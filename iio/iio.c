@@ -496,6 +496,46 @@ static int iio_rd_wr_attribute(struct attr_fun_params *params,
 	}
 }
 
+static int iio_rd_wr_shared_attr(struct attr_fun_params *params,
+				 struct iio_device *dev_descriptor,
+				 const char *attr_name,
+				 bool is_write)
+{
+	struct iio_channel *ch;
+	struct iio_attribute *attr;
+	int16_t j, k;
+
+	if (!dev_descriptor->channels)
+		return -ENOENT;
+
+	for (j = 0; j < dev_descriptor->num_ch; j++) {
+		ch = &dev_descriptor->channels[j];
+		if (!ch->attributes)
+			continue;
+		for (k = 0; ch->attributes[k].name; k++) {
+			attr = &ch->attributes[k];
+			if (attr->shared != IIO_SHARED_BY_ALL)
+				continue;
+			if (strcmp(attr_name, attr->name))
+				continue;
+			if (is_write) {
+				if (!attr->store)
+					return -ENOENT;
+				return attr->store(params->dev_instance,
+						   params->buf, params->len,
+						   NULL, attr->priv);
+			}
+			if (!attr->show)
+				return -ENOENT;
+			return attr->show(params->dev_instance,
+					  params->buf, params->len,
+					  NULL, attr->priv);
+		}
+	}
+
+	return -ENOENT;
+}
+
 /* Read a device register. The register address to read is set on
  * in desc->active_reg_addr in the function set_demo_reg_attr
  */
@@ -825,7 +865,18 @@ static int iio_read_attr(struct iiod_ctx *ctx, const char *device,
 		attributes = get_attributes(attr->type, dev, ch);
 		if (!strcmp(attr->name, ""))
 			return iio_read_all_attr(&params, attributes);
-		return iio_rd_wr_attribute(&params, attributes, attr->name, 0);
+		{
+			int ret;
+
+			ret = iio_rd_wr_attribute(&params, attributes,
+						  attr->name, 0);
+			if (ret == -ENOENT &&
+			    attr->type == IIO_ATTR_TYPE_DEVICE)
+				ret = iio_rd_wr_shared_attr(&params,
+							    dev->dev_descriptor,
+							    attr->name, 0);
+			return ret;
+		}
 	}
 
 	/* IIO device with given name is not found, verify if it corresponds to a trigger */
@@ -902,7 +953,18 @@ static int iio_write_attr(struct iiod_ctx *ctx, const char *device,
 		attributes = get_attributes(attr->type, dev, ch);
 		if (!strcmp(attr->name, ""))
 			return iio_write_all_attr(&params, attributes);
-		return iio_rd_wr_attribute(&params, attributes, attr->name, 1);
+		{
+			int ret;
+
+			ret = iio_rd_wr_attribute(&params, attributes,
+						  attr->name, 1);
+			if (ret == -ENOENT &&
+			    attr->type == IIO_ATTR_TYPE_DEVICE)
+				ret = iio_rd_wr_shared_attr(&params,
+							    dev->dev_descriptor,
+							    attr->name, 1);
+			return ret;
+		}
 	}
 
 	/* IIO device with given name is not found, verify if it corresponds to a trigger */
@@ -1591,7 +1653,9 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 	int32_t			i;
 	int32_t			j;
 	int32_t			k;
+	int32_t			l;
 	int32_t			n;
+	bool			found;
 
 	if ((int32_t)buff_size == -1)
 		n = 0;
@@ -1638,15 +1702,12 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 			if (ch->attributes)
 				for (k = 0; ch->attributes[k].name; k++) {
 					attr = &ch->attributes[k];
+					if (attr->shared == IIO_SHARED_BY_ALL)
+						continue;
 					i += snprintf(buff + i, no_os_max(n - i, 0), "<attribute name=\"%s\" ",
 						      attr->name);
 					if (ch->diferential) {
 						switch (attr->shared) {
-						case IIO_SHARED_BY_ALL:
-							i += snprintf(buff + i, no_os_max(n - i, 0),
-								      "filename=\"%s\"",
-								      attr->name);
-							break;
 						case IIO_SHARED_BY_DIR:
 							i += snprintf(buff + i, no_os_max(n - i, 0),
 								      "filename=\"%s_%s\"",
@@ -1675,14 +1736,11 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 								      ch->channel2,
 								      attr->name);
 							break;
+						default:
+							break;
 						}
 					} else {
 						switch (attr->shared) {
-						case IIO_SHARED_BY_ALL:
-							i += snprintf(buff + i, no_os_max(n - i, 0),
-								      "filename=\"%s\"",
-								      attr->name);
-							break;
 						case IIO_SHARED_BY_DIR:
 							i += snprintf(buff + i, no_os_max(n - i, 0),
 								      "filename=\"%s_%s\"",
@@ -1711,6 +1769,8 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 									      iio_chan_type_string[ch->ch_type],
 									      attr->name);
 							break;
+						default:
+							break;
 						}
 					}
 					i += snprintf(buff + i, no_os_max(n - i, 0), " />");
@@ -1725,6 +1785,40 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 			i += snprintf(buff + i, no_os_max(n - i, 0),
 				      "<attribute name=\"%s\" />",
 				      device->attributes[j].name);
+
+	/* Write IIO_SHARED_BY_ALL channel attributes at device level */
+	if (device->channels)
+		for (j = 0; j < device->num_ch; j++) {
+			ch = &device->channels[j];
+			if (!ch->attributes)
+				continue;
+			for (k = 0; ch->attributes[k].name; k++) {
+				attr = &ch->attributes[k];
+				if (attr->shared != IIO_SHARED_BY_ALL)
+					continue;
+				found = false;
+				for (l = 0; l < j; l++) {
+					if (!device->channels[l].attributes)
+						continue;
+					for (int32_t m = 0;
+					     device->channels[l].attributes[m].name;
+					     m++)
+						if (device->channels[l].attributes[m].shared
+						    == IIO_SHARED_BY_ALL &&
+						    !strcmp(device->channels[l].attributes[m].name,
+							    attr->name)) {
+							found = true;
+							break;
+						}
+					if (found)
+						break;
+				}
+				if (!found)
+					i += snprintf(buff + i, no_os_max(n - i, 0),
+						      "<attribute name=\"%s\" />",
+						      attr->name);
+			}
+		}
 
 	/* Write debug attributes */
 	if (device->debug_attributes)
