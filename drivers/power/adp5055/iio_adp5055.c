@@ -334,7 +334,6 @@ static struct iio_attribute adp5055_global_attrs[] = {
 	{
 		.name = "enable_mode_available",
 		.show = adp5055_iio_read_enable_mode_available,
-		.shared = IIO_SHARED_BY_ALL
 	},
 	{
 		.name = "dvs_auto",
@@ -345,7 +344,6 @@ static struct iio_attribute adp5055_global_attrs[] = {
 	{
 		.name = "dvs_auto_available",
 		.show = adp5055_iio_read_enable_attr_available,
-		.shared = IIO_SHARED_BY_ALL
 	},
 	{
 		.name = "ocp_blanking",
@@ -356,7 +354,6 @@ static struct iio_attribute adp5055_global_attrs[] = {
 	{
 		.name = "ocp_blanking_available",
 		.show = adp5055_iio_read_enable_attr_available,
-		.shared = IIO_SHARED_BY_ALL
 	},
 	{
 		.name = "pg_delay",
@@ -367,7 +364,6 @@ static struct iio_attribute adp5055_global_attrs[] = {
 	{
 		.name = "pg_delay_available",
 		.show = adp5055_iio_read_enable_attr_available,
-		.shared = IIO_SHARED_BY_ALL
 	},
 	END_ATTRIBUTES_ARRAY
 };

@@ -988,7 +988,6 @@ static struct iio_attribute lt7182s_global_attrs[] = {
 	{
 		.name = "freq_sync_available",
 		.show = lt7182s_iio_read_enable_available,
-		.shared = IIO_SHARED_BY_ALL
 	},
 	{
 		.name = "frequency",

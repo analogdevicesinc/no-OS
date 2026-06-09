@@ -369,50 +369,42 @@ static struct iio_attribute adp1050_global_attrs[] = {
 		.show = adp1050_iio_read_enable,
 		.store = adp1050_iio_write_enable,
 		.priv = ADP1050_IIO_FREQ_SYNC_ENABLE,
-		.shared = IIO_SHARED_BY_ALL
 	},
 	{
 		.name = "freq_sync_available",
 		.show = adp1050_iio_read_enable_available,
 		.priv = ADP1050_IIO_FREQ_SYNC_ENABLE,
-		.shared = IIO_SHARED_BY_ALL
 	},
 	{
 		.name = "feedforward",
 		.show = adp1050_iio_read_enable,
 		.store = adp1050_iio_write_enable,
 		.priv = ADP1050_IIO_FEEDFORWARD_ENABLE,
-		.shared = IIO_SHARED_BY_ALL
 	},
 	{
 		.name = "feedforward_available",
 		.show = adp1050_iio_read_enable_available,
 		.priv = ADP1050_IIO_FEEDFORWARD_ENABLE,
-		.shared = IIO_SHARED_BY_ALL
 	},
 	{
 		.name = "loop",
 		.show = adp1050_iio_read_loop,
 		.store = adp1050_iio_write_loop,
-		.shared = IIO_SHARED_BY_ALL
 	},
 	{
 		.name = "loop_available",
 		.show = adp1050_iio_read_loop_available,
-		.shared = IIO_SHARED_BY_ALL
 	},
 	{
 		.name = "pulse_skipping",
 		.show = adp1050_iio_read_enable,
 		.store = adp1050_iio_write_enable,
 		.priv = ADP1050_IIO_PULSE_ENABLE,
-		.shared = IIO_SHARED_BY_ALL
 	},
 	{
 		.name = "pulse_available",
 		.show = adp1050_iio_read_enable_available,
 		.priv = ADP1050_IIO_PULSE_ENABLE,
-		.shared = IIO_SHARED_BY_ALL
 	},
 	END_ATTRIBUTES_ARRAY
 };
