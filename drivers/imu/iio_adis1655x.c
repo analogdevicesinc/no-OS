@@ -156,7 +156,6 @@ struct iio_attribute adis1655x_iio_temp_attrs[] = {
 struct iio_attribute adis1655x_dev_attrs[] = {
 	{
 		.name   = "sampling_frequency",
-		.shared = IIO_SHARED_BY_ALL,
 		.show   = adis_iio_read_sampling_freq,
 		.store  = adis_iio_write_sampling_freq,
 	},

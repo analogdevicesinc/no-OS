@@ -841,7 +841,6 @@ static struct iio_attribute lt7170_global_attrs[] = {
 	{
 		.name = "freq_sync_available",
 		.show = lt7170_iio_read_enable_available,
-		.shared = IIO_SHARED_BY_ALL
 	},
 	{
 		.name = "frequency",
@@ -945,7 +944,6 @@ static struct iio_attribute lt7170_debug_attrs[] = {
 	{
 		.name = "pads_enable_available",
 		.show = lt7170_iio_read_enable_available,
-		.shared = IIO_SHARED_BY_ALL
 	},
 	{
 		.name = "vout_command",
@@ -986,7 +984,6 @@ static struct iio_attribute lt7170_debug_attrs[] = {
 	{
 		.name = "pulse_skipping_available",
 		.show = lt7170_iio_read_enable_available,
-		.shared = IIO_SHARED_BY_ALL
 	},
 	END_ATTRIBUTES_ARRAY
 };

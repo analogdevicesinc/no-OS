@@ -273,7 +273,6 @@ static struct iio_attribute ad74413r_iio_digital_attrs[] = {
 	},
 	{
 		.name = "sampling_frequency_available",
-		.shared = IIO_SHARED_BY_ALL,
 		.show = ad74413r_iio_read_sampling_freq_avail,
 		.priv = AD74413R_ADC
 	},
@@ -284,7 +283,6 @@ static struct iio_attribute ad74413r_iio_digital_attrs[] = {
 	},
 	{
 		.name = "threshold",
-		.shared = IIO_SHARED_BY_ALL,
 		.show = ad74413r_iio_read_threshold,
 		.store = ad74413r_iio_write_threshold,
 		.priv = AD74413R_ADC,
@@ -311,7 +309,6 @@ static struct iio_attribute ad74413r_iio_adc_diag_attrs[] = {
 	},
 	{
 		.name = "diag_function_available",
-		.shared = IIO_SHARED_BY_ALL,
 		.show = ad74413r_iio_read_diag_function_avail,
 	},
 	{
