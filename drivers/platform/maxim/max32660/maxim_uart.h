@@ -45,17 +45,17 @@
  */
 enum max_uart_flow_ctrl {
 	MAX_UART_FLOW_DIS,
-	UART_FLOW_LOW,
-	UART_FLOW_HIGH
+	MAX_UART_FLOW_LOW,
+	MAX_UART_FLOW_HIGH
 };
 
 /**
  * @brief UART pin mapping select
  */
 enum max_uart_map {
-	UART_MAP_A,
-	UART_MAP_B,
-	UART_MAP_C,
+	MAX_UART_MAP_A,
+	MAX_UART_MAP_B,
+	MAX_UART_MAP_C,
 };
 
 /**
