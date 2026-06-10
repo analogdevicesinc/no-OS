@@ -10,8 +10,8 @@ Supported Evaluation Boards
 ---------------------------
 
 * `AD-FMCOMMS2-EBZ <https://www.analog.com/AD-FMCOMMS2-EBZ>`_
-* `AD-FMCOMMS2-EBZ <https://www.analog.com/AD-FMCOMMS3-EBZ>`_
-* `AD-FMCOMMS2-EBZ <https://www.analog.com/AD-FMCOMMS4-EBZ>`_
+* `AD-FMCOMMS3-EBZ <https://www.analog.com/AD-FMCOMMS3-EBZ>`_
+* `AD-FMCOMMS4-EBZ <https://www.analog.com/AD-FMCOMMS4-EBZ>`_
 * `AD-FMCOMMS5-EBZ <https://www.analog.com/AD-FMCOMMS5-EBZ>`_
 
 Overview
