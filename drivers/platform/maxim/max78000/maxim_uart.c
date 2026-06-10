@@ -338,10 +338,10 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 	case MAX_UART_FLOW_DIS:
 		flow = MXC_UART_FLOW_DIS;
 		break;
-	case UART_FLOW_LOW:
+	case MAX_UART_FLOW_LOW:
 		flow = MXC_UART_FLOW_EN;
 		break;
-	case UART_FLOW_HIGH:
+	case MAX_UART_FLOW_HIGH:
 		flow = MXC_UART_FLOW_EN;
 		break;
 	default:

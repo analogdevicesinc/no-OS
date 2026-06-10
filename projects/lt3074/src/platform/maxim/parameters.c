@@ -34,7 +34,7 @@
 
 struct max_uart_init_param lt3074_uart_extra = {
 	.flow = MAX_UART_FLOW_DIS,
-	.map = UART_MAP_A
+	.map = MAX_UART_MAP_A
 };
 
 struct max_i2c_init_param lt3074_i2c_extra = {

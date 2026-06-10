@@ -311,7 +311,7 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 	case MAX_UART_FLOW_DIS:
 		flow = MXC_UART_FLOW_DIS;
 		break;
-	case UART_FLOW_EN:
+	case MAX_UART_FLOW_EN:
 		flow = MXC_UART_FLOW_EN;
 		break;
 	default:
@@ -320,13 +320,13 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 	}
 
 	switch (eparam->map) {
-	case UART_MAP_A:
+	case MAX_UART_MAP_A:
 		map = MAP_A;
 		break;
-	case UART_MAP_B:
+	case MAX_UART_MAP_B:
 		map = MAP_B;
 		break;
-	case UART_MAP_C:
+	case MAX_UART_MAP_C:
 		map = MAP_C;
 		break;
 	default:
