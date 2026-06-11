@@ -51,6 +51,7 @@
 #include "no_os_axi_io.h"
 
 #include "lwip_xemacps.h"
+#include <stdint.h>
 #define IIOD
 #define DMA_CYCLIC_PASS
 #include "xilinx_uart.h"
@@ -60,6 +61,30 @@
 #include "iio_app.h"
 #endif
 
+
+static void do_arm_oneshot(uint32_t base, uint32_t tlen)
+{
+	no_os_axi_io_write(base, 0x084, 0x00);
+	no_os_mdelay(1);
+	no_os_axi_io_write(base, 0x088, 0x02);
+	no_os_axi_io_write(base, 0x01C, tlen);
+	no_os_axi_io_write(base, 0x104, 0x00);
+	no_os_axi_io_write(base, 0x084, 0x01);
+}
+
+static void do_poll_fsm_idle(uint32_t base, const char *label, int timeout_ms)
+{
+	uint32_t do_fsm;
+
+	do {
+		no_os_mdelay(1);
+		no_os_axi_io_read(base, 0x200, &do_fsm);
+	} while (((do_fsm & 0x1F) != 1 ||
+		  ((do_fsm >> 8) & 0xF) != 1) && --timeout_ms);
+	printf("%s: wr=%lu rd=%lu\n", label,
+	       (unsigned long)(do_fsm & 0x1F),
+	       (unsigned long)((do_fsm >> 8) & 0xF));
+}
 
 /*
  * 512-bit test VEC stream (MSW..LSW):
@@ -536,24 +561,19 @@ int example_main()
 	 * Reg 0x200 = FSM debug (bits[4:0]=wr_fsm, bits[11:8]=rd_fsm)
 	 * ----------------------------------------------------------------
 	 */
-	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x084, 0x00);
-	no_os_mdelay(1);
-	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x088, 0x02);
-	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x01C,
-			   sizeof(tx_passthrough) - 1);
-	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x104, 0x00);
-	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x084, 0x01);
+	do_arm_oneshot(TX_DATA_OFFLOAD_BASEADDR,
+		       sizeof(tx_passthrough) - 1);
 	{
-		uint32_t do_fsm, do_ver, do_cfg, do_mem_lo, do_mem_hi;
+		uint32_t do_ver, do_cfg, do_mem_lo, do_mem_hi;
 		uint32_t do_tlen, do_sync_cfg;
-		int timeout = 100;
 
 		no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x000, &do_ver);
 		no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x010, &do_cfg);
 		no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x014, &do_mem_lo);
 		no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x018, &do_mem_hi);
 		no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x01C, &do_tlen);
-		no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x104, &do_sync_cfg);
+		no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x104,
+				  &do_sync_cfg);
 
 		printf("TX data offload: ver=0x%08lX cfg=0x%lX "
 		       "mem=%lu bytes tlen=0x%lX sync_cfg=%lu\n",
@@ -562,47 +582,33 @@ int example_main()
 		       ((unsigned long)do_mem_hi << 32),
 		       (unsigned long)do_tlen,
 		       (unsigned long)do_sync_cfg);
-
-		do {
-			no_os_mdelay(1);
-			no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x200,
-					  &do_fsm);
-		} while (((do_fsm & 0x1F) != 1 ||
-			  ((do_fsm >> 8) & 0xF) != 1) && --timeout);
-		printf("TX data offload: oneshot mode, wr=%lu rd=%lu\n",
-		       (unsigned long)(do_fsm & 0x1F),
-		       (unsigned long)((do_fsm >> 8) & 0xF));
 	}
+	do_poll_fsm_idle(TX_DATA_OFFLOAD_BASEADDR,
+			 "TX data offload init", 100);
 
 	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x084, 0x00);
 	no_os_mdelay(1);
-	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x088, 0x02);
-    no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x01C,
-           sizeof(tx_passthrough) - 1);
-    no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x104, 0x00);
 	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x088, 0x01);
 	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x084, 0x01);
 	{
-		uint32_t do_fsm, do_ver, do_cfg, do_mem_lo;
-		int timeout = 100;
-		printf("RX data offload: bypass mode\n");
+		uint32_t do_ver, do_cfg, do_mem_lo, do_mem_hi;
+		uint32_t do_tlen, do_sync_cfg;
+
 		no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR, 0x000, &do_ver);
 		no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR, 0x010, &do_cfg);
 		no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR, 0x014, &do_mem_lo);
+		no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR, 0x018, &do_mem_hi);
+		no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR, 0x01C, &do_tlen);
+		no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR, 0x104,
+				  &do_sync_cfg);
 
-		printf("RX data offload: ver=0x%08lX cfg=0x%lX mem=%lu bytes\n",
-			(unsigned long)do_ver, (unsigned long)do_cfg,
-			(unsigned long)do_mem_lo);
-
-		do {
-			no_os_mdelay(1);
-			no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR, 0x200,
-				&do_fsm);
-		} while (((do_fsm & 0x1F) != 1 ||
-			((do_fsm >> 8) & 0xF) != 1) && --timeout);
-		printf("RX data offload: oneshot mode, wr=%lu rd=%lu\n",
-			(unsigned long)(do_fsm & 0x1F),
-			(unsigned long)((do_fsm >> 8) & 0xF));
+		printf("RX data offload: ver=0x%08lX cfg=0x%lX "
+		       "mem=%lu bytes tlen=0x%lX sync_cfg=%lu\n",
+		       (unsigned long)do_ver, (unsigned long)do_cfg,
+		       (unsigned long)do_mem_lo |
+		       ((unsigned long)do_mem_hi << 32),
+		       (unsigned long)do_tlen,
+		       (unsigned long)do_sync_cfg);
 	}
 
 	/*
@@ -859,33 +865,8 @@ int example_main()
 			pr_info("TX DMA PASS transfer completed\n");
 	}
 
-	{
-		uint32_t do_fsm;
-		int timeout = 200;
-
-		do {
-			no_os_mdelay(1);
-			no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x200,
-					  &do_fsm);
-		} while (((do_fsm & 0x1F) != 1 ||
-			  ((do_fsm >> 8) & 0xF) != 1) && --timeout);
-		printf("TX data offload after PASS: wr=%lu rd=%lu\n",
-		       (unsigned long)(do_fsm & 0x1F),
-		       (unsigned long)((do_fsm >> 8) & 0xF));
-	}
-	{
-		uint32_t do_fsm;
-		int timeout = 200;
-		do {
-			no_os_mdelay(1);
-			no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR, 0x200,
-				&do_fsm);
-		} while (((do_fsm & 0x1F) != 1 ||
-			((do_fsm >> 8) & 0xF) != 1) && --timeout);
-		printf("RX data offload after PASS: wr=%lu rd=%lu\n",
-			(unsigned long)(do_fsm & 0x1F),
-			(unsigned long)((do_fsm >> 8) & 0xF));
-	}
+	do_poll_fsm_idle(TX_DATA_OFFLOAD_BASEADDR,
+			 "TX data offload after PASS", 200);
 
 #ifdef DMA_CYCLIC_PASS
 	ret = axi_dmac_transfer_wait_completion(rx_dmac, 2000);
@@ -912,35 +893,10 @@ int example_main()
 	 * then start the vec transfer normally.
 	 * ----------------------------------------------------------------
 	 */
-	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x084, 0x00);
-	no_os_mdelay(1);
-	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x088, 0x02);
-	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x01C,
-			   sizeof(tx_vector) - 1);
-	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x104, 0x00);
-	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x084, 0x01);
-	{
-		uint32_t do_fsm;
-		int timeout = 200;
-
-		do {
-			no_os_mdelay(1);
-			no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x200,
-					  &do_fsm);
-		} while (((do_fsm & 0x1F) != 1 ||
-			  ((do_fsm >> 8) & 0xF) != 1) && --timeout);
-		printf("TX data offload before VEC: wr=%lu rd=%lu\n",
-		       (unsigned long)(do_fsm & 0x1F),
-		       (unsigned long)((do_fsm >> 8) & 0xF));
-	}
-
-	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x084, 0x00);
-	no_os_mdelay(1);
-	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x088, 0x02);
-	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x01C,
-			sizeof(tx_vector) - 1);
-	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x104, 0x00);
-	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x084, 0x01);
+	do_arm_oneshot(TX_DATA_OFFLOAD_BASEADDR,
+		       sizeof(tx_vector) - 1);
+	do_poll_fsm_idle(TX_DATA_OFFLOAD_BASEADDR,
+			 "TX data offload before VEC", 200);
 
 	for (i = 0; i < NO_OS_ARRAY_SIZE(tx_vector); i++)
 		no_os_axi_io_write(TX_DDR_BASEADDR,
@@ -975,34 +931,8 @@ int example_main()
 			pr_info("TX DMA VEC transfer completed\n");
 	}
 
-	{
-		uint32_t do_fsm;
-		int timeout = 200;
-
-		do {
-			no_os_mdelay(1);
-			no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x200,
-					  &do_fsm);
-		} while (((do_fsm & 0x1F) != 1 ||
-			  ((do_fsm >> 8) & 0xF) != 1) && --timeout);
-		printf("TX data offload after VEC: wr=%lu rd=%lu\n",
-		       (unsigned long)(do_fsm & 0x1F),
-		       (unsigned long)((do_fsm >> 8) & 0xF));
-	}
-
-	{
-		uint32_t do_fsm;
-		int timeout = 200;
-		do {
-			no_os_mdelay(1);
-			no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR, 0x200,
-				&do_fsm);
-		} while (((do_fsm & 0x1F) != 1 ||
-			((do_fsm >> 8) & 0xF) != 1) && --timeout);
-		printf("RX data offload after VEC: wr=%lu rd=%lu\n",
-			(unsigned long)(do_fsm & 0x1F),
-			(unsigned long)((do_fsm >> 8) & 0xF));
-	}
+	do_poll_fsm_idle(TX_DATA_OFFLOAD_BASEADDR,
+			 "TX data offload after VEC", 200);
 
 	/*
 	 * ----------------------------------------------------------------
@@ -1010,7 +940,8 @@ int example_main()
 	 * Configure DT to send PATT/ASYNC data, then hit enter to capture.
 	 * ----------------------------------------------------------------
 	 */
-
+	printf("Now configure the DT to be sending PATT/ASYNC. Press Enter after that, to continue...\n");
+	getchar();
 	printf("Press Enter to start RX DMA transfer of PATT/ASYNC stream from DT...\n");
 	getchar();
 
