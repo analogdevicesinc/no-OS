@@ -91,7 +91,11 @@ static int32_t spi_init_pl(struct no_os_spi_desc *desc,
 	if (!xdesc->instance)
 		goto pl_error;
 
+#ifdef SDT
+	xdesc->config = XSpi_LookupConfig(xinit->base_addr);
+#else
 	xdesc->config = XSpi_LookupConfig(param->device_id);
+#endif
 	if (xdesc->config == NULL)
 		goto pl_error;
 
@@ -102,7 +106,11 @@ static int32_t spi_init_pl(struct no_os_spi_desc *desc,
 	if (ret != 0)
 		goto pl_error;
 
+#ifdef SDT
+	ret = XSpi_Initialize(xdesc->instance, xinit->base_addr);
+#else
 	ret = XSpi_Initialize(xdesc->instance, param->device_id);
+#endif
 	if (ret != 0)
 		goto pl_error;
 
@@ -165,7 +173,11 @@ static int32_t spi_init_ps(struct no_os_spi_desc *desc,
 	if (!xdesc->instance)
 		goto ps_error;
 
+#ifdef SDT
+	xdesc->config = XSpiPs_LookupConfig(xinit->base_addr);
+#else
 	xdesc->config = XSpiPs_LookupConfig(param->device_id);
+#endif
 	if (xdesc->config == NULL)
 		goto ps_error;
 

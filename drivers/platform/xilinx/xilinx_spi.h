@@ -62,6 +62,8 @@ struct xil_spi_init_param {
 	enum xil_spi_type	type;
 	/** SPI flags */
 	uint32_t		flags;
+	/** Device base address (used for SDT flow) */
+	uint32_t		base_addr;
 };
 
 /**

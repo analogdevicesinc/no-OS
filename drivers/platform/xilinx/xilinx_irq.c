@@ -59,6 +59,7 @@ int xil_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	int32_t status;
 	struct no_os_irq_ctrl_desc *descriptor;
 	struct xil_irq_desc *xil_dev;
+	struct xil_irq_init_param *xinit;
 #ifdef XSCUGIC_H
 	void *config;
 #endif
@@ -76,7 +77,8 @@ int xil_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 
 	descriptor->irq_ctrl_id = param->irq_ctrl_id;
 	descriptor->extra = xil_dev;
-	xil_dev->type = ((struct xil_irq_init_param *)param->extra)->type;
+	xinit = (struct xil_irq_init_param *)param->extra;
+	xil_dev->type = xinit->type;
 
 	switch (xil_dev->type) {
 	case IRQ_PS:
@@ -85,7 +87,11 @@ int xil_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 		if (!xil_dev->instance)
 			goto error;
 
+#ifdef SDT
+		config = XScuGic_LookupConfig(xinit->base_addr);
+#else
 		config = XScuGic_LookupConfig(descriptor->irq_ctrl_id);
+#endif
 		if (!config)
 			goto ps_error;
 
@@ -109,7 +115,13 @@ ps_error:
 		if (!xil_dev->instance)
 			goto error;
 
-		status = XIntc_Initialize(xil_dev->instance, descriptor->irq_ctrl_id);
+#ifdef SDT
+		status = XIntc_Initialize(xil_dev->instance,
+					  xinit->base_addr);
+#else
+		status = XIntc_Initialize(xil_dev->instance,
+					  descriptor->irq_ctrl_id);
+#endif
 		if (status != 0)
 			goto pl_error;
 

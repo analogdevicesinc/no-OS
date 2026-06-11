@@ -196,6 +196,12 @@ else
 LIB_FLAGS += -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
 endif
 
+# Vitis 2025+ uses System Device Tree (SDT) flow; the BSP is compiled
+# with -DSDT so the application must match.
+ifeq ($(shell test $(VITIS_YEAR) -ge 2025 && echo y),y)
+CFLAGS += -DSDT
+endif
+
 # Add the common include paths
 CFLAGS += -I$(BUILD_DIR)/app/src
 # Xilinx's bsp include path
