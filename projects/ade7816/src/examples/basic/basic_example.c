@@ -30,11 +30,11 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
-#include "basic_example.h"
 #include "common_data.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 #include "no_os_irq.h"
+#include "no_os_uart.h"
 #include "no_os_util.h"
 #include "no_os_units.h"
 
@@ -45,13 +45,20 @@
  * 		 for voltage stopping whenever an interrupt occurs and resulting
  * 		 in a stoppage of the measurement.
 */
-int basic_example_main()
+int example_main()
 {
 	struct ade7816_desc *desc;
 	bool interrupt = false;
 	uint32_t rms, scaled;
 	int32_t val;
 	int ret;
+	struct no_os_uart_desc *uart_desc;
+
+	ret = no_os_uart_init(&uart_desc, &ade7816_uart_ip);
+	if (ret)
+		return ret;
+
+	no_os_uart_stdio(uart_desc);
 
 	/** GPIO Pin Interrupt Controller */
 	struct no_os_irq_ctrl_desc *gpio_irq_desc;

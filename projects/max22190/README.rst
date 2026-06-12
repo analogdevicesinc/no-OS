@@ -73,15 +73,11 @@ reading digital input states across all eight channels. It also configures
 channel filter delays, manages channel states, and exercises the onboard
 diagnostics by enabling fault detection and wire-break detection.
 
-In order to build the basic example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/max22190/Makefile>`__:
+In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = y
-   IIO_EXAMPLE = n
+	make EXAMPLE=basic
 
 IIO example
 ~~~~~~~~~~~
@@ -93,15 +89,11 @@ channels through IIO clients such as the IIO Oscilloscope.
 If you are not familiar with ADI IIO Application, please take a look at:
 `IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
 
-In order to build the IIO example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/max22190/Makefile>`__:
+In order to build the IIO example make sure you are using this command:
 
 .. code-block:: bash
 
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = n
-   IIO_EXAMPLE = y
+	make EXAMPLE=iio
 
 No-OS Supported Platforms
 -------------------------
@@ -123,6 +115,6 @@ Build Command
    # to delete current build
    make reset
    # to build the project
-   make PLATFORM=maxim TARGET=max32690
+   make EXAMPLE=iio PLATFORM=maxim TARGET=max32690
    # to flash the code
    make run

@@ -33,7 +33,7 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "ad8460.h"
 #ifdef IIO_SUPPORT
 #include "iio_ad8460.h"

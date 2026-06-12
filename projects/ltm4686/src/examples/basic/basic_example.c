@@ -31,13 +31,19 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "common_data.h"
-#include "basic_example.h"
+#include "no_os_uart.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 #include "ltm4686.h"
 
-int basic_example_main()
+int example_main()
 {
+	struct no_os_uart_desc *uart_desc;
+	int _ret = no_os_uart_init(&uart_desc, &ltm4686_uart_ip);
+	if (_ret)
+		return _ret;
+	no_os_uart_stdio(uart_desc);
+
 	struct ltm4686_dev *dev;
 	int ret = 0, vals[4];
 	uint8_t chan;

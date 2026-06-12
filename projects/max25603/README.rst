@@ -55,14 +55,11 @@ comparator, enables EN2 with PWM dimming, configures a low beam
 output, waits 5 seconds, then disables the beam and enable outputs
 before removing the device.
 
-In order to build the basic example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/max25603/Makefile>`__:
+This is the only example in this project, so it builds by default:
 
 .. code-block:: bash
 
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = y
+	make
 
 No-OS Supported Platforms
 -------------------------

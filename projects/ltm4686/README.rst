@@ -115,14 +115,11 @@ This is a simple example that initializes the ltm4686, and performs telemetry
 readings of the voltage, current and temperature of each output channel. Status
 bytes/words are also monitored in the example.
 
-In order to build the basic example make sure you have the following configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltm4686/Makefile>`_
+In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = y
-	IIO_EXAMPLE = n
+	make EXAMPLE=basic
 
 IIO example
 ^^^^^^^^^^^
@@ -141,16 +138,13 @@ The No-OS IIO Application together with the No-OS IIO ltm4686 driver take care o
 all the back-end logic needed to setup the IIO server.
 
 This example initializes the IIO device and calls the IIO app as shown in:
-`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltm4686/src/examples/iio_example>`_
+`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltm4686/src/examples/iio>`_
 
-In order to build the IIO project make sure you have the following configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltm4686/Makefile>`_
+In order to build the IIO project make sure you are using this command:
 
 .. code-block:: bash
 
-        # Select the example you want to enable by choosing y for enabling and n for disabling
-        BASIC_EXAMPLE = n
-        IIO__EXAMPLE = y
+        make EXAMPLE=iio
 
 No-OS Supported Platforms
 -------------------------
@@ -188,6 +182,6 @@ Maxim Platform
 	# to delete current build
 	make reset
 	# to build the project
-	make PLATFORM=maxim TARGET=max32665
+	make EXAMPLE=iio PLATFORM=maxim TARGET=max32665
 	# to flash the code
 	make run

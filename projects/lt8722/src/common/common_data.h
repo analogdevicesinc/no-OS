@@ -33,7 +33,7 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "lt8722.h"
 
 extern struct no_os_uart_init_param lt8722_uart_ip;

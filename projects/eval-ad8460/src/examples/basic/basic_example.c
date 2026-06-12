@@ -31,8 +31,8 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 
-#include "basic_example.h"
 #include "common_data.h"
+#include "no_os_uart.h"
 #include "ad8460.h"
 #include "no_os_print_log.h"
 
@@ -42,8 +42,14 @@
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
  *******************************************************************************/
-int basic_example_main()
+int example_main()
 {
+	struct no_os_uart_desc *uart_desc;
+	int _ret = no_os_uart_init(&uart_desc, &uip);
+	if (_ret)
+		return _ret;
+	no_os_uart_stdio(uart_desc);
+
 	struct ad8460_device *dev;
 	int ret, i;
 	uint16_t val;

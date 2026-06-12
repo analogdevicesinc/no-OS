@@ -41,14 +41,11 @@ This is a simple example that initializes the LTC4296, unlock the chip and enabl
 avaliable ports.
 
 
-In order to build the basic example make sure you have the following configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltc4296/Makefile>`_
-
+This is the only example in this project, so it builds by default:
 
 .. code-block:: bash
 
-        # Select the example you want to enable by choosing y for enabling and n for disabling
-        BASIC_EXAMPLE = y
+	make
 
 No-OS Supported Platforms
 -------------------------
