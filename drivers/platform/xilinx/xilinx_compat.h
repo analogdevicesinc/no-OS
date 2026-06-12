@@ -118,11 +118,12 @@
 #define XPAR_INTC_SINGLE_DEVICE_ID	0
 #endif
 
-/* AXI Interrupt Controller renames: Vitis 2025+ changed the INTC array
- * size macro and the interrupt ID naming convention. */
-#if !defined(XPAR_INTC_MAX_NUM_INTR_INPUTS) && defined(XPAR_XINTC_0_NUM_INTR_INPUTS)
-#define XPAR_INTC_MAX_NUM_INTR_INPUTS	XPAR_XINTC_0_NUM_INTR_INPUTS
-#endif
+/* Note: XPAR_INTC_MAX_NUM_INTR_INPUTS is intentionally NOT provided here.
+ * On Vitis 2025+ the BSP's xintc.h pulls in xintc_drv_config.h, which always
+ * defines this macro.  Providing a fallback from xparameters.h (which only
+ * exposes XPAR_XINTC_0_NUM_INTR_INPUTS) would be redefined later by
+ * xintc_drv_config.h, triggering a redefinition warning.  No no-OS code uses
+ * this macro outside the xintc.h include chain, so the BSP definition suffices. */
 
 /* Interrupt ID renames: old XPAR_AXI_INTC_<periph>_INTERRUPT_INTR
  * became XPAR_FABRIC_<periph>_INTR in Vitis 2025+. */
@@ -144,6 +145,11 @@
 #ifndef XPAR_XSPIPS_1_DEVICE_ID
 #define XPAR_XSPIPS_1_DEVICE_ID			1
 #endif
+
+/* GPIO PS device ID: Vitis 2025+ removed this macro. */
+#ifndef XPAR_XGPIOPS_0_DEVICE_ID
+#define XPAR_XGPIOPS_0_DEVICE_ID		0
+#endif
 #if !defined(XPAR_PS7_SPI_0_SPI_CLK_FREQ_HZ) && defined(XPAR_XSPIPS_0_SPI_CLK_FREQ_HZ)
 #define XPAR_PS7_SPI_0_SPI_CLK_FREQ_HZ		XPAR_XSPIPS_0_SPI_CLK_FREQ_HZ
 #endif
@@ -155,6 +161,14 @@
 #endif
 #if !defined(XPAR_PSU_SPI_1_SPI_CLK_FREQ_HZ) && defined(XPAR_XSPIPS_1_SPI_CLK_FREQ_HZ)
 #define XPAR_PSU_SPI_1_SPI_CLK_FREQ_HZ		XPAR_XSPIPS_1_SPI_CLK_FREQ_HZ
+#endif
+
+/* UART PS interrupt ID renames: Vitis 2025+ changed _INTR to _INTERRUPTS. */
+#if !defined(XPAR_XUARTPS_0_INTR) && defined(XPAR_XUARTPS_0_INTERRUPTS)
+#define XPAR_XUARTPS_0_INTR			XPAR_XUARTPS_0_INTERRUPTS
+#endif
+#if !defined(XPAR_XUARTPS_1_INTR) && defined(XPAR_XUARTPS_1_INTERRUPTS)
+#define XPAR_XUARTPS_1_INTR			XPAR_XUARTPS_1_INTERRUPTS
 #endif
 
 #endif /* _XILINX_COMPAT_H_ */

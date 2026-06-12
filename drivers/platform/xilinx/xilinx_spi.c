@@ -46,16 +46,6 @@
 #include "no_os_alloc.h"
 #include "xilinx_spi.h"
 
-#if defined(PLATFORM_ZYNQ)
-#define SPI_CLK_FREQ_HZ(dev)	(XPAR_PS7_SPI_ ## dev ## _SPI_CLK_FREQ_HZ)
-#define SPI_NUM_INSTANCES	XPAR_XSPIPS_NUM_INSTANCES
-#elif defined(PLATFORM_ZYNQMP)
-#define SPI_CLK_FREQ_HZ(dev)	(XPAR_PSU_SPI_ ## dev ## _SPI_CLK_FREQ_HZ)
-#define SPI_NUM_INSTANCES	XPAR_XSPIPS_NUM_INSTANCES
-#else
-#define SPI_NUM_INSTANCES	0
-#endif
-
 #warning SPI delays are not supported on the xilinx platform
 
 /**
@@ -88,7 +78,11 @@ static int32_t spi_init_pl(struct no_os_spi_desc *desc,
 	if (!xdesc->instance)
 		goto pl_error;
 
+#ifdef SDT
+	xdesc->config = XSpi_LookupConfig(xinit->base_addr);
+#else
 	xdesc->config = XSpi_LookupConfig(param->device_id);
+#endif
 	if (xdesc->config == NULL)
 		goto pl_error;
 
@@ -99,7 +93,11 @@ static int32_t spi_init_pl(struct no_os_spi_desc *desc,
 	if (ret != 0)
 		goto pl_error;
 
+#ifdef SDT
+	ret = XSpi_Initialize(xdesc->instance, xinit->base_addr);
+#else
 	ret = XSpi_Initialize(xdesc->instance, param->device_id);
+#endif
 	if (ret != 0)
 		goto pl_error;
 
@@ -162,7 +160,11 @@ static int32_t spi_init_ps(struct no_os_spi_desc *desc,
 	if (!xdesc->instance)
 		goto ps_error;
 
+#ifdef SDT
+	xdesc->config = XSpiPs_LookupConfig(xinit->base_addr);
+#else
 	xdesc->config = XSpiPs_LookupConfig(param->device_id);
+#endif
 	if (xdesc->config == NULL)
 		goto ps_error;
 
@@ -173,20 +175,7 @@ static int32_t spi_init_ps(struct no_os_spi_desc *desc,
 	if (ret != 0)
 		goto ps_error;
 
-	switch (param->device_id) {
-#if (SPI_NUM_INSTANCES >= 1)
-	case 0:
-		input_clock = SPI_CLK_FREQ_HZ(0);
-		break;
-#endif
-#if (SPI_NUM_INSTANCES >= 2)
-	case 1:
-		input_clock = SPI_CLK_FREQ_HZ(1);
-		break;
-#endif
-	default:
-		goto ps_error;
-	};
+	input_clock = ((XSpiPs_Config*)xdesc->config)->InputClockHz;
 
 	if (desc->max_speed_hz != 0u) {
 		uint32_t div = input_clock / desc->max_speed_hz;

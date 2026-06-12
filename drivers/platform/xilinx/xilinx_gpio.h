@@ -58,6 +58,8 @@ struct xil_gpio_init_param {
 	enum xil_gpio_type	type;
 	/** Device ID */
 	uint32_t		device_id;
+	/** Device base address (used for SDT flow) */
+	uint32_t		base_addr;
 };
 
 /**

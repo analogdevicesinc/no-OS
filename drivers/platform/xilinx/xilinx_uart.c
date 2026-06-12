@@ -374,6 +374,7 @@ static int32_t xil_uart_init(struct no_os_uart_desc **desc,
 	xil_uart_desc = descriptor->extra;
 	xil_uart_desc->irq_id = xil_uart_init_param->irq_id;
 	xil_uart_desc->type = xil_uart_init_param->type;
+	xil_uart_desc->base_addr = xil_uart_init_param->base_addr;
 
 #ifdef _XPARAMETERS_PS_H_
 	status = irq_setup((struct no_os_irq_ctrl_desc **)&xil_uart_desc->irq_desc);
@@ -391,7 +392,11 @@ static int32_t xil_uart_init(struct no_os_uart_desc **desc,
 		 * Initialize the UART driver so that it's ready to use
 		 * Look up the configuration in the config table, then initialize it.
 		 */
+#ifdef SDT
+		config = XUartPs_LookupConfig(xil_uart_desc->base_addr);
+#else
 		config = XUartPs_LookupConfig(descriptor->device_id);
+#endif
 		if (!config)
 			goto error_free_instance;
 
@@ -434,7 +439,11 @@ static int32_t xil_uart_init(struct no_os_uart_desc **desc,
 		if (!(xil_uart_desc->instance))
 			goto error_free_xil_uart_desc;
 
+#ifdef SDT
+		config = XUartLite_LookupConfig(xil_uart_desc->base_addr);
+#else
 		config = XUartLite_LookupConfig(descriptor->device_id);
+#endif
 		if (!config)
 			goto error_free_instance;
 

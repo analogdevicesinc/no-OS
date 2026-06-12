@@ -56,6 +56,8 @@ enum xil_irq_type {
 struct xil_irq_init_param {
 	/** Xilinx architecture */
 	enum xil_irq_type	type;
+	/** Device base address (used for SDT flow) */
+	uint32_t		base_addr;
 };
 
 /**

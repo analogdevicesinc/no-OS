@@ -74,7 +74,11 @@ int32_t _gpio_init(struct no_os_gpio_desc *desc,
 		if (!xdesc->instance)
 			goto pl_error;
 
+#ifdef SDT
+		xdesc->config = XGpio_LookupConfig(xinit->base_addr);
+#else
 		xdesc->config = XGpio_LookupConfig(xinit->device_id);
+#endif
 		if (xdesc->config == NULL)
 			goto pl_error;
 
@@ -96,7 +100,11 @@ pl_error:
 		if (!xdesc->instance)
 			goto ps_error;
 
+#ifdef SDT
+		xdesc->config = XGpioPs_LookupConfig(xinit->base_addr);
+#else
 		xdesc->config = XGpioPs_LookupConfig(xinit->device_id);
+#endif
 		if (xdesc->config == NULL)
 			goto ps_error;
 

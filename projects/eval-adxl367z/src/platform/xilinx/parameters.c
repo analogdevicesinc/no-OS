@@ -35,5 +35,8 @@
 
 struct xil_spi_init_param spi_extra = {
 	.type = SPI_PS,
-	.flags = 0U
+	.flags = 0U,
+#ifdef SDT
+	.base_addr = XPAR_XSPIPS_0_BASEADDR,
+#endif
 };
