@@ -30,15 +30,21 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "basic_example.h"
 #include "common_data.h"
+#include "no_os_uart.h"
 #include "max22017.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 #include "no_os_irq.h"
 
-int basic_example_main()
+int example_main()
 {
+	struct no_os_uart_desc *uart_desc;
+	int _ret = no_os_uart_init(&uart_desc, &max22017_uart_ip);
+	if (_ret)
+		return _ret;
+	no_os_uart_stdio(uart_desc);
+
 	int ret, data, sign = 1;
 
 	/** Maximum value of 3V. */

@@ -33,7 +33,7 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "ltc4162l.h"
 #ifdef IIO_SUPPORT
 #include "iio_ltc4162l.h"

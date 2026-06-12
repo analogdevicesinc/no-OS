@@ -86,15 +86,11 @@ Basic Example
 This is a simple example that initializes the ADT75 sensor, reads
 temperature data, and displays the readings continuously via UART.
 
-In order to build the basic example make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adt75/Makefile>`_
+In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = y
-	IIO_EXAMPLE = n
+	make EXAMPLE=basic
 
 IIO Example
 ^^^^^^^^^^^
@@ -114,17 +110,13 @@ The No-OS IIO Application together with the No-OS IIO ADT75 driver take care
 of all the back-end logic needed to setup the IIO server.
 
 This example initializes the IIO device and calls the IIO app as shown in:
-`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adt75/src/examples/iio_example>`_
+`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adt75/src/examples/iio>`_
 
-In order to build the IIO project make sure you have the following configuration
-in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adt75/Makefile>`_
+In order to build the IIO project make sure you are using this command:
 
 .. code-block:: bash
 
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = n
-	IIO_EXAMPLE = y
+	make EXAMPLE=iio
 
 No-OS Supported Platforms
 -------------------------
@@ -155,6 +147,6 @@ VDD (Pin 8)       Power Supply        3V3
 	# to delete current build
 	make reset PLATFORM=maxim TARGET=max32650
 	# to build the project
-	make PLATFORM=maxim TARGET=max32650
+	make EXAMPLE=iio PLATFORM=maxim TARGET=max32650
 	# to flash the code
 	make run PLATFORM=maxim TARGET=max32650

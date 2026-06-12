@@ -39,7 +39,7 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "no_os_uart.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"

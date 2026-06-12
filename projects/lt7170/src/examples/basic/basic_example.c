@@ -37,16 +37,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "common_data.h"
-#include "basic_example.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
+#include "no_os_uart.h"
 #include "lt7170.h"
 
-int basic_example_main()
+int example_main()
 {
 	struct lt7170_dev *dev;
 	struct lt7170_status status;
+	struct no_os_uart_desc *uart_desc;
 	int ret, vals[4];
+
+	ret = no_os_uart_init(&uart_desc, &lt7170_uart_ip);
+	if (ret)
+		return ret;
+
+	no_os_uart_stdio(uart_desc);
 
 	pr_info("Running basic example.\n");
 

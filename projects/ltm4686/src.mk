@@ -1,11 +1,9 @@
-include $(PROJECT)/src/platform/$(PLATFORM)/platform_src.mk
-include $(PROJECT)/src/examples/examples_src.mk
-
 NO_OS_INC_DIRS += \
 	$(INCLUDE) \
 	$(PROJECT)/src/ \
-	$(DRIVERS)/api/ \
-	$(DRIVERS)/power/ltm4686/
+	$(DRIVERS)/api/
+
+INCS += $(DRIVERS)/power/ltm4686/ltm4686.h
 
 SRCS += $(PROJECT)/src/platform/$(PLATFORM)/main.c \
 	$(PROJECT)/src/common/common_data.c \

@@ -115,14 +115,11 @@ first channel's AO, then recreating a triangle wave.
 Values of the maximum value, frequency and increment can be changed in the
 basic_example.c source file.
 
-In order to build the basic example make sure you have the following configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max22017/Makefile>`_
+In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = y
-	IIO_EXAMPLE = n
+	make EXAMPLE=basic
 
 IIO example
 ^^^^^^^^^^^
@@ -134,14 +131,11 @@ an IIO app through the IIO lib. After which the client can configure the
 MAX22017 in every way possible througout an IIO interface such as IIO
 oscilloscope.
 
-In order to build the IIO example make sure you have the following configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max22017/Makefile>`_
+In order to build the IIO example make sure you are using this command:
 
 .. code-block:: bash
 
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = n
-	IIO_EXAMPLE = y
+	make EXAMPLE=iio
 
 No-OS Supported Platforms
 -------------------------
@@ -179,6 +173,6 @@ Maxim Platform
 	# to delete current build
 	make reset
 	# to build the project
-	make PLATFORM=maxim TARGET=max32665
+	make EXAMPLE=iio PLATFORM=maxim TARGET=max32665
 	# to flash the code
 	make run

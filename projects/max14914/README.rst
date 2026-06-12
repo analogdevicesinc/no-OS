@@ -91,13 +91,11 @@ Basic example
 This is a simple example which initializes the max14914 and sets the state of
 the device to a DIGITAL INPUT IEC TYPE 2.
 
-In order to build the basic example make sure you have the following configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max14914/Makefile>`_
+This is the only example in this project, so it builds by default:
 
 .. code-block:: bash
 
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = y
+	make
 
 No-OS Supported Platforms
 -------------------------

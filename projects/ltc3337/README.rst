@@ -70,14 +70,11 @@ The basic example initializes the LTC3337 device and continuously reads
 accumulated charge, battery input/output voltages (with iPeak on and off),
 and die temperature, printing the results over UART.
 
-In order to build the basic example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/ltc3337/Makefile>`__:
+This is the only example in this project, so it builds by default:
 
 .. code-block:: bash
 
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = y
+	make
 
 No-OS Supported Platforms
 -------------------------

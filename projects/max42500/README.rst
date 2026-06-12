@@ -57,13 +57,11 @@ loop, the example reads the status of the voltage monitor input and prints the
 results to the console. Optionally, varying input signals can be applied to the 
 input voltage monitor pin to test and see the status of the pin.
 
-To build the basic example, ensure you have the following configuration 
-in the **Makefile**:
+This is the only example in this project, so it builds by default:
 
 .. code-block:: bash
 
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = y
+	make
 
 No-OS Supported Platforms
 -------------------------

@@ -34,12 +34,18 @@
 #include "no_os_print_log.h"
 #include "no_os_spi.h"
 #include "no_os_util.h"
-#include "basic_example.h"
 #include "common_data.h"
+#include "no_os_uart.h"
 #include "lt8722.h"
 
-int basic_example_main()
+int example_main()
 {
+	struct no_os_uart_desc *uart_desc;
+	int _ret = no_os_uart_init(&uart_desc, &lt8722_uart_ip);
+	if (_ret)
+		return _ret;
+	no_os_uart_stdio(uart_desc);
+
 	int ret;
 	double voltage;
 	struct lt8722_dev *lt8722_dev;
