@@ -19,7 +19,7 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -35,7 +35,10 @@
 #define MAXIM_SPI_H_
 
 #include <stdint.h>
+#include "max32672.h"
+#include "gpio.h"
 #include "no_os_spi.h"
+#include "no_os_dma.h"
 
 /**
  * @brief maxim specific SPI platform ops structure
@@ -56,6 +59,19 @@ enum spi_ss_polarity {
 struct max_spi_init_param {
 	uint32_t num_slaves;
 	enum spi_ss_polarity polarity;
+	mxc_gpio_vssel_t vssel;
+	struct no_os_dma_init_param *dma_param;
+	uint32_t dma_rx_priority;
+	uint32_t dma_tx_priority;
+};
+
+struct max_spi_state {
+	struct max_spi_init_param *init_param;
+	uint32_t cs_delay_first;
+	uint32_t cs_delay_last;
+	struct no_os_dma_desc *dma;
+	uint32_t dma_req_rx;
+	uint32_t dma_req_tx;
 };
 
 #endif

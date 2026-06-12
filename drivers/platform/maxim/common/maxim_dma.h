@@ -47,6 +47,8 @@
 #include "max32665.h"
 #elif TARGET_NUM == 32670
 #include "max32670.h"
+#elif TARGET_NUM == 32672
+#include "max32672.h"
 #elif TARGET_NUM == 32690
 #include "max32690.h"
 #elif TARGET_NUM == 78000
