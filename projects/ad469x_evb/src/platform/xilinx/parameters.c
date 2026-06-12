@@ -36,9 +36,15 @@
 struct xil_uart_init_param uart_extra_ip = {
 #ifdef XPAR_XUARTLITE_NUM_INSTANCES
 	.type = UART_PL,
+#ifdef SDT
+	.base_addr = XPAR_XUARTLITE_0_BASEADDR,
+#endif
 #else
 	.type = UART_PS,
-	.irq_id = UART_IRQ_ID
+	.irq_id = UART_IRQ_ID,
+#ifdef SDT
+	.base_addr = XPAR_XUARTPS_0_BASEADDR,
+#endif
 #endif
 };
 struct axi_pwm_init_param pwm_extra_ip = {
@@ -56,4 +62,7 @@ struct spi_engine_init_param spi_eng_extra_ip = {
 struct xil_gpio_init_param gpio_extra_ip = {
 	.device_id = GPIO_DEVICE_ID,
 	.type = GPIO_PS,
+#ifdef SDT
+	.base_addr = XPAR_XGPIOPS_0_BASEADDR,
+#endif
 };

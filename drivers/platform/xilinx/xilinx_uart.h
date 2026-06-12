@@ -60,6 +60,8 @@ struct xil_uart_init_param {
 	uint32_t			irq_id;
 	/** Interrupt Request Descriptor */
 	struct no_os_irq_ctrl_desc *irq_desc;
+	/** Device base address (used for SDT flow) */
+	uint32_t			base_addr;
 };
 
 /**
@@ -73,6 +75,8 @@ struct xil_uart_desc {
 	uint32_t			irq_id;
 	/** Interrupt Request Descriptor */
 	struct no_os_irq_ctrl_desc *irq_desc;
+	/** Device base address (used for SDT flow) */
+	uint32_t			base_addr;
 	/** FIFO */
 	struct no_os_fifo_element	*fifo;
 	/** FIFO read offset */
