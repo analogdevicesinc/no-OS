@@ -183,6 +183,13 @@ else
 LIB_FLAGS += -Wl,--start-group,-lxil,-lgcc,-lc,-lm,--end-group
 endif
 
+# SDT (System Device Tree) mode for Vitis 2025+.  The BSP is compiled with
+# -DSDT, which changes struct layouts and API signatures.  App code must use
+# the same define so ABI matches.
+ifeq ($(shell test $(VITIS_YEAR) -ge 2025 && echo y),y)
+CFLAGS += -DSDT
+endif
+
 # Add the common include paths
 CFLAGS += -I$(BUILD_DIR)/app/src
 # Xilinx's bsp include path

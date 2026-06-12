@@ -85,7 +85,12 @@ int xil_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 		if (!xil_dev->instance)
 			goto error;
 
+#ifdef SDT
+		config = XScuGic_LookupConfig(
+				 ((struct xil_irq_init_param *)param->extra)->base_addr);
+#else
 		config = XScuGic_LookupConfig(descriptor->irq_ctrl_id);
+#endif
 		if (!config)
 			goto ps_error;
 

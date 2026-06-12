@@ -57,6 +57,8 @@ struct xil_i2c_init_param {
 	enum xil_i2c_type	type;
 	/** Device ID */
 	uint32_t		device_id;
+	/** Device base address (used for SDT flow) */
+	uint32_t		base_addr;
 };
 
 /**

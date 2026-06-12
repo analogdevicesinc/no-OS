@@ -145,13 +145,9 @@ def create_project(ws, hw_path, hw_file, target):
     client = vitis.create_client(workspace=out_dir)
     client.create_platform_component(
         name="hw0", hw_design=xsa, cpu=vcpu, os="standalone")
-    vitis.dispose()
 
-    # Reconnect: building immediately after create_platform_component on
-    # the same gRPC session fails with "Application error processing RPC".
-    # A fresh client session avoids this.
+    # Build the platform. No need to reconnect - just get the component.
     print("INFO: Building platform (BSP + FSBL)...")
-    client = vitis.create_client(workspace=out_dir)
     platform = client.get_component(name="hw0")
     platform.build()
 
