@@ -61,6 +61,19 @@
 				"TARGET_NUM": "32655",
 				"BOARD_CONFIG_FILE": "max32655_fthr_defconfig"
 			}
+		},
+		{
+			"name": "ad-swiot1l-sl",
+			"description": "AD-SWIOT1L-SL board",
+			"inherits": "maxim-base",
+			"cacheVariables": {
+				"BOARD": "ad-swiot1l-sl",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "maxim",
+				"TARGET": "max32650",
+				"TARGET_NUM": "32650",
+				"BOARD_CONFIG_FILE": "ad-swiot1l-sl_defconfig"
+			}
 		}
 	]
 }

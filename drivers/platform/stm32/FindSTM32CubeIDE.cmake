@@ -50,12 +50,5 @@ get_filename_component(
 
 mark_as_advanced(STM32CUBEIDE_EXECUTABLE)
 
-file(GLOB_RECURSE OPENOCD_PATH ${CUBEIDE_DIR}/plugins/*/openocd)
-file(GLOB_RECURSE OPENOCD_SCRIPTS ${CUBEIDE_DIR}/plugins/*/mem_helper.tcl)
-
-if(OPENOCD_SCRIPTS)
-  cmake_path(GET OPENOCD_SCRIPTS PARENT_PATH OPENOCD_SCRIPTS)
-
-  # OpenOCD interface configuration
-  set(OPENOCD_INTERFACE "interface/stlink.cfg")
-endif()
+# Export the CubeIDE directory so the toolchain can locate bundled tools (e.g. OpenOCD)
+set(CUBEIDE_DIR "${CUBEIDE_DIR}" PARENT_SCOPE)

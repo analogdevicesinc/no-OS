@@ -44,7 +44,6 @@ endif()
 target_compile_definitions(swiot1l PRIVATE
     NO_OS_LWIP_NETWORKING
     IIO_IGNORE_BUFF_OVERRUN_ERR
-    NO_OS_LWIP_INIT_ONETIME=1
 )
 
 target_include_directories(swiot1l PUBLIC

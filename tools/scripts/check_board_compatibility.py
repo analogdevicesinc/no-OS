@@ -23,9 +23,9 @@ class BoardCompatibilityChecker:
         self.no_os_root = Path(no_os_root)
         self.projects_dir = self.no_os_root / "projects"
 
-    def load_project_boards(self, project_name: str) -> List[str]:
+    def load_project_boards(self, project_name: str, project_variant: str) -> List[str]:
         """Load supported boards for a project from its boards/ directory."""
-        boards_dir = self.projects_dir / project_name / "boards"
+        boards_dir = self.projects_dir / project_name / project_variant / "boards"
 
         if not boards_dir.exists() or not boards_dir.is_dir():
             return []
@@ -94,7 +94,7 @@ class BoardCompatibilityChecker:
                 boards_str = ", ".join(boards)
                 print(f"{project:<25} | {boards_str}")
             else:
-                print(f"{project:<25} |   No boards/ directory (accepts any)")
+                print(f"{project:<25} |   No boards/ directory in project (unknown support)")
 
         print()
         print(f"Available boards: {', '.join(all_boards)}")
@@ -181,8 +181,8 @@ class BoardCompatibilityChecker:
                     print(f"\nProject '{project}' not found.")
                 continue
 
-            boards = self.load_project_boards(project)
             defconfigs = self.load_project_defconfigs(project)
+            boards = self.load_project_boards(project, defconfigs)
 
             if not defconfigs:
                 continue

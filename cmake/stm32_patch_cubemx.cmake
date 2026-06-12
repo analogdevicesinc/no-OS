@@ -41,6 +41,16 @@ string(REPLACE "target_sources(no-os PRIVATE \${MX_Application_Src})"
      PATCHED_CONTENTS "${FILE_CONTENTS}")
 file(WRITE ${CMAKE_FILE_TO_PATCH} "${PATCHED_CONTENTS}")
 
+# Remove the target_link_libraries(no-os ...) line that links CubeMX
+# OBJECT libraries (STM32_Drivers, USB_Device_Library, etc.) to no-os.
+# OBJECT libraries don't propagate other OBJECT library dependencies
+# transitively, so these must be linked directly to the build target.
+# stm32_platform_sdk.cmake handles this via MX_LINK_LIBS.
+file(READ ${CMAKE_FILE_TO_PATCH} FILE_CONTENTS)
+string(REGEX REPLACE "[^\n]*target_link_libraries\\(no-os [^\n]*MX_LINK_LIBS[^\n]*\n" ""
+     PATCHED_CONTENTS "${FILE_CONTENTS}")
+file(WRITE ${CMAKE_FILE_TO_PATCH} "${PATCHED_CONTENTS}")
+
 file(READ "${STM32_PROJECT_BUILD}/Core/Src/main.c" MAIN_FILE_CONTENTS)
 
 # Replace main function name with stm32_init

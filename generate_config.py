@@ -75,12 +75,41 @@ except Exception as e:
         print(f"Error generating config.cmake: {e}", file=sys.stderr)
         sys.exit(1)
 
-# Generate C header file with CONFIG_ defines using kconfiglib's built-in function
+# Generate C header file.
+# All symbols get a CONFIG_FOO define.
+# Symbols defined under drivers/ only get CONFIG_FOO (to avoid collisions
+# with driver identifiers such as enum values that share the symbol name).
+# All other symbols (project, library, network, platform) also get an
+# unprefixed FOO alias for backward compatibility with the Make build system.
 try:
         header_tmp = build_dir.joinpath("no_os_config.h.tmp")
         header_final = build_dir.joinpath("no_os_config.h")
-        header_comment = "/* Auto-generated configuration header */\n"
-        kconf.write_autoconf(filename=str(header_tmp), header=header_comment)
+        drivers_path = "drivers/"
+        with open(header_tmp, "w") as hf:
+                hf.write("/* Auto-generated configuration header — do not edit */\n")
+                hf.write("#ifndef NO_OS_CONFIG_H\n")
+                hf.write("#define NO_OS_CONFIG_H\n\n")
+                for sym in kconf.unique_defined_syms:
+                        if sym.orig_type is kconfiglib.STRING:
+                                val = f'"{sym.str_value}"'
+                        elif sym.orig_type is kconfiglib.INT:
+                                val = sym.str_value
+                        elif sym.tri_value == 2:  # y
+                                val = "1"
+                        else:
+                                continue  # n/m: omit
+
+                        hf.write(f"#define CONFIG_{sym.name} {val}\n")
+
+                        # Emit unprefixed alias only for non-driver symbols
+                        in_drivers = any(
+                                str(node.filename).startswith(drivers_path)
+                                for node in sym.nodes
+                        )
+                        if not in_drivers:
+                                hf.write(f"#define {sym.name} {val}\n")
+
+                hf.write("\n#endif /* NO_OS_CONFIG_H */\n")
         write_if_changed(header_tmp, header_final)
         print("Generated no_os_config.h")
 

@@ -164,7 +164,7 @@ static int32_t lwip_network_setup(struct iio_app_desc *app,
 	static bool is_initialized = false;
 	int ret;
 
-	if (NO_OS_LWIP_INIT_ONETIME && is_initialized) {
+	if (CONFIG_NO_OS_LWIP_INIT_ONETIME && is_initialized) {
 		socket_param.net = &lwip_desc.no_os_net;
 	} else {
 		ret = no_os_lwip_init(&app->lwip_desc, &param.lwip_param);

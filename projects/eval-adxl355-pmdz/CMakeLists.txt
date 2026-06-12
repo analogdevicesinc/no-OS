@@ -1,50 +1,61 @@
-add_library(eval-adxl355-pmdz-common STATIC)
+add_executable(eval-adxl355-pmdz)
 
-add_executable(eval-adxl355-pmdz-dummy ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/dummy/dummy_example.c)
-target_link_libraries(eval-adxl355-pmdz-dummy eval-adxl355-pmdz-common)
+# Common sources
+target_sources(eval-adxl355-pmdz PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/common/common_data.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}/main.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}/parameters.c
+)
 
-add_executable(eval-adxl355-pmdz-iio ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_example/iio_example.c)
-target_link_libraries(eval-adxl355-pmdz-iio eval-adxl355-pmdz-common)
+# Dummy example
+if(CONFIG_ADXL355_PMDZ_DUMMY_EXAMPLE)
+    target_sources(eval-adxl355-pmdz PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/dummy/dummy_example.c
+    )
+    target_include_directories(eval-adxl355-pmdz PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/dummy
+    )
+endif()
 
-add_executable(eval-adxl355-pmdz-iio-trigger ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_trigger_example/iio_trigger_example.c)
-target_link_libraries(eval-adxl355-pmdz-iio-trigger eval-adxl355-pmdz-common)
-target_link_libraries(eval-adxl355-pmdz-common no-os)
+# IIO example
+if(CONFIG_ADXL355_PMDZ_IIO_EXAMPLE)
+    target_sources(eval-adxl355-pmdz PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_example/iio_example.c
+    )
+    target_include_directories(eval-adxl355-pmdz PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_example
+    )
+endif()
 
-add_custom_target(eval-adxl355-pmdz DEPENDS eval-adxl355-pmdz-dummy eval-adxl355-pmdz-iio eval-adxl355-pmdz-iio-trigger)
+# IIO trigger example
+if(CONFIG_ADXL355_PMDZ_IIO_TRIGGER_EXAMPLE)
+    target_sources(eval-adxl355-pmdz PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_trigger_example/iio_trigger_example.c
+    )
+    target_include_directories(eval-adxl355-pmdz PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_trigger_example
+    )
+endif()
 
-target_sources(eval-adxl355-pmdz-common PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/common/common_data.c)
-target_sources(eval-adxl355-pmdz-common PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}/main.c)
-target_sources(eval-adxl355-pmdz-common PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}/parameters.c)
+# IIO LWIP example
+if(CONFIG_ADXL355_PMDZ_IIO_LWIP_EXAMPLE)
+    target_sources(eval-adxl355-pmdz PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_lwip_example/iio_lwip_example.c
+    )
+    target_include_directories(eval-adxl355-pmdz PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_lwip_example
+    )
+endif()
 
-target_include_directories(eval-adxl355-pmdz-common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/platform)
-target_include_directories(eval-adxl355-pmdz-common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/common)
-target_include_directories(eval-adxl355-pmdz-common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM})
+target_include_directories(eval-adxl355-pmdz PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/common
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/platform
+)
 
-target_compile_definitions(eval-adxl355-pmdz-dummy PRIVATE -DADXL355_DEV=1)
-target_compile_definitions(eval-adxl355-pmdz-iio PRIVATE -DADXL355_DEV=1)
-target_compile_definitions(eval-adxl355-pmdz-iio-trigger PRIVATE -DADXL355_DEV=1)
+target_compile_definitions(eval-adxl355-pmdz PRIVATE -DADXL355_DEV=1)
+target_link_libraries(eval-adxl355-pmdz no-os)
 
-target_include_directories(eval-adxl355-pmdz-dummy PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/dummy)
-target_include_directories(eval-adxl355-pmdz-iio PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_example)
-target_include_directories(eval-adxl355-pmdz-iio-trigger PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_trigger_example)
-
-config_platform_sdk(eval-adxl355-pmdz-dummy)
-config_platform_sdk(eval-adxl355-pmdz-iio)
-config_platform_sdk(eval-adxl355-pmdz-iio-trigger)
-
-add_flash_target(eval-adxl355-pmdz-dummy)
-# add_flash_target(eval-adxl355-pmdz-iio)
-# add_flash_target(eval-adxl355-pmdz-iio-trigger)
-
-post_build_config(eval-adxl355-pmdz-dummy)
-# post_build_config(eval-adxl355-pmdz-iio)
-# post_build_config(eval-adxl355-pmdz-iio-trigger)
-
-# add_custom_command(
-#     TARGET eval-adxl355-pmdz-dummy
-#     POST_BUILD
-#     COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:eval-adxl355-pmdz-dummy> eval-adxl355-pmdz-dummy.hex
-#     COMMENT "Generating eval-adxl355-pmdz-dummy.hex"
-# )
-
-# message(STATUS "Running make for eval-adxl355-pmdz")
+config_platform_sdk(eval-adxl355-pmdz)
+add_flash_target(eval-adxl355-pmdz)
+post_build_config(eval-adxl355-pmdz)

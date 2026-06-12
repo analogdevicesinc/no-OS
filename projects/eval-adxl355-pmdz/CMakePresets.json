@@ -11,7 +11,7 @@
         {
             "name": "default",
             "description": "Default config",
-            "generator": "Unix Makefiles"
+            "generator": "Ninja"
         },
         {
             "name": "max78000_fthr",
@@ -23,8 +23,7 @@
                 "USE_VENDOR_TOOLCHAIN": "OFF",
                 "PLATFORM": "maxim",
                 "TARGET": "max78000",
-                "TARGET_NUM": "78000",
-                "BOARD_CONFIG_FILE": "max78000_fthr_defconfig"
+                "TARGET_NUM": "78000"
             }
         },
         {
@@ -37,8 +36,7 @@
                 "USE_VENDOR_TOOLCHAIN": "ON",
                 "PLATFORM": "maxim",
                 "TARGET": "max32650",
-                "TARGET_NUM": "32650",
-                "BOARD_CONFIG_FILE": "max32650_fthr_defconfig"
+                "TARGET_NUM": "32650"
             }
         },
         {
@@ -51,49 +49,34 @@
                 "USE_VENDOR_TOOLCHAIN": "ON",
                 "PLATFORM": "maxim",
                 "TARGET": "max32690",
-                "TARGET_NUM": "32690",
-                "BOARD_CONFIG_FILE": "apard32690_defconfig"
+                "TARGET_NUM": "32690"
             }
         },
         {
             "name": "stm32f756_nucleo",
             "displayName": "STM32F756 Nucleo",
-            "description": "STM32F756 Nucleo board",
+            "description": "STM32F756 Nucleo board (SDP-K1)",
             "inherits": "default",
             "cacheVariables": {
                 "BOARD": "sdp-ck1z",
                 "USE_VENDOR_TOOLCHAIN": "OFF",
                 "PLATFORM": "stm32",
                 "TARGET": "stm32f756",
-                "TARGET_NUM": "stm32f756",
-                "BOARD_CONFIG_FILE": "stm32f756_nucleo_defconfig"
+                "TARGET_NUM": "stm32f756"
             }
-        }
-    ],
-    "buildPresets": [
-        {
-            "name": "dummy",
-            "displayName": "ADXL355 Dummy Example",
-            "description": "Build the dummy example application",
-            "targets": ["eval-adxl355-pmdz-dummy"]
         },
         {
-            "name": "iio",
-            "displayName": "ADXL355 IIO Example",
-            "description": "Build the IIO example application",
-            "targets": ["eval-adxl355-pmdz-iio"]
-        },
-        {
-            "name": "iio_trigger",
-            "displayName": "ADXL355 IIO Trigger Example",
-            "description": "Build the IIO trigger example application",
-            "targets": ["eval-adxl355-pmdz-iio-trigger"]
-        },
-        {
-            "name": "all",
-            "displayName": "All ADXL355 Examples",
-            "description": "Build all example applications",
-            "targets": ["eval-adxl355-pmdz"]
+            "name": "adin1110ebz",
+            "displayName": "ADIN1110-EBZ",
+            "description": "STM32F756 Nucleo with ADIN1110 Ethernet board",
+            "inherits": "default",
+            "cacheVariables": {
+                "BOARD": "adin1110ebz",
+                "USE_VENDOR_TOOLCHAIN": "OFF",
+                "PLATFORM": "stm32",
+                "TARGET": "stm32f756",
+                "TARGET_NUM": "stm32f756"
+            }
         }
     ]
 }

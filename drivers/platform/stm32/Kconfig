@@ -45,6 +45,8 @@ config I3C_STM32
 config SPI_STM32
 	bool "Enable STM32 SPI driver"
 	depends on SPI
+	select DMA
+	select DMA_STM32
 	default n
 	help
 	  Enable STM32-specific SPI driver implementation.
@@ -128,5 +130,13 @@ config TDM_STM32
 	help
 	  Enable STM32-specific TDM (Time Division Multiplexing) driver implementation.
 	  Requires CONFIG_TDM=y to be enabled.
+
+config STM32_IOC_PATH
+	string "STM32 CubeMX IOC file path"
+	default ""
+	help
+	  Path to a STM32 CubeMX .ioc configuration file used to generate
+	  the HAL drivers. Relative paths are resolved from the project
+	  directory. When empty, defaults to ${BOARD}.ioc.
 
 endif # STM32

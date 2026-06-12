@@ -3,5 +3,7 @@ menu "Project-Specific Configuration"
 source "projects/ftc_workshop_capi/Kconfig"
 source "projects/swiot1l/Kconfig"
 source "projects/iio_demo/Kconfig"
+source "projects/eval-adxl355-pmdz/Kconfig"
+source "projects/apard32690/Kconfig"
 
 endmenu

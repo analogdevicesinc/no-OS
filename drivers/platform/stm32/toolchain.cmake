@@ -10,14 +10,44 @@ if(USE_VENDOR_TOOLCHAIN)
     find_package(STM32CubeIDE REQUIRED)
 endif()
 
-find_program(OPENOCD_PATH
+# Find OpenOCD — prefer CubeIDE-bundled version, then system
+if(DEFINED CUBEIDE_DIR)
+    file(GLOB_RECURSE _cubeide_openocd ${CUBEIDE_DIR}/plugins/*/openocd)
+    if(_cubeide_openocd)
+        list(GET _cubeide_openocd 0 OPENOCD_PATH)
+        # Scripts dir sits next to the binary's parent
+        file(GLOB_RECURSE _cubeide_scripts ${CUBEIDE_DIR}/plugins/*/mem_helper.tcl)
+        if(_cubeide_scripts)
+            list(GET _cubeide_scripts 0 _scripts_file)
+            cmake_path(GET _scripts_file PARENT_PATH OPENOCD_SCRIPTS)
+        endif()
+        message(STATUS "Found CubeIDE-bundled OpenOCD: ${OPENOCD_PATH}")
+    endif()
+endif()
+
+if(NOT OPENOCD_PATH)
+    find_program(OPENOCD_PATH
         NAMES openocd
-        HINTS ${OPENOCD_SEARCH_PATH}
         PATH_SUFFIXES bin
         DOC "Path to OpenOCD executable"
     )
+    if(OPENOCD_PATH)
+        # Resolve scripts dir relative to the binary
+        cmake_path(GET OPENOCD_PATH PARENT_PATH _ocd_bin_dir)
+        cmake_path(GET _ocd_bin_dir PARENT_PATH _ocd_prefix)
+        cmake_path(SET _ocd_scripts NORMALIZE "${_ocd_prefix}/share/openocd/scripts")
+        if(EXISTS "${_ocd_scripts}")
+            set(OPENOCD_SCRIPTS "${_ocd_scripts}")
+        endif()
+        message(STATUS "Found system OpenOCD: ${OPENOCD_PATH}")
+    else()
+        message(STATUS "OpenOCD not found")
+    endif()
+endif()
 
-cmake_path(SET OPENOCD_SCRIPTS NORMALIZE "/usr/share/openocd/scripts")
+if(OPENOCD_PATH)
+    set(OPENOCD_INTERFACE "interface/stlink.cfg")
+endif()
 
 set(CMAKE_C_COMPILER arm-none-eabi-gcc)
 set(CMAKE_CXX_COMPILER arm-none-eabi-g++)

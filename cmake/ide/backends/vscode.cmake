@@ -20,22 +20,14 @@ function(ide_vscode_configure PROJECT_TARGET)
     file(MAKE_DIRECTORY "${VSCODE_DIR}")
 
     # --- OpenOCD configuration for launch.json ---
-    if(PLATFORM STREQUAL "maxim")
-        set(OPENOCD_CONFIG "interface/cmsis-dap.cfg\",\n                \"target/${TARGET}.cfg")
-    else()
-        set(OPENOCD_CONFIG "${CMAKE_CURRENT_BINARY_DIR}/openocd.cfg")
-    endif()
+    # Use the generated openocd.cfg produced by generate_openocd_config()
+    set(OPENOCD_CONFIG "${CMAKE_CURRENT_BINARY_DIR}/openocd.cfg")
 
+    # OPENOCD_SCRIPTS is set by the platform toolchain
     if(DEFINED OPENOCD_SCRIPTS)
         set(OPENOCD_SEARCH "${OPENOCD_SCRIPTS}")
     else()
-        if(WIN32)
-            set(OPENOCD_SEARCH "C:/openocd/share/openocd/scripts")
-        elseif(APPLE)
-            set(OPENOCD_SEARCH "/opt/homebrew/share/openocd/scripts;/usr/local/share/openocd/scripts")
-        else()
-            set(OPENOCD_SEARCH "/usr/share/openocd/scripts;/usr/local/share/openocd/scripts")
-        endif()
+        set(OPENOCD_SEARCH "")
     endif()
 
     # --- IntelliSense mode detection ---
@@ -85,6 +77,18 @@ function(ide_vscode_configure PROJECT_TARGET)
         INPUT "${CMAKE_BINARY_DIR}/_ide_tmp/launch.json.gen"
         TARGET ${PROJECT_TARGET}
     )
+
+    # --- Generate multi-root workspace file ---
+    # Places the project directory as the first root in VS Code's explorer,
+    # making project sources easy to find among the full no-OS tree.
+    if(DEFINED NO_OS_PROJECT_NAME)
+        configure_file(
+            "${VSCODE_TEMPLATES_DIR}/no-os.code-workspace.in"
+            "${PROJECT_HOME}/no-os.code-workspace"
+            @ONLY
+        )
+        message(STATUS "Generated VS Code workspace: ${PROJECT_HOME}/no-os.code-workspace")
+    endif()
 
     message(STATUS "Generated VS Code configuration in ${VSCODE_DIR}")
 endfunction()

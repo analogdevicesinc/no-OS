@@ -31,8 +31,9 @@ config SWIOT1L_MQTT_SERVER_PORT
 config SWIOT1L_STATIC_IP
 	bool "Use static IP address"
 	default n
+	select NO_OS_STATIC_IP
 	help
-	  Use a static IP (192.168.97.40) instead of DHCP.
+	  Use a static IP instead of DHCP.
 
 config SWIOT1L_OA_TC6_SPI
 	bool "Use OA TC6 SPI protocol"

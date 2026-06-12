@@ -119,7 +119,7 @@ set(CREATE_DOTCONFIG_SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/build/create_dotconfig.c
 # Create build directory during configure phase
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/build)
 
-set(VENV_DIR "${CMAKE_CURRENT_BINARY_DIR}/.no_os_venv")
+set(VENV_DIR "${CMAKE_CURRENT_SOURCE_DIR}/.no_os_venv")
 if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
   set(VENV_PYTHON_EXE "${VENV_DIR}/Scripts/python.exe")
 else()
@@ -140,28 +140,46 @@ if(NOT ${NATIVE_BUILD})
   # Variable already set in current scope above; PARENT_SCOPE propagates to including project
 endif()
 
-add_library(no-os STATIC)
+set(NO_OS_LIBRARY_TYPE "OBJECT" CACHE STRING "no-os library type (STATIC or OBJECT)")
+set_property(CACHE NO_OS_LIBRARY_TYPE PROPERTY STRINGS STATIC OBJECT)
+add_library(no-os ${NO_OS_LIBRARY_TYPE})
 
 target_include_directories(
         no-os
         PUBLIC
+        ${CMAKE_CURRENT_BINARY_DIR}/build  # Generated no_os_config.h (takes precedence)
         ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_BINARY_DIR}/build  # Make config.h accessible
 )
+
+# Force-include the generated config header so source files don't need
+# explicit #include "no_os_config.h" — matches the Make build where
+# symbols arrive via -D CFLAGS.
+target_compile_options(no-os PUBLIC -include no_os_config.h)
 list(APPEND GENERATE_CONFIG_ARGS "--defconfig")
 list(APPEND GENERATE_CONFIG_ARGS ${DEFAULT_DEFCONFIG})
 
-# Add board-specific config if available
+# Add board-specific config if available (try variant-specific path first, flat fallback)
 if(DEFINED NO_OS_PROJECT_NAME AND DEFINED BOARD)
+  # Extract variant name from PROJECT_DEFCONFIG filename
+  get_filename_component(VARIANT_NAME "${PROJECT_DEFCONFIG}" NAME_WE)
+
   if(${NATIVE_BUILD})
-    set(BOARD_CONFIG_FILE "${CMAKE_CURRENT_SOURCE_DIR}/projects/${NO_OS_PROJECT_NAME}/boards/${BOARD}.conf")
+    set(_variant_cfg "${CMAKE_CURRENT_SOURCE_DIR}/projects/${NO_OS_PROJECT_NAME}/boards/${VARIANT_NAME}/${BOARD}.conf")
+    set(_flat_cfg "${CMAKE_CURRENT_SOURCE_DIR}/projects/${NO_OS_PROJECT_NAME}/boards/${BOARD}.conf")
   else()
-    set(BOARD_CONFIG_FILE "${CMAKE_SOURCE_DIR}/boards/${BOARD}.conf")
+    set(_variant_cfg "${CMAKE_SOURCE_DIR}/boards/${VARIANT_NAME}/${BOARD}.conf")
+    set(_flat_cfg "${CMAKE_SOURCE_DIR}/boards/${BOARD}.conf")
   endif()
 
-  if(EXISTS "${BOARD_CONFIG_FILE}")
-    message(STATUS "Adding board defconfig: ${BOARD_CONFIG_FILE}")
-    list(APPEND GENERATE_CONFIG_ARGS "${BOARD_CONFIG_FILE}")
+  if(EXISTS "${_variant_cfg}")
+    set(BOARD_DEFCONFIG_FILE "${_variant_cfg}")
+  elseif(EXISTS "${_flat_cfg}")
+    set(BOARD_DEFCONFIG_FILE "${_flat_cfg}")
+  endif()
+
+  if(DEFINED BOARD_DEFCONFIG_FILE AND EXISTS "${BOARD_DEFCONFIG_FILE}")
+    message(STATUS "Adding board defconfig: ${BOARD_DEFCONFIG_FILE}")
+    list(APPEND GENERATE_CONFIG_ARGS "${BOARD_DEFCONFIG_FILE}")
   endif()
 endif()
 
@@ -275,3 +293,9 @@ add_custom_target(
 )
 
 add_dependencies(no-os KconfigVars)
+
+if(NATIVE_BUILD AND DEFINED NO_OS_PROJECT_NAME)
+    message(STATUS "")
+    message(STATUS "Build with: \ncmake --build ${CMAKE_BINARY_DIR} --target ${NO_OS_PROJECT_NAME}")
+    message(STATUS "")
+endif()

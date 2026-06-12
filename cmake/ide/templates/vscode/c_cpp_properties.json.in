@@ -4,12 +4,21 @@
             "name": "@PLATFORM@-@TARGET@",
             "compileCommands": "${workspaceFolder}/@CMAKE_BUILD_DIR@/compile_commands.json",
             "includePath": [
+                "${workspaceFolder}/@CMAKE_BUILD_DIR@/build",
                 "${workspaceFolder}/include",
                 "${workspaceFolder}/drivers/**",
-                "${workspaceFolder}/iio/**",
-                "${workspaceFolder}/libraries/**",
-                "${workspaceFolder}/@CMAKE_BUILD_DIR@/build"@PLATFORM_INCLUDE_PATHS@
+                "${workspaceFolder}/iio/**"@PLATFORM_INCLUDE_PATHS@
             ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/@CMAKE_BUILD_DIR@",
+                    "${workspaceFolder}/include",
+                    "${workspaceFolder}/drivers",
+                    "${workspaceFolder}/iio",
+                    "${workspaceFolder}/projects",
+                    "${workspaceFolder}/util"@PLATFORM_INCLUDE_PATHS@
+                ]
+            },
             "compilerPath": "@CMAKE_C_COMPILER@",
             "cStandard": "c11",
             "cppStandard": "c++17",

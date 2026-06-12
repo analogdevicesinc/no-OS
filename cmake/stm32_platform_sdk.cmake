@@ -89,7 +89,6 @@ function(stm32_check_cubemx_stale IOC_FILE BOARD_BUILD_DIR)
                         return()
                 endif()
                 message(STATUS "CubeMX regeneration needed (IOC or CubeMX changed)")
-                file(REMOVE_RECURSE "${BOARD_BUILD_DIR}")
         endif()
 endfunction()
 
@@ -117,6 +116,7 @@ function(config_stm32_sdk BUILD_TARGET)
         stm32_check_cubemx_stale("${IOC_FILE}" "${BOARD_BUILD_DIR}")
 
         if(NEED_REGEN)
+                message(STATUS "Patching STM32CubeMX config file...")
                 execute_process(
                         COMMAND ${CMAKE_COMMAND}
                         -D STM32_TEMPLATE_FILE=${NO_OS_DIR}/cmake/stm32_cubemx_template.cubemx
@@ -125,20 +125,29 @@ function(config_stm32_sdk BUILD_TARGET)
                         -D SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}
                         -D BOARD=${BOARD}
                         -P "${NO_OS_DIR}/cmake/stm32_patch_cubemx_config.cmake"
-                        COMMENT "Patching STM32CubeMX config file..."
                 )
 
+                message(STATUS "Generating STM32CubeMX project...")
                 execute_process(
                         COMMAND ${STM32CUBEMX_JAVA} -jar ${STM32CUBEMX_EXECUTABLE} -q "${CMAKE_CURRENT_BINARY_DIR}/stm32cubemx_config.cubemx"
-                        COMMENT "Generating STM32CubeMX project..."
+                        RESULT_VARIABLE CUBEMX_RESULT
+                        OUTPUT_VARIABLE CUBEMX_OUTPUT
+                        ERROR_VARIABLE CUBEMX_ERROR
                 )
+                message(STATUS "CubeMX exit code: ${CUBEMX_RESULT}")
+                if(CUBEMX_OUTPUT)
+                        message(STATUS "CubeMX stdout:\n${CUBEMX_OUTPUT}")
+                endif()
+                if(CUBEMX_ERROR)
+                        message(STATUS "CubeMX stderr:\n${CUBEMX_ERROR}")
+                endif()
 
+                message(STATUS "Patching STM32CubeMX generated CMakeLists.txt...")
                 execute_process(
                         COMMAND ${CMAKE_COMMAND}
                         -D CMAKE_FILE_TO_PATCH=${BOARD_BUILD_DIR}/${IOC_NAME}/cmake/stm32cubemx/CMakeLists.txt
                         -D STM32_PROJECT_BUILD=${BOARD_BUILD_DIR}/${IOC_NAME}
                         -P "${NO_OS_DIR}/cmake/stm32_patch_cubemx.cmake"
-                        COMMENT "Patching STM32CubeMX generated CMakeLists.txt..."
                 )
 
                 file(GLOB STARTUP_FILE ${BOARD_BUILD_DIR}/*/startup_*.s)
@@ -156,16 +165,19 @@ function(config_stm32_sdk BUILD_TARGET)
         target_sources(no-os PRIVATE ${EXTI_GEN_FILE})
         file(GLOB LINKER_SCRIPT_FILE ${BOARD_BUILD_DIR}/*/*_FLASH.ld)
 
-        # STM32_Drivers is an OBJECT library containing the HAL drivers
-        # (with weak HAL_*_MspInit / interrupt handler stubs) and, after
-        # patching, the CubeMX application sources (with the strong
-        # overrides).  Link it directly to the project executable so that
-        # all objects land unconditionally on the final link line — strong
-        # symbols then reliably override the weak stubs.
-        #
-        # no-os only needs the stm32cubemx INTERFACE library (include paths
-        # and compile definitions) so its own sources compile correctly.
-        target_link_libraries(${BUILD_TARGET} STM32_Drivers)
+        # Link all CubeMX OBJECT libraries (STM32_Drivers, USB_Device_Library,
+        # etc.) directly to the project executable.  OBJECT libraries don't
+        # propagate other OBJECT library dependencies transitively, so each
+        # must be linked to the final executable directly.
+        get_directory_property(_cubemx_targets
+                DIRECTORY ${BOARD_BUILD_DIR}/${IOC_NAME}/cmake/stm32cubemx
+                BUILDSYSTEM_TARGETS)
+        foreach(_lib ${_cubemx_targets})
+                get_target_property(_type ${_lib} TYPE)
+                if(_type STREQUAL "OBJECT_LIBRARY" OR _type STREQUAL "STATIC_LIBRARY")
+                        target_link_libraries(${BUILD_TARGET} ${_lib})
+                endif()
+        endforeach()
         target_link_libraries(no-os stm32cubemx)
         target_compile_definitions(no-os PRIVATE -DSTM32_PLATFORM=1)
         target_link_options(${BUILD_TARGET} PRIVATE -T${LINKER_SCRIPT_FILE})

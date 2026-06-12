@@ -15,9 +15,20 @@
 				"BOARD": "stm32f756_nucleo",
 				"USE_VENDOR_TOOLCHAIN": "ON",
 				"PLATFORM": "stm32",
-				"TARGET": "stm32f756",
-				"TARGET_NUM": "stm32f756",
 				"BOARD_CONFIG_FILE": "stm32f756_nucleo_defconfig"
+			}
+		},
+		{
+			"name": "sdp-ck1z",
+			"description": "SDP-CK1Z board",
+			"inherits": "stm32-base",
+			"cacheVariables": {
+				"BOARD": "sdp-ck1z",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "stm32",
+				"TARGET": "stm32f469",
+				"TARGET_NUM": "stm32f469",
+				"BOARD_CONFIG_FILE": "sdp-ck1z_defconfig"
 			}
 		},
 		{
@@ -26,10 +37,8 @@
 			"inherits": "stm32-base",
 			"cacheVariables": {
 				"BOARD": "adin1110ebz",
-				"USE_VENDOR_TOOLCHAIN": "OFF",
+				"USE_VENDOR_TOOLCHAIN": "ON",
 				"PLATFORM": "stm32",
-				"TARGET": "stm32l4",
-				"TARGET_NUM": "stm32l4",
 				"BOARD_CONFIG_FILE": "adin1110ebz_defconfig"
 			}
 		}
