@@ -79,15 +79,11 @@ This is a simple example that:
 * reads average battery voltage
 * reads battery current
 
-In order to build the basic example make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltc4162l/Makefile>`_
+In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = y
-	IIO_EXAMPLE = n
+	make EXAMPLE=basic
 
 IIO Example
 ^^^^^^^^^^^
@@ -107,17 +103,13 @@ The No-OS IIO Application together with the No-OS IIO LTC4162L driver take care
 of all the back-end logic needed to setup the IIO server.
 
 This example initializes the IIO device and calls the IIO app as shown in:
-`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltc4162l/src/examples/iio_example>`_
+`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltc4162l/src/examples/iio>`_
 
-In order to build the IIO project make sure you have the following configuration
-in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltc4162l/Makefile>`_
+In order to build the IIO project make sure you are using this command:
 
 .. code-block:: bash
 
-        # Select the example you want to enable by choosing y for enabling and n for disabling
-        BASIC_EXAMPLE = n
-        IIO__EXAMPLE = y
+	make EXAMPLE=iio
 
 No-OS Supported Platforms
 -------------------------

@@ -33,7 +33,7 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "ade7816.h"
 
 extern struct no_os_uart_init_param ade7816_uart_ip;

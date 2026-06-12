@@ -92,15 +92,11 @@ prints the results to the console, and updates readings every two
 seconds. If initialization or data reading fails, it logs an error and
 cleans up resources.
 
-In order to build the basic example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/max31855/Makefile>`__:
+In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = y
-   IIO_EXAMPLE = n
+	make EXAMPLE=basic
 
 IIO Example
 ~~~~~~~~~~~
@@ -117,15 +113,11 @@ If you are not familiar with ADI IIO-Oscilloscope Client, please take a
 look at:
 `IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
 
-In order to build the IIO project make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/max31855/Makefile>`__:
+In order to build the IIO project make sure you are using this command:
 
 .. code-block:: bash
 
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = n
-   IIO_EXAMPLE = y
+	make EXAMPLE=iio
 
 No-OS Supported Platforms
 -------------------------
@@ -187,6 +179,6 @@ Build Command
    # remove sp characters from the build directory
    make reset
    # build the project
-   make PLATFORM=maxim TARGET=max32650
+   make EXAMPLE=iio PLATFORM=maxim TARGET=max32650
    # flash the code
    make run

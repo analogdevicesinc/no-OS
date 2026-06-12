@@ -113,8 +113,7 @@ Basic example
 
 The basic example code for the DC2903A evaluation board demonstrates the
 configuration of the LTC2672 DAC’s output channels via SPI
-communication. It involves setting up the Makefile to enable the basic
-example (``BASIC_EXAMPLE = y``). The user must configure SPI
+communication. The user must configure SPI
 communication parameters and define settings for DAC channels to output
 desired current levels up to 3.125 mA. The example also includes
 monitoring the board’s outputs and internal diagnostics like the die
@@ -123,13 +122,11 @@ board with a voltage between 2.1 V and 5.5 V, ensuring all connections
 via specified J1 and E connectors, and verifying the reference settings
 through JP connectors.
 
-In order to build the basic example, make sure you have the following
-configuration in the Makefile:
+This is the only example in this project, so it builds by default:
 
 .. code-block:: bash
 
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = y
+   make
 
 No-OS Supported Platforms
 -------------------------

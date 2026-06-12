@@ -30,8 +30,8 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "basic_example.h"
 #include "common_data.h"
+#include "no_os_uart.h"
 #include "max22190.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
@@ -45,8 +45,14 @@
  * 		 sets the state for channel 0 to OFF. If all these operations
  * 		 were performed correctly 0 will be returned.
 */
-int basic_example_main()
+int example_main()
 {
+	struct no_os_uart_desc *uart_desc;
+	int _ret = no_os_uart_init(&uart_desc, &max22190_uart_ip);
+	if (_ret)
+		return _ret;
+	no_os_uart_stdio(uart_desc);
+
 	int ret, i;
 	struct max22190_desc *max22190_desc;
 	uint32_t clrf, fbp;

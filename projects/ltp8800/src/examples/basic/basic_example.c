@@ -31,13 +31,19 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "common_data.h"
-#include "basic_example.h"
+#include "no_os_uart.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 #include "ltp8800.h"
 
-int basic_example_main()
+int example_main()
 {
+	struct no_os_uart_desc *uart_desc;
+	int _ret = no_os_uart_init(&uart_desc, &ltp8800_uart_ip);
+	if (_ret)
+		return _ret;
+	no_os_uart_stdio(uart_desc);
+
 	struct ltp8800_dev *dev;
 	struct ltp8800_status status;
 	int ret, vals[4];

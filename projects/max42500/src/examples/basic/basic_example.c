@@ -45,7 +45,7 @@
  * @return ret - Result of the example execution.
 *******************************************************************************/
 
-int basic_example_main(void)
+int example_main(void)
 {
 	int ret;
 	struct no_os_uart_desc *uart_desc;

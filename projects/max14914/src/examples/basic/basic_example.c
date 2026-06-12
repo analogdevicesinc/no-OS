@@ -30,14 +30,20 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "basic_example.h"
 #include "common_data.h"
+#include "no_os_uart.h"
 #include "max14914.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 
-int basic_example_main()
+int example_main()
 {
+	struct no_os_uart_desc *uart_desc;
+	int _ret = no_os_uart_init(&uart_desc, &max14914_uart_ip);
+	if (_ret)
+		return _ret;
+	no_os_uart_stdio(uart_desc);
+
 	struct max14914_desc *desc;
 	int ret;
 

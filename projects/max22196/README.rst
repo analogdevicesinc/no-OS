@@ -69,15 +69,11 @@ The basic example initializes the MAX22196 device via SPI and configures
 channel 0 in source mode with a specific filter delay. It then reads back
 the channel's filter delay and counter values to verify the configuration.
 
-In order to build the basic example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/max22196/Makefile>`__:
+In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = y
-   IIO_EXAMPLE = n
+	make EXAMPLE=basic
 
 IIO example
 ~~~~~~~~~~~
@@ -89,15 +85,11 @@ channels through IIO clients such as the IIO Oscilloscope.
 If you are not familiar with ADI IIO Application, please take a look at:
 `IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
 
-In order to build the IIO example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/max22196/Makefile>`__:
+In order to build the IIO example make sure you are using this command:
 
 .. code-block:: bash
 
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = n
-   IIO_EXAMPLE = y
+	make EXAMPLE=iio
 
 No-OS Supported Platforms
 -------------------------
@@ -119,6 +111,6 @@ Build Command
    # to delete current build
    make reset
    # to build the project
-   make PLATFORM=maxim TARGET=max32690
+   make EXAMPLE=iio PLATFORM=maxim TARGET=max32690
    # to flash the code
    make run

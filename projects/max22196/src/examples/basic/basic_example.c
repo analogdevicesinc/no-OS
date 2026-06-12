@@ -30,8 +30,8 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "basic_example.h"
 #include "common_data.h"
+#include "no_os_uart.h"
 #include "max22196.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
@@ -49,8 +49,14 @@ static uint32_t delay_available[MAX22196_CHANNELS] = {
  * 		 channel 0 will be changed as well and printed afterwards.
  * 		 0 will be returned at the end in case of succes.
 */
-int basic_example_main()
+int example_main()
 {
+	struct no_os_uart_desc *uart_desc;
+	int _ret = no_os_uart_init(&uart_desc, &max22196_uart_ip);
+	if (_ret)
+		return _ret;
+	no_os_uart_stdio(uart_desc);
+
 	int ret;
 	struct max22196_desc *max22196_desc;
 	enum max22196_delay delay_write = MAX22196_DELAY_100US;

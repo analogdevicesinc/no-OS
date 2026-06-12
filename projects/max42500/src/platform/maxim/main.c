@@ -36,21 +36,12 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#if defined(BASIC_EXAMPLE)
-#include "basic_example.h"
-#endif
+#include "parameters.h"
+#include "common_data.h"
 
-/*******************************************************************************
- * @brief Main function execution.
- *
- * @return ret - Result of the enabled examples execution.
-*******************************************************************************/
+extern int example_main(void);
 
 int main()
 {
-#if defined(BASIC_EXAMPLE)
-	return basic_example_main();
-#else
-	return 0;
-#endif
+	return example_main();
 }

@@ -90,13 +90,11 @@ channel 2 on, after which is detects faults, reverse polarity and sets 2x
 current limit for the device.
 
 
-In order to build the basic example make sure you have the following configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max14919/Makefile>`_
+This is the only example in this project, so it builds by default:
 
 .. code-block:: bash
 
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = y
+	make
 
 No-OS Supported Platforms
 -------------------------
