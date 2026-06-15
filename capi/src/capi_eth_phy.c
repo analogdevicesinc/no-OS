@@ -13,17 +13,64 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 #include <errno.h>
 #include <capi_eth_phy.h>
+
+/* IEEE 802.3 standard PHY ID registers used by the bus scan. */
+#define CAPI_ETH_PHY_REG_ID1	0x02
+#define CAPI_ETH_PHY_REG_ID2	0x03
+
+/**
+ * @brief Scan the MDIO bus for a responding PHY.
+ *
+ */
+static int capi_eth_phy_scan(capi_eth_phy_read_fn fn_read, uint8_t *out_addr)
+{
+	uint16_t id1, id2;
+	uint8_t addr;
+	int ret;
+
+	if (fn_read == NULL || out_addr == NULL)
+		return -EINVAL;
+
+	for (addr = 0; addr <= 31; addr++) {
+		ret  = fn_read(addr, CAPI_ETH_PHY_REG_ID1, &id1);
+		ret |= fn_read(addr, CAPI_ETH_PHY_REG_ID2, &id2);
+
+		if (ret == 0 &&
+		    id1 > 0x0000 && id1 < 0xFFFF &&
+		    id2 > 0x0000 && id2 < 0xFFFF) {
+			*out_addr = addr;
+			return 0;
+		}
+	}
+
+	return -ENODEV;
+}
 
 int capi_eth_phy_init(struct capi_eth_phy_handle **handle,
 		      const struct capi_eth_phy_init_config *config)
 {
-	if (config != NULL && config->ops != NULL && config->ops->init != NULL) {
-		return config->ops->init(handle, config);
+	struct capi_eth_phy_init_config patched;
+	int ret;
+
+	if (config == NULL || config->ops == NULL || config->ops->init == NULL)
+		return -EINVAL;
+
+	if (config->phy_addr == 0) {
+		uint8_t found;
+
+		ret = capi_eth_phy_scan(config->fn_read, &found);
+		if (ret)
+			return ret;
+
+		patched = *config;
+		patched.phy_addr = found;
+		return patched.ops->init(handle, &patched);
 	}
 
-	return -EINVAL;
+	return config->ops->init(handle, config);
 }
 
 int capi_eth_phy_deinit(struct capi_eth_phy_handle *handle)
