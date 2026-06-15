@@ -31,55 +31,19 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include <errno.h>
-#include "platform_includes.h"
+#include "parameters.h"
 #include "common_data.h"
 
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
-
-#ifdef BASIC_EXAMPLE
-#include "basic_example.h"
-#endif
+extern int example_main();
 
 /*******************************************************************************
- * @brief Main function execution for STM32 platform.
+ * @brief Main function execution for Maxim platform.
  *
  * @return ret - Result of the enabled examples execution.
 *******************************************************************************/
 int main()
 {
-	int ret = -EINVAL;
-
 	adxl313_user_init.comm_init.spi_init = sip;
 
-#ifdef IIO_EXAMPLE
-	ret = iio_example_main();
-	if (ret)
-		goto error;
-#endif
-
-#ifdef BASIC_EXAMPLE
-	struct no_os_uart_desc *uart_desc;
-
-	ret = no_os_uart_init(&uart_desc, &uip);
-	if (ret)
-		goto error;
-
-	no_os_uart_stdio(uart_desc);
-	ret = basic_example_main();
-	if (ret) {
-		no_os_uart_remove(uart_desc);
-		goto error;
-	}
-#endif
-
-#if (IIO_EXAMPLE + BASIC_EXAMPLE > 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and rebuild the project.
-#endif
-
-error:
-	return ret;
+	return example_main();
 }

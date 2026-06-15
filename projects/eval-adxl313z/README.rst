@@ -90,15 +90,11 @@ terminal via a UART serial connection. Interrupt sources such as
 DATA_READY, ACTIVITY, INACTIVITY, WATERMARK, and OVERRUN are also
 reported.
 
-In order to build the basic example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/eval-adxl313z/Makefile>`__:
+In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-    # Select the example you want to enable by choosing y for enabling and n for disabling
-    BASIC_EXAMPLE = y
-    IIO_EXAMPLE = n
+    make EXAMPLE=basic
 
 IIO Example
 ~~~~~~~~~~~~
@@ -118,15 +114,11 @@ If you are not familiar with ADI IIO-Oscilloscope Client, please take a
 look at:
 `IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
 
-In order to build the IIO project, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/eval-adxl313z/Makefile>`__:
+In order to build the IIO project make sure you are using this command:
 
 .. code-block:: bash
 
-    # Select the example you want to enable by choosing y for enabling and n for disabling
-    BASIC_EXAMPLE = n
-    IIO_EXAMPLE = y
+    make EXAMPLE=iio
 
 No-OS Supported Platforms
 -------------------------
@@ -178,11 +170,9 @@ Build Command
 
 .. code-block:: bash
 
-    # To build the project for STM32 platform
-    make PLATFORM=stm32
     # To delete current build
     make reset
-    # To build the project
-    make
+    # To build the project (selecting the example to run)
+    make EXAMPLE=iio PLATFORM=stm32
     # To flash the code
     make run
