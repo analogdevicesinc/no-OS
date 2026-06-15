@@ -1,10 +1,10 @@
 {
   "mbed": {
-    "basic_example": {
+    "basic": {
       "flags" : "EXAMPLE=basic"
     },
     "iio": {
-      "flags": "EXAMPLE=iio_example"
+      "flags": "EXAMPLE=iio"
     }
   }
 }
