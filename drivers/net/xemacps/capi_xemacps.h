@@ -1,13 +1,15 @@
 /***************************************************************************//**
- *   @file   no_os_xemacps.h
- *   @brief  Public API for the Xilinx PS GEM (XEmacPs) MAC driver.
+ *   @file   capi_xemacps.h
+ *   @brief  CAPI MAC driver for the Xilinx PS GEM (XEmacPs).
  *
- *   Standalone Ethernet MAC driver for the Zynq-7000 / ZynqMP Processing
- *   System Gigabit Ethernet MAC.
+ *   Implements the capi_eth_mac.h contract for Zynq-7000 / ZynqMP PS
+ *   Gigabit Ethernet MAC.  This driver knows nothing about PHYs — the
+ *   application layer (or lwIP glue) owns the PHY handle and stitches
+ *   the two together via the MDIO helpers exposed below.
  *
  *   @author Nicolae-Daniel Deaconescu (Nicolae-daniel.Deaconescu@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -35,13 +37,18 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef __XEMACPS_DRV_H__
-#define __XEMACPS_DRV_H__
+#ifndef _CAPI_XEMACPS_H_
+#define _CAPI_XEMACPS_H_
 
 #include <stdint.h>
 #include <stdbool.h>
+
 #include "no_os_util.h"
-#include <capi_eth_phy.h>
+#include <capi_eth_mac.h>
+
+#if defined(__cplusplus)
+extern "C" {
+#endif /* __cplusplus */
 
 /* Number of RX buffer descriptors pre-posted to hardware */
 #define XGEM_RX_BD_COUNT		64
@@ -53,75 +60,58 @@
 #define XGEM_CACHE_LINE_SIZE	32
 #endif
 
-/* Frame buffer size, aligned to the next cache-line size. */
-#define XGEM_BUFF_SIZE	no_os_align(XEMACPS_MAX_FRAME_SIZE, XGEM_CACHE_LINE_SIZE)
-
-
-/* PHY ID register addresses — used by xgem_detect_phy() */
-#define PHY_REG_PHYID1				0x02
-#define PHY_REG_PHYID2				0x03
-
 /* Maximum Ethernet frame size, rounded up to a 32-byte cache-line multiple. */
 #ifndef XEMACPS_MAX_FRAME_SIZE
 #define XEMACPS_MAX_FRAME_SIZE	1536
 #endif
 
-/* MAC address length */
-#define XEMACPS_ETH_ALEN	6
+/* Frame buffer size, aligned to the next cache-line size. */
+#define XGEM_BUFF_SIZE	no_os_align(XEMACPS_MAX_FRAME_SIZE, XGEM_CACHE_LINE_SIZE)
 
 /* GEM feature flags. Override at build time, e.g. -DGEM_PROMISC */
 
-/* Promiscuous mode — receive all frames regardless of address */
 #ifdef GEM_PROMISC
 #define GEM_NWCFG_PROMISC	XEMACPS_NWCFG_COPYALLEN_MASK
 #else
 #define GEM_NWCFG_PROMISC	0
 #endif
 
-/* Reject broadcast frames */
 #ifdef GEM_NO_BROADCAST
 #define GEM_NWCFG_BCAST		XEMACPS_NWCFG_BCASTDI_MASK
 #else
 #define GEM_NWCFG_BCAST		0
 #endif
 
-/* Strip FCS from received frames */
 #ifdef GEM_STRIP_FCS
 #define GEM_NWCFG_FCS		XEMACPS_NWCFG_FCSREM_MASK
 #else
 #define GEM_NWCFG_FCS		0
 #endif
 
-/* RX checksum offload (enabled by default) */
 #ifndef GEM_NO_RX_CHKSUM
 #define GEM_NWCFG_RXCHKSUM	XEMACPS_NWCFG_RXCHKSUMEN_MASK
 #else
 #define GEM_NWCFG_RXCHKSUM	0
 #endif
 
-/* Pause frame support (enabled by default) */
 #ifndef GEM_NO_PAUSE
 #define GEM_NWCFG_PAUSE		XEMACPS_NWCFG_PAUSEEN_MASK
 #else
 #define GEM_NWCFG_PAUSE		0
 #endif
 
-/* Multicast hash filter (enabled by default) */
 #ifndef GEM_NO_MCAST_HASH
 #define GEM_NWCFG_MCAST		XEMACPS_NWCFG_MCASTHASHEN_MASK
 #else
 #define GEM_NWCFG_MCAST		0
 #endif
 
-/* Unicast hash filter */
 #ifdef GEM_UCAST_HASH
 #define GEM_NWCFG_UCAST		XEMACPS_NWCFG_UCASTHASHEN_MASK
 #else
 #define GEM_NWCFG_UCAST		0
 #endif
 
-/* SGMII / PCS mode — enable for boards using PS GTR serial Ethernet
- * Not needed for MIO/RGMII boards. */
 #ifdef GEM_SGMII
 #define GEM_NWCFG_SGMII		(XEMACPS_NWCFG_SGMIIEN_MASK | \
 				 XEMACPS_NWCFG_PCSSEL_MASK)
@@ -129,43 +119,50 @@
 #define GEM_NWCFG_SGMII		0
 #endif
 
-/* Combined feature mask */
 #define GEM_NWCFG_FEATURES	(GEM_NWCFG_PROMISC | \
 				 GEM_NWCFG_BCAST | GEM_NWCFG_FCS | \
 				 GEM_NWCFG_RXCHKSUM | GEM_NWCFG_PAUSE | \
 				 GEM_NWCFG_MCAST | GEM_NWCFG_UCAST | \
 				 GEM_NWCFG_SGMII)
 
-
-
-/* Opaque driver descriptor - full definition in xemacps.c */
-struct xemacps_desc;
+/**
+ * @brief XEmacPs CAPI MAC ops table.
+ *
+ * Pass `&xemacps_capi_mac_ops` as `capi_eth_mac_init_config.ops`.
+ */
+extern const struct capi_eth_mac_ops xemacps_capi_mac_ops;
 
 /**
- * @struct xemacps_init_param
- * @brief  Initialization parameters for the XEmacPs MAC driver.
+ * @brief MDIO clause-22 read on the GEM's MDIO bus.
+ *
+ * The GEM owns the MDIO peripheral.  This helper exposes it so that an
+ * external PHY driver — initialised separately via capi_eth_phy_init —
+ * can use the bus.  Callers typically wrap this in a trampoline that
+ * matches the `capi_eth_phy_read_fn` signature.
+ *
+ * @param handle    MAC handle returned by capi_eth_mac_init().
+ * @param phy_addr  MDIO PHY address (0..31).
+ * @param reg_addr  Register address.
+ * @param data      Output: register value.
+ * @return 0 on success, negative errno on failure.
  */
-struct xemacps_init_param {
-	/** XEmacPs device ID from xparameters.h (e.g. XPAR_XEMACPS_0_DEVICE_ID) */
-	uint16_t device_id;
-	/** MDIO address of the on-board PHY (0 = auto-detect) */
-	uint8_t phy_addr;
-	/** Ethernet MAC address for this interface */
-	uint8_t hwaddr[XEMACPS_ETH_ALEN];
-	/** CAPI PHY driver ops table */
-	const struct capi_eth_phy_ops *phy_ops;
-	/** Optional PHY-specific extra configuration (passed to capi_eth_phy_init_config.extra) */
-	void *phy_extra;
-	/** PHY mode configuration (speed, duplex, autoneg, mdix, loopback, isolate) */
-	struct capi_eth_phy_mode_config phy_mode;
-};
+int xemacps_mdio_read(struct capi_eth_mac_handle *handle,
+		      uint8_t phy_addr, uint8_t reg_addr, uint16_t *data);
 
-int xemacps_init(struct xemacps_desc **desc, struct xemacps_init_param *param);
-int xemacps_remove(struct xemacps_desc *desc);
-int xemacps_send(struct xemacps_desc *desc, uint8_t *buf, uint32_t len);
-int xemacps_recv(struct xemacps_desc *desc, uint8_t *buf, uint32_t *len);
-int xemacps_poll(struct xemacps_desc *desc);
-int xemacps_set_mcast_hash(struct xemacps_desc *desc, uint8_t *addr);
-bool xemacps_get_link_state(struct xemacps_desc *desc);
+/**
+ * @brief MDIO clause-22 write on the GEM's MDIO bus.
+ *
+ * @param handle    MAC handle returned by capi_eth_mac_init().
+ * @param phy_addr  MDIO PHY address (0..31).
+ * @param reg_addr  Register address.
+ * @param data      Value to write.
+ * @return 0 on success, negative errno on failure.
+ */
+int xemacps_mdio_write(struct capi_eth_mac_handle *handle,
+		       uint8_t phy_addr, uint8_t reg_addr, uint16_t data);
 
-#endif /* __XEMACPS_DRV_H__ */
+#if defined(__cplusplus)
+}
+#endif /* __cplusplus */
+
+#endif /* _CAPI_XEMACPS_H_ */
