@@ -96,6 +96,9 @@ struct no_os_spi_init_param ad7616_spi_init = {
 struct xil_gpio_init_param xil_gpio_param = {
 	.device_id = GPIO_DEVICE_ID,
 	.type = GPIO_PS,
+#ifdef SDT
+	.base_addr = XPAR_XGPIOPS_0_BASEADDR,
+#endif
 };
 struct no_os_gpio_init_param ad7616_gpio_reset = {
 	.number = GPIO_ADC_RESET_N,

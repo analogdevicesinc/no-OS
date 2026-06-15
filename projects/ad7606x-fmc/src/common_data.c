@@ -80,6 +80,9 @@ static struct no_os_pwm_init_param trigger_pwm_init = {
 static struct xil_gpio_init_param xil_gpio_param = {
 	.device_id = GPIO_DEVICE_ID,
 	.type = GPIO_PS,
+#ifdef SDT
+	.base_addr = XPAR_XGPIOPS_0_BASEADDR,
+#endif
 };
 
 static struct no_os_gpio_init_param ad7606x_gpio_reset = {

@@ -988,8 +988,14 @@ int main(void)
 	struct xil_uart_init_param platform_uart_init_par = {
 #ifdef XPAR_XUARTLITE_NUM_INSTANCES
 		.type = UART_PL,
+#ifdef SDT
+		.base_addr = XPAR_XUARTLITE_0_BASEADDR,
+#endif
 #else
 		.type = UART_PS,
+#ifdef SDT
+		.base_addr = XPAR_XUARTPS_0_BASEADDR,
+#endif
 		.irq_id = UART_IRQ_ID
 #endif
 	};

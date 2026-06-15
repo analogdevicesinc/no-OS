@@ -78,8 +78,14 @@ int32_t start_iiod(struct axi_adc *rx_0_adc, struct axi_adc *rx_1_adc,
 	struct xil_uart_init_param platform_uart_init_par = {
 #ifdef XPAR_XUARTLITE_NUM_INSTANCES
 		.type = UART_PL,
+#ifdef SDT
+		.base_addr = XPAR_XUARTLITE_0_BASEADDR,
+#endif
 #else
 		.type = UART_PS,
+#ifdef SDT
+		.base_addr = XPAR_XUARTPS_0_BASEADDR,
+#endif
 		.irq_id = UART_IRQ_ID
 #endif
 	};
@@ -151,6 +157,9 @@ int main(void)
 {
 	struct xil_spi_init_param xil_spi_param = {
 		.type = SPI_PL,
+#ifdef SDT
+		.base_addr = XPAR_XSPI_0_BASEADDR,
+#endif
 		.flags = 0
 	};
 
@@ -344,6 +353,9 @@ int main(void)
 
 	struct xil_gpio_init_param xilinx_gpio_init_param = {
 		.type = GPIO_PL,
+#ifdef SDT
+		.base_addr = XPAR_XGPIO_0_BASEADDR,
+#endif
 		.device_id = GPIO_DEVICE_ID
 	};
 

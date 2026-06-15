@@ -138,6 +138,9 @@ int32_t app_ad9083_init(struct app_ad9083 **app,
 	struct app_ad9083 *app_ad9083;
 	struct xil_spi_init_param xil_spi_param = {
 		.type = SPI_PS,
+#ifdef SDT
+		.base_addr = XPAR_XSPIPS_0_BASEADDR,
+#endif
 	};
 
 	// clock chip spi settings
@@ -152,6 +155,9 @@ int32_t app_ad9083_init(struct app_ad9083 **app,
 	};
 	struct xil_gpio_init_param  xil_gpio_param = {
 		.type = GPIO_PS,
+#ifdef SDT
+		.base_addr = XPAR_XGPIOPS_0_BASEADDR,
+#endif
 		.device_id = GPIO_DEVICE_ID
 	};
 	struct no_os_gpio_init_param	gpio_phy_resetb = {

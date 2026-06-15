@@ -144,7 +144,11 @@ int xil_gpio_irq_ctrl_init(struct no_os_irq_ctrl_desc **desc,
 	}
 
 	xil_ip = param->extra;
+#ifdef SDT
+	GPIO_Config = XGpioPs_LookupConfig(xil_ip->base_addr);
+#else
 	GPIO_Config = XGpioPs_LookupConfig(xil_ip->gpio_device_id);
+#endif
 	status = XGpioPs_CfgInitialize(&xil_desc->my_Gpio, GPIO_Config,
 				       GPIO_Config->BaseAddr);
 	if (status)

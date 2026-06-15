@@ -81,6 +81,9 @@ int main()
 	struct xil_gpio_init_param gpio_extra_param = {
 		.device_id = GPIO_DEVICE_ID,
 		.type = GPIO_PS,
+#ifdef SDT
+		.base_addr = XPAR_XGPIOPS_0_BASEADDR,
+#endif
 	};
 
 	struct no_os_gpio_init_param adaq7980_pd_ldo = {
