@@ -82,15 +82,11 @@ IRQ interfaces. A GPIO IRQ controller manages data-ready signals from
 the ADC. The program continuously reads ADC data, converts it to
 millivolts, and prints the results via UART.
 
-In order to build the basic example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/max11205pmb1/Makefile>`_:
+In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = y
-   IIO_EXAMPLE = n
+   make EXAMPLE=basic
 
 IIO Example
 ~~~~~~~~~~~
@@ -107,14 +103,11 @@ If you are not familiar with the ADI IIO Oscilloscope app, please take a
 look at:
 `IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
 
-In order to build the IIO project, make sure you have the following
-configuration in the Makefile:
+In order to build the IIO project make sure you are using this command:
 
 .. code-block:: bash
 
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = n
-   IIO_EXAMPLE = y
+   make EXAMPLE=iio
 
 No-OS Supported Platforms
 --------------------------
@@ -153,7 +146,7 @@ make the required connections as shown below.
 
    # to delete current build
    make reset PLATFORM=maxim TARGET=max32655
-   # to build the project
-   make PLATFORM=maxim TARGET=max32655
+   # to build the project (selecting the example to run)
+   make EXAMPLE=iio PLATFORM=maxim TARGET=max32655
    # to flash the code
    make run PLATFORM=maxim TARGET=max32655
