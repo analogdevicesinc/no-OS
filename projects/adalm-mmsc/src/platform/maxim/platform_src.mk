@@ -1,8 +1,3 @@
-
-SRCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.c \
-	$(PROJECT)/src/platform/$(PLATFORM)/main.c
-INCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.h
-
 SRCS += $(PLATFORM_DRIVERS)/maxim_spi.c \
 	$(PLATFORM_DRIVERS)/maxim_uart_stdio.c \
 	$(PLATFORM_DRIVERS)/maxim_uart.c \
