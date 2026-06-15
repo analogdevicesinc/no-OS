@@ -70,6 +70,9 @@ int main()
 	/* SPI instance */
 	struct xil_spi_init_param spi_extra = {
 		.type = SPI_PS,
+#ifdef SDT
+		.base_addr = XPAR_XSPIPS_0_BASEADDR,
+#endif
 		.flags = 0U
 	};
 	struct no_os_spi_init_param spi_ip = {
@@ -84,6 +87,9 @@ int main()
 
 	struct xil_gpio_init_param xil_gpio_param = {
 		.type = GPIO_PS,
+#ifdef SDT
+		.base_addr = XPAR_XGPIOPS_0_BASEADDR,
+#endif
 		.device_id = XPAR_PS7_GPIO_0_DEVICE_ID
 	};
 
@@ -149,6 +155,9 @@ int main()
 
 	struct xil_uart_init_param platform_uart_init_par = {
 		.type = UART_PS,
+#ifdef SDT
+		.base_addr = XPAR_XUARTPS_0_BASEADDR,
+#endif
 		.irq_id = UART_IRQ_ID
 	};
 

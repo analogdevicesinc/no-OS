@@ -98,8 +98,14 @@ uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__((
 struct xil_spi_init_param xil_spi_param = {
 #ifdef PLATFORM_MB
 	.type = SPI_PL,
+#ifdef SDT
+	.base_addr = XPAR_XSPI_0_BASEADDR,
+#endif
 #else
 	.type = SPI_PS,
+#ifdef SDT
+	.base_addr = XPAR_XSPIPS_0_BASEADDR,
+#endif
 #endif
 	.flags = 0
 };
@@ -107,8 +113,14 @@ struct xil_spi_init_param xil_spi_param = {
 struct xil_gpio_init_param xil_gpio_param = {
 #ifdef PLATFORM_MB
 	.type = GPIO_PL,
+#ifdef SDT
+	.base_addr = XPAR_XGPIO_0_BASEADDR,
+#endif
 #else
 	.type = GPIO_PS,
+#ifdef SDT
+	.base_addr = XPAR_XGPIOPS_0_BASEADDR,
+#endif
 #endif
 	.device_id = GPIO_DEVICE_ID
 };
@@ -694,6 +706,9 @@ int main(void)
 	 */
 	struct xil_irq_init_param xil_irq_init_par = {
 		.type = IRQ_PS,
+#ifdef SDT
+		.base_addr = XPAR_XSCUGIC_0_BASEADDR,
+#endif
 	};
 
 	/**
@@ -861,8 +876,14 @@ int main(void)
 	struct xil_uart_init_param platform_uart_init_par = {
 #ifdef XPAR_XUARTLITE_NUM_INSTANCES
 		.type = UART_PL,
+#ifdef SDT
+		.base_addr = XPAR_XUARTLITE_0_BASEADDR,
+#endif
 #else
 		.type = UART_PS,
+#ifdef SDT
+		.base_addr = XPAR_XUARTPS_0_BASEADDR,
+#endif
 		.irq_id = UART_IRQ_ID
 #endif
 	};

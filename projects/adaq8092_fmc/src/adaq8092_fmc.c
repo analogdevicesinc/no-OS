@@ -65,7 +65,10 @@ int main(void)
 
 	struct xil_spi_init_param xil_spi_init = {
 		.flags = 0,
-		.type = SPI_PS
+		.type = SPI_PS,
+#ifdef SDT
+		.base_addr = XPAR_XSPIPS_0_BASEADDR,
+#endif
 	};
 
 	/* SPI */
@@ -81,7 +84,10 @@ int main(void)
 	/* GPIO */
 	struct xil_gpio_init_param xil_gpio_init = {
 		.device_id = GPIO_DEVICE_ID,
-		.type = GPIO_PS
+		.type = GPIO_PS,
+#ifdef SDT
+		.base_addr = XPAR_XGPIOPS_0_BASEADDR,
+#endif
 	};
 
 	struct no_os_gpio_init_param gpio_par_ser_init_param = {
@@ -200,6 +206,9 @@ int main(void)
 #ifdef IIO_SUPPORT
 	struct xil_uart_init_param platform_uart_init_par = {
 		.type = UART_PS,
+#ifdef SDT
+		.base_addr = XPAR_XUARTPS_0_BASEADDR,
+#endif
 		.irq_id = UART_IRQ_ID
 	};
 

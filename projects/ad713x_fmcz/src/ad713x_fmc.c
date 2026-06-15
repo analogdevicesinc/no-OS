@@ -92,6 +92,9 @@ int main()
 	uint32_t spi_eng_msg_cmds[1];
 	static struct xil_spi_init_param spi_engine_init_params = {
 		.type = SPI_PS,
+#ifdef SDT
+		.base_addr = XPAR_XSPIPS_0_BASEADDR,
+#endif
 	};
 	struct xil_gpio_init_param gpio_extra_param;
 	struct no_os_gpio_init_param ad7134_1_dclkio = {
@@ -198,6 +201,9 @@ int main()
 
 	gpio_extra_param.device_id = GPIO_DEVICE_ID;
 	gpio_extra_param.type = GPIO_PS;
+#ifdef SDT
+	gpio_extra_param.base_addr = XPAR_XGPIOPS_0_BASEADDR;
+#endif
 
 	ad713x_init_param_1.adc_data_len = ADC_24_BIT_DATA;
 	ad713x_init_param_1.clk_delay_en = false;
@@ -313,8 +319,14 @@ int main()
 	struct xil_uart_init_param platform_uart_init_par = {
 #ifdef XPAR_XUARTLITE_NUM_INSTANCES
 		.type = UART_PL,
+#ifdef SDT
+		.base_addr = XPAR_XUARTLITE_0_BASEADDR,
+#endif
 #else
 		.type = UART_PS,
+#ifdef SDT
+		.base_addr = XPAR_XUARTPS_0_BASEADDR,
+#endif
 		.irq_id = UART_IRQ_ID
 #endif
 	};

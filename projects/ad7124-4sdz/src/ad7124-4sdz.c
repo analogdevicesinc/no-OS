@@ -48,6 +48,9 @@ int main(void)
 
 	static struct xil_spi_init_param xil_spi_init_params = {
 		.type = SPI_PS,
+#ifdef SDT
+		.base_addr = XPAR_XSPIPS_0_BASEADDR,
+#endif
 	};
 
 	struct no_os_spi_init_param spi_init = {

@@ -77,6 +77,8 @@ struct xil_timer_init_param {
 	uint8_t active_tmr;
 	/** Platform selection parameter */
 	enum xil_timer_type type;
+	/** Device base address (used for SDT flow) */
+	uint32_t base_addr;
 };
 
 /**

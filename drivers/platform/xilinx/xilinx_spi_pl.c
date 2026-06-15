@@ -169,7 +169,12 @@ static int32_t xil_spi_init_pl(struct no_os_spi_desc **desc,
 	if (!desc || !param || param->device_id >= XPAR_XSPI_NUM_INSTANCES)
 		return -EINVAL;
 
+#ifdef SDT
+	cfg = XSpi_LookupConfig(
+		      ((struct xil_spi_init_param *)param->extra)->base_addr);
+#else
 	cfg = XSpi_LookupConfig(param->device_id);
+#endif
 	if (!cfg)
 		return -EINVAL;
 

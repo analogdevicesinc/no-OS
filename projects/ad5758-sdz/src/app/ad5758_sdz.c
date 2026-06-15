@@ -48,6 +48,9 @@
 
 const struct xil_spi_init_param spi_extra = {
 	.type = SPI_PS,
+#ifdef SDT
+	.base_addr = XPAR_XSPIPS_0_BASEADDR,
+#endif
 	.flags = NULL
 };
 const struct no_os_spi_init_param spi_ip = {
@@ -62,6 +65,9 @@ const struct no_os_spi_init_param spi_ip = {
 
 const struct xil_gpio_init_param gpio_extra = {
 	.type = GPIO_PS,
+#ifdef SDT
+	.base_addr = XPAR_XGPIOPS_0_BASEADDR,
+#endif
 	.device_id = GPIO_DEVICE_ID
 };
 const struct no_os_gpio_init_param reset_ip = {
