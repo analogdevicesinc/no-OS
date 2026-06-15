@@ -32,13 +32,11 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "common_data.h"
 #include "no_os_error.h"
 
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
+extern int example_main();
 
 struct no_os_uart_desc *uart_desc;
 
@@ -56,11 +54,5 @@ int main()
 
 	stm32_init();
 
-#ifdef IIO_EXAMPLE
-	return iio_example_main();
-#else
-#error At least one example has to be selected using y value in Makefile.
-#endif
-
-	return 0;
+	return example_main();
 }
