@@ -112,15 +112,11 @@ to the console, providing a clear demonstration of ADC data handling.
 This example includes error management and cleanup operations for robust
 execution.
 
-In order to build the basic example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad463x_fmcz/Makefile>`_:
+In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = y
-	IIO_EXAMPLE = n
+	make EXAMPLE=basic
 
 IIO Example
 ~~~~~~~~~~~
@@ -140,14 +136,11 @@ integration within the project.
 If you are not familiar with ADI IIO Application, please take a look at:
 `IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
 
-In order to build the IIO project, make sure you have the following
-configuration in the Makefile:
+In order to build the IIO project make sure you are using this command:
 
 .. code-block:: bash
 
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = n
-	IIO_EXAMPLE = y
+	make EXAMPLE=iio
 
 No-OS Supported Platforms
 --------------------------

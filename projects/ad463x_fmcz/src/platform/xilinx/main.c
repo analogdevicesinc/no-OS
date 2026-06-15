@@ -32,15 +32,11 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "common_data.h"
 #include "no_os_error.h"
 
-#ifdef BASIC_EXAMPLE
-#include "basic_example.h"
-#elif defined(IIO_EXAMPLE)
-#include "iio_example.h"
-#endif
+extern int example_main();
 
 /***************************************************************************//**
  * @brief Main function execution for xilinx platform.
@@ -49,19 +45,10 @@
 *******************************************************************************/
 int main()
 {
-	int ret = -EINVAL;
-
 	/* Enable the instruction cache. */
 	Xil_ICacheEnable();
 	/* Enable the data cache. */
 	Xil_DCacheEnable();
 
-#ifdef BASIC_EXAMPLE
-	ret = basic_example_main();
-#elif defined(IIO_EXAMPLE)
-	ret = iio_example_main();
-#else
-#error At least one example has to be selected using y value in Makefile.
-#endif
-	return ret;
+	return example_main();
 }

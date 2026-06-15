@@ -2,14 +2,14 @@
 # PLATFORM = xilinx
 # PLATFORM = stm32
 
-# Select the example you want to enable by choosing y for enabling and n for disabling
-BASIC_EXAMPLE = n
-IIO_EXAMPLE = y
+EXAMPLE ?= iio
 
 # AD4630 Family = 0 | AD4030 Family = 1 | ADAQ4224 = 2 | ADAQ4216 = 3
 AD463X_ID=0
 
 include ../../tools/scripts/generic_variables.mk
+
+include ../../tools/scripts/examples.mk
 
 include src.mk
 

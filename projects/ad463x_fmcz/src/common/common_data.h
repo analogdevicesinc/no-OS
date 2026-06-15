@@ -34,7 +34,7 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "ad463x.h"
 
 #define ADC_DDR_BASEADDR	in_buff
