@@ -67,7 +67,7 @@ To build the basic example, use the following command:
 
 .. code-block:: bash
 
-        make IIO_EXAMPLE=n BASIC_EXAMPLE=y
+        make EXAMPLE=basic
 
 Sequencer example
 ^^^^^^^^^^^^^^^^^^
@@ -80,13 +80,13 @@ Standard sequencer Example:
 
 .. code-block:: bash
 
-        make IIO_EXAMPLE=n BASIC_EXAMPLE=y AD469X_SEQ=standard
+        make EXAMPLE=basic AD469X_SEQ=standard
 
 Advanced sequencer Example:
 
 .. code-block:: bash
 
-        make IIO_EXAMPLE=n BASIC_EXAMPLE=y AD469X_SEQ=advanced
+        make EXAMPLE=basic AD469X_SEQ=advanced
 
 
 IIO example (default)
@@ -107,16 +107,13 @@ The No-OS IIO Application together with the No-OS IIO AD469x driver take care of
 all the back-end logic needed to setup the IIO server.
 
 This example initializes the IIO device and calls the IIO app as shown in:
-`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/AD469x_evb/src/examples/iio_example>`_
-
-In order to build the IIO project make sure you have the following configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/AD469x_evb/Makefile>`_
+`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad469x_evb/src/examples/iio>`_
 
 To build the IIO example:
 
 .. code-block:: bash
 
-        make IIO_EXAMPLE=y BASIC_EXAMPLE=n
+        make EXAMPLE=iio
 
 
 No-OS Supported Platforms
@@ -138,7 +135,7 @@ Xilinx platform
         cp <SOME_PATH>/system_top.xsa .
         # to delete current build
         make reset
-        # to build the project
-        make
+        # to build the project (selecting the example to run)
+        make EXAMPLE=iio
         # to flash the code
         make run
