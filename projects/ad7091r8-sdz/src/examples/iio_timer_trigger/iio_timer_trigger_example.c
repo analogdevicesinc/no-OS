@@ -31,11 +31,22 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "iio_timer_trigger_example.h"
 #include "iio_ad7091r8.h"
 #include "common_data.h"
 #include "iio_app.h"
 #include "no_os_util.h"
+
+#ifdef AD7091R2_DEV
+#define ADC_CHANNELS 2
+#elif defined AD7091R4_DEV
+#define ADC_CHANNELS 4
+#else
+#define ADC_CHANNELS 8
+#endif
+
+#ifndef IIO_DATA_BUFFER_SIZE
+#define IIO_DATA_BUFFER_SIZE (400 * ADC_CHANNELS * sizeof(int32_t))
+#endif
 
 uint8_t ad7091r8_data_buffer[IIO_DATA_BUFFER_SIZE];
 
@@ -46,7 +57,7 @@ uint8_t ad7091r8_data_buffer[IIO_DATA_BUFFER_SIZE];
  *               execute continuously function iio_app_run and will not return.
 *******************************************************************************/
 
-int iio_timer_trigger_example_main()
+int example_main()
 {
 	struct ad7091r8_iio_dev *ad7091r8_iio_desc;
 	struct ad7091r8_iio_dev_init_param ad7091r8_iio_param;
