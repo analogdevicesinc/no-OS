@@ -31,7 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "basic_example.h"
 #include "common_data.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
@@ -262,7 +261,7 @@ int32_t send(struct mqtt_desc *mqtt)
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
 *******************************************************************************/
-int basic_example_main()
+int example_main()
 {
 	struct wifi_desc	*wifi;
 	struct mqtt_desc	*mqtt;
