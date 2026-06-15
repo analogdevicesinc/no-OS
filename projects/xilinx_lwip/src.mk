@@ -37,25 +37,27 @@ INCS += $(DRIVERS)/adc/adc_demo/adc_demo.h \
         $(DRIVERS)/dac/dac_demo/iio_dac_demo.h
 endif
 
-# CAPI Ethernet PHY common layer
+# CAPI Ethernet PHY + MAC common layer
 INCS += $(NO-OS)/capi/include/capi_eth_phy.h
 SRCS += $(NO-OS)/capi/src/capi_eth_phy.c
+INCS += $(NO-OS)/capi/include/capi_eth_mac.h
+SRCS += $(NO-OS)/capi/src/capi_eth_mac.c
 
 # Marvell 88E1510 PHY driver (CAPI)
 INCS += $(DRIVERS)/net/phy/mrvl_88e1510/capi_marvell_88e1510.h
 SRCS += $(DRIVERS)/net/phy/mrvl_88e1510/capi_marvell_88e1510.c
 
-# XEmacPs MAC driver (PS GEM)
-INCS += $(DRIVERS)/net/xemacps/no_os_xemacps.h
-SRCS += $(DRIVERS)/net/xemacps/no_os_xemacps.c
+# XEmacPs MAC driver (PS GEM, CAPI)
+INCS += $(DRIVERS)/net/xemacps/capi_xemacps.h
+SRCS += $(DRIVERS)/net/xemacps/capi_xemacps.c
 
 # # XAxiEmac MAC driver (PL AXI Ethernet) - stubs
 # INCS += $(DRIVERS)/net/xaxiemac/no_os_xaxiemac.h
 # SRCS += $(DRIVERS)/net/xaxiemac/no_os_xaxiemac.c
 
-# Generic Xilinx lwIP glue
-INCS += $(NO-OS)/network/lwip_raw_socket/netdevs/xemacps/lwip_xemacps.h
-SRCS += $(NO-OS)/network/lwip_raw_socket/netdevs/xemacps/lwip_xemacps.c
+# Generic CAPI lwIP glue (works with any capi_eth_mac + capi_eth_phy pair)
+INCS += $(NO-OS)/network/lwip_raw_socket/netdevs/capi/lwip_capi.h
+SRCS += $(NO-OS)/network/lwip_raw_socket/netdevs/capi/lwip_capi.c
 
 # HAL
 SRCS += $(DRIVERS)/api/no_os_uart.c \
@@ -76,6 +78,8 @@ INCS += $(INCLUDE)/no_os_delay.h \
         $(INCLUDE)/no_os_util.h \
         $(INCLUDE)/no_os_alloc.h \
         $(INCLUDE)/no_os_mutex.h \
+        $(INCLUDE)/no_os_fifo.h \
+        $(INCLUDE)/no_os_gpio.h \
         $(INCLUDE)/no_os_print_log.h
 
 # Xilinx platform drivers

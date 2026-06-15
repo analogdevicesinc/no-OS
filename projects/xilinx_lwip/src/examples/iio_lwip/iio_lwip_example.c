@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   iio_lwip_example.c
- *   @brief  IIO over Ethernet (lwIP / XEmacPs) example for Xilinx Zynq boards.
+ *   @brief  IIO over Ethernet (lwIP / CAPI) example for Xilinx Zynq boards.
  *
  *   Exposes virtual ADC and DAC demo devices over the iiod TCP protocol
  *   on port 30431. Connect from a host running libiio:
@@ -9,7 +9,7 @@
  *
  *   @author Nicolae-Daniel Deaconescu (Nicolae-daniel.Deaconescu@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,7 +41,8 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "iio_app.h"
-#include "lwip_xemacps.h"
+#include "lwip_capi.h"
+#include "capi_xemacps.h"
 #include "adc_demo.h"
 #include "iio_adc_demo.h"
 #include "dac_demo.h"
@@ -64,12 +65,26 @@ static uint8_t adc_data_buffer[DATA_BUFFER_SAMPLES * TOTAL_ADC_CHANNELS *
 static uint8_t dac_data_buffer[DATA_BUFFER_SAMPLES * TOTAL_DAC_CHANNELS *
 						   sizeof(uint16_t)];
 
+/* MDIO trampolines bound to the example's MAC handle. */
+static struct capi_eth_mac_handle *g_mac;
+
+static int example_mdio_read(uint8_t addr, uint8_t reg, uint16_t *data)
+{
+	return xemacps_mdio_read(g_mac, addr, reg, data);
+}
+
+static int example_mdio_write(uint8_t addr, uint8_t reg, uint16_t data)
+{
+	return xemacps_mdio_write(g_mac, addr, reg, data);
+}
+
 /***************************************************************************//**
  * @brief Run the IIO over Ethernet demo.
  *
- * Initialises the virtual ADC/DAC IIO demo devices, configures the XEmacPs
- * MAC driver as the lwIP network backend, and enters the iio_app_run() loop.
- * This function does not return under normal operation.
+ * Initialises the virtual ADC/DAC IIO demo devices, configures the
+ * XEmacPs MAC + Marvell PHY pair via the generic CAPI lwIP glue, and
+ * enters the iio_app_run() loop. This function does not return under
+ * normal operation.
  *
  * @return 0 on success, negative error code on initialisation failure.
 *******************************************************************************/
@@ -107,24 +122,37 @@ int iio_lwip_example_main(void)
 			       &dac_demo_iio_descriptor, NULL, &dac_buff, NULL),
 	};
 
-	/* --- XEmacPs GEM init params --- */
+	/* --- MAC + PHY configuration --- */
 	struct mrvl_88e1510_extra_config mrvl_cfg = {
 		.rgmii = { .rx_delay_en = true, .tx_delay_en = true },
 		.downshift_en = true,
 		.downshift_retries = 3,
 	};
-	struct xemacps_init_param gem_ip = {
-		.device_id = GEM_DEVICE_ID,
-		.phy_ops   = &mrvl_88e1510_ops,
-		.phy_extra = &mrvl_cfg,
-		.phy_mode  = {
+	struct capi_eth_mac_init_config mac_cfg = {
+		.identifier  = GEM_DEVICE_ID,
+		.mac_address = (capi_eth_mac_addr *)mac_addr,
+		.ops         = &xemacps_capi_mac_ops,
+	};
+	static struct lwip_capi_param netdev_param = {
+		.phy_addr      = 0,                /* auto-detect */
+		.phy_interface = CAPI_ETH_INTERFACE_RGMII,
+		.phy_mode      = {
 			.speed          = CAPI_ETH_PHY_SPEED_1G,
 			.duplex         = CAPI_ETH_PHY_DUPLEX_FULL,
 			.auto_negotiate = true,
 			.mdix           = CAPI_ETH_MDIX_AUTO,
 		},
 	};
-	memcpy(gem_ip.hwaddr, mac_addr, sizeof(mac_addr));
+	netdev_param.phy_ops   = &mrvl_88e1510_ops;
+	netdev_param.phy_extra = &mrvl_cfg;
+	netdev_param.fn_read   = example_mdio_read;
+	netdev_param.fn_write  = example_mdio_write;
+	memcpy(netdev_param.hwaddr, mac_addr, sizeof(mac_addr));
+
+	ret = capi_eth_mac_init(&g_mac, &mac_cfg);
+	if (ret)
+		goto remove_dac;
+	netdev_param.mac = g_mac;
 
 	/* --- iio_app init --- */
 	struct iio_app_init_param app_init_param = {0};
@@ -132,19 +160,21 @@ int iio_lwip_example_main(void)
 	app_init_param.devices = iio_devices;
 	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
 	app_init_param.uart_init_params = xilinx_lwip_uart_ip;
-	app_init_param.lwip_param.platform_ops = &xemacps_lwip_ops;
-	app_init_param.lwip_param.mac_param    = &gem_ip;
+	app_init_param.lwip_param.platform_ops = &lwip_capi_ops;
+	app_init_param.lwip_param.mac_param    = &netdev_param;
 	memcpy(app_init_param.lwip_param.hwaddr, mac_addr, sizeof(mac_addr));
 
 	ret = iio_app_init(&app, app_init_param);
 	if (ret)
-		goto remove_dac;
+		goto remove_mac;
 
 	/* Loops indefinitely, serving iiod connections on TCP port 30431 */
 	ret = iio_app_run(app);
 
 	iio_app_remove(app);
 
+remove_mac:
+	capi_eth_mac_deinit(g_mac);
 remove_dac:
 	dac_demo_remove(dac_desc);
 remove_adc:

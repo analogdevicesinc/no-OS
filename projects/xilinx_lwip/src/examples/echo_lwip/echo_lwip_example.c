@@ -1,9 +1,9 @@
 /***************************************************************************//**
  *   @file   echo_lwip_example.c
- *   @brief  TCP echo server over Ethernet (lwIP / XEmacPs) for Xilinx boards.
+ *   @brief  TCP echo server over Ethernet (lwIP / CAPI) for Xilinx boards.
  *   @author Nicolae-Daniel Deaconescu (Nicolae-daniel.Deaconescu@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -35,7 +35,8 @@
 #include <stdio.h>
 #include "no_os_error.h"
 #include "lwip_socket.h"
-#include "lwip_xemacps.h"
+#include "lwip_capi.h"
+#include "capi_xemacps.h"
 #include "tcpecho_raw.h"
 #include "parameters.h"
 #include "echo_lwip_example.h"
@@ -44,11 +45,29 @@
 /* MAC address - must be unique on the local network */
 static uint8_t mac_addr[6] = {0x00, 0x0A, 0x35, 0x00, 0x01, 0x02};
 
+/*
+ * MDIO trampolines: the CAPI PHY callbacks have signature
+ * (phy_addr, reg, data*) with no context pointer, so we hold the
+ * active MAC handle in a file-static slot and dispatch through it.
+ */
+static struct capi_eth_mac_handle *g_mac;
+
+static int example_mdio_read(uint8_t addr, uint8_t reg, uint16_t *data)
+{
+	return xemacps_mdio_read(g_mac, addr, reg, data);
+}
+
+static int example_mdio_write(uint8_t addr, uint8_t reg, uint16_t data)
+{
+	return xemacps_mdio_write(g_mac, addr, reg, data);
+}
+
 /***************************************************************************//**
  * @brief Run the TCP echo server on the board.
  *
- * Initialises the XEmacPs MAC, brings up the lwIP stack, starts the
- * tcpecho_raw server on port 7, and polls indefinitely.
+ * Brings up the XEmacPs MAC + Marvell PHY pair through the generic CAPI
+ * lwIP glue, starts the tcpecho_raw server on port 7, and polls
+ * indefinitely.
  *
  * @return 0 on success, negative error code on failure.
 *******************************************************************************/
@@ -60,11 +79,19 @@ int echo_lwip_example_main(void)
 		.downshift_en = true,
 		.downshift_retries = 3,
 	};
-	struct xemacps_init_param gem_ip = {
-		.device_id = GEM_DEVICE_ID,
-		.phy_ops   = &mrvl_88e1510_ops,
-		.phy_extra = &mrvl_cfg,
-		.phy_mode  = {
+	struct capi_eth_mac_init_config mac_cfg = {
+		.identifier  = GEM_DEVICE_ID,
+		.mac_address = (capi_eth_mac_addr *)mac_addr,
+		.ops         = &xemacps_capi_mac_ops,
+	};
+	struct lwip_capi_param netdev_param = {
+		.phy_ops       = &mrvl_88e1510_ops,
+		.phy_extra     = &mrvl_cfg,
+		.phy_addr      = 0,                  /* auto-detect */
+		.fn_read       = example_mdio_read,
+		.fn_write      = example_mdio_write,
+		.phy_interface = CAPI_ETH_INTERFACE_RGMII,
+		.phy_mode      = {
 			.speed          = CAPI_ETH_PHY_SPEED_1G,
 			.duplex         = CAPI_ETH_PHY_DUPLEX_FULL,
 			.auto_negotiate = true,
@@ -72,17 +99,24 @@ int echo_lwip_example_main(void)
 		},
 	};
 	struct lwip_network_param lwip_param = {
-		.platform_ops = &xemacps_lwip_ops,
-		.mac_param    = &gem_ip,
+		.platform_ops = &lwip_capi_ops,
+		.mac_param    = &netdev_param,
 	};
 	int ret;
 
-	memcpy(gem_ip.hwaddr, mac_addr, sizeof(mac_addr));
+	memcpy(netdev_param.hwaddr, mac_addr, sizeof(mac_addr));
 	memcpy(lwip_param.hwaddr, mac_addr, sizeof(mac_addr));
 
-	ret = no_os_lwip_init(&lwip_desc, &lwip_param);
+	ret = capi_eth_mac_init(&g_mac, &mac_cfg);
 	if (ret)
 		return ret;
+	netdev_param.mac = g_mac;
+
+	ret = no_os_lwip_init(&lwip_desc, &lwip_param);
+	if (ret) {
+		capi_eth_mac_deinit(g_mac);
+		return ret;
+	}
 
 	tcpecho_raw_init();
 
@@ -92,6 +126,7 @@ int echo_lwip_example_main(void)
 		no_os_lwip_step(lwip_desc, lwip_desc);
 
 	no_os_lwip_remove(lwip_desc);
+	capi_eth_mac_deinit(g_mac);
 
 	return 0;
 }
