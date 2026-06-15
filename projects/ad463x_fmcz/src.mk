@@ -1,13 +1,6 @@
-include $(PROJECT)/src/platform/$(PLATFORM)/platform_src.mk
-include $(PROJECT)/src/examples/examples_src.mk
-
-SRCS += $(PROJECT)/src/platform/$(PLATFORM)/main.c \
-	$(PROJECT)/src/common/common_data.c \
-	$(PROJECT)/src/platform/$(PLATFORM)/parameters.c
-
-INCS += $(PROJECT)/src/common/common_data.h \
-	$(PROJECT)/src/platform/platform_includes.h \
-	$(PROJECT)/src/platform/$(PLATFORM)/parameters.h
+ifeq (xilinx,$(PLATFORM))
+CFLAGS += -DSPI_ENGINE_OFFLOAD_EXAMPLE
+endif
 
 SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_dma.c \
@@ -63,6 +56,9 @@ INCS += $(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h \
 	$(DRIVERS)/axi_core/axi_pwmgen/axi_pwm_extra.h \
 	$(DRIVERS)/platform/xilinx/xilinx_spi.h
+
+INCS += $(DRIVERS)/adc/ad463x/ad463x.h
+SRCS += $(DRIVERS)/adc/ad463x/ad463x.c
 
 ifeq (3,$(strip $(AD463X_ID)))
 CFLAGS += -DADAQ4216_DEV
