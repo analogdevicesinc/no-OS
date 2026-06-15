@@ -33,7 +33,7 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "no_os_util.h"
 #include "display.h"
 #include "ssd_1306.h"
