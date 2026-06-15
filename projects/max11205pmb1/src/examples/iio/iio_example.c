@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by max11205pmb1 project.
+ *   @file   iio_example.c
+ *   @brief  Implementation of IIO example for max11205pmb1 project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
  * Copyright 2022(c) Analog Devices, Inc.
@@ -30,15 +30,66 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
 
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#endif
-
-#ifdef IIO_SUPPORT
+#include "iio_max11205.h"
 #include "iio_app.h"
-#endif
+#include "common_data.h"
+#include "no_os_util.h"
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+#define DATA_BUFFER_SIZE 400
+
+uint8_t iio_data_buffer[DATA_BUFFER_SIZE * sizeof(int16_t)];
+
+/***************************************************************************//**
+ * @brief IIO example main execution.
+ *
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously function iio_app_run and will not return.
+*******************************************************************************/
+int example_main()
+{
+	int ret;
+	struct iio_app_desc *app;
+	struct max11205_iio_dev *max11205_iio_desc;
+	struct max11205_iio_dev_init_param max11205_iio_ip;
+	struct no_os_irq_ctrl_desc *max11205_gpio_irq_desc;
+	struct iio_data_buffer accel_buff = {
+		.buff = (void *)iio_data_buffer,
+		.size = DATA_BUFFER_SIZE * sizeof(int16_t)
+	};
+	struct iio_app_init_param app_init_param = { 0 };
+
+	/* Initialize GPIO IRQ controller */
+	ret = no_os_irq_ctrl_init(&max11205_gpio_irq_desc, &max11205_gpio_irq_ip);
+	if (ret)
+		return ret;
+
+	/* Initialize device */
+	max11205_ip.irq_ctrl = max11205_gpio_irq_desc;
+
+	max11205_iio_ip.max11205_dev_init = &max11205_ip;
+	max11205_iio_ip.dev_id = MAX11205A;
+
+	ret = max11205_iio_init(&max11205_iio_desc, &max11205_iio_ip);
+	if (ret)
+		return ret;
+
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "max11205a",
+			.dev = max11205_iio_desc,
+			.dev_descriptor = max11205_iio_desc->iio_dev,
+			.read_buff = &accel_buff,
+		}
+	};
+
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = max11205_uart_ip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		return ret;
+
+	return iio_app_run(app);
+}
