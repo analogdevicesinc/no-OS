@@ -1,13 +1,13 @@
 {
   "xilinx": {
     "basic": {
-      "flags": "BASIC_EXAMPLE=y IIO_EXAMPLE=n",
+      "flags": "EXAMPLE=basic",
       "hardware": [
         "ad4630_fmc_zed"
       ]
     },
     "iio": {
-      "flags": "BASIC_EXAMPLE=n IIO_EXAMPLE=y",
+      "flags": "EXAMPLE=iio",
       "hardware": [
         "ad4630_fmc_zed"
       ]
@@ -15,10 +15,10 @@
   },
   "stm32": {
     "basic": {
-      "flags": "BASIC_EXAMPLE=y IIO_EXAMPLE=n"
+      "flags": "EXAMPLE=basic"
     },
     "iio": {
-      "flags": "BASIC_EXAMPLE=n IIO_EXAMPLE=y"
+      "flags": "EXAMPLE=iio"
     }
   }
 }

@@ -32,8 +32,8 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "basic_example.h"
 #include "common_data.h"
+#include "no_os_uart.h"
 #include "no_os_print_log.h"
 
 #define BITS_PER_SAMPLE 32
@@ -44,12 +44,19 @@
  * @return ret - Result of the example execution. If working correctly, will
  *               execute print the sample data.
 *******************************************************************************/
-int basic_example_main()
+int example_main()
 {
 	struct ad463x_dev *dev;
+	struct no_os_uart_desc *uart_desc;
 	uint32_t *buf = ADC_DDR_BASEADDR;
 	int32_t ret, i;
 	int32_t tmp;
+
+	ret = no_os_uart_init(&uart_desc, &ad463x_uart_ip);
+	if (ret)
+		return ret;
+
+	no_os_uart_stdio(uart_desc);
 
 	ret = ad463x_init(&dev, &ad463x_init_param);
 	if (ret)
