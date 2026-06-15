@@ -313,7 +313,11 @@ int32_t xilinx_timer_init(struct no_os_timer_desc **desc,
 	switch (xdesc->type) {
 	case TIMER_PS:
 #ifdef XSCUTIMER_H
+#ifdef SDT
+		xdesc->config = XScuTimer_LookupConfig(xinit->base_addr);
+#else
 		xdesc->config = XScuTimer_LookupConfig(dev->id);
+#endif
 		xdesc->instance = no_os_calloc(1, sizeof(XScuTimer));
 		if (!xdesc->instance)
 			goto error_xdesc;
@@ -342,7 +346,11 @@ int32_t xilinx_timer_init(struct no_os_timer_desc **desc,
 		if (!xdesc->instance)
 			return -1;
 
+#ifdef SDT
+		xdesc->config = XTmrCtr_LookupConfig(xinit->base_addr);
+#else
 		xdesc->config = XTmrCtr_LookupConfig(dev->id);
+#endif
 		if (!xdesc->config) {
 			no_os_free(xdesc->instance);
 			goto error_desc;

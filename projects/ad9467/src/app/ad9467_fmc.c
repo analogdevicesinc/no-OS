@@ -198,8 +198,14 @@ int main()
 	struct xil_spi_init_param xil_spi_param = {
 #ifdef PLATFORM_MB
 		.type = SPI_PL,
+#ifdef SDT
+		.base_addr = XPAR_XSPI_0_BASEADDR,
+#endif
 #else
 		.type = SPI_PS,
+#ifdef SDT
+		.base_addr = XPAR_XSPIPS_0_BASEADDR,
+#endif
 #endif
 	};
 	ad9467_spi_param.device_id = SPI_DEVICE_ID;
@@ -421,8 +427,14 @@ int main()
 	struct xil_uart_init_param platform_uart_init_par = {
 #ifdef XPAR_XUARTLITE_NUM_INSTANCES
 		.type = UART_PL,
+#ifdef SDT
+		.base_addr = XPAR_XUARTLITE_0_BASEADDR,
+#endif
 #else
 		.type = UART_PS,
+#ifdef SDT
+		.base_addr = XPAR_XUARTPS_0_BASEADDR,
+#endif
 		.irq_id = UART_IRQ_ID
 #endif
 	};

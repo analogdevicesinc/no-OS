@@ -57,6 +57,9 @@ int main()
 
 	struct xil_spi_init_param spi_extra = {
 		.type = SPI_PS,
+#ifdef SDT
+		.base_addr = XPAR_XSPIPS_0_BASEADDR,
+#endif
 		.flags = 0U
 	};
 	struct no_os_spi_init_param spi_ip = {
@@ -77,7 +80,10 @@ int main()
 	/* IRQ instance. */
 	struct no_os_irq_ctrl_desc *irq_desc;
 	struct xil_irq_init_param irq_extra = {
-		.type = IRQ_PS
+		.type = IRQ_PS,
+#ifdef SDT
+		.base_addr = XPAR_XSCUGIC_0_BASEADDR,
+#endif
 	};
 	struct no_os_irq_init_param irq_ip = {
 		.irq_ctrl_id = 0U,

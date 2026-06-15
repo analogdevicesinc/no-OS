@@ -102,7 +102,10 @@ struct no_os_pwm_init_param axi_pwm_1_ip = {
 
 struct xil_gpio_init_param xil_gpio_init = {
 	.device_id = GPIO_DEVICE_ID,
-	.type = GPIO_PS
+	.type = GPIO_PS,
+#ifdef SDT
+	.base_addr = XPAR_XGPIOPS_0_BASEADDR,
+#endif
 };
 
 struct no_os_gpio_init_param gpio_adc_en3_fmc_ip = {

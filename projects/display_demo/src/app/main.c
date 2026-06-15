@@ -54,6 +54,9 @@ int main(void)
 
 	struct xil_spi_init_param spi_extra = {
 		.type = SPI_PS,
+#ifdef SDT
+		.base_addr = XPAR_XSPIPS_0_BASEADDR,
+#endif
 		.flags = 0U
 	};
 
@@ -69,6 +72,9 @@ int main(void)
 
 	struct xil_gpio_init_param extra = {
 		.type = GPIO_PS,
+#ifdef SDT
+		.base_addr = XPAR_XGPIOPS_0_BASEADDR,
+#endif
 		.device_id = XPAR_PS7_GPIO_0_DEVICE_ID
 	};
 

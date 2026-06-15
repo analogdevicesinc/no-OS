@@ -120,10 +120,16 @@ int main(void)
 
 	struct xil_spi_init_param hal_spi_param = {
 		.type = SPI_PS,
+#ifdef SDT
+		.base_addr = XPAR_XSPIPS_0_BASEADDR,
+#endif
 		.flags = SPI_CS_DECODE
 	};
 	struct xil_gpio_init_param hal_gpio_param = {
 		.type = GPIO_PS,
+#ifdef SDT
+		.base_addr = XPAR_XGPIOPS_0_BASEADDR,
+#endif
 		.device_id = GPIO_DEVICE_ID
 	};
 
@@ -260,6 +266,9 @@ int main(void)
 
 	struct xil_spi_init_param xil_spi_param = {
 		.type = SPI_PS,
+#ifdef SDT
+		.base_addr = XPAR_XSPIPS_0_BASEADDR,
+#endif
 		.flags = SPI_CS_DECODE
 	};
 

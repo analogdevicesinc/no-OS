@@ -58,6 +58,8 @@ struct xil_callback_desc {
 struct xil_gpio_irq_init_param {
 	struct no_os_irq_ctrl_desc *parent_desc;
 	int32_t gpio_device_id;
+	/** Device base address (used for SDT flow) */
+	uint32_t base_addr;
 };
 
 /**

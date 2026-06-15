@@ -186,6 +186,9 @@ static int32_t app_set_i2c_mux(struct no_os_i2c_desc *adv7511_i2c)
 
 	i2c_mux_init_extra.device_id = XPAR_AXI_IIC_MAIN_DEVICE_ID;
 	i2c_mux_init_extra.type = IIC_PL;
+#ifdef SDT
+	i2c_mux_init_extra.base_addr = XPAR_XIIC_0_BASEADDR;
+#endif
 	i2c_mux_init.max_speed_hz = 400000;
 	i2c_mux_init.slave_address = mux_addr;
 	i2c_mux_init.platform_ops = &xil_i2c_ops;
@@ -326,6 +329,9 @@ int main()
 
 	adv7511_extra_i2c_init.device_id = XPAR_AXI_IIC_MAIN_DEVICE_ID;
 	adv7511_extra_i2c_init.type = IIC_PL;
+#ifdef SDT
+	adv7511_extra_i2c_init.base_addr = XPAR_XIIC_0_BASEADDR;
+#endif
 	adv7511_i2c_init.device_id = XPAR_AXI_IIC_MAIN_DEVICE_ID;
 	adv7511_i2c_init.max_speed_hz = 400000;
 	adv7511_i2c_init.slave_address = 0x39;
@@ -334,6 +340,9 @@ int main()
 #if defined(_XPARAMETERS_PS_H_)
 	xil_timer_init.active_tmr = 0;
 	xil_timer_init.type = TIMER_PS;
+#ifdef SDT
+	xil_timer_init.base_addr = XPAR_XSCUTIMER_0_BASEADDR;
+#endif
 	timer_init.id = XPAR_XSCUTIMER_0_DEVICE_ID;
 	timer_init.freq_hz = XPAR_CPU_CORTEXA9_CORE_CLOCK_FREQ_HZ / 2;
 	timer_init.ticks_count = timer_init.freq_hz / 1000;
@@ -342,6 +351,9 @@ int main()
 #else
 	xil_timer_init.active_tmr = 0;
 	xil_timer_init.type = TIMER_PL;
+#ifdef SDT
+	xil_timer_init.base_addr = XPAR_XTMRCTR_0_BASEADDR;
+#endif
 	timer_init.id = XPAR_AXI_TIMER_DEVICE_ID;
 	timer_init.freq_hz = XPAR_AXI_TIMER_CLOCK_FREQ_HZ;
 	timer_init.ticks_count = timer_init.freq_hz / 1000;
@@ -350,6 +362,9 @@ int main()
 #endif
 #if defined(_XPARAMETERS_PS_H_)
 	gic_init_extra.type = IRQ_PS;
+#ifdef SDT
+	gic_init_extra.base_addr = XPAR_XSCUGIC_0_BASEADDR;
+#endif
 	gic_init.irq_ctrl_id = XPAR_SCUGIC_0_DEVICE_ID;
 #else
 	gic_init_extra.type = IRQ_PL;
