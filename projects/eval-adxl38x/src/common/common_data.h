@@ -33,12 +33,8 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "adxl38x.h"
-
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#endif
 
 extern struct no_os_uart_init_param adxl38x_uart_ip;
 extern struct no_os_spi_init_param adxl38x_spi_ip;
