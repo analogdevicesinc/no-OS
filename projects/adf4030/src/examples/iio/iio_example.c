@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by ADF4030 project.
+ *   @file   iio_example.c
+ *   @brief  Implementation of IIO example for ADF4030 project.
  *   @author Sirac Kucukarabacioglu (sirac.kucukarabacioglu@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -30,18 +30,55 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#ifdef MBED_PLATFORM
-#include "mbed/parameters.h"
-#endif
-
-#ifdef IIO_SUPPORT
+#include "common_data.h"
+#include "iio_adf4030.h"
 #include "iio_app.h"
-#endif
+#include "no_os_print_log.h"
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+/**
+ * @brief IIO example main execution.
+ *
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously function iio_app_run and will not return.
+ */
+int example_main()
+{
+	struct adf4030_iio_dev *adf4030_iio_dev;
+	struct adf4030_iio_dev_init_param adf4030_iio_ip;
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
+	int ret;
+
+	adf4030_iio_ip.adf4030_dev_init = &adf4030_ip;
+	ret = adf4030_iio_init(&adf4030_iio_dev, &adf4030_iio_ip);
+	if (ret)
+		return ret;
+
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "adf4030",
+			.dev = adf4030_iio_dev,
+			.dev_descriptor = adf4030_iio_dev->iio_dev,
+		}
+	};
+
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = adf4030_uart_ip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		goto exit;
+
+	ret = iio_app_run(app);
+
+	iio_app_remove(app);
+exit:
+	adf4030_iio_remove(adf4030_iio_dev);
+
+	if (ret)
+		pr_info("Error!\n");
+
+	return ret;
+}

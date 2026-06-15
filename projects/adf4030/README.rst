@@ -184,13 +184,13 @@ The No-OS IIO Application together with the No-OS IIO ADF4030 driver take care
 of all the back-end logic needed to setup the IIO server.
 
 This example initializes the IIO device and calls the IIO app as shown in:
-`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4030/src/examples/iio_example>`_
+`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adf4030/src/examples/iio>`_
 
-In order to build the IIO project make sure you you are using this command:
+In order to build the IIO project make sure you are using this command:
 
 .. code-block:: bash
 
-    make EXAMPLE=iio_example
+    make EXAMPLE=iio
 
 
 No-OS Supported Platforms
@@ -217,8 +217,8 @@ board. 12V power supply needs to be connected. Reference clock can be provided u
 	export PATH=</path/to/arm/gcc/bin>:$PATH
 	# to delete current build
 	make reset
-	# to build the project
-	make PLATFORM=mbed
+	# to build the project (selecting the example to run)
+	make EXAMPLE=iio PLATFORM=mbed
 	# to flash the code
 	make
 	# copy the adf4030.bin to the mounted SDP-K1
