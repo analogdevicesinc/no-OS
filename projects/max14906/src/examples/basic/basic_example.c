@@ -30,10 +30,10 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "basic_example.h"
 #include "common_data.h"
 #include "max149x6-base.h"
 #include "max14906.h"
+#include "no_os_uart.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 #include "no_os_irq.h"
@@ -56,11 +56,12 @@ void gpio_callback_fn(void *ctx)
 		pr_info("Fault detected!\n");
 }
 
-int basic_example_main()
+int example_main()
 {
 	int ret, i;
 	uint32_t val;
 	struct max149x6_desc *max14906_desc;
+	struct no_os_uart_desc *uart_desc;
 
 	enum max14906_climit climit = MAX14906_CL_300;
 	enum max14906_climit climit2 = MAX14906_CL_600;
@@ -82,10 +83,16 @@ int basic_example_main()
 		.extra = GPIO_IRQ_EXTRA
 	};
 
+	ret = no_os_uart_init(&uart_desc, &max14906_uart_ip);
+	if (ret)
+		goto exit;
+
+	no_os_uart_stdio(uart_desc);
+
 	/** MAX14906 Initialization */
 	ret = max14906_init(&max14906_desc, &max14906_ip);
 	if (ret)
-		goto exit;
+		goto uart_remove;
 
 	ret = no_os_irq_ctrl_init(&gpio_irq_desc, &gpio_irq_desc_param);
 	if (ret)
@@ -165,6 +172,8 @@ remove_gpio_irq_ctrl:
 	no_os_irq_ctrl_remove(gpio_irq_desc);
 max14906_remove:
 	max14906_remove(max14906_desc);
+uart_remove:
+	no_os_uart_remove(uart_desc);
 exit:
 	if (ret)
 		pr_info("Error!\n");
