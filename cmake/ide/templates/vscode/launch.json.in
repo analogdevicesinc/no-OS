@@ -1,0 +1,30 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "J-Link Debug",
+            "type": "cortex-debug",
+            "request": "launch",
+            "servertype": "jlink",
+            "executable": "$<TARGET_FILE:@PROJECT_TARGET_NAME@>",
+            "device": "@TARGET@",
+            "runToEntryPoint": "main"
+        },
+        {
+            "name": "OpenOCD Debug",
+            "type": "cortex-debug",
+            "request": "launch",
+            "servertype": "openocd",
+            "device": "cmsis-dap",
+            "executable": "$<TARGET_FILE:@PROJECT_TARGET_NAME@>",@OPENOCD_PATH_CONFIG@
+            "configFiles": [
+                "@OPENOCD_CONFIG@"
+            ],
+            "searchDir": [
+                "@OPENOCD_SEARCH@"
+            ],
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "none"
+        }
+    ]
+}

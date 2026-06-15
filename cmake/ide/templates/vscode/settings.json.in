@@ -1,0 +1,5 @@
+{
+	"cortex-debug.gdbPath": "gdb-multiarch",
+	"cortex-debug.openocdPath": "@OPENOCD_PATH@",
+	"cmake.copyCompileCommands": "${workspaceFolder}/compile_commands.json"
+}
