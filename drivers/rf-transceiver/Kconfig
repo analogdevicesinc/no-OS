@@ -1,0 +1,55 @@
+menuconfig RF_TRANSCEIVER
+	bool "RF Transceiver Drivers"
+	default n
+	help
+	  Enable support for RF transceiver drivers.
+
+if RF_TRANSCEIVER
+
+config RF_TRANSCEIVER_AD9361
+	select GPIO
+	bool "Enable AD9361 RF transceiver driver"
+	default n
+
+config RF_TRANSCEIVER_IIO_AD9361
+	select RF_TRANSCEIVER_AD9361
+	bool "Enable AD9361 IIO driver"
+	default n
+
+config RF_TRANSCEIVER_ADF7023
+	depends on SPI
+	select GPIO
+	bool "Enable ADF7023 RF transceiver driver"
+	default n
+
+config RF_TRANSCEIVER_HMC630X
+	depends on GPIO
+	bool "Enable HMC630x millimeter-wave transceiver driver"
+	default n
+
+config RF_TRANSCEIVER_IIO_HMC630X
+	select RF_TRANSCEIVER_HMC630X
+	bool "Enable HMC630x IIO driver"
+	default n
+
+config RF_TRANSCEIVER_ADRV904X
+	select GPIO
+	bool "Enable ADRV904x RF transceiver driver"
+	default n
+
+config RF_TRANSCEIVER_ADRV9025
+	select GPIO
+	bool "Enable ADRV9025 RF transceiver driver"
+	default n
+
+config RF_TRANSCEIVER_ADRV9002
+	select GPIO
+	bool "Enable ADRV9002 RF transceiver driver"
+	default n
+
+config RF_TRANSCEIVER_ADRV9009
+	select GPIO
+	bool "Enable ADRV9009 RF transceiver driver"
+	default n
+
+endif # RF_TRANSCEIVER

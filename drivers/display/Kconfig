@@ -1,0 +1,15 @@
+menuconfig DISPLAY
+    bool "Display Drivers"
+    default n
+    help
+      Enable support for display drivers.
+
+if DISPLAY
+
+config DISPLAY_SSD1306
+    depends on I2C || SPI
+    select GPIO
+    bool "Enable SSD1306 display driver"
+    default n
+
+endif

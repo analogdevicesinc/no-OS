@@ -1,0 +1,14 @@
+menuconfig FILTER
+	bool "Filter Drivers"
+	default n
+	help
+	  Enable support for filter drivers.
+
+if FILTER
+
+config FILTER_ADMV8818
+	depends on SPI
+	bool "Enable ADMV8818 filter driver"
+	default n
+
+endif # FILTER
