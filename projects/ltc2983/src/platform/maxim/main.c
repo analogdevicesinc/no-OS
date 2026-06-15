@@ -31,24 +31,10 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "common_data.h"
 
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
-
-#ifdef BASIC_EXAMPLE
-#include "basic_example.h"
-#endif
-
-#ifdef ADT7604_BASIC_EXAMPLE
-#include "adt7604_basic_example.h"
-#endif
-
-#ifdef ADT7604_IIO_EXAMPLE
-#include "adt7604_iio_example.h"
-#endif
+extern int example_main();
 
 /*******************************************************************************
  * @brief Main function execution for LTC2983 platform.
@@ -57,54 +43,5 @@
  *******************************************************************************/
 int main()
 {
-#ifdef BASIC_EXAMPLE
-	int ret;
-	struct no_os_uart_desc *uart;
-
-	ret = no_os_uart_init(&uart, &uip);
-	if (ret)
-		goto error;
-
-	no_os_uart_stdio(uart);
-	ret = basic_example_main();
-	if (ret)
-		goto error;
-#endif
-
-#ifdef IIO_EXAMPLE
-	return iio_example_main();
-#endif
-
-#ifdef ADT7604_BASIC_EXAMPLE
-	int ret;
-	struct no_os_uart_desc *uart;
-
-	ret = no_os_uart_init(&uart, &uip);
-	if (ret)
-		goto adt7604_basic_error;
-
-	no_os_uart_stdio(uart);
-	ret = adt7604_basic_example_main();
-	if (ret)
-		goto adt7604_basic_error;
-#endif
-
-#ifdef ADT7604_IIO_EXAMPLE
-	return adt7604_iio_example_main();
-#endif
-
-#if (IIO_EXAMPLE + BASIC_EXAMPLE + ADT7604_BASIC_EXAMPLE + ADT7604_IIO_EXAMPLE != 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and rebuild the project.
-#endif
-
-#ifdef BASIC_EXAMPLE
-error:
-	no_os_uart_remove(uart);
-#endif
-#ifdef ADT7604_BASIC_EXAMPLE
-adt7604_basic_error:
-	no_os_uart_remove(uart);
-#endif
-	return 0;
+	return example_main();
 }

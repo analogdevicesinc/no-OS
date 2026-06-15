@@ -30,9 +30,9 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 
-#include "adt7604_iio_example.h"
 #include "common_data.h"
 #include "iio_ltc2983.h"
+#include "iio_app.h"
 #include "no_os_print_log.h"
 
 /*****************************************************************************
@@ -41,7 +41,7 @@
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously function iio_app_run and will not return.
  *******************************************************************************/
-int adt7604_iio_example_main()
+int example_main()
 {
 	struct ltc2983_iio_desc *ltc2983_iio_dev;
 	struct ltc2983_iio_desc_init_param ltc2983_iio_ip;

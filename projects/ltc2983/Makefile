@@ -1,10 +1,8 @@
-# Select the example you want to enable by choosing y for enabling and n for disabling
-BASIC_EXAMPLE = n
-IIO_EXAMPLE = y
-ADT7604_BASIC_EXAMPLE = n
-ADT7604_IIO_EXAMPLE = n
+EXAMPLE ?= iio
 
 include ../../tools/scripts/generic_variables.mk
+
+include ../../tools/scripts/examples.mk
 
 include src.mk
 
