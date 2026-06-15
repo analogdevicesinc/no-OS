@@ -102,21 +102,11 @@ This is a simple example which initializes the ad7091r-2/-4/-8 selected device
 and performs analog to digital conversions in a while loop with a period of 1s.
 The data is printed on the serial interface.
 
-In order to build the basic example project, add the following configuration in
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7091r8-sdz/Makefile>`_
+In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-        # Force select an example by assigning y for enabling.
-        BASIC_EXAMPLE = y
-
-Alternatively, one can set the desired example flag when calling the compiler to
-make it build the project with the specified example.
-
-.. code-block:: bash
-
-        # Builds the project's basic example.
-        make BASIC_EXAMPLE=y
+        make EXAMPLE=basic
 
 IIO example
 ^^^^^^^^^^^
@@ -137,7 +127,7 @@ The No-OS IIO Application together with the No-OS IIO ad7091r8 driver take care 
 all the back-end logic needed to setup the IIO server.
 
 This example initializes the IIO device and calls the IIO app as shown in:
-`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7091r8-sdz/src/examples/iio_example>`_
+`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7091r8-sdz/src/examples/iio>`_
 
 This example supports single-shot ADC readings. At each read request, the
 ad7091r8 driver writes to the channel register (address 0x01) to set the desired
@@ -148,22 +138,11 @@ pulsed either to update the channel sequencer or to trigger an actual ADC read.
 The CONVST pin is not pulsed if only reading or writing to configuration
 registers.
 
-In order to build the IIO project make sure you have the following configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7091r8-sdz/Makefile>`_
+In order to build the IIO project make sure you are using this command:
 
 .. code-block:: bash
 
-        # Select the example you want to enable by choosing y for enabling and n for disabling
-        BASIC_EXAMPLE = n
-        IIO_EXAMPLE = y
-
-Alternatively, one can set the desired example flag when calling the compiler to
-make it build the project with the specified example.
-
-.. code-block:: bash
-
-        # Builds the project with a simple IIO example.
-        make IIO_EXAMPLE=y
+        make EXAMPLE=iio
 
 
 IIO timer trigger example
@@ -184,7 +163,7 @@ files under subdirectories of
 `Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7091r8-sdz/src/platform>`_
 
 The initialization of IIO device, buffer, and IIO app is done in:
-`IIO Timer Trigger Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7091r8-sdz/src/examples/iio_timer_trigger_example>`_
+`IIO Timer Trigger Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7091r8-sdz/src/examples/iio_timer_trigger>`_
 
 The hardware timer periodically triggers an interrupt that runs a callback
 function. That callback function calls the IIO app which in turn calls the
@@ -192,22 +171,11 @@ trigger handler in the ad7091r8 driver. The ad7091r8 trigger handler then runs
 the ADC to get samples from each enabled channel and pushed the data to a buffer
 which is latter delivered to the application.
 
-In order to build the IIO project make sure you have the following configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7091r8-sdz/Makefile>`_
+In order to build the IIO timer trigger example make sure you are using this command:
 
 .. code-block:: bash
 
-        # Select the example you want to enable by choosing y for enabling and n for disabling
-        BASIC_EXAMPLE = n
-        IIO_TIMER_TRIGGER_EXAMPLE = y
-
-Alternatively, one can set the desired example flag when calling the compiler to
-make it build the project with the specified example.
-
-.. code-block:: bash
-
-        # Builds the project with an IIO example supporting buffered captures.
-        make IIO_TIMER_TRIGGER_EXAMPLE=y
+        make EXAMPLE=iio_timer_trigger
 
 No-OS Supported Platforms
 -------------------------
@@ -254,8 +222,8 @@ There are a number of connections to make between the ADC evaluation board and t
 
         # to delete current build
         make reset
-        # to build the project
-        make PLATFORM=maxim TARGET=max78000
+        # to build the project (selecting the example to run)
+        make EXAMPLE=iio PLATFORM=maxim TARGET=max78000
         # to flash the code
         make run
         # to debug the code

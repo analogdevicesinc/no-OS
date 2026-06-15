@@ -31,7 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "iio_example.h"
 #include "iio_ad7091r8.h"
 #include "common_data.h"
 #include "iio_app.h"
@@ -44,7 +43,7 @@
  *               execute continuously function iio_app_run and will not return.
 *******************************************************************************/
 
-int iio_example_main()
+int example_main()
 {
 	struct ad7091r8_iio_dev *ad7091r8_iio_desc;
 	struct ad7091r8_iio_dev_init_param ad7091r8_iio_param;
