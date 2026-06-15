@@ -1,12 +1,12 @@
 {
     "aducm3029": {
-        "basic_example": {
-            "flags" : "BASIC_EXAMPLE=y"
+        "basic": {
+            "flags" : "EXAMPLE=basic"
         }
     },
     "maxim": {
-        "basic_example": {
-            "flags" : "BASIC_EXAMPLE=y TARGET=max32690"
+        "basic": {
+            "flags" : "EXAMPLE=basic TARGET=max32690"
         }
     }
 }

@@ -31,9 +31,10 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "common_data.h"
-#include "basic_example.h"
+
+extern int example_main();
 
 /***************************************************************************//**
  * @brief Main function execution for maxim platform.
@@ -42,16 +43,5 @@
 *******************************************************************************/
 int main()
 {
-	int ret;
-
-	ret = basic_example_main();
-	if (ret)
-		goto error;
-
-#if (BASIC_EXAMPLE != 1)
-#error Please enable the example and rebuild the project.
-#endif
-
-error:
-	return ret;
+	return example_main();
 }
