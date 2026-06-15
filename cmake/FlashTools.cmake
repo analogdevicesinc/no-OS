@@ -1,0 +1,105 @@
+find_package(Python3 COMPONENTS Interpreter)
+
+# Find GDB for debug targets
+find_program(GDB_PATH
+	NAMES arm-none-eabi-gdb gdb-multiarch
+	DOC "Path to GDB executable"
+)
+
+# Default GDB port (must match gdb_port in openocd.cfg)
+if(NOT DEFINED GDB_PORT)
+	set(GDB_PORT 50000)
+endif()
+
+function(add_jlink_flash_target TARGET_NAME)
+	set(FLASH_SCRIPT "${NO_OS_DIR}/tools/scripts/jlink.py")
+	set(HEX_FILE "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TARGET_NAME}.hex")
+
+	add_custom_target(flash
+		COMMAND "${VENV_PYTHON_EXE}" "${FLASH_SCRIPT}"
+			--device "${TARGET}"
+			--file "${HEX_FILE}"
+		DEPENDS ${TARGET_NAME}
+		COMMENT "Flashing ${TARGET}..."
+		VERBATIM
+	)
+endfunction()
+
+function(add_openocd_flash_target TARGET_NAME)
+	set(OPENOCD_CFG "${CMAKE_CURRENT_BINARY_DIR}/openocd.cfg")
+	set(GDB_INIT_FILE "${CMAKE_CURRENT_BINARY_DIR}/gdbinit")
+	set(TARGET_ELF "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TARGET_NAME}.elf")
+
+	# Generate GDB init file
+	configure_file(
+		"${NO_OS_DIR}/cmake/ide/templates/gdbinit.in"
+		"${GDB_INIT_FILE}"
+		@ONLY
+	)
+
+	add_custom_target(flash
+		COMMAND ${OPENOCD_PATH}
+			-s ${OPENOCD_SCRIPTS}
+			-f ${OPENOCD_CFG}
+			-c "program ${TARGET_ELF} verify reset exit"
+		DEPENDS ${TARGET_NAME}
+		COMMENT "Flashing ${TARGET}..."
+		VERBATIM
+	)
+
+	add_custom_target(erase
+		COMMAND ${OPENOCD_PATH}
+			-s ${OPENOCD_SCRIPTS}
+			-f ${OPENOCD_CFG}
+			-c "init\; halt\; flash erase_sector 0 0 last\; exit"
+		DEPENDS ${TARGET_NAME}
+		COMMENT "Erasing..."
+		VERBATIM
+	)
+
+	# Debug server: starts OpenOCD and waits for GDB connection (blocking)
+	# Run this in one terminal, then run 'debug' target in another
+	add_custom_target(debug_server
+		COMMAND ${OPENOCD_PATH}
+			-s ${OPENOCD_SCRIPTS}
+			-f ${OPENOCD_CFG}
+			-c "init"
+		DEPENDS ${TARGET_NAME}
+		COMMENT "Starting OpenOCD debug server on port ${GDB_PORT}..."
+		USES_TERMINAL
+		VERBATIM
+	)
+
+	# Debug: starts OpenOCD in background and launches GDB
+	if(CMAKE_HOST_UNIX)
+		add_custom_target(debug
+			COMMAND sh -c "${OPENOCD_PATH} -s ${OPENOCD_SCRIPTS} -f ${OPENOCD_CFG} -c init &"
+			COMMAND ${GDB_PATH} -x ${GDB_INIT_FILE}
+			DEPENDS ${TARGET_NAME}
+			COMMENT "Starting debug session..."
+			USES_TERMINAL
+			VERBATIM
+		)
+	else()
+		# On Windows, run debug_server in one terminal, then debug_gdb in another
+		add_custom_target(debug
+			COMMAND ${CMAKE_COMMAND} -E echo "On Windows, run 'debug_server' in one terminal, then 'debug_gdb' in another"
+			VERBATIM
+		)
+		add_custom_target(debug_gdb
+			COMMAND ${GDB_PATH} -x ${GDB_INIT_FILE}
+			DEPENDS ${TARGET_NAME}
+			COMMENT "Starting GDB (connect to running debug_server)..."
+			USES_TERMINAL
+			VERBATIM
+		)
+	endif()
+endfunction()
+
+function(add_flash_target TARGET_NAME)
+	if(${PROBE} STREQUAL "jlink")
+		add_jlink_flash_target(${TARGET_NAME})
+	elseif(${PROBE} STREQUAL "openocd")
+		add_openocd_flash_target(${TARGET_NAME})
+	endif()
+endfunction()
