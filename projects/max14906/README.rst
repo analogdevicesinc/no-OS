@@ -94,15 +94,11 @@ a GPIO interrupt handler for fault detection. It demonstrates LED control
 by cycling the status LEDs on each channel, sets current limits on the
 output channels, and monitors fault conditions through interrupt callbacks.
 
-In order to build the basic example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max14906/Makefile>`_:
+In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = y
-	IIO_EXAMPLE = n
+	make EXAMPLE=basic
 
 IIO Example
 ^^^^^^^^^^^
@@ -119,15 +115,11 @@ If you are not familiar with the ADI IIO Oscilloscope Client, please take a
 look at:
 `IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
 
-In order to build the IIO example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max14906/Makefile>`_:
+In order to build the IIO example make sure you are using this command:
 
 .. code-block:: bash
 
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = n
-	IIO_EXAMPLE = y
+	make EXAMPLE=iio
 
 No-OS Supported Platforms
 --------------------------
@@ -170,8 +162,8 @@ board.
 
 	# to delete current build
 	make reset
-	# to build the project
-	make PLATFORM=maxim TARGET=max32690
+	# to build the project (selecting the example to run)
+	make EXAMPLE=iio PLATFORM=maxim TARGET=max32690
 	# to flash the code
 	make run
 
@@ -179,8 +171,8 @@ board.
 
 	# to delete current build
 	make reset
-	# to build the project
-	make PLATFORM=maxim TARGET=max32665
+	# to build the project (selecting the example to run)
+	make EXAMPLE=iio PLATFORM=maxim TARGET=max32665
 	# to flash the code
 	make run
 
@@ -218,7 +210,7 @@ the NUCLEO-F401RE board and the MAX14906EVKIT J13 header:
 
 	# to delete current build
 	make reset
-	# to build the project
-	make PLATFORM=stm32
+	# to build the project (selecting the example to run)
+	make EXAMPLE=iio PLATFORM=stm32
 	# to flash the code
 	make run
