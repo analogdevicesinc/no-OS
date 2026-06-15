@@ -34,7 +34,6 @@
 
 #include <stdio.h>
 
-#include "iio_example.h"
 #include "common_data.h"
 #include "iio.h"
 #include "ad7616.h"
@@ -52,7 +51,7 @@ extern struct no_os_uart_desc *uart_desc;
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
  */
-int iio_example_main()
+int example_main()
 {
 	struct ad7616_iio_dev *dev;
 	struct iio_app_init_param app_init_param = {0};
