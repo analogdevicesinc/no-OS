@@ -1,9 +1,7 @@
 # Uncomment to use the desired platform
 # PLATFORM = xilinx
 
-# Select the example you want to enable by choosing y for enabling and n for disabling
-IIO_EXAMPLE = y
-BASIC_EXAMPLE = n
+EXAMPLE ?= iio
 
 # Select part number to use: ad4695, ad4696*, ad4697, ad4698.
 AD469X_DEV ?= ad4696
@@ -13,6 +11,8 @@ AD469X_TEMP ?= n
 AD469X_SEQ ?= standard
 
 include ../../tools/scripts/generic_variables.mk
+
+include ../../tools/scripts/examples.mk
 
 include src.mk
 

@@ -31,9 +31,9 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "iio_example.h"
 #include "common_data.h"
 #include "iio.h"
+#include "iio_app.h"
 #include "ad469x.h"
 #include "no_os_util.h"
 #include "no_os_print_log.h"
@@ -94,7 +94,7 @@ static int32_t iio_ad469x_prepare_conversion(struct ad469x_dev *dev,
  * @return ret - Result of the example execution. If working correctly, will
  *				execute continuously function iio_app_run and will not return.
 */
-int iio_example_main()
+int example_main()
 {
 	int ret;
 	uint8_t num_channels;
