@@ -1,16 +1,16 @@
 {
   "maxim": {
-    "basic_example_max32665": {
-      "flags" : "BASIC_EXAMPLE=y IIO_EXAMPLE=n TARGET=max32665"
+    "basic_max32665": {
+      "flags" : "EXAMPLE=basic TARGET=max32665"
     },
-    "iio_example_max32665": {
-      "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=y TARGET=max32665"
+    "iio_max32665": {
+      "flags" : "EXAMPLE=iio TARGET=max32665"
     },
-    "adt7604_basic_example_max78000": {
-      "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=n ADT7604_BASIC_EXAMPLE=y ADT7604_IIO_EXAMPLE=n TARGET=max78000"
+    "adt7604_basic_max78000": {
+      "flags" : "EXAMPLE=adt7604_basic TARGET=max78000"
     },
-    "adt7604_iio_example_max78000": {
-      "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=n ADT7604_BASIC_EXAMPLE=n ADT7604_IIO_EXAMPLE=y TARGET=max78000"
+    "adt7604_iio_max78000": {
+      "flags" : "EXAMPLE=adt7604_iio TARGET=max78000"
     }
   }
 }
