@@ -31,7 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "fifo_example_main.h"
 #include "common_data.h"
 #include "adxl38x.h"
 #include "no_os_print_log.h"
@@ -48,7 +47,7 @@ static char getaxis(uint8_t chID);
  * @return ret - Result of the example execution. If working correctly, will
  *               execute the code and end at error statement.
 *******************************************************************************/
-int fifo_example_main()
+int example_main()
 {
 	struct adxl38x_dev *adxl38x_desc;
 	int ret;
