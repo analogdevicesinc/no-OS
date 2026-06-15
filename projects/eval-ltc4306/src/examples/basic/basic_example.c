@@ -31,9 +31,9 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "basic_example.h"
 #include "common_data.h"
 #include "ltc4306.h"
+#include "no_os_uart.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 
@@ -48,15 +48,22 @@ int LTC4306_USED_DOWNSTREAM_CHANNELS[] = {1, 2};
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
 *******************************************************************************/
-int basic_example_main()
+int example_main()
 {
 	struct ltc4306_dev *ltc4306;
 	struct max538x_dev *max538x;
+	struct no_os_uart_desc *uart;
 	float v0[] = {0.16, 0.26, 0.36, 0.46, 0.56, 0.66, 0.76, 0.86, 0.96};
 	float inc = 0.5;
 	int ret, i, j;
 	int voltage_inc = NO_OS_ARRAY_SIZE(v0);
 	int flash_instances = 16;
+
+	ret = no_os_uart_init(&uart, &uip);
+	if (ret)
+		return ret;
+
+	no_os_uart_stdio(uart);
 
 	ret = ltc4306_addr_gen(&ltc4306_user_init, LTC4306_HIGH, LTC4306_HIGH,
 			       LTC4306_HIGH);
