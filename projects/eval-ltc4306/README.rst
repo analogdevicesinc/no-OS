@@ -82,14 +82,11 @@ voltages on each DAC. The example showcases downstream channel switching
 and multi-DAC control, running continuously while providing error
 handling and status output through logs.
 
-In order to build the basic example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/eval-ltc4306/Makefile>`__:
+This is the only example in this project, so it builds by default:
 
 .. code-block:: bash
 
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = y
+   make
 
 No-OS Supported Platforms
 -------------------------

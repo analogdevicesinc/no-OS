@@ -31,9 +31,10 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "common_data.h"
-#include "basic_example.h"
+
+extern int example_main();
 
 /***************************************************************************//**
  * @brief Main function execution for MAX32655 platform.
@@ -42,29 +43,8 @@
 *******************************************************************************/
 int main()
 {
-	int ret;
-
 	ltc4306_user_init.i2c_init = iip;
 	max538x_user_init.i2c_init = iip;
 
-	struct no_os_uart_desc *uart;
-
-	ret = no_os_uart_init(&uart, &uip);
-	if (ret)
-		goto error;
-
-	no_os_uart_stdio(uart);
-
-	ret = basic_example_main();
-	if (ret)
-		goto error;
-
-#if (BASIC_EXAMPLE != 1)
-#error Please enable the example and rebuild the project.
-#endif
-
-error:
-	no_os_uart_remove(uart);
-
-	return 0;
+	return example_main();
 }

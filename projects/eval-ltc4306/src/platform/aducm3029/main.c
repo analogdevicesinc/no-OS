@@ -31,9 +31,10 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "common_data.h"
-#include "basic_example.h"
+
+extern int example_main();
 
 /***************************************************************************//**
  * @brief Main function execution for ADUCM3029 platform.
@@ -49,27 +50,7 @@ int main()
 
 	ret = platform_init();
 	if (ret)
-		goto error;
+		return ret;
 
-	struct no_os_uart_desc *uart;
-
-	ret = no_os_uart_init(&uart, &uip);
-	if (ret)
-		goto error;
-
-	no_os_uart_stdio(uart);
-
-	ret = basic_example_main();
-	if (ret)
-		goto error_uart;
-error_uart:
-	return no_os_uart_remove(uart);
-
-
-#if (BASIC_EXAMPLE != 1)
-#error Please enable the example and rebuild the project.
-#endif
-
-error:
-	return ret;
+	return example_main();
 }
