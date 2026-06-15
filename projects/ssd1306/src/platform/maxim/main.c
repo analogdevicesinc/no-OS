@@ -31,7 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "common_data.h"
 
 
