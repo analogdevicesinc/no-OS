@@ -1,0 +1,5 @@
+project toolchain CMake
+SetCopyLibrary "copy all"
+SetStructure Advanced
+project generate
+exit

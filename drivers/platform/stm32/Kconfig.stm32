@@ -1,0 +1,34 @@
+config SPI_STM32
+        depends on SPI
+        default n
+        bool "Enable the STM32 SPI driver"
+
+config I2C_STM32
+        depends on I2C
+        default n
+        bool "Enable the STM32 I2C driver"
+
+config UART_STM32
+        depends on UART
+        default n
+        bool "Enable the STM32 UART driver"
+
+config UART_STDIO_STM32
+        bool "Enable the STM32 UART STDIO driver"
+        default n
+
+config IRQ_STM32
+        depends on IRQ
+        bool "Enable the STM32 interrupt controller driver"
+        default n
+
+config GPIO_STM32
+        bool "Enable the STM32 GPIO driver"
+        default n
+
+config GPIO_IRQ_STM32
+        bool "Enable the STM32 GPIO IRQ driver"
+        default n
+
+config STM32_IOC_PATH
+        string "Path to a STM32 CubeMX configuration file that will be used to generate the HAL drivers"
