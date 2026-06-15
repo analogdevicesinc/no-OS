@@ -31,9 +31,9 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 
-#include "basic_example.h"
 #include "common_data.h"
 #include "ltc2983.h"
+#include "no_os_uart.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 
@@ -43,11 +43,18 @@
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
  *******************************************************************************/
-int basic_example_main()
+int example_main()
 {
 	struct ltc2983_desc *dev;
+	struct no_os_uart_desc *uart;
 	int ret, i;
 	int val;
+
+	ret = no_os_uart_init(&uart, &uip);
+	if (ret)
+		return ret;
+
+	no_os_uart_stdio(uart);
 
 	if (ltc2983_ip.dev_type == ID_LTC2983)
 		pr_info("\r\nRunning LTC2983 Basic Example\r\n");

@@ -88,15 +88,11 @@ Basic example
 This is a simple example that initializes the LTC2983, perform the start-up
 sequence and configure the output voltage.
 
-In order to build the basic example make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltc2983/Makefile>`_
+In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = y
-	IIO_EXAMPLE = n
+	make EXAMPLE=basic
 
 IIO example
 ^^^^^^^^^^^
@@ -117,17 +113,13 @@ The No-OS IIO Application together with the No-OS IIO LTC2983 driver take care o
 all the back-end logic needed to setup the IIO server.
 
 This example initializes the IIO device and calls the IIO app as shown in:
-`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltc2983/src/examples/iio_example>`_
+`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltc2983/src/examples/iio>`_
 
-In order to build the IIO project make sure you have the following configuration
-in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltc2983/Makefile>`_
+In order to build the IIO project make sure you are using this command:
 
 .. code-block:: bash
 
-        # Select the example you want to enable by choosing y for enabling and n for disabling
-        BASIC_EXAMPLE = n
-        IIO__EXAMPLE = y
+        make EXAMPLE=iio
 
 No-OS Supported Platforms
 -------------------------
@@ -168,8 +160,8 @@ Maxim Platform
 
 	# to delete current build
 	make PLATFORM=maxim TARGET=max32665 reset
-	# to build the project and flash the code
-	make PLATFORM=maxim TARGET=max32665 run
+	# to build the project and flash the code (selecting the example to run)
+	make EXAMPLE=iio PLATFORM=maxim TARGET=max32665 run
 
 EVAL-ADT7604-AZ
 ---------------
@@ -242,17 +234,11 @@ ADT7604 Basic example
 This example initializes the ADT7604, reads copper trace resistance, leak
 detector coverage, and PT100 temperature, and prints results over UART.
 
-In order to build the ADT7604 basic example make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltc2983/Makefile>`_
+In order to build the ADT7604 basic example make sure you are using this command:
 
 .. code-block:: bash
 
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = n
-	IIO_EXAMPLE = n
-	ADT7604_BASIC_EXAMPLE = y
-	ADT7604_IIO_EXAMPLE = n
+	make EXAMPLE=adt7604_basic
 
 ADT7604 IIO example
 """"""""""""""""""""
@@ -266,17 +252,11 @@ in milli-percent), and the PT100 as an ``IIO_TEMP`` channel.
 If you are not familiar with ADI IIO Application, please take a look at:
 `IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
 
-In order to build the ADT7604 IIO example make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltc2983/Makefile>`_
+In order to build the ADT7604 IIO example make sure you are using this command:
 
 .. code-block:: bash
 
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = n
-	IIO_EXAMPLE = n
-	ADT7604_BASIC_EXAMPLE = n
-	ADT7604_IIO_EXAMPLE = y
+	make EXAMPLE=adt7604_iio
 
 No-OS Supported Platforms
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -315,5 +295,5 @@ Maxim Platform
 
 	# to delete current build
 	make PLATFORM=maxim TARGET=max78000 reset
-	# to build the project and flash the code
-	make PLATFORM=maxim TARGET=max78000 run
+	# to build the project and flash the code (selecting the example to run)
+	make EXAMPLE=adt7604_iio PLATFORM=maxim TARGET=max78000 run
