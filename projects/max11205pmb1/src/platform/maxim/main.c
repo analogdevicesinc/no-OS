@@ -31,25 +31,19 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "common_data.h"
 
-#ifdef BASIC_EXAMPLE
-#include "basic_example.h"
-#endif
-
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
+extern int example_main();
 
 /***************************************************************************//**
- * @brief Main function execution for STM32 platform.
+ * @brief Main function execution for Maxim platform.
  *
  * @return ret - Result of the enabled examples execution.
 *******************************************************************************/
 int main()
 {
-	int ret = 0;
+	int ret;
 
 	max11205_ip.spi_init = max11205_spi_ip;
 
@@ -58,7 +52,7 @@ int main()
 		.platform_ops = &max_irq_ops,
 	};
 
-	/* Initialize NVIC IRQ controller in orde to be able to enable GPIO IRQ interrupt */
+	/* Initialize NVIC IRQ controller in order to be able to enable GPIO IRQ interrupt */
 	ret = no_os_irq_ctrl_init(&max11205_nvic_desc, &max11205_nvic_ip);
 	if (ret)
 		return ret;
@@ -71,27 +65,5 @@ int main()
 	if (ret)
 		return ret;
 
-#ifdef BASIC_EXAMPLE
-	struct no_os_uart_desc *max11205_uart_desc;
-
-	ret = no_os_uart_init(&max11205_uart_desc, &max11205_uart_ip);
-	if (ret)
-		return ret;
-
-	no_os_uart_stdio(max11205_uart_desc);
-
-	ret = basic_example_main();
-#endif
-
-#ifdef IIO_EXAMPLE
-	ret = iio_example_main();
-#endif
-	return ret;
-
-#if (BASIC_EXAMPLE + IIO_EXAMPLE == 0)
-#error At least one example has to be selected using y value in Makefile.
-#elif (BASIC_EXAMPLE + IIO_EXAMPLE > 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and rebuild the project.
-#endif
+	return example_main();
 }
