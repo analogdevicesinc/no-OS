@@ -1,12 +1,5 @@
-include $(PROJECT)/src/platform/$(PLATFORM)/platform_src.mk
-include $(PROJECT)/src/examples/examples_src.mk
-
-INCS += $(PROJECT)/src/common/common_data.h
-SRCS += $(PROJECT)/src/common/common_data.c
-
 INCS += $(INCLUDE)/no_os_spi.h \
 	$(DRIVERS)/adc/ad4080/ad4080.h \
-	$(DRIVERS)/adc/ad4080/iio_ad4080.h \
 	$(INCLUDE)/no_os_uart.h \
 	$(INCLUDE)/no_os_irq.h \
 	$(INCLUDE)/no_os_dma.h \
@@ -22,7 +15,6 @@ INCS += $(INCLUDE)/no_os_spi.h \
 
 SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/adc/ad4080/ad4080.c \
-	$(DRIVERS)/adc/ad4080/iio_ad4080.c \
 	$(DRIVERS)/api/no_os_uart.c \
 	$(DRIVERS)/api/no_os_irq.c \
 	$(DRIVERS)/api/no_os_dma.c \

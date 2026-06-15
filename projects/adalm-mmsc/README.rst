@@ -65,13 +65,11 @@ buffer for ADC data, and runs an IIO application to facilitate data acquisition
 and interaction with the device via UART, while handling errors and cleaning up
 resources as needed.
 
-To build the basic example, ensure you have the following configuration 
-in the **Makefile**:
+This is the only example in this project, so it builds by default:
 
 .. code-block:: bash
 
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	IIOD = y
+	make
 
 No-OS Supported Platforms
 -------------------------
