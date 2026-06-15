@@ -1,15 +1,9 @@
-include $(PROJECT)/src/platform/$(PLATFORM)/platform_src.mk
-include $(PROJECT)/src/examples/examples_src.mk
-
-SRCS += $(PROJECT)/src/platform/$(PLATFORM)/main.c
-
-INCS += $(PROJECT)/src/common/common_data.h
-SRCS += $(PROJECT)/src/common/common_data.c
-	
-INCS += $(PROJECT)/src/platform/platform_includes.h
-
-INCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.h
-SRCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.c 
+# Device selection: ADXL380 / ADXL382
+ifeq (y,$(strip $(ADXL380)))
+CFLAGS += -DADXL380_DEV=1
+else ifeq (y,$(strip $(ADXL382)))
+CFLAGS += -DADXL382_DEV=1
+endif
 
 INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_error.h     \

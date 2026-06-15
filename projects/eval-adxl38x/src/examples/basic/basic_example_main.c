@@ -31,7 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "basic_example_main.h"
 #include "common_data.h"
 #include "adxl38x.h"
 #include "no_os_delay.h"
@@ -44,7 +43,7 @@
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
 *******************************************************************************/
-int basic_example_main()
+int example_main()
 {
 	struct adxl38x_dev *adxl38x_desc;
 	union adxl38x_sts_reg_flags device_flags;
