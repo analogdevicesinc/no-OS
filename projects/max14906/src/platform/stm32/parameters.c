@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   max14906/src/platform/maxim/parameters.c
+ *   @file   parameters.c
  *   @brief  Definition of STM32 platform data used by max14906 project.
  *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************

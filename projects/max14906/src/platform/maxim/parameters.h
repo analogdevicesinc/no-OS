@@ -71,7 +71,6 @@
 extern struct max_uart_init_param max14906_uart_extra;
 extern struct max_spi_init_param max14906_spi_extra;
 
-#ifdef BASIC_EXAMPLE
 #define GPIO_OPS	&max_gpio_ops
 #define GPIO_EXTRA	&max14906_gpio_extra_ip
 #define GPIO_IRQ_OPS	&max_gpio_irq_ops
@@ -88,7 +87,6 @@ extern struct max_gpio_init_param max14906_gpio_extra_ip;
 #define GPIO_FAULT_PIN_NUM	21
 #define GPIO_IRQ_ID		2
 #define NVIC_GPIO_IRQ		GPIO2_IRQn
-#endif
 #endif
 
 #endif /* __PARAMETERS_H__ */
