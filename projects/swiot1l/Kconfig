@@ -1,0 +1,42 @@
+menu "SWIOT1L Configuration"
+
+choice SWIOT1L_FW_VARIANT
+	prompt "Firmware variant"
+	default SWIOT1L_DEFAULT_FW
+
+config SWIOT1L_DEFAULT_FW
+	bool "Default IIO firmware"
+	help
+	  Build the default IIO-based firmware with two-stage
+	  CONFIG/RUNTIME boot and channel configuration support.
+
+config SWIOT1L_MQTT_EXAMPLE
+	bool "MQTT example"
+	help
+	  Build the MQTT example firmware that publishes
+	  AD74413R sensor data to an MQTT broker.
+
+endchoice
+
+config SWIOT1L_MQTT_SERVER_IP
+	string "MQTT broker IP address"
+	default "192.168.97.1"
+	depends on SWIOT1L_MQTT_EXAMPLE
+
+config SWIOT1L_MQTT_SERVER_PORT
+	int "MQTT broker port"
+	default 1883
+	depends on SWIOT1L_MQTT_EXAMPLE
+
+config SWIOT1L_STATIC_IP
+	bool "Use static IP address"
+	default n
+	select NO_OS_STATIC_IP
+	help
+	  Use a static IP instead of DHCP.
+
+config SWIOT1L_OA_TC6_SPI
+	bool "Use OA TC6 SPI protocol"
+	default n
+
+endmenu
