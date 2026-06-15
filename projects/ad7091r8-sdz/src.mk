@@ -1,15 +1,11 @@
-include $(PROJECT)/src/platform/$(PLATFORM)/platform_src.mk
-include $(PROJECT)/src/examples/examples_src.mk
-
-SRCS += $(PROJECT)/src/platform/$(PLATFORM)/main.c
-
-INCS += $(PROJECT)/src/common/common_data.h
-SRCS += $(PROJECT)/src/common/common_data.c
-
-INCS += $(PROJECT)/src/platform/platform_includes.h
-
-INCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.h
-SRCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.c
+# Device selection: AD7091R2 / AD7091R4 / AD7091R8 (default AD7091R8)
+ifeq (y,$(strip $(AD7091R2)))
+CFLAGS += -DAD7091R2_DEV
+else ifeq (y,$(strip $(AD7091R4)))
+CFLAGS += -DAD7091R4_DEV
+else
+CFLAGS += -DAD7091R8_DEV
+endif
 
 INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_error.h     \

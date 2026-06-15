@@ -31,9 +31,9 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "basic_example.h"
 #include "common_data.h"
 #include "ad7091r8.h"
+#include "no_os_uart.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
@@ -44,11 +44,18 @@
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
 *******************************************************************************/
-int basic_example_main()
+int example_main()
 {
 	struct ad7091r8_dev *ad7091r8_dev;
+	struct no_os_uart_desc *uart_desc;
 	uint16_t val;
 	int ret;
+
+	ret = no_os_uart_init(&uart_desc, &ad7091r8_uart_ip);
+	if (ret)
+		return ret;
+
+	no_os_uart_stdio(uart_desc);
 
 	printf("AD7091R-8 basic_example - Read each channel sequentially\n\r");
 	/* Use ad7091r4_ip and ad7091r2_ip for AD7091R-4 and AD7091R-2 respectively */
