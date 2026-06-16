@@ -16,6 +16,8 @@
     "settings": {
         "files.exclude": {
             "projects/@NO_OS_PROJECT_NAME@": true
-        }
+        },
+        "cortex-debug.gdbPath": "@GDB_PATH@",
+        "cortex-debug.openocdPath": "@OPENOCD_PATH@"
     }
 }
