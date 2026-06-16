@@ -71,8 +71,6 @@ extern struct stm32_spi_init_param adis1657x_spi_extra_ip;
 #define GPIO_EXTRA          &adis1657x_gpio_reset_extra_ip
 extern struct stm32_gpio_init_param adis1657x_gpio_reset_extra_ip ;
 
-#ifdef IIO_TRIGGER_EXAMPLE
-
 #define GPIO_DRDY_PIN_NUM   2
 #define GPIO_DRDY_PORT_NUM  0
 
@@ -86,6 +84,5 @@ extern struct stm32_gpio_irq_init_param adis1657x_gpio_irq_extra_ip;
 #define GPIO_IRQ_ID             2 /* Pin 2 */
 #define GPIO_IRQ_OPS            &stm32_gpio_irq_ops
 #define GPIO_IRQ_EXTRA          &adis1657x_gpio_irq_extra_ip
-#endif
 
 #endif /* __PARAMETERS_H__ */

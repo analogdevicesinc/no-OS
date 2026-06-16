@@ -31,13 +31,35 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "iio_trigger_example.h"
-#include "no_os_print_log.h"
 #include "common_data.h"
+#include "iio_app.h"
+#include "parameters.h"
+#include "iio_trigger.h"
+#include "iio_adis1650x.h"
+#include "no_os_print_log.h"
 
 #define DATA_BUFFER_SIZE 400
+#define ADIS1650X_GPIO_TRIG_NAME "adis16505-2-dev0"
 
 uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 13 * sizeof(int)];
+
+/* GPIO trigger */
+struct no_os_irq_init_param adis1650x_gpio_irq_ip = {
+	.irq_ctrl_id = GPIO_IRQ_ID,
+	.platform_ops = GPIO_IRQ_OPS,
+	.extra = GPIO_IRQ_EXTRA,
+};
+
+struct iio_hw_trig_init_param adis1650x_gpio_trig_ip = {
+	.irq_id = ADIS1650X_GPIO_TRIG_IRQ_ID,
+	.irq_trig_lvl = NO_OS_IRQ_EDGE_RISING,
+	.cb_info = {
+		.event = NO_OS_EVT_GPIO,
+		.peripheral = NO_OS_GPIO_IRQ,
+		.handle = ADIS1650X_GPIO_CB_HANDLE,
+	},
+	.name = ADIS1650X_GPIO_TRIG_NAME,
+};
 
 /***************************************************************************//**
  * @brief IIO trigger example main execution.
@@ -46,7 +68,7 @@ uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 13 * sizeof(int)];
  *               execute continuously function iio_app_run_with_trigs and will
  * 				 not return.
  ********************************************************************************/
-int iio_trigger_example_main()
+int example_main()
 {
 	int ret;
 	struct adis_iio_dev *adis1650x_iio_desc;

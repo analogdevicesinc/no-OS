@@ -71,25 +71,3 @@ struct adis_init_param adis1654x_ip = {
 	.sync_mode = ADIS_SYNC_DEFAULT,
 	.dev_id = ADIS16545_3,
 };
-
-#ifdef IIO_TRIGGER_EXAMPLE
-/* GPIO trigger */
-struct no_os_irq_init_param adis1654x_gpio_irq_ip = {
-	.irq_ctrl_id = GPIO_IRQ_ID,
-	.platform_ops = GPIO_IRQ_OPS,
-	.extra = GPIO_IRQ_EXTRA,
-};
-
-const struct iio_hw_trig_cb_info gpio_cb_info = {
-	.event = NO_OS_EVT_GPIO,
-	.peripheral = NO_OS_GPIO_IRQ,
-	.handle = ADIS1654X_GPIO_CB_HANDLE,
-};
-
-struct iio_hw_trig_init_param adis1654x_gpio_trig_ip = {
-	.irq_id = ADIS1654X_GPIO_TRIG_IRQ_ID,
-	.irq_trig_lvl = NO_OS_IRQ_EDGE_RISING,
-	.cb_info = gpio_cb_info,
-	.name = ADIS1654X_GPIO_TRIG_NAME,
-};
-#endif
