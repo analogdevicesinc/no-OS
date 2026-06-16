@@ -40,6 +40,51 @@
 
 /******************************************************************************/
 
+const struct ad4080_chip_info ad4080_chip_info_tbl[NUM_AD4080_DEVICES] = {
+	[ID_AD4080] = {
+		.name = "ad4080",
+		.product_id = AD4080_PRODUCT_ID,
+		.num_bits = 20,
+		.lvds_cnv_clk_cnt_max = 7,
+	},
+	[ID_AD4082] = {
+		.name = "ad4082",
+		.product_id = AD4082_PRODUCT_ID,
+		.num_bits = 20,
+		.lvds_cnv_clk_cnt_max = 8,
+	},
+	[ID_AD4083] = {
+		.name = "ad4083",
+		.product_id = AD4083_PRODUCT_ID,
+		.num_bits = 16,
+		.lvds_cnv_clk_cnt_max = 5,
+	},
+	[ID_AD4085] = {
+		.name = "ad4085",
+		.product_id = AD4085_PRODUCT_ID,
+		.num_bits = 16,
+		.lvds_cnv_clk_cnt_max = 8,
+	},
+	[ID_AD4086] = {
+		.name = "ad4086",
+		.product_id = AD4086_PRODUCT_ID,
+		.num_bits = 14,
+		.lvds_cnv_clk_cnt_max = 4,
+	},
+	[ID_AD4087] = {
+		.name = "ad4087",
+		.product_id = AD4087_PRODUCT_ID,
+		.num_bits = 14,
+		.lvds_cnv_clk_cnt_max = 1,
+	},
+	[ID_AD4088] = {
+		.name = "ad4088",
+		.product_id = AD4088_PRODUCT_ID,
+		.num_bits = 14,
+		.lvds_cnv_clk_cnt_max = 8,
+	},
+};
+
 /**
  * @brief Safely select the SPI slave.
  *
@@ -609,6 +654,9 @@ int ad4080_set_lvds_cnv_clk_cnt(struct ad4080_dev *dev,
 	int ret;
 
 	if (!dev)
+		return -EINVAL;
+
+	if (lvds_cnv_clk_cnt > dev->chip_info->lvds_cnv_clk_cnt_max)
 		return -EINVAL;
 
 	ret = ad4080_update_bits(dev, AD4080_REG_DATA_INTF_CONFIG_B,
@@ -1244,12 +1292,18 @@ int ad4080_init(struct ad4080_dev **device,
 		struct ad4080_init_param init_param)
 {
 	struct ad4080_dev *dev;
+	uint16_t product_id;
 	uint8_t data;
 	int ret;
+
+	if (init_param.id >= NUM_AD4080_DEVICES)
+		return -EINVAL;
 
 	dev = (struct ad4080_dev *)calloc(1, sizeof(*dev) + init_param.privdata_len);
 	if (!dev)
 		return -ENOMEM;
+
+	dev->chip_info = &ad4080_chip_info_tbl[init_param.id];
 
 	/* init the config spi */
 	ret = ad4080_init_spi(&dev->cfg, &init_param.cfg);
@@ -1266,6 +1320,22 @@ int ad4080_init(struct ad4080_dev **device,
 		goto error_data_spi;
 
 	if (data != AD4080_CHIP_ID) {
+		ret = -EINVAL;
+		goto error_data_spi;
+	}
+
+	/* Verify the part matches the requested device ID */
+	ret = ad4080_read(dev, AD4080_REG_PRODUCT_ID_L, &data);
+	if (ret)
+		goto error_data_spi;
+	product_id = data;
+
+	ret = ad4080_read(dev, AD4080_REG_PRODUCT_ID_H, &data);
+	if (ret)
+		goto error_data_spi;
+	product_id |= no_os_field_prep(BYTE_ADDR_H, data);
+
+	if (product_id != dev->chip_info->product_id) {
 		ret = -EINVAL;
 		goto error_data_spi;
 	}
