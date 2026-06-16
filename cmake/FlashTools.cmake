@@ -1,10 +1,20 @@
 find_package(Python3 COMPONENTS Interpreter)
 
-# Find GDB for debug targets
+# Find GDB for debug targets.  arm-none-eabi-gdb ships in the same toolchain
+# bin directory as the cross compiler (e.g. the CubeIDE-bundled GCC), which is
+# typically not on PATH, so hint the search at the compiler's directory before
+# falling back to PATH / gdb-multiarch.
+if(CMAKE_C_COMPILER)
+	get_filename_component(_toolchain_bin_dir "${CMAKE_C_COMPILER}" DIRECTORY)
+endif()
 find_program(GDB_PATH
 	NAMES arm-none-eabi-gdb gdb-multiarch
+	HINTS "${_toolchain_bin_dir}" "${CROSS_COMPILER_BIN}"
 	DOC "Path to GDB executable"
 )
+if(NOT GDB_PATH)
+	message(STATUS "GDB not found; 'debug' target will be unavailable")
+endif()
 
 # Default GDB port (must match gdb_port in openocd.cfg)
 if(NOT DEFINED GDB_PORT)
