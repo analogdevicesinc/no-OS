@@ -34,25 +34,12 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "adis1655x.h"
-#ifdef IIO_SUPPORT
-#include "iio_adis1655x.h"
-#ifdef IIO_TRIGGER_EXAMPLE
-#include "iio_trigger.h"
-#endif
-#endif
 
 extern struct no_os_uart_init_param adis1655x_uart_ip;
 extern struct no_os_spi_init_param adis1655x_spi_ip;
 extern struct no_os_gpio_init_param adis1655x_gpio_reset_ip;
 extern struct adis_init_param adis1655x_ip;
-
-#ifdef IIO_TRIGGER_EXAMPLE
-#define ADIS1655X_GPIO_TRIG_NAME "adis16550-dev0"
-
-extern struct iio_hw_trig_init_param adis1655x_gpio_trig_ip;
-extern struct no_os_irq_init_param adis1655x_gpio_irq_ip;
-#endif
 
 #endif /* __COMMON_DATA_H__ */

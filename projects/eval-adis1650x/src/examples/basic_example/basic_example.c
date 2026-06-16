@@ -31,7 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "basic_example.h"
 #include "common_data.h"
 #include "adis1650x.h"
 #include "no_os_delay.h"
@@ -64,14 +63,21 @@ static const char * const output_unit[] = {
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
  */
-int basic_example_main()
+int example_main()
 {
+	struct no_os_uart_desc *uart_desc;
 	struct adis_dev *adis1650x_desc;
 	int ret;
 	int32_t val[7];
 	struct adis_scale_fractional accl_scale;
 	struct adis_scale_fractional anglvel_scale;
 	struct adis_scale_fractional temp_scale;
+
+	ret = no_os_uart_init(&uart_desc, &adis1650x_uart_ip);
+	if (ret)
+		goto clean_uart;
+
+	no_os_uart_stdio(uart_desc);
 
 	ret = adis_init(&adis1650x_desc, &adis1650x_ip);
 	if (ret)
@@ -128,6 +134,8 @@ int basic_example_main()
 			pr_info("%s %.5f %s \n", output_data[i], val[i] * output_scale[i],
 				output_unit[i]);
 	}
+clean_uart:
+	no_os_uart_remove(uart_desc);
 exit:
 	adis_remove(adis1650x_desc);
 	if (ret)
