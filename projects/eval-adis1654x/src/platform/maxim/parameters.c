@@ -47,7 +47,6 @@ struct max_spi_init_param adis1654x_spi_extra_ip  = {
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
 
-#ifdef IIO_TRIGGER_EXAMPLE
 /* Initialization for Sync pin GPIO. */
 struct no_os_gpio_init_param adis_gpio_drdy_ip = {
 	.port = GPIO_DRDY_PORT_NUM,
@@ -60,4 +59,3 @@ struct no_os_gpio_init_param adis_gpio_drdy_ip = {
 struct max_gpio_init_param adis_gpio_drdy_extra_ip = {
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
-#endif

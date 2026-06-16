@@ -47,8 +47,6 @@ struct stm32_gpio_init_param adis1650x_gpio_reset_extra_ip = {
 	.speed = GPIO_SPEED_FREQ_VERY_HIGH,
 };
 
-#ifdef IIO_TRIGGER_EXAMPLE
 struct stm32_gpio_irq_init_param adis1650x_gpio_irq_extra_ip = {
 	.port_nb = 0, /* Port A */
 };
-#endif

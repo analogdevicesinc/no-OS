@@ -121,9 +121,8 @@ In order to build the IIO project make sure you have the following configuration
 
 .. code-block:: bash
 
-        # Select the example you want to enable by choosing y for enabling and n for disabling
-        BASIC_EXAMPLE = y
-        IIO_TRIGGER_EXAMPLE = n
+        # Select the example you want to enable
+        EXAMPLE = basic_example
 
 IIO example
 ^^^^^^^^^^^
@@ -160,9 +159,8 @@ In order to build the IIO project make sure you have the following configuration
 
 .. code-block:: bash
 
-        # Select the example you want to enable by choosing y for enabling and n for disabling
-        BASIC_EXAMPLE = n
-        IIO_TRIGGER_EXAMPLE = y
+        # Select the example you want to enable
+        EXAMPLE = iio_trigger_example
 
 No-OS Supported Platforms
 -------------------------

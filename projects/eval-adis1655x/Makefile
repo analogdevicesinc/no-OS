@@ -1,10 +1,8 @@
-# Select the example you want to enable by choosing y for enabling and n for disabling
-BASIC_EXAMPLE = n
-IIO_TRIGGER_EXAMPLE = y
-
-# Select the device you want to enable by choosing y for enabling and n for disabling
+EXAMPLE=basic_example
 
 include ../../tools/scripts/generic_variables.mk
+
+include ../../tools/scripts/examples.mk
 
 include src.mk
 
