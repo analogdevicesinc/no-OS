@@ -142,6 +142,15 @@
 #define BYTE_ADDR_H				NO_OS_GENMASK(15, 8)
 #define BYTE_ADDR_L				NO_OS_GENMASK(7, 0)
 #define AD4080_CHIP_ID				NO_OS_GENMASK(2, 0)
+
+/** AD408x Product IDs (PRODUCT_ID_H:PRODUCT_ID_L) */
+#define AD4080_PRODUCT_ID			0x0050
+#define AD4082_PRODUCT_ID			0x0052
+#define AD4083_PRODUCT_ID			0x0053
+#define AD4085_PRODUCT_ID			0x0055
+#define AD4086_PRODUCT_ID			0x0056
+#define AD4087_PRODUCT_ID			0x0057
+#define AD4088_PRODUCT_ID			0x0058
 #define AD4080_FIFO_SIZE		  NO_OS_BIT(14)
 #define AD4080_FIFO_DEPTH 	16384 	/* AD4080 is 16K deep maximum */
 #define AD4080_MAX_FIFO_WATERMARK 	(AD4080_FIFO_DEPTH)
@@ -271,6 +280,35 @@ enum ad4080_fifo_mode {
 	AD4080_EVENT_TRIGGER,
 };
 
+/** AD408x Supported Device IDs */
+enum ad4080_id {
+	ID_AD4080,
+	ID_AD4082,
+	ID_AD4083,
+	ID_AD4085,
+	ID_AD4086,
+	ID_AD4087,
+	ID_AD4088,
+	NUM_AD4080_DEVICES,
+};
+
+/**
+ * @struct ad4080_chip_info
+ * @brief AD408x part-specific information.
+ */
+struct ad4080_chip_info {
+	/** Device name */
+	const char *name;
+	/** Product ID (PRODUCT_ID_H:PRODUCT_ID_L) */
+	uint16_t product_id;
+	/** ADC resolution in bits */
+	uint8_t num_bits;
+	/** Maximum LVDS interface clock periods from CNV rising edge */
+	uint8_t lvds_cnv_clk_cnt_max;
+};
+
+extern const struct ad4080_chip_info ad4080_chip_info_tbl[NUM_AD4080_DEVICES];
+
 struct ad4080_spi_desc {
 	struct no_os_spi_desc *spi;
 	struct no_os_gpio_desc *ss;
@@ -287,6 +325,8 @@ struct ad4080_gp_desc {
  * @brief ad4080 Device structure.
  */
 struct ad4080_dev {
+	/** Part-specific information */
+	const struct ad4080_chip_info *chip_info;
 	/* SPI */
 	struct ad4080_spi_desc 	cfg;
 	struct ad4080_spi_desc 	data;
@@ -346,6 +386,8 @@ struct ad4080_gp_init_param {
  * @brief ad4080 Device initialization parameters.
  */
 struct ad4080_init_param {
+	/** Device ID (selects the AD408x part) */
+	enum ad4080_id id;
 	/* SPI */
 	struct ad4080_spi_init_param cfg;
 	struct ad4080_spi_init_param data;
