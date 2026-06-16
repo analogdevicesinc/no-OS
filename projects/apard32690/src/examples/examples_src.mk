@@ -15,7 +15,7 @@ ifeq (y,$(strip $(APARD32690_ECHO_SERVER_EXAMPLE)))
 CFLAGS += -DAPARD32690_ECHO_SERVER_EXAMPLE
 LIBRARIES += lwip
 CFLAGS += -DNO_OS_STATIC_IP
-CFLAGS += -DNO_OS_LWIP_NETWORKING
+NETWORKING = y
 INCS += $(INCLUDE)/no_os_crc8.h
 INCS += $(DRIVERS)/net/adin1110/adin1110.h
 INCS += $(NO-OS)/network/lwip_raw_socket/netdevs/adin1110/lwip_adin1110.h

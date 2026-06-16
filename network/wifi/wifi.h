@@ -37,6 +37,7 @@
 
 #include <stdint.h>
 #include "network_interface.h"
+#include "no_os_net.h"
 #include "no_os_uart.h"
 #include "no_os_irq.h"
 
@@ -77,5 +78,20 @@ int32_t wifi_get_network_interface(struct wifi_desc *desc,
 				   struct network_interface **net);
 /* Wifi get ip interface */
 int32_t wifi_get_ip(struct wifi_desc *desc, char *ip_buff, uint32_t buff_size);
+
+/**
+ * @struct wifi_network_param
+ * @brief Parameters for initializing WiFi through the no_os_net interface
+ */
+struct wifi_network_param {
+	/** WiFi device initialization parameters */
+	struct wifi_init_param	wifi_param;
+	/** WiFi network SSID */
+	const char		*ssid;
+	/** WiFi network password */
+	const char		*pass;
+};
+
+extern const struct no_os_net_platform_ops wifi_net_ops;
 
 #endif

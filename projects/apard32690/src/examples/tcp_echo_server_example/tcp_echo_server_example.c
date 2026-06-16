@@ -34,10 +34,9 @@
 #include <stdio.h>
 #include "common_data.h"
 
-#include "lwip_socket.h"
 #include "tcp_socket.h"
 #include "no_os_error.h"
-#include "adin1110.h"
+#include "no_os_net.h"
 #include "network_interface.h"
 
 /***************************************************************************//**
@@ -50,7 +49,7 @@ int tcp_echo_server_example_main()
 	bool connected = false;
 	struct tcp_socket_desc *server_socket;
 	struct tcp_socket_desc *client_socket;
-	struct lwip_network_desc *lwip_desc;
+	struct no_os_net_desc *net_desc;
 	struct tcp_socket_init_param tcp_ip = {
 		.max_buff_size = 0
 	};
@@ -67,13 +66,13 @@ int tcp_echo_server_example_main()
 	no_os_uart_stdio(uart_desc);
 
 	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
-	memcpy(lwip_ip.hwaddr, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 
-	ret = no_os_lwip_init(&lwip_desc, &lwip_ip);
+	ret = no_os_net_init(&net_desc, &net_init_params);
 	if (ret)
 		return ret;
 
-	tcp_ip.net = &lwip_desc->no_os_net;
+	tcp_ip.net = net_desc->net_if;
+	tcp_ip.net_desc = net_desc;
 
 	ret = socket_init(&server_socket, &tcp_ip);
 	if (ret)
@@ -96,7 +95,7 @@ int tcp_echo_server_example_main()
 			connected = true;
 		}
 
-		no_os_lwip_step(server_socket->net->net, NULL);
+		no_os_net_step(net_desc);
 
 		if (connected) {
 			ret = socket_recv(client_socket, &read_byte, 1);

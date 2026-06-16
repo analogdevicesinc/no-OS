@@ -11,6 +11,7 @@ SRCS += $(DRIVERS)/api/no_os_uart.c     \
 	$(DRIVERS)/api/no_os_gpio.c     	\
 	$(DRIVERS)/api/no_os_timer.c     	\
 	$(DRIVERS)/api/no_os_dma.c     	\
+	$(DRIVERS)/api/no_os_net.c     	\
         $(NO-OS)/util/no_os_fifo.c      \
         $(NO-OS)/util/no_os_list.c      \
         $(NO-OS)/util/no_os_lf256fifo.c \
@@ -32,6 +33,7 @@ INCS += $(INCLUDE)/no_os_delay.h     \
         $(INCLUDE)/no_os_gpio.h       \
         $(INCLUDE)/no_os_lf256fifo.h \
         $(INCLUDE)/no_os_list.h      \
+        $(INCLUDE)/no_os_net.h      \
         $(INCLUDE)/no_os_uart.h      \
         $(INCLUDE)/no_os_util.h      \
         $(INCLUDE)/no_os_alloc.h     \

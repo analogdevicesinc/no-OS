@@ -7,8 +7,10 @@ SRC_DIRS += $(PAHO_DIR)/MQTTPacket/src
 
 SRCS += $(MQTT_DIR)/mqtt_client.c \
 	$(MQTT_DIR)/mqtt_noos_support.c \
+	$(DRIVERS)/api/no_os_net.c \
 	$(PAHO_DIR)/MQTTClient-C/src/MQTTClient.c
 
 INCS += $(MQTT_DIR)/mqtt_client.h \
 	$(MQTT_DIR)/mqtt_noos_support.h \
+	$(INCLUDE)/no_os_net.h \
 	$(PAHO_DIR)/MQTTClient-C/src/MQTTClient.h

@@ -3,6 +3,7 @@ include $(PROJECT)/src/examples/examples_src.mk
 include $(PROJECT)/src/common/common_src.mk
 
 SRCS += $(DRIVERS)/api/no_os_uart.c     			\
+	$(DRIVERS)/api/no_os_net.c     				\
 	$(DRIVERS)/api/no_os_spi.c     				\
 	$(DRIVERS)/api/no_os_timer.c    			\
 	$(DRIVERS)/api/no_os_i2c.c     				\
@@ -24,6 +25,7 @@ INCS += $(INCLUDE)/no_os_delay.h     				\
         $(INCLUDE)/no_os_lf256fifo.h 				\
         $(INCLUDE)/no_os_list.h      				\
         $(INCLUDE)/no_os_uart.h      				\
+        $(INCLUDE)/no_os_net.h      				\
         $(INCLUDE)/no_os_spi.h      				\
         $(INCLUDE)/no_os_i2c.h      				\
         $(INCLUDE)/no_os_dma.h      				\

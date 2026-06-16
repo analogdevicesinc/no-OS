@@ -1,7 +1,9 @@
 LIBRARIES += lwip
 CFLAGS += -DNO_OS_STATIC_IP
-CFLAGS += -DNO_OS_LWIP_NETWORKING
+NETWORKING = y
 
+SRCS += $(DRIVERS)/api/no_os_net.c
+INCS += $(INCLUDE)/no_os_net.h
 INCS += $(INCLUDE)/no_os_crc8.h
 INCS += $(DRIVERS)/net/adin1110/adin1110.h
 INCS += $(NO-OS)/network/lwip_raw_socket/netdevs/adin1110/lwip_adin1110.h

@@ -30,6 +30,7 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_mutex.h      \
 		$(INCLUDE)/no_os_crc8.h      \
 		$(INCLUDE)/no_os_uart.h      \
+		$(INCLUDE)/no_os_net.h      \
 		$(INCLUDE)/no_os_mutex.h      \
 		$(INCLUDE)/no_os_i2c.h      \
 		$(INCLUDE)/no_os_mdio.h      \
@@ -44,6 +45,7 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(DRIVERS)/api/no_os_irq.c  \
 		$(DRIVERS)/api/no_os_spi.c  \
 		$(DRIVERS)/api/no_os_uart.c \
+		$(DRIVERS)/api/no_os_net.c \
 		$(DRIVERS)/api/no_os_i2c.c \
 		$(DRIVERS)/api/no_os_timer.c \
 		$(DRIVERS)/api/no_os_mdio.c \
@@ -67,7 +69,9 @@ SRCS += $(DRIVERS)/temperature/adt75/adt75.c
 
 INCS += $(INCLUDE)/no_os_crc8.h
 INCS += $(DRIVERS)/net/adin1110/adin1110.h
+INCS += $(NO-OS)/network/lwip_raw_socket/lwip_socket.h
 INCS += $(NO-OS)/network/lwip_raw_socket/netdevs/adin1110/lwip_adin1110.h
+SRCS += $(NO-OS)/network/lwip_raw_socket/lwip_socket.c
 SRCS += $(NO-OS)/network/lwip_raw_socket/netdevs/adin1110/lwip_adin1110.c
 SRCS += $(DRIVERS)/net/adin1110/adin1110.c
 SRCS += $(NO-OS)/util/no_os_crc8.c

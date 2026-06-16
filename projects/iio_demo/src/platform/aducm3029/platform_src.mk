@@ -1,10 +1,6 @@
 SRCS += $(PLATFORM_DRIVERS)/aducm3029_delay.c \
 	$(DRIVERS)/api/no_os_irq.c
 
-ifeq (y,$(strip $(NO_OS_NETWORKING)))
-DISABLE_SECURE_SOCKET ?= y
-SRC_DIRS += $(NO-OS)/network
-endif
 
 SRCS += $(NO-OS)/util/no_os_circular_buffer.c \
 	$(DRIVERS)/api/no_os_timer.c

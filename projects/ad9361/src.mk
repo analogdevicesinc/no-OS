@@ -35,8 +35,8 @@ ifeq (y,$(strip $(IIOD)))
 LIBRARIES += iio
 
 ifeq (linux,$(strip $(PLATFORM)))
-CFLAGS += -DNO_OS_NETWORKING \
-		-DDISABLE_SECURE_SOCKET
+NETWORKING = y
+CFLAGS += -DDISABLE_SECURE_SOCKET
 SRCS += $(NO-OS)/network/linux_socket/linux_socket.c \
 		$(NO-OS)/network/tcp_socket.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \

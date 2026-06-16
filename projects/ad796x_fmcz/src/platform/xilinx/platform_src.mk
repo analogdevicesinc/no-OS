@@ -2,10 +2,6 @@ SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c \
 	$(DRIVERS)/api/no_os_irq.c \
 	$(DRIVERS)/api/no_os_timer.c
 	
-ifeq (y,$(strip $(NETWORKING)))
-DISABLE_SECURE_SOCKET ?= y
-SRC_DIRS += $(NO-OS)/network
-endif
 
 SRCS += $(NO-OS)/util/no_os_circular_buffer.c \
 	$(PLATFORM_DRIVERS)/xilinx_timer.c

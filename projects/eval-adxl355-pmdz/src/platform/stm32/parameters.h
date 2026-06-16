@@ -42,7 +42,9 @@
 #include "stm32_uart.h"
 #include "stm32_uart_stdio.h"
 
-#ifdef NO_OS_LWIP_NETWORKING
+
+
+#ifdef NO_OS_NETWORKING
 extern UART_HandleTypeDef huart1;
 #define UART_INSTANCE	(&huart1)
 #define SPI_DEVICE_ID   3

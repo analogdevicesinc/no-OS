@@ -125,6 +125,7 @@ int basic_pqm_firmware()
 {
 
 	struct no_os_uart_desc *uart_desc;
+	struct no_os_net_desc *net_desc;
 	struct pqm_desc *pqm_desc;
 	struct iio_app_desc *app;
 	struct iio_app_init_param app_init_param = {0};
@@ -147,6 +148,12 @@ int basic_pqm_firmware()
 		goto exit;
 
 	no_os_uart_stdio(uart_desc);
+
+#if defined(PQM_CONN_T1L) || defined(PQM_CONN_ETH)
+	status = no_os_net_init(&net_desc, &net_init_params);
+	if (status)
+		goto exit;
+#endif
 
 #if defined(PQM_CONN_SERIAL)
 	status = enable_RS482_driver();
@@ -178,8 +185,6 @@ int basic_pqm_firmware()
 	no_os_gpio_direction_input(adin1110_int_gpio);
 
 	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
-	memcpy(app_init_param.lwip_param.hwaddr, adin1110_mac_address,
-	       NETIF_MAX_HWADDR_LEN);
 #endif
 
 	status = afe_init();
@@ -218,21 +223,9 @@ int basic_pqm_firmware()
 	app_init_param.uart_init_params = iio_demo_usb_ip;
 #elif defined(PQM_CONN_SERIAL)
 	app_init_param.uart_init_params = iio_demo_serial_ip;
-#elif defined(PQM_CONN_T1L)
+#elif defined(PQM_CONN_T1L) || defined(PQM_CONN_ETH)
 	app_init_param.uart_init_params = iio_demo_serial_ip;
-	app_init_param.lwip_param.platform_ops = &adin1110_lwip_ops;
-	app_init_param.lwip_param.mac_param = &adin1110_ip;
-	app_init_param.lwip_param.extra = NULL;
-#endif
-
-#if defined(PQM_CONN_ETH)
-	struct w5500_network_dev *net_dev;
-
-	status = w5500_network_init(&net_dev, &w5500_network_ip);
-	if (status)
-		return status;
-
-	app_init_param.net_dev = net_dev;
+	app_init_param.net_desc = net_desc;
 #endif
 
 	app_init_param.post_step_callback = &(pqm_one_cycle);

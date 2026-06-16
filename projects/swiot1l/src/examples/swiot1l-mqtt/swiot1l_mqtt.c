@@ -44,7 +44,7 @@
 #include "mqtt_client.h"
 #include "mqtt_noos_support.h"
 #include "no_os_timer.h"
-#include "lwip_socket.h"
+#include "no_os_net.h"
 #include "lwip_adin1110.h"
 
 static void message_handler(struct mqtt_message_data *msg)
@@ -64,11 +64,7 @@ int swiot1l_mqtt()
 	int ret;
 
 	struct ad74413r_desc *ad74413r;
-	struct lwip_network_param lwip_ip = {
-		.platform_ops = &adin1110_lwip_ops,
-		.mac_param = &adin1110_ip,
-	};
-	struct lwip_network_desc *lwip_desc;
+	struct no_os_net_desc *net_desc;
 	struct tcp_socket_desc *tcp_socket;
 	struct no_os_timer_init_param adc_demo_tip = {
 		.id = 0,
@@ -150,16 +146,16 @@ int swiot1l_mqtt()
 	ad74413r_set_channel_dac_code(ad74413r, 3, 3000);
 
 	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
-	memcpy(lwip_ip.hwaddr, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 
-	ret = no_os_lwip_init(&lwip_desc, &lwip_ip);
+	ret = no_os_net_init(&net_desc, &lwip_net_init_params);
 	if (ret) {
-		pr_err("LWIP init error: %d (%s)\n", ret, strerror(-ret));
+		pr_err("Network init error: %d (%s)\n", ret, strerror(-ret));
 		goto free_ad74413r;
 	}
 
 	struct tcp_socket_init_param tcp_ip = {
-		.net = &lwip_desc->no_os_net,
+		.net = net_desc->net_if,
+		.net_desc = net_desc,
 		.max_buff_size = 0
 	};
 
@@ -209,7 +205,7 @@ int swiot1l_mqtt()
 	}
 
 	while (connect_timeout--) {
-		no_os_lwip_step(tcp_socket->net->net, NULL);
+		no_os_net_step(net_desc);
 		no_os_mdelay(1);
 	}
 
@@ -227,7 +223,7 @@ int swiot1l_mqtt()
 	};
 
 	while (1) {
-		no_os_lwip_step(tcp_socket->net->net, NULL);
+		no_os_net_step(net_desc);
 
 		ad74413r_adc_get_value(ad74413r, 0, &val);
 		memset(val_buff, 0, sizeof(val_buff));
@@ -299,8 +295,8 @@ free_mqtt:
 	mqtt_remove(mqtt);
 free_socket:
 	socket_remove(tcp_socket);
-free_lwip:
-	no_os_lwip_remove(lwip_desc);
+free_net:
+	no_os_net_remove(net_desc);
 free_ad74413r:
 	ad74413r_remove(ad74413r);
 free_gpio:

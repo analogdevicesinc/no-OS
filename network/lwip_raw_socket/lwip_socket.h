@@ -34,11 +34,10 @@
 #ifndef _LWIP_SOCKET_H_
 #define _LWIP_SOCKET_H_
 
-#ifdef NO_OS_LWIP_NETWORKING
-
 #include "lwip/netif.h"
 #include "network_interface.h"
 #include "tcp_socket.h"
+#include "no_os_net.h"
 
 #define NO_OS_LWIP_BUFF_SIZE	1530
 #define NO_OS_MTU_SIZE		1500
@@ -46,10 +45,6 @@
 
 #ifndef NO_OS_DOMAIN_NAME
 #define NO_OS_DOMAIN_NAME	"analog"
-#endif
-
-#ifndef NO_OS_LWIP_INIT_ONETIME
-#define NO_OS_LWIP_INIT_ONETIME		0
 #endif
 
 struct lwip_network_desc;
@@ -91,8 +86,6 @@ struct lwip_network_desc {
 };
 
 struct lwip_network_param {
-	/* The MAC address of the interface */
-	uint8_t hwaddr[6];
 	const struct no_os_lwip_ops *platform_ops;
 	void *mac_param;
 	void *extra;
@@ -107,18 +100,6 @@ struct no_os_lwip_ops {
 	int32_t (*step)(struct lwip_network_desc *desc, void *);
 };
 
-/* Initialize lwip stack */
-int32_t no_os_lwip_init(struct lwip_network_desc **,
-			struct lwip_network_param *);
-/* Remove the lwip descriptor */
-int32_t no_os_lwip_remove(struct lwip_network_desc *);
-/*
- * Should be periodically called in the application code as oftern as possible. By default,
- * it will call the necessary lwip timers.
- */
-int32_t no_os_lwip_step(struct lwip_network_desc *, void *);
+extern const struct no_os_net_platform_ops lwip_net_ops;
 
-extern struct network_interface lwip_socket_ops;
-
-#endif /* NO_OS_LWIP_NETWORKING */
 #endif

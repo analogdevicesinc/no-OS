@@ -67,9 +67,9 @@ SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c     \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_timer.c      \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_trng.c
 
-SRC_DIRS += $(NO-OS)/network
+NETWORKING = y
 
-LIBRARIES += mqtt
+LIBRARIES += wifi mqtt
 
 ifeq (y,$(strip $(AZURE_IOT_HUB)))
 INCS += $(PROJECT)/src/app/iot_sample_common.h

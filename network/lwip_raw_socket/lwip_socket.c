@@ -30,7 +30,6 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifdef NO_OS_LWIP_NETWORKING
 
 #include <stdio.h>
 #include <string.h>
@@ -72,6 +71,7 @@ static bool mdns_is_conflict;
 static uint32_t mdns_conflict_id;
 
 static void lwip_config_if(struct lwip_network_desc *desc);
+static int32_t no_os_lwip_step(struct lwip_network_desc *desc, void *data);
 
 /**
  * @brief Get a socket structure based on id.
@@ -174,7 +174,7 @@ static err_t lwip_netif_init(struct netif *netif)
  * @param data - parameter to be passed to the user defined function.
  * @return 0 in the case of success, negative error code otherwise
  */
-int32_t no_os_lwip_step(struct lwip_network_desc *desc, void *data)
+static int32_t no_os_lwip_step(struct lwip_network_desc *desc, void *data)
 {
 	int ret;
 
@@ -267,160 +267,6 @@ static int _lwip_start_mdns(struct lwip_network_desc *desc, struct netif *netif)
 	return 0;
 }
 
-/**
- * @brief Configure lwip and the lower layer network device.
- * @param desc - lwip sockets layer specific descriptor.
- * @param param - initialization parameter.
- * @return 0 in the case of success, negative error code otherwise
- */
-int32_t no_os_lwip_init(struct lwip_network_desc **desc,
-			struct lwip_network_param *param)
-{
-	struct network_interface *network_descriptor;
-	struct lwip_network_desc *descriptor;
-	struct netif *netif_descriptor;
-	ip4_addr_t ipaddr, netmask, gw;
-	uint32_t raw_netmask[4] = {0};
-	uint32_t raw_gateway[4] = {0};
-	uint32_t raw_ip[4] = {0};
-	int ret;
-	int i;
-
-	network_descriptor = calloc(1, sizeof(*network_descriptor));
-	if (!network_descriptor)
-		return -ENOMEM;
-
-	netif_descriptor = calloc(1, sizeof(*netif_descriptor));
-	if (!netif_descriptor) {
-		ret = -ENOMEM;
-		goto free_network_descriptor;
-	}
-
-	descriptor = calloc(1, sizeof(*descriptor));
-	if (!descriptor) {
-		ret = -ENOMEM;
-		goto free_netif_descriptor;
-	}
-
-	memcpy(descriptor->hwaddr, param->hwaddr, NETIF_MAX_HWADDR_LEN);
-
-	lwip_init();
-
-#ifdef NO_OS_IP
-#ifndef NO_OS_NETMASK
-#error NO_OS_NETMASK not defined
-#endif
-#ifndef NO_OS_GATEWAY
-#error NO_OS_GATEWAY not defined
-#endif
-	sscanf(NO_OS_IP, "%d.%d.%d.%d", &raw_ip[0], &raw_ip[1], &raw_ip[2],
-	       &raw_ip[3]);
-	sscanf(NO_OS_NETMASK, "%d.%d.%d.%d", &raw_netmask[0], &raw_netmask[1],
-	       &raw_netmask[2], &raw_netmask[3]);
-	sscanf(NO_OS_GATEWAY, "%d.%d.%d.%d", &raw_gateway[0], &raw_gateway[1],
-	       &raw_gateway[2], &raw_gateway[3]);
-
-	IP4_ADDR(&ipaddr, raw_ip[0], raw_ip[1], raw_ip[2], raw_ip[3]);
-	IP4_ADDR(&netmask, raw_netmask[0], raw_netmask[1], raw_netmask[2],
-		 raw_netmask[3]);
-	IP4_ADDR(&gw, raw_gateway[0], raw_gateway[1], raw_gateway[2], raw_gateway[3]);
-#else
-	ip4_addr_set_zero(&ipaddr);
-	ip4_addr_set_zero(&netmask);
-	ip4_addr_set_zero(&gw);
-#endif
-	netif_add(netif_descriptor, &ipaddr, &netmask, &gw, descriptor, lwip_netif_init,
-		  ethernet_input);
-	descriptor->lwip_netif = netif_descriptor;
-
-	ret = param->platform_ops->init(&descriptor->mac_desc, param->mac_param);
-	if (ret)
-		goto free_netif;
-
-	descriptor->platform_ops = param->platform_ops;
-
-	netif_set_default(netif_descriptor);
-	netif_set_up(netif_descriptor);
-
-	netif_set_link_up(netif_descriptor);
-
-#ifndef NO_OS_IP
-	uint32_t dhcp_timeout = 20000;
-	ret = dhcp_start(netif_descriptor);
-	if (ret)
-		goto platform_remove;
-
-	/*
-	 * By default, AutoIP is enabled, so it will fall back on getting a link local
-	 * address in the 169.254.0.0/16 range after 2 unsuccessful DHCPREQUESTs. Timeout after
-	 * ~20s.
-	 */
-	while (!netif_descriptor->ip_addr.addr && dhcp_timeout > 0) {
-		no_os_lwip_step(descriptor, descriptor);
-		dhcp_timeout--;
-		no_os_mdelay(1);
-	}
-
-	if (!dhcp_timeout && !netif_descriptor->ip_addr.addr) {
-		ret = -ETIMEDOUT;
-		printf("LWIP configuration timed out\n");
-		goto platform_remove;
-	}
-#endif
-
-	ret = _lwip_start_mdns(descriptor, netif_descriptor);
-	if (ret)
-		goto platform_remove;
-
-	lwip_config_if(descriptor);
-
-	printf("IP address: %s\n", ip4addr_ntoa(&netif_descriptor->ip_addr));
-	printf("Network mask: %s\n", ip4addr_ntoa(&netif_descriptor->netmask));
-	printf("Gateway's IP address: %s\n", ip4addr_ntoa(&netif_descriptor->gw));
-	for (i = 0; i < NO_OS_MAX_SOCKETS; i++) {
-		descriptor->sockets[i].state = SOCKET_CLOSED;
-		descriptor->sockets[i].desc = descriptor;
-		descriptor->sockets[i].id = i;
-	}
-
-	*desc = descriptor;
-
-	return 0;
-
-platform_remove:
-	param->platform_ops->remove(descriptor->mac_desc);
-free_netif:
-	netif_remove(netif_descriptor);
-free_descriptor:
-	free(descriptor);
-free_netif_descriptor:
-	free(netif_descriptor);
-free_network_descriptor:
-	free(network_descriptor);
-
-	return ret;
-}
-
-/**
- * @brief Configure lwip and the lower layer network device.
- * @param desc - lwip sockets layer specific descriptor.
- * @return 0
- */
-int32_t no_os_lwip_remove(struct lwip_network_desc *desc)
-{
-	if (!desc || !desc->platform_ops)
-		return -EINVAL;
-
-	if (!desc->platform_ops->remove)
-		return -ENOSYS;
-
-	desc->platform_ops->remove(desc->mac_desc);
-	netif_remove(desc->lwip_netif);
-	no_os_free(desc->lwip_netif);
-	no_os_free(desc);
-
-	return 0;
-}
 
 /**
  * @brief Called in case of a lwip error. The pcb may have already been freed.
@@ -899,7 +745,7 @@ u32_t sys_now(void)
 	return time.s * 1000 + time.us / 1000;
 }
 
-struct network_interface lwip_socket_ops = {
+static struct network_interface lwip_socket_ops = {
 	.socket_open = lwip_socket_open,
 	.socket_close = lwip_socket_close,
 	.socket_connect = lwip_socket_connect,
@@ -935,4 +781,181 @@ static void lwip_config_if(struct lwip_network_desc *desc)
 
 	net->net = desc;
 }
-#endif
+
+static int32_t lwip_net_init(struct no_os_net_desc **desc,
+			     const struct no_os_net_init_param *param)
+{
+	struct lwip_network_param *lwip_param;
+	struct lwip_network_desc *lwip_desc;
+	struct no_os_net_desc *net_desc;
+	struct netif *netif_desc;
+	ip4_addr_t ipaddr, netmask, gw;
+	int ret;
+	int i;
+
+	net_desc = (struct no_os_net_desc *)no_os_calloc(1, sizeof(*net_desc));
+	if (!net_desc)
+		return -ENOMEM;
+
+	netif_desc = (struct netif *)no_os_calloc(1, sizeof(*netif_desc));
+	if (!netif_desc) {
+		ret = -ENOMEM;
+		goto free_net_desc;
+	}
+
+	lwip_desc = (struct lwip_network_desc *)no_os_calloc(1, sizeof(*lwip_desc));
+	if (!lwip_desc) {
+		ret = -ENOMEM;
+		goto free_netif;
+	}
+
+	lwip_param = (struct lwip_network_param *)param->extra;
+
+	if (param->hwaddr)
+		memcpy(lwip_desc->hwaddr, param->hwaddr, NETIF_MAX_HWADDR_LEN);
+
+	lwip_init();
+
+	if (param->ip_config) {
+		IP4_ADDR(&ipaddr, param->ip_config->ip[0], param->ip_config->ip[1],
+			 param->ip_config->ip[2], param->ip_config->ip[3]);
+		IP4_ADDR(&netmask, param->ip_config->netmask[0],
+			 param->ip_config->netmask[1],
+			 param->ip_config->netmask[2],
+			 param->ip_config->netmask[3]);
+		IP4_ADDR(&gw, param->ip_config->gateway[0],
+			 param->ip_config->gateway[1],
+			 param->ip_config->gateway[2],
+			 param->ip_config->gateway[3]);
+	} else {
+		ip4_addr_set_zero(&ipaddr);
+		ip4_addr_set_zero(&netmask);
+		ip4_addr_set_zero(&gw);
+	}
+
+	netif_add(netif_desc, &ipaddr, &netmask, &gw, lwip_desc, lwip_netif_init,
+		  ethernet_input);
+	lwip_desc->lwip_netif = netif_desc;
+
+	ret = lwip_param->platform_ops->init(&lwip_desc->mac_desc,
+					     lwip_param->mac_param);
+	if (ret)
+		goto remove_netif;
+
+	lwip_desc->platform_ops = lwip_param->platform_ops;
+
+	netif_set_default(netif_desc);
+	netif_set_up(netif_desc);
+	netif_set_link_up(netif_desc);
+
+	if (!param->ip_config) {
+		uint32_t dhcp_timeout = 20000;
+
+		ret = dhcp_start(netif_desc);
+		if (ret)
+			goto remove_platform;
+
+		while (!netif_desc->ip_addr.addr && dhcp_timeout > 0) {
+			no_os_lwip_step(lwip_desc, lwip_desc);
+			dhcp_timeout--;
+			no_os_mdelay(1);
+		}
+
+		if (!dhcp_timeout && !netif_desc->ip_addr.addr) {
+			ret = -ETIMEDOUT;
+			printf("LWIP configuration timed out\n");
+			goto remove_platform;
+		}
+	}
+
+	ret = _lwip_start_mdns(lwip_desc, netif_desc);
+	if (ret)
+		goto remove_platform;
+
+	lwip_config_if(lwip_desc);
+
+	printf("IP address: %s\n", ip4addr_ntoa(&netif_desc->ip_addr));
+	printf("Network mask: %s\n", ip4addr_ntoa(&netif_desc->netmask));
+	printf("Gateway's IP address: %s\n", ip4addr_ntoa(&netif_desc->gw));
+
+	for (i = 0; i < NO_OS_MAX_SOCKETS; i++) {
+		lwip_desc->sockets[i].state = SOCKET_CLOSED;
+		lwip_desc->sockets[i].desc = lwip_desc;
+		lwip_desc->sockets[i].id = i;
+	}
+
+	net_desc->extra = lwip_desc;
+	net_desc->net_if = &lwip_desc->no_os_net;
+
+	*desc = net_desc;
+
+	return 0;
+
+remove_platform:
+	lwip_param->platform_ops->remove(lwip_desc->mac_desc);
+remove_netif:
+	netif_remove(netif_desc);
+	no_os_free(lwip_desc);
+free_netif:
+	no_os_free(netif_desc);
+free_net_desc:
+	no_os_free(net_desc);
+
+	return ret;
+}
+
+static int32_t lwip_net_remove(struct no_os_net_desc *desc)
+{
+	struct lwip_network_desc *lwip_desc;
+
+	if (!desc || !desc->extra)
+		return -EINVAL;
+
+	lwip_desc = (struct lwip_network_desc *)desc->extra;
+
+	if (lwip_desc->platform_ops && lwip_desc->platform_ops->remove)
+		lwip_desc->platform_ops->remove(lwip_desc->mac_desc);
+
+	netif_remove(lwip_desc->lwip_netif);
+	no_os_free(lwip_desc->lwip_netif);
+	no_os_free(lwip_desc);
+	no_os_free(desc);
+
+	return 0;
+}
+
+static int32_t lwip_net_get_ip(struct no_os_net_desc *desc,
+			       struct no_os_net_ip_config *ip)
+{
+	struct lwip_network_desc *lwip_desc = desc->extra;
+	struct netif *netif = lwip_desc->lwip_netif;
+
+	ip->ip[0] = ip4_addr1(&netif->ip_addr);
+	ip->ip[1] = ip4_addr2(&netif->ip_addr);
+	ip->ip[2] = ip4_addr3(&netif->ip_addr);
+	ip->ip[3] = ip4_addr4(&netif->ip_addr);
+
+	ip->netmask[0] = ip4_addr1(&netif->netmask);
+	ip->netmask[1] = ip4_addr2(&netif->netmask);
+	ip->netmask[2] = ip4_addr3(&netif->netmask);
+	ip->netmask[3] = ip4_addr4(&netif->netmask);
+
+	ip->gateway[0] = ip4_addr1(&netif->gw);
+	ip->gateway[1] = ip4_addr2(&netif->gw);
+	ip->gateway[2] = ip4_addr3(&netif->gw);
+	ip->gateway[3] = ip4_addr4(&netif->gw);
+
+	return 0;
+}
+
+static int32_t lwip_net_step(struct no_os_net_desc *desc)
+{
+	return no_os_lwip_step(desc->extra, NULL);
+}
+
+const struct no_os_net_platform_ops lwip_net_ops = {
+	.init = &lwip_net_init,
+	.remove = &lwip_net_remove,
+	.get_ip = &lwip_net_get_ip,
+	.step = &lwip_net_step,
+};

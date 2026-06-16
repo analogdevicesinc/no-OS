@@ -34,9 +34,8 @@
 #ifndef W5500_NETWORK_H
 #define W5500_NETWORK_H
 
-#ifdef NO_OS_W5500_NETWORKING
-
 #include "network_interface.h"
+#include "no_os_net.h"
 #include "w5500.h"
 
 enum w5500_socket_role {
@@ -71,12 +70,6 @@ struct w5500_network_init_param {
 	struct w5500_init_param *w5500_ip;
 };
 
-/** Initialize the device */
-int w5500_network_init(struct w5500_network_dev **net_dev,
-		       struct w5500_network_init_param *init_param);
+extern const struct no_os_net_platform_ops w5500_net_ops;
 
-/** Free a device descriptor and release resources */
-int w5500_network_remove(struct w5500_network_dev *dev);
-
-#endif /* NO_OS_W5500_NETWORKING */
 #endif /* W5500_NETWORK_H */

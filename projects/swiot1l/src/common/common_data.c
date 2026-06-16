@@ -31,6 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "common_data.h"
+#include "lwip_adin1110.h"
 
 struct no_os_uart_init_param uart_ip = {
 	.device_id = UART_DEVICE_ID,
@@ -224,6 +225,26 @@ struct adin1110_init_param adin1110_ip = {
 	.reset_param = adin1110_rst_gpio_ip,
 	.append_crc = false,
 	.oa_tc6_spi = SWIOT1L_OA_TC6_SPI,
+};
+
+struct lwip_network_param lwip_ip = {
+	.platform_ops = &adin1110_lwip_ops,
+	.mac_param = &adin1110_ip,
+};
+
+static struct no_os_net_ip_config net_ip_cfg = {
+	.ip      = {192, 168, 97, 40},
+	.netmask = {255, 255, 0, 0},
+	.gateway = {0, 0, 0, 0},
+};
+
+struct no_os_net_init_param lwip_net_init_params = {
+	.platform_ops = &lwip_net_ops,
+	.extra = &lwip_ip,
+#ifdef NO_OS_STATIC_IP
+	.ip_config = &net_ip_cfg,
+#endif
+	.hwaddr = adin1110_ip.mac_address,
 };
 
 const struct no_os_platform_spi_delays ad74413r_spi_delays = {
