@@ -71,6 +71,11 @@ struct iio_ad4080_desc {
 	struct iio_ad4080_fifo_struct fifo;
 	struct no_os_gpio_desc *afe_ctrl;
 
+	/* Per-instance channel/scan_type so two AD408x parts of different
+	 * resolution don't clobber each other's realbits. */
+	struct scan_type scan_type;
+	struct iio_channel ch;
+
 	uint32_t app_device_count;
 	char app_device_name[AD4080_IIO_APP_DEVICE_NAME_LEN];
 	unsigned long sampling_frequency_idx;

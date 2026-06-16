@@ -154,14 +154,19 @@ static const unsigned long sampling_frequency[] = {
  * @param data - The formatted data to be filled.
  * @param raw_data - The raw data read from the FIFO.
  * @param count - The number of samples to format.
+ * @param bytes_per_sample - Number of raw bytes per conversion sample.
  */
 static void ad4080_format_raw_data(uint32_t *data, uint8_t *raw_data,
-				   size_t count)
+				   size_t count, uint8_t bytes_per_sample)
 {
 	size_t i;
 	for (i = 0; i < count; i++) {
-		uint8_t *p = &raw_data[3 * i + 1];
-		data[i] = no_os_get_unaligned_be24(p);
+		/* skip the leading 0xAA synchro byte */
+		uint8_t *p = &raw_data[bytes_per_sample * i + 1];
+		if (bytes_per_sample == 3)
+			data[i] = no_os_get_unaligned_be24(p);
+		else
+			data[i] = no_os_get_unaligned_be16(p);
 	}
 	return;
 }
@@ -176,6 +181,7 @@ static int iio_ad4080_read_data(struct iio_ad4080_desc *iio_ad4080)
 {
 	struct ad4080_dev *dev = iio_ad4080->ad4080;
 	struct iio_ad4080_fifo_struct *fifo;
+	uint8_t bytes_per_sample;
 	int err;
 
 	/* first read raw fifo data */
@@ -185,8 +191,9 @@ static int iio_ad4080_read_data(struct iio_ad4080_desc *iio_ad4080)
 		return err;
 
 	/* then condition the raw data to make it readable */
+	bytes_per_sample = NO_OS_DIV_ROUND_UP(dev->chip_info->num_bits, 8);
 	ad4080_format_raw_data(fifo->formatted_fifo, fifo->raw_fifo,
-			       fifo->watermark);
+			       fifo->watermark, bytes_per_sample);
 
 	return err;
 }
@@ -300,8 +307,13 @@ static int scale_attr_handler(struct iio_ad4080_desc *iio_ad4080,
 			      const struct iio_ch_info *ch_info,
 			      bool show)
 {
-	const double ad4080_scale = AD4080_DEFAULT_SCALE;
-	return sprintf(buf, "%10f", ad4080_scale);
+	struct ad4080_dev *dev = iio_ad4080->ad4080;
+	int32_t vals[2];
+
+	/* ADC_REF_VOLTAGE is in mV, so the resulting scale is in mV per code */
+	vals[0] = ADC_REF_VOLTAGE;
+	vals[1] = (1UL << dev->chip_info->num_bits) - 1;
+	return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 1, vals);
 }
 
 /**
@@ -1463,7 +1475,7 @@ int iio_ad4080_fifo_set_watermark(struct iio_ad4080_fifo_struct *fifo,
 
 	iio_ad4080_fifo_unset_watermark(fifo);
 
-	fifo_size = NO_OS_DIV_ROUND_UP(AD4080_ADC_GRANULARITY, 8);
+	fifo_size = NO_OS_DIV_ROUND_UP(fifo->ad4080->chip_info->num_bits, 8);
 	fifo_size = (fifo_size * watermark);
 	fifo_size = fifo_size + 1; /* account for the 0xAA synchro byte */
 
@@ -1615,21 +1627,14 @@ static struct iio_attribute ad4080_global_attr[] = {
 	{0},
 };
 
-static struct scan_type ad4080_scan_type = {
-	.sign = 's',
-	.realbits = AD4080_ADC_GRANULARITY,
-	.storagebits = 32, /* round up to 4 bytes */
-	.shift = 0,
-	.is_big_endian = false
-};
-
-static struct iio_channel ad4080_ch = {
+/* Template copied into each iio_ad4080_desc at init; realbits and the
+ * scan_type back-pointer are filled in per instance. */
+static const struct iio_channel ad4080_ch_template = {
 	.name = "voltage",
 	.ch_type = IIO_VOLTAGE,
 	.channel = 0,
 	.scan_index = 0,
 	.indexed = true,
-	.scan_type = &ad4080_scan_type,
 	.attributes = ad4080_ch_attr,
 	.ch_out = false,
 };
@@ -1661,8 +1666,19 @@ int ad4080_iio_device(struct iio_ad4080_desc *iio_ad4080,
 	if (!iio_ad4080 || !iio_device)
 		return -EINVAL;
 
+	/* Build per-instance channel + scan_type matched to the part */
+	iio_ad4080->scan_type = (struct scan_type) {
+		.sign = 's',
+		.realbits = iio_ad4080->ad4080->chip_info->num_bits,
+		.storagebits = 32, /* round up to 4 bytes */
+		.shift = 0,
+		.is_big_endian = false,
+	};
+	iio_ad4080->ch = ad4080_ch_template;
+	iio_ad4080->ch.scan_type = &iio_ad4080->scan_type;
+
 	iio_device->num_ch = 1;
-	iio_device->channels = &ad4080_ch;
+	iio_device->channels = &iio_ad4080->ch;
 	iio_device->attributes = ad4080_global_attr;
 	iio_device->debug_attributes = NULL;
 	iio_device->buffer_attributes = NULL;
