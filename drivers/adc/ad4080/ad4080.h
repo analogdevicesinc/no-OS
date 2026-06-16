@@ -158,7 +158,6 @@
 #define AD4080_ADC_GRANULARITY 	20 	/* 20 Bits precision */
 #define ADC_REF_VOLTAGE 	3300 	/* mV granularity */
 #define AD4080_ADC_MAX_RESOLUTION_VAL 	((1 << AD4080_ADC_GRANULARITY) - 1)
-#define AD4080_DEFAULT_SCALE 	(((((double)ADC_REF_VOLTAGE)/1000) / AD4080_ADC_MAX_RESOLUTION_VAL) * 1E3L) /* 1E3 converts volts to millivolts: 1 x 10^3 = 1000. */
 #define OFFSET_CORRECTION_NEGATIVE_LIMIT 	0x800
 
 
