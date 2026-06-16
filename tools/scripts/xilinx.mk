@@ -178,9 +178,9 @@ endif
 # Vitis 2025+ splits BSP into libxil + libxilstandalone + libxiltimer;
 # older versions bundle everything in libxil.
 ifeq ($(shell test $(VITIS_YEAR) -ge 2025 && echo y),y)
-LIB_FLAGS += -Wl,--start-group,-lxil,-lxilstandalone,-lxiltimer,-lgcc,-lc,--end-group
+LIB_FLAGS += -Wl,--start-group,-lxil,-lxilstandalone,-lxiltimer,-lgcc,-lc,-lm,--end-group
 else
-LIB_FLAGS += -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+LIB_FLAGS += -Wl,--start-group,-lxil,-lgcc,-lc,-lm,--end-group
 endif
 
 # Add the common include paths
