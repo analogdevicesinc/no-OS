@@ -4,7 +4,13 @@ AD4080 no-OS Driver
 Supported Devices
 -----------------
 
-`AD4080 <https://www.analog.com/AD4080>`_
+* `AD4080 <https://www.analog.com/AD4080>`_
+* `AD4082 <https://www.analog.com/AD4082>`_
+* `AD4083 <https://www.analog.com/AD4083>`_
+* `AD4085 <https://www.analog.com/AD4085>`_
+* `AD4086 <https://www.analog.com/AD4086>`_
+* `AD4087 <https://www.analog.com/AD4087>`_
+* `AD4088 <https://www.analog.com/AD4088>`_
 
 Overview
 --------
@@ -18,6 +24,12 @@ Simplification of the input anti-alias filter design can be accomplished by
 applying oversampling along with the integrated digital filtering and decimation
 to reduce noise and lower the output data rate for applications that do not
 require the lowest latency of the AD4080.
+
+The driver supports several parts of the AD408x family. These parts are
+register-compatible and differ in ADC resolution: the AD4080 and AD4082 are
+20-bit, the AD4083 and AD4085 are 16-bit, and the AD4086, AD4087 and AD4088
+are 14-bit. The specific part is selected through the ``id`` field of the
+initialization parameter.
 
 Applications
 ------------
@@ -43,11 +55,15 @@ Driver Initialization
 
 The **ad4080_init** function initializes the AD4080 device by allocating memory
 for the device structure, setting up two SPI interfaces (one for configuration
-and one for data), and verifying communication with the chip by reading its ID.
-It performs a software reset, configures SPI settings like 3-wire mode and
-address auto-increment, sets the device's operating mode, and initializes both
-the configuration and data interfaces. Throughout the process, it checks for
-errors at each step and performs cleanup if any initialization fails.
+and one for data), and verifying communication with the chip by reading its
+chip type and product ID. The specific part within the AD408x family is selected
+through the ``id`` field of the initialization parameter, which is used to look
+up the matching entry in the chip information table; the product ID read back
+from the device is checked against the expected value for that part. It performs
+a software reset, configures SPI settings like 3-wire mode and address
+auto-increment, sets the device's operating mode, and initializes both the
+configuration and data interfaces. Throughout the process, it checks for errors
+at each step and performs cleanup if any initialization fails.
 
 SPI Configuration
 -------------------
