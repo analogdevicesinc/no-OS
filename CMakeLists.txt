@@ -72,6 +72,17 @@ if(DEFINED NO_OS_TOOLCHAIN_PATH AND NOT CMAKE_TOOLCHAIN_FILE)
     set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/${NO_OS_TOOLCHAIN_PATH}")
 endif()
 
+# Default to a debuggable build when the user hasn't picked one.  The base
+# compiler flags carry no -g; debug info only comes from the build-type
+# specific flags (CMAKE_C_FLAGS_<TYPE>).  Without this, the ELF has no
+# .debug_info/.debug_line, so the debugger shows no source.  Must be set
+# before project() so the toolchain's build-type flags take effect.
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+    set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING
+        "Build type (Debug, Release, RelWithDebInfo, MinSizeRel)" FORCE)
+    message(STATUS "No CMAKE_BUILD_TYPE set, defaulting to RelWithDebInfo")
+endif()
+
 # Board compatibility checking
 # include(BoardCompatibility)
 

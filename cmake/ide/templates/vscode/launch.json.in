@@ -7,6 +7,7 @@
             "request": "launch",
             "servertype": "jlink",
             "executable": "$<TARGET_FILE:@PROJECT_TARGET_NAME@>",
+            "cwd": "@CMAKE_SOURCE_DIR@",
             "device": "@TARGET@",
             "runToEntryPoint": "main"
         },
@@ -16,7 +17,8 @@
             "request": "launch",
             "servertype": "openocd",
             "device": "cmsis-dap",
-            "executable": "$<TARGET_FILE:@PROJECT_TARGET_NAME@>",@OPENOCD_PATH_CONFIG@
+            "executable": "$<TARGET_FILE:@PROJECT_TARGET_NAME@>",
+            "cwd": "@CMAKE_SOURCE_DIR@",@OPENOCD_PATH_CONFIG@
             "configFiles": [
                 "@OPENOCD_CONFIG@"
             ],
