@@ -16,7 +16,7 @@
 			"inherits": "maxim-base",
 			"cacheVariables": {
 				"BOARD": "max78000_fthr",
-				"USE_VENDOR_TOOLCHAIN": "OFF",
+				"USE_VENDOR_TOOLCHAIN": "ON",
 				"PLATFORM": "maxim",
 				"TARGET": "max78000",
 				"TARGET_NUM": "78000",
