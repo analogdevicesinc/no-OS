@@ -99,10 +99,10 @@ static int32_t ad74413r_slew_step_avail[] = {
 	64, 120, 500, 1820,
 };
 
-static int ad74413r_iio_read_reg(struct ad74413r_iio_desc *dev, uint32_t reg,
-				 uint32_t *readval);
-static int ad74413r_iio_write_reg(struct ad74413r_iio_desc *dev, uint32_t reg,
-				  uint32_t writeval);
+static int32_t ad74413r_iio_read_reg(void *dev, uint32_t reg,
+				     uint32_t *readval);
+static int32_t ad74413r_iio_write_reg(void *dev, uint32_t reg,
+				      uint32_t writeval);
 static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
 				    const struct iio_ch_info *channel, intptr_t priv);
 static int ad74413r_iio_read_offset(void *dev, char *buf, uint32_t len,
@@ -154,11 +154,11 @@ static int ad74413r_iio_read_diag_function_avail(void *dev, char *buf,
 		uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv);
-static int ad74413r_iio_update_channels(void *dev, uint32_t mask);
-static int ad74413r_iio_buffer_disable(void *dev);
-static int ad74413r_iio_read_samples(void *dev, uint32_t *buf,
-				     uint32_t samples);
-static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data);
+static int32_t ad74413r_iio_update_channels(void *dev, uint32_t mask);
+static int32_t ad74413r_iio_buffer_disable(void *dev);
+static int32_t ad74413r_iio_read_samples(void *dev, void *buf,
+		uint32_t samples);
+static int32_t ad74413r_iio_trigger_handler(struct iio_device_data *dev_data);
 
 static struct scan_type ad74413r_iio_adc_scan_type = {
 	.sign = 'u',
@@ -380,12 +380,12 @@ static struct ad74413r_channel_map channel_map[] = {
 };
 
 static struct iio_device ad74413r_iio_dev = {
-	.pre_enable = (int32_t (*)())ad74413r_iio_update_channels,
-	.post_disable = (int32_t (*)())ad74413r_iio_buffer_disable,
-	.trigger_handler = (int32_t (*)())ad74413r_iio_trigger_handler,
-	.read_dev = (int32_t (*)())ad74413r_iio_read_samples,
-	.debug_reg_read = (int32_t (*)())ad74413r_iio_read_reg,
-	.debug_reg_write = (int32_t (*)())ad74413r_iio_write_reg
+	.pre_enable = ad74413r_iio_update_channels,
+	.post_disable = ad74413r_iio_buffer_disable,
+	.trigger_handler = ad74413r_iio_trigger_handler,
+	.read_dev = ad74413r_iio_read_samples,
+	.debug_reg_read = ad74413r_iio_read_reg,
+	.debug_reg_write = ad74413r_iio_write_reg
 };
 
 /******************************************************************************/
@@ -442,9 +442,10 @@ static int _get_ch_by_idx(struct iio_device *iio_dev, int scan_index,
  * @param readval - Register value
  * @return 0 in case of success, error code otherwise
  */
-static int ad74413r_iio_read_reg(struct ad74413r_iio_desc *dev, uint32_t reg,
-				 uint32_t *readval)
+static int32_t ad74413r_iio_read_reg(void *iio_dev, uint32_t reg,
+				     uint32_t *readval)
 {
+	struct ad74413r_iio_desc *dev = iio_dev;
 	uint16_t reg_val;
 	int ret;
 
@@ -467,9 +468,10 @@ static int ad74413r_iio_read_reg(struct ad74413r_iio_desc *dev, uint32_t reg,
  * @param readval - Register value
  * @return 0 in case of success, error code otherwise
  */
-static int ad74413r_iio_write_reg(struct ad74413r_iio_desc *dev, uint32_t reg,
-				  uint32_t writeval)
+static int32_t ad74413r_iio_write_reg(void *iio_dev, uint32_t reg,
+				      uint32_t writeval)
 {
+	struct ad74413r_iio_desc *dev = iio_dev;
 	int ret;
 
 	ad74413_iio_trig_enable(dev, false);
@@ -1341,7 +1343,7 @@ free_channels:
  * @param mask - Bit mask that specifies the enabled channels.
  * @return 0 in case of success, error code otherwise
  */
-static int ad74413r_iio_update_channels(void *dev, uint32_t mask)
+static int32_t ad74413r_iio_update_channels(void *dev, uint32_t mask)
 {
 	struct ad74413r_iio_desc *iio_desc = dev;
 	uint32_t ch;
@@ -1389,7 +1391,7 @@ static int ad74413r_iio_update_channels(void *dev, uint32_t mask)
  * @param dev - The iio device structure.
  * @return 0 in case of success, error code otherwise
  */
-static int ad74413r_iio_buffer_disable(void *dev)
+static int32_t ad74413r_iio_buffer_disable(void *dev)
 {
 	struct ad74413r_iio_desc *iio_desc = dev;
 	int ret;
@@ -1424,13 +1426,14 @@ static int ad74413r_iio_buffer_disable(void *dev)
  * @param samples - The number of samples
  * @return The number of samples in case of success, an error code otherwise
  */
-static int ad74413r_iio_read_samples(void *dev, uint32_t *buf, uint32_t samples)
+static int32_t ad74413r_iio_read_samples(void *dev, void *buf, uint32_t samples)
 {
 	int ret;
 	uint32_t j = 0;
 	uint32_t val;
 	uint32_t i, chan_i;
 	struct ad74413r_iio_desc *iio_desc = dev;
+	uint32_t *ibuf = buf;
 
 	for (i = 0; i < samples; i++) {
 		for (chan_i = 0; chan_i < AD74413R_N_CHANNELS; chan_i++) {
@@ -1440,7 +1443,7 @@ static int ad74413r_iio_read_samples(void *dev, uint32_t *buf, uint32_t samples)
 							    (uint8_t *)&val);
 				if (ret)
 					return ret;
-				buf[j++] = val;
+				ibuf[j++] = val;
 			}
 		}
 	}
@@ -1453,7 +1456,7 @@ static int ad74413r_iio_read_samples(void *dev, uint32_t *buf, uint32_t samples)
  * @param dev_data - The iio device data structure.
  * @return 0 in case of success, an error code otherwise.
  */
-static int ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
+static int32_t ad74413r_iio_trigger_handler(struct iio_device_data *dev_data)
 {
 	int ret;
 	uint32_t i;
