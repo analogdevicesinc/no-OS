@@ -376,12 +376,14 @@ int32_t ssd_1306_print_buffer(struct display_dev *device, char *buffer)
 	uint8_t last_frame_bytes = nr_of_frame_bytes % 254;
 
 	for (int i = 0; i < nr_of_sendable_frames; i++) {
-		ret = ssd1306_buffer_transmit(extra, &buffer[i * 254], 254, SSD1306_DATA);
+		ret = ssd1306_buffer_transmit(extra, (uint8_t *)&buffer[i * 254], 254,
+					      SSD1306_DATA);
 		if (ret != 0)
 			return ret;
 	}
 	if (last_frame_bytes > 0) {
-		ret = ssd1306_buffer_transmit(extra, &buffer[nr_of_sendable_frames * 254],
+		ret = ssd1306_buffer_transmit(extra,
+					      (uint8_t *)&buffer[nr_of_sendable_frames * 254],
 					      last_frame_bytes, SSD1306_DATA);
 		if (ret != 0)
 			return ret;
