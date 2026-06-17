@@ -193,7 +193,8 @@ static int32_t iiod_parse_rw_attr(const char *token, struct comand_desc *res,
 	    res->type == IIO_ATTR_TYPE_CH_OUT) {
 		if (!token)
 			return -EINVAL;
-		strncpy(res->channel, token, sizeof(res->channel));
+		strncpy(res->channel, token, sizeof(res->channel) - 1);
+		res->channel[sizeof(res->channel) - 1] = '\0';
 		token = strtok_r(NULL, delim, ctx);
 	}
 
@@ -207,7 +208,8 @@ static int32_t iiod_parse_rw_attr(const char *token, struct comand_desc *res,
 			return parse_num(token, &res->bytes_count, 10);
 		}
 
-		strncpy(res->attr, token, sizeof(res->attr));
+		strncpy(res->attr, token, sizeof(res->attr) - 1);
+		res->attr[sizeof(res->attr) - 1] = '\0';
 		token = strtok_r(NULL, delim, ctx);
 		if (!token)
 			return -EINVAL;
@@ -215,10 +217,12 @@ static int32_t iiod_parse_rw_attr(const char *token, struct comand_desc *res,
 		return parse_num(token, &res->bytes_count, 10);
 	}
 
-	if (token)
-		strncpy(res->attr, token, sizeof(res->attr));
-	else
+	if (token) {
+		strncpy(res->attr, token, sizeof(res->attr) - 1);
+		res->attr[sizeof(res->attr) - 1] = '\0';
+	} else {
 		memset(res->attr, 0, sizeof(res->attr));
+	}
 
 	return 0;
 }
@@ -247,7 +251,8 @@ int32_t iiod_parse_line(char *buf, struct comand_desc *res, char **ctx)
 		break;
 	}
 
-	strncpy(res->device, token, sizeof(res->device));
+	strncpy(res->device, token, sizeof(res->device) - 1);
+	res->device[sizeof(res->device) - 1] = '\0';
 	token = strtok_r(NULL, delim, ctx);
 	switch (res->cmd) {
 	case IIOD_CMD_CLOSE:
@@ -262,10 +267,12 @@ int32_t iiod_parse_line(char *buf, struct comand_desc *res, char **ctx)
 	case IIOD_CMD_WRITEBUF:
 		return parse_num(token, &res->bytes_count, 10);
 	case IIOD_CMD_SETTRIG:
-		if (token)
-			strncpy(res->trigger, token, sizeof(res->trigger));
-		else
+		if (token) {
+			strncpy(res->trigger, token, sizeof(res->trigger) - 1);
+			res->trigger[sizeof(res->trigger) - 1] = '\0';
+		} else {
 			memset(res->trigger, 0, sizeof(res->trigger));
+		}
 
 		return 0;
 	case IIOD_CMD_SET:
