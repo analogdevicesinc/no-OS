@@ -86,7 +86,8 @@ int example_main()
 			}
 
 			/* Print Current set to all channels */
-			pr_info("All DAC channels have current of: %0.2f mA\n", currents_to_set[i]);
+			pr_info("All DAC channels have current of: %0.2f mA\n",
+				(double)currents_to_set[i]);
 
 			/*Lengthy delay to better visualize the change in values*/
 			no_os_mdelay(1500);
@@ -116,7 +117,7 @@ int example_main()
 
 		/* Setup and Demo toggle function on OUT3 */
 		pr_info("Toggle function on OUT3. Current toggles between %0.2f and %0.2f mA.\n",
-			currents_to_toggle[0], currents_to_toggle[1]);
+			(double)currents_to_toggle[0], (double)currents_to_toggle[1]);
 
 		ret = ltc2672_setup_toggle_channel(ltc2672_desc, LTC2672_DAC3,
 						   currents_to_toggle[0], currents_to_toggle[1]);
