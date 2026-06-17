@@ -286,7 +286,7 @@ int max17851_write_msg(struct max17851_desc *desc, const uint8_t *data,
 		.bytes_number = len + 2,
 		.cs_change = 1,
 	};
-	int ret, i;
+	int ret;
 
 	ret = max17851_config_gen2(desc, MAX17851_TX_QUEUE_SEL, true);
 	if (ret)
@@ -488,7 +488,6 @@ int max17851_set_comm(struct max17851_desc *desc,
 		      enum max17851_comm_timeout_delay delay)
 {
 	uint8_t reg_val;
-	int ret;
 
 	reg_val = no_os_field_prep(MAX17851_COMM_RETRY_COUNT_MASK, count) |
 		  no_os_field_prep(MAX17851_COMM_TIMEOUT_DELAY_MASK, delay);
