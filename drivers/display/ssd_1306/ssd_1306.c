@@ -253,7 +253,6 @@ int32_t ssd_1306_init(struct display_dev *device)
 *******************************************************************************/
 int32_t ssd_1306_display_on_off(struct display_dev *device, uint8_t on_off)
 {
-	int32_t	ret;
 	uint8_t command;
 	ssd_1306_extra *extra;
 

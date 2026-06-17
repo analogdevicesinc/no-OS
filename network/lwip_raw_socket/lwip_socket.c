@@ -280,11 +280,12 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 	struct lwip_network_desc *descriptor;
 	struct netif *netif_descriptor;
 	ip4_addr_t ipaddr, netmask, gw;
+#ifdef NO_OS_IP
 	uint32_t raw_netmask[4] = {0};
 	uint32_t raw_gateway[4] = {0};
 	uint32_t raw_ip[4] = {0};
+#endif
 	int ret;
-	int i;
 
 	network_descriptor = calloc(1, sizeof(*network_descriptor));
 	if (!network_descriptor)
@@ -377,7 +378,7 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 	printf("IP address: %s\n", ip4addr_ntoa(&netif_descriptor->ip_addr));
 	printf("Network mask: %s\n", ip4addr_ntoa(&netif_descriptor->netmask));
 	printf("Gateway's IP address: %s\n", ip4addr_ntoa(&netif_descriptor->gw));
-	for (i = 0; i < NO_OS_MAX_SOCKETS; i++) {
+	for (int i = 0; i < NO_OS_MAX_SOCKETS; i++) {
 		descriptor->sockets[i].state = SOCKET_CLOSED;
 		descriptor->sockets[i].desc = descriptor;
 		descriptor->sockets[i].id = i;
@@ -859,7 +860,6 @@ static int32_t lwip_socket_connect(void *net, uint32_t sock_id,
 	struct lwip_socket_desc *socket;
 	struct tcp_pcb *pcb;
 	uint8_t ip_addr[4];
-	err_t ret;
 
 	sscanf(addr->addr, "%d.%d.%d.%d", &ip_addr[0], &ip_addr[1],
 	       &ip_addr[2], &ip_addr[3]);

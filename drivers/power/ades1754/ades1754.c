@@ -891,7 +891,6 @@ int ades1754_set_cell_pol(struct ades1754_desc *desc,
 			  enum ades1754_cell_polarity cell_polarity)
 {
 	uint16_t reg_val = 0;
-	unsigned int i;
 	int ret;
 
 	reg_val = cell_polarity | no_os_field_prep(ADES1754_CELL_POLARITY_MASK,
