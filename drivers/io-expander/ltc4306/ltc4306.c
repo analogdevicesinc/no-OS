@@ -174,7 +174,7 @@ int ltc4306_read(struct ltc4306_dev *dev, uint8_t addr, uint8_t *read_data,
 	int ret;
 
 	/* Check if valid readable register */
-	if (addr < LTC4306_CTRL_REG0 || addr > LTC4306_CTRL_REG3)
+	if (addr > LTC4306_CTRL_REG3)
 		return -EINVAL;
 
 	/* Check if read will go out of bounds*/
@@ -231,13 +231,13 @@ int ltc4306_addr_gen(struct ltc4306_init_param *init_param,
 {
 	int loc;
 
-	if (addr0 < LTC4306_LOW || addr0 > LTC4306_NO_CONN)
+	if (addr0 > LTC4306_NO_CONN)
 		return -EINVAL;
 
-	if (addr1 < LTC4306_LOW || addr1 > LTC4306_NO_CONN)
+	if (addr1 > LTC4306_NO_CONN)
 		return -EINVAL;
 
-	if (addr2 < LTC4306_LOW || addr2 > LTC4306_NO_CONN)
+	if (addr2 > LTC4306_NO_CONN)
 		return -EINVAL;
 
 	loc = (int)addr0 * 1 + (int)addr1 * 3 + (int)addr2 * 9;
@@ -672,7 +672,7 @@ int ltc4306_get_mass_write(struct ltc4306_dev *dev, bool *mass_write_en)
 int ltc4306_set_timeout_mode(struct ltc4306_dev *dev,
 			     enum ltc4306_timeout_mode tout)
 {
-	if (tout < LTC4306_DISABLED || tout > LTC4306_7P5MS)
+	if (tout > LTC4306_7P5MS)
 		return -EINVAL;
 
 	return ltc4306_reg_update(dev, LTC4306_CTRL_REG2, LTC4306_TOUT, tout);
