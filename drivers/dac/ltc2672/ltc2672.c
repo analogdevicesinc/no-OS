@@ -216,9 +216,7 @@ int ltc2672_set_code_channel(struct ltc2672_dev *device, uint16_t code,
 
 	if (((device->id == LTC2672_12 || device->id == LTC2662_12)
 	     && code > LTC2672_12BIT_RESO)
-	    || ((device->id == LTC2672_16 || device->id == LTC2662_16)
-		&& code > LTC2672_16BIT_RESO)
-	    || out_ch < LTC2672_DAC0 || out_ch > LTC2672_DAC4)
+	    || out_ch > LTC2672_DAC4)
 		return -EINVAL;
 
 	/* Switching to V- results in constant -80mA output */
@@ -253,7 +251,7 @@ int ltc2672_set_current_channel(struct ltc2672_dev *device,
 {
 	uint32_t current_code;
 
-	if (current > device->max_currents[out_ch] || out_ch < LTC2672_DAC0
+	if (current > device->max_currents[out_ch]
 	    || out_ch > LTC2672_DAC4)
 		return -EINVAL;
 
@@ -272,10 +270,8 @@ int ltc2672_set_code_all_channels(struct ltc2672_dev *device, uint16_t code)
 {
 	uint32_t command;
 
-	if (((device->id == LTC2672_12 || device->id == LTC2662_12)
-	     && code > LTC2672_12BIT_RESO)
-	    || ((device->id == LTC2672_16 || device->id == LTC2662_16)
-		&& code > LTC2672_16BIT_RESO))
+	if ((device->id == LTC2672_12 || device->id == LTC2662_12)
+	    && code > LTC2672_12BIT_RESO)
 		return -EINVAL;
 
 	if (device->out_spans[0] == LTC2672_VMINUS_VREF) {
@@ -335,7 +331,7 @@ int ltc2672_set_span_channel(struct ltc2672_dev *device,
 	uint32_t command;
 
 	/* Check if span and channel are valid */
-	if (ch_span < LTC2672_OFF || ch_span > LTC2672_4800VREF || out_ch < LTC2672_DAC0 || out_ch > LTC2672_DAC4)
+	if (ch_span > LTC2672_4800VREF || out_ch > LTC2672_DAC4)
 		return -EINVAL;
 
 	device->out_spans[out_ch] = ch_span;
@@ -385,7 +381,7 @@ int ltc2672_set_span_all_channels(struct ltc2672_dev *device,
 	uint16_t span = 0;
 	uint32_t command;
 
-	if (ch_span < LTC2672_OFF || ch_span > LTC2672_4800VREF)
+	if (ch_span > LTC2672_4800VREF)
 		return -EINVAL;
 
 	for (i = 0; i < LTC2672_TOTAL_CHANNELS; i++)
@@ -450,7 +446,7 @@ int ltc2672_power_down_channel(struct ltc2672_dev *device,
 {
 	uint32_t command;
 
-	if (out_ch < LTC2672_DAC0 || out_ch > LTC2672_DAC4)
+	if (out_ch > LTC2672_DAC4)
 		return -EINVAL;
 
 	command = LTC2672_COMMAND32_GENERATE(LTC2672_PWRDWN_CHANNEL_X, out_ch,
@@ -494,7 +490,7 @@ int ltc2672_monitor_mux(struct ltc2672_dev *device,
 	uint32_t mux = 0;
 	uint32_t command;
 
-	if (mux_comm < LTC2672_MUX_DISABLED || mux_comm > LTC2672_MUX_VOUT4)
+	if (mux_comm > LTC2672_MUX_VOUT4)
 		return -EINVAL;
 
 	mux = LTC2672_MUX_SET(mux_comm);
@@ -522,7 +518,7 @@ int ltc2672_setup_toggle_channel(struct ltc2672_dev *device,
 	if (device->out_spans[out_ch] == LTC2672_VMINUS_VREF || device->out_spans[out_ch] == LTC2672_OFF)
 		return -EINVAL;
 
-	if (out_ch < LTC2672_DAC0 || out_ch > LTC2672_DAC4)
+	if (out_ch > LTC2672_DAC4)
 		return -EINVAL;
 
 	if ((current_reg_a > device->max_currents[out_ch])
@@ -590,7 +586,7 @@ int ltc2672_write_input_register_channel(struct ltc2672_dev *device,
 	    || device->out_spans[out_ch] == LTC2672_OFF)
 		return -EINVAL;
 
-	if (out_ch < LTC2672_DAC0 || out_ch > LTC2672_DAC4)
+	if (out_ch > LTC2672_DAC4)
 		return -EINVAL;
 
 	if (current_reg > device->max_currents[out_ch])
@@ -782,7 +778,7 @@ int ltc2672_update_channel(struct ltc2672_dev *device,
 {
 	uint32_t command;
 
-	if (out_ch < LTC2672_DAC0 || out_ch > LTC2672_DAC4)
+	if (out_ch > LTC2672_DAC4)
 		return -EINVAL;
 
 	command = LTC2672_COMMAND32_GENERATE(LTC2672_PWRUP_UPD_CHANNEL_X, out_ch,
