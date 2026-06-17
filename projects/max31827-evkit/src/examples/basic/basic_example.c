@@ -46,7 +46,6 @@ int example_main()
 	struct max31827_device *dev;
 	int ret;
 	int32_t val;
-	int idx;
 
 	struct no_os_uart_desc *uart;
 

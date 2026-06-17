@@ -123,8 +123,6 @@ free_descriptor:
  */
 static int maxim_dma_remove(struct no_os_dma_desc *desc)
 {
-	uint32_t i;
-
 	MXC_SYS_ClockDisable(MXC_SYS_PERIPH_CLOCK_DMA);
 	MAX_DMA->cn &= MAX_DMA_IRQ_EN_ALL_CH;
 	no_os_irq_ctrl_remove(desc->irq_ctrl);

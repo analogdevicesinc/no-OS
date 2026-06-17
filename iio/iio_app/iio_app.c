@@ -303,7 +303,6 @@ int iio_app_init(struct iio_app_desc **app,
 	struct iio_data_buffer *buff;
 	unsigned int i;
 	int status;
-	void *irq_desc = app_init_param.irq_desc;
 
 	application = (struct iio_app_desc *)no_os_calloc(1, sizeof(*application));
 	if (!application)
@@ -313,6 +312,7 @@ int iio_app_init(struct iio_app_desc **app,
 	application->arg = app_init_param.arg;
 
 #if defined(ADUCM_PLATFORM) || defined(STM32_PLATFORM)
+	void *irq_desc = app_init_param.irq_desc;
 	/* Only one irq controller can exist and be initialized in
 	 * any of the iio_devices. */
 	for (i = 0; i < app_init_param.nb_devices; i++) {

@@ -468,7 +468,6 @@ int lt7170_remove(struct lt7170_dev *dev)
  */
 int lt7170_send_byte(struct lt7170_dev *dev, uint8_t cmd)
 {
-	int ret;
 	uint8_t tx_buf[2] = {0};
 
 	tx_buf[0] = cmd;
@@ -518,7 +517,6 @@ int lt7170_read_byte(struct lt7170_dev *dev, uint8_t cmd, uint8_t *data)
  */
 int lt7170_write_byte(struct lt7170_dev *dev, uint8_t cmd, uint8_t value)
 {
-	int ret;
 	uint8_t tx_buf[3] = {0};
 
 	tx_buf[0] = cmd;
@@ -572,7 +570,6 @@ int lt7170_read_word(struct lt7170_dev *dev, uint8_t cmd, uint16_t *word)
  */
 int lt7170_write_word(struct lt7170_dev *dev, uint8_t cmd, uint16_t word)
 {
-	int ret;
 	uint8_t tx_buf[4] = {0};
 
 	tx_buf[0] = cmd;

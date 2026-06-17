@@ -1559,7 +1559,6 @@ close_socket:
  */
 int iio_step(struct iio_desc *desc)
 {
-	struct iiod_conn_data data;
 	uint32_t conn_id;
 	int32_t ret;
 
@@ -1583,6 +1582,7 @@ int iio_step(struct iio_desc *desc)
 	ret = iiod_conn_step(desc->iiod, conn_id);
 	if (ret == -ENOTCONN) {
 #if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
+		struct iiod_conn_data data;
 		iiod_conn_remove(desc->iiod, conn_id, &data);
 		socket_remove(data.conn);
 		no_os_free(data.buf);
@@ -2131,13 +2131,12 @@ free_desc:
  */
 int iio_remove(struct iio_desc *desc)
 {
-	struct iiod_conn_data data;
-	int ret;
-
 	if (!desc)
 		return -EINVAL;
 
 #if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
+	struct iiod_conn_data data;
+	int ret;
 	for (int i = 0; i < IIOD_MAX_CONNECTIONS; i++) {
 		ret = iiod_conn_remove(desc->iiod, i, &data);
 		if (!ret) {
