@@ -1,26 +1,26 @@
 {
     "maxim": {
       "basic_example_max32665": {
-        "flags" : "BASIC_EXAMPLE=y IIO_EXAMPLE=n TARGET=max32665"
+        "flags" : "EXAMPLE=basic TARGET=max32665"
       },
       "iio_example_max32665": {
-        "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=y TARGET=max32665"
+        "flags" : "EXAMPLE=iio_example TARGET=max32665"
       }
     },
     "linux": {
       "basic_example": {
-        "flags" : "BASIC_EXAMPLE=y IIO_EXAMPLE=n"
+        "flags" : "EXAMPLE=basic"
       },
       "iio_example": {
-        "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=y"
+        "flags" : "EXAMPLE=iio_example"
       }
     },
     "mac": {
       "basic_example": {
-        "flags" : "BASIC_EXAMPLE=y IIO_EXAMPLE=n"
+        "flags" : "EXAMPLE=basic"
       },
       "iio_example": {
-        "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=y"
+        "flags" : "EXAMPLE=iio_example"
       }
     }
   }
