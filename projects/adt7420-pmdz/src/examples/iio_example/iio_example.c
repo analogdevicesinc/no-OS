@@ -33,6 +33,7 @@
 
 #include "iio_adt7420.h"
 #include "common_data.h"
+#include "iio_app.h"
 
 #define DATA_BUFFER_SIZE 400
 
