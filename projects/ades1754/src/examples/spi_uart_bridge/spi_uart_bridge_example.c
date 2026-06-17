@@ -108,7 +108,7 @@ int example_main()
 
 			real_voltage = cell_voltage;
 			real_voltage = real_voltage * 5.0f / ADES1754_CELL_RESOLUTION;
-			pr_info("Cell %d Voltage : %0.5fV\n", i, real_voltage);
+			pr_info("Cell %d Voltage : %0.5fV\n", i, (double)real_voltage);
 		}
 
 		for (i = 0; i < 9; i++) {
