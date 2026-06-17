@@ -337,7 +337,8 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 	if (ret)
 		goto err_init;
 
-	ret = MXC_SPI_SetMode(MXC_SPI_GET_SPI(desc->device_id), desc->mode);
+	ret = MXC_SPI_SetMode(MXC_SPI_GET_SPI(desc->device_id),
+			      (mxc_spi_mode_t)desc->mode);
 	if (ret) {
 		ret = -EINVAL;
 		goto err_init;

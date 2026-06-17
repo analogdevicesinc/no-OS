@@ -233,7 +233,7 @@ int adxl313_init(struct adxl313_dev **device,
 			/* Compute resolution for ADXL313 part depending on FULL_RES bit
 			 * and range. */
 			if (reg_value & ADXL313_REG_DATA_FORMAT_FULL_RES) {
-				dev->resolution = dev->range;
+				dev->resolution = (enum adxl313_resolution)dev->range;
 			} else {
 				dev->resolution = ADXL313_10_BIT_RES;
 			}
