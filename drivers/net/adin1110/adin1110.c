@@ -947,9 +947,6 @@ int adin1110_init(struct adin1110_desc **desc,
 	struct adin1110_desc *descriptor;
 	int ret;
 
-	if (!param->mac_address)
-		return -EINVAL;
-
 	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;

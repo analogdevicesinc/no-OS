@@ -111,7 +111,7 @@ int max538x_init(struct max538x_dev **device,
 	int ret;
 	struct max538x_dev *dev;
 
-	if ((init_param.max538x_vdd == NULL || init_param.max538x_vdd == 0)
+	if (init_param.max538x_vdd == 0
 	    && init_param.active_device > MAX5381K)
 		return -EINVAL;
 
