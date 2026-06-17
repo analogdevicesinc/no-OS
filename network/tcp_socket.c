@@ -45,7 +45,7 @@
 
 #ifdef DISABLE_SECURE_SOCKET
 
-#warning "TCP socket communication is not secured"
+/* NOTE: TCP socket communication is not secured */
 
 #define DEFAULT_CONNECTION_BUFFER_SIZE 256
 
