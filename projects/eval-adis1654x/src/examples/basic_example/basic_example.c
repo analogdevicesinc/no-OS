@@ -131,7 +131,7 @@ int example_main()
 			goto exit;
 
 		for (uint8_t i = 0; i < 7; i++)
-			pr_info("%s %.5f %s \n", output_data[i], val[i] * output_scale[i],
+			pr_info("%s %.5f %s \n", output_data[i], (double)(val[i] * output_scale[i]),
 				output_unit[i]);
 	}
 

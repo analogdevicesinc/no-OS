@@ -120,7 +120,7 @@ int basic_example_main()
 	for (i = 0; i < LTC4306_NUM_DOWNSTREAM; i++) {
 		pr_info("DAC %d: \t", i + 1);
 		for (j = 0; j < voltage_inc; j++) {
-			pr_info("%0.4f \t", (v0[j] + (inc * (float)i)));
+			pr_info("%0.4f \t", (double)(v0[j] + (inc * (float)i)));
 		}
 		pr_info("\n");
 	}
@@ -136,7 +136,7 @@ int basic_example_main()
 				if (ret)
 					goto error_ltc4306;
 
-				ret = max538x_set_voutput(max538x, (v0[j] + (inc * (float)i)));
+				ret = max538x_set_voutput(max538x, (double)(v0[j] + (inc * (float)i)));
 				if (ret)
 					goto error_max538x;
 
