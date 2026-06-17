@@ -51,8 +51,8 @@ int32_t no_os_row_major_to_column_major_8bits(uint8_t *src, uint8_t *dst,
 	if (width % 8 != 0 || height % 8 != 0)
 		return -1;
 
-	for (int i = 0; i < dst_stride; i++) {
-		for (int j = 0; j < width; j++) {
+	for (uint32_t i = 0; i < dst_stride; i++) {
+		for (uint32_t j = 0; j < (uint32_t)width; j++) {
 			tmp_var = 0;
 			int byte_index = j / 8;
 			int bit_index = 7 - (j % 8);
