@@ -49,7 +49,6 @@
 #include "lwip_adin1110.h"
 
 #define DATA_BUFFER_SIZE 1000
-#define IIO_IGNORE_BUFF_OVERRUN_ERR
 
 uint8_t iio_data_buffer[DATA_BUFFER_SIZE * sizeof(uint32_t) * 8];
 
@@ -83,7 +82,7 @@ int swiot_firmware()
 	struct max14906_iio_desc *max14906_iio_desc;
 	struct adt75_iio_desc *adt75_iio_desc;
 	struct swiot_iio_desc *swiot_iio_desc;
-	struct iio_sw_trig *sw_trig;
+	struct iio_sw_trig *sw_trig = NULL;
 	int ret;
 
 	struct no_os_gpio_desc *ad74413r_ldac_gpio;

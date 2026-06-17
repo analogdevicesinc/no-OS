@@ -2104,8 +2104,8 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 
 	return 0;
 
-free_pylink:
 #if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
+free_pylink:
 	socket_remove(ldesc->server);
 #endif
 free_conns:

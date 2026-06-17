@@ -291,6 +291,7 @@ int32_t ssd_1306_move_cursor(struct display_dev *device, uint8_t row,
 	ret = ssd1306_buffer_transmit(extra, command, 3U, SSD1306_CMD);
 	if (ret != 0)
 		return -EFAULT;
+	return 0;
 }
 
 /***************************************************************************//**

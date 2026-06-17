@@ -55,9 +55,10 @@ int example_main()
 	struct no_os_uart_desc *uart;
 	float v0[] = {0.16, 0.26, 0.36, 0.46, 0.56, 0.66, 0.76, 0.86, 0.96};
 	float inc = 0.5;
-	int ret, i, j;
+	int ret, j;
+	unsigned int i;
 	int voltage_inc = NO_OS_ARRAY_SIZE(v0);
-	int flash_instances = 16;
+	unsigned int flash_instances = 16;
 
 	ret = no_os_uart_init(&uart, &uip);
 	if (ret)
@@ -159,7 +160,6 @@ error_ltc4306:
 	ltc4306_remove(ltc4306);
 error_max538x:
 	max538x_remove(max538x);
-error:
 	pr_info("Error!\r\n");
 	return 0;
 }
