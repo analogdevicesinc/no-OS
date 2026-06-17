@@ -1984,6 +1984,28 @@ static int32_t iio_init_trigs(struct iio_desc *desc,
 	return 0;
 }
 
+static int iio_uart_send(void *conn, uint8_t *buf, uint32_t len)
+{
+	return no_os_uart_write(conn, buf, len);
+}
+
+static int iio_uart_recv(void *conn, uint8_t *buf, uint32_t len)
+{
+	return no_os_uart_read(conn, buf, len);
+}
+
+#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
+static int iio_socket_send(void *conn, uint8_t *buf, uint32_t len)
+{
+	return socket_send(conn, buf, len);
+}
+
+static int iio_socket_recv(void *conn, uint8_t *buf, uint32_t len)
+{
+	return socket_recv(conn, buf, len);
+}
+#endif
+
 /**
  * @brief Set communication ops and read/write ops
  * @param desc - iio descriptor.
@@ -2052,8 +2074,8 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 		goto free_iiod;
 
 	if (init_param->phy_type == USE_UART) {
-		ldesc->send = (int (*)())no_os_uart_write;
-		ldesc->recv = (int (*)())no_os_uart_read;
+		ldesc->send = iio_uart_send;
+		ldesc->recv = iio_uart_recv;
 		ldesc->uart_desc = init_param->uart_desc;
 
 		struct iiod_conn_data data = {
@@ -2068,8 +2090,8 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	}
 #if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
 	else if (init_param->phy_type == USE_NETWORK) {
-		ldesc->send = (int (*)())socket_send;
-		ldesc->recv = (int (*)())socket_recv;
+		ldesc->send = iio_socket_send;
+		ldesc->recv = iio_socket_recv;
 		ret = socket_init(&ldesc->server,
 				  init_param->tcp_socket_init_param);
 		if (NO_OS_IS_ERR_VALUE(ret))

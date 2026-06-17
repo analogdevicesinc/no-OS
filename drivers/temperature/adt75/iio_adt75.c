@@ -47,7 +47,7 @@ static int adt75_iio_read_scale(void *dev, char *buf, uint32_t len,
 				const struct iio_ch_info *channel, intptr_t priv);
 static int adt75_iio_read_offset(void *dev, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel, intptr_t priv);
-static int adt75_iio_read_samples(void *dev, int16_t *buf, uint32_t samples);
+static int32_t adt75_iio_read_samples(void *dev, void *buf, uint32_t samples);
 
 static struct iio_attribute adt75_attrs[] = {
 	{
@@ -86,7 +86,7 @@ static struct iio_channel adt75_channels[] = {
 static struct iio_device adt75_iio_dev = {
 	.channels = adt75_channels,
 	.num_ch = 1,
-	.read_dev = (int32_t (*)())adt75_iio_read_samples,
+	.read_dev = adt75_iio_read_samples,
 };
 
 /**
@@ -160,9 +160,10 @@ static int adt75_iio_read_offset(void *dev, char *buf, uint32_t len,
  * @param samples - The number of samples
  * @return The number of samples in case of success, an error code otherwise
  */
-static int adt75_iio_read_samples(void *dev, int16_t *buf, uint32_t samples)
+static int32_t adt75_iio_read_samples(void *dev, void *buf, uint32_t samples)
 {
 	struct adt75_iio_desc *desc = dev;
+	int16_t *ibuf = buf;
 	uint16_t val;
 	uint32_t i;
 	int ret;
@@ -172,7 +173,7 @@ static int adt75_iio_read_samples(void *dev, int16_t *buf, uint32_t samples)
 		if (ret)
 			return ret;
 
-		buf[i] = val;
+		ibuf[i] = val;
 	}
 
 	return samples;
