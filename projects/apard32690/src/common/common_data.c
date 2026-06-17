@@ -62,7 +62,7 @@ struct no_os_uart_init_param uart_ip = {
 
 #if defined(APARD32690_ECHO_SERVER_EXAMPLE) || defined(APARD32690_ADIN1110_STANDALONE_EXAMPLE)
 
-const struct max_spi_init_param adin1110_spi_extra = {
+struct max_spi_init_param adin1110_spi_extra = {
 	.num_slaves = 1,
 	.polarity = SPI_SS_POL_LOW,
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
