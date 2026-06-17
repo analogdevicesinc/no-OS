@@ -87,21 +87,6 @@ int example_main()
 	struct iio_hw_trig *adxrs290_trig_desc;
 	struct no_os_irq_ctrl_desc *adxrs290_irq_desc;
 
-	/* To be moved in the example when all platforms support GPIO IRQ controller */
-	struct no_os_irq_ctrl_desc *nvic_desc;
-	struct no_os_irq_init_param nvic_ip = {
-		.platform_ops = &max_irq_ops,
-	};
-
-	/* Initialize GPIO IRQ controller */
-	ret = no_os_irq_ctrl_init(&nvic_desc, &nvic_ip);
-	if (ret)
-		goto error;
-
-	ret = no_os_irq_enable(nvic_desc, NVIC_GPIO_IRQ);
-	if (ret)
-		goto error;
-
 	ret = adxrs290_init(&adxrs290_desc, &adxrs290_ip);
 	if (ret)
 		return ret;

@@ -1,34 +1,34 @@
 {
   "aducm3029": {
     "iio_example": {
-      "flags": "IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=n"
+      "flags": "EXAMPLE=iio_example"
     },
     "iio_timer_trigger": {
-      "flags": "IIO_EXAMPLE=n IIO_SW_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=y"
+      "flags": "EXAMPLE=iio_timer_trigger_example"
     }
   },
   "stm32": {
     "iio_example": {
-      "flags": "IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=n"
+      "flags": "EXAMPLE=iio_example"
     }
   },
   "pico": {
     "iio_example": {
-      "flags": "IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=n"
+      "flags": "EXAMPLE=iio_example"
     },
     "iio_trigger_example": {
-      "flags": "IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y IIO_TIMER_TRIGGER_EXAMPLE=n"
+      "flags": "EXAMPLE=iio_trigger_example"
     },
     "iio_timer_trigger": {
-      "flags": "IIO_EXAMPLE=n IIO_SW_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=y"
+      "flags": "EXAMPLE=iio_timer_trigger_example"
     }
   },
   "maxim": {
     "iio_example_max32655": {
-      "flags": "IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n IIO_TIMER_TRIGGER_EXAMPLE=n TARGET=max32655"
+      "flags": "EXAMPLE=iio_example TARGET=max32655"
     },
     "iio_trigger_example_max32655": {
-      "flags": "IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y IIO_TIMER_TRIGGER_EXAMPLE=n TARGET=max32655"
+      "flags": "EXAMPLE=iio_trigger_example TARGET=max32655"
     }
   }
 }
