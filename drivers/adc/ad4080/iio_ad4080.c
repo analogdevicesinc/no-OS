@@ -1128,6 +1128,8 @@ static int device_mode_glob_attr_handler(struct iio_ad4080_desc *iio_ad4080,
 	uint8_t reg_val;
 	size_t i;
 	size_t count;
+	/* Normal, Standby, Sleep register encodings */
+	const uint8_t op_mode_reg[] = { 0, 2, 3 };
 
 	ad4080_read(iio_ad4080->ad4080, AD4080_REG_DEVICE_CONFIG, &reg_val);
 	if (show) {
@@ -1147,15 +1149,7 @@ static int device_mode_glob_attr_handler(struct iio_ad4080_desc *iio_ad4080,
 	count = sizeof operating_modes / sizeof operating_modes[0];
 	for (i = 0; i < count; i++) {
 		if (strcmp(buf, operating_modes[i]) == 0) {
-			switch (i) {
-			case 0:
-			case 2:
-			case 3:
-				reg_val = (reg_val & ~AD4080_OP_MODE_MSK) | i;
-				break;
-			default:
-				return -1;
-			}
+			reg_val = (reg_val & ~AD4080_OP_MODE_MSK) | op_mode_reg[i];
 
 			err = ad4080_write(iio_ad4080->ad4080,
 					   AD4080_REG_DEVICE_CONFIG,
