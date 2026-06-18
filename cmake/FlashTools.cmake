@@ -107,9 +107,23 @@ function(add_openocd_flash_target TARGET_NAME)
 endfunction()
 
 function(add_flash_target TARGET_NAME)
-	if(${PROBE} STREQUAL "jlink")
+	if(NOT PROBE)
+		message(WARNING
+			"PROBE is not set; no 'flash'/'debug' targets will be created. "
+			"Set -DPROBE=openocd or -DPROBE=jlink to enable flashing.")
+	elseif(${PROBE} STREQUAL "jlink")
 		add_jlink_flash_target(${TARGET_NAME})
 	elseif(${PROBE} STREQUAL "openocd")
-		add_openocd_flash_target(${TARGET_NAME})
+		if(NOT OPENOCD_PATH)
+			message(WARNING
+				"PROBE=openocd but OpenOCD was not found; 'flash'/'debug' targets "
+				"will be unavailable. Install OpenOCD or set -DOPENOCD_PATH=...")
+		else()
+			add_openocd_flash_target(${TARGET_NAME})
+		endif()
+	else()
+		message(WARNING
+			"Unknown PROBE='${PROBE}'; no 'flash'/'debug' targets will be created. "
+			"Supported values: openocd, jlink.")
 	endif()
 endfunction()

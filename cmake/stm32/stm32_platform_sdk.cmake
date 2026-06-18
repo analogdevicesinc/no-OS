@@ -118,7 +118,8 @@ function(config_stm32_sdk BUILD_TARGET)
 
         if(NEED_REGEN)
                 message(STATUS "Patching STM32CubeMX config file...")
-                execute_process(
+                no_os_run_checked(
+                        WHAT "patching the STM32CubeMX config"
                         COMMAND ${CMAKE_COMMAND}
                         -D STM32_TEMPLATE_FILE=${NO_OS_DIR}/cmake/stm32/stm32_cubemx_template.cubemx
                         -D STM32_TARGET_BUILD=${CMAKE_CURRENT_BINARY_DIR}
@@ -151,7 +152,8 @@ function(config_stm32_sdk BUILD_TARGET)
                 endif()
 
                 message(STATUS "Patching STM32CubeMX generated CMakeLists.txt...")
-                execute_process(
+                no_os_run_checked(
+                        WHAT "patching the STM32CubeMX-generated CMakeLists.txt"
                         COMMAND ${CMAKE_COMMAND}
                         -D CMAKE_FILE_TO_PATCH=${BOARD_BUILD_DIR}/${IOC_NAME}/cmake/stm32cubemx/CMakeLists.txt
                         -D STM32_PROJECT_BUILD=${BOARD_BUILD_DIR}/${IOC_NAME}
@@ -159,7 +161,13 @@ function(config_stm32_sdk BUILD_TARGET)
                 )
 
                 file(GLOB STARTUP_FILE ${BOARD_BUILD_DIR}/*/startup_*.s)
-                execute_process(
+                if(NOT STARTUP_FILE)
+                        message(FATAL_ERROR
+                                "No CubeMX startup file (startup_*.s) found under ${BOARD_BUILD_DIR}. "
+                                "STM32CubeMX project generation may have produced an unexpected layout.")
+                endif()
+                no_os_run_checked(
+                        WHAT "generating the STM32 GPIO IRQ table from ${STARTUP_FILE}"
                         COMMAND ${VENV_PYTHON_EXE} ${EXTI_SCRIPT} ${STARTUP_FILE} ${EXTI_GEN_FILE}
                 )
 

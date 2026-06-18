@@ -11,7 +11,16 @@ if (CFS)
 elseif(DEFINED ENV{MAXIM_LIBRARIES})
     set(MAXIM_LIBRARIES $ENV{MAXIM_LIBRARIES})
 else()
-    message(FATAL_ERROR "MAXIM_LIBRARIES environment variable is not defined")
+    message(FATAL_ERROR
+        "MAXIM_LIBRARIES is not set. Point it at the Maxim SDK Libraries directory "
+        "(set the MAXIM_LIBRARIES environment variable), or provide a CFS install "
+        "via -DCFS_PATH=... / the CFS_PATH environment variable.")
+endif()
+
+# MAXIM_LIBRARIES is dereferenced into the linker script path (-T...) below; a
+# wrong path would otherwise fail much later at link time with a missing .ld.
+if(NOT EXISTS "${MAXIM_LIBRARIES}")
+    message(FATAL_ERROR "MAXIM_LIBRARIES directory does not exist: ${MAXIM_LIBRARIES}")
 endif()
 
 message(STATUS "MAXIM_LIBRARIES: ${MAXIM_LIBRARIES}")
@@ -41,6 +50,15 @@ if(USE_VENDOR_TOOLCHAIN)
     find_program(CMAKE_LINKER arm-none-eabi-ld HINTS ${CROSS_COMPILER_BIN})
     find_program(CMAKE_SIZE arm-none-eabi-size HINTS ${CROSS_COMPILER_BIN})
     find_program(CMAKE_OBJCOPY arm-none-eabi-objcopy HINTS ${CROSS_COMPILER_BIN})
+
+    # Report a missing cross-compiler here, with the directory we searched,
+    # rather than letting CMake fail later with a generic compiler-detection error.
+    if(NOT CMAKE_C_COMPILER)
+        message(FATAL_ERROR
+            "arm-none-eabi-gcc not found under CROSS_COMPILER_BIN=${CROSS_COMPILER_BIN}. "
+            "Check the CFS/MAXIM_LIBRARIES location, or install the ARM GCC toolchain. "
+            "To use a compiler already on PATH instead, configure with -DUSE_VENDOR_TOOLCHAIN=OFF.")
+    endif()
 else()
     set(CMAKE_C_COMPILER arm-none-eabi-gcc)
     set(CMAKE_CXX_COMPILER arm-none-eabi-g++)

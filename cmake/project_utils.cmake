@@ -55,5 +55,13 @@ function(config_platform_sdk BUILD_TARGET)
                 else()
                         message(WARNING "Platform SDK file ${PLATFORM_SDK_FILE} does not define config_${PLATFORM_FUNC}_sdk()")
                 endif()
+        else()
+                # Not all platforms ship a *_platform_sdk.cmake (e.g. maxim configures
+                # its SDK entirely from the toolchain file), so this is informational
+                # rather than fatal — but surface it so an unsupported/typo'd PLATFORM
+                # doesn't silently skip SDK configuration.
+                message(STATUS "No platform SDK file for PLATFORM=${PLATFORM} "
+                        "(looked for ${NO_OS_DIR}/cmake/${PLATFORM}_platform_sdk.cmake and "
+                        "${NO_OS_DIR}/cmake/${PLATFORM}/${PLATFORM}_platform_sdk.cmake); skipping SDK configuration.")
         endif()
 endfunction()

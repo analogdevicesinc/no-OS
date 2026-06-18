@@ -8,6 +8,13 @@ list(APPEND CMAKE_MODULE_PATH
 
 include(ColoredOutput)
 include(source_util)
+include(ErrorUtils)
+
+# A platform must be selected before any toolchain/defconfig path can be
+# resolved.  Catch this early with a clear message rather than failing later
+# with "toolchain file not found".
+no_os_require(PLATFORM
+    "PLATFORM is not set. Select a board via a CMake preset (cmake --preset <board>) or pass it explicitly, e.g. -DPLATFORM=maxim.")
 
 # Check whether the build was started from the No-OS root or the library was included as a module
 cmake_path(COMPARE ${CMAKE_SOURCE_DIR} EQUAL ${CMAKE_CURRENT_SOURCE_DIR} NATIVE_BUILD)
@@ -38,6 +45,18 @@ elseif(DEFINED NO_OS_PATH AND EXISTS "${NO_OS_PATH}")
     message(STATUS "Out-of-tree build with local no-OS: ${NO_OS_PATH}")
     set(NO_OS_TOOLCHAIN_PATH "${NO_OS_PATH}/drivers/platform/${PLATFORM}/toolchain.cmake")
     set(NO_OS_DEFCONFIG_PATH "${NO_OS_PATH}/board_configs/${PLATFORM}/${BOARD_CONFIG_FILE}")
+else()
+    message(FATAL_ERROR
+        "Could not determine the no-OS build context. Run from the no-OS root, "
+        "use FetchContent, add no-OS as a subdirectory, or set -DNO_OS_PATH=<path-to-no-OS>.")
+endif()
+
+# The toolchain path is derived from PLATFORM; a typo'd or unsupported platform
+# produces a path that does not exist.  Fail here with the offending path
+# instead of letting CMake report a generic "toolchain file not found".
+if(NOT CMAKE_TOOLCHAIN_FILE)
+    no_os_require_path("${CMAKE_SOURCE_DIR}/${NO_OS_TOOLCHAIN_PATH}"
+        "Toolchain file not found: ${CMAKE_SOURCE_DIR}/${NO_OS_TOOLCHAIN_PATH}. Is PLATFORM=${PLATFORM} a supported platform?")
 endif()
 
 # Set DEFAULT_DEFCONFIG based on detected paths
@@ -98,6 +117,11 @@ endif()
 message(STATUS "No-OS build")
 
 find_package (Python3 COMPONENTS Interpreter Development)
+# A Python interpreter is mandatory: it creates the build venv and runs the
+# Kconfig config generator.  (Git is only used by the optional library cache,
+# so it stays non-fatal.)
+no_os_require(Python3_EXECUTABLE
+    "Python 3 interpreter not found. Install Python 3 (python3) and ensure it is on PATH.")
 find_package(Git)
 
 if(${NATIVE_BUILD})
@@ -142,11 +166,15 @@ endif()
 
 if(NOT EXISTS "${VENV_PYTHON_EXE}")
   message(STATUS "Creating Python virtual environment in ${VENV_DIR}")
-  execute_process(COMMAND ${Python3_EXECUTABLE} -m venv ${VENV_DIR})
+  no_os_run_checked(
+    WHAT "creating the Python virtual environment in ${VENV_DIR}"
+    COMMAND ${Python3_EXECUTABLE} -m venv ${VENV_DIR})
 
   set(REQS_FILE "${NO_OS_DIR}/tools/scripts/requirements.txt")
   message(STATUS "Installing Python dependencies from ${REQS_FILE}")
-  execute_process(COMMAND ${VENV_PYTHON_EXE} -m pip install -r ${REQS_FILE})
+  no_os_run_checked(
+    WHAT "installing Python dependencies from ${REQS_FILE}"
+    COMMAND ${VENV_PYTHON_EXE} -m pip install -r ${REQS_FILE})
 endif()
 
 if(NOT ${NATIVE_BUILD})
@@ -234,7 +262,8 @@ endif()
 
 # Generate initial config during configure if it doesn't exist
 if(NOT EXISTS "${CONFIG_FILE}")
-  execute_process(
+  no_os_run_checked(
+    WHAT "generating the initial build config"
     COMMAND ${CMAKE_COMMAND} -E env
       KCONFIG_CONFIG=${CONFIG_FILE}
       srctree=${CMAKE_CURRENT_SOURCE_DIR}
@@ -246,7 +275,8 @@ if(NOT EXISTS "${CONFIG_FILE}")
         --update
   )
 else()
-  execute_process(
+  no_os_run_checked(
+    WHAT "refreshing the build config"
     COMMAND ${CMAKE_COMMAND} -E env
       KCONFIG_CONFIG=${CONFIG_FILE}
       srctree=${CMAKE_CURRENT_SOURCE_DIR}

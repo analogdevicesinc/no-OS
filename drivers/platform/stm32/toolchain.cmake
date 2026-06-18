@@ -15,6 +15,10 @@ if(USE_VENDOR_TOOLCHAIN)
     if(_cubeide_gcc_bin)
         list(GET _cubeide_gcc_bin 0 CROSS_COMPILER_BIN)
         message(STATUS "Using CubeIDE-bundled GCC: ${CROSS_COMPILER_BIN}")
+    else()
+        message(WARNING
+            "Could not locate the CubeIDE-bundled GCC under ${CUBEIDE_DIR}/plugins. "
+            "Falling back to arm-none-eabi-gcc on PATH.")
     endif()
 
     find_program(CMAKE_C_COMPILER   arm-none-eabi-gcc HINTS ${CROSS_COMPILER_BIN})
@@ -23,6 +27,15 @@ if(USE_VENDOR_TOOLCHAIN)
     find_program(CMAKE_LINKER       arm-none-eabi-ld  HINTS ${CROSS_COMPILER_BIN})
     find_program(CMAKE_SIZE         arm-none-eabi-size HINTS ${CROSS_COMPILER_BIN})
     find_program(CMAKE_OBJCOPY      arm-none-eabi-objcopy HINTS ${CROSS_COMPILER_BIN})
+
+    # Report a missing cross-compiler here, with the directory we searched,
+    # rather than letting CMake fail later with a generic compiler-detection error.
+    if(NOT CMAKE_C_COMPILER)
+        message(FATAL_ERROR
+            "arm-none-eabi-gcc not found (searched CROSS_COMPILER_BIN=${CROSS_COMPILER_BIN} and PATH). "
+            "Install the ARM GCC toolchain or STM32CubeIDE. "
+            "To use a compiler already on PATH instead, configure with -DUSE_VENDOR_TOOLCHAIN=OFF.")
+    endif()
 else()
     set(CMAKE_C_COMPILER arm-none-eabi-gcc)
     set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
