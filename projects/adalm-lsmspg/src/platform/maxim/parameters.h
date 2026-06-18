@@ -46,8 +46,6 @@
 #include "maxim_timer.h"
 #include "maxim_i2c.h"
 
-#define INTC_DEVICE_ID 		0
-
 #define AD5592R_SPI_DEVICE_ID 	2
 #define AD5592R_SPI_SPEED 	1000000
 #define AD5592R_SPI_CS 		0

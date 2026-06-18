@@ -75,10 +75,6 @@ extern DMA_HandleTypeDef handle_GPDMA1_Channel2;
 extern UART_HandleTypeDef huart3;
 #define UART_INSTANCE	(&huart3)
 
-#ifdef IIO_SUPPORT
-#define INTC_DEVICE_ID  0U
-#define IIO_APP_HUART   (&huart3)
-#endif
 #define UART_IRQ_ID    USART3_IRQn
 
 #define UART_DEVICE_ID	1U

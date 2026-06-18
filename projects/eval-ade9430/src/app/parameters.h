@@ -39,7 +39,6 @@
 #endif
 
 #define UART_DEVICE_ID		1
-#define INTC_DEVICE_ID		0
 #define UART_IRQ_ID		UART1_IRQn
 #define UART_BAUDRATE		57600
 

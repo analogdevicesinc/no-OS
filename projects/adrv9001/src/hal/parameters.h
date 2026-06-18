@@ -79,7 +79,6 @@
 #endif
 
 /* Interrupt */
-#define INTC_DEVICE_ID			XPAR_SCUGIC_SINGLE_DEVICE_ID
 
 /* DMA Controller */
 #define RX1_DMA_BASEADDR		XPAR_AXI_ADRV9001_RX1_DMA_BASEADDR

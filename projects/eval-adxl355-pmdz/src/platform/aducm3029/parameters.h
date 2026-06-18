@@ -46,7 +46,6 @@
 
 #ifdef IIO_SUPPORT
 #define DATA_BUFFER_SIZE        300
-#define INTC_DEVICE_ID          0
 #endif
 #define UART_IRQ_ID             ADUCM_UART_INT_ID
 

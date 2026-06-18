@@ -41,9 +41,6 @@
 #include "linux_uart.h"
 #endif
 
-#ifdef IIO_SUPPORT
-#define INTC_DEVICE_ID	0
-#endif
 #define UART_IRQ_ID	0
 #define UART_DEVICE_ID	0
 #define UART_BAUDRATE	0

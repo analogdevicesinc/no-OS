@@ -272,7 +272,6 @@
 #define UART_IRQ_ID			XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR
 #endif
 #endif
-#define INTC_DEVICE_ID			XPAR_SCUGIC_SINGLE_DEVICE_ID
 #endif
 
 #endif

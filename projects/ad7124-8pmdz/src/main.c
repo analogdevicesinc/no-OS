@@ -162,6 +162,10 @@ int main(void)
 	app_init_param.devices = devices;
 	app_init_param.nb_devices = NUMBER_OF_DEVICES;
 	app_init_param.uart_init_params = ad7124_uart_ip;
+#ifdef NO_OS_NETWORKING
+	app_init_param.wifi_ssid = WIFI_SSID;
+	app_init_param.wifi_pwd = WIFI_PWD;
+#endif
 
 	status = iio_app_init(&app, app_init_param);
 	if (status)

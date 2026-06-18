@@ -406,7 +406,6 @@ int main()
 	struct nhd_c12832a1z_dev *nhd_c12832a1z_device;
 
 	struct no_os_irq_init_param irq_init_param = {
-		.irq_ctrl_id = INTC_DEVICE_ID,
 		.platform_ops = &max_irq_ops,
 		.extra = NULL
 	};

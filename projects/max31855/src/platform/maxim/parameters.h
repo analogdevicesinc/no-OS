@@ -38,9 +38,6 @@
 #include "maxim_irq.h"
 #include "maxim_gpio.h"
 
-#ifdef IIO_SUPPORT
-#define INTC_DEVICE_ID	0
-#endif
 #define UART_IRQ_ID	UART0_IRQn
 #define UART_DEVICE_ID	0
 #define UART_BAUDRATE	57600

@@ -219,7 +219,6 @@ int main(void)
 #ifndef IIO_SUPPORT
 	/* interrupt controller  */
 	struct no_os_irq_init_param nvic_ip = {
-		.irq_ctrl_id = INTC_DEVICE_ID,
 		.platform_ops = IRQ_OPS,
 	};
 	struct no_os_irq_ctrl_desc *nvic;
@@ -237,7 +236,7 @@ int main(void)
 #if defined(STM32_PLATFORM)
 		.irq_ctrl_id = GP0_PIN,
 #elif defined(ADUCM_PLATFORM)
-		.irq_ctrl_id = INTC_DEVICE_ID,
+		.irq_ctrl_id = ADUCM_GPIO_B_GROUP_SOFT_CTRL,
 #endif
 		.platform_ops = GPIO_IRQ_OPS,
 #if defined(STM32_PLATFORM)

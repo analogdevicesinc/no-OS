@@ -44,7 +44,6 @@
 #include "no_os_util.h"
 
 #define UART_DEVICE_ID	0
-#define INTC_DEVICE_ID	0
 #define UART_IRQ_ID		ADUCM_UART_INT_ID
 #define UART_BAUDRATE	115200
 #define UART_EXTRA      NULL
@@ -54,5 +53,10 @@
 of samples needed to be stored in the device buffer
 and based on the available RAM memory of the platform */
 #define SAMPLES_PER_CHANNEL_PLATFORM 200
+
+#ifdef NO_OS_NETWORKING
+#define WIFI_SSID	"RouterSSID"
+#define WIFI_PWD	"******"
+#endif
 
 #endif /* __PARAMETERS_H__ */

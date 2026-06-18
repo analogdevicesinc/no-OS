@@ -36,7 +36,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "iio_app.h"
-#include "parameters.h"
 #include "no_os_alloc.h"
 
 #if defined(ADUCM_PLATFORM)
@@ -189,7 +188,8 @@ static int32_t lwip_network_setup(struct iio_app_desc *app,
 #if defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
 static int32_t network_setup(struct iio_init_param *iio_init_param,
 			     struct no_os_uart_desc *uart_desc,
-			     void *irq_desc)
+			     void *irq_desc,
+			     struct iio_app_init_param app_init_param)
 {
 	static struct tcp_socket_init_param socket_param;
 
@@ -203,14 +203,15 @@ static int32_t network_setup(struct iio_init_param *iio_init_param,
 		.irq_desc = irq_desc,
 		.uart_desc = uart_desc,
 		.uart_irq_conf = uart_desc,
-		.uart_irq_id = UART_IRQ_ID,
+		.uart_irq_id = ADUCM_UART_INT_ID,
 		.sw_reset_en = true
 	};
 	status = wifi_init(&wifi, &wifi_param);
 	if (status < 0)
 		return status;
 
-	status = wifi_connect(wifi, WIFI_SSID, WIFI_PWD);
+	status = wifi_connect(wifi, app_init_param.wifi_ssid,
+			      app_init_param.wifi_pwd);
 	if (status < 0)
 		return status;
 
@@ -272,7 +273,6 @@ static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 #endif
 
 	struct no_os_irq_init_param irq_init_param = {
-		.irq_ctrl_id = INTC_DEVICE_ID,
 		.platform_ops = platform_irq_ops,
 		.extra = platform_irq_init_par
 	};
@@ -287,8 +287,6 @@ static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 
 /**
  * @brief Register devices for an iio application
- *
- * Configuration for communication is done in parameters.h
  * @param app - the iio application descriptor
  * @param app_init_param - the iio application initialization parameters
  * @return 0 on success, negative value otherwise
@@ -345,7 +343,8 @@ int iio_app_init(struct iio_app_desc **app,
 	if (status)
 		goto error;
 #elif defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
-	status = network_setup(&iio_init_param, uart_desc, application->irq_desc);
+	status = network_setup(&iio_init_param, uart_desc, application->irq_desc,
+			       app_init_param);
 	if (status < 0)
 		goto error;
 #elif defined(NO_OS_W5500_NETWORKING)

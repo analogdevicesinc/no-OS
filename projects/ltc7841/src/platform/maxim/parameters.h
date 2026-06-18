@@ -37,7 +37,6 @@
 #include "maxim_i2c.h"
 #include "maxim_uart.h"
 
-#define INTC_DEVICE_ID		                   0
 #define I2C_OPS                                &max_i2c_ops
 #define UART_OPS                               &max_uart_ops
 
