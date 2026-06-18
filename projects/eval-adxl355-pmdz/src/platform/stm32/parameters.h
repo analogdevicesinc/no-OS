@@ -56,10 +56,6 @@ extern UART_HandleTypeDef huart5;
 #define SPI_CS_PORT     0
 #endif
 
-#ifdef IIO_SUPPORT
-#define INTC_DEVICE_ID  0
-#define IIO_APP_HUART   (&huart5)
-#endif
 #define UART_IRQ_ID     UART5_IRQn
 
 #define UART_DEVICE_ID  1

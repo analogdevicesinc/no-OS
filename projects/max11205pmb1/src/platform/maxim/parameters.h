@@ -44,7 +44,6 @@
 #define UART_EXTRA              &max11205_uart_extra_ip
 extern struct max_uart_init_param max11205_uart_extra_ip;
 
-#define INTC_DEVICE_ID          0
 #define UART_DEVICE_ID          0
 #define UART_BAUDRATE           57600
 #define UART_IRQ_ID             UART0_IRQn

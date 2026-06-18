@@ -38,7 +38,6 @@
 #include "maxim_uart_stdio.h"
 
 #ifdef IIO_SUPPORT
-#define INTC_DEVICE_ID  0
 #define UART_IRQ_ID     UART0_IRQn
 #endif
 

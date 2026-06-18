@@ -62,8 +62,7 @@ and based on the available RAM memory of the platform */
 
 extern UART_HandleTypeDef huart5;
 #define UART_IRQ_ID     UART5_IRQn
-#define INTC_DEVICE_ID 0
-#define IIO_APP_HUART	(&huart5)
+#define UART_INSTANCE	(&huart5)
 #define UART_DEVICE_ID      5
 #define UART_BAUDRATE  115200
 

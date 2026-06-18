@@ -39,10 +39,6 @@
 #include "maxim_uart.h"
 #include "maxim_uart_stdio.h"
 
-#ifdef IIO_SUPPORT
-#define INTC_DEVICE_ID	0
-#endif
-
 #if (TARGET_NUM == 32690)
 #define	UART_IRQ_ID	UART0_IRQn
 #define UART_DEVICE_ID	0

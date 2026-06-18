@@ -45,10 +45,6 @@ extern UART_HandleTypeDef huart1;
 #define UART_INSTANCE	(&huart1)
 #define UART_IRQ_ID	USART1_IRQn
 
-#ifdef IIO_SUPPORT
-#define INTC_DEVICE_ID	0
-#endif
-
 #define UART_DEVICE_ID	1
 #define UART_BAUDRATE	115200
 #define UART_EXTRA	&cn0391_uart_extra_ip

@@ -37,8 +37,6 @@
 #include "stm32_spi.h"
 #include "stm32_uart.h"
 
-#define INTC_DEVICE_ID 0
-
 /* UART device parameters */
 #define UART_INSTANCE		&huart5
 #define UART_DEVICE_ID		5U // UART5

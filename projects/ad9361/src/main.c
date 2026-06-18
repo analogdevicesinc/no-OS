@@ -715,7 +715,7 @@ int main(void)
 	 * IRQ initial configuration.
 	 */
 	struct no_os_irq_init_param irq_init_param = {
-		.irq_ctrl_id = INTC_DEVICE_ID,
+		.irq_ctrl_id = IRQ_CTRL_ID,
 		.platform_ops = &xil_irq_ops,
 		.extra = &xil_irq_init_par,
 	};

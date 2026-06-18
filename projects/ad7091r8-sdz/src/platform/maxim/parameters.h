@@ -42,16 +42,11 @@
 #include "maxim_timer.h"
 #include "no_os_timer.h"
 
-#ifdef IIO_SUPPORT
-#define INTC_DEVICE_ID		0
-#endif
-
 #define UART_DEVICE_ID		0
 #define UART_IRQ_ID		UART0_IRQn
 #define UART_BAUDRATE		115200
 #define UART_EXTRA		&ad7091r8_uart_extra_ip
 #define UART_OPS		&max_uart_ops
-#define INTC_DEVICE_ID		0
 #define SPI_DEVICE_ID		1
 #define SPI_CS			1
 #define SPI_BAUDRATE		200000
