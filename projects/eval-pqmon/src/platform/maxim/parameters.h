@@ -43,7 +43,6 @@
 #include "maxim_uart_stdio.h"
 #include "maxim_usb_uart.h"
 
-#define INTC_DEVICE_ID 0
 #define UART_DEVICE_ID 1
 #define UART_BAUDRATE 115200
 #define UART_IRQ_ID USB_IRQn

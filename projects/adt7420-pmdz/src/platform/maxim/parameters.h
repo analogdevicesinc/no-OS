@@ -40,10 +40,6 @@
 #include "maxim_irq.h"
 #include "maxim_gpio.h"
 
-#ifdef IIO_SUPPORT
-#define INTC_DEVICE_ID  0
-#endif
-
 #if (TARGET_NUM == 32650) || (TARGET_NUM == 78000)
 #define I2C_DEVICE_ID    1
 #elif (TARGET_NUM == 32655)

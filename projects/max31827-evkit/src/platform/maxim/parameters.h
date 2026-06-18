@@ -36,9 +36,6 @@
 #include "maxim_uart_stdio.h"
 #include "maxim_i2c.h"
 
-#ifdef IIO_SUPPORT
-#define INTC_DEVICE_ID	0
-#endif
 #define UART_IRQ_ID	UART1_IRQn
 #define UART_DEVICE_ID	1
 #define UART_BAUDRATE	115200

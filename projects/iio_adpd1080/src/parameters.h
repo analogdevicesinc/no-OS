@@ -40,13 +40,14 @@
 #ifdef ADUCM_PLATFORM
 
 #define UART_DEVICE_ID	0
-#define INTC_DEVICE_ID	0
 #define UART_IRQ_ID		ADUCM_UART_INT_ID
 #define UART_BAUDRATE	115200
 
-#endif //ADUCM_PLATFORM
-
+#ifdef NO_OS_NETWORKING
 #define WIFI_SSID	"RouterSSID"
 #define WIFI_PWD	"******"
+#endif
+
+#endif //ADUCM_PLATFORM
 
 #endif // __PARAMETERS_H__

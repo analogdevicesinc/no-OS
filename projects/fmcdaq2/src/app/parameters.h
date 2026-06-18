@@ -68,8 +68,6 @@
 #define UART_IRQ_ID		XPAR_XUARTPS_1_INTR
 #endif
 
-#define INTC_DEVICE_ID				XPAR_SCUGIC_SINGLE_DEVICE_ID
-
 #ifdef PLATFORM_ZYNQMP
 #define GPIO_OFFSET				78
 #else

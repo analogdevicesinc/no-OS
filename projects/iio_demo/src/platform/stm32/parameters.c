@@ -39,7 +39,7 @@ struct stm32_usb_uart_init_param iio_demo_usb_uart_extra_ip = {
 };
 #else
 struct stm32_uart_init_param iio_demo_uart_extra_ip = {
-	.huart = IIO_APP_HUART,
+	.huart = UART_INSTANCE,
 };
 #endif
 

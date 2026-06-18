@@ -45,10 +45,6 @@
 
 extern UART_HandleTypeDef huart5;
 
-#ifdef IIO_SUPPORT
-#define INTC_DEVICE_ID  0
-#endif
-
 #define UART_DEVICE_ID  5
 #define UART_BAUDRATE   115200
 #define UART_EXTRA      &adis1654x_uart_extra_ip

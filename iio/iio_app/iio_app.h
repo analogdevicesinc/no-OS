@@ -125,6 +125,13 @@ struct iio_app_init_param {
 	/** Function parameteres */
 	void *arg;
 
+#ifdef NO_OS_NETWORKING
+	/** WiFi SSID used by the network path */
+	const char *wifi_ssid;
+	/** WiFi password used by the network path */
+	const char *wifi_pwd;
+#endif
+
 #ifdef NO_OS_LWIP_NETWORKING
 	struct lwip_network_param lwip_param;
 #endif

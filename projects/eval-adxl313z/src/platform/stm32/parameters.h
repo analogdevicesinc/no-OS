@@ -43,10 +43,6 @@
 
 extern UART_HandleTypeDef huart2;
 
-#ifdef IIO_SUPPORT
-#define INTC_DEVICE_ID 0
-#define IIO_APP_HUART	(&huart2)
-#endif
 #define UART_IRQ_ID     USART2_IRQn
 #define UART_DEVICE_ID      2
 #define UART_BAUDRATE  115200

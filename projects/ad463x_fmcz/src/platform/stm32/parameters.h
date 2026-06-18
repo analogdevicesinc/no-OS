@@ -50,10 +50,6 @@ extern TIM_HandleTypeDef htim8;
 #define SAMPLES_PER_CHANNEL_PLATFORM 2000
 #define MAX_SIZE_BASE_ADDR     (SAMPLES_PER_CHANNEL_PLATFORM * 2 * sizeof(uint32_t))
 
-#ifdef IIO_SUPPORT
-#define INTC_DEVICE_ID 0
-#endif
-
 #define UART_IRQ_ID		UART5_IRQn
 
 #define UART_DEVICE_ID		5

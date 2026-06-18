@@ -45,7 +45,6 @@
 #include "no_os_timer.h"
 
 #define UART_DEVICE_ID	0
-#define INTC_DEVICE_ID	0
 #define UART_IRQ_ID		ADUCM_UART_INT_ID
 #define UART_BAUDRATE	115200
 #define UART_EXTRA      NULL

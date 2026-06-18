@@ -142,8 +142,6 @@ extern struct max_spi_init_param data_spi_extra;
 #define CFG_SPI_EXTRA 		&cfg_spi_extra
 extern struct max_spi_init_param cfg_spi_extra;
 
-#define INTC_DEVICE_ID 		0
-
 #define IIO_UART_DEVICE_ID 	0
 #define IIO_UART_IRQ_ID 	USB_IRQn
 #define IIO_UART_ASYNC_RX 	true

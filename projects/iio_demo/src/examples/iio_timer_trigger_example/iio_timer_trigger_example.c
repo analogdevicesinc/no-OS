@@ -165,6 +165,10 @@ int iio_timer_trigger_example_main()
 	app_init_param.devices = devices;
 	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
 	app_init_param.uart_init_params = iio_demo_uart_ip;
+#ifdef NO_OS_NETWORKING
+	app_init_param.wifi_ssid = WIFI_SSID;
+	app_init_param.wifi_pwd = WIFI_PWD;
+#endif
 	app_init_param.trigs = trigs;
 	app_init_param.nb_trigs = NO_OS_ARRAY_SIZE(trigs);
 	app_init_param.irq_desc = NULL;

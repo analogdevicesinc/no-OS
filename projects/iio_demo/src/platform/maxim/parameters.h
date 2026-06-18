@@ -55,7 +55,6 @@ extern struct max_uart_init_param iio_demo_uart_extra_ip;
 extern struct max_usb_uart_init_param iio_demo_usb_uart_extra_ip;
 #endif
 
-#define INTC_DEVICE_ID	0
 #define UART_DEVICE_ID	0
 #define UART_BAUDRATE	57600
 #ifdef NO_OS_USB_UART

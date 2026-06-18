@@ -39,7 +39,6 @@
 
 #define SPI_DEVICE_ID		0
 #define SPI_CS			1
-#define INTC_DEVICE_ID		ADUCM_GPIO_B_GROUP_SOFT_CTRL
 #define UART_DEVICE_ID		0
 #define UART_IRQ_ID		ADUCM_UART_INT_ID
 #define UART_BAUDRATE		230400
@@ -58,7 +57,6 @@
 #define SPI_DEVICE_ID		1
 #define SPI_CS			15
 #define SPI_CS_PORT		0
-#define INTC_DEVICE_ID		0
 #define INT_IRQn		EXTI9_5_IRQn
 #define UART_DEVICE_ID		5
 #define UART_IRQ_ID		UART5_IRQn
@@ -68,7 +66,6 @@
 #ifdef IIO_SUPPORT
 extern UART_HandleTypeDef 	huart5;
 #endif
-#define IIO_APP_HUART		&huart5
 #define UART_BAUDRATE		230400
 #define I2C_DEVICE_ID		1
 #define I2C_BAUDRATE		100000
