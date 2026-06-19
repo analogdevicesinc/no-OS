@@ -1003,7 +1003,11 @@ int example_main()
 #else
 		.type = UART_PS,
 #ifdef SDT
+#ifdef PLATFORM_VERSAL
+		.base_addr = XPAR_XUARTPSV_1_BASEADDR,
+#else
 		.base_addr = XPAR_XUARTPS_0_BASEADDR,
+#endif
 #endif
 		.irq_id = UART_IRQ_ID
 #endif
