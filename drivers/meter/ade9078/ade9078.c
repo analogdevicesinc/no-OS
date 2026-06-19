@@ -59,7 +59,7 @@ int ade9078_read(struct ade9078_dev *dev, uint16_t reg_addr, uint32_t *reg_data)
 		return -EINVAL;
 
 	addr = (uint16_t) no_os_field_prep(NO_OS_GENMASK(15, 4), reg_addr);
-	no_os_put_unaligned_be16(addr, &buff);
+	no_os_put_unaligned_be16(addr, buff);
 	buff[1] = buff[1] | ADE9078_SPI_READ;
 
 	/* 16 bits registers */

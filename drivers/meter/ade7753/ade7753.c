@@ -64,6 +64,8 @@ int ade7753_init(struct ade7753_dev **device,
 	struct ade7753_dev *dev;
 	/* value read from register */
 	uint32_t reg_val;
+	/* interrupt status value */
+	uint8_t int_status;
 	/* timeout value */
 	uint16_t timeout = 1000;
 
@@ -80,7 +82,9 @@ int ade7753_init(struct ade7753_dev **device,
 	/* interrupt */
 	dev->irq_ctrl = init_param.irq_ctrl;
 	/* reset gpio */
-	dev->gpio_reset = init_param.gpio_reset;
+	ret = no_os_gpio_get_optional(&dev->gpio_reset, init_param.gpio_reset);
+	if (ret)
+		goto error_spi;
 
 	/* reset the device */
 	if (dev->gpio_reset) {
@@ -94,11 +98,11 @@ int ade7753_init(struct ade7753_dev **device,
 	}
 	/* wait for reset ack */
 	do {
-		ret = ade7753_get_int_status(dev, ADE7753_RESET_MSK, &reg_val);
+		ret = ade7753_get_int_status(dev, ADE7753_RESET_MSK, &int_status);
 		if (ret)
 			goto error_spi;
 		timeout--;
-	} while ((!reg_val) && (timeout > 0));
+	} while ((!int_status) && (timeout > 0));
 	if (timeout <= 0) {
 		ret = -ETIMEDOUT;
 		goto error_spi;

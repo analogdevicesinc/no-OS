@@ -1189,6 +1189,7 @@ static int lt8722_iio_read_dac_ilimn(void *dev, char *buf, uint32_t len,
 				     const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
+	uint16_t reg_value;
 	uint32_t value;
 	struct lt8722_iio_dev *iio_lt8722;
 	struct lt8722_dev *lt8722;
@@ -1199,9 +1200,11 @@ static int lt8722_iio_read_dac_ilimn(void *dev, char *buf, uint32_t len,
 	iio_lt8722 = (struct lt8722_iio_dev *)dev;
 	lt8722 = iio_lt8722->lt8722_dev;
 
-	ret = lt8722_get_spis_dac_ilimn(lt8722, &value);
+	ret = lt8722_get_spis_dac_ilimn(lt8722, &reg_value);
 	if (ret)
 		return ret;
+
+	value = reg_value;
 
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&value);
 }
@@ -1251,6 +1254,7 @@ static int lt8722_iio_read_dac_ilimp(void *dev, char *buf, uint32_t len,
 				     const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
+	uint16_t reg_value;
 	uint32_t value;
 	struct lt8722_iio_dev *iio_lt8722;
 	struct lt8722_dev *lt8722;
@@ -1261,9 +1265,11 @@ static int lt8722_iio_read_dac_ilimp(void *dev, char *buf, uint32_t len,
 	iio_lt8722 = (struct lt8722_iio_dev *)dev;
 	lt8722 = iio_lt8722->lt8722_dev;
 
-	ret = lt8722_get_spis_dac_ilimp(lt8722, &value);
+	ret = lt8722_get_spis_dac_ilimp(lt8722, &reg_value);
 	if (ret)
 		return ret;
+
+	value = reg_value;
 
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&value);
 }

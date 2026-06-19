@@ -48,7 +48,7 @@ int read_measurements(struct ade7758_dev *dev)
 
 	/* read energy values */
 	if (no_os_test_bit(no_os_find_first_set_bit(ADE7758_ZXA_MSK),
-			   dev->irq_status)) {
+			   &dev->irq_status)) {
 		ret = ade7758_energy_vals_phase_a(dev, &energy_vals);
 		if (ret)
 			return ret;
@@ -56,7 +56,7 @@ int read_measurements(struct ade7758_dev *dev)
 		if (ret)
 			return ret;
 	} else if (no_os_test_bit(no_os_find_first_set_bit(ADE7758_ZXB_MSK),
-				  dev->irq_status)) {
+				  &dev->irq_status)) {
 		ret = ade7758_energy_vals_phase_b(dev, &energy_vals);
 		if (ret)
 			return ret;
@@ -64,7 +64,7 @@ int read_measurements(struct ade7758_dev *dev)
 		if (ret)
 			return ret;
 	} else if (no_os_test_bit(no_os_find_first_set_bit(ADE7758_ZXC_MSK),
-				  dev->irq_status)) {
+				  &dev->irq_status)) {
 		ret = ade7758_energy_vals_phase_c(dev, &energy_vals);
 		if (ret)
 			return ret;

@@ -138,7 +138,7 @@ int example_main()
 		ret = adt7420_reg_write(adt7420, ADT7420_REG_HIST, hyst);
 		if (ret)
 			goto error_adt7420;
-		uint32_t readval = 0;
+		uint16_t readval = 0;
 		ret = adt7420_reg_read(adt7420, ADT7420_REG_HIST, &readval);
 		if (ret)
 			goto error_adt7420;

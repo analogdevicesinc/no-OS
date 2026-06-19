@@ -90,6 +90,7 @@ static int ad7490_iio_read_raw(void *device, char *buf, uint32_t len,
 			       intptr_t priv)
 {
 	struct ad7490_iio_desc *iio_desc = device;
+	int32_t val32;
 	int16_t val;
 	int ret;
 
@@ -97,7 +98,9 @@ static int ad7490_iio_read_raw(void *device, char *buf, uint32_t len,
 	if (ret)
 		return ret;
 
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+	val32 = val;
+
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val32);
 }
 
 static int ad7490_iio_read_scale(void *device, char *buf, uint32_t len,

@@ -47,7 +47,7 @@ int example_main()
 	no_os_uart_stdio(uart_desc);
 
 	int ret;
-	double voltage;
+	int64_t voltage;
 	struct lt8722_dev *lt8722_dev;
 
 	pr_info("\nBasic example");

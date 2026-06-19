@@ -151,7 +151,7 @@ int ade7913_read_waveforms(struct ade7913_dev *dev, uint8_t reg_addr,
 		// third device
 		dev->spi_desc = dev->spi_desc2;
 		ret = ade7913_read(dev, reg_addr,
-				   &reg_data);
+				   reg_data);
 		if (ret)
 			return ret;
 		dev->i_wav_m[2] = dev->i_wav;
@@ -160,7 +160,7 @@ int ade7913_read_waveforms(struct ade7913_dev *dev, uint8_t reg_addr,
 		// second device
 		dev->spi_desc = dev->spi_desc1;
 		ret = ade7913_read(dev, reg_addr,
-				   &reg_data);
+				   reg_data);
 		if (ret)
 			return ret;
 		dev->i_wav_m[1] = dev->i_wav;
@@ -169,7 +169,7 @@ int ade7913_read_waveforms(struct ade7913_dev *dev, uint8_t reg_addr,
 		// first device
 		dev->spi_desc = dev->spi_desc0;
 		ret = ade7913_read(dev, reg_addr,
-				   &reg_data);
+				   reg_data);
 		if (ret)
 			return ret;
 		dev->i_wav_m[0] = dev->i_wav;
@@ -180,7 +180,7 @@ int ade7913_read_waveforms(struct ade7913_dev *dev, uint8_t reg_addr,
 		// second device
 		dev->spi_desc = dev->spi_desc1;
 		ret = ade7913_read(dev, reg_addr,
-				   &reg_data);
+				   reg_data);
 		if (ret)
 			return ret;
 		dev->i_wav_m[1] = dev->i_wav;
@@ -189,7 +189,7 @@ int ade7913_read_waveforms(struct ade7913_dev *dev, uint8_t reg_addr,
 		// first device
 		dev->spi_desc = dev->spi_desc0;
 		ret = ade7913_read(dev, reg_addr,
-				   &reg_data);
+				   reg_data);
 		if (ret)
 			return ret;
 		dev->i_wav_m[0] = dev->i_wav;
@@ -200,7 +200,7 @@ int ade7913_read_waveforms(struct ade7913_dev *dev, uint8_t reg_addr,
 		// single device
 		dev->spi_desc = dev->spi_desc0;
 		ret = ade7913_read(dev, reg_addr,
-				   &reg_data);
+				   reg_data);
 		if (ret)
 			return ret;
 		dev->i_wav_m[0] = dev->i_wav;
@@ -263,29 +263,29 @@ int ade7913_write_broadcast(struct ade7913_dev *dev, uint8_t reg_addr,
 	case 3 :
 		// third device
 		dev->spi_desc = dev->spi_desc2;
-		ret = ade7913_write(dev, reg_addr, reg_data);
+		ret = ade7913_write(dev, reg_addr, *reg_data);
 		if (ret)
 			return ret;
 		// second device
 		dev->spi_desc = dev->spi_desc1;
-		ret = ade7913_write(dev, reg_addr, reg_data);
+		ret = ade7913_write(dev, reg_addr, *reg_data);
 		if (ret)
 			return ret;
 		// first device
 		dev->spi_desc = dev->spi_desc0;
-		ret = ade7913_write(dev, reg_addr, reg_data);
+		ret = ade7913_write(dev, reg_addr, *reg_data);
 		if (ret)
 			return ret;
 		break;
 	case 2 :
 		// second device
 		dev->spi_desc = dev->spi_desc1;
-		ret = ade7913_write(dev, reg_addr, reg_data);
+		ret = ade7913_write(dev, reg_addr, *reg_data);
 		if (ret)
 			return ret;
 		// first device
 		dev->spi_desc = dev->spi_desc0;
-		ret = ade7913_write(dev, reg_addr, reg_data);
+		ret = ade7913_write(dev, reg_addr, *reg_data);
 		if (ret)
 			return ret;
 		break;
@@ -586,7 +586,7 @@ int ade7913_remove(struct ade7913_dev *dev)
 int ade7913_sw_reset(struct ade7913_dev *dev)
 {
 	int ret;
-	uint8_t *ver_product;
+	uint8_t ver_product;
 	// reset on variable must be 0 after reset
 	uint8_t reset_on;
 
@@ -609,7 +609,7 @@ int ade7913_sw_reset(struct ade7913_dev *dev)
 	if (ret)
 		return ret;
 
-	dev->ver_product = ver_product;
+	dev->ver_product[0] = ver_product;
 
 	return 0;
 }
@@ -795,7 +795,7 @@ int ade7913_crc_status(struct ade7913_dev *dev, uint8_t *status)
 {
 	int ret;
 	/* register value read */
-	uint32_t reg_val;
+	uint8_t reg_val;
 
 	if (!dev)
 		return -ENODEV;
@@ -822,7 +822,7 @@ int ade7913_ic_prot_status(struct ade7913_dev *dev, uint8_t *status)
 {
 	int ret;
 	/* register value read */
-	uint32_t reg_val;
+	uint8_t reg_val;
 
 	if (!dev)
 		return -ENODEV;
@@ -833,8 +833,8 @@ int ade7913_ic_prot_status(struct ade7913_dev *dev, uint8_t *status)
 	if (ret)
 		return ret;
 
-	status = no_os_test_bit(no_os_find_first_set_bit(ADE7913_IC_PROT_MSK),
-				&reg_val);
+	*status = no_os_test_bit(no_os_find_first_set_bit(ADE7913_IC_PROT_MSK),
+				 &reg_val);
 
 	return 0;
 }
@@ -866,7 +866,7 @@ int ade7913_adc_na_status(struct ade7913_dev *dev, uint8_t *status)
 {
 	int ret;
 	/* register value read */
-	uint32_t reg_val;
+	uint8_t reg_val;
 
 	if (!dev)
 		return -ENODEV;
@@ -893,7 +893,7 @@ int ade7913_cnt_snapshot_val(struct ade7913_dev *dev, uint16_t *val)
 {
 	int ret;
 	/* register value read */
-	uint16_t reg_val;
+	uint8_t reg_val;
 
 	if (!dev)
 		return -ENODEV;

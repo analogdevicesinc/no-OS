@@ -58,7 +58,7 @@ int main(void)
 	/* counter for display values interval */
 	uint16_t cnt;
 	/* data value read */
-	uint32_t data;
+	int32_t data;
 
 	/* parameters initialization structure */
 	struct ade7754_init_param ade7754_ip;
@@ -128,7 +128,7 @@ int main(void)
 	ade7754_ip.spi_init = &ade7754_spi_ip;
 
 	/* Init the reset */
-	ade7754_ip.gpio_reset = reset_desc;
+	ade7754_ip.gpio_reset = &gpio_reset_ip;
 
 	no_os_uart_stdio(uart_desc);
 

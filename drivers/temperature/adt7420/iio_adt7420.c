@@ -42,15 +42,15 @@
 #include "adt7420.h"
 
 static int adt7420_iio_read_temp(void *dev, char *buf, uint32_t len,
-				 const struct iio_ch_info *channel, intptr_t *priv);
+				 const struct iio_ch_info *channel, intptr_t priv);
 static int adt7420_iio_read_max(void *dev, char *buf, uint32_t len,
-				const struct iio_ch_info *channel, intptr_t *priv);
+				const struct iio_ch_info *channel, intptr_t priv);
 static int adt7420_iio_read_min(void *dev, char *buf, uint32_t len,
-				const struct iio_ch_info *channel, intptr_t *priv);
+				const struct iio_ch_info *channel, intptr_t priv);
 static int adt7420_iio_read_crit(void *dev, char *buf, uint32_t len,
-				 const struct iio_ch_info *channel, intptr_t *priv);
+				 const struct iio_ch_info *channel, intptr_t priv);
 static int adt7420_iio_read_hyst(void *dev, char *buf, uint32_t len,
-				 const struct iio_ch_info *channel, intptr_t *priv);
+				 const struct iio_ch_info *channel, intptr_t priv);
 static int adt7420_iio_reg_read(struct adt7420_iio_dev *dev, uint32_t reg,
 				uint32_t *readval);
 static int adt7420_iio_reg_write(struct adt7420_iio_dev *dev, uint32_t reg,
@@ -181,10 +181,19 @@ int adt7420_iio_remove(struct adt7420_iio_dev *desc)
 static int adt7420_iio_reg_read(struct adt7420_iio_dev *dev, uint32_t reg,
 				uint32_t *readval)
 {
+	uint16_t val;
+	int ret;
+
 	if (reg > __UINT8_MAX__)
 		return -EINVAL;
 
-	return adt7420_reg_read(dev->adt7420_dev, reg, readval);
+	ret = adt7420_reg_read(dev->adt7420_dev, reg, &val);
+	if (ret)
+		return ret;
+
+	*readval = val;
+
+	return 0;
 }
 
 /**
@@ -220,7 +229,7 @@ static int adt7420_iio_reg_write(struct adt7420_iio_dev *dev, uint32_t reg,
  * @return ret    - 0 in case of success, errno errors otherwise
 */
 static int adt7420_iio_read_temp(void *dev, char *buf, uint32_t len,
-				 const struct iio_ch_info *channel, intptr_t *priv)
+				 const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct adt7420_iio_dev *iio_adt7420;
 	struct adt7420_dev *adt7420;
@@ -254,7 +263,7 @@ static int adt7420_iio_read_temp(void *dev, char *buf, uint32_t len,
  * @return ret    - 0 in case of success, errno errors otherwise
 */
 static int adt7420_iio_read_max(void *dev, char *buf, uint32_t len,
-				const struct iio_ch_info *channel, intptr_t *priv)
+				const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct adt7420_iio_dev *iio_adt7420;
 	struct adt7420_dev *adt7420;
@@ -311,7 +320,7 @@ static int adt7420_iio_read_max(void *dev, char *buf, uint32_t len,
  * @return ret    - 0 in case of success, errno errors otherwise
 */
 static int adt7420_iio_read_min(void *dev, char *buf, uint32_t len,
-				const struct iio_ch_info *channel, intptr_t *priv)
+				const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct adt7420_iio_dev *iio_adt7420;
 	struct adt7420_dev *adt7420;
@@ -368,7 +377,7 @@ static int adt7420_iio_read_min(void *dev, char *buf, uint32_t len,
  * @return ret    - 0 in case of success, errno errors otherwise
 */
 static int adt7420_iio_read_crit(void *dev, char *buf, uint32_t len,
-				 const struct iio_ch_info *channel, intptr_t *priv)
+				 const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct adt7420_iio_dev *iio_adt7420;
 	struct adt7420_dev *adt7420;
@@ -425,12 +434,12 @@ static int adt7420_iio_read_crit(void *dev, char *buf, uint32_t len,
  * @return ret    - 0 in case of success, errno errors otherwise
 */
 static int adt7420_iio_read_hyst(void *dev, char *buf, uint32_t len,
-				 const struct iio_ch_info *channel, intptr_t *priv)
+				 const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct adt7420_iio_dev *iio_adt7420;
 	struct adt7420_dev *adt7420;
 
-	int16_t temp = 0;
+	uint16_t temp = 0;
 	int32_t temp_c = 0;
 	iio_adt7420 = (struct adt7420_iio_dev *)dev;
 	adt7420 = iio_adt7420->adt7420_dev;

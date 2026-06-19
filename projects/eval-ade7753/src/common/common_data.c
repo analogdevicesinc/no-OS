@@ -48,7 +48,8 @@ int read_measurements(struct ade7753_dev *dev)
 	float current_rms_val, voltage_rms_val;
 	float frequency_val;
 	float temperature_C;
-	int32_t status, temperature;
+	uint8_t status;
+	int32_t temperature;
 
 	/* read energy values */
 	ret = ade7753_energy_vals(dev, &energy_vals);
@@ -75,7 +76,7 @@ int read_measurements(struct ade7753_dev *dev)
 	pr_info("V rms: %.2f mV \n", voltage_rms_val);
 
 	/* read temperature */
-	ret = ade7753_get_int_status(dev, ADE7753_TEMP_MSK, status);
+	ret = ade7753_get_int_status(dev, ADE7753_TEMP_MSK, &status);
 	if (ret)
 		return ret;
 	if (status) {

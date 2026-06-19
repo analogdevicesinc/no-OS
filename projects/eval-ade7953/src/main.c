@@ -126,7 +126,7 @@ int main(void)
 	ade7953_ip.en_24_bit = ENABLE;
 
 	/* Init the reset */
-	ade7953_ip.gpio_reset = reset_desc;
+	ade7953_ip.gpio_reset = &gpio_reset_ip;
 
 	no_os_uart_stdio(uart_desc);
 
@@ -145,7 +145,7 @@ int main(void)
 		goto free_dev;
 
 	/* Hard reset the ADE */
-	ade7953_dev->gpio_reset = ade7953_ip.gpio_reset;
+	ade7953_dev->gpio_reset = reset_desc;
 	ret = ade7953_hw_reset(ade7953_dev);
 	if (ret)
 		goto free_dev;

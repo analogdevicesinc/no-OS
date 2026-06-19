@@ -1054,7 +1054,7 @@ int ltc4296_init(struct ltc4296_dev **device,
 	return 0;
 
 err_spi:
-	no_os_spi_remove(dev);
+	no_os_spi_remove(dev->spi_desc);
 err:
 	no_os_free(dev);
 
