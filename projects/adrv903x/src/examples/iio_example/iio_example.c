@@ -1006,8 +1006,6 @@ int example_main()
 		.base_addr = XPAR_XUARTPS_0_BASEADDR,
 #endif
 		.irq_id = UART_IRQ_ID
-#else
-		.type = UART_PL,
 #endif
 	};
 
