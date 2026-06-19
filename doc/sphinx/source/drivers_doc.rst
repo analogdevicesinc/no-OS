@@ -203,6 +203,14 @@ ETHERNET
 
    drivers/ethernet/*
 
+NETWORK
+=======
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   drivers/net/*
+
 GYROSCOPES
 ============
 .. toctree::
