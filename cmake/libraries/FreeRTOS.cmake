@@ -38,17 +38,23 @@ else()
     # For native builds, use NO_OS_DIR; for external builds, use CMAKE_SOURCE_DIR
     if("${CMAKE_SOURCE_DIR}" STREQUAL "${NO_OS_DIR}")
         # Native build - path relative to NO_OS_DIR
-        target_include_directories(freertos_config SYSTEM
-            INTERFACE
-            ${NO_OS_DIR}/${CONFIG_FREERTOS_CONF_PATH}
-        )
+        set(_freertos_conf_abs "${NO_OS_DIR}/${CONFIG_FREERTOS_CONF_PATH}")
     else()
         # External build - path relative to CMAKE_SOURCE_DIR
-        target_include_directories(freertos_config SYSTEM
-            INTERFACE
-            ${CMAKE_SOURCE_DIR}/${CONFIG_FREERTOS_CONF_PATH}
-        )
+        set(_freertos_conf_abs "${CMAKE_SOURCE_DIR}/${CONFIG_FREERTOS_CONF_PATH}")
     endif()
+
+    # CONFIG_FREERTOS_CONF_PATH follows the legacy Makefile convention and may point
+    # directly at FreeRTOSConfig.h. target_include_directories() needs the directory
+    # that contains the header, so resolve to it when a file path is given.
+    if(EXISTS "${_freertos_conf_abs}" AND NOT IS_DIRECTORY "${_freertos_conf_abs}")
+        get_filename_component(_freertos_conf_abs "${_freertos_conf_abs}" DIRECTORY)
+    endif()
+
+    target_include_directories(freertos_config SYSTEM
+        INTERFACE
+        ${_freertos_conf_abs}
+    )
 endif()
 
 # If we already used FetchContent, freertos_kernel target exists
