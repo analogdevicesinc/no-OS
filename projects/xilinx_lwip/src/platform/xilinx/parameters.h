@@ -57,11 +57,25 @@
 
 /*
  * GEM instance selection. Override at build time with -DGEM_INSTANCE=1
+ *
  */
 #ifndef GEM_INSTANCE
 #define GEM_INSTANCE	0
 #endif
 
+#ifdef SDT
+#if GEM_INSTANCE == 0 && defined(XPAR_XEMACPS_0_BASEADDR)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_0_BASEADDR
+#elif GEM_INSTANCE == 1 && defined(XPAR_XEMACPS_1_BASEADDR)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_1_BASEADDR
+#elif GEM_INSTANCE == 2 && defined(XPAR_XEMACPS_2_BASEADDR)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_2_BASEADDR
+#elif GEM_INSTANCE == 3 && defined(XPAR_XEMACPS_3_BASEADDR)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_3_BASEADDR
+#else
+#error "GEM_INSTANCE not available - check your .xsa / BSP configuration"
+#endif
+#else /* legacy non-SDT BSP */
 #if GEM_INSTANCE == 0 && defined(XPAR_XEMACPS_0_DEVICE_ID)
 #define GEM_DEVICE_ID	XPAR_XEMACPS_0_DEVICE_ID
 #elif GEM_INSTANCE == 1 && defined(XPAR_XEMACPS_1_DEVICE_ID)
@@ -73,6 +87,7 @@
 #else
 #error "GEM_INSTANCE not available - check your .xsa / BSP configuration"
 #endif
+#endif /* SDT */
 
 extern struct xil_uart_init_param xilinx_lwip_uart_extra_ip;
 
