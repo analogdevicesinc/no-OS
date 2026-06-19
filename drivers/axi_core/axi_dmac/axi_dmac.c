@@ -309,7 +309,6 @@ static int32_t axi_dmac_detect_caps(struct axi_dmac *dmac)
 	} else if (dest_mem_mapped && src_mem_mapped) {
 		dmac->direction = DMA_MEM_TO_MEM;
 	} else {
-		printf("Destination and source memory-mapped interfaces not supported.\n");
 		return -1;
 	}
 	return 0;
@@ -394,19 +393,19 @@ int32_t axi_dmac_transfer_start(struct axi_dmac *dmac,
 
 	/* If HW cyclic transfer selected and not available, show error */
 	/* HW cyclic transfer available only for MEM to DEV transfers. */
-	if ((!dmac->hw_cyclic) && (dma_transfer->cyclic == CYCLIC)) {
-		printf("Transfer mode not supported!\n");
+	if ((!dmac->hw_cyclic) && (dma_transfer->cyclic == CYCLIC))
 		return -1;
-	}
 
 	/* Cyclic transfers not possible for DEV_TO_MEM and MEM_TO_MEM transmissions. */
 	if ((dmac->direction == DMA_DEV_TO_MEM)
 	    || (dmac->direction == DMA_MEM_TO_MEM)) {
-		if (dma_transfer->cyclic == CYCLIC) {
-			printf("Transfer mode not supported!\n");
+		if (dma_transfer->cyclic == CYCLIC)
 			return -1;
-		}
 	}
+
+	/* Clear any stale IRQ pending bits from previous transfers */
+	axi_dmac_write(dmac, AXI_DMAC_REG_IRQ_PENDING,
+		       AXI_DMAC_IRQ_SOT | AXI_DMAC_IRQ_EOT);
 
 	/* Clear the DMA_CYCLIC flag for all transfers */
 	axi_dmac_read(dmac, AXI_DMAC_REG_FLAGS, &reg_val);
@@ -439,19 +438,15 @@ int32_t axi_dmac_transfer_start(struct axi_dmac *dmac,
 			dmac->init_addr = dmac->next_dest_addr;
 			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_ADDRESS, dmac->next_dest_addr);
 			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_STRIDE, 0x0);
-			if (dmac->transfer.dest_addr % dmac->width_dst) {
-				printf("Destination address should be aligned with destination data path width.\n\n");
+			if (dmac->transfer.dest_addr % dmac->width_dst)
 				return -1;
-			}
 			break;
 		case DMA_MEM_TO_DEV:
 			dmac->init_addr = dmac->next_src_addr;
 			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_ADDRESS, dmac->next_src_addr);
 			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_STRIDE, 0x0);
-			if (dmac->transfer.src_addr % dmac->width_src) {
-				printf("Source address should be aligned with source data path width.\n");
+			if (dmac->transfer.src_addr % dmac->width_src)
 				return -1;
-			}
 			break;
 		case DMA_MEM_TO_MEM:
 			dmac->init_addr = dmac->next_src_addr;
@@ -460,10 +455,8 @@ int32_t axi_dmac_transfer_start(struct axi_dmac *dmac,
 			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_ADDRESS, dmac->next_src_addr);
 			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_STRIDE, 0x0);
 			if ((dmac->transfer.dest_addr % (dmac->width_dst))
-			    || (dmac->transfer.src_addr % (dmac->width_src))) {
-				printf("Source and destination addresses should be aligned with data path widths.\n");
+			    || (dmac->transfer.src_addr % (dmac->width_src)))
 				return -1;
-			}
 			break;
 		default:
 			return -1; /* Other directions are not supported yet. */
@@ -524,20 +517,16 @@ int32_t axi_dmac_transfer_wait_completion(struct axi_dmac *dmac,
 		while (!dmac->transfer.transfer_done) {
 			timeout++;
 			no_os_mdelay(1);
-			if (timeout == timeout_ms) {
-				printf("Error transferring data using DMA.\n");
+			if (timeout == timeout_ms)
 				return -1;
-			}
 		}
 	} else if (dmac->irq_option == IRQ_DISABLED) {
 		axi_dmac_read(dmac, AXI_DMAC_REG_IRQ_PENDING, &reg_val);
 		while (reg_val != (AXI_DMAC_IRQ_SOT | AXI_DMAC_IRQ_EOT)) {
 			timeout++;
 			no_os_mdelay(1);
-			if (timeout == timeout_ms) {
-				printf("Error transferring data using DMA.\n");
+			if (timeout == timeout_ms)
 				return -1;
-			}
 			axi_dmac_read(dmac, AXI_DMAC_REG_IRQ_PENDING, &reg_val);
 		}
 		axi_dmac_write(dmac, AXI_DMAC_REG_IRQ_PENDING, reg_val);

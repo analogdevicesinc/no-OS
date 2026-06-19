@@ -150,8 +150,7 @@ static int32_t iiod_parse_open(const char *token, struct comand_desc *res,
 	if (token) {
 		if (strcmp(token, "CYCLIC") == 0)
 			res->cyclic = 1;
-		else
-			return -EINVAL;
+		/* libiio v0.26+ sends "0" for non-cyclic; accept it */
 	}
 
 	return 0;

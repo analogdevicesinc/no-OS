@@ -44,7 +44,11 @@
 #include "no_os_error.h"
 #include "no_os_gpio.h"
 #include "no_os_util.h"
+#ifdef PLATFORM_VERSAL
+#include "hmc7044.h"
+#else
 #include "ad9528.h"
+#endif
 #include "axi_jesd204_rx.h"
 #include "axi_jesd204_tx.h"
 #include "axi_adxcvr.h"
@@ -52,31 +56,27 @@
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
 #include "jesd204.h"
+#include "adi_adrv903x_datainterface.h"
 #include "no_os_axi_io.h"
 #include "xilinx_uart.h"
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
 #include "iio_app.h"
 #include <string.h>
+#include <inttypes.h>
 #include <xil_cache.h>
 
 /*
- * TX_NUM_CHANNELS: JESD204 M parameter for the TX deframer (M_TX = 4).
- *   Results in 2 complex TX channels (TX 1, TX 2) in IIO Oscilloscope.
- * RX_NUM_CHANNELS: limited to 4 (first 4 of M_RX = 8 converters).
- *   The hardware framer has 8 converters (4 RX paths x I+Q), but the
- *   no-OS iio_axi_adc driver does not support complex_modified channels.
- *   Exposing 4 channels matches Linux (which groups I+Q into complex
- *   pairs) and shows voltage0-voltage3 in IIO Oscilloscope, covering
- *   RX0 (I/Q) and RX1 (I/Q). Converters 4-7 (RX2, RX3) are not captured.
+ * 8T8R profile: 16 converters per direction (8 antennas × I + Q).
+ * Matches DMA example and ADRV903X_TX_JESD_CONVS_PER_DEVICE in app_config.h.
  */
-#define TX_NUM_CHANNELS		4
-#define RX_NUM_CHANNELS		4
+#define TX_NUM_CHANNELS		ADRV903X_TX_JESD_CONVS_PER_DEVICE
+#define RX_NUM_CHANNELS		ADRV903X_TX_JESD_CONVS_PER_DEVICE
 
-/* DMA buffers — 1024-byte aligned for Zynq MPSoC cache line compatibility */
-uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__((aligned(1024)));
-uint16_t adc_buffer[ADC_BUFFER_SAMPLES *
-				       RX_NUM_CHANNELS] __attribute__((aligned(1024)));
+/* DMA buffers — placed at fixed high-DDR addresses (past the application)
+ * to avoid Versal PMC AXI errors when DMA targets .bss addresses. */
+uint32_t *dac_buffer = (uint32_t *)(DDR_MEM_BASEADDR + 0x1000000UL); /* 16MB */
+uint16_t *adc_buffer = (uint16_t *)(DDR_MEM_BASEADDR + 0x2000000UL); /* 32MB */
 
 /*
  * AXI data offload register map (axi_data_offload IP):
@@ -89,45 +89,208 @@ uint16_t adc_buffer[ADC_BUFFER_SAMPLES *
  * FIFO takes 64 samples to prime after each RESETN, causing a glitch at
  * capture start.  Normal mode has no such artifact.
  */
+#define AXI_DO_REG_VERSION		0x0000
+#define AXI_DO_REG_PERIPHERAL_ID	0x0004
+#define AXI_DO_REG_SCRATCH		0x0008
+#define AXI_DO_REG_IDENTIFICATION	0x000C
+#define AXI_DO_REG_SYNTH_CONFIG_1	0x0010
+#define AXI_DO_REG_MEMORY_SIZE_LSB	0x0014	/* SYNTHESIS_CONFIG_2 */
+#define AXI_DO_REG_MEMORY_SIZE_MSB	0x0018	/* SYNTHESIS_CONFIG_3 */
 #define AXI_DO_REG_TRANSFER_LENGTH	0x001C
+#define AXI_DO_REG_MEM_PHY_STATE	0x0080
 #define AXI_DO_REG_RESETN_OFFLOAD	0x0084
 #define AXI_DO_REG_CONTROL		0x0088
+#define AXI_DO_REG_SYNC_TRIGGER		0x0100
+#define AXI_DO_REG_SYNC_CONFIG		0x0104
+#define AXI_DO_REG_FSM_DBG		0x0200
 
 /*
- * read_dev wrapper: configure normal-mode store length then reset the offload
- * before each IIO DMA capture.  XFER_LENGTH is written before the RESETN
- * pulse so the value persists through the reset cycle.  The offload then
- * stores exactly 'bytes' from the ADC into BRAM and forwards them to the
- * DMAC — glitch-free from sample 0.
+ * read_dev wrapper: configure the data offload for each IIO DMA capture.
+ *
+ * Matches the DMA example sequence:
+ *   1. Set CONTROL = 0x0 (normal store-and-forward mode)
+ *   2. Pulse RESETN to start a fresh capture cycle
+ *   3. Run the DMA transfer (capped to BRAM size)
+ *
+ * If the client requests more samples than the BRAM can hold, the DMA
+ * transfer is capped and the remainder of the buffer is zero-filled.
+ * This prevents the DMA from stalling (the offload has no more data to
+ * forward) and avoids exposing stale memory to the IIO client.
  */
 static int32_t (*g_orig_adc_read_dev)(void *dev, void *buff,
 				      uint32_t nb_samples);
+static uint64_t g_rx_do_mem_size;
+
+/* DMA-safe destination in high DDR, same as dma_example */
+#define RX_DMA_ADDR	(DDR_MEM_BASEADDR + 0x2000000UL)
+
 static int32_t adrv903x_adc_read_dev(void *dev, void *buff, uint32_t nb_samples)
 {
 	struct iio_axi_adc_desc *adc_desc = (struct iio_axi_adc_desc *)dev;
-	uint32_t bytes = nb_samples * no_os_hweight32(adc_desc->mask) * 2;
+	uint32_t bytes_per_sample = no_os_hweight32(adc_desc->mask) * 2;
+	int32_t ret;
 
-	/* Set transfer length (units: 64 bytes) before reset so it persists */
+	/* Always DMA the full BRAM — matches the DMA example exactly. */
+	uint32_t bram_samples = nb_samples;
+	if (g_rx_do_mem_size)
+		bram_samples = (uint32_t)(g_rx_do_mem_size / bytes_per_sample);
+
+	uint32_t dma_bytes = bram_samples * bytes_per_sample;
+
+	/* Data offload reset sequence — matches the DMA example */
 	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR,
-			   AXI_DO_REG_TRANSFER_LENGTH, bytes >> 6);
-	/* Abort any in-progress store/forward cycle */
+			   AXI_DO_REG_CONTROL, 0x0);
 	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR,
 			   AXI_DO_REG_RESETN_OFFLOAD, 0x0);
+	no_os_mdelay(1);
 	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR,
 			   AXI_DO_REG_RESETN_OFFLOAD, 0x1);
-	return g_orig_adc_read_dev(dev, buff, nb_samples);
+
+	/* DMA to a safe high-DDR address to avoid PMC AXI errors */
+	struct axi_dma_transfer transfer = {
+		.size = dma_bytes,
+		.transfer_done = 0,
+		.cyclic = NO,
+		.src_addr = 0,
+		.dest_addr = RX_DMA_ADDR,
+	};
+
+	ret = axi_dmac_transfer_start(adc_desc->dmac, &transfer);
+	if (ret)
+		return ret;
+
+	ret = axi_dmac_transfer_wait_completion(adc_desc->dmac, 5000);
+	if (ret)
+		return ret;
+
+	if (adc_desc->dcache_invalidate_range)
+		adc_desc->dcache_invalidate_range(RX_DMA_ADDR, dma_bytes);
+
+	/* Copy captured data into the IIO circular buffer */
+	uint32_t copy_bytes = nb_samples * bytes_per_sample;
+	if (copy_bytes > dma_bytes)
+		copy_bytes = dma_bytes;
+	memcpy(buff, (void *)RX_DMA_ADDR, copy_bytes);
+
+	/* Zero-fill remainder if client asked for more than BRAM holds */
+	if (copy_bytes < nb_samples * bytes_per_sample)
+		memset((uint8_t *)buff + copy_bytes, 0,
+		       nb_samples * bytes_per_sample - copy_bytes);
+
+	return 0;
 }
+
+static void data_offload_regdump(const char *label, uint32_t base)
+{
+	uint32_t val;
+
+	pr_info("--- Data Offload regdump: %s (base 0x%08"PRIx32") ---\n",
+		label, base);
+
+	no_os_axi_io_read(base, AXI_DO_REG_VERSION, &val);
+	pr_info("  VERSION          (0x%04X) = 0x%08"PRIx32
+		"  (major.minor.patch: %u.%u.%u)\n",
+		AXI_DO_REG_VERSION, val,
+		(val >> 16) & 0xFF, (val >> 8) & 0xFF, val & 0xFF);
+
+	no_os_axi_io_read(base, AXI_DO_REG_PERIPHERAL_ID, &val);
+	pr_info("  PERIPHERAL_ID    (0x%04X) = 0x%08"PRIx32"\n",
+		AXI_DO_REG_PERIPHERAL_ID, val);
+
+	no_os_axi_io_read(base, AXI_DO_REG_IDENTIFICATION, &val);
+	pr_info("  IDENTIFICATION   (0x%04X) = 0x%08"PRIx32
+		"  ('%c%c%c%c')\n",
+		AXI_DO_REG_IDENTIFICATION, val,
+		(char)(val & 0xFF), (char)((val >> 8) & 0xFF),
+		(char)((val >> 16) & 0xFF), (char)((val >> 24) & 0xFF));
+
+	no_os_axi_io_read(base, AXI_DO_REG_SYNTH_CONFIG_1, &val);
+	pr_info("  SYNTH_CONFIG_1   (0x%04X) = 0x%08"PRIx32
+		"  (path=%s, mem=%s)\n",
+		AXI_DO_REG_SYNTH_CONFIG_1, val,
+		(val & 0x1) ? "TX" : "RX",
+		(val & 0x2) ? "DDR" : "BRAM");
+
+	uint32_t mem_lsb, mem_msb;
+	no_os_axi_io_read(base, AXI_DO_REG_MEMORY_SIZE_LSB, &mem_lsb);
+	no_os_axi_io_read(base, AXI_DO_REG_MEMORY_SIZE_MSB, &mem_msb);
+	uint64_t mem_size = (uint64_t)mem_lsb |
+			    ((uint64_t)(mem_msb & 0x3) << 32);
+	pr_info("  MEMORY_SIZE      (0x%04X) = 0x%08"PRIx32
+		":%08"PRIx32"  (%lu bytes)\n",
+		AXI_DO_REG_MEMORY_SIZE_LSB, mem_msb, mem_lsb,
+		(unsigned long)mem_size);
+
+	no_os_axi_io_read(base, AXI_DO_REG_TRANSFER_LENGTH, &val);
+	pr_info("  TRANSFER_LENGTH  (0x%04X) = 0x%08"PRIx32
+		"  (%lu bytes)\n",
+		AXI_DO_REG_TRANSFER_LENGTH, val, (unsigned long)val * 64);
+
+	no_os_axi_io_read(base, AXI_DO_REG_MEM_PHY_STATE, &val);
+	pr_info("  MEM_PHY_STATE    (0x%04X) = 0x%08"PRIx32
+		"  (calib_complete=%u, underflow=%u, overflow=%u)\n",
+		AXI_DO_REG_MEM_PHY_STATE, val,
+		val & 0x1, (val >> 4) & 0x1, (val >> 5) & 0x1);
+
+	no_os_axi_io_read(base, AXI_DO_REG_RESETN_OFFLOAD, &val);
+	pr_info("  RESETN_OFFLOAD   (0x%04X) = 0x%08"PRIx32
+		"  (resetn=%u)\n",
+		AXI_DO_REG_RESETN_OFFLOAD, val, val & 0x1);
+
+	no_os_axi_io_read(base, AXI_DO_REG_CONTROL, &val);
+	pr_info("  CONTROL          (0x%04X) = 0x%08"PRIx32
+		"  (bypass=%u, oneshot=%u)\n",
+		AXI_DO_REG_CONTROL, val, val & 0x1, (val >> 1) & 0x1);
+
+	no_os_axi_io_read(base, AXI_DO_REG_SYNC_CONFIG, &val);
+	static const char *sync_modes[] = {
+		"auto", "hw_trigger", "sw_trigger", "reserved"
+	};
+	pr_info("  SYNC_CONFIG      (0x%04X) = 0x%08"PRIx32
+		"  (mode=%s)\n",
+		AXI_DO_REG_SYNC_CONFIG, val, sync_modes[val & 0x3]);
+
+	no_os_axi_io_read(base, AXI_DO_REG_FSM_DBG, &val);
+	pr_info("  FSM_DBG          (0x%04X) = 0x%08"PRIx32
+		"  (fsm_state=%u)\n",
+		AXI_DO_REG_FSM_DBG, val, val & 0x1F);
+}
+
+#ifdef PLATFORM_VERSAL
+/*
+ * Versal GT lane clock stub — the GT transceiver is pre-configured by the
+ * Versal fabric (PDI).  The JESD204 driver calls set_rate / enable on
+ * lane_clk; these ops simply succeed without touching hardware.
+ */
+static int versal_lane_clk_enable(struct no_os_clk_desc *desc) { return 0; }
+static int versal_lane_clk_disable(struct no_os_clk_desc *desc) { return 0; }
+static int versal_lane_clk_set_rate(struct no_os_clk_desc *desc,
+				    uint64_t rate) { return 0; }
+static int versal_lane_clk_recalc_rate(struct no_os_clk_desc *desc,
+				       uint64_t *rate)
+{
+	*rate = (uint64_t)ADRV903X_LANE_RATE_KHZ * 1000ULL;
+	return 0;
+}
+
+static const struct no_os_clk_platform_ops versal_lane_clk_ops = {
+	.clk_enable = versal_lane_clk_enable,
+	.clk_disable = versal_lane_clk_disable,
+	.clk_set_rate = versal_lane_clk_set_rate,
+	.clk_recalc_rate = versal_lane_clk_recalc_rate,
+};
+#endif
 
 /***************************************************************************//**
  * @brief IIO example main execution.
  *
  * Brings up the full JESD204 link and starts the IIO application loop:
- *   1.  AD9528 clock synthesizer setup (DEVCLK + SYSREF)
- *   2.  SYSREF_REQ GPIO configuration
- *   3.  ADXCVR initialization (TX and RX)
+ *   1.  Clock synthesizer setup (HMC7044 on Versal, AD9528 on ZynqMP)
+ *   2.  SYSREF_REQ GPIO configuration (ZynqMP only)
+ *   3.  ADXCVR initialization (TX and RX, ZynqMP only)
  *   4.  AXI JESD204 TX and RX controller initialization
  *   5.  ADRV903X initialization (firmware load up to PreMcsInit_NonBroadcast)
- *   6.  AXI clkgen setup (lane_rate / 66 for JESD204C)
+ *   6.  AXI clkgen setup (lane_rate / 66 for JESD204C, ZynqMP only)
  *   7.  AXI DAC core init — DDS mode (IIO Oscilloscope controls tones)
  *   8.  AXI ADC core init — reset TPL + IQ correction
  *   9.  RX data offload — normal mode + per-capture XFER_LENGTH + RESETN
@@ -139,32 +302,180 @@ static int32_t adrv903x_adc_read_dev(void *dev, void *buff, uint32_t nb_samples)
 *******************************************************************************/
 int example_main()
 {
-	struct no_os_gpio_init_param sysref_gip = { 0 };
-	struct no_os_gpio_desc *sysref_gpio = NULL;
 	struct adrv903x_init_param init_param = { 0 };
-	struct ad9528_platform_data ad9528_pdata = { 0 };
-	struct ad9528_channel_spec ad9528_channels[14];
-	struct ad9528_init_param ad9528_param = { 0 };
-	struct ad9528_dev *ad9528_device = NULL;
 	struct jesd204_topology *topology = NULL;
 	struct adrv903x_rf_phy *phy = NULL;
-	struct axi_clkgen *rx_clkgen = NULL;
-	struct axi_clkgen *tx_clkgen = NULL;
 	struct axi_jesd204_rx *rx_jesd = NULL;
 	struct axi_jesd204_tx *tx_jesd = NULL;
-	struct adxcvr *tx_adxcvr = NULL;
-	struct adxcvr *rx_adxcvr = NULL;
 	struct axi_adc *rx_adc = NULL;
 	struct axi_dac *tx_dac = NULL;
 	struct axi_dmac *rx_dmac = NULL;
 	struct axi_dmac *tx_dmac = NULL;
 	int ret;
 
+#ifdef PLATFORM_VERSAL
+	struct no_os_gpio_desc *hmc7044_reset_gpio = NULL;
+	struct hmc7044_chan_spec hmc7044_channels[5];
+	struct hmc7044_init_param hmc7044_param = { 0 };
+	struct hmc7044_dev *hmc7044_device = NULL;
+	struct no_os_clk_desc *tx_lane_clk = NULL;
+	struct no_os_clk_desc *rx_lane_clk = NULL;
+#else
+	struct no_os_gpio_init_param sysref_gip = { 0 };
+	struct no_os_gpio_desc *sysref_gpio = NULL;
+	struct ad9528_platform_data ad9528_pdata = { 0 };
+	struct ad9528_channel_spec ad9528_channels[14];
+	struct ad9528_init_param ad9528_param = { 0 };
+	struct ad9528_dev *ad9528_device = NULL;
+	struct axi_clkgen *rx_clkgen = NULL;
+	struct axi_clkgen *tx_clkgen = NULL;
+	struct adxcvr *tx_adxcvr = NULL;
+	struct adxcvr *rx_adxcvr = NULL;
+#endif
+
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
-
+	pr_info("hello\n");
 	pr_info("ADRV903X IIO example\n");
 
+#ifdef PLATFORM_VERSAL
+	/*
+	 * ----------------------------------------------------------------
+	 * HMC7044 clock synthesizer setup (Versal Tetra).
+	 * Provides DEVCLK (491.52 MHz on ch0) and SYSREF for MCS.
+	 * Configuration matches DTS: versal-tetra-15mhz-nls.dts
+	 * ----------------------------------------------------------------
+	 */
+
+	/* HMC7044 hardware reset pulse (active-high reset) */
+	ret = no_os_gpio_get(&hmc7044_reset_gpio, &clkchip_gpio_init_param);
+	if (ret) {
+		pr_err("HMC7044 reset GPIO get failed: %d\n", ret);
+		return ret;
+	}
+	/* Assert reset (drive HIGH) */
+	ret = no_os_gpio_direction_output(hmc7044_reset_gpio, NO_OS_GPIO_HIGH);
+	if (ret) {
+		pr_err("HMC7044 reset GPIO set failed: %d\n", ret);
+		no_os_gpio_remove(hmc7044_reset_gpio);
+		return ret;
+	}
+	no_os_mdelay(10);
+	/* De-assert reset (drive LOW) */
+	ret = no_os_gpio_set_value(hmc7044_reset_gpio, NO_OS_GPIO_LOW);
+	if (ret) {
+		pr_err("HMC7044 reset de-assert failed: %d\n", ret);
+		no_os_gpio_remove(hmc7044_reset_gpio);
+		return ret;
+	}
+	no_os_mdelay(20);
+
+	memset(hmc7044_channels, 0, sizeof(hmc7044_channels));
+
+	/* Channel 0: DEV_CLK — ADRV903X reference clock (491.52 MHz) */
+	hmc7044_channels[0].num = 0;
+	hmc7044_channels[0].divider = HMC7044_DEV_CLK_DIV;
+	hmc7044_channels[0].driver_mode = 2; /* LVDS */
+
+	/* Channel 1: DEV_SYSREF */
+	hmc7044_channels[1].num = 1;
+	hmc7044_channels[1].divider = HMC7044_DEV_SYSREF_DIV;
+	hmc7044_channels[1].driver_mode = 1; /* LVPECL */
+	hmc7044_channels[1].is_sysref = true;
+	hmc7044_channels[1].start_up_mode_dynamic_enable = true;
+	hmc7044_channels[1].high_performance_mode_dis = true;
+
+	/* Channel 6: FPGA_CORE_REFCLK */
+	hmc7044_channels[2].num = 6;
+	hmc7044_channels[2].divider = HMC7044_FPGA_CORE_REFCLK_DIV;
+	hmc7044_channels[2].driver_mode = 2; /* LVDS */
+
+	/* Channel 7: FPGA_CORE_SYSREF */
+	hmc7044_channels[3].num = 7;
+	hmc7044_channels[3].divider = HMC7044_FPGA_CORE_SYSREF_DIV;
+	hmc7044_channels[3].driver_mode = 2; /* LVDS */
+
+	/* Channel 12: FPGA_REFCLK */
+	hmc7044_channels[4].num = 12;
+	hmc7044_channels[4].divider = HMC7044_FPGA_REFCLK_DIV;
+	hmc7044_channels[4].driver_mode = 2; /* LVDS */
+
+	hmc7044_param.spi_init = (struct no_os_spi_init_param *)&hmc7044_spi_param;
+	hmc7044_param.export_no_os_clk = true;
+	/* PLL1: no external CLKIN references — VCXO only (DTS: all zeros) */
+	hmc7044_param.vcxo_freq = HMC7044_VCXO_FREQ_HZ;
+	hmc7044_param.pll2_freq = HMC7044_PLL2_FREQ_HZ;
+	hmc7044_param.pll1_loop_bw = 200;
+	hmc7044_param.pll1_ref_prio_ctrl = 0xe4;
+	hmc7044_param.pll1_ref_autorevert_en = true;
+	hmc7044_param.pll1_cp_current = 1920;
+	hmc7044_param.pfd1_limit = HMC7044_PFD1_LIMIT_HZ;
+	hmc7044_param.sysref_timer_div = HMC7044_SYSREF_TIMER_DIV;
+	hmc7044_param.pulse_gen_mode = HMC7044_PULSE_GEN_8_PULSE;
+	hmc7044_param.sync_pin_mode = HMC7044_SYNC_PIN_SYNC;
+	hmc7044_param.high_performance_mode_clock_dist_en = false;
+	hmc7044_param.in_buf_mode[0] = 0x06;
+	hmc7044_param.in_buf_mode[1] = 0x06;
+	hmc7044_param.in_buf_mode[4] = HMC7044_OSCIN_BUF_MODE;
+	hmc7044_param.gpo_ctrl[0] = 0x37;
+	hmc7044_param.gpo_ctrl[1] = 0x33;
+	hmc7044_param.jesd204_sysref_provider = true;
+	hmc7044_param.jesd204_max_sysref_frequency_hz = 2000000;
+	hmc7044_param.num_channels = NO_OS_ARRAY_SIZE(hmc7044_channels);
+	hmc7044_param.channels = hmc7044_channels;
+
+	ret = hmc7044_init(&hmc7044_device, &hmc7044_param);
+	if (ret) {
+		pr_err("hmc7044_init() failed: %d\n", ret);
+		no_os_gpio_remove(hmc7044_reset_gpio);
+		return ret;
+	}
+
+	pr_info("HMC7044 init done, DEVCLK on channel 0\n");
+
+	/*
+	 * Reset the Versal GT PLL + datapath so the GT re-locks its PLL
+	 * to the HMC7044 reference clock that just became available.
+	 * Without this, the first cold boot often fails (GT CDR not locked).
+	 */
+	{
+		struct no_os_gpio_desc *gt_rst = NULL;
+		struct no_os_gpio_desc *gt_done = NULL;
+		struct no_os_gpio_init_param gt_gpio_param = {
+			.platform_ops = clkchip_gpio_init_param.platform_ops,
+			.extra = clkchip_gpio_init_param.extra,
+		};
+		uint32_t gt_pll_gpios[] = { TX_GT_PLL_RESET, RX_GT_PLL_RESET };
+		uint32_t gt_done_gpios[] = { TX_GT_RESET_DONE, RX_GT_RESET_DONE };
+		uint8_t done_val;
+
+		for (int i = 0; i < 2; i++) {
+			gt_gpio_param.number = gt_pll_gpios[i];
+			ret = no_os_gpio_get(&gt_rst, &gt_gpio_param);
+			if (ret)
+				continue;
+			no_os_gpio_direction_output(gt_rst, NO_OS_GPIO_HIGH);
+			no_os_mdelay(2);
+			no_os_gpio_set_value(gt_rst, NO_OS_GPIO_LOW);
+			no_os_gpio_remove(gt_rst);
+
+			/* Poll reset-done GPIO */
+			gt_gpio_param.number = gt_done_gpios[i];
+			ret = no_os_gpio_get(&gt_done, &gt_gpio_param);
+			if (!ret) {
+				no_os_gpio_direction_input(gt_done);
+				int timeout = 100;
+				do {
+					no_os_mdelay(5);
+					no_os_gpio_get_value(gt_done, &done_val);
+				} while (!done_val && --timeout);
+				no_os_gpio_remove(gt_done);
+			}
+		}
+		pr_info("GT PLL reset done\n");
+	}
+
+#else /* ZynqMP */
 	/*
 	 * ----------------------------------------------------------------
 	 * AD9528 clock synthesizer setup.
@@ -259,7 +570,7 @@ int example_main()
 	ret = no_os_gpio_get(&sysref_gpio, &sysref_gip);
 	if (ret) {
 		pr_err("SYSREF_REQ gpio_get failed: %d\n", ret);
-		goto error_ad9528;
+		goto error_clkchip;
 	}
 
 	ret = no_os_gpio_direction_output(sysref_gpio, NO_OS_GPIO_LOW);
@@ -308,10 +619,13 @@ int example_main()
 		pr_err("rx_adxcvr_init() failed: %d\n", ret);
 		goto error_tx_adxcvr;
 	}
+#endif /* PLATFORM_VERSAL */
 
 	/*
 	 * ----------------------------------------------------------------
-	 * AXI JESD204 TX and RX controller initialization
+	 * AXI JESD204 TX and RX controller initialization.
+	 * On ZynqMP, lane_clk comes from the ADXCVR clk_out.
+	 * On Versal, lane_clk is a stub (GT managed by Versal fabric).
 	 * ----------------------------------------------------------------
 	 */
 	struct jesd204_tx_init tx_jesd_init = {
@@ -339,13 +653,69 @@ int example_main()
 		.lane_clk_khz = ADRV903X_LANE_RATE_KHZ,
 	};
 
+#ifdef PLATFORM_VERSAL
+	struct no_os_clk_init_param tx_lane_clk_param = {
+		.name = "tx_lane_clk",
+		.platform_ops = &versal_lane_clk_ops,
+	};
+	struct no_os_clk_init_param rx_lane_clk_param = {
+		.name = "rx_lane_clk",
+		.platform_ops = &versal_lane_clk_ops,
+	};
+
+	ret = no_os_clk_init(&tx_lane_clk, &tx_lane_clk_param);
+	if (ret) {
+		pr_err("tx_lane_clk init failed: %d\n", ret);
+		goto error_clkchip;
+	}
+	ret = no_os_clk_init(&rx_lane_clk, &rx_lane_clk_param);
+	if (ret) {
+		pr_err("rx_lane_clk init failed: %d\n", ret);
+		no_os_clk_remove(tx_lane_clk);
+		goto error_clkchip;
+	}
+	tx_jesd_init.lane_clk = tx_lane_clk;
+	rx_jesd_init.lane_clk = rx_lane_clk;
+
+	/* GT reset GPIOs — wired into JESD FSM callbacks */
+	struct no_os_gpio_init_param gt_gpio_base = {
+		.platform_ops = clkchip_gpio_init_param.platform_ops,
+		.extra = clkchip_gpio_init_param.extra,
+	};
+	struct no_os_gpio_init_param tx_gt_pll_rst = gt_gpio_base;
+	tx_gt_pll_rst.number = TX_GT_PLL_RESET;
+	struct no_os_gpio_init_param tx_gt_dp_rst = gt_gpio_base;
+	tx_gt_dp_rst.number = TX_GT_DP_RESET;
+	struct no_os_gpio_init_param tx_gt_done = gt_gpio_base;
+	tx_gt_done.number = TX_GT_RESET_DONE;
+
+	struct no_os_gpio_init_param rx_gt_pll_rst = gt_gpio_base;
+	rx_gt_pll_rst.number = RX_GT_PLL_RESET;
+	struct no_os_gpio_init_param rx_gt_dp_rst = gt_gpio_base;
+	rx_gt_dp_rst.number = RX_GT_DP_RESET;
+	struct no_os_gpio_init_param rx_gt_done = gt_gpio_base;
+	rx_gt_done.number = RX_GT_RESET_DONE;
+
+	tx_jesd_init.gt_reset_pll = &tx_gt_pll_rst;
+	tx_jesd_init.gt_reset_dp = &tx_gt_dp_rst;
+	tx_jesd_init.gt_reset_done = &tx_gt_done;
+
+	rx_jesd_init.gt_reset_pll = &rx_gt_pll_rst;
+	rx_jesd_init.gt_reset_dp = &rx_gt_dp_rst;
+	rx_jesd_init.gt_reset_done = &rx_gt_done;
+#else
 	tx_jesd_init.lane_clk = tx_adxcvr->clk_out;
 	rx_jesd_init.lane_clk = rx_adxcvr->clk_out;
+#endif
 
 	ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
 	if (ret) {
 		pr_err("axi_jesd204_tx_init() failed: %d\n", ret);
+#ifdef PLATFORM_VERSAL
+		goto error_clkchip;
+#else
 		goto error_rx_adxcvr;
+#endif
 	}
 
 	ret = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
@@ -359,7 +729,11 @@ int example_main()
 	 * ADRV903X initialization
 	 * ----------------------------------------------------------------
 	 */
+#ifdef PLATFORM_VERSAL
+	init_param.dev_clk = hmc7044_device->clk_desc[0];
+#else
 	init_param.dev_clk = ad9528_device->clk_desc[1];
+#endif
 	init_param.post_mcs_init = &utilityInit;
 	init_param.profile_file = ADRV903X_PROFILE_FILE;
 	init_param.cpu_fw_file = ADRV903X_CPU_FW_FILE;
@@ -373,9 +747,10 @@ int example_main()
 		goto error_rx_jesd;
 	}
 
+#ifndef PLATFORM_VERSAL
 	/*
 	 * ----------------------------------------------------------------
-	 * AXI clkgen setup — JESD204C: lane_rate / 66
+	 * AXI clkgen setup — JESD204C: lane_rate / 66 (ZynqMP only)
 	 * ----------------------------------------------------------------
 	 */
 	ret = clkgen_setup(&rx_clkgen, &tx_clkgen);
@@ -383,6 +758,7 @@ int example_main()
 		pr_err("clkgen_setup() failed: %d\n", ret);
 		goto error_phy;
 	}
+#endif
 
 	/*
 	 * ----------------------------------------------------------------
@@ -453,6 +829,23 @@ int example_main()
 	 * sample priming glitch.
 	 * ----------------------------------------------------------------
 	 */
+	{
+		uint32_t do_mem_lsb, do_mem_msb;
+		no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR,
+				  AXI_DO_REG_MEMORY_SIZE_LSB, &do_mem_lsb);
+		no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR,
+				  AXI_DO_REG_MEMORY_SIZE_MSB, &do_mem_msb);
+		g_rx_do_mem_size = (uint64_t)do_mem_lsb |
+				   ((uint64_t)(do_mem_msb & 0x3) << 32);
+		pr_info("RX data offload: BRAM size = %lu bytes\n",
+			(unsigned long)g_rx_do_mem_size);
+	}
+	/* Normal mode (store-and-forward, same as DMA example) */
+	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR,
+			   AXI_DO_REG_CONTROL, 0x0);
+	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR,
+			   AXI_DO_REG_RESETN_OFFLOAD, 0x0);
+	no_os_mdelay(1);
 	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR,
 			   AXI_DO_REG_RESETN_OFFLOAD, 0x1);
 	pr_info("RX data offload: normal mode (store+forward)\n");
@@ -493,7 +886,11 @@ int example_main()
 	 */
 	struct jesd204_topology_dev devs[] = {
 		{
+#ifdef PLATFORM_VERSAL
+			.jdev = hmc7044_device->jdev,
+#else
 			.jdev = ad9528_device->jdev,
+#endif
 			.link_ids = { DEFRAMER0_LINK_TX, FRAMER0_LINK_RX },
 			.links_number = 2,
 			.is_sysref_provider = true,
@@ -528,10 +925,69 @@ int example_main()
 		goto error_fsm;
 	}
 
+	/* Fast TX deframer retry: if the ADRV903x deframer didn't sync,
+	 * pulse TX GT DP reset and re-enable the TX JESD link. */
+#ifdef PLATFORM_VERSAL
+	if (tx_jesd->gt_reset_dp) {
+		adi_adrv903x_DeframerStatus_v2_t dfrmSt = { 0 };
+		int tx_retry;
+
+		for (tx_retry = 0; tx_retry < 3; tx_retry++) {
+			adi_adrv903x_DeframerStatusGet_v2(phy->palmaDevice,
+				ADI_ADRV903X_DEFRAMER_0, &dfrmSt);
+			if (dfrmSt.linkState & 0x2)
+				break;
+			pr_warning("TX deframer not synced (0x%X), retry %d\n",
+				   dfrmSt.linkState, tx_retry + 1);
+			axi_jesd204_tx_lane_clk_disable(tx_jesd);
+			no_os_gpio_set_value(tx_jesd->gt_reset_dp,
+					     NO_OS_GPIO_HIGH);
+			no_os_udelay(20);
+			no_os_gpio_set_value(tx_jesd->gt_reset_dp,
+					     NO_OS_GPIO_LOW);
+			for (int w = 0; w < 32; w++) {
+				uint8_t dv;
+				no_os_mdelay(1);
+				no_os_gpio_get_value(tx_jesd->gt_reset_done,
+						     &dv);
+				if (dv)
+					break;
+			}
+			axi_jesd204_tx_lane_clk_enable(tx_jesd);
+			no_os_mdelay(20);
+		}
+		adi_adrv903x_DeframerStatusGet_v2(phy->palmaDevice,
+			ADI_ADRV903X_DEFRAMER_0, &dfrmSt);
+		pr_info("TX deframer linkState 0x%X after %d retries\n",
+			dfrmSt.linkState, tx_retry);
+		for (int i = 0; i < 4; i++)
+			pr_info("TX deframer lane%d status 0x%X\n",
+				i, dfrmSt.laneStatus[i]);
+		if (!(dfrmSt.linkState & 0x2))
+			pr_err("TX deframer failed after %d retries\n",
+			       tx_retry);
+	}
+#endif
+
 	pr_info("ADRV903X JESD204 link up\n");
 
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_jesd);
+
+	/*
+	 * TX data offload — bypass mode.
+	 * Bypass lets DMA buffer transfers flow through the CDC FIFO.
+	 * In DDS mode no data traverses the offload, so bypass is harmless.
+	 */
+	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR,
+			   AXI_DO_REG_CONTROL, 0x1); /* bypass */
+	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR,
+			   AXI_DO_REG_RESETN_OFFLOAD, 0x0);
+	no_os_mdelay(1);
+	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR,
+			   AXI_DO_REG_RESETN_OFFLOAD, 0x1);
+
+	pr_info("Setting up IIO application...\n");
 
 	/*
 	 * ----------------------------------------------------------------
@@ -550,6 +1006,8 @@ int example_main()
 		.base_addr = XPAR_XUARTPS_0_BASEADDR,
 #endif
 		.irq_id = UART_IRQ_ID
+#else
+		.type = UART_PL,
 #endif
 	};
 
@@ -578,12 +1036,14 @@ int example_main()
 	};
 
 	ret = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
-	if (ret < 0)
+	if (ret < 0) {
+		pr_err("iio_axi_adc_init() failed: %d\n", ret);
 		goto error_fsm;
+	}
 
 	struct iio_data_buffer read_buff = {
 		.buff = (void *)adc_buffer,
-		.size = sizeof(adc_buffer),
+		.size = ADC_BUFFER_SAMPLES * RX_NUM_CHANNELS * sizeof(uint16_t),
 	};
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
 
@@ -609,12 +1069,14 @@ int example_main()
 	};
 
 	ret = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
-	if (ret < 0)
+	if (ret < 0) {
+		pr_err("iio_axi_dac_init() failed: %d\n", ret);
 		goto error_iio_adc;
+	}
 
 	struct iio_data_buffer write_buff = {
 		.buff = (void *)dac_buffer,
-		.size = sizeof(dac_buffer),
+		.size = DAC_BUFFER_SAMPLES * sizeof(uint32_t),
 	};
 	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
 
@@ -631,12 +1093,18 @@ int example_main()
 	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
 	app_init_param.uart_init_params = iio_uart_ip;
 
+	pr_info("iio_app_init — UART switches to 921600 after this\n");
 	/* Allow previous log messages to flush before IIO takes over UART */
 	no_os_mdelay(100);
 
 	ret = iio_app_init(&app, app_init_param);
-	if (ret)
+	if (ret) {
+		pr_err("iio_app_init() failed: %d\n", ret);
 		goto error_iio_dac;
+	}
+
+	/* NOTE: UART is now at 921600 — no more pr_info() from this point,
+	 * any output would appear as garbled chars on the 115200 terminal. */
 
 	/* iio_app_run blocks indefinitely; cleanup on return is unreachable
 	 * in normal operation and follows the no-OS IIO example convention. */
@@ -658,21 +1126,38 @@ error_rx_adc:
 error_tx_dac:
 	axi_dac_remove(tx_dac);
 error_clkgen:
+#ifndef PLATFORM_VERSAL
 	clkgen_remove(rx_clkgen, tx_clkgen);
 error_phy:
+#endif
 	adrv903x_remove(phy);
 error_rx_jesd:
 	axi_jesd204_rx_remove(rx_jesd);
 error_tx_jesd:
 	axi_jesd204_tx_remove(tx_jesd);
+#ifdef PLATFORM_VERSAL
+	no_os_clk_remove(rx_lane_clk);
+	no_os_clk_remove(tx_lane_clk);
+#else
 error_rx_adxcvr:
 	adxcvr_remove(rx_adxcvr);
 error_tx_adxcvr:
 	adxcvr_remove(tx_adxcvr);
 error_sysref_gpio:
+	/*
+	 * sysref_gpio ownership is transferred to ad9528_device after the
+	 * handoff above; ad9528_remove() frees it.  Only free here if we
+	 * jumped before the handoff (ad9528_device->sysref_req_gpio != gpio).
+	 */
 	if (!ad9528_device || ad9528_device->sysref_req_gpio != sysref_gpio)
 		no_os_gpio_remove(sysref_gpio);
-error_ad9528:
+#endif
+error_clkchip:
+#ifdef PLATFORM_VERSAL
+	hmc7044_remove(hmc7044_device);
+	no_os_gpio_remove(hmc7044_reset_gpio);
+#else
 	ad9528_remove(ad9528_device);
+#endif
 	return ret;
 }

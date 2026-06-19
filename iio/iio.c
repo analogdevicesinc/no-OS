@@ -62,7 +62,7 @@
 #define IIOD_PORT		30431
 #define MAX_SOCKET_TO_HANDLE	10
 #define REG_ACCESS_ATTRIBUTE	"direct_reg_access"
-#define IIOD_CONN_BUFFER_SIZE	0x1000
+#define IIOD_CONN_BUFFER_SIZE	0x10000
 #define NO_TRIGGER				(uint32_t)-1
 
 #define NO_OS_STRINGIFY(x) #x
@@ -354,10 +354,11 @@ static int iio_set_buffers_count(struct iiod_ctx *ctx, const char *device,
 	if (!get_iio_device(desc, device))
 		return -ENODEV;
 
-	/* Our implementation uses a circular buffer to send/receive data so
-	 * only 1 is a valid value.
+	/* Our implementation uses a single circular buffer regardless of the
+	 * requested count.  Accept any non-zero value so that libiio clients
+	 * (v0.26+) that default to buffers_count=4 don't get rejected.
 	 */
-	if (buffers_count != 1)
+	if (buffers_count == 0)
 		return -EINVAL;
 
 	return 0;
