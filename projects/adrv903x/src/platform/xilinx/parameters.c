@@ -44,7 +44,11 @@ struct xil_spi_init_param spi_extra = {
 #else
 	.type = SPI_PS,
 #ifdef SDT
+#ifdef PLATFORM_VERSAL
+	.base_addr = XPAR_XSPIPS_1_BASEADDR,
+#else
 	.base_addr = XPAR_XSPIPS_0_BASEADDR,
+#endif
 #endif
 #endif
 	.flags = 0

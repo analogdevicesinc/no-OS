@@ -38,8 +38,10 @@
 
 #include "xparameters.h"
 
-/* Auto-detect Versal from BSP (covers both Makefile and Vitis IDE builds). */
-#if defined(XPAR_CPU_CORTEXA72_CORE_CLOCK_FREQ_HZ) && !defined(PLATFORM_VERSAL)
+/* Auto-detect Versal from BSP (covers both Makefile and Vitis IDE builds).
+ * XPAR_XUARTPSV_NUM_INSTANCES is Versal-specific (PSV = PS Versal).
+ * XPAR_CPU_CORTEXA72_CORE_CLOCK_FREQ_HZ exists in non-SDT mode only. */
+#if (defined(XPAR_XUARTPSV_NUM_INSTANCES) || defined(XPAR_CPU_CORTEXA72_CORE_CLOCK_FREQ_HZ)) && !defined(PLATFORM_VERSAL)
 #define PLATFORM_VERSAL
 #endif
 
