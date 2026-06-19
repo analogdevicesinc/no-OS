@@ -742,7 +742,7 @@ static int adf4382_frac2_compute(struct adf4382_dev *dev, uint64_t res,
  * 		       divider, which will be returned.
  * @return 	     - 0 in case of success, negative error code otherwise.
  */
-static int adf4382_pll_fract_n_compute(struct adf4382_dev *dev, uint64_t freq,
+static int adf4382_pll_fract_n_compute(struct adf4382_dev *dev,
 				       uint64_t pfd_freq, uint16_t *n_int,
 				       uint32_t *frac1_word, uint32_t *frac2_word,
 				       uint32_t *mod2_word)
@@ -750,13 +750,13 @@ static int adf4382_pll_fract_n_compute(struct adf4382_dev *dev, uint64_t freq,
 	uint64_t rem;
 	uint64_t res;
 
-	*n_int = no_os_div64_u64_rem(freq, pfd_freq, &rem);
+	*n_int = no_os_div64_u64_rem(dev->freq, pfd_freq, &rem);
 
 	res = rem * ADF4382_MOD1WORD;
 	*frac1_word = (uint32_t)no_os_div64_u64_rem(res, pfd_freq, &rem);
 
 	*frac2_word = 0;
-	*mod2_word = 1;
+	*mod2_word = 0;
 
 	if (rem > 0)
 		return adf4382_frac2_compute(dev, rem, pfd_freq, frac2_word,
@@ -1180,7 +1180,7 @@ int adf4382_set_change_freq(struct adf4382_dev *dev)
 	//Calculates the PFD freq. the output will be in Hz
 	pfd_freq = adf4382_pfd_compute(dev);
 
-	ret = adf4382_pll_fract_n_compute(dev, dev->freq, pfd_freq, &n_int,
+	ret = adf4382_pll_fract_n_compute(dev, pfd_freq, &n_int,
 					  &frac1_word, &frac2_word, &mod2_word);
 	if (ret)
 		return ret;
@@ -1370,6 +1370,8 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 	if (ret)
 		return ret;
 
+	pfd_freq = adf4382_pfd_compute(dev);
+
 	for (clkout_div = 0; clkout_div <= dev->clkout_div_reg_val_max; clkout_div++) {
 		tmp = (1 << clkout_div) * dev->freq;
 		if (tmp < dev->vco_min || tmp > dev->vco_max)
@@ -1384,16 +1386,7 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 		return -EINVAL;
 	}
 
-	//Calculates the PFD freq. the output will be in Hz
-	pfd_freq = adf4382_pfd_compute(dev);
-
-	ret = adf4382_spi_update_bits(dev, 0x1F, ADF4382_CP_I_MSK,
-				      no_os_field_prep(ADF4382_CP_I_MSK,
-						      dev->cp_i));
-	if (ret)
-		return ret;
-
-	ret = adf4382_pll_fract_n_compute(dev, dev->freq, pfd_freq, &n_int,
+	ret = adf4382_pll_fract_n_compute(dev, pfd_freq, &n_int,
 					  &frac1_word, &frac2_word, &mod2_word);
 	if (ret)
 		return ret;
@@ -1454,9 +1447,18 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 			return ret;
 	}
 
+	ret = adf4382_spi_update_bits(dev, 0x30, ADF4382_MUTE_NCLK_MSK,
+				      0xff);
+	if (ret)
+		return ret;
+
 	ret = adf4382_spi_update_bits(dev, 0x15, ADF4382_INT_MODE_MSK,
 				      no_os_field_prep(ADF4382_INT_MODE_MSK,
 						      int_mode));
+	if (ret)
+		return ret;
+
+	ret = adf4382_spi_update_bits(dev, 0x30, ADF4382_MUTE_NCLK_MSK, 0);
 	if (ret)
 		return ret;
 
@@ -1537,7 +1539,8 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 	if (ret)
 		return ret;
 
-	ret = adf4382_spi_update_bits(dev, 0x31, ADF4382_DCLK_MODE_MSK, 0xff);
+	ret = adf4382_spi_update_bits(dev, 0x31, ADF4382_DCLK_MODE_MSK,
+				      pfd_freq > (11 * MHZ) ? 0xff : 0);
 	if (ret)
 		return ret;
 
@@ -1545,12 +1548,15 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 	if (ret)
 		return ret;
 
-	ret = adf4382_spi_update_bits(dev, 0x31, ADF4382_EN_ADC_CLK_MSK, 0xff);
+	ret = adf4382_spi_write(dev, 0x38, ADF4382_VCO_CAL_VTUNE);
 	if (ret)
 		return ret;
 
-	//VCO automatic level calibration time
 	ret = adf4382_spi_write(dev, 0x3A, ADF4382_VCO_CAL_ALC);
+	if (ret)
+		return ret;
+
+	ret = adf4382_spi_write(dev, 0x37, ADF4382_VCO_CAL_CNT);
 	if (ret)
 		return ret;
 
@@ -2103,6 +2109,56 @@ const struct no_os_clk_platform_ops adf4382_clk_ops = {
 };
 
 /**
+ * @brief Set the revision-specific register defaults.
+ * @param dev 	- The device structure.
+ * @return 	- 0 in case of success or negative error code.
+ */
+static int adf4382_set_defaults(struct adf4382_dev *dev)
+{
+	const struct reg_sequence *defaults;
+	uint8_t chip_ver;
+	uint16_t size;
+	uint16_t i;
+	int ret;
+
+	ret = adf4382_spi_read(dev, 0x67, &chip_ver);
+	if (ret)
+		return ret;
+
+	switch (chip_ver) {
+	case ADF4382_CHIP_VER_U2:
+		defaults = adf4382_u2_reg_defaults;
+		size = NO_OS_ARRAY_SIZE(adf4382_u2_reg_defaults);
+		break;
+	case ADF4382_CHIP_VER_U4:
+		defaults = adf4382_u4_reg_defaults;
+		size = NO_OS_ARRAY_SIZE(adf4382_u4_reg_defaults);
+		break;
+	case ADF4382_CHIP_VER_U5_A:
+	case ADF4382_CHIP_VER_U5_B:
+	case ADF4382_CHIP_VER_U5_C:
+	case ADF4382_CHIP_VER_U5_D:
+		defaults = adf4382_u5_reg_defaults;
+		size = NO_OS_ARRAY_SIZE(adf4382_u5_reg_defaults);
+		break;
+	default:
+		pr_err("Unknown chip version: 0x%X\n", chip_ver);
+		return -EINVAL;
+	}
+
+	pr_info("ADF4382 chip version: %u\n", chip_ver);
+
+	for (i = 0; i < size; i++) {
+		ret = adf4382_spi_write(dev, defaults[i].reg,
+					defaults[i].val);
+		if (ret)
+			return ret;
+	}
+
+	return 0;
+}
+
+/**
  * @brief Initializes the ADF4382.
  * @param dev	     - The device structure.
  * @param init_param - The structure containing the device initial parameters.
@@ -2113,7 +2169,7 @@ int adf4382_init(struct adf4382_dev **dev,
 {
 	struct adf4382_dev *device;
 	bool en = true;
-	uint8_t i;
+	uint8_t val;
 	int ret;
 
 	device = (struct adf4382_dev *)no_os_calloc(1, sizeof(*device));
@@ -2186,13 +2242,24 @@ int adf4382_init(struct adf4382_dev **dev,
 	if (ret)
 		goto error_spi;
 
-	for (i = 0; i < NO_OS_ARRAY_SIZE(adf4382_reg_defaults); i++) {
-		ret = adf4382_spi_write(device,
-					adf4382_reg_defaults[i].reg,
-					adf4382_reg_defaults[i].val);
-		if (ret)
-			goto error_spi;
-	}
+	val = no_os_field_prep(ADF4382_EN_RDBLR_MSK, device->ref_doubler_en) |
+	      no_os_field_prep(ADF4382_R_DIV_MSK, device->ref_div);
+	ret = adf4382_spi_write(device, 0x20, val);
+	if (ret)
+		goto error_spi;
+
+	ret = adf4382_spi_write(device, 0x1F, device->cp_i);
+	if (ret)
+		goto error_spi;
+
+	ret = adf4382_set_defaults(device);
+	if (ret)
+		goto error_spi;
+
+	ret = adf4382_spi_update_bits(device, 0x20, ADF4382_EN_AUTOCAL_MSK,
+				      ADF4382_EN_AUTOCAL_MSK);
+	if (ret)
+		goto error_spi;
 
 	if (ID_ADF4383 == init_param->id) {
 		ret = adf4383_update_core_bias_table(device);
