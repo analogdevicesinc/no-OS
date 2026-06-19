@@ -441,10 +441,14 @@ int xemacps_init(struct xemacps_desc **desc, struct xemacps_init_param *param)
 #endif
 #endif
 
-	cfg = XEmacPs_LookupConfig(param->device_id);
+#ifdef SDT
+	cfg = XEmacPs_LookupConfig((UINTPTR)param->device_id);
+#else
+	cfg = XEmacPs_LookupConfig((uint16_t)param->device_id);
+#endif
 	if (!cfg) {
-		printf("xemacps: LookupConfig failed for device %u\n",
-		       param->device_id);
+		printf("xemacps: LookupConfig failed for identifier 0x%lx\n",
+		       (unsigned long)param->device_id);
 		ret = -ENODEV;
 		goto free_desc;
 	}

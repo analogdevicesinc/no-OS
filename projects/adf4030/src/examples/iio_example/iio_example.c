@@ -37,11 +37,28 @@
 #include "iio_app.h"
 #include "no_os_print_log.h"
 
-/**
- * @brief IIO example main execution.
+/* PS (Zynq-7000 / ZynqMP) peripheral IDs */
+#ifdef _XPARAMETERS_PS_H_
+#define UART_DEVICE_ID		XPAR_XUARTPS_0_DEVICE_ID
+#define INTC_DEVICE_ID		XPAR_SCUGIC_SINGLE_DEVICE_ID
+#define UART_IRQ_ID		XPAR_XUARTPS_1_INTR
+#else
+/* Fallback for MicroBlaze / PL UART */
+#define UART_DEVICE_ID		XPAR_AXI_UART_DEVICE_ID
+#define INTC_DEVICE_ID		XPAR_INTC_SINGLE_DEVICE_ID
+#define UART_IRQ_ID		XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR
+#endif
+
+#define UART_EXTRA		&xilinx_lwip_uart_extra_ip
+#define UART_OPS		&xil_uart_ops
+
+/* Buffer depth for virtual IIO demo devices */
+#define SAMPLES_PER_CHANNEL_PLATFORM	2000
+#define UART_BAUDRATE			        115200
+
+/*
+ * GEM instance selection. Override at build time with -DGEM_INSTANCE=1
  *
- * @return ret - Result of the example execution. If working correctly, will
- *               execute continuously function iio_app_run and will not return.
  */
 int iio_example_main()
 {
@@ -51,10 +68,31 @@ int iio_example_main()
 	struct iio_app_init_param app_init_param = { 0 };
 	int ret;
 
-	adf4030_iio_ip.adf4030_dev_init = &adf4030_ip;
-	ret = adf4030_iio_init(&adf4030_iio_dev, &adf4030_iio_ip);
-	if (ret)
-		return ret;
+#ifdef SDT
+#if GEM_INSTANCE == 0 && defined(XPAR_XEMACPS_0_BASEADDR)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_0_BASEADDR
+#elif GEM_INSTANCE == 1 && defined(XPAR_XEMACPS_1_BASEADDR)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_1_BASEADDR
+#elif GEM_INSTANCE == 2 && defined(XPAR_XEMACPS_2_BASEADDR)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_2_BASEADDR
+#elif GEM_INSTANCE == 3 && defined(XPAR_XEMACPS_3_BASEADDR)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_3_BASEADDR
+#else
+#error "GEM_INSTANCE not available - check your .xsa / BSP configuration"
+#endif
+#else /* legacy non-SDT BSP */
+#if GEM_INSTANCE == 0 && defined(XPAR_XEMACPS_0_DEVICE_ID)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_0_DEVICE_ID
+#elif GEM_INSTANCE == 1 && defined(XPAR_XEMACPS_1_DEVICE_ID)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_1_DEVICE_ID
+#elif GEM_INSTANCE == 2 && defined(XPAR_XEMACPS_2_DEVICE_ID)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_2_DEVICE_ID
+#elif GEM_INSTANCE == 3 && defined(XPAR_XEMACPS_3_DEVICE_ID)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_3_DEVICE_ID
+#else
+#error "GEM_INSTANCE not available - check your .xsa / BSP configuration"
+#endif
+#endif /* SDT */
 
 	struct iio_app_device iio_devices[] = {
 		{

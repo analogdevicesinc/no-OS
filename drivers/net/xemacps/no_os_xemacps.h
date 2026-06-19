@@ -174,8 +174,10 @@ struct xemacps_desc;
  * @brief  Initialization parameters for the XEmacPs MAC driver.
  */
 struct xemacps_init_param {
-	/** XEmacPs device ID from xparameters.h (e.g. XPAR_XEMACPS_0_DEVICE_ID) */
-	uint16_t device_id;
+	/**
+	 * XEmacPs identifier from xparameters.h.
+	 */
+	uintptr_t device_id;
 	/** MDIO address of the on-board PHY */
 	uint8_t phy_addr;
 	/** Ethernet MAC address for this interface */
