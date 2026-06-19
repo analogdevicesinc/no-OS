@@ -90,4 +90,7 @@ and sense circuit */
 /* Read measurements */
 int read_measurements(struct ade7758_dev *dev);
 
+/* Print measurements */
+int print_measurements(struct ade7758_dev *dev);
+
 #endif /* __COMMON_DATA_H__ */

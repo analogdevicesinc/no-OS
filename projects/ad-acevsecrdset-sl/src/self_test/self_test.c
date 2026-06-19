@@ -40,7 +40,12 @@
 #include "interface.h"
 #if defined(REV_D)
 #include "inter.h"
+/* Declared here because inter.h exposes the opto flag getters under
+ * different names; the implementations live in inter.c. */
+int get_gpio_opto_out1_flag_state(void);
+int get_gpio_opto_out2_flag_state(void);
 #endif
+#include "rcd.h"
 #include "supply.h"
 #include "pilot.h"
 #include "relay.h"

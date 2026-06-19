@@ -39,6 +39,7 @@
 #include "no_os_print_log.h"
 #include "no_os_units.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "no_os_error.h"
 #include "maxim_uart.h"
 #include "maxim_gpio.h"
@@ -53,12 +54,18 @@
 // nvic descriptor
 struct no_os_irq_ctrl_desc *ade7913_nvic_desc;
 
+// data ready flag accessors (defined in interrupt.c)
+int get_drdy_flag_state(void);
+void reset_drdy_low_flag_state(void);
+
 int main(void)
 {
 	int ret;
 	uint8_t i = 0;
 	// data read
 	uint8_t reg_val;
+	// value broadcast to the SYNC_SNAP register
+	uint8_t sync_snap_en = ENABLE;
 	uint16_t cnt;
 	// structure for the rms values
 	struct rms_adc_values rms_values;
@@ -81,7 +88,7 @@ int main(void)
 	struct no_os_gpio_desc *gpio_desc;
 
 	/* Initialize NVIC */
-	ret = init_nvic(&ade7913_nvic_desc);
+	ret = init_nvic(ade7913_nvic_desc);
 	if (ret)
 		goto error;
 	/* Initialize UART */
@@ -214,7 +221,7 @@ int main(void)
 		if (ret)
 			goto free_dev;
 		ret = ade7913_write_broadcast(ade7913_dev,
-					      ADE7913_REG_SYNC_SNAP, ENABLE);
+					      ADE7913_REG_SYNC_SNAP, &sync_snap_en);
 		if (ret)
 			goto free_dev;
 		ade7913_dev->spi_desc = ade7913_dev->spi_desc0;
@@ -240,7 +247,7 @@ int main(void)
 		if (ret)
 			goto free_dev;
 		ret = ade7913_write_broadcast(ade7913_dev,
-					      ADE7913_REG_SYNC_SNAP, ENABLE);
+					      ADE7913_REG_SYNC_SNAP, &sync_snap_en);
 		if (ret)
 			goto free_dev;
 		ade7913_dev->spi_desc = ade7913_dev->spi_desc0;

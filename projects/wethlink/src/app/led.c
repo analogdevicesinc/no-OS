@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "no_os_gpio.h"
+#include "no_os_delay.h"
 #include "parameters.h"
 #include "led.h"
 
