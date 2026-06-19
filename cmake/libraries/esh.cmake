@@ -50,4 +50,16 @@ target_compile_definitions(no-os PRIVATE
     ECHO_INIT_VALUE=1
 )
 
+# esh keeps its command/auto-load tables in dedicated sections (.cmd_list/.auto_list)
+# whose boundary symbols (__CMD_TABLE_START__/__AUTO_TABLE_START__) are defined by a
+# supplemental linker script. GNU ld treats additional -T scripts as additive, so this
+# augments the platform's main linker script rather than replacing it. Propagated as an
+# INTERFACE option so it reaches the final executable link (no-os is a static library).
+target_link_options(no-os INTERFACE
+    "-T${ESH_WRAPPER_DIR}/esh_linker.ld"
+)
+set_target_properties(no-os PROPERTIES
+    INTERFACE_LINK_DEPENDS "${ESH_WRAPPER_DIR}/esh_linker.ld"
+)
+
 message(STATUS "esh configured from: ${ESH_SOURCE_DIR}")
