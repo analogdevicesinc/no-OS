@@ -720,6 +720,46 @@ int example_main()
 
 	/*
 	 * ----------------------------------------------------------------
+	 * RX CMD DMA raw capture — single 64-bit CMD response.
+	 * ----------------------------------------------------------------
+	 */
+	{
+		volatile uint32_t *rx_cmd_buf =
+			(volatile uint32_t *)(uintptr_t)RX_CMD_DDR_BASEADDR;
+
+		memset((void *)(uintptr_t)RX_CMD_DDR_BASEADDR, 0,
+		       sizeof(tx_cmd_read));
+		Xil_DCacheFlushRange(RX_CMD_DDR_BASEADDR,
+				     sizeof(tx_cmd_read));
+
+		struct axi_dma_transfer cap_transfer = {
+			.size = sizeof(tx_cmd_read),
+			.transfer_done = 0,
+			.cyclic = NO,
+			.src_addr = 0,
+			.dest_addr = RX_CMD_DDR_BASEADDR,
+		};
+
+		ret = axi_dmac_transfer_start(rx_cmd_dmac, &cap_transfer);
+		if (ret)
+			pr_err("RX CMD capture start failed: %d\n", ret);
+
+		ret = axi_dmac_transfer_wait_completion(rx_cmd_dmac, 5000);
+		if (ret)
+			pr_err("RX CMD capture timeout\n");
+
+		Xil_DCacheInvalidateRange(RX_CMD_DDR_BASEADDR,
+					  sizeof(tx_cmd_read));
+
+		printf("RX CMD DMA raw capture:\n");
+		for (i = 0; i < NO_OS_ARRAY_SIZE(tx_cmd_read); i++)
+			printf("  rx_cmd_cap[%u] = 0x%08lX\n",
+			       i, (unsigned long)rx_cmd_buf[i]);
+		printf("\n");
+	}
+
+	/*
+	 * ----------------------------------------------------------------
 	 * TX CMD DMA transfer (tx_cmd_streaming_read).
 	 * ----------------------------------------------------------------
 	 */
@@ -729,6 +769,11 @@ int example_main()
 	getchar();
 
 	{
+		uint32_t numwords = (tx_cmd_streaming_read[0] >> 10) & 0x3F;
+		volatile uint32_t *rx_cmd_buf =
+			(volatile uint32_t *)(uintptr_t)RX_CMD_DDR_BASEADDR;
+		uint32_t w;
+
 		for (i = 0; i < NO_OS_ARRAY_SIZE(tx_cmd_streaming_read); i++)
 			no_os_axi_io_write(TX_CMD_DDR_BASEADDR,
 					   i * sizeof(uint32_t),
@@ -742,13 +787,54 @@ int example_main()
 			.dest_addr = 0,
 		};
 
+		memset((void *)(uintptr_t)RX_CMD_DDR_BASEADDR, 0,
+		       numwords * 8);
 		Xil_DCacheFlush();
 
 		ret = axi_dmac_transfer_start(tx_cmd_dmac, &cmd_transfer);
 		if (ret)
 			pr_err("axi_dmac_transfer_start(tx_cmd_streaming_read) failed: %d\n", ret);
 		else
-			pr_info("TX CMD DMA transfer of CMD STREAMING READ started\n");
+			pr_info("TX CMD DMA transfer of CMD STREAMING READ started (NUMWORDS=%lu)\n",
+				(unsigned long)numwords);
+
+		for (w = 0; w < numwords; w++) {
+			struct axi_dma_transfer rx_one = {
+				.size = 8,
+				.transfer_done = 0,
+				.cyclic = NO,
+				.src_addr = 0,
+				.dest_addr = RX_CMD_DDR_BASEADDR +
+					     w * 8,
+			};
+
+			ret = axi_dmac_transfer_start(rx_cmd_dmac,
+						      &rx_one);
+			if (ret) {
+				pr_err("RX CMD resp[%lu] start failed: %d\n",
+				       (unsigned long)w, ret);
+				break;
+			}
+
+			ret = axi_dmac_transfer_wait_completion(
+				rx_cmd_dmac, 5000);
+			if (ret) {
+				pr_err("RX CMD resp[%lu] timeout\n",
+				       (unsigned long)w);
+				break;
+			}
+		}
+
+		Xil_DCacheInvalidateRange(RX_CMD_DDR_BASEADDR,
+					  numwords * 8);
+
+		printf("RX CMD streaming read capture (%lu responses):\n",
+		       (unsigned long)numwords);
+		for (i = 0; i < numwords; i++)
+			printf("  resp[%u] = 0x%08lX_%08lX\n", i,
+			       (unsigned long)rx_cmd_buf[i * 2 + 1],
+			       (unsigned long)rx_cmd_buf[i * 2]);
+		printf("\n");
 	}
 
 	/*
