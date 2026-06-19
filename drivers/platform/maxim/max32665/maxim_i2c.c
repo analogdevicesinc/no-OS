@@ -62,13 +62,13 @@ void I2C0_IRQHandler(void)
  */
 void I2C1_IRQHandler(void)
 {
-	MXC_I2C_AsyncHandler(MXC_BASE_I2C1_BUS0);
+	MXC_I2C_AsyncHandler(MXC_I2C1_BUS0);
 }
 
 #ifdef MXC_I2C2
 void I2C2_IRQHandler(void)
 {
-	MXC_I2C_AsyncHandler(MXC_BASE_I2C2_BUS0);
+	MXC_I2C_AsyncHandler(MXC_I2C2_BUS0);
 }
 #endif
 
