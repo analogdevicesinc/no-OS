@@ -47,10 +47,6 @@ no_os_include_dir_ifdef(CONFIG_USB_UART_MAXIM ${MAXIM_LIBRARIES}/MAXUSB/include/
 no_os_include_dir_ifdef(CONFIG_USB_UART_MAXIM ${MAXIM_LIBRARIES}/MAXUSB/include/enumerate)
 no_os_include_dir_ifdef(CONFIG_USB_UART_MAXIM ${MAXIM_LIBRARIES}/MAXUSB/include/devclass)
 
-if(${CONFIG_USB_UART_MAXIM})
-        target_compile_definitions(no-os PUBLIC -DNO_OS_USB_UART=1)
-endif()
-
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET})
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/common)
 

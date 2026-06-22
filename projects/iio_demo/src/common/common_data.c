@@ -72,7 +72,7 @@ struct dac_demo_init_param dac_init_par = {
 uint8_t in_buff[MAX_SIZE_BASE_ADDR] = {0};
 uint8_t out_buff[MAX_SIZE_BASE_ADDR] = {0};
 
-#ifdef IIO_SW_TRIGGER_EXAMPLE
+#ifdef CONFIG_IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE
 struct iio_sw_trig_init_param adc_trig_ip = {
 	.name = ADC_DEMO_TRIG_NAME
 };
@@ -82,7 +82,7 @@ struct iio_sw_trig_init_param dac_trig_ip = {
 };
 #endif
 
-#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+#ifdef CONFIG_IIO_DEMO_IIO_TIMER_TRIGGER_EXAMPLE
 /* Adc Demo timer init parameter */
 struct no_os_timer_init_param adc_demo_tip = {
 	.id = ADC_DEMO_TIMER_DEVICE_ID,

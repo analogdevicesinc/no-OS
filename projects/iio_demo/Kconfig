@@ -15,12 +15,4 @@ config IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE
 
 endchoice
 
-config IIO_DEMO_USB_UART
-	bool "Use USB CDC as UART transport"
-	default n
-	help
-	  Use USB CDC ACM instead of a hardware UART for the IIO
-	  communication channel. Requires a USB CDC capable board
-	  and the platform USB UART driver.
-
 endmenu
