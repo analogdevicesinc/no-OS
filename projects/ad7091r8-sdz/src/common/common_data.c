@@ -67,35 +67,3 @@ struct ad7091r8_init_param ad7091r8_ip = {
 	.device_id = AD7091R8,
 #endif
 };
-
-#ifdef IIO_TIMER_TRIGGER_EXAMPLE
-/* AD7091R-8 timer init parameter */
-struct no_os_timer_init_param ad7091r8_timer_ip = {
-	.id = AD7091R8_TIMER_DEVICE_ID,
-	.freq_hz = AD7091R8_TIMER_FREQ_HZ,
-	.ticks_count = AD7091R8_TIMER_TICKS_COUNT,
-	.platform_ops = TIMER_OPS,
-	.extra = AD7091R8_TIMER_EXTRA,
-};
-
-/* AD7091R-8 timer irq init parameter */
-struct no_os_irq_init_param ad7091r8_timer_irq_ip = {
-	.irq_ctrl_id = 0,
-	.platform_ops = TIMER_IRQ_OPS,
-	.extra = AD7091R8_TIMER_IRQ_EXTRA,
-};
-
-/* AD7091R-8 timer trigger callback info */
-const struct iio_hw_trig_cb_info ad7091r8_timer_cb_info = {
-	.event = NO_OS_EVT_TIM_ELAPSED,
-	.peripheral = NO_OS_TIM_IRQ,
-	.handle = AD7091R8_TIMER_CB_HANDLE,
-};
-
-/* AD7091R-8 timer trigger init parameter */
-struct iio_hw_trig_init_param ad7091r8_timer_trig_ip = {
-	.irq_id = AD7091R8_TIMER_TRIG_IRQ_ID,
-	.cb_info = ad7091r8_timer_cb_info,
-	.name = AD7091R8_TIMER_TRIG_NAME,
-};
-#endif
