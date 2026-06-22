@@ -43,7 +43,7 @@
  */
 struct adt7420_iio_dev {
 	struct adt7420_dev *adt7420_dev;
-	struct iio_dev *iio_dev;
+	struct iio_device *iio_dev;
 	uint32_t active_channels;
 	uint8_t no_active_channels;
 };
