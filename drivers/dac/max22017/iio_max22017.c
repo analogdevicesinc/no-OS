@@ -390,7 +390,7 @@ static struct iio_channel max22017_iio_channels[] = {
 };
 
 static struct iio_device max22017_iio_dev = {
-	.channels = &max22017_iio_channels,
+	.channels = max22017_iio_channels,
 	.num_ch = NO_OS_ARRAY_SIZE(max22017_iio_channels),
 	.debug_reg_read = (int32_t (*)())max22017_iio_reg_read,
 	.debug_reg_write = (int32_t (*)())max22017_iio_reg_write,
