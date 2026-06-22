@@ -247,7 +247,7 @@ post_eeprom:
 		.rx_tolerance = nvmp->data.rx_tolerance,
 		.tx_auto_ifvga = nvmp->data.tx_auto_ifvga,
 		.rx_auto_ifvga_rflna = nvmp->data.rx_auto_ifvga_rflna,
-		.temp_correlation = &nvmp->data.temp_correlation[hbtx],
+		.temp_correlation = nvmp->data.temp_correlation[hbtx],
 		.id = id,
 		.hbtx = hbtx,
 		.crc8 = crc8,
