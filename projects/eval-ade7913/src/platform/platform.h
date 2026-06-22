@@ -76,6 +76,6 @@
 #define NVIC_GPIO_IRQ               GPIO2_IRQn
 
 // Init NVIC
-int init_nvic(struct no_os_irq_ctrl_desc *ade7913_nvic_desc);
+int init_nvic(struct no_os_irq_ctrl_desc **ade7913_nvic_desc);
 
 #endif /* __PLATFORM_H__ */

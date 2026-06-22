@@ -121,10 +121,10 @@ struct no_os_irq_init_param ade7913_gpio_irq_ip = {
 
 /**
  * @brief Init NVIC
- * @param ade7913_nvic_desc - irq nvic descriptor
+ * @param ade7913_nvic_desc - pointer to the irq nvic descriptor to allocate
  * @return 0 in case of success, negative error code otherwise.
  */
-int init_nvic(struct no_os_irq_ctrl_desc *ade7913_nvic_desc)
+int init_nvic(struct no_os_irq_ctrl_desc **ade7913_nvic_desc)
 {
 	int ret;
 
@@ -137,23 +137,23 @@ int init_nvic(struct no_os_irq_ctrl_desc *ade7913_nvic_desc)
 		.platform_ops = &max_irq_ops,
 	};
 	/* Initialize GPIO IRQ controller */
-	ret = no_os_irq_ctrl_init(&ade7913_nvic_desc,
+	ret = no_os_irq_ctrl_init(ade7913_nvic_desc,
 				  &ade7913_nvic_ip);
 	if (ret)
 		goto error;
-	ret = no_os_irq_set_priority(ade7913_nvic_desc,
+	ret = no_os_irq_set_priority(*ade7913_nvic_desc,
 				     GPIO2_IRQn, 1);
 	if (ret)
 		goto remove_irq;
 
-	ret = no_os_irq_enable(ade7913_nvic_desc, GPIO2_IRQn);
+	ret = no_os_irq_enable(*ade7913_nvic_desc, GPIO2_IRQn);
 	if (ret)
 		goto remove_irq;
 
 	return 0;
 
 remove_irq:
-	no_os_irq_ctrl_remove(ade7913_nvic_desc);
+	no_os_irq_ctrl_remove(*ade7913_nvic_desc);
 
 error:
 	pr_err("ERROR\n");
