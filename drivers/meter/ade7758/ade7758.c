@@ -64,6 +64,10 @@ int ade7758_init(struct ade7758_dev **device,
 	struct ade7758_dev *dev;
 	/* value read from register */
 	uint32_t reg_val;
+	/* interrupt status indicator */
+	uint8_t int_status;
+	/* status register dump for irq clear */
+	int32_t rstatus;
 	/* timeout value */
 	uint16_t timeout = 1000;
 
@@ -85,16 +89,16 @@ int ade7758_init(struct ade7758_dev **device,
 		goto error_spi;
 	/* wait for reset ack */
 	do {
-		ret = ade7758_get_int_status(dev, ADE7758_RESET_MSK, &reg_val);
+		ret = ade7758_get_int_status(dev, ADE7758_RESET_MSK, &int_status);
 		if (ret)
 			goto error_spi;
-	} while ((!reg_val) && (timeout--));
+	} while ((!int_status) && (timeout--));
 	if (!timeout) {
 		ret = -ETIMEDOUT;
 		goto error_spi;
 	}
 	/* reset the status register */
-	ret = ade7758_clear_irq_status(dev, &reg_val);
+	ret = ade7758_clear_irq_status(dev, &rstatus);
 	if (ret)
 		goto error_spi;
 	/* Read version product */
