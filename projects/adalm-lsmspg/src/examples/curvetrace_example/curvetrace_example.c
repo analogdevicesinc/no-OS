@@ -719,7 +719,7 @@ int lm75_example(struct no_os_uart_desc *uart_desc)
 		.i2c_ip = &lm75_i2c_ip,
 	};
 	int ret;
-	uint32_t temp_raw;
+	uint16_t temp_raw;
 	uint32_t temp;
 
 
