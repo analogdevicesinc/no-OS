@@ -39,6 +39,7 @@
 #include "gpio.h"
 #include "tmr.h"
 #include "adc.h"
+#include "nvic_table.h"
 
 // Flag indicating PWM values have been acquired
 static volatile int flag_pwm_low;
@@ -306,7 +307,8 @@ int pilot_setup_adc(void)
 unsigned int pilot_read_val(void)
 {
 	//clear ADC done interrupt flag
-	MXC_ADC_RevA_ClearFlags(MXC_ADC, MXC_F_ADC_REVA_INTR_DONE_IF);
+	MXC_ADC_RevA_ClearFlags((mxc_adc_reva_regs_t *)MXC_ADC,
+				MXC_F_ADC_REVA_INTR_DONE_IF);
 
 	//set start bit
 	MXC_ADC->ctrl |= MXC_F_ADC_REVA_CTRL_START;

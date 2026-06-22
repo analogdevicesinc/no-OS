@@ -388,11 +388,13 @@ int state_machine()
 
 		// ----------------------------- READ TEMPERATURE----------------------------------------
 		if (TEMPERATURE_READ_RATE <= multiple_20ms_adt75) {
-			ret = adt75_reg_read(adt75_desc, 0, &adt75_value);
+			uint16_t adt75_raw = 0;
+
+			ret = adt75_reg_read(adt75_desc, 0, &adt75_raw);
 			if (ret)
 				goto error;
 
-			adt75_value = no_os_field_get(ADT75_TEMP_MASK, adt75_value);
+			adt75_value = no_os_field_get(ADT75_TEMP_MASK, adt75_raw);
 			stout->temperature = no_os_sign_extend32(adt75_value, ADT75_SIGN_BIT);
 			stout->temperature *= MILLIDEGREE_PER_DEGREE / ADT75_TEMP_DIV;
 			pr_debug("Temperature: %.03f C\n", (double)stout->temperature / 1000);
