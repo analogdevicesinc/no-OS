@@ -40,6 +40,7 @@
 #include "no_os_units.h"
 #include "no_os_util.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
 #include "maxim_uart.h"
 #include "maxim_gpio.h"
 #include "maxim_uart_stdio.h"
@@ -47,6 +48,9 @@
 #include "maxim_spi.h"
 #include "ade7880.h"
 #include "platform.h"
+
+/* Defined in platform.c */
+int interface_toggle_led(struct no_os_gpio_desc *gpio_led_desc);
 
 int main(void)
 {
