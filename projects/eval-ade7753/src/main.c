@@ -125,7 +125,7 @@ int main(void)
 	ade7753_ip.spi_init = &ade7753_spi_ip;
 
 	/* Init the reset */
-	ade7753_ip.gpio_reset = reset_desc;
+	ade7753_ip.gpio_reset = &gpio_reset_ip;
 
 	no_os_uart_stdio(uart_desc);
 
