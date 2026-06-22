@@ -626,24 +626,27 @@ int w5500_network_init(struct w5500_network_dev **net_dev,
 			goto free_dev;
 	}
 
-#ifdef NO_OS_IP
-	sscanf(NO_OS_IP, "%hhu.%hhu.%hhu.%hhu", &dev->ip[0], &dev->ip[1], &dev->ip[2],
+#ifdef CONFIG_NO_OS_IP
+	sscanf(CONFIG_NO_OS_IP, "%hhu.%hhu.%hhu.%hhu", &dev->ip[0], &dev->ip[1],
+	       &dev->ip[2],
 	       &dev->ip[3]);
 	ret = w5500_set_ip(dev->mac_dev, dev->ip);
 	if (ret)
 		goto free_mac_dev;
 #endif
 
-#ifdef NO_OS_NETMASK
-	sscanf(NO_OS_NETMASK, "%hhu.%hhu.%hhu.%hhu", &dev->netmask[0], &dev->netmask[1],
+#ifdef CONFIG_NO_OS_NETMASK
+	sscanf(CONFIG_NO_OS_NETMASK, "%hhu.%hhu.%hhu.%hhu", &dev->netmask[0],
+	       &dev->netmask[1],
 	       &dev->netmask[2], &dev->netmask[3]);
 	ret = w5500_set_subnet(dev->mac_dev, dev->netmask);
 	if (ret)
 		goto free_mac_dev;
 #endif
 
-#ifdef NO_OS_GATEWAY
-	sscanf(NO_OS_GATEWAY, "%hhu.%hhu.%hhu.%hhu", &dev->gateway[0], &dev->gateway[1],
+#ifdef CONFIG_NO_OS_GATEWAY
+	sscanf(CONFIG_NO_OS_GATEWAY, "%hhu.%hhu.%hhu.%hhu", &dev->gateway[0],
+	       &dev->gateway[1],
 	       &dev->gateway[2], &dev->gateway[3]);
 	ret = w5500_set_gateway(dev->mac_dev, dev->gateway);
 	if (ret)
