@@ -245,9 +245,9 @@ static int ltc7871_iio_get_mod_freq(void *dev, char *buf, uint32_t len,
 static int ltc7871_iio_set_mod_freq(void *dev, char *buf, uint32_t len,
 				    const struct iio_ch_info *channel, intptr_t priv);
 static int ltc7871_iio_get_pwmen_pin(void *dev, char *buf, uint32_t len,
-				     const struct iio_ch_info *channel);
+				     const struct iio_ch_info *channel, intptr_t priv);
 static int ltc7871_iio_set_pwmen_pin(void *dev, char *buf, uint32_t len,
-				     const struct iio_ch_info *channel);
+				     const struct iio_ch_info *channel, intptr_t priv);
 
 static struct iio_channel const ltc7871_channels[] = {
 	//no available channel
@@ -638,6 +638,8 @@ uint32_t ltc7871_iio_get_mask_mfr_chip_ctrl(enum ltc7871_iio_mfr_chip_ctrl_attrs
  */
 static int ltc7871_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
 {
+	int ret;
+	uint8_t reg_val;
 	struct ltc7871_iio_dev *iio_ltc7871;
 	struct ltc7871_dev *ltc7871;
 
@@ -647,7 +649,13 @@ static int ltc7871_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
 	iio_ltc7871 = (struct ltc7871_iio_dev *)dev;
 	ltc7871 = iio_ltc7871->ltc7871_dev;
 
-	return ltc7871_reg_read(ltc7871, reg, readval);
+	ret = ltc7871_reg_read(ltc7871, reg, &reg_val);
+	if (ret)
+		return ret;
+
+	*readval = reg_val;
+
+	return 0;
 }
 
 /**
@@ -685,7 +693,7 @@ static int ltc7871_iio_read_mfr_fault(void *dev, char *buf, uint32_t len,
 				      const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
-	uint8_t value;
+	bool value;
 	uint8_t reg_data;
 	uint32_t mask = ltc7871_iio_get_mask_mfr_fault(priv);
 	struct ltc7871_iio_dev *iio_ltc7871;
@@ -718,7 +726,7 @@ static int ltc7871_iio_read_mfr_oc_fault(void *dev, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
-	uint8_t value;
+	bool value;
 	uint8_t reg_data;
 	uint32_t mask = ltc7871_iio_get_mask_mfr_oc_fault(priv);
 	struct ltc7871_iio_dev *iio_ltc7871;
@@ -751,7 +759,7 @@ static int ltc7871_iio_read_mfr_noc_fault(void *dev, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
-	uint8_t value;
+	bool value;
 	uint8_t reg_data;
 	uint32_t mask = ltc7871_iio_get_mask_mfr_noc_fault(priv);
 	struct ltc7871_iio_dev *iio_ltc7871;
@@ -784,7 +792,7 @@ static int ltc7871_iio_read_mfr_status(void *dev, char *buf, uint32_t len,
 				       const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
-	uint8_t value;
+	bool value;
 	uint8_t reg_data;
 	uint32_t mask = ltc7871_iio_get_mask_mfr_status(priv);
 	struct ltc7871_iio_dev *iio_ltc7871;
@@ -961,7 +969,7 @@ static int ltc7871_iio_read_pec_fault(void *dev, char *buf, uint32_t len,
 				      const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
-	uint8_t value;
+	bool value;
 	uint8_t reg_data;
 	uint32_t mask = ltc7871_iio_get_mask_mfr_chip_ctrl(priv);
 	struct ltc7871_iio_dev *iio_ltc7871;
@@ -994,7 +1002,7 @@ static int ltc7871_iio_set_write_protect(void *dev, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
-	uint8_t value;
+	int32_t value;
 	uint8_t mask = ltc7871_iio_get_mask_mfr_chip_ctrl(priv);
 	struct ltc7871_iio_dev *iio_ltc7871;
 	struct ltc7871_dev *ltc7871;
@@ -1026,7 +1034,7 @@ static int ltc7871_iio_read_write_protect(void *dev, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
-	uint8_t value;
+	bool value;
 
 	struct ltc7871_iio_dev *iio_ltc7871;
 	struct ltc7871_dev *ltc7871;
@@ -1091,7 +1099,7 @@ static int ltc7871_iio_write_mfr_idac_vlow(void *dev, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
-	int8_t value;
+	int32_t value;
 	struct ltc7871_iio_dev *iio_ltc7871;
 	struct ltc7871_dev *ltc7871;
 
@@ -1155,7 +1163,7 @@ static int ltc7871_iio_write_mfr_idac_vhigh(void *dev, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
-	int8_t value;
+	int32_t value;
 	struct ltc7871_iio_dev *iio_ltc7871;
 	struct ltc7871_dev *ltc7871;
 
@@ -1219,7 +1227,7 @@ static int ltc7871_iio_write_mfr_idac_setcur(void *dev, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
-	int8_t value;
+	int32_t value;
 	struct ltc7871_iio_dev *iio_ltc7871;
 	struct ltc7871_dev *ltc7871;
 
@@ -1347,7 +1355,7 @@ static int ltc7871_iio_set_mod_freq(void *dev, char *buf, uint32_t len,
 				    const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
-	int8_t value;
+	int32_t value;
 	struct ltc7871_iio_dev *iio_ltc7871;
 	struct ltc7871_dev *ltc7871;
 
@@ -1374,7 +1382,7 @@ static int ltc7871_iio_set_mod_freq(void *dev, char *buf, uint32_t len,
  * 		    In case of success, the size of the read data is returned.
 */
 static int ltc7871_iio_get_pwmen_pin(void *dev, char *buf, uint32_t len,
-				     const struct iio_ch_info *channel)
+				     const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
 	struct ltc7871_iio_dev *iio_ltc7871;
@@ -1405,7 +1413,7 @@ static int ltc7871_iio_get_pwmen_pin(void *dev, char *buf, uint32_t len,
  * 		    In case of success, the size of the read data is returned.
  */
 static int ltc7871_iio_set_pwmen_pin(void *dev, char *buf, uint32_t len,
-				     const struct iio_ch_info *channel)
+				     const struct iio_ch_info *channel, intptr_t priv)
 {
 	int ret;
 	uint8_t value;
