@@ -56,7 +56,7 @@ int main(void)
 	/* counter for display values interval */
 	uint32_t cnt;
 	/* value read from the adhv registers */
-	uint8_t value;
+	int8_t value;
 	/* used to set the alarm levels */
 	uint8_t level;
 
@@ -104,7 +104,7 @@ int main(void)
 	adhv4710_ip.spi_init = &adhv4710_spi_ip;
 
 	/* Init the reset */
-	adhv4710_ip.gpio_reset = reset_desc;
+	adhv4710_ip.gpio_reset = &gpio_reset_ip;
 
 	no_os_uart_stdio(uart_desc);
 
@@ -118,7 +118,7 @@ int main(void)
 		return -ENOMEM;
 
 	/* Hard reset the ADE */
-	adhv4710_dev->gpio_reset = adhv4710_ip.gpio_reset;
+	adhv4710_dev->gpio_reset = reset_desc;
 	ret = adhv4710_hw_reset(adhv4710_dev);
 	if (ret)
 		goto free_dev;
