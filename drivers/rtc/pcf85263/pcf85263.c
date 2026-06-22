@@ -84,7 +84,7 @@ int pcf85263_update_bits(struct pcf85263_dev *dev, uint8_t reg_addr,
 			 uint8_t mask, uint8_t reg_data)
 {
 	int ret;
-	uint32_t data;
+	uint8_t data;
 
 	ret = pcf85263_read(dev, reg_addr, &data);
 	if (ret)
