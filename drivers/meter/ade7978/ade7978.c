@@ -304,7 +304,7 @@ int ade7978_init(struct ade7978_dev **device,
 	/* chip id read value */
 	uint32_t chip_id;
 	/* data read */
-	uint32_t data;
+	uint8_t data;
 
 	dev = (struct ade7978_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
