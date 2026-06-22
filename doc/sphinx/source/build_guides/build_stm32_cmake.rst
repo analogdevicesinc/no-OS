@@ -32,6 +32,8 @@ The following STM32 boards (presets) are available out of the box:
          - STM32F756 (Cortex-M7)
        * - ``sdp-ck1z``
          - stm32f469 (Cortex-M4)
+       * - ``nucleo-f413zh``
+         - stm32f413 (Cortex-M4)
        * - ``adin1110ebz``
          - STM32L4S5 (Cortex-M4)
 
