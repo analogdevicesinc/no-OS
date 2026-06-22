@@ -52,7 +52,7 @@ struct mdio_spi_extra {
  * @return 0 in case of success, negative code otherwise
  */
 int mdio_spi_init(struct no_os_mdio_desc **dev,
-		  struct no_os_mdio_init_param *ip)
+		  const struct no_os_mdio_init_param *ip)
 {
 	int ret;
 	struct mdio_spi_init_param *msip;
