@@ -34,6 +34,8 @@
 #include "common_data.h"
 #include "no_os_error.h"
 
+extern int example_main();
+
 int main()
 {
 	return example_main();
