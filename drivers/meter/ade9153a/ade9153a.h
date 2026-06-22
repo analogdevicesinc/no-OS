@@ -666,9 +666,9 @@ struct ade9153a_init_param {
 	/** GPIO RESET descriptor used to reset device (HW reset) */
 	struct no_os_gpio_init_param  	*gpio_reset;
 	/** GPIO ss descriptor used to config comms */
-	struct no_os_spi_init_param 	*gpio_ss;
+	struct no_os_gpio_init_param 	*gpio_ss;
 	/** GPIO sck descriptor used to config comms */
-	struct no_os_spi_init_param	*gpio_sck;
+	struct no_os_gpio_init_param	*gpio_sck;
 	/** Enable SPI interface */
 	uint8_t				spi_en;
 	/** IRQ device descriptor used to handle interrupt routine for GPIO RDY */
@@ -932,7 +932,7 @@ int ade9153a_get_zxbi(struct ade9153a_dev *dev, uint8_t *status);
 int ade9153a_get_zxai(struct ade9153a_dev *dev, uint8_t *status);
 
 // Get zero crossing detect on V ch indicator.
-ade9153a_get_zxav(struct ade9153a_dev *dev, uint8_t *status);
+int ade9153a_get_zxav(struct ade9153a_dev *dev, uint8_t *status);
 
 // Get reset done indicator.
 int ade9153a_get_rstdone(struct ade9153a_dev *dev, uint8_t *status);
@@ -1031,7 +1031,7 @@ int ade9153a_clear_egyrdy(struct ade9153a_dev *dev);
 int ade9153a_clear_cf2(struct ade9153a_dev *dev);
 
 // Clear CF1 pulse issued int mask.
-ade9153a_clear_cf1(struct ade9153a_dev *dev);
+int ade9153a_clear_cf1(struct ade9153a_dev *dev);
 
 // Clear CF2 polarity change int mask.
 int ade9153a_clear_cf2_chg(struct ade9153a_dev *dev);

@@ -388,7 +388,7 @@ int ade9153a_read(struct ade9153a_dev *dev, uint16_t reg_addr,
 		buff[i] = 0;
 
 	addr = (uint16_t) no_os_field_prep(NO_OS_GENMASK(16, 4), reg_addr);
-	no_os_put_unaligned_be16(addr, &buff);
+	no_os_put_unaligned_be16(addr, buff);
 	buff[1] = buff[1] | ADE9153A_SPI_READ;
 
 	if ((reg_addr > ADE9153A_START_16ADDR) & (reg_addr < ADE9153A_END_16ADDR)) {
@@ -453,7 +453,7 @@ int ade9153a_write(struct ade9153a_dev *dev, uint16_t reg_addr,
 		return -ENODEV;
 
 	addr = (uint16_t) no_os_field_prep(NO_OS_GENMASK(16, 4), reg_addr);
-	no_os_put_unaligned_be16(addr, &buff);
+	no_os_put_unaligned_be16(addr, buff);
 
 	if ((reg_addr > ADE9153A_START_16ADDR) & (reg_addr < ADE9153A_END_16ADDR)) {
 		no_os_put_unaligned_be16(reg_data, &buff[data_byte_offset]);
@@ -1009,7 +1009,7 @@ int ade9153a_ipk_val(struct ade9153a_dev *dev, uint32_t *val)
 	ret = ade9153a_read(dev, ADE9153A_REG_IPEAK, &reg_val);
 	if (ret)
 		return ret;
-	*val = no_os_get_unaligned_be24(&reg_val);
+	*val = reg_val & (uint32_t)(ADE9153A_IPEAKVAL_MSK);
 
 	return 0;
 }
@@ -1034,7 +1034,7 @@ int ade9153a_vpk_val(struct ade9153a_dev *dev, uint32_t *val)
 	ret = ade9153a_read(dev, ADE9153A_REG_VPEAK, &reg_val);
 	if (ret)
 		return ret;
-	*val = no_os_get_unaligned_be24(&reg_val);
+	*val = reg_val & (uint32_t)(ADE9153A_VPEAKVAL_MSK);
 
 	return 0;
 }
@@ -1729,7 +1729,7 @@ int ade9153a_clear_chip_stat(struct ade9153a_dev *dev, uint32_t *reg_val)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_read(dev, ADE9153A_REG_CHIP_STATUS, &reg_val);
+	return ade9153a_read(dev, ADE9153A_REG_CHIP_STATUS, reg_val);
 }
 
 /**
@@ -1757,7 +1757,7 @@ int ade9153a_clear_event_stat(struct ade9153a_dev *dev, uint32_t *reg_val)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_read(dev, ADE9153A_REG_EVENT_STATUS, &reg_val);
+	return ade9153a_read(dev, ADE9153A_REG_EVENT_STATUS, reg_val);
 }
 
 /**
@@ -1785,7 +1785,7 @@ int ade9153a_clear_ms_stat(struct ade9153a_dev *dev, uint32_t *reg_val)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_read(dev, ADE9153A_REG_MS_STATUS_IRQ, &reg_val);
+	return ade9153a_read(dev, ADE9153A_REG_MS_STATUS_IRQ, reg_val);
 }
 
 /**
@@ -2638,7 +2638,7 @@ int ade9153a_get_phnoload_status(struct ade9153a_dev *dev, uint8_t *status)
 {
 	int ret;
 	/* register value read */
-	uint8_t reg_val;
+	uint32_t reg_val;
 
 	if (!dev)
 		return -ENODEV;
@@ -3977,7 +3977,7 @@ int ade9153a_temp_val(struct ade9153a_dev *dev,
 	/* temperature gain value read*/
 	uint32_t gain;
 	/* temperature value read */
-	uint32_t temp;
+	uint16_t temp;
 	/* status of temperature ready */
 	uint8_t status = 0;
 	/* timeout for temperature read */
