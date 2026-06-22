@@ -131,7 +131,7 @@ static int ltc4162l_ch_attr_show(void *ddev, char *buf,
 	struct ltc4162l_iio_device *dev = ddev;
 	int ret;
 	int32_t val;
-	uint32_t uval;
+	uint16_t uval;
 
 	switch (priv) {
 	case LTC4162L_BATTERY_COUNT:
@@ -216,7 +216,7 @@ static int ltc4162l_ch_attr_store(void *ddev, char *buf,
 				  intptr_t priv)
 {
 	struct ltc4162l_iio_device *dev = ddev;
-	int16_t val;
+	int32_t val;
 	int ret;
 
 	switch (priv) {
@@ -296,7 +296,7 @@ static int ltc4162l_read_raw(void *ddev, char *buf, uint32_t len,
 	struct ltc4162l_iio_device *dev = ddev;
 	int ret;
 	int32_t val;
-	uint32_t uval;
+	uint16_t uval;
 
 	switch (priv) {
 	case LTC4162L_VBAT_VAL:
