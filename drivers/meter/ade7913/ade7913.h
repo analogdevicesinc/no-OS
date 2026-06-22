@@ -162,11 +162,11 @@ struct ade7913_dev {
 	/* Version product */
 	uint8_t 			*ver_product;
 	/* I_WAV */
-	int32_t				*i_wav;
+	int32_t				i_wav;
 	/* V1_WAV */
-	int32_t				*v1_wav;
+	int32_t				v1_wav;
 	/* V2_WAV */
-	int32_t				*v2_wav;
+	int32_t				v2_wav;
 	/* I_WAV multiple devices */
 	int32_t				*i_wav_m;
 	/* V1_WAV multiple devices */
@@ -174,11 +174,11 @@ struct ade7913_dev {
 	/* V2_WAV multiple devices */
 	int32_t				*v2_wav_m;
 	/* ADC_CRC */
-	uint16_t            		*adc_crc;
+	uint16_t            		adc_crc;
 	/* Status 0 */
-	uint8_t             		*status0;
+	uint8_t             		status0;
 	/* CNT_SNAPSHOT */
-	uint16_t            		*cnt_snapshot;
+	uint16_t            		cnt_snapshot;
 	/* number of devices */
 	uint8_t 			no_devs;
 	/* burst mode */
