@@ -1378,7 +1378,7 @@ static int ade7816_irq_config(struct no_os_gpio_desc *gpio_irq,
 		return ret;
 
 	ret = no_os_irq_register_callback(init_param->irq_ctrl,
-					  gpio_irq->number, &irq_cb);
+					  gpio_irq->number, irq_cb);
 	if (ret)
 		return ret;
 
