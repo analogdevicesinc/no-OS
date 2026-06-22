@@ -46,17 +46,17 @@ int read_rms_measurements(struct ade7754_dev *dev)
 
 	/* read rms values */
 	if (no_os_test_bit(no_os_find_first_set_bit(ADE7754_ZXA_MSK),
-			   dev->irq_status)) {
+			   &dev->irq_status)) {
 		ret = ade7754_rms_vals_phase_a(dev, &rms_vals);
 		if (ret)
 			return ret;
 	} else if (no_os_test_bit(no_os_find_first_set_bit(ADE7754_ZXB_MSK),
-				  dev->irq_status)) {
+				  &dev->irq_status)) {
 		ret = ade7754_rms_vals_phase_b(dev, &rms_vals);
 		if (ret)
 			return ret;
 	} else if (no_os_test_bit(no_os_find_first_set_bit(ADE7754_ZXC_MSK),
-				  dev->irq_status)) {
+				  &dev->irq_status)) {
 		ret = ade7754_rms_vals_phase_c(dev, &rms_vals);
 		if (ret)
 			return ret;
