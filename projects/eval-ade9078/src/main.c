@@ -39,6 +39,7 @@
 #include "no_os_print_log.h"
 #include "no_os_units.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include "no_os_error.h"
 #include "maxim_uart.h"
 #include "maxim_gpio.h"
