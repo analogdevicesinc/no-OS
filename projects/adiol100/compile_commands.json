@@ -1,0 +1,1003 @@
+[
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/CMSIS/Device/Maxim/MAX78000/Source/heap.c.o",
+      "//home/lstan/MaximSDK/Libraries/CMSIS/Device/Maxim/MAX78000/Source/heap.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/CMSIS/Device/Maxim/MAX78000/Source/heap.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/CMSIS/Device/Maxim/MAX78000/Source/heap.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/CMSIS/Device/Maxim/MAX78000/Source/system_max78000.c.o",
+      "//home/lstan/MaximSDK/Libraries/CMSIS/Device/Maxim/MAX78000/Source/system_max78000.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/CMSIS/Device/Maxim/MAX78000/Source/system_max78000.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/CMSIS/Device/Maxim/MAX78000/Source/system_max78000.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/ADC/adc_me17.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/ADC/adc_me17.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/ADC/adc_me17.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/ADC/adc_me17.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/ADC/adc_reva.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/ADC/adc_reva.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/ADC/adc_reva.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/ADC/adc_reva.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/AES/aes_me17.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/AES/aes_me17.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/AES/aes_me17.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/AES/aes_me17.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/AES/aes_revb.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/AES/aes_revb.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/AES/aes_revb.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/AES/aes_revb.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/CAMERAIF/cameraif_ai85.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/CAMERAIF/cameraif_ai85.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/CAMERAIF/cameraif_ai85.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/CAMERAIF/cameraif_ai85.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/CAMERAIF/cameraif_reva.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/CAMERAIF/cameraif_reva.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/CAMERAIF/cameraif_reva.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/CAMERAIF/cameraif_reva.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/CRC/crc_me17.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/CRC/crc_me17.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/CRC/crc_me17.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/CRC/crc_me17.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/CRC/crc_reva.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/CRC/crc_reva.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/CRC/crc_reva.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/CRC/crc_reva.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/DMA/dma_me17.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/DMA/dma_me17.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/DMA/dma_me17.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/DMA/dma_me17.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/DMA/dma_reva.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/DMA/dma_reva.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/DMA/dma_reva.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/DMA/dma_reva.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/FLC/flc_common.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/FLC/flc_common.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/FLC/flc_common.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/FLC/flc_common.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/FLC/flc_me17.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/FLC/flc_me17.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/FLC/flc_me17.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/FLC/flc_me17.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/FLC/flc_reva.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/FLC/flc_reva.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/FLC/flc_reva.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/FLC/flc_reva.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/GPIO/gpio_ai85.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/GPIO/gpio_ai85.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/GPIO/gpio_ai85.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/GPIO/gpio_ai85.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/GPIO/gpio_common.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/GPIO/gpio_common.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/GPIO/gpio_common.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/GPIO/gpio_common.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/GPIO/gpio_reva.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/GPIO/gpio_reva.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/GPIO/gpio_reva.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/GPIO/gpio_reva.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/I2C/i2c_me17.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/I2C/i2c_me17.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/I2C/i2c_me17.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/I2C/i2c_me17.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/I2C/i2c_reva.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/I2C/i2c_reva.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/I2C/i2c_reva.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/I2C/i2c_reva.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/I2S/i2s_ai85.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/I2S/i2s_ai85.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/I2S/i2s_ai85.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/I2S/i2s_ai85.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/I2S/i2s_reva.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/I2S/i2s_reva.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/I2S/i2s_reva.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/I2S/i2s_reva.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/ICC/icc_me17.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/ICC/icc_me17.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/ICC/icc_me17.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/ICC/icc_me17.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/ICC/icc_reva.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/ICC/icc_reva.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/ICC/icc_reva.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/ICC/icc_reva.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/LP/lp_ai85.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/LP/lp_ai85.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/LP/lp_ai85.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/LP/lp_ai85.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/LPCMP/lpcmp_ai85.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/LPCMP/lpcmp_ai85.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/LPCMP/lpcmp_ai85.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/LPCMP/lpcmp_ai85.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/LPCMP/lpcmp_reva.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/LPCMP/lpcmp_reva.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/LPCMP/lpcmp_reva.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/LPCMP/lpcmp_reva.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/OWM/owm_me17.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/OWM/owm_me17.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/OWM/owm_me17.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/OWM/owm_me17.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/OWM/owm_reva.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/OWM/owm_reva.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/OWM/owm_reva.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/OWM/owm_reva.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/PT/pt_ai85.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/PT/pt_ai85.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/PT/pt_ai85.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/PT/pt_ai85.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/PT/pt_reva.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/PT/pt_reva.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/PT/pt_reva.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/PT/pt_reva.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/RTC/rtc_me17.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/RTC/rtc_me17.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/RTC/rtc_me17.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/RTC/rtc_me17.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/RTC/rtc_reva.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/RTC/rtc_reva.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/RTC/rtc_reva.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/RTC/rtc_reva.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SEMA/sema_me17.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SEMA/sema_me17.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SEMA/sema_me17.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SEMA/sema_me17.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SEMA/sema_reva.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SEMA/sema_reva.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SEMA/sema_reva.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SEMA/sema_reva.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SPI/spi_me17.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SPI/spi_me17.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SPI/spi_me17.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SPI/spi_me17.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SPI/spi_reva1.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SPI/spi_reva1.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SPI/spi_reva1.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SPI/spi_reva1.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/mxc_assert.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/mxc_assert.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/mxc_assert.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/mxc_assert.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/mxc_delay.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/mxc_delay.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/mxc_delay.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/mxc_delay.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/mxc_lock.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/mxc_lock.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/mxc_lock.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/mxc_lock.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/nvic_table.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/nvic_table.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/nvic_table.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/nvic_table.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/pins_ai85.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/pins_ai85.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/pins_ai85.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/pins_ai85.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/sys_ai85.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/sys_ai85.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/sys_ai85.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/SYS/sys_ai85.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TMR/tmr_ai85.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TMR/tmr_ai85.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TMR/tmr_ai85.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TMR/tmr_ai85.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TMR/tmr_common.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TMR/tmr_common.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TMR/tmr_common.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TMR/tmr_common.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TMR/tmr_revb.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TMR/tmr_revb.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TMR/tmr_revb.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TMR/tmr_revb.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TRNG/trng_ai85.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TRNG/trng_ai85.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TRNG/trng_ai85.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TRNG/trng_ai85.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TRNG/trng_revb.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TRNG/trng_revb.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TRNG/trng_revb.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/TRNG/trng_revb.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/UART/uart_ai85.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/UART/uart_ai85.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/UART/uart_ai85.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/UART/uart_ai85.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/UART/uart_common.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/UART/uart_common.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/UART/uart_common.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/UART/uart_common.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/UART/uart_revb.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/UART/uart_revb.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/UART/uart_revb.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/UART/uart_revb.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WDT/wdt_common.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WDT/wdt_common.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WDT/wdt_common.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WDT/wdt_common.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WDT/wdt_me17.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WDT/wdt_me17.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WDT/wdt_me17.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WDT/wdt_me17.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WDT/wdt_revb.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WDT/wdt_revb.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WDT/wdt_revb.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WDT/wdt_revb.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WUT/wut_ai85.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WUT/wut_ai85.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WUT/wut_ai85.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WUT/wut_ai85.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WUT/wut_reva.c.o",
+      "//home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WUT/wut_reva.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WUT/wut_reva.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/home/lstan/MaximSDK/Libraries/PeriphDrivers/Source/WUT/wut_reva.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/api/no_os_dma.c.o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/api/no_os_dma.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/api/no_os_dma.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/api/no_os_dma.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/api/no_os_irq.c.o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/api/no_os_irq.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/api/no_os_irq.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/api/no_os_irq.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/api/no_os_spi.c.o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/api/no_os_spi.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/api/no_os_spi.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/api/no_os_spi.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/api/no_os_uart.c.o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/api/no_os_uart.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/api/no_os_uart.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/api/no_os_uart.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/io-link/adiol100/adiol100.c.o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/io-link/adiol100/adiol100.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/io-link/adiol100/adiol100.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/io-link/adiol100/adiol100.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/platform/maxim/max78000/../common/maxim_dma.c.o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/platform/maxim/max78000/../common/maxim_dma.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/platform/maxim/common/maxim_dma.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/platform/maxim/common/maxim_dma.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/platform/maxim/max78000/maxim_delay.c.o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/platform/maxim/max78000/maxim_delay.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/platform/maxim/max78000/maxim_delay.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/platform/maxim/max78000/maxim_delay.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/platform/maxim/max78000/maxim_irq.c.o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/platform/maxim/max78000/maxim_irq.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/platform/maxim/max78000/maxim_irq.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/platform/maxim/max78000/maxim_irq.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/platform/maxim/max78000/maxim_spi.c.o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/platform/maxim/max78000/maxim_spi.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/platform/maxim/max78000/maxim_spi.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/platform/maxim/max78000/maxim_spi.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/platform/maxim/max78000/maxim_uart.c.o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/platform/maxim/max78000/maxim_uart.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/platform/maxim/max78000/maxim_uart.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/platform/maxim/max78000/maxim_uart.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/platform/maxim/max78000/maxim_uart_stdio.c.o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/platform/maxim/max78000/maxim_uart_stdio.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../drivers/platform/maxim/max78000/maxim_uart_stdio.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../drivers/platform/maxim/max78000/maxim_uart_stdio.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/adiol100/src/common/common_data.c.o",
+      "/adiol100/src/common/common_data.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/adiol100/src/common/common_data.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/adiol100/src/common/common_data.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/adiol100/src/examples/basic/basic_example.c.o",
+      "/adiol100/src/examples/basic/basic_example.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/adiol100/src/examples/basic/basic_example.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/adiol100/src/examples/basic/basic_example.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/adiol100/src/platform/maxim/main.c.o",
+      "/adiol100/src/platform/maxim/main.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/adiol100/src/platform/maxim/main.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/adiol100/src/platform/maxim/main.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/adiol100/src/platform/maxim/parameters.c.o",
+      "/adiol100/src/platform/maxim/parameters.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/adiol100/src/platform/maxim/parameters.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/build/app/adiol100/src/platform/maxim/parameters.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../util/no_os_alloc.c.o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../util/no_os_alloc.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../util/no_os_alloc.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../util/no_os_alloc.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../util/no_os_lf256fifo.c.o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../util/no_os_lf256fifo.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../util/no_os_lf256fifo.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../util/no_os_lf256fifo.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../util/no_os_list.c.o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../util/no_os_list.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../util/no_os_list.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../util/no_os_list.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../util/no_os_mutex.c.o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../util/no_os_mutex.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../util/no_os_mutex.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../util/no_os_mutex.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-cflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../util/no_os_util.c.o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../util/no_os_util.c"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/../../util/no_os_util.c",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/adiol100/../../util/no_os_util.c.o"
+  },
+  {
+    "arguments": [
+      "/home/lstan/MaximSDK/Tools/GNUTools/10.3/bin/arm-none-eabi-gcc",
+      "-c",
+      "@/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/adiol100-asflags.txt",
+      "-o",
+      "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs//home/lstan/MaximSDK/Libraries/CMSIS/Device/Maxim/MAX78000/Source/GCC/startup_max78000.S.o",
+      "/home/lstan/MaximSDK/Libraries/CMSIS/Device/Maxim/MAX78000/Source/GCC/startup_max78000.S"
+    ],
+    "directory": "/home/lstan/projects/adiol100/no-OS/projects/adiol100",
+    "file": "/home/lstan/MaximSDK/Libraries/CMSIS/Device/Maxim/MAX78000/Source/GCC/startup_max78000.S",
+    "output": "/home/lstan/projects/adiol100/no-OS/projects/adiol100/build/objs/home/lstan/MaximSDK/Libraries/CMSIS/Device/Maxim/MAX78000/Source/GCC/startup_max78000.S.o"
+  }
+]
