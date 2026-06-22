@@ -76,7 +76,9 @@ int adhv4710_init(struct adhv4710_dev **device,
 		goto error_dev;
 
 	/* reset gpio */
-	dev->gpio_reset = init_param.gpio_reset;
+	ret = no_os_gpio_get_optional(&dev->gpio_reset, init_param.gpio_reset);
+	if (ret)
+		goto error_spi;
 
 	/* Read version product */
 	ret = adhv4710_version_product(dev, &reg_val);
@@ -204,7 +206,7 @@ int adhv4710_get_status(struct adhv4710_dev *dev, uint8_t reg_addr, uint8_t msk,
 {
 	int ret;
 	/* register value read */
-	uint32_t reg_val;
+	int8_t reg_val;
 
 	if (!status)
 		return -EINVAL;
