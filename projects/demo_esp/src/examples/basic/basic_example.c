@@ -31,6 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#include <string.h>
 #include "common_data.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
@@ -114,7 +115,7 @@ int32_t init_and_connect_wifi(struct wifi_desc **wifi)
 	return 0;
 
 error_wifi:
-	wifi_remove(wifi);
+	wifi_remove(*wifi);
 error_uart:
 	no_os_uart_remove(udesc);
 error_irq:
@@ -228,7 +229,7 @@ int init_and_connect_to_mqtt_broker(struct mqtt_desc **mqtt,
 error_wifi:
 	wifi_remove(wifi);
 error_mqtt:
-	mqtt_remove(mqtt);
+	mqtt_remove(*mqtt);
 error_sock:
 	socket_remove(sock);
 
