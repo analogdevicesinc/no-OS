@@ -61,7 +61,7 @@ int ade9000_read(struct ade9000_dev *dev, uint16_t reg_addr, uint32_t *reg_data)
 		return -EINVAL;
 
 	addr = (uint16_t) no_os_field_prep(NO_OS_GENMASK(16, 4), reg_addr);
-	no_os_put_unaligned_be16(addr, &buff);
+	no_os_put_unaligned_be16(addr, buff);
 	buff[1] = buff[1] | ADE9000_SPI_READ;
 
 	/* 16 bits registers */
@@ -185,7 +185,7 @@ int ade9000_read_temp(struct ade9000_dev *dev)
 	/* temperature offset */
 	uint32_t offset;
 	/* status of temperature ready */
-	uint8_t *status = 0;
+	uint8_t status = 0;
 	/* timeout for temperature read */
 	uint16_t timeout = 0;
 
