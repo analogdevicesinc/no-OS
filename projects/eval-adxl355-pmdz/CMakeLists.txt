@@ -53,7 +53,15 @@ target_include_directories(eval-adxl355-pmdz PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/platform
 )
 
-target_compile_definitions(eval-adxl355-pmdz PRIVATE -DADXL355_DEV=1)
+# Select the target device. The adxl355 driver picks dev_type from one of
+# these mutually-exclusive defines (see src/common/common_data.c).
+if(CONFIG_ADXL355_PMDZ_DEV_ADXL359)
+    target_compile_definitions(eval-adxl355-pmdz PRIVATE -DADXL359_DEV)
+elseif(CONFIG_ADXL355_PMDZ_DEV_ADXL357)
+    target_compile_definitions(eval-adxl355-pmdz PRIVATE -DADXL357_DEV)
+else()
+    target_compile_definitions(eval-adxl355-pmdz PRIVATE -DADXL355_DEV)
+endif()
 target_link_libraries(eval-adxl355-pmdz no-os)
 
 config_platform_sdk(eval-adxl355-pmdz)

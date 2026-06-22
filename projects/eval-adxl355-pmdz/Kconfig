@@ -33,4 +33,22 @@ config ADXL355_PMDZ_IIO_LWIP_EXAMPLE
 
 endchoice
 
+choice ADXL355_PMDZ_DEVICE
+	prompt "Accelerometer device"
+	default ADXL355_PMDZ_DEV_ADXL355
+	help
+	  Selects which device on the PMDZ board to target. All three
+	  parts are handled by the same adxl355 driver via dev_type.
+
+config ADXL355_PMDZ_DEV_ADXL355
+	bool "ADXL355"
+
+config ADXL355_PMDZ_DEV_ADXL357
+	bool "ADXL357"
+
+config ADXL355_PMDZ_DEV_ADXL359
+	bool "ADXL359"
+
+endchoice
+
 endmenu
