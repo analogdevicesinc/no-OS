@@ -40,6 +40,8 @@
 #include "no_os_units.h"
 #include "no_os_util.h"
 #include "no_os_error.h"
+#include "no_os_alloc.h"
+#include "no_os_init.h"
 #include "maxim_uart.h"
 #include "maxim_gpio.h"
 #include "maxim_uart_stdio.h"
@@ -146,7 +148,7 @@ int main(void)
 		return -ENOMEM;
 
 	/* Init measurements struct */
-	vals = (struct vals *)no_os_calloc(1, sizeof(*vals));
+	vals = (struct measurements *)no_os_calloc(1, sizeof(*vals));
 	if (!vals) {
 		ret = -ENOMEM;
 		goto free_dev;
