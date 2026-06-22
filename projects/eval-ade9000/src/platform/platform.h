@@ -57,6 +57,8 @@ extern struct no_os_gpio_init_param gpio_led1_ip;
 // SPI init params
 extern struct no_os_spi_init_param ade9000_spi_ip ;
 
+int interface_toggle_led(struct no_os_gpio_desc *gpio_led_desc);
+
 /* Configuration for AD-APARD32690-SL */
 // Port and Pin for user LED
 #define GPIO_LED_PORT               2
