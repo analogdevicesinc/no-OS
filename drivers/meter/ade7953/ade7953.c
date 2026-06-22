@@ -81,7 +81,9 @@ int ade7953_init(struct ade7953_dev **device,
 	/* interrupt */
 	dev->irq_ctrl = init_param.irq_ctrl;
 	/* reset gpio */
-	dev->gpio_reset = init_param.gpio_reset;
+	ret = no_os_gpio_get(&dev->gpio_reset, init_param.gpio_reset);
+	if (ret)
+		goto error_spi;
 
 	/* Lock the communication interface after autoidentification */
 	ret = ade7953_update_bits(dev, ADE7953_REG_CONFIG, ADE7953_COMM_LOCK_MSK,
@@ -143,7 +145,7 @@ int ade7953_read(struct ade7953_dev *dev, uint16_t reg_addr,
 	if (!reg_data)
 		return -EINVAL;
 
-	no_os_put_unaligned_be16(reg_addr, &buff);
+	no_os_put_unaligned_be16(reg_addr, buff);
 	buff[2] = ADE7953_SPI_READ;
 
 	/* 8 bits registers */
@@ -212,7 +214,7 @@ int ade7953_write(struct ade7953_dev *dev, uint16_t reg_addr,
 	if (!dev)
 		return -ENODEV;
 
-	no_os_put_unaligned_be16(reg_addr, &buff);
+	no_os_put_unaligned_be16(reg_addr, buff);
 	buff[2] = 0x00;
 
 	/* 8 bits registers */
