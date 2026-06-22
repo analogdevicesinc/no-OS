@@ -171,8 +171,8 @@ int swiot1l_mqtt()
 
 	/* The default settings are 192.168.97.1:1883 */
 	struct socket_address ip_addr = {
-		.addr = SWIOT1L_MQTT_SERVER_IP,
-		.port = SWIOT1L_MQTT_SERVER_PORT
+		.addr = CONFIG_SWIOT1L_MQTT_SERVER_IP,
+		.port = CONFIG_SWIOT1L_MQTT_SERVER_PORT
 	};
 
 	struct mqtt_desc *mqtt;

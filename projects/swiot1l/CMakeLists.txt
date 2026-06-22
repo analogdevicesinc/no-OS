@@ -24,11 +24,6 @@ if(CONFIG_SWIOT1L_MQTT_EXAMPLE)
     target_sources(swiot1l PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/swiot1l-mqtt/swiot1l_mqtt.c
     )
-    target_compile_definitions(swiot1l PRIVATE
-        SWIOT1L_MQTT_EXAMPLE
-        SWIOT1L_MQTT_SERVER_IP="${CONFIG_SWIOT1L_MQTT_SERVER_IP}"
-        SWIOT1L_MQTT_SERVER_PORT=${CONFIG_SWIOT1L_MQTT_SERVER_PORT}
-    )
     target_include_directories(swiot1l PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/swiot1l-mqtt
     )
