@@ -174,6 +174,51 @@ function(config_stm32_sdk BUILD_TARGET)
                 stm32_write_cubemx_stamp("${IOC_FILE}" "${BOARD_BUILD_DIR}")
         endif()
 
+        # CubeMX generates two different CMakeLists.txt layouts:
+        #
+        # Linux: stm32cubemx is INTERFACE (includes/defines only),
+        #   STM32_Drivers and USB_Device_Library are separate OBJECT libs,
+        #   and target_link_libraries(no-os ${MX_LINK_LIBS}) links them to
+        #   no-os.
+        #
+        # Windows: stm32cubemx is INTERFACE with ALL sources attached via
+        #   target_sources(stm32cubemx INTERFACE ...).  No separate OBJECT
+        #   libs, no MX_LINK_LIBS.
+        #
+        # Both layouts cause duplicate symbols: Linux because the OBJECT
+        # libs reach the executable twice (through no-os AND through our
+        # foreach); Windows because INTERFACE sources propagate to every
+        # consumer of stm32cubemx.
+        #
+        # Normalize to a single pattern: OBJECT libs linked only to the
+        # executable via the foreach below, stm32cubemx carries only
+        # includes/defines.
+        set(_cubemx_cmake "${BOARD_BUILD_DIR}/${IOC_NAME}/cmake/stm32cubemx/CMakeLists.txt")
+        file(READ "${_cubemx_cmake}" _cubemx_content)
+        set(_cubemx_modified FALSE)
+
+        # Windows layout: move INTERFACE sources into an OBJECT library.
+        if(_cubemx_content MATCHES "target_sources\\(stm32cubemx INTERFACE")
+                string(REGEX REPLACE
+                        "target_sources\\(stm32cubemx INTERFACE([^)]+)\\)"
+                        "add_library(STM32_Drivers OBJECT)\ntarget_sources(STM32_Drivers PRIVATE\\1)\ntarget_link_libraries(STM32_Drivers PUBLIC stm32cubemx)"
+                        _cubemx_content "${_cubemx_content}")
+                set(_cubemx_modified TRUE)
+        endif()
+
+        # Linux layout: neutralize MX_LINK_LIBS so the generated
+        # target_link_libraries(no-os ${MX_LINK_LIBS}) becomes a no-op.
+        # The foreach below links the OBJECT libs directly to the executable.
+        if(_cubemx_content MATCHES "set\\(MX_LINK_LIBS[^_]")
+                string(REPLACE "set(MX_LINK_LIBS" "set(_MX_LINK_LIBS_UNUSED"
+                        _cubemx_content "${_cubemx_content}")
+                set(_cubemx_modified TRUE)
+        endif()
+
+        if(_cubemx_modified)
+                file(WRITE "${_cubemx_cmake}" "${_cubemx_content}")
+        endif()
+
         if(NOT TARGET STM32_Drivers)
                 add_subdirectory(${BOARD_BUILD_DIR}/${IOC_NAME}/cmake/stm32cubemx ${BOARD_BUILD_DIR}/${IOC_NAME}/cmake/stm32cubemx/build)
         endif()
@@ -181,16 +226,14 @@ function(config_stm32_sdk BUILD_TARGET)
         target_sources(no-os PRIVATE ${EXTI_GEN_FILE})
         file(GLOB LINKER_SCRIPT_FILE ${BOARD_BUILD_DIR}/*/*_FLASH.ld)
 
-        # Link all CubeMX OBJECT libraries (STM32_Drivers, USB_Device_Library,
-        # etc.) directly to the project executable.  OBJECT libraries don't
-        # propagate other OBJECT library dependencies transitively, so each
-        # must be linked to the final executable directly.
+        # Link CubeMX OBJECT libraries to the executable (not to no-os) so
+        # their objects appear on the link line exactly once.
         get_directory_property(_cubemx_targets
                 DIRECTORY ${BOARD_BUILD_DIR}/${IOC_NAME}/cmake/stm32cubemx
                 BUILDSYSTEM_TARGETS)
         foreach(_lib ${_cubemx_targets})
                 get_target_property(_type ${_lib} TYPE)
-                if(_type STREQUAL "OBJECT_LIBRARY" OR _type STREQUAL "STATIC_LIBRARY")
+                if(_type STREQUAL "OBJECT_LIBRARY")
                         target_link_libraries(${BUILD_TARGET} ${_lib})
                 endif()
         endforeach()
