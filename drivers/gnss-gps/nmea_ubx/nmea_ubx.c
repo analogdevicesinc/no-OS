@@ -717,16 +717,17 @@ int gnss_ubx_get_val(struct gnss_dev *dev, uint32_t key_id,
 	if (value_size != 1 && value_size != 2 && value_size != 4 && value_size != 8)
 		return -EINVAL;
 
-	/* Convert layer enum to bitfield */
+	/* VALGET encodes the layer as an enum (RAM=0, BBR=1, FLASH=2), unlike
+	 * VALSET which uses a bitmask (RAM=1, BBR=2, FLASH=4).*/
 	switch (layer) {
 	case GNSS_CONFIG_LAYER_RAM:
-		layer_val = VAL_LAYER_RAM;
+		layer_val = VALGET_LAYER_RAM;
 		break;
 	case GNSS_CONFIG_LAYER_BBR:
-		layer_val = VAL_LAYER_BBR;
+		layer_val = VALGET_LAYER_BBR;
 		break;
 	case GNSS_CONFIG_LAYER_FLASH:
-		layer_val = VAL_LAYER_FLASH;
+		layer_val = VALGET_LAYER_FLASH;
 		break;
 	default:
 		return -EINVAL;
@@ -783,6 +784,13 @@ int gnss_ubx_get_val(struct gnss_dev *dev, uint32_t key_id,
 		ret = -EINVAL;
 		goto free_response;
 	}
+
+	/* VALGET is ACKed too: consume the trailing ACK here so it cannot be
+	 * mistaken for the reply of a later poll. */
+	ret = gnss_ubx_wait_for_ack(dev, UBX_CLASS_CFG, UBX_CFG_VALGET);
+
+	if (ret)
+		goto free_payload;
 
 	ret = 0;
 
