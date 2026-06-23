@@ -39,8 +39,8 @@
 
 #define AD8460_CHAN_EXT_INFO(_name, _what, _read, _write) {	\
 	.name = (_name),					\
-	.show = (int (*)()) (_read),				\
-	.store = (int (*)()) (_write),				\
+	.show = (_read),					\
+	.store = (_write),					\
 	.priv = (_what),					\
 	.shared = IIO_SEPARATE,					\
 }
@@ -64,16 +64,20 @@
 	.attributes = ad8460_current_attrs,			\
 }
 
-static int ad8460_iio_reg_read(struct ad8460_iio_device *dev, uint32_t reg,
-			       uint32_t *readval)
+static int32_t ad8460_iio_reg_read(void *dev, uint32_t reg,
+				   uint32_t *readval)
 {
-	return ad8460_reg_read(dev->dev, (uint8_t)reg, (uint8_t*)readval);
+	struct ad8460_iio_device *iio_dev = dev;
+
+	return ad8460_reg_read(iio_dev->dev, (uint8_t)reg, (uint8_t*)readval);
 }
 
-static int ad8460_iio_reg_write(struct ad8460_iio_device *dev, uint32_t reg,
-				uint32_t writeval)
+static int32_t ad8460_iio_reg_write(void *dev, uint32_t reg,
+				    uint32_t writeval)
 {
-	return ad8460_reg_write(dev->dev, (uint8_t)reg, (uint8_t)writeval);
+	struct ad8460_iio_device *iio_dev = dev;
+
+	return ad8460_reg_write(iio_dev->dev, (uint8_t)reg, (uint8_t)writeval);
 }
 
 static int ad8460_iio_reg_update_bits(struct ad8460_iio_device *dev,
@@ -83,14 +87,14 @@ static int ad8460_iio_reg_update_bits(struct ad8460_iio_device *dev,
 				      (uint8_t)val);
 }
 
-static int ad8460_buffer_preenable(void *dev, uint32_t mask)
+static int32_t ad8460_buffer_preenable(void *dev, uint32_t mask)
 {
 	struct ad8460_iio_device *iio_dev = dev;
 
 	return ad8460_enable_apg_mode(iio_dev->dev, 0);
 }
 
-static int ad8460_buffer_postdisable(void *dev)
+static int32_t ad8460_buffer_postdisable(void *dev)
 {
 	struct ad8460_iio_device *iio_dev = dev;
 
@@ -402,10 +406,10 @@ static struct iio_channel ad8460_channels[] = {
 static struct iio_device ad8460_iio_dev = {
 	.num_ch = NO_OS_ARRAY_SIZE(ad8460_channels),
 	.channels = ad8460_channels,
-	.debug_reg_read = (int32_t (*)()) ad8460_iio_reg_read,
-	.debug_reg_write = (int32_t (*)()) ad8460_iio_reg_write,
-	.pre_enable = (int32_t (*)()) ad8460_buffer_preenable,
-	.post_disable = (int32_t (*)()) ad8460_buffer_postdisable,
+	.debug_reg_read = ad8460_iio_reg_read,
+	.debug_reg_write = ad8460_iio_reg_write,
+	.pre_enable = ad8460_buffer_preenable,
+	.post_disable = ad8460_buffer_postdisable,
 };
 
 /**
