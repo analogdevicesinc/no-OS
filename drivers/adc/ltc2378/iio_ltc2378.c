@@ -151,8 +151,8 @@ static struct iio_channel ltc2378_iio_channels[] = {
  * @param val - Pointer to variable to store read value
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ltc2378_iio_debug_reg_read(void *dev, uint32_t reg,
-		uint32_t *val)
+static int ltc2378_iio_debug_reg_read(void *dev, uint32_t reg,
+				      uint32_t *val)
 {
 	struct ltc2378_iio_desc *iio_ltc2378 = dev;
 	struct ltc2378_dev *ltc2378;
@@ -201,8 +201,8 @@ static int32_t ltc2378_iio_debug_reg_read(void *dev, uint32_t reg,
  * @param val - Value to write
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ltc2378_iio_debug_reg_write(void *dev, uint32_t reg,
-		uint32_t val)
+static int ltc2378_iio_debug_reg_write(void *dev, uint32_t reg,
+				       uint32_t val)
 {
 	struct ltc2378_iio_desc *iio_ltc2378 = dev;
 	struct ltc2378_dev *ltc2378;

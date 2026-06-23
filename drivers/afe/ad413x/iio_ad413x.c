@@ -19,23 +19,23 @@ struct scan_type ad413x_iio_scan_type = {
 	.is_big_endian = true
 };
 
-static int32_t _ad413x_read_register(void *device, uint32_t reg,
-				     uint32_t *readval)
+static int _ad413x_read_register(void *device, uint32_t reg,
+				 uint32_t *readval)
 {
 	struct ad413x_iio_dev *iiodev = (struct ad413x_iio_dev *)device;
 
 	return ad413x_reg_read(iiodev->ad413x_dev, reg, readval);
 }
 
-static int32_t _ad413x_write_register(void *device, uint32_t reg,
-				      uint32_t writeval)
+static int _ad413x_write_register(void *device, uint32_t reg,
+				  uint32_t writeval)
 {
 	struct ad413x_iio_dev *iiodev = (struct ad413x_iio_dev *)device;
 
 	return ad413x_reg_write(iiodev->ad413x_dev, reg, writeval);
 }
 
-static int32_t ad413x_iio_update_active_channels(void *device,
+static int ad413x_iio_update_active_channels(void *device,
 		uint32_t mask)
 {
 	struct ad413x_iio_dev *iiodev = (struct ad413x_iio_dev *)device;
@@ -76,7 +76,7 @@ static int32_t ad413x_iio_get_active_channels(void *device,
 	return 0;
 }
 
-static int32_t ad413x_iio_close_channels(void *device)
+static int ad413x_iio_close_channels(void *device)
 {
 	struct ad413x_iio_dev *iiodev = (struct ad413x_iio_dev *)device;
 	int32_t ret, ch_idx;
@@ -308,9 +308,9 @@ static int ad413x_iio_read_scale(void *device, char *buf, uint32_t len,
 	return iio_format_value(buf, len, valt, 2, vals);
 }
 
-static int32_t ad413x_iio_read_samples(void *device,
-				       int32_t *buff,
-				       uint32_t nb_samples)
+static int ad413x_iio_read_samples(void *device,
+				   int32_t *buff,
+				   uint32_t nb_samples)
 {
 	struct ad413x_iio_dev *iiodev = (struct ad413x_iio_dev *)device;
 	int32_t ret, ch_nb = 0;
@@ -424,9 +424,9 @@ static struct iio_device ad413x_iio_device = {
 	.buffer_attributes = NULL,
 	.pre_enable = ad413x_iio_update_active_channels,
 	.post_disable = ad413x_iio_close_channels,
-	.read_dev = (int32_t (*)())ad413x_iio_read_samples,
-	.debug_reg_read = (int32_t (*)())_ad413x_read_register,
-	.debug_reg_write = (int32_t (*)())_ad413x_write_register
+	.read_dev = ad413x_iio_read_samples,
+	.debug_reg_read = _ad413x_read_register,
+	.debug_reg_write = _ad413x_write_register
 };
 
 int32_t ad413x_iio_init(struct ad413x_iio_dev **iio_dev,

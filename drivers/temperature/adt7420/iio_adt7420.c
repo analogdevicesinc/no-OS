@@ -51,13 +51,13 @@ static int adt7420_iio_read_crit(void *dev, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel, intptr_t priv);
 static int adt7420_iio_read_hyst(void *dev, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel, intptr_t priv);
-static int32_t adt7420_iio_reg_read(void *dev, uint32_t reg,
-				    uint32_t *readval);
-static int32_t adt7420_iio_reg_write(void *dev, uint32_t reg,
-				     uint32_t writeval);
-static int32_t adt7420_iio_update_channels(void *dev, uint32_t mask);
-static int32_t adt7420_iio_read_samples(void *dev, void *buff,
-					uint32_t samples);
+static int adt7420_iio_reg_read(void *dev, uint32_t reg,
+				uint32_t *readval);
+static int adt7420_iio_reg_write(void *dev, uint32_t reg,
+				 uint32_t writeval);
+static int adt7420_iio_update_channels(void *dev, uint32_t mask);
+static int adt7420_iio_read_samples(void *dev, void *buff,
+				    uint32_t samples);
 
 static struct iio_attribute adt7420_iio_attrs[] = {
 	{
@@ -178,8 +178,8 @@ int adt7420_iio_remove(struct adt7420_iio_dev *desc)
  *
  * @return 0 in case of success, errno errors otherwise
  */
-static int32_t adt7420_iio_reg_read(void *dev, uint32_t reg,
-				    uint32_t *readval)
+static int adt7420_iio_reg_read(void *dev, uint32_t reg,
+				uint32_t *readval)
 {
 	struct adt7420_iio_dev *iio_dev = dev;
 	uint16_t val;
@@ -206,8 +206,8 @@ static int32_t adt7420_iio_reg_read(void *dev, uint32_t reg,
  *
  * @return 0 in case of success, errno errors otherwise
  */
-static int32_t adt7420_iio_reg_write(void *dev, uint32_t reg,
-				     uint32_t writeval)
+static int adt7420_iio_reg_write(void *dev, uint32_t reg,
+				 uint32_t writeval)
 {
 	struct adt7420_iio_dev *iio_dev = dev;
 
@@ -486,7 +486,7 @@ static int adt7420_iio_read_hyst(void *dev, char *buf, uint32_t len,
  *
  * @return 0 in case of success, errno errors otherwise
  */
-static int32_t adt7420_iio_update_channels(void *dev, uint32_t mask)
+static int adt7420_iio_update_channels(void *dev, uint32_t mask)
 {
 	struct adt7420_iio_dev *iio_adt7420;
 
@@ -510,8 +510,8 @@ static int32_t adt7420_iio_update_channels(void *dev, uint32_t mask)
  *
  * @return ret    - 0 in case of success, errno errors otherwise
 */
-static int32_t adt7420_iio_read_samples(void *dev, void *buff,
-					uint32_t samples)
+static int adt7420_iio_read_samples(void *dev, void *buff,
+				    uint32_t samples)
 {
 	struct adt7420_iio_dev *iio_adt7420;
 	struct adt7420_dev *adt7420;

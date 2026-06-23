@@ -872,8 +872,8 @@ static struct iio_device adxl367_iio_dev = {
 	.attributes = adxl367_iio_global_attributes,
 	.num_ch = NO_OS_ARRAY_SIZE(adxl367_channels),
 	.channels = adxl367_channels,
-	.pre_enable = (int32_t (*)())adxl367_iio_update_channels,
-	.read_dev = (int32_t (*)())adxl367_iio_read_samples,
-	.debug_reg_read = (int32_t (*)())adxl367_iio_read_reg,
-	.debug_reg_write = (int32_t (*)())adxl367_iio_write_reg
+	.pre_enable = adxl367_iio_update_channels,
+	.read_dev = adxl367_iio_read_samples,
+	.debug_reg_read = adxl367_iio_read_reg,
+	.debug_reg_write = adxl367_iio_write_reg
 };

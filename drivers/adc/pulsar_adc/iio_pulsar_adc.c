@@ -48,7 +48,7 @@
  * @param val - Pointer to variable to read data into
  * @return 0 in case of success, negative value otherwise
  */
-static int32_t iio_pulsar_adc_debug_reg_read(void *device, uint32_t reg,
+static int iio_pulsar_adc_debug_reg_read(void *device, uint32_t reg,
 		uint32_t *val)
 {
 	struct pulsar_adc_iio_dev *iio_dev = device;
@@ -71,7 +71,7 @@ static int32_t iio_pulsar_adc_debug_reg_read(void *device, uint32_t reg,
  * @param val - Pointer to variable to write data into
  * @return 0 in case of success, negative value otherwise
  */
-static int32_t iio_pulsar_adc_debug_reg_write(void *device, uint32_t reg,
+static int iio_pulsar_adc_debug_reg_write(void *device, uint32_t reg,
 		uint32_t val)
 {
 	struct pulsar_adc_iio_dev *iio_dev = device;
@@ -126,8 +126,8 @@ static int get_scale(void *device, char *buf, uint32_t len,
  * @param iio_dev_data - Pointer to IIO device data structure
  * @return 0 in case of success, negative error code otherwise
  */
-static int32_t iio_pulsar_adc_submit_buffer(struct iio_device_data
-		*iio_dev_data)
+static int iio_pulsar_adc_submit_buffer(struct iio_device_data
+					*iio_dev_data)
 {
 	struct pulsar_adc_iio_dev *iio_dev = iio_dev_data->dev;
 	struct pulsar_adc_dev *dev = iio_dev->pulsar_adc_dev;

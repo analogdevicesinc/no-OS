@@ -237,7 +237,7 @@ err_out:
  * @param readval - Pointer to store the read value.
  * @return
  */
-static int32_t ad4080_reg_read(void *dev, uint32_t reg, uint32_t *readval)
+static int ad4080_reg_read(void *dev, uint32_t reg, uint32_t *readval)
 {
 	if (reg > AD4080_LAST_REG_ADDR)
 		return -EINVAL;
@@ -251,7 +251,7 @@ static int32_t ad4080_reg_read(void *dev, uint32_t reg, uint32_t *readval)
  * @param writeval - The value to write to the register.
  * @return ret - The result of the write operation.
  */
-static int32_t ad4080_reg_write(void *dev, uint32_t reg, uint32_t writeval)
+static int ad4080_reg_write(void *dev, uint32_t reg, uint32_t writeval)
 {
 	if (reg > AD4080_LAST_REG_ADDR)
 		return -EINVAL;
@@ -1388,12 +1388,12 @@ static int ad4080_attr_avail_show(void *device,
 	return len;
 }
 
-static int32_t iio_ad4080_prepare_transfer(void *dev, uint32_t mask)
+static int iio_ad4080_prepare_transfer(void *dev, uint32_t mask)
 {
 	return 0;
 }
 
-static int32_t iio_ad4080_end_transfer(void *dev)
+static int iio_ad4080_end_transfer(void *dev)
 {
 	return 0;
 }
@@ -1494,7 +1494,7 @@ err_malloc_formatted_fifo:
  * @param iio_device_data - The IIO device data structure containing the device and buffer information.
  * @return 0 on success, or an error code on failure.
  */
-static int32_t ad4080_submit(struct iio_device_data *iio_device_data)
+static int ad4080_submit(struct iio_device_data *iio_device_data)
 {
 	struct ad4080_dev *dev = iio_device_data->dev;
 	struct iio_ad4080_desc *iio_ad4080 = ad4080_privdata(dev);

@@ -323,7 +323,7 @@ static int adpd188_iio_read_raw_chan(void *device, char *buf, uint32_t len,
  * @param mask - Mask of the enabled channels.
  * @return 0 in case of success, error code otherwise.
  */
-static int32_t iio_adpd188_prepare_data_read(void *dev, uint32_t mask)
+static int iio_adpd188_prepare_data_read(void *dev, uint32_t mask)
 {
 	struct adpd188_iio_desc *iio_desc = (struct adpd188_iio_desc *)dev;
 	struct adpd188_dev *desc = iio_desc->drv_dev;
@@ -338,7 +338,7 @@ static int32_t iio_adpd188_prepare_data_read(void *dev, uint32_t mask)
  * @param dev - Pointer to the IIO driver structure.
  * @return 0 in case of success, error code otherwise.
  */
-static int32_t iio_adpd188_end_data_read(void *dev)
+static int iio_adpd188_end_data_read(void *dev)
 {
 	struct adpd188_iio_desc *iio_desc = (struct adpd188_iio_desc *)dev;
 	struct adpd188_dev *desc = iio_desc->drv_dev;
@@ -382,8 +382,8 @@ static bool get_next_ch_idx(uint32_t ch_mask, uint32_t last_idx,
  * @param nb_samples - Number of samples to take.
  * @return 0 in case of success, error code otherwise.
  */
-static int32_t iio_adpd188_read_samples(void *dev, int32_t *buff,
-					uint32_t nb_samples)
+static int iio_adpd188_read_samples(void *dev, int32_t *buff,
+				    uint32_t nb_samples)
 {
 	struct adpd188_iio_desc *iio_desc = (struct adpd188_iio_desc *)dev;
 	struct adpd188_dev *desc = iio_desc->drv_dev;
@@ -424,9 +424,9 @@ static int32_t iio_adpd188_read_samples(void *dev, int32_t *buff,
  * @param reg_val - Pointer to the register value.
  * @return 0 in case of success, error code otherwise.
  */
-static int32_t iio_adpd188_reg_read(struct adpd188_iio_desc *dev,
-				    uint8_t reg_addr,
-				    uint16_t *reg_val)
+static int iio_adpd188_reg_read(struct adpd188_iio_desc *dev,
+				uint8_t reg_addr,
+				uint16_t *reg_val)
 {
 	struct adpd188_dev *desc = dev->drv_dev;
 
@@ -440,9 +440,9 @@ static int32_t iio_adpd188_reg_read(struct adpd188_iio_desc *dev,
  * @param reg_val - New register value.
  * @return 0 in case of success, error code otherwise.
  */
-static int32_t iio_adpd188_reg_write(struct adpd188_iio_desc *dev,
-				     uint8_t reg_addr,
-				     uint16_t reg_val)
+static int iio_adpd188_reg_write(struct adpd188_iio_desc *dev,
+				 uint8_t reg_addr,
+				 uint16_t reg_val)
 {
 	struct adpd188_dev *desc = dev->drv_dev;
 
@@ -566,8 +566,8 @@ struct iio_device iio_adpd188_device = {
 	.buffer_attributes = NULL,
 	.pre_enable = iio_adpd188_prepare_data_read,
 	.post_disable = iio_adpd188_end_data_read,
-	.read_dev = (int32_t (*)())iio_adpd188_read_samples,
-	.debug_reg_read = (int32_t (*)())iio_adpd188_reg_read,
-	.debug_reg_write = (int32_t (*)())iio_adpd188_reg_write
+	.read_dev = iio_adpd188_read_samples,
+	.debug_reg_read = iio_adpd188_reg_read,
+	.debug_reg_write = iio_adpd188_reg_write
 };
 

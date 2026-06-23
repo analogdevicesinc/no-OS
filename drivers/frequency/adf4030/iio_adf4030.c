@@ -709,8 +709,8 @@ static struct iio_device adf4030_iio_dev = {
 	.num_ch = NO_OS_ARRAY_SIZE(adf4030_channels),
 	.channels = adf4030_channels,
 	.attributes = adf4030_iio_attrs,
-	.debug_reg_read = (int32_t (*)())adf4030_iio_read_reg,
-	.debug_reg_write = (int32_t (*)())adf4030_iio_write_reg
+	.debug_reg_read = adf4030_iio_read_reg,
+	.debug_reg_write = adf4030_iio_write_reg
 };
 
 /**

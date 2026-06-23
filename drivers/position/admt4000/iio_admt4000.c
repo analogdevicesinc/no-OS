@@ -401,10 +401,10 @@ static struct iio_device admt4000_iio_dev = {
 	.attributes = admt4000_iio_attrs,
 	.channels = admt4000_channels,
 	.debug_attributes = admt4000_debug_attrs,
-	.debug_reg_read = (int32_t (*)())admt4000_iio_reg_read,
-	.debug_reg_write = (int32_t (*)())admt4000_iio_reg_write,
-	.trigger_handler = (int32_t (*)())admt4000_iio_trigger_handler,
-	.submit = (int32_t (*)())admt4000_iio_submit_buffer,
+	.debug_reg_read = admt4000_iio_reg_read,
+	.debug_reg_write = admt4000_iio_reg_write,
+	.trigger_handler = admt4000_iio_trigger_handler,
+	.submit = admt4000_iio_submit_buffer,
 };
 
 /**

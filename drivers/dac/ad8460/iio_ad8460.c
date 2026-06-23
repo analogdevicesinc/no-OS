@@ -64,16 +64,16 @@
 	.attributes = ad8460_current_attrs,			\
 }
 
-static int32_t ad8460_iio_reg_read(void *dev, uint32_t reg,
-				   uint32_t *readval)
+static int ad8460_iio_reg_read(void *dev, uint32_t reg,
+			       uint32_t *readval)
 {
 	struct ad8460_iio_device *iio_dev = dev;
 
 	return ad8460_reg_read(iio_dev->dev, (uint8_t)reg, (uint8_t*)readval);
 }
 
-static int32_t ad8460_iio_reg_write(void *dev, uint32_t reg,
-				    uint32_t writeval)
+static int ad8460_iio_reg_write(void *dev, uint32_t reg,
+				uint32_t writeval)
 {
 	struct ad8460_iio_device *iio_dev = dev;
 
@@ -87,14 +87,14 @@ static int ad8460_iio_reg_update_bits(struct ad8460_iio_device *dev,
 				      (uint8_t)val);
 }
 
-static int32_t ad8460_buffer_preenable(void *dev, uint32_t mask)
+static int ad8460_buffer_preenable(void *dev, uint32_t mask)
 {
 	struct ad8460_iio_device *iio_dev = dev;
 
 	return ad8460_enable_apg_mode(iio_dev->dev, 0);
 }
 
-static int32_t ad8460_buffer_postdisable(void *dev)
+static int ad8460_buffer_postdisable(void *dev)
 {
 	struct ad8460_iio_device *iio_dev = dev;
 

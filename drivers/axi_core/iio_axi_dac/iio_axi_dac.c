@@ -454,7 +454,7 @@ static struct iio_attribute iio_altvoltage_attributes[] = {
  * @param mask - Mask with new channels to activate
  * @return axi_dac_update_active_channels result.
  */
-int32_t iio_axi_dac_prepare_transfer(void *dev, uint32_t mask)
+int iio_axi_dac_prepare_transfer(void *dev, uint32_t mask)
 {
 	struct iio_axi_dac_desc *iio_dac = dev;
 	uint16_t i;
@@ -483,7 +483,7 @@ int32_t iio_axi_dac_prepare_transfer(void *dev, uint32_t mask)
  * @param nb_samples - Number of samples
  * @return 0 in case of success or negative value otherwise.
  */
-int32_t iio_axi_dac_write_data(void *dev, void *buff, uint32_t nb_samples)
+int iio_axi_dac_write_data(void *dev, void *buff, uint32_t nb_samples)
 {
 	struct iio_axi_dac_desc *iio_dac;
 	int bytes;

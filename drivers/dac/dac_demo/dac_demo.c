@@ -84,7 +84,7 @@ int32_t dac_demo_remove(struct dac_demo_desc *desc)
  * @param mask - the new number of active channels
  * @return 0 in case of success.
 *******************************************************************************/
-int32_t update_dac_channels(void *dev, int32_t mask)
+int update_dac_channels(void *dev, int32_t mask)
 {
 	struct dac_demo_desc *desc;
 	if (!dev)
@@ -102,7 +102,7 @@ int32_t update_dac_channels(void *dev, int32_t mask)
  * @param dev - physical instance of an adc device
  * @return 0 in case of success.
 **************************************************************************/
-int32_t close_dac_channels(void* dev)
+int close_dac_channels(void* dev)
 {
 	struct dac_demo_desc *desc;
 	if (!dev)

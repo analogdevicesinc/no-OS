@@ -515,8 +515,8 @@ static struct iio_device adf5611_iio_dev = {
 	.num_ch = NO_OS_ARRAY_SIZE(adf5611_channels),
 	.channels = adf5611_channels,
 	.attributes = adf5611_iio_attrs,
-	.debug_reg_read = (int32_t (*)())adf5611_iio_read_reg,
-	.debug_reg_write = (int32_t (*)())adf5611_iio_write_reg
+	.debug_reg_read = adf5611_iio_read_reg,
+	.debug_reg_write = adf5611_iio_write_reg
 };
 
 

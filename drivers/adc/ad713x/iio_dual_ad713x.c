@@ -77,8 +77,8 @@ static struct iio_channel iio_adc_channels[] = {
 	IIO_AD713X_CHANNEL(8)
 };
 
-static int32_t _iio_ad713x_prepare_transfer(struct iio_ad713x *desc,
-		uint32_t mask)
+static int _iio_ad713x_prepare_transfer(struct iio_ad713x *desc,
+					uint32_t mask)
 {
 	if (!desc)
 		return -EINVAL;
@@ -88,8 +88,8 @@ static int32_t _iio_ad713x_prepare_transfer(struct iio_ad713x *desc,
 	return 0;
 }
 
-static int32_t _iio_ad713x_read_dev(struct iio_ad713x *desc, uint32_t *buff,
-				    uint32_t nb_samples)
+static int _iio_ad713x_read_dev(struct iio_ad713x *desc, uint32_t *buff,
+				uint32_t nb_samples)
 {
 	struct spi_engine_offload_message *msg;
 	uint32_t bytes;
@@ -160,8 +160,8 @@ int32_t iio_dual_ad713x_init(struct iio_ad713x **desc,
 	iio_ad713x->iio_dev_desc = (struct iio_device) {
 		.num_ch = param->num_channels,
 		.channels = iio_adc_channels,
-		.pre_enable = (int32_t (*)())_iio_ad713x_prepare_transfer,
-		.read_dev = (int32_t (*)())_iio_ad713x_read_dev
+		.pre_enable = _iio_ad713x_prepare_transfer,
+		.read_dev = _iio_ad713x_read_dev
 	};
 
 	*desc = iio_ad713x;

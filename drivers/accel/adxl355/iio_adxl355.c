@@ -81,10 +81,10 @@ extern int adxl355_write_device_data(struct adxl355_dev *dev,
 static int adxl355_iio_fill_3db_frequency_table(void *dev);
 static int adxl355_iio_find_2d_row(const int (*freq_tbl)[2], const int n,
 				   const int val1, const int val2);
-static int32_t adxl355_iio_read_reg(void *dev, uint32_t reg,
-				    uint32_t *readval);
-static int32_t adxl355_iio_write_reg(void *dev, uint32_t reg,
-				     uint32_t writeval);
+static int adxl355_iio_read_reg(void *dev, uint32_t reg,
+				uint32_t *readval);
+static int adxl355_iio_write_reg(void *dev, uint32_t reg,
+				 uint32_t writeval);
 static int adxl355_iio_read_raw(void *dev, char *buf, uint32_t len,
 				const struct iio_ch_info *channel, intptr_t priv);
 static int adxl355_iio_read_offset(void *dev, char *buf, uint32_t len,
@@ -107,10 +107,10 @@ static int adxl355_iio_read_hpf_available(void *dev, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv);
 static int adxl355_iio_read_samp_freq_avail(void *dev, char *buf,
 		uint32_t len, const struct iio_ch_info *channel, intptr_t priv);
-static int32_t adxl355_iio_read_samples(void *dev, void *buff,
-					uint32_t samples);
-static int32_t adxl355_iio_update_channels(void *dev, uint32_t mask);
-static int32_t adxl355_trigger_handler(struct iio_device_data *dev_data);
+static int adxl355_iio_read_samples(void *dev, void *buff,
+				    uint32_t samples);
+static int adxl355_iio_update_channels(void *dev, uint32_t mask);
+static int adxl355_trigger_handler(struct iio_device_data *dev_data);
 static struct iio_attribute adxl355_iio_temp_attrs[] = {
 	{
 		.name = "offset",
@@ -285,8 +285,8 @@ static int adxl355_iio_find_2d_row(const int (*freq_tbl)[2], const int size,
  *
  * @return ret    - Result of the reading procedure.
 *******************************************************************************/
-static int32_t adxl355_iio_read_reg(void *dev, uint32_t reg,
-				    uint32_t *readval)
+static int adxl355_iio_read_reg(void *dev, uint32_t reg,
+				uint32_t *readval)
 {
 	struct adxl355_iio_dev *iio_adxl355 = dev;
 
@@ -303,8 +303,8 @@ static int32_t adxl355_iio_read_reg(void *dev, uint32_t reg,
  *
  * @return ret    - Result of the writing procedure.
 *******************************************************************************/
-static int32_t adxl355_iio_write_reg(void *dev, uint32_t reg,
-				     uint32_t writeval)
+static int adxl355_iio_write_reg(void *dev, uint32_t reg,
+				 uint32_t writeval)
 {
 	struct adxl355_iio_dev *iio_adxl355 = dev;
 	uint8_t val = writeval;
@@ -890,8 +890,8 @@ static int adxl355_iio_read_samp_freq_avail(void *dev, char *buf,
  * @return ret    - Result of the reading procedure.
  * 					In case of success, the size of the read data is returned.
 *******************************************************************************/
-static int32_t adxl355_iio_read_samples(void *dev, void *buff,
-					uint32_t samples)
+static int adxl355_iio_read_samples(void *dev, void *buff,
+				    uint32_t samples)
 {
 	uint32_t data_x;
 	uint32_t data_y;
@@ -945,7 +945,7 @@ static int32_t adxl355_iio_read_samples(void *dev, void *buff,
  *
  * @return ret - Result of the updating procedure.
 *******************************************************************************/
-static int32_t adxl355_iio_update_channels(void *dev, uint32_t mask)
+static int adxl355_iio_update_channels(void *dev, uint32_t mask)
 {
 	struct adxl355_iio_dev *iio_adxl355;
 	uint8_t counter = 0;
@@ -979,7 +979,7 @@ static int32_t adxl355_iio_update_channels(void *dev, uint32_t mask)
  * @return ret - Result of the handling procedure. In case of success, the size
  * 				 of the written data is returned.
 *******************************************************************************/
-static int32_t adxl355_trigger_handler(struct iio_device_data *dev_data)
+static int adxl355_trigger_handler(struct iio_device_data *dev_data)
 {
 	int32_t data_buff[3];
 	uint32_t x, y, z;

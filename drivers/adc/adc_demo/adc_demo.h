@@ -90,11 +90,11 @@ int32_t adc_demo_init(struct adc_demo_desc **desc,
 
 int32_t adc_demo_remove(struct adc_demo_desc *desc);
 
-int32_t update_adc_channels(void *dev, uint32_t mask);
+int update_adc_channels(void *dev, uint32_t mask);
 
-int32_t close_adc_channels(void* dev);
+int close_adc_channels(void* dev);
 
-int32_t adc_submit_samples(struct iio_device_data *dev_data);
+int adc_submit_samples(struct iio_device_data *dev_data);
 
 int32_t adc_demo_reg_read(struct adc_demo_desc *desc, uint8_t reg_index,
 			  uint8_t *readval);
@@ -102,6 +102,6 @@ int32_t adc_demo_reg_read(struct adc_demo_desc *desc, uint8_t reg_index,
 int32_t adc_demo_reg_write(struct adc_demo_desc *desc, uint8_t reg_index,
 			   uint8_t writeval);
 
-int32_t adc_demo_trigger_handler(struct iio_device_data *dev_data);
+int adc_demo_trigger_handler(struct iio_device_data *dev_data);
 
 #endif /*IIO_DEMO_ADC_*/

@@ -80,7 +80,7 @@ static struct iio_device lt7170_iio_dev;
  * @return ret    - Result of the reading procedure.
  * 		    In case of success, the size of the read data is returned.
 */
-static int32_t lt7170_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
+static int lt7170_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
 {
 	struct lt7170_iio_desc *iio_lt7170 = dev;
 	struct lt7170_dev *lt7170 = iio_lt7170->lt7170_dev;
@@ -198,7 +198,7 @@ static int32_t lt7170_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
  * @param writeval - Value to write.
  * @return ret    - Result of the writing procedure.
 */
-static int32_t lt7170_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
+static int lt7170_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
 {
 	struct lt7170_iio_desc *iio_lt7170 = dev;
 	struct lt7170_dev *lt7170 = iio_lt7170->lt7170_dev;

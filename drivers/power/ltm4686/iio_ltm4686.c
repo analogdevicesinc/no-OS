@@ -79,7 +79,7 @@ static struct iio_device ltm4673_iio_dev;
  * @return ret    - Result of the reading procedure.
  * 		    In case of success, the size of the read data is returned.
 */
-static int32_t ltm4686_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
+static int ltm4686_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
 {
 	struct ltm4686_iio_desc *iio_ltm4686 = dev;
 	struct ltm4686_dev *ltm4686 = iio_ltm4686->ltm4686_dev;
@@ -186,7 +186,7 @@ static int32_t ltm4686_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
  * @param writeval - Value to write.
  * @return ret    - Result of the writing procedure.
 */
-static int32_t ltm4686_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
+static int ltm4686_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
 {
 	struct ltm4686_iio_desc *iio_ltm4686 = dev;
 	struct ltm4686_dev *ltm4686 = iio_ltm4686->ltm4686_dev;

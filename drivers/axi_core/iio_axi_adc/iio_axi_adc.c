@@ -317,7 +317,7 @@ static struct iio_attribute iio_voltage_attributes[] = {
  * @param mask - Mask with new channels to activate
  * @return axi_adc_update_active_channels result.
  */
-int32_t iio_axi_adc_prepare_transfer(void *dev, uint32_t mask)
+int iio_axi_adc_prepare_transfer(void *dev, uint32_t mask)
 {
 	struct iio_axi_adc_desc *iio_adc = dev;
 
@@ -333,7 +333,7 @@ int32_t iio_axi_adc_prepare_transfer(void *dev, uint32_t mask)
  * @param nb_samples - Number of samples
  * @return 0 in case of success or negative value otherwise.
  */
-int32_t	iio_axi_adc_read_dev(void *dev, void *buff, uint32_t nb_samples)
+int	iio_axi_adc_read_dev(void *dev, void *buff, uint32_t nb_samples)
 {
 	struct iio_axi_adc_desc *iio_adc;
 	int ret, bytes;

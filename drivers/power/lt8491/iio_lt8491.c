@@ -94,8 +94,8 @@ enum lt8491_attr_priv {
 	LT8491_SERIAL_ID,
 };
 
-static int32_t lt8491_iio_reg_read(void *ddev,
-				   uint32_t reg, uint32_t *readval)
+static int lt8491_iio_reg_read(void *ddev,
+			       uint32_t reg, uint32_t *readval)
 {
 	struct lt8491_iio_device *dev = ddev;
 	uint16_t temp;
@@ -108,8 +108,8 @@ static int32_t lt8491_iio_reg_read(void *ddev,
 	return ret;
 }
 
-static int32_t lt8491_iio_reg_write(void *ddev,
-				    uint32_t reg, uint32_t writeval)
+static int lt8491_iio_reg_write(void *ddev,
+				uint32_t reg, uint32_t writeval)
 {
 	struct lt8491_iio_device *dev = ddev;
 

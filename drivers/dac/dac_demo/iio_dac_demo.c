@@ -101,7 +101,7 @@ int get_dac_demo_attr(void *device, char *buf, uint32_t len,
  * @return ret - Result of the writing procedure. Returns 0 in case of success
  * and a negative code otherwise.
  */
-int32_t dac_submit_samples(struct iio_device_data *dev_data)
+int dac_submit_samples(struct iio_device_data *dev_data)
 {
 	struct dac_demo_desc *desc;
 	uint32_t k = 0;
@@ -144,7 +144,7 @@ int32_t dac_submit_samples(struct iio_device_data *dev_data)
  * @return ret - Result of the handling procedure. Returns 0 in case of success
  * and a negative code otherwise.
  */
-int32_t dac_demo_trigger_handler(struct iio_device_data *dev_data)
+int dac_demo_trigger_handler(struct iio_device_data *dev_data)
 {
 	struct dac_demo_desc *desc;
 	uint32_t k = 0;
@@ -276,7 +276,7 @@ static struct iio_channel iio_dac_channels[] = {
  * @param mask - Channel mask (unsigned)
  * @return 0 on success, negative error code otherwise
  */
-static int32_t iio_update_dac_channels(void *dev, uint32_t mask)
+static int iio_update_dac_channels(void *dev, uint32_t mask)
 {
 	return update_dac_channels(dev, (int32_t)mask);
 }
@@ -288,7 +288,7 @@ static int32_t iio_update_dac_channels(void *dev, uint32_t mask)
  * @param readval - Pointer to store read value (32-bit)
  * @return 0 on success, negative error code otherwise
  */
-static int32_t iio_dac_demo_reg_read(void *dev, uint32_t reg, uint32_t *readval)
+static int iio_dac_demo_reg_read(void *dev, uint32_t reg, uint32_t *readval)
 {
 	struct dac_demo_desc *desc = (struct dac_demo_desc *)dev;
 	uint8_t val8;
@@ -311,8 +311,8 @@ static int32_t iio_dac_demo_reg_read(void *dev, uint32_t reg, uint32_t *readval)
  * @param writeval - Value to write (32-bit)
  * @return 0 on success, negative error code otherwise
  */
-static int32_t iio_dac_demo_reg_write(void *dev, uint32_t reg,
-				      uint32_t writeval)
+static int iio_dac_demo_reg_write(void *dev, uint32_t reg,
+				  uint32_t writeval)
 {
 	struct dac_demo_desc *desc = (struct dac_demo_desc *)dev;
 

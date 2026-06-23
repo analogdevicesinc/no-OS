@@ -72,7 +72,7 @@ static struct iio_device ltp8800_iio_dev;
  * @return ret    - Result of the reading procedure.
  * 		    In case of success, the size of the read data is returned.
 */
-static int32_t ltp8800_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
+static int ltp8800_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
 {
 	struct ltp8800_iio_desc *iio_ltp8800 = dev;
 	struct ltp8800_dev *ltp8800 = iio_ltp8800->ltp8800_dev;
@@ -150,7 +150,7 @@ static int32_t ltp8800_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
  * @param writeval - Value to write.
  * @return ret    - Result of the writing procedure.
 */
-static int32_t ltp8800_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
+static int ltp8800_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
 {
 	struct ltp8800_iio_desc *iio_ltp8800 = dev;
 	struct ltp8800_dev *ltp8800 = iio_ltp8800->ltp8800_dev;

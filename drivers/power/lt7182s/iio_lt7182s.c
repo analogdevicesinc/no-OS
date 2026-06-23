@@ -83,7 +83,7 @@ static struct iio_device lt7182s_iio_dev;
  * @return ret    - Result of the reading procedure.
  * 		    In case of success, the size of the read data is returned.
 */
-static int32_t lt7182s_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
+static int lt7182s_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
 {
 	struct lt7182s_iio_desc *iio_lt7182s = dev;
 	struct lt7182s_dev *lt7182s = iio_lt7182s->lt7182s_dev;
@@ -207,7 +207,7 @@ static int32_t lt7182s_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
  * @param writeval - Value to write.
  * @return ret    - Result of the writing procedure.
 */
-static int32_t lt7182s_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
+static int lt7182s_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
 {
 	struct lt7182s_iio_desc *iio_lt7182s = dev;
 	struct lt7182s_dev *lt7182s = iio_lt7182s->lt7182s_dev;

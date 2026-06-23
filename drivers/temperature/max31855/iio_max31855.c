@@ -43,11 +43,11 @@ static int max31855_iio_read_raw(void *dev, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel, intptr_t priv);
 static int max31855_iio_read_scale(void *dev, char *buf, uint32_t len,
 				   const struct iio_ch_info *channel, intptr_t priv);
-static int32_t max31855_iio_update_channels(void *dev, uint32_t mask);
-static int32_t max31855_iio_reg_read(void *dev, uint32_t reg,
-				     uint32_t *readval);
-static int32_t max31855_iio_read_samples(void *dev, void *buff,
-		uint32_t samples);
+static int max31855_iio_update_channels(void *dev, uint32_t mask);
+static int max31855_iio_reg_read(void *dev, uint32_t reg,
+				 uint32_t *readval);
+static int max31855_iio_read_samples(void *dev, void *buff,
+				     uint32_t samples);
 
 static struct iio_attribute max31855_iio_temp_attrs[] = {
 	{
@@ -166,7 +166,7 @@ int max31855_iio_remove(struct max31855_iio_dev *desc)
  * @param mask - Bit mask containing active channels
  * @return 0 in case of success, errno errors otherwise
  */
-static int32_t max31855_iio_update_channels(void *dev, uint32_t mask)
+static int max31855_iio_update_channels(void *dev, uint32_t mask)
 {
 	struct max31855_iio_dev *iio_max31855;
 
@@ -188,8 +188,8 @@ static int32_t max31855_iio_update_channels(void *dev, uint32_t mask)
  * @param readval - Register value
  * @return 0 in case of success, errno errors otherwise
  */
-static int32_t max31855_iio_reg_read(void *dev, uint32_t reg,
-				     uint32_t *readval)
+static int max31855_iio_reg_read(void *dev, uint32_t reg,
+				 uint32_t *readval)
 {
 	struct max31855_iio_dev *iio_max31855 = dev;
 
@@ -285,8 +285,8 @@ static int max31855_iio_read_scale(void *dev, char *buf, uint32_t len,
  * @param samples - Number of samples to be returned
  * @return ret    - 0 in case of success, errno errors otherwise
 */
-static int32_t max31855_iio_read_samples(void *dev, void *buff,
-		uint32_t samples)
+static int max31855_iio_read_samples(void *dev, void *buff,
+				     uint32_t samples)
 {
 	int ret;
 	int16_t i_temp;

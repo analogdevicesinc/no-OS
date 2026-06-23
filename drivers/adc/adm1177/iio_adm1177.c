@@ -113,7 +113,7 @@ static int adm1177_iio_read_scale(void *device, char *buf, uint32_t len,
 	}
 }
 
-static int32_t adm1177_iio_update_channels(void *dev, uint32_t mask)
+static int adm1177_iio_update_channels(void *dev, uint32_t mask)
 {
 	void *device = dev;
 	struct adm1177_iio_dev *iio_adm1177;
@@ -130,8 +130,8 @@ static int32_t adm1177_iio_update_channels(void *dev, uint32_t mask)
 	return 0;
 }
 
-static int32_t adm1177_iio_read_samples(void *dev, void *buff_raw,
-					uint32_t samples)
+static int adm1177_iio_read_samples(void *dev, void *buff_raw,
+				    uint32_t samples)
 {
 	void *device = dev;
 	int *buff = buff_raw;

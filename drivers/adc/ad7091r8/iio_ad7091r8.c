@@ -40,16 +40,16 @@
 #include "no_os_units.h"
 #include "no_os_alloc.h"
 
-static int32_t ad7091r8_iio_read_reg(void *dev, uint32_t reg,
-				     uint32_t *readval);
-static int32_t ad7091r8_iio_write_reg(void *dev, uint32_t reg,
-				      uint32_t writeval);
+static int ad7091r8_iio_read_reg(void *dev, uint32_t reg,
+				 uint32_t *readval);
+static int ad7091r8_iio_write_reg(void *dev, uint32_t reg,
+				  uint32_t writeval);
 static int ad7091r8_iio_read_raw(void *dev, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel, intptr_t priv);
 static int ad7091r8_iio_read_scale(void *dev, char *buf, uint32_t len,
 				   const struct iio_ch_info *channel, intptr_t priv);
-static int32_t ad7091r8_buffer_preenable(void* dev, uint32_t mask);
-static int32_t ad7091r8_trigger_handler(struct iio_device_data *iio_dev_data);
+static int ad7091r8_buffer_preenable(void* dev, uint32_t mask);
+static int ad7091r8_trigger_handler(struct iio_device_data *iio_dev_data);
 
 static struct iio_attribute ad7091r8_iio_attrs[] = {
 	{
@@ -112,8 +112,8 @@ static struct iio_device ad7091r4_iio_device = ad7091r8_iio_device(
 static struct iio_device ad7091r8_iio_device = ad7091r8_iio_device(
 			ad7091r8_channels);
 
-static int32_t ad7091r8_iio_read_reg(void *dev, uint32_t reg,
-				     uint32_t *readval)
+static int ad7091r8_iio_read_reg(void *dev, uint32_t reg,
+				 uint32_t *readval)
 {
 	struct ad7091r8_iio_dev *iio_dev = dev;
 	uint16_t read_data;
@@ -127,8 +127,8 @@ static int32_t ad7091r8_iio_read_reg(void *dev, uint32_t reg,
 	return 0;
 }
 
-static int32_t ad7091r8_iio_write_reg(void *dev, uint32_t reg,
-				      uint32_t writeval)
+static int ad7091r8_iio_write_reg(void *dev, uint32_t reg,
+				  uint32_t writeval)
 {
 	struct ad7091r8_iio_dev *iio_dev = dev;
 
@@ -212,7 +212,7 @@ static int ad7091r8_iio_read_scale(void *dev, char *buf, uint32_t len,
  * @return ret    - Result of the pre enable setup.
  * 		    Zero in case of success, errno otherwise.
 *******************************************************************************/
-static int32_t ad7091r8_buffer_preenable(void* dev, uint32_t mask)
+static int ad7091r8_buffer_preenable(void* dev, uint32_t mask)
 {
 	struct ad7091r8_iio_dev *iio_ad7091r8;
 	struct ad7091r8_dev *ad7091r8;
@@ -247,7 +247,7 @@ static int32_t ad7091r8_buffer_preenable(void* dev, uint32_t mask)
  * @return ret            - Result of the trigger handler routine.
  * 		            Zero in case of success, errno otherwise.
 *******************************************************************************/
-static int32_t ad7091r8_trigger_handler(struct iio_device_data *iio_dev_data)
+static int ad7091r8_trigger_handler(struct iio_device_data *iio_dev_data)
 {
 	struct ad7091r8_iio_dev *iio_ad7091r8;
 	struct ad7091r8_dev *ad7091r8;

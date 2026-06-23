@@ -105,7 +105,7 @@ int32_t adc_demo_remove(struct adc_demo_desc *desc)
  * @param mask - active channels mask
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t update_adc_channels(void *dev, uint32_t mask)
+int update_adc_channels(void *dev, uint32_t mask)
 {
 	struct adc_demo_desc *desc;
 
@@ -125,7 +125,7 @@ int32_t update_adc_channels(void *dev, uint32_t mask)
  * @param dev - physical instance of an adc device
  * @return 0 in case of success.
  */
-int32_t close_adc_channels(void* dev)
+int close_adc_channels(void* dev)
 {
 	struct adc_demo_desc *desc;
 
