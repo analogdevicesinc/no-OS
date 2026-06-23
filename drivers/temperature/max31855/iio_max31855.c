@@ -43,11 +43,11 @@ static int max31855_iio_read_raw(void *dev, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel, intptr_t priv);
 static int max31855_iio_read_scale(void *dev, char *buf, uint32_t len,
 				   const struct iio_ch_info *channel, intptr_t priv);
-static int max31855_iio_update_channels(void *dev, uint32_t mask);
-static int max31855_iio_reg_read(struct max31855_iio_dev *dev, uint32_t reg,
-				 uint32_t *readval);
-static int max31855_iio_read_samples(void* dev, uint16_t* buff,
-				     uint32_t samples);
+static int32_t max31855_iio_update_channels(void *dev, uint32_t mask);
+static int32_t max31855_iio_reg_read(void *dev, uint32_t reg,
+				     uint32_t *readval);
+static int32_t max31855_iio_read_samples(void *dev, void *buff,
+		uint32_t samples);
 
 static struct iio_attribute max31855_iio_temp_attrs[] = {
 	{
@@ -101,9 +101,9 @@ static struct iio_channel max31855_channels[] = {
 static struct iio_device max31855_iio_dev = {
 	.num_ch = NO_OS_ARRAY_SIZE(max31855_channels),
 	.channels = max31855_channels,
-	.pre_enable = (int32_t (*)())max31855_iio_update_channels,
-	.read_dev = (int32_t (*)())max31855_iio_read_samples,
-	.debug_reg_read = (int32_t (*)())max31855_iio_reg_read
+	.pre_enable = max31855_iio_update_channels,
+	.read_dev = max31855_iio_read_samples,
+	.debug_reg_read = max31855_iio_reg_read
 };
 
 /******************************************************************************/
@@ -166,7 +166,7 @@ int max31855_iio_remove(struct max31855_iio_dev *desc)
  * @param mask - Bit mask containing active channels
  * @return 0 in case of success, errno errors otherwise
  */
-static int max31855_iio_update_channels(void *dev, uint32_t mask)
+static int32_t max31855_iio_update_channels(void *dev, uint32_t mask)
 {
 	struct max31855_iio_dev *iio_max31855;
 
@@ -188,10 +188,12 @@ static int max31855_iio_update_channels(void *dev, uint32_t mask)
  * @param readval - Register value
  * @return 0 in case of success, errno errors otherwise
  */
-static int max31855_iio_reg_read(struct max31855_iio_dev *dev, uint32_t reg,
-				 uint32_t *readval)
+static int32_t max31855_iio_reg_read(void *dev, uint32_t reg,
+				     uint32_t *readval)
 {
-	return max31855_read_raw(dev->max31855_desc, readval);
+	struct max31855_iio_dev *iio_max31855 = dev;
+
+	return max31855_read_raw(iio_max31855->max31855_desc, readval);
 }
 
 /**
@@ -283,13 +285,14 @@ static int max31855_iio_read_scale(void *dev, char *buf, uint32_t len,
  * @param samples - Number of samples to be returned
  * @return ret    - 0 in case of success, errno errors otherwise
 */
-static int max31855_iio_read_samples(void* dev, uint16_t* buff,
-				     uint32_t samples)
+static int32_t max31855_iio_read_samples(void *dev, void *buff,
+		uint32_t samples)
 {
 	int ret;
 	int16_t i_temp;
 	int16_t t_temp;
 	uint32_t raw_buff;
+	uint16_t *samples_buff = buff;
 	struct max31855_iio_dev *max31855_iio;
 	struct max31855_dev *max31855_dev;
 
@@ -306,13 +309,13 @@ static int max31855_iio_read_samples(void* dev, uint16_t* buff,
 
 		if (max31855_iio->active_channels & NO_OS_BIT(0)) {
 			t_temp = no_os_field_get(NO_OS_GENMASK(31, 16), raw_buff);
-			buff[i] = t_temp;
+			samples_buff[i] = t_temp;
 			i++;
 		}
 
 		if (max31855_iio->active_channels & NO_OS_BIT(1)) {
 			i_temp = no_os_field_get(NO_OS_GENMASK(15, 0), raw_buff);
-			buff[i] = i_temp;
+			samples_buff[i] = i_temp;
 			i++;
 		}
 	}
