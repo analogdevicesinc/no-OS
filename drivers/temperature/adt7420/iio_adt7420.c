@@ -51,13 +51,13 @@ static int adt7420_iio_read_crit(void *dev, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel, intptr_t priv);
 static int adt7420_iio_read_hyst(void *dev, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel, intptr_t priv);
-static int adt7420_iio_reg_read(struct adt7420_iio_dev *dev, uint32_t reg,
-				uint32_t *readval);
-static int adt7420_iio_reg_write(struct adt7420_iio_dev *dev, uint32_t reg,
-				 uint32_t writeval);
-static int adt7420_iio_update_channels(void *dev, uint32_t mask);
-static int adt7420_iio_read_samples(void *dev, uint16_t *buff,
-				    uint32_t samples);
+static int32_t adt7420_iio_reg_read(void *dev, uint32_t reg,
+				    uint32_t *readval);
+static int32_t adt7420_iio_reg_write(void *dev, uint32_t reg,
+				     uint32_t writeval);
+static int32_t adt7420_iio_update_channels(void *dev, uint32_t mask);
+static int32_t adt7420_iio_read_samples(void *dev, void *buff,
+					uint32_t samples);
 
 static struct iio_attribute adt7420_iio_attrs[] = {
 	{
@@ -106,10 +106,10 @@ static struct iio_channel adt7420_channels[] = {
 static struct iio_device adt7420_iio_dev = {
 	.num_ch = NO_OS_ARRAY_SIZE(adt7420_channels),
 	.channels = adt7420_channels,
-	.pre_enable = (int32_t (*)()) adt7420_iio_update_channels,
-	.read_dev = (int32_t (*)()) adt7420_iio_read_samples,
-	.debug_reg_read = (int32_t (*)()) adt7420_iio_reg_read,
-	.debug_reg_write = (int32_t (*)()) adt7420_iio_reg_write,
+	.pre_enable = adt7420_iio_update_channels,
+	.read_dev = adt7420_iio_read_samples,
+	.debug_reg_read = adt7420_iio_reg_read,
+	.debug_reg_write = adt7420_iio_reg_write,
 };
 
 /***************************************************************************//**
@@ -178,16 +178,17 @@ int adt7420_iio_remove(struct adt7420_iio_dev *desc)
  *
  * @return 0 in case of success, errno errors otherwise
  */
-static int adt7420_iio_reg_read(struct adt7420_iio_dev *dev, uint32_t reg,
-				uint32_t *readval)
+static int32_t adt7420_iio_reg_read(void *dev, uint32_t reg,
+				    uint32_t *readval)
 {
+	struct adt7420_iio_dev *iio_dev = dev;
 	uint16_t val;
 	int ret;
 
 	if (reg > __UINT8_MAX__)
 		return -EINVAL;
 
-	ret = adt7420_reg_read(dev->adt7420_dev, reg, &val);
+	ret = adt7420_reg_read(iio_dev->adt7420_dev, reg, &val);
 	if (ret)
 		return ret;
 
@@ -205,16 +206,18 @@ static int adt7420_iio_reg_read(struct adt7420_iio_dev *dev, uint32_t reg,
  *
  * @return 0 in case of success, errno errors otherwise
  */
-static int adt7420_iio_reg_write(struct adt7420_iio_dev *dev, uint32_t reg,
-				 uint32_t writeval)
+static int32_t adt7420_iio_reg_write(void *dev, uint32_t reg,
+				     uint32_t writeval)
 {
+	struct adt7420_iio_dev *iio_dev = dev;
+
 	if (!dev)
 		return -ENODEV;
 
 	if (writeval > __UINT16_MAX__)
 		return -EINVAL;
 
-	return adt7420_reg_write(dev->adt7420_dev, reg, writeval);
+	return adt7420_reg_write(iio_dev->adt7420_dev, reg, writeval);
 }
 
 /**
@@ -483,7 +486,7 @@ static int adt7420_iio_read_hyst(void *dev, char *buf, uint32_t len,
  *
  * @return 0 in case of success, errno errors otherwise
  */
-static int adt7420_iio_update_channels(void *dev, uint32_t mask)
+static int32_t adt7420_iio_update_channels(void *dev, uint32_t mask)
 {
 	struct adt7420_iio_dev *iio_adt7420;
 
@@ -507,17 +510,18 @@ static int adt7420_iio_update_channels(void *dev, uint32_t mask)
  *
  * @return ret    - 0 in case of success, errno errors otherwise
 */
-static int adt7420_iio_read_samples(void *dev, uint16_t *buff,
-				    uint32_t samples)
+static int32_t adt7420_iio_read_samples(void *dev, void *buff,
+					uint32_t samples)
 {
 	struct adt7420_iio_dev *iio_adt7420;
 	struct adt7420_dev *adt7420;
+	uint16_t *samples_buff = buff;
 
 	iio_adt7420 = (struct adt7420_iio_dev *)dev;
 	adt7420 = iio_adt7420->adt7420_dev;
 
 	for (uint32_t i = 0; i < samples; i++)
-		buff[i] = (int16_t) adt7420_get_temperature(adt7420);
+		samples_buff[i] = (int16_t) adt7420_get_temperature(adt7420);
 
 	return samples;
 }
