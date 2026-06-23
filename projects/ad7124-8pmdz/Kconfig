@@ -1,0 +1,21 @@
+menu "ad7124-8pmdz Configuration"
+
+choice AD7124_8PMDZ_EXAMPLE
+	prompt "Example variant"
+	default AD7124_8PMDZ_IIO_EXAMPLE
+
+config AD7124_8PMDZ_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+endchoice
+
+config AD7124_8PMDZ_NETWORKING
+	bool "Enable ESP8266 Wi-Fi networking"
+	default n
+	select WIFI_NETWORKING
+	help
+	  Route IIO transport over an ESP8266 Wi-Fi module (UART AT commands)
+	  instead of the serial backend. aducm3029/eval-adicup3029 only.
+
+endmenu
