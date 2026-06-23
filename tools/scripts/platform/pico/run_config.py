@@ -13,6 +13,10 @@ project = sys.argv[2]
 pico_sdk = sys.argv[3]
 target = sys.argv[4]
 server_path = sys.argv[5]
+# Optional extra args. The default probe is cmsis-dap (a second Pico running
+# debugprobe/picoprobe firmware); pass "jlink" to select a SEGGER J-Link.
+probe = sys.argv[6] if len(sys.argv) > 6 else "cmsis-dap"
+openocd_path = sys.argv[7] if len(sys.argv) > 7 else "openocd"
 gdb_path = "gdb-multiarch"
 
 run_conf = run_file.read()
@@ -23,11 +27,43 @@ run_conf = re.sub("YYYY", target, run_conf)
 debug_config = json.loads(debug_conf)
 run_config = json.loads(run_conf)
 
-debug_config["serverpath"] = server_path
 debug_config["gdbPath"] = os.path.join(gdb_path)
-debug_config["configFiles"].append(os.path.join("target", target + ".cfg"))
+
+# Clear TIMER_DBGPAUSE (TIMER_BASE 0x40054000 + 0x2c). By default the RP2040
+# timer is paused whenever a core is halted by the debugger, so busy_wait_us()/
+# busy_wait_until() loops (e.g. the UART setup delay in hardware_uart/uart.c, or
+# any sleep) spin forever under debug because the timer never advances.
+#
+# It must be cleared on every *halt*, not just at reset: the SDK runtime brings
+# the TIMER block out of reset during startup, which restores DBGPAUSE to its
+# 0x7 default *after* any connect-/reset-time clear. Clearing on the "halted"
+# event re-applies it at every breakpoint/step (including run-to-main), so it
+# sticks through the firmware's own init.
+if probe == "jlink":
+    # The "jlink" servertype talks to JLinkGDBServer directly and has no OpenOCD
+    # event system. postLaunch/postReset GDB writes are the best available hook
+    # (clears at launch and after each reset).
+    debug_config["serverpath"] = server_path
+    _dbgpause_clear = ["set {unsigned int}0x4005402c = 0"]
+    debug_config["postLaunchCommands"] = _dbgpause_clear
+    debug_config["postResetCommands"] = _dbgpause_clear
+else:
+    # Default: second Pico (debugprobe/picoprobe) via OpenOCD. The "openocd"
+    # servertype uses configFiles for the interface and target.
+    debug_config["servertype"] = "openocd"
+    debug_config["serverpath"] = openocd_path
+    debug_config["configFiles"] = [
+        os.path.join("interface", "cmsis-dap.cfg"),
+        os.path.join("target", target + ".cfg"),
+    ]
+    # OpenOCD "halted" event handler: clears DBGPAUSE every time the core halts,
+    # independent of Cortex-Debug's command ordering and robust against the SDK
+    # runtime re-arming it during startup.
+    debug_config["openOCDLaunchCommands"] = [
+        target + ".core0 configure -event halted { mww 0x4005402c 0 }"
+    ]
 debug_config["svdFile"] = os.path.join(
-    pico_sdk, "src", target, "hardware_regs", target + ".svd"
+    pico_sdk, "src", target, "hardware_regs", target.upper() + ".svd"
 )
 
 default_debug_config = {"configurations": [debug_config]}

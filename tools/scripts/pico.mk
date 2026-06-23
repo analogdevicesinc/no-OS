@@ -1,13 +1,58 @@
-ifeq ($(PICO_SDK_PATH),)
-$(error $(ENDL)PICO_SDK_PATH not defined\
-		$(ENDL)Please run command "export PICO_SDK_PATH=/path/to/your/PICO_SDK_PATH"$(ENDL))
+# Pico platform build for Raspberry Pi Pico (rp2040), targeting pico-sdk 2.x.
+#
+# The pico-sdk is vendored as a git submodule under libraries/pico-sdk, so no
+# external setup is required. PICO_SDK_PATH is always pinned to this in-tree copy
+# and any externally exported value is ignored, so a stale PICO_SDK_PATH left in
+# the environment cannot break the build.
+
+# Pin PICO_SDK_PATH to the vendored submodule, overriding any exported value.
+override PICO_SDK_PATH := $(NO-OS)/libraries/pico-sdk
+
+ifeq ($(wildcard $(PICO_SDK_PATH)/pico_sdk_init.cmake),)
+$(error $(ENDL)pico-sdk not found at $(PICO_SDK_PATH)$(ENDL)\
+		$(ENDL)Initialize the submodule from the root of the repository with:$(ENDL)\
+		$(ENDL)    git submodule update --init libraries/pico-sdk$(ENDL))
 endif # PICO_SDK_PATH check
 
+# Flash/debug probe selector: "cmsis-dap" (default - a second Raspberry Pi Pico
+# running debugprobe/picoprobe firmware, driven by OpenOCD) or "jlink" (SEGGER
+# J-Link, native SEGGER tools). OpenOCD's J-Link driver fails the RP2040 SWD
+# multidrop selection ("Failed to connect multidrop rp2040.dap0"), so the jlink
+# probe uses the native SEGGER tools; OpenOCD's cmsis-dap driver handles
+# multidrop correctly.
+PROBE ?= cmsis-dap
+
+#----------------------------------------------------------------------
+# CMSIS-DAP / picoprobe probe (default)
+#----------------------------------------------------------------------
+# OpenOCD settings used by the cmsis-dap probe. OPENOCD_SCRIPTS is optional;
+# when empty OpenOCD uses its built-in default scripts directory.
+OPENOCD ?= openocd
+OPENOCD_SCRIPTS ?=
+OPENOCD_INTERFACE ?= interface/cmsis-dap.cfg
+OPENOCD_TARGET ?= target/rp2040.cfg
+OPENOCD_ADAPTER_SPEED ?= 5000
+# Expands to "-s <dir>" only when OPENOCD_SCRIPTS is set.
+OPENOCD_SEARCH = $(if $(OPENOCD_SCRIPTS),-s $(OPENOCD_SCRIPTS),)
+
+#----------------------------------------------------------------------
+# J-Link probe (PROBE=jlink)
+#----------------------------------------------------------------------
+ifeq ($(PROBE),jlink)
 ifeq ($(JLINK_SERVER_PATH),)
 $(warning $(ENDL)JLINK_SERVER_PATH not defined\
 		$(ENDL)Please run command "export JLINK_SERVER_PATH=/path/to/your/JLINK_SERVER_PATH"$(ENDL)\
 		$(ENDL)Example "export JLINK_SERVER_PATH=/opt/SEGGER/JLink/JLinkGDBServerCLExe"$(ENDL))
 endif # JLINK_SERVER_PATH check
+endif # PROBE jlink check
+
+# JLinkExe (standalone flasher) lives next to the GDB server, so derive it from
+# JLINK_SERVER_PATH and fall back to PATH.
+JLINK_EXE ?= $(if $(JLINK_SERVER_PATH),$(dir $(JLINK_SERVER_PATH))JLinkExe,$(shell command -v JLinkExe 2>/dev/null))
+
+# RP2040 device name and SWD speed (kHz) used by the J-Link tools.
+JLINK_DEVICE ?= RP2040_M0_0
+JLINK_SPEED  ?= 4000
 
 #----------------------------------------------------------------------
 # Tools & Helpers
@@ -16,14 +61,29 @@ CC=arm-none-eabi-gcc
 AR=arm-none-eabi-ar
 AS=arm-none-eabi-gcc
 GDB=gdb-multiarch
-OC=arm-none-eabi-objcopy	
+OC=arm-none-eabi-objcopy
 SIZE=arm-none-eabi-size
 
-# ELF2UF2 is used to convert elf binary in uf2 format
-# For flashing UF2 file can be dragged onto USB Mass Storage Device 
-ELF2UF2  :=  $(PICO_SDK_PATH)/tools/elf2uf2/build/elf2uf2
-ELF2UF2_CMAKE_DIR  :=  $(PICO_SDK_PATH)/tools/elf2uf2/
-ELF2UF2_BUILD  :=  $(shell (if [ -f $(ELF2UF2) ] ; then echo "ELF2UF2 already built" ; else echo "ELF2UF2 not built, proceed building" ; cd $(ELF2UF2_CMAKE_DIR) ; mkdir build ; cd build ; cmake .. ; make ; fi ;))
+# picotool converts the elf binary into the uf2 format used for USB Mass Storage
+# flashing. It is a separate tool from the pico-sdk (not vendored). It is looked
+# up on PATH by default, but PICOTOOL may be exported to point at a built binary
+# (e.g. <picotool>/build/picotool). When unavailable, the .uf2 step is skipped
+# while the .elf and .hex are still produced.
+PICOTOOL ?= $(shell command -v picotool 2>/dev/null)
+# A PICOTOOL pointing at a missing binary (e.g. a stale exported path) is treated
+# as unset: fall back to PATH, then to skipping the .uf2 step. This avoids
+# failing the build trying to exec a tool that isn't there.
+ifneq ($(PICOTOOL),)
+ifeq ($(wildcard $(PICOTOOL)),)
+$(warning $(ENDL)PICOTOOL=$(PICOTOOL) does not exist; falling back to PATH lookup.$(ENDL))
+PICOTOOL := $(shell command -v picotool 2>/dev/null)
+endif
+endif
+ifeq ($(PICOTOOL),)
+$(warning $(ENDL)picotool not found on PATH.$(ENDL)\
+		$(ENDL)The .uf2 image will not be generated (.elf and .hex still build).$(ENDL)\
+		$(ENDL)Install picotool or export PICOTOOL=/path/to/picotool to enable it.$(ENDL))
+endif
 
 # Generated hex file
 HEX = $(basename $(BINARY)).hex
@@ -36,12 +96,22 @@ UF2 = $(basename $(BINARY)).uf2
 TARGET = rp2040
 PROJECT_BUILD = $(BUILD_DIR)/app
 
-LSCRIPT = $(PICO_SDK_PATH)/src/rp2_common/pico_standard_link/memmap_default.ld
+# Directory holding the headers normally auto-generated by the SDK CMake build
+# (pico/version.h and pico/config_autogen.h). We generate them manually below.
+PICO_GENERATED_DIR = $(BUILD_DIR)/generated/pico_base
+
+# Pico board flash size (default 2 MiB for the Raspberry Pi Pico). The SDK's
+# memmap_default.ld INCLUDEs a generated pico_flash_region.ld that defines the
+# FLASH region; we generate it (see pico_genheaders) instead of CMake.
+PICO_FLASH_SIZE_BYTES ?= 2097152
+
+LSCRIPT = $(PICO_SDK_PATH)/src/rp2_common/pico_crt0/rp2040/memmap_default.ld
 
 #----------------------------------------------------------------------
 # Platform Source Files
 #----------------------------------------------------------------------
 # These are the platform c files that have to be compiled
+PLATFORM_SRCS += $(PICO_SDK_PATH)/src/common/hardware_claim/claim.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/common/pico_sync/critical_section.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/common/pico_sync/lock_core.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/common/pico_sync/mutex.c
@@ -51,7 +121,6 @@ PLATFORM_SRCS += $(PICO_SDK_PATH)/src/common/pico_time/timeout_helper.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/common/pico_util/datetime.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/common/pico_util/pheap.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/common/pico_util/queue.c
-PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/hardware_claim/claim.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/hardware_clocks/clocks.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/hardware_gpio/gpio.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/hardware_i2c/i2c.c
@@ -59,33 +128,49 @@ PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/hardware_irq/irq.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/hardware_pll/pll.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/hardware_spi/spi.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/hardware_sync/sync.c
+PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c
+PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/hardware_ticks/ticks.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/hardware_timer/timer.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/hardware_uart/uart.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/hardware_vreg/vreg.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/hardware_watchdog/watchdog.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/hardware_xosc/xosc.c
+PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_atomic/atomic.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_bootrom/bootrom.c
+PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_clib_interface/newlib_interface.c
+PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_double/double_init_rom_rp2040.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_double/double_math.c
-PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_float/float_init_rom.c
+PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_float/float_init_rom_rp2040.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_float/float_math.c
-PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_malloc/pico_malloc.c
-PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_platform/platform.c
+PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_malloc/malloc.c
+PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_mem_ops/mem_ops.c
+PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_platform_common/common.c
+PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_platform_panic/panic.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_printf/printf.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_runtime/runtime.c
-PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_standard_link/binary_info.c
+PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_runtime_init/runtime_init.c
+PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_runtime_init/runtime_init_clocks.c
+PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c
+PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_standard_binary_info/standard_binary_info.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_stdio/stdio.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_stdio_uart/stdio_uart.c
 PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_stdlib/stdlib.c
+PLATFORM_SRCS += $(PICO_SDK_PATH)/src/rp2040/pico_platform/platform.c
 
 #----------------------------------------------------------------------
 # Assembly Source Files
 #----------------------------------------------------------------------
 # These are the platform assembly files that have to be compiled
 ASM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/hardware_irq/irq_handler_chain.S
-ASM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_double/double_v1_rom_shim.S
-ASM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_float/float_aeabi.S
-ASM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_float/float_v1_rom_shim.S
-ASM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_standard_link/crt0.S
+ASM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S
+ASM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_divider/divider_hardware.S
+ASM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_crt0/crt0.S
+ASM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_double/double_aeabi_rp2040.S
+ASM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_double/double_v1_rom_shim_rp2040.S
+ASM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_float/float_aeabi_rp2040.S
+ASM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_float/float_v1_rom_shim_rp2040.S
+ASM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_int64_ops/pico_int64_ops_aeabi.S
+ASM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_mem_ops/mem_ops_aeabi.S
 
 #----------------------------------------------------------------------
 # Platform Include Paths
@@ -93,14 +178,25 @@ ASM_SRCS += $(PICO_SDK_PATH)/src/rp2_common/pico_standard_link/crt0.S
 # These are the platform include paths that contain needed header files
 
 PLATFORM_PICO_INCS_PATH += $(NO-OS)/drivers/platform/pico/
-PLATFORM_INCS_PATH += $(PICO_SDK_PATH)/src/boards/include
 
-PLATFORM_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/boot_stage2/include
+# Auto-generated headers (pico/version.h, pico/config_autogen.h)
+PLATFORM_INCS_PATH += $(PICO_GENERATED_DIR)
+
+PLATFORM_INCS_PATH += $(PICO_SDK_PATH)/src/boards/include
+PLATFORM_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/boot_bootrom_headers/include
+PLATFORM_INCS_PATH += $(PICO_SDK_PATH)/src/common/boot_picobin_headers/include
+PLATFORM_INCS_PATH += $(PICO_SDK_PATH)/src/common/boot_picoboot_headers/include
+PLATFORM_INCS_PATH += $(PICO_SDK_PATH)/src/common/boot_uf2_headers/include
 PLATFORM_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/cmsis/include
+PLATFORM_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/cmsis/stub/CMSIS/Core/Include
+PLATFORM_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/cmsis/stub/CMSIS/Device/RP2040/Include
+
 PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_base/include
-PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_claim/include
+PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_boot_lock/include
 PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_clocks/include
 PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_divider/include
+PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_dma/include
+PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_exception/include
 PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_gpio/include
 PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_i2c/include
 PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_irq/include
@@ -108,32 +204,47 @@ PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_pll/incl
 PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_resets/include
 PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_spi/include
 PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_sync/include
+PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_sync_spin_lock/include
+PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_ticks/include
 PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_timer/include
 PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_uart/include
 PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_vreg/include
 PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_watchdog/include
 PLATFORM_HARDWARE_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/hardware_xosc/include
+
+PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_atomic/include
 PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_bootrom/include
+PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_clib_interface/include
 PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_double/include
+PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_flash/include
 PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_float/include
 PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_int64_ops/include
 PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_malloc/include
-PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_platform/include
+PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_mem_ops/include
+PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_platform_common/include
+PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_platform_compiler/include
+PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_platform_panic/include
+PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_platform_sections/include
 PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_printf/include
 PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_runtime/include
+PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_runtime_init/include
 PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_stdio/include
 PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_stdio_uart/include
+PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/rp2_common/pico_time_adapter/include
+
 PLATFORM_INCS_PATH += $(PICO_SDK_PATH)/src/rp2040/hardware_regs/include
 PLATFORM_INCS_PATH += $(PICO_SDK_PATH)/src/rp2040/hardware_structs/include
+PLATFORM_INCS_PATH += $(PICO_SDK_PATH)/src/rp2040/pico_platform/include
 
-PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/common/pico_base/include
+PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/common/pico_base_headers/include
 PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/common/pico_binary_info/include
-PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/common/pico_bit_ops/include
-PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/common/pico_divider/include
-PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/common/pico_stdlib/include
+PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/common/pico_bit_ops_headers/include
+PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/common/pico_divider_headers/include
+PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/common/pico_stdlib_headers/include
 PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/common/pico_sync/include
 PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/common/pico_time/include
 PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/common/pico_util/include
+PLATFORM_PICO_INCS_PATH += $(PICO_SDK_PATH)/src/common/hardware_claim/include
 
 
 PLATFORM_INCS_PATH += $(PLATFORM_PICO_INCS_PATH)
@@ -145,33 +256,28 @@ PLATFORM_INCS += $(addprefix -I,$(PLATFORM_INCS_PATH))
 ASM_INCLUDE += $(PLATFORM_INCS)
 
 #----------------------------------------------------------------------
-# Platform Directories needed for source links
-#----------------------------------------------------------------------
-PLATFORM_DIRS += $(sort $(foreach dir, $(PLATFORM_SRCS),$(dir $(dir))))
-PLATFORM_DIRS += $(sort $(foreach dir, $(PLATFORM_INCS_PATH),$(dir $(dir))))
-PLATFORM_DIRS += $(sort $(foreach dir, $(PLATFORM_HARDWARE_INCS_PATH),$(addsuffix hardware/, $(dir)/)))
-PLATFORM_DIRS += $(sort $(foreach dir, $(PLATFORM_PICO_INCS_PATH),$(addsuffix pico/, $(dir)/)))
-PLATFORM_DIRS += $(sort $(foreach dir, $(PICO_SDK_PATH)/src/boards/include/boards/,$(dir $(dir))))
-PLATFORM_DIRS += $(sort $(foreach dir, $(PICO_SDK_PATH)/src/common/pico_binary_info/include/pico/binary_info/,$(dir $(dir))))
-PLATFORM_DIRS += $(sort $(foreach dir, $(PICO_SDK_PATH)/src/common//pico_util/include/pico/util/,$(dir $(dir))))
-PLATFORM_DIRS += $(sort $(foreach dir, $(PICO_SDK_PATH)/src/rp2_common/pico_stdio/include/pico/stdio/,$(dir $(dir))))
-PLATFORM_DIRS += $(sort $(foreach dir, $(PICO_SDK_PATH)/src/rp2_common/boot_stage2/include/boot_stage2/,$(dir $(dir))))
-PLATFORM_DIRS += $(sort $(foreach dir, $(PICO_SDK_PATH)/src/rp2_common/cmsis/include/cmsis/,$(dir $(dir))))
-PLATFORM_DIRS += $(sort $(foreach dir, $(PICO_SDK_PATH)/src/rp2_common/pico_bootrom/include/pico/bootrom/,$(dir $(dir))))
-PLATFORM_DIRS += $(sort $(foreach dir, $(PICO_SDK_PATH)/src/rp2040/hardware_structs/include/hardware/structs/,$(dir $(dir))))
-PLATFORM_DIRS += $(sort $(foreach dir, $(PICO_SDK_PATH)/src/rp2040/hardware_regs/include/hardware/regs/,$(dir $(dir))))
-
-#----------------------------------------------------------------------
 # Platform header files needed for source links
 #----------------------------------------------------------------------
 PLATFORM_INCLUDE_FILES += $(foreach dir, $(PLATFORM_INCS_PATH), $(call rwildcard, $(dir),*.h))
-PLATFORM_INCLUDE_FILES += $(foreach dir, $(PLATFORM_INCS_PATH), $(call rwildcard, $(dir)/pico,*.h))
+
+#----------------------------------------------------------------------
+# Platform Directories needed for source links
+#----------------------------------------------------------------------
+# The SDK 2.x include tree has many nested header directories (boot/, pico/,
+# hardware/, pico/platform/, m-profile/, ...). Derive the directory list
+# directly from the source and header files instead of enumerating each nesting.
+PLATFORM_DIRS += $(sort $(foreach dir, $(PLATFORM_SRCS),$(dir $(dir))))
+PLATFORM_DIRS += $(sort $(foreach dir, $(PLATFORM_INCS_PATH),$(dir $(dir))))
+PLATFORM_DIRS += $(sort $(dir $(PLATFORM_INCLUDE_FILES)))
 
 #----------------------------------------------------------------------
 # Defined Symbols
 #----------------------------------------------------------------------
+DEFINES += -DLIB_PICO_ATOMIC=1
 DEFINES += -DLIB_PICO_BIT_OPS=1
 DEFINES += -DLIB_PICO_BIT_OPS_PICO=1
+DEFINES += -DLIB_PICO_CLIB_INTERFACE=1
+DEFINES += -DLIB_PICO_CRT0=1
 DEFINES += -DLIB_PICO_DIVIDER=1
 DEFINES += -DLIB_PICO_DIVIDER_HARDWARE=1
 DEFINES += -DLIB_PICO_DOUBLE=1
@@ -187,17 +293,20 @@ DEFINES += -DLIB_PICO_PLATFORM=1
 DEFINES += -DLIB_PICO_PRINTF=1
 DEFINES += -DLIB_PICO_PRINTF_PICO=1
 DEFINES += -DLIB_PICO_RUNTIME=1
+DEFINES += -DLIB_PICO_RUNTIME_INIT=1
+DEFINES += -DLIB_PICO_STANDARD_BINARY_INFO=1
 DEFINES += -DLIB_PICO_STANDARD_LINK=1
 DEFINES += -DLIB_PICO_STDIO=1
 DEFINES += -DLIB_PICO_STDIO_UART=1
 DEFINES += -DLIB_PICO_STDLIB=1
 DEFINES += -DLIB_PICO_SYNC=1
-DEFINES += -DLIB_PICO_SYNC_CORE=1
 DEFINES += -DLIB_PICO_SYNC_CRITICAL_SECTION=1
 DEFINES += -DLIB_PICO_SYNC_MUTEX=1
 DEFINES += -DLIB_PICO_SYNC_SEM=1
 DEFINES += -DLIB_PICO_TIME=1
+DEFINES += -DLIB_PICO_TIME_ADAPTER=1
 DEFINES += -DLIB_PICO_UTIL=1
+DEFINES += -DPICO_32BIT=1
 DEFINES += -DPICO_BOARD=\"pico\"
 DEFINES += -DPICO_BUILD=1
 DEFINES += -DPICO_CMAKE_BUILD_TYPE=\"Debug\"
@@ -206,6 +315,7 @@ DEFINES += -DPICO_CXX_ENABLE_EXCEPTIONS=0
 DEFINES += -DPICO_NO_FLASH=0
 DEFINES += -DPICO_NO_HARDWARE=0
 DEFINES += -DPICO_ON_DEVICE=1
+DEFINES += -DPICO_RP2040=1
 DEFINES += -DPICO_USE_BLOCKED_RAM=0
 
 DEFINES += -DDEBUG
@@ -218,7 +328,7 @@ DEFINES += -DPICO_DEFAULT_IRQ_PRIORITY=0
 #----------------------------------------------------------------------
 # Bootloader specific
 #----------------------------------------------------------------------
-BOOT_STAGE2 = $(PICO_SDK_PATH)/src/rp2_common/boot_stage2
+BOOT_STAGE2 = $(PICO_SDK_PATH)/src/rp2040/boot_stage2
 BOOTSRCS := $(BOOT_STAGE2)/compile_time_choice.S
 BOOTELF := $(subst :,__COLON__, $(addprefix $(PROJECT_BUILD)/, $(BOOT_STAGE2)/boot.elf))
 BOOTBIN := $(subst :,__COLON__, $(addprefix $(PROJECT_BUILD)/, $(BOOT_STAGE2)/boot.bin))
@@ -231,16 +341,22 @@ BOOT_DEFINES := -DPICO_BOARD=\"pico\"
 BOOT_DEFINES += -DPICO_BUILD=1
 BOOT_DEFINES += -DPICO_NO_HARDWARE=0
 BOOT_DEFINES += -DPICO_ON_DEVICE=1
+BOOT_DEFINES += -DPICO_RP2040=1
 
 BOOT_INCLUDE := -I$(NO-OS)/drivers/platform/pico/
+BOOT_INCLUDE += -I$(PICO_GENERATED_DIR)
 BOOT_INCLUDE += -I$(PICO_SDK_PATH)/src/rp2_common/cmsis/include
-BOOT_INCLUDE += -I$(PICO_SDK_PATH)/src/rp2_common/boot_stage2/asminclude
+BOOT_INCLUDE += -I$(PICO_SDK_PATH)/src/rp2040/boot_stage2/asminclude
 BOOT_INCLUDE += -I$(PICO_SDK_PATH)/src/rp2040/hardware_regs/include
 BOOT_INCLUDE += -I$(PICO_SDK_PATH)/src/rp2_common/hardware_base/include
-BOOT_INCLUDE += -I$(PICO_SDK_PATH)/src/common/pico_base/include
+BOOT_INCLUDE += -I$(PICO_SDK_PATH)/src/common/pico_base_headers/include
 BOOT_INCLUDE += -I$(PICO_SDK_PATH)/src/boards/include
-BOOT_INCLUDE += -I$(PICO_SDK_PATH)/src/rp2_common/pico_platform/include
-BOOT_INCLUDE += -I$(PICO_SDK_PATH)/src/rp2_common/boot_stage2/include
+BOOT_INCLUDE += -I$(PICO_SDK_PATH)/src/rp2_common/pico_platform_common/include
+BOOT_INCLUDE += -I$(PICO_SDK_PATH)/src/rp2_common/pico_platform_compiler/include
+BOOT_INCLUDE += -I$(PICO_SDK_PATH)/src/rp2_common/pico_platform_panic/include
+BOOT_INCLUDE += -I$(PICO_SDK_PATH)/src/rp2_common/pico_platform_sections/include
+BOOT_INCLUDE += -I$(PICO_SDK_PATH)/src/rp2040/pico_platform/include
+BOOT_INCLUDE += -I$(PICO_SDK_PATH)/src/rp2040/boot_stage2/include
 
 BOOT_ASFLAGS := $(BOOT_INCLUDE) $(BOOT_DEFINES)
 
@@ -280,6 +396,7 @@ ASFLAGS += $(DEFINES)
 ASFLAGS += -xassembler-with-cpp
 
 LDFLAGS += -Wl,-Map=$(BUILD_DIR)/$(PROJECT_NAME).map
+LDFLAGS += -L$(BUILD_DIR)/generated
 LDFLAGS += -mcpu=cortex-m0plus
 LDFLAGS += -mthumb
 LDFLAGS += -O0
@@ -414,13 +531,56 @@ LDFLAGS += -Wl,--wrap=puts
 LDFLAGS += -Wl,--wrap=putchar
 LDFLAGS += -Wl,--wrap=getchar
 
-$(PLATFORM)_project:
+#----------------------------------------------------------------------
+# Generated headers (normally produced by the SDK CMake build)
+#----------------------------------------------------------------------
+# pico/version.h is produced from version.h.in, pico/config_autogen.h holds the
+# list of config headers to include (board header is enough for an rp2040 build).
+PICO_VERSION_IN = $(PICO_SDK_PATH)/src/common/pico_base_headers/include/pico/version.h.in
+PICO_VERSION_CMAKE = $(PICO_SDK_PATH)/pico_sdk_version.cmake
+
+PICO_VER_MAJOR := $(shell sed -n 's/.*set(PICO_SDK_VERSION_MAJOR \([0-9]*\)).*/\1/p' $(PICO_VERSION_CMAKE) | head -1)
+PICO_VER_MINOR := $(shell sed -n 's/.*set(PICO_SDK_VERSION_MINOR \([0-9]*\)).*/\1/p' $(PICO_VERSION_CMAKE) | head -1)
+PICO_VER_REVISION := $(shell sed -n 's/.*set(PICO_SDK_VERSION_REVISION \([0-9]*\)).*/\1/p' $(PICO_VERSION_CMAKE) | head -1)
+PICO_VER_STRING := $(PICO_VER_MAJOR).$(PICO_VER_MINOR).$(PICO_VER_REVISION)
+
+# These are real file targets (not PHONY) so they are generated once and keep a
+# stable timestamp - the object files depend on them through their .d files, so
+# regenerating them on every build would force a full rebuild + relink loop.
+PICO_GEN_VERSION_H = $(PICO_GENERATED_DIR)/pico/version.h
+PICO_GEN_CONFIG_H = $(PICO_GENERATED_DIR)/pico/config_autogen.h
+PICO_GEN_FLASH_LD = $(BUILD_DIR)/generated/pico_flash_region.ld
+PICO_GEN_FILES = $(PICO_GEN_VERSION_H) $(PICO_GEN_CONFIG_H) $(PICO_GEN_FLASH_LD)
+
+$(PICO_GEN_VERSION_H): $(PICO_VERSION_IN) $(PICO_VERSION_CMAKE)
+	$(call print,[GEN] $(notdir $@))
+	$(call mk_dir,$(@D)) $(HIDE)
+	sed -e 's/$${PICO_SDK_VERSION_MAJOR}/$(PICO_VER_MAJOR)/g' \
+	    -e 's/$${PICO_SDK_VERSION_MINOR}/$(PICO_VER_MINOR)/g' \
+	    -e 's/$${PICO_SDK_VERSION_REVISION}/$(PICO_VER_REVISION)/g' \
+	    -e 's/$${PICO_SDK_VERSION_STRING}/$(PICO_VER_STRING)/g' \
+	    $(PICO_VERSION_IN) > $@
+
+$(PICO_GEN_CONFIG_H):
+	$(call print,[GEN] $(notdir $@))
+	$(call mk_dir,$(@D)) $(HIDE)
+	printf '// AUTOGENERATED BY no-OS pico.mk - DO NOT EDIT\n#include "boards/pico.h"\n' > $@
+
+$(PICO_GEN_FLASH_LD):
+	$(call print,[GEN] $(notdir $@))
+	$(call mk_dir,$(@D)) $(HIDE)
+	printf 'FLASH(rx) : ORIGIN = 0x10000000, LENGTH = $(PICO_FLASH_SIZE_BYTES)\n' > $@
+
+.PHONY: pico_genheaders
+pico_genheaders: $(PICO_GEN_FILES)
+
+$(PLATFORM)_project: pico_genheaders
 	$(call print, Buildingfortarget $(TARGET))
 	$(call print, CreatingIDEproject)
 	$(call mk_dir, $(BUILD_DIR)) $(HIDE)
 
 $(PLATFORM)_sdkopen:
-	$(shell python $(PLATFORM_TOOLS)/run_config.py $(BINARY) $(PROJECT) $(PICO_SDK_PATH) $(TARGET) $(JLINK_SERVER_PATH))
+	$(shell python $(PLATFORM_TOOLS)/run_config.py $(BINARY) $(PROJECT) $(PICO_SDK_PATH) $(TARGET) $(JLINK_SERVER_PATH) $(PROBE) $(OPENOCD))
 	code $(PROJECT)
 
 $(PLATFORM)_sdkclean: clean
@@ -433,12 +593,16 @@ $(HEX): $(BINARY)
 	$(call print, $(notdir $@) isready)
 
 $(UF2): $(BINARY)
+ifeq ($(PICOTOOL),)
+	$(call print,[UF2] skipped (picotool not available))
+else
 	$(call print,[UF2] $(notdir $@))
-	$(ELF2UF2) $(BINARY) $(UF2)
+	$(PICOTOOL) uf2 convert -t elf $(BINARY) -t uf2 $(UF2) --family rp2040
 	$(call print,$(notdir $@) isready)
+endif
 
 .SECONDEXPANSION:
-$(BOOTSRC): $(BOOTSRCS)
+$(BOOTSRC): $(BOOTSRCS) | pico_genheaders
 	@mkdir -p $(@D)
 	$(CC) $(BOOT_CFLAGS) -T $(BOOTLD) $^ -o $(BOOTELF)
 	$(OC) -Obinary $(BOOTELF) $(BOOTBIN)
@@ -451,28 +615,57 @@ $(BOOTOBJ): $(BOOTSRC)
 
 .PHONY: $(BINARY).gdb
 $(BINARY).gdb:
-	@echo target remote localhost:3333 > $(BINARY).gdb	
-	@echo load $(BINARY) >> $(BINARY).gdb	
+	@echo target remote localhost:3333 > $(BINARY).gdb
+	@echo load $(BINARY) >> $(BINARY).gdb
 	@echo file $(BINARY) >> $(BINARY).gdb
 	@echo b main >> $(BINARY).gdb
-	@echo monitor reset halt >> $(BINARY).gdb	
+	@echo monitor reset halt >> $(BINARY).gdb
 	@echo tui enable >> $(BINARY).gdb
-	@echo c >> $(BINARY).gdb	
+	@echo c >> $(BINARY).gdb
+
+# Generated J-Link command file used by the run target to flash and start the
+# application over SWD (replaces the previous OpenOCD "program ... reset exit").
+JLINK_FLASH_CMD = $(BUILD_DIR)/flash.jlink
+
+.PHONY: $(JLINK_FLASH_CMD)
+$(JLINK_FLASH_CMD):
+	@echo si SWD > $(JLINK_FLASH_CMD)
+	@echo speed $(JLINK_SPEED) >> $(JLINK_FLASH_CMD)
+	@echo connect >> $(JLINK_FLASH_CMD)
+	@echo loadfile $(BINARY) >> $(JLINK_FLASH_CMD)
+	@echo r >> $(JLINK_FLASH_CMD)
+	@echo g >> $(JLINK_FLASH_CMD)
+	@echo exit >> $(JLINK_FLASH_CMD)
 
 .PHONY: pico_run
-$(PLATFORM)_run:all
-	openocd -f interface/jlink.cfg -c "transport select swd" -c "adapter_khz 6000" \
-	-f target/rp2040.cfg -c "program $(BINARY) reset exit"
+ifeq ($(PROBE),jlink)
+$(PLATFORM)_run: all $(JLINK_FLASH_CMD)
+	$(JLINK_EXE) -device $(JLINK_DEVICE) -if SWD -speed $(JLINK_SPEED) \
+	-autoconnect 1 -ExitOnError 1 -CommandFile $(JLINK_FLASH_CMD)
+else
+$(PLATFORM)_run: all
+	$(OPENOCD) $(OPENOCD_SEARCH) -f $(OPENOCD_INTERFACE) \
+	-c "adapter speed $(OPENOCD_ADAPTER_SPEED)" -f $(OPENOCD_TARGET) \
+	-c "program $(BINARY) verify reset exit"
+endif
 
 $(PLATFORM)_reset:
 
+# Pick the GDB server backing the debug target. Both servers listen on
+# localhost:3333, which the generated $(BINARY).gdb command file connects to.
+ifeq ($(PROBE),jlink)
+DEBUG_SERVER_DEP = start_jlink_gdbserver
+else
+DEBUG_SERVER_DEP = start_openocd
+endif
+
 .PHONY:debug
-debug: all $(BINARY).gdb start_openocd
+debug: all $(BINARY).gdb $(DEBUG_SERVER_DEP)
 	$(GDB) --command=$(BINARY).gdb
 
 
 LINK_SRCS = y
-link_srcs: 
+link_srcs:
 	$(foreach file,$(sort $(PLATFORM_SRCS)),\
 		$(call update_file,$(file),$(call relative_to_project,$(file))) $(HIDE);) echo . $(HIDE)
 	$(foreach file,$(sort $(PLATFORM_INCLUDE_FILES)),\
@@ -490,6 +683,26 @@ clean_uf2:
 
 clean:clean_hex clean_uf2
 
+start_jlink_gdbserver:
+	$(JLINK_SERVER_PATH) -device $(JLINK_DEVICE) -if SWD -speed $(JLINK_SPEED) \
+	-endian little -port 3333 -singlerun -nogui &
+
+# OpenOCD GDB server over cmsis-dap (default probe). Listens on the default
+# gdb port 3333, matching the generated $(BINARY).gdb command file. "reset halt"
+# brings the target into a known, halted state on attach (mirroring the flash
+# path's "program ... reset"); a bare "init" leaves the running firmware driving
+# the bus, which makes the initial SWD attach unreliable.
+#
+# The "halted" event handler clears TIMER_DBGPAUSE (TIMER_BASE 0x40054000 + 0x2c)
+# on every core halt. By default the RP2040 timer is paused whenever a core is
+# halted by the debugger, so busy_wait_us()/busy_wait_until() loops (e.g.
+# hardware_timer/timer.c, the UART setup delay in hardware_uart/uart.c) spin
+# forever under debug because timerawl never advances. A one-shot clear is not
+# enough: the SDK runtime brings the TIMER block out of reset during startup,
+# restoring DBGPAUSE to its 0x7 default afterwards; clearing on every halt
+# re-applies it at each breakpoint/step so it sticks through the firmware's init.
 start_openocd:
-	openocd -f interface/jlink.cfg -c "transport select swd" -c "adapter_khz 6000" \
-	-f target/rp2040.cfg -c "init" &
+	$(OPENOCD) $(OPENOCD_SEARCH) -f $(OPENOCD_INTERFACE) \
+	-c "adapter speed $(OPENOCD_ADAPTER_SPEED)" -f $(OPENOCD_TARGET) \
+	-c "$(TARGET).core0 configure -event halted { mww 0x4005402c 0 }" \
+	-c "init" -c "reset halt" &
