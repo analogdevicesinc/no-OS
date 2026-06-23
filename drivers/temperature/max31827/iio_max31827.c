@@ -66,15 +66,19 @@ enum max31827_ch_attr_priv {
 	MAX31827_C_UPDATE_INTERVAL,
 };
 
-static int32_t max31827_iio_reg_read(struct max31827_iio_device *dev,
+static int32_t max31827_iio_reg_read(void *ddev,
 				     uint32_t reg, uint32_t *readval)
 {
+	struct max31827_iio_device *dev = ddev;
+
 	return max31827_reg_read(dev->dev, (uint8_t)reg, (uint16_t*)readval);
 }
 
-static int32_t max31827_iio_reg_write(struct max31827_iio_device *dev,
+static int32_t max31827_iio_reg_write(void *ddev,
 				      uint32_t reg, uint32_t writeval)
 {
+	struct max31827_iio_device *dev = ddev;
+
 	return max31827_reg_write(dev->dev, reg, writeval);
 }
 
@@ -332,8 +336,8 @@ static struct iio_channel max31827_channels[] = {
 static struct iio_device max31827_iio_dev = {
 	.num_ch = NO_OS_ARRAY_SIZE(max31827_channels),
 	.channels = max31827_channels,
-	.debug_reg_read = (int32_t (*)()) max31827_iio_reg_read,
-	.debug_reg_write = (int32_t (*)()) max31827_iio_reg_write,
+	.debug_reg_read = max31827_iio_reg_read,
+	.debug_reg_write = max31827_iio_reg_write,
 	.attributes = max31827_iio_ch_attrs,
 };
 
