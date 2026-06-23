@@ -76,11 +76,11 @@ config ESH
 
 config ESH_VERSION
 	string "esh version tag"
-	default "master"
+	default "main"
 	depends on ESH
 	help
 	  Git tag or branch name for esh.
-	  Examples: master
+	  Examples: main
 	  This version will be checked against the submodule,
 	  then the global cache, then fetched if not found.
 

@@ -5,7 +5,7 @@
 include(LibraryCacheUtils)
 
 if(NOT DEFINED CONFIG_ESH_VERSION OR "${CONFIG_ESH_VERSION}" STREQUAL "")
-    set(CONFIG_ESH_VERSION "master")
+    set(CONFIG_ESH_VERSION "main")
 endif()
 
 message(STATUS "esh requested version: ${CONFIG_ESH_VERSION}")
