@@ -157,6 +157,11 @@
 #define VAL_LAYER_FLASH					0x04
 #define VAL_LAYER_ALL					(VAL_LAYER_RAM | VAL_LAYER_BBR | VAL_LAYER_FLASH)
 
+/* Value layer definitions for UBX-CFG-VALGET */
+#define VALGET_LAYER_RAM					0x00
+#define VALGET_LAYER_BBR					0x01
+#define VALGET_LAYER_FLASH					0x02
+
 /* Value size definitions */
 #define VAL_SIZE_1					0x01
 #define VAL_SIZE_8					0x02
