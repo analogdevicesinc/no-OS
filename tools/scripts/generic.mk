@@ -167,6 +167,12 @@ CFLAGS += -Wall								\
 	 -MMD 								\
 	 -MP
 
+# Generate header dependencies for C++ objects too. -MP emits a phony rule
+# for every header prerequisite, so a renamed or removed header does not break
+# incremental builds with "No rule to make target '<old header>'".
+CPPFLAGS += -MMD							\
+	 -MP
+
 #------------------------------------------------------------------------------
 #                          COMMON INITIALIZATION
 #------------------------------------------------------------------------------
