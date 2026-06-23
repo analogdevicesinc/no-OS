@@ -240,7 +240,7 @@ static int ad7490_iio_read_sampling_freq(void *device, char *buf, uint32_t len,
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
 }
 
-static int ad7490_iio_pre_enable(void *device, uint32_t mask)
+static int32_t ad7490_iio_pre_enable(void *device, uint32_t mask)
 {
 	struct ad7490_iio_desc *desc = device;
 
@@ -250,14 +250,14 @@ static int ad7490_iio_pre_enable(void *device, uint32_t mask)
 	return ad7490_start_seq(desc->ad7490_desc, AD7490_SHADOW_SEQ, mask, 0);
 }
 
-static int ad7490_iio_post_disable(void *device, uint32_t mask)
+static int32_t ad7490_iio_post_disable(void *device)
 {
 	struct ad7490_iio_desc *desc = device;
 
 	return ad7490_stop_seq(desc->ad7490_desc);
 }
 
-static int iio_ad7490_submit_buffer(struct iio_device_data *iio_dev_data)
+static int32_t iio_ad7490_submit_buffer(struct iio_device_data *iio_dev_data)
 {
 	struct ad7490_iio_desc *iio_desc = iio_dev_data->dev;
 	struct ad7490_desc *desc = iio_desc->ad7490_desc;
@@ -289,9 +289,11 @@ static int iio_ad7490_submit_buffer(struct iio_device_data *iio_dev_data)
 	return iio_buffer_block_done(buffer);
 }
 
-static int ad7490_iio_read_samples(void *device, int *buff, uint32_t samples)
+static int32_t ad7490_iio_read_samples(void *device, void *buff,
+				       uint32_t samples)
 {
 	struct ad7490_iio_desc *desc = device;
+	int *buff_data = buff;
 	int16_t channels_val[16];
 	uint32_t i = 0, j;
 	int ret;
@@ -302,7 +304,7 @@ static int ad7490_iio_read_samples(void *device, int *buff, uint32_t samples)
 			return ret;
 
 		for (j = 0; j < desc->no_of_active_channels; j++) {
-			buff[i] = channels_val[j];
+			buff_data[i] = channels_val[j];
 			i++;
 		}
 	}
@@ -371,10 +373,10 @@ static struct iio_device ad7490_iio_dev = {
 	.num_ch = NO_OS_ARRAY_SIZE(ad7490_channels),
 	.channels = ad7490_channels,
 	.attributes = ad7490_global_attrs,
-	.read_dev = (int32_t (*)())ad7490_iio_read_samples,
-	.pre_enable = (int32_t (*)())ad7490_iio_pre_enable,
-	.post_disable = (int32_t (*)())ad7490_iio_post_disable,
-	.submit = (int32_t (*)())iio_ad7490_submit_buffer,
+	.read_dev = ad7490_iio_read_samples,
+	.pre_enable = ad7490_iio_pre_enable,
+	.post_disable = ad7490_iio_post_disable,
+	.submit = iio_ad7490_submit_buffer,
 };
 
 int ad7490_iio_init(struct ad7490_iio_desc **iio_desc,
