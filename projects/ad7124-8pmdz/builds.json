@@ -6,5 +6,10 @@
     "iio_wifi": {
       "flags" : "EXAMPLE=iio_example NETWORKING=y"
     }
+  },
+  "maxim": {
+    "iio_example_max32690": {
+      "flags" : "EXAMPLE=iio_example TARGET=max32690"
+    }
   }
 }

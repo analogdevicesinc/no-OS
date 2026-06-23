@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   common_data.c
- *   @brief  Defines common data to be used by ad7124-8pmdz examples.
- *   @author Drimbarean Andrei (andrei.drimbarean@analog.com)
+ *   @file   parameters.h
+ *   @brief  Definitions specific to Maxim platform used by ad7124-8pmdz
+ *           project.
+ *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,34 +31,27 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
-#include "common_data.h"
+#include "maxim_irq.h"
+#include "maxim_spi.h"
+#include "maxim_uart.h"
+#include "maxim_uart_stdio.h"
 
-struct no_os_uart_init_param ad7124_uart_ip = {
-	.device_id = UART_DEVICE_ID,
-	.irq_id = UART_IRQ_ID,
-	.asynchronous_rx = true,
-	.baud_rate = UART_BAUDRATE,
-	.size = NO_OS_UART_CS_8,
-	.parity = NO_OS_UART_PAR_NO,
-	.stop = NO_OS_UART_STOP_1_BIT,
-	.extra = UART_EXTRA,
-	.platform_ops = UART_OPS,
-};
+#define UART_IRQ_ID	UART0_IRQn
+#define UART_DEVICE_ID	0
+#define UART_BAUDRATE	115200
+#define UART_EXTRA	&ad7124_uart_extra_ip
+#define UART_OPS	&max_uart_ops
 
-struct no_os_spi_init_param ad7124_spi_ip = {
-	.device_id = SPI_DEVICE_ID,
-	.max_speed_hz = SPI_BAUDRATE,
-	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
-	.mode = NO_OS_SPI_MODE_3,
-	.platform_ops = SPI_OPS,
-	.chip_select = SPI_CS,
-	.extra = SPI_EXTRA,
-};
+#define SPI_DEVICE_ID	4
+#define SPI_CS		0
+#define SPI_BAUDRATE	1000000
+#define SPI_OPS		&max_spi_ops
+#define SPI_EXTRA	&ad7124_spi_extra_ip
 
-struct ad7124_init_param ad7124_ip = {
-	.spi_init = &ad7124_spi_ip,
-	.regs = ad7124_init_regs_default,
-	.spi_rdy_poll_cnt = 1000,
-	.active_device = ID_AD7124_8,
-};
+extern struct max_uart_init_param ad7124_uart_extra_ip;
+extern struct max_spi_init_param ad7124_spi_extra_ip;
+
+#endif /* __PARAMETERS_H__ */
