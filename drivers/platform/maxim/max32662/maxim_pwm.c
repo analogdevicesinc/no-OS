@@ -66,7 +66,7 @@ static int _get_prescaler(uint32_t div, mxc_tmr_pres_t *prescaler)
  * @param desc - PWM descriptor.
  * @return 0 in case of success, negative error code otherwise.
  */
-int max_pwm_enable(struct no_os_pwm_desc *desc)
+int32_t max_pwm_enable(struct no_os_pwm_desc *desc)
 {
 	MXC_TMR_Start(MXC_TMR_GET_TMR(desc->id));
 
@@ -78,7 +78,7 @@ int max_pwm_enable(struct no_os_pwm_desc *desc)
  * @param desc - PWM descriptor.
  * @return 0 in case of success, negative error otherwise.
  */
-int max_pwm_disable(struct no_os_pwm_desc *desc)
+int32_t max_pwm_disable(struct no_os_pwm_desc *desc)
 {
 	MXC_TMR_Stop(MXC_TMR_GET_TMR(desc->id));
 
@@ -114,8 +114,8 @@ static int _max_pwm_pins_vddio(uint32_t id, mxc_gpio_vssel_t vssel)
  * @param period_ns - PWM period.
  * @return 0 in case of success, negative error code otherwise.
  */
-int max_pwm_set_period(struct no_os_pwm_desc *desc,
-		       uint32_t period_ns)
+int32_t max_pwm_set_period(struct no_os_pwm_desc *desc,
+			   uint32_t period_ns)
 {
 	struct max_pwm_extra *pwm_extra;
 	uint32_t period_ticks, div;
@@ -162,8 +162,8 @@ int max_pwm_set_period(struct no_os_pwm_desc *desc,
  * @param period_ns - PWM period.
  * @return 0 in case of success, negative error code otherwise.
  */
-int max_pwm_get_period(struct no_os_pwm_desc *desc,
-		       uint32_t *period_ns)
+int32_t max_pwm_get_period(struct no_os_pwm_desc *desc,
+			   uint32_t *period_ns)
 {
 	*period_ns = desc->period_ns;
 
@@ -176,8 +176,8 @@ int max_pwm_get_period(struct no_os_pwm_desc *desc,
  * @param duty_cycle_ns - PWM duty cycle.
  * @return 0 in case of success, negative error code otherwise.
  */
-int max_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
-			   uint32_t duty_cycle_ns)
+int32_t max_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
+			       uint32_t duty_cycle_ns)
 {
 	struct max_pwm_extra *pwm_extra;
 	uint32_t duty_ticks;
@@ -215,8 +215,8 @@ int max_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
  * @param duty_cycle_ns - PWM duty cycle.
  * @return 0 in case of success, negative error code otherwise.
  */
-int max_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
-			   uint32_t *duty_cycle_ns)
+int32_t max_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
+			       uint32_t *duty_cycle_ns)
 {
 	*duty_cycle_ns = desc->duty_cycle_ns;
 
@@ -229,8 +229,8 @@ int max_pwm_get_duty_cycle(struct no_os_pwm_desc *desc,
  * @param param - The structure containing PWM init parameters.
  * @return 0 in case of success, negative error code otherwise.
  */
-int max_pwm_init(struct no_os_pwm_desc **desc,
-		 const struct no_os_pwm_init_param *param)
+int32_t max_pwm_init(struct no_os_pwm_desc **desc,
+		     const struct no_os_pwm_init_param *param)
 {
 	struct max_pwm_init_param *extra_init;
 	struct no_os_pwm_desc *descriptor;
@@ -283,7 +283,7 @@ error:
  * @param desc - PWM descriptor
  * @return 0 in case of success, negative error code otherwise.
  */
-int max_pwm_remove(struct no_os_pwm_desc *desc)
+int32_t max_pwm_remove(struct no_os_pwm_desc *desc)
 {
 	if (!desc)
 		return -EINVAL;
@@ -299,12 +299,12 @@ int max_pwm_remove(struct no_os_pwm_desc *desc)
 * @brief Maxim platform specific callbacks for the PWM API
 */
 const struct no_os_pwm_platform_ops max_pwm_ops = {
-	.pwm_ops_enable = (int32_t (*)())max_pwm_enable,
-	.pwm_ops_disable = (int32_t (*)())max_pwm_disable,
-	.pwm_ops_set_period = (int32_t (*)())max_pwm_set_period,
-	.pwm_ops_get_period = (int32_t (*)())max_pwm_get_period,
-	.pwm_ops_set_duty_cycle = (int32_t (*)())max_pwm_set_duty_cycle,
-	.pwm_ops_get_duty_cycle = (int32_t (*)())max_pwm_get_duty_cycle,
-	.pwm_ops_init = (int32_t (*)())max_pwm_init,
-	.pwm_ops_remove = (int32_t (*)())max_pwm_remove
+	.pwm_ops_enable = max_pwm_enable,
+	.pwm_ops_disable = max_pwm_disable,
+	.pwm_ops_set_period = max_pwm_set_period,
+	.pwm_ops_get_period = max_pwm_get_period,
+	.pwm_ops_set_duty_cycle = max_pwm_set_duty_cycle,
+	.pwm_ops_get_duty_cycle = max_pwm_get_duty_cycle,
+	.pwm_ops_init = max_pwm_init,
+	.pwm_ops_remove = max_pwm_remove
 };
