@@ -43,10 +43,10 @@
 #include "iio_ad4692.h"
 
 
-static int ad4692_iio_reg_read(struct ad4692_iio_desc *desc, uint32_t reg,
-			       uint32_t *readval);
-static int ad4692_iio_reg_write(struct ad4692_iio_desc *desc, uint32_t reg,
-				uint32_t writeval);
+static int32_t ad4692_iio_reg_read(void *desc, uint32_t reg,
+				   uint32_t *readval);
+static int32_t ad4692_iio_reg_write(void *desc, uint32_t reg,
+				    uint32_t writeval);
 static int ad4692_iio_read_raw(void *desc, char *buf, uint32_t len,
 			       const struct iio_ch_info *channel,
 			       intptr_t priv);
@@ -62,12 +62,12 @@ static int ad4692_iio_write_freq(void *desc, char *buf, uint32_t len,
 static int ad4692_iio_read_freq_avail(void *desc, char *buf, uint32_t len,
 				      const struct iio_ch_info *channel,
 				      intptr_t priv);
-static int ad4692_iio_update_channels(void *desc, uint32_t mask);
-static int ad4692_iio_post_disable(void *desc);
+static int32_t ad4692_iio_update_channels(void *desc, uint32_t mask);
+static int32_t ad4692_iio_post_disable(void *desc);
 static int32_t ad4692_trigger_handler(struct iio_device_data *desc_data);
-static int ad4692_iio_read_samples(void *desc, uint32_t *buff,
-				   uint32_t samples);
-static int ad4692_iio_submit_buffer(struct iio_device_data *iio_dev_data);
+static int32_t ad4692_iio_read_samples(void *desc, void *buff,
+				       uint32_t samples);
+static int32_t ad4692_iio_submit_buffer(struct iio_device_data *iio_dev_data);
 
 static struct iio_attribute ad4692_iio_attrs[] = {
 	{
@@ -208,11 +208,11 @@ static struct iio_channel ad4693_manual_channels[] = {
 };
 
 static struct iio_device ad4692_iio_dev = {
-	.pre_enable = (int32_t (*)())ad4692_iio_update_channels,
-	.post_disable = (int32_t (*)())ad4692_iio_post_disable,
-	.read_dev = (int32_t (*)())ad4692_iio_read_samples,
-	.debug_reg_read = (int32_t (*)())ad4692_iio_reg_read,
-	.debug_reg_write = (int32_t (*)())ad4692_iio_reg_write,
+	.pre_enable = ad4692_iio_update_channels,
+	.post_disable = ad4692_iio_post_disable,
+	.read_dev = ad4692_iio_read_samples,
+	.debug_reg_read = ad4692_iio_reg_read,
+	.debug_reg_write = ad4692_iio_reg_write,
 };
 
 static void ad4692_iio_setup_channels(struct ad4692_iio_desc *desc)
@@ -237,16 +237,20 @@ static void ad4692_iio_setup_channels(struct ad4692_iio_desc *desc)
 }
 
 
-static int ad4692_iio_reg_read(struct ad4692_iio_desc *desc, uint32_t reg,
-			       uint32_t *readval)
+static int32_t ad4692_iio_reg_read(void *desc, uint32_t reg,
+				   uint32_t *readval)
 {
-	return ad4692_reg_read(desc->ad4692_desc, reg, readval);
+	struct ad4692_iio_desc *iio_ad4692 = desc;
+
+	return ad4692_reg_read(iio_ad4692->ad4692_desc, reg, readval);
 }
 
-static int ad4692_iio_reg_write(struct ad4692_iio_desc *desc, uint32_t reg,
-				uint32_t writeval)
+static int32_t ad4692_iio_reg_write(void *desc, uint32_t reg,
+				    uint32_t writeval)
 {
-	return ad4692_reg_write(desc->ad4692_desc, reg, writeval);
+	struct ad4692_iio_desc *iio_ad4692 = desc;
+
+	return ad4692_reg_write(iio_ad4692->ad4692_desc, reg, writeval);
 }
 
 static int ad4692_iio_read_raw(void *desc, char *buf, uint32_t len,
@@ -434,7 +438,7 @@ static int ad4692_iio_read_freq_avail(void *desc, char *buf, uint32_t len,
 	return length;
 }
 
-static int ad4692_iio_update_channels(void *desc, uint32_t mask)
+static int32_t ad4692_iio_update_channels(void *desc, uint32_t mask)
 {
 	struct ad4692_iio_desc *iio_ad4692;
 	uint32_t min_period_ns;
@@ -511,7 +515,7 @@ static int ad4692_iio_update_channels(void *desc, uint32_t mask)
 	}
 }
 
-static int ad4692_iio_post_disable(void *desc)
+static int32_t ad4692_iio_post_disable(void *desc)
 {
 	struct ad4692_iio_desc *iio_ad4692;
 	uint32_t reg_val;
@@ -584,10 +588,11 @@ static int32_t ad4692_trigger_handler(struct iio_device_data *desc_data)
 	return ad4692_sampling_enable(ad4692, true);
 }
 
-static int ad4692_iio_read_samples(void *desc, uint32_t *buff, uint32_t samples)
+static int32_t ad4692_iio_read_samples(void *desc, void *buff, uint32_t samples)
 {
 	struct ad4692_iio_desc *iio_ad4692;
 	struct ad4692_desc *ad4692;
+	uint32_t *samples_buff = buff;
 	int ret, i, j;
 
 	if (!desc)
@@ -602,7 +607,7 @@ static int ad4692_iio_read_samples(void *desc, uint32_t *buff, uint32_t samples)
 
 	i = no_os_find_first_set_bit(iio_ad4692->active_channels);
 	for (j = 0; j < (int)samples; j++) {
-		ret = ad4692_get_ch(ad4692, i, &buff[j]);
+		ret = ad4692_get_ch(ad4692, i, &samples_buff[j]);
 		if (ret)
 			return ret;
 
@@ -618,7 +623,7 @@ static int ad4692_iio_read_samples(void *desc, uint32_t *buff, uint32_t samples)
 	return samples;
 }
 
-static int ad4692_iio_submit_buffer(struct iio_device_data *iio_dev_data)
+static int32_t ad4692_iio_submit_buffer(struct iio_device_data *iio_dev_data)
 {
 	struct ad4692_iio_desc *iio_ad4692 = iio_dev_data->dev;
 	struct ad4692_desc *ad4692;
@@ -791,9 +796,9 @@ int ad4692_iio_init(struct ad4692_iio_desc **iio_desc,
 	 * trigger_handler is only available for non-MANUAL modes (used with
 	 * DATA_READY GPIO interrupt trigger).
 	 */
-	descriptor->iio_dev->submit = (int32_t (*)())ad4692_iio_submit_buffer;
+	descriptor->iio_dev->submit = ad4692_iio_submit_buffer;
 	if (init_param->ad4692_init_param->mode != AD4692_MANUAL_MODE)
-		descriptor->iio_dev->trigger_handler = (int32_t (*)())ad4692_trigger_handler;
+		descriptor->iio_dev->trigger_handler = ad4692_trigger_handler;
 	else
 		descriptor->iio_dev->trigger_handler = NULL;
 
