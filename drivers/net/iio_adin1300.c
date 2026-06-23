@@ -9,10 +9,11 @@
 #include "adin1300.h"
 #include "iio.h"
 
-static int32_t _adin1300_read2(struct adin1300_iio_desc *iiodev,
+static int32_t _adin1300_read2(void *dev,
 			       uint32_t reg,
 			       uint32_t *readval)
 {
+	struct adin1300_iio_desc *iiodev = dev;
 	int ret;
 	uint16_t val;
 
@@ -27,10 +28,12 @@ static int32_t _adin1300_read2(struct adin1300_iio_desc *iiodev,
 	return 0;
 }
 
-static int32_t _adin1300_write2(struct adin1300_iio_desc *iiodev,
+static int32_t _adin1300_write2(void *dev,
 				uint32_t reg,
 				uint32_t writeval)
 {
+	struct adin1300_iio_desc *iiodev = dev;
+
 	if (reg > 0x1f)
 		return -EINVAL;
 
@@ -138,8 +141,8 @@ static struct iio_attribute adin1300_iio_attrs[] = {
 
 static struct iio_device adin1300_iio_descice_template = {
 	.attributes = adin1300_iio_attrs,
-	.debug_reg_read = (int32_t (*)())_adin1300_read2,
-	.debug_reg_write = (int32_t (*)())_adin1300_write2
+	.debug_reg_read = _adin1300_read2,
+	.debug_reg_write = _adin1300_write2
 };
 
 int32_t adin1300_iio_init(struct adin1300_iio_desc **iiodev,
