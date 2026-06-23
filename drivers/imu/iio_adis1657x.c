@@ -458,11 +458,11 @@ static struct iio_device adis1657x_iio_dev = {
 	.channels 		= adis1657x_channels,
 	.debug_attributes 	= adis1657x_debug_attrs,
 	.attributes		= adis_dev_attrs,
-	.pre_enable 		= (int32_t (*)())adis_iio_pre_enable,
-	.post_disable 		= (int32_t (*)())adis_iio_post_disable,
-	.trigger_handler 	= (int32_t (*)())adis_iio_trigger_handler_with_fifo,
-	.debug_reg_read 	= (int32_t (*)())adis_iio_read_reg,
-	.debug_reg_write 	= (int32_t (*)())adis_iio_write_reg,
+	.pre_enable 		= adis_iio_pre_enable,
+	.post_disable 		= adis_iio_post_disable,
+	.trigger_handler 	= adis_iio_trigger_handler_with_fifo,
+	.debug_reg_read 	= adis_iio_read_reg,
+	.debug_reg_write 	= adis_iio_write_reg,
 };
 
 /**
