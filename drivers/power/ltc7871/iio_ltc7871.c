@@ -200,8 +200,9 @@ enum ltc7871_iio_mfr_ssfm_attrs {
 	LTC7871_FSR,
 	LTC7871_MSF
 };
-static int ltc7871_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval);
-static int ltc7871_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval);
+static int32_t ltc7871_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval);
+static int32_t ltc7871_iio_reg_write(void *dev, uint32_t reg,
+				     uint32_t writeval);
 static int ltc7871_iio_read_mfr_fault(void *dev, char *buf, uint32_t len,
 				      const struct iio_ch_info *channel, intptr_t priv);
 static int ltc7871_iio_read_mfr_oc_fault(void *dev, char *buf, uint32_t len,
@@ -463,8 +464,8 @@ static struct iio_device ltc7871_iio_dev = {
 	.channels = ltc7871_channels,
 	.attributes = ltc7871_global_attrs,
 	.debug_attributes = ltc7871_debug_attrs,
-	.debug_reg_read = (int32_t (*)())ltc7871_iio_reg_read,
-	.debug_reg_write = (int32_t (*)())ltc7871_iio_reg_write,
+	.debug_reg_read = ltc7871_iio_reg_read,
+	.debug_reg_write = ltc7871_iio_reg_write,
 };
 
 /**
@@ -636,7 +637,7 @@ uint32_t ltc7871_iio_get_mask_mfr_chip_ctrl(enum ltc7871_iio_mfr_chip_ctrl_attrs
  * @param readval - The data read from the register.
  * @return 0 in case of success, an error code otherwise.
  */
-static int ltc7871_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
+static int32_t ltc7871_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
 {
 	int ret;
 	uint8_t reg_val;
@@ -665,7 +666,7 @@ static int ltc7871_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
  * @param writeval - The data to write to the register.
  * @return 0 in case of success, an error code otherwise.
  */
-static int ltc7871_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
+static int32_t ltc7871_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
 {
 	struct ltc7871_iio_dev *iio_ltc7871;
 	struct ltc7871_dev *ltc7871;
