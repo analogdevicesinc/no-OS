@@ -165,15 +165,15 @@ static struct iio_attribute iio_ad3552r_ch_attributes[] = {
 	END_ATTRIBUTES_ARRAY,
 };
 
-static int32_t iio_ad3552r_write_reg(struct iio_ad3552r_desc *iio_dac,
-				     uint32_t addr, uint32_t val)
+static int iio_ad3552r_write_reg(struct iio_ad3552r_desc *iio_dac,
+				 uint32_t addr, uint32_t val)
 {
 	return ad3552r_write_reg(iio_dac->dac, addr, val);
 }
 
 
-static int32_t iio_ad3552r_read_reg(struct iio_ad3552r_desc *iio_dac,
-				    uint32_t addr, uint32_t *val)
+static int iio_ad3552r_read_reg(struct iio_ad3552r_desc *iio_dac,
+				uint32_t addr, uint32_t *val)
 {
 	uint16_t v2;
 	int32_t err;
@@ -184,16 +184,16 @@ static int32_t iio_ad3552r_read_reg(struct iio_ad3552r_desc *iio_dac,
 	return err;
 }
 
-static int32_t iio_ad3552r_prep_wr(struct iio_ad3552r_desc *iio_dac,
-				   uint32_t mask)
+static int iio_ad3552r_prep_wr(struct iio_ad3552r_desc *iio_dac,
+			       uint32_t mask)
 {
 	iio_dac->mask = mask;
 
 	return 0;
 }
 
-static int32_t iio_ad3552r_wr_dev(struct iio_ad3552r_desc *iio_dac,
-				  uint16_t *buff, uint32_t nb_samples)
+static int iio_ad3552r_wr_dev(struct iio_ad3552r_desc *iio_dac,
+			      uint16_t *buff, uint32_t nb_samples)
 {
 	int32_t i;
 
@@ -236,10 +236,10 @@ int32_t iio_ad3552r_init(struct iio_ad3552r_desc **iio_dac,
 
 	liio_dac->iio_desc.num_ch = j;
 	liio_dac->iio_desc.channels = liio_dac->channels;
-	liio_dac->iio_desc.write_dev = (int32_t (*)())iio_ad3552r_wr_dev;
-	liio_dac->iio_desc.pre_enable = (int32_t (*)())iio_ad3552r_prep_wr;
-	liio_dac->iio_desc.debug_reg_read = (int32_t (*)())iio_ad3552r_read_reg;
-	liio_dac->iio_desc.debug_reg_write = (int32_t (*)())iio_ad3552r_write_reg;
+	liio_dac->iio_desc.write_dev = iio_ad3552r_wr_dev;
+	liio_dac->iio_desc.pre_enable = iio_ad3552r_prep_wr;
+	liio_dac->iio_desc.debug_reg_read = iio_ad3552r_read_reg;
+	liio_dac->iio_desc.debug_reg_write = iio_ad3552r_write_reg;
 
 	*iio_dac = liio_dac;
 

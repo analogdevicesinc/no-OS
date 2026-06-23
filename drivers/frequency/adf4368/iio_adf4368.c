@@ -618,8 +618,8 @@ static struct iio_device adf4368_iio_dev = {
 	.num_ch = NO_OS_ARRAY_SIZE(adf4368_channels),
 	.channels = adf4368_channels,
 	.attributes = adf4368_iio_attrs,
-	.debug_reg_read = (int32_t (*)())adf4368_iio_read_reg,
-	.debug_reg_write = (int32_t (*)())adf4368_iio_write_reg
+	.debug_reg_read = adf4368_iio_read_reg,
+	.debug_reg_write = adf4368_iio_write_reg
 };
 
 /**

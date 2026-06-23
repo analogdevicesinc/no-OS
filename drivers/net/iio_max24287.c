@@ -9,9 +9,9 @@
 #include "max24287.h"
 #include "iio.h"
 
-static int32_t _max24287_read2(void *dev,
-			       uint32_t reg,
-			       uint32_t *readval)
+static int _max24287_read2(void *dev,
+			   uint32_t reg,
+			   uint32_t *readval)
 {
 	struct max24287_iio_desc *iiodev = dev;
 	int ret;
@@ -25,9 +25,9 @@ static int32_t _max24287_read2(void *dev,
 	return 0;
 }
 
-static int32_t _max24287_write2(void *dev,
-				uint32_t reg,
-				uint32_t writeval)
+static int _max24287_write2(void *dev,
+			    uint32_t reg,
+			    uint32_t writeval)
 {
 	struct max24287_iio_desc *iiodev = dev;
 

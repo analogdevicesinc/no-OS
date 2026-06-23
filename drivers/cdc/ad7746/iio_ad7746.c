@@ -11,14 +11,14 @@
 #include "ad7746.h"
 #include <string.h>
 
-static int32_t _ad7746_read_register2(struct ad7746_iio_dev *dev, uint32_t reg,
-				      uint32_t *readval)
+static int _ad7746_read_register2(struct ad7746_iio_dev *dev, uint32_t reg,
+				  uint32_t *readval)
 {
 	return ad7746_reg_read(dev->ad7746_dev, reg, (uint8_t *)readval, 1);
 }
 
-static int32_t _ad7746_write_register2(struct ad7746_iio_dev *dev, uint32_t reg,
-				       uint32_t writeval)
+static int _ad7746_write_register2(struct ad7746_iio_dev *dev, uint32_t reg,
+				   uint32_t writeval)
 {
 	uint8_t val = writeval;
 	return ad7746_reg_write(dev->ad7746_dev, reg, &val, 1);
@@ -734,8 +734,8 @@ static struct iio_device ad7746_iio_device = {
 	.pre_enable = NULL,
 	.post_disable = NULL,
 	.read_dev = NULL,
-	.debug_reg_read = (int32_t (*)())_ad7746_read_register2,
-	.debug_reg_write = (int32_t (*)())_ad7746_write_register2
+	.debug_reg_read = _ad7746_read_register2,
+	.debug_reg_write = _ad7746_write_register2
 };
 
 int32_t ad7746_iio_init(struct ad7746_iio_dev **iio_dev,

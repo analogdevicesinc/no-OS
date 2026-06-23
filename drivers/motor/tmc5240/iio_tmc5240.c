@@ -245,10 +245,10 @@ static struct iio_device tmc5240_iio_dev = {
 	.attributes = tmc5240_iio_attrs,
 	.channels = tmc5240_iio_channels,
 	.num_ch = NO_OS_ARRAY_SIZE(tmc5240_iio_channels),
-	.debug_reg_read = (int32_t (*)(void *, uint32_t,
-				       uint32_t *))tmc5240_iio_reg_read,
-	.debug_reg_write = (int32_t (*)(void *, uint32_t,
-					uint32_t))tmc5240_iio_reg_write,
+	.debug_reg_read = (int (*)(void *, uint32_t,
+				   uint32_t *))tmc5240_iio_reg_read,
+	.debug_reg_write = (int (*)(void *, uint32_t,
+				    uint32_t))tmc5240_iio_reg_write,
 };
 
 /**

@@ -64,11 +64,11 @@ static int max14916_iio_read_scale(void *dev, char *buf, uint32_t len,
 				   const struct iio_ch_info *channel,
 				   intptr_t priv);
 
-static int32_t max14916_iio_reg_read(void *dev, uint32_t reg,
-				     uint32_t *readval);
+static int max14916_iio_reg_read(void *dev, uint32_t reg,
+				 uint32_t *readval);
 
-static int32_t max14916_iio_reg_write(void *dev, uint32_t reg,
-				      uint32_t writeval);
+static int max14916_iio_reg_write(void *dev, uint32_t reg,
+				  uint32_t writeval);
 
 static struct iio_attribute max14916_attrs[] = {
 	{
@@ -211,8 +211,8 @@ int max14916_iio_setup_channels(struct max14916_iio_desc *desc, bool *ch_enable)
  * @param readval - Register value
  * @return 0 in case of success, error code otherwise
  */
-static int32_t max14916_iio_reg_read(void *dev, uint32_t reg,
-				     uint32_t *readval)
+static int max14916_iio_reg_read(void *dev, uint32_t reg,
+				 uint32_t *readval)
 {
 	struct max14916_iio_desc *desc = dev;
 
@@ -226,8 +226,8 @@ static int32_t max14916_iio_reg_read(void *dev, uint32_t reg,
  * @param readval - Register value
  * @return 0 in case of success, error code otherwise
  */
-static int32_t max14916_iio_reg_write(void *dev, uint32_t reg,
-				      uint32_t writeval)
+static int max14916_iio_reg_write(void *dev, uint32_t reg,
+				  uint32_t writeval)
 {
 	struct max14916_iio_desc *desc = dev;
 

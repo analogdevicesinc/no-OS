@@ -194,10 +194,10 @@ static struct iio_channel adxl313_channels[] = {
 static struct iio_device adxl313_iio_dev = {
 	.num_ch = NO_OS_ARRAY_SIZE(adxl313_channels),
 	.channels = adxl313_channels,
-	.pre_enable = (int32_t (*)())adxl313_iio_update_channels,
-	.read_dev = (int32_t (*)())adxl313_iio_read_samples,
-	.debug_reg_read = (int32_t (*)())adxl313_iio_read_reg,
-	.debug_reg_write = (int32_t (*)())adxl313_iio_write_reg
+	.pre_enable = adxl313_iio_update_channels,
+	.read_dev = adxl313_iio_read_samples,
+	.debug_reg_read = adxl313_iio_read_reg,
+	.debug_reg_write = adxl313_iio_write_reg
 };
 
 /*******************************************************************************

@@ -240,7 +240,7 @@ static int ad7490_iio_read_sampling_freq(void *device, char *buf, uint32_t len,
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
 }
 
-static int32_t ad7490_iio_pre_enable(void *device, uint32_t mask)
+static int ad7490_iio_pre_enable(void *device, uint32_t mask)
 {
 	struct ad7490_iio_desc *desc = device;
 
@@ -250,14 +250,14 @@ static int32_t ad7490_iio_pre_enable(void *device, uint32_t mask)
 	return ad7490_start_seq(desc->ad7490_desc, AD7490_SHADOW_SEQ, mask, 0);
 }
 
-static int32_t ad7490_iio_post_disable(void *device)
+static int ad7490_iio_post_disable(void *device)
 {
 	struct ad7490_iio_desc *desc = device;
 
 	return ad7490_stop_seq(desc->ad7490_desc);
 }
 
-static int32_t iio_ad7490_submit_buffer(struct iio_device_data *iio_dev_data)
+static int iio_ad7490_submit_buffer(struct iio_device_data *iio_dev_data)
 {
 	struct ad7490_iio_desc *iio_desc = iio_dev_data->dev;
 	struct ad7490_desc *desc = iio_desc->ad7490_desc;
@@ -289,8 +289,8 @@ static int32_t iio_ad7490_submit_buffer(struct iio_device_data *iio_dev_data)
 	return iio_buffer_block_done(buffer);
 }
 
-static int32_t ad7490_iio_read_samples(void *device, void *buff,
-				       uint32_t samples)
+static int ad7490_iio_read_samples(void *device, void *buff,
+				   uint32_t samples)
 {
 	struct ad7490_iio_desc *desc = device;
 	int *buff_data = buff;

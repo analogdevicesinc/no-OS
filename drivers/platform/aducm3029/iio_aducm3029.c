@@ -355,8 +355,8 @@ int set_gpio_attr(void *device, char *buf, uint32_t len,
 }
 
 /* iio wrapper for aducm3029_adc_update_active_channels */
-int32_t iio_aducm3029_adc_set_mask(struct iio_aducm3029_desc *desc,
-				   uint32_t mask)
+int iio_aducm3029_adc_set_mask(struct iio_aducm3029_desc *desc,
+			       uint32_t mask)
 {
 	if (!desc)
 		return -1;
@@ -365,8 +365,8 @@ int32_t iio_aducm3029_adc_set_mask(struct iio_aducm3029_desc *desc,
 }
 
 /* iio wrapper for aducm3029_adc_read */
-int32_t iio_aducm3029_adc_read(struct iio_aducm3029_desc *desc, uint16_t *buff,
-			       uint32_t nb_samples)
+int iio_aducm3029_adc_read(struct iio_aducm3029_desc *desc, uint16_t *buff,
+			   uint32_t nb_samples)
 {
 	if (!desc)
 		return -1;
@@ -468,8 +468,8 @@ struct iio_device const iio_aducm3029_desc = {
 	.num_ch = NO_OS_ARRAY_SIZE(aducm3029_channels),
 	.channels = aducm3029_channels,
 	.attributes = aducm3029_attributes,
-	.pre_enable = (int32_t (*)())iio_aducm3029_adc_set_mask,
-	.read_dev = (int32_t (*)())iio_aducm3029_adc_read,
+	.pre_enable = iio_aducm3029_adc_set_mask,
+	.read_dev = iio_aducm3029_adc_read,
 };
 
 struct iio_aducm3029_desc g_aducm3029_desc;

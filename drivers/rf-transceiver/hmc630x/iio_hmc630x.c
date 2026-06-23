@@ -43,9 +43,9 @@
 #include "hmc630x.h"
 #include <string.h>
 
-static int32_t _hmc630x_read_register2(void *dev,
-				       uint32_t reg,
-				       uint32_t *readval)
+static int _hmc630x_read_register2(void *dev,
+				   uint32_t reg,
+				   uint32_t *readval)
 {
 	struct hmc630x_iio_dev *iiodev = dev;
 	int ret;
@@ -58,9 +58,9 @@ static int32_t _hmc630x_read_register2(void *dev,
 	return 0;
 }
 
-static int32_t _hmc630x_write_register2(void *dev,
-					uint32_t reg,
-					uint32_t writeval)
+static int _hmc630x_write_register2(void *dev,
+				    uint32_t reg,
+				    uint32_t writeval)
 {
 	struct hmc630x_iio_dev *iiodev = dev;
 

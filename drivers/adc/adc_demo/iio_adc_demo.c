@@ -134,7 +134,7 @@ int set_adc_demo_attr(void *device, char *buf, uint32_t len,
  * @param dev_data  - The iio device data structure.
  * @return the number of read samples.
  */
-int32_t adc_submit_samples(struct iio_device_data *dev_data)
+int adc_submit_samples(struct iio_device_data *dev_data)
 {
 	struct adc_demo_desc *desc;
 	uint32_t k = 0;
@@ -181,7 +181,7 @@ int32_t adc_submit_samples(struct iio_device_data *dev_data)
  * @return ret - Result of the handling procedure. In case of success, the size
  * 				 of the written data is returned.
  */
-int32_t adc_demo_trigger_handler(struct iio_device_data *dev_data)
+int adc_demo_trigger_handler(struct iio_device_data *dev_data)
 {
 	struct adc_demo_desc *desc;
 	uint32_t k = 0;
@@ -281,7 +281,7 @@ static struct iio_channel iio_adc_channels[] = {
  * @param readval - Pointer to store read value (32-bit)
  * @return 0 on success, negative error code otherwise
  */
-static int32_t iio_adc_demo_reg_read(void *dev, uint32_t reg, uint32_t *readval)
+static int iio_adc_demo_reg_read(void *dev, uint32_t reg, uint32_t *readval)
 {
 	struct adc_demo_desc *desc = (struct adc_demo_desc *)dev;
 	uint8_t val8;
@@ -304,8 +304,8 @@ static int32_t iio_adc_demo_reg_read(void *dev, uint32_t reg, uint32_t *readval)
  * @param writeval - Value to write (32-bit)
  * @return 0 on success, negative error code otherwise
  */
-static int32_t iio_adc_demo_reg_write(void *dev, uint32_t reg,
-				      uint32_t writeval)
+static int iio_adc_demo_reg_write(void *dev, uint32_t reg,
+				  uint32_t writeval)
 {
 	struct adc_demo_desc *desc = (struct adc_demo_desc *)dev;
 

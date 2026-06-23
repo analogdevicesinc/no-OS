@@ -169,7 +169,7 @@ static int set_adxrs290_iio_ch_lpf(void *device, char *buf, uint32_t len,
 	return -1;
 }
 
-static int32_t adxrs290_update_active_channels(void *device, uint32_t mask)
+static int adxrs290_update_active_channels(void *device, uint32_t mask)
 {
 	struct adxrs290_dev *dev = device;
 
@@ -178,8 +178,8 @@ static int32_t adxrs290_update_active_channels(void *device, uint32_t mask)
 	return 0;
 }
 
-static int32_t adxrs290_read_samples(void *device, void *buff,
-				     uint32_t nb_samples)
+static int adxrs290_read_samples(void *device, void *buff,
+				 uint32_t nb_samples)
 {
 	struct adxrs290_dev	*dev = device;
 	uint16_t		*samples = buff;
@@ -207,7 +207,7 @@ static int32_t adxrs290_read_samples(void *device, void *buff,
 	return nb_samples;
 }
 
-static int32_t adxrs290_trigger_handler(struct iio_device_data *device)
+static int adxrs290_trigger_handler(struct iio_device_data *device)
 {
 	struct adxrs290_dev	*dev = device->dev;
 	int16_t			data[ADXRS290_CHANNEL_COUNT];
@@ -218,8 +218,8 @@ static int32_t adxrs290_trigger_handler(struct iio_device_data *device)
 	return iio_buffer_push_scan(device->buffer, data);
 }
 
-static int32_t adxrs290_iio_reg_read(void *device, uint32_t reg,
-				     uint32_t *readval)
+static int adxrs290_iio_reg_read(void *device, uint32_t reg,
+				 uint32_t *readval)
 {
 	struct adxrs290_dev	*dev = device;
 	uint8_t			data;
@@ -234,8 +234,8 @@ static int32_t adxrs290_iio_reg_read(void *device, uint32_t reg,
 	return 0;
 }
 
-static int32_t adxrs290_iio_reg_write(void *device, uint32_t reg,
-				      uint32_t writeval)
+static int adxrs290_iio_reg_write(void *device, uint32_t reg,
+				  uint32_t writeval)
 {
 	struct adxrs290_dev	*dev = device;
 

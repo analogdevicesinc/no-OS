@@ -79,8 +79,8 @@ static int adpd410x_iio_read_raw_chan(void *device, char *buf, uint32_t len,
  * @param nb_samples - Input number of samples.
  * @return Number of samples, or negative code.
  */
-static int32_t adpd410x_read_samples(void *device, uint32_t *buff,
-				     uint32_t nb_samples)
+static int adpd410x_read_samples(void *device, uint32_t *buff,
+				 uint32_t nb_samples)
 {
 	struct adpd410x_dev *dev = (struct adpd410x_dev *)device;
 
@@ -385,7 +385,7 @@ struct iio_device const adpd410x_iio_descriptor = {
 	.num_ch = ADPD410X_IIO_NUM_CH,
 	.channels = adpd410x_iio_channels,
 	.attributes = adpd410x_iio_attributes,
-	.read_dev = (int32_t (*)())adpd410x_read_samples,
+	.read_dev = adpd410x_read_samples,
 	.debug_reg_read = (int32_t (*)())adpd410x_reg_read,
 	.debug_reg_write = (int32_t (*)())adpd410x_reg_write,
 };

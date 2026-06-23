@@ -66,16 +66,16 @@ enum max31827_ch_attr_priv {
 	MAX31827_C_UPDATE_INTERVAL,
 };
 
-static int32_t max31827_iio_reg_read(void *ddev,
-				     uint32_t reg, uint32_t *readval)
+static int max31827_iio_reg_read(void *ddev,
+				 uint32_t reg, uint32_t *readval)
 {
 	struct max31827_iio_device *dev = ddev;
 
 	return max31827_reg_read(dev->dev, (uint8_t)reg, (uint16_t*)readval);
 }
 
-static int32_t max31827_iio_reg_write(void *ddev,
-				      uint32_t reg, uint32_t writeval)
+static int max31827_iio_reg_write(void *ddev,
+				  uint32_t reg, uint32_t writeval)
 {
 	struct max31827_iio_device *dev = ddev;
 

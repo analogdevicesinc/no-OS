@@ -563,7 +563,7 @@ static bool get_next_ch_idx(uint32_t ch_mask, uint32_t last_idx,
  * @param [in] mask - Number of bytes to transfer.
  * @return 0 in case of success, error code otherwise.
  */
-static int32_t iio_ad7124_update_active_channels(void *dev, uint32_t mask)
+static int iio_ad7124_update_active_channels(void *dev, uint32_t mask)
 {
 	struct ad7124_dev *desc = (struct ad7124_dev *)dev;
 	uint32_t ch_idx = -1;
@@ -592,7 +592,7 @@ static int32_t iio_ad7124_update_active_channels(void *dev, uint32_t mask)
  * @param [in] dev - Application descriptor.
  * @return 0 in case of success, error code otherwise.
  */
-static int32_t iio_ad7124_close_channels(void *dev)
+static int iio_ad7124_close_channels(void *dev)
 {
 	struct ad7124_dev *desc = (struct ad7124_dev *)dev;
 	uint32_t ch_idx;
@@ -649,8 +649,8 @@ static int32_t iio_ad7124_get_active_channels(struct ad7124_dev * desc,
  * @param [in] bn_samples - Number of samples to get.
  * @return Number of samples read.
  */
-static int32_t iio_ad7124_read_samples(void *dev, int32_t *buff,
-				       uint32_t nb_samples)
+static int iio_ad7124_read_samples(void *dev, int32_t *buff,
+				   uint32_t nb_samples)
 {
 	struct ad7124_dev *desc = (struct ad7124_dev *)dev;
 	int32_t ret, i = 0, k;
@@ -699,7 +699,7 @@ struct iio_device iio_ad7124_device = {
 	.buffer_attributes = NULL,
 	.pre_enable = iio_ad7124_update_active_channels,
 	.post_disable = iio_ad7124_close_channels,
-	.read_dev = (int32_t (*)())iio_ad7124_read_samples,
+	.read_dev = iio_ad7124_read_samples,
 	.debug_reg_read = (int32_t (*)())ad7124_read_register2,
 	.debug_reg_write = (int32_t (*)())ad7124_write_register2
 };

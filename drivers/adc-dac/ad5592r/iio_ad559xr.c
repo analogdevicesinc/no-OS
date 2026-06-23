@@ -559,7 +559,7 @@ static void iio_ad559xr_one_scan(struct iio_ad559xr_desc *desc,
  *
  * @return 0 on success
  */
-static int32_t iio_ad559xr_submit(struct iio_device_data *dev)
+static int iio_ad559xr_submit(struct iio_device_data *dev)
 {
 	size_t scan;
 	struct iio_ad559xr_desc *desc;

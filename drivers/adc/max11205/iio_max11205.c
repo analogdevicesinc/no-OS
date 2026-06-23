@@ -162,8 +162,8 @@ static int max11205_iio_read_sampling_frequency(void *dev, char *buf,
  * @param samples - Number of samples to be returned.
  * @return ret    - Result of the reading procedure. In case of success, the size of the read data is returned.
  */
-static int32_t max11205_iio_read_samples(void *dev, void *buff,
-		uint32_t samples)
+static int max11205_iio_read_samples(void *dev, void *buff,
+				     uint32_t samples)
 {
 	int ret;
 	bool new_data_avail = false;

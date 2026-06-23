@@ -53,8 +53,8 @@ enum ad7606_iio_attributes_id {
  * @param       val - Pointer to variable to read data into
  * @return      0 in case of success, negative value otherwise
  */
-static int32_t iio_ad7606_debug_reg_read(void *device, uint32_t reg,
-		uint32_t *val)
+static int iio_ad7606_debug_reg_read(void *device, uint32_t reg,
+				     uint32_t *val)
 {
 	struct ad7606_iio_dev *iio_dev = device;
 	struct ad7606_dev *dev = iio_dev->ad7606_dev;
@@ -77,8 +77,8 @@ static int32_t iio_ad7606_debug_reg_read(void *device, uint32_t reg,
  * @param       val - Pointer to variable to write data into
  * @return      0 in case of success, negative value otherwise
  */
-static int32_t iio_ad7606_debug_reg_write(void *device, uint32_t reg,
-		uint32_t val)
+static int iio_ad7606_debug_reg_write(void *device, uint32_t reg,
+				      uint32_t val)
 {
 	struct ad7606_iio_dev *iio_dev = device;
 	struct ad7606_dev *dev = iio_dev->ad7606_dev;
@@ -292,7 +292,7 @@ static int iio_ad7606_attr_set(void *device, char *buf, uint32_t len,
  * @param	mask - Scan-mask for pre-enable
  * @return	0 in case of success, negative error code otherwise
  */
-static int32_t iio_ad7606_pre_enable(void *dev, uint32_t mask)
+static int iio_ad7606_pre_enable(void *dev, uint32_t mask)
 {
 	struct ad7606_iio_dev *iio_dev = dev;
 
@@ -304,7 +304,7 @@ static int32_t iio_ad7606_pre_enable(void *dev, uint32_t mask)
  * @param	dev - Pointer to IIO device data structure
  * @return	0 in case of success, negative error code otherwise
  */
-static int32_t iio_ad7606_post_disable(void *dev)
+static int iio_ad7606_post_disable(void *dev)
 {
 	struct ad7606_iio_dev *iio_dev = dev;
 
@@ -318,7 +318,7 @@ static int32_t iio_ad7606_post_disable(void *dev)
  * @param	iio_dev_data - Pointer to IIO device data structure
  * @return	0 in case of success, negative error code otherwise
  */
-static int32_t iio_ad7606_submit_buffer(struct iio_device_data *iio_dev_data)
+static int iio_ad7606_submit_buffer(struct iio_device_data *iio_dev_data)
 {
 	struct ad7606_iio_dev *iio_dev = iio_dev_data->dev;
 	struct ad7606_dev *dev = iio_dev->ad7606_dev;

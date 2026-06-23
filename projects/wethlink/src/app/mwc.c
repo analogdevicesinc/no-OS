@@ -62,8 +62,8 @@ const union nvmp255 factory_defaults_template = {
 	}
 };
 
-static int32_t mwc_read(void *dev, uint32_t reg,
-			uint32_t *readval)
+static int mwc_read(void *dev, uint32_t reg,
+		    uint32_t *readval)
 {
 	struct mwc_iio_dev *mwc = dev;
 
@@ -80,8 +80,8 @@ static int32_t mwc_read(void *dev, uint32_t reg,
 	return 0;
 }
 
-static int32_t mwc_write(void *dev, uint32_t reg,
-			 uint32_t writeval)
+static int mwc_write(void *dev, uint32_t reg,
+		     uint32_t writeval)
 {
 	struct mwc_iio_dev *mwc = dev;
 

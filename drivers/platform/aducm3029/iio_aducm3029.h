@@ -68,10 +68,10 @@ int get_gpio_attr(void *device, char *buf, uint32_t len,
 int set_gpio_attr(void *device, char *buf, uint32_t len,
 		  const struct iio_ch_info *channel, intptr_t priv);
 
-int32_t iio_aducm3029_adc_set_mask(struct iio_aducm3029_desc *desc,
-				   uint32_t mask);
-int32_t iio_aducm3029_adc_read(struct iio_aducm3029_desc *desc, uint16_t *buff,
-			       uint32_t nb_samples);
+int iio_aducm3029_adc_set_mask(struct iio_aducm3029_desc *desc,
+			       uint32_t mask);
+int iio_aducm3029_adc_read(struct iio_aducm3029_desc *desc, uint16_t *buff,
+			   uint32_t nb_samples);
 
 enum iio_pwm_attributes {
 	PWM_ENABLE,

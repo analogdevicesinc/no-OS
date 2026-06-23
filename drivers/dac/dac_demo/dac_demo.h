@@ -87,11 +87,11 @@ int32_t dac_demo_init(struct dac_demo_desc **desc,
 
 int32_t dac_demo_remove(struct dac_demo_desc *desc);
 
-int32_t update_dac_channels(void *dev, int32_t mask);
+int update_dac_channels(void *dev, int32_t mask);
 
-int32_t close_dac_channels(void* dev);
+int close_dac_channels(void* dev);
 
-int32_t dac_submit_samples(struct iio_device_data *dev_data);
+int dac_submit_samples(struct iio_device_data *dev_data);
 
 int get_dac_demo_attr(void *device, char *buf, uint32_t len,
 		      const struct iio_ch_info *channel, intptr_t priv);
@@ -105,6 +105,6 @@ int32_t dac_demo_reg_read(struct dac_demo_desc *desc, uint8_t reg_index,
 int32_t dac_demo_reg_write(struct dac_demo_desc *desc, uint8_t reg_index,
 			   uint8_t writeval);
 
-int32_t dac_demo_trigger_handler(struct iio_device_data *dev_data);
+int dac_demo_trigger_handler(struct iio_device_data *dev_data);
 
 #endif /*IIO_DEMO_DAC_*/

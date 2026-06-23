@@ -254,27 +254,27 @@ struct iio_device {
 	 * samples * (storage_size_of_first_active_ch / 8) * nb_active_channels
 	 * DEPRECATED.
 	 */
-	int32_t	(*read_dev)(void *dev, void *buff, uint32_t nb_samples);
+	int	(*read_dev)(void *dev, void *buff, uint32_t nb_samples);
 	/* Numbers of bytes will be:
 	 * samples * (storage_size_of_first_active_ch / 8) * nb_active_channels
 	 * DEPRECATED.
 	 */
-	int32_t	(*write_dev)(void *dev, void *buff, uint32_t nb_samples);
+	int	(*write_dev)(void *dev, void *buff, uint32_t nb_samples);
 
 	/* Bufer callbacks */
 	/** Called before enabling buffer */
-	int32_t (*pre_enable)(void *dev, uint32_t mask);
+	int (*pre_enable)(void *dev, uint32_t mask);
 	/** Called after disabling buffer */
-	int32_t (*post_disable)(void *dev);
+	int (*post_disable)(void *dev);
 	/** Called when buffer ready to transfer. Write/read to/from dev */
-	int32_t	(*submit)(struct iio_device_data *dev);
+	int	(*submit)(struct iio_device_data *dev);
 	/** Called after a trigger signal has been received by iio */
-	int32_t (*trigger_handler)(struct iio_device_data *dev);
+	int (*trigger_handler)(struct iio_device_data *dev);
 
 	/* Read device register */
-	int32_t (*debug_reg_read)(void *dev, uint32_t reg, uint32_t *readval);
+	int (*debug_reg_read)(void *dev, uint32_t reg, uint32_t *readval);
 	/* Write device register */
-	int32_t (*debug_reg_write)(void *dev, uint32_t reg, uint32_t writeval);
+	int (*debug_reg_write)(void *dev, uint32_t reg, uint32_t writeval);
 
 };
 

@@ -179,11 +179,10 @@ static int max22017_iio_read_available(void *dev, char *buf, uint32_t len,
 				       const struct iio_ch_info *channel,
 				       intptr_t priv);
 
-static int32_t max22017_iio_reg_read(void *dev, uint32_t reg,
-				     uint32_t *readval);
+static int max22017_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval);
 
-static int32_t max22017_iio_reg_write(void *dev, uint32_t reg,
-				      uint32_t writeval);
+static int max22017_iio_reg_write(void *dev, uint32_t reg,
+				  uint32_t writeval);
 
 static struct iio_attribute max22017_attrs[] = {
 	{
@@ -730,15 +729,15 @@ static int max22017_iio_write_int_en(void *dev, char *buf, uint32_t len,
 				  (uint32_t)val);
 }
 
-static int32_t max22017_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
+static int max22017_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
 {
 	struct max22017_iio_desc *iio_desc = dev;
 
 	return max22017_reg_read(iio_desc->max22017_desc, reg, readval);
 }
 
-static int32_t max22017_iio_reg_write(void *dev, uint32_t reg,
-				      uint32_t writeval)
+static int max22017_iio_reg_write(void *dev, uint32_t reg,
+				  uint32_t writeval)
 {
 	struct max22017_iio_desc *iio_desc = dev;
 

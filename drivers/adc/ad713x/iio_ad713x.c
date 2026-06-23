@@ -420,8 +420,8 @@ static int ad713x_iio_show_scale(void *device, char *buf, uint32_t len,
 				(int32_t *)vref);
 }
 
-static int32_t ad713x_iio_prepare_transfer(struct ad713x_iio *desc,
-		uint32_t mask)
+static int ad713x_iio_prepare_transfer(struct ad713x_iio *desc,
+				       uint32_t mask)
 {
 	if (!desc)
 		return -EINVAL;
@@ -431,8 +431,8 @@ static int32_t ad713x_iio_prepare_transfer(struct ad713x_iio *desc,
 	return 0;
 }
 
-static int32_t ad713x_iio_read_dev(struct ad713x_iio *desc, uint32_t *buff,
-				   uint32_t nb_samples)
+static int ad713x_iio_read_dev(struct ad713x_iio *desc, uint32_t *buff,
+			       uint32_t nb_samples)
 {
 	struct spi_engine_offload_message msg;
 	uint32_t bytes;
@@ -542,9 +542,9 @@ struct iio_device ad713x_iio_desc = {
 	.attributes = channel_attributes,
 	.debug_attributes = NULL,
 	.buffer_attributes = NULL,
-	.read_dev = (int32_t (*)())ad713x_iio_read_dev,
+	.read_dev = ad713x_iio_read_dev,
 	.write_dev = NULL,
-	.pre_enable = (int32_t (*)())ad713x_iio_prepare_transfer,
+	.pre_enable = ad713x_iio_prepare_transfer,
 	.post_disable = NULL,
 	.submit = NULL,
 	.debug_reg_read = (int32_t (*)()) ad713x_spi_reg_read,

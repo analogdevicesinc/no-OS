@@ -66,10 +66,10 @@ static int ltc2983_iio_read_raw(void *dev, char *buf, uint32_t len,
 static int ltc2983_iio_read_scale(void *dev, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel,
 				  intptr_t priv);
-static int32_t ltc2983_iio_reg_read(void *dev, uint32_t reg,
-				    uint32_t *readval);
-static int32_t ltc2983_iio_reg_write(void *dev, uint32_t reg,
-				     uint32_t writeval);
+static int ltc2983_iio_reg_read(void *dev, uint32_t reg,
+				uint32_t *readval);
+static int ltc2983_iio_reg_write(void *dev, uint32_t reg,
+				 uint32_t writeval);
 
 static struct iio_attribute ltc2983_iio_attrs[] = {
 	{
@@ -312,8 +312,8 @@ static int ltc2983_iio_read_scale(void *dev, char *buf, uint32_t len,
  * @param readval - Register value
  * @return 0 in case of success, errno errors otherwise
  */
-static int32_t ltc2983_iio_reg_read(void *dev, uint32_t reg,
-				    uint32_t *readval)
+static int ltc2983_iio_reg_read(void *dev, uint32_t reg,
+				uint32_t *readval)
 {
 	struct ltc2983_iio_desc *iio_desc = dev;
 
@@ -328,8 +328,8 @@ static int32_t ltc2983_iio_reg_read(void *dev, uint32_t reg,
  * @param writeval - Register value
  * @return 0 in case of success, errno errors otherwise
  */
-static int32_t ltc2983_iio_reg_write(void *dev, uint32_t reg,
-				     uint32_t writeval)
+static int ltc2983_iio_reg_write(void *dev, uint32_t reg,
+				 uint32_t writeval)
 {
 	struct ltc2983_iio_desc *iio_desc = dev;
 

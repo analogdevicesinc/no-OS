@@ -79,8 +79,8 @@ static int max14906_iio_read_config_iec_available(void *dev, char *buf,
 		uint32_t len, const struct iio_ch_info *channel,
 		intptr_t priv);
 
-static int32_t max14906_iio_reg_read(void *, uint32_t, uint32_t *);
-static int32_t max14906_iio_reg_write(void *, uint32_t, uint32_t);
+static int max14906_iio_reg_read(void *, uint32_t, uint32_t *);
+static int max14906_iio_reg_write(void *, uint32_t, uint32_t);
 
 static const uint32_t max14906_limit_avail[4] = {600, 130, 300, 1200};
 
@@ -549,8 +549,8 @@ free_channels:
  * @param readval - Register value
  * @return 0 in case of success, error code otherwise
  */
-static int32_t max14906_iio_reg_read(void *iio_dev, uint32_t reg,
-				     uint32_t *readval)
+static int max14906_iio_reg_read(void *iio_dev, uint32_t reg,
+				 uint32_t *readval)
 {
 	struct max14906_iio_desc *dev = iio_dev;
 	return max149x6_reg_read(dev->max14906_desc, reg, readval);
@@ -563,8 +563,8 @@ static int32_t max14906_iio_reg_read(void *iio_dev, uint32_t reg,
  * @param readval - Register value
  * @return 0 in case of success, error code otherwise
  */
-static int32_t max14906_iio_reg_write(void *iio_dev, uint32_t reg,
-				      uint32_t writeval)
+static int max14906_iio_reg_write(void *iio_dev, uint32_t reg,
+				  uint32_t writeval)
 {
 	struct max14906_iio_desc *dev = iio_dev;
 	return max149x6_reg_write(dev->max14906_desc, reg, writeval);

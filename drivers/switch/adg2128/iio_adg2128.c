@@ -11,9 +11,9 @@
 #include "no_os_alloc.h"
 #include "iio_adg2128.h"
 
-static int32_t _adg2128_read_register2(struct adg2128_iio_dev *dev,
-				       uint32_t reg,
-				       uint32_t *readval)
+static int _adg2128_read_register2(struct adg2128_iio_dev *dev,
+				   uint32_t reg,
+				   uint32_t *readval)
 {
 	int ret;
 	uint8_t vals[2];
@@ -26,9 +26,9 @@ static int32_t _adg2128_read_register2(struct adg2128_iio_dev *dev,
 	return 0;
 }
 
-static int32_t _adg2128_write_register2(struct adg2128_iio_dev *dev,
-					uint32_t reg,
-					uint32_t writeval)
+static int _adg2128_write_register2(struct adg2128_iio_dev *dev,
+				    uint32_t reg,
+				    uint32_t writeval)
 {
 	uint8_t vals[2];
 	vals[0] = writeval >> 8;
@@ -46,8 +46,8 @@ static struct iio_device adg2128_iio_device = {
 	.pre_enable = NULL,
 	.post_disable = NULL,
 	.read_dev = NULL,
-	.debug_reg_read = (int32_t (*)())_adg2128_read_register2,
-	.debug_reg_write = (int32_t (*)())_adg2128_write_register2
+	.debug_reg_read = _adg2128_read_register2,
+	.debug_reg_write = _adg2128_write_register2
 };
 
 int32_t adg2128_iio_init(struct adg2128_iio_dev **iio_dev,

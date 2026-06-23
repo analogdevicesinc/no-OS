@@ -59,7 +59,7 @@ enum ltc7841_iio_chan_type {
  * @return ret    - Result of the reading procedure.
  * 		    In case of success, the size of the read data is returned.
 */
-static int32_t ltc7841_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
+static int ltc7841_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
 {
 	uint8_t register_value[2];
 	int ret;
@@ -81,7 +81,7 @@ static int32_t ltc7841_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
  * @param writeval - Value to write.
  * @return ret    - Result of the writing procedure.
 */
-static int32_t ltc7841_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
+static int ltc7841_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
 {
 	struct ltc7841_iio_desc *iio_ltc7841 = dev;
 	struct ltc7841_desc *ltc7841 = iio_ltc7841->ltc7841_desc;

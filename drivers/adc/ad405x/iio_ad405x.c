@@ -157,11 +157,11 @@ static struct iio_device ad405x_iio_dev = {
 	.num_ch = NO_OS_ARRAY_SIZE(ad405x_channels),
 	.channels = ad405x_channels,
 	.debug_attributes = ad405x_debug_attrs,
-	.pre_enable = (int32_t (*)())ad405x_iio_update_channels,
-	.post_disable = (int32_t (*)())ad405x_iio_post_disable,
-	.read_dev = (int32_t (*)())ad405x_iio_read_samples,
-	.debug_reg_read = (int32_t (*)())ad405x_iio_read_reg,
-	.debug_reg_write = (int32_t (*)())ad405x_iio_write_reg
+	.pre_enable = ad405x_iio_update_channels,
+	.post_disable = ad405x_iio_post_disable,
+	.read_dev = ad405x_iio_read_samples,
+	.debug_reg_read = ad405x_iio_read_reg,
+	.debug_reg_write = ad405x_iio_write_reg
 };
 
 /**

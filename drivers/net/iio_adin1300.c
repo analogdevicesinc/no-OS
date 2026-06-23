@@ -9,9 +9,9 @@
 #include "adin1300.h"
 #include "iio.h"
 
-static int32_t _adin1300_read2(void *dev,
-			       uint32_t reg,
-			       uint32_t *readval)
+static int _adin1300_read2(void *dev,
+			   uint32_t reg,
+			   uint32_t *readval)
 {
 	struct adin1300_iio_desc *iiodev = dev;
 	int ret;
@@ -28,9 +28,9 @@ static int32_t _adin1300_read2(void *dev,
 	return 0;
 }
 
-static int32_t _adin1300_write2(void *dev,
-				uint32_t reg,
-				uint32_t writeval)
+static int _adin1300_write2(void *dev,
+			    uint32_t reg,
+			    uint32_t writeval)
 {
 	struct adin1300_iio_desc *iiodev = dev;
 

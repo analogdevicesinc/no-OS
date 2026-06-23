@@ -47,10 +47,10 @@ static int ad463x_iio_store_scale(void *dev, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel, intptr_t priv);
 static int ad463x_iio_read_scale_avail(void *dev, char *buf,
 				       uint32_t len, const struct iio_ch_info *channel, intptr_t priv);
-static int32_t _iio_ad463x_read_dev(struct iio_ad463x *desc, uint32_t *buff,
-				    uint32_t nb_samples);
-static int32_t _iio_ad463x_prepare_transfer(struct iio_ad463x *desc,
-		uint32_t mask);
+static int _iio_ad463x_read_dev(struct iio_ad463x *desc, uint32_t *buff,
+				uint32_t nb_samples);
+static int _iio_ad463x_prepare_transfer(struct iio_ad463x *desc,
+					uint32_t mask);
 #define BITS_PER_SAMPLE 32
 #define REAL_BITS 24
 
@@ -102,15 +102,15 @@ static struct iio_channel iio_adc_one_channel[] = {
 struct iio_device ad463x_iio_desc_one_chn = {
 	.channels = iio_adc_one_channel,
 	.num_ch = 1,
-	.pre_enable = (int32_t (*)())_iio_ad463x_prepare_transfer,
-	.read_dev = (int32_t (*)())_iio_ad463x_read_dev
+	.pre_enable = _iio_ad463x_prepare_transfer,
+	.read_dev = _iio_ad463x_read_dev
 };
 
 struct iio_device ad463x_iio_desc_two_chn = {
 	.channels = iio_adc_two_channels,
 	.num_ch = 2,
-	.pre_enable = (int32_t (*)())_iio_ad463x_prepare_transfer,
-	.read_dev = (int32_t (*)())_iio_ad463x_read_dev
+	.pre_enable = _iio_ad463x_prepare_transfer,
+	.read_dev = _iio_ad463x_read_dev
 };
 
 /**
@@ -119,8 +119,8 @@ struct iio_device ad463x_iio_desc_two_chn = {
  * @param mask - Mask of the active channels
  * @return ret - Result of the updating procedure.
 */
-static int32_t _iio_ad463x_prepare_transfer(struct iio_ad463x *desc,
-		uint32_t mask)
+static int _iio_ad463x_prepare_transfer(struct iio_ad463x *desc,
+					uint32_t mask)
 {
 	if (!desc)
 		return -EINVAL;
@@ -273,8 +273,8 @@ static int ad463x_iio_read_scale_avail(void *dev, char *buf,
 */
 
 
-static int32_t _iio_ad463x_read_dev(struct iio_ad463x *desc, uint32_t *buff,
-				    uint32_t nb_samples)
+static int _iio_ad463x_read_dev(struct iio_ad463x *desc, uint32_t *buff,
+				uint32_t nb_samples)
 {
 	int ret;
 	uint32_t i, j;
