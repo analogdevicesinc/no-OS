@@ -96,8 +96,8 @@ static int max22200_iio_read_available(void *dev, char *buf, uint32_t len,
 				       const struct iio_ch_info *channel,
 				       intptr_t priv);
 
-static int max22200_iio_reg_read(struct max22200_iio_desc *, uint32_t,
-				 uint32_t *);
+static int32_t max22200_iio_reg_read(void *dev, uint32_t reg,
+				     uint32_t *readval);
 
 static int max22200_iio_write_ch_mode(void *dev, char *buf, uint32_t len,
 				      const struct iio_ch_info *channel,
@@ -127,8 +127,8 @@ static int max22200_iio_write_channel_attrs(void *dev, char *buf, uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv);
 
-static int max22200_iio_reg_write(struct max22200_iio_desc *, uint32_t,
-				  uint32_t);
+static int32_t max22200_iio_reg_write(void *dev, uint32_t reg,
+				      uint32_t writeval);
 
 static struct iio_attribute max22200_attrs[] = {
 	{
@@ -320,8 +320,8 @@ static struct iio_attribute max22200_global_attrs[] = {
 };
 
 static struct iio_device max22200_iio_dev = {
-	.debug_reg_read = (int32_t (*)())max22200_iio_reg_read,
-	.debug_reg_write = (int32_t (*)())max22200_iio_reg_write,
+	.debug_reg_read = max22200_iio_reg_read,
+	.debug_reg_write = max22200_iio_reg_write,
 	.debug_attributes = max22200_debug_attrs,
 	.attributes = max22200_global_attrs
 };
@@ -686,10 +686,12 @@ static int max22200_iio_read_available(void *dev, char *buf, uint32_t len,
  * @param readval - Register value
  * @return 0 in case of success, error code otherwise
  */
-static int max22200_iio_reg_read(struct max22200_iio_desc *dev, uint32_t reg,
-				 uint32_t *readval)
+static int32_t max22200_iio_reg_read(void *dev, uint32_t reg,
+				     uint32_t *readval)
 {
-	return max22200_reg_read(dev->max22200_desc, reg, readval);
+	struct max22200_iio_desc *desc = dev;
+
+	return max22200_reg_read(desc->max22200_desc, reg, readval);
 }
 
 /**
@@ -989,10 +991,12 @@ static int max22200_iio_write_channel_attrs(void *dev, char *buf, uint32_t len,
  * @param readval - Register value
  * @return 0 in case of success, error code otherwise
  */
-static int max22200_iio_reg_write(struct max22200_iio_desc *dev, uint32_t reg,
-				  uint32_t writeval)
+static int32_t max22200_iio_reg_write(void *dev, uint32_t reg,
+				      uint32_t writeval)
 {
-	return max22200_reg_write(dev->max22200_desc, reg, writeval);
+	struct max22200_iio_desc *desc = dev;
+
+	return max22200_reg_write(desc->max22200_desc, reg, writeval);
 }
 
 int max22200_iio_setup_channels(struct max22200_iio_desc *desc, bool *ch_enable)
