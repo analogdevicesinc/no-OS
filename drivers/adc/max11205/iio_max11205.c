@@ -162,11 +162,13 @@ static int max11205_iio_read_sampling_frequency(void *dev, char *buf,
  * @param samples - Number of samples to be returned.
  * @return ret    - Result of the reading procedure. In case of success, the size of the read data is returned.
  */
-static int max11205_iio_read_samples(void* dev, int16_t* buff, uint32_t samples)
+static int32_t max11205_iio_read_samples(void *dev, void *buff,
+		uint32_t samples)
 {
 	int ret;
 	bool new_data_avail = false;
 	struct max11205_iio_dev *iio_max11205;
+	int16_t *samples_buff = buff;
 	uint32_t timeout = MAX11205_NEW_DATA_TIMEOUT;
 	uint32_t i;
 
@@ -181,7 +183,7 @@ static int max11205_iio_read_samples(void* dev, int16_t* buff, uint32_t samples)
 	for (i = 0; i < samples; i++) {
 		while (!new_data_avail && timeout) {
 			ret = max11205_get_data_raw(iio_max11205->max11205_dev, &new_data_avail,
-						    &buff[i]);
+						    &samples_buff[i]);
 			if (ret)
 				return ret;
 			timeout --;
@@ -231,7 +233,7 @@ static struct iio_channel max11205_channels[] = {
 static struct iio_device max11205_iio_dev = {
 	.num_ch = NO_OS_ARRAY_SIZE(max11205_channels),
 	.channels = max11205_channels,
-	.read_dev = (int32_t (*)())max11205_iio_read_samples,
+	.read_dev = max11205_iio_read_samples,
 };
 
 /**
