@@ -9,10 +9,11 @@
 #include "max24287.h"
 #include "iio.h"
 
-static int32_t _max24287_read2(struct max24287_iio_desc *iiodev,
+static int32_t _max24287_read2(void *dev,
 			       uint32_t reg,
 			       uint32_t *readval)
 {
+	struct max24287_iio_desc *iiodev = dev;
 	int ret;
 	uint16_t val;
 
@@ -24,10 +25,12 @@ static int32_t _max24287_read2(struct max24287_iio_desc *iiodev,
 	return 0;
 }
 
-static int32_t _max24287_write2(struct max24287_iio_desc *iiodev,
+static int32_t _max24287_write2(void *dev,
 				uint32_t reg,
 				uint32_t writeval)
 {
+	struct max24287_iio_desc *iiodev = dev;
+
 	return max24287_write(iiodev->dev, reg, (uint16_t)writeval);
 }
 
@@ -124,8 +127,8 @@ static struct iio_attribute max24287_iio_attrs[] = {
 
 static struct iio_device max24287_iio_template = {
 	.attributes = max24287_iio_attrs,
-	.debug_reg_read = (int32_t (*)())_max24287_read2,
-	.debug_reg_write = (int32_t (*)())_max24287_write2
+	.debug_reg_read = _max24287_read2,
+	.debug_reg_write = _max24287_write2
 };
 
 int32_t max24287_iio_init(struct max24287_iio_desc **iiodev,
