@@ -70,10 +70,16 @@ Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
 No-OS Supported Examples
 ------------------------
 
-The initialization data used in the examples is taken out from the
-`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7124-8pmdz/src>`__.
+This project is organized around the no-OS ``EXAMPLE`` based build flow.
+Selecting an example at build time (``EXAMPLE=<name>``) chooses which
+application is compiled. The platform ``main()`` is a thin dispatcher that
+calls ``example_main()``, provided by the selected example. Shared
+initialization data (UART, SPI, and AD7124 init parameters) is defined in
+`src/common <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7124-8pmdz/src/common>`__,
+and platform-specific macros and extra init parameters are in
+`src/platform <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7124-8pmdz/src/platform>`__.
 
-IIO example
+IIO Example
 ~~~~~~~~~~~
 
 This project is an IIOD demo for the EVAL-AD7124-8-PMDZ evaluation
@@ -88,15 +94,6 @@ If you are not familiar with ADI IIO Application, please take a look at:
 If you are not familiar with ADI IIO-Oscilloscope Client, please take a
 look at:
 :dokuwiki:`IIO Oscilloscope </resources/tools-software/linux-software/iio_oscilloscope>`
-
-In order to build the IIO project, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad7124-8pmdz/Makefile>`__:
-
-.. code-block:: bash
-
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   IIOD = y
 
 No-OS Supported Platforms
 -------------------------
@@ -124,6 +121,59 @@ Build Command
 .. code-block:: bash
 
    # to build the project
-   make
+   make PLATFORM=aducm3029 EXAMPLE=iio_example
    # to flash the code
    make run
+
+Maxim
+~~~~~
+
+Used Hardware
+^^^^^^^^^^^^^
+
+* `AD-APARD32690-SL <https://www.analog.com/AD-APARD32690-SL>`_ (MAX32690)
+* `MAX32666FTHR <https://www.analog.com/MAX32666FTHR>`_ (MAX32665)
+* `MAX32655FTHR <https://www.analog.com/MAX32655FTHR>`_ (MAX32655)
+* `EVAL-AD7124-8-PMDZ <https://www.analog.com/EVAL-AD7124-8>`_
+
+Connections
+^^^^^^^^^^^
+
+Connect the EVAL-AD7124-8-PMDZ PMOD to the SPI header of the Maxim
+board. The UART console is available at 115200 baud on the default UART
+port for each target:
+
+* MAX32690 (AD-APARD32690-SL): SPI4, UART0
+* MAX32665 (MAX32666FTHR): SPI1, UART1 (MAP_B, pins P1.12/P1.13)
+* MAX32655 (MAX32655FTHR): SPI0, UART0
+
+Build Command
+^^^^^^^^^^^^^
+
+The Maxim platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available boards:
+``ad-apard32690-sl``, ``max32655fthr``, ``max32665fthr``.
+
+.. code-block:: bash
+
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the IIO example for AD-APARD32690-SL (MAX32690)
+   python tools/scripts/no_os_build.py build \
+      --project ad7124-8pmdz --variant iio_example --board ad-apard32690-sl
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad7124-8pmdz --variant iio_example --board ad-apard32690-sl \
+      --probe openocd --flash
+
+   # build for MAX32655FTHR
+   python tools/scripts/no_os_build.py build \
+      --project ad7124-8pmdz --variant iio_example --board max32655fthr
+
+   # build for MAX32666FTHR (MAX32665)
+   python tools/scripts/no_os_build.py build \
+      --project ad7124-8pmdz --variant iio_example --board max32665fthr
+
