@@ -127,3 +127,35 @@ Build Command
    make
    # to flash the code
    make run
+
+Maxim
+~~~~~
+
+Used Hardware
+^^^^^^^^^^^^^
+
+* `AD-APARD32690-SL <https://www.analog.com/AD-APARD32690-SL>`_ (MAX32690)
+* `MAX32666FTHR <https://www.analog.com/MAX32666FTHR>`_ (MAX32665)
+* `EVAL-AD7124-8-PMDZ <https://www.analog.com/EVAL-AD7124-8>`_
+
+Connections
+^^^^^^^^^^^
+
+Connect the EVAL-AD7124-8-PMDZ PMOD to the SPI header of the Maxim
+board. The UART console is available at 230400 baud on the default UART
+port for each target (UART0 on MAX32690, UART1 on MAX32665).
+
+Build Command
+^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+   # to build for AD-APARD32690-SL (MAX32690)
+   make PLATFORM=maxim TARGET=max32690 EXAMPLE=iio_example
+   # to flash the code
+   make run PLATFORM=maxim TARGET=max32690 EXAMPLE=iio_example
+
+   # to build for MAX32666FTHR (MAX32665)
+   make PLATFORM=maxim TARGET=max32665 EXAMPLE=iio_example
+   # to flash the code
+   make run PLATFORM=maxim TARGET=max32665 EXAMPLE=iio_example
