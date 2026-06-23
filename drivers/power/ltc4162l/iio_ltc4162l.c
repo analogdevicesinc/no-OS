@@ -104,9 +104,10 @@ enum ltc4162l_attr_priv {
 	LTC4162L_TELEMETRY,
 };
 
-static int32_t ltc4162l_iio_reg_read(struct ltc4162l_iio_device *dev,
+static int32_t ltc4162l_iio_reg_read(void *ddev,
 				     uint32_t reg, uint32_t *readval)
 {
+	struct ltc4162l_iio_device *dev = ddev;
 	uint16_t temp;
 	int ret;
 
@@ -117,9 +118,11 @@ static int32_t ltc4162l_iio_reg_read(struct ltc4162l_iio_device *dev,
 	return ret;
 }
 
-static int32_t ltc4162l_iio_reg_write(struct ltc4162l_iio_device *dev,
+static int32_t ltc4162l_iio_reg_write(void *ddev,
 				      uint32_t reg, uint32_t writeval)
 {
+	struct ltc4162l_iio_device *dev = ddev;
+
 	return ltc4162l_reg_write(dev->dev, (uint8_t)reg, (uint16_t)writeval);
 }
 
@@ -473,8 +476,8 @@ struct iio_channel ltc4162l_channels[] = {
 static struct iio_device ltc4162l_iio_dev = {
 	.num_ch = NO_OS_ARRAY_SIZE(ltc4162l_channels),
 	.channels = ltc4162l_channels,
-	.debug_reg_read = (int32_t (*)()) ltc4162l_iio_reg_read,
-	.debug_reg_write = (int32_t (*)()) ltc4162l_iio_reg_write,
+	.debug_reg_read = ltc4162l_iio_reg_read,
+	.debug_reg_write = ltc4162l_iio_reg_write,
 	.debug_attributes = ltc4162l_debug_attrs,
 };
 
