@@ -142,7 +142,7 @@ int32_t pico_timer_start(struct no_os_timer_desc *desc)
 
 	/* For pico platform, the timer starts counting from the boot-up and it cannot be stopped.
 	An alarm shall be used to trigger interrupts at specific periods of time. */
-	absolute_time_t target = {._private_us_since_boot = time_us_64() + pico_timer->period};
+	absolute_time_t target = from_us_since_boot(time_us_64() + pico_timer->period);
 	hardware_alarm_set_target(desc->id, target);
 
 	return 0;

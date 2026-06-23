@@ -28,3 +28,6 @@
 [submodule "libraries/precision-converters-library"]
 	path = libraries/precision-converters-library
 	url = https://github.com/analogdevicesinc/precision-converters-library.git
+[submodule "libraries/pico-sdk"]
+	path = libraries/pico-sdk
+	url = https://github.com/raspberrypi/pico-sdk.git
