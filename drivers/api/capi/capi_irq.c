@@ -27,7 +27,7 @@ int capi_irq_deinit(void)
 	return capi_irq_stub_deinit();
 }
 
-int capi_irq_global_enalbe(void)
+int capi_irq_global_enable(void)
 {
 	return capi_irq_stub_global_enable();
 }
@@ -72,7 +72,8 @@ int capi_irq_get_priority(uint32_t irq, uint32_t *priority)
 	return capi_irq_stub_get_priority(irq, priority);
 }
 
-int capi_irq_set_level_edge_trigger(uint32_t irq, enum capi_irq_trig_level trigger)
+int capi_irq_set_level_edge_trigger(uint32_t irq,
+				    enum capi_irq_trig_level trigger)
 {
 	return capi_irq_stub_set_level_edge_trigger(irq, trigger);
 }

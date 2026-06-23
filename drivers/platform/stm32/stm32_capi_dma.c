@@ -1,15 +1,71 @@
+/*
+ * Copyright (c) 2025-2026 Analog Devices, Inc.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
 #include "stm32_capi_dma.h"
-#include "capi/capi_dma.h"
-#include "no_os_alloc.h"
-#include "no_os_error.h"
+#include "capi_dma.h"
+#include "capi_alloc.h"
+#include <errno.h>
 #include <string.h>
+
+/**
+ * @struct stm32_dma_priv_handle
+ * @brief STM32 platform specific DMA private handle
+ */
+struct stm32_dma_priv_handle {
+	/** Number of channels */
+	uint32_t num_chans;
+	/** Array of channel private data pointers */
+	struct stm32_dma_chan_priv **chan_privs;
+};
+
+/**
+ * @struct stm32_dma_chan_priv
+ * @brief STM32 platform specific DMA channel private data
+ */
+struct stm32_dma_chan_priv {
+	/** DMA HAL Handle */
+	DMA_HandleTypeDef hdma;
+	/** Channel Number */
+	uint32_t ch_num;
+	/** Memory Increment */
+	bool mem_increment;
+	/** Peripheral Increment */
+	bool per_increment;
+	/** Memory Data Alignment */
+	enum stm32_capi_dma_data_alignment mem_data_alignment;
+	/** Peripheral Data Alignment */
+	enum stm32_capi_dma_data_alignment per_data_alignment;
+	/** DMA Mode */
+	enum stm32_capi_dma_mode dma_mode;
+	/** Trigger configuration */
+	struct stm32_capi_dma_trigger *trig;
+	/** Source Address for the data */
+	capi_dma_glbl_addr_t src;
+	/** Destination Address for the data */
+	capi_dma_glbl_addr_t dst;
+	/** Transfer length in Bytes */
+	size_t length;
+	/** Transfer completed flag */
+	volatile bool completed;
+	/** Back-reference to the CAPI channel */
+	struct capi_dma_chan *capi_chan;
+};
 
 #define MAX_DMA_CHANNELS 16
 
 static struct capi_dma_handle *dma_handle_singleton = NULL;
 static struct stm32_dma_chan_priv *chan_priv_map[MAX_DMA_CHANNELS];
 
-static struct stm32_dma_chan_priv *find_chan_priv_by_hdma(DMA_HandleTypeDef *hdma)
+/**
+ * @brief Find channel private data by HAL DMA handle.
+ * @param hdma - Pointer to the HAL DMA handle.
+ * @return Pointer to the matching channel private data, or NULL if not found.
+ */
+static struct stm32_dma_chan_priv *find_chan_priv_by_hdma(
+	DMA_HandleTypeDef *hdma)
 {
 	uint32_t i;
 
@@ -21,6 +77,10 @@ static struct stm32_dma_chan_priv *find_chan_priv_by_hdma(DMA_HandleTypeDef *hdm
 	return NULL;
 }
 
+/**
+ * @brief HAL DMA transfer complete callback.
+ * @param hdma - Pointer to the HAL DMA handle that completed.
+ */
 static void stm32_capi_dma_xfer_cplt_callback(DMA_HandleTypeDef *hdma)
 {
 	struct stm32_dma_chan_priv *chan_priv;
@@ -31,11 +91,15 @@ static void stm32_capi_dma_xfer_cplt_callback(DMA_HandleTypeDef *hdma)
 
 	chan_priv->completed = true;
 
-	if (chan_priv->capi_chan->xfer_complete_cb && chan_priv->capi_chan->xfer)
-		chan_priv->capi_chan->xfer_complete_cb(chan_priv->capi_chan->xfer,
-						       chan_priv->capi_chan->xfer->user_data);
+	if (chan_priv->capi_chan->xfer_complete_cb)
+		chan_priv->capi_chan->xfer_complete_cb(0,
+						       chan_priv->capi_chan->xfer_complete_ctx);
 }
 
+/**
+ * @brief HAL DMA transfer error callback.
+ * @param hdma - Pointer to the HAL DMA handle that errored.
+ */
 static void stm32_capi_dma_xfer_error_callback(DMA_HandleTypeDef *hdma)
 {
 	struct stm32_dma_chan_priv *chan_priv;
@@ -47,6 +111,12 @@ static void stm32_capi_dma_xfer_error_callback(DMA_HandleTypeDef *hdma)
 	chan_priv->completed = true;
 }
 
+/**
+ * @brief Initialize the STM32 DMA controller.
+ * @param handle - Pointer to the DMA handle pointer to be allocated.
+ * @param config - Pointer to the DMA configuration structure.
+ * @return 0 on success, negative error code otherwise.
+ */
 static int stm32_capi_dma_init(struct capi_dma_handle **handle,
 			       const struct capi_dma_config *config)
 {
@@ -61,28 +131,28 @@ static int stm32_capi_dma_init(struct capi_dma_handle **handle,
 		return 0;
 	}
 
-	dma_handle = (struct capi_dma_handle *)no_os_calloc(1, sizeof(*dma_handle));
+	dma_handle = (struct capi_dma_handle *)capi_calloc(1, sizeof(*dma_handle));
 	if (!dma_handle)
 		return -ENOMEM;
 
-	dma_priv = (struct stm32_dma_priv_handle *)no_os_calloc(1, sizeof(*dma_priv));
+	dma_priv = (struct stm32_dma_priv_handle *)capi_calloc(1, sizeof(*dma_priv));
 	if (!dma_priv) {
-		no_os_free(dma_handle);
+		capi_free(dma_handle);
 		return -ENOMEM;
 	}
 
 	dma_priv->num_chans = config->num_chans;
-	dma_priv->chan_privs = (struct stm32_dma_chan_priv **)no_os_calloc(
+	dma_priv->chan_privs = (struct stm32_dma_chan_priv **)capi_calloc(
 				       config->num_chans, sizeof(struct stm32_dma_chan_priv *));
 	if (!dma_priv->chan_privs) {
-		no_os_free(dma_priv);
-		no_os_free(dma_handle);
+		capi_free(dma_priv);
+		capi_free(dma_handle);
 		return -ENOMEM;
 	}
 
 	dma_handle->init_allocated = true;
 	dma_handle->ops = config->ops;
-	dma_handle->extra = dma_priv;
+	dma_handle->priv = dma_priv;
 
 	dma_handle_singleton = dma_handle;
 	*handle = dma_handle;
@@ -90,6 +160,11 @@ static int stm32_capi_dma_init(struct capi_dma_handle **handle,
 	return 0;
 }
 
+/**
+ * @brief Deinitialize the STM32 DMA controller.
+ * @param handle - Pointer to the DMA handle to deinitialize.
+ * @return 0 on success, negative error code otherwise.
+ */
 static int stm32_capi_dma_deinit(struct capi_dma_handle *handle)
 {
 	struct stm32_dma_priv_handle *dma_priv;
@@ -98,29 +173,36 @@ static int stm32_capi_dma_deinit(struct capi_dma_handle *handle)
 	if (!handle)
 		return -EINVAL;
 
-	dma_priv = handle->extra;
+	dma_priv = handle->priv;
 
 	if (dma_priv) {
 		for (i = 0; i < dma_priv->num_chans; i++) {
 			if (dma_priv->chan_privs[i]) {
 				HAL_DMA_DeInit(&dma_priv->chan_privs[i]->hdma);
-				no_os_free(dma_priv->chan_privs[i]);
+				capi_free(dma_priv->chan_privs[i]);
 			}
 		}
-		no_os_free(dma_priv->chan_privs);
-		no_os_free(dma_priv);
+		capi_free(dma_priv->chan_privs);
+		capi_free(dma_priv);
 	}
 
 	memset(chan_priv_map, 0, sizeof(chan_priv_map));
 
 	if (handle->init_allocated)
-		no_os_free(handle);
+		capi_free(handle);
 
 	dma_handle_singleton = NULL;
 
 	return 0;
 }
 
+/**
+ * @brief Initialize a DMA channel.
+ * @param handle - Pointer to the DMA handle.
+ * @param chan_ptr - Pointer to the channel pointer to be allocated.
+ * @param id - Channel identifier.
+ * @return 0 on success, negative error code otherwise.
+ */
 static int stm32_capi_dma_init_chan(struct capi_dma_handle *handle,
 				    struct capi_dma_chan **chan_ptr,
 				    uint32_t id)
@@ -132,7 +214,7 @@ static int stm32_capi_dma_init_chan(struct capi_dma_handle *handle,
 	if (!handle || !chan_ptr)
 		return -EINVAL;
 
-	dma_priv = handle->extra;
+	dma_priv = handle->priv;
 	if (!dma_priv)
 		return -EINVAL;
 
@@ -142,13 +224,13 @@ static int stm32_capi_dma_init_chan(struct capi_dma_handle *handle,
 	if (dma_priv->chan_privs[id])
 		return -EBUSY;
 
-	chan = (struct capi_dma_chan *)no_os_calloc(1, sizeof(*chan));
+	chan = (struct capi_dma_chan *)capi_calloc(1, sizeof(*chan));
 	if (!chan)
 		return -ENOMEM;
 
-	chan_priv = (struct stm32_dma_chan_priv *)no_os_calloc(1, sizeof(*chan_priv));
+	chan_priv = (struct stm32_dma_chan_priv *)capi_calloc(1, sizeof(*chan_priv));
 	if (!chan_priv) {
-		no_os_free(chan);
+		capi_free(chan);
 		return -ENOMEM;
 	}
 
@@ -170,6 +252,11 @@ static int stm32_capi_dma_init_chan(struct capi_dma_handle *handle,
 	return 0;
 }
 
+/**
+ * @brief Deinitialize a DMA channel.
+ * @param chan - Pointer to the DMA channel to deinitialize.
+ * @return 0 on success, negative error code otherwise.
+ */
 static int stm32_capi_dma_deinit_chan(struct capi_dma_chan *chan)
 {
 	struct stm32_dma_chan_priv *chan_priv;
@@ -179,7 +266,7 @@ static int stm32_capi_dma_deinit_chan(struct capi_dma_chan *chan)
 		return -EINVAL;
 
 	chan_priv = chan->extra;
-	dma_priv = chan->handle->extra;
+	dma_priv = chan->handle->priv;
 
 	if (chan_priv) {
 		HAL_DMA_DeInit(&chan_priv->hdma);
@@ -190,15 +277,21 @@ static int stm32_capi_dma_deinit_chan(struct capi_dma_chan *chan)
 		if (dma_priv && chan->id < dma_priv->num_chans)
 			dma_priv->chan_privs[chan->id] = NULL;
 
-		no_os_free(chan_priv);
+		capi_free(chan_priv);
 	}
 
 	if (!chan->owned_by_app)
-		no_os_free(chan);
+		capi_free(chan);
 
 	return 0;
 }
 
+/**
+ * @brief Configure a DMA transfer.
+ * @param chan - Pointer to the DMA channel.
+ * @param xfer - Pointer to the DMA transfer descriptor.
+ * @return 0 on success, negative error code otherwise.
+ */
 static int stm32_capi_dma_config_xfer(struct capi_dma_chan *chan,
 				      struct capi_dma_transfer *xfer)
 {
@@ -303,7 +396,6 @@ static int stm32_capi_dma_config_xfer(struct capi_dma_chan *chan,
 	chan_priv->completed = false;
 
 	chan->xfer = xfer;
-	chan->xfer_complete_cb = xfer->xfer_complete_cb;
 
 	chan_priv->hdma.XferCpltCallback = stm32_capi_dma_xfer_cplt_callback;
 	chan_priv->hdma.XferErrorCallback = stm32_capi_dma_xfer_error_callback;
@@ -315,6 +407,11 @@ static int stm32_capi_dma_config_xfer(struct capi_dma_chan *chan,
 	return 0;
 }
 
+/**
+ * @brief Start a DMA transfer.
+ * @param chan - Pointer to the DMA channel.
+ * @return 0 on success, negative error code otherwise.
+ */
 static int stm32_capi_dma_xfer_start(struct capi_dma_chan *chan)
 {
 	struct stm32_dma_chan_priv *chan_priv;
@@ -344,6 +441,11 @@ static int stm32_capi_dma_xfer_start(struct capi_dma_chan *chan)
 	return 0;
 }
 
+/**
+ * @brief Abort an ongoing DMA transfer.
+ * @param chan - Pointer to the DMA channel.
+ * @return 0 on success, negative error code otherwise.
+ */
 static int stm32_capi_dma_xfer_abort(struct capi_dma_chan *chan)
 {
 	struct stm32_dma_chan_priv *chan_priv;
@@ -365,6 +467,11 @@ static int stm32_capi_dma_xfer_abort(struct capi_dma_chan *chan)
 	return 0;
 }
 
+/**
+ * @brief Check if a DMA channel transfer is completed.
+ * @param chan - Pointer to the DMA channel.
+ * @return true if the transfer is completed, false otherwise.
+ */
 static bool stm32_capi_dma_chan_is_completed(const struct capi_dma_chan *chan)
 {
 	struct stm32_dma_chan_priv *chan_priv;
@@ -377,12 +484,22 @@ static bool stm32_capi_dma_chan_is_completed(const struct capi_dma_chan *chan)
 	return chan_priv->completed;
 }
 
+/**
+ * @brief DMA controller interrupt handler.
+ * @param handle - Pointer to the DMA handle.
+ * @return 0 on success, negative error code otherwise.
+ */
 static int stm32_capi_dma_isr(struct capi_dma_handle *handle)
 {
 	(void)handle;
 	return 0;
 }
 
+/**
+ * @brief DMA channel interrupt handler.
+ * @param chan - Pointer to the DMA channel.
+ * @return 0 on success, negative error code otherwise.
+ */
 static int stm32_capi_dma_isr_chan(struct capi_dma_chan *chan)
 {
 	struct stm32_dma_chan_priv *chan_priv;

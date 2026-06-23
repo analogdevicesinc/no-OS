@@ -33,21 +33,13 @@ extern "C" {
 #define CAPI_GPIO_ACTIVE_LOW  0x01
 
 /**
- * GPIO port handle.
+ * GPIO port handle type
  */
 struct capi_gpio_port_handle {
-	/** Set if init() has allocated the required memory. */
-	bool init_allocated;
-	/** GPIO port specific operations. */
-	const struct capi_gpio_ops *ops;
-	/** GPIO port identifier:
-	 * - Base address for internal GPIO controllers.
-	 * - Device specific address for external GPIO controllers (e.g., GPIO
-	 *   expanders).
-	 */
-	uint64_t identifier;
-	/** Reference to GPIO port private information. */
-	void *priv;
+	const struct capi_gpio_ops *ops; /**< set and used by capi thin layer */
+	bool init_allocated;             /**< If true, the driver is owner of handle memory. */
+	void *lock;                      /**< set and used by capi thin layer if mux is available */
+	void *priv;                      /**< set and used by user optionally */
 };
 
 /**
@@ -66,8 +58,8 @@ struct capi_gpio_port_config {
 	uint8_t num_pins;
 	/** GPIO pins flags. */
 	uint32_t *flags;
-	/** Reference to GPIO port private information. */
-	void *priv;
+	/** This is intended to store GPIO specific configurations. */
+	void *extra;
 };
 
 /**
@@ -77,7 +69,7 @@ struct capi_gpio_pin {
 	/** Corresponding GPIO port handle. */
 	struct capi_gpio_port_handle *port_handle;
 	/** GPIO pin number. */
-	int number;
+	uint32_t number;
 	/** GPIO pin flags. */
 	uint32_t flags;
 };
@@ -114,7 +106,8 @@ int capi_gpio_port_deinit(struct capi_gpio_port_handle **handle);
  *
  * @return 0 in case of success, negative error code otherwise.
  */
-int capi_gpio_port_set_direction(struct capi_gpio_port_handle *handle, uint64_t direction_bitmask);
+int capi_gpio_port_set_direction(struct capi_gpio_port_handle *handle,
+				 uint64_t direction_bitmask);
 
 /**
  * @brief Get the current direction of all the pins belonging to the
@@ -126,7 +119,8 @@ int capi_gpio_port_set_direction(struct capi_gpio_port_handle *handle, uint64_t 
  *
  * @return 0 in case of success, negative error code otherwise.
  */
-int capi_gpio_port_get_direction(struct capi_gpio_port_handle *handle, uint64_t *direction_bitmask);
+int capi_gpio_port_get_direction(struct capi_gpio_port_handle *handle,
+				 uint64_t *direction_bitmask);
 
 /**
  * @brief Set the value of all the pins belonging to the specified port.
@@ -136,7 +130,8 @@ int capi_gpio_port_get_direction(struct capi_gpio_port_handle *handle, uint64_t 
  *
  * @return 0 in case of success, negative error code otherwise.
  */
-int capi_gpio_port_set_value(struct capi_gpio_port_handle *handle, uint64_t value_bitmask);
+int capi_gpio_port_set_value(struct capi_gpio_port_handle *handle,
+			     uint64_t value_bitmask);
 
 /**
  * @brief Get the current value of all the pins belonging to the
@@ -147,7 +142,8 @@ int capi_gpio_port_set_value(struct capi_gpio_port_handle *handle, uint64_t valu
  *
  * @return 0 in case of success, negative error code otherwise.
  */
-int capi_gpio_port_get_value(struct capi_gpio_port_handle *handle, uint64_t *value_bitmask);
+int capi_gpio_port_get_value(struct capi_gpio_port_handle *handle,
+			     uint64_t *value_bitmask);
 
 /**
  * @brief Set the raw value of all the pins belonging to the specified port.
@@ -158,7 +154,8 @@ int capi_gpio_port_get_value(struct capi_gpio_port_handle *handle, uint64_t *val
  *
  * @return 0 in case of success, negative error code otherwise.
  */
-int capi_gpio_port_set_raw_value(struct capi_gpio_port_handle *handle, uint64_t value_bitmask);
+int capi_gpio_port_set_raw_value(struct capi_gpio_port_handle *handle,
+				 uint64_t value_bitmask);
 
 /**
  * @brief Get the current raw value of all the pins belonging to the
@@ -169,7 +166,8 @@ int capi_gpio_port_set_raw_value(struct capi_gpio_port_handle *handle, uint64_t 
  *                            regardless of the ACTIVE_LOW flag.
  * @return 0 in case of success, negative error code otherwise.
  */
-int capi_gpio_port_get_raw_value(struct capi_gpio_port_handle *handle, uint64_t *value_bitmask);
+int capi_gpio_port_get_raw_value(struct capi_gpio_port_handle *handle,
+				 uint64_t *value_bitmask);
 
 /**
  * @brief Set the direction of the specified GPIO pin.
@@ -244,18 +242,23 @@ struct capi_gpio_ops {
 	/** See capi_gpio_port_deinit() */
 	int (*port_deinit)(struct capi_gpio_port_handle **handle);
 	/** See capi_gpio_port_set_direction() */
-	int (*port_set_direction)(struct capi_gpio_port_handle *handle, uint64_t direction_bitmask);
+	int (*port_set_direction)(struct capi_gpio_port_handle *handle,
+				  uint64_t direction_bitmask);
 	/** See capi_gpio_port_get_direction() */
 	int (*port_get_direction)(struct capi_gpio_port_handle *handle,
 				  uint64_t *direction_bitmask);
 	/** See capi_gpio_port_set_value() */
-	int (*port_set_value)(struct capi_gpio_port_handle *handle, uint64_t value_bitmask);
+	int (*port_set_value)(struct capi_gpio_port_handle *handle,
+			      uint64_t value_bitmask);
 	/** See capi_gpio_port_get_value() */
-	int (*port_get_value)(struct capi_gpio_port_handle *handle, uint64_t *value_bitmask);
+	int (*port_get_value)(struct capi_gpio_port_handle *handle,
+			      uint64_t *value_bitmask);
 	/** See capi_gpio_port_set_raw_value() */
-	int (*port_set_raw_value)(struct capi_gpio_port_handle *handle, uint64_t value_bitmask);
+	int (*port_set_raw_value)(struct capi_gpio_port_handle *handle,
+				  uint64_t value_bitmask);
 	/** See capi_gpio_port_get_raw_value() */
-	int (*port_get_raw_value)(struct capi_gpio_port_handle *handle, uint64_t *value_bitmask);
+	int (*port_get_raw_value)(struct capi_gpio_port_handle *handle,
+				  uint64_t *value_bitmask);
 	/** See capi_gpio_pin_set_direction() */
 	int (*pin_set_direction)(struct capi_gpio_pin *pin, uint8_t direction);
 	/** See capi_gpio_pin_get_direction() */

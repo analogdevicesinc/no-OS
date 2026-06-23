@@ -22,133 +22,124 @@
 int capi_gpio_port_init(struct capi_gpio_port_handle **handle,
 			const struct capi_gpio_port_config *config)
 {
-	if (config != NULL && config->ops != NULL && config->ops->port_init != NULL) {
-		return config->ops->port_init(handle, config);
+	if (!handle || !config || !config->ops || !config->ops->port_init) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return config->ops->port_init(handle, config);
 }
 
 int capi_gpio_port_deinit(struct capi_gpio_port_handle **handle)
 {
-	if (handle != NULL && *handle != NULL && (*handle)->ops != NULL &&
-	    (*handle)->ops->port_deinit != NULL) {
-		return (*handle)->ops->port_deinit(handle);
+	if (!handle || !*handle || !(*handle)->ops || !(*handle)->ops->port_deinit) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return (*handle)->ops->port_deinit(handle);
 }
 
-int capi_gpio_port_set_direction(struct capi_gpio_port_handle *handle, uint64_t direction_bitmask)
+int capi_gpio_port_set_direction(struct capi_gpio_port_handle *handle,
+				 uint64_t direction_bitmask)
 {
-	if (handle != NULL && handle->ops != NULL && handle->ops->port_set_direction != NULL) {
-		return handle->ops->port_set_direction(handle, direction_bitmask);
+	if (!handle || !handle->ops || !handle->ops->port_set_direction) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return handle->ops->port_set_direction(handle, direction_bitmask);
 }
 
-int capi_gpio_port_get_direction(struct capi_gpio_port_handle *handle, uint64_t *direction_bitmask)
+int capi_gpio_port_get_direction(struct capi_gpio_port_handle *handle,
+				 uint64_t *direction_bitmask)
 {
-	if (handle != NULL && handle->ops != NULL && handle->ops->port_get_direction != NULL) {
-		return handle->ops->port_get_direction(handle, direction_bitmask);
+	if (!handle || !handle->ops || !handle->ops->port_get_direction) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return handle->ops->port_get_direction(handle, direction_bitmask);
 }
 
-int capi_gpio_port_set_value(struct capi_gpio_port_handle *handle, uint64_t value_bitmask)
+int capi_gpio_port_set_value(struct capi_gpio_port_handle *handle,
+			     uint64_t value_bitmask)
 {
-	if (handle != NULL && handle->ops != NULL && handle->ops->port_set_value != NULL) {
-		return handle->ops->port_set_value(handle, value_bitmask);
+	if (!handle || !handle->ops || !handle->ops->port_set_value) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return handle->ops->port_set_value(handle, value_bitmask);
 }
 
-int capi_gpio_port_get_value(struct capi_gpio_port_handle *handle, uint64_t *value_bitmask)
+int capi_gpio_port_get_value(struct capi_gpio_port_handle *handle,
+			     uint64_t *value_bitmask)
 {
-	if (handle != NULL && handle->ops != NULL && handle->ops->port_get_value != NULL) {
-		return handle->ops->port_get_value(handle, value_bitmask);
+	if (!handle || !handle->ops || !handle->ops->port_get_value) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return handle->ops->port_get_value(handle, value_bitmask);
 }
 
-int capi_gpio_port_set_raw_value(struct capi_gpio_port_handle *handle, uint64_t value_bitmask)
+int capi_gpio_port_set_raw_value(struct capi_gpio_port_handle *handle,
+				 uint64_t value_bitmask)
 {
-	if (handle != NULL && handle->ops != NULL && handle->ops->port_set_raw_value != NULL) {
-		return handle->ops->port_set_raw_value(handle, value_bitmask);
+	if (!handle || !handle->ops || !handle->ops->port_set_raw_value) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return handle->ops->port_set_raw_value(handle, value_bitmask);
 }
 
-int capi_gpio_port_get_raw_value(struct capi_gpio_port_handle *handle, uint64_t *value_bitmask)
+int capi_gpio_port_get_raw_value(struct capi_gpio_port_handle *handle,
+				 uint64_t *value_bitmask)
 {
-	if (handle != NULL && handle->ops != NULL && handle->ops->port_get_raw_value != NULL) {
-		return handle->ops->port_get_raw_value(handle, value_bitmask);
+	if (!handle || !handle->ops || !handle->ops->port_get_raw_value) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return handle->ops->port_get_raw_value(handle, value_bitmask);
 }
 
 int capi_gpio_pin_set_direction(struct capi_gpio_pin *pin, uint8_t direction)
 {
-	if (pin != NULL && pin->port_handle != NULL && pin->port_handle->ops != NULL &&
-	    pin->port_handle->ops->pin_set_direction != NULL) {
-		return pin->port_handle->ops->pin_set_direction(pin, direction);
+	if (!pin || !pin->port_handle || !pin->port_handle->ops ||
+	    !pin->port_handle->ops->pin_set_direction) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return pin->port_handle->ops->pin_set_direction(pin, direction);
 }
 
 int capi_gpio_pin_get_direction(struct capi_gpio_pin *pin, uint8_t *direction)
 {
-	if (pin != NULL && pin->port_handle != NULL && pin->port_handle->ops != NULL &&
-	    pin->port_handle->ops->pin_get_direction != NULL) {
-		return pin->port_handle->ops->pin_get_direction(pin, direction);
+	if (!pin || !pin->port_handle || !pin->port_handle->ops ||
+	    !pin->port_handle->ops->pin_get_direction) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return pin->port_handle->ops->pin_get_direction(pin, direction);
 }
 
 int capi_gpio_pin_set_value(struct capi_gpio_pin *pin, uint8_t value)
 {
-	if (pin != NULL && pin->port_handle != NULL && pin->port_handle->ops != NULL &&
-	    pin->port_handle->ops->pin_set_value != NULL) {
-		return pin->port_handle->ops->pin_set_value(pin, value);
+	if (!pin || !pin->port_handle || !pin->port_handle->ops ||
+	    !pin->port_handle->ops->pin_set_value) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return pin->port_handle->ops->pin_set_value(pin, value);
 }
 
 int capi_gpio_pin_get_value(struct capi_gpio_pin *pin, uint8_t *value)
 {
-	if (pin != NULL && pin->port_handle != NULL && pin->port_handle->ops != NULL &&
-	    pin->port_handle->ops->pin_get_value != NULL) {
-		return pin->port_handle->ops->pin_get_value(pin, value);
+	if (!pin || !pin->port_handle || !pin->port_handle->ops ||
+	    !pin->port_handle->ops->pin_get_value) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return pin->port_handle->ops->pin_get_value(pin, value);
 }
 
 int capi_gpio_pin_set_raw_value(struct capi_gpio_pin *pin, uint8_t value)
 {
-	if (pin != NULL && pin->port_handle != NULL && pin->port_handle->ops != NULL &&
-	    pin->port_handle->ops->pin_set_raw_value != NULL) {
-		return pin->port_handle->ops->pin_set_raw_value(pin, value);
+	if (!pin || !pin->port_handle || !pin->port_handle->ops ||
+	    !pin->port_handle->ops->pin_set_raw_value) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return pin->port_handle->ops->pin_set_raw_value(pin, value);
 }
 
 int capi_gpio_pin_get_raw_value(struct capi_gpio_pin *pin, uint8_t *value)
 {
-	if (pin != NULL && pin->port_handle != NULL && pin->port_handle->ops != NULL &&
-	    pin->port_handle->ops->pin_get_raw_value != NULL) {
-		return pin->port_handle->ops->pin_get_raw_value(pin, value);
+	if (!pin || !pin->port_handle || !pin->port_handle->ops ||
+	    !pin->port_handle->ops->pin_get_raw_value) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return pin->port_handle->ops->pin_get_raw_value(pin, value);
 }

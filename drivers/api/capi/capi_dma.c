@@ -19,94 +19,137 @@
 #include <errno.h>
 #include <capi_dma.h>
 
-int capi_dma_init(struct capi_dma_handle **handle, const struct capi_dma_config *config)
+int capi_dma_init(struct capi_dma_handle **handle,
+		  const struct capi_dma_config *config)
 {
-	if (config != NULL && config->ops != NULL && config->ops->init != NULL) {
-		return config->ops->init(handle, config);
+	if (!handle || !config || !config->ops || !config->ops->init) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return config->ops->init(handle, config);
 }
 
 int capi_dma_deinit(struct capi_dma_handle *handle)
 {
-	if (handle != NULL && handle->ops != NULL && handle->ops->deinit != NULL) {
-		return handle->ops->deinit(handle);
+	if (!handle || !handle->ops || !handle->ops->deinit) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return handle->ops->deinit(handle);
 }
 
-int capi_dma_init_chan(struct capi_dma_handle *handle, struct capi_dma_chan **chan_ptr, uint32_t id)
+int capi_dma_init_chan(struct capi_dma_handle *handle,
+		       struct capi_dma_chan **chan_ptr, uint32_t id)
 {
-	if (handle != NULL && handle->ops != NULL && handle->ops->init_chan != NULL) {
-		return handle->ops->init_chan(handle, chan_ptr, id);
+	if (!handle || !handle->ops || !handle->ops->init_chan) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return handle->ops->init_chan(handle, chan_ptr, id);
 }
 
 int capi_dma_deinit_chan(struct capi_dma_chan *chan)
 {
-	if (chan != NULL && chan->handle != NULL && chan->handle->ops != NULL &&
-	    chan->handle->ops->deinit_chan != NULL) {
-		return chan->handle->ops->deinit_chan(chan);
+	if (!chan || !chan->handle || !chan->handle->ops
+	    || !chan->handle->ops->deinit_chan) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return chan->handle->ops->deinit_chan(chan);
 }
 
-int capi_dma_config_xfer(struct capi_dma_chan *chan, struct capi_dma_transfer *xfer)
+int capi_dma_config_xfer(struct capi_dma_chan *chan,
+			 struct capi_dma_transfer *xfer)
 {
-	if (chan != NULL && chan->handle != NULL && chan->handle->ops != NULL &&
-	    chan->handle->ops->config_xfer != NULL) {
-		return chan->handle->ops->config_xfer(chan, xfer);
+	if (!chan || !chan->handle || !chan->handle->ops
+	    || !chan->handle->ops->config_xfer) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return chan->handle->ops->config_xfer(chan, xfer);
 }
 
 int capi_dma_xfer_start(struct capi_dma_chan *chan)
 {
-	if (chan != NULL && chan->handle != NULL && chan->handle->ops != NULL &&
-	    chan->handle->ops->xfer_start != NULL) {
-		return chan->handle->ops->xfer_start(chan);
+	if (!chan || !chan->handle || !chan->handle->ops
+	    || !chan->handle->ops->xfer_start) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return chan->handle->ops->xfer_start(chan);
 }
 
 int capi_dma_xfer_abort(struct capi_dma_chan *chan)
 {
-	if (chan != NULL && chan->handle != NULL && chan->handle->ops != NULL &&
-	    chan->handle->ops->xfer_abort != NULL) {
-		return chan->handle->ops->xfer_abort(chan);
+	if (!chan || !chan->handle || !chan->handle->ops
+	    || !chan->handle->ops->xfer_abort) {
+		return -EINVAL;
 	}
-
-	return -EINVAL;
+	return chan->handle->ops->xfer_abort(chan);
 }
 
 bool capi_dma_chan_is_completed(const struct capi_dma_chan *chan)
 {
-	if (chan != NULL && chan->handle != NULL && chan->handle->ops != NULL &&
-	    chan->handle->ops->chan_is_completed != NULL) {
-		return chan->handle->ops->chan_is_completed(chan);
+	if (!chan || !chan->handle || !chan->handle->ops
+	    || !chan->handle->ops->chan_is_completed) {
+		return false;
 	}
-
-	return false;
+	return chan->handle->ops->chan_is_completed(chan);
 }
 
-void capi_dma_isr(struct capi_dma_handle *handle)
+int capi_dma_isr(struct capi_dma_handle *handle)
 {
-	if (handle != NULL && handle->ops != NULL && handle->ops->isr != NULL) {
-		handle->ops->isr(handle);
+	if (!handle || !handle->ops || !handle->ops->isr) {
+		return -EINVAL;
 	}
+	return handle->ops->isr(handle);
 }
 
-void capi_dma_isr_chan(struct capi_dma_chan *chan)
+int capi_dma_isr_chan(struct capi_dma_chan *chan)
 {
-	if (chan != NULL && chan->handle != NULL && chan->handle->ops != NULL &&
-	    chan->handle->ops->isr_chan != NULL) {
-		chan->handle->ops->isr_chan(chan);
+	if (!chan || !chan->handle || !chan->handle->ops
+	    || !chan->handle->ops->isr_chan) {
+		return -EINVAL;
 	}
+	return chan->handle->ops->isr_chan(chan);
+}
+
+int capi_dma_register_complete_callback(struct capi_dma_chan *chan,
+					capi_dma_xfer_complete_cb callback, void *xfer_complete_ctx)
+{
+	if (!chan || !chan->handle || !chan->handle->ops ||
+	    !chan->handle->ops->register_complete_callback) {
+		return -EINVAL;
+	}
+
+	return chan->handle->ops->register_complete_callback(chan, callback,
+			xfer_complete_ctx);
+}
+
+int capi_dma_register_error_callback(struct capi_dma_chan *chan,
+				     capi_dma_error_cb callback,
+				     void *error_ctx)
+{
+	if (!chan || !chan->handle || !chan->handle->ops ||
+	    !chan->handle->ops->register_error_callback) {
+		return -EINVAL;
+	}
+
+	return chan->handle->ops->register_error_callback(chan, callback, error_ctx);
+}
+
+int capi_dma_config_scattergather_xfer(struct capi_dma_chan *chan,
+				       const struct capi_dma_sg_config *sg_config,
+				       struct capi_dma_transfer *block, uint32_t index)
+{
+	if (!chan || !chan->handle || !chan->handle->ops ||
+	    !chan->handle->ops->config_scattergather_xfer || !sg_config || !block) {
+		return -EINVAL;
+	}
+	return chan->handle->ops->config_scattergather_xfer(chan, sg_config, block,
+			index);
+}
+
+int capi_dma_start_scattergather_xfer(struct capi_dma_chan *chan,
+				      const struct capi_dma_sg_config *sg_config)
+{
+	if (!chan || !chan->handle || !chan->handle->ops ||
+	    !chan->handle->ops->start_scattergather_xfer) {
+		return -EINVAL;
+	}
+	return chan->handle->ops->start_scattergather_xfer(chan, sg_config);
 }

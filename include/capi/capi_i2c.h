@@ -34,7 +34,7 @@ enum capi_i2c_speed {
 	CAPI_I2C_SPEED_FAST,      /**< I2C Fast Speed: 400 kbps */
 	CAPI_I2C_SPEED_FAST_PLUS, /**< I2C Fast Plus Speed: 1 Mbps */
 	CAPI_I2C_SPEED_HIGH,      /**< I2C High Speed: 3.4 Mbps */
-	CAPI_I2C_SPEED_ULTRA      /**< I2C Ultra Fast Speed: 5 Mbps */
+	CAPI_I2C_SPEED_ULTRA      /**< I2C Fast Plus Speed: 5 Mbps */
 };
 
 /**
@@ -145,7 +145,8 @@ struct capi_i2c_transfer {
  * @param[in] arg Pointer to user specific data.
  * @param[in] event_extra optional, platform/driver specific extra information for event
  */
-typedef void (*capi_i2c_callback)(enum capi_i2c_async_event event, void *arg, int event_extra);
+typedef void (*capi_i2c_callback)(enum capi_i2c_async_event event, void *arg,
+				  int event_extra);
 
 /**
  * @brief Initialize an instance of the I2C controller.
@@ -159,7 +160,8 @@ typedef void (*capi_i2c_callback)(enum capi_i2c_async_event event, void *arg, in
  *
  * @return int 0 for success or error code.
  */
-int capi_i2c_init(struct capi_i2c_controller_handle **handle, const struct capi_i2c_config *config);
+int capi_i2c_init(struct capi_i2c_controller_handle **handle,
+		  const struct capi_i2c_config *config);
 
 /**
  * @brief Deinitialize the I2C controller, disable, and bring to default settings.
@@ -178,7 +180,8 @@ int capi_i2c_deinit(struct capi_i2c_controller_handle *handle);
  *
  * @return int 0 for success or error code.
  */
-int capi_i2c_transmit(struct capi_i2c_device *device, struct capi_i2c_transfer *transfer);
+int capi_i2c_transmit(struct capi_i2c_device *device,
+		      struct capi_i2c_transfer *transfer);
 
 /**
  * @brief Sync/Blocking receive function.
@@ -188,7 +191,8 @@ int capi_i2c_transmit(struct capi_i2c_device *device, struct capi_i2c_transfer *
  *
  * @return int 0 for success or error code.
  */
-int capi_i2c_receive(struct capi_i2c_device *device, struct capi_i2c_transfer *transfer);
+int capi_i2c_receive(struct capi_i2c_device *device,
+		     struct capi_i2c_transfer *transfer);
 
 /**
  * @brief Register callback to get async events
@@ -222,7 +226,8 @@ int capi_i2c_configure_bus_speed(struct capi_i2c_controller_handle *handle,
  *
  * @return int 0 for success or error code.
  */
-int capi_i2c_transmit_async(struct capi_i2c_device *device, struct capi_i2c_transfer *transfer);
+int capi_i2c_transmit_async(struct capi_i2c_device *device,
+			    struct capi_i2c_transfer *transfer);
 
 /**
  * @brief Async/Non-blocking receive function.
@@ -232,10 +237,11 @@ int capi_i2c_transmit_async(struct capi_i2c_device *device, struct capi_i2c_tran
  *
  * @return int 0 for success or error code.
  */
-int capi_i2c_receive_async(struct capi_i2c_device *device, struct capi_i2c_transfer *transfer);
+int capi_i2c_receive_async(struct capi_i2c_device *device,
+			   struct capi_i2c_transfer *transfer);
 
 /**
- * @brief Recover I2C bus by releasing SDA line if held low by a target device.
+ * @brief Recover I2C bus by releasing SDA line if held low by a slave device.
  *
  * This function attempts to recover the I2C bus by enabling the bus clear mechanism
  * and waiting for the SDA line to be released (go high). It performs multiple
@@ -258,7 +264,8 @@ int capi_i2c_recover_bus(struct capi_i2c_controller_handle *handle);
  *
  * @return int 0 for success or error code.
  */
-int capi_i2c_register_target(struct capi_i2c_controller_handle *handle, uint16_t addr);
+int capi_i2c_register_target(struct capi_i2c_controller_handle *handle,
+			     uint16_t addr);
 
 /**
  * @brief Unregister I2C controller from target mode.
@@ -291,9 +298,11 @@ struct capi_i2c_ops {
 	/** See capi_i2c_deinit() */
 	int (*deinit)(struct capi_i2c_controller_handle *handle);
 	/** See capi_i2c_transmit() */
-	int (*transmit)(struct capi_i2c_device *device, struct capi_i2c_transfer *transfer);
+	int (*transmit)(struct capi_i2c_device *device,
+			struct capi_i2c_transfer *transfer);
 	/** See capi_i2c_receive() */
-	int (*receive)(struct capi_i2c_device *device, struct capi_i2c_transfer *transfer);
+	int (*receive)(struct capi_i2c_device *device,
+		       struct capi_i2c_transfer *transfer);
 	/** See capi_i2c_register_callback() */
 	int (*register_callback)(struct capi_i2c_controller_handle *handle,
 				 capi_i2c_callback const callback, void *const callback_arg);
@@ -301,13 +310,16 @@ struct capi_i2c_ops {
 	int (*configure_bus_speed)(struct capi_i2c_controller_handle *handle,
 				   enum capi_i2c_speed speed, uint8_t duty_cycle);
 	/** See capi_i2c_transmit_async() */
-	int (*transmit_async)(struct capi_i2c_device *device, struct capi_i2c_transfer *transfer);
+	int (*transmit_async)(struct capi_i2c_device *device,
+			      struct capi_i2c_transfer *transfer);
 	/** See capi_i2c_receive_async() */
-	int (*receive_async)(struct capi_i2c_device *device, struct capi_i2c_transfer *transfer);
+	int (*receive_async)(struct capi_i2c_device *device,
+			     struct capi_i2c_transfer *transfer);
 	/** See capi_i2c_recover_bus() */
 	int (*recover_bus)(struct capi_i2c_controller_handle *handle);
 	/** See capi_i2c_register_target() */
-	int (*register_target)(struct capi_i2c_controller_handle *handle, uint16_t addr);
+	int (*register_target)(struct capi_i2c_controller_handle *handle,
+			       uint16_t addr);
 	/** See capi_i2c_unregister_target() */
 	int (*unregister_target)(struct capi_i2c_controller_handle *handle);
 	/** See capi_i2c_isr() */

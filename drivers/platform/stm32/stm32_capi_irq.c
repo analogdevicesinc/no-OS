@@ -1,6 +1,27 @@
+/*
+ * Copyright (c) 2025-2026 Analog Devices, Inc.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
 #include <string.h>
 #include <errno.h>
 #include "stm32_capi_irq.h"
+
+#define STM32_CAPI_IRQ_INVALID	((IRQn_Type)(-1))
+
+/**
+ * @struct stm32_capi_irq_entry
+ * @brief IRQ callback entry
+ */
+struct stm32_capi_irq_entry {
+	/** Callback function */
+	capi_isr_callback_t callback;
+	/** Callback argument */
+	void *arg;
+	/** IRQ enabled flag */
+	bool enabled;
+};
 
 /** IRQ callback table */
 static struct stm32_capi_irq_entry irq_table[STM32_CAPI_IRQ_MAX_IRQS];
@@ -21,14 +42,14 @@ static uint32_t default_preempt_priority = 0;
 static uint32_t default_sub_priority = 0;
 
 /**
- * @brief Map GPIO pin number to EXTI IRQn
- * @param pin - GPIO pin number (0-15)
- * @return IRQn_Type for the EXTI line
+ * @brief Map GPIO pin number to EXTI IRQn.
+ * @param pin - GPIO pin number (0-15).
+ * @return IRQn_Type for the EXTI line.
  */
 static IRQn_Type get_exti_irqn(uint16_t pin)
 {
-	if (pin > 15)
-		return (IRQn_Type)(-1);
+	if (pin >= STM32_CAPI_EXTI_MAX_LINES)
+		return STM32_CAPI_IRQ_INVALID;
 
 #if defined(STM32F0) || defined(STM32L0) || defined(STM32G0)
 	/* Some STM32 families have combined EXTI handlers */
@@ -71,7 +92,7 @@ static IRQn_Type get_exti_irqn(uint16_t pin)
 }
 
 /**
- * @brief Initialize EXTI IRQ mapping table
+ * @brief Initialize EXTI IRQ mapping table.
  */
 static void init_exti_irq_map(void)
 {
@@ -82,9 +103,9 @@ static void init_exti_irq_map(void)
 }
 
 /**
- * @brief Check if IRQ number is valid
- * @param irq - IRQ number
- * @return true if valid, false otherwise
+ * @brief Check if IRQ number is valid.
+ * @param irq - IRQ number.
+ * @return true if valid, false otherwise.
  */
 static inline bool is_valid_irq(uint32_t irq)
 {
@@ -92,10 +113,10 @@ static inline bool is_valid_irq(uint32_t irq)
 }
 
 /**
- * @brief Check if IRQ is an EXTI GPIO interrupt
- * @param irq - IRQ number
- * @param pin - Pointer to store GPIO pin (0-15) if EXTI
- * @return true if EXTI GPIO interrupt, false otherwise
+ * @brief Check if IRQ is an EXTI GPIO interrupt.
+ * @param irq - IRQ number.
+ * @param pin - Pointer to store GPIO pin (0-15) if EXTI.
+ * @return true if EXTI GPIO interrupt, false otherwise.
  */
 static bool is_exti_gpio_irq(uint32_t irq, uint16_t *pin)
 {
@@ -112,7 +133,12 @@ static bool is_exti_gpio_irq(uint32_t irq, uint16_t *pin)
 	return false;
 }
 
-int stm32_capi_irq_init(struct capi_irq_config *config)
+/**
+ * @brief Initialize the STM32 IRQ controller.
+ * @param config - Pointer to the IRQ configuration.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_irq_init(struct capi_irq_config *config)
 {
 	struct stm32_capi_irq_extra_config *extra;
 
@@ -145,7 +171,11 @@ int stm32_capi_irq_init(struct capi_irq_config *config)
 	return 0;
 }
 
-int stm32_capi_irq_deinit(void)
+/**
+ * @brief Deinitialize the STM32 IRQ controller.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_irq_deinit(void)
 {
 	uint32_t i;
 
@@ -167,19 +197,32 @@ int stm32_capi_irq_deinit(void)
 	return 0;
 }
 
-int stm32_capi_irq_global_enable(void)
+/**
+ * @brief Enable global interrupts.
+ * @return 0 on success.
+ */
+static int stm32_capi_irq_global_enable(void)
 {
 	__enable_irq();
 	return 0;
 }
 
-int stm32_capi_irq_global_disable(void)
+/**
+ * @brief Disable global interrupts.
+ * @return 0 on success.
+ */
+static int stm32_capi_irq_global_disable(void)
 {
 	__disable_irq();
 	return 0;
 }
 
-int stm32_capi_irq_enable(uint32_t irq)
+/**
+ * @brief Enable a specific IRQ.
+ * @param irq - IRQ number.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_irq_enable(uint32_t irq)
 {
 	if (!irq_initialized)
 		return -ENODEV;
@@ -198,7 +241,12 @@ int stm32_capi_irq_enable(uint32_t irq)
 	return 0;
 }
 
-int stm32_capi_irq_disable(uint32_t irq)
+/**
+ * @brief Disable a specific IRQ.
+ * @param irq - IRQ number.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_irq_disable(uint32_t irq)
 {
 	if (!irq_initialized)
 		return -ENODEV;
@@ -212,7 +260,15 @@ int stm32_capi_irq_disable(uint32_t irq)
 	return 0;
 }
 
-int stm32_capi_irq_connect(uint32_t irq, capi_isr_callback_t isr, void *arg)
+/**
+ * @brief Connect an ISR to an IRQ.
+ * @param irq - IRQ number.
+ * @param isr - ISR callback function.
+ * @param arg - Argument passed to ISR.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_irq_connect(uint32_t irq, capi_isr_callback_t isr,
+				  void *arg)
 {
 	if (!irq_initialized)
 		return -ENODEV;
@@ -230,6 +286,11 @@ int stm32_capi_irq_connect(uint32_t irq, capi_isr_callback_t isr, void *arg)
 	return 0;
 }
 
+/**
+ * @brief Disconnect an ISR from an IRQ.
+ * @param irq - IRQ number.
+ * @return 0 on success, negative error code otherwise.
+ */
 int stm32_capi_irq_disconnect(uint32_t irq)
 {
 	if (!irq_initialized)
@@ -251,7 +312,12 @@ int stm32_capi_irq_disconnect(uint32_t irq)
 	return 0;
 }
 
-int stm32_capi_irq_clear_pending(uint32_t irq)
+/**
+ * @brief Clear pending interrupt flag.
+ * @param irq - IRQ number.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_irq_clear_pending(uint32_t irq)
 {
 	if (!irq_initialized)
 		return -ENODEV;
@@ -264,6 +330,11 @@ int stm32_capi_irq_clear_pending(uint32_t irq)
 	return 0;
 }
 
+/**
+ * @brief Set pending interrupt flag.
+ * @param irq - IRQ number.
+ * @return 0 on success, negative error code otherwise.
+ */
 int stm32_capi_irq_set_pending(uint32_t irq)
 {
 	if (!irq_initialized)
@@ -277,7 +348,13 @@ int stm32_capi_irq_set_pending(uint32_t irq)
 	return 0;
 }
 
-int stm32_capi_irq_get_status(uint32_t irq, uint32_t *pactive)
+/**
+ * @brief Get IRQ status (active/pending).
+ * @param irq - IRQ number.
+ * @param pactive - Pointer to store status (1=active/pending, 0=inactive).
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_irq_get_status(uint32_t irq, uint32_t *pactive)
 {
 	if (!irq_initialized)
 		return -ENODEV;
@@ -292,7 +369,13 @@ int stm32_capi_irq_get_status(uint32_t irq, uint32_t *pactive)
 	return 0;
 }
 
-int stm32_capi_irq_set_priority(uint32_t irq, uint32_t priority)
+/**
+ * @brief Set IRQ priority.
+ * @param irq - IRQ number.
+ * @param priority - Priority value (used as preemption priority).
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_irq_set_priority(uint32_t irq, uint32_t priority)
 {
 	uint32_t preempt_priority;
 	uint32_t sub_priority;
@@ -316,7 +399,13 @@ int stm32_capi_irq_set_priority(uint32_t irq, uint32_t priority)
 	return 0;
 }
 
-int stm32_capi_irq_get_priority(uint32_t irq, uint32_t *priority)
+/**
+ * @brief Get IRQ priority.
+ * @param irq - IRQ number.
+ * @param priority - Pointer to store priority value.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_irq_get_priority(uint32_t irq, uint32_t *priority)
 {
 	uint32_t preempt_priority;
 	uint32_t sub_priority;
@@ -336,12 +425,17 @@ int stm32_capi_irq_get_priority(uint32_t irq, uint32_t *priority)
 	return 0;
 }
 
-int stm32_capi_irq_set_level_edge_trigger(uint32_t irq,
-					  enum capi_irq_trig_level trigger)
+/**
+ * @brief Set IRQ trigger level/edge for EXTI lines.
+ * @param irq - IRQ number (must be an EXTI IRQ).
+ * @param trigger - Trigger type.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_irq_set_level_edge_trigger(uint32_t irq,
+		enum capi_irq_trig_level trigger)
 {
 	uint16_t pin;
-	GPIO_InitTypeDef gpio_config = {0};
-	uint32_t mode;
+	uint32_t line_mask;
 
 	if (!irq_initialized)
 		return -ENODEV;
@@ -356,13 +450,8 @@ int stm32_capi_irq_set_level_edge_trigger(uint32_t irq,
 	/* Map CAPI trigger level to STM32 GPIO EXTI mode */
 	switch (trigger) {
 	case CAPI_IRQ_EDGE_RISING:
-		mode = GPIO_MODE_IT_RISING;
-		break;
 	case CAPI_IRQ_EDGE_FALLING:
-		mode = GPIO_MODE_IT_FALLING;
-		break;
 	case CAPI_IRQ_EDGE_BOTH:
-		mode = GPIO_MODE_IT_RISING_FALLING;
 		break;
 	case CAPI_IRQ_LEVEL_LOW:
 	case CAPI_IRQ_LEVEL_HIGH:
@@ -372,25 +461,14 @@ int stm32_capi_irq_set_level_edge_trigger(uint32_t irq,
 		return -EINVAL;
 	}
 
-	/*
-	 * Note: To properly configure EXTI trigger, the GPIO pin must be
-	 * configured. This function assumes the GPIO is already initialized
-	 * and only updates the EXTI configuration in the EXTI registers.
-	 *
-	 * For a complete trigger reconfiguration, use HAL_GPIO_Init with
-	 * the appropriate GPIO port and pin.
-	 */
+	line_mask = (1UL << pin);
 
 	/* Configure EXTI trigger through EXTI registers directly */
 #if defined(STM32H7) || defined(STM32L5) || defined(STM32U5) || defined(STM32H5)
 	/* New EXTI architecture with separate registers */
-	uint32_t line_mask = (1UL << pin);
-
-	/* Clear existing trigger configuration */
 	EXTI->RTSR1 &= ~line_mask;
 	EXTI->FTSR1 &= ~line_mask;
 
-	/* Set new trigger configuration */
 	if (trigger == CAPI_IRQ_EDGE_RISING || trigger == CAPI_IRQ_EDGE_BOTH)
 		EXTI->RTSR1 |= line_mask;
 
@@ -398,13 +476,9 @@ int stm32_capi_irq_set_level_edge_trigger(uint32_t irq,
 		EXTI->FTSR1 |= line_mask;
 #else
 	/* Legacy EXTI architecture */
-	uint32_t line_mask = (1UL << pin);
-
-	/* Clear existing trigger configuration */
 	EXTI->RTSR &= ~line_mask;
 	EXTI->FTSR &= ~line_mask;
 
-	/* Set new trigger configuration */
 	if (trigger == CAPI_IRQ_EDGE_RISING || trigger == CAPI_IRQ_EDGE_BOTH)
 		EXTI->RTSR |= line_mask;
 
@@ -415,6 +489,12 @@ int stm32_capi_irq_set_level_edge_trigger(uint32_t irq,
 	return 0;
 }
 
+/**
+ * @brief Check if IRQ is enabled.
+ * @param irq - IRQ number.
+ * @param enabled - Pointer to store enabled status.
+ * @return 0 on success, negative error code otherwise.
+ */
 int stm32_capi_irq_is_enabled(uint32_t irq, bool *enabled)
 {
 	if (!irq_initialized)
@@ -428,14 +508,10 @@ int stm32_capi_irq_is_enabled(uint32_t irq, bool *enabled)
 	return 0;
 }
 
-const struct stm32_capi_irq_entry *stm32_capi_irq_get_entry(uint32_t irq)
-{
-	if (!irq_initialized || !is_valid_irq(irq))
-		return NULL;
-
-	return &irq_table[irq];
-}
-
+/**
+ * @brief Generic IRQ handler that dispatches to registered callbacks.
+ * @param irq - IRQ number.
+ */
 void stm32_capi_irq_handler(uint32_t irq)
 {
 	const struct stm32_capi_irq_entry *entry;
@@ -449,6 +525,10 @@ void stm32_capi_irq_handler(uint32_t irq)
 		entry->callback(entry->arg);
 }
 
+/**
+ * @brief EXTI callback handler for GPIO interrupts.
+ * @param gpio_pin - GPIO pin number (0-15).
+ */
 void stm32_capi_exti_handler(uint16_t gpio_pin)
 {
 	IRQn_Type irq;
@@ -461,7 +541,8 @@ void stm32_capi_exti_handler(uint16_t gpio_pin)
 }
 
 /**
- * @brief HAL GPIO EXTI Callback (weak override)
+ * @brief HAL GPIO EXTI Callback (weak override).
+ * @param GPIO_Pin - GPIO pin bitmask that triggered the interrupt.
  *
  * This overrides the weak HAL_GPIO_EXTI_Callback to dispatch to
  * registered CAPI callbacks.
@@ -480,65 +561,129 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 }
 
 /*
- * CAPI IRQ interface implementation
- * These functions are called by the capi_irq.c wrapper
+ * CAPI IRQ interface implementation.
+ * These functions are called directly by application code via the
+ * capi_irq.h API. The capi_irq.c wrapper is only used for stub builds.
  */
 
+/**
+ * @brief Initialize the IRQ controller (CAPI interface).
+ * @param config - Pointer to the IRQ configuration.
+ * @return 0 on success, negative error code otherwise.
+ */
 int capi_irq_init(struct capi_irq_config *config)
 {
 	return stm32_capi_irq_init(config);
 }
 
+/**
+ * @brief Deinitialize the IRQ controller (CAPI interface).
+ * @return 0 on success, negative error code otherwise.
+ */
 int capi_irq_deinit(void)
 {
 	return stm32_capi_irq_deinit();
 }
 
+/**
+ * @brief Enable global interrupts (CAPI interface).
+ * @return 0 on success.
+ */
 int capi_irq_global_enable(void)
 {
 	return stm32_capi_irq_global_enable();
 }
 
+/**
+ * @brief Disable global interrupts (CAPI interface).
+ * @return 0 on success.
+ */
 int capi_irq_global_disable(void)
 {
 	return stm32_capi_irq_global_disable();
 }
 
+/**
+ * @brief Enable a specific IRQ (CAPI interface).
+ * @param irq - IRQ number.
+ * @return 0 on success, negative error code otherwise.
+ */
 int capi_irq_enable(uint32_t irq)
 {
 	return stm32_capi_irq_enable(irq);
 }
 
+/**
+ * @brief Disable a specific IRQ (CAPI interface).
+ * @param irq - IRQ number.
+ * @return 0 on success, negative error code otherwise.
+ */
 int capi_irq_disable(uint32_t irq)
 {
 	return stm32_capi_irq_disable(irq);
 }
 
+/**
+ * @brief Connect an ISR to an IRQ (CAPI interface).
+ * @param irq - IRQ number.
+ * @param isr - ISR callback function.
+ * @param arg - Argument passed to ISR.
+ * @return 0 on success, negative error code otherwise.
+ */
 int capi_irq_connect(uint32_t irq, capi_isr_callback_t isr, void *arg)
 {
 	return stm32_capi_irq_connect(irq, isr, arg);
 }
 
+/**
+ * @brief Clear pending interrupt flag (CAPI interface).
+ * @param irq - IRQ number.
+ * @return 0 on success, negative error code otherwise.
+ */
 int capi_irq_clear_pending(uint32_t irq)
 {
 	return stm32_capi_irq_clear_pending(irq);
 }
 
+/**
+ * @brief Get IRQ status (CAPI interface).
+ * @param irq - IRQ number.
+ * @param pactive - Pointer to store status.
+ * @return 0 on success, negative error code otherwise.
+ */
 int capi_irq_get_status(uint32_t irq, uint32_t *pactive)
 {
 	return stm32_capi_irq_get_status(irq, pactive);
 }
 
+/**
+ * @brief Set IRQ priority (CAPI interface).
+ * @param irq - IRQ number.
+ * @param priority - Priority value.
+ * @return 0 on success, negative error code otherwise.
+ */
 int capi_irq_set_priority(uint32_t irq, uint32_t priority)
 {
 	return stm32_capi_irq_set_priority(irq, priority);
 }
 
+/**
+ * @brief Get IRQ priority (CAPI interface).
+ * @param irq - IRQ number.
+ * @param priority - Pointer to store priority value.
+ * @return 0 on success, negative error code otherwise.
+ */
 int capi_irq_get_priority(uint32_t irq, uint32_t *priority)
 {
 	return stm32_capi_irq_get_priority(irq, priority);
 }
 
+/**
+ * @brief Set IRQ trigger level/edge (CAPI interface).
+ * @param irq - IRQ number.
+ * @param trigger - Trigger type.
+ * @return 0 on success, negative error code otherwise.
+ */
 int capi_irq_set_level_edge_trigger(uint32_t irq,
 				    enum capi_irq_trig_level trigger)
 {

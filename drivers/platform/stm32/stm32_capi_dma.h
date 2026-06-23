@@ -1,10 +1,16 @@
+/*
+ * Copyright (c) 2025-2026 Analog Devices, Inc.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
 #ifndef STM32_CAPI_DMA_H_
 #define STM32_CAPI_DMA_H_
 
 #include <stdint.h>
 #include <stdbool.h>
 #include "stm32_hal.h"
-#include "capi/capi_dma.h"
+#include "capi_dma.h"
 
 /**
  * @enum stm32_capi_dma_data_alignment
@@ -80,17 +86,6 @@ struct stm32_dma_extra_config {
 };
 
 /**
- * @struct stm32_dma_priv_handle
- * @brief STM32 platform specific DMA private handle
- */
-struct stm32_dma_priv_handle {
-	/** Number of channels */
-	uint32_t num_chans;
-	/** Array of channel private data pointers */
-	struct stm32_dma_chan_priv **chan_privs;
-};
-
-/**
  * @struct stm32_dma_chan_extra_config
  * @brief STM32 platform specific DMA channel configuration
  */
@@ -111,39 +106,6 @@ struct stm32_dma_chan_extra_config {
 	enum stm32_capi_dma_mode dma_mode;
 	/** Trigger configuration (optional) */
 	struct stm32_capi_dma_trigger *trig;
-};
-
-/**
- * @struct stm32_dma_chan_priv
- * @brief STM32 platform specific DMA channel private data
- */
-struct stm32_dma_chan_priv {
-	/** DMA HAL Handle */
-	DMA_HandleTypeDef hdma;
-	/** Channel Number */
-	uint32_t ch_num;
-	/** Memory Increment */
-	bool mem_increment;
-	/** Peripheral Increment */
-	bool per_increment;
-	/** Memory Data Alignment */
-	enum stm32_capi_dma_data_alignment mem_data_alignment;
-	/** Peripheral Data Alignment */
-	enum stm32_capi_dma_data_alignment per_data_alignment;
-	/** DMA Mode */
-	enum stm32_capi_dma_mode dma_mode;
-	/** Trigger configuration */
-	struct stm32_capi_dma_trigger *trig;
-	/** Source Address for the data */
-	capi_dma_cpu_addr_t src;
-	/** Destination Address for the data */
-	capi_dma_cpu_addr_t dst;
-	/** Transfer length in Bytes */
-	size_t length;
-	/** Transfer completed flag */
-	volatile bool completed;
-	/** Back-reference to the CAPI channel */
-	struct capi_dma_chan *capi_chan;
 };
 
 /**

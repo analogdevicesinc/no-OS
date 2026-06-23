@@ -183,7 +183,8 @@ struct capi_timer_config {
  * @brief TIMER handle type
  */
 struct capi_timer_handle {
-	const struct capi_timer_ops *ops; /**< Function pointers that implement the Timer CAPI */
+	const struct capi_timer_ops
+		*ops; /**< Function pointers that implement the Timer CAPI */
 	bool init_allocated;              /**< If true, the driver is owner of handle memory. */
 	void *priv;                       /**< Pointer to driver-specific handle extension. */
 };
@@ -212,7 +213,8 @@ enum capi_timer_channel_event {
  * @param[in] arg Pointer to user specific data.
  * @param[in] event_extra optional, platform/driver specific extra information for event
  */
-typedef void (*capi_timer_event_callback)(uint32_t event, void *arg, int event_extra);
+typedef void (*capi_timer_event_callback)(uint32_t event, void *arg,
+		int event_extra);
 
 /**
  * @brief TIMER channel callback type
@@ -221,8 +223,9 @@ typedef void (*capi_timer_event_callback)(uint32_t event, void *arg, int event_e
  * @param[in] arg Pointer to user specific data.
  * @param[in] event_extra optional, platform/driver specific extra information for event
  */
-typedef void (*capi_timer_channel_callback)(uint32_t event, uint32_t chan, void *arg,
-					    int event_extra);
+typedef void (*capi_timer_channel_callback)(uint32_t event, uint32_t chan,
+		void *arg,
+		int event_extra);
 
 /**
  * @struct capi_timer_ops
@@ -230,7 +233,8 @@ typedef void (*capi_timer_channel_callback)(uint32_t event, uint32_t chan, void 
  */
 struct capi_timer_ops {
 	/** See capi_timer_init() */
-	int (*init)(struct capi_timer_handle **handle, const struct capi_timer_config *config);
+	int (*init)(struct capi_timer_handle **handle,
+		    const struct capi_timer_config *config);
 	/** See capi_timer_deinit() */
 	int (*deinit)(struct capi_timer_handle *handle);
 	/** See capi_timer_start() */
@@ -271,11 +275,14 @@ struct capi_timer_ops {
 	int (*channel_capture_get)(struct capi_timer_handle *handle, uint32_t chan,
 				   uint32_t *capture);
 	/** See capi_timer_channel_irq_enable() */
-	int (*channel_irq_enable)(struct capi_timer_handle *handle, uint32_t chan, uint32_t event);
+	int (*channel_irq_enable)(struct capi_timer_handle *handle, uint32_t chan,
+				  uint32_t event);
 	/** See capi_timer_channel_irq_disable() */
-	int (*channel_irq_disable)(struct capi_timer_handle *handle, uint32_t chan, uint32_t event);
+	int (*channel_irq_disable)(struct capi_timer_handle *handle, uint32_t chan,
+				   uint32_t event);
 	/** See capi_timer_channel_register_callback() */
-	int (*channel_register_callback)(struct capi_timer_handle *handle, uint32_t chan,
+	int (*channel_register_callback)(struct capi_timer_handle *handle,
+					 uint32_t chan,
 					 capi_timer_channel_callback callback, void *callback_arg);
 	/** See capi_timer_is_irq_pending() */
 	int (*is_irq_pending)(struct capi_timer_handle *handle, bool *pending);
@@ -283,7 +290,8 @@ struct capi_timer_ops {
 	void (*isr)(struct capi_timer_handle *handle);
 
 	/** See capi_timer_nsec_to_ticks() */
-	int (*nsec_to_ticks)(const struct capi_timer_handle *handle, uint64_t duration_ns,
+	int (*nsec_to_ticks)(const struct capi_timer_handle *handle,
+			     uint64_t duration_ns,
 			     uint32_t *ticks);
 	/** See capi_timer_ticks_to_nsec() */
 	int (*ticks_to_nsec)(const struct capi_timer_handle *handle, uint64_t ticks,
@@ -297,7 +305,8 @@ struct capi_timer_ops {
  * @param[in] config Pointer to a timer configuration structure.
  * @return int 0 for success, negative error code otherwise.
  */
-int capi_timer_init(struct capi_timer_handle **handle, const struct capi_timer_config *config);
+int capi_timer_init(struct capi_timer_handle **handle,
+		    const struct capi_timer_config *config);
 
 /**
  * @brief Deallocate resources allocated by capi_timer_init and put the timer in an idle state.
@@ -343,7 +352,8 @@ int capi_timer_counter_get(struct capi_timer_handle *handle, uint32_t *counter);
  * @param[in] event The event identifier.
  * @return int 0 for success, negative error code otherwise.
  */
-int capi_timer_event_irq_enable(struct capi_timer_handle *handle, uint32_t event);
+int capi_timer_event_irq_enable(struct capi_timer_handle *handle,
+				uint32_t event);
 
 /**
  * @brief Disable interrupt for TIMER event (non-channel) specific events.
@@ -351,7 +361,8 @@ int capi_timer_event_irq_enable(struct capi_timer_handle *handle, uint32_t event
  * @param[in] event The event identifier.
  * @return int 0 for success, negative error code otherwise.
  */
-int capi_timer_event_irq_disable(struct capi_timer_handle *handle, uint32_t event);
+int capi_timer_event_irq_disable(struct capi_timer_handle *handle,
+				 uint32_t event);
 
 /**
  * @brief Register a user provided callback for TIMER event (non-channel) specific events.
@@ -414,7 +425,8 @@ int capi_timer_channel_disable(struct capi_timer_handle *handle, uint32_t chan);
  * @param[in] compare The compare value.
  * @return int 0 for success, negative error code otherwise.
  */
-int capi_timer_channel_compare_set(struct capi_timer_handle *handle, uint32_t chan,
+int capi_timer_channel_compare_set(struct capi_timer_handle *handle,
+				   uint32_t chan,
 				   uint32_t compare);
 
 /**
@@ -424,7 +436,8 @@ int capi_timer_channel_compare_set(struct capi_timer_handle *handle, uint32_t ch
  * @param[out] compare The compare value.
  * @return int 0 for success, negative error code otherwise.
  */
-int capi_timer_channel_compare_get(struct capi_timer_handle *handle, uint32_t chan,
+int capi_timer_channel_compare_get(struct capi_timer_handle *handle,
+				   uint32_t chan,
 				   uint32_t *compare);
 /**
  * @brief Get the capture value of an input capture channel.
@@ -433,7 +446,8 @@ int capi_timer_channel_compare_get(struct capi_timer_handle *handle, uint32_t ch
  * @param[out] capture The input capture value.
  * @return int 0 for success, negative error code otherwise.
  */
-int capi_timer_channel_capture_get(struct capi_timer_handle *handle, uint32_t chan,
+int capi_timer_channel_capture_get(struct capi_timer_handle *handle,
+				   uint32_t chan,
 				   uint32_t *capture);
 
 /**
@@ -443,7 +457,8 @@ int capi_timer_channel_capture_get(struct capi_timer_handle *handle, uint32_t ch
  * @param[in] event The event identifier.
  * @return int 0 for success, negative error code otherwise.
  */
-int capi_timer_channel_irq_enable(struct capi_timer_handle *handle, uint32_t chan, uint32_t event);
+int capi_timer_channel_irq_enable(struct capi_timer_handle *handle,
+				  uint32_t chan, uint32_t event);
 
 /**
  * @brief Disable interrupt for the specified event on the specified channel.
@@ -452,7 +467,8 @@ int capi_timer_channel_irq_enable(struct capi_timer_handle *handle, uint32_t cha
  * @param[in] event The event identifier.
  * @return int 0 for success, negative error code otherwise.
  */
-int capi_timer_channel_irq_disable(struct capi_timer_handle *handle, uint32_t chan, uint32_t event);
+int capi_timer_channel_irq_disable(struct capi_timer_handle *handle,
+				   uint32_t chan, uint32_t event);
 
 /**
  * @brief Register a user provided callback on TIMER channel specific events.
@@ -462,8 +478,9 @@ int capi_timer_channel_irq_disable(struct capi_timer_handle *handle, uint32_t ch
  * @param[in] callback_arg Arguments that the interrupt passes to the callback function.
  * @return int 0 for success, negative error code otherwise.
  */
-int capi_timer_channel_register_callback(struct capi_timer_handle *handle, uint32_t chan,
-					 capi_timer_channel_callback callback, void *callback_arg);
+int capi_timer_channel_register_callback(struct capi_timer_handle *handle,
+		uint32_t chan,
+		capi_timer_channel_callback callback, void *callback_arg);
 
 /**
  * @brief Check if the specified timer has any pending interrupts.
@@ -480,7 +497,8 @@ int capi_timer_is_irq_pending(struct capi_timer_handle *handle, bool *pending);
  * @param[out] ticks Timer tick count for given duration_ns.
  * @return int 0 for success, negative error code otherwise.
  */
-int capi_timer_nsec_to_ticks(const struct capi_timer_handle *handle, uint64_t duration_ns,
+int capi_timer_nsec_to_ticks(const struct capi_timer_handle *handle,
+			     uint64_t duration_ns,
 			     uint32_t *ticks);
 
 /**
@@ -490,7 +508,8 @@ int capi_timer_nsec_to_ticks(const struct capi_timer_handle *handle, uint64_t du
  * @param[out] duration_ns Duration in nanoseconds for given ticks.
  * @return int 0 for success, negative error code otherwise.
  */
-int capi_timer_ticks_to_nsec(const struct capi_timer_handle *handle, uint64_t ticks,
+int capi_timer_ticks_to_nsec(const struct capi_timer_handle *handle,
+			     uint64_t ticks,
 			     uint32_t *duration_ns);
 
 /**

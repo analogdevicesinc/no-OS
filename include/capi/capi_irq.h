@@ -149,7 +149,8 @@ int capi_irq_get_priority(uint32_t irq, uint32_t *priority);
  * @param [in] trigger The defined state for IRQ trigger which can be level or edge.
  * @return int 0 for success or error code.
  */
-int capi_irq_set_level_edge_trigger(uint32_t irq, enum capi_irq_trig_level trigger);
+int capi_irq_set_level_edge_trigger(uint32_t irq,
+				    enum capi_irq_trig_level trigger);
 
 #if defined(__cplusplus)
 }

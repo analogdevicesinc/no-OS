@@ -1,15 +1,47 @@
+/*
+ * Copyright (c) 2025-2026 Analog Devices, Inc.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
 #include <stdlib.h>
 #include <errno.h>
 #include "stm32_capi_i2c.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
-#define MAX_I2C_INSTANCES 4
+#define MAX_I2C_INSTANCES		4
+#define STM32_I2C_DEFAULT_CLOCK_HZ	100000
+#define STM32_I2C_DEFAULT_TIMING	0x10909CECU
+
+/**
+ * @struct stm32_i2c_priv_handle
+ * @brief STM32 platform specific I2C private handle
+ */
+struct stm32_i2c_priv_handle {
+	/** I2C HAL Handle */
+	I2C_HandleTypeDef hi2c;
+	/** CAPI callback */
+	capi_i2c_callback callback;
+	/** CAPI callback argument */
+	void *callback_arg;
+	/** Async transfer in progress flag */
+	bool async_in_progress;
+	/** Current transfer for async operations */
+	struct capi_i2c_transfer *current_transfer;
+};
+
+/* Lookup table for mapping HAL handles to private handles */
 static struct {
 	I2C_HandleTypeDef *hi2c;
 	struct stm32_i2c_priv_handle *priv_handle;
 } i2c_handle_lookup[MAX_I2C_INSTANCES];
 static uint8_t i2c_handle_count = 0;
 
+/**
+ * @brief Find the private handle associated with a HAL I2C handle.
+ * @param hi2c - Pointer to the HAL I2C handle.
+ * @return Pointer to the private handle, or NULL if not found.
+ */
 static struct stm32_i2c_priv_handle *find_priv_handle(I2C_HandleTypeDef *hi2c)
 {
 	for (uint8_t i = 0; i < i2c_handle_count; i++) {
@@ -19,6 +51,12 @@ static struct stm32_i2c_priv_handle *find_priv_handle(I2C_HandleTypeDef *hi2c)
 	return NULL;
 }
 
+/**
+ * @brief Register a mapping between a HAL I2C handle and a private handle.
+ * @param hi2c - Pointer to the HAL I2C handle.
+ * @param priv_handle - Pointer to the private handle.
+ * @return 0 on success, negative error code otherwise.
+ */
 static int register_handle_mapping(I2C_HandleTypeDef *hi2c,
 				   struct stm32_i2c_priv_handle *priv_handle)
 {
@@ -31,10 +69,15 @@ static int register_handle_mapping(I2C_HandleTypeDef *hi2c,
 	return 0;
 }
 
+/**
+ * @brief Unregister the mapping for a HAL I2C handle.
+ * @param hi2c - Pointer to the HAL I2C handle.
+ */
 static void unregister_handle_mapping(I2C_HandleTypeDef *hi2c)
 {
 	for (uint8_t i = 0; i < i2c_handle_count; i++) {
 		if (i2c_handle_lookup[i].hi2c == hi2c) {
+			/* Move last entry to this position */
 			if (i < i2c_handle_count - 1)
 				i2c_handle_lookup[i] = i2c_handle_lookup[i2c_handle_count - 1];
 			i2c_handle_count--;
@@ -44,11 +87,13 @@ static void unregister_handle_mapping(I2C_HandleTypeDef *hi2c)
 }
 
 /**
- * @brief Get I2C base address from identifier
+ * @brief Get I2C base address from identifier.
+ * @param identifier - I2C peripheral identifier or base address.
+ * @return Pointer to the I2C peripheral, or NULL if invalid.
  */
 static I2C_TypeDef *get_i2c_base_from_identifier(uint64_t identifier)
 {
-	if (identifier >= 0x40000000)
+	if (identifier >= PERIPH_BASE)
 		return (I2C_TypeDef *)identifier;
 
 	switch (identifier) {
@@ -73,8 +118,14 @@ static I2C_TypeDef *get_i2c_base_from_identifier(uint64_t identifier)
 	}
 }
 
-int stm32_capi_i2c_init(struct capi_i2c_controller_handle **handle,
-			const struct capi_i2c_config *config)
+/**
+ * @brief Initialize the STM32 I2C controller.
+ * @param handle - Pointer to a pointer of the I2C controller handle.
+ * @param config - Pointer to the I2C configuration.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_i2c_init(struct capi_i2c_controller_handle **handle,
+			       const struct capi_i2c_config *config)
 {
 	struct capi_i2c_controller_handle *i2c_handle;
 	struct stm32_i2c_priv_handle *priv_handle;
@@ -85,11 +136,11 @@ int stm32_capi_i2c_init(struct capi_i2c_controller_handle **handle,
 	if (!handle || !config)
 		return -EINVAL;
 
-	i2c_handle = no_os_calloc(1, sizeof(*i2c_handle));
+	i2c_handle = capi_calloc(1, sizeof(*i2c_handle));
 	if (!i2c_handle)
 		return -ENOMEM;
 
-	priv_handle = no_os_calloc(1, sizeof(*priv_handle));
+	priv_handle = capi_calloc(1, sizeof(*priv_handle));
 	if (!priv_handle) {
 		ret = -ENOMEM;
 		goto error_free_handle;
@@ -114,13 +165,14 @@ int stm32_capi_i2c_init(struct capi_i2c_controller_handle **handle,
 
 #if defined(STM32F4) || defined(STM32F1) || defined(STM32F2) || defined(STM32L1)
 	priv_handle->hi2c.Init.ClockSpeed = config->clk_freq_hz ?
-					    config->clk_freq_hz : 100000;
+					    config->clk_freq_hz :
+					    STM32_I2C_DEFAULT_CLOCK_HZ;
 	priv_handle->hi2c.Init.DutyCycle = I2C_DUTYCYCLE_2;
 #else
 	if (extra_config)
 		priv_handle->hi2c.Init.Timing = extra_config->i2c_timing;
 	else
-		priv_handle->hi2c.Init.Timing = 0x10909CEC;
+		priv_handle->hi2c.Init.Timing = STM32_I2C_DEFAULT_TIMING;
 #endif
 	priv_handle->hi2c.Init.OwnAddress1 = config->address;
 	priv_handle->hi2c.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
@@ -149,13 +201,18 @@ int stm32_capi_i2c_init(struct capi_i2c_controller_handle **handle,
 error_deinit:
 	HAL_I2C_DeInit(&priv_handle->hi2c);
 error_free_priv:
-	no_os_free(priv_handle);
+	capi_free(priv_handle);
 error_free_handle:
-	no_os_free(i2c_handle);
+	capi_free(i2c_handle);
 	return ret;
 }
 
-int stm32_capi_i2c_deinit(struct capi_i2c_controller_handle *handle)
+/**
+ * @brief Deinitialize the STM32 I2C controller.
+ * @param handle - Pointer to the I2C controller handle.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_i2c_deinit(struct capi_i2c_controller_handle *handle)
 {
 	struct stm32_i2c_priv_handle *priv_handle;
 
@@ -167,17 +224,23 @@ int stm32_capi_i2c_deinit(struct capi_i2c_controller_handle *handle)
 	if (priv_handle) {
 		unregister_handle_mapping(&priv_handle->hi2c);
 		HAL_I2C_DeInit(&priv_handle->hi2c);
-		no_os_free(priv_handle);
+		capi_free(priv_handle);
 	}
 
 	if (handle->init_allocated)
-		no_os_free(handle);
+		capi_free(handle);
 
 	return 0;
 }
 
-int stm32_capi_i2c_transmit(struct capi_i2c_device *device,
-			    struct capi_i2c_transfer *transfer)
+/**
+ * @brief Synchronous I2C transmit operation.
+ * @param device - Pointer to the I2C device descriptor.
+ * @param transfer - Pointer to the I2C transfer descriptor.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_i2c_transmit(struct capi_i2c_device *device,
+				   struct capi_i2c_transfer *transfer)
 {
 	struct stm32_i2c_priv_handle *priv_handle;
 	HAL_StatusTypeDef hal_ret;
@@ -193,23 +256,24 @@ int stm32_capi_i2c_transmit(struct capi_i2c_device *device,
 	if (!priv_handle)
 		return -EINVAL;
 
-	dev_addr = (transfer->target_addr ? transfer->target_addr : device->address) << 1;
+	dev_addr = (transfer->target_addr ? transfer->target_addr : device->address) <<
+		   1;
 
 	if (transfer->sub_address && transfer->sub_address_len > 0) {
 		hal_ret = HAL_I2C_Mem_Write(&priv_handle->hi2c,
 					    dev_addr,
 					    transfer->sub_address[0],
 					    transfer->sub_address_len == 1 ?
-						I2C_MEMADD_SIZE_8BIT : I2C_MEMADD_SIZE_16BIT,
+					    I2C_MEMADD_SIZE_8BIT : I2C_MEMADD_SIZE_16BIT,
 					    transfer->buf,
 					    transfer->len,
 					    HAL_MAX_DELAY);
 	} else if (transfer->no_stop) {
 		hal_ret = HAL_I2C_Master_Seq_Transmit_IT(&priv_handle->hi2c,
-							 dev_addr,
-							 transfer->buf,
-							 transfer->len,
-							 I2C_FIRST_FRAME);
+				dev_addr,
+				transfer->buf,
+				transfer->len,
+				I2C_FIRST_FRAME);
 		if (hal_ret == HAL_OK) {
 			while (HAL_I2C_GetState(&priv_handle->hi2c) != HAL_I2C_STATE_READY)
 				;
@@ -234,8 +298,14 @@ int stm32_capi_i2c_transmit(struct capi_i2c_device *device,
 	}
 }
 
-int stm32_capi_i2c_receive(struct capi_i2c_device *device,
-			   struct capi_i2c_transfer *transfer)
+/**
+ * @brief Synchronous I2C receive operation.
+ * @param device - Pointer to the I2C device descriptor.
+ * @param transfer - Pointer to the I2C transfer descriptor.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_i2c_receive(struct capi_i2c_device *device,
+				  struct capi_i2c_transfer *transfer)
 {
 	struct stm32_i2c_priv_handle *priv_handle;
 	HAL_StatusTypeDef hal_ret;
@@ -251,14 +321,15 @@ int stm32_capi_i2c_receive(struct capi_i2c_device *device,
 	if (!priv_handle)
 		return -EINVAL;
 
-	dev_addr = (transfer->target_addr ? transfer->target_addr : device->address) << 1;
+	dev_addr = (transfer->target_addr ? transfer->target_addr : device->address) <<
+		   1;
 
 	if (transfer->sub_address && transfer->sub_address_len > 0) {
 		hal_ret = HAL_I2C_Mem_Read(&priv_handle->hi2c,
 					   dev_addr,
 					   transfer->sub_address[0],
 					   transfer->sub_address_len == 1 ?
-						I2C_MEMADD_SIZE_8BIT : I2C_MEMADD_SIZE_16BIT,
+					   I2C_MEMADD_SIZE_8BIT : I2C_MEMADD_SIZE_16BIT,
 					   transfer->buf,
 					   transfer->len,
 					   HAL_MAX_DELAY);
@@ -292,9 +363,17 @@ int stm32_capi_i2c_receive(struct capi_i2c_device *device,
 	}
 }
 
-int stm32_capi_i2c_register_callback(struct capi_i2c_controller_handle *handle,
-				     capi_i2c_callback const callback,
-				     void *const callback_arg)
+/**
+ * @brief Register an async event callback for I2C operations.
+ * @param handle - Pointer to the I2C controller handle.
+ * @param callback - User callback function.
+ * @param callback_arg - User callback argument.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_i2c_register_callback(struct capi_i2c_controller_handle
+		*handle,
+		capi_i2c_callback const callback,
+		void *const callback_arg)
 {
 	struct stm32_i2c_priv_handle *priv_handle;
 
@@ -308,9 +387,17 @@ int stm32_capi_i2c_register_callback(struct capi_i2c_controller_handle *handle,
 	return 0;
 }
 
-int stm32_capi_i2c_configure_bus_speed(struct capi_i2c_controller_handle *handle,
-				       enum capi_i2c_speed speed,
-				       uint8_t duty_cycle)
+/**
+ * @brief Configure I2C bus speed.
+ * @param handle - Pointer to the I2C controller handle.
+ * @param speed - Desired I2C bus speed mode.
+ * @param duty_cycle - Desired I2C SCLK duty cycle percentage.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_i2c_configure_bus_speed(struct capi_i2c_controller_handle
+		*handle,
+		enum capi_i2c_speed speed,
+		uint8_t duty_cycle)
 {
 	struct stm32_i2c_priv_handle *priv_handle;
 	uint32_t clock_speed;
@@ -322,7 +409,7 @@ int stm32_capi_i2c_configure_bus_speed(struct capi_i2c_controller_handle *handle
 
 	switch (speed) {
 	case CAPI_I2C_SPEED_STANDARD:
-		clock_speed = 100000;
+		clock_speed = STM32_I2C_DEFAULT_CLOCK_HZ;
 		break;
 	case CAPI_I2C_SPEED_FAST:
 		clock_speed = 400000;
@@ -353,8 +440,14 @@ int stm32_capi_i2c_configure_bus_speed(struct capi_i2c_controller_handle *handle
 	return 0;
 }
 
-int stm32_capi_i2c_transmit_async(struct capi_i2c_device *device,
-				  struct capi_i2c_transfer *transfer)
+/**
+ * @brief Asynchronous I2C transmit operation.
+ * @param device - Pointer to the I2C device descriptor.
+ * @param transfer - Pointer to the I2C transfer descriptor.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_i2c_transmit_async(struct capi_i2c_device *device,
+		struct capi_i2c_transfer *transfer)
 {
 	struct stm32_i2c_priv_handle *priv_handle;
 	HAL_StatusTypeDef hal_ret;
@@ -376,14 +469,15 @@ int stm32_capi_i2c_transmit_async(struct capi_i2c_device *device,
 	priv_handle->async_in_progress = true;
 	priv_handle->current_transfer = transfer;
 
-	dev_addr = (transfer->target_addr ? transfer->target_addr : device->address) << 1;
+	dev_addr = (transfer->target_addr ? transfer->target_addr : device->address) <<
+		   1;
 
 	if (transfer->sub_address && transfer->sub_address_len > 0) {
 		hal_ret = HAL_I2C_Mem_Write_IT(&priv_handle->hi2c,
 					       dev_addr,
 					       transfer->sub_address[0],
 					       transfer->sub_address_len == 1 ?
-						   I2C_MEMADD_SIZE_8BIT : I2C_MEMADD_SIZE_16BIT,
+					       I2C_MEMADD_SIZE_8BIT : I2C_MEMADD_SIZE_16BIT,
 					       transfer->buf,
 					       transfer->len);
 	} else {
@@ -407,8 +501,14 @@ int stm32_capi_i2c_transmit_async(struct capi_i2c_device *device,
 	return 0;
 }
 
-int stm32_capi_i2c_receive_async(struct capi_i2c_device *device,
-				 struct capi_i2c_transfer *transfer)
+/**
+ * @brief Asynchronous I2C receive operation.
+ * @param device - Pointer to the I2C device descriptor.
+ * @param transfer - Pointer to the I2C transfer descriptor.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_i2c_receive_async(struct capi_i2c_device *device,
+					struct capi_i2c_transfer *transfer)
 {
 	struct stm32_i2c_priv_handle *priv_handle;
 	HAL_StatusTypeDef hal_ret;
@@ -430,14 +530,15 @@ int stm32_capi_i2c_receive_async(struct capi_i2c_device *device,
 	priv_handle->async_in_progress = true;
 	priv_handle->current_transfer = transfer;
 
-	dev_addr = (transfer->target_addr ? transfer->target_addr : device->address) << 1;
+	dev_addr = (transfer->target_addr ? transfer->target_addr : device->address) <<
+		   1;
 
 	if (transfer->sub_address && transfer->sub_address_len > 0) {
 		hal_ret = HAL_I2C_Mem_Read_IT(&priv_handle->hi2c,
 					      dev_addr,
 					      transfer->sub_address[0],
 					      transfer->sub_address_len == 1 ?
-						  I2C_MEMADD_SIZE_8BIT : I2C_MEMADD_SIZE_16BIT,
+					      I2C_MEMADD_SIZE_8BIT : I2C_MEMADD_SIZE_16BIT,
 					      transfer->buf,
 					      transfer->len);
 	} else {
@@ -461,7 +562,12 @@ int stm32_capi_i2c_receive_async(struct capi_i2c_device *device,
 	return 0;
 }
 
-int stm32_capi_i2c_recover_bus(struct capi_i2c_controller_handle *handle)
+/**
+ * @brief Recover the I2C bus by reinitializing the peripheral.
+ * @param handle - Pointer to the I2C controller handle.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_i2c_recover_bus(struct capi_i2c_controller_handle *handle)
 {
 	struct stm32_i2c_priv_handle *priv_handle;
 
@@ -478,8 +584,15 @@ int stm32_capi_i2c_recover_bus(struct capi_i2c_controller_handle *handle)
 	return 0;
 }
 
-int stm32_capi_i2c_register_target(struct capi_i2c_controller_handle *handle,
-				   uint16_t addr)
+/**
+ * @brief Register the I2C controller as a target device.
+ * @param handle - Pointer to the I2C controller handle.
+ * @param addr - Target device address (7-bit or 10-bit).
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_i2c_register_target(struct capi_i2c_controller_handle
+		*handle,
+		uint16_t addr)
 {
 	struct stm32_i2c_priv_handle *priv_handle;
 
@@ -498,7 +611,13 @@ int stm32_capi_i2c_register_target(struct capi_i2c_controller_handle *handle,
 	return 0;
 }
 
-int stm32_capi_i2c_unregister_target(struct capi_i2c_controller_handle *handle)
+/**
+ * @brief Unregister the I2C controller from target mode.
+ * @param handle - Pointer to the I2C controller handle.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_i2c_unregister_target(struct capi_i2c_controller_handle
+		*handle)
 {
 	struct stm32_i2c_priv_handle *priv_handle;
 
@@ -517,7 +636,11 @@ int stm32_capi_i2c_unregister_target(struct capi_i2c_controller_handle *handle)
 	return 0;
 }
 
-void stm32_capi_i2c_isr(void *handle)
+/**
+ * @brief I2C interrupt service routine handler.
+ * @param handle - Pointer to the I2C controller handle.
+ */
+static void stm32_capi_i2c_isr(void *handle)
 {
 	struct capi_i2c_controller_handle *ctrl_handle;
 	struct stm32_i2c_priv_handle *priv_handle;
@@ -532,6 +655,10 @@ void stm32_capi_i2c_isr(void *handle)
 	HAL_I2C_ER_IRQHandler(&priv_handle->hi2c);
 }
 
+/**
+ * @brief HAL I2C master transmit complete callback.
+ * @param hi2c - Pointer to the HAL I2C handle.
+ */
 void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
 	struct stm32_i2c_priv_handle *priv_handle;
@@ -547,6 +674,10 @@ void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
 		priv_handle->callback(CAPI_I2C_XFR_DONE, priv_handle->callback_arg, 0);
 }
 
+/**
+ * @brief HAL I2C master receive complete callback.
+ * @param hi2c - Pointer to the HAL I2C handle.
+ */
 void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
 	struct stm32_i2c_priv_handle *priv_handle;
@@ -562,6 +693,10 @@ void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c)
 		priv_handle->callback(CAPI_I2C_XFR_DONE, priv_handle->callback_arg, 0);
 }
 
+/**
+ * @brief HAL I2C memory transmit complete callback.
+ * @param hi2c - Pointer to the HAL I2C handle.
+ */
 void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
 	struct stm32_i2c_priv_handle *priv_handle;
@@ -577,6 +712,10 @@ void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c)
 		priv_handle->callback(CAPI_I2C_XFR_DONE, priv_handle->callback_arg, 0);
 }
 
+/**
+ * @brief HAL I2C memory receive complete callback.
+ * @param hi2c - Pointer to the HAL I2C handle.
+ */
 void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
 	struct stm32_i2c_priv_handle *priv_handle;
@@ -592,6 +731,10 @@ void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
 		priv_handle->callback(CAPI_I2C_XFR_DONE, priv_handle->callback_arg, 0);
 }
 
+/**
+ * @brief HAL I2C error callback.
+ * @param hi2c - Pointer to the HAL I2C handle.
+ */
 void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
 {
 	struct stm32_i2c_priv_handle *priv_handle;
@@ -618,6 +761,10 @@ void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
 		priv_handle->callback(event, priv_handle->callback_arg, (int)error);
 }
 
+/**
+ * @brief HAL I2C abort complete callback.
+ * @param hi2c - Pointer to the HAL I2C handle.
+ */
 void HAL_I2C_AbortCpltCallback(I2C_HandleTypeDef *hi2c)
 {
 	struct stm32_i2c_priv_handle *priv_handle;

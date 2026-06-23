@@ -48,6 +48,8 @@ enum capi_uart_interrupt_reason {
 	CAPI_UART_INTR_RX_LINE_STATUS,  /**< Receive line status interrupt,
 					 * Details can be get by calling capi_uart_get_line_status()
 					 */
+	CAPI_UART_INTR_RX_TIMEOUT,      /**< Receive timeout interrupt */
+	CAPI_UART_INTR_NONE,            /**< No interrupt reason */
 };
 
 /**
@@ -159,10 +161,7 @@ struct capi_uart_config {
 };
 
 /**
- * @brief UART handle
- *
- * Drivers may need own handle type to handle internals.
- * Driver developer shall declare this as the first field of private handle structure.
+ * @brief UART handle type
  */
 struct capi_uart_handle {
 	const struct capi_uart_ops *ops; /**< set and used by capi thin layer */
@@ -177,7 +176,8 @@ struct capi_uart_handle {
  * @param[in] arg Pointer to user specific data.
  * @param[in] event_extra optional, platform/driver specific extra information for event
  */
-typedef void (*capi_uart_callback)(enum capi_uart_async_event event, void *arg, int event_extra);
+typedef void (*capi_uart_callback)(enum capi_uart_async_event event, void *arg,
+				   int event_extra);
 
 /**
  * @brief Initialize an instance of the UART controller.
@@ -191,7 +191,8 @@ typedef void (*capi_uart_callback)(enum capi_uart_async_event event, void *arg, 
  *
  * @return int 0 for success or error code.
  */
-int capi_uart_init(struct capi_uart_handle **handle, const struct capi_uart_config *config);
+int capi_uart_init(struct capi_uart_handle **handle,
+		   const struct capi_uart_config *config);
 
 /**
  * @brief Deinitialize the UART controller, disable, and bring to default settings.
@@ -264,7 +265,8 @@ int capi_uart_flush_rx_fifo(struct capi_uart_handle *handle);
  *
  * @return int 0 for success or error code.
  */
-int capi_uart_get_rx_fifo_count(struct capi_uart_handle *handle, uint16_t *count);
+int capi_uart_get_rx_fifo_count(struct capi_uart_handle *handle,
+				uint16_t *count);
 
 /**
  * @brief Get available bytes on Tx fifo of UART controller
@@ -274,7 +276,8 @@ int capi_uart_get_rx_fifo_count(struct capi_uart_handle *handle, uint16_t *count
  *
  * @return int 0 for success or error code.
  */
-int capi_uart_get_tx_fifo_count(struct capi_uart_handle *handle, uint16_t *count);
+int capi_uart_get_tx_fifo_count(struct capi_uart_handle *handle,
+				uint16_t *count);
 
 /**
  * @brief Sync/Blocking transmit function.
@@ -285,7 +288,8 @@ int capi_uart_get_tx_fifo_count(struct capi_uart_handle *handle, uint16_t *count
  *
  * @return int 0 for success or error code.
  */
-int capi_uart_transmit(struct capi_uart_handle *handle, uint8_t *buf, uint32_t len);
+int capi_uart_transmit(struct capi_uart_handle *handle, uint8_t *buf,
+		       uint32_t len);
 
 /**
  * @brief Sync/Blocking receive function.
@@ -296,7 +300,8 @@ int capi_uart_transmit(struct capi_uart_handle *handle, uint8_t *buf, uint32_t l
  *
  * @return int 0 for success or error code.
  */
-int capi_uart_receive(struct capi_uart_handle *handle, uint8_t *buf, uint32_t len);
+int capi_uart_receive(struct capi_uart_handle *handle, uint8_t *buf,
+		      uint32_t len);
 
 /**
  * @brief Register callback to get async events
@@ -307,7 +312,8 @@ int capi_uart_receive(struct capi_uart_handle *handle, uint8_t *buf, uint32_t le
  *
  * @return int 0 for success or error code.
  */
-int capi_uart_register_callback(struct capi_uart_handle *handle, capi_uart_callback const callback,
+int capi_uart_register_callback(struct capi_uart_handle *handle,
+				capi_uart_callback const callback,
 				void *const callback_arg);
 
 /**
@@ -319,7 +325,8 @@ int capi_uart_register_callback(struct capi_uart_handle *handle, capi_uart_callb
  *
  * @return int 0 for success or error code.
  */
-int capi_uart_transmit_async(struct capi_uart_handle *handle, uint8_t *buf, uint32_t len);
+int capi_uart_transmit_async(struct capi_uart_handle *handle, uint8_t *buf,
+			     uint32_t len);
 
 /**
  * @brief Async/Non-Blocking receive function.
@@ -330,7 +337,8 @@ int capi_uart_transmit_async(struct capi_uart_handle *handle, uint8_t *buf, uint
  *
  * @return int 0 for success or error code.
  */
-int capi_uart_receive_async(struct capi_uart_handle *handle, uint8_t *buf, uint32_t len);
+int capi_uart_receive_async(struct capi_uart_handle *handle, uint8_t *buf,
+			    uint32_t len);
 
 /**
  * @brief Get UART interrupt reason.
@@ -354,7 +362,8 @@ int capi_uart_get_interrupt_reason(struct capi_uart_handle *handle,
  *
  * @return int 0 for success or error code.
  */
-int capi_uart_get_line_status(struct capi_uart_handle *handle, uint32_t *status_flags);
+int capi_uart_get_line_status(struct capi_uart_handle *handle,
+			      uint32_t *status_flags);
 
 /**
  * @brief Send 9-bit data for multi-drop communication
@@ -365,7 +374,8 @@ int capi_uart_get_line_status(struct capi_uart_handle *handle, uint32_t *status_
  *
  * @return int 0 for success or error code.
  */
-int capi_uart_transmit_9bit(struct capi_uart_handle *handle, uint16_t data, bool is_address);
+int capi_uart_transmit_9bit(struct capi_uart_handle *handle, uint16_t data,
+			    bool is_address);
 
 /**
  * @brief Receive 9-bit data for multi-drop communication
@@ -376,7 +386,8 @@ int capi_uart_transmit_9bit(struct capi_uart_handle *handle, uint16_t data, bool
  *
  * @return int 0 for success or error code.
  */
-int capi_uart_receive_9bit(struct capi_uart_handle *handle, uint16_t *data, bool *is_address);
+int capi_uart_receive_9bit(struct capi_uart_handle *handle, uint16_t *data,
+			   bool *is_address);
 
 /**
  * @brief Set flow control state manually
@@ -387,7 +398,8 @@ int capi_uart_receive_9bit(struct capi_uart_handle *handle, uint16_t *data, bool
  *
  * @return int 0 for success or error code.
  */
-int capi_uart_set_flow_control_state(struct capi_uart_handle *handle, bool rts_state,
+int capi_uart_set_flow_control_state(struct capi_uart_handle *handle,
+				     bool rts_state,
 				     bool cts_state);
 
 /**
@@ -399,7 +411,8 @@ int capi_uart_set_flow_control_state(struct capi_uart_handle *handle, bool rts_s
  *
  * @return int 0 for success or error code.
  */
-int capi_uart_get_flow_control_state(struct capi_uart_handle *handle, bool *rts_state,
+int capi_uart_get_flow_control_state(struct capi_uart_handle *handle,
+				     bool *rts_state,
 				     bool *cts_state);
 
 /**
@@ -411,12 +424,102 @@ int capi_uart_get_flow_control_state(struct capi_uart_handle *handle, bool *rts_
 void capi_uart_isr(void *handle);
 
 /**
+ * @brief Read a single byte from the UART
+ * @param [in] handle Points to the UART controller context.
+ * @param [out] byte Pointer to store the received byte
+ *
+ * @return uint32_t Number of bytes read (0 if no data available, 1 if byte was read)
+ */
+uint32_t capi_uart_read_byte(struct capi_uart_handle *handle, uint8_t *byte);
+
+/**
+ * @brief Write a single byte to the UART
+ *
+ * @param [in] handle Points to the UART controller context.
+ * @param [in] byte Byte to transmit
+ *
+ * @return uint32_t Number of bytes written (0 on failure, 1 on success)
+ */
+uint32_t capi_uart_write_byte(struct capi_uart_handle *handle, uint8_t byte);
+
+/**
+ * @brief Enable or disable TX interrupt
+ *
+ * @param [in] handle Points to the UART controller context.
+ * @param [in] enable Boolean to enable (true) or disable (false) the TX interrupt
+ *
+ * @return int 0 for success or error code.
+ */
+int capi_uart_set_irq_tx(struct capi_uart_handle *handle, bool enable);
+
+/**
+ * @brief Check if UART TX buffer can accept bytes
+ *
+ * @param [in] handle Points to the UART controller context.
+ * @param [out] ready Pointer to store TX buffer ready status
+ *
+ * @return int 0 for success or error code.
+ */
+int capi_uart_irq_tx_ready(struct capi_uart_handle *handle, bool *ready);
+
+/**
+ * @brief Check if transmission is complete
+ *
+ * @param [in] handle Points to the UART controller context.
+ * @param [out] complete Pointer to store completion status
+ *
+ * @return int 0 for success or error code.
+ */
+int capi_uart_irq_tx_complete(struct capi_uart_handle *handle, bool *complete);
+
+/**
+ * @brief Enable or disable RX interrupt
+ *
+ * @param [in] handle Points to the UART controller context.
+ * @param [in] enable Boolean to enable (true) or disable (false) the RX interrupt
+ *
+ * @return int 0 for success or error code.
+ */
+int capi_uart_set_irq_rx(struct capi_uart_handle *handle, bool enable);
+
+/**
+ * @brief Check if RX data is ready
+ *
+ * @param [in] handle Points to the UART controller context.
+ * @param [out] ready Pointer to store data ready status
+ *
+ * @return int 0 for success or error code.
+ */
+int capi_uart_irq_rx_ready(struct capi_uart_handle *handle, bool *ready);
+
+/**
+ * @brief Enable or disable status/error interrupt
+ *
+ * @param [in] handle Points to the UART controller context.
+ * @param [in] enable Boolean to enable (true) or disable (false) the status interrupt
+ *
+ * @return int 0 for success or error code.
+ */
+int capi_uart_set_irq_err(struct capi_uart_handle *handle, bool enable);
+
+/**
+ * @brief Check if any interrupt is pending
+ *
+ * @param [in] handle Points to the UART controller context.
+ * @param [out] pending Pointer to store interrupt pending status
+ *
+ * @return int 0 for success or error code.
+ */
+int capi_uart_is_irq_pending(struct capi_uart_handle *handle, bool *pending);
+
+/**
  * @brief Structure holding UART function pointers that point to the platform
  * specific function. See API functions for relevant descriptions.
  */
 struct capi_uart_ops {
 	/** See capi_uart_init() */
-	int (*init)(struct capi_uart_handle **handle, const struct capi_uart_config *config);
+	int (*init)(struct capi_uart_handle **handle,
+		    const struct capi_uart_config *config);
 	/** See capi_uart_deinit() */
 	int (*deinit)(struct capi_uart_handle *handle);
 	/** See capi_uart_get_line_config() */
@@ -440,21 +543,26 @@ struct capi_uart_ops {
 	/** See capi_uart_receive() */
 	int (*receive)(struct capi_uart_handle *handle, uint8_t *buf, uint32_t len);
 	/** See capi_uart_register_callback() */
-	int (*register_callback)(struct capi_uart_handle *handle, capi_uart_callback const callback,
+	int (*register_callback)(struct capi_uart_handle *handle,
+				 capi_uart_callback const callback,
 				 void *const callback_arg);
 	/** See capi_uart_transmit_async() */
-	int (*transmit_async)(struct capi_uart_handle *handle, uint8_t *buf, uint32_t len);
+	int (*transmit_async)(struct capi_uart_handle *handle, uint8_t *buf,
+			      uint32_t len);
 	/** See capi_uart_receive_async() */
-	int (*receive_async)(struct capi_uart_handle *handle, uint8_t *buf, uint32_t len);
+	int (*receive_async)(struct capi_uart_handle *handle, uint8_t *buf,
+			     uint32_t len);
 	/** See capi_uart_get_interrupt_reason() */
 	int (*get_interrupt_reason)(struct capi_uart_handle *handle,
 				    enum capi_uart_interrupt_reason *reason);
 	/** See capi_uart_get_line_status() */
 	int (*get_line_status)(struct capi_uart_handle *handle, uint32_t *status_flags);
 	/** See capi_uart_transmit_9bit() */
-	int (*transmit_9bit)(struct capi_uart_handle *handle, uint16_t data, bool is_address);
+	int (*transmit_9bit)(struct capi_uart_handle *handle, uint16_t data,
+			     bool is_address);
 	/** See capi_uart_receive_9bit() */
-	int (*receive_9bit)(struct capi_uart_handle *handle, uint16_t *data, bool *is_address);
+	int (*receive_9bit)(struct capi_uart_handle *handle, uint16_t *data,
+			    bool *is_address);
 	/** See capi_uart_set_flow_control_state() */
 	int (*set_flow_control_state)(struct capi_uart_handle *handle, bool rts_state,
 				      bool cts_state);
@@ -463,6 +571,24 @@ struct capi_uart_ops {
 				      bool *cts_state);
 	/** See capi_uart_isr() */
 	void (*isr)(void *handle);
+	/** See capi_uart_read_byte() */
+	uint32_t (*read_byte)(struct capi_uart_handle *handle, uint8_t *byte);
+	/** See capi_uart_write_byte() */
+	uint32_t (*write_byte)(struct capi_uart_handle *handle, uint8_t byte);
+	/** See capi_uart_set_irq_tx() */
+	int (*set_irq_tx)(struct capi_uart_handle *handle, bool enable);
+	/** See capi_uart_irq_tx_ready() */
+	int (*irq_tx_ready)(struct capi_uart_handle *handle, bool *ready);
+	/** See capi_uart_irq_tx_complete() */
+	int (*irq_tx_complete)(struct capi_uart_handle *handle, bool *complete);
+	/** See capi_uart_set_irq_rx() */
+	int (*set_irq_rx)(struct capi_uart_handle *handle, bool enable);
+	/** See capi_uart_irq_rx_ready() */
+	int (*irq_rx_ready)(struct capi_uart_handle *handle, bool *ready);
+	/** See capi_uart_set_irq_err() */
+	int (*set_irq_err)(struct capi_uart_handle *handle, bool enable);
+	/** See capi_uart_is_irq_pending() */
+	int (*is_irq_pending)(struct capi_uart_handle *handle, bool *pending);
 };
 
 #if defined(__cplusplus)

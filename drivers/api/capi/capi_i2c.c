@@ -19,7 +19,8 @@
 #include <errno.h>
 #include <capi_i2c.h>
 
-int capi_i2c_init(struct capi_i2c_controller_handle **handle, const struct capi_i2c_config *config)
+int capi_i2c_init(struct capi_i2c_controller_handle **handle,
+		  const struct capi_i2c_config *config)
 {
 	if (!handle || !config || !config->ops || !config->ops->init) {
 		return -EINVAL;
@@ -35,7 +36,8 @@ int capi_i2c_deinit(struct capi_i2c_controller_handle *handle)
 	return handle->ops->deinit(handle);
 }
 
-int capi_i2c_transmit(struct capi_i2c_device *device, struct capi_i2c_transfer *transfer)
+int capi_i2c_transmit(struct capi_i2c_device *device,
+		      struct capi_i2c_transfer *transfer)
 {
 	if (!device || !device->controller || !device->controller->ops ||
 	    !device->controller->ops->transmit) {
@@ -44,7 +46,8 @@ int capi_i2c_transmit(struct capi_i2c_device *device, struct capi_i2c_transfer *
 	return device->controller->ops->transmit(device, transfer);
 }
 
-int capi_i2c_receive(struct capi_i2c_device *device, struct capi_i2c_transfer *transfer)
+int capi_i2c_receive(struct capi_i2c_device *device,
+		     struct capi_i2c_transfer *transfer)
 {
 	if (!device || !device->controller || !device->controller->ops ||
 	    !device->controller->ops->receive) {
@@ -71,7 +74,8 @@ int capi_i2c_register_callback(struct capi_i2c_controller_handle *handle,
 	return handle->ops->register_callback(handle, callback, callback_arg);
 }
 
-int capi_i2c_transmit_async(struct capi_i2c_device *device, struct capi_i2c_transfer *transfer)
+int capi_i2c_transmit_async(struct capi_i2c_device *device,
+			    struct capi_i2c_transfer *transfer)
 {
 	if (!device || !device->controller || !device->controller->ops ||
 	    !device->controller->ops->transmit_async) {
@@ -80,7 +84,8 @@ int capi_i2c_transmit_async(struct capi_i2c_device *device, struct capi_i2c_tran
 	return device->controller->ops->transmit_async(device, transfer);
 }
 
-int capi_i2c_receive_async(struct capi_i2c_device *device, struct capi_i2c_transfer *transfer)
+int capi_i2c_receive_async(struct capi_i2c_device *device,
+			   struct capi_i2c_transfer *transfer)
 {
 	if (!device || !device->controller || !device->controller->ops ||
 	    !device->controller->ops->receive_async) {
@@ -97,7 +102,8 @@ int capi_i2c_recover_bus(struct capi_i2c_controller_handle *handle)
 	return handle->ops->recover_bus(handle);
 }
 
-int capi_i2c_register_target(struct capi_i2c_controller_handle *handle, uint16_t addr)
+int capi_i2c_register_target(struct capi_i2c_controller_handle *handle,
+			     uint16_t addr)
 {
 	if (!handle || !handle->ops || !handle->ops->register_target) {
 		return -EINVAL;

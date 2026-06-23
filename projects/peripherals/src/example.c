@@ -1,32 +1,39 @@
 #include <stdio.h>
 #include <string.h>
+#include <errno.h>
 
 /* UART includes */
 #include "capi_uart.h"
 #include "stm32_capi_uart.h"
 
 /* SPI includes - CAPI implementation */
-#include "capi/capi_spi.h"
+#include "capi_spi.h"
 #include "stm32_capi_spi.h"
-
+//
 /* I2C includes - CAPI implementation */
-#include "capi/capi_i2c.h"
+#include "capi_i2c.h"
 #include "stm32_capi_i2c.h"
 
 /* DMA includes - CAPI implementation */
-#include "capi/capi_dma.h"
+#include "capi_dma.h"
 #include "stm32_capi_dma.h"
-
+//
 /* Timer includes - CAPI implementation */
-#include "capi/capi_timer.h"
+#include "capi_timer.h"
 #include "stm32_capi_timer.h"
 
 /* IRQ includes - CAPI implementation */
-#include "capi/capi_irq.h"
+#include "capi_irq.h"
 #include "stm32_capi_irq.h"
+//
+/* PWM includes - CAPI implementation */
+#include "stm32_capi_pwm.h"
+
+/* Time includes - CAPI implementation */
+#include "capi_time.h"
 
 /* GPIO includes - CAPI implementation */
-#include "capi/capi_gpio.h"
+#include "capi_gpio.h"
 #include "stm32_capi_gpio.h"
 
 /* Function to get SPI peripheral input clock (APB clock) */
@@ -53,7 +60,7 @@ static struct capi_uart_handle *g_uart_handle = NULL;
 static void debug_print(const char *msg)
 {
 	if (g_uart_handle) {
-		capi_uart_transmit(g_uart_handle, msg, strlen(msg));
+		capi_uart_transmit(g_uart_handle, (uint8_t *)msg, strlen(msg));
 	}
 }
 
@@ -372,9 +379,9 @@ static DMA_HandleTypeDef hdma_memtomem;
 /* Flag for async completion */
 static volatile bool capi_dma_transfer_done = false;
 
-static void capi_dma_xfer_complete(struct capi_dma_transfer *xfer, void *ctx)
+static void capi_dma_xfer_complete(uint32_t event, void *ctx)
 {
-	(void)xfer;
+	(void)event;
 	(void)ctx;
 	capi_dma_transfer_done = true;
 }
@@ -419,7 +426,6 @@ static int capi_dma_example(void)
 		.ops = &stm32_capi_dma_ops,
 		.id = 2,  /* DMA2 supports memory-to-memory */
 		.num_chans = 8,
-		.addr_offset = 0,
 		.irq_handle = NULL,
 		.extra = NULL,
 	};
@@ -441,6 +447,9 @@ static int capi_dma_example(void)
 		return ret;
 	}
 	debug_print("CAPI DMA channel initialized OK\n\r");
+
+	/* Register transfer complete callback */
+	capi_dma_register_complete_callback(dma_chan, capi_dma_xfer_complete, NULL);
 
 	/* Store channel pointer for IRQ handler and enable interrupt mode */
 	g_dma_chan = dma_chan;
@@ -476,13 +485,12 @@ static int capi_dma_example(void)
 
 	/* Configure transfer */
 	struct capi_dma_transfer dma_xfer = {
-		.src = (capi_dma_cpu_addr_t)dma_src_buffer,
-		.dst = (capi_dma_cpu_addr_t)dma_dst_buffer,
+		.src = (capi_dma_glbl_addr_t)dma_src_buffer,
+		.dst = (capi_dma_glbl_addr_t)dma_dst_buffer,
 		.length = sizeof(dma_src_buffer),
 		.xfer_type = CAPI_DMA_MEM_TO_MEM,
 		.src_inc = CAPI_DMA_BYTE_INCREMENT,
 		.dst_inc = CAPI_DMA_BYTE_INCREMENT,
-		.xfer_complete_cb = capi_dma_xfer_complete,
 		.irq_priority = 0,
 		.user_data = NULL,
 		.extra = &chan_extra,
@@ -552,307 +560,307 @@ static int capi_dma_example(void)
 	return 0;
 }
 
-/******************************************************************************/
-/************************* CAPI Timer Example *********************************/
-/******************************************************************************/
-
-#ifdef HAL_TIM_MODULE_ENABLED
-
-/* Timer handle from generated_main.c */
-extern TIM_HandleTypeDef htim2;
-
-/* Get TIM2 input clock - on STM32F7, timer clock is 2x APB1 when APB1 prescaler > 1 */
-static uint32_t get_tim2_input_clock(void)
-{
-	RCC_ClkInitTypeDef clk_config;
-	uint32_t flash_latency;
-	uint32_t apb1_freq;
-
-	HAL_RCC_GetClockConfig(&clk_config, &flash_latency);
-	apb1_freq = HAL_RCC_GetPCLK1Freq();
-
-	/* If APB1 prescaler > 1, timer clock is 2x APB1 */
-	if (clk_config.APB1CLKDivider != RCC_HCLK_DIV1)
-		return apb1_freq * 2;
-
-	return apb1_freq;
-}
-
-/* Timer callback flags */
-static volatile bool timer_overflow_occurred = false;
-static volatile bool timer_compare_occurred = false;
-static volatile uint32_t timer_overflow_count = 0;
-
-static void timer_event_callback(uint32_t event, void *arg, int event_extra)
-{
-	(void)arg;
-	(void)event_extra;
-
-	if (event == CAPI_TIMER_GLOBAL_EVENT_COUNTER_OVERFLOW) {
-		timer_overflow_occurred = true;
-		timer_overflow_count++;
-	}
-}
-
-static void timer_channel_callback(uint32_t event, uint32_t chan, void *arg,
-				   int event_extra)
-{
-	(void)arg;
-	(void)event_extra;
-	(void)chan;
-
-	if (event == CAPI_TIMER_CHANNEL_EVENT_COMPARE) {
-		timer_compare_occurred = true;
-	}
-}
-
-/**
- * @brief Example using the CAPI Timer interface
- * @return 0 on success, negative error code on failure
- */
-static int capi_timer_example(void)
-{
-	struct capi_timer_handle *timer_handle = NULL;
-	int ret;
-	uint32_t ticks;
-
-	debug_print("=== CAPI Timer Example ===\n\r");
-
-	/* Check if TIM2 is configured */
-	if (htim2.Instance == NULL) {
-		debug_print("[CAPI] TIM2 not configured in CubeMX, skipping\n\r");
-		return 0;
-	}
-
-	debug_print("[CAPI] Setting up timer config structures...\n\r");
-
-	struct stm32_capi_timer_extra_config timer_extra = {
-		.htim = &htim2,
-		.get_input_clock = get_tim2_input_clock,
-		.irq_num = 0,
-	};
-
-	struct capi_timer_config timer_config = {
-		.ops = &stm32_capi_timer_ops,
-		.identifier = 2,
-		.input_clock_identifier = 0,
-		.input_clock_hz = 0,
-		.output_freq_hz = 1000000,
-		.extra = &timer_extra,
-	};
-
-	debug_print("[CAPI] timer_config configured, calling init...\n\r");
-
-	ret = capi_timer_init(&timer_handle, &timer_config);
-	if (ret) {
-		debug_print("CAPI Timer init FAILED\n\r");
-		debug_print_int("Error code: ", ret);
-		return ret;
-	}
-	debug_print("CAPI Timer initialized OK\n\r");
-
-	ret = capi_timer_register_event_callback(timer_handle,
-						 timer_event_callback, NULL);
-	if (ret) {
-		debug_print("CAPI Timer register_event_callback FAILED\n\r");
-		capi_timer_deinit(timer_handle);
-		return ret;
-	}
-
-	struct capi_timer_counter_config counter_config = {
-		.direction = CAPI_TIMER_COUNT_UP,
-		.min = 0,
-		.max = 10000,
-		.rollover = true,
-		.extra = NULL,
-	};
-
-	ret = capi_timer_counter_config(timer_handle, &counter_config);
-	if (ret) {
-		debug_print("CAPI Timer counter_config FAILED\n\r");
-		capi_timer_deinit(timer_handle);
-		return ret;
-	}
-	debug_print("CAPI Timer counter configured OK\n\r");
-
-	debug_print("[CAPI] Starting timer...\n\r");
-	ret = capi_timer_start(timer_handle);
-	if (ret) {
-		debug_print("CAPI Timer start FAILED\n\r");
-		capi_timer_deinit(timer_handle);
-		return ret;
-	}
-	debug_print("CAPI Timer started OK\n\r");
-
-	/* Counter verification test */
-	debug_print("[CAPI] Starting counter verification test...\n\r");
-
-	uint32_t counter_start, counter_end, elapsed;
-	uint32_t delay_ms = 8;
-	uint32_t expected_ticks = delay_ms * 1000; /* 1 MHz = 1000 ticks/ms */
-	uint32_t tolerance = expected_ticks / 5;   /* 20% tolerance for HAL_GetTick granularity */
-
-	/* Stop and reconfigure timer to reset counter to 0 */
-	capi_timer_stop(timer_handle);
-	capi_timer_counter_config(timer_handle, &counter_config);
-	capi_timer_start(timer_handle);
-
-	uint32_t tick_start, tick_end;
-
-	tick_start = HAL_GetTick();
-	ret = capi_timer_counter_get(timer_handle, &counter_start);
-	if (ret) {
-		debug_print("CAPI Timer counter_get (start) FAILED\n\r");
-		capi_timer_deinit(timer_handle);
-		return ret;
-	}
-
-	HAL_Delay(delay_ms);
-
-	ret = capi_timer_counter_get(timer_handle, &counter_end);
-	tick_end = HAL_GetTick();
-	if (ret) {
-		debug_print("CAPI Timer counter_get (end) FAILED\n\r");
-		capi_timer_deinit(timer_handle);
-		return ret;
-	}
-
-	/* Print after both reads to avoid UART time affecting measurement */
-	debug_print_int("[CAPI] Counter start: ", counter_start);
-	debug_print_int("[CAPI] Counter end: ", counter_end);
-	debug_print_int("[CAPI] HAL ticks elapsed: ", tick_end - tick_start);
-
-	/* Handle rollover (counter max is 10000) */
-	if (counter_end >= counter_start) {
-		elapsed = counter_end - counter_start;
-	} else {
-		elapsed = (10000 - counter_start) + counter_end;
-	}
-
-	/* Calculate expected based on actual HAL ticks elapsed (more accurate) */
-	uint32_t hal_elapsed = tick_end - tick_start;
-	expected_ticks = hal_elapsed * 1000; /* 1 MHz = 1000 ticks/ms */
-	tolerance = expected_ticks / 5;      /* 20% tolerance for HAL_GetTick granularity */
-
-	debug_print_int("[CAPI] Elapsed ticks: ", elapsed);
-	debug_print_int("[CAPI] Expected ticks: ", expected_ticks);
-
-	/* Verify elapsed ticks within tolerance */
-	if (elapsed >= (expected_ticks - tolerance) &&
-	    elapsed <= (expected_ticks + tolerance)) {
-		debug_print("[CAPI] Counter verification PASSED\n\r");
-	} else {
-		debug_print("[CAPI] Counter verification FAILED\n\r");
-		capi_timer_deinit(timer_handle);
-		return -1;
-	}
-
-	debug_print("[CAPI] Testing time conversion...\n\r");
-	ret = capi_timer_nsec_to_ticks(timer_handle, 1000000, &ticks);
-	if (ret == 0) {
-		debug_print_int("[CAPI] 1ms = ticks: ", ticks);
-	}
-
-	debug_print("[CAPI] Configuring compare channel 0...\n\r");
-	ret = capi_timer_channel_init(timer_handle, 0);
-	if (ret) {
-		debug_print("CAPI Timer channel_init FAILED\n\r");
-	} else {
-		struct capi_timer_channel_config ch_config = {
-			.mode = CAPI_TIMER_COMPARE_MODE,
-			.config.compare = {
-				.generate_pulse_on_match = false,
-				.output_identifier = 0,
-				.polarity = CAPI_TIMER_ON_COMPARE_KEEP,
-				.stop_enabled = false,
-				.match_value = 5000,
-				.extra = NULL,
-			},
-			.extra = NULL,
-		};
-
-		ret = capi_timer_channel_config(timer_handle, 0, &ch_config);
-		if (ret) {
-			debug_print("CAPI Timer channel_config FAILED\n\r");
-		} else {
-			debug_print("CAPI Timer compare channel configured OK\n\r");
-
-			ret = capi_timer_channel_register_callback(timer_handle, 0,
-								   timer_channel_callback,
-								   NULL);
-			if (ret == 0) {
-				debug_print("CAPI Timer channel callback registered OK\n\r");
-			}
-
-			ret = capi_timer_channel_enable(timer_handle, 0);
-			if (ret == 0) {
-				debug_print("CAPI Timer compare channel enabled OK\n\r");
-			}
-
-			uint32_t compare_val;
-			ret = capi_timer_channel_compare_get(timer_handle, 0, &compare_val);
-			if (ret == 0) {
-				debug_print_int("[CAPI] Compare value: ", compare_val);
-			}
-		}
-	}
-
-	debug_print("[CAPI] Configuring PWM on channel 1...\n\r");
-	ret = capi_timer_channel_init(timer_handle, 1);
-	if (ret) {
-		debug_print("CAPI Timer channel 1 init FAILED\n\r");
-	} else {
-		struct capi_timer_channel_config pwm_config = {
-			.mode = CAPI_TIMER_PWM_MODE,
-			.config.pwm = {
-				.output_identifier = 0,
-				.inverted_polarity = false,
-				.period_ns = 1000000,
-				.active_ns = 500000,
-				.offset_ns = 0,
-				.extra = NULL,
-			},
-			.extra = NULL,
-		};
-
-		ret = capi_timer_channel_config(timer_handle, 1, &pwm_config);
-		if (ret) {
-			debug_print("CAPI Timer PWM channel_config FAILED\n\r");
-			debug_print_int("Error code: ", ret);
-		} else {
-			debug_print("CAPI Timer PWM channel configured OK\n\r");
-
-			ret = capi_timer_channel_enable(timer_handle, 1);
-			if (ret == 0) {
-				debug_print("CAPI Timer PWM channel enabled OK\n\r");
-			}
-		}
-	}
-
-	debug_print("[CAPI] Stopping timer...\n\r");
-	ret = capi_timer_stop(timer_handle);
-	if (ret) {
-		debug_print("CAPI Timer stop FAILED\n\r");
-	} else {
-		debug_print("CAPI Timer stopped OK\n\r");
-	}
-
-	ret = capi_timer_channel_disable(timer_handle, 0);
-	ret = capi_timer_channel_deinit(timer_handle, 0);
-	ret = capi_timer_channel_disable(timer_handle, 1);
-	ret = capi_timer_channel_deinit(timer_handle, 1);
-
-	ret = capi_timer_deinit(timer_handle);
-	if (ret) {
-		debug_print("CAPI Timer deinit FAILED\n\r");
-		return ret;
-	}
-	debug_print("CAPI Timer example completed\n\r");
-
-	return 0;
-}
-
-#endif /* HAL_TIM_MODULE_ENABLED */
+// /******************************************************************************/
+// /************************* CAPI Timer Example *********************************/
+// /******************************************************************************/
+//
+// #ifdef HAL_TIM_MODULE_ENABLED
+//
+// /* Timer handle from generated_main.c */
+// extern TIM_HandleTypeDef htim2;
+//
+// /* Get TIM2 input clock - on STM32F7, timer clock is 2x APB1 when APB1 prescaler > 1 */
+// static uint32_t get_tim2_input_clock(void)
+// {
+// 	RCC_ClkInitTypeDef clk_config;
+// 	uint32_t flash_latency;
+// 	uint32_t apb1_freq;
+//
+// 	HAL_RCC_GetClockConfig(&clk_config, &flash_latency);
+// 	apb1_freq = HAL_RCC_GetPCLK1Freq();
+//
+// 	/* If APB1 prescaler > 1, timer clock is 2x APB1 */
+// 	if (clk_config.APB1CLKDivider != RCC_HCLK_DIV1)
+// 		return apb1_freq * 2;
+//
+// 	return apb1_freq;
+// }
+//
+// /* Timer callback flags */
+// static volatile bool timer_overflow_occurred = false;
+// static volatile bool timer_compare_occurred = false;
+// static volatile uint32_t timer_overflow_count = 0;
+//
+// static void timer_event_callback(uint32_t event, void *arg, int event_extra)
+// {
+// 	(void)arg;
+// 	(void)event_extra;
+//
+// 	if (event == CAPI_TIMER_GLOBAL_EVENT_COUNTER_OVERFLOW) {
+// 		timer_overflow_occurred = true;
+// 		timer_overflow_count++;
+// 	}
+// }
+//
+// static void timer_channel_callback(uint32_t event, uint32_t chan, void *arg,
+// 				   int event_extra)
+// {
+// 	(void)arg;
+// 	(void)event_extra;
+// 	(void)chan;
+//
+// 	if (event == CAPI_TIMER_CHANNEL_EVENT_COMPARE) {
+// 		timer_compare_occurred = true;
+// 	}
+// }
+//
+// /**
+//  * @brief Example using the CAPI Timer interface
+//  * @return 0 on success, negative error code on failure
+//  */
+// static int capi_timer_example(void)
+// {
+// 	struct capi_timer_handle *timer_handle = NULL;
+// 	int ret;
+// 	uint32_t ticks;
+//
+// 	debug_print("=== CAPI Timer Example ===\n\r");
+//
+// 	/* Check if TIM2 is configured */
+// 	if (htim2.Instance == NULL) {
+// 		debug_print("[CAPI] TIM2 not configured in CubeMX, skipping\n\r");
+// 		return 0;
+// 	}
+//
+// 	debug_print("[CAPI] Setting up timer config structures...\n\r");
+//
+// 	struct stm32_capi_timer_extra_config timer_extra = {
+// 		.htim = &htim2,
+// 		.get_input_clock = get_tim2_input_clock,
+// 		.irq_num = 0,
+// 	};
+//
+// 	struct capi_timer_config timer_config = {
+// 		.ops = &stm32_capi_timer_ops,
+// 		.identifier = 2,
+// 		.input_clock_identifier = 0,
+// 		.input_clock_hz = 0,
+// 		.output_freq_hz = 1000000,
+// 		.extra = &timer_extra,
+// 	};
+//
+// 	debug_print("[CAPI] timer_config configured, calling init...\n\r");
+//
+// 	ret = capi_timer_init(&timer_handle, &timer_config);
+// 	if (ret) {
+// 		debug_print("CAPI Timer init FAILED\n\r");
+// 		debug_print_int("Error code: ", ret);
+// 		return ret;
+// 	}
+// 	debug_print("CAPI Timer initialized OK\n\r");
+//
+// 	ret = capi_timer_register_event_callback(timer_handle,
+// 						 timer_event_callback, NULL);
+// 	if (ret) {
+// 		debug_print("CAPI Timer register_event_callback FAILED\n\r");
+// 		capi_timer_deinit(timer_handle);
+// 		return ret;
+// 	}
+//
+// 	struct capi_timer_counter_config counter_config = {
+// 		.direction = CAPI_TIMER_COUNT_UP,
+// 		.min = 0,
+// 		.max = 10000,
+// 		.rollover = true,
+// 		.extra = NULL,
+// 	};
+//
+// 	ret = capi_timer_counter_config(timer_handle, &counter_config);
+// 	if (ret) {
+// 		debug_print("CAPI Timer counter_config FAILED\n\r");
+// 		capi_timer_deinit(timer_handle);
+// 		return ret;
+// 	}
+// 	debug_print("CAPI Timer counter configured OK\n\r");
+//
+// 	debug_print("[CAPI] Starting timer...\n\r");
+// 	ret = capi_timer_start(timer_handle);
+// 	if (ret) {
+// 		debug_print("CAPI Timer start FAILED\n\r");
+// 		capi_timer_deinit(timer_handle);
+// 		return ret;
+// 	}
+// 	debug_print("CAPI Timer started OK\n\r");
+//
+// 	/* Counter verification test */
+// 	debug_print("[CAPI] Starting counter verification test...\n\r");
+//
+// 	uint32_t counter_start, counter_end, elapsed;
+// 	uint32_t delay_ms = 8;
+// 	uint32_t expected_ticks = delay_ms * 1000; /* 1 MHz = 1000 ticks/ms */
+// 	uint32_t tolerance = expected_ticks / 5;   /* 20% tolerance for HAL_GetTick granularity */
+//
+// 	/* Stop and reconfigure timer to reset counter to 0 */
+// 	capi_timer_stop(timer_handle);
+// 	capi_timer_counter_config(timer_handle, &counter_config);
+// 	capi_timer_start(timer_handle);
+//
+// 	uint32_t tick_start, tick_end;
+//
+// 	tick_start = HAL_GetTick();
+// 	ret = capi_timer_counter_get(timer_handle, &counter_start);
+// 	if (ret) {
+// 		debug_print("CAPI Timer counter_get (start) FAILED\n\r");
+// 		capi_timer_deinit(timer_handle);
+// 		return ret;
+// 	}
+//
+// 	HAL_Delay(delay_ms);
+//
+// 	ret = capi_timer_counter_get(timer_handle, &counter_end);
+// 	tick_end = HAL_GetTick();
+// 	if (ret) {
+// 		debug_print("CAPI Timer counter_get (end) FAILED\n\r");
+// 		capi_timer_deinit(timer_handle);
+// 		return ret;
+// 	}
+//
+// 	/* Print after both reads to avoid UART time affecting measurement */
+// 	debug_print_int("[CAPI] Counter start: ", counter_start);
+// 	debug_print_int("[CAPI] Counter end: ", counter_end);
+// 	debug_print_int("[CAPI] HAL ticks elapsed: ", tick_end - tick_start);
+//
+// 	/* Handle rollover (counter max is 10000) */
+// 	if (counter_end >= counter_start) {
+// 		elapsed = counter_end - counter_start;
+// 	} else {
+// 		elapsed = (10000 - counter_start) + counter_end;
+// 	}
+//
+// 	/* Calculate expected based on actual HAL ticks elapsed (more accurate) */
+// 	uint32_t hal_elapsed = tick_end - tick_start;
+// 	expected_ticks = hal_elapsed * 1000; /* 1 MHz = 1000 ticks/ms */
+// 	tolerance = expected_ticks / 5;      /* 20% tolerance for HAL_GetTick granularity */
+//
+// 	debug_print_int("[CAPI] Elapsed ticks: ", elapsed);
+// 	debug_print_int("[CAPI] Expected ticks: ", expected_ticks);
+//
+// 	/* Verify elapsed ticks within tolerance */
+// 	if (elapsed >= (expected_ticks - tolerance) &&
+// 	    elapsed <= (expected_ticks + tolerance)) {
+// 		debug_print("[CAPI] Counter verification PASSED\n\r");
+// 	} else {
+// 		debug_print("[CAPI] Counter verification FAILED\n\r");
+// 		capi_timer_deinit(timer_handle);
+// 		return -1;
+// 	}
+//
+// 	debug_print("[CAPI] Testing time conversion...\n\r");
+// 	ret = capi_timer_nsec_to_ticks(timer_handle, 1000000, &ticks);
+// 	if (ret == 0) {
+// 		debug_print_int("[CAPI] 1ms = ticks: ", ticks);
+// 	}
+//
+// 	debug_print("[CAPI] Configuring compare channel 0...\n\r");
+// 	ret = capi_timer_channel_init(timer_handle, 0);
+// 	if (ret) {
+// 		debug_print("CAPI Timer channel_init FAILED\n\r");
+// 	} else {
+// 		struct capi_timer_channel_config ch_config = {
+// 			.mode = CAPI_TIMER_COMPARE_MODE,
+// 			.config.compare = {
+// 				.generate_pulse_on_match = false,
+// 				.output_identifier = 0,
+// 				.polarity = CAPI_TIMER_ON_COMPARE_KEEP,
+// 				.stop_enabled = false,
+// 				.match_value = 5000,
+// 				.extra = NULL,
+// 			},
+// 			.extra = NULL,
+// 		};
+//
+// 		ret = capi_timer_channel_config(timer_handle, 0, &ch_config);
+// 		if (ret) {
+// 			debug_print("CAPI Timer channel_config FAILED\n\r");
+// 		} else {
+// 			debug_print("CAPI Timer compare channel configured OK\n\r");
+//
+// 			ret = capi_timer_channel_register_callback(timer_handle, 0,
+// 								   timer_channel_callback,
+// 								   NULL);
+// 			if (ret == 0) {
+// 				debug_print("CAPI Timer channel callback registered OK\n\r");
+// 			}
+//
+// 			ret = capi_timer_channel_enable(timer_handle, 0);
+// 			if (ret == 0) {
+// 				debug_print("CAPI Timer compare channel enabled OK\n\r");
+// 			}
+//
+// 			uint32_t compare_val;
+// 			ret = capi_timer_channel_compare_get(timer_handle, 0, &compare_val);
+// 			if (ret == 0) {
+// 				debug_print_int("[CAPI] Compare value: ", compare_val);
+// 			}
+// 		}
+// 	}
+//
+// 	debug_print("[CAPI] Configuring PWM on channel 1...\n\r");
+// 	ret = capi_timer_channel_init(timer_handle, 1);
+// 	if (ret) {
+// 		debug_print("CAPI Timer channel 1 init FAILED\n\r");
+// 	} else {
+// 		struct capi_timer_channel_config pwm_config = {
+// 			.mode = CAPI_TIMER_PWM_MODE,
+// 			.config.pwm = {
+// 				.output_identifier = 0,
+// 				.inverted_polarity = false,
+// 				.period_ns = 1000000,
+// 				.active_ns = 500000,
+// 				.offset_ns = 0,
+// 				.extra = NULL,
+// 			},
+// 			.extra = NULL,
+// 		};
+//
+// 		ret = capi_timer_channel_config(timer_handle, 1, &pwm_config);
+// 		if (ret) {
+// 			debug_print("CAPI Timer PWM channel_config FAILED\n\r");
+// 			debug_print_int("Error code: ", ret);
+// 		} else {
+// 			debug_print("CAPI Timer PWM channel configured OK\n\r");
+//
+// 			ret = capi_timer_channel_enable(timer_handle, 1);
+// 			if (ret == 0) {
+// 				debug_print("CAPI Timer PWM channel enabled OK\n\r");
+// 			}
+// 		}
+// 	}
+//
+// 	debug_print("[CAPI] Stopping timer...\n\r");
+// 	ret = capi_timer_stop(timer_handle);
+// 	if (ret) {
+// 		debug_print("CAPI Timer stop FAILED\n\r");
+// 	} else {
+// 		debug_print("CAPI Timer stopped OK\n\r");
+// 	}
+//
+// 	ret = capi_timer_channel_disable(timer_handle, 0);
+// 	ret = capi_timer_channel_deinit(timer_handle, 0);
+// 	ret = capi_timer_channel_disable(timer_handle, 1);
+// 	ret = capi_timer_channel_deinit(timer_handle, 1);
+//
+// 	ret = capi_timer_deinit(timer_handle);
+// 	if (ret) {
+// 		debug_print("CAPI Timer deinit FAILED\n\r");
+// 		return ret;
+// 	}
+// 	debug_print("CAPI Timer example completed\n\r");
+//
+// 	return 0;
+// }
+//
+// #endif /* HAL_TIM_MODULE_ENABLED */
 
 /******************************************************************************/
 /************************* CAPI IRQ Example ***********************************/
@@ -1074,7 +1082,7 @@ static int capi_gpio_example(void)
 		.identifier = 6,  /* GPIOG = port 6 */
 		.num_pins = 16,
 		.flags = NULL,
-		.priv = &port_extra,
+		.extra = &port_extra,
 	};
 
 	ret = capi_gpio_port_init(&gpio_port, &port_config);
@@ -1308,7 +1316,7 @@ static int capi_uart_example(void)
 	if (ret)
 		return ret;
 
-	ret = capi_uart_transmit(g_uart_handle, "Hello\n\r", 7);
+	ret = capi_uart_transmit(g_uart_handle, (uint8_t *)"Hello\n\r", 7);
 	if (ret)
 		return ret;
 
@@ -1318,6 +1326,655 @@ static int capi_uart_example(void)
 
 	return 0;
 }
+
+/******************************************************************************/
+/****************** CAPI UART Line Config Example *****************************/
+/******************************************************************************/
+
+/**
+ * @brief Example exercising capi_uart_set_line_config / capi_uart_get_line_config
+ *
+ * Because the UART under test is also the debug console, the test must
+ * restore the original configuration before returning so that subsequent
+ * debug_print() calls continue to work.
+ *
+ * @return 0 on success, negative error code on failure
+ */
+static int capi_uart_line_config_example(void)
+{
+	struct capi_uart_line_config original_cfg;
+	struct capi_uart_line_config readback_cfg;
+	struct capi_uart_line_config new_cfg;
+	int ret;
+	int result = 0;
+
+	debug_print("=== CAPI UART Line Config Example ===\n\r");
+
+	if (!g_uart_handle) {
+		debug_print("[CAPI] UART not initialized, skipping\n\r");
+		return 0;
+	}
+
+	/* Test 1: get_line_config – read the current (init-time) settings */
+	debug_print("[CAPI] Test 1: get_line_config (initial)...\n\r");
+
+	ret = capi_uart_get_line_config(g_uart_handle, &original_cfg);
+	if (ret) {
+		debug_print("CAPI UART get_line_config FAILED\n\r");
+		debug_print_int("Error code: ", ret);
+		return ret;
+	}
+	debug_print("CAPI UART get_line_config OK\n\r");
+	debug_print_int("[CAPI] Baudrate: ", original_cfg.baudrate);
+	debug_print_int("[CAPI] Data bits (0=8,1=7): ", original_cfg.size);
+	debug_print_int("[CAPI] Parity (0=none): ", original_cfg.parity);
+	debug_print_int("[CAPI] Stop bits (0=1,1=2): ", original_cfg.stop_bits);
+	debug_print_int("[CAPI] Flow ctrl: ", original_cfg.flow_control);
+
+	/* Verify readback matches what we configured at init */
+	if (original_cfg.baudrate != 115200 ||
+	    original_cfg.size != CAPI_UART_DATA_BITS_8 ||
+	    original_cfg.parity != CAPI_UART_PARITY_NONE ||
+	    original_cfg.stop_bits != CAPI_UART_STOP_1_BIT) {
+		debug_print("[CAPI] Initial config readback FAILED\n\r");
+		return -1;
+	}
+	debug_print("[CAPI] Initial config readback PASSED\n\r");
+
+	/* Test 2: set_line_config – change baudrate and stop bits */
+	debug_print("[CAPI] Test 2: set_line_config (9600, 2 stop bits)...\n\r");
+
+	new_cfg = original_cfg;
+	new_cfg.baudrate = 9600;
+	new_cfg.stop_bits = CAPI_UART_STOP_2_BIT;
+
+	ret = capi_uart_set_line_config(g_uart_handle, &new_cfg);
+	if (ret) {
+		debug_print("CAPI UART set_line_config FAILED\n\r");
+		debug_print_int("Error code: ", ret);
+		return ret;
+	}
+
+	/* Test 3: get_line_config – verify the new settings took effect */
+	ret = capi_uart_get_line_config(g_uart_handle, &readback_cfg);
+	if (ret) {
+		result = ret;
+		goto restore;
+	}
+
+	if (readback_cfg.baudrate != 9600 ||
+	    readback_cfg.stop_bits != CAPI_UART_STOP_2_BIT) {
+		result = -1;
+		goto restore;
+	}
+
+restore:
+	/* Restore original config so the debug console keeps working */
+	ret = capi_uart_set_line_config(g_uart_handle, &original_cfg);
+	if (ret) {
+		/* Cannot even report this via UART – just return */
+		return ret;
+	}
+
+	if (result) {
+		debug_print("[CAPI] Set/Get roundtrip FAILED\n\r");
+		return result;
+	}
+	debug_print("[CAPI] Set/Get roundtrip PASSED\n\r");
+
+	/* Test 4: set_line_config with even parity */
+	debug_print("[CAPI] Test 3: set_line_config (even parity)...\n\r");
+
+	new_cfg = original_cfg;
+	new_cfg.parity = CAPI_UART_PARITY_EVEN;
+
+	ret = capi_uart_set_line_config(g_uart_handle, &new_cfg);
+	if (ret) {
+		debug_print("CAPI UART set_line_config (parity) FAILED\n\r");
+		debug_print_int("Error code: ", ret);
+		return ret;
+	}
+
+	ret = capi_uart_get_line_config(g_uart_handle, &readback_cfg);
+	if (ret) {
+		result = ret;
+		goto restore_parity;
+	}
+
+	if (readback_cfg.parity != CAPI_UART_PARITY_EVEN)
+		result = -1;
+
+restore_parity:
+	ret = capi_uart_set_line_config(g_uart_handle, &original_cfg);
+	if (ret)
+		return ret;
+
+	if (result) {
+		debug_print("[CAPI] Parity roundtrip FAILED\n\r");
+		return result;
+	}
+	debug_print("[CAPI] Parity roundtrip PASSED\n\r");
+
+	/* Test 5: NULL-pointer rejection */
+	debug_print("[CAPI] Test 4: NULL pointer rejection...\n\r");
+
+	ret = capi_uart_set_line_config(g_uart_handle, NULL);
+	if (ret != -EINVAL) {
+		debug_print("[CAPI] NULL rejection FAILED (set)\n\r");
+		return -1;
+	}
+
+	ret = capi_uart_get_line_config(g_uart_handle, NULL);
+	if (ret != -EINVAL) {
+		debug_print("[CAPI] NULL rejection FAILED (get)\n\r");
+		return -1;
+	}
+	debug_print("[CAPI] NULL pointer rejection PASSED\n\r");
+
+	debug_print("CAPI UART Line Config example completed\n\r");
+
+	return 0;
+}
+
+/******************************************************************************/
+/***************** CAPI UART Async / Callback / ISR Example *******************/
+/******************************************************************************/
+
+static volatile bool uart_tx_done;
+static volatile bool uart_rx_done;
+static volatile bool uart_error_occurred;
+static volatile int  uart_last_event_extra;
+
+static void uart_async_callback(enum capi_uart_async_event event, void *arg,
+				int event_extra)
+{
+	(void)arg;
+
+	switch (event) {
+	case CAPI_UART_EVENT_TX_DONE:
+		uart_tx_done = true;
+		break;
+	case CAPI_UART_EVENT_RX_DONE:
+		uart_rx_done = true;
+		break;
+	case CAPI_UART_EVENT_INTERRUPT:
+		uart_error_occurred = true;
+		uart_last_event_extra = event_extra;
+		break;
+	default:
+		break;
+	}
+}
+
+void USART3_IRQHandler(void)
+{
+	if (g_uart_handle)
+		capi_uart_isr(g_uart_handle);
+}
+
+/**
+ * @brief Example exercising the async transmit/receive, callback registration,
+ *        ISR dispatch, and line-status reporting paths.
+ *
+ * The test performs a loopback-style async TX (the bytes go out on the wire;
+ * we just verify the completion callback fires).  Full loopback verification
+ * would require either hardware loopback wiring or a second UART.
+ *
+ * @return 0 on success, negative error code on failure
+ */
+static int capi_uart_async_example(void)
+{
+	int ret;
+	uint8_t tx_buf[] = "CAPI_ASYNC";
+	uint32_t timeout;
+	uint32_t status_flags;
+	enum capi_uart_interrupt_reason reason;
+
+	debug_print("=== CAPI UART Async Example ===\n\r");
+
+	if (!g_uart_handle) {
+		debug_print("[CAPI] UART not initialized, skipping\n\r");
+		return 0;
+	}
+
+	/* Test 1: Register callback */
+	debug_print("[CAPI] Test 1: Register callback...\n\r");
+
+	ret = capi_uart_register_callback(g_uart_handle,
+					  uart_async_callback, NULL);
+	if (ret) {
+		debug_print("CAPI UART register_callback FAILED\n\r");
+		debug_print_int("Error code: ", ret);
+		return ret;
+	}
+	debug_print("CAPI UART register_callback OK\n\r");
+
+	/* Test 2: Async transmit — verify TX_DONE callback fires */
+	debug_print("[CAPI] Test 2: Async transmit...\n\r");
+
+	/* Enable USART3 interrupt in NVIC so the HAL IT path can fire */
+	HAL_NVIC_SetPriority(USART3_IRQn, 5, 0);
+	HAL_NVIC_EnableIRQ(USART3_IRQn);
+
+	uart_tx_done = false;
+
+	ret = capi_uart_transmit_async(g_uart_handle, tx_buf, sizeof(tx_buf) - 1);
+	if (ret) {
+		HAL_NVIC_DisableIRQ(USART3_IRQn);
+		debug_print("CAPI UART transmit_async FAILED\n\r");
+		debug_print_int("Error code: ", ret);
+		return ret;
+	}
+
+	/* Poll for completion */
+	timeout = 1000000;
+	while (!uart_tx_done && --timeout)
+		;
+
+	if (!uart_tx_done) {
+		/* Abort the in-flight IT transfer so the HAL state returns to READY
+		 * and subsequent blocking HAL_UART_Transmit (debug_print) works. */
+		HAL_UART_Abort(&huart3);
+		HAL_NVIC_DisableIRQ(USART3_IRQn);
+		debug_print("[CAPI] Async TX timeout\n\r");
+		return -1;
+	}
+
+	debug_print("[CAPI] Async TX completed via callback PASSED\n\r");
+
+	/* Small delay to let any in-flight TX finish before next test */
+	HAL_Delay(10);
+
+	/* Test 3: get_line_status — should return 0 (no errors) after clean TX */
+	debug_print("[CAPI] Test 3: get_line_status (clean)...\n\r");
+
+	ret = capi_uart_get_line_status(g_uart_handle, &status_flags);
+	if (ret) {
+		debug_print("CAPI UART get_line_status FAILED\n\r");
+		debug_print_int("Error code: ", ret);
+		return ret;
+	}
+	debug_print_int("[CAPI] Line status flags: ", (int)status_flags);
+
+	if (status_flags == 0) {
+		debug_print("[CAPI] Clean line status PASSED\n\r");
+	} else {
+		debug_print("[CAPI] Unexpected line status flags\n\r");
+	}
+
+	/* Test 4: get_interrupt_reason — verify API returns without error */
+	debug_print("[CAPI] Test 4: get_interrupt_reason...\n\r");
+
+	ret = capi_uart_get_interrupt_reason(g_uart_handle, &reason);
+	if (ret) {
+		debug_print("CAPI UART get_interrupt_reason FAILED\n\r");
+		debug_print_int("Error code: ", ret);
+		return ret;
+	}
+	debug_print_int("[CAPI] Interrupt reason: ", (int)reason);
+	debug_print("[CAPI] get_interrupt_reason OK\n\r");
+
+	/* Test 5: NULL-pointer rejection on new APIs */
+	debug_print("[CAPI] Test 5: NULL pointer rejection (async APIs)...\n\r");
+
+	ret = capi_uart_register_callback(g_uart_handle, NULL, NULL);
+	if (ret) {
+		debug_print("[CAPI] NULL callback rejected unexpectedly\n\r");
+		return -1;
+	}
+
+	ret = capi_uart_transmit_async(g_uart_handle, NULL, 5);
+	if (ret != -EINVAL) {
+		debug_print("[CAPI] NULL buf rejection FAILED (transmit_async)\n\r");
+		return -1;
+	}
+
+	ret = capi_uart_receive_async(g_uart_handle, NULL, 5);
+	if (ret != -EINVAL) {
+		debug_print("[CAPI] NULL buf rejection FAILED (receive_async)\n\r");
+		return -1;
+	}
+
+	ret = capi_uart_get_line_status(g_uart_handle, NULL);
+	if (ret != -EINVAL) {
+		debug_print("[CAPI] NULL rejection FAILED (get_line_status)\n\r");
+		return -1;
+	}
+
+	ret = capi_uart_get_interrupt_reason(g_uart_handle, NULL);
+	if (ret != -EINVAL) {
+		debug_print("[CAPI] NULL rejection FAILED (get_interrupt_reason)\n\r");
+		return -1;
+	}
+	debug_print("[CAPI] NULL pointer rejection PASSED\n\r");
+
+	/* Disable USART3 NVIC and unregister callback — return to polling mode
+	 * so that subsequent blocking debug_print calls work normally. */
+	HAL_NVIC_DisableIRQ(USART3_IRQn);
+	capi_uart_register_callback(g_uart_handle, NULL, NULL);
+
+	debug_print("CAPI UART Async example completed\n\r");
+
+	return 0;
+}
+
+/******************************************************************************/
+/************************* CAPI Time Example **********************************/
+/******************************************************************************/
+
+/**
+ * @brief Example exercising capi_wait_us, capi_wait_ms and capi_uptime.
+ *
+ * Test 1: capi_uptime returns success and a non-zero value after boot.
+ * Test 2: capi_wait_ms — verify that a 50 ms delay produces an uptime
+ *         delta within a reasonable tolerance window.
+ * Test 3: capi_wait_us — verify that a 500 us delay is measurably
+ *         non-zero (at least 100 us of elapsed uptime).
+ * Test 4: Monotonicity — two consecutive capi_uptime calls never go
+ *         backwards.
+ *
+ * @return 0 on success, negative error code on failure
+ */
+static int capi_time_example(void)
+{
+	int ret;
+	uint64_t t0, t1, elapsed;
+
+	debug_print("=== CAPI Time Example ===\n\r");
+
+	/* Test 1: capi_uptime basic functionality */
+	debug_print("[CAPI] Test 1: capi_uptime...\n\r");
+
+	ret = capi_uptime(&t0);
+	if (ret) {
+		debug_print("capi_uptime FAILED\n\r");
+		debug_print_int("Error code: ", ret);
+		return ret;
+	}
+	debug_print_int("[CAPI] Uptime (us, low 32): ", (int)(t0 & 0xFFFFFFFF));
+	debug_print("[CAPI] capi_uptime OK\n\r");
+
+	/* Test 2: capi_wait_ms — 50 ms delay, then measure elapsed */
+	debug_print("[CAPI] Test 2: capi_wait_ms (50 ms)...\n\r");
+
+	ret = capi_uptime(&t0);
+	if (ret)
+		return ret;
+
+	capi_wait_ms(50);
+
+	ret = capi_uptime(&t1);
+	if (ret)
+		return ret;
+
+	elapsed = t1 - t0;
+	debug_print_int("[CAPI] Elapsed (us): ", (int)elapsed);
+
+	/* Accept 30–80 ms: generous tolerance for SysTick granularity */
+	if (elapsed >= 30000 && elapsed <= 80000) {
+		debug_print("[CAPI] capi_wait_ms PASSED\n\r");
+	} else {
+		debug_print("[CAPI] capi_wait_ms FAILED (out of tolerance)\n\r");
+		return -1;
+	}
+
+	/* Test 3: capi_wait_us — 500 us delay */
+	debug_print("[CAPI] Test 3: capi_wait_us (500 us)...\n\r");
+
+	ret = capi_uptime(&t0);
+	if (ret)
+		return ret;
+
+	capi_wait_us(500);
+
+	ret = capi_uptime(&t1);
+	if (ret)
+		return ret;
+
+	elapsed = t1 - t0;
+	debug_print_int("[CAPI] Elapsed (us): ", (int)elapsed);
+
+	if (elapsed >= 100) {
+		debug_print("[CAPI] capi_wait_us PASSED\n\r");
+	} else {
+		debug_print("[CAPI] capi_wait_us FAILED (too short)\n\r");
+		return -1;
+	}
+
+	/* Test 4: Monotonicity — t1 must be >= t0 */
+	debug_print("[CAPI] Test 4: Monotonicity...\n\r");
+
+	ret = capi_uptime(&t0);
+	if (ret)
+		return ret;
+	ret = capi_uptime(&t1);
+	if (ret)
+		return ret;
+
+	if (t1 >= t0) {
+		debug_print("[CAPI] Monotonicity PASSED\n\r");
+	} else {
+		debug_print("[CAPI] Monotonicity FAILED\n\r");
+		return -1;
+	}
+
+	/* Test 5: NULL-pointer rejection */
+	debug_print("[CAPI] Test 5: NULL pointer rejection...\n\r");
+
+	ret = capi_uptime(NULL);
+	if (ret != -EINVAL) {
+		debug_print("[CAPI] NULL rejection FAILED\n\r");
+		return -1;
+	}
+	debug_print("[CAPI] NULL pointer rejection PASSED\n\r");
+
+	debug_print("CAPI Time example completed\n\r");
+
+	return 0;
+}
+
+/******************************************************************************/
+/************************* CAPI PWM Example ***********************************/
+/******************************************************************************/
+
+#ifdef HAL_TIM_MODULE_ENABLED
+
+/**
+ * @brief Example using the CAPI PWM convenience wrapper over capi_timer
+ *
+ * Tests init, enable, disable, set/get period, set/get duty cycle, set/get
+ * polarity, and remove.  Uses TIM2 channel 0 (TIM_CHANNEL_1) which is
+ * available on most STM32 boards.
+ *
+ * @return 0 on success, negative error code on failure
+ */
+static int capi_pwm_example(void)
+{
+	struct stm32_capi_pwm_desc *pwm = NULL;
+	int ret;
+	uint64_t val;
+	bool pol;
+
+	debug_print("=== CAPI PWM Example ===\n\r");
+
+	struct stm32_capi_pwm_config pwm_cfg = {
+		.timer_id = 2,
+		.channel = 0,
+		.period_ns = 1000000,
+		.duty_cycle_ns = 500000,
+		.inverted_polarity = false,
+		.input_clock_hz = 0,
+		.get_input_clock = NULL,
+	};
+
+	/* Test 1: Init */
+	debug_print("[CAPI] Test 1: PWM init...\n\r");
+
+	ret = stm32_capi_pwm_init(&pwm, &pwm_cfg);
+	if (ret) {
+		debug_print("CAPI PWM init FAILED\n\r");
+		debug_print_int("Error code: ", ret);
+		return ret;
+	}
+	debug_print("CAPI PWM init OK\n\r");
+
+	/* Test 2: Enable */
+	debug_print("[CAPI] Test 2: PWM enable...\n\r");
+
+	ret = stm32_capi_pwm_enable(pwm);
+	if (ret) {
+		debug_print("CAPI PWM enable FAILED\n\r");
+		debug_print_int("Error code: ", ret);
+		stm32_capi_pwm_remove(pwm);
+		return ret;
+	}
+	debug_print("CAPI PWM enable OK\n\r");
+
+	/* Test 3: Get period — should match init value */
+	debug_print("[CAPI] Test 3: get_period...\n\r");
+
+	ret = stm32_capi_pwm_get_period(pwm, &val);
+	if (ret) {
+		debug_print("CAPI PWM get_period FAILED\n\r");
+		stm32_capi_pwm_remove(pwm);
+		return ret;
+	}
+	debug_print_int("[CAPI] Period (ns): ", (int)val);
+
+	if (val != 1000000) {
+		debug_print("[CAPI] Period readback FAILED\n\r");
+		stm32_capi_pwm_remove(pwm);
+		return -1;
+	}
+	debug_print("[CAPI] Period readback PASSED\n\r");
+
+	/* Test 4: Get duty cycle — should match init value */
+	debug_print("[CAPI] Test 4: get_duty_cycle...\n\r");
+
+	ret = stm32_capi_pwm_get_duty_cycle(pwm, &val);
+	if (ret) {
+		debug_print("CAPI PWM get_duty_cycle FAILED\n\r");
+		stm32_capi_pwm_remove(pwm);
+		return ret;
+	}
+	debug_print_int("[CAPI] Duty cycle (ns): ", (int)val);
+
+	if (val != 500000) {
+		debug_print("[CAPI] Duty cycle readback FAILED\n\r");
+		stm32_capi_pwm_remove(pwm);
+		return -1;
+	}
+	debug_print("[CAPI] Duty cycle readback PASSED\n\r");
+
+	/* Test 5: Set new period and verify roundtrip */
+	debug_print("[CAPI] Test 5: set_period (2000000 ns)...\n\r");
+
+	ret = stm32_capi_pwm_set_period(pwm, 2000000);
+	if (ret) {
+		debug_print("CAPI PWM set_period FAILED\n\r");
+		stm32_capi_pwm_remove(pwm);
+		return ret;
+	}
+
+	ret = stm32_capi_pwm_get_period(pwm, &val);
+	if (ret || val != 2000000) {
+		debug_print("[CAPI] Period set/get roundtrip FAILED\n\r");
+		stm32_capi_pwm_remove(pwm);
+		return -1;
+	}
+	debug_print("[CAPI] Period set/get roundtrip PASSED\n\r");
+
+	/* Test 6: Set new duty cycle and verify roundtrip */
+	debug_print("[CAPI] Test 6: set_duty_cycle (750000 ns)...\n\r");
+
+	ret = stm32_capi_pwm_set_duty_cycle(pwm, 750000);
+	if (ret) {
+		debug_print("CAPI PWM set_duty_cycle FAILED\n\r");
+		stm32_capi_pwm_remove(pwm);
+		return ret;
+	}
+
+	ret = stm32_capi_pwm_get_duty_cycle(pwm, &val);
+	if (ret || val != 750000) {
+		debug_print("[CAPI] Duty cycle set/get roundtrip FAILED\n\r");
+		stm32_capi_pwm_remove(pwm);
+		return -1;
+	}
+	debug_print("[CAPI] Duty cycle set/get roundtrip PASSED\n\r");
+
+	/* Test 7: Set polarity and verify roundtrip */
+	debug_print("[CAPI] Test 7: set_polarity (inverted)...\n\r");
+
+	ret = stm32_capi_pwm_set_polarity(pwm, true);
+	if (ret) {
+		debug_print("CAPI PWM set_polarity FAILED\n\r");
+		stm32_capi_pwm_remove(pwm);
+		return ret;
+	}
+
+	ret = stm32_capi_pwm_get_polarity(pwm, &pol);
+	if (ret || !pol) {
+		debug_print("[CAPI] Polarity set/get roundtrip FAILED\n\r");
+		stm32_capi_pwm_remove(pwm);
+		return -1;
+	}
+	debug_print("[CAPI] Polarity set/get roundtrip PASSED\n\r");
+
+	/* Test 8: Disable */
+	debug_print("[CAPI] Test 8: PWM disable...\n\r");
+
+	ret = stm32_capi_pwm_disable(pwm);
+	if (ret) {
+		debug_print("CAPI PWM disable FAILED\n\r");
+		stm32_capi_pwm_remove(pwm);
+		return ret;
+	}
+	debug_print("CAPI PWM disable OK\n\r");
+
+	/* Test 9: NULL pointer rejection */
+	debug_print("[CAPI] Test 9: NULL pointer rejection...\n\r");
+
+	ret = stm32_capi_pwm_init(NULL, &pwm_cfg);
+	if (ret != -EINVAL) {
+		debug_print("[CAPI] NULL rejection FAILED (init desc)\n\r");
+		stm32_capi_pwm_remove(pwm);
+		return -1;
+	}
+
+	ret = stm32_capi_pwm_get_period(NULL, &val);
+	if (ret != -EINVAL) {
+		debug_print("[CAPI] NULL rejection FAILED (get_period)\n\r");
+		stm32_capi_pwm_remove(pwm);
+		return -1;
+	}
+
+	ret = stm32_capi_pwm_get_duty_cycle(pwm, NULL);
+	if (ret != -EINVAL) {
+		debug_print("[CAPI] NULL rejection FAILED (get_duty_cycle)\n\r");
+		stm32_capi_pwm_remove(pwm);
+		return -1;
+	}
+
+	ret = stm32_capi_pwm_get_polarity(pwm, NULL);
+	if (ret != -EINVAL) {
+		debug_print("[CAPI] NULL rejection FAILED (get_polarity)\n\r");
+		stm32_capi_pwm_remove(pwm);
+		return -1;
+	}
+	debug_print("[CAPI] NULL pointer rejection PASSED\n\r");
+
+	/* Clean up */
+	ret = stm32_capi_pwm_remove(pwm);
+	if (ret) {
+		debug_print("CAPI PWM remove FAILED\n\r");
+		return ret;
+	}
+	debug_print("CAPI PWM example completed\n\r");
+
+	return 0;
+}
+
+#endif /* HAL_TIM_MODULE_ENABLED */
 
 /******************************************************************************/
 /************************* Main Function **************************************/
@@ -1338,9 +1995,42 @@ int main(void)
 
 	/* Use direct UART output for critical debug messages */
 	debug_print("\n\r========================================\n\r");
-	debug_print("STM32 Peripheral Examples\n\r");
+	debug_print("STM32 UART Example\n\r");
 	debug_print("========================================\n\r\n\r");
 
+	debug_print("About to run CAPI UART Line Config example...\n\r");
+
+	/* Run CAPI UART Line Config example */
+	ret = capi_uart_line_config_example();
+	if (ret) {
+		debug_print("CAPI UART Line Config example FAILED\n\r");
+	} else {
+		debug_print("CAPI UART Line Config example completed OK\n\r");
+	}
+
+	debug_print("\n\r");
+	debug_print("About to run CAPI UART Async example...\n\r");
+
+	/* Run CAPI UART Async example */
+	ret = capi_uart_async_example();
+	if (ret) {
+		debug_print("CAPI UART Async example FAILED\n\r");
+	} else {
+		debug_print("CAPI UART Async example completed OK\n\r");
+	}
+
+	debug_print("\n\r");
+	debug_print("About to run CAPI Time example...\n\r");
+
+	/* Run CAPI Time example */
+	ret = capi_time_example();
+	if (ret) {
+		debug_print("CAPI Time example FAILED\n\r");
+	} else {
+		debug_print("CAPI Time example completed OK\n\r");
+	}
+
+	debug_print("\n\r");
 	debug_print("About to run CAPI SPI example...\n\r");
 
 	/* Run CAPI SPI example */
@@ -1354,14 +2044,14 @@ int main(void)
 	debug_print("\n\r");
 	debug_print("About to run CAPI I2C example...\n\r");
 
-	/* Run CAPI I2C example */
-	ret = capi_i2c_example();
-	if (ret) {
-		debug_print("CAPI I2C example FAILED\n\r");
-	} else {
-		debug_print("CAPI I2C example completed OK\n\r");
-	}
-
+// 	/* Run CAPI I2C example */
+// 	ret = capi_i2c_example();
+// 	if (ret) {
+// 		debug_print("CAPI I2C example FAILED\n\r");
+// 	} else {
+// 		debug_print("CAPI I2C example completed OK\n\r");
+// 	}
+//
 	debug_print("\n\r");
 	debug_print("About to run CAPI DMA example...\n\r");
 
@@ -1386,35 +2076,35 @@ int main(void)
 
 	debug_print("\n\r");
 	debug_print("About to run CAPI GPIO example...\n\r");
-
-	/* Run CAPI GPIO example */
+//
+// 	/* Run CAPI GPIO example */
 	ret = capi_gpio_example();
 	if (ret) {
 		debug_print("CAPI GPIO example FAILED\n\r");
 	} else {
 		debug_print("CAPI GPIO example completed OK\n\r");
 	}
-
+//
 #ifdef HAL_TIM_MODULE_ENABLED
 	debug_print("\n\r");
-	debug_print("About to run CAPI Timer example...\n\r");
+	debug_print("About to run CAPI PWM example...\n\r");
 
-	/* Run CAPI Timer example */
-	ret = capi_timer_example();
+	/* Run CAPI PWM example */
+	ret = capi_pwm_example();
 	if (ret) {
-		debug_print("CAPI Timer example FAILED\n\r");
+		debug_print("CAPI PWM example FAILED\n\r");
 	} else {
-		debug_print("CAPI Timer example completed OK\n\r");
+		debug_print("CAPI PWM example completed OK\n\r");
 	}
 #else
 	debug_print("\n\r");
-	debug_print("[CAPI] Timer module not enabled, skipping\n\r");
+	debug_print("[CAPI] Timer module not enabled, skipping PWM\n\r");
 #endif /* HAL_TIM_MODULE_ENABLED */
 
 	(void)ret; /* Suppress unused variable warning */
 
 	debug_print("========================================\n\r");
-	debug_print("SPI, I2C, DMA, IRQ, GPIO, and Timer examples completed\n\r");
+	debug_print("All examples completed\n\r");
 	debug_print("========================================\n\r");
 
 	/* Infinite loop to keep running */

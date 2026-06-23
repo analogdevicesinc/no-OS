@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2026 Analog Devices, Inc.
+ * Copyright (c) 2024-2025 Analog Devices, Inc.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -134,7 +134,7 @@ struct capi_spi_flow_ctl_params {
 				      * transferred at once.
 				      * See flow control mode descriptions for further information. */
 	enum capi_spi_rdy_pol
-		rdy_pol;   /**< Polarity of the Readt Pin, used when ready pin based flow ctrl */
+	rdy_pol;   /**< Polarity of the Readt Pin, used when ready pin based flow ctrl */
 	uint16_t wait_tmr; /**< number of clock cycles to wait, used when timer based flow ctrl.
 			    * See flow control mode descriptions for further information */
 };
@@ -179,7 +179,8 @@ enum capi_spi_cs_control {
  * @brief  SPI transfer
  */
 struct capi_spi_transfer {
-	const uint8_t *tx_buf; /**< transmit buffer, if NULL zeroes will be transmitted */
+	const uint8_t
+	*tx_buf; /**< transmit buffer, if NULL zeroes will be transmitted */
 	uint8_t *rx_buf;       /**< receive buffer, if NULL rx bytes will be discarded */
 	uint16_t tx_size;      /**< tx size */
 	uint16_t rx_size;      /**< rx size, rx size can be different from tx
@@ -212,7 +213,8 @@ enum capi_async_event {
  * @param[in] arg Pointer to user specific data.
  * @param[in] event_extra optional, platform/driver specific extra information for event
  */
-typedef void (*capi_spi_callback_t)(enum capi_async_event event, void *arg, int event_extra);
+typedef void (*capi_spi_callback_t)(enum capi_async_event event, void *arg,
+				    int event_extra);
 
 /**
  * @brief Initialize an instance of the SPI controller.
@@ -226,7 +228,8 @@ typedef void (*capi_spi_callback_t)(enum capi_async_event event, void *arg, int 
  *
  * @return int 0 for success or error code.
  */
-int capi_spi_init(struct capi_spi_controller_handle **handle, const struct capi_spi_config *config);
+int capi_spi_init(struct capi_spi_controller_handle **handle,
+		  const struct capi_spi_config *config);
 
 /**
  * @brief Deinitialize the SPI controller, disable, and bring to default settings.
@@ -245,7 +248,8 @@ int capi_spi_deinit(struct capi_spi_controller_handle *handle);
  *
  * @return int 0 for success or error code.
  */
-int capi_spi_transceive(struct capi_spi_device *device, struct capi_spi_transfer *transfer);
+int capi_spi_transceive(struct capi_spi_device *device,
+			struct capi_spi_transfer *transfer);
 
 /**
  * @brief Async/Non-Blocking transceive function.
@@ -255,7 +259,8 @@ int capi_spi_transceive(struct capi_spi_device *device, struct capi_spi_transfer
  *
  * @return int 0 for success or error code.
  */
-int capi_spi_transceive_async(struct capi_spi_device *device, struct capi_spi_transfer *transfer);
+int capi_spi_transceive_async(struct capi_spi_device *device,
+			      struct capi_spi_transfer *transfer);
 
 /**
  * @brief Sync/Blocking read command style transceive function.
@@ -277,7 +282,8 @@ int capi_spi_transceive_async(struct capi_spi_device *device, struct capi_spi_tr
  *
  * @return int 0 for success or error code.
  */
-int capi_spi_read_command(struct capi_spi_device *device, struct capi_spi_transfer *transfer);
+int capi_spi_read_command(struct capi_spi_device *device,
+			  struct capi_spi_transfer *transfer);
 
 /**
  * @brief Async/Non-Blocking read command style transceive function.
@@ -288,7 +294,8 @@ int capi_spi_read_command(struct capi_spi_device *device, struct capi_spi_transf
  *
  * @return int 0 for success or error code.
  */
-int capi_spi_read_command_async(struct capi_spi_device *device, struct capi_spi_transfer *transfer);
+int capi_spi_read_command_async(struct capi_spi_device *device,
+				struct capi_spi_transfer *transfer);
 
 /**
  * @brief Abort recent async transfer operation
@@ -319,7 +326,8 @@ int capi_spi_register_callback(struct capi_spi_controller_handle *handle,
  *
  * @return int 0 for success or error code.
  */
-int capi_spi_set_cs(struct capi_spi_device *device, enum capi_spi_cs_control cs_control);
+int capi_spi_set_cs(struct capi_spi_device *device,
+		    enum capi_spi_cs_control cs_control);
 
 /**
  * @brief SPI Driver Interrupt handler. If interrupt vectors are managed and implemented by user,
@@ -340,12 +348,15 @@ struct capi_spi_ops {
 	/** See capi_spi_deinit() */
 	int (*deinit)(struct capi_spi_controller_handle *handle);
 	/** See capi_spi_transceive() */
-	int (*transceive)(struct capi_spi_device *device, struct capi_spi_transfer *transfer);
+	int (*transceive)(struct capi_spi_device *device,
+			  struct capi_spi_transfer *transfer);
 	/** See capi_spi_transceive_async() */
-	int (*transceive_async)(struct capi_spi_device *device, struct capi_spi_transfer *transfer,
+	int (*transceive_async)(struct capi_spi_device *device,
+				struct capi_spi_transfer *transfer,
 				int timeout);
 	/** See capi_spi_read_command() */
-	int (*read_command)(struct capi_spi_device *device, struct capi_spi_transfer *transfer);
+	int (*read_command)(struct capi_spi_device *device,
+			    struct capi_spi_transfer *transfer);
 	/** See capi_spi_read_command_async() */
 	int (*read_command_async)(struct capi_spi_device *device,
 				  struct capi_spi_transfer *transfer);

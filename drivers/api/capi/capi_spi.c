@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2026 Analog Devices, Inc.
+ * Copyright (c) 2024-2025 Analog Devices, Inc.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -19,7 +19,8 @@
 #include <errno.h>
 #include <capi_spi.h>
 
-int capi_spi_init(struct capi_spi_controller_handle **handle, const struct capi_spi_config *config)
+int capi_spi_init(struct capi_spi_controller_handle **handle,
+		  const struct capi_spi_config *config)
 {
 	if (!handle || !config || !config->ops || !config->ops->init) {
 		return -EINVAL;
@@ -35,7 +36,8 @@ int capi_spi_deinit(struct capi_spi_controller_handle *handle)
 	return handle->ops->deinit(handle);
 }
 
-int capi_spi_transceive(struct capi_spi_device *device, struct capi_spi_transfer *transfer)
+int capi_spi_transceive(struct capi_spi_device *device,
+			struct capi_spi_transfer *transfer)
 {
 	if (!device || !device->controller || !device->controller->ops ||
 	    !device->controller->ops->transceive) {
@@ -44,7 +46,8 @@ int capi_spi_transceive(struct capi_spi_device *device, struct capi_spi_transfer
 	return device->controller->ops->transceive(device, transfer);
 }
 
-int capi_spi_transceive_async(struct capi_spi_device *device, struct capi_spi_transfer *transfer)
+int capi_spi_transceive_async(struct capi_spi_device *device,
+			      struct capi_spi_transfer *transfer)
 {
 	if (!device || !device->controller || !device->controller->ops ||
 	    !device->controller->ops->transceive_async) {
@@ -53,7 +56,8 @@ int capi_spi_transceive_async(struct capi_spi_device *device, struct capi_spi_tr
 	return device->controller->ops->transceive_async(device, transfer, 0);
 }
 
-int capi_spi_read_command(struct capi_spi_device *device, struct capi_spi_transfer *transfer)
+int capi_spi_read_command(struct capi_spi_device *device,
+			  struct capi_spi_transfer *transfer)
 {
 	if (!device || !device->controller || !device->controller->ops ||
 	    !device->controller->ops->read_command) {
@@ -62,7 +66,8 @@ int capi_spi_read_command(struct capi_spi_device *device, struct capi_spi_transf
 	return device->controller->ops->read_command(device, transfer);
 }
 
-int capi_spi_read_command_async(struct capi_spi_device *device, struct capi_spi_transfer *transfer)
+int capi_spi_read_command_async(struct capi_spi_device *device,
+				struct capi_spi_transfer *transfer)
 {
 	if (!device || !device->controller || !device->controller->ops ||
 	    !device->controller->ops->read_command_async) {
@@ -89,7 +94,8 @@ int capi_spi_register_callback(struct capi_spi_controller_handle *handle,
 	return handle->ops->register_callback(handle, callback, callback_arg);
 }
 
-int capi_spi_set_cs(struct capi_spi_device *device, enum capi_spi_cs_control cs_control)
+int capi_spi_set_cs(struct capi_spi_device *device,
+		    enum capi_spi_cs_control cs_control)
 {
 	if (!device || !device->controller || !device->controller->ops ||
 	    !device->controller->ops->set_cs) {
