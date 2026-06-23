@@ -170,6 +170,22 @@ function(resolve_library_source LIB_NAME REQUESTED_VERSION SUBMODULE_PATH GIT_RE
     if(FETCH_TO_CACHE)
         message(STATUS "[${LIB_NAME}] → Fetching ${REQUESTED_VERSION} to cache: ${CACHED_LIB_DIR}")
 
+        # FetchContent picks clone-vs-update from the subbuild stamps, so a
+        # missing/corrupt cache checkout with stale stamps makes it "update" a
+        # non-repo and fail. Scrub the cache dir and the stamps (under the
+        # top-level _deps, not CMAKE_CURRENT_BINARY_DIR) so a clean clone runs.
+        string(TOLOWER "${LIB_NAME}" LIB_NAME_LOWER)
+        if(DEFINED FETCHCONTENT_BASE_DIR AND NOT "${FETCHCONTENT_BASE_DIR}" STREQUAL "")
+            set(_fc_base "${FETCHCONTENT_BASE_DIR}")
+        else()
+            set(_fc_base "${CMAKE_BINARY_DIR}/_deps")
+        endif()
+        if(NOT EXISTS "${CACHED_LIB_DIR}/.git")
+            message(STATUS "[${LIB_NAME}] Cache checkout missing or not a git repo; scrubbing stale subbuild stamps for a clean clone")
+            file(REMOVE_RECURSE "${CACHED_LIB_DIR}")
+            file(REMOVE_RECURSE "${_fc_base}/${LIB_NAME_LOWER}-subbuild")
+        endif()
+
         # Create cache directory structure
         file(MAKE_DIRECTORY "${CACHE_DIR}/${LIB_NAME}")
 
