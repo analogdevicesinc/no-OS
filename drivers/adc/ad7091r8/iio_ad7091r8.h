@@ -38,10 +38,10 @@
 #define ad7091r8_iio_device(chans) {					\
 	.num_ch = NO_OS_ARRAY_SIZE(chans),				\
 	.channels = chans,						\
-	.pre_enable = (int32_t (*)())ad7091r8_buffer_preenable,		\
-	.trigger_handler = (int32_t (*)())ad7091r8_trigger_handler,	\
-	.debug_reg_read = (int32_t (*)())ad7091r8_iio_read_reg,		\
-	.debug_reg_write = (int32_t (*)())ad7091r8_iio_write_reg	\
+	.pre_enable = ad7091r8_buffer_preenable,			\
+	.trigger_handler = ad7091r8_trigger_handler,			\
+	.debug_reg_read = ad7091r8_iio_read_reg,			\
+	.debug_reg_write = ad7091r8_iio_write_reg			\
 }
 
 extern struct iio_trigger ad7091r8_iio_timer_trig_desc;
