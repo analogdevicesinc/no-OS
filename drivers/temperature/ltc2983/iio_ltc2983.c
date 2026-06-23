@@ -66,10 +66,10 @@ static int ltc2983_iio_read_raw(void *dev, char *buf, uint32_t len,
 static int ltc2983_iio_read_scale(void *dev, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel,
 				  intptr_t priv);
-static int ltc2983_iio_reg_read(struct ltc2983_iio_desc *dev, uint32_t reg,
-				uint32_t *readval);
-static int ltc2983_iio_reg_write(struct ltc2983_iio_desc *dev, uint32_t reg,
-				 uint32_t writeval);
+static int32_t ltc2983_iio_reg_read(void *dev, uint32_t reg,
+				    uint32_t *readval);
+static int32_t ltc2983_iio_reg_write(void *dev, uint32_t reg,
+				     uint32_t writeval);
 
 static struct iio_attribute ltc2983_iio_attrs[] = {
 	{
@@ -104,8 +104,8 @@ static struct iio_attribute ltc2983_res_iio_attrs[] = {
 };
 
 static struct iio_device ltc2983_iio_dev = {
-	.debug_reg_read = (int32_t (*)())ltc2983_iio_reg_read,
-	.debug_reg_write = (int32_t (*)())ltc2983_iio_reg_write,
+	.debug_reg_read = ltc2983_iio_reg_read,
+	.debug_reg_write = ltc2983_iio_reg_write,
 };
 
 /******************************************************************************/
@@ -312,10 +312,12 @@ static int ltc2983_iio_read_scale(void *dev, char *buf, uint32_t len,
  * @param readval - Register value
  * @return 0 in case of success, errno errors otherwise
  */
-static int ltc2983_iio_reg_read(struct ltc2983_iio_desc *dev, uint32_t reg,
-				uint32_t *readval)
+static int32_t ltc2983_iio_reg_read(void *dev, uint32_t reg,
+				    uint32_t *readval)
 {
-	return ltc2983_reg_read(dev->ltc2983_dev, (uint16_t)reg,
+	struct ltc2983_iio_desc *iio_desc = dev;
+
+	return ltc2983_reg_read(iio_desc->ltc2983_dev, (uint16_t)reg,
 				(uint8_t*)readval);
 }
 
@@ -326,9 +328,11 @@ static int ltc2983_iio_reg_read(struct ltc2983_iio_desc *dev, uint32_t reg,
  * @param writeval - Register value
  * @return 0 in case of success, errno errors otherwise
  */
-static int ltc2983_iio_reg_write(struct ltc2983_iio_desc *dev, uint32_t reg,
-				 uint32_t writeval)
+static int32_t ltc2983_iio_reg_write(void *dev, uint32_t reg,
+				     uint32_t writeval)
 {
-	return ltc2983_reg_write(dev->ltc2983_dev, (uint16_t)reg,
+	struct ltc2983_iio_desc *iio_desc = dev;
+
+	return ltc2983_reg_write(iio_desc->ltc2983_dev, (uint16_t)reg,
 				 (uint8_t)writeval);
 }
