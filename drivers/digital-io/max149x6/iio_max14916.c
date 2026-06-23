@@ -64,11 +64,11 @@ static int max14916_iio_read_scale(void *dev, char *buf, uint32_t len,
 				   const struct iio_ch_info *channel,
 				   intptr_t priv);
 
-static int max14916_iio_reg_read(struct max14916_iio_desc *, uint32_t,
-				 uint32_t *);
+static int32_t max14916_iio_reg_read(void *dev, uint32_t reg,
+				     uint32_t *readval);
 
-static int max14916_iio_reg_write(struct max14916_iio_desc *, uint32_t,
-				  uint32_t);
+static int32_t max14916_iio_reg_write(void *dev, uint32_t reg,
+				      uint32_t writeval);
 
 static struct iio_attribute max14916_attrs[] = {
 	{
@@ -88,8 +88,8 @@ static struct iio_attribute max14916_attrs[] = {
 };
 
 static struct iio_device max14916_iio_dev = {
-	.debug_reg_read = (int32_t (*)())max14916_iio_reg_read,
-	.debug_reg_write = (int32_t (*)())max14916_iio_reg_write,
+	.debug_reg_read = max14916_iio_reg_read,
+	.debug_reg_write = max14916_iio_reg_write,
 };
 
 /**
@@ -211,10 +211,12 @@ int max14916_iio_setup_channels(struct max14916_iio_desc *desc, bool *ch_enable)
  * @param readval - Register value
  * @return 0 in case of success, error code otherwise
  */
-static int max14916_iio_reg_read(struct max14916_iio_desc *dev, uint32_t reg,
-				 uint32_t *readval)
+static int32_t max14916_iio_reg_read(void *dev, uint32_t reg,
+				     uint32_t *readval)
 {
-	return max149x6_reg_read(dev->max14916_desc, reg, readval);
+	struct max14916_iio_desc *desc = dev;
+
+	return max149x6_reg_read(desc->max14916_desc, reg, readval);
 }
 
 /**
@@ -224,10 +226,12 @@ static int max14916_iio_reg_read(struct max14916_iio_desc *dev, uint32_t reg,
  * @param readval - Register value
  * @return 0 in case of success, error code otherwise
  */
-static int max14916_iio_reg_write(struct max14916_iio_desc *dev, uint32_t reg,
-				  uint32_t writeval)
+static int32_t max14916_iio_reg_write(void *dev, uint32_t reg,
+				      uint32_t writeval)
 {
-	return max149x6_reg_write(dev->max14916_desc, reg, writeval);
+	struct max14916_iio_desc *desc = dev;
+
+	return max149x6_reg_write(desc->max14916_desc, reg, writeval);
 }
 
 /**
