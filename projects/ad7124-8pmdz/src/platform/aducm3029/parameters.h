@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   ad7124-8pmdz/src/parameters.h
- *   @brief  Parameters Definitions.
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @file   parameters.h
+ *   @brief  Definitions specific to aducm3029 platform used by ad7124-8pmdz
+ *           project.
+ *   @author Drimbarean Andrei (andrei.drimbarean@analog.com)
 ********************************************************************************
- * Copyright 2013(c) Analog Devices, Inc.
+ * Copyright 2020(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -19,7 +20,7 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -33,61 +34,25 @@
 #ifndef __PARAMETERS_H__
 #define __PARAMETERS_H__
 
-#ifdef XILINX_PLATFORM
-#include <xparameters.h>
-#endif
-
-#ifdef ADUCM_PLATFORM
+#include "stdio.h"
+#include "platform_init.h"
+#include "aducm3029_spi.h"
+#include "aducm3029_uart.h"
 #include "aducm3029_irq.h"
-#endif
+#include "aducm3029_uart_stdio.h"
 
-#ifdef XILINX_PLATFORM
-
-#ifdef _XPARAMETERS_PS_H_
-#define ADC_DDR_BASEADDR	(XPAR_DDR_MEM_BASEADDR + 0x800000)
-#define DAC_DDR_BASEADDR	(XPAR_DDR_MEM_BASEADDR + 0xA000000)
-#define UART_DEVICE_ID		XPAR_XUARTPS_0_DEVICE_ID
-
-#ifdef XPS_BOARD_ZCU102
-#define UART_IRQ_ID		XPAR_XUARTPS_0_INTR
-#else
-#define UART_IRQ_ID		XPAR_XUARTPS_1_INTR
-#endif
-
-#else // _XPARAMETERS_PS_H_
-
-#ifdef XPAR_DDR3_SDRAM_S_AXI_BASEADDR
-#define ADC_DDR_BASEADDR	(XPAR_DDR3_SDRAM_S_AXI_BASEADDR + 0x800000)
-#define DAC_DDR_BASEADDR	(XPAR_DDR3_SDRAM_S_AXI_BASEADDR + 0xA000000)
-#else
-#define ADC_DDR_BASEADDR	(XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000)
-#define DAC_DDR_BASEADDR	(XPAR_AXI_DDR_CNTRL_BASEADDR + 0xA000000)
-#endif
-
-#define UART_DEVICE_ID	XPAR_AXI_UART_DEVICE_ID
-#define UART_IRQ_ID		XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR
-#endif // _XPARAMETERS_PS_H_
-
-#define UART_OPS        &xil_uart_ops
-
-/* 400 * 8 * 2 = 6400‬ Default number of samples requested on a capture */
-#define MAX_SIZE_BASE_ADDR	10000
-#define UART_BAUDRATE	115200
-
-#endif // XILINX_PLATFORM
-
-#ifdef ADUCM_PLATFORM
-
+#define UART_IRQ_ID	ADUCM_UART_INT_ID
 #define UART_DEVICE_ID	0
-#define UART_IRQ_ID		ADUCM_UART_INT_ID
 #define UART_BAUDRATE	115200
-#define UART_OPS        &aducm_uart_ops
+#define UART_EXTRA	NULL
+#define UART_OPS	&aducm_uart_ops
 
-#ifdef NO_OS_NETWORKING
-#define WIFI_SSID	"RouterSSID"
-#define WIFI_PWD	"******"
-#endif
+#define SPI_DEVICE_ID	1
+#define SPI_BAUDRATE	10000000
+#define SPI_CS		0
+#define SPI_OPS		&aducm_spi_ops
+#define SPI_EXTRA	&ad7124_spi_extra_ip
 
-#endif //ADUCM_PLATFORM
+extern struct aducm_spi_init_param ad7124_spi_extra_ip;
 
-#endif // __PARAMETERS_H__
+#endif /* __PARAMETERS_H__ */
