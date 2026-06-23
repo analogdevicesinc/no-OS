@@ -85,8 +85,8 @@ static int _get_prescaler(uint32_t div, mxc_tmr_pres_t *prescaler)
  * @param param - initialization parameter for the desc
  * @return 0 in case of success, negative errno error codes otherwise.
  */
-int max_timer_init(struct no_os_timer_desc **desc,
-		   const struct no_os_timer_init_param *param)
+int32_t max_timer_init(struct no_os_timer_desc **desc,
+		       const struct no_os_timer_init_param *param)
 {
 	int ret;
 	uint32_t clk_div;
@@ -146,7 +146,7 @@ free_descriptor:
  * @param desc - timer descriptor
  * @return 0 in case of success, -EINVAL otherwise.
  */
-int max_timer_remove(struct no_os_timer_desc *desc)
+int32_t max_timer_remove(struct no_os_timer_desc *desc)
 {
 	if (!desc)
 		return -EINVAL;
@@ -163,7 +163,7 @@ int max_timer_remove(struct no_os_timer_desc *desc)
  * @param desc - timer descriptor
  * @return 0 in case of success, -EINVAL otherwise.
  */
-int max_timer_start(struct no_os_timer_desc *desc)
+int32_t max_timer_start(struct no_os_timer_desc *desc)
 {
 	if (!desc)
 		return -EINVAL;
@@ -178,7 +178,7 @@ int max_timer_start(struct no_os_timer_desc *desc)
  * @param desc - timer descriptor
  * @return 0 in case of success, -EINVAL otherwise.
  */
-int max_timer_stop(struct no_os_timer_desc *desc)
+int32_t max_timer_stop(struct no_os_timer_desc *desc)
 {
 	if (!desc)
 		return -EINVAL;
@@ -194,7 +194,7 @@ int max_timer_stop(struct no_os_timer_desc *desc)
  * @param counter - the timer counter value
  * @return 0 in case of success, -EINVAL otherwise.
  */
-int max_timer_counter_get(struct no_os_timer_desc *desc, uint32_t *counter)
+int32_t max_timer_counter_get(struct no_os_timer_desc *desc, uint32_t *counter)
 {
 	if (!desc)
 		return -EINVAL;
@@ -210,7 +210,7 @@ int max_timer_counter_get(struct no_os_timer_desc *desc, uint32_t *counter)
  * @param new_val - timer counter value to be set
  * @return 0 in case of success, -EINVAL otherwise.
  */
-int max_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
+int32_t max_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
 {
 	if (!desc || new_val >= SOURCE_CLOCK_FREQ)
 		return -EINVAL;
@@ -226,7 +226,8 @@ int max_timer_counter_set(struct no_os_timer_desc *desc, uint32_t new_val)
  * @param freq_hz - the timer frequency value
  * @return 0 in case of success, -EINVAL otherwise.
  */
-int max_timer_count_clk_get(struct no_os_timer_desc *desc, uint32_t *freq_hz)
+int32_t max_timer_count_clk_get(struct no_os_timer_desc *desc,
+				uint32_t *freq_hz)
 {
 	if (!desc)
 		return -EINVAL;
@@ -242,7 +243,7 @@ int max_timer_count_clk_get(struct no_os_timer_desc *desc, uint32_t *freq_hz)
  * @param freq_hz - the timer frequency value to be set.
  * @return 0 in case of success, negative errno error codes otherwise.
  */
-int max_timer_count_clk_set(struct no_os_timer_desc *desc, uint32_t freq_hz)
+int32_t max_timer_count_clk_set(struct no_os_timer_desc *desc, uint32_t freq_hz)
 {
 	int ret;
 	uint32_t div;
@@ -285,7 +286,8 @@ int max_timer_count_clk_set(struct no_os_timer_desc *desc, uint32_t freq_hz)
  * @param elapsed_time - time in nanoseconds
  * @return -ENOSYS
  */
-int max_get_elapsed_nsec(struct no_os_timer_desc *desc, uint64_t *elapsed_time)
+int32_t max_get_elapsed_nsec(struct no_os_timer_desc *desc,
+			     uint64_t *elapsed_time)
 {
 	return -ENOSYS;
 }
@@ -294,13 +296,13 @@ int max_get_elapsed_nsec(struct no_os_timer_desc *desc, uint64_t *elapsed_time)
  * @brief maxim platform specific timer platform ops structure
  */
 const struct no_os_timer_platform_ops max_timer_ops = {
-	.init = (int32_t (*)())max_timer_init,
-	.start = (int32_t (*)())max_timer_start,
-	.stop = (int32_t (*)())max_timer_stop,
-	.counter_get = (int32_t (*)())max_timer_counter_get,
-	.counter_set = (int32_t (*)())max_timer_counter_set,
-	.count_clk_get = (int32_t (*)())max_timer_count_clk_get,
-	.count_clk_set = (int32_t (*)())max_timer_count_clk_set,
-	.get_elapsed_time_nsec = (int32_t (*)())max_get_elapsed_nsec,
-	.remove = (int32_t (*)())max_timer_remove
+	.init = max_timer_init,
+	.start = max_timer_start,
+	.stop = max_timer_stop,
+	.counter_get = max_timer_counter_get,
+	.counter_set = max_timer_counter_set,
+	.count_clk_get = max_timer_count_clk_get,
+	.count_clk_set = max_timer_count_clk_set,
+	.get_elapsed_time_nsec = max_get_elapsed_nsec,
+	.remove = max_timer_remove
 };
