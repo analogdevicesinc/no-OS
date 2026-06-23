@@ -490,8 +490,8 @@ def _init_ps_cortexr5(session, hw_path, hw_file, jtagtarget):
 
 def _init_ps_versal(session, jtagtarget):
     """Initialize PS for Versal (cortexa72) after PDI programming."""
-    session.targets('-s', '--nocase',
-                    filter=_build_filter('*A72*#0', jtagtarget))
+    filt = _build_filter('Cortex-A72*0', jtagtarget)
+    session.targets('-s', filter=filt)
     session.rst('-c', type='processor')
     time.sleep(2)
     session.configparams('force-mem-accesses', 1)
