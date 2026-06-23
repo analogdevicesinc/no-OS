@@ -89,14 +89,11 @@ If you are not familiar with ADI IIO-Oscilloscope Client, please take a
 look at:
 :dokuwiki:`IIO Oscilloscope </resources/tools-software/linux-software/iio_oscilloscope>`
 
-In order to build the IIO project, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad7124-8pmdz/Makefile>`__:
+In order to build the IIO example make sure you are using this command:
 
 .. code-block:: bash
 
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   IIOD = y
+	make EXAMPLE=iio_example
 
 No-OS Supported Platforms
 -------------------------
@@ -123,7 +120,30 @@ Build Command
 
 .. code-block:: bash
 
+   # to delete current build
+   make reset
    # to build the project
-   make
+   make EXAMPLE=iio_example PLATFORM=aducm3029
+   # to flash the code
+   make run
+
+Maxim
+~~~~~
+
+Used Hardware
+^^^^^^^^^^^^^
+
+* `EVAL-AD7124-8-PMDZ <https://www.analog.com/EVAL-AD7124-8>`_
+* AD-APARD32690-SL (MAX32690)
+
+Build Command
+^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+   # to delete current build
+   make reset
+   # to build the project
+   make EXAMPLE=iio_example PLATFORM=maxim TARGET=max32690
    # to flash the code
    make run
