@@ -43,10 +43,11 @@
 #include "hmc630x.h"
 #include <string.h>
 
-static int32_t _hmc630x_read_register2(struct hmc630x_iio_dev *iiodev,
+static int32_t _hmc630x_read_register2(void *dev,
 				       uint32_t reg,
 				       uint32_t *readval)
 {
+	struct hmc630x_iio_dev *iiodev = dev;
 	int ret;
 	uint8_t val;
 	ret = hmc630x_read_row(iiodev->dev, reg, &val);
@@ -57,10 +58,12 @@ static int32_t _hmc630x_read_register2(struct hmc630x_iio_dev *iiodev,
 	return 0;
 }
 
-static int32_t _hmc630x_write_register2(struct hmc630x_iio_dev *iiodev,
+static int32_t _hmc630x_write_register2(void *dev,
 					uint32_t reg,
 					uint32_t writeval)
 {
+	struct hmc630x_iio_dev *iiodev = dev;
+
 	return hmc630x_write_row(iiodev->dev, reg, (uint8_t)writeval);
 }
 
@@ -426,8 +429,8 @@ static struct iio_device hmc630x_iio_device_template = {
 	.attributes = NULL, // filled at run-time
 	.num_ch = NO_OS_ARRAY_SIZE(hmc630x_channels),
 	.channels = hmc630x_channels,
-	.debug_reg_read = (int32_t (*)())_hmc630x_read_register2,
-	.debug_reg_write = (int32_t (*)())_hmc630x_write_register2
+	.debug_reg_read = _hmc630x_read_register2,
+	.debug_reg_write = _hmc630x_write_register2
 };
 
 int32_t hmc630x_iio_init(struct hmc630x_iio_dev **iiodev,
