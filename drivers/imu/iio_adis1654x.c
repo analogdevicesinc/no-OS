@@ -615,10 +615,10 @@ static struct iio_device adis1654x_iio_dev = {
 	.channels 		= adis1654x_channels,
 	.debug_attributes 	= adis1654x_debug_attrs,
 	.attributes		= adis1654x_dev_attrs,
-	.pre_enable 		= (int32_t (*)())adis_iio_pre_enable,
-	.trigger_handler 	= (int32_t (*)())adis_iio_trigger_handler,
-	.debug_reg_read 	= (int32_t (*)())adis_iio_read_reg,
-	.debug_reg_write 	= (int32_t (*)())adis_iio_write_reg,
+	.pre_enable 		= adis_iio_pre_enable,
+	.trigger_handler 	= adis_iio_trigger_handler,
+	.debug_reg_read 	= adis_iio_read_reg,
+	.debug_reg_write 	= adis_iio_write_reg,
 };
 
 /**

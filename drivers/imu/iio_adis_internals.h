@@ -308,14 +308,14 @@ extern struct iio_attribute adis_iio_temp_attrs[];
 extern struct iio_trigger adis_iio_trig_desc;
 
 /*! API to be called before trigger is enabled. */
-int adis_iio_pre_enable(void* dev, uint32_t mask);
+int32_t adis_iio_pre_enable(void* dev, uint32_t mask);
 /*! API to be called before trigger is disabled. */
-int adis_iio_post_disable(void* dev, uint32_t mask);
+int32_t adis_iio_post_disable(void* dev);
 /*! Read adis iio samples for the active channels. */
 int adis_iio_read_samples(void* dev, int* buff, uint32_t samples);
 /*! Callback for adis iio data ready trigger. */
-int adis_iio_trigger_handler(struct iio_device_data *dev_data);
-int adis_iio_trigger_handler_with_fifo(struct iio_device_data *dev_data);
+int32_t adis_iio_trigger_handler(struct iio_device_data *dev_data);
+int32_t adis_iio_trigger_handler_with_fifo(struct iio_device_data *dev_data);
 
 /*! Callback for adis iio debug attributes reading. */
 int adis_iio_read_debug_attrs(void *dev, char *buf, uint32_t len,
@@ -325,11 +325,11 @@ int adis_iio_write_debug_attrs(void *dev, char *buf, uint32_t len,
 			       const struct iio_ch_info *channel, intptr_t priv);
 
 /*! Wrapper for reading adis register. */
-int adis_iio_read_reg(struct adis_iio_dev *device, uint32_t reg,
-		      uint32_t *readval);
+int32_t adis_iio_read_reg(void *dev, uint32_t reg,
+			  uint32_t *readval);
 /*! Wrapper for writing adis register. */
-int adis_iio_write_reg(struct adis_iio_dev *device, uint32_t reg,
-		       uint32_t writeval);
+int32_t adis_iio_write_reg(void *dev, uint32_t reg,
+			   uint32_t writeval);
 
 /*! Handles the read request for raw attribute. */
 int adis_iio_read_raw(void *dev, char *buf, uint32_t len,

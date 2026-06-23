@@ -46,27 +46,31 @@
 
 /**
  * @brief Wrapper for reading adis register.
- * @param device  - The iio device structure.
+ * @param dev	  - The iio device structure.
  * @param reg	  - Address of the register to be read from.
  * @param readval - Read data.
  * @return ret    - Result of the reading procedure.
  */
-int adis_iio_read_reg(struct adis_iio_dev *device, uint32_t reg,
-		      uint32_t *readval)
+int32_t adis_iio_read_reg(void *dev, uint32_t reg,
+			  uint32_t *readval)
 {
+	struct adis_iio_dev *device = dev;
+
 	return adis_read_reg(device->adis_dev, reg, readval, 2);
 }
 
 /**
  * @brief Wrapper for writing to adis register.
- * @param device   - The iio device structure.
+ * @param dev	    - The iio device structure.
  * @param reg	    - Address of the register to be written to.
  * @param writeval - Data to be written.
  * @return ret     - Result of the writing procedure.
  */
-int adis_iio_write_reg(struct adis_iio_dev *device, uint32_t reg,
-		       uint32_t writeval)
+int32_t adis_iio_write_reg(void *dev, uint32_t reg,
+			   uint32_t writeval)
 {
+	struct adis_iio_dev *device = dev;
+
 	return adis_write_reg(device->adis_dev, reg, writeval, 2);
 }
 
@@ -1394,7 +1398,7 @@ int adis_iio_write_debug_attrs(void *dev, char *buf, uint32_t len,
  * @param mask - The active channels mask.
  * @return 0 in case of success, error code otherwise.
  */
-int adis_iio_pre_enable(void* dev, uint32_t mask)
+int32_t adis_iio_pre_enable(void* dev, uint32_t mask)
 {
 	struct adis_iio_dev *iio_adis;
 	struct adis_dev *adis;
@@ -1451,10 +1455,9 @@ int adis_iio_pre_enable(void* dev, uint32_t mask)
 /**
  * @brief API to be called after trigger is disabled.
  * @param dev  - The iio device structure.
- * @param mask - The active channels mask.
  * @return 0 in case of success, error code otherwise.
  */
-int adis_iio_post_disable(void* dev, uint32_t mask)
+int32_t adis_iio_post_disable(void* dev)
 {
 	struct adis_iio_dev *iio_adis;
 	struct adis_dev *adis;
@@ -1704,7 +1707,7 @@ static int adis_iio_trigger_push_single_sample(struct adis_iio_dev *iio_adis,
  * @param dev_data  - The iio device data structure.
  * @return the size of the written data in case of success, error code otherwise.
  */
-int adis_iio_trigger_handler(struct iio_device_data *dev_data)
+int32_t adis_iio_trigger_handler(struct iio_device_data *dev_data)
 {
 	struct adis_iio_dev *iio_adis;
 
@@ -1726,7 +1729,7 @@ int adis_iio_trigger_handler(struct iio_device_data *dev_data)
  * @param dev_data  - The iio device data structure.
  * @return the size of the written data in case of success, error code otherwise.
  */
-int adis_iio_trigger_handler_with_fifo(struct iio_device_data *dev_data)
+int32_t adis_iio_trigger_handler_with_fifo(struct iio_device_data *dev_data)
 {
 	struct adis_iio_dev *iio_adis;
 	struct adis_dev *adis;
