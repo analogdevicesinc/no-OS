@@ -179,11 +179,11 @@ static int max22017_iio_read_available(void *dev, char *buf, uint32_t len,
 				       const struct iio_ch_info *channel,
 				       intptr_t priv);
 
-static int max22017_iio_reg_read(struct max22017_iio_desc *iio_desc,
-				 uint32_t reg, uint32_t *readval);
+static int32_t max22017_iio_reg_read(void *dev, uint32_t reg,
+				     uint32_t *readval);
 
-static int max22017_iio_reg_write(struct max22017_iio_desc *iio_desc,
-				  uint32_t reg, uint32_t writeval);
+static int32_t max22017_iio_reg_write(void *dev, uint32_t reg,
+				      uint32_t writeval);
 
 static struct iio_attribute max22017_attrs[] = {
 	{
@@ -392,8 +392,8 @@ static struct iio_channel max22017_iio_channels[] = {
 static struct iio_device max22017_iio_dev = {
 	.channels = max22017_iio_channels,
 	.num_ch = NO_OS_ARRAY_SIZE(max22017_iio_channels),
-	.debug_reg_read = (int32_t (*)())max22017_iio_reg_read,
-	.debug_reg_write = (int32_t (*)())max22017_iio_reg_write,
+	.debug_reg_read = max22017_iio_reg_read,
+	.debug_reg_write = max22017_iio_reg_write,
 	.debug_attributes = max22017_debug_attrs,
 };
 
@@ -730,15 +730,18 @@ static int max22017_iio_write_int_en(void *dev, char *buf, uint32_t len,
 				  (uint32_t)val);
 }
 
-static int max22017_iio_reg_read(struct max22017_iio_desc *iio_desc,
-				 uint32_t reg, uint32_t *readval)
+static int32_t max22017_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
 {
+	struct max22017_iio_desc *iio_desc = dev;
+
 	return max22017_reg_read(iio_desc->max22017_desc, reg, readval);
 }
 
-static int max22017_iio_reg_write(struct max22017_iio_desc *iio_desc,
-				  uint32_t reg, uint32_t writeval)
+static int32_t max22017_iio_reg_write(void *dev, uint32_t reg,
+				      uint32_t writeval)
 {
+	struct max22017_iio_desc *iio_desc = dev;
+
 	return max22017_reg_write(iio_desc->max22017_desc, reg, writeval);
 }
 
