@@ -94,9 +94,10 @@ enum lt8491_attr_priv {
 	LT8491_SERIAL_ID,
 };
 
-static int32_t lt8491_iio_reg_read(struct lt8491_iio_device *dev,
+static int32_t lt8491_iio_reg_read(void *ddev,
 				   uint32_t reg, uint32_t *readval)
 {
+	struct lt8491_iio_device *dev = ddev;
 	uint16_t temp;
 	int ret;
 
@@ -107,9 +108,11 @@ static int32_t lt8491_iio_reg_read(struct lt8491_iio_device *dev,
 	return ret;
 }
 
-static int32_t lt8491_iio_reg_write(struct lt8491_iio_device *dev,
+static int32_t lt8491_iio_reg_write(void *ddev,
 				    uint32_t reg, uint32_t writeval)
 {
+	struct lt8491_iio_device *dev = ddev;
+
 	return lt8491_reg_write(dev->dev, (uint8_t)reg, (uint16_t)writeval,
 				false);
 }
@@ -437,8 +440,8 @@ static struct iio_channel lt8491_channels[] = {
 static struct iio_device lt8491_iio_dev = {
 	.num_ch = NO_OS_ARRAY_SIZE(lt8491_channels),
 	.channels = lt8491_channels,
-	.debug_reg_read = (int32_t (*)()) lt8491_iio_reg_read,
-	.debug_reg_write = (int32_t (*)()) lt8491_iio_reg_write,
+	.debug_reg_read = lt8491_iio_reg_read,
+	.debug_reg_write = lt8491_iio_reg_write,
 	.debug_attributes = lt8491_debug_attrs,
 };
 
