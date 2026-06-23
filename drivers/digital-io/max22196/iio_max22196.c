@@ -112,11 +112,11 @@ static int max22196_iio_write_global_cfg(void *dev, char *buf, uint32_t len,
 		const struct iio_ch_info *channel,
 		intptr_t priv);
 
-static int max22196_iio_reg_read(struct max22196_iio_desc *dev, uint32_t reg,
-				 uint32_t *readval);
+static int32_t max22196_iio_reg_read(void *dev, uint32_t reg,
+				     uint32_t *readval);
 
-static int max22196_iio_reg_write(struct max22196_iio_desc *dev, uint32_t reg,
-				  uint32_t writeval);
+static int32_t max22196_iio_reg_write(void *dev, uint32_t reg,
+				      uint32_t writeval);
 
 static const uint32_t max22196_delay_avail[8] = {
 	50, 100, 400, 800, 1800, 3200, 12800, 20000
@@ -296,8 +296,8 @@ static struct iio_attribute max22196_debug_attrs[] = {
 	}
 
 static struct iio_device max22196_iio_dev = {
-	.debug_reg_read = (int32_t (*)())max22196_iio_reg_read,
-	.debug_reg_write = (int32_t (*)())max22196_iio_reg_write,
+	.debug_reg_read = max22196_iio_reg_read,
+	.debug_reg_write = max22196_iio_reg_write,
 	.debug_attributes = max22196_debug_attrs
 };
 
@@ -797,10 +797,12 @@ int max22196_iio_setup_channels(struct max22196_iio_desc *desc)
  * @param readval - Register value
  * @return 0 in case of success, error code otherwise
  */
-static int max22196_iio_reg_read(struct max22196_iio_desc *dev, uint32_t reg,
-				 uint32_t *readval)
+static int32_t max22196_iio_reg_read(void *dev, uint32_t reg,
+				     uint32_t *readval)
 {
-	return max22196_reg_read(dev->max22196_desc, reg, readval);
+	struct max22196_iio_desc *iio_desc = dev;
+
+	return max22196_reg_read(iio_desc->max22196_desc, reg, readval);
 }
 
 /**
@@ -810,10 +812,12 @@ static int max22196_iio_reg_read(struct max22196_iio_desc *dev, uint32_t reg,
  * @param readval - Register value
  * @return 0 in case of success, error code otherwise
  */
-static int max22196_iio_reg_write(struct max22196_iio_desc *dev, uint32_t reg,
-				  uint32_t writeval)
+static int32_t max22196_iio_reg_write(void *dev, uint32_t reg,
+				      uint32_t writeval)
 {
-	return max22196_reg_write(dev->max22196_desc, reg, writeval);
+	struct max22196_iio_desc *iio_desc = dev;
+
+	return max22196_reg_write(iio_desc->max22196_desc, reg, writeval);
 }
 
 /**
