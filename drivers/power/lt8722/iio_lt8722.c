@@ -240,8 +240,8 @@ enum lt8722_iio_pins {
 	LT8722_SWEN_PIN,
 };
 
-static int lt8722_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval);
-static int lt8722_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval);
+static int32_t lt8722_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval);
+static int32_t lt8722_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval);
 static int lt8722_iio_read_output_voltage(void *dev, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv);
 static int lt8722_iio_write_output_voltage(void *dev, char *buf, uint32_t len,
@@ -638,8 +638,8 @@ static struct iio_device lt8722_iio_dev = {
 	.channels = lt8722_channels,
 	.attributes = lt8722_global_attrs,
 	.debug_attributes = lt8722_debug_attrs,
-	.debug_reg_read = (int32_t (*)())lt8722_iio_reg_read,
-	.debug_reg_write = (int32_t (*)())lt8722_iio_reg_write,
+	.debug_reg_read = lt8722_iio_reg_read,
+	.debug_reg_write = lt8722_iio_reg_write,
 };
 
 /**
@@ -876,7 +876,7 @@ struct lt8722_iio_attr_avail lt8722_iio_get_amux_available(
  * @param readval - The data read from the register.
  * @return 0 in case of success, an error code otherwise.
  */
-static int lt8722_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
+static int32_t lt8722_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
 {
 	struct lt8722_iio_dev *iio_lt8722;
 	struct lt8722_dev *lt8722;
@@ -897,7 +897,7 @@ static int lt8722_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
  * @param writeval - The data to write to the register.
  * @return 0 in case of success, an error code otherwise.
  */
-static int lt8722_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
+static int32_t lt8722_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
 {
 	struct lt8722_iio_dev *iio_lt8722;
 	struct lt8722_dev *lt8722;
