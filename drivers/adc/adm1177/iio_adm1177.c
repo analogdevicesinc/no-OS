@@ -113,8 +113,9 @@ static int adm1177_iio_read_scale(void *device, char *buf, uint32_t len,
 	}
 }
 
-static int adm1177_iio_update_channels(void *device, uint32_t mask)
+static int32_t adm1177_iio_update_channels(void *dev, uint32_t mask)
 {
+	void *device = dev;
 	struct adm1177_iio_dev *iio_adm1177;
 
 	if (!device)
@@ -129,8 +130,11 @@ static int adm1177_iio_update_channels(void *device, uint32_t mask)
 	return 0;
 }
 
-static int adm1177_iio_read_samples(void *device, int *buff, uint32_t samples)
+static int32_t adm1177_iio_read_samples(void *dev, void *buff_raw,
+					uint32_t samples)
 {
+	void *device = dev;
+	int *buff = buff_raw;
 	uint16_t conv_voltage, conv_current;
 	uint32_t raw_voltage, raw_current;
 	uint32_t i = 0;
@@ -211,8 +215,8 @@ static struct iio_channel adm1177_channels[] = {
 static struct iio_device adm1177_iio_dev = {
 	.num_ch = NO_OS_ARRAY_SIZE(adm1177_channels),
 	.channels = adm1177_channels,
-	.read_dev = (int32_t (*)())adm1177_iio_read_samples,
-	.pre_enable = (int32_t (*)())adm1177_iio_update_channels,
+	.read_dev = adm1177_iio_read_samples,
+	.pre_enable = adm1177_iio_update_channels,
 };
 
 int adm1177_iio_init(struct adm1177_iio_dev **iio_dev,
