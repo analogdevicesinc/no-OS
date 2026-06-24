@@ -47,7 +47,7 @@
 #ifndef PLATFORM_VERSAL
 #define AD9528_SPI_SPEED_HZ			10000000u
 #endif
-#define ADRV903X_SPI_SPEED_HZ			1000000u
+#define ADRV903X_SPI_SPEED_HZ			10000000u
 
 /******************************************************************************/
 /* Clock and lane rate configuration                                          */

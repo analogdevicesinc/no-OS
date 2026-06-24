@@ -53,6 +53,8 @@
 #include "no_os_print_log.h"
 #include "no_os_util.h"
 
+#include "xilinx_spi.h"
+#include <xspips.h>
 #include <string.h>
 
 /******************************************************************************/
@@ -128,6 +130,12 @@ static int adrv903x_jesd204_setup_stage1(struct jesd204_dev *jdev,
 	if (reason != JESD204_STATE_OP_REASON_INIT)
 		return JESD204_STATE_CHANGE_DONE;
 
+	/* Slow down PS SPI for HMC7044 SYSREF access (shared bus) */
+	{
+		struct xil_spi_desc *xdesc = (struct xil_spi_desc *)phy->hal.spi->extra;
+		XSpiPs_SetClkPrescaler(xdesc->instance, XSPIPS_CLK_PRESCALE_256);
+	}
+
 	for (i = 0; i < 255; i++) {
 		ret = adi_adrv903x_MultichipSyncStatusGet(phy->palmaDevice,
 				&mcsStatus);
@@ -147,6 +155,12 @@ static int adrv903x_jesd204_setup_stage1(struct jesd204_dev *jdev,
 		pr_err("adrv903x: MCS did not complete after %d pulses (status=0x%x)\n",
 		       i, mcsStatus);
 		return JESD204_STATE_CHANGE_ERROR;
+	}
+
+	/* Restore PS SPI speed for ADRV903x (12.5 MHz) */
+	{
+		struct xil_spi_desc *xdesc = (struct xil_spi_desc *)phy->hal.spi->extra;
+		XSpiPs_SetClkPrescaler(xdesc->instance, XSPIPS_CLK_PRESCALE_16);
 	}
 
 	pr_info("adrv903x: MCS complete (status=0x%x, %d pulse(s))\n",
@@ -473,25 +487,33 @@ static int adrv903x_jesd204_link_enable(struct jesd204_dev *jdev,
 			return JESD204_STATE_CHANGE_ERROR;
 		}
 
-		/* Run SERDES initial calibration for deframer alignment */
-		serdesCal.calMask = ADI_ADRV903X_IC_SERDES;
-		serdesCal.rxChannelMask = 0xFF;
+		/* SERDES cal only required for lane rates >= 16 Gbps */
+		unsigned long lane_rate_khz = 0;
+		jesd204_link_get_rate_khz(lnk, &lane_rate_khz);
+		pr_info("adrv903x: deframer lane rate = %lu kHz\n", lane_rate_khz);
 
-		ret = adi_adrv903x_InitCalsRun(phy->palmaDevice, &serdesCal);
-		if (ret) {
-			pr_err("adrv903x: InitCalsRun SERDES failed (%d)\n",
-			       ret);
-			return JESD204_STATE_CHANGE_ERROR;
-		}
+		if (lane_rate_khz >= 16000000UL) {
+			serdesCal.calMask = ADI_ADRV903X_IC_SERDES;
+			serdesCal.rxChannelMask = 0xFF;
 
-		ret = adi_adrv903x_InitCalsWait_v2(phy->palmaDevice,
-						   60000, NULL);
-		if (ret) {
-			pr_err("adrv903x: InitCalsWait SERDES failed (%d)\n",
-			       ret);
-			pr_warning("adrv903x: continuing despite SERDES cal error\n");
+			ret = adi_adrv903x_InitCalsRun(phy->palmaDevice, &serdesCal);
+			if (ret) {
+				pr_err("adrv903x: InitCalsRun SERDES failed (%d)\n",
+				       ret);
+				return JESD204_STATE_CHANGE_ERROR;
+			}
+
+			ret = adi_adrv903x_InitCalsWait_v2(phy->palmaDevice,
+							   60000, NULL);
+			if (ret) {
+				pr_err("adrv903x: InitCalsWait SERDES failed (%d)\n",
+				       ret);
+				pr_warning("adrv903x: continuing despite SERDES cal error\n");
+			} else {
+				pr_info("adrv903x: SERDES calibration complete\n");
+			}
 		} else {
-			pr_info("adrv903x: SERDES calibration complete\n");
+			pr_info("adrv903x: SERDES cal skipped (lane rate < 16 Gbps)\n");
 		}
 
 		/* Disable SYSREF before enabling the deframer link */
@@ -916,7 +938,6 @@ int adrv903x_init(struct adrv903x_rf_phy **phy,
 		pr_err("adrv903x: PreMcsInit_NonBroadcast failed (%d)\n", ret);
 		goto error_hw_close;
 	}
-
 	pr_info("adrv903x: firmware loaded, ARM CPU running\n");
 
 	/*

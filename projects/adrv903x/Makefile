@@ -1,4 +1,4 @@
-EXAMPLE ?= dma_example
+EXAMPLE ?= iio_example
 
 # Uncomment to use the desired platform
 PLATFORM = xilinx

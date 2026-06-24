@@ -62,8 +62,17 @@
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
 #include "iio_app.h"
+#include "no_os_delay.h"
 #include <string.h>
 #include <xil_cache.h>
+
+static inline uint32_t time_delta_ms(struct no_os_time start,
+				     struct no_os_time end)
+{
+	int32_t ds  = (int32_t)(end.s  - start.s);
+	int32_t dus = (int32_t)(end.us - start.us);
+	return (uint32_t)(ds * 1000 + dus / 1000);
+}
 
 /*
  * 8T8R profile: 16 converters per direction (8 antennas × I + Q).
@@ -204,6 +213,7 @@ int example_main()
 	struct axi_dmac *rx_dmac = NULL;
 	struct axi_dmac *tx_dmac = NULL;
 	int ret;
+	struct no_os_time t_start, t_end, t_total;
 
 #ifdef PLATFORM_VERSAL
 	struct no_os_gpio_desc *hmc7044_reset_gpio = NULL;
@@ -229,6 +239,7 @@ int example_main()
 	Xil_DCacheEnable();
 	pr_info("hello\n");
 	pr_info("ADRV903X IIO example\n");
+	t_total = no_os_get_time();
 
 #ifdef PLATFORM_VERSAL
 	/*
@@ -240,6 +251,7 @@ int example_main()
 	 */
 
 	/* HMC7044 hardware reset pulse (active-high reset) */
+	t_start = no_os_get_time();
 	ret = no_os_gpio_get(&hmc7044_reset_gpio, &clkchip_gpio_init_param);
 	if (ret) {
 		pr_err("HMC7044 reset GPIO get failed: %d\n", ret);
@@ -323,13 +335,16 @@ int example_main()
 		return ret;
 	}
 
-	pr_info("HMC7044 init done, DEVCLK on channel 0\n");
+	t_end = no_os_get_time();
+	pr_info("HMC7044 init done (%lu ms)\n",
+		(unsigned long)time_delta_ms(t_start, t_end));
 
 	/*
 	 * Reset the Versal GT PLL + datapath so the GT re-locks its PLL
 	 * to the HMC7044 reference clock that just became available.
 	 * Without this, the first cold boot often fails (GT CDR not locked).
 	 */
+	t_start = no_os_get_time();
 	{
 		struct no_os_gpio_desc *gt_rst = NULL;
 		struct no_os_gpio_desc *gt_done = NULL;
@@ -364,7 +379,9 @@ int example_main()
 				no_os_gpio_remove(gt_done);
 			}
 		}
-		pr_info("GT PLL reset done\n");
+		t_end = no_os_get_time();
+		pr_info("GT PLL reset done (%lu ms)\n",
+			(unsigned long)time_delta_ms(t_start, t_end));
 	}
 
 #else /* ZynqMP */
@@ -600,6 +617,7 @@ int example_main()
 	rx_jesd_init.lane_clk = rx_adxcvr->clk_out;
 #endif
 
+	t_start = no_os_get_time();
 	ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
 	if (ret) {
 		pr_err("axi_jesd204_tx_init() failed: %d\n", ret);
@@ -615,6 +633,9 @@ int example_main()
 		pr_err("axi_jesd204_rx_init() failed: %d\n", ret);
 		goto error_tx_jesd;
 	}
+	t_end = no_os_get_time();
+	pr_info("JESD204 TX+RX init: %lu ms\n",
+		(unsigned long)time_delta_ms(t_start, t_end));
 
 	/*
 	 * ----------------------------------------------------------------
@@ -633,7 +654,11 @@ int example_main()
 	init_param.rx_gain_table_file = ADRV903X_RX_GAIN_TABLE_FILE;
 	init_param.rx_gain_table_mask = ADRV903X_RX_GAIN_TABLE_MASK;
 
+	t_start = no_os_get_time();
 	ret = adrv903x_init(&phy, &init_param);
+	t_end = no_os_get_time();
+	pr_info("adrv903x_init: %lu ms\n",
+		(unsigned long)time_delta_ms(t_start, t_end));
 	if (ret) {
 		pr_err("adrv903x_init() failed: %d\n", ret);
 		goto error_rx_jesd;
@@ -666,6 +691,7 @@ int example_main()
 		.rate = 0,	/* AXI DAC RATECNTRL: 0 = 1:1 clock-to-sample ratio */
 	};
 
+	t_start = no_os_get_time();
 	ret = axi_dac_init(&tx_dac, &tx_dac_init);
 	if (ret) {
 		pr_err("axi_dac_init() failed: %d\n", ret);
@@ -677,6 +703,9 @@ int example_main()
 		pr_err("axi_dac_set_datasel() failed: %d\n", ret);
 		goto error_tx_dac;
 	}
+	t_end = no_os_get_time();
+	pr_info("AXI DAC init: %lu ms\n",
+		(unsigned long)time_delta_ms(t_start, t_end));
 
 	/*
 	 * ----------------------------------------------------------------
@@ -685,6 +714,7 @@ int example_main()
 	 * Linux adrv903x_conv.c adrv903x_post_setup().
 	 * ----------------------------------------------------------------
 	 */
+	t_start = no_os_get_time();
 	struct axi_adc_init rx_adc_init = {
 		.name = "rx_adc",
 		.base = RX_CORE_BASEADDR,
@@ -732,7 +762,9 @@ int example_main()
 	no_os_mdelay(1);
 	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR,
 			   AXI_DO_REG_RESETN_OFFLOAD, 0x1);
-	pr_info("RX data offload: normal mode (store+forward)\n");
+	t_end = no_os_get_time();
+	pr_info("AXI ADC init + data offload: %lu ms\n",
+		(unsigned long)time_delta_ms(t_start, t_end));
 
 	/*
 	 * ----------------------------------------------------------------
@@ -803,7 +835,11 @@ int example_main()
 		goto error_rx_dmac;
 	}
 
+	t_start = no_os_get_time();
 	ret = jesd204_fsm_start(topology, JESD204_LINKS_ALL);
+	t_end = no_os_get_time();
+	pr_info("jesd204_fsm_start: %lu ms\n",
+		(unsigned long)time_delta_ms(t_start, t_end));
 	if (ret) {
 		pr_err("jesd204_fsm_start() failed: %d\n", ret);
 		goto error_fsm;
@@ -812,6 +848,7 @@ int example_main()
 	/* Fast TX deframer retry: if the ADRV903x deframer didn't sync,
 	 * pulse TX GT DP reset and re-enable the TX JESD link. */
 #ifdef PLATFORM_VERSAL
+	t_start = no_os_get_time();
 	if (tx_jesd->gt_reset_dp) {
 		adi_adrv903x_DeframerStatus_v2_t dfrmSt = { 0 };
 		int tx_retry;
@@ -851,8 +888,14 @@ int example_main()
 			pr_err("TX deframer failed after %d retries\n",
 			       tx_retry);
 	}
+	t_end = no_os_get_time();
+	pr_info("TX deframer retry: %lu ms\n",
+		(unsigned long)time_delta_ms(t_start, t_end));
 #endif
 
+	t_end = no_os_get_time();
+	pr_info("=== Total init: %lu ms ===\n",
+		(unsigned long)time_delta_ms(t_total, t_end));
 	pr_info("ADRV903X JESD204 link up\n");
 
 	axi_jesd204_tx_status_read(tx_jesd);
