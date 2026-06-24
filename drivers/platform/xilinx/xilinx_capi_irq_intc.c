@@ -241,20 +241,20 @@ int capi_irq_clear_pending(uint32_t irq)
  *
  * @return 0 on success, negative errno on failure.
  */
-int capi_irq_get_status(uint32_t irq, uint32_t *pending)
+int capi_irq_get_status(uint32_t irq, uint32_t *pactive)
 {
-	if (!g_initialized || !pending)
+	if (!g_initialized || !pactive)
 		return -EINVAL;
 	if (irq < XPAR_INTC_MAX_NUM_INTR_INPUTS) {
 		uint32_t isr = XIntc_GetIntrStatus(g_intc.BaseAddress);
-		*pending = (isr & (1u << irq)) ? 1u : 0u;
+		*pactive = (isr & (1u << irq)) ? 1u : 0u;
 		return 0;
 	}
 	if (irq >= XSCUGIC_MAX_NUM_INTR_INPUTS)
 		return -EINVAL;
 	uint32_t reg = XSCUGIC_PENDING_SET_OFFSET + (irq / 32U) * 4U;
 	uint32_t val = Xil_In32(g_scugic.Config->DistBaseAddress + reg);
-	*pending = (val & (1U << (irq % 32U))) ? 1U : 0U;
+	*pactive = (val & (1U << (irq % 32U))) ? 1U : 0U;
 	return 0;
 }
 
