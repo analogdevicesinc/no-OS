@@ -128,9 +128,30 @@ int basic_example_main(void)
 
 	pr_info("\n--- Peripheral tests complete ---\n\n");
 
+	/* LED blinky - reuse gpio_desc for LED */
+	struct no_os_gpio_init_param led_ip = {
+		.number = LED_GPIO_PIN,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &hello_world_gpio_extra_ip,
+	};
+
+	ret = no_os_gpio_get(&gpio_desc, &led_ip);
+	if (ret) {
+		pr_err("LED GPIO init FAILED: %d\n", ret);
+		gpio_desc = NULL;
+	} else {
+		no_os_gpio_direction_output(gpio_desc, 0);
+		pr_info("LED blinky on GPIO %d\n", LED_GPIO_PIN);
+	}
+
 	while (1) {
 		count++;
 		pr_info("Hello World #%"PRIu32"\n", count);
+
+		if (gpio_desc) {
+			no_os_gpio_set_value(gpio_desc, count & 1);
+		}
+
 		no_os_mdelay(1000);
 	}
 

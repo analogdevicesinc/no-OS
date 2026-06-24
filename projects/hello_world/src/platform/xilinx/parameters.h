@@ -83,6 +83,17 @@
 #define UART_EXTRA		&hello_world_uart_extra_ip
 #define UART_OPS		&xil_uart_ops
 
+/*
+ * LED GPIO pin for blinky demo.
+ * ZCU102: MIO 23 (heartbeat LED DS50)
+ * Other boards: override as needed
+ */
+#ifdef XPS_BOARD_ZCU102
+#define LED_GPIO_PIN		23
+#else
+#define LED_GPIO_PIN		0
+#endif
+
 extern struct xil_uart_init_param hello_world_uart_extra_ip;
 extern struct xil_spi_init_param hello_world_spi_extra_ip;
 extern struct xil_gpio_init_param hello_world_gpio_extra_ip;
