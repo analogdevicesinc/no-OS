@@ -1809,6 +1809,11 @@ int ad4170_init(struct ad4170_dev **device,
 		prod_id_h_expected = AD4190_PRODUCT_ID_H_VALUE;
 		break;
 
+	case ID_AD4195_8:
+		prod_id_l_expected = AD4195_8_PRODUCT_ID_L_VALUE;
+		prod_id_h_expected = AD4195_8_PRODUCT_ID_H_VALUE;
+		break;
+
 	default:
 		goto error;
 	}
