@@ -62,7 +62,6 @@ int basic_example_main(void)
 	struct no_os_gpio_desc *gpio_desc;
 	int ret;
 	uint32_t count = 0;
-	uint8_t gpio_val;
 
 	struct no_os_uart_init_param uart_ip = {
 		.device_id = UART_DEVICE_ID,
@@ -144,15 +143,23 @@ int basic_example_main(void)
 		pr_info("LED blinky on GPIO %d\n", LED_GPIO_PIN);
 	}
 
-	while (1) {
-		count++;
-		pr_info("Hello World #%"PRIu32"\n", count);
+	pr_info("Type any key to echo it back.\n");
 
-		if (gpio_desc) {
-			no_os_gpio_set_value(gpio_desc, count & 1);
+	while (1) {
+		uint8_t c;
+
+		/* Poll the UART for a keypress (non-blocking). */
+		if (no_os_uart_read_nonblocking(uart_desc, &c, 1) == 1)
+			pr_info("You pressed: '%c' (0x%02x)\n", c, c);
+
+		/* Blink the LED and print a heartbeat once per second. */
+		if (++count % 10 == 0) {
+			pr_info("Hello World #%"PRIu32"\n", count / 10);
+			if (gpio_desc)
+				no_os_gpio_set_value(gpio_desc, (count / 10) & 1);
 		}
 
-		no_os_mdelay(1000);
+		no_os_mdelay(100);
 	}
 
 	no_os_uart_remove(uart_desc);
