@@ -731,7 +731,6 @@ static int adf4382_frac2_compute(struct adf4382_dev *dev, uint64_t res,
 /**
  * @brief Computes the feedback divider values for the PLL.
  * @param dev 	     - The device structure.
- * @param freq 	     - The output frequency.
  * @param pfd_freq   - Phase/frequency detector frequency.
  * @param n_int      - Integer part of the feedback divider, which will be
  * 		       returned.
@@ -1439,6 +1438,10 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 			ldwin_pw = 1;
 	}
 
+	pr_info("VCO=%llu PFD=%llu RFout_div=%u N=%u FRAC1=%u FRAC2=%u MOD2=%u\n",
+		vco, pfd_freq, 1 << clkout_div, n_int,
+		frac1_word, frac2_word, mod2_word);
+
 	if (frac2_word) {
 		ret = adf4382_spi_update_bits(dev, 0x28, ADF4382_VAR_MOD_EN_MSK,
 					      0xff);
@@ -1592,6 +1595,11 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 		return ret;
 
 	locked = no_os_field_get(val, ADF4382_LOCKED_MSK);
+
+	pr_info("PLL %s, REF %s\n",
+		val & NO_OS_BIT(0) ? "Locked" : "Unlocked",
+		val & NO_OS_BIT(3) ? "OK" : "Error");
+
 	if (!locked)
 		return -EIO;
 

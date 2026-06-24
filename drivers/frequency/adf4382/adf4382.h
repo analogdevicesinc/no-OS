@@ -589,7 +589,6 @@ struct reg_sequence {
  * @brief ADF4382 register initialization
  */
 static const struct reg_sequence adf4382_reg_defaults[] = {
-	{ 0x000, 0x18 },
 	{ 0x00a, 0xA5 },
 	{ 0x200, 0x00 },
 	{ 0x201, 0x00 },

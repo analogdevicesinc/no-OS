@@ -83,7 +83,7 @@ struct no_os_gpio_init_param gpio_reset_ip = {
 
 struct adf4382_init_param adf4382_ip = {
 	.spi_init = &adf4382_spi_ip,
-	.spi_3wire_en = false,
+	.spi_3wire_en = true, //MB is using 3-wire SPI
 	.cmos_3v3 = false,
 	.ref_freq_hz = 125000000,
 	.freq = 20000000000,
