@@ -508,7 +508,48 @@ static int32_t xil_uart_read_nonblocking(struct no_os_uart_desc *desc,
 		uint8_t *data,
 		uint32_t bytes_number)
 {
-	return -EINVAL;
+	struct xil_uart_desc *xil_uart_desc = desc->extra;
+	uint32_t i = 0;
+#ifdef XUARTLITE_H
+	XUartLite *instance = xil_uart_desc->instance;
+#endif
+
+	switch (xil_uart_desc->type) {
+	case UART_PS:
+#ifdef XUARTPS_H
+		/*
+		 * The RX interrupt handler moves received bytes into a software
+		 * fifo. Drain whatever is available without blocking and return
+		 * the number of bytes read (0 when nothing has arrived yet).
+		 */
+		if (uart_fifo_insert(desc) < 0)
+			return -EIO;
+
+		while (i < bytes_number && xil_uart_desc->fifo) {
+			data[i++] = xil_uart_desc->fifo->data[xil_uart_desc->fifo_read_offset];
+			xil_uart_desc->fifo_read_offset++;
+
+			if (xil_uart_desc->fifo->len - xil_uart_desc->fifo_read_offset <= 0) {
+				xil_uart_desc->fifo_read_offset = 0;
+				xil_uart_desc->fifo = no_os_fifo_remove(xil_uart_desc->fifo);
+			}
+		}
+#endif // XUARTPS_H
+		break;
+	case UART_PL:
+#ifdef XUARTLITE_H
+		while (i < bytes_number &&
+		       (Xil_In32(instance->RegBaseAddress + XUL_STATUS_REG_OFFSET) &
+			XUL_SR_RX_FIFO_VALID_DATA)) {
+			data[i++] = Xil_In32(instance->RegBaseAddress + XUL_RX_FIFO_OFFSET);
+		}
+#endif // XUARTLITE_H
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	return i;
 }
 
 /**
