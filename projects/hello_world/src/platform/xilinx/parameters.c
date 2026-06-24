@@ -54,3 +54,33 @@ struct xil_uart_init_param hello_world_uart_extra_ip = {
 	.irq_id = UART_IRQ_ID,
 #endif
 };
+
+struct xil_spi_init_param hello_world_spi_extra_ip = {
+#ifdef XPAR_XSPI_NUM_INSTANCES
+	.type = SPI_PL,
+#ifdef SDT
+	.base_addr = XPAR_XSPI_0_BASEADDR,
+#endif
+#else
+	.type = SPI_PS,
+#ifdef SDT
+	.base_addr = XPAR_XSPIPS_0_BASEADDR,
+#endif
+#endif
+	.flags = 0
+};
+
+struct xil_gpio_init_param hello_world_gpio_extra_ip = {
+#ifdef XPAR_XGPIO_NUM_INSTANCES
+	.type = GPIO_PL,
+#ifdef SDT
+	.base_addr = XPAR_XGPIO_0_BASEADDR,
+#endif
+#else
+	.type = GPIO_PS,
+#ifdef SDT
+	.base_addr = XPAR_XGPIOPS_0_BASEADDR,
+#endif
+#endif
+	.device_id = GPIO_DEVICE_ID
+};

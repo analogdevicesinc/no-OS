@@ -1,31 +1,12 @@
 /***************************************************************************//**
  *   @file   basic_example.c
- *   @brief  Hello World example for no-OS.
+ *   @brief  Hello World example for no-OS with SPI and GPIO tests.
  *
- *           This project is a minimal starting point for learning how to build
- *           and run a bare-metal no-OS application.  It demonstrates:
- *
- *             1. Initialising a UART peripheral using the no-OS HAL
- *             2. Printing messages with the no-OS logging macros
- *             3. Using the no-OS delay API
- *             4. Proper error handling and resource cleanup
- *
- *           BUILD
- *           -----
- *           Place your board's .xsa file (exported from Vivado) in the project
- *           directory, then run:
- *
- *             make
- *
- *           The build system auto-detects the target architecture from the XSA
- *           and selects the right cross-compiler automatically.
- *
- *           EXPECTED OUTPUT (115200 8N1 on the USB-UART port)
- *           --------------------------------------------------
- *             *** no-OS Hello World ***
- *             Hello World #1
- *             Hello World #2
- *             ...
+ *           This project demonstrates:
+ *             1. Initialising UART, SPI, and GPIO peripherals using no-OS HAL
+ *             2. Testing SPI init (validates SDT base_addr)
+ *             3. Testing GPIO init and toggling (validates SDT base_addr)
+ *             4. Printing messages with no-OS logging macros
  *
  *   @author Analog Devices, Inc.
 ********************************************************************************
@@ -60,6 +41,8 @@
 #include <inttypes.h>
 #include "parameters.h"
 #include "no_os_uart.h"
+#include "no_os_spi.h"
+#include "no_os_gpio.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
@@ -68,88 +51,89 @@
 /***************************************************************************//**
  * @brief Hello World application entry point.
  *
- * Initialises the UART peripheral, prints a banner, then loops forever
- * printing a counter message once per second.
+ * Initialises UART, SPI, and GPIO peripherals to test SDT base_addr fixes.
  *
  * @return 0 on success, negative error code on failure.
 *******************************************************************************/
 int basic_example_main(void)
 {
-	/*
-	 * no-OS uses a descriptor pattern for peripheral handles.
-	 * no_os_uart_desc holds all state for an initialised UART instance.
-	 */
 	struct no_os_uart_desc *uart_desc;
+	struct no_os_spi_desc *spi_desc;
+	struct no_os_gpio_desc *gpio_desc;
 	int ret;
 	uint32_t count = 0;
+	uint8_t gpio_val;
 
-	/*
-	 * Initialisation parameters for the UART peripheral.
-	 *
-	 * All platform-specific values (device ID, baud rate, ops pointer, and
-	 * the extra platform init struct) are defined in parameters.h so that
-	 * this file stays platform-agnostic.
-	 *
-	 * no_os_uart_init_param is the generic descriptor; the platform driver
-	 * reads the 'extra' field for any hardware-specific settings.
-	 */
 	struct no_os_uart_init_param uart_ip = {
 		.device_id = UART_DEVICE_ID,
-		.baud_rate  = UART_BAUDRATE,
-		.size       = NO_OS_UART_CS_8,  /* 8 data bits */
-		.parity     = NO_OS_UART_PAR_NO, /* no parity   */
-		.stop       = NO_OS_UART_STOP_1_BIT,
+		.baud_rate = UART_BAUDRATE,
+		.size = NO_OS_UART_CS_8,
+		.parity = NO_OS_UART_PAR_NO,
+		.stop = NO_OS_UART_STOP_1_BIT,
 		.platform_ops = UART_OPS,
-		.extra      = UART_EXTRA,
+		.extra = UART_EXTRA,
 	};
 
-	/*
-	 * no_os_uart_init() configures the hardware and returns a descriptor.
-	 * Always check the return value: no-OS functions return 0 on success
-	 * and a negative errno-style code on failure (e.g. -EINVAL, -EIO).
-	 */
-	ret = no_os_uart_init(&uart_desc, &uart_ip);
-	if (ret) {
-		/*
-		 * If UART init fails we cannot print anything useful over
-		 * serial, so just return the error to the caller.
-		 */
-		return ret;
-	}
+	struct no_os_spi_init_param spi_ip = {
+		.device_id = SPI_DEVICE_ID,
+		.max_speed_hz = 1000000,
+		.chip_select = 0,
+		.mode = NO_OS_SPI_MODE_0,
+		.platform_ops = &xil_spi_ops,
+		.extra = &hello_world_spi_extra_ip,
+	};
 
-	/*
-	 * Redirect printf() to the initialised UART so that pr_info() and
-	 * friends produce visible output on the serial terminal.
-	 */
+	struct no_os_gpio_init_param gpio_ip = {
+		.number = 0,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &hello_world_gpio_extra_ip,
+	};
+
+	/* UART init */
+	ret = no_os_uart_init(&uart_desc, &uart_ip);
+	if (ret)
+		return ret;
+
 	no_os_uart_stdio(uart_desc);
 
-	/*
-	 * pr_info() is one of the no-OS logging macros defined in
-	 * no_os_print_log.h.  They map to printf() and are filtered by the
-	 * NO_OS_LOG_LEVEL compile-time setting.  Available levels (lowest to
-	 * highest priority): pr_debug, pr_info, pr_warning, pr_err.
-	 */
-	pr_info("\n*** no-OS Hello World ***\n\n");
+	pr_info("\n*** no-OS Hello World (SPI/GPIO test) ***\n\n");
+
+	/* SPI init test */
+	pr_info("Testing SPI init...\n");
+	ret = no_os_spi_init(&spi_desc, &spi_ip);
+	if (ret) {
+		pr_err("SPI init FAILED: %d\n", ret);
+	} else {
+		pr_info("SPI init OK\n");
+		no_os_spi_remove(spi_desc);
+	}
+
+	/* GPIO init test */
+	pr_info("Testing GPIO init...\n");
+	ret = no_os_gpio_get(&gpio_desc, &gpio_ip);
+	if (ret) {
+		pr_err("GPIO init FAILED: %d\n", ret);
+	} else {
+		pr_info("GPIO init OK\n");
+
+		ret = no_os_gpio_direction_output(gpio_desc, 0);
+		if (ret) {
+			pr_err("GPIO direction set FAILED: %d\n", ret);
+		} else {
+			pr_info("GPIO direction set OK\n");
+		}
+
+		no_os_gpio_remove(gpio_desc);
+	}
+
+	pr_info("\n--- Peripheral tests complete ---\n\n");
 
 	while (1) {
 		count++;
-
 		pr_info("Hello World #%"PRIu32"\n", count);
-
-		/*
-		 * no_os_mdelay() is the no-OS millisecond delay function.
-		 * It uses the platform timer underneath, so the exact
-		 * implementation differs per target but the API is identical.
-		 */
 		no_os_mdelay(1000);
 	}
 
-	/*
-	 * Good practice: always release resources when done.
-	 * In this example the loop never exits, but the pattern is shown here
-	 * for reference -- real applications should call _remove() on every
-	 * descriptor they own before returning.
-	 */
 	no_os_uart_remove(uart_desc);
 
 	return 0;

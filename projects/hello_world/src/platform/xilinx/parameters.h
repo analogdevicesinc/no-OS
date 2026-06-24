@@ -45,16 +45,20 @@
 #include <xparameters.h>
 #include <xil_cache.h>
 #include <xilinx_uart.h>
+#include <xilinx_spi.h>
+#include <xilinx_gpio.h>
 
 /*
  * _XPARAMETERS_PS_H_ is defined whenever the design contains an ARM
  * Processing System (PS) -- i.e. Zynq-7000 or ZynqMP.  When it is NOT
  * defined we are running on a MicroBlaze soft-core inside the PL and must
- * use an AXI UART Lite peripheral instead.
+ * use AXI peripherals instead.
  */
 #ifdef _XPARAMETERS_PS_H_
 
 #define UART_DEVICE_ID		XPAR_XUARTPS_0_DEVICE_ID
+#define SPI_DEVICE_ID		XPAR_XSPIPS_0_DEVICE_ID
+#define GPIO_DEVICE_ID		XPAR_XGPIOPS_0_DEVICE_ID
 
 /*
  * The ZCU102 routes its JTAG/USB-UART adapter to UART0; all other Zynq-7000
@@ -70,6 +74,8 @@
 
 #define UART_DEVICE_ID		XPAR_AXI_UART_DEVICE_ID
 #define UART_IRQ_ID		XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR
+#define SPI_DEVICE_ID		XPAR_SPI_0_DEVICE_ID
+#define GPIO_DEVICE_ID		XPAR_GPIO_0_DEVICE_ID
 
 #endif /* _XPARAMETERS_PS_H_ */
 
@@ -78,5 +84,7 @@
 #define UART_OPS		&xil_uart_ops
 
 extern struct xil_uart_init_param hello_world_uart_extra_ip;
+extern struct xil_spi_init_param hello_world_spi_extra_ip;
+extern struct xil_gpio_init_param hello_world_gpio_extra_ip;
 
 #endif /* __PARAMETERS_H__ */
