@@ -1,0 +1,130 @@
+XEmacPs no-OS Driver
+=====================
+
+Supported Devices
+-----------------
+
+- Xilinx Zynq-7000 SoC (GEM v2)
+- Xilinx ZynqMP / Versal (GEM v3+)
+
+Overview
+--------
+
+The XEmacPs driver is a standalone, bare-metal MAC driver for the
+Processing System Gigabit Ethernet MAC (PS GEM) found in the Xilinx
+Zynq-7000 and ZynqMP SoC families. It uses polling (no IRQs) and
+copy-mode DMA to send and receive raw Ethernet frames, with no
+dependency on any network stack. An upper layer such as the no-OS lwIP
+glue (``lwip_xemacps``) can be used to connect this driver to a TCP/IP
+stack.
+
+Buffer descriptor memory is placed in a dedicated 1 MB uncached region
+marked as ``DEVICE_MEMORY`` via ``Xil_SetTlbAttributes()``, eliminating
+cache-coherency races between the CPU and the GEM DMA engine. Frame data
+buffers are cache-line aligned and use explicit cache maintenance
+(flush before TX, invalidate after RX).
+
+The driver includes an automatic workaround for the Zynq-7000 GEM v2
+silicon errata (`AR# 52028
+<https://adaptivesupport.amd.com/s/article/52028>`_), where the RX data
+path can lock up under heavy traffic of small frames. The workaround
+flushes the RX packet buffer on every resource error and resets the RX
+path when inactivity is detected. It is gated on runtime GEM version
+detection and only activates on GEM v2.
+
+Applications
+------------
+
+- Industrial Ethernet networking on Zynq-based boards
+- IIO data acquisition over Ethernet
+- TCP/UDP server applications
+- Bare-metal network connectivity for sensor and control systems
+
+Device Configuration
+--------------------
+
+The driver exposes a small public API for initialization, data transfer,
+and polling. All functions are declared in ``no_os_xemacps.h``.
+
+Initialization and Resource Management
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The ``xemacps_init()`` function allocates the driver descriptor,
+configures the GEM controller registers (network configuration, DMA
+configuration, buffer descriptors), starts PHY auto-negotiation, and
+starts the MAC. Initialization succeeds regardless of whether a PHY
+link is present - if no cable is connected, the driver starts with
+link down and ``xemacps_poll()`` will detect the link once it comes up.
+The ``xemacps_remove()`` function stops the MAC and frees the
+descriptor.
+
+Data Transfer
+~~~~~~~~~~~~~
+
+The ``xemacps_send()`` function copies an Ethernet frame into a static
+TX buffer, flushes the D-cache, programs the TX buffer descriptor, and
+polls until the GEM sets the TxUsed bit. The ``xemacps_recv()`` function
+harvests a single completed RX buffer descriptor, copies the frame into
+the caller's buffer, and reposts the descriptor to hardware.
+
+Polling, Link State, and Errata Handling
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The ``xemacps_poll()`` function must be called once per polling cycle
+before the ``xemacps_recv()`` loop. It polls the PHY link state via
+BMSR, and when the link transitions up it reads the negotiated speed
+and configures the MAC accordingly. When the link drops, it restarts
+auto-negotiation so the PHY re-negotiates when the cable is
+reconnected. If the link is down, RX processing is skipped entirely.
+
+On Zynq-7000 (``PLATFORM_ZYNQ``), ``xemacps_poll()`` also runs the
+AR# 52028 errata workaround and clears RX status error flags.
+
+Multicast Filtering
+~~~~~~~~~~~~~~~~~~~
+
+The ``xemacps_set_mcast_hash()`` function adds a multicast MAC address
+to the GEM hash filter, enabling reception of frames destined for that
+multicast group (e.g. mDNS at ``01:00:5E:00:00:FB``).
+
+Driver Initialization Example
+------------------------------
+
+.. code-block:: C
+
+    #include <stdint.h>
+    #include "no_os_xemacps.h"
+
+    int main(void)
+    {
+        struct xemacps_init_param param = {
+            .device_id = 0,
+            .phy_addr  = 1,
+            .hwaddr    = {0x00, 0x0A, 0x35, 0x00, 0x01, 0x02},
+        };
+
+        struct xemacps_desc *desc;
+        uint8_t buf[XEMACPS_MAX_FRAME_SIZE];
+        uint32_t len;
+        int ret;
+
+        ret = xemacps_init(&desc, &param);
+        if (ret)
+            return ret;
+
+        /* Main polling loop */
+        while (1) {
+            xemacps_poll(desc);
+
+            ret = xemacps_recv(desc, buf, &len);
+            if (ret)
+                break;
+
+            if (len > 0) {
+                /* Process received frame in buf[0..len-1] */
+            }
+        }
+
+        xemacps_remove(desc);
+        return ret;
+    }

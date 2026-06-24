@@ -202,6 +202,7 @@ ETHERNET
    :glob:
 
    drivers/ethernet/*
+   drivers/net/*
 
 NETWORK
 =======
