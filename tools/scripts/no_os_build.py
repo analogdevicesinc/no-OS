@@ -251,6 +251,11 @@ def print_table(combinations):
     print(f"\n{len(combinations)} combination(s)")
 
 
+def echo_cmd(cmd):
+    """Echo a cmake command to stdout before it is executed."""
+    print(f"  $ {' '.join(cmd)}", flush=True)
+
+
 def append_log(log_path, section, result):
     """Append a labelled section of captured output to the build log."""
     with open(log_path, "a") as f:
@@ -314,6 +319,7 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
     label = f"{project}/{variant} for {board}"
 
     with Spinner(f"Configuring {label}") as spinner:
+        echo_cmd(configure_cmd)
         try:
             result = subprocess.run(
                 configure_cmd,
@@ -330,6 +336,7 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
             return combo, False, f"Configure failed:\n{e.stderr[-500:]}"
 
     with Spinner(f"Building {label}") as spinner:
+        echo_cmd(build_cmd)
         try:
             result = subprocess.run(
                 build_cmd,
@@ -346,6 +353,7 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
             return combo, False, f"Build failed:\n{e.stderr[-500:]}"
 
     if flash:
+        echo_cmd(flash_cmd)
         try:
             subprocess.run(
                 flash_cmd,
@@ -432,7 +440,8 @@ def cmd_build(args, repo_root, presets):
                     continue
 
                 log_path = build_dir / "build.log"
-                print(f"  [{idx}/{total}] Configuring {label}...", end=" ", flush=True)
+                print(f"  [{idx}/{total}] Configuring {label}...", flush=True)
+                echo_cmd(configure_cmd)
                 try:
                     result = subprocess.run(
                         configure_cmd,
@@ -485,6 +494,7 @@ def cmd_build(args, repo_root, presets):
                     lines += f"\n  {' '.join(flash_cmd)}"
                 return combo, True, lines
 
+            echo_cmd(build_cmd)
             try:
                 result = subprocess.run(
                     build_cmd,
@@ -501,6 +511,7 @@ def cmd_build(args, repo_root, presets):
             artifacts_msg = f"Build artifacts: {build_dir / 'build'}"
 
             if args.flash:
+                echo_cmd(flash_cmd)
                 try:
                     subprocess.run(
                         flash_cmd,
