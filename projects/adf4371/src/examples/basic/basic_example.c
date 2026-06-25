@@ -68,11 +68,11 @@ int example_main()
 	if (ret)
 		goto error;
 
-	ret = adf4371_clk_set_rate_chan(dev, 0, 80000000);
+	ret = adf4371_set_rf8_freq(dev, 5000000000);
 	if (ret)
 		goto remove_adf4371;
 
-	pr_info("Clock Frequency for RF8 has been successfully set to 80MHz\n");
+	pr_info("Clock Frequency for RF8 has been successfully set to 5GHz\n");
 
 remove_adf4371:
 	adf4371_remove(dev);

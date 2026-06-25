@@ -2,6 +2,7 @@
  *   @file   common_data.c
  *   @brief  Defines common data to be used by adf4371 examples.
  *   @author Radu Sabau (radu.sabau@analog.com)
+ *   @author Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
  *
@@ -55,25 +56,19 @@ struct no_os_spi_init_param adf4371_spi_ip = {
 };
 
 struct no_os_gpio_init_param adf4371_ce_ip = {
-	.port = GPIO_CE_PORT_NUM,
+	.port = GPIO_CE_PIN_NUM,
 	.pull = NO_OS_PULL_NONE,
 	.number = GPIO_CE_PIN_NUM,
 	.platform_ops = GPIO_OPS,
-	.extra = GPIO_EXTRA
-};
-
-struct adf4371_chan_spec chan_spec[1] = {
-	{
-		.num = 0,
-		.power_up_frequency = 8000000000,
-	},
+	.extra = GPIO_EXTRA,
 };
 
 struct adf4371_init_param adf4371_ip = {
 	.spi_init = &adf4371_spi_ip,
-	.channels = chan_spec,
+	.gpio_ce_param = &adf4371_ce_ip,
 	.spi_3wire_enable = false,
-	.clkin_frequency = 50000000,
+	.clkin_frequency = 100000000,
 	.muxout_select = 11,
-	.num_channels = 1,
+	.rfout8_freq = 5000000000,
+	.rf_div_sel = 0,
 };

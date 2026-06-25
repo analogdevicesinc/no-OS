@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   common_data.h
- *   @brief  Defines common data to be used by adf4371 examples.
- *   @author Radu Sabau (radu.sabau@analog.com)
+ *   @file   iio_adf4371.h
+ *   @brief  Implementation of IIO ADF4371 Driver.
+ *   @author Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -19,7 +19,7 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -30,20 +30,41 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef IIO_ADF4371_H
+#define IIO_ADF4371_H
 
-#include "parameters.h"
-#include "adf4371.h"
-#include "no_os_spi.h"
-#include "no_os_uart.h"
-#include "no_os_util.h"
-#include "no_os_gpio.h"
+#include "iio.h"
 
+struct adf4371_iio_dev {
+	struct adf4371_dev *adf4371_dev;
+	struct iio_device *iio_dev;
+};
 
-extern struct no_os_gpio_init_param	adf4371_ce_ip;
-extern struct no_os_uart_init_param	adf4371_uart_ip;
-extern struct no_os_spi_init_param	adf4371_spi_ip;
-extern struct adf4371_init_param 	adf4371_ip;
+struct adf4371_iio_dev_init_param {
+	struct adf4371_init_param *adf4371_dev_init;
+};
 
-#endif /* __COMMON_DATA_H__ */
+enum adf4371_iio_ch_attr_id {
+	ADF4371_IIO_CH_ATTR_CHANNEL_POWERDOWN,
+	ADF4371_IIO_CH_ATTR_RFOUT8_FREQ,
+	ADF4371_IIO_CH_ATTR_RFOUT8AUX_FREQ,
+	ADF4371_IIO_CH_ATTR_RFOUT16_FREQ,
+	ADF4371_IIO_CH_ATTR_RFOUT32_FREQ,
+};
+
+enum adf4371_iio_dev_attr_id {
+	ADF4371_IIO_DEV_ATTR_REF_FREQ,
+	ADF4371_IIO_DEV_ATTR_BLEED_CURRENT,
+	ADF4371_IIO_DEV_ATTR_CHARGE_PUMP_CURRENT,
+	ADF4371_IIO_DEV_ATTR_CHARGE_PUMP_AVAILABLE,
+	ADF4371_IIO_DEV_ATTR_REF_DIVIDER2_ENABLE,
+	ADF4371_IIO_DEV_ATTR_REF_DOUBLER_EN,
+	ADF4371_IIO_DEV_ATTR_R_WORD,
+};
+
+int adf4371_iio_init(struct adf4371_iio_dev **iio_dev,
+		     struct adf4371_iio_dev_init_param *init_param);
+
+int adf4371_iio_remove(struct adf4371_iio_dev *desc);
+
+#endif

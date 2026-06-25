@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   common_data.h
- *   @brief  Defines common data to be used by adf4371 examples.
- *   @author Radu Sabau (radu.sabau@analog.com)
+ *   @file   iio_example.c
+ *   @brief  Implementation of IIO example for adf4371 project.
+ *   @author Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,20 +30,56 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
 
-#include "parameters.h"
-#include "adf4371.h"
-#include "no_os_spi.h"
-#include "no_os_uart.h"
-#include "no_os_util.h"
-#include "no_os_gpio.h"
+#include "common_data.h"
+#include "iio_adf4371.h"
+#include "iio_app.h"
+#include "no_os_print_log.h"
 
+/**
+ * @brief IIO example main execution.
+ *
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously function iio_app_run and will not return.
+ */
+int example_main()
+{
+	struct adf4371_iio_dev *adf4371_iio_dev;
+	struct adf4371_iio_dev_init_param adf4371_iio_ip;
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
+	int ret;
 
-extern struct no_os_gpio_init_param	adf4371_ce_ip;
-extern struct no_os_uart_init_param	adf4371_uart_ip;
-extern struct no_os_spi_init_param	adf4371_spi_ip;
-extern struct adf4371_init_param 	adf4371_ip;
+	adf4371_iio_ip.adf4371_dev_init = &adf4371_ip;
+	ret = adf4371_iio_init(&adf4371_iio_dev, &adf4371_iio_ip);
+	if (ret)
+		return ret;
 
-#endif /* __COMMON_DATA_H__ */
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "adf4371",
+			.dev = adf4371_iio_dev,
+			.dev_descriptor = adf4371_iio_dev->iio_dev,
+		}
+	};
+
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = adf4371_uart_ip;
+	// app_init_param. = adf4371_ce_ip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		goto exit;
+
+	ret = iio_app_run(app);
+
+	iio_app_remove(app);
+exit:
+	adf4371_iio_remove(adf4371_iio_dev);
+
+	if (ret)
+		pr_info("Error!\n");
+
+	return ret;
+}

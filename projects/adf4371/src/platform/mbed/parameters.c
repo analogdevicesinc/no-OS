@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   common_data.h
- *   @brief  Defines common data to be used by adf4371 examples.
- *   @author Radu Sabau (radu.sabau@analog.com)
+ *   @file   parameters.c
+ *   @brief  Definition of Mbed platform data used by ADF4371 project.
+ *   @author Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,20 +30,21 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
 
 #include "parameters.h"
-#include "adf4371.h"
-#include "no_os_spi.h"
-#include "no_os_uart.h"
-#include "no_os_util.h"
-#include "no_os_gpio.h"
 
+struct mbed_uart_init_param adf4371_uart_extra_ip = {
+	.uart_tx_pin = UART_TX_PIN,
+	.uart_rx_pin = UART_RX_PIN
+};
 
-extern struct no_os_gpio_init_param	adf4371_ce_ip;
-extern struct no_os_uart_init_param	adf4371_uart_ip;
-extern struct no_os_spi_init_param	adf4371_spi_ip;
-extern struct adf4371_init_param 	adf4371_ip;
+struct mbed_spi_init_param adf4371_spi_extra = {
+	.spi_miso_pin = SDP_SPI_MISO,
+	.spi_mosi_pin = SDP_SPI_MOSI,
+	.spi_clk_pin = SDP_SPI_SCK,
+	.use_sw_csb = false
+};
 
-#endif /* __COMMON_DATA_H__ */
+struct no_os_gpio_init_param adf4371_gpio_extra_ip = {
+	.platform_ops = GPIO_OPS
+};
