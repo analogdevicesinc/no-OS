@@ -87,8 +87,26 @@ jobs:
     clean: true
     persistCredentials: true
   - script: |
-      echo "Using STM32CubeIDE version: $(STM32CUBEIDE_VERSION)"
-      echo "Using STM32CubeMX version: $(STM32CUBEMX_VERSION)"
+      [ -f /no-OS_agent/.stm32_environment.sh ] && . /no-OS_agent/.stm32_environment.sh
+      STM32CUBEIDE="${STM32CUBEIDE:-/opt/stm32cubeide}"
+      STM32CUBEMX="${STM32CUBEMX:-/opt/stm32cubemx}"
+
+      echo "STM32CubeIDE path: $STM32CUBEIDE"
+      echo "STM32CubeMX path:  $STM32CUBEMX"
+
+      # CubeIDE version from its product descriptor.
+      IDE_VER=$(sed -n 's/^version=//p' "$STM32CUBEIDE/.eclipseproduct" 2>/dev/null)
+      echo "Using STM32CubeIDE version: ${IDE_VER:-unknown}"
+
+      # CubeMX version
+      MX_VER=$(strings "$STM32CUBEMX/.installationinformation" 2>/dev/null \
+               | grep -A1 'APP_VER' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+      echo "Using STM32CubeMX version: ${MX_VER:-unknown}"
+
+      # arm-none-eabi-gcc version
+      GCC=$(find "$STM32CUBEIDE/plugins" -name arm-none-eabi-gcc -path '*gnu-tools*' 2>/dev/null | head -1)
+      echo "Bundled toolchain: ${GCC:-not found}"
+      [ -n "$GCC" ] && "$GCC" -dumpfullversion 2>/dev/null | sed 's/^/Bundled arm-none-eabi-gcc version: /'
     displayName: 'Show SDK versions'
   - script: |
       wget -P ./tools/scripts/ \
