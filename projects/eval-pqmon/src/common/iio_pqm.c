@@ -1533,7 +1533,7 @@ struct scan_type pqm_scan_type = {.sign = 's',
 	.storagebits = 16,
 	.shift = 0,
 	.is_big_endian =
-		true
+		false
 }; // generic waveform channel definition
 
 static struct iio_channel iio_pqm_channels[] = {
