@@ -706,8 +706,8 @@ int32_t adf4371_clk_recalc_rate_chan(struct adf4371_dev *dev, uint32_t chan,
  * @param rate - Channel rate.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t adf4371_clk_recalc_rate(struct no_os_clk_desc *desc,
-				       uint64_t *rate)
+static int adf4371_clk_recalc_rate(struct no_os_clk_desc *desc,
+				   uint64_t *rate)
 {
 	uint64_t tmp = 0;
 
@@ -739,9 +739,9 @@ int32_t adf4371_clk_round_rate_dev(struct adf4371_dev *dev, uint64_t rate,
  * @param rounded_rate - The closest possible rate of desired rate.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t adf4371_clk_round_rate(struct no_os_clk_desc *desc,
-				      uint64_t rate,
-				      uint64_t *rounded_rate)
+static int adf4371_clk_round_rate(struct no_os_clk_desc *desc,
+				  uint64_t rate,
+				  uint64_t *rounded_rate)
 {
 	*rounded_rate = rate;
 
@@ -770,8 +770,8 @@ int32_t adf4371_clk_set_rate_chan(struct adf4371_dev *dev, uint32_t chan,
  * @param rate - Channel rate.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t adf4371_clk_set_rate(struct no_os_clk_desc *desc,
-				    uint64_t rate)
+static int adf4371_clk_set_rate(struct no_os_clk_desc *desc,
+				uint64_t rate)
 {
 	return adf4371_set_freq(desc->dev_desc, rate, desc->hw_ch_num);
 }
