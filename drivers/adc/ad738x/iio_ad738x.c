@@ -189,11 +189,15 @@ static int get_raw(void *device, char *buf, uint32_t len,
 	struct ad738x_iio_dev *iio_dev = device;
 	struct ad738x_dev *dev = iio_dev->ad738x_dev;
 	uint16_t results[2];
+	uint32_t result;
 	int32_t ret;
 
-	ret = ad738x_spi_single_conversion(dev, results);
+	ret = ad738x_spi_single_conversion(dev, &result);
 	if (ret)
 		return ret;
+
+	results[0] = result & 0xFFFF;
+	results[1] = result >> 16;
 
 	return sprintf(buf, "%i", results[channel->ch_num]);
 }
