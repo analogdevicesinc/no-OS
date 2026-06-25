@@ -308,7 +308,7 @@ static int32_t ad738x_read_data_dma(struct ad738x_dev *dev,
 
 	spi_msg.tx_buff = &tx_buf,
 	spi_msg.bytes_number = samples * 4,
-	spi_msg.rx_buff = buf,
+	spi_msg.rx_buff = (uint8_t *)buf,
 
 	ret = no_os_pwm_enable(dev->pwm_desc);
 	if (ret != 0)
@@ -323,7 +323,7 @@ static int32_t ad738x_read_data_dma(struct ad738x_dev *dev,
 		goto out;
 
 	for (i = 0; i < samples; i++) {
-		buf_p = &buf[i];
+		buf_p = (uint8_t *)&buf[i];
 		buf[i] = (buf_p[2] << 24) | buf_p[3] << 16 | (buf_p[0] << 8) | buf_p[1];
 	}
 out:
