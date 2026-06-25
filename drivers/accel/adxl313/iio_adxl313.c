@@ -89,9 +89,9 @@ extern int adxl313_write(struct adxl313_dev *dev,
 			 uint8_t base_address, uint16_t size, uint8_t *write_data);
 static int adxl313_iio_find_2d_row(const int (*freq_tbl)[2], const int n,
 				   const int val1, const int val2);
-static int adxl313_iio_read_reg(struct adxl313_iio_dev *dev, uint32_t reg,
+static int adxl313_iio_read_reg(void *dev, uint32_t reg,
 				uint32_t *readval);
-static int adxl313_iio_write_reg(struct adxl313_iio_dev *dev, uint32_t reg,
+static int adxl313_iio_write_reg(void *dev, uint32_t reg,
 				 uint32_t writeval);
 static int adxl313_iio_read_raw(void *dev, char *buf, uint32_t len,
 				const struct iio_ch_info *channel, intptr_t priv);
@@ -117,7 +117,7 @@ static int adxl313_iio_read_range_avail(void *dev, char *buf,
 					uint32_t len, const struct iio_ch_info *channel, intptr_t priv);
 static int adxl313_iio_read_scale_avail(void *dev, char *buf,
 					uint32_t len, const struct iio_ch_info *channel, intptr_t priv);
-static int adxl313_iio_read_samples(void* dev, int16_t* buff, uint32_t samples);
+static int adxl313_iio_read_samples(void* dev, void* buff, uint32_t samples);
 static int adxl313_iio_update_channels(void* dev, uint32_t mask);
 static struct iio_attribute adxl313_iio_accel_attrs[] = {
 	{
@@ -232,10 +232,12 @@ static int adxl313_iio_find_2d_row(const int (*freq_tbl)[2], const int size,
  *
  * @return ret    - Result of the reading procedure.
 *******************************************************************************/
-static int adxl313_iio_read_reg(struct adxl313_iio_dev *dev, uint32_t reg,
+static int adxl313_iio_read_reg(void *dev, uint32_t reg,
 				uint32_t *readval)
 {
-	return adxl313_read(dev->adxl313_dev, reg, 1, (uint8_t *)readval);
+	struct adxl313_iio_dev *iio_adxl313 = (struct adxl313_iio_dev *)dev;
+
+	return adxl313_read(iio_adxl313->adxl313_dev, reg, 1, (uint8_t *)readval);
 }
 
 /*******************************************************************************
@@ -247,11 +249,13 @@ static int adxl313_iio_read_reg(struct adxl313_iio_dev *dev, uint32_t reg,
  *
  * @return ret     - Result of the writing procedure.
 *******************************************************************************/
-static int adxl313_iio_write_reg(struct adxl313_iio_dev *dev, uint32_t reg,
+static int adxl313_iio_write_reg(void *dev, uint32_t reg,
 				 uint32_t writeval)
 {
+	struct adxl313_iio_dev *iio_adxl313 = (struct adxl313_iio_dev *)dev;
 	uint8_t val = writeval;
-	return adxl313_write(dev->adxl313_dev, reg, 1, &val);
+
+	return adxl313_write(iio_adxl313->adxl313_dev, reg, 1, &val);
 }
 
 /*******************************************************************************
@@ -936,12 +940,13 @@ static int adxl313_iio_read_scale_avail(void *dev, char *buf,
  * @return ret    - Result of the reading procedure.
  * 					In case of success, the size of the read data is returned.
 *******************************************************************************/
-static int adxl313_iio_read_samples(void* dev, int16_t* buff, uint32_t samples)
+static int adxl313_iio_read_samples(void* dev, void* buff, uint32_t samples)
 {
 	int ret;
 	int16_t data_x;
 	int16_t data_y;
 	int16_t data_z;
+	int16_t *samples_buff = (int16_t *)buff;
 	struct adxl313_iio_dev *iio_adxl313;
 	struct adxl313_dev *adxl313;
 
@@ -961,15 +966,15 @@ static int adxl313_iio_read_samples(void* dev, int16_t* buff, uint32_t samples)
 			return ret;
 
 		if (iio_adxl313->active_channels & NO_OS_BIT(0)) {
-			buff[i] = no_os_sign_extend16(data_x, MIN_SHIFT + adxl313->resolution);
+			samples_buff[i] = no_os_sign_extend16(data_x, MIN_SHIFT + adxl313->resolution);
 			i++;
 		}
 		if (iio_adxl313->active_channels & NO_OS_BIT(1)) {
-			buff[i] = no_os_sign_extend16(data_y, MIN_SHIFT + adxl313->resolution);
+			samples_buff[i] = no_os_sign_extend16(data_y, MIN_SHIFT + adxl313->resolution);
 			i++;
 		}
 		if (iio_adxl313->active_channels & NO_OS_BIT(2)) {
-			buff[i] = no_os_sign_extend16(data_z, MIN_SHIFT + adxl313->resolution);
+			samples_buff[i] = no_os_sign_extend16(data_z, MIN_SHIFT + adxl313->resolution);
 			i++;
 		}
 	}
