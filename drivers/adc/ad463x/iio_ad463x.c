@@ -47,9 +47,9 @@ static int ad463x_iio_store_scale(void *dev, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel, intptr_t priv);
 static int ad463x_iio_read_scale_avail(void *dev, char *buf,
 				       uint32_t len, const struct iio_ch_info *channel, intptr_t priv);
-static int _iio_ad463x_read_dev(struct iio_ad463x *desc, uint32_t *buff,
+static int _iio_ad463x_read_dev(void *dev, void *buff,
 				uint32_t nb_samples);
-static int _iio_ad463x_prepare_transfer(struct iio_ad463x *desc,
+static int _iio_ad463x_prepare_transfer(void *dev,
 					uint32_t mask);
 #define BITS_PER_SAMPLE 32
 #define REAL_BITS 24
@@ -119,9 +119,11 @@ struct iio_device ad463x_iio_desc_two_chn = {
  * @param mask - Mask of the active channels
  * @return ret - Result of the updating procedure.
 */
-static int _iio_ad463x_prepare_transfer(struct iio_ad463x *desc,
+static int _iio_ad463x_prepare_transfer(void *dev,
 					uint32_t mask)
 {
+	struct iio_ad463x *desc = dev;
+
 	if (!desc)
 		return -EINVAL;
 
@@ -273,9 +275,11 @@ static int ad463x_iio_read_scale_avail(void *dev, char *buf,
 */
 
 
-static int _iio_ad463x_read_dev(struct iio_ad463x *desc, uint32_t *buff,
+static int _iio_ad463x_read_dev(void *dev, void *buff,
 				uint32_t nb_samples)
 {
+	struct iio_ad463x *desc = dev;
+	uint32_t *buff32 = buff;
 	int ret;
 	uint32_t i, j;
 
@@ -288,18 +292,18 @@ static int _iio_ad463x_read_dev(struct iio_ad463x *desc, uint32_t *buff,
 		goto error_comm;
 
 	/** Read samples for both channels */
-	ret = ad463x_read_data(desc->ad463x_desc, buff, nb_samples);
+	ret = ad463x_read_data(desc->ad463x_desc, buff32, nb_samples);
 	if (ret != 0)
 		goto error_comm;
 
 	/** Fill IIO Buffer  with singel channel if only one is enabled */
 	if (desc->mask == 0x1)
 		for (i = 0, j = 0; j < nb_samples; i += 2)
-			buff[j++] = buff[i];
+			buff32[j++] = buff32[i];
 
 	if (desc->mask == 0x2)
 		for (i = 1, j = 0; j < nb_samples; i += 2)
-			buff[j++] = buff[i];
+			buff32[j++] = buff32[i];
 
 	return nb_samples;
 

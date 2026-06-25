@@ -37,7 +37,7 @@
 #include "parameters.h"
 #include "ad463x.h"
 
-#define ADC_DDR_BASEADDR	in_buff
+#define ADC_DDR_BASEADDR	((uint32_t *)in_buff)
 
 #define SAMPLES_PER_CHANNEL     SAMPLES_PER_CHANNEL_PLATFORM
 extern uint8_t in_buff[];
