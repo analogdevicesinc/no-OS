@@ -48,12 +48,12 @@
 typedef enum {
     MCS_PARAMS_ALL                                  = 0,       /*!< Set the entire MCS FW config structure. */
     MCS_USE_SIDE_A_AS_REFERENCE_UINT8               = 1,       /*!< Set to 1, Side A is used as reference when aligning or comparing against Side B while using Center TDC. */
-    MCS_USE_GAPPED_SYSREF_UINT8                     = 2,       /*!< Set to 1, External SysRef is 'Gapped-Periodc'. Meaning, the signal randomly misses cycles. The nominal period of External SysRef must be Exactly the same as internal SysRef period.*/
+    MCS_USE_GAPPED_SYSREF_UINT8                     = 2,       /*!< Set to 1, External SysRef is 'Gapped-Periodic'. Meaning, the signal randomly misses cycles. The nominal period of External SysRef must be Exactly the same as internal SysRef period.*/
     MCS_LEAVE_SYSREF_RECEIVER_ON_POST_SYNC_UINT8    = 3,       /*!< If set to 1, Apollo's External SysRef receiver is left turned on post MCS init Calibration.Set to 1 if running MCS Tracking calibration. */
     MCS_TRACK_ABORT_UINT8                           = 4,       /*!< Set to 1, MCS Tracking calibration will clear configuration variables, including ADF4382 Current DAC correction values, and will enter idle, waiting for users to configure the next action. */
     MCS_TRACK_HALT_UINT8                            = 5,       /*!< Set to 1, MCS Tracking calibration will bypass MCS tracking calibration. It will not use TDC or send commands to ADF4382.*/
-    MCS_TRACK_INITIALIZE_UINT8                      = 6,       /*!< Set to 1, MCS Tracking calibration will take the user-defined track_start_coarse, track_start_fine, track_start_sleed_pol, maxFineCode, maxCoarseCode track_win, and adi_apollo_track_target as initial values for MCS Tracking calibration. */
-    MCS_TRACK_FOREGROUND_UINT8                      = 7,       /*!< It can only be used after track_initialize has finished. Set to 1, track_foreground will run TDC measurements and send ADF4382 correction signals at a faster rate than track_backround. */
+    MCS_TRACK_INITIALIZE_UINT8                      = 6,       /*!< Set to 1, MCS Tracking calibration will take the user-defined track_start_coarse, track_start_fine, track_start_bleed_pol, maxFineCode, maxCoarseCode track_win, and adi_apollo_track_target as initial values for MCS Tracking calibration. */
+    MCS_TRACK_FOREGROUND_UINT8                      = 7,       /*!< It can only be used after track_initialize has finished. Set to 1, track_foreground will run TDC measurements and send ADF4382 correction signals at a faster rate than track_background. */
     MCS_TRACK_FORCE_FOREGROUND_UINT8                = 8,       /*!< It can only be used after track_initialize has finished. Set to 1, track_force_foreground will execute track_foreground. It is self-clearing. It can be written to 1 to re-run foreground. */
     MCS_TRACK_BACKGROUND_0_UINT8                    = 9,       /*!< Set to 1, MCS tracking calibration will measure time differences with TDC, and send correction signals to the single or side A's ADF4382. Up to 1 correction signal will be sent per second.*/
     MCS_TRACK_BACKGROUND_1_UINT8                    = 10,      /*!< Set to 1, MCS tracking calibration will measure time differences with TDC, and send correction signals to Side B's ADF4382. Up to 1 correction signal will be sent per second.*/
@@ -81,7 +81,7 @@ typedef enum {
     MCS_ADF4382_TRACK_WIN_UINT32                    = 32,      /*!< Time in in absolute-value femtoseconds allowed for internal sysref to drift with respect to external sysref before MCS Tracking Calibration sends adjustments to ADF4382. */
     MCS_ADF4382_TRACK_TARGET_0_INT32                = 33,      /*!< Time offset in picoseconds between the rising edge of internal and External sysref for the single or Side A's ADF4382. */
     MCS_ADF4382_TRACK_TARGET_1_INT32                = 34,      /*!< Time offset in picoseconds between the rising edge of internal and External sysref for Side B's ADF4382. */
-    MCS_PARAMETER_LAST                              = 0xFF  
+    MCS_PARAMETER_LAST                              = 0xFF
 } ADI_APOLLO_PACK_ENUM adi_apollo_mcs_parameter_e;
 
 /**
@@ -242,7 +242,7 @@ typedef struct {
  * @brief MCS Calibration Data
  *
  * Interpretation of adi_apollo_mcs_cal_data_t:
- * Center, Side A and Side B here do not refer to the MCS which is being used, but the internl sysref which is being aligned, and they
+ * Center, Side A and Side B here do not refer to the MCS which is being used, but the internal sysref which is being aligned, and they
  * may or not be the same.
  * ADI_APOLLO_MCS_MODE0: diff_C_Before_femtoseconds/Aft, internal_period_C_femtoseconds, is_C_Locked.
  * ADI_APOLLO_MCS_MODE1: diff_B_Before_femtoseconds/Aft, internal_period_B_femtoseconds, is_B_Locked, diff_A_Before_femtoseconds/Aft, internal_period_A_femtoseconds, is_A_Locked.
@@ -297,8 +297,6 @@ ADI_APOLLO_PACKED(
 typedef struct {
     adi_apollo_mcs_fsmstate_e fsmState;     /*!< FSM State */
     adi_apollo_mcs_fsmstate_e prevFsmState; /*!< Previous FSM State */
-    adi_apollo_mcs_fsm_cmd_e fsmCmd;        /*!< FSM Command */
-    adi_apollo_mcs_fsm_cmd_e prevFsmCmd;    /*!< Previous FSM Command */
     uint8_t event_waiting;                  /*!< Event being waited for*/
     uint8_t alignDone;                      /*!< Is Alignment Done */
     uint8_t is_Side_A_Done;                 /*!< Is Side A Done Flag */
@@ -307,11 +305,11 @@ typedef struct {
     uint8_t isDone;                         /*!< Is MCS Operation Done */
     uint8_t extraSyncStep;                  /*!< Extra sync phase for modes 2 and 4 */
     uint8_t partial_alignment_done;         /*!< Counter Measure for Extra rotations from divG */
-    uint8_t tdc_precondition_is_completed;  /*!< Flag that will indicate if we alredy completed the TDC precondition */
+    uint8_t tdc_precondition_is_completed;  /*!< Flag that will indicate if we already completed the TDC precondition */
     uint8_t pad8_cal_state[3];              /*!< Padding */
 } adi_apollo_mcs_cal_state_t;)
 
-#ifndef CLIENT_IGNORE    
+#ifndef CLIENT_IGNORE
 /**
  * @brief Top level MCS object
  *

@@ -260,28 +260,6 @@ int32_t adi_apollo_jtx_lanes_xbar_set(adi_apollo_device_t *device, const uint16_
     return API_CMS_ERROR_OK;
 }
 
-int32_t adi_apollo_jtx_lane_force_pd_set(adi_apollo_device_t *device,
-    const uint16_t link_sides,
-    uint8_t physical_lane,
-    uint8_t power_down)
-{
-    int32_t err, i;
-    uint32_t regmap_base_addr = 0;
-
-    ADI_APOLLO_NULL_POINTER_RETURN(device);
-    ADI_APOLLO_LOG_FUNC();
-    ADI_APOLLO_INVALID_PARAM_RETURN(physical_lane > ADI_APOLLO_JTX_LANES_MAX-1);
-    ADI_APOLLO_INVALID_PARAM_RETURN(power_down > 1);
-
-    for (i = 0; i < ADI_APOLLO_NUM_JTX_LINKS; i += ADI_APOLLO_NUM_JTX_LINKS_PER_SIDE) {
-        if ((1 << i) & link_sides) {
-            regmap_base_addr = calc_jtx_dual_link_base(i);
-            err = adi_apollo_hal_bf_set(device, BF_JTX_FORCE_LANE_PD_INFO(regmap_base_addr, physical_lane), power_down);
-            ADI_APOLLO_ERROR_RETURN(err);
-        }
-    }
-    return API_CMS_ERROR_OK;
-}
 
 int32_t adi_apollo_jtx_lane_drive_swing_set(adi_apollo_device_t *device,
                                             uint8_t link_sides,

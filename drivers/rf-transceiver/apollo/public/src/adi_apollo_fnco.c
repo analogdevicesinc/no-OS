@@ -52,10 +52,10 @@ int32_t adi_apollo_fnco_profile_load(adi_apollo_device_t *device, adi_apollo_ter
                 ADI_APOLLO_ERROR_RETURN(err);
 
                 if (word_sel == ADI_APOLLO_NCO_PROFILE_PHASE_INCREMENT) {
-                    err = adi_apollo_hal_paged_bf_set(device, BF_HOP_PHASE_INC_INFO(regmap_base_addr), words[j]);
+                    err = adi_apollo_hal_paged_bf_set(device, BF_HOP_PHASE_INC_INFO(regmap_base_addr), words[j-first]);
                     ADI_APOLLO_ERROR_RETURN(err);
                 } else {
-                    err = adi_apollo_hal_paged_bf_set(device, BF_HOP_PHASE_OFFSET_INFO(regmap_base_addr), words[j]);
+                    err = adi_apollo_hal_paged_bf_set(device, BF_HOP_PHASE_OFFSET_INFO(regmap_base_addr), words[j-first]);
                     ADI_APOLLO_ERROR_RETURN(err);
                 }
            }

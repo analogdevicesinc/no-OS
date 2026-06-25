@@ -30,10 +30,7 @@ static uint32_t calc_mcs_tdc_top_dual_clk_base(int32_t idx);
 static void get_adc_fifo_offsets(adi_apollo_data_fifo_conv_clk_ratio_e clk_ratio, uint8_t *wr_offset, uint8_t *rd_offset);
 static void get_dac_fifo_offsets(adi_apollo_data_fifo_conv_clk_ratio_e clk_ratio, uint8_t *wr_offset, uint8_t *rd_offset);
 static int32_t mask_sync(adi_apollo_device_t *device, uint32_t reg, uint32_t info, int32_t filter, uint64_t value);
-static int32_t rxtx_sync(adi_apollo_device_t *device, adi_apollo_sync_mask_rxtx_e rxtx_mask);
 static int32_t rxtxlink_sync(adi_apollo_device_t *device, adi_apollo_sync_mask_rxtx_link_e rxtx_link_mask);
-static int32_t lpbkfifo_sync_mask_set(adi_apollo_device_t *device, adi_apollo_sync_mask_lpbkfifo_e mask);
-static int32_t sync_logic_reset(adi_apollo_device_t *device, int32_t mcs_sync_top);
 static int32_t clk_pd_status_get(adi_apollo_device_t *device, int32_t top_base, adi_apollo_clk_input_power_status_e *status);
 
 
@@ -53,6 +50,12 @@ int32_t adi_apollo_clk_mcs_rx_data_fifo_configure(adi_apollo_device_t *device, c
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_LOG_FUNC();
     ADI_APOLLO_NULL_POINTER_RETURN(fifo_config);
+    ADI_APOLLO_INVALID_PARAM_RETURN(fifo_config->enable > 1);
+    ADI_APOLLO_INVALID_PARAM_RETURN(fifo_config->mode > ADI_APOLLO_DATA_FIFO_MODE_FORCE_ON);
+    if (fifo_config->lat_override) {
+        ADI_APOLLO_INVALID_PARAM_RETURN(fifo_config->lat_wr_offset > 0xF);
+        ADI_APOLLO_INVALID_PARAM_RETURN(fifo_config->lat_rd_offset > 0x7);
+    }
 
     for(i = 0; i < ADI_APOLLO_ADC_NUM; i ++) {
         adc = adcs & (ADI_APOLLO_ADC_A0 << i);
@@ -94,6 +97,7 @@ int32_t adi_apollo_clk_mcs_rx_data_fifo_enable(adi_apollo_device_t *device, cons
 
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_LOG_FUNC();
+    ADI_APOLLO_INVALID_PARAM_RETURN(enable > 1);
 
     for(i = 0; i < ADI_APOLLO_ADC_NUM; i ++) {
         adc = adcs & (ADI_APOLLO_ADC_A0 << i);
@@ -114,6 +118,11 @@ int32_t adi_apollo_clk_mcs_rx_data_fifo_offset_set(adi_apollo_device_t *device, 
     uint8_t i;
     uint16_t adc;
     uint32_t regmap_base_addr;
+
+    ADI_APOLLO_NULL_POINTER_RETURN(device);
+    ADI_APOLLO_LOG_FUNC();
+    ADI_APOLLO_INVALID_PARAM_RETURN(wr_offset > 0xF);
+    ADI_APOLLO_INVALID_PARAM_RETURN(rd_offset > 0x7);
 
     for(i = 0; i < ADI_APOLLO_ADC_NUM; i ++) {
         adc = adcs & (ADI_APOLLO_ADC_A0 << i);
@@ -139,13 +148,14 @@ int32_t adi_apollo_clk_mcs_rx_data_fifo_mode_set(adi_apollo_device_t *device, co
 
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_LOG_FUNC();
+    ADI_APOLLO_INVALID_PARAM_RETURN(mode > ADI_APOLLO_DATA_FIFO_MODE_FORCE_ON);
 
     for(i = 0; i < ADI_APOLLO_ADC_NUM; i ++) {
         adc = adcs & (ADI_APOLLO_ADC_A0 << i);
         if (adc > 0) {
             regmap_base_addr = calc_rx_datin_base(i);
 
-            err = adi_apollo_hal_bf_set(device, BF_DFIFO_EN_RX_DATIN_INFO(regmap_base_addr), 1);
+            err = adi_apollo_hal_bf_set(device, BF_LAT_PGM_MODE_RX_DATIN_INFO(regmap_base_addr), mode);
             ADI_APOLLO_ERROR_RETURN(err);
         }
     }
@@ -273,7 +283,7 @@ int32_t adi_apollo_clk_mcs_sync_hw_align_set(adi_apollo_device_t *device)
     ADI_APOLLO_LOG_FUNC();
 
     // Clear Rx-Tx digital mask to be synced
-    err = adi_apollo_hal_reg_set(device, REG_SYNC_MASK_RXTX_ADDR, 0x00);
+    err = adi_apollo_hal_reg_set(device, REG_SYNC_MASK_RXTX_ADDR, ADI_APOLLO_SYNC_MASK_RX_TX_NONE);
     ADI_APOLLO_ERROR_RETURN(err);
 
     // Set Rx-Tx serdes link mask to avoid getting synced
@@ -281,6 +291,10 @@ int32_t adi_apollo_clk_mcs_sync_hw_align_set(adi_apollo_device_t *device)
     ADI_APOLLO_ERROR_RETURN(err);
 
     err = adi_apollo_clk_mcs_oneshot_sync(device);
+    ADI_APOLLO_ERROR_RETURN(err);
+
+    // Clear JTx/JRx link masks
+    err = adi_apollo_hal_reg_set(device, REG_SYNC_MASK_RXTXLINK_ADDR, ADI_APOLLO_SYNC_MASK_RXTX_LINK_NONE);
     ADI_APOLLO_ERROR_RETURN(err);
 
     return API_CMS_ERROR_OK;
@@ -411,26 +425,6 @@ int32_t adi_apollo_clk_mcs_trig_reset_dsp_enable(adi_apollo_device_t *device)
         ADI_APOLLO_ERROR_RETURN(err);
     } else {
         err = adi_apollo_hal_bf_set(device, BF_SYNCTRL_MAN_INFO(MCS_SYNC_MCSTOP0), 0x00c0);
-        ADI_APOLLO_ERROR_RETURN(err);
-    }
-
-    return API_CMS_ERROR_OK;
-}
-
-int32_t adi_apollo_clk_mcs_trig_reset_serdes_enable(adi_apollo_device_t *device)
-{
-    int32_t err;
-
-    ADI_APOLLO_NULL_POINTER_RETURN(device);
-    ADI_APOLLO_LOG_FUNC();
-
-    if (IS_DUAL_CLK(device)) {
-        err = adi_apollo_hal_bf_set(device, BF_SYNCTRL_MAN_INFO(MCS_SYNC_MCSTOP1), 0x0300);
-        ADI_APOLLO_ERROR_RETURN(err);
-        err = adi_apollo_hal_bf_set(device, BF_SYNCTRL_MAN_INFO(MCS_SYNC_MCSTOP2), 0x0300);
-        ADI_APOLLO_ERROR_RETURN(err);
-    } else {
-        err = adi_apollo_hal_bf_set(device, BF_SYNCTRL_MAN_INFO(MCS_SYNC_MCSTOP0), 0x0300);
         ADI_APOLLO_ERROR_RETURN(err);
     }
 
@@ -672,7 +666,7 @@ int32_t adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run(adi_apollo_device_t *
     ADI_APOLLO_LOG_FUNC();
 
     // Set Rx-Tx digital root clk mask to avoid them getting re-synced
-    err = adi_apollo_hal_reg_set(device, REG_SYNC_MASK_RTCLK_ADDR, 0x55);
+    err = adi_apollo_hal_reg_set(device, REG_SYNC_MASK_RTCLK_ADDR, ADI_APOLLO_SYNC_MASK_RTCLK_DIG_ALL);
     ADI_APOLLO_ERROR_RETURN(err);
 
     // Mask JTx A link 0 & link 1 and perform dynamic sync
@@ -692,7 +686,7 @@ int32_t adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run(adi_apollo_device_t *
     ADI_APOLLO_ERROR_RETURN(err);
 
     // Clear Rx-Tx digital root clk mask
-    err = adi_apollo_hal_reg_set(device, REG_SYNC_MASK_RTCLK_ADDR, 0x00);
+    err = adi_apollo_hal_reg_set(device, REG_SYNC_MASK_RTCLK_ADDR, ADI_APOLLO_SYNC_MASK_RTCLK_NONE);
     ADI_APOLLO_ERROR_RETURN(err);
 
     // Clear JTx/JRx link masks
@@ -711,7 +705,13 @@ int32_t adi_apollo_clk_mcs_dyn_sync_sequence_run(adi_apollo_device_t *device)
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_LOG_FUNC();
 
-    // disable masking of rx and tx digital, jrx and jtx link, and lpbk fifo
+    /* Mask Synchronization of ADC and DAC fifos, Rx and Tx digital, JRx and JTx link, and LPBK fifo */
+    err = adi_apollo_hal_bf_set(device, BF_SYNC_MASK_ADCFIFO_INFO, ADI_APOLLO_SYNC_MASK_ADCFIFO_ALL);
+    ADI_APOLLO_ERROR_RETURN(err);
+    
+    err = adi_apollo_hal_bf_set(device, BF_SYNC_MASK_DACFIFO_INFO, ADI_APOLLO_SYNC_MASK_DACFIFO_ALL);
+    ADI_APOLLO_ERROR_RETURN(err);
+    
     err = adi_apollo_clk_mcs_dig_path_reset_disable(device);
     ADI_APOLLO_ERROR_RETURN(err);
 
@@ -721,49 +721,28 @@ int32_t adi_apollo_clk_mcs_dyn_sync_sequence_run(adi_apollo_device_t *device)
     err = adi_apollo_clk_mcs_lpbk_fifo_reset_disable(device);
     ADI_APOLLO_ERROR_RETURN(err);
 
+    /* Synchronize Root Clocks */
     err = adi_apollo_clk_mcs_dynamic_sync(device);
     ADI_APOLLO_ERROR_RETURN(err);
-
-    // RXTX Dynamic Sync
-    // sync rx digital a
-    err = rxtx_sync(device, ADI_APOLLO_SYNC_MASK_RX_DIG_A);
+    
+    /*
+     * Allow synchronization of other blocks
+     * RTCLK and RXTXLINK masks handled inside adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run()
+     */
+    err = adi_apollo_hal_bf_set(device, BF_SYNC_MASK_ADCFIFO_INFO, ADI_APOLLO_SYNC_MASK_ADCFIFO_NONE);
     ADI_APOLLO_ERROR_RETURN(err);
-
-    // sync rx digital a & b
-    err = rxtx_sync(device, ADI_APOLLO_SYNC_MASK_RX_DIG_A | ADI_APOLLO_SYNC_MASK_RX_DIG_B);
+    
+    err = adi_apollo_hal_bf_set(device, BF_SYNC_MASK_DACFIFO_INFO, ADI_APOLLO_SYNC_MASK_DACFIFO_NONE);
     ADI_APOLLO_ERROR_RETURN(err);
-
-    // sync rx digital a & b and tx digital a
-    err = rxtx_sync(device, ADI_APOLLO_SYNC_MASK_RX_DIG_A | ADI_APOLLO_SYNC_MASK_RX_DIG_B
-                          | ADI_APOLLO_SYNC_MASK_TX_DIG_A);
+    
+    err = adi_apollo_hal_bf_set(device, BF_SYNC_MASK_RXTX_INFO, ADI_APOLLO_SYNC_MASK_RX_TX_NONE);
     ADI_APOLLO_ERROR_RETURN(err);
-
-    // sync rx and tx digital
-    err = rxtx_sync(device, ADI_APOLLO_SYNC_MASK_RX_TX_ALL);
+    
+    err = adi_apollo_hal_bf_set(device, BF_SYNC_MASK_LPBKFIFO_INFO, ADI_APOLLO_SYNC_MASK_LPBKFIFO_NONE);
     ADI_APOLLO_ERROR_RETURN(err);
-
-    // JRx/JTx Dynamic Sync
-    // sync jtx a link 0 & 1
-    err = rxtxlink_sync(device, ADI_APOLLO_SYNC_MASK_JTX_A_LINK0 | ADI_APOLLO_SYNC_MASK_JTX_A_LINK1);
-    ADI_APOLLO_ERROR_RETURN(err);
-
-    // sync jtx a&b link 0 & 1
-    err = rxtxlink_sync(device, ADI_APOLLO_SYNC_MASK_JTX_A_LINK0 | ADI_APOLLO_SYNC_MASK_JTX_A_LINK1
-                              | ADI_APOLLO_SYNC_MASK_JTX_B_LINK0 | ADI_APOLLO_SYNC_MASK_JTX_B_LINK1);
-    ADI_APOLLO_ERROR_RETURN(err);
-
-    // sync jtx a&b link 0 & 1, jrx a link 0&1
-    err = rxtxlink_sync(device, ADI_APOLLO_SYNC_MASK_JTX_A_LINK0 | ADI_APOLLO_SYNC_MASK_JTX_A_LINK1
-                              | ADI_APOLLO_SYNC_MASK_JTX_B_LINK0 | ADI_APOLLO_SYNC_MASK_JTX_B_LINK1
-                              | ADI_APOLLO_SYNC_MASK_JRX_A_LINK0 | ADI_APOLLO_SYNC_MASK_JRX_A_LINK1);
-    ADI_APOLLO_ERROR_RETURN(err);
-
-    // sync jtx a&b link 0 & 1, jrx a&b link 0&1
-    err = rxtxlink_sync(device, ADI_APOLLO_SYNC_MASK_RXTX_LINK_ALL);
-    ADI_APOLLO_ERROR_RETURN(err);
-
-    // clear the lpbk fifo mask
-    err = lpbkfifo_sync_mask_set(device, ADI_APOLLO_SYNC_MASK_LPBKFIFO_NONE);
+    
+    /* Staggered Synchronization of JTx and JRx links. */
+    err = adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run(device);
     ADI_APOLLO_ERROR_RETURN(err);
 
     return API_CMS_ERROR_OK;
@@ -811,33 +790,6 @@ int32_t adi_apollo_clk_mcs_subclass_get(adi_apollo_device_t *device, uint32_t *s
         *subclass = val_e;
     } else {
         err = adi_apollo_hal_bf_get(device, BF_SUBCLASS_SEL_INFO(MCS_SYNC_MCSTOP0), (uint8_t *)subclass, sizeof(*subclass));
-        ADI_APOLLO_ERROR_RETURN(err);
-    }
-
-    return API_CMS_ERROR_OK;
-}
-
-int32_t adi_apollo_clk_mcs_internal_sysref_per_set(adi_apollo_device_t *device, uint16_t sysref_per)
-{
-    int32_t err;
-
-    ADI_APOLLO_NULL_POINTER_RETURN(device);
-    ADI_APOLLO_LOG_FUNC();
-
-    if (IS_DUAL_CLK(device)) {
-        err = adi_apollo_hal_bf_set(device, BF_INT_SYSREF_PERIOD_INFO(MCS_SYNC_MCSTOP1), sysref_per);
-        ADI_APOLLO_ERROR_RETURN(err);
-        err = sync_logic_reset(device, MCS_SYNC_MCSTOP1);
-        ADI_APOLLO_ERROR_RETURN(err);
-
-        err = adi_apollo_hal_bf_set(device, BF_INT_SYSREF_PERIOD_INFO(MCS_SYNC_MCSTOP2), sysref_per);
-        ADI_APOLLO_ERROR_RETURN(err);
-        err = sync_logic_reset(device, MCS_SYNC_MCSTOP2);
-        ADI_APOLLO_ERROR_RETURN(err);
-    } else {
-        err = adi_apollo_hal_bf_set(device, BF_INT_SYSREF_PERIOD_INFO(MCS_SYNC_MCSTOP0), sysref_per);
-        ADI_APOLLO_ERROR_RETURN(err);
-        err = sync_logic_reset(device, MCS_SYNC_MCSTOP0);
         ADI_APOLLO_ERROR_RETURN(err);
     }
 
@@ -941,6 +893,12 @@ int32_t adi_apollo_clk_mcs_sysref_en_set(adi_apollo_device_t* device, uint8_t en
 
     err = adi_apollo_hal_bf_set(device, BF_SYSREF_EN_INFO(MCS_TDC_MCSTOP0), enable != 0 ? 1 : 0);
     ADI_APOLLO_ERROR_RETURN(err);
+
+    /* Add 50us delay when enabling SYSREF to ensure receiver stability before oneshot sync */
+    if (enable != 0) {
+        err = adi_apollo_hal_delay_us(device, 50);
+        ADI_APOLLO_ERROR_RETURN(err);
+    }
 
     return API_CMS_ERROR_OK;
 }
@@ -1062,6 +1020,31 @@ int32_t adi_apollo_clk_mcs_input_power_status_get(adi_apollo_device_t *device, a
     return API_CMS_ERROR_OK;
 }
 
+int32_t adi_apollo_clk_mcs_dig_clk_mask_set(adi_apollo_device_t *device, uint8_t enable)
+{
+    int32_t err;
+
+    ADI_APOLLO_NULL_POINTER_RETURN(device);
+    ADI_APOLLO_LOG_FUNC();
+
+    // mask off digital clocks from ext trigger reset
+    err = adi_apollo_hal_reg_set(device, REG_SYNC_MASK_ADCFIFO_ADDR, enable ? 0xF : 0);
+    ADI_APOLLO_ERROR_RETURN(err);
+    err = adi_apollo_hal_reg_set(device, REG_SYNC_MASK_DACFIFO_ADDR, enable ? 0xF : 0);
+    ADI_APOLLO_ERROR_RETURN(err);
+    err = adi_apollo_hal_reg_set(device, REG_SYNC_MASK_LPBKFIFO_ADDR, enable ? 0x3 : 0);
+    ADI_APOLLO_ERROR_RETURN(err);
+    err = adi_apollo_hal_reg_set(device, REG_SYNC_MASK_RTCLK_ADDR, enable ? 0xFF : 0);
+    ADI_APOLLO_ERROR_RETURN(err);
+    err = adi_apollo_hal_reg_set(device, REG_SYNC_MASK_RXTX_ADDR, enable ? 0xF : 0);
+    ADI_APOLLO_ERROR_RETURN(err);
+    err = adi_apollo_hal_reg_set(device, REG_SYNC_MASK_RXTXLINK_ADDR, enable ? 0xF : 0);
+    ADI_APOLLO_ERROR_RETURN(err);
+
+    return API_CMS_ERROR_OK;
+
+}
+
 /*==================== S T A T I C  F U N C T I O N S ====================*/
 
 static __maybe_unused int32_t clk_pd_status_get(adi_apollo_device_t *device, int32_t top_base, adi_apollo_clk_input_power_status_e *status)
@@ -1096,11 +1079,6 @@ static __maybe_unused int32_t clk_pd_status_get(adi_apollo_device_t *device, int
     return API_CMS_ERROR_OK;
 }
 
-static int32_t rxtx_sync(adi_apollo_device_t *device, adi_apollo_sync_mask_rxtx_e rxtx_mask)
-{
-    return mask_sync(device, BF_SYNC_MASK_RXTX_INFO, ADI_APOLLO_SYNC_MASK_RX_TX_ALL, (uint64_t)rxtx_mask);
-}
-
 static int32_t rxtxlink_sync(adi_apollo_device_t *device, adi_apollo_sync_mask_rxtx_link_e rxtx_link_mask)
 {
     return mask_sync(device, BF_SYNC_MASK_RXTXLINK_INFO, ADI_APOLLO_SYNC_MASK_RXTX_LINK_ALL, (uint64_t)rxtx_link_mask);
@@ -1117,18 +1095,6 @@ static int32_t mask_sync(adi_apollo_device_t *device, uint32_t reg, uint32_t inf
     ADI_APOLLO_ERROR_RETURN(err);
 
     err = adi_apollo_hal_delay_us(device, 50);
-    ADI_APOLLO_ERROR_RETURN(err);
-
-    return API_CMS_ERROR_OK;
-}
-
-static int32_t lpbkfifo_sync_mask_set(adi_apollo_device_t *device, adi_apollo_sync_mask_lpbkfifo_e mask)
-{
-    uint32_t err;
-
-    ADI_APOLLO_NULL_POINTER_RETURN(device);
-
-    err = adi_apollo_hal_bf_set(device, BF_SYNC_MASK_LPBKFIFO_INFO, 0x3 & mask);
     ADI_APOLLO_ERROR_RETURN(err);
 
     return API_CMS_ERROR_OK;
@@ -1169,11 +1135,16 @@ static void get_dac_fifo_offsets(adi_apollo_data_fifo_conv_clk_ratio_e clk_ratio
 
 static uint32_t calc_rx_datin_base(int32_t idx)
 {
-    static uint32_t rx_datin_regmap[] = {
-        RX_DATIN_RX_SLICE_0_RX_DIGITAL0,        /* A0 */
-        RX_DATIN_RX_SLICE_1_RX_DIGITAL0,        /* A1 */
-        RX_DATIN_RX_SLICE_0_RX_DIGITAL1,        /* B0 */
-        RX_DATIN_RX_SLICE_1_RX_DIGITAL1         /* B1 */
+    static uint32_t rx_datin_regmap[ADI_APOLLO_ADC_NUM] = {
+        RX_DATIN_RX_SLICE_0_RX_DIGITAL0,        /* A0: 4T4R/8T8R */
+        RX_DATIN_RX_SLICE_1_RX_DIGITAL0,        /* A1: 4T4R/8T8R */
+        RX_DATIN_RX_SLICE_0_RX_DIGITAL0,        /* A2: 8T8R */
+        RX_DATIN_RX_SLICE_1_RX_DIGITAL0,        /* A3: 8T8R */
+
+        RX_DATIN_RX_SLICE_0_RX_DIGITAL1,        /* B0: 4T4R/8T8R */
+        RX_DATIN_RX_SLICE_1_RX_DIGITAL1,        /* B1: 4T4R/8T8R */
+        RX_DATIN_RX_SLICE_0_RX_DIGITAL1,        /* B2: 8T8R */
+        RX_DATIN_RX_SLICE_1_RX_DIGITAL1         /* B3: 8T8R */
     };
     return rx_datin_regmap[idx];
 }
@@ -1207,17 +1178,4 @@ uint32_t calc_tx_hsdout_base(int32_t index)
     return tx_hsdout_regmap[index];
 }
 
-static int32_t sync_logic_reset(adi_apollo_device_t *device, int32_t mcs_sync_top)
-{
-    int32_t err;
-
-    err = adi_apollo_hal_bf_set(device, BF_SYNCLOGIC_RESET_INFO(mcs_sync_top), 0);
-    ADI_APOLLO_ERROR_RETURN(err);
-    err = adi_apollo_hal_bf_set(device, BF_SYNCLOGIC_RESET_INFO(mcs_sync_top), 1);
-    ADI_APOLLO_ERROR_RETURN(err);
-    err = adi_apollo_hal_bf_set(device, BF_SYNCLOGIC_RESET_INFO(mcs_sync_top), 0);
-    ADI_APOLLO_ERROR_RETURN(err);
-
-    return API_CMS_ERROR_OK;
-}
 /*! @} */

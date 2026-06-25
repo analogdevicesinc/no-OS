@@ -53,19 +53,6 @@ typedef enum {
  } adi_apollo_jrx_j204c_irq_e;
 
 /**
- * \brief fec errors
- */
-typedef struct adi_apollo_fec_errors
-{
-    uint8_t sh_err_cnt;                 /*!< Count of block alignment errors */
-    uint8_t parity_err_cnt;             /*!< Count of FEC parity errors */
-    uint8_t uncorrectable_err_cnt;      /*!< Count of uncorrectable FEC errors */
-    uint8_t crc_err_cnt;                /*!< Count of CRC errors */
-    uint8_t emb_err_cnt;                /*!< Count of Extended Multi Block alignment errors */
-    uint8_t mb_err_cnt;                 /*!< Count of Multi Block alignment errors */
-} adi_apollo_fec_errors_t;
-
-/**
  * \brief JESD Rx inspect params
  */
 typedef struct adi_apollo_jesd_rx_inspect

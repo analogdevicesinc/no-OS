@@ -217,40 +217,6 @@ int32_t adi_apollo_jrx_clear_pclk_errors(adi_apollo_device_t *device,
     const uint16_t links);
 
 /**
- * \brief  clear all fec error counters
- * 
- * \deprecated Use \ref adi_apollo_jrx_j204c_irq_clear() instead.
- *             This will be removed in the future releases.
- * 
- * \param[in]   device     Context variable - Pointer to the APOLLO device data structure
- * \param[in]   links      Target link adi_apollo_jesd_link_select_e
- *
- * \return API_CMS_ERROR_OK                     API Completed Successfully
- * \return <0                                   Failed. \ref adi_cms_error_e for details.
- */
-int32_t adi_apollo_jrx_clear_fec_errors(adi_apollo_device_t *device,
-    const uint16_t links);
-
-/**
- * \brief  Get current jrx FEC error counters
- * 
- * \deprecated Use \ref adi_apollo_jrx_j204c_irq_get() instead.
- *             This will be removed in the future releases.
- *
- * \param[in]   device     Context variable - Pointer to the APOLLO device data structure
- * \param[in]   link      Target link. Only 1 link selection per call. adi_apollo_jesd_link_select_e
- * \param[in]   lane       Target serdes lane. Valid values from 0 to ADI_APOLLO_JESD_DESER_COUNT-1 \ref adi_apollo_common_types.h
- * \param[out]  fec_errors Pointer to jrx fec errors structure
- *
- * \return API_CMS_ERROR_OK                     API Completed Successfully
- * \return <0                                   Failed. \ref adi_cms_error_e for details.
- */
-int32_t adi_apollo_jrx_fec_errors(adi_apollo_device_t *device,
-    const uint16_t link,
-    const uint16_t lane,
-    adi_apollo_fec_errors_t *fec_errors);
-
-/**
  * \brief  Inspect Jrx link param data from device
  *
  * \param[in]   device      Context variable - Pointer to the APOLLO device data structure
@@ -383,20 +349,6 @@ int32_t adi_apollo_jrx_lr_adapt_set(adi_apollo_device_t *device,
 int32_t adi_apollo_jrx_phase_diff_get(adi_apollo_device_t* device,
     const uint16_t links,
     uint16_t *phase_diff);
-
-/**
- * \brief  Configure the JESD Rx (JRx) subclass mode
- *
- * \param[in]  device          Context variable - Pointer to the APOLLO device data structure
- * \param[in]  links           Target link
- * \param[in]  subclass        Link subclass operation mode. 0 = subclass 0, 1 = subclass 1
- *
- * \return API_CMS_ERROR_OK                     API Completed Successfully
- * \return <0                                   Failed. \ref adi_cms_error_e for details.
- */
-int32_t adi_apollo_jrx_subclass_set(adi_apollo_device_t *device,
-    const uint16_t links,
-    const uint16_t subclass);
 
 /**
  * \brief  Enable JRx 204C IRQs

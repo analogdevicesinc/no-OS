@@ -19,6 +19,10 @@
 #include "adi_apollo_common.h"
 #include "adi_apollo_mailbox_types.h"
 
+/*============= D E F I N E S ==============*/
+#define ADI_APOLLO_4T4R_ADC_TIMEOUT                 120
+#define ADI_APOLLO_8T8R_ADC_TIMEOUT                 240
+
 /*!
  * \brief Enumerates ADC sync path delay types
  */

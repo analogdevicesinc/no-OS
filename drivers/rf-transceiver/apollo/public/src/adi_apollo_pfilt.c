@@ -69,7 +69,8 @@ int32_t adi_apollo_pfilt_mode_pgm(adi_apollo_device_t *device, adi_apollo_termin
     ADI_APOLLO_DEV_FEAT_LOCKOUT_RETURN(terminal, ADI_APOLLO_EC_PFILT_LOCK);
     ADI_APOLLO_PFILT_BLK_SEL_MASK(pfilts);
 
-    for(i = 0; i < ADI_APOLLO_PFILT_NUM; i += 2) {                               //Common bitfield for 0 & 1 pfilts
+    /* Common bitfield for 0 & 1 pfilts */
+    for(i = 0; i < ADI_APOLLO_PFILT_NUM; i += 2) {                               
         pfilt = pfilts & ((ADI_APOLLO_PFILT_A0 << i) | (ADI_APOLLO_PFILT_A0 << (i+1)));
         if (pfilt > 0) {
             regmap_base_addr = calc_pfilt_base(terminal, i);
@@ -85,14 +86,23 @@ int32_t adi_apollo_pfilt_mode_pgm(adi_apollo_device_t *device, adi_apollo_termin
         }
     }
 
+    /* 
+     * 4t4r: Program for n=0;
+     * 8t8r ADC pair 0: Program for n=0;
+     * 8t8r ADC pair 1: Program for n=1
+     */    
     for(i = 0; i < ADI_APOLLO_PFILT_NUM; i ++) {
         pfilt = pfilts & (ADI_APOLLO_PFILT_A0 << i);
         if (pfilt > 0) {
             regmap_base_addr = calc_pfilt_base(terminal, i);
 
-            err = adi_apollo_hal_bf_set(device, BF_PFIR_I_MODE_INFO(regmap_base_addr, i%2), config->pfir_i_mode);
+            /* v10
+             * A0 and B0 get i/q_mode[0]
+             * A1 and B1 get i/q_mode[1]
+             */
+            err = adi_apollo_hal_bf_set(device, BF_PFIR_I_MODE_INFO(regmap_base_addr, i%2), config->pfir_i_mode[i%2]);
             ADI_APOLLO_ERROR_RETURN(err);
-            err = adi_apollo_hal_bf_set(device, BF_PFIR_Q_MODE_INFO(regmap_base_addr, i%2), config->pfir_q_mode);
+            err = adi_apollo_hal_bf_set(device, BF_PFIR_Q_MODE_INFO(regmap_base_addr, i%2), config->pfir_q_mode[i%2]);
             ADI_APOLLO_ERROR_RETURN(err);
         }
     }
@@ -112,14 +122,40 @@ int32_t adi_apollo_pfilt_gain_dly_pgm(adi_apollo_device_t *device, adi_apollo_te
     ADI_APOLLO_DEV_FEAT_LOCKOUT_RETURN(terminal, ADI_APOLLO_EC_PFILT_LOCK);
     ADI_APOLLO_PFILT_BLK_SEL_MASK(pfilts);
 
+    /* 
+     * for each of the pfilts (4 for 8T8R: A0/A1/B0/B1, 2 for 4T4R: A0/B0)
+     *    for each of the 4 banks supported in each pfilt
+     *        set the parameters gain/scalar-gain/delay
+     *        
+     * 4t4r: Program n=0 for 1st coeff bank;
+     * 4t4r: Program n=1 for 2nd coeff bank;
+     * 4t4r: Program n=2 for 3rd coeff bank;
+     * 4t4r: Program n=3 for 4th coeff bank;
+     * 
+     * 8t8r: Program n=0 for 1st coeff bank of ADC pair 0;
+     * 8t8r: Program n=1 for 2nd coeff bank of ADC pair 0;
+     * 8t8r: Program n=2 for 3rd coeff bank of ADC pair 0;
+     * 8t8r: Program n=3 for 4th coeff bank of ADC pair 0;
+     * 8t8r: Program n=4 for 1st coeff bank of ADC pair 1;
+     * 8t8r: Program n=5 for 2nd coeff bank of ADC pair 1;
+     * 8t8r: Program n=6 for 3rd coeff bank of ADC pair 1;
+     * 8t8r: Program n=7 for 4th coeff bank of ADC pair 1;
+     */
     for(i = 0; i < ADI_APOLLO_PFILT_NUM; i ++) {
         pfilt = pfilts & (ADI_APOLLO_PFILT_A0 << i);
         if (pfilt > 0) {
+            /* base of pfilt */
             regmap_base_addr = calc_pfilt_base(terminal, i);
 
+            /* For each of the banks supported in a pfilt */
             for(j = 0; j < ADI_APOLLO_PFILT_BANK_NUM; j ++) {
                 pfilt_bank = pfilt_banks & (ADI_APOLLO_PFILT_BANK0 <<j);
                 if (pfilt_bank > 0) {
+                    /* i: 0 to 3
+                     * (i % ADI_APOLLO_PFILT_PER_SIDE): 0, 1, 0, 1
+                     * (i % ADI_APOLLO_PFILT_PER_SIDE) * ADI_APOLLO_PFILT_BANK_NUM: 0, 4, 0, 4
+                     * pfilt_local: 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 (the bank index)
+                     * */
                     pfilt_local = (((i%ADI_APOLLO_PFILT_PER_SIDE)*ADI_APOLLO_PFILT_BANK_NUM) + j);
 
                     err = adi_apollo_hal_bf_set(device, BF_PFIR_IX_GAIN_INFO(regmap_base_addr, pfilt_local), config->pfir_ix_gain);
@@ -149,8 +185,32 @@ int32_t adi_apollo_pfilt_gain_dly_pgm(adi_apollo_device_t *device, adi_apollo_te
     return API_CMS_ERROR_OK;
 }
 
-
-int32_t adi_apollo_pfilt_coeff_pgm(adi_apollo_device_t *device, adi_apollo_terminal_e terminal, adi_apollo_blk_sel_t pfilts, uint8_t pfilt_banks, uint16_t pfilt_coeff[], uint32_t length)
+/*
+ * This function programs a set of length coefficients into a BANK
+ * 
+ * For each side of the chip (A and B)
+ *      For each of Tx and Rx     *      
+ *          For 4T4R
+ *              There is one PFIR called A0 on side A and one PFIR called B0 on side B
+ *              The PFIR has 4 coefficients sets associated with it
+ *              (on Side A, these are at 0x60360000, 0x60360040, 0x60560000, 0x60560040)
+ *              (on Side B, these are at 0x60B60000, 0x60B60040, 0x60D60000, 0x60D60040)
+ *          For 8T8R
+ *              There is one additional PFIR called A1 on side A and one additional PFIR called B1 on side B
+ *              This additional PFIR has 4 coefficients sets associated with it
+ *              (e.g. on Side A, these are at 0x60361000, 0x60361040, 0x60561000, 0x60561040)
+ *              (e.g. on Side B, these are at 0x60B61000, 0x60B61040, 0x60D61000, 0x60D61040)
+ *              
+ *          So, in summary:
+ *          There are 4 sets of coefficients (4 x 32 x int16) on each side of the chip, for Tx and Rx separately for a 4T4R chip
+ *          There are 8 sets of coefficients (8 x 32 x int16) on each side of the chip, for Tx and Rx separately for a 8T8R chip
+ *          
+ * This function gets these parameters:
+ *      RX/Tx
+ *      A 4 bit mask that indicates which of the A0/A1/B0/B1 coefficient sets are to be written to with the coefficients - pfilts is a 4 bit value: B1:B0:A1:A0
+ *      pfilt_banks: This is a 4 bit field indicating which banks to write to within the PFIR (3:2:1:0) with the coefficients
+ * */
+int32_t adi_apollo_pfilt_coeff_pgm(adi_apollo_device_t *device, adi_apollo_terminal_e terminal, adi_apollo_blk_sel_t pfilts, uint8_t pfilt_banks, int16_t pfilt_coeff[], uint32_t length)
 {
     int32_t err;
     uint8_t i, j, k, pfilt_bank;
@@ -228,8 +288,7 @@ int32_t adi_apollo_pfilt_coeff_ntap_set(adi_apollo_device_t *device, adi_apollo_
                             err = write_bank(device, j, regmap_base_addr, stream_ceoff_loc.idx[s], coeffs, stream_ceoff_loc.n_taps);
                             ADI_APOLLO_ERROR_RETURN(err);
                         }
-                    }
-                    
+                    }                    
                 }
             }
         }
@@ -425,10 +484,10 @@ int32_t adi_apollo_pfilt_inspect(adi_apollo_device_t *device, adi_apollo_termina
         if (pfilt_temp > 0) {
             regmap_base_addr = calc_pfilt_base(terminal, i);
 
-            err = adi_apollo_hal_bf_get(device, BF_PFIR_COEFF_TRANSFER_INFO(regmap_base_addr, i % 2), (uint8_t*)&(pfilt_inspect->pfir_coeff_transfer), 1);
+            err = adi_apollo_hal_bf_get(device, BF_PFIR_COEFF_TRANSFER_INFO(regmap_base_addr, i%2), (uint8_t*)&(pfilt_inspect->pfir_coeff_transfer), 1);
             ADI_APOLLO_ERROR_RETURN(err);
 
-            err = adi_apollo_hal_bf_get(device, BF_RD_COEFF_PAGE_SEL_INFO(regmap_base_addr, i % 2), (uint8_t*)&(pfilt_inspect->bank_sel), 1);
+            err = adi_apollo_hal_bf_get(device, BF_RD_COEFF_PAGE_SEL_INFO(regmap_base_addr, i%2), (uint8_t*)&(pfilt_inspect->bank_sel), 1);
             ADI_APOLLO_ERROR_RETURN(err);
             break;
         }
@@ -465,9 +524,9 @@ int32_t adi_apollo_pfilt_inspect(adi_apollo_device_t *device, adi_apollo_termina
         if (pfilt_temp > 0) {
             regmap_base_addr = calc_pfilt_base(terminal, i);
 
-            err = adi_apollo_hal_bf_get(device, BF_PFIR_I_MODE_INFO(regmap_base_addr, i%2), (uint8_t*) &(pfilt_inspect->dp_cfg.i_mode), 1);
+            err = adi_apollo_hal_bf_get(device, BF_PFIR_I_MODE_INFO(regmap_base_addr, i%2), (uint8_t*) &(pfilt_inspect->dp_cfg.i_mode[i%2]), 1);
             ADI_APOLLO_ERROR_RETURN(err);
-            err = adi_apollo_hal_bf_get(device, BF_PFIR_Q_MODE_INFO(regmap_base_addr, i%2), (uint8_t*) &(pfilt_inspect->dp_cfg.q_mode), 1);
+            err = adi_apollo_hal_bf_get(device, BF_PFIR_Q_MODE_INFO(regmap_base_addr, i%2), (uint8_t*) &(pfilt_inspect->dp_cfg.q_mode[i%2]), 1);
             ADI_APOLLO_ERROR_RETURN(err);
 
             for (j = 0; j < ADI_APOLLO_PFILT_BANK_NUM; j++) {
@@ -607,7 +666,7 @@ int32_t adi_apollo_pfilt_next_hop_num_set(adi_apollo_device_t *device, adi_apoll
         if (pfilt > 0) {
             regmap_base_addr = calc_pfilt_base(terminal, i);
 
-            err = adi_apollo_hal_bf_set(device, BF_RD_COEFF_PAGE_SEL_INFO(regmap_base_addr, i % 2), hop_num);   // Next active coeff bank on trig event
+            err = adi_apollo_hal_bf_set(device, BF_RD_COEFF_PAGE_SEL_INFO(regmap_base_addr, i%2), hop_num);   // Next active coeff bank on trig event
             ADI_APOLLO_ERROR_RETURN(err);
         }
     }
@@ -635,6 +694,8 @@ int32_t adi_apollo_pfilt_ave_mode_set(adi_apollo_device_t *device, adi_apollo_bl
             err = adi_apollo_hal_bf_set(device, BF_MODE_SWITCH_INFO(regmap_base_addr), ave_mode != ADI_APOLLO_PFILT_AVE_DISABLE);
             ADI_APOLLO_ERROR_RETURN(err);
             err = adi_apollo_hal_bf_set(device, BF_ADD_SUB_SEL_INFO(regmap_base_addr), ave_mode == ADI_APOLLO_PFILT_AVE_ENABLE_ADD);
+            ADI_APOLLO_ERROR_RETURN(err);
+            err = adi_apollo_hal_bf_set(device, BF_QUAD_MODE_INFO(regmap_base_addr), device->dev_info.is_8t8r ? 1 : 0);
             ADI_APOLLO_ERROR_RETURN(err);
         }
     }

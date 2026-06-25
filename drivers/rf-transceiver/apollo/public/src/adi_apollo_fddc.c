@@ -18,7 +18,7 @@
 #include "adi_apollo_ddc_local.h"
 #include "adi_apollo_nco_local.h"
 #include "adi_apollo_duc_local.h"
-#include "adi_apollo_pfilt_local.h" //TODO: PFILT pgm dependency; Move to pfilt module
+#include "adi_apollo_pfilt_local.h"
 #include "adi_apollo_private_blk_sel_types.h"
 
 #include "adi_apollo_bf_rx_cddc.h"

@@ -29,8 +29,6 @@
 #include "adi_utils.h"
 
 /*============= D E F I N E S ==============*/
-#define ADI_APOLLO_4T4R_ADC_TIMEOUT                 60
-#define ADI_APOLLO_8T8R_ADC_TIMEOUT                 120
 #define ADC_OVR_SAMPLES_MIN                         1
 #define ADC_OVR_SAMPLES_MAX                         10000
 #define ADC_OVR_CYCLES_MIN                          1
@@ -44,6 +42,9 @@
 #define ADI_APOLLO_ADC_INPUT_STATUS_UINT32          21          /*!< [   out]     Get the Input Condition Status. */
 #define ADI_APOLLO_ADC_OVER_RANGE_THRESHOLD_UINT32  22          /*!< [in,out] Set/Get Over Range Protection Threshold */
 #define ADI_APOLLO_ADC_OVER_RANGE_SAMPLES_UINT32    23          /*!< [in,out] Set/Get Over Range Protection Number of Samples */
+#define ADI_APOLLO_ADC_FACTORY_CAL_COEFF_STATUS_UINT64 31       /*!< [   out]     Get the Calibration Co-efficient Status. */
+#define ADI_APOLLO_ADC_FACTORY_CAL_COEFF_MODE_UINT32   32       /*!< [in,out] Set/Get the Calibration Co-efficient Mode. */
+
 
 static uint32_t calc_master_bias_base(int32_t index);
 
@@ -193,110 +194,6 @@ int32_t adi_apollo_adc_init_cal(adi_apollo_device_t *device, adi_apollo_blk_sel_
     ADI_APOLLO_ERROR_RETURN(err);
 
     return adi_apollo_adc_init_cal_complete(device, adcs);
-}
-
-int32_t adi_apollo_adc_tlines_offset_set(adi_apollo_device_t *device, int8_t offset, adi_apollo_side_select_e side_sel)
-{
-    int32_t err;
-    uint8_t side, side_index;
-    uint32_t regmap_base_addr = 0;
-
-    uint8_t t1_r_pup, t1_rterm_pup_msb, t1_rterm_pup_lsb;
-    uint8_t t1_r_pdn, t1_rterm_pdn_msb, t1_rterm_pdn_lsb;
-    uint8_t t2_r_pup, t2_rterm_pup_msb, t2_rterm_pup_lsb;
-    uint8_t t2_r_pdn, t2_rterm_pdn_msb, t2_rterm_pdn_lsb;
-    uint8_t t1_rterm_pup, t1_rterm_pdn, t2_rterm_pup, t2_rterm_pdn;
-    uint8_t off_t1_pup, off_t1_pdn, off_t2_pup, off_t2_pdn;
-    uint8_t off_t1_rterm_pup, off_t1_rterm_pdn, off_t2_rterm_pup, off_t2_rterm_pdn;
-
-    ADI_APOLLO_NULL_POINTER_RETURN(device);
-    ADI_APOLLO_LOG_FUNC();
-
-    for (side_index = 0;  side_index < ADI_APOLLO_NUM_SIDES; side_index++) {
-        side = side_sel & (ADI_APOLLO_SIDE_A << side_index);
-        if (side > 0) {
-
-            regmap_base_addr = calc_master_bias_base(side_index);
-
-            err = adi_apollo_hal_bf_get(device, BF_ADC_TL1_CLKP_R_PUP_INFO(regmap_base_addr), &t1_r_pup, 1);
-            ADI_APOLLO_ERROR_RETURN(err);
-
-            err = adi_apollo_hal_bf_get(device, BF_ADC_TL1_CLKP_RTERM_PUP_INFO(regmap_base_addr), &t1_rterm_pup, 1);
-            ADI_APOLLO_ERROR_RETURN(err);
-
-            t1_rterm_pup_msb = (t1_rterm_pup >> 1) & 0x1;
-            t1_rterm_pup_lsb = t1_rterm_pup & 0x1;
-
-            err = adi_apollo_hal_bf_get(device, BF_ADC_TL1_CLKP_R_PDN_INFO(regmap_base_addr), &t1_r_pdn, 1);
-            ADI_APOLLO_ERROR_RETURN(err);
-
-            err = adi_apollo_hal_bf_get(device, BF_ADC_TL1_CLKP_RTERM_PDN_INFO(regmap_base_addr), &t1_rterm_pdn, 1);
-            ADI_APOLLO_ERROR_RETURN(err);
-
-            t1_rterm_pdn_msb = (t1_rterm_pdn >> 1) & 0x1;
-            t1_rterm_pdn_lsb = t1_rterm_pdn & 0x1;
-
-            err = adi_apollo_hal_bf_get(device, BF_ADC_TL2_CLKP_R_PUP_INFO(regmap_base_addr), &t2_r_pup, 1);
-            ADI_APOLLO_ERROR_RETURN(err);
-
-            err = adi_apollo_hal_bf_get(device, BF_ADC_TL2_CLKP_RTERM_PUP_INFO(regmap_base_addr), &t2_rterm_pup, 1);
-            ADI_APOLLO_ERROR_RETURN(err);
-
-            t2_rterm_pup_msb = (t2_rterm_pup >> 1) & 0x1;
-            t2_rterm_pup_lsb = t2_rterm_pup & 0x1;
-
-            err = adi_apollo_hal_bf_get(device, BF_ADC_TL2_CLKP_R_PDN_INFO(regmap_base_addr), &t2_r_pdn, 1);
-            ADI_APOLLO_ERROR_RETURN(err);
-
-            err = adi_apollo_hal_bf_get(device, BF_ADC_TL2_CLKP_RTERM_PDN_INFO(regmap_base_addr), &t2_rterm_pdn, 1);
-            ADI_APOLLO_ERROR_RETURN(err);
-
-            t2_rterm_pdn_msb = (t2_rterm_pdn >> 1) & 0x1;
-            t2_rterm_pdn_lsb = t2_rterm_pdn & 0x1;
-
-            off_t1_pup = t1_rterm_pup_msb*32 + t1_r_pup;
-            off_t1_pdn = t1_rterm_pdn_msb*32 + t1_r_pdn;
-            off_t2_pup = t2_rterm_pup_msb*32 + t2_r_pup;
-            off_t2_pdn = t2_rterm_pdn_msb*32 + t2_r_pdn;
-
-            off_t1_pup = off_t1_pup + offset;
-            off_t1_pdn = off_t1_pdn - offset;
-            off_t2_pup = off_t2_pup + offset;
-            off_t2_pdn = off_t2_pdn - offset;
-
-            err = adi_apollo_hal_bf_set(device, BF_ADC_TL1_CLKP_R_PUP_INFO(regmap_base_addr), off_t1_pup & 0x1F);
-            ADI_APOLLO_ERROR_RETURN(err);
-
-            err = adi_apollo_hal_bf_set(device, BF_ADC_TL1_CLKP_R_PDN_INFO(regmap_base_addr), off_t1_pdn & 0x1F);
-            ADI_APOLLO_ERROR_RETURN(err);
-
-            err = adi_apollo_hal_bf_set(device, BF_ADC_TL2_CLKP_R_PUP_INFO(regmap_base_addr), off_t2_pup & 0x1F);
-            ADI_APOLLO_ERROR_RETURN(err);
-
-            err = adi_apollo_hal_bf_set(device, BF_ADC_TL2_CLKP_R_PDN_INFO(regmap_base_addr), off_t2_pdn & 0x1F);
-            ADI_APOLLO_ERROR_RETURN(err);
-
-            off_t1_rterm_pup = 2 * ((off_t1_pup & 0x20) >> 5) + t1_rterm_pup_lsb;
-            err = adi_apollo_hal_bf_set(device, BF_ADC_TL1_CLKP_RTERM_PUP_INFO(regmap_base_addr), off_t1_rterm_pup);
-            ADI_APOLLO_ERROR_RETURN(err);
-
-            off_t1_rterm_pdn = 2 * ((off_t1_pdn & 0x20) >> 5) + t1_rterm_pdn_lsb;
-            err = adi_apollo_hal_bf_set(device, BF_ADC_TL1_CLKP_RTERM_PDN_INFO(regmap_base_addr), off_t1_rterm_pdn);
-            ADI_APOLLO_ERROR_RETURN(err);
-
-            off_t2_rterm_pup = 2 * ((off_t2_pup & 0x20) >> 5) + t2_rterm_pup_lsb;
-            err = adi_apollo_hal_bf_set(device, BF_ADC_TL2_CLKP_RTERM_PUP_INFO(regmap_base_addr), off_t2_rterm_pup);
-            ADI_APOLLO_ERROR_RETURN(err);
-
-            off_t2_rterm_pdn = 2 * ((off_t2_pdn & 0x20) >> 5) + t2_rterm_pdn_lsb;
-            err = adi_apollo_hal_bf_set(device, BF_ADC_TL2_CLKP_RTERM_PDN_INFO(regmap_base_addr), off_t2_rterm_pdn);
-            ADI_APOLLO_ERROR_RETURN(err);
-
-        }
-    }
-
-    return API_CMS_ERROR_OK;
-
 }
 
 int32_t adi_apollo_adc_nyquist_zone_set(adi_apollo_device_t *device, adi_apollo_blk_sel_t adcs,
@@ -603,8 +500,8 @@ int32_t adi_apollo_adc_mode_switch_prepare(adi_apollo_device_t *device, adi_apol
     err = adi_apollo_adc_bgcal_freeze(device, adcs);
     ADI_APOLLO_ERROR_RETURN(err);
 
-    // Wait 10ms.
-    err = adi_apollo_hal_delay_us(device, 10000);
+    // Delay 50ms for ADC BG cals to disable and go inactive
+    err = adi_apollo_hal_delay_us(device, 50000);
     ADI_APOLLO_ERROR_RETURN(err);
 
     // Set the ADC Channel Mask, where, Reg bits[7:0] corresponds to [B3 B2 B1 B0 A3 A2 A1 A0].
@@ -1262,7 +1159,150 @@ int32_t adi_apollo_adc_ovr_samples_get(adi_apollo_device_t *device, adi_apollo_b
     return API_CMS_ERROR_OK;
 }
 
+int32_t adi_apollo_adc_fact_cal_status_get(adi_apollo_device_t *device, adi_apollo_blk_sel_t adc, uint64_t *coeff_status)
+{
+    int32_t err;
+    uint16_t i, adc_index;
+    adi_apollo_mailbox_cmd_set_ctrl_t set_ctrl_cmd = {
+        .sys_cal_object_id = APOLLO_CPU_OBJID_IC_ADC_RX,
+        .ctrl_cmd          = CTRL_CMD_PARAM_GET,
+        .data_buffer[0]    = ADI_APOLLO_ADC_FACTORY_CAL_COEFF_STATUS_UINT64,
+        .data_buffer[1]    = 0,
+        .data_buffer[2]    = 0,
+        .data_buffer[3]    = 0,
+        .length            = 8
+    };
+    adi_apollo_mailbox_resp_set_ctrl_t set_ctrl_resp = {0};
 
+    ADI_APOLLO_NULL_POINTER_RETURN(device);
+    ADI_APOLLO_LOG_FUNC();
+    ADI_APOLLO_NULL_POINTER_RETURN(coeff_status);
+    ADI_APOLLO_INVALID_PARAM_RETURN(adi_api_utils_num_selected(adc) != 1);
+    ADI_APOLLO_ADC_BLK_SEL_MASK(adc);
+
+    for (i = 0; i < ADI_APOLLO_ADC_NUM; i++) {
+        if ( (adc & (ADI_APOLLO_ADC_A0 << i)) > 0 ) {
+            adc_index = i;
+            break;
+        }
+    }
+
+    set_ctrl_cmd.channel_num = adc_index;
+
+    err = adi_apollo_mailbox_set_ctrl(device, &set_ctrl_cmd, &set_ctrl_resp);
+    if (err != API_CMS_ERROR_OK) {
+        adi_apollo_hal_log_write(device, ADI_CMS_LOG_ERR, "Error from adi_apollo_mailbox_set_ctrl() %d", err);
+        return err;
+    }
+
+    if (set_ctrl_resp.status != API_CMS_ERROR_OK) {
+        adi_apollo_hal_log_write(device, ADI_CMS_LOG_ERR, "Mailbox Response Status Error from adi_apollo_mailbox_set_ctrl() 0x%X", set_ctrl_resp.status);
+        return API_CMS_ERROR_MAILBOX_RESP_STATUS;
+    }
+
+    /* Extract Num of samples at or above over-range threshold from response structure */
+    *coeff_status = (uint64_t)(set_ctrl_resp.data_buffer[4+0])        |  ((uint64_t)(set_ctrl_resp.data_buffer[4+1]) << 8)  |
+                   ((uint64_t)(set_ctrl_resp.data_buffer[4+2]) << 16) |  ((uint64_t)(set_ctrl_resp.data_buffer[4+3]) << 24) |
+                   ((uint64_t)(set_ctrl_resp.data_buffer[4+4]) << 32) |  ((uint64_t)(set_ctrl_resp.data_buffer[4+5]) << 40) |
+                   ((uint64_t)(set_ctrl_resp.data_buffer[4+6]) << 48) |  ((uint64_t)(set_ctrl_resp.data_buffer[4+7]) << 56);
+
+    return API_CMS_ERROR_OK;
+}
+
+int32_t adi_apollo_adc_fact_cal_mode_set(adi_apollo_device_t *device, adi_apollo_blk_sel_t adcs, uint32_t coeff_mode)
+{
+    int32_t err;
+    uint16_t i;
+    adi_apollo_blk_sel_t adc;
+    adi_apollo_mailbox_cmd_set_ctrl_t set_ctrl_cmd = {
+        .sys_cal_object_id = APOLLO_CPU_OBJID_IC_ADC_RX,
+        .ctrl_cmd          = CTRL_CMD_PARAM_SET,
+        .data_buffer[0]    = ADI_APOLLO_ADC_FACTORY_CAL_COEFF_MODE_UINT32,
+        .data_buffer[1]    = 0,
+        .data_buffer[2]    = 0,
+        .data_buffer[3]    = 0,
+        .data_buffer[4]    = (coeff_mode & 0xFFU),
+        .data_buffer[5]    = (coeff_mode & 0xFF00U) >> 8,
+        .data_buffer[6]    = (coeff_mode & 0xFF0000U) >> 16,
+        .data_buffer[7]    = (coeff_mode & 0xFF000000U) >> 24,
+        .length            = 8
+    };
+    adi_apollo_mailbox_resp_set_ctrl_t set_ctrl_resp = {0};
+
+    ADI_APOLLO_NULL_POINTER_RETURN(device);
+    ADI_APOLLO_LOG_FUNC();
+    /* TOBE DEFINED by ADC ADI_CMS_RANGE_CHECK(coeff_mode, ADC_COEFF_MODE_MIN, ADC_COEFF_MODE_MAX); */
+    ADI_APOLLO_ADC_BLK_SEL_MASK(adcs);
+
+    for (i = 0; i < ADI_APOLLO_ADC_NUM; i++) {
+        adc = adcs & (ADI_APOLLO_ADC_A0 << i);
+
+        if (adc > 0) {
+            set_ctrl_cmd.channel_num = i;
+
+            err = adi_apollo_mailbox_set_ctrl(device, &set_ctrl_cmd, &set_ctrl_resp);
+            if (err != API_CMS_ERROR_OK) {
+                adi_apollo_hal_log_write(device, ADI_CMS_LOG_ERR, "Error from adi_apollo_mailbox_set_ctrl() %d", err);
+                return err;
+            }
+
+            if (set_ctrl_resp.status != API_CMS_ERROR_OK) {
+                adi_apollo_hal_log_write(device, ADI_CMS_LOG_ERR, "Mailbox Response Status Error from adi_apollo_mailbox_set_ctrl() 0x%X", set_ctrl_resp.status);
+                return API_CMS_ERROR_MAILBOX_RESP_STATUS;
+            }
+        }
+    }
+
+    return API_CMS_ERROR_OK;
+}
+
+int32_t adi_apollo_adc_fact_cal_mode_get(adi_apollo_device_t *device, adi_apollo_blk_sel_t adc, uint32_t *coeff_mode)
+{
+    int32_t err;
+    uint16_t i, adc_index;
+    adi_apollo_mailbox_cmd_set_ctrl_t set_ctrl_cmd = {
+        .sys_cal_object_id = APOLLO_CPU_OBJID_IC_ADC_RX,
+        .ctrl_cmd          = CTRL_CMD_PARAM_GET,
+        .data_buffer[0]    = ADI_APOLLO_ADC_FACTORY_CAL_COEFF_MODE_UINT32,
+        .data_buffer[1]    = 0,
+        .data_buffer[2]    = 0,
+        .data_buffer[3]    = 0,
+        .length            = 4
+    };
+    adi_apollo_mailbox_resp_set_ctrl_t set_ctrl_resp = {0};
+
+    ADI_APOLLO_NULL_POINTER_RETURN(device);
+    ADI_APOLLO_LOG_FUNC();
+    ADI_APOLLO_NULL_POINTER_RETURN(coeff_mode);
+    ADI_APOLLO_INVALID_PARAM_RETURN(adi_api_utils_num_selected(adc) != 1);
+    ADI_APOLLO_ADC_BLK_SEL_MASK(adc);
+
+    for (i = 0; i < ADI_APOLLO_ADC_NUM; i++) {
+        if ( (adc & (ADI_APOLLO_ADC_A0 << i)) > 0 ) {
+            adc_index = i;
+            break;
+        }
+    }
+
+    set_ctrl_cmd.channel_num = adc_index;
+
+    err = adi_apollo_mailbox_set_ctrl(device, &set_ctrl_cmd, &set_ctrl_resp);
+    if (err != API_CMS_ERROR_OK) {
+        adi_apollo_hal_log_write(device, ADI_CMS_LOG_ERR, "Error from adi_apollo_mailbox_set_ctrl() %d", err);
+        return err;
+    }
+
+    if (set_ctrl_resp.status != API_CMS_ERROR_OK) {
+        adi_apollo_hal_log_write(device, ADI_CMS_LOG_ERR, "Mailbox Response Status Error from adi_apollo_mailbox_set_ctrl() 0x%X", set_ctrl_resp.status);
+        return API_CMS_ERROR_MAILBOX_RESP_STATUS;
+    }
+
+    /* Extract Num of samples at or above over-range threshold from response structure */
+    *coeff_mode = (set_ctrl_resp.data_buffer[4+0]) |  (set_ctrl_resp.data_buffer[4+1] << 8) |
+                   (set_ctrl_resp.data_buffer[4+2] << 16) | (set_ctrl_resp.data_buffer[4+3] << 24);
+
+    return API_CMS_ERROR_OK;
+}
 
 static uint32_t calc_master_bias_base(int32_t index)
 {

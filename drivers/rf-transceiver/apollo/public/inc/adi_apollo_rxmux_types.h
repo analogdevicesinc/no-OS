@@ -46,5 +46,15 @@ typedef enum {
     ADI_APOLLO_RXMUX_SAMPLE_FINE7_Q =         15u,
 } adi_apollo_rxmux_sample_sel_e;
 
+/*!
+* \brief Enumerates Rx Mux1 crossbar outputs (CBOUT). ADC inputs are routed to CBOUTx
+*/
+typedef enum {
+    ADI_APOLLO_RXMUX_CBOUT_0 =         0u,  /*!< Rx Mux1 CBOUT-0 output */
+    ADI_APOLLO_RXMUX_CBOUT_1 =         1u,  /*!< Rx Mux1 CBOUT-1 output */
+    ADI_APOLLO_RXMUX_CBOUT_2 =         2u,  /*!< Rx Mux1 CBOUT-2 output */
+    ADI_APOLLO_RXMUX_CBOUT_3 =         3u   /*!< Rx Mux1 CBOUT-3 output */
+} adi_apollo_rxmux_cbout_sel_e;
+
 #endif /* __ADI_APOLLO_RXMUX_TYPES_H__ */
 /*! @} */

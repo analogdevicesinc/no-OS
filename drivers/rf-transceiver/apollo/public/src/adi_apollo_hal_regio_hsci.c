@@ -14,7 +14,6 @@
 static int32_t hsci_regio_write(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t reg, uint8_t data);
 static int32_t hsci_regio_write32(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t reg, uint32_t data);
 static int32_t hsci_regio_rmw_write(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t reg, uint8_t data, uint8_t mask, uint8_t is_paged);
-//static int32_t hsci_regio_rmw_write32(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t reg, uint32_t data, uint32_t mask, uint8_t is_paged);
 static int32_t hsci_regio_paged_base_addr_set(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t address);
 static int32_t hsci_regio_paged_write(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t address, uint8_t data);
 static int32_t hsci_regio_paged_write32(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t address, uint32_t data);
@@ -149,7 +148,7 @@ static int32_t hsci_rmw(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t addr, u
     uint8_t in_data[12] = {0};
     uint8_t out_data[12] = {0};
     adi_apollo_hal_txn_config_t txn_config;
-    
+
     if (!desc)
     {
         return API_CMS_ERROR_NULL_PARAM;
@@ -319,7 +318,7 @@ static int32_t stream_write(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t reg
     int32_t err;
     uint32_t i;
     uint32_t xfer_sz_bytes = 0;
-    
+
     uint32_t in_data_len;
     adi_apollo_hal_txn_config_t stream_txn_cfgs = {.addr_len = 4, .data_len = 1, .stream_len = stream_bytes};        /* Continuous 8-bit transaction */
 
@@ -329,10 +328,10 @@ static int32_t stream_write(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t reg
     if (desc->buff != NULL) {
         if (desc->buff_len > ADI_APOLLO_HAL_REGIO_HSCI_STREAM_HEADER_OVERHEAD) {
             in_data_len = desc->buff_len - ADI_APOLLO_HAL_REGIO_HSCI_STREAM_HEADER_OVERHEAD;
-            in_data = desc->buff;            
+            in_data = desc->buff;
         } else {
             return API_CMS_ERROR_ERROR; // Chuck size not supported
-        }            
+        }
     } else {
         return API_CMS_ERROR_NULL_PARAM;
     }
@@ -340,7 +339,7 @@ static int32_t stream_write(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t reg
     uint8_t in_data[ADI_APOLLO_HAL_REGIO_HSCI_STREAM_DEFAULT_SIZE];
     in_data_len = ADI_APOLLO_HAL_REGIO_HSCI_STREAM_DEFAULT_PAYLOAD_SIZE;
 #endif
-    
+
     if (stream_bytes > in_data_len) {
         return API_CMS_ERROR_ERROR; // Chuck size not supported
     }
@@ -390,10 +389,10 @@ static int32_t stream_read(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t reg,
     if (desc->buff != NULL) {
         if (desc->buff_len > ADI_APOLLO_HAL_REGIO_HSCI_STREAM_HEADER_OVERHEAD) {
             out_data_len = desc->buff_len - ADI_APOLLO_HAL_REGIO_HSCI_STREAM_HEADER_OVERHEAD;
-            out_data = desc->buff;            
+            out_data = desc->buff;
         } else {
             return API_CMS_ERROR_ERROR; // Chuck size not supported
-        }            
+        }
     } else {
         return API_CMS_ERROR_NULL_PARAM;
     }
@@ -451,12 +450,6 @@ static int32_t hsci_regio_write32(adi_apollo_hal_regio_hsci_desc_t *desc, uint32
 static int32_t hsci_regio_rmw_write(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t reg, uint8_t data, uint8_t mask, uint8_t is_paged)
 {
     return hsci_rmw(desc, reg, data, mask, ADI_APOLLO_HAL_REGIO_HSCI_BUS_SIZE_D8);
-}
-
-/* 8-bit read-modify-write */
-int32_t hsci_regio_rmw_write32(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t reg, uint32_t data, uint32_t mask, uint8_t is_paged)
-{
-    return hsci_rmw(desc, reg, data, mask, ADI_APOLLO_HAL_REGIO_HSCI_BUS_SIZE_D32);
 }
 
 static int32_t hsci_regio_paged_base_addr_set(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t reg)

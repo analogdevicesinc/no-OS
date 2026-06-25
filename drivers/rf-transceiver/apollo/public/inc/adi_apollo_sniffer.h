@@ -76,7 +76,7 @@ int32_t adi_apollo_sniffer_pgm(adi_apollo_device_t *device, adi_apollo_blk_sel_t
  * \param[in]  device            Context variable - Pointer to the APOLLO device data structure
  * \param[in]  sniffers          Single target sniffer selector \ref adi_apollo_sniffer_select_e
  * \param[in]  config            Sniffer programming parameters \ref adi_apollo_sniffer_pgm_t
- * \param[out] fft_data          FFT data output \ref adi_apollo_sniffer_fft_data_t
+ * \param[out] fft_data_params   FFT data output \ref adi_apollo_sniffer_fft_data_t
  *
  * \return API_CMS_ERROR_OK                     API Completed Successfully
  * \return <0                                   Failed. \ref adi_cms_error_e for details.
@@ -125,7 +125,7 @@ int32_t adi_apollo_sniffer_fft_done_get(adi_apollo_device_t *device, adi_apollo_
  * \param[in]  device            Context variable - Pointer to the APOLLO device data structure
  * \param[in]  sniffers          Single target sniffer selector \ref adi_apollo_sniffer_select_e
  * \param[in]  config            Sniffer programming parameters \ref adi_apollo_sniffer_pgm_t
- * \param[out] fft_data          FFT data output \ref adi_apollo_sniffer_fft_data_t
+ * \param[out] fft_data_params   FFT data output \ref adi_apollo_sniffer_fft_data_t
  *
  * \return API_CMS_ERROR_OK                     API Completed Successfully
  * \return <0                                   Failed. \ref adi_cms_error_e for details.

@@ -36,11 +36,11 @@ int32_t adi_apollo_txmux_summer_block_set(adi_apollo_device_t *device, const uin
 
     /* align summer reg A                   A0    A1    A2    A3   */
     /*                                      B0    B1    B2    B3   */
-    const static uint8_t reg_ofst_tab[4] = {0x00, 0x02, 0x01, 0x03};
+    static const uint8_t reg_ofst_tab[4] = {0x00, 0x02, 0x01, 0x03};
 
     /* fduc selects for 8T devices               A0    A1    A2    A3    A4    A5    A6    A7  */
     /*                                           B0    B1    B2    B3    B4    B5    B6    B7  */
-    const static uint8_t fduc_sel_map_8t8r[] = {0x01, 0x04, 0x10, 0x40, 0x02, 0x08, 0x20, 0x80};
+    static const uint8_t fduc_sel_map_8t8r[] = {0x01, 0x04, 0x10, 0x40, 0x02, 0x08, 0x20, 0x80};
 
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_LOG_FUNC();
@@ -83,7 +83,7 @@ int32_t adi_apollo_txmux_hsdout_set(adi_apollo_device_t *device, adi_apollo_side
     ADI_APOLLO_INVALID_PARAM_RETURN(length > ADI_APOLLO_NUM_DAC_PER_SIDE);
 
     for (i = 0; i < length; i ++) {
-        xbar |= (0x03 & dac[i]) << (2*i); 
+        xbar |= (0x03 & dac[i]) << (2*i);
     }
 
     if ((side_sel & ADI_APOLLO_SIDE_A) > 0) {

@@ -234,10 +234,24 @@ int32_t adi_apollo_txen_pwrup_ctrl_sel_cnt_rate_set(adi_apollo_device_t *device,
 
 }
 
+/* Map Tx chanId to address for bias_force_standby_en bitfield */
+static uint32_t tx_chan_id_to_bias_force_standby_en_addr [] = {
+    0x6123880b,
+    0x6123880b,
+    0x6123880b,
+    0x6123980b,
+    0x6143880b,
+    0x6143980b,
+    0x61a3880b,
+    0x61a3980b,
+    0x61c3880b,
+    0x61c3980b
+};
+
 int32_t adi_apollo_txen_config_set(adi_apollo_device_t *device, adi_apollo_blk_sel_t tx_enables, const adi_apollo_txen_blk_config_t *config)
 {
     int32_t err;
-    uint8_t i, side;
+    uint8_t chan_id, side;
     adi_apollo_blk_sel_t tx_en;
     uint32_t regmap_base_addr = 0;
 
@@ -246,107 +260,115 @@ int32_t adi_apollo_txen_config_set(adi_apollo_device_t *device, adi_apollo_blk_s
     ADI_APOLLO_NULL_POINTER_RETURN(config);
     ADI_APOLLO_TXEN_BLK_SEL_MASK(tx_enables);
 
-    for (i = 0; i < ADI_APOLLO_NUM_TX_EN; i ++) {
-        tx_en = tx_enables & (ADI_APOLLO_TX_EN_A0 << i);        
+    for (chan_id = 0; chan_id < ADI_APOLLO_NUM_TX_EN; chan_id ++) {
+        tx_en = tx_enables & (ADI_APOLLO_TX_EN_A0 << chan_id);        
         if (tx_en > 0) {
-            side = i / ADI_APOLLO_NUM_TX_EN_PER_SIDE;
+
+            side = chan_id / ADI_APOLLO_NUM_TX_EN_PER_SIDE;
+
+            /* TXRX_ENABLE block on TX_SLICE0 controls both slices. There is no TXRX_ENABLE block on TX_SLICE1. */
             regmap_base_addr = calc_tx_enable_base(side);
 
             /* Enable polarity */
             err = adi_apollo_hal_bf_set(device, 
-                                        BF_ENABLE_POL_INFO(regmap_base_addr, (i % ADI_APOLLO_NUM_TX_EN_PER_SIDE)), 
+                                        BF_ENABLE_POL_INFO(regmap_base_addr, (chan_id % ADI_APOLLO_NUM_TX_EN_PER_SIDE)), 
                                         (config->enable_polarity == ADI_APOLLO_TXEN_EN_ACTIVE_HIGH) ? 0 : 1);
             ADI_APOLLO_ERROR_RETURN(err);
 
             /* SPI enable */
             err = adi_apollo_hal_bf_set(device, 
-                                        BF_ENABLE_SPI_INFO(regmap_base_addr, (i % ADI_APOLLO_NUM_TX_EN_PER_SIDE)), 
+                                        BF_ENABLE_SPI_INFO(regmap_base_addr, (chan_id % ADI_APOLLO_NUM_TX_EN_PER_SIDE)), 
                                         (config->spi_en == ADI_APOLLO_DISABLE) ? 0 : 1);
             ADI_APOLLO_ERROR_RETURN(err);
 
             /* SPIEN enable */
             err = adi_apollo_hal_bf_set(device, 
-                                        BF_ENABLE_SPIEN_INFO(regmap_base_addr, (i % ADI_APOLLO_NUM_TX_EN_PER_SIDE)), 
+                                        BF_ENABLE_SPIEN_INFO(regmap_base_addr, (chan_id % ADI_APOLLO_NUM_TX_EN_PER_SIDE)), 
                                         (config->spien_en == ADI_APOLLO_DISABLE) ? 0 : 1);
             ADI_APOLLO_ERROR_RETURN(err);
 
             /* Slice select */
+            /* Regardless of 8T8R or 4T4R, the lower four bits in config->slice_sel are for SideA; the upper four for SideB */
             err = adi_apollo_hal_bf_set(device, 
-                                        BF_SLICE_SEL_INFO(regmap_base_addr, (i % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
+                                        BF_SLICE_SEL_INFO(regmap_base_addr, (chan_id % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
                                         (side == 0) ? config->slice_sel : config->slice_sel >> ADI_APOLLO_MAX_SLICES_PER_SIDE_NUM);
             ADI_APOLLO_ERROR_RETURN(err);
 
             /* Linx select */
             err = adi_apollo_hal_bf_set(device, 
-                                        BF_LINX_SEL_INFO(regmap_base_addr, (i % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
+                                        BF_LINX_SEL_INFO(regmap_base_addr, (chan_id % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
                                         (side == 0) ? config->linx_sel : config->linx_sel >> ADI_APOLLO_NUM_LINX_PER_SIDE);
             ADI_APOLLO_ERROR_RETURN(err);
 
             /* PFILT select */
             err = adi_apollo_hal_bf_set(device, 
-                                        BF_PFILT_SEL_INFO(regmap_base_addr, (i % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
+                                        BF_PFILT_SEL_INFO(regmap_base_addr, (chan_id % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
                                         (side == 0) ? config->pfilt_sel : config->pfilt_sel >> ADI_APOLLO_PFILT_PER_SIDE);
             ADI_APOLLO_ERROR_RETURN(err);
 
             /* CDUC select */
             err = adi_apollo_hal_bf_set(device, 
-                                        BF_CDUC_CDDC_SEL_INFO(regmap_base_addr, (i % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
+                                        BF_CDUC_CDDC_SEL_INFO(regmap_base_addr, (chan_id % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
                                         (side == 0) ? config->cduc_sel : config->cduc_sel >> ADI_APOLLO_CDUC_PER_SIDE_NUM);
             ADI_APOLLO_ERROR_RETURN(err);
 
             /* FDUC select */
             err = adi_apollo_hal_bf_set(device, 
-                                        BF_FDUC_FDDC_SEL_INFO(regmap_base_addr, (i % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
+                                        BF_FDUC_FDDC_SEL_INFO(regmap_base_addr, (chan_id % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
                                         (side == 0) ? config->fduc_sel : config->fduc_sel >> ADI_APOLLO_FDUC_PER_SIDE_NUM);
             ADI_APOLLO_ERROR_RETURN(err);
 
             /* CFIR select */
             err = adi_apollo_hal_bf_set(device, 
-                                        BF_CFIR_SEL_INFO(regmap_base_addr, (i % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
+                                        BF_CFIR_SEL_INFO(regmap_base_addr, (chan_id % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
                                         (side == 0) ? config->cfir_sel : config->cfir_sel >> ADI_APOLLO_NUM_CFIR_PER_SIDE);
             ADI_APOLLO_ERROR_RETURN(err);
 
             /* FSRC select */
             err = adi_apollo_hal_bf_set(device, 
-                                        BF_FSRC_SEL_INFO(regmap_base_addr, (i % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
+                                        BF_FSRC_SEL_INFO(regmap_base_addr, (chan_id % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
                                         (side == 0) ? config->fsrc_sel : config->fsrc_sel >> ADI_APOLLO_NUM_FSRC_PER_SIDE);
             ADI_APOLLO_ERROR_RETURN(err);
 
             /* JRX link select */
             err = adi_apollo_hal_bf_set(device, 
-                                        BF_JRX_JTX_LINK_SEL_INFO(regmap_base_addr, (i % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
+                                        BF_JRX_JTX_LINK_SEL_INFO(regmap_base_addr, (chan_id % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
                                         (side == 0) ? config->jrx_link_sel : config->jrx_link_sel >> ADI_APOLLO_NUM_JRX_LINKS_PER_SIDE);
             ADI_APOLLO_ERROR_RETURN(err);
             
             /* JRX phy0 & phy1 select */
             err = adi_apollo_hal_bf_set(device, 
-                                        BF_JRX_JTX_PHY_SEL_INFO(regmap_base_addr, (i % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
+                                        BF_JRX_JTX_PHY_SEL_INFO(regmap_base_addr, (chan_id % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
                                         (side == 0) ? config->jrx_phy_sel_side_a : config->jrx_phy_sel_side_b);
             ADI_APOLLO_ERROR_RETURN(err);            
         
             /* MODSW select */
             err = adi_apollo_hal_bf_set(device, 
-                                        BF_MODSW_SEL_INFO(regmap_base_addr, (i % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
+                                        BF_MODSW_SEL_INFO(regmap_base_addr, (chan_id % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
                                         (config->modsw_sel == ADI_APOLLO_DISABLE) ? 0 : 1);                                        
             ADI_APOLLO_ERROR_RETURN(err);
 
             /* INVSINC select */
             err = adi_apollo_hal_bf_set(device, 
-                                        BF_INVSINC_SEL_INFO(regmap_base_addr, (i % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
+                                        BF_INVSINC_SEL_INFO(regmap_base_addr, (chan_id % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
                                         (side == 0) ? config->invsinc_sel : config->invsinc_sel >> ADI_APOLLO_NUM_TX_INVSINC_PER_SIDE);                                        
             ADI_APOLLO_ERROR_RETURN(err);
 
             /* GAIN select */
             err = adi_apollo_hal_bf_set(device, 
-                                        BF_GAIN_SEL_INFO(regmap_base_addr, (i % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
+                                        BF_GAIN_SEL_INFO(regmap_base_addr, (chan_id % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
                                         (side == 0) ? config->gain_sel : config->gain_sel >> ADI_APOLLO_NUM_TX_GAIN_PER_SIDE);                                        
             ADI_APOLLO_ERROR_RETURN(err);
 
             /* SRD select */
             err = adi_apollo_hal_bf_set(device, 
-                                        BF_SRD_SEL_INFO(regmap_base_addr, (i % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
+                                        BF_SRD_SEL_INFO(regmap_base_addr, (chan_id % ADI_APOLLO_NUM_TX_EN_PER_SIDE)),
                                         (side == 0) ? config->srd_sel : config->srd_sel >> ADI_APOLLO_NUM_TX_SRD_PER_SIDE);                                        
             ADI_APOLLO_ERROR_RETURN(err);
+
+            /* Set DAC to disable output on standby signal */
+            err = adi_apollo_hal_bf_set(device, tx_chan_id_to_bias_force_standby_en_addr[chan_id], 0x0104, 0);
+            ADI_CMS_ERROR_RETURN(err);
         }
     }
 

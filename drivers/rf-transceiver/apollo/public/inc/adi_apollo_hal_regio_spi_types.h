@@ -32,6 +32,22 @@ typedef enum {
 } adi_apollo_hal_regio_spi_bus_size_e;
 
 #ifndef CLIENT_IGNORE
+typedef struct {
+    uint8_t enabled;
+    uint8_t valid;
+} adi_apollo_hal_regio_spi_base_addr_cache_t;
+
+typedef struct {
+    uint8_t dma_ctrl;
+    uint8_t addr3;
+    uint8_t addr2;
+    uint8_t addr1;
+    /* There is no point caching addr0 byte as this is always required
+     * to be written in order to latch in the new DMA addr. */
+    uint8_t valid;
+    uint8_t enabled;
+} adi_apollo_hal_regio_spi_indir_cache_t;
+
 /*!
  * \brief SPI register I/O descriptor
  */
@@ -39,7 +55,7 @@ typedef struct {
     uint8_t is_used;                                /*!< 0 = protocol block not used (default), 1 = is used */
     uint8_t is_spi1;                                /*!< Indicates spi instance: 0 = spi0, 1 = spi1 */
     uint8_t rd_stream_en;                           /*!< Enable rd streaming transactions by API. 0 = disable, 1 = enable */    
-    uint8_t wr_stream_en;                           /*!< Enable we streaming transactions by API. 0 = disable, 1 = enable */
+    uint8_t wr_stream_en;                           /*!< Enable wr streaming transactions by API. 0 = disable, 1 = enable */
 
     /* These functions are supplied by the customer platform driver */
     adi_apollo_hal_init_t       init;               /*!< Platform init function ptr. \ref adi_apollo_hal_init_t */
@@ -52,9 +68,11 @@ typedef struct {
     void                        *dev_obj;           /*!< Platform defined object for SPI instance */
 
     /* Internal API fields */
-    adi_apollo_hal_regio_t      base_regio;         /*!< Base HAL register I/O */
-    uint32_t                    page_base_addr;     /*!< Current SPI page base address */
-    adi_apollo_hal_txn_config_t txn_config;         /*!< Transaction info passed to HAL read/write functions */
+    adi_apollo_hal_regio_t      base_regio;                     /*!< Base HAL register I/O */
+    uint32_t                    page_base_addr;                 /*!< Current SPI page base address */
+    adi_apollo_hal_regio_spi_base_addr_cache_t base_addr_cache; /*!< Byte-level cache of SPI paged access addr */
+    adi_apollo_hal_regio_spi_indir_cache_t indir_cache;         /*!< Byte-level cache of SPI indirect (aka DMA) addr */
+    adi_apollo_hal_txn_config_t txn_config;                     /*!< Transaction info passed to HAL read/write functions */
 } adi_apollo_hal_regio_spi_desc_t;
 #endif /* CLIENT_IGNORE*/
 

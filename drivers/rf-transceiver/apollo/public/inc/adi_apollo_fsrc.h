@@ -36,7 +36,7 @@ extern "C" {
 int32_t adi_apollo_fsrc_pgm(adi_apollo_device_t *device, adi_apollo_terminal_e terminal, adi_apollo_blk_sel_t fsrcs, adi_apollo_fsrc_pgm_t *config);
 
 /**
- * \brief  Inspect FSRC parameters
+ * \brief  Inspect FSRC parameters of one FSC block
  *
  * \param[in]  device              Context variable - Pointer to the APOLLO device data structure
  * \param[in]  terminal            Target terminal \ref adi_apollo_terminal_e

@@ -364,78 +364,10 @@ int32_t adi_apollo_jrx_clear_pclk_errors(adi_apollo_device_t *device,
     for (link = 0; link < ADI_APOLLO_NUM_JRX_LINKS; link++) {
         if ((1 << link) & links) {
             regmap_base_addr = calc_jrx_core_base(link);
-            err = adi_apollo_hal_bf_set(device, BF_JRX_CORE_PCLK_ERROR_CLEAR_INFO(regmap_base_addr, link / ADI_APOLLO_NUM_JRX_LINKS_PER_SIDE), 1);
+            err = adi_apollo_hal_bf_set(device, BF_JRX_CORE_PCLK_ERROR_CLEAR_INFO(regmap_base_addr, link % ADI_APOLLO_NUM_JRX_LINKS_PER_SIDE), 1);
             ADI_APOLLO_ERROR_RETURN(err);
         }
     }
-
-    return API_CMS_ERROR_OK;
-}
-
-int32_t adi_apollo_jrx_clear_fec_errors(adi_apollo_device_t *device,
-    const uint16_t links)
-{
-    int32_t  err;
-    uint32_t regmap_base_addr = 0;
-    uint8_t link;
-
-    ADI_APOLLO_NULL_POINTER_RETURN(device);
-    ADI_APOLLO_LOG_FUNC();
-
-    for (link = 0; link < ADI_APOLLO_NUM_JRX_LINKS; link++) {
-        if ((1 << link) & links) {
-            regmap_base_addr = calc_jrx_dl_204c_base(link);
-            err = adi_apollo_hal_bf_set(device, BF_JRX_DL_204C_CLR_ERR_CNT_INFO(regmap_base_addr), 1);
-            ADI_APOLLO_ERROR_RETURN(err);
-        }
-    }
-
-    return API_CMS_ERROR_OK;
-}
-
-int32_t adi_apollo_jrx_fec_errors(adi_apollo_device_t *device,
-    const uint16_t link,
-    const uint16_t lane,
-    adi_apollo_fec_errors_t *fec_errors)
-{
-    int32_t  err;
-    uint32_t regmap_base_addr = 0;
-    uint8_t  reg8;
-    uint8_t link_index = 0;
-
-    ADI_APOLLO_NULL_POINTER_RETURN(device);
-    ADI_APOLLO_LOG_FUNC();
-    ADI_APOLLO_NULL_POINTER_RETURN(fec_errors);
-    ADI_APOLLO_INVALID_PARAM_RETURN(lane >= ADI_APOLLO_JESD_DESER_COUNT); // Check if lane is in range
-    ADI_APOLLO_INVALID_PARAM_RETURN(adi_api_utils_num_selected(link) != 1); // Check if only one link is selected
-    
-    link_index  = adi_api_utils_select_lsb_get(link);
-
-    regmap_base_addr = calc_jrx_dl_204c_base(link_index);
-
-    err = adi_apollo_hal_bf_get(device, BF_JRX_DL_204C_SH_ERR_CNT_INFO(regmap_base_addr, lane), &reg8, 1); /*  204C Lane status */
-    ADI_APOLLO_ERROR_RETURN(err);
-    fec_errors->sh_err_cnt = reg8;
-
-    err = adi_apollo_hal_bf_get(device, BF_JRX_DL_204C_FEC_ERR_CNT_INFO(regmap_base_addr, lane), &reg8, 1); /*  204C Lane status */
-    ADI_APOLLO_ERROR_RETURN(err);
-    fec_errors->parity_err_cnt = reg8;
-
-    err = adi_apollo_hal_bf_get(device, BF_JRX_DL_204C_FEC_UNCORRECTABLE_ERR_CNT_INFO(regmap_base_addr, lane), &reg8, 1); /*  204C Lane status */
-    ADI_APOLLO_ERROR_RETURN(err);
-    fec_errors->uncorrectable_err_cnt = reg8;
-
-    err = adi_apollo_hal_bf_get(device, BF_JRX_DL_204C_CRC_ERR_CNT_INFO(regmap_base_addr, lane), &reg8, 1); /*  204C Lane status */
-    ADI_APOLLO_ERROR_RETURN(err);
-    fec_errors->crc_err_cnt = reg8;
-
-    err = adi_apollo_hal_bf_get(device, BF_JRX_DL_204C_EMB_ERR_CNT_INFO(regmap_base_addr, lane), &reg8, 1); /*  204C Lane status */
-    ADI_APOLLO_ERROR_RETURN(err);
-    fec_errors->emb_err_cnt = reg8;
-
-    err = adi_apollo_hal_bf_get(device, BF_JRX_DL_204C_MB_ERR_CNT_INFO(regmap_base_addr, lane), &reg8, 1); /*  204C Lane status */
-    ADI_APOLLO_ERROR_RETURN(err);
-    fec_errors->mb_err_cnt = reg8;
 
     return API_CMS_ERROR_OK;
 }
@@ -681,27 +613,6 @@ int32_t adi_apollo_jrx_lanes_xbar_set(adi_apollo_device_t *device,
     for (i = 0; i < length; i++) {
         err = adi_apollo_jrx_lane_xbar_set(device, links, i, logical_lanes[i]);
         ADI_APOLLO_ERROR_RETURN(err);
-    }
-
-    return API_CMS_ERROR_OK;
-}
-
-int32_t adi_apollo_jrx_subclass_set(adi_apollo_device_t *device,
-    const uint16_t links,
-    const uint16_t subclass)
-{
-    int32_t err, i;
-    uint32_t regmap_base_addr = 0;
-
-    ADI_APOLLO_NULL_POINTER_RETURN(device);
-    ADI_APOLLO_LOG_FUNC();
-
-    for (i = 0; i < ADI_APOLLO_NUM_JRX_LINKS; i++) {
-        if ((1 << i) & links) {
-            regmap_base_addr = calc_jrx_jesd_l0_base(i);
-            err = adi_apollo_hal_bf_set(device, BF_JRX_CORE_SUBCLASSV_CFG_INFO(regmap_base_addr, (i % ADI_APOLLO_NUM_JRX_LINKS_PER_SIDE)), subclass);
-            ADI_APOLLO_ERROR_RETURN(err);
-        }
     }
 
     return API_CMS_ERROR_OK;

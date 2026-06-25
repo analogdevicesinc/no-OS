@@ -132,6 +132,7 @@ typedef enum
     APOLLO_CPU_ADC_RX_ADC_RESUM_SLICE_MODE_SWITCH_FAILED_ERROR   = 0x33, /*< code: 0x33 err: Resuming ADC slice mode fast switch failed, cause: Unexpected HW behavior; Failed on resuming ADC slice mode fast switch; report to ADI, recovery: Reset device. If the problem persists contact ADI. */
     APOLLO_CPU_ADC_RX_ADC_MODE_SWITCH_ENABLED_IN_8T8R_ERROR      = 0x34, /*< code: 0x34 err: ADC slice mode switch not supported in 8T8R, cause: Unexpected HW behavior; ADC slice mode switch not supported in 8T8R; report to ADI, recovery: Reset device. If the problem persists contact ADI. */
     APOLLO_CPU_ADC_RX_GUARD_OBJ_ERROR                            = 0x35, /*< code: 0x35 err: Factory test guard-object, cause: Factory test cal object; report to ADI, recovery: no recovery */
+    APOLLO_CPU_ADC_RX_ADC_CAL_DAC_CFG_ERROR                      = 0x36, /*< code: 0x36 err: ADC wrong parameter or internal error, cause: Unexpected HW behavior; ADC calibration DAC configuration error; report to ADI, recovery: Reset device. If the problem persists contact ADI. */
     APOLLO_CPU_DAC_TX_CMD_ERROR                                  = 0x101, /*< code: 0x101 err: Bad Control command, cause: Unexpected HW behavior; bad command; report to ADI, recovery: Reset device. If the problem persists contact ADI. */
     APOLLO_CPU_DAC_TX_QUEUE_ERROR                                = 0x102, /*< code: 0x102 err: Control command queue, cause: Unexpected HW behavior; command queue error; report to ADI, recovery: Reset device. If the problem persists contact ADI. */
     APOLLO_CPU_DAC_TX_HW_STARTUP_ERROR                           = 0x103, /*< code: 0x103 err: HW start-up error, cause: Unexpected HW behavior; start-up error; report to ADI, recovery: Reset device. If the problem persists contact ADI. */
@@ -207,6 +208,7 @@ typedef enum
     APOLLO_CPU_MCS_SYSREF_WITHIN_KEEPOUT_WINDOW_ERROR            = 0x40d, /*< code: 0x40d err: External SysRef is within the Keep-Out Window, cause: SysRef Alignment did not complete, recovery: Provide an updated time-difference offset, Increase decRate, or adjust the timing of External SysRef and clock to ensure External SysRef is well-sampled */
     APOLLO_CPU_MCS_GPIO_MISCONFIGURATION_ERROR                   = 0x40e, /*< code: 0x40e err: DELADJ or DELSTR GPIO numbers are not valid, cause: The provided GPIO configuration is not supported., recovery: Check GPIO configuration */
     APOLLO_CPU_MCS_MEASUREMENT_ERROR                             = 0x40f, /*< code: 0x40f err: MCS measurement error, cause: MCS module was not able to complete a measurement., recovery: Check MCS configuration */
+    APOLLO_CPU_MCS_TRACKING_NEEDS_INIT_ERROR                     = 0x410, /*< code: 0x410 err: Must run initial cal before tracking, cause: Did not successfully complete initial MCS cal, recovery: Check interface */
     APOLLO_CPU_LINEARX_RX_ALREADY_RUNNING_CAL_ERROR              = 0x580, /*< code: 0x580 err: Requested to run a cal when in the middle of a cal, cause: Must wait until currently running cal completes, recovery: Check interface */
     APOLLO_CPU_LINEARX_RX_CAL_TIMEOUT_ERROR                      = 0x581, /*< code: 0x581 err: Cal timed-out, cause: Unexpected HW behavior; Cal did not finish in expected time; report to ADI, recovery: Reset device. If the problem persists contact ADI. */
     APOLLO_CPU_LINEARX_RX_CTRL_FSM_CMD_NOT_SUPPORTED_ERROR       = 0x582, /*< code: 0x582 err: Command not supported, cause: The used parameter is not supported, recovery: Correct the parameter and rerun */
@@ -1690,18 +1692,17 @@ typedef struct adi_apollo_mailbox_resp_update_cal_data_crc
 ADI_APOLLO_PACKED(
 typedef struct adi_apollo_mailbox_resp_get_fw_version
 {
-    uint32_t status;        /*!< cpu error response code - see \ref adi_apollo_mailbox_cpu_error_code_e */
-    uint16_t year;          /*!< The year component of the version */
-    uint8_t month;          /*!< The month component of the version */
-    uint8_t day;            /*!< The day component of the version */
-    uint8_t minor;          /*!< The minor component of the version */
-    uint16_t build;         /*!< The bulid number component of the version */
-    uint8_t qualifier;      /*!< A qualifier number (may not be used) */
-    uint16_t build_year;    /*!< The year the firmware was built */
-    uint8_t build_month;    /*!< The month the firmware was built */
-    uint8_t build_day;      /*!< The day the firmware was built */
-    uint8_t build_hour;     /*!< The hour the firware was built (UTC) */
-    uint8_t build_min;      /*!< The minute the firware was built (UTC) */
+    uint32_t status;             /*!< cpu error response code - see \ref adi_apollo_mailbox_cpu_error_code_e */
+    uint16_t major;              /*!< Software major version */
+    uint16_t minor;              /*!< Software minor version */
+    uint16_t patch;              /*!< Software patch version */
+    uint8_t quality_level[3];    /*!< Software quality level string */
+    uint16_t state_version;      /*!< Internal release version at give quality level */
+    uint16_t build_year;         /*!< The year the firmware was built */
+    uint8_t build_month;         /*!< The month the firmware was built */
+    uint8_t build_day;           /*!< The day the firmware was built */
+    uint8_t build_hour;          /*!< The hour the firware was built (UTC) */
+    uint8_t build_min;           /*!< The minute the firware was built (UTC) */
 } adi_apollo_mailbox_resp_get_fw_version_t;
 )
 
@@ -1762,8 +1763,12 @@ typedef struct adi_apollo_mailbox_resp_mcs_bsync_get_config
     uint8_t func_mode;     /*!< Function mode for controlling BSYNC operations - see \ref adi_apollo_mailbox_mcs_bsync_mode_e */
     uint32_t bsync_div;    /*!< BSYNC division ratio relative to Apollo device clock */
     uint8_t done_flag;     /*!<  */
-    int64_t delta_t0;      /*!< Time difference after alignment in femtoseconds */
-    int64_t delta_t1;      /*!< Measure delay needed to be compensated by delay line in femtoseconds */
+    int64_t delta_t0;      /*!< Time difference after alignment in femtoseconds for the CENTER sysref */
+    int64_t delta_t1;      /*!< Measure delay needed to be compensated by delay line in femtoseconds for the CENTER sysref */
+    int64_t delta_t0_a;    /*!< Time difference after alignment in femtoseconds for the side A sysref */
+    int64_t delta_t1_a;    /*!< Measure delay needed to be compensated by delay line in femtoseconds for the side A sysref */
+    int64_t delta_t0_b;    /*!< Time difference after alignment in femtoseconds for the side B sysref */
+    int64_t delta_t1_b;    /*!< Measure delay needed to be compensated by delay line in femtoseconds for the side B sysref */
 } adi_apollo_mailbox_resp_mcs_bsync_get_config_t;
 )
 

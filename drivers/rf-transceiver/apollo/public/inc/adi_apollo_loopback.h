@@ -49,7 +49,7 @@ int32_t adi_apollo_loopback_lb0_rx_enable_set(adi_apollo_device_t *device, uint1
 int32_t adi_apollo_loopback_lb0_tx_enable_set(adi_apollo_device_t *device, uint16_t adcs, uint8_t enable);
 
 /**
- * \brief  Set XBAR mapping
+ * \brief  Set Loopback0 ADC to DAC mux0 (hsdout) using fixed 1-to-1 mapping 
  *
  * \param[in]  device              Context variable - Pointer to the APOLLO device data structure
  * \param[in]  sides               Side select (single side) \ref adi_apollo_side_select_e for designators.
@@ -60,6 +60,21 @@ int32_t adi_apollo_loopback_lb0_tx_enable_set(adi_apollo_device_t *device, uint1
  * \return <0                                   Failed. \ref adi_cms_error_e for details.
  */
 int32_t adi_apollo_loopback_lb0_tx_xbar_set(adi_apollo_device_t *device, uint16_t sides, uint16_t adcs[], uint32_t adc_map_length);
+
+/**
+ * \brief  Set Loopback0 ADC to DAC mux0 (hsdout) using custom mapping 
+ *
+ * \param[in]  device              Context variable - Pointer to the APOLLO device data structure
+ * \param[in]  sides               Side select (single side) \ref adi_apollo_side_select_e for designators.
+ * \param[in]  adcs                Array of adcs to map. \ref adi_apollo_adc_idx_e for designators.
+ * \param[in]  dacs                Array of dacs to map to adcs: {adcs[0]->dacs[0], adcs[1]->dacs[1], ...} \ref adi_apollo_dac_idx_e for designators.
+ * \param[in]  adc_map_length      Length of adc map (2 for 4t4r, 4 for 8t8r)
+ *
+ * \return API_CMS_ERROR_OK                     API Completed Successfully
+ * \return <0                                   Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_loopback_lb0_tx_xbar_custom_set(adi_apollo_device_t *device, uint16_t sides, uint16_t adcs[], uint16_t dacs[], uint32_t adc_map_length);
+
 
 /**
  * \brief  Set read pointer reset value

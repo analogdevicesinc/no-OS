@@ -108,5 +108,9 @@
 #define BF_LB1_EN0_INFO(inst)                                ((inst) + 0x00000025), 0x00000100
 #define BF_LB2_EN0_INFO(inst)                                ((inst) + 0x00000027), 0x00000100
 
+// Apollo Part Variant
+#define REG_PART_VARIANT_SW_MXFE_ADDR                        REG_SCRATCH_REGS_ADDR(201)
+#define REG_PART_VARIANT_SW_TRIM_ADDR                        REG_SCRATCH_REGS_ADDR(202)
+
 #endif /* __ADI_APOLLO_BF_CUSTOM_H__ */
 /*! @} */

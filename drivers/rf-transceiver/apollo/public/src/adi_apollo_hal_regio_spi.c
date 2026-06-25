@@ -93,6 +93,10 @@ int32_t adi_apollo_l_hal_regio_spi_init(adi_apollo_hal_regio_spi_desc_t *desc, u
     desc->base_regio.child_desc = desc;        // instance (child)
     desc->base_regio.protocol_id = is_spi1 ? ADI_APOLLO_HAL_PROTOCOL_SPI1 : ADI_APOLLO_HAL_PROTOCOL_SPI0;
     desc->is_spi1 = is_spi1;
+    desc->base_addr_cache.enabled = 0;
+    desc->base_addr_cache.valid = 0;
+    desc->indir_cache.enabled = 0;
+    desc->indir_cache.valid = 0;
 
     /* If the user didn't specify an optional poll read hal for SPI0, use the built in alternate */
     if (!is_spi1 && desc->poll_read == NULL) {
@@ -161,28 +165,65 @@ static int32_t spi_regio_rmw_write(adi_apollo_hal_regio_spi_desc_t *desc, uint32
 static int32_t spi_regio_paged_base_addr_set(adi_apollo_hal_regio_spi_desc_t *desc, uint32_t reg)
 {
     int32_t err;
-    uint32_t reg_word_aligned = reg & ~0x03ul;    /* reg address must be on 32-bit boundary */
+    uint32_t reg_word_aligned = reg & ~0x03ul;    /* Page address must be on 32-bit boundary */
 
     // Program the spi paged base address
     uint32_t spi_page_base_reg = desc->is_spi1 ?  REG_SPI1_PAGE_ADDRESS_31TO24_ADDR : REG_SPI0_BASE_PAGE_ADDRESS_31TO24_ADDR;
 
-    //TODO: work in progress err = spi_write_stream_fifo_mode(desc, spi_page_base_reg, &reg_word_aligned, 4, 0xffffffff, 0);
+    // Cache of the base addr bytes for further optimisation.
+    // If this is the first time we're communicating with the device, we don't know the
+    // value of the page_base_addr register. It seems to be 0s but we cannot trust that. Thus,
+    // we make the cache valid the first time we write a known value.
 
-    if (err = spi_regio_write(desc, spi_page_base_reg + 0, (uint8_t)(reg_word_aligned >> 24)), err != API_CMS_ERROR_OK) {
-        return err;
-    }
-    if (err = spi_regio_write(desc, spi_page_base_reg + 1, (uint8_t)(reg_word_aligned >> 16)), err != API_CMS_ERROR_OK) {
-        return err;
-    }
-    if (err = spi_regio_write(desc, spi_page_base_reg + 2, (uint8_t)(reg_word_aligned >>  8)), err != API_CMS_ERROR_OK) {
-        return err;
-    }
-    if (err = spi_regio_write(desc, spi_page_base_reg + 3, (uint8_t)(reg_word_aligned >>  0)), err != API_CMS_ERROR_OK) {
-        return err;
-    }
+    if (!desc->base_addr_cache.enabled || !desc->base_addr_cache.valid)
+    {
+        // Byte-level caching is either disabled or invalid; update the entire register in h/w
+        err = spi_regio_write(desc, spi_page_base_reg + 0, (uint8_t)(reg_word_aligned >> 24));
+        ADI_APOLLO_ERROR_RETURN(err);
 
-    desc->page_base_addr = reg_word_aligned;
+        err = spi_regio_write(desc, spi_page_base_reg + 1, (uint8_t)(reg_word_aligned >> 16));
+        ADI_APOLLO_ERROR_RETURN(err);
 
+        err = spi_regio_write(desc, spi_page_base_reg + 2, (uint8_t)(reg_word_aligned >>  8));
+        ADI_APOLLO_ERROR_RETURN(err);
+
+        err = spi_regio_write(desc, spi_page_base_reg + 3, (uint8_t)(reg_word_aligned >>  0));
+        ADI_APOLLO_ERROR_RETURN(err);
+
+        // Update ADI's own word-level cache variable
+        desc->page_base_addr = reg_word_aligned;
+
+        // Now we can mark our cache as valid
+        desc->base_addr_cache.valid = 1;
+        return API_CMS_ERROR_OK;
+    } else {
+        // Byte-level caching is enabled; contents are valid.
+        // Only update the bytes that have changed.
+
+        if ((desc->page_base_addr & 0xFF000000) != (reg_word_aligned & 0xFF000000)) {
+            err = spi_regio_write(desc, spi_page_base_reg + 0, (uint8_t)(reg_word_aligned >> 24));
+            ADI_APOLLO_ERROR_RETURN(err);
+        }
+
+        if ((desc->page_base_addr & 0x00FF0000) != (reg_word_aligned & 0x00FF0000)) {
+            err = spi_regio_write(desc, spi_page_base_reg + 1, (uint8_t)(reg_word_aligned >> 16));
+            ADI_APOLLO_ERROR_RETURN(err);
+        }
+
+        if ((desc->page_base_addr & 0x0000FF00) != (reg_word_aligned & 0x0000FF00)) {
+            err = spi_regio_write(desc, spi_page_base_reg + 2, (uint8_t)(reg_word_aligned >>  8));
+            ADI_APOLLO_ERROR_RETURN(err);
+        }
+
+        if ((desc->page_base_addr & 0x000000FF) != (reg_word_aligned & 0x000000FF)) {
+            err = spi_regio_write(desc, spi_page_base_reg + 3, (uint8_t)(reg_word_aligned >>  0));
+            ADI_APOLLO_ERROR_RETURN(err);
+        }
+
+        // Also update word-level cache variable
+        desc->page_base_addr = reg_word_aligned;
+    }
+    
     return API_CMS_ERROR_OK;
 }
 
@@ -347,15 +388,6 @@ static int32_t spi_regio_read_bf_indirect(adi_apollo_hal_regio_spi_desc_t *desc,
 
     return (err == API_CMS_ERROR_OK) ? API_CMS_ERROR_OK : API_CMS_ERROR_SPI_REGIO_XFER;
 }
-
-
-
-
-
-
-
-
-
 
 /* 8 bit stream write */
 static int32_t spi_regio_stream_write(adi_apollo_hal_regio_spi_desc_t *desc, uint32_t reg, uint8_t *data, uint32_t data_len_bytes, uint8_t is_cont)
@@ -680,16 +712,93 @@ static int32_t indirect_addr_set(adi_apollo_hal_regio_spi_desc_t *desc, uint32_t
 {
     int32_t err;
 
-    err = spi_regio_write(desc, desc->is_spi1 ? REG_SPIDMA1_CTL_ADDR : REG_SPIDMA0_CTL_ADDR, dma_ctrl);
-    ADI_APOLLO_ERROR_RETURN(err);
-    err = spi_regio_write(desc, desc->is_spi1 ? REG_SPIDMA1_ADDR3_ADDR : REG_SPIDMA0_ADDR3_ADDR, (reg >> 24) & 0xFF);
-    ADI_APOLLO_ERROR_RETURN(err);
-    err = spi_regio_write(desc, desc->is_spi1 ? REG_SPIDMA1_ADDR2_ADDR : REG_SPIDMA0_ADDR2_ADDR, (reg >> 16) & 0xFF);
-    ADI_APOLLO_ERROR_RETURN(err);
-    err = spi_regio_write(desc, desc->is_spi1 ? REG_SPIDMA1_ADDR1_ADDR : REG_SPIDMA0_ADDR1_ADDR, (reg >>  8) & 0xFF);
-    ADI_APOLLO_ERROR_RETURN(err);
-    err = spi_regio_write(desc, desc->is_spi1 ? REG_SPIDMA1_ADDR0_ADDR : REG_SPIDMA0_ADDR0_ADDR, (reg >>  0) & 0xFF);
-    ADI_APOLLO_ERROR_RETURN(err);
+    if (!desc->indir_cache.enabled || !desc->indir_cache.valid)
+    {
+        // The cache is invalid or is not enabled; Write all addr
+        // bytes to the device.
+        err = spi_regio_write(desc,
+            desc->is_spi1 ? REG_SPIDMA1_CTL_ADDR
+                          : REG_SPIDMA0_CTL_ADDR,
+            dma_ctrl);
+        ADI_APOLLO_ERROR_RETURN(err);
+        desc->indir_cache.dma_ctrl = dma_ctrl;
+
+        err = spi_regio_write(desc,
+            desc->is_spi1 ? REG_SPIDMA1_ADDR3_ADDR
+                          : REG_SPIDMA0_ADDR3_ADDR,
+            (reg >> 24) & 0xFF);
+        ADI_APOLLO_ERROR_RETURN(err);
+        desc->indir_cache.addr3 = (reg >> 24) & 0xFF;
+
+        err = spi_regio_write(desc,
+            desc->is_spi1 ? REG_SPIDMA1_ADDR2_ADDR
+                          : REG_SPIDMA0_ADDR2_ADDR,
+            (reg >> 16) & 0xFF);
+        ADI_APOLLO_ERROR_RETURN(err);
+        desc->indir_cache.addr2 = (reg >> 16) & 0xFF;
+
+        err = spi_regio_write(desc,
+            desc->is_spi1 ? REG_SPIDMA1_ADDR1_ADDR
+                          : REG_SPIDMA0_ADDR1_ADDR,
+            (reg >> 8) & 0xFF);
+        ADI_APOLLO_ERROR_RETURN(err);
+        desc->indir_cache.addr1 = (reg >> 8) & 0xFF;
+
+        err = spi_regio_write(desc,
+            desc->is_spi1 ? REG_SPIDMA1_ADDR0_ADDR
+                          : REG_SPIDMA0_ADDR0_ADDR,
+            (reg >> 0) & 0xFF);
+        ADI_APOLLO_ERROR_RETURN(err);
+
+        // Mark cache as valid
+        desc->indir_cache.valid = 1;
+    } else {
+        // Cache is valid and enabled. Only write the addr bytes
+        // which are different to the cached addr to the device.
+        if (desc->indir_cache.dma_ctrl != dma_ctrl) {
+            err = spi_regio_write(desc,
+                desc->is_spi1 ? REG_SPIDMA1_CTL_ADDR
+                              : REG_SPIDMA0_CTL_ADDR,
+                dma_ctrl);
+            ADI_APOLLO_ERROR_RETURN(err);
+            desc->indir_cache.dma_ctrl = dma_ctrl;
+        }
+
+        if (desc->indir_cache.addr3 != ((reg >> 24) & 0xFF)) {
+            err = spi_regio_write(desc,
+                desc->is_spi1 ? REG_SPIDMA1_ADDR3_ADDR
+                              : REG_SPIDMA0_ADDR3_ADDR,
+                (reg >> 24) & 0xFF);
+            ADI_APOLLO_ERROR_RETURN(err);
+            desc->indir_cache.addr3 = (reg >> 24) & 0xFF;
+        }
+
+        if (desc->indir_cache.addr2 != ((reg >> 16) & 0xFF)) {
+            err = spi_regio_write(desc,
+                desc->is_spi1 ? REG_SPIDMA1_ADDR2_ADDR
+                              : REG_SPIDMA0_ADDR2_ADDR,
+                (reg >> 16) & 0xFF);
+            ADI_APOLLO_ERROR_RETURN(err);
+            desc->indir_cache.addr2 = (reg >> 16) & 0xFF;
+        }
+
+        if (desc->indir_cache.addr1 != ((reg >> 8) & 0xFF)) {
+            err = spi_regio_write(desc,
+                desc->is_spi1 ? REG_SPIDMA1_ADDR1_ADDR
+                              : REG_SPIDMA0_ADDR1_ADDR,
+                (reg >> 8) & 0xFF);
+            ADI_APOLLO_ERROR_RETURN(err);
+            desc->indir_cache.addr1 = (reg >> 8) & 0xFF;
+        }
+
+        // The DMA (indirect) register is not latched in until
+        // the least-significant byte is written. So always write this last byte.
+        err = spi_regio_write(desc,
+            desc->is_spi1 ? REG_SPIDMA1_ADDR0_ADDR
+                        : REG_SPIDMA0_ADDR0_ADDR,
+            (reg >> 0) & 0xFF);
+        ADI_APOLLO_ERROR_RETURN(err);
+    }
 
     return API_CMS_ERROR_OK;
 }

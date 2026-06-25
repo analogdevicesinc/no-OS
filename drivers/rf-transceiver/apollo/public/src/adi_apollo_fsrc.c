@@ -83,10 +83,10 @@ int32_t adi_apollo_fsrc_pgm(adi_apollo_device_t *device, adi_apollo_terminal_e t
             regmap_base_addr = calc_fsrc_base(terminal, i);
             
             if (i % 2 == 0) {
-                err = adi_apollo_hal_bf_set(device, BF_FSRC_EN0_INFO(regmap_base_addr), config->fsrc_en);
+                err = adi_apollo_hal_bf_set(device, BF_FSRC_EN0_INFO(regmap_base_addr), config->fsrc_en0);
                 ADI_APOLLO_ERROR_RETURN(err);
             } else {
-                err = adi_apollo_hal_bf_set(device, BF_FSRC_EN1_INFO(regmap_base_addr), config->fsrc_en);
+                err = adi_apollo_hal_bf_set(device, BF_FSRC_EN1_INFO(regmap_base_addr), config->fsrc_en1);
                 ADI_APOLLO_ERROR_RETURN(err);
             }
         }
@@ -108,7 +108,6 @@ int32_t adi_apollo_fsrc_inspect(adi_apollo_device_t *device, adi_apollo_terminal
     ADI_APOLLO_NULL_POINTER_RETURN(fsrc_inspect);
     ADI_APOLLO_INVALID_PARAM_RETURN(adi_api_utils_num_selected(fsrc)!= 1);
     ADI_APOLLO_FSRC_BLK_SEL_MASK(fsrc);
-
 
     for(i = 0; i < ADI_APOLLO_FSRC_NUM; i += 2) {                 //Common bitfield for 0 & 1 fsrcs              
         fsrc_temp = fsrc & ((ADI_APOLLO_FSRC_A0 << i) | (ADI_APOLLO_FSRC_A0 << (i+1)));
@@ -144,16 +143,21 @@ int32_t adi_apollo_fsrc_inspect(adi_apollo_device_t *device, adi_apollo_terminal
         }
     }    
             
+    /* first clear the enables since only one will be updated in the function call */
+    fsrc_inspect->dp_cfg.enable0 = 0;
+    fsrc_inspect->dp_cfg.enable1 = 0;
+    
+    /* Now retrieve the enable for the specific FSC block */
     for(i = 0; i < ADI_APOLLO_FSRC_NUM; i ++) {
         fsrc_temp = fsrc & (ADI_APOLLO_FSRC_A0 << i);
         if (fsrc_temp > 0) {
             regmap_base_addr = calc_fsrc_base(terminal, i);
             
             if (i % 2 == 0) {
-                err = adi_apollo_hal_bf_get(device, BF_FSRC_EN0_INFO(regmap_base_addr), (uint8_t*) &(fsrc_inspect->dp_cfg.enable), 1);
+                err = adi_apollo_hal_bf_get(device, BF_FSRC_EN0_INFO(regmap_base_addr), (uint8_t*) &(fsrc_inspect->dp_cfg.enable0), 1);
                 ADI_APOLLO_ERROR_RETURN(err);
             } else {
-                err = adi_apollo_hal_bf_get(device, BF_FSRC_EN1_INFO(regmap_base_addr), (uint8_t*) &(fsrc_inspect->dp_cfg.enable), 1);
+                err = adi_apollo_hal_bf_get(device, BF_FSRC_EN1_INFO(regmap_base_addr), (uint8_t*) &(fsrc_inspect->dp_cfg.enable1), 1);
                 ADI_APOLLO_ERROR_RETURN(err);
             }
         }

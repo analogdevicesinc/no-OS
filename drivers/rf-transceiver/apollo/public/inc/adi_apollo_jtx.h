@@ -132,21 +132,6 @@ int32_t adi_apollo_jtx_subclass_set(adi_apollo_device_t* device,
     const uint16_t links,
     const uint16_t subclass);
 
-/**
- * \brief  Enable or disable 'force_power_down' on a particular lane for Tx
- *
- * \param[in]  device          Context variable - Pointer to the APOLLO device data structure
- * \param[in]  link_sides      Target link side \ref adi_apollo_jesd_link_side_select_e
- * \param[in]  physical_lane   Physical lane index (0~11)
- * \param[in]  power_down      1:Force power down, 0:Not force power down
- *
- * \return API_CMS_ERROR_OK                     API Completed Successfully
- * \return <0                                   Failed. \ref adi_cms_error_e for details.
- */
-int32_t adi_apollo_jtx_lane_force_pd_set(adi_apollo_device_t *device,
-    const uint16_t link_sides,
-    uint8_t physical_lane,
-    uint8_t power_down);
 
 /**
  * \brief  Set Output Drive Swing level for jtx serdes lanes.

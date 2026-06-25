@@ -263,6 +263,57 @@ int32_t adi_apollo_cfg_profile_type_version_get(adi_apollo_device_t *device, adi
  */
 int32_t adi_apollo_cfg_serdes_rx_bridging_cal_cfg_set(adi_apollo_device_t *device, uint8_t bridging_cal_runs);
 
+/**
+ * \brief Set the Clock Conditioning data to device.
+ *
+ * \param[in]   device        Context variable - Pointer to the APOLLO device data structure
+ * \param[in]   sides         Apollo side selection mask. \ref adi_apollo_side_select_e
+ * \param[in]  cal_data      Array to load calibration data. Memory is allocated by the caller.
+ * \param[in]   len           Number of bytes in cal_data (includes room for ending checksum.)
+ *                            The cal_data array length can be retrieved from \ref adi_apollo_cfg_clk_cond_cal_data_len_get
+ *
+ * \return API_CMS_ERROR_OK     API Completed Successfully
+ * \return <0                   Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_cfg_clk_cond_cal_data_set(adi_apollo_device_t *device, const uint16_t sides, uint8_t cal_data[], uint32_t len);
+
+/**
+ * \brief Read the current Clock Conditioning data from device.
+ *
+ * \param[in]   device        Context variable - Pointer to the APOLLO device data structure
+ * \param[in]   sides         Apollo side selection mask. \ref adi_apollo_side_select_e
+ * \param[out]  cal_data      Array to store calibration data. Memory is allocated by the caller.
+ * \param[in]   len           Number of bytes in cal_data (includes room for ending checksum.)
+ *                            The cal_data array length can be retrieved from \ref adi_apollo_cfg_clk_cond_cal_data_len_get
+ *
+ * \return API_CMS_ERROR_OK     API Completed Successfully
+ * \return <0                   Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_cfg_clk_cond_cal_data_get(adi_apollo_device_t* device, const uint16_t sides, uint8_t cal_data[], uint32_t len);
+
+/**
+ * \brief Get size (in bytes) of Clock Conditioning data. Includes ending 32-bit checksum.
+ *        Both CC Side instances have the same cal data length.
+ *
+ * \param[in]   device        Context variable - Pointer to the APOLLO device data structure
+ * \param[out]  len           Number of bytes in cal_data (includes ending 32-bit checksum)
+ *
+ * \return API_CMS_ERROR_OK     API Completed Successfully
+ * \return <0                   Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_cfg_clk_cond_cal_data_len_get(adi_apollo_device_t* device, uint32_t* len);
+
+/**
+ * \brief Sets clock conditioning cal cfg. Must be done after firmware loading but before profile loading.
+ *
+ * \param[in]   device        Context variable - Pointer to the APOLLO device data structure
+ * \param[in]  cc_cal_cfg    cal config. \ref adi_apollo_sysclock_cond_cfg_e
+ *
+ * \return API_CMS_ERROR_OK     API Completed Successfully
+ * \return <0                   Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_cfg_clk_cond_cal_cfg_set(adi_apollo_device_t *device, adi_apollo_sysclock_cond_cfg_e cc_cal_cfg);
+
 
 #ifndef CLIENT_IGNORE
 #endif /* CLIENT_IGNORE*/

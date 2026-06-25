@@ -36,6 +36,7 @@ static int32_t cal_data_len_get(adi_apollo_device_t* device,
         uint32_t cal_obj_ofst, uint32_t siz_ptr,
         uint32_t *size);
 static uint8_t is_init_cal_cfg_valid(adi_apollo_init_cal_cfg_e init_cal_cfg);
+static uint8_t is_clk_cond_cal_cfg_valid(adi_apollo_sysclock_cond_cfg_e cc_cal_cfg);
 
 /*==================== P U B L I C   A P I   C O D E ====================*/
 
@@ -105,6 +106,18 @@ int32_t adi_apollo_cfg_adc_init_cal_cfg_set(adi_apollo_device_t *device, const u
         }
     }
 
+    return API_CMS_ERROR_OK;
+}
+
+int32_t adi_apollo_cfg_clk_cond_cal_cfg_set(adi_apollo_device_t *device, adi_apollo_sysclock_cond_cfg_e cc_cal_cfg)
+{
+    int32_t err;
+
+    ADI_APOLLO_NULL_POINTER_RETURN(device);
+    ADI_APOLLO_LOG_FUNC();
+    ADI_APOLLO_INVALID_PARAM_RETURN(!is_clk_cond_cal_cfg_valid(cc_cal_cfg));
+    err = adi_apollo_hal_bf_set(device, ADI_APOLLO_WARMBOOT_CFG_BASE_ADDR + ADI_APOLLO_WARMBOOT_CFG_SYSCLK_CONDITIONING, 0x00000400, cc_cal_cfg);
+    ADI_APOLLO_ERROR_RETURN(err);
     return API_CMS_ERROR_OK;
 }
 
@@ -264,7 +277,7 @@ int32_t adi_apollo_cfg_serdes_rx_cal_data_set(adi_apollo_device_t *device, const
             /* Get the cal data size and address location */
             err = cal_data_size_addr_get(device, i,
                 ADI_APOLLO_SERDES_RX_CAL_OBJ_SIZE, ADI_APOLLO_SERDES_RX_CAL_OBJ_OFFSET,
-                ADI_APOLLO_CPU_1_FW_SERDES_RX_OBJ_PTR, ADI_APOLLO_CPU_1_FW_SERDES_RX_SIZE_PTR,
+                ADI_APOLLO_CPU_0_FW_SERDES_RX_OBJ_PTR, ADI_APOLLO_CPU_0_FW_SERDES_RX_SIZE_PTR,
                 &size_bytes, &address);
 
             ADI_APOLLO_ERROR_RETURN(err);
@@ -313,6 +326,83 @@ int32_t adi_apollo_cfg_serdes_tx_cal_data_set(adi_apollo_device_t *device, const
              err = adi_apollo_hal_stream_reg_set(device, address, cal_data, len, 0);
              ADI_APOLLO_ERROR_RETURN(err);
 
+        }
+    }
+
+    return API_CMS_ERROR_OK;
+}
+
+int32_t adi_apollo_cfg_clk_cond_cal_data_set(adi_apollo_device_t *device, const uint16_t sides, uint8_t cal_data[], uint32_t len)
+{
+    int32_t err;
+    uint8_t i;
+    uint16_t side;
+    uint32_t size_bytes;
+    uint32_t address_ptr;
+    uint32_t address;
+
+    ADI_APOLLO_NULL_POINTER_RETURN(device);
+    ADI_APOLLO_LOG_FUNC();
+    ADI_APOLLO_NULL_POINTER_RETURN(cal_data);
+    ADI_APOLLO_INVALID_PARAM_RETURN(adi_api_utils_num_selected(sides) != 1);
+
+    for (i = 0; i < ADI_APOLLO_NUM_SIDES; i++) {
+        side = sides & (ADI_APOLLO_SIDE_A << i);
+        if (side > 0) {
+            /* Get the cal data size and address location */
+            err = adi_apollo_cfg_clk_cond_cal_data_len_get(device, &size_bytes);
+            ADI_APOLLO_ERROR_RETURN(err);
+
+            if (size_bytes != len) {
+                return API_CMS_ERROR_INVALID_PARAM;
+            }
+
+            address_ptr = (side == ADI_APOLLO_SIDE_A) ? APOLLO_CPU_1_FW_CLK_COND_0_CALDATA_PTR : APOLLO_CPU_1_FW_CLK_COND_1_CALDATA_PTR;
+            err = adi_apollo_hal_reg32_get(device, address_ptr, &address);
+            ADI_APOLLO_ERROR_RETURN(err);
+
+            /* Stream cal data to core */
+            err = adi_apollo_hal_stream_reg_set(device, address, cal_data, len, 0);
+            ADI_APOLLO_ERROR_RETURN(err);
+        }
+    }
+
+    return API_CMS_ERROR_OK;
+}
+
+int32_t adi_apollo_cfg_clk_cond_cal_data_get(adi_apollo_device_t* device, const uint16_t sides, uint8_t cal_data[], uint32_t len)
+{
+    int32_t err;
+    uint8_t i;
+    uint16_t side;
+    uint32_t size_bytes;
+    uint32_t address_ptr;
+    uint32_t address;
+
+    ADI_APOLLO_NULL_POINTER_RETURN(device);
+    ADI_APOLLO_LOG_FUNC();
+    ADI_APOLLO_NULL_POINTER_RETURN(cal_data);
+    ADI_APOLLO_INVALID_PARAM_RETURN(adi_api_utils_num_selected(sides) != 1);
+
+    for (i = 0; i < ADI_APOLLO_NUM_SIDES; i++) {
+        side = sides & (ADI_APOLLO_SIDE_A << i);
+        if (side > 0) {
+            /* Get the cal data size and address location */
+            err = adi_apollo_cfg_clk_cond_cal_data_len_get(device, &size_bytes);
+            ADI_APOLLO_ERROR_RETURN(err);
+
+            if (size_bytes != len) {
+                return API_CMS_ERROR_INVALID_PARAM;
+            }
+            address_ptr = (side == ADI_APOLLO_SIDE_A) ? APOLLO_CPU_1_FW_CLK_COND_0_CALDATA_PTR : APOLLO_CPU_1_FW_CLK_COND_1_CALDATA_PTR;
+            err = adi_apollo_hal_reg32_get(device, address_ptr, &address);
+            ADI_APOLLO_ERROR_RETURN(err);
+
+            /* Stream cal data from core */
+            err = adi_apollo_hal_stream_reg_get(device, address, cal_data, len, 0);
+            ADI_APOLLO_ERROR_RETURN(err);
+
+            break;
         }
     }
 
@@ -418,7 +508,7 @@ int32_t adi_apollo_cfg_serdes_rx_cal_data_get(adi_apollo_device_t* device, const
             /* Get the cal data size and address location */
             err = cal_data_size_addr_get(device, i,
                 ADI_APOLLO_SERDES_RX_CAL_OBJ_SIZE, ADI_APOLLO_SERDES_RX_CAL_OBJ_OFFSET,
-                ADI_APOLLO_CPU_1_FW_SERDES_RX_OBJ_PTR, ADI_APOLLO_CPU_1_FW_SERDES_RX_SIZE_PTR,
+                ADI_APOLLO_CPU_0_FW_SERDES_RX_OBJ_PTR, ADI_APOLLO_CPU_0_FW_SERDES_RX_SIZE_PTR,
                 &size_bytes, &address);
             ADI_APOLLO_ERROR_RETURN(err);
 
@@ -528,7 +618,7 @@ int32_t adi_apollo_cfg_serdes_rx_cal_data_len_get(adi_apollo_device_t* device, u
     /* Get the cal data size in byes. Same length for all ADC instances */
     err = cal_data_len_get(device,
         ADI_APOLLO_SERDES_RX_CAL_OBJ_OFFSET,
-        ADI_APOLLO_CPU_1_FW_SERDES_RX_SIZE_PTR,
+        ADI_APOLLO_CPU_0_FW_SERDES_RX_SIZE_PTR,
         len);
 
     /* Add 32-bit checksum */
@@ -584,6 +674,21 @@ int32_t adi_apollo_cfg_serdes_rx_bridging_cal_cfg_set(adi_apollo_device_t *devic
     return API_CMS_ERROR_OK;
 }
 
+int32_t adi_apollo_cfg_clk_cond_cal_data_len_get(adi_apollo_device_t* device, uint32_t* len)
+{
+    int32_t err = API_CMS_ERROR_OK;
+
+    ADI_APOLLO_NULL_POINTER_RETURN(device);
+    ADI_APOLLO_LOG_FUNC();
+    ADI_APOLLO_NULL_POINTER_RETURN(len);
+
+    /* The cal data size is in bytes, included 32-bit checksum. Same length for all Clock Conditioning instances
+    This value is fixed.
+    */
+    *len = ADI_APOLLO_CLK_COND_CAL_DATA_LEN_BYTES;
+
+    return err;
+}
 
 static int32_t cal_data_len_get(adi_apollo_device_t* device,
     uint32_t cal_obj_ofst, uint32_t siz_ptr,
@@ -633,6 +738,18 @@ static uint8_t is_init_cal_cfg_valid(adi_apollo_init_cal_cfg_e init_cal_cfg) {
         case ADI_APOLLO_INIT_CAL_ENABLED:
         case ADI_APOLLO_INIT_CAL_ENABLED_WARMBOOT_FROM_NVM:
         case ADI_APOLLO_INIT_CAL_ENABLED_WARMBOOT_FROM_USER:
+        return 1;
+    }
+
+    return 0;
+}
+
+static uint8_t is_clk_cond_cal_cfg_valid(adi_apollo_sysclock_cond_cfg_e cc_cal_cfg) {
+    switch (cc_cal_cfg) {
+        case ADI_APOLLO_SYSCLKCONDITIONING_ENABLED:
+        case ADI_APOLLO_SYSCLKCONDITIONING_DISABLED:
+        case ADI_APOLLO_SYSCLKCONDITIONING_ENABLED_WARMBOOT_FROM_USER:
+        case ADI_APOLLO_SYSCLKCONDITIONING_DISABLED_WARMBOOT_FROM_USER:
         return 1;
     }
 

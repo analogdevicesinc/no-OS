@@ -75,18 +75,6 @@ int32_t adi_apollo_adc_init_cal_start(adi_apollo_device_t *device, adi_apollo_bl
 int32_t adi_apollo_adc_init_cal_complete(adi_apollo_device_t *device, adi_apollo_blk_sel_t adcs);
 
 /**
- * \brief  Write adc tlines offset
- *
- * \param[in] device            Context variable - Pointer to the APOLLO device data structure
- * \param[in] offset            Offset for ADC Transmission Lines
- * \param[in] side_sel          side \ref adi_apollo_side_select_e
- *
- * \return API_CMS_ERROR_OK                     API Completed Successfully
- * \return <0                                   Failed. \ref adi_cms_error_e for details.
- */
-int32_t adi_apollo_adc_tlines_offset_set(adi_apollo_device_t *device, int8_t offset, adi_apollo_side_select_e side_sel);
-
-/**
  * \brief  Set ADC Sync Path Delay
  *
  * \param[in] device            Context variable - Pointer to the APOLLO device data structure
@@ -378,6 +366,47 @@ int32_t adi_apollo_adc_ovr_samples_set(adi_apollo_device_t *device, adi_apollo_b
  * \return <0                                   Failed. \ref adi_cms_error_e for details.
  */
 int32_t adi_apollo_adc_ovr_samples_get(adi_apollo_device_t *device, adi_apollo_blk_sel_t adc, uint32_t *num_samples);
+
+/**
+ * \brief   Get the Calibration Co-efficient Status.
+ * \note    Only one ADC select per call. Select one within ADI_APOLLO_ADC_A0 - ADI_APOLLO_ADC_B3.
+ *
+ *
+ * \param[in]   device              Context variable - Pointer to the APOLLO device data structure
+ * \param[in]   adc                 Target ADC selector \ref adi_apollo_adc_select_e
+ * \param[out]  coeff_status        Calibration Co-efficient Status.
+ *
+ * \return API_CMS_ERROR_OK                     API Completed Successfully
+ * \return <0                                   Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_adc_fact_cal_status_get(adi_apollo_device_t *device, adi_apollo_blk_sel_t adc, uint64_t *coeff_status);
+
+/**
+ * \brief   Set the Calibration Co-efficient Mode
+ *
+ * \param[in]   device              Context variable - Pointer to the APOLLO device data structure
+ * \param[in]   adcs                Target ADC selector \ref adi_apollo_adc_select_e
+ * \param[in]   coeff_mode          Calibration Co-efficient Mode.
+ * 
+
+ * \return API_CMS_ERROR_OK                     API Completed Successfully
+ * \return <0                                   Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_adc_fact_cal_mode_set(adi_apollo_device_t *device, adi_apollo_blk_sel_t adcs, uint32_t coeff_mode);
+
+/**
+ * \brief   Get the Calibration Co-efficient Mode.
+ * \note    Only one ADC select per call. Select one within ADI_APOLLO_ADC_A0 - ADI_APOLLO_ADC_B3.
+ *
+ *
+ * \param[in]   device              Context variable - Pointer to the APOLLO device data structure
+ * \param[in]   adc                 Target ADC selector \ref adi_apollo_adc_select_e
+ * \param[out]  coeff_mode          Calibration Co-efficient Mode.
+ *
+ * \return API_CMS_ERROR_OK                     API Completed Successfully
+ * \return <0                                   Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_adc_fact_cal_mode_get(adi_apollo_device_t *device, adi_apollo_blk_sel_t adc, uint32_t *coeff_mode);
 
 #ifdef __cplusplus
 }

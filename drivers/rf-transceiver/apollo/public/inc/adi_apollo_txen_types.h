@@ -131,7 +131,7 @@ typedef struct {
     adi_apollo_txen_pwrup_ctrl_t ctrl;
     adi_apollo_txen_pwrup_ctrl_edge_t edge;
     adi_apollo_txen_pwrup_ctrl_count_t count;
-    adi_apollo_puc_en_pin_sel_e pin_en;         /*!< Select which enable pin is mapped to the pwrup control. */
+    adi_apollo_puc_en_pin_sel_e pin_en;         /*!< Select which enable pin from CONV_POW_ONOFF is used as TXEN_POWER_CTRL input. */
 } adi_apollo_txen_pwrup_blk_config_t;
 
 #endif /* __ADI_APOLLO_TXEN_TYPES_H__ */

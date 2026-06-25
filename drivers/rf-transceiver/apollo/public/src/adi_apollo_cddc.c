@@ -18,7 +18,7 @@
 #include "adi_apollo_ddc_local.h"
 #include "adi_apollo_nco_local.h"
 #include "adi_apollo_duc_local.h"
-#include "adi_apollo_pfilt_local.h" //TODO: PFILT pgm dependency; Move to pfilt module
+#include "adi_apollo_pfilt_local.h"
 #include "adi_apollo_private_blk_sel_types.h"
 #include "adi_apollo_bf_rx_cddc.h"
 #include "adi_apollo_bf_rx_fine_ddc.h"
@@ -36,7 +36,7 @@
 
 /*==================== P U B L I C   A P I   C O D E ====================*/
 
-int32_t adi_apollo_cddc_dcm_set(adi_apollo_device_t *device, adi_apollo_blk_sel_t cddcs, adi_apollo_coarse_ddc_dcm_e dcm)
+int32_t adi_apollo_cddc_dcm_set(adi_apollo_device_t *device, adi_apollo_blk_sel_t cddcs, adi_apollo_cddc_ratio_e dcm)
 {
     int32_t err;
     uint8_t i;
@@ -231,30 +231,30 @@ int32_t adi_apollo_cddc_fine_bypass_enable(adi_apollo_device_t *device, adi_apol
     return API_CMS_ERROR_OK;
 }
 
-int32_t adi_apollo_cddc_dcm_bf_to_val(adi_apollo_device_t *device, adi_apollo_coarse_ddc_dcm_e bf_enum, uint32_t *val)
+int32_t adi_apollo_cddc_dcm_bf_to_val(adi_apollo_device_t *device, adi_apollo_cddc_ratio_e bf_enum, uint32_t *val)
 {
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_LOG_FUNC();
     ADI_APOLLO_NULL_POINTER_RETURN(val);
 
     switch (bf_enum) {
-        case ADI_APOLLO_CDDC_DCM_1:
-        case ADI_APOLLO_CDDC_DCM_2:
-        case ADI_APOLLO_CDDC_DCM_3:
-        case ADI_APOLLO_CDDC_DCM_4:
+        case ADI_APOLLO_CDDC_RATIO_1:
+        case ADI_APOLLO_CDDC_RATIO_2:
+        case ADI_APOLLO_CDDC_RATIO_3:
+        case ADI_APOLLO_CDDC_RATIO_4:
             *val = bf_enum + 1;
         break;
 
-        case ADI_APOLLO_CDDC_DCM_6:
+        case ADI_APOLLO_CDDC_RATIO_6:
             *val = 6;
         break;
 
-        case ADI_APOLLO_CDDC_DCM_12:
+        case ADI_APOLLO_CDDC_RATIO_12:
             *val = 12;
         break;
 
         default:
-            ADI_APOLLO_LOG_ERR("Invalid adi_apollo_coarse_ddc_dcm_e enum");
+            ADI_APOLLO_LOG_ERR("Invalid adi_apollo_cddc_ratio_e enum");
             return API_CMS_ERROR_INVALID_PARAM;
     }
 

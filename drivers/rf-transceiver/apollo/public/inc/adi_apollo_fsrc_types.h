@@ -50,7 +50,8 @@ typedef struct {
     uint8_t fsrc_dither_en;                 /*!< If this bit is 1, dither is added into FSRC in the delta delay calculation */
     uint8_t fsrc_4t4r_split;                /*!< If this bit is set FSRC0_1 is enabled. This bit is only to be used for 4T4R two stream use case */
     uint8_t fsrc_bypass;                    /*!< If this bit is 1, the FSRC is bypassed */
-    uint8_t fsrc_en;                        /*!< If this bit is 1, FSRC is enabled */
+    uint8_t fsrc_en0;                       /*!< If this bit is 1, FSRC0 is enabled */
+    uint8_t fsrc_en1;                       /*!< If this bit is 1, FSRC1 is enabled */
     uint8_t fsrc_1x_mode;                   /*!< If this bit is 1, FSRC will be in 1x mode */
 } adi_apollo_fsrc_pgm_t;
 

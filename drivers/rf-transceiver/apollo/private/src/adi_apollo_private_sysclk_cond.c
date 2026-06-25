@@ -23,7 +23,7 @@ int32_t adi_apollo_private_sysclk_cond_defaults_set(adi_apollo_device_t *device,
     /* Initial clock conditioning constants. ***Do not modify*** */
     uint32_t cc_config_address, cc_cal_data_address_a, cc_cal_data_address_b;
     uint32_t cal_data[88] = { 0 };
-    uint8_t low_speed = clk_cfg->dev_clk_freq_kHz < 15000000UL;
+    uint8_t low_speed = clk_cfg->dev_clk_freq_Hz < 15000000000ULL;
     adi_apollo_sysclk_cond_calconfig_t calconfig = {
         .adc_centering_capture_length_Kb    = low_speed ? 1 : 8,
         .adc_centering_capture_avg          = low_speed ? 1 : 8,

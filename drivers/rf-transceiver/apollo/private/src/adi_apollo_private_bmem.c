@@ -18,6 +18,11 @@
 #include "adi_apollo_bf_rx_bmem.h"
 #include "adi_apollo_config.h"
 #include "adi_apollo_hal.h"
+#include "linux/gfp_types.h"
+#include "linux/slab.h"
+#ifdef __KERNEL__
+#include <linux/cleanup.h>
+#endif
 
 #define TIMEOUT_US 100000
 #define POLL_DELAY_US 10
@@ -54,7 +59,7 @@ int32_t adi_apollo_private_bmem_delay_sample_set(adi_apollo_device_t *device, ad
         if ((bmems & (ADI_APOLLO_BMEM_A0 << i)) > 0) {
             regmap_base_addr = calc_bmem_base(i);
 
-            // Set sample delay 
+            // Set sample delay
             err = adi_apollo_hal_bf_set(device, BF_SAMPLE_DLY_INFO(regmap_base_addr), sample_delay);
             ADI_CMS_ERROR_RETURN(err);
         }
@@ -137,7 +142,7 @@ int32_t adi_apollo_private_bmem_delay_sample_config(adi_apollo_device_t *device,
             err = adi_apollo_hal_bf_set(device, BF_HOP_DLY_SEL_MODE_INFO(regmap_base_addr), 0);
             ADI_CMS_ERROR_RETURN(err);
 
-            
+
             // Set parity check
             err = adi_apollo_hal_bf_set(device, BF_PARITY_CHECK_EN_INFO(regmap_base_addr), config->parity_check_en);
             ADI_CMS_ERROR_RETURN(err);
@@ -192,7 +197,7 @@ int32_t adi_apollo_private_bmem_delay_hop_config(adi_apollo_device_t *device, ad
             // Set trigger mode self clear
             err = adi_apollo_hal_bf_set(device, BF_TRIG_MODE_SCLR_EN_INFO(regmap_base_addr), config->trig_mode_sclr_en);
             ADI_CMS_ERROR_RETURN(err);
-            
+
             // Set parity check
             err = adi_apollo_hal_bf_set(device, BF_PARITY_CHECK_EN_INFO(regmap_base_addr), config->parity_check_en);
             ADI_CMS_ERROR_RETURN(err);
@@ -277,7 +282,7 @@ int32_t adi_apollo_private_bmem_capture_config(adi_apollo_device_t *device, adi_
             err = adi_apollo_hal_bf_set(device, BF_PARITY_CHECK_EN_INFO(regmap_base_addr), config->parity_check_en);
             ADI_CMS_ERROR_RETURN(err);
 
-            // Set trigger mode
+            // Disable trigger mode
             err = adi_apollo_hal_bf_set(device, BF_TRIG_MODE_INFO(regmap_base_addr), 0);
             ADI_CMS_ERROR_RETURN(err);
 
@@ -512,7 +517,7 @@ int32_t adi_apollo_private_bmem_awg_sram_set(adi_apollo_device_t *device, adi_ap
     /* Only SPI transactions can be used for writing BMEM AWG */
     err = adi_apollo_hal_active_protocol_get(device, &ap);
     ADI_CMS_ERROR_RETURN(err);
-    
+
     if (ap != ADI_APOLLO_HAL_PROTOCOL_SPI0) {
         ADI_CMS_ERROR_RETURN(API_CMS_ERROR_PROTOCOL_OP_NOT_SUPPORTED);
     }
@@ -557,7 +562,14 @@ int32_t adi_apollo_private_bmem_awg_sample_write(adi_apollo_device_t *device, ad
 {
     int32_t err;
     uint32_t vec32_len = data16_len/2;
+#ifdef __KERNEL__
+    uint32_t *vec32 __free(kfree) = kcalloc(vec32_len, sizeof(uint32_t), GFP_KERNEL);
+    if (!vec32) {
+        ADI_CMS_ERROR_RETURN(API_CMS_ERROR_MEM_ALLOC);
+    }
+#else
     uint32_t vec32[vec32_len];
+#endif
     uint32_t s0, s1;
     int32_t i;
 

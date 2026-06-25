@@ -74,8 +74,6 @@ typedef struct {
 typedef struct {
     uint8_t sample_size;                       /*!< 0: NORMAL 16b, 1: DEBUG 32b */
     uint8_t ramclk_ph_dis;                     /*!< Set 1 to Disable SRAM Clock Phasing. */
-    uint16_t st_addr_awg;                      /*!< [DEPRECATED] Start Address of SRAM in AWG Mode */
-    uint16_t end_addr_awg;                     /*!< [DEPRECATED] End Address of SRAM in AWG Mode */
     uint8_t parity_check_en;                   /*!< Set 1 to Enable Parity Check on Data Read from SRAM. */
 } adi_apollo_bmem_awg_t;
 
@@ -100,9 +98,6 @@ typedef struct {
 	uint8_t trig_mode_sclr_en;                              /*!< Set to 1 to self clear after a trigger */
 	uint8_t parity_check_en;                                /*!< Set 1 to Enable Parity Check on Data Read from SRAM. */
 } adi_apollo_bmem_delay_hop_t;
-
-typedef adi_apollo_bmem_delay_sample_t adi_apollo_bmem_sample_delay_t;   // DEPRECATED: alias for back compatability
-typedef adi_apollo_bmem_delay_hop_t adi_apollo_bmem_hop_delay_t;         // DEPRECATED: alias for back compatability
 
 
 #endif /* __ADI_APOLLO_BMEM_TYPES_H__ */

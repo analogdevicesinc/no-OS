@@ -328,6 +328,15 @@ int32_t adi_apollo_trigts_reset_done_clear(adi_apollo_device_t *device, adi_apol
  */
 int32_t adi_apollo_trigts_reset_done_get(adi_apollo_device_t *device, adi_apollo_terminal_e terminal, uint16_t side_sel, uint8_t *reset_done_status);
 
+/**
+ * \brief Setup external trigger without dynamic reconfiguration
+ * 
+ * \param[in] device       Context variable - Pointer to the APOLLO device data structure.
+ * \param[in] terminal     Target terminal \ref adi_apollo_terminal_e
+ * \param[in] side_sel     Target side  \ref adi_apollo_side_select_e
+ */
+int32_t adi_apollo_trigts_ext_trig_no_dr_setup(adi_apollo_device_t *device, adi_apollo_terminal_e terminal, uint16_t side_sel);
+
 #ifndef CLIENT_IGNORE
 #endif /* CLIENT_IGNORE */
 

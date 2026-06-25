@@ -26,7 +26,7 @@
  */
 typedef struct {
     adi_apollo_hal_protocol_e protocol_id;          /*!< Indicates protocol type \ref adi_apollo_hal_protocol_e */
-    uint8_t     supports_paging;                    /*!< Indicates of paging is supported */ /* todo - may remove this, hsci could do pseudo paging */
+    uint8_t     supports_paging;                    /*!< Indicates of paging is supported */
     uint8_t     rmw_enabled;                        /*!< Indicates if read-modify-write feature should be used */
     uint8_t     poll_read_en;                       /*!< Indicates if poll reads are enabled  */
     uint8_t     poll_read_returns_val;              /*!< Indicates if a polling read returns an actual value. */

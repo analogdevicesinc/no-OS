@@ -92,14 +92,14 @@ int32_t adi_apollo_tx_cfir_configure(adi_apollo_device_t *device, adi_apollo_sid
  *
  * \param[in] device            Context variable - Pointer to the APOLLO device data structure
  * \param[in] side              Device side, A or B \ref adi_apollo_sides_e
- * \param[in] idx               Index of block to configure. \ref adi_apollo_fsrc_idx_e
+ * \param[in] idx               Index of block to configure (0 or 1)
  * \param[in] config            FSRC config parameters. \ref adi_apollo_fsrc_cfg_t
  * \param[in] jrx_link_config   JRX link config parameters. \ref adi_apollo_jesd_rx_link_cfg_t
  *
  * \return API_CMS_ERROR_OK                     Completed successfully
  * \return <0                                   Failed. \ref adi_cms_error_e for details.
  */
-int32_t adi_apollo_tx_fsrc_configure(adi_apollo_device_t *device, adi_apollo_sides_e side, adi_apollo_fsrc_idx_e idx, 
+int32_t adi_apollo_tx_fsrc_configure(adi_apollo_device_t *device, adi_apollo_sides_e side, uint8_t idx, 
     adi_apollo_fsrc_cfg_t *config, adi_apollo_jesd_rx_link_cfg_t *jrx_link_config);
 
 /**

@@ -30,6 +30,7 @@
 #include "adi_apollo_smon_types.h"
 #include "adi_apollo_txmux_types.h"
 #include "adi_apollo_private_device.h"
+#include "adi_apollo_private_blk_sel.h"
 
 int32_t adi_apollo_private_blk_sel_mask_set(adi_apollo_device_t *device)
 {
@@ -42,7 +43,7 @@ int32_t adi_apollo_private_blk_sel_mask_set(adi_apollo_device_t *device)
     device->dev_info.blk_sel_mask.cduc      = (device->dev_info.is_8t8r ? ADI_APOLLO_CDUC_ALL : ADI_APOLLO_CDUC_ALL_4T4R);
     device->dev_info.blk_sel_mask.cfir      = (device->dev_info.is_8t8r ? ADI_APOLLO_CFIR_ALL : ADI_APOLLO_CFIR_ALL_4T4R);
     device->dev_info.blk_sel_mask.cnco      = (device->dev_info.is_8t8r ? ADI_APOLLO_CNCO_ALL : ADI_APOLLO_CNCO_ALL_4T4R);
-    device->dev_info.blk_sel_mask.dac       = 0xff; 
+    device->dev_info.blk_sel_mask.dac       = 0xff;
     device->dev_info.blk_sel_mask.fddc      = (device->dev_info.is_8t8r ? ADI_APOLLO_FDDC_ALL : ADI_APOLLO_FDDC_ALL_4T4R);
     device->dev_info.blk_sel_mask.fduc      = (device->dev_info.is_8t8r ? ADI_APOLLO_FDUC_ALL : ADI_APOLLO_FDUC_ALL_4T4R);
     device->dev_info.blk_sel_mask.fnco      = (device->dev_info.is_8t8r ? ADI_APOLLO_FNCO_ALL : ADI_APOLLO_FNCO_ALL_4T4R);

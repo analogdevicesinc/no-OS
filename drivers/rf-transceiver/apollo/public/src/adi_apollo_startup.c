@@ -148,6 +148,7 @@ static int32_t seq_profile_load(adi_apollo_device_t *device,  adi_apollo_top_t *
     int32_t err = API_CMS_ERROR_OK;
     uint32_t num_tries = 10;
     uint8_t boot_status = 0;
+    uint8_t prev_boot_status = 0;
     int32_t fw_err_code = 0;
 
     ADI_APOLLO_LOG_MSG("ADI_APOLLO_STARTUP_SEQ_PROFILE_LOAD");
@@ -155,10 +156,16 @@ static int32_t seq_profile_load(adi_apollo_device_t *device,  adi_apollo_top_t *
     /* Wait for FW ready to accept profile */
     num_tries = 100;
     do {
-        err = adi_apollo_hal_delay_us(device, 1 * 50000);
+        err = adi_apollo_hal_delay_us(device, 50000);
         ADI_APOLLO_ERROR_RETURN(err);
         err = adi_apollo_arm_boot_status(device, &boot_status);
         ADI_APOLLO_ERROR_RETURN(err);
+
+        if (boot_status != prev_boot_status) {
+            ADI_APOLLO_LOG_MSG_VAR("Core 1 Ram Boot Status: 0x%02X", boot_status);
+            prev_boot_status = boot_status;
+        }
+
     } while (boot_status != ADI_APOLLO_RAM_BOOT_STEP_WAIT_FOR_CONFIG && num_tries-- > 0);
 
     if (boot_status != ADI_APOLLO_RAM_BOOT_STEP_WAIT_FOR_CONFIG) {
@@ -185,12 +192,18 @@ static int32_t seq_profile_load(adi_apollo_device_t *device,  adi_apollo_top_t *
     ADI_APOLLO_LOG_ERROR_RETURN_VAR(err, PREFIX"Profile write to device failed. err: %d", err);
 
     /* Verify FW mailbox is ready */
-    num_tries = 60;
+    num_tries = 600;
     do {
-        err = adi_apollo_hal_delay_us(device, 1 * 500000);
+        err = adi_apollo_hal_delay_us(device, 1 * 50000);
         ADI_APOLLO_ERROR_RETURN(err);
         err = adi_apollo_arm_boot_status(device, &boot_status);
         ADI_APOLLO_ERROR_RETURN(err);
+
+        if (boot_status != prev_boot_status) {
+            ADI_APOLLO_LOG_MSG_VAR("Core 1 Ram Boot Status: 0x%02X", boot_status);
+            prev_boot_status = boot_status;
+        }
+
     } while (boot_status != ADI_APOLLO_CPU_BOOT_MAILBOX_READY && num_tries-- > 0);
 
     if (boot_status != ADI_APOLLO_CPU_BOOT_MAILBOX_READY) {
@@ -263,6 +276,7 @@ static int32_t seq_link_en(adi_apollo_device_t *device,  adi_apollo_top_t *dev_p
 static int32_t seq_txrx_activate(adi_apollo_device_t *device)
 {
     int32_t err;
+    
     ADI_APOLLO_LOG_MSG(PREFIX"ADI_APOLLO_STARTUP_SEQ_TXRX_ACTIVATE");
 
     /* Activate the Rx and Tx blocks */
@@ -275,7 +289,8 @@ static int32_t seq_txrx_activate(adi_apollo_device_t *device)
 static int32_t seq_sync(adi_apollo_device_t *device)
 {
     int32_t err;
-    ADI_APOLLO_LOG_MSG("ADI_APOLLO_STARTUP_SEQ_SYNC");
+
+    ADI_APOLLO_LOG_MSG(PREFIX"ADI_APOLLO_STARTUP_SEQ_SYNC");
 
     /* Datapath reset */
     err = adi_apollo_rxmisc_dp_reset(device, ADI_APOLLO_SIDE_ALL, 1);
@@ -287,19 +302,9 @@ static int32_t seq_sync(adi_apollo_device_t *device)
     err = adi_apollo_txmisc_dp_reset(device, ADI_APOLLO_SIDE_ALL, 0);
     ADI_APOLLO_ERROR_RETURN(err);
 
-    /*
-        Note:   Skipping this startup sync as it might be redundant.
-                If the example doesn't work as expected, make sure to run Clk Cond Cal
-                after enabling all digital blocks per example.
-    */
-
-    // /* Dynamic sync sequence - gradual enabling of blocks to mitigate dynamic power */
-    // err = adi_apollo_clk_mcs_dyn_sync_sequence_run(device);
-    // ADI_APOLLO_LOG_ERROR_RETURN_VAR(err, PREFIX"adi_apollo_clk_mcs_dyn_sync_sequence_run failed. err: %d", err);
-
-    // /* Align and sync clocks */
-    // err = adi_apollo_clk_mcs_oneshot_sync(device);
-    // ADI_APOLLO_LOG_ERROR_RETURN_VAR(err, PREFIX"adi_apollo_clk_mcs_oneshot_sync failed. err: %d", err);
+    /* Dynamic sync sequence - gradual enabling of blocks to mitigate dynamic power */
+    err = adi_apollo_clk_mcs_dyn_sync_sequence_run(device);
+    ADI_APOLLO_LOG_ERROR_RETURN_VAR(err, PREFIX"adi_apollo_clk_mcs_dyn_sync_sequence_run failed. err: %d\n", err);
 
     return err;
 }
@@ -309,7 +314,7 @@ static int32_t fw_load(adi_apollo_device_t *device)
     int32_t err;
     uint8_t *core1_fw_buf = NULL;
     uint8_t *core0_fw_buf = NULL;
-	uint32_t core1_size_bytes = 0;
+    uint32_t core1_size_bytes = 0;
     uint32_t core0_size_bytes = 0;
     adi_apollo_fw_provider_t *fw_provider;
 

@@ -33,26 +33,33 @@
 int32_t adi_apollo_mailbox_ready_check(adi_apollo_device_t *device)
 {
     int32_t err;
-    uint8_t status = 0x00;
+    uint8_t boot_status = 0x00;
+    uint8_t prev_boot_status = 0x00;
     int32_t i;
 
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_LOG_FUNC();
 
-    for (i = 0; i < 50; i++)
+    for (i = 0; i < 100; i++)
     {
         err = adi_apollo_arm_ram_boot_error_check(device);
         ADI_APOLLO_ERROR_RETURN(err);
-        err = adi_apollo_arm_boot_status(device, &status);
+        err = adi_apollo_arm_boot_status(device, &boot_status);
         ADI_APOLLO_ERROR_RETURN(err);
-        if(status >= ADI_ADI_APOLLO_RAM_BOOT_STEP_MAILBOX_READY)
+
+        if (boot_status != prev_boot_status) {
+            ADI_APOLLO_LOG_MSG_VAR("Core 1 Ram Boot Status: 0x%02X", boot_status);
+            prev_boot_status = boot_status;
+        }
+
+        if (boot_status >= ADI_ADI_APOLLO_RAM_BOOT_STEP_MAILBOX_READY)
         {    
             err = API_CMS_ERROR_OK;
             break;
         }
         
-        //delay 100ms
-        err = adi_apollo_hal_delay_us(device, 100000);
+        // delay 50ms
+        err = adi_apollo_hal_delay_us(device, 50000);
         ADI_APOLLO_ERROR_RETURN(err);
         
 	    err = API_CMS_ERROR_ERROR;
@@ -65,8 +72,8 @@ int32_t adi_apollo_mailbox_ready_check(adi_apollo_device_t *device)
 
 int32_t adi_apollo_mailbox_busy_wait(adi_apollo_device_t *device)
 {
-    uint32_t delay_us = 100000;             // 100ms polling delay
-    uint32_t max_delay_us = 150*delay_us;   // 15s timeout
+    uint32_t delay_us = 1000;           // 1ms polling delay
+    uint32_t max_delay_us = 15000000;   // 15s timeout
     return adi_apollo_hal_bf_wait_to_clear(device, BF_ARM1_SPI0_COMMAND_BUSY_INFO, max_delay_us, delay_us);
 }
 

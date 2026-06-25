@@ -40,13 +40,16 @@ int32_t adi_apollo_tmode_config_set(adi_apollo_device_t *device,
     
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_LOG_FUNC();
+
+    ADI_CMS_RANGE_CHECK(res, ADI_APOLLO_RX_TMODE_RES_16B, ADI_APOLLO_RX_TMODE_RES_12B);
+    ADI_CMS_RANGE_CHECK(mode, ADI_APOLLO_TMODE_TYPE_SEL_NORM, ADI_APOLLO_TMODE_TYPE_SEL_RAMP);
     
     /* set test mode converters */
     err = adi_apollo_dformat_conv_test_mode_enable_set(device, links, converter_mask);
     ADI_APOLLO_ERROR_RETURN(err);
 
-    /* set JTx output as 16bit resolution */
-    err = adi_apollo_dformat_res_sel_set(device, links, ADI_APOLLO_CHIP_OUT_RES_16BIT);
+    /* set JTx output resolution */
+    err = adi_apollo_dformat_res_sel_set(device, links, res);
     ADI_APOLLO_ERROR_RETURN(err);
 
     /* Set ADC TMODE block res */

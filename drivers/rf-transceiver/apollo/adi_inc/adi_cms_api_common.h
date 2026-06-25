@@ -60,6 +60,7 @@ typedef enum {
     API_CMS_ERROR_INVALID_RESET_CTRL_PTR    = -15, /*!< Invalid pointer to the reset control function assigned */
     API_CMS_ERROR_NOT_SUPPORTED             = -16, /*!< Not supported */
     API_CMS_ERROR_INVALID_MASK_SELECT       = -17, /*!< Invalid bitmask select parameter passed */
+    API_CMS_ERROR_INVALID_PROFILE_SELECT    = -18, /*!< Invalid profile parameter passed */
     API_CMS_ERROR_IN_REF_STATUS             = -19, /*!< The Input Reference Signal is not available */
     API_CMS_ERROR_VCO_OUT_OF_RANGE          = -20, /*!< The VCO is out of range */
     API_CMS_ERROR_PLL_NOT_LOCKED            = -21, /*!< PLL is not locked */
@@ -97,6 +98,8 @@ typedef enum {
     API_CMS_ERROR_NOT_IMPLEMENTED           = -93, /*!< Feature not currently implemented */
     API_CMS_ERROR_STRUCT_UNPOPULATED        = -94, /*!< Struct not populated */
     API_CMS_ERROR_PROTOCOL_OP_NOT_SUPPORTED = -95, /*!< Protocol not supported for operation */
+    API_CMS_ERROR_INVALID_CLK_OR_REF_PARAM  = -96, /*!< Invalid clock or reference parameter */
+    API_CMS_ERROR_UNEXPECTED_RESULT         = -97, /*!< An unexpected result */
 
     API_CMS_ERROR_MEM_ALLOC                 = -100, /*!< memory allocation error */
     API_CMS_ERROR_MMAP                      = -101, /*!< memory mapping error */
@@ -121,14 +124,16 @@ typedef enum {
     API_CMS_ERROR_ADC_CAL_TIMEOUT           = -136,  /*!< ADC Cal run or status check response timed out error */
 
     API_CMS_ERROR_BAD_STATE                 = -140,  /*!< Device is not in appropriate state to perform operation */
-    
-    API_CMS_ERROR_STARTUP_FW_RDY_FOR_PROFILE_ERROR = -150,   /*!< FW did not reach ready for profile config state */
-    API_CMS_ERROR_STARTUP_FW_MAILBOX_RDY_ERROR = -151,  /*!< FW did not reach mailbox ready state */
+    API_CMS_ERROR_VEC_IQ_LEN_MISMATCH       = -141,  /*!< Complex vector I&Q lengths not equal */
 
-    API_CMS_ERROR_PLATFORM_CAPTURE_INVALID_CONFIG = -200, /*!< Invalid platform capture configuration */
-                                               
-                                              
-                              
+    API_CMS_ERROR_STARTUP_FW_RDY_FOR_PROFILE_ERROR  = -150,  /*!< FW did not reach ready for profile config state */
+    API_CMS_ERROR_STARTUP_FW_MAILBOX_RDY_ERROR      = -151,  /*!< FW did not reach mailbox ready state */
+
+    API_CMS_ERROR_SMON_FRAMER_SOF_NOT_FOUND         = -160,  /*!< Start of frame not found */
+    API_CMS_ERROR_SMON_FRAMER_MIN_SAMPLES_ERROR     = -161,  /*!< Min samples not available for de-serialization */
+
+    API_CMS_ERROR_PLATFORM_CAPTURE_INVALID_CONFIG   = -200,  /*!< Invalid platform capture configuration */
+
 } adi_cms_error_e;
 
 /*!
@@ -354,6 +359,7 @@ typedef int32_t(*adi_cms_delay_us_t)(void *user_data, uint32_t us);
 #define ADI_CMS_MEM_ALLOC_CHECK(r)         ADI_CMS_CHECK(r == NULL, API_CMS_ERROR_MEM_ALLOC)
 #define ADI_CMS_FILE_OPEN_CHECK(r)         ADI_CMS_CHECK(r == NULL, API_CMS_ERROR_FILE_OPEN)
 #define ADI_CMS_INVALID_PARAM_CHECK(r)     ADI_CMS_CHECK(r, API_CMS_ERROR_INVALID_PARAM)
+#define ADI_CMS_MAX_SELECT_CHECK(r, m)     ADI_CMS_CHECK((((r) & (~(m)))), API_CMS_ERROR_INVALID_MASK_SELECT)
 #define ADI_CMS_SINGLE_SELECT_CHECK(r)     ADI_CMS_CHECK(!(r > 0 && (r & (r - 1)) == 0), API_CMS_ERROR_INVALID_MASK_SELECT)
 #define ADI_CMS_RANGE_CHECK(r, min, max)   ADI_CMS_CHECK(r < min || r > max, API_CMS_ERROR_INVALID_PARAM)
 

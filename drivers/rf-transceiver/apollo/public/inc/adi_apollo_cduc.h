@@ -28,7 +28,7 @@ extern "C" {
  *
  * \param[in]  device       Context variable - Pointer to the APOLLO device data structure
  * \param[in]  cducs        Coarse DUC selection. ADI_APOLLO_CDUC_A0, _A0 to _A3, _B0 to _B3, _ALL \ref adi_apollo_cduc_select_e
- * \param[in]  interp       Interpolation enum.  ADI_APOLLO_CDUC_INTERP_1, _2, _3, _4, _6, _8, _12 \ref adi_apollo_coarse_duc_dcm_e
+ * \param[in]  interp       Interpolation enum.  ADI_APOLLO_CDUC_RATIO_1, _2, _3, _4, _6, _8, _12 \ref adi_apollo_cduc_ratio_e
  *
  * \return API_CMS_ERROR_OK                     API Completed Successfully
  * \return <0                                   Failed. \ref adi_cms_error_e for details.
@@ -82,7 +82,7 @@ int32_t adi_apollo_cduc_inspect(adi_apollo_device_t *device, adi_apollo_blk_sel_
  * \return API_CMS_ERROR_OK                     API Completed Successfully
  * \return <0                                   Failed. \ref adi_cms_error_e for details.
  */
-int32_t adi_apollo_cduc_interp_bf_to_val(adi_apollo_device_t* device, adi_apollo_coarse_duc_dcm_e bf_enum, uint32_t* val);
+int32_t adi_apollo_cduc_interp_bf_to_val(adi_apollo_device_t* device, adi_apollo_cduc_ratio_e bf_enum, uint32_t* val);
 
 /**
  * \brief  Enables/disables coarse DUC IRQ generation

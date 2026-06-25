@@ -63,7 +63,7 @@ int32_t adi_apollo_cfir_pgm(adi_apollo_device_t* device, adi_apollo_terminal_e t
     return API_CMS_ERROR_OK;
 }
 
-int32_t adi_apollo_cfir_coeff_pgm(adi_apollo_device_t *device, adi_apollo_terminal_e terminal, adi_apollo_blk_sel_t cfirs, uint8_t cfir_profiles, uint8_t cfir_dps, uint16_t cfir_coeff_i[], uint16_t cfir_coeff_q[], uint32_t len)
+int32_t adi_apollo_cfir_coeff_pgm(adi_apollo_device_t *device, adi_apollo_terminal_e terminal, adi_apollo_blk_sel_t cfirs, uint8_t cfir_profiles, uint8_t cfir_dps, int16_t cfir_coeff_i[], int16_t cfir_coeff_q[], uint32_t len)
 {
     int32_t err;
     uint16_t cfir;
@@ -203,6 +203,10 @@ int32_t adi_apollo_cfir_scalar_pgm(adi_apollo_device_t *device, adi_apollo_termi
         if (cfir > 0) {
             regmap_base_addr = calc_cfir_base(terminal, i);
 
+            /* Set reg_map base address for subsequent paged writes */
+            err = adi_apollo_hal_paged_base_addr_set(device, regmap_base_addr);
+            ADI_APOLLO_ERROR_RETURN(err);
+
             for (dp = 0; dp < ADI_APOLLO_CFIR_PROFILE_NUM; dp++) {
                 cfir_profile = cfir_profiles & (ADI_APOLLO_CFIR_DP_0 << dp);
                 if (cfir_profile > 0) {
@@ -214,54 +218,54 @@ int32_t adi_apollo_cfir_scalar_pgm(adi_apollo_device_t *device, adi_apollo_termi
                             if (dp == 0) {      /* profile 1 */
                                 switch (j) {
                                     case 0:
-                                        err = adi_apollo_hal_bf_set(device, BF_I_COMPLEX_SCALAR_1_INFO(regmap_base_addr, 0), scalar_i);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_I_COMPLEX_SCALAR_1_INFO(regmap_base_addr, 0), scalar_i);
                                         ADI_APOLLO_ERROR_RETURN(err);
-                                        err = adi_apollo_hal_bf_set(device, BF_Q_COMPLEX_SCALAR_1_INFO(regmap_base_addr, 0), scalar_q);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_Q_COMPLEX_SCALAR_1_INFO(regmap_base_addr, 0), scalar_q);
                                         ADI_APOLLO_ERROR_RETURN(err);
                                         break;
                                     case 1:
-                                        err = adi_apollo_hal_bf_set(device, BF_I_COMPLEX_SCALAR_1_INFO(regmap_base_addr, 1), scalar_i);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_I_COMPLEX_SCALAR_1_INFO(regmap_base_addr, 1), scalar_i);
                                         ADI_APOLLO_ERROR_RETURN(err);
-                                        err = adi_apollo_hal_bf_set(device, BF_Q_COMPLEX_SCALAR_1_INFO(regmap_base_addr, 1), scalar_q);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_Q_COMPLEX_SCALAR_1_INFO(regmap_base_addr, 1), scalar_q);
                                         ADI_APOLLO_ERROR_RETURN(err);
                                         break;
                                     case 2:
-                                        err = adi_apollo_hal_bf_set(device, BF_I_COMPLEX_SCALAR_1_INFO(regmap_base_addr, 2), scalar_i);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_I_COMPLEX_SCALAR_1_INFO(regmap_base_addr, 2), scalar_i);
                                         ADI_APOLLO_ERROR_RETURN(err);
-                                        err = adi_apollo_hal_bf_set(device, BF_Q_COMPLEX_SCALAR_1_INFO(regmap_base_addr, 2), scalar_q);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_Q_COMPLEX_SCALAR_1_INFO(regmap_base_addr, 2), scalar_q);
                                         ADI_APOLLO_ERROR_RETURN(err);
                                         break;
                                     case 3:
-                                        err = adi_apollo_hal_bf_set(device, BF_I_COMPLEX_SCALAR_1_INFO(regmap_base_addr, 3), scalar_i);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_I_COMPLEX_SCALAR_1_INFO(regmap_base_addr, 3), scalar_i);
                                         ADI_APOLLO_ERROR_RETURN(err);
-                                        err = adi_apollo_hal_bf_set(device, BF_Q_COMPLEX_SCALAR_1_INFO(regmap_base_addr, 3), scalar_q);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_Q_COMPLEX_SCALAR_1_INFO(regmap_base_addr, 3), scalar_q);
                                         ADI_APOLLO_ERROR_RETURN(err);
                                         break;
                                         }
                             } else {              /* profile #2 */
                                 switch (j) {
                                     case 0:
-                                        err = adi_apollo_hal_bf_set(device, BF_I_COMPLEX_SCALAR_2_INFO(regmap_base_addr, 0), scalar_i);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_I_COMPLEX_SCALAR_2_INFO(regmap_base_addr, 0), scalar_i);
                                         ADI_APOLLO_ERROR_RETURN(err);
-                                        err = adi_apollo_hal_bf_set(device, BF_Q_COMPLEX_SCALAR_2_INFO(regmap_base_addr, 0), scalar_q);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_Q_COMPLEX_SCALAR_2_INFO(regmap_base_addr, 0), scalar_q);
                                         ADI_APOLLO_ERROR_RETURN(err);
                                         break;
                                     case 1:
-                                        err = adi_apollo_hal_bf_set(device, BF_I_COMPLEX_SCALAR_2_INFO(regmap_base_addr, 1), scalar_i);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_I_COMPLEX_SCALAR_2_INFO(regmap_base_addr, 1), scalar_i);
                                         ADI_APOLLO_ERROR_RETURN(err);
-                                        err = adi_apollo_hal_bf_set(device, BF_Q_COMPLEX_SCALAR_2_INFO(regmap_base_addr, 1), scalar_q);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_Q_COMPLEX_SCALAR_2_INFO(regmap_base_addr, 1), scalar_q);
                                         ADI_APOLLO_ERROR_RETURN(err);
                                         break;
                                     case 2:
-                                        err = adi_apollo_hal_bf_set(device, BF_I_COMPLEX_SCALAR_2_INFO(regmap_base_addr, 2), scalar_i);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_I_COMPLEX_SCALAR_2_INFO(regmap_base_addr, 2), scalar_i);
                                         ADI_APOLLO_ERROR_RETURN(err);
-                                        err = adi_apollo_hal_bf_set(device, BF_Q_COMPLEX_SCALAR_2_INFO(regmap_base_addr, 2), scalar_q);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_Q_COMPLEX_SCALAR_2_INFO(regmap_base_addr, 2), scalar_q);
                                         ADI_APOLLO_ERROR_RETURN(err);
                                         break;
                                     case 3:
-                                        err = adi_apollo_hal_bf_set(device, BF_I_COMPLEX_SCALAR_2_INFO(regmap_base_addr, 3), scalar_i);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_I_COMPLEX_SCALAR_2_INFO(regmap_base_addr, 3), scalar_i);
                                         ADI_APOLLO_ERROR_RETURN(err);
-                                        err = adi_apollo_hal_bf_set(device, BF_Q_COMPLEX_SCALAR_2_INFO(regmap_base_addr, 3), scalar_q);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_Q_COMPLEX_SCALAR_2_INFO(regmap_base_addr, 3), scalar_q);
                                         ADI_APOLLO_ERROR_RETURN(err);
                                         break;
                                         }
@@ -298,6 +302,10 @@ int32_t adi_apollo_cfir_gain_pgm(adi_apollo_device_t* device, adi_apollo_termina
         if (cfir > 0) {
             regmap_base_addr = calc_cfir_base(terminal, i);
 
+            /* Set reg_map base address for subsequent paged writes */
+            err = adi_apollo_hal_paged_base_addr_set(device, regmap_base_addr);
+            ADI_APOLLO_ERROR_RETURN(err);
+
             for (dp = 0; dp < ADI_APOLLO_CFIR_PROFILE_NUM; dp++) {
                 cfir_profile = cfir_profiles & (ADI_APOLLO_CFIR_DP_0 << dp);
                 if (cfir_profile > 0) {
@@ -309,38 +317,38 @@ int32_t adi_apollo_cfir_gain_pgm(adi_apollo_device_t* device, adi_apollo_termina
                             if (dp == 0) {      /* profile 1 */
                                 switch (j) {
                                     case 0:
-                                        err = adi_apollo_hal_bf_set(device, BF_CFIR_GAIN0_1_INFO(regmap_base_addr), gain);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_CFIR_GAIN0_1_INFO(regmap_base_addr), gain);
                                         ADI_APOLLO_ERROR_RETURN(err);
                                         break;
                                     case 1:
-                                        err = adi_apollo_hal_bf_set(device, BF_CFIR_GAIN1_1_INFO(regmap_base_addr), gain);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_CFIR_GAIN1_1_INFO(regmap_base_addr), gain);
                                         ADI_APOLLO_ERROR_RETURN(err);
                                         break;
                                     case 2:
-                                        err = adi_apollo_hal_bf_set(device, BF_CFIR_GAIN2_1_INFO(regmap_base_addr), gain);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_CFIR_GAIN2_1_INFO(regmap_base_addr), gain);
                                         ADI_APOLLO_ERROR_RETURN(err);
                                         break;
                                     case 3:
-                                        err = adi_apollo_hal_bf_set(device, BF_CFIR_GAIN3_1_INFO(regmap_base_addr), gain);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_CFIR_GAIN3_1_INFO(regmap_base_addr), gain);
                                         ADI_APOLLO_ERROR_RETURN(err);
                                         break;
                                 }
                             } else {              /* profile #2 */
                                 switch (j) {
                                     case 0:
-                                        err = adi_apollo_hal_bf_set(device, BF_CFIR_GAIN0_2_INFO(regmap_base_addr), gain);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_CFIR_GAIN0_2_INFO(regmap_base_addr), gain);
                                         ADI_APOLLO_ERROR_RETURN(err);
                                         break;
                                     case 1:
-                                        err = adi_apollo_hal_bf_set(device, BF_CFIR_GAIN1_2_INFO(regmap_base_addr), gain);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_CFIR_GAIN1_2_INFO(regmap_base_addr), gain);
                                         ADI_APOLLO_ERROR_RETURN(err);
                                         break;
                                     case 2:
-                                        err = adi_apollo_hal_bf_set(device, BF_CFIR_GAIN2_2_INFO(regmap_base_addr), gain);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_CFIR_GAIN2_2_INFO(regmap_base_addr), gain);
                                         ADI_APOLLO_ERROR_RETURN(err);
                                         break;
                                     case 3:
-                                        err = adi_apollo_hal_bf_set(device, BF_CFIR_GAIN3_2_INFO(regmap_base_addr), gain);
+                                        err = adi_apollo_hal_paged_bf_set(device, BF_CFIR_GAIN3_2_INFO(regmap_base_addr), gain);
                                         ADI_APOLLO_ERROR_RETURN(err);
                                         break;
                                 }

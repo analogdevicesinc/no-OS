@@ -65,9 +65,9 @@ int32_t adi_apollo_dformat_format_sel_set(adi_apollo_device_t *device, const uin
  *
  * \param[in]  device          Context variable - Pointer to the APOLLO device data structure
  * \param[in]  links           Target link select \ref adi_apollo_jesd_link_select_e
- * \param[in]  bit0_sel        0: overrange, 1: low, 2: SMON, 3: Fast Detection, 5: SYSREF, 8/9/10/11: NCO Chan Sel 0/1/2/3
- * \param[in]  bit1_sel        0: overrange, 1: low, 2: SMON, 3: Fast Detection, 5: SYSREF, 8/9/10/11: NCO Chan Sel 0/1/2/3
- * \param[in]  bit2_sel        0: overrange, 1: low, 2: SMON, 3: Fast Detection, 5: SYSREF, 8/9/10/11: NCO Chan Sel 0/1/2/3
+ * \param[in]  bit0_sel        Control bit selection 0 (LSB) \ref adi_apollo_dformat_ctrl_bit_e
+ * \param[in]  bit1_sel        Control bit selection 1       \ref adi_apollo_dformat_ctrl_bit_e
+ * \param[in]  bit2_sel        Control bit selection 2 (MSB) \ref adi_apollo_dformat_ctrl_bit_e
  *
  * \return API_CMS_ERROR_OK                     API Completed Successfully
  * \return <0                                   Failed. \ref adi_cms_error_e for details.
@@ -110,6 +110,18 @@ int32_t adi_apollo_dformat_overflow_status_get(adi_apollo_device_t *device, cons
  * \return <0                                   Failed. \ref adi_cms_error_e for details.
  */
 int32_t adi_apollo_dformat_overflow_status_clear(adi_apollo_device_t *device, const uint16_t link);
+
+/**
+ * \brief  Connect SMON and Fast Detect JESD control bits FDDC I/Q path
+ *
+ * \param[in]   device    Context variable - Pointer to the APOLLO device data structure
+ * \param[in]   map       Map specifying control bit to FDDC I/Q path connectons \ref adi_apollo_dformat_smon_fd_map_t
+ * \param[in]   map_len   NUmber of entries in 'map' array
+ *
+ * \return API_CMS_ERROR_OK                     API Completed Successfully
+ * \return <0                                   Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_dformat_smon_fd_fddc_set(adi_apollo_device_t *device, adi_apollo_dformat_smon_fd_map_t map[], uint32_t map_len);
 
 #ifndef CLIENT_IGNORE
 #endif /* CLIENT_IGNORE*/

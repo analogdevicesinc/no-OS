@@ -96,12 +96,12 @@ typedef enum
 */
 typedef struct
 {
-    adi_apollo_pfilt_dq_mode_e dq_mode;        /*!< Dual or quad mode \ref adi_apollo_pfilt_dq_mode_e */
-    adi_apollo_pfilt_data_e data;              /*!< Real or Complex data \ref adi_apollo_pfilt_data_e */
-    uint8_t mode_switch;                       /*!< 0: Disable Modsw (averaging), 1: Enable */
-    uint8_t add_sub_sel;                       /*!< 0: subtraction, 1: addition for Modsw (averaging) */
-    adi_apollo_pfilt_mode_e pfir_i_mode;       /*!< Filter mode (e.g. bypass, real n/2, etc.) \ref adi_apollo_pfilt_mode_e */
-    adi_apollo_pfilt_mode_e pfir_q_mode;       /*!< Filter mode (e.g. bypass, real n/2, etc.) \ref adi_apollo_pfilt_mode_e */
+    adi_apollo_pfilt_dq_mode_e dq_mode;           /*!< Dual or quad mode \ref adi_apollo_pfilt_dq_mode_e */
+    adi_apollo_pfilt_data_e data;                 /*!< Real or Complex data \ref adi_apollo_pfilt_data_e */
+    uint8_t mode_switch;                          /*!< 0: Disable Modsw (averaging), 1: Enable */
+    uint8_t add_sub_sel;                          /*!< 0: subtraction, 1: addition for Modsw (averaging) */
+    adi_apollo_pfilt_mode_e pfir_i_mode[2];       /*!< Filter mode (e.g. bypass, real n/2, etc.)  [1] valid for 8T8R devices only \ref adi_apollo_pfilt_mode_e */
+    adi_apollo_pfilt_mode_e pfir_q_mode[2];       /*!< Filter mode (e.g. bypass, real n/2, etc.)  [1] valid for 8T8R devices only \ref adi_apollo_pfilt_mode_e */
 } adi_apollo_pfilt_mode_pgm_t;
 
 /*!

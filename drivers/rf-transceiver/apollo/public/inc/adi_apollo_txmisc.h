@@ -27,7 +27,7 @@ extern "C" {
  *
  * \param[in]  device               Context variable - Pointer to the APOLLO device data structure
  * \param[in]  side_sel             Target side \ref adi_apollo_side_select_e
- * \param[in]  low_samp_en      1: low sampling enabled 0: low sampling disabled
+ * \param[in]  low_samp_en          1: low sampling enabled 0: low sampling disabled
  *
  * \return API_CMS_ERROR_OK         API Completed Successfully
  * \return <0                       Failed. \ref adi_cms_error_e for details.
@@ -45,6 +45,18 @@ int32_t adi_apollo_txmisc_low_samp_set(adi_apollo_device_t *device, adi_apollo_s
  * \return <0                       Failed. \ref adi_cms_error_e for details.
  */
 int32_t adi_apollo_txmisc_dp_reset(adi_apollo_device_t *device, adi_apollo_side_select_e side_sel, uint8_t reset_en);
+    
+/**
+ * \brief  Enables/disables CDUC dac
+ *
+ * \param[in]  device               Context variable - Pointer to the APOLLO device data structure
+ * \param[in]  cducs                Coarse DUC selection. ADI_APOLLO_CDUC_A0, _A0 to _A3, _B0 to _B3, _ALL \ref adi_apollo_cduc_select_e
+ * \param[in]  enable               Enable CDUC dac.  1 to enable, 0 to disable
+ *
+ * \return API_CMS_ERROR_OK         API Completed Successfully
+ * \return <0                       Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_txmisc_cduc_dac_enable_set(adi_apollo_device_t *device, const uint16_t cducs, const uint8_t enable);    
 
 /**
  * \brief  Inspect TX crossbars and low sample enable

@@ -44,11 +44,11 @@ typedef enum {
  */
 typedef struct {
     uint8_t interp;                                     /*!< Interpolation value */
-    uint8_t chb1_int_time_dly;                          /*!< Coarse HB1 int time delay control - TODO: private? */
-    uint8_t chb2_int_time_dly;                          /*!< Coarse HB2 int time delay control - TODO: private? */
-    uint8_t chb3_int_time_dly;                          /*!< Coarse HB3 int time delay control - TODO: private? */
-    uint8_t ctb1_int_time_dly;                          /*!< Coarse TB1 int time delay control - TODO: private? */
-    uint8_t test_mux;                                   /*!< Test signal mux - TODO: more detail needed */
+    uint8_t chb1_int_time_dly;                          /*!< Coarse HB1 int time delay control */
+    uint8_t chb2_int_time_dly;                          /*!< Coarse HB2 int time delay control */
+    uint8_t chb3_int_time_dly;                          /*!< Coarse HB3 int time delay control */
+    uint8_t ctb1_int_time_dly;                          /*!< Coarse TB1 int time delay control */
+    uint8_t test_mux;                                   /*!< Test signal mux */
     uint16_t cduc_irq_en;                               /*!< Coarse DUC irq enable */
     uint16_t cduc_irq_status;                           /*!< Coarse DUC irq status (write to clear status) */
 
@@ -61,11 +61,11 @@ typedef struct {
  */
 typedef struct {
     adi_apollo_cduc_cfg_t dp_cfg;                       /*!< Parameters defined from device profile \ref apollo_cpu_device_profile_types.h */
-    uint8_t chb1_int_time_dly;                          /*!< Coarse HB1 int time delay control - TODO: private? */
-    uint8_t chb2_int_time_dly;                          /*!< Coarse HB2 int time delay control - TODO: private? */
-    uint8_t chb3_int_time_dly;                          /*!< Coarse HB3 int time delay control - TODO: private? */
-    uint8_t ctb1_int_time_dly;                          /*!< Coarse TB1 int time delay control - TODO: private? */
-    uint8_t test_mux;                                   /*!< Test signal mux - TODO: more detail needed */
+    uint8_t chb1_int_time_dly;                          /*!< Coarse HB1 int time delay control */
+    uint8_t chb2_int_time_dly;                          /*!< Coarse HB2 int time delay control */
+    uint8_t chb3_int_time_dly;                          /*!< Coarse HB3 int time delay control */
+    uint8_t ctb1_int_time_dly;                          /*!< Coarse TB1 int time delay control */
+    uint8_t test_mux;                                   /*!< Test signal mux */
     uint16_t cduc_irq_en;                               /*!< Coarse DUC irq enable */
     uint16_t cduc_irq_status;                           /*!< Coarse DUC irq status (write to clear status) */
 

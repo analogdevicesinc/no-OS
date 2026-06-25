@@ -123,6 +123,10 @@ int32_t adi_apollo_clk_mcs_tx_data_fifo_mode_set(adi_apollo_device_t *device, co
 /**
  * \brief Align internal to external sysref and issue system sync
  *
+ *  Performs internal to external SYSREF alignment using the HW based method.
+ *  This is followed by a system sync of all digital blocks except for JTx and JRx. Omiting 
+ *  JRx and JTx sync here prevents the JESD links from dropping. 
+ *  
  * \param[in] device        Context variable - Pointer to the APOLLO device data structure
  *
  * \return API_CMS_ERROR_OK     API Completed Successfully
@@ -205,19 +209,7 @@ int32_t adi_apollo_clk_mcs_trig_sync_enable_get(adi_apollo_device_t *device, uin
 int32_t adi_apollo_clk_mcs_trig_reset_dsp_enable(adi_apollo_device_t *device);
 
 /**
- * \brief Enable the resets for Serdes conv_clk and lmfc/lemc when trigger occurs
- *
- * \note After using any trigger based reset, run this function to clear any enables set for trigger.
- *
- * \param[in] device        Context variable - Pointer to the APOLLO device data structure
- *
- * \return API_CMS_ERROR_OK     API Completed Successfully
- * \return <0                   Failed. \ref adi_cms_error_e for details.
- */
-int32_t adi_apollo_clk_mcs_trig_reset_serdes_enable(adi_apollo_device_t *device);
-
-/**
- * \brief Dsiable the resets for all clocks by trigger
+ * \brief Disable the resets for all clocks by trigger
  *
  * \note After using any trigger based reset, run this function to clear any enables set for trigger.
  *
@@ -322,7 +314,16 @@ int32_t adi_apollo_clk_mcs_dynamic_sync(adi_apollo_device_t *device);
 int32_t adi_apollo_clk_mcs_man_reconfig_sync(adi_apollo_device_t *device);
 
 /**
- * \brief Run default Dynamic Sync Sequence.
+ * \brief Run default Dynamic Sync Sequence
+ * 
+ * This sync sequence will minimize supply transients during device synchronization
+ *     - Sync: digital root clocks
+ * 
+ *     - Call: adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run() to sync
+ *             ADC & DAC fifos, Rx & Tx digital, Loopback fifos and JTx & JRx
+ * 
+ * On Enter: all sync masks are expected to be cleared
+ * On Exit:  all sync masks are clear
  *
  * \param[in] device        Context variable - Pointer to the APOLLO device data structure
  *
@@ -332,8 +333,17 @@ int32_t adi_apollo_clk_mcs_man_reconfig_sync(adi_apollo_device_t *device);
 int32_t adi_apollo_clk_mcs_dyn_sync_sequence_run(adi_apollo_device_t *device);
 
 /**
- * \brief Run JTx and JRx SerDes Link Dynamic Sync Sequence with digital root clks masked.
+ * \brief Run JTx and JRx SerDes Link Dynamic Sync Sequence with digital root clks masked
  *
+ * This sync sequence will minimize supply transients during JESD link synchronization.
+ *     - Sync: ADC & DAC fifos, Rx & Tx digital, Loopback fifos, JTx-A0, JTx-A1 (not dig root clks)
+ *     - Sync: JTx-B0, JTx-B1
+ *     - Sync: JRx-A0, JRx-A1
+ *     - SYnc: JRx-B0, JRx-B1
+ * 
+ * On Enter: all sync masks are expected to be cleared
+ * On Exit:  all sync masks are clear
+ * 
  * \param[in] device        Context variable - Pointer to the APOLLO device data structure
  *
  * \return API_CMS_ERROR_OK     API Completed Successfully
@@ -362,25 +372,6 @@ int32_t adi_apollo_clk_mcs_sysref_en_set(adi_apollo_device_t *device, uint8_t en
  * \return <0                   Failed. \ref adi_cms_error_e for details.
  */
 int32_t adi_apollo_clk_mcs_sysref_en_get(adi_apollo_device_t* device, uint8_t* enable);
-
-/**
- * \brief Set the MCS internal sysref period
- *
- * The MCS internal SYSREF period is in units of Fclk.
- *
- * For 4T4R 1:1                   mode: sysref_per = (Fclk/Fsysref)/8
- * For 4T4R 1:2, 1:4 and all 8T8R mode: sysref_per = (Fclk/Fsysref)/4
- *
- * Fadc:Fdac ratio
- *
- *
- * \param[in] device        Context variable - Pointer to the APOLLO device data structure
- * \param[in] sysref_per    The SYSREF period in units of fclk. Min: 32(fastest), Max: 65534(slowest). Must be even.
- *
- * \return API_CMS_ERROR_OK     API Completed Successfully
- * \return <0                   Failed. \ref adi_cms_error_e for details.
- */
-int32_t adi_apollo_clk_mcs_internal_sysref_per_set(adi_apollo_device_t *device, uint16_t sysref_per);
 
 /**
  * \brief Get the MCS internal sysref period
@@ -423,7 +414,7 @@ int32_t adi_apollo_clk_mcs_subclass_get(adi_apollo_device_t *device, uint32_t *s
  * Result is units of Fclk.
  *
  * \param[in]  device        Context variable - Pointer to the APOLLO device data structure
- * \param[out] phase_diff    Pointer to ext-to-int SYSREF phase delta in units or FClk.
+ * \param[out] sysref_phase  Pointer to ext-to-int SYSREF phase delta in units or FClk.
  *
  * \return API_CMS_ERROR_OK     API Completed Successfully
  * \return <0                   Failed. \ref adi_cms_error_e for details.
@@ -480,6 +471,16 @@ int32_t adi_apollo_clk_mcs_sync_trig_map(adi_apollo_device_t *device, uint16_t r
  */
 int32_t adi_apollo_clk_mcs_input_power_status_get(adi_apollo_device_t *device, adi_apollo_clk_input_power_status_e *status_a, adi_apollo_clk_input_power_status_e *status_b);
 
+/**
+ * \brief Set the digital clock reset mask
+ *
+ * \param[in] device       Context variable - Pointer to the APOLLO device data structure.
+ * \param[in] enable       1 to mask digital clocks from trigger based resets, 0 to unmask
+ *
+ * \return API_CMS_ERROR_OK     API Completed Successfully
+ * \return <0                   Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_clk_mcs_dig_clk_mask_set(adi_apollo_device_t *device, uint8_t enable);
 
 #ifndef CLIENT_IGNORE
 #endif /* CLIENT_IGNORE*/

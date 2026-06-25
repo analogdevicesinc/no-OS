@@ -27,12 +27,12 @@ extern "C" {
  *
  * \param[in]  device     Context variable - Pointer to the APOLLO device data structure
  * \param[in]  cddcs      Target CDDC. ADI_APOLLO_CDDC_A0, _A0 to A3, B0 to B3, _ALL \ref adi_apollo_cddc_select_e
- * \param[in]  dcm        Coarse decimation. ADI_APOLLO_CDDC_DCM_1, _2, _3, _4, _6, _12 \ref adi_apollo_coarse_ddc_dcm_e
+ * \param[in]  dcm        Coarse decimation. ADI_APOLLO_CDDC_RATIO_1, _2, _3, _4, _6, _12 \ref adi_apollo_cddc_ratio_e
  *
  * \return API_CMS_ERROR_OK                     API Completed Successfully
  * \return <0                                   Failed. \ref adi_cms_error_e for details.
  */
-int32_t adi_apollo_cddc_dcm_set(adi_apollo_device_t *device, adi_apollo_blk_sel_t cddcs, adi_apollo_coarse_ddc_dcm_e dcm);
+int32_t adi_apollo_cddc_dcm_set(adi_apollo_device_t *device, adi_apollo_blk_sel_t cddcs, adi_apollo_cddc_ratio_e dcm);
 
 /**
  * \brief  Set the coarse DDC link num
@@ -104,7 +104,7 @@ int32_t adi_apollo_cddc_fine_bypass_enable(adi_apollo_device_t *device, adi_apol
  * \return API_CMS_ERROR_OK                     API Completed Successfully
  * \return <0                                   Failed. \ref adi_cms_error_e for details.
  */
-int32_t adi_apollo_cddc_dcm_bf_to_val(adi_apollo_device_t *device, adi_apollo_coarse_ddc_dcm_e bf_enum, uint32_t *val);
+int32_t adi_apollo_cddc_dcm_bf_to_val(adi_apollo_device_t *device, adi_apollo_cddc_ratio_e bf_enum, uint32_t *val);
 
 /**
  * \brief  Enable or disable CDDC +6dB filter gains

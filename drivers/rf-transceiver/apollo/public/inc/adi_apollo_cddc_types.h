@@ -56,7 +56,7 @@ typedef enum {
  * \brief Rx coarse DDC configuration
  */
 typedef struct {
-    adi_apollo_coarse_ddc_dcm_e dcm;                    /*!< \ref adi_apollo_coarse_ddc_dcm_e */
+    adi_apollo_cddc_ratio_e dcm;                        /*!< \ref adi_apollo_cddc_ratio_e */
     uint8_t link_num;                                   /*!< 0: Link0, 1: Link1 */   
     uint8_t debug_clkoff_n;                             /*!< bit 0: filter input clock 
                                                              bit 1: filter output clock

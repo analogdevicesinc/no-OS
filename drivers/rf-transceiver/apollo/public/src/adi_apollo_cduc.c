@@ -205,25 +205,25 @@ int32_t adi_apollo_cduc_inspect(adi_apollo_device_t *device, adi_apollo_blk_sel_
     return API_CMS_ERROR_OK;
 }
 
-int32_t adi_apollo_cduc_interp_bf_to_val(adi_apollo_device_t* device, adi_apollo_coarse_duc_dcm_e bf_enum, uint32_t* val)
+int32_t adi_apollo_cduc_interp_bf_to_val(adi_apollo_device_t* device, adi_apollo_cduc_ratio_e bf_enum, uint32_t* val)
 {
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_LOG_FUNC();
     ADI_APOLLO_NULL_POINTER_RETURN(val);
 
     switch (bf_enum) {
-    case ADI_APOLLO_CDUC_INTERP_1:
-    case ADI_APOLLO_CDUC_INTERP_2:
-    case ADI_APOLLO_CDUC_INTERP_3:
-    case ADI_APOLLO_CDUC_INTERP_4:
-    case ADI_APOLLO_CDUC_INTERP_6:
-    case ADI_APOLLO_CDUC_INTERP_8:
-    case ADI_APOLLO_CDUC_INTERP_12:
+    case ADI_APOLLO_CDUC_RATIO_1:
+    case ADI_APOLLO_CDUC_RATIO_2:
+    case ADI_APOLLO_CDUC_RATIO_3:
+    case ADI_APOLLO_CDUC_RATIO_4:
+    case ADI_APOLLO_CDUC_RATIO_6:
+    case ADI_APOLLO_CDUC_RATIO_8:
+    case ADI_APOLLO_CDUC_RATIO_12:
         *val = bf_enum;
         break;
 
     default:
-        ADI_APOLLO_LOG_ERR("Invalid adi_apollo_coarse_duc_dcm_e enum");
+        ADI_APOLLO_LOG_ERR("Invalid adi_apollo_cduc_ratio_e enum");
         return API_CMS_ERROR_INVALID_PARAM;
     }
 

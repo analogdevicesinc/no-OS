@@ -121,22 +121,6 @@ int32_t adi_apollo_arm_profile_write_post_config(adi_apollo_device_t *device, ad
 /**
  * \brief  Load device firmware to CPU
  *
- * \deprecated  Use \ref adi_apollo_arm_firmware_buf_write() instead.
- *              This function will be removed in the future.
- *
- * \param[in]  device               Context variable - Pointer to the APOLLO device data structure
- * \param[in]  fw_image_buf         firmware binary byte array
- * \param[in]  fw_image_size_bytes  firmware image size
- * \param[in]  chunk_sz_bytes   Number of bytes to transfer to CPU at a time
- *
- * \return API_CMS_ERROR_OK                     API Completed Successfully
- * \return <0                                   Failed. \ref adi_cms_error_e for details.
- */
-int32_t adi_apollo_arm_firmware_write(adi_apollo_device_t *device, uint8_t fw_image_buf[], uint32_t fw_image_size_bytes, uint16_t chunk_sz_bytes);
-
-/**
- * \brief  Load device firmware to CPU
- *
  * \param[in]  device               Context variable - Pointer to the APOLLO device data structure
  * \param[in]  core                 Target core. \ref adi_apollo_cpu_id_e
  * \param[in]  fw_image_buf         Firmware binary byte array

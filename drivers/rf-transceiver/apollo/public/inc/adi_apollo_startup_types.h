@@ -15,7 +15,6 @@
 #define __ADI_APOLLO_STARTUP_TYPES_H__
 
 /*============= I N C L U D E S ============*/
-#include "adi_apollo_common.h"
 #include "adi_apollo_device_types.h"
 
 /*============= E X P O R T S ==============*/

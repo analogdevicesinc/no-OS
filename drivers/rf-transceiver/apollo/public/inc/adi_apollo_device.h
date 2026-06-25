@@ -186,6 +186,61 @@ int32_t adi_apollo_device_die_id_get(adi_apollo_device_t *device, uint8_t *id);
 int32_t adi_apollo_device_si_grade_get(adi_apollo_device_t *device, uint8_t *si_grade);
 
 /**
+ * \brief  Get sw variant Tx/Rx/Mxfe info
+ *
+ * \param[in]   device      Context variable - Pointer to the APOLLO device data structure
+ * \param[out]  mxfe    Pointer to sw variant tx/rx/mxfe info. \ref adi_apollo_device_sw_variant_mxfe_e
+ *
+ * \return API_CMS_ERROR_OK                     API Completed Successfully
+ * \return <0                                   Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_device_sw_mxfe_get(adi_apollo_device_t *device, adi_apollo_device_sw_variant_mxfe_e *mxfe);
+
+/**
+ * \brief  Get sw trim info
+ *
+ * \param[in]   device      Context variable - Pointer to the APOLLO device data structure
+ * \param[out]  sw_trim    Pointer to sw trim info. \ref adi_apollo_device_sw_variant_trim_e
+ *
+ * \return API_CMS_ERROR_OK                     API Completed Successfully
+ * \return <0                                   Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_device_sw_trim_get(adi_apollo_device_t *device, adi_apollo_device_sw_variant_trim_e *sw_trim);
+
+/**
+ * \brief  Get trx config info
+ *
+ * \param[in]   device      Context variable - Pointer to the APOLLO device data structure
+ * \param[out]  trx_cfg    Pointer to trx config. \ref adi_apollo_device_rev_trx_config_e
+ *
+ * \return API_CMS_ERROR_OK                     API Completed Successfully
+ * \return <0                                   Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_device_trx_config_get(adi_apollo_device_t *device, adi_apollo_device_rev_trx_config_e *trx_cfg);
+
+/**
+ * \brief  Get rx type info
+ *
+ * \param[in]   device      Context variable - Pointer to the APOLLO device data structure
+ * \param[out]  rx_type    Pointer to rx type. \ref adi_apollo_device_rev_rx_type_e
+ *
+ * \return API_CMS_ERROR_OK                     API Completed Successfully
+ * \return <0                                   Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_device_rx_type_get(adi_apollo_device_t *device, adi_apollo_device_rev_rx_type_e *rx_type);
+
+/**
+ * \brief  Get board variant and rev info
+ *
+ * \param[in]   device      Context variable - Pointer to the APOLLO device data structure
+ * \param[out]  board_var_rev    Pointer to board variant and rev info. \ref adi_apollo_device_board_var_and_rev_info_t
+ *
+ * \return API_CMS_ERROR_OK                     API Completed Successfully
+ * \return <0                                   Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_device_board_variant_and_rev_get(adi_apollo_device_t *device, adi_apollo_device_board_var_and_rev_info_t *board_var_rev);
+
+/**
  * \brief Configure SPI settings
  *
  * \param[in]  device       Context variable - Pointer to the APOLLO device data structure

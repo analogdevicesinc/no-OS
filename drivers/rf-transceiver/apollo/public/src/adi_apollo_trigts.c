@@ -75,7 +75,6 @@ int32_t adi_apollo_trigts_mst_config(adi_apollo_device_t *device, adi_apollo_ter
     ADI_APOLLO_LOG_FUNC();
     ADI_APOLLO_NULL_POINTER_RETURN(config);
 
-    //TODO : Invalid param check for both Tx and Rx side trigger masters  
     for (side_index = 0;  side_index < ADI_APOLLO_NUM_SIDES; side_index++) {
         side = side_sel & (ADI_APOLLO_SIDE_A << side_index);
         if (side > 0) {
@@ -731,6 +730,36 @@ int32_t adi_apollo_trigts_reset_done_get(adi_apollo_device_t *device, adi_apollo
     return API_CMS_ERROR_OK;
 }
 
+int32_t adi_apollo_trigts_ext_trig_no_dr_setup(adi_apollo_device_t *device, adi_apollo_terminal_e terminal, uint16_t side_sel)
+{
+    int32_t err;
+    uint8_t side_index;
+    uint16_t side;
+    uint32_t prefsrc_regmap_base_addr = 0;
+
+    ADI_APOLLO_NULL_POINTER_RETURN(device);
+    ADI_APOLLO_LOG_FUNC();
+
+    err = adi_apollo_clk_mcs_trig_sync_enable(device, 1);
+    ADI_APOLLO_ERROR_RETURN(err);
+
+    err = adi_apollo_clk_mcs_dig_clk_mask_set(device, 1);
+    ADI_APOLLO_ERROR_RETURN(err);
+
+    for (side_index = 0; side_index < ADI_APOLLO_NUM_SIDES; side_index++) {
+        side = side_sel & (ADI_APOLLO_SIDE_A << side_index);
+        if (side > 0) {
+            prefsrc_regmap_base_addr = calc_prefsrc_reconfig_base(terminal, side_index);
+
+            err = adi_apollo_hal_bf_set(device, BF_NONRESYNC_SYSREF_EN_INFO(prefsrc_regmap_base_addr), 1);
+            ADI_APOLLO_ERROR_RETURN(err);
+        }
+    }
+    
+    return API_CMS_ERROR_OK;
+
+}
+
 static uint32_t calc_cnco_trig_mst_num(uint8_t cnco_index)
 {   
     static uint32_t cnco_trig_mst_map[ADI_APOLLO_CDDC_PER_SIDE_NUM] = {
@@ -784,25 +813,25 @@ static reg_bf_info_map_t *calc_cdrc_trig_sel_mux(adi_apollo_terminal_e terminal,
 {
     static reg_bf_info_map_t cdrc_rx_trig_sel_mux[] = {
         {BF_TRIG_SEL_MUX_CDRC0_INFO(TXRX_TRIGGER_TS_RX_DIGITAL0, 0)},   /* A0 */
-        {BF_TRIG_SEL_MUX_CDRC1_INFO(TXRX_TRIGGER_TS_RX_DIGITAL0, 0)},   /* A1 */
-        {BF_TRIG_SEL_MUX_CDRC0_INFO(TXRX_TRIGGER_TS_RX_DIGITAL0, 1)},   /* A2 */
+        {BF_TRIG_SEL_MUX_CDRC0_INFO(TXRX_TRIGGER_TS_RX_DIGITAL0, 1)},   /* A1 */        
+        {BF_TRIG_SEL_MUX_CDRC1_INFO(TXRX_TRIGGER_TS_RX_DIGITAL0, 0)},   /* A2 */
         {BF_TRIG_SEL_MUX_CDRC1_INFO(TXRX_TRIGGER_TS_RX_DIGITAL0, 1)},   /* A3 */
 
         {BF_TRIG_SEL_MUX_CDRC0_INFO(TXRX_TRIGGER_TS_RX_DIGITAL1, 0)},   /* B0 */
-        {BF_TRIG_SEL_MUX_CDRC1_INFO(TXRX_TRIGGER_TS_RX_DIGITAL1, 0)},   /* B1 */
-        {BF_TRIG_SEL_MUX_CDRC0_INFO(TXRX_TRIGGER_TS_RX_DIGITAL1, 1)},   /* B2 */
+        {BF_TRIG_SEL_MUX_CDRC0_INFO(TXRX_TRIGGER_TS_RX_DIGITAL1, 1)},   /* B1 */
+        {BF_TRIG_SEL_MUX_CDRC1_INFO(TXRX_TRIGGER_TS_RX_DIGITAL1, 0)},   /* B2 */
         {BF_TRIG_SEL_MUX_CDRC1_INFO(TXRX_TRIGGER_TS_RX_DIGITAL1, 1)}    /* B3 */
     };
 
     static reg_bf_info_map_t cdrc_tx_trig_sel_mux[] = {
         {BF_TRIG_SEL_MUX_CDRC0_INFO(TXRX_TRIGGER_TS_TX_TOP_TX_DIGITAL0, 0)},    /* A0 */
-        {BF_TRIG_SEL_MUX_CDRC1_INFO(TXRX_TRIGGER_TS_TX_TOP_TX_DIGITAL0, 0)},    /* A1 */
-        {BF_TRIG_SEL_MUX_CDRC0_INFO(TXRX_TRIGGER_TS_TX_TOP_TX_DIGITAL0, 1)},    /* A2 */
+        {BF_TRIG_SEL_MUX_CDRC0_INFO(TXRX_TRIGGER_TS_TX_TOP_TX_DIGITAL0, 1)},    /* A1 */
+        {BF_TRIG_SEL_MUX_CDRC1_INFO(TXRX_TRIGGER_TS_TX_TOP_TX_DIGITAL0, 0)},    /* A2 */
         {BF_TRIG_SEL_MUX_CDRC1_INFO(TXRX_TRIGGER_TS_TX_TOP_TX_DIGITAL0, 1)},    /* A3 */
 
         {BF_TRIG_SEL_MUX_CDRC0_INFO(TXRX_TRIGGER_TS_TX_TOP_TX_DIGITAL1, 0)},    /* B0 */
-        {BF_TRIG_SEL_MUX_CDRC1_INFO(TXRX_TRIGGER_TS_TX_TOP_TX_DIGITAL1, 0)},    /* B1 */
-        {BF_TRIG_SEL_MUX_CDRC0_INFO(TXRX_TRIGGER_TS_TX_TOP_TX_DIGITAL1, 1)},    /* B2 */
+        {BF_TRIG_SEL_MUX_CDRC0_INFO(TXRX_TRIGGER_TS_TX_TOP_TX_DIGITAL1, 1)},    /* B1 */
+        {BF_TRIG_SEL_MUX_CDRC1_INFO(TXRX_TRIGGER_TS_TX_TOP_TX_DIGITAL1, 0)},    /* B2 */
         {BF_TRIG_SEL_MUX_CDRC1_INFO(TXRX_TRIGGER_TS_TX_TOP_TX_DIGITAL1, 1)}     /* B3 */
     };
 

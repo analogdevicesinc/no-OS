@@ -109,7 +109,7 @@ int32_t adi_apollo_rxmux_sample_xbar_set(adi_apollo_device_t *device, uint16_t l
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_LOG_FUNC();
     ADI_APOLLO_NULL_POINTER_RETURN(sample_sel);
-    ADI_APOLLO_INVALID_PARAM_RETURN((sample_offset + length) > ADI_APOLLO_JESD_MAX_FRM_SAMPLE_XBAR_IDX);
+    ADI_APOLLO_INVALID_PARAM_RETURN((sample_offset + length) > ADI_APOLLO_JESD_MAX_SAMPLE_XBAR_IDXS);
 
     for (i = 0; i < ADI_APOLLO_NUM_JTX_LINKS; i++) {
         if ((1 << i) & link_sel) {

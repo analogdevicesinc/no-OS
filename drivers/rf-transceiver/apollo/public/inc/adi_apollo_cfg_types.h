@@ -46,6 +46,8 @@
 #define ADI_APOLLO_WARMBOOT_CFG_LINEARX_TX_B1_B0            179
 #define ADI_APOLLO_WARMBOOT_CFG_LINEARX_TX_B3_B2            180
 
+#define ADI_APOLLO_WARMBOOT_CFG_SYSCLK_CONDITIONING         182
+
 #define ADI_APOLLO_SERDES_RX_NUM_BRIDGING_CALS              196
 
 #define ADI_APOLLO_DAC_CAL_OBJ_SIZE                         24
@@ -72,9 +74,9 @@
 #define ADI_APOLLO_CPU_1_FW_DAC_TX_OBJ_PTR              (0x21000540U)         /*!< DAC Tx object pointer */
 #define ADI_APOLLO_CPU_1_FW_DAC_TX_SIZE_PTR             (0x21000544U)         /*!< DAC Tx size pointer */
 #define ADI_APOLLO_CPU_1_FW_DAC_TX_VERSION_PTR          (0x21000548U)         /*!< DAC Tx version pointer */
-#define ADI_APOLLO_CPU_1_FW_SERDES_RX_OBJ_PTR           (0x2100054CU)         /*!< Serdes Rx object pointer */
-#define ADI_APOLLO_CPU_1_FW_SERDES_RX_SIZE_PTR          (0x21000550U)         /*!< Serdes Rx size pointer */
-#define ADI_APOLLO_CPU_1_FW_SERDES_RX_VERSION_PTR       (0x21000554U)         /*!< Serdes Rx version pointer */
+#define ADI_APOLLO_CPU_0_FW_SERDES_RX_OBJ_PTR           (0x20000224U)         /*!< Serdes Rx object pointer */
+#define ADI_APOLLO_CPU_0_FW_SERDES_RX_SIZE_PTR          (0x20000228U)         /*!< Serdes Rx size pointer */
+#define ADI_APOLLO_CPU_0_FW_SERDES_RX_VERSION_PTR       (0x2000022CU)         /*!< Serdes Rx version pointer */
 #define ADI_APOLLO_CPU_1_FW_SERDES_TX_OBJ_PTR           (0x21000558U)         /*!< Serdes Tx object pointer */
 #define ADI_APOLLO_CPU_1_FW_SERDES_TX_SIZE_PTR          (0x2100055CU)         /*!< Serdes Tx size pointer */
 #define ADI_APOLLO_CPU_1_FW_SERDES_TX_VERSION_PTR       (0x21000560U)         /*!< Serdes Tx version pointer */
@@ -85,6 +87,8 @@
 #define APOLLO_CPU_1_FW_CLK_COND_1_CALDATA_PTR          (0x21000668U)          /*!< ADC clock conditioning side B cal ref pointer */
 #define APOLLO_CPU_1_FW_CLK_COND_BGCAL_CLIP_PTR         (0x21000688U)          /*!< Clock conditioning Bg calibration clip status pointer */
 
+/* The cal data size is in bytes, included 32-bit checksum. Same length for all Clock Conditioning instances This value is fixed. 116 + 4 */
+#define ADI_APOLLO_CLK_COND_CAL_DATA_LEN_BYTES          (120U)
 /*!
  * \brief Enumeration of initial calibration configurations
  */
@@ -97,6 +101,17 @@ typedef enum
     ADI_APOLLO_INIT_CAL_ENABLED_WARMBOOT_FROM_NVM,     /*!< Run Init Calibration - start with calibration data from NVM  */
     ADI_APOLLO_INIT_CAL_ENABLED_WARMBOOT_FROM_USER,    /*!< Run Init Calibration - start with calibration data from USER */
 } adi_apollo_init_cal_cfg_e;
+
+/*!
+ * \brief Enumeration of Clock Conditioning Configurations
+ */
+typedef enum
+{
+    ADI_APOLLO_SYSCLKCONDITIONING_ENABLED                     = 0,       /*!< Run clock conditioning calibration */
+    ADI_APOLLO_SYSCLKCONDITIONING_DISABLED                    = 1,       /*!< No clock conditioning calibration */
+    ADI_APOLLO_SYSCLKCONDITIONING_ENABLED_WARMBOOT_FROM_USER  = 2,       /*!< Run clock conditioning calibration - start with cal data from user */
+    ADI_APOLLO_SYSCLKCONDITIONING_DISABLED_WARMBOOT_FROM_USER = 3,       /*!< No clock conditioning calibration - start with cal data from user */
+} adi_apollo_sysclock_cond_cfg_e;
 
 #endif /* __ADI_APOLLO_CFG_TYPES_H__ */
 

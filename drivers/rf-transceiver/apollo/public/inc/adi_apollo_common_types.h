@@ -84,6 +84,7 @@
 #define ADI_APOLLO_CFIR_PROFILE_IDX2B(idx) (1<< (idx))
 #define ADI_APOLLO_FSRC_IDX2B(side, idx) (1<<((side)*(ADI_APOLLO_FSRC_PER_SIDE_NUM) + (idx)))
 #define ADI_APOLLO_DFMT_IDX2B(side, idx) (1<<((side)*(ADI_APOLLO_JESD_LINKS) + (idx)))
+#define ADI_APOLLO_SMON_IDX2B(side, idx) (1 << ((side) * (ADI_APOLLO_SMON_PER_SIDE_NUM) + (idx)))
 
 /*!
  * \brief Enumerates ADC Select

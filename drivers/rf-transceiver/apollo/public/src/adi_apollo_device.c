@@ -27,9 +27,10 @@
 #include "adi_apollo_bf_ec.h"
 #include "adi_apollo_rxmisc.h"
 #include "adi_apollo_txmisc.h"
+#include "adi_apollo_bf_custom.h"
 
 /*============= D A T A ====================*/
-static uint16_t apollo_api_revision[3] = { 0, 5, 0 };
+static uint16_t apollo_api_revision[3] = { 2, 0, 10 };
 
 static adi_apollo_mailbox_cmd_set_enabled_temp_sensors_t temp_senors_cmd = {
         .temp_sensor_mask = ADI_APOLLO_DEVTEMP_MASK_SERDESPLL |
@@ -122,6 +123,10 @@ int32_t adi_apollo_device_reset(adi_apollo_device_t *device, adi_apollo_reset_e 
         ADI_APOLLO_ERROR_RETURN(err);
     }
 
+    /* Align the SPI page base addresses after reset */
+    device->hal_info.spi0_desc.page_base_addr = 0;
+    device->hal_info.spi1_desc.page_base_addr = 0;
+    
     return API_CMS_ERROR_OK;
 }
 
@@ -226,6 +231,122 @@ int32_t adi_apollo_device_si_grade_get(adi_apollo_device_t *device, uint8_t *si_
     *si_grade = (reg_val & 0x01);
 
     return API_CMS_ERROR_OK;
+}
+
+int32_t adi_apollo_device_sw_mxfe_get(adi_apollo_device_t *device, adi_apollo_device_sw_variant_mxfe_e *mxfe)
+{
+    int32_t err;
+    uint8_t reg_val;
+    
+    ADI_APOLLO_NULL_POINTER_RETURN(device);
+    ADI_APOLLO_LOG_FUNC();
+    ADI_APOLLO_NULL_POINTER_RETURN(mxfe);
+
+    err = adi_apollo_hal_reg_get(device, REG_PART_VARIANT_SW_MXFE_ADDR, &reg_val);
+    ADI_APOLLO_ERROR_RETURN(err);
+    
+    *mxfe = (reg_val <= 2) ?
+            (adi_apollo_device_sw_variant_mxfe_e)reg_val : 
+            ADI_APOLLO_DEVICE_SW_VARIANT_INVALID;
+    
+    return API_CMS_ERROR_OK;
+}
+
+int32_t adi_apollo_device_sw_trim_get(adi_apollo_device_t *device, adi_apollo_device_sw_variant_trim_e *sw_trim)
+{
+    int32_t err;
+    uint8_t reg_val;
+
+    ADI_APOLLO_NULL_POINTER_RETURN(device);
+    ADI_APOLLO_LOG_FUNC();
+    ADI_APOLLO_NULL_POINTER_RETURN(sw_trim);
+
+    err = adi_apollo_hal_reg_get(device, REG_PART_VARIANT_SW_TRIM_ADDR, &reg_val);
+    ADI_APOLLO_ERROR_RETURN(err);
+    switch (reg_val) {
+        case 0:
+        case 1:
+        case 3:
+        case 5:
+            *sw_trim = (adi_apollo_device_sw_variant_trim_e)reg_val;
+            break;
+        default:
+            *sw_trim = ADI_APOLLO_DEVICE_SW_VARIANT_TRIM_INVALID;
+            break;
+    }
+
+    return API_CMS_ERROR_OK;
+}
+
+int32_t adi_apollo_device_trx_config_get(adi_apollo_device_t *device, adi_apollo_device_rev_trx_config_e *trx_cfg)
+{
+    int32_t err;
+    uint8_t reg_val;
+
+    ADI_APOLLO_NULL_POINTER_RETURN(device);
+    ADI_APOLLO_LOG_FUNC();
+	ADI_APOLLO_NULL_POINTER_RETURN(trx_cfg);
+
+    err = adi_apollo_device_die_id_get(device, &reg_val);
+    ADI_APOLLO_ERROR_RETURN(err);
+
+    /* Bit 7 indicates 4T4R (0) or 8T8R (1) */
+	*trx_cfg = (adi_apollo_device_rev_trx_config_e)((reg_val & 0x80) >> 7);
+
+    return API_CMS_ERROR_OK;
+}
+
+int32_t adi_apollo_device_rx_type_get(adi_apollo_device_t *device, adi_apollo_device_rev_rx_type_e *rx_type)
+{
+    int32_t err;
+    uint8_t reg_val;
+
+    ADI_APOLLO_NULL_POINTER_RETURN(device);
+    ADI_APOLLO_LOG_FUNC();
+	ADI_APOLLO_NULL_POINTER_RETURN(rx_type);
+
+    err = adi_apollo_device_die_id_get(device, &reg_val);
+    ADI_APOLLO_ERROR_RETURN(err);
+
+    /* Bit 5 indicates Differential (0) or single-ended (1) */
+	*rx_type = (adi_apollo_device_rev_rx_type_e)((reg_val & 0x40) >> 6);
+
+    return API_CMS_ERROR_OK;
+}
+
+int32_t adi_apollo_device_board_variant_and_rev_get(adi_apollo_device_t *device, adi_apollo_device_board_var_and_rev_info_t *board_var_rev)
+{
+	int32_t err;
+
+	ADI_APOLLO_NULL_POINTER_RETURN(device);
+	ADI_APOLLO_LOG_FUNC();
+	ADI_APOLLO_NULL_POINTER_RETURN(board_var_rev);
+
+	/* read back die id */
+	err = adi_apollo_device_die_id_get(device, &board_var_rev->die_id);
+	ADI_APOLLO_ERROR_RETURN(err);
+
+	/* read back si_grade */
+	err = adi_apollo_device_si_grade_get(device, &board_var_rev->si_grade);
+	ADI_APOLLO_ERROR_RETURN(err);
+	
+	/* read back mxfe */
+	err = adi_apollo_device_sw_mxfe_get(device, &board_var_rev->mxfe);
+	ADI_APOLLO_ERROR_RETURN(err);
+	
+	/* read back sw trim */
+	err = adi_apollo_device_sw_trim_get(device, &board_var_rev->sw_trim);
+	ADI_APOLLO_ERROR_RETURN(err);
+	
+	/* read back trx config */
+	err = adi_apollo_device_trx_config_get(device, &board_var_rev->trx_cfg);
+	ADI_APOLLO_ERROR_RETURN(err);
+	
+	/* read back rx type */
+	err = adi_apollo_device_rx_type_get(device, &board_var_rev->rx_type);
+	ADI_APOLLO_ERROR_RETURN(err);
+	
+	return API_CMS_ERROR_OK;
 }
 
 int32_t adi_apollo_device_hw_open(adi_apollo_device_t *device, adi_apollo_reset_e reset_opt)

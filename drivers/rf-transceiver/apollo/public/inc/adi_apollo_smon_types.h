@@ -21,7 +21,9 @@
 
 /*============= D E F I N E S ==============*/
 #define ADI_APOLLO_SMON_NUM 8
+#define ADI_APOLLO_SMON_PER_SIDE_NUM 4
 #define ADI_APOLLO_SMON_STATUS_SIZE 3
+#define ADI_APOLLO_SMON_MAX_THRESH_VAL (2047)
 
 /*!
 * \brief Enumerates SMON selection
@@ -49,6 +51,14 @@ typedef enum {
     ADI_APOLLO_SFRAMER_FIVE_BIT_DISABLE  = 0x2,      /*!< 5 Bit Framer Disabled */
     ADI_APOLLO_SFRAMER_FIVE_BIT_ENABLE   = 0x3,      /*!< 5 Bit Framer Enabled */
 } adi_apollo_smon_sframer_sel_e;
+
+/*!
+ * \brief Enumerates SMON framer types
+ */
+typedef enum {
+    ADI_APOLLO_SMON_SFRAMER_TEN_BIT      = 0x0,     /*!< 10 Bit Framer type */
+    ADI_APOLLO_SMON_SFRAMER_FIVE_BIT     = 0x1      /*!< 5 Bit Framer type */
+} adi_apollo_smon_sframer_type_e;
 
 /*!
 * \brief SMON programming data
@@ -91,11 +101,11 @@ typedef struct {
 * \brief SMON DFOR programming data
 */
 typedef struct {
-    uint8_t ctrl_bit_0;                                    /*!< Control Bit 0 Mux Selection \ref adi_apollo_dfor_ctrl_sel_e */
-    uint8_t ctrl_bit_1;                                    /*!< Control Bit 1 Mux Selection \ref adi_apollo_dfor_ctrl_sel_e */
-    uint8_t ctrl_bit_2;                                    /*!< Control Bit 2 Mux Selection \ref adi_apollo_dfor_ctrl_sel_e */
-    uint8_t fine_adc_i_sel[ADI_APOLLO_FDDC_NUM];        /*!< FDDC ADC I Path Selection \ref adi_apollo_fine_adc_sel_e */
-    uint8_t fine_adc_q_sel[ADI_APOLLO_FDDC_NUM];        /*!< FDDC ADC Q Path Selection \ref adi_apollo_fine_adc_sel_e */ 
+    uint8_t ctrl_bit_0;                                    /*!< Control Bit 0 Mux Selection \ref adi_apollo_dformat_ctrl_bit_e */
+    uint8_t ctrl_bit_1;                                    /*!< Control Bit 1 Mux Selection \ref adi_apollo_dformat_ctrl_bit_e */
+    uint8_t ctrl_bit_2;                                    /*!< Control Bit 2 Mux Selection \ref adi_apollo_dformat_ctrl_bit_e */
+    uint8_t fine_adc_i_sel[ADI_APOLLO_FDDC_NUM];        /*!< FDDC ADC I Path Selection. \ref adi_apollo_dformat_fddc_adc_e */
+    uint8_t fine_adc_q_sel[ADI_APOLLO_FDDC_NUM];        /*!< FDDC ADC Q Path Selection. \ref adi_apollo_dformat_fddc_adc_e */
 } adi_apollo_smon_dfor_pgm_t;
 
 /*!
@@ -105,6 +115,15 @@ typedef struct {
     uint8_t status_fcnt;      /*!< Increments whenever period counter expires */
     uint32_t status;          /*!< 20 bits Signal Monitor Serial Data Output bits */
 } adi_apollo_smon_read_t;
+
+/*!
+ * \brief SMON inspect params
+ */
+typedef struct
+{
+    adi_apollo_smon_cfg_t dp_cfg;   /*!< Parameters defined from device profile \ref apollo_cpu_device_profile_types.h */
+
+} adi_apollo_smon_inspect_t;
 
 #endif /* __ADI_APOLLO_SMON_TYPES_H__ */
 /*! @} */

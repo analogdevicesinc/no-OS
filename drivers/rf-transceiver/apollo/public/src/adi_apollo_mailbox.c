@@ -606,7 +606,6 @@ int32_t adi_apollo_mailbox_mcs_bsync_get_config(adi_apollo_device_t *device, adi
     return API_CMS_ERROR_OK;
 }
 
-
 int32_t adi_apollo_mailbox_mcs_bsync_go(adi_apollo_device_t *device, adi_apollo_mailbox_resp_mcs_bsync_go_t *resp)
 {
     int32_t err;
@@ -640,6 +639,7 @@ int32_t adi_apollo_mailbox_set_adc_slice_mode_fast_switch_action(adi_apollo_devi
     int32_t err;
 
     ADI_APOLLO_NULL_POINTER_RETURN(device);
+    ADI_APOLLO_NULL_POINTER_RETURN(cmd);
     ADI_APOLLO_NULL_POINTER_RETURN(resp);
     ADI_APOLLO_LOG_FUNC();
 

@@ -51,7 +51,7 @@ int32_t adi_apollo_cfir_pgm(adi_apollo_device_t* device, adi_apollo_terminal_e t
  * \return API_CMS_ERROR_OK    API Completed Successfully
  * \return <0                  Failed. \ref adi_cms_error_e for details.
  */
-int32_t adi_apollo_cfir_coeff_pgm(adi_apollo_device_t *device, adi_apollo_terminal_e terminal, adi_apollo_blk_sel_t cfirs, uint8_t cfir_profiles, uint8_t cfir_dps, uint16_t cfir_coeff_i[], uint16_t cfir_coeff_q[], uint32_t len);
+int32_t adi_apollo_cfir_coeff_pgm(adi_apollo_device_t *device, adi_apollo_terminal_e terminal, adi_apollo_blk_sel_t cfirs, uint8_t cfir_profiles, uint8_t cfir_dps, int16_t cfir_coeff_i[], int16_t cfir_coeff_q[], uint32_t len);
 
 /**
  * \brief  Load CFIR complex scalar values for one or more profiles

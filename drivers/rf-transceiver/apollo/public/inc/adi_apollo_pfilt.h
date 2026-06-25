@@ -54,7 +54,7 @@ int32_t adi_apollo_pfilt_gain_dly_pgm(adi_apollo_device_t *device, adi_apollo_te
  *
  * \param[in]  device              Context variable - Pointer to the APOLLO device data structure
  * \param[in]  terminal            Target terminal \ref adi_apollo_terminal_e
- * \param[in]  pfilts              Target PFILT \ref adi_apollo_pfilt_sel_e
+ * \param[in]  pfilts              Target PFILT a mask of which pfilt
  * \param[in]  pfilt_banks         Target PFILT coeff banks \ref adi_apollo_pfilt_bank_sel_e 
  * \param[in]  pfilt_coeff         Coefficient values for the PFILT bank
  * \param[in]  length              Coefficient values for the PFILT bank array size
@@ -62,7 +62,7 @@ int32_t adi_apollo_pfilt_gain_dly_pgm(adi_apollo_device_t *device, adi_apollo_te
  * \return API_CMS_ERROR_OK    API Completed Successfully
  * \return <0                  Failed. \ref adi_cms_error_e for details.
  */
-int32_t adi_apollo_pfilt_coeff_pgm(adi_apollo_device_t *device, adi_apollo_terminal_e terminal, adi_apollo_blk_sel_t pfilts, uint8_t pfilt_banks, uint16_t pfilt_coeff[], uint32_t length);
+int32_t adi_apollo_pfilt_coeff_pgm(adi_apollo_device_t *device, adi_apollo_terminal_e terminal, adi_apollo_blk_sel_t pfilts, uint8_t pfilt_banks, int16_t pfilt_coeff[], uint32_t length);
 
 /**
  * \brief  Set PFILT coeffs for Real-N, Real-N/2 or Real-N/4 modes
