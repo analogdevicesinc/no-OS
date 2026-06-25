@@ -5,7 +5,7 @@ EXAMPLE ?= basic_example
 DEV_TYPE ?= AD4052
 
 # nucleo_h563zi.ioc, nucleo_h503rb.ioc
-HARDWARE ?= carrier/nucleo-h563zi.ioc
+HARDWARE ?= nucleo-h563zi.ioc
 
 # Set the PID Instance ID to match the pins ADDR[2:0] (valid range: 0-7) (I3C only)
 INSTANCE_ID ?= 0

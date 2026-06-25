@@ -57,13 +57,11 @@ const int32_t ad405x_sample_rate[] = {2000000, 1000000, 333000, 100000, 33000,
 				      166, 140, 125, 111
 				     };
 
-static int ad405x_iio_read_reg(struct ad405x_iio_dev *dev, uint8_t reg,
-			       uint8_t *readval);
-static int ad405x_iio_write_reg(struct ad405x_iio_dev *dev, uint8_t reg,
-				uint8_t writeval);
+static int ad405x_iio_read_reg(void *dev, uint32_t reg, uint32_t *readval);
+static int ad405x_iio_write_reg(void *dev, uint32_t reg, uint32_t writeval);
 static int ad405x_iio_read_raw(void *dev, char *buf, uint32_t len,
 			       const struct iio_ch_info *channel, intptr_t priv);
-static int ad405x_iio_read_samples(void* dev, int32_t* buff, uint32_t samples);
+static int ad405x_iio_read_samples(void* dev, void* buff, uint32_t samples);
 static int ad405x_iio_update_channels(void* dev, uint32_t mask);
 static int ad405x_iio_post_disable(void* dev);
 static int ad405x_iio_set_sample_rate(struct ad405x_dev* dev, uint32_t val);
@@ -473,21 +471,24 @@ int ad405x_iio_remove(struct ad405x_iio_dev *desc)
  * @param readval - Read data.
  * @return Result of the reading procedure.
  */
-static int ad405x_iio_read_reg(struct ad405x_iio_dev *dev, uint8_t reg,
-			       uint8_t *readval)
+static int ad405x_iio_read_reg(void *dev, uint32_t reg, uint32_t *readval)
 {
-	int ret;
+	struct ad405x_iio_dev *iio_dev = dev;
 	enum ad405x_operation_mode mode;
+	uint8_t val;
+	int ret;
 
-	ret = ad405x_set_config_mode(dev->ad405x_dev, &mode);
+	ret = ad405x_set_config_mode(iio_dev->ad405x_dev, &mode);
 	if (ret)
 		return ret;
 
-	ret = ad405x_read(dev->ad405x_dev, reg, (uint8_t *)readval, 1);
+	ret = ad405x_read(iio_dev->ad405x_dev, reg, &val, 1);
 	if (ret)
 		return ret;
 
-	return ad405x_set_operation_mode(dev->ad405x_dev, mode);
+	*readval = val;
+
+	return ad405x_set_operation_mode(iio_dev->ad405x_dev, mode);
 }
 
 /**
@@ -497,22 +498,22 @@ static int ad405x_iio_read_reg(struct ad405x_iio_dev *dev, uint8_t reg,
  * @param writeval - Data to be written.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int ad405x_iio_write_reg(struct ad405x_iio_dev *dev, uint8_t reg,
-				uint8_t writeval)
+static int ad405x_iio_write_reg(void *dev, uint32_t reg, uint32_t writeval)
 {
+	struct ad405x_iio_dev *iio_dev = dev;
+	enum ad405x_operation_mode mode;
 	uint8_t val = writeval;
 	int ret;
-	enum ad405x_operation_mode mode;
 
-	ret = ad405x_set_config_mode(dev->ad405x_dev, &mode);
+	ret = ad405x_set_config_mode(iio_dev->ad405x_dev, &mode);
 	if (ret)
 		return ret;
 
-	ret = ad405x_write(dev->ad405x_dev, reg, &val, 1);
+	ret = ad405x_write(iio_dev->ad405x_dev, reg, &val, 1);
 	if (ret)
 		return ret;
 
-	return ad405x_set_operation_mode(dev->ad405x_dev, mode);
+	return ad405x_set_operation_mode(iio_dev->ad405x_dev, mode);
 }
 
 /**
@@ -580,11 +581,12 @@ static int ad405x_iio_read_raw(void *dev, char *buf, uint32_t len,
  * @param samples - Number of samples to be returned
  * @return The size of the read data in case of success, error code otherwise.
  */
-static int ad405x_iio_read_samples(void* dev, int32_t* buff, uint32_t samples)
+static int ad405x_iio_read_samples(void* dev, void* buff, uint32_t samples)
 {
 	int ret;
 	struct ad405x_iio_dev *iio_dev;
 	struct ad405x_dev *desc;
+	int32_t *buff32 = buff;
 	int32_t data;
 
 	if (!dev)
@@ -602,7 +604,7 @@ static int ad405x_iio_read_samples(void* dev, int32_t* buff, uint32_t samples)
 		if (ret)
 			return ret;
 
-		buff[i] = data;
+		buff32[i] = data;
 		i++;
 	}
 

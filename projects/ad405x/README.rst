@@ -22,8 +22,8 @@ No-OS Build Setup
 
 Please see: https://wiki.analog.com/resources/no-os/build
 
-For the ``.ioc``, copy the desired carrier target file from the *carrier* folder
-to the project directory.
+Select the target carrier by pointing ``HARDWARE`` at the desired ``.ioc``
+file in the project directory (or add your own).
 
 No-OS Supported Examples
 ------------------------
@@ -105,8 +105,8 @@ STM32 Platform
 
 **Build and flash**
 
-* Find the target carrier configuration at the carrier folder (or add your own)
-* make run EXAMPLE=basic_i3c_example DEV_TYPE=AD4060 HARDWARE=carrier/nucleo-h563zi.ioc
+* Pick the target carrier ``.ioc`` in the project directory (or add your own)
+* make run EXAMPLE=basic_i3c_example DEV_TYPE=AD4060 HARDWARE=nucleo-h563zi.ioc
 
 Project Options
 ----------------
@@ -122,5 +122,5 @@ Project Options
   | INSTANCE_ID = 0-7 (range)
 
 * | Specify the carrier in use:
-  | HARDWARE = carrier/nucleo-h563zi.ioc, carrier/nucleo-h503rb.ioc
+  | HARDWARE = nucleo-h563zi.ioc, nucleo-h503rb.ioc
 
