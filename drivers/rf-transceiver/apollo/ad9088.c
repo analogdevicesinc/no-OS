@@ -8,7 +8,7 @@
 #include "ad9088.h"
 #include "no_os_delay.h"
 
-//#define DEBUG
+#include "adi_cms_api_common.h"
 
 #define APOLLO_FW_CPU0_NAME "APOLLO_FW_CPU0_B.bin"
 #define APOLLO_FW_CPU1_NAME "APOLLO_FW_CPU1_B.bin"
@@ -31,7 +31,177 @@
 #define CORE_1_TYE_FW_MEM_ADDR  (0x02000000U)
 #define TYE_OPER_FW_MEM_ADDR    (0x21000000U)
 
-static const uint8_t lanes_all[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23};
+static const uint8_t lanes_all[] = {
+	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
+	14, 15, 16, 17, 18, 19, 20, 21, 22, 23
+};
+
+static const char *adi_cms_error_to_string(int error_code)
+{
+	switch (error_code) {
+	case API_CMS_ERROR_OK:
+		return "No Error";
+	case API_CMS_ERROR_ERROR:
+		return "General Error";
+	case API_CMS_ERROR_NULL_PARAM:
+		return "Null parameter";
+	case API_CMS_ERROR_OVERFLOW:
+		return "General overflow";
+	case API_CMS_ERROR_DIV_BY_ZERO:
+		return "Divide by zero";
+	case API_CMS_ERROR_FEAT_LOCKOUT:
+		return "Device feature is locked out";
+	case API_CMS_ERROR_SPI_SDO:
+		return "Wrong SDO value in device structure";
+	case API_CMS_ERROR_INVALID_HANDLE_PTR:
+		return "Invalid device handler pointer";
+	case API_CMS_ERROR_INVALID_XFER_PTR:
+		return "Invalid SPI xfer function pointer";
+	case API_CMS_ERROR_INVALID_DELAYUS_PTR:
+		return "Invalid delay_us function pointer";
+	case API_CMS_ERROR_INVALID_PARAM:
+		return "Invalid parameter";
+	case API_CMS_ERROR_INVALID_RESET_CTRL_PTR:
+		return "Invalid reset control function pointer";
+	case API_CMS_ERROR_NOT_SUPPORTED:
+		return "Not supported";
+	case API_CMS_ERROR_INVALID_MASK_SELECT:
+		return "Invalid bitmask select";
+	case API_CMS_ERROR_IN_REF_STATUS:
+		return "Input reference signal not available";
+	case API_CMS_ERROR_VCO_OUT_OF_RANGE:
+		return "VCO out of range";
+	case API_CMS_ERROR_PLL_NOT_LOCKED:
+		return "PLL not locked";
+	case API_CMS_ERROR_DLL_NOT_LOCKED:
+		return "DLL not locked";
+	case API_CMS_ERROR_MODE_NOT_IN_TABLE:
+		return "JESD mode not in table";
+	case API_CMS_ERROR_CLK_CKT:
+		return "Clock circuit error";
+	case API_CMS_ERROR_FTW_LOAD_ACK:
+		return "FTW acknowledge not received";
+	case API_CMS_ERROR_NCO_NOT_ENABLED:
+		return "NCO not enabled";
+	case API_CMS_ERROR_INIT_SEQ_FAIL:
+		return "Initialization sequence failed";
+	case API_CMS_ERROR_TEST_FAILED:
+		return "Test failed";
+	case API_CMS_ERROR_SPI_XFER:
+		return "SPI transfer error";
+	case API_CMS_ERROR_TX_EN_PIN_CTRL:
+		return "TX enable function error";
+	case API_CMS_ERROR_RESET_PIN_CTRL:
+		return "HW reset function error";
+	case API_CMS_ERROR_EVENT_HNDL:
+		return "Event handling error";
+	case API_CMS_ERROR_HW_OPEN:
+		return "HW open function error";
+	case API_CMS_ERROR_HW_CLOSE:
+		return "HW close function error";
+	case API_CMS_ERROR_LOG_OPEN:
+		return "Log open error";
+	case API_CMS_ERROR_LOG_WRITE:
+		return "Log write error";
+	case API_CMS_ERROR_LOG_CLOSE:
+		return "Log close error";
+	case API_CMS_ERROR_DELAY_US:
+		return "Delay error";
+	case API_CMS_ERROR_HSCI_LINK_UP:
+		return "HSCI linkup error";
+	case API_CMS_ERROR_SPI_REGIO_XFER:
+		return "SPI register transaction error";
+	case API_CMS_ERROR_HSCI_REGIO_XFER:
+		return "HSCI register transaction error";
+	case API_CMS_ERROR_OPERATION_TIMEOUT:
+		return "Operation timeout";
+	case API_CMS_ERROR_LINK_DOWN:
+		return "JESD links down";
+	case API_CMS_ERROR_FILE_OPEN:
+		return "File open error";
+	case API_CMS_ERROR_SERDES_CAL_ERROR:
+		return "SERDES cal error";
+	case API_CMS_ERROR_SERDES_CAL_TIMEOUT:
+		return "SERDES cal timeout";
+	case API_CMS_ERROR_PLATFORM_READ:
+		return "Platform read error";
+	case API_CMS_ERROR_PLATFORM_WRITE:
+		return "Platform write error";
+	case API_CMS_ERROR_FILE_READ:
+		return "File read error";
+	case API_CMS_ERROR_FILE_WRITE:
+		return "File write error";
+	case API_CMS_ERROR_FILE_OPERATION:
+		return "General file error";
+	case API_CMS_ERROR_PLATFORM_IMAGE_LOAD:
+		return "Platform FPGA image load error";
+	case API_CMS_ERROR_NOT_IMPLEMENTED:
+		return "Not implemented";
+	case API_CMS_ERROR_STRUCT_UNPOPULATED:
+		return "Struct not populated";
+	case API_CMS_ERROR_PROTOCOL_OP_NOT_SUPPORTED:
+		return "Protocol not supported for operation";
+	case API_CMS_ERROR_INVALID_CLK_OR_REF_PARAM:
+		return "Invalid clock or reference parameter";
+	case API_CMS_ERROR_MEM_ALLOC:
+		return "Memory allocation error";
+	case API_CMS_ERROR_MMAP:
+		return "Memory mapping error";
+	case API_CMS_ERROR_DEV_MEM_OPEN:
+		return "Device memory open error";
+	case API_CMS_ERROR_I2C_ERROR:
+		return "I2C error";
+	case API_CMS_ERROR_I2C_WRITE:
+		return "I2C write failed";
+	case API_CMS_ERROR_I2C_READ:
+		return "I2C read failed";
+	case API_CMS_ERROR_I2C_BUSY:
+		return "I2C busy";
+	case API_CMS_ERROR_PMOD_NVM_LOCK:
+		return "Power module NVM fault";
+	case API_CMS_ERROR_EC_RAM_LOCK_ERROR:
+		return "EC ram-lock error";
+	case API_CMS_ERROR_PROFILE_CRC:
+		return "Profile CRC invalid";
+	case API_CMS_ERROR_MAILBOX_RESP_STATUS:
+		return "Mailbox response status error";
+	case API_CMS_ERROR_MCS_CAL_CONFIG_ERROR:
+		return "MCS cal configuration error";
+	case API_CMS_ERROR_MCS_INIT_CAL_ERROR:
+		return "MCS init cal error";
+	case API_CMS_ERROR_MCS_TRACK_CAL_ERROR:
+		return "MCS tracking cal error";
+	case API_CMS_ERROR_MCS_CAL_TIMEOUT:
+		return "MCS cal timeout";
+	case API_CMS_ERROR_ADC_INIT_CAL_ERROR:
+		return "ADC init cal error";
+	case API_CMS_ERROR_ADC_TRACK_CAL_ERROR:
+		return "ADC tracking cal error";
+	case API_CMS_ERROR_ADC_CAL_TIMEOUT:
+		return "ADC cal timeout";
+	case API_CMS_ERROR_BAD_STATE:
+		return "Device in wrong state";
+	case API_CMS_ERROR_STARTUP_FW_RDY_FOR_PROFILE_ERROR:
+		return "FW not ready for profile config";
+	case API_CMS_ERROR_STARTUP_FW_MAILBOX_RDY_ERROR:
+		return "FW mailbox not ready";
+	case API_CMS_ERROR_PLATFORM_CAPTURE_INVALID_CONFIG:
+		return "Invalid platform capture config";
+	default:
+		return "Unknown error";
+	}
+}
+
+int ad9088_check_apollo_error(int ret, const char *api_name)
+{
+	if (ret != API_CMS_ERROR_OK) {
+		pr_err("%s failed: %s (%d)\n",
+		       api_name, adi_cms_error_to_string(ret), ret);
+		return -EIO;
+	}
+
+	return 0;
+}
 //static int ad9088_trig_sync(struct ad9088_phy *phy, int val);
 
 static int ad9088_jesd204_post_setup_stage1(struct jesd204_dev *jdev,
