@@ -47,7 +47,7 @@ extern UART_HandleTypeDef huart5;
 #define MAX_SIZE_BASE_ADDR     (SAMPLES_PER_CHANNEL_PLATFORM * sizeof(uint32_t))
 extern uint8_t in_buff[];
 
-#define ADC_DDR_BASEADDR	in_buff
+#define ADC_DDR_BASEADDR	((uint32_t *)in_buff)
 
 #define UART_IRQ_ID		UART5_IRQn
 
