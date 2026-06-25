@@ -175,8 +175,8 @@ It must define the following macros:
 	#define GPIO_OUTPUT_IDENTIFIER  /* device ID or base address */
 	#define GPIO_OUTPUT_NUM_PINS    /* number of pins on this port */
 	#define GPIO_OUTPUT_OPS         /* pointer to struct capi_gpio_port_ops */
-	#define GPIO_OUTPUT_EXTRA_TYPE  struct my_gpio_config
-	#define GPIO_OUTPUT_EXTRA_INIT  { /* initializer for GPIO_OUTPUT_EXTRA_TYPE */ }
+	#define GPIO_OUTPUT_EXTRA  struct my_gpio_config
+	#define GPIO_OUTPUT_EXTRA_INIT  { /* initializer for GPIO_OUTPUT_EXTRA */ }
 
 **Input GPIO port** (sampled by the test):
 
@@ -186,8 +186,8 @@ It must define the following macros:
 	#define GPIO_INPUT_IDENTIFIER  /* device ID or base address */
 	#define GPIO_INPUT_NUM_PINS    /* number of pins on this port */
 	#define GPIO_INPUT_OPS         /* pointer to struct capi_gpio_port_ops */
-	#define GPIO_INPUT_EXTRA_TYPE  struct my_gpio_config
-	#define GPIO_INPUT_EXTRA_INIT  { /* initializer for GPIO_INPUT_EXTRA_TYPE */ }
+	#define GPIO_INPUT_EXTRA  struct my_gpio_config
+	#define GPIO_INPUT_EXTRA_INIT  { /* initializer for GPIO_INPUT_EXTRA */ }
 
 The ``_EXTRA_TYPE`` and ``_EXTRA_INIT`` macros are used by ``common_data.c``
 to declare and initialize the private config structs for each port. If your
@@ -196,7 +196,7 @@ an empty struct and empty initializer:
 
 .. code-block:: c
 
-	#define GPIO_OUTPUT_EXTRA_TYPE  struct { int unused; }
+	#define GPIO_OUTPUT_EXTRA  struct { int unused; }
 	#define GPIO_OUTPUT_EXTRA_INIT  { 0 }
 
 Step 3 — Write ``main.c``

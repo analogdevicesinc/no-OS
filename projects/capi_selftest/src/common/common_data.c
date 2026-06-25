@@ -94,17 +94,9 @@ void get_test_framework_config(struct test_framework_config *config,
 /**
  * @brief Platform-specific private data for the output/readback GPIO port.
  */
-static GPIO_OUTPUT_EXTRA_TYPE gpio_output_extra = GPIO_OUTPUT_EXTRA_INIT;
+static GPIO_OUTPUT_EXTRA gpio_output_extra = GPIO_OUTPUT_EXTRA_INIT;
+static GPIO_INPUT_EXTRA gpio_input_extra = GPIO_INPUT_EXTRA_INIT;
 
-/**
- * @brief Platform-specific private data for the input GPIO port.
- */
-static GPIO_INPUT_EXTRA_TYPE gpio_input_extra = GPIO_INPUT_EXTRA_INIT;
-
-/**
- * @brief Human-readable name for the output/readback GPIO port.
- */
-const char gpio_output_name[] = GPIO_OUTPUT_NAME;
 
 /**
  * @brief CAPI configuration for the output/readback GPIO port.
@@ -118,11 +110,6 @@ const struct capi_gpio_port_config gpio_output_config = {
 };
 
 /**
- * @brief Human-readable name for the input GPIO port.
- */
-const char gpio_input_name[] = GPIO_INPUT_NAME;
-
-/**
  * @brief CAPI configuration for the input GPIO port.
  */
 const struct capi_gpio_port_config gpio_input_config = {
@@ -132,3 +119,34 @@ const struct capi_gpio_port_config gpio_input_config = {
 	.flags = NULL,
 	.extra = &gpio_input_extra,
 };
+
+/**
+ * @brief Platform-specific extra data for the SPI peripheral
+ */
+static SPI_EXTRA_TYPE spi_extra = SPI_EXTRA_INIT;
+
+/**
+ * @brief CAPI configuration for the SPI controller.
+ */
+const struct capi_spi_config spi_controller_config = {
+	.ops = SPI_OPS,
+	.identifier = SPI_IDENTIFIER,
+	.three_pin_mode = false,
+	.clk_freq_hz = SPI_CLK_FREQ,
+	.loopback = false,
+	.dma_handle = NULL,
+	.extra = &spi_extra,
+};
+
+/**
+ * @brief CAPI SPI device descriptor for the external loopback test.
+ *
+ * Platform fields are set here; the .controller field must be assigned
+ * after capi_spi_init() before use.
+ */
+struct capi_spi_device spi_dev = {
+	.native_cs    = SPI_DEVICE_NATIVE_CS,
+	.mode         = SPI_DEVICE_MODE,
+	.max_speed_hz = SPI_DEVICE_SPEED_HZ,
+};
+

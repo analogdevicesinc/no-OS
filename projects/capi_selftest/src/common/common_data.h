@@ -36,6 +36,7 @@
 
 #include "capi_gpio.h"
 #include "capi_uart.h"
+#include "capi_spi.h"
 
 struct test_framework_config;
 
@@ -48,21 +49,24 @@ extern const struct capi_uart_config uart_config;
  */
 extern const char platform_name[];
 /**
- * @brief Human-readable name for the output/readback GPIO port.
- */
-extern const char gpio_output_name[];
-/**
  * @brief CAPI GPIO config for the output/readback test port.
  */
 extern const struct capi_gpio_port_config gpio_output_config;
 /**
- * @brief Human-readable name for the input GPIO port.
- */
-extern const char gpio_input_name[];
-/**
  * @brief CAPI GPIO config for the input sampling test port.
  */
 extern const struct capi_gpio_port_config gpio_input_config;
+/**
+ * @brief CAPI SPI config for external loopback.
+ */
+extern const struct capi_spi_config spi_controller_config;
+/**
+ * @brief CAPI SPI device descriptor for the external loopback test.
+ *
+ * Platform fields are set in common_data.c; the .controller field must be
+ * assigned after capi_spi_init() before use.
+ */
+extern struct capi_spi_device spi_dev;
 
 /**
  * @brief Fill a test framework configuration for the selected platform.

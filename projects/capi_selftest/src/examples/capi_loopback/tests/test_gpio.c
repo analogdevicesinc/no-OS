@@ -42,34 +42,45 @@ static int gpio_loopback(void)
 	uint64_t value;
 	int ret;
 
-	/* Open both ports and configure directions. */
+	/* ----------------------------------------------------------------------
+	 * Open both ports and configure directions.
+	 * Direction bitmask: 0 = output, 1 = input (CAPI convention).
+	 * -------------------------------------------------------------------- */
+	TEST_SECTION("Open ports and set directions");
 	ret = capi_gpio_port_init(&out, &gpio_output_config);
 	TEST_ASSERT_EQ(ret, 0, "OUT_INIT");
 	ret = capi_gpio_port_init(&in, &gpio_input_config);
 	TEST_ASSERT_EQ(ret, 0, "IN_INIT");
 
-	/* Direction bitmask: 0 = output, 1 = input (CAPI convention). */
 	ret = capi_gpio_port_set_direction(out, 0U);
 	TEST_ASSERT_EQ(ret, 0, "OUT_DIR_ALL_OUTPUT");
 	ret = capi_gpio_port_set_direction(in, all_high);
 	TEST_ASSERT_EQ(ret, 0, "IN_DIR_ALL_INPUT");
 
-	/* Drive all pins high, expect input to read all high. */
-	TEST_BEGIN(GPIO_MODULE, "LOOPBACK_HIGH");
+	/* ----------------------------------------------------------------------
+	 * Drive all pins high; the wired input port must read them all high.
+	 * -------------------------------------------------------------------- */
+	TEST_SECTION("Loopback high");
 	ret = capi_gpio_port_set_raw_value(out, all_high);
 	TEST_ASSERT_EQ(ret, 0, "DRIVE_HIGH");
 	ret = capi_gpio_port_get_raw_value(in, &value);
 	TEST_ASSERT_EQ(ret, 0, "READ_HIGH");
 	TEST_ASSERT_EQ(value & all_high, all_high, "HIGH_READBACK");
 
-	/* Drive all pins low, expect input to read all low. */
-	TEST_BEGIN(GPIO_MODULE, "LOOPBACK_LOW");
+	/* ----------------------------------------------------------------------
+	 * Drive all pins low; the input port must read them all low.
+	 * -------------------------------------------------------------------- */
+	TEST_SECTION("Loopback low");
 	ret = capi_gpio_port_set_raw_value(out, 0U);
 	TEST_ASSERT_EQ(ret, 0, "DRIVE_LOW");
 	ret = capi_gpio_port_get_raw_value(in, &value);
 	TEST_ASSERT_EQ(ret, 0, "READ_LOW");
 	TEST_ASSERT_EQ(value & all_high, 0U, "LOW_READBACK");
 
+	/* ----------------------------------------------------------------------
+	 * Release both ports.
+	 * -------------------------------------------------------------------- */
+	TEST_SECTION("Deinit ports");
 	ret = capi_gpio_port_deinit(&out);
 	TEST_ASSERT_EQ(ret, 0, "OUT_DEINIT");
 	ret = capi_gpio_port_deinit(&in);
@@ -93,21 +104,29 @@ static int gpio_error_paths(void)
 	struct capi_gpio_port_handle *gpio = NULL;
 	int ret;
 
-	/* num_pins = 0: dispatcher passes it through, driver must reject it. */
-	TEST_BEGIN(GPIO_MODULE, "ERROR_ZERO_PINS");
+	/* ----------------------------------------------------------------------
+	 * num_pins = 0: the dispatcher passes it through, so the driver itself
+	 * must reject the zero-width port.
+	 * -------------------------------------------------------------------- */
+	TEST_SECTION("Reject zero-pin port");
 	cfg.num_pins = 0U;
 	ret = capi_gpio_port_init(&gpio, &cfg);
 	TEST_ASSERT_EQ(ret, -EINVAL, "ZERO_PINS");
 
-	/* NULL output pointer on get_direction: dispatcher does not check this. */
-	TEST_BEGIN(GPIO_MODULE, "ERROR_NULL_OUT_DIR");
+	/* ----------------------------------------------------------------------
+	 * NULL output pointer on get_direction: the dispatcher does not check
+	 * this, so the driver must return -EINVAL.
+	 * -------------------------------------------------------------------- */
+	TEST_SECTION("Reject NULL get_direction output");
 	ret = capi_gpio_port_init(&gpio, &gpio_output_config);
 	TEST_ASSERT_EQ(ret, 0, "INIT");
 	ret = capi_gpio_port_get_direction(gpio, NULL);
 	TEST_ASSERT_EQ(ret, -EINVAL, "GET_DIR_NULL_OUT");
 
-	/* NULL output pointer on get_raw_value: same, dispatcher skips it. */
-	TEST_BEGIN(GPIO_MODULE, "ERROR_NULL_OUT_VAL");
+	/* ----------------------------------------------------------------------
+	 * NULL output pointer on get_raw_value: same contract as above.
+	 * -------------------------------------------------------------------- */
+	TEST_SECTION("Reject NULL get_raw_value output");
 	ret = capi_gpio_port_get_raw_value(gpio, NULL);
 	TEST_ASSERT_EQ(ret, -EINVAL, "GET_VAL_NULL_OUT");
 

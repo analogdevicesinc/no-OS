@@ -14,7 +14,7 @@
 #include "common_data.h"
 #include "test_framework.h"
 #include "tests/test_gpio.h"
-
+#include "tests/test_spi.h"
 /**
  * @brief Common function signature for a top-level test group.
  */
@@ -39,6 +39,7 @@ struct test_entry {
  */
 static const struct test_entry tests[] = {
 	{ 0, "GPIO", test_gpio, false },
+	{0, "SPI", test_spi, false}
 };
 
 #define NUM_TESTS	(sizeof(tests) / sizeof(tests[0]))
