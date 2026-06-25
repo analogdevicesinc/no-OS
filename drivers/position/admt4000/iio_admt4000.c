@@ -56,10 +56,10 @@ static int admt4000_iio_read_offset(void *dev, char *buf, uint32_t len,
 				    const struct iio_ch_info *channel,
 				    intptr_t priv);
 
-static int admt4000_iio_reg_read(struct admt4000_iio_dev *dev, uint32_t reg,
+static int admt4000_iio_reg_read(void *dev, uint32_t reg,
 				 uint32_t *readval);
 
-static int admt4000_iio_reg_write(struct admt4000_iio_dev *dev, uint32_t reg,
+static int admt4000_iio_reg_write(void *dev, uint32_t reg,
 				  uint32_t writeval);
 
 static int admt4000_iio_read_gpio_raw(void *dev, char *buf, uint32_t len,
@@ -462,13 +462,14 @@ int admt4000_iio_remove(struct admt4000_iio_dev *desc)
  * @param readval - Register value
  * @return 0 in case of success, errno errors otherwise
  */
-static int admt4000_iio_reg_read(struct admt4000_iio_dev *dev, uint32_t reg,
+static int admt4000_iio_reg_read(void *dev, uint32_t reg,
 				 uint32_t *readval)
 {
+	struct admt4000_iio_dev *iio_dev = dev;
 	int ret;
 	uint16_t temp;
 
-	ret = admt4000_reg_read(dev->admt4000_desc, (uint8_t)reg, &temp, NULL);
+	ret = admt4000_reg_read(iio_dev->admt4000_desc, (uint8_t)reg, &temp, NULL);
 	*readval = temp;
 
 	return ret;
@@ -481,10 +482,12 @@ static int admt4000_iio_reg_read(struct admt4000_iio_dev *dev, uint32_t reg,
  * @param writeval - Register value to write
  * @return 0 in case of success, errno errors otherwise
  */
-static int admt4000_iio_reg_write(struct admt4000_iio_dev *dev, uint32_t reg,
+static int admt4000_iio_reg_write(void *dev, uint32_t reg,
 				  uint32_t writeval)
 {
-	return admt4000_reg_write(dev->admt4000_desc, (uint8_t)reg,
+	struct admt4000_iio_dev *iio_dev = dev;
+
+	return admt4000_reg_write(iio_dev->admt4000_desc, (uint8_t)reg,
 				  (uint16_t) writeval);
 }
 
@@ -630,8 +633,8 @@ static int admt4000_iio_show_conv_sync_mode(void *dev, char *buf, uint32_t len,
 {
 	struct admt4000_iio_dev *iio_admt4000;
 	struct admt4000_dev *admt4000;
+	enum admt4000_conv_sync_mode mode = 0;
 	int ret;
-	int32_t mode = 0;
 
 	iio_admt4000 = (struct admt4000_iio_dev *)dev;
 	admt4000 = iio_admt4000->admt4000_desc;
@@ -885,8 +888,8 @@ static int admt4000_iio_show_harmonic_corr_src(void *dev, char *buf,
 {
 	struct admt4000_iio_dev *iio_admt4000;
 	struct admt4000_dev *admt4000;
+	enum admt4000_harmonic_corr_src source;
 	int ret;
-	uint8_t source;
 
 	iio_admt4000 = (struct admt4000_iio_dev *)dev;
 	admt4000 = iio_admt4000->admt4000_desc;
@@ -1169,7 +1172,7 @@ static int admt4000_iio_read_raw(void *dev, char *buf, uint32_t len,
 {
 	struct admt4000_iio_dev *iio_admt4000;
 	struct admt4000_dev *admt4000;
-	int ret;
+	int32_t ret;
 	uint16_t angle[2];
 	int16_t sincos_val;
 	uint16_t temp;
