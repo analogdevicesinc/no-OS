@@ -256,8 +256,8 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 
 	return 0;
 
-error_pwm:
 #ifdef HAL_TIM_MODULE_ENABLED
+error_pwm:
 	no_os_pwm_remove(sdesc->pwm_desc);
 	no_os_pwm_remove(sdesc->tx_pwm_desc);
 #endif
@@ -514,7 +514,7 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 	for (i = 0; i < len; i++) {
 		tx_ch_xfer[i].src = msgs[i].tx_buff;
 #ifndef SPI_SR_TXE
-		tx_ch_xfer[i].dst = &(SPIx->TXDR);
+		tx_ch_xfer[i].dst = (uint8_t *) & (SPIx->TXDR);
 #else
 		tx_ch_xfer[i].dst = (uint8_t *) & (SPIx->DR);
 #endif
@@ -524,7 +524,7 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 
 		rx_ch_xfer[i].dst = msgs[i].rx_buff;
 #ifndef SPI_SR_RXNE
-		rx_ch_xfer[i].src = &(SPIx->RXDR);
+		rx_ch_xfer[i].src = (uint8_t *) & (SPIx->RXDR);
 #else
 		rx_ch_xfer[i].src = (uint8_t *) & (SPIx->DR);
 #endif
@@ -594,7 +594,6 @@ abort_transfer:
 	no_os_dma_xfer_abort(sdesc->dma_desc, sdesc->rxdma_ch);
 remove_dma:
 	no_os_dma_remove(sdesc->dma_desc);
-free_tx_ch_xfer:
 	no_os_free(tx_ch_xfer);
 free_rx_ch_xfer:
 	no_os_free(rx_ch_xfer);
