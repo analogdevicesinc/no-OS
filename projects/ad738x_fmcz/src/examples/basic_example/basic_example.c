@@ -34,6 +34,7 @@
 
 #include "basic_example.h"
 #include "common_data.h"
+#include "no_os_delay.h"
 #include "no_os_print_log.h"
 
 #ifdef NUMBER_OF_CHANNELS
