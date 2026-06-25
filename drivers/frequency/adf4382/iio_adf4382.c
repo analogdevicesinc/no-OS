@@ -91,13 +91,14 @@ static int adf4382_iio_find_2d_row(const int (*tbl)[2], const int size,
  * @param readval - Read data.
  * @return	  - Result of the reading procedure.
  */
-static int adf4382_iio_read_reg(struct adf4382_iio_dev *dev, uint32_t reg,
+static int adf4382_iio_read_reg(void *dev, uint32_t reg,
 				uint32_t *readval)
 {
+	struct adf4382_iio_dev *iio_adf4382 = dev;
 	uint8_t tmp;
 	int ret;
 
-	ret = adf4382_spi_read(dev->adf4382_dev, (uint16_t)reg, &tmp);
+	ret = adf4382_spi_read(iio_adf4382->adf4382_dev, (uint16_t)reg, &tmp);
 	if (ret)
 		return ret;
 
@@ -112,10 +113,12 @@ static int adf4382_iio_read_reg(struct adf4382_iio_dev *dev, uint32_t reg,
  * @param writeval - Data to be written.
  * @return	   - Result of the writing procedure.
  */
-static int adf4382_iio_write_reg(struct adf4382_iio_dev *dev, uint32_t reg,
+static int adf4382_iio_write_reg(void *dev, uint32_t reg,
 				 uint32_t writeval)
 {
-	return adf4382_spi_write(dev->adf4382_dev, (uint16_t)reg,
+	struct adf4382_iio_dev *iio_adf4382 = dev;
+
+	return adf4382_spi_write(iio_adf4382->adf4382_dev, (uint16_t)reg,
 				 (uint8_t)writeval);
 }
 
