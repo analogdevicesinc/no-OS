@@ -11,10 +11,11 @@
 #include "no_os_alloc.h"
 #include "iio_adg2128.h"
 
-static int _adg2128_read_register2(struct adg2128_iio_dev *dev,
+static int _adg2128_read_register2(void *device,
 				   uint32_t reg,
 				   uint32_t *readval)
 {
+	struct adg2128_iio_dev *dev = device;
 	int ret;
 	uint8_t vals[2];
 	dev->i2c_desc->slave_address = reg;
@@ -26,10 +27,11 @@ static int _adg2128_read_register2(struct adg2128_iio_dev *dev,
 	return 0;
 }
 
-static int _adg2128_write_register2(struct adg2128_iio_dev *dev,
+static int _adg2128_write_register2(void *device,
 				    uint32_t reg,
 				    uint32_t writeval)
 {
+	struct adg2128_iio_dev *dev = device;
 	uint8_t vals[2];
 	vals[0] = writeval >> 8;
 	vals[1] = writeval;
