@@ -275,19 +275,22 @@ int ad74416h_nb_active_channels(struct ad74416h_desc *desc,
 int ad74416h_get_raw_adc_result(struct ad74416h_desc *desc, uint32_t ch,
 				uint32_t *val)
 {
-	uint32_t val_msb, val_lsb;
+	uint32_t val_msb = 0, val_lsb;
+	uint16_t reg_val;
 	int ret;
 
 	if (desc->id == ID_AD74416H) {
 		ret = ad74416h_reg_read(desc, AD74416H_ADC_RESULT_UPR(ch),
-					&val_msb);
+					&reg_val);
 		if (ret)
 			return ret;
+		val_msb = reg_val;
 	}
 
-	ret = ad74416h_reg_read(desc, AD74416H_ADC_RESULT(ch), &val_lsb);
+	ret = ad74416h_reg_read(desc, AD74416H_ADC_RESULT(ch), &reg_val);
 	if (ret)
 		return ret;
+	val_lsb = reg_val;
 
 	if (desc->id == ID_AD74416H)
 		*val = (no_os_field_get(AD74416H_CONV_RES_UPR_MSK, val_msb) << 16) |

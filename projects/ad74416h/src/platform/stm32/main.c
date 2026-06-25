@@ -35,9 +35,7 @@
 #include "common_data.h"
 #include "no_os_error.h"
 
-#ifdef BASIC_EXAMPLE
-#include "basic_example.h"
-#endif
+extern int example_main();
 
 /***************************************************************************//**
  * @brief Main function execution for STM32 platform.
