@@ -1,0 +1,7 @@
+{
+  "maxim": {
+    "max32690": {
+      "flags": "TARGET=max32690"
+    }
+  }
+}
