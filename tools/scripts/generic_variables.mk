@@ -27,20 +27,6 @@ BUILD_DIR		?= $(PROJECT)/build
 WORKSPACE		?= $(BUILD_DIR)
 PROJECT_BUILD	?= $(BUILD_DIR)
 
-# Normalize critical paths for Windows or Cygwin/Mingw environments so native
-# toolchains see drive-letter prefixes instead of /home-style paths.
-WINDOWSISH_HOST := $(or $(filter Windows_NT,$(OS)),$(findstring CYGWIN,$(HOST_OS_NAME)),$(findstring MINGW,$(HOST_OS_NAME)))
-ifneq (,$(strip $(WINDOWSISH_HOST)))
-ifneq (,$(shell command -v cygpath 2>/dev/null))
-PROJECT := $(shell cygpath -m "$(PROJECT)")
-NO-OS   := $(shell cygpath -m "$(NO-OS)")
-BUILD_DIR := $(shell cygpath -m "$(BUILD_DIR)")
-WORKSPACE := $(BUILD_DIR)
-PROJECT_BUILD := $(BUILD_DIR)
-ROOT_DRIVE := $(firstword $(subst /, ,$(PROJECT)))/
-endif
-endif
-
 #Useful variables for src.mk
 INCLUDE			?= $(NO-OS)/include
 DRIVERS 		?= $(NO-OS)/drivers
