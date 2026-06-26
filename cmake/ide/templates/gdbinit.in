@@ -1,0 +1,6 @@
+target remote localhost:@GDB_PORT@
+load @TARGET_ELF@
+file @TARGET_ELF@
+monitor reset halt
+tb main
+c
