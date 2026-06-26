@@ -35,11 +35,11 @@
 #include "common_data.h"
 #include "no_os_error.h"
 
-#ifdef IIO_EXAMPLE
+#ifdef CONFIG_IIO_DEMO_IIO_EXAMPLE
 #include "iio_example.h"
 #endif
 
-#ifdef IIO_SW_TRIGGER_EXAMPLE
+#ifdef CONFIG_IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE
 #include "iio_sw_triggger_example.h"
 #endif
 
@@ -57,19 +57,19 @@ int main()
 	/* Enable the data cache. */
 	Xil_DCacheEnable();
 
-#ifdef IIO_EXAMPLE
+#ifdef CONFIG_IIO_DEMO_IIO_EXAMPLE
 	ret = iio_example_main();
 #endif
 
-#ifdef IIO_SW_TRIGGER_EXAMPLE
+#ifdef CONFIG_IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE
 #error Software trigger is not supported over UART.
 #endif
 
-#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+#ifdef CONFIG_IIO_DEMO_IIO_TIMER_TRIGGER_EXAMPLE
 #error Timer trigger example is not supported on xilinx platform.
 #endif
 
-#if (IIO_EXAMPLE == 0)
+#if (CONFIG_IIO_DEMO_IIO_EXAMPLE == 0)
 #error At least one example has to be selected using y value in Makefile.
 #endif
 
