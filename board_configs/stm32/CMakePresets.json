@@ -1,0 +1,46 @@
+{
+	"version": 7,
+	"configurePresets": [
+		{
+			"name": "stm32-base",
+			"hidden": true,
+			"description": "Base config for STM32 boards",
+			"generator": "Ninja"
+		},
+		{
+			"name": "stm32f756_nucleo",
+			"description": "STM32F756 Nucleo board",
+			"inherits": "stm32-base",
+			"cacheVariables": {
+				"BOARD": "stm32f756_nucleo",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "stm32",
+				"BOARD_CONFIG_FILE": "stm32f756_nucleo_defconfig"
+			}
+		},
+		{
+			"name": "sdp-ck1z",
+			"description": "SDP-CK1Z board",
+			"inherits": "stm32-base",
+			"cacheVariables": {
+				"BOARD": "sdp-ck1z",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "stm32",
+				"TARGET": "stm32f469",
+				"TARGET_NUM": "stm32f469",
+				"BOARD_CONFIG_FILE": "sdp-ck1z_defconfig"
+			}
+		},
+		{
+			"name": "adin1110ebz",
+			"description": "ADIN1110-EBZ board",
+			"inherits": "stm32-base",
+			"cacheVariables": {
+				"BOARD": "adin1110ebz",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "stm32",
+				"BOARD_CONFIG_FILE": "adin1110ebz_defconfig"
+			}
+		}
+	]
+}
