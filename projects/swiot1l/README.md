@@ -14,7 +14,7 @@ Currently, this project offers 2 firmware examples meant to run on the AD-SWIOT1
 This is only intended to be run on the MAX32650 target.
 
 1. Open a terminal and navigate to this project directory (if building on Windows, `Git Bash` has to be used). Please remember that switching between the firmware examples requires you to clean the previous build artifacts. You may do this by running `make reset`.
-2.  Type `make RELEASE=y SWIOT1L_STATIC_IP=y -j`, in order to build the project. You may leave out the `SWIOT1L_STATIC_IP=y` flag if you want the IP to be assigned using DHCP. The `RELEASE` flag adds `-O2` optimization and is optional, but without it, the MCU won't be able to keep up with the AD74413R's sampling rate, and some samples will be lost. So, it should only be omitted during debugging.
+2.  Type `make RELEASE=y CONFIG_SWIOT1L_STATIC_IP=y -j`, in order to build the project. You may leave out the `CONFIG_SWIOT1L_STATIC_IP=y` flag if you want the IP to be assigned using DHCP. The `RELEASE` flag adds `-O2` optimization and is optional, but without it, the MCU won't be able to keep up with the AD74413R's sampling rate, and some samples will be lost. So, it should only be omitted during debugging.
 
 A successful build should end with the following terminal output:
 ```
@@ -28,7 +28,7 @@ rm /home/xvr/MaximSDK_new/Libraries/CMSIS/Device/Maxim/MAX32650/Source/GCC/start
 This is only intended to be run on the MAX32650 target.
 
 1. Open a terminal and navigate to this project directory (if building on Windows, `Git Bash` has to be used). Please remember that switching between the firmware examples requires you to clean the previous build artifacts. You may do this by running `make reset`.
-2.  Type `make RELEASE=y SWIOT1L_STATIC_IP=y SWIOT1L_MQTT_EXAMPLE=y SWIOT1L_DEFAULT_FW=n -j`, in order to build the project. The `RELEASE` flag adds `-O2` optimization and is optional, but without it, the MCU won't be able to keep up with the AD74413R's sampling rate, and some samples will be lost. So, it should only be omitted during debugging.
+2.  Type `make RELEASE=y CONFIG_SWIOT1L_STATIC_IP=y CONFIG_SWIOT1L_MQTT_EXAMPLE=y CONFIG_SWIOT1L_DEFAULT_FW=n -j`, in order to build the project. The `RELEASE` flag adds `-O2` optimization and is optional, but without it, the MCU won't be able to keep up with the AD74413R's sampling rate, and some samples will be lost. So, it should only be omitted during debugging.
 
 A successful build should end with the following terminal output:
 ```
@@ -68,8 +68,8 @@ In order to configure and sample data from the SWIOT1L board, you'll have to con
 
 1. Using a T1L -> Ethernet media converter:
 - Direct connection to PC:
-Build the firmware with the `SWIOT1L_STATIC_IP=y` flag, will result in using `192.168.97.40` as an IP address. This is the fastest way of testing the platform, since it doesn't require the DHCP configuration or DHCP timeout (in case of AutoIP).
-Alternatively, you may omit `SWIOT1L_STATIC_IP=y` (or set it to `n`), in which case, the board will send a DHCP request and try to get an IP that way. If you don't have a DHCP server listening on the PC's network interface (to which SWIOT1L is connected), a link local address (in the 169.254.x.x\16 range) will be used. This may take a while (~10s) the first time you power the board, since there have to be 2 failed DHCP requests.
+Build the firmware with the `CONFIG_SWIOT1L_STATIC_IP=y` flag, will result in using `192.168.97.40` as an IP address. This is the fastest way of testing the platform, since it doesn't require the DHCP configuration or DHCP timeout (in case of AutoIP).
+Alternatively, you may omit `CONFIG_SWIOT1L_STATIC_IP=y` (or set it to `n`), in which case, the board will send a DHCP request and try to get an IP that way. If you don't have a DHCP server listening on the PC's network interface (to which SWIOT1L is connected), a link local address (in the 169.254.x.x\16 range) will be used. This may take a while (~10s) the first time you power the board, since there have to be 2 failed DHCP requests.
 
 	In case a link local or static IP address is used for the AD-SWIOT1L-SL, the user may need to manually add a static IP for their PC's network interface which connects to the board. You may do this by going through the following guide https://wiki.analog.com/resources/no-os/misc_guides/static_ip_setting?rev=1715173602 (and choosing an IP in the same subnet as the AD-SWIOT1L-SL board: e.g 192.168.97.1/24).
 
@@ -94,7 +94,7 @@ B -- USB --> D[PC]
 ```
 
 After the hardware connections are made, you'll have to power cycle the board.
-In all these cases, once the TCP/IP software stack is fully configured and the board has an IP assigned to it (this will take ~10s if there is no DHCP server and the `SWIOT1L_STATIC_IP` flag is not set to `y`), the IP, network mask and gateway will be output to the serial interface (baudrate 115200 8N1).
+In all these cases, once the TCP/IP software stack is fully configured and the board has an IP assigned to it (this will take ~10s if there is no DHCP server and the `CONFIG_SWIOT1L_STATIC_IP` flag is not set to `y`), the IP, network mask and gateway will be output to the serial interface (baudrate 115200 8N1).
 
 Next, just to make sure that you can communicate with the board, you can try to ping the it using the IP address previously mentioned (either from command line or terminal).
 In case the the ping resulted in a "destination unreachable" error, it may be the case that the PC's network interface is not correctly configure to route packets to the board's IP.
@@ -103,7 +103,7 @@ In case the the ping resulted in a "destination unreachable" error, it may be th
 
 Directly connect the AD-SWIOT1L-SL board to your PC using a SPE -> Ethernet/USB media converter.
 
-By default, the firmware will try to connect to the 192.168.97.1 IP, port 1883. So, you'll need to have an MQTT broker running on the host PC. The broker should listen for connections on an interface which has the 192.168.97.1 IP configured. The IP and port settings may be changed by setting different value to the `SWIOT1L_MQTT_SERVER_IP` and `SWIOT1L_MQTT_SERVER_PORT` make variables when compiling.
+By default, the firmware will try to connect to the 192.168.97.1 IP, port 1883. So, you'll need to have an MQTT broker running on the host PC. The broker should listen for connections on an interface which has the 192.168.97.1 IP configured. The IP and port settings may be changed by setting different value to the `CONFIG_SWIOT1L_MQTT_SERVER_IP` and `CONFIG_SWIOT1L_MQTT_SERVER_PORT` make variables when compiling.
 
 The MQTT protocol version used by the AD-SWIOT1L-SL is V3.1.1. The connection is not using TLS and the client does not use an username or password.
 
