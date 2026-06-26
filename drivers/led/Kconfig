@@ -1,0 +1,27 @@
+menuconfig LED
+	bool "LED Drivers"
+	default n
+	help
+	  Enable support for LED drivers.
+
+if LED
+
+config LED_LTC3208
+	depends on I2C
+	select GPIO
+	bool "Enable LTC3208 LED driver"
+	default n
+
+config LED_LTC3220
+	depends on I2C
+	select GPIO
+	bool "Enable LTC3220 LED driver"
+	default n
+
+config LED_MAX25603
+	depends on GPIO
+	select PWM
+	bool "Enable MAX25603 LED driver"
+	default n
+
+endif # LED

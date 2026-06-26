@@ -48,8 +48,8 @@
 #define NO_OS_DOMAIN_NAME	"analog"
 #endif
 
-#ifndef NO_OS_LWIP_INIT_ONETIME
-#define NO_OS_LWIP_INIT_ONETIME		0
+#ifndef CONFIG_NO_OS_LWIP_INIT_ONETIME
+#define CONFIG_NO_OS_LWIP_INIT_ONETIME		0
 #endif
 
 struct lwip_network_desc;

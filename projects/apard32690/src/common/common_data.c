@@ -35,11 +35,11 @@
 #include "maxim_gpio.h"
 #include "maxim_spi.h"
 
-#if defined(APARD32690_ADIN1110_STANDALONE_EXAMPLE)
+#if defined(CONFIG_APARD32690_ADIN1110_STANDALONE_EXAMPLE)
 #include "adin1110.h"
 #endif
 
-#if defined(APARD32690_ECHO_SERVER_EXAMPLE)
+#if defined(CONFIG_APARD32690_ECHO_SERVER_EXAMPLE)
 #include "adin1110.h"
 #include "lwip_socket.h"
 #include "lwip_adin1110.h"
@@ -60,7 +60,7 @@ struct no_os_uart_init_param uart_ip = {
 	.platform_ops = &max_uart_ops,
 };
 
-#if defined(APARD32690_ECHO_SERVER_EXAMPLE) || defined(APARD32690_ADIN1110_STANDALONE_EXAMPLE)
+#if defined(CONFIG_APARD32690_ECHO_SERVER_EXAMPLE) || defined(CONFIG_APARD32690_ADIN1110_STANDALONE_EXAMPLE)
 
 struct max_spi_init_param adin1110_spi_extra = {
 	.num_slaves = 1,
@@ -99,7 +99,7 @@ struct adin1110_init_param adin1110_ip = {
 
 #endif
 
-#if defined(APARD32690_ECHO_SERVER_EXAMPLE)
+#if defined(CONFIG_APARD32690_ECHO_SERVER_EXAMPLE)
 
 struct lwip_network_param lwip_ip = {
 	.platform_ops = &adin1110_lwip_ops,

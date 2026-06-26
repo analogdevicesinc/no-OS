@@ -1,0 +1,23 @@
+{
+    "folders": [
+        {
+            "name": "@NO_OS_PROJECT_NAME@ [project]",
+            "path": "projects/@NO_OS_PROJECT_NAME@"
+        },
+        {
+            "name": "@CMAKE_BUILD_DIR@ [build directory]",
+            "path": "@CMAKE_BUILD_DIR@"
+        },
+        {
+            "name": "no-OS",
+            "path": "."
+        }
+    ],
+    "settings": {
+        "files.exclude": {
+            "projects/@NO_OS_PROJECT_NAME@": true
+        },
+        "cortex-debug.gdbPath": "@GDB_PATH@",
+        "cortex-debug.openocdPath": "@OPENOCD_PATH@"
+    }
+}

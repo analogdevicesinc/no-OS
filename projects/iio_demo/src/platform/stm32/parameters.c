@@ -33,7 +33,7 @@
 
 #include "parameters.h"
 
-#if defined NO_OS_USB_UART
+#if defined CONFIG_USB_UART_STM32
 struct stm32_usb_uart_init_param iio_demo_usb_uart_extra_ip = {
 	.husbdevice = IIO_APP_HUSBUART,
 };
@@ -43,7 +43,7 @@ struct stm32_uart_init_param iio_demo_uart_extra_ip = {
 };
 #endif
 
-#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+#ifdef CONFIG_IIO_DEMO_IIO_TIMER_TRIGGER_EXAMPLE
 extern TIM_HandleTypeDef htim13;
 struct stm32_timer_init_param adc_demo_xtip = {
 	.htimer = &htim13,

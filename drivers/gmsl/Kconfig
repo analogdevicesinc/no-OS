@@ -1,0 +1,14 @@
+menuconfig GMSL
+	bool "GMSL Drivers"
+	default n
+	help
+	  Enable support for Gigabit Multimedia Serial Link (GMSL) drivers.
+
+if GMSL
+
+config GMSL_REG_ACCESS
+	depends on I2C
+	bool "Enable GMSL register access driver"
+	default n
+
+endif # GMSL

@@ -1,0 +1,122 @@
+menu "External Libraries"
+
+config FREERTOS
+	bool "Enable FreeRTOS"
+	default n
+
+config FREERTOS_CONF_PATH
+	depends on FREERTOS
+	string "Path to the FreeRTOSConfig.h file"
+
+config FREERTOS_VERSION
+	string "FreeRTOS version tag"
+	default "V11.2.0"
+	depends on FREERTOS
+	help
+	  Git tag or branch name for FreeRTOS-Kernel.
+	  Examples: V11.2.0, V10.4.3, main
+	  This version will be checked against the submodule,
+	  then the global cache, then fetched if not found.
+
+config FREERTOS_HEAP_ALLOCATOR
+	int "Select the FreeRTOS heap memory allocator implementation"
+	default 2
+	range 1 5
+	depends on FREERTOS
+
+config LWIP
+	bool "Enable LWIP"
+	default n
+
+config LWIP_VERSION
+	string "lwIP version tag"
+	default "STABLE-2_2_1_RELEASE"
+	depends on LWIP
+	help
+	  Git tag or branch name for lwIP.
+	  Examples: STABLE-2_2_1_RELEASE, STABLE-2_1_0_RELEASE, master
+	  This version will be checked against the submodule,
+	  then the global cache, then fetched if not found.
+
+config CORDIO
+	bool "Enable CORDIO"
+	default n
+
+config MBEDTLS
+	bool "Enable mbedTLS"
+	default n
+
+config MBEDTLS_VERSION
+	string "mbedTLS version tag"
+	default "mbedtls-2.28.0"
+	depends on MBEDTLS
+	help
+	  Git tag or branch name for mbedTLS.
+	  Examples: mbedtls-2.28.0, mbedtls-3.6.0, development
+	  This version will be checked against the submodule,
+	  then the global cache, then fetched if not found.
+
+config MQTT
+	bool "Enable MQTT (Paho Embedded-C)"
+	default n
+
+config MQTT_VERSION
+	string "Paho MQTT version tag"
+	default "master"
+	depends on MQTT
+	help
+	  Git tag or branch name for paho.mqtt.embedded-c.
+	  Examples: master, v1.1.0
+	  This version will be checked against the submodule,
+	  then the global cache, then fetched if not found.
+
+config ESH
+	bool "Enable esh (Embedded Shell)"
+	default n
+
+config ESH_VERSION
+	string "esh version tag"
+	default "main"
+	depends on ESH
+	help
+	  Git tag or branch name for esh.
+	  Examples: main
+	  This version will be checked against the submodule,
+	  then the global cache, then fetched if not found.
+
+config LVGL
+	bool "Enable LVGL"
+	default n
+
+config LVGL_VERSION
+	string "LVGL version tag"
+	default "v8.3.0"
+	depends on LVGL
+	help
+	  Git tag or branch name for LVGL.
+	  Examples: v8.3.0, v9.0.0, master
+	  This version will be checked against the submodule,
+	  then the global cache, then fetched if not found.
+
+config LVGL_CONF_PATH
+	string "Path to directory containing lv_conf.h"
+	depends on LVGL
+	help
+	  Directory containing the lv_conf.h configuration file.
+	  Can be absolute or relative to CMAKE_SOURCE_DIR.
+
+config AZURE
+	bool "Enable Azure SDK for C"
+	default n
+
+config AZURE_VERSION
+	string "Azure SDK version tag"
+	default "1.5.0"
+	depends on AZURE
+	help
+	  Git tag or branch name for azure-sdk-for-c.
+	  Examples: 1.5.0, 1.4.0, main
+	  This version will be checked against the submodule,
+	  then the global cache, then fetched if not found.
+
+endmenu

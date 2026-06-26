@@ -1,0 +1,207 @@
+menuconfig POWER
+	bool "Power Management Drivers"
+	default n
+	help
+	  Enable support for power management drivers.
+
+if POWER
+
+config POWER_ADES1754
+	depends on SPI || UART
+	bool "Enable ADES1754 power driver"
+	default n
+
+config POWER_ADP1050
+	depends on I2C
+	select GPIO
+	select PWM
+	bool "Enable ADP1050 digital power controller driver"
+	default n
+
+config POWER_IIO_ADP1050
+	select POWER_ADP1050
+	bool "Enable ADP1050 IIO driver"
+	default n
+
+config POWER_ADP1055
+	depends on I2C
+	select GPIO
+	select PWM
+	bool "Enable ADP1055 digital power controller driver"
+	default n
+
+config POWER_IIO_ADP1055
+	select POWER_ADP1055
+	bool "Enable ADP1055 IIO driver"
+	default n
+
+config POWER_ADP5055
+	depends on I2C
+	select GPIO
+	select PWM
+	bool "Enable ADP5055 power controller driver"
+	default n
+
+config POWER_IIO_ADP5055
+	select POWER_ADP5055
+	bool "Enable ADP5055 IIO driver"
+	default n
+
+config POWER_LT3074
+	depends on I2C
+	bool "Enable LT3074 power driver"
+	default n
+
+config POWER_IIO_LT3074
+	select POWER_LT3074
+	bool "Enable LT3074 IIO driver"
+	default n
+
+config POWER_LT7170
+	depends on I2C
+	bool "Enable LT7170 power driver"
+	default n
+
+config POWER_IIO_LT7170
+	select POWER_LT7170
+	bool "Enable LT7170 IIO driver"
+	default n
+
+config POWER_LT7182S
+	depends on I2C
+	bool "Enable LT7182S power driver"
+	default n
+
+config POWER_IIO_LT7182S
+	select POWER_LT7182S
+	bool "Enable LT7182S IIO driver"
+	default n
+
+config POWER_LT8491
+	depends on I2C
+	bool "Enable LT8491 solar battery charger controller driver"
+	default n
+
+config POWER_IIO_LT8491
+	select POWER_LT8491
+	bool "Enable LT8491 IIO driver"
+	default n
+
+config POWER_LT8722
+	depends on SPI
+	select GPIO
+	bool "Enable LT8722 power driver"
+	default n
+
+config POWER_IIO_LT8722
+	select POWER_LT8722
+	bool "Enable LT8722 IIO driver"
+	default n
+
+config POWER_LTC2992
+	depends on I2C
+	select GPIO
+	bool "Enable LTC2992 power monitor driver"
+	default n
+
+config POWER_LTC3337
+	depends on I2C
+	bool "Enable LTC3337 power driver"
+	default n
+
+config POWER_LTC3350
+	depends on I2C
+	bool "Enable LTC3350 supercapacitor charger driver"
+	default n
+
+config POWER_LTC4162L
+	depends on I2C
+	bool "Enable LTC4162L battery charger driver"
+	default n
+
+config POWER_IIO_LTC4162L
+	select POWER_LTC4162L
+	bool "Enable LTC4162L IIO driver"
+	default n
+
+config POWER_LTC4296
+	depends on SPI
+	select GPIO
+	bool "Enable LTC4296 PoE power driver"
+	default n
+
+config POWER_LTC7841
+	depends on I2C
+	bool "Enable LTC7841 power driver"
+	default n
+
+config POWER_IIO_LTC7841
+	select POWER_LTC7841
+	bool "Enable LTC7841 IIO driver"
+	default n
+
+config POWER_LTC7871
+	depends on SPI
+	select GPIO
+	bool "Enable LTC7871 power driver"
+	default n
+
+config POWER_IIO_LTC7871
+	select POWER_LTC7871
+	bool "Enable LTC7871 IIO driver"
+	default n
+
+config POWER_LTM3360B
+	depends on I2C
+	bool "Enable LTM3360B power module driver"
+	default n
+
+config POWER_LTM4686
+	depends on I2C
+	bool "Enable LTM4686 power module driver"
+	default n
+
+config POWER_IIO_LTM4686
+	select POWER_LTM4686
+	bool "Enable LTM4686 IIO driver"
+	default n
+
+config POWER_LTP8800
+	depends on I2C
+	bool "Enable LTP8800 power driver"
+	default n
+
+config POWER_IIO_LTP8800
+	select POWER_LTP8800
+	bool "Enable LTP8800 IIO driver"
+	default n
+
+config POWER_MAX17616
+	depends on I2C
+	bool "Enable MAX17616 power driver"
+	default n
+
+config POWER_IIO_MAX17616
+	select POWER_MAX17616
+	bool "Enable MAX17616 IIO driver"
+	default n
+
+config POWER_MAX17851
+	depends on SPI || UART
+	select GPIO
+	bool "Enable MAX17851 power driver"
+	default n
+
+config POWER_MAX22216
+	depends on SPI
+	select GPIO
+	bool "Enable MAX22216 power driver"
+	default n
+
+config POWER_MAX42500
+	depends on I2C
+	select GPIO
+	bool "Enable MAX42500 power driver"
+	default n
+
+endif # POWER
