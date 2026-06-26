@@ -1,0 +1,14 @@
+menuconfig ECG
+	bool "ECG Drivers"
+	default n
+	help
+	  Enable support for electrocardiogram (ECG) drivers.
+
+if ECG
+
+config ECG_ADAS1000
+	depends on SPI
+	bool "Enable ADAS1000 ECG driver"
+	default n
+
+endif # ECG

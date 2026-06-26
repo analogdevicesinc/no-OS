@@ -1,0 +1,29 @@
+menuconfig IO_EXPANDER
+	bool "I/O Expander Drivers"
+	default n
+	help
+	  Enable support for I/O expander drivers.
+
+if IO_EXPANDER
+
+config IO_EXPANDER_ADP5589
+	depends on I2C
+	bool "Enable ADP5589 I/O expander driver"
+	default n
+
+config IO_EXPANDER_DEMUX_SPI
+	depends on SPI
+	bool "Enable SPI demultiplexer driver"
+	default n
+
+config IO_EXPANDER_LTC4306
+	depends on I2C
+	bool "Enable LTC4306 I/O expander driver"
+	default n
+
+config IO_EXPANDER_LTC4332
+	depends on SPI
+	bool "Enable LTC4332 I/O expander driver"
+	default n
+
+endif # IO_EXPANDER
