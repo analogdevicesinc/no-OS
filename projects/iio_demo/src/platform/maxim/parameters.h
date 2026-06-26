@@ -41,7 +41,7 @@
 #include "common_data.h"
 #include "no_os_util.h"
 #include "no_os_timer.h"
-#ifdef NO_OS_USB_UART
+#ifdef CONFIG_USB_UART_MAXIM
 #include "maxim_usb_uart.h"
 #endif
 
@@ -51,13 +51,13 @@
 #define SAMPLES_PER_CHANNEL_PLATFORM 2000
 
 extern struct max_uart_init_param iio_demo_uart_extra_ip;
-#ifdef NO_OS_USB_UART
+#ifdef CONFIG_USB_UART_MAXIM
 extern struct max_usb_uart_init_param iio_demo_usb_uart_extra_ip;
 #endif
 
 #define UART_DEVICE_ID	0
 #define UART_BAUDRATE	57600
-#ifdef NO_OS_USB_UART
+#ifdef CONFIG_USB_UART_MAXIM
 #define UART_IRQ_ID    	USB_IRQn
 #define UART_EXTRA      &iio_demo_usb_uart_extra_ip
 #define UART_OPS        &max_usb_uart_ops
@@ -67,7 +67,7 @@ extern struct max_usb_uart_init_param iio_demo_usb_uart_extra_ip;
 #define UART_OPS        &max_uart_ops
 #endif
 
-#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+#ifdef CONFIG_IIO_DEMO_IIO_TIMER_TRIGGER_EXAMPLE
 /* Adc Demo Timer settings */
 #define ADC_DEMO_TIMER_DEVICE_ID    0
 #define ADC_DEMO_TIMER_FREQ_HZ      1000000

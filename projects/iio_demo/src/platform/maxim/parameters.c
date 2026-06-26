@@ -37,7 +37,7 @@ struct max_uart_init_param iio_demo_uart_extra_ip = {
 	.flow = MAX_UART_FLOW_DIS,
 };
 
-#ifdef NO_OS_USB_UART
+#ifdef CONFIG_USB_UART_MAXIM
 struct max_usb_uart_init_param iio_demo_usb_uart_extra_ip = {
 	.vid = 0x0B6B,
 	.pid = 0x003C

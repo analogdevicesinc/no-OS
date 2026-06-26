@@ -36,11 +36,11 @@
 #include "no_os_error.h"
 #include "pico/stdlib.h"
 
-#ifdef IIO_EXAMPLE
+#ifdef CONFIG_IIO_DEMO_IIO_EXAMPLE
 #include "iio_example.h"
 #endif
 
-#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+#ifdef CONFIG_IIO_DEMO_IIO_TIMER_TRIGGER_EXAMPLE
 #include "iio_timer_trigger_example.h"
 #endif
 
@@ -53,21 +53,21 @@ int main()
 {
 	int ret = -EINVAL;
 
-#ifdef IIO_EXAMPLE
+#ifdef CONFIG_IIO_DEMO_IIO_EXAMPLE
 	ret = iio_example_main();
 #endif
 
-#ifdef IIO_SW_TRIGGER_EXAMPLE
+#ifdef CONFIG_IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE
 #error Software trigger is not supported over UART.
 #endif
 
-#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+#ifdef CONFIG_IIO_DEMO_IIO_TIMER_TRIGGER_EXAMPLE
 #error Timer trigger is not supported on PICO platform.
 #endif
 
-#if (IIO_EXAMPLE + IIO_TIMER_TRIGGER_EXAMPLE == 0)
+#if (CONFIG_IIO_DEMO_IIO_EXAMPLE + CONFIG_IIO_DEMO_IIO_TIMER_TRIGGER_EXAMPLE == 0)
 #error At least one example has to be selected using y value in Makefile.
-#elif (IIO_EXAMPLE + IIO_SW_TRIGGER_EXAMPLE + IIO_TIMER_TRIGGER_EXAMPLE > 1)
+#elif (CONFIG_IIO_DEMO_IIO_EXAMPLE + CONFIG_IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE + CONFIG_IIO_DEMO_IIO_TIMER_TRIGGER_EXAMPLE > 1)
 #error Selected example projects cannot be enabled at the same time. \
 Please enable only one example and rebuild the project.
 #endif
