@@ -1,0 +1,35 @@
+menu "APARD32690 Configuration"
+
+choice APARD32690_EXAMPLE
+	prompt "Example variant"
+	default APARD32690_ECHO_SERVER_EXAMPLE
+
+config APARD32690_BASIC_EXAMPLE
+	bool "Basic UART example"
+	help
+	  Simple example that prints a message over UART.
+
+config APARD32690_ECHO_SERVER_EXAMPLE
+	bool "TCP echo server example"
+	depends on LWIP && NET && ADIN1110
+	help
+	  TCP echo server on port 10000 using LWIP and the ADIN1110
+	  MAC/PHY over Ethernet.
+
+config APARD32690_ESH_EXAMPLE
+	bool "Embedded shell (esh) example"
+	depends on FREERTOS && ESH
+	help
+	  Interactive shell over UART using the esh library
+	  running on FreeRTOS.
+
+config APARD32690_ADIN1110_STANDALONE_EXAMPLE
+	bool "ADIN1110 standalone example"
+	depends on NET && ADIN1110
+	help
+	  Standalone test for the ADIN1110 MAC/PHY driver.
+	  Reads the device ID register over SPI.
+
+endchoice
+
+endmenu

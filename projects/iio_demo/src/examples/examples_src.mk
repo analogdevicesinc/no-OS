@@ -1,11 +1,11 @@
-ifeq (y,$(strip $(IIO_EXAMPLE)))
-CFLAGS += -DIIO_EXAMPLE
+ifeq (y,$(strip $(CONFIG_IIO_DEMO_IIO_EXAMPLE)))
+CFLAGS += -DCONFIG_IIO_DEMO_IIO_EXAMPLE
 SRCS += $(PROJECT)/src/examples/iio_example/iio_example.c
 INCS += $(PROJECT)/src/examples/iio_example/iio_example.h
 endif
 
-ifeq (y,$(strip $(IIO_TIMER_TRIGGER_EXAMPLE)))
-CFLAGS += -DIIO_TIMER_TRIGGER_EXAMPLE
+ifeq (y,$(strip $(CONFIG_IIO_DEMO_IIO_TIMER_TRIGGER_EXAMPLE)))
+CFLAGS += -DCONFIG_IIO_DEMO_IIO_TIMER_TRIGGER_EXAMPLE
 SRCS += $(PROJECT)/src/examples/iio_timer_trigger_example/iio_timer_trigger_example.c
 INCS += $(PROJECT)/src/examples/iio_timer_trigger_example/iio_timer_trigger_example.h
 
@@ -16,8 +16,8 @@ SRCS += $(DRIVERS)/adc/adc_demo/iio_adc_demo_trig.c \
         $(DRIVERS)/dac/dac_demo/iio_dac_demo_trig.c
 endif
 
-ifeq (y,$(strip $(IIO_SW_TRIGGER_EXAMPLE)))
-CFLAGS += -DIIO_SW_TRIGGER_EXAMPLE
+ifeq (y,$(strip $(CONFIG_IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE)))
+CFLAGS += -DCONFIG_IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE
 
 SRCS += $(PROJECT)/src/examples/iio_sw_trigger_example/iio_sw_trigger_example.c
 INCS += $(PROJECT)/src/examples/iio_sw_trigger_example/iio_sw_trigger_example.h

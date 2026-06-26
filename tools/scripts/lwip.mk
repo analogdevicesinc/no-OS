@@ -18,16 +18,16 @@ INCS += $(NO-OS)/network/tcp_socket.h
 SRCS += $(NO-OS)/network/tcp_socket.c
 SRCS += $(NO-OS)/network/lwip_raw_socket/lwip_socket.c
 
-ifdef NO_OS_IP
-CFLAGS += -DNO_OS_IP=\"$(NO_OS_IP)\"
+ifdef CONFIG_NO_OS_IP
+CFLAGS += -DCONFIG_NO_OS_IP=\"$(CONFIG_NO_OS_IP)\"
 endif
 
-ifdef NO_OS_NETMASK
-CFLAGS += -DNO_OS_NETMASK=\"$(NO_OS_NETMASK)\"
+ifdef CONFIG_NO_OS_NETMASK
+CFLAGS += -DCONFIG_NO_OS_NETMASK=\"$(CONFIG_NO_OS_NETMASK)\"
 endif
 
-ifdef NO_OS_GATEWAY
-CFLAGS += -DNO_OS_GATEWAY=\"$(NO_OS_GATEWAY)\"
+ifdef CONFIG_NO_OS_GATEWAY
+CFLAGS += -DCONFIG_NO_OS_GATEWAY=\"$(CONFIG_NO_OS_GATEWAY)\"
 endif
 
 ifdef NO_OS_DOMAIN_NAME

@@ -1,0 +1,36 @@
+menu "ADXL355 PMDZ Configuration"
+
+choice ADXL355_PMDZ_EXAMPLE
+	prompt "Example variant"
+	default ADXL355_PMDZ_DUMMY_EXAMPLE
+
+config ADXL355_PMDZ_DUMMY_EXAMPLE
+	bool "Basic dummy example"
+	help
+	  Simple example that reads acceleration data from the ADXL355
+	  and prints it over UART.
+
+config ADXL355_PMDZ_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO framework example. Launches an IIOD server for remote
+	  data acquisition using IIO Oscilloscope or libiio clients.
+
+config ADXL355_PMDZ_IIO_TRIGGER_EXAMPLE
+	bool "IIO trigger example"
+	depends on IIO && IRQ && GPIO
+	help
+	  Interrupt-driven IIO example using the ADXL355 data-ready
+	  pin as a hardware trigger.
+
+config ADXL355_PMDZ_IIO_LWIP_EXAMPLE
+	bool "IIO LWIP example"
+	depends on IIO && LWIP
+	help
+	  IIO server over Ethernet using the LWIP stack and an
+	  ADIN1110 MAC/PHY. Requires the adin1110ebz board overlay.
+
+endchoice
+
+endmenu

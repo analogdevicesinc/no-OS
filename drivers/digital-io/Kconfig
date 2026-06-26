@@ -1,0 +1,20 @@
+menuconfig DIGITAL_IO
+    bool "Digital I/O Drivers"
+    default n
+    help
+      Enable support for digital I/O drivers.
+
+if DIGITAL_IO
+
+config DIGITAL_IO_MAX14906
+    depends on SPI
+    select GPIO
+    bool "Enable MAX14906 driver"
+    default n
+
+config DIGITAL_IO_IIO_MAX14906
+    select DIGITAL_IO_MAX14906
+    bool "Enable MAX14906 IIO driver"
+    default n
+
+endif

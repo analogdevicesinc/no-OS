@@ -28,7 +28,7 @@ rm /home/xvr/MaximSDK_new/Libraries/CMSIS/Device/Maxim/MAX32650/Source/GCC/start
 This is only intended to be run on the MAX32650 target.
 
 1. Open a terminal and navigate to this project directory (if building on Windows, `Git Bash` has to be used). Please remember that switching between the firmware examples requires you to clean the previous build artifacts. You may do this by running `make reset`.
-2.  Type `make RELEASE=y SWIOT1L_STATIC_IP=y SWIOT1L_MQTT_EXAMPLE=y SWIOT1L_DEFAULT_FW=n -j`, in order to build the project. The `RELEASE` flag adds `-O2` optimization and is optional, but without it, the MCU won't be able to keep up with the AD74413R's sampling rate, and some samples will be lost. So, it should only be omitted during debugging.
+2.  Type `make RELEASE=y SWIOT1L_STATIC_IP=y CONFIG_SWIOT1L_MQTT_EXAMPLE=y CONFIG_SWIOT1L_DEFAULT_FW=n -j`, in order to build the project. The `RELEASE` flag adds `-O2` optimization and is optional, but without it, the MCU won't be able to keep up with the AD74413R's sampling rate, and some samples will be lost. So, it should only be omitted during debugging.
 
 A successful build should end with the following terminal output:
 ```
@@ -103,7 +103,7 @@ In case the the ping resulted in a "destination unreachable" error, it may be th
 
 Directly connect the AD-SWIOT1L-SL board to your PC using a SPE -> Ethernet/USB media converter.
 
-By default, the firmware will try to connect to the 192.168.97.1 IP, port 1883. So, you'll need to have an MQTT broker running on the host PC. The broker should listen for connections on an interface which has the 192.168.97.1 IP configured. The IP and port settings may be changed by setting different value to the `SWIOT1L_MQTT_SERVER_IP` and `SWIOT1L_MQTT_SERVER_PORT` make variables when compiling.
+By default, the firmware will try to connect to the 192.168.97.1 IP, port 1883. So, you'll need to have an MQTT broker running on the host PC. The broker should listen for connections on an interface which has the 192.168.97.1 IP configured. The IP and port settings may be changed by setting different value to the `CONFIG_SWIOT1L_MQTT_SERVER_IP` and `CONFIG_SWIOT1L_MQTT_SERVER_PORT` make variables when compiling.
 
 The MQTT protocol version used by the AD-SWIOT1L-SL is V3.1.1. The connection is not using TLS and the client does not use an username or password.
 

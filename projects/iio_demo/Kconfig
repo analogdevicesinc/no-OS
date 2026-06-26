@@ -1,0 +1,18 @@
+menu "IIO Demo Configuration"
+
+choice IIO_DEMO_EXAMPLE
+	prompt "Example variant"
+	default IIO_DEMO_IIO_EXAMPLE
+
+config IIO_DEMO_IIO_EXAMPLE
+	bool "Basic IIO example"
+
+config IIO_DEMO_IIO_TIMER_TRIGGER_EXAMPLE
+	bool "IIO timer trigger example"
+
+config IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE
+	bool "IIO software trigger example"
+
+endchoice
+
+endmenu
