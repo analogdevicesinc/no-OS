@@ -10,9 +10,9 @@ APARD32690_STATIC_IP = n
 endif
 
 ifeq (y,$(strip $(APARD32690_STATIC_IP)))
-NO_OS_IP=192.168.97.50
-NO_OS_NETMASK=255.255.0.0
-NO_OS_GATEWAY=0.0.0.0
+CONFIG_NO_OS_IP=192.168.97.50
+CONFIG_NO_OS_NETMASK=255.255.0.0
+CONFIG_NO_OS_GATEWAY=0.0.0.0
 endif
 
 include ../../tools/scripts/generic_variables.mk

@@ -110,7 +110,7 @@ To override the default static IP address (``192.168.90.60``):
 .. code-block:: bash
 
         make -j$(nproc) -C projects/eval-cn0391-ardz EXAMPLE=iio_lwip_example ADIN1110_STATIC_IP=y \
-            NO_OS_IP=192.168.1.100 NO_OS_NETMASK=255.255.255.0 NO_OS_GATEWAY=192.168.1.1
+            CONFIG_NO_OS_IP=192.168.1.100 CONFIG_NO_OS_NETMASK=255.255.255.0 CONFIG_NO_OS_GATEWAY=192.168.1.1
 
 To enable the optional ``cn0391`` IIO device:
 

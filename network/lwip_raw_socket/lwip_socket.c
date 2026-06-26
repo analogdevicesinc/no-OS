@@ -280,7 +280,7 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 	struct lwip_network_desc *descriptor;
 	struct netif *netif_descriptor;
 	ip4_addr_t ipaddr, netmask, gw;
-#ifdef NO_OS_IP
+#ifdef CONFIG_NO_OS_IP
 	uint32_t raw_netmask[4] = {0};
 	uint32_t raw_gateway[4] = {0};
 	uint32_t raw_ip[4] = {0};
@@ -307,18 +307,18 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 
 	lwip_init();
 
-#ifdef NO_OS_IP
-#ifndef NO_OS_NETMASK
-#error NO_OS_NETMASK not defined
+#ifdef CONFIG_NO_OS_IP
+#ifndef CONFIG_NO_OS_NETMASK
+#error CONFIG_NO_OS_NETMASK not defined
 #endif
-#ifndef NO_OS_GATEWAY
-#error NO_OS_GATEWAY not defined
+#ifndef CONFIG_NO_OS_GATEWAY
+#error CONFIG_NO_OS_GATEWAY not defined
 #endif
-	sscanf(NO_OS_IP, "%d.%d.%d.%d", &raw_ip[0], &raw_ip[1], &raw_ip[2],
+	sscanf(CONFIG_NO_OS_IP, "%d.%d.%d.%d", &raw_ip[0], &raw_ip[1], &raw_ip[2],
 	       &raw_ip[3]);
-	sscanf(NO_OS_NETMASK, "%d.%d.%d.%d", &raw_netmask[0], &raw_netmask[1],
+	sscanf(CONFIG_NO_OS_NETMASK, "%d.%d.%d.%d", &raw_netmask[0], &raw_netmask[1],
 	       &raw_netmask[2], &raw_netmask[3]);
-	sscanf(NO_OS_GATEWAY, "%d.%d.%d.%d", &raw_gateway[0], &raw_gateway[1],
+	sscanf(CONFIG_NO_OS_GATEWAY, "%d.%d.%d.%d", &raw_gateway[0], &raw_gateway[1],
 	       &raw_gateway[2], &raw_gateway[3]);
 
 	IP4_ADDR(&ipaddr, raw_ip[0], raw_ip[1], raw_ip[2], raw_ip[3]);
@@ -345,7 +345,7 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 
 	netif_set_link_up(netif_descriptor);
 
-#ifndef NO_OS_IP
+#ifndef CONFIG_NO_OS_IP
 	uint32_t dhcp_timeout = 20000;
 	ret = dhcp_start(netif_descriptor);
 	if (ret)
