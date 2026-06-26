@@ -1,0 +1,85 @@
+menuconfig METER
+	bool "Energy Meter Drivers"
+	default n
+	help
+	  Enable support for energy metering drivers.
+
+if METER
+
+config METER_ADE7753
+	depends on SPI
+	select GPIO
+	bool "Enable ADE7753 energy meter driver"
+	default n
+
+config METER_ADE7754
+	depends on SPI
+	select GPIO
+	bool "Enable ADE7754 energy meter driver"
+	default n
+
+config METER_ADE7758
+	depends on SPI
+	select GPIO
+	bool "Enable ADE7758 energy meter driver"
+	default n
+
+config METER_ADE7816
+	depends on SPI || I2C
+	select GPIO
+	bool "Enable ADE7816 energy meter driver"
+	default n
+
+config METER_ADE7880
+	depends on SPI
+	select GPIO
+	bool "Enable ADE7880 energy meter driver"
+	default n
+
+config METER_ADE7913
+	depends on SPI
+	select GPIO
+	bool "Enable ADE7913 energy meter driver"
+	default n
+
+config METER_ADE7953
+	depends on SPI
+	select GPIO
+	bool "Enable ADE7953 energy meter driver"
+	default n
+
+config METER_ADE7978
+	depends on SPI
+	select GPIO
+	bool "Enable ADE7978 energy meter driver"
+	default n
+
+config METER_ADE9000
+	depends on SPI
+	bool "Enable ADE9000 energy meter driver"
+	default n
+
+config METER_ADE9078
+	depends on SPI
+	select GPIO
+	bool "Enable ADE9078 energy meter driver"
+	default n
+
+config METER_ADE9113
+	depends on SPI
+	select GPIO
+	bool "Enable ADE9113 energy meter driver"
+	default n
+
+config METER_ADE9153A
+	depends on SPI
+	select GPIO
+	bool "Enable ADE9153A energy meter driver"
+	default n
+
+config METER_ADE9430
+	depends on SPI
+	bool "Enable ADE9430 energy meter driver"
+	default n
+
+endif # METER

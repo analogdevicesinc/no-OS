@@ -1,0 +1,14 @@
+menuconfig CHARGER
+    bool "Battery charger Drivers"
+    default n
+    help
+      Enable support for battery charger drivers.
+
+if CHARGER
+
+config CHARGER_MAX20303
+    depends on I2C
+    bool "Enable MAX20303 battery charger driver"
+    default n
+
+endif

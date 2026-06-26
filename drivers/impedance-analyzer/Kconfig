@@ -1,0 +1,14 @@
+menuconfig IMPEDANCE_ANALYZER
+	bool "Impedance Analyzer Drivers"
+	default n
+	help
+	  Enable support for impedance analyzer drivers.
+
+if IMPEDANCE_ANALYZER
+
+config IMPEDANCE_ANALYZER_AD5933
+	depends on I2C
+	bool "Enable AD5933 impedance analyzer driver"
+	default n
+
+endif # IMPEDANCE_ANALYZER
