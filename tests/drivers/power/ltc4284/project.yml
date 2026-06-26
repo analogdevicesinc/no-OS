@@ -1,0 +1,86 @@
+---
+:project:
+  :use_exceptions: FALSE
+  :use_test_preprocessor: :all
+  :use_auxiliary_dependencies: TRUE
+  :build_root: build
+  :test_file_prefix: test_
+  :which_ceedling: gem
+  :ceedling_version: 1.0.1
+  :default_tasks:
+    - test:all
+
+:environment:
+
+:extension:
+  :executable: .out
+
+:paths:
+  :test:
+    - test
+  :source:
+    - ../../../../drivers/power/ltc4284/**
+  :support:
+    - test/support
+  :include:
+    - ../../../../include/**
+    - ../../../../drivers/power/ltc4284/**
+
+:defines:
+  :common: &common_defines []
+  :test:
+    - *common_defines
+    - TEST
+  :test_preprocess:
+    - *common_defines
+    - TEST
+
+:cmock:
+  :mock_prefix: mock_
+  :when_no_prototypes: :warn
+  :enforce_strict_ordering: FALSE
+  :plugins:
+    - :ignore
+    - :callback
+    - :return_thru_ptr
+  :treat_as:
+    uint8:    HEX8
+    uint16:   HEX16
+    uint32:   UINT32
+    int8:     INT8
+    bool:     UINT8
+
+:gcov:
+  :reports:
+    - HtmlDetailed
+  :gcovr:
+    :html_medium_threshold: 75
+    :html_high_threshold: 90
+    :report_include: "../../../../drivers/power/ltc4284/.*"
+
+:tools:
+  :release_compiler:
+    :executable: gcc
+    :arguments:
+      - -g
+      - -I"$": COLLECTION_PATHS_SOURCE_INCLUDE_VENDOR
+      - -D$: COLLECTION_DEFINES_RELEASE_AND_VENDOR
+      - -c "${1}"
+      - -o "${2}"
+  :release_linker:
+    :executable: gcc
+    :arguments:
+      - -o "${2}"
+      - "${1}"
+
+:report_tests_log_factory:
+  :reports:
+    - junit
+
+:plugins:
+  :enabled:
+    - report_tests_pretty_stdout
+    - module_generator
+    - report_tests_raw_output_log
+    - gcov
+    - report_tests_log_factory
