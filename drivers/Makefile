@@ -8,7 +8,8 @@ SKIPDIR = -path ./platform -prune -o \
 	-path ./rf-transceiver/koror -prune -o	\
 	-path ./rf-transceiver/palma -prune -o	\
 	-path ./net/oa_tc6 -prune -o \
-	-path ./motor/tmc5240 -prune -o
+	-path ./motor/tmc5240 -prune -o \
+	-path ./net/xemacps -prune -o
 
 INCLUDES = -I../include/ \
 	 -I../projects/drivers/util/ \
@@ -34,7 +35,8 @@ INCLUDES = -I../include/ \
 	 -I./gmsl/common \
 	 -I./gmsl/serializer \
 	 -I./gmsl/deserializer \
-	 -I./gmsl/gmsl_dbg
+	 -I./gmsl/gmsl_dbg \
+	 -I../capi/include
 
 IIOD_FLAGS += -DIIO_SUPPORT
 
