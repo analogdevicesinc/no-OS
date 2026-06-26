@@ -1,0 +1,7 @@
+# 24xx32a
+no_os_sources_ifdef(CONFIG_EEPROM_DRIVERS_24XX32A ${CMAKE_CURRENT_SOURCE_DIR}/24xx32a/24xx32a.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/24xx32a)
+
+# m24512
+no_os_sources_ifdef(CONFIG_EEPROM_DRIVERS_M24512 ${CMAKE_CURRENT_SOURCE_DIR}/m24512/m24512.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/m24512)
