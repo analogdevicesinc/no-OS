@@ -1,0 +1,24 @@
+menuconfig MUX
+	bool "Multiplexer Drivers"
+	default n
+	help
+	  Enable support for multiplexer/demultiplexer drivers.
+
+if MUX
+
+config MUX_ADG2404
+	depends on GPIO
+	bool "Enable ADG2404 multiplexer driver"
+	default n
+
+config MUX_ADGS1408
+	depends on SPI
+	bool "Enable ADGS1408 multiplexer driver"
+	default n
+
+config MUX_ADGS5412
+	depends on SPI
+	bool "Enable ADGS5412 multiplexer driver"
+	default n
+
+endif # MUX

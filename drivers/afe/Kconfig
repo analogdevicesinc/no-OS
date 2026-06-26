@@ -1,0 +1,42 @@
+menuconfig AFE
+    bool "AFE Drivers"
+    default n
+    help
+      Enable support for Analog Front End (AFE) drivers.
+
+      This section contains drivers for various AFE devices that provide
+      analog signal conditioning, amplification, and processing.
+
+if AFE
+
+config AFE_AD4110
+    depends on SPI
+    select GPIO
+    select IRQ
+    bool "Enable AD4110 AFE driver"
+    default n
+
+config AFE_AD413X
+    depends on SPI
+    select GPIO
+    select IRQ
+    bool "Enable AD413X AFE driver"
+    default n
+
+config AFE_IIO_AD413X
+    select AFE_AD413X
+    bool "Enable AD413X IIO driver"
+    default n
+
+config AFE_AD5940
+    depends on SPI
+    select GPIO
+    bool "Enable AD5940 AFE driver"
+    default n
+
+config AFE_IIO_AD5940
+    select AFE_AD5940
+    bool "Enable AD5940 IIO driver"
+    default n
+
+endif # AFE

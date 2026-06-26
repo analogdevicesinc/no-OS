@@ -1,0 +1,20 @@
+menuconfig EEPROM_DRIVERS
+	bool "EEPROM Device Drivers"
+	default n
+	help
+	  Enable support for EEPROM device drivers.
+
+if EEPROM_DRIVERS
+
+config EEPROM_DRIVERS_24XX32A
+	depends on I2C
+	bool "Enable 24xx32a EEPROM driver"
+	default n
+
+config EEPROM_DRIVERS_M24512
+	depends on I2C
+	select GPIO
+	bool "Enable M24512 EEPROM driver"
+	default n
+
+endif # EEPROM_DRIVERS

@@ -1,0 +1,36 @@
+menuconfig AMPLIFIERS
+	bool "Amplifier Drivers"
+	default n
+	help
+	  Enable support for amplifier drivers.
+
+if AMPLIFIERS
+
+config AMPLIFIERS_ADA4250
+	depends on SPI
+	select GPIO
+	bool "Enable ADA4250 amplifier driver"
+	default n
+
+config AMPLIFIERS_IIO_ADA4250
+	select AMPLIFIERS_ADA4250
+	bool "Enable ADA4250 IIO driver"
+	default n
+
+config AMPLIFIERS_ADHV4710
+	depends on SPI
+	select GPIO
+	bool "Enable ADHV4710 amplifier driver"
+	default n
+
+config AMPLIFIERS_ADL8113
+	depends on GPIO
+	bool "Enable ADL8113 amplifier driver"
+	default n
+
+config AMPLIFIERS_IIO_ADL8113
+	select AMPLIFIERS_ADL8113
+	bool "Enable ADL8113 IIO driver"
+	default n
+
+endif # AMPLIFIERS
