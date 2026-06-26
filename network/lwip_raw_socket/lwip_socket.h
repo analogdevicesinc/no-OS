@@ -44,12 +44,12 @@
 #define NO_OS_MTU_SIZE		1500
 #define NO_OS_MAX_SOCKETS	10
 
-#ifndef NO_OS_DOMAIN_NAME
-#define NO_OS_DOMAIN_NAME	"analog"
+#ifndef CONFIG_NO_OS_DOMAIN_NAME
+#define CONFIG_NO_OS_DOMAIN_NAME	"analog"
 #endif
 
-#ifndef NO_OS_LWIP_INIT_ONETIME
-#define NO_OS_LWIP_INIT_ONETIME		0
+#ifndef CONFIG_NO_OS_LWIP_INIT_ONETIME
+#define CONFIG_NO_OS_LWIP_INIT_ONETIME		0
 #endif
 
 struct lwip_network_desc;
