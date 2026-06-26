@@ -125,7 +125,8 @@ ifeq ($(TARGET_LCASE), max32650)
 INCS := $(filter-out $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Include/mxc_device.h, $(INCS))
 endif
 
-ifeq ($(NO_OS_USB_UART),y)
+ifeq ($(CONFIG_USB_UART_MAXIM),y)
+CFLAGS += -DCONFIG_USB_UART_MAXIM
 SRCS +=	$(MAXIM_LIBRARIES)/MAXUSB/src/core/usb_event.c
 INCS += $(MAXIM_LIBRARIES)/MAXUSB/include/core/usb.h \
 	$(MAXIM_LIBRARIES)/MAXUSB/include/core/usb_protocol.h \
