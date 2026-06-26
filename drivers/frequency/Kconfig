@@ -1,0 +1,183 @@
+menuconfig FREQUENCY
+	bool "Frequency/Clock Drivers"
+	default n
+	help
+	  Enable support for frequency synthesizer and clock drivers.
+
+if FREQUENCY
+
+config FREQUENCY_AD9508
+	depends on SPI
+	bool "Enable AD9508 clock driver"
+	default n
+
+config FREQUENCY_AD9517
+	depends on SPI
+	bool "Enable AD9517 clock driver"
+	default n
+
+config FREQUENCY_AD9523
+	depends on SPI
+	bool "Enable AD9523 clock driver"
+	default n
+
+config FREQUENCY_AD9528
+	depends on SPI
+	select GPIO
+	bool "Enable AD9528 clock driver"
+	default n
+
+config FREQUENCY_AD9545
+	depends on SPI || I2C
+	select GPIO
+	bool "Enable AD9545 clock driver"
+	default n
+
+config FREQUENCY_AD9553
+	depends on SPI
+	bool "Enable AD9553 clock driver"
+	default n
+
+config FREQUENCY_AD9833
+	depends on SPI
+	select GPIO
+	bool "Enable AD9833 waveform generator driver"
+	default n
+
+config FREQUENCY_ADF4030
+	depends on SPI
+	bool "Enable ADF4030 PLL driver"
+	default n
+
+config FREQUENCY_IIO_ADF4030
+	select FREQUENCY_ADF4030
+	bool "Enable ADF4030 IIO driver"
+	default n
+
+config FREQUENCY_ADF4106
+	depends on SPI
+	select GPIO
+	bool "Enable ADF4106 PLL driver"
+	default n
+
+config FREQUENCY_ADF4153
+	depends on SPI
+	select GPIO
+	bool "Enable ADF4153 PLL driver"
+	default n
+
+config FREQUENCY_ADF4156
+	depends on SPI
+	select GPIO
+	bool "Enable ADF4156 PLL driver"
+	default n
+
+config FREQUENCY_ADF4157
+	depends on SPI
+	select GPIO
+	bool "Enable ADF4157 PLL driver"
+	default n
+
+config FREQUENCY_ADF4350
+	depends on SPI
+	bool "Enable ADF4350 PLL driver"
+	default n
+
+config FREQUENCY_ADF4368
+	depends on SPI
+	bool "Enable ADF4368 PLL driver"
+	default n
+
+config FREQUENCY_IIO_ADF4368
+	select FREQUENCY_ADF4368
+	bool "Enable ADF4368 IIO driver"
+	default n
+
+config FREQUENCY_ADF4371
+	depends on SPI
+	bool "Enable ADF4371 PLL driver"
+	default n
+
+config FREQUENCY_ADF4377
+	depends on SPI
+	select GPIO
+	bool "Enable ADF4377 PLL driver"
+	default n
+
+config FREQUENCY_IIO_ADF4377
+	select FREQUENCY_ADF4377
+	bool "Enable ADF4377 IIO driver"
+	default n
+
+config FREQUENCY_ADF4382
+	depends on SPI
+	bool "Enable ADF4382 PLL driver"
+	default n
+
+config FREQUENCY_IIO_ADF4382
+	select FREQUENCY_ADF4382
+	bool "Enable ADF4382 IIO driver"
+	default n
+
+config FREQUENCY_ADF5355
+	depends on SPI
+	bool "Enable ADF5355 PLL driver"
+	default n
+
+config FREQUENCY_ADF5611
+	depends on SPI
+	bool "Enable ADF5611 PLL driver"
+	default n
+
+config FREQUENCY_IIO_ADF5611
+	select FREQUENCY_ADF5611
+	bool "Enable ADF5611 IIO driver"
+	default n
+
+config FREQUENCY_ADF5902
+	depends on SPI
+	select GPIO
+	bool "Enable ADF5902 FMCW radar driver"
+	default n
+
+config FREQUENCY_IIO_ADF5902
+	select FREQUENCY_ADF5902
+	bool "Enable ADF5902 IIO driver"
+	default n
+
+config FREQUENCY_ADMFM2000
+	depends on GPIO
+	bool "Enable ADMFM2000 microwave down converter driver"
+	default n
+
+config FREQUENCY_IIO_ADMFM2000
+	select FREQUENCY_ADMFM2000
+	bool "Enable ADMFM2000 IIO driver"
+	default n
+
+config FREQUENCY_ADMV1013
+	depends on SPI
+	bool "Enable ADMV1013 upconverter driver"
+	default n
+
+config FREQUENCY_ADMV1014
+	depends on SPI
+	bool "Enable ADMV1014 downconverter driver"
+	default n
+
+config FREQUENCY_ADRF6780
+	depends on SPI
+	bool "Enable ADRF6780 upconverter driver"
+	default n
+
+config FREQUENCY_HMC7044
+	depends on SPI
+	bool "Enable HMC7044 clock driver"
+	default n
+
+config FREQUENCY_LTC6953
+	depends on SPI
+	bool "Enable LTC6953 clock driver"
+	default n
+
+endif # FREQUENCY

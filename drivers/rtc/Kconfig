@@ -1,0 +1,19 @@
+menuconfig RTC_DRIVERS
+	bool "RTC Device Drivers"
+	default n
+	help
+	  Enable support for Real-Time Clock (RTC) device drivers.
+
+if RTC_DRIVERS
+
+config RTC_DRIVERS_MAX31343
+	depends on I2C
+	bool "Enable MAX31343 RTC driver"
+	default n
+
+config RTC_DRIVERS_PCF85263
+	depends on I2C
+	bool "Enable PCF85263 RTC driver"
+	default n
+
+endif # RTC_DRIVERS

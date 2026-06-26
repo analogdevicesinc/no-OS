@@ -1,0 +1,15 @@
+menuconfig RESOLVER
+	bool "Resolver Drivers"
+	default n
+	help
+	  Enable support for resolver-to-digital converter drivers.
+
+if RESOLVER
+
+config RESOLVER_AD2S1210
+	depends on SPI
+	select GPIO
+	bool "Enable AD2S1210 resolver driver"
+	default n
+
+endif # RESOLVER
