@@ -36,7 +36,7 @@
 #include "no_os_uart.h"
 #include "no_os_util.h"
 
-#if defined(APARD32690_ECHO_SERVER_EXAMPLE)
+#if defined(CONFIG_APARD32690_ECHO_SERVER_EXAMPLE)
 #include "lwip_socket.h"
 #include "lwip_adin1110.h"
 #endif
@@ -48,11 +48,11 @@
 
 extern struct no_os_uart_init_param uart_ip;
 
-#if defined(APARD32690_ADIN1110_STANDALONE_EXAMPLE)
+#if defined(CONFIG_APARD32690_ADIN1110_STANDALONE_EXAMPLE)
 extern struct adin1110_init_param adin1110_ip;
 #endif
 
-#if defined(APARD32690_ECHO_SERVER_EXAMPLE)
+#if defined(CONFIG_APARD32690_ECHO_SERVER_EXAMPLE)
 extern struct lwip_network_param lwip_ip;
 extern struct adin1110_init_param adin1110_ip;
 #endif
