@@ -55,9 +55,6 @@ CFLAGS += -DNO_OS_VERSION=$(GIT_VERSION) \
 #Variables for compiling flags in generic.mk
 CFLAGS_MFLOAT_TYPE 	?= hard
 
-ifeq '$(NO_OS_USB_UART)' 'y'
-CFLAGS += -DNO_OS_USB_UART
-endif
 #------------------------------------------------------------------------------
 #                          EVALUATE PLATFORM
 #------------------------------------------------------------------------------
