@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   IIO_SW_TRIGGER_EXAMPLE.c
+ *   @file   iio_timer_trigger_example.c
  *   @brief  Implementation of IIO trigger example for iio_demo project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
