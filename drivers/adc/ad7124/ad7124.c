@@ -4,7 +4,7 @@
 *   	     Devices: AD7124-4, AD7124-8
 *
 ********************************************************************************
-* Copyright 2015-2019, 2023(c) Analog Devices, Inc.
+* Copyright 2015-2019, 2023, 2026(c) Analog Devices, Inc.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are met:
@@ -1028,6 +1028,448 @@ int ad7124_set_power_mode(struct ad7124_dev *device,
 }
 
 /***************************************************************************//**
+ * @brief Get the setup ID assigned to a hardware channel (reads from HW).
+ * @param dev      - The device structure.
+ * @param ch_no    - Hardware channel number (0-15).
+ * @param setup_id - Output: setup index (0-7).
+ * @return Returns 0 for success or negative error code otherwise.
+******************************************************************************/
+int32_t ad7124_get_ch_setup(struct ad7124_dev *dev,
+			    uint8_t ch_no,
+			    uint8_t *setup_id)
+{
+	int32_t ret;
+	uint32_t reg_val;
+
+	ret = ad7124_read_register2(dev, AD7124_Channel_0 + ch_no, &reg_val);
+	if (ret)
+		return ret;
+
+	*setup_id = (reg_val & AD7124_CHMAP_REG_SETUP_SEL_MSK) >> 12;
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Get bipolar/unipolar mode for a hardware channel.
+ * @param dev     - The device structure.
+ * @param ch_no   - Hardware channel number (0-15).
+ * @param bipolar - Output: true if bipolar, false if unipolar.
+ * @return Returns 0 for success or negative error code otherwise.
+******************************************************************************/
+int32_t ad7124_get_bipolar(struct ad7124_dev *dev,
+			   uint8_t ch_no,
+			   bool *bipolar)
+{
+	int32_t ret;
+	uint8_t setup_id;
+	uint32_t reg_val;
+
+	ret = ad7124_get_ch_setup(dev, ch_no, &setup_id);
+	if (ret)
+		return ret;
+
+	ret = ad7124_read_register2(dev, AD7124_Config_0 + setup_id, &reg_val);
+	if (ret)
+		return ret;
+
+	*bipolar = (reg_val & AD7124_CFG_REG_BIPOLAR) != 0;
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Get PGA bits (0-7, gain = 2^pga_bits) for a hardware channel.
+ * @param dev      - The device structure.
+ * @param ch_no    - Hardware channel number (0-15).
+ * @param pga_bits - Output: PGA field value (0-7).
+ * @return Returns 0 for success or negative error code otherwise.
+******************************************************************************/
+int32_t ad7124_get_pga(struct ad7124_dev *dev,
+		       uint8_t ch_no,
+		       uint8_t *pga_bits)
+{
+	int32_t ret;
+	uint8_t setup_id;
+	uint32_t reg_val;
+
+	ret = ad7124_get_ch_setup(dev, ch_no, &setup_id);
+	if (ret)
+		return ret;
+
+	ret = ad7124_read_register2(dev, AD7124_Config_0 + setup_id, &reg_val);
+	if (ret)
+		return ret;
+
+	*pga_bits = reg_val & AD7124_SETUP_CONF_REG_PGA_MSK;
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Get reference voltage in mV for a hardware channel.
+ * @param dev     - The device structure.
+ * @param ch_no   - Hardware channel number (0-15).
+ * @param vref_mv - Output: reference voltage in mV.
+ * @return Returns 0 for success or negative error code otherwise.
+******************************************************************************/
+int32_t ad7124_get_vref_mv(struct ad7124_dev *dev,
+			   uint8_t ch_no,
+			   uint32_t *vref_mv)
+{
+	int32_t ret;
+	uint8_t setup_id;
+
+	ret = ad7124_get_ch_setup(dev, ch_no, &setup_id);
+	if (ret)
+		return ret;
+
+	*vref_mv = dev->vref_mv[setup_id];
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Set reference voltage in mV for a setup.
+ * @param dev      - The device structure.
+ * @param setup_id - Setup index (0-7).
+ * @param vref_mv  - Reference voltage in mV.
+ * @return Returns 0 for success or negative error code otherwise.
+******************************************************************************/
+int32_t ad7124_set_vref_mv(struct ad7124_dev *dev,
+			   uint8_t setup_id,
+			   uint32_t vref_mv)
+{
+	if (setup_id >= AD7124_MAX_SETUPS)
+		return -EINVAL;
+
+	dev->vref_mv[setup_id] = vref_mv;
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Get filter type for a setup (reads from hardware).
+ * @param dev      - The device structure.
+ * @param setup_id - Setup index (0-7).
+ * @param ftype    - Output: filter type enum value.
+ * @return Returns 0 for success or negative error code otherwise.
+******************************************************************************/
+int32_t ad7124_get_filter_type(struct ad7124_dev *dev,
+			       uint8_t setup_id,
+			       enum ad7124_filter_type *ftype)
+{
+	int32_t ret;
+	uint32_t reg_val;
+	uint8_t filter, rej60, post;
+
+	ret = ad7124_read_register2(dev, AD7124_Filter_0 + setup_id, &reg_val);
+	if (ret)
+		return ret;
+
+	filter = (reg_val >> 21) & 0x7;
+	rej60  = (reg_val >> 20) & 0x1;
+	post   = (reg_val >> 17) & 0x7;
+
+	switch (filter) {
+	case 0:
+		*ftype = rej60 ? AD7124_FILTER_TYPE_SINC4_REJ60
+			 : AD7124_FILTER_TYPE_SINC4;
+		break;
+	case 2:
+		*ftype = rej60 ? AD7124_FILTER_TYPE_SINC3_REJ60
+			 : AD7124_FILTER_TYPE_SINC3;
+		break;
+	case 4:
+		*ftype = AD7124_FILTER_TYPE_SINC4_SINC1;
+		break;
+	case 5:
+		*ftype = AD7124_FILTER_TYPE_SINC3_SINC1;
+		break;
+	case 7:
+		switch (post) {
+		case 2:
+			*ftype = AD7124_FILTER_TYPE_SINC3_PF1;
+			break;
+		case 3:
+			*ftype = AD7124_FILTER_TYPE_SINC3_PF2;
+			break;
+		case 5:
+			*ftype = AD7124_FILTER_TYPE_SINC3_PF3;
+			break;
+		case 6:
+			*ftype = AD7124_FILTER_TYPE_SINC3_PF4;
+			break;
+		default:
+			return -EINVAL;
+		}
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Set filter type for a setup (writes to hardware).
+ * @param dev      - The device structure.
+ * @param setup_id - Setup index (0-7).
+ * @param ftype    - Filter type enum value.
+ * @return Returns 0 for success or negative error code otherwise.
+******************************************************************************/
+int32_t ad7124_set_filter_type(struct ad7124_dev *dev,
+			       uint8_t setup_id,
+			       enum ad7124_filter_type ftype)
+{
+	int32_t ret;
+	uint32_t reg_val;
+	uint8_t filter = 0, rej60 = 0, post = 0;
+
+	switch (ftype) {
+	case AD7124_FILTER_TYPE_SINC4:
+		filter = 0;
+		rej60 = 0;
+		break;
+	case AD7124_FILTER_TYPE_SINC4_REJ60:
+		filter = 0;
+		rej60 = 1;
+		break;
+	case AD7124_FILTER_TYPE_SINC3:
+		filter = 2;
+		rej60 = 0;
+		break;
+	case AD7124_FILTER_TYPE_SINC3_REJ60:
+		filter = 2;
+		rej60 = 1;
+		break;
+	case AD7124_FILTER_TYPE_SINC4_SINC1:
+		filter = 4;
+		break;
+	case AD7124_FILTER_TYPE_SINC3_SINC1:
+		filter = 5;
+		break;
+	case AD7124_FILTER_TYPE_SINC3_PF1:
+		filter = 7;
+		post = 2;
+		break;
+	case AD7124_FILTER_TYPE_SINC3_PF2:
+		filter = 7;
+		post = 3;
+		break;
+	case AD7124_FILTER_TYPE_SINC3_PF3:
+		filter = 7;
+		post = 5;
+		break;
+	case AD7124_FILTER_TYPE_SINC3_PF4:
+		filter = 7;
+		post = 6;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	ret = ad7124_read_register2(dev, AD7124_Filter_0 + setup_id, &reg_val);
+	if (ret)
+		return ret;
+
+	reg_val &= ~(AD7124_FILT_REG_FILTER(0x7) | AD7124_FILT_REG_REJ60 |
+		     AD7124_FILT_REG_POST_FILTER(0x7));
+	reg_val |= AD7124_FILT_REG_FILTER(filter);
+	if (rej60)
+		reg_val |= AD7124_FILT_REG_REJ60;
+	reg_val |= AD7124_FILT_REG_POST_FILTER(post);
+
+	return ad7124_write_register2(dev, AD7124_Filter_0 + setup_id, reg_val);
+}
+
+/***************************************************************************//**
+ * @brief Get the 3dB cutoff factor (×1000) for a given filter type.
+ *        Matching Linux kernel ad7124 driver values.
+ * @param ftype - Filter type enum value.
+ * @return Factor × 1000.
+******************************************************************************/
+uint32_t ad7124_get_3db_filter_factor(enum ad7124_filter_type ftype)
+{
+	switch (ftype) {
+	case AD7124_FILTER_TYPE_SINC3:
+	case AD7124_FILTER_TYPE_SINC3_REJ60:
+	case AD7124_FILTER_TYPE_SINC3_SINC1:
+		return 272;
+	case AD7124_FILTER_TYPE_SINC3_PF1:
+		return 633;
+	case AD7124_FILTER_TYPE_SINC3_PF2:
+		return 605;
+	case AD7124_FILTER_TYPE_SINC3_PF3:
+		return 669;
+	case AD7124_FILTER_TYPE_SINC3_PF4:
+		return 759;
+	case AD7124_FILTER_TYPE_SINC4:
+	case AD7124_FILTER_TYPE_SINC4_REJ60:
+	case AD7124_FILTER_TYPE_SINC4_SINC1:
+	default:
+		return 230;
+	}
+}
+
+/***************************************************************************//**
+ * @brief Get ODR for a hardware channel (resolves setup via register read).
+ * @param dev   - The device structure.
+ * @param ch_no - Hardware channel number (0-15).
+ * @return ODR in sps, or negative error code.
+******************************************************************************/
+int32_t ad7124_get_odr_ch(struct ad7124_dev *dev, uint8_t ch_no)
+{
+	int32_t ret;
+	uint8_t setup_id;
+	float odr_f;
+
+	ret = ad7124_get_ch_setup(dev, ch_no, &setup_id);
+	if (ret)
+		return ret;
+
+	odr_f = ad7124_get_odr(dev, setup_id);
+	if (odr_f < 0)
+		return (int32_t)odr_f;
+
+	return (int32_t)(odr_f + 0.5f);
+}
+
+/***************************************************************************//**
+ * @brief Set ODR for a hardware channel (resolves setup via register read).
+ * @param dev    - The device structure.
+ * @param odr_hz - Desired output data rate in sps.
+ * @param ch_no  - Hardware channel number (0-15).
+ * @return Returns 0 for success or negative error code otherwise.
+******************************************************************************/
+int32_t ad7124_set_odr_ch(struct ad7124_dev *dev,
+			  int32_t odr_hz,
+			  uint8_t ch_no)
+{
+	int32_t ret;
+	uint8_t setup_id;
+
+	ret = ad7124_get_ch_setup(dev, ch_no, &setup_id);
+	if (ret)
+		return ret;
+
+	return ad7124_set_odr(dev, (float)odr_hz, setup_id);
+}
+
+/***************************************************************************//**
+ * @brief Perform system zero-scale or full-scale calibration on a channel.
+ * @param dev        - The device structure.
+ * @param ch_no      - Hardware channel number (0-15).
+ * @param full_scale - true for full-scale calibration, false for zero-scale.
+ * @return Returns 0 for success or negative error code otherwise.
+******************************************************************************/
+int32_t ad7124_do_calibration(struct ad7124_dev *dev,
+			      uint8_t ch_no,
+			      bool full_scale)
+{
+	int32_t ret;
+	enum ad7124_mode calib_mode;
+
+	ret = ad7124_set_channel_status(dev, ch_no, true);
+	if (ret)
+		return ret;
+
+	calib_mode = full_scale ? AD7124_SYS_ZERO_SCALE_GAIN
+		     : AD7124_SYS_ZERO_SCALE_OFF;
+
+	ret = ad7124_set_adc_mode(dev, calib_mode);
+	if (ret)
+		goto restore;
+
+	ret = ad7124_wait_for_conv_ready(dev, 10000);
+
+restore:
+	ad7124_set_channel_status(dev, ch_no, false);
+	ad7124_set_adc_mode(dev, AD7124_CONTINUOUS);
+	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Read one raw sample from the internal temperature sensor (hw ch 15).
+ *        Configures hw channel 15 with setup 7 (bipolar, internal ref, PGA=1,
+ *        AINP=TEMP_SENSOR, AINM=AVSS), reads one sample, then disables ch 15.
+ * @param dev - The device structure.
+ * @param val - Output: raw ADC value.
+ * @return Returns 0 for success or negative error code otherwise.
+******************************************************************************/
+int32_t ad7124_read_temp_raw(struct ad7124_dev *dev, int32_t *val)
+{
+	int32_t ret;
+	struct ad7124_analog_inputs temp_input = {
+		.ainp = AD7124_TEMP_SENSOR,
+		.ainm = AD7124_AVSS,
+	};
+
+	/* Stop the ADC before touching registers to ensure DRDY is stable. */
+	ret = ad7124_set_adc_mode(dev, AD7124_IDLE);
+	if (ret)
+		return ret;
+
+	ret = ad7124_connect_analog_input(dev, 15, temp_input);
+	if (ret)
+		return ret;
+
+	ret = ad7124_assign_setup(dev, 15, 7);
+	if (ret)
+		return ret;
+
+	ret = ad7124_set_polarity(dev, true, 7);
+	if (ret)
+		return ret;
+
+	ret = ad7124_set_reference_source(dev, INTERNAL_REF, 7, true);
+	if (ret)
+		return ret;
+
+	ret = ad7124_set_pga(dev, AD7124_PGA_1, 7);
+	if (ret)
+		return ret;
+
+	/*
+	 * Write Filter_7 to hardware. The setup() path does not write filter
+	 * registers, so hardware may be at chip reset default (FS=384, ~6 Hz in
+	 * low power mode). The software cache has FS=1 (2400 Hz), which gives a
+	 * 0.42 ms conversion time — well within the 240 ms poll timeout.
+	 */
+	ret = ad7124_write_register2(dev, AD7124_Filter_7,
+				     dev->regs[AD7124_Filter_7].value);
+	if (ret)
+		return ret;
+
+	ret = ad7124_set_channel_status(dev, 15, true);
+	if (ret)
+		return ret;
+
+	/*
+	 * Use SINGLE conversion mode: the ADC performs exactly one conversion
+	 * then auto-returns to IDLE. This prevents DRDY from cycling again
+	 * before the channel is disabled, which would cause SPI_IGNORE_ERR and
+	 * a device stall. This mirrors what the Linux kernel driver does via
+	 * ad_sigma_delta_single_conversion().
+	 */
+	ret = ad7124_set_adc_mode(dev, AD7124_SINGLE);
+	if (ret)
+		goto disable;
+
+	ret = ad7124_wait_for_conv_ready(dev, 10000);
+	if (ret)
+		goto disable;
+
+	ret = ad7124_read_data(dev, val);
+
+disable:
+	/* Ensure ADC is idle before disabling the channel. */
+	ad7124_set_adc_mode(dev, AD7124_IDLE);
+	ad7124_set_channel_status(dev, 15, false);
+	return ret;
+}
+
+/***************************************************************************//**
  * @brief Initializes the AD7124.
  * @param device     - The device structure.
  * @param init_param - The structure that contains the device initial
@@ -1048,6 +1490,10 @@ int32_t ad7124_setup(struct ad7124_dev **device,
 
 	dev->regs = init_param->regs;
 	dev->spi_rdy_poll_cnt = init_param->spi_rdy_poll_cnt;
+
+	/* Default vref to 2500 mV (internal reference) for all setups */
+	for (setup_index = 0; setup_index < AD7124_MAX_SETUPS; setup_index++)
+		dev->vref_mv[setup_index] = 2500;
 
 	/* Initialize the SPI communication. */
 	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
@@ -1086,6 +1532,7 @@ int32_t ad7124_setup(struct ad7124_dev **device,
 			break;
 
 		default:
+			ret = -ENODEV;
 			goto error_spi;
 		}
 	}
@@ -1098,6 +1545,7 @@ int32_t ad7124_setup(struct ad7124_dev **device,
 			break;
 
 		default:
+			ret = -ENODEV;
 			goto error_spi;
 		}
 	}
