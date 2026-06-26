@@ -1,0 +1,39 @@
+menu "Network Configuration"
+	depends on LWIP || W5500
+
+config NO_OS_STATIC_IP
+	bool "Use static IP address"
+	default n
+	help
+	  Use a static IP address instead of DHCP. When enabled,
+	  NO_OS_IP, NO_OS_NETMASK and NO_OS_GATEWAY must be configured.
+
+config NO_OS_IP
+	string "IP address"
+	depends on NO_OS_STATIC_IP
+
+config NO_OS_NETMASK
+	string "Netmask"
+	depends on NO_OS_STATIC_IP
+
+config NO_OS_GATEWAY
+	string "Gateway"
+	depends on NO_OS_STATIC_IP
+
+config NO_OS_DOMAIN_NAME
+	string "mDNS host name"
+	default "analog"
+	depends on LWIP
+	help
+	  Host name advertised by the lwIP mDNS responder (the board is
+	  reachable as <name>.local). Defaults to "analog".
+
+config NO_OS_LWIP_INIT_ONETIME
+	bool "Initialize LWIP only once"
+	default n
+	depends on LWIP
+	help
+	  When enabled, the LWIP network stack is initialized only
+	  once and subsequent calls reuse the existing descriptor.
+
+endmenu

@@ -1,0 +1,68 @@
+menuconfig POTENTIOMETER
+	bool "Digital Potentiometer Drivers"
+	default n
+	help
+	  Enable support for digital potentiometer drivers.
+
+if POTENTIOMETER
+
+config POTENTIOMETER_AD5110
+	depends on I2C
+	bool "Enable AD5110 digital potentiometer driver"
+	default n
+
+config POTENTIOMETER_AD514X
+	depends on SPI || I2C
+	select GPIO
+	bool "Enable AD514x digital potentiometer driver (AD5141/AD5142/AD5143/AD5144)"
+	default n
+
+config POTENTIOMETER_AD5161
+	depends on SPI || I2C
+	select GPIO
+	bool "Enable AD5161 digital potentiometer driver"
+	default n
+
+config POTENTIOMETER_AD5165
+	depends on SPI || I2C
+	select GPIO
+	bool "Enable AD5165 digital potentiometer driver"
+	default n
+
+config POTENTIOMETER_AD5171
+	depends on SPI || I2C
+	select GPIO
+	bool "Enable AD5171 digital potentiometer driver"
+	default n
+
+config POTENTIOMETER_AD5242
+	depends on SPI || I2C
+	select GPIO
+	bool "Enable AD5242 digital potentiometer driver"
+	default n
+
+config POTENTIOMETER_AD5246
+	depends on SPI || I2C
+	select GPIO
+	bool "Enable AD5246 digital potentiometer driver"
+	default n
+
+config POTENTIOMETER_AD5259
+	depends on SPI || I2C
+	select GPIO
+	bool "Enable AD5259 digital potentiometer driver"
+	default n
+
+config POTENTIOMETER_AD525X
+	depends on SPI || I2C
+	select GPIO
+	bool "Enable AD525x digital potentiometer driver"
+	default n
+
+config POTENTIOMETER_AD5293
+	depends on SPI
+	select GPIO
+	bool "Enable AD5293 digital potentiometer driver"
+	default n
+
+endif # POTENTIOMETER

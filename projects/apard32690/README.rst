@@ -15,10 +15,10 @@ Building the project
 
 The project includes 2 different examples:
 
-1. basic_example - may be selected by setting the APARD32690_BASIC_EXAMPLE = y (and all the other examples to n) in the main Makefile.
+1. basic_example - may be selected by setting the CONFIG_APARD32690_BASIC_EXAMPLE = y (and all the other examples to n) in the main Makefile.
 This example is meant to print "Hello world" over UART0. Make sure to have jumpers in the position 2-3 on headers P50 and P55.
 
-2. tcp_echo_server (selected by default) - may be selected by setting the APARD32690_ECHO_SERVER_EXAMPLE = y (and all the other examples to n) in the main Makefile.
+2. tcp_echo_server (selected by default) - may be selected by setting the CONFIG_APARD32690_ECHO_SERVER_EXAMPLE = y (and all the other examples to n) in the main Makefile.
 This will start a TCP server using the interface ADIN1110 is connected to (the default settings are IP: 192.168.97.40 port: 10000). It will reply back to the connected client with the
 characters it receives. The actual IP address, netmask, and gateway used at runtime are printed on the serial port connected through the debug adapter.
 

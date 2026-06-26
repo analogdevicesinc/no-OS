@@ -1,6 +1,6 @@
 EXAMPLE ?= iio_example
 
-NO_OS_USB_UART = y
+CONFIG_USB_UART_MAXIM = y
 IIOD = y
 
 include ../../tools/scripts/generic_variables.mk

@@ -41,7 +41,7 @@
 #include "common_data.h"
 #include "no_os_util.h"
 
-#if defined NO_OS_USB_UART
+#if defined CONFIG_USB_UART_STM32
 #include "stm32_usb_uart.h"
 #else
 #include "stm32_uart.h"
@@ -52,7 +52,7 @@ of samples needed to be stored in the device buffer
 and based on the available RAM memory of the platform */
 #define SAMPLES_PER_CHANNEL_PLATFORM 2000
 
-#if defined NO_OS_USB_UART
+#if defined CONFIG_USB_UART_STM32
 #define UART_EXTRA      &iio_demo_usb_uart_extra_ip
 #define UART_OPS        &stm32_usb_uart_ops
 #else
@@ -66,7 +66,7 @@ extern UART_HandleTypeDef huart5;
 #define UART_DEVICE_ID      5
 #define UART_BAUDRATE  115200
 
-#if defined NO_OS_USB_UART
+#if defined CONFIG_USB_UART_STM32
 extern struct stm32_usb_uart_init_param iio_demo_usb_uart_extra_ip;
 #if defined(STM32F413xx) || defined(STM32H743xx)
 extern USBD_HandleTypeDef hUsbDeviceFS;
@@ -79,7 +79,7 @@ extern USBD_HandleTypeDef hUsbDeviceHS;
 extern struct stm32_uart_init_param iio_demo_uart_extra_ip;
 #endif
 
-#ifdef IIO_TIMER_TRIGGER_EXAMPLE
+#ifdef CONFIG_IIO_DEMO_IIO_TIMER_TRIGGER_EXAMPLE
 /* Adc Demo Timer settings */
 extern struct stm32_timer_init_param adc_demo_xtip;
 #define ADC_DEMO_TIMER_DEVICE_ID    13

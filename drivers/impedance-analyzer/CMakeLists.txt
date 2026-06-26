@@ -1,0 +1,3 @@
+# ad5933
+no_os_sources_ifdef(CONFIG_IMPEDANCE_ANALYZER_AD5933 ${CMAKE_CURRENT_SOURCE_DIR}/ad5933/ad5933.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad5933)

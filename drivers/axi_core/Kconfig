@@ -1,0 +1,64 @@
+menuconfig AXI_CORE
+	bool "AXI Core Drivers"
+	default n
+	help
+	  Enable support for AXI core drivers used with FPGA-based platforms.
+	  These drivers provide interfaces for AXI-based IP cores commonly
+	  found in Xilinx and Altera FPGA designs.
+
+if AXI_CORE
+
+config AXI_CORE_AXI_ADC_CORE
+	bool "Enable AXI ADC core driver"
+	default n
+
+config AXI_CORE_AXI_DAC_CORE
+	bool "Enable AXI DAC core driver"
+	default n
+
+config AXI_CORE_AXI_DMAC
+	bool "Enable AXI DMA controller driver"
+	default n
+
+config AXI_CORE_AXI_PWMGEN
+	bool "Enable AXI PWM generator driver"
+	default n
+
+config AXI_CORE_AXI_SYSID
+	bool "Enable AXI system ID driver"
+	default n
+
+config AXI_CORE_CLK_ALTERA_A10_FPLL
+	bool "Enable Altera Arria 10 FPLL clock driver"
+	default n
+
+config AXI_CORE_CLK_AXI_CLKGEN
+	bool "Enable AXI clock generator driver"
+	default n
+
+config AXI_CORE_IIO_AXI_ADC
+	select AXI_CORE_AXI_ADC_CORE
+	bool "Enable AXI ADC IIO driver"
+	default n
+
+config AXI_CORE_IIO_AXI_DAC
+	select AXI_CORE_AXI_DAC_CORE
+	bool "Enable AXI DAC IIO driver"
+	default n
+
+config AXI_CORE_JESD204
+	bool "Enable JESD204 interface driver"
+	default n
+	help
+	  Enable support for the JESD204 high-speed serial interface.
+	  Includes support for both Xilinx and Altera FPGA implementations.
+
+config AXI_CORE_SPI_ENGINE
+	depends on SPI
+	bool "Enable SPI Engine offload driver"
+	default n
+	help
+	  Enable the SPI Engine driver which offloads SPI transactions
+	  to an AXI-based hardware SPI engine IP core.
+
+endif # AXI_CORE

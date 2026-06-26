@@ -1,0 +1,15 @@
+menuconfig NET
+    bool "Networking Drivers"
+    default n
+    help
+      Enable support for networking drivers.
+
+if NET
+
+config ADIN1110
+    depends on SPI
+    select GPIO
+    bool "Enable the ADIN1110 driver"
+    default n
+
+endif

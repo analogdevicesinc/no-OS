@@ -287,7 +287,7 @@ struct ad74413r_init_param ad74413r_ip = {
 	.comm_param = ad74413r_spi_ip,
 };
 
-#ifdef SWIOT1L_DEFAULT_FW
+#ifdef CONFIG_SWIOT1L_DEFAULT_FW
 /* GPIO trigger */
 struct no_os_irq_init_param ad74413r_gpio_irq_ip = {
 	.irq_ctrl_id = GPIO_IRQ_ID,

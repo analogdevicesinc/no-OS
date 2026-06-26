@@ -1,0 +1,14 @@
+menuconfig SD_CARD
+	bool "SD Card Drivers"
+	default n
+	help
+	  Enable support for SD card drivers.
+
+if SD_CARD
+
+config SD_CARD_SD
+	depends on SPI
+	bool "Enable SD card driver"
+	default n
+
+endif # SD_CARD
