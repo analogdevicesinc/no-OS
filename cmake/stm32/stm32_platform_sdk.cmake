@@ -117,6 +117,9 @@ function(config_stm32_sdk BUILD_TARGET)
                 "${BOARD_BUILD_DIR}/${IOC_NAME}/cmake/stm32cubemx")
 
         if(NEED_REGEN)
+                # Wipe any prior generation so CubeMX always loads into a clean dir.
+                file(REMOVE_RECURSE "${BOARD_BUILD_DIR}/${IOC_NAME}")
+
                 message(STATUS "Patching STM32CubeMX config file...")
                 no_os_run_checked(
                         WHAT "patching the STM32CubeMX config"
