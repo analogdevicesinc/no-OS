@@ -56,6 +56,112 @@ def open_vscode_workspace(repo_root):
         print(f"--open: failed to launch '{editor}': {e}", file=sys.stderr)
 
 
+def discover_built_workspaces(search_root):
+    """Return [(label, workspace_path), ...] for every built project found.
+
+    Each build directory persists a no-os.code-workspace (absolute paths) when
+    its IDE config is generated. The build directory name encodes the
+    project/variant/board combination, which is used as the picker label.
+    """
+    results = []
+    for ws in sorted(search_root.glob("*/no-os.code-workspace")):
+        results.append((ws.parent.name, ws))
+    return results
+
+
+def pick_workspace_graphically(entries):
+    """Show a graphical chooser (zenity) and return the selected workspace path.
+
+    Returns None if no graphical picker is available or the user cancels.
+    """
+    zenity = shutil.which("zenity")
+    if not zenity or not os.environ.get("DISPLAY"):
+        return None
+    cmd = [
+        zenity, "--list", "--title=Open no-OS project in VS Code",
+        "--text=Select a built project to open:",
+        "--column=Project", "--width=600", "--height=400",
+    ]
+    cmd.extend(label for label, _ in entries)
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True)
+    except OSError:
+        return None
+    if result.returncode != 0:
+        # Non-zero means the user cancelled or closed the dialog.
+        return "CANCELLED"
+    choice = result.stdout.strip()
+    for label, path in entries:
+        if label == choice:
+            return path
+    return None
+
+
+def pick_workspace_text(entries):
+    """Text-menu fallback chooser. Returns the selected workspace path or None."""
+    print("Built projects:")
+    for i, (label, _) in enumerate(entries, 1):
+        print(f"  {i}) {label}")
+    try:
+        raw = input("Select a project to open [1-%d] (or blank to cancel): "
+                    % len(entries)).strip()
+    except EOFError:
+        return None
+    if not raw:
+        return None
+    if not raw.isdigit() or not (1 <= int(raw) <= len(entries)):
+        print(f"Invalid selection: {raw}", file=sys.stderr)
+        return None
+    return entries[int(raw) - 1][1]
+
+
+def cmd_open(args, repo_root):
+    """Discover built projects and open one in VS Code (graphical picker)."""
+    editor = shutil.which("code") or shutil.which("codium")
+    if not editor:
+        sys.exit("Error: 'code' not found on PATH. Install VS Code or its CLI.")
+
+    search_root = Path(args.build_dir) if args.build_dir else repo_root
+    if not search_root.is_absolute():
+        search_root = repo_root / search_root
+
+    entries = discover_built_workspaces(search_root)
+    if not entries:
+        sys.exit(f"Error: no built projects found under {search_root}. "
+                 "Build a project first (no_os_build.py build ...).")
+
+    # Honour an explicit selection if the combo filters were given.
+    if args.project or args.variant or args.board:
+        def matches(label):
+            parts = label.rsplit("-", 2)  # project-variant-board (best effort)
+            return all(
+                f is None or f in label
+                for f in (args.project, args.variant, args.board)
+            )
+        entries = [(l, p) for l, p in entries if matches(l)]
+        if not entries:
+            sys.exit("Error: no built project matches the given filters.")
+
+    if len(entries) == 1:
+        workspace = entries[0][1]
+    else:
+        workspace = pick_workspace_graphically(entries)
+        if workspace == "CANCELLED":
+            print("Cancelled.")
+            return
+        if workspace is None:
+            workspace = pick_workspace_text(entries)
+        if workspace is None:
+            print("Cancelled.")
+            return
+
+    print(f"Opening VS Code workspace: {workspace}")
+    try:
+        subprocess.run([editor, str(workspace)], check=True)
+    except subprocess.CalledProcessError as e:
+        sys.exit(f"Failed to launch '{editor}': {e}")
+
+
 class Spinner:
     """Braille spinner shown only when stdout is a tty."""
 
@@ -673,9 +779,27 @@ def main():
         help="Open the generated VS Code workspace after a successful build",
     )
 
+    # open subcommand
+    open_parser = subparsers.add_parser(
+        "open",
+        help="Open a built project in VS Code (graphical picker when several exist)",
+    )
+    open_parser.add_argument("--project", help="Filter by project name")
+    open_parser.add_argument("--variant", help="Filter by variant name")
+    open_parser.add_argument("--board", help="Filter by board name")
+    open_parser.add_argument(
+        "--build-dir",
+        help="Base directory to search for built projects (default: repo root)",
+    )
+
     args = parser.parse_args()
 
     repo_root = find_repo_root()
+
+    if args.command == "open":
+        cmd_open(args, repo_root)
+        return
+
     presets = load_presets(repo_root)
 
     if args.command == "list":

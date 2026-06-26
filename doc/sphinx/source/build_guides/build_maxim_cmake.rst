@@ -92,6 +92,15 @@ with ``MAXIM_LIBRARIES environment variable is not defined``.
   utility can also open it for you after a successful build by passing
   ``--open`` to ``no_os_build.py build``.
 
+  When several projects have been built, pick which one to open with:
+
+  .. code-block:: bash
+
+      $ python tools/scripts/no_os_build.py open
+
+  This shows a graphical chooser (falling back to a text menu) listing every
+  built project; ``--project``/``--variant``/``--board`` narrow the list.
+
 Listing build combinations
 ==========================
 

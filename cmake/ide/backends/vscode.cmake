@@ -114,6 +114,43 @@ function(ide_vscode_configure PROJECT_TARGET)
         )
         message(STATUS "Generated VS Code workspace: ${PROJECT_HOME}/no-os.code-workspace")
         message(STATUS "Open it with: code ${PROJECT_HOME}/no-os.code-workspace")
+
+        # Also write a self-contained workspace inside the build directory using
+        # absolute paths. Unlike the repo-root file (which each build
+        # overwrites), this one persists per build, so 'no_os_build.py open' can
+        # list every built project and let the user pick which to open.
+        get_filename_component(BUILD_DIR_NAME "${CMAKE_BINARY_DIR}" NAME)
+        set(_build_workspace "${CMAKE_BINARY_DIR}/no-os.code-workspace")
+        configure_file(
+            "${VSCODE_TEMPLATES_DIR}/no-os-build.code-workspace.in"
+            "${_build_workspace}"
+            @ONLY
+        )
+
+        # Refresh the per-build workspace on every `cmake --build`, even when
+        # the firmware target is already up to date. configure_file() above only
+        # runs when CMake re-configures; this target has no output, so it is
+        # always considered out of date and regenerates the workspace each build.
+        # This is the workspace 'no_os_build.py open' discovers and opens.
+        #
+        # It is added to ALL (so a plain `cmake --build` runs it) and made a
+        # dependency of the firmware target (so `cmake --build --target
+        # <project>`, as used by no_os_build.py, runs it too).
+        add_custom_target(${PROJECT_TARGET}_vscode_workspace ALL
+            COMMAND ${CMAKE_COMMAND}
+                -DTEMPLATE=${VSCODE_TEMPLATES_DIR}/no-os-build.code-workspace.in
+                -DOUTPUT=${_build_workspace}
+                -DNO_OS_PROJECT_NAME=${NO_OS_PROJECT_NAME}
+                -DCMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR}
+                -DCMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}
+                -DBUILD_DIR_NAME=${BUILD_DIR_NAME}
+                -DGDB_PATH=${GDB_PATH}
+                -DOPENOCD_PATH=${OPENOCD_PATH}
+                -P ${IDE_DIR}/update_vscode_workspace.cmake
+            COMMENT "Updating VS Code workspace"
+            VERBATIM
+        )
+        add_dependencies(${PROJECT_TARGET} ${PROJECT_TARGET}_vscode_workspace)
     endif()
 
     message(STATUS "Generated VS Code configuration in ${VSCODE_DIR}")
