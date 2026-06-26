@@ -1,0 +1,31 @@
+menuconfig PHOTO_ELECTRONIC
+	bool "Photo-Electronic Drivers"
+	default n
+	help
+	  Enable support for photo-electronic sensor drivers.
+
+if PHOTO_ELECTRONIC
+
+config PHOTO_ELECTRONIC_ADPD188
+	depends on SPI || I2C
+	select GPIO
+	bool "Enable ADPD188 photo-electronic driver"
+	default n
+
+config PHOTO_ELECTRONIC_IIO_ADPD188
+	select PHOTO_ELECTRONIC_ADPD188
+	bool "Enable ADPD188 IIO driver"
+	default n
+
+config PHOTO_ELECTRONIC_ADPD410X
+	depends on SPI || I2C
+	select GPIO
+	bool "Enable ADPD410x photo-electronic driver"
+	default n
+
+config PHOTO_ELECTRONIC_IIO_ADPD410X
+	select PHOTO_ELECTRONIC_ADPD410X
+	bool "Enable ADPD410x IIO driver"
+	default n
+
+endif # PHOTO_ELECTRONIC
