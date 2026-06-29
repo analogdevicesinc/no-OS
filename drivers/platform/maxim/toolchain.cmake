@@ -105,6 +105,19 @@ set(CMAKE_ASM_FLAGS_MINSIZEREL "" CACHE STRING "ASM compiler flags for MinSizeRe
 set(CMAKE_EXE_LINKER_FLAGS "${COMMON_CPU_FLAGS} -specs=nosys.specs -Wl,--gc-sections,--undefined=_sbrk ${MCU_LINKER_FLAGS} \
     -T${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX${TARGET_NUM}/Source/GCC/${TARGET}.ld --entry=Reset_Handler" CACHE STRING "Linker flags for MCU" FORCE)
 
+# Work around a Ninja restat bug with arm-none-eabi-gcc: on link failure the
+# toolchain deletes the output .elf, and Ninja restat then reports success
+# because the output is "unchanged".  Wrapping the link command ensures a
+# failure always leaves a touched output so restat never masks the error.
+if(CMAKE_GENERATOR MATCHES "Ninja")
+    set(CMAKE_C_LINK_EXECUTABLE
+        "( <CMAKE_C_COMPILER> <FLAGS> <CMAKE_C_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES> ) || ( <CMAKE_COMMAND> -E touch <TARGET> && false )"
+    )
+    set(CMAKE_CXX_LINK_EXECUTABLE
+        "( <CMAKE_CXX_COMPILER> <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES> ) || ( <CMAKE_COMMAND> -E touch <TARGET> && false )"
+    )
+endif()
+
 # Find OpenOCD - handles different names on Linux (openocd) and Windows (openocd.exe)
 if (CFS)
     cmake_path(SET OPENOCD_SEARCH_PATH NORMALIZE "${CFS}/Tools/openocd")

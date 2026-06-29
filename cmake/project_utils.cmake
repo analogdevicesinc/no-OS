@@ -31,8 +31,7 @@ function(post_build_config PROJECT_TARGET)
                 POST_BUILD
                 COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${PROJECT_TARGET}> ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_TARGET}.hex
                 COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${PROJECT_TARGET}> ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_TARGET}.bin
-                COMMAND ${CMAKE_COMMAND} -E echo "Binary size:"
-                COMMAND ${CMAKE_SIZE} --format=berkeley $<TARGET_FILE:${PROJECT_TARGET}>
+                COMMAND ${CMAKE_COMMAND} -E echo "Binary size:" && (${CMAKE_SIZE} --format=berkeley $<TARGET_FILE:${PROJECT_TARGET}> || ${CMAKE_COMMAND} -E true)
                 COMMENT "Generating ${PROJECT_TARGET}.hex"
         )
 
