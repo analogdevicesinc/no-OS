@@ -1,12 +1,11 @@
-# Select the example you want to enable by choosing y for enabling and n for disabling
-BASIC_EXAMPLE = y
-DMA_EXAMPLE = n
-IIO_EXAMPLE = n
+EXAMPLE ?= basic_example
 
 # Uncomment to use the desired platform
 PLATFORM = xilinx
 
 include ../../tools/scripts/generic_variables.mk
+
+include ../../tools/scripts/examples.mk
 
 include src.mk
 

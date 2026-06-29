@@ -46,17 +46,7 @@
 #include "no_os_error.h"
 #include "adrv904x.h"
 
-#ifdef BASIC_EXAMPLE
-#include "basic_example.h"
-#endif
-
-#ifdef DMA_EXAMPLE
-#include "dma_example.h"
-#endif
-
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
+extern int example_main();
 
 static adi_adrv904x_SpiConfigSettings_t spiSettings = {
 	.msbFirst = 1,
@@ -98,26 +88,5 @@ adi_adrv904x_SpiOptions_t *adrv904x_spi_options_get(void)
 *******************************************************************************/
 int main()
 {
-	int ret = -EINVAL;
-
-#ifdef BASIC_EXAMPLE
-	ret = basic_example_main();
-#endif
-
-#ifdef DMA_EXAMPLE
-	ret = dma_example_main();
-#endif
-
-#ifdef IIO_EXAMPLE
-	ret = iio_example_main();
-#endif
-
-#if (BASIC_EXAMPLE + IIO_EXAMPLE + DMA_EXAMPLE == 0)
-#error At least one example has to be selected using y value in Makefile.
-#elif (BASIC_EXAMPLE + IIO_EXAMPLE + DMA_EXAMPLE > 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and rebuild the project.
-#endif
-
-	return ret;
+	return example_main();
 }
