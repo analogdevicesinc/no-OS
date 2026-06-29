@@ -81,7 +81,7 @@ uint16_t adc_buffer_dma[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__((
  *
  * @return ret - Result of the example execution.
 *******************************************************************************/
-int dma_example_main(void)
+int example_main(void)
 {
 	struct adrv904x_init_param adrv904x_init_par = { 0 };
 	struct adi_adrv904x_Device adrv904x_device = { 0 };
