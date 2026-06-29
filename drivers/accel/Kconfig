@@ -56,4 +56,10 @@ config ACCEL_ADXL37X
       The driver picks the bus at runtime via adxl37x_init_param.comm_type,
       so both SPI and I2C back ends are always linked in.
 
+config ACCEL_IIO_ADXL37X
+    depends on SPI && I2C
+    select ACCEL_ADXL37X
+    bool "Enable the ADXL37X IIO driver"
+    default n
+
 endif
