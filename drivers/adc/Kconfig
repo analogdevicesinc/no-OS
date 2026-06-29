@@ -27,6 +27,17 @@ config ADC_AD4170
     bool "Enable AD4170 ADC driver"
     default n
 
+config ADC_AD4692
+    depends on SPI
+    select GPIO
+    bool "Enable AD4692 ADC driver"
+    default n
+
+config ADC_IIO_AD4692
+    select ADC_AD4692
+    bool "Enable AD4692 IIO driver"
+    default n
+
 config ADC_AD463X
     depends on SPI
     select GPIO

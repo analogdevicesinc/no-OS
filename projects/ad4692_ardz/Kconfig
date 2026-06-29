@@ -1,0 +1,29 @@
+menu "AD4692 ARDZ Configuration"
+
+choice AD4692_ARDZ_EXAMPLE
+	prompt "Example variant"
+	default AD4692_ARDZ_IIO_EXAMPLE
+
+config AD4692_ARDZ_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Simple example that initialises the AD4692 and reads samples
+	  over SPI, printing results over UART.
+
+config AD4692_ARDZ_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO framework example. Launches an IIOD server for remote
+	  data acquisition using IIO Oscilloscope or libiio clients.
+
+config AD4692_ARDZ_IIO_TRIGGER_EXAMPLE
+	bool "IIO trigger example"
+	depends on IIO && IRQ && GPIO
+	help
+	  Interrupt-driven IIO example using the AD4692 data-ready
+	  pin as a hardware trigger.
+
+endchoice
+
+endmenu
