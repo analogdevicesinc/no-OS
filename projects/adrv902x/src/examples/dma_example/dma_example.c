@@ -74,7 +74,7 @@ __attribute__((aligned(16)));
  *
  * @return status - Result of the example execution.
 *******************************************************************************/
-int dma_example_main(void)
+int example_main(void)
 {
 	struct adrv9025_init_param adrv9025_init_par = { 0 };
 	struct adi_adrv9025_Device adrv9025_device = { 0 };

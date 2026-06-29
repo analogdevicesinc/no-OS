@@ -191,26 +191,22 @@ board. Three examples are provided in the sample project:
 * DMA Example
 * IIO Example
 
-An example is selected by specifying ``y`` as the value of the corresponding
-variable in the project Makefile. Below is an example for activating the basic
-example:
+An example is selected by setting the ``EXAMPLE`` variable in the project
+Makefile. Below is an example for activating the basic example:
 
 .. code-block:: bash
 
-   BASIC_EXAMPLE = y
-   DMA_EXAMPLE = n
-   IIO_EXAMPLE = n
+   EXAMPLE = basic_example
 
-Another way of selecting a demo is by passing variables to ``make`` through
+Another way of selecting a demo is by passing the variable to ``make`` through
 command line arguments:
 
 .. code-block:: bash
 
-   make DMA_EXAMPLE=y IIO_EXAMPLE=n
+   make EXAMPLE=dma_example
 
-Note that only one example can be enabled at a time. Therefore, when using
-command line arguments, the settings in the Makefile should be taken into
-account. The command line overwrites the values in the Makefile.
+Note that only one example can be enabled at a time. The command line
+overwrites the value in the Makefile.
 
 Basic Example
 ^^^^^^^^^^^^^
@@ -253,20 +249,20 @@ DMA Example
 
 DMA example is a standard example that sends a sinewave on Tx channels using
 DMA from a lookup table. If you physically loopback a Tx channel to an Rx
-channel via an electrical wire, you may run the DMA_EXAMPLE and read the
+channel via an electrical wire, you may run the DMA example and read the
 received data at Rx from its particular memory address.
 
 Select the example through command line arguments as below:
 
 .. code-block:: bash
 
-    make BASIC_EXAMPLE=n DMA_EXAMPLE=y IIO_EXAMPLE=n
+    make EXAMPLE=dma_example
 
 To run the DMA example, you simply need to run the application as usual by:
 
-* making sure it was built with the ``DMA_EXAMPLE`` flag (``DMA_EXAMPLE = y``
-  in the Makefile or as command line argument for ``make``), as already
-  mentioned
+* making sure it was built with the ``dma_example`` selection (``EXAMPLE =
+  dma_example`` in the Makefile or as command line argument for ``make``), as
+  already mentioned
 * monitoring the serial terminal for messages printed by the application
 
 After the output from the basic example, the application will eventually print something like this:

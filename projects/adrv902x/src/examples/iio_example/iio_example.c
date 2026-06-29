@@ -84,7 +84,7 @@ int adrv9025_set_agc_params(adi_adrv9025_AgcCfg_t *agcConfig_init_param);
  *
  * @return status - Result of the example execution.
 *******************************************************************************/
-int iio_example_main(void)
+int example_main(void)
 {
 	struct adrv9025_init_param adrv9025_init_par = { 0 };
 	struct adi_adrv9025_Device adrv9025_device = { 0 };

@@ -33,6 +33,6 @@
 #ifndef __DMA_EXAMPLE_H__
 #define __DMA_EXAMPLE_H__
 
-int dma_example_main();
+int example_main();
 
 #endif /* __DMA_EXAMPLE_H__ */
