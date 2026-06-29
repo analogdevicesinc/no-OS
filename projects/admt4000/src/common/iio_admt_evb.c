@@ -77,7 +77,7 @@ static struct iio_device admt_evb_iio_dev = {
 int admt_evb_iio_init(struct admt_evb_iio_desc **iio_desc,
 		      struct admt_evb_iio_init_param *init_param)
 {
-	int i, ret;
+	int ret;
 	struct admt_evb_iio_desc *descriptor;
 
 	if (!init_param)
@@ -143,7 +143,6 @@ err:
  */
 int admt_evb_iio_remove(struct admt_evb_iio_desc *desc)
 {
-	int ret;
 	no_os_gpio_remove(desc->gpio_v_en_desc);
 	no_os_gpio_remove(desc->gpio_shdn_n_desc);
 	no_os_free(desc);
@@ -167,8 +166,8 @@ static int admt_evb_bool_attr_show(void *dev, char *buf, uint32_t len,
 {
 	struct admt_evb_iio_desc *iio_admt_evb_desc;
 	int ret;
+	uint8_t gpio_val;
 	int32_t vals[2];
-
 
 	if (!dev)
 		return -ENODEV;
@@ -178,16 +177,18 @@ static int admt_evb_bool_attr_show(void *dev, char *buf, uint32_t len,
 	switch (priv) {
 	case ADMT_EVB_SHDN:
 		ret = no_os_gpio_get_value(iio_admt_evb_desc->gpio_shdn_n_desc,
-					   &vals[0]);
-		vals[0] = !vals[0];
+					   &gpio_val);
+		vals[0] = !gpio_val;
 		break;
 	case ADMT_EVB_V_EN:
 		ret = no_os_gpio_get_value(iio_admt_evb_desc->gpio_v_en_desc,
-					   &vals[0]);
+					   &gpio_val);
+		vals[0] = gpio_val;
 		break;
 	case ADMT_COIL_RS:
 		ret = no_os_gpio_get_value(iio_admt_evb_desc->gpio_coil_rs_desc,
-					   &vals[0]);
+					   &gpio_val);
+		vals[0] = gpio_val;
 		break;
 	default:
 		return -ENOTSUP;
