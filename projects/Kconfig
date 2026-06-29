@@ -4,5 +4,6 @@ source "projects/apard32690/Kconfig"
 source "projects/eval-adxl355-pmdz/Kconfig"
 source "projects/iio_demo/Kconfig"
 source "projects/swiot1l/Kconfig"
+source "projects/ad4692_ardz/Kconfig"
 
 endmenu
