@@ -93,10 +93,8 @@
 #define ORX_CLKGEN_BASEADDR		XPAR_AXI_ADRV9026_RX_OS_CLKGEN_BASEADDR
 #endif
 
-#if defined(DMA_EXAMPLE) || defined(IIO_SUPPORT)
 #define DAC_BUFFER_SAMPLES              8192
 #define ADC_BUFFER_SAMPLES              16384
-#endif
 
 #define AD9528_CS			1
 #define ADRV9025_CS			0
