@@ -47,4 +47,13 @@ config ACCEL_ADXL38X
     bool "Enable the ADXL38X driver"
     default n
 
+config ACCEL_ADXL37X
+    depends on SPI && I2C
+    select GPIO
+    bool "Enable the ADXL37X driver"
+    default n
+    help
+      The driver picks the bus at runtime via adxl37x_init_param.comm_type,
+      so both SPI and I2C back ends are always linked in.
+
 endif
