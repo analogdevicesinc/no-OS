@@ -416,20 +416,25 @@ or to J18 (the SMA interface).
 
 **Build Command**
 
+Available variants: ``basic``, ``iio``. Replace ``--variant`` accordingly.
+
 .. code-block:: bash
 
-	# set the path to STM32CUBEMX
-	export STM32CUBEMX=</path/to/STM32CubeMX>
-	# set the path to STM32CUBEIDE
+	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+	# in a default install location)
+	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
-	# add the arm gcc to the PATH variable
-	export PATH=</path/to/arm/gcc/bin>:$PATH
-	# to delete current build
-	make reset
-	# to build the project
-	make PLATFORM=stm32
-	# to flash the code
-	make run
+
+	cd no-OS
+
+	# build the project (basic example on the SDP-K1 board)
+	python tools/scripts/no_os_build.py build \
+		--project adf4382 --variant basic --board sdp-ck1z
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project adf4382 --variant basic --board sdp-ck1z \
+		--probe openocd --flash
 
 Mbed Platform
 ^^^^^^^^^^^^^
