@@ -10,9 +10,14 @@ menuconfig ADC
 if ADC
 
 config ADC_AD405X
-    depends on SPI
+    depends on SPI || I3C
     select GPIO
     bool "Enable AD405X ADC driver"
+    default n
+
+config ADC_IIO_AD405X
+    select ADC_AD405X
+    bool "Enable AD405X IIO driver"
     default n
 
 config ADC_AD4080

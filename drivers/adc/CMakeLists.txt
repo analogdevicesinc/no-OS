@@ -1,5 +1,6 @@
 # AD405X
 no_os_sources_ifdef(CONFIG_ADC_AD405X ${CMAKE_CURRENT_SOURCE_DIR}/ad405x/ad405x.c)
+no_os_sources_ifdef(CONFIG_ADC_IIO_AD405X ${CMAKE_CURRENT_SOURCE_DIR}/ad405x/iio_ad405x.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad405x)
 
 # AD4080
