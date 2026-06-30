@@ -86,6 +86,19 @@
 			}
 		},
 		{
+			"name": "max32670evkit",
+			"description": "MAX32670 EvKit board",
+			"inherits": "maxim-base",
+			"cacheVariables": {
+				"BOARD": "max32670evkit",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "maxim",
+				"TARGET": "max32670",
+				"TARGET_NUM": "32670",
+				"BOARD_CONFIG_FILE": "max32670evkit_defconfig"
+			}
+		},
+		{
 			"name": "ad-swiot1l-sl",
 			"description": "AD-SWIOT1L-SL board",
 			"inherits": "maxim-base",

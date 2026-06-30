@@ -115,6 +115,10 @@ elseif("${TARGET}" MATCHES "^stm32l4")
     # Cortex-M4 MCUs (STM32L4xx)
     set(STM32_MCU_FLAGS "-mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16")
     message(STATUS "Detected Cortex-M4 MCU: ${TARGET}")
+elseif("${TARGET}" MATCHES "^stm32h5")
+    # Cortex-M33 MCUs (STM32H5xx)
+    set(STM32_MCU_FLAGS "-mthumb -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16")
+    message(STATUS "Detected Cortex-M33 MCU: ${TARGET}")
 else()
     # An unset or unrecognized TARGET would otherwise silently produce a
     # binary with wrong -mcpu/-mfpu flags (e.g. Cortex-M4 flags for a
