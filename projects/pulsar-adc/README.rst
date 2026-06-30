@@ -112,18 +112,27 @@ STM32 Platform
 * `SDP-K1 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
 * ST debugger
 
-**Prerequisites**
+**Build Command**
 
-* Vitis/Vivado software installed
-* HDL code (**system_top.xsa**) placed in the porject folder
-* export STM32CUBEMX=<YOUR_PATH>/STMicroelectronics/STM32Cube/STM32CubeMX/
-* export STM32CUBEIDE=<YOUR_PATH>/stm32cubeide_1.14.0/
-* sdp-ck1z.ioc file in the porject folder
+.. code-block:: bash
 
-**Build and flash**
+	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+	# in a default install location)
+	export STM32CUBEMX=</path/to/stm32cubemx>
+	export STM32CUBEIDE=</path/to/stm32cubeide>
 
-* make
-* openocd -f ./build/ad400x-fmcz.elf.openocd -c "program ./build/ad400x-fmcz.elf verify reset exit"
+	cd no-OS
+
+	# build the project (basic example on the SDP-K1 board)
+	python tools/scripts/no_os_build.py build \
+		--project pulsar-adc --variant basic --board sdp-ck1z
+
+	# Available variants: ``basic``, ``iio``. Replace ``--variant`` accordingly.
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project pulsar-adc --variant basic --board sdp-ck1z \
+		--probe openocd --flash
 
 Project Options
 ----------------
