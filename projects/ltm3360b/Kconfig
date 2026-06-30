@@ -1,0 +1,15 @@
+menu "LTM3360B Configuration"
+
+choice LTM3360B_EXAMPLE
+	prompt "Example variant"
+	default LTM3360B_BASIC_EXAMPLE
+
+config LTM3360B_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Basic example that configures the LTM3360B power module and reads
+	  the ADC values over UART.
+
+endchoice
+
+endmenu
