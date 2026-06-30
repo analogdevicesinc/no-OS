@@ -1,0 +1,25 @@
+menu "ADXL38x Configuration"
+
+choice EVAL_ADXL38X_EXAMPLE
+	prompt "Example variant"
+	default EVAL_ADXL38X_BASIC_EXAMPLE
+
+config EVAL_ADXL38X_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Simple example that reads acceleration data from the ADXL38x
+	  and prints it over UART.
+
+config EVAL_ADXL38X_SELFTEST_EXAMPLE
+	bool "Selftest example"
+	help
+	  Self-test example that validates accelerometer functionality.
+
+config EVAL_ADXL38X_FIFO_EXAMPLE
+	bool "FIFO example"
+	help
+	  FIFO example that demonstrates data buffering and retrieval.
+
+endchoice
+
+endmenu
