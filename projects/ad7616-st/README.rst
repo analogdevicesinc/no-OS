@@ -139,11 +139,18 @@ STM32 Platform
 
 .. code-block:: bash
 
-        # to delete current build
-        make reset
-        # to build the project
-        make
-        # to flash the code
-        make run
-        # to debug the code
-        make debug
+	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+	# in a default install location)
+	export STM32CUBEMX=</path/to/stm32cubemx>
+	export STM32CUBEIDE=</path/to/stm32cubeide>
+
+	cd no-OS
+
+	# build the project (iio example on the SDP-K1 board)
+	python tools/scripts/no_os_build.py build \
+		--project ad7616-st --variant iio --board sdp-ck1z
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project ad7616-st --variant iio --board sdp-ck1z \
+		--probe openocd --flash
