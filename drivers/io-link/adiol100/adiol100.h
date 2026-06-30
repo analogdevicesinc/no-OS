@@ -36,6 +36,7 @@
 
 #include "no_os_spi.h"
 #include <stdint.h>
+#include "no_os_delay.h"
 
 struct adiol100_init_param{
     struct no_os_spi_init_param *spi_ip;
@@ -51,8 +52,17 @@ int adiol100_init(struct adiol100_dev **dev, struct adiol100_init_param *ip);
 
 int adiol100_remove(struct adiol100_dev *dev);
 
-int adiol100_read();
+int adiol100_read(struct adiol100_dev *dev, uint16_t reg, uint16_t *value);
 
-int adiol100_write();
+int adiol100_write(struct adiol100_dev *dev, uint16_t reg, uint16_t value);
+
+int adiol100_fifo_write(struct adiol100_dev *dev, uint8_t *data, uint8_t len,
+                        uint16_t trigger);
+
+int adiol100_fifo_read(struct adiol100_dev *dev, uint8_t *data, uint8_t *len);
+
+int adiol100_reset_channel_a(struct adiol100_dev *dev);
+
+int adiol100_reset_channel_b(struct adiol100_dev *dev);
 
 #endif
