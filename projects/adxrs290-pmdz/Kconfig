@@ -1,0 +1,17 @@
+menu "ADXRS290 PMDZ Configuration"
+
+choice ADXRS290_PMDZ_EXAMPLE
+	prompt "Example variant"
+	default ADXRS290_PMDZ_IIO_EXAMPLE
+
+config ADXRS290_PMDZ_IIO_EXAMPLE
+	bool "Basic IIO example"
+	depends on IIO
+
+config ADXRS290_PMDZ_IIO_TRIGGER_EXAMPLE
+	bool "IIO trigger example"
+	depends on IIO && IRQ && GPIO
+
+endchoice
+
+endmenu
