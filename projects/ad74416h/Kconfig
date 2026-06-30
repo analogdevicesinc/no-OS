@@ -1,0 +1,15 @@
+menu "AD74416H Configuration"
+
+choice AD74416H_EXAMPLE
+	prompt "Example variant"
+	default AD74416H_BASIC_EXAMPLE
+
+config AD74416H_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Basic example that initializes the AD74416H ADC-DAC device
+	  and performs GPIO operations over SPI interface.
+
+endchoice
+
+endmenu

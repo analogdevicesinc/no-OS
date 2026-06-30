@@ -287,17 +287,21 @@ Build Command
 
 .. code-block:: bash
 
-    # Clean the build environment                                                                                                   
-    make clean                                                                                                                                                                       
-                                                                                                                                                                                     
-    # Build the project                                                                             
-    make all                                                                                                                                                                         
-                                                                                                                                                                                     
-    # Flash the firmware               
-    make flash                                                                                                                                                                       
-                                                                                                                                                                                     
-    # Debug the project                                                                                    
-    make debug   
+    # set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+    # in a default install location)
+    export STM32CUBEMX=</path/to/stm32cubemx>
+    export STM32CUBEIDE=</path/to/stm32cubeide>
+
+    cd no-OS
+
+    # build the project (basic example on the SDP-K1 board)
+    python tools/scripts/no_os_build.py build \
+        --project ad74416h --variant basic --board sdp-ck1z
+
+    # build and flash (requires a connected debug probe)
+    python tools/scripts/no_os_build.py build \
+        --project ad74416h --variant basic --board sdp-ck1z \
+        --probe openocd --flash
 
 Mbed Platform
 ~~~~~~~~~~~~~

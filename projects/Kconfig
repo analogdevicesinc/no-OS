@@ -6,5 +6,6 @@ source "projects/iio_demo/Kconfig"
 source "projects/swiot1l/Kconfig"
 source "projects/ad4692_ardz/Kconfig"
 source "projects/adf4371/Kconfig"
+source "projects/ad74416h/Kconfig"
 
 endmenu
