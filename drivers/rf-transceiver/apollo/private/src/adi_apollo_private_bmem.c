@@ -18,9 +18,9 @@
 #include "adi_apollo_bf_rx_bmem.h"
 #include "adi_apollo_config.h"
 #include "adi_apollo_hal.h"
+#ifdef __KERNEL__
 #include "linux/gfp_types.h"
 #include "linux/slab.h"
-#ifdef __KERNEL__
 #include <linux/cleanup.h>
 #endif
 
