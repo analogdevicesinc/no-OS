@@ -32,7 +32,6 @@
  *******************************************************************************/
 
 #include "common_data.h"
-#include "basic_example.h"
 #include "ltc3208.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"

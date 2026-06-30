@@ -38,11 +38,9 @@
 
 #define DEV_I2C_ADDRESS     0x1B
 
-#if (TARGET_NUM == 32650) || (TARGET_NUM == 78000)
-#define I2C_DEVICE_ID    1
-#elif (TARGET_NUM == 32655)
+#if (TARGET_NUM == 32655)
 #define I2C_DEVICE_ID    2
-#elif (TARGET_NUM == 32665) || (TARGET_NUM == 32660) || (TARGET_NUM == 32690)
+#elif (TARGET_NUM == 32690)
 #define I2C_DEVICE_ID    0
 #endif
 
