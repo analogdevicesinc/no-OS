@@ -21,5 +21,7 @@ source "projects/ad74416h/Kconfig"
 source "projects/adf4382/Kconfig"
 source "projects/ad7616-st/Kconfig"
 source "projects/pulsar-adc/Kconfig"
+source "projects/ad738x_fmcz/Kconfig"
+source "projects/admt4000/Kconfig"
 
 endmenu
