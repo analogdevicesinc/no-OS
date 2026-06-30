@@ -1,0 +1,25 @@
+menuconfig POSITION
+	bool "Position Drivers"
+	default n
+	help
+	  Enable support for position drivers.
+
+if POSITION
+
+config POSITION_ADMT4000
+	depends on SPI
+	select GPIO
+	bool "Enable ADMT4000 driver"
+	default n
+
+config POSITION_IIO_ADMT4000
+	select POSITION_ADMT4000
+	bool "Enable ADMT4000 IIO driver"
+	default n
+
+config POSITION_IIO_ADMT4000_TRIG
+	select POSITION_IIO_ADMT4000
+	bool "Enable ADMT4000 IIO trigger driver"
+	default n
+
+endif
