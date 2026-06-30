@@ -143,12 +143,22 @@ Build Command
 
 .. code-block:: bash
 
-   # to delete current build
-   make reset
-   # to build the project, uncomment to select target
-   make PLATFORM=maxim # TARGET=max32655 # TARGET=max78000
-   # to flash the code
-   make run
+	# point at the Maxim SDK libraries (only if not auto-detected)
+	export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+	cd no-OS
+
+	# build the project (dummy example on the MAX78000FTHR board)
+	python tools/scripts/no_os_build.py build \
+		--project ad74413r --variant dummy --board max78000fthr
+
+	# Available variants: ``dummy``, ``iio``, ``iio_trigger``. Replace ``--variant`` accordingly.
+	# Alternative board: ``max32655fthr``. Replace ``--board`` accordingly.
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project ad74413r --variant dummy --board max78000fthr \
+		--probe openocd --flash
 
 STM32
 ~~~~~
@@ -157,7 +167,7 @@ Used Hardware
 ^^^^^^^^^^^^^
 
 * `EVAL-AD74413R <https://www.analog.com/EVAL-AD74413R>`_
-* STM32 microcontroller board
+* `NUCLEO-F756ZG <https://www.st.com/en/evaluation-tools/nucleo-f756zg.html>`_
 
 Connections
 ^^^^^^^^^^^
@@ -171,9 +181,20 @@ Build Command
 
 .. code-block:: bash
 
-   # to delete current build
-   make reset
-   # to build the project
-   make PLATFORM=stm32
-   # to flash the code
-   make run
+	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+	# in a default install location)
+	export STM32CUBEMX=</path/to/stm32cubemx>
+	export STM32CUBEIDE=</path/to/stm32cubeide>
+
+	cd no-OS
+
+	# build the project (dummy example on the NUCLEO-F756ZG board)
+	python tools/scripts/no_os_build.py build \
+		--project ad74413r --variant dummy --board nucleo-f756zg
+
+	# Available variants: ``dummy``, ``iio``, ``iio_trigger``. Replace ``--variant`` accordingly.
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project ad74413r --variant dummy --board nucleo-f756zg \
+		--probe openocd --flash
