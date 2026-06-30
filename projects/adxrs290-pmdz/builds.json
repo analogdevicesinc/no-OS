@@ -7,11 +7,6 @@
       "flags": "EXAMPLE=iio_timer_trigger_example"
     }
   },
-  "stm32": {
-    "iio_example": {
-      "flags": "EXAMPLE=iio_example"
-    }
-  },
   "pico": {
     "iio_example": {
       "flags": "EXAMPLE=iio_example"
@@ -21,14 +16,6 @@
     },
     "iio_timer_trigger": {
       "flags": "EXAMPLE=iio_timer_trigger_example"
-    }
-  },
-  "maxim": {
-    "iio_example_max32655": {
-      "flags": "EXAMPLE=iio_example TARGET=max32655"
-    },
-    "iio_trigger_example_max32655": {
-      "flags": "EXAMPLE=iio_trigger_example TARGET=max32655"
     }
   }
 }

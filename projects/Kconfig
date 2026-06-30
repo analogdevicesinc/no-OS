@@ -1,6 +1,7 @@
 menu "Project-Specific Configuration"
 
 source "projects/apard32690/Kconfig"
+source "projects/adxrs290-pmdz/Kconfig"
 source "projects/eval-adxl355-pmdz/Kconfig"
 source "projects/iio_demo/Kconfig"
 source "projects/ltm3360b/Kconfig"
