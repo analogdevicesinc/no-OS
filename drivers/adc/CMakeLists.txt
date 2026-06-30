@@ -75,6 +75,10 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad7280a)
 no_os_sources_ifdef(CONFIG_ADC_AD738X ${CMAKE_CURRENT_SOURCE_DIR}/ad738x/ad738x.c)
 no_os_sources_ifdef(CONFIG_ADC_IIO_AD738X ${CMAKE_CURRENT_SOURCE_DIR}/ad738x/iio_ad738x.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad738x)
+# AD738X uses standard SPI on STM32 (not SPI engine like Xilinx)
+if(PLATFORM STREQUAL "stm32" AND (CONFIG_ADC_AD738X OR CONFIG_ADC_IIO_AD738X))
+  target_compile_definitions(no-os PRIVATE USE_STANDARD_SPI)
+endif()
 
 # AD74XX
 no_os_sources_ifdef(CONFIG_ADC_AD74XX ${CMAKE_CURRENT_SOURCE_DIR}/ad74xx/ad74xx.c)

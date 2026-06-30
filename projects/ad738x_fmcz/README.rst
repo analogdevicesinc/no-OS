@@ -283,16 +283,25 @@ CS         SPI CS (Digital Pin)   SPI CS
 Build Command
 ^^^^^^^^^^^^^^
 
+Available variants: ``basic``, ``iio``. Replace ``--variant`` accordingly.
+
 .. code-block:: bash
 
-   # to delete current build
-   make reset
-   # to build the project
-   make PLATFORM=stm32
-   # to flash the code
-   make run
-   # to debug the code
-   make debug
+   # set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+   # in a default install location)
+   export STM32CUBEMX=</path/to/stm32cubemx>
+   export STM32CUBEIDE=</path/to/stm32cubeide>
+
+   cd no-OS
+
+   # build the project (basic example on the SDP-K1 board)
+   python tools/scripts/no_os_build.py build \
+      --project ad738x_fmcz --variant basic --board sdp-ck1z
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad738x_fmcz --variant basic --board sdp-ck1z \
+      --probe openocd --flash
 
 Lattice Platform
 ~~~~~~~~~~~~~~~~
