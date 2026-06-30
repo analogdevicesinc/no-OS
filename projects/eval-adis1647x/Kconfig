@@ -1,0 +1,16 @@
+menu "EVAL-ADIS1647X Configuration"
+
+choice EVAL_ADIS1647X_EXAMPLE
+	prompt "Example variant"
+	default EVAL_ADIS1647X_BASIC_EXAMPLE
+
+config EVAL_ADIS1647X_BASIC_EXAMPLE
+	bool "Basic example"
+
+config EVAL_ADIS1647X_IIO_TRIGGER_EXAMPLE
+	bool "IIO trigger example"
+	depends on IIO && IRQ && GPIO
+
+endchoice
+
+endmenu
