@@ -1,0 +1,8 @@
+# ADMT4000
+no_os_sources_ifdef(CONFIG_POSITION_ADMT4000
+	${CMAKE_CURRENT_SOURCE_DIR}/admt4000/admt4000.c)
+no_os_sources_ifdef(CONFIG_POSITION_IIO_ADMT4000
+	${CMAKE_CURRENT_SOURCE_DIR}/admt4000/iio_admt4000.c)
+no_os_sources_ifdef(CONFIG_POSITION_IIO_ADMT4000_TRIG
+	${CMAKE_CURRENT_SOURCE_DIR}/admt4000/iio_admt4000_trig.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/admt4000)
