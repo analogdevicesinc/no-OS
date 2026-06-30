@@ -31,7 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "basic_example.h"
 #include "common_data.h"
 #include "ad9545.h"
 #include "no_os_clk.h"
@@ -46,7 +45,7 @@
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
 *******************************************************************************/
-int basic_example_main()
+int example_main()
 {
 	struct ad9545_dev *ad9545_dev;
 	struct no_os_clk_desc *ref_b_clk;

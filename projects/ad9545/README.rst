@@ -121,8 +121,8 @@ configuration in the
 
 .. code-block:: bash
 
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = y
+   # Select the example you want to enable
+   EXAMPLE = basic_example
 
 No-OS Supported Platforms
 -------------------------
