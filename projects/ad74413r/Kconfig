@@ -1,0 +1,29 @@
+menu "AD74413R Configuration"
+
+choice AD74413R_EXAMPLE
+	prompt "Example variant"
+	default AD74413R_DUMMY_EXAMPLE
+
+config AD74413R_DUMMY_EXAMPLE
+	bool "Dummy example"
+	help
+	  Dummy example that initializes the AD74413R ADC-DAC device
+	  and performs basic operations.
+
+config AD74413R_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that initializes the AD74413R ADC-DAC device
+	  and interfaces using the IIO subsystem.
+
+config AD74413R_IIO_TRIGGER_EXAMPLE
+	bool "IIO Trigger example"
+	depends on IIO && IRQ && GPIO
+	help
+	  IIO trigger example that initializes the AD74413R ADC-DAC device
+	  and interfaces using the IIO subsystem with hardware trigger support.
+
+endchoice
+
+endmenu
