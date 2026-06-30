@@ -111,6 +111,10 @@ if(CONFIG_PHOTO_ELECTRONIC)
     add_subdirectory(photo-electronic)
 endif()
 
+if(CONFIG_POSITION)
+    add_subdirectory(position)
+endif()
+
 if(CONFIG_POTENTIOMETER)
     add_subdirectory(potentiometer)
 endif()

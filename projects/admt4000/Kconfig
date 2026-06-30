@@ -1,0 +1,23 @@
+menu "ADMT4000 Configuration"
+
+choice ADMT4000_EXAMPLE
+	prompt "Example variant"
+	default ADMT4000_BASIC_EXAMPLE
+
+config ADMT4000_BASIC_EXAMPLE
+	bool "Basic example"
+
+config ADMT4000_IIO_TRIGGER_EXAMPLE
+	bool "IIO Trigger example"
+	depends on IIO && IRQ
+
+endchoice
+
+config ADMT4000_TMC5240
+	bool "Enable TMC5240 motor driver support"
+	depends on ADMT4000_IIO_TRIGGER_EXAMPLE
+	default n
+	help
+	  Enable Trinamic TMC5240 stepper motor driver support in IIO trigger example.
+
+endmenu

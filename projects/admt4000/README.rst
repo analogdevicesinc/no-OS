@@ -115,12 +115,8 @@ To build the basic example:
 
 .. code-block:: bash
 
-        # to delete current build
-        make reset
-        # to build the project
-        make PLATFORM=stm32 EXAMPLE=basic_example
-        # to flash the code to the controller
-        make PLATFORM=stm32 EXAMPLE=basic_example run
+        python tools/scripts/no_os_build.py build \
+                --project admt4000 --variant basic --board sdp-ck1z
 
 IIO example
 ^^^^^^^^^^^
@@ -156,10 +152,8 @@ In order to build the IIO project:
 
 .. code-block:: bash
 
-        # to delete current build
-        make reset
-        # to build the project
-        make PLATFORM=stm32 EXAMPLE=iio_trigger_example TMC_DEVICE=TMC5240
+        python tools/scripts/no_os_build.py build \
+                --project admt4000 --variant iio_trigger_tmc5240 --board sdp-ck1z
 
 No-OS Supported Platforms
 -------------------------
@@ -171,6 +165,24 @@ STM32 Platform
 
 * `SDP-K1 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
 
+**Build Command**
+
 .. code-block:: bash
 
-        make PLATFORM=stm32 <other build parameters>
+	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+	# in a default install location)
+	export STM32CUBEMX=</path/to/stm32cubemx>
+	export STM32CUBEIDE=</path/to/stm32cubeide>
+
+	cd no-OS
+
+	# build the project (basic example on the SDP-K1 board)
+	python tools/scripts/no_os_build.py build \
+		--project admt4000 --variant basic --board sdp-ck1z
+
+	# Available variants: ``basic``, ``iio_trigger``, ``iio_trigger_tmc5240``. Replace ``--variant`` accordingly.
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project admt4000 --variant basic --board sdp-ck1z \
+		--probe openocd --flash

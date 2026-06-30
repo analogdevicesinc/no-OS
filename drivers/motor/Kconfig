@@ -6,6 +6,16 @@ menuconfig MOTOR
 
 if MOTOR
 
+config MOTOR_TMC5240
+	depends on SPI
+	bool "Enable TMC5240 motor driver"
+	default n
+
+config MOTOR_IIO_TMC5240
+	select MOTOR_TMC5240
+	bool "Enable TMC5240 IIO driver"
+	default n
+
 config MOTOR_TMC7300
 	depends on UART
 	select GPIO
