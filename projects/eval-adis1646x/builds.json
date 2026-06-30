@@ -6,21 +6,5 @@
     "iio_trigger_example": {
       "flags" : "EXAMPLE=iio_trigger_example RELEASE=y"
     }
-  },
-  "maxim": {
-    "basic_example_max78000": {
-      "flags" : "EXAMPLE=basic_example TARGET=max78000 RELEASE=y"
-    },
-    "iio_trigger_example_max78000": {
-      "flags" : "EXAMPLE=iio_trigger_example TARGET=max78000 RELEASE=y"
-    }
-  },
-  "stm32": {
-    "basic_example": {
-      "flags" : "EXAMPLE=basic_example HARDWARE=sdp-ck1z.ioc RELEASE=y"
-    },
-    "iio_trigger_example": {
-      "flags" : "EXAMPLE=iio_trigger_example HARDWARE=sdp-ck1z.ioc RELEASE=y"
-    }
   }
 }
