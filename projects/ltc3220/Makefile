@@ -1,4 +1,5 @@
-EXAMPLE ?= basic
+# Select the example you want to enable
+EXAMPLE = basic_example
 
 PLATFORM ?= maxim
 
