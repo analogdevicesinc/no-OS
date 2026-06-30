@@ -49,7 +49,27 @@ enum transmit_type {
 	SSD1306_DATA
 };
 
+#ifndef SSD1306_I2C_ADDR
 #define SSD1306_I2C_ADDR	0x3C
+#endif
+
+/*
+ * Build-time display orientation, in degrees. Supported values are 0 and 180
+ * (the SSD1306 can only mirror the segment/COM scan direction in hardware).
+ */
+#ifndef SSD1306_ROTATION
+#define SSD1306_ROTATION	0
+#endif
+
+/*
+ * Command-byte builders derived from SSD1306_ROTATION. A 180-degree rotation
+ * mirrors both the segment remap (0xA0) and the COM output scan direction
+ * (0xC0).
+ */
+#define SSD1306_SEG_REMAP_CMD \
+	(0xA0U | (((SSD1306_ROTATION) == 180) ?  0x00U : 0x01U))
+#define SSD1306_COM_SCAN_CMD \
+	(0xC0U | (((SSD1306_ROTATION) == 180) ? 0x00U : 0x08U))
 
 /**
  * @struct ssd_1306_extra
