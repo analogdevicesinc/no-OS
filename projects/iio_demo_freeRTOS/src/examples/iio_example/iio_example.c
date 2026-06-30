@@ -31,7 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "iio_example.h"
+#include "iio_app.h"
 #include "iio_adc_demo.h"
 #include "iio_dac_demo.h"
 #include "common_data.h"
@@ -43,7 +43,7 @@
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously function iio_app_run and will not return.
 *******************************************************************************/
-int iio_example_main()
+int example_main()
 {
 	int32_t status;
 

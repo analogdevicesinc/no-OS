@@ -31,20 +31,17 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "platform_includes.h"
 #include "common_data.h"
 
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
+extern int example_main();
 
 /**
  * @brief IIOD example task
- * @return Returns the error code of iio_example_main function
+ * @return Returns the error code of example_main function
 */
 int iiodTask()
 {
-	return iio_example_main();
+	return example_main();
 }
 
 /**
@@ -128,18 +125,9 @@ error_iio_demo_task:
  */
 int main()
 {
-	int ret = -1;
-
 #if TARGET_NUM == 32660
 #error TARGET MAX32660 not supported
 #endif
 
-#ifdef IIO_EXAMPLE
-	ret = create_tasks();
-#endif
-
-#if (IIO_EXAMPLE== 0)
-#error At least one example has to be selected using y value in Makefile.
-#endif
-	return ret;
+	return create_tasks();
 }
