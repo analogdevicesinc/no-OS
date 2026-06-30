@@ -18,12 +18,12 @@ and AUX LED displays. The LTC3208 requires only small
 ceramic capacitors and one current set resistor to form a
 complete LED power supply and current controller
 
-The maximum display currents are set by a single external resistor. 
-Current for each LED is controlled by a precision internal 
-current source. Dimming and On/Off for all displays is achieved 
-via the I2C serial interface. 
-256 brightness levels are available for the MAIN and SUB displays. 
-16 levels are available for the RGB and CAM displays. 
+The maximum display currents are set by a single external resistor.
+Current for each LED is controlled by a precision internal
+current source. Dimming and On/Off for all displays is achieved
+via the I2C serial interface.
+256 brightness levels are available for the MAIN and SUB displays.
+16 levels are available for the RGB and CAM displays.
 Four AUX current sources can be independently
 assigned via the I2C port to the CAM, SUB, MAIN or AUX
 DAC controlled displays.
@@ -111,30 +111,52 @@ The initialization data used in the examples is taken out from:
 The macros used in Common data are defined in platfor-specific files found in:
 `Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltc3208/src/platform>`_
 
+Basic example
+^^^^^^^^^^^^^
+
+This is a comprehensive example that demonstrates the full functionality of the
+LTC3208 multidisplay LED controller.
+
+The example runs continuously in a loop, cycling through all LED configurations
+with timing delays to visually demonstrate each feature.
+
+In order to build the basic example make sure you have the following
+configuration in the
+`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltc3208/Makefile>`_
+
+.. code-block:: bash
+
+	EXAMPLE = basic_example
+
 Maxim Platform
 --------------
 
 **Used Hardware**
 
 * `DC824A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/dc824a.html>`_
+* `MAX32655FTHR <https://www.analog.com/MAX32655FTHR>`_ or `MAX32690EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/MAX32690EVKIT.html>`_
 
 **Connections**:
 
-+----------+-----------------------+
-| LTC3208  | MAX32655 Pinouts      |
-+----------+-----------------------+
-| V_IN     | Power Supply          |
-+----------+-----------------------+
-| V_CC     | 3v3                   |
-+----------+-----------------------+
-| GND      | GND                   |
-+----------+-----------------------+
-| I2C_SCL  | P0_30                 |
-+----------+-----------------------+
-| I2C_SDA  | P0_31                 |
-+----------+-----------------------+
++----------+----------------------+----------------------+
+| LTC3208  | MAX32655FTHR         | MAX32690EVKIT        |
++----------+----------------------+----------------------+
+| V_IN     | Power Supply         | Power Supply         |
++----------+----------------------+----------------------+
+| V_CC     | 3v3                  | 3v3                  |
++----------+----------------------+----------------------+
+| GND      | GND                  | GND                  |
++----------+----------------------+----------------------+
+| I2C_SCL  | P0_30                | P2_8                 |
++----------+----------------------+----------------------+
+| I2C_SDA  | P0_31                | P2_7                 |
++----------+----------------------+----------------------+
+| ENRGBS   | P1_9                 | P0_14                |
++----------+----------------------+----------------------+
 
 ** Build Command **
+
+For MAX32655FTHR:
 
 .. code-block:: bash
 
@@ -146,3 +168,16 @@ Maxim Platform
 
     # to flash the code to the controller
     make TARGET=max32655 run
+
+For MAX32690EVKIT:
+
+.. code-block:: bash
+
+    # to delete current build
+    make reset
+
+    #to build project
+    make TARGET=max32690
+
+    # to flash the code to the controller
+    make TARGET=max32690 run
