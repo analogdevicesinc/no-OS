@@ -9,5 +9,6 @@ source "projects/ad4692_ardz/Kconfig"
 source "projects/adf4371/Kconfig"
 source "projects/ad74416h/Kconfig"
 source "projects/adf4382/Kconfig"
+source "projects/ad7616-st/Kconfig"
 
 endmenu
