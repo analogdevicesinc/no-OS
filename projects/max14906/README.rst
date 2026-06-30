@@ -98,7 +98,8 @@ In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-	make EXAMPLE=basic
+	python tools/scripts/no_os_build.py build \
+		--project max14906 --variant basic --board nucleo-f401re
 
 IIO Example
 ^^^^^^^^^^^
@@ -119,7 +120,8 @@ In order to build the IIO example make sure you are using this command:
 
 .. code-block:: bash
 
-	make EXAMPLE=iio
+	python tools/scripts/no_os_build.py build \
+		--project max14906 --variant iio --board nucleo-f401re
 
 No-OS Supported Platforms
 --------------------------
@@ -160,21 +162,22 @@ board.
 
 .. code-block:: bash
 
-	# to delete current build
-	make reset
-	# to build the project (selecting the example to run)
-	make EXAMPLE=iio PLATFORM=maxim TARGET=max32690
-	# to flash the code
-	make run
+	# point at the Maxim SDK libraries (only if not auto-detected)
+	export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
 
-.. code-block:: bash
+	cd no-OS
 
-	# to delete current build
-	make reset
-	# to build the project (selecting the example to run)
-	make EXAMPLE=iio PLATFORM=maxim TARGET=max32665
-	# to flash the code
-	make run
+	# build the project (iio example on the AD-APARD32690-SL board)
+	python tools/scripts/no_os_build.py build \
+		--project max14906 --variant iio --board ad-apard32690-sl
+
+	# Available variants: ``basic``, ``iio``. Replace ``--variant`` accordingly.
+	# Alternative board: ``max32665fthr``. Replace ``--board`` accordingly.
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project max14906 --variant iio --board ad-apard32690-sl \
+		--probe openocd --flash
 
 STM32 Platform
 ^^^^^^^^^^^^^^
@@ -208,9 +211,20 @@ the NUCLEO-F401RE board and the MAX14906EVKIT J13 header:
 
 .. code-block:: bash
 
-	# to delete current build
-	make reset
-	# to build the project (selecting the example to run)
-	make EXAMPLE=iio PLATFORM=stm32
-	# to flash the code
-	make run
+	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+	# in a default install location)
+	export STM32CUBEMX=</path/to/stm32cubemx>
+	export STM32CUBEIDE=</path/to/stm32cubeide>
+
+	cd no-OS
+
+	# build the project (basic example on the NUCLEO-F401RE board)
+	python tools/scripts/no_os_build.py build \
+		--project max14906 --variant basic --board nucleo-f401re
+
+	# Available variants: ``basic``, ``iio``. Replace ``--variant`` accordingly.
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project max14906 --variant basic --board nucleo-f401re \
+		--probe openocd --flash
