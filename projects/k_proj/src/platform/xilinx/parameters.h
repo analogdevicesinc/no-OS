@@ -43,7 +43,12 @@
 #ifdef XPS_BOARD_ZCU102
 #define GPIO_OFFSET			78
 #define GPIO_DEVICE_ID			XPAR_PSU_GPIO_0_DEVICE_ID
-#define I2C_DEVICE_ID			XPAR_PSU_I2C_1_DEVICE_ID
+/*
+ * Vitis 2025+ SDT BSPs no longer emit XPAR_PSU_I2C_1_DEVICE_ID; the PS I2C
+ * driver is looked up by base address in SDT mode. Si5391 is on I2C1.
+ */
+#define I2C_DEVICE_ID			1
+#define I2C_BASEADDR			XPAR_XIICPS_1_BASEADDR
 #else
 #define GPIO_OFFSET			54
 #endif
@@ -121,6 +126,25 @@
 #define GEM_INSTANCE	0
 #endif
 
+/*
+ * The XEmacPs driver is looked up by an "identifier" which is a device ID on
+ * legacy BSPs and a base address on Vitis 2025+ SDT BSPs (-DSDT). SDT BSPs no
+ * longer emit XPAR_XEMACPS_n_DEVICE_ID, so prefer the base address there and
+ * fall back to the device ID on older BSPs.
+ */
+#if defined(SDT)
+#if GEM_INSTANCE == 0 && defined(XPAR_XEMACPS_0_BASEADDR)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_0_BASEADDR
+#elif GEM_INSTANCE == 1 && defined(XPAR_XEMACPS_1_BASEADDR)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_1_BASEADDR
+#elif GEM_INSTANCE == 2 && defined(XPAR_XEMACPS_2_BASEADDR)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_2_BASEADDR
+#elif GEM_INSTANCE == 3 && defined(XPAR_XEMACPS_3_BASEADDR)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_3_BASEADDR
+#else
+#error "GEM_INSTANCE base address not available - check your .xsa / BSP configuration"
+#endif
+#else /* legacy (non-SDT) BSP */
 #if GEM_INSTANCE == 0 && defined(XPAR_XEMACPS_0_DEVICE_ID)
 #define GEM_DEVICE_ID	XPAR_XEMACPS_0_DEVICE_ID
 #elif GEM_INSTANCE == 1 && defined(XPAR_XEMACPS_1_DEVICE_ID)
@@ -131,6 +155,7 @@
 #define GEM_DEVICE_ID	XPAR_XEMACPS_3_DEVICE_ID
 #else
 #error "GEM_INSTANCE not available - check your .xsa / BSP configuration"
+#endif
 #endif
 
 extern struct xil_i2c_init_param i2c_extra;

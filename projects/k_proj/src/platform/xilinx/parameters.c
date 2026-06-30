@@ -32,6 +32,9 @@
 struct xil_i2c_init_param i2c_extra = {
 	.type = IIC_PS,
 	.device_id = I2C_DEVICE_ID,
+#ifdef SDT
+	.base_addr = I2C_BASEADDR,
+#endif
 };
 
 struct xil_gpio_init_param xil_gpio_param = {
@@ -41,6 +44,9 @@ struct xil_gpio_init_param xil_gpio_param = {
 	.type = GPIO_PS,
 #endif
 	.device_id = GPIO_DEVICE_ID,
+#ifdef SDT
+	.base_addr = XPAR_XGPIOPS_0_BASEADDR,
+#endif
 };
 
 struct xil_uart_init_param xilinx_lwip_uart_extra_ip = {
@@ -49,5 +55,8 @@ struct xil_uart_init_param xilinx_lwip_uart_extra_ip = {
 #else
 	.type = UART_PS,
 	.irq_id = UART_IRQ_ID,
+#ifdef SDT
+	.base_addr = XPAR_XUARTPS_0_BASEADDR,
+#endif
 #endif
 };
