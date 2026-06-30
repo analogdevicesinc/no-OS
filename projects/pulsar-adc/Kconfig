@@ -1,0 +1,20 @@
+menu "Pulsar ADC Configuration"
+
+choice PULSAR_ADC_EXAMPLE
+	prompt "Example variant"
+	default PULSAR_ADC_BASIC_EXAMPLE
+
+config PULSAR_ADC_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Basic example for the Pulsar ADC.
+
+config PULSAR_ADC_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example for the Pulsar ADC.
+
+endchoice
+
+endmenu
