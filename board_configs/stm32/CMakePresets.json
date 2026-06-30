@@ -8,15 +8,15 @@
 			"generator": "Ninja"
 		},
 		{
-			"name": "stm32f756_nucleo",
-			"description": "STM32F756 Nucleo board",
+			"name": "nucleo-f756",
+			"description": "NUCLEO-F756ZG board",
 			"inherits": "stm32-base",
 			"cacheVariables": {
-				"BOARD": "stm32f756_nucleo",
+				"BOARD": "nucleo-f756",
 				"USE_VENDOR_TOOLCHAIN": "ON",
 				"PLATFORM": "stm32",
 				"TARGET": "stm32f756",
-				"BOARD_CONFIG_FILE": "stm32f756_nucleo_defconfig"
+				"BOARD_CONFIG_FILE": "nucleo-f756_defconfig"
 			}
 		},
 		{
