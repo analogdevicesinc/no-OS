@@ -211,15 +211,22 @@ USB Communication                               Connect SDP-K1 to PC via USB
 
 **Build Command**
 
+Available variants: ``eit``, ``eit_iio``. Replace ``--variant`` accordingly.
+
 .. code-block:: bash
 
-	cd no-OS/projects/cn0565
+	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+	# in a default install location)
+	export STM32CUBEMX=</path/to/stm32cubemx>
+	export STM32CUBEIDE=</path/to/stm32cubeide>
 
-	# to delete current build
-	make reset
-	# to build the project
-	make PLATFORM=stm32
-	# to flash the code
-	make run
-	# to debug the code
-	make debug
+	cd no-OS
+
+	# build the project (eit example on the SDP-K1 board)
+	python tools/scripts/no_os_build.py build \
+		--project cn0565 --variant eit --board sdp-ck1z
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project cn0565 --variant eit --board sdp-ck1z \
+		--probe openocd --flash
