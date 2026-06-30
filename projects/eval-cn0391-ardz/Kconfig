@@ -1,0 +1,22 @@
+menu "EVAL-CN0391-ARDZ Configuration"
+
+choice EVAL_CN0391_ARDZ_EXAMPLE
+	prompt "Example variant"
+	default EVAL_CN0391_ARDZ_BASIC_EXAMPLE
+
+config EVAL_CN0391_ARDZ_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Read the four thermocouple channels and the cold-junction RTD over
+	  UART.
+
+config EVAL_CN0391_ARDZ_IIO_LWIP_EXAMPLE
+	bool "IIO LWIP example"
+	depends on IIO && LWIP && NET
+	help
+	  Expose the CN0391 as an IIO device over an lwIP network link using
+	  the ADIN1110 Ethernet controller.
+
+endchoice
+
+endmenu
