@@ -2,7 +2,7 @@ PLATFORM = mbed
 # PLATFORM = xilinx
 
 # Choose the default example to build
-EXAMPLE := iio_example
+EXAMPLE ?= iio_example
 
 
 include ../../tools/scripts/generic_variables.mk
