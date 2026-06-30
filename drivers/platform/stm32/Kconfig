@@ -46,11 +46,12 @@ config SPI_STM32
 	bool "Enable STM32 SPI driver"
 	depends on SPI
 	select DMA
-	select DMA_STM32
 	default n
 	help
 	  Enable STM32-specific SPI driver implementation.
 	  Requires CONFIG_SPI=y to be enabled.
+	  The concrete DMA implementation (DMA_STM32 for classic-DMA families,
+	  GPDMA_STM32 for STM32H5) is selected by the board defconfig.
 
 config XSPI_STM32
 	bool "Enable STM32 XSPI driver"
