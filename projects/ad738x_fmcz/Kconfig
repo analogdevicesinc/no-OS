@@ -1,0 +1,26 @@
+menu "AD738X_FMCZ Configuration"
+
+choice AD738X_FMCZ_EXAMPLE
+	prompt "Example variant"
+	default AD738X_FMCZ_BASIC_EXAMPLE
+
+config AD738X_FMCZ_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Basic example demonstrating the AD738X ADC.
+
+config AD738X_FMCZ_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example demonstrating the AD738X ADC with libiio support.
+
+endchoice
+
+config AD738X_FMCZ_USE_STANDARD_SPI
+	bool
+	default y if STM32
+	help
+	  Use standard SPI driver instead of SPI engine (Xilinx).
+
+endmenu
