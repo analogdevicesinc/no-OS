@@ -5,9 +5,12 @@ trigger:
 - 20*
 
 pr:
-- main
-- next_stable
-- 20*
+  autoCancel: True
+  branches:
+    include:
+    - main
+    - next_stable
+    - 20*
 
 variables:
   runCondition: true
