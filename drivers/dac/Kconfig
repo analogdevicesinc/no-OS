@@ -170,6 +170,11 @@ config DAC_LTC268X
     bool "Enable LTC268X DAC driver"
     default n
 
+config DAC_MAX22007
+    depends on SPI
+    bool "Enable MAX22007 DAC driver"
+    default n
+
 config DAC_MAX22017
     depends on SPI
     bool "Enable MAX22017 DAC driver"
