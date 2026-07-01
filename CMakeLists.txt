@@ -139,11 +139,6 @@ else()
   set(NO_OS_NATIVE_BUILD_MODE "")
 endif()
 
-# Board specific defconfig
-list(APPEND CONFIG_FILES ${DEFAULT_DEFCONFIG})
-
-message(STATUS "Project defconfig: ${PROJECT_DEFCONFIG}")
-
 set(NO_OS_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 if(NOT ${NATIVE_BUILD})
   set(NO_OS_DIR ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)
