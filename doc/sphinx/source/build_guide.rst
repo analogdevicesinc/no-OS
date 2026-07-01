@@ -87,7 +87,6 @@ RASPBERRY PI PICO
 .. toctree::
     :maxdepth: 1
 
-    build_guides/build_pico
     build_guides/build_pico_cmake
 
 LATTICE PROPEL SDK

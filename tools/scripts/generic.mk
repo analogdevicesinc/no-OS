@@ -136,10 +136,6 @@ ifeq 'maxim' '$(PLATFORM)'
 include $(NO-OS)/tools/scripts/maxim.mk
 endif
 
-ifeq 'pico' '$(PLATFORM)'
-include $(NO-OS)/tools/scripts/pico.mk
-endif
-
 ifeq 'mbed' '$(PLATFORM)'
 include $(NO-OS)/tools/scripts/mbed.mk
 endif
