@@ -40,7 +40,12 @@
 #include "tcpecho_raw.h"
 #include "parameters.h"
 #include "echo_lwip_example.h"
+
+#if PHY_TYPE == PHY_TYPE_TI_DP83867
+#include "capi_dp83867.h"
+#else
 #include "capi_marvell_88e1510.h"
+#endif
 
 /* MAC address - must be unique on the local network */
 static uint8_t mac_addr[6] = {0x00, 0x0A, 0x35, 0x00, 0x01, 0x02};
@@ -74,19 +79,32 @@ static int example_mdio_write(uint8_t addr, uint8_t reg, uint16_t data)
 int echo_lwip_example_main(void)
 {
 	struct lwip_network_desc *lwip_desc;
-	struct mrvl_88e1510_extra_config mrvl_cfg = {
+#if PHY_TYPE == PHY_TYPE_TI_DP83867
+	struct dp83867_extra_config phy_cfg = {
+		.rgmii = {
+			.rx_delay_en   = true,
+			.tx_delay_en   = true,
+			.rx_delay_code = DP83867_RGMII_DELAY_2_00_NS,
+			.tx_delay_code = DP83867_RGMII_DELAY_2_00_NS,
+		},
+	};
+	const struct capi_eth_phy_ops *phy_ops = &dp83867_ops;
+#else
+	struct mrvl_88e1510_extra_config phy_cfg = {
 		.rgmii = { .rx_delay_en = true, .tx_delay_en = true },
 		.downshift_en = true,
 		.downshift_retries = 3,
 	};
+	const struct capi_eth_phy_ops *phy_ops = &mrvl_88e1510_ops;
+#endif
 	struct capi_eth_mac_init_config mac_cfg = {
 		.identifier  = GEM_DEVICE_ID,
 		.mac_address = (capi_eth_mac_addr *)mac_addr,
 		.ops         = &xemacps_capi_mac_ops,
 	};
 	struct lwip_capi_param netdev_param = {
-		.phy_ops       = &mrvl_88e1510_ops,
-		.phy_extra     = &mrvl_cfg,
+		.phy_ops       = phy_ops,
+		.phy_extra     = &phy_cfg,
 		.phy_addr      = 0,                  /* auto-detect */
 		.fn_read       = example_mdio_read,
 		.fn_write      = example_mdio_write,

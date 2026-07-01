@@ -5,6 +5,7 @@ Supported Devices
 -----------------
 
 - Marvell 88E1510/88E1518/88E1512/88E1514 (Alaska family)
+- Texas Instruments DP83867 (used on Xilinx ZCU102)
 
 Overview
 --------
@@ -37,6 +38,25 @@ Features:
 - Speed downshift on link failure
 - Link-change interrupt support
 - Power management (full power / power down)
+
+TI DP83867
+~~~~~~~~~~
+
+The TI DP83867 driver (``dp83867/``) supports the DP83867 gigabit
+copper PHY used on the Xilinx ZCU102. It communicates over MDIO
+Clause 22, with vendor extended registers accessed through the standard
+MMD-indirect mechanism (REGCR/ADDAR at addresses 0x0D/0x0E).
+
+Features:
+
+- Auto-negotiation with configurable speed/duplex advertisement
+- Forced speed/duplex mode (10/100/1000 Mbps)
+- RGMII internal TX/RX clock delay with per-step timing codes
+  (250 ps .. 4 ns, see ``DP83867_RGMII_DELAY_*``)
+- MDI/MDIX auto-crossover and manual override
+- Link-change interrupt support
+- Power management (full power / power down)
+- LED function control (page-less; single LEDCR1 register)
 
 Driver Initialization Example
 ------------------------------

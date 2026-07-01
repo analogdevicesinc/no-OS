@@ -95,6 +95,23 @@
 #endif
 #endif /* SDT */
 
+/*
+ * PHY selection. Override at build time with -DPHY_TYPE=PHY_TYPE_DP83867
+ *
+ *   PHY_TYPE_MRVL_88E1510  — Marvell Alaska
+ *   PHY_TYPE_TI_DP83867    — TI DP83867
+ */
+#define PHY_TYPE_MRVL_88E1510	1
+#define PHY_TYPE_TI_DP83867	2
+
+#ifndef PHY_TYPE
+#if defined(__aarch64__)
+#define PHY_TYPE		PHY_TYPE_TI_DP83867
+#else
+#define PHY_TYPE		PHY_TYPE_MRVL_88E1510
+#endif
+#endif
+
 extern struct xil_uart_init_param xilinx_lwip_uart_extra_ip;
 
 #endif /* __PARAMETERS_H__ */

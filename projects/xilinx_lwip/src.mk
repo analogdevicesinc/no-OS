@@ -3,7 +3,7 @@ LIBRARIES += lwip
 # slipif.c requires sio_* functions which we don't implement.
 ALL_IGNORED_FILES += $(NO-OS)/libraries/lwip/lwip/src/netif/slipif.c
 
-CFLAGS += -DGEM_INSTANCE=1
+CFLAGS += -DGEM_INSTANCE=0
 CFLAGS += -DSSIZE_MAX=INT_MAX
 
 SRCS += $(PROJECT)/src/platform/xilinx/main.c
@@ -46,6 +46,10 @@ SRCS += $(NO-OS)/capi/src/capi_eth_mac.c
 # Marvell 88E1510 PHY driver (CAPI)
 INCS += $(DRIVERS)/net/phy/mrvl_88e1510/capi_marvell_88e1510.h
 SRCS += $(DRIVERS)/net/phy/mrvl_88e1510/capi_marvell_88e1510.c
+
+# TI DP83867 PHY driver (CAPI) — used on ZCU102
+INCS += $(DRIVERS)/net/phy/dp83867/capi_dp83867.h
+SRCS += $(DRIVERS)/net/phy/dp83867/capi_dp83867.c
 
 # XEmacPs MAC driver (PS GEM, CAPI)
 INCS += $(DRIVERS)/net/xemacps/capi_xemacps.h
