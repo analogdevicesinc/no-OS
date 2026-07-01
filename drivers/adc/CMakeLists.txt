@@ -10,6 +10,11 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad4080)
 no_os_sources_ifdef(CONFIG_ADC_AD4170 ${CMAKE_CURRENT_SOURCE_DIR}/ad4170/ad4170.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad4170)
 
+# AD4692
+no_os_sources_ifdef(CONFIG_ADC_AD4692 ${CMAKE_CURRENT_SOURCE_DIR}/ad4692/ad4692.c)
+no_os_sources_ifdef(CONFIG_ADC_IIO_AD4692 ${CMAKE_CURRENT_SOURCE_DIR}/ad4692/iio_ad4692.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad4692)
+
 # AD463X
 no_os_sources_ifdef(CONFIG_ADC_AD463X ${CMAKE_CURRENT_SOURCE_DIR}/ad463x/ad463x.c)
 no_os_sources_ifdef(CONFIG_ADC_IIO_AD463X ${CMAKE_CURRENT_SOURCE_DIR}/ad463x/iio_ad463x.c)

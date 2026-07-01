@@ -32,6 +32,18 @@
 			}
 		},
 		{
+			"name": "nucleo-f413zh",
+			"description": "NUCLEO-F413ZH board",
+			"inherits": "stm32-base",
+			"cacheVariables": {
+				"BOARD": "nucleo-f413zh",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "stm32",
+				"TARGET": "stm32f413",
+				"BOARD_CONFIG_FILE": "nucleo-f413zh_defconfig"
+			}
+		},
+		{
 			"name": "adin1110ebz",
 			"description": "ADIN1110-EBZ board",
 			"inherits": "stm32-base",

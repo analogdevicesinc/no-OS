@@ -60,6 +60,32 @@
 			}
 		},
 		{
+			"name": "max32660_fthr",
+			"description": "MAX32660 board",
+			"inherits": "maxim-base",
+			"cacheVariables": {
+				"BOARD": "max32660_fthr",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "maxim",
+				"TARGET": "max32660",
+				"TARGET_NUM": "32660",
+				"BOARD_CONFIG_FILE": "max32660_fthr_defconfig"
+			}
+		},
+		{
+			"name": "max32665_fthr",
+			"description": "MAX32665 board",
+			"inherits": "maxim-base",
+			"cacheVariables": {
+				"BOARD": "max32665_fthr",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "maxim",
+				"TARGET": "max32665",
+				"TARGET_NUM": "32665",
+				"BOARD_CONFIG_FILE": "max32665_fthr_defconfig"
+			}
+		},
+		{
 			"name": "ad-swiot1l-sl",
 			"description": "AD-SWIOT1L-SL board",
 			"inherits": "maxim-base",
