@@ -25,7 +25,7 @@ from no_os_build import (
 # Platforms handled by the CMake build system (the only ones with board
 # presets under board_configs/). A project's builds.json is expected to carry
 # only the platforms NOT in this set; its CMake combos cover these.
-CMAKE_PLATFORMS = {'maxim', 'stm32'}
+CMAKE_PLATFORMS = {'maxim', 'stm32', 'pico'}
 
 TGREEN =  '\033[32m' # Green Text	
 TBLUE =  '\033[34m' # Green Text	
@@ -282,9 +282,6 @@ class BuildConfig:
 		if (platform == 'aducm3029' or platform == 'stm32' or platform == 'maxim'):
 			self.export_elf_file = self.export_file
 			self.export_file = self.export_file.replace('.elf', '.hex')
-		if (platform == 'pico'):
-			self.export_elf_file = self.export_file
-			self.export_file = self.export_file.replace('.elf', '.uf2')
 		if (platform == 'mbed'):
 			self.export_elf_file = self.export_file
 			self.export_file = self.export_file.replace('.elf', '.bin')

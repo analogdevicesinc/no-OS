@@ -1,0 +1,22 @@
+{
+	"version": 7,
+	"configurePresets": [
+		{
+			"name": "rpi-pico-base",
+			"hidden": true,
+			"description": "Base config for Raspberry Pi Pico boards",
+			"generator": "Ninja"
+		},
+		{
+			"name": "rpi-pico",
+			"description": "Raspberry Pi Pico (RP2040) board",
+			"inherits": "rpi-pico-base",
+			"cacheVariables": {
+				"BOARD": "rpi-pico",
+				"PLATFORM": "pico",
+				"TARGET": "rp2040",
+				"BOARD_CONFIG_FILE": "pico_defconfig"
+			}
+		}
+	]
+}

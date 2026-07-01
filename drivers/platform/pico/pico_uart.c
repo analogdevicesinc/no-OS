@@ -38,6 +38,7 @@
 #include "pico_uart.h"
 #include "pico_irq.h"
 #include "pico/stdlib.h"
+#include "pico/stdio_uart.h"
 #include "hardware/irq.h"
 
 /**
