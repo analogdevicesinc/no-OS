@@ -1,0 +1,16 @@
+{
+      "xilinx": {
+            "dummy": {
+                  "flags": "EXAMPLE=dummy",
+                  "hardware": [
+                        "adv7511_zed"
+                  ]
+            },
+            "iio_example": {
+                  "flags": "EXAMPLE=iio_example",
+                  "hardware": [
+                        "adv7511_zed"
+                  ]
+            }
+      }
+}

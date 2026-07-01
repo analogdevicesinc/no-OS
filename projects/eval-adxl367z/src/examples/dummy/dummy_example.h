@@ -33,6 +33,6 @@
 #ifndef __DUMMY_EXAMPLE_H__
 #define __DUMMY_EXAMPLE_H__
 
-int dummy_example_main();
+int example_main();
 
 #endif /* __DUMMY_EXAMPLE_H__ */

@@ -31,16 +31,11 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "common_data.h"
+#include "no_os_error.h"
 
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
-
-#ifdef DUMMY_EXAMPLE
-#include "dummy_example.h"
-#endif
+extern int example_main();
 
 /***************************************************************************//**
  * @brief Main function execution for XILINX platform.
@@ -49,35 +44,22 @@
 *******************************************************************************/
 int main()
 {
-	int ret;
+	int ret = -EINVAL;
 
 	/* Enable the instruction cache. */
 	Xil_ICacheEnable();
 	/* Enable the data cache. */
 	Xil_DCacheEnable();
 
-#ifdef IIO_EXAMPLE
-	ret = iio_example_main();
-	if (ret < 0)
-		goto error;
-#endif
-
-#ifdef DUMMY_EXAMPLE
-	ret = dummy_example_main();
-	if (ret < 0)
-		goto error;
-#endif
+	/* Execute the example main function */
+	ret = example_main();
+	if (ret)
+		return ret;
 
 	/* Disable the instruction cache. */
-	Xil_DCacheDisable();
-	/* Disable the data cache. */
 	Xil_ICacheDisable();
+	/* Disable the data cache. */
+	Xil_DCacheDisable();
 
-#if (IIO_EXAMPLE+DUMMY_EXAMPLE != 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and rebuild the project.
-#endif
-
-error:
-	return 0;
+	return ret;
 }

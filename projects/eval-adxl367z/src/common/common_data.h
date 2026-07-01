@@ -40,4 +40,8 @@ extern const struct no_os_spi_init_param spi_ip;
 
 extern struct adxl367_init_param init_param;
 
+#ifdef IIO_SUPPORT
+extern struct no_os_uart_init_param adxl367_uart_ip;
+#endif
+
 #endif /* __COMMON_DATA_H__ */
