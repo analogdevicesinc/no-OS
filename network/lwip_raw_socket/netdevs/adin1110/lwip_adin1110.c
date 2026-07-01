@@ -52,7 +52,6 @@
 #include "lwip/inet.h"
 #include "lwip_socket.h"
 #include "no_os_delay.h"
-#include "tcp_socket.h"
 
 #include "adin1110.h"
 #include "lwip_adin1110.h"

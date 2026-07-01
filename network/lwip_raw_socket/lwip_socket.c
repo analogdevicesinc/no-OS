@@ -63,7 +63,10 @@
 
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
-#include "tcp_socket.h"
+#include "no_os_error.h"
+#include "no_os_util.h"
+#include "no_os_net.h"
+#include "no_os_socket.h"
 
 #include "adin1110.h"
 
@@ -71,7 +74,8 @@ static bool mdns_result;
 static bool mdns_is_conflict;
 static uint32_t mdns_conflict_id;
 
-static void lwip_config_if(struct lwip_network_desc *desc);
+/* Backend socket operations, populated at the bottom of this file. */
+static const struct no_os_socket_ops lwip_socket_platform_ops;
 
 /**
  * @brief Get a socket structure based on id.
@@ -119,6 +123,44 @@ static void _release_socket(struct lwip_network_desc *desc, uint32_t id)
 	struct lwip_socket_desc *sock = _get_sock(desc, id);
 
 	sock->state = SOCKET_CLOSED;
+}
+
+/**
+ * @brief Tear down a socket pool slot (close the pcb, release the slot).
+ *
+ * This operates purely on the lwip socket pool and is used both by the public
+ * close/disconnect operations and by the lwip receive callback (which has no
+ * generic no_os_socket_desc to work with).
+ * @param desc - lwip sockets layer specific descriptor.
+ * @param sock_id - the index of the socket to be closed.
+ * @return 0 in the case of success, negative error code otherwise
+ */
+static int32_t _close_slot(struct lwip_network_desc *desc, uint32_t sock_id)
+{
+	struct lwip_socket_desc *sock;
+
+	sock = _get_sock(desc, sock_id);
+	if (!sock)
+		return -EINVAL;
+
+	if (!sock->pcb)
+		return 0;
+
+	if (sock->p) {
+		tcp_recved(sock->pcb, sock->p->tot_len);
+		pbuf_free(sock->p);
+	}
+
+	tcp_close(sock->pcb);
+	tcp_recv(sock->pcb, NULL);
+	tcp_err(sock->pcb, NULL);
+
+	sock->p_idx = 0;
+	sock->pcb = NULL;
+	sock->p = NULL;
+	_release_socket(desc, sock_id);
+
+	return 0;
 }
 
 /**
@@ -268,15 +310,14 @@ static int _lwip_start_mdns(struct lwip_network_desc *desc, struct netif *netif)
 }
 
 /**
- * @brief Configure lwip and the lower layer network device.
- * @param desc - lwip sockets layer specific descriptor.
+ * @brief Bring up the lwip stack and the lower layer network device.
+ * @param out - Address where to store the lwip specific descriptor.
  * @param param - initialization parameter.
  * @return 0 in the case of success, negative error code otherwise
  */
-int32_t no_os_lwip_init(struct lwip_network_desc **desc,
-			struct lwip_network_param *param)
+static int32_t _lwip_bringup(struct lwip_network_desc **out,
+			     struct lwip_network_param *param)
 {
-	struct network_interface *network_descriptor;
 	struct lwip_network_desc *descriptor;
 	struct netif *netif_descriptor;
 	ip4_addr_t ipaddr, netmask, gw;
@@ -287,17 +328,11 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 #endif
 	int ret;
 
-	network_descriptor = calloc(1, sizeof(*network_descriptor));
-	if (!network_descriptor)
+	netif_descriptor = no_os_calloc(1, sizeof(*netif_descriptor));
+	if (!netif_descriptor)
 		return -ENOMEM;
 
-	netif_descriptor = calloc(1, sizeof(*netif_descriptor));
-	if (!netif_descriptor) {
-		ret = -ENOMEM;
-		goto free_network_descriptor;
-	}
-
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor) {
 		ret = -ENOMEM;
 		goto free_netif_descriptor;
@@ -373,8 +408,6 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 	if (ret)
 		goto platform_remove;
 
-	lwip_config_if(descriptor);
-
 	printf("IP address: %s\n", ip4addr_ntoa(&netif_descriptor->ip_addr));
 	printf("Network mask: %s\n", ip4addr_ntoa(&netif_descriptor->netmask));
 	printf("Gateway's IP address: %s\n", ip4addr_ntoa(&netif_descriptor->gw));
@@ -384,7 +417,7 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 		descriptor->sockets[i].id = i;
 	}
 
-	*desc = descriptor;
+	*out = descriptor;
 
 	return 0;
 
@@ -392,34 +425,11 @@ platform_remove:
 	param->platform_ops->remove(descriptor->mac_desc);
 free_netif:
 	netif_remove(netif_descriptor);
-	free(descriptor);
+	no_os_free(descriptor);
 free_netif_descriptor:
-	free(netif_descriptor);
-free_network_descriptor:
-	free(network_descriptor);
+	no_os_free(netif_descriptor);
 
 	return ret;
-}
-
-/**
- * @brief Configure lwip and the lower layer network device.
- * @param desc - lwip sockets layer specific descriptor.
- * @return 0
- */
-int32_t no_os_lwip_remove(struct lwip_network_desc *desc)
-{
-	if (!desc || !desc->platform_ops)
-		return -EINVAL;
-
-	if (!desc->platform_ops->remove)
-		return -ENOSYS;
-
-	desc->platform_ops->remove(desc->mac_desc);
-	netif_remove(desc->lwip_netif);
-	no_os_free(desc->lwip_netif);
-	no_os_free(desc);
-
-	return 0;
 }
 
 /**
@@ -435,44 +445,9 @@ static void lwip_err_callback(void *arg, err_t err)
 }
 
 /**
- * @brief Close a socket connection.
- * @param desc - lwip sockets layer specific descriptor.
- * @param param - the index of the socket to be closed.
- * @return 0 in the case of success, negative error code otherwise
- */
-static int32_t lwip_socket_close(void *net, uint32_t sock_id)
-{
-	struct lwip_network_desc *desc = net;
-	struct lwip_socket_desc *sock;
-
-	sock = _get_sock(desc, sock_id);
-	if (!sock)
-		return -EINVAL;
-
-	if (!sock->pcb)
-		return 0;
-
-	if (sock->p) {
-		tcp_recved(sock->pcb, sock->p->tot_len);
-		pbuf_free(sock->p);
-	}
-
-	tcp_close(sock->pcb);
-	tcp_recv(sock->pcb, NULL);
-	tcp_err(sock->pcb, NULL);
-
-	sock->p_idx = 0;
-	sock->pcb = NULL;
-	sock->p = NULL;
-	_release_socket(desc, sock_id);
-
-	return 0;
-}
-
-/**
  * @brief Called when a pbuf is received.
- * @param desc - lwip sockets layer specific descriptor.
- * @param tcp_pcb - lwip TCP descriptor of the socket from which the pbuf was received.
+ * @param arg - lwip socket pool slot.
+ * @param tpcb - lwip TCP descriptor of the socket from which the pbuf was received.
  * @param p - the received pbuf.
  * @param err - error code.
  * @return 0 in the case of success, negative error code otherwise
@@ -487,7 +462,7 @@ static err_t lwip_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p,
 		tcp_recv(sock->pcb, NULL);
 		sock->state = SOCKET_CLOSED;
 
-		lwip_socket_close(sock->desc, sock->id);
+		_close_slot(sock->desc, sock->id);
 
 		return ERR_OK;
 	}
@@ -509,8 +484,7 @@ static err_t lwip_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p,
 
 /**
  * @brief Configure the receive and error callbacks.
- * @param desc - lwip sockets layer specific descriptor.
- * @param err - error code.
+ * @param desc - lwip socket pool slot.
  */
 static void lwip_config_socket(struct lwip_socket_desc *desc)
 {
@@ -521,23 +495,25 @@ static void lwip_config_socket(struct lwip_socket_desc *desc)
 
 /**
  * @brief Create a TCP socket.
- * @param net - lwip sockets layer specific descriptor.
- * @param sock_id - index of the socket that was created.
+ * @param net - generic network interface descriptor.
+ * @param sock - address where the created socket descriptor is stored.
  * @param proto - Layer 4 protocol (only TCP is supported).
  * @param buff_size - unused.
  * @return 0 in the case of success, negative error code otherwise
  */
-static int32_t lwip_socket_open(void *net, uint32_t *sock_id,
-				enum socket_protocol proto,
+static int32_t lwip_socket_open(struct no_os_net_desc *net,
+				struct no_os_socket_desc **sock,
+				enum no_os_socket_protocol proto,
 				uint32_t buff_size)
 {
-	struct lwip_network_desc *desc = net;
+	struct lwip_network_desc *desc = net->extra;
+	struct no_os_socket_desc *s;
 	struct tcp_pcb *pcb;
 	uint32_t socket_id;
 	int32_t ret;
 
 	NO_OS_UNUSED_PARAM(buff_size);
-	if (proto != PROTOCOL_TCP)
+	if (proto != NO_OS_SOCKET_TCP)
 		return -EPROTONOSUPPORT;
 
 	ret = _get_closed_socket(desc, &socket_id);
@@ -546,6 +522,13 @@ static int32_t lwip_socket_open(void *net, uint32_t *sock_id,
 
 	pcb = tcp_new_ip_type(IPADDR_TYPE_ANY);
 	if (!pcb) {
+		_release_socket(desc, socket_id);
+		return -ENOMEM;
+	}
+
+	s = no_os_socket_alloc(net, &lwip_socket_platform_ops, socket_id);
+	if (!s) {
+		tcp_close(pcb);
 		_release_socket(desc, socket_id);
 		return -ENOMEM;
 	}
@@ -560,49 +543,64 @@ static int32_t lwip_socket_open(void *net, uint32_t *sock_id,
 	lwip_config_socket(&desc->sockets[socket_id]);
 
 	mdns_conflict_id = 0;
-	*sock_id = socket_id;
+
+	*sock = s;
 
 	return 0;
 }
 
 /**
- * @brief Send a TCP packet.
- * @param net - lwip sockets layer specific descriptor.
- * @param sock_id - index of the socket to send data to.
- * @param data - pointer to the data array.
- * @param size - size of data array.
+ * @brief Close a socket connection and free the socket descriptor.
+ * @param sock - socket descriptor.
  * @return 0 in the case of success, negative error code otherwise
  */
-static int32_t lwip_socket_send(void *net, uint32_t sock_id, const void *data,
-				uint32_t size)
+static int32_t lwip_socket_close(struct no_os_socket_desc *sock)
 {
-	struct lwip_network_desc *desc = net;
-	struct lwip_socket_desc *sock;
+	int32_t ret;
+
+	ret = _close_slot(sock->net->extra, sock->id);
+	no_os_free(sock);
+
+	return ret;
+}
+
+/**
+ * @brief Send a TCP packet.
+ * @param sock - socket descriptor.
+ * @param data - pointer to the data array.
+ * @param size - size of data array.
+ * @return number of bytes sent on success, negative error code otherwise
+ */
+static int32_t lwip_socket_send(struct no_os_socket_desc *sock,
+				const void *data, uint32_t size)
+{
+	struct lwip_network_desc *desc = sock->net->extra;
+	struct lwip_socket_desc *s;
 	uint32_t avail;
 	uint32_t flags;
 	err_t err;
 
-	sock = _get_sock(desc, sock_id);
-	if (!sock)
+	s = _get_sock(desc, sock->id);
+	if (!s)
 		return -EINVAL;
 
-	if (sock->state != SOCKET_CONNECTED)
+	if (s->state != SOCKET_CONNECTED)
 		return -ENOTCONN;
 
-	avail = tcp_sndbuf(sock->pcb);
+	avail = tcp_sndbuf(s->pcb);
 	flags = TCP_WRITE_FLAG_COPY;
 	if (avail < size)
 		/* Partial write */
 		flags |= TCP_WRITE_FLAG_MORE;
 
 	size = no_os_min(avail, size);
-	err = tcp_write(sock->pcb, data, size, flags);
+	err = tcp_write(s->pcb, data, size, flags);
 	if (err != ERR_OK)
 		return err;
 
 	if (!(flags & TCP_WRITE_FLAG_MORE)) {
 		/* Mark data as ready to be sent */
-		err = tcp_output(sock->pcb);
+		err = tcp_output(s->pcb);
 		if (err != ERR_OK)
 			return err;
 	}
@@ -612,22 +610,21 @@ static int32_t lwip_socket_send(void *net, uint32_t sock_id, const void *data,
 
 /**
  * @brief Receive a TCP packet.
- * @param net - lwip sockets layer specific descriptor.
- * @param sock_id - index of the socket to receive data from.
+ * @param sock - socket descriptor.
  * @param data - pointer to the data array.
  * @param size - size of data to be read.
- * @return 0 in the case of success, negative error code otherwise
+ * @return number of bytes received on success, negative error code otherwise
  */
-static int32_t lwip_socket_recv(void *net, uint32_t sock_id, void *data,
+static int32_t lwip_socket_recv(struct no_os_socket_desc *sock, void *data,
 				uint32_t size)
 {
-	struct lwip_network_desc *desc = net;
+	struct lwip_network_desc *desc = sock->net->extra;
 	struct lwip_socket_desc *socket;
 	struct pbuf *p, *old_p;
 	uint8_t *buf, *pdata;
 	uint32_t i, len;
 
-	socket = _get_sock(desc, sock_id);
+	socket = _get_sock(desc, sock->id);
 	if (!socket)
 		return -EINVAL;
 
@@ -667,18 +664,17 @@ static int32_t lwip_socket_recv(void *net, uint32_t sock_id, void *data,
 
 /**
  * @brief Bind a socket to a port.
- * @param net - lwip sockets layer specific descriptor.
- * @param sock_id - index of the socket to receive data from.
+ * @param sock - socket descriptor.
  * @param port - port number to bind a socket to.
  * @return 0 in the case of success, negative error code otherwise
  */
-static int32_t lwip_socket_bind(void *net, uint32_t sock_id, uint16_t port)
+static int32_t lwip_socket_bind(struct no_os_socket_desc *sock, uint16_t port)
 {
-	struct lwip_network_desc *desc = net;
+	struct lwip_network_desc *desc = sock->net->extra;
 	struct lwip_socket_desc *socket;
 	err_t err;
 
-	socket = _get_sock(desc, sock_id);
+	socket = _get_sock(desc, sock->id);
 	if (!socket)
 		return -EINVAL;
 
@@ -693,19 +689,18 @@ static int32_t lwip_socket_bind(void *net, uint32_t sock_id, uint16_t port)
 
 /**
  * @brief Configure a socket to listen for connections.
- * @param net - lwip sockets layer specific descriptor.
- * @param sock_id - index of the socket to listen (server socket id).
+ * @param sock - socket descriptor (server socket).
  * @param back_log - connections queue length.
  * @return 0 in the case of success, negative error code otherwise
  */
-static int32_t lwip_socket_listen(void *net, uint32_t sock_id,
+static int32_t lwip_socket_listen(struct no_os_socket_desc *sock,
 				  uint32_t back_log)
 {
-	struct lwip_network_desc *desc = net;
+	struct lwip_network_desc *desc = sock->net->extra;
 	struct lwip_socket_desc *socket;
 	struct tcp_pcb *pcb;
 
-	socket = _get_sock(desc, sock_id);
+	socket = _get_sock(desc, sock->id);
 	if (!socket)
 		return -EINVAL;
 
@@ -722,7 +717,7 @@ static int32_t lwip_socket_listen(void *net, uint32_t sock_id,
 
 /**
  * @brief Called when a connecton is accepted.
- * @param net - lwip sockets layer specific descriptor.
+ * @param arg - lwip socket pool slot (server socket).
  * @param new_pcb - lwip TCP descriptor of the new connection.
  * @param err - error code.
  * @return 0 in the case of success, negative error code otherwise
@@ -757,19 +752,21 @@ static err_t lwip_accept_callback(void *arg, struct tcp_pcb *new_pcb, err_t err)
 
 /**
  * @brief Check for incoming connections, and accept if there are any.
- * @param net - lwip sockets layer specific descriptor.
- * @param client_socket_id - index of the assigned client socket.
- * @return 0 in the case of success, negative error code otherwise
+ * @param sock - listening socket descriptor.
+ * @param client - address where the accepted socket descriptor is stored.
+ * @return 0 in the case of success, negative error code otherwise (-EAGAIN if
+ *         no pending connection is available).
  */
-static int32_t lwip_socket_accept(void *net, uint32_t sock_id,
-				  uint32_t *client_socket_id)
+static int32_t lwip_socket_accept(struct no_os_socket_desc *sock,
+				  struct no_os_socket_desc **client)
 {
-	struct lwip_network_desc *desc = net;
+	struct lwip_network_desc *desc = sock->net->extra;
+	struct no_os_socket_desc *c;
 	struct lwip_socket_desc *serv_sock;
 	struct lwip_socket_desc *cli_sock;
 	uint32_t i;
 
-	serv_sock = _get_sock(desc, sock_id);
+	serv_sock = _get_sock(desc, sock->id);
 	if (!serv_sock)
 		return -EINVAL;
 
@@ -784,8 +781,14 @@ static int32_t lwip_socket_accept(void *net, uint32_t sock_id,
 		cli_sock = &desc->sockets[i];
 		if (cli_sock->state == SOCKET_WAITING_ACCEPT) {
 			/* New client connection for server */
-			*client_socket_id = i;
+			c = no_os_socket_alloc(sock->net,
+					       &lwip_socket_platform_ops, i);
+			if (!c)
+				return -ENOMEM;
+
 			cli_sock->state = SOCKET_CONNECTED;
+			*client = c;
+
 			return 0;
 		}
 	}
@@ -795,40 +798,31 @@ static int32_t lwip_socket_accept(void *net, uint32_t sock_id,
 
 /**
  * @brief Not implemented.
- * @param net - Not used.
- * @param sock_id - Not used.
- * @param data - Not used.
- * @param size - Not used.
- * @param to - Not used.
  * @return -ENOSYS
  */
-static int32_t lwip_socket_sendto(void *net, uint32_t sock_id, const void *data,
-				  uint32_t size, const struct socket_address *to)
+static int32_t lwip_socket_sendto(struct no_os_socket_desc *sock,
+				  const void *data, uint32_t size,
+				  const struct no_os_sockaddr *to)
 {
 	return -ENOSYS;
 }
 
 /**
  * @brief Not implemented.
- * @param net - Not used.
- * @param sock_id - Not used.
- * @param data - Not used.
- * @param size - Not used.
- * @param from - Not used.
  * @return -ENOSYS
  */
-static int32_t lwip_socket_recvfrom(void *net, uint32_t sock_id, void *data,
-				    uint32_t size, struct socket_address *from)
+static int32_t lwip_socket_recvfrom(struct no_os_socket_desc *sock, void *data,
+				    uint32_t size, struct no_os_sockaddr *from)
 {
 	return -ENOSYS;
 }
 
 /**
  * @brief Called once a connect() completes.
- * @param net - lwip sockets layer specific descriptor.
+ * @param arg - lwip socket pool slot.
  * @param pcb - unused.
  * @param err - connection result.
- * @return -ENOSYS
+ * @return ERR_OK on success, error code otherwise
  */
 static err_t lwip_connect_callback(void *arg, struct tcp_pcb *pcb, err_t err)
 {
@@ -847,27 +841,28 @@ static err_t lwip_connect_callback(void *arg, struct tcp_pcb *pcb, err_t err)
 
 /**
  * @brief Connect to a remote listening socket.
- * @param net - lwip sockets layer specific descriptor.
- * @param sock_id - index of the local socket.
+ * @param sock - socket descriptor.
  * @param addr - IP/port of the remote socket.
- * @return -ENOSYS
+ * @return 0 in the case of success, negative error code otherwise
  */
-static int32_t lwip_socket_connect(void *net, uint32_t sock_id,
-				   struct socket_address *addr)
+static int32_t lwip_socket_connect(struct no_os_socket_desc *sock,
+				   struct no_os_sockaddr *addr)
 {
-	struct lwip_network_desc *desc = net;
+	struct lwip_network_desc *desc = sock->net->extra;
 	struct lwip_socket_desc *socket;
 	struct tcp_pcb *pcb;
 	uint8_t ip_addr[4];
+	int32_t ret;
 
-	sscanf(addr->addr, "%d.%d.%d.%d", &ip_addr[0], &ip_addr[1],
-	       &ip_addr[2], &ip_addr[3]);
+	ret = no_os_net_ipv4_to_bytes(addr->addr, ip_addr);
+	if (ret)
+		return ret;
 
 	ip4_addr_t ip4;
 	IP_ADDR4(&ip4, ip_addr[0], ip_addr[1], ip_addr[2], ip_addr[3]);
 	const ip_addr_t ipaddr = IPADDR4_INIT(ip4.addr);
 
-	socket = _get_sock(desc, sock_id);
+	socket = _get_sock(desc, sock->id);
 	if (!socket)
 		return -ENOMEM;
 
@@ -878,13 +873,12 @@ static int32_t lwip_socket_connect(void *net, uint32_t sock_id,
 
 /**
  * @brief Close a connection from the client side.
- * @param net - lwip sockets layer specific descriptor.
- * @param sock_id - index of the remote socket to be closed.
+ * @param sock - socket descriptor.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t lwip_socket_disconnect(void *net, uint32_t sock_id)
+static int32_t lwip_socket_disconnect(struct no_os_socket_desc *sock)
 {
-	return lwip_socket_close(net, sock_id);
+	return _close_slot(sock->net->extra, sock->id);
 }
 
 /**
@@ -898,40 +892,167 @@ u32_t sys_now(void)
 	return time.s * 1000 + time.us / 1000;
 }
 
-struct network_interface lwip_socket_ops = {
-	.socket_open = lwip_socket_open,
-	.socket_close = lwip_socket_close,
-	.socket_connect = lwip_socket_connect,
-	.socket_disconnect = lwip_socket_disconnect,
-	.socket_send = lwip_socket_send,
-	.socket_recv = lwip_socket_recv,
-	.socket_sendto = lwip_socket_sendto,
-	.socket_recvfrom = lwip_socket_recvfrom,
-	.socket_bind = lwip_socket_bind,
-	.socket_listen = lwip_socket_listen,
-	.socket_accept = lwip_socket_accept,
-};
+/* ---- no_os_net / no_os_socket backend operations ---------------------- */
 
 /**
- * @brief Configure the TCP socket operations for the lwip sockets layer descriptor.
- * @param desc - lwip sockets layer specific descriptor.
+ * @brief no_os_net init: bring up the lwip stack behind a generic descriptor.
+ * @param desc - address where the generic network descriptor is stored.
+ * @param param - generic init parameter (extra = struct lwip_network_param *).
+ * @return 0 in the case of success, negative error code otherwise
  */
-static void lwip_config_if(struct lwip_network_desc *desc)
+static int32_t lwip_net_init(struct no_os_net_desc **desc,
+			     const struct no_os_net_init_param *param)
 {
-	struct network_interface *net = &desc->no_os_net;
+	struct no_os_net_desc *nd;
+	struct lwip_network_desc *ld;
+	int32_t ret;
 
-	net->socket_open = lwip_socket_open;
-	net->socket_close = lwip_socket_close;
-	net->socket_connect = lwip_socket_connect;
-	net->socket_disconnect = lwip_socket_disconnect;
-	net->socket_send = lwip_socket_send;
-	net->socket_recv = lwip_socket_recv;
-	net->socket_sendto = lwip_socket_sendto;
-	net->socket_recvfrom = lwip_socket_recvfrom;
-	net->socket_bind = lwip_socket_bind;
-	net->socket_listen = lwip_socket_listen;
-	net->socket_accept = lwip_socket_accept;
+	if (!desc || !param || !param->extra)
+		return -EINVAL;
 
-	net->net = desc;
+	nd = no_os_calloc(1, sizeof(*nd));
+	if (!nd)
+		return -ENOMEM;
+
+	ret = _lwip_bringup(&ld, param->extra);
+	if (ret) {
+		no_os_free(nd);
+		return ret;
+	}
+
+	nd->extra = ld;
+	ld->net_desc = nd;
+
+	*desc = nd;
+
+	return 0;
 }
+
+/**
+ * @brief no_os_net remove: tear down the lwip stack.
+ * @param desc - generic network descriptor.
+ * @return 0 in the case of success, negative error code otherwise
+ */
+static int32_t lwip_net_remove(struct no_os_net_desc *desc)
+{
+	struct lwip_network_desc *ld = desc->extra;
+
+	if (!ld || !ld->platform_ops)
+		return -EINVAL;
+
+	if (!ld->platform_ops->remove)
+		return -ENOSYS;
+
+	ld->platform_ops->remove(ld->mac_desc);
+	netif_remove(ld->lwip_netif);
+	no_os_free(ld->lwip_netif);
+	no_os_free(ld);
+	no_os_free(desc);
+
+	return 0;
+}
+
+/**
+ * @brief no_os_net step: drive the lwip timers and poll the MAC.
+ * @param desc - generic network descriptor.
+ * @return 0 in the case of success, negative error code otherwise
+ */
+static int32_t lwip_net_step(struct no_os_net_desc *desc)
+{
+	struct lwip_network_desc *ld = desc->extra;
+
+	return no_os_lwip_step(ld, NULL);
+}
+
+/**
+ * @brief no_os_net get_ip: report the current IP address as a string.
+ * @param desc - generic network descriptor.
+ * @param buf - destination buffer.
+ * @param size - size of the destination buffer.
+ * @return 0 in the case of success, negative error code otherwise
+ */
+static int32_t lwip_net_get_ip(struct no_os_net_desc *desc, char *buf,
+			       uint32_t size)
+{
+	struct lwip_network_desc *ld = desc->extra;
+	char *ip;
+
+	ip = ip4addr_ntoa(&ld->lwip_netif->ip_addr);
+	if (strlen(ip) >= size)
+		return -EINVAL;
+
+	strcpy(buf, ip);
+
+	return 0;
+}
+
+const struct no_os_net_platform_ops lwip_net_platform_ops = {
+	.init = lwip_net_init,
+	.remove = lwip_net_remove,
+	.step = lwip_net_step,
+	.get_ip = lwip_net_get_ip,
+	.socket_open = lwip_socket_open,
+};
+
+static const struct no_os_socket_ops lwip_socket_platform_ops = {
+	.close = lwip_socket_close,
+	.connect = lwip_socket_connect,
+	.disconnect = lwip_socket_disconnect,
+	.send = lwip_socket_send,
+	.recv = lwip_socket_recv,
+	.sendto = lwip_socket_sendto,
+	.recvfrom = lwip_socket_recvfrom,
+	.bind = lwip_socket_bind,
+	.listen = lwip_socket_listen,
+	.accept = lwip_socket_accept,
+};
+
+/* ---- Legacy compatibility shim --------------------------------------- */
+
+/**
+ * @brief Configure lwip and the lower layer network device.
+ *
+ * Compatibility wrapper over the no_os_net interface. New code should use
+ * no_os_net_init() with &lwip_net_platform_ops instead.
+ * @param desc - lwip sockets layer specific descriptor.
+ * @param param - initialization parameter.
+ * @return 0 in the case of success, negative error code otherwise
+ */
+int32_t no_os_lwip_init(struct lwip_network_desc **desc,
+			struct lwip_network_param *param)
+{
+	struct no_os_net_init_param nip = {
+		.platform_ops = &lwip_net_platform_ops,
+		.extra = param,
+	};
+	struct no_os_net_desc *nd;
+	int32_t ret;
+
+	if (!desc || !param)
+		return -EINVAL;
+
+	ret = no_os_net_init(&nd, &nip);
+	if (ret)
+		return ret;
+
+	*desc = nd->extra;
+
+	return 0;
+}
+
+/**
+ * @brief Remove the lwip descriptor.
+ *
+ * Compatibility wrapper over no_os_net_remove().
+ * @param desc - lwip sockets layer specific descriptor.
+ * @return 0 in the case of success, negative error code otherwise
+ */
+int32_t no_os_lwip_remove(struct lwip_network_desc *desc)
+{
+	if (!desc)
+		return -EINVAL;
+
+	return no_os_net_remove(desc->net_desc);
+}
+
 #endif

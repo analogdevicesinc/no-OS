@@ -51,7 +51,7 @@ struct socket_desc {
 	/* Circular buffer size */
 	uint32_t		cb_size;
 	/* Socket type */
-	enum socket_protocol	type;
+	enum no_os_socket_protocol	type;
 	/* Connection id */
 	uint32_t		conn_id;
 	/* States of a socket structure */
@@ -88,28 +88,20 @@ struct wifi_desc {
 	struct server_desc		server;
 	/* Reference to the AT parser */
 	struct at_desc			*at;
-	/* Network interface */
-	struct network_interface	interface;
 	/* Will be used in callback */
 	int32_t				conn_id_to_sock_id[MAX_CONNECTIONS];
 };
 
 static int32_t wifi_socket_open(struct wifi_desc *desc, uint32_t *sock_id,
-				enum socket_protocol proto, uint32_t buff_size);
+				enum no_os_socket_protocol proto, uint32_t buff_size);
 static int32_t wifi_socket_close(struct wifi_desc *desc, uint32_t sock_id);
 static int32_t wifi_socket_connect(struct wifi_desc *desc, uint32_t sock_id,
-				   struct socket_address *addr);
+				   struct no_os_sockaddr *addr);
 static int32_t wifi_socket_disconnect(struct wifi_desc *desc, uint32_t sock_id);
 static int32_t wifi_socket_send(struct wifi_desc *desc, uint32_t sock_id,
 				const void *data, uint32_t size);
 static int32_t wifi_socket_recv(struct wifi_desc *desc, uint32_t sock_id,
 				void *data, uint32_t size);
-static int32_t wifi_socket_sendto(struct wifi_desc *desc, uint32_t sock_id,
-				  const void *data, uint32_t size,
-				  struct socket_address to);
-static int32_t wifi_socket_recvfrom(struct wifi_desc *desc, uint32_t sock_id,
-				    void *data, uint32_t size,
-				    struct socket_address *from);
 static int32_t wifi_socket_bind(struct wifi_desc *desc, uint32_t sock_id,
 				uint16_t port);
 static int32_t wifi_socket_listen(struct wifi_desc *desc, uint32_t sock_id,
@@ -173,48 +165,6 @@ static inline void _wifi_release_conn(struct wifi_desc *desc,
 		desc->sockets[sock_id].conn_id = INVALID_ID;
 		desc->conn_id_to_sock_id[conn_id] = INVALID_ID;
 	}
-}
-
-/* Connect internal functions to the network interface */
-static void wifi_init_interface(struct wifi_desc *desc)
-{
-	desc->interface.net = desc;
-	desc->interface.socket_open =
-		(int32_t (*)(void *, uint32_t *, enum socket_protocol,
-			     uint32_t))
-		wifi_socket_open;
-	desc->interface.socket_close =
-		(int32_t (*)(void *, uint32_t))
-		wifi_socket_close;
-	desc->interface.socket_connect =
-		(int32_t (*)(void *, uint32_t, struct socket_address *))
-		wifi_socket_connect;
-	desc->interface.socket_disconnect =
-		(int32_t (*)(void *, uint32_t))
-		wifi_socket_disconnect;
-	desc->interface.socket_send =
-		(int32_t (*)(void *, uint32_t, const void *, uint32_t))
-		wifi_socket_send;
-	desc->interface.socket_recv =
-		(int32_t (*)(void *, uint32_t, void *, uint32_t))
-		wifi_socket_recv;
-	desc->interface.socket_sendto =
-		(int32_t (*)(void *, uint32_t, const void *, uint32_t,
-			     const struct socket_address *))
-		wifi_socket_sendto;
-	desc->interface.socket_recvfrom =
-		(int32_t (*)(void *, uint32_t, void *, uint32_t,
-			     struct socket_address *))
-		wifi_socket_recvfrom;
-	desc->interface.socket_bind =
-		(int32_t (*)(void *, uint32_t, uint16_t))
-		wifi_socket_bind;
-	desc->interface.socket_listen =
-		(int32_t (*)(void *, uint32_t, uint32_t))
-		wifi_socket_listen;
-	desc->interface.socket_accept =
-		(int32_t (*)(void *, uint32_t, uint32_t*))
-		wifi_socket_accept;
 }
 
 static inline int32_t _get_initialized_client_id(struct wifi_desc *desc)
@@ -308,8 +258,6 @@ int32_t wifi_init(struct wifi_desc **desc, struct wifi_init_param *param)
 	if (NO_OS_IS_ERR_VALUE(result))
 		goto ldesc_err;
 
-	wifi_init_interface(ldesc);
-
 	par.in.wifi_mode = CLIENT;
 	result = at_run_cmd(ldesc->at, AT_SET_OPERATION_MODE, AT_SET_OP, &par);
 	if (NO_OS_IS_ERR_VALUE(result))
@@ -392,25 +340,6 @@ int32_t wifi_disconnect(struct wifi_desc *desc)
 }
 
 /**
- * @brief Get network interface reference
- * @param desc - Socket descriptor
- * @param net - Address where to store the reference to the network interface
- * @return
- *  - 0 : On success
- *  - -1 : Otherwise
- */
-int32_t wifi_get_network_interface(struct wifi_desc *desc,
-				   struct network_interface **net)
-{
-	if (!desc || !net)
-		return -1;
-
-	*net = &desc->interface;
-
-	return 0;
-}
-
-/**
  * @brief Get ip
  * @param desc - Wifi descriptor
  * @param ip_buff - Buffer where to copy the null terminated ip string
@@ -442,9 +371,9 @@ int32_t wifi_get_ip(struct wifi_desc *desc, char *ip_buff, uint32_t buff_size)
 	return 0;
 }
 
-/** @brief See \ref network_interface.socket_open */
+/** @brief See \ref no_os_socket_ops.socket_open */
 static int32_t wifi_socket_open(struct wifi_desc *desc, uint32_t *sock_id,
-				enum socket_protocol proto, uint32_t buff_size)
+				enum no_os_socket_protocol proto, uint32_t buff_size)
 {
 	uint32_t	id;
 	int32_t		ret;
@@ -481,7 +410,7 @@ static inline bool _is_server_socket(struct wifi_desc *desc, uint32_t sock_id)
 	return false;
 }
 
-/** @brief See \ref network_interface.socket_close */
+/** @brief See \ref no_os_socket_ops.socket_close */
 static int32_t wifi_socket_close(struct wifi_desc *desc, uint32_t sock_id)
 {
 	struct socket_desc	*sock;
@@ -516,9 +445,9 @@ static int32_t wifi_socket_close(struct wifi_desc *desc, uint32_t sock_id)
 	return 0;
 }
 
-/** @brief See \ref network_interface.socket_connect */
+/** @brief See \ref no_os_socket_ops.socket_connect */
 static int32_t wifi_socket_connect(struct wifi_desc *desc, uint32_t sock_id,
-				   struct socket_address *addr)
+				   struct no_os_sockaddr *addr)
 {
 	union in_out_param	param;
 	int32_t			ret;
@@ -567,7 +496,7 @@ static void _remove_server_back_log(struct wifi_desc *desc)
 	}
 }
 
-/** @brief See \ref network_interface.socket_disconnect */
+/** @brief See \ref no_os_socket_ops.socket_disconnect */
 static int32_t wifi_socket_disconnect(struct wifi_desc *desc, uint32_t sock_id)
 {
 	union in_out_param	param;
@@ -609,7 +538,7 @@ static int32_t wifi_socket_disconnect(struct wifi_desc *desc, uint32_t sock_id)
 	return 0;
 }
 
-/** @brief See \ref network_interface.socket_send */
+/** @brief See \ref no_os_socket_ops.socket_send */
 static int32_t wifi_socket_send(struct wifi_desc *desc, uint32_t sock_id,
 				const void *data, uint32_t size)
 {
@@ -642,7 +571,7 @@ static int32_t wifi_socket_send(struct wifi_desc *desc, uint32_t sock_id,
 	return (int32_t)size;
 }
 
-/** @brief See \ref network_interface.socket_recv */
+/** @brief See \ref no_os_socket_ops.socket_recv */
 static int32_t wifi_socket_recv(struct wifi_desc *desc, uint32_t sock_id,
 				void *data, uint32_t size)
 {
@@ -671,38 +600,7 @@ static int32_t wifi_socket_recv(struct wifi_desc *desc, uint32_t sock_id,
 	return size;
 }
 
-/** @brief See \ref network_interface.socket_sendto */
-static int32_t wifi_socket_sendto(struct wifi_desc *desc, uint32_t sock_id,
-				  const void *data, uint32_t size,
-				  const struct socket_address to)
-{
-	NO_OS_UNUSED_PARAM(desc);
-	NO_OS_UNUSED_PARAM(sock_id);
-	NO_OS_UNUSED_PARAM(data);
-	NO_OS_UNUSED_PARAM(size);
-	NO_OS_UNUSED_PARAM(to);
-
-	/* TODO: Implement for UDP */
-	return -1;
-}
-
-/** @brief See \ref network_interface.socket_recvfrom */
-static int32_t wifi_socket_recvfrom(struct wifi_desc *desc, uint32_t sock_id,
-				    void *data, uint32_t size,
-				    struct socket_address *from)
-{
-	NO_OS_UNUSED_PARAM(desc);
-	NO_OS_UNUSED_PARAM(sock_id);
-	NO_OS_UNUSED_PARAM(data);
-	NO_OS_UNUSED_PARAM(size);
-	NO_OS_UNUSED_PARAM(from);
-
-	/* TODO: Implement for UDP */
-	return -1;
-}
-
-
-/** @brief See \ref network_interface.socket_bind */
+/** @brief See \ref no_os_socket_ops.socket_bind */
 static int32_t wifi_socket_bind(struct wifi_desc *desc, uint32_t sock_id,
 				uint16_t port)
 {
@@ -722,7 +620,7 @@ static int32_t wifi_socket_bind(struct wifi_desc *desc, uint32_t sock_id,
 	return 0;
 }
 
-/** @brief See \ref network_interface.socket_listen */
+/** @brief See \ref no_os_socket_ops.socket_listen */
 static int32_t wifi_socket_listen(struct wifi_desc *desc, uint32_t sock_id,
 				  uint32_t back_log)
 {
@@ -788,7 +686,7 @@ free_resources:
 	return ret;
 }
 
-/** @brief See \ref network_interface.socket_accept */
+/** @brief See \ref no_os_socket_ops.socket_accept */
 static int32_t wifi_socket_accept(struct wifi_desc *desc, uint32_t sock_id,
 				  uint32_t *client_socket_id)
 {
@@ -811,3 +709,203 @@ static int32_t wifi_socket_accept(struct wifi_desc *desc, uint32_t sock_id,
 
 	return -EAGAIN;
 }
+
+/* ---- no_os_net / no_os_socket backend --------------------------------- */
+/*
+ * The wifi (ESP8266) backend keeps its socket pool inside wifi_desc, indexed by
+ * a small integer id. In the new API, no_os_net_desc.extra holds the wifi_desc,
+ * and each no_os_socket_desc wraps a pool id in its "id" field. RX is driven by
+ * the UART IRQ into per-socket circular buffers, so step() is a no-op.
+ */
+
+#include "no_os_socket.h"
+
+static const struct no_os_socket_ops wifi_socket_ops;
+
+static int32_t wifi_net_init(struct no_os_net_desc **desc,
+			     const struct no_os_net_init_param *param)
+{
+	struct wifi_net_param *wp;
+	struct no_os_net_desc *nd;
+	struct wifi_desc *wifi;
+	int32_t ret;
+
+	if (!desc || !param || !param->extra)
+		return -EINVAL;
+
+	wp = param->extra;
+
+	nd = no_os_calloc(1, sizeof(*nd));
+	if (!nd)
+		return -ENOMEM;
+
+	ret = wifi_init(&wifi, &wp->wifi_ip);
+	if (ret) {
+		no_os_free(nd);
+		return ret;
+	}
+
+	if (wp->ssid) {
+		ret = wifi_connect(wifi, wp->ssid, wp->pwd);
+		if (ret) {
+			wifi_remove(wifi);
+			no_os_free(nd);
+			return ret;
+		}
+	}
+
+	nd->extra = wifi;
+	*desc = nd;
+
+	return 0;
+}
+
+static int32_t wifi_net_remove(struct no_os_net_desc *desc)
+{
+	struct wifi_desc *wifi = desc->extra;
+	int32_t ret;
+
+	ret = wifi_remove(wifi);
+	no_os_free(desc);
+
+	return ret;
+}
+
+static int32_t wifi_net_step(struct no_os_net_desc *desc)
+{
+	/* ESP8266 RX is serviced by the UART interrupt; nothing to pump here. */
+	return 0;
+}
+
+static int32_t wifi_net_get_ip(struct no_os_net_desc *desc, char *buf,
+			       uint32_t size)
+{
+	return wifi_get_ip(desc->extra, buf, size);
+}
+
+static int32_t wifi_net_socket_open(struct no_os_net_desc *net,
+				    struct no_os_socket_desc **sock,
+				    enum no_os_socket_protocol proto,
+				    uint32_t buff_size)
+{
+	struct wifi_desc *wifi = net->extra;
+	struct no_os_socket_desc *s;
+	uint32_t id;
+	int32_t ret;
+
+	ret = wifi_socket_open(wifi, &id,
+			       (proto == NO_OS_SOCKET_UDP) ? NO_OS_SOCKET_UDP :
+			       NO_OS_SOCKET_TCP, buff_size);
+	if (ret)
+		return ret;
+
+	s = no_os_socket_alloc(net, &wifi_socket_ops, id);
+	if (!s) {
+		wifi_socket_close(wifi, id);
+		return -ENOMEM;
+	}
+
+	*sock = s;
+
+	return 0;
+}
+
+static int32_t wifi_sock_close(struct no_os_socket_desc *sock)
+{
+	int32_t ret;
+
+	ret = wifi_socket_close(sock->net->extra, sock->id);
+	no_os_free(sock);
+
+	return ret;
+}
+
+static int32_t wifi_sock_connect(struct no_os_socket_desc *sock,
+				 struct no_os_sockaddr *addr)
+{
+	return wifi_socket_connect(sock->net->extra, sock->id, addr);
+}
+
+static int32_t wifi_sock_disconnect(struct no_os_socket_desc *sock)
+{
+	return wifi_socket_disconnect(sock->net->extra, sock->id);
+}
+
+static int32_t wifi_sock_send(struct no_os_socket_desc *sock, const void *data,
+			      uint32_t size)
+{
+	return wifi_socket_send(sock->net->extra, sock->id, data, size);
+}
+
+static int32_t wifi_sock_recv(struct no_os_socket_desc *sock, void *data,
+			      uint32_t size)
+{
+	return wifi_socket_recv(sock->net->extra, sock->id, data, size);
+}
+
+static int32_t wifi_sock_sendto(struct no_os_socket_desc *sock,
+				const void *data, uint32_t size,
+				const struct no_os_sockaddr *to)
+{
+	return -ENOSYS;
+}
+
+static int32_t wifi_sock_recvfrom(struct no_os_socket_desc *sock, void *data,
+				  uint32_t size, struct no_os_sockaddr *from)
+{
+	return -ENOSYS;
+}
+
+static int32_t wifi_sock_bind(struct no_os_socket_desc *sock, uint16_t port)
+{
+	return wifi_socket_bind(sock->net->extra, sock->id, port);
+}
+
+static int32_t wifi_sock_listen(struct no_os_socket_desc *sock,
+				uint32_t backlog)
+{
+	return wifi_socket_listen(sock->net->extra, sock->id, backlog);
+}
+
+static int32_t wifi_sock_accept(struct no_os_socket_desc *sock,
+				struct no_os_socket_desc **client)
+{
+	struct no_os_socket_desc *c;
+	uint32_t id;
+	int32_t ret;
+
+	ret = wifi_socket_accept(sock->net->extra, sock->id, &id);
+	if (ret)
+		return ret;
+
+	c = no_os_socket_alloc(sock->net, &wifi_socket_ops, id);
+	if (!c) {
+		wifi_socket_close(sock->net->extra, id);
+		return -ENOMEM;
+	}
+
+	*client = c;
+
+	return 0;
+}
+
+const struct no_os_net_platform_ops wifi_net_platform_ops = {
+	.init = wifi_net_init,
+	.remove = wifi_net_remove,
+	.step = wifi_net_step,
+	.get_ip = wifi_net_get_ip,
+	.socket_open = wifi_net_socket_open,
+};
+
+static const struct no_os_socket_ops wifi_socket_ops = {
+	.close = wifi_sock_close,
+	.connect = wifi_sock_connect,
+	.disconnect = wifi_sock_disconnect,
+	.send = wifi_sock_send,
+	.recv = wifi_sock_recv,
+	.sendto = wifi_sock_sendto,
+	.recvfrom = wifi_sock_recvfrom,
+	.bind = wifi_sock_bind,
+	.listen = wifi_sock_listen,
+	.accept = wifi_sock_accept,
+};

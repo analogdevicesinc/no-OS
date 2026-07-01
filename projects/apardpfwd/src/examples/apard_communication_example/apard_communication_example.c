@@ -36,11 +36,11 @@
 
 #include "lwip_socket.h"
 #include "lwip_adin1110.h"
-#include "tcp_socket.h"
+#include "no_os_net.h"
+#include "no_os_socket.h"
 #include "no_os_error.h"
 #include "no_os_gpio.h"
 #include "adin1110.h"
-#include "network_interface.h"
 
 #define SERVER_PORT		10000
 
@@ -57,11 +57,12 @@ int example_main()
 		.mac_param = &adin1110_ip,
 	};
 
-	struct tcp_socket_desc *server_socket;
-	struct tcp_socket_desc *client_socket;
+	struct no_os_socket_desc *server_socket;
+	struct no_os_socket_desc *client_socket;
 	struct lwip_network_desc *lwip_desc;
-	struct tcp_socket_init_param tcp_ip = {
-		.max_buff_size = 0
+	struct no_os_socket_init_param tcp_ip = {
+		.proto = NO_OS_SOCKET_TCP,
+		.buff_size = 0
 	};
 
 	struct no_os_uart_desc *uart_desc;
@@ -122,21 +123,21 @@ int example_main()
 
 	pr_info("Got device id 0x%X\n", device_id);
 
-	tcp_ip.net = &lwip_desc->no_os_net;
+	tcp_ip.net = lwip_desc->net_desc;
 
-	ret = socket_init(&server_socket, &tcp_ip);
+	ret = no_os_socket_init(&server_socket, &tcp_ip);
 	if (ret) {
 		pr_err("Socket initialization failed (%d)\n", ret);
 		goto remove_lwip;
 	}
 
-	ret = socket_bind(server_socket, SERVER_PORT);
+	ret = no_os_socket_bind(server_socket, SERVER_PORT);
 	if (ret) {
 		pr_err("Socket bind failed (%d)\n", ret);
 		goto remove_server_socket;
 	}
 
-	ret = socket_listen(server_socket, MAX_BACKLOG);
+	ret = no_os_socket_listen(server_socket, NO_OS_SOCKET_MAX_BACKLOG);
 	if (ret) {
 		pr_err("Socket listen failed (%d)\n", ret);
 		goto remove_server_socket;
@@ -146,24 +147,24 @@ int example_main()
 	uint8_t read_byte;
 
 	while (1) {
-		no_os_lwip_step(server_socket->net->net, NULL);
+		no_os_net_step(server_socket->net);
 
 		if (connected) {
-			ret = socket_recv(client_socket, &read_byte, 1);
+			ret = no_os_socket_recv(client_socket, &read_byte, 1);
 			if (ret > 0) {
-				socket_send(client_socket, &read_byte, ret);
+				no_os_socket_send(client_socket, &read_byte, ret);
 				pr_info("%c", read_byte);
 			} else if (ret < 0 && ret != -EAGAIN) {
 				pr_err("Socket recv failed (%d), closing connection\n", ret);
-				socket_remove(client_socket);
+				no_os_socket_remove(client_socket);
 				connected = false;
 			} else if (ret == 0) {
 				pr_info("Client disconnected\n");
-				socket_remove(client_socket);
+				no_os_socket_remove(client_socket);
 				connected = false;
 			}
 		} else {
-			ret = socket_accept(server_socket, &client_socket);
+			ret = no_os_socket_accept(server_socket, &client_socket);
 			if (ret && ret != -EAGAIN) {
 				pr_err("Socket accept failed (%d)\n", ret);
 				goto remove_server_socket;
@@ -177,7 +178,7 @@ int example_main()
 	}
 
 remove_server_socket:
-	socket_remove(server_socket);
+	no_os_socket_remove(server_socket);
 
 remove_lwip:
 	no_os_lwip_remove(lwip_desc);

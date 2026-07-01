@@ -38,10 +38,8 @@
 #include "no_os_util.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
-
-#ifdef NO_OS_LWIP_NETWORKING
-#include "lwip_socket.h"
-#endif
+#include "no_os_net.h"
+#include "no_os_socket.h"
 
 /* Timer reference used by the functions */
 static struct no_os_timer_desc	*timer;
@@ -137,15 +135,13 @@ int mqtt_noos_read(Network* net, unsigned char* buff, int len, int timeout)
 
 	sent = 0;
 	do {
-#ifdef NO_OS_LWIP_NETWORKING
 		/*
-		 * Currently, the LWIP networking layer doesn't implement packet RX
-		 * using interrupts, so we have to poll.
+		 * Some backends (e.g. lwIP) service RX by polling rather than
+		 * interrupts, so pump the network interface on every iteration.
 		 */
-		no_os_lwip_step(net->sock->net->net, NULL);
-#endif
-		rc = socket_recv(net->sock, (void *)(buff + sent),
-				 (uint32_t)(len - sent));
+		no_os_net_step(net->sock->net);
+		rc = no_os_socket_recv(net->sock, (void *)(buff + sent),
+				       (uint32_t)(len - sent));
 		if (rc != -EAGAIN) { //If data available or error
 			if (NO_OS_IS_ERR_VALUE(rc))
 				return rc;
@@ -168,5 +164,5 @@ int mqtt_noos_write(Network* net, unsigned char* buff, int len, int timeout)
 	/* non blocking read is not implemented */
 	NO_OS_UNUSED_PARAM(timeout);
 
-	return socket_send(net->sock, (const void *)buff, (uint32_t)len);
+	return no_os_socket_send(net->sock, (const void *)buff, (uint32_t)len);
 }

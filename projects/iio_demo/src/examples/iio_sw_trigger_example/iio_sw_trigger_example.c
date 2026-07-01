@@ -39,6 +39,13 @@
 #include "iio_dac_demo.h"
 #include "common_data.h"
 #include "no_os_util.h"
+#ifdef NO_OS_NETWORKING
+#ifdef LINUX_PLATFORM
+#include "linux_socket.h"
+#else
+#include "wifi.h"
+#endif
+#endif
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -120,8 +127,22 @@ int iio_sw_trigger_example_main()
 	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
 	app_init_param.uart_init_params = iio_demo_uart_ip;
 #ifdef NO_OS_NETWORKING
-	app_init_param.wifi_ssid = WIFI_SSID;
-	app_init_param.wifi_pwd = WIFI_PWD;
+#ifdef LINUX_PLATFORM
+	struct no_os_net_init_param net_param = {
+		.platform_ops = &linux_net_platform_ops,
+	};
+#else
+	static struct wifi_net_param wifi_np;
+	struct no_os_net_init_param net_param = {
+		.platform_ops = &wifi_net_platform_ops,
+		.extra = &wifi_np,
+	};
+
+	wifi_np.wifi_ip.sw_reset_en = true;
+	wifi_np.ssid = WIFI_SSID;
+	wifi_np.pwd = WIFI_PWD;
+#endif
+	app_init_param.net_param = &net_param;
 #endif
 	app_init_param.trigs = trigs;
 	app_init_param.nb_trigs = NO_OS_ARRAY_SIZE(trigs);

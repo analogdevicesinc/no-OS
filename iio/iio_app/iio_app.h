@@ -34,20 +34,14 @@
 #ifndef IIO_APP
 #define IIO_APP
 
+#include <stdbool.h>
 #include "iio.h"
 #include "no_os_irq.h"
 #include "no_os_uart.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
 
-#if defined(NO_OS_LWIP_NETWORKING)
-#include "lwip_socket.h"
-#endif
-
-#if defined(NO_OS_W5500_NETWORKING)
-#include "tcp_socket.h"
-#include "w5500_network.h"
-#endif
+#include "no_os_net.h"
 
 #define IIO_APP_DEVICE(_name, _dev, _dev_descriptor, _read_buff, _write_buff, _default_trigger_id) {\
 	.name = _name,\
@@ -94,9 +88,10 @@ struct iio_app_desc {
 	/** Function parameteres */
 	void *arg;
 
-#ifdef NO_OS_LWIP_NETWORKING
-	struct lwip_network_desc *lwip_desc;
-#endif
+	/** Network interface used by the IIO server (NULL if UART only) */
+	struct no_os_net_desc *net_desc;
+	/** Set when iio_app brought up net_desc itself (and must free it) */
+	bool net_owned;
 };
 
 /**
@@ -125,20 +120,22 @@ struct iio_app_init_param {
 	/** Function parameteres */
 	void *arg;
 
-#ifdef NO_OS_NETWORKING
-	/** WiFi SSID used by the network path */
-	const char *wifi_ssid;
-	/** WiFi password used by the network path */
-	const char *wifi_pwd;
-#endif
-
-#ifdef NO_OS_LWIP_NETWORKING
-	struct lwip_network_param lwip_param;
-#endif
-
-#ifdef NO_OS_W5500_NETWORKING
-	struct w5500_network_dev *net_dev;
-#endif
+	/*
+	 * Networking (optional). Two ways to attach a network interface to the
+	 * IIO server, mirroring the no_os_net bus/device split:
+	 *
+	 * - net_desc:  a network interface the caller already brought up with
+	 *   no_os_net_init() and continues to own (e.g. lwIP, W5500). iio_app
+	 *   forwards it and does NOT free it.
+	 *
+	 * - net_param: parameters for an interface iio_app should bring up and
+	 *   own itself (e.g. Linux sockets, or the ESP8266 wifi backend, whose
+	 *   "extra" is a struct wifi_net_param). Freed on iio_app_remove().
+	 *
+	 * Leave both NULL for a UART-only server. If both are set, net_desc wins.
+	 */
+	struct no_os_net_desc *net_desc;
+	struct no_os_net_init_param *net_param;
 };
 
 /** Register devices for an IIO application */

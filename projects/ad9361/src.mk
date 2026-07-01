@@ -38,7 +38,8 @@ ifeq (linux,$(strip $(PLATFORM)))
 CFLAGS += -DNO_OS_NETWORKING \
 		-DDISABLE_SECURE_SOCKET
 SRCS += $(NO-OS)/network/linux_socket/linux_socket.c \
-		$(NO-OS)/network/tcp_socket.c \
+		$(DRIVERS)/api/no_os_net.c \
+		$(DRIVERS)/api/no_os_socket.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(PLATFORM_DRIVERS)/linux_uart.c
 else
@@ -84,9 +85,9 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 ifeq (y,$(strip $(IIOD)))
 
 ifeq (linux,$(strip $(PLATFORM)))
-INCS += $(NO-OS)/network/tcp_socket.h \
+INCS += $(INCLUDE)/no_os_net.h \
+	$(INCLUDE)/no_os_socket.h \
 	$(NO-OS)/network/linux_socket/linux_socket.h \
-	$(NO-OS)/network/network_interface.h \
 	$(NO-OS)/network/noos_mbedtls_config.h
 endif
 

@@ -89,6 +89,8 @@ int example_main()
 		.size = DATA_BUFFER_SIZE * 3 * sizeof(int)
 	};
 	struct iio_app_init_param app_init_param = { 0 };
+	struct lwip_network_param lwip_ip = { 0 };
+	struct lwip_network_desc *lwip_desc;
 
 	adxl355_iio_ip.adxl355_dev_init = &adxl355_ip;
 	ret = adxl355_iio_init(&adxl355_iio_desc, &adxl355_iio_ip);
@@ -108,11 +110,16 @@ int example_main()
 	app_init_param.devices = iio_devices;
 	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
 	app_init_param.uart_init_params = adxl355_uart_ip;
-	app_init_param.lwip_param.platform_ops = &adin1110_lwip_ops;
-	app_init_param.lwip_param.mac_param = &adin1110_ip;
-	app_init_param.lwip_param.extra = NULL;
-	memcpy(app_init_param.lwip_param.hwaddr, adin1110_mac_address,
-	       NETIF_MAX_HWADDR_LEN);
+	lwip_ip.platform_ops = &adin1110_lwip_ops;
+	lwip_ip.mac_param = &adin1110_ip;
+	lwip_ip.extra = NULL;
+	memcpy(lwip_ip.hwaddr, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
+
+	ret = no_os_lwip_init(&lwip_desc, &lwip_ip);
+	if (ret)
+		return ret;
+
+	app_init_param.net_desc = lwip_desc->net_desc;
 
 	ret = iio_app_init(&app, app_init_param);
 	if (ret)

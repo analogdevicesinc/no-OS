@@ -21,6 +21,8 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 	$(INCLUDE)/no_os_circular_buffer.h \
 	$(INCLUDE)/no_os_trng.h \
 	$(INCLUDE)/no_os_rtc.h \
+	$(INCLUDE)/no_os_net.h \
+	$(INCLUDE)/no_os_socket.h \
 	$(DRIVERS)/rtc/pcf85263/pcf85263.h \
 	$(DRIVERS)/meter/ade9430/ade9430.h \
 	$(DRIVERS)/display/nhd_c12832a1z/nhd_c12832a1z.h \
@@ -53,6 +55,8 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 	$(NO-OS)/util/no_os_circular_buffer.c \
 	$(NO-OS)/util/no_os_alloc.c \
 	$(NO-OS)/util/no_os_mutex.c \
+	$(NO-OS)/util/no_os_net.c \
+	$(NO-OS)/util/no_os_socket.c \
 	$(DRIVERS)/display/nhd_c12832a1z/nhd_c12832a1z.c
 
 SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c     \

@@ -37,8 +37,8 @@
 #ifdef NO_OS_LWIP_NETWORKING
 
 #include "lwip/netif.h"
-#include "network_interface.h"
-#include "tcp_socket.h"
+#include "no_os_net.h"
+#include "no_os_socket.h"
 
 #define NO_OS_LWIP_BUFF_SIZE	1530
 #define NO_OS_MTU_SIZE		1500
@@ -83,7 +83,8 @@ struct lwip_socket_desc {
 struct lwip_network_desc {
 	void *mac_desc;
 	struct netif *lwip_netif;
-	struct network_interface no_os_net;
+	/* Generic no_os_net descriptor that owns this lwip instance. */
+	struct no_os_net_desc *net_desc;
 	const struct no_os_lwip_ops *platform_ops;
 	uint8_t hwaddr[6];
 	struct lwip_socket_desc sockets[NO_OS_MAX_SOCKETS];
@@ -107,6 +108,13 @@ struct no_os_lwip_ops {
 	int32_t (*step)(struct lwip_network_desc *desc, void *);
 };
 
+/*
+ * no_os_net backend operations implemented by the lwip stack. Reference this
+ * from a no_os_net_init_param (with .extra pointing to a lwip_network_param) to
+ * bring up an lwip based network interface.
+ */
+extern const struct no_os_net_platform_ops lwip_net_platform_ops;
+
 /* Initialize lwip stack */
 int32_t no_os_lwip_init(struct lwip_network_desc **,
 			struct lwip_network_param *);
@@ -117,8 +125,6 @@ int32_t no_os_lwip_remove(struct lwip_network_desc *);
  * it will call the necessary lwip timers.
  */
 int32_t no_os_lwip_step(struct lwip_network_desc *, void *);
-
-extern struct network_interface lwip_socket_ops;
 
 #endif /* NO_OS_LWIP_NETWORKING */
 #endif

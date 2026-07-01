@@ -37,8 +37,20 @@
 
 #include "iio_types.h"
 #include "no_os_uart.h"
-#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
-#include "tcp_socket.h"
+
+/*
+ * Enabled whenever any networking backend is selected. The IIO networking code
+ * is backend-agnostic (it only uses the generic no_os_net / no_os_socket API),
+ * so a single token gates it regardless of which backend is built.
+ */
+#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || \
+    defined(NO_OS_W5500_NETWORKING)
+#define NO_OS_IIO_NETWORK
+#endif
+
+#ifdef NO_OS_IIO_NETWORK
+#include "no_os_net.h"
+#include "no_os_socket.h"
 #endif
 
 enum physical_link_type {
@@ -97,8 +109,8 @@ struct iio_init_param {
 	enum physical_link_type	phy_type;
 	union {
 		struct no_os_uart_desc *uart_desc;
-#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
-		struct tcp_socket_init_param *tcp_socket_init_param;
+#ifdef NO_OS_IIO_NETWORK
+		struct no_os_net_desc *net_desc;
 #endif
 	};
 	struct iio_local_backend *local_backend;

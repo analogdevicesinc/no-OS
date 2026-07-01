@@ -34,8 +34,12 @@
 #ifndef LINUX_SOCKET_H_
 #define LINUX_SOCKET_H_
 
-#include "network_interface.h"
+#include "no_os_net.h"
 
-extern struct network_interface linux_net;
+/*
+ * no_os_net backend for POSIX/Linux host sockets. Use with no_os_net_init();
+ * the init param needs no backend-specific "extra" (pass NULL).
+ */
+extern const struct no_os_net_platform_ops linux_net_platform_ops;
 
 #endif /* LINUX_SOCKET_H_ */

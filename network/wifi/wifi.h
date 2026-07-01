@@ -36,7 +36,8 @@
 #define WIFI_DRIVER_H
 
 #include <stdint.h>
-#include "network_interface.h"
+#include "no_os_net.h"
+#include "no_os_socket.h"
 #include "no_os_uart.h"
 #include "no_os_irq.h"
 
@@ -63,6 +64,27 @@ struct wifi_init_param {
 	bool			sw_reset_en;
 };
 
+/**
+ * @struct wifi_net_param
+ * @brief no_os_net "extra" parameter for the wifi backend. Point a
+ * no_os_net_init_param.extra at this to bring up the ESP8266 and (optionally)
+ * join an access point in a single no_os_net_init() call.
+ */
+struct wifi_net_param {
+	/** ESP8266 hardware/UART init parameters */
+	struct wifi_init_param	wifi_ip;
+	/** Access point SSID to join (NULL to skip joining) */
+	const char		*ssid;
+	/** Access point password */
+	const char		*pwd;
+};
+
+/*
+ * no_os_net backend for the ESP8266 wifi module. Use with no_os_net_init();
+ * the init param's "extra" must point to a struct wifi_net_param.
+ */
+extern const struct no_os_net_platform_ops wifi_net_platform_ops;
+
 /* Wifi init */
 int32_t wifi_init(struct wifi_desc **desc, struct wifi_init_param *param);
 /* Wifi remove */
@@ -72,9 +94,6 @@ int32_t wifi_connect(struct wifi_desc *desc, const char *ssid,
 		     const char *pass);
 /* Wifi disconnect */
 int32_t wifi_disconnect(struct wifi_desc *desc);
-/* Wifi get network interface */
-int32_t wifi_get_network_interface(struct wifi_desc *desc,
-				   struct network_interface **net);
 /* Wifi get ip interface */
 int32_t wifi_get_ip(struct wifi_desc *desc, char *ip_buff, uint32_t buff_size);
 

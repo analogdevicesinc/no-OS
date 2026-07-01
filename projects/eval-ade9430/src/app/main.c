@@ -58,7 +58,10 @@
 #include "no_os_print_log.h"
 
 #include "wifi.h"
-#include "tcp_socket.h"
+#include "no_os_net.h"
+#include "no_os_socket.h"
+#include "no_os_secure_socket.h"
+#include "no_os_trng.h"
 
 #ifndef DISABLE_SECURE_SOCKET
 #include "az_iot_hub_client.h"
@@ -529,35 +532,34 @@ int main()
 		goto error_irq;
 	}
 
-	static struct wifi_desc *wifi;
-	struct wifi_init_param wifi_param = {
-		.irq_desc = irq_desc,
-		.uart_desc = uart_desc,
-		.uart_irq_conf = uart_desc,
-		.uart_irq_id = UART_IRQ_ID,
-		.sw_reset_en = false
+	static struct no_os_net_desc *net;
+	struct wifi_net_param wifi_net_ip = {
+		.wifi_ip = {
+			.irq_desc = irq_desc,
+			.uart_desc = uart_desc,
+			.uart_irq_conf = uart_desc,
+			.uart_irq_id = UART_IRQ_ID,
+			.sw_reset_en = false
+		},
+		.ssid = WIFI_SSID,
+		.pwd = WIFI_PWD
 	};
-	ret = wifi_init(&wifi, &wifi_param);
+	struct no_os_net_init_param net_param = {
+		.platform_ops = &wifi_net_platform_ops,
+		.extra = &wifi_net_ip
+	};
+	ret = no_os_net_init(&net, &net_param);
 	if (ret) {
-		pr_err("Error wifi_init!\n");
+		pr_err("Error wifi net init!\n");
 		goto error_uart;
 	}
 
-	ret = wifi_connect(wifi, WIFI_SSID, WIFI_PWD);
-	if (ret) {
-		pr_err("Error wifi connection!\n");
-		goto error_wifi;
-	}
-
-	struct tcp_socket_init_param socket_param;
-	struct tcp_socket_desc	*sock;
-	socket_param.max_buff_size = 0;
-
-	wifi_get_network_interface(wifi, &socket_param.net);
-	if (ret) {
-		pr_err("Error getting wifi network interface!\n");
-		goto error_wifi;
-	}
+	struct no_os_socket_init_param socket_param = {
+		.net = net,
+		.proto = NO_OS_SOCKET_TCP,
+		.buff_size = 0
+	};
+	struct no_os_socket_desc	*sock;
 
 	struct no_os_timer_init_param timer_init_param = {
 		.id = TIMER_ID,
@@ -573,7 +575,7 @@ int main()
 		.password = MQTT_CONFIG_CLI_PASS
 	};
 
-	struct socket_address mqtt_broker_addr = {
+	struct no_os_sockaddr mqtt_broker_addr = {
 		.port = SERVER_PORT
 	};
 
@@ -599,7 +601,7 @@ int main()
 		.platform_ops = &max_trng_ops
 	};
 
-	struct secure_init_param sip = {
+	struct no_os_secure_init_param sip = {
 		.trng_init_param = &trng_ip,
 		.ca_cert = my_ca_cert,
 		.ca_cert_len = NO_OS_ARRAY_SIZE(my_ca_cert),
@@ -609,20 +611,26 @@ int main()
 		.cli_pk_len = NO_OS_ARRAY_SIZE(my_cli_pk),
 		.cert_verify_mode = MBEDTLS_SSL_VERIFY_NONE
 	};
-
-	socket_param.secure_init_param = &sip;
+	struct no_os_socket_desc	*inner_sock;
 
 #ifdef CONFIG_DPS
 	mqtt_broker_addr.addr = DPS_SERVER_ADDR;
-	sip.hostname = DPS_SERVER_ADDR;
+	sip.hostname = (uint8_t *)DPS_SERVER_ADDR;
 
-	ret = socket_init(&sock, &socket_param);
+	ret = no_os_socket_init(&inner_sock, &socket_param);
 	if (ret) {
 		pr_err("Error Azure DPS socket initalization!\n");
 		goto error_wifi;
 	}
 
-	ret = socket_connect(sock, &mqtt_broker_addr);
+	ret = no_os_secure_socket_init(&sock, inner_sock, &sip);
+	if (ret) {
+		no_os_socket_remove(inner_sock);
+		pr_err("Error Azure DPS secure socket init!\n");
+		goto error_wifi;
+	}
+
+	ret = no_os_socket_connect(sock, &mqtt_broker_addr);
 	if (ret) {
 		pr_err("Error Azure DPS socket connect!\n");
 		goto error_sock;
@@ -685,28 +693,35 @@ int main()
 		goto error_sock;
 	}
 
-	ret = socket_disconnect(sock);
+	ret = no_os_socket_disconnect(sock);
 	if (ret) {
 		pr_err("Error Azure DPS socket disconnect!\n");
 		goto error_sock;
 	}
 
-	ret = socket_remove(sock);
+	ret = no_os_socket_remove(sock);
 	if (ret) {
 		pr_err("Error Azure DPS socket remove!\n");
 		goto error_wifi;
 	}
 #endif
 	mqtt_broker_addr.addr = SERVER_ADDR;
-	sip.hostname = SERVER_ADDR;
+	sip.hostname = (uint8_t *)SERVER_ADDR;
 
-	ret = socket_init(&sock, &socket_param);
+	ret = no_os_socket_init(&inner_sock, &socket_param);
 	if (ret) {
 		pr_err("Error Azure Hub socket init!\n");
 		goto error_wifi;;
 	}
 
-	ret = socket_connect(sock, &mqtt_broker_addr);
+	ret = no_os_secure_socket_init(&sock, inner_sock, &sip);
+	if (ret) {
+		no_os_socket_remove(inner_sock);
+		pr_err("Error Azure Hub secure socket init!\n");
+		goto error_wifi;
+	}
+
+	ret = no_os_socket_connect(sock, &mqtt_broker_addr);
 	if (ret) {
 		pr_err("Error Azure Hub socket connect!\n");
 		goto error_sock;
@@ -766,13 +781,13 @@ int main()
 #else
 	mqtt_broker_addr.addr = SERVER_ADDR;
 
-	ret = socket_init(&sock, &socket_param);
+	ret = no_os_socket_init(&sock, &socket_param);
 	if (ret) {
 		pr_err("Error socket_init!\n");
 		goto error_wifi;
 	}
 
-	ret = socket_connect(sock, &mqtt_broker_addr);
+	ret = no_os_socket_connect(sock, &mqtt_broker_addr);
 	if (ret) {
 		pr_err("Error socket_connect!\n");
 		goto error_sock;
@@ -849,9 +864,9 @@ int main()
 error_mqtt:
 	mqtt_remove(mqtt);
 error_sock:
-	socket_remove(sock);
+	no_os_socket_remove(sock);
 error_wifi:
-	wifi_remove(wifi);
+	no_os_net_remove(net);
 error_uart:
 	no_os_uart_remove(uart_desc);
 error_irq:

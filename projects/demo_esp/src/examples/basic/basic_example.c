@@ -40,15 +40,17 @@
 #include "no_os_irq.h"
 #include "no_os_print_log.h"
 #include "mqtt_client.h"
-#include "tcp_socket.h"
+#include "no_os_net.h"
+#include "no_os_socket.h"
 #include "wifi.h"
 
-int32_t init_and_connect_wifi(struct wifi_desc **wifi)
+int32_t init_and_connect_wifi(struct no_os_net_desc **net)
 {
 	static struct no_os_irq_ctrl_desc	*irq_ctrl;
 	static struct no_os_uart_desc		*udesc;
 	struct no_os_gpio_desc			*wifi_rst_gpio;
-	struct wifi_init_param			wifi_param;
+	static struct wifi_net_param		wifi_net_ip;
+	struct no_os_net_init_param		net_param;
 	int32_t				ret;
 
 	if (!WIFI_SW_RESET) {
@@ -88,34 +90,33 @@ int32_t init_and_connect_wifi(struct wifi_desc **wifi)
 		goto error_irq;
 	}
 
-	/* Initialize wifi descriptor */
-	wifi_param = (struct wifi_init_param) {
-		.irq_desc = irq_ctrl,
-		.uart_desc = udesc,
-		.uart_irq_conf = udesc,
-		.uart_irq_id = UART_CONFIG_IRQ_ID,
-		.sw_reset_en = WIFI_SW_RESET
+	/* Initialize the wifi network interface (brings up + joins the AP) */
+	wifi_net_ip = (struct wifi_net_param) {
+		.wifi_ip = {
+			.irq_desc = irq_ctrl,
+			.uart_desc = udesc,
+			.uart_irq_conf = udesc,
+			.uart_irq_id = UART_CONFIG_IRQ_ID,
+			.sw_reset_en = WIFI_SW_RESET
+		},
+		.ssid = WIFI_SSID,
+		.pwd = WIFI_PASS
+	};
+	net_param = (struct no_os_net_init_param) {
+		.platform_ops = &wifi_net_platform_ops,
+		.extra = &wifi_net_ip
 	};
 
-	ret = wifi_init(wifi, &wifi_param);
+	ret = no_os_net_init(net, &net_param);
 	if (ret) {
-		pr_err("Error wifi_init\n");
+		pr_err("Error wifi net init\n");
 		goto error_uart;
-	}
-
-	/* Connect to wifi network */
-	ret = wifi_connect(*wifi, WIFI_SSID, WIFI_PASS);
-	if (ret) {
-		pr_err("Error wifi_connect\n");
-		goto error_wifi;
 	}
 
 	printf("Connected to: %s\n", WIFI_SSID);
 
 	return 0;
 
-error_wifi:
-	wifi_remove(*wifi);
 error_uart:
 	no_os_uart_remove(udesc);
 error_irq:
@@ -142,38 +143,37 @@ void mqtt_message_handler(struct mqtt_message_data *msg)
 }
 
 int init_and_connect_to_mqtt_broker(struct mqtt_desc **mqtt,
-				    struct wifi_desc *wifi)
+				    struct no_os_net_desc *net)
 {
 	static uint8_t			send_buff[BUFF_LEN];
 	static uint8_t			read_buff[BUFF_LEN];
-	static struct tcp_socket_desc	*sock;
+	static struct no_os_socket_desc	*sock;
 
 	struct mqtt_init_param		mqtt_init_param;
-	struct tcp_socket_init_param	socket_init_param;
-	struct socket_address		mqtt_broker_addr;
+	struct no_os_socket_init_param	socket_init_param;
+	struct no_os_sockaddr		mqtt_broker_addr;
 	struct mqtt_connect_config	conn_config;
 	int32_t				ret;
 
 	/* Initialize socket structure */
-	socket_init_param.max_buff_size = 0; //Default buffer size
-	ret = wifi_get_network_interface(wifi, &socket_init_param.net);
-	if (ret) {
-		pr_err("Error wifi_get_network_interface\n");
-		goto error_wifi;
-	}
+	socket_init_param = (struct no_os_socket_init_param) {
+		.net = net,
+		.proto = NO_OS_SOCKET_TCP,
+		.buff_size = 0 //Default buffer size
+	};
 
-	ret = socket_init(&sock, &socket_init_param);
+	ret = no_os_socket_init(&sock, &socket_init_param);
 	if (ret) {
 		pr_err("Error socket_init", ret);
-		goto error_wifi;
+		goto error;
 	}
 
 	/* Connect socket to mqtt borker server */
-	mqtt_broker_addr = (struct socket_address) {
+	mqtt_broker_addr = (struct no_os_sockaddr) {
 		.addr = SERVER_ADDR,
 		.port = SERVER_PORT
 	};
-	ret = socket_connect(sock, &mqtt_broker_addr);
+	ret = no_os_socket_connect(sock, &mqtt_broker_addr);
 	if (ret) {
 		pr_err("Error socket_connect\n");
 		goto error_sock;
@@ -226,13 +226,11 @@ int init_and_connect_to_mqtt_broker(struct mqtt_desc **mqtt,
 
 	return 0;
 
-error_wifi:
-	wifi_remove(wifi);
 error_mqtt:
 	mqtt_remove(*mqtt);
 error_sock:
-	socket_remove(sock);
-
+	no_os_socket_remove(sock);
+error:
 	return ret;
 }
 
@@ -264,17 +262,17 @@ int32_t send(struct mqtt_desc *mqtt)
 *******************************************************************************/
 int example_main()
 {
-	struct wifi_desc	*wifi;
+	struct no_os_net_desc	*net;
 	struct mqtt_desc	*mqtt;
 	int32_t			ret;
 
-	ret = init_and_connect_wifi(&wifi);
+	ret = init_and_connect_wifi(&net);
 	if (ret) {
 		pr_err("Error init_and_connect_wifi\n");
 		return ret;
 	}
 
-	ret = init_and_connect_to_mqtt_broker(&mqtt, wifi);
+	ret = init_and_connect_to_mqtt_broker(&mqtt, net);
 	if (ret) {
 		pr_info("Error init_and_connect_to_mqtt_broker\n");
 		return ret;
@@ -300,7 +298,7 @@ int example_main()
 	return 0;
 
 error:
-	wifi_remove(wifi);
+	no_os_net_remove(net);
 	mqtt_remove(mqtt);
 
 	return ret;

@@ -36,7 +36,8 @@
 
 #ifdef NO_OS_W5500_NETWORKING
 
-#include "network_interface.h"
+#include "no_os_net.h"
+#include "no_os_socket.h"
 #include "w5500.h"
 
 enum w5500_socket_role {
@@ -58,12 +59,13 @@ struct w5500_socket_map {
 
 struct w5500_network_dev {
 	struct                  w5500_dev *mac_dev;
-	struct                  network_interface net_if;
 	struct                  w5500_socket_map sockets[W5500_MAX_SOCK_NUMBER + 1];
 	uint32_t                next_virtual_id;
 	uint8_t                 ip[4];
 	uint8_t                 netmask[4];
 	uint8_t                 gateway[4];
+	/* Scratch buffer for the w5500->net address string (recvfrom). */
+	char                    addr_str[16];
 };
 
 struct w5500_network_init_param {
@@ -77,6 +79,13 @@ int w5500_network_init(struct w5500_network_dev **net_dev,
 
 /** Free a device descriptor and release resources */
 int w5500_network_remove(struct w5500_network_dev *dev);
+
+/*
+ * no_os_net backend for the W5500 hardwired TCP/IP controller. Use with
+ * no_os_net_init(); the init param's "extra" must point to a
+ * struct w5500_network_init_param.
+ */
+extern const struct no_os_net_platform_ops w5500_net_platform_ops;
 
 #endif /* NO_OS_W5500_NETWORKING */
 #endif /* W5500_NETWORK_H */
