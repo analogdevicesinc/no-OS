@@ -328,38 +328,41 @@ wiring the boards.
 Build Command
 ^^^^^^^^^^^^^
 
-Below is a single code block containing the primary commands for
-cleaning, building, flashing, and debugging the ADXRS290 project on the
-PICO platform:
+The Pico platform is built through the CMake build flow (see the
+`Pico CMake build guide <https://wiki.analog.com/resources/no-os/build>`_).
+The ``rpi-pico`` preset selects the board and toolchain, while
+``PROJECT_DEFCONFIG`` selects the example variant. The following variants are
+available for the ``rpi-pico`` board:
+
+* ``iio`` - IIO example (``adxrs290-pmdz/iio.conf``)
+* ``iio_trigger`` - IIO trigger example (``adxrs290-pmdz/iio_trigger.conf``)
+* ``iio_timer_trigger`` - IIO timer trigger example
+  (``adxrs290-pmdz/iio_timer_trigger.conf``)
+
+Below is a consolidated set of commands to configure, build, flash, and debug
+the ADXRS290-PMDZ project on the ``rpi-pico`` board (swap the ``.conf`` file to
+build a different variant):
 
 .. code-block:: bash
 
-    # Navigate to the project directory (if not already there)                                                                                                                       
-    cd no-OS/projects/adxrs290-pmdz/src/examples/iio_example                                                                                                                                                                                                                                                    
-                                                                                                                                                                                     
-    # Set the target platform to PICO                                                                                                                                                 
-    make TARGET=pico
+    # Configure: select the rpi-pico preset and the iio example variant.
+    # Pass -DPROBE=openocd (default) or -DPROBE=jlink to enable the flash and
+    # debug targets.
+    cmake --preset rpi-pico -B build-adxrs290-pmdz-iio-rpi-pico \
+        -DPROJECT_DEFCONFIG=adxrs290-pmdz/iio.conf -DPROBE=openocd
 
-   # Clean: remove previous build artifacts                                                                                                                                         
-    make clean PLATFORM=pico                                                                                                                                                         
-                                                                                                                                                                                     
-    # Build:                                                                                                                                                                         
-    #   - Default full build (using 'all' target or simply 'make')                                                                                                                   
-    make all PLATFORM=pico                                                                                                                                                           
-                                                                                                                                                                                     
-    # Build specific IIO examples:                                                                                                                                                   
-    #   IIO example build                                                                                                                                                            
-    make iio_example TARGET=pico                                                                                                                                                     
-    #   IIO trigger example build                                                                                                                                                    
-    make iio_trigger_example TARGET=pico                                                                                                                                             
-    #   IIO timer trigger example build                                                                                                                                              
-    make iio_timer_trigger TARGET=pico                                                                                                                                               
-                                                                                                                                                                                     
-    # Flash: program the firmware onto the PICO board                                                                                                                                
-    make flash PLATFORM=pico                                                                                                                                                         
-                                                                                                                                                                                     
-    # Debug: launch a GDB debugging session for troubleshooting                                                                                                                      
-    make debug PLATFORM=pico  
+    # Build: compile the project (produces .elf and, when picotool is
+    # available, a .uf2 image under the build directory).
+    cmake --build build-adxrs290-pmdz-iio-rpi-pico --target adxrs290-pmdz
+
+    # Change Kconfig options interactively (optional).
+    cmake --build build-adxrs290-pmdz-iio-rpi-pico --target menuconfig
+
+    # Flash: program the firmware onto the board via the selected probe.
+    cmake --build build-adxrs290-pmdz-iio-rpi-pico --target flash
+
+    # Debug: start OpenOCD and attach GDB.
+    cmake --build build-adxrs290-pmdz-iio-rpi-pico --target debug
 
 STM32 Platform
 ~~~~~~~~~~~~~~~
