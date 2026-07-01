@@ -55,6 +55,7 @@
 /* Version product */
 #define ADHV4710_SILICON_REV					0x4
 #define ADHV4710_VERSION_PRODUCT     				0x46
+#define ADHV4711_VERSION_PRODUCT					0x47
 
 /* ADHV4710 Register Map */
 /* 8 BIT REGISTERS */
@@ -128,6 +129,26 @@
 #define ADHV4710_DECREASE_I 					0
 
 /**
+* @enum adhv4710_type
+* @brief Supported device variants.
+*/
+enum adhv4710_type {
+	/** ADHV4710 */
+	ID_ADHV4710,
+	/** ADHV4711 */
+	ID_ADHV4711,
+};
+
+/**
+* @struct adhv4710_chip_info
+* @brief Per-variant constants.
+*/
+struct adhv4710_chip_info {
+	/** Expected value of the CTRL_REG_26 chip-id register */
+	uint8_t version_product;
+};
+
+/**
 * @struct adhv4710_init_param
 * @brief ADHV4710 Device initialization parameters.
 */
@@ -136,6 +157,8 @@ struct adhv4710_init_param {
 	struct no_os_spi_init_param 	*spi_init;
 	/** GPIO RESET descriptor used to reset device (HW reset) */
 	struct no_os_gpio_init_param  	*gpio_reset;
+	/** Device variant */
+	enum adhv4710_type		id;
 };
 
 /**
@@ -147,6 +170,8 @@ struct adhv4710_dev {
 	struct no_os_spi_desc		*spi_desc;
 	/** GPIO RESET descriptor used to reset device (HW reset) */
 	struct no_os_gpio_desc  	*gpio_reset;
+	/** Device variant */
+	enum adhv4710_type		id;
 };
 
 /* Initialize the device. */

@@ -48,6 +48,12 @@
 #include <errno.h>
 #include <math.h>
 
+/* Per-variant constants, indexed by enum adhv4710_type */
+static const struct adhv4710_chip_info chip_info[] = {
+	[ID_ADHV4710] = { .version_product = ADHV4710_VERSION_PRODUCT },
+	[ID_ADHV4711] = { .version_product = ADHV4711_VERSION_PRODUCT },
+};
+
 /**
  * @brief Initialize the device.
  * @param device - The device structure.
@@ -69,6 +75,8 @@ int adhv4710_init(struct adhv4710_dev **device,
 	if (!dev)
 		return -ENOMEM;
 
+	dev->id = init_param.id;
+
 	/* SPI Initialization */
 	ret = no_os_spi_init(&dev->spi_desc,
 			     init_param.spi_init);
@@ -85,7 +93,7 @@ int adhv4710_init(struct adhv4710_dev **device,
 	if (ret)
 		goto error_spi;
 
-	if (reg_val != ADHV4710_VERSION_PRODUCT) {
+	if (reg_val != chip_info[dev->id].version_product) {
 		ret = -ENXIO;
 		goto error_spi;
 	}
