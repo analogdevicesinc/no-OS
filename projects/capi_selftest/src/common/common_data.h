@@ -36,6 +36,8 @@
 
 #include "capi_gpio.h"
 #include "capi_uart.h"
+#include "capi_spi.h"
+#include "capi_irq.h"
 
 struct test_framework_config;
 
@@ -43,6 +45,10 @@ struct test_framework_config;
  * @brief Console UART configuration used by the test framework output path.
  */
 extern const struct capi_uart_config uart_config;
+/**
+ * @brief IRQ controller configuration used by IRQ-backed async tests.
+ */
+extern struct capi_irq_config irq_config;
 /**
  * @brief Short platform label printed in the test run header.
  */
@@ -55,6 +61,15 @@ extern const struct capi_gpio_port_config gpio_output_config;
  * @brief CAPI GPIO config for the input sampling test port.
  */
 extern const struct capi_gpio_port_config gpio_input_config;
+/**
+ * @brief CAPI SPI config for external loopback.
+ */
+extern const struct capi_spi_config spi_controller_config;
+/**
+ * @brief CAPI SPI device descriptor for the external loopback test.
+ *
+ */
+extern struct capi_spi_device spi_dev;
 
 /**
  * @brief Fill a test framework configuration for the selected platform.
