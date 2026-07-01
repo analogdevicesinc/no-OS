@@ -41,9 +41,15 @@
 #define SPI_OPS 	&xil_spi_ops
 
 #ifdef IIO_SUPPORT
+#include "xilinx_uart.h"
+
 #define UART_IRQ_ID     XPAR_XUARTPS_1_INTR
 #define UART_DEVICE_ID      XPAR_XUARTPS_0_DEVICE_ID
 #define UART_BAUDRATE  115200
+#define UART_EXTRA      &uart_extra_ip
+#define UART_OPS        &xil_uart_ops
+
+extern struct xil_uart_init_param uart_extra_ip;
 #endif
 
 extern struct xil_spi_init_param spi_extra;

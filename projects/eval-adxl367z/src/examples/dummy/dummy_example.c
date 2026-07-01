@@ -45,7 +45,7 @@
  *
  * @return ret - Result of the example execution.
 *******************************************************************************/
-int dummy_example_main()
+int example_main()
 {
 	int32_t ret;
 
