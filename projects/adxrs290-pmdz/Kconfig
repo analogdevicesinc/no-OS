@@ -5,12 +5,24 @@ choice ADXRS290_PMDZ_EXAMPLE
 	default ADXRS290_PMDZ_IIO_EXAMPLE
 
 config ADXRS290_PMDZ_IIO_EXAMPLE
-	bool "Basic IIO example"
+	bool "IIO example"
 	depends on IIO
+	help
+	  IIO framework example. Launches an IIOD server for remote
+	  data acquisition using IIO Oscilloscope or libiio clients.
 
 config ADXRS290_PMDZ_IIO_TRIGGER_EXAMPLE
 	bool "IIO trigger example"
 	depends on IIO && IRQ && GPIO
+	help
+	  Interrupt-driven IIO example using the ADXRS290 sync pin as a
+	  hardware trigger.
+
+config ADXRS290_PMDZ_IIO_TIMER_TRIGGER_EXAMPLE
+	bool "IIO timer trigger example"
+	depends on IIO && IRQ && TIMER
+	help
+	  IIO example using a hardware timer as the acquisition trigger.
 
 endchoice
 
