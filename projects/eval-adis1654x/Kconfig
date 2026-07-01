@@ -1,0 +1,22 @@
+menu "ADIS1654X Configuration"
+
+choice ADIS1654X_EXAMPLE
+	prompt "Example variant"
+	default ADIS1654X_BASIC_EXAMPLE
+
+config ADIS1654X_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Simple example that initializes the ADIS1654X IMU and prints
+	  measurements over UART.
+
+config ADIS1654X_IIO_TRIGGER_EXAMPLE
+	bool "IIO trigger example"
+	depends on IIO && IRQ && GPIO
+	help
+	  Interrupt-driven IIO example using the ADIS1654X data-ready pin
+	  as a hardware trigger.
+
+endchoice
+
+endmenu

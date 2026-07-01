@@ -342,13 +342,36 @@ The following table shows how the connection between ADALM-UARTJTAG and Raspberr
 
 **Build Command**
 
+The Pico platform is built through the CMake build flow (see the
+`Pico CMake build guide <https://wiki.analog.com/resources/no-os/build>`_).
+The ``rpi-pico`` preset selects the board and toolchain, while
+``PROJECT_DEFCONFIG`` selects the example variant. The following variants are
+available for the ``rpi-pico`` board:
+
+* ``basic`` - basic example (``eval-adis1654x/basic.conf``)
+* ``iio_trigger`` - IIO trigger example (``eval-adis1654x/iio_trigger.conf``)
+
+Below is a consolidated set of commands to configure, build, flash, and debug
+the eval-adis1654x project on the ``rpi-pico`` board (swap the ``.conf`` file to build a
+different variant):
+
 .. code-block:: bash
 
-        # to delete current build
-        make reset
-        # to build the project
-        make PLATFORM=pico
-        # to flash the code
-        make run
-        # to debug the code
-        make debug
+        # Configure: select the rpi-pico preset and the basic example variant.
+        # Pass -DPROBE=openocd (default) or -DPROBE=jlink to enable the flash
+        # and debug targets.
+        cmake --preset rpi-pico -B build-eval-adis1654x-basic-rpi-pico \
+            -DPROJECT_DEFCONFIG=eval-adis1654x/basic.conf -DPROBE=openocd
+
+        # Build: compile the project (produces .elf and, when picotool is
+        # available, a .uf2 image under the build directory).
+        cmake --build build-eval-adis1654x-basic-rpi-pico --target eval-adis1654x
+
+        # Change Kconfig options interactively (optional).
+        cmake --build build-eval-adis1654x-basic-rpi-pico --target menuconfig
+
+        # Flash: program the firmware onto the board via the selected probe.
+        cmake --build build-eval-adis1654x-basic-rpi-pico --target flash
+
+        # Debug: start OpenOCD and attach GDB.
+        cmake --build build-eval-adis1654x-basic-rpi-pico --target debug
