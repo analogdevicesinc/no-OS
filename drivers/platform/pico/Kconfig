@@ -1,0 +1,63 @@
+menuconfig PICO
+	bool "Pico Platform Drivers"
+	default n
+	help
+	  Enable support for Raspberry Pi Pico (RP2040) platform drivers.
+
+	  This section contains low-level platform drivers for the RP2040
+	  microcontroller including GPIO, SPI, I2C, UART, interrupt handling
+	  and Timer drivers, built on top of the vendored pico-sdk.
+
+if PICO
+
+config GPIO_PICO
+	bool "Enable Pico GPIO driver"
+	depends on GPIO
+	default n
+	help
+	  Enable Pico-specific GPIO driver implementation.
+
+config GPIO_IRQ_PICO
+	bool "Enable Pico GPIO IRQ driver"
+	depends on GPIO && IRQ
+	default n
+	help
+	  Enable Pico-specific GPIO interrupt driver implementation.
+
+config I2C_PICO
+	bool "Enable Pico I2C driver"
+	depends on I2C
+	default n
+	help
+	  Enable Pico-specific I2C driver implementation.
+
+config SPI_PICO
+	bool "Enable Pico SPI driver"
+	depends on SPI
+	default n
+	help
+	  Enable Pico-specific SPI driver implementation.
+
+config UART_PICO
+	bool "Enable Pico UART driver"
+	depends on UART
+	default n
+	help
+	  Enable Pico-specific UART driver implementation.
+
+config IRQ_PICO
+	bool "Enable Pico IRQ driver"
+	depends on IRQ
+	default n
+	help
+	  Enable Pico-specific IRQ driver implementation.
+
+config TIMER_PICO
+	bool "Enable Pico Timer driver"
+	depends on TIMER
+	default n
+	help
+	  Enable Pico-specific Timer driver implementation.
+	  Requires CONFIG_TIMER=y to be enabled.
+
+endif # PICO

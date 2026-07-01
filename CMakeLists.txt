@@ -108,6 +108,15 @@ endif()
 project(no-os VERSION 1.0 LANGUAGES C CXX ASM)
 include(FetchContent)
 
+# The pico platform builds against the vendored pico-sdk's own CMake instead of a
+# hand-maintained source/include/define list. pico_sdk_init.cmake defines the
+# pico_sdk_init() macro and runs the SDK's pre-load; it honours our already-set
+# CMAKE_TOOLCHAIN_FILE (see drivers/platform/pico/toolchain.cmake) and stands down
+# its own toolchain selection. PICO_SDK_PATH is set (CACHE) by that toolchain file.
+if(PLATFORM STREQUAL "pico")
+    include(${PICO_SDK_PATH}/pico_sdk_init.cmake)
+endif()
+
 if(NOT EXISTS "${CMAKE_BINARY_DIR}/CMakeCache.txt")
   set(IS_FRESH_CONFIGURE TRUE)
 else()
@@ -180,6 +189,15 @@ endif()
 set(NO_OS_LIBRARY_TYPE "OBJECT" CACHE STRING "no-os library type (STATIC or OBJECT)")
 set_property(CACHE NO_OS_LIBRARY_TYPE PROPERTY STRINGS STATIC OBJECT)
 add_library(no-os ${NO_OS_LIBRARY_TYPE})
+
+# Bring in the pico-sdk's CMake targets (pico_stdlib, hardware_*, ...). This must
+# run after project() and before the projects/ and drivers/ subdirectories are
+# added, so both the no-os library (drivers/platform/pico) and the per-project
+# executable can link the SDK's INTERFACE libraries.
+if(PLATFORM STREQUAL "pico")
+    set(PICO_BOARD "pico" CACHE STRING "Pico board" FORCE)
+    pico_sdk_init()
+endif()
 
 target_include_directories(
         no-os
