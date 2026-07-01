@@ -34,6 +34,7 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
+#include "capi_gpio.h"
 #include "capi_uart.h"
 
 struct test_framework_config;
@@ -46,6 +47,14 @@ extern const struct capi_uart_config uart_config;
  * @brief Short platform label printed in the test run header.
  */
 extern const char platform_name[];
+/**
+ * @brief CAPI GPIO config for the output/readback test port.
+ */
+extern const struct capi_gpio_port_config gpio_output_config;
+/**
+ * @brief CAPI GPIO config for the input sampling test port.
+ */
+extern const struct capi_gpio_port_config gpio_input_config;
 
 /**
  * @brief Fill a test framework configuration for the selected platform.
