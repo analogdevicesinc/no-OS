@@ -1,0 +1,12 @@
+{
+	"xilinx": {
+		"demo": {
+			"flags": "",
+			"hardware": ["adv7511_zed"]
+		},
+		"iio": {
+			"flags": "IIOD=y",
+			"hardware": ["adv7511_zed"]
+		}
+	}
+}
