@@ -48,15 +48,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifdef NO_OS_NETWORKING
+#ifdef NO_OS_IIO_NETWORK
 #include "no_os_delay.h"
-#include "tcp_socket.h"
-#endif
-
-#ifdef NO_OS_LWIP_NETWORKING
-#include "no_os_delay.h"
-#include "tcp_socket.h"
-#include "lwip_socket.h"
+#include "no_os_net.h"
+#include "no_os_socket.h"
 #endif
 
 #define IIOD_PORT		30431
@@ -210,10 +205,10 @@ struct iio_desc {
 	int (*send)(void *conn, uint8_t *buf, uint32_t len);
 	/* FIFO for socket descriptors */
 	struct no_os_circular_buffer	*conns;
-#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
-	struct tcp_socket_desc	*current_sock;
+#ifdef NO_OS_IIO_NETWORK
+	struct no_os_socket_desc	*current_sock;
 	/* Instance of server socket */
-	struct tcp_socket_desc	*server;
+	struct no_os_socket_desc	*server;
 #endif
 };
 
@@ -1507,17 +1502,17 @@ int iio_buffer_pop_scan(struct iio_buffer *buffer, void *data)
 	return ret;
 }
 
-#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
+#ifdef NO_OS_IIO_NETWORK
 
 static int32_t accept_network_clients(struct iio_desc *desc)
 {
-	struct tcp_socket_desc *sock;
+	struct no_os_socket_desc *sock;
 	struct iiod_conn_data data;
 	int32_t ret;
 	uint32_t id;
 
 	do {
-		ret = socket_accept(desc->server, &sock);
+		ret = no_os_socket_accept(desc->server, &sock);
 		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
 
@@ -1546,7 +1541,7 @@ remove_conn:
 free_buf:
 	no_os_free(data.buf);
 close_socket:
-	socket_remove(sock);
+	no_os_socket_remove(sock);
 
 	return ret;
 }
@@ -1564,14 +1559,12 @@ int iio_step(struct iio_desc *desc)
 
 	iio_process_async_triggers(desc);
 
-#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
+#ifdef NO_OS_IIO_NETWORK
 	if (desc->server) {
 		ret = accept_network_clients(desc);
 		if (NO_OS_IS_ERR_VALUE(ret) && ret != -EAGAIN)
 			return ret;
-#if defined(NO_OS_LWIP_NETWORKING)
-		no_os_lwip_step(desc->server->net->net, desc->server->net->net);
-#endif
+		no_os_net_step(desc->server->net);
 	}
 #endif
 
@@ -1581,10 +1574,10 @@ int iio_step(struct iio_desc *desc)
 
 	ret = iiod_conn_step(desc->iiod, conn_id);
 	if (ret == -ENOTCONN) {
-#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
+#ifdef NO_OS_IIO_NETWORK
 		struct iiod_conn_data data;
 		iiod_conn_remove(desc->iiod, conn_id, &data);
-		socket_remove(data.conn);
+		no_os_socket_remove(data.conn);
 		no_os_free(data.buf);
 #endif
 	} else {
@@ -1994,15 +1987,15 @@ static int iio_uart_recv(void *conn, uint8_t *buf, uint32_t len)
 	return no_os_uart_read(conn, buf, len);
 }
 
-#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
+#ifdef NO_OS_IIO_NETWORK
 static int iio_socket_send(void *conn, uint8_t *buf, uint32_t len)
 {
-	return socket_send(conn, buf, len);
+	return no_os_socket_send(conn, buf, len);
 }
 
 static int iio_socket_recv(void *conn, uint8_t *buf, uint32_t len)
 {
-	return socket_recv(conn, buf, len);
+	return no_os_socket_recv(conn, buf, len);
 }
 #endif
 
@@ -2088,18 +2081,22 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 			goto free_conns;
 		_push_conn(ldesc, conn_id);
 	}
-#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
+#ifdef NO_OS_IIO_NETWORK
 	else if (init_param->phy_type == USE_NETWORK) {
+		struct no_os_socket_init_param sock_ip = {
+			.net = init_param->net_desc,
+			.proto = NO_OS_SOCKET_TCP,
+			.buff_size = 0
+		};
 		ldesc->send = iio_socket_send;
 		ldesc->recv = iio_socket_recv;
-		ret = socket_init(&ldesc->server,
-				  init_param->tcp_socket_init_param);
+		ret = no_os_socket_init(&ldesc->server, &sock_ip);
 		if (NO_OS_IS_ERR_VALUE(ret))
 			goto free_conns;
-		ret = socket_bind(ldesc->server, IIOD_PORT);
+		ret = no_os_socket_bind(ldesc->server, IIOD_PORT);
 		if (NO_OS_IS_ERR_VALUE(ret))
 			goto free_pylink;
-		ret = socket_listen(ldesc->server, MAX_BACKLOG);
+		ret = no_os_socket_listen(ldesc->server, NO_OS_SOCKET_MAX_BACKLOG);
 		if (NO_OS_IS_ERR_VALUE(ret))
 			goto free_pylink;
 	}
@@ -2126,9 +2123,9 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 
 	return 0;
 
-#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
+#ifdef NO_OS_IIO_NETWORK
 free_pylink:
-	socket_remove(ldesc->server);
+	no_os_socket_remove(ldesc->server);
 #endif
 free_conns:
 	no_os_cb_remove(ldesc->conns);
@@ -2156,17 +2153,17 @@ int iio_remove(struct iio_desc *desc)
 	if (!desc)
 		return -EINVAL;
 
-#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
+#ifdef NO_OS_IIO_NETWORK
 	struct iiod_conn_data data;
 	int ret;
 	for (int i = 0; i < IIOD_MAX_CONNECTIONS; i++) {
 		ret = iiod_conn_remove(desc->iiod, i, &data);
 		if (!ret) {
 			no_os_free(data.buf);
-			socket_remove(data.conn);
+			no_os_socket_remove(data.conn);
 		}
 	}
-	socket_remove(desc->server);
+	no_os_socket_remove(desc->server);
 #endif
 	no_os_cb_remove(desc->conns);
 	iiod_remove(desc->iiod);

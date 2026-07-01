@@ -12,11 +12,13 @@ SRC_DIRS += $(LWIP_DIR)/src/netif
 SRC_DIRS += $(LWIP_DIR)/src/apps/mdns
 SRC_DIRS += $(LWIP_DIR)/src/apps/lwiperf
 
-INCS += $(NO-OS)/network/network_interface.h
 INCS += $(NO-OS)/network/lwip_raw_socket/lwip_socket.h
-INCS += $(NO-OS)/network/tcp_socket.h
-SRCS += $(NO-OS)/network/tcp_socket.c
 SRCS += $(NO-OS)/network/lwip_raw_socket/lwip_socket.c
+
+INCS += $(INCLUDE)/no_os_net.h
+INCS += $(INCLUDE)/no_os_socket.h
+SRCS += $(DRIVERS)/api/no_os_net.c
+SRCS += $(DRIVERS)/api/no_os_socket.c
 
 ifdef CONFIG_NO_OS_IP
 CFLAGS += -DCONFIG_NO_OS_IP=\"$(CONFIG_NO_OS_IP)\"

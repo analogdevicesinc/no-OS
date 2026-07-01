@@ -162,6 +162,8 @@ int basic_pqm_firmware()
 	struct no_os_gpio_desc *adin1110_cfg0_gpio;
 	struct no_os_gpio_desc *adin1110_cfg1_gpio;
 	struct no_os_gpio_desc *adin1110_int_gpio;
+	struct lwip_network_param lwip_ip = { 0 };
+	struct lwip_network_desc *lwip_desc;
 	int ret;
 
 	no_os_gpio_get(&adin1110_cfg0_gpio, &adin1110_cfg0_ip);
@@ -178,8 +180,7 @@ int basic_pqm_firmware()
 	no_os_gpio_direction_input(adin1110_int_gpio);
 
 	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
-	memcpy(app_init_param.lwip_param.hwaddr, adin1110_mac_address,
-	       NETIF_MAX_HWADDR_LEN);
+	memcpy(lwip_ip.hwaddr, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 #endif
 
 	status = afe_init();
@@ -220,19 +221,29 @@ int basic_pqm_firmware()
 	app_init_param.uart_init_params = iio_demo_serial_ip;
 #elif defined(PQM_CONN_T1L)
 	app_init_param.uart_init_params = iio_demo_serial_ip;
-	app_init_param.lwip_param.platform_ops = &adin1110_lwip_ops;
-	app_init_param.lwip_param.mac_param = &adin1110_ip;
-	app_init_param.lwip_param.extra = NULL;
+	lwip_ip.platform_ops = &adin1110_lwip_ops;
+	lwip_ip.mac_param = &adin1110_ip;
+	lwip_ip.extra = NULL;
+
+	ret = no_os_lwip_init(&lwip_desc, &lwip_ip);
+	if (ret)
+		return ret;
+
+	app_init_param.net_desc = lwip_desc->net_desc;
 #endif
 
 #if defined(PQM_CONN_ETH)
-	struct w5500_network_dev *net_dev;
+	struct no_os_net_desc *net;
+	struct no_os_net_init_param net_ip = {
+		.platform_ops = &w5500_net_platform_ops,
+		.extra = &w5500_network_ip
+	};
 
-	status = w5500_network_init(&net_dev, &w5500_network_ip);
+	status = no_os_net_init(&net, &net_ip);
 	if (status)
 		return status;
 
-	app_init_param.net_dev = net_dev;
+	app_init_param.net_desc = net;
 #endif
 
 	app_init_param.post_step_callback = &(pqm_one_cycle);

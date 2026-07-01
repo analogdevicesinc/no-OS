@@ -57,6 +57,10 @@
 #include "xilinx_irq.h"
 #endif //LINUX
 
+#ifdef NO_OS_NETWORKING
+#include "linux_socket.h"
+#endif
+
 #include "axi_adc_core.h"
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
@@ -1071,6 +1075,12 @@ int main(void)
 	app_init_param.devices = devices;
 	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
 	app_init_param.uart_init_params = iio_uart_ip;
+#ifdef NO_OS_NETWORKING
+	struct no_os_net_init_param net_param = {
+		.platform_ops = &linux_net_platform_ops,
+	};
+	app_init_param.net_param = &net_param;
+#endif
 
 	status = iio_app_init(&app, app_init_param);
 	if (status)

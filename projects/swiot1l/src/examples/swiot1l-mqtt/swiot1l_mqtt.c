@@ -44,6 +44,8 @@
 #include "mqtt_client.h"
 #include "mqtt_noos_support.h"
 #include "no_os_timer.h"
+#include "no_os_net.h"
+#include "no_os_socket.h"
 #include "lwip_socket.h"
 #include "lwip_adin1110.h"
 
@@ -68,8 +70,12 @@ int swiot1l_mqtt()
 		.platform_ops = &adin1110_lwip_ops,
 		.mac_param = &adin1110_ip,
 	};
-	struct lwip_network_desc *lwip_desc;
-	struct tcp_socket_desc *tcp_socket;
+	struct no_os_net_init_param net_ip = {
+		.platform_ops = &lwip_net_platform_ops,
+		.extra = &lwip_ip,
+	};
+	struct no_os_net_desc *net;
+	struct no_os_socket_desc *tcp_socket;
 	struct no_os_timer_init_param adc_demo_tip = {
 		.id = 0,
 		.freq_hz = 32000,
@@ -152,25 +158,26 @@ int swiot1l_mqtt()
 	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 	memcpy(lwip_ip.hwaddr, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 
-	ret = no_os_lwip_init(&lwip_desc, &lwip_ip);
+	ret = no_os_net_init(&net, &net_ip);
 	if (ret) {
 		pr_err("LWIP init error: %d (%s)\n", ret, strerror(-ret));
 		goto free_ad74413r;
 	}
 
-	struct tcp_socket_init_param tcp_ip = {
-		.net = &lwip_desc->no_os_net,
-		.max_buff_size = 0
+	struct no_os_socket_init_param tcp_ip = {
+		.net = net,
+		.proto = NO_OS_SOCKET_TCP,
+		.buff_size = 0
 	};
 
-	ret = socket_init(&tcp_socket, &tcp_ip);
+	ret = no_os_socket_init(&tcp_socket, &tcp_ip);
 	if (ret) {
 		pr_err("Socket init error: %d (%s)\n", ret, strerror(-ret));
 		goto free_ad74413r;
 	}
 
 	/* The default settings are 192.168.97.1:1883 */
-	struct socket_address ip_addr = {
+	struct no_os_sockaddr ip_addr = {
 		.addr = CONFIG_SWIOT1L_MQTT_SERVER_IP,
 		.port = CONFIG_SWIOT1L_MQTT_SERVER_PORT
 	};
@@ -201,7 +208,7 @@ int swiot1l_mqtt()
 		.password = NULL
 	};
 
-	ret = socket_connect(tcp_socket, &ip_addr);
+	ret = no_os_socket_connect(tcp_socket, &ip_addr);
 	if (ret) {
 		pr_err("Couldn't connect to the remote TCP socket: %d (%s)\n", ret,
 		       strerror(-ret));
@@ -209,13 +216,13 @@ int swiot1l_mqtt()
 	}
 
 	while (connect_timeout--) {
-		no_os_lwip_step(tcp_socket->net->net, NULL);
+		no_os_net_step(net);
 		no_os_mdelay(1);
 	}
 
 	ret = mqtt_connect(mqtt, &conn_config, NULL);
 	if (ret) {
-		socket_disconnect(tcp_socket);
+		no_os_socket_disconnect(tcp_socket);
 		pr_err("Couldn't connect to the MQTT broker: %d (%s)\n", ret, strerror(-ret));
 		goto free_mqtt;
 	}
@@ -227,7 +234,7 @@ int swiot1l_mqtt()
 	};
 
 	while (1) {
-		no_os_lwip_step(tcp_socket->net->net, NULL);
+		no_os_net_step(net);
 
 		ad74413r_adc_get_value(ad74413r, 0, &val);
 		memset(val_buff, 0, sizeof(val_buff));
@@ -298,9 +305,9 @@ int swiot1l_mqtt()
 free_mqtt:
 	mqtt_remove(mqtt);
 free_socket:
-	socket_remove(tcp_socket);
+	no_os_socket_remove(tcp_socket);
 free_lwip:
-	no_os_lwip_remove(lwip_desc);
+	no_os_net_remove(net);
 free_ad74413r:
 	ad74413r_remove(ad74413r);
 free_gpio:

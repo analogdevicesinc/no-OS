@@ -37,6 +37,7 @@
 #include <stdio.h>
 #include "iio_app.h"
 #include "no_os_alloc.h"
+#include "no_os_util.h"
 
 #if defined(ADUCM_PLATFORM)
 #include "aducm3029_uart.h"
@@ -56,22 +57,11 @@
 #include "maxim_uart.h"
 #endif
 
-#ifdef NO_OS_NETWORKING
-/* Fix: Use static buffers instead of calloc for new connections */
+#if defined(NO_OS_NETWORKING) && defined(ADUCM_PLATFORM)
+/* The wifi backend needs iio_app's console UART + IRQ injected into its
+ * no_os_net "extra" (struct wifi_net_param) before bring-up. */
 #warning "iio may not work with WIFI on aducm3029."
-#ifdef ADUCM_PLATFORM
 #include "wifi.h"
-#endif
-#include "tcp_socket.h"
-#endif
-
-#ifdef LINUX_PLATFORM
-#include "linux_socket.h"
-#include "tcp_socket.h"
-#endif
-
-#ifdef NO_OS_LWIP_NETWORKING
-#include "lwip_socket.h"
 #endif
 
 // The default baudrate iio_app will use to print messages to console.
@@ -154,81 +144,63 @@ static int32_t print_uart_error_message(struct no_os_uart_desc **uart_desc,
 #endif
 }
 
-#if defined(NO_OS_LWIP_NETWORKING)
-static int32_t lwip_network_setup(struct iio_app_desc *app,
-				  struct iio_app_init_param param,
-				  struct iio_init_param *iio_init_param)
+/**
+ * @brief Resolve the network interface used by the IIO server.
+ *
+ * Two ways to attach a network interface (see iio_app_init_param):
+ *   - net_desc:  brought up and owned by the caller; forwarded as-is.
+ *   - net_param: brought up and owned here (freed on iio_app_remove()).
+ *
+ * The wifi backend is the one interface that cannot be fully pre-built by the
+ * caller: it needs iio_app's console UART and IRQ, which are injected into its
+ * no_os_net "extra" (struct wifi_net_param) right before bring-up.
+ *
+ * @param app - the iio application descriptor (receives net_desc/net_owned).
+ * @param p - the iio application init parameters.
+ * @param uart_desc - console UART (used by the wifi backend).
+ * @param irq_desc - interrupt controller (used by the wifi backend).
+ * @return 0 on success (net_desc may be NULL for a UART-only server), negative
+ *         error code otherwise.
+ */
+static int32_t network_setup(struct iio_app_desc *app,
+			     struct iio_app_init_param p,
+			     struct no_os_uart_desc *uart_desc,
+			     void *irq_desc)
 {
-	static struct tcp_socket_init_param socket_param;
-	static struct lwip_network_desc lwip_desc;
-	static bool is_initialized = false;
-	int ret;
+	struct no_os_net_desc *net = p.net_desc;
+	char buff[100];
+	int32_t ret;
 
-	if (CONFIG_NO_OS_LWIP_INIT_ONETIME && is_initialized) {
-		socket_param.net = &lwip_desc.no_os_net;
-	} else {
-		ret = no_os_lwip_init(&app->lwip_desc, &param.lwip_param);
+	NO_OS_UNUSED_PARAM(uart_desc);
+	NO_OS_UNUSED_PARAM(irq_desc);
+
+	if (!net && p.net_param) {
+#if defined(NO_OS_NETWORKING) && defined(ADUCM_PLATFORM)
+		/* wifi backend: inject iio_app's console UART + IRQ */
+		struct wifi_net_param *wp = p.net_param->extra;
+
+		if (wp) {
+			wp->wifi_ip.uart_desc = uart_desc;
+			wp->wifi_ip.uart_irq_conf = uart_desc;
+			wp->wifi_ip.irq_desc = irq_desc;
+			wp->wifi_ip.uart_irq_id = ADUCM_UART_INT_ID;
+		}
+#endif
+		ret = no_os_net_init(&net, p.net_param);
 		if (ret)
 			return ret;
 
-		socket_param.net = &app->lwip_desc->no_os_net;
-		memcpy(&lwip_desc, app->lwip_desc, sizeof(lwip_desc));
+		app->net_owned = true;
 	}
 
-	is_initialized = true;
-	socket_param.max_buff_size = 0;
+	app->net_desc = net;
 
-	iio_init_param->phy_type = USE_NETWORK;
-	iio_init_param->tcp_socket_init_param = &socket_param;
-
-	return 0;
-}
-#endif
-
-#if defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
-static int32_t network_setup(struct iio_init_param *iio_init_param,
-			     struct no_os_uart_desc *uart_desc,
-			     void *irq_desc,
-			     struct iio_app_init_param app_init_param)
-{
-	static struct tcp_socket_init_param socket_param;
-
-#ifdef LINUX_PLATFORM
-	socket_param.net = &linux_net;
-#endif
-#ifdef ADUCM_PLATFORM
-	int32_t status;
-	static struct wifi_desc *wifi;
-	struct wifi_init_param wifi_param = {
-		.irq_desc = irq_desc,
-		.uart_desc = uart_desc,
-		.uart_irq_conf = uart_desc,
-		.uart_irq_id = ADUCM_UART_INT_ID,
-		.sw_reset_en = true
-	};
-	status = wifi_init(&wifi, &wifi_param);
-	if (status < 0)
-		return status;
-
-	status = wifi_connect(wifi, app_init_param.wifi_ssid,
-			      app_init_param.wifi_pwd);
-	if (status < 0)
-		return status;
-
-	char buff[100];
-	wifi_get_ip(wifi, buff, 100);
-	printf("iiod ip is: %s\n", buff);
-
-	wifi_get_network_interface(wifi, &socket_param.net);
-#endif
-
-	socket_param.max_buff_size = 0;
-	iio_init_param->phy_type = USE_NETWORK;
-	iio_init_param->tcp_socket_init_param = &socket_param;
+	/* Best-effort: report the address if the backend can provide one. */
+	if (net && !no_os_net_get_ip(net, buff, sizeof(buff)))
+		printf("iiod ip is: %s\n", buff);
 
 	return 0;
 }
-#endif
 
 static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 			  struct no_os_uart_init_param *uart_init_par)
@@ -326,6 +298,8 @@ int iio_app_init(struct iio_app_desc **app,
 		if (status < 0)
 			return status;
 	}
+	/* Publish the resolved controller so the network path can use it. */
+	application->irq_desc = irq_desc;
 #endif
 
 	status = uart_setup(&uart_desc, &app_init_param.uart_init_params);
@@ -338,27 +312,22 @@ int iio_app_init(struct iio_app_desc **app,
 		goto error;
 
 	application->uart_desc = uart_desc;
-#if defined(NO_OS_LWIP_NETWORKING)
-	status = lwip_network_setup(application, app_init_param, &iio_init_param);
-	if (status)
-		goto error;
-#elif defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
-	status = network_setup(&iio_init_param, uart_desc, application->irq_desc,
-			       app_init_param);
+
+	status = network_setup(application, app_init_param, uart_desc,
+			       application->irq_desc);
 	if (status < 0)
 		goto error;
-#elif defined(NO_OS_W5500_NETWORKING)
-	static struct tcp_socket_init_param socket_param;
 
-	socket_param.net = &app_init_param.net_dev->net_if;
-	socket_param.max_buff_size = 0;
-
-	iio_init_param.phy_type = USE_NETWORK;
-	iio_init_param.tcp_socket_init_param = &socket_param;
-#else
-	iio_init_param.phy_type = USE_UART;
-	iio_init_param.uart_desc = uart_desc;
+#ifdef NO_OS_IIO_NETWORK
+	if (application->net_desc) {
+		iio_init_param.phy_type = USE_NETWORK;
+		iio_init_param.net_desc = application->net_desc;
+	} else
 #endif
+	{
+		iio_init_param.phy_type = USE_UART;
+		iio_init_param.uart_desc = uart_desc;
+	}
 
 	iio_init_devs = no_os_calloc(app_init_param.nb_devices, sizeof(*iio_init_devs));
 	if (!iio_init_devs) {
@@ -473,6 +442,14 @@ int iio_app_remove(struct iio_app_desc *app)
 	ret = iio_remove(app->iio_desc);
 	if (ret)
 		return ret;
+
+	/* Only free interfaces we brought up ourselves; caller-owned ones
+	 * (passed via net_desc) are freed by the caller. */
+	if (app->net_owned) {
+		ret = no_os_net_remove(app->net_desc);
+		if (ret)
+			return ret;
+	}
 
 	no_os_free(app);
 

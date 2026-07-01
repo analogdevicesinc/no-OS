@@ -48,7 +48,7 @@
  * 	uint8_t send_buff[BUFF_SIZE];
  * 	uint8_t read_buff[BUFF_SIZE];
  *
- * 	struct tcp_socket_desc	*sock;
+ * 	struct no_os_socket_desc	*sock;
  * 	struct mqtt_desc	*mqtt;
  * 	struct mqtt_init_param	mqtt_init_param = {
  * 		.timer_id = 0,
@@ -61,11 +61,11 @@
  * 		.message_handler = message_handler
  * 	};
  *
- * 	init_socket(&sock); //Initialize socket depending on network stack
+ * 	no_os_socket_init(&sock, &sock_ip); //From a no_os_net interface
  *
- * 	struct socket_address server = {.addr = "mqtt.server.com",
+ * 	struct no_os_sockaddr server = {.addr = "mqtt.server.com",
  * 					.port = 1883};
- * 	socket_connect(sock, &server);
+ * 	no_os_socket_connect(sock, &server);
  *
  * 	mqtt_init_param.sock = sock;
  * 	ret = mqtt_init(&mqtt, &mqtt_init_param);
@@ -101,7 +101,7 @@
 #define MQTT_NOOS_CLIENT
 
 #include <stdbool.h>
-#include "tcp_socket.h"
+#include "no_os_socket.h"
 
 /**
  * @enum mqtt_qos
@@ -198,7 +198,7 @@ struct mqtt_init_param {
 	 * Reference to a socket. The connection must be established before
 	 * calling any MQTT client functions.
 	 */
-	struct tcp_socket_desc	*sock;
+	struct no_os_socket_desc	*sock;
 	/** Parameter to initialize a \ref timer_desc */
 	struct no_os_timer_init_param	*timer_init_param;
 	/** Timeout for a MQTT command to be executed */

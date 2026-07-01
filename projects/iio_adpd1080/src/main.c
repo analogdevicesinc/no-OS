@@ -36,6 +36,9 @@
 #include "no_os_util.h"
 #include "iio_adpd188.h"
 #include "iio_app.h"
+#ifdef NO_OS_NETWORKING
+#include "wifi.h"
+#endif
 #include "aducm3029_gpio.h"
 #include "no_os_gpio.h"
 #include "no_os_timer.h"
@@ -417,8 +420,16 @@ int main(void)
 	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
 	app_init_param.uart_init_params = adpd1080_uart_ip;
 #ifdef NO_OS_NETWORKING
-	app_init_param.wifi_ssid = WIFI_SSID;
-	app_init_param.wifi_pwd = WIFI_PWD;
+	static struct wifi_net_param wifi_np;
+	struct no_os_net_init_param net_param = {
+		.platform_ops = &wifi_net_platform_ops,
+		.extra = &wifi_np,
+	};
+
+	wifi_np.wifi_ip.sw_reset_en = true;
+	wifi_np.ssid = WIFI_SSID;
+	wifi_np.pwd = WIFI_PWD;
+	app_init_param.net_param = &net_param;
 #endif
 
 	status = iio_app_init(&app, app_init_param);

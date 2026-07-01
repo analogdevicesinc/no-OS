@@ -40,6 +40,9 @@
 #include <assert.h>
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_net.h"
+#include "no_os_socket.h"
+#include "no_os_alloc.h"
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -50,97 +53,146 @@
 #include <string.h>
 #include <fcntl.h>
 
-/** @brief See \ref network_interface.socket_open */
-static int32_t linux_socket_open(void *desc, uint32_t *sock_id,
-				 enum socket_protocol prot, uint32_t buff_size)
+/* ---- no_os_net / no_os_socket backend --------------------------------- */
+/*
+ * The Linux backend is stateless: a socket is just a POSIX fd, stored directly
+ * in no_os_socket_desc.id. There is no per-interface state, so no_os_net_desc
+ * only carries the (const) ops table.
+ */
+
+static const struct no_os_socket_ops linux_socket_ops;
+
+static int32_t lnx_net_init(struct no_os_net_desc **desc,
+			    const struct no_os_net_init_param *param)
 {
-	int32_t flags;
-	int err;
+	struct no_os_net_desc *nd;
 
-	err = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (err < 0)
-		return err;
+	nd = no_os_calloc(1, sizeof(*nd));
+	if (!nd)
+		return -ENOMEM;
 
-	*sock_id = err;
-	flags = fcntl(*sock_id, F_GETFL);
-	fcntl(*sock_id, F_SETFL, flags | O_NONBLOCK);
+	*desc = nd;
 
 	return 0;
 }
 
-/** @brief See \ref network_interface.socket_close */
-static int32_t linux_socket_close(void *desc, uint32_t sock_id)
+static int32_t lnx_net_remove(struct no_os_net_desc *desc)
+{
+	no_os_free(desc);
+
+	return 0;
+}
+
+static int32_t lnx_net_step(struct no_os_net_desc *desc)
+{
+	/* POSIX sockets need no periodic servicing. */
+	return 0;
+}
+
+static int32_t lnx_net_resolve(struct no_os_net_desc *desc, const char *host,
+			       struct no_os_sockaddr *addr)
+{
+	struct hostent *hptr;
+
+	hptr = gethostbyname(host);
+	if (!hptr || !hptr->h_addr_list[0])
+		return -EINVAL;
+
+	/*
+	 * Return the address as-is; connect()/sendto() resolve the string again.
+	 * Kept simple since the Linux backend is host-side test tooling.
+	 */
+	addr->addr = (char *)host;
+
+	return 0;
+}
+
+/* Close the underlying fd without freeing the descriptor. */
+static int32_t lnx_close_fd(struct no_os_socket_desc *sock)
+{
+	if (close(sock->id) < 0)
+		return -errno;
+
+	return 0;
+}
+
+static int32_t lnx_socket_open(struct no_os_net_desc *net,
+			       struct no_os_socket_desc **sock,
+			       enum no_os_socket_protocol proto,
+			       uint32_t buff_size)
+{
+	struct no_os_socket_desc *s;
+	int32_t flags;
+	int fd;
+
+	fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (fd < 0)
+		return -errno;
+
+	flags = fcntl(fd, F_GETFL);
+	fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+
+	s = no_os_socket_alloc(net, &linux_socket_ops, fd);
+	if (!s) {
+		close(fd);
+		return -ENOMEM;
+	}
+
+	*sock = s;
+
+	return 0;
+}
+
+static int32_t lnx_socket_close(struct no_os_socket_desc *sock)
 {
 	int32_t ret;
 
-	ret = close(sock_id);
-	if (ret < 0)
-		return -errno;
+	ret = lnx_close_fd(sock);
+	no_os_free(sock);
 
 	return ret;
 }
 
-/** @brief See \ref network_interface.socket_connect */
-static int32_t linux_socket_connect(void *desc, uint32_t sock_id,
-				    struct socket_address *addr)
+static int32_t lnx_socket_connect(struct no_os_socket_desc *sock,
+				  struct no_os_sockaddr *addr)
 {
-	int32_t ret;
-	struct hostent* hptr;
-
 	struct sockaddr_in saddr = {0};
+	struct hostent *hptr;
+
 	saddr.sin_family = AF_INET;
 	saddr.sin_port = htons(addr->port);
 	hptr = gethostbyname(addr->addr);
-	saddr.sin_addr.s_addr = ((struct in_addr*) hptr->h_addr_list[0])->s_addr;
-	socklen_t len = sizeof(saddr);
+	saddr.sin_addr.s_addr = ((struct in_addr *) hptr->h_addr_list[0])->s_addr;
 
-	ret = connect(sock_id, (struct sockaddr*) &saddr, len);
-
-	if (ret < 0)
-		return -errno;
-
-	return ret;
-
-}
-
-/** @brief See \ref network_interface.socket_disconnect */
-static int32_t linux_socket_disconnect(void *desc,
-				       uint32_t sock_id)
-{
-	int32_t ret;
-
-	ret = linux_socket_close(desc, sock_id);
-
-	if (ret < 0)
+	if (connect(sock->id, (struct sockaddr *) &saddr, sizeof(saddr)) < 0)
 		return -errno;
 
 	return 0;
 }
 
-/** @brief See \ref network_interface.socket_send */
-static int32_t linux_socket_send(void *desc, uint32_t sock_id,
-				 const void *data, uint32_t size)
+static int32_t lnx_socket_disconnect(struct no_os_socket_desc *sock)
 {
-	int32_t ret;
+	return lnx_close_fd(sock);
+}
 
-	ret = send(sock_id, data, size, 0);
-
-	if (ret < 0)
+static int32_t lnx_socket_send(struct no_os_socket_desc *sock,
+			       const void *data, uint32_t size)
+{
+	if (send(sock->id, data, size, 0) < 0)
 		return -errno;
 
 	return size;
 }
 
-/** @brief See \ref network_interface.socket_recv */
-static int32_t linux_socket_recv(void *desc, uint32_t sock_id,
-				 void *data, uint32_t size)
+static int32_t lnx_socket_recv(struct no_os_socket_desc *sock, void *data,
+			       uint32_t size)
 {
 	int32_t ret;
 
 	if (!size)
 		return size;
 
-	ret = recv(sock_id, data, size, MSG_DONTWAIT);
+	ret = recv(sock->id, data, size, MSG_DONTWAIT);
 	if (ret < 0)
 		return -errno;
 
@@ -151,120 +203,112 @@ static int32_t linux_socket_recv(void *desc, uint32_t sock_id,
 	return ret;
 }
 
-/** @brief See \ref network_interface.socket_sendto */
-static int32_t linux_socket_sendto(void *desc, uint32_t sock_id,
-				   const void *data, uint32_t size,
-				   const struct socket_address* to)
+static int32_t lnx_socket_sendto(struct no_os_socket_desc *sock,
+				 const void *data, uint32_t size,
+				 const struct no_os_sockaddr *to)
 {
-	int32_t ret;
 	struct sockaddr_in saddr_to = {0};
-	socklen_t len;
-	struct hostent* hptr;
+	struct hostent *hptr;
+	int32_t ret;
 
 	saddr_to.sin_family = AF_INET;
 	saddr_to.sin_port = htons(to->port);
 	hptr = gethostbyname(to->addr);
-	saddr_to.sin_addr.s_addr = ((struct in_addr*) hptr->h_addr_list[0])->s_addr;
-	len = sizeof(saddr_to);
+	saddr_to.sin_addr.s_addr = ((struct in_addr *) hptr->h_addr_list[0])->s_addr;
 
-	ret = sendto(sock_id, data, size, 0, (struct sockaddr*) &saddr_to, len);
-
+	ret = sendto(sock->id, data, size, 0, (struct sockaddr *) &saddr_to,
+		     sizeof(saddr_to));
 	if (ret != 0)
 		return ret;
 
 	return 0;
 }
 
-/** @brief See \ref network_interface.socket_recvfrom */
-static int32_t linux_socket_recvfrom(void *desc, uint32_t sock_id,
-				     void *data, uint32_t size,
-				     struct socket_address *from)
+static int32_t lnx_socket_recvfrom(struct no_os_socket_desc *sock, void *data,
+				   uint32_t size, struct no_os_sockaddr *from)
 {
-	int32_t ret;
 	struct sockaddr_in saddr_from = {0};
+	struct hostent *hptr;
 	socklen_t len;
-	struct hostent* hptr;
+	int32_t ret;
 
 	saddr_from.sin_family = AF_INET;
 	saddr_from.sin_port = htons(from->port);
 	hptr = gethostbyname(from->addr);
-	saddr_from.sin_addr.s_addr = ((struct in_addr*) hptr->h_addr_list[0])->s_addr;
+	saddr_from.sin_addr.s_addr = ((struct in_addr *) hptr->h_addr_list[0])->s_addr;
 	len = sizeof(saddr_from);
 
-	ret = recvfrom(sock_id, data, size, MSG_DONTWAIT,
-		       (struct sockaddr*) &saddr_from,
-		       &len);
-
+	ret = recvfrom(sock->id, data, size, MSG_DONTWAIT,
+		       (struct sockaddr *) &saddr_from, &len);
 	if (ret != 0)
 		return ret;
 
 	return 0;
 }
 
-/** @brief See \ref network_interface.socket_bind */
-static int32_t linux_socket_bind(void *desc, uint32_t sock_id,
-				 uint16_t port)
+static int32_t lnx_socket_bind(struct no_os_socket_desc *sock, uint16_t port)
 {
-	int32_t ret;
 	struct sockaddr_in saddr = {0};
-	socklen_t len;
 
 	saddr.sin_family = AF_INET;
 	saddr.sin_port = htons(port);
 	saddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	len = sizeof(saddr);
 
-	ret = bind(sock_id, (struct sockaddr*) &saddr, len);
-
-	if (ret < 0)
+	if (bind(sock->id, (struct sockaddr *) &saddr, sizeof(saddr)) < 0)
 		return -errno;
-
-	return ret;
-}
-
-/** @brief See \ref network_interface.socket_listen */
-static int32_t linux_socket_listen(void *desc, uint32_t sock_id,
-				   uint32_t back_log)
-{
-	int32_t ret;
-
-	ret = listen(sock_id, back_log);
-
-	if (ret < 0)
-		return -errno;
-
-	return ret;
-}
-
-/** @brief See \ref network_interface.socket_accept */
-static int32_t linux_socket_accept(void *desc, uint32_t sock_id,
-				   uint32_t *client_socket_id)
-{
-	int32_t ret;
-
-	ret = accept4(sock_id, NULL, NULL, SOCK_NONBLOCK);
-
-	if (ret < 0)
-		return -errno;
-
-	*client_socket_id = ret;
 
 	return 0;
 }
 
-struct network_interface linux_net = {
-	.socket_open = (int32_t (*)(void *, uint32_t *, enum socket_protocol,
-				    uint32_t)) linux_socket_open,
-	.socket_close = (int32_t (*)(void *, uint32_t)) linux_socket_close,
-	.socket_connect = (int32_t (*)(void *, uint32_t, struct socket_address *))linux_socket_connect,
-	.socket_disconnect = (int32_t (*)(void *, uint32_t))linux_socket_disconnect,
-	.socket_send = (int32_t (*)(void *, uint32_t, const void *, uint32_t))linux_socket_send,
-	.socket_recv = (int32_t (*)(void *, uint32_t, void *, uint32_t))linux_socket_recv,
-	.socket_sendto = (int32_t (*)(void *, uint32_t, const void *, uint32_t, const struct socket_address * to))linux_socket_sendto,
-	.socket_recvfrom = (int32_t (*)(void *, uint32_t, void *, uint32_t, struct socket_address * from))linux_socket_recvfrom,
-	.socket_bind = (int32_t (*)(void *, uint32_t, uint16_t))linux_socket_bind,
-	.socket_listen = (int32_t (*)(void *, uint32_t, uint32_t))linux_socket_listen,
-	.socket_accept = (int32_t (*)(void *, uint32_t, uint32_t*))linux_socket_accept
+static int32_t lnx_socket_listen(struct no_os_socket_desc *sock,
+				 uint32_t backlog)
+{
+	if (listen(sock->id, backlog) < 0)
+		return -errno;
+
+	return 0;
+}
+
+static int32_t lnx_socket_accept(struct no_os_socket_desc *sock,
+				 struct no_os_socket_desc **client)
+{
+	struct no_os_socket_desc *c;
+	int fd;
+
+	fd = accept4(sock->id, NULL, NULL, SOCK_NONBLOCK);
+	if (fd < 0)
+		return -errno;
+
+	c = no_os_socket_alloc(sock->net, &linux_socket_ops, fd);
+	if (!c) {
+		close(fd);
+		return -ENOMEM;
+	}
+
+	*client = c;
+
+	return 0;
+}
+
+const struct no_os_net_platform_ops linux_net_platform_ops = {
+	.init = lnx_net_init,
+	.remove = lnx_net_remove,
+	.step = lnx_net_step,
+	.resolve = lnx_net_resolve,
+	.socket_open = lnx_socket_open,
+};
+
+static const struct no_os_socket_ops linux_socket_ops = {
+	.close = lnx_socket_close,
+	.connect = lnx_socket_connect,
+	.disconnect = lnx_socket_disconnect,
+	.send = lnx_socket_send,
+	.recv = lnx_socket_recv,
+	.sendto = lnx_socket_sendto,
+	.recvfrom = lnx_socket_recvfrom,
+	.bind = lnx_socket_bind,
+	.listen = lnx_socket_listen,
+	.accept = lnx_socket_accept,
 };
 
 #endif

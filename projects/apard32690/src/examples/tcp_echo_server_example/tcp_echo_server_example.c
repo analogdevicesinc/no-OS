@@ -35,10 +35,10 @@
 #include "common_data.h"
 
 #include "lwip_socket.h"
-#include "tcp_socket.h"
+#include "no_os_net.h"
+#include "no_os_socket.h"
 #include "no_os_error.h"
 #include "adin1110.h"
-#include "network_interface.h"
 
 /***************************************************************************//**
  * @brief TCP echo example main execution.
@@ -48,11 +48,12 @@
 int tcp_echo_server_example_main()
 {
 	bool connected = false;
-	struct tcp_socket_desc *server_socket;
-	struct tcp_socket_desc *client_socket;
+	struct no_os_socket_desc *server_socket;
+	struct no_os_socket_desc *client_socket;
 	struct lwip_network_desc *lwip_desc;
-	struct tcp_socket_init_param tcp_ip = {
-		.max_buff_size = 0
+	struct no_os_socket_init_param tcp_ip = {
+		.proto = NO_OS_SOCKET_TCP,
+		.buff_size = 0
 	};
 
 	uint8_t read_byte;
@@ -73,22 +74,22 @@ int tcp_echo_server_example_main()
 	if (ret)
 		return ret;
 
-	tcp_ip.net = &lwip_desc->no_os_net;
+	tcp_ip.net = lwip_desc->net_desc;
 
-	ret = socket_init(&server_socket, &tcp_ip);
+	ret = no_os_socket_init(&server_socket, &tcp_ip);
 	if (ret)
 		return ret;
 
-	ret = socket_bind(server_socket, 10000);
+	ret = no_os_socket_bind(server_socket, 10000);
 	if (ret)
 		return ret;
 
-	ret = socket_listen(server_socket, MAX_BACKLOG);
+	ret = no_os_socket_listen(server_socket, NO_OS_SOCKET_MAX_BACKLOG);
 	if (ret)
 		return ret;
 
 	while (1) {
-		ret = socket_accept(server_socket, &client_socket);
+		ret = no_os_socket_accept(server_socket, &client_socket);
 		if (ret && ret != -EAGAIN)
 			return ret;
 
@@ -96,12 +97,12 @@ int tcp_echo_server_example_main()
 			connected = true;
 		}
 
-		no_os_lwip_step(server_socket->net->net, NULL);
+		no_os_net_step(server_socket->net);
 
 		if (connected) {
-			ret = socket_recv(client_socket, &read_byte, 1);
+			ret = no_os_socket_recv(client_socket, &read_byte, 1);
 			if (ret > 0)
-				socket_send(client_socket, &read_byte, ret);
+				no_os_socket_send(client_socket, &read_byte, ret);
 		}
 	}
 
