@@ -62,6 +62,9 @@ extern struct no_os_gpio_init_param gpio_reset_ip;
 /* check for triggered alarms interval */
 #define READ_INTERVAL                   2000000
 
+/* Device variant: ID_ADHV4710 or ID_ADHV4711 */
+#define ADHV4710_DEV_ID                 ID_ADHV4710
+
 /* Setup values for ADHV4710 */
 /* Current resolution */
 #define ADHV4710_CURRENT_RESOLUTION     15.625

@@ -106,6 +106,9 @@ int main(void)
 	/* Init the reset */
 	adhv4710_ip.gpio_reset = &gpio_reset_ip;
 
+	/* Select the device variant */
+	adhv4710_ip.id = ADHV4710_DEV_ID;
+
 	no_os_uart_stdio(uart_desc);
 
 	pr_info("\n");
