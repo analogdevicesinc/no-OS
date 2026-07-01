@@ -336,9 +336,15 @@ Build Command
 
 .. code-block:: bash
 
-   # to delete current build
-   make reset
-   # to build the project
-   make PLATFORM=pico
-   # to flash the code
-   make run
+	cd no-OS
+
+	# build the project (iio example on the Raspberry Pi Pico)
+	python tools/scripts/no_os_build.py build \
+		--project eval-adxl355-pmdz --variant iio --board rpi-pico
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project eval-adxl355-pmdz --variant iio --board rpi-pico \
+		--probe openocd --flash
+
+Available variants: ``dummy``, ``iio``, ``iio_trigger``. Replace ``--variant`` accordingly.
