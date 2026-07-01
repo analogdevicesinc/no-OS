@@ -3,7 +3,7 @@
             "dummy_example": {
                   "flags": "DUMMY_EXAMPLE=y",
                   "hardware": [
-                        "adxl367_xilinx_zed"
+                        "adv7511_zed"
                   ]
             }
       }
