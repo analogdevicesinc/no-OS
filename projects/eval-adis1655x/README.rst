@@ -151,14 +151,6 @@ This is a simple example which initializes the adis1655x selected device and
 performs angular velocity, acceleration and temperature readings in a while loop
 with a period of 1s. The data is printed on the serial interface.
 
-In order to build the IIO project make sure you have the following configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1655x/Makefile>`_
-
-.. code-block:: bash
-
-        # Select the example you want to enable
-        EXAMPLE = basic_example
-
 IIO example
 ^^^^^^^^^^^
 
@@ -188,14 +180,6 @@ When DATA_READY pin transitions from low to high, new data is available and will
 be read based on is_synchronous flag setting used in adis_iio_trigger_desc.
 If the flag is set to true, the data will be read immediately, in the interrupt context.
 If the flag is set to false, the data will be read from application context. In this case some samples might be missed.
-
-In order to build the IIO project make sure you have the following configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1655x/Makefile>`_
-
-.. code-block:: bash
-
-        # Select the example you want to enable
-        EXAMPLE = iio_trigger_example
 
 No-OS Supported Platforms
 -------------------------
@@ -355,11 +339,15 @@ The following table shows how the connection between ADALM-UARTJTAG and Raspberr
 
 .. code-block:: bash
 
-        # to delete current build
-        make reset
-        # to build the project
-        make PLATFORM=pico
-        # to flash the code
-        make run
-        # to debug the code
-        make debug
+	cd no-OS
+
+	# build the project (basic example on the Raspberry Pi Pico)
+	python tools/scripts/no_os_build.py build \
+		--project eval-adis1655x --variant basic --board rpi-pico
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project eval-adis1655x --variant basic --board rpi-pico \
+		--probe openocd --flash
+
+Available variants: ``basic``, ``iio_trigger``. Replace ``--variant`` accordingly.
