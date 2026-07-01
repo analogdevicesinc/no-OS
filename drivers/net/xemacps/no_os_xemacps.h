@@ -82,6 +82,46 @@
 #define MRVL_RGMII_100_DELAYS			0x2030
 #define MRVL_RGMII_10_DELAYS			0x0030
 
+/* TI DP83867 (ZCU102 on-board PHY) register definitions */
+#define TI_PHY_ID				0x080028
+/* MMD indirect access registers (Clause 22 window into Clause 45 space) */
+#define PHY_REG_MMD_CTRL			0x0D
+#define PHY_REG_MMD_DATA			0x0E
+#define TI_MMD_DEVAD				0x1F	/* vendor MMD */
+/* MMD_CTRL function field: 0 = address, 0x4000 = data, no post-increment */
+#define PHY_MMD_CTRL_ADDR			0x0000
+#define PHY_MMD_CTRL_DATA			0x4000
+/* DP83867 RGMII control / delay registers (in vendor MMD 0x1F) */
+#define DP83867_RGMIICTL			0x0032
+#define DP83867_RGMIIDCTL			0x0086
+/* RGMIICTL bits: enable TX and RX internal delays */
+#define DP83867_RGMII_TX_CLK_DELAY_EN		NO_OS_BIT(1)
+#define DP83867_RGMII_RX_CLK_DELAY_EN		NO_OS_BIT(0)
+/* ZCU102 board delay values (from the Xilinx device tree) */
+#define DP83867_ZCU102_TX_DELAY			0xA
+#define DP83867_ZCU102_RX_DELAY			0x8
+
+/*
+ * ZynqMP CRL_APB GEM reference-clock control. The GEM TX clock divisor must be
+ * reprogrammed for the negotiated link speed. This is normally done by the
+ * FSBL/PMUFW; when the PMUFW is not running (bare-metal no-os) the driver must
+ * do it, otherwise TX is clocked at the wrong rate and frames never reach the
+ * link partner (link parks at 100 Mbps, no DHCP).
+ */
+#define CRL_APB_GEM3_REF_CTRL		0xFF5E005C
+#define CRL_APB_GEM_DIV0_MASK		0x00003F00
+#define CRL_APB_GEM_DIV0_SHIFT		8
+#define CRL_APB_GEM_DIV1_MASK		0x003F0000
+#define CRL_APB_GEM_DIV1_SHIFT		16
+
+/* ZCU102 GEM3 TX-clock divisors per speed (from the BSP xparameters.h) */
+#define GEM_TXCLK_DIV0_1000		12
+#define GEM_TXCLK_DIV1_1000		1
+#define GEM_TXCLK_DIV0_100		60
+#define GEM_TXCLK_DIV1_100		1
+#define GEM_TXCLK_DIV0_10		60
+#define GEM_TXCLK_DIV1_10		10
+
 /* Maximum Ethernet frame size, rounded up to a 32-byte cache-line multiple. */
 #ifndef XEMACPS_MAX_FRAME_SIZE
 #define XEMACPS_MAX_FRAME_SIZE	1536

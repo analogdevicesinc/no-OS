@@ -188,6 +188,113 @@ static int32_t xgem_marvell_rgmii_delays(XEmacPs *emac, uint8_t phy_addr)
 }
 
 /**
+ * @brief Write a PHY register in an MMD (Clause 45) space via Clause 22.
+ *
+ * Uses the MMD access control/data register pair (0x0D/0x0E) to reach
+ * vendor-specific registers that are not in the base Clause 22 page.
+ *
+ * @param emac     - XEmacPs instance.
+ * @param phy_addr - MDIO address of the PHY.
+ * @param devad    - MMD device address.
+ * @param reg      - Register within the MMD.
+ * @param val      - Value to write.
+ * @return 0 on success, negative error code on MDIO failure.
+ */
+static int32_t xgem_phy_write_mmd(XEmacPs *emac, uint8_t phy_addr,
+				  uint16_t devad, uint16_t reg, uint16_t val)
+{
+	int ret;
+
+	/* Select address function, then write the register address */
+	ret = XEmacPs_PhyWrite(emac, phy_addr, PHY_REG_MMD_CTRL,
+			       PHY_MMD_CTRL_ADDR | devad);
+	ret |= XEmacPs_PhyWrite(emac, phy_addr, PHY_REG_MMD_DATA, reg);
+	/* Select data function (no post-increment), then write the value */
+	ret |= XEmacPs_PhyWrite(emac, phy_addr, PHY_REG_MMD_CTRL,
+				PHY_MMD_CTRL_DATA | devad);
+	ret |= XEmacPs_PhyWrite(emac, phy_addr, PHY_REG_MMD_DATA, val);
+
+	return (ret == XST_SUCCESS) ? 0 : -EIO;
+}
+
+/**
+ * @brief Configure RGMII TX/RX internal delays on a TI DP83867 PHY.
+ *
+ * The DP83867 (ZCU102 on-board PHY) needs its internal RGMII clock delays
+ * enabled and programmed; without them the RGMII data is sampled on the wrong
+ * clock edge and every frame is corrupted. The delay controls live in the
+ * vendor MMD (0x1F) and are reached via MMD-indirect access.
+ *
+ * @param emac     - XEmacPs instance.
+ * @param phy_addr - MDIO address of the PHY.
+ * @return 0 on success (including "not a DP83867"), negative on MDIO failure.
+ */
+static int32_t xgem_ti_rgmii_delays(XEmacPs *emac, uint8_t phy_addr)
+{
+	uint16_t phyid1, phyid2, bmcr;
+	uint32_t oui;
+	int ret;
+
+	ret = XEmacPs_PhyRead(emac, phy_addr, PHY_REG_PHYID1, &phyid1);
+	if (ret != XST_SUCCESS)
+		return -EIO;
+	ret = XEmacPs_PhyRead(emac, phy_addr, PHY_REG_PHYID2, &phyid2);
+	if (ret != XST_SUCCESS)
+		return -EIO;
+
+	oui = ((uint32_t)phyid1 << 6) | ((phyid2 >> 10) & 0x3F);
+	if (oui != TI_PHY_ID) {
+		printf("xemacps: PHY OUI 0x%06x is not TI, "
+		       "skipping DP83867 RGMII delay config\n", oui);
+		return 0;
+	}
+
+	printf("xemacps: Found TI DP83867, configuring RGMII delays\n");
+
+	/*
+	 * Soft-reset the PHY FIRST. On the DP83867 a BMCR reset (bit 15)
+	 * restores all registers - including RGMIICTL/RGMIIDCTL - to their
+	 * strap defaults. Doing the reset AFTER programming the delays would
+	 * silently wipe them (RX would still work off the strap default while
+	 * TX timing stays wrong and the link drops to 100 Mbps). Reset here,
+	 * then program the delays so they survive.
+	 */
+	ret = XEmacPs_PhyRead(emac, phy_addr, PHY_REG_BMCR, &bmcr);
+	if (ret != XST_SUCCESS)
+		return -EIO;
+
+	bmcr |= PHY_REG_BMCR_RESET;
+	ret = XEmacPs_PhyWrite(emac, phy_addr, PHY_REG_BMCR, bmcr);
+	if (ret != XST_SUCCESS)
+		return -EIO;
+
+	no_os_mdelay(100);
+
+	/* Enable both TX and RX internal delays */
+	ret = xgem_phy_write_mmd(emac, phy_addr, TI_MMD_DEVAD,
+				 DP83867_RGMIICTL,
+				 DP83867_RGMII_TX_CLK_DELAY_EN |
+				 DP83867_RGMII_RX_CLK_DELAY_EN);
+	if (ret)
+		return ret;
+
+	/*
+	 * Program the actual delay values. In RGMIIDCTL the RX clock delay is
+	 * bits [7:4] and the TX clock delay is bits [3:0], so the value is
+	 * (rx << 4) | tx.
+	 */
+	ret = xgem_phy_write_mmd(emac, phy_addr, TI_MMD_DEVAD,
+				 DP83867_RGMIIDCTL,
+				 (DP83867_ZCU102_RX_DELAY << 4) |
+				 DP83867_ZCU102_TX_DELAY);
+	if (ret)
+		return ret;
+
+	printf("xemacps: DP83867 RGMII delays configured\n");
+	return 0;
+}
+
+/**
  * @brief Restart auto-negotiation on the PHY.
  * @param emac     - XEmacPs instance.
  * @param phy_addr - MDIO address of the PHY.
@@ -246,11 +353,18 @@ static int32_t xgem_rx_submit(struct xemacps_desc *d, uint32_t count,
 {
 	XEmacPs_BdRing *rx_ring = &XEmacPs_GetRxRing(&d->emac);
 	XEmacPs_Bd *cur_bd = bd;
+	uint32_t bdindex;
 	uint8_t *buf;
 	uint32_t i;
 
 	for (i = 0; i < count; i++) {
-		buf = (uint8_t *)(uintptr_t)(XEmacPs_BdRead(cur_bd, 0U) & ~0x3UL);
+		/*
+		 * Recover the buffer from its BD ring index, not from the BD's
+		 * word 0. On 64-bit BDs the address spans words 0 and 2, so
+		 * reading word 0 alone truncates buffers in high DDR (>4 GB).
+		 */
+		bdindex = XGEM_BD_TO_INDEX(rx_ring, cur_bd);
+		buf = rx_buf[bdindex];
 		Xil_DCacheInvalidateRange((uintptr_t)buf, XGEM_BUFF_SIZE);
 
 		XEmacPs_BdWrite(cur_bd, XEMACPS_BD_STAT_OFFSET, 0);
@@ -381,8 +495,15 @@ void xgem_config_controller(struct xemacps_desc* d, XEmacPs_Config* cfg)
 			(((XGEM_BUFF_SIZE / 64U) << XEMACPS_DMACR_RXBUF_SHIFT)
 			 & XEMACPS_DMACR_RXBUF_MASK);
 
-		dmacr |= XEMACPS_DMACR_TCPCKSUM_MASK
-			 | XEMACPS_DMACR_TXSIZE_MASK
+		/*
+		 * Do NOT enable hardware TX checksum generation
+		 * (XEMACPS_DMACR_TCPCKSUM_MASK). lwIP already computes IP/UDP/TCP
+		 * checksums in software, and letting the GEM re-insert them on top
+		 * corrupts frames whose source IP is still 0.0.0.0 (e.g. DHCP
+		 * DISCOVER/REQUEST), so the DHCP server silently drops them and
+		 * never sends us an OFFER. Keep checksums entirely in software.
+		 */
+		dmacr |= XEMACPS_DMACR_TXSIZE_MASK
 			 | XEMACPS_DMACR_RXSIZE_MASK;
 
 		dmacr &= ~(XEMACPS_DMACR_ENDIAN_MASK);
@@ -476,10 +597,22 @@ int xemacps_init(struct xemacps_desc **desc, struct xemacps_init_param *param)
 	}
 	d->phy_addr = phy;
 
-	/* Configure RGMII delays on the PHY before starting autoneg */
+	/*
+	 * Configure RGMII internal delays on the PHY before starting autoneg.
+	 * Each helper checks the PHY OUI and no-ops if it doesn't match, so
+	 * both the Marvell (SoM-style boards) and TI DP83867 (ZCU102) PHYs are
+	 * handled. Without the correct internal delays RGMII data is sampled on
+	 * the wrong clock edge and every frame is corrupted.
+	 */
 	ret = xgem_marvell_rgmii_delays(&d->emac, d->phy_addr);
 	if (ret) {
-		printf("xemacps: RGMII delay config failed (%d)\n", ret);
+		printf("xemacps: Marvell RGMII delay config failed (%d)\n", ret);
+		goto free_desc;
+	}
+
+	ret = xgem_ti_rgmii_delays(&d->emac, d->phy_addr);
+	if (ret) {
+		printf("xemacps: TI RGMII delay config failed (%d)\n", ret);
 		goto free_desc;
 	}
 
@@ -692,6 +825,7 @@ int xemacps_recv(struct xemacps_desc *desc, uint8_t *buf, uint32_t *len)
 {
 	XEmacPs_BdRing *rx_ring = &XEmacPs_GetRxRing(&desc->emac);
 	XEmacPs_Bd *bd;
+	uint32_t bdindex;
 	uint8_t *frame;
 	int ret;
 
@@ -700,7 +834,14 @@ int xemacps_recv(struct xemacps_desc *desc, uint8_t *buf, uint32_t *len)
 	if (XEmacPs_BdRingFromHwRx(rx_ring, 1, &bd) == 0)
 		return 0;
 
-	frame = (uint8_t *)(uintptr_t)(XEmacPs_BdRead(bd, 0U) & ~0x3UL);
+	/*
+	 * Recover the buffer from its BD ring index, not from the BD's word 0.
+	 * On 64-bit BDs the buffer address spans words 0 and 2, so reading
+	 * word 0 alone truncates the upper 32 bits and returns a bogus pointer
+	 * for buffers located in high DDR (>4 GB).
+	 */
+	bdindex = XGEM_BD_TO_INDEX(rx_ring, bd);
+	frame = rx_buf[bdindex];
 	*len = XEmacPs_BdGetLength(bd);
 
 	Xil_DCacheInvalidateRange((uintptr_t)frame, *len);
@@ -720,6 +861,71 @@ int xemacps_recv(struct xemacps_desc *desc, uint8_t *buf, uint32_t *len)
 		return -EIO;
 
 	return 0;
+}
+
+/**
+ * @brief Program the ZynqMP GEM TX reference-clock divisor for a link speed.
+ *
+ * On ZynqMP the GEM TX clock is derived in CRL_APB_GEMx_REF_CTRL and must be
+ * divided down to 125 MHz / 25 MHz / 2.5 MHz for 1000 / 100 / 10 Mbps. This is
+ * normally done by the FSBL/PMUFW; with no PMUFW (bare-metal) the driver must
+ * do it or the TX clock stays at the reset default and transmitted frames are
+ * unusable by the link partner (symptom: link parks at 100M, TX "succeeds" per
+ * the MAC frame counter but no replies ever come back).
+ *
+ * Only GEM3 (ZCU102) is handled here; extend the base-address switch for other
+ * instances if needed.
+ *
+ * @param d     - Driver descriptor.
+ * @param speed - Negotiated link speed in Mbps (10, 100, or 1000).
+ */
+static void xgem_set_tx_clk(struct xemacps_desc *d, int16_t speed)
+{
+	uintptr_t crl_base;
+	uint32_t div0, div1, reg;
+
+	/*
+	 * Map the physical GEM base to its CRL_APB ref-ctrl register. Note the
+	 * BSP's logical XPAR_XEMACPS_0 maps to physical GEM3 (0xFF0E0000) on
+	 * ZCU102, so switch on the actual base address, not the XPAR index.
+	 */
+	switch (d->emac.Config.BaseAddress) {
+	case 0xFF0B0000:	/* GEM0 */
+		crl_base = 0xFF5E0050;
+		break;
+	case 0xFF0C0000:	/* GEM1 */
+		crl_base = 0xFF5E0054;
+		break;
+	case 0xFF0D0000:	/* GEM2 */
+		crl_base = 0xFF5E0058;
+		break;
+	case 0xFF0E0000:	/* GEM3 (ZCU102) */
+	default:
+		crl_base = CRL_APB_GEM3_REF_CTRL;
+		break;
+	}
+
+	switch (speed) {
+	case 1000:
+		div0 = GEM_TXCLK_DIV0_1000;
+		div1 = GEM_TXCLK_DIV1_1000;
+		break;
+	case 100:
+		div0 = GEM_TXCLK_DIV0_100;
+		div1 = GEM_TXCLK_DIV1_100;
+		break;
+	default:
+		div0 = GEM_TXCLK_DIV0_10;
+		div1 = GEM_TXCLK_DIV1_10;
+		break;
+	}
+
+	reg = XEmacPs_In32(crl_base);
+	reg &= ~(CRL_APB_GEM_DIV0_MASK | CRL_APB_GEM_DIV1_MASK);
+	reg |= (div0 << CRL_APB_GEM_DIV0_SHIFT) & CRL_APB_GEM_DIV0_MASK;
+	reg |= (div1 << CRL_APB_GEM_DIV1_SHIFT) & CRL_APB_GEM_DIV1_MASK;
+	XEmacPs_Out32(crl_base, reg);
+	dsb();
 }
 
 /**
@@ -749,6 +955,8 @@ static int xgem_poll_link(struct xemacps_desc *d)
 			return speed;
 		printf("xemacps: PHY link up at %dMbps\n", speed);
 		XEmacPs_SetOperatingSpeed(&d->emac, (uint16_t)speed);
+		/* Match the GEM TX reference clock to the negotiated speed. */
+		xgem_set_tx_clk(d, speed);
 	} else {
 		printf("xemacps: PHY link down\n");
 		ret = xgem_phy_start_autonegotiation(&d->emac, d->phy_addr);
