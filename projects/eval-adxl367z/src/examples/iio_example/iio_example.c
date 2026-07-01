@@ -46,7 +46,7 @@ uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 4 * sizeof(int16_t)];
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously function iio_app_run and will not return.
 *******************************************************************************/
-int iio_example_main()
+int example_main()
 {
 	int ret;
 	struct adxl367_iio_dev *adxl367_iio_desc;
@@ -70,5 +70,16 @@ int iio_example_main()
 		}
 	};
 
-	return iio_app_run(NULL, 0, iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
+
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = adxl367_uart_ip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		return ret;
+
+	return iio_app_run(app);
 }

@@ -40,3 +40,13 @@ struct xil_spi_init_param spi_extra = {
 	.base_addr = XPAR_XSPIPS_0_BASEADDR,
 #endif
 };
+
+#ifdef IIO_SUPPORT
+struct xil_uart_init_param uart_extra_ip = {
+	.type = UART_PS,
+	.irq_id = UART_IRQ_ID,
+#ifdef SDT
+	.base_addr = XPAR_XUARTPS_0_BASEADDR,
+#endif
+};
+#endif
