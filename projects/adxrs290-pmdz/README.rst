@@ -323,38 +323,20 @@ wiring the boards.
 Build Command
 ^^^^^^^^^^^^^
 
-Below is a single code block containing the primary commands for
-cleaning, building, flashing, and debugging the ADXRS290 project on the
-PICO platform:
-
 .. code-block:: bash
 
-    # Navigate to the project directory (if not already there)                                                                                                                       
-    cd no-OS/projects/adxrs290-pmdz/src/examples/iio_example                                                                                                                                                                                                                                                    
-                                                                                                                                                                                     
-    # Set the target platform to PICO                                                                                                                                                 
-    make TARGET=pico
+	cd no-OS
 
-   # Clean: remove previous build artifacts                                                                                                                                         
-    make clean PLATFORM=pico                                                                                                                                                         
-                                                                                                                                                                                     
-    # Build:                                                                                                                                                                         
-    #   - Default full build (using 'all' target or simply 'make')                                                                                                                   
-    make all PLATFORM=pico                                                                                                                                                           
-                                                                                                                                                                                     
-    # Build specific IIO examples:                                                                                                                                                   
-    #   IIO example build                                                                                                                                                            
-    make iio_example TARGET=pico                                                                                                                                                     
-    #   IIO trigger example build                                                                                                                                                    
-    make iio_trigger_example TARGET=pico                                                                                                                                             
-    #   IIO timer trigger example build                                                                                                                                              
-    make iio_timer_trigger TARGET=pico                                                                                                                                               
-                                                                                                                                                                                     
-    # Flash: program the firmware onto the PICO board                                                                                                                                
-    make flash PLATFORM=pico                                                                                                                                                         
-                                                                                                                                                                                     
-    # Debug: launch a GDB debugging session for troubleshooting                                                                                                                      
-    make debug PLATFORM=pico  
+	# build the project (iio example on the Raspberry Pi Pico)
+	python tools/scripts/no_os_build.py build \
+		--project adxrs290-pmdz --variant iio --board rpi-pico
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project adxrs290-pmdz --variant iio --board rpi-pico \
+		--probe openocd --flash
+
+Available variants: ``iio``, ``iio_trigger``, ``iio_timer_trigger``. Replace ``--variant`` accordingly.
 
 STM32 Platform
 ~~~~~~~~~~~~~~~

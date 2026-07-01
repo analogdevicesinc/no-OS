@@ -7,7 +7,7 @@ target_sources(adxrs290-pmdz PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}/parameters.c
 )
 
-# Basic IIO example
+# IIO example
 if(CONFIG_ADXRS290_PMDZ_IIO_EXAMPLE)
     target_sources(adxrs290-pmdz PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_example/iio_example.c
@@ -24,6 +24,16 @@ if(CONFIG_ADXRS290_PMDZ_IIO_TRIGGER_EXAMPLE)
     )
     target_include_directories(adxrs290-pmdz PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_trigger_example
+    )
+endif()
+
+# IIO timer trigger example
+if(CONFIG_ADXRS290_PMDZ_IIO_TIMER_TRIGGER_EXAMPLE)
+    target_sources(adxrs290-pmdz PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_timer_trigger_example/iio_timer_trigger_example.c
+    )
+    target_include_directories(adxrs290-pmdz PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_timer_trigger_example
     )
 endif()
 
