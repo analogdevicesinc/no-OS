@@ -123,6 +123,9 @@ function(config_stm32_sdk BUILD_TARGET)
                 "${BOARD_BUILD_DIR}/${IOC_NAME}/cmake/stm32cubemx")
 
         if(NEED_REGEN)
+                # Wipe any prior generation so CubeMX always loads into a clean dir.
+                file(REMOVE_RECURSE "${BOARD_BUILD_DIR}/${IOC_NAME}")
+
                 message(STATUS "Patching STM32CubeMX config file...")
                 no_os_run_checked(
                         WHAT "patching the STM32CubeMX config"
@@ -166,10 +169,10 @@ function(config_stm32_sdk BUILD_TARGET)
                         -P "${NO_OS_DIR}/cmake/stm32/stm32_patch_cubemx.cmake"
                 )
 
-                file(GLOB STARTUP_FILE ${BOARD_BUILD_DIR}/*/startup_*.s)
+                file(GLOB STARTUP_FILE ${BOARD_BUILD_DIR}/${IOC_NAME}/startup_*.s)
                 if(NOT STARTUP_FILE)
                         message(FATAL_ERROR
-                                "No CubeMX startup file (startup_*.s) found under ${BOARD_BUILD_DIR}. "
+                                "No CubeMX startup file (startup_*.s) found under ${BOARD_BUILD_DIR}/${IOC_NAME}. "
                                 "STM32CubeMX project generation may have produced an unexpected layout.")
                 endif()
                 no_os_run_checked(
@@ -231,20 +234,25 @@ function(config_stm32_sdk BUILD_TARGET)
 
         target_sources(no-os PRIVATE ${EXTI_GEN_FILE})
 
-        # Locate the CubeMX-generated linker script. Validate the GLOB result
-        # before passing it to -T: zero matches would otherwise yield a bare
-        # "-T" (cryptic linker error) and multiple matches would pass the extra
-        # scripts as input files, silently producing a wrong link.
-        file(GLOB LINKER_SCRIPT_FILE ${BOARD_BUILD_DIR}/*/*_FLASH.ld)
+        # Locate the CubeMX-generated linker script. Scope the GLOB to this
+        # .ioc's own output dir: a board can have several .ioc files (e.g.
+        # iio_demo's sdp-ck1z.ioc and sdp-ck1z-usb-cdc-acm.ioc both target
+        # BOARD=sdp-ck1z), so a "*/" glob across the shared BOARD_BUILD_DIR
+        # would pick up a sibling .ioc's linker script left over from a
+        # previous variant build. Validate the result before passing it to -T:
+        # zero matches would otherwise yield a bare "-T" (cryptic linker error)
+        # and multiple matches would pass the extra scripts as input files,
+        # silently producing a wrong link.
+        file(GLOB LINKER_SCRIPT_FILE ${BOARD_BUILD_DIR}/${IOC_NAME}/*_FLASH.ld)
         if(NOT LINKER_SCRIPT_FILE)
                 message(FATAL_ERROR
-                        "No CubeMX linker script (*_FLASH.ld) found under ${BOARD_BUILD_DIR}. "
+                        "No CubeMX linker script (*_FLASH.ld) found under ${BOARD_BUILD_DIR}/${IOC_NAME}. "
                         "STM32CubeMX project generation may have produced an unexpected layout.")
         endif()
         list(LENGTH LINKER_SCRIPT_FILE _linker_script_count)
         if(_linker_script_count GREATER 1)
                 message(FATAL_ERROR
-                        "Multiple CubeMX linker scripts (*_FLASH.ld) found under ${BOARD_BUILD_DIR}: "
+                        "Multiple CubeMX linker scripts (*_FLASH.ld) found under ${BOARD_BUILD_DIR}/${IOC_NAME}: "
                         "${LINKER_SCRIPT_FILE}. Expected exactly one.")
         endif()
 
