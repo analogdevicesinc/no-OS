@@ -17,4 +17,10 @@ config DIGITAL_IO_IIO_MAX14906
     bool "Enable MAX14906 IIO driver"
     default n
 
+config DIGITAL_IO_MAX22915
+    depends on SPI
+    select GPIO
+    bool "Enable MAX22915 driver"
+    default n
+
 endif

@@ -1,0 +1,30 @@
+menu "AD405X Configuration"
+
+choice AD405X_EXAMPLE
+	prompt "Example variant"
+	default AD405X_BASIC_EXAMPLE
+
+config AD405X_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Basic SPI example for the AD4050.
+
+config AD405X_BASIC_I3C_EXAMPLE
+	bool "Basic I3C example"
+	help
+	  Basic I3C example for the AD4060.
+
+config AD405X_I3C_DMA_EXAMPLE
+	bool "I3C DMA example"
+	help
+	  I3C example using GPDMA for the AD4062.
+
+config AD405X_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example for the AD4058.
+
+endchoice
+
+endmenu

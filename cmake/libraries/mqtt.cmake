@@ -49,10 +49,8 @@ target_compile_definitions(no-os PUBLIC
 
 # Paho sources are missing #include <string.h> for strcmp/memset/etc.
 # GCC 14+ treats implicit function declarations as errors.
-# The SHELL: prefix keeps "-include string.h" as two separate arguments and
-# exempts them from CMake's option de-duplication, which would otherwise drop
-# the "-include" token (it already appears for no_os_config.h) and leave a
-# stray "string.h" that gcc treats as a missing input file.
+# Use SHELL: so "-include string.h" is passed as two separate arguments rather
+# than collapsed into one token (which leaves a bare "string.h" on the command line).
 target_compile_options(no-os PRIVATE "$<$<COMPILE_LANGUAGE:C>:SHELL:-include string.h>")
 
 message(STATUS "MQTT configured from: ${PAHO_SOURCE_DIR}")

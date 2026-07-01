@@ -1,0 +1,15 @@
+menu "AD7616-ST Configuration"
+
+choice AD7616_ST_EXAMPLE
+	prompt "Example variant"
+	default AD7616_ST_IIO_EXAMPLE
+
+config AD7616_ST_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example for the AD7616 ADC.
+
+endchoice
+
+endmenu

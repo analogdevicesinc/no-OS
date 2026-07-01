@@ -34,7 +34,9 @@
 *******************************************************************************/
 
 #include "common_data.h"
+#ifdef XILINX_PLATFORM
 #include "spi_engine.h"
+#endif
 #include "no_os_spi.h"
 #include "no_os_uart.h"
 #include "no_os_pwm.h"

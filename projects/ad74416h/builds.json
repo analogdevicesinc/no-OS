@@ -1,9 +1,4 @@
 {
-  "stm32": {
-    "basic_example": {
-      "flags" : "EXAMPLE=basic"
-    }
-  },
   "mbed": {
     "basic_example": {
       "flags" : "EXAMPLE=basic"

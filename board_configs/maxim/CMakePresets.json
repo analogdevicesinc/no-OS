@@ -8,55 +8,94 @@
 			"generator": "Ninja"
 		},
 		{
-			"name": "max78000_fthr",
+			"name": "max78000fthr",
 			"description": "MAX78000 feather board",
 			"inherits": "maxim-base",
 			"cacheVariables": {
-				"BOARD": "max78000_fthr",
+				"BOARD": "max78000fthr",
 				"USE_VENDOR_TOOLCHAIN": "ON",
 				"PLATFORM": "maxim",
 				"TARGET": "max78000",
 				"TARGET_NUM": "78000",
-				"BOARD_CONFIG_FILE": "max78000_fthr_defconfig"
+				"BOARD_CONFIG_FILE": "max78000fthr_defconfig"
 			}
 		},
 		{
-			"name": "max32650_fthr",
+			"name": "max32650fthr",
 			"description": "MAX32650 feather board",
 			"inherits": "maxim-base",
 			"cacheVariables": {
-				"BOARD": "max32650_fthr",
+				"BOARD": "max32650fthr",
 				"USE_VENDOR_TOOLCHAIN": "ON",
 				"PLATFORM": "maxim",
 				"TARGET": "max32650",
 				"TARGET_NUM": "32650",
-				"BOARD_CONFIG_FILE": "max32650_fthr_defconfig"
+				"BOARD_CONFIG_FILE": "max32650fthr_defconfig"
 			}
 		},
 		{
-			"name": "apard32690",
+			"name": "ad-apard32690-sl",
 			"description": "APARD32690 board",
 			"inherits": "maxim-base",
 			"cacheVariables": {
-				"BOARD": "apard32690",
+				"BOARD": "ad-apard32690-sl",
 				"USE_VENDOR_TOOLCHAIN": "ON",
 				"PLATFORM": "maxim",
 				"TARGET": "max32690",
 				"TARGET_NUM": "32690",
-				"BOARD_CONFIG_FILE": "apard32690_defconfig"
+				"BOARD_CONFIG_FILE": "ad-apard32690-sl_defconfig"
 			}
 		},
 		{
-			"name": "max32655_fthr",
+			"name": "max32655fthr",
 			"description": "MAX32655 FTHR board",
 			"inherits": "maxim-base",
 			"cacheVariables": {
-				"BOARD": "max32655_fthr",
+				"BOARD": "max32655fthr",
 				"USE_VENDOR_TOOLCHAIN": "ON",
 				"PLATFORM": "maxim",
 				"TARGET": "max32655",
 				"TARGET_NUM": "32655",
-				"BOARD_CONFIG_FILE": "max32655_fthr_defconfig"
+				"BOARD_CONFIG_FILE": "max32655fthr_defconfig"
+			}
+		},
+		{
+			"name": "max32660fthr",
+			"description": "MAX32660 board",
+			"inherits": "maxim-base",
+			"cacheVariables": {
+				"BOARD": "max32660fthr",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "maxim",
+				"TARGET": "max32660",
+				"TARGET_NUM": "32660",
+				"BOARD_CONFIG_FILE": "max32660fthr_defconfig"
+			}
+		},
+		{
+			"name": "max32665fthr",
+			"description": "MAX32665 board",
+			"inherits": "maxim-base",
+			"cacheVariables": {
+				"BOARD": "max32665fthr",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "maxim",
+				"TARGET": "max32665",
+				"TARGET_NUM": "32665",
+				"BOARD_CONFIG_FILE": "max32665fthr_defconfig"
+			}
+		},
+		{
+			"name": "max32670evkit",
+			"description": "MAX32670 EvKit board",
+			"inherits": "maxim-base",
+			"cacheVariables": {
+				"BOARD": "max32670evkit",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "maxim",
+				"TARGET": "max32670",
+				"TARGET_NUM": "32670",
+				"BOARD_CONFIG_FILE": "max32670evkit_defconfig"
 			}
 		},
 		{

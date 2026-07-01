@@ -1,5 +1,6 @@
 # AD405X
 no_os_sources_ifdef(CONFIG_ADC_AD405X ${CMAKE_CURRENT_SOURCE_DIR}/ad405x/ad405x.c)
+no_os_sources_ifdef(CONFIG_ADC_IIO_AD405X ${CMAKE_CURRENT_SOURCE_DIR}/ad405x/iio_ad405x.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad405x)
 
 # AD4080
@@ -9,6 +10,11 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad4080)
 # AD4170
 no_os_sources_ifdef(CONFIG_ADC_AD4170 ${CMAKE_CURRENT_SOURCE_DIR}/ad4170/ad4170.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad4170)
+
+# AD4692
+no_os_sources_ifdef(CONFIG_ADC_AD4692 ${CMAKE_CURRENT_SOURCE_DIR}/ad4692/ad4692.c)
+no_os_sources_ifdef(CONFIG_ADC_IIO_AD4692 ${CMAKE_CURRENT_SOURCE_DIR}/ad4692/iio_ad4692.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad4692)
 
 # AD463X
 no_os_sources_ifdef(CONFIG_ADC_AD463X ${CMAKE_CURRENT_SOURCE_DIR}/ad463x/ad463x.c)
@@ -70,6 +76,10 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad7280a)
 no_os_sources_ifdef(CONFIG_ADC_AD738X ${CMAKE_CURRENT_SOURCE_DIR}/ad738x/ad738x.c)
 no_os_sources_ifdef(CONFIG_ADC_IIO_AD738X ${CMAKE_CURRENT_SOURCE_DIR}/ad738x/iio_ad738x.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad738x)
+# AD738X uses standard SPI on STM32 (not SPI engine like Xilinx)
+if(PLATFORM STREQUAL "stm32" AND (CONFIG_ADC_AD738X OR CONFIG_ADC_IIO_AD738X))
+  target_compile_definitions(no-os PRIVATE USE_STANDARD_SPI)
+endif()
 
 # AD74XX
 no_os_sources_ifdef(CONFIG_ADC_AD74XX ${CMAKE_CURRENT_SOURCE_DIR}/ad74xx/ad74xx.c)
@@ -211,3 +221,7 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/max9611pmb)
 no_os_sources_ifdef(CONFIG_ADC_PULSAR_ADC ${CMAKE_CURRENT_SOURCE_DIR}/pulsar_adc/pulsar_adc.c)
 no_os_sources_ifdef(CONFIG_ADC_IIO_PULSAR_ADC ${CMAKE_CURRENT_SOURCE_DIR}/pulsar_adc/iio_pulsar_adc.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/pulsar_adc)
+# Define USE_STANDARD_SPI for STM32 platform (pulsar_adc driver supports both xilinx with spi_engine and stm32 with no_os_spi)
+if(PLATFORM STREQUAL "stm32")
+    target_compile_definitions(no-os PRIVATE USE_STANDARD_SPI)
+endif()

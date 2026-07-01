@@ -1,0 +1,16 @@
+menu "EVAL-ADIS1654X Configuration"
+
+choice EVAL_ADIS1654X_EXAMPLE
+	prompt "Example variant"
+	default EVAL_ADIS1654X_BASIC_EXAMPLE
+
+config EVAL_ADIS1654X_BASIC_EXAMPLE
+	bool "Basic example"
+
+config EVAL_ADIS1654X_IIO_TRIGGER_EXAMPLE
+	bool "IIO Trigger example"
+	depends on IIO && IRQ && GPIO
+
+endchoice
+
+endmenu

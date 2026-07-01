@@ -110,6 +110,10 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ltc2672)
 no_os_sources_ifdef(CONFIG_DAC_LTC268X ${CMAKE_CURRENT_SOURCE_DIR}/ltc268x/ltc268x.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ltc268x)
 
+# MAX22007
+no_os_sources_ifdef(CONFIG_DAC_MAX22007 ${CMAKE_CURRENT_SOURCE_DIR}/max22007/max22007.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/max22007)
+
 # MAX22017
 no_os_sources_ifdef(CONFIG_DAC_MAX22017 ${CMAKE_CURRENT_SOURCE_DIR}/max22017/max22017.c)
 no_os_sources_ifdef(CONFIG_DAC_IIO_MAX22017 ${CMAKE_CURRENT_SOURCE_DIR}/max22017/iio_max22017.c)

@@ -74,8 +74,13 @@ endfunction()
 # directory must also still exist; otherwise a previous failed (but stamped)
 # run would masquerade as up-to-date and break the later add_subdirectory().
 # Returns TRUE/FALSE via NEED_REGEN in the caller's scope.
-function(stm32_check_cubemx_stale IOC_FILE BOARD_BUILD_DIR GENERATED_DIR)
-        set(STAMP_FILE "${BOARD_BUILD_DIR}/.cubemx_stamp")
+function(stm32_check_cubemx_stale IOC_FILE IOC_BUILD_DIR GENERATED_DIR)
+        # The stamp lives inside this .ioc's own output dir, not the shared
+        # per-board dir: a project can build several .ioc files against the
+        # same BOARD (e.g. iio_demo's sdp-ck1z.ioc and sdp-ck1z-usb-cdc-acm.ioc),
+        # and each must keep its own cache fingerprint so switching between
+        # variants does not force a needless (slow) CubeMX regeneration.
+        set(STAMP_FILE "${IOC_BUILD_DIR}/.cubemx_stamp")
         set(NEED_REGEN TRUE PARENT_SCOPE)
 
         # Compute current fingerprint
@@ -98,14 +103,16 @@ function(stm32_check_cubemx_stale IOC_FILE BOARD_BUILD_DIR GENERATED_DIR)
         endif()
 endfunction()
 
-# Write the stamp file after a successful CubeMX generation.
-function(stm32_write_cubemx_stamp IOC_FILE BOARD_BUILD_DIR)
+# Write the stamp file after a successful CubeMX generation. Kept per-.ioc
+# (inside IOC_BUILD_DIR) so sibling .ioc files on the same board do not
+# overwrite each other's cache fingerprint.
+function(stm32_write_cubemx_stamp IOC_FILE IOC_BUILD_DIR)
         if(EXISTS "${IOC_FILE}")
                 file(SHA1 "${IOC_FILE}" _ioc_hash)
         else()
                 set(_ioc_hash "MISSING")
         endif()
-        file(WRITE "${BOARD_BUILD_DIR}/.cubemx_stamp" "${_ioc_hash}:${STM32CUBEMX_EXECUTABLE}")
+        file(WRITE "${IOC_BUILD_DIR}/.cubemx_stamp" "${_ioc_hash}:${STM32CUBEMX_EXECUTABLE}")
 endfunction()
 
 function(config_stm32_sdk BUILD_TARGET)
@@ -119,10 +126,13 @@ function(config_stm32_sdk BUILD_TARGET)
         set(EXTI_GEN_FILE ${CMAKE_CURRENT_BINARY_DIR}/stm32_gpio_irq_generated.c)
         set(BOARD_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build")
 
-        stm32_check_cubemx_stale("${IOC_FILE}" "${BOARD_BUILD_DIR}"
+        stm32_check_cubemx_stale("${IOC_FILE}" "${BOARD_BUILD_DIR}/${IOC_NAME}"
                 "${BOARD_BUILD_DIR}/${IOC_NAME}/cmake/stm32cubemx")
 
         if(NEED_REGEN)
+                # Wipe any prior generation so CubeMX always loads into a clean dir.
+                file(REMOVE_RECURSE "${BOARD_BUILD_DIR}/${IOC_NAME}")
+
                 message(STATUS "Patching STM32CubeMX config file...")
                 no_os_run_checked(
                         WHAT "patching the STM32CubeMX config"
@@ -166,10 +176,10 @@ function(config_stm32_sdk BUILD_TARGET)
                         -P "${NO_OS_DIR}/cmake/stm32/stm32_patch_cubemx.cmake"
                 )
 
-                file(GLOB STARTUP_FILE ${BOARD_BUILD_DIR}/*/startup_*.s)
+                file(GLOB STARTUP_FILE ${BOARD_BUILD_DIR}/${IOC_NAME}/startup_*.s)
                 if(NOT STARTUP_FILE)
                         message(FATAL_ERROR
-                                "No CubeMX startup file (startup_*.s) found under ${BOARD_BUILD_DIR}. "
+                                "No CubeMX startup file (startup_*.s) found under ${BOARD_BUILD_DIR}/${IOC_NAME}. "
                                 "STM32CubeMX project generation may have produced an unexpected layout.")
                 endif()
                 no_os_run_checked(
@@ -177,7 +187,7 @@ function(config_stm32_sdk BUILD_TARGET)
                         COMMAND ${VENV_PYTHON_EXE} ${EXTI_SCRIPT} ${STARTUP_FILE} ${EXTI_GEN_FILE}
                 )
 
-                stm32_write_cubemx_stamp("${IOC_FILE}" "${BOARD_BUILD_DIR}")
+                stm32_write_cubemx_stamp("${IOC_FILE}" "${BOARD_BUILD_DIR}/${IOC_NAME}")
         endif()
 
         # CubeMX generates two different CMakeLists.txt layouts:
@@ -231,20 +241,25 @@ function(config_stm32_sdk BUILD_TARGET)
 
         target_sources(no-os PRIVATE ${EXTI_GEN_FILE})
 
-        # Locate the CubeMX-generated linker script. Validate the GLOB result
-        # before passing it to -T: zero matches would otherwise yield a bare
-        # "-T" (cryptic linker error) and multiple matches would pass the extra
-        # scripts as input files, silently producing a wrong link.
-        file(GLOB LINKER_SCRIPT_FILE ${BOARD_BUILD_DIR}/*/*_FLASH.ld)
+        # Locate the CubeMX-generated linker script. Scope the GLOB to this
+        # .ioc's own output dir: a board can have several .ioc files (e.g.
+        # iio_demo's sdp-ck1z.ioc and sdp-ck1z-usb-cdc-acm.ioc both target
+        # BOARD=sdp-ck1z), so a "*/" glob across the shared BOARD_BUILD_DIR
+        # would pick up a sibling .ioc's linker script left over from a
+        # previous variant build. Validate the result before passing it to -T:
+        # zero matches would otherwise yield a bare "-T" (cryptic linker error)
+        # and multiple matches would pass the extra scripts as input files,
+        # silently producing a wrong link.
+        file(GLOB LINKER_SCRIPT_FILE ${BOARD_BUILD_DIR}/${IOC_NAME}/*_FLASH.ld)
         if(NOT LINKER_SCRIPT_FILE)
                 message(FATAL_ERROR
-                        "No CubeMX linker script (*_FLASH.ld) found under ${BOARD_BUILD_DIR}. "
+                        "No CubeMX linker script (*_FLASH.ld) found under ${BOARD_BUILD_DIR}/${IOC_NAME}. "
                         "STM32CubeMX project generation may have produced an unexpected layout.")
         endif()
         list(LENGTH LINKER_SCRIPT_FILE _linker_script_count)
         if(_linker_script_count GREATER 1)
                 message(FATAL_ERROR
-                        "Multiple CubeMX linker scripts (*_FLASH.ld) found under ${BOARD_BUILD_DIR}: "
+                        "Multiple CubeMX linker scripts (*_FLASH.ld) found under ${BOARD_BUILD_DIR}/${IOC_NAME}: "
                         "${LINKER_SCRIPT_FILE}. Expected exactly one.")
         endif()
 

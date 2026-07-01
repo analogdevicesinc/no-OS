@@ -94,7 +94,8 @@ In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-    make EXAMPLE=basic
+	python tools/scripts/no_os_build.py build \
+		--project eval-adxl313z --variant basic --board nucleo-f401re
 
 IIO Example
 ~~~~~~~~~~~~
@@ -118,7 +119,8 @@ In order to build the IIO project make sure you are using this command:
 
 .. code-block:: bash
 
-    make EXAMPLE=iio
+	python tools/scripts/no_os_build.py build \
+		--project eval-adxl313z --variant iio --board nucleo-f401re
 
 No-OS Supported Platforms
 -------------------------
@@ -170,9 +172,20 @@ Build Command
 
 .. code-block:: bash
 
-    # To delete current build
-    make reset
-    # To build the project (selecting the example to run)
-    make EXAMPLE=iio PLATFORM=stm32
-    # To flash the code
-    make run
+	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+	# in a default install location)
+	export STM32CUBEMX=</path/to/stm32cubemx>
+	export STM32CUBEIDE=</path/to/stm32cubeide>
+
+	cd no-OS
+
+	# build the project (basic example on the NUCLEO-F401RE board)
+	python tools/scripts/no_os_build.py build \
+		--project eval-adxl313z --variant basic --board nucleo-f401re
+
+	# Available variants: ``basic``, ``iio``. Replace ``--variant`` accordingly.
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project eval-adxl313z --variant basic --board nucleo-f401re \
+		--probe openocd --flash

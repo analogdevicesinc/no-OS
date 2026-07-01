@@ -36,9 +36,9 @@
 #include "common_data.h"
 #include "no_os_error.h"
 
-#ifdef BASIC_EXAMPLE
+#ifdef CONFIG_AD738X_FMCZ_BASIC_EXAMPLE
 #include "basic_example.h"
-#elif defined(IIO_EXAMPLE)
+#elif defined(CONFIG_AD738X_FMCZ_IIO_EXAMPLE)
 #include "iio_example.h"
 #endif
 
@@ -61,12 +61,12 @@ int main()
 
 	no_os_uart_stdio(uart);
 
-#ifdef BASIC_EXAMPLE
+#ifdef CONFIG_AD738X_FMCZ_BASIC_EXAMPLE
 	ret = basic_example_main();
-#elif defined(IIO_EXAMPLE)
+#elif defined(CONFIG_AD738X_FMCZ_IIO_EXAMPLE)
 
 	ret = iio_example_main();
 #else
-#error At least one example has to be selected using y value in Makefile.
+#error At least one example has to be selected using y value in Kconfig.
 #endif
 }

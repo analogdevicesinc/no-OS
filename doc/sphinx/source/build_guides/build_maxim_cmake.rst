@@ -23,13 +23,19 @@ use the vendor toolchain bundled with the Maxim SDK:
 
        * - Preset / Board
          - Target chip
-       * - ``max78000_fthr``
+       * - ``max78000fthr``
          - max78000
-       * - ``max32650_fthr``
+       * - ``max32650fthr``
          - max32650
-       * - ``max32655_fthr``
+       * - ``max32655fthr``
          - max32655
-       * - ``apard32690``
+       * - ``max32660fthr``
+         - max32660
+       * - ``max32665fthr``
+         - max32665
+       * - ``max32670evkit``
+         - max32670
+       * - ``ad-apard32690-sl``
          - max32690
        * - ``ad-swiot1l-sl``
          - max32650
@@ -116,7 +122,7 @@ You can filter by project, variant or board:
     .. code-block:: bash
 
         $ python tools/scripts/no_os_build.py list --project iio_demo
-        $ python tools/scripts/no_os_build.py list --board max78000_fthr
+        $ python tools/scripts/no_os_build.py list --board max78000fthr
 
 Each row is a ``PROJECT  VARIANT  BOARD  PLATFORM`` tuple that can be fed back
 to the ``build`` subcommand.
@@ -132,7 +138,7 @@ the right preset, defconfig and board config for you:
     .. code-block:: bash
 
         $ python tools/scripts/no_os_build.py build \
-              --project iio_demo --variant iio --board max78000_fthr
+              --project iio_demo --variant iio --board max78000fthr
 
 Useful options:
 
@@ -155,7 +161,7 @@ the project/variant with ``PROJECT_DEFCONFIG``:
 
     .. code-block:: bash
 
-        $ cmake -B iio_demo --preset max78000_fthr \
+        $ cmake -B iio_demo --preset max78000fthr \
               -DPROJECT_DEFCONFIG=iio_demo/iio.conf
 
 Then build the project target (the target name is the project directory name):
@@ -198,7 +204,7 @@ Configure with the desired probe, build, then run the ``flash`` target:
 
     .. code-block:: bash
 
-        $ cmake -B iio_demo --preset max78000_fthr \
+        $ cmake -B iio_demo --preset max78000fthr \
               -DPROJECT_DEFCONFIG=iio_demo/iio.conf -DPROBE=openocd
         $ cmake --build iio_demo --target iio_demo
         $ cmake --build iio_demo --target flash
@@ -208,7 +214,7 @@ Or, with the helper script in one step:
     .. code-block:: bash
 
         $ python tools/scripts/no_os_build.py build \
-              --project iio_demo --variant iio --board max78000_fthr \
+              --project iio_demo --variant iio --board max78000fthr \
               --probe openocd --flash
 
 When the OpenOCD probe is selected, the following additional targets are

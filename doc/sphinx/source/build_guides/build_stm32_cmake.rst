@@ -28,10 +28,20 @@ The following STM32 boards (presets) are available out of the box:
 
        * - Preset / Board
          - Target chip
-       * - ``stm32f756_nucleo``
-         - STM32F756 (Cortex-M7)
+       * - ``nucleo-f756zg``
+         - stm32f756 (Cortex-M7)
        * - ``sdp-ck1z``
          - stm32f469 (Cortex-M4)
+       * - ``nucleo-f413zh``
+         - stm32f413 (Cortex-M4)
+       * - ``nucleo-f401re``
+         - stm32f401 (Cortex-M4)
+       * - ``nucleo-f767zi``
+         - stm32f767 (Cortex-M7)
+       * - ``nucleo-h503rb``
+         - stm32h503 (Cortex-M33)
+       * - ``nucleo-h563zi``
+         - stm32h563 (Cortex-M33)
        * - ``adin1110ebz``
          - STM32L4S5 (Cortex-M4)
 

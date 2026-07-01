@@ -8,15 +8,15 @@
 			"generator": "Ninja"
 		},
 		{
-			"name": "stm32f756_nucleo",
-			"description": "STM32F756 Nucleo board",
+			"name": "nucleo-f756zg",
+			"description": "NUCLEO-F756ZG board",
 			"inherits": "stm32-base",
 			"cacheVariables": {
-				"BOARD": "stm32f756_nucleo",
+				"BOARD": "nucleo-f756zg",
 				"USE_VENDOR_TOOLCHAIN": "ON",
 				"PLATFORM": "stm32",
 				"TARGET": "stm32f756",
-				"BOARD_CONFIG_FILE": "stm32f756_nucleo_defconfig"
+				"BOARD_CONFIG_FILE": "nucleo-f756zg_defconfig"
 			}
 		},
 		{
@@ -32,6 +32,18 @@
 			}
 		},
 		{
+			"name": "nucleo-f413zh",
+			"description": "NUCLEO-F413ZH board",
+			"inherits": "stm32-base",
+			"cacheVariables": {
+				"BOARD": "nucleo-f413zh",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "stm32",
+				"TARGET": "stm32f413",
+				"BOARD_CONFIG_FILE": "nucleo-f413zh_defconfig"
+			}
+		},
+		{
 			"name": "adin1110ebz",
 			"description": "ADIN1110-EBZ board",
 			"inherits": "stm32-base",
@@ -41,6 +53,54 @@
 				"PLATFORM": "stm32",
 				"TARGET": "stm32l4s5",
 				"BOARD_CONFIG_FILE": "adin1110ebz_defconfig"
+			}
+		},
+		{
+			"name": "nucleo-f401re",
+			"description": "NUCLEO-F401RE board",
+			"inherits": "stm32-base",
+			"cacheVariables": {
+				"BOARD": "nucleo-f401re",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "stm32",
+				"TARGET": "stm32f401",
+				"BOARD_CONFIG_FILE": "nucleo-f401re_defconfig"
+			}
+		},
+		{
+			"name": "nucleo-f767zi",
+			"description": "NUCLEO-F767ZI board",
+			"inherits": "stm32-base",
+			"cacheVariables": {
+				"BOARD": "nucleo-f767zi",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "stm32",
+				"TARGET": "stm32f767",
+				"BOARD_CONFIG_FILE": "nucleo-f767zi_defconfig"
+			}
+		},
+		{
+			"name": "nucleo-h503rb",
+			"description": "NUCLEO-H503RB board",
+			"inherits": "stm32-base",
+			"cacheVariables": {
+				"BOARD": "nucleo-h503rb",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "stm32",
+				"TARGET": "stm32h503",
+				"BOARD_CONFIG_FILE": "nucleo-h503rb_defconfig"
+			}
+		},
+		{
+			"name": "nucleo-h563zi",
+			"description": "NUCLEO-H563ZI board",
+			"inherits": "stm32-base",
+			"cacheVariables": {
+				"BOARD": "nucleo-h563zi",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "stm32",
+				"TARGET": "stm32h563",
+				"BOARD_CONFIG_FILE": "nucleo-h563zi_defconfig"
 			}
 		}
 	]
