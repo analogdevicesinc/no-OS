@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for EVAL-ADE9430 project.
+ *   @file   iot_example.c
+ *   @brief  Sensor-to-Cloud (MQTT / Azure IoT Hub) example for EVAL-ADE9430.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -277,7 +277,7 @@ void mqtt_message_handler(struct mqtt_message_data *msg)
  *
  * @return ret - Result of the enabled examples execution.
 *******************************************************************************/
-int main()
+int example_main()
 {
 	int ret;
 	uint32_t len;

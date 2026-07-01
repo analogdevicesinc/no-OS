@@ -1,6 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // SPDX-License-Identifier: MIT
 
+// This file is only relevant for the Azure IoT Hub (secure socket) build.
+// When the secure socket is disabled the Azure SDK is not available, so the
+// whole translation unit compiles to nothing.
+#ifndef DISABLE_SECURE_SOCKET
+
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -69,3 +74,5 @@ void iot_sample_create_mqtt_endpoint(
 
 	IOT_SAMPLE_LOG_SUCCESS("MQTT endpoint created at \"%s\".", out_endpoint);
 }
+
+#endif /* DISABLE_SECURE_SOCKET */
