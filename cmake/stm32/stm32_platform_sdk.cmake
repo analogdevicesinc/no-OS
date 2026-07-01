@@ -74,8 +74,13 @@ endfunction()
 # directory must also still exist; otherwise a previous failed (but stamped)
 # run would masquerade as up-to-date and break the later add_subdirectory().
 # Returns TRUE/FALSE via NEED_REGEN in the caller's scope.
-function(stm32_check_cubemx_stale IOC_FILE BOARD_BUILD_DIR GENERATED_DIR)
-        set(STAMP_FILE "${BOARD_BUILD_DIR}/.cubemx_stamp")
+function(stm32_check_cubemx_stale IOC_FILE IOC_BUILD_DIR GENERATED_DIR)
+        # The stamp lives inside this .ioc's own output dir, not the shared
+        # per-board dir: a project can build several .ioc files against the
+        # same BOARD (e.g. iio_demo's sdp-ck1z.ioc and sdp-ck1z-usb-cdc-acm.ioc),
+        # and each must keep its own cache fingerprint so switching between
+        # variants does not force a needless (slow) CubeMX regeneration.
+        set(STAMP_FILE "${IOC_BUILD_DIR}/.cubemx_stamp")
         set(NEED_REGEN TRUE PARENT_SCOPE)
 
         # Compute current fingerprint
@@ -98,14 +103,16 @@ function(stm32_check_cubemx_stale IOC_FILE BOARD_BUILD_DIR GENERATED_DIR)
         endif()
 endfunction()
 
-# Write the stamp file after a successful CubeMX generation.
-function(stm32_write_cubemx_stamp IOC_FILE BOARD_BUILD_DIR)
+# Write the stamp file after a successful CubeMX generation. Kept per-.ioc
+# (inside IOC_BUILD_DIR) so sibling .ioc files on the same board do not
+# overwrite each other's cache fingerprint.
+function(stm32_write_cubemx_stamp IOC_FILE IOC_BUILD_DIR)
         if(EXISTS "${IOC_FILE}")
                 file(SHA1 "${IOC_FILE}" _ioc_hash)
         else()
                 set(_ioc_hash "MISSING")
         endif()
-        file(WRITE "${BOARD_BUILD_DIR}/.cubemx_stamp" "${_ioc_hash}:${STM32CUBEMX_EXECUTABLE}")
+        file(WRITE "${IOC_BUILD_DIR}/.cubemx_stamp" "${_ioc_hash}:${STM32CUBEMX_EXECUTABLE}")
 endfunction()
 
 function(config_stm32_sdk BUILD_TARGET)
@@ -119,7 +126,7 @@ function(config_stm32_sdk BUILD_TARGET)
         set(EXTI_GEN_FILE ${CMAKE_CURRENT_BINARY_DIR}/stm32_gpio_irq_generated.c)
         set(BOARD_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build")
 
-        stm32_check_cubemx_stale("${IOC_FILE}" "${BOARD_BUILD_DIR}"
+        stm32_check_cubemx_stale("${IOC_FILE}" "${BOARD_BUILD_DIR}/${IOC_NAME}"
                 "${BOARD_BUILD_DIR}/${IOC_NAME}/cmake/stm32cubemx")
 
         if(NEED_REGEN)
@@ -180,7 +187,7 @@ function(config_stm32_sdk BUILD_TARGET)
                         COMMAND ${VENV_PYTHON_EXE} ${EXTI_SCRIPT} ${STARTUP_FILE} ${EXTI_GEN_FILE}
                 )
 
-                stm32_write_cubemx_stamp("${IOC_FILE}" "${BOARD_BUILD_DIR}")
+                stm32_write_cubemx_stamp("${IOC_FILE}" "${BOARD_BUILD_DIR}/${IOC_NAME}")
         endif()
 
         # CubeMX generates two different CMakeLists.txt layouts:
