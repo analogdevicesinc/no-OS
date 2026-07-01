@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   app_config.h
- *   @brief  Config file of AD7124-8 project.
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @file   main.c
+ *   @brief  Main file for Maxim platform of ad7124-8pmdz project.
+ *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
- * Copyright 2015(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -19,7 +19,7 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -30,11 +30,18 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef CONFIG_H_
-#define CONFIG_H_
 
-//#define XILINX_PLATFORM
-//#define ALTERA_PLATFORM
-//#define ADUCM_PLATFORM
+#include "parameters.h"
+#include "common_data.h"
 
-#endif
+extern int example_main();
+
+/***************************************************************************//**
+ * @brief Main function execution for Maxim platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+*******************************************************************************/
+int main()
+{
+	return example_main();
+}

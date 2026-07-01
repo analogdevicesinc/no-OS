@@ -1,9 +1,10 @@
-# Uncomment to use the desired platform
-# PLATFORM = xilinx
-# PLATFORM = altera
-PLATFORM = aducm3029
+EXAMPLE ?= iio_example
+
+LIB_FLAGS += -lm
 
 include ../../tools/scripts/generic_variables.mk
+
+include ../../tools/scripts/examples.mk
 
 include src.mk
 
