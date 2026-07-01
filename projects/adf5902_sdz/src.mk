@@ -14,7 +14,8 @@ SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(DRIVERS)/frequency/adf5902/adf5902.c \
 	$(NO-OS)/util/no_os_alloc.c \
-	$(NO-OS)/util/no_os_mutex.c
+	$(NO-OS)/util/no_os_mutex.c \
+	$(NO-OS)/util/no_os_util.c
 SRCS +=	$(PLATFORM_DRIVERS)/xilinx_axi_io.c \
 	$(PLATFORM_DRIVERS)/xilinx_spi.c \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c \
@@ -25,7 +26,8 @@ SRCS += $(NO-OS)/util/no_os_fifo.c \
 	$(NO-OS)/util/no_os_list.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
-	$(PLATFORM_DRIVERS)/irq.c \
+	$(DRIVERS)/api/no_os_irq.c \
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c \
 	$(NO-OS)/iio/iio_app/iio_app.c \
 	$(DRIVERS)/api/no_os_uart.c \
 	$(DRIVERS)/frequency/adf5902/iio_adf5902.c
