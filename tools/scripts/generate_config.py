@@ -57,6 +57,12 @@ except kconfiglib.KconfigError as e:
 
 if args.update:
         if args.defconfig is not None:
+                # The defconfig is merged on top of the already-loaded main
+                # config, so re-applying it (e.g. on an incremental rebuild)
+                # re-assigns symbols to the value they already hold. That is
+                # benign, so silence kconfiglib's "set more than once" noise;
+                # other warnings (unknown/undefined symbols) stay visible.
+                kconf.warn_assign_redun = False
                 for defconfig in args.defconfig:
                         defconfig_path = src_dir.joinpath(defconfig)
                         if not defconfig_path.exists():
