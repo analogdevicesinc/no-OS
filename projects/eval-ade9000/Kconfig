@@ -1,0 +1,12 @@
+menu "eval-ade9000 Configuration"
+
+choice EVAL_ADE9000_EXAMPLE
+	prompt "Example variant"
+	default EVAL_ADE9000_ADE9000_EXAMPLE
+
+config EVAL_ADE9000_ADE9000_EXAMPLE
+	bool "ADE9000 example"
+
+endchoice
+
+endmenu
