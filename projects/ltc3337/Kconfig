@@ -1,0 +1,12 @@
+menu "LTC3337 Configuration"
+
+choice LTC3337_EXAMPLE
+	prompt "Example variant"
+	default LTC3337_BASIC_EXAMPLE
+
+config LTC3337_BASIC_EXAMPLE
+	bool "Basic example"
+
+endchoice
+
+endmenu
