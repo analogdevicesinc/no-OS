@@ -1,0 +1,16 @@
+menu "demo_esp Configuration"
+
+choice DEMO_ESP_EXAMPLE
+	prompt "Example variant"
+	default DEMO_ESP_BASIC_EXAMPLE
+
+config DEMO_ESP_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Connects to an ESP8266 Wi-Fi module via UART AT commands, establishes
+	  a TCP connection to an MQTT broker, and continuously publishes and
+	  receives messages.
+
+endchoice
+
+endmenu
