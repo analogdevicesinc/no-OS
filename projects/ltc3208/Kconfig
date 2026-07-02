@@ -1,0 +1,12 @@
+menu "LTC3208 Configuration"
+
+choice LTC3208_EXAMPLE
+	prompt "Example variant"
+	default LTC3208_BASIC_EXAMPLE
+
+config LTC3208_BASIC_EXAMPLE
+	bool "Basic example"
+
+endchoice
+
+endmenu
