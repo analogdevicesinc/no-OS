@@ -1,0 +1,12 @@
+menu "adin1110 Configuration"
+
+choice ADIN1110_EXAMPLE
+	prompt "Example variant"
+	default ADIN1110_FRAME_RX_TX_EXAMPLE
+
+config ADIN1110_FRAME_RX_TX_EXAMPLE
+	bool "Frame RX/TX example"
+
+endchoice
+
+endmenu

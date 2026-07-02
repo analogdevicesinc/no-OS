@@ -137,11 +137,21 @@ Ensure voltage levels are compatible (typically 3.3V).
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``frame_rx_tx``.
+Available boards: ``max32650fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-   # to delete current build
-   make reset
-   # to build the project
-   make PLATFORM=maxim TARGET=max32650
-   # to flash the code
-   make run
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (frame_rx_tx example on the max32650fthr board)
+   python tools/scripts/no_os_build.py build \
+      --project adin1110 --variant frame_rx_tx --board max32650fthr
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project adin1110 --variant frame_rx_tx --board max32650fthr \
+      --probe openocd --flash
