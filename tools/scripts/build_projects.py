@@ -386,6 +386,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 
 	build_dir_base = Path(cmake_builds_dir)
 	ok = 1
+	binary_created = False
 	for combo in combos:
 		variant = combo['variant']
 		board = combo['board']
@@ -442,8 +443,16 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 			src = out_dir / ('%s.%s' % (project, ext))
 			if src.is_file():
 				run_cmd("cp %s %s" % (src, os.path.join(project_export, '%s.%s' % (name, ext))))
+				binary_created = True
 
 		log_success("DONE")
+
+	if ok == 1 and binary_created:
+		cwd = os.getcwd()
+		os.chdir(project_export)
+		os.system("zip -mr -FS %s.zip . >> %s 2>&1" % ("../"+project, "../../"+log_file))
+		os.chdir(cwd)
+		run_cmd("rm -r %s" % project_export)
 
 	return ok
 
