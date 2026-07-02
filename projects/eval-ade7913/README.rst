@@ -138,13 +138,8 @@ communicate with ADE7913 devices using no-OS drivers. It covers hardware
 interface initialization, interrupt management, and data processing, and
 it showcases key functionalities such as SPI and GPIO configuration.
 
-In order to build the basic example make sure you have the following configuration 
-in the :git-no-OS:`Makefile </projects/eval-ade7913/Makefile>`.  
-
-.. code-block:: bash
-
-   # Enable the ADE7913 evaluation example
-   ADE7913_EXAMPLE = y
+The ADE7913 evaluation example is selected via the ``ade7913_example``
+build variant (see the Build Command section below).
 
 No-OS Supported Platforms
 -------------------------
@@ -178,10 +173,21 @@ GND          GND
 Build Command
 ^^^^^^^^^^^^^^
 
+Available variants: ``ade7913_example``.
+Available boards: ``ad-apard32690-sl``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-   # Build the ade7913_example project for MAX32690
-   make ade7913_example
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
 
-   # To remove previous build artifacts, run:
-   make clean
+   cd no-OS
+
+   # build the project (ade7913_example on the ad-apard32690-sl board)
+   python tools/scripts/no_os_build.py build \
+      --project eval-ade7913 --variant ade7913_example --board ad-apard32690-sl
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project eval-ade7913 --variant ade7913_example --board ad-apard32690-sl \
+      --probe openocd --flash
