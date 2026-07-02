@@ -1,0 +1,12 @@
+menu "eval-adg2404 Configuration"
+
+choice EVAL_ADG2404_EXAMPLE
+	prompt "Example variant"
+	default EVAL_ADG2404_BASIC_EXAMPLE
+
+config EVAL_ADG2404_BASIC_EXAMPLE
+	bool "Basic example"
+
+endchoice
+
+endmenu

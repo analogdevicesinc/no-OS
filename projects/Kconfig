@@ -59,4 +59,5 @@ source "projects/eval-ade9078/Kconfig"
 source "projects/eval-ade9153a/Kconfig"
 source "projects/eval-adg1712/Kconfig"
 source "projects/eval-adg1736/Kconfig"
+source "projects/eval-adg2404/Kconfig"
 endmenu
