@@ -201,11 +201,21 @@ Note: P1.6 is on J7 header (pin 4), P2.0 is on J9 header (pin 5).
 
 **Build Command**
 
+Available variants: ``basic``.
+Available boards: ``max32655fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-	# to delete current build
-	make PLATFORM=maxim TARGET=max32655 reset
-	# to build the project
-	make PLATFORM=maxim TARGET=max32655
-	# to flash the code
-	make run
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (basic example on the max32655fthr board)
+   python tools/scripts/no_os_build.py build \
+      --project eval-adg1736 --variant basic --board max32655fthr
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project eval-adg1736 --variant basic --board max32655fthr \
+      --probe openocd --flash
