@@ -1,0 +1,16 @@
+menu "ADP1055 Configuration"
+
+choice ADP1055_EXAMPLE
+	prompt "Example variant"
+	default ADP1055_BASIC_EXAMPLE
+
+config ADP1055_BASIC_EXAMPLE
+	bool "Basic example"
+
+config ADP1055_IIO_EXAMPLE_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+endchoice
+
+endmenu
