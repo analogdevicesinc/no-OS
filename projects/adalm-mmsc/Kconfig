@@ -1,0 +1,13 @@
+menu "ADALM-MMSC Configuration"
+
+choice ADALM_MMSC_EXAMPLE
+	prompt "Example variant"
+	default ADALM_MMSC_IIO_EXAMPLE
+
+config ADALM_MMSC_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+endchoice
+
+endmenu
