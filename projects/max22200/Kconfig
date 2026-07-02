@@ -1,0 +1,16 @@
+menu "MAX22200 Configuration"
+
+choice MAX22200_EXAMPLE
+	prompt "Example variant"
+	default MAX22200_BASIC_EXAMPLE
+
+config MAX22200_BASIC_EXAMPLE
+	bool "Basic example"
+
+config MAX22200_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+endchoice
+
+endmenu
