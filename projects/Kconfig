@@ -31,5 +31,6 @@ source "projects/ad7616-st/Kconfig"
 source "projects/pulsar-adc/Kconfig"
 source "projects/ad738x_fmcz/Kconfig"
 source "projects/admt4000/Kconfig"
+source "projects/ade7816/Kconfig"
 
 endmenu
