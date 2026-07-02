@@ -1,0 +1,16 @@
+menu "ADP5055 Configuration"
+
+choice ADP5055_EXAMPLE
+	prompt "Example variant"
+	default ADP5055_BASIC_EXAMPLE
+
+config ADP5055_BASIC_EXAMPLE
+	bool "Basic example"
+
+config ADP5055_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+endchoice
+
+endmenu

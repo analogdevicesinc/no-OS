@@ -168,11 +168,21 @@ J4:
 
 **Build Command**
 
+Available variants: ``basic``, ``iio_example``.
+Available boards: ``ad-apard32690-sl``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-	# to delete current build
-	make reset
-	# to build the project
-	make PLATFORM=maxim TARGET=max32690 EXAMPLE=basic
-	# to flash the code
-	make run
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (basic example on the ad-apard32690-sl board)
+   python tools/scripts/no_os_build.py build \
+      --project adp5055 --variant basic --board ad-apard32690-sl
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project adp5055 --variant basic --board ad-apard32690-sl \
+      --probe openocd --flash
