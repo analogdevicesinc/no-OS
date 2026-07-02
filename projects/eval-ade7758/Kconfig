@@ -1,0 +1,12 @@
+menu "eval-ade7758 Configuration"
+
+choice EVAL_ADE7758_EXAMPLE
+	prompt "Example variant"
+	default EVAL_ADE7758_BASIC_EXAMPLE
+
+config EVAL_ADE7758_BASIC_EXAMPLE
+	bool "Basic example"
+
+endchoice
+
+endmenu
