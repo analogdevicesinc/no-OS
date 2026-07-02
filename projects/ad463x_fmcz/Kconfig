@@ -1,0 +1,50 @@
+menu "AD463X_FMCZ Configuration"
+
+choice AD463X_FMCZ_EXAMPLE
+	prompt "Example variant"
+	default AD463X_FMCZ_BASIC_EXAMPLE
+
+config AD463X_FMCZ_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Basic example demonstrating the AD463X ADC.
+
+config AD463X_FMCZ_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example demonstrating the AD463X ADC with libiio support.
+
+endchoice
+
+config AD463X_FMCZ_USE_STANDARD_SPI
+	bool
+	default y if STM32
+	help
+	  Use the standard SPI driver instead of the Xilinx SPI engine
+	  offload path. Selected automatically on STM32.
+
+choice AD463X_FMCZ_DEV
+	prompt "Device variant"
+	default AD463X_FMCZ_DEV_AD4630_24
+
+config AD463X_FMCZ_DEV_AD4630_24
+	bool "AD4630-24"
+	help
+	  Default AD4630-24 device (no extra compile define needed).
+
+config AD463X_FMCZ_DEV_AD4630_20
+	bool "AD4630-20"
+
+config AD463X_FMCZ_DEV_AD4030
+	bool "AD4030"
+
+config AD463X_FMCZ_DEV_ADAQ4224
+	bool "ADAQ4224"
+
+config AD463X_FMCZ_DEV_ADAQ4216
+	bool "ADAQ4216"
+
+endchoice
+
+endmenu

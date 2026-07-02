@@ -12,13 +12,5 @@
         "ad4630_fmc_zed"
       ]
     }
-  },
-  "stm32": {
-    "basic": {
-      "flags": "EXAMPLE=basic"
-    },
-    "iio": {
-      "flags": "EXAMPLE=iio"
-    }
   }
 }

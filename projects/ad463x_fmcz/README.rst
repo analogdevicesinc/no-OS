@@ -221,3 +221,22 @@ STM32 Platform
 	make run
 	# to debug the code
 	make debug
+
+Available variants: ``basic``, ``iio``.
+Available boards: ``sdp-ck1z``.
+Replace ``--variant`` / ``--board`` accordingly.
+
+.. code-block:: bash
+
+   export STM32CUBEMX_EXECUTABLE=</path/to/STM32CubeMX>
+
+   cd no-OS
+
+   # build the project (basic example on the sdp-ck1z board)
+   python tools/scripts/no_os_build.py build \
+      --project ad463x_fmcz --variant basic --board sdp-ck1z
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad463x_fmcz --variant basic --board sdp-ck1z \
+      --probe openocd --flash
