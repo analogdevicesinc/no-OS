@@ -1,0 +1,12 @@
+menu "eval-adhv4710 Configuration"
+
+choice EVAL_ADHV4710_EXAMPLE
+	prompt "Example variant"
+	default EVAL_ADHV4710_ADHV4710_EXAMPLE
+
+config EVAL_ADHV4710_ADHV4710_EXAMPLE
+	bool "ADHV4710 example"
+
+endchoice
+
+endmenu
