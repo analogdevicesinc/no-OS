@@ -1,0 +1,38 @@
+menu "ADIN1320 Configuration"
+
+choice ADIN1320_EXAMPLE
+	prompt "Example variant"
+	default ADIN1320_BASIC_INIT_EXAMPLE
+
+config ADIN1320_BASIC_INIT_EXAMPLE
+	bool "Basic init"
+	help
+	  Initialize a single ADIN1320 PHY and bring the link up.
+
+config ADIN1320_BASIC_INIT_2DEVICES_EXAMPLE
+	bool "Basic init (2 devices)"
+	help
+	  Initialize two ADIN1320 PHYs and bring both links up.
+
+config ADIN1320_CMD_EXAMPLE
+	bool "Command interface"
+	help
+	  Interactive command interface for reading/writing PHY registers
+	  and switching operating modes over the console.
+
+config ADIN1320_WAKE_ON_LAN_EXAMPLE
+	bool "Wake on LAN"
+	help
+	  Configure the ADIN1320 for Wake-on-LAN and react to the wake event.
+
+endchoice
+
+config ADIN1320_FORCE_SPEED
+	bool "Force a fixed link speed"
+	default n
+	depends on ADIN1320_BASIC_INIT_EXAMPLE || ADIN1320_BASIC_INIT_2DEVICES_EXAMPLE
+	help
+	  Force the PHY to a fixed link speed instead of auto-negotiating.
+	  Applies to the basic_init examples.
+
+endmenu
