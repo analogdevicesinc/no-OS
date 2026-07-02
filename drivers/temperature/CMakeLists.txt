@@ -26,6 +26,13 @@ no_os_sources_ifdef(CONFIG_TEMPERATURE_IIO_LTC2983
     ${CMAKE_CURRENT_SOURCE_DIR}/ltc2983/iio_ltc2983.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ltc2983)
 
+# MAX31827
+no_os_sources_ifdef(CONFIG_TEMPERATURE_MAX31827
+    ${CMAKE_CURRENT_SOURCE_DIR}/max31827/max31827.c)
+no_os_sources_ifdef(CONFIG_TEMPERATURE_IIO_MAX31827
+    ${CMAKE_CURRENT_SOURCE_DIR}/max31827/iio_max31827.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/max31827)
+
 # MAX31855
 no_os_sources_ifdef(CONFIG_TEMPERATURE_MAX31855
     ${CMAKE_CURRENT_SOURCE_DIR}/max31855/max31855.c)

@@ -46,6 +46,16 @@ config TEMPERATURE_IIO_LTC2983
     bool "Enable LTC2983 IIO driver"
     default n
 
+config TEMPERATURE_MAX31827
+    depends on I2C
+    bool "Enable MAX31827 driver"
+    default n
+
+config TEMPERATURE_IIO_MAX31827
+    select TEMPERATURE_MAX31827
+    bool "Enable MAX31827 IIO driver"
+    default n
+
 config TEMPERATURE_MAX31855
     depends on SPI
     bool "Enable MAX31855 driver"
