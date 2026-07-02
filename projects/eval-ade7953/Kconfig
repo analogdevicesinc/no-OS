@@ -1,0 +1,12 @@
+menu "eval-ade7953 Configuration"
+
+choice EVAL_ADE7953_EXAMPLE
+	prompt "Example variant"
+	default EVAL_ADE7953_BASIC_EXAMPLE
+
+config EVAL_ADE7953_BASIC_EXAMPLE
+	bool "Basic example"
+
+endchoice
+
+endmenu
