@@ -26,20 +26,24 @@ The apard_communication_example may be tested by using netcat on the host:
 
 	netcat 192.168.97.50 10000
 
-#. Open a terminal and navigate to this project directory (if building on Windows, `Git Bash` has to be used).
-
-#. Type `make RELEASE=y -j`, in order to build the project. The `RELEASE` flag adds `-O2` optimization. It should be omitted during debugging.
-
-A successful build should end with the following terminal output:
+Available variants: ``apard_communication_example``, ``forward_packets_example``.
+Available boards: ``ad-apard32690-sl``.
+Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
-	[11:11:27] [HEX] apardpfwd.hex
-	[11:11:27] apardpfwd.hex is ready
-	rm /home/xvr/MaximSDK_new/Libraries/CMSIS/Device/Maxim/MAX32690/Source/GCC/startup_max32690.s
-	[11:11:21] Done (build/apardpfwd.elf)
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
 
-The binary and executable files are now available in the `build` directory (`apardpfwd.hex` and `apardpfwd.elf` files).
+   cd no-OS
+
+   # build the project (apard_communication_example example on the ad-apard32690-sl board)
+   python tools/scripts/no_os_build.py build \
+      --project apardpfwd --variant apard_communication_example --board ad-apard32690-sl
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project apardpfwd --variant apard_communication_example --board ad-apard32690-sl \
+      --probe openocd --flash
 
 Programming the MCU
 -------------------
@@ -62,16 +66,4 @@ Before the MCU can be programmed a few steps are necessary:
 
 #. Power on the AD-APARD32690-SL board using the USB-C port on the AD-APARD32690-SL or the AD-APARDPFWD-SL.
 
-The microcontroller may be programmed in 2 ways:
-1. Drag-and-drop the binary (.hex) file in the `DAPLINK` directory. The drive should be unmounted and mounted again, once the programming is done.
-2. While in the project's root directory, type `make RELEASE=y run`. This method uses OpenOCD in order to load the binary file. If the programming is successful, you should see the following terminal output:
-
-.. code-block:: bash
-
-	** Programming Started **
-	** Programming Finished **
-	** Verify Started **
-	** Verified OK **
-	** Resetting Target **
-	shutdown command invoked
-	[11:27:42] apardpfwd.elf uploaded to board
+The microcontroller may be programmed by running the build and flash command with the ``--probe`` and ``--flash`` options as shown in the build section above. This method uses OpenOCD in order to load the binary file. If the programming is successful, you should see output indicating successful verification and flashing.
