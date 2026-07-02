@@ -1,0 +1,16 @@
+menu "LTC4162L Configuration"
+
+choice LTC4162L_EXAMPLE
+	prompt "Example variant"
+	default LTC4162L_BASIC_EXAMPLE
+
+config LTC4162L_BASIC_EXAMPLE
+	bool "Basic example"
+
+config LTC4162L_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+endchoice
+
+endmenu
