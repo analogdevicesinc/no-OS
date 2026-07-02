@@ -1,0 +1,16 @@
+menu "eval-ad8460 Configuration"
+
+choice EVAL_AD8460_EXAMPLE
+	prompt "Example variant"
+	default EVAL_AD8460_BASIC_EXAMPLE
+
+config EVAL_AD8460_BASIC_EXAMPLE
+	bool "Basic example"
+
+config EVAL_AD8460_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+endchoice
+
+endmenu
