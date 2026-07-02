@@ -85,14 +85,8 @@ To build the basic example, run:
 
 .. code-block:: bash
 
-	make EXAMPLE=basic TARGET=max32665
-
-Or alternatively:
-
-.. code-block:: bash
-
-	export EXAMPLE=basic
-	make TARGET=max32665
+	python tools/scripts/no_os_build.py build \
+	   --project ltc2378 --variant basic --board max32665fthr
 
 IIO example
 ^^^^^^^^^^^
@@ -119,14 +113,8 @@ To build the IIO example, run:
 
 .. code-block:: bash
 
-	make EXAMPLE=iio TARGET=max32665
-
-Or alternatively:
-
-.. code-block:: bash
-
-	export EXAMPLE=iio
-	make TARGET=max32665
+	python tools/scripts/no_os_build.py build \
+	   --project ltc2378 --variant iio --board max32665fthr
 
 No-OS Supported Platforms
 -------------------------
@@ -160,9 +148,21 @@ Maxim Platform
 
 **Build Command**
 
+Available variants: ``basic``, ``iio``.
+Available boards: ``max32665fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-	# to delete current build
-	make PLATFORM=maxim TARGET=max32665 reset
-	# to build the project and flash the code
-	make PLATFORM=maxim TARGET=max32665 run
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (basic example on the max32665fthr board)
+   python tools/scripts/no_os_build.py build \
+      --project ltc2378 --variant basic --board max32665fthr
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ltc2378 --variant basic --board max32665fthr \
+      --probe openocd --flash
