@@ -1,0 +1,23 @@
+menu "ltc2983 Configuration"
+
+choice LTC2983_EXAMPLE
+	prompt "Example variant"
+	default LTC2983_BASIC_EXAMPLE
+
+config LTC2983_BASIC_EXAMPLE
+	bool "Basic example"
+
+config LTC2983_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+config LTC2983_ADT7604_BASIC_EXAMPLE
+	bool "ADT7604 Basic example"
+
+config LTC2983_ADT7604_IIO_EXAMPLE
+	bool "ADT7604 IIO example"
+	depends on IIO
+
+endchoice
+
+endmenu
