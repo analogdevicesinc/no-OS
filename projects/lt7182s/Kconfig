@@ -1,0 +1,16 @@
+menu "LT7182S Configuration"
+
+choice LT7182S_EXAMPLE
+	prompt "Example variant"
+	default LT7182S_BASIC_EXAMPLE
+
+config LT7182S_BASIC_EXAMPLE
+	bool "Basic example"
+
+config LT7182S_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+endchoice
+
+endmenu
