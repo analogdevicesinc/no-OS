@@ -1,0 +1,16 @@
+menu "MAX31855 Configuration"
+
+choice MAX31855_EXAMPLE
+	prompt "Example variant"
+	default MAX31855_BASIC_EXAMPLE
+
+config MAX31855_BASIC_EXAMPLE
+	bool "Basic example"
+
+config MAX31855_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+endchoice
+
+endmenu
