@@ -1,0 +1,12 @@
+menu "eval-ade9153a Configuration"
+
+choice EVAL_ADE9153A_EXAMPLE
+	prompt "Example variant"
+	default EVAL_ADE9153A_ADE9153A_EXAMPLE_EXAMPLE
+
+config EVAL_ADE9153A_ADE9153A_EXAMPLE_EXAMPLE
+	bool "ADE9153A example"
+
+endchoice
+
+endmenu
