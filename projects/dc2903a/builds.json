@@ -1,7 +1,0 @@
-{
-	"maxim": {
-		"basic_max32665": {
-			"flags": "EXAMPLE=basic TARGET=max32665"
-		}
-	}
-}

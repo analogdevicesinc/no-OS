@@ -188,3 +188,22 @@ Build Command
    make PLATFORM=maxim TARGET=MAX32665
    # to flash the code
    make run
+
+Available variants: ``basic``.
+Available boards: ``max32665fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
+.. code-block:: bash
+
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (basic example on the max32665fthr board)
+   python tools/scripts/no_os_build.py build \
+      --project dc2903a --variant basic --board max32665fthr
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project dc2903a --variant basic --board max32665fthr \
+      --probe openocd --flash
