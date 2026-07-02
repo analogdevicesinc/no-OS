@@ -1,0 +1,15 @@
+menu "ADES1754 Configuration"
+
+choice ADES1754_EXAMPLE
+	prompt "Example variant"
+	default ADES1754_BASIC_EXAMPLE
+
+config ADES1754_BASIC_EXAMPLE
+	bool "Basic example"
+
+config ADES1754_SPI_UART_BRIDGE_EXAMPLE
+	bool "SPI UART bridge example"
+
+endchoice
+
+endmenu
