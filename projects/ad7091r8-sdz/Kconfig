@@ -1,0 +1,35 @@
+menu "AD7091R8-SDZ Configuration"
+
+choice AD7091R8_SDZ_EXAMPLE
+	prompt "Example variant"
+	default AD7091R8_SDZ_BASIC_EXAMPLE
+
+config AD7091R8_SDZ_BASIC_EXAMPLE
+	bool "Basic example"
+
+config AD7091R8_SDZ_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+config AD7091R8_SDZ_IIO_TIMER_TRIGGER_EXAMPLE
+	bool "IIO timer trigger example"
+	depends on IIO
+
+endchoice
+
+choice AD7091R8_SDZ_DEV
+	prompt "Device variant"
+	default AD7091R8_SDZ_DEV_R8
+
+config AD7091R8_SDZ_DEV_R2
+	bool "AD7091R-2 (2-channel)"
+
+config AD7091R8_SDZ_DEV_R4
+	bool "AD7091R-4 (4-channel)"
+
+config AD7091R8_SDZ_DEV_R8
+	bool "AD7091R-8 (8-channel)"
+
+endchoice
+
+endmenu
