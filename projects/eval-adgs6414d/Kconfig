@@ -1,0 +1,12 @@
+menu "eval-adgs6414d Configuration"
+
+choice EVAL_ADGS6414D_EXAMPLE
+	prompt "Example variant"
+	default EVAL_ADGS6414D_BASIC_EXAMPLE
+
+config EVAL_ADGS6414D_BASIC_EXAMPLE
+	bool "Basic example"
+
+endchoice
+
+endmenu
