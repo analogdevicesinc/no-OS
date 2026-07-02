@@ -61,7 +61,8 @@ In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-    make EXAMPLE=basic
+    python tools/scripts/no_os_build.py build \
+       --project ltc7841 --variant basic --board ad-apard32690-sl
 
 IIO example
 ^^^^^^^^^^^
@@ -86,7 +87,8 @@ In order to build the IIO project make sure you you are using this command:
 
 .. code-block:: bash
 
-    make EXAMPLE=iio_example
+    python tools/scripts/no_os_build.py build \
+       --project ltc7841 --variant iio_example --board ad-apard32690-sl
 
 No-OS Supported Platforms
 -------------------------
@@ -114,13 +116,21 @@ Maxim Platform
 
 **Build Command**
 
+Available variants: ``basic``, ``iio_example``.
+Available boards: ``ad-apard32690-sl``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-	# to delete current build
-	make reset
-	# to build the project for running basic example
-	make EXAMPLE=basic PLATFORM=maxim TARGET=max32690
-	# to build the project for running iio example
-	make EXAMPLE=iio_example PLATFORM=maxim TARGET=max32690
-	# to flash the code
-	make run
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (basic example on the ad-apard32690-sl board)
+   python tools/scripts/no_os_build.py build \
+      --project ltc7841 --variant basic --board ad-apard32690-sl
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ltc7841 --variant basic --board ad-apard32690-sl \
+      --probe openocd --flash
