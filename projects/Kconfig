@@ -40,4 +40,5 @@ source "projects/ad7091r8-sdz/Kconfig"
 source "projects/adalm-lsmspg/Kconfig"
 source "projects/ades1754/Kconfig"
 source "projects/adin1110/Kconfig"
+source "projects/adp1050/Kconfig"
 endmenu
