@@ -1,0 +1,12 @@
+menu "eval-ade7753 Configuration"
+
+choice EVAL_ADE7753_EXAMPLE
+	prompt "Example variant"
+	default EVAL_ADE7753_ADE7753_EXAMPLE
+
+config EVAL_ADE7753_ADE7753_EXAMPLE
+	bool "ADE7753 example"
+
+endchoice
+
+endmenu
