@@ -96,7 +96,8 @@ In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-	make EXAMPLE=basic
+	python tools/scripts/no_os_build.py build \
+	   --project max31855 --variant basic --board max78000fthr
 
 IIO Example
 ~~~~~~~~~~~
@@ -117,7 +118,8 @@ In order to build the IIO project make sure you are using this command:
 
 .. code-block:: bash
 
-	make EXAMPLE=iio
+	python tools/scripts/no_os_build.py build \
+	   --project max31855 --variant iio --board max78000fthr
 
 No-OS Supported Platforms
 -------------------------
@@ -174,11 +176,21 @@ Pin 6 (VCC)           VCC
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``basic``, ``iio``.
+Available boards: ``max32650fthr``, ``max32655fthr``, ``max32665fthr``, ``max78000fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-   # remove sp characters from the build directory
-   make reset
-   # build the project
-   make EXAMPLE=iio PLATFORM=maxim TARGET=max32650
-   # flash the code
-   make run
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (basic example on the max32650fthr board)
+   python tools/scripts/no_os_build.py build \
+      --project max31855 --variant basic --board max32650fthr
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project max31855 --variant basic --board max32650fthr \
+      --probe openocd --flash
