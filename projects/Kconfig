@@ -50,4 +50,5 @@ source "projects/eval-ad7490sdz/Kconfig"
 source "projects/eval-ad8460/Kconfig"
 source "projects/eval-ade7753/Kconfig"
 source "projects/eval-ade7758/Kconfig"
+source "projects/eval-ade7880/Kconfig"
 endmenu

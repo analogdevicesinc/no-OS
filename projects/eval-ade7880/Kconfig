@@ -1,0 +1,12 @@
+menu "EVAL-ADE7880 Configuration"
+
+choice EVAL_ADE7880_EXAMPLE
+	prompt "EVAL-ADE7880 example selection"
+	default EVAL_ADE7880_ADE7880_EXAMPLE
+
+config EVAL_ADE7880_ADE7880_EXAMPLE
+	bool "ADE7880 example"
+
+endchoice
+
+endmenu
