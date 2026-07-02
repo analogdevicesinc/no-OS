@@ -46,4 +46,5 @@ source "projects/adp5055/Kconfig"
 source "projects/adt75/Kconfig"
 source "projects/apardpfwd/Kconfig"
 source "projects/dc2703a/Kconfig"
+source "projects/eval-ad7490sdz/Kconfig"
 endmenu
