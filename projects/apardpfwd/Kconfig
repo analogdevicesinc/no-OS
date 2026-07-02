@@ -1,0 +1,22 @@
+menu "apardpfwd Configuration"
+
+choice APARDPFWD_EXAMPLE
+	prompt "Example variant"
+	default APARDPFWD_APARD_COMMUNICATION_EXAMPLE
+
+config APARDPFWD_APARD_COMMUNICATION_EXAMPLE
+	bool "APARD communication example"
+	depends on LWIP && NET && ADIN1110
+	help
+	  TCP communication example using LWIP and the ADIN1110
+	  MAC/PHY over Ethernet.
+
+config APARDPFWD_FORWARD_PACKETS_EXAMPLE
+	bool "Forward packets example"
+	depends on NET && ADIN1110
+	help
+	  Example that forwards packets using the ADIN1110 MAC/PHY driver.
+
+endchoice
+
+endmenu
