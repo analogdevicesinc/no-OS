@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   app_config.h
- *   @brief  Config file of CN0531 project.
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @file   main.c
+ *   @brief  Main file for ADuCM3029 platform of cn0531 project.
+ *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
- * Copyright 2015(c) Analog Devices, Inc.
+ * Copyright 2021(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,11 +30,24 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef CONFIG_H_
-#define CONFIG_H_
 
-//#define XILINX_PLATFORM
-//#define ALTERA_PLATFORM
-//#define ADUCM_PLATFORM
+#include "parameters.h"
+#include "common_data.h"
 
-#endif
+extern int example_main();
+
+/***************************************************************************//**
+ * @brief Main function execution for ADuCM3029 platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+*******************************************************************************/
+int main()
+{
+	int ret;
+
+	ret = platform_init();
+	if (ret)
+		return ret;
+
+	return example_main();
+}
