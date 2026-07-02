@@ -1,0 +1,16 @@
+menu "max11205pmb1 Configuration"
+
+choice MAX11205PMB1_EXAMPLE
+	prompt "Example variant"
+	default MAX11205PMB1_BASIC_EXAMPLE
+
+config MAX11205PMB1_BASIC_EXAMPLE
+	bool "Basic example"
+
+config MAX11205PMB1_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+endchoice
+
+endmenu
