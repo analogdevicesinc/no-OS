@@ -153,11 +153,21 @@ Maxim Platform
 
 **Build Command**
 
+Available variants: ``basic``, ``iio_example``.
+Available boards: ``max32665fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-	# to delete current build
-	make TARGET=max32655 reset && make TARGET=max32655 clean
-	# to build the project
-	make TARGET=max32655
-	# to flash the code
-	make TARGET=max32655 run
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (basic example on the max32665fthr board)
+   python tools/scripts/no_os_build.py build \
+      --project max17616 --variant basic --board max32665fthr
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project max17616 --variant basic --board max32665fthr \
+      --probe openocd --flash
