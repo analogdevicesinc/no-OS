@@ -1,0 +1,12 @@
+menu "eval-ade9078 Configuration"
+
+choice EVAL_ADE9078_EXAMPLE
+	prompt "Example variant"
+	default EVAL_ADE9078_ADE9078_EXAMPLE
+
+config EVAL_ADE9078_ADE9078_EXAMPLE
+	bool "ADE9078 example"
+
+endchoice
+
+endmenu
