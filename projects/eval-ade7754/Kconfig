@@ -1,0 +1,12 @@
+menu "EVAL-ADE7754 Configuration"
+
+choice ADE7754_EXAMPLE
+    prompt "ADE7754 example selection"
+    default ADE7754_EXAMPLE
+
+config ADE7754_EXAMPLE
+    bool "ADE7754 example"
+
+endchoice
+
+endmenu
