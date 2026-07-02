@@ -6,6 +6,16 @@ menuconfig TEMPERATURE
 
 if TEMPERATURE
 
+config TEMPERATURE_ADT7420
+    depends on I2C
+    bool "Enable ADT7420 driver"
+    default n
+
+config TEMPERATURE_IIO_ADT7420
+    select TEMPERATURE_ADT7420
+    bool "Enable ADT7420 IIO driver"
+    default n
+
 config TEMPERATURE_ADT75
     depends on I2C
     bool "Enable ADT75 driver"

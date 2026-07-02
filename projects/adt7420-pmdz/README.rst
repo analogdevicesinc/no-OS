@@ -205,3 +205,22 @@ SDA                    A4               I2C data line
 	make PLATFORM=mbed
 	# to flash the code
 	make run
+
+Available variants: ``dummy``, ``iio_example``.
+Available boards: ``ad-apard32690-sl``, ``max32650fthr``, ``max32655fthr``, ``max32660fthr``, ``max32665fthr``, ``max78000fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
+.. code-block:: bash
+
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (dummy example on the ad-apard32690-sl board)
+   python tools/scripts/no_os_build.py build \
+      --project adt7420-pmdz --variant dummy --board ad-apard32690-sl
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project adt7420-pmdz --variant dummy --board ad-apard32690-sl \
+      --probe openocd --flash
