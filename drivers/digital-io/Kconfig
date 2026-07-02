@@ -22,6 +22,17 @@ config DIGITAL_IO_MAX14914
     bool "Enable MAX14914 driver"
     default n
 
+config DIGITAL_IO_MAX14916
+    depends on SPI
+    select GPIO
+    bool "Enable MAX14916 driver"
+    default n
+
+config DIGITAL_IO_IIO_MAX14916
+    select DIGITAL_IO_MAX14916
+    bool "Enable MAX14916 IIO driver"
+    default n
+
 config DIGITAL_IO_MAX14919
     depends on GPIO
     bool "Enable MAX14919 driver"
