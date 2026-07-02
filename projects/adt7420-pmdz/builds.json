@@ -1,42 +1,4 @@
 {
-    "maxim": {
-      "dummy_example_max32650": {
-        "flags" : "EXAMPLE=dummy TARGET=max32650"
-      },
-      "iio_example_max32650": {
-        "flags" : "EXAMPLE=iio_example TARGET=max32650"
-      },
-      "dummy_example_max32655": {
-        "flags" : "EXAMPLE=dummy TARGET=max32655"
-      },
-      "iio_example_max32655": {
-        "flags" : "EXAMPLE=iio_example TARGET=max32655"
-      },
-      "dummy_example_max32660": {
-        "flags" : "EXAMPLE=dummy TARGET=max32660"
-      },
-      "iio_example_max32660": {
-        "flags" : "EXAMPLE=iio_example TARGET=max32660"
-      },
-      "dummy_example_max32665": {
-        "flags" : "EXAMPLE=dummy TARGET=max32665"
-      },
-      "iio_example_max32665": {
-        "flags" : "EXAMPLE=iio_example TARGET=max32665"
-      },
-      "dummy_example_max78000": {
-        "flags" : "EXAMPLE=dummy TARGET=max78000"
-      },
-      "iio_example_max78000": {
-        "flags" : "EXAMPLE=iio_example TARGET=max78000"
-      },
-      "dummy_example_max32690": {
-        "flags" : "EXAMPLE=dummy TARGET=max32690"
-      },
-      "iio_example_max32690": {
-        "flags" : "EXAMPLE=iio_example TARGET=max32690"
-      }
-    },
     "mbed": {
       "dummy_example_mbed": {
         "flags" : "EXAMPLE=dummy"

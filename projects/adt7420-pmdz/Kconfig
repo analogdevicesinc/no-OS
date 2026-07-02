@@ -1,0 +1,16 @@
+menu "adt7420-pmdz Configuration"
+
+choice ADT7420_PMDZ_EXAMPLE
+	prompt "Example variant"
+	default ADT7420_PMDZ_DUMMY_EXAMPLE
+
+config ADT7420_PMDZ_DUMMY_EXAMPLE
+	bool "Dummy example"
+
+config ADT7420_PMDZ_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+endchoice
+
+endmenu

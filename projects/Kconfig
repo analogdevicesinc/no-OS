@@ -91,4 +91,5 @@ source "projects/max22200/Kconfig"
 source "projects/max25603/Kconfig"
 source "projects/max31855/Kconfig"
 source "projects/max42500/Kconfig"
+source "projects/adt7420-pmdz/Kconfig"
 endmenu
