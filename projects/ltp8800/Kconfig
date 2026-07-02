@@ -1,0 +1,16 @@
+menu "LTP8800 Configuration"
+
+choice LTP8800_EXAMPLE
+	prompt "Example variant"
+	default LTP8800_BASIC_EXAMPLE
+
+config LTP8800_BASIC_EXAMPLE
+	bool "Basic example"
+
+config LTP8800_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+endchoice
+
+endmenu
