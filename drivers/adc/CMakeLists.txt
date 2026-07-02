@@ -49,6 +49,7 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad7091r5)
 # AD7091R8
 no_os_sources_ifdef(CONFIG_ADC_AD7091R8 ${CMAKE_CURRENT_SOURCE_DIR}/ad7091r8/ad7091r8.c)
 no_os_sources_ifdef(CONFIG_ADC_IIO_AD7091R8 ${CMAKE_CURRENT_SOURCE_DIR}/ad7091r8/iio_ad7091r8.c)
+no_os_sources_ifdef(CONFIG_ADC_IIO_AD7091R8_TRIG ${CMAKE_CURRENT_SOURCE_DIR}/ad7091r8/iio_ad7091r8_trig.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad7091r8)
 
 # AD7124
@@ -81,6 +82,11 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad738x)
 if(PLATFORM STREQUAL "stm32" AND (CONFIG_ADC_AD738X OR CONFIG_ADC_IIO_AD738X))
   target_compile_definitions(no-os PRIVATE USE_STANDARD_SPI)
 endif()
+
+# AD7490
+no_os_sources_ifdef(CONFIG_ADC_AD7490 ${CMAKE_CURRENT_SOURCE_DIR}/ad7490/ad7490.c)
+no_os_sources_ifdef(CONFIG_ADC_IIO_AD7490 ${CMAKE_CURRENT_SOURCE_DIR}/ad7490/iio_ad7490.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad7490)
 
 # AD74XX
 no_os_sources_ifdef(CONFIG_ADC_AD74XX ${CMAKE_CURRENT_SOURCE_DIR}/ad74xx/ad74xx.c)
@@ -204,6 +210,11 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ltc2312)
 # LTC2358
 no_os_sources_ifdef(CONFIG_ADC_LTC2358 ${CMAKE_CURRENT_SOURCE_DIR}/ltc2358/ltc2358.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ltc2358)
+
+# LTC2378
+no_os_sources_ifdef(CONFIG_ADC_LTC2378 ${CMAKE_CURRENT_SOURCE_DIR}/ltc2378/ltc2378.c)
+no_os_sources_ifdef(CONFIG_ADC_IIO_LTC2378 ${CMAKE_CURRENT_SOURCE_DIR}/ltc2378/iio_ltc2378.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ltc2378)
 
 # MAX11205
 no_os_sources_ifdef(CONFIG_ADC_MAX11205 ${CMAKE_CURRENT_SOURCE_DIR}/max11205/max11205.c)

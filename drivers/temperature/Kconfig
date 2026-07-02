@@ -16,4 +16,34 @@ config TEMPERATURE_IIO_ADT75
     bool "Enable ADT75 IIO driver"
     default n
 
+config TEMPERATURE_LM75
+    depends on I2C
+    bool "Enable LM75 driver"
+    default n
+
+config TEMPERATURE_IIO_LM75
+    select TEMPERATURE_LM75
+    bool "Enable LM75 IIO driver"
+    default n
+
+config TEMPERATURE_LTC2983
+    depends on SPI
+    bool "Enable LTC2983 driver"
+    default n
+
+config TEMPERATURE_IIO_LTC2983
+    select TEMPERATURE_LTC2983
+    bool "Enable LTC2983 IIO driver"
+    default n
+
+config TEMPERATURE_MAX31855
+    depends on SPI
+    bool "Enable MAX31855 driver"
+    default n
+
+config TEMPERATURE_IIO_MAX31855
+    select TEMPERATURE_MAX31855
+    bool "Enable MAX31855 IIO driver"
+    default n
+
 endif

@@ -6,6 +6,37 @@ no_os_sources_ifdef(CONFIG_DIGITAL_IO_IIO_MAX14906
     ${CMAKE_CURRENT_SOURCE_DIR}/max149x6/iio_max14906.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/max149x6)
 
+# MAX14914
+no_os_sources_ifdef(CONFIG_DIGITAL_IO_MAX14914
+    ${CMAKE_CURRENT_SOURCE_DIR}/max14914/max14914.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/max14914)
+
+# MAX14919
+no_os_sources_ifdef(CONFIG_DIGITAL_IO_MAX14919
+    ${CMAKE_CURRENT_SOURCE_DIR}/max14919/max14919.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/max14919)
+
+# MAX22190
+no_os_sources_ifdef(CONFIG_DIGITAL_IO_MAX22190
+    ${CMAKE_CURRENT_SOURCE_DIR}/max22190/max22190.c)
+no_os_sources_ifdef(CONFIG_DIGITAL_IO_IIO_MAX22190
+    ${CMAKE_CURRENT_SOURCE_DIR}/max22190/iio_max22190.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/max22190)
+
+# MAX22196
+no_os_sources_ifdef(CONFIG_DIGITAL_IO_MAX22196
+    ${CMAKE_CURRENT_SOURCE_DIR}/max22196/max22196.c)
+no_os_sources_ifdef(CONFIG_DIGITAL_IO_IIO_MAX22196
+    ${CMAKE_CURRENT_SOURCE_DIR}/max22196/iio_max22196.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/max22196)
+
+# MAX22200
+no_os_sources_ifdef(CONFIG_DIGITAL_IO_MAX22200
+    ${CMAKE_CURRENT_SOURCE_DIR}/max22200/max22200.c)
+no_os_sources_ifdef(CONFIG_DIGITAL_IO_IIO_MAX22200
+    ${CMAKE_CURRENT_SOURCE_DIR}/max22200/iio_max22200.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/max22200)
+
 # MAX22915
 no_os_sources_ifdef(CONFIG_DIGITAL_IO_MAX22915
     ${CMAKE_CURRENT_SOURCE_DIR}/max22915/max22915.c)

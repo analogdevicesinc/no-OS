@@ -1,0 +1,16 @@
+menuconfig GNSS_GPS
+    bool "GNSS/GPS Drivers"
+    default n
+    help
+      Enable support for GNSS/GPS drivers.
+
+if GNSS_GPS
+
+config GNSS_GPS_NMEA_UBX
+    depends on UART
+    select GPIO
+    select IRQ
+    bool "Enable NMEA UBX GNSS driver"
+    default n
+
+endif

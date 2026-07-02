@@ -17,6 +17,49 @@ config DIGITAL_IO_IIO_MAX14906
     bool "Enable MAX14906 IIO driver"
     default n
 
+config DIGITAL_IO_MAX14914
+    depends on GPIO
+    bool "Enable MAX14914 driver"
+    default n
+
+config DIGITAL_IO_MAX14919
+    depends on GPIO
+    bool "Enable MAX14919 driver"
+    default n
+
+config DIGITAL_IO_MAX22190
+    depends on SPI
+    select GPIO
+    bool "Enable MAX22190 driver"
+    default n
+
+config DIGITAL_IO_IIO_MAX22190
+    select DIGITAL_IO_MAX22190
+    bool "Enable MAX22190 IIO driver"
+    default n
+
+config DIGITAL_IO_MAX22196
+    depends on SPI
+    select GPIO
+    bool "Enable MAX22196 driver"
+    default n
+
+config DIGITAL_IO_IIO_MAX22196
+    select DIGITAL_IO_MAX22196
+    bool "Enable MAX22196 IIO driver"
+    default n
+
+config DIGITAL_IO_MAX22200
+    depends on SPI
+    select GPIO
+    bool "Enable MAX22200 driver"
+    default n
+
+config DIGITAL_IO_IIO_MAX22200
+    select DIGITAL_IO_MAX22200
+    bool "Enable MAX22200 IIO driver"
+    default n
+
 config DIGITAL_IO_MAX22915
     depends on SPI
     select GPIO

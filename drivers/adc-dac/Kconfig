@@ -14,6 +14,11 @@ config ADC_DAC_AD5592R
     bool "Enable AD5592R ADC-DAC driver"
     default n
 
+config ADC_DAC_IIO_AD559XR
+    select ADC_DAC_AD5592R
+    bool "Enable AD559XR IIO driver"
+    default n
+
 config ADC_DAC_AD74413R
     depends on SPI
     select GPIO

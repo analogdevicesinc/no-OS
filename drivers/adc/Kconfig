@@ -99,6 +99,11 @@ config ADC_IIO_AD7091R8
     bool "Enable AD7091R8 IIO driver"
     default n
 
+config ADC_IIO_AD7091R8_TRIG
+    select ADC_IIO_AD7091R8
+    bool "Enable AD7091R8 IIO timer trigger driver"
+    default n
+
 config ADC_AD7124
     depends on SPI
     bool "Enable AD7124 ADC driver"
@@ -142,6 +147,16 @@ config ADC_AD738X
 config ADC_IIO_AD738X
     select ADC_AD738X
     bool "Enable AD738X IIO driver"
+    default n
+
+config ADC_AD7490
+    depends on SPI
+    bool "Enable AD7490 ADC driver"
+    default n
+
+config ADC_IIO_AD7490
+    select ADC_AD7490
+    bool "Enable AD7490 IIO driver"
     default n
 
 config ADC_AD74XX
@@ -319,6 +334,16 @@ config ADC_LTC2312
 config ADC_LTC2358
     depends on SPI
     bool "Enable LTC2358 ADC driver"
+    default n
+
+config ADC_LTC2378
+    depends on SPI
+    bool "Enable LTC2378 ADC driver"
+    default n
+
+config ADC_IIO_LTC2378
+    select ADC_LTC2378
+    bool "Enable LTC2378 IIO driver"
     default n
 
 config ADC_MAX11205

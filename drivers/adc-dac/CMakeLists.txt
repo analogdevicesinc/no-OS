@@ -1,5 +1,8 @@
 # AD5592R
 no_os_sources_ifdef(CONFIG_ADC_DAC_AD5592R ${CMAKE_CURRENT_SOURCE_DIR}/ad5592r/ad5592r.c)
+no_os_sources_ifdef(CONFIG_ADC_DAC_AD5592R ${CMAKE_CURRENT_SOURCE_DIR}/ad5592r/ad5592r-base.c)
+no_os_sources_ifdef(CONFIG_ADC_DAC_AD5592R ${CMAKE_CURRENT_SOURCE_DIR}/ad5592r/ad5593r.c)
+no_os_sources_ifdef(CONFIG_ADC_DAC_IIO_AD559XR ${CMAKE_CURRENT_SOURCE_DIR}/ad5592r/iio_ad559xr.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad5592r)
 
 # AD74413R

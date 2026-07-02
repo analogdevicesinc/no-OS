@@ -67,6 +67,10 @@ if(CONFIG_GMSL)
     add_subdirectory(gmsl)
 endif()
 
+if(CONFIG_GNSS_GPS)
+    add_subdirectory(gnss-gps)
+endif()
+
 if(CONFIG_GYRO)
     add_subdirectory(gyro)
 endif()
