@@ -75,6 +75,14 @@ config CLK
 	  API: include/no_os_clk.h
 	  Used for clock tree configuration and frequency management.
 
+config MDIO
+	bool "Enable MDIO"
+	default n
+	help
+	  Enable Management Data Input/Output (MDIO) support.
+	  API: drivers/api/no_os_mdio.c, include/no_os_mdio.h
+	  Serial management interface used to configure Ethernet PHYs.
+
 config DMA
 	bool "Enable DMA"
 	default n

@@ -180,3 +180,22 @@ Build Command
 
    # to flash the code to the controller
    make run
+
+Available variants: ``basic_init``, ``basic_init_2devices``, ``cmd``, ``wake_on_lan``.
+Available boards: ``max32670evkit``.
+Replace ``--variant`` / ``--board`` accordingly.
+
+.. code-block:: bash
+
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (basic_init example on the max32670evkit board)
+   python tools/scripts/no_os_build.py build \
+      --project adin1320 --variant basic_init --board max32670evkit
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project adin1320 --variant basic_init --board max32670evkit \
+      --probe openocd --flash

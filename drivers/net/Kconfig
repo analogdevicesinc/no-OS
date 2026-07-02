@@ -12,4 +12,21 @@ config ADIN1110
     bool "Enable the ADIN1110 driver"
     default n
 
+config ADIN1320
+    select MDIO_SPI
+    bool "Enable the ADIN1320 driver"
+    default n
+    help
+      Enable the ADIN1320 Ethernet PHY driver. Communicates with the PHY
+      over MDIO carried on a SPI bus (MDIO_SPI).
+
+config MDIO_SPI
+    depends on SPI
+    select MDIO
+    bool "Enable the MDIO over SPI driver"
+    default n
+    help
+      Enable the MDIO-over-SPI transport driver, which implements the
+      no_os_mdio API on top of a SPI bus.
+
 endif
