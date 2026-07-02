@@ -342,7 +342,6 @@ add_custom_target(
   COMMAND ${CMAKE_COMMAND} -E env
     srctree=${CMAKE_CURRENT_SOURCE_DIR}
     ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/tools/scripts/generate_config.py
-    ${GENERATE_CONFIG_ARGS}
     ${NO_OS_NATIVE_BUILD_MODE}
     --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
     --build_dir ${CMAKE_CURRENT_BINARY_DIR}/build
