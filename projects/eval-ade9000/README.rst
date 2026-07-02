@@ -140,16 +140,24 @@ J3 Header          P2 Header
 5 V                5 V
 ================= ================
 
-Build
-^^^^^
+Build Command
+^^^^^^^^^^^^^
+
+Available variants: ``ade9000_example``.
+Available boards: ``ad-apard32690-sl``.
+Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
-   # Go into the ADE9000 project directory
-   cd no-OS/projects/eval-ade9000
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
 
-   # To build the ADE9000 project
-   make PLATFORM=maxim TARGET=max32690
+   cd no-OS
 
-   # To upload the .elf, .hex, or .bin file into the AD-APARD32690-SL
-   make PLATFORM=maxim TARGET=max32690 run
+   # build the project (ade9000_example example on the ad-apard32690-sl board)
+   python tools/scripts/no_os_build.py build \
+      --project eval-ade9000 --variant ade9000_example --board ad-apard32690-sl
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project eval-ade9000 --variant ade9000_example --board ad-apard32690-sl \
+      --probe openocd --flash
