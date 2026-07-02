@@ -1,0 +1,16 @@
+menu "adalm-lsmspg Configuration"
+
+choice ADALM_LSMSPG_EXAMPLE
+	prompt "Example variant"
+	default ADALM_LSMSPG_IIO_EXAMPLE
+
+config ADALM_LSMSPG_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+config ADALM_LSMSPG_CURVETRACE_EXAMPLE
+	bool "Curvetrace example"
+
+endchoice
+
+endmenu

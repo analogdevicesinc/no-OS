@@ -61,10 +61,8 @@ Please see the following table for the pin assignments for the interface
 No-OS Build Setup
 -----------------
 
-#. cd projects/adalm-lsmspg
-#. make PLATFORM=maxim TARGET=max32665
-
-For more information, please see https://wiki.analog.com/resources/no-os/build
+Please see the Build Command section below for the no_os_build.py flow, or
+https://wiki.analog.com/resources/no-os/build for more information.
 
 
 No-OS Supported Examples
@@ -96,16 +94,24 @@ Maxim Platform
 Build Setup
 ^^^^^^^^^^^
 
+Available variants: ``curvetrace_example``, ``iio``.
+Available boards: ``max32665fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-   # go to the project directory
-   $ cd <no_os_directory>/projects/adalm-lsmspg
-   # to clean the build directory
-   $ make TARGET=max32665 PLATFORM=maxim reset
-   # to build the code
-   $ make TARGET=max32665 PLATFORM=maxim
-   # to flash the adalm-lsmspg binary
-   $ make TARGET=max32665 PLATFORM=maxim run
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (iio example on the max32665fthr board)
+   python tools/scripts/no_os_build.py build \
+      --project adalm-lsmspg --variant iio --board max32665fthr
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project adalm-lsmspg --variant iio --board max32665fthr \
+      --probe openocd --flash
 
 
 Connection Setup
