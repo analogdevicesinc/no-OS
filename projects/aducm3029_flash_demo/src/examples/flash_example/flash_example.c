@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   aducm3029_flash_demo/src/main.c
- *   @brief  Implementation of Main Function.
+ *   @file   flash_example.c
+ *   @brief  Implementation of flash example for aducm3029_flash_demo project.
  *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
  * Copyright 2021(c) Analog Devices, Inc.
@@ -32,56 +32,25 @@
 *******************************************************************************/
 
 #include <stdio.h>
-#include <sys/platform.h>
-
-#include "adi_initialize.h"
+#include "common_data.h"
 #include "no_os_flash.h"
 #include "no_os_irq.h"
-#include "platform_init.h"
 #include "no_os_uart.h"
-#include "aducm3029_uart.h"
-#include "aducm3029_uart_stdio.h"
-#include "aducm3029_irq.h"
 
 /***************************************************************************//**
- * @brief main
+ * @brief Flash example main execution.
+ *
+ * @return ret - Result of the example execution.
 *******************************************************************************/
-int main(int argc, char *argv[])
+int example_main()
 {
-	/**
-	 * Initialize managed drivers and/or services that have been added to
-	 * the project.
-	 * @return zero on success
-	 */
-	adi_initComponents();
-
 	int32_t ret;
 	uint32_t flash_val = 0;
 	struct no_os_flash_dev *flash_dut;
-	struct no_os_flash_init_param flash_init_par = {
-		.id = 0
-	};
 	struct no_os_uart_desc *uart_dut;
-	struct no_os_uart_init_param uart_init_par = {
-		.baud_rate = 115200,
-		.device_id = 0,
-		.parity = NO_OS_UART_PAR_NO,
-		.size = NO_OS_UART_CS_8,
-		.stop = NO_OS_UART_STOP_1_BIT,
-		.platform_ops = &aducm_uart_ops,
-	};
 	struct no_os_irq_ctrl_desc *irq_dut;
-	struct no_os_irq_init_param irq_init = {
-		.irq_ctrl_id = 0,
-		.platform_ops = &aducm_irq_ops,
-		.extra = NULL
-	};
 
-	ret = platform_init();
-	if (ret < 0)
-		return ret;
-
-	ret = no_os_irq_ctrl_init(&irq_dut, &irq_init);
+	ret = no_os_irq_ctrl_init(&irq_dut, &flash_demo_irq_ip);
 	if (ret < 0)
 		return ret;
 
@@ -89,12 +58,12 @@ int main(int argc, char *argv[])
 	if (ret < 0)
 		return ret;
 
-	ret = no_os_uart_init(&uart_dut, &uart_init_par);
+	ret = no_os_uart_init(&uart_dut, &flash_demo_uart_ip);
 	if (ret < 0)
 		return ret;
 	no_os_uart_stdio(uart_dut);
 
-	ret = no_os_flash_init(&flash_dut, &flash_init_par);
+	ret = no_os_flash_init(&flash_dut, &flash_demo_flash_ip);
 	if (ret < 0)
 		return ret;
 
@@ -144,4 +113,3 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
-

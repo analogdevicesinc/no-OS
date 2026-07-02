@@ -1,10 +1,11 @@
 #See No-OS/tool/scripts/src_model.mk for variable description
 
-CFLAGS += -DENABLE_UART_STDIO
+INCS += $(INCLUDE)/no_os_flash.h \
+	$(INCLUDE)/no_os_irq.h   \
+	$(INCLUDE)/no_os_uart.h
 
-SRC_DIRS += $(PROJECT)/src
+SRCS += $(DRIVERS)/api/no_os_irq.c \
+	$(DRIVERS)/api/no_os_uart.c
 
-SRC_DIRS += $(PLATFORM_DRIVERS)
-SRC_DIRS += $(DRIVERS)/api
 SRC_DIRS += $(NO-OS)/util
 SRC_DIRS += $(INCLUDE)
