@@ -187,13 +187,21 @@ Maxim Platform
 
 **Build Command**
 
+Available variants: ``basic``.
+Available boards: ``max32655fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-        # to delete current build
-        make clean TARGET=max32655 MAXIM_LIBRARIES=/home/$USER/MaximSDK/Libraries/
-        # to build the project
-        make TARGET=max32655 MAXIM_LIBRARIES=/home/$USER/MaximSDK/Libraries/
-        # to flash the code
-        make run  TARGET=max32655 MAXIM_LIBRARIES=/home/$USER/MaximSDK/Libraries/
-        # to debug the code
-        make sdkopen TARGET=max32655 MAXIM_LIBRARIES=/home/$USER/MaximSDK/Libraries/
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (basic example on the max32655fthr board)
+   python tools/scripts/no_os_build.py build \
+      --project eval-adgs6414d --variant basic --board max32655fthr
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project eval-adgs6414d --variant basic --board max32655fthr \
+      --probe openocd --flash
