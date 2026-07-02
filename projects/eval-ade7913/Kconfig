@@ -1,0 +1,12 @@
+menu "eval-ade7913 Configuration"
+
+choice EVAL_ADE7913_EXAMPLE
+	prompt "Example variant"
+	default EVAL_ADE7913_ADE7913_EXAMPLE
+
+config EVAL_ADE7913_ADE7913_EXAMPLE
+	bool "ADE7913 example"
+
+endchoice
+
+endmenu
