@@ -106,7 +106,8 @@ In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-        make EXAMPLE=basic
+        python tools/scripts/no_os_build.py build \
+           --project ad7091r8-sdz --variant basic --board max78000fthr
 
 IIO example
 ^^^^^^^^^^^
@@ -142,7 +143,8 @@ In order to build the IIO project make sure you are using this command:
 
 .. code-block:: bash
 
-        make EXAMPLE=iio
+        python tools/scripts/no_os_build.py build \
+           --project ad7091r8-sdz --variant iio_r2 --board max78000fthr
 
 
 IIO timer trigger example
@@ -175,7 +177,8 @@ In order to build the IIO timer trigger example make sure you are using this com
 
 .. code-block:: bash
 
-        make EXAMPLE=iio_timer_trigger
+        python tools/scripts/no_os_build.py build \
+           --project ad7091r8-sdz --variant iio_timer_trigger_r2 --board max78000fthr
 
 No-OS Supported Platforms
 -------------------------
@@ -218,14 +221,22 @@ There are a number of connections to make between the ADC evaluation board and t
 
 **Build Command**
 
+Available variants: ``basic``, ``iio_r2``, ``iio_r4``, ``iio_r8``, ``iio_timer_trigger_r2``, ``iio_timer_trigger_r4``, ``iio_timer_trigger_r8``.
+Available boards: ``max78000fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-        # to delete current build
-        make reset
-        # to build the project (selecting the example to run)
-        make EXAMPLE=iio PLATFORM=maxim TARGET=max78000
-        # to flash the code
-        make run
-        # to debug the code
-        make debug
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (basic example on the max78000fthr board)
+   python tools/scripts/no_os_build.py build \
+      --project ad7091r8-sdz --variant basic --board max78000fthr
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad7091r8-sdz --variant basic --board max78000fthr \
+      --probe openocd --flash
 
