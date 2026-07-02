@@ -309,6 +309,11 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
         import shutil
         shutil.rmtree(build_dir)
 
+    # append_log() opens in append mode; on a reused build_dir that accumulates
+    # stale output. Start each run with a fresh log.
+    if not dry_run and log_path.exists():
+        log_path.unlink()
+
     defconfig = f"{project}/{variant}.conf"
 
     configure_cmd = [
