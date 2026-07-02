@@ -84,7 +84,11 @@ def log_success(msg):
 
 DEFAULT_LOG_FILE = 'log.txt'
 log_file = DEFAULT_LOG_FILE
-create_dir_cmd = "test -d {0} || mkdir -p {0}"
+
+def ensure_dir(path):
+	# Silent mkdir -p; not routed through run_cmd so it neither logs a bogus
+	# build step nor leaks the "test -d ... ||" text to stdout.
+	os.makedirs(path, exist_ok=True)
 
 def shell_source(script):
 	"""
@@ -210,16 +214,16 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 			exit()
 
 	builds_dir = _builds_dir + '_' + hdl_branch
-	run_cmd(create_dir_cmd.format(builds_dir))
+	ensure_dir(builds_dir)
 	if SKIP_DOWNLOAD == 1:
 		return (builds_dir, [])
 	hardwares = os.path.join(builds_dir, HW_DIR_NAME)
-	run_cmd(create_dir_cmd.format(hardwares))
+	ensure_dir(hardwares)
 	server_full_path = server_base_path + hdl_branch_path
 	if (_platform is None or _platform == 'xilinx'):
 		blacklist = process_blacklist()
 		new_hardwares = os.path.join(builds_dir, NEW_HW_DIR_NAME)
-		run_cmd(create_dir_cmd.format(new_hardwares))
+		ensure_dir(new_hardwares)
 		err = os.system("python3 {}/tools/scripts/download_files.py {} {} {} \"{}\""
 				  .format(noos, noos, builds_dir, server_full_path, blacklist))
 		if err != 0:
@@ -376,7 +380,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		return None
 
 	project_export = os.path.join(export_dir, project)
-	run_cmd(create_dir_cmd.format(project_export))
+	ensure_dir(project_export)
 
 	build_dir_base = Path(cmake_builds_dir)
 	ok = 1
@@ -445,8 +449,8 @@ def main():
 	(noos, export_dir, log_dir, _project,
 	 _platform, _build_name, _builds_dir, _hw, hdl_branch) = parse_input()
 	projets = os.path.join(noos,'projects')
-	run_cmd(create_dir_cmd.format(export_dir))
-	run_cmd(create_dir_cmd.format(log_dir))
+	ensure_dir(export_dir)
+	ensure_dir(log_dir)
 	(builds_dir, blacklist) = configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch)
 	for project in os.listdir(projets):
 		binary_created = False
@@ -470,7 +474,7 @@ def main():
 		# returns None when the current -platform job has nothing to build here.
 		if has_cmake:
 			cmake_builds_dir = builds_dir + '_cmake'
-			run_cmd(create_dir_cmd.format(cmake_builds_dir))
+			ensure_dir(cmake_builds_dir)
 			cmake_ok = build_cmake_project(noos, project, _platform, _build_name,
 						 export_dir, log_dir, cmake_builds_dir)
 			if cmake_ok is not None:
@@ -493,7 +497,7 @@ def main():
 					if _build_name != build_name:
 						continue
 				project_export = os.path.join(export_dir, project)
-				run_cmd(create_dir_cmd.format(project_export))
+				ensure_dir(project_export)
 				flags = params['flags']
 				if 'hardware' in params:
 					hardwares = params['hardware']
@@ -529,7 +533,7 @@ def main():
 					else:
 						if platform == 'xilinx':
 							project_export_dir = os.path.join(project_export, new_build.boot_dir)
-							run_cmd(create_dir_cmd.format(project_export_dir))
+							ensure_dir(project_export_dir)
 							run_cmd("cp %s %s" %
 								(new_build.export_archive, project_export_dir))
 							file = open(os.path.join(new_build.build_dir,"tmp/arch.txt"))
