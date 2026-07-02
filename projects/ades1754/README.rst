@@ -225,22 +225,17 @@ Maxim Platform
 
 **Build Command**
 
-Default UART Example
---------------------
-
 .. code-block:: bash
 
-	# to delete current build
-	make PLATFORM=maxim TARGET=max32690 EXAMPLE=def_uart_example reset
-	# to build the project and flash the code
-	make PLATFORM=maxim TARGET=max32690 EXAMPLE=def_uart_example run
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
 
-SPI UART Example
-----------------
+   cd no-OS
 
-.. code-block:: bash
+   # build the project (basic example on the ad-apard32690-sl board)
+   python tools/scripts/no_os_build.py build \
+      --project ades1754 --variant basic --board ad-apard32690-sl
 
-	# to delete current build
-	make PLATFORM=maxim TARGET=max32690 EXAMPLE=spi_uart_example reset
-	# to build the project and flash the code
-	make PLATFORM=maxim TARGET=max32690 EXAMPLE=spi_uart_example run
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ades1754 --variant basic --board ad-apard32690-sl \
+      --probe openocd --flash
