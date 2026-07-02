@@ -1,6 +1,8 @@
-PLATFORM = aducm3029
+EXAMPLE ?= flash_example
 
 include ../../tools/scripts/generic_variables.mk
+
+include ../../tools/scripts/examples.mk
 
 include src.mk
 
