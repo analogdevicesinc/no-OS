@@ -1,0 +1,16 @@
+menu "max31827-evkit Configuration"
+
+choice MAX31827_EVKIT_EXAMPLE
+	prompt "Example variant"
+	default MAX31827_EVKIT_BASIC_EXAMPLE
+
+config MAX31827_EVKIT_BASIC_EXAMPLE
+	bool "Basic example"
+
+config MAX31827_EVKIT_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+endchoice
+
+endmenu
