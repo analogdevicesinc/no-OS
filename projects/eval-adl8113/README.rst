@@ -97,7 +97,8 @@ To build the IIO example:
 
 .. code-block:: bash
 
-    make EXAMPLE=iio_example PLATFORM=maxim TARGET=max32655
+    python tools/scripts/no_os_build.py build \
+       --project eval-adl8113 --variant iio_example --board max32655fthr
 
 No-OS Supported Platforms
 -------------------------
@@ -130,11 +131,21 @@ Maxim Platform
 
 **Build Command**
 
+Available variants: ``basic``, ``iio_example``.
+Available boards: ``max32655fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-	# to delete current build
-	make reset PLATFORM=maxim TARGET=max32655
-	# to build the project
-	make PLATFORM=maxim TARGET=max32655
-	# to flash the code
-	make run PLATFORM=maxim TARGET=max32655
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (basic example on the max32655fthr board)
+   python tools/scripts/no_os_build.py build \
+      --project eval-adl8113 --variant basic --board max32655fthr
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project eval-adl8113 --variant basic --board max32655fthr \
+      --probe openocd --flash
