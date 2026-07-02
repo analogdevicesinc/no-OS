@@ -231,35 +231,27 @@ no-OS compatible GNSS driver providing unified support for both **UBX-capable de
 **Building**
 ---------------
 
-**Build Commands**
-~~~~~~~~~~~~~~~~~~
+**Maxim Build Command**
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Available variants: ``basic``.
+Available boards: ``ad-apard32690-sl``.
+Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
-   # Navigate to project directory
-   cd no-OS/projects/eval-ublox-gnss
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
 
-   # Clean previous build
-   make PLATFORM=<platform> TARGET=<MCU_target> clean
+   cd no-OS
 
-   # Build and flash to target
-   make PLATFORM=<platform> TARGET=<MCU_target> run
+   # build the project (basic example on the ad-apard32690-sl board)
+   python tools/scripts/no_os_build.py build \
+      --project eval-ublox-gnss --variant basic --board ad-apard32690-sl
 
-   # Simple make (build only)
-   make PLATFORM=<platform> TARGET=<MCU_target>
-
-**Example Platform Commands**
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: bash
-
-   # For STM32 target
-   make PLATFORM=stm32 TARGET=stm32f407vg clean
-   make PLATFORM=stm32 TARGET=stm32f407vg run
-
-   # For Maxim target
-   make PLATFORM=maxim TARGET=max32690 clean
-   make PLATFORM=maxim TARGET=max32690 run
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project eval-ublox-gnss --variant basic --board ad-apard32690-sl \
+      --probe openocd --flash
 
 **Source Files**
 ~~~~~~~~~~~~~~~~
