@@ -18,7 +18,6 @@ from no_os_build import (
 	load_presets,
 	discover_all_combinations,
 	filter_combinations,
-	run_build,
 	combo_build_dir,
 )
 
@@ -361,15 +360,16 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 	"""Build the CMake/Kconfig (Maxim/STM32) side of a project.
 
 	Discovers the project's project/variant/board combinations from the board
-	presets and per-project *.conf files (reusing no_os_build.py) and builds each
-	through no_os_build.run_build. run_build writes a per-combination build.log
-	(configure + full compiler output) which we copy into log_dir for CI.
+	presets and per-project *.conf files (reusing no_os_build.py for discovery)
+	and builds each by invoking no_os_build.py as a subprocess, so the CI console
+	shows the invocation while its output is redirected into the per-combination
+	log.
 
 	Returns 1 if all combinations succeeded, 0 if any failed, or None if there
 	were no combinations for the requested platform (so the caller can tell a
 	genuine no-op from a real build and avoid emitting a misleading status).
 	"""
-	global ERR
+	global ERR, log_file
 
 	presets = load_presets(Path(noos))
 	combos = discover_all_combinations(Path(noos), presets)
@@ -408,36 +408,43 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		shell_source(environment_path_files + platform + "_environment.sh")
 
 		# The final link + .hex/.bin generation runs as a custom command whose
-		# failure 'cmake --build' does NOT report as a non-zero exit. So the .elf
-		# is the source of truth: remove any stale one, build, then require it.
+		# failure does NOT report as a non-zero exit. So the .elf is the source
+		# of truth: remove any stale one, build, then require it.
 		if elf.is_file():
 			elf.unlink()
 
-		_, success, msg = run_build(
-			Path(noos), combo, build_dir_base,
-			jobs=int(multiprocessing.cpu_count() / 2) or 1,
-			clean=False, dry_run=False, probe='openocd',
-		)
+		# Delegate the actual build to no_os_build.py, invoked as a subprocess:
+		# the CI console shows the invocation (the " -> " bullet from run_cmd)
+		# while its spinner/output are redirected into the per-combination log.
+		dst_log = os.path.join(log_dir, '%s_%s_%s_%s.txt' % (project, platform, variant, board))
+		log_file = dst_log
+		open(log_file, 'w').close()
+		jobs = int(multiprocessing.cpu_count() / 2) or 1
+		# Pass an absolute --build-dir: no_os_build anchors a relative one to the
+		# repo root, which would not match the build_dir we clean/probe here.
+		build_cmd = ("python3 %s/tools/scripts/no_os_build.py build"
+			     " --project %s --variant %s --board %s"
+			     " --build-dir %s --jobs %d --probe openocd --fresh"
+			     % (noos, project, variant, board,
+				os.path.abspath(build_dir_base), jobs))
+		err = run_cmd(build_cmd)
+		success = err == 0
 
 		os.environ.clear()
 		os.environ.update(env)
 
-		# Surface run_build's per-combination build.log under log_dir so CI can
-		# publish it alongside the legacy logs.
-		combo_log = build_dir / 'build.log'
-		dst_log = os.path.join(log_dir, '%s_%s_%s_%s.txt' % (project, platform, variant, board))
-		if combo_log.is_file():
-			run_cmd("cp %s %s" % (combo_log, dst_log))
-
+		# run_cmd already logged ERROR + the log path on a non-zero exit; only
+		# the "build reported success but produced no .elf" case (a link failure
+		# hidden in a custom command) needs to be flagged here.
 		if success and not elf.is_file():
 			log_err("ERROR")
 			log("See log %s -- no .elf produced (link likely failed)" % dst_log)
 			ERR = 1
 			success = False
 
+		log_file = DEFAULT_LOG_FILE
+
 		if not success:
-			log_err("ERROR")
-			log("See log %s" % dst_log)
 			ERR = 1
 			ok = 0
 			continue
