@@ -84,4 +84,5 @@ source "projects/max11205pmb1/Kconfig"
 source "projects/max14914/Kconfig"
 source "projects/max14919/Kconfig"
 source "projects/max17616/Kconfig"
+source "projects/max22017/Kconfig"
 endmenu

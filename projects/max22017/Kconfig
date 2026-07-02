@@ -1,0 +1,16 @@
+menu "MAX22017 Configuration"
+
+choice MAX22017_EXAMPLE
+	prompt "Example variant"
+	default MAX22017_BASIC_EXAMPLE
+
+config MAX22017_BASIC_EXAMPLE
+	bool "Basic example"
+
+config MAX22017_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+endchoice
+
+endmenu
