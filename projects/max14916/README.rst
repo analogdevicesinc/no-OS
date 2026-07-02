@@ -174,3 +174,22 @@ Build Command
    make PLATFORM=linux
    # to flash the code
    make run
+
+Available variants: ``basic``, ``iio_example``.
+Available boards: ``ad-apard32690-sl``, ``max32665fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
+.. code-block:: bash
+
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (basic example on the ad-apard32690-sl board)
+   python tools/scripts/no_os_build.py build \
+      --project max14916 --variant basic --board ad-apard32690-sl
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project max14916 --variant basic --board ad-apard32690-sl \
+      --probe openocd --flash

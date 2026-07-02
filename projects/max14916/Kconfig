@@ -1,0 +1,20 @@
+menu "max14916 Configuration"
+
+choice MAX14916_EXAMPLE
+	prompt "Example variant"
+	default MAX14916_BASIC_EXAMPLE
+
+config MAX14916_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Basic example demonstrating MAX14916 digital I/O operations.
+
+config MAX14916_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example demonstrating MAX14916 as an IIO device.
+
+endchoice
+
+endmenu
