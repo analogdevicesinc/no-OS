@@ -1,0 +1,16 @@
+menu "ADT75 Configuration"
+
+choice ADT75_EXAMPLE
+	prompt "Example variant"
+	default ADT75_BASIC_EXAMPLE
+
+config ADT75_BASIC_EXAMPLE
+	bool "Basic example"
+
+config ADT75_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+endchoice
+
+endmenu

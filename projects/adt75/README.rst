@@ -90,7 +90,8 @@ In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-	make EXAMPLE=basic
+	python tools/scripts/no_os_build.py build \
+	   --project adt75 --variant basic --board max32650fthr
 
 IIO Example
 ^^^^^^^^^^^
@@ -116,7 +117,8 @@ In order to build the IIO project make sure you are using this command:
 
 .. code-block:: bash
 
-	make EXAMPLE=iio
+	python tools/scripts/no_os_build.py build \
+	   --project adt75 --variant iio --board max32650fthr
 
 No-OS Supported Platforms
 -------------------------
@@ -142,11 +144,21 @@ VDD (Pin 8)       Power Supply        3V3
 
 **Build Command**
 
+Available variants: ``basic``, ``iio``.
+Available boards: ``max32650fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-	# to delete current build
-	make reset PLATFORM=maxim TARGET=max32650
-	# to build the project
-	make EXAMPLE=iio PLATFORM=maxim TARGET=max32650
-	# to flash the code
-	make run PLATFORM=maxim TARGET=max32650
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (basic example on the max32650fthr board)
+   python tools/scripts/no_os_build.py build \
+      --project adt75 --variant basic --board max32650fthr
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project adt75 --variant basic --board max32650fthr \
+      --probe openocd --flash
