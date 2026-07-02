@@ -42,4 +42,5 @@ source "projects/ades1754/Kconfig"
 source "projects/adin1110/Kconfig"
 source "projects/adp1050/Kconfig"
 source "projects/adp1055/Kconfig"
+source "projects/adp5055/Kconfig"
 endmenu
