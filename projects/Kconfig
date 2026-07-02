@@ -93,4 +93,5 @@ source "projects/max31855/Kconfig"
 source "projects/max42500/Kconfig"
 source "projects/adt7420-pmdz/Kconfig"
 source "projects/demo_esp/Kconfig"
+source "projects/eval-ltc4306/Kconfig"
 endmenu

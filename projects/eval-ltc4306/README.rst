@@ -163,3 +163,22 @@ Build Command
    make PLATFORM=aducm3029
    # flash the code
    make run
+
+Available variants: ``basic``.
+Available boards: ``max32650fthr``, ``max32655fthr``, ``max32660fthr``, ``max32665fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
+.. code-block:: bash
+
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (basic example on the max32650fthr board)
+   python tools/scripts/no_os_build.py build \
+      --project eval-ltc4306 --variant basic --board max32650fthr
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project eval-ltc4306 --variant basic --board max32650fthr \
+      --probe openocd --flash

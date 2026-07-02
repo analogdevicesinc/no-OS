@@ -1,18 +1,4 @@
 {
-    "maxim": {
-      "basic_max32650": {
-        "flags" : "EXAMPLE=basic TARGET=max32650"
-      },
-      "basic_max32655": {
-        "flags" : "EXAMPLE=basic TARGET=max32655"
-      },
-      "basic_max32660": {
-        "flags" : "EXAMPLE=basic TARGET=max32660"
-      },
-      "basic_max32665": {
-        "flags" : "EXAMPLE=basic TARGET=max32665"
-      }
-    },
     "aducm3029": {
       "basic": {
         "flags" : "EXAMPLE=basic"
