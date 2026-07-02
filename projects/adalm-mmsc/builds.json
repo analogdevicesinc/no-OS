@@ -1,7 +1,0 @@
-{
-	"maxim": {
-		"iio_max32665": {
-			"flags" : "EXAMPLE=iio TARGET=max32665"
-		}
-	}
-}

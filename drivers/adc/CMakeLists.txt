@@ -5,6 +5,7 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad405x)
 
 # AD4080
 no_os_sources_ifdef(CONFIG_ADC_AD4080 ${CMAKE_CURRENT_SOURCE_DIR}/ad4080/ad4080.c)
+no_os_sources_ifdef(CONFIG_ADC_IIO_AD4080 ${CMAKE_CURRENT_SOURCE_DIR}/ad4080/iio_ad4080.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad4080)
 
 # AD4170

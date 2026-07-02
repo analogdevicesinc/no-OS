@@ -26,6 +26,11 @@ config ADC_AD4080
     bool "Enable AD4080 ADC driver"
     default n
 
+config ADC_IIO_AD4080
+    select ADC_AD4080
+    bool "Enable AD4080 IIO driver"
+    default n
+
 config ADC_AD4170
     depends on SPI
     select GPIO

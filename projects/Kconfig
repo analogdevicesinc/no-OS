@@ -34,5 +34,6 @@ source "projects/admt4000/Kconfig"
 source "projects/ade7816/Kconfig"
 source "projects/dc2903a/Kconfig"
 source "projects/eval-ade7754/Kconfig"
+source "projects/adalm-mmsc/Kconfig"
 
 endmenu

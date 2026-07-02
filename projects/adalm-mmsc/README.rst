@@ -118,3 +118,22 @@ Maxim Platform
         make PLATFORM=maxim TARGET=max32665
         # to flash the code
         make run
+
+Available variants: ``iio``.
+Available boards: ``max32665fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
+.. code-block:: bash
+
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (iio example on the max32665fthr board)
+   python tools/scripts/no_os_build.py build \
+      --project adalm-mmsc --variant iio --board max32665fthr
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project adalm-mmsc --variant iio --board max32665fthr \
+      --probe openocd --flash
