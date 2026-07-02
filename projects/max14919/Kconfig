@@ -1,0 +1,12 @@
+menu "max14919 Configuration"
+
+choice MAX14919_EXAMPLE
+	prompt "Example variant"
+	default MAX14919_BASIC_EXAMPLE
+
+config MAX14919_BASIC_EXAMPLE
+	bool "Basic example"
+
+endchoice
+
+endmenu
