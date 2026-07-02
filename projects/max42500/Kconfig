@@ -1,0 +1,12 @@
+menu "max42500 Configuration"
+
+choice MAX42500_EXAMPLE
+	prompt "Example variant"
+	default MAX42500_BASIC_EXAMPLE
+
+config MAX42500_BASIC_EXAMPLE
+	bool "Basic example"
+
+endchoice
+
+endmenu
