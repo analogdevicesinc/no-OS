@@ -1,0 +1,12 @@
+menu "eval-adgm3121 Configuration"
+
+choice EVAL_ADGM3121_EXAMPLE
+	prompt "Example variant"
+	default EVAL_ADGM3121_BASIC_EXAMPLE
+
+config EVAL_ADGM3121_BASIC_EXAMPLE
+	bool "Basic example"
+
+endchoice
+
+endmenu
