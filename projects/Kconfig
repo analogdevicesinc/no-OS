@@ -80,4 +80,5 @@ source "projects/ltc7841/Kconfig"
 source "projects/ltc7871/Kconfig"
 source "projects/ltm4686/Kconfig"
 source "projects/ltp8800/Kconfig"
+source "projects/max11205pmb1/Kconfig"
 endmenu
