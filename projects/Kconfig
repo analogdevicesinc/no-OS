@@ -77,4 +77,5 @@ source "projects/ltc3337/Kconfig"
 source "projects/ltc4162l/Kconfig"
 source "projects/ltc4296/Kconfig"
 source "projects/ltc7841/Kconfig"
+source "projects/ltc7871/Kconfig"
 endmenu
