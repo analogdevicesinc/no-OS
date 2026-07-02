@@ -133,15 +133,24 @@ Maxim Platform
 | RST      | P0_14                 |
 +----------+-----------------------+
 
-** Build Command **
+Build Command
+^^^^^^^^^^^^^
+
+Available variants: ``basic``.
+Available boards: ``ad-apard32690-sl``, ``max32655fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
-    # to delete current build
-    make reset
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
 
-    #to build project
-    make TARGET=max32690
+   cd no-OS
 
-    # to flash the code to the controller
-    make TARGET=max32690 run
+   # build the project (basic example on the ad-apard32690-sl board)
+   python tools/scripts/no_os_build.py build \
+      --project ltc3220 --variant basic --board ad-apard32690-sl
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ltc3220 --variant basic --board ad-apard32690-sl \
+      --probe openocd --flash
