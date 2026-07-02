@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   iio_adpd1080/src/parameters.h
- *   @brief  Parameters Definitions.
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @file   common_data.h
+ *   @brief  Defines common data to be used by iio_adpd1080 examples.
+ *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
- * Copyright 2013(c) Analog Devices, Inc.
+ * Copyright 2020(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,24 +30,25 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef __COMMON_DATA_H__
+#define __COMMON_DATA_H__
 
-#ifdef ADUCM_PLATFORM
-#include "aducm3029_irq.h"
-#endif
+#include "parameters.h"
+#include "adpd188.h"
+#include "iio_adpd188.h"
+#include "no_os_uart.h"
+#include "no_os_gpio.h"
+#include "no_os_irq.h"
+#include "no_os_timer.h"
 
-#ifdef ADUCM_PLATFORM
+/* Sync GPIO pin number used during the 32kHz calibration. */
+#define ADPD1080_SYNC_GPIO_NUM  GPIO_SYNC_NUM
 
-#define UART_DEVICE_ID	0
-#define UART_IRQ_ID		ADUCM_UART_INT_ID
-#define UART_BAUDRATE	115200
+extern struct no_os_uart_init_param adpd1080_uart_ip;
+extern struct adpd188_iio_init_param adpd1080_iio_ip;
 
-#ifdef NO_OS_NETWORKING
-#define WIFI_SSID	"RouterSSID"
-#define WIFI_PWD	"******"
-#endif
+extern struct no_os_timer_init_param adpd1080_cal_timer_ip;
+extern struct no_os_gpio_init_param adpd1080_sync_gpio_ip;
+extern struct no_os_irq_init_param adpd1080_cal_irq_ip;
 
-#endif //ADUCM_PLATFORM
-
-#endif // __PARAMETERS_H__
+#endif /* __COMMON_DATA_H__ */

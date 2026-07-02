@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   iio_adpd1080/src/main.c
- *   @brief  Implementation of Main Function.
- *   @author Drimbarean Andrei (andrei.drimbarean@analog.com)
+ *   @file   iio_example.c
+ *   @brief  Implementation of IIO example for iio_adpd1080 project.
+ *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
  *
@@ -31,20 +31,15 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "app_config.h"
+#include <stdlib.h>
+#include "common_data.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_gpio.h"
+#include "no_os_irq.h"
+#include "no_os_timer.h"
 #include "iio_adpd188.h"
 #include "iio_app.h"
-#include "aducm3029_gpio.h"
-#include "no_os_gpio.h"
-#include "no_os_timer.h"
-#include "aducm3029_irq.h"
-#include "aducm3029_i2c.h"
-#include "aducm3029_uart.h"
-#include "aducm3029_gpio_irq.h"
-#include "aducm3029_timer.h"
-#include "parameters.h"
 
 #define MAX_SIZE_BASE_ADDR		1024
 
@@ -67,41 +62,24 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 	volatile int32_t sync_gpio_pulse_no;
 	int32_t min_diff = 0x7fffffff;
 	struct no_os_timer_desc *cal_timer;
-	struct no_os_timer_init_param cal_timer_init = {
-		.id = 0,
-		.ticks_count = 0,
-		.freq_hz = 1,
-		.platform_ops = &aducm_timer_ops,
-		.extra = NULL
-	};
 	struct no_os_gpio_desc *sync_gpio;
-	struct no_os_gpio_init_param sync_gpio_init = {
-		.number = 0x0D,
-		.extra = NULL,
-		.platform_ops = &aducm_gpio_ops
-	};
 	struct no_os_irq_ctrl_desc *cal_irq;
-	struct no_os_irq_init_param cal_irq_init = {
-		.irq_ctrl_id = ADUCM_GPIO_B_GROUP_SOFT_CTRL,
-		.platform_ops = &aducm_gpio_irq_ops,
-		.extra = NULL
-	};
 
-	status = no_os_timer_init(&cal_timer, &cal_timer_init);
+	status = no_os_timer_init(&cal_timer, &adpd1080_cal_timer_ip);
 	if (status != 0)
 		return -1;
 	status = no_os_timer_start(cal_timer);
 	if (status != 0)
 		goto timer_finish;
 
-	status = no_os_gpio_get(&sync_gpio, &sync_gpio_init);
+	status = no_os_gpio_get(&sync_gpio, &adpd1080_sync_gpio_ip);
 	if (status != 0)
 		goto timer_finish;
 	status = no_os_gpio_direction_input(sync_gpio);
 	if (status != 0)
 		goto gpio_finish;
 
-	status = no_os_irq_ctrl_init(&cal_irq, &cal_irq_init);
+	status = no_os_irq_ctrl_init(&cal_irq, &adpd1080_cal_irq_ip);
 	if (status != 0)
 		goto gpio_finish;
 
@@ -112,7 +90,8 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 		.handle = cal_irq->extra,
 		.peripheral = NO_OS_GPIO_IRQ
 	};
-	status = no_os_irq_register_callback(cal_irq, 0x0D, &sync_gpio_cb);
+	status = no_os_irq_register_callback(cal_irq, ADPD1080_SYNC_GPIO_NUM,
+					     &sync_gpio_cb);
 	if (status != 0)
 		goto gpio_finish;
 
@@ -133,7 +112,7 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 	if (status != 0)
 		goto finish;
 
-	status = no_os_irq_enable(cal_irq, 0x0D);
+	status = no_os_irq_enable(cal_irq, ADPD1080_SYNC_GPIO_NUM);
 	if (status != 0)
 		goto finish;
 
@@ -163,11 +142,12 @@ static int32_t adpd1080pmod_32k_calib(struct adpd188_dev *adpd1080_dev)
 			goto finish;
 	}
 
-	status = no_os_irq_disable(cal_irq, 0x0D);
+	status = no_os_irq_disable(cal_irq, ADPD1080_SYNC_GPIO_NUM);
 	if (status != 0)
 		goto finish;
 
-	status = no_os_irq_unregister_callback(cal_irq, 0x0D, &sync_gpio_cb);
+	status = no_os_irq_unregister_callback(cal_irq, ADPD1080_SYNC_GPIO_NUM,
+					       &sync_gpio_cb);
 	if (status != 0)
 		goto gpio_finish;
 
@@ -198,61 +178,24 @@ timer_finish:
 }
 
 /***************************************************************************//**
- * @brief main
+ * @brief IIO example main execution.
+ *
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously function iio_app_run and will not return.
 *******************************************************************************/
-int main(void)
+int example_main()
 {
 	int32_t status;
 	uint16_t reg_data;
 	struct iio_app_desc *app;
 	struct iio_app_init_param app_init_param = { 0 };
-
-	struct no_os_uart_init_param adpd1080_uart_ip = {
-		.device_id = UART_DEVICE_ID,
-		.irq_id = UART_IRQ_ID,
-		.asynchronous_rx = true,
-		.baud_rate = UART_BAUDRATE,
-		.size = NO_OS_UART_CS_8,
-		.parity = NO_OS_UART_PAR_NO,
-		.stop = NO_OS_UART_STOP_1_BIT,
-		.extra = NULL,
-		.platform_ops = &aducm_uart_ops,
-	};
-
-	status = platform_init();
-	if (NO_OS_IS_ERR_VALUE(status))
-		return status;
-
 	struct adpd188_iio_desc *adpd1080_iio_device;
-	struct adpd188_iio_init_param adpd1080_iio_inital = {
-		.drv_init_param.device = ADPD1080,
-		.drv_init_param.phy_opt = ADPD188_I2C,
-		.drv_init_param.phy_init.i2c_phy =
-		{
-			.slave_address = 0x64,
-			.max_speed_hz = 400000,
-			.platform_ops = &aducm_i2c_ops,
-			.extra = NULL
-		},
-		.drv_init_param.gpio0_init =
-		{
-			.number = 0,
-			.platform_ops = &aducm_gpio_ops,
-			.extra = 0
-		},
-		.drv_init_param.gpio1_init =
-		{
-			.number = 0,
-			.platform_ops = &aducm_gpio_ops,
-			.extra = 0
-		}
-	};
 	struct iio_data_buffer iio_adpd1080_read_buff = {
-		.buff = ADC_DDR_BASEADDR,
+		.buff = (void *)ADC_DDR_BASEADDR,
 		.size = MAX_SIZE_BASE_ADDR,
 	};
 
-	status = adpd188_iio_init(&adpd1080_iio_device, &adpd1080_iio_inital);
+	status = adpd188_iio_init(&adpd1080_iio_device, &adpd1080_iio_ip);
 	if (status < 0)
 		return status;
 
@@ -427,4 +370,3 @@ int main(void)
 
 	return iio_app_run(app);
 }
-

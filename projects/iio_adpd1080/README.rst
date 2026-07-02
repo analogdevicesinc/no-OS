@@ -83,8 +83,14 @@ Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
 No-OS Supported Examples
 ------------------------
 
-The initialization data used in the examples is taken out from the
-`Project Source Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/iio_adpd1080/src>`__.
+This project is organized around the no-OS ``EXAMPLE`` based build flow.
+Selecting an example at build time (``EXAMPLE=<name>``) chooses which
+application is compiled. The platform ``main()`` is a thin dispatcher that
+calls ``example_main()``, provided by the selected example. The
+initialization data used in the examples is defined in
+`src/common <https://github.com/analogdevicesinc/no-OS/tree/main/projects/iio_adpd1080/src/common>`__,
+and the platform-specific macros in
+`src/platform <https://github.com/analogdevicesinc/no-OS/tree/main/projects/iio_adpd1080/src/platform>`__.
 
 IIO Example
 ~~~~~~~~~~~
@@ -103,23 +109,20 @@ If you are not familiar with ADI IIO-Oscilloscope Client, please take a
 look at:
 `IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
 
-The IIO example is the default build configuration (``IIOD=y`` is set in
-``src.mk``). Two variants are available:
+The IIO example is the default build configuration (``EXAMPLE`` defaults to
+``iio_example``, which sets ``IIOD=y``). Two variants are available:
 
 **IIO over UART** (default):
 
 .. code-block:: bash
 
-   # IIOD is enabled by default, no additional flags needed
-   IIOD = y
+   make EXAMPLE=iio_example PLATFORM=aducm3029
 
 **IIO over WiFi:**
 
 .. code-block:: bash
 
-   # Enable networking for WiFi-based IIO communication
-   IIOD = y
-   NETWORKING = y
+   make EXAMPLE=iio_example NETWORKING=y PLATFORM=aducm3029
 
 No-OS Supported Platforms
 -------------------------
@@ -185,7 +188,7 @@ Build Command
 
    # remove sp characters from the build directory
    make reset
-   # build the project
-   make PLATFORM=aducm3029
+   # build the project (EXAMPLE defaults to iio_example)
+   make EXAMPLE=iio_example PLATFORM=aducm3029
    # flash the code
    make run
