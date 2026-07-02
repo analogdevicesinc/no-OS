@@ -64,4 +64,5 @@ source "projects/eval-adgm3121/Kconfig"
 source "projects/eval-adgs6414d/Kconfig"
 source "projects/eval-adhv4710/Kconfig"
 source "projects/eval-adl8113/Kconfig"
+source "projects/eval-ublox-gnss/Kconfig"
 endmenu
