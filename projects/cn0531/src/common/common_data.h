@@ -1,7 +1,6 @@
 /***************************************************************************//**
- *   @file   cn0531/src/parameters.h
- *   @brief  Parameters Definitions.
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @file   common_data.h
+ *   @brief  Defines common data to be used by cn0531 examples.
  *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
  * Copyright 2021(c) Analog Devices, Inc.
@@ -31,24 +30,16 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef __COMMON_DATA_H__
+#define __COMMON_DATA_H__
 
-#ifdef ADUCM_PLATFORM
-#include "aducm3029_irq.h"
-#endif
+#include "parameters.h"
+#include "ad5791.h"
+#include "iio_ad5791.h"
+#include "no_os_uart.h"
 
-#ifdef ADUCM_PLATFORM
+extern struct no_os_uart_init_param cn0531_uart_ip;
+extern struct ad5791_init_param cn0531_ad5791_ip;
+extern struct ad5791_iio_init_param cn0531_ad5791_iio_ip;
 
-#define UART_DEVICE_ID	0
-#define UART_IRQ_ID		ADUCM_UART_INT_ID
-#define UART_BAUDRATE	115200
-
-#ifdef NO_OS_NETWORKING
-#define WIFI_SSID	"RouterSSID"
-#define WIFI_PWD	"******"
-#endif
-
-#endif //ADUCM_PLATFORM
-
-#endif // __PARAMETERS_H__
+#endif /* __COMMON_DATA_H__ */

@@ -60,8 +60,14 @@ Please see: https://wiki.analog.com/resources/no-os/build
 No-OS Supported Examples
 ------------------------
 
-The initialization data used in the examples is taken out from:
-`Project Data Source Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/cn0531/src>`_
+This project is organized around the no-OS ``EXAMPLE`` based build flow.
+Selecting an example at build time (``EXAMPLE=<name>``) chooses which
+application is compiled. The platform ``main()`` is a thin dispatcher that
+calls ``example_main()``, provided by the selected example. The
+initialization data used in the examples is defined in
+`src/common <https://github.com/analogdevicesinc/no-OS/tree/main/projects/cn0531/src/common>`_,
+and the platform-specific macros in
+`src/platform <https://github.com/analogdevicesinc/no-OS/tree/main/projects/cn0531/src/platform>`_.
 
 IIO Example
 ^^^^^^^^^^^^
@@ -87,14 +93,20 @@ look at:
 The No-OS IIO Application together with the AD5791 no-OS driver takes
 care of all the back-end logic needed to setup the IIO server.
 
-In order to build the IIO project, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/cn0531/Makefile>`_:
+The IIO example is the default build configuration (``EXAMPLE`` defaults to
+``iio_example``, which sets ``IIOD=y``). Two variants are available:
+
+**IIO over UART** (default):
 
 .. code-block:: bash
 
-	# remove comment below to enable IIO
-	IIOD=y
+	make EXAMPLE=iio_example PLATFORM=aducm3029
+
+**IIO over WiFi:**
+
+.. code-block:: bash
+
+	make EXAMPLE=iio_example NETWORKING=y PLATFORM=aducm3029
 
 No-OS Supported Platforms
 -------------------------
@@ -120,8 +132,8 @@ into the EVAL-ADICUP3029.
 
 	# to delete current build
 	make reset
-	# to build the project
-	make PLATFORM=aducm3029
+	# to build the project (EXAMPLE defaults to iio_example)
+	make EXAMPLE=iio_example PLATFORM=aducm3029
 	# to flash the code
 	make run
 	# to debug the code
