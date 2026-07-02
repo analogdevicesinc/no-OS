@@ -1,0 +1,12 @@
+menu "MAX25603 Configuration"
+
+choice MAX25603_EXAMPLE
+	prompt "Example variant"
+	default MAX25603_BASIC_EXAMPLE
+
+config MAX25603_BASIC_EXAMPLE
+	bool "Basic example"
+
+endchoice
+
+endmenu
