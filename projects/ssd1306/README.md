@@ -99,6 +99,23 @@ The main entry point of the project. Initializes the system, configures peripher
    make run
    ```
 
+Available variants: `example`. Available boards: `max78000fthr`.
+
+```bash
+export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+cd no-OS
+
+# build the project (example on the max78000fthr board)
+python tools/scripts/no_os_build.py build \
+   --project ssd1306 --variant example --board max78000fthr
+
+# build and flash (requires a connected debug probe)
+python tools/scripts/no_os_build.py build \
+   --project ssd1306 --variant example --board max78000fthr \
+   --probe openocd --flash
+```
+
 ## NOTE:
 Using RTOS implementation, one must make sure to include the ```lc_tick_inc()``` function in the system timer callback, in order to have regular updates on the screen. In baremetal solution, like this project, in the file: \
 ```drivers/platform/maxim/max78000/maxim_delay.c``` \
