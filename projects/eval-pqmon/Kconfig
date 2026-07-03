@@ -1,0 +1,31 @@
+menu "eval-pqmon Configuration"
+
+choice EVAL_PQMON_EXAMPLE
+	prompt "Example variant"
+	default EVAL_PQMON_BASIC_EXAMPLE
+
+config EVAL_PQMON_BASIC_EXAMPLE
+	bool "Basic example"
+	depends on IIO
+
+endchoice
+
+choice EVAL_PQMON_INTERFACE
+	prompt "IIO transport interface"
+	default EVAL_PQMON_CONN_USB
+
+config EVAL_PQMON_CONN_USB
+	bool "USB CDC-ACM"
+
+config EVAL_PQMON_CONN_SERIAL
+	bool "UART / RS-485"
+
+config EVAL_PQMON_CONN_ETH
+	bool "Ethernet (W5500)"
+
+config EVAL_PQMON_CONN_T1L
+	bool "Ethernet 10BASE-T1L (ADIN1110)"
+
+endchoice
+
+endmenu
