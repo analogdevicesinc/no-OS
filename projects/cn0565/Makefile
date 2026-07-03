@@ -1,11 +1,8 @@
-# Uncomment to use the desired platform
-# PLATFORM = xilinx
-# PLATFORM = altera
-# PLATFORM = aducm3029
-# PLATFORM = stm32
-CFLAGS += -DENABLE_UART_STDIO
+EXAMPLE ?= eit
 
 include ../../tools/scripts/generic_variables.mk
+
+include ../../tools/scripts/examples.mk
 
 include src.mk
 

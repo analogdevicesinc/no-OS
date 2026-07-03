@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Parameters Definitions.
- *   @author Darius Berghe (darius.berghe@analog.com)
+ *   @file   common_data.c
+ *   @brief  Defines common data to be used by cn0565 examples.
+ *   @author Kister Genesis Jimenez (kister.jimenez@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,48 +30,69 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
 
-#if defined(ADUCM_PLATFORM)
-#include "aducm3029_irq.h"
-#include "aducm3029_gpio_irq.h"
+#include "common_data.h"
 
-#define SPI_DEVICE_ID		0
-#define SPI_CS			1
-#define UART_DEVICE_ID		0
-#define UART_IRQ_ID		ADUCM_UART_INT_ID
-#define UART_BAUDRATE		230400
-#define I2C_DEVICE_ID		0
-#define I2C_BAUDRATE		100000
-#define RESET_PIN		13 // 0.13
-#define GP0_PIN			15 // 0.15
-#define INT_IRQn		GP0_PIN
-#define UART_OPS			&aducm_uart_ops
-#define IRQ_OPS			&aducm_irq_ops
-#define GPIO_IRQ_OPS    	&aducm_gpio_irq_ops
+volatile uint32_t ucInterrupted = 0; /* Flag to indicate interrupt occurred */
 
-#elif defined(STM32_PLATFORM)
-#include "stm32_hal.h"
+void ad5940_int_callback(void *ctx)
+{
+	ucInterrupted = 1;
+}
 
-#define SPI_DEVICE_ID		1
-#define SPI_CS			15
-#define SPI_CS_PORT		0
-#define INT_IRQn		EXTI9_5_IRQn
-#define UART_DEVICE_ID		5
-#define UART_IRQ_ID		UART5_IRQn
-#define UART_OPS			&stm32_uart_ops
-#define IRQ_OPS			&stm32_irq_ops
-#define GPIO_IRQ_OPS    	&stm32_gpio_irq_ops
-#ifdef IIO_SUPPORT
-extern UART_HandleTypeDef 	huart5;
-#endif
-#define UART_BAUDRATE		230400
-#define I2C_DEVICE_ID		1
-#define I2C_BAUDRATE		100000
+uint32_t GetMCUIntFlag(void)
+{
+	return ucInterrupted;
+}
 
-#define RESET_PIN		12 // D.12
-#define GP0_PIN			7 // G.7
-#endif
+uint32_t ClrMCUIntFlag(void)
+{
+	ucInterrupted = 0;
+	return 1;
+}
 
-#endif // __PARAMETERS_H__
+struct no_os_uart_init_param cn0565_uart_ip = {
+	.device_id = UART_DEVICE_ID,
+	.irq_id = UART_IRQ_ID,
+	.asynchronous_rx = true,
+	.baud_rate = UART_BAUDRATE,
+	.size = NO_OS_UART_CS_8,
+	.parity = NO_OS_UART_PAR_NO,
+	.stop = NO_OS_UART_STOP_1_BIT,
+	.extra = UART_EXTRA,
+	.platform_ops = UART_OPS,
+};
+
+struct no_os_i2c_init_param cn0565_i2c_ip = {
+	.device_id = I2C_DEVICE_ID,
+	.max_speed_hz = I2C_BAUDRATE,
+	.slave_address = 0x70,
+	.platform_ops = I2C_OPS,
+	.extra = I2C_EXTRA,
+};
+
+struct ad5940_init_param cn0565_ad5940_ip = {
+	.spi_init = {
+		.device_id = SPI_DEVICE_ID,
+		.max_speed_hz = 3000000,
+		.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+		.mode = NO_OS_SPI_MODE_0,
+		.chip_select = SPI_CS,
+		.platform_ops = SPI_OPS,
+		.extra = SPI_EXTRA,
+	},
+	.reset_gpio_init = {
+		.port = RESET_PORT,
+		.number = RESET_PIN,
+		.pull = NO_OS_PULL_NONE,
+		.platform_ops = GPIO_OPS,
+		.extra = GPIO_RESET_EXTRA,
+	},
+	.gp0_gpio_init = {
+		.port = GP0_PORT,
+		.number = GP0_PIN,
+		.pull = NO_OS_PULL_NONE,
+		.platform_ops = GPIO_OPS,
+		.extra = GPIO_GP0_EXTRA,
+	},
+};

@@ -109,13 +109,27 @@ Please see: https://wiki.analog.com/resources/no-os/build
 No-OS Supported Examples
 ------------------------
 
-The initialization data used in the examples is taken out from the
-`Project Data Source Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/cn0565/src>`__.
+This project is organized around the no-OS ``EXAMPLE`` based build flow.
+Selecting an example at build time (``EXAMPLE=<name>``) chooses which
+application is compiled. The platform ``main()`` is a thin dispatcher that
+calls ``example_main()``, provided by the selected example. The
+initialization data used in the examples is defined in
+`src/common <https://github.com/analogdevicesinc/no-OS/tree/main/projects/cn0565/src/common>`__,
+and the platform-specific macros in
+`src/platform <https://github.com/analogdevicesinc/no-OS/tree/main/projects/cn0565/src/platform>`__.
+
+EIT Example
+^^^^^^^^^^^
+
+The EIT example (``EXAMPLE=eit``, the default) runs the EIT
+application over a UART console. It initializes the AD5940 AFE and the
+ADG2128 switch matrix and exposes an interactive command interface for
+electrical impedance tomography measurements.
 
 IIO Example
 ^^^^^^^^^^^^
 
-The IIO example code for the EVAL-CN0565-ARDZ board in the no-OS project
+The IIO example (``EXAMPLE=eit_iio``) code for the EVAL-CN0565-ARDZ board in the no-OS project
 interfaces with the AD5940 and ADG2128 components to facilitate EIT.
 The code initializes the IIO interfaces for both components,
 configures UART parameters, and sets up an array of devices passed
@@ -140,13 +154,11 @@ The No-OS IIO Application together with the No-OS IIO AD5940 and ADG2128
 drivers take care of all the back-end logic needed to setup the IIO
 server.
 
-In order to build the IIO project, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/cn0565/Makefile>`__:
+To build the IIO example, select it with the ``EXAMPLE`` variable:
 
 .. code-block:: bash
 
-	IIOD=y
+	make EXAMPLE=eit_iio PLATFORM=aducm3029
 
 No-OS Supported Platforms
 -------------------------
@@ -180,9 +192,10 @@ DS2 LED on EVAL-CN0565-ARDZ                     Should turn green to confirm pow
 
 	cd no-OS/projects/cn0565
 
-	export PLATFORM=aducm3029
-	# to build the project
-	make
+	# to build the EIT example (default)
+	make EXAMPLE=eit PLATFORM=aducm3029
+	# to build the IIO example
+	make EXAMPLE=eit_iio PLATFORM=aducm3029
 	# to flash the code
 	make run
 	# to debug the code
