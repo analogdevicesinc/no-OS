@@ -62,7 +62,16 @@
 #include "adi_adrv903x_datainterface.h"
 #include <string.h>
 #include "no_os_axi_io.h"
+#include "no_os_delay.h"
 #include <xil_cache.h>
+
+static inline uint32_t time_delta_ms(struct no_os_time start,
+				     struct no_os_time end)
+{
+	int32_t ds  = (int32_t)(end.s  - start.s);
+	int32_t dus = (int32_t)(end.us - start.us);
+	return (uint32_t)(ds * 1000 + dus / 1000);
+}
 
 /*
  * Must match the FPGA HDL TPL channel count.
@@ -146,6 +155,7 @@ int example_main()
 	struct axi_dmac *rx_dmac = NULL;
 	struct axi_dmac *tx_dmac = NULL;
 	int ret;
+	struct no_os_time t0, t1, t_total;
 
 #ifdef PLATFORM_VERSAL
 	struct no_os_gpio_desc *hmc7044_reset_gpio = NULL;
@@ -173,6 +183,8 @@ int example_main()
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 
+
+	t_total = no_os_get_time();
 	pr_info("ADRV903X DMA example\n");
 
 #ifdef PLATFORM_VERSAL
@@ -650,7 +662,7 @@ int example_main()
 		.base = TX_CORE_BASEADDR,
 		.num_channels = DMA_NUM_CHANNELS,
 		.channels = NULL,
-		.rate = 3,
+		.rate = 0,
 	};
 
 	ret = axi_dac_init_begin(&tx_dac, &tx_dac_init);
@@ -685,6 +697,62 @@ int example_main()
 	no_os_axi_io_write(tx_dac->base, 0x40, 0);
 	no_os_axi_io_write(tx_dac->base, 0x40, NO_OS_BIT(1) | NO_OS_BIT(0));
 
+	/* Readback ADC TPL configuration to verify HDL build */
+	{
+		uint32_t val;
+		pr_info("=== ADC TPL common registers ===\n");
+		for (uint32_t r = 0x0000; r <= 0x0080; r += 4) {
+			no_os_axi_io_read(RX_CORE_BASEADDR, r, &val);
+			if (val)
+				pr_info("  ADC[0x%04x] = 0x%08x\n", r, val);
+		}
+		pr_info("=== ADC TPL per-channel registers (ch0-3) ===\n");
+		for (int ch = 0; ch < 4; ch++) {
+			uint32_t base = 0x0400 + ch * 0x40;
+			for (uint32_t r = base; r < base + 0x40; r += 4) {
+				no_os_axi_io_read(RX_CORE_BASEADDR, r, &val);
+				if (val)
+					pr_info("  ADC[0x%04x] = 0x%08x  (ch%d+0x%02x)\n",
+						r, val, ch, r - base);
+			}
+		}
+		pr_info("=== DAC TPL common registers ===\n");
+		for (uint32_t r = 0x0000; r <= 0x0080; r += 4) {
+			no_os_axi_io_read(tx_dac->base, r, &val);
+			if (val)
+				pr_info("  DAC[0x%04x] = 0x%08x\n", r, val);
+		}
+		pr_info("=== JESD RX synthesis registers ===\n");
+		no_os_axi_io_read(rx_jesd->base, 0x00, &val);
+		pr_info("  JESD_RX[0x00] VERSION    = 0x%08x\n", val);
+		no_os_axi_io_read(rx_jesd->base, 0x10, &val);
+		pr_info("  JESD_RX[0x10] NUM_LANES  = %lu\n", (unsigned long)val);
+		no_os_axi_io_read(rx_jesd->base, 0x14, &val);
+		pr_info("  JESD_RX[0x14] DATA_WIDTH = 0x%08x (synth=%lu tpl=%lu)\n",
+			val, (unsigned long)(1 << (val & 0xFF)),
+			(unsigned long)((val >> 8) & 0xFF));
+		no_os_axi_io_read(rx_jesd->base, 0x18, &val);
+		pr_info("  JESD_RX[0x18] SYNTH_REG1 = 0x%08x (encoder=%lu)\n",
+			val, (unsigned long)((val >> 8) & 0x3));
+		no_os_axi_io_read(rx_jesd->base, 0x210, &val);
+		pr_info("  JESD_RX[0x210] LINK_CONF0 = 0x%08x (F=%lu K*F=%lu)\n",
+			val, (unsigned long)((val >> 16) & 0xFF) + 1,
+			(unsigned long)(val & 0xFFFF) + 1);
+		no_os_axi_io_read(rx_jesd->base, 0x21C, &val);
+		pr_info("  JESD_RX[0x21C] LINK_CONF4 = 0x%08x (beats_per_mf=%lu)\n",
+			val, (unsigned long)val + 1);
+		pr_info("=== JESD TX synthesis registers ===\n");
+		no_os_axi_io_read(tx_jesd->base, 0x10, &val);
+		pr_info("  JESD_TX[0x10] NUM_LANES  = %lu\n", (unsigned long)val);
+		no_os_axi_io_read(tx_jesd->base, 0x14, &val);
+		pr_info("  JESD_TX[0x14] DATA_WIDTH = 0x%08x (synth=%lu tpl=%lu)\n",
+			val, (unsigned long)(1 << (val & 0xFF)),
+			(unsigned long)((val >> 8) & 0xFF));
+		no_os_axi_io_read(tx_jesd->base, 0x18, &val);
+		pr_info("  JESD_TX[0x18] SYNTH_REG1 = 0x%08x (encoder=%lu)\n",
+			val, (unsigned long)((val >> 8) & 0x3));
+	}
+
 	/* ADC IQ correction */
 	axi_adc_write(rx_adc, AXI_ADC_REG_CNTRL, 0);
 	for (int i = 0; i < rx_adc->num_channels; i++) {
@@ -695,6 +763,20 @@ int example_main()
 		axi_adc_write(rx_adc, AXI_ADC_REG_CHAN_CNTRL(i),
 			      AXI_ADC_FORMAT_SIGNEXT | AXI_ADC_FORMAT_ENABLE |
 			      AXI_ADC_ENABLE | AXI_ADC_IQCOR_ENB);
+	}
+
+	/* Verify channel config readback */
+	{
+		uint32_t val;
+		for (int i = 0; i < 4; i++) {
+			axi_adc_read(rx_adc, AXI_ADC_REG_CHAN_CNTRL(i), &val);
+			pr_info("ADC ch%d CNTRL=0x%08x (en=%lu fmt_en=%lu signext=%lu iqcor=%lu)\n",
+				i, val,
+				(unsigned long)(val & 1),
+				(unsigned long)((val >> 4) & 1),
+				(unsigned long)((val >> 6) & 1),
+				(unsigned long)((val >> 9) & 1));
+		}
 	}
 
 	/*
@@ -870,13 +952,47 @@ int example_main()
 	}
 #endif
 
-	pr_info("ADRV903X JESD204 link up\n");
-
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_jesd);
 #ifdef ORX_JESD_BASEADDR
 	axi_jesd204_rx_status_read(orx_jesd);
 #endif
+
+	/* JESD link config readback (after FSM configured them) */
+	{
+		uint32_t val;
+		pr_info("=== JESD RX link config (post-FSM) ===\n");
+		no_os_axi_io_read(rx_jesd->base, 0x210, &val);
+		pr_info("  RX LINK_CONF0 = 0x%08x (octets_per_frame=%lu octets_per_mf=%lu)\n",
+			val, (unsigned long)((val >> 16) & 0xFFFF) + 1,
+			(unsigned long)(val & 0xFFFF) + 1);
+		no_os_axi_io_read(rx_jesd->base, 0x214, &val);
+		pr_info("  RX LINK_CONF1 = 0x%08x\n", val);
+		no_os_axi_io_read(rx_jesd->base, 0x21C, &val);
+		pr_info("  RX LINK_CONF4 = 0x%08x (beats_per_mf=%lu)\n",
+			val, (unsigned long)(val & 0xFFFF) + 1);
+		no_os_axi_io_read(rx_jesd->base, 0x240, &val);
+		pr_info("  RX LINK_CONF2 = 0x%08x\n", val);
+		no_os_axi_io_read(rx_jesd->base, 0x280, &val);
+		pr_info("  RX LINK_STATUS = 0x%08x\n", val);
+		for (int l = 0; l < 4; l++) {
+			no_os_axi_io_read(rx_jesd->base, 0x300 + l * 32, &val);
+			pr_info("  RX lane%d STATUS = 0x%08x\n", l, val);
+			no_os_axi_io_read(rx_jesd->base, 0x304 + l * 32, &val);
+			pr_info("  RX lane%d LATENCY = %lu\n", l, (unsigned long)val);
+		}
+
+		pr_info("=== JESD TX link config (post-FSM) ===\n");
+		no_os_axi_io_read(tx_jesd->base, 0x210, &val);
+		pr_info("  TX LINK_CONF0 = 0x%08x (octets_per_frame=%lu octets_per_mf=%lu)\n",
+			val, (unsigned long)((val >> 16) & 0xFFFF) + 1,
+			(unsigned long)(val & 0xFFFF) + 1);
+		no_os_axi_io_read(tx_jesd->base, 0x21C, &val);
+		pr_info("  TX LINK_CONF4 = 0x%08x (beats_per_mf=%lu)\n",
+			val, (unsigned long)(val & 0xFFFF) + 1);
+		no_os_axi_io_read(tx_jesd->base, 0x280, &val);
+		pr_info("  TX LINK_STATUS = 0x%08x\n", val);
+	}
 
 	/* Check RX/ORX lanes for errors after link-up */
 	{
@@ -901,6 +1017,33 @@ int example_main()
 #endif
 	}
 
+	t1 = no_os_get_time();
+	pr_info("=== JESD204 link verified: %lu ms from start ===\n",
+		(unsigned long)time_delta_ms(t_total, t1));
+
+	/* Set MIO11 HIGH to signal link is up */
+#ifdef PLATFORM_VERSAL
+	{
+		struct xil_gpio_init_param ps_gpio_extra = {
+			.device_id = PS_GPIO_DEVICE_ID,
+			.type = GPIO_PS,
+		};
+		struct no_os_gpio_init_param link_gpio_param = {
+			.number = LINK_STATUS_GPIO_MIO,
+			.platform_ops = &xil_gpio_ops,
+			.extra = &ps_gpio_extra,
+		};
+		struct no_os_gpio_desc *link_gpio = NULL;
+		ret = no_os_gpio_get(&link_gpio, &link_gpio_param);
+		if (!ret) {
+			no_os_gpio_direction_output(link_gpio, NO_OS_GPIO_HIGH);
+			pr_info("MIO11 set HIGH — link up\n");
+		} else {
+			pr_err("MIO11 gpio_get failed: %d\n", ret);
+		}
+	}
+#endif
+
 	/* Check ADRV903x CPU is still responsive after JESD link-up */
 	adi_adrv903x_DevTempData_t devTemp = { 0 };
 	ret = (int)adi_adrv903x_TemperatureGet(phy->palmaDevice, 0, &devTemp);
@@ -909,6 +1052,19 @@ int example_main()
 	else
 		pr_info("ADRV903x alive, temp sensor[0] = %d C\n",
 			devTemp.tempDegreesCelsius[0]);
+
+	/* Set LO to 1 GHz */
+	{
+		adi_adrv903x_LoConfig_t loCfg = { 0 };
+		loCfg.loName = ADI_ADRV903X_LO0;
+		loCfg.loFrequency_Hz = 1500000000ULL;
+		loCfg.loConfigSel = 0;
+		ret = (int)adi_adrv903x_LoFrequencySet(phy->palmaDevice, &loCfg);
+		if (ret)
+			pr_err("LoFrequencySet LO0 failed: %d\n", ret);
+		else
+			pr_info("LO0 set to 1500 MHz\n");
+	}
 
 	/* RX gain: per channel. Valid range 191 (0 dB) to 255 (32 dB). */
 	adi_adrv903x_RxGain_t rxGain;
@@ -989,17 +1145,13 @@ int example_main()
 	}
 
 #else /* DDS mode — use FPGA internal tone generator instead of DMA */
+	axi_dac_data_setup(tx_dac);
 	axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
-	for (int i = 0; i < tx_dac->num_channels; i++) {
-		axi_dac_dds_set_frequency(tx_dac, (i * 2) + 0, 3000000);
-		axi_dac_dds_set_phase(tx_dac, (i * 2) + 0, 90000);
-		axi_dac_dds_set_scale(tx_dac, (i * 2) + 0, 500000);
-		axi_dac_dds_set_frequency(tx_dac, (i * 2) + 1, 3000000);
-		axi_dac_dds_set_phase(tx_dac, (i * 2) + 1, 90000);
-		axi_dac_dds_set_scale(tx_dac, (i * 2) + 1, 500000);
-	}
 	no_os_axi_io_write(tx_dac->base, 0x44, 0x1); /* sync */
 #endif
+
+	/* DDS on all TX outputs */
+
 
 	/* Allow the tone to settle for 0.1 s before capturing RX data */
 	no_os_mdelay(100);
@@ -1038,6 +1190,21 @@ int example_main()
 	}
 
 	Xil_DCacheInvalidateRange(rx_dma_addr, rx_bytes);
+
+	// /* Print 256 sample periods as signed 16-bit, 16 channels per line */
+	// {
+	// 	int16_t *s = (int16_t *)rx_dma_addr;
+	// 	uint32_t num_samples = rx_bytes / (DMA_NUM_CHANNELS * sizeof(int16_t));
+	// 	if (num_samples > 256)
+	// 		num_samples = 256;
+	// 	for (uint32_t n = 0; n < num_samples; n++) {
+	// 		pr_info("S[%03lu]: %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d\n",
+	// 			(unsigned long)n,
+	// 			s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7],
+	// 			s[8], s[9], s[10], s[11], s[12], s[13], s[14], s[15]);
+	// 		s += DMA_NUM_CHANNELS;
+	// 	}
+	// }
 
 	pr_info("DMA RX: address=0x%08lx size=%lu channels=%u bits_per_sample=16 samples_per_ch=%lu\n",
 		rx_dma_addr,

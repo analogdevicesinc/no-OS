@@ -57,6 +57,7 @@
 #include "axi_dmac.h"
 #include "jesd204.h"
 #include "adi_adrv903x_datainterface.h"
+#include "adi_adrv903x_radioctrl.h"
 #include "no_os_axi_io.h"
 #include "xilinx_uart.h"
 #include "iio_axi_adc.h"
@@ -213,10 +214,11 @@ int example_main()
 	struct axi_dmac *rx_dmac = NULL;
 	struct axi_dmac *tx_dmac = NULL;
 	int ret;
-	struct no_os_time t_start, t_end, t_total;
+	struct no_os_time t_total;
 
 #ifdef PLATFORM_VERSAL
 	struct no_os_gpio_desc *hmc7044_reset_gpio = NULL;
+	struct no_os_gpio_desc *link_status_gpio = NULL;
 	struct hmc7044_chan_spec hmc7044_channels[5];
 	struct hmc7044_init_param hmc7044_param = { 0 };
 	struct hmc7044_dev *hmc7044_device = NULL;
@@ -237,8 +239,27 @@ int example_main()
 
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
-	pr_info("hello\n");
-	pr_info("ADRV903X IIO example\n");
+
+#ifdef PLATFORM_VERSAL
+	{
+		struct xil_gpio_init_param ps_gpio_extra = {
+			.device_id = PS_GPIO_DEVICE_ID,
+			.type = GPIO_PS,
+		};
+		struct no_os_gpio_init_param mio11_param = {
+			.number = LINK_STATUS_GPIO_MIO,
+			.platform_ops = &xil_gpio_ops,
+			.extra = &ps_gpio_extra,
+		};
+		ret = no_os_gpio_get(&link_status_gpio, &mio11_param);
+		if (!ret) {
+			no_os_gpio_direction_output(link_status_gpio, NO_OS_GPIO_HIGH);
+			// pr_info("MIO11 set HIGH at boot\n");
+		} else {
+			pr_err("MIO11 gpio_get failed: %d\n", ret);
+		}
+	}
+#endif
 	t_total = no_os_get_time();
 
 #ifdef PLATFORM_VERSAL
@@ -251,7 +272,6 @@ int example_main()
 	 */
 
 	/* HMC7044 hardware reset pulse (active-high reset) */
-	t_start = no_os_get_time();
 	ret = no_os_gpio_get(&hmc7044_reset_gpio, &clkchip_gpio_init_param);
 	if (ret) {
 		pr_err("HMC7044 reset GPIO get failed: %d\n", ret);
@@ -264,7 +284,7 @@ int example_main()
 		no_os_gpio_remove(hmc7044_reset_gpio);
 		return ret;
 	}
-	no_os_mdelay(10);
+	no_os_mdelay(1);
 	/* De-assert reset (drive LOW) */
 	ret = no_os_gpio_set_value(hmc7044_reset_gpio, NO_OS_GPIO_LOW);
 	if (ret) {
@@ -272,7 +292,7 @@ int example_main()
 		no_os_gpio_remove(hmc7044_reset_gpio);
 		return ret;
 	}
-	no_os_mdelay(20);
+	no_os_mdelay(1);
 
 	memset(hmc7044_channels, 0, sizeof(hmc7044_channels));
 
@@ -316,7 +336,7 @@ int example_main()
 	hmc7044_param.pfd1_limit = HMC7044_PFD1_LIMIT_HZ;
 	hmc7044_param.sysref_timer_div = HMC7044_SYSREF_TIMER_DIV;
 	hmc7044_param.pulse_gen_mode = HMC7044_PULSE_GEN_8_PULSE;
-	hmc7044_param.sync_pin_mode = HMC7044_SYNC_PIN_SYNC;
+	hmc7044_param.sync_pin_mode = HMC7044_SYNC_PIN_DISABLED;
 	hmc7044_param.high_performance_mode_clock_dist_en = false;
 	hmc7044_param.in_buf_mode[0] = 0x06;
 	hmc7044_param.in_buf_mode[1] = 0x06;
@@ -335,16 +355,11 @@ int example_main()
 		return ret;
 	}
 
-	t_end = no_os_get_time();
-	pr_info("HMC7044 init done (%lu ms)\n",
-		(unsigned long)time_delta_ms(t_start, t_end));
-
 	/*
 	 * Reset the Versal GT PLL + datapath so the GT re-locks its PLL
 	 * to the HMC7044 reference clock that just became available.
 	 * Without this, the first cold boot often fails (GT CDR not locked).
 	 */
-	t_start = no_os_get_time();
 	{
 		struct no_os_gpio_desc *gt_rst = NULL;
 		struct no_os_gpio_desc *gt_done = NULL;
@@ -379,9 +394,6 @@ int example_main()
 				no_os_gpio_remove(gt_done);
 			}
 		}
-		t_end = no_os_get_time();
-		pr_info("GT PLL reset done (%lu ms)\n",
-			(unsigned long)time_delta_ms(t_start, t_end));
 	}
 
 #else /* ZynqMP */
@@ -617,7 +629,6 @@ int example_main()
 	rx_jesd_init.lane_clk = rx_adxcvr->clk_out;
 #endif
 
-	t_start = no_os_get_time();
 	ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
 	if (ret) {
 		pr_err("axi_jesd204_tx_init() failed: %d\n", ret);
@@ -633,9 +644,6 @@ int example_main()
 		pr_err("axi_jesd204_rx_init() failed: %d\n", ret);
 		goto error_tx_jesd;
 	}
-	t_end = no_os_get_time();
-	pr_info("JESD204 TX+RX init: %lu ms\n",
-		(unsigned long)time_delta_ms(t_start, t_end));
 
 	/*
 	 * ----------------------------------------------------------------
@@ -654,11 +662,7 @@ int example_main()
 	init_param.rx_gain_table_file = ADRV903X_RX_GAIN_TABLE_FILE;
 	init_param.rx_gain_table_mask = ADRV903X_RX_GAIN_TABLE_MASK;
 
-	t_start = no_os_get_time();
 	ret = adrv903x_init(&phy, &init_param);
-	t_end = no_os_get_time();
-	pr_info("adrv903x_init: %lu ms\n",
-		(unsigned long)time_delta_ms(t_start, t_end));
 	if (ret) {
 		pr_err("adrv903x_init() failed: %d\n", ret);
 		goto error_rx_jesd;
@@ -691,7 +695,6 @@ int example_main()
 		.rate = 0,	/* AXI DAC RATECNTRL: 0 = 1:1 clock-to-sample ratio */
 	};
 
-	t_start = no_os_get_time();
 	ret = axi_dac_init(&tx_dac, &tx_dac_init);
 	if (ret) {
 		pr_err("axi_dac_init() failed: %d\n", ret);
@@ -703,9 +706,6 @@ int example_main()
 		pr_err("axi_dac_set_datasel() failed: %d\n", ret);
 		goto error_tx_dac;
 	}
-	t_end = no_os_get_time();
-	pr_info("AXI DAC init: %lu ms\n",
-		(unsigned long)time_delta_ms(t_start, t_end));
 
 	/*
 	 * ----------------------------------------------------------------
@@ -714,7 +714,6 @@ int example_main()
 	 * Linux adrv903x_conv.c adrv903x_post_setup().
 	 * ----------------------------------------------------------------
 	 */
-	t_start = no_os_get_time();
 	struct axi_adc_init rx_adc_init = {
 		.name = "rx_adc",
 		.base = RX_CORE_BASEADDR,
@@ -741,19 +740,6 @@ int example_main()
 			      AXI_ADC_ENABLE | AXI_ADC_IQCOR_ENB);
 	}
 
-#ifdef PLATFORM_VERSAL
-	{
-		uint32_t do_mem_lsb, do_mem_msb;
-		no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR,
-				  AXI_DO_REG_MEMORY_SIZE_LSB, &do_mem_lsb);
-		no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR,
-				  AXI_DO_REG_MEMORY_SIZE_MSB, &do_mem_msb);
-		g_rx_do_mem_size = (uint64_t)do_mem_lsb |
-				   ((uint64_t)(do_mem_msb & 0x3) << 32);
-		pr_info("RX data offload: BRAM size = %lu bytes\n",
-			(unsigned long)g_rx_do_mem_size);
-	}
-#endif
 	/* RX data offload — normal mode (store-and-forward) */
 	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR,
 			   AXI_DO_REG_CONTROL, 0x0);
@@ -762,9 +748,6 @@ int example_main()
 	no_os_mdelay(1);
 	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR,
 			   AXI_DO_REG_RESETN_OFFLOAD, 0x1);
-	t_end = no_os_get_time();
-	pr_info("AXI ADC init + data offload: %lu ms\n",
-		(unsigned long)time_delta_ms(t_start, t_end));
 
 	/*
 	 * ----------------------------------------------------------------
@@ -835,11 +818,7 @@ int example_main()
 		goto error_rx_dmac;
 	}
 
-	t_start = no_os_get_time();
 	ret = jesd204_fsm_start(topology, JESD204_LINKS_ALL);
-	t_end = no_os_get_time();
-	pr_info("jesd204_fsm_start: %lu ms\n",
-		(unsigned long)time_delta_ms(t_start, t_end));
 	if (ret) {
 		pr_err("jesd204_fsm_start() failed: %d\n", ret);
 		goto error_fsm;
@@ -848,7 +827,6 @@ int example_main()
 	/* Fast TX deframer retry: if the ADRV903x deframer didn't sync,
 	 * pulse TX GT DP reset and re-enable the TX JESD link. */
 #ifdef PLATFORM_VERSAL
-	t_start = no_os_get_time();
 	if (tx_jesd->gt_reset_dp) {
 		adi_adrv903x_DeframerStatus_v2_t dfrmSt = { 0 };
 		int tx_retry;
@@ -879,24 +857,41 @@ int example_main()
 		}
 		adi_adrv903x_DeframerStatusGet_v2(phy->palmaDevice,
 			ADI_ADRV903X_DEFRAMER_0, &dfrmSt);
-		pr_info("TX deframer linkState 0x%X after %d retries\n",
-			dfrmSt.linkState, tx_retry);
 		for (int i = 0; i < 4; i++)
-			pr_info("TX deframer lane%d status 0x%X\n",
-				i, dfrmSt.laneStatus[i]);
+			pr_debug("TX deframer lane%d status 0x%X\n",
+				 i, dfrmSt.laneStatus[i]);
 		if (!(dfrmSt.linkState & 0x2))
 			pr_err("TX deframer failed after %d retries\n",
 			       tx_retry);
 	}
-	t_end = no_os_get_time();
-	pr_info("TX deframer retry: %lu ms\n",
-		(unsigned long)time_delta_ms(t_start, t_end));
 #endif
 
-	t_end = no_os_get_time();
+	{
+	struct no_os_time t_end = no_os_get_time();
 	pr_info("=== Total init: %lu ms ===\n",
 		(unsigned long)time_delta_ms(t_total, t_end));
-	pr_info("ADRV903X JESD204 link up\n");
+	}
+
+	/* Set MIO11 HIGH to signal link is up */
+#ifdef PLATFORM_VERSAL
+	if (link_status_gpio) {
+		no_os_gpio_set_value(link_status_gpio, NO_OS_GPIO_LOW);
+		pr_info("MIO11 set LOW — link up\n");
+	}
+#endif
+
+	/* Set LO to 1.5 GHz */
+	{
+		adi_adrv903x_LoConfig_t loCfg = { 0 };
+		loCfg.loName = ADI_ADRV903X_LO0;
+		loCfg.loFrequency_Hz = 1500000000ULL;
+		loCfg.loConfigSel = 0;
+		ret = (int)adi_adrv903x_LoFrequencySet(phy->palmaDevice, &loCfg);
+		if (ret)
+			pr_err("LoFrequencySet LO0 failed: %d\n", ret);
+		else
+			pr_debug("LO0 set to 1500 MHz\n");
+	}
 
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_jesd);
@@ -1003,7 +998,6 @@ int example_main()
 	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
 	app_init_param.uart_init_params = iio_uart_ip;
 
-	pr_info("iio_app_init — UART switches to 921600 after this\n");
 	/* Allow previous log messages to flush before IIO takes over UART */
 	no_os_mdelay(100);
 

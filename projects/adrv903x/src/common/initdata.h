@@ -38,8 +38,10 @@
 #ifndef INITDATA_H_
 #define INITDATA_H_
 
+#include "adi_adrv903x_types.h"
 #include "adi_adrv903x_utilities_types.h"
 
 extern adi_adrv903x_PostMcsInit_t utilityInit;
+extern adi_adrv903x_Init_t deviceInitStruct;
 
 #endif /* INITDATA_H_ */
