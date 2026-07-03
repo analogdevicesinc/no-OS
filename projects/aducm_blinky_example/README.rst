@@ -32,15 +32,21 @@ Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
 No-OS Supported Examples
 ------------------------
 
-The initialization data used in the examples is taken out from the
-`Project Source Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/aducm_blinky_example/app_src>`__.
+This project is organized around the no-OS ``EXAMPLE`` based build flow.
+Selecting an example at build time (``EXAMPLE=<name>``) chooses which
+application is compiled. The platform ``main()`` is a thin dispatcher that
+calls ``example_main()``, provided by the selected example. The
+initialization data used in the examples is defined in
+`src/common <https://github.com/analogdevicesinc/no-OS/tree/main/projects/aducm_blinky_example/src/common>`__,
+and the platform-specific macros in
+`src/platform <https://github.com/analogdevicesinc/no-OS/tree/main/projects/aducm_blinky_example/src/platform>`__.
 
-Application example
-~~~~~~~~~~~~~~~~~~~
+Basic Example
+~~~~~~~~~~~~~
 
-This is the default example which initializes the GPIO pins for the
-on-board LEDs and toggles them in a binary count pattern for a set
-number of iterations.
+This is the default example (``EXAMPLE=basic_example``) which initializes
+the GPIO pins for the on-board LEDs (DS3 green, DS4 blue) and toggles them
+in a blink pattern.
 
 No-OS Supported Platforms
 -------------------------
@@ -66,7 +72,7 @@ Build Command
 
    # to delete current build
    make reset
-   # to build the project
-   make PLATFORM=aducm3029
+   # to build the project (EXAMPLE defaults to basic_example)
+   make EXAMPLE=basic_example PLATFORM=aducm3029
    # to flash the code
    make run
