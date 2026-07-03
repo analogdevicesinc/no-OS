@@ -413,12 +413,10 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		if elf.is_file():
 			elf.unlink()
 
-		# Delegate the actual build to no_os_build.py, invoked as a subprocess:
-		# the CI console shows the invocation (the " -> " bullet from run_cmd)
-		# while its spinner/output are redirected into the per-combination log.
+		# Delegate the actual build to no_os_build.py. Suppress its
+		# spinner/summary (not useful on CI); the real cmake output lands in
+		# build.log inside the build dir and is copied into dst_log below.
 		dst_log = os.path.join(log_dir, '%s_%s_%s_%s.txt' % (project, platform, variant, board))
-		log_file = dst_log
-		open(log_file, 'w').close()
 		jobs = int(multiprocessing.cpu_count() / 2) or 1
 		# Pass an absolute --build-dir: no_os_build anchors a relative one to the
 		# repo root, which would not match the build_dir we clean/probe here.
@@ -427,22 +425,35 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 			     " --build-dir %s --jobs %d --probe openocd --fresh"
 			     % (noos, project, variant, board,
 				os.path.abspath(build_dir_base), jobs))
-		err = run_cmd(build_cmd)
+		log(build_cmd)
+		sys.stdout.flush()
+		err = os.system(build_cmd + ' > /dev/null 2>&1')
 		success = err == 0
 
 		os.environ.clear()
 		os.environ.update(env)
 
-		# run_cmd already logged ERROR + the log path on a non-zero exit; only
-		# the "build reported success but produced no .elf" case (a link failure
-		# hidden in a custom command) needs to be flagged here.
+		# Copy the cmake configure+build log (written by no_os_build into the
+		# build dir) into the per-combo CI log artifact.
+		cmake_log = build_dir / 'build.log'
+		if cmake_log.is_file():
+			import shutil
+			shutil.copy2(str(cmake_log), dst_log)
+		else:
+			open(dst_log, 'w').close()
+
+		if not success:
+			log_err("ERROR")
+			log("See log %s" % dst_log)
+			ERR = 1
+
+		# The final link + .hex/.bin runs as a cmake custom command whose failure
+		# does NOT propagate as a non-zero exit. Check for the .elf explicitly.
 		if success and not elf.is_file():
 			log_err("ERROR")
 			log("See log %s -- no .elf produced (link likely failed)" % dst_log)
 			ERR = 1
 			success = False
-
-		log_file = DEFAULT_LOG_FILE
 
 		if not success:
 			ERR = 1
