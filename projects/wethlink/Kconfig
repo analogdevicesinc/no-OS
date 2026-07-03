@@ -1,0 +1,17 @@
+menu "wethlink Configuration"
+
+choice WETHLINK_EXAMPLE
+	prompt "Example variant"
+	default WETHLINK_WETHLINK_REVB_EXAMPLE
+
+config WETHLINK_WETHLINK_REVB_EXAMPLE
+	bool "WEthLink RevB (HW_VERSION=1)"
+	depends on IIO
+
+config WETHLINK_WETHLINK_REVA_EXAMPLE
+	bool "WEthLink RevA (HW_VERSION=0)"
+	depends on IIO
+
+endchoice
+
+endmenu

@@ -20,6 +20,31 @@ config ADIN1320
       Enable the ADIN1320 Ethernet PHY driver. Communicates with the PHY
       over MDIO carried on a SPI bus (MDIO_SPI).
 
+config NET_ADIN1300
+    depends on GPIO
+    bool "Enable the ADIN1300 driver"
+    default n
+
+config NET_IIO_ADIN1300
+    select NET_ADIN1300
+    bool "Enable the ADIN1300 IIO driver"
+    default n
+
+config NET_MAX24287
+    depends on GPIO
+    bool "Enable the MAX24287 driver"
+    default n
+
+config NET_IIO_MAX24287
+    select NET_MAX24287
+    bool "Enable the MAX24287 IIO driver"
+    default n
+
+config NET_MDIO_BITBANG
+    depends on GPIO
+    bool "Enable the MDIO bit-bang driver"
+    default n
+
 config MDIO_SPI
     depends on SPI
     select MDIO
