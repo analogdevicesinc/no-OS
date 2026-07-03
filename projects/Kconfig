@@ -96,4 +96,5 @@ source "projects/demo_esp/Kconfig"
 source "projects/eval-ltc4306/Kconfig"
 source "projects/max14916/Kconfig"
 source "projects/max31827-evkit/Kconfig"
+source "projects/ad-acevsecrdset-sl/Kconfig"
 endmenu
