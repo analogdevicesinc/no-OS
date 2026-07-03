@@ -1,0 +1,12 @@
+menu "ssd1306 Configuration"
+
+choice SSD1306_EXAMPLE
+	prompt "Example variant"
+	default SSD1306_EXAMPLE_EXAMPLE
+
+config SSD1306_EXAMPLE_EXAMPLE
+	bool "Basic example"
+
+endchoice
+
+endmenu
