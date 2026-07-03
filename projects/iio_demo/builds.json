@@ -17,10 +17,5 @@
         "pulsar_adc_zed"
       ]
     }
-  },
-  "pico": {
-    "iio_example": {
-      "flags": "CONFIG_IIO_DEMO_IIO_EXAMPLE=y CONFIG_IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE=n CONFIG_IIO_DEMO_IIO_TIMER_TRIGGER_EXAMPLE=n"
-    }
   }
 }
