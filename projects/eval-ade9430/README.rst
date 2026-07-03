@@ -155,3 +155,65 @@ Build Configuration Examples
     registering in the cloud, followed by encrypted connection and telemetry
     data publishing into the Azure IoT Hub, including the RTC default date and
     time set required for obtaining relevant timestamp values.
+
+Building with CMake (no-os-build)
+----------------------------------
+
+Use ``no_os_build.py`` to build any of the 8 variants. Each variant is
+selected by passing its ``.conf`` name as ``--variant``:
+
+.. code-block:: bash
+
+    python3 tools/scripts/no_os_build.py build \
+        --project eval-ade9430 \
+        --variant basic_example \
+        --board max32650fthr
+
+.. code-block:: bash
+
+    python3 tools/scripts/no_os_build.py build \
+        --project eval-ade9430 \
+        --variant basic_example_hw_reset \
+        --board max32650fthr
+
+.. code-block:: bash
+
+    python3 tools/scripts/no_os_build.py build \
+        --project eval-ade9430 \
+        --variant iot_example \
+        --board max32650fthr
+
+.. code-block:: bash
+
+    python3 tools/scripts/no_os_build.py build \
+        --project eval-ade9430 \
+        --variant iot_example_rtc \
+        --board max32650fthr
+
+.. code-block:: bash
+
+    python3 tools/scripts/no_os_build.py build \
+        --project eval-ade9430 \
+        --variant iot_example_azure_iot_hub \
+        --board max32650fthr
+
+.. code-block:: bash
+
+    python3 tools/scripts/no_os_build.py build \
+        --project eval-ade9430 \
+        --variant iot_example_azure_iot_hub_rtc \
+        --board max32650fthr
+
+.. code-block:: bash
+
+    python3 tools/scripts/no_os_build.py build \
+        --project eval-ade9430 \
+        --variant iot_example_azure_iot_hub_dps \
+        --board max32650fthr
+
+.. code-block:: bash
+
+    python3 tools/scripts/no_os_build.py build \
+        --project eval-ade9430 \
+        --variant iot_example_azure_iot_hub_dps_rtc \
+        --board max32650fthr

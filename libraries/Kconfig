@@ -56,6 +56,15 @@ config MBEDTLS_VERSION
 	  This version will be checked against the submodule,
 	  then the global cache, then fetched if not found.
 
+config MBEDTLS_CONFIG_FILE
+	string "Path to project mbedTLS config header"
+	depends on MBEDTLS
+	help
+	  Path to a project-specific mbedTLS configuration header, wired up as
+	  MBEDTLS_CONFIG_FILE so mbedTLS includes it instead of its default
+	  config.h. Can be absolute or relative to CMAKE_SOURCE_DIR. Leave empty
+	  to use the stock configuration.
+
 config MQTT
 	bool "Enable MQTT (Paho Embedded-C)"
 	default n

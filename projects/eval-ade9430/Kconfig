@@ -1,0 +1,40 @@
+menu "eval-ade9430 Configuration"
+
+choice EVAL_ADE9430_EXAMPLE
+	prompt "Example variant"
+	default EVAL_ADE9430_BASIC_EXAMPLE
+
+config EVAL_ADE9430_BASIC_EXAMPLE
+	bool "Basic example"
+
+config EVAL_ADE9430_IOT_EXAMPLE
+	bool "IoT (MQTT/Azure) example"
+
+endchoice
+
+config EVAL_ADE9430_HW_RESET
+	bool "Enable hardware reset pin sequence on startup"
+	default n
+	depends on EVAL_ADE9430_BASIC_EXAMPLE
+	help
+	  Drive the ADE9430 reset pin before SPI access. Required on
+	  EVAL-PQMON boards where the reset line is wired to the MCU.
+
+config EVAL_ADE9430_IOT_AZURE
+	bool "Use Azure IoT Hub (mbedTLS + azure-sdk-for-c)"
+	default n
+	depends on EVAL_ADE9430_IOT_EXAMPLE
+	select MBEDTLS
+	select AZURE
+
+config EVAL_ADE9430_IOT_RTC
+	bool "Set RTC to default date/time on boot"
+	default n
+	depends on EVAL_ADE9430_IOT_EXAMPLE
+
+config EVAL_ADE9430_IOT_DPS
+	bool "Use Azure Device Provisioning Service"
+	default n
+	depends on EVAL_ADE9430_IOT_AZURE
+
+endmenu
