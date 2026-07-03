@@ -291,7 +291,7 @@ def append_log(log_path, section, result):
         f.write("\n")
 
 
-def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None, flash=False):
+def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None, flash=False, fresh=False):
     """Run cmake configure + build (and optionally flash) for a single combination.
 
     Returns (combo, success, detail). On failure, detail is the error message.
@@ -322,6 +322,8 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
         "--preset", preset,
         f"-DPROJECT_DEFCONFIG={defconfig}",
     ]
+    if fresh:
+        configure_cmd.append("--fresh")
     if probe:
         configure_cmd.append(f"-DPROBE={probe}")
 
@@ -471,6 +473,8 @@ def cmd_build(args, repo_root, presets):
                     "--preset", combo["preset"],
                     f"-DPROJECT_DEFCONFIG={defconfig}",
                 ]
+                if args.fresh:
+                    configure_cmd.append("--fresh")
                 if args.probe:
                     configure_cmd.append(f"-DPROBE={args.probe}")
 
@@ -608,7 +612,7 @@ def cmd_build(args, repo_root, presets):
 
             combo_result, success, msg = run_build(
                 repo_root, combo, build_dir_base, args.jobs, args.clean, args.dry_run,
-                probe=args.probe, flash=args.flash,
+                probe=args.probe, flash=args.flash, fresh=args.fresh,
             )
 
             if args.dry_run:
@@ -666,6 +670,9 @@ def main():
     )
     build_parser.add_argument(
         "--clean", action="store_true", help="Remove build dir before configure"
+    )
+    build_parser.add_argument(
+        "--fresh", action="store_true", help="Pass --fresh to cmake configure (removes CMakeCache.txt and CMakeFiles/)"
     )
     build_parser.add_argument(
         "--dry-run", action="store_true", help="Print cmake commands without executing"
