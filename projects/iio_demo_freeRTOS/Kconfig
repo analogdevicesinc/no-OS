@@ -1,0 +1,13 @@
+menu "iio_demo_freeRTOS Configuration"
+
+choice IIO_DEMO_FREERTOS_EXAMPLE
+	prompt "Example variant"
+	default IIO_DEMO_FREERTOS_IIO_EXAMPLE
+
+config IIO_DEMO_FREERTOS_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+endchoice
+
+endmenu

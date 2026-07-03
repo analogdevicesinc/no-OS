@@ -63,6 +63,8 @@ if(NOT TARGET freertos_kernel)
     add_subdirectory("${FREERTOS_SOURCE_DIR}" "${FREERTOS_BINARY_DIR}" EXCLUDE_FROM_ALL)
 endif()
 
-target_link_libraries(no-os freertos_kernel)
+target_link_libraries(no-os PUBLIC freertos_kernel)
+
+target_compile_definitions(no-os PUBLIC FREERTOS)
 
 message(STATUS "FreeRTOS configured from: ${FREERTOS_SOURCE_DIR}")
