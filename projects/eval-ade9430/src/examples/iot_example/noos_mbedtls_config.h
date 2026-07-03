@@ -92,6 +92,9 @@
 /* Minimal requirements */
 /* Hardware entropy is used (trng.h) */
 #define MBEDTLS_NO_PLATFORM_ENTROPY
+/* RNG is supplied externally via the hardware TRNG (mbedtls_ssl_conf_rng), so
+ * ECP does not need an internal DRBG. Required by mbedTLS >= 2.28 check_config. */
+#define MBEDTLS_ECP_NO_INTERNAL_RNG
 /* Needed in order to use TLS features */
 #define MBEDTLS_SSL_TLS_C
 /* TLS Client features */
