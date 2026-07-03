@@ -1,7 +1,7 @@
 {
   "aducm3029": {
-    "simple":  {
-      "flags" : ""
+    "iio_example": {
+      "flags": "EXAMPLE=iio_example"
     }
   }
 }
