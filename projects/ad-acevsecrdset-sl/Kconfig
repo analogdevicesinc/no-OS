@@ -1,0 +1,12 @@
+menu "ad-acevsecrdset-sl Configuration"
+
+choice AD_ACEVSECRDSET_SL_EXAMPLE
+	prompt "Example variant"
+	default AD_ACEVSECRDSET_SL_STOUT_APPLICATION_EXAMPLE
+
+config AD_ACEVSECRDSET_SL_STOUT_APPLICATION_EXAMPLE
+	bool "Stout application example"
+
+endchoice
+
+endmenu

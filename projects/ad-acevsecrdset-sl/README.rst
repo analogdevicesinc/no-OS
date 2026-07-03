@@ -154,3 +154,22 @@ To flash the MAX32625PICO with the correct firmware image:
    make PLATFORM=maxim TARGET=max32655
    # to flash the code
    make run PLATFORM=maxim TARGET=max32655
+
+Available variants: ``stout_application``.
+Available boards: ``max32655fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
+.. code-block:: bash
+
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (stout_application example on the max32655fthr board)
+   python tools/scripts/no_os_build.py build \
+      --project ad-acevsecrdset-sl --variant stout_application --board max32655fthr
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad-acevsecrdset-sl --variant stout_application --board max32655fthr \
+      --probe openocd --flash
