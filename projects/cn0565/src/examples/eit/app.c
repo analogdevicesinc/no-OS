@@ -44,6 +44,7 @@
 #include "mux_board.h"
 #include "app.h"
 #include "parameters.h"
+#include "common_data.h"
 
 extern struct no_os_uart_desc *uart;
 
@@ -55,7 +56,6 @@ float SinFreqVal = 0.0;
 unsigned int SinFreqValUINT = 0;
 unsigned int runningCmd = 0;
 
-volatile uint32_t ucInterrupted = 0; /* Flag to indicate interrupt occurred */
 extern volatile unsigned char szInSring[32];
 
 /* Since the reset pin is mapped to GPIO of AD5940, Access it through
@@ -67,17 +67,6 @@ int ADG2128_SwRst(struct ad5940_dev *dev)
 		return ret;
 	no_os_udelay(1);
 	return ad5940_WriteReg(dev, REG_AGPIO_GP0OUT, AGPIO_Pin1);
-}
-
-uint32_t GetMCUIntFlag(void)
-{
-	return ucInterrupted;
-}
-
-uint32_t ClrMCUIntFlag(void)
-{
-	ucInterrupted = 0;
-	return 1;
 }
 
 void configMeasurement(struct measurement_config *oldCfg,

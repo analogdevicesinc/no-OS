@@ -1,3 +1,16 @@
 menu "CN0565 Configuration"
 
+choice CN0565_EXAMPLE
+	prompt "Example variant"
+	default CN0565_EIT_EXAMPLE
+
+config CN0565_EIT_EXAMPLE
+	bool "Basic EIT example"
+
+config CN0565_EIT_IIO_EXAMPLE
+	bool "IIO EIT example"
+	depends on IIO
+
+endchoice
+
 endmenu
