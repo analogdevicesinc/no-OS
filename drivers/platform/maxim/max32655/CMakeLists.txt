@@ -8,7 +8,10 @@ target_include_directories(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source
 
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/DMA/dma_reva.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/DMA/dma_me17.c)
-target_include_directories(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/DMA)
+# PUBLIC: Source/ADC's adc_reva.h (exposed below) pulls in dma_reva_regs.h and
+# dma_regs.h, so projects that include adc_reva.h directly (ad-acevsecrdset-sl)
+# need Source/DMA on their include path too.
+target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Source/DMA)
 
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/UART/uart_me17.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/UART/uart_revb.c)
@@ -44,6 +47,10 @@ target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/TMR/tmr_me1
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/GPIO/gpio_me17.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/GPIO/gpio_reva.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/GPIO/gpio_common.c)
+
+target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/ADC/adc_me17.c)
+target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/ADC/adc_reva.c)
+target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Source/ADC)
 
 target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Include/RTC)
 target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Include/ICC)
