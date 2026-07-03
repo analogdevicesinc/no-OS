@@ -101,4 +101,5 @@ source "projects/iio_demo_freeRTOS/Kconfig"
 source "projects/ssd1306/Kconfig"
 source "projects/wethlink/Kconfig"
 source "projects/eval-ade9430/Kconfig"
+source "projects/eval-pqmon/Kconfig"
 endmenu
