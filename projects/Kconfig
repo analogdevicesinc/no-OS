@@ -99,4 +99,5 @@ source "projects/max31827-evkit/Kconfig"
 source "projects/ad-acevsecrdset-sl/Kconfig"
 source "projects/iio_demo_freeRTOS/Kconfig"
 source "projects/ssd1306/Kconfig"
+source "projects/wethlink/Kconfig"
 endmenu
