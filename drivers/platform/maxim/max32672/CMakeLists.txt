@@ -11,7 +11,7 @@ target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/DMA/dma_me2
 target_include_directories(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/DMA)
 
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/UART/uart_me21.c)
-target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/UART/uart_reva.c)
+target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/UART/uart_revb.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/UART/uart_common.c)
 target_include_directories(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/UART)
 
@@ -30,7 +30,7 @@ target_include_directories(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source
 
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/RTC/rtc_me21.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/RTC/rtc_reva.c)
-target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/TMR/tmr_reva.c)
+target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/TMR/tmr_revb.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/TMR/tmr_common.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/TMR/tmr_me21.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/GPIO/gpio_me21.c)
