@@ -15,6 +15,8 @@
 #include "test_framework.h"
 #include "tests/test_gpio.h"
 #include "tests/test_spi.h"
+#include "tests/test_timer.h"
+#include "tests/test_dma.h"
 /**
  * @brief Common function signature for a top-level test group.
  */
@@ -42,6 +44,8 @@ struct test_entry {
 static const struct test_entry tests[] = {
 	{ 0, "GPIO", test_gpio, false },
 	{ 0, "SPI", test_spi, false },
+	{ 0, "Timer", test_timer, false },
+	{ 0, "DMA", test_dma, false },
 };
 
 #define NUM_TESTS	(sizeof(tests) / sizeof(tests[0]))
@@ -64,6 +68,7 @@ static int run_all_tests(void)
 		if (tests[i].skip_all)
 			continue;
 
+		TEST_SECTION(tests[i].name);
 		ret = tests[i].func();
 		if (ret != 0 && first_error == 0)
 			first_error = ret;
