@@ -1,5 +1,16 @@
 menu "Network Configuration"
-	depends on LWIP || W5500
+	depends on LWIP || W5500 || WIFI
+
+config NO_OS_NET
+	bool "Use the new no_os_net / no_os_socket interfaces"
+	default n
+	depends on LWIP || W5500 || WIFI
+	help
+	  Select the new networking HAL (no_os_net + no_os_socket) instead of
+	  the legacy network_interface / tcp_socket stack. Mutually exclusive
+	  with the legacy path: when enabled, the matching adapter (network/lwip,
+	  network/w5500 or network/wifi) is compiled and the legacy
+	  NO_OS_*_NETWORKING macro is left undefined.
 
 config NO_OS_STATIC_IP
 	bool "Use static IP address"

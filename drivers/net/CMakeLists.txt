@@ -20,3 +20,6 @@ endif()
 
 no_os_sources_ifdef(CONFIG_MDIO_SPI ${CMAKE_CURRENT_SOURCE_DIR}/mdio_spi/mdio_spi.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/mdio_spi)
+
+no_os_sources_ifdef(CONFIG_W5500 ${CMAKE_CURRENT_SOURCE_DIR}/w5500/w5500.c)
+no_os_include_dir_ifdef(CONFIG_W5500 ${CMAKE_CURRENT_SOURCE_DIR}/w5500)

@@ -40,7 +40,11 @@ target_include_directories(lwipallapps PRIVATE ${NO_OS_DIR}/libraries/lwip/confi
 target_include_directories(lwipallapps PRIVATE ${NO_OS_DIR}/libraries/lwip)
 target_include_directories(lwipallapps PRIVATE ${LWIP_INCLUDE_DIRS})
 
-target_compile_definitions(no-os PUBLIC -DNO_OS_LWIP_NETWORKING=1)
+if(CONFIG_NO_OS_NET)
+    target_compile_definitions(no-os PUBLIC -DNO_OS_NET=1)
+else()
+    target_compile_definitions(no-os PUBLIC -DNO_OS_LWIP_NETWORKING=1)
+endif()
 target_compile_definitions(no-os PUBLIC -DDISABLE_SECURE_SOCKET=1)
 
 target_link_libraries(no-os PUBLIC lwipallapps lwipcore)
