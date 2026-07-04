@@ -45,11 +45,6 @@
 #include "lwip_socket.h"
 #endif
 
-#if defined(NO_OS_W5500_NETWORKING)
-#include "tcp_socket.h"
-#include "w5500_network.h"
-#endif
-
 #define IIO_APP_DEVICE(_name, _dev, _dev_descriptor, _read_buff, _write_buff, _default_trigger_id) {\
 	.name = _name,\
 	.dev = _dev,\
@@ -143,10 +138,6 @@ struct iio_app_init_param {
 
 #ifdef NO_OS_LWIP_NETWORKING
 	struct lwip_network_param lwip_param;
-#endif
-
-#ifdef NO_OS_W5500_NETWORKING
-	struct w5500_network_dev *net_dev;
 #endif
 };
 
