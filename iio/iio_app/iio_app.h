@@ -36,6 +36,7 @@
 
 #include "iio.h"
 #include "no_os_irq.h"
+#include "no_os_net.h"
 #include "no_os_uart.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
@@ -85,6 +86,10 @@ struct iio_app_device {
 struct iio_app_desc {
 	/** UART descriptor to be used */
 	struct no_os_uart_desc *uart_desc;
+#if defined(NO_OS_NET)
+	/** Network descriptor to be used */
+	struct no_os_net_desc *net_desc;
+#endif
 	/** IRQ descriptor to be used */
 	void *irq_desc;
 	/**  IIO descriptor to be returned */
@@ -118,6 +123,10 @@ struct iio_app_init_param {
 	int32_t nb_trigs;
 	/** UART init params */
 	struct no_os_uart_init_param uart_init_params;
+#if defined(NO_OS_NET)
+	/** Network init params */
+	struct no_os_net_init_param net_init_params;
+#endif
 	/** IRQ descriptor to be used */
 	void *irq_desc;
 	/** Function to be called each step */
