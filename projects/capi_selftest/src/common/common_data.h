@@ -38,6 +38,8 @@
 #include "capi_uart.h"
 #include "capi_spi.h"
 #include "capi_irq.h"
+#include "capi_timer.h"
+#include "capi_dma.h"
 
 struct test_framework_config;
 
@@ -70,6 +72,22 @@ extern const struct capi_spi_config spi_controller_config;
  *
  */
 extern struct capi_spi_device spi_dev;
+#ifdef TIMER_OPS
+/**
+ * @brief CAPI timer configuration for the counter/compare/IRQ tests.
+ */
+extern const struct capi_timer_config timer_config;
+#endif
+#ifdef DMA_OPS
+/**
+ * @brief CAPI DMA configuration for the memory-to-memory tests.
+ */
+extern const struct capi_dma_config dma_config;
+/**
+ * @brief Platform-specific DMA transfer extra config.
+ */
+extern DMA_XFER_EXTRA_TYPE dma_xfer_extra;
+#endif
 
 /**
  * @brief Fill a test framework configuration for the selected platform.

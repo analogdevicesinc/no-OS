@@ -83,6 +83,10 @@ static struct capi_uart_line_config uart_line_config = {
 	.loopback = false,
 };
 
+#ifdef UART_EXTRA_TYPE
+static UART_EXTRA_TYPE uart_extra = UART_EXTRA_INIT;
+#endif
+
 /**
  * @brief CAPI UART configuration used as the test report transport.
  */
@@ -91,7 +95,11 @@ const struct capi_uart_config uart_config = {
 	.dma_handle = NULL,
 	.clk_freq_hz = 0U,
 	.line_config = &uart_line_config,
+#ifdef UART_EXTRA_TYPE
+	.extra = &uart_extra,
+#else
 	.extra = NULL,
+#endif
 	.ops = UART_OPS,
 };
 
@@ -168,6 +176,44 @@ const struct capi_spi_config spi_controller_config = {
 	.clk_freq_hz = SPI_CLK_FREQ,
 	.extra = &spi_extra,
 };
+
+#ifdef TIMER_OPS
+/*
+ * Timer configuration: uses the same EXTRA_TYPE / EXTRA_INIT pattern as the
+ * other peripherals.  The timer_config is consumed by test_timer.c.
+ */
+#ifdef TIMER_EXTRA_TYPE
+static TIMER_EXTRA_TYPE timer_extra = TIMER_EXTRA_INIT;
+#endif
+
+/**
+ * @brief CAPI timer configuration for the counter/compare/IRQ tests.
+ */
+const struct capi_timer_config timer_config = {
+	.ops = TIMER_OPS,
+	.identifier = TIMER_IDENTIFIER,
+	.input_clock_identifier = 0U,
+	.input_clock_hz = 0U,
+	.output_freq_hz = 1000000U,
+#ifdef TIMER_EXTRA_TYPE
+	.extra = &timer_extra,
+#else
+	.extra = NULL,
+#endif
+};
+#endif /* TIMER_OPS */
+
+#ifdef DMA_OPS
+DMA_XFER_EXTRA_TYPE dma_xfer_extra = DMA_XFER_EXTRA_INIT;
+
+const struct capi_dma_config dma_config = {
+	.id = DMA_IDENTIFIER,
+	.num_chans = DMA_NUM_CHANS,
+	.ops = DMA_OPS,
+	.irq_handle = NULL,
+	.extra = NULL,
+};
+#endif /* DMA_OPS */
 
 /**
  * @brief CAPI SPI device descriptor for the external loopback test.
