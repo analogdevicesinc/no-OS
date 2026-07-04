@@ -1,8 +1,12 @@
 # Select the example you want to enable
 EXAMPLE ?= basic
 
-# Select the hardware file (XSA for Xilinx)
+# Select the hardware file (XSA for Xilinx, IOC for STM32)
+ifeq ($(PLATFORM),stm32)
+HARDWARE ?= capi_selftest.ioc
+else
 HARDWARE ?= zed_gic.xsa
+endif
 
 include ../../tools/scripts/generic_variables.mk
 
