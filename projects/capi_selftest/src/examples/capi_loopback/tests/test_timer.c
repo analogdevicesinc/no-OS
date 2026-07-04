@@ -9,13 +9,27 @@
 #include <errno.h>
 #include <stdint.h>
 #include <string.h>
+#include "parameters.h"
+#include "test_framework.h"
+#include "test_timer.h"
+
+#ifndef TIMER_OPS
+
+int test_timer(void)
+{
+	static const struct test_case stub[] = {
+		{ "NOT_CONFIGURED", NULL, false },
+	};
+
+	return test_framework_run_cases("TIMER", stub, 1U);
+}
+
+#else /* TIMER_OPS defined — full test implementation */
+
 #include "capi_irq.h"
 #include "capi_time.h"
 #include "capi_timer.h"
-#include "parameters.h"
 #include "common_data.h"
-#include "test_framework.h"
-#include "test_timer.h"
 
 #define TIMER_MODULE		"TIMER"
 #define TIMER_IRQ_TIMEOUT_US	1000000U
@@ -494,3 +508,5 @@ int test_timer(void)
 	return test_framework_run_cases(TIMER_MODULE, timer_subtests,
 					sizeof(timer_subtests) / sizeof(timer_subtests[0]));
 }
+
+#endif /* TIMER_OPS */
