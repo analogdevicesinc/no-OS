@@ -1,5 +1,6 @@
 menu "Project-Specific Configuration"
 
+source "projects/adin1140/Kconfig"
 source "projects/apard32690/Kconfig"
 source "projects/cn0565/Kconfig"
 source "projects/adxrs290-pmdz/Kconfig"
