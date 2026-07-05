@@ -140,6 +140,10 @@
 #define OA_TC6_MDIOACC6_REG 		OA_MMS_REG(0x0, 0x0026)
 #define OA_TC6_MDIOACC7_REG 		OA_MMS_REG(0x0, 0x0027)
 
+#define OA_TC6_RESET_SWRESET		NO_OS_BIT(0)
+
+#define OA_TC6_STATUS0_RESETC		NO_OS_BIT(6)
+
 #define OA_TC6_CONFIG0_ZARFE_MASK	NO_OS_BIT(12)
 
 #define OA_TC6_BUFSTS_TXC_MASK 		NO_OS_GENMASK(15, 8)
@@ -272,6 +276,9 @@ int oa_tc6_get_xfer_flags(struct oa_tc6_desc *, struct oa_tc6_flags *, bool);
  * available chunks.
  */
 int oa_tc6_thread(struct oa_tc6_desc *);
+
+/* Trigger a soft reset of the MAC-PHY and wait for completion */
+int oa_tc6_sw_reset(struct oa_tc6_desc *);
 
 /* Initialize the OA TC6 SPI driver */
 int oa_tc6_init(struct oa_tc6_desc **, struct oa_tc6_init_param *);
