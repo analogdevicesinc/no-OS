@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for Maxim platform of the ADIN1140 project.
+ *   @file   FreeRTOSConfig.h
+ *   @brief  FreeRTOS configuration for the ADIN1140 project (MAX78000).
  *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -31,34 +31,51 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "parameters.h"
-#include "common_data.h"
-#include "no_os_error.h"
-#include "no_os_print_log.h"
+#ifndef ADIN1140_FREE_RTOS_CONFIG
+#define ADIN1140_FREE_RTOS_CONFIG
 
-#define _STR(x) #x
-#define STR(x)  _STR(x)
+#include <stdint.h>
 
-extern int example_main();
+#define configCPU_CLOCK_HZ          ((uint32_t)100000000)
+#define configTICK_RATE_HZ          ((portTickType)1000)
+#define configRTC_TICK_RATE_HZ      (32768)
+#define configTOTAL_HEAP_SIZE       ((size_t)(64 * 1024))
+#define configMINIMAL_STACK_SIZE    ((uint16_t)512)
+#define configIIO_APP_STACK_SIZE    ((uint16_t)4096)
+#define configMAX_PRIORITIES        5
+#define configUSE_PREEMPTION        1
+#define configUSE_IDLE_HOOK         0
+#define configUSE_TICK_HOOK         0
+#define configUSE_CO_ROUTINES       0
+#define configUSE_16_BIT_TICKS      0
+#define configUSE_MUTEXES           1
+#define configUSE_COUNTING_SEMAPHORES 1
+#define configUSE_RECURSIVE_MUTEXES 1
 
-/***************************************************************************//**
- * @brief Main function execution for Maxim platform.
- *
- * @return ret - Result of the enabled examples execution.
-*******************************************************************************/
-int main()
-{
-	int ret;
+#define configSUPPORT_DYNAMIC_ALLOCATION 1
+#define configHEAP_CLEAR_MEMORY_ON_FREE  1
+#define configUSE_TRACE_FACILITY         1
+#define configUSE_STATS_FORMATTING_FUNCTIONS 1
 
-	struct no_os_uart_desc *uart_desc;
+#define INCLUDE_vTaskPrioritySet    0
+#define INCLUDE_vTaskDelete         1
+#define INCLUDE_vTaskSuspend        1
+#define INCLUDE_vTaskDelayUntil     1
+#define INCLUDE_uxTaskPriorityGet   0
+#define INCLUDE_vTaskDelay          1
 
-	ret = no_os_uart_init(&uart_desc, &adin1140_uart_ip);
-	if (ret)
-		return ret;
+#define configPRIO_BITS             3
+#define configKERNEL_INTERRUPT_PRIORITY \
+	((unsigned char)7 << (8 - configPRIO_BITS))
+#define configMAX_SYSCALL_INTERRUPT_PRIORITY \
+	((unsigned char)5 << (8 - configPRIO_BITS))
 
-	no_os_uart_stdio(uart_desc);
+#define vPortSVCHandler     SVC_Handler
+#define xPortPendSVHandler  PendSV_Handler
+#define xPortSysTickHandler SysTick_Handler
 
-	pr_info("Running " STR(EXAMPLE) " on " STR(TARGET) "\n");
+#define configCOMMAND_INT_MAX_OUTPUT_SIZE 1
+#define INCLUDE_xTaskGetIdleTaskHandle   1
+#define INCLUDE_pxTaskGetStackStart      1
 
-	return example_main();
-}
+#endif /* ADIN1140_FREE_RTOS_CONFIG */
