@@ -38,6 +38,7 @@
 
 #include "no_os_alloc.h"
 #include "no_os_delay.h"
+#include "no_os_mutex.h"
 #include "oa_tc6.h"
 
 int oa_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
@@ -103,14 +104,28 @@ static void oa_tc6_prepare_tx_ctrl(struct oa_tc6_desc *desc, uint32_t addr,
 	desc->ctrl_tx_credit++;
 }
 
-/**
- * @brief Read a register value.
- * @param desc - the OA TC6 descriptor.
- * @param addr - Register address.
- * @param val - Register value.
- * @return 0 in case of success, negative error code otherwise
- */
-int oa_tc6_reg_read(struct oa_tc6_desc *desc, uint32_t addr, uint32_t *val)
+static int oa_tc6_do_ctrl_transfer(struct oa_tc6_desc *desc)
+{
+	struct no_os_spi_msg xfer = {0};
+
+	if (desc->ctrl_rx_credit || desc->ctrl_tx_credit) {
+		xfer.tx_buff = desc->ctrl_chunks;
+		xfer.rx_buff = desc->ctrl_chunks;
+		xfer.cs_change = 1;
+
+		if (desc->prote_spi)
+			xfer.bytes_number = 2 * (OA_HEADER_LEN + OA_REG_LEN);
+		else
+			xfer.bytes_number = 2 * OA_HEADER_LEN + OA_REG_LEN;
+
+		return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
+	}
+
+	return 0;
+}
+
+static int __oa_tc6_reg_read(struct oa_tc6_desc *desc, uint32_t addr,
+			     uint32_t *val)
 {
 	uint32_t comp_val;
 	int ret;
@@ -119,7 +134,7 @@ int oa_tc6_reg_read(struct oa_tc6_desc *desc, uint32_t addr, uint32_t *val)
 		return -ENODEV;
 
 	oa_tc6_prepare_rx_ctrl(desc, addr);
-	ret = oa_tc6_thread(desc);
+	ret = oa_tc6_do_ctrl_transfer(desc);
 	if (ret)
 		return ret;
 
@@ -142,7 +157,19 @@ int oa_tc6_reg_read(struct oa_tc6_desc *desc, uint32_t addr, uint32_t *val)
  * @param val - Register value.
  * @return 0 in case of success, negative error code otherwise
  */
-int oa_tc6_reg_write(struct oa_tc6_desc *desc, uint32_t addr, uint32_t val)
+int oa_tc6_reg_read(struct oa_tc6_desc *desc, uint32_t addr, uint32_t *val)
+{
+	int ret;
+
+	no_os_mutex_lock(desc->ctrl_lock);
+	ret = __oa_tc6_reg_read(desc, addr, val);
+	no_os_mutex_unlock(desc->ctrl_lock);
+
+	return ret;
+}
+
+static int __oa_tc6_reg_write(struct oa_tc6_desc *desc, uint32_t addr,
+			      uint32_t val)
 {
 	int ret;
 
@@ -150,13 +177,47 @@ int oa_tc6_reg_write(struct oa_tc6_desc *desc, uint32_t addr, uint32_t val)
 		return -ENODEV;
 
 	oa_tc6_prepare_tx_ctrl(desc, addr, val);
-	ret = oa_tc6_thread(desc);
+	ret = oa_tc6_do_ctrl_transfer(desc);
 	if (ret)
 		return ret;
 
 	desc->ctrl_tx_credit = 0;
 
 	return 0;
+}
+
+/**
+ * @brief Write a register value.
+ * @param desc - the OA TC6 descriptor.
+ * @param addr - Register address.
+ * @param val - Register value.
+ * @return 0 in case of success, negative error code otherwise
+ */
+int oa_tc6_reg_write(struct oa_tc6_desc *desc, uint32_t addr, uint32_t val)
+{
+	int ret;
+
+	no_os_mutex_lock(desc->ctrl_lock);
+	ret = __oa_tc6_reg_write(desc, addr, val);
+	no_os_mutex_unlock(desc->ctrl_lock);
+
+	return ret;
+}
+
+int __oa_tc6_reg_update(struct oa_tc6_desc *desc, uint32_t addr,
+			uint32_t val, uint32_t mask)
+{
+	uint32_t reg_val;
+	int ret;
+
+	ret = __oa_tc6_reg_read(desc, addr, &reg_val);
+	if (ret)
+		return ret;
+
+	reg_val &= ~mask;
+	reg_val |= val & mask;
+
+	return __oa_tc6_reg_write(desc, addr, reg_val);
 }
 
 /**
@@ -170,17 +231,13 @@ int oa_tc6_reg_write(struct oa_tc6_desc *desc, uint32_t addr, uint32_t val)
 int oa_tc6_reg_update(struct oa_tc6_desc *desc, uint32_t addr,
 		      uint32_t val, uint32_t mask)
 {
-	uint32_t reg_val;
 	int ret;
 
-	ret = oa_tc6_reg_read(desc, addr, &reg_val);
-	if (ret)
-		return ret;
+	no_os_mutex_lock(desc->ctrl_lock);
+	ret = __oa_tc6_reg_update(desc, addr, val, mask);
+	no_os_mutex_unlock(desc->ctrl_lock);
 
-	reg_val &= ~mask;
-	reg_val |= val & mask;
-
-	return oa_tc6_reg_write(desc, addr, reg_val);
+	return ret;
 }
 
 /**
@@ -664,22 +721,11 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 	struct oa_tc6_frame_buffer *frame_buffer;
 	struct no_os_spi_msg xfer = {0};
 
-	if (desc->ctrl_rx_credit || desc->ctrl_tx_credit) {
-		xfer.tx_buff = desc->ctrl_chunks;
-		xfer.rx_buff = desc->ctrl_chunks;
-		xfer.cs_change = 1;
-
-		if (desc->prote_spi)
-			xfer.bytes_number = 2 * (OA_HEADER_LEN + OA_REG_LEN);
-		else
-			xfer.bytes_number = 2 * OA_HEADER_LEN + OA_REG_LEN;
-
-		return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
-	}
+	no_os_mutex_lock(desc->data_lock);
 
 	ret = oa_tc6_update_stats(desc);
 	if (ret)
-		return ret;
+		goto unlock;
 
 	if (desc->data_tx_credit) {
 		ret = oa_tc6_get_first_tx_frame(desc, &frame_buffer);
@@ -699,13 +745,13 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 		if (ret) {
 			memset(desc->data_chunks, 0, bytes_total);
 
-			return ret;
+			goto unlock;
 		}
 
 		ret = oa_tc6_rx_chunk_to_frame(desc, desc->data_chunks,
 					       bytes_total / (OA_CHUNK_SIZE + OA_HEADER_LEN));
 		if (ret)
-			return ret;
+			goto unlock;
 
 		ret = oa_tc6_get_first_tx_frame(desc, &frame_buffer);
 		if (!ret)
@@ -719,7 +765,10 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 			break;
 	}
 
-	return 0;
+unlock:
+	no_os_mutex_unlock(desc->data_lock);
+
+	return ret;
 }
 
 /**
@@ -772,25 +821,32 @@ int oa_tc6_init(struct oa_tc6_desc **desc, struct oa_tc6_init_param *param)
 	descriptor->comm_desc = param->comm_desc;
 	descriptor->prote_spi = param->prote_spi;
 
+	no_os_mutex_init(&descriptor->ctrl_lock);
+	no_os_mutex_init(&descriptor->data_lock);
+
 	ret = oa_tc6_sw_reset(descriptor);
 	if (ret)
 		goto free_lock;
 
 #if CONFIG_OA_ZERO_SWO_ONLY
 	/* For now, we'll only support receiving frames with SWO = 0 */
-	int ret = oa_tc6_reg_update(descriptor, OA_TC6_CONFIG0_REG,
-				    OA_TC6_CONFIG0_ZARFE_MASK,
-				    OA_TC6_CONFIG0_ZARFE_MASK);
-	if (ret) {
-		no_os_free(descriptor);
-
-		return ret;
-	}
+	ret = oa_tc6_reg_update(descriptor, OA_TC6_CONFIG0_REG,
+				OA_TC6_CONFIG0_ZARFE_MASK,
+				OA_TC6_CONFIG0_ZARFE_MASK);
+	if (ret)
+		goto free_lock;
 #endif
 
 	*desc = descriptor;
 
 	return 0;
+
+free_lock:
+	no_os_mutex_remove(descriptor->ctrl_lock);
+	no_os_mutex_remove(descriptor->data_lock);
+	no_os_free(descriptor);
+
+	return ret;
 }
 
 /**
@@ -803,6 +859,8 @@ int oa_tc6_remove(struct oa_tc6_desc *desc)
 	if (!desc)
 		return -ENODEV;
 
+	no_os_mutex_remove(desc->ctrl_lock);
+	no_os_mutex_remove(desc->data_lock);
 	no_os_free(desc);
 
 	return 0;
