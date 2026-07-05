@@ -37,6 +37,7 @@
 #include <string.h>
 
 #include "no_os_alloc.h"
+#include "no_os_delay.h"
 #include "oa_tc6.h"
 
 int oa_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
@@ -722,6 +723,38 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 }
 
 /**
+ * @brief Trigger a soft reset of the MAC-PHY via the OA-TC6 RESET register
+ *        and wait for completion. Mirrors the linux oa_tc6_sw_reset_macphy:
+ *        write SWRESET, poll STATUS0.RESETC every 1ms up to 1s, then RW1C
+ *        clear the reset-complete status.
+ * @param desc - the OA TC6 descriptor.
+ * @return 0 in case of success, -ENODEV on timeout, negative error otherwise.
+ */
+int oa_tc6_sw_reset(struct oa_tc6_desc *desc)
+{
+	uint32_t val;
+	int ret;
+	int i;
+
+	ret = oa_tc6_reg_write(desc, OA_TC6_RESET_REG, OA_TC6_RESET_SWRESET);
+	if (ret)
+		return ret;
+
+	for (i = 0; i < 1000; i++) {
+		ret = oa_tc6_reg_read(desc, OA_TC6_STATUS0_REG, &val);
+		if (ret)
+			return ret;
+		if (val & OA_TC6_STATUS0_RESETC)
+			break;
+		no_os_mdelay(1);
+	}
+	if (i == 1000)
+		return -ENODEV;
+
+	return oa_tc6_reg_write(desc, OA_TC6_STATUS0_REG, OA_TC6_STATUS0_RESETC);
+}
+
+/**
  * @brief Allocate resources for the OA TC6 driver.
  * @param desc - the device descriptor to be initialized
  * @param param - the device's parameter
@@ -730,6 +763,7 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 int oa_tc6_init(struct oa_tc6_desc **desc, struct oa_tc6_init_param *param)
 {
 	struct oa_tc6_desc *descriptor;
+	int ret;
 
 	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
@@ -737,6 +771,10 @@ int oa_tc6_init(struct oa_tc6_desc **desc, struct oa_tc6_init_param *param)
 
 	descriptor->comm_desc = param->comm_desc;
 	descriptor->prote_spi = param->prote_spi;
+
+	ret = oa_tc6_sw_reset(descriptor);
+	if (ret)
+		goto free_lock;
 
 #if CONFIG_OA_ZERO_SWO_ONLY
 	/* For now, we'll only support receiving frames with SWO = 0 */
