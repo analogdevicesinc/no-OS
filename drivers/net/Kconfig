@@ -67,4 +67,6 @@ config OA_TC6
     bool "Enable the Open Alliance TC6 protocol library"
     default n
 
+source "drivers/net/oa_tc6/Kconfig"
+
 endif
