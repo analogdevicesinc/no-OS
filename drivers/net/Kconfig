@@ -9,6 +9,7 @@ if NET
 config ADIN1110
     depends on SPI
     select GPIO
+    select OA_TC6
     bool "Enable the ADIN1110 driver"
     default n
 
@@ -53,5 +54,10 @@ config MDIO_SPI
     help
       Enable the MDIO-over-SPI transport driver, which implements the
       no_os_mdio API on top of a SPI bus.
+
+config OA_TC6
+    depends on SPI
+    bool "Enable the Open Alliance TC6 protocol library"
+    default n
 
 endif
