@@ -141,6 +141,12 @@
 #define OA_TC6_MDIOACC6_REG 		OA_MMS_REG(0x0, 0x0026)
 #define OA_TC6_MDIOACC7_REG 		OA_MMS_REG(0x0, 0x0027)
 
+/* Clause 22 PHY standard register window (MMS 0, offsets 0xFF00..0xFF1F) */
+#define OA_TC6_PHY_STD_REG_BASE		0xFF00
+#define OA_TC6_PHY_STD_REG_MASK		0x001F
+#define OA_TC6_PHY_STD_REG(reg)		\
+	OA_MMS_REG(0x0, OA_TC6_PHY_STD_REG_BASE | ((reg) & OA_TC6_PHY_STD_REG_MASK))
+
 #define OA_TC6_RESET_SWRESET		NO_OS_BIT(0)
 
 #define OA_TC6_STATUS0_RESETC		NO_OS_BIT(6)
