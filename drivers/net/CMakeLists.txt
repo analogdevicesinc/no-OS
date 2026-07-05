@@ -22,3 +22,7 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/mdio_spi)
 if (CONFIG_OA_TC6)
         add_subdirectory(oa_tc6)
 endif()
+
+if (CONFIG_ADIN1140)
+        add_subdirectory(adin1140)
+endif()
