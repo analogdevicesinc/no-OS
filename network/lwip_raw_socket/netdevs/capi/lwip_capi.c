@@ -110,8 +110,7 @@ static int32_t lwip_capi_init(void **desc, void *param)
 	uint8_t mdns_mcast[6] = {0x01, 0x00, 0x5E, 0x00, 0x00, 0xFB};
 	int ret;
 
-	if (!desc || !cfg || !cfg->mac || !cfg->phy_ops ||
-	    !cfg->fn_read || !cfg->fn_write)
+	if (!desc || !cfg || !cfg->mac || !cfg->phy_ops || !cfg->mdio_bus)
 		return -EINVAL;
 
 	priv = no_os_calloc(1, sizeof(*priv));
@@ -125,8 +124,7 @@ static int32_t lwip_capi_init(void **desc, void *param)
 
 	memset(&phy_cfg, 0, sizeof(phy_cfg));
 	phy_cfg.phy_addr = cfg->phy_addr;
-	phy_cfg.fn_read  = cfg->fn_read;
-	phy_cfg.fn_write = cfg->fn_write;
+	phy_cfg.mdio_bus = cfg->mdio_bus;
 	phy_cfg.extra    = cfg->phy_extra;
 	phy_cfg.ops      = cfg->phy_ops;
 

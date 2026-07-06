@@ -47,6 +47,7 @@
 #include "lwip_socket.h"
 #include <capi_eth_mac.h>
 #include <capi_eth_phy.h>
+#include <capi_mdio.h>
 
 /**
  * @struct lwip_capi_param
@@ -56,27 +57,24 @@
  * `lwip_network_param.mac_param`.  The glue does not interpret any of
  * the fields itself — it forwards them to the relevant CAPI op.
  *
- * The MAC handle must be initialised by the caller (via
- * `capi_eth_mac_init`) before `no_os_lwip_init` runs.  This lets the
- * caller wire a static `struct capi_eth_mac_handle *` slot and use
- * it from MDIO trampolines that match `capi_eth_phy_read_fn` (which
- * has no context pointer).
+ * The MAC handle and MDIO bus handle must be initialised by the caller
+ * (via `capi_eth_mac_init` and `capi_mdio_init`) before
+ * `no_os_lwip_init` runs.
  */
 struct lwip_capi_param {
-	/** Pre-initialised MAC handle (owns DMA rings, MDIO bus). */
+	/** Pre-initialised MAC handle (owns DMA rings). */
 	struct capi_eth_mac_handle *mac;
+
+	/** Pre-initialised MDIO bus handle used by the PHY. */
+	struct capi_mdio_handle *mdio_bus;
 
 	/* ---- PHY ---- */
 	/** Ops table for the PHY driver. */
 	const struct capi_eth_phy_ops *phy_ops;
 	/** Optional PHY-specific extra config (capi_eth_phy_init_config.extra). */
 	void *phy_extra;
-	/** PHY MDIO address; 0 = auto-detect via fn_read. */
+	/** PHY MDIO address; CAPI_ETH_PHY_ADDR_ANY (0xFF) to auto-scan. */
 	uint8_t phy_addr;
-	/** Caller-supplied MDIO transport (typically wraps a MAC helper). */
-	capi_eth_phy_read_fn  fn_read;
-	/** Caller-supplied MDIO transport. */
-	capi_eth_phy_write_fn fn_write;
 	/** PHY mode (speed/duplex/autoneg/mdix/loopback/isolate). */
 	struct capi_eth_phy_mode_config phy_mode;
 	/** Media interface (RGMII, RMII, SGMII, ...). */
