@@ -3,4 +3,4 @@
 kconfiglib==14.1.0
 pylink-square==1.6.0
 
-windows-curses==2.4.1; sys_platform == 'win32'
+windows-curses>=2.4.1; sys_platform == 'win32'
