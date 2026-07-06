@@ -15,6 +15,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include <capi_mdio.h>
+
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */
@@ -117,54 +119,28 @@ enum capi_eth_phy_power_state {
 typedef void (*capi_eth_phy_event_callback)(uint32_t event, void *arg);
 
 /**
- * @brief Function pointer type for reading a PHY register.
- *
- * Provided by the MAC driver and passed to capi_eth_phy_init() so that the
- * PHY driver can access PHY registers without holding a reference to the MAC
- * handle.
- *
- * @param[in]  phy_addr PHY device address (meaning is transport-specific;
- *                      for MDIO this is the 5-bit bus address, 0-31).
- * @param[in]  reg_addr Register address (meaning is transport-specific;
- *                      for MDIO this is the 5-bit register number, 0-31).
- * @param[out] data     Returns the 16-bit register value.
- *
- * @return int 0 for success or error code.
- */
-typedef int (*capi_eth_phy_read_fn)(uint8_t phy_addr, uint8_t reg_addr,
-				    uint16_t *data);
-
-/**
- * @brief Function pointer type for writing a PHY register.
- *
- * See capi_eth_phy_read_fn for details on transport and NULL semantics.
- *
- * @param[in] phy_addr PHY device address (meaning is transport-specific;
- *                     for MDIO this is the 5-bit bus address, 0-31).
- * @param[in] reg_addr Register address (meaning is transport-specific;
- *                     for MDIO this is the 5-bit register number, 0-31).
- * @param[in] data     16-bit data to write.
- *
- * @return int 0 for success or error code.
- */
-typedef int (*capi_eth_phy_write_fn)(uint8_t phy_addr, uint8_t reg_addr,
-				     uint16_t data);
-
-/**
  * @brief Ethernet PHY initialization configuration
  */
 struct capi_eth_phy_init_config {
-	/** PHY device address on MDIO bus (0-31) */
+	/**
+	 * PHY device address on the MDIO bus (0-31).
+	 * A value of 0xFF requests that the thin layer scan the bus and use
+	 * the first responding PHY.
+	 */
 	uint8_t phy_addr;
-	/** Register read function provided by the MAC driver (see capi_eth_phy_read_fn) */
-	capi_eth_phy_read_fn fn_read;
-	/** Register write function provided by the MAC driver (see capi_eth_phy_write_fn) */
-	capi_eth_phy_write_fn fn_write;
+	/**
+	 * MDIO bus this PHY sits on. Must be initialised (via
+	 * capi_mdio_init) before calling capi_eth_phy_init.
+	 */
+	struct capi_mdio_handle *mdio_bus;
 	/** Optional platform specific extra configuration */
 	void *extra;
 	/** Platform specific implementation of the API (Mandatory field) */
 	const struct capi_eth_phy_ops *ops;
 };
+
+/** Sentinel for capi_eth_phy_init_config.phy_addr: scan the bus for a PHY. */
+#define CAPI_ETH_PHY_ADDR_ANY	0xFF
 
 /**
  * @brief Ethernet PHY handle
