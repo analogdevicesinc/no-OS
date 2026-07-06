@@ -58,6 +58,6 @@ elseif(CMAKE_CROSSCOMPILING)
     endforeach()
 endif()
 
-target_link_libraries(no-os mbedtls mbedx509 mbedcrypto)
+target_link_libraries(no-os PUBLIC mbedtls mbedx509 mbedcrypto)
 
 message(STATUS "mbedTLS configured from: ${MBEDTLS_SOURCE_DIR}")
