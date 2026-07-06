@@ -37,24 +37,30 @@ extern int example_main();
 
 /**
  * @brief IIOD example task
- * @return Returns the error code of example_main function
+ * @param arg - Unused FreeRTOS task parameter.
+ *
+ * FreeRTOS task functions must match TaskFunction_t (void (*)(void *)) and
+ * never return; delete the task if example_main() ever returns.
 */
-int iiodTask()
+void iiodTask(void *arg)
 {
-	return example_main();
+	(void)arg;
+	example_main();
+	vTaskDelete(NULL);
 }
 
 /**
  * @brief LED blinking task for multithreading example
- * @return Returns error code
+ * @param arg - Unused FreeRTOS task parameter.
 */
-int blinkingTask()
+void blinkingTask(void *arg)
 {
+	(void)arg;
 	int ret = 0;
 	struct no_os_gpio_desc *led_pin;
 	ret = no_os_gpio_get(&led_pin, &gpio_ip);
 	if (ret)
-		return ret;
+		vTaskDelete(NULL);
 
 	ret = no_os_gpio_direction_output(led_pin, NO_OS_GPIO_LOW);
 	if (ret)
@@ -80,7 +86,7 @@ int blinkingTask()
 
 error_pin:
 	no_os_gpio_remove(led_pin);
-	return ret;
+	vTaskDelete(NULL);
 }
 
 /**
