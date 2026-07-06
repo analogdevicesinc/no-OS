@@ -37,6 +37,7 @@
 #include "lwip_socket.h"
 #include "lwip_capi.h"
 #include "capi_xemacps.h"
+#include <capi_mdio.h>
 #include "tcpecho_raw.h"
 #include "parameters.h"
 #include "echo_lwip_example.h"
@@ -50,35 +51,19 @@
 /* MAC address - must be unique on the local network */
 static uint8_t mac_addr[6] = {0x00, 0x0A, 0x35, 0x00, 0x01, 0x02};
 
-/*
- * MDIO trampolines: the CAPI PHY callbacks have signature
- * (phy_addr, reg, data*) with no context pointer, so we hold the
- * active MAC handle in a file-static slot and dispatch through it.
- */
-static struct capi_eth_mac_handle *g_mac;
-
-static int example_mdio_read(uint8_t addr, uint8_t reg, uint16_t *data)
-{
-	return xemacps_mdio_read(g_mac, addr, reg, data);
-}
-
-static int example_mdio_write(uint8_t addr, uint8_t reg, uint16_t data)
-{
-	return xemacps_mdio_write(g_mac, addr, reg, data);
-}
-
 /***************************************************************************//**
  * @brief Run the TCP echo server on the board.
  *
- * Brings up the XEmacPs MAC + Marvell PHY pair through the generic CAPI
- * lwIP glue, starts the tcpecho_raw server on port 7, and polls
- * indefinitely.
+ * Brings up the XEmacPs MAC + PHY pair through the generic CAPI lwIP glue,
+ * starts the tcpecho_raw server on port 7, and polls indefinitely.
  *
  * @return 0 on success, negative error code on failure.
 *******************************************************************************/
 int echo_lwip_example_main(void)
 {
 	struct lwip_network_desc *lwip_desc;
+	struct capi_eth_mac_handle *mac = NULL;
+	struct capi_mdio_handle *mdio_bus = NULL;
 #if PHY_TYPE == PHY_TYPE_TI_DP83867
 	struct dp83867_extra_config phy_cfg = {
 		.rgmii = {
@@ -102,12 +87,15 @@ int echo_lwip_example_main(void)
 		.mac_address = (capi_eth_mac_addr *)mac_addr,
 		.ops         = &xemacps_capi_mac_ops,
 	};
+	struct xemacps_mdio_init_config xmdio_extra;
+	struct capi_mdio_init_config mdio_cfg = {
+		.ops   = &xemacps_capi_mdio_ops,
+		.extra = &xmdio_extra,
+	};
 	struct lwip_capi_param netdev_param = {
 		.phy_ops       = phy_ops,
 		.phy_extra     = &phy_cfg,
-		.phy_addr      = 0,                  /* auto-detect */
-		.fn_read       = example_mdio_read,
-		.fn_write      = example_mdio_write,
+		.phy_addr      = CAPI_ETH_PHY_ADDR_ANY,
 		.phy_interface = CAPI_ETH_INTERFACE_RGMII,
 		.phy_mode      = {
 			.speed          = CAPI_ETH_PHY_SPEED_1G,
@@ -125,14 +113,24 @@ int echo_lwip_example_main(void)
 	memcpy(netdev_param.hwaddr, mac_addr, sizeof(mac_addr));
 	memcpy(lwip_param.hwaddr, mac_addr, sizeof(mac_addr));
 
-	ret = capi_eth_mac_init(&g_mac, &mac_cfg);
+	ret = capi_eth_mac_init(&mac, &mac_cfg);
 	if (ret)
 		return ret;
-	netdev_param.mac = g_mac;
+
+	xmdio_extra.mac = mac;
+	ret = capi_mdio_init(&mdio_bus, &mdio_cfg);
+	if (ret) {
+		capi_eth_mac_deinit(mac);
+		return ret;
+	}
+
+	netdev_param.mac      = mac;
+	netdev_param.mdio_bus = mdio_bus;
 
 	ret = no_os_lwip_init(&lwip_desc, &lwip_param);
 	if (ret) {
-		capi_eth_mac_deinit(g_mac);
+		capi_mdio_deinit(mdio_bus);
+		capi_eth_mac_deinit(mac);
 		return ret;
 	}
 
@@ -144,7 +142,8 @@ int echo_lwip_example_main(void)
 		no_os_lwip_step(lwip_desc, lwip_desc);
 
 	no_os_lwip_remove(lwip_desc);
-	capi_eth_mac_deinit(g_mac);
+	capi_mdio_deinit(mdio_bus);
+	capi_eth_mac_deinit(mac);
 
 	return 0;
 }

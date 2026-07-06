@@ -43,6 +43,7 @@
 #include "iio_app.h"
 #include "lwip_capi.h"
 #include "capi_xemacps.h"
+#include <capi_mdio.h>
 #include "adc_demo.h"
 #include "iio_adc_demo.h"
 #include "dac_demo.h"
@@ -70,19 +71,6 @@ static uint8_t adc_data_buffer[DATA_BUFFER_SAMPLES * TOTAL_ADC_CHANNELS *
 static uint8_t dac_data_buffer[DATA_BUFFER_SAMPLES * TOTAL_DAC_CHANNELS *
 						   sizeof(uint16_t)];
 
-/* MDIO trampolines bound to the example's MAC handle. */
-static struct capi_eth_mac_handle *g_mac;
-
-static int example_mdio_read(uint8_t addr, uint8_t reg, uint16_t *data)
-{
-	return xemacps_mdio_read(g_mac, addr, reg, data);
-}
-
-static int example_mdio_write(uint8_t addr, uint8_t reg, uint16_t data)
-{
-	return xemacps_mdio_write(g_mac, addr, reg, data);
-}
-
 /***************************************************************************//**
  * @brief Run the IIO over Ethernet demo.
  *
@@ -98,6 +86,8 @@ int iio_lwip_example_main(void)
 	struct adc_demo_desc *adc_desc;
 	struct dac_demo_desc *dac_desc;
 	struct iio_app_desc *app;
+	struct capi_eth_mac_handle *mac = NULL;
+	struct capi_mdio_handle *mdio_bus = NULL;
 	int ret;
 
 	/* --- Initialise virtual IIO devices --- */
@@ -149,8 +139,13 @@ int iio_lwip_example_main(void)
 		.mac_address = (capi_eth_mac_addr *)mac_addr,
 		.ops         = &xemacps_capi_mac_ops,
 	};
+	struct xemacps_mdio_init_config xmdio_extra;
+	struct capi_mdio_init_config mdio_cfg = {
+		.ops   = &xemacps_capi_mdio_ops,
+		.extra = &xmdio_extra,
+	};
 	static struct lwip_capi_param netdev_param = {
-		.phy_addr      = 0,                /* auto-detect */
+		.phy_addr      = CAPI_ETH_PHY_ADDR_ANY,
 		.phy_interface = CAPI_ETH_INTERFACE_RGMII,
 		.phy_mode      = {
 			.speed          = CAPI_ETH_PHY_SPEED_1G,
@@ -165,14 +160,19 @@ int iio_lwip_example_main(void)
 	netdev_param.phy_ops   = &mrvl_88e1510_ops;
 #endif
 	netdev_param.phy_extra = &phy_cfg;
-	netdev_param.fn_read   = example_mdio_read;
-	netdev_param.fn_write  = example_mdio_write;
 	memcpy(netdev_param.hwaddr, mac_addr, sizeof(mac_addr));
 
-	ret = capi_eth_mac_init(&g_mac, &mac_cfg);
+	ret = capi_eth_mac_init(&mac, &mac_cfg);
 	if (ret)
 		goto remove_dac;
-	netdev_param.mac = g_mac;
+
+	xmdio_extra.mac = mac;
+	ret = capi_mdio_init(&mdio_bus, &mdio_cfg);
+	if (ret)
+		goto remove_mac;
+
+	netdev_param.mac      = mac;
+	netdev_param.mdio_bus = mdio_bus;
 
 	/* --- iio_app init --- */
 	struct iio_app_init_param app_init_param = {0};
@@ -186,15 +186,17 @@ int iio_lwip_example_main(void)
 
 	ret = iio_app_init(&app, app_init_param);
 	if (ret)
-		goto remove_mac;
+		goto remove_mdio;
 
 	/* Loops indefinitely, serving iiod connections on TCP port 30431 */
 	ret = iio_app_run(app);
 
 	iio_app_remove(app);
 
+remove_mdio:
+	capi_mdio_deinit(mdio_bus);
 remove_mac:
-	capi_eth_mac_deinit(g_mac);
+	capi_eth_mac_deinit(mac);
 remove_dac:
 	dac_demo_remove(dac_desc);
 remove_adc:

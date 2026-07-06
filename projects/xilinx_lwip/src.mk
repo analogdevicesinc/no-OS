@@ -37,11 +37,13 @@ INCS += $(DRIVERS)/adc/adc_demo/adc_demo.h \
         $(DRIVERS)/dac/dac_demo/iio_dac_demo.h
 endif
 
-# CAPI Ethernet PHY + MAC common layer
+# CAPI Ethernet PHY + MAC + MDIO common layer
 INCS += $(NO-OS)/capi/include/capi_eth_phy.h
 SRCS += $(NO-OS)/capi/src/capi_eth_phy.c
 INCS += $(NO-OS)/capi/include/capi_eth_mac.h
 SRCS += $(NO-OS)/capi/src/capi_eth_mac.c
+INCS += $(NO-OS)/capi/include/capi_mdio.h
+SRCS += $(NO-OS)/capi/src/capi_mdio.c
 
 # Marvell 88E1510 PHY driver (CAPI)
 INCS += $(DRIVERS)/net/phy/mrvl_88e1510/capi_marvell_88e1510.h
