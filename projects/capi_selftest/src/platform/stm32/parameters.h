@@ -16,6 +16,7 @@
 #include "stm32_capi_uart.h"
 #include "stm32_capi_timer.h"
 #include "stm32_capi_dma.h"
+#include "stm32_capi_i2c.h"
 #include "capi_uart.h"
 
 extern UART_HandleTypeDef huart3;
@@ -56,7 +57,7 @@ extern TIM_HandleTypeDef htim2;
 
 /* SPI async delivery mode selection. */
 #define SPI_HAS_IRQ  1
-#define SPI_HAS_DMA  0
+#define SPI_HAS_DMA  1
 
 /* IRQ controller — NVIC, no base address needed. */
 #define IRQ_CTRL_IDENTIFIER		0U
@@ -102,6 +103,7 @@ extern TIM_HandleTypeDef htim2;
 #define TIMER_RATE_TOLERANCE_PCT 5U
 #define TIMER_HAS_IRQ		1
 #define TIMER_HAS_CAPTURE	1
+#define TIMER_IRQ_OVERFLOW_MAX	999U
 
 /*
  * DMA2 on NUCLEO-F767ZI: only DMA2 supports memory-to-memory transfers.
@@ -124,5 +126,31 @@ extern TIM_HandleTypeDef htim2;
 				  .trig = NULL }
 #define DMA_PLATFORM_INIT()	__HAL_RCC_DMA2_CLK_ENABLE()
 #define DMA_XFER_SIZE		64U
+
+/*
+ * I2C loopback on NUCLEO-F767ZI:
+ *   I2C1 (initiator): PB6 = SCL, PB9 = SDA (configured by CubeMX).
+ *   I2C2 (target):    PB10 = SCL, PB11 = SDA (configured by CAPI driver).
+ * Both buses are cross-wired for single-board loopback.
+ */
+#define I2C_IDENTIFIER		1U
+#define I2C_OPS			&stm32_capi_i2c_ops
+#define I2C_EXTRA_TYPE		struct stm32_i2c_extra_config
+#define I2C_EXTRA_INIT		{ .hi2c = NULL, .i2c_timing = 0x20303E5D }
+#define I2C_TARGET_ADDR		0x42U
+#define I2C_HAS_IRQ		0
+
+#define I2C_TARGET_IDENTIFIER	2U
+#define I2C_TARGET_OPS		&stm32_capi_i2c_ops
+#define I2C_TARGET_EXTRA_TYPE	struct stm32_i2c_extra_config
+#define I2C_TARGET_EXTRA_INIT	{ .hi2c = NULL, .i2c_timing = 0x20303E5D }
+
+struct capi_i2c_controller_handle;
+int i2c_platform_init(void);
+void i2c_platform_deinit(void);
+void i2c_platform_set_target_handle(struct capi_i2c_controller_handle *handle);
+#define I2C_PLATFORM_INIT()		i2c_platform_init()
+#define I2C_PLATFORM_DEINIT()		i2c_platform_deinit()
+#define I2C_PLATFORM_SET_TARGET(h)	i2c_platform_set_target_handle(h)
 
 #endif /* __PARAMETERS_H__ */
