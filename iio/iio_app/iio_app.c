@@ -65,7 +65,7 @@
 #include "tcp_socket.h"
 #endif
 
-#ifdef LINUX_PLATFORM
+#if defined(LINUX_PLATFORM) && !defined(NO_OS_NET)
 #include "linux_socket.h"
 #include "tcp_socket.h"
 #endif
@@ -185,7 +185,7 @@ static int32_t lwip_network_setup(struct iio_app_desc *app,
 }
 #endif
 
-#if defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
+#if (defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)) && !defined(NO_OS_NET)
 static int32_t network_setup(struct iio_init_param *iio_init_param,
 			     struct no_os_uart_desc *uart_desc,
 			     void *irq_desc,
@@ -342,7 +342,7 @@ int iio_app_init(struct iio_app_desc **app,
 	status = lwip_network_setup(application, app_init_param, &iio_init_param);
 	if (status)
 		goto error;
-#elif defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
+#elif (defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)) && !defined(NO_OS_NET)
 	status = network_setup(&iio_init_param, uart_desc, application->irq_desc,
 			       app_init_param);
 	if (status < 0)
