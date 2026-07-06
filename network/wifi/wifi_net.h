@@ -49,6 +49,11 @@
 /** Maximum number of client sockets a server can back-log. */
 #define WIFI_NB_CLI_SOCKETS	MAX_CONNECTIONS
 
+/** Receive buffer size used when socket_open() is called with buff_size 0. */
+#ifndef WIFI_NET_DEFAULT_BUFF_SIZE
+#define WIFI_NET_DEFAULT_BUFF_SIZE	4096
+#endif
+
 struct wifi_net_desc;
 
 /**

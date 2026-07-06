@@ -387,6 +387,9 @@ static int32_t _wifi_net_open_client(struct wifi_net_desc *wd,
 	uint32_t		id;
 	int32_t			ret;
 
+	if (buff_size == 0)
+		buff_size = WIFI_NET_DEFAULT_BUFF_SIZE;
+
 	ret = _wifi_get_unused_socket(wd, &id);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
