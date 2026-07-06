@@ -40,6 +40,7 @@
 #include "capi_irq.h"
 #include "capi_timer.h"
 #include "capi_dma.h"
+#include "capi_i2c.h"
 
 struct test_framework_config;
 
@@ -87,6 +88,27 @@ extern const struct capi_dma_config dma_config;
  * @brief Platform-specific DMA transfer extra config.
  */
 extern DMA_XFER_EXTRA_TYPE dma_xfer_extra;
+#endif
+
+#ifdef I2C_OPS
+/**
+ * @brief CAPI I2C initiator configuration for the loopback tests.
+ */
+extern const struct capi_i2c_config i2c_master_config;
+/**
+ * @brief CAPI I2C device descriptor used by the initiator to address the target.
+ */
+extern struct capi_i2c_device i2c_dev;
+#endif
+#ifdef I2C_TARGET_OPS
+/**
+ * @brief CAPI I2C target configuration for the loopback tests.
+ */
+extern const struct capi_i2c_config i2c_target_config;
+/**
+ * @brief CAPI I2C device descriptor for the target side.
+ */
+extern struct capi_i2c_device i2c_target_dev;
 #endif
 
 /**

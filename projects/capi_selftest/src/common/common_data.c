@@ -215,6 +215,56 @@ const struct capi_dma_config dma_config = {
 };
 #endif /* DMA_OPS */
 
+#ifdef I2C_OPS
+static I2C_EXTRA_TYPE i2c_extra = I2C_EXTRA_INIT;
+
+const struct capi_i2c_config i2c_master_config = {
+	.identifier = I2C_IDENTIFIER,
+	.clk_freq_hz = 0U,
+	.initiator = true,
+	.address = 0U,
+	.device = NULL,
+	.dma_handle = NULL,
+	.extra = &i2c_extra,
+	.ops = I2C_OPS,
+};
+
+struct capi_i2c_device i2c_dev = {
+	.controller = NULL,
+	.address = I2C_TARGET_ADDR,
+	.b10addr = false,
+	.speed = CAPI_I2C_SPEED_STANDARD,
+	.duty_cycle = 0U,
+	.clk_stretch = 0,
+	.extra = NULL,
+};
+#endif /* I2C_OPS */
+
+#ifdef I2C_TARGET_OPS
+static I2C_TARGET_EXTRA_TYPE i2c_target_extra = I2C_TARGET_EXTRA_INIT;
+
+const struct capi_i2c_config i2c_target_config = {
+	.identifier = I2C_TARGET_IDENTIFIER,
+	.clk_freq_hz = 0U,
+	.initiator = false,
+	.address = I2C_TARGET_ADDR,
+	.device = NULL,
+	.dma_handle = NULL,
+	.extra = &i2c_target_extra,
+	.ops = I2C_TARGET_OPS,
+};
+
+struct capi_i2c_device i2c_target_dev = {
+	.controller = NULL,
+	.address = I2C_TARGET_ADDR,
+	.b10addr = false,
+	.speed = CAPI_I2C_SPEED_STANDARD,
+	.duty_cycle = 0U,
+	.clk_stretch = 0,
+	.extra = NULL,
+};
+#endif /* I2C_TARGET_OPS */
+
 /**
  * @brief CAPI SPI device descriptor for the external loopback test.
  *
