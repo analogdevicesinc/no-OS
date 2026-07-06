@@ -36,7 +36,6 @@ else()
 endif()
 
 target_compile_definitions(swiot1l PRIVATE
-    NO_OS_LWIP_NETWORKING
     IIO_IGNORE_BUFF_OVERRUN_ERR
 )
 
