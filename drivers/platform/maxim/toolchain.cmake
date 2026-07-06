@@ -41,10 +41,12 @@ if(USE_VENDOR_TOOLCHAIN)
     if(CFS)
         cmake_path(SET CROSS_COMPILER_BIN NORMALIZE "${CFS}/Tools/gcc/arm-none-eabi/bin")
     else()
-        # MaximSDK installs the bundled GCC under a versioned directory
-        # (Tools/GNUTools/<version>/bin), so the path must be globbed --
-        # cmake_path(SET) would keep the literal '*'.
-        file(GLOB CROSS_COMPILER_BIN "${MAXIM_LIBRARIES}/../Tools/GNUTools/*/bin")
+        # Stock MaximSDK installs the bundled GCC under a versioned directory
+        # (Tools/GNUTools/<version>/bin). Other frameworks may place it directly in
+        # Tools/GNUTools/bin. Glob both layouts.
+        file(GLOB CROSS_COMPILER_BIN
+             "${MAXIM_LIBRARIES}/../Tools/GNUTools/*/bin"
+             "${MAXIM_LIBRARIES}/../Tools/GNUTools/bin")
     endif()
 
     find_program(CMAKE_C_COMPILER arm-none-eabi-gcc HINTS ${CROSS_COMPILER_BIN})
