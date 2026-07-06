@@ -1,0 +1,22 @@
+{
+	"version": 7,
+	"configurePresets": [
+		{
+			"name": "xilinx-base",
+			"hidden": true,
+			"description": "Base config for Xilinx boards",
+			"generator": "Ninja"
+		},
+		{
+			"name": "zed",
+			"description": "ZedBoard (Zynq-7000, cortexa9). Requires -DHARDWARE=<abs path to system_top.xsa>",
+			"inherits": "xilinx-base",
+			"cacheVariables": {
+				"BOARD": "zed",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "xilinx",
+				"BOARD_CONFIG_FILE": "zed_defconfig"
+			}
+		}
+	]
+}
