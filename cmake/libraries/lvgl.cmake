@@ -50,6 +50,6 @@ target_include_directories(lvgl PUBLIC
     ${LVGL_SOURCE_DIR}/src/display
 )
 
-target_link_libraries(no-os lvgl)
+target_link_libraries(no-os PUBLIC lvgl)
 
 message(STATUS "LVGL configured from: ${LVGL_SOURCE_DIR}")

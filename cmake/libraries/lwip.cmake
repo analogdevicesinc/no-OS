@@ -43,6 +43,6 @@ target_include_directories(lwipallapps PRIVATE ${LWIP_INCLUDE_DIRS})
 target_compile_definitions(no-os PUBLIC -DNO_OS_LWIP_NETWORKING=1)
 target_compile_definitions(no-os PUBLIC -DDISABLE_SECURE_SOCKET=1)
 
-target_link_libraries(no-os lwipallapps lwipcore)
+target_link_libraries(no-os PUBLIC lwipallapps lwipcore)
 
 message(STATUS "lwIP configured from: ${LWIP_SOURCE_DIR}")
