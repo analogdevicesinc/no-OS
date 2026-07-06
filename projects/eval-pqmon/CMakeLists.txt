@@ -37,39 +37,26 @@ target_include_directories(eval-pqmon PUBLIC
 # The IIO buffer-overrun error is expected during acquisition; suppress it.
 target_compile_definitions(eval-pqmon PRIVATE IIO_IGNORE_BUFF_OVERRUN_ERR)
 
-# Transport interface: each variant selects one PQM_CONN_* define plus the
-# networking sources it needs (see the legacy Makefile INTERFACE handling).
+# Transport interface: each variant selects one PQM_CONN_* define. All
+# networking sources are pulled in by the no-os tree from the CONFIG_* symbols
+# in the variant's defconfig (CONFIG_W5500 / CONFIG_LWIP + CONFIG_ADIN1110,
+# always with CONFIG_NO_OS_NET), so no per-project source wiring is needed.
 if(CONFIG_EVAL_PQMON_CONN_USB)
     target_compile_definitions(eval-pqmon PRIVATE PQM_CONN_USB)
 elseif(CONFIG_EVAL_PQMON_CONN_SERIAL)
     target_compile_definitions(eval-pqmon PRIVATE PQM_CONN_SERIAL)
 elseif(CONFIG_EVAL_PQMON_CONN_ETH)
-    # W5500 Ethernet keeps the USB console alive alongside the wired link.
-    # The W5500 transport is plain TCP (no TLS), so disable the secure socket
-    # path in tcp_socket.h/.c to avoid pulling in mbedtls.
+    # W5500 Ethernet (no_os_net HAL) keeps the USB console alive alongside the
+    # wired link. The W5500 transport is plain TCP (no TLS).
     target_compile_definitions(eval-pqmon PRIVATE
         PQM_CONN_USB
         PQM_CONN_ETH
-        NO_OS_W5500_NETWORKING
         DISABLE_SECURE_SOCKET
     )
-    target_sources(eval-pqmon PRIVATE
-        ${NO_OS_DIR}/drivers/net/w5500/w5500.c
-        ${NO_OS_DIR}/network/w5500_network/w5500_network.c
-        ${NO_OS_DIR}/network/tcp_socket.c
-    )
-    target_include_directories(eval-pqmon PUBLIC
-        ${NO_OS_DIR}/drivers/net/w5500
-        ${NO_OS_DIR}/network/w5500_network
-    )
 elseif(CONFIG_EVAL_PQMON_CONN_T1L)
-    # 10BASE-T1L over ADIN1110 uses the lwIP stack; lwip.cmake and the lwip
-    # netdevs subdir compile the adin1110 glue when CONFIG_LWIP/CONFIG_ADIN1110
-    # are set, so only the transport defines are needed here.
-    target_compile_definitions(eval-pqmon PRIVATE
-        PQM_CONN_T1L
-        NO_OS_LWIP_NETWORKING
-    )
+    # 10BASE-T1L over ADIN1110 (no_os_net HAL over lwIP). network/lwip and its
+    # adin1110 netdev are compiled from CONFIG_LWIP + CONFIG_NO_OS_NET.
+    target_compile_definitions(eval-pqmon PRIVATE PQM_CONN_T1L)
 endif()
 
 target_link_libraries(eval-pqmon no-os)
