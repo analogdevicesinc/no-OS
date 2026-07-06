@@ -35,6 +35,7 @@
 
 #include "no_os_spi.h"
 #include "no_os_util.h"
+#include "no_os_mutex.h"
 #include <stdint.h>
 
 #ifndef CONFIG_OA_TX_FRAME_BUFF_NUM
@@ -140,6 +141,16 @@
 #define OA_TC6_MDIOACC6_REG 		OA_MMS_REG(0x0, 0x0026)
 #define OA_TC6_MDIOACC7_REG 		OA_MMS_REG(0x0, 0x0027)
 
+/* Clause 22 PHY standard register window (MMS 0, offsets 0xFF00..0xFF1F) */
+#define OA_TC6_PHY_STD_REG_BASE		0xFF00
+#define OA_TC6_PHY_STD_REG_MASK		0x001F
+#define OA_TC6_PHY_STD_REG(reg)		\
+	OA_MMS_REG(0x0, OA_TC6_PHY_STD_REG_BASE | ((reg) & OA_TC6_PHY_STD_REG_MASK))
+
+#define OA_TC6_RESET_SWRESET		NO_OS_BIT(0)
+
+#define OA_TC6_STATUS0_RESETC		NO_OS_BIT(6)
+
 #define OA_TC6_CONFIG0_ZARFE_MASK	NO_OS_BIT(12)
 
 #define OA_TC6_BUFSTS_TXC_MASK 		NO_OS_GENMASK(15, 8)
@@ -214,6 +225,8 @@ struct oa_tc6_desc {
 	struct no_os_spi_desc *comm_desc;
 	uint8_t ctrl_chunks[OA_SPI_CTRL_LEN];
 	uint8_t data_chunks[OA_SPI_BUFF_LEN];
+	void *ctrl_lock;
+	void *data_lock;
 
 	struct oa_tc6_frame_buffer user_rx_frame_buffer[OA_RX_FRAME_BUFF_NUM];
 	struct oa_tc6_frame_buffer user_tx_frame_buffer[OA_TX_FRAME_BUFF_NUM];
@@ -272,6 +285,9 @@ int oa_tc6_get_xfer_flags(struct oa_tc6_desc *, struct oa_tc6_flags *, bool);
  * available chunks.
  */
 int oa_tc6_thread(struct oa_tc6_desc *);
+
+/* Trigger a soft reset of the MAC-PHY and wait for completion */
+int oa_tc6_sw_reset(struct oa_tc6_desc *);
 
 /* Initialize the OA TC6 SPI driver */
 int oa_tc6_init(struct oa_tc6_desc **, struct oa_tc6_init_param *);

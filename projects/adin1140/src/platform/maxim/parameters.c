@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for Maxim platform of the ADIN1140 project.
+ *   @file   parameters.c
+ *   @brief  Definition of Maxim platform data used by the ADIN1140 project.
  *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -32,33 +32,25 @@
 *******************************************************************************/
 
 #include "parameters.h"
-#include "common_data.h"
-#include "no_os_error.h"
-#include "no_os_print_log.h"
 
-#define _STR(x) #x
-#define STR(x)  _STR(x)
+struct max_uart_init_param adin1140_uart_extra_ip = {
+	.flow = MAX_UART_FLOW_DIS,
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
+};
 
-extern int example_main();
+struct no_os_dma_init_param adin1140_dma_ip = {
+	.id = 0,
+	.num_ch = 2,
+	.platform_ops = &max_dma_ops,
+};
 
-/***************************************************************************//**
- * @brief Main function execution for Maxim platform.
- *
- * @return ret - Result of the enabled examples execution.
-*******************************************************************************/
-int main()
-{
-	int ret;
+struct max_spi_init_param adin1140_spi_extra_ip = {
+	.num_slaves = 1,
+	.polarity = SPI_SS_POL_LOW,
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
+	.dma_param = &adin1140_dma_ip,
+};
 
-	struct no_os_uart_desc *uart_desc;
-
-	ret = no_os_uart_init(&uart_desc, &adin1140_uart_ip);
-	if (ret)
-		return ret;
-
-	no_os_uart_stdio(uart_desc);
-
-	pr_info("Running " STR(EXAMPLE) " on " STR(TARGET) "\n");
-
-	return example_main();
-}
+struct max_i2c_init_param adin1140_i2c_extra_ip = {
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
+};

@@ -9,7 +9,22 @@ if NET
 config ADIN1110
     depends on SPI
     select GPIO
+    select OA_TC6
     bool "Enable the ADIN1110 driver"
     default n
+
+config ADIN1140
+    depends on SPI
+    select GPIO
+    select OA_TC6
+    bool "Enable the ADIN1140 10BASE-T1S MACPHY driver"
+    default n
+
+config OA_TC6
+    depends on SPI
+    bool "Enable the Open Alliance TC6 protocol library"
+    default n
+
+source "drivers/net/oa_tc6/Kconfig"
 
 endif
