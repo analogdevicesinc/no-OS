@@ -101,7 +101,11 @@
 #define MQTT_NOOS_CLIENT
 
 #include <stdbool.h>
+#if defined(NO_OS_NET)
+#include "no_os_socket.h"
+#else
 #include "tcp_socket.h"
+#endif
 
 /**
  * @enum mqtt_qos
@@ -198,7 +202,11 @@ struct mqtt_init_param {
 	 * Reference to a socket. The connection must be established before
 	 * calling any MQTT client functions.
 	 */
+#if defined(NO_OS_NET)
+	struct no_os_socket_desc	*sock;
+#else
 	struct tcp_socket_desc	*sock;
+#endif
 	/** Parameter to initialize a \ref timer_desc */
 	struct no_os_timer_init_param	*timer_init_param;
 	/** Timeout for a MQTT command to be executed */

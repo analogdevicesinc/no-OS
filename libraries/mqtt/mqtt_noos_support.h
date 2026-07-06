@@ -35,7 +35,11 @@
 #define MQTT_NOOS
 
 #include <stdint.h>
+#if defined(NO_OS_NET)
+#include "no_os_socket.h"
+#else
 #include "tcp_socket.h"
+#endif
 #include "no_os_timer.h"
 
 /** Typedef for \ref timer_port_noos */
@@ -61,7 +65,11 @@ struct timer_port_noos {
  */
 struct network_port_noos {
 	/** Reference to no-os socket */
+#if defined(NO_OS_NET)
+	struct no_os_socket_desc	*sock;
+#else
 	struct tcp_socket_desc	*sock;
+#endif
 	/** Reference to no-os network wrapper read function */
 	int	(*mqttread)(Network*, unsigned char*, int, int);
 	/** Reference to no-os network wrapper write function */

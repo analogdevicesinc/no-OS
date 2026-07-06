@@ -39,7 +39,10 @@
 #include "no_os_delay.h"
 #include "no_os_error.h"
 
-#ifdef NO_OS_LWIP_NETWORKING
+#if defined(NO_OS_NET)
+#include "no_os_net.h"
+#include "no_os_socket.h"
+#elif defined(NO_OS_LWIP_NETWORKING)
 #include "lwip_socket.h"
 #endif
 
@@ -137,6 +140,15 @@ int mqtt_noos_read(Network* net, unsigned char* buff, int len, int timeout)
 
 	sent = 0;
 	do {
+#if defined(NO_OS_NET)
+		/*
+		 * Service the interface so software stacks (e.g. lwIP) drive their
+		 * timers and poll the MAC. No-op for offloaded backends.
+		 */
+		no_os_net_step(net->sock->net);
+		rc = no_os_socket_recv(net->sock, (void *)(buff + sent),
+				       (uint32_t)(len - sent));
+#else
 #ifdef NO_OS_LWIP_NETWORKING
 		/*
 		 * Currently, the LWIP networking layer doesn't implement packet RX
@@ -146,6 +158,7 @@ int mqtt_noos_read(Network* net, unsigned char* buff, int len, int timeout)
 #endif
 		rc = socket_recv(net->sock, (void *)(buff + sent),
 				 (uint32_t)(len - sent));
+#endif
 		if (rc != -EAGAIN) { //If data available or error
 			if (NO_OS_IS_ERR_VALUE(rc))
 				return rc;
@@ -168,5 +181,9 @@ int mqtt_noos_write(Network* net, unsigned char* buff, int len, int timeout)
 	/* non blocking read is not implemented */
 	NO_OS_UNUSED_PARAM(timeout);
 
+#if defined(NO_OS_NET)
+	return no_os_socket_send(net->sock, (const void *)buff, (uint32_t)len);
+#else
 	return socket_send(net->sock, (const void *)buff, (uint32_t)len);
+#endif
 }
