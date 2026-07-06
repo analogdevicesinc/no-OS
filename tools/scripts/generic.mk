@@ -136,10 +136,6 @@ ifeq 'maxim' '$(PLATFORM)'
 include $(NO-OS)/tools/scripts/maxim.mk
 endif
 
-ifeq 'mbed' '$(PLATFORM)'
-include $(NO-OS)/tools/scripts/mbed.mk
-endif
-
 ifeq 'lattice' '$(PLATFORM)'
 include $(NO-OS)/tools/scripts/lattice.mk
 endif
