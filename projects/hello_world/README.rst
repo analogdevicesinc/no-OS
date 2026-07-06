@@ -1,73 +1,103 @@
 Hello World no-OS Example Project
-==================================
+===================================
+
+.. no-os-doxygen::
+
+.. contents:: Table of Contents
+    :depth: 3
 
 Overview
 --------
 
-This is the simplest possible no-OS project: it initialises the board's UART
+This is the simplest possible no-OS project: it initializes the board's UART
 peripheral and prints a "Hello World" counter message over the serial port once
-per second.  It is intended as a **quick-start template** for engineers who are
+per second. It is intended as a **quick-start template** for engineers who are
 new to no-OS and want to understand how to build, flash, and run a bare-metal
 embedded application on a Xilinx board.
 
 What it demonstrates:
 
-- How a no-OS project is structured (``Makefile``, ``src.mk``, platform tree)
 - The no-OS peripheral descriptor pattern (``no_os_uart_init`` / ``no_os_uart_remove``)
-- The no-OS logging macros (``pr_info``, ``pr_err``, …)
+- The no-OS logging macros (``pr_info``, ``pr_err``, ...)
 - The no-OS delay API (``no_os_mdelay``)
 - Proper error handling (checking return values, cleanup on failure)
 
-Supported Platforms
--------------------
+No-OS Supported Examples
+-------------------------
+
+This project is organized around the no-OS variant based build flow.
+Selecting a variant at build time (``--variant <name>``) chooses which
+application is compiled. The platform ``main()`` is a thin dispatcher that
+calls ``example_main()``, provided by the selected example.
+Platform-specific init parameters are in
+`src/platform <https://github.com/analogdevicesinc/no-OS/tree/main/projects/hello_world/src/platform>`__.
+
+Basic Example
+~~~~~~~~~~~~~
+
+Initializes the board's UART peripheral and prints a "Hello World" counter
+message over the serial port once per second. No external hardware is required
+beyond the board itself.
+
+This example is built by selecting the ``basic`` variant (see the Build Command
+section below).
+
+No-OS Supported Platforms
+--------------------------
 
 Xilinx
-^^^^^^
+~~~~~~
 
-The project is generic — no board-specific code is required.  The same source
-builds correctly for:
+Used Hardware
+^^^^^^^^^^^^^
 
-- **Zynq-7000**: Cora Z7, ZED, ZC706, and any other Zynq-7000 carrier
-- **ZynqMP (Zynq UltraScale+)**: ZCU102, and any other ZynqMP carrier
+* Any Xilinx FPGA carrier board that exposes a PS UART (ZedBoard, ZC706,
+  ZCU102, Cora Z7, and others). No eval board is required.
 
-The target architecture (Cortex-A9 for Zynq-7000, Cortex-A53 for ZynqMP) is
-auto-detected from the XSA file you provide — see `Hardware Requirements`_
-below.
+Connections
+^^^^^^^^^^^
 
-Project Layout
---------------
+No external hardware connections are required beyond the carrier board's USB
+cable. The application uses only the ARM Processing System (PS) and its
+built-in UART — no custom PL logic is needed. Any XSA that targets your
+board will work, even one borrowed from a different no-OS or HDL project.
 
-::
+The UART console appears on the board's USB-UART adapter at **115200 baud,
+8N1, no flow control**:
 
-   no-OS/projects/hello_world/
-   ├── Makefile
-   ├── README.rst
-   ├── builds.json
-   ├── src.mk
-   └── src/
-       ├── app/
-       │   ├── hello_world.c      ← application logic (platform-agnostic)
-       │   └── hello_world.h
-       └── platform/
-           ├── platform_includes.h
-           └── xilinx/
-               ├── main.c         ← Xilinx entry point (cache enable)
-               ├── parameters.c   ← UART init parameters
-               ├── parameters.h   ← UART peripheral IDs
-               └── platform_src.mk
+- **Linux**: ``/dev/ttyUSB0`` (ZedBoard/Cora Z7) or ``/dev/ttyUSB1`` (ZCU102)
+- **Windows**: a COM port listed in Device Manager under *Ports (COM & LPT)*
+- **macOS**: ``/dev/tty.usbserial-*``
 
-Hardware Requirements
----------------------
+Build Command
+^^^^^^^^^^^^^
 
-Xilinx builds require an **XSA file** (hardware description exported from
-Vivado) to be present in the project directory before running ``make``.  The
-build system uses it to generate the BSP (board support package), linker
-script, and the ``xparameters.h`` header that provides peripheral base
-addresses.
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``basic``.
+Available boards: ``zed``.
 
-hello_world uses only the ARM Processing System (PS) and its built-in UART —
-no custom PL logic is needed.  **Any XSA that targets your board will work**,
-even one borrowed from a different no-OS or HDL project.
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
+
+.. code-block:: bash
+
+   # source the Vitis environment (adjust path to your Vitis install)
+   source /path/to/Vitis/2025.1/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   & "<path\to\Vitis\2025.1\settings64.bat"
+
+   cd no-OS
+
+   # build the basic example on the ZedBoard (requires a .xsa hardware file)
+   python tools/scripts/no_os_build.py build \
+      --project hello_world --variant basic --board zed \
+      --hardware /path/to/system_top.xsa
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project hello_world --variant basic --board zed \
+      --hardware /path/to/system_top.xsa \
+      --probe openocd --flash
 
 Where to get an XSA
 ^^^^^^^^^^^^^^^^^^^
@@ -75,123 +105,24 @@ Where to get an XSA
 **Option 1 — Reuse an existing XSA (easiest).**
 
 If you already have an XSA from any other no-OS or Vivado project that targets
-your board, copy it here::
+your board, pass it directly with ``--hardware``::
 
-   cp /path/to/existing/system_top.xsa .
-
-For example, if you have a ZCU102 build of ``adrv9001``::
-
-   cp ../adrv9001/system_top.xsa .
+   python tools/scripts/no_os_build.py build \
+      --project hello_world --variant basic --board zed \
+      --hardware /path/to/existing/system_top.xsa
 
 **Option 2 — Build an XSA from the ADI HDL repository.**
 
 The `ADI HDL repository <https://github.com/analogdevicesinc/hdl>`__ contains
-reference designs for many boards.  Follow the
+reference designs for many boards. Follow the
 `ADI HDL build guide <https://analogdevicesinc.github.io/hdl/user_guide/build_hdl.html>`__
-to generate a ``system_top.xsa`` for your board, then copy it here.
-
-Build
------
-
-.. code-block:: bash
-
-   # 1. Enter the project directory
-   cd no-OS/projects/hello_world/
-
-   # 2. Place your XSA here (see Hardware Requirements above)
-   cp /path/to/your/system_top.xsa .
-
-   # 3. Build
-   make
-
-Useful build variants:
-
-.. code-block:: bash
-
-   # Build with full debug symbols and -O0 optimisation (recommended for stepping through code)
-   make DEBUG=1
-
-   # Remove all generated files and start fresh
-   make reset
-
-   # Open the project in Vitis for GUI-based editing or debugging
-   make sdkopen
-
-Flash and Run
--------------
-
-From the command line
-^^^^^^^^^^^^^^^^^^^^^
-
-After a successful ``make``, program the board via JTAG and run the
-application:
-
-.. code-block:: bash
-
-   make run
-
-This calls ``xsct`` (Xilinx System Console Tool) to download and execute the
-ELF on the connected board.
-
-From Vitis (GUI)
-^^^^^^^^^^^^^^^^
-
-Open the generated Vitis workspace with ``make sdkopen``, then follow the
-no-OS build guide for your Vitis version to run or debug the application:
-
-https://analogdevicesinc.github.io/no-OS/build_guide.html
-
-Viewing UART Output
--------------------
-
-The application prints over the board's USB-UART bridge at **115200 baud,
-8N1, no flow control**.
-
-Connect the board to your PC with a USB cable before powering it on.  The
-USB-UART adapter appears as a serial device on the host:
-
-- **Linux**: ``/dev/ttyUSB0`` (Cora Z7) or ``/dev/ttyUSB1`` (ZCU102 — the
-  second of the four USB-serial interfaces exposed by the FTDI chip)
-- **Windows**: a COM port listed in Device Manager under *Ports (COM & LPT)*
-- **macOS**: ``/dev/tty.usbserial-*``
-
-Using picocom (Linux)
-^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: bash
-
-   sudo picocom /dev/ttyUSB0 -b 115200
-
-Press **Ctrl-A Ctrl-X** to exit picocom.
-
-Using screen (Linux/macOS)
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: bash
-
-   sudo screen /dev/ttyUSB0 115200
-
-Press **Ctrl-A K** to exit screen.
-
-Using a GUI terminal (Windows / cross-platform)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Configure any serial terminal application (PuTTY, TeraTerm, CoolTerm) with:
-
-=============  =======
-Setting        Value
-=============  =======
-Baud rate      115200
-Data bits      8
-Parity         None
-Stop bits      1
-Flow control   None
-=============  =======
+to generate a ``system_top.xsa`` for your board.
 
 Expected Output
 ---------------
 
-After programming the board and opening the serial terminal, you should see:
+After programming the board and opening a serial terminal at 115200 baud, you
+should see:
 
 .. code-block:: text
 
@@ -202,38 +133,5 @@ After programming the board and opening the serial terminal, you should see:
    Hello World #3
    ...
 
-A new line is printed every second.  If nothing appears, check that:
-
-- You are connected to the correct serial device.
-- The baud rate is exactly 115200.
-- The board has been powered on and the ELF has been programmed successfully
-  (``make run`` completed without errors).
-
-Build Flags Reference
----------------------
-
-.. list-table::
-   :header-rows: 1
-
-   * - Flag
-     - Default
-     - Description
-   * - ``DEBUG=1``
-     - not set
-     - Build with ``-O0`` optimisation and full debug symbols (``-g3``)
-
-Adding Support for Other Platforms
------------------------------------
-
-The project is structured so that adding a new platform (STM32, Maxim, etc.)
-requires only a new ``src/platform/<platform>/`` directory containing
-``main.c``, ``parameters.h``, ``parameters.c``, and ``platform_src.mk``.
-Use the existing ``src/platform/xilinx/`` directory as a reference.
-
-no-OS Build Guide
------------------
-
-For a full description of the no-OS build system, prerequisites, and
-toolchain setup, refer to the official build guide:
-
-https://analogdevicesinc.github.io/no-OS/build_guide.html
+A new line is printed every second. If nothing appears, check that you are
+connected to the correct serial device and that the baud rate is exactly 115200.
