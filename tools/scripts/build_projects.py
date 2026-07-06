@@ -282,9 +282,6 @@ class BuildConfig:
 		if (platform == 'aducm3029' or platform == 'stm32' or platform == 'maxim'):
 			self.export_elf_file = self.export_file
 			self.export_file = self.export_file.replace('.elf', '.hex')
-		if (platform == 'mbed'):
-			self.export_elf_file = self.export_file
-			self.export_file = self.export_file.replace('.elf', '.bin')
 		if (platform == 'xilinx'):
 			self.export_boot_bin = os.path.join(self.build_dir, "output_boot_bin/BOOT.BIN")
 			self.export_archive = os.path.join(self.build_dir, "bootgen_sysfiles.tar.gz")
