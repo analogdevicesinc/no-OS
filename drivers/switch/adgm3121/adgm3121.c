@@ -445,6 +445,7 @@ int adgm3121_init(struct adgm3121_dev **device,
 	if (!dev)
 		return -ENOMEM;
 
+	dev->type = init_param->type;
 	dev->mode = init_param->mode;
 	dev->switch_states = 0;
 	dev->daisy_chain_mode = false;
@@ -502,7 +503,10 @@ int adgm3121_init(struct adgm3121_dev **device,
 	}
 
 	/* Wait for power-up time */
-	no_os_mdelay(ADGM3121_POWER_UP_TIME_MS);
+	if (dev->type == ID_ADGM3053)
+		no_os_mdelay(ADGM3053_POWER_UP_TIME_MS);
+	else
+		no_os_mdelay(ADGM3121_POWER_UP_TIME_MS);
 
 	/* Reset all switches to off state */
 	ret = adgm3121_reset_switches(dev);

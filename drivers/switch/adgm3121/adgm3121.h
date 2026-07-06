@@ -59,16 +59,26 @@
 /* Default timeout values */
 #define ADGM3121_SWITCHING_TIME_US	200
 #define ADGM3121_POWER_UP_TIME_MS	45
+#define ADGM3053_POWER_UP_TIME_MS	5
+
+/**
+ * @enum adgm3121_type
+ * @brief Device type enumeration
+ */
+enum adgm3121_type {
+	ID_ADGM3121,
+	ID_ADGM3053,
+};
 
 /**
  * @enum adgm3121_switch
  * @brief Switch enumeration (valid for both devices)
  */
 enum adgm3121_switch {
-	ADGM3121_SW1,
-	ADGM3121_SW2,
-	ADGM3121_SW3,
-	ADGM3121_SW4,
+	ADGM3121_SW1, /* ADGM3121: RF1A-RFCA, ADGM3053: S1-D1 */
+	ADGM3121_SW2, /* ADGM3121: RF2A-RFCA, ADGM3053: S2-D2 */
+	ADGM3121_SW3, /* ADGM3121: RF2B-RFCB, ADGM3053: S3-D3 */
+	ADGM3121_SW4, /* ADGM3121: RF1B-RFCB, ADGM3053: S4-D4 */
 };
 
 /**
@@ -103,6 +113,8 @@ struct adgm3121_dev {
 	struct no_os_gpio_desc *gpio_in4;
 	/* PIN/SPI mode select GPIO */
 	struct no_os_gpio_desc *gpio_pin_spi;
+	/* Device type */
+	enum adgm3121_type type;
 	/* Control mode */
 	enum adgm3121_mode mode;
 	/* Current switch states cache */
@@ -125,6 +137,8 @@ struct adgm3121_init_param {
 	struct no_os_gpio_init_param gpio_in4;
 	/* PIN/SPI mode select GPIO */
 	struct no_os_gpio_init_param gpio_pin_spi;
+	/* Device type */
+	enum adgm3121_type type;
 	/* Control mode */
 	enum adgm3121_mode mode;
 };
