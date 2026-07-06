@@ -54,9 +54,10 @@ This driver implements only the MAC half of the Ethernet stack. PHY
 drivers are separate (``drivers/net/phy/...``) and use the CAPI PHY
 contract. The MAC and PHY meet in the application or lwIP glue, never
 in the driver. The MDIO bus, which is physically a peripheral of the
-GEM, is exposed via ``xemacps_mdio_read`` / ``xemacps_mdio_write`` so
-the application can wire it into a CAPI PHY's
-``capi_eth_phy_init_config.fn_read`` / ``fn_write`` callbacks.
+GEM, is exposed via ``xemacps_capi_mdio_ops``: construct a
+``capi_mdio_handle`` with ``capi_mdio_init``, passing the MAC
+handle in ``xemacps_mdio_init_config``, and hand the resulting handle to
+``capi_eth_phy_init_config.mdio_bus``.
 
 Driver Initialization Example
 ------------------------------

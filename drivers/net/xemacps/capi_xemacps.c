@@ -57,6 +57,7 @@
 #include "capi_xemacps.h"
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
+#include "no_os_alloc.h"
 #include <capi_eth_phy.h>		/* for the shared capi_eth_interface enum */
 
 #define XGEM_BD_TO_INDEX(ringptr, bdptr) \
@@ -855,4 +856,69 @@ const struct capi_eth_mac_ops xemacps_capi_mac_ops = {
 	.flush_rx_buffer    = xemacps_op_flush_rx_buffer,
 	.flush_tx_buffer    = xemacps_op_flush_tx_buffer,
 	/* PTP / VLAN / sleep / stats / interrupts: NULL — CAPI wrapper returns -EINVAL */
+};
+
+/* ---------- CAPI MDIO bus ops backed by the GEM ---------- */
+
+static int xemacps_mdio_op_init(struct capi_mdio_handle **handle,
+				const struct capi_mdio_init_config *config)
+{
+	const struct xemacps_mdio_init_config *extra;
+	struct capi_mdio_handle *h;
+
+	if (!handle || !config || !config->extra)
+		return -EINVAL;
+
+	extra = config->extra;
+	if (!extra->mac)
+		return -EINVAL;
+
+	if (*handle) {
+		h = *handle;
+	} else {
+		h = no_os_calloc(1, sizeof(*h));
+		if (!h)
+			return -ENOMEM;
+	}
+
+	h->ops = config->ops;
+	h->priv = extra->mac;
+	*handle = h;
+	return 0;
+}
+
+static int xemacps_mdio_op_deinit(struct capi_mdio_handle *handle)
+{
+	if (!handle)
+		return -EINVAL;
+	no_os_free(handle);
+	return 0;
+}
+
+static int xemacps_mdio_op_read_c22(struct capi_mdio_handle *handle,
+				    uint8_t phy_addr, uint8_t reg,
+				    uint16_t *data)
+{
+	if (!handle || !handle->priv)
+		return -EINVAL;
+	return xemacps_mdio_read((struct capi_eth_mac_handle *)handle->priv,
+				 phy_addr, reg, data);
+}
+
+static int xemacps_mdio_op_write_c22(struct capi_mdio_handle *handle,
+				     uint8_t phy_addr, uint8_t reg,
+				     uint16_t data)
+{
+	if (!handle || !handle->priv)
+		return -EINVAL;
+	return xemacps_mdio_write((struct capi_eth_mac_handle *)handle->priv,
+				  phy_addr, reg, data);
+}
+
+const struct capi_mdio_ops xemacps_capi_mdio_ops = {
+	.init      = xemacps_mdio_op_init,
+	.deinit    = xemacps_mdio_op_deinit,
+	.read_c22  = xemacps_mdio_op_read_c22,
+	.write_c22 = xemacps_mdio_op_write_c22,
+	/* read_c45 / write_c45 = NULL — thin layer falls back to C22 indirect */
 };

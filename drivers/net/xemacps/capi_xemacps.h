@@ -45,6 +45,7 @@
 
 #include "no_os_util.h"
 #include <capi_eth_mac.h>
+#include <capi_mdio.h>
 
 #if defined(__cplusplus)
 extern "C" {
@@ -135,10 +136,9 @@ extern const struct capi_eth_mac_ops xemacps_capi_mac_ops;
 /**
  * @brief MDIO clause-22 read on the GEM's MDIO bus.
  *
- * The GEM owns the MDIO peripheral.  This helper exposes it so that an
- * external PHY driver — initialised separately via capi_eth_phy_init —
- * can use the bus.  Callers typically wrap this in a trampoline that
- * matches the `capi_eth_phy_read_fn` signature.
+ * The GEM owns the MDIO peripheral.  This helper is called by
+ * xemacps_capi_mdio_ops (or directly, for legacy code) to reach PHYs
+ * attached to the bus.
  *
  * @param handle    MAC handle returned by capi_eth_mac_init().
  * @param phy_addr  MDIO PHY address (0..31).
@@ -160,6 +160,25 @@ int xemacps_mdio_read(struct capi_eth_mac_handle *handle,
  */
 int xemacps_mdio_write(struct capi_eth_mac_handle *handle,
 		       uint8_t phy_addr, uint8_t reg_addr, uint16_t data);
+
+/**
+ * @brief CAPI MDIO bus ops table backed by the GEM's MDIO peripheral.
+ *
+ * Pair with capi_mdio_init(); pass the parent MAC handle in
+ * @ref xemacps_mdio_init_config.mac and put that struct's address in
+ * capi_mdio_init_config.extra.
+ */
+extern const struct capi_mdio_ops xemacps_capi_mdio_ops;
+
+/**
+ * @brief Init parameters for xemacps_capi_mdio_ops.
+ *
+ * Passed via capi_mdio_init_config.extra.
+ */
+struct xemacps_mdio_init_config {
+	/** Parent MAC handle (already initialised via capi_eth_mac_init). */
+	struct capi_eth_mac_handle *mac;
+};
 
 #if defined(__cplusplus)
 }
