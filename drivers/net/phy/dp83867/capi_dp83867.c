@@ -39,6 +39,7 @@
 #include <errno.h>
 
 #include <capi_eth_phy.h>
+#include <capi_mdio.h>
 #include "capi_dp83867.h"
 #include "no_os_alloc.h"
 #include "no_os_delay.h"
@@ -50,16 +51,12 @@
 
 static int dp83867_read(struct dp83867_handle *dev, uint8_t reg, uint16_t *val)
 {
-	if (!dev->fn_read)
-		return -EINVAL;
-	return dev->fn_read(dev->phy_addr, reg, val);
+	return capi_mdio_read(dev->mdio_bus, dev->phy_addr, reg, val);
 }
 
 static int dp83867_write(struct dp83867_handle *dev, uint8_t reg, uint16_t val)
 {
-	if (!dev->fn_write)
-		return -EINVAL;
-	return dev->fn_write(dev->phy_addr, reg, val);
+	return capi_mdio_write(dev->mdio_bus, dev->phy_addr, reg, val);
 }
 
 static int dp83867_modify(struct dp83867_handle *dev, uint8_t reg,
@@ -79,35 +76,15 @@ static int dp83867_modify(struct dp83867_handle *dev, uint8_t reg,
 static int dp83867_ext_read(struct dp83867_handle *dev, uint16_t reg,
 			    uint16_t *val)
 {
-	int ret;
-
-	ret = dp83867_write(dev, DP83867_REG_REGCR, DP83867_REGCR_ADDR);
-	if (ret)
-		return ret;
-	ret = dp83867_write(dev, DP83867_REG_ADDAR, reg);
-	if (ret)
-		return ret;
-	ret = dp83867_write(dev, DP83867_REG_REGCR, DP83867_REGCR_DATA_NO_INC);
-	if (ret)
-		return ret;
-	return dp83867_read(dev, DP83867_REG_ADDAR, val);
+	return capi_mdio_read_c45(dev->mdio_bus, dev->phy_addr,
+				      DP83867_DEVAD, reg, val);
 }
 
 static int dp83867_ext_write(struct dp83867_handle *dev, uint16_t reg,
 			     uint16_t val)
 {
-	int ret;
-
-	ret = dp83867_write(dev, DP83867_REG_REGCR, DP83867_REGCR_ADDR);
-	if (ret)
-		return ret;
-	ret = dp83867_write(dev, DP83867_REG_ADDAR, reg);
-	if (ret)
-		return ret;
-	ret = dp83867_write(dev, DP83867_REG_REGCR, DP83867_REGCR_DATA_NO_INC);
-	if (ret)
-		return ret;
-	return dp83867_write(dev, DP83867_REG_ADDAR, val);
+	return capi_mdio_write_c45(dev->mdio_bus, dev->phy_addr,
+				       DP83867_DEVAD, reg, val);
 }
 
 static int dp83867_ext_modify(struct dp83867_handle *dev, uint16_t reg,
@@ -237,7 +214,7 @@ static int dp83867_init(struct capi_eth_phy_handle **handle,
 	uint32_t phy_id;
 	int ret;
 
-	if (!handle || !config || !config->fn_read || !config->fn_write)
+	if (!handle || !config || !config->mdio_bus)
 		return -EINVAL;
 
 	if (*handle) {
@@ -252,8 +229,7 @@ static int dp83867_init(struct capi_eth_phy_handle **handle,
 
 	dev->base.ops = config->ops;
 	dev->phy_addr = config->phy_addr;
-	dev->fn_read = config->fn_read;
-	dev->fn_write = config->fn_write;
+	dev->mdio_bus = config->mdio_bus;
 
 	extra = (const struct dp83867_extra_config *)config->extra;
 	if (extra)

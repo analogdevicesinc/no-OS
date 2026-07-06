@@ -61,32 +61,43 @@ Features:
 Driver Initialization Example
 ------------------------------
 
-PHY drivers are not used directly. Instead, pass the ops table and
-extra configuration to a MAC driver:
+A PHY driver is bound to its MDIO transport at init time. The typical
+flow with a Xilinx GEM MAC is:
 
 .. code-block:: C
 
     #include "capi_marvell_88e1510.h"
-    #include "no_os_xemacps.h"
+    #include "capi_xemacps.h"
+    #include <capi_eth_mac.h>
+    #include <capi_mdio.h>
+    #include <capi_eth_phy.h>
 
-    struct mrvl_88e1510_extra_config mrvl_cfg = {
-        .rgmii = { .rx_delay_en = true, .tx_delay_en = true },
-        .downshift_en = true,
+    struct capi_eth_mac_handle  *mac      = NULL;
+    struct capi_mdio_handle *mdio_bus = NULL;
+    struct capi_eth_phy_handle  *phy      = NULL;
+
+    struct capi_eth_mac_init_config mac_cfg = {
+        .identifier = GEM_DEVICE_ID,
+        .ops        = &xemacps_capi_mac_ops,
+    };
+    capi_eth_mac_init(&mac, &mac_cfg);
+
+    struct xemacps_mdio_init_config xmdio = { .mac = mac };
+    struct capi_mdio_init_config mdio_cfg = {
+        .ops   = &xemacps_capi_mdio_ops,
+        .extra = &xmdio,
+    };
+    capi_mdio_init(&mdio_bus, &mdio_cfg);
+
+    struct mrvl_88e1510_extra_config phy_extra = {
+        .rgmii             = { .rx_delay_en = true, .tx_delay_en = true },
+        .downshift_en      = true,
         .downshift_retries = 3,
     };
-
-    struct xemacps_init_param gem_ip = {
-        .device_id = 0,
-        .phy_ops   = &mrvl_88e1510_ops,
-        .phy_extra = &mrvl_cfg,
-        .phy_mode  = {
-            .speed          = CAPI_ETH_PHY_SPEED_1G,
-            .duplex         = CAPI_ETH_PHY_DUPLEX_FULL,
-            .auto_negotiate = true,
-            .mdix           = CAPI_ETH_MDIX_AUTO,
-        },
-        .hwaddr = {0x00, 0x0A, 0x35, 0x00, 0x01, 0x02},
+    struct capi_eth_phy_init_config phy_cfg = {
+        .phy_addr = CAPI_ETH_PHY_ADDR_ANY,   /* auto-scan */
+        .mdio_bus = mdio_bus,
+        .extra    = &phy_extra,
+        .ops      = &mrvl_88e1510_ops,
     };
-
-    struct xemacps_desc *desc;
-    xemacps_init(&desc, &gem_ip);
+    capi_eth_phy_init(&phy, &phy_cfg);

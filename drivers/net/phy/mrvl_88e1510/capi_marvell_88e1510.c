@@ -39,6 +39,7 @@
 #include <errno.h>
 
 #include <capi_eth_phy.h>
+#include <capi_mdio.h>
 #include "capi_marvell_88e1510.h"
 #include "no_os_alloc.h"
 #include "no_os_delay.h"
@@ -51,17 +52,13 @@
 static int mrvl_read(struct mrvl_88e1510_handle *dev,
 		     uint8_t reg, uint16_t *val)
 {
-	if (!dev->fn_read)
-		return -EINVAL;
-	return dev->fn_read(dev->phy_addr, reg, val);
+	return capi_mdio_read(dev->mdio_bus, dev->phy_addr, reg, val);
 }
 
 static int mrvl_write(struct mrvl_88e1510_handle *dev,
 		      uint8_t reg, uint16_t val)
 {
-	if (!dev->fn_write)
-		return -EINVAL;
-	return dev->fn_write(dev->phy_addr, reg, val);
+	return capi_mdio_write(dev->mdio_bus, dev->phy_addr, reg, val);
 }
 
 static int mrvl_modify(struct mrvl_88e1510_handle *dev,
@@ -208,7 +205,7 @@ static int mrvl_init(struct capi_eth_phy_handle **handle,
 	uint32_t oui;
 	int ret;
 
-	if (!handle || !config || !config->fn_read || !config->fn_write)
+	if (!handle || !config || !config->mdio_bus)
 		return -EINVAL;
 
 	if (*handle) {
@@ -223,8 +220,7 @@ static int mrvl_init(struct capi_eth_phy_handle **handle,
 
 	dev->base.ops = config->ops;
 	dev->phy_addr = config->phy_addr;
-	dev->fn_read = config->fn_read;
-	dev->fn_write = config->fn_write;
+	dev->mdio_bus = config->mdio_bus;
 
 	extra = (const struct mrvl_88e1510_extra_config *)config->extra;
 	if (extra) {

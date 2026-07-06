@@ -159,8 +159,7 @@ struct mrvl_88e1510_handle {
 	struct capi_eth_phy_handle base;
 
 	uint8_t phy_addr;
-	capi_eth_phy_read_fn fn_read;
-	capi_eth_phy_write_fn fn_write;
+	struct capi_mdio_handle *mdio_bus;
 
 	enum capi_eth_interface interface;
 	struct mrvl_88e1510_rgmii_config rgmii;

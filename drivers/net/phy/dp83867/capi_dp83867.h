@@ -115,18 +115,15 @@ extern "C" {
 /* CFG3 (0x1E) */
 #define DP83867_CFG3_INT_OE                     NO_OS_BIT(7)
 
-/* Extended register access via MMD0x1F.
- * The DP83867 exposes vendor extended registers through clause-22 MMD indirect
- * access using registers 0x0D (REGCR) and 0x0E (ADDAR). This is the standard
- * MDIO extended access mechanism.
+/* Vendor extended registers live in MMD device address 0x1F. They can be
+ * reached either via a native Clause 45 access (preferred) or via the
+ * standard C22-indirect MMD access at registers 0x0D/0x0E — the CAPI MDIO
+ * thin layer picks the fast path when the bus advertises c45 ops and
+ * falls back to the indirect sequence otherwise.
  */
 #define DP83867_DEVAD                           0x1f
-#define DP83867_REG_REGCR                       0x0d
-#define DP83867_REG_ADDAR                       0x0e
-#define DP83867_REGCR_ADDR                      (0x0000 | DP83867_DEVAD)
-#define DP83867_REGCR_DATA_NO_INC               (0x4000 | DP83867_DEVAD)
 
-/* Extended registers (accessed via REGCR/ADDAR) */
+/* Extended registers (MMD 0x1F) */
 #define DP83867_REG_RGMIICTL                    0x0032
 #define DP83867_REG_RGMIIDCTL                   0x0086
 #define DP83867_REG_IO_MUX_CFG                  0x0170
@@ -208,8 +205,7 @@ struct dp83867_handle {
 	struct capi_eth_phy_handle base;
 
 	uint8_t phy_addr;
-	capi_eth_phy_read_fn fn_read;
-	capi_eth_phy_write_fn fn_write;
+	struct capi_mdio_handle *mdio_bus;
 
 	enum capi_eth_interface interface;
 	struct dp83867_rgmii_config rgmii;
