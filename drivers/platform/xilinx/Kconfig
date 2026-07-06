@@ -1,0 +1,48 @@
+menuconfig XILINX
+	bool "Xilinx Platform Drivers"
+	default n
+	help
+	  Enable support for Xilinx platform drivers.
+
+	  Low-level platform drivers for Xilinx Zynq-7000, ZynqMP, Versal
+	  and MicroBlaze targets (GPIO, SPI, I2C, UART, IRQ, Timer),
+	  built on top of a Vitis-generated standalone BSP.
+
+if XILINX
+
+config UART_XILINX
+	bool "Enable Xilinx UART driver"
+	depends on UART
+	default n
+
+config SPI_XILINX
+	bool "Enable Xilinx SPI driver"
+	depends on SPI
+	default n
+
+config I2C_XILINX
+	bool "Enable Xilinx I2C driver"
+	depends on I2C
+	default n
+
+config GPIO_XILINX
+	bool "Enable Xilinx GPIO driver"
+	depends on GPIO
+	default n
+
+config GPIO_IRQ_XILINX
+	bool "Enable Xilinx GPIO IRQ driver"
+	depends on GPIO && IRQ
+	default n
+
+config IRQ_XILINX
+	bool "Enable Xilinx IRQ driver"
+	depends on IRQ
+	default n
+
+config TIMER_XILINX
+	bool "Enable Xilinx Timer driver"
+	depends on TIMER
+	default n
+
+endif
