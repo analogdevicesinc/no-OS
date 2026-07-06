@@ -275,9 +275,26 @@ def print_table(combinations):
     print(f"\n{len(combinations)} combination(s)")
 
 
+def quote_cmd(cmd):
+    """Render a command list as a copy-pasteable string.
+
+    Tokens containing spaces or shell/backslash characters are wrapped in
+    double quotes so the printed command works when pasted into a shell on
+    both POSIX and Windows (where build paths routinely contain spaces and
+    backslashes, e.g. C:\\Users\\John Doe\\no-os).
+    """
+    parts = []
+    for token in cmd:
+        if token and not any(ch in token for ch in ' \t"\\'):
+            parts.append(token)
+        else:
+            parts.append('"' + token.replace('"', '\\"') + '"')
+    return " ".join(parts)
+
+
 def echo_cmd(cmd):
     """Echo a cmake command to stdout before it is executed."""
-    print(f"  $ {' '.join(cmd)}", flush=True)
+    print(f"  $ {quote_cmd(cmd)}", flush=True)
 
 
 def append_log(log_path, section, result):
@@ -335,10 +352,10 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
     ]
 
     if dry_run:
-        print(f"  {' '.join(configure_cmd)}")
-        print(f"  {' '.join(build_cmd)}")
+        print(f"  {quote_cmd(configure_cmd)}")
+        print(f"  {quote_cmd(build_cmd)}")
         if flash:
-            print(f"  {' '.join(flash_cmd)}")
+            print(f"  {quote_cmd(flash_cmd)}")
         return combo, True, ""
 
     label = f"{project}/{variant} for {board}"
@@ -470,7 +487,7 @@ def cmd_build(args, repo_root, presets):
                     configure_cmd.append(f"-DPROBE={args.probe}")
 
                 if args.dry_run:
-                    print(f"  [{idx}/{total}] {' '.join(configure_cmd)}")
+                    print(f"  [{idx}/{total}] {quote_cmd(configure_cmd)}")
                     continue
 
                 log_path = build_dir / "build.log"
@@ -533,9 +550,9 @@ def cmd_build(args, repo_root, presets):
             ]
 
             if args.dry_run:
-                lines = f"  {' '.join(build_cmd)}"
+                lines = f"  {quote_cmd(build_cmd)}"
                 if args.flash:
-                    lines += f"\n  {' '.join(flash_cmd)}"
+                    lines += f"\n  {quote_cmd(flash_cmd)}"
                 return combo, True, lines
 
             echo_cmd(build_cmd)
