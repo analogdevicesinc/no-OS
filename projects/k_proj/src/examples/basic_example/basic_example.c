@@ -201,7 +201,7 @@ int example_main()
 
 	unsigned int i;
 	int ret;
-
+#ifndef ONLY_IIOD
 	printf("\nAD9081K (K) basic example - JESD204 link bring-up.\n");
 
 	/*
@@ -984,6 +984,7 @@ int example_main()
 	}
 #endif
 
+#endif
 
 #ifdef IIOD
 	/*
@@ -1016,12 +1017,12 @@ int example_main()
 #endif
 	};
 
+#ifndef ONLY_IIOD
 	ret = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
 	if (ret) {
 		pr_err("iio_axi_adc_init() failed: %d\n", ret);
 		goto error_fsm;
 	}
-
 	struct iio_data_buffer read_buff = {
 		.buff = (void *)(uintptr_t)ADC_DDR_BASEADDR,
 		.size = ADC_BUFFER_SAMPLES * ADC_CHANNELS * sizeof(uint16_t),
@@ -1034,12 +1035,15 @@ int example_main()
 		goto error_iio_adc;
 	}
 	iio_ad9081k_get_dev_descriptor(iio_ad9081k_desc, &ad9081k_dev_desc);
+#endif
 
 	struct iio_app_device iio_devices[] = {
+#ifndef ONLY_IIOD
 		IIO_APP_DEVICE("cf-ad9081k-lpc", iio_axi_adc_desc,
 			       adc_dev_desc, &read_buff, NULL, NULL),
 		IIO_APP_DEVICE("ad9081k", iio_ad9081k_desc,
 			       ad9081k_dev_desc, NULL, NULL, NULL),
+#endif
 	};
 
 	app_init_param.devices = iio_devices;
