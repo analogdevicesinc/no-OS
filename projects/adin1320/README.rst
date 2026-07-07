@@ -159,28 +159,6 @@ Connections
 Build Command
 ^^^^^^^^^^^^^
 
-.. code-block:: bash
-
-   # navigate to project folder
-   cd projects/adin1320
-
-   # to delete current build
-   make reset
-
-   # (optional) select an example; default: basic_init_2devices
-   # (options: basic_init, basic_init_2devices, wake_on_lan, cmd)
-   export EXAMPLE=basic_init_2devices
-
-   # (optional) enable or disable forced speed mode; default: n
-   # (options: y, n; applies to basic_init and basic_init_2devices)
-   export FORCE_SPEED=n
-
-   # to build project
-   make
-
-   # to flash the code to the controller
-   make run
-
 Available variants: ``basic_init``, ``basic_init_2devices``, ``cmd``, ``wake_on_lan``.
 Available boards: ``max32670evkit``.
 Replace ``--variant`` / ``--board`` accordingly.
