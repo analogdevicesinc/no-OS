@@ -73,6 +73,13 @@ function(ide_vscode_configure PROJECT_TARGET)
     set(PLATFORM_INCLUDE_PATHS "")
     if(DEFINED MAXIM_LIBRARIES)
         set(PLATFORM_INCLUDE_PATHS ",\n                \"${MAXIM_LIBRARIES}/**\"")
+    elseif(DEFINED ADUCM_DFP)
+        # ADuCM3029: expose the Device Family Pack and CMSIS Core headers so
+        # IntelliSense resolves SDK includes for files not in compile_commands.
+        set(PLATFORM_INCLUDE_PATHS ",\n                \"${ADUCM_DFP}/**\"")
+        if(DEFINED ADUCM_CMSIS_CORE)
+            set(PLATFORM_INCLUDE_PATHS "${PLATFORM_INCLUDE_PATHS},\n                \"${ADUCM_CMSIS_CORE}/**\"")
+        endif()
     endif()
 
     # --- Generate settings.json and c_cpp_properties.json (no genex needed) ---

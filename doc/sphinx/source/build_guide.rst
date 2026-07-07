@@ -81,6 +81,7 @@ ADUCM3029
     :maxdepth: 1
 
     build_guides/build_aducm3029
+    build_guides/build_aducm3029_cmake
 
 RASPBERRY PI PICO
 =================

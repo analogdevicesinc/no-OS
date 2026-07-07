@@ -9,7 +9,8 @@
 	"include": [
 		"board_configs/maxim/CMakePresets.json",
 		"board_configs/stm32/CMakePresets.json",
-		"board_configs/pico/CMakePresets.json"
+		"board_configs/pico/CMakePresets.json",
+		"board_configs/aducm3029/CMakePresets.json"
 	],
 
 	"configurePresets": [

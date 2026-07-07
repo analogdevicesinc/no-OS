@@ -64,6 +64,11 @@ function(ide_build_source_groups)
         list(APPEND _groups "maxim_sdk=${MAXIM_LIBRARIES}")
     endif()
 
+    # ADuCM3029 Device Family Pack (CCES SDK)
+    if(PLATFORM STREQUAL "aducm3029" AND DEFINED ADUCM_DFP)
+        list(APPEND _groups "aducm_dfp=${ADUCM_DFP}")
+    endif()
+
     set(IDE_SOURCE_GROUPS ${_groups} PARENT_SCOPE)
 endfunction()
 
