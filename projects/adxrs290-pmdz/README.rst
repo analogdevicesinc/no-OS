@@ -87,15 +87,8 @@ acquisition using the IIO framework in a no-OS environment. It shows how
 to capture and stream data from the ADXRS290 gyroscope with minimal
 configuration.
 
-In order to build the IIO project make sure you have the following configuration in the
-:git-no-OS:`Makefile <projects/adxrs290-pmdz/Makefile>`.
-
-.. code-block:: bash
-
-   # Enable Standard IIO Example                                                                                                                                                    
-    IIO_EXAMPLE=y                                                                                                                                                                    
-    IIO_TRIGGER_EXAMPLE=n                                                                                                                                                            
-    IIO_TIMER_TRIGGER_EXAMPLE=n   
+This example is built by selecting the ``iio`` variant (see the Build
+Command sections below).
 
 IIO Trigger Example
 ~~~~~~~~~~~~~~~~~~~
@@ -105,12 +98,8 @@ software triggers to synchronize sensor data capture with external
 events. It is ideal for scenarios where sensor readings must be
 initiated by specific trigger conditions.
 
-.. code-block:: bash
-
-    # Enable IIO Trigger Example                                                                                                                                                     
-    IIO_EXAMPLE=n                                                                                                                                                                    
-    IIO_TRIGGER_EXAMPLE=y                                                                                                                                                            
-    IIO_TIMER_TRIGGER_EXAMPLE=n  
+This example is built by selecting the ``iio_trigger`` variant (see the
+Build Command sections below).
 
 IIO Timer Trigger Example
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -120,12 +109,8 @@ sampling through timer interrupts. It is suited for applications
 requiring consistent sample intervals to reliably monitor the ADXRS290
 sensor data.
 
-.. code-block:: bash
-
-    # Enable IIO Timer Trigger Example                                                                                                                                               
-    IIO_EXAMPLE=n                                                                                                                                                                    
-    IIO_TRIGGER_EXAMPLE=n                                                                                                                                                            
-    IIO_TIMER_TRIGGER_EXAMPLE=y 
+This example is built by selecting the ``iio_timer_trigger`` variant (see
+the Build Command sections below).
 
 No-OS Supported Platforms
 -------------------------
@@ -193,19 +178,25 @@ number), a suggested connection mnemonic, and the pin function.
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``iio``, ``iio_timer_trigger``.
+Available boards: ``eval-adicup3029``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-    # Clean previous build artifacts                                                                                                                                                 
-    make clean                                                                                                                                                                       
-                                                                                                                                                                                     
-    # Build the project with ADuCM3029-specific settings                                                                                                                             
-    make aducm3029                                                                                                                                                                   
-                                                                                                                                                                                     
-    # Flash the newly compiled firmware onto the ADuCM device                                                                                                                        
-    make flash                                                                                                                                                                       
-                                                                                                                                                                                     
-    # Launch a debugging session for the ADuCM platform                                                                                                                              
-    make debug
+	# point at the CrossCore Embedded Studio install (only if not auto-detected)
+	export CCES_HOME=/opt/analog/cces/3.0.3
+
+	cd no-OS
+
+	# build the project (iio example on the EVAL-ADICUP3029)
+	python tools/scripts/no_os_build.py build \
+		--project adxrs290-pmdz --variant iio --board eval-adicup3029
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project adxrs290-pmdz --variant iio --board eval-adicup3029 \
+		--probe openocd --flash
 
 Maxim Platform
 ~~~~~~~~~~~~~~
@@ -261,6 +252,10 @@ a brief description of the pin function.
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``iio``, ``iio_trigger``.
+Available boards: ``max32655fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# point at the Maxim SDK libraries (only if not auto-detected)
@@ -276,8 +271,6 @@ Build Command
 	python tools/scripts/no_os_build.py build \
 		--project adxrs290-pmdz --variant iio --board max32655fthr \
 		--probe openocd --flash
-
-Available variants: ``iio``, ``iio_trigger``. Replace ``--variant`` accordingly.
 
 PICO Platform
 ~~~~~~~~~~~~~
@@ -323,6 +316,10 @@ wiring the boards.
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``iio``, ``iio_trigger``, ``iio_timer_trigger``.
+Available boards: ``rpi-pico``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	cd no-OS
@@ -335,8 +332,6 @@ Build Command
 	python tools/scripts/no_os_build.py build \
 		--project adxrs290-pmdz --variant iio --board rpi-pico \
 		--probe openocd --flash
-
-Available variants: ``iio``, ``iio_trigger``, ``iio_timer_trigger``. Replace ``--variant`` accordingly.
 
 STM32 Platform
 ~~~~~~~~~~~~~~~
@@ -386,6 +381,10 @@ Connections
 
 Build Command
 ^^^^^^^^^^^^^
+
+Available variants: ``iio``.
+Available boards: ``sdp-ck1z``.
+Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
