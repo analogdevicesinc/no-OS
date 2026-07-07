@@ -12,6 +12,15 @@
 #include "parameters.h"
 #include "test_framework.h"
 
+/*
+ * Root IRQ controller extra config. A platform whose controller needs no extra
+ * data (the NVIC on STM32, or the GIC-only Xilinx build) can leave this
+ * undefined; default it to NULL so irq_config still compiles everywhere.
+ */
+#ifndef IRQ_CTRL_EXTRA
+#define IRQ_CTRL_EXTRA NULL
+#endif
+
 /**
 static void test_wait_us(void *context, uint32_t us)
 {
@@ -160,6 +169,7 @@ _Static_assert(sizeof(gpio_output_pin_numbers) == sizeof(
  */
 struct capi_irq_config irq_config = {
 	.irq_ctrl_id = IRQ_CTRL_IDENTIFIER,
+	.extra = IRQ_CTRL_EXTRA,
 };
 #endif /* IRQ_CTRL_IDENTIFIER */
 
@@ -221,3 +231,71 @@ const struct capi_timer_config timer_config = {
 	.extra = &timer_extra,
 };
 #endif /* TIMER_OPS */
+
+#ifdef I2C_OPS
+/**
+ * @brief Platform-specific extra data for the I2C initiator.
+ */
+static I2C_EXTRA_TYPE i2c_extra = I2C_EXTRA_INIT;
+
+/**
+ * @brief CAPI I2C initiator configuration for the loopback tests.
+ */
+const struct capi_i2c_config i2c_master_config = {
+	.identifier = I2C_IDENTIFIER,
+	.clk_freq_hz = 0U,
+	.initiator = true,
+	.address = 0U,
+	.device = NULL,
+	.dma_handle = NULL,
+	.extra = &i2c_extra,
+	.ops = I2C_OPS,
+};
+
+/**
+ * @brief CAPI I2C device descriptor used by the initiator to address the target.
+ */
+struct capi_i2c_device i2c_dev = {
+	.controller = NULL,
+	.address = I2C_TARGET_ADDR,
+	.b10addr = false,
+	.speed = CAPI_I2C_SPEED_STANDARD,
+	.duty_cycle = 0U,
+	.clk_stretch = 0,
+	.extra = NULL,
+};
+#endif /* I2C_OPS */
+
+#ifdef I2C_TARGET_OPS
+/**
+ * @brief Platform-specific extra data for the I2C target.
+ */
+static I2C_TARGET_EXTRA_TYPE i2c_target_extra = I2C_TARGET_EXTRA_INIT;
+
+/**
+ * @brief CAPI I2C target configuration for the loopback tests.
+ */
+const struct capi_i2c_config i2c_target_config = {
+	.identifier = I2C_TARGET_IDENTIFIER,
+	.clk_freq_hz = 0U,
+	.initiator = false,
+	.address = I2C_TARGET_ADDR,
+	.device = NULL,
+	.dma_handle = NULL,
+	.extra = &i2c_target_extra,
+	.ops = I2C_TARGET_OPS,
+};
+
+/**
+ * @brief CAPI I2C device descriptor for the target side.
+ */
+struct capi_i2c_device i2c_target_dev = {
+	.controller = NULL,
+	.address = I2C_TARGET_ADDR,
+	.b10addr = false,
+	.speed = CAPI_I2C_SPEED_STANDARD,
+	.duty_cycle = 0U,
+	.clk_stretch = 0,
+	.extra = NULL,
+};
+#endif /* I2C_TARGET_OPS */
