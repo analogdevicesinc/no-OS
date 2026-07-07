@@ -88,6 +88,14 @@ config ADC_ADUCM3029
 	help
 	  Enable ADuCM3029-specific ADC driver implementation.
 
+config IIO_ADUCM3029
+	bool "Enable ADuCM3029 ADC/PWM IIO driver"
+	depends on IIO && ADC_ADUCM3029
+	default n
+	help
+	  Enable the ADuCM3029-specific IIO driver that exposes the on-chip
+	  ADC and PWM channels over an IIO interface.
+
 config FLASH_ADUCM3029
 	bool "Enable ADuCM3029 flash driver"
 	default n

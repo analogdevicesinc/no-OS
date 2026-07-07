@@ -16,6 +16,7 @@ no_os_sources_ifdef(CONFIG_TIMER_ADUCM3029      ${CMAKE_CURRENT_SOURCE_DIR}/aduc
 no_os_sources_ifdef(CONFIG_RTC_ADUCM3029        ${CMAKE_CURRENT_SOURCE_DIR}/aducm3029_rtc.c)
 no_os_sources_ifdef(CONFIG_PWM_ADUCM3029        ${CMAKE_CURRENT_SOURCE_DIR}/aducm3029_pwm.c)
 no_os_sources_ifdef(CONFIG_ADC_ADUCM3029        ${CMAKE_CURRENT_SOURCE_DIR}/aducm3029_adc.c)
+no_os_sources_ifdef(CONFIG_IIO_ADUCM3029        ${CMAKE_CURRENT_SOURCE_DIR}/iio_aducm3029.c)
 no_os_sources_ifdef(CONFIG_FLASH_ADUCM3029      ${CMAKE_CURRENT_SOURCE_DIR}/aducm3029_flash.c)
 no_os_sources_ifdef(CONFIG_TRNG_ADUCM3029       ${CMAKE_CURRENT_SOURCE_DIR}/aducm3029_trng.c)
 
