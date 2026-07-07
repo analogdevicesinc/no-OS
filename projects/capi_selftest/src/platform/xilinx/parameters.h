@@ -14,6 +14,7 @@
 #include "xilinx_capi_gpio.h"
 #include "xilinx_capi_spi.h"
 #include "xilinx_capi_timer.h"
+#include "xilinx_capi_i2c.h"
 #include "xilinx_capi_irq.h"
 #include "capi_timer.h"
 #include "xinterrupt_wrap.h"
@@ -116,5 +117,38 @@ extern struct capi_uart_ops capi_uart_xilinx_ps_ops;
 #define TIMER_RATE_WINDOW_US	100U
 #define TIMER_RATE_COUNTER_MASK	0x0000FFFFU
 #define TIMER_RATE_TOLERANCE_PCT 10U
+
+/*
+ * I2C initiator/target loopback on ZedBoard:
+ *   Initiator = PL AXI IIC (XIic) in the fabric, IRQ_F2P GIC id 36.
+ *   Target    = PS I2C0 (XIicPs) on EMIO, behind the GIC (level-high SPI).
+ * Wire the two buses together (SCL<->SCL, SDA<->SDA) with pull-ups. The
+ * target answers I2C_TARGET_ADDR; the initiator addresses that same address.
+ */
+#define I2C_TARGET_ADDR		0x42U
+
+#define I2C_IDENTIFIER		XPAR_XIIC_0_BASEADDR
+#define I2C_OPS			&capi_i2c_xilinx_pl_ops
+#define I2C_EXTRA_TYPE		struct capi_i2c_xilinx_config
+#define I2C_EXTRA_INIT		{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_GIC(XPAR_FABRIC_AXI_IIC_0_INTR) }
+
+#define I2C_TARGET_IDENTIFIER	XPAR_XIICPS_0_BASEADDR
+#define I2C_TARGET_OPS		&capi_i2c_xilinx_ps_ops
+#define I2C_TARGET_EXTRA_TYPE	struct capi_i2c_xilinx_config
+#define I2C_TARGET_PS_IRQ_ID	(XGet_IntrId(XPAR_XIICPS_0_INTERRUPTS) + \
+				 XGet_IntrOffset(XPAR_XIICPS_0_INTERRUPTS))
+#define I2C_TARGET_EXTRA_INIT	{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_GIC(I2C_TARGET_PS_IRQ_ID) }
+
+/*
+ * On Xilinx the CAPI GIC IRQ singleton routes each controller's interrupt to
+ * the ISR connected at capi_i2c_init(), and the BSP handles clocking/pinmux.
+ * So the test's platform hooks reduce to no-ops (unlike STM32, where I2C2's
+ * clock, pins and IRQ vectors must be brought up by hand).
+ */
+#define I2C_PLATFORM_INIT()		0
+#define I2C_PLATFORM_DEINIT()		((void)0)
+#define I2C_PLATFORM_SET_TARGET(h)	((void)(h))
 
 #endif /* __PARAMETERS_H__ */
