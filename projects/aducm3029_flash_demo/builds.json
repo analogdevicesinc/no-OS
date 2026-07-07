@@ -1,7 +1,0 @@
-{
-  "aducm3029": {
-    "flash_example":  {
-      "flags" : "EXAMPLE=flash_example"
-    }
-  }
-}

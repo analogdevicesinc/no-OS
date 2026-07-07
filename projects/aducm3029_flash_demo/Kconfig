@@ -1,0 +1,15 @@
+menu "ADuCM3029 Flash Demo Configuration"
+
+choice ADUCM_FLASH_DEMO_VARIANT
+	prompt "Example variant"
+	default ADUCM_FLASH_DEMO_EXAMPLE
+
+config ADUCM_FLASH_DEMO_EXAMPLE
+	bool "Flash example"
+	help
+	  Example that exercises the ADuCM3029 on-chip flash controller
+	  (erase/write/read) and reports the result over UART.
+
+endchoice
+
+endmenu

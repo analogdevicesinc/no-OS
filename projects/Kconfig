@@ -36,6 +36,7 @@ source "projects/dc2903a/Kconfig"
 source "projects/eval-ade7754/Kconfig"
 source "projects/adalm-mmsc/Kconfig"
 source "projects/aducm_blinky_example/Kconfig"
+source "projects/aducm3029_flash_demo/Kconfig"
 
 source "projects/ad7091r8-sdz/Kconfig"
 source "projects/adalm-lsmspg/Kconfig"
