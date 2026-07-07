@@ -60,8 +60,8 @@ Please see: https://wiki.analog.com/resources/no-os/build
 No-OS Supported Examples
 ------------------------
 
-This project is organized around the no-OS ``EXAMPLE`` based build flow.
-Selecting an example at build time (``EXAMPLE=<name>``) chooses which
+This project is organized around the no-OS variant based build flow.
+Selecting a variant at build time (``--variant <name>``) chooses which
 application is compiled. The platform ``main()`` is a thin dispatcher that
 calls ``example_main()``, provided by the selected example. The
 initialization data used in the examples is defined in
@@ -93,20 +93,28 @@ look at:
 The No-OS IIO Application together with the AD5791 no-OS driver takes
 care of all the back-end logic needed to setup the IIO server.
 
-The IIO example is the default build configuration (``EXAMPLE`` defaults to
-``iio_example``, which sets ``IIOD=y``). Two variants are available:
+This example is built by selecting the ``iio`` variant (see the Build
+Command below).
 
-**IIO over UART** (default):
+IIO Example over Wi-Fi
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Same IIO example as above, but the IIOD transport runs over an ESP8266
+Wi-Fi module (UART AT commands) instead of the serial backend. The board
+connects to the configured access point and the IIO client connects to
+the reported IP address.
+
+Set the network credentials in the ``iio_wifi`` defconfig
+`iio_wifi.conf <https://github.com/analogdevicesinc/no-OS/tree/main/projects/cn0531/iio_wifi.conf>`_
+via ``CONFIG_WIFI_SSID`` and ``CONFIG_WIFI_PWD`` before building, for example:
 
 .. code-block:: bash
 
-	make EXAMPLE=iio_example PLATFORM=aducm3029
+	CONFIG_WIFI_SSID="MyNetwork"
+	CONFIG_WIFI_PWD="MyPassword"
 
-**IIO over WiFi:**
-
-.. code-block:: bash
-
-	make EXAMPLE=iio_example NETWORKING=y PLATFORM=aducm3029
+This example is built by selecting the ``iio_wifi`` variant (see the Build
+Command below). It is available on the ADuCM/eval-adicup3029 target only.
 
 No-OS Supported Platforms
 -------------------------
@@ -128,13 +136,26 @@ into the EVAL-ADICUP3029.
 
 **Build Command**
 
+Available variants: ``iio``, ``iio_wifi``.
+Available boards: ``eval-adicup3029``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-	# to delete current build
-	make reset
-	# to build the project (EXAMPLE defaults to iio_example)
-	make EXAMPLE=iio_example PLATFORM=aducm3029
-	# to flash the code
-	make run
-	# to debug the code
-	make debug
+	# point at the CrossCore Embedded Studio install (only if not auto-detected)
+	export CCES_HOME=/opt/analog/cces/3.0.3
+
+	cd no-OS
+
+	# build the iio example on the EVAL-ADICUP3029
+	python tools/scripts/no_os_build.py build \
+		--project cn0531 --variant iio --board eval-adicup3029
+
+	# build the iio example over Wi-Fi (ESP8266)
+	python tools/scripts/no_os_build.py build \
+		--project cn0531 --variant iio_wifi --board eval-adicup3029
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project cn0531 --variant iio --board eval-adicup3029 \
+		--probe openocd --flash

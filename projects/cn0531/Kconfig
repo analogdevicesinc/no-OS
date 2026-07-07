@@ -1,0 +1,24 @@
+menu "CN0531 Configuration"
+
+choice CN0531_EXAMPLE
+	prompt "Example variant"
+	default CN0531_IIO_EXAMPLE
+
+config CN0531_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the CN0531 (AD5791 20-bit DAC) over an
+	  IIO interface on top of a UART transport.
+
+endchoice
+
+config CN0531_NETWORKING
+	bool "Enable ESP8266 Wi-Fi networking"
+	default n
+	select WIFI_NETWORKING
+	help
+	  Route IIO transport over an ESP8266 Wi-Fi module (UART AT commands)
+	  instead of the serial backend. aducm3029/eval-adicup3029 only.
+
+endmenu
