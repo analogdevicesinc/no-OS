@@ -72,6 +72,10 @@ No-OS Supported Examples
 The initialization data used in the examples is taken from:
 `Project Common Data Path <src/common>`_
 
+Each example below is selected with its own ``--variant`` (``basic``, ``iio``,
+``iio_trigger``) and built for the ``ad-apard32690-sl`` board. See the
+**Build Command** section for the exact invocations.
+
 The operating mode is selected via the ``mode`` field in ``ad4692_ip`` in
 `common_data.c <src/common/common_data.c>`_. The default is
 ``AD4692_MANUAL_MODE``, which works for all three examples. Refer to the
@@ -89,13 +93,6 @@ For oscillator-driven modes (CNV Burst, Autonomous, SPI Burst) the example
 first sets the internal OSC to 500 kHz. No additional setup is required for
 Manual or CNV Clock modes.
 
-To build and run:
-
-.. code-block:: bash
-
-	make EXAMPLE=basic TARGET=max32690
-	make run TARGET=max32690
-
 IIO example
 ^^^^^^^^^^^
 
@@ -109,19 +106,6 @@ If you are not familiar with ADI IIO Application, please take a look at:
 
 If you are not familiar with ADI IIO-Oscilloscope Client, please take a look at:
 `IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
-
-To connect from a host once the board is running:
-
-.. code-block:: bash
-
-	iio_info -u serial:/dev/ttyUSB0,57600,8n1
-
-To build and run:
-
-.. code-block:: bash
-
-	make EXAMPLE=iio_example TARGET=max32690
-	make run TARGET=max32690
 
 IIO trigger example
 ^^^^^^^^^^^^^^^^^^^
@@ -143,13 +127,6 @@ accumulated channel data.
 The trigger is configured for a falling-edge interrupt on the GPIO0 pin
 (P3.0 on the MAX32690, connected to the DREADY/BUSY signal of the
 EVAL-AD4692-ARDZ).
-
-To build and run:
-
-.. code-block:: bash
-
-	make EXAMPLE=iio_trigger_example TARGET=max32690
-	make run TARGET=max32690
 
 No-OS Supported Platforms
 -------------------------
@@ -189,21 +166,22 @@ the AD-APARD32690-SL. The following MAX32690 peripherals are used:
      - UART0
      - 57600 baud, 8N1
 
-**Build commands**
+**Build Command**
 
 .. code-block:: bash
 
-	# Basic example (default)
-	make EXAMPLE=basic TARGET=max32690
+	# point at the Maxim SDK libraries (only if not auto-detected)
+	export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
 
-	# IIO example
-	make EXAMPLE=iio_example TARGET=max32690
+	cd no-OS
 
-	# IIO trigger example
-	make EXAMPLE=iio_trigger_example TARGET=max32690
+	# build the project (basic example on the AD-APARD32690-SL board)
+	python tools/scripts/no_os_build.py build \
+		--project ad4692_ardz --variant basic --board ad-apard32690-sl
 
-	# Flash to board
-	make run TARGET=max32690
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project ad4692_ardz --variant basic --board ad-apard32690-sl \
+		--probe openocd --flash
 
-	# Clean build artifacts
-	make reset TARGET=max32690
+Available variants: ``basic``, ``iio``, ``iio_trigger``. Replace ``--variant`` accordingly.
