@@ -84,3 +84,37 @@ void get_test_framework_config(struct test_framework_config *config,
 		.write_context = uart,
 	};
 }
+
+#ifdef GPIO_OUTPUT_OPS
+/**
+ * @brief Platform-specific private data for the output/readback GPIO port.
+ */
+static GPIO_OUTPUT_EXTRA gpio_output_extra = GPIO_OUTPUT_EXTRA_INIT;
+
+/**
+ * @brief Platform-specific private data for the input GPIO port.
+ */
+static GPIO_INPUT_EXTRA gpio_input_extra = GPIO_INPUT_EXTRA_INIT;
+
+/**
+ * @brief CAPI configuration for the output/readback GPIO port.
+ */
+const struct capi_gpio_port_config gpio_output_config = {
+	.ops = GPIO_OUTPUT_OPS,
+	.identifier = GPIO_OUTPUT_IDENTIFIER,
+	.num_pins = GPIO_OUTPUT_NUM_PINS,
+	.flags = NULL,
+	.extra = &gpio_output_extra,
+};
+
+/**
+ * @brief CAPI configuration for the input GPIO port.
+ */
+const struct capi_gpio_port_config gpio_input_config = {
+	.ops = GPIO_INPUT_OPS,
+	.identifier = GPIO_INPUT_IDENTIFIER,
+	.num_pins = GPIO_INPUT_NUM_PINS,
+	.flags = NULL,
+	.extra = &gpio_input_extra,
+};
+#endif /* GPIO_OUTPUT_OPS */
