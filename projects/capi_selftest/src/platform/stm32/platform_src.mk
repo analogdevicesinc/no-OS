@@ -6,5 +6,6 @@ NO_OS_INC_DIRS += \
 	$(NO-OS)/include
 
 SRCS += $(CAPI_STM32_DRIVERS)/stm32_capi_uart.c \
+	$(CAPI_STM32_DRIVERS)/stm32_capi_gpio.c \
 	$(CAPI_STM32_DRIVERS)/stm32_capi_alloc.c \
 	$(CAPI_STM32_DRIVERS)/stm32_capi_time.c
