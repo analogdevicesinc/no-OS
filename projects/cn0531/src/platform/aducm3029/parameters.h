@@ -59,11 +59,6 @@
 #define GPIO_OPS        &aducm_gpio_ops
 #define GPIO_EXTRA      NULL
 
-#ifdef NO_OS_NETWORKING
-#define WIFI_SSID	"RouterSSID"
-#define WIFI_PWD	"******"
-#endif
-
 extern struct aducm_spi_init_param cn0531_spi_extra_ip;
 
 #endif /* __PARAMETERS_H__ */
