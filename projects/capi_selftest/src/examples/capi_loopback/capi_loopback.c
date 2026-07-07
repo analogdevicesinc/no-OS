@@ -17,6 +17,7 @@
 #include "tests/test_irq.h"
 #include "tests/test_spi.h"
 #include "tests/test_timer.h"
+#include "tests/test_i2c.h"
 /**
  * @brief Common function signature for a top-level test group.
  */
@@ -46,6 +47,7 @@ static const struct test_entry tests[] = {
 	{ 0, "IRQ", test_irq, false },
 	{ 0, "SPI", test_spi, false },
 	{ 0, "TIMER", test_timer, false },
+	{ 0, "I2C", test_i2c, false },
 };
 
 #define NUM_TESTS	(sizeof(tests) / sizeof(tests[0]))

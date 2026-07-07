@@ -63,6 +63,30 @@ extern struct capi_irq_config irq_config;
 extern const struct capi_timer_config timer_config;
 #endif /* TIMER_OPS */
 
+#ifdef I2C_OPS
+#include "capi_i2c.h"
+
+/**
+ * @brief CAPI I2C initiator configuration for the loopback tests.
+ */
+extern const struct capi_i2c_config i2c_master_config;
+/**
+ * @brief CAPI I2C device descriptor used by the initiator to address the target.
+ */
+extern struct capi_i2c_device i2c_dev;
+#endif /* I2C_OPS */
+
+#ifdef I2C_TARGET_OPS
+/**
+ * @brief CAPI I2C target configuration for the loopback tests.
+ */
+extern const struct capi_i2c_config i2c_target_config;
+/**
+ * @brief CAPI I2C device descriptor for the target side.
+ */
+extern struct capi_i2c_device i2c_target_dev;
+#endif /* I2C_TARGET_OPS */
+
 /**
  * @brief Fill a test framework configuration for the selected platform.
  * @param config - Destination framework configuration.

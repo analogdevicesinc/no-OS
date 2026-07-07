@@ -7,4 +7,5 @@ SRCS += $(NO-OS)/capi/src/capi_uart.c \
 	$(NO-OS)/capi/src/capi_gpio.c \
 	$(NO-OS)/capi/src/capi_irq.c \
 	$(NO-OS)/capi/src/capi_spi.c \
-	$(NO-OS)/capi/src/capi_timer.c
+	$(NO-OS)/capi/src/capi_timer.c \
+	$(NO-OS)/capi/src/capi_i2c.c
