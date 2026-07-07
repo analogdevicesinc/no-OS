@@ -102,13 +102,8 @@ sensor's FIFO buffer to gather multiple data sets in one cycle. This
 simple yet effective loop showcases real-time data capture without added
 complexity.
 
-In order to build the dummy example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/eval-adxl355-pmdz/Makefile>`__:
-
-.. code-block:: bash
-
-   EXAMPLE = dummy
+This example is built by selecting the ``dummy`` variant (see the Build
+Command sections below).
 
 IIO example
 ~~~~~~~~~~~
@@ -136,13 +131,8 @@ If you are not familiar with ADI IIO Oscilloscope Client, please take a
 look at:
 `IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`__
 
-In order to build the IIO project, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/eval-adxl355-pmdz/Makefile>`__:
-
-.. code-block:: bash
-
-   EXAMPLE = iio_example
+This example is built by selecting the ``iio`` variant (see the Build
+Command sections below).
 
 IIO Trigger Example
 ~~~~~~~~~~~~~~~~~~~
@@ -158,13 +148,8 @@ operation, resulting in efficient and consistent data acquisition. This
 method reduces power consumption by waking the system only when data is
 available, optimizing the data collection process.
 
-In order to build the IIO trigger example, make sure you have the
-following configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/eval-adxl355-pmdz/Makefile>`__:
-
-.. code-block:: bash
-
-   EXAMPLE = iio_trigger_example
+This example is built by selecting the ``iio_trigger`` variant (see the
+Build Command sections below).
 
 IIO LWIP Example
 ~~~~~~~~~~~~~~~~
@@ -176,13 +161,8 @@ network communication. This allows remote access to the ADXL355 sensor
 data via an IIO client over Ethernet, suitable for networked sensor
 deployments.
 
-In order to build the IIO LWIP example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/eval-adxl355-pmdz/Makefile>`__:
-
-.. code-block:: bash
-
-   EXAMPLE = iio_lwip_example
+This example is built by selecting the ``iio_lwip`` variant on the
+``adin1110ebz`` board (see the Build Command sections below).
 
 No-OS Supported Platforms
 -------------------------
@@ -205,14 +185,25 @@ EVAL-ADXL355-PMDZ through the PMOD connector.
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``dummy``, ``iio``, ``iio_trigger``.
+Available boards: ``eval-adicup3029``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-   # to delete current build
-   make reset
-   # to build the project
-   make PLATFORM=aducm3029
-   # to flash the code
-   make run
+   # point at the CrossCore Embedded Studio install (only if not auto-detected)
+   export CCES_HOME=/opt/analog/cces/3.0.3
+
+   cd no-OS
+
+   # build the project (iio example on the EVAL-ADICUP3029)
+   python tools/scripts/no_os_build.py build \
+      --project eval-adxl355-pmdz --variant iio --board eval-adicup3029
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project eval-adxl355-pmdz --variant iio --board eval-adicup3029 \
+      --probe openocd --flash
 
 Maxim Platform
 ~~~~~~~~~~~~~~
@@ -245,14 +236,27 @@ Pin 10           P1_9          Data Ready (DRDY)       Indicates new data is ava
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``dummy``, ``dummy_adxl357``, ``dummy_adxl359``, ``iio``, ``iio_adxl357``, ``iio_adxl359``, ``iio_trigger``, ``iio_trigger_adxl357``, ``iio_trigger_adxl359``.
+Available boards: ``ad-apard32690-sl``, ``max32650fthr``, ``max32655fthr``, ``max32660fthr``, ``max32665fthr``, ``max78000fthr``.
+Replace ``--variant`` / ``--board`` accordingly. Not every variant is
+available on every board; see the combination list with
+``python tools/scripts/no_os_build.py list --project eval-adxl355-pmdz``.
+
 .. code-block:: bash
 
-   # to delete current build
-   make reset
-   # to build the project
-   make PLATFORM=maxim TARGET=max32655
-   # to flash the code
-   make run
+   # point at the Maxim SDK libraries (only if not auto-detected)
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the project (iio example on MAX32655FTHR)
+   python tools/scripts/no_os_build.py build \
+      --project eval-adxl355-pmdz --variant iio --board max32655fthr
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project eval-adxl355-pmdz --variant iio --board max32655fthr \
+      --probe openocd --flash
 
 STM32 Platform
 ~~~~~~~~~~~~~~
@@ -290,14 +294,28 @@ to match the operating voltage of the EVAL-ADXL355-PMDZ board.
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``dummy``, ``iio``, ``iio_trigger``, ``iio_lwip``.
+Available boards: ``sdp-ck1z``, ``adin1110ebz``.
+Replace ``--variant`` / ``--board`` accordingly. The ``iio_lwip`` variant
+is only available on ``adin1110ebz``.
+
 .. code-block:: bash
 
-   # to delete current build
-   make reset
-   # to build the project
-   make PLATFORM=stm32
-   # to flash the code
-   make run
+   # set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+   # in a default install location)
+   export STM32CUBEMX=</path/to/stm32cubemx>
+   export STM32CUBEIDE=</path/to/stm32cubeide>
+
+   cd no-OS
+
+   # build the project (iio example on the SDP-K1 board)
+   python tools/scripts/no_os_build.py build \
+      --project eval-adxl355-pmdz --variant iio --board sdp-ck1z
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project eval-adxl355-pmdz --variant iio --board sdp-ck1z \
+      --probe openocd --flash
 
 Raspberry Pi Pico Platform
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -334,6 +352,10 @@ Pico.
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``dummy``, ``iio``, ``iio_trigger``.
+Available boards: ``rpi-pico``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	cd no-OS
@@ -346,5 +368,3 @@ Build Command
 	python tools/scripts/no_os_build.py build \
 		--project eval-adxl355-pmdz --variant iio --board rpi-pico \
 		--probe openocd --flash
-
-Available variants: ``dummy``, ``iio``, ``iio_trigger``. Replace ``--variant`` accordingly.
