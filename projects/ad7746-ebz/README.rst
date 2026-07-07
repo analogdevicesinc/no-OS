@@ -106,12 +106,8 @@ If you are not familiar with ADI IIO Oscilloscope Client, please take a
 look at:
 `IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
 
-To build the IIO example, add the following flag when invoking make:
-
-.. code-block:: bash
-
-	# to build the IIO example
-	make IIOD=y
+This example is built by selecting the ``iio_capacitive_length_demo``
+variant (see the Build Command below).
 
 No-OS Supported Platforms
 -------------------------
@@ -144,11 +140,22 @@ bus.
 
 **Build Command**
 
+Available variants: ``capacitive_length_demo``, ``iio_capacitive_length_demo``.
+Available boards: ``eval-adicup3029``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-	# to delete current build
-	make reset PLATFORM=aducm3029
-	# to build the project
-	make PLATFORM=aducm3029
-	# to flash the code
-	make run PLATFORM=aducm3029
+	# point at the CrossCore Embedded Studio install (only if not auto-detected)
+	export CCES_HOME=/opt/analog/cces/3.0.3
+
+	cd no-OS
+
+	# build the capacitive length demo on the EVAL-ADICUP3029
+	python tools/scripts/no_os_build.py build \
+		--project ad7746-ebz --variant capacitive_length_demo --board eval-adicup3029
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project ad7746-ebz --variant capacitive_length_demo --board eval-adicup3029 \
+		--probe openocd --flash
