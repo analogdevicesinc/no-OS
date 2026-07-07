@@ -1,9 +1,9 @@
 /***************************************************************************//**
  *   @file   parameters.h
- *   @brief  Definitions specific to Mbed platform used by ADF4030 project.
+ *   @brief  Definitions specific to STM32 platform used by ADF4030 project.
  *   @author Sirac Kucukarabacioglu (sirac.kucukarabacioglu@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -33,26 +33,32 @@
 #ifndef __PARAMETERS_H__
 #define __PARAMETERS_H__
 
-#include <PinNames.h>
-#include "mbed_uart.h"
-#include "mbed_spi.h"
-#include "no_os_uart.h"
+#include "stm32_irq.h"
+#include "stm32_spi.h"
+#include "stm32_uart.h"
+#include "stm32_uart_stdio.h"
 
-#define UART_TX_PIN	CONSOLE_TX
-#define	UART_RX_PIN	CONSOLE_RX
+extern UART_HandleTypeDef huart5;
+
+#ifdef IIO_SUPPORT
+#define INTC_DEVICE_ID  0
+#define IIO_APP_HUART   (&huart5)
+#endif
+#define UART_IRQ_ID     UART5_IRQn
+
 #define UART_DEVICE_ID  5
-#define UART_IRQ_ID     53
 #define UART_BAUDRATE   115200
-#define UART_EXTRA	&adf4030_uart_extra_ip
-#define UART_OPS        &mbed_uart_ops
+#define UART_EXTRA      &adf4030_uart_extra_ip
+#define UART_OPS        &stm32_uart_ops
 
+#define SPI_DEVICE_ID   1
 #define SPI_BAUDRATE    4000000
-#define SPI_OPS         &mbed_spi_ops
+#define SPI_CS          15
+#define SPI_CS_PORT     0
+#define SPI_OPS         &stm32_spi_ops
 #define SPI_EXTRA       &adf4030_spi_extra
-#define SPI_DEVICE_ID   5
-#define SPI_CS          ARDUINO_UNO_D10
 
-extern struct mbed_uart_init_param adf4030_uart_extra_ip;
-extern struct mbed_spi_init_param adf4030_spi_extra;
+extern struct stm32_uart_init_param	adf4030_uart_extra_ip;
+extern struct stm32_spi_init_param	adf4030_spi_extra;
 
 #endif /* __PARAMETERS_H__ */

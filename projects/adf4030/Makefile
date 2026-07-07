@@ -1,5 +1,5 @@
 # Uncomment to use the desired platform
-PLATFORM = mbed
+PLATFORM = stm32
 
 EXAMPLE ?= basic
 

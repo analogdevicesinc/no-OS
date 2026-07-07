@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   parameters.c
- *   @brief  Definition of Mbed platform data used by ADF4030 project.
+ *   @file   main.c
+ *   @brief  Main file for STM32 platform of ADF4030 project.
  *   @author Sirac Kucukarabacioglu (sirac.kucukarabacioglu@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,16 +31,24 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
 #include "parameters.h"
+#include "common_data.h"
+#include "no_os_error.h"
 
-struct mbed_uart_init_param adf4030_uart_extra_ip = {
-	.uart_tx_pin = UART_TX_PIN,
-	.uart_rx_pin = UART_RX_PIN
-};
+extern int example_main();
 
-extern struct mbed_spi_init_param adf4030_spi_extra = {
-	.spi_miso_pin = ARDUINO_UNO_D12,
-	.spi_mosi_pin = ARDUINO_UNO_D11,
-	.spi_clk_pin = ARDUINO_UNO_D13,
-	.use_sw_csb = false
-};
+/**
+ * @brief Main function execution for STM32 platform.
+ * @return ret - Result of the enabled examples execution.
+ */
+int main()
+{
+	adf4030_spi_extra.get_input_clock = HAL_RCC_GetPCLK2Freq;
+
+	stm32_init();
+
+	return example_main();
+}

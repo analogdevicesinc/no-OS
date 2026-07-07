@@ -1,0 +1,22 @@
+menu "ADF4030 Configuration"
+
+choice ADF4030_EXAMPLE
+	prompt "Example variant"
+	default ADF4030_BASIC_EXAMPLE
+
+config ADF4030_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Simple example that configures the ADF4030 precision synchronizer
+	  and prints the resulting register state over UART.
+
+config ADF4030_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO framework example. Launches an IIOD server for remote
+	  data acquisition using IIO Oscilloscope or libiio clients.
+
+endchoice
+
+endmenu

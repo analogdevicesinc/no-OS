@@ -1,5 +1,5 @@
 {
-  "mbed": {
+  "stm32": {
     "basic": {
       "flags" : "EXAMPLE=basic"
     },
