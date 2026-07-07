@@ -38,7 +38,7 @@ Here is an example on how see the sample data of the basic example:
 .. code-block:: bash
 
    minicom -b 115200 -D /dev/ttyACM0 -C ./serial.dat
-   make run
+   # (build and flash the basic variant first, see "Build and flash" below)
    cat ./serial.dat | grep  ADC | cut -d ' ' -f 2 > ./plot.dat
    echo "set terminal svg; set output './o.svg';plot './plot.dat' with lines" | gnuplot
 
@@ -105,22 +105,40 @@ STM32 Platform
 
 **Build and flash**
 
-* Pick the target carrier ``.ioc`` in the project directory (or add your own)
-* make run EXAMPLE=basic_i3c_example DEV_TYPE=AD4060 HARDWARE=nucleo-h563zi.ioc
+The project is built with CMake through ``no_os_build.py``. Select the example
+with ``--variant`` and the carrier with ``--board`` (append ``--flash`` with a
+``--probe`` to program the board after building):
+
+.. code-block:: bash
+
+   python3 tools/scripts/no_os_build.py build \
+      --project ad405x --variant basic --board nucleo-h563zi
+
+   python3 tools/scripts/no_os_build.py build \
+      --project ad405x --variant iio --board nucleo-h563zi
+
+   python3 tools/scripts/no_os_build.py build \
+      --project ad405x --variant basic_i3c --board nucleo-h563zi
+
+   python3 tools/scripts/no_os_build.py build \
+      --project ad405x --variant i3c_dma --board nucleo-h503rb
 
 Project Options
 ----------------
 
 * | Use basic interactive example that prints samples to uart:
-  | EXAMPLE = basic_example, basic_i3c_example, i3c_dma_example
+  | ``--variant`` = basic, basic_i3c, i3c_dma
 
 * | Or IIOD example:
-  | EXAMPLE = iio_example
+  | ``--variant`` = iio
 
-* | Specify the AD405X/AD406X part and instance ID (I3C only) in use:
+* | The AD405X/AD406X part and instance ID (I3C only) are fixed per variant via
+    the ``AD405X_DEV_TYPE`` / ``AD405X_INSTANCE_ID`` compile definitions set in
+    ``CMakeLists.txt``. Edit those definitions (or add a new variant) to target a
+    different part:
   | DEV_TYPE = AD4050, AD4052, AD4056, AD4058, AD4060, AD4062
   | INSTANCE_ID = 0-7 (range)
 
 * | Specify the carrier in use:
-  | HARDWARE = nucleo-h563zi.ioc, nucleo-h503rb.ioc
+  | ``--board`` = nucleo-h563zi, nucleo-h503rb
 
