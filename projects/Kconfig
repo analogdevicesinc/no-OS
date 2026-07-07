@@ -40,6 +40,7 @@ source "projects/aducm3029_flash_demo/Kconfig"
 source "projects/ada4250_ardz/Kconfig"
 source "projects/cn0531/Kconfig"
 source "projects/iio_adpd1080/Kconfig"
+source "projects/eval-ltc4306/Kconfig"
 
 source "projects/ad7091r8-sdz/Kconfig"
 source "projects/adalm-lsmspg/Kconfig"

@@ -6,6 +6,9 @@ choice EVAL_LTC4306_EXAMPLE
 
 config EVAL_LTC4306_BASIC_EXAMPLE
 	bool "Basic example"
+	help
+	  Basic example that configures the LTC4306 I2C multiplexer and a
+	  MAX538X DAC behind it, reporting progress over UART.
 
 endchoice
 
