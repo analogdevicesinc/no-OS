@@ -89,3 +89,67 @@ void get_test_framework_config(struct test_framework_config *config,
 		.wait_context = NULL,
 	};
 }
+
+#ifdef GPIO_OUTPUT_OPS
+/**
+ * @brief Platform-specific private data for the output/readback GPIO port.
+ */
+static GPIO_OUTPUT_EXTRA gpio_output_extra = GPIO_OUTPUT_EXTRA_INIT;
+
+/**
+ * @brief Platform-specific private data for the input GPIO port.
+ */
+static GPIO_INPUT_EXTRA gpio_input_extra = GPIO_INPUT_EXTRA_INIT;
+
+/**
+ * @brief CAPI configuration for the output/readback GPIO port.
+ */
+const struct capi_gpio_port_config gpio_output_config = {
+	.ops = GPIO_OUTPUT_OPS,
+	.identifier = GPIO_OUTPUT_IDENTIFIER,
+	.num_pins = GPIO_OUTPUT_NUM_PINS,
+	.flags = NULL,
+	.extra = &gpio_output_extra,
+};
+
+/**
+ * @brief CAPI configuration for the input GPIO port.
+ */
+const struct capi_gpio_port_config gpio_input_config = {
+	.ops = GPIO_INPUT_OPS,
+	.identifier = GPIO_INPUT_IDENTIFIER,
+	.num_pins = GPIO_INPUT_NUM_PINS,
+	.flags = NULL,
+	.extra = &gpio_input_extra,
+};
+
+#if GPIO_HAS_PIN_LOOPBACK
+/**
+ * @brief Output pin numbers for loopback testing.
+ */
+const uint32_t gpio_output_pin_numbers[] = GPIO_OUTPUT_PIN_NUMBERS;
+
+/**
+ * @brief Input pin numbers for loopback testing.
+ */
+const uint32_t gpio_input_pin_numbers[] = GPIO_INPUT_PIN_NUMBERS;
+
+/**
+ * @brief Number of output pins in the loopback mapping.
+ */
+const uint32_t gpio_num_output_pins = sizeof(gpio_output_pin_numbers)
+				      / sizeof(gpio_output_pin_numbers[0]);
+
+/**
+ * @brief Number of input pins in the loopback mapping.
+ */
+const uint32_t gpio_num_input_pins = sizeof(gpio_input_pin_numbers)
+				     / sizeof(gpio_input_pin_numbers[0]);
+
+/* Compile-time assertion: pin arrays must have matching sizes */
+_Static_assert(sizeof(gpio_output_pin_numbers) == sizeof(
+		       gpio_input_pin_numbers),
+	       "GPIO loopback pin arrays must have the same size");
+#endif /* GPIO_HAS_PIN_LOOPBACK */
+
+#endif /* GPIO_OUTPUT_OPS */
