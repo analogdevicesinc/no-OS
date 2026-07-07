@@ -3,217 +3,104 @@ EVAL-ADE9430 no-OS Example Project
 
 .. no-os-doxygen::
 
+Supported Evaluation Boards
+---------------------------
+
+* `EVAL-ADE9430 <https://www.analog.com/EVAL-ADE9430>`_
+
 Overview
 --------
 
-The project was developed on max32650 and is organized around the no-OS
-``EXAMPLE`` based build flow. Selecting an example at build time chooses which
-application is compiled:
+The ADE9430 is a high performance, multiphase energy and power quality
+monitoring device. This project runs on the MAX32650 and demonstrates both a
+minimal SPI read example and a Sensor-to-Cloud IoT application. The
+application is selected at build time through the ``--variant`` option, and
+each variant maps to a ``.conf`` defconfig in the project directory.
 
-- ``basic_example`` - minimal SPI example that reads and prints the RMS voltage
-  and current for Phase A together with the on-chip temperature.
-- ``iot_example`` - Sensor-to-Cloud application, supporting:
-
-  - non-encrypted communication with a MQTT Broker.
-  - encrypted communication with Azure IoT Hub (with the option of configuring
-    and registering the device in the cloud via the Azure Device Provisioning
-    Service prior to the IoT Hub connection and telemetry data publishing).
-
-The default example is ``iot_example`` and its default configuration is a
-simple, non-encrypted connection.
-
-Project Structure
+No-OS Build Setup
 -----------------
 
-::
+Please see: https://wiki.analog.com/resources/no-os/build
 
-    eval-ade9430/
-    ├── Makefile
-    ├── src.mk               - shared no-OS core and ADE9430 driver sources
-    ├── builds.json          - CI build matrix (one entry per configuration)
-    └── src/
-        ├── common/          - init parameters shared across examples
-        │   └── common_data.{c,h}
-        ├── examples/
-        │   ├── basic_example/   - basic SPI read example
-        │   └── iot_example/     - MQTT / Azure IoT Hub application
-        └── platform/
-            └── maxim/           - platform main(), parameters.h, platform_src.mk
+No-OS Supported Examples
+------------------------
 
-The platform ``main()`` is a thin dispatcher that calls ``example_main()``,
-which is provided by the selected example.
+The initialization data used in the examples is taken out from:
+`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-ade9430/src/common>`_
 
-Building project
-----------------
+The macros used in Common Data are defined in platform specific files found in:
+`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-ade9430/src/platform>`_
 
-Select the example with the ``EXAMPLE`` variable (defaults to ``iot_example``):
+Basic Example
+^^^^^^^^^^^^^
 
-.. code-block:: bash
+Initializes the ADE9430 over SPI and, in a loop, reads and prints the Phase A
+RMS voltage and RMS current together with the on-chip temperature. Two variants
+are provided:
 
-    make EXAMPLE=basic_example PLATFORM=maxim TARGET=max32650
-    make EXAMPLE=iot_example   PLATFORM=maxim TARGET=max32650
+* ``basic_example`` - basic SPI read example for boards without an ADE9430
+  reset line wired to the MCU (default variant).
+* ``basic_example_hw_reset`` - same as above, plus the ADE9430 hardware reset
+  sequence performed before SPI access. Use this on the EVAL-PQMON board, where
+  the reset pin is wired to the MCU.
 
-Building attributes
--------------------
+IoT Example
+^^^^^^^^^^^
 
-+-----------------+-----------------------------------------------------------+
-|  Variable       |                Description                                |
-+-----------------+-----------------------------------------------------------+
-|  EXAMPLE        |  Select the example: ``basic_example`` or                 |
-|                 |  ``iot_example`` (default: ``iot_example``).              |
-+-----------------+-----------------------------------------------------------+
-|  HW_RESET       |  ``y`` to drive the ADE9430 hardware reset pin before     |
-|                 |  SPI access. Required on the EVAL-PQMON board, which      |
-|                 |  wires the reset line to the MCU (P1.27). Default: ``n``. |
-|                 |  Only relevant for ``basic_example``.                     |
-+-----------------+-----------------------------------------------------------+
-|  AZURE_IOT_HUB  |  Enable the Azure IoT encrypted connection                |
-|                 |  (``iot_example`` only).                                  |
-+-----------------+-----------------------------------------------------------+
+Sensor-to-Cloud application that publishes ADE9430 telemetry data. It supports
+non-encrypted communication with an MQTT broker and encrypted communication
+with Azure IoT Hub, optionally registering the device via the Azure Device
+Provisioning Service (DPS) beforehand. The following variants are provided:
 
-+-----------------+---------------------------------------------------+
-|  C Flags        |                Description                        |
-+-----------------+---------------------------------------------------+
-|  CONFIG_DPS     |  Enable the device registering in the cloud.      |
-+-----------------+---------------------------------------------------+
-|  RTC_SET_DEFAULT|  Set the default date and time for the RTC.       |
-+-----------------+---------------------------------------------------+
+* ``iot_example`` - simple, non-encrypted connection to an MQTT broker (base
+  IoT configuration).
+* ``iot_example_rtc`` - non-encrypted MQTT connection, with the RTC default
+  date and time set for relevant timestamp values.
+* ``iot_example_azure_iot_hub`` - encrypted connection and telemetry publishing
+  to the Azure IoT Hub.
+* ``iot_example_azure_iot_hub_rtc`` - Azure IoT Hub connection, with the RTC
+  default date and time set.
+* ``iot_example_azure_iot_hub_dps`` - device registration through the Azure
+  Device Provisioning Service, followed by encrypted Azure IoT Hub telemetry
+  publishing.
+* ``iot_example_azure_iot_hub_dps_rtc`` - Azure DPS registration and IoT Hub
+  telemetry publishing, with the RTC default date and time set.
 
-basic_example
--------------
+No-OS Supported Platforms
+-------------------------
 
-Initializes the ADE9430 over SPI and, in a loop, reads and prints:
+Maxim Platform
+^^^^^^^^^^^^^^
 
-- Phase A RMS voltage (``Vrms``) and RMS current (``Irms``),
-- the on-chip temperature, obtained by starting a conversion and polling the
-  ``TEMP_RDY`` bit in ``STATUS0`` until the result is ready (with a timeout).
-  This is implemented locally as ``basic_read_temp()``. If preferred, it can be
-  replaced by the driver's ``ade9430_read_temp()``, which uses a fixed delay
-  instead of polling the conversion-ready status.
+**Used Hardware**
 
-On the EVAL-PQMON board the ADE9430 reset pin is wired to the MCU and must be
-driven high before communication. Build with ``HW_RESET=y`` to include the
-reset sequence; on boards without this connection leave it disabled (default).
+* `EVAL-ADE9430 <https://www.analog.com/EVAL-ADE9430>`_
+* `MAX32650FTHR <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32650fthr.html>`_
 
-Build Configuration Examples
-----------------------------
+**Build Command**
 
-1.
-  .. code-block:: bash
-
-    make EXAMPLE=basic_example PLATFORM=maxim TARGET=max32650
-
-  - Basic SPI read example (RMS voltage/current and temperature) on a board
-    without a reset line wired to the MCU.
-
-2.
-  .. code-block:: bash
-
-    make EXAMPLE=basic_example PLATFORM=maxim TARGET=max32650 HW_RESET=y
-
-  - Basic SPI read example on the EVAL-PQMON board, including the ADE9430
-    hardware reset sequence before SPI access.
-
-3.
-  .. code-block:: bash
-
-    make EXAMPLE=iot_example PLATFORM=maxim TARGET=max32650
-
-  - Default usage of the IoT example consisting of simple, non-encrypted
-    connection to a MQTT broker.
-
-4.
-  .. code-block:: bash
-
-    make EXAMPLE=iot_example PLATFORM=maxim TARGET=max32650 NEW_CFLAGS=-DRTC_SET_DEFAULT
-
-  - Simple, non-encrypted connection to a MQTT broker, including the RTC default
-    date and time set required for obtaining relevant timestamp values.
-
-5.
-  .. code-block:: bash
-
-    make EXAMPLE=iot_example PLATFORM=maxim TARGET=max32650 AZURE_IOT_HUB=y
-
-  - Encrypted connection and telemetry data publishing into the Azure IoT Hub.
-
-6.
-  .. code-block:: bash
-
-    make EXAMPLE=iot_example PLATFORM=maxim TARGET=max32650 AZURE_IOT_HUB=y NEW_CFLAGS=-DCONFIG_DPS
-
-  - Encrypted connection to the Azure Device Provisioning Service for the device
-    registering in the cloud, followed by encrypted connection and telemetry
-    data publishing into the Azure IoT Hub.
-
-7.
-  .. code-block:: bash
-
-    make EXAMPLE=iot_example PLATFORM=maxim TARGET=max32650 AZURE_IOT_HUB=y NEW_CFLAGS=-DCONFIG_DPS NEW_CFLAGS=-DRTC_SET_DEFAULT
-
-  - Encrypted connection to the Azure Device Provisioning Service for the device
-    registering in the cloud, followed by encrypted connection and telemetry
-    data publishing into the Azure IoT Hub, including the RTC default date and
-    time set required for obtaining relevant timestamp values.
-
-Building with CMake (no-os-build)
-----------------------------------
-
-Use ``no_os_build.py`` to build any of the 8 variants. Each variant is
-selected by passing its ``.conf`` name as ``--variant``:
+Available variants: ``basic_example``, ``basic_example_hw_reset``,
+``iot_example``, ``iot_example_rtc``, ``iot_example_azure_iot_hub``,
+``iot_example_azure_iot_hub_rtc``, ``iot_example_azure_iot_hub_dps``,
+``iot_example_azure_iot_hub_dps_rtc``.
+Available boards: ``max32650fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
-    python3 tools/scripts/no_os_build.py build \
-        --project eval-ade9430 \
-        --variant basic_example \
-        --board max32650fthr
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
 
-.. code-block:: bash
+   cd no-OS
 
-    python3 tools/scripts/no_os_build.py build \
-        --project eval-ade9430 \
-        --variant basic_example_hw_reset \
-        --board max32650fthr
+   # build the default variant (basic example on the max32650fthr board)
+   python tools/scripts/no_os_build.py build \
+      --project eval-ade9430 --variant basic_example --board max32650fthr
 
-.. code-block:: bash
+   # build the base IoT example
+   python tools/scripts/no_os_build.py build \
+      --project eval-ade9430 --variant iot_example --board max32650fthr
 
-    python3 tools/scripts/no_os_build.py build \
-        --project eval-ade9430 \
-        --variant iot_example \
-        --board max32650fthr
-
-.. code-block:: bash
-
-    python3 tools/scripts/no_os_build.py build \
-        --project eval-ade9430 \
-        --variant iot_example_rtc \
-        --board max32650fthr
-
-.. code-block:: bash
-
-    python3 tools/scripts/no_os_build.py build \
-        --project eval-ade9430 \
-        --variant iot_example_azure_iot_hub \
-        --board max32650fthr
-
-.. code-block:: bash
-
-    python3 tools/scripts/no_os_build.py build \
-        --project eval-ade9430 \
-        --variant iot_example_azure_iot_hub_rtc \
-        --board max32650fthr
-
-.. code-block:: bash
-
-    python3 tools/scripts/no_os_build.py build \
-        --project eval-ade9430 \
-        --variant iot_example_azure_iot_hub_dps \
-        --board max32650fthr
-
-.. code-block:: bash
-
-    python3 tools/scripts/no_os_build.py build \
-        --project eval-ade9430 \
-        --variant iot_example_azure_iot_hub_dps_rtc \
-        --board max32650fthr
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project eval-ade9430 --variant iot_example --board max32650fthr \
+      --probe openocd --flash
