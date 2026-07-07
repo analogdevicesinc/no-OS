@@ -49,14 +49,8 @@ demo ADC and DAC device descriptors, configures the IIO application, and
 runs the IIOD server in a FreeRTOS task. A second task blinks an LED to
 demonstrate concurrent execution.
 
-In order to build the IIO example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/iio_demo_freeRTOS/Makefile>`__:
-
-.. code-block:: bash
-
-   # Select the example you want to enable
-   EXAMPLE = iio_example
+As it is the only example, it is selected by default (``--variant iio``).
+See the **Build Command** section below for the build instructions.
 
 No-OS Supported Platforms
 -------------------------
@@ -72,15 +66,6 @@ Used Hardware
 
 Build Command
 ^^^^^^^^^^^^^
-
-.. code-block:: bash
-
-   # to delete current build
-   make reset
-   # to build the project
-   make PLATFORM=maxim TARGET=max32690
-   # to flash the code
-   make run
 
 Available variants: ``iio``.
 Available boards: ``ad-apard32690-sl``, ``max32655fthr``.
