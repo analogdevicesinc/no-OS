@@ -253,3 +253,21 @@ struct capi_i2c_device i2c_target_dev = {
 	.extra = NULL,
 };
 #endif /* I2C_TARGET_OPS */
+
+#ifdef DMA_OPS
+/**
+ * @brief Platform-specific DMA transfer extra config.
+ */
+DMA_XFER_EXTRA_TYPE dma_xfer_extra = DMA_XFER_EXTRA_INIT;
+
+/**
+ * @brief CAPI DMA configuration for the memory-to-memory tests.
+ */
+const struct capi_dma_config dma_config = {
+	.id = DMA_IDENTIFIER,
+	.num_chans = DMA_NUM_CHANS,
+	.ops = DMA_OPS,
+	.irq_handle = NULL,
+	.extra = NULL,
+};
+#endif /* DMA_OPS */

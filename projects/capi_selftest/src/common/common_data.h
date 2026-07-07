@@ -87,6 +87,19 @@ extern const struct capi_i2c_config i2c_target_config;
 extern struct capi_i2c_device i2c_target_dev;
 #endif /* I2C_TARGET_OPS */
 
+#ifdef DMA_OPS
+#include "capi_dma.h"
+
+/**
+ * @brief CAPI DMA configuration for the memory-to-memory tests.
+ */
+extern const struct capi_dma_config dma_config;
+/**
+ * @brief Platform-specific DMA transfer extra config.
+ */
+extern DMA_XFER_EXTRA_TYPE dma_xfer_extra;
+#endif /* DMA_OPS */
+
 /**
  * @brief Fill a test framework configuration for the selected platform.
  * @param config - Destination framework configuration.
