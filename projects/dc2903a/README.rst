@@ -122,11 +122,8 @@ board with a voltage between 2.1 V and 5.5 V, ensuring all connections
 via specified J1 and E connectors, and verifying the reference settings
 through JP connectors.
 
-This is the only example in this project, so it builds by default:
-
-.. code-block:: bash
-
-   make
+This is the only example in this project, so it builds by default.
+See the **Build Command** section below for the build instructions.
 
 No-OS Supported Platforms
 -------------------------
@@ -179,15 +176,6 @@ Connections
 
 Build Command
 ^^^^^^^^^^^^^
-
-.. code-block:: bash
-
-   # to delete the current build
-   make reset
-   # to build the project
-   make PLATFORM=maxim TARGET=MAX32665
-   # to flash the code
-   make run
 
 Available variants: ``basic``.
 Available boards: ``max32665fthr``.
