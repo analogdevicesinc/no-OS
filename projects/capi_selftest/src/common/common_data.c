@@ -166,3 +166,22 @@ struct capi_spi_device spi_dev = {
 	.extra = NULL,
 };
 #endif /* SPI_OPS */
+
+#ifdef TIMER_OPS
+/**
+ * @brief Platform-specific extra data for the timer (IRQ selection).
+ */
+static TIMER_EXTRA_TYPE timer_extra = TIMER_EXTRA_INIT;
+
+/**
+ * @brief CAPI configuration for the timer used by the timer tests.
+ */
+const struct capi_timer_config timer_config = {
+	.ops = TIMER_OPS,
+	.identifier = TIMER_IDENTIFIER,
+	.input_clock_identifier = 0U,
+	.input_clock_hz = TIMER_INPUT_CLK_HZ,
+	.output_freq_hz = TIMER_OUTPUT_FREQ_HZ,
+	.extra = &timer_extra,
+};
+#endif /* TIMER_OPS */

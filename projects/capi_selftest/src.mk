@@ -6,4 +6,5 @@ SRCS += $(NO-OS)/capi/src/capi_uart.c \
 	$(NO-OS)/capi/src/capi_time.c \
 	$(NO-OS)/capi/src/capi_gpio.c \
 	$(NO-OS)/capi/src/capi_irq.c \
-	$(NO-OS)/capi/src/capi_spi.c
+	$(NO-OS)/capi/src/capi_spi.c \
+	$(NO-OS)/capi/src/capi_timer.c

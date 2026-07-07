@@ -54,6 +54,15 @@ extern struct capi_spi_device spi_dev;
 extern struct capi_irq_config irq_config;
 #endif /* SPI_OPS */
 
+#ifdef TIMER_OPS
+#include "capi_timer.h"
+
+/**
+ * @brief CAPI timer config for the counter/compare/IRQ tests.
+ */
+extern const struct capi_timer_config timer_config;
+#endif /* TIMER_OPS */
+
 /**
  * @brief Fill a test framework configuration for the selected platform.
  * @param config - Destination framework configuration.
