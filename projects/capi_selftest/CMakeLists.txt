@@ -6,6 +6,12 @@ target_sources(capi_selftest PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/test_framework.c
 )
 
+if(PLATFORM STREQUAL "stm32" AND CONFIG_CAPI_I2C)
+	target_sources(capi_selftest PRIVATE
+		${CMAKE_CURRENT_SOURCE_DIR}/src/platform/stm32/i2c_platform_init.c
+	)
+endif()
+
 if(CONFIG_CAPI_SELFTEST_BASIC_EXAMPLE)
     target_sources(capi_selftest PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/basic/basic_example.c
