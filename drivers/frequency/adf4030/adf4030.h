@@ -3,7 +3,7 @@
  *   @brief  Implementation of ADF4030 Driver.
  *   @author Sirac Kucukarabacioglu (sirac.kucukarabacioglu@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2025-2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -477,12 +477,13 @@
 #define ADF4030_CHANNEL_PRBS_SEPARATOR		6
 #define ADF4030_CHANNEL_INV_SEPARATOR		4
 #define ADF4030_POR_DELAY_US			200
-#define ADF4030_RCM_CONST1			7000
+#define ADF4030_RCM_CONST1			7000000	/* Resistance numerator [mOhm] */
 #define ADF4030_RCM_CONST2			735
-#define ADF4030_RCM_CONST3			10
-#define ADF4030_RCM_CONST4			265
-#define ADF4030_RCM_CURRENT0			14
-#define ADF4030_RCM_CURRENT1			20
+#define ADF4030_RCM_MV_SCALE			1000	/* mV scaling factor */
+#define ADF4030_RCM_CONST4			26500	/* Resistance offset [mOhm] */
+#define ADF4030_RCM_SLOPE			10	/* RCM code coefficient */
+#define ADF4030_RCM_CURRENT0			14	/* Drive current [mA] */
+#define ADF4030_RCM_CURRENT1			20	/* Boosted drive current [mA] */
 #define ADF4030_RCM_VOLTAGE_MIN0		504
 #define ADF4030_RCM_VOLTAGE_MAX0		1304
 #define ADF4030_RCM_VOLTAGE_MIN1		720
@@ -517,6 +518,13 @@
 #define ADF4030_ALIGN_CYCLES_MAX		(8U)
 #define ADF4030_CHIP_ADDRESS_MIN		0U
 #define ADF4030_CHIP_ADDRESS_MAX		15U
+
+/* Channel TDC offset is a 16-bit signed value */
+#define ADF4030_TDC_OFFSET_CH_MAX		0x7FFF
+#define ADF4030_TDC_OFFSET_CH_MIN		(-0x8000)
+/* Common TDC offset is a 21-bit signed value */
+#define ADF4030_TDC_OFFSET_COM_MAX		0xFFFFF
+#define ADF4030_TDC_OFFSET_COM_MIN		(-0x100000)
 
 enum adf4030_terminations_e {
 	TX_VOLTAGE_DRIVER = 0,
