@@ -14,6 +14,7 @@
 #include "stm32_capi_gpio.h"
 #include "stm32_capi_spi.h"
 #include "stm32_capi_irq.h"
+#include "stm32_capi_timer.h"
 #include "capi_uart.h"
 
 extern UART_HandleTypeDef huart3;
@@ -78,5 +79,28 @@ extern SPI_HandleTypeDef hspi1;
 #define SPI_DEVICE_NATIVE_CS	0x01U
 #define SPI_DEVICE_MODE		CAPI_SPI_MODE_0
 #define SPI_DEVICE_SPEED_HZ	1000000U
+
+/*
+ * TIM2 on NUCLEO-F767ZI: 32-bit general-purpose timer on APB1.
+ * The driver uses identifier=2 to select TIM2 via get_timer_base_from_identifier()
+ * and auto-detects the APB1 clock. output_freq_hz=1 MHz gives 1 us resolution.
+ */
+#define TIMER_IDENTIFIER	2U
+#define TIMER_OPS		&stm32_capi_timer_ops
+#define TIMER_INPUT_CLK_HZ	0U		/* auto-detected from APB1 */
+#define TIMER_OUTPUT_FREQ_HZ	1000000U	/* 1 MHz -> 1 us resolution */
+#define TIMER_EXTRA_TYPE	struct stm32_capi_timer_extra_config
+#define TIMER_EXTRA_INIT	{ .htim = NULL, \
+				  .get_input_clock = NULL, \
+				  .irq_num = TIM2_IRQn }
+
+#define TIMER_DIRECTION		CAPI_TIMER_COUNT_UP
+#define TIMER_COUNTER_MAX	0xFFFFFFFFU
+#define TIMER_COMPARE_VALUE	0x8000U
+#define TIMER_RATE_WINDOW_US	10000U
+#define TIMER_RATE_COUNTER_MASK	0xFFFFFFFFU
+#define TIMER_RATE_TOLERANCE_PCT 5U
+#define TIMER_HAS_IRQ		1
+#define TIMER_HAS_CAPTURE	1
 
 #endif /* __PARAMETERS_H__ */
