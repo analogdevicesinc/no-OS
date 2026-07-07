@@ -844,7 +844,16 @@ int xemacps_recv(struct xemacps_desc *desc, uint8_t *buf, uint32_t *len)
 	frame = rx_buf[bdindex];
 	*len = XEmacPs_BdGetLength(bd);
 
-	Xil_DCacheInvalidateRange((uintptr_t)frame, *len);
+	/*
+	 * Invalidate the whole cache-line-aligned buffer, not just *len.
+	 * frame is cache-line aligned and XGEM_BUFF_SIZE is a cache-line
+	 * multiple, so this is a pure invalidate. Invalidating only *len
+	 * bytes ends mid-line for short frames, turning the tail line into a
+	 * clean-and-invalidate that writes speculatively-cached stale bytes
+	 * back over the freshly-DMA'd frame tail (e.g. the ICMP checksum),
+	 * corrupting small frames while large ones survive.
+	 */
+	Xil_DCacheInvalidateRange((uintptr_t)frame, XGEM_BUFF_SIZE);
 
 	memcpy(buf, frame, *len);
 

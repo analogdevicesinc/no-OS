@@ -27,7 +27,7 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.c \
 	$(DRIVERS)/frequency/si5391/si5391.c \
-	$(DRIVERS)/rf-transceiver/k/ad9081k.c \
+	$(PROJECT)/src/devices/ad9081k/ad9081k.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_clk.c \
 	$(NO-OS)/util/no_os_alloc.c \
@@ -48,7 +48,7 @@ INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.h \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.h \
 	$(DRIVERS)/frequency/si5391/si5391.h \
-	$(DRIVERS)/rf-transceiver/k/ad9081k.h
+	$(PROJECT)/src/devices/ad9081k/ad9081k.h
 INCS += $(DRIVERS)/axi_core/jesd204/axi_adxcvr.h
 LIBRARIES += lwip
 ALL_IGNORED_FILES += $(NO-OS)/libraries/lwip/lwip/src/netif/slipif.c
@@ -65,11 +65,27 @@ SRCS += $(NO-OS)/util/no_os_lf256fifo.c \
 
 LIBRARIES += iio
 SRCS += $(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
-	$(DRIVERS)/rf-transceiver/k/iio_ad9081k.c \
+	$(PROJECT)/src/devices/ad9081k/iio_ad9081k.c \
 	$(NO-OS)/iio/iio_app/iio_app.c
 INCS += $(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h \
-	$(DRIVERS)/rf-transceiver/k/iio_ad9081k.h \
+	$(PROJECT)/src/devices/ad9081k/iio_ad9081k.h \
 	$(NO-OS)/iio/iio_app/iio_app.h
+
+# K IIOD control + data plane (k_data engine + 6 IIO devices)
+SRCS += $(PROJECT)/src/k_iio/k_data.c \
+	$(PROJECT)/src/k_iio/iio_k_tx.c \
+	$(PROJECT)/src/k_iio/iio_k_rx.c \
+	$(PROJECT)/src/k_iio/iio_k_regmap.c \
+	$(PROJECT)/src/k_iio/iio_k_hdlregs.c \
+	$(PROJECT)/src/k_iio/iio_k_gpio.c \
+	$(PROJECT)/src/k_iio/iio_k_time.c
+INCS += $(PROJECT)/src/k_iio/k_data.h \
+	$(PROJECT)/src/k_iio/iio_k_tx.h \
+	$(PROJECT)/src/k_iio/iio_k_rx.h \
+	$(PROJECT)/src/k_iio/iio_k_regmap.h \
+	$(PROJECT)/src/k_iio/iio_k_hdlregs.h \
+	$(PROJECT)/src/k_iio/iio_k_gpio.h \
+	$(PROJECT)/src/k_iio/iio_k_time.h
 
 INCS += $(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_spi.h \

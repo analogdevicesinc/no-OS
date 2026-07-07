@@ -1,0 +1,1694 @@
+[
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_gpio.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/api/no_os_gpio.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/api/no_os_gpio.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_i2c.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/api/no_os_i2c.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/api/no_os_i2c.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_irq.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/api/no_os_irq.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/api/no_os_irq.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_spi.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/api/no_os_spi.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/api/no_os_spi.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_uart.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/api/no_os_uart.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/api/no_os_uart.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "axi_adc_core.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/axi_core/axi_adc_core/axi_adc_core.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/axi_core/axi_adc_core/axi_adc_core.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "axi_dmac.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/axi_core/axi_dmac/axi_dmac.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/axi_core/axi_dmac/axi_dmac.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "iio_axi_adc.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/axi_core/iio_axi_adc/iio_axi_adc.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/axi_core/iio_axi_adc/iio_axi_adc.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "axi_adxcvr.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/axi_core/jesd204/axi_adxcvr.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/axi_core/jesd204/axi_adxcvr.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "axi_jesd204_rx.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/axi_core/jesd204/axi_jesd204_rx.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/axi_core/jesd204/axi_jesd204_rx.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "axi_jesd204_tx.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/axi_core/jesd204/axi_jesd204_tx.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/axi_core/jesd204/axi_jesd204_tx.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "xilinx_transceiver.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/axi_core/jesd204/xilinx_transceiver.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/axi_core/jesd204/xilinx_transceiver.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "tx_generator.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/axi_core/tx_generator/tx_generator.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/axi_core/tx_generator/tx_generator.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "si5391.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/frequency/si5391/si5391.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/frequency/si5391/si5391.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_xemacps.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/net/xemacps/no_os_xemacps.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/net/xemacps/no_os_xemacps.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "xilinx_axi_io.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/platform/xilinx/xilinx_axi_io.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/platform/xilinx/xilinx_axi_io.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "xilinx_delay.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/platform/xilinx/xilinx_delay.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/platform/xilinx/xilinx_delay.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "xilinx_gpio.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/platform/xilinx/xilinx_gpio.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/platform/xilinx/xilinx_gpio.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "xilinx_i2c.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/platform/xilinx/xilinx_i2c.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/platform/xilinx/xilinx_i2c.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "xilinx_irq.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/platform/xilinx/xilinx_irq.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/platform/xilinx/xilinx_irq.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "xilinx_spi.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/platform/xilinx/xilinx_spi.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/platform/xilinx/xilinx_spi.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "xilinx_uart.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/platform/xilinx/xilinx_uart.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/platform/xilinx/xilinx_uart.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "ad9081k.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/rf-transceiver/k/ad9081k.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/rf-transceiver/k/ad9081k.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "iio_ad9081k.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/rf-transceiver/k/iio_ad9081k.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/drivers/rf-transceiver/k/iio_ad9081k.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "iio.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/iio/iio.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/iio/iio.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "iio_app.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/iio/iio_app/iio_app.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/iio/iio_app/iio_app.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "iio_trigger.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/iio/iio_trigger.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/iio/iio_trigger.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "iiod.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/iio/iiod.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/iio/iiod.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "jesd204-core.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/jesd204/jesd204-core.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/jesd204/jesd204-core.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "jesd204-fsm.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/jesd204/jesd204-fsm.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/jesd204/jesd204-fsm.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "api_lib.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/api/api_lib.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/api/api_lib.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "api_msg.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/api/api_msg.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/api/api_msg.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "err.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/api/err.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/api/err.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "if_api.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/api/if_api.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/api/if_api.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "netbuf.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/api/netbuf.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/api/netbuf.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "netdb.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/api/netdb.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/api/netdb.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "netifapi.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/api/netifapi.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/api/netifapi.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "sockets.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/api/sockets.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/api/sockets.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "tcpip.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/api/tcpip.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/api/tcpip.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "lwiperf.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/apps/lwiperf/lwiperf.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/apps/lwiperf/lwiperf.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "mdns.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/apps/mdns/mdns.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/apps/mdns/mdns.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "mdns_domain.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/apps/mdns/mdns_domain.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/apps/mdns/mdns_domain.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "mdns_out.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/apps/mdns/mdns_out.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/apps/mdns/mdns_out.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "altcp.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/altcp.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/altcp.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "altcp_alloc.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/altcp_alloc.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/altcp_alloc.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "altcp_tcp.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/altcp_tcp.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/altcp_tcp.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "def.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/def.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/def.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "dns.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/dns.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/dns.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "inet_chksum.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/inet_chksum.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/inet_chksum.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "init.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/init.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/init.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "ip.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ip.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ip.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "acd.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv4/acd.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv4/acd.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "autoip.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv4/autoip.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv4/autoip.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "dhcp.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv4/dhcp.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv4/dhcp.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "etharp.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv4/etharp.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv4/etharp.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "icmp.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv4/icmp.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv4/icmp.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "igmp.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv4/igmp.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv4/igmp.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "ip4.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv4/ip4.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv4/ip4.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "ip4_addr.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv4/ip4_addr.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv4/ip4_addr.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "ip4_frag.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv4/ip4_frag.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv4/ip4_frag.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "dhcp6.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv6/dhcp6.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv6/dhcp6.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "ethip6.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv6/ethip6.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv6/ethip6.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "icmp6.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv6/icmp6.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv6/icmp6.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "inet6.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv6/inet6.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv6/inet6.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "ip6.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv6/ip6.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv6/ip6.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "ip6_addr.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv6/ip6_addr.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv6/ip6_addr.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "ip6_frag.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv6/ip6_frag.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv6/ip6_frag.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "mld6.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv6/mld6.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv6/mld6.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "nd6.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv6/nd6.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/ipv6/nd6.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "mem.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/mem.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/mem.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "memp.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/memp.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/memp.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "netif.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/netif.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/netif.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "pbuf.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/pbuf.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/pbuf.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "raw.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/raw.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/raw.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "stats.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/stats.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/stats.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "sys.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/sys.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/sys.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "tcp.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/tcp.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/tcp.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "tcp_in.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/tcp_in.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/tcp_in.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "tcp_out.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/tcp_out.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/tcp_out.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "timeouts.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/timeouts.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/timeouts.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "udp.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/udp.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/core/udp.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "bridgeif.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/bridgeif.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/bridgeif.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "bridgeif_fdb.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/bridgeif_fdb.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/bridgeif_fdb.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "ethernet.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ethernet.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ethernet.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "lowpan6.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/lowpan6.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/lowpan6.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "lowpan6_ble.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/lowpan6_ble.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/lowpan6_ble.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "lowpan6_common.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/lowpan6_common.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/lowpan6_common.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "auth.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/auth.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/auth.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "ccp.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/ccp.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/ccp.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "chap-md5.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/chap-md5.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/chap-md5.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "chap-new.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/chap-new.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/chap-new.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "chap_ms.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/chap_ms.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/chap_ms.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "demand.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/demand.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/demand.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "eap.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/eap.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/eap.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "ecp.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/ecp.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/ecp.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "eui64.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/eui64.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/eui64.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "fsm.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/fsm.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/fsm.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "ipcp.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/ipcp.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/ipcp.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "ipv6cp.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/ipv6cp.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/ipv6cp.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "lcp.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/lcp.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/lcp.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "magic.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/magic.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/magic.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "mppe.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/mppe.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/mppe.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "multilink.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/multilink.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/multilink.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "arc4.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/polarssl/arc4.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/polarssl/arc4.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "des.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/polarssl/des.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/polarssl/des.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "md4.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/polarssl/md4.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/polarssl/md4.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "md5.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/polarssl/md5.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/polarssl/md5.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "sha1.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/polarssl/sha1.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/polarssl/sha1.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "ppp.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/ppp.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/ppp.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "pppapi.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/pppapi.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/pppapi.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "pppcrypt.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/pppcrypt.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/pppcrypt.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "pppoe.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/pppoe.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/pppoe.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "pppol2tp.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/pppol2tp.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/pppol2tp.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "pppos.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/pppos.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/pppos.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "upap.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/upap.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/upap.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "utils.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/utils.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/utils.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "vj.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/vj.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/ppp/vj.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "zepif.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/zepif.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/libraries/lwip/lwip/src/netif/zepif.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "lwip_socket.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/network/lwip_raw_socket/lwip_socket.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/network/lwip_raw_socket/lwip_socket.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "lwip_xemacps.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/network/lwip_raw_socket/netdevs/xemacps/lwip_xemacps.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/network/lwip_raw_socket/netdevs/xemacps/lwip_xemacps.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "tcp_socket.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/network/tcp_socket.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/network/tcp_socket.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "common_data.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/k_proj/src/common/common_data.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/k_proj/src/common/common_data.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "basic_example.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/k_proj/src/examples/basic_example/basic_example.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/k_proj/src/examples/basic_example/basic_example.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "main.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/k_proj/src/platform/xilinx/main.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/k_proj/src/platform/xilinx/main.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "parameters.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/k_proj/src/platform/xilinx/parameters.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/k_proj/src/platform/xilinx/parameters.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_alloc.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_alloc.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_alloc.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_circular_buffer.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_circular_buffer.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_circular_buffer.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_clk.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_clk.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_clk.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_crc16.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_crc16.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_crc16.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_crc24.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_crc24.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_crc24.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_crc8.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_crc8.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_crc8.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_display.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_display.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_display.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_fifo.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_fifo.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_fifo.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_font_8x8.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_font_8x8.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_font_8x8.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_lf256fifo.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_lf256fifo.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_lf256fifo.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_list.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_list.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_list.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_mutex.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_mutex.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_mutex.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_pid.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_pid.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_pid.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_semaphore.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_semaphore.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_semaphore.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_sin_lut.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_sin_lut.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_sin_lut.c"
+  },
+  {
+    "directory": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj",
+    "arguments": [
+      "aarch64-none-elf-gcc",
+      "-I/home/rbudai/Xilinx/2025.1/Vitis/include",
+      "-o",
+      "no_os_util.o",
+      "-c",
+      "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_util.c"
+    ],
+    "file": "/home/rbudai/Workspace_no_os/no-os/projects/k_proj/build/app/noos/util/no_os_util.c"
+  }
+]

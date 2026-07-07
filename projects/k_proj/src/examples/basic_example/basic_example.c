@@ -837,52 +837,52 @@ int example_main()
 
 #ifdef DMA_CYCLIC_PASS
 	{
-	volatile uint32_t *rx_pass_buf =
-		(volatile uint32_t *)(uintptr_t)RX_DDR_BASEADDR;
+		volatile uint32_t *rx_pass_buf =
+			(volatile uint32_t *)(uintptr_t)RX_DDR_BASEADDR;
 
-	struct axi_dma_transfer read_pass_transfer = {
-		.size = sizeof(tx_passthrough),
-		.transfer_done = 0,
-		.cyclic = NO,
-		.src_addr = 0,
-		.dest_addr = RX_DDR_BASEADDR,
-	};
+		struct axi_dma_transfer read_pass_transfer = {
+			.size = sizeof(tx_passthrough),
+			.transfer_done = 0,
+			.cyclic = NO,
+			.src_addr = 0,
+			.dest_addr = RX_DDR_BASEADDR,
+		};
 
-	ret = axi_dmac_transfer_start(rx_dmac, &read_pass_transfer);
-	if (ret)
-		pr_err("axi_dmac_transfer_start(rx_pass) failed: %d\n", ret);
+		ret = axi_dmac_transfer_start(rx_dmac, &read_pass_transfer);
+		if (ret)
+			pr_err("axi_dmac_transfer_start(rx_pass) failed: %d\n", ret);
 #endif
 
-	ret = axi_dmac_transfer_start(tx_dmac, &transfer);
-	if (ret) {
-		pr_err("axi_dmac_transfer_start(tx_passthrough) failed: %d\n", ret);
-	} else {
-		pr_info("TX DMA transfer of PASS stream started\n");
-		ret = axi_dmac_transfer_wait_completion(tx_dmac, 2000);
-		if (ret)
-			pr_err("TX DMA PASS transfer timeout\n");
-		else
-			pr_info("TX DMA PASS transfer completed\n");
-	}
+		ret = axi_dmac_transfer_start(tx_dmac, &transfer);
+		if (ret) {
+			pr_err("axi_dmac_transfer_start(tx_passthrough) failed: %d\n", ret);
+		} else {
+			pr_info("TX DMA transfer of PASS stream started\n");
+			ret = axi_dmac_transfer_wait_completion(tx_dmac, 2000);
+			if (ret)
+				pr_err("TX DMA PASS transfer timeout\n");
+			else
+				pr_info("TX DMA PASS transfer completed\n");
+		}
 
-	do_poll_fsm_idle(TX_DATA_OFFLOAD_BASEADDR,
-			 "TX data offload after PASS", 200);
+		do_poll_fsm_idle(TX_DATA_OFFLOAD_BASEADDR,
+				 "TX data offload after PASS", 200);
 
 #ifdef DMA_CYCLIC_PASS
-	ret = axi_dmac_transfer_wait_completion(rx_dmac, 2000);
-	if (ret)
-		pr_err("RX PASS DMA transfer timeout\n");
+		ret = axi_dmac_transfer_wait_completion(rx_dmac, 2000);
+		if (ret)
+			pr_err("RX PASS DMA transfer timeout\n");
 
-	Xil_DCacheInvalidateRange(RX_DDR_BASEADDR, sizeof(tx_passthrough));
+		Xil_DCacheInvalidateRange(RX_DDR_BASEADDR, sizeof(tx_passthrough));
 
-	pr_info("DMA_EXAMPLE Rx: address=%#x samples=%lu channels=%u bits=%lu\n",
-		RX_DDR_BASEADDR, (unsigned long)NO_OS_ARRAY_SIZE(tx_passthrough),
-		rx_adc->num_channels,
-		8 * sizeof(tx_passthrough[0]));
+		pr_info("DMA_EXAMPLE Rx: address=%#x samples=%lu channels=%u bits=%lu\n",
+			RX_DDR_BASEADDR, (unsigned long)NO_OS_ARRAY_SIZE(tx_passthrough),
+			rx_adc->num_channels,
+			8 * sizeof(tx_passthrough[0]));
 
-	for (i = 0; i < NO_OS_ARRAY_SIZE(tx_passthrough); i++)
-		printf("  rx_pass[%2u] = 0x%08lX\n", i,
-		       (unsigned long)rx_pass_buf[i]);
+		for (i = 0; i < NO_OS_ARRAY_SIZE(tx_passthrough); i++)
+			printf("  rx_pass[%2u] = 0x%08lX\n", i,
+			       (unsigned long)rx_pass_buf[i]);
 	}
 #endif
 
@@ -947,40 +947,40 @@ int example_main()
 
 #ifdef DMA_CYCLIC_PASS
 	{
-	volatile uint32_t *rx_stream =
-		(volatile uint32_t *)(uintptr_t)RX_DDR_BASEADDR;
+		volatile uint32_t *rx_stream =
+			(volatile uint32_t *)(uintptr_t)RX_DDR_BASEADDR;
 
-	struct axi_dma_transfer read_rx_stream_transfer = {
-		.size = sizeof(tx_vector),
-		.transfer_done = 0,
-		.cyclic = NO,
-		.src_addr = 0,
-		.dest_addr = RX_DDR_BASEADDR,
-	};
+		struct axi_dma_transfer read_rx_stream_transfer = {
+			.size = sizeof(tx_vector),
+			.transfer_done = 0,
+			.cyclic = NO,
+			.src_addr = 0,
+			.dest_addr = RX_DDR_BASEADDR,
+		};
 
-	ret = axi_dmac_transfer_start(rx_dmac, &read_rx_stream_transfer);
-	if (ret)
-		pr_err("axi_dmac_transfer_start(rx_stream) failed: %d\n", ret);
+		ret = axi_dmac_transfer_start(rx_dmac, &read_rx_stream_transfer);
+		if (ret)
+			pr_err("axi_dmac_transfer_start(rx_stream) failed: %d\n", ret);
 
-	ret = axi_dmac_transfer_wait_completion(rx_dmac, 2000);
-	if (ret)
-		pr_err("RX stream DMA transfer timeout\n");
+		ret = axi_dmac_transfer_wait_completion(rx_dmac, 2000);
+		if (ret)
+			pr_err("RX stream DMA transfer timeout\n");
 
-	Xil_DCacheInvalidateRange(RX_DDR_BASEADDR, sizeof(tx_vector));
+		Xil_DCacheInvalidateRange(RX_DDR_BASEADDR, sizeof(tx_vector));
 
-	pr_info("DMA_EXAMPLE Rx: address=%#x samples=%lu channels=%u bits=%lu\n",
-		RX_DDR_BASEADDR, (unsigned long)NO_OS_ARRAY_SIZE(tx_vector),
-		rx_adc->num_channels,
-		8 * sizeof(tx_vector[0]));
+		pr_info("DMA_EXAMPLE Rx: address=%#x samples=%lu channels=%u bits=%lu\n",
+			RX_DDR_BASEADDR, (unsigned long)NO_OS_ARRAY_SIZE(tx_vector),
+			rx_adc->num_channels,
+			8 * sizeof(tx_vector[0]));
 
-	if ((rx_stream[0] & 0x3) == 1) {
-		printf("RX PATT stream detected (streamID=0x1)\n");
-	} else if ((rx_stream[0] & 0x3) == 2) {
-		printf("RX ASYNC stream detected (streamID=0x2)\n");
-	}
-	for (i = 0; i < NO_OS_ARRAY_SIZE(tx_vector); i++)
-		printf("  rx_stream[%2u] = 0x%08lX\n", i,
-		       (unsigned long)rx_stream[i]);
+		if ((rx_stream[0] & 0x3) == 1) {
+			printf("RX PATT stream detected (streamID=0x1)\n");
+		} else if ((rx_stream[0] & 0x3) == 2) {
+			printf("RX ASYNC stream detected (streamID=0x2)\n");
+		}
+		for (i = 0; i < NO_OS_ARRAY_SIZE(tx_vector); i++)
+			printf("  rx_stream[%2u] = 0x%08lX\n", i,
+			       (unsigned long)rx_stream[i]);
 	}
 #endif
 
@@ -1028,22 +1028,31 @@ int example_main()
 		.size = ADC_BUFFER_SAMPLES * ADC_CHANNELS * sizeof(uint16_t),
 	};
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
+#endif
 
+	/*
+	 * ad9081k is a self-contained (register-map) IIO device that needs no
+	 * JESD/DMA hardware, so it is exposed even in the ONLY_IIOD build to give
+	 * the IIOD transport a real device to advertise.
+	 */
 	ret = iio_ad9081k_init(&iio_ad9081k_desc);
 	if (ret) {
 		pr_err("iio_ad9081k_init() failed: %d\n", ret);
+#ifndef ONLY_IIOD
 		goto error_iio_adc;
+#else
+		return ret;
+#endif
 	}
 	iio_ad9081k_get_dev_descriptor(iio_ad9081k_desc, &ad9081k_dev_desc);
-#endif
 
 	struct iio_app_device iio_devices[] = {
 #ifndef ONLY_IIOD
 		IIO_APP_DEVICE("cf-ad9081k-lpc", iio_axi_adc_desc,
 			       adc_dev_desc, &read_buff, NULL, NULL),
+#endif
 		IIO_APP_DEVICE("ad9081k", iio_ad9081k_desc,
 			       ad9081k_dev_desc, NULL, NULL, NULL),
-#endif
 	};
 
 	app_init_param.devices = iio_devices;
@@ -1065,8 +1074,12 @@ int example_main()
 
 error_iio_ad9081k:
 	iio_ad9081k_remove(iio_ad9081k_desc);
+#ifndef ONLY_IIOD
 error_iio_adc:
 	iio_axi_adc_remove(iio_axi_adc_desc);
+#else
+	return ret;
+#endif
 #endif /* IIOD */
 error_fsm:
 error_ad9081k:

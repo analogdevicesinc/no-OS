@@ -257,6 +257,21 @@ static int iio_send(struct iiod_ctx *ctx, uint8_t *buf, uint32_t len)
 	return desc->send(ctx->conn, buf, len);
 }
 
+/*
+ * The client sends a TIMEOUT command right after connecting to configure the
+ * R/W timeout. This is a non-blocking bare-metal server: recv/send already
+ * return -EAGAIN immediately and the step loop retries, so there is no
+ * per-socket blocking timeout to program. Accept the command as a no-op so the
+ * handshake succeeds instead of failing with the dummy op's -EINVAL.
+ */
+static int iio_set_timeout(struct iiod_ctx *ctx, uint32_t timeout)
+{
+	(void)ctx;
+	(void)timeout;
+
+	return 0;
+}
+
 static inline void _print_ch_id(char *buff, struct iio_channel *ch)
 {
 	if (ch->modified) {
@@ -1940,6 +1955,7 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	ops->close = iio_close_dev;
 	ops->send = iio_send;
 	ops->recv = iio_recv;
+	ops->set_timeout = iio_set_timeout;
 	ops->set_buffers_count = iio_set_buffers_count;
 
 	iiod_param.instance = ldesc;

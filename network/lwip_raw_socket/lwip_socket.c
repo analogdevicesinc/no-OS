@@ -580,22 +580,44 @@ static int32_t lwip_socket_send(void *net, uint32_t sock_id, const void *data,
 		return -ENOTCONN;
 
 	avail = tcp_sndbuf(sock->pcb);
+	if (!avail)
+		/* No room in the send buffer right now; ask caller to retry. */
+		return -EAGAIN;
+
 	flags = TCP_WRITE_FLAG_COPY;
 	if (avail < size)
-		/* Partial write */
+		/* Partial write: more of this payload will follow. */
 		flags |= TCP_WRITE_FLAG_MORE;
 
 	size = no_os_min(avail, size);
 	err = tcp_write(sock->pcb, data, size, flags);
+	/*
+	 * tcp_write() can return ERR_MEM even when tcp_sndbuf() reported space,
+	 * when the pcb segment queue or pbuf pool is momentarily exhausted (this
+	 * happens while pushing a large payload such as the context XML). This is
+	 * transient: map it to -EAGAIN so IIOD retries the same bytes instead of
+	 * treating it as fatal and tearing down the connection (which surfaces to
+	 * the client as a broken pipe, -EPIPE).
+	 */
+	if (err == ERR_MEM || err == ERR_WOULDBLOCK)
+		return -EAGAIN;
+	if (err == ERR_CONN || err == ERR_RST || err == ERR_CLSD ||
+	    err == ERR_ABRT)
+		return -ENOTCONN;
 	if (err != ERR_OK)
-		return err;
+		return -EINVAL;
 
-	if (!(flags & TCP_WRITE_FLAG_MORE)) {
-		/* Mark data as ready to be sent */
-		err = tcp_output(sock->pcb);
-		if (err != ERR_OK)
-			return err;
-	}
+	/*
+	 * Always flush. When size > tcp_sndbuf the MORE flag is set above, but we
+	 * must still call tcp_output() so the queued data is actually sent and the
+	 * send buffer drains; otherwise a large transfer can stall forever.
+	 */
+	err = tcp_output(sock->pcb);
+	if (err == ERR_CONN || err == ERR_RST || err == ERR_CLSD ||
+	    err == ERR_ABRT)
+		return -ENOTCONN;
+	if (err != ERR_OK && err != ERR_MEM)
+		return -EINVAL;
 
 	return size;
 }
