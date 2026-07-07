@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for Mbed platform of ADF4030 project.
+ *   @file   parameters.c
+ *   @brief  Definition of STM32 platform data used by ADF4030 project.
  *   @author Sirac Kucukarabacioglu (sirac.kucukarabacioglu@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,20 +31,12 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include "parameters.h"
-#include "common_data.h"
-#include "no_os_error.h"
 
-extern int example_main();
+struct stm32_uart_init_param adf4030_uart_extra_ip = {
+	.huart = &huart5,
+};
 
-/**
- * @brief Main function execution for mbed platform.
- * @return ret - Result of the enabled examples execution.
- */
-int main()
-{
-	return example_main();
-}
+struct stm32_spi_init_param adf4030_spi_extra = {
+	.chip_select_port = SPI_CS_PORT,
+};

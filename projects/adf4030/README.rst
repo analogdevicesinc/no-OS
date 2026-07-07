@@ -196,8 +196,8 @@ In order to build the IIO project make sure you are using this command:
 No-OS Supported Platforms
 -------------------------
 
-Mbed Platform
-^^^^^^^^^^^^^
+STM32 Platform
+^^^^^^^^^^^^^^
 **Used hardware**
 
 * `EVAL-ADF4030 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4030.html>`_
@@ -218,7 +218,7 @@ board. 12V power supply needs to be connected. Reference clock can be provided u
 	# to delete current build
 	make reset
 	# to build the project (selecting the example to run)
-	make EXAMPLE=iio PLATFORM=mbed
+	make EXAMPLE=iio PLATFORM=stm32 HARDWARE=sdp-ck1z.ioc
 	# to flash the code
 	make
 	# copy the adf4030.bin to the mounted SDP-K1
