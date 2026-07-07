@@ -85,14 +85,9 @@ If you are not familiar with ADI IIO-Oscilloscope Client, please take a
 look at:
 `IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
 
-In order to build the IIO project make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/iio_aducm3029/Makefile>`__:
-
-.. code-block:: bash
-
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   IIOD = y
+This example is built by selecting the ``iio`` variant (see the Build
+Command below). The ``serial_print`` variant builds the plain UART example
+instead.
 
 No-OS Supported Platforms
 -------------------------
@@ -115,11 +110,22 @@ UART switch (S2) is set to the USB position for PC terminal access.
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``serial_print``, ``iio``.
+Available boards: ``eval-adicup3029``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-   # remove sp characters from the build directory
-   make reset
-   # build the project
-   make PLATFORM=aducm3029
-   # flash the code
-   make run
+   # point at the CrossCore Embedded Studio install (only if not auto-detected)
+   export CCES_HOME=/opt/analog/cces/3.0.3
+
+   cd no-OS
+
+   # build the serial_print example on the EVAL-ADICUP3029
+   python tools/scripts/no_os_build.py build \
+      --project iio_aducm3029 --variant serial_print --board eval-adicup3029
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project iio_aducm3029 --variant serial_print --board eval-adicup3029 \
+      --probe openocd --flash
