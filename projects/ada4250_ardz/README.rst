@@ -51,8 +51,8 @@ Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
 No-OS Supported Examples
 ------------------------
 
-This project is organized around the no-OS ``EXAMPLE`` based build flow.
-Selecting an example at build time (``EXAMPLE=<name>``) chooses which
+This project is organized around the no-OS variant based build flow.
+Selecting a variant at build time (``--variant <name>``) chooses which
 application is compiled. The platform ``main()`` is a thin dispatcher that
 calls ``example_main()``, provided by the selected example. The
 initialization data used in the examples is defined in
@@ -63,7 +63,7 @@ and the platform-specific macros in
 IIO Example
 ~~~~~~~~~~~
 
-The IIO example (``EXAMPLE=iio_example``, the default) initializes the
+The IIO example (``iio`` variant, the default) initializes the
 ADA4250 over SPI and launches an IIOD server over UART. Using IIO
 Oscilloscope, or any IIO-compatible client, the user can read and adjust
 the amplifier settings such as gain, reference buffer, and bias current
@@ -100,11 +100,22 @@ power, programming, and serial communication. Ensure the UART switch
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``iio``.
+Available boards: ``eval-adicup3029``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-   # remove sp characters from the build directory
-   make reset
-   # build the project (EXAMPLE defaults to iio_example)
-   make EXAMPLE=iio_example PLATFORM=aducm3029
-   # flash the code
-   make run
+   # point at the CrossCore Embedded Studio install (only if not auto-detected)
+   export CCES_HOME=/opt/analog/cces/3.0.3
+
+   cd no-OS
+
+   # build the iio example on the EVAL-ADICUP3029
+   python tools/scripts/no_os_build.py build \
+      --project ada4250_ardz --variant iio --board eval-adicup3029
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ada4250_ardz --variant iio --board eval-adicup3029 \
+      --probe openocd --flash

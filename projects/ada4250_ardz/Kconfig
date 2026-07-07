@@ -1,0 +1,16 @@
+menu "ADA4250-ARDZ Configuration"
+
+choice ADA4250_ARDZ_EXAMPLE
+	prompt "Example variant"
+	default ADA4250_ARDZ_IIO_EXAMPLE
+
+config ADA4250_ARDZ_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the ADA4250 programmable-gain amplifier
+	  over an IIO interface on top of a UART transport.
+
+endchoice
+
+endmenu
