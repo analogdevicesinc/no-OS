@@ -36,11 +36,8 @@ The basic example initializes the ESP Wi-Fi module, connects to a
 configured Wi-Fi network and MQTT broker, then continuously publishes
 messages to a specified MQTT topic.
 
-This is the only example in this project, so it builds by default:
-
-.. code-block:: bash
-
-   make
+This is the only example in this project, so it is selected with the
+``basic`` variant (see the Build Command sections below).
 
 No-OS Supported Platforms
 -------------------------
@@ -51,19 +48,49 @@ ADuCM3029
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_ (on-board ESP8266 Wi-Fi module)
+
+Connections
+^^^^^^^^^^^
+
+The EVAL-ADICUP3029 carries an on-board ESP8266 Wi-Fi module wired to
+connector P1, so no external module has to be added. Set the UART switch
+**S2** to the "WiFi Module" (right) position to route UART0 to the P1
+Wi-Fi connector; the module is driven over UART0 at 115200 baud and its
+reset line is not connected (the module is reset in software).
+
+=================== =========================== ==============================================
+P1 Wi-Fi Net        ADuCM3029 Pin               Function
+=================== =========================== ==============================================
+UART0_TX            P0.10 (UART0 TX)            Data from the ADuCM3029 to the module
+UART0_RX            P0.11 (UART0 RX)            Data from the module to the ADuCM3029
+Reset               Not connected               Module is reset in software
+Power (pin 8)       +3.3V                       Module power supply
+Ground (pin 1)      DGND                        Common ground
+=================== =========================== ==============================================
 
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``basic``.
+Available boards: ``eval-adicup3029``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-   # to delete current build
-   make reset
-   # to build the project
-   make PLATFORM=aducm3029
-   # to flash the code
-   make run
+   # point at the CrossCore Embedded Studio install (only if not auto-detected)
+   export CCES_HOME=/opt/analog/cces/3.0.3
+
+   cd no-OS
+
+   # build the basic example on the EVAL-ADICUP3029
+   python tools/scripts/no_os_build.py build \
+      --project demo_esp --variant basic --board eval-adicup3029
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project demo_esp --variant basic --board eval-adicup3029 \
+      --probe openocd --flash
 
 Maxim
 ~~~~~
@@ -72,19 +99,30 @@ Used Hardware
 ^^^^^^^^^^^^^
 
 * MAX32690 platform (MAX32690EVKIT or AD-APARD32690-SL)
-* ESP Wi-Fi module (e.g., ESP8266)
+* ESP Wi-Fi module (e.g., ESP8266); the AD-APARD32690-SL integrates an
+  on-board Wi-Fi module
+
+Connections
+^^^^^^^^^^^
+
+The Wi-Fi module is driven over UART2 at 115200 baud and, unlike the
+ADuCM3029, is reset through a hardware line wired to GPIO P3.9. The
+MAX32690 signals used by the firmware are listed below; connect them to
+the module UART, reset and power pins (on the AD-APARD32690-SL these are
+already routed on-board).
+
+=================== =========================== ==============================================
+MAX32690 Signal     Pin                         Function
+=================== =========================== ==============================================
+UART2 TX            UART2 TX                    Data from the MAX32690 to the module
+UART2 RX            UART2 RX                    Data from the module to the MAX32690
+Reset               P3.9 (GPIO)                 Hardware reset driven by the MAX32690
+Power               3.3V                        Module power supply
+Ground              GND                         Common ground
+=================== =========================== ==============================================
 
 Build Command
 ^^^^^^^^^^^^^
-
-.. code-block:: bash
-
-   # to delete current build
-   make reset
-   # to build the project
-   make PLATFORM=maxim TARGET=max32690
-   # to flash the code
-   make run
 
 Available variants: ``basic``.
 Available boards: ``ad-apard32690-sl``.
