@@ -82,11 +82,8 @@ voltages on each DAC. The example showcases downstream channel switching
 and multi-DAC control, running continuously while providing error
 handling and status output through logs.
 
-This is the only example in this project, so it builds by default:
-
-.. code-block:: bash
-
-   make
+This is the only example in this project, so it is selected with the
+``basic`` variant (see the Build Command sections below).
 
 No-OS Supported Platforms
 -------------------------
@@ -127,14 +124,25 @@ devices.
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``basic``.
+Available boards: ``max32650fthr``, ``max32655fthr``, ``max32660fthr``, ``max32665fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-   # remove sp characters from the build directory
-   make reset
-   # build the project
-   make PLATFORM=maxim TARGET=max32650
-   # flash the code
-   make run
+   # point at the Maxim SDK libraries (only if not auto-detected)
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+
+   cd no-OS
+
+   # build the basic example on the MAX32650FTHR
+   python tools/scripts/no_os_build.py build \
+      --project eval-ltc4306 --variant basic --board max32650fthr
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project eval-ltc4306 --variant basic --board max32650fthr \
+      --probe openocd --flash
 
 ADuCM Platform
 ~~~~~~~~~~~~~~
@@ -155,30 +163,22 @@ downstream devices.
 Build Command
 ^^^^^^^^^^^^^
 
-.. code-block:: bash
-
-   # remove sp characters from the build directory
-   make reset
-   # build the project
-   make PLATFORM=aducm3029
-   # flash the code
-   make run
-
 Available variants: ``basic``.
-Available boards: ``max32650fthr``, ``max32655fthr``, ``max32660fthr``, ``max32665fthr``.
+Available boards: ``eval-adicup3029``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
-   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # point at the CrossCore Embedded Studio install (only if not auto-detected)
+   export CCES_HOME=/opt/analog/cces/3.0.3
 
    cd no-OS
 
-   # build the project (basic example on the max32650fthr board)
+   # build the basic example on the EVAL-ADICUP3029
    python tools/scripts/no_os_build.py build \
-      --project eval-ltc4306 --variant basic --board max32650fthr
+      --project eval-ltc4306 --variant basic --board eval-adicup3029
 
    # build and flash (requires a connected debug probe)
    python tools/scripts/no_os_build.py build \
-      --project eval-ltc4306 --variant basic --board max32650fthr \
+      --project eval-ltc4306 --variant basic --board eval-adicup3029 \
       --probe openocd --flash
