@@ -12,9 +12,12 @@
 #include "stm32_hal.h"
 #include "stm32_capi_uart.h"
 #include "stm32_capi_gpio.h"
+#include "stm32_capi_spi.h"
+#include "stm32_capi_irq.h"
 #include "capi_uart.h"
 
 extern UART_HandleTypeDef huart3;
+extern SPI_HandleTypeDef hspi1;
 
 #define UART_IDENTIFIER		0U
 #define UART_OPS		&stm32_capi_uart_ops
@@ -70,5 +73,33 @@ extern UART_HandleTypeDef huart3;
 #define GPIO_HAS_PIN_LOOPBACK	1
 #define GPIO_OUTPUT_PIN_NUMBERS	{ 0U }
 #define GPIO_INPUT_PIN_NUMBERS	{ 0U }
+
+/* SPI async delivery mode selection. */
+#define SPI_HAS_IRQ  1
+#define SPI_HAS_DMA  0
+
+/* IRQ controller — NVIC, no base address needed. */
+#define IRQ_CTRL_IDENTIFIER		0U
+
+/*
+ * SPI1 on NUCLEO-F767ZI:
+ *   PA5 = SCK, PA6 = MISO, PA7 = MOSI
+ *   External loopback requires PA7 physically wired to PA6.
+ */
+#define SPI_IDENTIFIER		((uint64_t)(uintptr_t)SPI1)
+#define SPI_OPS			&stm32_capi_spi_ops
+#define SPI_EXTRA_TYPE		struct stm32_spi_extra_config
+#define SPI_EXTRA_INIT		{ .hspi = &hspi1, \
+				  .get_input_clock = NULL, \
+				  .alternate = 0U, \
+				  .dma_handle = NULL, \
+				  .rxdma_ch_id = 0U, \
+				  .txdma_ch_id = 0U, \
+				  .irq_num = SPI1_IRQn }
+#define SPI_CLK_FREQ		96000000U
+
+#define SPI_DEVICE_NATIVE_CS	0x01U
+#define SPI_DEVICE_MODE		CAPI_SPI_MODE_0
+#define SPI_DEVICE_SPEED_HZ	1000000U
 
 #endif /* __PARAMETERS_H__ */
