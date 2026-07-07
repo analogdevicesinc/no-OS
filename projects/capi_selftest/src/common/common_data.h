@@ -198,6 +198,112 @@ extern struct capi_irq_config irq_config;
 extern const struct capi_timer_config timer_config;
 #endif /* TIMER_OPS */
 
+#ifdef I2C_OPS
+#include "capi_i2c.h"
+
+/*
+ * Test-only I2C constants. Defaults let the tests build before I2C is mapped;
+ * a platform overrides any of them in parameters.h if its bus needs different
+ * values (e.g. a taken address, or an extra config the speed switch requires).
+ */
+
+/* Second address the target listens on for the readdress case. */
+#ifndef I2C_TARGET_ALT_ADDR
+#define I2C_TARGET_ALT_ADDR	0x55U
+#endif /* I2C_TARGET_ALT_ADDR */
+
+/* Alternate bus speed the bus-speed case switches to and proves still works. */
+#ifndef I2C_SPEED_ALT
+#define I2C_SPEED_ALT		CAPI_I2C_SPEED_FAST
+#endif /* I2C_SPEED_ALT */
+
+/* SCLK duty cycle (percent) passed to configure_bus_speed in the speed case. */
+#ifndef I2C_DUTY_CYCLE
+#define I2C_DUTY_CYCLE		50U
+#endif /* I2C_DUTY_CYCLE */
+
+/*
+ * Floor (microseconds) below which a bus-speed transfer time is dominated by
+ * the async poll granularity + ISR latency + timer resolution (the software
+ * floor) rather than on-wire time, so a fast-vs-slow comparison cannot resolve
+ * the SCL rate change. Probes shorter than this skip the direction assert.
+ * Override in parameters.h to match a platform's measured floor.
+ */
+#ifndef I2C_SPEED_MIN_RESOLVABLE_US
+#define I2C_SPEED_MIN_RESOLVABLE_US	20000U
+#endif /* I2C_SPEED_MIN_RESOLVABLE_US */
+
+/*
+ * Whether the initiator's controller can honor a non-50% SCL duty ratio. The
+ * duty ratio is a property of the clock-GENERATING (master) side; a target that
+ * never drives SCL cannot honor it, so it is only ever exercised on the
+ * initiator. All Xilinx masters (XIic, XIicPs) lack an asymmetric-duty API, so
+ * this defaults off and the duty sub-block compiles out. Set to 1 in
+ * parameters.h on a platform whose master honors duty_cycle; the sub-block then
+ * runs and asserts the request is accepted and the bus still carries data.
+ */
+#ifndef I2C_DUTY_CYCLE_SUPPORTED
+#define I2C_DUTY_CYCLE_SUPPORTED	0
+#endif /* I2C_DUTY_CYCLE_SUPPORTED */
+
+/*
+ * Two axes gate the I2C suite, kept separate so a new platform sets each on its
+ * own terms:
+ *
+ *   I2C_PAIR_TARGET_ASYNC - both roles are mapped AND the target can arm a
+ *                  background (async, IRQ-backed) listen. Every case runs the
+ *                  target's half async while the initiator blocks; on one core
+ *                  that listen must be armed before the blocking initiator call
+ *                  and complete during it, so a target with no IRQ cannot back
+ *                  the loopback at all. Hence this folds in I2C_TARGET_HAS_IRQ,
+ *                  not just presence.
+ *   I2C_MASTER_ASYNC - the INITIATOR can run async too (its IRQ path is live).
+ *                  Only the MASTER_ASYNC case needs it; the plain cases keep the
+ *                  initiator blocking. That case ANDs it with the pair flag
+ *                  above, so this carries just the initiator half.
+ *
+ * A platform overrides the per-role IRQ flags in its parameters.h; the defaults
+ * below assume a fully-mapped, fully-IRQ-capable board.
+ */
+#ifndef I2C_MASTER_HAS_IRQ
+#define I2C_MASTER_HAS_IRQ	1
+#endif /* I2C_MASTER_HAS_IRQ */
+
+#ifndef I2C_TARGET_HAS_IRQ
+#define I2C_TARGET_HAS_IRQ	1
+#endif /* I2C_TARGET_HAS_IRQ */
+
+#ifndef I2C_PAIR_TARGET_ASYNC
+#if defined(I2C_OPS) && defined(I2C_TARGET_OPS) && I2C_TARGET_HAS_IRQ
+#define I2C_PAIR_TARGET_ASYNC	1
+#else
+#define I2C_PAIR_TARGET_ASYNC	0
+#endif
+#endif /* I2C_PAIR_TARGET_ASYNC */
+
+#define I2C_MASTER_ASYNC	I2C_MASTER_HAS_IRQ
+
+/**
+ * @brief CAPI I2C initiator configuration for the loopback tests.
+ */
+extern const struct capi_i2c_config i2c_master_config;
+/**
+ * @brief CAPI I2C device descriptor used by the initiator to address the target.
+ */
+extern struct capi_i2c_device i2c_dev;
+#endif /* I2C_OPS */
+
+#ifdef I2C_TARGET_OPS
+/**
+ * @brief CAPI I2C target configuration for the loopback tests.
+ */
+extern const struct capi_i2c_config i2c_target_config;
+/**
+ * @brief CAPI I2C device descriptor for the target side.
+ */
+extern struct capi_i2c_device i2c_target_dev;
+#endif /* I2C_TARGET_OPS */
+
 /**
  * @brief Fill a test framework configuration for the selected platform.
  * @param config - Destination framework configuration.
