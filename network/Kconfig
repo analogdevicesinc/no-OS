@@ -37,3 +37,25 @@ config NO_OS_LWIP_INIT_ONETIME
 	  once and subsequent calls reuse the existing descriptor.
 
 endmenu
+
+# ESP8266 Wi-Fi credentials. Kept outside the LWIP/W5500 menu above because the
+# AT-command Wi-Fi transport does not use those stacks. Selected by a project's
+# own networking option (e.g. IIO_DEMO_NETWORKING) so the WIFI_SSID / WIFI_PWD
+# strings are only emitted for Wi-Fi builds, the same way NO_OS_IP is gated by
+# NO_OS_STATIC_IP.
+config WIFI_NETWORKING
+	bool
+
+config WIFI_SSID
+	string "Wi-Fi SSID"
+	depends on WIFI_NETWORKING
+	default "RouterSSID"
+	help
+	  SSID of the access point the ESP8266 Wi-Fi module connects to.
+
+config WIFI_PWD
+	string "Wi-Fi password"
+	depends on WIFI_NETWORKING
+	default "******"
+	help
+	  Password for the WIFI_SSID access point.

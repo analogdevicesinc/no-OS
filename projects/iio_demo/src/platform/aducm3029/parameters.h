@@ -54,9 +54,4 @@ of samples needed to be stored in the device buffer
 and based on the available RAM memory of the platform */
 #define SAMPLES_PER_CHANNEL_PLATFORM 200
 
-#ifdef NO_OS_NETWORKING
-#define WIFI_SSID	"RouterSSID"
-#define WIFI_PWD	"******"
-#endif
-
 #endif /* __PARAMETERS_H__ */

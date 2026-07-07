@@ -35,7 +35,4 @@
 
 #define ENABLE_LOOPBACK
 
-#define WIFI_SSID	"RouterSSID"
-#define WIFI_PWD	"******"
-
 #endif

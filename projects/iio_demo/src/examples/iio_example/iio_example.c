@@ -88,8 +88,8 @@ int iio_example_main()
 	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
 	app_init_param.uart_init_params = iio_demo_uart_ip;
 #ifdef NO_OS_NETWORKING
-	app_init_param.wifi_ssid = WIFI_SSID;
-	app_init_param.wifi_pwd = WIFI_PWD;
+	app_init_param.wifi_ssid = CONFIG_WIFI_SSID;
+	app_init_param.wifi_pwd = CONFIG_WIFI_PWD;
 #endif
 
 	status = iio_app_init(&app, app_init_param);

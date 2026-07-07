@@ -23,4 +23,38 @@ python tools/scripts/no_os_build.py build \
 	--project iio_demo --variant iio --board rpi-pico \
 	--probe openocd --flash
 
-Available variants: iio. Replace --variant accordingly.
+ADuCM3029 build (CMake, EVAL-ADICUP3029):
+The aducm3029 platform is built through the CMake build flow. Point at the
+CrossCore Embedded Studio install if it is not auto-detected:
+export CCES_HOME=/opt/analog/cces/3.0.3
+
+cd no-OS
+
+# build the iio example on the EVAL-ADICUP3029
+python tools/scripts/no_os_build.py build \
+	--project iio_demo --variant iio --board eval-adicup3029
+
+# build the iio example over Wi-Fi (ESP8266)
+python tools/scripts/no_os_build.py build \
+	--project iio_demo --variant iio_wifi --board eval-adicup3029
+
+# build the sw-trigger iio example over Wi-Fi (ESP8266)
+python tools/scripts/no_os_build.py build \
+	--project iio_demo --variant iio_wifi_with_sw_trig --board eval-adicup3029
+
+The iio_wifi variants run the IIOD transport over an ESP8266 Wi-Fi module
+(UART AT commands) instead of the serial backend. The board connects to the
+configured access point and the IIO client connects to the reported IP
+address. The software trigger example requires networking (it is not
+supported over UART).
+
+Set the network credentials in the iio_wifi (or iio_wifi_with_sw_trig)
+defconfig via CONFIG_WIFI_SSID and CONFIG_WIFI_PWD before building, for
+example:
+	CONFIG_WIFI_SSID="MyNetwork"
+	CONFIG_WIFI_PWD="MyPassword"
+
+Available variants:
+  rpi-pico:        iio
+  eval-adicup3029: iio, iio_wifi, iio_wifi_with_sw_trig
+Replace --variant / --board accordingly.
