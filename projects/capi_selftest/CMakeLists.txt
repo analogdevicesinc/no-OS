@@ -21,6 +21,7 @@ if(CONFIG_CAPI_SELFTEST_LOOPBACK_EXAMPLE)
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/capi_loopback/tests/test_gpio.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/capi_loopback/tests/test_irq.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/capi_loopback/tests/test_spi.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/capi_loopback/tests/test_timer.c
     )
     target_include_directories(capi_selftest PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/capi_loopback
