@@ -70,9 +70,4 @@
 #define TIMER_OPS       &aducm_timer_ops
 #define TIMER_EXTRA     NULL
 
-#ifdef NO_OS_NETWORKING
-#define WIFI_SSID	"RouterSSID"
-#define WIFI_PWD	"******"
-#endif
-
 #endif /* __PARAMETERS_H__ */
