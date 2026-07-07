@@ -12,6 +12,7 @@
 #include <xparameters.h>
 #include "capi_uart.h"
 #include "xilinx_capi_gpio.h"
+#include "xilinx_capi_irq.h"
 
 extern struct capi_uart_ops capi_uart_xilinx_ps_ops;
 
@@ -38,5 +39,9 @@ extern struct capi_uart_ops capi_uart_xilinx_ps_ops;
 #define GPIO_INPUT_OPS		&capi_gpio_xilinx_ps_ops
 #define GPIO_INPUT_EXTRA	struct capi_gpio_xilinx_ps_config
 #define GPIO_INPUT_EXTRA_INIT	{ .base_pin = 54U }
+
+/* IRQ controller: PS GIC. Its identifier is the controller the IRQ test and
+ * every IRQ-backed async peripheral initialize through capi_irq_init(). */
+#define IRQ_CTRL_IDENTIFIER	XPAR_XSCUGIC_0_BASEADDR
 
 #endif /* __PARAMETERS_H__ */
