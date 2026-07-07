@@ -16,6 +16,7 @@
 #include "stm32_capi_irq.h"
 #include "stm32_capi_timer.h"
 #include "stm32_capi_i2c.h"
+#include "stm32_capi_dma.h"
 #include "capi_uart.h"
 
 extern UART_HandleTypeDef huart3;
@@ -131,5 +132,27 @@ void i2c_platform_set_target_handle(struct capi_i2c_controller_handle *handle);
 #define I2C_PLATFORM_INIT()		i2c_platform_init()
 #define I2C_PLATFORM_DEINIT()		i2c_platform_deinit()
 #define I2C_PLATFORM_SET_TARGET(h)	i2c_platform_set_target_handle(h)
+
+/*
+ * DMA2 on NUCLEO-F767ZI: only DMA2 supports memory-to-memory transfers.
+ * Stream 0, channel 0 is used (no peripheral trigger needed for mem-to-mem).
+ * Polling mode (irq_num=0): the driver blocks in xfer_start until the
+ * transfer completes — no interrupt infrastructure required.
+ */
+#define DMA_OPS			&stm32_capi_dma_ops
+#define DMA_IDENTIFIER		0U
+#define DMA_NUM_CHANS		1U
+#define DMA_XFER_EXTRA_TYPE	struct stm32_dma_chan_extra_config
+#define DMA_XFER_EXTRA_INIT	{ .hdma = &(DMA_HandleTypeDef){ \
+					.Instance = DMA2_Stream0 }, \
+				  .ch_num = DMA_CHANNEL_0, \
+				  .mem_increment = true, \
+				  .per_increment = true, \
+				  .mem_data_alignment = CAPI_DMA_DATA_ALIGN_BYTE, \
+				  .per_data_alignment = CAPI_DMA_DATA_ALIGN_BYTE, \
+				  .dma_mode = CAPI_DMA_NORMAL_MODE, \
+				  .trig = NULL }
+#define DMA_PLATFORM_INIT()	__HAL_RCC_DMA2_CLK_ENABLE()
+#define DMA_XFER_SIZE		64U
 
 #endif /* __PARAMETERS_H__ */

@@ -11,6 +11,7 @@ SRCS += $(CAPI_STM32_DRIVERS)/stm32_capi_uart.c \
 	$(CAPI_STM32_DRIVERS)/stm32_capi_irq.c \
 	$(CAPI_STM32_DRIVERS)/stm32_capi_timer.c \
 	$(CAPI_STM32_DRIVERS)/stm32_capi_i2c.c \
+	$(CAPI_STM32_DRIVERS)/stm32_capi_dma.c \
 	$(CAPI_STM32_DRIVERS)/stm32_capi_alloc.c \
 	$(CAPI_STM32_DRIVERS)/stm32_capi_time.c
 
