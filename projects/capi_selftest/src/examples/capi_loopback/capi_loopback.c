@@ -16,6 +16,7 @@
 #include "tests/test_gpio.h"
 #include "tests/test_irq.h"
 #include "tests/test_spi.h"
+#include "tests/test_timer.h"
 /**
  * @brief Common function signature for a top-level test group.
  */
@@ -44,6 +45,7 @@ static const struct test_entry tests[] = {
 	{ 0, "GPIO", test_gpio, false },
 	{ 0, "IRQ", test_irq, false },
 	{ 0, "SPI", test_spi, false },
+	{ 0, "TIMER", test_timer, false },
 };
 
 #define NUM_TESTS	(sizeof(tests) / sizeof(tests[0]))

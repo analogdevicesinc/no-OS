@@ -119,6 +119,85 @@ extern struct capi_spi_device spi_dev;
 extern struct capi_irq_config irq_config;
 #endif /* IRQ_CTRL_IDENTIFIER */
 
+#ifdef TIMER_OPS
+#include "capi_timer.h"
+
+/*
+ * Xilinx has three timer flavours (AXI/PL, PS TTC, PS SCU) and each supports a
+ * different subset of the CAPI timer surface. The test never branches on the
+ * timer type; instead each platform declares what its mapped timer can do and
+ * the test exercises exactly those hardware paths, skipping the rest. Defaults
+ * below assume a fully featured timer; a platform opts out in parameters.h.
+ */
+
+/* Counting direction the free-running counter advances in. */
+#ifndef TIMER_DIRECTION
+#define TIMER_DIRECTION		CAPI_TIMER_COUNT_UP
+#endif /* TIMER_DIRECTION */
+
+/* Counter-overflow interrupt path is wired (async_irq case). */
+#ifndef TIMER_HAS_IRQ
+#define TIMER_HAS_IRQ		1
+#endif /* TIMER_HAS_IRQ */
+
+/* Output-compare channel mode is supported (compare case). */
+#ifndef TIMER_HAS_COMPARE
+#define TIMER_HAS_COMPARE	1
+#endif /* TIMER_HAS_COMPARE */
+
+/*
+ * Free-running counter reload/rollover value: one overflow per this many ticks.
+ * Default is the 16-bit max (the ARMA9 TTC interval width); a wider timer can
+ * raise it in parameters.h. Sized with the clock so a rate window sees tens of
+ * overflows (e.g. ~55 MHz TTC / 0xFFFF ~= 1.2 ms period).
+ */
+#ifndef TIMER_COUNTER_MAX
+#define TIMER_COUNTER_MAX	0xFFFFU
+#endif /* TIMER_COUNTER_MAX */
+
+/* Output-compare match threshold used by the compare case. */
+#ifndef TIMER_COMPARE_VALUE
+#define TIMER_COMPARE_VALUE	0x8000U
+#endif /* TIMER_COMPARE_VALUE */
+
+/* Rate-check window length (us), timed by the independent uptime clock. */
+#ifndef TIMER_RATE_WINDOW_US
+#define TIMER_RATE_WINDOW_US	100000U
+#endif /* TIMER_RATE_WINDOW_US */
+
+/*
+ * IRQ-count case (distinct from the BASIC rate check): fire the overflow
+ * interrupt every TIMER_IRQ_PERIOD_US and count exactly TIMER_IRQ_EXPECTED_COUNT
+ * of them over PERIOD_US*COUNT of run time (e.g. 1 ms x 200 => 200 interrupts).
+ * The period is real time, converted to ticks at runtime, so it is clock
+ * agnostic; a platform only needs a period its counter width can hold (the
+ * 16-bit TTC tops out near 1.18 ms, hence a 1 ms default). Override per timer in
+ * parameters.h.
+ */
+#ifndef TIMER_IRQ_PERIOD_US
+#define TIMER_IRQ_PERIOD_US	1000U
+#endif /* TIMER_IRQ_PERIOD_US */
+
+#ifndef TIMER_IRQ_EXPECTED_COUNT
+#define TIMER_IRQ_EXPECTED_COUNT	200U
+#endif /* TIMER_IRQ_EXPECTED_COUNT */
+
+/* Allowed deviation (%) of measured rate/count from the predicted value. */
+#ifndef TIMER_RATE_TOLERANCE_PCT
+#define TIMER_RATE_TOLERANCE_PCT	10U
+#endif /* TIMER_RATE_TOLERANCE_PCT */
+
+/* Mask applied to the counter delta so it works for any counter width. */
+#ifndef TIMER_RATE_COUNTER_MASK
+#define TIMER_RATE_COUNTER_MASK	0xFFFFFFFFU
+#endif /* TIMER_RATE_COUNTER_MASK */
+
+/**
+ * @brief CAPI timer config for the counter/compare/IRQ tests.
+ */
+extern const struct capi_timer_config timer_config;
+#endif /* TIMER_OPS */
+
 /**
  * @brief Fill a test framework configuration for the selected platform.
  * @param config - Destination framework configuration.
