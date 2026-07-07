@@ -50,20 +50,19 @@ Choose interface
 ----------------
 
 The firmware application can communicate with clients via several interfaces.
-In order to use the preferred connection type, set ``INTERFACE`` to the
-desired value:
+Each interface is a separate ``--variant`` selected at build time:
 
-* ``INTERFACE=usb`` (Default value)
-* ``INTERFACE=serial`` (Used for 485 communication. Half-duplex communication
+* ``--variant pqmon_usb`` (Default value)
+* ``--variant pqmon_serial`` (Used for 485 communication. Half-duplex communication
   must be handled by user)
-* ``INTERFACE=ethernet_t1l`` (Used for communication over T1L)
-* ``INTERFACE=ethernet`` (Used for standard Ethernet communication via W5500
+* ``--variant pqmon_ethernet_t1l`` (Used for communication over T1L)
+* ``--variant pqmon_ethernet`` (Used for standard Ethernet communication via W5500
   controller)
 
 .. note::
 
-   In case one builds firmware multiple times with different interfaces, make
-   sure to delete the ``build`` directory before the new compilation.
+   Each variant is built into its own ``build-eval-pqmon-<variant>-max32650fthr``
+   directory, so different interfaces do not share build artifacts.
 
 .. note::
 
@@ -81,19 +80,23 @@ desired value:
 Build and run
 -------------
 
-The project is based on a :adi:`MAX32650` microcontroller. It can
-be built and run by running the following script:
+The project is based on a :adi:`MAX32650` microcontroller. The proprietary
+pqlib is not part of the repository; point the ``PQLIB_PATH`` environment
+variable at its directory before building. Select the interface with
+``--variant`` and build (append ``--probe`` / ``--flash`` to program the board):
 
-        # remove build directory
-        make reset
-        # select platform
-        export PLATFORM=maxim
-        # select controller type
-        export TARGET=max32650
-        # select interface
-        export INTERFACE=usb
-        # build and flash the code
-        make PQLIB_PATH=<path_to_library> run
+.. code-block:: bash
+
+        export PQLIB_PATH=<path_to_library>
+
+        # build the USB interface variant
+        python3 tools/scripts/no_os_build.py build \
+            --project eval-pqmon --variant pqmon_usb --board max32650fthr
+
+        # build and flash (requires a connected debug probe)
+        python3 tools/scripts/no_os_build.py build \
+            --project eval-pqmon --variant pqmon_usb --board max32650fthr \
+            --probe openocd --flash
 
 AFE Calibration
 ---------------
