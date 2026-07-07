@@ -76,7 +76,8 @@ In order to build the basic example, use the following command:
 
 .. code-block:: bash
 
-        make -j$(nproc) -C projects/eval-cn0391-ardz EXAMPLE=basic_example
+        python3 tools/scripts/no_os_build.py build \
+            --project eval-cn0391-ardz --variant basic --board adin1110ebz
 
 IIO over lwIP example
 ^^^^^^^^^^^^^^^^^^^^^
@@ -94,29 +95,28 @@ The IIO device exposed is an ``ad7124-8`` with 4 channels (``voltage0`` ..
 The channel index corresponds directly to the ``CHx`` label silkscreened on
 the EVAL-CN0391-ARDZ board.
 
-An optional ``cn0391`` IIO device can be enabled with ``CN0391_IIO_SUPPORT=y``,
-exposing 4 channels (``temp0`` .. ``temp3``) with per-channel attributes:
-``hot_junction_temp``, ``cold_junction_temp``, ``tc_voltage``,
-``rtd_resistance``.
+A dedicated ``cn0391`` IIO device can additionally be exposed, providing
+4 channels (``temp0`` .. ``temp3``) with per-channel attributes:
+``hot_junction_temp``, ``cold_junction_temp``, ``tc_voltage`` and
+``rtd_resistance``. It is enabled through the ``CN0391_IIO_SUPPORT`` compile
+definition, which is driven by the ``CONFIG_EVAL_CN0391_ARDZ_IIO_CN0391_SUPPORT``
+Kconfig symbol. Use the dedicated ``iio_lwip_cn0391`` variant to build the IIO
+over lwIP example with this extra device enabled.
 
 In order to build the IIO over lwIP example, use the following command:
 
 .. code-block:: bash
 
-        make -j$(nproc) -C projects/eval-cn0391-ardz EXAMPLE=iio_lwip_example ADIN1110_STATIC_IP=y
+        # ad7124-8 IIO device only
+        python3 tools/scripts/no_os_build.py build \
+            --project eval-cn0391-ardz --variant iio_lwip --board adin1110ebz
 
-To override the default static IP address (``192.168.90.60``):
+        # ad7124-8 plus the dedicated cn0391 IIO device
+        python3 tools/scripts/no_os_build.py build \
+            --project eval-cn0391-ardz --variant iio_lwip_cn0391 --board adin1110ebz
 
-.. code-block:: bash
-
-        make -j$(nproc) -C projects/eval-cn0391-ardz EXAMPLE=iio_lwip_example ADIN1110_STATIC_IP=y \
-            CONFIG_NO_OS_IP=192.168.1.100 CONFIG_NO_OS_NETMASK=255.255.255.0 CONFIG_NO_OS_GATEWAY=192.168.1.1
-
-To enable the optional ``cn0391`` IIO device:
-
-.. code-block:: bash
-
-        make -j$(nproc) -C projects/eval-cn0391-ardz EXAMPLE=iio_lwip_example ADIN1110_STATIC_IP=y CN0391_IIO_SUPPORT=y
+The static IP address is configured in the platform ``parameters`` sources; edit
+them to override the default.
 
 No-OS Supported Platforms
 --------------------------
@@ -133,9 +133,11 @@ STM32 Platform
 
 .. code-block:: bash
 
-        # to delete current build
-        make reset
-        # to build the IIO over lwIP example (default)
-        make -j$(nproc) -C projects/eval-cn0391-ardz EXAMPLE=iio_lwip_example ADIN1110_STATIC_IP=y
-        # to flash the code
-        make -C projects/eval-cn0391-ardz run
+        # build the IIO over lwIP example (default)
+        python3 tools/scripts/no_os_build.py build \
+            --project eval-cn0391-ardz --variant iio_lwip --board adin1110ebz
+
+        # build and flash (requires a connected debug probe)
+        python3 tools/scripts/no_os_build.py build \
+            --project eval-cn0391-ardz --variant iio_lwip --board adin1110ebz \
+            --probe openocd --flash

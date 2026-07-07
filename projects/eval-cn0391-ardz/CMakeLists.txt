@@ -34,6 +34,12 @@ if(CONFIG_EVAL_CN0391_ARDZ_IIO_LWIP_EXAMPLE)
     target_include_directories(eval-cn0391-ardz PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_lwip_example
     )
+    if(CONFIG_EVAL_CN0391_ARDZ_IIO_CN0391_SUPPORT)
+        # Expose the dedicated cn0391 IIO device (temp0..temp3 channels with
+        # hot/cold junction, thermocouple voltage and RTD resistance
+        # attributes) alongside the ad7124-8 device.
+        target_compile_definitions(eval-cn0391-ardz PRIVATE CN0391_IIO_SUPPORT)
+    endif()
 endif()
 
 target_include_directories(eval-cn0391-ardz PUBLIC

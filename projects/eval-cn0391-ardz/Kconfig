@@ -19,4 +19,14 @@ config EVAL_CN0391_ARDZ_IIO_LWIP_EXAMPLE
 
 endchoice
 
+config EVAL_CN0391_ARDZ_IIO_CN0391_SUPPORT
+	bool "Expose the dedicated cn0391 IIO device"
+	default n
+	depends on EVAL_CN0391_ARDZ_IIO_LWIP_EXAMPLE
+	help
+	  In addition to the ad7124-8 IIO device, expose a dedicated cn0391 IIO
+	  device (temp0..temp3 channels with hot/cold junction temperature,
+	  thermocouple voltage and RTD resistance attributes). Sets the
+	  CN0391_IIO_SUPPORT compile definition.
+
 endmenu
