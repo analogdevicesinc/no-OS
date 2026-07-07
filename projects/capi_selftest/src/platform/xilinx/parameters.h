@@ -13,7 +13,9 @@
 #include "capi_uart.h"
 #include "xilinx_capi_gpio.h"
 #include "xilinx_capi_spi.h"
+#include "xilinx_capi_timer.h"
 #include "xilinx_capi_irq.h"
+#include "capi_timer.h"
 #include "xinterrupt_wrap.h"
 
 extern struct capi_uart_ops capi_uart_xilinx_ps_ops;
@@ -68,5 +70,51 @@ extern struct capi_uart_ops capi_uart_xilinx_ps_ops;
 #define SPI_DEVICE_NATIVE_CS	0x01U
 #define SPI_DEVICE_MODE		CAPI_SPI_MODE_0
 #define SPI_DEVICE_SPEED_HZ	1000000U
+
+/*
+ * PS TTC (XTtcPs, triple timer counter) — 1 channel per instance, driven by
+ * capi_timer_xilinx_ps_ttc_ops. TTC0 is a PS peripheral behind the GIC, so its
+ * overflow interrupt is a level-high SPI (same delivery path as the PS SPI/UART
+ * that already work) rather than a fabric edge — the AXI timer's fabric IRQ_F2P
+ * pulse never reached the GIC on this board. Base, clock and interrupt come from
+ * the SDT xparameters macros.
+ */
+#define TIMER_IDENTIFIER	XPAR_XTTCPS_0_BASEADDR
+#define TIMER_OPS		&capi_timer_xilinx_ps_ttc_ops
+#define TIMER_INPUT_CLK_HZ	XPAR_XTTCPS_0_CLOCK_FREQ
+#define TIMER_OUTPUT_FREQ_HZ	0U	/* TTC free-runs, no target frequency */
+#define TIMER_EXTRA_TYPE	struct capi_timer_xilinx_config
+#define TIMER_IRQ_ID		(XGet_IntrId(XPAR_XTTCPS_0_INTERRUPTS) + \
+				 XGet_IntrOffset(XPAR_XTTCPS_0_INTERRUPTS))
+#define TIMER_EXTRA_INIT	{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_GIC(TIMER_IRQ_ID) }
+
+/*
+ * Timer test capability flags and counter shape (consumed by test_timer.c).
+ *
+ * The TTC has an overflow interrupt, so IRQ-backed tests run. It has no input
+ * capture, so capture is gated off here rather than failing.
+ *
+ * The Zynq-7000 (ARMA9) TTC counter is 16-bit: XTTCPS_MAX_INTERVAL_COUNT is
+ * 0xFFFF, so max, the rate mask and the counter width are all 16-bit here. The
+ * driver's default prescaler divides the ~111 MHz source by 2, so a 16-bit span
+ * rolls over in ~1.2 ms — well inside the test's 1 s IRQ timeout.
+ */
+#define TIMER_HAS_IRQ		1
+#define TIMER_HAS_CAPTURE	0
+
+#define TIMER_DIRECTION		CAPI_TIMER_COUNT_UP
+#define TIMER_COUNTER_MAX	0x0000FFFFU	/* 16-bit TTC, ~1.2 ms rollover */
+#define TIMER_COUNTER_WIDTH	16U
+#define TIMER_COMPARE_VALUE	0x00001000U
+
+/*
+ * Rate check window: short enough that the counter delta measured over it never
+ * straddles a rollover (window << rollover period), and the mask covers the full
+ * 16-bit counter width. Tolerance allows for measurement/quantization slack.
+ */
+#define TIMER_RATE_WINDOW_US	100U
+#define TIMER_RATE_COUNTER_MASK	0x0000FFFFU
+#define TIMER_RATE_TOLERANCE_PCT 10U
 
 #endif /* __PARAMETERS_H__ */
