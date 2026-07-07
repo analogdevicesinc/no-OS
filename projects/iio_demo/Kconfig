@@ -15,4 +15,12 @@ config IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE
 
 endchoice
 
+config IIO_DEMO_NETWORKING
+	bool "Enable ESP8266 Wi-Fi networking"
+	default n
+	select WIFI_NETWORKING
+	help
+	  Route IIO transport over an ESP8266 Wi-Fi module (UART AT commands)
+	  instead of the serial backend. aducm3029/eval-adicup3029 only.
+
 endmenu

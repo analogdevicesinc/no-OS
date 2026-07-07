@@ -1,15 +1,4 @@
 {
-  "aducm3029": {
-    "iio_uart": {
-      "flags": "CONFIG_IIO_DEMO_IIO_EXAMPLE=y CONFIG_IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE=n"
-    },
-    "iio_wifi": {
-      "flags": "CONFIG_IIO_DEMO_IIO_EXAMPLE=y CONFIG_IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE=n NETWORKING=y"
-    },
-    "iio_wifi_with_sw_trig": {
-      "flags": "CONFIG_IIO_DEMO_IIO_EXAMPLE=n CONFIG_IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE=y NETWORKING=y"
-    }
-  },
   "xilinx": {
     "iio_zed": {
       "flags": "CONFIG_IIO_DEMO_IIO_EXAMPLE=y CONFIG_IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE=n",
