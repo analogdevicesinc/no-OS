@@ -3,7 +3,7 @@
  *   @brief  Implementation of ADF4030 Driver.
  *   @author Sirac Kucukarabacioglu (sirac.kucukarabacioglu@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2025-2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,7 +41,7 @@
  * @struct adf4030_reg_sequence
  * @brief ADF4030 register format structure for default values
  */
-static struct adf4030_reg_sequence {
+struct adf4030_reg_sequence {
 	uint16_t reg;
 	uint8_t val;
 };
@@ -333,13 +333,13 @@ static uint32_t adf4030_channel_voltage_compute(struct adf4030_dev *dev,
 {
 	uint32_t r_value;
 	uint32_t i_value;
-	uint32_t v_value;
 
-	r_value = ADF4030_RCM_CONST1 / (ADF4030_RCM_CONST2 - ADF4030_RCM_CONST3 * rcm);
+	/* R in milliohms: R = 7000000 / (735 - 10 * rcm) */
+	r_value = ADF4030_RCM_CONST1 / (ADF4030_RCM_CONST2 - ADF4030_RCM_SLOPE * rcm);
 	i_value = boost ? ADF4030_RCM_CURRENT1 : ADF4030_RCM_CURRENT0;
-	v_value = ((r_value * ADF4030_RCM_CONST3) + ADF4030_RCM_CONST4) * i_value;
 
-	return v_value / ADF4030_RCM_CONST3;
+	/* V[mV] = (R[mOhm] + 26500) * I[mA] / 1000 */
+	return ((r_value + ADF4030_RCM_CONST4) * i_value) / ADF4030_RCM_MV_SCALE;
 }
 
 /**
@@ -354,16 +354,24 @@ static uint8_t adf4030_channel_rcm_compute(struct adf4030_dev *dev,
 {
 	uint32_t r_value;
 	uint32_t i_value;
-	uint32_t reg_value;
+	int32_t reg_value;
 
 	i_value = boost ? ADF4030_RCM_CURRENT1 : ADF4030_RCM_CURRENT0;
-	r_value = (voltage_vm * ADF4030_RCM_CONST3 / i_value) - ADF4030_RCM_CONST4;
 
-	reg_value = (ADF4030_RCM_CONST2 - (ADF4030_RCM_CONST1 / r_value) *
-		     ADF4030_RCM_CONST3) / ADF4030_RCM_CONST3;
-	reg_value = reg_value > 63 ? 63 : reg_value;
+	/* Requested resistance in milliohms: R = V[mV] * 1000 / I[mA] - 26500 */
+	r_value = (voltage_vm * ADF4030_RCM_MV_SCALE / i_value) - ADF4030_RCM_CONST4;
 
-	return reg_value;
+	/* reg = round((735 - 7000000 / R) / 10), clamped to [0, 63] */
+	reg_value = (int32_t)ADF4030_RCM_CONST2 -
+		    (int32_t)(ADF4030_RCM_CONST1 / r_value);
+	if (reg_value < 0)
+		reg_value = 0;
+
+	reg_value = NO_OS_DIV_ROUND_CLOSEST(reg_value, ADF4030_RCM_SLOPE);
+	if (reg_value > 63)
+		reg_value = 63;
+
+	return (uint8_t)reg_value;
 }
 
 /**
@@ -443,8 +451,8 @@ int adf4030_set_temperature(struct adf4030_dev *dev, bool en)
 int adf4030_get_temperature(struct adf4030_dev *dev, int16_t *temperature)
 {
 	int ret;
-	uint8_t tmp;
-	uint8_t sign;
+	uint8_t lsb, msb;
+	int16_t raw;
 
 	if (!dev)
 		return -EINVAL;
@@ -453,17 +461,21 @@ int adf4030_get_temperature(struct adf4030_dev *dev, int16_t *temperature)
 	if (ret)
 		return ret;
 
-	ret = adf4030_spi_read(dev, 0x93, &tmp);
+	ret = adf4030_spi_read(dev, 0x93, &msb);
 	if (ret)
 		return ret;
 
-	sign = no_os_field_get(tmp, ADF4030_TEMP_MEAS_MSB);
-
-	ret = adf4030_spi_read(dev, 0x92, &tmp);
+	ret = adf4030_spi_read(dev, 0x92, &lsb);
 	if (ret)
 		return ret;
 
-	*temperature = sign ? (int16_t)tmp * -1 : tmp;
+	/* Temperature is a 9-bit two's complement value:
+	 * bit 8 comes from REG0093, bits 7:0 from REG0092. */
+	raw = (no_os_field_get(ADF4030_TEMP_MEAS_MSB, msb) << 8) | lsb;
+	if (raw & 0x100)
+		raw -= 0x200;
+
+	*temperature = raw;
 
 	return 0;
 }
@@ -772,7 +784,7 @@ int adf4030_set_vco_freq(struct adf4030_dev *dev, uint32_t vco_freq)
 	// Wait for Lock Detect
 	ret = adf4030_poll(dev, 0x90, ADF4030_PLL_LD, true);
 	if (ret)
-		pr_warning("%s:%d PLL failed to lock within the expected time. %x", __FILE__,
+		pr_warning("%s:%d PLL failed to lock within the expected time. %x\n", __FILE__,
 			   __LINE__, ret);
 
 	return adf4030_set_vco_cal(dev, false);
@@ -1389,7 +1401,7 @@ int adf4030_get_background_serial_alignment(struct adf4030_dev *dev,
 		ch_flags |= (tmp << 2);
 		*channel_flags = ch_flags;
 	} else
-		channel_flags = 0;
+		*channel_flags = 0;
 
 	return 0;
 }
@@ -1407,7 +1419,12 @@ int adf4030_set_channel_delay(struct adf4030_dev *dev, uint8_t channel,
 {
 
 	int64_t vco_period_fs;
-	int16_t tdc_offset;
+	int64_t offset_int;
+	int16_t ch_offset;
+	int32_t rem;
+	int32_t com_offset;
+	uint16_t ch_reg;
+	uint32_t com_reg;
 	uint16_t reg;
 	int ret;
 
@@ -1415,17 +1432,55 @@ int adf4030_set_channel_delay(struct adf4030_dev *dev, uint8_t channel,
 		return -EINVAL;
 
 	vco_period_fs = NO_OS_DIV_ROUND_CLOSEST(1000000000000000ULL, dev->vco_freq);
-	tdc_offset = NO_OS_DIV_ROUND_CLOSEST(delay_fs * 512, vco_period_fs);
+	offset_int = NO_OS_DIV_ROUND_CLOSEST(delay_fs * 512, vco_period_fs);
+
+	/* Channel TDC offset is a 16-bit signed value; clamp to its range. */
+	if (offset_int > ADF4030_TDC_OFFSET_CH_MAX)
+		ch_offset = ADF4030_TDC_OFFSET_CH_MAX;
+	else if (offset_int < ADF4030_TDC_OFFSET_CH_MIN)
+		ch_offset = ADF4030_TDC_OFFSET_CH_MIN;
+	else
+		ch_offset = (int16_t)offset_int;
+
+	/* The overflow beyond the channel range goes into the common TDC
+	 * offset, a 21-bit signed value; clamp to its range as well. */
+	rem = (int32_t)(offset_int - ch_offset);
+	if (rem > ADF4030_TDC_OFFSET_COM_MAX)
+		com_offset = ADF4030_TDC_OFFSET_COM_MAX;
+	else if (rem < ADF4030_TDC_OFFSET_COM_MIN)
+		com_offset = ADF4030_TDC_OFFSET_COM_MIN;
+	else
+		com_offset = rem;
+
+	ch_reg = (uint16_t)ch_offset;
+	com_reg = (uint32_t)com_offset & 0x1FFFFF;
 
 	reg = 0x1D + (channel * 2);
 
 	// TDC OFFSET LSB
-	ret = adf4030_spi_write(dev, reg, tdc_offset & 0xFF);
+	ret = adf4030_spi_write(dev, reg, ch_reg & 0xFF);
 	if (ret)
 		return ret;
 
 	// TDC OFFSET MSB
-	ret = adf4030_spi_write(dev, reg + 1, (tdc_offset >> 8));
+	ret = adf4030_spi_write(dev, reg + 1, (ch_reg >> 8));
+	if (ret)
+		return ret;
+
+	// TDC OFFSET COM LSB
+	ret = adf4030_spi_write(dev, 0x1A, com_reg & 0xFF);
+	if (ret)
+		return ret;
+
+	// TDC OFFSET COM MID
+	ret = adf4030_spi_write(dev, 0x1B, (com_reg >> 8) & 0xFF);
+	if (ret)
+		return ret;
+
+	// TDC OFFSET COM MSB
+	ret = adf4030_spi_update_bits(dev, 0x1C, ADF4030_TDC_OFFSET_COM_MSB,
+				      no_os_field_prep(ADF4030_TDC_OFFSET_COM_MSB,
+						      com_reg >> 16));
 	if (ret)
 		return ret;
 
@@ -1445,7 +1500,10 @@ int adf4030_get_channel_delay(struct adf4030_dev *dev, uint8_t channel,
 			      int64_t *delay_fs)
 {
 	int64_t vco_period_fs;
-	int16_t tdc_offset;
+	int32_t total_offset;
+	int16_t ch_offset;
+	int32_t com_offset;
+	uint32_t com_reg;
 	uint16_t reg;
 	uint8_t tmp;
 	int ret;
@@ -1463,15 +1521,41 @@ int adf4030_get_channel_delay(struct adf4030_dev *dev, uint8_t channel,
 	if (ret)
 		return ret;
 
-	tdc_offset = (tmp << 8);
+	ch_offset = (tmp << 8);
 	// TDC OFFSET LSB
 	ret = adf4030_spi_read(dev, reg, &tmp);
 	if (ret)
 		return ret;
 
-	tdc_offset |= tmp;
+	ch_offset |= tmp;
 
-	dev->channels[channel].delay_fs = tdc_offset * vco_period_fs;
+	// TDC OFFSET COM MSB
+	ret = adf4030_spi_read(dev, 0x1C, &tmp);
+	if (ret)
+		return ret;
+
+	com_reg = no_os_field_get(ADF4030_TDC_OFFSET_COM_MSB, tmp) << 16;
+	// TDC OFFSET COM MID
+	ret = adf4030_spi_read(dev, 0x1B, &tmp);
+	if (ret)
+		return ret;
+
+	com_reg |= (tmp << 8);
+	// TDC OFFSET COM LSB
+	ret = adf4030_spi_read(dev, 0x1A, &tmp);
+	if (ret)
+		return ret;
+
+	com_reg |= tmp;
+
+	/* Sign-extend the 21-bit common offset. */
+	com_offset = (int32_t)com_reg;
+	if (com_offset & 0x100000)
+		com_offset -= 0x200000;
+
+	total_offset = ch_offset + com_offset;
+
+	dev->channels[channel].delay_fs = total_offset * vco_period_fs;
 	*delay_fs = dev->channels[channel].delay_fs;
 
 	return 0;
@@ -2002,7 +2086,9 @@ int adf4030_init(struct adf4030_dev **dev,
 
 	ret = adf4030_check_scratchpad(device);
 	if (ret)
-		goto error_spi;
+		pr_warning("%s:%d ADF4030 scratchpad test failed. Check SPI connection. %x\n",
+			   __FILE__,
+			   __LINE__, ret);
 
 	ret = adf4030_spi_write(device, 0x5C,
 				no_os_field_prep(ADF4030_CMOS_OV,
@@ -2050,9 +2136,14 @@ int adf4030_remove(struct adf4030_dev *dev)
 {
 	int ret;
 
+	if (!dev)
+		return -EINVAL;
+
 	ret = no_os_spi_remove(dev->spi_desc);
 	if (ret)
-		no_os_free(dev);
+		return ret;
+
+	no_os_free(dev);
 
 	return 0;
 }
