@@ -61,14 +61,6 @@ P7              Commonly used for power and communication interface
                 connections
 =============== ===========================================================
 
-**EVAL-ADICUP3029 Connectors**
-
-=============== ===========================================================
-Connector       Description
-=============== ===========================================================
-P10             Micro-USB power connection to the Carrier Board
-=============== ===========================================================
-
 **EVAL-CN0565-ARDZ Digital Communication Pins**
 
 ========== =================== ==========================================
@@ -83,24 +75,6 @@ P7-4       SCK                 SPI Clock - synchronizes data transfer
 P7-6       GND                 Ground
 ========== =================== ==========================================
 
-**Carrier Board - Digital Communication Pins**
-
-======================= ==========================
-Arduino DIO High        ADuCM3029 Pin
-Pin Name                Function
-======================= ==========================
-SCL                     I2C0_SCL / GPIO04
-SDA                     I2C0_SDA / GPIO05
-AREF                    VREF+
-AGND                    Analog Ground
-SCLK                    SPI0_CLK / GPIO00
-MISO                    SPI0_MISO / GPIO02
-MOSI                    SPI0_MOSI / GPIO01
-CS                      SPI10_CS1 / GPIO26
-RDY                     SPI_RDY / GPIO30
-IO28                    GPIO28
-======================= ==========================
-
 No-OS Build Setup
 -----------------
 
@@ -109,8 +83,8 @@ Please see: https://wiki.analog.com/resources/no-os/build
 No-OS Supported Examples
 ------------------------
 
-This project is organized around the no-OS ``EXAMPLE`` based build flow.
-Selecting an example at build time (``EXAMPLE=<name>``) chooses which
+This project is organized around the no-OS variant based build flow.
+Selecting a variant at build time (``--variant <name>``) chooses which
 application is compiled. The platform ``main()`` is a thin dispatcher that
 calls ``example_main()``, provided by the selected example. The
 initialization data used in the examples is defined in
@@ -121,15 +95,18 @@ and the platform-specific macros in
 EIT Example
 ^^^^^^^^^^^
 
-The EIT example (``EXAMPLE=eit``, the default) runs the EIT
+The EIT example (``eit`` variant, the default) runs the EIT
 application over a UART console. It initializes the AD5940 AFE and the
 ADG2128 switch matrix and exposes an interactive command interface for
 electrical impedance tomography measurements.
 
+This example is built by selecting the ``eit`` variant (see the Build
+Command sections below).
+
 IIO Example
 ^^^^^^^^^^^^
 
-The IIO example (``EXAMPLE=eit_iio``) code for the EVAL-CN0565-ARDZ board in the no-OS project
+The IIO example (``eit_iio`` variant) code for the EVAL-CN0565-ARDZ board in the no-OS project
 interfaces with the AD5940 and ADG2128 components to facilitate EIT.
 The code initializes the IIO interfaces for both components,
 configures UART parameters, and sets up an array of devices passed
@@ -154,11 +131,8 @@ The No-OS IIO Application together with the No-OS IIO AD5940 and ADG2128
 drivers take care of all the back-end logic needed to setup the IIO
 server.
 
-To build the IIO example, select it with the ``EXAMPLE`` variable:
-
-.. code-block:: bash
-
-	make EXAMPLE=eit_iio PLATFORM=aducm3029
+This example is built by selecting the ``eit_iio`` variant (see the Build
+Command sections below).
 
 No-OS Supported Platforms
 -------------------------
@@ -186,20 +160,53 @@ UART Switch (S2) on EVAL-ADICUP3029             Set to middle position to enable
 DS2 LED on EVAL-CN0565-ARDZ                     Should turn green to confirm power is received
 =============================================== ===============================================
 
+**EVAL-ADICUP3029 Connectors**
+
+=============== ===========================================================
+Connector       Description
+=============== ===========================================================
+P10             Micro-USB power connection to the Carrier Board
+=============== ===========================================================
+
+**Carrier Board - Digital Communication Pins**
+
+======================= ==========================
+Arduino DIO High        ADuCM3029 Pin
+Pin Name                Function
+======================= ==========================
+SCL                     I2C0_SCL / GPIO04
+SDA                     I2C0_SDA / GPIO05
+AREF                    VREF+
+AGND                    Analog Ground
+SCLK                    SPI0_CLK / GPIO00
+MISO                    SPI0_MISO / GPIO02
+MOSI                    SPI0_MOSI / GPIO01
+CS                      SPI10_CS1 / GPIO26
+RDY                     SPI_RDY / GPIO30
+IO28                    GPIO28
+======================= ==========================
+
 **Build Command**
+
+Available variants: ``eit``, ``eit_iio``.
+Available boards: ``eval-adicup3029``.
+Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
-	cd no-OS/projects/cn0565
+	# point at the CrossCore Embedded Studio install (only if not auto-detected)
+	export CCES_HOME=/opt/analog/cces/3.0.3
 
-	# to build the EIT example (default)
-	make EXAMPLE=eit PLATFORM=aducm3029
-	# to build the IIO example
-	make EXAMPLE=eit_iio PLATFORM=aducm3029
-	# to flash the code
-	make run
-	# to debug the code
-	make debug
+	cd no-OS
+
+	# build the eit example on the EVAL-ADICUP3029
+	python tools/scripts/no_os_build.py build \
+		--project cn0565 --variant eit --board eval-adicup3029
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project cn0565 --variant eit --board eval-adicup3029 \
+		--probe openocd --flash
 
 STM32 Platform
 ^^^^^^^^^^^^^^
@@ -224,7 +231,9 @@ USB Communication                               Connect SDP-K1 to PC via USB
 
 **Build Command**
 
-Available variants: ``eit``, ``eit_iio``. Replace ``--variant`` accordingly.
+Available variants: ``eit``, ``eit_iio``.
+Available boards: ``sdp-ck1z``.
+Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
