@@ -1,0 +1,113 @@
+menuconfig ADUCM3029
+	bool "ADuCM3029 Platform Drivers"
+	default n
+	help
+	  Enable support for Analog Devices ADuCM3029 platform drivers.
+
+	  This section contains low-level platform drivers for the ADuCM3029
+	  microcontroller including GPIO, SPI, I2C, UART, PWM, ADC, RTC, Timer,
+	  TRNG, flash and interrupt handling. Building this platform requires
+	  Analog Devices CrossCore Embedded Studio (CCES).
+
+if ADUCM3029
+
+config UART_ADUCM3029
+	bool "Enable ADuCM3029 UART driver"
+	depends on UART
+	default n
+	help
+	  Enable ADuCM3029-specific UART driver implementation.
+
+config UART_STDIO_ADUCM3029
+	bool "Enable ADuCM3029 UART STDIO driver"
+	depends on UART
+	default n
+	help
+	  Enable ADuCM3029-specific UART STDIO driver implementation.
+
+config IRQ_ADUCM3029
+	bool "Enable ADuCM3029 IRQ driver"
+	depends on IRQ
+	default n
+	help
+	  Enable ADuCM3029-specific interrupt handling driver.
+
+config GPIO_ADUCM3029
+	bool "Enable ADuCM3029 GPIO driver"
+	depends on GPIO
+	default n
+	help
+	  Enable ADuCM3029-specific GPIO driver implementation.
+
+config GPIO_IRQ_ADUCM3029
+	bool "Enable ADuCM3029 GPIO IRQ driver"
+	depends on GPIO && IRQ
+	default n
+	help
+	  Enable ADuCM3029-specific GPIO interrupt driver implementation.
+
+config I2C_ADUCM3029
+	bool "Enable ADuCM3029 I2C driver"
+	depends on I2C
+	default n
+	help
+	  Enable ADuCM3029-specific I2C driver implementation.
+
+config SPI_ADUCM3029
+	bool "Enable ADuCM3029 SPI driver"
+	depends on SPI
+	default n
+	help
+	  Enable ADuCM3029-specific SPI driver implementation.
+
+config TIMER_ADUCM3029
+	bool "Enable ADuCM3029 Timer driver"
+	depends on TIMER
+	default n
+	help
+	  Enable ADuCM3029-specific Timer driver implementation.
+
+config RTC_ADUCM3029
+	bool "Enable ADuCM3029 RTC driver"
+	depends on RTC
+	default n
+	help
+	  Enable ADuCM3029-specific RTC driver implementation.
+
+config PWM_ADUCM3029
+	bool "Enable ADuCM3029 PWM driver"
+	depends on PWM
+	default n
+	help
+	  Enable ADuCM3029-specific PWM driver implementation.
+
+config ADC_ADUCM3029
+	bool "Enable ADuCM3029 ADC driver"
+	depends on ADC
+	default n
+	help
+	  Enable ADuCM3029-specific ADC driver implementation.
+
+config FLASH_ADUCM3029
+	bool "Enable ADuCM3029 flash driver"
+	default n
+	help
+	  Enable ADuCM3029-specific flash controller driver implementation.
+
+config TRNG_ADUCM3029
+	bool "Enable ADuCM3029 TRNG driver"
+	depends on TRNG
+	default n
+	help
+	  Enable ADuCM3029-specific True Random Number Generator driver.
+
+config ADUCM_PINMUX_PATH
+	string "ADuCM3029 pinmux_config.c path"
+	default ""
+	help
+	  Path to the pinmux_config.c "hardware" file used by CCES to generate
+	  the ADuCM3029 pin multiplexing sources. Relative paths are resolved
+	  from the project directory. When empty, defaults to
+	  projects/<project>/pinmux_config.c.
+
+endif # ADUCM3029

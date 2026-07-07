@@ -24,7 +24,7 @@ from no_os_build import (
 # Platforms handled by the CMake build system (the only ones with board
 # presets under board_configs/). A project's builds.json is expected to carry
 # only the platforms NOT in this set; its CMake combos cover these.
-CMAKE_PLATFORMS = {'maxim', 'stm32', 'pico'}
+CMAKE_PLATFORMS = {'maxim', 'stm32', 'pico', 'aducm3029'}
 
 TGREEN =  '\033[32m' # Green Text	
 TBLUE =  '\033[34m' # Green Text	

@@ -1,0 +1,23 @@
+{
+	"version": 7,
+	"configurePresets": [
+		{
+			"name": "aducm3029-base",
+			"hidden": true,
+			"description": "Base config for ADuCM3029 boards",
+			"generator": "Ninja"
+		},
+		{
+			"name": "eval-adicup3029",
+			"description": "EVAL-ADICUP3029 board (ADuCM3029)",
+			"inherits": "aducm3029-base",
+			"cacheVariables": {
+				"BOARD": "eval-adicup3029",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "aducm3029",
+				"TARGET": "ADuCM3029",
+				"BOARD_CONFIG_FILE": "eval-adicup3029_defconfig"
+			}
+		}
+	]
+}

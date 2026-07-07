@@ -14,6 +14,7 @@ if PLATFORM_DRIVERS
 source "drivers/platform/stm32/Kconfig"
 source "drivers/platform/maxim/Kconfig"
 source "drivers/platform/pico/Kconfig"
+source "drivers/platform/aducm3029/Kconfig"
 
 config PLATFORM_I2C_BITBANG
 	default n
