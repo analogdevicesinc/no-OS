@@ -122,15 +122,6 @@ SS          P17.5                         P4.1
 
 **Build Command**
 
-.. code-block:: bash
-
-	# to delete current build
-	make reset
-	# to build the project
-	make PLATFORM=maxim TARGET=max32690
-	# to flash the code
-	make run
-
 Available variants: ``basic``.
 Available boards: ``ad-apard32690-sl``.
 Replace ``--variant`` / ``--board`` accordingly.
