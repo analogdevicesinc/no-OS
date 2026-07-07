@@ -32,8 +32,8 @@ Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
 No-OS Supported Examples
 ------------------------
 
-This project is organized around the no-OS ``EXAMPLE`` based build flow.
-Selecting an example at build time (``EXAMPLE=<name>``) chooses which
+This project is organized around the no-OS variant based build flow.
+Selecting a variant at build time (``--variant <name>``) chooses which
 application is compiled. The platform ``main()`` is a thin dispatcher that
 calls ``example_main()``, provided by the selected example. The
 initialization data used in the examples is defined in
@@ -44,7 +44,7 @@ and the platform-specific macros in
 Basic Example
 ~~~~~~~~~~~~~
 
-This is the default example (``EXAMPLE=basic_example``) which initializes
+This is the default example (``basic`` variant) which initializes
 the GPIO pins for the on-board LEDs (DS3 green, DS4 blue) and toggles them
 in a blink pattern.
 
@@ -68,11 +68,22 @@ switch is set to the USB position for serial terminal communication.
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``basic``.
+Available boards: ``eval-adicup3029``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-   # to delete current build
-   make reset
-   # to build the project (EXAMPLE defaults to basic_example)
-   make EXAMPLE=basic_example PLATFORM=aducm3029
-   # to flash the code
-   make run
+   # point at the CrossCore Embedded Studio install (only if not auto-detected)
+   export CCES_HOME=/opt/analog/cces/3.0.3
+
+   cd no-OS
+
+   # build the basic example on the EVAL-ADICUP3029
+   python tools/scripts/no_os_build.py build \
+      --project aducm_blinky_example --variant basic --board eval-adicup3029
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project aducm_blinky_example --variant basic --board eval-adicup3029 \
+      --probe openocd --flash
