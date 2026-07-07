@@ -9,4 +9,16 @@ config AD_ACEVSECRDSET_SL_STOUT_APPLICATION_EXAMPLE
 
 endchoice
 
+choice AD_ACEVSECRDSET_SL_BOARD_REVISION
+	prompt "Board revision"
+	default AD_ACEVSECRDSET_SL_REV_D
+
+config AD_ACEVSECRDSET_SL_REV_A
+	bool "Revision A"
+
+config AD_ACEVSECRDSET_SL_REV_D
+	bool "Revision D"
+
+endchoice
+
 endmenu

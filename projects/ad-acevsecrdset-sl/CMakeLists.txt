@@ -6,7 +6,6 @@ target_sources(ad-acevsecrdset-sl PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/common_data.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/state_machine/state_machine.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/pilot/pilot.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/inter/inter.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/interface/interface.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/supply/supply.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/rcd/rcd.c
@@ -15,8 +14,19 @@ target_sources(ad-acevsecrdset-sl PRIVATE
 )
 
 if(CONFIG_AD_ACEVSECRDSET_SL_STOUT_APPLICATION_EXAMPLE)
-    target_compile_definitions(ad-acevsecrdset-sl PRIVATE REV_D)
     target_compile_definitions(ad-acevsecrdset-sl PRIVATE NO_OS_LOG_LEVEL=NO_OS_LOG_DEBUG)
+endif()
+
+# Board revision (selected via defconfig)
+if(CONFIG_AD_ACEVSECRDSET_SL_REV_A)
+    target_compile_definitions(ad-acevsecrdset-sl PRIVATE REV_A)
+elseif(CONFIG_AD_ACEVSECRDSET_SL_REV_D)
+    target_compile_definitions(ad-acevsecrdset-sl PRIVATE REV_D)
+    # The interrupt/opto handling (inter.c) uses REV_D-only pin macros and is
+    # only referenced from REV_D-guarded code.
+    target_sources(ad-acevsecrdset-sl PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/inter/inter.c
+    )
 endif()
 
 target_include_directories(ad-acevsecrdset-sl PUBLIC

@@ -104,15 +104,13 @@ Central to the project is a state machine managing charging states and
 interfacing with pilot, relay, and RCD functions, allowing control over
 the charging process.
 
-In order to build the basic example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad-acevsecrdset-sl/Makefile>`_:
+The board revision is selected at build time through a dedicated defconfig,
+one per revision:
 
-.. code-block:: bash
+* ``stout_application_rev_a`` - builds for board revision A (defines ``REV_A``).
+* ``stout_application_rev_d`` - builds for board revision D (defines ``REV_D``).
 
-   # Select the board revision
-   REV_A = n
-   REV_D = y
+Pick the variant matching your hardware when running the build command below.
 
 No-OS Supported Platforms
 -------------------------
@@ -146,16 +144,8 @@ To flash the MAX32625PICO with the correct firmware image:
 
 **Build Command**
 
-.. code-block:: bash
-
-   # to delete current build
-   make reset PLATFORM=maxim TARGET=max32655
-   # to build the project
-   make PLATFORM=maxim TARGET=max32655
-   # to flash the code
-   make run PLATFORM=maxim TARGET=max32655
-
-Available variants: ``stout_application``.
+Available variants: ``stout_application_rev_a``, ``stout_application_rev_d``
+(one per board revision).
 Available boards: ``max32655fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
@@ -165,11 +155,15 @@ Replace ``--variant`` / ``--board`` accordingly.
 
    cd no-OS
 
-   # build the project (stout_application example on the max32655fthr board)
+   # build the project for board revision D on the max32655fthr board
    python tools/scripts/no_os_build.py build \
-      --project ad-acevsecrdset-sl --variant stout_application --board max32655fthr
+      --project ad-acevsecrdset-sl --variant stout_application_rev_d --board max32655fthr
+
+   # build for board revision A instead
+   python tools/scripts/no_os_build.py build \
+      --project ad-acevsecrdset-sl --variant stout_application_rev_a --board max32655fthr
 
    # build and flash (requires a connected debug probe)
    python tools/scripts/no_os_build.py build \
-      --project ad-acevsecrdset-sl --variant stout_application --board max32655fthr \
+      --project ad-acevsecrdset-sl --variant stout_application_rev_d --board max32655fthr \
       --probe openocd --flash
