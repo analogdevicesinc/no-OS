@@ -103,12 +103,8 @@ converter over I2C and starts an IIO application, allowing the device to be
 controlled and monitored via UART using an IIO client such as
 iio-oscilloscope.
 
-In order to build the IIO example, use the following configuration:
-
-.. code-block:: bash
-
-	# IIOD is enabled by default in src.mk
-	make
+This example is built by selecting the ``iio`` variant (see the Build
+Command below).
 
 No-OS Supported Platforms
 -------------------------
@@ -145,11 +141,22 @@ Connections
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``iio``.
+Available boards: ``eval-adicup3029``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-	# remove previous build artifacts
-	make reset PLATFORM=aducm3029
-	# build the project for ADuCM3029
-	make PLATFORM=aducm3029
-	# flash the firmware onto the device
-	make flash
+	# point at the CrossCore Embedded Studio install (only if not auto-detected)
+	export CCES_HOME=/opt/analog/cces/3.0.3
+
+	cd no-OS
+
+	# build the iio example on the EVAL-ADICUP3029
+	python tools/scripts/no_os_build.py build \
+		--project cn0552 --variant iio --board eval-adicup3029
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project cn0552 --variant iio --board eval-adicup3029 \
+		--probe openocd --flash
