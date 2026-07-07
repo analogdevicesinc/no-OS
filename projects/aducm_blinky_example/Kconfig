@@ -1,0 +1,14 @@
+menu "ADuCM Blinky Example Configuration"
+
+choice ADUCM_BLINKY_EXAMPLE
+	prompt "Example variant"
+	default ADUCM_BLINKY_BASIC_EXAMPLE
+
+config ADUCM_BLINKY_BASIC_EXAMPLE
+	bool "Basic blinky example"
+	help
+	  Basic example that blinks the on-board LEDs of the EVAL-ADICUP3029.
+
+endchoice
+
+endmenu
