@@ -65,11 +65,8 @@ buffer for ADC data, and runs an IIO application to facilitate data acquisition
 and interaction with the device via UART, while handling errors and cleaning up
 resources as needed.
 
-This is the only example in this project, so it builds by default:
-
-.. code-block:: bash
-
-	make
+This is the only example in this project, so it builds by default.
+See the **Build Command** section below for the build instructions.
 
 No-OS Supported Platforms
 -------------------------
@@ -109,15 +106,6 @@ Maxim Platform
 +----------------------+----------------------+-----------------------------+
 
 **Build Command**
-
-.. code-block:: bash
-
-        # to delete current build
-        make reset
-        # to build the project
-        make PLATFORM=maxim TARGET=max32665
-        # to flash the code
-        make run
 
 Available variants: ``iio``.
 Available boards: ``max32665fthr``.
