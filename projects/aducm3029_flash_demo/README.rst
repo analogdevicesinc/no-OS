@@ -48,8 +48,8 @@ Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
 No-OS Supported Examples
 ------------------------
 
-This project is organized around the no-OS ``EXAMPLE`` based build flow.
-Selecting an example at build time (``EXAMPLE=<name>``) chooses which
+This project is organized around the no-OS variant based build flow.
+Selecting a variant at build time (``--variant <name>``) chooses which
 application is compiled. The platform ``main()`` is a thin dispatcher that
 calls ``example_main()``, provided by the selected example. The initialization
 data is defined in ``src/common`` and the platform-specific macros in
@@ -58,7 +58,7 @@ data is defined in ``src/common`` and the platform-specific macros in
 Flash Example
 ~~~~~~~~~~~~~
 
-The flash example (``EXAMPLE=flash_example``, the default) initializes the
+The flash example (``flash`` variant, the default) initializes the
 UART, IRQ controller, and flash peripherals, then reads from and writes to
 flash memory at specific addresses (0x3E000 and 0x3E004). The results of each
 read/write operation are printed to the serial console.
@@ -84,11 +84,22 @@ UART switch (S2) is set to the USB position for PC terminal access.
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``flash``.
+Available boards: ``eval-adicup3029``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-   # remove sp characters from the build directory
-   make reset
-   # build the project (EXAMPLE defaults to flash_example)
-   make EXAMPLE=flash_example PLATFORM=aducm3029
-   # flash the code
-   make run
+   # point at the CrossCore Embedded Studio install (only if not auto-detected)
+   export CCES_HOME=/opt/analog/cces/3.0.3
+
+   cd no-OS
+
+   # build the flash example on the EVAL-ADICUP3029
+   python tools/scripts/no_os_build.py build \
+      --project aducm3029_flash_demo --variant flash --board eval-adicup3029
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project aducm3029_flash_demo --variant flash --board eval-adicup3029 \
+      --probe openocd --flash
