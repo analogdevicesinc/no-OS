@@ -3,7 +3,7 @@
  *   @brief  Implementation of IIO ADF4030 Driver.
  *   @author Sirac Kucukarabacioglu (sirac.kucukarabacioglu@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2025-2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -47,13 +47,14 @@
  * @param readval - Read data.
  * @return	  - Result of the reading procedure.
  */
-static int adf4030_iio_read_reg(struct adf4030_iio_dev *dev, uint32_t reg,
+static int adf4030_iio_read_reg(void *dev, uint32_t reg,
 				uint32_t *readval)
 {
+	struct adf4030_iio_dev *iio_adf4030 = dev;
 	uint8_t tmp;
 	int ret;
 
-	ret = adf4030_spi_read(dev->adf4030_dev, (uint16_t)reg, &tmp);
+	ret = adf4030_spi_read(iio_adf4030->adf4030_dev, (uint16_t)reg, &tmp);
 	if (ret)
 		return ret;
 
@@ -68,10 +69,12 @@ static int adf4030_iio_read_reg(struct adf4030_iio_dev *dev, uint32_t reg,
  * @param writeval - Data to be written.
  * @return	   - Result of the writing procedure.
  */
-static int adf4030_iio_write_reg(struct adf4030_iio_dev *dev, uint32_t reg,
+static int adf4030_iio_write_reg(void *dev, uint32_t reg,
 				 uint32_t writeval)
 {
-	return adf4030_spi_write(dev->adf4030_dev, (uint16_t)reg,
+	struct adf4030_iio_dev *iio_adf4030 = dev;
+
+	return adf4030_spi_write(iio_adf4030->adf4030_dev, (uint16_t)reg,
 				 (uint8_t)writeval);
 }
 
@@ -93,7 +96,7 @@ static int adf4030_iio_read_device_attr(void *dev, char *buf, uint32_t len,
 	struct adf4030_iio_dev *iio_adf4030 = (struct adf4030_iio_dev *)dev;
 	struct adf4030_dev *adf4030;
 	int64_t val = 0;
-	int ret;
+	int ret = 0;
 
 	if (!iio_adf4030)
 		return -EINVAL;
@@ -116,49 +119,76 @@ static int adf4030_iio_read_device_attr(void *dev, char *buf, uint32_t len,
 		val = adf4030->ref_freq;
 		break;
 
-	case ADF4030_IIO_DEV_ATTR_VCO_FREQ:
-		ret = adf4030_get_vco_freq(adf4030, &val);
+	case ADF4030_IIO_DEV_ATTR_VCO_FREQ: {
+		uint32_t vco_freq;
+		ret = adf4030_get_vco_freq(adf4030, &vco_freq);
+		val = vco_freq;
 		break;
+	}
 
-	case ADF4030_IIO_DEV_ATTR_BSYNCA_FREQ:
-		ret = adf4030_get_bsync_freq(adf4030, &val, false);
+	case ADF4030_IIO_DEV_ATTR_BSYNCA_FREQ: {
+		uint32_t bsync_freq;
+		ret = adf4030_get_bsync_freq(adf4030, &bsync_freq, false);
+		val = bsync_freq;
 		break;
+	}
 
-	case ADF4030_IIO_DEV_ATTR_BSYNCB_FREQ:
-		ret = adf4030_get_bsync_freq(adf4030, &val, true);
+	case ADF4030_IIO_DEV_ATTR_BSYNCB_FREQ: {
+		uint32_t bsync_freq;
+		ret = adf4030_get_bsync_freq(adf4030, &bsync_freq, true);
+		val = bsync_freq;
 		break;
+	}
 
-	case ADF4030_IIO_DEV_ATTR_TDC_SOURCE_CH:
-		ret = adf4030_get_tdc_source(adf4030, &val);
+	case ADF4030_IIO_DEV_ATTR_TDC_SOURCE_CH: {
+		uint8_t tdc_source;
+		ret = adf4030_get_tdc_source(adf4030, &tdc_source);
+		val = tdc_source;
 		break;
+	}
 
 	case ADF4030_IIO_DEV_ATTR_TDC_MEASUREMENT:
 		ret = adf4030_get_tdc_measurement(adf4030, &val);
 		break;
 
-	case ADF4030_IIO_DEV_ATTR_ALIGNMENT_ITER:
-		ret = adf4030_get_alignment_iter(adf4030, &val);
+	case ADF4030_IIO_DEV_ATTR_ALIGNMENT_ITER: {
+		uint8_t iter_number;
+		ret = adf4030_get_alignment_iter(adf4030, &iter_number);
+		val = iter_number;
 		break;
+	}
 
-	case ADF4030_IIO_DEV_ATTR_ALIGNMENT_THRESHOLD:
-		ret = adf4030_get_alignment_threshold(adf4030, &val);
+	case ADF4030_IIO_DEV_ATTR_ALIGNMENT_THRESHOLD: {
+		uint32_t threshold_fs;
+		ret = adf4030_get_alignment_threshold(adf4030, &threshold_fs);
+		val = threshold_fs;
 		break;
+	}
 
 	case ADF4030_IIO_DEV_ATTR_SINGLE_CH_ALINGMENT:
 		val = 1; // DUMMY DATA
 		break;
 
-	case ADF4030_IIO_DEV_ATTR_SERIAL_CH_ALINGMENT:
-		ret = adf4030_get_serial_alignment(adf4030, &val);
+	case ADF4030_IIO_DEV_ATTR_SERIAL_CH_ALINGMENT: {
+		uint16_t channel_flags;
+		ret = adf4030_get_serial_alignment(adf4030, &channel_flags);
+		val = channel_flags;
 		break;
+	}
 
-	case ADF4030_IIO_DEV_ATTR_BACKGROUND_SERIAL_ALINGMENT:
-		ret = adf4030_get_background_serial_alignment(adf4030, &val);
+	case ADF4030_IIO_DEV_ATTR_BACKGROUND_SERIAL_ALINGMENT: {
+		uint16_t channel_flags;
+		ret = adf4030_get_background_serial_alignment(adf4030, &channel_flags);
+		val = channel_flags;
 		break;
+	}
 
-	case ADF4030_IIO_DEV_ATTR_TEMP:
-		ret = adf4030_get_temperature(adf4030, &val);
+	case ADF4030_IIO_DEV_ATTR_TEMP: {
+		int16_t temperature;
+		ret = adf4030_get_temperature(adf4030, &temperature);
+		val = temperature;
 		break;
+	}
 
 	case ADF4030_IIO_DEV_ATTR_NDIV: {
 		uint8_t ndiv;
@@ -329,7 +359,7 @@ static int adf4030_iio_read_channel_attr(void *dev, char *buf, uint32_t len,
 	struct adf4030_iio_dev *iio_adf4030 = (struct adf4030_iio_dev *)dev;
 	struct adf4030_dev *adf4030;
 	int64_t val = 0;
-	int ret;
+	int ret = 0;
 
 	if (!iio_adf4030)
 		return -EINVAL;
@@ -340,33 +370,51 @@ static int adf4030_iio_read_channel_attr(void *dev, char *buf, uint32_t len,
 		return -EINVAL;
 
 	switch (priv) {
-	case ADF4030_IIO_CH_ATTR_DIRECTION:
-		ret = adf4030_get_channel_direction(adf4030, channel->ch_num, &val);
+	case ADF4030_IIO_CH_ATTR_DIRECTION: {
+		bool tx_en;
+		ret = adf4030_get_channel_direction(adf4030, channel->ch_num, &tx_en);
+		val = tx_en;
 		break;
+	}
 
 	case ADF4030_IIO_CH_ATTR_DELAY:
 		ret = adf4030_get_channel_delay(adf4030, channel->ch_num, &val);
 		break;
 
-	case ADF4030_IIO_CH_ATTR_ODIVB_EN:
-		ret = adf4030_get_channel_odivb(adf4030, channel->ch_num, &val);
+	case ADF4030_IIO_CH_ATTR_ODIVB_EN: {
+		bool odivb_en;
+		ret = adf4030_get_channel_odivb(adf4030, channel->ch_num, &odivb_en);
+		val = odivb_en;
 		break;
+	}
 
-	case ADF4030_IIO_CH_ATTR_TERMINATION:
-		ret = adf4030_get_channel_termination(adf4030, channel->ch_num, &val);
+	case ADF4030_IIO_CH_ATTR_TERMINATION: {
+		enum adf4030_terminations_e termination;
+		ret = adf4030_get_channel_termination(adf4030, channel->ch_num, &termination);
+		val = termination;
 		break;
+	}
 
-	case ADF4030_IIO_CH_ATTR_PRBS:
-		ret = adf4030_get_channel_prbs(adf4030, channel->ch_num, &val);
+	case ADF4030_IIO_CH_ATTR_PRBS: {
+		bool prbs_en;
+		ret = adf4030_get_channel_prbs(adf4030, channel->ch_num, &prbs_en);
+		val = prbs_en;
 		break;
+	}
 
-	case ADF4030_IIO_CH_ATTR_INVERT:
-		ret = adf4030_get_channel_invert(adf4030, channel->ch_num, &val);
+	case ADF4030_IIO_CH_ATTR_INVERT: {
+		bool invert_en;
+		ret = adf4030_get_channel_invert(adf4030, channel->ch_num, &invert_en);
+		val = invert_en;
 		break;
+	}
 
-	case ADF4030_IIO_CH_ATTR_VOLTAGE:
-		ret = adf4030_get_channel_voltage(adf4030, channel->ch_num, &val);
+	case ADF4030_IIO_CH_ATTR_VOLTAGE: {
+		uint32_t voltage_mv;
+		ret = adf4030_get_channel_voltage(adf4030, channel->ch_num, &voltage_mv);
+		val = voltage_mv;
 		break;
+	}
 
 	default:
 		return -EINVAL;
@@ -450,108 +498,126 @@ static int adf4030_iio_write_channel_attr(void *dev, char *buf, uint32_t len,
 static struct iio_attribute adf4030_iio_attrs[] = {
 	{
 		.name = "default_register",
+		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4030_IIO_DEV_ATTR_DEFAULT_REGS,
 		.show = adf4030_iio_read_device_attr,
 		.store = adf4030_iio_write_device_attr,
 	},
 	{
 		.name = "chip_address",
+		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4030_IIO_DEV_ATTR_CHIP_ADDR,
 		.show = adf4030_iio_read_device_attr,
 		.store = adf4030_iio_write_device_attr,
 	},
 	{
 		.name = "reference_frequency",
+		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4030_IIO_DEV_ATTR_REF_FREQ,
 		.show = adf4030_iio_read_device_attr,
 		.store = adf4030_iio_write_device_attr,
 	},
 	{
 		.name = "vco_frequency",
+		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4030_IIO_DEV_ATTR_VCO_FREQ,
 		.show = adf4030_iio_read_device_attr,
 		.store = adf4030_iio_write_device_attr,
 	},
 	{
 		.name = "bsync_freq_odiva",
+		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4030_IIO_DEV_ATTR_BSYNCA_FREQ,
 		.show = adf4030_iio_read_device_attr,
 		.store = adf4030_iio_write_device_attr,
 	},
 	{
 		.name = "bsync_freq_odivb",
+		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4030_IIO_DEV_ATTR_BSYNCB_FREQ,
 		.show = adf4030_iio_read_device_attr,
 		.store = adf4030_iio_write_device_attr,
 	},
 	{
 		.name = "tdc_source_ch",
+		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4030_IIO_DEV_ATTR_TDC_SOURCE_CH,
 		.show = adf4030_iio_read_device_attr,
 		.store = adf4030_iio_write_device_attr,
 	},
 	{
 		.name = "tdc_measurement",
+		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4030_IIO_DEV_ATTR_TDC_MEASUREMENT,
 		.show = adf4030_iio_read_device_attr,
 		.store = adf4030_iio_write_device_attr,
 	},
 	{
 		.name = "alignment_iter",
+		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4030_IIO_DEV_ATTR_ALIGNMENT_ITER,
 		.show = adf4030_iio_read_device_attr,
 		.store = adf4030_iio_write_device_attr,
 	},
 	{
 		.name = "alignment_threshold",
+		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4030_IIO_DEV_ATTR_ALIGNMENT_THRESHOLD,
 		.show = adf4030_iio_read_device_attr,
 		.store = adf4030_iio_write_device_attr,
 	},
 	{
 		.name = "single_ch_alignment",
+		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4030_IIO_DEV_ATTR_SINGLE_CH_ALINGMENT,
 		.show = adf4030_iio_read_device_attr,
 		.store = adf4030_iio_write_device_attr,
 	},
 	{
 		.name = "serial_alignment",
+		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4030_IIO_DEV_ATTR_SERIAL_CH_ALINGMENT,
 		.show = adf4030_iio_read_device_attr,
 		.store = adf4030_iio_write_device_attr,
 	},
 	{
 		.name = "background_serial_alignment",
+		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4030_IIO_DEV_ATTR_BACKGROUND_SERIAL_ALINGMENT,
 		.show = adf4030_iio_read_device_attr,
 		.store = adf4030_iio_write_device_attr,
 	},
 	{
 		.name = "temperature",
+		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4030_IIO_DEV_ATTR_TEMP,
 		.show = adf4030_iio_read_device_attr,
 		.store = adf4030_iio_write_device_attr,
 	},
 	{
 		.name = "ndiv",
+		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4030_IIO_DEV_ATTR_NDIV,
 		.show = adf4030_iio_read_device_attr,
 		.store = adf4030_iio_write_device_attr,
 	},
 	{
 		.name = "rdiv",
+		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4030_IIO_DEV_ATTR_RDIV,
 		.show = adf4030_iio_read_device_attr,
 		.store = adf4030_iio_write_device_attr,
 	},
 	{
 		.name = "odiva",
+		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4030_IIO_DEV_ATTR_ODIVA,
 		.show = adf4030_iio_read_device_attr,
 		.store = adf4030_iio_write_device_attr,
 	},
 	{
 		.name = "odvib",
+		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4030_IIO_DEV_ATTR_ODIVB,
 		.show = adf4030_iio_read_device_attr,
 		.store = adf4030_iio_write_device_attr,
