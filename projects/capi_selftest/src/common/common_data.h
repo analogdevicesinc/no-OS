@@ -36,6 +36,24 @@ extern const struct capi_gpio_port_config gpio_output_config;
 extern const struct capi_gpio_port_config gpio_input_config;
 #endif /* GPIO_OUTPUT_OPS */
 
+#ifdef SPI_OPS
+#include "capi_spi.h"
+#include "capi_irq.h"
+
+/**
+ * @brief CAPI SPI config for external loopback.
+ */
+extern const struct capi_spi_config spi_controller_config;
+/**
+ * @brief CAPI SPI device descriptor for the external loopback test.
+ */
+extern struct capi_spi_device spi_dev;
+/**
+ * @brief CAPI IRQ controller config used before IRQ-backed async tests.
+ */
+extern struct capi_irq_config irq_config;
+#endif /* SPI_OPS */
+
 /**
  * @brief Fill a test framework configuration for the selected platform.
  * @param config - Destination framework configuration.

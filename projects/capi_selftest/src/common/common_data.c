@@ -118,3 +118,51 @@ const struct capi_gpio_port_config gpio_input_config = {
 	.extra = &gpio_input_extra,
 };
 #endif /* GPIO_OUTPUT_OPS */
+
+#ifdef SPI_OPS
+/**
+ * @brief CAPI IRQ controller configuration used before IRQ-backed async tests.
+ */
+struct capi_irq_config irq_config = {
+	.irq_ctrl_id = IRQ_CTRL_IDENTIFIER,
+	.extra = NULL,
+};
+
+/**
+ * @brief Platform-specific extra data for the SPI controller.
+ */
+static SPI_EXTRA_TYPE spi_extra = SPI_EXTRA_INIT;
+
+/**
+ * @brief CAPI configuration for the SPI controller.
+ */
+const struct capi_spi_config spi_controller_config = {
+	.ops = SPI_OPS,
+	.identifier = SPI_IDENTIFIER,
+	.dma_handle = NULL,
+	.three_pin_mode = false,
+	.loopback = false,
+	.clk_freq_hz = SPI_CLK_FREQ,
+	.extra = &spi_extra,
+};
+
+/**
+ * @brief CAPI SPI device descriptor for the external loopback test.
+ *
+ * The controller field is assigned after capi_spi_init().
+ */
+struct capi_spi_device spi_dev = {
+	.controller = NULL,
+	.max_speed_hz = SPI_DEVICE_SPEED_HZ,
+	.mode = SPI_DEVICE_MODE,
+	.native_cs = SPI_DEVICE_NATIVE_CS,
+	.cs_gpio = NULL,
+	.cs_gpio_num = 0U,
+	.flow_ctl_param = {
+		.mode = CAPI_SPI_FLOW_CTL_DISABLE,
+	},
+	.non_continuous_mode = false,
+	.lsb_first = false,
+	.extra = NULL,
+};
+#endif /* SPI_OPS */
