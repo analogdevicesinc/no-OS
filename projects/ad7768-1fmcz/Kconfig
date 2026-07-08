@@ -1,0 +1,23 @@
+menu "ad7768-1fmcz Configuration"
+
+choice AD7768_1FMCZ_EXAMPLE
+	prompt "Example variant"
+	default AD7768_1FMCZ_DEMO_EXAMPLE
+
+config AD7768_1FMCZ_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Basic demo that initializes the AD7768-1 ADC via the AXI SPI Engine
+	  and AXI clock generator, then reads and prints conversion results
+	  continuously using the SPI Engine in standard (non-offload) mode.
+
+config AD7768_1FMCZ_SPI_ENGINE_OFFLOAD_EXAMPLE
+	bool "SPI Engine offload example"
+	help
+	  Offload example that uses the AXI SPI Engine offload mode with DMA
+	  to capture a burst of samples from the AD7768-1 ADC into DDR memory
+	  and prints the raw results.
+
+endchoice
+
+endmenu
