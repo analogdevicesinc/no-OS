@@ -1,10 +1,10 @@
 AD7124-4SDZ no-OS Example Project
-=================================
+==================================
 
 .. no-os-doxygen::
 
-.. contents::
-	:depth: 3
+.. contents:: Table of Contents
+    :depth: 3
 
 Supported Evaluation Boards
 ---------------------------
@@ -30,45 +30,36 @@ sensors and conduct ADC diagnostics.
 Applications
 ------------
 
-* Temperature Measurement
-* Pressure Measurement
-* Industrial Process Control
+* Temperature measurement
+* Pressure measurement
+* Industrial process control
 * Instrumentation
-* Smart Transmitters
+* Smart transmitters
 
 Hardware Specifications
 -----------------------
 
 Power Supply Requirements
-^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The EVAL-AD7124-4SDZ evaluation board requires an external power supply
 ranging from 7V to 9V. Power can be supplied via the J3 connector
 using a bench top supply or the J5 connector with a DC plug adapter.
 
-Board Connector and Jumper Settings
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+On-board Connectors
+~~~~~~~~~~~~~~~~~~~
 
-**On-board Connectors**
-
-	Please see the following table for the connector descriptions:
-
-	==============  ====================================================================
-	Connector       Description
-	==============  ====================================================================
-	J3              Barrel jack (bench top) 7 V to 9 V input; LK2 Position A
-	J5              Barrel jack (wall wart) 7 V to 9 V input; LK2 Position B
-	J6              Analog input header for sensors/signals
-	J11             Additional analog input header
-	A0 / A1         SMA/SMB footprints for differential analog input channels
-	CLK IN          SMB/SMA jack for optional external master clock input
-	Test Points     SPI signal access (CS, SCLK, DIN, DOUT/RDY); remove R9-R13
-	==============  ====================================================================
-
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
+==============  ====================================================================
+Connector       Description
+==============  ====================================================================
+J3              Barrel jack (bench top) 7 V to 9 V input; LK2 Position A
+J5              Barrel jack (wall wart) 7 V to 9 V input; LK2 Position B
+J6              Analog input header for sensors/signals
+J11             Additional analog input header
+A0 / A1         SMA/SMB footprints for differential analog input channels
+CLK IN          SMB/SMA jack for optional external master clock input
+Test Points     SPI signal access (CS, SCLK, DIN, DOUT/RDY); remove R9-R13
+==============  ====================================================================
 
 No-OS Supported Examples
 ------------------------
@@ -76,8 +67,8 @@ No-OS Supported Examples
 The initialization data used in the examples is taken out from:
 `Project Source Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7124-4sdz/src>`_
 
-Application Example
-^^^^^^^^^^^^^^^^^^^
+Demo Example
+~~~~~~~~~~~~
 
 This is a simple example that initializes the AD7124-4 ADC via
 ``ad7124_setup()`` and reads all device registers to confirm the
@@ -87,17 +78,19 @@ and reads the conversion result via ``ad7124_read_data()``. The
 obtained raw ADC data is printed to the console.
 
 No-OS Supported Platforms
--------------------------
+--------------------------
 
 Xilinx Platform
-^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~
 
-**Used Hardware**
+Used Hardware
+^^^^^^^^^^^^^
 
 * `EVAL-AD7124-4SDZ <https://www.analog.com/EVAL-AD7124-4SDZ>`_
 * `ZedBoard <https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/zedboard-zynq-7000.html>`_
 
-**Connections**
+Connections
+^^^^^^^^^^^
 
 The EVAL-AD7124-4SDZ connects to the ZedBoard via the SPI test points
 on the evaluation board. Remove the 0 Ohm links R9 to R13 to access the
@@ -115,16 +108,36 @@ GND                     GND                   Ground
 
 Consult the ZedBoard User Guide for Pmod or FMC header pinouts. Verify
 that the logic voltage levels are compatible; the AD7124-4 supports a
-digital I/O supply (IOVDD) between 1.65V and 3.6V.
+digital I/O supply (IOVDD) between 1.65V and 3.6V. Connect a USB-UART
+cable to the ZedBoard USB-UART port (J14) for serial console output
+(115200 baud, 8N1).
 
-**Build Command**
+Build Command
+^^^^^^^^^^^^^
+
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``demo``.
+Available boards: ``zed``.
+
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
 
 .. code-block:: bash
 
-	cp <SOME_PATH>/system_top.xsa .
-	# to delete current build
-	make reset
-	# to build the project
-	make
-	# to flash the code
-	make run
+   # source the Vitis environment (adjust path to your installation)
+   source /path/to/Vitis/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   & "C:\path\to\Vitis\settings64.bat"
+
+   cd no-OS
+
+   # build the demo example on the ZedBoard
+   python tools/scripts/no_os_build.py build \
+      --project ad7124-4sdz --variant demo --board zed \
+      --hardware /path/to/ad7134_fmc_zed/system_top.xsa
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad7124-4sdz --variant demo --board zed \
+      --hardware /path/to/ad7134_fmc_zed/system_top.xsa \
+      --probe openocd --flash

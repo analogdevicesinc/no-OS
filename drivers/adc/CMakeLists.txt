@@ -54,6 +54,7 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad7091r8)
 
 # AD7124
 no_os_sources_ifdef(CONFIG_ADC_AD7124 ${CMAKE_CURRENT_SOURCE_DIR}/ad7124/ad7124.c)
+no_os_sources_ifdef(CONFIG_ADC_AD7124 ${CMAKE_CURRENT_SOURCE_DIR}/ad7124/ad7124_regs.c)
 no_os_sources_ifdef(CONFIG_ADC_IIO_AD7124 ${CMAKE_CURRENT_SOURCE_DIR}/ad7124/iio_ad7124.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad7124)
 
