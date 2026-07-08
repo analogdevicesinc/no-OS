@@ -4,10 +4,10 @@ AD4110 no-OS Example Project
 .. no-os-doxygen::
 
 .. contents:: Table of Contents
-    :depth: 3
+   :depth: 3
 
 Supported Evaluation Boards
-----------------------------
+---------------------------
 
 * `EVAL-AD4110-1SDZ <https://www.analog.com/EVAL-AD4110-1>`_
 
@@ -67,7 +67,7 @@ J1        120-pin connector for SDP-B controller board
 No-OS Build Setup
 -----------------
 
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
+Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`__
 
 No-OS Supported Examples
 ------------------------
@@ -75,7 +75,7 @@ No-OS Supported Examples
 The initialization data used in the examples is taken out from the
 `Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad4110/src/app>`__.
 
-Basic example
+Basic Example
 ~~~~~~~~~~~~~
 
 This is the default example which initializes the AD4110-1 device via
@@ -93,7 +93,7 @@ Used Hardware
 ^^^^^^^^^^^^^
 
 * `EVAL-AD4110-1SDZ <https://www.analog.com/EVAL-AD4110-1>`_
-* `ZedBoard <https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html>`_
+* `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
 Connections
 ^^^^^^^^^^^
@@ -103,16 +103,34 @@ Connect the EVAL-AD4110-1SDZ to the ZedBoard via the SPI PMOD connector
 6 = 5 V external power. Connect a ±15 V power supply to J14 (VDD, VSS,
 GND).
 
+The UART console appears on the ZedBoard USB-UART port at 115200 baud, 8N1.
+
 Build Command
 ^^^^^^^^^^^^^
 
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``uart``.
+Available boards: ``zed``.
+
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
+
 .. code-block:: bash
 
-   # copy the Xilinx hardware description file
-   cp <SOME_PATH>/system_top.xsa .
-   # to delete current build
-   make reset
-   # to build the project
-   make
-   # to flash the code
-   make run
+   # Source the Vitis environment (sets XILINX_VITIS and adds tools to PATH)
+   source /path/to/Vitis/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   $env:XILINX_VITIS = "<C:\path\to\Vitis>"
+
+   cd no-OS
+
+   # build the example on the ZedBoard
+   python tools/scripts/no_os_build.py build \
+      --project ad4110 --variant uart --board zed \
+      --hardware /path/to/system_top.xsa
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad4110 --variant uart --board zed \
+      --hardware /path/to/system_top.xsa \
+      --probe openocd --flash
