@@ -1,0 +1,23 @@
+menu "adf5902_sdz Configuration"
+
+choice ADF5902_SDZ_EXAMPLE
+	prompt "Example variant"
+	default ADF5902_SDZ_DEMO_EXAMPLE
+
+config ADF5902_SDZ_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Basic demo that initializes the ADF5902 FMCW radar synthesizer,
+	  performs recalibration, reads the locked output frequency, and
+	  reads the device temperature.
+
+config ADF5902_SDZ_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the ADF5902 through the IIO framework,
+	  enabling host-side control and monitoring over UART.
+
+endchoice
+
+endmenu
