@@ -1,0 +1,22 @@
+menu "adaq8092_fmc Configuration"
+
+choice ADAQ8092_FMC_EXAMPLE
+	prompt "Example variant"
+	default ADAQ8092_FMC_DEMO_EXAMPLE
+
+config ADAQ8092_FMC_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Demo example that initializes the ADAQ8092 ADC via AXI ADC core and
+	  AXI DMA, runs a checkerboard pattern test, and captures data to DDR.
+
+config ADAQ8092_FMC_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the ADAQ8092 ADC through the IIO framework
+	  via iio_axi_adc, enabling host-side data capture over UART.
+
+endchoice
+
+endmenu
