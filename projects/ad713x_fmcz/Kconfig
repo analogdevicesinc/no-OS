@@ -1,0 +1,22 @@
+menu "ad713x_fmcz Configuration"
+
+choice AD713X_FMCZ_EXAMPLE
+	prompt "Example variant"
+	default AD713X_FMCZ_UART_EXAMPLE
+
+config AD713X_FMCZ_UART_EXAMPLE
+	bool "UART example"
+	help
+	  Basic example that initializes two AD7134 ADCs via SPI Engine offload
+	  with AXI DMA, captures samples, and prints conversion results over UART.
+
+config AD713X_FMCZ_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the dual AD7134 ADC through the IIO framework,
+	  enabling host-side data capture over UART.
+
+endchoice
+
+endmenu

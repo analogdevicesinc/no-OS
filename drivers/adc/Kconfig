@@ -124,6 +124,11 @@ config ADC_IIO_AD713X
     bool "Enable AD713X IIO driver"
     default n
 
+config ADC_IIO_DUAL_AD713X
+    select ADC_IIO_AD713X
+    bool "Enable dual AD713X IIO driver"
+    default n
+
 config ADC_AD717X
     depends on SPI
     bool "Enable AD717X ADC driver"
