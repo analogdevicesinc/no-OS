@@ -1,0 +1,15 @@
+menu "ad5758-sdz Configuration"
+
+choice AD5758_SDZ_EXAMPLE
+	prompt "Example variant"
+	default AD5758_SDZ_EXAMPLE_EXAMPLE
+
+config AD5758_SDZ_EXAMPLE_EXAMPLE
+	bool "Example"
+	help
+	  Basic example that initializes the AD5758 DAC and writes a
+	  mid-scale output code.
+
+endchoice
+
+endmenu

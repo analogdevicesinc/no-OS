@@ -1,8 +1,0 @@
-{
-      "xilinx": {
-        "example": {
-              "flags" : "",
-              "hardware" : ["ad5758_sdz_zed"]
-        }
-      }
-}
