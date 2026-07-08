@@ -61,6 +61,7 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad7124)
 # AD713X
 no_os_sources_ifdef(CONFIG_ADC_AD713X ${CMAKE_CURRENT_SOURCE_DIR}/ad713x/ad713x.c)
 no_os_sources_ifdef(CONFIG_ADC_IIO_AD713X ${CMAKE_CURRENT_SOURCE_DIR}/ad713x/iio_ad713x.c)
+no_os_sources_ifdef(CONFIG_ADC_IIO_DUAL_AD713X ${CMAKE_CURRENT_SOURCE_DIR}/ad713x/iio_dual_ad713x.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad713x)
 
 # AD717X

@@ -3,11 +3,11 @@ AD713x FMCZ no-OS Example Project
 
 .. no-os-doxygen::
 
-.. contents::
-	:depth: 3
+.. contents:: Table of Contents
+    :depth: 3
 
 Supported Evaluation Boards
-----------------------------
+---------------------------
 
 * `EVAL-AD7134FMCZ <https://www.analog.com/EVAL-AD7134FMCZ>`_
 
@@ -30,7 +30,7 @@ each ADC. Clock inputs can be sourced from a crystal, MEMS oscillator,
 or external CMOS input.
 
 Applications
--------------
+------------
 
 * Electrical test and measurement
 * Audio test
@@ -67,21 +67,16 @@ P6, P10                 Optional external connectors for driver (Ch 0, Ch 1)
 P8                      FMC connector (160-pin, VITA 57)
 ======================  =====================================================
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
--------------------------
+------------------------
 
 The initialization data used in the examples is taken out from:
 `Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad713x_fmcz/src>`_
 
-Demo Example
+UART Example
 ~~~~~~~~~~~~
 
-The demo example initializes two AD7134 ADC devices over SPI using the
+The UART example initializes two AD7134 ADC devices over SPI using the
 SPI Engine and AXI DMAC cores. It configures PWM signals for sample
 triggering, acquires 1024 samples across all 8 channels (4 channels
 per ADC), converts the raw 24-bit data to voltage values, and prints
@@ -97,16 +92,11 @@ such as offset, sampling frequency, and data scale, facilitating data
 acquisition and conversion of raw ADC readings into voltage signals.
 
 If you are not familiar with ADI IIO Application, please take a look at:
-`IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
+:dokuwiki:`IIO No-OS </resources/tools-software/no-os-software/iio>`
 
-If you are not familiar with ADI IIO Oscilloscope Client, please take a look at:
-`IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
-
-To build the IIO example, add the following flag when invoking make:
-
-.. code-block:: bash
-
-   IIOD=y
+If you are not familiar with ADI IIO Oscilloscope Client, please take a
+look at:
+:dokuwiki:`IIO Oscilloscope </resources/tools-software/linux-software/iio_oscilloscope>`
 
 No-OS Supported Platforms
 --------------------------
@@ -114,12 +104,14 @@ No-OS Supported Platforms
 Xilinx Platform
 ~~~~~~~~~~~~~~~
 
-**Used Hardware**
+Used Hardware
+^^^^^^^^^^^^^
 
 * `EVAL-AD7134FMCZ <https://www.analog.com/EVAL-AD7134FMCZ>`_
 * `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
-**Connections**
+Connections
+^^^^^^^^^^^
 
 * Mount the EVAL-AD7134FMCZ onto the ZedBoard through the FMC LPC
   connector (P8 on the evaluation board).
@@ -127,16 +119,34 @@ Xilinx Platform
   for the EVAL-AD7134FMCZ is supplied via the FMC connector from the
   ZedBoard.
 * Connect a micro-USB cable from the ZedBoard USB-UART port (J14) to
-  your PC for serial communication.
+  your PC for serial communication (115200 baud, 8N1).
 
-**Build Command**
+Build Command
+^^^^^^^^^^^^^
+
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``uart``, ``iio``.
+Available boards: ``zed``.
+
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
 
 .. code-block:: bash
 
-   cp <SOME_PATH>/system_top.xsa .
-   # to delete current build
-   make reset
-   # to build the project
-   make
-   # to flash the code
-   make run
+   # source the Vitis environment (adjust path to your installation)
+   source /path/to/Vitis/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   & "C:\path\to\Vitis\settings64.bat"
+
+   cd no-OS
+
+   # build the uart example on the ZedBoard
+   python tools/scripts/no_os_build.py build \
+      --project ad713x_fmcz --variant uart --board zed \
+      --hardware /path/to/ad7134_fmc_zed/system_top.xsa
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad713x_fmcz --variant uart --board zed \
+      --hardware /path/to/ad7134_fmc_zed/system_top.xsa \
+      --probe openocd --flash
