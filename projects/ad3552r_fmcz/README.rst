@@ -1,47 +1,52 @@
 EVAL-AD3552R no-OS Example Project
-==================================
+===================================
+
+.. no-os-doxygen::
+
+.. contents:: Table of Contents
+   :depth: 3
 
 Supported Evaluation Boards
 ---------------------------
 
-- :adi:`EVAL-AD3552RFMCZ`
+* `EVAL-AD3552RFMCZ <https://www.analog.com/EVAL-AD3552RFMCZ>`_
 
 Overview
----------
+--------
 
 The EVAL-AD3552RFMCZ Evaluation Board is designed for the dual-channel,
 16-bit AD3552R digital-to-analog converter (DAC). It features two
-channels with distinct transimpedance amplifiers—one for dynamic
+channels with distinct transimpedance amplifiers — one for dynamic
 performance and one for DC precision over temperature. The board
 supports comprehensive testing across all DAC outputs, waveform
 generation, and offers various power supply and reference options.
-Connectivity is facilitated through the USB port using the SDP-H1 system
+Connectivity is facilitated through either the SDP-H1 system
 demonstration platform or via a pin header for ZedBoard or other
 controllers.
 
 Applications
--------------
+------------
 
-- Instrumentation
-- Hardware in the loop
-- Process control equipment
-- Medical devices
-- Automated test equipment
-- Data acquisition systems
-- Programmable voltage sources
-- Optical communications
+* Instrumentation
+* Hardware in the loop
+* Process control equipment
+* Medical devices
+* Automated test equipment
+* Data acquisition systems
+* Programmable voltage sources
+* Optical communications
 
 Hardware Specifications
 -----------------------
 
 Power Supply Requirements
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To power the EVAL-AD3552RFMCZ board, connect it using either a
 controller board or external power supplies via connector P3.
 
 Pin Assignment on Power Supply Connector P3
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 +-----------------------+-----------------------+-----------------------+
 | Pin Number            | Signal                | Description           |
@@ -73,10 +78,10 @@ Pin Assignment on Power Supply Connector P3
 +-----------------------+-----------------------+-----------------------+
 
 Digital Signals
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
 Pin Assignment on Connector P5
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 +-------------+--------------+---------------------------------------------------------------+
 | Pin Number  | Signal       | Description                                                   |
@@ -137,84 +142,60 @@ No-OS Build Setup
 Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`__
 
 No-OS Supported Examples
--------------------------
+------------------------
 
-The initialization data used in the examples is taken out from the
-`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad3552r_fmcz/src/common>`__
+This project uses the no-OS variant-based build flow. Selecting a variant
+at build time (``--variant <name>``) chooses which application is compiled.
+Shared initialization data is defined in
+`src/common <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad3552r_fmcz/src/common>`__,
+and platform-specific macros are in
+`src/platform <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad3552r_fmcz/src/platform>`__.
 
-The macros used in Common Data are defined in platform specific files
-found in the `Project Platform Configuration Path: <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad3552r_fmcz/src/platform/>`__
+AXI QSPI Example
+~~~~~~~~~~~~~~~~
 
-AXI Quad SPI example
-~~~~~~~~~~~~~~~~~~~~~~
+The ``axi_qspi`` variant drives the AD3552R DAC via the AXI QSPI interface
+with AXI DMA and AXI clock generator IP. It demonstrates hardware
+initialization (GPIOs, SPI, DAC), raw sample data transfer to the DAC,
+and cyclic DMA-based sine wave generation using the ``no_os_sine_lut_16``
+lookup table.
 
-The ``axi_qspi_example.c`` demonstrates using the AD3552R DAC via the
-AXI QSPI interface, emphasizing hardware initialization, such as GPIOs,
-SPI, and the DAC itself. It showcases data writing operations, including
-raw sample data transfer to the DAC, with cyclic DMA capabilities. The
-example supports sine wave generation via the ``no_os_sine_lut_16``
-lookup table, with provisions for IIO integration for broader
-compatibility with Linux kernel subsystems, offering a flexible
-foundation suitable for diverse signal processing applications.
+AXI QSPI IIO Example
+~~~~~~~~~~~~~~~~~~~~
 
-In order to build the axi_qspi example, make sure you have the following
-configuration in the `Makefile: <https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad3552r_fmcz/Makefile>`__
-
-.. code-block:: bash
-
-   # Enable AXI QSPI Example
-   EXAMPLE = axi_qspi
-
-Generic SPI example
-~~~~~~~~~~~~~~~~~~~
-
-The ``generic_spi_example.c`` code functions by initializing hardware
-components like GPIOs and the SPI interface to facilitate communication
-with the AD3552R DAC. It configures SPI parameters and utilizes a sine
-wave lookup table for data generation. The code supports conditional
-compilation to enable standalone operation or integration with the IIO
-framework, which enhances data handling and device management. The main
-function orchestrates system setup, ensuring proper DAC operation by
-managing the initialization and execution of GPIO and SPI
-configurations, ultimately allowing the DAC to process and output the
-sine wave data accurately.
-
-In order to build the axi_qspi example, make sure you have the following
-configuration in the Makefile:
-
-.. code-block:: bash
-
-   # Enable Generic SPI Example
-   EXAMPLE = generic_spi
-
-IIO example
------------
-
-The IIO demo is a standard example, provided in most 
-`no-OS projects <https://github.com/analogdevicesinc/no-OS/tree/main/projects>`__,
-that launches an IIOD server on the board so that the user may connect
-to it via an IIO client. Using the IIO-Oscilloscope application, the
-user can configure the device attributes and visualize DAC sequence
-executions.
+The ``axi_qspi_iio`` variant extends the AXI QSPI example with an IIOD
+server, exposing the AD3552R DAC through the IIO framework via ``iio_ad3552r``
+and ``iio_axi_dac``. A host can connect using any libiio-compatible client
+to configure DAC attributes and trigger waveform sequences.
 
 If you are not familiar with ADI IIO Application, please take a look at:
-`IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`__ 
+`IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`__
 
 If you are not familiar with ADI IIO-Oscilloscope Client, please take a
-look at: `IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`__
+look at:
+`IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`__
 
-To build the IIOD demo, add the following flags when invoking make. This
-will build the IIOD server and the IIO section of the driver:
+Generic SPI Example
+~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: bash
+The ``generic_spi`` variant drives the AD3552R DAC using the Zynq PS SPI
+controller (no AXI offload). It initializes GPIOs and SPI, configures the
+DAC, and streams a sine wave lookup table to both channels using cyclic DMA.
 
-   # Enable IIO example for AXI QSPI
-   EXAMPLE = axi_qspi
-   IIOD = y
+Generic SPI IIO Example
+~~~~~~~~~~~~~~~~~~~~~~~
 
-   # Enable IIO example for Generic SPI
-   EXAMPLE = generic_spi
-   IIOD = y
+The ``generic_spi_iio`` variant extends the generic SPI example with an
+IIOD server, exposing the AD3552R DAC through the IIO framework via
+``iio_ad3552r``. A host can connect using any libiio-compatible client to
+configure DAC attributes and control waveform output.
+
+If you are not familiar with ADI IIO Application, please take a look at:
+`IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`__
+
+If you are not familiar with ADI IIO-Oscilloscope Client, please take a
+look at:
+`IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`__
 
 No-OS Supported Platforms
 -------------------------
@@ -222,32 +203,31 @@ No-OS Supported Platforms
 Xilinx
 ~~~~~~
 
-Hardware Used
+Used Hardware
 ^^^^^^^^^^^^^
 
-- EVAL-AD3552RFMCZ
-- ZedBoard
+* `EVAL-AD3552RFMCZ <https://www.analog.com/EVAL-AD3552RFMCZ>`_
+* `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
 Connections
-^^^^^^^^^^^^
+^^^^^^^^^^^
 
-The EVAL-AD3552RFMCZ board interfaces with the ZedBoard via connector
-P5, which handles both digital signal transmission and power
-requirements. For power, utilize the +12V_FMC pin, and activate the
-POWER_ON_FMC pin to enable the board’s regulators. I/O voltage is
-selected through the VIO pin, while grounding is managed by the GND pin.
-The SPI bus can operate in either Quad mode or the classic configuration
-controlled by the SPI_QPI pin. Voltage reference is adjustable via
-jumper J_REF for external configurations. Proper initialization requires
-setting GPIO_RESET_N and GPIO_LDAC_N pins high at startup.
+The EVAL-AD3552RFMCZ board interfaces with the ZedBoard via connector P5,
+which handles both digital signal transmission and power requirements.
 
-- Connect the :adi:`EVAL-AD3552RFMCZ` board into the ZedBoard FMC connector.
-- Connect USB UART J14 (Micro USB) to your host PC.
-- Plug your ethernet cable into the RJ45 ethernet connector(J11).
-- Plug the Power Supply into the 12V Power input connector (J20).
+* Connect the EVAL-AD3552RFMCZ board into the ZedBoard FMC connector.
+* Connect USB UART J14 (Micro USB) to your host PC.
+* Plug your ethernet cable into the RJ45 ethernet connector (J11).
+* Plug the Power Supply into the 12V Power input connector (J20).
+
+For power, utilize the +12V_FMC pin and activate the POWER_ON_FMC pin to
+enable the board's regulators. I/O voltage is selected through the VIO pin.
+The SPI bus can operate in Quad mode or classic configuration controlled by
+the SPI_QPI pin. Proper initialization requires setting GPIO_RESET_N and
+GPIO_LDAC_N pins high at startup.
 
 +-----------------------+-----------------------+-----------------------+
-| **Pin Function**      | **Pin Name**          | **Description**       |
+| Pin Function          | Pin Name              | Description           |
 +-----------------------+-----------------------+-----------------------+
 | SPI Mode Selector     | SPI_QPI1              | High level sets to    |
 |                       |                       | Quad SPI; low level   |
@@ -275,27 +255,43 @@ setting GPIO_RESET_N and GPIO_LDAC_N pins high at startup.
 | SPI SDIO Bit 3        | SPI_SDIO31            | SDIO3 in Quad SPI     |
 |                       |                       | mode.                 |
 +-----------------------+-----------------------+-----------------------+
-| **Special Purpose     |                       |                       |
-| Pins**                |                       |                       |
-+-----------------------+-----------------------+-----------------------+
 | Load DAC Data         | /LDAC1                | Load DAC data.        |
 +-----------------------+-----------------------+-----------------------+
-| Reset                 | /RESET1               | Reset signal to       |
-|                       |                       | initialize the board. |
+| Reset                 | /RESET1               | Reset signal.         |
 +-----------------------+-----------------------+-----------------------+
 | Alert                 | /ALERT1               | Indicates errors or   |
 |                       |                       | alerts.               |
 +-----------------------+-----------------------+-----------------------+
 
+The UART console appears on the ZedBoard USB-UART port at 115200 baud, 8N1.
+
 Build Command
-~~~~~~~~~~~~~
+^^^^^^^^^^^^^
+
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``axi_qspi``,
+``axi_qspi_iio``, ``generic_spi``, ``generic_spi_iio``.
+Available boards: ``zed``.
+
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
 
 .. code-block:: bash
 
-   cp <SOME_PATH>/system_top.xsa .
-   # to delete current build
-   make reset PLATFORM=xilinx
-   # to build the basic project
-   make EXAMPLE=axi_qspi PLATFORM=xilinx
-   # to flash the code
-   make run
+   # Source the Vitis environment (sets XILINX_VITIS and adds tools to PATH)
+   source /path/to/Vitis/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   $env:XILINX_VITIS = "<C:\path\to\Vitis>"
+
+   cd no-OS
+
+   # build the example on the ZedBoard (replace --variant as needed)
+   python tools/scripts/no_os_build.py build \
+      --project ad3552r_fmcz --variant axi_qspi --board zed \
+      --hardware /path/to/system_top.xsa
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad3552r_fmcz --variant axi_qspi --board zed \
+      --hardware /path/to/system_top.xsa \
+      --probe openocd --flash
