@@ -1,0 +1,14 @@
+menu "max78000 Configuration"
+
+choice MAX78000_EXAMPLE
+	prompt "Example variant"
+	default MAX78000_BASIC_EXAMPLE
+
+config MAX78000_BASIC_EXAMPLE
+	bool "Basic UART example"
+	help
+	  Simple example that prints a message over UART.
+
+endchoice
+
+endmenu
