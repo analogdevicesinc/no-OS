@@ -1,0 +1,15 @@
+menu "adaq7980_sdz Configuration"
+
+choice ADAQ7980_SDZ_EXAMPLE
+	prompt "Example variant"
+	default ADAQ7980_SDZ_DEMO_EXAMPLE
+
+config ADAQ7980_SDZ_DEMO_EXAMPLE
+	bool "Demo"
+	help
+	  Basic demo that initializes the ADAQ7980 ADC using SPI Engine offload
+	  and reads ADC samples using AXI DMA.
+
+endchoice
+
+endmenu

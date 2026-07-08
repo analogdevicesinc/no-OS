@@ -1,5 +1,5 @@
 ADAQ7980_SDZ no-OS Example Project
-==================================
+===================================
 
 .. no-os-doxygen::
 
@@ -65,21 +65,16 @@ Board Connectors
 * **J9, J10** -- Settings for on-board and external reference voltages
 * **J13, J14** -- Supply source settings for V_SDP and VDRIVE
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
-The initialization data used in the examples is taken out from the
+The initialization data used in the examples is taken from the
 `Project Source Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adaq7980_sdz/src>`__.
 
-Demo example
+Demo Example
 ~~~~~~~~~~~~
 
-The example project initializes the ADAQ7980 device using the SPI Engine
+The demo example initializes the ADAQ7980 device using the SPI Engine
 IP core and configures the AXI PWM generator to produce the CNV
 (conversion start) trigger signal at the desired sampling rate. The SPI
 Engine offload mode is then used to perform continuous high-speed ADC
@@ -98,7 +93,7 @@ Used Hardware
 ^^^^^^^^^^^^^
 
 * `EVAL-ADAQ7980SDZ <https://www.analog.com/EVAL-ADAQ7980SDZ>`_
-* ZedBoard
+* `ZedBoard <https://www.avnet.com/wps/portal/us/products/avnet-boards/avnet-board-families/zedboard/>`_
 
 Connections
 ^^^^^^^^^^^
@@ -111,13 +106,33 @@ acquisition. All digital logic levels are 3.3 V.
 Build Command
 ^^^^^^^^^^^^^
 
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``demo``.
+Available boards: ``zed``.
+
+A Xilinx XSA hardware description file is required. Pass its path via
+the ``--hardware`` flag (local dev) or set the ``HARDWARE`` environment
+variable.
+
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
+
 .. code-block:: bash
 
-   # copy the Xilinx hardware description file
-   cp <SOME_PATH>/system_top.xsa .
-   # to delete current build
-   make reset
-   # to build the project
-   make
-   # to flash the code
-   make run
+   # Source the Vitis environment (adjust path to your installation)
+   source /path/to/Vitis/2025.1/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   & "C:\path\to\Vitis\2025.1\settings64.bat"
+
+   cd no-OS
+
+   # Build the demo example for ZedBoard (supply your own .xsa)
+   python tools/scripts/no_os_build.py build \
+       --project adaq7980_sdz --variant demo --board zed \
+       --hardware /path/to/system_top.xsa
+
+   # Build and flash via JTAG
+   python tools/scripts/no_os_build.py build \
+       --project adaq7980_sdz --variant demo --board zed \
+       --hardware /path/to/system_top.xsa \
+       --probe openocd --flash
