@@ -219,6 +219,14 @@
 #define ADIOL100_LPARTIM_MSK            NO_OS_GENMASK(13, 8)
 #define ADIOL100_LPAR_MSK               NO_OS_GENMASK(3, 0)
 
+/* Watchdog bit masks (0x000F) */
+#define ADIOL100_WDGTIMEBASE_MSK        NO_OS_GENMASK(11, 10)
+#define ADIOL100_WDGTIME_MSK            NO_OS_GENMASK(9, 4)
+#define ADIOL100_WDGLOCK                NO_OS_BIT(3)
+#define ADIOL100_WDGMODE                NO_OS_BIT(2)
+#define ADIOL100_WDGENABLE              NO_OS_BIT(1)
+#define ADIOL100_WDGCLEAR               NO_OS_BIT(0)
+
 /* ClockCfg bit masks (0x1F01) */
 #define ADIOL100_SPICRCEN               NO_OS_BIT(7)
 #define ADIOL100_CLKOEN                 NO_OS_BIT(4)
@@ -309,6 +317,27 @@ enum adiol100_ins_chks {
 enum adiol100_framer {
     ADIOL100_FRAMER_DIS = 0,
     ADIOL100_FRAMER_EN  = 1,
+};
+
+enum adiol100_wdg_timebase {
+    ADIOL100_WDG_100US = 0,
+    ADIOL100_WDG_500US = 1,
+    ADIOL100_WDG_2MS   = 2,
+};
+
+enum adiol100_wdg_mode {
+    ADIOL100_WDG_MODE_SPI   = 0,
+    ADIOL100_WDG_MODE_CLEAR = 1,
+};
+
+enum adiol100_wdg_en {
+    ADIOL100_WDG_DIS = 0,
+    ADIOL100_WDG_EN  = 1,
+};
+
+enum adiol100_wdg_lock {
+    ADIOL100_WDG_UNLOCKED = 0,
+    ADIOL100_WDG_LOCKED   = 1,
 };
 
 enum adiol100_cq_slew_rate {
@@ -426,6 +455,21 @@ int adiol100_enable_global_irq(struct adiol100_dev *dev, uint16_t mask);
 
 int adiol100_enable_channel_irq(struct adiol100_dev *dev,
                                 enum adiol100_channel ch, uint16_t mask);
+
+int adiol100_get_fifo_status(struct adiol100_dev *dev, enum adiol100_channel ch,
+                             uint16_t *flags);
+
+int adiol100_get_status(struct adiol100_dev *dev, enum adiol100_channel ch,
+                        uint16_t *flags);
+
+int adiol100_config_watchdog(struct adiol100_dev *dev,
+                             enum adiol100_wdg_timebase timebase,
+                             uint8_t time,
+                             enum adiol100_wdg_mode mode,
+                             enum adiol100_wdg_en enable,
+                             enum adiol100_wdg_lock lock);
+
+int adiol100_clear_watchdog(struct adiol100_dev *dev);
 
 int adiol100_estcom(struct adiol100_dev *dev, enum adiol100_channel ch);
 

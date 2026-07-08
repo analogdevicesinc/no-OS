@@ -646,6 +646,56 @@ int adiol100_enable_channel_irq(struct adiol100_dev *dev,
     return adiol100_write(dev, reg, mask);
 }
 
+int adiol100_get_fifo_status(struct adiol100_dev *dev, enum adiol100_channel ch,
+                             uint16_t *flags)
+{
+    uint16_t reg;
+
+    if (ch == ADIOL100_CH_A)
+        reg = ADIOL100_REG_RXFIFOSTAT_A;
+    else
+        reg = ADIOL100_REG_RXFIFOSTAT_B;
+
+    return adiol100_read(dev, reg, flags);
+}
+
+int adiol100_get_status(struct adiol100_dev *dev, enum adiol100_channel ch,
+                        uint16_t *flags)
+{
+    uint16_t reg;
+
+    if (ch == ADIOL100_CH_A)
+        reg = ADIOL100_REG_STATUS_A;
+    else
+        reg = ADIOL100_REG_STATUS_B;
+
+    return adiol100_read(dev, reg, flags);
+}
+
+int adiol100_config_watchdog(struct adiol100_dev *dev,
+                             enum adiol100_wdg_timebase timebase,
+                             uint8_t time,
+                             enum adiol100_wdg_mode mode,
+                             enum adiol100_wdg_en enable,
+                             enum adiol100_wdg_lock lock)
+{
+    uint16_t val = 0;
+
+    val |= no_os_field_prep(ADIOL100_WDGTIMEBASE_MSK, timebase);
+    val |= no_os_field_prep(ADIOL100_WDGTIME_MSK, time);
+    val |= no_os_field_prep(ADIOL100_WDGMODE, mode);
+    val |= no_os_field_prep(ADIOL100_WDGENABLE, enable);
+    val |= no_os_field_prep(ADIOL100_WDGLOCK, lock);
+
+    return adiol100_write(dev, ADIOL100_REG_WATCHDOG, val);
+}
+
+int adiol100_clear_watchdog(struct adiol100_dev *dev)
+{
+    return adiol100_update(dev, ADIOL100_REG_WATCHDOG,
+                           ADIOL100_WDGCLEAR, ADIOL100_WDGCLEAR);
+}
+
 int adiol100_estcom(struct adiol100_dev *dev, enum adiol100_channel ch)
 {
     uint16_t reg;
