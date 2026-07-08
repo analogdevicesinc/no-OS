@@ -110,3 +110,11 @@ endif()
 set(CMAKE_C_FLAGS_INIT   "${_xl_cpu_flags}")
 set(CMAKE_CXX_FLAGS_INIT "${_xl_cpu_flags}")
 set(CMAKE_ASM_FLAGS_INIT "${_xl_cpu_flags}")
+
+# Emit the executable as <project>.elf, matching the maxim/stm32/pico
+# toolchains. The CI success gate (build_projects.py) and FlashTools
+# (${TARGET_NAME}.elf) both key off the .elf name; .hex/.bin are derived from
+# $<TARGET_FILE:...> so they are unaffected by the suffix.
+set(CMAKE_EXECUTABLE_SUFFIX_ASM ".elf")
+set(CMAKE_EXECUTABLE_SUFFIX_C   ".elf")
+set(CMAKE_EXECUTABLE_SUFFIX_CXX ".elf")

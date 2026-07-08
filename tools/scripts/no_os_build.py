@@ -199,6 +199,41 @@ def discover_boards_for_variant(repo_root, project, variant):
     return [], "none"
 
 
+def _read_conf_string(conf_path, symbol):
+    """Return the value of a CONFIG_<symbol>="..." assignment in a .conf file.
+
+    Kconfig string fragments look like CONFIG_FOO="bar". Returns the unquoted
+    value, or None if the file or symbol is absent. Deliberately a plain text
+    scan so it runs before (and without) any cmake/Kconfig invocation.
+    """
+    if not conf_path.is_file():
+        return None
+    key = f"CONFIG_{symbol}"
+    for line in conf_path.read_text().splitlines():
+        line = line.strip()
+        if line.startswith("#") or "=" not in line:
+            continue
+        name, _, value = line.partition("=")
+        if name.strip() == key:
+            return value.strip().strip('"')
+    return None
+
+
+def xilinx_hardware_name(repo_root, project, variant, board):
+    """Compose the HDL hardware name for a Xilinx (project, variant, board).
+
+    The name is <CONFIG_XILINX_HDL_DESIGN>_<board> (e.g. adv7511_zed), matching
+    the artifact-server folder that holds system_top.xsa. The design prefix
+    lives in the variant .conf; the board suffix is the CMake board. Returns
+    None when the variant declares no design (i.e. not a Xilinx build).
+    """
+    conf = repo_root / "projects" / project / f"{variant}.conf"
+    design = _read_conf_string(conf, "XILINX_HDL_DESIGN")
+    if not design:
+        return None
+    return f"{design}_{board}"
+
+
 def discover_all_combinations(repo_root, presets):
     """Build the full list of valid (project, variant, board, platform) tuples."""
     # Map board name -> preset info
@@ -308,7 +343,7 @@ def append_log(log_path, section, result):
         f.write("\n")
 
 
-def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None, flash=False, fresh=False):
+def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None, flash=False, fresh=False, hardware=None):
     """Run cmake configure + build (and optionally flash) for a single combination.
 
     Returns (combo, success, detail). On failure, detail is the error message.
@@ -343,6 +378,8 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
         configure_cmd.append("--fresh")
     if probe:
         configure_cmd.append(f"-DPROBE={probe}")
+    if hardware:
+        configure_cmd.append(f"-DHARDWARE={Path(hardware).resolve()}")
 
     build_cmd = [
         "cmake",
@@ -494,6 +531,8 @@ def cmd_build(args, repo_root, presets):
                     configure_cmd.append("--fresh")
                 if args.probe:
                     configure_cmd.append(f"-DPROBE={args.probe}")
+                if args.hardware:
+                    configure_cmd.append(f"-DHARDWARE={Path(args.hardware).resolve()}")
 
                 if args.dry_run:
                     print(f"  [{idx}/{total}] {quote_cmd(configure_cmd)}")
@@ -630,6 +669,7 @@ def cmd_build(args, repo_root, presets):
             combo_result, success, msg = run_build(
                 repo_root, combo, build_dir_base, args.jobs, args.clean, args.dry_run,
                 probe=args.probe, flash=args.flash, fresh=args.fresh,
+                hardware=args.hardware,
             )
 
             if args.dry_run:
@@ -703,6 +743,11 @@ def main():
         "--probe",
         choices=["jlink", "openocd"],
         help="Debug probe type; sets -DPROBE=<value> at configure time",
+    )
+    build_parser.add_argument(
+        "--hardware",
+        help="Path to a Xilinx .xsa hardware file; passed to cmake as "
+             "-DHARDWARE=<abs path> (required for xilinx builds)",
     )
     build_parser.add_argument(
         "--flash",

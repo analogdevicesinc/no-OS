@@ -13,6 +13,9 @@ no_os_sources_ifdef(CONFIG_GPIO_IRQ_XILINX ${CMAKE_CURRENT_SOURCE_DIR}/xilinx_gp
 no_os_sources_ifdef(CONFIG_TIMER_XILINX    ${CMAKE_CURRENT_SOURCE_DIR}/xilinx_timer.c)
 
 # xilinx_delay.c and xilinx_axi_io.c are used unconditionally by the platform.
+# xilinx_axi_io.c provides no_os_axi_io_read/write, needed by every axi_core
+# driver (axi_dmac, spi_engine, axi_adc_core, ...).
 target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/xilinx_delay.c)
+target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/xilinx_axi_io.c)
 
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

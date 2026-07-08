@@ -19,12 +19,13 @@ from no_os_build import (
 	discover_all_combinations,
 	filter_combinations,
 	combo_build_dir,
+	xilinx_hardware_name,
 )
 
 # Platforms handled by the CMake build system (the only ones with board
 # presets under board_configs/). A project's builds.json is expected to carry
 # only the platforms NOT in this set; its CMake combos cover these.
-CMAKE_PLATFORMS = {'maxim', 'stm32', 'pico', 'aducm3029'}
+CMAKE_PLATFORMS = {'maxim', 'stm32', 'pico', 'aducm3029', 'xilinx'}
 
 TGREEN =  '\033[32m' # Green Text	
 TBLUE =  '\033[34m' # Green Text	
@@ -350,14 +351,19 @@ class BuildConfig:
 		return 0
 
 def build_cmake_project(noos, project, _platform, _build_name, export_dir,
-			log_dir, cmake_builds_dir):
-	"""Build the CMake/Kconfig (Maxim/STM32) side of a project.
+			log_dir, cmake_builds_dir, builds_dir):
+	"""Build the CMake/Kconfig (Maxim/STM32/Pico/Xilinx) side of a project.
 
 	Discovers the project's project/variant/board combinations from the board
 	presets and per-project *.conf files (reusing no_os_build.py for discovery)
 	and builds each by invoking no_os_build.py as a subprocess, so the CI console
 	shows the invocation while its output is redirected into the per-combination
 	log.
+
+	For xilinx combos the per-(variant, board) hardware name is resolved and its
+	downloaded .xsa (in <builds_dir>/hardware/, placed by get_hardware) is passed
+	through to cmake as --hardware. builds_dir is the hardware-cache root (the
+	same dir configfile_and_download_all_hw populated).
 
 	Returns 1 if all combinations succeeded, 0 if any failed, or None if there
 	were no combinations for the requested platform (so the caller can tell a
@@ -407,6 +413,33 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		if elf.is_file():
 			elf.unlink()
 
+		# Xilinx builds need the board .xsa: resolve the hardware name for this
+		# (variant, board) and pass the downloaded file through to cmake. The
+		# .xsa was fetched into <builds_dir>/new_hardware/<name>/system_top.xsa
+		# by configfile_and_download_all_hw; get_hardware copies/renames it into
+		# <builds_dir>/hardware/<name>.xsa and returns that path.
+		hardware_arg = ""
+		if platform == 'xilinx':
+			hw_name = xilinx_hardware_name(Path(noos), project, variant, board)
+			if not hw_name:
+				log_err("ERROR")
+				log("%s/%s/%s: no CONFIG_XILINX_HDL_DESIGN in %s.conf" % (
+					project, variant, board, variant))
+				ERR = 1
+				ok = 0
+				os.environ.clear(); os.environ.update(env)
+				continue
+			(hardware_file, _new_hdf, hw_err) = get_hardware(hw_name, 'xilinx', builds_dir)
+			if hw_err != 0 or not hardware_file:
+				log_err("ERROR")
+				log("%s: could not resolve .xsa for hardware '%s' (not downloaded?)" % (
+					project, hw_name))
+				ERR = 1
+				ok = 0
+				os.environ.clear(); os.environ.update(env)
+				continue
+			hardware_arg = " --hardware %s" % hardware_file
+
 		# Delegate the actual build to no_os_build.py. Suppress its
 		# spinner/summary (not useful on CI); the real cmake output lands in
 		# build.log inside the build dir and is copied into dst_log below.
@@ -416,9 +449,9 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		# repo root, which would not match the build_dir we clean/probe here.
 		build_cmd = ("python3 %s/tools/scripts/no_os_build.py build"
 			     " --project %s --variant %s --board %s"
-			     " --build-dir %s --jobs %d --probe openocd --fresh"
+			     " --build-dir %s --jobs %d --probe openocd --fresh%s"
 			     % (noos, project, variant, board,
-				os.path.abspath(build_dir_base), jobs))
+				os.path.abspath(build_dir_base), jobs, hardware_arg))
 		log(build_cmd)
 		sys.stdout.flush()
 		err = os.system(build_cmd + ' > /dev/null 2>&1')
@@ -494,7 +527,7 @@ def main():
 			cmake_builds_dir = builds_dir + '_cmake'
 			ensure_dir(cmake_builds_dir)
 			cmake_ok = build_cmake_project(noos, project, _platform, _build_name,
-						 export_dir, log_dir, cmake_builds_dir)
+						 export_dir, log_dir, cmake_builds_dir, builds_dir)
 			if cmake_ok is not None:
 				status = 'OK' if cmake_ok == 1 else 'Fail'
 				os.system('echo Project %20s -- %s >> %s' % (project, status, all_status))
