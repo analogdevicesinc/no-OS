@@ -1,0 +1,15 @@
+menu "ad5766-sdz Configuration"
+
+choice AD5766_SDZ_EXAMPLE
+	prompt "Example variant"
+	default AD5766_SDZ_EXAMPLE_EXAMPLE
+
+config AD5766_SDZ_EXAMPLE_EXAMPLE
+	bool "Example"
+	help
+	  Basic example that initializes the AD5766 DAC, configures the
+	  SPI Engine offload and AXI DMAC, and drives the DAC outputs.
+
+endchoice
+
+endmenu
