@@ -1,0 +1,23 @@
+menu "ad796x_fmcz Configuration"
+
+choice AD796X_FMCZ_EXAMPLE
+	prompt "Example variant"
+	default AD796X_FMCZ_IIO_EXAMPLE
+
+config AD796X_FMCZ_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the AD796x ADC through the IIO framework
+	  via iio_axi_adc and AXI DMAC, enabling host-side data capture over
+	  UART.
+
+config AD796X_FMCZ_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Basic example that initializes the AD796x ADC via AXI ADC core,
+	  AXI DMAC, and AXI PWM generator and captures conversion data.
+
+endchoice
+
+endmenu

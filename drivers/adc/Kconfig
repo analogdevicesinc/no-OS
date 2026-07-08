@@ -227,7 +227,6 @@ config ADC_IIO_AD7799
     default n
 
 config ADC_AD796X
-    depends on SPI
     bool "Enable AD796X ADC driver"
     default n
 

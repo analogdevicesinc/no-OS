@@ -1,110 +1,124 @@
 AD796x no-OS Example Project
-============================
+=============================
 
 .. no-os-doxygen::
 
-
-Contents
---------
-
 .. contents:: Table of Contents
-	:depth: 3
+    :depth: 3
 
 Supported Evaluation Boards
 ---------------------------
 
-* `AD796xDC1-EVALZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-AD796x.html#eb-documentation>`_
+* `EVAL-AD7960FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7960.html>`_
 
 Overview
 --------
 
-The EVAL-AD7960FMCZ is a fully featured evaluation Kit designed to demonstrate
-the performance of the low power 18-bit,5 MSPS PulSAR® Differential ADC AD7960.
+The EVAL-AD7960FMCZ is a fully featured evaluation kit designed to demonstrate
+the performance of the AD7960, a low-power 18-bit, 5 MSPS PulSAR differential
+ADC. The device uses an LVDS serial interface for high-speed data transfer and
+is configured through a simple 3-wire SPI port. The evaluation board connects to
+a Xilinx carrier board (such as the ZedBoard) via the FMC LPC connector, where
+an AXI ADC core, AXI DMAC, and AXI PWM generator on the FPGA manage data
+capture, conversion triggering, and clocking.
 
-This board operates in conjunction with the Zedboard. The evaluation software
-is provided to enable the user to perform detailed analysis of the AD7960's
-performance. The technical user guide includes the detailed description of
-the operation and set up of the evaluation board and software when operated
-with the System Demonstration Platform board.
+Applications
+------------
 
-No-OS Build Setup
------------------
+* High-speed data acquisition systems
+* Communications and instrumentation
+* Medical imaging
+* Radar and electronic warfare
+* Test and measurement
 
-Please see: https://wiki.analog.com/resources/no-os/build
+Hardware Specifications
+-----------------------
+
+Power Supply Requirements
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The EVAL-AD7960FMCZ is powered from the carrier board FMC connector.
+No external power supply is required when connected to a compatible carrier.
+
+On-board Connectors
+~~~~~~~~~~~~~~~~~~~
+
+========= =========================================================
+Connector Description
+========= =========================================================
+P1        FMC LPC connector (underside) that mates with carrier
+J1, J2    SMA connectors for differential analog input (IN+, IN-)
+========= =========================================================
 
 No-OS Supported Examples
 ------------------------
 
-The initialization data used in the examples is taken out from:
-`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad796x_fmcz/src/common>`_
+This project is organized around the no-OS variant-based build flow.
+Selecting a variant at build time (``--variant <name>``) chooses which
+application is compiled. Shared initialization data is defined in
+`src <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad796x_fmcz/src>`__.
 
-The macros used in Common Data are defined in platform specific files found in:
-`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad796x_fmcz/src/platform>`_
+IIO Example
+~~~~~~~~~~~
 
-Basic example
-^^^^^^^^^^^^^
-
-This is a simple example that initializes the AD796x, collects a numer of samples
-and prints the result on the uart.
-
-In order to build the basic example make sure you have the following configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad796x_fmcz/Makefile>`_
-
-.. code-block:: bash
-
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = y
-	IIO_EXAMPLE = n
-
-IIO example
-^^^^^^^^^^^
-
-This project is actually a IIOD demo for EVAL-AD7960FMCZ evaluation board.
-The project launches a IIOD server on the board so that the user may connect
-to it via an IIO client.
-Using IIO-Oscilloscope, the user can configure the IMU and view the measured data on a plot.
+The IIO example exposes the AD796x ADC through the IIO framework using
+iio_axi_adc and AXI DMAC, enabling host-side data capture over UART.
+The project launches an IIOD server so that the user may connect via an
+IIO client such as IIO-Oscilloscope or Scopy.
 
 If you are not familiar with ADI IIO Application, please take a look at:
-`IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
+:dokuwiki:`IIO No-OS </resources/tools-software/no-os-software/iio>`
 
-If you are not familiar with ADI IIO-Oscilloscope Client, please take a look at:
-`IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
-
-The No-OS IIO Application together with the No-OS IIO AD796x driver take care of
-all the back-end logic needed to setup the IIO server.
-
-This example initializes the IIO device and calls the IIO app as shown in:
-`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad796x_fmcz/src/examples/iio_example>`_
-
-In order to build the IIO project make sure you have the following configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad796x_fmcz/Makefile>`_
-
-.. code-block:: bash
-
-        # Select the example you want to enable by choosing y for enabling and n for disabling
-        BASIC_EXAMPLE = n
-        IIO__EXAMPLE = y
+If you are not familiar with ADI IIO-Oscilloscope Client, please take a
+look at:
+:dokuwiki:`IIO Oscilloscope </resources/tools-software/linux-software/iio_oscilloscope>`
 
 No-OS Supported Platforms
 -------------------------
 
-Xilinx platorm
-^^^^^^^^^^^^^^
+Xilinx
+~~~~~~
 
-**Used hardware**
+Used Hardware
+^^^^^^^^^^^^^
 
-* `eval-ad7960 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7960.html>`_
-* `Zedboard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
+* `EVAL-AD7960FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7960.html>`_
+* `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
+Connections
+^^^^^^^^^^^
 
-**Build Command**
+Mount the EVAL-AD7960FMCZ to the ZedBoard via the FMC LPC connector. The AXI
+ADC core on the Zynq PL communicates with the AD796x through the LVDS interface
+routed via the FMC connector. Connect a micro-USB cable to the ZedBoard UART
+(115200 baud) to interact with the IIO server.
+
+Build Command
+^^^^^^^^^^^^^
+
+The Xilinx platform uses the CMake/Ninja build system via the ``no_os_build.py``
+helper script. Available variants: ``iio``.
+Available boards: ``zed``.
+
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
 
 .. code-block:: bash
 
-        cp <SOME_PATH>/system_top.xsa .
-        # to delete current build
-        make reset
-        # to build the project
-        make
-        # to flash the code
-        make run
+   # Source the Vitis environment (adjust path for your installation):
+   source ~/.xilinx/2025.1/Vitis/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   & "$env:XILINX_VITIS\settings64.bat"
+
+   cd no-OS
+
+   # Build the IIO example on zed
+   python tools/scripts/no_os_build.py build \
+      --project ad796x_fmcz --variant iio --board zed \
+      --hardware /path/to/pulsar_lvds_adc_zed/system_top.xsa
+
+   # Build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad796x_fmcz --variant iio --board zed \
+      --hardware /path/to/pulsar_lvds_adc_zed/system_top.xsa \
+      --probe openocd --flash
