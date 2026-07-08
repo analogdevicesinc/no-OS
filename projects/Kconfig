@@ -151,4 +151,5 @@ source "projects/ad7124-8pmdz/Kconfig"
 source "projects/fmcdaq2/Kconfig"
 source "projects/fmcdaq3/Kconfig"
 source "projects/hello_world/Kconfig"
+source "projects/adiol100/Kconfig"
 endmenu
