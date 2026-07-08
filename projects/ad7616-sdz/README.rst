@@ -1,15 +1,15 @@
 AD7616-SDZ no-OS Example Project
-================================
+=================================
 
 .. no-os-doxygen::
 
-.. contents::
-	:depth: 3
+.. contents:: Table of Contents
+    :depth: 3
 
 Supported Evaluation Boards
-----------------------------
+---------------------------
 
-* :adi:`EVAL-AD7616SDZ`
+* `EVAL-AD7616SDZ <https://www.analog.com/EVAL-AD7616SDZ>`_
 
 Overview
 --------
@@ -30,7 +30,7 @@ ADCs in applications such as power-line monitoring, motor control,
 instrumentation, and data acquisition systems.
 
 Applications
--------------
+------------
 
 * Power line monitoring
 * Protective relays
@@ -71,13 +71,8 @@ J9         External VCC power connector
 J10        120-way connector for the EVAL-SDP-CB1Z
 =========  ===================================================
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
--------------------------
+------------------------
 
 The initialization data used in the examples is taken out from:
 `Project Data Source Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7616-sdz/src>`_
@@ -98,13 +93,15 @@ No-OS Supported Platforms
 Xilinx Platform
 ~~~~~~~~~~~~~~~
 
-**Used Hardware**
+Used Hardware
+^^^^^^^^^^^^^
 
 * `EVAL-AD7616SDZ <https://www.analog.com/EVAL-AD7616SDZ>`_
 * `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 * SDP-I-FMC interposer board
 
-**Connections**
+Connections
+^^^^^^^^^^^
 
 * Connect the EVAL-AD7616SDZ to the SDP-I-FMC interposer using the
   provided headers or cables.
@@ -116,6 +113,8 @@ Xilinx Platform
   via its power jack (J7).
 * Ensure both boards share a common ground connection to avoid
   communication issues.
+* Connect a micro-USB cable from the ZedBoard USB-UART port (J14) to
+  your PC for serial console output (115200 baud, 8N1).
 
 .. note::
 
@@ -127,14 +126,32 @@ Xilinx Platform
      * For **Parallel Interface**: Ensure SL5 is unmounted.
      * For **Serial Interface**: Ensure SL5 is mounted.
 
-**Build Command**
+Build Command
+^^^^^^^^^^^^^
+
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``demo``.
+Available boards: ``zed``.
+
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
 
 .. code-block:: bash
 
-   cp <SOME_PATH>/system_top.xsa .
-   # to delete current build
-   make reset
-   # to build the project
-   make
-   # to flash the code
-   make run
+   # source the Vitis environment (adjust path to your installation)
+   source /path/to/Vitis/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   & "C:\path\to\Vitis\settings64.bat"
+
+   cd no-OS
+
+   # build the demo example on the ZedBoard
+   python tools/scripts/no_os_build.py build \
+      --project ad7616-sdz --variant demo --board zed \
+      --hardware /path/to/ad7616_sdz_zed/system_top.xsa
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad7616-sdz --variant demo --board zed \
+      --hardware /path/to/ad7616_sdz_zed/system_top.xsa \
+      --probe openocd --flash
