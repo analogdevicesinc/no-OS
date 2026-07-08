@@ -1,0 +1,15 @@
+menu "ad719x Configuration"
+
+choice AD719X_EXAMPLE
+	prompt "Example variant"
+	default AD719X_DUMMY_EXAMPLE
+
+config AD719X_DUMMY_EXAMPLE
+	bool "Dummy example"
+	help
+	  Basic dummy example that initializes the AD719X ADC, reads temperature
+	  and a channel average over 100 samples, and prints the results.
+
+endchoice
+
+endmenu

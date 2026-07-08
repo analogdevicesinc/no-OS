@@ -4,7 +4,7 @@ AD719X no-OS Example Project
 .. no-os-doxygen::
 
 .. contents:: Table of Contents
-	:depth: 3
+    :depth: 3
 
 Supported Evaluation Boards
 ---------------------------
@@ -19,6 +19,11 @@ ultralow noise 24-bit sigma-delta ADC. The on-chip low noise gain
 stage means that signals of small amplitude can interface directly to
 the ADC. The internal clock option provides a compact solution for low
 bandwidth requirements.
+
+The AD7190 operates from an analog supply voltage (AVDD) between 4.75V
+and 5.25V and a digital supply (DVDD) from 2.7V to 5.25V. It provides
+on-chip programmable gain amplification, a differential reference input,
+and a sinc filter for simultaneous 50 Hz/60 Hz rejection.
 
 Applications
 ------------
@@ -44,8 +49,8 @@ The ADC operates on an analog supply voltage (AVDD) between 4.75V and
 5.25V, and a digital supply voltage (DVDD) ranging from 2.7V to 5.25V,
 consuming about 6 mA.
 
-Connectors
-~~~~~~~~~~
+On-board Connectors
+~~~~~~~~~~~~~~~~~~~
 
 ============================  =====================================================
 Connector                     Description
@@ -59,11 +64,6 @@ Digital Logic                  Serial interface for control and data communicati
 Temp Sensor                    On-board temperature monitoring
 Clock Circuitry                Timing signal inputs for ADC operations
 ============================  =====================================================
-
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
 
 No-OS Supported Examples
 ------------------------
@@ -84,28 +84,23 @@ continuously averages 100 samples from the ADC to calculate a mean
 voltage. The temperature and average voltage are then displayed to
 validate basic ADC functionality.
 
-In order to build the dummy example, add the following flags to the
-make command:
-
-.. code-block:: bash
-
-	DUMMY_EXAMPLE=y
-
 No-OS Supported Platforms
--------------------------
+--------------------------
 
-Xilinx
-~~~~~~
+Xilinx Platform
+~~~~~~~~~~~~~~~
 
-**Used Hardware**
+Used Hardware
+^^^^^^^^^^^^^
 
 * `EVAL-AD7190ASDZ <https://www.analog.com/EVAL-AD7190ASDZ>`_
 * `ZedBoard <https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html>`_
 
-**Connections**
+Connections
+^^^^^^^^^^^
 
 Connect the SPI lines of the EVAL-AD7190ASDZ to the ZedBoard's PMOD
-header using jumper wires. The ZedBoard operates at a 3.3V logic level.
+header using jumper wires. The ZedBoard operates at 3.3V logic level.
 
 +-----------------------+-----------------------+-----------------------+
 | AD7190 Signal         | ZedBoard              | Notes / Requirements  |
@@ -127,13 +122,35 @@ header using jumper wires. The ZedBoard operates at a 3.3V logic level.
 | GND                   | Ground                | Connect to board GND  |
 +-----------------------+-----------------------+-----------------------+
 
-**Build Command**
+Connect a micro-USB cable from the ZedBoard USB-UART port (J14) to
+your PC for serial console output (115200 baud, 8N1).
+
+Build Command
+^^^^^^^^^^^^^
+
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``dummy_example``.
+Available boards: ``zed``.
+
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
 
 .. code-block:: bash
 
-	# to delete current build
-	make reset
-	# to build the project
-	make
-	# to flash the code
-	make run
+   # source the Vitis environment (adjust path to your installation)
+   source /path/to/Vitis/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   & "C:\path\to\Vitis\settings64.bat"
+
+   cd no-OS
+
+   # build the dummy example on the ZedBoard
+   python tools/scripts/no_os_build.py build \
+      --project ad719x --variant dummy_example --board zed \
+      --hardware /path/to/adv7511_zed/system_top.xsa
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad719x --variant dummy_example --board zed \
+      --hardware /path/to/adv7511_zed/system_top.xsa \
+      --probe openocd --flash
