@@ -10,10 +10,31 @@ menuconfig XILINX
 
 if XILINX
 
+config XILINX_HDL_DESIGN
+	string "HDL design name for the CI .xsa download"
+	default ""
+	help
+	  Name of the HDL design whose exported system_top.xsa this project
+	  builds against (e.g. "adv7511", "pulsar_adc", "adrv9009"). The build
+	  tooling composes the artifact server folder name as
+	  <this>_<board> (e.g. adv7511_zed) and downloads system_top.xsa from
+	  the sdg-hdl Cloudsmith repo for CI builds. The board suffix comes from
+	  the CMake board/preset, so only the design prefix belongs here. This
+	  symbol is read by the build scripts only; it does not affect compiled
+	  sources.
+
 config UART_XILINX
 	bool "Enable Xilinx UART driver"
 	depends on UART
+	select IRQ
+	select IRQ_XILINX
 	default n
+	help
+	  The Xilinx PS UART driver is interrupt-driven (it calls
+	  no_os_irq_ctrl_init and references xil_irq_ops unconditionally on
+	  Zynq/ZynqMP), so it requires the IRQ subsystem and the Xilinx IRQ
+	  platform driver. Select them here so a project enabling UART_XILINX
+	  does not have to remember the dependency.
 
 config SPI_XILINX
 	bool "Enable Xilinx SPI driver"

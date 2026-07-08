@@ -32,6 +32,30 @@ for dir in os.listdir(NOOS_PATH + '/projects'):
                     for hardware_value in params['hardware']:
                         list_hardware.append(hardware_value)
 
+# CMake-migrated Xilinx projects carry no 'hardware' array in builds.json (the
+# xilinx entry is removed on migration). Their .xsa is instead described by
+# CONFIG_XILINX_HDL_DESIGN in the variant .conf, combined with the CMake board
+# to form <design>_<board> (e.g. adv7511_zed). Collect those too so migrated
+# projects stay in the bulk download set. Guarded: a discovery import failure
+# must not break the legacy builds.json path above.
+try:
+    sys.path.insert(0, os.path.join(NOOS_PATH, 'tools', 'scripts'))
+    from no_os_build import (
+        discover_projects, discover_variants,
+        discover_boards_for_variant, xilinx_hardware_name,
+    )
+    from pathlib import Path
+    _root = Path(NOOS_PATH)
+    for project in discover_projects(_root):
+        for variant in discover_variants(_root, project):
+            boards, _ = discover_boards_for_variant(_root, project, variant)
+            for board in boards:
+                name = xilinx_hardware_name(_root, project, variant, board)
+                if name:
+                    list_hardware.append(name)
+except Exception as e:
+    log_warn("Could not scan CMake .conf for xilinx hardware: %s" % e)
+
 new_harware_dir= os.path.join(BUILD_PATH, NEW_HW_DIR_NAME)
 os.system("rm -rf %s/*" % (new_harware_dir))
 unique_hardware_list = set(list_hardware)
