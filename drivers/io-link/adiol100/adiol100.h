@@ -35,12 +35,307 @@
 #define __ADIOL100_H_
 
 #include "no_os_spi.h"
+#include "no_os_util.h"
 #include <stdint.h>
 #include "no_os_delay.h"
+
+/* R/W direction */
+#define ADIOL100_READ                   1
+#define ADIOL100_WRITE                  0
+
+/* ExtraPage register — gateway to USER_paged map */
+#define ADIOL100_REG_EXTRAPAGE          0x001F
+#define ADIOL100_PAGED_BASE             0x1F00
+
+/* USER_direct registers — channel A */
+#define ADIOL100_REG_INTERRUPTG         0x0000
+#define ADIOL100_REG_RXFIFOSTAT_A       0x0001
+#define ADIOL100_REG_INTERRUPT_A        0x0002
+#define ADIOL100_REG_STATUS_A           0x0003
+#define ADIOL100_REG_TXRXDATA_A         0x0004
+#define ADIOL100_REG_FRAMCTRL1_A        0x0005
+#define ADIOL100_REG_FRAMCTRL2_A        0x0006
+#define ADIOL100_REG_CYCLTMR_A          0x0007
+#define ADIOL100_REG_CQSET_A            0x0009
+#define ADIOL100_REG_CQCURLIM_A         0x000A
+#define ADIOL100_REG_INTEN_A            0x000E
+#define ADIOL100_REG_LPCFG_A            0x000D
+
+/* USER_direct registers — channel B */
+#define ADIOL100_REG_RXFIFOSTAT_B       0x0011
+#define ADIOL100_REG_INTERRUPT_B        0x0012
+#define ADIOL100_REG_STATUS_B           0x0013
+#define ADIOL100_REG_TXRXDATA_B         0x0014
+#define ADIOL100_REG_FRAMCTRL1_B        0x0015
+#define ADIOL100_REG_FRAMCTRL2_B        0x0016
+#define ADIOL100_REG_CYCLTMR_B          0x0017
+#define ADIOL100_REG_CQSET_B            0x0019
+#define ADIOL100_REG_CQCURLIM_B         0x001A
+#define ADIOL100_REG_INTEN_B            0x001E
+#define ADIOL100_REG_LPCFG_B            0x001D
+
+/* USER_direct registers — global */
+#define ADIOL100_REG_WATCHDOG           0x000F
+#define ADIOL100_REG_TRIGGER            0x0010
+
+/* USER_paged registers — global */
+#define ADIOL100_REG_INTERRUPTG_EN      0x1F00
+#define ADIOL100_REG_CLOCKCFG           0x1F01
+#define ADIOL100_REG_REVISIONID         0x1F02
+#define ADIOL100_REG_DEVICEID           0x1F03
+#define ADIOL100_REG_SPIFIFO_A_BURST    0x1F04
+#define ADIOL100_REG_SPIFIFO_B_BURST    0x1F05
+#define ADIOL100_REG_LPFETPWRCFG_A      0x1F10
+#define ADIOL100_REG_LPCURRENTCFG_A     0x1F11
+#define ADIOL100_REG_LPFETPROTECT_A     0x1F12
+#define ADIOL100_REG_LPSLOPE_A          0x1F13
+#define ADIOL100_REG_LPRETRY_A          0x1F14
+#define ADIOL100_REG_LPFETPWRCFG_B      0x1F20
+#define ADIOL100_REG_LPCURRENTCFG_B     0x1F21
+#define ADIOL100_REG_LPFETPROTECT_B     0x1F22
+#define ADIOL100_REG_LPSLOPE_B          0x1F23
+#define ADIOL100_REG_LPRETRY_B          0x1F24
+
+/* FramCtrl1 bit masks (0x0005 / 0x0015) */
+#define ADIOL100_INSCHKS                NO_OS_BIT(12)
+#define ADIOL100_COMRT_MSK              NO_OS_GENMASK(7, 6)
+#define ADIOL100_ESTCOM                 NO_OS_BIT(5)
+#define ADIOL100_WUPULS                 NO_OS_BIT(4)
+#define ADIOL100_TXKEEPMSG              NO_OS_BIT(3)
+#define ADIOL100_FRAMEREN               NO_OS_BIT(2)
+#define ADIOL100_CYCLETMREN             NO_OS_BIT(1)
+#define ADIOL100_CQSEND                 NO_OS_BIT(0)
+
+/* CyclTmr bit masks (0x0007 / 0x0017) */
+#define ADIOL100_TCYCLBS_MSK            NO_OS_GENMASK(7, 6)
+#define ADIOL100_TCYCLM_MSK             NO_OS_GENMASK(5, 0)
+#define ADIOL100_CYCLTMR_MSK            NO_OS_GENMASK(7, 0)
+
+/* FramCtrl2 bit masks (0x0006 / 0x0016) */
+#define ADIOL100_CHANRST                NO_OS_BIT(15)
+#define ADIOL100_TXFIFORSTN             NO_OS_BIT(13)
+#define ADIOL100_RXFIFORSTN             NO_OS_BIT(12)
+
+/* InterruptG_En bit masks (0x1F00) */
+#define ADIOL100_EXTCLKOKINTEN          NO_OS_BIT(15)
+#define ADIOL100_WDGINTEN               NO_OS_BIT(14)
+#define ADIOL100_SPICRCERRINTEN         NO_OS_BIT(13)
+#define ADIOL100_EXTCLKMISINTEN         NO_OS_BIT(12)
+#define ADIOL100_THSHDNINTEN            NO_OS_BIT(11)
+#define ADIOL100_THWARNINTEN            NO_OS_BIT(10)
+#define ADIOL100_V24ERRINTEN            NO_OS_BIT(9)
+#define ADIOL100_V24WARNINTEN           NO_OS_BIT(8)
+
+/* InterruptG bit masks (0x0000) — bits 15:8 read-to-clear, bits 7:0 live status */
+#define ADIOL100_EXTCLKOKINT            NO_OS_BIT(15)
+#define ADIOL100_WDGINT                 NO_OS_BIT(14)
+#define ADIOL100_SPICRCERRINT           NO_OS_BIT(13)
+#define ADIOL100_EXTCLKMISINT           NO_OS_BIT(12)
+#define ADIOL100_THSHDNINT              NO_OS_BIT(11)
+#define ADIOL100_THWARNINT              NO_OS_BIT(10)
+#define ADIOL100_V24ERRINT              NO_OS_BIT(9)
+#define ADIOL100_V24WARNINT             NO_OS_BIT(8)
+#define ADIOL100_EXTCLKOKST             NO_OS_BIT(7)
+#define ADIOL100_WDGST                  NO_OS_BIT(6)
+#define ADIOL100_SPICRCERRSTST          NO_OS_BIT(5)
+#define ADIOL100_EXTCLKMISST            NO_OS_BIT(4)
+#define ADIOL100_THSHDNST               NO_OS_BIT(3)
+#define ADIOL100_THWARNST               NO_OS_BIT(2)
+#define ADIOL100_V24ERRST               NO_OS_BIT(1)
+#define ADIOL100_V24WARNST              NO_OS_BIT(0)
+
+/* Interrupt bit masks (0x0002 / 0x0012) — read-to-clear */
+#define ADIOL100_DELAYERRINT            NO_OS_BIT(15)
+#define ADIOL100_SAFEPULSRINT           NO_OS_BIT(14)
+#define ADIOL100_TXERRINT               NO_OS_BIT(13)
+#define ADIOL100_RXERRINT               NO_OS_BIT(12)
+#define ADIOL100_ESTCOMSUCINT           NO_OS_BIT(11)
+#define ADIOL100_ESTCOMFAILINT          NO_OS_BIT(10)
+#define ADIOL100_RXDARDYINT             NO_OS_BIT(9)
+#define ADIOL100_DILEVELINT             NO_OS_BIT(8)
+#define ADIOL100_LPERRINT               NO_OS_BIT(7)
+#define ADIOL100_LPUVINT                NO_OS_BIT(6)
+#define ADIOL100_CQDRVERRINT            NO_OS_BIT(5)
+#define ADIOL100_CQTHEINT               NO_OS_BIT(4)
+#define ADIOL100_CQCURLIMINT            NO_OS_BIT(3)
+#define ADIOL100_CQVWINT                NO_OS_BIT(2)
+#define ADIOL100_CQRXWINT               NO_OS_BIT(1)
+#define ADIOL100_CQLEVELINT             NO_OS_BIT(0)
+
+/* RxFIFOStat bit masks (0x0001 / 0x0011) */
+#define ADIOL100_TRANSMERR              NO_OS_BIT(15)
+#define ADIOL100_TERRSEND               NO_OS_BIT(14)
+#define ADIOL100_TCHKSMERR              NO_OS_BIT(13)
+#define ADIOL100_TSIZEERR               NO_OS_BIT(12)
+#define ADIOL100_RCHKSMERR              NO_OS_BIT(11)
+#define ADIOL100_RSIZEERR               NO_OS_BIT(10)
+#define ADIOL100_FRAMEERR               NO_OS_BIT(9)
+#define ADIOL100_PARITYERR              NO_OS_BIT(8)
+#define ADIOL100_RXFIFOLVL_MSK          NO_OS_GENMASK(7, 0)
+
+/* Status bit masks (0x0003 / 0x0013) */
+#define ADIOL100_COMLOST                NO_OS_BIT(13)
+#define ADIOL100_RXDARDY                NO_OS_BIT(9)
+#define ADIOL100_DILEVEL                NO_OS_BIT(8)
+#define ADIOL100_LPERR                  NO_OS_BIT(7)
+#define ADIOL100_LPUV                   NO_OS_BIT(6)
+#define ADIOL100_CQDRVERR               NO_OS_BIT(5)
+#define ADIOL100_CQLEVEL                NO_OS_BIT(0)
+
+/* CQSet bit masks (0x0009 / 0x0019) */
+#define ADIOL100_IEC3TH                 NO_OS_BIT(15)
+#define ADIOL100_SOURCESINK             NO_OS_BIT(14)
+#define ADIOL100_SINKSEL_MSK            NO_OS_GENMASK(13, 12)
+#define ADIOL100_GLITCHFILTER_MSK       NO_OS_GENMASK(11, 10)
+#define ADIOL100_CQSLEW_MSK             NO_OS_GENMASK(9, 8)
+#define ADIOL100_NPN                    NO_OS_BIT(7)
+#define ADIOL100_PUSHPUL                NO_OS_BIT(6)
+#define ADIOL100_DRVEN                  NO_OS_BIT(5)
+#define ADIOL100_CQEXT                  NO_OS_BIT(3)
+#define ADIOL100_INVCQ                  NO_OS_BIT(2)
+#define ADIOL100_TXEN                   NO_OS_BIT(1)
+
+/* LPCfg bit masks (0x000D / 0x001D) */
+#define ADIOL100_LPFETREVEN             NO_OS_BIT(15)
+#define ADIOL100_LPEN                   NO_OS_BIT(8)
+#define ADIOL100_LPCLNOM_MSK            NO_OS_GENMASK(7, 0)
+
+/* LPAFetPwrCfg bit masks (0x1F10 / 0x1F20) */
+#define ADIOL100_LPFETPWRMAX_MSK        NO_OS_GENMASK(7, 0)
+
+/* LPACurrentCfg bit masks (0x1F11 / 0x1F21) */
+#define ADIOL100_LPCURRMAX_MSK          NO_OS_GENMASK(15, 8)
+#define ADIOL100_LPCURRMIN_MSK          NO_OS_GENMASK(7, 0)
+
+/* LPAFETProtect bit masks (0x1F12 / 0x1F22) */
+#define ADIOL100_LPOLTIMOUT_MSK         NO_OS_GENMASK(15, 8)
+#define ADIOL100_LPCLTIMOUT_MSK         NO_OS_GENMASK(7, 0)
+
+/* LPASlope bit masks (0x1F13 / 0x1F23) */
+#define ADIOL100_LPSLOPE_MSK            NO_OS_GENMASK(15, 8)
+#define ADIOL100_LPSLOPEBL_MSK          NO_OS_GENMASK(7, 0)
+
+/* LPARetry bit masks (0x1F14 / 0x1F24) */
+#define ADIOL100_LPARTIM_MSK            NO_OS_GENMASK(13, 8)
+#define ADIOL100_LPAR_MSK               NO_OS_GENMASK(3, 0)
+
+/* ClockCfg bit masks (0x1F01) */
+#define ADIOL100_SPICRCEN               NO_OS_BIT(7)
+#define ADIOL100_CLKOEN                 NO_OS_BIT(4)
+#define ADIOL100_CLKDIV_MSK             NO_OS_GENMASK(3, 2)
+#define ADIOL100_CLOCKCFG_MSK           NO_OS_GENMASK(1, 0)
+
+/* CQCurLim bit masks (0x000A / 0x001A) */
+#define ADIOL100_CQVTHRH_MSK           NO_OS_GENMASK(15, 14)
+#define ADIOL100_CQVTHRL_MSK           NO_OS_GENMASK(13, 12)
+#define ADIOL100_RXVTHRH_MSK           NO_OS_GENMASK(11, 10)
+#define ADIOL100_RXVTHRL_MSK           NO_OS_GENMASK(9, 8)
+#define ADIOL100_CQCL_MSK              NO_OS_GENMASK(7, 5)
+#define ADIOL100_CLBL_MSK              NO_OS_GENMASK(4, 3)
+#define ADIOL100_ARTTMO_MSK            NO_OS_GENMASK(2, 1)
+#define ADIOL100_ARTEN                 NO_OS_BIT(0)
+
+/* FIFO constants */
+#define ADIOL100_FIFO_MAX_LEN           66
+
+/* Channel selection */
+enum adiol100_channel {
+    ADIOL100_CH_A = 0,
+    ADIOL100_CH_B = 1,
+};
+
+enum adiol100_cq_current_limit {
+    ADIOL100_CQCL_10MA  = 0,
+    ADIOL100_CQCL_15MA  = 1,
+    ADIOL100_CQCL_20MA  = 2,
+    ADIOL100_CQCL_50MA  = 3,
+    ADIOL100_CQCL_100MA = 4,
+    ADIOL100_CQCL_200MA = 5,
+    ADIOL100_CQCL_300MA = 6,
+    ADIOL100_CQCL_500MA = 7,
+};
+
+enum adiol100_blanking_time {
+    ADIOL100_CLBL_150US = 0,
+    ADIOL100_CLBL_500US = 1,
+    ADIOL100_CLBL_1MS   = 2,
+    ADIOL100_CLBL_5MS   = 3,
+};
+
+enum adiol100_autoretry_timeout {
+    ADIOL100_ARTTMO_5MS   = 0,
+    ADIOL100_ARTTMO_10MS  = 1,
+    ADIOL100_ARTTMO_50MS  = 2,
+    ADIOL100_ARTTMO_100MS = 3,
+};
+
+enum adiol100_voltage_threshold {
+    ADIOL100_VTHR_2V = 0,
+    ADIOL100_VTHR_4V = 1,
+    ADIOL100_VTHR_6V = 2,
+    ADIOL100_VTHR_8V = 3,
+};
+
+enum adiol100_cq_mode {
+    ADIOL100_CQ_NPN      = 0,
+    ADIOL100_CQ_PUSHPULL = 1,
+};
+
+enum adiol100_cq_drv {
+    ADIOL100_CQ_DRV_DIS = 0,
+    ADIOL100_CQ_DRV_EN  = 1,
+};
+
+enum adiol100_autoretry {
+    ADIOL100_AUTORETRY_DIS = 0,
+    ADIOL100_AUTORETRY_EN  = 1,
+};
+
+enum adiol100_lp_en {
+    ADIOL100_LP_DIS = 0,
+    ADIOL100_LP_EN  = 1,
+};
+
+enum adiol100_lp_rev {
+    ADIOL100_LP_REV_DIS = 0,
+    ADIOL100_LP_REV_EN  = 1,
+};
+
+enum adiol100_ins_chks {
+    ADIOL100_CHKS_DIS = 0,
+    ADIOL100_CHKS_EN  = 1,
+};
+
+enum adiol100_framer {
+    ADIOL100_FRAMER_DIS = 0,
+    ADIOL100_FRAMER_EN  = 1,
+};
+
+enum adiol100_cq_slew_rate {
+    ADIOL100_CQSLEW_250NS  = 0,
+    ADIOL100_CQSLEW_500NS  = 1,
+    ADIOL100_CQSLEW_1250NS = 2,
+    ADIOL100_CQSLEW_5000NS = 3,
+};
+
+enum adiol100_sink_sel {
+    ADIOL100_SINKSEL_OFF   = 0,
+    ADIOL100_SINKSEL_5MA   = 1,
+    ADIOL100_SINKSEL_2MA   = 2,
+    ADIOL100_SINKSEL_150UA = 3,
+};
+
+enum adiol100_clock_src {
+    ADIOL100_CLK_INTERNAL = 0,
+    ADIOL100_CLK_CRYSTAL  = 1,
+    ADIOL100_CLK_EXTERNAL = 2,
+};
 
 struct adiol100_init_param{
     struct no_os_spi_init_param *spi_ip;
     uint8_t chip_addr;
+    uint8_t clock_src;
+    uint8_t clk_div;
 };
 
 struct adiol100_dev{
@@ -56,13 +351,82 @@ int adiol100_read(struct adiol100_dev *dev, uint16_t reg, uint16_t *value);
 
 int adiol100_write(struct adiol100_dev *dev, uint16_t reg, uint16_t value);
 
-int adiol100_fifo_write(struct adiol100_dev *dev, uint8_t *data, uint8_t len,
-                        uint16_t trigger);
+int adiol100_update(struct adiol100_dev *dev, uint16_t reg, uint16_t mask,
+                    uint16_t value);
 
-int adiol100_fifo_read(struct adiol100_dev *dev, uint8_t *data, uint8_t *len);
+int adiol100_send_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
+                      uint8_t *data, uint8_t len);
 
-int adiol100_reset_channel_a(struct adiol100_dev *dev);
+int adiol100_read_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
+                       uint8_t *data, uint8_t *len);
 
-int adiol100_reset_channel_b(struct adiol100_dev *dev);
+int adiol100_global_reset(struct adiol100_dev *dev);
+
+int adiol100_reset_tx_fifo(struct adiol100_dev *dev, enum adiol100_channel ch);
+
+int adiol100_reset_rx_fifo(struct adiol100_dev *dev, enum adiol100_channel ch);
+
+int adiol100_reset_channel(struct adiol100_dev *dev, enum adiol100_channel ch);
+
+int adiol100_config_cq(struct adiol100_dev *dev, enum adiol100_channel ch,
+                       enum adiol100_cq_mode mode,
+                       enum adiol100_cq_drv drv_en,
+                       enum adiol100_sink_sel sink_sel,
+                       enum adiol100_cq_slew_rate slew_rate);
+
+int adiol100_config_cq_protection(struct adiol100_dev *dev,
+                                  enum adiol100_channel ch,
+                                  enum adiol100_cq_current_limit current_limit,
+                                  enum adiol100_blanking_time blanking,
+                                  enum adiol100_autoretry_timeout retry_tmo,
+                                  enum adiol100_autoretry retry_en,
+                                  enum adiol100_voltage_threshold tx_vthr_h,
+                                  enum adiol100_voltage_threshold tx_vthr_l,
+                                  enum adiol100_voltage_threshold rx_vthr_h,
+                                  enum adiol100_voltage_threshold rx_vthr_l);
+
+int adiol100_config_lp(struct adiol100_dev *dev, enum adiol100_channel ch,
+                       enum adiol100_lp_en enable,
+                       enum adiol100_lp_rev rev_en);
+
+int adiol100_config_lp_protection(struct adiol100_dev *dev,
+                                  enum adiol100_channel ch,
+                                  uint8_t cl_nom, uint8_t pwr_max,
+                                  uint8_t curr_max, uint8_t curr_min,
+                                  uint8_t ol_timeout, uint8_t cl_timeout,
+                                  uint8_t slope, uint8_t slope_bl,
+                                  uint8_t ar_time, uint8_t ar_count);
+
+int adiol100_config_framer(struct adiol100_dev *dev, enum adiol100_channel ch,
+                           enum adiol100_ins_chks ins_chks,
+                           enum adiol100_framer framer_en);
+
+int adiol100_set_burst_len(struct adiol100_dev *dev, enum adiol100_channel ch,
+                           int write_len, int read_len);
+
+int adiol100_get_comrt(struct adiol100_dev *dev, enum adiol100_channel ch,
+                       uint8_t *comrt);
+
+int adiol100_set_cycle_tmr(struct adiol100_dev *dev, enum adiol100_channel ch,
+                           uint8_t value);
+
+int adiol100_get_cycle_tmr(struct adiol100_dev *dev, enum adiol100_channel ch,
+                           uint16_t *value);
+
+int adiol100_enable_cycle_timer(struct adiol100_dev *dev, enum adiol100_channel ch);
+
+int adiol100_disable_cycle_timer(struct adiol100_dev *dev, enum adiol100_channel ch);
+
+int adiol100_get_channel_irq(struct adiol100_dev *dev, enum adiol100_channel ch,
+                             uint16_t *flags);
+
+int adiol100_get_global_irq(struct adiol100_dev *dev, uint16_t *flags);
+
+int adiol100_enable_global_irq(struct adiol100_dev *dev, uint16_t mask);
+
+int adiol100_enable_channel_irq(struct adiol100_dev *dev,
+                                enum adiol100_channel ch, uint16_t mask);
+
+int adiol100_estcom(struct adiol100_dev *dev, enum adiol100_channel ch);
 
 #endif

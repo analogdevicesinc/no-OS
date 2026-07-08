@@ -22,5 +22,7 @@ struct no_os_spi_init_param adiol100_spi_ip = {
 
 struct adiol100_init_param adiol100_ip = {
     .spi_ip    = &adiol100_spi_ip,
-    .chip_addr = 0x01,   /* ADRSEL=HIGH on FPGA board */
+    .chip_addr = 0x01,
+    .clock_src = ADIOL100_CLK_CRYSTAL,
+    .clk_div   = 0,
 };
