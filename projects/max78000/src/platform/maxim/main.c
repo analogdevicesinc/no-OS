@@ -20,6 +20,9 @@
 
 
 
+#if defined(CONFIG_MAX78000_IMU_SINGLE_CORE_EXAMPLE)
+#include "imu_single_core_example.h"
+#endif
 
 
 /***************************************************************************//**
@@ -33,6 +36,8 @@ int main()
 	return basic_example_main();
 #elif defined(CONFIG_MAX78000_DUAL_CORE_EXAMPLE)
 	return dual_core_example_main();
+#elif defined(CONFIG_MAX78000_IMU_SINGLE_CORE_EXAMPLE)
+	return imu_single_core_example_main();
 #endif
 
 	return 0;
