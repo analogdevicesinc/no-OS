@@ -19,6 +19,19 @@ config MAX78000_DUAL_CORE_EXAMPLE
 	  and waits for RISC-V to ring the doorbell periodically.
 	  Requires CONFIG_CAPI_COPROCESSOR=y and CONFIG_CAPI_MAILBOX=y.
 
+config MAX78000_IMU_SINGLE_CORE_EXAMPLE
+	bool "Single-core dual-IMU example (ADIS16577 + ADXL345 on ARM)"
+	depends on SPI && GPIO && SPI_MAXIM && GPIO_MAXIM && SYS_MAXIM
+	depends on ACCEL_ADXL345 && IMU_ADIS1657X
+	help
+	  Both IMUs share SPI0, driven entirely from the ARM Cortex-M4F.
+	  ADXL345 accelerometer on CS=P0.19 (GPIO); ADIS16577-2 6-axis IMU on
+	  CS=P0.11 (GPIO). The ARM integrates gyro rate into roll/pitch/yaw
+	  angles and logs both sensors at ~10 Hz. No RISC-V or IPC required.
+	  Requires CONFIG_SPI_MAXIM=y, CONFIG_GPIO_MAXIM=y, CONFIG_SYS_MAXIM=y,
+	  CONFIG_ACCEL_ADXL345=y and CONFIG_IMU_ADIS1657X=y.
+
+
 endchoice
 
 endmenu
