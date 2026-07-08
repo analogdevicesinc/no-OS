@@ -12,6 +12,9 @@
 #include "basic_example.h"
 #endif
 
+#if defined(CONFIG_MAX78000_DUAL_CORE_EXAMPLE)
+#include "dual_core_example.h"
+#endif
 
 
 
@@ -26,6 +29,8 @@ int main()
 {
 #if defined(CONFIG_MAX78000_BASIC_EXAMPLE)
 	return basic_example_main();
+#elif defined(CONFIG_MAX78000_DUAL_CORE_EXAMPLE)
+	return dual_core_example_main();
 #endif
 
 	return 0;
