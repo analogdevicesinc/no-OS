@@ -1,0 +1,22 @@
+menu "ad413x Configuration"
+
+choice AD413X_EXAMPLE
+	prompt "Example variant"
+	default AD413X_DEMO_EXAMPLE
+
+config AD413X_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Demo example that initializes the AD413X AFE/ADC, performs continuous
+	  conversion on selected channels and prints the results.
+
+config AD413X_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the AD413X ADC through the IIO framework
+	  via iio_ad413x, enabling host-side data capture over UART.
+
+endchoice
+
+endmenu

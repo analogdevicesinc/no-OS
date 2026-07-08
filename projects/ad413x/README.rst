@@ -3,7 +3,7 @@ AD413x no-OS Example Project
 
 .. no-os-doxygen::
 
-.. contents::
+.. contents:: Table of Contents
    :depth: 3
 
 Supported Evaluation Boards
@@ -17,8 +17,8 @@ Overview
 The EVAL-AD4130-8WARDZ is an evaluation board that allows users to
 evaluate the AD4130-8, an ultra low power, high precision ADC. The fully
 integrated analog front end (AFE) includes a multiplexer for up to 16
-single-ended or eight differential inputs, programmable gain amplifier
-(PGA), 24-bit sigma-delta ADC. It features programmable gain
+single-ended or eight differential inputs, a programmable gain amplifier
+(PGA), and a 24-bit sigma-delta ADC. It features programmable gain
 amplifiers and multiplexers for selecting input channels, supporting
 digital communication over an SPI interface.
 
@@ -89,67 +89,41 @@ PMOD Connector P7 Function  Connection Function
 No-OS Build Setup
 -----------------
 
-Please see: `no-OS Build Setup <https://wiki.analog.com/resources/no-os/build>`_
+Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`__
 
 No-OS Supported Examples
 ------------------------
 
-The AD413x no-OS project supports two primary example types: BASIC and
-IIO. The BASIC example focuses on initializing the AD413x, demonstrating
-continuous conversion, SPI data reading, and data display. Conversely,
-the IIO example sets up a device and application for more intricate
-operations, initializing UART communication and IIO buffers.
-
+This project uses the no-OS variant-based build flow. Selecting a variant
+at build time (``--variant <name>``) chooses which application is compiled.
 The initialization data used in the examples is taken out from the
-`Project Data Source Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad413x/src/app>`__
+`Project Data Source Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad413x/src/app>`__.
 
-Basic example
-~~~~~~~~~~~~~
+Demo Example
+~~~~~~~~~~~~
 
-The basic example code for the AD413x device initializes SPI
-communication in four-wire mode, configures GPIO for conversion
-readiness, and applies predefined presets for channel setup. These
-presets specify input sources, gain settings, filters, and reference
-settings. A soft reset is performed to prepare the device for operation,
-and key parameters such as master clock mode and standby controls are
-set. Once initialized, ADC operation modes, either single or continuous,
-are managed to facilitate data acquisition. This configuration enables
-ready interaction with the AD413x AFE using the no-OS driver setup,
-allowing effective data collection and management.
+The demo example initializes the AD413x via SPI in four-wire mode, configures
+GPIO for conversion readiness, and applies predefined presets for channel setup
+(input sources, gain settings, filters, and reference settings). A soft reset
+prepares the device for operation. Once initialized, ADC operation modes
+(single or continuous) are managed to facilitate data acquisition. Results
+are printed to the UART console.
 
-In order to build the basic example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad413x/Makefile>`__
-
-.. code-block:: bash
-
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   IIOD = n
-
-IIO example
+IIO Example
 ~~~~~~~~~~~
 
-The IIO example code for the AD413x ADC series demonstrates integration
-with the Industrial I/O framework for streamlined data acquisition.
-Initialization is handled by ``ad413x_iio_init``, which configures the
-ADC per given parameters and allocates resources. Channel management is
-dynamic, utilizing ``ad413x_iio_close_channels`` and
-``ad413x_iio_update_active_channels`` to modify channel states. Sample
+The IIO example sets up the AD413x ADC within the IIO framework via
+``ad413x_iio_init``. Channel management is handled dynamically. Sample
 data is retrieved using ``ad413x_iio_read_samples``, applying continuous
-conversion techniques. The code enables IIO attribute setup for scale
-and raw data properties, ensuring seamless integration and management of
-AD413x devices within IIO applications.
+conversion techniques. The example enables IIO attribute setup for scale
+and raw data properties.
 
 If you are not familiar with ADI IIO Application, please take a look at:
 `IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`__
 
-In order to build the IIO project, make sure you have the following
-configuration in the Makefile:
-
-.. code-block:: bash
-
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   IIOD = y
+If you are not familiar with ADI IIO-Oscilloscope Client, please take a
+look at:
+`IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`__
 
 No-OS Supported Platforms
 -------------------------
@@ -157,11 +131,11 @@ No-OS Supported Platforms
 Xilinx
 ~~~~~~
 
-Hardware Used
+Used Hardware
 ^^^^^^^^^^^^^
 
-* EVAL-AD4130-8WARDZ
-* ZedBoard
+* `EVAL-AD4130-8WARDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad4130-8.html>`_
+* `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
 Connections
 ^^^^^^^^^^^
@@ -170,55 +144,62 @@ Connections
 
 * Use on-board regulators to set up AVDD (default 3.3V) and IOVDD.
 
-* Connect SPI lines of the EVAL-AD4130-8 board to the ZedBoard's
-  appropriate GPIO/PMOD headers.
+* Connect SPI lines of the EVAL-AD4130-8 board PMOD connector P7 to the
+  ZedBoard's appropriate PMOD header.
 
-* Ensure a common ground is established between EVAL-AD4130-8 and
-  ZedBoard.
+* Ensure a common ground is established between EVAL-AD4130-8 and ZedBoard.
 
 +-----------------+-----------------+-----------------+-----------------+
-| **EVAL-AD4130-8 | **Function**    | **ZedBoard PMOD | **Function**    |
-| PMOD            |                 | Header**        |                 |
-| Connector**     |                 |                 |                 |
+| EVAL-AD4130-8   | Function        | ZedBoard PMOD   | Function        |
+| PMOD P7         |                 | Header Pin      |                 |
 +-----------------+-----------------+-----------------+-----------------+
-| P7-1            | CS_N            | Pmod Header Pin | Chip Select     |
-|                 |                 | 1               | (Active Low)    |
+| P7-1            | CS_N            | 1               | Chip Select     |
+|                 |                 |                 | (Active Low)    |
 +-----------------+-----------------+-----------------+-----------------+
-| P7-2            | MOSI/DIN        | Pmod Header Pin | Master Out      |
-|                 |                 | 2               | Slave In / Data |
-|                 |                 |                 | Input           |
+| P7-2            | MOSI/DIN        | 2               | Master Out      |
+|                 |                 |                 | Slave In        |
 +-----------------+-----------------+-----------------+-----------------+
-| P7-3            | MISO/DOUT       | Pmod Header Pin | Master In Slave |
-|                 |                 | 3               | Out / Data      |
-|                 |                 |                 | Output          |
+| P7-3            | MISO/DOUT       | 3               | Master In Slave |
+|                 |                 |                 | Out             |
 +-----------------+-----------------+-----------------+-----------------+
-| P7-4            | SCLK            | Pmod Header Pin | Serial Clock    |
-|                 |                 | 4               |                 |
+| P7-4            | SCLK            | 4               | Serial Clock    |
 +-----------------+-----------------+-----------------+-----------------+
-| P7-5            | GND             | Pmod Header Pin | Ground          |
-|                 |                 | 5               | reference for   |
-|                 |                 |                 | SPI             |
-|                 |                 |                 | communication   |
+| P7-5            | GND             | 5               | Ground          |
 +-----------------+-----------------+-----------------+-----------------+
-| P7-6            | V_USB           | Pmod Header Pin | Voltage supply  |
-|                 |                 | 6               | for the board   |
-|                 |                 |                 | and peripherals |
+| P7-6            | V_USB           | 6               | Voltage Supply  |
 +-----------------+-----------------+-----------------+-----------------+
 
 * Use a 12V supply in the barrel jack (J20) to power the ZedBoard.
 
-* Connect the ZedBoard's USB-UART to your PC via MicroUSB.
+* Connect the ZedBoard's USB-UART to your PC via MicroUSB. The UART
+  console appears at 115200 baud, 8N1.
 
 Build Command
 ^^^^^^^^^^^^^
 
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``demo``, ``iio``.
+Available boards: ``zed``.
+
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
+
 .. code-block:: bash
 
-   cp <SOME_PATH>/system_top.xsa .
+   # Source the Vitis environment (sets XILINX_VITIS and adds tools to PATH)
+   source /path/to/Vitis/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   $env:XILINX_VITIS = "<C:\path\to\Vitis>"
 
-   # to delete current build
-   make reset
-   # to build the project
-   make
-   # to flash the code
-   make run
+   cd no-OS
+
+   # build the example on the ZedBoard (replace --variant as needed)
+   python tools/scripts/no_os_build.py build \
+      --project ad413x --variant demo --board zed \
+      --hardware /path/to/system_top.xsa
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad413x --variant demo --board zed \
+      --hardware /path/to/system_top.xsa \
+      --probe openocd --flash
