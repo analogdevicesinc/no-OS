@@ -113,7 +113,7 @@ no_os_sources_ifdef(CONFIG_ADC_AD7768 ${CMAKE_CURRENT_SOURCE_DIR}/ad7768/ad7768.
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad7768)
 
 # AD7768-1
-no_os_sources_ifdef(CONFIG_ADC_AD7768_1 ${CMAKE_CURRENT_SOURCE_DIR}/ad7768-1/ad7768-1.c)
+no_os_sources_ifdef(CONFIG_ADC_AD7768_1 ${CMAKE_CURRENT_SOURCE_DIR}/ad7768-1/ad77681.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad7768-1)
 
 # AD7779
