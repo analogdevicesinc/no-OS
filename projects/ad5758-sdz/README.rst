@@ -3,8 +3,8 @@ AD5758-SDZ no-OS Example Project
 
 .. no-os-doxygen::
 
-.. contents::
-	:depth: 3
+.. contents:: Table of Contents
+   :depth: 3
 
 Supported Evaluation Boards
 ---------------------------
@@ -32,8 +32,7 @@ Applications
 * Process control
 * Actuator control
 * Channel isolated analog outputs
-* Programmable logic controller (PLC) and distributed control systems
-  (DCS)
+* Programmable logic controller (PLC) and distributed control systems (DCS)
 * HART network connectivity
 
 Hardware Specifications
@@ -80,16 +79,16 @@ JP11            Inserted        Various configurations based on application
 No-OS Build Setup
 -----------------
 
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
+Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`__
 
 No-OS Supported Examples
 ------------------------
 
 The initialization data used in the examples is taken out from the
-`Project Source Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad5758-sdz/src/app>`_
+`Project Source Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad5758-sdz/src/app>`__
 
 Application Example
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 This is a simple example that initializes the AD5758 DAC using
 ``ad5758_init()`` with default parameters for SPI communication, GPIO
@@ -104,11 +103,11 @@ No-OS Supported Platforms
 Xilinx
 ~~~~~~
 
-Hardware Used
+Used Hardware
 ^^^^^^^^^^^^^
 
 * `EVAL-AD5758SDZ <https://www.analog.com/EVAL-AD5758SDZ>`_
-* `ZedBoard <https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/zedboard-zynq-7000.html>`_
+* `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
 Connections
 ^^^^^^^^^^^
@@ -121,15 +120,34 @@ Connections
   onboard ADP1031-1 power management unit. Power is supplied from the
   ZedBoard FMC connector.
 
+The UART console appears on the ZedBoard USB-UART port at 115200 baud, 8N1.
+
 Build Command
 ^^^^^^^^^^^^^
 
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``example``.
+Available boards: ``zed``.
+
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
+
 .. code-block:: bash
 
-	cp <SOME_PATH>/system_top.xsa .
-	# to delete current build
-	make reset
-	# to build the project
-	make
-	# to flash the code
-	make run
+   # Source the Vitis environment (sets XILINX_VITIS and adds tools to PATH)
+   source /path/to/Vitis/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   $env:XILINX_VITIS = "<C:\path\to\Vitis>"
+
+   cd no-OS
+
+   # build the example on the ZedBoard
+   python tools/scripts/no_os_build.py build \
+      --project ad5758-sdz --variant example --board zed \
+      --hardware /path/to/system_top.xsa
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad5758-sdz --variant example --board zed \
+      --hardware /path/to/system_top.xsa \
+      --probe openocd --flash
