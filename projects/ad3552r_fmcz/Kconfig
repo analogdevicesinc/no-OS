@@ -1,0 +1,39 @@
+menu "ad3552r_fmcz Configuration"
+
+choice AD3552R_FMCZ_EXAMPLE
+	prompt "Example variant"
+	default AD3552R_FMCZ_AXI_QSPI_EXAMPLE
+
+config AD3552R_FMCZ_AXI_QSPI_EXAMPLE
+	bool "AXI QSPI example"
+	help
+	  Example that uses the AXI DAC core with QSPI offload, AXI DMA, and
+	  AXI clock generator IP to drive the AD3552R DAC at high speed via
+	  the HDL QSPI controller.
+
+config AD3552R_FMCZ_AXI_QSPI_IIO_EXAMPLE
+	bool "AXI QSPI IIO example"
+	depends on IIO
+	help
+	  IIO-enabled variant of the AXI QSPI example. Exposes the AD3552R
+	  DAC through the IIO framework using iio_ad3552r and iio_axi_dac,
+	  enabling host-side control via libiio over UART.
+
+config AD3552R_FMCZ_GENERIC_SPI_EXAMPLE
+	bool "Generic SPI example"
+	help
+	  Example that drives the AD3552R DAC using the generic PS SPI
+	  controller (no AXI offload), streaming a sine wave to both
+	  channels.
+
+config AD3552R_FMCZ_GENERIC_SPI_IIO_EXAMPLE
+	bool "Generic SPI IIO example"
+	depends on IIO
+	help
+	  IIO-enabled variant of the generic SPI example. Exposes the
+	  AD3552R DAC through the IIO framework using iio_ad3552r, enabling
+	  host-side control via libiio over UART.
+
+endchoice
+
+endmenu
