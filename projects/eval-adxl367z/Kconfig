@@ -1,0 +1,22 @@
+menu "eval-adxl367z Configuration"
+
+choice EVAL_ADXL367Z_EXAMPLE
+	prompt "Example variant"
+	default EVAL_ADXL367Z_DUMMY_EXAMPLE
+
+config EVAL_ADXL367Z_DUMMY_EXAMPLE
+	bool "Dummy example"
+	help
+	  Basic example that initializes the ADXL367 accelerometer, reads
+	  acceleration and temperature data from the FIFO, and prints the results.
+
+config EVAL_ADXL367Z_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the ADXL367 accelerometer through the IIO
+	  framework, enabling host-side data capture over UART.
+
+endchoice
+
+endmenu

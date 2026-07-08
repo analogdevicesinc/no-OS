@@ -1,5 +1,5 @@
 EVAL-ADXL367Z no-OS Example Project
-====================================
+=====================================
 
 .. no-os-doxygen::
 
@@ -52,22 +52,19 @@ with a separate digital interface supply (VDDIO). Current consumption is
 0.89 uA at 100 Hz ODR (2.0 V supply), 180 nA in motion-activated wake-up
 mode, and 40 nA in standby.
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
-------------------------
+-------------------------
 
-The initialization data used in the examples is taken out from the
-`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adxl367z/src/common>`__.
+This project is organized around the no-OS variant based build flow.
+Selecting a variant at build time (``--variant <name>``) chooses which
+application is compiled. The platform ``main()`` is a thin dispatcher that
+calls ``example_main()``, provided by the selected example. Shared
+initialization data is defined in
+`src/common <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adxl367z/src/common>`__,
+and platform-specific macros and extra init parameters are in
+`src/platform <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adxl367z/src/platform>`__.
 
-The macros used in Common Data are defined in platform specific files
-found in the
-`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adxl367z/src/platform>`__.
-
-Dummy example
+Dummy Example
 ~~~~~~~~~~~~~
 
 The dummy example initializes the ADXL367 accelerometer, performs a
@@ -77,17 +74,10 @@ switched to measurement mode, and acceleration data along the x, y, and
 z axes along with temperature data is read from the FIFO buffer and
 printed to the console.
 
-In order to build the dummy example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/eval-adxl367z/Makefile>`__:
+This example is built by selecting the ``dummy`` variant (see the Build Command
+sections below).
 
-.. code-block:: bash
-
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   DUMMY_EXAMPLE = y
-   IIO_EXAMPLE = n
-
-IIO example
+IIO Example
 ~~~~~~~~~~~
 
 The IIO example initializes the ADXL367 accelerometer and sets up an
@@ -95,24 +85,17 @@ IIO device server that allows users to interact with the sensor via an
 IIO client such as IIO Oscilloscope.
 
 If you are not familiar with ADI IIO Application, please take a look at:
-`IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`__
+:dokuwiki:`IIO No-OS </resources/tools-software/no-os-software/iio>`
 
-If you are not familiar with ADI IIO Oscilloscope Client, please take a
+If you are not familiar with ADI IIO-Oscilloscope Client, please take a
 look at:
-`IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`__
+:dokuwiki:`IIO Oscilloscope </resources/tools-software/linux-software/iio_oscilloscope>`
 
-In order to build the IIO example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/eval-adxl367z/Makefile>`__:
-
-.. code-block:: bash
-
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   DUMMY_EXAMPLE = n
-   IIO_EXAMPLE = y
+This example is built by selecting the ``iio_example`` variant (see the Build
+Command sections below).
 
 No-OS Supported Platforms
--------------------------
+--------------------------
 
 Xilinx
 ~~~~~~
@@ -128,18 +111,35 @@ Connections
 
 Connect the EVAL-ADXL367Z to the ZedBoard via the SPI interface. The
 ADXL367 communicates over SPI using device ID 0 as configured in
-``parameters.h``.
+``src/platform/xilinx/parameters.h``. The UART console appears on the
+ZedBoard USB-UART adapter at **115200 baud, 8N1**.
 
 Build Command
 ^^^^^^^^^^^^^
 
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``dummy``,
+``iio_example``. Available boards: ``zed``.
+
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
+
 .. code-block:: bash
 
-   # copy the Xilinx hardware description file
-   cp <SOME_PATH>/system_top.xsa .
-   # to delete current build
-   make reset
-   # to build the project
-   make
-   # to flash the code
-   make run
+   # source the Vitis environment (adjust path to your Vitis install)
+   source /path/to/Vitis/2025.1/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   & "<path\to\Vitis\2025.1\settings64.bat"
+
+   cd no-OS
+
+   # build the dummy example on the ZedBoard (requires a .xsa hardware file)
+   python tools/scripts/no_os_build.py build \
+      --project eval-adxl367z --variant dummy --board zed \
+      --hardware /path/to/system_top.xsa
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project eval-adxl367z --variant dummy --board zed \
+      --hardware /path/to/system_top.xsa \
+      --probe openocd --flash
