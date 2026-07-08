@@ -1,13 +1,16 @@
-AD9467 no-OS Example project
+AD9467 no-OS Example Project
 ============================
+
+.. contents:: Table of Contents
+	:depth: 3
 
 Supported Evaluation Boards
 ----------------------------
 
-- :adi:`AD9467-FMC-250EBZ`
+* `AD9467-FMC-250EBZ <https://www.analog.com/AD9467>`_
 
 Overview
----------
+--------
 
 The AD9467 evaluation board (AD9467-FMC-250EBZ) is engineered to
 facilitate the comprehensive evaluation of the AD9467 analog-to-digital
@@ -16,30 +19,31 @@ providing leading signal-to-noise ratio (SNR) and spurious-free dynamic
 range (SFDR) within a compact design. Notable features include
 differential analog inputs optimized for broad bandwidth down
 conversion, configurable clock inputs for both single-ended and
-differential signals, and a flexible power supply setup. This board is
-ideally suited for demanding applications such as instrumentation,
-spectrum analysis, and radar systems requiring precise and rapid data
-acquisition.
+differential signals, and a flexible power supply setup. The AD9517
+clock distribution IC provides a programmable reference clock to the
+ADC. This board is ideally suited for demanding applications such as
+instrumentation, spectrum analysis, and radar systems requiring precise
+and rapid data acquisition.
 
 Applications
 ------------
 
-- Multicarrier, multimode cellular receivers
-- Power amplifier linearization
-- Broadband wireless
-- Radar
-- Infrared imaging
-- Communications instrumentation
-- Antenna array positioning
+* Multicarrier, multimode cellular receivers
+* Power amplifier linearization
+* Broadband wireless
+* Radar
+* Infrared imaging
+* Communications instrumentation
+* Antenna array positioning
 
 Hardware Specifications
-------------------------
+-----------------------
 
 Power Supply Requirements
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To power the AD9467 evaluation board with an external power supply,
-connect a switching power supply rated for 100V to 240V AC, configured
+connect a switching power supply rated for 100 V to 240 V AC, configured
 to output 6 V at up to 2.5 A, directly to the power input jack labeled
 P700. Ensure all jumpers, including those for reference settings and
 clock input configurations, are correctly placed. Consider using
@@ -47,85 +51,103 @@ additional components like COAX cables or terminators if deviating from
 standard configurations.
 
 No-OS Build Setup
-------------------
+-----------------
 
 Please see: https://wiki.analog.com/resources/no-os/build
 
 No-OS Supported Examples
--------------------------
+------------------------
 
-The initialization data used in the example is taken out from the
-`Project Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9467/src>`__
+The initialization data used in the examples is taken from:
+`Project Source Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9467/src>`__
+
+Demo Example
+~~~~~~~~~~~~
+
+The demo example initializes the AD9467 ADC and AD9517 clock distribution
+IC via SPI, configures the AXI ADC core and AXI DMAC, runs test pattern
+verification (including various test modes via ``ad9467_test_mode``), and
+captures ADC samples into DDR memory via DMA.
 
 IIO Example
------------
+~~~~~~~~~~~
 
-The IIO example code demonstrates the implementation and configuration
-of the Industrial I/O subsystem within the no-OS environment.
-Specifically, it showcases the setup of AD9467 ADC via its driver,
-involving SPI communication, register manipulation, and power mode
-management. The code provides functions such as ``ad9467_test_mode`` to
-configure operational modes, output current, and clock delay,
-illustrating how to control various ADC parameters. Additionally, the
-examples include initializing and running IIO applications with
-functions like ``iio_app_run``, facilitating real-time data acquisition
-and processing, thereby leveraging the modularity of the no-OS
-repository to interface efficiently with hardware components through IIO
-client application.
+The IIO example launches an IIOD server on the carrier board so that the
+user may connect to it via an IIO client. Using the IIO Oscilloscope
+application, users can configure the AD9467 ADC operational modes, output
+current, clock delay, and other parameters, and perform real-time data
+capture over UART.
 
 If you are not familiar with ADI IIO Application, please take a look at:
-:dokuwiki:`IIO No-OS </resources/tools-software/no-os-software/iio>`
+`IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
 
-In order to build the IIO project, make sure you have the following
-configuration in the 
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad9467/Makefile>`__
-
-.. code-block:: bash
-
-   # Force select an example by assigning y for enabling.
-      
-   IIO_EXAMPLE = y
+If you are not familiar with ADI IIO Oscilloscope Client, please take a
+look at:
+`IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
 
 No-OS Supported Platforms
 --------------------------
 
-Xilinx Platform
-~~~~~~~~~~~~~~~~
+Xilinx
+~~~~~~
 
-Hardware Used
-^^^^^^^^^^^^^^
+Used Hardware
+^^^^^^^^^^^^^
 
-- AD9467 Evaluation Board (AD9467-FMC-250EBZ)
-- `AMD Kintex™ 7 FPGA KC705 Evaluation Kit <https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/ek-k7-kc705-g.html>`__
+* `AD9467-FMC-250EBZ <https://www.analog.com/AD9467>`_
+* `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board/>`_ (Zynq-7000)
 
-Connection Setup
-^^^^^^^^^^^^^^^^^
+Connections
+^^^^^^^^^^^
 
-1. Connect the AD9467-FMC-250EBZ board to the KC705 Zedboard using the
-   FMC interface connector.
+1. Connect the AD9467-FMC-250EBZ board to the ZedBoard using the FMC
+   LPC interface connector.
 
-2. Use a USB Type A to mini-B cable to connect the KC705 ZedBoard to the
-   host PC via the USB-UART port.
+2. Use a USB Type-A to mini-B cable to connect the ZedBoard to the host
+   PC via the USB-UART port (J2).
 
-3. Attach the 12 VDC power adapter to the KC705 ZedBoard (via J49).
+3. Attach the power adapter to the ZedBoard (via J3, 12 V input) and
+   power on the board via SW8.
 
-4. Set the adjustable voltage on the KC705 ZedBoard to supply 2.5V for
-   the AD9467 board.
-
-5. Power on the KC705 ZedBoard using switch SW15.
+4. Set the adjustable voltage (VADJ) on the ZedBoard to supply 2.5 V for
+   the AD9467 board (consult the ZedBoard hardware guide for the jumper
+   settings).
 
 Build Command
-^^^^^^^^^^^^^^
+^^^^^^^^^^^^^
+
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``demo``, ``iio``.
+Available boards: ``zed``.
+
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
 
 .. code-block:: bash
 
-   cp <SOME_PATH>/system_top.xsa .
+   # Source the Vitis toolchain environment (adjust version as needed)
+   source ~/.xilinx/2025.1/Vitis/settings64.sh
 
-   # to delete current build
-   make reset 
-   # to build the project
-   make
-   # to flash the code
-   make run
-   # to debug the code
-   make debug
+   cd no-OS
+
+   # build the demo example
+   python tools/scripts/no_os_build.py build \
+      --project ad9467 --variant demo --board zed \
+      --hardware /path/to/system_top.xsa
+
+   # build and flash
+   python tools/scripts/no_os_build.py build \
+      --project ad9467 --variant demo --board zed \
+      --hardware /path/to/system_top.xsa \
+      --probe openocd --flash
+
+   # build the IIO example
+   python tools/scripts/no_os_build.py build \
+      --project ad9467 --variant iio --board zed \
+      --hardware /path/to/system_top.xsa
+
+   # build and flash the IIO example
+   python tools/scripts/no_os_build.py build \
+      --project ad9467 --variant iio --board zed \
+      --hardware /path/to/system_top.xsa \
+      --probe openocd --flash
