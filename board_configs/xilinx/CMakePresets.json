@@ -17,6 +17,28 @@
 				"PLATFORM": "xilinx",
 				"BOARD_CONFIG_FILE": "zed_defconfig"
 			}
+		},
+		{
+			"name": "zc706",
+			"description": "ZC706 (Zynq-7000, cortexa9). Requires -DHARDWARE=<abs path to system_top.xsa>",
+			"inherits": "xilinx-base",
+			"cacheVariables": {
+				"BOARD": "zc706",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "xilinx",
+				"BOARD_CONFIG_FILE": "zc706_defconfig"
+			}
+		},
+		{
+			"name": "coraz7s",
+			"description": "Cora Z7-07S (Zynq-7000, cortexa9). Requires -DHARDWARE=<abs path to system_top.xsa>",
+			"inherits": "xilinx-base",
+			"cacheVariables": {
+				"BOARD": "coraz7s",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "xilinx",
+				"BOARD_CONFIG_FILE": "coraz7s_defconfig"
+			}
 		}
 	]
 }
