@@ -39,6 +39,17 @@ config SPI_MAXIM
 	help
 	  Enable Maxim-specific SPI driver implementation.
 
+config SPI_GPIO_MAXIM
+	bool "Enable Maxim bit-banged (GPIO) SPI driver"
+	depends on SPI && GPIO_MAXIM
+	default n
+	help
+	  Enable a software SPI master implemented with direct GPIO register
+	  toggling (no_os_spi platform ops). Pin-parameterized and safe to share a
+	  bus between two cores: it drives SCLK/MOSI only while a transfer is in
+	  flight and leaves them high-Z otherwise, so an idle core does not fight
+	  the active one. Used by the MAX78000 dual-core IMU example.
+
 config UART_MAXIM
 	bool "Enable Maxim UART driver"
 	depends on UART
