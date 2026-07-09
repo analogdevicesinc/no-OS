@@ -1580,16 +1580,32 @@ int iio_step(struct iio_desc *desc)
 		return ret;
 
 	ret = iiod_conn_step(desc->iiod, conn_id);
-	if (ret == -ENOTCONN) {
 #if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
+	if (ret != 0 && ret != -EAGAIN && ret != -NO_OS_EOVERRUN) {
+		/*
+		 * Anything other than success or the recoverable in-progress
+		 * states (-EAGAIN: more work to do later, -NO_OS_EOVERRUN: buffer
+		 * overran but the link is fine) means this connection is finished:
+		 * the client closed it (-ENOTCONN) or an I/O/protocol error
+		 * occurred mid-transfer. Tear down just this connection and keep
+		 * the server running. Without this a single misbehaving client
+		 * (e.g. one that aborts a large buffered read) would propagate the
+		 * error up through iio_app_run and out of main, killing the whole
+		 * IIOD daemon for every client. Report -ENOTCONN, which
+		 * iio_app_run treats as "connection ended", not "server error".
+		 */
 		struct iiod_conn_data data;
 		iiod_conn_remove(desc->iiod, conn_id, &data);
 		socket_remove(data.conn);
 		no_os_free(data.buf);
-#endif
+		ret = -ENOTCONN;
 	} else {
 		_push_conn(desc, conn_id);
 	}
+#else
+	if (ret != -ENOTCONN)
+		_push_conn(desc, conn_id);
+#endif
 
 	return ret;
 }
