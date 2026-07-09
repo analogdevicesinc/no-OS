@@ -784,8 +784,7 @@ int adf4030_set_vco_freq(struct adf4030_dev *dev, uint32_t vco_freq)
 	// Wait for Lock Detect
 	ret = adf4030_poll(dev, 0x90, ADF4030_PLL_LD, true);
 	if (ret)
-		pr_warning("%s:%d PLL failed to lock within the expected time. %x\n", __FILE__,
-			   __LINE__, ret);
+		return ret;
 
 	return adf4030_set_vco_cal(dev, false);
 }
@@ -2097,7 +2096,11 @@ int adf4030_init(struct adf4030_dev **dev,
 		goto error_spi;
 
 	ret = adf4030_set_vco_freq(device, device->vco_freq);
-	if (ret)
+	if (ret == ETIMEDOUT) {
+		pr_warning("%s:%d ADF4030 VCO frequency setting failed. %x\n",
+			   __FILE__,
+			   __LINE__, ret);
+	} else if (ret)
 		goto error_spi;
 
 	// Set BSYNC ODIVA
