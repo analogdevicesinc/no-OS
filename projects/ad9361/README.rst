@@ -1,5 +1,5 @@
 AD9361/AD9364 no-OS Example Project
-====================================
+=====================================
 
 .. no-os-doxygen::
 
@@ -7,7 +7,7 @@ AD9361/AD9364 no-OS Example Project
     :depth: 3
 
 Supported Evaluation Boards
----------------------------
+----------------------------
 
 * `AD-FMCOMMS2-EBZ <https://www.analog.com/AD-FMCOMMS2-EBZ>`_
 * `AD-FMCOMMS3-EBZ <https://www.analog.com/AD-FMCOMMS3-EBZ>`_
@@ -17,9 +17,9 @@ Supported Evaluation Boards
 Overview
 --------
 
-The `AD-FMCOMMS2-EBZ <https://www.analog.com/AD-FMCOMMS2-EBZ>`_, 
+The `AD-FMCOMMS2-EBZ <https://www.analog.com/AD-FMCOMMS2-EBZ>`_,
 `AD-FMCOMMS3-EBZ <https://www.analog.com/AD-FMCOMMS3-EBZ>`_,
-`AD-FMCOMMS4-EBZ <https://www.analog.com/AD-FMCOMMS4-EBZ>`_ and 
+`AD-FMCOMMS4-EBZ <https://www.analog.com/AD-FMCOMMS4-EBZ>`_ and
 `AD-FMCOMMS5-EBZ <https://www.analog.com/AD-FMCOMMS5-EBZ>`_ are high-speed
 analog FMC modules designed to showcase the
 `AD9361 <https://www.analog.com/AD9361>`_, a high-performance, highly
@@ -47,7 +47,7 @@ Hardware Specifications
 Power Supply Requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The AD-FMCOMMS2-EBZ, AD-FMCOMMS3-EBZ, AD-FMCOMMS4-EBZ 
+The AD-FMCOMMS2-EBZ, AD-FMCOMMS3-EBZ, AD-FMCOMMS4-EBZ
 and AD-FMCOMMS5-EBZ boards are powered entirely
 through the FMC connector from the host carrier board; no separate
 external power supply is needed for the FMC module itself. Internally,
@@ -81,49 +81,43 @@ No-OS Supported Examples
 The initialization data used in the examples is taken from the
 `Project Source Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9361/src>`__.
 
-DMA example
-~~~~~~~~~~~
+This project supports six build variants selectable via ``--variant``:
 
-The DMA example demonstrates high-speed data transfer between the AD9361
-transceiver and DDR memory using the AXI DMA core. The example
-configures the AD9361 for a specified carrier frequency, sample rate,
-and channel bandwidth, then initiates a DMA transfer to capture a block
-of I/Q samples from the receive path into a memory buffer, allowing the
-user to verify the data path without requiring an operating system or
-IIO client.
+Demo Example (FMComms2)
+~~~~~~~~~~~~~~~~~~~~~~~
 
-In order to build the DMA example, make sure you have the following
-configuration in the Makefile:
+The demo example (variant ``demo``) demonstrates basic initialization and
+bring-up of the AD9361 transceiver via AXI ADC/DAC cores and DMAC,
+targeting the FMCOMMS2/3/4 board. It configures the AD9361 for a
+specified carrier frequency, sample rate, and channel bandwidth.
 
-.. code-block:: bash
+DMA Example (FMComms2)
+~~~~~~~~~~~~~~~~~~~~~~
 
-   NEW_CFLAGS=-DDMA_EXAMPLE
+The DMA example (variant ``dma-example``) demonstrates high-speed data
+transfer between the AD9361 transceiver and DDR memory using the AXI DMA
+core. The example configures the AD9361, then initiates a DMA transfer to
+capture a block of I/Q samples from the receive path into a memory buffer,
+allowing the user to verify the data path without requiring an operating
+system or IIO client.
 
-DMA-IRQ example
-~~~~~~~~~~~~~~~
+DMA-IRQ Example (FMComms2)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The DMA-IRQ example extends the DMA example by enabling interrupt-driven
-DMA transfers. Rather than polling for DMA completion, the firmware
-registers an interrupt service routine (ISR) triggered by the DMA
-controller upon completion of each transfer. This approach allows the
-processor to perform other tasks while a DMA transfer is in progress,
-and is useful for demonstrating more efficient, production-ready data
-acquisition patterns for the AD9361 receive path.
+The DMA-IRQ example (variant ``dma-irq-example``) extends the DMA example
+by enabling interrupt-driven DMA transfers. Rather than polling for DMA
+completion, the firmware registers an interrupt service routine (ISR)
+triggered by the DMA controller upon completion of each transfer. This
+approach allows the processor to perform other tasks while a DMA transfer
+is in progress.
 
-In order to build the DMA-IRQ example, make sure you have the following
-configuration in the Makefile:
+IIO Example (FMComms2)
+~~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: bash
-
-   NEW_CFLAGS=-DDMA_EXAMPLE -DDMA_IRQ_ENABLE
-
-IIO example
-~~~~~~~~~~~
-
-The IIO example launches an IIOD server on the carrier board so that the
-user may connect to it via an IIO client. Using the IIO Oscilloscope
-application, users can access AD9361 device settings such as LO
-frequency, sampling rate, channel bandwidth, RF gain, and TX/RX path
+The IIO example (variant ``iio``) launches an IIOD server on the carrier
+board so that the user may connect to it via an IIO client. Using the IIO
+Oscilloscope application, users can access AD9361 device settings such as
+LO frequency, sampling rate, channel bandwidth, RF gain, and TX/RX path
 configuration, facilitating seamless data management and real-time
 streaming of I/Q samples to and from the transceiver through the AXI DMA
 infrastructure.
@@ -131,15 +125,37 @@ infrastructure.
 If you are not familiar with ADI IIO Application, please take a look at:
 `IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
 
-To build the IIO project, add the following flag when invoking make:
+If you are not familiar with ADI IIO Oscilloscope Client, please take a
+look at:
+`IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
 
-.. code-block:: bash
+Demo Example (FMComms5)
+~~~~~~~~~~~~~~~~~~~~~~~
 
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   IIOD = y
+The FMComms5 demo example (variant ``demo_fmcomms5``) demonstrates basic
+initialization and bring-up of the dual AD9361 transceiver on the
+FMCOMMS5 board for 4x4 MIMO configurations.
+
+IIO Example (FMComms5)
+~~~~~~~~~~~~~~~~~~~~~~
+
+The FMComms5 IIO example (variant ``iio_fmcomms5``) provides an IIOD
+server for the dual AD9361 transceiver on the FMCOMMS5 board, enabling
+host-side data capture and playback for 4x4 MIMO configurations.
+
+If you are not familiar with ADI IIO Application, please take a look at:
+`IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
+
+If you are not familiar with ADI IIO Oscilloscope Client, please take a
+look at:
+`IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
+
+**Note for AD-FMCOMMS4-EBZ:** This board carries the AD9364 (single
+transceiver) rather than the AD9361. In ``app_config.h``, set
+``AD9364_DEVICE=1`` and ``AD9361_DEVICE=0`` before building.
 
 No-OS Supported Platforms
--------------------------
+--------------------------
 
 Xilinx
 ~~~~~~
@@ -149,53 +165,80 @@ Used Hardware
 
 * `AD-FMCOMMS2-EBZ <https://www.analog.com/AD-FMCOMMS2-EBZ>`_,
   `AD-FMCOMMS3-EBZ <https://www.analog.com/AD-FMCOMMS3-EBZ>`_,
-  `AD-FMCOMMS4-EBZ <https://www.analog.com/AD-FMCOMMS4-EBZ>`_,
+  `AD-FMCOMMS4-EBZ <https://www.analog.com/AD-FMCOMMS4-EBZ>`_, or
   `AD-FMCOMMS5-EBZ <https://www.analog.com/AD-FMCOMMS5-EBZ>`_
-* `ZC706 <https://www.xilinx.com/ZC706>`_,
-  `ZCU102 <https://www.xilinx.com/ZCU102>`_,
-  ZC702, or ZedBoard carrier board
+* One of: `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board/>`_,
+  `ZC706 <https://www.xilinx.com/ZC706>`_,
+  ZC702, `ZCU102 <https://www.xilinx.com/ZCU102>`_, or
+  `KCU105 <https://www.xilinx.com/KCU105>`_ carrier board
 
 Connections
 ^^^^^^^^^^^
 
-The AD-FMCOMMS2-EBZ connects to the Xilinx carrier board via its FMC LPC
-connector. The AD-FMCOMMS5-EBZ requires a dual FMC slot (available on
-ZC706 and ZC702).
+The AD-FMCOMMS2-EBZ/3-EBZ/4-EBZ connects to the Xilinx carrier board
+via its FMC LPC connector. The AD-FMCOMMS5-EBZ requires a dual FMC slot
+(available on ZC706 and ZC702).
+
+Connect a USB cable to the carrier board USB-UART port and the host PC
+for serial console access at 115200 baud, 8N1.
+
+Board and variant availability:
+
++------------------+--------------------------------------------------+
+| Board            | Supported variants                               |
++==================+==================================================+
+| zed              | demo, dma-example, dma-irq-example, iio          |
++------------------+--------------------------------------------------+
+| zc702            | demo, dma-example, dma-irq-example, iio,         |
+|                  | demo_fmcomms5, iio_fmcomms5                      |
++------------------+--------------------------------------------------+
+| zc706            | demo, dma-example, dma-irq-example, iio,         |
+|                  | demo_fmcomms5, iio_fmcomms5                      |
++------------------+--------------------------------------------------+
+| zcu102           | demo, dma-example, dma-irq-example, iio,         |
+|                  | demo_fmcomms5, iio_fmcomms5                      |
++------------------+--------------------------------------------------+
+| kcu105           | demo, dma-example, dma-irq-example, iio          |
++------------------+--------------------------------------------------+
 
 Build Command
 ^^^^^^^^^^^^^
 
-.. code-block:: bash
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script.
 
-   # copy the Xilinx hardware description file
-   cp <SOME_PATH>/system_top.xsa .
-   # to delete current build
-   make reset
-   # to build the project
-   make
-   # to flash the code
-   make run
-
-**For AD-FMCOMMS5-EBZ**, add the following flags depending on the example:
-
-DMA example:
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
 
 .. code-block:: bash
 
-   NEW_CFLAGS=-DFMCOMMS5
+   # Source the Vitis toolchain environment (adjust version as needed)
+   source ~/.xilinx/2025.1/Vitis/settings64.sh
 
-IIO example:
+   cd no-OS
 
-.. code-block:: bash
+   # build the demo example on ZedBoard
+   python tools/scripts/no_os_build.py build \
+      --project ad9361 --variant demo --board zed \
+      --hardware /path/to/system_top.xsa
 
-   IIOD=y NEW_CFLAGS=-DFMCOMMS5
+   # build and flash
+   python tools/scripts/no_os_build.py build \
+      --project ad9361 --variant demo --board zed \
+      --hardware /path/to/system_top.xsa \
+      --probe openocd --flash
 
+   # build the IIO example on ZCU102
+   python tools/scripts/no_os_build.py build \
+      --project ad9361 --variant iio --board zcu102 \
+      --hardware /path/to/system_top.xsa
 
-**For AD-FMCOMMS4-EBZ**, change app_config.h so it has 
-AD9361_DEVICE=0 and AD9364_DEVICE=1, because it uses 
-AD9634 instead of AD9361. 
+   # build the FMComms5 demo on ZC706
+   python tools/scripts/no_os_build.py build \
+      --project ad9361 --variant demo_fmcomms5 --board zc706 \
+      --hardware /path/to/system_top.xsa
 
-.. code-block:: bash
-
-   #define AD9361_DEVICE			1 /* set it 1 if AD9361 device is used, 0 otherwise */
-   #define AD9364_DEVICE			0 /* set it 1 if AD9364 device is used, 0 otherwise */
+   # build the DMA-IRQ example on KCU105
+   python tools/scripts/no_os_build.py build \
+      --project ad9361 --variant dma-irq-example --board kcu105 \
+      --hardware /path/to/system_top.xsa
