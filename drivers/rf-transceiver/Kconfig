@@ -37,6 +37,11 @@ config RF_TRANSCEIVER_ADRV904X
 	bool "Enable ADRV904x RF transceiver driver"
 	default n
 
+config RF_TRANSCEIVER_ADRV903X
+	select GPIO
+	bool "Enable ADRV903X RF transceiver driver"
+	default n
+
 config RF_TRANSCEIVER_ADRV9025
 	select GPIO
 	bool "Enable ADRV9025 RF transceiver driver"
