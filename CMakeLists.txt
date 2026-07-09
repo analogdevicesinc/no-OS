@@ -327,6 +327,7 @@ add_subdirectory(libraries)
 add_subdirectory(network)
 add_subdirectory(util)
 add_subdirectory(iio)
+add_subdirectory(jesd204)
 add_subdirectory(drivers)
 
 add_custom_target(KconfigVars ALL
