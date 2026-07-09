@@ -15,6 +15,8 @@ if(CONFIG_AD738X_FMCZ_BASIC_EXAMPLE)
     target_include_directories(ad738x_fmcz PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/basic_example
     )
+    # src/platform/xilinx/main.c selects examples with bare #ifdef BASIC_EXAMPLE
+    target_compile_definitions(ad738x_fmcz PRIVATE BASIC_EXAMPLE)
 endif()
 
 # IIO example
@@ -25,6 +27,8 @@ if(CONFIG_AD738X_FMCZ_IIO_EXAMPLE)
     target_include_directories(ad738x_fmcz PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_example
     )
+    # src/platform/xilinx/main.c selects examples with bare #ifdef IIO_EXAMPLE
+    target_compile_definitions(ad738x_fmcz PRIVATE IIO_EXAMPLE)
 endif()
 
 target_include_directories(ad738x_fmcz PUBLIC

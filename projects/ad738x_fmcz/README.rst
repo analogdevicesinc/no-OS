@@ -1,14 +1,14 @@
 AD738x_FMCZ no-OS Example Project
-=================================
+==================================
 
-.. contents::
+.. contents:: Table of Contents
     :depth: 3
 
 Supported Evaluation Boards
 ---------------------------
 
-- :adi:`EVAL-AD7380FMCZ`
-- :adi:`EVAL-AD7381FMCZ`
+* `EVAL-AD7380FMCZ <https://www.analog.com/EVAL-AD7380FMCZ>`_
+* `EVAL-AD7381FMCZ <https://www.analog.com/EVAL-AD7381FMCZ>`_
 
 Overview
 --------
@@ -26,13 +26,13 @@ performance in different scenarios.
 Applications
 ------------
 
-- Motor control feedback
-- Motor control current sense
-- Sonar
-- Power quality
-- Data acquisition systems
-- Erbium doped fiber amplifier (EDFA) applications
-- Quadrature modulation (I and Q demodulation)
+* Motor control feedback
+* Motor control current sense
+* Sonar
+* Power quality
+* Data acquisition systems
+* Erbium doped fiber amplifier (EDFA) applications
+* Quadrature modulation (I and Q demodulation)
 
 Hardware Specifications
 -----------------------
@@ -44,7 +44,7 @@ The EVAL-AD738xFMCZ evaluation board requires a 12V ±10% main power
 supply for its internal voltage regulators. Additionally, it features an
 ADC analog power supply (VCC), a digital serial peripheral interface
 power supply (VLOGIC), and amplifier power supplies (AMP_PWR+ and
-AMP_PWR−). Power connection points include P4 for the main board power
+AMP_PWR-). Power connection points include P4 for the main board power
 supply, P5 for the ADC and SPI interface, and P6 for the amplifier,
 ensuring efficient power distribution to support high-speed data
 acquisition applications.
@@ -83,9 +83,9 @@ Link Connectors
 +-----------------+-----------------+-----------------+-----------------+
 | **Link Name**   | **Function**    | **Position**    | **Description** |
 +-----------------+-----------------+-----------------+-----------------+
-| LK1             | AMP_PWR–        | 1               | Use internal    |
-|                 |                 |                 | –2.5V from U9   |
-|                 |                 |                 | for AMP_PWR–    |
+| LK1             | AMP_PWR-        | 1               | Use internal    |
+|                 |                 |                 | -2.5V from U9   |
+|                 |                 |                 | for AMP_PWR-    |
 +-----------------+-----------------+-----------------+-----------------+
 | LK2             | AMP_PWR+        | 1               | Use internal 5V |
 |                 |                 |                 | from U8 for     |
@@ -102,16 +102,16 @@ Link Connectors
 |                 |                 |                 | 2.3V from U6    |
 |                 |                 |                 | for VLOGIC      |
 +-----------------+-----------------+-----------------+-----------------+
-| JP1             | AINA–           | 1 SMD RES       | Connect         |
+| JP1             | AINA-           | 1 SMD RES       | Connect         |
 |                 |                 |                 | external SMB    |
 |                 |                 |                 | Connector J1 to |
 |                 |                 |                 | A1 buffer       |
 |                 |                 |                 | amplifier       |
 +-----------------+-----------------+-----------------+-----------------+
-| JP2             | AINA–           | 1 SMD RES       | Connect         |
+| JP2             | AINA-           | 1 SMD RES       | Connect         |
 |                 |                 |                 | internal signal |
 |                 |                 |                 | from A2 to ADC  |
-|                 |                 |                 | U10 input AINA– |
+|                 |                 |                 | U10 input AINA- |
 +-----------------+-----------------+-----------------+-----------------+
 | JP3             | AINA+           | 1 SMD RES       | Connect         |
 |                 |                 |                 | internal signal |
@@ -142,10 +142,10 @@ The initialization data used in the examples is taken out from the
 `Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad738x_fmcz/src/common>`__
 
 The macros used in Common Data are defined in platform specific files
-found in the 
+found in the
 `Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad738x_fmcz/src/platform>`__
 
-Basic example
+Basic Example
 ~~~~~~~~~~~~~
 
 The basic example for the AD738x no-OS setup showcases the
@@ -157,10 +157,10 @@ hardware components like SPI and PWM. Post-initialization, the ADC reads
 data in a loop, using the ``ad738x_read_data`` function to acquire 400
 samples continuously. These samples, processed through bit manipulation,
 yield ADC channel values representing analog-to-digital conversions,
-concluding with printed verification to demonstrate the AD738x’s rapid
+concluding with printed verification to demonstrate the AD738x's rapid
 data handling in a no-OS environment.
 
-IIO example
+IIO Example
 ~~~~~~~~~~~
 
 The IIO example code initializes the IIO application to facilitate
@@ -170,41 +170,33 @@ function to integrate the ADC driver. This process involves reading ADC
 data into a buffer and exposing device attributes such as raw data and
 scaling through the IIO client interface. Channels are registered, scan
 types are defined for determining data resolution, and data is
-continuously managed for client applications. Users can utilize the IIO
-Oscilloscope to monitor and visualize waveforms, ensuring effective ADC
-performance evaluation.
-
-The IIO demo is a standard example, provided in most `no-OS
-projects <https://github.com/analogdevicesinc/no-OS/tree/main/projects>`__,
-that launches an IIOD server on the board so that the user may connect
-to it via an IIO client. Using the IIO Oscilloscope application, users
-can access device settings such as channels, scan types, and data
-resolution.
+continuously managed for client applications.
 
 If you are not familiar with ADI IIO Application, please take a look at:
-`IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`__
+:dokuwiki:`IIO No-OS </resources/tools-software/no-os-software/iio>`
 
 If you are not familiar with ADI IIO Oscilloscope Client, please take a
 look at:
-`IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`__
+:dokuwiki:`IIO Oscilloscope </resources/tools-software/linux-software/iio_oscilloscope>`
 
 No-OS Supported Platforms
--------------------------
+--------------------------
 
-Xilinx 
-~~~~~~
+Xilinx Platform
+~~~~~~~~~~~~~~~
 
-Hardware Used
+Used Hardware
 ^^^^^^^^^^^^^
 
-- :adi:`EVAL-AD7380FMCZ` or :adi:`EVAL-AD7381FMCZ`
-- ZedBoard
+* `EVAL-AD7380FMCZ <https://www.analog.com/EVAL-AD7380FMCZ>`_ or `EVAL-AD7381FMCZ <https://www.analog.com/EVAL-AD7381FMCZ>`_
+* `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
 Connections
 ^^^^^^^^^^^
 
 The EVAL-AD7380FMCZ has a standard FMC connector, which can be directly
-plugged into the FMC slot on the Zedboard.
+plugged into the FMC LPC slot on the ZedBoard (P7 on the evaluation
+board connects to the ZedBoard FMC-LPC connector).
 
 +-----------------+-----------------------------------+-----------------+
 | **Signal**      | **EVAL-AD7380FMCZ** FMC-LPC       | **ZedBoard**    |
@@ -220,48 +212,47 @@ plugged into the FMC slot on the Zedboard.
 | **CS**          | SPI CS (Digital Pin)              | SPI CS          |
 +-----------------+-----------------------------------+-----------------+
 
+Connect a micro-USB cable from the ZedBoard USB-UART port (J14) to
+your PC for serial console output (115200 baud, 8N1).
+
 Build Command
 ^^^^^^^^^^^^^
 
-For the make-based build flow and prerequisites, see the
-`No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_.
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``basic``, ``iio``.
+Available boards: ``zed``.
 
-In order to build the basic example, make sure you have the following
-configuration in the Makefile:
-
-.. code-block:: bash
-
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = y
-   IIO_EXAMPLE = n
-
-In order to build the IIO project, make sure you have the following
-configuration in the Makefile:
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
 
 .. code-block:: bash
 
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = n
-   IIO_EXAMPLE = y
+   # source the Vitis environment (adjust path to your installation)
+   source /path/to/Vitis/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   & "C:\path\to\Vitis\settings64.bat"
 
-.. code-block:: bash
+   cd no-OS
 
-   cp <SOME_PATH>/system_top.xsa .
-   # to delete current build
-   make reset
-   # to build the project
-   make PLATFORM=xilinx
-   # to flash the code
-   make run
+   # build the basic example on the ZedBoard
+   python tools/scripts/no_os_build.py build \
+      --project ad738x_fmcz --variant basic --board zed \
+      --hardware /path/to/ad738x_fmc_zed/system_top.xsa
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad738x_fmcz --variant basic --board zed \
+      --hardware /path/to/ad738x_fmc_zed/system_top.xsa \
+      --probe openocd --flash
 
 STM32 Platform
 ~~~~~~~~~~~~~~
 
-Hardware Used
+Used Hardware
 ^^^^^^^^^^^^^
 
-- EVAL-AD7380FMCZ or EVAL-AD7381FMCZ
-- EVAL-SDP-CK1Z (SDP-K1)
+* `EVAL-AD7380FMCZ <https://www.analog.com/EVAL-AD7380FMCZ>`_ or `EVAL-AD7381FMCZ <https://www.analog.com/EVAL-AD7381FMCZ>`_
+* `EVAL-SDP-CK1Z (SDP-K1) <https://www.analog.com/EVAL-SDP-CK1Z>`_
 
 Connections
 ^^^^^^^^^^^
@@ -272,6 +263,7 @@ board to PC via USB.
 
 ========== ====================== =============
 Signal     EVAL-AD7380FMCZ        EVAL-SDP-CK1Z
+========== ====================== =============
 MOSI       SPI MOSI (Digital Pin) SPI MOSI
 MISO       SPI MISO (Digital Pin) SPI MISO
 SCK        SPI SCK (Digital Pin)  SPI SCK
@@ -279,14 +271,14 @@ CS         SPI CS (Digital Pin)   SPI CS
 ========== ====================== =============
 
 Build Command
-^^^^^^^^^^^^^^
+^^^^^^^^^^^^^
+
+The STM32 platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``basic``, ``iio``.
+Available boards: ``sdp-ck1z``.
 
 For toolchain setup and prerequisites, see the
 `STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
-
-Available variants: ``basic``, ``iio``.
-Available boards: ``sdp-ck1z``.
-Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
@@ -294,13 +286,13 @@ Replace ``--variant`` / ``--board`` accordingly.
    # in a default install location)
    export STM32CUBEMX=</path/to/stm32cubemx>
    export STM32CUBEIDE=</path/to/stm32cubeide>
-   # Windows (PowerShell):
-   #   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
-   #   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
+   # PowerShell (Windows) equivalent:
+   #   $env:STM32CUBEMX = "<path\to\stm32cubemx>"
+   #   $env:STM32CUBEIDE = "<path\to\stm32cubeide>"
 
    cd no-OS
 
-   # build the project (basic example on the SDP-K1 board)
+   # build the basic example on the SDP-K1 board
    python tools/scripts/no_os_build.py build \
       --project ad738x_fmcz --variant basic --board sdp-ck1z
 
@@ -308,103 +300,3 @@ Replace ``--variant`` / ``--board`` accordingly.
    python tools/scripts/no_os_build.py build \
       --project ad738x_fmcz --variant basic --board sdp-ck1z \
       --probe openocd --flash
-
-Lattice Platform
-~~~~~~~~~~~~~~~~
-
-Hardware Used
-^^^^^^^^^^^^^
-
-- :adi:`EVAL-AD7380FMCZ` or :adi:`EVAL-AD7381FMCZ`
-- LFCPNX-EVN
-
-Connections
-^^^^^^^^^^^
-
-The EVAL-AD7380FMCZ has a standard FMC connector, which can be directly
-plugged into the FMC slot on the LFCPNX-EVN carrier board.
-
-+-----------------+-----------------------------------+------------------+
-| **Signal**      | **EVAL-AD7380FMCZ** FMC-LPC       | **LFCPNX-EVN**   |
-|                 | Connector (P7)                    | FMC-LPC          |
-|                 |                                   | Connector        |
-+-----------------+-----------------------------------+------------------+
-| **MOSI**        | SPI MOSI (Digital Pin)            | SPI MOSI         |
-+-----------------+-----------------------------------+------------------+
-| **MISO**        | SPI MISO (Digital Pin)            | SPI MISO         |
-+-----------------+-----------------------------------+------------------+
-| **SCK**         | SPI SCK (Digital Pin)             | SPI SCK          |
-+-----------------+-----------------------------------+------------------+
-| **CS**          | SPI CS (Digital Pin)              | SPI CS           |
-+-----------------+-----------------------------------+------------------+
-
-Build Command
-^^^^^^^^^^^^^
-
-For the make-based build flow and prerequisites, see the
-`No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_.
-
-In order to build the basic example, make sure you have the following
-configuration in the Makefile:
-
-.. code-block:: bash
-
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = y
-   IIO_EXAMPLE = n
-
-In order to build the IIO project, make sure you have the following
-configuration in the Makefile:
-
-.. code-block:: bash
-
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = n
-   IIO_EXAMPLE = y
-
-The reference HDL project for the Lattice platform (``LFCPNX-EVN``) is available
-at: `hdl/projects/ad738x_fmc/lfcpnx
-<https://github.com/analogdevicesinc/hdl/tree/main/projects/ad738x_fmc/lfcpnx>`__
-
-The Propel SDK command-line tools and the bundled RISC-V GCC toolchain
-must be on your ``PATH``:
-
-.. code-block:: bash
-
-   export PATH="<your_path>/lscc/propel/<version>/sdk/tools/bin":$PATH
-   export PATH="<your_path>/lscc/propel/<version>/sdk/riscv-none-embed-gcc/bin":$PATH
-   export PATH="<your_path>/lscc/propel/<version>/sdk/openocd/bin":$PATH
-   # On Windows Cygwin, the Lattice programmer binary path:
-   export PATH="/<your_path>/lscc/programmer/radiant/2025.2/bin/nt64":$PATH
-   # On Linux, the Lattice programmer binary path:
-   export PATH="/<your_path>/lscc/programmer/radiant/2025.2/bin/lin64":$PATH
-
-The hardware package exported by Propel Builder can be provided as an ``sge``
-directory or an ``sge.zip`` file. Place it in the project root, or pass its
-location with ``HARDWARE=/path/to/your/sge``.
-
-.. code-block:: bash
-
-   # copy the hardware package folder or zip file to the project directory
-   cp -r <your_path>/sge .
-   # optionally copy the bitstream file to the project directory
-   cp <your_path>/*.bit .
-   # to delete current build
-   make reset
-   # to build the project
-   make PLATFORM=lattice
-   # to flash and run the code (requires openocd)
-   make run
-
-.. note::
-   In default when using ``make run``, if the bitstream (``*.bit``) is available
-   in the project root, it is automatically downloaded to the FPGA before
-   loading the ELF by OpenOCD; Otherwise use `Lattice Radiant Programmer
-   <https://www.latticesemi.com/en/Products/DesignSoftwareAndIP/FPGAandLDS/Radiant>`__
-   GUI or command line to load the ``*.bit`` bitstream to the ``LFCPNX-EVN``
-   board before running the software. You can also disable the automatic
-   bitstream download by:
-
-   .. code-block:: bash
-
-      make run BITSTREAM=n
