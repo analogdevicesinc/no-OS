@@ -1,0 +1,22 @@
+menu "ad6676-ebz Configuration"
+
+choice AD6676_EBZ_EXAMPLE
+	prompt "Example variant"
+	default AD6676_EBZ_DEMO_EXAMPLE
+
+config AD6676_EBZ_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Demo example that initializes the AD6676 RF ADC via AXI ADC core and
+	  JESD204 interface, runs pattern tests, and captures data to DDR via DMA.
+
+config AD6676_EBZ_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the AD6676 ADC through the IIO framework via
+	  iio_axi_adc, enabling host-side data capture over UART.
+
+endchoice
+
+endmenu

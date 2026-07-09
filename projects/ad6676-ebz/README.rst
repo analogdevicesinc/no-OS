@@ -3,11 +3,11 @@ AD6676-EBZ no-OS Example Project
 
 .. no-os-doxygen::
 
-.. contents::
-	:depth: 3
+.. contents:: Table of Contents
+    :depth: 3
 
 Supported Evaluation Boards
-----------------------------
+---------------------------
 
 * `EVAL-AD6676 <https://www.analog.com/EVAL-AD6676>`_
 
@@ -31,7 +31,7 @@ quad frequency oscillator with a default 200 MHz reference clock. The
 board receives its power via the FMC connector from the carrier board.
 
 Applications
--------------
+------------
 
 * Wideband cellular infrastructure equipment and repeaters
 * Point-to-point microwave equipment
@@ -67,13 +67,8 @@ AGC Pins                         Automatic gain control loop interface
 Power Supply Connectors          Supply rails (VDD1, VDDL, VDDQ, etc.)
 ===============================  =====================================================
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
--------------------------
+------------------------
 
 The initialization data used in the examples is taken out from:
 `Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad6676-ebz/src>`_
@@ -96,17 +91,11 @@ GPIO and SPI, sets up the JESD204B interface and ADC core, and runs an IIO
 daemon that enables real-time data capture through the IIO client interface.
 
 If you are not familiar with ADI IIO Application, please take a look at:
-`IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
+:dokuwiki:`IIO No-OS </resources/tools-software/no-os-software/iio>`
 
 If you are not familiar with ADI IIO Oscilloscope Client, please take a
 look at:
-`IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
-
-To build the IIO example, add the following flag when invoking make:
-
-.. code-block:: bash
-
-   IIOD=y
+:dokuwiki:`IIO Oscilloscope </resources/tools-software/linux-software/iio_oscilloscope>`
 
 No-OS Supported Platforms
 --------------------------
@@ -114,29 +103,51 @@ No-OS Supported Platforms
 Xilinx Platform
 ~~~~~~~~~~~~~~~
 
-**Used Hardware**
+Used Hardware
+^^^^^^^^^^^^^
 
 * `EVAL-AD6676 <https://www.analog.com/EVAL-AD6676>`_
 * `ZC706 <https://www.xilinx.com/products/boards-and-kits/ek-z7-zc706-g.html>`_
 
-**Connections**
+Connections
+^^^^^^^^^^^
 
-* Plug the AD6676-EBZ FMC connector into the HPC (J37) connector on the
+* Plug the EVAL-AD6676 FMC connector into the HPC (J37) connector on the
   ZC706 board. The connector and board are keyed to ensure correct
   orientation; the evaluation board should face away from the main ZC706
   PCB.
-* The AD6676-EBZ receives its power directly via the FMC connector from
+* The EVAL-AD6676 receives its power directly via the FMC connector from
   the ZC706 board. No additional external power is needed if correctly
   mounted.
+* Connect a USB-UART cable to the ZC706 UART port for serial console
+  output (115200 baud, 8N1).
 
-**Build Command**
+Build Command
+^^^^^^^^^^^^^
+
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``demo``, ``iio``.
+Available boards: ``zc706``.
+
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
 
 .. code-block:: bash
 
-   cp <SOME_PATH>/system_top.xsa .
-   # to delete current build
-   make reset
-   # to build the project
-   make
-   # to flash the code
-   make run
+   # source the Vitis environment (adjust path to your installation)
+   source /path/to/Vitis/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   & "C:\path\to\Vitis\settings64.bat"
+
+   cd no-OS
+
+   # build the demo example on the ZC706 board
+   python tools/scripts/no_os_build.py build \
+      --project ad6676-ebz --variant demo --board zc706 \
+      --hardware /path/to/ad6676evb_zc706/system_top.xsa
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad6676-ebz --variant demo --board zc706 \
+      --hardware /path/to/ad6676evb_zc706/system_top.xsa \
+      --probe openocd --flash
