@@ -50,6 +50,15 @@ config SPI_GPIO_MAXIM
 	  flight and leaves them high-Z otherwise, so an idle core does not fight
 	  the active one. Used by the MAX78000 dual-core IMU example.
 
+config SYS_MAXIM
+	bool "Enable Maxim system-level helpers"
+	default n
+	help
+	  Enable shared MAX78000 system helpers (maxim_sys.c), including the
+	  read-modify-write __wrap_MXC_SYS_Reset_Periph() replacement for the SDK's
+	  destructive peripheral-reset store. Requires the corresponding
+	  "-Wl,--wrap=MXC_SYS_Reset_Periph" link option.
+
 config UART_MAXIM
 	bool "Enable Maxim UART driver"
 	depends on UART
