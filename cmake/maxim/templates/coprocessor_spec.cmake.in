@@ -1,0 +1,8 @@
+# Generated CPU1 source selection; CPU0's Kconfig is not inherited.
+set(NO_OS_PATH [==[@NO_OS_DIR@]==])
+set(RV_SOURCES [==[@RV_SOURCES@]==])
+set(RV_INCLUDES [==[@RV_INCLUDES@]==])
+set(RV_DEFINES [==[@RV_DEFINES@]==])
+set(RV_DEPENDS [==[@RV_DEPENDS@]==])
+set(RV_FORCE_INCLUDE [==[@RV_FORCE_INCLUDE@]==])
+set(RV_OPTIMIZATION [==[@RV_OPTIMIZATION@]==])
