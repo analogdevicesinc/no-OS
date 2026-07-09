@@ -507,6 +507,33 @@ static int32_t wifi_socket_close(struct wifi_desc *desc, uint32_t sock_id)
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
 
+	/*
+	 * Backlog client sockets are created once at listen and reused for the
+	 * lifetime of the server: _get_initialized_client_id only ever re-offers
+	 * a client slot that is in SOCKET_DISCONNECTED state. Closing one such
+	 * client (e.g. IIOD tearing down a finished/aborted connection) must
+	 * therefore leave it DISCONNECTED with its circular buffer intact, so it
+	 * can accept the next connection. The wifi_socket_disconnect() above has
+	 * already put it in SOCKET_DISCONNECTED; releasing it to SOCKET_UNUSED
+	 * here would strand the slot forever (never re-offered), so the server
+	 * would stop accepting clients after back_log_clients connections -
+	 * observed as the client getting EPIPE on connect. Only tear the
+	 * buffers/slots down when the server socket itself is closed.
+	 *
+	 * The RX circular buffer must be reset so no bytes left unconsumed by the
+	 * previous connection (e.g. a trailing/partial command) carry over into
+	 * the next one - that would desync the request/response stream and the
+	 * new client would receive the stale command's response instead of its
+	 * own. no_os_cb_cfg re-initializes the buffer pointers without freeing the
+	 * backing storage.
+	 */
+	if (_is_server_socket(desc, sock_id) && sock_id != desc->server.id) {
+		if (sock->cb)
+			no_os_cb_cfg(sock->cb, sock->cb->buff, sock->cb->size);
+
+		return 0;
+	}
+
 	/* Server socket circular buffer will be released only when server
 	 * is removed */
 	if (!_is_server_socket(desc, sock_id)) {
