@@ -1,0 +1,41 @@
+menu "adrv9009 Configuration"
+
+choice ADRV9009_EXAMPLE
+	prompt "Example variant"
+	default ADRV9009_DEMO_EXAMPLE
+
+config ADRV9009_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Basic initialization and bring-up example for the ADRV9009 transceiver
+	  via AXI ADC/DAC cores, JESD204 and DMA, targeting zc706 or zcu102.
+
+config ADRV9009_ADRV9008_1_EXAMPLE
+	bool "ADRV9008-1 example"
+	help
+	  Build for ADRV9008-1 (TX-only sub-variant of the ADRV9009 family).
+	  Enables -DADRV9008_1 which gates the TX-only code paths in headless_arm.c.
+
+config ADRV9009_ADRV9008_2_EXAMPLE
+	bool "ADRV9008-2 example"
+	help
+	  Build for ADRV9008-2 (RX-only sub-variant of the ADRV9009 family).
+	  Enables -DADRV9008_2 which gates the RX-only code paths in headless_arm.c.
+
+config ADRV9009_DMA_EXAMPLE
+	bool "DMA example"
+	help
+	  DMA-based data capture and playback example for the ADRV9009 transceiver.
+	  Enables -DDMA_EXAMPLE to activate the DMA transfer code paths.
+
+config ADRV9009_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the ADRV9009 transceiver through the IIO
+	  framework via iio_axi_adc and iio_axi_dac, enabling host-side data
+	  capture and playback over UART (IIOD).  Enables -DIIO_SUPPORT.
+
+endchoice
+
+endmenu
