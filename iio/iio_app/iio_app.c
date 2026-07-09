@@ -326,6 +326,8 @@ int iio_app_init(struct iio_app_desc **app,
 		if (status < 0)
 			return status;
 	}
+
+	application->irq_desc = irq_desc;
 #endif
 
 	status = uart_setup(&uart_desc, &app_init_param.uart_init_params);
