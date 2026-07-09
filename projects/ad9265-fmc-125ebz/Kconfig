@@ -1,0 +1,22 @@
+menu "ad9265-fmc-125ebz Configuration"
+
+choice AD9265_FMC_125EBZ_EXAMPLE
+	prompt "Example variant"
+	default AD9265_FMC_125EBZ_DEMO_EXAMPLE
+
+config AD9265_FMC_125EBZ_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Demo example that initializes the AD9265 ADC via AXI ADC core and
+	  AXI DMA, runs pattern tests, and captures data to DDR.
+
+config AD9265_FMC_125EBZ_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the AD9265 ADC through the IIO framework
+	  via iio_axi_adc, enabling host-side data capture over UART.
+
+endchoice
+
+endmenu
