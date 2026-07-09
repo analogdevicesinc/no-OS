@@ -33,6 +33,8 @@
    ---------------------------------------------------------------------------*/
 
 #include <stdint.h>
+#include <errno.h>
+#include <sys/types.h>
 #include <rtos_map/adi_rtos_map.h>
 
 /*----------------------------------------------------------------------------
@@ -44,6 +46,10 @@ extern uint32_t __data_end__;
 extern uint32_t __bss_start__;
 extern uint32_t __bss_end__;
 extern uint32_t __StackTop;
+/* Heap window in DSRAM_B: [__end__ .. __HeapLimit). Used by the bounded _sbrk
+ * below so heap growth can never run past the end of the bank. */
+extern uint32_t __end__;
+extern uint32_t __HeapLimit;
 
 /*----------------------------------------------------------------------------
   Exception / Interrupt Handler Function Prototype
@@ -360,6 +366,51 @@ void Reset_Handler_C(void) {
 void Default_Handler(void) {
 
 	while(1);
+}
+
+/*----------------------------------------------------------------------------
+  Bounded heap allocator (_sbrk)
+ *----------------------------------------------------------------------------*/
+/*
+ * The _sbrk from nosys.specs is UNBOUNDED: it grows the heap on every malloc
+ * with no check against the top of RAM. The heap[] array occupies DSRAM_B up to
+ * __HeapLimit (see the linker rework in aducm3029_platform_sdk.cmake), but the
+ * stock _sbrk does not know that limit: once heap demand exceeds the heap[]
+ * budget it keeps handing out addresses past __HeapLimit and off the end of
+ * DSRAM_B into unmapped memory. malloc then returns a non-NULL but invalid
+ * pointer; the first access faults (imprecise BusFault) somewhere far from the
+ * real cause, or nearby allocations get clobbered.
+ *
+ * Override it with a version that stops at __HeapLimit (end of the heap[]
+ * region) and returns (void *)-1 / ENOMEM instead. Over-allocation then turns
+ * into a clean malloc()==NULL that callers already handle, rather than silent
+ * corruption. The heap window is [__end__ .. __HeapLimit); both symbols come
+ * from the linker script.
+ */
+void *_sbrk(ptrdiff_t incr)
+{
+	static uint8_t	*heap_ptr;
+	uint8_t		*base = (uint8_t *)&__end__;
+	uint8_t		*limit = (uint8_t *)&__HeapLimit;
+	uint8_t		*prev;
+
+	if (heap_ptr == 0)
+		heap_ptr = base;
+
+	/* Reject shrink-below-base and growth past the heap limit. */
+	if (incr < 0 && (heap_ptr + incr) < base) {
+		errno = ENOMEM;
+		return (void *) -1;
+	}
+	if (incr > 0 && (heap_ptr + incr) > limit) {
+		errno = ENOMEM;
+		return (void *) -1;
+	}
+
+	prev = heap_ptr;
+	heap_ptr += incr;
+
+	return (void *)prev;
 }
 
 /*
