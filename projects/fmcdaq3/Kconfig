@@ -1,0 +1,24 @@
+menu "fmcdaq3 Configuration"
+
+choice FMCDAQ3_EXAMPLE
+	prompt "Example variant"
+	default FMCDAQ3_DEMO_EXAMPLE
+
+config FMCDAQ3_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Demo example that initializes the AD9152 DAC + AD9680 ADC via JESD204
+	  (TX and RX), AXI DAC/ADC cores, AD9528 clock, and AXI DMAC. Runs
+	  pattern tests and a DMA capture. No IIO.
+
+config FMCDAQ3_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the AD9152 DAC and AD9680 ADC through the IIO
+	  framework via iio_axi_dac and iio_axi_adc, enabling host-side data
+	  transfer over UART.
+
+endchoice
+
+endmenu
