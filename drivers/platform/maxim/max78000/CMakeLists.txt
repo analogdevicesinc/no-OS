@@ -1,6 +1,14 @@
 no_os_sources_ifdef(CONFIG_SPI_GPIO_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/maxim_gpio_spi.c)
 no_os_sources_ifdef(CONFIG_SYS_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/maxim_sys.c)
 
+# MAX78000 still uses legacy peripherals alongside its CAPI mailbox and coprocessor.
+if(CONFIG_CAPI)
+    target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/maxim_init.c)
+    if(NOT CONFIG_FREERTOS)
+        target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/maxim_delay.c)
+    endif()
+endif()
+
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SPI/spi_me17.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SPI/spi_reva1.c)
 target_include_directories(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SPI)
@@ -54,6 +62,14 @@ target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MA
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX78000/Source/GCC/startup_max78000.S)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX78000/Source/heap.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX78000/Source/system_max78000.c)
+
+no_os_sources_ifdef(CONFIG_CAPI_MAILBOX
+    ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SEMA/sema_me17.c
+    ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SEMA/sema_reva.c)
+if(CONFIG_CAPI_MAILBOX)
+    target_include_directories(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SEMA)
+    target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Include/SEMA)
+endif()
 
 target_compile_definitions(no-os PUBLIC -DTARGET_NUM=78000)
 target_compile_definitions(no-os PUBLIC -DTARGET=78000)
