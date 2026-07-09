@@ -8,6 +8,7 @@ sw.elf
 xsct.log
 RemoteSystemsTempFiles
 build
+build-*
 BUILD
 builds
 exports
@@ -20,6 +21,8 @@ dfp_drivers
 aducm_project
 aducm_build
 .vscode
+no-os.code-workspace
+compile_commands.json
 .Xil
 .github/CODEOWNERS
 .github/PULL_REQUEST_TEMPLATE.md
