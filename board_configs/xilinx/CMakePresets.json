@@ -50,6 +50,17 @@
 				"PLATFORM": "xilinx",
 				"BOARD_CONFIG_FILE": "zcu102_defconfig"
 			}
+		},
+		{
+			"name": "vcu118",
+			"description": "VCU118 (Virtex UltraScale+, MicroBlaze / sys_mb). Requires -DHARDWARE=<abs path to system_top.xsa>",
+			"inherits": "xilinx-base",
+			"cacheVariables": {
+				"BOARD": "vcu118",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "xilinx",
+				"BOARD_CONFIG_FILE": "vcu118_defconfig"
+			}
 		}
 	]
 }
