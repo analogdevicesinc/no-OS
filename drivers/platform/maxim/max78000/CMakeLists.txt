@@ -1,4 +1,5 @@
 no_os_sources_ifdef(CONFIG_SPI_GPIO_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/maxim_gpio_spi.c)
+no_os_sources_ifdef(CONFIG_SYS_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/maxim_sys.c)
 
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SPI/spi_me17.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SPI/spi_reva1.c)
