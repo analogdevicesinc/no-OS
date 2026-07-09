@@ -61,6 +61,39 @@
 				"PLATFORM": "xilinx",
 				"BOARD_CONFIG_FILE": "vcu118_defconfig"
 			}
+		},
+		{
+			"name": "zc702",
+			"description": "ZC702 (Zynq-7000, cortexa9). Requires -DHARDWARE=<abs path to system_top.xsa>",
+			"inherits": "xilinx-base",
+			"cacheVariables": {
+				"BOARD": "zc702",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "xilinx",
+				"BOARD_CONFIG_FILE": "zc702_defconfig"
+			}
+		},
+		{
+			"name": "zcu102_lvds",
+			"description": "ZCU102 LVDS variant (Zynq UltraScale+ MPSoC, cortexa53). Requires -DHARDWARE=<abs path to system_top.xsa>",
+			"inherits": "xilinx-base",
+			"cacheVariables": {
+				"BOARD": "zcu102_lvds",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "xilinx",
+				"BOARD_CONFIG_FILE": "zcu102_lvds_defconfig"
+			}
+		},
+		{
+			"name": "kcu105",
+			"description": "KCU105 (Kintex UltraScale, MicroBlaze / sys_mb). Requires -DHARDWARE=<abs path to system_top.xsa>",
+			"inherits": "xilinx-base",
+			"cacheVariables": {
+				"BOARD": "kcu105",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "xilinx",
+				"BOARD_CONFIG_FILE": "kcu105_defconfig"
+			}
 		}
 	]
 }
