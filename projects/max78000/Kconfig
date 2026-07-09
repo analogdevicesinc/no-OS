@@ -9,6 +9,16 @@ config MAX78000_BASIC_EXAMPLE
 	help
 	  Simple example that prints a message over UART.
 
+config MAX78000_DUAL_CORE_EXAMPLE
+	bool "Dual-core example (ARM + RISC-V)"
+	depends on COPROCESSOR && IPC_MAXIM
+	help
+	  Demonstrates the coprocessor lifecycle API (boot, halt) and inter-core
+	  communication via the no_os_ipc doorbell/mailbox API and shared memory.
+	  ARM (CPU0) boots RISC-V (CPU1), publishes a callback address,
+	  and waits for RISC-V to ring the doorbell periodically.
+	  Requires CONFIG_COPROCESSOR=y and CONFIG_IPC_MAXIM=y.
+
 endchoice
 
 endmenu
