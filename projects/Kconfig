@@ -143,5 +143,6 @@ source "projects/wethlink/Kconfig"
 source "projects/eval-ade9430/Kconfig"
 source "projects/eval-pqmon/Kconfig"
 source "projects/ad7124-8pmdz/Kconfig"
+source "projects/fmcdaq3/Kconfig"
 source "projects/hello_world/Kconfig"
 endmenu
