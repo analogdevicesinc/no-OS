@@ -218,9 +218,17 @@ static inline bool is_payload_message(struct at_desc *desc, uint8_t ch)
 	 */
 	switch (desc->ipd_stat) {
 	case RAEDING_CONN:
-		if (ch < '0' || ch > '4')
+		if (ch < '0' || ch > '9')
 			goto reset;
 		desc->current_conn = ch - '0';
+		/*
+		 * conn[] and the wifi conn_id_to_sock_id[] arrays are sized
+		 * MAX_CONNECTIONS (valid ids 0..MAX_CONNECTIONS-1). The module
+		 * can report a higher link id; using it as an index would write
+		 * past those arrays and corrupt the heap, so reject it here.
+		 */
+		if (desc->current_conn >= MAX_CONNECTIONS)
+			goto reset;
 		desc->ipd_stat = WAITING_COMMA;
 		desc->ipd_idx++;
 		break;

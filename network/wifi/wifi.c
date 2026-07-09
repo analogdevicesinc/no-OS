@@ -244,6 +244,14 @@ static void _wifi_connection_callback(void *ctx, enum at_event event,
 	struct socket_desc	*sock;
 	int32_t			sock_id;
 
+	/*
+	 * conn_id indexes conn_id_to_sock_id[MAX_CONNECTIONS]. The parser
+	 * already rejects out-of-range link ids, but guard here too since a bad
+	 * index would read/write past the wifi descriptor and corrupt the heap.
+	 */
+	if (conn_id >= MAX_CONNECTIONS)
+		return;
+
 	sock_id = desc->conn_id_to_sock_id[conn_id];
 	if (event == AT_NEW_CONNECTION) {
 		if (sock_id != INVALID_ID) {
