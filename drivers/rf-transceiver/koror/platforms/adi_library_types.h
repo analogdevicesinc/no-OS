@@ -23,6 +23,7 @@
 #include <time.h>
 #include <limits.h>
 #include <ctype.h>
+#include <stdbool.h>
 
 /* stddef.h */
 #define ADI_LIBRARY_OFFSETOF                            offsetof
