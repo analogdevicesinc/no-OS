@@ -1,0 +1,13 @@
+if MAXIM
+
+# The generic module switches also enable the MAX78000 backends. Both
+# backends allocate private state, but neither requires the other module.
+config CAPI_MAILBOX
+	select CAPI
+	select CAPI_ALLOC
+
+config CAPI_COPROCESSOR
+	select CAPI
+	select CAPI_ALLOC
+
+endif # MAXIM

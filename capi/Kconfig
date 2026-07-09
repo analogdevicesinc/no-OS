@@ -56,3 +56,5 @@ config CAPI_PINT
 	default n
 
 endif # CAPI
+
+source "capi/platform/maxim/max78000/Kconfig"
