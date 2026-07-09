@@ -242,7 +242,18 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 		/* TODO: remove this ifdef when asynchrounous rx is implemented on every platform. */
 #if defined(STM32_PLATFORM) || defined(MAXIM_PLATFORM) || defined(ADUCM_PLATFORM) || defined(PICO_PLATFORM) || defined(LATTICE_PLATFORM)
 		.irq_id = uart_init_par->irq_id,
+#if defined(ADUCM_PLATFORM) && defined(NO_OS_NETWORKING)
+		/*
+		 * On the aducm3029 WiFi build the ESP8266 AT parser shares this
+		 * UART and installs its own RX/error callbacks in at_init. The
+		 * UART driver's own asynchronous RX would register a competing
+		 * callback and RX buffer on the same event, corrupting the AT
+		 * byte stream, so it must stay disabled here.
+		 */
+		.asynchronous_rx = false,
+#else
 		.asynchronous_rx = uart_init_par->asynchronous_rx,
+#endif
 #endif
 		.baud_rate = UART_BAUDRATE_DEFAULT,
 		.size = NO_OS_UART_CS_8,
