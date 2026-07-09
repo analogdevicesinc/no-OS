@@ -41,6 +41,14 @@ if(NOT CCES_HOME OR NOT EXISTS "${CCES_HOME}")
         "export CCES_HOME=/opt/analog/cces/3.0.3) or pass -DCCES_HOME=...")
 endif()
 
+# Normalize to forward slashes. On Windows CCES_HOME arrives with backslashes
+# (e.g. C:\analog\cces\3.0.3), and paths derived from it are emitted verbatim
+# into .vscode/launch.json (searchDir) and openocd.cfg. Backslash sequences like
+# \a \c \3 are invalid JSON string escapes, so Cortex-Debug mangles the OpenOCD
+# -s search dir (C:\analog\cces\3.0.3 -> C:nalogces.0.3) and fails to parse the
+# launch config. Forward slashes are valid JSON and accepted by all Windows
+# tools (OpenOCD, GCC, GDB), so convert once here and every derived path is safe.
+file(TO_CMAKE_PATH "${CCES_HOME}" CCES_HOME)
 set(CCES_HOME "${CCES_HOME}" CACHE PATH "CrossCore Embedded Studio install root" FORCE)
 message(STATUS "CCES_HOME: ${CCES_HOME}")
 
