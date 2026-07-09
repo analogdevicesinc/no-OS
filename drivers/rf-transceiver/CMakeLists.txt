@@ -46,14 +46,25 @@ no_os_sources_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV9025
 no_os_include_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV9025
     ${CMAKE_CURRENT_SOURCE_DIR}/madura)
 
-# navassa (adrv9002)
-no_os_sources_ifdef(CONFIG_RF_TRANSCEIVER_ADRV9002
-    ${CMAKE_CURRENT_SOURCE_DIR}/navassa/adrv9002.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/navassa/adrv9002_conv.c)
-target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/navassa)
+# navassa (adrv9002) — top-level wrapper + full vendor API tree
+# FLAG (shared driver change): Switched from two explicit sources to recurse
+# helpers to compile the full vendor API tree under navassa/ (common/, third_party/,
+# devices/adrv9001/private/src/ and public/src/). The legacy Make used
+# SRC_DIRS+=navassa which compiled all .c files recursively; CMake needs explicit
+# registration via these helpers to do the same.
+no_os_sources_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV9002
+    ${CMAKE_CURRENT_SOURCE_DIR}/navassa)
+no_os_include_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV9002
+    ${CMAKE_CURRENT_SOURCE_DIR}/navassa)
 
-# talise (adrv9009)
-no_os_sources_ifdef(CONFIG_RF_TRANSCEIVER_ADRV9009
-    ${CMAKE_CURRENT_SOURCE_DIR}/talise/adrv9009.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/talise/adrv9009_conv.c)
-target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/talise)
+# talise (adrv9009) — top-level wrapper + full vendor API tree
+# FLAG (shared driver change): Switched from two explicit sources to recurse
+# helpers to compile the full vendor API tree under talise/ (top-level
+# adrv9009.c/adrv9009_conv.c wrappers + api/*.c with all talise vendor
+# functions). The legacy Make arm_src.mk listed all api/*.c explicitly and
+# mb_src.mk used SRC_DIRS+=talise recursively; CMake needs recurse registration
+# to do the same. Also adds recurse include so talise/api/ headers are found.
+no_os_sources_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV9009
+    ${CMAKE_CURRENT_SOURCE_DIR}/talise)
+no_os_include_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV9009
+    ${CMAKE_CURRENT_SOURCE_DIR}/talise)
