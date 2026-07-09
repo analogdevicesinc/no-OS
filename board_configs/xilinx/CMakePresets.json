@@ -39,6 +39,17 @@
 				"PLATFORM": "xilinx",
 				"BOARD_CONFIG_FILE": "coraz7s_defconfig"
 			}
+		},
+		{
+			"name": "zcu102",
+			"description": "ZCU102 (Zynq UltraScale+ MPSoC, cortexa53). Requires -DHARDWARE=<abs path to system_top.xsa>",
+			"inherits": "xilinx-base",
+			"cacheVariables": {
+				"BOARD": "zcu102",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "xilinx",
+				"BOARD_CONFIG_FILE": "zcu102_defconfig"
+			}
 		}
 	]
 }
