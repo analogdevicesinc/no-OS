@@ -1,13 +1,16 @@
-ad9081 no-OS Example Project
-============================
+AD9081 no-OS Example Project
+=============================
 
 .. no-os-doxygen::
+
+.. contents:: Table of Contents
+    :depth: 3
 
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD9081 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9081.html>`_
-* `Quad MxFE <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/quad-mxfe.html>`_
+* `AD9081-FMCA-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9081.html>`_
+* `QUAD-MXFE <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/quad-mxfe.html>`_
 
 Supported Carriers
 ------------------
@@ -20,28 +23,11 @@ Supported Carriers
      - Carrier
      - FMC slot
    * - `AD9081-FMCA-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9081.html>`_
-     - `VCK190 <https://www.xilinx.com/VCK190>`_
-     - FMC0
-   * -
      - `VCU118 <https://www.xilinx.com/VCU118>`_
-     - FMC+
-   * -
-     - `VCU128 <https://www.xilinx.com/VCU128>`_
      - FMC+
    * -
      - `ZCU102 <https://www.xilinx.com/ZCU102>`_
      - FMC HPC0
-   * -
-     - `ZC706 <https://www.xilinx.com/ZC706>`_
-     - FMC HPC
-
-.. list-table::
-   :widths: 35 35 30
-   :header-rows: 1
-
-   * - Evaluation board
-     - Carrier
-     - FMC slot
    * - `QUAD-MXFE <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/quad-mxfe.html>`_
      - `VCU118 <https://www.xilinx.com/VCU118>`_
      - FMC+
@@ -49,261 +35,164 @@ Supported Carriers
 Overview
 --------
 
-The AD9081 is a highly integrated, multi-channel mixed-signal front-end (MxFE™)
-device designed to deliver a complete radio solution for a wide range of applications,
-including 5G wireless infrastructure, broadband communication, and defense electronics.
-It combines multiple high-speed ADCs and DACs, a digital up-converter (DUC) and
-digital down-converter (DDC), and integrated digital signal processing (DSP) blocks.
+The AD9081 is a highly integrated, multi-channel mixed-signal front-end (MxFE)
+device designed for a complete radio solution across a wide range of
+applications including 5G wireless infrastructure, broadband communication, and
+defense electronics. It combines multiple high-speed ADCs and DACs, a digital
+up-converter (DUC) and digital down-converter (DDC), and integrated DSP blocks.
+The device communicates with an FPGA over a high-speed JESD204B/C serial
+interface.
 
-The Quad-MxFE System Development Platform contains four MxFE™ software defined,
-direct RF sampling transceivers, as well as associated RF front-ends, clocking,
-and power circuitry. The target application is phased array radars, electronic
-warfare, and ground-based SATCOM, specifically a 16 transmit/16 receive channel
-direct sampling phased array at L/S/C band (0.1 GHz to ~5GHz). The Rx & Tx RF
-front-end has drop-in configurations that allow for customized frequency ranges,
-depending on the user’s application.
+The Quad-MxFE System Development Platform contains four MxFE software-defined,
+direct RF sampling transceivers with associated RF front-ends, clocking, and
+power circuitry. The target application is phased array radars, electronic
+warfare, and ground-based SATCOM, specifically a 16Tx/16Rx channel direct
+sampling phased array at L/S/C band (0.1 GHz to approximately 5 GHz).
 
-Prerequisites
--------------
+Applications
+------------
 
-Prior to building the project, the environment for the development of Xilinx
-projects must be set up. These are presented in the *Build Prerequisites*
-section of no-OS build guide available :dokuwiki:`here <resources/no-os/build>`.
+* 5G wireless infrastructure
+* Broadband communication
+* Defense electronics and phased array radar
+* Electronic warfare
+* Ground-based SATCOM
+
+Hardware Specifications
+-----------------------
+
+Power Supply Requirements
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The AD9081-FMCA-EBZ is powered from the FMC carrier board. The carrier supplies
+12 V and 3.3 V through the FMC connector; on-board regulators generate all
+internal supply rails. For the Quad-MxFE board, an external 12 V laboratory
+supply is required.
 
 Reference Input Requirements
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For the AD9081-EVALZ, the board can either use an external clock source or the
-internal one.
-
-.. note::
-  The following rework is required:
-   - In order to avoid using an external clock source and fully rely on the
-     HMC7044 clock chip, rotate the C6D/C4D caps in C5D/C3D position
-     (Please note: In the latest version of the board, this is now the default
-     configuration, so this configuration step might not be needed anymore)
-   - If LEDS V1P0_LED and VINT_LED are not on please depopulate R22M and populate R2M
-
-For the Quad-MxFE, an additional 500MHz Reference Oscillator or Waveform Generator
-is required.
-
-Building and Running the Project
---------------------------------
-
-The steps indicated have to be followed for building the project, for debugging,
-and running.
-
-#. Open a terminal and navigate to this project directory (if building on
-   Windows, `Git Bash` has to be used).
-#. Make sure that the environment is set up for building Xilinx projects.
-#. Make sure you have copied the corresponding `system_top.xsa` file of your project to the
-   `projects/ad9081/` directory, because it is necessary for the build process.
-#. Make sure that the `Makefile` is configured correctly for your platform.
-   The default configuration is for the `AD9081-FMCA-EBZ` evaluation board, with
-   the profile specified in profiles/vcu118_ad9081_m8_l4/app_config.h:
-
-   .. code-block:: bash
-
-     JESD_MODE=8B10B \ #JESD204B, subclass 1
-     TX_MODE=9 \
-     RX_MODE=10 \
-     RX_LANE_RATE_KHZ=10000000 \ 
-     TX_LANE_RATE_KHZ=10000000 \
-     RX_JESD_M=8 \
-     RX_JESD_L=4 \
-     RX_JESD_F=4 \
-     RX_JESD_K=32 \
-     RX_JESD_S=1 \
-     RX_JESD_NP=16 \
-     RX_NUM_LINKS=1 \
-     TX_JESD_M=8 \
-     TX_JESD_L=4 \
-     TX_JESD_F=4 \
-     TX_JESD_K=32 \
-     TX_JESD_S=1 \
-     TX_JESD_NP=16 \
-     TX_NUM_LINKS=1 \
-
-#. If you want to use the `Quad-MxFE` you can do so with one of the available
-   profiles in the `profiles` directory, or you can create your own profile
-   by copying one of the existing ones and modifying it. To build the project
-   this way you can run the following command:
-
-    .. code-block:: bash
-
-      make -j QUAD_MXFE=y PROFILE=vcu118_quad_ad9081_204b_txmode_9_rxmode_10_revc
-#. Otherwise, type ``make -j`` in order to build the project.
-
-A successful build should end with the following terminal output:
-
-.. code-block:: bash
-
-  [14:15:11] Creating archive with files
-    text    data     bss     dec     hex filename
-  240676    2092 1057008 1299776  13d540 /home/ramona/workspace/no-OS/projects/ad9081/build/ad9081.elf
-  [14:14:38] Done (build/ad9081.elf)
-
-Available profiles:
-  * vcu118_ad9081_m8_l4 - default profile
-  * vcu118_quad_ad9081_204b_txmode_9_rxmode_10_revc - Quad-MxFE profile
-   
-    .. code-block:: bash
-  
-      JESD_MODE=8B10B \ #JESD204B, subclass 1
-      TX_MODE=9 \
-      RX_MODE=10 \
-      RX_LANE_RATE_KHZ=10000000 \ 
-      TX_LANE_RATE_KHZ=10000000 \
-      RX_JESD_M=8 \
-      RX_JESD_L=4 \
-      RX_JESD_F=4 \
-      RX_JESD_K=32 \
-      RX_JESD_S=1 \
-      RX_JESD_NP=16 \
-      RX_NUM_LINKS=4 \
-      TX_JESD_M=8 \
-      TX_JESD_L=4 \
-      TX_JESD_F=4 \
-      TX_JESD_K=32 \
-      TX_JESD_S=1 \
-      TX_JESD_NP=16 \
-      TX_NUM_LINKS=4 \
-  * vcu118_quad_ad9081_204c_txmode_11_rxmode_4_revc - Quad-MxFE profile
-   
-    .. code-block:: bash
-  
-      JESD_MODE=64B66B \ #JESD204C, subclass 1
-      TX_MODE=11 \
-      RX_MODE=4 \
-      RX_LANE_RATE_KHZ=16500000 \ 
-      TX_LANE_RATE_KHZ=16500000 \
-      RX_JESD_M=8 \
-      RX_JESD_L=2 \
-      RX_JESD_F=8 \
-      RX_JESD_K=32 \
-      RX_JESD_S=1 \
-      RX_JESD_NP=16 \
-      RX_NUM_LINKS=4 \
-      TX_JESD_M=16 \
-      TX_JESD_L=4 \
-      TX_JESD_F=8 \
-      TX_JESD_K=32 \
-      TX_JESD_S=1 \
-      TX_JESD_NP=16 \
-      TX_NUM_LINKS=4 \
-  * zcu102_ad9081_m8_l4 - ZCU102 + AD9081
-   
-    .. code-block:: bash
-  
-      JESD_MODE=8B10B \ #JESD204B, subclass 1
-      TX_MODE=9 \
-      RX_MODE=10 \
-      RX_LANE_RATE_KHZ=10000000 \ 
-      TX_LANE_RATE_KHZ=10000000 \
-      RX_JESD_M=8 \
-      RX_JESD_L=4 \
-      RX_JESD_F=4 \
-      RX_JESD_K=32 \
-      RX_JESD_S=1 \
-      RX_JESD_NP=16 \
-      RX_NUM_LINKS=1 \
-      TX_JESD_M=8 \
-      TX_JESD_L=4 \
-      TX_JESD_F=4 \
-      TX_JESD_K=32 \
-      TX_JESD_S=1 \
-      TX_JESD_NP=16 \
-      TX_NUM_LINKS=1 \
-  * zc706_ad9081_m8_l4 - ZC706 + AD9081
-   
-    .. code-block:: bash
-  
-      #This is a profile which uses QPLL for both adxcvr instances.
-      #For this to work both instances need to configure the same lane rate.
-      ADXCVR_REF_CLK_KHZ=250000
-      #JESD profile
-      JESD_MODE=8B10B \ #JESD204B, subclass 1
-      TX_MODE=9 \
-      RX_MODE=10 \
-      RX_LANE_RATE_KHZ=10000000 \ 
-      TX_LANE_RATE_KHZ=10000000 \
-      RX_JESD_M=8 \
-      RX_JESD_L=4 \
-      RX_JESD_F=4 \
-      RX_JESD_K=32 \
-      RX_JESD_S=1 \
-      RX_JESD_NP=16 \
-      RX_NUM_LINKS=1 \
-      TX_JESD_M=8 \
-      TX_JESD_L=4 \
-      TX_JESD_F=4 \
-      TX_JESD_K=32 \
-      TX_JESD_S=1 \
-      TX_JESD_NP=16 \
-      TX_NUM_LINKS=1 \
-
-These profiles correspond some of the possible HDL configurations. For creating
-a profile for your specific project needs, please visit
-:git-hdl:`QUAD-MxFE hdl <projects/ad_quadmxfe1_ebz>` or 
-:git-hdl:`QUAD-MxFE hdl <projects/ad9081_fmca_ebz>` 
-documentation files for your platform, as well as `the AD9081 user guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-ad9082-ug-1578.pdf>` 
-
-Fore more details about the available make rules, check out
-:dokuwiki:`this page <resources/no-os/make>`.
+For the AD9081-FMCA-EBZ, the board can use an external clock source or the
+internal HMC7044 clock chip.
 
 .. note::
-  The QUAD-MXFE project is configured for rev C boards, in case of older revisions,
-  please check out older releases.
 
-Running the Project
--------------------
-Once the project is built, you can run it on your target platform. You can either
-run using Vitis or by using the command line:
-... code-block:: bash
+   The following rework may be required on older board revisions:
 
-  make run
+   * To avoid using an external clock source and rely on the HMC7044, rotate
+     the C6D/C4D capacitors to position C5D/C3D. (On the latest board revision
+     this is the default configuration and may not be needed.)
+   * If LEDs V1P0_LED and VINT_LED are not lit, depopulate R22M and populate R2M.
+
+For the Quad-MxFE, an additional 500 MHz reference oscillator or waveform
+generator is required.
+
+Board Connectors
+~~~~~~~~~~~~~~~~
+
+* **J1** — FMC+ connector that mates with the carrier board (VCU118 or ZCU102)
+* **J10** — SMA connector for optional external reference clock input
+
+.. note::
+
+   The QUAD-MXFE project is configured for rev C boards and later. For older
+   revisions, refer to the corresponding older no-OS release.
 
 No-OS Supported Examples
 ------------------------
 
-The various example modes can be selected via Makefile, or when running the make
-command while buidling the project
+This project is organized around the no-OS variant-based build flow.
+Selecting a variant at build time (``--variant <name>``) chooses which
+application is compiled. Shared initialization data is defined in
+`src <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9081/src>`__.
+
+Demo Example
+~~~~~~~~~~~~
+
+The demo example initializes the AD9081 MxFE device via JESD204 RX/TX links,
+AXI ADC and DAC cores, and AXI DMAC, then captures and plays back data to
+DDR memory. This is the default example using the ``ad9081_fmca_ebz`` HDL
+design (VCU118 or ZCU102 carrier).
+
+IIO Example
+~~~~~~~~~~~
+
+The IIO example exposes the AD9081 MxFE through the IIO framework using
+iio_axi_adc and iio_axi_dac, enabling host-side data capture and injection
+over UART. If IIOD is enabled, the board can be used with any ADI IIO client:
+
+* `libiio <https://wiki.analog.com/resources/tools-software/linux-software/libiio>`_ command-line tools
+* `IIO-Oscilloscope <https://github.com/analogdevicesinc/iio-oscilloscope/releases>`_
+* `Scopy v2 <https://github.com/analogdevicesinc/scopy/releases/tag/v2.0.0>`_
+
+If you are not familiar with ADI IIO Application, please take a look at:
+:dokuwiki:`IIO No-OS </resources/tools-software/no-os-software/iio>`
+
+If you are not familiar with ADI IIO-Oscilloscope Client, please take a
+look at:
+:dokuwiki:`IIO Oscilloscope </resources/tools-software/linux-software/iio_oscilloscope>`
+
+No-OS Supported Platforms
+-------------------------
+
+Xilinx
+~~~~~~
+
+Used Hardware
+^^^^^^^^^^^^^
+
+* `AD9081-FMCA-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9081.html>`_
+* `VCU118 <https://www.xilinx.com/VCU118>`_ or `ZCU102 <https://www.xilinx.com/ZCU102>`_
+
+Connections
+^^^^^^^^^^^
+
+Connect the AD9081-FMCA-EBZ to the carrier board via the FMC+ connector
+(FMC+ slot on VCU118, FMC HPC0 on ZCU102). The JESD204B/C high-speed serial
+lanes, SPI interface, clock signals, and power rails are all routed through the
+FMC connector. Connect a USB-to-serial cable to the carrier board UART
+(115200 baud) for console output.
+
+Build Command
+^^^^^^^^^^^^^
+
+The Xilinx platform uses the CMake/Ninja build system via the ``no_os_build.py``
+helper script. Available variants: ``demo``, ``iio``.
+Available boards: ``vcu118``, ``zcu102``.
+
+The HDL design used is ``ad9081_fmca_ebz``. The hardware name composed for the
+XSA download is ``ad9081_fmca_ebz_<board>`` (e.g. ``ad9081_fmca_ebz_vcu118``).
+
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
 
 .. code-block:: bash
 
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	IIOD ?= n
-  QUAD_MXFE = n
+   # Source the Vitis environment (adjust path for your installation):
+   source ~/.xilinx/2025.1/Vitis/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   & "$env:XILINX_VITIS\settings64.bat"
 
-  # Uncomment to select the profile:
-  #PROFILE = vcu118_quad_ad9081_204c_txmode_11_rxmode_4_revc
-  #PROFILE = vcu118_quad_ad9081_204b_txmode_9_rxmode_10_revc
-  #PROFILE = zcu102_ad9081_m8_l4
-  PROFILE = vcu118_ad9081_m8_l4
-  #PROFILE = zc706_ad9081_m8_l4
+   cd no-OS
 
-or
-.. code-block:: bash
+   # Build the demo example on vcu118
+   python tools/scripts/no_os_build.py build \
+      --project ad9081 --variant demo --board vcu118 \
+      --hardware /path/to/ad9081_fmca_ebz_vcu118/system_top.xsa
 
-  make run IIOD=y QUAD_MXFE=y PROFILE=vcu118_quad_ad9081_204b_txmode_9_rxmode_10_revc
+   # Build the IIO example on zcu102
+   python tools/scripts/no_os_build.py build \
+      --project ad9081 --variant iio --board zcu102 \
+      --hardware /path/to/ad9081_fmca_ebz_zcu102/system_top.xsa
 
-AD9081 example
-^^^^^^^^^^^^^^
-The AD9081 example is a simple application that initializes the AD9081 device, 
-in case IIOD is enabled, it will also configure the IIO interface and you can
-use `libiio <https://wiki.analog.com/resources/tools-software/linux-software/libiio>`_ command line tools / `IIO-Oscilloscope <https://github.com/analogdevicesinc/iio-oscilloscope/releases>`_ / `Scopy2 v2 <https://github.com/analogdevicesinc/scopy/releases/tag/v2.0.0>`_ to control the device.
+   # Build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad9081 --variant demo --board vcu118 \
+      --hardware /path/to/ad9081_fmca_ebz_vcu118/system_top.xsa \
+      --probe openocd --flash
 
-QUAD-MXFE example
-^^^^^^^^^^^^^^^^^
-In this example all four AD9081 devices are initialized and configured, in order
-to be able to fully use the eval board.
-
-.. important::
-
-   The QUAD-MXFE project is configured for rev C boards and later, which implies 
-   the use of specific HMC7043 channels (as opposed to the rev B boards), along
-   with some specific pin configurations for AD9081. 
-
-Just like in the case of single MxFE, if IIOD is enabled, it will also provide
-the iio support so that the board can be used with any of the ADI iio tools:
-`libiio <https://wiki.analog.com/resources/tools-software/linux-software/libiio>`_ command line tools / `IIO-Oscilloscope <https://github.com/analogdevicesinc/iio-oscilloscope/releases>`_ / `Scopy v2 <https://github.com/analogdevicesinc/scopy/releases/tag/v2.0.0>`_ to control the device.
+For more information on the AD9081 device and available JESD204 profiles,
+refer to the `AD9081 User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-ad9082-ug-1578.pdf>`__
+and the HDL reference designs for
+`AD9081-FMCA-EBZ <https://analogdevicesinc.github.io/hdl/projects/ad9081_fmca_ebz/>`__
+and `QUAD-MxFE <https://analogdevicesinc.github.io/hdl/projects/ad_quadmxfe1_ebz/>`__.

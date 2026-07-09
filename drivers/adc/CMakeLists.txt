@@ -143,6 +143,9 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad799x)
 
 # AD9081
 no_os_sources_ifdef(CONFIG_ADC_AD9081 ${CMAKE_CURRENT_SOURCE_DIR}/ad9081/ad9081.c)
+# AD9081 vendor API sources (compiled alongside the wrapper; legacy Make picked these
+# up automatically via SRC_DIRS recursive wildcard — CMake needs them explicit)
+no_os_sources_dir_ifdef(CONFIG_ADC_AD9081 ${CMAKE_CURRENT_SOURCE_DIR}/ad9081/api)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad9081)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad9081/api)
 
