@@ -52,5 +52,10 @@ target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX78000/Sour
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX78000/Source/heap.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX78000/Source/system_max78000.c)
 
+target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SEMA/sema_me17.c)
+target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SEMA/sema_reva.c)
+target_include_directories(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SEMA)
+target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Include/SEMA)
+
 target_compile_definitions(no-os PUBLIC -DTARGET_NUM=78000)
 target_compile_definitions(no-os PUBLIC -DTARGET=78000)
