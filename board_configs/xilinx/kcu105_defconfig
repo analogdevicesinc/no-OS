@@ -1,0 +1,16 @@
+CONFIG_PLATFORM_DRIVERS=y
+CONFIG_XILINX=y
+
+# Enable every Xilinx platform driver at the board baseline; each is gated by
+# `depends on <SUBSYS>` in drivers/platform/xilinx/Kconfig, so an enable here is
+# inert unless the project's .conf turns on the matching generic subsystem
+# (CONFIG_SPI, CONFIG_GPIO, ...). Mirrors the maxim/stm32 board defconfigs.
+#
+# GPIO_IRQ_XILINX is omitted (MicroBlaze): xilinx_gpio_irq.h unconditionally
+# includes the PS-only xgpiops.h, absent from a MicroBlaze BSP. See vcu118.
+CONFIG_UART_XILINX=y
+CONFIG_SPI_XILINX=y
+CONFIG_I2C_XILINX=y
+CONFIG_GPIO_XILINX=y
+CONFIG_IRQ_XILINX=y
+CONFIG_TIMER_XILINX=y
