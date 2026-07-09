@@ -1,0 +1,54 @@
+menu "ad9361 Configuration"
+
+choice AD9361_EXAMPLE
+	prompt "Example variant"
+	default AD9361_DEMO_EXAMPLE
+
+config AD9361_DEMO_EXAMPLE
+	bool "Demo example (FMComms2)"
+	help
+	  Basic initialization and bring-up example for the AD9361 transceiver
+	  via AXI ADC/DAC cores and DMAC, targeting the FMCOMMS2/3/4 board.
+	  Supports kcu105, zc702, zc706, zcu102, and zed carriers.
+
+config AD9361_IIO_EXAMPLE
+	bool "IIO example (FMComms2)"
+	depends on IIO
+	help
+	  IIO example that exposes the AD9361 transceiver through the IIO
+	  framework via iio_axi_adc and iio_axi_dac, enabling host-side data
+	  capture and playback over UART (IIOD). Enables -DIIO_SUPPORT.
+	  Supports kcu105, zc702, zc706, zcu102, and zed carriers.
+
+config AD9361_DMA_EXAMPLE
+	bool "DMA example (FMComms2)"
+	help
+	  DMA-based data capture and playback example for the AD9361 transceiver.
+	  Enables -DDMA_EXAMPLE to activate the DMA transfer code paths.
+	  Supports kcu105, zc702, zc706, zcu102, and zed carriers.
+
+config AD9361_DMA_IRQ_EXAMPLE
+	bool "DMA+IRQ example (FMComms2)"
+	help
+	  DMA-based data capture/playback example with IRQ-driven DMA completion
+	  notifications. Enables -DDMA_EXAMPLE and -DDMA_IRQ_ENABLE.
+	  Supports kcu105, zc702, zc706, zcu102, and zed carriers.
+
+config AD9361_DEMO_FMCOMMS5_EXAMPLE
+	bool "Demo example (FMComms5)"
+	help
+	  Basic initialization and bring-up example for the dual AD9361 transceiver
+	  on the FMCOMMS5 board. Enables -DFMCOMMS5 for dual-chip mode.
+	  Supports zc702, zc706, and zcu102 carriers.
+
+config AD9361_IIO_FMCOMMS5_EXAMPLE
+	bool "IIO example (FMComms5)"
+	depends on IIO
+	help
+	  IIO example for the dual AD9361 transceiver on the FMCOMMS5 board.
+	  Enables -DFMCOMMS5 and -DIIO_SUPPORT. Supports zc702, zc706, and
+	  zcu102 carriers.
+
+endchoice
+
+endmenu
