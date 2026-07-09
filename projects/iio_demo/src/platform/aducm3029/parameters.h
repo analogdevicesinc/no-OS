@@ -51,7 +51,14 @@
 
 /* This value can be modified based on the number
 of samples needed to be stored in the device buffer
-and based on the available RAM memory of the platform */
-#define SAMPLES_PER_CHANNEL_PLATFORM 200
+and based on the available RAM memory of the platform.
+ *
+ * It also bounds the per-buffer block size a client may request: the demo
+ * serves the IIO buffer from the static in_buff/out_buff arrays (sized
+ * SAMPLES_PER_CHANNEL_PLATFORM * channels * 2 bytes), and iio_open_dev rejects
+ * a requested block larger than that array with -ENOMEM. libiio defaults to a
+ * 256-sample block when iio_readdev is called without -b, so keep this at least
+ * 256; 512 leaves headroom for larger -b values while still fitting DSRAM_A. */
+#define SAMPLES_PER_CHANNEL_PLATFORM 512
 
 #endif /* __PARAMETERS_H__ */
