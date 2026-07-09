@@ -1,7 +1,10 @@
 adrv902x no-OS Example Project
-==============================
+================================
 
 .. no-os-doxygen::
+
+.. contents:: Table of Contents
+    :depth: 3
 
 Supported Devices
 -----------------
@@ -14,128 +17,42 @@ Supported Carriers
 
 * `ZCU102 <https://www.xilinx.com/ZCU102>`_
 
-Naming Conventions
-------------------
+Overview
+--------
 
 This guide is a source of information for system engineers and software
-developers using the Analog Devices, Inc., ADRV902x family of software defined
-radio transceivers. This family consists of the ADRV9026 integrated quad RF
-transceiver and the ADRV9029 integrated quad RF transceiver with digital
-predistortion (DPD) and crest factor reduction (CFR) capability.
+developers using the Analog Devices, Inc., ADRV902x family of software
+defined radio transceivers. This family consists of the ADRV9026
+integrated quad RF transceiver and the ADRV9029 integrated quad RF
+transceiver with digital predistortion (DPD) and crest factor reduction
+(CFR) capability.
 
-Prerequisites
+The ADRV9025/ADRV9026/ADRV9029 devices feature four transmitters, four
+receivers, and dual observation receivers covering a frequency range of
+75 MHz to 6 GHz. They integrate JESD204B interfaces for high-speed
+digital data transfer and ARM Cortex-M3 based firmware (Madura API) for
+device control.
+
+Driver Layout
 -------------
 
-Prior to building the project, the environment for the development of Xilinx
-projects must be set up. These are presented in the *Build Prerequisites*
-section of no-OS build guide available :dokuwiki:`here <resources/no-os/build>`.
-
-Building and Running the Project
---------------------------------
-
-The steps indicated at the following address have to be followed for building
-the project, for debugging, and running. These steps are adapted to the used
-platform and host OS.
-
-Currently, the project is only intended to be run on the :xilinx:`ZCU102`
-target, so the Xilinx procedure is to be followed.
-
-#. Open a terminal and navigate to this project directory (if building on
-   Windows, `Git Bash` has to be used).
-#. Type ``make -j`` in order to build the project.
-
-A successful build should end with the following terminal output:
-
-.. code-block:: bash
-
-   [23:38:48] Creating BOOT.BIN and archive with files
-   text	   data	    bss	    dec	    hex	filename
-   1213864	 368588	1239608	2822060	 2b0fac	/path/to/no-OS/projects/adrv902x/build/adrv902x.elf
-   [23:36:50] Done (build/adrv902x.elf)
-
-Make sure to connect your adrv902x evaluation board to the correct FMC
-connector or the carrier you use before programming it.
-
-Fore more details about the available make rules, check out
-:dokuwiki:`this page <resources/no-os/make>`.
-
-Project Layout and HDL Generation
----------------------------------
-
-This is how the :git-no-OS:`adrv902x no-OS project <projects/adrv902x>` looks
-like as a file tree:
-
-::
-
-   no-OS/projects/adrv902x/
-   ├── Makefile
-   ├── README.rst
-   ├── src
-   │   ├── common
-   │   │   ├── ADRV9025_RxGainTable.h
-   │   │   ├── ADRV9025_TxAttenTable.h
-   │   │   ├── app_config.h
-   │   │   ├── common_data.c
-   │   │   ├── common_data.h
-   │   │   ├── firmware
-   │   │   │   ├── ActiveUseCase_profile.h
-   │   │   │   ├── ActiveUtilInit_profile.h
-   │   │   │   ├── ADRV9025_DPDCORE_FW.h
-   │   │   │   ├── ADRV9025_FW.h
-   │   │   │   └── ADRV9025_stream_image.h
-   │   │   └── hal
-   │   │       ├── no_os_platform.c
-   │   │       └── no_os_platform.h
-   │   ├── examples
-   │   │   ├── basic_example
-   │   │   │   ├── basic_example.c
-   │   │   │   └── basic_example.h
-   │   │   ├── dma_example
-   │   │   │   ├── dma_example.c
-   │   │   │   └── dma_example.h
-   │   │   ├── examples_src.mk
-   │   │   └── iio_example
-   │   │       ├── iio_example.c
-   │   │       └── iio_example.h
-   │   ├── LICENSE_API
-   │   ├── LICENSE_FW
-   │   └── platform
-   │       ├── platform_includes.h
-   │       └── xilinx
-   │           ├── main.c
-   │           ├── parameters.c
-   │           ├── parameters.h
-   │           └── platform_src.mk
-   ├── src.mk
-   └── system_top.xsa
-
-Note the presence of the system_top.xsa. In order to build this
-:dokuwiki:`no-OS <resources/no-os>` project, you need such an .xsa file present
-in the project directory, as shown above. In case you don't have one, either
-obtain a pre-built file or build it yourself by following the
-:dokuwiki:`Building HDL guide <resources/fpga/docs/build>`.
-
-And this is how the corresponding :git-no-OS:`drivers section <drivers/rf-transceiver/madura>`
-looks like as a file tree (the Madura API can be found under common and devices
-directories):
+The Madura API is located in the no-OS driver directory under:
 
 ::
 
    no-OS/drivers/rf-transceiver/madura/
    ├── adrv9025.c
    ├── adrv9025_conv.c
-   ├── adrv9025.c.orig
    ├── adrv9025.h
    ├── common
-   │   ├── adi_common.h
-   │   ├── adi_common_macros.h
-   │   ├── adi_common_types.h
-   │   ├── adi_common_user.h
-   │   ├── adi_error
-   │   ├── adi_halMake sure to connect your adrv9002 evaluation board to the correct FMC connector or the carrier you use:
-   │   └── adi_logging
+   │   ├── adi_common.h
+   │   ├── adi_common_macros.h
+   │   ├── adi_common_types.h
+   │   ├── adi_common_user.h
+   │   ├── adi_error
+   │   └── adi_logging
    ├── devices
-   │   └── adrv9025
+   │   └── adrv9025
    └── platforms
        ├── adi_platform.h
        └── adi_platform_types.h
@@ -143,77 +60,64 @@ directories):
 Switching Between Use Cases
 ---------------------------
 
-When the implementation of a different use case than the one in the project
-folder is desired, the following steps have to be followed:
+When the implementation of a different use case than the one in the
+project folder is desired, the following steps have to be followed:
 
-#. From the Madura TES GUI, generate the resources folder that contains the files listed below:
+#. From the Madura TES GUI, generate the resources folder that contains
+   the files listed below:
 
    * Firmware files (ADRV9025_FW.bin and ADRV9025_DPDCORE_FW.bin),
    * Stream binary (e.g., stream_image_6E3E00EFB74FE7D465FA88A171B81B8F.bin),
    * ActiveUseCase.profile and ActiveUtilInit.profile.
 
-#. Since no-OS does not have mechanisms for manipulating files, create a hex dump for each .bin file. As can be seen in the project structure, these are added as header files to the project.
+#. Since no-OS does not have mechanisms for manipulating files, create a
+   hex dump for each .bin file. As can be seen in the project structure,
+   these are added as header files to the project.
 
    * Use the following command for storing the hex dump in a file:
      ::
 
         xxd -i ADRV9025_FW.bin > ADRV9025_FW.h
 
-   * Copy the generated unsigned char array to the correspoding header file in
-     the :git-no-OS:`project structure <projects/adrv902x/src/common/firmware>`
+   * Copy the generated unsigned char array to the corresponding header
+     file in the
+     `project structure <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv902x/src/common/firmware>`__
      (ADRV9025_FW.h, ADRV9025_DPDCORE_FW.h or ADRV9025_stream_image.h).
 
-#. Profile files also have to be transformed for being included in the project:
+#. Profile files also have to be transformed for being included in the
+   project:
 
    * Generate string literals from the json files using the
-     :git-no-OS:`json2cstring.sh <projects/adrv902x/json2cstring.sh>`
-     script in the :git-no-OS:`no-OS project <projects/adrv902x>`:
+     `json2cstring.sh <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv902x/json2cstring.sh>`__
+     script in the no-OS project:
      ::
 
        ./json2cstring path/ActiveUseCase.profile
 
-   * Copy the contents of the generated files to the corresponding header files
-     in the :git-no-OS:`project structure <adrv902x/src/common/firmware>`
+   * Copy the contents of the generated files to the corresponding header
+     files in the
+     `project structure <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv902x/src/common/firmware>`__
      (ActiveUseCase_profile.h and ActiveUtilInit_profile.h).
 
-#. Modify the code in the project so that the new settings are correctly used
-   (e.g., :git-no-OS:`app_config.h <adrv902x/src/common/app_config.h>`).
+#. Modify the code in the project so that the new settings are correctly
+   used (e.g.,
+   `app_config.h <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv902x/src/common/app_config.h>`__).
 
 #. Build the project.
 
-Demo Applications
------------------
+No-OS Supported Examples
+-------------------------
 
-The demo applications highlight the functionality of the adrv902x evaluation
-board. Three examples are provided in the sample project:
-
-* Basic Example
-* DMA Example
-* IIO Example
-
-An example is selected by setting the ``EXAMPLE`` variable in the project
-Makefile. Below is an example for activating the basic example:
-
-.. code-block:: bash
-
-   EXAMPLE = basic_example
-
-Another way of selecting a demo is by passing the variable to ``make`` through
-command line arguments:
-
-.. code-block:: bash
-
-   make EXAMPLE=dma_example
-
-Note that only one example can be enabled at a time. The command line
-overwrites the value in the Makefile.
+The demo applications highlight the functionality of the adrv902x
+evaluation board. Three example variants are provided in the project:
 
 Basic Example
-^^^^^^^^^^^^^
+~~~~~~~~~~~~~
 
-The basic example simply initializes the components on the evaluation board and
-enables a JESD link. Tx will transmit a DDS waveform with the default
-parameters set by the DAC driver. The output looks like the one below:
+The basic example (variant ``basic_example``) simply initializes the
+components on the evaluation board and enables a JESD link. TX will
+transmit a DDS waveform with the default parameters set by the DAC
+driver. The output looks like the one below:
 
 .. code-block:: bash
 
@@ -245,72 +149,62 @@ parameters set by the DAC driver. The output looks like the one below:
    Bye
 
 DMA Example
-^^^^^^^^^^^
+~~~~~~~~~~~
 
-DMA example is a standard example that sends a sinewave on Tx channels using
-DMA from a lookup table. If you physically loopback a Tx channel to an Rx
-channel via an electrical wire, you may run the DMA example and read the
-received data at Rx from its particular memory address.
+The DMA example (variant ``dma_example``) sends a sine wave on TX
+channels using DMA from a lookup table. If you physically loopback a TX
+channel to an RX channel via an electrical wire, you may run the DMA
+example and read the received data at RX from its particular memory
+address.
 
-Select the example through command line arguments as below:
-
-.. code-block:: bash
-
-    make EXAMPLE=dma_example
-
-To run the DMA example, you simply need to run the application as usual by:
-
-* making sure it was built with the ``dma_example`` selection (``EXAMPLE =
-  dma_example`` in the Makefile or as command line argument for ``make``), as
-  already mentioned
-* monitoring the serial terminal for messages printed by the application
-
-After the output from the basic example, the application will eventually print something like this:
+After the output from the basic example, the application will eventually
+print something like this:
 
 .. code-block:: bash
 
     DMA_EXAMPLE Tx: address=0x1dc900 samples=8192 channels=8 bits=32
     DMA_EXAMPLE Rx: address=0x1e4900 samples=65536 channels=8 bits=16
 
-This means that the memory address where the data at Rx is stored is
+This means that the memory address where the data at RX is stored is
 ``0x1e4900``. There are a total of 65536 samples, 16-bit wide across 8
-channels, which is equivalent to 8192, 16-bit samples per channel. The location
-of the transmitted data is also given (0x1dc900).
+channels, which is equivalent to 8192, 16-bit samples per channel. The
+location of the transmitted data is also given (0x1dc900).
 
-At this point you may use a Tcl script to retrieve data from memory and store
-it into .csv files for processing:
+At this point you may use a Tcl script to retrieve data from memory and
+store it into .csv files for processing:
 
 .. code-block:: bash
 
    xsct tools/scripts/platform/xilinx/capture.tcl ZYNQ_PSU 0x1e4900 65536 8 16
 
-You can find more information about  the data :dokuwiki:`here <resources/no-os/dac_dma_example>`.
+You can find more information about the data `here <https://wiki.analog.com/resources/no-os/dac_dma_example>`_.
 
 The data in the .csv files generated can be visualised using the
-:git-no-OS:`plot.py <tools/scripts/platform/xilinx/plot.py>` script in the
-:git-no-OS:`/`. The following command will display the data on all 8 channels:
+`plot.py <https://github.com/analogdevicesinc/no-OS/blob/master/tools/scripts/platform/xilinx/plot.py>`_
+script in the no-OS repository. The following command will display the
+data on all 8 channels:
 
 .. code-block:: bash
 
-   python do_graph.py 8
+   python tools/scripts/platform/xilinx/plot.py 8
 
 IIO Example
-^^^^^^^^^^^
+~~~~~~~~~~~
 
-IIO demo is a standard example, provided in most :git-no-OS:`no-OS projects <projects>`,
-that launches a IIOD server on the board so that the user may connect to it via
-an IIO client. Using iio-oscilloscope, the user can configure the DAC and view
-the ADC data on a plot.
+The IIO example (variant ``iio_example``) launches a IIOD server on the
+board so that the user may connect to it via an IIO client. Using
+iio-oscilloscope, the user can configure the DAC and view the ADC data
+on a plot.
 
-To build the IIOD demo, add the following flags when invoking make which will
-build the IIOD server and the IIO section of the driver:
+If you are not familiar with ADI IIO Application, please take a look at:
+`IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
 
-.. code-block:: bash
+If you are not familiar with ADI IIO-Oscilloscope Client, please take a
+look at:
+`IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
 
-   make BASIC_EXAMPLE=n DMA_EXAMPLE=n IIO_EXAMPLE=y
-
-To run the IIOD demo, first connect to the board via UART to see the runtime
-output messages with the following settings:
+To run the IIOD demo, connect to the board via UART with the following
+settings:
 
 .. code-block:: bash
 
@@ -320,14 +214,7 @@ output messages with the following settings:
    Stop bits: 1 bit
    Flow Control: none
 
-Please note that for proper message display, you may need to convert all LF
-characters to CRLF, if your serial terminal supports it.
-
-With a serial terminal correctly configured and listening to incoming messages,
-launch the application (make run or click the debug button in your SDK).
-Runtime messages specific to the application will appear on your serial
-terminal screen, and eventually the following message is printed, after the
-output from the basic example:
+After the link bring-up messages, the application will eventually print:
 
 .. code-block:: bash
 
@@ -341,6 +228,71 @@ output from the basic example:
        Stop bits: 1
        Flow control: none
 
-This message implies a IIOD server is being run and you may connect to it using
-a serial-backend enabled :git-iio-oscilloscope:`iio-oscilloscope </>` and with the settings
-indicated at the serial terminal.
+This message implies a IIOD server is being run and you may connect to it
+using a serial-backend enabled
+`iio-oscilloscope <https://github.com/analogdevicesinc/iio-oscilloscope>`__
+with the settings indicated at the serial terminal.
+
+No-OS Supported Platforms
+--------------------------
+
+Xilinx
+~~~~~~
+
+Used Hardware
+^^^^^^^^^^^^^
+
+* `ZCU102 Evaluation Kit <https://www.xilinx.com/ZCU102>`__ (Zynq UltraScale+ MPSoC)
+* ADRV9026 or ADRV9029 evaluation board
+
+Connections
+^^^^^^^^^^^
+
+Connect the adrv902x evaluation board to the correct FMC connector on
+the ZCU102 carrier board before programming it. Connect a USB cable to
+the carrier board USB-UART port and the host PC for serial console
+access at 115200 baud, 8N1.
+
+Build Command
+^^^^^^^^^^^^^
+
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``basic_example``,
+``dma_example``, ``iio_example``. Available boards: ``zcu102``.
+
+A Xilinx XSA hardware description file is required. The HDL design name
+is ``adrv9026``; the hardware name is composed as ``adrv9026_<board>``
+(e.g. ``adrv9026_zcu102``).
+
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
+
+.. code-block:: bash
+
+   # Source the Vitis toolchain environment
+   source ~/.xilinx/2025.1/Vitis/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   & "$env:USERPROFILE\.xilinx\2025.1\Vitis\settings64.bat"
+
+   cd no-OS
+
+   # Build the basic example for ZCU102
+   python tools/scripts/no_os_build.py build \
+       --project adrv902x --variant basic_example --board zcu102 \
+       --hardware /path/to/adrv9026_zcu102/system_top.xsa
+
+   # Build and flash via JTAG
+   python tools/scripts/no_os_build.py build \
+       --project adrv902x --variant basic_example --board zcu102 \
+       --hardware /path/to/adrv9026_zcu102/system_top.xsa \
+       --probe openocd --flash
+
+   # Build the DMA example for ZCU102
+   python tools/scripts/no_os_build.py build \
+       --project adrv902x --variant dma_example --board zcu102 \
+       --hardware /path/to/adrv9026_zcu102/system_top.xsa
+
+   # Build the IIO example for ZCU102
+   python tools/scripts/no_os_build.py build \
+       --project adrv902x --variant iio_example --board zcu102 \
+       --hardware /path/to/adrv9026_zcu102/system_top.xsa

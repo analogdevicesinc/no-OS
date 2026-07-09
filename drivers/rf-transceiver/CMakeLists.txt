@@ -22,11 +22,25 @@ no_os_sources_ifdef(CONFIG_RF_TRANSCEIVER_ADRV904X
     ${CMAKE_CURRENT_SOURCE_DIR}/koror/adrv904x_conv.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/koror)
 
-# madura (adrv9025)
-no_os_sources_ifdef(CONFIG_RF_TRANSCEIVER_ADRV9025
-    ${CMAKE_CURRENT_SOURCE_DIR}/madura/adrv9025.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/madura/adrv9025_conv.c)
-target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/madura)
+# palma (adrv903x) — top-level wrapper + full vendor API tree
+# FLAG (shared driver change): Added recurse helpers to compile the full vendor
+# API tree under palma/ (common/adi_{error,hal,logging}/, devices/adrv903x/
+# private/src/ and public/src/).  The legacy Make used SRC_DIRS+=palma which
+# compiled all .c files recursively; CMake needs explicit registration.
+no_os_sources_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV903X
+    ${CMAKE_CURRENT_SOURCE_DIR}/palma)
+no_os_include_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV903X
+    ${CMAKE_CURRENT_SOURCE_DIR}/palma)
+
+# madura (adrv9025) — top-level wrapper + full vendor API tree
+# FLAG (shared driver change): Added recurse helpers to compile the full vendor
+# API tree under madura/ (common/adi_{error,hal,logging}/, devices/adrv9025/
+# private/src/ and public/src/).  The legacy Make used SRC_DIRS+=madura which
+# compiled all .c files recursively; CMake needs explicit registration.
+no_os_sources_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV9025
+    ${CMAKE_CURRENT_SOURCE_DIR}/madura)
+no_os_include_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV9025
+    ${CMAKE_CURRENT_SOURCE_DIR}/madura)
 
 # navassa (adrv9002)
 no_os_sources_ifdef(CONFIG_RF_TRANSCEIVER_ADRV9002
