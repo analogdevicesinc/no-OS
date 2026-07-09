@@ -34,6 +34,10 @@ no_os_sources_ifdef(CONFIG_SPI_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim
 
 no_os_sources_ifdef(CONFIG_DMA_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/common/maxim_dma.c)
 
+no_os_sources_ifdef(CONFIG_IPC_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_ipc.c)
+
+no_os_sources_ifdef(CONFIG_COPROCESSOR_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_coprocessor.c)
+
 target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_init.c)
 
 # Delay (always included when not using FreeRTOS)

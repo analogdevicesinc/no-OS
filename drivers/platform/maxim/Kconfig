@@ -106,4 +106,23 @@ config DMA_MAXIM
 	help
 	  Enable Maxim-specific DMA driver implementation.
 
+config IPC_MAXIM
+	bool "Enable Maxim inter-processor communication (IPC) driver"
+	select IPC
+	default n
+	help
+	  Enable the SEMA-backed inter-processor communication driver: core-to-core
+	  doorbell interrupts (irq0/irq1) and hardware mailbox registers for
+	  notifications between CPU0 (Arm) and CPU1 (RISC-V). Implements the generic
+	  no_os_ipc API (include/no_os_ipc.h).
+
+config COPROCESSOR_MAXIM
+	bool "Enable Maxim coprocessor (CPU1) lifecycle driver"
+	depends on IPC_MAXIM
+	default n
+	help
+	  Enable boot/halt lifecycle control for the auxiliary processor core
+	  (e.g., RISC-V RV32 CPU1 on MAX78000). Also provides access to the
+	  cross-core IPC shared memory interface (maxim_ipc_shared.h).
+
 endif # MAXIM
