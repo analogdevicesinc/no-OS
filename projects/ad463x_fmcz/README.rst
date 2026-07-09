@@ -4,10 +4,10 @@ AD463x-FMCZ no-OS Example Project
 .. no-os-doxygen::
 
 .. contents:: Table of Contents
-	:depth: 3
+   :depth: 3
 
 Supported Evaluation Boards
-----------------------------
+---------------------------
 
 * `EVAL-AD4030-24FMCZ <https://www.analog.com/EVAL-AD4030-24>`_
 * `EVAL-AD4630-16FMCZ <https://www.analog.com/EVAL-AD4630-16>`_
@@ -31,17 +31,16 @@ The evaluation boards demonstrate the performance of either the
 AD4630-24, AD4030-24, or AD4630-16 and provide a configurable analog
 front end (AFE) for a variety of system applications.
 
-The evaluation boards are designed for use with a ZedBoard.
-The ZedBoard is used to control data capture and buffering. The
-evaluation board connects to the ZedBoard via a field-programmable
-gate array (FPGA) mezzanine card (FMC) low pin count (LPC) connector.
+The evaluation boards are designed for use with a ZedBoard or the
+SDP-K1 controller board. The ZedBoard uses the FMC low pin count (LPC)
+connector for high-speed data capture and buffering.
 
 .. note::
 
-	The name ``AD463x`` is used as a generic identifier in the no-OS driver code;
-	this driver supports multiple devices in the AD463x family including
-	AD4630-24, AD4630-20, AD4630-16, AD4631-24, AD4631-20, AD4631-16,
-	AD4632-24, AD4632-20, AD4632-16, AD4030, ADAQ4216, and ADAQ4224.
+   The name ``AD463x`` is used as a generic identifier in the no-OS driver code;
+   this driver supports multiple devices in the AD463x family including
+   AD4630-24, AD4630-20, AD4630-16, AD4631-24, AD4631-20, AD4631-16,
+   AD4632-24, AD4632-20, AD4632-16, AD4030, ADAQ4216, and ADAQ4224.
 
 Applications
 ------------
@@ -65,7 +64,7 @@ is first converted to a 7.5V intermediate voltage by a switching
 regulator before being post-regulated to provide various required
 voltage rails. Moreover, the 12V is instrumental in generating negative
 rail voltages, such as the -3.3V needed for the buffers and drive
-amplifiers, ensuring precise operational amplifier functionality.
+amplifiers.
 
 ============  =========================================  ========  ========
 Power Supply  Function                                   Min. (V)  Max. (V)
@@ -84,151 +83,154 @@ REF           5V at the ADC reference output             4.95      5.05
 EN            1.8V enable signal for power supplies      1.75      1.85
 ============  =========================================  ========  ========
 
+No-OS Build Setup
+-----------------
+
+Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`__
+
 No-OS Supported Examples
 ------------------------
 
+This project uses the no-OS variant-based build flow. Selecting a variant
+at build time (``--variant <name>``) chooses which application is compiled.
 The initialization data used in the examples is taken out from:
-`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad463x_fmcz/src/common>`_
+`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad463x_fmcz/src/common>`__
 
 The macros used in Common Data are defined in platform specific files found in:
-`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad463x_fmcz/src/platform>`_
+`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad463x_fmcz/src/platform>`__
 
 Basic Example
 ~~~~~~~~~~~~~
 
-The basic example code demonstrates the initialization, configuration,
-and data acquisition for AD463x series ADCs. The process begins with the
-``basic_example_main`` function, which initializes the ADC using
-``ad463x_init``. If the ADAQ4224 is used, gain settings are configured
-via a scale table with ``ad463x_set_pgia_gain``. The function then exits
-the register configuration mode using ``ad463x_exit_reg_cfg_mode``. ADC
-data is read into a buffer with ``ad463x_read_data`` and sign-extended
-with ``no_os_sign_extend32``. Finally, data for two channels is printed
-to the console, providing a clear demonstration of ADC data handling.
-This example includes error management and cleanup operations for robust
-execution.
+The basic example demonstrates initialization, configuration, and data
+acquisition for AD463x series ADCs. The ``basic_example_main`` function
+initializes the ADC using ``ad463x_init``. If the ADAQ4224 is used, gain
+settings are configured via a scale table with ``ad463x_set_pgia_gain``.
+The function then exits the register configuration mode, reads ADC data
+into a buffer, sign-extends the results with ``no_os_sign_extend32``, and
+prints data for both channels to the console.
 
 IIO Example
 ~~~~~~~~~~~
 
-The IIO example code for the ad463x_fmcz project demonstrates the use of
-the Industrial I/O framework to interface with AD463x series ADCs. It
-focuses on initializing the ADC device and setting up the IIO interface
-through the ``iio_example_main()`` function. This involves allocating
-and initializing an ``ad463x_dev`` structure, alongside an
-``iio_ad463x`` structure to support IIO functions. The example routinely
-streams data from the ADC, handling it via an IIO-configured buffer,
-showcasing ADC configuration and data management capabilities using the
-IIO framework. It provides a practical implementation of IIO for
-enhanced device interfacing, forming a key part of hardware-software
-integration within the project.
+The IIO example initializes the AD463x ADC and sets up the IIO interface
+through ``iio_example_main()``. It allocates and initializes an
+``ad463x_dev`` structure, alongside an ``iio_ad463x`` structure to support
+IIO functions. The example routinely streams data from the ADC via an
+IIO-configured buffer, showcasing ADC configuration and data management
+capabilities using the IIO framework.
 
 If you are not familiar with ADI IIO Application, please take a look at:
-`IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
+`IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`__
+
+If you are not familiar with ADI IIO-Oscilloscope Client, please take a
+look at:
+`IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`__
 
 No-OS Supported Platforms
 --------------------------
 
-Xilinx Platform
-~~~~~~~~~~~~~~~
+Xilinx
+~~~~~~
 
-**Used Hardware**
+Used Hardware
+^^^^^^^^^^^^^
 
 * `EVAL-AD4630-24FMCZ <https://www.analog.com/EVAL-AD4630-24>`_
 * `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
-**Connections**
+Connections
+^^^^^^^^^^^
 
-*EVAL-AD4630-24FMCZ to ZedBoard*
-
-* Connect the EVAL-AD4630-24FMCZ to the ZedBoard through the FMC LPC connector
-  for data and 12V power supply.
+* Connect the EVAL-AD4630-24FMCZ to the ZedBoard through the FMC LPC
+  connector for data and 12V power supply.
 * Connect differential signal sources to the input channels via the SMA
   connectors.
-* Set the VADJ SELECT jumper to the correct voltage (e.g., **2.5V**) to avoid
+* Set the VADJ SELECT jumper to the correct voltage (e.g., 2.5V) to avoid
   damage.
-* Optionally connect an external clock input (up to 100 MHz) via the CLK IN SMA
-  connector.
-
-*ZedBoard*
-
-* Configure the boot jumpers for SD card boot.
-* Connect a USB cable to the USB OTG port for communication.
+* Optionally connect an external clock input (up to 100 MHz) via the CLK IN
+  SMA connector.
+* Configure the ZedBoard boot jumpers for SD card boot.
+* Connect a USB cable to the ZedBoard USB-UART port for serial communication.
 * Connect a power supply to J20/DC Input to power the system.
-* Verify the green power LED (LD1/3) is lit after powering up.
 
-**Build Command**
+The UART console appears on the ZedBoard USB-UART port at 115200 baud, 8N1.
 
-For the make-based build flow and prerequisites, see the
-`No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_.
+Build Command
+^^^^^^^^^^^^^
 
-In order to build the basic example make sure you are using this command:
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``basic``, ``iio``.
+Available boards: ``zed``.
 
-.. code-block:: bash
-
-	make EXAMPLE=basic
-
-In order to build the IIO project make sure you are using this command:
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
 
 .. code-block:: bash
 
-	make EXAMPLE=iio
+   # Source the Vitis environment (sets XILINX_VITIS and adds tools to PATH)
+   source /path/to/Vitis/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   $env:XILINX_VITIS = "<C:\path\to\Vitis>"
 
-.. code-block:: bash
+   cd no-OS
 
-	cp <SOME_PATH>/system_top.xsa .
-	# to delete current build
-	make reset
-	# to build the project
-	make PLATFORM=xilinx
-	# to flash the code
-	make run
-	# to debug the code
-	make debug
+   # build the example on the ZedBoard (replace --variant as needed)
+   python tools/scripts/no_os_build.py build \
+      --project ad463x_fmcz --variant basic --board zed \
+      --hardware /path/to/system_top.xsa
 
-STM32 Platform
-~~~~~~~~~~~~~~~
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad463x_fmcz --variant basic --board zed \
+      --hardware /path/to/system_top.xsa \
+      --probe openocd --flash
 
-**Used Hardware**
+STM32
+~~~~~
+
+Used Hardware
+^^^^^^^^^^^^^
 
 * `EVAL-AD4630-24FMCZ <https://www.analog.com/EVAL-AD4630-24>`_
 * `EVAL-SDP-CK1Z (SDP-K1) <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
 
-**Connections**
+Connections
+^^^^^^^^^^^
 
-* Align and mate the EVAL-AD4630-24FMCZ with the SDP-K1 120-pin FMC connector.
-  The evaluation board receives +12V, +3.3V, and +18V through the connector
-  interface.
-* Connect a 7V to 12V DC power supply (center positive, min 300 mA, max 3.5 A)
-  to the SDP-K1 DC jack.
+* Align and mate the EVAL-AD4630-24FMCZ with the SDP-K1 120-pin FMC
+  connector. The evaluation board receives +12V, +3.3V, and +18V through
+  the connector interface.
+* Connect a 7V to 12V DC power supply (center positive, min 300 mA,
+  max 3.5 A) to the SDP-K1 DC jack.
 * Set the VIO_ADJUST header to the correct voltage (1.8V or 3.3V) before
   powering to avoid damage.
 * Verify the SYS_PWR LED lights up to indicate proper power.
-* Connect a USB standard-A to mini-B cable from the SDP-K1 USB mini-B port to
-  the PC.
+* Connect a USB standard-A to mini-B cable from the SDP-K1 USB mini-B
+  port to the PC.
 
-**Build Command**
+The UART console appears on the SDP-K1 USB virtual COM port at 115200 baud, 8N1.
+
+Build Command
+^^^^^^^^^^^^^
+
+The STM32 platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``basic``, ``iio``.
+Available boards: ``sdp-ck1z``.
 
 For toolchain setup and prerequisites, see the
 `STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
-Available variants: ``basic``, ``iio``.
-Available boards: ``sdp-ck1z``.
-Replace ``--variant`` / ``--board`` accordingly.
-
 .. code-block:: bash
 
-   # set the path to STM32CubeMX and STM32CubeIDE (only if they are not
-   # in a default install location)
-   export STM32CUBEMX=</path/to/stm32cubemx>
-   export STM32CUBEIDE=</path/to/stm32cubeide>
-   # Windows (PowerShell):
-   #   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
-   #   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
+   # point at your STM32CubeMX installation
+   export STM32CUBEMX_EXECUTABLE=/path/to/STM32CubeMX
+   # PowerShell (Windows) equivalent:
+   #   $env:STM32CUBEMX_EXECUTABLE = "<C:\path\to\STM32CubeMX>"
 
    cd no-OS
 
-   # build the project (basic example on the sdp-ck1z board)
+   # build the example on the SDP-K1 board (replace --variant as needed)
    python tools/scripts/no_os_build.py build \
       --project ad463x_fmcz --variant basic --board sdp-ck1z
 
