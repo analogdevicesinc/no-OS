@@ -43,16 +43,18 @@ ADuCM3029
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_ (on-board ESP8266 Wi-Fi module)
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
+* An external ESP8266 Wi-Fi module
 
 Connections
 ^^^^^^^^^^^
 
-The EVAL-ADICUP3029 carries an on-board ESP8266 Wi-Fi module wired to
-connector P1, so no external module has to be added. Set the UART switch
-**S2** to the "WiFi Module" (right) position to route UART0 to the P1
-Wi-Fi connector; the module is driven over UART0 at 115200 baud and its
-reset line is not connected (the module is reset in software).
+The EVAL-ADICUP3029 does **not** carry an on-board Wi-Fi module: an
+external ESP8266 module has to be connected to the **P1** connector. Set
+the UART switch **S2** to the "WiFi Module" (right) position to route
+UART0 to the P1 Wi-Fi connector; the module is driven over UART0 at
+115200 baud and its reset line is not connected (the module is reset in
+software).
 
 =================== =========================== ==============================================
 P1 Wi-Fi Net        ADuCM3029 Pin               Function
@@ -63,6 +65,11 @@ Reset               Not connected               Module is reset in software
 Power (pin 8)       +3.3V                       Module power supply
 Ground (pin 1)      DGND                        Common ground
 =================== =========================== ==============================================
+
+The ESP8266 must run AT firmware configured for 115200 baud, and its
+``CH_PD``/``EN`` pin must be tied high (and ``GPIO0`` left high at boot)
+for the module to start; otherwise no response is received and
+initialization times out.
 
 Build Command
 ^^^^^^^^^^^^^
