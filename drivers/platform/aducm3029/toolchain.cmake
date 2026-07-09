@@ -130,7 +130,13 @@ set(ADUCM_DEFS "-DCORE0 -D_RTE_ -D__ADUCM3029__ -D__SILICON_REVISION__=0xffff")
 
 set(CMAKE_C_FLAGS "${COMMON_CPU_FLAGS} ${ADUCM_DEFS} -ffunction-sections -fdata-sections -MD" CACHE STRING "C compiler flags" FORCE)
 set(CMAKE_CXX_FLAGS "${COMMON_CPU_FLAGS} ${ADUCM_DEFS} -ffunction-sections -fdata-sections -MD" CACHE STRING "C++ compiler flags" FORCE)
-set(CMAKE_ASM_FLAGS "${COMMON_CPU_FLAGS} ${ADUCM_DEFS} -x assembler-with-cpp" CACHE STRING "ASM compiler flags" FORCE)
+# ADI_DISABLE_INSTRUCTION_SRAM selects the DFP's strong Reset_Handler in
+# reset_ADuCM3029.S, which clears PMG_TST_SRAM_CTL.INSTREN before any data
+# access. That remaps the 32 KiB of instruction SRAM (unused - code runs from
+# flash) as data SRAM, doubling DSRAM_A/DSRAM_B to 32 KiB each (SRAM MODE2).
+# The linker regions are widened to match (see aducm3029_platform_sdk.cmake).
+# Requires the code cache to stay disabled (default); see system_ADuCM3029.c.
+set(CMAKE_ASM_FLAGS "${COMMON_CPU_FLAGS} ${ADUCM_DEFS} -DADI_DISABLE_INSTRUCTION_SRAM -x assembler-with-cpp" CACHE STRING "ASM compiler flags" FORCE)
 
 # Debug build flags - Full debug info, no optimization
 set(CMAKE_C_FLAGS_DEBUG "-g -gdwarf-2 -O0 -D_DEBUG" CACHE STRING "C compiler flags for Debug" FORCE)

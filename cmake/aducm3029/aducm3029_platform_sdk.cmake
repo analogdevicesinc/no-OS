@@ -215,6 +215,57 @@ function(config_aducm3029_sdk BUILD_TARGET)
 		${CCES_PROJECT_DIR}/system
 	)
 
+	# Rework the generated linker script so the WiFi/IIOD workload can use as
+	# much of the chip's 64 KiB SRAM as possible.
+	#
+	# The reset handler clears INSTREN (-DADI_DISABLE_INSTRUCTION_SRAM, see
+	# toolchain.cmake), which remaps the 32 KiB of otherwise-unused instruction
+	# SRAM as data SRAM (SRAM MODE2). The chip then exposes two 32 KiB data
+	# banks that are NOT contiguous: DSRAM_A at 0x20000000 and DSRAM_B at
+	# 0x20040000. newlib's malloc/_sbrk can only grow one contiguous region, so
+	# the heap cannot straddle the gap - it must live entirely in one bank.
+	#
+	# The stock script puts .data/.bss in DSRAM_B and heap+stack in DSRAM_A,
+	# which caps the heap at "32 KiB minus data/bss/stack". Instead:
+	#   1. widen both banks 16k -> 32k,
+	#   2. move .data/.bss into DSRAM_A (alongside the stack), and
+	#   3. give the whole of DSRAM_B to the heap.
+	# The fixed footprint (.data + .bss + stack ~= 18 KiB) then lives in
+	# DSRAM_A with room to spare, and the heap gets a full contiguous 32 KiB
+	# bank to itself (see __HEAP_SIZE in the platform CMakeLists).
+	#
+	# Idempotent: the region swaps are anchored on symbols that only appear
+	# once and flip B->A / A->B, and the length/assert edits match strings that
+	# are gone after the first run, so re-running on a patched script is a no-op.
+	set(_ld_file "${_rte_dir}/ADuCM3029.ld")
+	file(READ "${_ld_file}" _ld_contents)
+	# 1. Both banks physically span 32 KiB.
+	string(REGEX REPLACE
+		"(DSRAM_A[^\n]*ORIGIN[ \t]*=[ \t]*0x20000000,[ \t]*LENGTH[ \t]*=[ \t]*)16k"
+		"\\132k" _ld_contents "${_ld_contents}")
+	string(REGEX REPLACE
+		"(DSRAM_B[^\n]*ORIGIN[ \t]*=[ \t]*0x20040000,[ \t]*LENGTH[ \t]*=[ \t]*)16k"
+		"\\132k" _ld_contents "${_ld_contents}")
+	# 2. .data and .bss move from DSRAM_B to DSRAM_A (anchored on their end
+	#    symbols so only these two output sections are retargeted).
+	string(REGEX REPLACE
+		"(__data_end__[^}]*})[ \t]*>[ \t]*DSRAM_B"
+		"\\1 > DSRAM_A" _ld_contents "${_ld_contents}")
+	string(REGEX REPLACE
+		"(__bss_end__[^}]*})[ \t]*>[ \t]*DSRAM_B"
+		"\\1 > DSRAM_A" _ld_contents "${_ld_contents}")
+	# 3. The heap moves from DSRAM_A to DSRAM_B (gets the whole bank).
+	string(REGEX REPLACE
+		"(__HeapLimit[^}]*})[ \t]*>[ \t]*DSRAM_A"
+		"\\1 > DSRAM_B" _ld_contents "${_ld_contents}")
+	# 4. The stock ASSERT guarded heap+stack sharing DSRAM_A. Now DSRAM_A holds
+	#    data/bss/stack and DSRAM_B holds the heap, so guard each bank instead.
+	string(REGEX REPLACE
+		"ASSERT\\(__StackLimit >= __HeapLimit[^\n]*\n"
+		"ASSERT(__StackLimit >= __bss_end__, \"region DSRAM_A overflowed with stack\")\n\tASSERT(__HeapLimit <= ORIGIN(DSRAM_B) + LENGTH(DSRAM_B), \"region DSRAM_B overflowed with heap\")\n"
+		_ld_contents "${_ld_contents}")
+	file(WRITE "${_ld_file}" "${_ld_contents}")
+
 	# Linker script (generated per-project).
 	target_link_options(${BUILD_TARGET} PRIVATE -T${_rte_dir}/ADuCM3029.ld)
 
