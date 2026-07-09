@@ -1,0 +1,29 @@
+menu "ad9172 Configuration"
+
+choice AD9172_EXAMPLE
+	prompt "Example variant"
+	default AD9172_DEMO_EXAMPLE
+
+config AD9172_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Demo example that initializes the AD9172 RF DAC via JESD204 TX,
+	  AXI DAC core, and HMC7044 clock chip. Uses legacy JESD204 or FSM
+	  depending on USE_JESD_FSM. No DMA, no IIO.
+
+config AD9172_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the AD9172 DAC through the IIO framework
+	  via iio_axi_dac, enabling host-side data write over UART.
+
+config AD9172_DMA_EXAMPLE
+	bool "DMA example"
+	help
+	  DMA example that loads a sine LUT into DDR and transfers it to the
+	  DAC via AXI DMAC, then reads back the transfer status.
+
+endchoice
+
+endmenu
