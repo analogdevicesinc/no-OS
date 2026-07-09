@@ -1,9 +1,9 @@
 AD9265-FMC-125EBZ no-OS Example Project
-=======================================
+========================================
 
 .. no-os-doxygen::
 
-.. contents::
+.. contents:: Table of Contents
 	:depth: 3
 
 Supported Evaluation Boards
@@ -25,7 +25,7 @@ required to operate the AD9265 in its various modes and configurations,
 with a built-in SPI interface for setup and control.
 
 Applications
--------------
+------------
 
 * Communications
 * Multimode digital receivers (3G)
@@ -83,55 +83,47 @@ No-OS Build Setup
 Please see: https://wiki.analog.com/resources/no-os/build
 
 No-OS Supported Examples
--------------------------
+------------------------
 
-The initialization data used in the examples is taken out from:
-`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9265-fmc-125ebz/src>`_
+The initialization data used in the examples is taken from:
+`Project Source Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9265-fmc-125ebz/src>`__
 
-The macros used in Common Data are defined in platform specific files
-found in:
-`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9265-fmc-125ebz/src/platform>`_
+Demo Example
+~~~~~~~~~~~~
 
-Basic Example
-~~~~~~~~~~~~~
-
-The basic example demonstrates initialization and data acquisition
-of the AD9265 ADC, configured via SPI interface, ADC core, and AXI DMAC
-for data transfers. It operates the ADC in test mode and manages DMA
-transfers.
+The demo example initializes the AD9265 ADC via the AXI ADC core and
+AXI DMAC, runs test pattern verification on the digital output lanes,
+and performs a DMA capture of ADC samples into DDR memory.
 
 IIO Example
 ~~~~~~~~~~~
 
-The IIO example demonstrates basic ADC initialization and data
-acquisition using the IIO framework within the no-OS environment.
-Through the IIO Oscilloscope application, users can visualize
-captured data from the AD9265 ADC.
+The IIO example launches an IIOD server on the carrier board so that the
+user may connect to it via an IIO client. Using the IIO Oscilloscope
+application, users can configure the AD9265 ADC and visualize captured
+data from the 16-bit, 125 MSPS ADC.
 
-If you are not familiar with the ADI IIO framework, please take a look
-at: `IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
+If you are not familiar with ADI IIO Application, please take a look at:
+`IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
 
-If you are not familiar with the ADI IIO Oscilloscope app, please take a
-look at: `IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
-
-To build the IIO example, add the following flag when invoking make:
-
-.. code-block:: bash
-
-   IIOD=y
+If you are not familiar with ADI IIO Oscilloscope Client, please take a
+look at:
+`IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
 
 No-OS Supported Platforms
 --------------------------
 
-Xilinx Platform
-~~~~~~~~~~~~~~~
+Xilinx
+~~~~~~
 
-**Used Hardware**
+Used Hardware
+^^^^^^^^^^^^^
 
 * `AD9265-FMC-125EBZ <https://www.analog.com/ad9265>`_
-* `ZC706 <https://www.xilinx.com/ZC706>`_
+* `ZC706 <https://www.xilinx.com/ZC706>`_ evaluation kit
 
-**Connections**
+Connections
+^^^^^^^^^^^
 
 * Mount the AD9265-FMC-125EBZ to the ZC706 through the FMC LPC
   connector.
@@ -152,17 +144,44 @@ Xilinx Platform
 * Connect a micro-USB cable to the ZC706 board via the USB-UART
   connector (J1), and the other end of the cable to the host PC.
 * Connect the power supply to the 12 V Power Input Connector (J22).
-* Switch ON the ZC706 board via SW1, the green LED (DS22) will
+* Switch ON the ZC706 board via SW1; the green LED (DS22) will
   illuminate when power is ON.
 
-**Build Command**
+Build Command
+^^^^^^^^^^^^^
+
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``demo``, ``iio``.
+Available boards: ``zc706``.
+
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
 
 .. code-block:: bash
 
-   cp <SOME_PATH>/system_top.xsa .
-   # to delete current build
-   make reset
-   # to build the project
-   make
-   # to flash the code
-   make run
+   # Source the Vitis toolchain environment (adjust version as needed)
+   source ~/.xilinx/2025.1/Vitis/settings64.sh
+
+   cd no-OS
+
+   # build the demo example
+   python tools/scripts/no_os_build.py build \
+      --project ad9265-fmc-125ebz --variant demo --board zc706 \
+      --hardware /path/to/system_top.xsa
+
+   # build and flash
+   python tools/scripts/no_os_build.py build \
+      --project ad9265-fmc-125ebz --variant demo --board zc706 \
+      --hardware /path/to/system_top.xsa \
+      --probe openocd --flash
+
+   # build the IIO example
+   python tools/scripts/no_os_build.py build \
+      --project ad9265-fmc-125ebz --variant iio --board zc706 \
+      --hardware /path/to/system_top.xsa
+
+   # build and flash the IIO example
+   python tools/scripts/no_os_build.py build \
+      --project ad9265-fmc-125ebz --variant iio --board zc706 \
+      --hardware /path/to/system_top.xsa \
+      --probe openocd --flash
