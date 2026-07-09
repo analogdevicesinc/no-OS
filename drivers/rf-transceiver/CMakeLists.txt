@@ -16,11 +16,15 @@ no_os_sources_ifdef(CONFIG_RF_TRANSCEIVER_HMC630X ${CMAKE_CURRENT_SOURCE_DIR}/hm
 no_os_sources_ifdef(CONFIG_RF_TRANSCEIVER_IIO_HMC630X ${CMAKE_CURRENT_SOURCE_DIR}/hmc630x/iio_hmc630x.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/hmc630x)
 
-# koror (adrv904x)
-no_os_sources_ifdef(CONFIG_RF_TRANSCEIVER_ADRV904X
-    ${CMAKE_CURRENT_SOURCE_DIR}/koror/adrv904x.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/koror/adrv904x_conv.c)
-target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/koror)
+# koror (adrv904x) — top-level wrapper + full vendor API tree
+# FLAG (shared driver change): Added recurse helpers to compile the full vendor
+# API tree under koror/ (common/adi_{error,hal,logging}/, devices/adrv904x/
+# private/src/ and public/src/).  The legacy Make used SRC_DIRS+=koror which
+# compiled all .c files recursively; CMake needs explicit registration.
+no_os_sources_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV904X
+    ${CMAKE_CURRENT_SOURCE_DIR}/koror)
+no_os_include_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV904X
+    ${CMAKE_CURRENT_SOURCE_DIR}/koror)
 
 # palma (adrv903x) — top-level wrapper + full vendor API tree
 # FLAG (shared driver change): Added recurse helpers to compile the full vendor
