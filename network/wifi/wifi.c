@@ -763,15 +763,17 @@ static int32_t wifi_socket_listen(struct wifi_desc *desc, uint32_t sock_id,
 			break;
 
 		cli_sock = &desc->sockets[id];
+		/*
+		 * wifi_socket_open already allocated cli_sock->cb of cb_size, so
+		 * it must not be re-allocated here (that would leak the buffer).
+		 * For the first client reuse the server socket's buffer instead
+		 * and release the freshly allocated one, so the (otherwise unused)
+		 * server buffer is not leaked either.
+		 */
 		if (*i == 0 && server_sock->cb) {
+			no_os_cb_remove(cli_sock->cb);
 			cli_sock->cb = server_sock->cb;
 			server_sock->cb = NULL;
-		} else {
-			ret = no_os_cb_init(&cli_sock->cb, server_sock->cb_size);
-			if (NO_OS_IS_ERR_VALUE(ret)) {
-				wifi_socket_close(desc, id);
-				break;
-			}
 		}
 		cli_sock->state = SOCKET_DISCONNECTED;
 		desc->server.client_ids[*i] = id;
