@@ -193,6 +193,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 
    # point at the CrossCore Embedded Studio install (only if not auto-detected)
    export CCES_HOME=/opt/analog/cces/3.0.3
+   # Windows (PowerShell): $env:CCES_HOME = "C:\analog\cces\3.0.3"
 
    cd no-OS
 
@@ -246,6 +247,7 @@ available on every board; see the combination list with
 
    # point at the Maxim SDK libraries (only if not auto-detected)
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
@@ -305,6 +307,9 @@ is only available on ``adin1110ebz``.
    # in a default install location)
    export STM32CUBEMX=</path/to/stm32cubemx>
    export STM32CUBEIDE=</path/to/stm32cubeide>
+   # Windows (PowerShell):
+   #   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+   #   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
    cd no-OS
 

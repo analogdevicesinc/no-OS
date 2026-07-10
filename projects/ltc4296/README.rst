@@ -41,11 +41,7 @@ This is a simple example that initializes the LTC4296, unlock the chip and enabl
 avaliable ports.
 
 
-This is the only example in this project, so it builds by default:
-
-.. code-block:: bash
-
-	make
+This is the only example in this project, so it builds by default.
 
 No-OS Supported Platforms
 -------------------------
@@ -62,6 +58,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

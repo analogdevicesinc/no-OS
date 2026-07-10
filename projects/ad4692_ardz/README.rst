@@ -168,10 +168,15 @@ the AD-APARD32690-SL. The following MAX32690 peripherals are used:
 
 **Build Command**
 
+Available variants: ``basic``, ``iio``, ``iio_trigger``.
+Available boards: ``ad-apard32690-sl``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# point at the Maxim SDK libraries (only if not auto-detected)
 	export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+	# Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
 	cd no-OS
 
@@ -184,4 +189,3 @@ the AD-APARD32690-SL. The following MAX32690 peripherals are used:
 		--project ad4692_ardz --variant basic --board ad-apard32690-sl \
 		--probe openocd --flash
 
-Available variants: ``basic``, ``iio``, ``iio_trigger``. Replace ``--variant`` accordingly.

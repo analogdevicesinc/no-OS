@@ -110,7 +110,7 @@ UART switch (S2) is set to the USB position for PC terminal access.
 Build Command
 ^^^^^^^^^^^^^
 
-Available variants: ``serial_print``, ``iio``.
+Available variants: ``iio``, ``serial_print``.
 Available boards: ``eval-adicup3029``.
 Replace ``--variant`` / ``--board`` accordingly.
 
@@ -118,6 +118,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 
    # point at the CrossCore Embedded Studio install (only if not auto-detected)
    export CCES_HOME=/opt/analog/cces/3.0.3
+   # Windows (PowerShell): $env:CCES_HOME = "C:\analog\cces\3.0.3"
 
    cd no-OS
 

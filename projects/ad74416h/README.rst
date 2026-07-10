@@ -196,7 +196,7 @@ No-OS Supported Examples
 The initialization data used in the examples is taken from the
 :git-no-OS:`Project Common Data Path </projects/ad74416h/src/common>`. 
 The macros used in Common Data are defined in platform-specific files found in:
-:git-no-OS:`Platform Platform Configuration Path </projects/ad74416h/src/platform>`.
+:git-no-OS:`Project Platform Configuration Path </projects/ad74416h/src/platform>`.
 
 Basic Example
 ~~~~~~~~~~~~~
@@ -285,12 +285,19 @@ EVAL-AD74416H board and the EVAL-SDP-CK1Z evaluation board:
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``basic``.
+Available boards: ``sdp-ck1z``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
     # set the path to STM32CubeMX and STM32CubeIDE (only if they are not
     # in a default install location)
     export STM32CUBEMX=</path/to/stm32cubemx>
     export STM32CUBEIDE=</path/to/stm32cubeide>
+    # Windows (PowerShell):
+    #   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+    #   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
     cd no-OS
 

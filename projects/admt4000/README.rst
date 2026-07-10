@@ -143,8 +143,8 @@ This IIO project supports exposes the ADMT4000 as an IIO device. Details of the
 IIO implementation is documented in IIO section of the ADMT4000 driver:
 `ADMT4000 Drivers <https://github.com/analogdevicesinc/no-OS/tree/main/drivers/position/admt4000/README.rst>`_
 
-This IIO project also supports the TMC5240 as an IIO device if TMC_DEVICE is
-defined as TMC5240 in the Makefile. EVAL-ADMT4000ARD1Z has an onboard TMC5240. 
+This IIO project also supports the TMC5240 as an IIO device when built with the
+``iio_trigger_tmc5240`` variant. EVAL-ADMT4000ARD1Z has an onboard TMC5240.
 Details of the IIO implementation for the TMC5240 is documented in the IIO TMC5240 driver:
 `TMC5240 Drivers <https://github.com/analogdevicesinc/no-OS/tree/main/drivers/motor/tmc5240/README.rst>`_
 
@@ -167,20 +167,25 @@ STM32 Platform
 
 **Build Command**
 
+Available variants: ``basic``, ``iio_trigger``, ``iio_trigger_tmc5240``.
+Available boards: ``sdp-ck1z``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
 	# in a default install location)
 	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 	cd no-OS
 
 	# build the project (basic example on the SDP-K1 board)
 	python tools/scripts/no_os_build.py build \
 		--project admt4000 --variant basic --board sdp-ck1z
-
-	# Available variants: ``basic``, ``iio_trigger``, ``iio_trigger_tmc5240``. Replace ``--variant`` accordingly.
 
 	# build and flash (requires a connected debug probe)
 	python tools/scripts/no_os_build.py build \

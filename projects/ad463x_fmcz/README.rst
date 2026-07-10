@@ -211,24 +211,19 @@ STM32 Platform
 
 **Build Command**
 
-.. code-block:: bash
-
-	# to delete current build
-	make reset
-	# to build the project
-	make PLATFORM=stm32
-	# to flash the code
-	make run
-	# to debug the code
-	make debug
-
 Available variants: ``basic``, ``iio``.
 Available boards: ``sdp-ck1z``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
-   export STM32CUBEMX_EXECUTABLE=</path/to/STM32CubeMX>
+   # set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+   # in a default install location)
+   export STM32CUBEMX=</path/to/stm32cubemx>
+   export STM32CUBEIDE=</path/to/stm32cubeide>
+   # Windows (PowerShell):
+   #   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+   #   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
    cd no-OS
 

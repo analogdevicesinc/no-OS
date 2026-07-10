@@ -128,20 +128,25 @@ Nucleo board.
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``basic``, ``fifo``, ``selftest``.
+Available boards: ``nucleo-f767zi``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
 	# in a default install location)
 	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 	cd no-OS
 
 	# build the project (basic example on the NUCLEO-F767ZI board)
 	python tools/scripts/no_os_build.py build \
 		--project eval-adxl38x --variant basic --board nucleo-f767zi
-
-	# Available variants: ``basic``, ``selftest``, ``fifo``. Replace ``--variant`` accordingly.
 
 	# build and flash (requires a connected debug probe)
 	python tools/scripts/no_os_build.py build \
@@ -167,18 +172,21 @@ MAX78000FTHR board.
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``basic``, ``fifo``, ``selftest``.
+Available boards: ``max78000fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# point at the Maxim SDK libraries (only if not auto-detected)
 	export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+	# Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
 	cd no-OS
 
 	# build the project (basic example on the MAX78000FTHR board)
 	python tools/scripts/no_os_build.py build \
 		--project eval-adxl38x --variant basic --board max78000fthr
-
-	# Available variants: ``basic``, ``selftest``, ``fifo``. Replace ``--variant`` accordingly.
 
 	# build and flash (requires a connected debug probe)
 	python tools/scripts/no_os_build.py build \

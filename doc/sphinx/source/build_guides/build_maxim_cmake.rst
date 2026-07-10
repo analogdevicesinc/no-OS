@@ -74,10 +74,10 @@ The build system locates the SDK in one of two ways (checked in this order):
         # Linux (default install path)
         export MAXIM_LIBRARIES=~/MaximSDK/Libraries
 
-    .. code-block:: bash
+    .. code-block:: powershell
 
-        # Windows (Git Bash), SDK installed to C:\MaximSDK
-        export MAXIM_LIBRARIES=/c/MaximSDK/Libraries
+        # Windows (PowerShell), SDK installed to C:\MaximSDK
+        $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
 If neither a CFS install nor ``MAXIM_LIBRARIES`` is found, configuration fails
 with ``MAXIM_LIBRARIES is not set. Point it at the Maxim SDK Libraries
@@ -238,7 +238,7 @@ opening the no-OS folder without the workspace will not load the debug setup.
 Windows
 =======
 
-The CMake flow works under Git Bash. Install the Maxim SDK to a path without
-spaces (e.g. ``C:\MaximSDK``) and export ``MAXIM_LIBRARIES`` as shown above.
-Make sure ``cmake``, ``ninja`` and ``python`` are available on ``PATH`` in your
-Git Bash session, then follow the same configure/build/flash steps as on Linux.
+The CMake flow works natively on Windows (PowerShell). Install the Maxim SDK to
+a path without spaces (e.g. ``C:\MaximSDK``) and set ``MAXIM_LIBRARIES`` as shown
+above. Make sure ``cmake``, ``ninja`` and ``python`` are available on ``PATH``,
+then follow the same configure/build/flash steps as on Linux.

@@ -66,12 +66,8 @@ Basic Example
 This is a simple example which initializes the MAX22007 and writes to the data register of channel 0 and 3 with a value 
 equivalent to 2v and 4v respectively.
 
-In order to build the basic example make sure you have the following configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max22007/Makefile>`_
-
-.. code-block:: bash
-
-	EXAMPLE ?= basic_example
+This example is built by selecting the ``basic`` variant (see the Build
+Command section below).
 
 
 No-OS Supported Platforms
@@ -103,12 +99,19 @@ STM32 Platform
 
 **Build Command**
 
+Available variants: ``basic``.
+Available boards: ``sdp-ck1z``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
 	# in a default install location)
 	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 	cd no-OS
 

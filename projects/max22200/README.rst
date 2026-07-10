@@ -113,7 +113,7 @@ Used Hardware
 ^^^^^^^^^^^^^
 
 * MAX22200EVKIT
-* MAX32665
+* MAX32666FTHR
 
 Build Command
 ^^^^^^^^^^^^^
@@ -125,6 +125,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

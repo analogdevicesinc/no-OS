@@ -90,13 +90,8 @@ This is a simple example that initializes the MAX17616, and performs telemetry
 readings of the voltage, current and temperature. Status bytes/words are also
 monitored in the example.
 
-In order to build the basic example make sure you have the following
-configuration in the Makefile
-`Basic Example Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max17616/Makefile>`_
-
-.. code-block:: bash
-
-	EXAMPLE ?= basic
+This example is built by selecting the ``basic`` variant (see the Build
+Command section below).
 
 IIO example
 ^^^^^^^^^^^
@@ -117,13 +112,8 @@ all the back-end logic needed to setup the IIO server.
 This example initializes the IIO device and calls the IIO app as shown in:
 `IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max17616/src/examples/iio_example>`_
 
-In order to build the IIO project make sure you have the following
-configuration in the
-`IIO Example Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max17616/Makefile>`_
-
-.. code-block:: bash
-
-	EXAMPLE ?= iio_example
+This example is built by selecting the ``iio_example`` variant (see the Build
+Command section below).
 
 No-OS Supported Platforms
 -------------------------
@@ -160,6 +150,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

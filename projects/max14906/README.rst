@@ -132,7 +132,7 @@ Maxim Platform
 **Used Hardware**
 
 * `AD-APARD32690-SL <https://www.analog.com/AD-APARD32690-SL>`_
-* `MAX32666FTHR <https://www.analog.com/MAX32666FTHR>`_
+* `max32666fthr <https://www.analog.com/max32666fthr>`_
 
 **Connections**
 
@@ -142,7 +142,7 @@ jumper wires for point-to-point wiring between the J13 header and the target
 board.
 
 +-------------------+-------------+---------------------+------------------+
-| Function          | MAX14906    | AD-APARD32690-SL    | MAX32666FTHR     |
+| Function          | MAX14906    | AD-APARD32690-SL    | max32666fthr     |
 |                   | Interface   |                     |                  |
 +===================+=============+=====================+==================+
 | SPI Device ID     | SPI         | 4                   | 1                |
@@ -160,10 +160,15 @@ board.
 
 **Build Command**
 
+Available variants: ``basic``, ``iio``.
+Available boards: ``ad-apard32690-sl``, ``max32666fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# point at the Maxim SDK libraries (only if not auto-detected)
 	export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+	# Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
 	cd no-OS
 
@@ -209,20 +214,25 @@ the NUCLEO-F401RE board and the MAX14906EVKIT J13 header:
 
 **Build Command**
 
+Available variants: ``basic``, ``iio``.
+Available boards: ``nucleo-f401re``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
 	# in a default install location)
 	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 	cd no-OS
 
 	# build the project (basic example on the NUCLEO-F401RE board)
 	python tools/scripts/no_os_build.py build \
 		--project max14906 --variant basic --board nucleo-f401re
-
-	# Available variants: ``basic``, ``iio``. Replace ``--variant`` accordingly.
 
 	# build and flash (requires a connected debug probe)
 	python tools/scripts/no_os_build.py build \

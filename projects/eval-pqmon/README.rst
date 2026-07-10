@@ -88,6 +88,7 @@ variable at its directory before building. Select the interface with
 .. code-block:: bash
 
         export PQLIB_PATH=<path_to_library>
+        # Windows (PowerShell): $env:PQLIB_PATH = "C:\path\to\library"
 
         # build the USB interface variant
         python3 tools/scripts/no_os_build.py build \

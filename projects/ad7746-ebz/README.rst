@@ -148,6 +148,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 
 	# point at the CrossCore Embedded Studio install (only if not auto-detected)
 	export CCES_HOME=/opt/analog/cces/3.0.3
+	# Windows (PowerShell): $env:CCES_HOME = "C:\analog\cces\3.0.3"
 
 	cd no-OS
 

@@ -76,11 +76,11 @@ build at them with environment variables:
         export STM32CUBEMX=/path/to/STM32CubeMX
         export STM32CUBEIDE=/path/to/stm32cubeide
 
-    .. code-block:: bash
+    .. code-block:: powershell
 
-        # Windows (Git Bash)
-        export STM32CUBEMX=/c/ST/STM32CubeMX
-        export STM32CUBEIDE=/c/ST/STM32CubeIDE
+        # Windows (PowerShell)
+        $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+        $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 .. note::
    The toolchain and OpenOCD are taken from the GCC and OpenOCD bundled inside
@@ -256,8 +256,8 @@ the ``.ioc`` file (MCU family and part number), falling back to the preset's
 Windows
 =======
 
-The CMake flow works under Git Bash. Install STM32CubeIDE and STM32CubeMX, then
-export ``STM32CUBEIDE`` and ``STM32CUBEMX`` if they are not in a default
-location (see above). Make sure ``cmake``, ``ninja`` and ``python`` are
-available on ``PATH`` in your Git Bash session, then follow the same
-configure/build/flash steps as on Linux.
+The CMake flow works natively on Windows (PowerShell). Install STM32CubeIDE and
+STM32CubeMX, then set ``STM32CUBEIDE`` and ``STM32CUBEMX`` if they are not in a
+default location (see above). Make sure ``cmake``, ``ninja`` and ``python`` are
+available on ``PATH``, then follow the same configure/build/flash steps as on
+Linux.

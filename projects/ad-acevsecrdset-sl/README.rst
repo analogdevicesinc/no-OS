@@ -144,14 +144,14 @@ To flash the MAX32625PICO with the correct firmware image:
 
 **Build Command**
 
-Available variants: ``stout_application_rev_a``, ``stout_application_rev_d``
-(one per board revision).
+Available variants: ``stout_application_rev_a``, ``stout_application_rev_d``.
 Available boards: ``max32655fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

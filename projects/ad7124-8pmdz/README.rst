@@ -126,6 +126,7 @@ The ADuCM3029 platform uses the CMake/Ninja build system via the
 
    # point at the CrossCore Embedded Studio install (only if not auto-detected)
    export CCES_HOME=/opt/analog/cces/3.0.3
+   # Windows (PowerShell): $env:CCES_HOME = "C:\analog\cces\3.0.3"
 
    cd no-OS
 
@@ -145,7 +146,7 @@ Used Hardware
 ^^^^^^^^^^^^^
 
 * `AD-APARD32690-SL <https://www.analog.com/AD-APARD32690-SL>`_ (MAX32690)
-* `MAX32666FTHR <https://www.analog.com/MAX32666FTHR>`_ (MAX32665)
+* `MAX32666FTHR <https://www.analog.com/MAX32666FTHR>`_ (MAX32666)
 * `MAX32655FTHR <https://www.analog.com/MAX32655FTHR>`_ (MAX32655)
 * `EVAL-AD7124-8-PMDZ <https://www.analog.com/EVAL-AD7124-8>`_
 
@@ -157,7 +158,7 @@ board. The UART console is available at 115200 baud on the default UART
 port for each target:
 
 * MAX32690 (AD-APARD32690-SL): SPI4, UART0
-* MAX32665 (MAX32666FTHR): SPI1, UART1 (MAP_B, pins P1.12/P1.13)
+* MAX32666 (MAX32666FTHR): SPI1, UART1 (MAP_B, pins P1.12/P1.13)
 * MAX32655 (MAX32655FTHR): SPI0, UART0
 
 Build Command
@@ -165,11 +166,12 @@ Build Command
 
 The Maxim platform uses the CMake/Ninja build system via the
 ``no_os_build.py`` helper script. Available boards:
-``ad-apard32690-sl``, ``max32655fthr``, ``max32665fthr``.
+``ad-apard32690-sl``, ``max32655fthr``, ``max32666fthr``.
 
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
@@ -186,7 +188,6 @@ The Maxim platform uses the CMake/Ninja build system via the
    python tools/scripts/no_os_build.py build \
       --project ad7124-8pmdz --variant iio_example --board max32655fthr
 
-   # build for MAX32666FTHR (MAX32665)
+   # build for MAX32666FTHR (MAX32666)
    python tools/scripts/no_os_build.py build \
-      --project ad7124-8pmdz --variant iio_example --board max32665fthr
-
+      --project ad7124-8pmdz --variant iio_example --board max32666fthr

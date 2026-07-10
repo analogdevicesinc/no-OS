@@ -73,13 +73,8 @@ This is the default example which initializes the AD74413R device, configures
 ADC channels for digital input, voltage input/output, and current input,
 and continuously reads channel statuses for functionality validation.
 
-In order to build the dummy example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad74413r/Makefile>`__:
-
-.. code-block:: bash
-
-   EXAMPLE = dummy
+This example is built by selecting the ``dummy`` variant (see the Build
+Command section below).
 
 IIO example
 ~~~~~~~~~~~
@@ -96,13 +91,8 @@ If you are not familiar with ADI IIO-Oscilloscope Client, please take a
 look at:
 `IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
 
-In order to build the IIO project make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad74413r/Makefile>`__:
-
-.. code-block:: bash
-
-   EXAMPLE = iio_example
+This example is built by selecting the ``iio`` variant (see the Build
+Command section below).
 
 IIO trigger example
 ~~~~~~~~~~~~~~~~~~~
@@ -111,13 +101,8 @@ This example initializes the AD74413R with configured channels, sets up
 hardware triggers using GPIO interrupts, and integrates them into the IIO
 subsystem for synchronized data capture.
 
-In order to build the IIO trigger example make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad74413r/Makefile>`__:
-
-.. code-block:: bash
-
-   EXAMPLE = iio_trigger_example
+This example is built by selecting the ``iio_trigger`` variant (see the Build
+Command section below).
 
 No-OS Supported Platforms
 -------------------------
@@ -141,19 +126,21 @@ for trigger-based examples.
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``dummy``, ``iio``.
+Available boards: ``max32655fthr``, ``max78000fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# point at the Maxim SDK libraries (only if not auto-detected)
 	export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+	# Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
 	cd no-OS
 
 	# build the project (dummy example on the MAX78000FTHR board)
 	python tools/scripts/no_os_build.py build \
 		--project ad74413r --variant dummy --board max78000fthr
-
-	# Available variants: ``dummy``, ``iio``, ``iio_trigger``. Replace ``--variant`` accordingly.
-	# Alternative board: ``max32655fthr``. Replace ``--board`` accordingly.
 
 	# build and flash (requires a connected debug probe)
 	python tools/scripts/no_os_build.py build \
@@ -179,20 +166,25 @@ for trigger-based examples.
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``dummy``, ``iio``, ``iio_trigger``.
+Available boards: ``nucleo-f756zg``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
 	# in a default install location)
 	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 	cd no-OS
 
 	# build the project (dummy example on the NUCLEO-F756ZG board)
 	python tools/scripts/no_os_build.py build \
 		--project ad74413r --variant dummy --board nucleo-f756zg
-
-	# Available variants: ``dummy``, ``iio``, ``iio_trigger``. Replace ``--variant`` accordingly.
 
 	# build and flash (requires a connected debug probe)
 	python tools/scripts/no_os_build.py build \

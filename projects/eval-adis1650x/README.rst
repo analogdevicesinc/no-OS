@@ -185,12 +185,19 @@ STM32 Platform
 
 **Build Command**
 
+Available variants: ``basic``, ``iio_trigger``.
+Available boards: ``sdp-ck1z``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
 	# in a default install location)
 	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 	cd no-OS
 
@@ -202,8 +209,6 @@ STM32 Platform
 	python tools/scripts/no_os_build.py build \
 		--project eval-adis1650x --variant basic --board sdp-ck1z \
 		--probe openocd --flash
-
-Available variants: ``basic``, ``iio_trigger``. Replace ``--variant`` accordingly.
 
 Maxim Platform
 ^^^^^^^^^^^^^^
@@ -240,10 +245,15 @@ Maxim Platform
 
 **Build Command**
 
+Available variants: ``basic``, ``iio_trigger``.
+Available boards: ``max78000fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# point at the Maxim SDK libraries (only if not auto-detected)
 	export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+	# Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
 	cd no-OS
 
@@ -255,8 +265,6 @@ Maxim Platform
 	python tools/scripts/no_os_build.py build \
 		--project eval-adis1650x --variant basic --board max78000fthr \
 		--probe openocd --flash
-
-Available variants: ``basic``, ``iio_trigger``. Replace ``--variant`` accordingly.
 
 Pico Platform
 ^^^^^^^^^^^^^
@@ -273,7 +281,7 @@ Pico Platform
 **Connections**:
 
 +---------------------------+----------+-------------------------------------------------------+---------------------+
-| EVAL-ADIS1650X Pin Number | Mnemonic | Function                                              | MAX78000 Pin Number |
+| EVAL-ADIS1650X Pin Number | Mnemonic | Function                                              | RPi Pico Pin Number |
 +---------------------------+----------+-------------------------------------------------------+---------------------+
 | 1                         | ~RST     | Reset, active low                                     | GP20                |
 +---------------------------+----------+-------------------------------------------------------+---------------------+
@@ -308,6 +316,10 @@ The following table shows how the connection between ADALM-UARTJTAG and Raspberr
 
 **Build Command**
 
+Available variants: ``basic``, ``iio_trigger``.
+Available boards: ``rpi-pico``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	cd no-OS
@@ -321,4 +333,3 @@ The following table shows how the connection between ADALM-UARTJTAG and Raspberr
 		--project eval-adis1650x --variant basic --board rpi-pico \
 		--probe openocd --flash
 
-Available variants: ``basic``, ``iio_trigger``. Replace ``--variant`` accordingly.

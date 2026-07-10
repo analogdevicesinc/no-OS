@@ -111,11 +111,8 @@ Basic example
 This is a simple example which initializes the ADG1712 and sets switch 1 on and off in a while loop
 with a period of 2s. The data is printed on the serial interface.
 
-To build the basic example, add the following to the Makefile:
-
-.. code-block:: bash
-
-        EXAMPLE = basic
+This example is built by selecting the ``basic`` variant (see the Build
+Command section below).
 
 
 No-OS Supported Platforms
@@ -158,6 +155,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

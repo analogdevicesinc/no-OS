@@ -196,6 +196,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 
 	# point at the CrossCore Embedded Studio install (only if not auto-detected)
 	export CCES_HOME=/opt/analog/cces/3.0.3
+	# Windows (PowerShell): $env:CCES_HOME = "C:\analog\cces\3.0.3"
 
 	cd no-OS
 
@@ -241,6 +242,9 @@ Replace ``--variant`` / ``--board`` accordingly.
 	# in a default install location)
 	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 	cd no-OS
 

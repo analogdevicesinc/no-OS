@@ -186,6 +186,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 
 	# point at the CrossCore Embedded Studio install (only if not auto-detected)
 	export CCES_HOME=/opt/analog/cces/3.0.3
+	# Windows (PowerShell): $env:CCES_HOME = "C:\analog\cces\3.0.3"
 
 	cd no-OS
 
@@ -260,6 +261,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 
 	# point at the Maxim SDK libraries (only if not auto-detected)
 	export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+	# Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
 	cd no-OS
 
@@ -316,7 +318,7 @@ wiring the boards.
 Build Command
 ^^^^^^^^^^^^^
 
-Available variants: ``iio``, ``iio_trigger``, ``iio_timer_trigger``.
+Available variants: ``iio``, ``iio_timer_trigger``, ``iio_trigger``.
 Available boards: ``rpi-pico``.
 Replace ``--variant`` / ``--board`` accordingly.
 
@@ -392,6 +394,9 @@ Replace ``--variant`` / ``--board`` accordingly.
 	# in a default install location)
 	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 	cd no-OS
 

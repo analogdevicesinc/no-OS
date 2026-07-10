@@ -127,14 +127,8 @@ For the PWM it sets the duty cycle on the OUTA channel and then enables the OUTA
 channel with a 49KHz frequency, then the DUTY_CYCLE data is read as well as all
 the statuses.
 
-In order to build the basic example make sure you have the following configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adp1050/Makefile>`_
-
-.. code-block:: bash
-
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = y
-	IIO_EXAMPLE = n
+This example is built by selecting the ``basic`` variant (see the Build
+Command section below).
 
 IIO example
 ^^^^^^^^^^^
@@ -156,14 +150,8 @@ all the back-end logic needed to setup the IIO server.
 This example initializes the IIO device and calls the IIO app as shown in:
 `IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adp1050/src/examples/iio_example>`_
 
-In order to build the IIO project make sure you have the following configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adp1050/Makefile>`_
-
-.. code-block:: bash
-
-        # Select the example you want to build by passing one of the following to make
-        EXAMPLE = basic
-        EXAMPLE = iio_example
+This example is built by selecting the ``iio_example`` variant (see the Build
+Command section below).
 
 No-OS Supported Platforms
 -------------------------
@@ -227,6 +215,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
