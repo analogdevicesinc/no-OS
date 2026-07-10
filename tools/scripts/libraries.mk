@@ -165,10 +165,8 @@ LIB_PATHS			+= $(addprefix -L,$(EXTRA_LIBS_PATHS))
 
 #TODO remove afeter changes are done
 #Convert variable to linux.mk naming
-ifneq (aducm3029,$(strip $(PLATFORM)))
 INC_PATHS += $(EXTRA_INC_PATHS)
 LIBS += $(LIB_FLAGS)
-endif
 
 # Build project Release Configuration
 PHONY := libs

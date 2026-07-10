@@ -112,14 +112,6 @@ endif
 include $(NO-OS)/tools/scripts/altera.mk
 endif
 
-ifeq 'aducm3029' '$(PLATFORM)'
-HARDWARE := $(filter pinmux_config.c, $(HARDWARE))
-ifeq '' '$(HARDWARE)'
-$(error 'No HARDWARE for aducm3029 found. Add pinmux_config.c file')
-endif
-include $(NO-OS)/tools/scripts/aducm.mk
-endif
-
 ifeq 'stm32' '$(PLATFORM)'
 HARDWARE := $(filter %.ioc, $(HARDWARE))
 ifeq '' '$(HARDWARE)'
