@@ -36,7 +36,7 @@ The board utilizes multiple ADC channels for comprehensive signal acquisition:
 Frequency Range Support
 -----------------------
 
-The system supports calibration across 8 frequency ranges:
+The system supports calibration across 11 frequency ranges:
 
 * 10 MHz
 * 100 MHz
@@ -45,6 +45,9 @@ The system supports calibration across 8 frequency ranges:
 * 3000 MHz (3 GHz)
 * 4000 MHz (4 GHz)
 * 5000 MHz (5 GHz)
+* 5250 MHz (5.25 GHz)
+* 5500 MHz (5.5 GHz)
+* 5750 MHz (5.75 GHz)
 * 6000 MHz (6 GHz)
 
 User Interface Options
@@ -165,7 +168,7 @@ Each frequency range supports three temperature compensation coefficients stored
    # Temperature calibration for each frequency range
    iio_attr -c powrms precision_array calib_temp_10MHz_values "coeff1,coeff2,coeff3"
    iio_attr -c powrms precision_array calib_temp_100MHz_values "coeff1,coeff2,coeff3"
-   # ... for all 8 frequency ranges
+   # ... for all 11 frequency ranges
 
 **Temperature Compensation Value:**
 
@@ -196,12 +199,15 @@ Each frequency range requires six precision values for comprehensive calibration
    iio_attr -c powrms precision_array calib_3000MHz_values "val1,val2,val3,val4,val5,val6"
    iio_attr -c powrms precision_array calib_4000MHz_values "val1,val2,val3,val4,val5,val6"
    iio_attr -c powrms precision_array calib_5000MHz_values "val1,val2,val3,val4,val5,val6"
+   iio_attr -c powrms precision_array calib_5250MHz_values "val1,val2,val3,val4,val5,val6"
+   iio_attr -c powrms precision_array calib_5500MHz_values "val1,val2,val3,val4,val5,val6"
+   iio_attr -c powrms precision_array calib_5750MHz_values "val1,val2,val3,val4,val5,val6"
    iio_attr -c powrms precision_array calib_6000MHz_values "val1,val2,val3,val4,val5,val6"
 
 **Calibration Data Organization:**
 
-* **48 Precision Values**: 6 values × 8 frequency ranges = 48 total precision coefficients
-* **24 Temperature Coefficients**: 3 coefficients × 8 frequency ranges = 24 temperature correction values
+* **Precision Values**: 28 values × 11 frequency ranges = 308 total precision coefficients
+* **Temperature Coefficients**: 3 coefficients × 11 frequency ranges = 33 temperature correction values
 * **EEPROM Persistence**: All calibration data stored in non-volatile memory
 
 Custom Calibration Data Sets
