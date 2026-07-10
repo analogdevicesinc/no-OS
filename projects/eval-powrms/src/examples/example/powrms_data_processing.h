@@ -50,8 +50,8 @@
 
 
 // Precision array definitions
-#define FREQUENCY_RANGE_NR              8  // Number of frequency ranges for callibration
-#define PRECISION_ARRAY_SIZE            224
+#define FREQUENCY_RANGE_NR              11  // Number of frequency ranges for callibration
+#define PRECISION_ARRAY_SIZE            308
 #define PRECISION_POINTS_FREQ			14
 #define PRECISION_POINTS_FREQ_ALL		(2 * PRECISION_POINTS_FREQ)
 #define TEMPERATURE_CORRECTION_COEFFS   3
