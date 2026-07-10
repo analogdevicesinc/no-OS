@@ -93,7 +93,7 @@ In order to build the basic example make sure you are using this command:
 .. code-block:: bash
 
 	python tools/scripts/no_os_build.py build \
-	   --project ltc2983 --variant basic_max32665 --board max32665fthr
+	   --project ltc2983 --variant basic --board max32666fthr
 
 IIO example
 ^^^^^^^^^^^
@@ -121,7 +121,7 @@ In order to build the IIO project make sure you are using this command:
 .. code-block:: bash
 
         python tools/scripts/no_os_build.py build \
-           --project ltc2983 --variant iio_max32665 --board max32665fthr
+           --project ltc2983 --variant iio --board max32666fthr
 
 No-OS Supported Platforms
 -------------------------
@@ -158,8 +158,8 @@ Maxim Platform
 
 **Build Command**
 
-Available variants: ``basic_max32665``, ``iio_max32665``.
-Available boards: ``max32665fthr``.
+Available variants: ``basic``, ``iio``.
+Available boards: ``max32666fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
@@ -168,13 +168,13 @@ Replace ``--variant`` / ``--board`` accordingly.
 
    cd no-OS
 
-   # build the project (iio_max32665 example on the max32665fthr board)
+   # build the project (iio example on the max32666fthr board)
    python tools/scripts/no_os_build.py build \
-      --project ltc2983 --variant iio_max32665 --board max32665fthr
+      --project ltc2983 --variant iio --board max32666fthr
 
    # build and flash (requires a connected debug probe)
    python tools/scripts/no_os_build.py build \
-      --project ltc2983 --variant iio_max32665 --board max32665fthr \
+      --project ltc2983 --variant iio --board max32666fthr \
       --probe openocd --flash
 
 EVAL-ADT7604-AZ
@@ -253,7 +253,7 @@ In order to build the ADT7604 basic example make sure you are using this command
 .. code-block:: bash
 
 	python tools/scripts/no_os_build.py build \
-	   --project ltc2983 --variant adt7604_basic_max78000 --board max78000fthr
+	   --project ltc2983 --variant adt7604_basic --board max78000fthr
 
 ADT7604 IIO example
 """"""""""""""""""""
@@ -272,7 +272,7 @@ In order to build the ADT7604 IIO example make sure you are using this command:
 .. code-block:: bash
 
 	python tools/scripts/no_os_build.py build \
-	   --project ltc2983 --variant adt7604_iio_max78000 --board max78000fthr
+	   --project ltc2983 --variant adt7604_iio --board max78000fthr
 
 No-OS Supported Platforms
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -307,7 +307,7 @@ Maxim Platform
 
 **Build Command**
 
-Available variants: ``adt7604_basic_max78000``, ``adt7604_iio_max78000``.
+Available variants: ``adt7604_basic``, ``adt7604_iio``.
 Available boards: ``max78000fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
@@ -317,11 +317,11 @@ Replace ``--variant`` / ``--board`` accordingly.
 
    cd no-OS
 
-   # build the project (adt7604_iio_max78000 example on the max78000fthr board)
+   # build the project (adt7604_iio example on the max78000fthr board)
    python tools/scripts/no_os_build.py build \
-      --project ltc2983 --variant adt7604_iio_max78000 --board max78000fthr
+      --project ltc2983 --variant adt7604_iio --board max78000fthr
 
    # build and flash (requires a connected debug probe)
    python tools/scripts/no_os_build.py build \
-      --project ltc2983 --variant adt7604_iio_max78000 --board max78000fthr \
+      --project ltc2983 --variant adt7604_iio --board max78000fthr \
       --probe openocd --flash
