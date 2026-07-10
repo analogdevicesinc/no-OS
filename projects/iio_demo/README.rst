@@ -206,7 +206,7 @@ Used Hardware
 
 * `MAX32650FTHR <https://www.analog.com/MAX32650FTHR>`_
 * `MAX32655FTHR <https://www.analog.com/MAX32655FTHR>`_
-* `MAX32665FTHR <https://www.analog.com/MAX32665FTHR>`_
+* `MAX32666FTHR <https://www.analog.com/MAX32666FTHR>`_
 * `MAX78000FTHR <https://www.analog.com/MAX78000FTHR>`_
 * `AD-APARD32690-SL <https://www.analog.com/AD-APARD32690-SL>`_
 
@@ -220,9 +220,9 @@ Build Command
 ^^^^^^^^^^^^^
 
 Available variants: ``iio``, ``iio_usb_uart``.
-Available boards: ``max32650fthr``, ``max32655fthr``, ``max32665fthr``,
+Available boards: ``max32650fthr``, ``max32655fthr``, ``max32666fthr``,
 ``max78000fthr`` (``iio``); ``ad-apard32690-sl``, ``max32650fthr``,
-``max32665fthr`` (``iio_usb_uart``).
+``max32666fthr`` (``iio_usb_uart``).
 Replace ``--variant`` / ``--board`` accordingly. Not every variant is available
 on every board; see the combination list with
 ``python tools/scripts/no_os_build.py list --project iio_demo``.

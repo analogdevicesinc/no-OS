@@ -176,7 +176,7 @@ Build Command
    make run
 
 Available variants: ``basic``, ``iio_example``.
-Available boards: ``ad-apard32690-sl``, ``max32665fthr``.
+Available boards: ``ad-apard32690-sl``, ``max32666fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash

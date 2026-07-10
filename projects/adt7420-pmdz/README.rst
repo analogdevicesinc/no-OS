@@ -207,7 +207,7 @@ SDA                    A4               I2C data line
 	make run
 
 Available variants: ``dummy``, ``iio_example``.
-Available boards: ``ad-apard32690-sl``, ``max32650fthr``, ``max32655fthr``, ``max32660fthr``, ``max32665fthr``, ``max78000fthr``.
+Available boards: ``ad-apard32690-sl``, ``max32650fthr``, ``max32655fthr``, ``max32660fthr``, ``max32666fthr``, ``max78000fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash

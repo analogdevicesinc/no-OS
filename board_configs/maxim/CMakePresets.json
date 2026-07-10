@@ -73,16 +73,16 @@
 			}
 		},
 		{
-			"name": "max32665fthr",
-			"description": "MAX32665 board",
+			"name": "max32666fthr",
+			"description": "MAX32666 board",
 			"inherits": "maxim-base",
 			"cacheVariables": {
-				"BOARD": "max32665fthr",
+				"BOARD": "max32666fthr",
 				"USE_VENDOR_TOOLCHAIN": "ON",
 				"PLATFORM": "maxim",
 				"TARGET": "max32665",
 				"TARGET_NUM": "32665",
-				"BOARD_CONFIG_FILE": "max32665fthr_defconfig"
+				"BOARD_CONFIG_FILE": "max32666fthr_defconfig"
 			}
 		},
 		{
