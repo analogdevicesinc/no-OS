@@ -161,13 +161,14 @@ This example initializes the ADF4030 with the configurations provided in the
 above mentioned common files and applies them to the IC. By default reference
 frequency is provided as 125 MHz. Example assign BSYNC1 and BSYNC 2 channels 
 as TX and align them with the 200 ps delay. Then it perform a TDC measurement
-to check the delay between the two channels. 
+to check the delay between the two channels.
 
 In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-    make EXAMPLE=basic
+    python tools/scripts/no_os_build.py build \
+        --project adf4030 --variant basic --board sdp-ck1z
 
 
 IIO example
@@ -190,7 +191,8 @@ In order to build the IIO project make sure you are using this command:
 
 .. code-block:: bash
 
-    make EXAMPLE=iio
+    python tools/scripts/no_os_build.py build \
+        --project adf4030 --variant iio --board sdp-ck1z
 
 
 No-OS Supported Platforms
