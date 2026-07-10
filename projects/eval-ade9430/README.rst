@@ -80,15 +80,16 @@ Maxim Platform
 **Build Command**
 
 Available variants: ``basic_example``, ``basic_example_hw_reset``,
-``iot_example``, ``iot_example_rtc``, ``iot_example_azure_iot_hub``,
-``iot_example_azure_iot_hub_rtc``, ``iot_example_azure_iot_hub_dps``,
-``iot_example_azure_iot_hub_dps_rtc``.
+``iot_example``, ``iot_example_azure_iot_hub``,
+``iot_example_azure_iot_hub_dps``, ``iot_example_azure_iot_hub_dps_rtc``,
+``iot_example_azure_iot_hub_rtc``, ``iot_example_rtc``.
 Available boards: ``max32650fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

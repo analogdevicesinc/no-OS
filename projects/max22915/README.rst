@@ -88,13 +88,8 @@ This is a simple example which initializes the MAX22915 device and demonstrates:
 The example configures all 8 channels as high-side switches and demonstrates
 basic switch control operations along with diagnostic capabilities.
 
-In order to build the basic example make sure you have the following configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max22915/Makefile>`_
-
-.. code-block:: bash
-
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = y
+This example is built by selecting the ``basic`` variant (see the Build
+Command section below).
 
 No-OS Supported Platforms
 -------------------------
@@ -109,12 +104,19 @@ STM32 Platform
 
 **Build Command**
 
+Available variants: ``basic``.
+Available boards: ``sdp-ck1z``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
 	# in a default install location)
 	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 	cd no-OS
 

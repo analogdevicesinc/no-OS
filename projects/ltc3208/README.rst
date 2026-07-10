@@ -120,13 +120,8 @@ LTC3208 multidisplay LED controller.
 The example runs continuously in a loop, cycling through all LED configurations
 with timing delays to visually demonstrate each feature.
 
-In order to build the basic example make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltc3208/Makefile>`_
-
-.. code-block:: bash
-
-	EXAMPLE = basic_example
+This example is built by selecting the ``basic`` variant (see the Build
+Command section below).
 
 Maxim Platform
 --------------
@@ -164,6 +159,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

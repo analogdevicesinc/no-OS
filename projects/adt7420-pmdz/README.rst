@@ -106,15 +106,8 @@ temperature using ``adt7420_get_temperature()``, and configures the hysteresis
 register. The example runs in a continuous loop, periodically printing the
 current temperature and threshold values.
 
-In order to build the dummy example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adt7420-pmdz/Makefile>`_
-
-.. code-block:: bash
-
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	DUMMY_EXAMPLE = y
-	IIO_EXAMPLE = n
+This example is built by selecting the ``dummy`` variant (see the Build
+Command section below).
 
 IIO example
 ~~~~~~~~~~~
@@ -137,15 +130,8 @@ of all the back-end logic needed to setup the IIO server.
 This example initializes the IIO device and calls the IIO app as shown in:
 `IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adt7420-pmdz/src/examples/iio_example>`_
 
-In order to build the IIO project make sure you have the following configuration
-in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adt7420-pmdz/Makefile>`_
-
-.. code-block:: bash
-
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	DUMMY_EXAMPLE = n
-	IIO_EXAMPLE = y
+This example is built by selecting the ``iio_example`` variant (see the Build
+Command section below).
 
 No-OS Supported Platforms
 -------------------------
@@ -156,7 +142,7 @@ Maxim Platform
 **Used hardware**
 
 * `EVAL-ADT7420-PMDZ <https://www.analog.com/EVAL-ADT7420-PMDZ>`_
-* Maxim platform board (MAX32650, MAX32655, MAX32660, MAX32665, MAX78000, or
+* Maxim platform board (MAX32650, MAX32655, MAX32660, MAX32666, MAX78000, or
   MAX32690)
 
 **Connections**
@@ -167,45 +153,6 @@ through the PMOD connector.
 
 **Build Command**
 
-.. code-block:: bash
-
-	# to delete current build
-	make reset
-	# to build the project
-	make PLATFORM=maxim TARGET=max32690
-	# to flash the code
-	make run
-
-Mbed Platform
-~~~~~~~~~~~~~
-
-**Used hardware**
-
-* `EVAL-ADT7420-PMDZ <https://www.analog.com/EVAL-ADT7420-PMDZ>`_
-* Arduino UNO compatible board
-
-**Connections**
-
-=====================  ===============  ==================================
-EVAL-ADT7420-PMDZ Pin  Arduino UNO Pin  Description
-=====================  ===============  ==================================
-VDD                    5V               Power supply for the sensor
-GND                    GND              Common ground connection
-SCL                    A5               I2C clock line
-SDA                    A4               I2C data line
-=====================  ===============  ==================================
-
-**Build Command**
-
-.. code-block:: bash
-
-	# to delete current build
-	make reset
-	# to build the project
-	make PLATFORM=mbed
-	# to flash the code
-	make run
-
 Available variants: ``dummy``, ``iio_example``.
 Available boards: ``ad-apard32690-sl``, ``max32650fthr``, ``max32655fthr``, ``max32660fthr``, ``max32666fthr``, ``max78000fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -213,6 +160,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

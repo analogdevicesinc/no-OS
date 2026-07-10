@@ -42,7 +42,7 @@
 
 #define AD4080_IIO_APP_DEVICE_NAME_LEN 	16
 
-/* Developer notes. We pattern a 15 second around the Max32665 Fthr which has
+/* Developer notes. We pattern a 15 second around the Max32666 Fthr which has
  * a core clock of 96Mhz or ~10.4ns.
  */
 #define AD4080_FIFO_TIMEOUT 	1440000000

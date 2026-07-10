@@ -37,7 +37,7 @@ The project may be tested by using netcat on the host:
 
 	netcat 192.168.97.40 10000
 
-#. Open a terminal and navigate to the repository root (if building on Windows, `Git Bash` has to be used).
+#. Open a terminal and navigate to the repository root.
 
 #. Build the project with the ``no_os_build.py`` helper, selecting the desired variant (the build defaults to a release, ``-O2``, build):
 

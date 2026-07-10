@@ -91,12 +91,8 @@ The external feedback resistor values are also defined.
 	#define EXAMPLE_RTOP3 20000.0
 	#define EXAMPLE_RBOT3 10000.0
 
-In order to build the basic example make sure you have the following configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adp5055/Makefile>`_
-
-.. code-block:: bash
-
-	EXAMPLE=basic
+This example is built by selecting the ``basic`` variant (see the Build
+Command section below).
 
 IIO example
 ^^^^^^^^^^^
@@ -119,13 +115,8 @@ all the back-end logic needed to setup the IIO server.
 This example initializes the IIO device and calls the IIO app as shown in:
 `IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adp5055/src/examples/iio_example>`_
 
-In order to build the IIO project make sure you have the following configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adp5055/Makefile>`_
-
-.. code-block:: bash
-
-        # Select the example you want to build by passing one of the following to make
-        EXAMPLE=iio_example
+This example is built by selecting the ``iio_example`` variant (see the Build
+Command section below).
 
 No-OS Supported Platforms
 -------------------------
@@ -175,6 +166,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

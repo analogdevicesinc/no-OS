@@ -283,7 +283,9 @@ CS         SPI CS (Digital Pin)   SPI CS
 Build Command
 ^^^^^^^^^^^^^^
 
-Available variants: ``basic``, ``iio``. Replace ``--variant`` accordingly.
+Available variants: ``basic``, ``iio``.
+Available boards: ``sdp-ck1z``.
+Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
@@ -291,6 +293,9 @@ Available variants: ``basic``, ``iio``. Replace ``--variant`` accordingly.
    # in a default install location)
    export STM32CUBEMX=</path/to/stm32cubemx>
    export STM32CUBEIDE=</path/to/stm32cubeide>
+   # Windows (PowerShell):
+   #   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+   #   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
    cd no-OS
 

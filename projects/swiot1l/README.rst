@@ -51,8 +51,8 @@ SWIOT1L default firmware
 
 This is only intended to be run on the MAX32650 target.
 
-Open a terminal, navigate to the repository root (if building on Windows,
-``Git Bash`` has to be used) and build the default (IIO) firmware:
+Open a terminal, navigate to the repository root and build the default (IIO)
+firmware:
 
 .. code-block:: bash
 

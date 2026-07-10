@@ -165,6 +165,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
@@ -250,6 +251,12 @@ detector coverage, and PT100 temperature, and prints results over UART.
 
 In order to build the ADT7604 basic example make sure you are using this command:
 
+Available variants: ``adt7604_basic``, ``adt7604_iio``, ``basic``, ``iio``.
+Available boards: ``max32666fthr``, ``max78000fthr``.
+Replace ``--variant`` / ``--board`` accordingly. Not every variant is available
+on every board; see the combination list with
+``python tools/scripts/no_os_build.py list --project ltc2983``.
+
 .. code-block:: bash
 
 	python tools/scripts/no_os_build.py build \
@@ -268,6 +275,12 @@ If you are not familiar with ADI IIO Application, please take a look at:
 `IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
 
 In order to build the ADT7604 IIO example make sure you are using this command:
+
+Available variants: ``adt7604_basic``, ``adt7604_iio``, ``basic``, ``iio``.
+Available boards: ``max32666fthr``, ``max78000fthr``.
+Replace ``--variant`` / ``--board`` accordingly. Not every variant is available
+on every board; see the combination list with
+``python tools/scripts/no_os_build.py list --project ltc2983``.
 
 .. code-block:: bash
 
@@ -314,6 +327,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

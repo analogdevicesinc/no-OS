@@ -101,6 +101,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
@@ -117,7 +118,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 Connection Setup
 ^^^^^^^^^^^^^^^^
 
-#. Use a USB Type A to mini-B cable to Connect the Max32665 FTHR board to the 
+#. Use a USB Type A to mini-B cable to Connect the Max32666 FTHR board to the 
    feather connector header of the adalm-lsmspg board.
 #. The adalm-lsmspg board will be powered up and the red HEARTBEAT LED should
    start blinking a pre-defined pattern similar to a plane's beacon.

@@ -114,20 +114,25 @@ STM32 Platform
 
 **Build Command**
 
+Available variants: ``basic``, ``iio``.
+Available boards: ``sdp-ck1z``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
 	# in a default install location)
 	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 	cd no-OS
 
 	# build the project (basic example on the SDP-K1 board)
 	python tools/scripts/no_os_build.py build \
 		--project pulsar-adc --variant basic --board sdp-ck1z
-
-	# Available variants: ``basic``, ``iio``. Replace ``--variant`` accordingly.
 
 	# build and flash (requires a connected debug probe)
 	python tools/scripts/no_os_build.py build \

@@ -136,23 +136,26 @@ board.
 Build Command
 ^^^^^^^^^^^^^
 
-.. code-block:: bash
-
-   # to delete current build
-   make reset
-   # to build the project (for AD-APARD32690-SL)
-   make PLATFORM=maxim TARGET=max32690
-   # to flash the code
-   make run
+Available variants: ``basic``, ``iio_example``.
+Available boards: ``ad-apard32690-sl``, ``max32666fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
-   # to delete current build
-   make reset
-   # to build the project (for MAX32666FTHR)
-   make PLATFORM=maxim TARGET=max32665
-   # to flash the code
-   make run
+   # point at the Maxim SDK libraries (only if not auto-detected)
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
+
+   cd no-OS
+
+   # build the project (basic example on the ad-apard32690-sl board)
+   python tools/scripts/no_os_build.py build \
+      --project max14916 --variant basic --board ad-apard32690-sl
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project max14916 --variant basic --board ad-apard32690-sl \
+      --probe openocd --flash
 
 Linux
 ~~~~~

@@ -135,13 +135,13 @@ Hardware Used
 ^^^^^^^^^^^^^
 
 - DC2903A
-- MAX32665
+- MAX32666FTHR
 
 Connections
 ^^^^^^^^^^^
 
 +-----------------------+-----------------------+-----------------------+
-| Description           | DC2903A Connection    | MAX32665 Connection   |
+| Description           | DC2903A Connection    | MAX32666 Connection   |
 +-----------------------+-----------------------+-----------------------+
 | Power Connection      | E6 (VCC)              | Connect to the power  |
 | (VCC)                 |                       | source providing 2.1V |
@@ -154,15 +154,15 @@ Connections
 |                       |                       | required              |
 +-----------------------+-----------------------+-----------------------+
 | SPI Chip Select       | J1 Pin 6 (CS)         | Chip select signal    |
-|                       |                       | from MAX32665         |
+|                       |                       | from MAX32666         |
 +-----------------------+-----------------------+-----------------------+
 | SPI Clock Signal      | J1 Pin 4 (SCL/SCK)    | Serial clock signal   |
-|                       |                       | from MAX32665         |
+|                       |                       | from MAX32666         |
 +-----------------------+-----------------------+-----------------------+
-| SPI Master-Out        | J1 Pin 7 (SDA/MOSI)   | Data from MAX32665 to |
+| SPI Master-Out        | J1 Pin 7 (SDA/MOSI)   | Data from MAX32666 to |
 | Slave-In              |                       | DC2903A               |
 +-----------------------+-----------------------+-----------------------+
-| SPI Master-In         | J1 Pin 5 (MISO)       | Data to MAX32665 from |
+| SPI Master-In         | J1 Pin 5 (MISO)       | Data to MAX32666 from |
 | Slave-Out             |                       | DC2903A               |
 +-----------------------+-----------------------+-----------------------+
 | EEPROM Data           | J1 Pin 9 (EEDA)       | Connect for data      |
@@ -184,6 +184,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

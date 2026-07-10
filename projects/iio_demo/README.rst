@@ -166,12 +166,13 @@ Build Command
 
 Available variants: ``iio``, ``iio_wifi``, ``iio_wifi_with_sw_trig``.
 Available boards: ``eval-adicup3029``.
-Replace ``--variant`` accordingly.
+Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
    # point at the CrossCore Embedded Studio install (only if not auto-detected)
    export CCES_HOME=/opt/analog/cces/3.0.3
+   # Windows (PowerShell): $env:CCES_HOME = "C:\analog\cces\3.0.3"
 
    cd no-OS
 
@@ -231,6 +232,7 @@ on every board; see the combination list with
 
    # point at the Maxim SDK libraries (only if not auto-detected)
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
@@ -263,8 +265,7 @@ Build Command
 ^^^^^^^^^^^^^
 
 Available variants: ``iio``, ``iio_timer_trigger``, ``iio_usb_uart``.
-Available boards: ``sdp-ck1z`` (all three variants); ``nucleo-f413zh``
-(``iio_usb_uart``).
+Available boards: ``nucleo-f413zh``, ``sdp-ck1z``.
 Replace ``--variant`` / ``--board`` accordingly. Not every variant is available
 on every board; see the combination list with
 ``python tools/scripts/no_os_build.py list --project iio_demo``.
@@ -275,6 +276,9 @@ on every board; see the combination list with
    # in a default install location)
    export STM32CUBEMX=</path/to/stm32cubemx>
    export STM32CUBEIDE=</path/to/stm32cubeide>
+   # Windows (PowerShell):
+   #   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+   #   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
    cd no-OS
 

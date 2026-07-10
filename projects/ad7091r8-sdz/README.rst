@@ -221,13 +221,15 @@ There are a number of connections to make between the ADC evaluation board and t
 
 **Build Command**
 
-Available variants: ``basic``, ``iio_r2``, ``iio_r4``, ``iio_r8``, ``iio_timer_trigger_r2``, ``iio_timer_trigger_r4``, ``iio_timer_trigger_r8``.
+Available variants: ``basic``, ``iio_r2``, ``iio_r4``, ``iio_r8``,
+``iio_timer_trigger_r2``, ``iio_timer_trigger_r4``, ``iio_timer_trigger_r8``.
 Available boards: ``max78000fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

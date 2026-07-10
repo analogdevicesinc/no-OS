@@ -211,15 +211,27 @@ board. 12V power supply needs to be connected. Reference clock can be provided u
 
 **Build Command**
 
+Available variants: ``basic``, ``iio``.
+Available boards: ``sdp-ck1z``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-	# add the arm gcc to the PATH variable
-	export PATH=</path/to/arm/gcc/bin>:$PATH
-	# to delete current build
-	make reset
-	# to build the project (selecting the example to run)
-	make EXAMPLE=iio PLATFORM=stm32 HARDWARE=sdp-ck1z.ioc
-	# to flash the code
-	make
-	# copy the adf4030.bin to the mounted SDP-K1
-	cp build/adf4030.bin </path/to/SDP-K1/mounted/folder>
+	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+	# in a default install location)
+	export STM32CUBEMX=</path/to/stm32cubemx>
+	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
+
+	cd no-OS
+
+	# build the project (iio example on the SDP-K1 board)
+	python tools/scripts/no_os_build.py build \
+		--project adf4030 --variant iio --board sdp-ck1z
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project adf4030 --variant iio --board sdp-ck1z \
+		--probe openocd --flash

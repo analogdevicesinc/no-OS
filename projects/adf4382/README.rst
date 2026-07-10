@@ -14,7 +14,7 @@ Supported Evaluation Boards
 
 * `EVAL-ADF4382 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4382.html>`_
 * `EVAL-ADF4382A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4382a.html>`_
-* `EVAL-ADF43823 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4383.html>`_
+* `EVAL-ADF4383 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4383.html>`_
 
 Overview
 --------
@@ -331,7 +331,7 @@ connectors (P5 and P2).
     +-----+-------------------+------------------------------------------+
     | 7   | SCLK              | Connected to SCLK of the ADF4382         |
     +-----+-------------------+------------------------------------------+
-    | 8   | CSB                | Connected to CSB of the ADF4382         |
+    | 8   | CSB               | Connected to CSB of the ADF4382          |
     +-----+-------------------+------------------------------------------+
     | 9   | GND               | Connected to Ground                      |
     +-----+-------------------+------------------------------------------+
@@ -347,10 +347,10 @@ No-OS Supported Examples
 ------------------------
 
 The initialization data used in the examples is taken out from:
-`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4382/src/common>`_
+`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adf4382/src/common>`_
 
 The macros used in Common Data are defined in platform specific files found in:
-`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4382/src/platform>`_
+`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adf4382/src/platform>`_
 
 Basic example
 ^^^^^^^^^^^^^
@@ -416,7 +416,9 @@ or to J18 (the SMA interface).
 
 **Build Command**
 
-Available variants: ``basic``, ``iio``. Replace ``--variant`` accordingly.
+Available variants: ``basic``, ``iio``.
+Available boards: ``sdp-ck1z``.
+Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
@@ -424,6 +426,9 @@ Available variants: ``basic``, ``iio``. Replace ``--variant`` accordingly.
 	# in a default install location)
 	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 	cd no-OS
 

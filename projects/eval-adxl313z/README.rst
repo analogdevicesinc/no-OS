@@ -170,20 +170,25 @@ accelerometer breakout board and the NUCLEO-F401RE:
 Build Command
 ^^^^^^^^^^^^^
 
+Available variants: ``basic``, ``iio``.
+Available boards: ``nucleo-f401re``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
 	# in a default install location)
 	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 	cd no-OS
 
 	# build the project (basic example on the NUCLEO-F401RE board)
 	python tools/scripts/no_os_build.py build \
 		--project eval-adxl313z --variant basic --board nucleo-f401re
-
-	# Available variants: ``basic``, ``iio``. Replace ``--variant`` accordingly.
 
 	# build and flash (requires a connected debug probe)
 	python tools/scripts/no_os_build.py build \

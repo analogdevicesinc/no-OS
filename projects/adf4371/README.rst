@@ -330,14 +330,8 @@ above mentioned common files and applies them to the IC. By default reference
 frequency is provided by the local oscillator of the board. Subsequently the
 example sets a test frequency of 8 GHz to channel 0 (RF8).
 
-In order to build the basic example make sure you have the following
-configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4371/Makefile>`_
-
-.. code-block:: bash
-
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	EXAMPLE ?= basic
+This example is built by selecting the ``basic`` variant (see the Build
+Command section below).
 
 No-OS Supported Platforms
 -------------------------
@@ -358,12 +352,19 @@ or to VSUPPL (the SMA interface).
 
 **Build Command**
 
+Available variants: ``basic``.
+Available boards: ``sdp-ck1z``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
 	# in a default install location)
 	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 	cd no-OS
 

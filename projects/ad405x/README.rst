@@ -6,10 +6,10 @@ AD405X no-OS Example Project STM32
 Supported Evaluation Boards
 ---------------------------
 
-`EVAL-AD4050-ARDZ <https://www.analog.com/EVAL-AD4050-ARDZ>`_
-`EVAL-AD4052-ARDZ <https://www.analog.com/EVAL-AD4052-ARDZ>`_
-`EVAL-AD4060-ARDZ <https://www.analog.com/EVAL-AD4060-ARDZ>`_
-`EVAL-AD4062-ARDZ <https://www.analog.com/EVAL-AD4062-ARDZ>`_
+* `EVAL-AD4050-ARDZ <https://www.analog.com/EVAL-AD4050-ARDZ>`_
+* `EVAL-AD4052-ARDZ <https://www.analog.com/EVAL-AD4052-ARDZ>`_
+* `EVAL-AD4060-ARDZ <https://www.analog.com/EVAL-AD4060-ARDZ>`_
+* `EVAL-AD4062-ARDZ <https://www.analog.com/EVAL-AD4062-ARDZ>`_
 
 Overview
 --------
@@ -97,48 +97,46 @@ STM32 Platform
 * `STM32 NUCLEO-H563ZI <https://www.st.com/en/evaluation-tools/nucleo-h563zi.html>`__
 * ST debugger
 
-**Prerequisites**
+**Build Command**
 
-* export STM32CUBEMX=<path/to/stm32cubemx>
-* export STM32CUBEIDE=<path/to/stm32cubeide>
-* firmware for the target platform (download on stm32cubemx beforehand)
-
-**Build and flash**
-
-The project is built with CMake through ``no_os_build.py``. Select the example
-with ``--variant`` and the carrier with ``--board`` (append ``--flash`` with a
-``--probe`` to program the board after building):
+Available variants: ``basic``, ``basic_i3c``, ``i3c_dma``, ``iio``.
+Available boards: ``nucleo-h503rb``, ``nucleo-h563zi``.
+Replace ``--variant`` / ``--board`` accordingly. Not every variant is available
+on every board; see the combination list with
+``python tools/scripts/no_os_build.py list --project ad405x``.
 
 .. code-block:: bash
 
-   python3 tools/scripts/no_os_build.py build \
+   # set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+   # in a default install location)
+   export STM32CUBEMX=</path/to/stm32cubemx>
+   export STM32CUBEIDE=</path/to/stm32cubeide>
+   # Windows (PowerShell):
+   #   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+   #   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
+
+   cd no-OS
+
+   # build the project (basic example on the NUCLEO-H563ZI board)
+   python tools/scripts/no_os_build.py build \
       --project ad405x --variant basic --board nucleo-h563zi
 
-   python3 tools/scripts/no_os_build.py build \
-      --project ad405x --variant iio --board nucleo-h563zi
-
-   python3 tools/scripts/no_os_build.py build \
-      --project ad405x --variant basic_i3c --board nucleo-h563zi
-
-   python3 tools/scripts/no_os_build.py build \
-      --project ad405x --variant i3c_dma --board nucleo-h503rb
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad405x --variant basic --board nucleo-h563zi \
+      --probe openocd --flash
 
 Project Options
-----------------
+---------------
 
-* | Use basic interactive example that prints samples to uart:
-  | ``--variant`` = basic, basic_i3c, i3c_dma
+The ``basic``, ``basic_i3c``, and ``i3c_dma`` variants are interactive examples
+that print samples to UART; ``iio`` is the IIOD example.
 
-* | Or IIOD example:
-  | ``--variant`` = iio
+The AD405X/AD406X part and instance ID (I3C only) are fixed per variant via the
+``AD405X_DEV_TYPE`` / ``AD405X_INSTANCE_ID`` compile definitions set in
+``CMakeLists.txt``. Edit those definitions (or add a new variant) to target a
+different part:
 
-* | The AD405X/AD406X part and instance ID (I3C only) are fixed per variant via
-    the ``AD405X_DEV_TYPE`` / ``AD405X_INSTANCE_ID`` compile definitions set in
-    ``CMakeLists.txt``. Edit those definitions (or add a new variant) to target a
-    different part:
-  | DEV_TYPE = AD4050, AD4052, AD4056, AD4058, AD4060, AD4062
-  | INSTANCE_ID = 0-7 (range)
-
-* | Specify the carrier in use:
-  | ``--board`` = nucleo-h563zi, nucleo-h503rb
+* DEV_TYPE = AD4050, AD4052, AD4056, AD4058, AD4060, AD4062
+* INSTANCE_ID = 0-7 (range)
 

@@ -69,10 +69,10 @@ elsewhere, or you want to pin a specific version, point the build at it with the
         # Linux
         export CCES_HOME=/opt/analog/cces/3.0.3
 
-    .. code-block:: bash
+    .. code-block:: powershell
 
-        # Windows (Git Bash) — install to a path without whitespaces
-        export CCES_HOME=/c/ADI/cces3.0.3
+        # Windows (PowerShell) — install to a path without whitespaces
+        $env:CCES_HOME = "C:\ADI\cces3.0.3"
 
 You can also pass it explicitly to CMake with ``-DCCES_HOME=...``.
 
@@ -254,8 +254,8 @@ opening the no-OS folder without the workspace will not load the debug setup.
 Windows
 =======
 
-The CMake flow works under Git Bash. Install CrossCore Embedded Studio (to a
-path without whitespaces) and the ADuCM302x DFP / ARM.CMSIS packs, then export
-``CCES_HOME`` if it is not in a default location (see above). Make sure
-``cmake``, ``ninja`` and ``python`` are available on ``PATH`` in your Git Bash
-session, then follow the same configure/build/flash steps as on Linux.
+The CMake flow works natively on Windows (PowerShell). Install CrossCore
+Embedded Studio (to a path without whitespaces) and the ADuCM302x DFP /
+ARM.CMSIS packs, then set ``CCES_HOME`` if it is not in a default location (see
+above). Make sure ``cmake``, ``ninja`` and ``python`` are available on
+``PATH``, then follow the same configure/build/flash steps as on Linux.

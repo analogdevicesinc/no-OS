@@ -82,14 +82,8 @@ the ADIN1110, integrating descriptors and error checking into the
 control flow. Dependencies include other functions for SPI transfers and
 register operations essential for the communication process.
 
-In order to build the example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/adin1110/Makefile>`__:
-
-.. code-block:: bash
-
-   # Select the example
-   EXAMPLE = frame_rx_tx
+This example is built by selecting the ``frame_rx_tx`` variant (see the Build
+Command section below).
 
 No-OS Supported Platforms
 -------------------------
@@ -144,6 +138,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

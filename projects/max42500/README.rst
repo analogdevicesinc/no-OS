@@ -3,7 +3,7 @@ MAX42500 no-OS Example Project
 
 .. no-os-doxygen::
 
-..contents::
+.. contents::
         :depth: 3
 
 Supported Evaluation Boards
@@ -57,11 +57,7 @@ loop, the example reads the status of the voltage monitor input and prints the
 results to the console. Optionally, varying input signals can be applied to the 
 input voltage monitor pin to test and see the status of the pin.
 
-This is the only example in this project, so it builds by default:
-
-.. code-block:: bash
-
-	make
+This is the only example in this project, so it builds by default.
 
 No-OS Supported Platforms
 -------------------------
@@ -99,6 +95,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
