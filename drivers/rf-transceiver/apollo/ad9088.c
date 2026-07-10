@@ -7,6 +7,7 @@
 
 #include "ad9088.h"
 #include "no_os_delay.h"
+#include <string.h>
 
 #include "adi_cms_api_common.h"
 
@@ -224,8 +225,8 @@ static int ad9088_spi_xfer(void *dev_obj, uint8_t *wbuf, uint8_t *rbuf,
 		return ret;
 	}
 
-	*rbuf = *wbuf; 
-	
+	memcpy(rbuf, wbuf, len);
+
 	return 0;
 }
 
@@ -234,18 +235,20 @@ static int ad9088_spi_read(void *dev_obj, const uint8_t tx_data[],
 			   adi_apollo_hal_txn_config_t *txn_config)
 {
 	struct ad9088_phy *phy = dev_obj;
-	uint8_t *tx = tx_data;
-	uint32_t idx;
+	uint8_t buf[16];
 	int ret;
-	
-	ret = no_os_spi_write_and_read(phy->spi, tx, num_tx_rx_bytes);
+
+	if (num_tx_rx_bytes > sizeof(buf))
+		return -EINVAL;
+
+	memcpy(buf, tx_data, num_tx_rx_bytes);
+	ret = no_os_spi_write_and_read(phy->spi, buf, num_tx_rx_bytes);
 	if (ret) {
 		pr_err("SPI transfer failed: %d\n", ret);
 		return ret;
 	}
 
-	for (idx = 0; idx < num_tx_rx_bytes; idx++)
-		rx_data[idx] = tx[idx];
+	memcpy(rx_data, buf, num_tx_rx_bytes);
 
 	return 0;
 }
@@ -254,10 +257,14 @@ static int ad9088_spi_write(void *dev_obj, const uint8_t tx_data[],
 			    uint32_t num_tx_bytes, adi_apollo_hal_txn_config_t *txn_config)
 {
 	struct ad9088_phy *phy = dev_obj;
-	uint8_t *tx = tx_data;
-	
-	return no_os_spi_write_and_read(phy->spi, tx, num_tx_bytes);
+	uint8_t buf[16];
 
+	if (num_tx_bytes > sizeof(buf))
+		return -EINVAL;
+
+	memcpy(buf, tx_data, num_tx_bytes);
+
+	return no_os_spi_write_and_read(phy->spi, buf, num_tx_bytes);
 }
 
 static int ad9088_reset_pin_ctrl(void *user_data, uint8_t enable)

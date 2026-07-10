@@ -110,11 +110,6 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 	if (!phy)
 		return -ENOMEM;
 
-	ret = no_os_spi_init(&phy->spi, init_param->spi_init);
-	if (ret) {
-		goto error_dev;
-	}
-
 	ret = no_os_gpio_get(&phy->reset_gpio, init_param->gpio_reset);
 	if (ret) {
 		goto error_spi;
@@ -123,6 +118,11 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 	ret = no_os_gpio_direction_output(phy->reset_gpio, NO_OS_GPIO_HIGH);
 	if (ret) {
 		goto error_reset;
+	}
+
+	ret = no_os_spi_init(&phy->spi, init_param->spi_init);
+	if (ret) {
+		goto error_dev;
 	}
 
 	phy->spi_3wire_en = init_param->spi_3wire_en;

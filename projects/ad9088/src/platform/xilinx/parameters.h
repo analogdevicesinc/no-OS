@@ -87,7 +87,7 @@ extern struct xil_gpio_init_param	xil_gpio_param;
 
 #define GPIO_OPS			&xil_gpio_ops
 #define GPIO_EXTRA			&xil_gpio_param
-#define GPIO_OFFSET			0
+#define GPIO_OFFSET			32
 #define GPIO_RESET_N			30
 
 #define UART_OPS			&xil_uart_ops
