@@ -3,8 +3,7 @@ ADuCM3029 Build Prerequisites (CMake)
 *************************************
 
 This guide describes how to build a no-OS project for the ADuCM3029 platform
-using the **CMake** build system. For the legacy Makefile flow, see
-:doc:`build_aducm3029`.
+using the **CMake** build system.
 
 The CMake build is driven by board *presets* (defined in
 ``board_configs/aducm3029/CMakePresets.json``) and project *defconfigs* (Kconfig

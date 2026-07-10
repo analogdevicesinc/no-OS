@@ -1,7 +1,7 @@
 # ADuCM3029 platform driver sources
 target_compile_definitions(no-os PUBLIC -DADUCM_PLATFORM)
 
-# Heap size required by the RTE startup (from aducm.mk:104).
+# Heap size required by the RTE startup.
 target_compile_definitions(no-os PUBLIC -D__HEAP_SIZE=15000)
 
 # no-OS platform driver sources, gated by Kconfig.
@@ -30,13 +30,13 @@ endif()
 
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-# Device Family Pack + CMSIS Core includes (from aducm.mk:79-80).
+# Device Family Pack + CMSIS Core includes.
 target_include_directories(no-os PUBLIC ${ADUCM_DFP}/Include)
 target_include_directories(no-os PUBLIC ${ADUCM_CMSIS_CORE}/Include)
 
 # DFP driver sources. The full set is compiled (matches the legacy build which
 # wildcards $(DFP_DRIVERS)/*.c); two data files are excluded because they are
-# not used on the ADuCM3029 (aducm.mk:73-77).
+# not used on the ADuCM3029.
 file(GLOB_RECURSE _dfp_sources "${ADUCM_DFP}/Source/drivers/*.c")
 list(REMOVE_ITEM _dfp_sources
     "${ADUCM_DFP}/Source/drivers/flash/adi_flash_data.c"

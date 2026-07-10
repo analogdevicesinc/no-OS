@@ -6,7 +6,6 @@
 # For these platforms, the user may optionally pass the PLATFORM variable:
 # PLATFORM = xilinx
 # PLATFORM = altera
-# PLATFORM = aducm3029
 # PLATFORM = stm32
 # PLATFORM = maxim
 
@@ -87,11 +86,7 @@ else
 ifneq '' '$(findstring .ioc,$(HARDWARE))'
 PLATFORM = stm32
 else
-ifneq '' '$(findstring pinmux_config.c,$(HARDWARE))'
-PLATFORM = aducm3029
-else
 $(error No HARDWARE or TARGET found. Please specify one of them.)
-endif
 endif
 endif
 endif

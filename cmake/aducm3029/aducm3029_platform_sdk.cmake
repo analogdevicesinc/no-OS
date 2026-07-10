@@ -3,8 +3,7 @@
 # The ADuCM3029 project artifacts — startup_ADuCM3029.c, reset_ADuCM3029.S,
 # system_ADuCM3029.c, the pinmux GeneratedSources, adi_initialize.c and the
 # ADuCM3029.ld linker script — are produced by CrossCore Embedded Studio (CCES)
-# headless tools. This mirrors the legacy tools/scripts/aducm.mk `aducm3029_project`
-# rule, and follows the same shape as cmake/stm32/stm32_platform_sdk.cmake
+# headless tools. It follows the same shape as cmake/stm32/stm32_platform_sdk.cmake
 # (generate-once, stamp-gated, then consume the generated sources).
 
 # Resolve the pinmux_config.c "hardware" file for the current project.
@@ -78,7 +77,7 @@ function(config_aducm3029_sdk BUILD_TARGET)
 			"CONFIG_ADUCM_PINMUX_PATH.")
 	endif()
 
-	# CCES workspace + generated project layout (mirrors aducm.mk WORKSPACE / PROJECT_BUILD=app).
+	# CCES workspace + generated project layout (WORKSPACE / PROJECT_BUILD=app).
 	set(CCES_WORKSPACE "${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_cces")
 	set(CCES_PROJECT_NAME "app")
 	set(CCES_PROJECT_DIR "${CCES_WORKSPACE}/${CCES_PROJECT_NAME}")

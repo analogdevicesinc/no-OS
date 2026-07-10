@@ -3,7 +3,7 @@
 # The ADuCM3029 build relies on Analog Devices CrossCore Embedded Studio (CCES)
 # both for the cross compiler / OpenOCD and (later, in the platform SDK module)
 # for generating the project startup, pinmux, RTE config and linker script.
-# This file mirrors the discovery the legacy tools/scripts/aducm.mk performs.
+# This file performs the CCES/DFP discovery for the ADuCM3029 platform.
 
 message(STATUS "ADuCM3029 Platform")
 
@@ -44,7 +44,7 @@ endif()
 set(CCES_HOME "${CCES_HOME}" CACHE PATH "CrossCore Embedded Studio install root" FORCE)
 message(STATUS "CCES_HOME: ${CCES_HOME}")
 
-# Tool / SDK locations derived from CCES_HOME (mirrors aducm.mk:27-50).
+# Tool / SDK locations derived from CCES_HOME.
 set(CCES_COMPILER_BIN "${CCES_HOME}/ARM/gcc-arm-embedded/bin")
 set(CCES_OPENOCD_BIN "${CCES_HOME}/ARM/openocd/bin")
 set(CCES_OPENOCD_SCRIPTS "${CCES_HOME}/ARM/openocd/share/openocd/scripts")
@@ -113,7 +113,7 @@ set(CMAKE_EXECUTABLE_SUFFIX_C ".elf")
 set(CMAKE_EXECUTABLE_SUFFIX_CXX ".elf")
 
 # ---------------------------------------------------------------------------
-# Compiler / linker flags (from aducm.mk:97-117)
+# Compiler / linker flags
 # ---------------------------------------------------------------------------
 set(COMMON_CPU_FLAGS "-mcpu=cortex-m3 -mthumb")
 
@@ -166,8 +166,7 @@ if(OPENOCD_PATH)
 
     # target/aducm3029.cfg ships in the DFP's own openocd scripts directory, not
     # the standard CCES scripts dir (-s OPENOCD_SCRIPTS). Add it to OpenOCD's
-    # search path so `source [find target/aducm3029.cfg]` resolves (mirrors the
-    # second -s in tools/scripts/aducm.mk).
+    # search path so `source [find target/aducm3029.cfg]` resolves.
     set(OPENOCD_EXTRA_COMMANDS "add_script_search_dir \"${ADUCM_DFP}/openocd/scripts\"")
 
     if(NOT PROBE)
