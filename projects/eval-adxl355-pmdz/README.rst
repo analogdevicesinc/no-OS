@@ -237,7 +237,7 @@ Build Command
 ^^^^^^^^^^^^^
 
 Available variants: ``dummy``, ``dummy_adxl357``, ``dummy_adxl359``, ``iio``, ``iio_adxl357``, ``iio_adxl359``, ``iio_trigger``, ``iio_trigger_adxl357``, ``iio_trigger_adxl359``.
-Available boards: ``ad-apard32690-sl``, ``max32650fthr``, ``max32655fthr``, ``max32660fthr``, ``max32665fthr``, ``max78000fthr``.
+Available boards: ``ad-apard32690-sl``, ``max32650fthr``, ``max32655fthr``, ``max32660fthr``, ``max32666fthr``, ``max78000fthr``.
 Replace ``--variant`` / ``--board`` accordingly. Not every variant is
 available on every board; see the combination list with
 ``python tools/scripts/no_os_build.py list --project eval-adxl355-pmdz``.

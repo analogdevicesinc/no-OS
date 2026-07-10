@@ -177,7 +177,7 @@ Build Command
 ^^^^^^^^^^^^^
 
 Available variants: ``basic``, ``iio``.
-Available boards: ``max32650fthr``, ``max32655fthr``, ``max32665fthr``, ``max78000fthr``.
+Available boards: ``max32650fthr``, ``max32655fthr``, ``max32666fthr``, ``max78000fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash

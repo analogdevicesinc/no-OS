@@ -31,7 +31,7 @@ use the vendor toolchain bundled with the Maxim SDK:
          - max32655
        * - ``max32660fthr``
          - max32660
-       * - ``max32665fthr``
+       * - ``max32666fthr``
          - max32665
        * - ``max32670evkit``
          - max32670

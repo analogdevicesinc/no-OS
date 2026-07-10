@@ -120,7 +120,7 @@ In order to build the basic example make sure you are using this command:
 .. code-block:: bash
 
 	python tools/scripts/no_os_build.py build \
-	   --project ltm4686 --variant basic --board max32665fthr
+	   --project ltm4686 --variant basic --board max32666fthr
 
 IIO example
 ^^^^^^^^^^^
@@ -146,7 +146,7 @@ In order to build the IIO project make sure you are using this command:
 .. code-block:: bash
 
         python tools/scripts/no_os_build.py build \
-           --project ltm4686 --variant iio --board max32665fthr
+           --project ltm4686 --variant iio --board max32666fthr
 
 No-OS Supported Platforms
 -------------------------
@@ -180,7 +180,7 @@ Maxim Platform
 **Build Command**
 
 Available variants: ``basic``, ``iio``.
-Available boards: ``max32665fthr``.
+Available boards: ``max32666fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
@@ -189,11 +189,11 @@ Replace ``--variant`` / ``--board`` accordingly.
 
    cd no-OS
 
-   # build the project (basic example on the max32665fthr board)
+   # build the project (basic example on the max32666fthr board)
    python tools/scripts/no_os_build.py build \
-      --project ltm4686 --variant basic --board max32665fthr
+      --project ltm4686 --variant basic --board max32666fthr
 
    # build and flash (requires a connected debug probe)
    python tools/scripts/no_os_build.py build \
-      --project ltm4686 --variant basic --board max32665fthr \
+      --project ltm4686 --variant basic --board max32666fthr \
       --probe openocd --flash

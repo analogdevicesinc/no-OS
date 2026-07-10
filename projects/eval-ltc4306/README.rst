@@ -125,7 +125,7 @@ Build Command
 ^^^^^^^^^^^^^
 
 Available variants: ``basic``.
-Available boards: ``max32650fthr``, ``max32655fthr``, ``max32660fthr``, ``max32665fthr``.
+Available boards: ``max32650fthr``, ``max32655fthr``, ``max32660fthr``, ``max32666fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash

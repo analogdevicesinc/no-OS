@@ -78,7 +78,7 @@ In order to build the basic example make sure you are using this command:
 .. code-block:: bash
 
 	python tools/scripts/no_os_build.py build \
-	   --project max22190 --variant basic --board max32665fthr
+	   --project max22190 --variant basic --board max32666fthr
 
 IIO example
 ~~~~~~~~~~~
@@ -95,7 +95,7 @@ In order to build the IIO example make sure you are using this command:
 .. code-block:: bash
 
 	python tools/scripts/no_os_build.py build \
-	   --project max22190 --variant iio --board max32665fthr
+	   --project max22190 --variant iio --board max32666fthr
 
 No-OS Supported Platforms
 -------------------------
@@ -113,7 +113,7 @@ Build Command
 ^^^^^^^^^^^^^
 
 Available variants: ``basic``, ``iio``.
-Available boards: ``ad-apard32690-sl``, ``max32665fthr``.
+Available boards: ``ad-apard32690-sl``, ``max32666fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash

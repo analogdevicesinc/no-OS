@@ -172,7 +172,7 @@ board.
 		--project max14906 --variant iio --board ad-apard32690-sl
 
 	# Available variants: ``basic``, ``iio``. Replace ``--variant`` accordingly.
-	# Alternative board: ``max32665fthr``. Replace ``--board`` accordingly.
+	# Alternative board: ``max32666fthr``. Replace ``--board`` accordingly.
 
 	# build and flash (requires a connected debug probe)
 	python tools/scripts/no_os_build.py build \
