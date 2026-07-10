@@ -8,24 +8,18 @@
 #include "no_os_spi.h"
 
 
-static uint8_t msg_id = 1;
-
 static int mseq_type0_read(struct adiol100_dev *dev, enum adiol100_channel ch,
                            int iol_ch, uint8_t addr, uint8_t *value)
 {
-    uint8_t tx[5];
+    uint8_t tx[2];
     uint8_t rx[16];
     uint8_t rx_len;
     int ret;
 
-    tx[0] = msg_id++;
-    tx[1] = 0x02;
-    tx[2] = 0x02;
-    tx[3] = IOL_MC(IOL_READ, iol_ch, addr);
-    tx[4] = IOL_CKT_TYPE0;
+    tx[0] = IOL_MC(IOL_READ, iol_ch, addr);
+    tx[1] = IOL_CKT_TYPE0;
 
-    adiol100_set_burst_len(dev, ch, 5, 4);
-    ret = adiol100_send_msg(dev, ch, tx, 5);
+    ret = adiol100_send_msg(dev, ch, tx, 2, 2, ADIOL100_DISCARD_MSG);
     if (ret)
         return ret;
 
@@ -35,8 +29,8 @@ static int mseq_type0_read(struct adiol100_dev *dev, enum adiol100_channel ch,
     if (ret)
         return ret;
 
-    if (rx_len >= 3)
-        *value = rx[2];
+    if (rx_len >= 1)
+        *value = rx[0];
     else
         return -EIO;
 
@@ -46,18 +40,14 @@ static int mseq_type0_read(struct adiol100_dev *dev, enum adiol100_channel ch,
 static int mseq_type0_write(struct adiol100_dev *dev, enum adiol100_channel ch,
                             int iol_ch, uint8_t addr, uint8_t value)
 {
-    uint8_t tx[6];
+    uint8_t tx[3];
     int ret;
 
-    tx[0] = msg_id++;
-    tx[1] = 0x01;
-    tx[2] = 0x03;
-    tx[3] = IOL_MC(IOL_WRITE, iol_ch, addr);
-    tx[4] = IOL_CKT_TYPE0;
-    tx[5] = value;
+    tx[0] = IOL_MC(IOL_WRITE, iol_ch, addr);
+    tx[1] = IOL_CKT_TYPE0;
+    tx[2] = value;
 
-    adiol100_set_burst_len(dev, ch, 6, 3);
-    ret = adiol100_send_msg(dev, ch, tx, 6);
+    ret = adiol100_send_msg(dev, ch, tx, 3, 1, ADIOL100_DISCARD_MSG);
     if (ret)
         return ret;
 
@@ -70,19 +60,15 @@ static int mseq_type1v_read(struct adiol100_dev *dev, enum adiol100_channel ch,
                             uint8_t *data, uint8_t *data_len)
 {
     int rx_bytes = od_bytes + 1;
-    uint8_t tx[5];
+    uint8_t tx[2];
     uint8_t rx[36];
     uint8_t rx_len;
     int ret;
 
-    tx[0] = msg_id++;
-    tx[1] = rx_bytes;
-    tx[2] = 0x02;
-    tx[3] = IOL_MC(IOL_READ, iol_ch, addr);
-    tx[4] = IOL_CKT_TYPE1;
+    tx[0] = IOL_MC(IOL_READ, iol_ch, addr);
+    tx[1] = IOL_CKT_TYPE1;
 
-    adiol100_set_burst_len(dev, ch, 5, 2 + rx_bytes);
-    ret = adiol100_send_msg(dev, ch, tx, 5);
+    ret = adiol100_send_msg(dev, ch, tx, 2, rx_bytes, ADIOL100_DISCARD_MSG);
     if (ret)
         return ret;
 
@@ -92,11 +78,13 @@ static int mseq_type1v_read(struct adiol100_dev *dev, enum adiol100_channel ch,
     if (ret)
         return ret;
 
-    int copy = (rx_len > 2) ? rx_len - 3 : 0;
+    int copy = rx_len - 1;
     if (copy > od_bytes)
         copy = od_bytes;
+    if (copy < 0)
+        copy = 0;
     for (int i = 0; i < copy; i++)
-        data[i] = rx[2 + i];
+        data[i] = rx[i];
     *data_len = copy;
 
     return 0;
@@ -107,20 +95,15 @@ static int mseq_type1v_write(struct adiol100_dev *dev, enum adiol100_channel ch,
                              uint8_t *data, int data_len, int od_bytes)
 {
     int tx_bytes = 2 + od_bytes;
-    int len = 3 + tx_bytes;
-    uint8_t tx[36] = {0};
+    uint8_t tx[32] = {0};
     int ret;
 
-    tx[0] = msg_id++;
-    tx[1] = 0x01;
-    tx[2] = tx_bytes;
-    tx[3] = IOL_MC(IOL_WRITE, iol_ch, addr);
-    tx[4] = IOL_CKT_TYPE1;
+    tx[0] = IOL_MC(IOL_WRITE, iol_ch, addr);
+    tx[1] = IOL_CKT_TYPE1;
     for (int i = 0; i < data_len && i < od_bytes; i++)
-        tx[5 + i] = data[i];
+        tx[2 + i] = data[i];
 
-    adiol100_set_burst_len(dev, ch, len, 3);
-    ret = adiol100_send_msg(dev, ch, tx, len);
+    ret = adiol100_send_msg(dev, ch, tx, tx_bytes, 1, ADIOL100_DISCARD_MSG);
     if (ret)
         return ret;
 
@@ -133,17 +116,13 @@ static int mseq_type2_read(struct adiol100_dev *dev, enum adiol100_channel ch,
                            int od_bytes, int pd_in_bytes)
 {
     int rx_bytes = od_bytes + pd_in_bytes;
-    uint8_t tx[5];
+    uint8_t tx[2];
 
-    tx[0] = msg_id++;
-    tx[1] = rx_bytes;
-    tx[2] = 0x02;
-    tx[3] = IOL_MC(IOL_READ, iol_ch, addr);
-    tx[4] = IOL_CKT_TYPE2;
+    tx[0] = IOL_MC(IOL_READ, iol_ch, addr);
+    tx[1] = IOL_CKT_TYPE2;
 
-    adiol100_set_burst_len(dev, ch, 5, 2 + rx_bytes);
     adiol100_enable_cycle_timer(dev, ch);
-    return adiol100_send_msg(dev, ch, tx, 5);
+    return adiol100_send_msg(dev, ch, tx, 2, rx_bytes, ADIOL100_KEEP_MSG);
 }
 
 static int iol_isdu_send(struct adiol100_dev *dev, enum adiol100_channel ch,
@@ -347,8 +326,8 @@ int basic_example_main(void)
     uint8_t rx_len;
     for (int cyc = 0; cyc < 20; cyc++) {
         adiol100_read_msg(dev, ADIOL100_CH_A, rx, &rx_len);
-        if (rx_len > 4) {
-            int16_t dist = (int16_t)((rx[4] << 8) | rx[5]);
+        if (rx_len > op_od_bytes + 1) {
+            int16_t dist = (int16_t)((rx[op_od_bytes] << 8) | rx[op_od_bytes + 1]);
             pr_info("Cyclic #%d dist=%dmm raw(%d):", cyc, dist, rx_len);
             for (int i = 0; i < rx_len; i++) pr_info(" %02X", rx[i]);
             pr_info("\r\n");

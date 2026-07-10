@@ -204,11 +204,16 @@ int adiol100_update(struct adiol100_dev *dev, uint16_t reg, uint16_t mask,
 }
 
 int adiol100_send_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
-                      uint8_t *data, uint8_t len)
+                      uint8_t *data, uint8_t txbytes, uint8_t rxbytes,
+                      enum adiol100_keep_msg keep)
 {
     uint8_t buf[ADIOL100_FIFO_MAX_LEN + 1];
+    uint8_t write_len = 3 + txbytes;
+    uint8_t read_len = 2 + rxbytes;
     uint16_t data_reg;
     uint16_t fc1_reg;
+    uint16_t mask;
+    uint16_t val;
     int ret;
 
     if (ch == ADIOL100_CH_A) {
@@ -219,18 +224,28 @@ int adiol100_send_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
         fc1_reg = ADIOL100_REG_FRAMCTRL1_B;
     }
 
-    if (len > ADIOL100_FIFO_MAX_LEN)
+    if (write_len > ADIOL100_FIFO_MAX_LEN)
         return -EINVAL;
 
-    buf[0] = (dev->chip_addr << 6) | (data_reg << 1) | ADIOL100_WRITE;
-    for (int i = 0; i < len; i++)
-        buf[1 + i] = data[i];
-
-    ret = no_os_spi_write_and_read(dev->spi_desc, buf, len + 1);
+    ret = adiol100_set_burst_len(dev, ch, write_len, read_len);
     if (ret)
         return ret;
 
-    return adiol100_update(dev, fc1_reg, ADIOL100_CQSEND, ADIOL100_CQSEND);
+    buf[0] = (dev->chip_addr << 6) | (data_reg << 1) | ADIOL100_WRITE;
+    buf[1] = dev->msg_id++;
+    buf[2] = rxbytes;
+    buf[3] = txbytes;
+    for (int i = 0; i < txbytes; i++)
+        buf[4 + i] = data[i];
+
+    ret = no_os_spi_write_and_read(dev->spi_desc, buf, write_len + 1);
+    if (ret)
+        return ret;
+
+    mask = ADIOL100_CQSEND | ADIOL100_TXKEEPMSG;
+    val = ADIOL100_CQSEND | no_os_field_prep(ADIOL100_TXKEEPMSG, keep);
+
+    return adiol100_update(dev, fc1_reg, mask, val);
 }
 
 int adiol100_read_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
@@ -239,6 +254,7 @@ int adiol100_read_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
     uint16_t rxstat;
     uint8_t fifo_lvl;
     uint8_t total;
+    uint8_t payload;
     uint8_t buf[ADIOL100_FIFO_MAX_LEN + 1];
     uint16_t stat_reg;
     uint16_t data_reg;
@@ -274,10 +290,17 @@ int adiol100_read_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
     if (ret)
         return ret;
 
-    for (int i = 0; i < total; i++)
-        data[i] = buf[1 + i];
+    if (buf[2] != fifo_lvl) {
+        adiol100_reset_rx_fifo(dev, ch);
+        *len = 0;
+        return -EIO;
+    }
 
-    *len = total;
+    payload = fifo_lvl;
+    for (int i = 0; i < payload; i++)
+        data[i] = buf[3 + i];
+
+    *len = payload;
     return 0;
 }
 

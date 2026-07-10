@@ -340,6 +340,11 @@ enum adiol100_wdg_lock {
     ADIOL100_WDG_LOCKED   = 1,
 };
 
+enum adiol100_keep_msg {
+    ADIOL100_DISCARD_MSG = 0,
+    ADIOL100_KEEP_MSG    = 1,
+};
+
 enum adiol100_cq_slew_rate {
     ADIOL100_CQSLEW_250NS  = 0,
     ADIOL100_CQSLEW_500NS  = 1,
@@ -370,6 +375,7 @@ struct adiol100_init_param{
 struct adiol100_dev{
     struct no_os_spi_desc *spi_desc;
     uint8_t chip_addr;
+    uint8_t msg_id;
 };
 
 int adiol100_init(struct adiol100_dev **dev, struct adiol100_init_param *ip);
@@ -384,7 +390,8 @@ int adiol100_update(struct adiol100_dev *dev, uint16_t reg, uint16_t mask,
                     uint16_t value);
 
 int adiol100_send_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
-                      uint8_t *data, uint8_t len);
+                      uint8_t *data, uint8_t txbytes, uint8_t rxbytes,
+                      enum adiol100_keep_msg keep);
 
 int adiol100_read_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
                        uint8_t *data, uint8_t *len);
