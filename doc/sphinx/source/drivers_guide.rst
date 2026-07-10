@@ -8,7 +8,7 @@ This page represents a quick guide on how to create a no-OS driver and at the sa
 C code C++ compatible
 =====================
 
-The code must be written in C, but be compatible with C + + environments too since some platforms of this type (e.g., Mbed OS)  are already capable of using the no-OS drivers.
+The code must be written in C, but be compatible with C++ environments too since some platforms of this type are already capable of using the no-OS drivers.
 
 Conversion from void*
 ---------------------
