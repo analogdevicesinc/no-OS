@@ -57,7 +57,6 @@
 #include "capi_xemacps.h"
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
-#include "no_os_alloc.h"
 #include <capi_eth_phy.h>		/* for the shared capi_eth_interface enum */
 
 #define XGEM_BD_TO_INDEX(ringptr, bdptr) \
@@ -690,6 +689,85 @@ static int xemacps_op_read_frame(struct capi_eth_mac_handle *handle,
 	return (int)actual;
 }
 
+static void gem_setup_zynq_slcr(uintptr_t base, uint16_t mbps)
+{
+	uint32_t off;
+	uint32_t val;
+
+	if (mbps != 10 && mbps != 100 && mbps != 1000)
+		return;
+
+	if (base == GEM_ZYNQ_GEM0_BASE)
+		off = GEM_ZYNQ_SLCR_GEM0_CLK_CTRL_OFF;
+	else if (base == GEM_ZYNQ_GEM1_BASE)
+		off = GEM_ZYNQ_SLCR_GEM1_CLK_CTRL_OFF;
+	else
+		return;
+
+	XEmacPs_WriteReg(XPS_SYS_CTRL_BASEADDR, GEM_ZYNQ_SLCR_UNLOCK_OFF,
+			 GEM_ZYNQ_SLCR_UNLOCK_KEY);
+
+	val = XEmacPs_ReadReg(XPS_SYS_CTRL_BASEADDR, off);
+	val &= GEM_ZYNQ_SLCR_DIV_MASK;
+	val |= (uint32_t)gem_zynq_divs[mbps].div0 << GEM_ZYNQ_SLCR_DIV0_SHIFT;
+	val |= (uint32_t)gem_zynq_divs[mbps].div1 << GEM_ZYNQ_SLCR_DIV1_SHIFT;
+	XEmacPs_WriteReg(XPS_SYS_CTRL_BASEADDR, off, val);
+
+	XEmacPs_WriteReg(XPS_SYS_CTRL_BASEADDR, GEM_ZYNQ_SLCR_LOCK_OFF,
+			 GEM_ZYNQ_SLCR_LOCK_KEY);
+}
+
+#ifdef XPAR_PSU_CRL_APB_BASEADDR
+static void gem_setup_zynqmp_crl(uintptr_t base, uint16_t mbps)
+{
+	uint32_t off;
+	uint32_t val;
+
+	if (mbps != 10 && mbps != 100 && mbps != 1000)
+		return;
+
+	switch (base) {
+	case GEM_ZYNQMP_GEM0_BASE:
+		off = GEM_ZYNQMP_CRL_GEM0_REF_CTRL_OFF;
+		break;
+	case GEM_ZYNQMP_GEM1_BASE:
+		off = GEM_ZYNQMP_CRL_GEM1_REF_CTRL_OFF;
+		break;
+	case GEM_ZYNQMP_GEM2_BASE:
+		off = GEM_ZYNQMP_CRL_GEM2_REF_CTRL_OFF;
+		break;
+	case GEM_ZYNQMP_GEM3_BASE:
+		off = GEM_ZYNQMP_CRL_GEM3_REF_CTRL_OFF;
+		break;
+	default:
+		return;
+	}
+
+	val = XEmacPs_ReadReg(XPAR_PSU_CRL_APB_BASEADDR, off);
+	val &= ~(GEM_ZYNQMP_CRL_DIV0_MASK | GEM_ZYNQMP_CRL_DIV1_MASK);
+	val |= (uint32_t)gem_zynqmp_divs[mbps].div0 << GEM_ZYNQMP_CRL_DIV0_SHIFT;
+	val |= (uint32_t)gem_zynqmp_divs[mbps].div1 << GEM_ZYNQMP_CRL_DIV1_SHIFT;
+	XEmacPs_WriteReg(XPAR_PSU_CRL_APB_BASEADDR, off, val);
+}
+#endif
+
+static void gem_setup_tx_clock(uintptr_t base, uint16_t mbps)
+{
+	/* Zynq-7000 GEM PS bases dispatch to SLCR; anything else is treated as
+	 * ZynqMP (CRL_APB path). Extend here for Versal.
+	 */
+	if (base == GEM_ZYNQ_GEM0_BASE || base == GEM_ZYNQ_GEM1_BASE) {
+		gem_setup_zynq_slcr(base, mbps);
+	} else {
+#ifdef XPAR_PSU_CRL_APB_BASEADDR
+		gem_setup_zynqmp_crl(base, mbps);
+#else
+		(void)base;
+		(void)mbps;
+#endif
+	}
+}
+
 static int xemacps_op_configure(struct capi_eth_mac_handle *handle,
 				const struct capi_eth_mac_config *cfg)
 {
@@ -703,8 +781,10 @@ static int xemacps_op_configure(struct capi_eth_mac_handle *handle,
 	d = to_priv(handle);
 
 	mbps = mac_speed_to_mbps(cfg->speed);
-	if (mbps)
+	if (mbps) {
 		XEmacPs_SetOperatingSpeed(&d->emac, mbps);
+		gem_setup_tx_clock(d->emac.Config.BaseAddress, mbps);
+	}
 
 	nwcfg = XEmacPs_ReadReg(d->emac.Config.BaseAddress,
 				XEMACPS_NWCFG_OFFSET);

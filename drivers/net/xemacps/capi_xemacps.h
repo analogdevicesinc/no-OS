@@ -43,6 +43,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include <xparameters.h>
+#include <xparameters_ps.h>
 #include "no_os_util.h"
 #include <capi_eth_mac.h>
 #include <capi_mdio.h>
@@ -179,6 +181,71 @@ struct xemacps_mdio_init_config {
 	/** Parent MAC handle (already initialised via capi_eth_mac_init). */
 	struct capi_eth_mac_handle *mac;
 };
+
+/*
+ * GEM RGMII TX_CLK divisors and clock-generator register windows.
+ *
+ * Register bases come from the BSP where possible:
+ *   - Zynq-7000  SLCR : XPS_SYS_CTRL_BASEADDR (xparameters_ps.h)
+ *   - ZynqMP    CRL_APB: XPAR_PSU_CRL_APB_BASEADDR (xparameters.h)
+ *
+ * GEM PS instance base addresses are SoC-fixed (not BSP-driven — the BSP
+ * only emits XPAR_XEMACPS_n_BASEADDR for enabled instances), so the four
+ * possible bases stay named here for dispatch.
+ */
+
+/* Zynq-7000 SLCR window (relative to XPS_SYS_CTRL_BASEADDR = 0xF8000000) */
+#define GEM_ZYNQ_SLCR_LOCK_OFF		0x004U
+#define GEM_ZYNQ_SLCR_UNLOCK_OFF	0x008U
+#define GEM_ZYNQ_SLCR_GEM0_CLK_CTRL_OFF	0x140U
+#define GEM_ZYNQ_SLCR_GEM1_CLK_CTRL_OFF	0x144U
+#define GEM_ZYNQ_SLCR_UNLOCK_KEY	0x0000DF0DU
+#define GEM_ZYNQ_SLCR_LOCK_KEY		0x0000767BU
+#define GEM_ZYNQ_SLCR_DIV_MASK		0xFC0FC0FFU
+#define GEM_ZYNQ_SLCR_DIV0_SHIFT	8
+#define GEM_ZYNQ_SLCR_DIV1_SHIFT	20
+
+/* Zynq-7000 GEM PS base addresses (used for dispatch between SLCR/CRL paths) */
+#define GEM_ZYNQ_GEM0_BASE		0xE000B000U
+#define GEM_ZYNQ_GEM1_BASE		0xE000C000U
+
+/* ZynqMP CRL_APB GEMx_REF_CTRL offsets (relative to XPAR_PSU_CRL_APB_BASEADDR) */
+#define GEM_ZYNQMP_CRL_GEM0_REF_CTRL_OFF	0x50U
+#define GEM_ZYNQMP_CRL_GEM1_REF_CTRL_OFF	0x54U
+#define GEM_ZYNQMP_CRL_GEM2_REF_CTRL_OFF	0x58U
+#define GEM_ZYNQMP_CRL_GEM3_REF_CTRL_OFF	0x5CU
+#define GEM_ZYNQMP_CRL_DIV0_SHIFT		8
+#define GEM_ZYNQMP_CRL_DIV1_SHIFT		16
+#define GEM_ZYNQMP_CRL_DIV0_MASK		(0x3FU << GEM_ZYNQMP_CRL_DIV0_SHIFT)
+#define GEM_ZYNQMP_CRL_DIV1_MASK		(0x3FU << GEM_ZYNQMP_CRL_DIV1_SHIFT)
+
+/* ZynqMP GEM PS base addresses */
+#define GEM_ZYNQMP_GEM0_BASE		0xFF0B0000U
+#define GEM_ZYNQMP_GEM1_BASE		0xFF0C0000U
+#define GEM_ZYNQMP_GEM2_BASE		0xFF0D0000U
+#define GEM_ZYNQMP_GEM3_BASE		0xFF0E0000U
+
+struct gem_clk_divs {
+	uint8_t div0;
+	uint8_t div1;
+};
+
+/* Divisor tables — indexed by speed (Mbps). See the doc comment above for
+ * source-clock assumptions.
+ */
+static const struct gem_clk_divs gem_zynq_divs[] = {
+	[10]   = { .div0 = 8,  .div1 = 50 },
+	[100]  = { .div0 = 8,  .div1 = 5  },
+	[1000] = { .div0 = 8,  .div1 = 1  },
+};
+
+#ifdef XPAR_PSU_CRL_APB_BASEADDR
+static const struct gem_clk_divs gem_zynqmp_divs[] = {
+	[10]   = { .div0 = 12, .div1 = 50 },
+	[100]  = { .div0 = 12, .div1 = 5  },
+	[1000] = { .div0 = 12, .div1 = 1  },
+};
+#endif
 
 #if defined(__cplusplus)
 }
