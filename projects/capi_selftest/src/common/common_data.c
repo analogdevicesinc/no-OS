@@ -59,6 +59,11 @@ static struct capi_uart_line_config uart_line_config = {
 };
 
 /**
+ * @brief Platform-specific extra data for the console UART.
+ */
+static UART_EXTRA_TYPE uart_extra = UART_EXTRA_INIT;
+
+/**
  * @brief CAPI UART configuration used as the test report transport.
  */
 const struct capi_uart_config uart_config = {
@@ -66,7 +71,7 @@ const struct capi_uart_config uart_config = {
 	.dma_handle = NULL,
 	.clk_freq_hz = 0U,
 	.line_config = &uart_line_config,
-	.extra = NULL,
+	.extra = &uart_extra,
 	.ops = UART_OPS,
 };
 
