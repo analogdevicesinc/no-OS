@@ -3,8 +3,7 @@ STM32 Build Prerequisites (CMake)
 *********************************
 
 This guide describes how to build a no-OS project for the STM32 platform using
-the **CMake** build system. For the legacy Makefile flow, see
-:doc:`build_stm32`.
+the **CMake** build system.
 
 The CMake build is driven by board *presets* (defined in
 ``board_configs/stm32/CMakePresets.json``) and project *defconfigs* (Kconfig

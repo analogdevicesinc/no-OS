@@ -3,8 +3,7 @@ Maxim Build Prerequisites (CMake)
 *********************************
 
 This guide describes how to build a no-OS project for the Maxim platform using
-the **CMake** build system. For the legacy Makefile flow, see
-:doc:`build_maxim`.
+the **CMake** build system.
 
 The CMake build is driven by board *presets* (defined in
 ``board_configs/maxim/CMakePresets.json``) and project *defconfigs* (Kconfig
