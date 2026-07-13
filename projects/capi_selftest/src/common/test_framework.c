@@ -276,6 +276,8 @@ int test_framework_run_cases(const char *module, const struct test_case *cases,
 	if (cases == NULL)
 		return -EINVAL;
 
+	test_framework_section(module);
+
 	for (size_t i = 0U; i < count; i++) {
 		test_framework_begin(module, cases[i].name);
 
