@@ -20,6 +20,14 @@ ACCELEROMETERS
 
    drivers/accel/*
 
+ANALOG FRONT-ENDS
+=================
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   drivers/afe/*
+
 ANALOG TO DIGITAL CONVERTERS
 ============================
 .. toctree::
@@ -33,7 +41,7 @@ ADC / DAC
 .. toctree::
    :maxdepth: 1
    :glob:
-   
+
    drivers/adc-dac/*
 
 AXI CORES
