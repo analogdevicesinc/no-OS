@@ -36,7 +36,6 @@ MAXIM
 .. toctree::
    :maxdepth: 1
 
-   build_guides/build_maxim
    build_guides/build_maxim_cmake
 
 FTD2XX
@@ -65,7 +64,6 @@ STM32
 .. toctree::
     :maxdepth: 1
 
-    build_guides/build_stm32
     build_guides/build_stm32_cmake
 
 ADUCM3029
