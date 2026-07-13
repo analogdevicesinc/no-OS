@@ -21,10 +21,12 @@ Submission Checklist
 Before being reviewed by the no-OS maintainers and then accepted to the GitHub
 repository, each commit should respect a few rules:
 
-- The commit contains a **Signed-off-by** trailer by the committer at the end
-  of the commit log message - it certifies that the committer has the rights to
-  submit the work under the project's license.
-
+- The commit must contain a **Signed-off-by** trailer by the committer at the end
+  of the commit log message.
+- If an **AI agent** was used to author or modify the commit, add an
+  **Assisted-by** trailer naming the agent and model, for example
+  ``Assisted-by: Claude Sonnet 4.6``. Place it before the
+  **Signed-off-by** trailer.
 - The commit message should follow the **50/72 rule** :
 
   - The first line (the subject) should be **at most 50 characters** long.
