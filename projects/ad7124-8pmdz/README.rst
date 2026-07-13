@@ -70,8 +70,8 @@ Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
 No-OS Supported Examples
 ------------------------
 
-This project is organized around the no-OS ``EXAMPLE`` based build flow.
-Selecting an example at build time (``EXAMPLE=<name>``) chooses which
+This project is organized around the no-OS variant based build flow.
+Selecting a variant at build time (``--variant <name>``) chooses which
 application is compiled. The platform ``main()`` is a thin dispatcher that
 calls ``example_main()``, provided by the selected example. Shared
 initialization data (UART, SPI, and AD7124 init parameters) is defined in
@@ -118,12 +118,25 @@ connector of the EVAL-ADICUP3029 for UART communication with a PC.
 Build Command
 ^^^^^^^^^^^^^
 
+The ADuCM3029 platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``iio_example``,
+``iio_wifi``. Available board: ``eval-adicup3029``.
+
 .. code-block:: bash
 
-   # to build the project
-   make PLATFORM=aducm3029 EXAMPLE=iio_example
-   # to flash the code
-   make run
+   # point at the CrossCore Embedded Studio install (only if not auto-detected)
+   export CCES_HOME=/opt/analog/cces/3.0.3
+
+   cd no-OS
+
+   # build the IIO example on the EVAL-ADICUP3029
+   python tools/scripts/no_os_build.py build \
+      --project ad7124-8pmdz --variant iio_example --board eval-adicup3029
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project ad7124-8pmdz --variant iio_example --board eval-adicup3029 \
+      --probe openocd --flash
 
 Maxim
 ~~~~~
