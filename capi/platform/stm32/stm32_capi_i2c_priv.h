@@ -27,6 +27,10 @@ struct stm32_i2c_priv_handle {
 	bool async_in_progress;
 	/** Current transfer for async operations */
 	struct capi_i2c_transfer *current_transfer;
+	/** true when controller is in initiator (master) role */
+	bool is_initiator;
+	/** Cached target address (7-bit, unshifted) when in target mode */
+	uint16_t target_addr;
 };
 
 #define CAPI_I2C_CONTROLLER_HANDLE_STM32_INIT() \
