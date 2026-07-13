@@ -12,3 +12,7 @@ no_os_sources_ifdef(CONFIG_AFE_AD5940 ${CMAKE_CURRENT_SOURCE_DIR}/ad5940/ad5940.
 no_os_sources_ifdef(CONFIG_AFE_IIO_AD5940 ${CMAKE_CURRENT_SOURCE_DIR}/ad5940/iio_ad5940.c)
 no_os_sources_ifdef(CONFIG_AFE_AD5940 ${CMAKE_CURRENT_SOURCE_DIR}/ad5940/bia_measurement.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad5940)
+
+# MAX30009
+no_os_sources_ifdef(CONFIG_AFE_MAX30009 ${CMAKE_CURRENT_SOURCE_DIR}/max30009/max30009.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/max30009)

@@ -39,4 +39,11 @@ config AFE_IIO_AD5940
     bool "Enable AD5940 IIO driver"
     default n
 
+config AFE_MAX30009
+    depends on SPI || I2C
+    select GPIO
+    select IRQ
+    bool "Enable MAX30009 AFE driver"
+    default n
+
 endif # AFE
