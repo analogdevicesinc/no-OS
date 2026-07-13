@@ -1,0 +1,12 @@
+menu "max30009 Configuration"
+
+choice MAX30009
+	prompt "Example variant"
+	default MAX30009_BASIC_EXAMPLE
+
+config MAX30009_BASIC_EXAMPLE
+	bool "Basic example"
+
+endchoice
+
+endmenu
