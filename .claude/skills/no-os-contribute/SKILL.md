@@ -52,7 +52,9 @@ Signed-off-by: Jane Dev <jane.dev@analog.com>
 - Passes **astyle**:
   `astyle --style=linux --indent=force-tab=8 --max-code-length=80 --suffix=none --pad-oper --pad-header --unpad-paren --pad-comma`
 - The PR description explains **how the change was tested**; if a driver was
-  tested on a supported platform, add a project example that uses it.
+  tested on a supported platform, add a project example that uses it. When that
+  example needs a `README.rst`, use the **`no-os-project-readme`** skill, which
+  generates it from `doc/project_readme_template.rst`.
 
 ## PR workflow
 
