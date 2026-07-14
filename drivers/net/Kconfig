@@ -54,4 +54,19 @@ config MDIO_SPI
       Enable the MDIO-over-SPI transport driver, which implements the
       no_os_mdio API on top of a SPI bus.
 
+config W5500
+    depends on SPI
+    select GPIO
+    bool "Enable the W5500 driver"
+    default n
+
+config WIFI
+    depends on UART
+    select IRQ
+    bool "Enable the WiFi (ESP8266 AT) driver"
+    default n
+    help
+      Enable the ESP8266 AT-command WiFi stack (network/wifi). Talks to the
+      module over UART and drives receive from the UART interrupt.
+
 endif

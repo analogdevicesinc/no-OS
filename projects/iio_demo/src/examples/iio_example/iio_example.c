@@ -36,6 +36,9 @@
 #include "iio_dac_demo.h"
 #include "common_data.h"
 #include "no_os_util.h"
+#if defined(NO_OS_NET) && defined(LINUX_PLATFORM)
+#include "linux_net.h"
+#endif
 
 /***************************************************************************//**
  * @brief IIO example main execution.
@@ -90,6 +93,10 @@ int iio_example_main()
 #ifdef NO_OS_NETWORKING
 	app_init_param.wifi_ssid = CONFIG_WIFI_SSID;
 	app_init_param.wifi_pwd = CONFIG_WIFI_PWD;
+#endif
+#if defined(NO_OS_NET) && defined(LINUX_PLATFORM)
+	app_init_param.net_init_params.platform_ops = &linux_net_ops;
+	app_init_param.net_init_params.extra = NULL;
 #endif
 
 	status = iio_app_init(&app, app_init_param);

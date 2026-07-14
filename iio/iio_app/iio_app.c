@@ -65,7 +65,7 @@
 #include "tcp_socket.h"
 #endif
 
-#ifdef LINUX_PLATFORM
+#if defined(LINUX_PLATFORM) && !defined(NO_OS_NET)
 #include "linux_socket.h"
 #include "tcp_socket.h"
 #endif
@@ -185,7 +185,7 @@ static int32_t lwip_network_setup(struct iio_app_desc *app,
 }
 #endif
 
-#if defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
+#if (defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)) && !defined(NO_OS_NET)
 static int32_t network_setup(struct iio_init_param *iio_init_param,
 			     struct no_os_uart_desc *uart_desc,
 			     void *irq_desc,
@@ -342,22 +342,25 @@ int iio_app_init(struct iio_app_desc **app,
 	status = lwip_network_setup(application, app_init_param, &iio_init_param);
 	if (status)
 		goto error;
-#elif defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
+#elif (defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)) && !defined(NO_OS_NET)
 	status = network_setup(&iio_init_param, uart_desc, application->irq_desc,
 			       app_init_param);
 	if (status < 0)
 		goto error;
-#elif defined(NO_OS_W5500_NETWORKING)
-	static struct tcp_socket_init_param socket_param;
-
-	socket_param.net = &app_init_param.net_dev->net_if;
-	socket_param.max_buff_size = 0;
-
-	iio_init_param.phy_type = USE_NETWORK;
-	iio_init_param.tcp_socket_init_param = &socket_param;
 #else
 	iio_init_param.phy_type = USE_UART;
 	iio_init_param.uart_desc = uart_desc;
+#endif
+
+#if defined(NO_OS_NET)
+	if (app_init_param.net_init_params.platform_ops) {
+		int ret = no_os_net_init(&application->net_desc,
+					 &app_init_param.net_init_params);
+		if (ret)
+			return ret;
+		iio_init_param.phy_type = USE_NETWORK;
+		iio_init_param.net_desc = application->net_desc;
+	}
 #endif
 
 	iio_init_devs = no_os_calloc(app_init_param.nb_devices, sizeof(*iio_init_devs));
@@ -473,6 +476,14 @@ int iio_app_remove(struct iio_app_desc *app)
 	ret = iio_remove(app->iio_desc);
 	if (ret)
 		return ret;
+
+#if defined(NO_OS_NET)
+	if (app->net_desc) {
+		ret = no_os_net_remove(app->net_desc);
+		if (ret)
+			return ret;
+	}
+#endif
 
 	no_os_free(app);
 

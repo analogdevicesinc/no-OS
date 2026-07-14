@@ -39,7 +39,6 @@
 #include "iio_ad74413r.h"
 #include "max14906.h"
 #include "iio_max14906.h"
-#include "adin1110.h"
 
 #define SWIOT_CHANNELS	4
 
@@ -77,7 +76,6 @@ struct swiot_config_state {
 struct swiot_iio_desc {
 	struct ad74413r_iio_desc *ad74413r;
 	struct max149x6_iio_desc *max14906;
-	struct adin1110_desc *adin1110;
 	struct iio_device *iio_dev;
 	uint32_t active_channels;
 	uint8_t no_of_active_channels;

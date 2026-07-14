@@ -37,7 +37,11 @@
 
 #include "iio_types.h"
 #include "no_os_uart.h"
-#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
+#if defined(NO_OS_NET)
+#include "no_os_net.h"
+#include "no_os_socket.h"
+#endif
+#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING)
 #include "tcp_socket.h"
 #endif
 
@@ -97,7 +101,10 @@ struct iio_init_param {
 	enum physical_link_type	phy_type;
 	union {
 		struct no_os_uart_desc *uart_desc;
-#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
+#if defined(NO_OS_NET)
+		struct no_os_net_desc *net_desc;
+#endif
+#if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING)
 		struct tcp_socket_init_param *tcp_socket_init_param;
 #endif
 	};

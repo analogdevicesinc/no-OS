@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   mqtt_noos_support.h
- *   @brief  Header file used to port the MQTT paho to use no-os
- *   @author Mihail Chindris (mihail.chindris@analog.com)
+ *   @file   lwip_adin1110_net.h
+ *   @brief  ADIN1110 MAC glue for the lwIP no_os_net adapter.
+ *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,60 +31,16 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef MQTT_NOOS
-#define MQTT_NOOS
+#ifndef _LWIP_ADIN1110_NET_H_
+#define _LWIP_ADIN1110_NET_H_
 
-#include <stdint.h>
-#if defined(NO_OS_NET)
-#include "no_os_socket.h"
-#else
-#include "tcp_socket.h"
-#endif
-#include "no_os_timer.h"
+#ifdef NO_OS_NET
 
-/** Typedef for \ref timer_port_noos */
-typedef struct timer_port_noos		Timer;
+#include "lwip_net.h"
 
-/** Typedef for \ref network_port_noos */
-typedef struct network_port_noos	Network;
+#define ADIN1110_LWIP_BUFF_SIZE 2000
 
-/**
- * @struct timer_port_noos
- * @brief Timer structure used by MQTTClient.
- */
-struct timer_port_noos {
-	/** Time when the countdown is started */
-	uint32_t	start_time;
-	/** Time when the countdown value */
-	uint32_t	ms;
-};
+extern const struct lwip_mac_ops adin1110_lwip_ops;
 
-/**
- * @struct network_port_noos
- * @brief Network structure used by MQTTClient.
- */
-struct network_port_noos {
-	/** Reference to no-os socket */
-#if defined(NO_OS_NET)
-	struct no_os_socket_desc	*sock;
-#else
-	struct tcp_socket_desc	*sock;
-#endif
-	/** Reference to no-os network wrapper read function */
-	int	(*mqttread)(Network*, unsigned char*, int, int);
-	/** Reference to no-os network wrapper write function */
-	int	(*mqttwrite)(Network*, unsigned char*, int,
-			     int);
-};
-
-/* Init porting file */
-int32_t mqtt_timer_init(struct no_os_timer_init_param *timer_init_param);
-/* Uninit porting file */
-void mqtt_timer_remove();
-
-/* Function to be linked to Network.mqttread */
-int mqtt_noos_read(Network*, unsigned char*, int, int);
-/* Function to be linked to Network.mqttwrite */
-int mqtt_noos_write(Network*, unsigned char*, int, int);
-
-#endif
+#endif /* NO_OS_NET */
+#endif /* _LWIP_ADIN1110_NET_H_ */

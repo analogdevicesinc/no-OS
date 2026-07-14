@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   mqtt_noos_support.h
- *   @brief  Header file used to port the MQTT paho to use no-os
- *   @author Mihail Chindris (mihail.chindris@analog.com)
+ *   @file   linux_net.h
+ *   @brief  Linux adapter for the no_os_net / no_os_socket interfaces.
+ *   @author Ramona Nechita (ramona.nechita@analog.com)
+ *   @author Alisa-Dariana Roman (alisa.roman@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,61 +31,31 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef _LINUX_NET_H_
+#define _LINUX_NET_H_
 
-#ifndef MQTT_NOOS
-#define MQTT_NOOS
+#if defined(NO_OS_NET) && defined(LINUX_PLATFORM)
 
 #include <stdint.h>
-#if defined(NO_OS_NET)
+#include "no_os_net.h"
 #include "no_os_socket.h"
-#else
-#include "tcp_socket.h"
-#endif
-#include "no_os_timer.h"
-
-/** Typedef for \ref timer_port_noos */
-typedef struct timer_port_noos		Timer;
-
-/** Typedef for \ref network_port_noos */
-typedef struct network_port_noos	Network;
 
 /**
- * @struct timer_port_noos
- * @brief Timer structure used by MQTTClient.
+ * @struct linux_net_desc
+ * @brief Linux backend state, stored in no_os_net_desc::extra.
+ *
+ * The host kernel owns the whole TCP/IP stack, so there is no device, no socket
+ * pool and no netdev sublayer. Each no_os_socket_desc carries its file
+ * descriptor directly in no_os_socket_desc::id, so this descriptor holds no
+ * per-connection state and exists only for interface symmetry.
  */
-struct timer_port_noos {
-	/** Time when the countdown is started */
-	uint32_t	start_time;
-	/** Time when the countdown value */
-	uint32_t	ms;
+struct linux_net_desc {
+	/** Placeholder; the kernel holds all networking state. */
+	uint8_t				reserved;
 };
 
-/**
- * @struct network_port_noos
- * @brief Network structure used by MQTTClient.
- */
-struct network_port_noos {
-	/** Reference to no-os socket */
-#if defined(NO_OS_NET)
-	struct no_os_socket_desc	*sock;
-#else
-	struct tcp_socket_desc	*sock;
-#endif
-	/** Reference to no-os network wrapper read function */
-	int	(*mqttread)(Network*, unsigned char*, int, int);
-	/** Reference to no-os network wrapper write function */
-	int	(*mqttwrite)(Network*, unsigned char*, int,
-			     int);
-};
+/** Network platform operations implementing the Linux adapter. */
+extern const struct no_os_net_platform_ops linux_net_ops;
 
-/* Init porting file */
-int32_t mqtt_timer_init(struct no_os_timer_init_param *timer_init_param);
-/* Uninit porting file */
-void mqtt_timer_remove();
-
-/* Function to be linked to Network.mqttread */
-int mqtt_noos_read(Network*, unsigned char*, int, int);
-/* Function to be linked to Network.mqttwrite */
-int mqtt_noos_write(Network*, unsigned char*, int, int);
-
-#endif
+#endif /* NO_OS_NET && LINUX_PLATFORM */
+#endif /* _LINUX_NET_H_ */

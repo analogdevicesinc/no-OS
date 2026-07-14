@@ -12,11 +12,18 @@ SRC_DIRS += $(LWIP_DIR)/src/netif
 SRC_DIRS += $(LWIP_DIR)/src/apps/mdns
 SRC_DIRS += $(LWIP_DIR)/src/apps/lwiperf
 
+ifeq (y,$(strip $(CONFIG_NO_OS_NET)))
+INCS += $(NO-OS)/include/no_os_net.h
+INCS += $(NO-OS)/include/no_os_socket.h
+INCS += $(NO-OS)/network/lwip/lwip_net.h
+SRCS += $(NO-OS)/network/lwip/lwip_net.c
+else
 INCS += $(NO-OS)/network/network_interface.h
 INCS += $(NO-OS)/network/lwip_raw_socket/lwip_socket.h
 INCS += $(NO-OS)/network/tcp_socket.h
 SRCS += $(NO-OS)/network/tcp_socket.c
 SRCS += $(NO-OS)/network/lwip_raw_socket/lwip_socket.c
+endif
 
 ifdef CONFIG_NO_OS_IP
 CFLAGS += -DCONFIG_NO_OS_IP=\"$(CONFIG_NO_OS_IP)\"

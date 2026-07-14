@@ -70,7 +70,7 @@ struct w5500_init_param w5500_ip = {
 	.retry_count = 3,
 };
 
-struct w5500_network_init_param w5500_network_ip = {
+struct w5500_net_param w5500_net_ip = {
 	.mac_dev = NULL,
 	.w5500_ip = &w5500_ip,
 };
@@ -175,9 +175,10 @@ struct adin1110_init_param adin1110_ip = {
 	.reset_param = adin1110_rst_gpio_ip,
 	.append_crc = false,
 };
-struct lwip_network_param lwip_ip = {
-	.platform_ops = &adin1110_lwip_ops,
+struct lwip_net_param lwip_net_ip = {
+	.mac_ops = &adin1110_lwip_ops,
 	.mac_param = &adin1110_ip,
+	.extra = NULL,
 };
 #endif
 #endif

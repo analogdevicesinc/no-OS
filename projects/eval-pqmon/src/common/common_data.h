@@ -35,12 +35,12 @@
 #define __COMMON_DATA_H__
 
 #if defined(PQM_CONN_ETH)
-#include "w5500_network.h"
+#include "w5500_net.h"
 #endif
 
 #if defined(PQM_CONN_T1L)
-#include "lwip_socket.h"
-#include "lwip_adin1110.h"
+#include "lwip_net.h"
+#include "lwip_adin1110_net.h"
 #include "adin1110.h"
 #endif
 
@@ -79,7 +79,7 @@ extern IIO_BUFF_TYPE iio_data_buffer_loc[MAX_SIZE_BASE_ADDR];
 extern const struct no_os_spi_init_param w5500_spi_init_params;
 
 extern struct w5500_init_param w5500_ip;
-extern struct w5500_network_init_param w5500_network_ip;
+extern struct w5500_net_param w5500_net_ip;
 #endif
 
 #if defined(PQM_CONN_USB)
@@ -98,7 +98,7 @@ extern const struct no_os_gpio_init_param adin1110_cfg1_ip;
 extern const struct no_os_spi_init_param adin1110_spi_ip;
 
 extern struct adin1110_init_param adin1110_ip;
-extern struct lwip_network_param lwip_ip;
+extern struct lwip_net_param lwip_net_ip;
 #endif
 
 extern struct pqm_init_para pqm_ip;
