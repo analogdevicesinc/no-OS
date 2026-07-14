@@ -33,13 +33,14 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include <malloc.h>
+#include <stdlib.h>
 #include "adf4377.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
+#include "no_os_units.h"
 
 /**
  * @struct adf4377_reg_sequence
@@ -92,6 +93,26 @@ static const struct adf4377_reg_sequence adf4377_reg_defaults[] = {
 	{ 0x3B, 0x2B },
 	{ 0x42, 0x05 },
 	{ 0x10, 0x28 },
+};
+
+/* Charge pump current values expressed in uA, indexed by the CP_I register. */
+static const int adf4377_ci_ua[] = {
+	790,
+	990,
+	1190,
+	1380,
+	1590,
+	1980,
+	2390,
+	2790,
+	3180,
+	3970,
+	4770,
+	5570,
+	6330,
+	7910,
+	9510,
+	11100
 };
 
 /**
@@ -303,7 +324,8 @@ int adf4377_set_ref_div(struct adf4377_dev *dev, int32_t div)
 {
 	if (!dev)
 		return -EINVAL;
-
+	if (div < 1)
+		div = 1;
 	dev->ref_div_factor = div;
 
 	if (div > ADF4377_REF_DIV_MAX)
@@ -381,6 +403,8 @@ int adf4377_get_en_ref_doubler(struct adf4377_dev *dev, bool *en)
 static uint64_t adf4377_pfd_compute(struct adf4377_dev *dev)
 {
 	uint64_t pfd_freq;
+	if (dev->ref_div_factor == 0)
+		dev->ref_div_factor = 1;
 
 	pfd_freq = NO_OS_DIV_ROUND_CLOSEST(dev->clkin_freq, dev->ref_div_factor);
 	if (dev->ref_doubler_en)
@@ -438,25 +462,28 @@ int adf4377_soft_reset(struct adf4377_dev *dev, bool spi_4wire)
  */
 int adf4377_set_bleed_word(struct adf4377_dev *dev, int32_t word)
 {
-	uint8_t val;
 	int ret;
-
+	uint8_t en_bleed;
 	if (!dev)
 		return -EINVAL;
 
 	dev->bleed_word = (uint16_t)word;
-
+	en_bleed = 1;
 	if (word > ADF4377_BLEED_WORD_MAX)
 		dev->bleed_word = ADF4377_BLEED_WORD_MAX;
+	else if (word == 0)
+		en_bleed = 0;
 
-	val = dev->bleed_word & ADF4377_BLEED_I_LSB_MSK;
-	ret = adf4377_spi_update_bit(dev, 0x15, ADF4377_BLEED_I_LSB_MSK,
-				     no_os_field_prep(ADF4377_BLEED_I_LSB_MSK,
-						     val));
+	/* 2 LSBs go to REG 0x15[7:6], the 8 MSBs to REG 0x16[7:0]. */
+	ret = adf4377_spi_update_bit(dev, 0x15,
+				     ADF4377_EN_BLEED_MSK | ADF4377_BLEED_I_LSB_MSK,
+				     no_os_field_prep(ADF4377_EN_BLEED_MSK,
+						     en_bleed) | no_os_field_prep(ADF4377_BLEED_I_LSB_MSK,
+								     dev->bleed_word));
 	if (ret)
 		return ret;
-	val = (dev->bleed_word >> 2) & ADF4377_EN_BLEED_MSK;
-	return adf4377_spi_write(dev, 0x16, val);
+
+	return adf4377_spi_write(dev, 0x16, (dev->bleed_word >> 2) & 0xFF);
 }
 
 /**
@@ -467,20 +494,138 @@ int adf4377_set_bleed_word(struct adf4377_dev *dev, int32_t word)
  */
 int adf4377_get_bleed_word(struct adf4377_dev *dev, int32_t *bleed_word)
 {
-	uint8_t upper, lower;
+	uint8_t tmp, pol, en;
+	uint16_t bleed;
 	int ret;
 
-	ret = adf4377_spi_read(dev, 0x1E, &upper);
+	if (!dev)
+		return -EINVAL;
+
+	ret = adf4377_spi_read(dev, 0x15, &tmp);
 	if (ret)
 		return ret;
-	dev->bleed_word = upper;
+	en = no_os_field_get(ADF4377_EN_BLEED_MSK, tmp);
+	if (!en) {
+		*bleed_word = 0;
+		return 0;
+	}
+	bleed = no_os_field_get(ADF4377_BLEED_I_LSB_MSK, tmp);
+	pol = no_os_field_get(ADF4377_BLEED_POL_MSK, tmp);
 
-	ret = adf4377_spi_read(dev, 0x1F, &lower);
+	ret = adf4377_spi_read(dev, 0x16, &tmp);
 	if (ret)
 		return ret;
+	bleed = bleed | (tmp << 2);
 
-	dev->bleed_word = (upper << 8) | lower;
+	dev->bleed_word = pol ? -bleed : bleed;
 	*bleed_word = dev->bleed_word;
+
+	return 0;
+}
+
+/**
+ * @brief Computes the output delay for one bleed-word step, in femtoseconds.
+ * @param dev - The device structure.
+ * @return    - Bleed step value in fs.
+ */
+static uint32_t adf4377_bleed_step_compute(struct adf4377_dev *dev)
+{
+	uint64_t pfd_freq, tmp, tmp2;
+	int32_t cp_i;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = adf4377_get_cp_i(dev, &cp_i);
+	if (ret)
+		return ret;
+
+	pfd_freq = adf4377_pfd_compute(dev);
+
+	/* uA*Hz = Cpi(uA) * pfd_freq(Hz) */
+	tmp = adf4377_ci_ua[cp_i] * pfd_freq;
+
+	/* Hz*A = uA*Hz / 10^6 */
+	tmp = no_os_div_u64(tmp, MEGA);
+
+	/* fA = nA * 10^6 */
+	tmp2 = (ADF4377_BLEED_CONST1 * MEGA);
+
+	/* fs = fA / (Hz*A) */
+	return tmp2 / tmp;
+}
+
+/**
+ * @brief Set the bleed delay in femtoseconds.
+ * @param dev            - The device structure.
+ * @param bleed_delay_fs - The desired bleed delay in femtoseconds.
+ * @return               - 0 in case of success, negative error code otherwise.
+ */
+int adf4377_set_bleed_delay(struct adf4377_dev *dev, int64_t bleed_delay_fs)
+{
+	uint64_t bleed_delay;
+	uint32_t bleed_step_fs;
+	uint16_t bleed_word;
+	uint8_t pol, val;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	bleed_delay = llabs(bleed_delay_fs);
+	pol = bleed_delay_fs < 0;
+
+	bleed_step_fs = adf4377_bleed_step_compute(dev);
+
+	bleed_word = bleed_delay / bleed_step_fs;
+
+	val = no_os_field_prep(ADF4377_BLEED_POL_MSK, pol) |
+	      no_os_field_prep(ADF4377_EN_BLEED_MSK, true) |
+	      no_os_field_prep(ADF4377_BLEED_I_LSB_MSK, bleed_word);
+
+	ret = adf4377_spi_update_bit(dev, 0x15,
+				     ADF4377_BLEED_POL_MSK | ADF4377_EN_BLEED_MSK |
+				     ADF4377_BLEED_I_LSB_MSK, val);
+	if (ret)
+		return ret;
+
+	return adf4377_spi_write(dev, 0x16, (bleed_word >> 2) & 0xFF);
+}
+
+/**
+ * @brief Get the bleed delay in femtoseconds.
+ * @param dev            - The device structure.
+ * @param bleed_delay_fs - The bleed delay in femtoseconds.
+ * @return               - 0 in case of success, negative error code otherwise.
+ */
+int adf4377_get_bleed_delay(struct adf4377_dev *dev, int64_t *bleed_delay_fs)
+{
+	uint32_t bleed_step_fs;
+	uint16_t bleed;
+	uint8_t tmp, pol;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = adf4377_spi_read(dev, 0x15, &tmp);
+	if (ret)
+		return ret;
+
+	bleed = no_os_field_get(ADF4377_BLEED_I_LSB_MSK, tmp);
+	pol = no_os_field_get(ADF4377_BLEED_POL_MSK, tmp);
+
+	ret = adf4377_spi_read(dev, 0x16, &tmp);
+	if (ret)
+		return ret;
+	bleed = bleed | (tmp << 2);
+
+	dev->bleed_word = pol ? -bleed : bleed;
+
+	bleed_step_fs = adf4377_bleed_step_compute(dev);
+
+	*bleed_delay_fs = (int64_t)dev->bleed_word * (int64_t)bleed_step_fs;
 
 	return 0;
 }
@@ -624,7 +769,7 @@ int adf4377_get_rfout_divider(struct adf4377_dev *dev, int8_t *div)
 	if (ret)
 		return ret;
 
-	dev->clkout_div_sel = ADF4377_CLKOUT_DIV(tmp);
+	dev->clkout_div_sel =  no_os_field_get(ADF4377_CLKOUT_DIV_MSK, tmp);
 	*div = dev->clkout_div_sel;
 
 	return 0;
@@ -681,7 +826,6 @@ int adf4377_set_freq(struct adf4377_dev *dev)
 	dev->clkout_div_sel = clkout_div;
 
 	if (!vco) {
-		pr_err("VCO is 0\n");
 		return -EINVAL;
 	}
 
@@ -715,7 +859,7 @@ int adf4377_set_freq(struct adf4377_dev *dev)
 
 	locked = no_os_field_get(ADF4377_LOCKED_MSK, val);
 	if (!locked)
-		return -EIO;
+		return -ETIMEDOUT;
 
 	return 0;
 
@@ -824,7 +968,6 @@ int adf4377_set_rdel(struct adf4377_dev *dev, int32_t val)
  */
 int adf4377_get_rdel(struct adf4377_dev *dev, int32_t *val)
 {
-	int32_t rdel;
 	uint8_t tmp;
 	int ret;
 
@@ -920,6 +1063,88 @@ int adf4377_get_en_sr_inv_adj(struct adf4377_dev *dev, bool *en)
 
 	dev->sr_inv = no_os_field_get(ADF4377_INV_SR_MSK, tmp);
 	*en = dev->sr_inv;
+
+	return 0;
+}
+
+/**
+ * @brief Set the clock output inversion.
+ * @param dev - The device structure.
+ * @param inv - The desired clock output inversion (0 or 1).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4377_set_clk_inv(struct adf4377_dev *dev, uint8_t inv)
+{
+	if (!dev)
+		return -EINVAL;
+
+	return adf4377_spi_update_bit(dev, 0x17, ADF4377_INV_CLKOUT_MSK,
+				      ADF4377_INV_CLKOUT(inv));
+}
+
+/**
+ * @brief Get the clock output inversion.
+ * @param dev - The device structure.
+ * @param inv - Pointer to store the current clock output inversion (0 or 1).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4377_get_clk_inv(struct adf4377_dev *dev, uint8_t *inv)
+{
+	uint8_t tmp;
+	int ret;
+
+	if (!dev || !inv)
+		return -EINVAL;
+
+	ret = adf4377_spi_read(dev, 0x17, &tmp);
+	if (ret)
+		return ret;
+
+	*inv = no_os_field_get(ADF4377_INV_CLKOUT_MSK, tmp);
+
+	return 0;
+}
+
+/**
+ * @brief Set the channel inversion.
+ * @param dev - The device structure.
+ * @param ch  - The channel to set inversion (0 or 1).
+ * @param inv - The desired channel inversion (0 or 1).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4377_set_channel_inv(struct adf4377_dev *dev, uint8_t ch, uint8_t inv)
+{
+	if (!dev)
+		return -EINVAL;
+
+	if (!ch)
+		return adf4377_set_clk_inv(dev, inv);
+
+	return adf4377_set_en_sr_inv_adj(dev, inv);
+}
+
+/**
+ * @brief Get the channel inversion.
+ * @param dev - The device structure.
+ * @param ch  - The channel to get inversion (0 or 1).
+ * @param inv - Pointer to store the current channel inversion (0 or 1).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4377_get_channel_inv(struct adf4377_dev *dev, uint8_t ch, uint8_t *inv)
+{
+	bool en;
+	int ret;
+
+	if (!dev || !inv)
+		return -EINVAL;
+
+	if (!ch)
+		return adf4377_get_clk_inv(dev, inv);
+
+	ret = adf4377_get_en_sr_inv_adj(dev, &en);
+	if (ret)
+		return ret;
+	*inv = en;
 
 	return 0;
 }
@@ -1156,6 +1381,9 @@ int32_t adf4377_init(struct adf4377_dev **device,
 		ret = no_os_gpio_direction_output(dev->gpio_ce, NO_OS_GPIO_HIGH);
 		if (ret < 0)
 			goto error_gpio_ce;
+		ret = no_os_gpio_set_value(dev->gpio_ce, NO_OS_GPIO_HIGH);
+		if (ret < 0)
+			goto error_gpio_ce;
 	}
 
 	/* Software Reset and load register values*/
@@ -1169,12 +1397,16 @@ int32_t adf4377_init(struct adf4377_dev **device,
 		goto error_spi;
 
 	if (chip_type != ADF4377_CHIP_TYPE)
-		goto error_spi;
+		pr_warning("%s:%d ADF4377 Chip Type test failed. %d\n",
+			   __FILE__,
+			   __LINE__, (int)ret);
 
 	/* Scratchpad Check */
 	ret = adf4377_check_scratchpad(dev);
 	if (ret < 0)
-		goto error_spi;
+		pr_warning("%s:%d ADF4377 scratchpad test failed. Check SPI connection. %d\n",
+			   __FILE__,
+			   __LINE__, (int)ret);
 
 	ret = adf4377_spi_read(dev, ADF4377_REG(0x04), &device_id);
 	if (ret < 0)
@@ -1191,6 +1423,9 @@ int32_t adf4377_init(struct adf4377_dev **device,
 							  NO_OS_GPIO_HIGH);
 			if (ret < 0)
 				goto error_gpio_enclk1;
+			ret = no_os_gpio_set_value(dev->gpio_enclk1, NO_OS_GPIO_HIGH);
+			if (ret < 0)
+				goto error_gpio_enclk1;
 		}
 
 		if (dev->dev_id == ADF4377) {
@@ -1204,23 +1439,28 @@ int32_t adf4377_init(struct adf4377_dev **device,
 								  NO_OS_GPIO_HIGH);
 				if (ret < 0)
 					goto error_gpio_enclk2;
+				ret = no_os_gpio_set_value(dev->gpio_enclk2, NO_OS_GPIO_HIGH);
+				if (ret < 0)
+					goto error_gpio_enclk2;
 			}
 		}
-	} else {
-		ret = -ENODEV;
-		goto error_spi;
-	}
+	} else
+		pr_warning("%s:%d Device ID Check failed. %d\n",
+			   __FILE__,
+			   __LINE__, (int)ret);
+
 
 	ret = adf4377_setup(dev);
-	if (ret < 0) {
-		if (dev->dev_id == ADF4378)
-			goto error_gpio_enclk1;
-		else
-			goto error_gpio_enclk2;
-	}
+	if (ret == -ETIMEDOUT) {
+		pr_warning("%s:%d ADF4377 VCO frequency setting failed. %d\n",
+			   __FILE__,
+			   __LINE__, (int)ret);
+	} else if (ret)
+		goto error_spi;
+
 	*device = dev;
 
-	return ret;
+	return 0;
 
 error_gpio_enclk2:
 	no_os_gpio_remove(dev->gpio_enclk2);
