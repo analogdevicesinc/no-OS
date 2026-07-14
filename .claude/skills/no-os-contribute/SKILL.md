@@ -54,7 +54,9 @@ Signed-off-by: Jane Dev <jane.dev@analog.com>
 - The PR description explains **how the change was tested**; if a driver was
   tested on a supported platform, add a project example that uses it. When that
   example needs a `README.rst`, use the **`no-os-project-readme`** skill, which
-  generates it from `doc/project_readme_template.rst`.
+  generates it from `doc/project_readme_template.rst`. When a new **driver**
+  needs a `README.rst`, use the **`no-os-driver-readme`** skill, which generates
+  it from `doc/driver_readme_template.rst`.
 
 ## PR workflow
 
