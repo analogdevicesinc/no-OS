@@ -26,6 +26,7 @@ Contents
    drivers_doc
    projects_doc
    build_guide
+   cmake_cheatsheet
    contributing
 
 Doxygen
