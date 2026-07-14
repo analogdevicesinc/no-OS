@@ -352,7 +352,7 @@ connectors (P5 and P2).
 No-OS Build Setup
 -----------------
 
-Please see: https://wiki.analog.com/resources/no-os/build
+Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`__
 
 No-OS Supported Examples
 ------------------------
@@ -377,7 +377,8 @@ In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-	make EXAMPLE=basic
+	python tools/scripts/no_os_build.py build \
+		--project adf4377_sdz --variant basic --board sdp-ck1z
 
 IIO example
 ^^^^^^^^^^^
@@ -394,64 +395,120 @@ The No-OS IIO Application together with the No-OS IIO ADF4377 driver take care
 of all the back-end logic needed to setup the IIO server.
 
 This example initializes the IIO device and calls the IIO app as shown in:
-`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adf4377_sdz/src/examples/iio_example>`_
+`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adf4377_sdz/src/examples/iio>`_
 
 In order to build the IIO project make sure you are using this command:
 
 .. code-block:: bash
 
-	make EXAMPLE=iio_example
+	python tools/scripts/no_os_build.py build \
+		--project adf4377_sdz --variant iio --board sdp-ck1z
 
 No-OS Supported Platforms
 -------------------------
 
-Mbed Platform
+Xilinx
+^^^^^^
+
+Used Hardware
 ^^^^^^^^^^^^^
 
-**Used hardware**
-
 * `EVAL-ADF4377 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4377.html>`_
-* `SDP-K1 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
+* `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
-**Connections**:
+Connections
+^^^^^^^^^^^
 
-The SDP connector of the SDP-K1 needs to be connected to SDP header of the 
-Evaluation board.
-Additionally a 6V power supply needs to be connected to either J12 
-(the SMA interface).
+The EVAL-ADF4377 is controlled from the ZedBoard through the SPI and GPIO
+lines routed on the PS7 (Zynq processing system). Connect a 6V supply to J12
+(the SMA interface) of the evaluation board. Configure the ZedBoard boot
+jumpers for JTAG/SD boot and connect the ZedBoard USB-UART port for the serial
+console.
 
-**Build Command**
+The UART console appears on the ZedBoard USB-UART port at 115200 baud, 8N1.
+
+Build Command
+^^^^^^^^^^^^^
+
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``basic``, ``iio``.
+Available boards: ``zed``.
+
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
 
 .. code-block:: bash
 
-	# to delete current build
-	make reset PLATFORM=mbed
-	# to build the basic project
-	make EXAMPLE=basic PLATFORM=mbed
-	# to build the IIO project
-	make EXAMPLE=iio_example PLATFORM=mbed
-	# copy the adf4377_sdz.bin to the mounted SDP-K1
-	cp build/adf5611.bin </path/to/SDP-K1/mounted/folder>
+   # Source the Vitis environment (sets XILINX_VITIS and adds tools to PATH)
+   source /path/to/Vitis/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   $env:XILINX_VITIS = "<C:\path\to\Vitis>"
 
-Xilinx platform
-^^^^^^^^^^^^^^^
+   cd no-OS
 
-**Used hardware**
+   # build the example on the ZedBoard (replace --variant as needed)
+   python tools/scripts/no_os_build.py build \
+      --project adf4377_sdz --variant basic --board zed \
+      --hardware /path/to/system_top.xsa
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project adf4377_sdz --variant basic --board zed \
+      --hardware /path/to/system_top.xsa \
+      --probe openocd --flash
+
+STM32
+^^^^^
+
+Used Hardware
+^^^^^^^^^^^^^
 
 * `EVAL-ADF4377 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4377.html>`_
-* `Zedboard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
+* `SDP-CK1Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-ck1z.html>`_
 
+Connections
+^^^^^^^^^^^
 
-**Build Command**
+The SDP connector of the SDP-CK1Z needs to be connected to the SDP header of
+the evaluation board. Additionally a 6V power supply needs to be connected to
+J12 (the SMA interface).
+
+The UART console appears on the SDP-CK1Z USB virtual COM port at 115200 baud, 8N1.
+
+.. note::
+
+   The STM32 GPIO port/pin assignments in
+   ``src/platform/stm32/parameters.h`` (CE, ENCLK1, ENCLK2, MUXOUT, LKDET) are
+   placeholders mapped onto free SDP-CK1Z pins. Verify them against the
+   SDP-CK1Z schematic and the ADF4377 SDP interposer routing before use.
+
+Build Command
+^^^^^^^^^^^^^
+
+The STM32 platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``basic``, ``iio``.
+Available boards: ``sdp-ck1z``.
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
 .. code-block:: bash
 
-        cp <SOME_PATH>/system_top.xsa .
-        # to delete current build
-        make reset PLATFORM=xilinx
-		# to build the basic project
-		make EXAMPLE=basic PLATFORM=xilinx
-		# to build the IIO project
-		make EXAMPLE=iio_example PLATFORM=xilinx
-        # to flash the code
-        make run
+   # set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+   # in a default install location)
+   export STM32CUBEMX=</path/to/stm32cubemx>
+   export STM32CUBEIDE=</path/to/stm32cubeide>
+   # PowerShell (Windows) equivalent:
+   #   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+   #   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
+
+   cd no-OS
+
+   # build the example on the SDP-CK1Z board (replace --variant as needed)
+   python tools/scripts/no_os_build.py build \
+      --project adf4377_sdz --variant basic --board sdp-ck1z
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project adf4377_sdz --variant basic --board sdp-ck1z \
+      --probe openocd --flash

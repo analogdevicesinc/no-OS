@@ -50,23 +50,21 @@ int example_main()
 {
 	struct adf4377_dev *dev;
 	struct no_os_gpio_desc *sdp_gpio;
+	struct no_os_uart_desc *uart_desc;
 	int ret;
+
+	ret = no_os_uart_init(&uart_desc, &adf4377_uart_ip);
+	if (ret)
+		return ret;
+
+	no_os_uart_stdio(uart_desc);
 
 	pr_info("Enter basic example \n");
 
 	ret = adf4377_init(&dev, &adf4377_ip);
 	if (ret)
 		goto error;
-	ret = no_os_gpio_get(&sdp_gpio, &adf4377_gpio_ip);
-	if (ret)
-		goto error;
-	ret = no_os_gpio_direction_output(sdp_gpio, 1);
-	if (ret)
-		goto error;
 	pr_info("ADF4377 initialized\n");
-	ret = adf4377_set_rfout(dev, 10000000000);
-	if (ret)
-		goto error;
 
 	return ret;
 error:

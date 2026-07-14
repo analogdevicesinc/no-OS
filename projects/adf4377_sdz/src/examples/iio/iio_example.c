@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Definitions specific to Mbed platform used by adf4377 project.
+ *   @file   iio_example.c
+ *   @brief  Implementation of IIO example for adf4377 project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
  *   @author Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
@@ -31,45 +31,56 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
 
-#include <PinNames.h>
-#include "mbed_uart.h"
-#include "mbed_spi.h"
-#include "no_os_uart.h"
-#include "mbed_gpio.h"
-#include "no_os_gpio.h"
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include "iio_adf4377.h"
+#include "common_data.h"
+#include "no_os_print_log.h"
+#include "iio_app.h"
 
-#define UART_TX_PIN	CONSOLE_TX
-#define	UART_RX_PIN	CONSOLE_RX
-#define UART_DEVICE_ID  5
-#define UART_IRQ_ID     53
-#define UART_BAUDRATE   115200
-#define UART_EXTRA	&adf4377_uart_extra_ip
-#define UART_OPS        &mbed_uart_ops
-
-#define SPI_BAUDRATE    4000000
-#define SPI_OPS         &mbed_spi_ops
-#define SPI_EXTRA       &adf4377_spi_extra
-#define SPI_DEVICE_ID   5
-#define SPI_CS          SDP_SPI_CS_A
-
-/* SDP GPIO Configuration */
-#define GPIO_OPS 	&mbed_gpio_ops
-#define GPIO_EXTRA 	&adf4377_gpio_ip
-// #define GPIO_SDP 	SDP_GPIO_0
-#define GPIO_LKDET      SDP_GPIO_0
-#define GPIO_ENCLK1     SDP_GPIO_1
-#define GPIO_ENCLK2     SDP_GPIO_2
-#define GPIO_MUXOUT     SDP_GPIO_4
-#define GPIO_CE		SDP_GPIO_5
+/**
+ * @brief IIO example main execution.
+ *
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously function iio_app_run and will not return.
+ */
+int example_main()
+{
+	struct adf4377_iio_dev *adf4377_iio_dev;
+	struct adf4377_iio_dev_init_param adf4377_iio_ip;
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
+	int ret;
 
 
+	adf4377_iio_ip.adf4377_dev_init = &adf4377_ip;
+	ret = adf4377_iio_init(&adf4377_iio_dev, &adf4377_iio_ip);
+	if (ret)
+		return ret;
+	// pr_info("ADF4377 IIO initialized\n");
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "adf4377",
+			.dev = adf4377_iio_dev,
+			.dev_descriptor = adf4377_iio_dev->iio_dev,
+		}
+	};
 
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = adf4377_uart_ip;
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		goto exit;
+	iio_app_run(app);
 
-extern struct mbed_uart_init_param adf4377_uart_extra_ip;
-extern struct mbed_spi_init_param adf4377_spi_extra;
-extern struct no_os_gpio_init_param adf4377_gpio_ip;
+	iio_app_remove(app);
+exit:
+	adf4377_iio_remove(adf4377_iio_dev);
 
-#endif /* __PARAMETERS_H__ */
+	if (ret)
+		pr_info("Error!\n");
+	return ret;
+}

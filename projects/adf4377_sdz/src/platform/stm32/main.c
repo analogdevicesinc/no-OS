@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.c
- *   @brief  Definition of Mbed platform data used by adf4377 project.
+ *   @file   main.c
+ *   @brief  Main file for STM32 platform of adf4377 project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
  *   @author Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
@@ -31,21 +31,22 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+
 #include "parameters.h"
 #include "common_data.h"
+#include "no_os_error.h"
 
-struct mbed_uart_init_param adf4377_uart_extra_ip = {
-	.uart_tx_pin = UART_TX_PIN,
-	.uart_rx_pin = UART_RX_PIN
-};
+extern int example_main();
 
-struct mbed_spi_init_param adf4377_spi_extra = {
-	.spi_miso_pin = SDP_SPI_MISO,
-	.spi_mosi_pin = SDP_SPI_MOSI,
-	.spi_clk_pin = SDP_SPI_SCK,
-	.use_sw_csb = false
-};
+/**
+ * @brief Main function execution for STM32 platform.
+ * @return ret - Result of the enabled examples execution.
+ */
+int main()
+{
+	adf4377_spi_extra_ip.get_input_clock = HAL_RCC_GetPCLK1Freq;
 
-struct no_os_gpio_init_param adf4377_gpio_ip = {
-	.platform_ops = GPIO_OPS,
-};
+	stm32_init();
+
+	return example_main();
+}
