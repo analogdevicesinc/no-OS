@@ -55,11 +55,6 @@ Power Supply Requirements
 * On-resistance: 200 mOhm (typ) at +25 C
 * Continuous output current: up to 1 A RMS per half-bridge
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -117,6 +112,9 @@ Used Hardware
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``, ``iio``.
 Available boards: ``ad-apard32690-sl``, ``max32666fthr``.

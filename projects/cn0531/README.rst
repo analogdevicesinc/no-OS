@@ -52,11 +52,6 @@ applications like scientific instrumentation and industrial control. The
 high power supply rejection ratio and low operating drift provided by
 the onboard voltage regulators enhance its stability and precision.
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -135,6 +130,9 @@ Plug the USB Type A connector into your PC and the micro USB connector
 into the EVAL-ADICUP3029.
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
 
 Available variants: ``iio``, ``iio_wifi``.
 Available boards: ``eval-adicup3029``.

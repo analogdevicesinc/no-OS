@@ -72,11 +72,6 @@ GND Test Point        Ground connection for 24 V DC power supply and scope probe
 DOI Test Points       Oscilloscope probe points for digital output signal verification
 ====================  ==================================================================
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -160,6 +155,9 @@ board.
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+
 Available variants: ``basic``, ``iio``.
 Available boards: ``ad-apard32690-sl``, ``max32666fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -213,6 +211,9 @@ the NUCLEO-F401RE board and the MAX14906EVKIT J13 header:
 +-------------+----------------------+-------------+
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
 Available variants: ``basic``, ``iio``.
 Available boards: ``nucleo-f401re``.

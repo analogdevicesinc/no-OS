@@ -92,11 +92,6 @@ a micro-USB cable.
 	| J1	 | 2-3		|
 	+--------+--------------+
 
-No-OS Build Setup
------------------
-
-`Please see: <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -169,6 +164,9 @@ Maxim Platform
 +-------------------------------+----------+---------------------------------+-------------------------+
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``, ``iio``.
 Available boards: ``ad-apard32690-sl``, ``max32666fthr``.

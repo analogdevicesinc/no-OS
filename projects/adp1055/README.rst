@@ -121,11 +121,6 @@ interface.
 	| 4   | GND      | Connect to Ground			     |
 	+-----+----------+-------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -226,6 +221,9 @@ J2:
 +-----------------------------+------------+----------------------------------------------+-----------------------------+
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``, ``iio_example``.
 Available boards: ``ad-apard32690-sl``.

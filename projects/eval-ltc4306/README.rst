@@ -57,11 +57,6 @@ Board Connectors
 * **RDY LED** - Lights when upstream is disconnected from all downstream
   buses; turns off when at least one connection is established
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -124,6 +119,9 @@ devices.
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+
 Available variants: ``basic``.
 Available boards: ``max32650fthr``, ``max32655fthr``, ``max32660fthr``, ``max32666fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -163,6 +161,9 @@ downstream devices.
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
 
 Available variants: ``basic``.
 Available boards: ``eval-adicup3029``.

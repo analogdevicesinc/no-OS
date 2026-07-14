@@ -338,11 +338,6 @@ connectors (P5 and P2).
     | 10  | NC                | Not connected                            |
     +-----+-------------------+------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -361,17 +356,6 @@ frequency is provided by the local oscillator of the board and channel 0 is
 active with a power level of 9. Subsequently the example sets a test frequency
 of 20 GHz and adjusts the phase by 1ns.
 
-
-In order to build the basic example make sure you have the following
-configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4382/Makefile>`_
-
-.. code-block:: bash
-
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = y
-	IIO_EXAMPLE = n
-
 IIO example
 ^^^^^^^^^^^
 
@@ -387,15 +371,6 @@ of all the back-end logic needed to setup the IIO server.
 
 This example initializes the IIO device and calls the IIO app as shown in:
 `IIO Example <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4382/src/examples/iio_example>`_
-
-In order to build the IIO project make sure you have the following configuration in:
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4382/Makefile>`_
-
-.. code-block:: bash
-
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = n
-	IIO_EXAMPLE = y
 
 No-OS Supported Platforms
 -------------------------
@@ -415,6 +390,9 @@ board. Additionally a 6V power supply needs to be connected to either J14 - J15
 or to J18 (the SMA interface).
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
 Available variants: ``basic``, ``iio``.
 Available boards: ``sdp-ck1z``.
@@ -456,6 +434,29 @@ board. Additionally a 6V power supply needs to be connected to either J14 - J15
 or to J18 (the SMA interface).
 
 **Build Command**
+
+For the make-based build flow and prerequisites, see the
+`No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_.
+
+In order to build the basic example, make sure you have the following
+configuration in the
+`Makefile <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4382/Makefile>`_:
+
+.. code-block:: bash
+
+	# Select the example you want to enable by choosing y for enabling and n for disabling
+	BASIC_EXAMPLE = y
+	IIO_EXAMPLE = n
+
+In order to build the IIO project, make sure you have the following
+configuration in the
+`Makefile <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4382/Makefile>`_:
+
+.. code-block:: bash
+
+	# Select the example you want to enable by choosing y for enabling and n for disabling
+	BASIC_EXAMPLE = n
+	IIO_EXAMPLE = y
 
 .. code-block:: bash
 

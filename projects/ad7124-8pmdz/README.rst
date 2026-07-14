@@ -62,11 +62,6 @@ Eight solder jumpers on the board control default connections for
 REFIN1, REFOUT, AVDD, AVSS, and SDO routing, allowing operational
 mode adjustments without component changes.
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -122,6 +117,9 @@ The ADuCM3029 platform uses the CMake/Ninja build system via the
 ``no_os_build.py`` helper script. Available variants: ``iio_example``,
 ``iio_wifi``. Available board: ``eval-adicup3029``.
 
+For toolchain setup and prerequisites, see the
+`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
+
 .. code-block:: bash
 
    # point at the CrossCore Embedded Studio install (only if not auto-detected)
@@ -163,6 +161,9 @@ port for each target:
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 The Maxim platform uses the CMake/Ninja build system via the
 ``no_os_build.py`` helper script. Available boards:

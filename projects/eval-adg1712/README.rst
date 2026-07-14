@@ -11,7 +11,6 @@ Supported Evaluation Boards
 
 * `ADG1712 <https://www.analog.com/ADG1712>`_
 
-
 Overview
 --------
 
@@ -90,12 +89,6 @@ The ADG1712 eval devices have to be supplied with +5V voltage on VDD pin. Connec
        - JP2, JP3, JP4, JP5: removed
        - P11, P12, P13, P14: inserted
 
-
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -113,7 +106,6 @@ with a period of 2s. The data is printed on the serial interface.
 
 This example is built by selecting the ``basic`` variant (see the Build
 Command section below).
-
 
 No-OS Supported Platforms
 -------------------------
@@ -147,6 +139,9 @@ The labels on the eval board are wrong. DIGIO2 (IN2) controls SW4 (S4, D4), and 
         +--------------------+----------+-------------------------------------------------------+-------------------------+
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``.
 Available boards: ``max32655fthr``.

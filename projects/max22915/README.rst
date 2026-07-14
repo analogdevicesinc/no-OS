@@ -60,11 +60,6 @@ The MAX22915 evaluation kit needs to be supplied with:
 	| 5   | GND      | Connect to GROUND                         |
 	+-----+----------+-------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -103,6 +98,9 @@ STM32 Platform
 * `SDP-K1 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
 Available variants: ``basic``.
 Available boards: ``sdp-ck1z``.

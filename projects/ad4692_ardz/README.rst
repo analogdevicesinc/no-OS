@@ -61,11 +61,6 @@ Applications
 * Precision instrumentation
 * Data acquisition systems
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -168,6 +163,9 @@ the AD-APARD32690-SL. The following MAX32690 peripherals are used:
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+
 Available variants: ``basic``, ``iio``, ``iio_trigger``.
 Available boards: ``ad-apard32690-sl``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -188,4 +186,3 @@ Replace ``--variant`` / ``--board`` accordingly.
 	python tools/scripts/no_os_build.py build \
 		--project ad4692_ardz --variant basic --board ad-apard32690-sl \
 		--probe openocd --flash
-

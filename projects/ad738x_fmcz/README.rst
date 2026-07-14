@@ -135,11 +135,6 @@ Link Connectors
 |                 |                 |                 | amplifier       |
 +-----------------+-----------------+-----------------+-----------------+
 
-No-OS Build Setup
------------------
-
-Please see: `https://wiki.analog.com/resources/no-os/build`
-
 No-OS Supported Examples
 ------------------------
 
@@ -164,15 +159,6 @@ samples continuously. These samples, processed through bit manipulation,
 yield ADC channel values representing analog-to-digital conversions,
 concluding with printed verification to demonstrate the AD738x’s rapid
 data handling in a no-OS environment.
-
-In order to build the basic example, make sure you have the following
-configuration in the Makefile:
-
-.. code-block:: bash
-
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = y
-   IIO_EXAMPLE = n
 
 IIO example
 ~~~~~~~~~~~
@@ -199,17 +185,8 @@ If you are not familiar with ADI IIO Application, please take a look at:
 `IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`__
 
 If you are not familiar with ADI IIO Oscilloscope Client, please take a
-look at: 
+look at:
 `IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`__
-
-To build the IIOD demo, add the following flag when invoking make. This
-will build the IIOD server and the IIO section of the driver:
-
-.. code-block:: bash
-
-   # Configure the example you want to enable by setting 'y' for enable and 'n' for disable
-   BASIC_EXAMPLE = n
-   IIO_EXAMPLE = y
 
 No-OS Supported Platforms
 -------------------------
@@ -245,6 +222,27 @@ plugged into the FMC slot on the Zedboard.
 
 Build Command
 ^^^^^^^^^^^^^
+
+For the make-based build flow and prerequisites, see the
+`No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_.
+
+In order to build the basic example, make sure you have the following
+configuration in the Makefile:
+
+.. code-block:: bash
+
+   # Select the example you want to enable by choosing y for enabling and n for disabling
+   BASIC_EXAMPLE = y
+   IIO_EXAMPLE = n
+
+In order to build the IIO project, make sure you have the following
+configuration in the Makefile:
+
+.. code-block:: bash
+
+   # Select the example you want to enable by choosing y for enabling and n for disabling
+   BASIC_EXAMPLE = n
+   IIO_EXAMPLE = y
 
 .. code-block:: bash
 
@@ -282,6 +280,9 @@ CS         SPI CS (Digital Pin)   SPI CS
 
 Build Command
 ^^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
 Available variants: ``basic``, ``iio``.
 Available boards: ``sdp-ck1z``.
@@ -339,6 +340,27 @@ plugged into the FMC slot on the LFCPNX-EVN carrier board.
 
 Build Command
 ^^^^^^^^^^^^^
+
+For the make-based build flow and prerequisites, see the
+`No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_.
+
+In order to build the basic example, make sure you have the following
+configuration in the Makefile:
+
+.. code-block:: bash
+
+   # Select the example you want to enable by choosing y for enabling and n for disabling
+   BASIC_EXAMPLE = y
+   IIO_EXAMPLE = n
+
+In order to build the IIO project, make sure you have the following
+configuration in the Makefile:
+
+.. code-block:: bash
+
+   # Select the example you want to enable by choosing y for enabling and n for disabling
+   BASIC_EXAMPLE = n
+   IIO_EXAMPLE = y
 
 The reference HDL project for the Lattice platform (``LFCPNX-EVN``) is available
 at: `hdl/projects/ad738x_fmc/lfcpnx

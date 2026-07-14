@@ -1,13 +1,11 @@
 Evaluating the LTC3220
 ======================
 
-
 Supported Evaluation Boards
 ---------------------------
 
 * DC1265A-A (LTC3220)
 * DC1265A-B (LTC3220-1)
-
 
 Overview
 --------
@@ -92,12 +90,6 @@ uses 3.3V via the controller as a logic high reference.
 | 29  | GND       | Ground Pad                                |
 +-----+-----------+-------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please refer to the Analog Wiki: https://wiki.analog.com/resources/no-os/build
-
-
 No-OS Supported Platforms
 -------------------------
 
@@ -135,6 +127,9 @@ Maxim Platform
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``.
 Available boards: ``ad-apard32690-sl``, ``max32655fthr``.

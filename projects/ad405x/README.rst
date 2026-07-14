@@ -17,14 +17,6 @@ Overview
 Applications
 ------------
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
-Select the target carrier by pointing ``HARDWARE`` at the desired ``.ioc``
-file in the project directory (or add your own).
-
 No-OS Supported Examples
 ------------------------
 
@@ -98,6 +90,9 @@ STM32 Platform
 * ST debugger
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
 Available variants: ``basic``, ``basic_i3c``, ``i3c_dma``, ``iio``.
 Available boards: ``nucleo-h503rb``, ``nucleo-h563zi``.

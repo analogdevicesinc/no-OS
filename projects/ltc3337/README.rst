@@ -48,11 +48,6 @@ Power Supply Requirements
 * 8 selectable peak input current limits: 5 mA, 10 mA, 15 mA, 20 mA,
   25 mA, 50 mA, 75 mA, 100 mA
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -102,6 +97,9 @@ DC2973A and the MAX32655 board:
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``.
 Available boards: ``max32655fthr``.

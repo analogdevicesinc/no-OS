@@ -70,11 +70,6 @@ The ADGM3121 eval device has to be supplied with 3.3V voltage on VDD pin.
 	| 11  | VDD     | Power Supply, +3.3V                        |
 	+-----+---------+--------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -135,6 +130,9 @@ Maxim Platform
 +---------------------+----------+--------------------------------------------+---------------------+
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``.
 Available boards: ``max32655fthr``.

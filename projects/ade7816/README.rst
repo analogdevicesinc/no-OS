@@ -59,11 +59,6 @@ signaling events like data ready or fault conditions. The ISR handles the
 interrupt by reading the ADE7816 status, processing the data, and clearing
 the interrupt flag.
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -121,6 +116,9 @@ SS          P17.5                         P4.1
 ==========  ============================  ==============================
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``.
 Available boards: ``ad-apard32690-sl``.

@@ -45,11 +45,6 @@ Power Supply Requirements
 * On-resistance: 250 mOhm (max) at 125 C ambient
 * Logic voltage interface: 2.5 V to 5.5 V
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -69,16 +64,6 @@ device parameters such as the flash LED time, watchdog timer, open-wire OFF
 current source, and short-to-VDD threshold, then reads back the configuration
 registers for verification.
 
-In order to build the basic example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/max14916/Makefile>`__:
-
-.. code-block:: bash
-
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = y
-   IIO_EXAMPLE = n
-
 IIO example
 ~~~~~~~~~~~
 
@@ -92,16 +77,6 @@ If you are not familiar with ADI IIO Application, please take a look at:
 If you are not familiar with ADI IIO Oscilloscope Client, please take a
 look at:
 `IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`__
-
-In order to build the IIO example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/max14916/Makefile>`__:
-
-.. code-block:: bash
-
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = n
-   IIO_EXAMPLE = y
 
 No-OS Supported Platforms
 --------------------------
@@ -136,6 +111,9 @@ board.
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+
 Available variants: ``basic``, ``iio_example``.
 Available boards: ``ad-apard32690-sl``, ``max32666fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -169,6 +147,29 @@ Used Hardware
 Build Command
 ^^^^^^^^^^^^^
 
+For the make-based build flow and prerequisites, see the
+`No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_.
+
+In order to build the basic example, make sure you have the following
+configuration in the
+`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/max14916/Makefile>`__:
+
+.. code-block:: bash
+
+   # Select the example you want to enable by choosing y for enabling and n for disabling
+   BASIC_EXAMPLE = y
+   IIO_EXAMPLE = n
+
+In order to build the IIO example, make sure you have the following
+configuration in the
+`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/max14916/Makefile>`__:
+
+.. code-block:: bash
+
+   # Select the example you want to enable by choosing y for enabling and n for disabling
+   BASIC_EXAMPLE = n
+   IIO_EXAMPLE = y
+
 .. code-block:: bash
 
    # to delete current build
@@ -177,22 +178,3 @@ Build Command
    make PLATFORM=linux
    # to flash the code
    make run
-
-Available variants: ``basic``, ``iio_example``.
-Available boards: ``ad-apard32690-sl``, ``max32666fthr``.
-Replace ``--variant`` / ``--board`` accordingly.
-
-.. code-block:: bash
-
-   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
-
-   cd no-OS
-
-   # build the project (basic example on the ad-apard32690-sl board)
-   python tools/scripts/no_os_build.py build \
-      --project max14916 --variant basic --board ad-apard32690-sl
-
-   # build and flash (requires a connected debug probe)
-   python tools/scripts/no_os_build.py build \
-      --project max14916 --variant basic --board ad-apard32690-sl \
-      --probe openocd --flash

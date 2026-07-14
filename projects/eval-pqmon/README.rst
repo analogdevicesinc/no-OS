@@ -83,7 +83,9 @@ Build and run
 The project is based on a :adi:`MAX32650` microcontroller. The proprietary
 pqlib is not part of the repository; point the ``PQLIB_PATH`` environment
 variable at its directory before building. Select the interface with
-``--variant`` and build (append ``--probe`` / ``--flash`` to program the board):
+``--variant`` and build (append ``--probe`` / ``--flash`` to program the board).
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__:
 
 .. code-block:: bash
 

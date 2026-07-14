@@ -34,7 +34,6 @@ Applications
 * Clock generation
 * Aerospace and defense
 
-
 Hardware Specifications
 -----------------------
 
@@ -308,11 +307,6 @@ connector (P1).
     | 120 | NC                | Not connected                            |
     +-----+-------------------+------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -351,6 +345,9 @@ board. Additionally a 6V power supply needs to be connected to either P2 - P4
 or to VSUPPL (the SMA interface).
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
 Available variants: ``basic``.
 Available boards: ``sdp-ck1z``.

@@ -64,11 +64,6 @@ GPIO 3      IRQ               Input (interrupt)
 3.3 V       Not applicable    Power
 =========== ================= =================
 
-No-OS Build Setup
-~~~~~~~~~~~~~~~~~
-
-Please see: `https://wiki.analog.com/resources/no-os/build`
-
 No-OS Supported Examples
 ------------------------
 
@@ -152,6 +147,9 @@ GND                -               Ground
 
 Build Command
 ~~~~~~~~~~~~~
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``ade9153a_example``.
 Available boards: ``ad-apard32690-sl``.

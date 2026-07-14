@@ -1,12 +1,10 @@
 Evaluating the LTC3208
 ======================
 
-
 Supported Evaluation Boards
 ---------------------------
 
 * DC824A (LTC3208)
-
 
 Overview
 --------
@@ -96,12 +94,6 @@ uses 3.3V via the controller as a logic high reference.
 | 33  | GND       | Ground Pad                                |
 +-----+-----------+-------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
-
 No-OS Supported Platforms
 -------------------------
 
@@ -151,6 +143,9 @@ Maxim Platform
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``.
 Available boards: ``ad-apard32690-sl``, ``max32655fthr``.

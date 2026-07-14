@@ -47,11 +47,6 @@ Power Supply Requirements
 * Integrated 5 V LDO regulator: up to 20 mA load current
 * Logic interface supply (VL): 2.5 V to 5.5 V
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -107,6 +102,9 @@ Used Hardware
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``, ``iio``.
 Available boards: ``ad-apard32690-sl``, ``max32666fthr``.

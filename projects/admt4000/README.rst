@@ -1,7 +1,6 @@
 Evaluating the ADMT4000
 =======================
 
-
 Contents
 --------
 
@@ -88,11 +87,6 @@ supply from the USB-C connector is required.
 	D7              CS_MOTOR        CS for TMC5240 (EVAL-ADMT4000ARD1Z)
 	==============  ==============  ========================================
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -166,6 +160,9 @@ STM32 Platform
 * `SDP-K1 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
 Available variants: ``basic``, ``iio_trigger``, ``iio_trigger_tmc5240``.
 Available boards: ``sdp-ck1z``.

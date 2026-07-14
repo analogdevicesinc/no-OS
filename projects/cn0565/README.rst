@@ -75,11 +75,6 @@ P7-4       SCK                 SPI Clock - synchronizes data transfer
 P7-6       GND                 Ground
 ========== =================== ==========================================
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -188,6 +183,9 @@ IO28                    GPIO28
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
+
 Available variants: ``eit``, ``eit_iio``.
 Available boards: ``eval-adicup3029``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -231,6 +229,9 @@ USB Communication                               Connect SDP-K1 to PC via USB
 =============================================== ===============================================
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
 Available variants: ``eit``, ``eit_iio``.
 Available boards: ``sdp-ck1z``.

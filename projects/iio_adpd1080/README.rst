@@ -75,11 +75,6 @@ standard I2C Pmod specification.
 | 6       | VCC     | Pmod VCC input power                          |
 +---------+---------+-----------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -191,6 +186,9 @@ establishes the serial communication link used by the IIO server.
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
 
 Available variants: ``iio``, ``iio_wifi``.
 Available boards: ``eval-adicup3029``.

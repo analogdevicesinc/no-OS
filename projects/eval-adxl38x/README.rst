@@ -52,11 +52,6 @@ The following signals are required:
 * **CS** — Chip select (active low)
 * **INT1** / **INT2** — Interrupt outputs (connect to interrupt-capable GPIOs)
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -128,6 +123,9 @@ Nucleo board.
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
+
 Available variants: ``basic``, ``fifo``, ``selftest``.
 Available boards: ``nucleo-f767zi``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -171,6 +169,9 @@ MAX78000FTHR board.
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``, ``fifo``, ``selftest``.
 Available boards: ``max78000fthr``.

@@ -61,11 +61,6 @@ from a regulated 2.5V supply that is generated on-board.
 For reference, consult the Quick Start Procedure section in the user guide for the corresponding demo board:
 `DC2135A user guide <https://www.analog.com/media/en/technical-documentation/user-guides/DC2135AF.PDF>`_.
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -129,7 +124,6 @@ Maxim Platform
 
 **Connections**:
 
-
 +--------------------------+----------------------------------------------+------------------+
 | DC2135A Pin              | Function					  | MAX32666FTHR Pin |
 +--------------------------+----------------------------------------------+------------------+
@@ -147,6 +141,9 @@ Maxim Platform
 +--------------------------+----------------------------------------------+------------------+
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``, ``iio``.
 Available boards: ``max32666fthr``.

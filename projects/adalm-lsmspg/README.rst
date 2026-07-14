@@ -57,14 +57,6 @@ Please see the following table for the pin assignments for the interface
 |    Heartbeat LED |      P0_21       |    LED    |   
 +------------------+------------------+-----------+
 
-
-No-OS Build Setup
------------------
-
-Please see the Build Command section below for the no_os_build.py flow, or
-https://wiki.analog.com/resources/no-os/build for more information.
-
-
 No-OS Supported Examples
 -------------------------
 
@@ -93,6 +85,9 @@ Maxim Platform
 
 Build Setup
 ^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``curvetrace_example``, ``iio``.
 Available boards: ``max32666fthr``.

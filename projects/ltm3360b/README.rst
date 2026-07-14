@@ -54,12 +54,6 @@ Power Connections (TP3 and TP4):
 | 2   | GND      | Ground                                    |
 +-----+----------+-------------------------------------------+
 
-
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -122,6 +116,9 @@ I2C Interface:
 +-----------------------------+------------+---------------------+-------------------+
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
 Available variants: ``basic``.
 Available boards: ``sdp-ck1z``.
