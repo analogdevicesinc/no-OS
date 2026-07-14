@@ -3,7 +3,6 @@ Evaluating the LTC7871
 ======================
 .. no-os-doxygen::
 
-
 .. contents::
 	:depth: 3
 
@@ -77,12 +76,6 @@ Several Pins are exposed on the board
 6. SYNC adn CLKOUT pin
 7. SETCUR pin
 8. IMON pin
-
-
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
 
 No-OS Supported Examples
 ------------------------
@@ -172,6 +165,9 @@ Maxim Platform
 '* - DC2886A SDO's external pull-up resistor should be replaced with 1kohm resistor
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``, ``iio_example``.
 Available boards: ``ad-apard32690-sl``.

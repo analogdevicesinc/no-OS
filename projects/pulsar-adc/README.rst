@@ -40,11 +40,6 @@ Applications
 * Aerospace and Defense Systems
 * Wireless Communication Solutions
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 Basic example
@@ -113,6 +108,9 @@ STM32 Platform
 * ST debugger
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
 Available variants: ``basic``, ``iio``.
 Available boards: ``sdp-ck1z``.

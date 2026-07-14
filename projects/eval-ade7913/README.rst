@@ -117,11 +117,6 @@ Auxiliary Voltage Sense Inputs
 |                 |                 |                 | TP5 and TP1.    |
 +-----------------+-----------------+-----------------+-----------------+
 
-No-OS Build Setup
------------------
-
-Please see: :dokuwiki:`No-OS Build Setup </resources/no-os/build>`
-
 No-OS Supported Examples
 ------------------------
 
@@ -172,6 +167,9 @@ GND          GND
 
 Build Command
 ^^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``ade7913_example``.
 Available boards: ``ad-apard32690-sl``.

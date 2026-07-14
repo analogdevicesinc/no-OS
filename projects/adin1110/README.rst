@@ -52,11 +52,6 @@ of the power source is configurable via jumpers, supporting various
 development or testing configurations. The kit includes a USB-A to Micro
 USB-B cable for connection purposes.
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -130,6 +125,9 @@ Ensure voltage levels are compatible (typically 3.3V).
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``frame_rx_tx``.
 Available boards: ``max32650fthr``.

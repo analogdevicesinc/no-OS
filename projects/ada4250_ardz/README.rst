@@ -43,11 +43,6 @@ supplied from the carrier board, which is itself powered over the
 micro-USB connector. The amplifier accepts a single supply of up to 5 V
 (``avdd_v`` defaults to 5000 mV in the example configuration).
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -99,6 +94,9 @@ power, programming, and serial communication. Ensure the UART switch
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
 
 Available variants: ``iio``.
 Available boards: ``eval-adicup3029``.

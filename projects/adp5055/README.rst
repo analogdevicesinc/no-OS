@@ -51,11 +51,6 @@ VOUT3 = 1.8V at up to 3A continuous load current
 	| 3   | SCL      | Power Supply, +12V DC                     |
 	+-----+----------+-------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -158,6 +153,9 @@ J4:
 +-----------------------------+------------+--------------------+-------------------------------------------------------+
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``, ``iio_example``.
 Available boards: ``ad-apard32690-sl``.

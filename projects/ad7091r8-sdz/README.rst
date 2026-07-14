@@ -40,7 +40,6 @@ The instructions below describe how to set up EVAL-AD7091R-xSDZ_ with MAX78000FT
 The evaluation board default configuration is intended to work with
 EVAL-SDP-CB1Z_ so it must be adapted to connect to a different platform.
 
-
 **EVAL Board Jumper Links**
 
 For the jumper links, use the following configuration:
@@ -75,16 +74,9 @@ Use a soldering iron to change a few soldering links.
   * Unsolder LK13 and LK14 from position A and solder them in position C (tie MUX_OUT with ADC_IN).
   * Unsolder SL09 and SL10 from position A and solder each of them to position B to allow the VIN7 signal to bypass the input buffer.
 
-
 .. _EVAL-AD7091R-xSDZ: https://www.analog.com/eval-ad7091r-xsdz
 .. _MAX78000FTHR: https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/max78000fthr.html
 .. _EVAL-SDP-CB1Z: https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/SDP-B.html
-
-
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
 
 No-OS Supported Examples
 ------------------------
@@ -145,7 +137,6 @@ In order to build the IIO project make sure you are using this command:
 
         python tools/scripts/no_os_build.py build \
            --project ad7091r8-sdz --variant iio_r2 --board max78000fthr
-
 
 IIO timer trigger example
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -221,6 +212,9 @@ There are a number of connections to make between the ADC evaluation board and t
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+
 Available variants: ``basic``, ``iio_r2``, ``iio_r4``, ``iio_r8``,
 ``iio_timer_trigger_r2``, ``iio_timer_trigger_r4``, ``iio_timer_trigger_r8``.
 Available boards: ``max78000fthr``.
@@ -241,4 +235,3 @@ Replace ``--variant`` / ``--board`` accordingly.
    python tools/scripts/no_os_build.py build \
       --project ad7091r8-sdz --variant basic --board max78000fthr \
       --probe openocd --flash
-

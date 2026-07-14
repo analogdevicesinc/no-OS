@@ -48,11 +48,6 @@ Board Connector and Jumper Settings
 	| SDA      | Connect to I2C Data (SDA)		       |
 	+----------+-------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -137,6 +132,9 @@ Maxim Platform
 +-----------------------+-----------------------+------------------+
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``, ``iio``.
 Available boards: ``max32666fthr``.

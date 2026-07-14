@@ -73,12 +73,6 @@ EVAL-AD7616 Jumpers setup
 | LK41               | A         | Onboard 3V3 power supply selected    |
 +--------------------+-----------+--------------------------------------+
 
-
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -136,6 +130,9 @@ STM32 Platform
 +-------------+-----------------------+
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
 Available variants: ``iio``.
 Available boards: ``sdp-ck1z``.

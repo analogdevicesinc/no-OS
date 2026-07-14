@@ -234,6 +234,9 @@ no-OS compatible GNSS driver providing unified support for both **UBX-capable de
 **Maxim Build Command**
 ~~~~~~~~~~~~~~~~~~~~~~~
 
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+
 Available variants: ``basic``.
 Available boards: ``ad-apard32690-sl``.
 Replace ``--variant`` / ``--board`` accordingly.

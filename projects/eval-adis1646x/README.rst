@@ -95,11 +95,6 @@ The ADIS1646X eval devices have to be supplied with 3.3V voltage on VDD pin.
 
         At the time of initial release for these breakout boards, we were most familiar with the `TCSD Series from Samtec <https://www.samtec.com/products/tcsd>`_.
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -185,6 +180,9 @@ STM32 Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
+
 Available variants: ``basic``, ``iio_trigger``.
 Available boards: ``sdp-ck1z``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -244,6 +242,9 @@ Maxim Platform
 +---------------------------+----------+-------------------------------------------------------+---------------------+
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``, ``iio_trigger``.
 Available boards: ``max78000fthr``.
@@ -316,6 +317,9 @@ The following table shows how the connection between ADALM-UARTJTAG and Raspberr
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+`Raspberry Pi Pico CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_pico_cmake.html>`__.
+
 Available variants: ``basic``, ``iio_trigger``.
 Available boards: ``rpi-pico``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -332,4 +336,3 @@ Replace ``--variant`` / ``--board`` accordingly.
 	python tools/scripts/no_os_build.py build \
 		--project eval-adis1646x --variant basic --board rpi-pico \
 		--probe openocd --flash
-

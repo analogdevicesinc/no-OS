@@ -55,11 +55,6 @@ Board Connector and Jumper Settings
 
    Input signal range is VSS to VDD-2V for safe handling.
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -109,6 +104,9 @@ Maxim Platform
 +-----------------+---------------------------------+-------------------------+
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``.
 Available boards: ``max32655fthr``.

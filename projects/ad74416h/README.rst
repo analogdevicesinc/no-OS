@@ -185,11 +185,6 @@ Facilitates integration with the Arduino ecosystem by providing power
 through isolators and enabling signals; works in conjunction with jumper
 settings on P36 and P38.
 
-No-OS Build Setup
------------------
-
-Please see: :dokuwiki:`No-OS Build Setup </resources/no-os/build>`
-
 No-OS Supported Examples
 ------------------------
 
@@ -204,14 +199,7 @@ Basic Example
 The Basic Example demonstrates the fundamental initialization and
 configuration of the AD74416H device by setting up communication
 interfaces such as UART, SPI, and GPIO using common data structures in a
-no-OS environment. To enable the Basic Example and disable other
-examples, update the :git-no-OS:`Makefile </projects/ad74416h/Makefile>` 
-with the following settings:
-
-.. code-block:: bash
-
-    # Enable Basic Example 
-    EXAMPLE = basic
+no-OS environment.
 
 No-OS Supported Platforms
 -------------------------
@@ -284,6 +272,9 @@ EVAL-AD74416H board and the EVAL-SDP-CK1Z evaluation board:
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
 Available variants: ``basic``.
 Available boards: ``sdp-ck1z``.
@@ -367,25 +358,37 @@ and the EVAL‑SDP‑CK1Z evaluation board:
 Build Command
 ^^^^^^^^^^^^^
 
+For the make-based build flow and prerequisites, see the
+:dokuwiki:`No-OS Build Guide </resources/no-os/build>`.
+
+In order to build the basic example, update the
+:git-no-OS:`Makefile </projects/ad74416h/Makefile>` with the following
+settings:
+
 .. code-block:: bash
 
-    # Ensure you are in the project directory where the Makefile is located                                                                                                           
-    cd path/to/your/project                                                                                                                                                          
-                                                                                                                                                                         
-    # Set the target platform                                                                                                               
-    make TARGET=mbed                                                                                                                                                                
-                                                                                                                                                                                     
-    # Set the board type                                                                                                                          
+    # Enable Basic Example
+    EXAMPLE = basic
+
+.. code-block:: bash
+
+    # Ensure you are in the project directory where the Makefile is located
+    cd path/to/your/project
+
+    # Set the target platform
+    make TARGET=mbed
+
+    # Set the board type
     make BOARD=EVAL-AD74416H
 
-   # Clean previous build artifacts (if applicable)                                                                                                                                 
-    make clean                                                                                                                                                                       
-                                                                                                                                                                                     
-    # Build the project with MBED-specific drivers and configuration                                                                                                                 
-    make all                                                                                                                                                                         
-                                                                                                                                                                                     
-    # Flash the project to your hardware (modify to your flash tool if needed)                                                                                                       
-    make flash  # or use: mbed flash                                                                                                                                                 
-                                                                                                                                                                                     
-    # Start a debugging session                                                                                                                
-    make debug  # or use: mbed debug --run  
+    # Clean previous build artifacts (if applicable)
+    make clean
+
+    # Build the project with MBED-specific drivers and configuration
+    make all
+
+    # Flash the project to your hardware (modify to your flash tool if needed)
+    make flash  # or use: mbed flash
+
+    # Start a debugging session
+    make debug  # or use: mbed debug --run

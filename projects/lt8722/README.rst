@@ -85,11 +85,6 @@ LIN position to allow the MCU to control the state of the EN pin via GPIO.
 	| 14  | LIN_SWEN | Connect to GPIO pin (SWEN)		     |
 	+-----+----------+-------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -174,6 +169,9 @@ Maxim Platform
 +--------------------------+----------------------------------------------+------------------+
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``, ``iio``.
 Available boards: ``max32666fthr``.

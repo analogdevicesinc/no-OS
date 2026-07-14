@@ -50,11 +50,6 @@ The EVAL-ADICUP3029 board can be powered through the micro-USB connector
 header (BT1). The USB connection provides power and also serves as the
 programming and debug interface.
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -109,6 +104,9 @@ UART switch (S2) is set to the USB position for PC terminal access.
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
 
 Available variants: ``iio``, ``serial_print``.
 Available boards: ``eval-adicup3029``.

@@ -24,11 +24,6 @@ The ADuCM3029 features single-supply operation from 1.74 V to 3.6 V, with
 active mode dynamic current of 30 uA/MHz and hibernate mode current of
 750 nA.
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -67,6 +62,9 @@ switch is set to the USB position for serial terminal communication.
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
 
 Available variants: ``basic``.
 Available boards: ``eval-adicup3029``.

@@ -67,11 +67,6 @@ Board Connector and Jumper Settings
 	LK2                     I2C header (SDA, SCL, RDY) for external controller access
 	======================  ==========================================================
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -139,6 +134,9 @@ bus.
 +---------------------+---------------------+-----------------------------+
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
 
 Available variants: ``capacitive_length_demo``, ``iio_capacitive_length_demo``.
 Available boards: ``eval-adicup3029``.

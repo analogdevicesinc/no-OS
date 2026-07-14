@@ -76,11 +76,6 @@ On-board Connections
 | Connector       | Programming     | unit            |                 |
 +-----------------+-----------------+-----------------+-----------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 -------------------------
 
@@ -143,6 +138,9 @@ To flash the MAX32625PICO with the correct firmware image:
 * Eject the drive safely and reboot the board.
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``stout_application_rev_a``, ``stout_application_rev_d``.
 Available boards: ``max32655fthr``.

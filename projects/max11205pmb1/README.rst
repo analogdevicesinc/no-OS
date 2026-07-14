@@ -59,11 +59,6 @@ Pin Number Signal       Description
 6          VDD          Power supply (3.3 V)
 ========== ============ ==========================
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 -------------------------
 
@@ -143,6 +138,9 @@ make the required connections as shown below.
 +-----------------+-----------------+-----------------+
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``, ``iio``.
 Available boards: ``max32655fthr``.

@@ -27,11 +27,6 @@ If you are not familiar with the ADI IIO-Oscilloscope Client, please take a look
 at:
 `IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -164,6 +159,9 @@ configuration.
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
+
 Available variants: ``iio``, ``iio_wifi``, ``iio_wifi_with_sw_trig``.
 Available boards: ``eval-adicup3029``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -220,6 +218,9 @@ the host via its USB port for power and the serial console.
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+
 Available variants: ``iio``, ``iio_usb_uart``.
 Available boards: ``max32650fthr``, ``max32655fthr``, ``max32666fthr``,
 ``max78000fthr`` (``iio``); ``ad-apard32690-sl``, ``max32650fthr``,
@@ -264,6 +265,9 @@ the host via its USB port for power and the serial console.
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
+
 Available variants: ``iio``, ``iio_timer_trigger``, ``iio_usb_uart``.
 Available boards: ``nucleo-f413zh``, ``sdp-ck1z``.
 Replace ``--variant`` / ``--board`` accordingly. Not every variant is available
@@ -307,6 +311,9 @@ the host via its USB port for power and the serial console.
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`Raspberry Pi Pico CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_pico_cmake.html>`__.
 
 Available variants: ``iio``.
 Available boards: ``rpi-pico``.

@@ -50,11 +50,6 @@ Power Supply Requirements
 * LDO output: 3.3 V, up to 25 mA for external loads
 * SPI logic levels (VL): 3.3 V or 5 V
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -111,6 +106,9 @@ Used Hardware
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``, ``iio``.
 Available boards: ``ad-apard32690-sl``, ``max32666fthr``.

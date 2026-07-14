@@ -84,11 +84,6 @@ REF           5V at the ADC reference output             4.95      5.05
 EN            1.8V enable signal for power supplies      1.75      1.85
 ============  =========================================  ========  ========
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -113,12 +108,6 @@ to the console, providing a clear demonstration of ADC data handling.
 This example includes error management and cleanup operations for robust
 execution.
 
-In order to build the basic example make sure you are using this command:
-
-.. code-block:: bash
-
-	make EXAMPLE=basic
-
 IIO Example
 ~~~~~~~~~~~
 
@@ -136,12 +125,6 @@ integration within the project.
 
 If you are not familiar with ADI IIO Application, please take a look at:
 `IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
-
-In order to build the IIO project make sure you are using this command:
-
-.. code-block:: bash
-
-	make EXAMPLE=iio
 
 No-OS Supported Platforms
 --------------------------
@@ -175,6 +158,21 @@ Xilinx Platform
 * Verify the green power LED (LD1/3) is lit after powering up.
 
 **Build Command**
+
+For the make-based build flow and prerequisites, see the
+`No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_.
+
+In order to build the basic example make sure you are using this command:
+
+.. code-block:: bash
+
+	make EXAMPLE=basic
+
+In order to build the IIO project make sure you are using this command:
+
+.. code-block:: bash
+
+	make EXAMPLE=iio
 
 .. code-block:: bash
 
@@ -210,6 +208,9 @@ STM32 Platform
   the PC.
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
 Available variants: ``basic``, ``iio``.
 Available boards: ``sdp-ck1z``.

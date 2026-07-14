@@ -11,7 +11,6 @@ Supported Evaluation Boards
 
 * `ADGS6414D <https://www.analog.com/ADGS6414D>`_
 
-
 Overview
 --------
 
@@ -110,11 +109,6 @@ The ADGS6414D eval devices have to be supplied with +5V voltage on VDD pin. Conn
        JP1, JP2, JP5, JP6, JP7: position A
        JP3, JP4: position B
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -181,8 +175,10 @@ Maxim Platform
 | P3                 | SDO      | Data Output (Serial Peripheral Interface)             | P0_22                   |
 +--------------------+----------+-------------------------------------------------------+-------------------------+
 
-
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``.
 Available boards: ``max32655fthr``.

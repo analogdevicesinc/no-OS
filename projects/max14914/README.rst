@@ -71,11 +71,6 @@ with voltage of 3.3V.
 	| 12  | VL	 | Power Supply, +3.3V			     |
 	+-----+----------+-------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -125,6 +120,9 @@ Maxim Platform
 +------------------------+----------+-------------------------------------------+-----------------------------+
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``.
 Available boards: ``ad-apard32690-sl``.

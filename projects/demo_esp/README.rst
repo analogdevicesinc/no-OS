@@ -21,11 +21,6 @@ The macros used in Common Data are defined in platform specific files
 found in the
 `Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/demo_esp/src/platform>`__.
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -71,6 +66,9 @@ Ground (pin 1)      DGND                        Common ground
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
 
 Available variants: ``basic``.
 Available boards: ``eval-adicup3029``.
@@ -124,6 +122,9 @@ Ground              GND                         Common ground
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``.
 Available boards: ``ad-apard32690-sl``.

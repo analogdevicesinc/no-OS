@@ -10,9 +10,8 @@ Prerequisites
 -------------
 
 Prior to building the project, a couple steps are necessary in order to get the
-Maxim Micros SDK and setup the environment. These are presented in the **Build
-Prerequisites** section of the no-OS build guide available here:
-https://wiki.analog.com/resources/no-os/build .
+Maxim Micros SDK and setup the environment. These are presented in the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 The MaximSDK provides distributions of ``arm-none-eabi-`` GCC compiler +
 utilities and ``OpenOCD``, so you don't have to install these separately.
@@ -30,17 +29,13 @@ AD-SWIOT1L-SL board:
   connected over the 10Base-T1L port. This will be referred to as "SWIOT1L MQTT
   firmware".
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
 The project is built with CMake through the ``no_os_build.py`` helper. Each
 firmware configuration is selected with a ``--variant`` (the ``.conf`` files in
-this directory):
+this directory). For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__:
 
 * ``swiot1l_static_ip`` - IIO firmware with a static IP address.
 * ``swiot1l_dhcp`` - IIO firmware with the IP assigned over DHCP.

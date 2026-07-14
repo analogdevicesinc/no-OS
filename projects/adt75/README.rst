@@ -66,11 +66,6 @@ OS/ALERT  Overtemperature indicator (optional)
 A0-A2     I2C address selection pins
 ========  ==========================================
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -143,6 +138,9 @@ VDD (Pin 8)       Power Supply        3V3
 ================  ==================  ==================
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``, ``iio``.
 Available boards: ``max32650fthr``.

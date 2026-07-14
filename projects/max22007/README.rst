@@ -46,11 +46,6 @@ voltage of the SPI communication).
 
 	Please refer to the `MAX22007EVKIT Board user guide <https://www.analog.com/media/en/technical-documentation/data-sheets/max22007evkit.pdf>`_ for more details on jumper positions.
 
-No-OS Build Setup
------------------
-
-`Please see: <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -68,7 +63,6 @@ equivalent to 2v and 4v respectively.
 
 This example is built by selecting the ``basic`` variant (see the Build
 Command section below).
-
 
 No-OS Supported Platforms
 -------------------------
@@ -99,6 +93,9 @@ STM32 Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
+
 Available variants: ``basic``.
 Available boards: ``sdp-ck1z``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -123,4 +120,3 @@ Replace ``--variant`` / ``--board`` accordingly.
 	python tools/scripts/no_os_build.py build \
 		--project max22007 --variant basic --board sdp-ck1z \
 		--probe openocd --flash
-

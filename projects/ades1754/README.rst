@@ -129,11 +129,6 @@ SPI-to-UART
 	|  TXP	    |   Connect to RXP signal of MAX17851EVKIT	      |
 	+-----------+-------------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Wiki <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -214,6 +209,9 @@ Maxim Platform
 +--------------+---------------------------------+-------------------+------------------+----------------------+
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``, ``spi_uart_bridge``.
 Available boards: ``ad-apard32690-sl``.

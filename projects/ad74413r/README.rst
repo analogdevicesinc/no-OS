@@ -51,11 +51,6 @@ a regulated 5 V supply via JP3. The DVCC supply is derived from the ADP1720
 when JP6 is in place. The SDP-S board, connected through JP10, supplies 3.3 V
 for communication.
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -126,6 +121,9 @@ for trigger-based examples.
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+
 Available variants: ``dummy``, ``iio``.
 Available boards: ``max32655fthr``, ``max78000fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -165,6 +163,9 @@ for trigger-based examples.
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
 Available variants: ``dummy``, ``iio``, ``iio_trigger``.
 Available boards: ``nucleo-f756zg``.

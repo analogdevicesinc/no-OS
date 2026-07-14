@@ -68,11 +68,6 @@ Pin 9             Ground                           GND
 Pin 10            Interrupt 1 Output               INT1
 ================= ================================ ============
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -169,6 +164,9 @@ accelerometer breakout board and the NUCLEO-F401RE:
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
 Available variants: ``basic``, ``iio``.
 Available boards: ``nucleo-f401re``.

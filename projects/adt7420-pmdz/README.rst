@@ -83,11 +83,6 @@ JP1 Position   JP2 Position   A1 Logic  A0 Logic  I2C Address
 1 & 2 Short    1 & 2 Short    High      High      0x4B
 =============  =============  ========  ========  ===========
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -152,6 +147,9 @@ Maxim platform board. The I2C SDA, SCL, VDD (3.3 V), and GND signals are routed
 through the PMOD connector.
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``dummy``, ``iio_example``.
 Available boards: ``ad-apard32690-sl``, ``max32650fthr``, ``max32655fthr``, ``max32660fthr``, ``max32666fthr``, ``max78000fthr``.

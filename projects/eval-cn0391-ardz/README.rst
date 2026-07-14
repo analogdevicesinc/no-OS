@@ -131,6 +131,9 @@ STM32 Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
+
 Available variants: ``basic``, ``iio_lwip``, ``iio_lwip_cn0391``.
 Available boards: ``adin1110ebz``.
 Replace ``--variant`` / ``--board`` accordingly.

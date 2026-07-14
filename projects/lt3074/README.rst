@@ -3,7 +3,6 @@ Evaluating the LT3074
 
 .. no-os-doxygen::
 
-
 Contents
 --------
 
@@ -70,11 +69,6 @@ An external power supply between 2.4V to 5.5V can be used for this project.
 	| 5   | POWERGOOD| Do Not Connect			     |
 	+-----+----------+-------------------------------------------+
 	
-
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
 
 No-OS Supported Examples
 ------------------------
@@ -163,6 +157,9 @@ Other connection:
 +-----------------------------+------------+----------------------------------------------+-----------------------------+
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
 
 Available variants: ``basic``, ``iio_example``.
 Available boards: ``max32666fthr``.

@@ -24,7 +24,6 @@ Overview
 - SDP-K1 controller board functions as an interface between a PC and the evaluation board
 - Up to 16 EV-ADF4030SD1Z evaluation boards can be stacked up using the Arduino connector
 
-
 Hardware Specifications
 -----------------------
 
@@ -40,14 +39,12 @@ Reference Input Requirements
 The EV-ADF4030SD1Z has two ways to create the ADF4030 RE-FIN clock, a clock between 10 MHz and 250 MHz as
 follows:
 
-
 * Using a J1 Subminiature Version A (SMA) connector REF_CLK S/E in. Apply a 4 dBm signal, which means a 1 V p-p clock. A 50 Ω load resistor to ground (R1) is populated on board.
 
 * Using a P1 twinax connector (REFIN DIFF). Apply a 320 mV p-p to 2 V p-p differential voltage. 
 
 This must be a AC-coupled input to the ADF4030. This connector is suitable for
 connecting the reference clock from another EV-ADF4030SD1Z.
-
 
 	P5:
 
@@ -137,12 +134,6 @@ connecting the reference clock from another EV-ADF4030SD1Z.
     | 6   | GND               | Not connected                            |
     +-----+-------------------+------------------------------------------+
 
-
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -151,8 +142,6 @@ The initialization data used in the examples is taken out from:
 
 The macros used in Common Data are defined in platform specific files found in:
 `Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4030/src/platform>`_
-
-
 
 Basic example
 ^^^^^^^^^^^^^
@@ -169,7 +158,6 @@ In order to build the basic example make sure you are using this command:
 
     python tools/scripts/no_os_build.py build \
         --project adf4030 --variant basic --board sdp-ck1z
-
 
 IIO example
 ^^^^^^^^^^^
@@ -194,7 +182,6 @@ In order to build the IIO project make sure you are using this command:
     python tools/scripts/no_os_build.py build \
         --project adf4030 --variant iio --board sdp-ck1z
 
-
 No-OS Supported Platforms
 -------------------------
 
@@ -205,13 +192,15 @@ STM32 Platform
 * `EVAL-ADF4030 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4030.html>`_
 * `SDP-K1 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
 
-
 **Connections**:
 
 The SDP connector of the SDP-K1 needs to be connected to P5, P17, P18 and P16 of the EVAL-ADF4030
 board. 12V power supply needs to be connected. Reference clock can be provided using the SMA connector.
 
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
 Available variants: ``basic``, ``iio``.
 Available boards: ``sdp-ck1z``.

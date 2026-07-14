@@ -65,12 +65,6 @@ Pin Description
 +-----------------+-----------------+----------------------------------------------------------+
 
 
-No-OS Build Setup
------------------
-
-For detailed build setup instructions, please refer to the 
-:dokuwiki:`no-OS build guide </resources/no-os/build>`.
-
 No-OS Supported Examples
 ------------------------
 
@@ -178,6 +172,9 @@ number), a suggested connection mnemonic, and the pin function.
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
+
 Available variants: ``iio``, ``iio_timer_trigger``.
 Available boards: ``eval-adicup3029``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -253,6 +250,9 @@ a brief description of the pin function.
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+
 Available variants: ``iio``, ``iio_trigger``.
 Available boards: ``max32655fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -317,6 +317,9 @@ wiring the boards.
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`Raspberry Pi Pico CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_pico_cmake.html>`__.
 
 Available variants: ``iio``, ``iio_timer_trigger``, ``iio_trigger``.
 Available boards: ``rpi-pico``.
@@ -383,6 +386,9 @@ Connections
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
 Available variants: ``iio``.
 Available boards: ``sdp-ck1z``.
