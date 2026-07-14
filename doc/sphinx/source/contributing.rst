@@ -57,3 +57,8 @@ repository, each commit should respect a few rules:
 - When adding a new project, base its ``README.rst`` on the template at
   ``doc/project_readme_template.rst`` so it follows the standard structure and
   the current CMake/no_os_build.py build conventions.
+
+- When adding a new driver, base its ``README.rst`` on the template at
+  ``doc/driver_readme_template.rst`` so it follows the standard driver
+  documentation structure, and add the matching Sphinx include stub under
+  ``doc/sphinx/source/drivers/<category>/``.
