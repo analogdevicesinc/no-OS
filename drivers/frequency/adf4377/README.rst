@@ -110,6 +110,16 @@ by default to 1023. This can be configured using the **adf4377_set_bleed_word**
 API, by providing the bleed word as a parameter on 10 bits. The current
 configuration can be read out using **adf4377_get_bleed_word**.
 
+Bleed Delay Configuration
+-------------------------
+
+Instead of programming the raw bleed word, the bleed current can also be
+expressed as an output delay. The **adf4377_set_bleed_delay** API accepts the
+desired delay in femtoseconds (a negative value selects the opposite polarity)
+and translates it into the corresponding bleed word based on the charge pump
+current and PFD frequency. The current configuration can be read back in
+femtoseconds using **adf4377_get_bleed_delay**.
+
 Output Frequency Configuration
 ------------------------------
 
@@ -143,6 +153,13 @@ determine if a channel is currently set the **adf4377_get_en_chan** API can be
 used.
 
 By default only channel 1 is enabled.
+
+Output Inversion Configuration
+------------------------------
+
+The output of each channel can be inverted using the **adf4377_set_channel_inv**
+API, by providing the channel number and the desired inversion value (0 or 1).
+The current configuration can be read out using **adf4377_get_channel_inv**.
 
 SYSREF Output Configuration
 ---------------------------
@@ -294,6 +311,8 @@ therefore most of the attributes will be device attributes.
 The attributes are:
 
 * bleed_current - is the adjustment value for the set charge pump current.
+* bleed_delay - is the bleed current expressed as an output delay in
+                femtoseconds.
 * charge_pump_current - is the current set in your design.
 * charge_pump_current_available - lists the available and predefined charge
                                   pump currents of the ADF4377.
@@ -321,10 +340,11 @@ The channels are:
 * output altvoltage0 - corresponding to channel 1 on the device
 * output altvoltage1 - corresponding to channel 2 on the device
 
-Each channel has 2 individual attributes:
+Each channel has 3 individual attributes:
 
 * en - enables the channel. 
 * output_power - determines the output power of the channel between 0 and 15.
+* inv - inverts the channel output.
 
 Each channel has 2 common attributes:
 
