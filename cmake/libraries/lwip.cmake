@@ -9,6 +9,11 @@ endif()
 
 message(STATUS "lwIP requested version: ${CONFIG_LWIP_VERSION}")
 
+if(DEFINED ENV{LWIP_PATH} AND NOT "$ENV{LWIP_PATH}" STREQUAL "")
+    message(STATUS "lwIP: using pre-cloned source from LWIP_PATH=$ENV{LWIP_PATH}")
+    set(LWIP_SOURCE_DIR "$ENV{LWIP_PATH}")
+    set(LWIP_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/lwip-build")
+else()
 # Resolve library source using hybrid priority chain
 resolve_library_source(
     lwip
@@ -18,6 +23,7 @@ resolve_library_source(
     LWIP_SOURCE_DIR
     LWIP_BINARY_DIR
 )
+endif()
 
 # If we already used FetchContent, lwip targets exist
 # Otherwise, we need to add the subdirectory
