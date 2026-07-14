@@ -47,18 +47,21 @@ struct no_os_spi_init_param adf4377_spi_ip = {
 
 struct no_os_gpio_init_param gpio_ce_param = {
 	.number = GPIO_CE,
+	.port = GPIO_CE_PORT,
 	.platform_ops = GPIO_OPS,
 	.extra = GPIO_EXTRA
 };
 
 struct no_os_gpio_init_param gpio_enclk1_param = {
 	.number = GPIO_ENCLK1,
+	.port = GPIO_ENCLK1_PORT,
 	.platform_ops = GPIO_OPS,
 	.extra = GPIO_EXTRA
 };
 
 struct no_os_gpio_init_param gpio_enclk2_param = {
 	.number = GPIO_ENCLK2,
+	.port = GPIO_ENCLK2_PORT,
 	.platform_ops = GPIO_OPS,
 	.extra = GPIO_EXTRA
 };

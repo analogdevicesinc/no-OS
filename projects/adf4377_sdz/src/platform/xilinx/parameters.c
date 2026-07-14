@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   parameters.c
- *   @brief  Definition of Mbed platform data used by adf4377 project.
+ *   @brief  Definition of Xilinx platform data used by adf4377 project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
  *   @author Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
