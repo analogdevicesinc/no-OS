@@ -8,6 +8,11 @@ endif()
 
 message(STATUS "LVGL requested version: ${CONFIG_LVGL_VERSION}")
 
+if(DEFINED ENV{LVGL_PATH} AND NOT "$ENV{LVGL_PATH}" STREQUAL "")
+    message(STATUS "LVGL: using pre-cloned source from LVGL_PATH=$ENV{LVGL_PATH}")
+    set(LVGL_SOURCE_DIR "$ENV{LVGL_PATH}")
+    set(LVGL_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/lvgl-build")
+else()
 resolve_library_source(
     lvgl
     "${CONFIG_LVGL_VERSION}"
@@ -16,6 +21,7 @@ resolve_library_source(
     LVGL_SOURCE_DIR
     LVGL_BINARY_DIR
 )
+endif()
 
 # LVGL requires a lv_conf.h configuration file provided by the project
 if(NOT DEFINED CONFIG_LVGL_CONF_PATH OR "${CONFIG_LVGL_CONF_PATH}" STREQUAL "")
