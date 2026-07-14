@@ -53,3 +53,7 @@ repository, each commit should respect a few rules:
   information can be written in the pull request description. If the driver
   was tested on one of the supported no-OS platforms, it is recommended to also
   add a project example which uses the newly added driver.
+
+- When adding a new project, base its ``README.rst`` on the template at
+  ``doc/project_readme_template.rst`` so it follows the standard structure and
+  the current CMake/no_os_build.py build conventions.
