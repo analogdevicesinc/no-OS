@@ -8,6 +8,11 @@ endif()
 
 message(STATUS "mbedTLS requested version: ${CONFIG_MBEDTLS_VERSION}")
 
+if(DEFINED ENV{MBEDTLS_PATH} AND NOT "$ENV{MBEDTLS_PATH}" STREQUAL "")
+    message(STATUS "mbedTLS: using pre-cloned source from MBEDTLS_PATH=$ENV{MBEDTLS_PATH}")
+    set(MBEDTLS_SOURCE_DIR "$ENV{MBEDTLS_PATH}")
+    set(MBEDTLS_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/mbedtls-build")
+else()
 resolve_library_source(
     mbedtls
     "${CONFIG_MBEDTLS_VERSION}"
@@ -16,6 +21,7 @@ resolve_library_source(
     MBEDTLS_SOURCE_DIR
     MBEDTLS_BINARY_DIR
 )
+endif()
 
 # Disable components not needed for embedded use
 set(ENABLE_PROGRAMS OFF CACHE BOOL "" FORCE)
