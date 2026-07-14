@@ -39,14 +39,6 @@
 #include <stdint.h>
 #include "no_os_delay.h"
 
-/* R/W direction */
-#define ADIOL100_READ                   1
-#define ADIOL100_WRITE                  0
-
-/* ExtraPage register — gateway to USER_paged map */
-#define ADIOL100_REG_EXTRAPAGE          0x001F
-#define ADIOL100_PAGED_BASE             0x1F00
-
 /* USER_direct registers — channel A */
 #define ADIOL100_REG_INTERRUPTG         0x0000
 #define ADIOL100_REG_RXFIFOSTAT_A       0x0001
@@ -95,6 +87,10 @@
 #define ADIOL100_REG_LPFETPROTECT_B     0x1F22
 #define ADIOL100_REG_LPSLOPE_B          0x1F23
 #define ADIOL100_REG_LPRETRY_B          0x1F24
+
+/* ExtraPage register — gateway to USER_paged map */
+#define ADIOL100_REG_EXTRAPAGE          0x001F
+#define ADIOL100_PAGED_BASE             0x1F00
 
 /* FramCtrl1 bit masks (0x0005 / 0x0015) */
 #define ADIOL100_INSCHKS                NO_OS_BIT(12)
@@ -246,12 +242,17 @@
 /* FIFO constants */
 #define ADIOL100_FIFO_MAX_LEN           66
 
-/* Channel selection */
+/* R/W direction */
+#define ADIOL100_READ                   1
+#define ADIOL100_WRITE                  0
+
+/* Channel selection. */
 enum adiol100_channel {
     ADIOL100_CH_A = 0,
     ADIOL100_CH_B = 1,
 };
 
+/* CQ driver current limit (CQCurLim register, CQ_CL[2:0]). */
 enum adiol100_cq_current_limit {
     ADIOL100_CQCL_10MA  = 0,
     ADIOL100_CQCL_15MA  = 1,
@@ -263,6 +264,7 @@ enum adiol100_cq_current_limit {
     ADIOL100_CQCL_500MA = 7,
 };
 
+/* CQ current limit blanking time. */
 enum adiol100_blanking_time {
     ADIOL100_CLBL_150US = 0,
     ADIOL100_CLBL_500US = 1,
@@ -270,6 +272,7 @@ enum adiol100_blanking_time {
     ADIOL100_CLBL_5MS   = 3,
 };
 
+/* CQ autoretry timeout after current limit event. */
 enum adiol100_autoretry_timeout {
     ADIOL100_ARTTMO_5MS   = 0,
     ADIOL100_ARTTMO_10MS  = 1,
@@ -277,6 +280,7 @@ enum adiol100_autoretry_timeout {
     ADIOL100_ARTTMO_100MS = 3,
 };
 
+/* CQ/RX voltage threshold selection. */
 enum adiol100_voltage_threshold {
     ADIOL100_VTHR_2V = 0,
     ADIOL100_VTHR_4V = 1,
@@ -284,67 +288,80 @@ enum adiol100_voltage_threshold {
     ADIOL100_VTHR_8V = 3,
 };
 
+/* CQ driver output mode. */
 enum adiol100_cq_mode {
     ADIOL100_CQ_NPN      = 0,
     ADIOL100_CQ_PUSHPULL = 1,
 };
 
+/* CQ driver enable/disable. */
 enum adiol100_cq_drv {
     ADIOL100_CQ_DRV_DIS = 0,
     ADIOL100_CQ_DRV_EN  = 1,
 };
 
+/* CQ autoretry enable/disable. */
 enum adiol100_autoretry {
     ADIOL100_AUTORETRY_DIS = 0,
     ADIOL100_AUTORETRY_EN  = 1,
 };
 
+/* L+ sensor supply enable/disable. */
 enum adiol100_lp_en {
     ADIOL100_LP_DIS = 0,
     ADIOL100_LP_EN  = 1,
 };
 
+/* L+ reverse polarity protection enable/disable. */
 enum adiol100_lp_rev {
     ADIOL100_LP_REV_DIS = 0,
     ADIOL100_LP_REV_EN  = 1,
 };
 
+/* IO-Link checksum insertion enable/disable. */
 enum adiol100_ins_chks {
     ADIOL100_CHKS_DIS = 0,
     ADIOL100_CHKS_EN  = 1,
 };
 
+/* IO-Link framer enable/disable. */
 enum adiol100_framer {
     ADIOL100_FRAMER_DIS = 0,
     ADIOL100_FRAMER_EN  = 1,
 };
 
+/* Watchdog timer time base. */
 enum adiol100_wdg_timebase {
     ADIOL100_WDG_100US = 0,
     ADIOL100_WDG_500US = 1,
     ADIOL100_WDG_2MS   = 2,
 };
 
+/* Watchdog mode: SPI activity or explicit clear. */
 enum adiol100_wdg_mode {
     ADIOL100_WDG_MODE_SPI   = 0,
     ADIOL100_WDG_MODE_CLEAR = 1,
 };
 
+/* Watchdog enable/disable. */
 enum adiol100_wdg_en {
     ADIOL100_WDG_DIS = 0,
     ADIOL100_WDG_EN  = 1,
 };
 
+/* Watchdog lock (prevents further config changes). */
 enum adiol100_wdg_lock {
     ADIOL100_WDG_UNLOCKED = 0,
     ADIOL100_WDG_LOCKED   = 1,
 };
 
+/* TxFIFO message retention for cyclic operation. */
 enum adiol100_keep_msg {
     ADIOL100_DISCARD_MSG = 0,
     ADIOL100_KEEP_MSG    = 1,
 };
 
+/* CQ driver slew rate. */
 enum adiol100_cq_slew_rate {
     ADIOL100_CQSLEW_250NS  = 0,
     ADIOL100_CQSLEW_500NS  = 1,
@@ -352,6 +369,7 @@ enum adiol100_cq_slew_rate {
     ADIOL100_CQSLEW_5000NS = 3,
 };
 
+/* CQ input sink current selection. */
 enum adiol100_sink_sel {
     ADIOL100_SINKSEL_OFF   = 0,
     ADIOL100_SINKSEL_5MA   = 1,
@@ -359,57 +377,93 @@ enum adiol100_sink_sel {
     ADIOL100_SINKSEL_150UA = 3,
 };
 
+/* Clock source selection. */
 enum adiol100_clock_src {
     ADIOL100_CLK_INTERNAL = 0,
     ADIOL100_CLK_CRYSTAL  = 1,
     ADIOL100_CLK_EXTERNAL = 2,
 };
 
-struct adiol100_init_param{
+/**
+ * @struct adiol100_init_param
+ * @brief Initialization parameters for the ADIOL100 driver.
+ */
+struct adiol100_init_param {
+    /* SPI initialization parameters. */
     struct no_os_spi_init_param *spi_ip;
+    /* Device address set by ADRSEL pin (0–3). */
     uint8_t chip_addr;
+    /* Clock source (see enum adiol100_clock_src). */
     uint8_t clock_src;
+    /* Clock divider (ClkDiv[1:0]). */
     uint8_t clk_div;
 };
 
-struct adiol100_dev{
+/**
+ * @struct adiol100_dev
+ * @brief ADIOL100 device descriptor, created by adiol100_init().
+ */
+struct adiol100_dev {
+    /* SPI descriptor. */
     struct no_os_spi_desc *spi_desc;
+    /* Device address set by ADRSEL pin (0–3). */
     uint8_t chip_addr;
+    /* Auto-incrementing FIFO message ID. */
     uint8_t msg_id;
 };
 
+/** Read RevisionID and DeviceID to verify the chip is present. */
+int adiol100_verify_chip(struct adiol100_dev *dev);
+
+/** Configure the clock source, divider, and enable clock output. */
+int adiol100_setup_clock(struct adiol100_dev *dev,
+                         struct adiol100_init_param *ip);
+
+/** Initialize the ADIOL100 device. */
 int adiol100_init(struct adiol100_dev **dev, struct adiol100_init_param *ip);
 
+/** Free resources allocated by adiol100_init(). */
 int adiol100_remove(struct adiol100_dev *dev);
 
+/** Read a 16-bit register. Handles paged access automatically. */
 int adiol100_read(struct adiol100_dev *dev, uint16_t reg, uint16_t *value);
 
+/** Write a 16-bit register. Handles paged access automatically. */
 int adiol100_write(struct adiol100_dev *dev, uint16_t reg, uint16_t value);
 
+/** Read-modify-write a register using a bit mask. */
 int adiol100_update(struct adiol100_dev *dev, uint16_t reg, uint16_t mask,
                     uint16_t value);
 
+/** Load IO-Link payload into TxFIFO and trigger CQSend. */
 int adiol100_send_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
                       uint8_t *data, uint8_t txbytes, uint8_t rxbytes,
                       enum adiol100_keep_msg keep);
 
+/** Read device response from RxFIFO, stripping the MsgID/RxBytesAct header. */
 int adiol100_read_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
                        uint8_t *data, uint8_t *len);
 
+/** Disable global interrupts, clear trigger, and read-clear all IRQ registers. */
 int adiol100_global_reset(struct adiol100_dev *dev);
 
+/** Reset the transmit FIFO for a channel. */
 int adiol100_reset_tx_fifo(struct adiol100_dev *dev, enum adiol100_channel ch);
 
+/** Reset the receive FIFO for a channel. */
 int adiol100_reset_rx_fifo(struct adiol100_dev *dev, enum adiol100_channel ch);
 
+/** Assert CHANRST to reset all channel-specific registers. */
 int adiol100_reset_channel(struct adiol100_dev *dev, enum adiol100_channel ch);
 
+/** Configure the CQ driver: output mode, enable, sink current, slew rate. */
 int adiol100_config_cq(struct adiol100_dev *dev, enum adiol100_channel ch,
                        enum adiol100_cq_mode mode,
                        enum adiol100_cq_drv drv_en,
                        enum adiol100_sink_sel sink_sel,
                        enum adiol100_cq_slew_rate slew_rate);
 
+/** Configure CQ protection: current limit, blanking, thresholds, autoretry. */
 int adiol100_config_cq_protection(struct adiol100_dev *dev,
                                   enum adiol100_channel ch,
                                   enum adiol100_cq_current_limit current_limit,
@@ -421,10 +475,12 @@ int adiol100_config_cq_protection(struct adiol100_dev *dev,
                                   enum adiol100_voltage_threshold rx_vthr_h,
                                   enum adiol100_voltage_threshold rx_vthr_l);
 
+/** Configure the L+ sensor supply: enable and reverse polarity protection. */
 int adiol100_config_lp(struct adiol100_dev *dev, enum adiol100_channel ch,
                        enum adiol100_lp_en enable,
                        enum adiol100_lp_rev rev_en);
 
+/** Configure L+ FET protection: current, power, timeouts, slope, retry. */
 int adiol100_config_lp_protection(struct adiol100_dev *dev,
                                   enum adiol100_channel ch,
                                   uint8_t cl_nom, uint8_t pwr_max,
@@ -433,42 +489,56 @@ int adiol100_config_lp_protection(struct adiol100_dev *dev,
                                   uint8_t slope, uint8_t slope_bl,
                                   uint8_t ar_time, uint8_t ar_count);
 
+/** Configure the IO-Link framer: checksum insertion and framer enable. */
 int adiol100_config_framer(struct adiol100_dev *dev, enum adiol100_channel ch,
                            enum adiol100_ins_chks ins_chks,
                            enum adiol100_framer framer_en);
 
+/** Set the SPI burst length for FIFO access. */
 int adiol100_set_burst_len(struct adiol100_dev *dev, enum adiol100_channel ch,
                            int write_len, int read_len);
 
+/** Get the communication rate determined by EstCom (COM1/2/3). */
 int adiol100_get_comrt(struct adiol100_dev *dev, enum adiol100_channel ch,
                        uint8_t *comrt);
 
+/** Set the IO-Link cycle timer value (IO-Link encoded byte). */
 int adiol100_set_cycle_tmr(struct adiol100_dev *dev, enum adiol100_channel ch,
                            uint8_t value);
 
+/** Get the current cycle timer register value. */
 int adiol100_get_cycle_tmr(struct adiol100_dev *dev, enum adiol100_channel ch,
                            uint16_t *value);
 
+/** Enable the cycle timer for autonomous cyclic operation. */
 int adiol100_enable_cycle_timer(struct adiol100_dev *dev, enum adiol100_channel ch);
 
+/** Disable the cycle timer. */
 int adiol100_disable_cycle_timer(struct adiol100_dev *dev, enum adiol100_channel ch);
 
+/** Read and clear the channel interrupt register. */
 int adiol100_get_channel_irq(struct adiol100_dev *dev, enum adiol100_channel ch,
                              uint16_t *flags);
 
+/** Read and clear the global interrupt register. */
 int adiol100_get_global_irq(struct adiol100_dev *dev, uint16_t *flags);
 
+/** Set the global interrupt enable mask. */
 int adiol100_enable_global_irq(struct adiol100_dev *dev, uint16_t mask);
 
+/** Set the channel interrupt enable mask. */
 int adiol100_enable_channel_irq(struct adiol100_dev *dev,
                                 enum adiol100_channel ch, uint16_t mask);
 
+/** Read the RxFIFO status register (level + error flags). */
 int adiol100_get_fifo_status(struct adiol100_dev *dev, enum adiol100_channel ch,
                              uint16_t *flags);
 
+/** Read the channel status register. */
 int adiol100_get_status(struct adiol100_dev *dev, enum adiol100_channel ch,
                         uint16_t *flags);
 
+/** Configure the watchdog timer: time base, period, mode, enable, lock. */
 int adiol100_config_watchdog(struct adiol100_dev *dev,
                              enum adiol100_wdg_timebase timebase,
                              uint8_t time,
@@ -476,8 +546,10 @@ int adiol100_config_watchdog(struct adiol100_dev *dev,
                              enum adiol100_wdg_en enable,
                              enum adiol100_wdg_lock lock);
 
+/** Clear the watchdog timer (write-1-to-clear). */
 int adiol100_clear_watchdog(struct adiol100_dev *dev);
 
+/** Run EstablishCommunication: wake-up, poll for success/fail, return baud. */
 int adiol100_estcom(struct adiol100_dev *dev, enum adiol100_channel ch);
 
 #endif

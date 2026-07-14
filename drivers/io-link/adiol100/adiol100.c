@@ -39,7 +39,12 @@
 #include <errno.h>
 #include <stdint.h>
 
-static int adiol100_verify_chip(struct adiol100_dev *dev)
+/**
+ * @brief Read RevisionID and DeviceID to verify the chip is present.
+ * @param dev - The device structure.
+ * @return 0 in case of success, -ENODEV if IDs read back as zero.
+ */
+int adiol100_verify_chip(struct adiol100_dev *dev)
 {
     uint16_t rev_id;
     uint16_t dev_id;
@@ -59,8 +64,14 @@ static int adiol100_verify_chip(struct adiol100_dev *dev)
     return 0;
 }
 
-static int adiol100_setup_clock(struct adiol100_dev *dev,
-                                struct adiol100_init_param *ip)
+/**
+ * @brief Configure the clock source, divider, and enable clock output.
+ * @param dev - The device structure.
+ * @param ip  - Initialization parameters containing clock_src and clk_div.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adiol100_setup_clock(struct adiol100_dev *dev,
+                         struct adiol100_init_param *ip)
 {
     uint16_t val;
 
@@ -71,6 +82,12 @@ static int adiol100_setup_clock(struct adiol100_dev *dev,
     return adiol100_write(dev, ADIOL100_REG_CLOCKCFG, val);
 }
 
+/**
+ * @brief Initialize the ADIOL100 device.
+ * @param dev - Pointer to the device descriptor (allocated internally).
+ * @param ip  - Initialization parameters (SPI, address, clock).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_init(struct adiol100_dev **dev, struct adiol100_init_param *ip)
 {
     int ret;
@@ -117,6 +134,11 @@ err:
     return ret;
 }
 
+/**
+ * @brief Free resources allocated by adiol100_init().
+ * @param dev - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_remove(struct adiol100_dev *dev)
 {
     int ret;
@@ -133,6 +155,13 @@ int adiol100_remove(struct adiol100_dev *dev)
     return 0;
 }
 
+/**
+ * @brief Read a 16-bit register. Handles paged access automatically.
+ * @param dev   - The device structure.
+ * @param reg   - Register address (0x1Fxx for paged registers).
+ * @param value - Pointer to store the read value.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_read(struct adiol100_dev *dev, uint16_t reg, uint16_t *value)
 {
     uint8_t buf[4];
@@ -163,6 +192,13 @@ int adiol100_read(struct adiol100_dev *dev, uint16_t reg, uint16_t *value)
     return 0;
 }
 
+/**
+ * @brief Write a 16-bit register. Handles paged access automatically.
+ * @param dev   - The device structure.
+ * @param reg   - Register address (0x1Fxx for paged registers).
+ * @param value - The value to write.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_write(struct adiol100_dev *dev, uint16_t reg, uint16_t value)
 {
     uint8_t buf[4];
@@ -187,6 +223,14 @@ int adiol100_write(struct adiol100_dev *dev, uint16_t reg, uint16_t value)
     return no_os_spi_write_and_read(dev->spi_desc, buf, len);
 }
 
+/**
+ * @brief Read-modify-write a register using a bit mask.
+ * @param dev   - The device structure.
+ * @param reg   - Register address.
+ * @param mask  - Bit mask of the field to modify.
+ * @param value - New value (pre-shifted to match mask position).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_update(struct adiol100_dev *dev, uint16_t reg, uint16_t mask,
                     uint16_t value)
 {
@@ -203,6 +247,16 @@ int adiol100_update(struct adiol100_dev *dev, uint16_t reg, uint16_t mask,
     return adiol100_write(dev, reg, tmp);
 }
 
+/**
+ * @brief Load IO-Link payload into TxFIFO and trigger CQSend.
+ * @param dev     - The device structure.
+ * @param ch      - Channel selection (A or B).
+ * @param data    - IO-Link payload bytes (MC + CKT + OD).
+ * @param txbytes - Number of payload bytes to transmit.
+ * @param rxbytes - Number of response bytes expected from the device.
+ * @param keep    - Retain message in TxFIFO for cyclic re-sending.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_send_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
                       uint8_t *data, uint8_t txbytes, uint8_t rxbytes,
                       enum adiol100_keep_msg keep)
@@ -248,6 +302,14 @@ int adiol100_send_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
     return adiol100_update(dev, fc1_reg, mask, val);
 }
 
+/**
+ * @brief Read device response from RxFIFO, stripping the MsgID/RxBytesAct header.
+ * @param dev  - The device structure.
+ * @param ch   - Channel selection (A or B).
+ * @param data - Buffer to store the device response bytes.
+ * @param len  - Pointer to store the number of bytes read.
+ * @return 0 in case of success, -EIO on FIFO mismatch.
+ */
 int adiol100_read_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
                        uint8_t *data, uint8_t *len)
 {
@@ -304,6 +366,11 @@ int adiol100_read_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
     return 0;
 }
 
+/**
+ * @brief Disable global interrupts, clear trigger, and read-clear all IRQ registers.
+ * @param dev - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_global_reset(struct adiol100_dev *dev)
 {
     uint16_t dummy;
@@ -336,6 +403,12 @@ int adiol100_global_reset(struct adiol100_dev *dev)
     return adiol100_read(dev, ADIOL100_REG_STATUS_B, &dummy);
 }
 
+/**
+ * @brief Reset the transmit FIFO for a channel.
+ * @param dev - The device structure.
+ * @param ch  - Channel selection (A or B).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_reset_tx_fifo(struct adiol100_dev *dev, enum adiol100_channel ch)
 {
     uint16_t reg;
@@ -348,6 +421,12 @@ int adiol100_reset_tx_fifo(struct adiol100_dev *dev, enum adiol100_channel ch)
     return adiol100_update(dev, reg, ADIOL100_TXFIFORSTN, ADIOL100_TXFIFORSTN);
 }
 
+/**
+ * @brief Reset the receive FIFO for a channel.
+ * @param dev - The device structure.
+ * @param ch  - Channel selection (A or B).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_reset_rx_fifo(struct adiol100_dev *dev, enum adiol100_channel ch)
 {
     uint16_t reg;
@@ -360,6 +439,12 @@ int adiol100_reset_rx_fifo(struct adiol100_dev *dev, enum adiol100_channel ch)
     return adiol100_update(dev, reg, ADIOL100_RXFIFORSTN, ADIOL100_RXFIFORSTN);
 }
 
+/**
+ * @brief Assert CHANRST to reset all channel-specific registers.
+ * @param dev - The device structure.
+ * @param ch  - Channel selection (A or B).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_reset_channel(struct adiol100_dev *dev, enum adiol100_channel ch)
 {
     uint16_t reg;
@@ -379,6 +464,16 @@ int adiol100_reset_channel(struct adiol100_dev *dev, enum adiol100_channel ch)
     return 0;
 }
 
+/**
+ * @brief Configure the CQ driver: output mode, enable, sink current, slew rate.
+ * @param dev       - The device structure.
+ * @param ch        - Channel selection (A or B).
+ * @param mode      - NPN or push-pull output.
+ * @param drv_en    - Enable or disable the CQ driver.
+ * @param sink_sel  - Input sink current selection.
+ * @param slew_rate - CQ output slew rate.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_config_cq(struct adiol100_dev *dev, enum adiol100_channel ch,
                        enum adiol100_cq_mode mode,
                        enum adiol100_cq_drv drv_en,
@@ -405,6 +500,20 @@ int adiol100_config_cq(struct adiol100_dev *dev, enum adiol100_channel ch,
     return adiol100_update(dev, reg, mask, val);
 }
 
+/**
+ * @brief Configure CQ protection: current limit, blanking, thresholds, autoretry.
+ * @param dev           - The device structure.
+ * @param ch            - Channel selection (A or B).
+ * @param current_limit - CQ driver current limit.
+ * @param blanking      - Current limit blanking time.
+ * @param retry_tmo     - Autoretry timeout after current limit event.
+ * @param retry_en      - Enable or disable autoretry.
+ * @param tx_vthr_h     - CQ transmit high voltage threshold.
+ * @param tx_vthr_l     - CQ transmit low voltage threshold.
+ * @param rx_vthr_h     - CQ receive high voltage threshold.
+ * @param rx_vthr_l     - CQ receive low voltage threshold.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_config_cq_protection(struct adiol100_dev *dev,
                                   enum adiol100_channel ch,
                                   enum adiol100_cq_current_limit current_limit,
@@ -436,6 +545,14 @@ int adiol100_config_cq_protection(struct adiol100_dev *dev,
     return adiol100_write(dev, reg, val);
 }
 
+/**
+ * @brief Configure the L+ sensor supply: enable and reverse polarity protection.
+ * @param dev    - The device structure.
+ * @param ch     - Channel selection (A or B).
+ * @param enable - Enable or disable L+ supply.
+ * @param rev_en - Enable or disable reverse polarity protection.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_config_lp(struct adiol100_dev *dev, enum adiol100_channel ch,
                        enum adiol100_lp_en enable,
                        enum adiol100_lp_rev rev_en)
@@ -457,6 +574,22 @@ int adiol100_config_lp(struct adiol100_dev *dev, enum adiol100_channel ch,
     return adiol100_update(dev, reg, mask, val);
 }
 
+/**
+ * @brief Configure L+ FET protection: current, power, timeouts, slope, retry.
+ * @param dev        - The device structure.
+ * @param ch         - Channel selection (A or B).
+ * @param cl_nom     - Nominal current limit (LPCLNom register).
+ * @param pwr_max    - Maximum power limit (LPFetPwrCfg register).
+ * @param curr_max   - Maximum current limit (LPCurrentCfg register).
+ * @param curr_min   - Minimum current limit (LPCurrentCfg register).
+ * @param ol_timeout - Open-load timeout (LPFETProtect register).
+ * @param cl_timeout - Current-limit timeout (LPFETProtect register).
+ * @param slope      - Slope control (LPSlope register).
+ * @param slope_bl   - Slope blanking (LPSlope register).
+ * @param ar_time    - Autoretry time (LPRetry register).
+ * @param ar_count   - Autoretry count (LPRetry register).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_config_lp_protection(struct adiol100_dev *dev,
                                   enum adiol100_channel ch,
                                   uint8_t cl_nom, uint8_t pwr_max,
@@ -526,6 +659,14 @@ int adiol100_config_lp_protection(struct adiol100_dev *dev,
     return adiol100_write(dev, retry_reg, val);
 }
 
+/**
+ * @brief Configure the IO-Link framer: checksum insertion and framer enable.
+ * @param dev       - The device structure.
+ * @param ch        - Channel selection (A or B).
+ * @param ins_chks  - Enable or disable checksum insertion.
+ * @param framer_en - Enable or disable the framer.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_config_framer(struct adiol100_dev *dev, enum adiol100_channel ch,
                            enum adiol100_ins_chks ins_chks,
                            enum adiol100_framer framer_en)
@@ -547,6 +688,14 @@ int adiol100_config_framer(struct adiol100_dev *dev, enum adiol100_channel ch,
     return adiol100_update(dev, reg, mask, val);
 }
 
+/**
+ * @brief Set the SPI burst length for FIFO access.
+ * @param dev       - The device structure.
+ * @param ch        - Channel selection (A or B).
+ * @param write_len - Number of bytes in the write burst.
+ * @param read_len  - Number of bytes in the read burst.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_set_burst_len(struct adiol100_dev *dev, enum adiol100_channel ch,
                            int write_len, int read_len)
 {
@@ -563,6 +712,13 @@ int adiol100_set_burst_len(struct adiol100_dev *dev, enum adiol100_channel ch,
     return adiol100_write(dev, reg, val);
 }
 
+/**
+ * @brief Get the communication rate determined by EstCom (COM1/2/3).
+ * @param dev   - The device structure.
+ * @param ch    - Channel selection (A or B).
+ * @param comrt - Pointer to store the COM rate value (1, 2, or 3).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_get_comrt(struct adiol100_dev *dev, enum adiol100_channel ch,
                        uint8_t *comrt)
 {
@@ -583,6 +739,13 @@ int adiol100_get_comrt(struct adiol100_dev *dev, enum adiol100_channel ch,
     return 0;
 }
 
+/**
+ * @brief Set the IO-Link cycle timer value.
+ * @param dev   - The device structure.
+ * @param ch    - Channel selection (A or B).
+ * @param value - IO-Link encoded cycle time byte.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_set_cycle_tmr(struct adiol100_dev *dev, enum adiol100_channel ch,
                            uint8_t value)
 {
@@ -596,6 +759,13 @@ int adiol100_set_cycle_tmr(struct adiol100_dev *dev, enum adiol100_channel ch,
     return adiol100_update(dev, reg, ADIOL100_CYCLTMR_MSK, (uint16_t)value);
 }
 
+/**
+ * @brief Get the current cycle timer register value.
+ * @param dev   - The device structure.
+ * @param ch    - Channel selection (A or B).
+ * @param value - Pointer to store the cycle timer value.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_get_cycle_tmr(struct adiol100_dev *dev, enum adiol100_channel ch,
                            uint16_t *value)
 {
@@ -609,6 +779,12 @@ int adiol100_get_cycle_tmr(struct adiol100_dev *dev, enum adiol100_channel ch,
     return adiol100_read(dev, reg, value);
 }
 
+/**
+ * @brief Enable the cycle timer for autonomous cyclic operation.
+ * @param dev - The device structure.
+ * @param ch  - Channel selection (A or B).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_enable_cycle_timer(struct adiol100_dev *dev, enum adiol100_channel ch)
 {
     uint16_t reg;
@@ -621,6 +797,12 @@ int adiol100_enable_cycle_timer(struct adiol100_dev *dev, enum adiol100_channel 
     return adiol100_update(dev, reg, ADIOL100_CYCLETMREN, ADIOL100_CYCLETMREN);
 }
 
+/**
+ * @brief Disable the cycle timer.
+ * @param dev - The device structure.
+ * @param ch  - Channel selection (A or B).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_disable_cycle_timer(struct adiol100_dev *dev, enum adiol100_channel ch)
 {
     uint16_t reg;
@@ -633,6 +815,13 @@ int adiol100_disable_cycle_timer(struct adiol100_dev *dev, enum adiol100_channel
     return adiol100_update(dev, reg, ADIOL100_CYCLETMREN, 0);
 }
 
+/**
+ * @brief Read and clear the channel interrupt register.
+ * @param dev   - The device structure.
+ * @param ch    - Channel selection (A or B).
+ * @param flags - Pointer to store the interrupt flags.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_get_channel_irq(struct adiol100_dev *dev, enum adiol100_channel ch,
                              uint16_t *flags)
 {
@@ -646,16 +835,35 @@ int adiol100_get_channel_irq(struct adiol100_dev *dev, enum adiol100_channel ch,
     return adiol100_read(dev, reg, flags);
 }
 
+/**
+ * @brief Read and clear the global interrupt register.
+ * @param dev   - The device structure.
+ * @param flags - Pointer to store the interrupt flags.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_get_global_irq(struct adiol100_dev *dev, uint16_t *flags)
 {
     return adiol100_read(dev, ADIOL100_REG_INTERRUPTG, flags);
 }
 
+/**
+ * @brief Set the global interrupt enable mask.
+ * @param dev  - The device structure.
+ * @param mask - Bitmask of interrupts to enable.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_enable_global_irq(struct adiol100_dev *dev, uint16_t mask)
 {
     return adiol100_write(dev, ADIOL100_REG_INTERRUPTG_EN, mask);
 }
 
+/**
+ * @brief Set the channel interrupt enable mask.
+ * @param dev  - The device structure.
+ * @param ch   - Channel selection (A or B).
+ * @param mask - Bitmask of interrupts to enable.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_enable_channel_irq(struct adiol100_dev *dev,
                                 enum adiol100_channel ch, uint16_t mask)
 {
@@ -669,6 +877,13 @@ int adiol100_enable_channel_irq(struct adiol100_dev *dev,
     return adiol100_write(dev, reg, mask);
 }
 
+/**
+ * @brief Read the RxFIFO status register (level + error flags).
+ * @param dev   - The device structure.
+ * @param ch    - Channel selection (A or B).
+ * @param flags - Pointer to store the status flags.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_get_fifo_status(struct adiol100_dev *dev, enum adiol100_channel ch,
                              uint16_t *flags)
 {
@@ -682,6 +897,13 @@ int adiol100_get_fifo_status(struct adiol100_dev *dev, enum adiol100_channel ch,
     return adiol100_read(dev, reg, flags);
 }
 
+/**
+ * @brief Read the channel status register.
+ * @param dev   - The device structure.
+ * @param ch    - Channel selection (A or B).
+ * @param flags - Pointer to store the status flags.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_get_status(struct adiol100_dev *dev, enum adiol100_channel ch,
                         uint16_t *flags)
 {
@@ -695,6 +917,16 @@ int adiol100_get_status(struct adiol100_dev *dev, enum adiol100_channel ch,
     return adiol100_read(dev, reg, flags);
 }
 
+/**
+ * @brief Configure the watchdog timer.
+ * @param dev      - The device structure.
+ * @param timebase - Timer tick period (100us, 500us, or 2ms).
+ * @param time     - Timeout multiplier (6-bit, 0–63).
+ * @param mode     - SPI activity reset or explicit clear.
+ * @param enable   - Enable or disable the watchdog.
+ * @param lock     - Lock the watchdog configuration.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_config_watchdog(struct adiol100_dev *dev,
                              enum adiol100_wdg_timebase timebase,
                              uint8_t time,
@@ -713,12 +945,23 @@ int adiol100_config_watchdog(struct adiol100_dev *dev,
     return adiol100_write(dev, ADIOL100_REG_WATCHDOG, val);
 }
 
+/**
+ * @brief Clear the watchdog timer (write-1-to-clear).
+ * @param dev - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int adiol100_clear_watchdog(struct adiol100_dev *dev)
 {
     return adiol100_update(dev, ADIOL100_REG_WATCHDOG,
                            ADIOL100_WDGCLEAR, ADIOL100_WDGCLEAR);
 }
 
+/**
+ * @brief Run EstablishCommunication: reset FIFOs, set EstCom, poll for result.
+ * @param dev - The device structure.
+ * @param ch  - Channel selection (A or B).
+ * @return 0 on success, -ENODEV if no device responded, -ETIMEDOUT on timeout.
+ */
 int adiol100_estcom(struct adiol100_dev *dev, enum adiol100_channel ch)
 {
     uint16_t reg;
