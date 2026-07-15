@@ -162,6 +162,27 @@ def run_cmd(cmd):
 def to_blue(str):
 	return TBLUE + str + TWHITE
 
+def cmake_cache_source_mismatch(build_dir, noos):
+	"""True if build_dir's CMakeCache.txt was generated from a different source path.
+
+	CMake refuses to reuse a cache whose CMAKE_HOME_DIRECTORY differs, which
+	happens when CI agents check the repo out under different absolute paths.
+	"""
+	cache = os.path.join(build_dir, 'CMakeCache.txt')
+	if not os.path.isfile(cache):
+		return False
+	want = os.path.realpath(noos)
+	try:
+		with open(cache) as f:
+			for line in f:
+				if line.startswith('CMAKE_HOME_DIRECTORY:'):
+					have = line.split('=', 1)[1].strip()
+					return os.path.realpath(have) != want
+	except OSError:
+		# Unreadable cache: treat as mismatch so --fresh regenerates it cleanly.
+		return True
+	return False
+
 SKIP_DOWNLOAD = None
 key = 'SKIP_DOWNLOAD'
 if key in os.environ:
@@ -451,8 +472,10 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		jobs = int(multiprocessing.cpu_count() / 2) or 1
 		# Pass an absolute --build-dir: no_os_build anchors a relative one to the
 		# repo root, which would not match the build_dir we clean/probe here.
-		# Xilinx: keep the cached BSP, clean only objects unless the .xsa changed.
-		if platform == 'xilinx' and build_dir.exists() and not new_hdf:
+		# Xilinx: keep the cached BSP, clean only objects unless the .xsa changed
+		# or the cache came from a different source path (another CI agent).
+		stale_cache = platform == 'xilinx' and cmake_cache_source_mismatch(str(build_dir), noos)
+		if platform == 'xilinx' and build_dir.exists() and not new_hdf and not stale_cache:
 			# CMAKE, not bare 'cmake': the sourced xilinx env leads PATH with Vitis's broken one.
 			clean_cmd = "%s --build %s --target clean > /dev/null 2>&1" % (CMAKE, build_dir)
 			os.system(clean_cmd)
