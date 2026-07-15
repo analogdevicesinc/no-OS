@@ -41,15 +41,21 @@ for dir in os.listdir(NOOS_PATH + '/projects'):
 try:
     sys.path.insert(0, os.path.join(NOOS_PATH, 'tools', 'scripts'))
     from no_os_build import (
-        discover_projects, discover_variants,
+        load_presets, discover_projects, discover_variants,
         discover_boards_for_variant, xilinx_hardware_name,
     )
     from pathlib import Path
     _root = Path(NOOS_PATH)
+    # Restrict to boards with a xilinx preset; a variant's HDL_DESIGN otherwise
+    # composes bogus names for its non-xilinx boards, wasting API walk-backs.
+    _xilinx_boards = {p['board'] for p in load_presets(_root).values()
+                      if p.get('platform') == 'xilinx'}
     for project in discover_projects(_root):
         for variant in discover_variants(_root, project):
             boards, _ = discover_boards_for_variant(_root, project, variant)
             for board in boards:
+                if board not in _xilinx_boards:
+                    continue
                 name = xilinx_hardware_name(_root, project, variant, board)
                 if name:
                     list_hardware.append(name)
