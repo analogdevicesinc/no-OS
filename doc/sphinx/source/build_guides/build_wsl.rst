@@ -26,26 +26,15 @@ Install usbipd-win
 ==================
 
 Install the `usbipd-win <https://github.com/dorssel/usbipd-win/releases>`_
-project on the Windows side. Installation can be done with the MSI installer.
+project (version 4.0.0 or later) on the Windows side. Installation can be done
+with the MSI installer, or from a PowerShell prompt with:
 
-Install Linux USB/IP tools
-==========================
+.. code-block::
 
-From WSL, install the user space tools for USB/IP and a database of USB hardware
-identifiers:
+    C:\> winget install usbipd
 
-.. code-block:: bash
-
-    $ sudo apt update
-    $ sudo apt upgrade
-    $ sudo apt install linux-tools-virtual hwdata
-    $ sudo update-alternatives --install /usr/local/bin/usbip usbip $(command -v ls /usr/lib/linux-tools/*/usbip | tail -n1) 20
-
-If the last command does not work, try:
-
-.. code-block:: bash
-
-    $ sudo update-alternatives --install /usr/local/bin/usbip usbip `ls /usr/lib/linux-tools/*/usbip | tail -n1` 20
+As of usbipd-win 4.0.0 you no longer need to install any client-side USB/IP
+tooling inside WSL — the Windows-side commands below are all that is required.
 
 Attach USB devices to WSL
 =========================
@@ -53,16 +42,16 @@ Attach USB devices to WSL
 Listing available devices
 -------------------------
 
-Open **Command Prompt** or **PowerShell** in Administrator mode and run:
+Open **Command Prompt** or **PowerShell** and run:
 
 .. code-block::
 
-    C:\> usbipd wsl list
+    C:\> usbipd list
     BUSID  VID:PID    DEVICE                                  STATE
-    10-1   0403:6014  USB Serial Converter                    Not attached
+    10-1   0403:6014  USB Serial Converter                    Not shared
     ...
 
-This lists all connected USB devices and their attachment state.
+This lists all connected USB devices and their state.
 
 From WSL, you can see currently attached USB devices with:
 
@@ -70,24 +59,57 @@ From WSL, you can see currently attached USB devices with:
 
     $ lsusb
 
-Attaching a device
-------------------
+Binding a device
+----------------
 
-To attach a USB device to WSL, run in the Windows Command Prompt:
+Before a device can be attached to WSL it must be shared once with ``bind``.
+Open **Command Prompt** or **PowerShell** in Administrator mode and run:
 
 .. code-block::
 
-    C:\> usbipd wsl attach -b <BUSID>
+    C:\> usbipd bind --busid <BUSID>
 
 For example:
 
 .. code-block::
 
-    C:\> usbipd wsl attach -b 10-1
+    C:\> usbipd bind --busid 10-1
 
-After attaching, ``usbipd wsl list`` will show the device as
-**Attached - Ubuntu** (or your WSL distribution name), and ``lsusb`` inside
-WSL will show the device.
+Binding is persistent and survives reboots, so this only needs to be done once
+per device. After binding, ``usbipd list`` shows the device as **Shared**.
+
+Force binding
+^^^^^^^^^^^^^
+
+A plain ``bind`` leaves the device usable by Windows until it is attached to
+WSL, which is what you normally want. If a Windows driver holds the device and
+prevents it from being shared or attached, add ``--force`` to bind it anyway:
+
+.. code-block::
+
+    C:\> usbipd bind --force --busid <BUSID>
+
+With ``--force`` the host can no longer use the device while it is bound. Only
+use it when a normal ``bind`` does not work.
+
+Attaching a device
+------------------
+
+To attach a shared USB device to WSL, run in the Windows Command Prompt (no
+administrator privileges required):
+
+.. code-block::
+
+    C:\> usbipd attach --wsl --busid <BUSID>
+
+For example:
+
+.. code-block::
+
+    C:\> usbipd attach --wsl --busid 10-1
+
+After attaching, ``usbipd list`` will show the device as **Attached**, and
+``lsusb`` inside WSL will show the device.
 
 Detaching a device
 ------------------
@@ -97,7 +119,7 @@ reconnect it, or run in the Windows Command Prompt:
 
 .. code-block::
 
-    C:\> usbipd wsl detach -b <BUSID>
+    C:\> usbipd detach --busid <BUSID>
 
 Additional Resources
 ====================
