@@ -227,7 +227,9 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 		err = os.system("python3 {}/tools/scripts/download_files.py {} {} {} \"{}\""
 				  .format(noos, noos, builds_dir, server_full_path, blacklist))
 		if err != 0:
-			return
+			# Exit instead of returning None (caller unpacks a tuple -> TypeError).
+			log_err("Hardware download failed (exit %d); see download_files.py output above" % err)
+			sys.exit(1)
 	return (builds_dir, blacklist)
 
 def get_hardware(hardware, platform, builds_dir):
