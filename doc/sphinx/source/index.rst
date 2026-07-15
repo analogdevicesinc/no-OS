@@ -22,6 +22,7 @@ Contents
 .. toctree::
    :maxdepth: 2
 
+   getting_started
    drivers_guide
    drivers_doc
    projects_doc
