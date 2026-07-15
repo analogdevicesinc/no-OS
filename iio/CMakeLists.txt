@@ -1,7 +1,6 @@
 # Only define IIO_SUPPORT when IIO is enabled. Many drivers switch behavior on
 # #ifdef IIO_SUPPORT, so defining it unconditionally pulls IIO code paths into
-# non-IIO builds. This mirrors the Make build, which gates -DIIO_SUPPORT behind
-# the IIO toggle (tools/scripts/libraries.mk).
+# non-IIO builds.
 if(CONFIG_IIO)
   target_compile_definitions(no-os PUBLIC -DIIO_SUPPORT)
 endif()

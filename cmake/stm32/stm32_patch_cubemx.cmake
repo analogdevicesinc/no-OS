@@ -18,7 +18,7 @@ string(REPLACE "\${CMAKE_PROJECT_NAME}" "no-os"
 file(WRITE ${CMAKE_FILE_TO_PATCH} "${PATCHED_CONTENTS}")
 
 # Remove syscalls.c to avoid duplicate symbol conflicts with
-# stm32_uart_stdio.c (matches the make build behavior in stm32.mk).
+# stm32_uart_stdio.c.
 file(READ ${CMAKE_FILE_TO_PATCH} FILE_CONTENTS)
 string(REGEX REPLACE "[^\n]*syscalls\\.c[^\n]*\n" ""
      PATCHED_CONTENTS "${FILE_CONTENTS}")
