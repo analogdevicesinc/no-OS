@@ -1,28 +1,22 @@
-AD400x no-OS Example Project on ZED and SDP-K1
-==============================================
+PULSAR-ADC no-OS Example Project
+==================================
 
 .. no-os-doxygen::
-
-Contents
---------
 
 .. contents:: Table of Contents
     :depth: 3
 
 Supported Evaluation Boards
----------------------------
+----------------------------
 
-* `AD400x <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD400x-FMCZ.html>`_
+* `EVAL-AD400x-FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD400x-FMCZ.html>`_
 
 Overview
 --------
 
-Features and Benefits
-
-Product Details
 The AD4000/AD4001/AD4002/AD4003/AD4020 family of evaluation boards enable quick,
 simplified evaluation of the AD4000 family of 16-/18-/20-bit, precision
-successive approx-imation register (SAR) analog-to-digital converters (ADCs).
+successive approximation register (SAR) analog-to-digital converters (ADCs).
 
 The AD4000/AD4001/AD4002/AD4003/AD4020 are low power, 16-bit/18-bit/20-bit,
 precision SAR ADCs that offer high performance with throughputs up to 2 MSPS
@@ -33,118 +27,164 @@ simplified interface for a variety of system applications.
 Applications
 ------------
 
-* Industrial Automation Technology
-* Instrumentation and Measurement Solutions
-* Intelligent Building Solutions
-* Healthcare Solutions
-* Aerospace and Defense Systems
-* Wireless Communication Solutions
+* Industrial automation technology
+* Instrumentation and measurement solutions
+* Intelligent building solutions
+* Healthcare solutions
+* Aerospace and defense systems
+* Wireless communication solutions
+
+Hardware Specifications
+-----------------------
+
+Power Supply Requirements
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The EVAL-AD400x-FMCZ receives power through the FMC connector from the attached
+FPGA carrier board, or via the SDP connector when used with an SDP-K1. No
+external power supply is required.
 
 No-OS Supported Examples
-------------------------
-Basic example
-^^^^^^^^^^^^^
+-------------------------
 
-This example prints sample data out to the uart.
+This project is organized around the no-OS variant based build flow.
+Selecting a variant at build time (``--variant <name>``) chooses which
+application is compiled. The platform ``main()`` is a thin dispatcher that
+calls ``example_main()``, provided by the selected example. Shared
+initialization data is defined in
+`src/common <https://github.com/analogdevicesinc/no-OS/tree/main/projects/pulsar-adc/src/common>`__,
+and platform-specific macros and extra init parameters are in
+`src/platform <https://github.com/analogdevicesinc/no-OS/tree/main/projects/pulsar-adc/src/platform>`__.
 
-Here is an example on how see the sample data of the basic example using zedboard:
+Basic Example
+~~~~~~~~~~~~~
 
-| minicom -b 115200 -D /dev/ttyACM1 -C ~/serial.dat
-| make run
-| cat ~/serial.dat | grep  ADC | cut -d ' ' -f 2 > ~/plot.dat
-| echo "set terminal jpeg; set output '~/o.jpeg';plot '~/plot.dat' with lines" | gnuplot
+The basic example initializes the AD400x ADC and prints sampled data out to
+the UART console. On Xilinx, the SPI Engine offload core is used for
+high-speed data capture.
 
-IIO example
-^^^^^^^^^^^
+This example is built by selecting the ``basic`` variant (see the Build Command
+sections below).
 
-This project is actually a IIOD demo for EVAL-AD400X device.
-The project launches a IIOD server on the board so that the user may connect
-to it via an IIO client.
-Using IIO-Oscilloscope, the user can configure the ADC and view the measured data
-on a plot.
+IIO Example
+~~~~~~~~~~~
+
+This project is an IIOD demo for the EVAL-AD400x evaluation board. The project
+launches an IIOD server on the board so that the user may connect to it via an
+IIO client. Using IIO-Oscilloscope, the user can configure the ADC and view the
+measured data on a plot.
 
 If you are not familiar with ADI IIO Application, please take a look at:
-`IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
+:dokuwiki:`IIO No-OS </resources/tools-software/no-os-software/iio>`
 
-If you are not familiar with ADI IIO-Oscilloscope Client, please take a look at:
-`IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
+If you are not familiar with ADI IIO-Oscilloscope Client, please take a
+look at:
+:dokuwiki:`IIO Oscilloscope </resources/tools-software/linux-software/iio_oscilloscope>`
 
-The No-OS IIO Application together with the No-OS IIO AD400X driver take care of
-all the back-end logic needed to setup the IIO server.
-
-The read buffer is used for storing the burst data which shall be retrieved
-by any LibIIO client.
+This example is built by selecting the ``iio`` variant (see the Build Command
+sections below).
 
 No-OS Supported Platforms
--------------------------
-ZEDBOARD Platform
-^^^^^^^^^^^^^^^^^
+--------------------------
 
-**Used hardware:**
+Xilinx
+~~~~~~
 
-* `EVAL-AD400x <https://www.analog.com/eval-ad400x-fmcz.html>`_
-* `Zedboard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
+Used Hardware
+^^^^^^^^^^^^^
 
-**Prerequisites**
+* `EVAL-AD400x-FMCZ <https://www.analog.com/eval-ad400x-fmcz.html>`_
+* `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
-* Vitis/Vivado software installed
-* export PATH=$PATH:"<YOUR_PATH>/Xilinx/Vivado/2023.2/bin"
-* export PATH=$PATH:"<YOUR_PATH>/Xilinx/Vitis/2023.2/bin"
-* (optional) export ADI_IGNORE_VERSION_CHECK=1
-* HDL code (**system_top.xsa**) in the porject folder
+Connections
+^^^^^^^^^^^
 
-**Build and flash**
+Connect the EVAL-AD400x-FMCZ to the ZedBoard via the FMC connector. On Xilinx,
+the SPI Engine offload core is used; the device part in use can be configured in
+``src/common/common_data.c`` via the ``dev_id`` field of the
+``ad400x_init_param`` struct (for example ``ID_AD4020``). The UART console
+appears on the ZedBoard USB-UART adapter at **115200 baud, 8N1**.
 
-* make
-* make run
+Build Command
+^^^^^^^^^^^^^
 
-STM32 Platform
-^^^^^^^^^^^^^^
+The Xilinx platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``basic``, ``iio``.
+Available boards: ``zed``.
 
-**Used hardware:**
+A Xilinx hardware description file (``.xsa``) generated from the matching HDL
+design is required. The HDL design name for all variants is ``pulsar_adc`` (see
+``CONFIG_XILINX_HDL_DESIGN`` in each ``.conf`` file). Obtain the pre-built
+``pulsar_adc_zed/system_top.xsa`` from the ADI HDL repository releases, or
+build it yourself by following the
+`Building HDL guide <https://wiki.analog.com/resources/fpga/docs/build>`_.
 
-* `EVAL-AD400x <https://www.analog.com/eval-ad400x-fmcz.html>`_
-* `SDP-K1 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
+
+.. code-block:: bash
+
+   # source the Vitis environment (adjust path to your Vitis install)
+   source ~/.xilinx/2025.1/Vitis/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   & "$env:USERPROFILE\.xilinx\2025.1\Vitis\settings64.bat"
+
+   cd no-OS
+
+   # build the basic example on the ZedBoard (requires a .xsa hardware file)
+   python tools/scripts/no_os_build.py build \
+      --project pulsar-adc --variant basic --board zed \
+      --hardware /path/to/pulsar_adc_zed/system_top.xsa
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project pulsar-adc --variant basic --board zed \
+      --hardware /path/to/pulsar_adc_zed/system_top.xsa \
+      --probe openocd --flash
+
+STM32
+~~~~~
+
+Used Hardware
+^^^^^^^^^^^^^
+
+* `EVAL-AD400x-FMCZ <https://www.analog.com/eval-ad400x-fmcz.html>`_
+* `SDP-K1 <https://www.analog.com/SDP-K1>`_
 * ST debugger
 
-**Build Command**
+Connections
+^^^^^^^^^^^
+
+Connect the EVAL-AD400x-FMCZ to the SDP-K1 via the SDP connector. The
+UART console appears on the SDP-K1 USB port at **115200 baud, 8N1**.
+
+Build Command
+^^^^^^^^^^^^^
+
+The STM32 platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``basic``, ``iio``.
+Available boards: ``sdp-ck1z``.
 
 For toolchain setup and prerequisites, see the
 `STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
-Available variants: ``basic``, ``iio``.
-Available boards: ``sdp-ck1z``.
-Replace ``--variant`` / ``--board`` accordingly.
-
 .. code-block:: bash
 
-	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
-	# in a default install location)
-	export STM32CUBEMX=</path/to/stm32cubemx>
-	export STM32CUBEIDE=</path/to/stm32cubeide>
-	# Windows (PowerShell):
-	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
-	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
+   # set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+   # in a default install location)
+   export STM32CUBEMX=</path/to/stm32cubemx>
+   export STM32CUBEIDE=</path/to/stm32cubeide>
+   # PowerShell (Windows) equivalent:
+   #   $env:STM32CUBEMX = "<path\to\stm32cubemx>"
+   #   $env:STM32CUBEIDE = "<path\to\stm32cubeide>"
 
-	cd no-OS
+   cd no-OS
 
-	# build the project (basic example on the SDP-K1 board)
-	python tools/scripts/no_os_build.py build \
-		--project pulsar-adc --variant basic --board sdp-ck1z
+   # build the basic example on the SDP-K1 board
+   python tools/scripts/no_os_build.py build \
+      --project pulsar-adc --variant basic --board sdp-ck1z
 
-	# build and flash (requires a connected debug probe)
-	python tools/scripts/no_os_build.py build \
-		--project pulsar-adc --variant basic --board sdp-ck1z \
-		--probe openocd --flash
-
-Project Options
-----------------
-* Use basic example that prints samples to uart (zed-only)s
-    | ./Makefile
-    |   BASIC_EXAMPLE = n
-    |   IIO_EXAMPLE = y
-
-* Specify the 400x part in use:
-    | src/common/common_data.c:
-    |   struct ad400x_init_param ad400x_init_param = {
-    |       .dev_id = **ID_AD4020**,
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project pulsar-adc --variant basic --board sdp-ck1z \
+      --probe openocd --flash
