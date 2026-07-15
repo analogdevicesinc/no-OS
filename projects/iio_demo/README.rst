@@ -1,5 +1,5 @@
 IIO Demo no-OS Example Project
-==============================
+================================
 
 .. no-os-doxygen::
 
@@ -21,28 +21,30 @@ UART/USB/Wi-Fi transport, the IRQ and timer infrastructure, and the IIO stack
 without depending on any physical sensor being present.
 
 If you are not familiar with the ADI IIO Application, please take a look at:
-`IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
+:dokuwiki:`IIO No-OS </resources/tools-software/no-os-software/iio>`
 
 If you are not familiar with the ADI IIO-Oscilloscope Client, please take a look
 at:
-`IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
+:dokuwiki:`IIO Oscilloscope </resources/tools-software/linux-software/iio_oscilloscope>`
 
 No-OS Supported Examples
-------------------------
+-------------------------
 
-The initialization data used in the examples is taken out from the
-`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/iio_demo/src/common>`__.
-
-The macros used in Common Data are defined in platform specific files
-found in the
-`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/iio_demo/src/platform>`__.
+This project is organized around the no-OS variant based build flow.
+Selecting a variant at build time (``--variant <name>``) chooses which
+application is compiled. The platform ``main()`` is a thin dispatcher that
+calls ``example_main()``, provided by the selected example. Shared
+initialization data is defined in
+`src/common <https://github.com/analogdevicesinc/no-OS/tree/main/projects/iio_demo/src/common>`__,
+and platform-specific macros and extra init parameters are in
+`src/platform <https://github.com/analogdevicesinc/no-OS/tree/main/projects/iio_demo/src/platform>`__.
 
 Each example is selected with its own ``--variant`` (the ``.conf`` files in the
 project directory). Not every variant is available on every board; see the
 combination list with
 ``python tools/scripts/no_os_build.py list --project iio_demo``.
 
-IIO example
+IIO Example
 ~~~~~~~~~~~
 
 The ``iio`` example instantiates the demo ADC and DAC devices and launches an
@@ -55,8 +57,8 @@ and offset and stream buffered data.
 This example is built by selecting the ``iio`` variant (see the Build Command
 sections below).
 
-IIO Timer Trigger example
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+IIO Timer Trigger Example
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``iio_timer_trigger`` example demonstrates buffered data acquisition driven
 by a hardware timer trigger. A periodic timer interrupt paces the sampling of
@@ -66,7 +68,7 @@ no-OS IIO trigger infrastructure without needing an external trigger source.
 This example is built by selecting the ``iio_timer_trigger`` variant (see the
 Build Command sections below).
 
-IIO USB UART example
+IIO USB UART Example
 ~~~~~~~~~~~~~~~~~~~~~
 
 The ``iio_usb_uart`` example is functionally identical to the basic ``iio``
@@ -77,7 +79,7 @@ the host, and the IIO client connects to that virtual COM port.
 This example is built by selecting the ``iio_usb_uart`` variant (see the Build
 Command sections below).
 
-IIO Wi-Fi example
+IIO Wi-Fi Example
 ~~~~~~~~~~~~~~~~~~
 
 The ``iio_wifi`` example runs the IIOD transport over an ESP8266 Wi-Fi module
@@ -91,8 +93,8 @@ Set the network credentials in the ``iio_wifi`` defconfig via
 This example is built by selecting the ``iio_wifi`` variant (see the Build
 Command sections below).
 
-IIO Wi-Fi with Software Trigger example
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+IIO Wi-Fi with Software Trigger Example
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``iio_wifi_with_sw_trig`` example combines the Wi-Fi transport with a
 software trigger for buffered data acquisition. As with ``iio_wifi``, the IIOD
@@ -105,8 +107,8 @@ Set the network credentials in the ``iio_wifi_with_sw_trig`` defconfig via
 This example is built by selecting the ``iio_wifi_with_sw_trig`` variant (see the
 Build Command sections below).
 
-Interacting with the device
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Interacting with the Device
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Once the board is running, an IIO client such as ``iio_writedev`` / ``iio_readdev``
 can be used to write to and read from the demo devices.
@@ -131,7 +133,7 @@ On Windows, use the ``COM`` port name for the serial URI:
    iio_readdev -u serial:COM9,921600 -b 100 -s 100 demo_device_input voltage0 voltage1
 
 No-OS Supported Platforms
--------------------------
+--------------------------
 
 All platforms below are built through the unified no-OS CMake build flow using
 ``tools/scripts/no_os_build.py``. Because the demo devices are software
@@ -159,18 +161,19 @@ configuration.
 Build Command
 ^^^^^^^^^^^^^
 
-For toolchain setup and prerequisites, see the
-`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
-
 Available variants: ``iio``, ``iio_wifi``, ``iio_wifi_with_sw_trig``.
 Available boards: ``eval-adicup3029``.
-Replace ``--variant`` / ``--board`` accordingly.
+Replace ``--variant`` accordingly.
+
+For toolchain setup and prerequisites, see the
+`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
 
 .. code-block:: bash
 
    # point at the CrossCore Embedded Studio install (only if not auto-detected)
    export CCES_HOME=/opt/analog/cces/3.0.3
-   # Windows (PowerShell): $env:CCES_HOME = "C:\analog\cces\3.0.3"
+   # PowerShell (Windows) equivalent:
+   #   $env:CCES_HOME = "C:\Analog Devices\CrossCore Embedded Studio 3.0.3"
 
    cd no-OS
 
@@ -218,9 +221,6 @@ the host via its USB port for power and the serial console.
 Build Command
 ^^^^^^^^^^^^^
 
-For toolchain setup and prerequisites, see the
-`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
-
 Available variants: ``iio``, ``iio_usb_uart``.
 Available boards: ``max32650fthr``, ``max32655fthr``, ``max32666fthr``,
 ``max78000fthr`` (``iio``); ``ad-apard32690-sl``, ``max32650fthr``,
@@ -229,11 +229,15 @@ Replace ``--variant`` / ``--board`` accordingly. Not every variant is available
 on every board; see the combination list with
 ``python tools/scripts/no_os_build.py list --project iio_demo``.
 
+For toolchain setup and prerequisites, see the
+`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+
 .. code-block:: bash
 
    # point at the Maxim SDK libraries (only if not auto-detected)
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
-   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
+   # PowerShell (Windows) equivalent:
+   #   $env:MAXIM_LIBRARIES = "<path\to\MaximSDK\Libraries>"
 
    cd no-OS
 
@@ -265,14 +269,15 @@ the host via its USB port for power and the serial console.
 Build Command
 ^^^^^^^^^^^^^
 
-For toolchain setup and prerequisites, see the
-`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
-
 Available variants: ``iio``, ``iio_timer_trigger``, ``iio_usb_uart``.
-Available boards: ``nucleo-f413zh``, ``sdp-ck1z``.
+Available boards: ``sdp-ck1z`` (all three variants); ``nucleo-f413zh``
+(``iio_usb_uart``).
 Replace ``--variant`` / ``--board`` accordingly. Not every variant is available
 on every board; see the combination list with
 ``python tools/scripts/no_os_build.py list --project iio_demo``.
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
 
 .. code-block:: bash
 
@@ -280,9 +285,9 @@ on every board; see the combination list with
    # in a default install location)
    export STM32CUBEMX=</path/to/stm32cubemx>
    export STM32CUBEIDE=</path/to/stm32cubeide>
-   # Windows (PowerShell):
-   #   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
-   #   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
+   # PowerShell (Windows) equivalent:
+   #   $env:STM32CUBEMX = "<path\to\stm32cubemx>"
+   #   $env:STM32CUBEIDE = "<path\to\stm32cubeide>"
 
    cd no-OS
 
@@ -312,12 +317,12 @@ the host via its USB port for power and the serial console.
 Build Command
 ^^^^^^^^^^^^^
 
-For toolchain setup and prerequisites, see the
-`Raspberry Pi Pico CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_pico_cmake.html>`__.
-
 Available variants: ``iio``.
 Available boards: ``rpi-pico``.
 Replace ``--variant`` / ``--board`` accordingly.
+
+For toolchain setup and prerequisites, see the Pico CMake build guide in the
+no-OS documentation.
 
 .. code-block:: bash
 
@@ -330,4 +335,48 @@ Replace ``--variant`` / ``--board`` accordingly.
    # build and flash (requires a connected debug probe)
    python tools/scripts/no_os_build.py build \
       --project iio_demo --variant iio --board rpi-pico \
+      --probe openocd --flash
+
+Xilinx Platform
+~~~~~~~~~~~~~~~
+
+Used Hardware
+^^^^^^^^^^^^^
+
+* `ZedBoard <https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html>`_
+
+Connections
+^^^^^^^^^^^
+
+No external sensor connections are required. The demo devices are software
+loopbacks. Connect the ZedBoard to the host via its USB-UART connector for the
+serial console. The UART console appears at **115200 baud, 8N1**.
+
+Build Command
+^^^^^^^^^^^^^
+
+Available variants: ``iio``.
+Available boards: ``zed``.
+
+For toolchain setup and prerequisites, see the
+`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
+
+.. code-block:: bash
+
+   # source the Vitis environment (adjust path to your Vitis install)
+   source /path/to/Vitis/2025.1/settings64.sh
+   # PowerShell (Windows) equivalent:
+   #   & "<path\to\Vitis\2025.1\settings64.bat"
+
+   cd no-OS
+
+   # build the iio example on the ZedBoard (requires a .xsa hardware file)
+   python tools/scripts/no_os_build.py build \
+      --project iio_demo --variant iio --board zed \
+      --hardware /path/to/system_top.xsa
+
+   # build and flash (requires a connected debug probe)
+   python tools/scripts/no_os_build.py build \
+      --project iio_demo --variant iio --board zed \
+      --hardware /path/to/system_top.xsa \
       --probe openocd --flash
