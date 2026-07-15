@@ -23,6 +23,7 @@ Contents
    :maxdepth: 2
 
    getting_started
+   architecture
    drivers_guide
    drivers_doc
    projects_doc
