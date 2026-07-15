@@ -419,6 +419,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		# by configfile_and_download_all_hw; get_hardware copies/renames it into
 		# <builds_dir>/hardware/<name>.xsa and returns that path.
 		hardware_arg = ""
+		new_hdf = False
 		if platform == 'xilinx':
 			hw_name = xilinx_hardware_name(Path(noos), project, variant, board)
 			if not hw_name:
@@ -429,7 +430,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 				ok = 0
 				os.environ.clear(); os.environ.update(env)
 				continue
-			(hardware_file, _new_hdf, hw_err) = get_hardware(hw_name, 'xilinx', builds_dir)
+			(hardware_file, new_hdf, hw_err) = get_hardware(hw_name, 'xilinx', builds_dir)
 			if hw_err != 0 or not hardware_file:
 				log_err("ERROR")
 				log("%s: could not resolve .xsa for hardware '%s' (not downloaded?)" % (
@@ -447,11 +448,18 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		jobs = int(multiprocessing.cpu_count() / 2) or 1
 		# Pass an absolute --build-dir: no_os_build anchors a relative one to the
 		# repo root, which would not match the build_dir we clean/probe here.
+		# Xilinx: keep the cached BSP, clean only objects unless the .xsa changed.
+		if platform == 'xilinx' and build_dir.exists() and not new_hdf:
+			clean_cmd = "cmake --build %s --target clean > /dev/null 2>&1" % build_dir
+			os.system(clean_cmd)
+			fresh_flag = ""
+		else:
+			fresh_flag = " --fresh"
 		build_cmd = ("python3 %s/tools/scripts/no_os_build.py build"
 			     " --project %s --variant %s --board %s"
-			     " --build-dir %s --jobs %d --probe openocd --fresh%s"
+			     " --build-dir %s --jobs %d --probe openocd%s%s"
 			     % (noos, project, variant, board,
-				os.path.abspath(build_dir_base), jobs, hardware_arg))
+				os.path.abspath(build_dir_base), jobs, fresh_flag, hardware_arg))
 		log(build_cmd)
 		sys.stdout.flush()
 		err = os.system(build_cmd + ' > /dev/null 2>&1')
