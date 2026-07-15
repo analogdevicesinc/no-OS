@@ -36,7 +36,7 @@
 
 #include <stdint.h>
 
-#define configCPU_CLOCK_HZ          ((uint32_t)100000000)
+#define configCPU_CLOCK_HZ          ((uint32_t)250000000)
 #define configTICK_RATE_HZ          ((portTickType)1000)
 #define configRTC_TICK_RATE_HZ      (32768)
 #define configTOTAL_HEAP_SIZE       ((size_t)(64 * 1024))
@@ -64,7 +64,7 @@
 #define INCLUDE_uxTaskPriorityGet   0
 #define INCLUDE_vTaskDelay          1
 
-#define configPRIO_BITS             3
+#define configPRIO_BITS             4
 #define configKERNEL_INTERRUPT_PRIORITY \
 	((unsigned char)7 << (8 - configPRIO_BITS))
 #define configMAX_SYSCALL_INTERRUPT_PRIORITY \

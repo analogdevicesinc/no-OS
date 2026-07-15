@@ -413,13 +413,13 @@ int adin1140_write_fifo(struct adin1140_desc *desc,
 	       ADIN1140_ETH_HDR_LEN);
 	frame_offset += ADIN1140_ETH_HDR_LEN;
 
-	memcpy(&oa_frame->data[frame_offset], eth_buff->payload,
-	       eth_buff->len - ADIN1140_ETH_HDR_LEN);
-
-	if (eth_buff->len < 64)
-		oa_frame->len = 64;
+	if (eth_buff->len < 60)
+		oa_frame->len = 60;
 	else
 		oa_frame->len = eth_buff->len;
+
+	memcpy(&oa_frame->data[frame_offset], eth_buff->payload,
+	       eth_buff->len - ADIN1140_ETH_HDR_LEN);
 
 	oa_frame->vs = 0;
 
@@ -439,11 +439,14 @@ int adin1140_read_fifo(struct adin1140_desc *desc,
 {
 	struct oa_tc6_frame_buffer *frame;
 	uint32_t field_offset = 0;
+	uint32_t reg_val;
 	int ret;
 
 	ret = oa_tc6_get_rx_frame(desc->oa_desc, &frame);
 	if (ret)
 		return ret;
+
+	ret = oa_tc6_reg_read(desc->oa_desc, 0xB, &reg_val);
 
 	memcpy(&eth_buff->mac_dest[0], &frame->data[field_offset],
 	       ADIN1140_ETH_HDR_LEN);
@@ -465,10 +468,10 @@ void adin1140_set_irq_flag(struct adin1140_desc *desc)
 
 int adin1140_poll(struct adin1140_desc *desc)
 {
-	if (!desc->irq_pending)
-		return 0;
+	// if (!desc->irq_pending)
+		// return 0;
 
-	desc->irq_pending = false;
+	// desc->irq_pending = false;
 
 	return oa_tc6_thread(desc->oa_desc);
 }
@@ -697,6 +700,7 @@ int adin1140_init(struct adin1140_desc **desc,
 {
 	struct oa_tc6_init_param oa_param;
 	struct adin1140_desc *d;
+	uint32_t reg_val;
 	int ret;
 
 	if (!param->mac_address)
@@ -735,6 +739,8 @@ int adin1140_init(struct adin1140_desc **desc,
 				  ADIN1140_CONFIG0_SYNC);
 	if (ret)
 		goto free_oa;
+
+	adin1140_set_promisc(d, true);
 
 	*desc = d;
 

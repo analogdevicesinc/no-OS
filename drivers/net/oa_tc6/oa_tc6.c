@@ -69,11 +69,13 @@ static void oa_tc6_prepare_rx_ctrl(struct oa_tc6_desc *desc, uint32_t addr)
 {
 	uint32_t header;
 
+	memset(desc->ctrl_chunks_tx, 0, OA_SPI_CTRL_LEN);
+
 	header = no_os_field_prep(OA_CTRL_ADDR_MMS_MASK, addr);
 	header |= no_os_field_prep(OA_CTRL_AID_MASK, 1);
 	header |= oa_tc6_crc1(header);
 
-	no_os_put_unaligned_be32(header, desc->ctrl_chunks);
+	no_os_put_unaligned_be32(header, desc->ctrl_chunks_tx);
 	desc->ctrl_rx_credit++;
 }
 
@@ -93,12 +95,12 @@ static void oa_tc6_prepare_tx_ctrl(struct oa_tc6_desc *desc, uint32_t addr,
 	header |= no_os_field_prep(OA_CTRL_WNR_MASK, 1);
 	header |= oa_tc6_crc1(header);
 
-	no_os_put_unaligned_be32(header, desc->ctrl_chunks);
-	no_os_put_unaligned_be32(val, &desc->ctrl_chunks[OA_HEADER_LEN]);
+	no_os_put_unaligned_be32(header, desc->ctrl_chunks_tx);
+	no_os_put_unaligned_be32(val, &desc->ctrl_chunks_tx[OA_HEADER_LEN]);
 
 	if (desc->prote_spi) {
 		no_os_put_unaligned_be32(val ^ NO_OS_GENMASK(31, 0),
-					 &desc->ctrl_chunks[OA_HEADER_LEN + OA_REG_LEN]);
+					 &desc->ctrl_chunks_tx[OA_HEADER_LEN + OA_REG_LEN]);
 	}
 
 	desc->ctrl_tx_credit++;
@@ -109,8 +111,8 @@ static int oa_tc6_do_ctrl_transfer(struct oa_tc6_desc *desc)
 	struct no_os_spi_msg xfer = {0};
 
 	if (desc->ctrl_rx_credit || desc->ctrl_tx_credit) {
-		xfer.tx_buff = desc->ctrl_chunks;
-		xfer.rx_buff = desc->ctrl_chunks;
+		xfer.tx_buff = desc->ctrl_chunks_tx;
+		xfer.rx_buff = desc->ctrl_chunks_rx;
 		xfer.cs_change = 1;
 
 		if (desc->prote_spi)
@@ -138,11 +140,11 @@ static int __oa_tc6_reg_read(struct oa_tc6_desc *desc, uint32_t addr,
 	if (ret)
 		return ret;
 
-	*val = no_os_get_unaligned_be32(&desc->ctrl_chunks[2 * OA_HEADER_LEN]);
+	*val = no_os_get_unaligned_be32(&desc->ctrl_chunks_rx[2 * OA_HEADER_LEN]);
 	desc->ctrl_rx_credit = 0;
 
 	if (desc->prote_spi) {
-		comp_val = no_os_get_unaligned_be32(&desc->ctrl_chunks[3 * OA_HEADER_LEN]);
+		comp_val = no_os_get_unaligned_be32(&desc->ctrl_chunks_rx[3 * OA_HEADER_LEN]);
 		if (*val != (comp_val ^ NO_OS_GENMASK(31, 0)))
 			return -EINVAL;
 	}
@@ -716,6 +718,7 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 	uint32_t tx_chunks_avail = 0;
 	uint32_t rx_limit = 0;
 	uint32_t bytes_total;
+	uint32_t reg_val;
 	int ret;
 
 	struct oa_tc6_frame_buffer *frame_buffer;
@@ -739,6 +742,7 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 
 		xfer.tx_buff = desc->data_chunks;
 		xfer.rx_buff = desc->data_chunks;
+		xfer.cs_change = 1;
 		xfer.bytes_number = bytes_total;
 
 		ret = no_os_spi_transfer(desc->comm_desc, &xfer, 1);
@@ -768,7 +772,7 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 unlock:
 	no_os_mutex_unlock(desc->data_lock);
 
-	return ret;
+	return 0;
 }
 
 /**
