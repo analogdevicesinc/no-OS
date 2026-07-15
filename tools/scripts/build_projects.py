@@ -110,35 +110,9 @@ def shell_source(script):
 
 	os.environ.update(env)
 
-def re_run_stm32(cmd):
-	global ERR
-	log("Project first failed, rebuild to check if the error persists")
-	log("make reset")
-	cmd_reset = cmd.replace("all", "reset")
-	err = os.system(cmd_reset + ' >> %s 2>&1' % log_file)
-	if err != 0:
-		ERR = 1
-		log_err("ERROR")
-		return err
-
-	log("make all")
-	err = os.system(cmd + ' >> %s 2>&1' % log_file)
-	if err != 0:
-		log("Error persits, not a random fail, please check!")
-	else:
-		log("First fail was possibly a random one")
-	return err
-
 def run_cmd(cmd):
 	global ERR
-	tmp = cmd.split(' ')
-	if tmp[0] == 'make':
-		log('make ' + tmp[-1])
-	else:
-		if tmp[2] == 'make':
-			log('make ' + tmp[-1])
-		else:
-			log(cmd)
+	log(cmd)
 	sys.stdout.flush()
 	err = os.system('echo %s >> %s' % (cmd, log_file))
 	if err != 0:
@@ -146,11 +120,6 @@ def run_cmd(cmd):
 		return err
 	err = os.system(cmd + ' >> %s 2>&1' % log_file)
 	if err != 0:
-		if 'timeout' in cmd:
-			err = re_run_stm32(cmd)
-			if err == 0:
-				return err
-
 		log_err("ERROR")
 		log("See log %s " \
 		    "-- Use cat (linux) or type (windows) to see colored output"
@@ -280,99 +249,6 @@ def get_hardware(hardware, platform, builds_dir):
 	log("Hardware changed from last build")
 
 	return (filename, 1, err)
-
-class BuildConfig:
-	def __init__(self, project_dir, platform, flags, build_name, hardware,
-	             _builds_dir, log_dir):
-		self.project_dir = project_dir
-		self.builds_dir = _builds_dir
-		self.log_dir = log_dir
-		self.project = os.path.basename(project_dir)
-		self.platform = platform
-		self.flags = flags
-		self.build_name = build_name
-		self.hardware = hardware
-		short_build_dir = 'build_%s' % platform
-		self._binary = "%s_%s_%s.elf" % (self.project, platform, build_name)
-		self.boot_dir = "%s_%s_%s" % (self.project, platform, build_name)
-		if hardware != '':
-			short_build_dir = short_build_dir + '_' + hardware
-			self._binary = "%s_%s_%s_%s.elf" % (
-				self.project, platform, build_name, hardware)
-			self.boot_dir = "%s_%s_%s_%s" % (
-				self.project, platform, build_name, hardware)
-		if (platform == 'stm32'):
-			self.build_dir = os.path.join(self.project_dir, 'build')
-		else:
-			self.build_dir = os.path.join(self.builds_dir, short_build_dir)
-		self.binary = os.path.join(self.build_dir, self._binary)
-		self.export_file = os.path.join(self.build_dir, self.binary)
-		if (platform == 'aducm3029' or platform == 'stm32' or platform == 'maxim'):
-			self.export_elf_file = self.export_file
-			self.export_file = self.export_file.replace('.elf', '.hex')
-		if (platform == 'xilinx'):
-			self.export_boot_bin = os.path.join(self.build_dir, "output_boot_bin/BOOT.BIN")
-			self.export_archive = os.path.join(self.build_dir, "bootgen_sysfiles.tar.gz")
-
-	def build(self):
-		global log_file
-	
-		log_file = self._binary.replace('.elf', '.txt')
-		log_file = os.path.join(self.log_dir, log_file)
-
-		log_str = "Building %10s (%8s) -- %s " % (
-			to_blue(self.project), to_blue(self.build_name), to_blue(self.platform))
-		if self.hardware != '':
-			log_str = log_str + "-- %20s" % to_blue(self.hardware)	
-		log(log_str)
-
-		cmd = "make -C " + self.project_dir + \
-			" PLATFORM=" + self.platform + \
-			" BUILD_DIR=" + self.build_dir + \
-			" BINARY=" + self.binary + \
-			" LOCAL_BUILD=n" + \
-			" LINK_SRCS=y " + self.flags
-			
-		if self.hardware != '':
-			(hardware_file, new_hdf, err) = get_hardware(self.hardware,
-						self.platform, self.builds_dir)
-			if err != 0:
-				return err
-			cmd = cmd + ' HARDWARE=%s' % hardware_file
-		else:
-			if os.path.isdir(self.build_dir):
-				new_hdf = False
-			else:
-				new_hdf = True
-		if self.platform == 'stm32':
-			err = run_cmd(cmd + ' reset')
-			if err != 0:
-				return err
-			err = run_cmd("timeout 200s " + cmd + ' VERBOSE=y -j%d all' % (multiprocessing.cpu_count() / 2))
-			if err != 0:
-				if err == 124:
-					log("Build not finished, stopped by timeout")
-				return err
-		else:
-			if new_hdf:
-				err = run_cmd(cmd + ' reset')
-				if err != 0:
-					return err
-
-			err = run_cmd(cmd + ' update')
-			if err != 0:
-				return err
-			err = run_cmd(cmd + ' clean')
-			if err != 0:
-				return err
-			err = run_cmd(cmd + ' -j%d all' % (multiprocessing.cpu_count() / 2))
-			if err != 0:
-				return err
-		
-		log_success("DONE")
-		log_file = DEFAULT_LOG_FILE
-
-		return 0
 
 def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 			log_dir, cmake_builds_dir, builds_dir):
@@ -539,120 +415,27 @@ def main():
 	ensure_dir(log_dir)
 	(builds_dir, blacklist) = configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch)
 	for project in os.listdir(projets):
-		binary_created = False
 		if _project is not None:
 			if _project != project:
 				continue
 		project_dir = os.path.join(projets, project)
-		build_file = os.path.join(project_dir, 'builds.json')
-		# A project can have a CMakeLists.txt (Maxim/STM32 via CMake), a
-		# builds.json (other platforms via legacy make), or both. The two are
-		# detected independently rather than keying solely on builds.json.
-		has_cmake = os.path.isfile(os.path.join(project_dir, 'CMakeLists.txt'))
-		has_builds = os.path.isfile(build_file)
-		if not has_cmake and not has_builds:
+		# CMake is the only build system; skip projects without a CMakeLists.txt.
+		if not os.path.isfile(os.path.join(project_dir, 'CMakeLists.txt')):
 			continue
 
 		all_status = os.path.join(log_dir, 'all_builds.txt')
 
-		# CMake/Kconfig side: the Maxim/STM32 combos discovered from the board
-		# presets. build_cmake_project filters to CMAKE_PLATFORMS internally and
-		# returns None when the current -platform job has nothing to build here.
-		if has_cmake:
-			cmake_builds_dir = builds_dir + '_cmake'
-			ensure_dir(cmake_builds_dir)
-			cmake_ok = build_cmake_project(noos, project, _platform, _build_name,
-						 export_dir, log_dir, cmake_builds_dir, builds_dir)
-			if cmake_ok is not None:
-				status = 'OK' if cmake_ok == 1 else 'Fail'
-				os.system('echo Project %20s -- %s >> %s' % (project, status, all_status))
+		# CMake/Kconfig side: combos discovered from the board presets.
+		# build_cmake_project filters to CMAKE_PLATFORMS internally and returns
+		# None when the current -platform job has nothing to build here.
+		cmake_builds_dir = builds_dir + '_cmake'
+		ensure_dir(cmake_builds_dir)
+		cmake_ok = build_cmake_project(noos, project, _platform, _build_name,
+					 export_dir, log_dir, cmake_builds_dir, builds_dir)
+		if cmake_ok is not None:
+			status = 'OK' if cmake_ok == 1 else 'Fail'
+			os.system('echo Project %20s -- %s >> %s' % (project, status, all_status))
 
-		if not has_builds:
-			continue
-
-		fp = open(build_file)
-		configs = json.loads(fp.read())
-		ok = 1
-		legacy_ran = False
-		for (platform, config) in configs.items():
-			if _platform is not None:
-				if _platform != platform:
-					continue
-			for (build_name, params) in config.items():
-				if _build_name is not None:
-					if _build_name != build_name:
-						continue
-				project_export = os.path.join(export_dir, project)
-				ensure_dir(project_export)
-				flags = params['flags']
-				if 'hardware' in params:
-					hardwares = params['hardware']
-				else:
-					hardwares = [""]
-				
-				for hardware in hardwares:
-					if _hw is not None:
-						if _hw != hardware:
-							continue
-					if hardware in blacklist:
-						continue
-					legacy_ran = True
-					env = dict(os.environ)
-					shell_source(environment_path_files + platform + "_environment.sh")
-
-					new_build = BuildConfig(project_dir,
-								platform,
-								flags,
-								build_name,
-								hardware,
-								builds_dir,
-								log_dir)
-					err = new_build.build()
-					os.environ.clear()
-					os.environ.update(env)
-					if err != 0:
-						ok = 0
-						if err == 2:
-							#Keyboard interrupt
-							exit()
-						continue
-					else:
-						if platform == 'xilinx':
-							project_export_dir = os.path.join(project_export, new_build.boot_dir)
-							ensure_dir(project_export_dir)
-							run_cmd("cp %s %s" %
-								(new_build.export_archive, project_export_dir))
-							file = open(os.path.join(new_build.build_dir,"tmp/arch.txt"))
-							if 'sys_mb' not in file.read(): #for sys_mb no BOOT.BIN is created
-								run_cmd("cp %s %s" %
-									(new_build.export_boot_bin, project_export_dir))
-							binary_created = True
-						else:
-							run_cmd("cp %s %s" %
-								(new_build.export_file, project_export))
-							run_cmd("cp %s %s" %
-								(new_build.export_elf_file, project_export))
-							binary_created = True
-			
-		fp.close()
-
-		# Nothing in builds.json matched this -platform job (e.g. a hybrid
-		# project whose only match was the CMake side handled above): don't
-		# emit a misleading legacy status line.
-		if not legacy_ran:
-			continue
-
-		if ok == 1:
-			status = 'OK'
-		else:
-			status = 'Fail'
-		os.system('echo Project %20s -- %s >> %s' % (project, status, all_status))
-		if binary_created:
-			cwd = os.getcwd()
-			os.chdir(project_export)
-			os.system("zip -mr -FS %s.zip . >> %s 2>&1" % ("../"+project, "../../"+log_file))
-			os.chdir(cwd)
-			run_cmd("rm -r %s" % project_export)
 main()
 
 if ERR != 0:
