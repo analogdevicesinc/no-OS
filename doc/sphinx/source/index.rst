@@ -26,6 +26,7 @@ Contents
    architecture
    iio_framework
    drivers_guide
+   porting_guide
    drivers_doc
    projects_doc
    build_guide
