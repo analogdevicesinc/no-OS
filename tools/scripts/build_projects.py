@@ -15,6 +15,7 @@ from pathlib import Path
 # Discovery helpers for the CMake build system. no_os_build.py guards its CLI
 # under "if __name__ == '__main__':", so importing it has no side effects.
 from no_os_build import (
+	CMAKE,
 	load_presets,
 	discover_all_combinations,
 	filter_combinations,
@@ -452,7 +453,8 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		# repo root, which would not match the build_dir we clean/probe here.
 		# Xilinx: keep the cached BSP, clean only objects unless the .xsa changed.
 		if platform == 'xilinx' and build_dir.exists() and not new_hdf:
-			clean_cmd = "cmake --build %s --target clean > /dev/null 2>&1" % build_dir
+			# CMAKE, not bare 'cmake': the sourced xilinx env leads PATH with Vitis's broken one.
+			clean_cmd = "%s --build %s --target clean > /dev/null 2>&1" % (CMAKE, build_dir)
 			os.system(clean_cmd)
 			fresh_flag = ""
 		else:
