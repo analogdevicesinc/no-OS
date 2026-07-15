@@ -67,6 +67,7 @@ Contents
    projects_doc
    build_guide
    cmake_cheatsheet
+   configuration_guide
    contributing
 
 Additional resources
