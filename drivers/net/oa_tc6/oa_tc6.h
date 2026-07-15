@@ -39,11 +39,11 @@
 #include <stdint.h>
 
 #ifndef CONFIG_OA_TX_FRAME_BUFF_NUM
-#define CONFIG_OA_TX_FRAME_BUFF_NUM	2
+#define CONFIG_OA_TX_FRAME_BUFF_NUM	10
 #endif
 
 #ifndef CONFIG_OA_RX_FRAME_BUFF_NUM
-#define CONFIG_OA_RX_FRAME_BUFF_NUM	5
+#define CONFIG_OA_RX_FRAME_BUFF_NUM	10
 #endif
 
 #ifndef CONFIG_OA_CHUNK_BUFFER_SIZE
@@ -223,7 +223,8 @@ struct oa_tc6_flags {
  */
 struct oa_tc6_desc {
 	struct no_os_spi_desc *comm_desc;
-	uint8_t ctrl_chunks[OA_SPI_CTRL_LEN];
+	uint8_t ctrl_chunks_tx[OA_SPI_CTRL_LEN];
+	uint8_t ctrl_chunks_rx[OA_SPI_CTRL_LEN];
 	uint8_t data_chunks[OA_SPI_BUFF_LEN];
 	void *ctrl_lock;
 	void *data_lock;

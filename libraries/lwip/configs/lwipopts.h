@@ -33,7 +33,7 @@
 #define LWIP_LWIPOPTS_H
 
 /* NO_SYS==1: Use lwIP without OS-awareness (no thread and etc.) */
-#define NO_SYS                     		1
+#define NO_SYS                     		0
 #define LWIP_SOCKET                		0
 #define LWIP_NETCONN               		0
 #define LWIP_NETIF_API             		0
@@ -175,5 +175,15 @@ a lot of data that needs to be copied, this should be set high. */
 
 /* ---------- RAW Options ---------- */
 #define LWIP_RAW                		1
+
+#define LWIP_PROVIDE_ERRNO 1
+
+/* Use sys_now() from lwip_socket.c (no_os_get_time), not FreeRTOS tick counter */
+#define LWIP_FREERTOS_SYS_NOW_FROM_FREERTOS 0
+
+/* ERR_NEED_SCHED was added after STABLE-2_2_1; define it for the FreeRTOS port */
+#ifndef ERR_NEED_SCHED
+#define ERR_NEED_SCHED ERR_OK
+#endif
 
 #endif /* LWIP_LWIPOPTS_H */

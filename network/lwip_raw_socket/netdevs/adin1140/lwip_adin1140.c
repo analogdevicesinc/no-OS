@@ -87,6 +87,9 @@ static int adin1140_read_frames(struct adin1140_desc *desc, struct pbuf **p,
 	if (!*p)
 		return -ENOMEM;
 
+	printf("RX %d bytes from %X:%X:%X:%X:%X:%X\n", *len, mac_buff.mac_source[0], mac_buff.mac_source[1],
+	mac_buff.mac_source[2], mac_buff.mac_source[3], mac_buff.mac_source[4], mac_buff.mac_source[5]);
+
 	pbuf_take(*p, lwip_buff, mac_buff.len);
 
 	return 0;
@@ -154,6 +157,12 @@ static int32_t adin1140_netif_output(struct netif *net, struct pbuf *p)
 
 	buff.len = frame_len;
 	buff.payload = &lwip_buff[ADIN1140_ETH_HDR_LEN];
+
+	printf("TX %d bytes to %X:%X:%X:%X:%X:%X\n", buff.len, buff.mac_dest[0], buff.mac_dest[1],
+	       buff.mac_dest[2], buff.mac_dest[3], buff.mac_dest[4], buff.mac_dest[5]);
+
+	printf("TX %d bytes from %X:%X:%X:%X:%X:%X\n", buff.len, buff.mac_source[0], buff.mac_source[1],
+	       buff.mac_source[2], buff.mac_source[3], buff.mac_source[4], buff.mac_source[5]);
 
 	return adin1140_write_fifo(mac_desc, &buff);
 }

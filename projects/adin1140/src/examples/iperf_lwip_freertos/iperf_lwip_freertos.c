@@ -63,6 +63,8 @@ static void adin1140_irq_cb(void *ctx)
 	struct adin1140_net_data *data = ctx;
 	BaseType_t higher_prio_woken = pdFALSE;
 
+	printf("IRQ\n");
+
 	adin1140_set_irq_flag(data->adin1140);
 
 	no_os_irq_disable(data->gpio_irq, ADIN1140_INT_PIN);
@@ -100,7 +102,7 @@ static int setup_interrupt(struct adin1140_net_data *data)
 	struct no_os_irq_init_param gpio_irq_ip = {
 		.irq_ctrl_id = ADIN1140_INT_IRQ_ID,
 		.platform_ops = ADIN1140_INT_IRQ_OPS,
-		.extra = NULL,
+		.extra = ADIN1140_INT_IRQ_EXTRA,
 	};
 	struct no_os_callback_desc gpio_cb = {
 		.callback = adin1140_irq_cb,
@@ -127,17 +129,17 @@ static int setup_interrupt(struct adin1140_net_data *data)
 	no_os_irq_set_priority(data->nvic, SysTick_IRQn, 1);
 
 	ret = no_os_irq_trigger_level_set(data->gpio_irq, ADIN1140_INT_PIN,
-					  NO_OS_IRQ_LEVEL_LOW);
+					  NO_OS_IRQ_EDGE_FALLING);
 	if (ret)
 		return ret;
 
-	ret = no_os_irq_enable(data->gpio_irq, ADIN1140_INT_PIN);
-	if (ret)
-		return ret;
+	// ret = no_os_irq_enable(data->gpio_irq, ADIN1140_INT_PIN);
+	// if (ret)
+	// 	return ret;
 
-	ret = no_os_irq_enable(data->nvic, ADIN1140_INT_GPIO_IRQn);
-	if (ret)
-		return ret;
+	// ret = no_os_irq_enable(data->nvic, ADIN1140_INT_GPIO_IRQn);
+	// if (ret)
+	// 	return ret;
 
 	return 0;
 }
@@ -171,23 +173,23 @@ static void net_task(void *param)
 
 	data->adin1140 = data->lwip->mac_desc;
 
-	ret = setup_interrupt(data);
-	if (ret) {
-		pr_info("setup_interrupt failed: %d\n", ret);
-		vTaskDelete(NULL);
-		return;
-	}
+	// ret = setup_interrupt(data);
+	// if (ret) {
+	// 	pr_info("setup_interrupt failed: %d\n", ret);
+	// 	vTaskDelete(NULL);
+	// 	return;
+	// }
 
 	pr_info("Starting lwiperf server on port %d\n",
 		LWIPERF_TCP_PORT_DEFAULT);
 	lwiperf_start_tcp_server_default(lwiperf_report, NULL);
 
 	while (1) {
-		ulTaskNotifyTake(pdTRUE, 0xFFFFFFFF);
+		// ulTaskNotifyTake(pdTRUE, 0xFFFFFFFF);
 
 		no_os_lwip_step(data->lwip, NULL);
 
-		no_os_irq_enable(data->gpio_irq, ADIN1140_INT_PIN);
+		// no_os_irq_enable(data->gpio_irq, ADIN1140_INT_PIN);
 	}
 }
 

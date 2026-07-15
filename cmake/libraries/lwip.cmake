@@ -45,4 +45,15 @@ target_compile_definitions(no-os PUBLIC -DDISABLE_SECURE_SOCKET=1)
 
 target_link_libraries(no-os PUBLIC lwipallapps lwipcore)
 
+# Wire in FreeRTOS sys_arch port when FreeRTOS is also enabled
+if(CONFIG_FREERTOS)
+    target_sources(lwipcore PRIVATE
+        ${LWIP_SOURCE_DIR}/contrib/ports/freertos/sys_arch.c
+    )
+    target_include_directories(lwipcore PUBLIC
+        ${LWIP_SOURCE_DIR}/contrib/ports/freertos/include
+    )
+    target_link_libraries(lwipcore PUBLIC freertos_kernel)
+endif()
+
 message(STATUS "lwIP configured from: ${LWIP_SOURCE_DIR}")

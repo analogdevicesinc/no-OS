@@ -69,11 +69,13 @@ static void oa_tc6_prepare_rx_ctrl(struct oa_tc6_desc *desc, uint32_t addr)
 {
 	uint32_t header;
 
+	memset(desc->ctrl_chunks_tx, 0, OA_SPI_CTRL_LEN);
+
 	header = no_os_field_prep(OA_CTRL_ADDR_MMS_MASK, addr);
 	header |= no_os_field_prep(OA_CTRL_AID_MASK, 1);
 	header |= oa_tc6_crc1(header);
 
-	no_os_put_unaligned_be32(header, desc->ctrl_chunks);
+	no_os_put_unaligned_be32(header, desc->ctrl_chunks_tx);
 	desc->ctrl_rx_credit++;
 }
 
@@ -93,12 +95,12 @@ static void oa_tc6_prepare_tx_ctrl(struct oa_tc6_desc *desc, uint32_t addr,
 	header |= no_os_field_prep(OA_CTRL_WNR_MASK, 1);
 	header |= oa_tc6_crc1(header);
 
-	no_os_put_unaligned_be32(header, desc->ctrl_chunks);
-	no_os_put_unaligned_be32(val, &desc->ctrl_chunks[OA_HEADER_LEN]);
+	no_os_put_unaligned_be32(header, desc->ctrl_chunks_tx);
+	no_os_put_unaligned_be32(val, &desc->ctrl_chunks_tx[OA_HEADER_LEN]);
 
 	if (desc->prote_spi) {
 		no_os_put_unaligned_be32(val ^ NO_OS_GENMASK(31, 0),
-					 &desc->ctrl_chunks[OA_HEADER_LEN + OA_REG_LEN]);
+					 &desc->ctrl_chunks_tx[OA_HEADER_LEN + OA_REG_LEN]);
 	}
 
 	desc->ctrl_tx_credit++;
@@ -109,8 +111,8 @@ static int oa_tc6_do_ctrl_transfer(struct oa_tc6_desc *desc)
 	struct no_os_spi_msg xfer = {0};
 
 	if (desc->ctrl_rx_credit || desc->ctrl_tx_credit) {
-		xfer.tx_buff = desc->ctrl_chunks;
-		xfer.rx_buff = desc->ctrl_chunks;
+		xfer.tx_buff = desc->ctrl_chunks_tx;
+		xfer.rx_buff = desc->ctrl_chunks_rx;
 		xfer.cs_change = 1;
 
 		if (desc->prote_spi)
@@ -138,13 +140,15 @@ static int __oa_tc6_reg_read(struct oa_tc6_desc *desc, uint32_t addr,
 	if (ret)
 		return ret;
 
-	*val = no_os_get_unaligned_be32(&desc->ctrl_chunks[2 * OA_HEADER_LEN]);
+	*val = no_os_get_unaligned_be32(&desc->ctrl_chunks_rx[2 * OA_HEADER_LEN]);
 	desc->ctrl_rx_credit = 0;
 
 	if (desc->prote_spi) {
-		comp_val = no_os_get_unaligned_be32(&desc->ctrl_chunks[3 * OA_HEADER_LEN]);
-		if (*val != (comp_val ^ NO_OS_GENMASK(31, 0)))
+		comp_val = no_os_get_unaligned_be32(&desc->ctrl_chunks_rx[3 * OA_HEADER_LEN]);
+		if (*val != (comp_val ^ NO_OS_GENMASK(31, 0))) {
+			printf("0x%X != 0x%X\n", *val, (comp_val ^ NO_OS_GENMASK(31, 0)));
 			return -EINVAL;
+		}
 	}
 
 	return 0;
@@ -161,9 +165,9 @@ int oa_tc6_reg_read(struct oa_tc6_desc *desc, uint32_t addr, uint32_t *val)
 {
 	int ret;
 
-	no_os_mutex_lock(desc->ctrl_lock);
+	// no_os_mutex_lock(desc->ctrl_lock);
 	ret = __oa_tc6_reg_read(desc, addr, val);
-	no_os_mutex_unlock(desc->ctrl_lock);
+	// no_os_mutex_unlock(desc->ctrl_lock);
 
 	return ret;
 }
@@ -197,9 +201,9 @@ int oa_tc6_reg_write(struct oa_tc6_desc *desc, uint32_t addr, uint32_t val)
 {
 	int ret;
 
-	no_os_mutex_lock(desc->ctrl_lock);
+	// no_os_mutex_lock(desc->ctrl_lock);
 	ret = __oa_tc6_reg_write(desc, addr, val);
-	no_os_mutex_unlock(desc->ctrl_lock);
+	// no_os_mutex_unlock(desc->ctrl_lock);
 
 	return ret;
 }
@@ -378,6 +382,8 @@ int oa_tc6_get_rx_frame(struct oa_tc6_desc *desc,
 			*buffer = &desc->user_rx_frame_buffer[i];
 			desc->user_rx_frame_buffer[i].state = OA_BUFF_RX_USER_OWNED;
 
+			printf("valid frame found\n");
+
 			return 0;
 		}
 	}
@@ -548,6 +554,8 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 			continue;
 		}
 
+		printf("Error bits: extst %d hdrb %d\n", desc->xfer_flags.exst, desc->xfer_flags.hdrb);
+
 		if (sv && ev) {
 			if (sbo > ebo) {
 				/* There are 2 frames in the current chunk. Finish the existing. */
@@ -716,16 +724,39 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 	uint32_t tx_chunks_avail = 0;
 	uint32_t rx_limit = 0;
 	uint32_t bytes_total;
+	uint32_t reg_val;
 	int ret;
 
 	struct oa_tc6_frame_buffer *frame_buffer;
 	struct no_os_spi_msg xfer = {0};
 
-	no_os_mutex_lock(desc->data_lock);
+	// no_os_mutex_lock(desc->data_lock);
+
+	static bool once = false;
+	if (!once) {
+		once = true;
+		ret = __oa_tc6_reg_read(desc, OA_TC6_PHY_STD_REG(0x00), &reg_val);
+		printf("PHY_STD_CTRL=0x%04x LINKCTL=%d LOOP=%d COLTEST=%d\n",
+		       reg_val, !!(reg_val & NO_OS_BIT(12)),
+		       !!(reg_val & NO_OS_BIT(14)), !!(reg_val & NO_OS_BIT(7)));
+		ret = __oa_tc6_reg_read(desc, OA_TC6_CONFIG0_REG, &reg_val);
+		printf("MAC_CONFIG0=0x%08x SYNC=%d CPS=%d\n",
+		       reg_val, !!(reg_val & NO_OS_BIT(15)), (int)(reg_val & 7));
+		/* Correct PLCA regs: MMS4 */
+		ret = __oa_tc6_reg_read(desc, OA_MMS_REG(0x4, 0xCA01), &reg_val);
+		printf("PLCA_CTRL0=0x%08x PLCAEN=%d\n",
+		       reg_val, !!(reg_val & NO_OS_BIT(15)));
+		ret = __oa_tc6_reg_read(desc, OA_MMS_REG(0x1, 0x00C2), &reg_val);
+		printf("MAC_DUPLEX=0x%08x\n", reg_val);
+		ret = __oa_tc6_reg_read(desc, OA_MMS_REG(0x1, 0x00C3), &reg_val);
+		printf("MAC_MAX_RETRY=0x%08x\n", reg_val);
+	}
 
 	ret = oa_tc6_update_stats(desc);
-	if (ret)
+	if (ret) {
+		printf("Unlock %d\n", ret);
 		goto unlock;
+	}
 
 	if (desc->data_tx_credit) {
 		ret = oa_tc6_get_first_tx_frame(desc, &frame_buffer);
@@ -739,8 +770,10 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 
 		xfer.tx_buff = desc->data_chunks;
 		xfer.rx_buff = desc->data_chunks;
+		xfer.cs_change = 1;
 		xfer.bytes_number = bytes_total;
 
+		printf("oa_tc6_thread() %d chunks available\n", desc->data_rx_credit);
 		ret = no_os_spi_transfer(desc->comm_desc, &xfer, 1);
 		if (ret) {
 			memset(desc->data_chunks, 0, bytes_total);
@@ -748,10 +781,43 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 			goto unlock;
 		}
 
+		/* Raw footer decode: EXST(31) HDRB(30) SYNC(29) TXC(5:1) */
+		{
+			uint32_t f = no_os_get_unaligned_be32(
+				&desc->data_chunks[OA_CHUNK_SIZE]);
+			printf("footer=0x%08x EXST=%d HDRB=%d SYNC=%d TXC=%d\n",
+			       f, (f >> 31) & 1, (f >> 30) & 1,
+			       (f >> 29) & 1, (f >> 1) & 0x1f);
+		}
+
 		ret = oa_tc6_rx_chunk_to_frame(desc, desc->data_chunks,
 					       bytes_total / (OA_CHUNK_SIZE + OA_HEADER_LEN));
 		if (ret)
 			goto unlock;
+
+		/* MAC_STATUS0/1 and TX counters */
+		ret = __oa_tc6_reg_read(desc, OA_TC6_STATUS0_REG, &reg_val);
+		if (!ret && reg_val)
+			printf("STATUS0=0x%08x TXFCSE=%d HDRE=%d\n",
+			       reg_val, !!(reg_val & NO_OS_BIT(11)),
+			       !!(reg_val & NO_OS_BIT(5)));
+		ret = __oa_tc6_reg_read(desc, OA_TC6_STATUS1_REG, &reg_val);
+		if (!ret && reg_val)
+			printf("STATUS1=0x%08x MAX_RR=%d\n",
+			       reg_val, !!(reg_val & NO_OS_BIT(9)));
+		/* MAC_TX_FRM_CNT (MMS1, 0xB1) and MAC_TX_UNR_CNT (MMS1, 0xBA) */
+		ret = __oa_tc6_reg_read(desc, OA_MMS_REG(0x1, 0x00B1), &reg_val);
+		if (!ret)
+			printf("TX_FRM=%u\n", (unsigned)reg_val);
+		ret = __oa_tc6_reg_read(desc, OA_MMS_REG(0x1, 0x00BA), &reg_val);
+		if (!ret && reg_val)
+			printf("TX_UNR=%u\n", (unsigned)reg_val);
+		ret = __oa_tc6_reg_read(desc, OA_MMS_REG(0x1, 0x00B9), &reg_val);
+		if (!ret && reg_val)
+			printf("TX_XSCOL=%u\n", (unsigned)reg_val);
+		ret = __oa_tc6_reg_read(desc, OA_MMS_REG(0x1, 0x00B7), &reg_val);
+		if (!ret && reg_val)
+			printf("TX_DEFER=%u\n", (unsigned)reg_val);
 
 		ret = oa_tc6_get_first_tx_frame(desc, &frame_buffer);
 		if (!ret)
@@ -766,9 +832,9 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 	}
 
 unlock:
-	no_os_mutex_unlock(desc->data_lock);
+	// no_os_mutex_unlock(desc->data_lock);
 
-	return ret;
+	return 0;
 }
 
 /**
