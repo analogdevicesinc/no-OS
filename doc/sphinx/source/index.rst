@@ -60,6 +60,7 @@ Contents
 
    getting_started
    architecture
+   iio_framework
    drivers_guide
    drivers_doc
    projects_doc
