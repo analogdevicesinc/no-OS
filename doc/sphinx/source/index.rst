@@ -69,6 +69,7 @@ Contents
    cmake_cheatsheet
    configuration_guide
    contributing
+   troubleshooting
 
 Additional resources
 --------------------
