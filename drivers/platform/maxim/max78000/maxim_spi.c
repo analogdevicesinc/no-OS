@@ -44,6 +44,7 @@
 #include "no_os_alloc.h"
 #include "no_os_units.h"
 #include "no_os_dma.h"
+#include "no_os_gpio.h"
 
 #define SPI_MASTER_MODE	1
 #define SPI_SINGLE_MODE	0
@@ -218,9 +219,9 @@ static int _max_spi_config(struct no_os_spi_desc *desc)
 
 	mxc_spi_pins_t spi_pins_config = {
 		.clock = true,
-		.ss0 = (desc->chip_select == 0) ? true : false,
-		.ss1 = (desc->chip_select == 1) ? true : false,
-		.ss2 = (desc->chip_select == 2) ? true : false,
+		.ss0 = !eparam->gpio_cs && desc->chip_select == 0,
+		.ss1 = !eparam->gpio_cs && desc->chip_select == 1,
+		.ss2 = !eparam->gpio_cs && desc->chip_select == 2,
 		.miso = true,
 		.mosi = true,
 		.sdio2 = false,
@@ -260,6 +261,16 @@ err_init:
 	MXC_SPI_Shutdown(MXC_SPI_GET_SPI(desc->device_id));
 
 	return ret;
+}
+
+static int32_t max_spi_gpio_cs_set(struct no_os_spi_desc *desc, uint8_t value)
+{
+	struct max_spi_state *st = desc->extra;
+
+	if (!st->gpio_cs)
+		return 0;
+
+	return no_os_gpio_set_value(st->gpio_cs, value);
 }
 
 /**
@@ -327,9 +338,24 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 		_max_dma_set_req(descriptor);
 	}
 
+	if (eparam->gpio_cs) {
+		ret = no_os_gpio_get(&st->gpio_cs, eparam->gpio_cs);
+		if (ret)
+			goto err_dma;
+
+		ret = no_os_gpio_direction_output(st->gpio_cs, NO_OS_GPIO_HIGH);
+		if (ret)
+			goto err_gpio_cs;
+	}
+
 	*desc = descriptor;
 
 	return 0;
+err_gpio_cs:
+	no_os_gpio_remove(st->gpio_cs);
+err_dma:
+	if (st->dma)
+		no_os_dma_remove(st->dma);
 err:
 	no_os_free(st);
 	no_os_free(descriptor);
@@ -344,10 +370,17 @@ err:
  */
 int32_t max_spi_remove(struct no_os_spi_desc *desc)
 {
+	struct max_spi_state *st;
+
 	if (!desc)
 		return -EINVAL;
 
+	st = desc->extra;
 	MXC_SPI_Shutdown(MXC_SPI_GET_SPI(desc->device_id));
+	if (st->gpio_cs)
+		no_os_gpio_remove(st->gpio_cs);
+	if (st->dma)
+		no_os_dma_remove(st->dma);
 	no_os_free(desc->extra);
 	no_os_free(desc);
 
@@ -381,6 +414,9 @@ static int32_t max_config_dma_and_start(struct no_os_spi_desc *desc,
 	uint32_t slave_id;
 	size_t i = 0;
 	int32_t ret;
+
+	if (max_spi->gpio_cs)
+		return -ENOTSUP;
 
 	slave_id = desc->chip_select;
 	if (slave_id != last_slave_id[desc->device_id]) {
@@ -564,18 +600,24 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 			 struct no_os_spi_msg *msgs,
 			 uint32_t len)
 {
-	mxc_spi_regs_t *spi = MXC_SPI_GET_SPI(desc->device_id);
+	mxc_spi_regs_t *spi;
 	static uint32_t last_slave_id[MXC_SPI_INSTANCES];
+	struct max_spi_state *st;
 	uint32_t tx_cnt;
 	uint32_t rx_cnt;
+	bool use_gpio_cs;
 	bool rx_done = true;
 	bool tx_done = true;
 	uint32_t slave_id;
 	size_t i = 0;
 	int32_t ret;
 
-	if (!desc || !msgs)
+	if (!desc || !msgs || !desc->extra)
 		return -EINVAL;
+
+	spi = MXC_SPI_GET_SPI(desc->device_id);
+	st = desc->extra;
+	use_gpio_cs = st->gpio_cs;
 
 	slave_id = desc->chip_select;
 	if (slave_id != last_slave_id[desc->device_id]) {
@@ -586,10 +628,12 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 		last_slave_id[desc->device_id] = slave_id;
 	}
 
-	/* Assert CS desc->chip_select when the SPI transaction is started */
-	spi->ctrl0 &= ~MXC_F_SPI_CTRL0_SS_ACTIVE;
-	spi->ctrl0 |= no_os_field_prep(MXC_F_SPI_CTRL0_SS_ACTIVE,
-				       NO_OS_BIT(desc->chip_select));
+	if (!use_gpio_cs) {
+		/* Assert CS desc->chip_select when the SPI transaction is started */
+		spi->ctrl0 &= ~MXC_F_SPI_CTRL0_SS_ACTIVE;
+		spi->ctrl0 |= no_os_field_prep(MXC_F_SPI_CTRL0_SS_ACTIVE,
+					       NO_OS_BIT(desc->chip_select));
+	}
 
 	for (i = 0; i < len; i++) {
 		/* Flush the RX and TX FIFOs */
@@ -601,12 +645,18 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 		rx_cnt = 0;
 		tx_cnt = 0;
 
-		if (msgs[i].cs_change)
+		if (use_gpio_cs)
+			spi->ctrl0 |= MXC_F_SPI_CTRL0_SS_CTRL;
+		else if (msgs[i].cs_change)
 			spi->ctrl0 &= ~MXC_F_SPI_CTRL0_SS_CTRL;
 		else
 			spi->ctrl0 |= MXC_F_SPI_CTRL0_SS_CTRL;
 
 		_max_delay_config(desc, &msgs[i]);
+
+		ret = max_spi_gpio_cs_set(desc, NO_OS_GPIO_LOW);
+		if (ret)
+			return ret;
 
 		if (msgs[i].tx_buff) {
 			/* Set the transfer size in the TX direction */
@@ -651,6 +701,13 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 
 		/* Disable the RX and TX FIFOs */
 		spi->dma &= ~(MXC_F_SPI_DMA_TX_FIFO_EN | MXC_F_SPI_DMA_RX_FIFO_EN);
+
+		if (use_gpio_cs) {
+			no_os_udelay(msgs[i].cs_delay_last);
+			ret = max_spi_gpio_cs_set(desc, NO_OS_GPIO_HIGH);
+			if (ret)
+				return ret;
+		}
 
 		no_os_udelay(msgs[i].cs_change_delay);
 	}

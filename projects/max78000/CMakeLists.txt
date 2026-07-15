@@ -27,6 +27,23 @@ if(CONFIG_MAX78000_DUAL_CORE_EXAMPLE)
     )
 endif()
 
+# Single-core dual-IMU example (ADIS + ADXL345, ARM only)
+if(CONFIG_MAX78000_IMU_SINGLE_CORE_EXAMPLE)
+    target_sources(max78000 PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/imu_single_core/imu_single_core_example.c
+    )
+    target_include_directories(max78000 PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/imu_single_core
+    )
+    # adxl345.c, adis.c, and the selected ADIS family driver are compiled via
+    # CONFIG_ACCEL_ADXL345=y / CONFIG_IMU_ADIS=y / CONFIG_IMU_ADIS16xxx=y in
+    # the defconfig -- adding them here again would cause duplicate symbols.
+    # Redirect MXC_SYS_Reset_Periph to the RMW wrapper so MXC_SPI_Init() does
+    # not clobber RST1_SIMO when reinitializing SPI0 for the second device.
+    target_link_options(max78000 PRIVATE -Wl,--wrap=MXC_SYS_Reset_Periph)
+endif()
+
+
 target_include_directories(max78000 PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common
     ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}

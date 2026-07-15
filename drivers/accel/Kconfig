@@ -18,6 +18,11 @@ config ACCEL_IIO_ADXL313
     bool "Enable the ADXL313 IIO driver"
     default n
 
+config ACCEL_ADXL345
+    depends on SPI
+    bool "Enable the ADXL345 driver"
+    default n
+
 config ACCEL_ADXL355
     depends on SPI
     select GPIO
