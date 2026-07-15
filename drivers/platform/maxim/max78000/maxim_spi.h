@@ -1,12 +1,10 @@
-/***************************************************************************//**
+/* SPDX-License-Identifier: BSD-3-Clause */
+
+/**
  *   @file   maxim_spi.h
  *   @brief  maxim specific header for SPI driver
  *   @author Ciprian Regus (ciprian.regus@analog.com)
-********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
- *
- * SPDX-License-Identifier: BSD-3-Clause
-*******************************************************************************/
+ */
 
 #ifndef MAXIM_SPI_H_
 #define MAXIM_SPI_H_
@@ -16,6 +14,9 @@
 #include "no_os_spi.h"
 #include "no_os_dma.h"
 #include "maxim_dma.h"
+
+struct no_os_gpio_desc;
+struct no_os_gpio_init_param;
 
 /**
  * @brief maxim specific SPI platform ops structure
@@ -34,10 +35,12 @@ struct max_spi_init_param {
 	struct no_os_dma_init_param *dma_param;
 	uint32_t dma_rx_priority;
 	uint32_t dma_tx_priority;
+	struct no_os_gpio_init_param *gpio_cs;
 };
 
 struct max_spi_state {
 	struct max_spi_init_param *init_param;
+	struct no_os_gpio_desc *gpio_cs;
 	uint32_t cs_delay_first;
 	uint32_t cs_delay_last;
 	struct no_os_dma_desc *dma;
