@@ -48,6 +48,12 @@
 
 #define SPI_MASTER_MODE	1
 #define SPI_SINGLE_MODE	0
+/*
+ * Bounds the busy-wait loops in max_spi_transfer so a stuck SPI peripheral
+ * (never asserting RX-ready or MST_DONE) fails with -ETIMEDOUT instead of
+ * hanging the core forever.
+ */
+#define MAX_SPI_TIMEOUT_LOOPS 1000000u
 
 #define MAX_DELAY_SCLK	255
 #define NS_PER_US	1000
@@ -605,6 +611,7 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 	struct max_spi_state *st;
 	uint32_t tx_cnt;
 	uint32_t rx_cnt;
+	uint32_t timeout;
 	bool use_gpio_cs;
 	bool rx_done = true;
 	bool tx_done = true;
@@ -680,7 +687,12 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 		/* Start the transaction */
 		spi->ctrl0 |= MXC_F_SPI_CTRL0_START;
 
+		timeout = MAX_SPI_TIMEOUT_LOOPS;
 		while (!(rx_done && tx_done)) {
+			if (!--timeout) {
+				ret = -ETIMEDOUT;
+				goto err_xfer;
+			}
 			if (msgs[i].tx_buff && tx_cnt < msgs[i].bytes_number) {
 				tx_cnt += MXC_SPI_WriteTXFIFO(spi, &msgs[i].tx_buff[tx_cnt],
 							      msgs[i].bytes_number - tx_cnt);
@@ -694,7 +706,13 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 		}
 
 		/* Wait for the RX and TX FIFOs to empty */
-		while (!(spi->intfl & MXC_F_SPI_INTFL_MST_DONE));
+		timeout = MAX_SPI_TIMEOUT_LOOPS;
+		while (!(spi->intfl & MXC_F_SPI_INTFL_MST_DONE)) {
+			if (!--timeout) {
+				ret = -ETIMEDOUT;
+				goto err_xfer;
+			}
+		}
 
 		/* End the transaction */
 		spi->ctrl0 &= ~MXC_F_SPI_CTRL0_START;
@@ -713,6 +731,12 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 	}
 
 	return 0;
+
+err_xfer:
+	if (use_gpio_cs)
+		max_spi_gpio_cs_set(desc, NO_OS_GPIO_HIGH);
+
+	return ret;
 }
 
 /**
