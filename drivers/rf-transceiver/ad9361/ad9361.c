@@ -37,6 +37,7 @@
 #include <string.h>
 #include <inttypes.h>
 #include "ad9361.h"
+#include "ad9361_ext_band_ctrl.h"
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
 #include "no_os_delay.h"
@@ -2417,6 +2418,12 @@ int32_t ad9361_set_gain_ctrl_mode(struct ad9361_rf_phy *phy,
 	else
 		val &= ~SLOW_ATTACK_HYBRID_MODE;
 
+	/* apply digital saturation overrange enable bit (0x101:7) */
+	if (phy->pdata->gain_ctrl.agc_dig_sat_ovrg_en)
+		val |= ENABLE_DIG_SAT_OVRG;
+	else
+		val &= ~ENABLE_DIG_SAT_OVRG;
+
 	rc = ad9361_spi_write(spi, REG_AGC_CONFIG_1, val);
 	if (rc) {
 		dev_err(dev, "Unable to write AGC config1 register: %x",
@@ -4405,6 +4412,17 @@ static int32_t ad9361_bb_clk_change_handler(struct ad9361_rf_phy *phy)
 	ret |= ad9361_auxadc_setup(phy, &phy->pdata->auxadc_ctrl,
 				   clk_get_rate(phy, phy->ref_clk_scale[BBPLL_CLK]));
 
+	/*
+	 * when bb_clk_change_dig_tune_en is set, re-run the digital
+	 * interface tuning every time the baseband clock rate changes, so
+	 * DATA_CLK timing remains valid across dynamic sample-rate switches.
+	 */
+	if (phy->pdata->bb_clk_change_dig_tune_en) {
+#ifndef AXI_ADC_NOT_PRESENT
+		ret |= ad9361_dig_tune(phy, 0, RESTORE_DEFAULT);
+#endif
+	}
+
 	return ret;
 }
 
@@ -5632,6 +5650,20 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	ret = ad9361_rssi_setup(phy, &pd->rssi_ctrl, false);
 	if (ret < 0)
 		return ret;
+
+	/* skip live RSSI gain-step calib when pre-loaded tables are present */
+	if (!pd->rssi_skip_calib) {
+		ret = ad9361_rssi_gain_step_calib(phy);
+		if (ret < 0)
+			return ret;
+	} else if (pd->rssi_lna_err_tbl[0] || pd->rssi_mixer_err_tbl[0] ||
+		   pd->rssi_gain_step_calib_reg_val[0]) {
+		/* factory tables present — program them directly */
+		ad9361_ensm_force_state(phy, ENSM_STATE_ALERT);
+		ad9361_rssi_program_lna_gain(phy);
+		ad9361_rssi_write_err_tbl(phy);
+		ad9361_ensm_restore_prev_state(phy);
+	}
 
 	ret = ad9361_clkout_control(phy, pd->ad9361_clkout_mode);
 	if (ret < 0)
@@ -7096,6 +7128,8 @@ int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate)
 		ret = ad9361_load_gt(phy, ad9361_from_clk(rate), GT_RX1 + GT_RX2);
 		if (ret < 0)
 			return ret;
+		/* trigger external band switching on RX LO change */
+		ad9361_adjust_rx_ext_band_settings(phy, ad9361_from_clk(rate));
 		break;
 	case TX_RFPLL:
 		if (phy->pdata->use_ext_tx_lo) {
@@ -7119,6 +7153,8 @@ int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate)
 						"%s: TX QUAD cal failed", __func__);
 				phy->last_tx_quad_cal_freq = ad9361_from_clk(rate);
 			}
+		/* trigger external band switching on TX LO change */
+		ad9361_adjust_tx_ext_band_settings(phy, ad9361_from_clk(rate));
 		break;
 	default:
 		break;
@@ -7130,7 +7166,7 @@ int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate)
 /**
  * Set clock mux parent.
  * @param clk_priv The refclk_scale structure.
- * @param index Index - Enable (1), disable (0) ext lo.
+ * @param index Index - Enable (1) external LO, disable (0) = use internal PLL.
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_clk_mux_set_parent(struct refclk_scale *clk_priv, uint8_t index)
@@ -7145,6 +7181,34 @@ int32_t ad9361_clk_mux_set_parent(struct refclk_scale *clk_priv, uint8_t index)
 	ret = ad9361_trx_ext_lo_control(phy, clk_priv->source == TX_RFPLL, index == 1);
 	if (ret >= 0)
 		clk_priv->mult = index;
+
+	/*
+	 * When switching back from external to internal LO, the dummy
+	 * rate path only updated a software variable — the internal VCO has
+	 * not been programmed.  Re-run the internal RFPLL set_rate at the last
+	 * known frequency so the PLL actually locks.
+	 */
+	if (ret >= 0 && index == 0) {
+		bool tx = (clk_priv->source == TX_RFPLL);
+		uint64_t restore_hz = tx ? phy->current_tx_lo_freq
+				      : phy->current_rx_lo_freq;
+
+		if (restore_hz) {
+			enum ad9361_clocks int_src = tx ? TX_RFPLL_INT : RX_RFPLL_INT;
+			uint32_t restore_rate = ad9361_to_clk(restore_hz);
+
+			ret = ad9361_rfpll_int_set_rate(
+				      phy->ref_clk_scale[int_src],
+				      restore_rate,
+				      phy->clks[phy->ref_clk_scale[int_src]->parent_source]->rate);
+			if (ret < 0)
+				dev_err(&phy->spi->dev,
+					"%s: %s internal PLL re-lock to %"PRIu64
+					" Hz failed: %"PRId32"\n",
+					__func__, tx ? "TX" : "RX",
+					restore_hz, ret);
+		}
+	}
 
 	ad9361_ensm_restore_prev_state(phy);
 
@@ -7492,6 +7556,193 @@ int32_t ad9361_rssi_gain_step_calib(struct ad9361_rf_phy *phy)
 	ad9361_spi_write(phy->spi, REG_CONFIG, 0x00);
 
 	ad9361_ensm_restore_prev_state(phy);
+
+	return 0;
+}
+
+/**
+ * Program the LNA gain step values from pdata->rssi_gain_step_calib_reg_val
+ * into the AD9361 gain-step calibration table.
+ * @param phy The AD9361 state structure.
+ * @return 0 on success, negative error code otherwise.
+ */
+int32_t ad9361_rssi_program_lna_gain(struct ad9361_rf_phy *phy)
+{
+	struct no_os_spi_desc *spi = phy->spi;
+	uint32_t i;
+
+	ad9361_spi_write(spi, REG_LNA_GAIN,
+			 phy->pdata->rssi_gain_step_calib_reg_val[0]);
+
+	ad9361_spi_write(spi, REG_CONFIG,
+			 CALIB_TABLE_SELECT(0x3) | START_CALIB_TABLE_CLOCK);
+
+	for (i = 0; i < 4; i++) {
+		ad9361_spi_write(spi, REG_WORD_ADDRESS, i);
+		ad9361_spi_write(spi, REG_GAIN_DIFF_WORDERROR_WRITE,
+				 phy->pdata->rssi_gain_step_calib_reg_val[i + 1]);
+		ad9361_spi_write(spi, REG_CONFIG,
+				 CALIB_TABLE_SELECT(0x3) | WRITE_LNA_GAIN_DIFF |
+				 START_CALIB_TABLE_CLOCK);
+		no_os_udelay(3);
+	}
+
+	ad9361_spi_write(spi, REG_CONFIG, START_CALIB_TABLE_CLOCK);
+	ad9361_spi_write(spi, REG_CONFIG, 0x00);
+
+	return 0;
+}
+
+/**
+ * Write the pre-loaded LNA and mixer error tables from pdata into hardware.
+ * @param phy The AD9361 state structure.
+ * @return 0 on success, negative error code otherwise.
+ */
+int32_t ad9361_rssi_write_err_tbl(struct ad9361_rf_phy *phy)
+{
+	struct no_os_spi_desc *spi = phy->spi;
+	uint32_t i;
+
+	ad9361_spi_write(spi, REG_CONFIG,
+			 CALIB_TABLE_SELECT(0x3) | START_CALIB_TABLE_CLOCK);
+
+	for (i = 0; i < 4; i++) {
+		ad9361_spi_write(spi, REG_WORD_ADDRESS, i);
+		ad9361_spi_write(spi, REG_GAIN_DIFF_WORDERROR_WRITE,
+				 phy->pdata->rssi_lna_err_tbl[i]);
+		ad9361_spi_write(spi, REG_CONFIG,
+				 CALIB_TABLE_SELECT(0x3) | WRITE_LNA_ERROR_TABLE |
+				 START_CALIB_TABLE_CLOCK);
+	}
+
+	ad9361_spi_write(spi, REG_CONFIG,
+			 CALIB_TABLE_SELECT(0x3) | START_CALIB_TABLE_CLOCK);
+
+	for (i = 0; i < 16; i++) {
+		ad9361_spi_write(spi, REG_WORD_ADDRESS, i);
+		ad9361_spi_write(spi, REG_GAIN_DIFF_WORDERROR_WRITE,
+				 phy->pdata->rssi_mixer_err_tbl[i]);
+		ad9361_spi_write(spi, REG_CONFIG,
+				 CALIB_TABLE_SELECT(0x3) | WRITE_MIXER_ERROR_TABLE |
+				 START_CALIB_TABLE_CLOCK);
+	}
+
+	ad9361_spi_write(spi, REG_CONFIG, 0x00);
+
+	ad9361_spi_write(spi, REG_SETTLE_TIME,
+			 ENABLE_DIG_GAIN_CORR | SETTLE_TIME(0x10));
+
+	return 0;
+}
+
+/**
+ * Read the current RX and TX clock/data delay register values back into pdata.
+ * Call this after ad9361_dig_tune() to persist the tuned values.
+ * @param phy The AD9361 state structure.
+ * @return 0 on success, negative error code otherwise.
+ */
+int32_t ad9361_read_clock_data_delays(struct ad9361_rf_phy *phy)
+{
+	phy->pdata->port_ctrl.rx_clk_data_delay =
+		ad9361_spi_read(phy->spi, REG_RX_CLOCK_DATA_DELAY);
+	phy->pdata->port_ctrl.tx_clk_data_delay =
+		ad9361_spi_read(phy->spi, REG_TX_CLOCK_DATA_DELAY);
+	return 0;
+}
+
+/**
+ * Write the saved RX and TX clock/data delay values from pdata to hardware.
+ * Call this at startup to restore previously tuned values and skip dig_tune.
+ * @param phy The AD9361 state structure.
+ * @return 0 on success, negative error code otherwise.
+ */
+int32_t ad9361_write_clock_data_delays(struct ad9361_rf_phy *phy)
+{
+	ad9361_spi_write(phy->spi, REG_RX_CLOCK_DATA_DELAY,
+			 phy->pdata->port_ctrl.rx_clk_data_delay);
+	ad9361_spi_write(phy->spi, REG_TX_CLOCK_DATA_DELAY,
+			 phy->pdata->port_ctrl.tx_clk_data_delay);
+	return 0;
+}
+
+/**
+ * Return the current digital interface tuning state.
+ * @param phy  The AD9361 state structure.
+ * @param data Output: populated with skip_mode and current delay register values.
+ * @return 0 on success, negative error code otherwise.
+ */
+int32_t ad9361_get_dig_tune_data(struct ad9361_rf_phy *phy,
+				 struct ad9361_dig_tune_data *data)
+{
+	if (!data)
+		return -EINVAL;
+
+	data->skip_mode     = phy->pdata->dig_interface_tune_skipmode;
+	data->rx_clk_delay  = phy->pdata->port_ctrl.rx_clk_data_delay >> 4;
+	data->rx_data_delay = phy->pdata->port_ctrl.rx_clk_data_delay & 0xF;
+	data->tx_clk_delay  = phy->pdata->port_ctrl.tx_clk_data_delay >> 4;
+	data->tx_data_delay = phy->pdata->port_ctrl.tx_clk_data_delay & 0xF;
+
+	return 0;
+}
+
+/**
+ * Write directly to the AD9361 BIST configuration register.
+ * @param phy The AD9361 state structure.
+ * @param val Value to write.
+ * @return 0 on success, negative error code otherwise.
+ */
+int32_t ad9361_write_bist_reg(struct ad9361_rf_phy *phy, uint32_t val)
+{
+	phy->bist_config = val;
+	return ad9361_spi_write(phy->spi, REG_BIST_AND_DATA_PORT_TEST_CONFIG, val);
+}
+
+/**
+ * Temporarily disable ENSM pin control by forcing TDD SPI mode.
+ * Useful before calibration sequences that must use SPI-driven state.
+ * @param phy The AD9361 state structure.
+ * @return 0 on success, negative error code otherwise.
+ */
+int32_t ad9361_ensm_mode_disable_pinctrl(struct ad9361_rf_phy *phy)
+{
+	if (!phy->pdata->fdd)
+		return ad9361_set_ensm_mode(phy, true, false);
+	return 0;
+}
+
+/**
+ * Restore ENSM pin control to the state configured in pdata.
+ * @param phy The AD9361 state structure.
+ * @return 0 on success, negative error code otherwise.
+ */
+int32_t ad9361_ensm_mode_restore_pinctrl(struct ad9361_rf_phy *phy)
+{
+	if (!phy->pdata->fdd)
+		return ad9361_set_ensm_mode(phy, phy->pdata->fdd,
+					    phy->pdata->ensm_pin_ctrl);
+	return 0;
+}
+
+/**
+ * Drive the external calibration switch GPIOs (cal-sw1, cal-sw2).
+ * Bit 0 of @val controls cal-sw1, bit 1 controls cal-sw2.
+ * These GPIOs route signals for TX quad / LO calibration on boards that
+ * have external calibration switch hardware.
+ * @param phy The AD9361 state structure.
+ * @param val 2-bit value: bit0 = cal_sw1, bit1 = cal_sw2.
+ * @return 0 on success, -ENODEV if GPIOs are not configured.
+ */
+int32_t ad9361_set_cal_sw(struct ad9361_rf_phy *phy, uint32_t val)
+{
+	if (!phy->gpio_desc_cal_sw1 || !phy->gpio_desc_cal_sw2) {
+		dev_err(&phy->spi->dev,
+			"%s: calibration switch GPIOs not configured\n", __func__);
+		return -ENODEV;
+	}
+
+	no_os_gpio_set_value(phy->gpio_desc_cal_sw1, !!(val & NO_OS_BIT(0)));
+	no_os_gpio_set_value(phy->gpio_desc_cal_sw2, !!(val & NO_OS_BIT(1)));
 
 	return 0;
 }
