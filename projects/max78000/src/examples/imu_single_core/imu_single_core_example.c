@@ -52,37 +52,14 @@
 #include "adis.h"
 #include "adis1657x.h"
 #include "common_data.h"
-#include "mxc_device.h"
-#include "gcr_regs.h"
-#include "lpgcr_regs.h"
-#include "mxc_sys.h"
+#include "maxim_sys.h"
 
 /*
- * MXC_SYS_Reset_Periph() in sys_ai85.c writes GCR->rst0/rst1 as a plain
- * single-bit assignment, clearing every other bit in the register. For rst1
- * this silently resets SMPHR (bit 16) and SIMO (bit 25). Although no hardware
- * semaphore is in use here, resetting SIMO mid-transaction can glitch the
- * supply rail and cause SPI corruption. The --wrap linker flag redirects all
- * call sites to this read-modify-write replacement.
+ * The shared __wrap_MXC_SYS_Reset_Periph() lives in maxim_sys.c (enabled via
+ * CONFIG_SYS_MAXIM + the -Wl,--wrap link option). It replaces the SDK's
+ * destructive peripheral-reset store, which would otherwise clobber RST1_SIMO
+ * when MXC_SPI_Init() reinitializes SPI0 for the second device.
  */
-void __wrap_MXC_SYS_Reset_Periph(mxc_sys_reset_t reset)
-{
-	uint32_t bit;
-
-	if (reset > 63) {
-		bit = reset - 64;
-		MXC_LPGCR->rst |= (1u << bit);
-		while (MXC_LPGCR->rst & (1u << bit)) {}
-	} else if (reset > 31) {
-		bit = reset - 32;
-		MXC_GCR->rst1 |= (1u << bit);
-		while (MXC_GCR->rst1 & (1u << bit)) {}
-	} else {
-		bit = (uint32_t)reset;
-		MXC_GCR->rst0 |= (1u << bit);
-		while (MXC_GCR->rst0 & (1u << bit)) {}
-	}
-}
 
 /* ------------------------------------------------------------------------- */
 /* ADXL345 (accelerometer) on SPI0, chip-select = GPIO P0.19                */
