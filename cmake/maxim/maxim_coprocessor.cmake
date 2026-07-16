@@ -41,7 +41,9 @@ function(maxim_find_riscv_toolchain)
 endfunction()
 
 function(maxim_add_riscv_coprocessor ARM_TARGET)
-    cmake_parse_arguments(RV "" "" "SOURCES;INCLUDES;DEFINES" ${ARGN})
+    cmake_parse_arguments(RV ""
+        "FORCE_INCLUDE"
+        "SOURCES;INCLUDES;DEFINES;DEPENDS;NOOS_DRIVERS;NOOS_INCLUDES" ${ARGN})
     if(NOT RV_SOURCES)
         message(FATAL_ERROR "maxim_add_riscv_coprocessor: SOURCES is required")
     endif()
@@ -72,6 +74,40 @@ function(maxim_add_riscv_coprocessor ARM_TARGET)
     endforeach()
     set(_cflags ${_march} ${_mabi} -Os -ffunction-sections -fdata-sections
                 ${_defs} ${_incs})
+
+    # --- Optional: cross-compile no-OS drivers into the RISC-V image ----------
+    # When NOOS_DRIVERS is given, the coprocessor uses the real no-OS driver
+    # stack (e.g. no_os_spi + a device driver) instead of bare-metal register
+    # code. These extra sources compile with the same RV flags plus the no-OS
+    # include dirs and the generated no_os_config.h force-include (matching the
+    # Arm no-os target). FORCE_INCLUDE optionally prepends one more -include
+    # header into every RV translation unit (e.g. to patch SDK definitions).
+    set(_noos_cflags ${_cflags})
+    if(RV_NOOS_DRIVERS)
+        list(APPEND _noos_cflags
+             -I${NO_OS_DIR}/include
+             -I${NO_OS_DIR}/drivers/platform/maxim/max${TARGET_NUM}
+             -I${NO_OS_DIR}/drivers/platform/maxim/common
+             -I${CMAKE_BINARY_DIR}/build          # generated no_os_config.h
+             -include no_os_config.h)
+        # MXC PeriphDrivers compile against private *_reva.h headers that live
+        # next to each peripheral's source (e.g. Source/DMA/dma_reva.h included by
+        # Source/SPI/spi_reva1.c), so add every Source/<PERIPH> dir as an include
+        # path -- same as the Arm no-os build does.
+        set(_mxc_src ${MAXIM_LIBRARIES}/PeriphDrivers/Source)
+        list(APPEND _noos_cflags
+             -I${_mxc_src}/SPI -I${_mxc_src}/GPIO -I${_mxc_src}/DMA
+             -I${_mxc_src}/SYS -I${_mxc_src}/FLC)
+        foreach(_d ${RV_NOOS_INCLUDES})
+            list(APPEND _noos_cflags -I${_d})
+        endforeach()
+    endif()
+    if(RV_FORCE_INCLUDE)
+        # Applies to the firmware sources AND the no-OS drivers so the forced
+        # header reaches every RV translation unit.
+        list(APPEND _cflags -include ${RV_FORCE_INCLUDE})
+        list(APPEND _noos_cflags -include ${RV_FORCE_INCLUDE})
+    endif()
 
     # --- Link the ARM target with the dual-core ARM linker script -------------
     # It confines the ARM stack/heap to SRAM0/SRAM1 (out of the RISC-V's SRAM2)
@@ -121,15 +157,33 @@ function(maxim_add_riscv_coprocessor ARM_TARGET)
 
     # --- Pass 2: compile the RISC-V objects ----------------------------------
     # Firmware sources + the stock RISC-V startup and system init (which set up the
-    # C runtime and leave clock setup to the ARM core).
+    # C runtime and leave clock setup to the ARM core). Firmware compiles with the
+    # no-OS include set when NOOS_DRIVERS is used (it calls the no-OS API), else
+    # the lean flags.
+    if(RV_NOOS_DRIVERS)
+        set(_app_cflags ${_noos_cflags})
+    else()
+        set(_app_cflags ${_cflags})
+    endif()
     set(_objs "")
     set(_n 0)
     foreach(_s ${RV_SOURCES})
         set(_o ${_bin}/rv_app_${_n}.o)
         add_custom_command(OUTPUT ${_o}
-            COMMAND ${RISCV_GCC} ${_cflags} -c ${_s} -o ${_o}
-            DEPENDS ${_s}
+            COMMAND ${RISCV_GCC} ${_app_cflags} -c ${_s} -o ${_o}
+            DEPENDS ${_s} ${RV_FORCE_INCLUDE} ${RV_DEPENDS} ${CONFIG_HEADER_FILE}
             COMMENT "coprocessor: compiling ${_s}")
+        list(APPEND _objs ${_o})
+        math(EXPR _n "${_n}+1")
+    endforeach()
+
+    # no-OS / MXC / device driver sources cross-compiled for RV32.
+    foreach(_s ${RV_NOOS_DRIVERS})
+        set(_o ${_bin}/rv_drv_${_n}.o)
+        add_custom_command(OUTPUT ${_o}
+            COMMAND ${RISCV_GCC} ${_noos_cflags} -c ${_s} -o ${_o}
+            DEPENDS ${_s} ${CONFIG_HEADER_FILE}
+            COMMENT "coprocessor: compiling (no-OS) ${_s}")
         list(APPEND _objs ${_o})
         math(EXPR _n "${_n}+1")
     endforeach()
@@ -148,6 +202,17 @@ function(maxim_add_riscv_coprocessor ARM_TARGET)
         DEPENDS ${_src}/system_riscv_max${TARGET_NUM}.c
         COMMENT "coprocessor: compiling RISC-V system init")
 
+    # Bare-metal _sbrk: the SDK's heap.c uses __HeapBase/__HeapLimit symbols from
+    # the linker script instead of Linux ecall stubs. Without it, any call to
+    # malloc/printf (via newlib's -lc_nano) issues an 'ecall' that traps immediately
+    # on bare metal because there is no OS to handle sys_brk.
+    set(_heap_obj ${_bin}/heap_riscv.o)
+    add_custom_command(OUTPUT ${_heap_obj}
+        COMMAND ${RISCV_GCC} ${_cflags}
+            -c ${_src}/heap.c -o ${_heap_obj}
+        DEPENDS ${_src}/heap.c
+        COMMENT "coprocessor: compiling bare-metal heap/_sbrk")
+
     # --- Pass 2b: link the RISC-V ELF to run in place from flash --------------
     set(_rv_elf ${_bin}/riscv.elf)
     set(_rv_bin ${_bin}/riscv.bin)
@@ -156,10 +221,15 @@ function(maxim_add_riscv_coprocessor ARM_TARGET)
             -T${_gcc}/max${TARGET_NUM}_riscv.ld
             -L${_bin} -L${_gcc}
             -nostartfiles -Wl,--gc-sections -Wl,-Map=${_bin}/riscv.map
+            # Redirect MXC_SYS_Reset_Periph to the RMW wrapper defined in the
+            # application sources.  The SDK's plain-write implementation clobbers
+            # unrelated bits in GCR->rst1 (SMPHR, SIMO) when resetting SPI0,
+            # which corrupts the hardware semaphore and can glitch the JTAG TAP.
+            -Wl,--wrap=MXC_SYS_Reset_Periph
             -o ${_rv_elf}
-            ${_startup_obj} ${_system_obj} ${_objs}
+            ${_startup_obj} ${_system_obj} ${_heap_obj} ${_objs}
             -Wl,--start-group -lc_nano -lm -lgcc -Wl,--end-group
-        DEPENDS ${_startup_obj} ${_system_obj} ${_objs} ${_common_ld}
+        DEPENDS ${_startup_obj} ${_system_obj} ${_heap_obj} ${_objs} ${_common_ld}
         COMMENT "coprocessor: linking RISC-V ELF (in-place flash)")
 
     add_custom_command(OUTPUT ${_rv_bin}
