@@ -115,6 +115,13 @@
  */
 #define IMU_RV_LOOP_PERIOD_US 500u
 
+/*
+ * Consecutive RISC-V publishes with no DATA_CNTR change after which the ARM warns
+ * the ADIS sample counter is stuck. Sized above the per-print publish count so a
+ * transient hiccup does not trip it.
+ */
+#define IMU_DCNTR_STUCK_SAMPLES 400u
+
 /**
  * RISC-V lifecycle milestones, published (monotonically) in imu_shared_t.state so
  * the ARM can gate its own bring-up on the RISC-V's progress. These are ordered
@@ -143,7 +150,7 @@
 /**
  * @brief Bring-up stage tag written to imu_shared_t.stage before each risky step,
  * so a fault or hang can be localized to the last stage the RISC-V entered even if
- * it never returns. Distinct from @state (which only advances on success).
+ * it never returns. Distinct from `state` (which only advances on success).
  */
 #define IMU_STAGE_START        0u
 #define IMU_STAGE_SPI_INIT     1u  /* inside no_os_spi_init */
@@ -175,7 +182,7 @@
  * The RISC-V writes lifecycle, fault, and raw ADIS sample fields. The ARM reads
  * those raw samples and owns gyro integration, keeping the math in one place.
  *
- * Ordering: the RISC-V updates the payload then bumps @seq and rings the host
+ * Ordering: the RISC-V updates the payload then bumps `seq` and rings the host
  * doorbell; the ARM waits the doorbell, then reads a coherent snapshot (both
  * cores are data-cacheless, so volatile access + the doorbell handshake are
  * sufficient — see the dual_core example notes on why the RISC-V issues no fence).

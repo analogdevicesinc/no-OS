@@ -431,7 +431,9 @@ int imu_dual_core_example_main(void)
 	uint32_t prev_dcntr = 0;
 	uint32_t last_doorbell = risc_v_doorbell_count;
 	uint32_t last_seq = 0;
-	uint64_t last_print_samples = 0;
+	uint32_t last_print_seq = 0;
+	uint32_t dcntr_stuck = 0;
+	int dcntr_warned = 0;
 	int have_prev = 0;
 
 	for (;;) {
@@ -504,6 +506,20 @@ int imu_dual_core_example_main(void)
 			accum[1] += (int64_t)gy * delta;
 			accum[2] += (int64_t)gz * delta;
 			total_samples += delta;
+			dcntr_stuck = 0;
+			dcntr_warned = 0;
+		} else {
+			/*
+			 * seq advanced but DATA_CNTR did not: reads succeed yet the
+			 * sensor is not producing new samples. Warn once so the stall
+			 * is visible instead of the console silently not advancing.
+			 */
+			if (++dcntr_stuck == IMU_DCNTR_STUCK_SAMPLES && !dcntr_warned) {
+				printf("[ARM] WARNING: ADIS DATA_CNTR stuck at %lu over %u "
+				       "samples (sensor not updating; check sync/reset)\r\n",
+				       (unsigned long)dc, (unsigned)IMU_DCNTR_STUCK_SAMPLES);
+				dcntr_warned = 1;
+			}
 		}
 
 		roll = (int32_t)(accum[0] / ADIS_GYRO_MDEG_DIV);
@@ -514,15 +530,15 @@ int imu_dual_core_example_main(void)
 		adxl_read_mg(&mgx, &mgy, &mgz);
 
 		/*
-		 * Decimate console output to ~10 Hz so UART never backpressures. The
-		 * RISC-V now free-runs, so gate on the ADIS sample count (which advances
-		 * at the fixed 2 kHz ODR) rather than a loop-iteration count: one line
-		 * per 200 samples is 10 Hz regardless of how fast we poll. Gyro
-		 * integration above still runs on every sample.
+		 * Decimate console output to ~10 Hz. Gate on the RISC-V publish
+		 * counter (seq), which always advances while the coprocessor is alive,
+		 * not on DATA_CNTR -- so output keeps flowing even if the sensor's
+		 * sample counter freezes. Gyro integration above still keys off the
+		 * real DATA_CNTR delta.
 		 */
-		if (total_samples - last_print_samples < 200)
+		if (seq - last_print_seq < 200)
 			continue;
-		last_print_samples = total_samples;
+		last_print_seq = seq;
 
 		a_mgx = (int32_t)((int64_t)ax / ADIS_ACCL_LSB_PER_MG);
 		a_mgy = (int32_t)((int64_t)ay / ADIS_ACCL_LSB_PER_MG);
@@ -537,9 +553,9 @@ int imu_dual_core_example_main(void)
 		print_milli(" g  pmod=", mgx);
 		print_milli(",", mgy);
 		print_milli(",", mgz);
-		/* seq counts RISC-V publishes since the last print; with the ADIS at a
-		 * fixed 2 kHz ODR and a 200-sample (10 Hz) print gate, this shows how
-		 * many raw samples the coprocessor pushed for this line. */
+		/* n = real ADIS samples (DATA_CNTR deltas), seq = RISC-V publishes,
+		 * +N = publishes since last print. n stalling while seq climbs means
+		 * DATA_CNTR is stuck (see WARNING above). */
 		printf(" g (n=%lu, seq=%lu, +%lu)\r\n", (unsigned long)total_samples,
 		       (unsigned long)seq, (unsigned long)(seq - last_seq));
 		last_seq = seq;
