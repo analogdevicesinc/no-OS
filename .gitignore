@@ -1,4 +1,7 @@
 .metadata
+.no_os_venv
+.cubeide
+no-os.code-workspace
 SDK.log
 bsp
 hw
@@ -10,6 +13,7 @@ RemoteSystemsTempFiles
 build
 BUILD
 builds
+build-*
 exports
 logs
 log.txt
