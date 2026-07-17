@@ -1,0 +1,78 @@
+name: Workflow for checkers, drivers and unit-tests
+
+on:
+  pull_request:
+    branches:
+      - main
+      - staging/*
+      - next_stable
+      - '20*'
+
+permissions:
+  contents: read
+  id-token: write
+  checks: write
+  pull-requests: write
+
+env:
+  NUM_JOBS: 4
+
+jobs:
+  run-checkers:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 50
+          clean: true
+      - name: Astyle check
+        shell: sh
+        run: |
+          ${{ github.workspace }}/.github/scripts/astyle.sh
+        env:
+          NUM_JOBS: ${{ env.NUM_JOBS }}
+      - name: Check-cpp format
+        shell: sh
+        run: |
+          ${{ github.workspace }}/.github/scripts/cppcheck.sh
+  build-drivers:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+      - name: Build drivers
+        shell: sh
+        run: |
+          sudo apt-get install -y gcc-arm-none-eabi libnewlib-arm-none-eabi
+          make -j${NUM_JOBS} -C ${{ github.workspace }}/drivers -f Makefile
+  unit-tests:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+      - name: Setup test tools
+        shell: bash
+        run: |
+          sudo apt-get install ruby-full
+          sudo gem install ceedling --no-document
+          pip install gcovr==4.1
+          find tests -name "project.yml" -type f | while read project_file; do
+            dir=$(dirname "$project_file")
+            cd "$dir" && ceedling test:all && cd -
+          done
+      - name: Publish test results
+        uses: mikepenz/action-junit-report@bccf2e31636835cf0874589931c4116687171386   # @v6.4.0
+        with:
+          report_paths: tests/drivers/**/build/artifacts/test/*.xml
+          include_passed: true
+          pr_id: ${{github.event.pull_request.number}}
+          comment: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          updateComment: true
+      
