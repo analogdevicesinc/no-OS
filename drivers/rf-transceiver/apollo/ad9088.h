@@ -182,8 +182,8 @@ struct ad9088_init_param {
 struct ad9088_phy {
 	struct no_os_spi_desc *spi;
 	struct jesd204_dev *jdev;
-	const struct firmware *fw;
 	adi_apollo_device_t ad9088;
+	adi_apollo_fw_provider_t fw_provider;
 	adi_apollo_top_t profile;
 	adi_cms_chip_id_t chip_id;
 	// struct axiadc_chip_info chip_info;
@@ -284,10 +284,29 @@ extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_
 extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_end[];
 extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_size[];
 
+extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x01030000_bin_start[];
+extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x01030000_bin_end[];
+extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x20000000_bin_start[];
+extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x20000000_bin_end[];
+extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x02000000_bin_start[];
+extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x02000000_bin_end[];
+extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x21000000_bin_start[];
+extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x21000000_bin_end[];
+
+extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x01030000_bin_start[];
+extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x01030000_bin_end[];
+extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x20000000_bin_start[];
+extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x20000000_bin_end[];
+extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x02000000_bin_start[];
+extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x02000000_bin_end[];
+extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x21000000_bin_start[];
+extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x21000000_bin_end[];
+
 int ad9088_check_apollo_error(int ret, const char *api_name);
 int ad9088_parse_struct(struct ad9088_phy **device,
 			const struct ad9088_init_param *init_param);
 int ad9088_init(struct ad9088_phy **device,
 		const struct ad9088_init_param *init_param);
+int ad9088_remove(struct ad9088_phy *phy);
 int ad9088_fft_sniffer_probe(struct ad9088_phy *phy,
 			     adi_apollo_side_select_e side_sel);

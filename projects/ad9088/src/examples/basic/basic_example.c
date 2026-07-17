@@ -59,61 +59,63 @@ int basic_example_main()
 	ret = adf4382_init(&adf4382_dev, &adf4382_ip);
 	if (ret) {
 		pr_info("ADF4382 initialization failed\n");
-		goto error_1;
+		goto error;
 	}
 
 	ret = hmc7044_init(&hmc7044_dev, &hmc7044_ip);
 	if (ret) {
 		pr_info("HMC7044 initialization failed\n");
-		goto error_2;
+		goto error_adf4382;
 	}
 
 	ret = axi_dmac_init(&rx_dmac, &rx_dmac_ip);
 	if (ret) {
 		pr_info("RX DMAC initialization failed\n");
-		goto error_3;
+		goto error_hmc7044;
 	}
 
 	ret = axi_dmac_init(&tx_dmac, &tx_dmac_ip);
 	if (ret) {
 		pr_info("TX DMAC initialization failed\n");
-		goto error_4;
+		goto error_rx_dmac;
 	}
 
 	ret = axi_jesd204_rx_init(&rx_jesd, &rx_jesd204_ip);
 	if (ret) {
 		pr_info("JESD RX initialization failed\n");
-		goto error_5;
+		goto error_tx_dmac;
 	}
 
 	ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd204_ip);
 	if (ret) {
-		pr_info("JESD RX initialization failed\n");
-		goto error_6;
+		pr_info("JESD TX initialization failed\n");
+		goto error_rx_jesd;
 	}
 
 	ret = ad9088_init(&ad9088_phy, &ad9088_ip);
 	if (ret) {
 		pr_info("AD9088 initialization failed\n");
-		goto error_7;
+		goto error_tx_jesd;
 	}
 
 	pr_info("Project configured\n");
-error_7:
-error_6:
+
+	return 0;
+
+error_tx_jesd:
 	axi_jesd204_tx_remove(tx_jesd);
-error_5:
+error_rx_jesd:
 	axi_jesd204_rx_remove(rx_jesd);
-error_4:
+error_tx_dmac:
 	axi_dmac_remove(tx_dmac);
-error_3:
+error_rx_dmac:
 	axi_dmac_remove(rx_dmac);
-error_2:
+error_hmc7044:
 	hmc7044_remove(hmc7044_dev);
-error_1:
+error_adf4382:
 	adf4382_remove(adf4382_dev);
-	if (ret)
-		pr_info("Error!\n");
-	
+error:
+	pr_info("Error!\n");
+
 	return ret;
 }

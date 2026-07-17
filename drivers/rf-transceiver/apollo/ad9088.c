@@ -7,30 +7,16 @@
 
 #include "ad9088.h"
 #include "no_os_delay.h"
+#include "no_os_alloc.h"
 #include <string.h>
 
 #include "adi_cms_api_common.h"
+#include "adi_apollo_startup.h"
+#include "adi_apollo_device.h"
+#include "adi_apollo_mailbox.h"
 
-#define APOLLO_FW_CPU0_NAME "APOLLO_FW_CPU0_B.bin"
-#define APOLLO_FW_CPU1_NAME "APOLLO_FW_CPU1_B.bin"
 #define INDIRECT_REG_TEST_ADDR  (0x60366045)
 #define ARM_REG_TEST_BASE_ADDR  (0x20000000U)
-
-#define SECR_BOOT_HDR_BIN	"app_signed_encrypted_B/flash_image_0x01030000.bin"
-#define CORE_0_TYE_FW_BIN	"app_signed_encrypted_B/flash_image_0x20000000.bin"
-#define CORE_1_TYE_FW_BIN	"app_signed_encrypted_B/flash_image_0x02000000.bin"
-#define TYE_OPER_FW_BIN		"app_signed_encrypted_B/flash_image_0x21000000.bin"
-
-#define PROD_SECR_BOOT_HDR_BIN	"app_signed_encrypted_prod_B/flash_image_0x01030000.bin"
-#define PROD_CORE_0_TYE_FW_BIN	"app_signed_encrypted_prod_B/flash_image_0x20000000.bin"
-#define PROD_CORE_1_TYE_FW_BIN	"app_signed_encrypted_prod_B/flash_image_0x02000000.bin"
-#define PROD_TYE_OPER_FW_BIN	"app_signed_encrypted_prod_B/flash_image_0x21000000.bin"
-
-
-#define SECR_BOOT_HDR_MEM_ADDR  (0x01030000U)
-#define CORE_0_TYE_FW_MEM_ADDR  (0x20000000U)
-#define CORE_1_TYE_FW_MEM_ADDR  (0x02000000U)
-#define TYE_OPER_FW_MEM_ADDR    (0x21000000U)
 
 static const uint8_t lanes_all[] = {
 	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
@@ -203,14 +189,66 @@ int ad9088_check_apollo_error(int ret, const char *api_name)
 
 	return 0;
 }
-//static int ad9088_trig_sync(struct ad9088_phy *phy, int val);
+struct fw_entry {
+	const uint8_t *start;
+	const uint8_t *end;
+};
 
-static int ad9088_jesd204_post_setup_stage1(struct jesd204_dev *jdev,
-				       enum jesd204_state_op_reason reason);
-static int ad9088_jesd204_post_setup_stage2(struct jesd204_dev *jdev,
-				       enum jesd204_state_op_reason reason);
-static int ad9088_jesd204_post_setup_stage3(struct jesd204_dev *jdev,
-				       enum jesd204_state_op_reason reason);
+static const struct fw_entry fw_table[ADI_APOLLO_FW_ID_MAX] = {
+	[ADI_APOLLO_FW_ID_SECR_BOOT_HDR_BIN] = {
+		.start = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x01030000_bin_start,
+		.end   = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x01030000_bin_end,
+	},
+	[ADI_APOLLO_FW_ID_CORE_0_TYE_FW_BIN] = {
+		.start = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x20000000_bin_start,
+		.end   = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x20000000_bin_end,
+	},
+	[ADI_APOLLO_FW_ID_CORE_1_TYE_FW_BIN] = {
+		.start = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x02000000_bin_start,
+		.end   = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x02000000_bin_end,
+	},
+	[ADI_APOLLO_FW_ID_TYE_OPER_FW_BIN] = {
+		.start = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x21000000_bin_start,
+		.end   = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x21000000_bin_end,
+	},
+	[ADI_APOLLO_FW_ID_PROD_SECR_BOOT_HDR_BIN] = {
+		.start = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x01030000_bin_start,
+		.end   = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x01030000_bin_end,
+	},
+	[ADI_APOLLO_FW_ID_PROD_CORE_0_TYE_FW_BIN] = {
+		.start = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x20000000_bin_start,
+		.end   = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x20000000_bin_end,
+	},
+	[ADI_APOLLO_FW_ID_PROD_CORE_1_TYE_FW_BIN] = {
+		.start = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x02000000_bin_start,
+		.end   = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x02000000_bin_end,
+	},
+	[ADI_APOLLO_FW_ID_PROD_TYE_OPER_FW_BIN] = {
+		.start = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x21000000_bin_start,
+		.end   = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x21000000_bin_end,
+	},
+};
+
+static int ad9088_fw_provider_get(adi_apollo_fw_provider_t *obj,
+				  adi_apollo_startup_fw_id_e fw_id,
+				  uint8_t **byte_arr, uint32_t *bytes_read)
+{
+	if (fw_id >= ADI_APOLLO_FW_ID_MAX || !fw_table[fw_id].start) {
+		pr_err("Unknown firmware ID %d\n", fw_id);
+		return API_CMS_ERROR_INVALID_PARAM;
+	}
+
+	*byte_arr = (uint8_t *)fw_table[fw_id].start;
+	*bytes_read = fw_table[fw_id].end - fw_table[fw_id].start;
+
+	return API_CMS_ERROR_OK;
+}
+
+static int ad9088_fw_provider_close(adi_apollo_fw_provider_t *obj,
+				    adi_apollo_startup_fw_id_e fw_id)
+{
+	return API_CMS_ERROR_OK;
+}
 
 
 static int ad9088_spi_xfer(void *dev_obj, uint8_t *wbuf, uint8_t *rbuf,
@@ -359,10 +397,11 @@ static int ad9088_reg_test(adi_apollo_device_t *device)
 		}
 	}
 
-	pr_err("Test direct register %s\n", (0 == stat) ? "Passed" : "*** FAILED ***");
 	if (stat != 0) {
+		pr_err("Test direct register *** FAILED ***\n");
 		return API_CMS_ERROR_ERROR;
 	}
+	pr_info("Test direct register Passed\n");
 
 	/* Indirect register SPI loop rd/wr test */
 	stat = 0;
@@ -380,10 +419,11 @@ static int ad9088_reg_test(adi_apollo_device_t *device)
 		}
 	}
 
-	pr_err("Test indirect register %s\n", (0 == stat) ? "Passed" : "*** FAILED ***");
 	if (stat != 0) {
+		pr_err("Test indirect register *** FAILED ***\n");
 		return API_CMS_ERROR_ERROR;
 	}
+	pr_info("Test indirect register Passed\n");
 
 	/* 32-bit ARM mem rd/wr test */
 	stat = 0;
@@ -404,21 +444,82 @@ static int ad9088_reg_test(adi_apollo_device_t *device)
 		}
 	}
 
-	pr_err("Test ARM memory %s\n", (0 == stat) ? "Passed" : "*** FAILED ***");
 	if (stat != 0) {
+		pr_err("Test ARM memory *** FAILED ***\n");
 		return API_CMS_ERROR_ERROR;
 	}
+	pr_info("Test ARM memory Passed\n");
 
 	return API_CMS_ERROR_OK;
 }
 
-int ad9088_init(struct ad9088_phy **device, 
+static int ad9088_version_info(struct ad9088_phy *phy)
+{
+	adi_apollo_mailbox_resp_get_fw_version_t fw_ver;
+	adi_apollo_mailbox_cmd_ping_t ping_cmd;
+	adi_apollo_mailbox_resp_ping_t ping_resp;
+	adi_apollo_device_t *device = &phy->ad9088;
+	int ret;
+	uint16_t maj, min, rc;
+
+	ret = adi_apollo_device_api_revision_get(device, &maj, &min, &rc);
+	if (ret) {
+		pr_err("API revision get error (%d)\n", ret);
+		return ret;
+	}
+
+	pr_info("API ver: %d.%d.%d\n", maj, min, rc);
+
+	ret = adi_apollo_mailbox_ready_check(device);
+	if (ret) {
+		pr_err("Mailbox Ready error (%d)\n", ret);
+		return ret;
+	}
+
+	ping_cmd.echo_data = 0x00000000;
+	ret = adi_apollo_mailbox_ping(device, &ping_cmd, &ping_resp);
+	if (ret) {
+		pr_err("Mailbox ping error (%d)\n", ret);
+		return ret;
+	}
+
+	pr_info("Ping (core 1) cmd/res: 0x%08x/0x%08x\n",
+		(unsigned int)ping_cmd.echo_data,
+		(unsigned int)ping_resp.echo_data);
+
+	ping_cmd.echo_data = 0x12345678;
+	ret = adi_apollo_mailbox_ping(device, &ping_cmd, &ping_resp);
+	if (ret) {
+		pr_err("Mailbox ping error (%d)\n", ret);
+		return ret;
+	}
+
+	pr_info("Ping (core 0) cmd/res: 0x%08x/0x%08x\n",
+		(unsigned int)ping_cmd.echo_data,
+		(unsigned int)ping_resp.echo_data);
+
+	ret = adi_apollo_mailbox_get_fw_version(device, &fw_ver);
+	if (ret) {
+		pr_err("Mailbox fw error (%d)\n", ret);
+		return ret;
+	}
+
+	pr_info("FW ver: %d.%d.%d\n", fw_ver.major, fw_ver.minor,
+		fw_ver.patch);
+
+	return 0;
+}
+
+int ad9088_init(struct ad9088_phy **device,
 		const struct ad9088_init_param *init_param)
 {
 	struct ad9088_phy *phy;
+	uint16_t api_rev[3];
 	int ret;
 
 	ret = ad9088_parse_struct(&phy, init_param);
+	if (ret)
+		return ret;
 
 	phy->ad9088.hal_info.spi0_desc.spi_config.sdo = (phy->spi_3wire_en) ?
 			ADI_APOLLO_DEVICE_SPI_SDIO : ADI_APOLLO_DEVICE_SPI_SDO;
@@ -434,33 +535,93 @@ int ad9088_init(struct ad9088_phy **device,
 	phy->ad9088.hal_info.reset_pin_ctrl = ad9088_reset_pin_ctrl;
 	phy->ad9088.hal_info.log_write = ad9088_log_write;
 
-	ret = adi_apollo_device_hw_open(&phy->ad9088, 
+	phy->fw_provider.desc = "no-OS Embedded FW Provider";
+	phy->fw_provider.tag = phy;
+	phy->ad9088.startup_info.fw_provider = &phy->fw_provider;
+	phy->ad9088.startup_info.get = ad9088_fw_provider_get;
+	phy->ad9088.startup_info.close = ad9088_fw_provider_close;
+	phy->ad9088.startup_info.open = NULL;
+
+	ret = adi_apollo_device_hw_open(&phy->ad9088,
 					phy->reset_gpio ? ADI_APOLLO_HARD_RESET_AND_INIT :
 					ADI_APOLLO_SOFT_RESET_AND_INIT);
-	if (ret < 0) {
-		pr_err("reset/init failed (%d)\n", ret);
-		return -ENODEV;
-	}
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_device_hw_open");
+	if (ret)
+		goto error;
 
-	ret = adi_apollo_hal_active_protocol_set(&phy->ad9088, ADI_APOLLO_HAL_PROTOCOL_SPI0);
-	if (ret < 0) {
-		pr_err("SPI active protocol set failed (%d)\n", ret);
-		return -ENODEV;
-	}
+	ret = adi_apollo_hal_active_protocol_set(&phy->ad9088,
+						 ADI_APOLLO_HAL_PROTOCOL_SPI0);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_hal_active_protocol_set");
+	if (ret)
+		goto error_hw_close;
 
-	ret = adi_apollo_hal_rmw_enable_set(&phy->ad9088, ADI_APOLLO_HAL_PROTOCOL_SPI0, 0);
-	if (ret < 0) {
-		pr_err("SPI rmw enable failed (%d)\n", ret);
-		return -ENODEV;
-	}
+	ret = adi_apollo_hal_rmw_enable_set(&phy->ad9088,
+					    ADI_APOLLO_HAL_PROTOCOL_SPI0, 0);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_hal_rmw_enable_set");
+	if (ret)
+		goto error_hw_close;
 
 	ret = ad9088_reg_test(&phy->ad9088);
-	if (ret < 0) {
+	if (ret) {
 		pr_err("Register test failed (%d)\n", ret);
-		return -ENODEV;
+		ret = -EIO;
+		goto error_hw_close;
 	}
 
+	ret = adi_apollo_startup_execute(&phy->ad9088, &phy->profile,
+					 ADI_APOLLO_STARTUP_SEQ_DEFAULT);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_startup_execute");
+	if (ret)
+		goto error_hw_close;
+
+	ret = ad9088_version_info(phy);
+	if (ret)
+		goto error_hw_close;
+
+	ret = adi_apollo_device_chip_id_get(&phy->ad9088, &phy->chip_id);
+	if (ret) {
+		pr_err("chip_id failed (%d)\n", ret);
+		goto error_hw_close;
+	}
+
+	adi_apollo_device_api_revision_get(&phy->ad9088,
+					   &api_rev[0], &api_rev[1],
+					   &api_rev[2]);
+
+	pr_info("AD%X Rev. %u Grade %u (API %u.%u.%u) probed\n",
+		phy->chip_id.prod_id, phy->chip_id.dev_revision,
+		phy->chip_id.prod_grade, api_rev[0], api_rev[1],
+		api_rev[2]);
+
 	*device = phy;
+
+	return 0;
+
+error_hw_close:
+	adi_apollo_device_hw_close(&phy->ad9088);
+error:
+	no_os_gpio_remove(phy->reset_gpio);
+	no_os_spi_remove(phy->spi);
+	no_os_free(phy);
+
+	return ret;
+}
+
+int ad9088_remove(struct ad9088_phy *phy)
+{
+	if (!phy)
+		return -EINVAL;
+
+	adi_apollo_device_hw_close(&phy->ad9088);
+
+	no_os_gpio_remove(phy->tx2_en_gpio);
+	no_os_gpio_remove(phy->tx1_en_gpio);
+	no_os_gpio_remove(phy->rx2_en_gpio);
+	no_os_gpio_remove(phy->rx1_en_gpio);
+	no_os_gpio_remove(phy->triq_req_gpio);
+	no_os_gpio_remove(phy->reset_gpio);
+	no_os_spi_remove(phy->spi);
+	no_os_free(phy);
 
 	return 0;
 }
