@@ -1,19 +1,22 @@
-trigger:
-- main
-- next_stable
-- 20*
+trigger: none
+pr: none
 
-pr:
-  branches:
-    include:
-    - main
-    - next_stable
-    - 20*
-  paths:
-    exclude:
-    - doc/**
-    - '**/*.md'
-    - '**/*.rst'
+# trigger:
+# - main
+# - next_stable
+# - 20*
+
+# pr:
+#   branches:
+#     include:
+#     - main
+#     - next_stable
+#     - 20*
+  # paths:
+  #   exclude:
+  #   - doc/**
+  #   - '**/*.md'
+  #   - '**/*.rst'
 
 variables:
 - group: noos_releases_group_variables
