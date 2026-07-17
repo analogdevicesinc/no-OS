@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 name: Workflow for checkers, drivers and unit-tests
+=======
+name: Workflow for checkers and unit-tests
+>>>>>>> 126b62cb9 (Separate unit workflows steps)
 
 on:
   pull_request:
@@ -75,4 +79,3 @@ jobs:
           comment: true
           token: ${{ secrets.GITHUB_TOKEN }}
           updateComment: true
-          
