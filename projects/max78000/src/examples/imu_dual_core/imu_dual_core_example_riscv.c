@@ -165,11 +165,56 @@ static struct adis_init_param adis_ip = {
 	.dev_id     = ADIS16577_2,
 };
 
+/* Software-reset attempts before reporting an error to the ARM. */
+#define IMU_ADIS_RESET_ATTEMPTS 3u
+
+/*
+ * The ADIS keeps power across an MCU reset/reflash, so it can come up wedged
+ * (DATA_CNTR stuck at 0xFFFF, data 0) where only a hard power cycle recovers it.
+ * Confirm it is sampling: DATA_CNTR must be readable, not 0xFFFF, and advancing.
+ * Returns 0 when sampling, -EIO otherwise.
+ */
+static int imu_adis_check_sampling(struct adis_dev *dev)
+{
+	uint32_t dc0 = 0, dc1 = 0;
+	int ret;
+
+	ret = adis_read_data_cntr(dev, &dc0);
+	if (ret)
+		return ret;
+
+	no_os_mdelay(2);   /* > one 2 kHz ODR period */
+
+	ret = adis_read_data_cntr(dev, &dc1);
+	if (ret)
+		return ret;
+
+	if (dc0 == 0xFFFF || dc0 == dc1)
+		return -EIO;
+
+	return 0;
+}
+
+/*
+ * Re-align the ADIS SPI frame before a reset: an MCU reset mid-transaction can
+ * leave the ADIS bit counter mid-word, so the next command lands misaligned. Each
+ * CS-framed read ends on a CS rising edge, resetting that counter; the value is
+ * discarded. Runs under the caller's bus lock.
+ */
+static void imu_adis_reframe(struct adis_dev *dev)
+{
+	uint32_t scratch;
+
+	for (uint32_t i = 0; i < 2; i++)
+		(void)adis_read_prod_id(dev, &scratch);
+}
+
 static int imu_adis_init_staged(struct adis_dev **adis)
 {
 	struct adis_diag_flags diag_flags;
 	struct adis_dev *dev;
-	int ret;
+	int ret = -EIO;
+	uint32_t attempt;
 
 	if (!adis_ip.info)
 		return -EINVAL;
@@ -191,8 +236,19 @@ static int imu_adis_init_staged(struct adis_dev **adis)
 	dev->is_locked = false;
 	g_shared->state = IMU_STATE_SPI_OK;
 
-	set_stage(IMU_STAGE_ADIS_RESET_CMD);
-	ret = adis_cmd_sw_res(dev);
+	/* Re-frame, reset, and verify the ADIS is sampling; retry if not. */
+	for (attempt = 0; attempt < IMU_ADIS_RESET_ATTEMPTS; attempt++) {
+		set_stage(IMU_STAGE_ADIS_RESET_CMD);
+		imu_adis_reframe(dev);
+		ret = adis_cmd_sw_res(dev);
+		if (ret)
+			goto error;
+
+		set_stage(IMU_STAGE_ADIS_RESET_WAIT);
+		ret = imu_adis_check_sampling(dev);
+		if (!ret)
+			break;
+	}
 	if (ret)
 		goto error;
 
