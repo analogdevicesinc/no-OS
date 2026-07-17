@@ -1,0 +1,50 @@
+name: Deploy docs for ToF
+
+on:
+  workflow_dispatch:
+    inputs:
+      update-gh-pages:
+        required: false
+        default: 'false'
+
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+env:
+  NUM_JOBS: 4
+
+jobs:
+  deploy-doxygen:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+      - name: Verify changed files
+        id: verify_changed_files
+        uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 #v3
+        with:
+          filters: |
+            docs:
+              - 'doc/**'
+              - '.github/scripts/documentation.sh'
+              - '.github/scripts/gen_dox.sh'
+              - '.github/scripts/deploy-docs.sh'
+              - '.github/workflows/deploy-docs.yaml'
+            drivers:
+              - 'drivers/**'
+      - name: Deploy doxygen
+        if: ${{ steps.verify_changed_files.outputs.docs == 'true' || steps.verify_changed_files.outputs.drivers == 'true' }}
+        shell: sh
+        run: |
+          ${{ github.workspace }}/.github/scripts/deploy-docs.sh
+        env:
+          TOP_DIR: ${{ github.workspace }}
+          NUM_JOBS: ${{ env.NUM_JOBS }}
+          VERSION: '1.13.2'
+          UPDATE_GH_PAGES: ${{ github.event == 'workflow_dispatch' && inputs.update-gh-pages || 'true' }}

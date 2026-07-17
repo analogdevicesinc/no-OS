@@ -1,4 +1,4 @@
-#!/bin/sh -xe
+#!/bin/bash
 # Copyright 2023(c) Analog Devices, Inc.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -25,70 +25,90 @@
 # LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#List of excluded driver folders for the documentation generation.
 
-COMMON_SCRIPTS="astyle.sh astyle_config cppcheck.sh"
-NUM_JOBS=$(nproc)
 
-get_script_path() {
-	local script="$1"
+set -e
 
-	[ -n "$script" ] || return 1
+ASTYLE_EXT_LIST="${ASTYLE_EXT_LIST} .c .h"
+COMMIT_RANGE="$1"
 
-	if [ -f "ci/$script" ] ; then
-		echo "ci/$script"
-	elif [ -f "build/$script" ] ; then
-		echo "build/$script"
-	else
-		return 1
-	fi
-}
-
-echo_red() { printf "\033[1;31m$*\033[m\n"; }
-echo_green() { printf "\033[1;32m$*\033[m\n"; }
-
-# Other scripts will download lib.sh [this script] and lib.sh will
-# in turn download the other scripts it needs.
-# This gives way more flexibility when changing things, as they propagate
-download_common_scripts() {
-	for script in $COMMON_SCRIPTS ; do
-		[ ! -f "ci/$script" ] || continue
-		[ ! -f "build/$script" ] || continue
-		mkdir -p build
-		wget https://raw.githubusercontent.com/analogdevicesinc/no-OS/main/ci/$script \
-			-O build/$script
-	done
-}
-
-#################################################################
-# Parse commit range - shared implementation for CI scripts
-#################################################################
 parse_commit_range() {
 	local operation_name="${1:-check}"
 
-	if [ -z "$COMMIT_RANGE" ]
-	then
+	if [ -z "$COMMIT_RANGE" ]; then
 		COMMIT_RANGE="${COMMIT_RANGE}"
 	fi
 
-	if [ -z "$COMMIT_RANGE" ]  && [ -n "$TARGET_BRANCH" ]
-	then
+	if [ -z "$COMMIT_RANGE" ]  && [ -n "$TARGET_BRANCH" ]; then
 		git fetch --depth=50 origin $TARGET_BRANCH
 		git branch $TARGET_BRANCH origin/$TARGET_BRANCH
 		COMMIT_RANGE="${TARGET_BRANCH}.."
 	fi
 
-	if [ -z "$COMMIT_RANGE" ]
-	then
-		echo_green "Using only latest commit, since there is no Pull Request"
+	if [ -z "$COMMIT_RANGE" ]; then
+		echo "Using only latest commit, since there is no Pull Request"
 		COMMIT_RANGE=HEAD~1
 	fi
 
-	echo_green "Running $operation_name on commit range '$COMMIT_RANGE'"
-	echo_green "Commits should be:"
+	echo "Running $operation_name on commit range '$COMMIT_RANGE'"
+	echo "Commits should be:"
 	if ! git rev-parse $COMMIT_RANGE ; then
-		echo_red "Failed to parse commit range '$COMMIT_RANGE'"
-		echo_green "Using only latest commit"
+		echo "Failed to parse commit range '$COMMIT_RANGE'"
+		echo "Using only latest commit"
 		COMMIT_RANGE=HEAD~1
 	fi
 }
+
+is_valid_file() {
+	[[ -f ".astyleignore" ]] &&
+	while read -r fpath; do
+		[[ -z "$fpath" ]] && continue
+		[[ "$file" == *"$fpath"* ]] && return 1
+	done < ".astyleignore"
+
+	return 0
+}
+
+is_source_file() {
+	local file="$1"
+
+	for ext in $ASTYLE_EXT_LIST; do
+		[[ "${file: -2}" == "$ext" || "${file: -3}" == "$ext" ]] && return 0
+	done;
+
+	return 1
+}
+
+
+build_astyle() {
+	if [ ! -d build/astyle/build/gcc ]; then
+		mkdir -p build
+		pushd build
+		wget --no-check-certificate "https://sourceforge.net/projects/astyle/files/astyle/astyle 3.1/astyle_3.1_linux.tar.gz"
+		tar -xzf astyle_3.1_linux.tar.gz
+		pushd ./astyle/build/gcc
+		make -j${NUM_JOBS}
+		popd
+		popd
+	fi
+}
+
+run_astyle() {
+	git diff --name-only --diff-filter=d $COMMIT_RANGE | while read -r file; do
+		if is_source_file "$file" && is_valid_file "$file"
+		then
+			./build/astyle/build/gcc/bin/astyle --options="$(get_script_path astyle_config)" "$file"
+		fi
+	done;
+
+	git diff --exit-code || {
+		echo "Code style issues found."
+		exit 1
+	}
+}
+
+parse_commit_range
+
+build_astyle
+
+run_astyle
