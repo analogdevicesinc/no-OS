@@ -30,3 +30,4 @@
 *:libraries/mbedtls/*
 *:legacy/*
 *:tools/scripts/platform/*
+*:build/*

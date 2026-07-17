@@ -47,7 +47,7 @@ build_cppheck() {
 
 parse_cppcheck_options() {
 	[[ ! -f .cppcheckignore ]] || CPPCHECK_OPTIONS="${CPPCHECK_OPTIONS} --suppressions-list=.cppcheckignore"
-	[[ ! -f ./ci/config.cppcheck ]] || CPPCHECK_OPTIONS="${CPPCHECK_OPTIONS} --library=./ci/config.cppcheck"
+	[[ ! -f ./.github/config/config.cppcheck ]] || CPPCHECK_OPTIONS="${CPPCHECK_OPTIONS} --library=./.github/config/config.cppcheck"
 }
 
 run_cppcheck() {

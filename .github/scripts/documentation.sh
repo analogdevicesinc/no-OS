@@ -26,15 +26,43 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-. ./ci/lib.sh
-
 COMMIT_RANGE="$1"
+
+parse_commit_range() {
+        local operation_name="${1:-check}"
+
+	if [ -z "$COMMIT_RANGE" ]
+	then
+		COMMIT_RANGE="${COMMIT_RANGE}"
+	fi
+
+	if [ -z "$COMMIT_RANGE" ]  && [ -n "$TARGET_BRANCH" ]
+	then
+		git fetch --depth=50 origin $TARGET_BRANCH
+		git branch $TARGET_BRANCH origin/$TARGET_BRANCH
+		COMMIT_RANGE="${TARGET_BRANCH}.."
+	fi
+
+	if [ -z "$COMMIT_RANGE" ]
+	then
+		echo_green "Using only latest commit, since there is no Pull Request"
+		COMMIT_RANGE=HEAD~1
+	fi
+
+	echo_green "Running $operation_name on commit range '$COMMIT_RANGE'"
+	echo_green "Commits should be:"
+	if ! git rev-parse $COMMIT_RANGE ; then
+		echo_red "Failed to parse commit range '$COMMIT_RANGE'"
+		echo_green "Using only latest commit"
+		COMMIT_RANGE=HEAD~1
+	fi
+}
 
 #################################################################
 # Check if new drivers/projects have README.rst files
 #################################################################
 check_new_components_readme() {
-	echo_green "Checking for new drivers/projects and their README.rst files..."
+	echo "Checking for new drivers/projects and their README.rst files..."
 
 	# Excluded driver categories that don't require README.rst
 	# Note: "imu" uses a flat structure with a single shared README.rst
@@ -77,11 +105,11 @@ check_new_components_readme() {
 				local readme_path="$component_path/README.rst"
 
 				if [ ! -f "$readme_path" ]; then
-					echo_red "ERROR: New component '$component_dir' in '$top_dir' is missing README.rst file"
-					echo_red "Please add a README.rst file at: $readme_path"
+					echo "ERROR: New component '$component_dir' in '$top_dir' is missing README.rst file"
+					echo "Please add a README.rst file at: $readme_path"
 					exit 1
 				else
-					echo_green "Found README.rst for new component: $component_dir"
+					echo "Found README.rst for new component: $component_dir"
 				fi
 			fi
 		fi
@@ -117,12 +145,12 @@ check_sphinx_doc() {
                                         category_dir=$(basename "$(dirname "$actual_location")")
                                         wildcard_pattern="$top_dir/$category_dir/\*"
                                         if ! grep -q "$wildcard_pattern" "$sphinx_path/${top_dir}_doc.rst"; then
-                                                echo_red "Missing wildcard pattern '$wildcard_pattern' in $sphinx_path/${top_dir}_doc.rst"
+                                                echo "Missing wildcard pattern '$wildcard_pattern' in $sphinx_path/${top_dir}_doc.rst"
                                                 exit 1
                                         fi
                                 else
                                         # File doesn't exist at all
-                                        echo_red "Missing $fn_dir.rst file under $sphinx_path/$top_dir"
+                                        echo "Missing $fn_dir.rst file under $sphinx_path/$top_dir"
                                         exit 1
                                 fi
                         else
@@ -132,18 +160,18 @@ check_sphinx_doc() {
                                         # File exists in the expected subdirectory, now check if category is in toctree
                                         wildcard_pattern="$top_dir/$second_dir/\*"
                                         if ! grep -q "$wildcard_pattern" "$sphinx_path/${top_dir}_doc.rst"; then
-                                                echo_red "Missing wildcard pattern '$wildcard_pattern' in $sphinx_path/${top_dir}_doc.rst"
+                                                echo "Missing wildcard pattern '$wildcard_pattern' in $sphinx_path/${top_dir}_doc.rst"
                                                 exit 1
                                         fi
                                 elif find "$sphinx_path/$top_dir" -name "$fn_dir.rst" -type f | grep -q .; then
                                         # File exists but in wrong subdirectory
                                         actual_location=$(find "$sphinx_path/$top_dir" -name "$fn_dir.rst" -type f | head -1)
                                         expected_location="$sphinx_path/$top_dir/$second_dir/$fn_dir.rst"
-                                        echo_red "File $fn_dir.rst found at $actual_location but expected at $expected_location"
+                                        echo "File $fn_dir.rst found at $actual_location but expected at $expected_location"
                                         exit 1
                                 else
                                         # File doesn't exist at all
-                                        echo_red "Missing $fn_dir.rst file under $sphinx_path/$top_dir"
+                                        echo "Missing $fn_dir.rst file under $sphinx_path/$top_dir"
                                         exit 1
                                 fi
                         fi
@@ -157,12 +185,12 @@ check_sphinx_doc() {
 build_doxygen() {
         pushd ${TOP_DIR}/doc/doxygen
         (cd build && ! make -j${NUM_JOBS} doc TOP_DIR=${TOP_DIR} 2>&1 | grep -E "warning:|error:") || {
-                echo_red "Documentation incomplete or errors in the generation of it have occured!"
+                echo "Documentation incomplete or errors in the generation of it have occured!"
                 exit 1
         }
         popd
 
-        echo_green "Documentation was generated successfully!"
+        echo "Documentation was generated successfully!"
 }
 
 build_sphinx() {
@@ -180,57 +208,44 @@ build_sphinx() {
 update_gh_pages() {
         REPO_SLUG="${REPO_SLUG:-analogdevicesinc/no-OS}"
 
-        if [[ -z "${SYSTEM_PULLREQUEST_PULLREQUESTNUMBER}" && "${BUILD_SOURCEBRANCH}" == *"main"* ]] ; then
-                UPDATE_GH_DOCS=1
-        fi
+        git config --global user.email "cse-ci-notifications@analog.com"
+        git config --global user.name "CSE-CI"
 
-        if [ "$UPDATE_GH_DOCS" = "1" ]
-        then
-                git config --global user.email "cse-ci-notifications@analog.com"
-                git config --global user.name "CSE-CI"
+        MAIN_COMMIT=$(git rev-parse --short HEAD)
 
-                MAIN_COMMIT=$(git rev-parse --short HEAD)
+        echo "Running Github docs update on commit '$MAIN_COMMIT'"
 
-                echo_green "Running Github docs update on commit '$MAIN_COMMIT'"
+        git fetch --depth 1 origin +refs/heads/gh-pages:gh-pages
+        rm -rf ${DEPS_DIR}
+        git checkout gh-pages
 
-                git fetch --depth 1 origin +refs/heads/gh-pages:gh-pages
+        # Clear previous content in the root folder except the doc path which holds new builds
+        find ${TOP_DIR} -mindepth 1 -maxdepth 1 ! \( -name "doc" -o -name ".git" \) -exec rm -r {} \;
 
-                rm -rf ${DEPS_DIR}
+        # Create doxygen folder holding new build content
+        mkdir -p ${TOP_DIR}/doxygen
+        rsync -a "${TOP_DIR}/doc/doxygen/build/doxygen_doc/html/" "${TOP_DIR}/doxygen/"
 
-                git checkout gh-pages
+        # Add sphinx build content to root folder
+        cp -R ${TOP_DIR}/doc/sphinx/build/html/* ${TOP_DIR}
+        rm -rf ${TOP_DIR}/doc
 
-                # Clear previous content in the root folder except the doc path which holds new builds
-                find ${TOP_DIR} -mindepth 1 -maxdepth 1 ! \( -name "doc" -o -name ".git" \) -exec rm -r {} \;
-
-                # Create doxygen folder holding new build content
-                mkdir -p ${TOP_DIR}/doxygen
-                rsync -a "${TOP_DIR}/doc/doxygen/build/doxygen_doc/html/" "${TOP_DIR}/doxygen/"
-
-                # Add sphinx build content to root folder
-                cp -R ${TOP_DIR}/doc/sphinx/build/html/* ${TOP_DIR}
-
-                rm -rf ${TOP_DIR}/doc
-
-                # Create .nojekyll file
-                touch ${TOP_DIR}/.nojekyll
-
-                CURRENT_COMMIT=$(git log -1 --pretty=%B)
-                if [[ ${CURRENT_COMMIT:(-7)} != ${MAIN_COMMIT:0:7} ]]
-                then
-                        git add --all .
-                        git commit --allow-empty --amend -m "Update documentation to ${MAIN_COMMIT:0:7}"
-                        if [ -n "$GITHUB_DOC_TOKEN" ] ; then
-                                git push https://${GITHUB_DOC_TOKEN}@github.com/${REPO_SLUG} gh-pages -f
-                        else
-                                git push origin gh-pages -f
-                        fi
-
-                        echo_green "Documetation updated!"
+        # Create .nojekyll file
+        touch ${TOP_DIR}/.nojekyll
+        CURRENT_COMMIT=$(git log -1 --pretty=%B)
+        
+        if [[ ${CURRENT_COMMIT:(-7)} != ${MAIN_COMMIT:0:7} ]]; then
+                git add --all .
+                git commit --allow-empty -m "Update documentation to ${MAIN_COMMIT:0:7}"
+                if [ -n "$GITHUB_DOC_TOKEN" ] ; then
+                        git push https://${GITHUB_DOC_TOKEN}@github.com/${REPO_SLUG} gh-pages
                 else
-                        echo_green "Documentation already up to date!"
+                        git push origin gh-pages
                 fi
+
+                echo "Documetation updated!"
         else
-                echo_green "Documentation will be updated when this commit gets on main!"
+                echo "Documentation already up to date!"
         fi
 }
 
@@ -244,4 +259,8 @@ build_doxygen
 
 build_sphinx
 
-update_gh_pages
+if [[ "UPDATE_GH_PAGES" == 'true' ]]; then
+        update_gh_pages
+else
+        echo "Not updating gh-pages ..."
+fi
