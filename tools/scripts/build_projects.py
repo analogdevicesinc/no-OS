@@ -376,20 +376,11 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 				os.path.abspath(build_dir_base), jobs, fresh_flag, hardware_arg))
 		log(build_cmd)
 		sys.stdout.flush()
-		err = os.system(build_cmd + ' > /dev/null 2>&1')
+		err = os.system(build_cmd + ' > %s 2>&1' % dst_log)
 		success = err == 0
 
 		os.environ.clear()
 		os.environ.update(env)
-
-		# Copy the cmake configure+build log (written by no_os_build into the
-		# build dir) into the per-combo CI log artifact.
-		cmake_log = build_dir / 'build.log'
-		if cmake_log.is_file():
-			import shutil
-			shutil.copy2(str(cmake_log), dst_log)
-		else:
-			open(dst_log, 'w').close()
 
 		if not success:
 			log_err("ERROR")
@@ -425,6 +416,8 @@ def main():
 	projets = os.path.join(noos,'projects')
 	ensure_dir(export_dir)
 	ensure_dir(log_dir)
+	global log_file
+	log_file = os.path.join(log_dir, DEFAULT_LOG_FILE)
 	(builds_dir, blacklist) = configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch)
 	for project in os.listdir(projets):
 		if _project is not None:
