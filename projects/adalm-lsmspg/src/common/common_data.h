@@ -34,7 +34,6 @@
 #define __COMMON_DATA_H__
 
 extern struct no_os_spi_init_param ad5592r_spi_ip;
-extern struct no_os_gpio_init_param ad5592r_spi_ss_ip;
 extern struct no_os_uart_init_param uart_ip;
 extern struct no_os_irq_init_param timer_irq_ip;
 extern struct no_os_timer_init_param timer_ip;
