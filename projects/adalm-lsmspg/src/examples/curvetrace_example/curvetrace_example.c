@@ -33,6 +33,7 @@
 *******************************************************************************/
 #include "example.h"
 #include "common_data.h"
+#include "parameters.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 #include "no_os_uart.h"
@@ -48,7 +49,7 @@
     .int_ref = true, \
     .spi_init = &ad5592r_spi_ip, \
     .i2c_init = NULL, \
-    .ss_init = &ad5592r_spi_ss_ip, \
+    .ss_init = AD5592R_SPI_SS_IP, \
     .channel_modes = { \
         CH_MODE_DAC,         /* channel 0 */ \
         CH_MODE_ADC,         /* channel 1 */ \

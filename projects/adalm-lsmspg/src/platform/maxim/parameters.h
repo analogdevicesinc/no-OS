@@ -41,12 +41,18 @@
 #include "maxim_spi.h"
 #include "maxim_gpio.h"
 #include "maxim_uart.h"
+#ifdef CONFIG_USB_UART_MAXIM
 #include "maxim_usb_uart.h"
+#endif
 #include "maxim_irq.h"
 #include "maxim_timer.h"
 #include "maxim_i2c.h"
 
+#if (TARGET_NUM == 32655)
+#define AD5592R_SPI_DEVICE_ID 	0
+#elif (TARGET_NUM == 32665)
 #define AD5592R_SPI_DEVICE_ID 	2
+#endif
 #define AD5592R_SPI_SPEED 	1000000
 #define AD5592R_SPI_CS 		0
 #define AD5592R_SPI_MODE 	NO_OS_SPI_MODE_2 /* CPOL = 1, CPHA = 0 */
@@ -56,23 +62,37 @@
 #define AD5592R_SPI_EXTRA 	&ad5592r_spi_extra
 extern struct max_spi_init_param ad5592r_spi_extra;
 
+#if (TARGET_NUM == 32665)
 #define AD5592R_SPI_SS_PORT 	0
 #define AD5592R_SPI_SS_NUMBER 	2
 #define AD5592R_SPI_SS_PULL 	NO_OS_PULL_NONE
 #define AD5592R_SPI_SS_OPS 	&max_gpio_ops
 #define AD5592R_SPI_SS_EXTRA 	&ad5592r_spi_ss_extra
 extern struct max_gpio_init_param ad5592r_spi_ss_extra;
+extern struct no_os_gpio_init_param ad5592r_spi_ss_ip;
+#define AD5592R_SPI_SS_IP 	&ad5592r_spi_ss_ip
+#elif (TARGET_NUM == 32655)
+#define AD5592R_SPI_SS_IP 	NULL
+#endif
 
 #define UART_DEVICE_ID 		0
+#ifdef CONFIG_USB_UART_MAXIM
 #define UART_IRQ_ID 		USB_IRQn
 #define UART_ASYNC_RX 		true
+#define UART_PLATFORM_OPS 	&max_usb_uart_ops
+#define UART_EXTRA 		&uart_extra
+extern struct max_usb_uart_init_param uart_extra;
+#else
+#define UART_IRQ_ID 		UART0_IRQn
+#define UART_ASYNC_RX 		true
+#define UART_PLATFORM_OPS 	&max_uart_ops
+#define UART_EXTRA 		&uart_extra
+extern struct max_uart_init_param uart_extra;
+#endif
 #define UART_BAUD_RATE 		115200
 #define UART_SIZE  		NO_OS_UART_CS_8
 #define UART_PARITY 		NO_OS_UART_PAR_NO
 #define UART_STOP_BITS 		NO_OS_UART_STOP_1_BIT
-#define UART_PLATFORM_OPS 	&max_usb_uart_ops
-#define UART_EXTRA 		&uart_extra
-extern struct max_usb_uart_init_param uart_extra;
 
 #define TIMER_IRQ_ID 		0
 #define TIMER_IRQ_OPS 		&max_irq_ops
@@ -83,21 +103,34 @@ extern struct max_usb_uart_init_param uart_extra;
 #define TIMER_TICKS_COUNT 	16000
 #define TIMER_OPS 		&max_timer_ops
 
+#if (TARGET_NUM == 32655)
+#define LED_GPIO_PORT 		2
+#define LED_GPIO_NUMBER 	5
+#elif (TARGET_NUM == 32665)
 #define LED_GPIO_PORT 		0
 #define LED_GPIO_NUMBER 	21
+#endif
 #define LED_GPIO_PULL 		NO_OS_PULL_NONE
 #define LED_GPIO_OPS 		&max_gpio_ops
-#define LED_GPIO_EXTRA 		&ad5592r_led_extra
-extern struct max_gpio_init_param ad5592r_led_extra;
+#define LED_GPIO_EXTRA 		&led_gpio_extra
+extern struct max_gpio_init_param led_gpio_extra;
 
+#if (TARGET_NUM == 32655)
+#define AD5593R_I2C_DEVICE_ID 	2
+#elif (TARGET_NUM == 32665)
 #define AD5593R_I2C_DEVICE_ID 	0
+#endif
 #define AD5593R_I2C_SPEED_HZ 	100000  /* fast mode 100 Khz */
 #define AD5593R_I2C_SLAVE_ADDR 	0b10000 /* 0x10 */
 #define AD5593R_I2C_OPS 	&max_i2c_ops
 #define AD5593R_I2C_EXTRA 	&ad5593r_i2c_extra
 extern struct max_i2c_init_param ad5593r_i2c_extra;
 
+#if (TARGET_NUM == 32655)
+#define LM75_I2C_DEVICE_ID 	2
+#elif (TARGET_NUM == 32665)
 #define LM75_I2C_DEVICE_ID 	0
+#endif
 #define LM75_I2C_SPEED_HZ 	100000
 #define LM75_I2C_SLAVE_ADDR 	0b1001000 /* 0x48 */
 #define LM75_I2C_OPS 		&max_i2c_ops

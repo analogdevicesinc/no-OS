@@ -35,6 +35,9 @@
 #include "no_os_timer.h"
 #include "maxim_irq.h"
 #include "common_data.h"
+#if (TARGET_NUM == 32655)
+#include "tmr.h"
+#endif
 
 static struct no_os_irq_ctrl_desc *timer_irq_desc;
 static struct no_os_callback_desc heartbeat_callback;
@@ -63,6 +66,12 @@ int heartbeat_init(void (*cb)(void *context))
 	err = no_os_timer_start(timer_desc);
 	if (err)
 		goto err_timer_exit;
+
+#if (TARGET_NUM == 32655)
+	/* max32655 timers require explicit interrupt enable (IE_A bit in ctrl1);
+	   max32665 has no such gate and no MXC_TMR_EnableInt API. */
+	MXC_TMR_EnableInt(MXC_TMR0);
+#endif
 
 	err = no_os_irq_enable(timer_irq_desc, TMR0_IRQn);
 	if (err)
