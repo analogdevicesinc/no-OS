@@ -81,7 +81,11 @@ jobs:
         with:
           path: ${{ env.LOGS_DIR }}
           name: logs_xilinx_${{ github.job }}
+<<<<<<< HEAD
       - name: Remove logs, new_hardware and release output
         shell: sh
         run: |
           rm -rf ${{ env.RELEASES_DIR }} ${{ env.LOGS_DIR }} ${{ env.BUILDS_DIR }}_${{ env.HDL_BRANCH }}/new_hardware
+=======
+
+>>>>>>> ac87b2f03 (Matrix refferences replaced with xilinx)
