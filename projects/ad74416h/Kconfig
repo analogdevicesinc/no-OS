@@ -10,6 +10,66 @@ config AD74416H_BASIC_EXAMPLE
 	  Basic example that initializes the AD74416H ADC-DAC device
 	  and performs GPIO operations over SPI interface.
 
+config AD74416H_CURRENT_INPUT_EXT_EXAMPLE
+	bool "Current input external example"
+	help
+	  Current input measurement in externally powered mode.
+
+config AD74416H_CURRENT_INPUT_LOOP_EXAMPLE
+	bool "Current input loop example"
+	help
+	  Current input measurement in loop powered mode.
+
+config AD74416H_CURRENT_OUTPUT_EXAMPLE
+	bool "Current output example"
+	help
+	  Configures a channel as a current output (source) DAC.
+
+config AD74416H_DIGITAL_INPUT_LOGIC_EXAMPLE
+	bool "Digital input logic example"
+	help
+	  Reads a channel configured as a digital (logic) input.
+
+config AD74416H_DIGITAL_INPUT_LOOP_EXAMPLE
+	bool "Digital input loop example"
+	help
+	  Reads a channel configured as a loop powered digital input.
+
+config AD74416H_DIGITAL_OUTPUT_EXAMPLE
+	bool "Digital output example"
+	help
+	  Drives a channel configured as a digital output.
+
+config AD74416H_MULTIPLE_DEVICES_EXAMPLE
+	bool "Multiple devices example"
+	help
+	  Initializes and operates multiple AD74416H devices.
+
+config AD74416H_TEMPERATURE_2WIRE_RTD_EXAMPLE
+	bool "Temperature 2-wire RTD example"
+	help
+	  Temperature measurement using a 2-wire RTD Pt-1000 sensor.
+
+config AD74416H_TEMPERATURE_3WIRE_RTD_EXAMPLE
+	bool "Temperature 3-wire RTD example"
+	help
+	  Temperature measurement using a 3-wire RTD Pt-1000 sensor.
+
+config AD74416H_VOLTAGE_INPUT_EXAMPLE
+	bool "Voltage input example"
+	help
+	  Reads a channel configured as a voltage input (ADC).
+
+config AD74416H_VOLTAGE_INPUT_IRQ_EXAMPLE
+	bool "Voltage input IRQ example"
+	help
+	  Reads a voltage input using ADC ready interrupts.
+
+config AD74416H_VOLTAGE_OUTPUT_EXAMPLE
+	bool "Voltage output example"
+	help
+	  Configures a channel as a voltage output (source) DAC.
+
 endchoice
 
 endmenu
