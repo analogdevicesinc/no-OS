@@ -334,22 +334,22 @@ int ad9088_log_write(void *user_data, int32_t log_type, const char *message,
 	case ADI_CMS_LOG_NONE:
 		break;
 	case ADI_CMS_LOG_MSG:
-		pr_info("%s", logMessage);
+		pr_info("%s\n", logMessage);
 		break;
 	case ADI_CMS_LOG_WARN:
-		pr_warning("%s", logMessage);
+		pr_warning("%s\n", logMessage);
 		break;
 	case ADI_CMS_LOG_ERR:
-		pr_err("%s", logMessage);
+		pr_err("%s\n", logMessage);
 		break;
 	case ADI_CMS_LOG_SPI:
-		pr_debug("%s", logMessage);
+		pr_debug("%s\n", logMessage);
 		break;
 	case ADI_CMS_LOG_API:
-		pr_debug("%s", logMessage);
+		pr_debug("%s\n", logMessage);
 		break;
 	case ADI_CMS_LOG_ALL:
-		printf(logMessage);
+		printf("%s\n", logMessage);
 		break;
 	}
 
@@ -513,6 +513,7 @@ static int ad9088_version_info(struct ad9088_phy *phy)
 int ad9088_init(struct ad9088_phy **device,
 		const struct ad9088_init_param *init_param)
 {
+	struct ad9088_jesd204_priv *priv;
 	struct ad9088_phy *phy;
 	uint16_t api_rev[3];
 	int ret;
@@ -593,6 +594,13 @@ int ad9088_init(struct ad9088_phy **device,
 		phy->chip_id.prod_grade, api_rev[0], api_rev[1],
 		api_rev[2]);
 
+	ret = jesd204_dev_register(&phy->jdev, &jesd204_ad9088_init);
+	if (ret)
+		goto error_hw_close;
+
+	priv = jesd204_dev_priv(phy->jdev);
+	priv->phy = phy;
+
 	*device = phy;
 
 	return 0;
@@ -612,6 +620,7 @@ int ad9088_remove(struct ad9088_phy *phy)
 	if (!phy)
 		return -EINVAL;
 
+	jesd204_dev_unregister(phy->jdev);
 	adi_apollo_device_hw_close(&phy->ad9088);
 
 	no_os_gpio_remove(phy->tx2_en_gpio);

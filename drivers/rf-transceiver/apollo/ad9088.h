@@ -4,6 +4,8 @@
  *
  * Copyright 2022 Analog Devices Inc.
  */
+#ifndef __AD9088_H__
+#define __AD9088_H__
 //#define DEBUG
 
 #include <stdio.h>
@@ -37,6 +39,15 @@
 // #include "../../../misc/adi-axi-hsci.h"
 
 #define JESD204_OF_PREFIX	"adi,"
+
+#define DEFRAMER_LINK_A0_TX	0
+#define DEFRAMER_LINK_A1_TX	1
+#define DEFRAMER_LINK_B0_TX	2
+#define DEFRAMER_LINK_B1_TX	3
+#define FRAMER_LINK_A0_RX	4
+#define FRAMER_LINK_A1_RX	5
+#define FRAMER_LINK_B0_RX	6
+#define FRAMER_LINK_B1_RX	7
 
 #define CHIPID_AD9084 0x9084
 #define CHIPID_AD9088 0x9088
@@ -302,6 +313,8 @@ extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_e
 extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x21000000_bin_start[];
 extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x21000000_bin_end[];
 
+extern const struct jesd204_dev_data jesd204_ad9088_init;
+
 int ad9088_check_apollo_error(int ret, const char *api_name);
 int ad9088_parse_struct(struct ad9088_phy **device,
 			const struct ad9088_init_param *init_param);
@@ -310,3 +323,5 @@ int ad9088_init(struct ad9088_phy **device,
 int ad9088_remove(struct ad9088_phy *phy);
 int ad9088_fft_sniffer_probe(struct ad9088_phy *phy,
 			     adi_apollo_side_select_e side_sel);
+
+#endif /* __AD9088_H__ */

@@ -35,6 +35,9 @@
 #include "common_data.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
+#include "no_os_util.h"
+#include "ad9088.h"
+#include "jesd204.h"
 
 /**
  * @brief Basic example main execution.
@@ -98,10 +101,55 @@ int basic_example_main()
 		goto error_tx_jesd;
 	}
 
+	struct jesd204_topology *topology;
+	struct jesd204_topology_dev devs[] = {
+		{
+			.jdev = hmc7044_dev->jdev,
+			.link_ids = {FRAMER_LINK_A0_RX,
+				     DEFRAMER_LINK_A0_TX},
+			.links_number = 2,
+			.is_sysref_provider = true,
+		},
+		{
+			.jdev = rx_jesd->jdev,
+			.link_ids = {FRAMER_LINK_A0_RX},
+			.links_number = 1,
+		},
+		{
+			.jdev = tx_jesd->jdev,
+			.link_ids = {DEFRAMER_LINK_A0_TX},
+			.links_number = 1,
+		},
+		{
+			.jdev = ad9088_phy->jdev,
+			.link_ids = {FRAMER_LINK_A0_RX,
+				     DEFRAMER_LINK_A0_TX},
+			.links_number = 2,
+			.is_top_device = true,
+		},
+	};
+
+	ret = jesd204_topology_init(&topology, devs,
+				    NO_OS_ARRAY_SIZE(devs));
+	if (ret) {
+		pr_info("JESD204 topology init failed\n");
+		goto error_ad9088;
+	}
+
+	ret = jesd204_fsm_start(topology, JESD204_LINKS_ALL);
+	if (ret) {
+		pr_info("JESD204 FSM start failed\n");
+		goto error_topology;
+	}
+
 	pr_info("Project configured\n");
 
 	return 0;
 
+error_topology:
+	jesd204_topology_remove(topology);
+error_ad9088:
+	ad9088_remove(ad9088_phy);
 error_tx_jesd:
 	axi_jesd204_tx_remove(tx_jesd);
 error_rx_jesd:

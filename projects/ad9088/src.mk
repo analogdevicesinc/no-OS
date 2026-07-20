@@ -79,4 +79,5 @@ INCS += $(DRIVERS)/frequency/adf4382/adf4382.h			\
 	
 SRCS += $(DRIVERS)/frequency/adf4382/adf4382.c			\
 	$(DRIVERS)/frequency/hmc7044/hmc7044.c			\
-	$(DRIVERS)/rf-transceiver/apollo/ad9088.c
+	$(DRIVERS)/rf-transceiver/apollo/ad9088.c		\
+	$(DRIVERS)/rf-transceiver/apollo/ad9088_jesd204_fsm.c

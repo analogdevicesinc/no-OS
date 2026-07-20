@@ -49,12 +49,12 @@
 #include "apollo_cpu_device_profile_types.h"
 
 /*UC42*/
-#define AD9088_RX_JESD_F			2
-#define AD9088_RX_JESD_K			128
+#define AD9088_RX_JESD_F			1
+#define AD9088_RX_JESD_K			256
 #define AD9088_RX_JESD_SUBCLASS			0
 
-#define AD9088_TX_JESD_F			2
-#define AD9088_TX_JESD_K			128
+#define AD9088_TX_JESD_F			1
+#define AD9088_TX_JESD_K			256
 #define AD9088_TX_JESD_M 			4
 #define AD9088_TX_JESD_N			16
 #define AD9088_TX_JESD_NP			16
