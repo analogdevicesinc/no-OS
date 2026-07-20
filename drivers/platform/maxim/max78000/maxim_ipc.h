@@ -3,17 +3,17 @@
  *   @brief  Maxim MAX78000 inter-processor communication (IPC) driver header.
  *   @author Victor Pascu (victor.pascu@analog.com)
  *
- * Implements the generic no_os_ipc API (include/no_os_ipc.h) on top of the
- * Maxim SEMA peripheral: core-to-core doorbell interrupts and single-word
- * mailbox registers.
+ * Implements the CAPI mailbox API (capi_mailbox.h) on top of the Maxim SEMA
+ * peripheral: core-to-core doorbell interrupts and single-word mailbox
+ * registers.
  *
  * Channel mapping (MAX78000 SEMA):
- *   NO_OS_IPC_CHAN_HOST   (notify Arm CM4)   -> irq0 / CM4_IRQ,  mailbox mail1
- *   NO_OS_IPC_CHAN_COPROC (notify RISC-V RV32)-> irq1 / RV32_IRQ, mailbox mail0
+ *   MAX_IPC_HOST_ID   (notify Arm CM4)     -> irq0 / CM4_IRQ,  mailbox mail1
+ *   MAX_IPC_COPROC_ID (notify RISC-V RV32) -> irq1 / RV32_IRQ, mailbox mail0
  *
  * Two ways to use it:
- *  - Host (Arm) side: the full descriptor + ops API via no_os_ipc_*(). Requires
- *    the no-OS runtime (heap, etc.).
+ *  - Host (Arm) side: the CAPI mailbox API via capi_mailbox_*(). Requires the
+ *    no-OS runtime (heap, etc.).
  *  - Coprocessor (RISC-V) side: this core runs as freestanding firmware and
  *    cannot link the no-OS API layer, so it uses the header-only inline helpers
  *    below (maxim_ipc_raw_*), which poke the SEMA registers directly. The host
@@ -56,7 +56,12 @@
 #include <stdbool.h>
 #include "mxc_device.h"
 #include "sema_regs.h"
-#include "no_os_ipc.h"
+#ifndef RISCV
+#include "capi_mailbox.h"
+#endif
+
+#define MAX_IPC_HOST_ID    0u
+#define MAX_IPC_COPROC_ID  1u
 
 /*
  * ----------------------------------------------------------------------------
@@ -135,11 +140,13 @@ static inline uint32_t maxim_ipc_raw_mbox_from_host(void)
 
 /*
  * ----------------------------------------------------------------------------
- * Host-side no_os_ipc ops (require the no-OS runtime)
+ * Host-side CAPI mailbox ops (require the no-OS runtime)
  * ----------------------------------------------------------------------------
  */
 
-/** Platform ops table implementing no_os_ipc over the Maxim SEMA peripheral. */
-extern const struct no_os_ipc_platform_ops max_ipc_ops;
+/** Platform ops table implementing CAPI mailbox over the Maxim SEMA peripheral. */
+#ifndef RISCV
+extern const struct capi_mailbox_ops max_mailbox_ops;
+#endif
 
 #endif /* _MAXIM_IPC_H_ */

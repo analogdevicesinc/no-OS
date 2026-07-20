@@ -56,9 +56,9 @@
 #include <stdbool.h>
 #include <errno.h>
 #include "no_os_uart.h"
-#include "no_os_coprocessor.h"
-#include "no_os_ipc.h"
 #include "no_os_delay.h"
+#include "capi_coprocessor.h"
+#include "capi_mailbox.h"
 #include "maxim_coprocessor.h"
 #include "maxim_ipc.h"
 #include "maxim_gpio_spi.h"
@@ -79,9 +79,9 @@
 static volatile imu_shared_t *const g_shared =
 	(volatile imu_shared_t *)IMU_SHARED_ADDR;
 
-/* Coprocessor (RISC-V CPU1) and IPC (doorbell) descriptors. */
-static struct no_os_coprocessor_desc *cpu1_desc;
-static struct no_os_ipc_desc *ipc_desc;
+/* Coprocessor (RISC-V CPU1) and mailbox (doorbell) handles. */
+static struct capi_coprocessor_handle *cpu1_desc;
+static struct capi_mailbox_handle *mailbox_handle;
 static struct no_os_uart_desc *uart_desc;
 
 /*
@@ -102,7 +102,7 @@ static void risc_v_doorbell_isr(void)
 {
 	risc_v_doorbell_count++;
 	/* Acknowledge (clear) the CM4 doorbell, keeping it enabled. */
-	maxim_ipc_raw_ack_host();
+	capi_mailbox_acknowledge(mailbox_handle, MAX_IPC_HOST_ID);
 }
 
 /**
@@ -179,14 +179,13 @@ static struct adxl345_init_param adxl_ip = {
 static int init_ipc(void)
 {
 	int ret;
-	struct no_os_ipc_init_param param = {
-		.id = 0,
-		.platform_ops = &max_ipc_ops,
-		.extra = NULL
+	struct capi_mailbox_config param = {
+		.identifier = MAX_IPC_HOST_ID,
+		.ops = &max_mailbox_ops,
 	};
 
 	printf("[ARM] Initializing IPC (doorbells)...\r\n");
-	ret = no_os_ipc_init(&ipc_desc, &param);
+	ret = capi_mailbox_init(&mailbox_handle, &param);
 	if (ret) {
 		printf("[ARM] ERROR: IPC init failed (%d)\r\n", ret);
 		return ret;
@@ -201,21 +200,21 @@ static int init_coprocessor(void)
 		.boot_addr = (uint32_t)&_riscv_boot,
 		.enable_debug = true
 	};
-	struct no_os_coprocessor_init_param param = {
-		.id = 0,
-		.platform_ops = &max_coprocessor_ops,
+	struct capi_coprocessor_config param = {
+		.identifier = 0,
+		.ops = &max_coprocessor_ops,
 		.extra = &extra
 	};
 
 	printf("[ARM] Initializing coprocessor (CPU1)...\r\n");
-	ret = no_os_coprocessor_init(&cpu1_desc, &param);
+	ret = capi_coprocessor_init(&cpu1_desc, &param);
 	if (ret) {
 		printf("[ARM] ERROR: Coprocessor init failed (%d)\r\n", ret);
 		return ret;
 	}
 
 	printf("[ARM] Booting coprocessor (CPU1)...\r\n");
-	ret = no_os_coprocessor_boot(cpu1_desc);
+	ret = capi_coprocessor_boot(cpu1_desc);
 	if (ret) {
 		printf("[ARM] ERROR: Coprocessor boot failed (%d)\r\n", ret);
 		return ret;

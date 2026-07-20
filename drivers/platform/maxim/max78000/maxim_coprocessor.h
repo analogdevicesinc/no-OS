@@ -37,7 +37,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "no_os_coprocessor.h"
+#include "capi_coprocessor.h"
 
 /**
  * @struct max_coprocessor_init_param
@@ -57,6 +57,6 @@ struct max_coprocessor_init_param {
 };
 
 /** Platform ops table for MAX78000 coprocessor driver */
-extern const struct no_os_coprocessor_platform_ops max_coprocessor_ops;
+extern const struct capi_coprocessor_ops max_coprocessor_ops;
 
 #endif /* _MAXIM_COPROCESSOR_H_ */

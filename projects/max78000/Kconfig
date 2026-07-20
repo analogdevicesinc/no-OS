@@ -11,24 +11,24 @@ config MAX78000_BASIC_EXAMPLE
 
 config MAX78000_DUAL_CORE_EXAMPLE
 	bool "Dual-core example (ARM + RISC-V)"
-	depends on COPROCESSOR && IPC_MAXIM
+	depends on CAPI_COPROCESSOR && IPC_MAXIM
 	help
-	  Demonstrates the coprocessor lifecycle API (boot, halt) and inter-core
-	  communication via the no_os_ipc doorbell/mailbox API and shared memory.
+	  Demonstrates the CAPI coprocessor lifecycle API (boot, halt) and
+	  inter-core communication via the CAPI mailbox API and shared memory.
 	  ARM (CPU0) boots RISC-V (CPU1), publishes a callback address,
 	  and waits for RISC-V to ring the doorbell periodically.
-	  Requires CONFIG_COPROCESSOR=y and CONFIG_IPC_MAXIM=y.
+	  Requires CONFIG_CAPI_COPROCESSOR=y and CONFIG_IPC_MAXIM=y.
 
 config MAX78000_IMU_DUAL_CORE_EXAMPLE
 	bool "Dual-core IMU example (ADIS16577 + ADXL345)"
-	depends on COPROCESSOR && IPC_MAXIM && ACCEL_ADXL345 && IMU_ADIS1657X
+	depends on CAPI_COPROCESSOR && IPC_MAXIM && ACCEL_ADXL345 && IMU_ADIS1657X
 	help
 	  Dual-sensor workload on shared SPI pins. The RISC-V (CPU1) polls an
 	  ADIS16577-2 IMU via the no-OS driver and publishes raw gyro/accel
-	  samples over no_os_ipc. The ARM (CPU0) reads an ADXL345 on the same
-	  bus, integrates gyro rate into roll/pitch/yaw angles, and logs both
+	  samples over the CAPI mailbox doorbell. The ARM (CPU0) reads an ADXL345
+	  on the same bus, integrates gyro rate into roll/pitch/yaw angles, and logs both
 	  sensors. SPI0 access is serialized across cores with a MAX78000 hardware
-	  semaphore. Requires CONFIG_COPROCESSOR=y, CONFIG_IPC_MAXIM=y,
+	  semaphore. Requires CONFIG_CAPI_COPROCESSOR=y, CONFIG_IPC_MAXIM=y,
 	  CONFIG_ACCEL_ADXL345=y and CONFIG_IMU_ADIS1657X=y.
 
 

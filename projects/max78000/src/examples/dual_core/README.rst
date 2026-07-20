@@ -61,8 +61,7 @@ Or manually enable the options in any defconfig:
 
 .. code-block:: bash
 
-   CONFIG_COPROCESSOR=y
-   CONFIG_SEMA_MAXIM=y
+   CONFIG_IPC_MAXIM=y
    CONFIG_COPROCESSOR_MAXIM=y
    CONFIG_MAX78000_DUAL_CORE_EXAMPLE=y
 
@@ -128,11 +127,11 @@ Both cores have **no data cache** (ICC0/ICC1 are instruction-only) -> shared
 memory is automatically coherent; synchronization is ``volatile`` + the SEMA
 doorbell.
 
-- ARM's ``__DSB()`` / ``no_os_barrier_full()`` (``dsb sy``) is used for
+- ARM's ``__DSB()`` / ``capi_barrier_full()`` (``dsb sy``) is used for
   explicit ordering.
 - The RISC-V side issues **no** memory barriers. On this PULP-derived RV32
   core a ``fence iorw,iorw`` corrupts the immediately-following load, so
-  ``no_os_barrier_full()`` is intentionally not called from the RISC-V side --
+  ``capi_barrier_full()`` is intentionally not called from the RISC-V side --
   ``volatile`` accesses plus the doorbell handshake order the exchange
   correctly.
 
@@ -287,14 +286,15 @@ Debug Hints
   with the stock startup) wedges the AHB bus -- recover by racing
   ``reset halt`` + ``flash erase_sector 0 0 last`` before the bad image runs.
 - **RISC-V reads garbage from the table**: do not issue
-  ``fence``/``no_os_barrier_full()`` on the RISC-V side -- on this core the
+  ``fence``/``capi_barrier_full()`` on the RISC-V side -- on this core the
   fence corrupts the following load.
 
 References
 ----------
 
-- ``include/no_os_coprocessor.h`` -- Generic coprocessor API
-- ``include/no_os_ipc.h`` -- Generic IPC (doorbell + mailbox) API
+- ``capi/inc/capi_coprocessor.h`` -- CAPI coprocessor API
+- ``capi/inc/capi_mailbox.h`` -- CAPI mailbox (doorbell + mailbox) API
+- ``capi/inc/capi_barrier.h`` -- CAPI memory-barrier primitive
 - ``drivers/platform/maxim/max78000/maxim_coprocessor.c`` -- CPU1 boot/halt
 - ``drivers/platform/maxim/max78000/maxim_ipc.{c,h}`` -- SEMA doorbell/mailbox
   IPC

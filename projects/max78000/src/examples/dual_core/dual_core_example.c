@@ -52,9 +52,9 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "no_os_uart.h"
-#include "no_os_coprocessor.h"
-#include "no_os_ipc.h"
-#include "no_os_barrier.h"
+#include "capi_coprocessor.h"
+#include "capi_mailbox.h"
+#include "capi_barrier.h"
 #include "maxim_coprocessor.h"
 #include "maxim_ipc.h"
 #include "maxim_ipc_shared.h"
@@ -74,10 +74,10 @@ static volatile maxim_ipc_table_t *const g_ipc_table =
 	(volatile maxim_ipc_table_t *)IPC_TABLE_ADDR;
 
 /* Coprocessor descriptor */
-static struct no_os_coprocessor_desc *cpu1_desc;
+static struct capi_coprocessor_handle *cpu1_desc;
 
-/* Inter-core IPC descriptor (doorbell + mailbox) */
-static struct no_os_ipc_desc *ipc_desc;
+/* Inter-core mailbox handle (doorbell + scalar mailbox word) */
+static struct capi_mailbox_handle *mailbox_handle;
 
 /* UART descriptor for console output */
 static struct no_os_uart_desc *uart_desc;
@@ -107,19 +107,19 @@ static void publish_callback_to_risc_v(void)
 {
 	/* Invalidate the magic while the table is being updated */
 	g_ipc_table->magic = 0;
-	no_os_barrier_full();
+	capi_barrier_full();
 
 	/* Write the callback address and context */
 	g_ipc_table->fn[0] = (uint32_t)risc_v_event_callback;
 	g_ipc_table->ctx[0] = (uint32_t)NULL;
 
 	/* Release barrier: publish the payload before the ready/magic flags */
-	no_os_barrier_full();
+	capi_barrier_full();
 
 	/* Validate and release the RISC-V core to read */
 	g_ipc_table->magic = MAXIM_IPC_MAGIC;
 	g_ipc_table->ready = 1;
-	no_os_barrier_full();
+	capi_barrier_full();
 
 	printf("[ARM] Callback address published to RISC-V (0x%lx)\r\n",
 	       (unsigned long)risc_v_event_callback);
@@ -145,14 +145,14 @@ static int init_coprocessor(void)
 		.enable_debug = false                /* set true to attach a RISC-V JTAG debugger */
 	};
 
-	struct no_os_coprocessor_init_param param = {
-		.id = 0,
-		.platform_ops = &max_coprocessor_ops,
+	struct capi_coprocessor_config param = {
+		.identifier = 0,
+		.ops = &max_coprocessor_ops,
 		.extra = &extra
 	};
 
 	printf("[ARM] Initializing coprocessor (CPU1)...\r\n");
-	ret = no_os_coprocessor_init(&cpu1_desc, &param);
+	ret = capi_coprocessor_init(&cpu1_desc, &param);
 	if (ret) {
 		printf("[ARM] ERROR: Coprocessor init failed (%d)\r\n", ret);
 		return ret;
@@ -169,7 +169,7 @@ static int boot_coprocessor(void)
 	int ret;
 
 	printf("[ARM] Booting coprocessor (CPU1)...\r\n");
-	ret = no_os_coprocessor_boot(cpu1_desc);
+	ret = capi_coprocessor_boot(cpu1_desc);
 	if (ret) {
 		printf("[ARM] ERROR: Coprocessor boot failed (%d)\r\n", ret);
 		return ret;
@@ -185,14 +185,13 @@ static int boot_coprocessor(void)
 static int init_ipc(void)
 {
 	int ret;
-	struct no_os_ipc_init_param param = {
-		.id = 0,
-		.platform_ops = &max_ipc_ops,
-		.extra = NULL
+	struct capi_mailbox_config param = {
+		.identifier = MAX_IPC_HOST_ID,
+		.ops = &max_mailbox_ops,
 	};
 
 	printf("[ARM] Initializing IPC (doorbells + mailboxes)...\r\n");
-	ret = no_os_ipc_init(&ipc_desc, &param);
+	ret = capi_mailbox_init(&mailbox_handle, &param);
 	if (ret) {
 		printf("[ARM] ERROR: IPC init failed (%d)\r\n", ret);
 		return ret;
@@ -270,13 +269,17 @@ int dual_core_example_main(void)
 
 	while (wakeup_count < target_wakeups) {
 		uint32_t cb;
+		struct capi_mailbox_transaction msg = {
+			.dest_id = MAX_IPC_HOST_ID,
+			.buf = (uint8_t *)&cb,
+			.size = sizeof(cb),
+		};
 
 		/* Wait for the RISC-V core to ring our (host) doorbell */
-		no_os_ipc_wait(ipc_desc, NO_OS_IPC_CHAN_HOST);
+		capi_mailbox_receive_sync(mailbox_handle, &msg);
 
 		/* Read the echoed address, then acknowledge the doorbell */
-		no_os_ipc_mbox_recv(ipc_desc, NO_OS_IPC_CHAN_HOST, &cb);
-		no_os_ipc_ack(ipc_desc, NO_OS_IPC_CHAN_HOST);
+		capi_mailbox_acknowledge(mailbox_handle, MAX_IPC_HOST_ID);
 		wakeup_count++;
 
 		/* Dispatch the echoed callback on the ARM side */
@@ -293,12 +296,12 @@ int dual_core_example_main(void)
 	       (unsigned long)wakeup_count);
 
 	printf("[ARM] Halting coprocessor...\r\n");
-	no_os_coprocessor_halt(cpu1_desc);
+	capi_coprocessor_halt(cpu1_desc);
 
 	printf("[ARM] Removing coprocessor descriptor...\r\n");
-	no_os_coprocessor_remove(cpu1_desc);
+	capi_coprocessor_deinit(cpu1_desc);
 
-	no_os_ipc_remove(ipc_desc);
+	capi_mailbox_deinit(mailbox_handle);
 
 	printf("[ARM] Dual-core example finished\r\n");
 	return 0;
