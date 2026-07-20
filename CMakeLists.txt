@@ -205,6 +205,7 @@ target_include_directories(
         PUBLIC
         ${CMAKE_CURRENT_BINARY_DIR}/build  # Generated no_os_config.h (takes precedence)
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/capi/inc
 )
 
 # Force-include the generated config header so source files don't need
