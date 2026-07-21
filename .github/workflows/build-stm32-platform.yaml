@@ -1,0 +1,66 @@
+name: Build STM32 platform
+
+on:
+  push:
+    branches:
+    - migration/migrate-stm32-to-github-actions
+
+permissions:
+    contents: read
+    id-token: write
+    checks: write
+    pull-requests: write
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build-stm32-platform:
+    env:
+      CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
+      TOOLS_REPO: ${{ secrets.TOOLS_REPO }}
+      BLACKLIST_URL: ${{ secrets.BLACKLIST_URL }}
+      HDL_BRANCH: 'main'
+      BUILDS_DIR: ${{ github.workspace }}/builds
+      RELEASES_DIR: ${{ github.workspace }}/latest_build
+      LOGS_DIR: ${{ github.workspace }}/logs
+    runs-on: "stm32-runner"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          submodules: false
+      - name: Setup STM32 platform env
+        shell: sh
+        run: |
+          ${{ github.workspace }}/.github/scripts/setup-platform-env.sh
+        env:
+          PLATFORM: stm32
+          WORKSPACE: ${{ github.workspace }}
+      - name: Build STM32 projects
+        shell: sh
+        run: |
+          echo "Setup cloudsmith helper ..."
+          wget -P ./tools/scripts/ \
+            https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py -O ./tools/scripts/cloudsmith_temp.py
+          cat tools/scripts/cloudsmith_temp.py | sed 's#/usr/bin/python3#/usr/bin/env python3#' > tools/scripts/cloudsmith_helper.py
+
+          echo "Running project build ..."
+          python3 ./tools/scripts/build_projects.py "$GITHUB_WORKSPACE" \
+            -export_dir ${{ env.RELEASES_DIR }} \
+            -log_dir ${{ env.LOGS_DIR }} \
+            -builds_dir ${{ env.BUILDS_DIR }} \
+            -platform stm32 \
+            -hdl_branch ${{ env.HDL_BRANCH }}
+      - name: Upload STM32 artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          path: ${{ env.RELEASES_DIR }}
+          name: release_stm32_${{ github.job }}
+      - name: Upload STM32 build logs
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          path: ${{ env.LOGS_DIR }}
+          name: logs_stm32_${{ github.job }}
