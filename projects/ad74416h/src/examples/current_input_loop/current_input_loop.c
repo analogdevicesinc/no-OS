@@ -60,13 +60,6 @@ int example_main()
 
 	pr_info("ad74416h successfully initialized!\r\n");
 
-	//Configure Channel A as Current Input loop powered
-	ret = ad74416h_set_channel_function(ad74416h_desc, 0, AD74416H_CURRENT_IN_LOOP);
-	if (ret) {
-		pr_info("Error setting Channel 0 as current input loop powered\r\n");
-		goto error_ad74416h;
-	}
-
 	//Configure the current output limit
 	ret = ad74416h_dac_current_to_code(ad74416h_desc, 22000, &current_code);
 	if (ret) {
@@ -76,6 +69,13 @@ int example_main()
 	ret = ad74416h_set_channel_dac_code(ad74416h_desc, 0, current_code);
 	if (ret) {
 		pr_info("Error loading current limit into DAC A\r\n");
+		goto error_ad74416h;
+	}
+
+	//Configure Channel A as Current Input loop powered
+	ret = ad74416h_set_channel_function(ad74416h_desc, 0, AD74416H_CURRENT_IN_LOOP);
+	if (ret) {
+		pr_info("Error setting Channel 0 as current input loop powered\r\n");
 		goto error_ad74416h;
 	}
 

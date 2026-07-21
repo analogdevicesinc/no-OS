@@ -46,7 +46,7 @@ struct no_os_irq_ctrl_desc *adc_rdy_irq_desc;
 struct ad74416h_desc *ad74416h_desc;
 
 volatile uint8_t send_result_to_uart = 0;
-volatile int adc_value = 0;
+volatile uint32_t adc_value = 0;
 
 void adc_rdy_event_handler()
 {
@@ -79,7 +79,7 @@ int gpio_adc_rdy_init()
 		return ret;
 	}
 
-	/*Init interrup controller for external interrupt*/
+	/*Init interrupt controller for external interrupt*/
 	ret = no_os_irq_ctrl_init(&adc_rdy_irq_desc, &adc_rdy_gpio_irq_ip);
 	if (ret) {
 		pr_info("Error in irq init\r\n");
@@ -122,11 +122,8 @@ int example_main()
 	int ret;
 	double calculated_voltage = 0.0;
 
-	/**
-	  * @brief Initialize the ADC_RDY GPIO and associated IRQ event
-	  * @return 0 if success, negative error code otherwise
-	  */
 	ret = gpio_adc_rdy_init();
+
 	if (ret)
 		goto error;
 

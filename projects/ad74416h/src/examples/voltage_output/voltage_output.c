@@ -49,7 +49,7 @@ int example_main()
 	int ret;
 
 	uint16_t reg_value = 0xAAAA;
-	uint32_t dac_code = 0;
+	uint16_t dac_code = 0;
 
 	ret = ad74416h_init(&ad74416h_desc, &ad74416h_ip);
 	if (ret)
