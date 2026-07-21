@@ -31,7 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #ifndef AXI_SYSID_H_
-#define AXI_SYSOD_H_
+#define AXI_SYSID_H_
 
 #include <stdint.h>
 #include <stdio.h>
