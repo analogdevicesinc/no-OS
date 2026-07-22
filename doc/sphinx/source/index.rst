@@ -64,12 +64,18 @@ Contents
 .. toctree::
    :maxdepth: 2
 
+   getting_started
+   architecture
+   iio_framework
    drivers_guide
+   porting_guide
    drivers_doc
    projects_doc
    build_guide
    cmake_cheatsheet
+   configuration_guide
    contributing
+   troubleshooting
 
 Additional resources
 --------------------

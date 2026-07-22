@@ -2,7 +2,17 @@
 Windows Build Prerequisites
 ***************************
 
-Prior to building a no-OS project, it is required to set up some environment variables so that the build process may find the necessary tools (compiler, linker, libraries etc.).
+.. note::
+   The prerequisites on this page (Git Bash, MSYS2 GCC, ``git-bash.sh``) apply
+   only to the legacy **Makefile** build flow. For the **CMake** build flow —
+   driven by ``tools/scripts/no_os_build.py`` and used throughout the
+   :doc:`../getting_started` tutorial — none of this is required: you can build
+   from any console (Command Prompt, PowerShell, or a terminal) as long as
+   ``cmake``, ``ninja`` and ``python`` are on your ``PATH``, plus the vendor SDK
+   for your platform. See the CMake build guide for your platform under
+   :doc:`../build_guide`.
+
+Prior to building a no-OS project with the Makefile flow, it is required to set up some environment variables so that the build process may find the necessary tools (compiler, linker, libraries etc.).
 
 Use the following commands to prepare your environment for building no-OS projects:
 
