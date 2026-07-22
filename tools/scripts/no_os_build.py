@@ -444,7 +444,7 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
         except subprocess.CalledProcessError as e:
             append_log(log_path, "Configure", e)
             spinner.finish("FAILED")
-            return combo, False, f"Configure failed:\n{e.stderr[-500:]}"
+            return combo, False, f"Configure failed:\n{e.stderr}"
 
     with Spinner(f"Building {label}") as spinner:
         echo_cmd(build_cmd)
@@ -461,7 +461,7 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
         except subprocess.CalledProcessError as e:
             append_log(log_path, "Build", e)
             spinner.finish("FAILED")
-            return combo, False, f"Build failed:\n{e.stderr[-500:]}"
+            return combo, False, f"Build failed:\n{e.stderr}"
 
     if flash:
         echo_cmd(flash_cmd)
