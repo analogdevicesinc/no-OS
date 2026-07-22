@@ -58,9 +58,22 @@ jobs:
         with:
           path: ${{ env.RELEASES_DIR }}
           name: release_stm32_${{ github.job }}
+      - name: Collect all build logs
+        if: always()
+        shell: sh
+        run: |
+          mkdir -p ${{ env.LOGS_DIR }}/builds_main_cmake
+          cp -r ${{ github.workspace }}/builds_main_cmake/* ${{ env.LOGS_DIR }}/builds_main_cmake/ 2>/dev/null || true
       - name: Upload STM32 build logs
         if: always()
         uses: actions/upload-artifact@v7
         with:
           path: ${{ env.LOGS_DIR }}
           name: logs_stm32_${{ github.job }}
+      - name: Clean workspace
+        if: always()
+        shell: sh
+        run: |
+          rm -rf ${{ env.BUILDS_DIR }} ${{ env.RELEASES_DIR }} ${{ env.LOGS_DIR }}
+          rm -rf ${{ github.workspace }}/builds_main_cmake
+          rm -rf ${{ github.workspace }}/.no_os_venv

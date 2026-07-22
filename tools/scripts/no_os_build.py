@@ -473,7 +473,7 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
                 text=True,
             )
         except subprocess.CalledProcessError as e:
-            stderr_tail = e.stderr[-500:] if e.stderr else "(see terminal output above)"
+            stderr_tail = e.stderr if e.stderr else "(see terminal output above)"
             return combo, False, f"Flash failed:\n{stderr_tail}"
 
     return combo, True, str(build_dir / "build")
@@ -580,7 +580,7 @@ def cmd_build(args, repo_root, presets):
                     append_log(log_path, "Configure", e)
                     print("FAILED")
                     configure_failed.add((combo["project"], combo["variant"], combo["board"]))
-                    failures.append((combo, f"Configure failed:\n{e.stderr[-500:]}"))
+                    failures.append((combo, f"Configure failed:\n{e.stderr}"))
                     failed += 1
 
         # Phase 2: parallel build across boards
@@ -640,7 +640,7 @@ def cmd_build(args, repo_root, presets):
                 append_log(log_path, "Build", result)
             except subprocess.CalledProcessError as e:
                 append_log(log_path, "Build", e)
-                return combo, False, f"Build failed:\n{e.stderr[-500:]}"
+                return combo, False, f"Build failed:\n{e.stderr}"
 
             artifacts_msg = f"Build artifacts: {build_dir / 'build'}"
 
@@ -657,7 +657,7 @@ def cmd_build(args, repo_root, presets):
                             text=True,
                         )
                     except subprocess.CalledProcessError as e:
-                        stderr_tail = e.stderr[-500:] if e.stderr else "(see terminal output above)"
+                        stderr_tail = e.stderr if e.stderr else "(see terminal output above)"
                         return combo, False, f"Flash failed:\n{stderr_tail}"
 
             return combo, True, artifacts_msg
