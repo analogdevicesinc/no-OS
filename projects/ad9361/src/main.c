@@ -552,6 +552,40 @@ static int ad9361_iio_axi_adc_get_sampling_freq(struct axi_adc *dev,
 	return 0;
 }
 
+/**
+ * @brief Get TX sampling frequency callback for iio_axi_dac.
+ * @param dev - The AXI DAC device (unused, uses global ad9361_phy).
+ * @param chan - Channel number (unused, AD9361 has single TX sample rate).
+ * @param sampling_freq_hz - Output sampling frequency in Hz.
+ * @return 0.
+ */
+static int ad9361_iio_axi_dac_get_sampling_freq(struct axi_dac *dev,
+		uint32_t chan,
+		uint64_t *sampling_freq_hz)
+{
+	uint32_t freq;
+	struct ad9361_rf_phy *phy;
+	int ret;
+
+	if (!dev || !sampling_freq_hz)
+		return -EINVAL;
+
+#ifdef FMCOMMS5
+	if (dev == ad9361_phy_b->tx_dac)
+		phy = ad9361_phy_b;
+	else
+#endif
+		phy = ad9361_phy;
+
+	ret = ad9361_get_tx_sampling_freq(phy, &freq);
+
+	if (ret < 0)
+		return ret;
+
+	*sampling_freq_hz = freq;
+	return 0;
+}
+
 #endif /* IIO_SUPPORT */
 
 /***************************************************************************//**
@@ -1011,6 +1045,7 @@ int main(void)
 	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
 		.tx_dac = ad9361_phy->tx_dac,
 		.tx_dmac = tx_dmac,
+		.get_sampling_frequency = ad9361_iio_axi_dac_get_sampling_freq,
 #ifndef PLATFORM_MB
 		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
 #endif
@@ -1029,6 +1064,7 @@ int main(void)
 #ifdef FMCOMMS5
 	iio_axi_dac_b_init_par = (struct iio_axi_dac_init_param) {
 		.tx_dac = ad9361_phy_b->tx_dac,
+		.get_sampling_frequency = ad9361_iio_axi_dac_get_sampling_freq,
 	};
 
 	status = iio_axi_dac_init(&iio_axi_dac_b_desc, &iio_axi_dac_b_init_par);

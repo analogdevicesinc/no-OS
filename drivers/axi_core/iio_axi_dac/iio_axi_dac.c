@@ -114,10 +114,23 @@ static int get_voltage_sampling_frequency(void *device, char *buf,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
-	/* This function doesn't have an equivalent function in axi_dac_core,
-	 * and it should be implemented there first */
+	uint64_t sampling_freq_hz;
+	int ret;
+	struct iio_axi_dac_desc *iio_dac = (struct iio_axi_dac_desc *)device;
 
-	return -ENOENT;
+	if (iio_dac->get_sampling_frequency)
+		ret = iio_dac->get_sampling_frequency(iio_dac->dac,
+						      channel->ch_num,
+						      &sampling_freq_hz);
+	else
+		/* This function doesn't have an equivalent function in
+		 * axi_dac_core, and it should be implemented there first */
+		return -ENOSYS;
+
+	if (ret < 0)
+		return ret;
+
+	return snprintf(buf, len, "%"PRIi64"", sampling_freq_hz);
 }
 
 /**
@@ -215,10 +228,23 @@ static int get_altvoltage_sampling_frequency(void *device, char *buf,
 		const struct iio_ch_info *channel,
 		intptr_t priv)
 {
-	/* This function doesn't have an equivalent function in axi_dac_core,
-	 * and it should be implemented there first */
+	uint64_t sampling_freq_hz;
+	int ret;
+	struct iio_axi_dac_desc *iio_dac = (struct iio_axi_dac_desc *)device;
 
-	return -ENOENT;
+	if (iio_dac->get_sampling_frequency)
+		ret = iio_dac->get_sampling_frequency(iio_dac->dac,
+						      channel->ch_num,
+						      &sampling_freq_hz);
+	else
+		/* This function doesn't have an equivalent function in
+		 * axi_dac_core, and it should be implemented there first */
+		return -ENOSYS;
+
+	if (ret < 0)
+		return ret;
+
+	return snprintf(buf, len, "%"PRIi64"", sampling_freq_hz);
 }
 
 /**
@@ -670,6 +696,7 @@ int32_t iio_axi_dac_init(struct iio_axi_dac_desc **desc,
 		iio_axi_dac_inst->dmac = init->tx_dmac;
 		iio_axi_dac_inst->dcache_flush_range = init->dcache_flush_range;
 	}
+	iio_axi_dac_inst->get_sampling_frequency = init->get_sampling_frequency;
 
 	status = iio_axi_dac_create_device_descriptor(iio_axi_dac_inst,
 			&iio_axi_dac_inst->dev_descriptor);
