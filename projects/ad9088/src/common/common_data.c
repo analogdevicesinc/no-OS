@@ -186,6 +186,28 @@ struct jesd204_tx_init tx_jesd204_ip = {
 	.lane_clk_khz = AD9088_LANE_RATE_KHZ
 };
 
+struct adxcvr_init tx_adxcvr_ip = {
+	.name = "tx_adxcvr",
+	.base = TX_XCVR_BASEADDR,
+	.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
+	.out_clk_sel = ADXCVR_PROGDIV_CLK,
+	.lpm_enable = 0,
+	.lane_rate_khz = AD9088_LANE_RATE_KHZ,
+	.ref_rate_khz = 312500,
+	.export_no_os_clk = true,
+};
+
+struct adxcvr_init rx_adxcvr_ip = {
+	.name = "rx_adxcvr",
+	.base = RX_XCVR_BASEADDR,
+	.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
+	.out_clk_sel = ADXCVR_PROGDIV_CLK,
+	.lpm_enable = 1,
+	.lane_rate_khz = AD9088_LANE_RATE_KHZ,
+	.ref_rate_khz = 312500,
+	.export_no_os_clk = true,
+};
+
 struct ad9088_init_param ad9088_ip = {
 	.spi_init = &ad9088_spi_ip, // to be set by the user
 	.gpio_reset = &gpio_reset_ip, // to be set by the user

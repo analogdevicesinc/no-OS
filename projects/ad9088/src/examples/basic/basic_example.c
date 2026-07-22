@@ -38,6 +38,8 @@
 #include "no_os_util.h"
 #include "ad9088.h"
 #include "jesd204.h"
+#include "axi_adxcvr.h"
+#include "jesd204_clk.h"
 
 /**
  * @brief Basic example main execution.
@@ -51,10 +53,16 @@ int basic_example_main()
 	struct hmc7044_dev *hmc7044_dev;
 	struct axi_jesd204_rx *rx_jesd;
 	struct axi_jesd204_tx *tx_jesd;
+	struct adxcvr *rx_adxcvr;
+	struct adxcvr *tx_adxcvr;
+	struct jesd204_clk rx_jesd_clk = {0};
+	struct jesd204_clk tx_jesd_clk = {0};
+	struct no_os_clk_desc rx_lane_clk = {0};
+	struct no_os_clk_desc tx_lane_clk = {0};
 	struct axi_dmac *rx_dmac;
 	struct axi_dmac *tx_dmac;
 	struct ad9088_phy *ad9088_phy;
-	
+
 	int ret = 0;
 
 	pr_info("Enter basic example\n");
@@ -83,17 +91,41 @@ int basic_example_main()
 		goto error_rx_dmac;
 	}
 
+	ret = adxcvr_init(&tx_adxcvr, &tx_adxcvr_ip);
+	if (ret) {
+		pr_info("TX ADXCVR initialization failed\n");
+		goto error_tx_dmac;
+	}
+	tx_jesd_clk.xcvr = tx_adxcvr;
+
+	ret = adxcvr_init(&rx_adxcvr, &rx_adxcvr_ip);
+	if (ret) {
+		pr_info("RX ADXCVR initialization failed\n");
+		goto error_tx_adxcvr;
+	}
+	rx_jesd_clk.xcvr = rx_adxcvr;
+
+	rx_lane_clk.platform_ops = &jesd204_clk_ops;
+	rx_lane_clk.dev_desc = &rx_jesd_clk;
+	rx_jesd204_ip.lane_clk = &rx_lane_clk;
+
+	tx_lane_clk.platform_ops = &jesd204_clk_ops;
+	tx_lane_clk.dev_desc = &tx_jesd_clk;
+	tx_jesd204_ip.lane_clk = &tx_lane_clk;
+
 	ret = axi_jesd204_rx_init(&rx_jesd, &rx_jesd204_ip);
 	if (ret) {
 		pr_info("JESD RX initialization failed\n");
-		goto error_tx_dmac;
+		goto error_rx_adxcvr;
 	}
+	rx_jesd_clk.jesd_rx = rx_jesd;
 
 	ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd204_ip);
 	if (ret) {
 		pr_info("JESD TX initialization failed\n");
 		goto error_rx_jesd;
 	}
+	tx_jesd_clk.jesd_tx = tx_jesd;
 
 	ret = ad9088_init(&ad9088_phy, &ad9088_ip);
 	if (ret) {
@@ -154,6 +186,10 @@ error_tx_jesd:
 	axi_jesd204_tx_remove(tx_jesd);
 error_rx_jesd:
 	axi_jesd204_rx_remove(rx_jesd);
+error_rx_adxcvr:
+	adxcvr_remove(rx_adxcvr);
+error_tx_adxcvr:
+	adxcvr_remove(tx_adxcvr);
 error_tx_dmac:
 	axi_dmac_remove(tx_dmac);
 error_rx_dmac:

@@ -45,6 +45,8 @@
 #include "axi_dmac.h"
 #include "axi_jesd204_rx.h"
 #include "axi_jesd204_tx.h"
+#include "axi_adxcvr.h"
+#include "jesd204_clk.h"
 
 #include "apollo_cpu_device_profile_types.h"
 
@@ -78,6 +80,8 @@ extern struct axi_dmac_init 			rx_dmac_ip;
 extern struct axi_dmac_init 			tx_dmac_ip;
 extern struct jesd204_rx_init			rx_jesd204_ip;
 extern struct jesd204_tx_init			tx_jesd204_ip;
+extern struct adxcvr_init			rx_adxcvr_ip;
+extern struct adxcvr_init			tx_adxcvr_ip;
 extern struct ad9088_init_param			ad9088_ip;
 
 
