@@ -265,6 +265,7 @@ int oa_tc6_get_tx_frame(struct oa_tc6_desc *desc,
 		if (desc->user_tx_frame_buffer[i].state == OA_BUFF_FREE) {
 			*buffer = &desc->user_tx_frame_buffer[i];
 			desc->user_tx_frame_buffer[i].state = OA_BUFF_TX_BUSY;
+			desc->user_tx_frame_buffer[i].index = 0;
 			memset(desc->user_tx_frame_buffer[i].data, 0,
 			       CONFIG_OA_CHUNK_BUFFER_SIZE);
 
@@ -293,7 +294,9 @@ int oa_tc6_put_tx_frame(struct oa_tc6_desc *desc,
 }
 
 /**
- * @brief Get the first TX frame buffer that is ready to be transmitted.
+ * @brief Get the first TX frame buffer that is ready to be transmitted. A
+ * partially transmitted frame takes precedence, since it has to be completed
+ * before another one can be started.
  * @param desc - the OA TC6 descriptor.
  * @param buffer - buffer to be filled with the frame to be transmitted.
  * @return 0 in case of success, negative error code otherwise
@@ -301,15 +304,28 @@ int oa_tc6_put_tx_frame(struct oa_tc6_desc *desc,
 static int oa_tc6_get_first_tx_frame(struct oa_tc6_desc *desc,
 				     struct oa_tc6_frame_buffer **buffer)
 {
+	struct oa_tc6_frame_buffer *first = NULL;
+
 	for (int i = 0; i < OA_TX_FRAME_BUFF_NUM; i++) {
-		if (desc->user_tx_frame_buffer[i].state == OA_BUFF_TX_READY) {
+		if (desc->user_tx_frame_buffer[i].state != OA_BUFF_TX_READY)
+			continue;
+
+		if (desc->user_tx_frame_buffer[i].index) {
 			*buffer = &desc->user_tx_frame_buffer[i];
 
 			return 0;
 		}
+
+		if (!first)
+			first = &desc->user_tx_frame_buffer[i];
 	}
 
-	return -ENOENT;
+	if (!first)
+		return -ENOENT;
+
+	*buffer = first;
+
+	return 0;
 }
 
 /**
@@ -429,14 +445,12 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 				     uint32_t *tx_written)
 {
 	uint32_t spi_buffer_index = 0;
-	uint32_t tx_frame_num_chunks;
 	uint32_t spi_buff_max_chunks;
 	uint32_t chunks_written = 0;
-	uint32_t frame_offset = 0;
 	uint32_t chunks_limit;
-	uint32_t frame_len;
+	uint32_t remaining;
+	uint32_t copy_len;
 	uint32_t header;
-	uint32_t i;
 	int ret;
 
 	struct oa_tc6_frame_buffer *frame_buffer;
@@ -445,51 +459,51 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 	/* The maximum number of chunks we can potentially send, given the size of our SPI buffer. */
 	chunks_limit = no_os_min(spi_buff_max_chunks, tx_credit);
 
-	do {
+	/*
+	 * A frame that doesn't fit in the remaining space is sent partially. Its
+	 * index is kept, and the next call resumes it without setting SV.
+	 */
+	while (chunks_written < chunks_limit) {
 		ret = oa_tc6_get_first_tx_frame(desc, &frame_buffer);
 		if (ret)
 			break;
 
-		frame_len = frame_buffer->len;
-		tx_frame_num_chunks = NO_OS_DIV_ROUND_UP(frame_len, OA_CHUNK_SIZE);
-
-		/* Check if we can fit the current frame into the SPI buffer (as a whole). */
-		if (!frame_len || ((chunks_written + tx_frame_num_chunks) > chunks_limit))
+		remaining = frame_buffer->len - frame_buffer->index;
+		if (!remaining)
 			break;
 
-		frame_offset = 0;
-		for (i = 0; i < tx_frame_num_chunks; i++) {
-			header = no_os_field_prep(OA_DATA_HEADER_DNC_MASK, 1);
-			header |= no_os_field_prep(OA_DATA_HEADER_DV_MASK, 1);
-			header |= no_os_field_prep(OA_DATA_HEADER_VS_MASK, frame_buffer->vs);
+		copy_len = no_os_min(remaining, OA_CHUNK_SIZE);
 
-			if (!i) {
-				header |= no_os_field_prep(OA_DATA_HEADER_SV_MASK, 1);
-				header |= no_os_field_prep(OA_DATA_HEADER_TSC_MASK, frame_buffer->tsc);
-			}
+		header = no_os_field_prep(OA_DATA_HEADER_DNC_MASK, 1);
+		header |= no_os_field_prep(OA_DATA_HEADER_DV_MASK, 1);
+		header |= no_os_field_prep(OA_DATA_HEADER_VS_MASK, frame_buffer->vs);
 
-			if (i == tx_frame_num_chunks - 1) {
-				header |= no_os_field_prep(OA_DATA_HEADER_EV_MASK, 1);
-				header |= no_os_field_prep(OA_DATA_HEADER_EBO_MASK, frame_len - 1);
-			}
-
-			header |= oa_tc6_crc1(header);
-
-			no_os_put_unaligned_be32(header, &tx_buffer[spi_buffer_index]);
-			spi_buffer_index += OA_HEADER_LEN;
-			memcpy(&tx_buffer[spi_buffer_index], &frame_buffer->data[frame_offset],
-			       OA_CHUNK_SIZE);
-			frame_offset += OA_CHUNK_SIZE;
-			spi_buffer_index += OA_CHUNK_SIZE;
-
-			frame_len -= OA_CHUNK_SIZE;
+		if (!frame_buffer->index) {
+			header |= no_os_field_prep(OA_DATA_HEADER_SV_MASK, 1);
+			header |= no_os_field_prep(OA_DATA_HEADER_TSC_MASK, frame_buffer->tsc);
 		}
-		chunks_written += tx_frame_num_chunks;
 
-		frame_buffer->len = 0;
-		frame_buffer->index = 0;
-		frame_buffer->state = OA_BUFF_FREE;
-	} while (1);
+		if (remaining <= OA_CHUNK_SIZE) {
+			header |= no_os_field_prep(OA_DATA_HEADER_EV_MASK, 1);
+			header |= no_os_field_prep(OA_DATA_HEADER_EBO_MASK, remaining - 1);
+		}
+
+		header |= oa_tc6_crc1(header);
+
+		no_os_put_unaligned_be32(header, &tx_buffer[spi_buffer_index]);
+		spi_buffer_index += OA_HEADER_LEN;
+		memcpy(&tx_buffer[spi_buffer_index], &frame_buffer->data[frame_buffer->index],
+		       copy_len);
+		frame_buffer->index += copy_len;
+		spi_buffer_index += OA_CHUNK_SIZE;
+		chunks_written++;
+
+		if (frame_buffer->index == frame_buffer->len) {
+			frame_buffer->len = 0;
+			frame_buffer->index = 0;
+			frame_buffer->state = OA_BUFF_FREE;
+		}
+	}
 
 	/*
 	 * The TX queue may be empty, there is no space in the SPI buffer,
