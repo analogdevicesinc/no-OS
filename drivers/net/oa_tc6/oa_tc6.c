@@ -443,14 +443,13 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 		if (ret)
 			break;
 
-		frame_len = frame_buffer->len;
+		frame_len = frame_buffer->len - frame_buffer->index;
 		tx_frame_num_chunks = NO_OS_DIV_ROUND_UP(frame_len, OA_CHUNK_SIZE);
 
-		/* Check if we can fit the current frame into the SPI buffer (as a whole). */
-		if (!frame_len || ((chunks_written + tx_frame_num_chunks) > chunks_limit))
+		/* Check if we can fit more chunks into the MACPHY's FIFO */
+		if (!frame_len || chunks_written >= chunks_limit)
 			break;
 
-		frame_offset = 0;
 		for (i = 0; i < tx_frame_num_chunks; i++) {
 			header = no_os_field_prep(OA_DATA_HEADER_DNC_MASK, 1);
 			header |= no_os_field_prep(OA_DATA_HEADER_DV_MASK, 1);
@@ -470,18 +469,18 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 
 			no_os_put_unaligned_be32(header, &tx_buffer[spi_buffer_index]);
 			spi_buffer_index += OA_HEADER_LEN;
-			memcpy(&tx_buffer[spi_buffer_index], &frame_buffer->data[frame_offset],
+			memcpy(&tx_buffer[spi_buffer_index], &frame_buffer->data[frame_buffer->index],
 			       OA_CHUNK_SIZE);
-			frame_offset += OA_CHUNK_SIZE;
+			frame_buffer->index += OA_CHUNK_SIZE;
 			spi_buffer_index += OA_CHUNK_SIZE;
-
-			frame_len -= OA_CHUNK_SIZE;
 		}
 		chunks_written += tx_frame_num_chunks;
 
-		frame_buffer->len = 0;
-		frame_buffer->index = 0;
-		frame_buffer->state = OA_BUFF_FREE;
+		if (frame_buffer->index >= frame_buffer->len) {
+			frame_buffer->len = 0;
+			frame_buffer->index = 0;
+			frame_buffer->state = OA_BUFF_FREE;
+		}
 	} while (1);
 
 	/*
