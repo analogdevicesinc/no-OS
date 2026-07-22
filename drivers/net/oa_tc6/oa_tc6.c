@@ -423,7 +423,6 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 	uint32_t tx_frame_num_chunks;
 	uint32_t spi_buff_max_chunks;
 	uint32_t chunks_written = 0;
-	uint32_t frame_offset = 0;
 	uint32_t chunks_limit;
 	uint32_t frame_len;
 	uint32_t header;
@@ -441,45 +440,60 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 		if (ret)
 			break;
 
-		frame_len = frame_buffer->len;
+		frame_len = frame_buffer->len - frame_buffer->index;
 		tx_frame_num_chunks = NO_OS_DIV_ROUND_UP(frame_len, OA_CHUNK_SIZE);
 
-		/* Check if we can fit the current frame into the SPI buffer (as a whole). */
-		if (!frame_len || ((chunks_written + tx_frame_num_chunks) > chunks_limit))
+		/* Check if we can fit more chunks into the MACPHY's FIFO */
+		if (!frame_len || chunks_written >= chunks_limit)
 			break;
 
-		frame_offset = 0;
+		/*
+		 * Only send as many chunks as fit in the remaining SPI buffer
+		 * space / TX credit. The rest of the frame is sent on a later
+		 * call, resuming from frame_buffer->index.
+		 */
+		if (tx_frame_num_chunks > chunks_limit - chunks_written)
+			tx_frame_num_chunks = chunks_limit - chunks_written;
+
 		for (i = 0; i < tx_frame_num_chunks; i++) {
+			uint32_t chunk_len = no_os_min(OA_CHUNK_SIZE,
+						       frame_buffer->len - frame_buffer->index);
+			bool last_chunk = frame_buffer->index + chunk_len >=
+					  frame_buffer->len;
+
 			header = no_os_field_prep(OA_DATA_HEADER_DNC_MASK, 1);
 			header |= no_os_field_prep(OA_DATA_HEADER_DV_MASK, 1);
 			header |= no_os_field_prep(OA_DATA_HEADER_VS_MASK, frame_buffer->vs);
 
-			if (!i) {
+			/* Start valid only on the very first chunk of the frame. */
+			if (!frame_buffer->index) {
 				header |= no_os_field_prep(OA_DATA_HEADER_SV_MASK, 1);
 				header |= no_os_field_prep(OA_DATA_HEADER_TSC_MASK, frame_buffer->tsc);
 			}
 
-			if (i == tx_frame_num_chunks - 1) {
+			/* End valid only on the actual last chunk of the frame. */
+			if (last_chunk) {
 				header |= no_os_field_prep(OA_DATA_HEADER_EV_MASK, 1);
-				header |= no_os_field_prep(OA_DATA_HEADER_EBO_MASK, frame_len - 1);
+				header |= no_os_field_prep(OA_DATA_HEADER_EBO_MASK, chunk_len - 1);
 			}
 
 			header |= oa_tc6_crc1(header);
 
 			no_os_put_unaligned_be32(header, &tx_buffer[spi_buffer_index]);
 			spi_buffer_index += OA_HEADER_LEN;
-			memcpy(&tx_buffer[spi_buffer_index], &frame_buffer->data[frame_offset],
+			memcpy(&tx_buffer[spi_buffer_index], &frame_buffer->data[frame_buffer->index],
 			       OA_CHUNK_SIZE);
-			frame_offset += OA_CHUNK_SIZE;
+			frame_buffer->index += OA_CHUNK_SIZE;
 			spi_buffer_index += OA_CHUNK_SIZE;
-
-			frame_len -= OA_CHUNK_SIZE;
 		}
 		chunks_written += tx_frame_num_chunks;
 
-		frame_buffer->len = 0;
-		frame_buffer->index = 0;
-		frame_buffer->state = OA_BUFF_FREE;
+		/* Free the buffer only once the whole frame has been sent. */
+		if (frame_buffer->index >= frame_buffer->len) {
+			frame_buffer->len = 0;
+			frame_buffer->index = 0;
+			frame_buffer->state = OA_BUFF_FREE;
+		}
 	} while (1);
 
 	/*
