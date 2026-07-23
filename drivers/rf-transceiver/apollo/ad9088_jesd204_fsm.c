@@ -253,6 +253,87 @@ static int ad9088_jesd204_link_setup(struct jesd204_dev *jdev,
 	return JESD204_STATE_CHANGE_DONE;
 }
 
+static int ad9088_jesd204_clks_enable(struct jesd204_dev *jdev,
+				      enum jesd204_state_op_reason reason,
+				      struct jesd204_link *lnk)
+{
+	struct ad9088_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct ad9088_phy *phy = priv->phy;
+	struct adi_apollo_device_t *device = &phy->ad9088;
+	uint32_t lane_rate_khz = phy->profile.jrx[0].common_link_cfg.lane_rate_kHz;
+	uint16_t serdes;
+	int ret;
+
+	switch (lnk->link_id) {
+	case DEFRAMER_LINK_A0_TX:
+	case DEFRAMER_LINK_A1_TX:
+		serdes = ADI_APOLLO_TXRX_SERDES_12PACK_A;
+		break;
+	case DEFRAMER_LINK_B0_TX:
+	case DEFRAMER_LINK_B1_TX:
+		serdes = ADI_APOLLO_TXRX_SERDES_12PACK_B;
+		break;
+	default:
+		serdes = ADI_APOLLO_TXRX_SERDES_12PACK_NONE;
+		break;
+	}
+
+	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
+		 lnk->link_id, jesd204_state_op_reason_str(reason));
+
+	/* On teardown, freeze the SERDES JRx bg cal for fast lanes */
+	if (lnk->is_transmit && reason == JESD204_STATE_OP_REASON_UNINIT &&
+	    lane_rate_khz > 16000000) {
+		ret = adi_apollo_serdes_jrx_bgcal_freeze(device, serdes);
+		ret = ad9088_check_apollo_error(ret,
+						"adi_apollo_serdes_jrx_bgcal_freeze");
+		if (ret)
+			return ret;
+
+		pr_debug("Link%u: SERDES JRx bg cal freeze\n", lnk->link_id);
+	}
+
+	/* On init, run the SERDES JRx init-cal (mandatory above 8 Gbps) */
+	if (lnk->is_transmit && reason == JESD204_STATE_OP_REASON_INIT &&
+	    lane_rate_khz > 8000000) {
+		/* Warmboot from FW cal data is not supported yet in no-OS */
+		adi_apollo_init_cal_cfg_e init_cal = ADI_APOLLO_INIT_CAL_ENABLED;
+
+		pr_info("Link%u: SERDES JRx cal Rate %u kBps via INIT_CAL ...\n",
+			lnk->link_id, lane_rate_khz);
+
+		ret = adi_apollo_serdes_jrx_init_cal(device, serdes, init_cal);
+		ret = ad9088_check_apollo_error(ret,
+						"adi_apollo_serdes_jrx_init_cal");
+		if (ret)
+			return ret;
+
+		if (lane_rate_khz > 16000000) {
+			ret = adi_apollo_serdes_jrx_bgcal_unfreeze(device, serdes);
+			ret = ad9088_check_apollo_error(ret,
+							"adi_apollo_serdes_jrx_bgcal_unfreeze");
+			if (ret)
+				return ret;
+
+			pr_debug("Link%u: SERDES JRx bg cal unfreeze\n",
+				 lnk->link_id);
+		}
+	}
+
+	/* Framer (JTx) links: enable on init, disable on teardown */
+	if (!lnk->is_transmit) {
+		ret = adi_apollo_jtx_link_enable_set(device,
+						     ad9088_to_link(lnk->link_id),
+						     reason == JESD204_STATE_OP_REASON_INIT);
+		ret = ad9088_check_apollo_error(ret,
+						"adi_apollo_jtx_link_enable_set");
+		if (ret)
+			return ret;
+	}
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
 static int ad9088_jesd204_uninit(struct jesd204_dev *jdev,
 				 enum jesd204_state_op_reason reason)
 {
@@ -276,6 +357,9 @@ const struct jesd204_dev_data jesd204_ad9088_init = {
 		[JESD204_OP_LINK_SETUP] = {
 			.per_device = ad9088_jesd204_link_setup,
 			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
+		},
+		[JESD204_OP_CLOCKS_ENABLE] = {
+			.per_link = ad9088_jesd204_clks_enable,
 		},
 	},
 

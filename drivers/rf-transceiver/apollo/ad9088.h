@@ -316,6 +316,7 @@ extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_e
 extern const struct jesd204_dev_data jesd204_ad9088_init;
 
 int ad9088_check_apollo_error(int ret, const char *api_name);
+uint8_t ad9088_to_link(uint8_t linkid);
 int ad9088_parse_struct(struct ad9088_phy **device,
 			const struct ad9088_init_param *init_param);
 int ad9088_init(struct ad9088_phy **device,

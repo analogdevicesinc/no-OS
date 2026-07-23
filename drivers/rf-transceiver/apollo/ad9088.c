@@ -189,6 +189,18 @@ int ad9088_check_apollo_error(int ret, const char *api_name)
 
 	return 0;
 }
+
+uint8_t ad9088_to_link(uint8_t linkid)
+{
+	uint8_t lut[8] = {
+		ADI_APOLLO_LINK_A0, ADI_APOLLO_LINK_A1, /* DEFRAMER */
+		ADI_APOLLO_LINK_B0, ADI_APOLLO_LINK_B1,
+		ADI_APOLLO_LINK_A0, ADI_APOLLO_LINK_A1, /* FRAMER */
+		ADI_APOLLO_LINK_B0, ADI_APOLLO_LINK_B1
+	};
+
+	return lut[linkid];
+}
 struct fw_entry {
 	const uint8_t *start;
 	const uint8_t *end;
