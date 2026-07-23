@@ -20,16 +20,18 @@ endif()
 
 # IIO Trigger example
 if(CONFIG_ADMT4000_IIO_TRIGGER_EXAMPLE)
+    # Resolve precision-converters-library (override/submodule/cache/fetch)
+    include(pcl)
     target_sources(admt4000 PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_trigger_example/iio_trigger_example.c
-        ${CMAKE_SOURCE_DIR}/libraries/precision-converters-library/common/common.c
-        ${CMAKE_SOURCE_DIR}/libraries/precision-converters-library/board_info/board_info.c
+        ${PCL_SOURCE_DIR}/common/common.c
+        ${PCL_SOURCE_DIR}/board_info/board_info.c
     )
     target_include_directories(admt4000 PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_trigger_example
-        ${CMAKE_SOURCE_DIR}/libraries/precision-converters-library/common
-        ${CMAKE_SOURCE_DIR}/libraries/precision-converters-library/board_info
-        ${CMAKE_SOURCE_DIR}/libraries/precision-converters-library/sdp_k1_sdram
+        ${PCL_SOURCE_DIR}/common
+        ${PCL_SOURCE_DIR}/board_info
+        ${PCL_SOURCE_DIR}/sdp_k1_sdram
     )
     target_compile_definitions(admt4000 PRIVATE IIO_IGNORE_BUFF_OVERRUN_ERR)
     # precision-converters board_info.c uses sprintf without including
