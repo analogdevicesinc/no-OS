@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for Mbed platform of ADF4368 project.
+ *   @file   parameters.c
+ *   @brief  Definition of STM32 platform data used by ADF4368 project.
  *   @author Sirac Kucukarabacioglu (sirac.kucukarabacioglu@analog.com)
 ********************************************************************************
- * Copyright 2024(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -32,16 +32,11 @@
 *******************************************************************************/
 
 #include "parameters.h"
-#include "common_data.h"
-#include "no_os_error.h"
 
-extern int example_main();
+struct stm32_uart_init_param adf4368_uart_extra_ip = {
+	.huart = &huart5,
+};
 
-/**
- * @brief Main function execution for mbed platform.
- * @return ret - Result of the enabled examples execution.
- */
-int main()
-{
-	return example_main();
-}
+struct stm32_spi_init_param adf4368_spi_extra = {
+	.chip_select_port = SPI_CS_PORT,
+};
