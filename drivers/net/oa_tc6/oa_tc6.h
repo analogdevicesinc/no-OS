@@ -251,6 +251,9 @@ struct oa_tc6_desc {
 	enum oa_tc6_bufst_polling bufst_polling;
 	struct oa_tc6_flags	xfer_flags;
 	bool	 prote_spi;
+
+	void (*callback)(struct oa_tc6_desc *, uint32_t, void *);
+	void *callback_arg;
 };
 
 /**
@@ -301,6 +304,11 @@ int oa_tc6_thread(struct oa_tc6_desc *);
 
 /* Trigger a soft reset of the MAC-PHY and wait for completion */
 int oa_tc6_sw_reset(struct oa_tc6_desc *);
+
+/* Register a function that will be called as a result of OA TC6 events */
+int oa_tc6_register_callback(struct oa_tc6_desc *,
+			     void (*)(struct oa_tc6_desc *, uint32_t, void *),
+			     void *);
 
 /* Initialize the OA TC6 SPI driver */
 int oa_tc6_init(struct oa_tc6_desc **, struct oa_tc6_init_param *);
