@@ -1,20 +1,44 @@
 message(STATUS "Pico Platform")
 
-# The pico-sdk is vendored as the git submodule libraries/pico-sdk. Pin
-# PICO_SDK_PATH to this in-tree copy (relative to this toolchain file:
-# drivers/platform/pico -> repo root) and ignore any externally exported value,
-# so a stale PICO_SDK_PATH left in the environment cannot break the build.
-cmake_path(SET PICO_SDK_PATH NORMALIZE "${CMAKE_CURRENT_LIST_DIR}/../../..")
-cmake_path(APPEND PICO_SDK_PATH "libraries" "pico-sdk")
-set(PICO_SDK_PATH "${PICO_SDK_PATH}" CACHE PATH "Path to the vendored pico-sdk" FORCE)
+# Resolve PICO_SDK_PATH with clone-once semantics. This toolchain file runs before
+# project(), so FetchContent isn't available; resolve directly here.
+# Priority: NO_OS_PICO_SDK_DIR override -> in-tree libraries/pico-sdk (cloned once
+# by default) -> version-keyed shared cache when NO_OS_CACHE_DIR is set.
+cmake_path(SET _no_os_root NORMALIZE "${CMAKE_CURRENT_LIST_DIR}/../../..")
+set(_pico_version "1.5.1")
 
-# Surface a missing submodule here, with the fix, rather than failing later with
-# a missing pico header during compilation.
+if(DEFINED NO_OS_PICO_SDK_DIR AND NOT "${NO_OS_PICO_SDK_DIR}" STREQUAL "")
+    set(PICO_SDK_PATH "${NO_OS_PICO_SDK_DIR}")
+elseif(DEFINED ENV{NO_OS_PICO_SDK_DIR} AND NOT "$ENV{NO_OS_PICO_SDK_DIR}" STREQUAL "")
+    set(PICO_SDK_PATH "$ENV{NO_OS_PICO_SDK_DIR}")
+else()
+    if(DEFINED ENV{NO_OS_CACHE_DIR} AND NOT "$ENV{NO_OS_CACHE_DIR}" STREQUAL "")
+        set(PICO_SDK_PATH "$ENV{NO_OS_CACHE_DIR}/pico-sdk/${_pico_version}")
+    else()
+        set(PICO_SDK_PATH "${_no_os_root}/libraries/pico-sdk")
+    endif()
+    if(NOT EXISTS "${PICO_SDK_PATH}/pico_sdk_init.cmake")
+        find_package(Git REQUIRED)
+        cmake_path(GET PICO_SDK_PATH PARENT_PATH _pico_parent)
+        file(MAKE_DIRECTORY "${_pico_parent}")
+        # No --recurse-submodules: an RP2040 no-OS build does not need the SDK's
+        # own submodules (tinyusb, cyw43, lwip, ...); mirrors the documented
+        # `git submodule update --init libraries/pico-sdk` (non-recursive).
+        message(STATUS "Cloning pico-sdk ${_pico_version} to ${PICO_SDK_PATH}")
+        execute_process(
+            COMMAND ${GIT_EXECUTABLE} clone --depth 1 --branch ${_pico_version}
+                    https://github.com/raspberrypi/pico-sdk.git "${PICO_SDK_PATH}"
+            RESULT_VARIABLE _pico_clone_res)
+        if(NOT _pico_clone_res EQUAL 0)
+            message(FATAL_ERROR "Failed to clone pico-sdk to ${PICO_SDK_PATH}")
+        endif()
+    endif()
+endif()
+
+set(PICO_SDK_PATH "${PICO_SDK_PATH}" CACHE PATH "Path to the pico-sdk" FORCE)
+
 if(NOT EXISTS "${PICO_SDK_PATH}/pico_sdk_init.cmake")
-    message(FATAL_ERROR
-        "pico-sdk not found at ${PICO_SDK_PATH}. Initialize the submodule from "
-        "the repository root with:\n"
-        "    git submodule update --init libraries/pico-sdk")
+    message(FATAL_ERROR "pico-sdk not found at ${PICO_SDK_PATH}")
 endif()
 
 # no-OS drives the toolchain itself (Generic bare-metal), rather than letting the
