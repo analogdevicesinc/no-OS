@@ -1,9 +1,9 @@
 /***************************************************************************//**
  *   @file   main.c
- *   @brief  Main file for Mbed platform of ADF5611 project.
- *   @author Josemene (jude.osemene@analog.com)
+ *   @brief  Main file for STM32 platform of ADF5611 project.
+ *   @author Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
- * Copyright 2024(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -38,25 +38,23 @@
 extern int example_main();
 
 /**
- * @brief Main function execution for mbed platform.
+ * @brief Main function execution for STM32 platform.
  * @return ret - Result of the enabled examples execution.
  */
 int main()
 {
-	int ret = -EINVAL;
+	int ret;
 	struct no_os_uart_desc *uart_desc;
 
-	// Initialize UART Interface
+	adf5611_spi_extra.get_input_clock = HAL_RCC_GetPCLK2Freq;
+
+	stm32_init();
+
 	ret = no_os_uart_init(&uart_desc, &adf5611_uart_ip);
 	if (ret)
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
 
-	// Execute the example main function
-	ret = example_main();
-	if (ret)
-		return ret;
-
-	return ret;
+	return example_main();
 }
