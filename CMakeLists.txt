@@ -260,6 +260,9 @@ file(GLOB_RECURSE ALL_KCONFIG_FILES
   ${CMAKE_CURRENT_SOURCE_DIR}/*/*/*/*/Kconfig
 )
 
+# Drop Kconfigs inside cloned dependency trees; they get re-cloned and break ninja.
+list(FILTER ALL_KCONFIG_FILES EXCLUDE REGEX "/libraries/[^/]+/")
+
 set_property(
   DIRECTORY
   APPEND

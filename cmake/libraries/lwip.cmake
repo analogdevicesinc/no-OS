@@ -1,5 +1,5 @@
 # lwip.cmake - lwIP library with hybrid caching
-# Priority: Submodule → Global Cache → FetchContent
+# Source tree resolved by resolve_library_source (override -> managed clone).
 include(LibraryCacheUtils)
 
 # Default version if not set via Kconfig
@@ -19,7 +19,7 @@ resolve_library_source(
     LWIP_BINARY_DIR
 )
 
-# If we already used FetchContent, lwip targets exist
+# If a prior include added lwip targets, reuse them
 # Otherwise, we need to add the subdirectory
 if(NOT TARGET lwipcore)
     add_subdirectory("${LWIP_SOURCE_DIR}" "${LWIP_BINARY_DIR}" EXCLUDE_FROM_ALL)
