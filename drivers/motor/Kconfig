@@ -11,6 +11,15 @@ config MOTOR_TMC5240
 	bool "Enable TMC5240 motor driver"
 	default n
 
+config TMC_API_VERSION
+	string "TMC-API version tag"
+	default "e95877463f54345de68c6a0964b5cb2c37461a8d"
+	depends on MOTOR_TMC5240
+	help
+	  Git tag, branch or commit for TMC-API.
+	  Resolved via the NO_OS_DEP_TMC_PATH override, else cloned in-tree
+	  (or into a version-keyed NO_OS_CACHE_DIR store when that is set).
+
 config MOTOR_IIO_TMC5240
 	select MOTOR_TMC5240
 	bool "Enable TMC5240 IIO driver"
