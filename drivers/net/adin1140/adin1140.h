@@ -76,6 +76,9 @@
 /* STATUS1 bits */
 #define ADIN1140_STATUS1_LINK_STATE	NO_OS_BIT(0)
 
+/* IMASK1 bits */
+#define ADIN1140_IMASK1_P1_RX_RDY_MASK		NO_OS_BIT(4)
+
 /* MMS 1: MAC registers */
 #define ADIN1140_MAC_ADDR_FILT_UPR_REG(x)	OA_MMS_REG(0x1, 0x50 + 2 * (x))
 #define ADIN1140_MAC_ADDR_FILT_LWR_REG(x)	OA_MMS_REG(0x1, 0x51 + 2 * (x))
