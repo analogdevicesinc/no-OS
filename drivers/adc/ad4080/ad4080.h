@@ -145,6 +145,7 @@
 
 /** AD408x Product IDs (PRODUCT_ID_H:PRODUCT_ID_L) */
 #define AD4080_PRODUCT_ID			0x0050
+#define AD4081_PRODUCT_ID			0x0051
 #define AD4082_PRODUCT_ID			0x0052
 #define AD4083_PRODUCT_ID			0x0053
 #define AD4085_PRODUCT_ID			0x0055
@@ -282,6 +283,7 @@ enum ad4080_fifo_mode {
 /** AD408x Supported Device IDs */
 enum ad4080_id {
 	ID_AD4080,
+	ID_AD4081,
 	ID_AD4082,
 	ID_AD4083,
 	ID_AD4085,
