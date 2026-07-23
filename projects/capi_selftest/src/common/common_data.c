@@ -1,0 +1,278 @@
+/***************************************************************************//**
+ * @file common_data.c
+ * @brief Common data source file for capi_selftest project.
+ * Copyright (c) 2025-2026 Analog Devices, Inc.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ *******************************************************************************/
+
+#include <stdint.h>
+#include "common_data.h"
+#include "parameters.h"
+#include "test_framework.h"
+
+/**
+ * @brief Write test-framework bytes through the configured CAPI UART.
+ * @param context - CAPI UART handle.
+ * @param data - Bytes to transmit.
+ * @param length - Number of bytes to transmit.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+/*
+ * The polled CAPI transmit fills the UART TX FIFO in one shot; a request
+ * larger than the FIFO leaves bytes undrained and wedges the console. Send in
+ * FIFO-sized chunks so every call completes cleanly.
+ */
+#define TEST_UART_TX_CHUNK	32U
+
+static int test_uart_write(void *context, const uint8_t *data, uint32_t length)
+{
+	struct capi_uart_handle *uart = (struct capi_uart_handle *)context;
+
+	for (uint32_t off = 0U; off < length; off += TEST_UART_TX_CHUNK) {
+		uint32_t chunk = length - off;
+
+		if (chunk > TEST_UART_TX_CHUNK)
+			chunk = TEST_UART_TX_CHUNK;
+
+		int ret = capi_uart_transmit(uart, (uint8_t *)data + off, chunk);
+		if (ret != 0)
+			return ret;
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Default console UART line configuration.
+ */
+static struct capi_uart_line_config uart_line_config = {
+	.baudrate = UART_BAUDRATE,
+	.size = CAPI_UART_DATA_BITS_8,
+	.parity = CAPI_UART_PARITY_NONE,
+	.stop_bits = CAPI_UART_STOP_1_BIT,
+	.flow_control = CAPI_UART_FLOW_CONTROL_NONE,
+	.address_mode = CAPI_UART_ADDRESS_MODE_DISABLED,
+	.device_address = 0U,
+	.sticky_parity = false,
+	.loopback = false,
+};
+
+/**
+ * @brief Platform-specific extra data for the console UART.
+ */
+static UART_EXTRA_TYPE uart_extra = UART_EXTRA_INIT;
+
+/**
+ * @brief CAPI UART configuration used as the test report transport.
+ */
+const struct capi_uart_config uart_config = {
+	.identifier = UART_IDENTIFIER,
+	.dma_handle = NULL,
+	.clk_freq_hz = 0U,
+	.line_config = &uart_line_config,
+	.extra = &uart_extra,
+	.ops = UART_OPS,
+};
+
+/**
+ * @brief Short platform label printed by TEST_RUN_START().
+ */
+const char platform_name[] = PLATFORM_NAME;
+
+void get_test_framework_config(struct test_framework_config *config,
+			       struct capi_uart_handle *uart)
+{
+	*config = (struct test_framework_config) {
+		.run_label = platform_name,
+		.write = test_uart_write,
+		.write_context = uart,
+	};
+}
+
+#ifdef GPIO_OUTPUT_OPS
+/**
+ * @brief Platform-specific private data for the output/readback GPIO port.
+ */
+static GPIO_OUTPUT_EXTRA gpio_output_extra = GPIO_OUTPUT_EXTRA_INIT;
+
+/**
+ * @brief Platform-specific private data for the input GPIO port.
+ */
+static GPIO_INPUT_EXTRA gpio_input_extra = GPIO_INPUT_EXTRA_INIT;
+
+/**
+ * @brief CAPI configuration for the output/readback GPIO port.
+ */
+const struct capi_gpio_port_config gpio_output_config = {
+	.ops = GPIO_OUTPUT_OPS,
+	.identifier = GPIO_OUTPUT_IDENTIFIER,
+	.num_pins = GPIO_OUTPUT_NUM_PINS,
+	.flags = NULL,
+	.extra = &gpio_output_extra,
+};
+
+/**
+ * @brief CAPI configuration for the input GPIO port.
+ */
+const struct capi_gpio_port_config gpio_input_config = {
+	.ops = GPIO_INPUT_OPS,
+	.identifier = GPIO_INPUT_IDENTIFIER,
+	.num_pins = GPIO_INPUT_NUM_PINS,
+	.flags = NULL,
+	.extra = &gpio_input_extra,
+};
+#endif /* GPIO_OUTPUT_OPS */
+
+#ifdef SPI_OPS
+/**
+ * @brief CAPI IRQ controller configuration used before IRQ-backed async tests.
+ */
+struct capi_irq_config irq_config = {
+	.irq_ctrl_id = IRQ_CTRL_IDENTIFIER,
+	.extra = NULL,
+};
+
+/**
+ * @brief Platform-specific extra data for the SPI controller.
+ */
+static SPI_EXTRA_TYPE spi_extra = SPI_EXTRA_INIT;
+
+/**
+ * @brief CAPI configuration for the SPI controller.
+ */
+const struct capi_spi_config spi_controller_config = {
+	.ops = SPI_OPS,
+	.identifier = SPI_IDENTIFIER,
+	.dma_handle = NULL,
+	.three_pin_mode = false,
+	.loopback = false,
+	.clk_freq_hz = SPI_CLK_FREQ,
+	.extra = &spi_extra,
+};
+
+/**
+ * @brief CAPI SPI device descriptor for the external loopback test.
+ *
+ * The controller field is assigned after capi_spi_init().
+ */
+struct capi_spi_device spi_dev = {
+	.controller = NULL,
+	.max_speed_hz = SPI_DEVICE_SPEED_HZ,
+	.mode = SPI_DEVICE_MODE,
+	.native_cs = SPI_DEVICE_NATIVE_CS,
+	.cs_gpio = NULL,
+	.cs_gpio_num = 0U,
+	.flow_ctl_param = {
+		.mode = CAPI_SPI_FLOW_CTL_DISABLE,
+	},
+	.non_continuous_mode = false,
+	.lsb_first = false,
+	.extra = NULL,
+};
+#endif /* SPI_OPS */
+
+#ifdef TIMER_OPS
+/**
+ * @brief Platform-specific extra data for the timer (IRQ selection).
+ */
+static TIMER_EXTRA_TYPE timer_extra = TIMER_EXTRA_INIT;
+
+/**
+ * @brief CAPI configuration for the timer used by the timer tests.
+ */
+const struct capi_timer_config timer_config = {
+	.ops = TIMER_OPS,
+	.identifier = TIMER_IDENTIFIER,
+	.input_clock_identifier = 0U,
+	.input_clock_hz = TIMER_INPUT_CLK_HZ,
+	.output_freq_hz = TIMER_OUTPUT_FREQ_HZ,
+	.extra = &timer_extra,
+};
+#endif /* TIMER_OPS */
+
+#ifdef I2C_OPS
+/**
+ * @brief Platform-specific extra data for the I2C initiator.
+ */
+static I2C_EXTRA_TYPE i2c_extra = I2C_EXTRA_INIT;
+
+/**
+ * @brief CAPI I2C initiator configuration for the loopback tests.
+ */
+const struct capi_i2c_config i2c_master_config = {
+	.identifier = I2C_IDENTIFIER,
+	.clk_freq_hz = 0U,
+	.initiator = true,
+	.address = 0U,
+	.device = NULL,
+	.dma_handle = NULL,
+	.extra = &i2c_extra,
+	.ops = I2C_OPS,
+};
+
+/**
+ * @brief CAPI I2C device descriptor used by the initiator to address the target.
+ */
+struct capi_i2c_device i2c_dev = {
+	.controller = NULL,
+	.address = I2C_TARGET_ADDR,
+	.b10addr = false,
+	.speed = CAPI_I2C_SPEED_STANDARD,
+	.duty_cycle = 0U,
+	.clk_stretch = 0,
+	.extra = NULL,
+};
+#endif /* I2C_OPS */
+
+#ifdef I2C_TARGET_OPS
+/**
+ * @brief Platform-specific extra data for the I2C target.
+ */
+static I2C_TARGET_EXTRA_TYPE i2c_target_extra = I2C_TARGET_EXTRA_INIT;
+
+/**
+ * @brief CAPI I2C target configuration for the loopback tests.
+ */
+const struct capi_i2c_config i2c_target_config = {
+	.identifier = I2C_TARGET_IDENTIFIER,
+	.clk_freq_hz = 0U,
+	.initiator = false,
+	.address = I2C_TARGET_ADDR,
+	.device = NULL,
+	.dma_handle = NULL,
+	.extra = &i2c_target_extra,
+	.ops = I2C_TARGET_OPS,
+};
+
+/**
+ * @brief CAPI I2C device descriptor for the target side.
+ */
+struct capi_i2c_device i2c_target_dev = {
+	.controller = NULL,
+	.address = I2C_TARGET_ADDR,
+	.b10addr = false,
+	.speed = CAPI_I2C_SPEED_STANDARD,
+	.duty_cycle = 0U,
+	.clk_stretch = 0,
+	.extra = NULL,
+};
+#endif /* I2C_TARGET_OPS */
+
+#ifdef DMA_OPS
+/**
+ * @brief Platform-specific DMA transfer extra config.
+ */
+DMA_XFER_EXTRA_TYPE dma_xfer_extra = DMA_XFER_EXTRA_INIT;
+
+/**
+ * @brief CAPI DMA configuration for the memory-to-memory tests.
+ */
+const struct capi_dma_config dma_config = {
+	.id = DMA_IDENTIFIER,
+	.num_chans = DMA_NUM_CHANS,
+	.ops = DMA_OPS,
+	.irq_handle = NULL,
+	.extra = NULL,
+};
+#endif /* DMA_OPS */
