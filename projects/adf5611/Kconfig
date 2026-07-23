@@ -1,0 +1,22 @@
+menu "ADF5611 Configuration"
+
+choice ADF5611_EXAMPLE
+	prompt "Example variant"
+	default ADF5611_BASIC_EXAMPLE
+
+config ADF5611_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Simple example that configures the ADF5611 microwave wideband
+	  synthesizer and generates a fixed RF output frequency.
+
+config ADF5611_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO framework example. Launches an IIOD server for remote
+	  configuration using IIO Oscilloscope or libiio clients.
+
+endchoice
+
+endmenu
