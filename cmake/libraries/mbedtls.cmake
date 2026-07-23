@@ -1,5 +1,5 @@
 # mbedtls.cmake - mbedTLS library with hybrid caching
-# Priority: Submodule -> Global Cache -> FetchContent
+# Source tree resolved by resolve_library_source (override -> managed clone).
 include(LibraryCacheUtils)
 
 if(NOT DEFINED CONFIG_MBEDTLS_VERSION OR "${CONFIG_MBEDTLS_VERSION}" STREQUAL "")
