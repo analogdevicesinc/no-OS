@@ -2,19 +2,24 @@
 No-OS Build Guide
 *****************
 
-Clone no-OS with **--recursive** flag:
-   
+Clone no-OS:
+
     .. code-block::
 
-        git clone --recursive https://github.com/analogdevicesinc/no-OS
+        git clone https://github.com/analogdevicesinc/no-OS
 
+External libraries (lwIP, LVGL, mbedTLS, FreeRTOS, Paho MQTT, Azure SDK, esh,
+TMC-API, precision-converters-library, pico-sdk) are no longer git submodules.
+The CMake build fetches each one automatically at configure time, pinned to the
+version selected via Kconfig, into its path under ``libraries/`` so it is cloned
+only once and reused by all subsequent builds. These fetched paths are
+git-ignored.
 
-
-If however you've already cloned no-OS without the **--recursive** flag, you may initialize all the submodules in an existing no-OS clone with:
-    
-    .. code-block::
-
-        git submodule update --recursive --init
+Set ``NO_OS_CACHE_DIR`` to fetch into a persistent or shared, version-keyed
+store outside the tree instead (useful in CI or to share one clone across
+multiple checkouts/worktrees). To point a single library at a local working
+copy, set ``NO_OS_<LIB>_DIR`` (e.g. ``NO_OS_LWIP_DIR``, ``NO_OS_MBEDTLS_DIR``);
+it takes priority over everything else.
 
 
 XILINX
