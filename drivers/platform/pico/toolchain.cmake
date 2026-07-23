@@ -1,20 +1,29 @@
 message(STATUS "Pico Platform")
 
-# The pico-sdk is vendored as the git submodule libraries/pico-sdk. Pin
-# PICO_SDK_PATH to this in-tree copy (relative to this toolchain file:
-# drivers/platform/pico -> repo root) and ignore any externally exported value,
-# so a stale PICO_SDK_PATH left in the environment cannot break the build.
-cmake_path(SET PICO_SDK_PATH NORMALIZE "${CMAKE_CURRENT_LIST_DIR}/../../..")
-cmake_path(APPEND PICO_SDK_PATH "libraries" "pico-sdk")
-set(PICO_SDK_PATH "${PICO_SDK_PATH}" CACHE PATH "Path to the vendored pico-sdk" FORCE)
+# Resolve PICO_SDK_PATH via the shared resolver (override -> version-keyed cache
+# -> in-tree clone-once). This toolchain file runs before project(), so two things
+# differ from the other libraries/*.cmake modules:
+#   - LibraryCacheUtils is included by absolute path: CMAKE_MODULE_PATH isn't set
+#     yet, and isn't inherited by try-compile subprocesses, so include-by-name
+#     would fail here.
+#   - The pico-sdk has no Kconfig entry (Kconfig isn't loaded pre-project()), so
+#     the version is pinned inline rather than read from a CONFIG_* variable.
+include("${CMAKE_CURRENT_LIST_DIR}/../../../cmake/libraries/LibraryCacheUtils.cmake")
 
-# Surface a missing submodule here, with the fix, rather than failing later with
-# a missing pico header during compilation.
+resolve_library_source(
+    pico_sdk
+    "2.2.0"
+    "${CMAKE_CURRENT_LIST_DIR}/../../../libraries/pico-sdk"
+    "https://github.com/raspberrypi/pico-sdk.git"
+    PICO_SDK_PATH
+    _pico_bin)
+
+# resolve_library_source sets PICO_SDK_PATH in this scope only; the pico-sdk init
+# and each try-compile re-read it as a cache entry, so promote it to the cache.
+set(PICO_SDK_PATH "${PICO_SDK_PATH}" CACHE PATH "Path to the pico-sdk" FORCE)
+
 if(NOT EXISTS "${PICO_SDK_PATH}/pico_sdk_init.cmake")
-    message(FATAL_ERROR
-        "pico-sdk not found at ${PICO_SDK_PATH}. Initialize the submodule from "
-        "the repository root with:\n"
-        "    git submodule update --init libraries/pico-sdk")
+    message(FATAL_ERROR "pico-sdk not found at ${PICO_SDK_PATH}")
 endif()
 
 # no-OS drives the toolchain itself (Generic bare-metal), rather than letting the
