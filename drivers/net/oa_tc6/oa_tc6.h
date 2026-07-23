@@ -189,6 +189,16 @@ enum oa_tc6_user_buffer_state {
 	OA_BUFF_TX_READY,
 };
 
+enum oa_tc6_event {
+	OA_TC6_EVENT_RX,
+	OA_TC6_EVENT_TXPE,
+	OA_TC6_EVENT_TXBOE,
+	OA_TC6_EVENT_TXBUE,
+	OA_TC6_EVENT_RXBOE,
+	OA_TC6_EVENT_LOFE,
+	OA_TC6_EVENT_HDRE,
+};
+
 /**
  * @brief Stores an Ethernet frame along with metadata needed for parsing.
  * The MAC driver or the user application will receive and submit frames for transmission

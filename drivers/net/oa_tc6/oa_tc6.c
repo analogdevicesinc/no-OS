@@ -410,7 +410,6 @@ static void oa_tc6_invoke_callback(struct oa_tc6_desc *desc, uint32_t event)
 		desc->callback(desc, event, desc->callback_arg);
 }
 
-
 /**
  * @brief Convert frames in the OA_BUFF_TX_READY state to chunks.
  * Configure empty chunks if we need to receive more then transmit.
