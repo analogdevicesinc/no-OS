@@ -11,6 +11,14 @@ config MOTOR_TMC5240
 	bool "Enable TMC5240 motor driver"
 	default n
 
+config TMC_API_VERSION
+	string "TMC-API version tag"
+	default "3.11.4"
+	depends on MOTOR_TMC5240
+	help
+	  Git tag or branch name for TMC-API.
+	  Checked against the submodule, then the shared cache, then fetched.
+
 config MOTOR_IIO_TMC5240
 	select MOTOR_TMC5240
 	bool "Enable TMC5240 IIO driver"
