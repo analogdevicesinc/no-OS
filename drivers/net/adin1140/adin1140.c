@@ -669,6 +669,27 @@ static int adin1140_setup_mac(struct adin1140_desc *desc,
 	return adin1140_set_mac_addr(desc, desc->mac_address);
 }
 
+int adin1140_register_callback(struct adin1140_desc *desc,
+			       void (*callback)(struct adin1140_desc *, uint32_t, void *),
+			       void *arg)
+{
+	if (!desc)
+		return -EINVAL;
+
+	desc->callback = callback;
+	desc->callback_arg = arg;
+
+	return 0;
+}
+
+static void adin1140_oa_tc6_callback(struct oa_tc6_desc *desc, uint32_t event, void *arg)
+{
+	struct adin1140_desc *priv = (struct adin1140_desc *)arg;
+
+	if (priv->callback)
+		priv->callback(priv, event, priv->callback_arg);
+}
+
 /**
  * @brief Verify the PHY identity by reading the MACPHY ID register.
  * @param desc - the device descriptor.
@@ -731,6 +752,10 @@ int adin1140_init(struct adin1140_desc **desc,
 		goto free_oa;
 
 	ret = adin1140_plca_set_cfg(d, &param->plca_cfg);
+	if (ret)
+		goto free_oa;
+
+	ret = oa_tc6_register_callback(d->oa_desc, adin1140_oa_tc6_callback, d);
 	if (ret)
 		goto free_oa;
 
