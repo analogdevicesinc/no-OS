@@ -82,6 +82,30 @@ int adiol100_setup_clock(struct adiol100_dev *dev,
     return adiol100_write(dev, ADIOL100_REG_CLOCKCFG, val);
 }
 
+static void adiol100_irqg_isr(void *arg)
+{
+    struct adiol100_dev *dev = arg;
+
+    if (dev->irq_cb_g)
+        dev->irq_cb_g(dev->irq_cb_ctx_g);
+}
+
+static void adiol100_irqa_isr(void *arg)
+{
+    struct adiol100_dev *dev = arg;
+
+    if (dev->irq_cb[ADIOL100_CH_A])
+        dev->irq_cb[ADIOL100_CH_A](dev->irq_cb_ctx[ADIOL100_CH_A]);
+}
+
+static void adiol100_irqb_isr(void *arg)
+{
+    struct adiol100_dev *dev = arg;
+
+    if (dev->irq_cb[ADIOL100_CH_B])
+        dev->irq_cb[ADIOL100_CH_B](dev->irq_cb_ctx[ADIOL100_CH_B]);
+}
+
 /**
  * @brief Initialize the ADIOL100 device.
  * @param dev - Pointer to the device descriptor (allocated internally).
@@ -125,9 +149,125 @@ int adiol100_init(struct adiol100_dev **dev, struct adiol100_init_param *ip)
     if (ret)
         goto err;
 
+    if (ip->irq_gpio_g || ip->irq_gpio_a || ip->irq_gpio_b) {
+        ret = no_os_irq_ctrl_init(&descriptor->irq_ctrl, ip->irq_ip);
+        if (ret)
+            goto err;
+    }
+
+    if (ip->irq_gpio_g) {
+        ret = no_os_gpio_get(&descriptor->irq_gpio_g, ip->irq_gpio_g);
+        if (ret)
+            goto err_irq;
+
+        ret = no_os_gpio_direction_input(descriptor->irq_gpio_g);
+        if (ret)
+            goto err_gpio_g;
+
+        struct no_os_callback_desc cb_g = {
+            .callback = adiol100_irqg_isr,
+            .ctx = descriptor,
+            .event = NO_OS_EVT_GPIO,
+            .peripheral = NO_OS_GPIO_IRQ,
+            .handle = descriptor->irq_gpio_g,
+        };
+        ret = no_os_irq_register_callback(descriptor->irq_ctrl,
+                                           ip->irq_gpio_g->number, &cb_g);
+        if (ret)
+            goto err_gpio_g;
+
+        ret = no_os_irq_trigger_level_set(descriptor->irq_ctrl,
+                                           ip->irq_gpio_g->number,
+                                           NO_OS_IRQ_EDGE_FALLING);
+        if (ret)
+            goto err_gpio_g;
+
+        ret = no_os_irq_enable(descriptor->irq_ctrl,
+                                ip->irq_gpio_g->number);
+        if (ret)
+            goto err_gpio_g;
+    }
+
+    if (ip->irq_gpio_a) {
+        ret = no_os_gpio_get(&descriptor->irq_gpio_a, ip->irq_gpio_a);
+        if (ret)
+            goto err_gpio_g;
+
+        ret = no_os_gpio_direction_input(descriptor->irq_gpio_a);
+        if (ret)
+            goto err_gpio_a;
+
+        struct no_os_callback_desc cb_a = {
+            .callback = adiol100_irqa_isr,
+            .ctx = descriptor,
+            .event = NO_OS_EVT_GPIO,
+            .peripheral = NO_OS_GPIO_IRQ,
+            .handle = descriptor->irq_gpio_a,
+        };
+        ret = no_os_irq_register_callback(descriptor->irq_ctrl,
+                                           ip->irq_gpio_a->number, &cb_a);
+        if (ret)
+            goto err_gpio_a;
+
+        ret = no_os_irq_trigger_level_set(descriptor->irq_ctrl,
+                                           ip->irq_gpio_a->number,
+                                           NO_OS_IRQ_EDGE_FALLING);
+        if (ret)
+            goto err_gpio_a;
+
+        ret = no_os_irq_enable(descriptor->irq_ctrl,
+                                ip->irq_gpio_a->number);
+        if (ret)
+            goto err_gpio_a;
+    }
+
+    if (ip->irq_gpio_b) {
+        ret = no_os_gpio_get(&descriptor->irq_gpio_b, ip->irq_gpio_b);
+        if (ret)
+            goto err_gpio_a;
+
+        ret = no_os_gpio_direction_input(descriptor->irq_gpio_b);
+        if (ret)
+            goto err_gpio_b;
+
+        struct no_os_callback_desc cb_b = {
+            .callback = adiol100_irqb_isr,
+            .ctx = descriptor,
+            .event = NO_OS_EVT_GPIO,
+            .peripheral = NO_OS_GPIO_IRQ,
+            .handle = descriptor->irq_gpio_b,
+        };
+        ret = no_os_irq_register_callback(descriptor->irq_ctrl,
+                                           ip->irq_gpio_b->number, &cb_b);
+        if (ret)
+            goto err_gpio_b;
+
+        ret = no_os_irq_trigger_level_set(descriptor->irq_ctrl,
+                                           ip->irq_gpio_b->number,
+                                           NO_OS_IRQ_EDGE_FALLING);
+        if (ret)
+            goto err_gpio_b;
+
+        ret = no_os_irq_enable(descriptor->irq_ctrl,
+                                ip->irq_gpio_b->number);
+        if (ret)
+            goto err_gpio_b;
+    }
+
     *dev = descriptor;
     return 0;
 
+err_gpio_b:
+    no_os_gpio_remove(descriptor->irq_gpio_b);
+err_gpio_a:
+    if (descriptor->irq_gpio_a)
+        no_os_gpio_remove(descriptor->irq_gpio_a);
+err_gpio_g:
+    if (descriptor->irq_gpio_g)
+        no_os_gpio_remove(descriptor->irq_gpio_g);
+err_irq:
+    if (descriptor->irq_ctrl)
+        no_os_irq_ctrl_remove(descriptor->irq_ctrl);
 err:
     no_os_spi_remove(descriptor->spi_desc);
     no_os_free(descriptor);
@@ -145,6 +285,18 @@ int adiol100_remove(struct adiol100_dev *dev)
 
     if (!dev)
         return -ENODEV;
+
+    if (dev->irq_gpio_b)
+        no_os_gpio_remove(dev->irq_gpio_b);
+
+    if (dev->irq_gpio_a)
+        no_os_gpio_remove(dev->irq_gpio_a);
+
+    if (dev->irq_gpio_g)
+        no_os_gpio_remove(dev->irq_gpio_g);
+
+    if (dev->irq_ctrl)
+        no_os_irq_ctrl_remove(dev->irq_ctrl);
 
     ret = no_os_spi_remove(dev->spi_desc);
     if (ret)
@@ -991,6 +1143,48 @@ int adiol100_clear_watchdog(struct adiol100_dev *dev)
 {
     return adiol100_update(dev, ADIOL100_REG_WATCHDOG,
                            ADIOL100_WDGCLEAR, ADIOL100_WDGCLEAR);
+}
+
+/**
+ * @brief Register an IRQ callback for a channel.
+ * @param dev - The device structure.
+ * @param ch  - Channel selection (A or B).
+ * @param cb  - Callback function (called from ISR context).
+ * @param ctx - User context passed to the callback.
+ * @return 0 in case of success, -ENOTSUP if IRQ is not configured.
+ */
+int adiol100_register_irq_callback(struct adiol100_dev *dev,
+                                   enum adiol100_channel ch,
+                                   adiol100_irq_cb_t cb,
+                                   void *ctx)
+{
+    if (!dev->irq_ctrl)
+        return -ENOTSUP;
+
+    dev->irq_cb[ch] = cb;
+    dev->irq_cb_ctx[ch] = ctx;
+
+    return 0;
+}
+
+/**
+ * @brief Register an IRQ callback for global interrupts.
+ * @param dev - The device structure.
+ * @param cb  - Callback function (called from ISR context).
+ * @param ctx - User context passed to the callback.
+ * @return 0 in case of success, -ENOTSUP if IRQ is not configured.
+ */
+int adiol100_register_global_irq_callback(struct adiol100_dev *dev,
+                                          adiol100_irq_cb_t cb,
+                                          void *ctx)
+{
+    if (!dev->irq_ctrl)
+        return -ENOTSUP;
+
+    dev->irq_cb_g = cb;
+    dev->irq_cb_ctx_g = ctx;
+
+    return 0;
 }
 
 /**

@@ -35,9 +35,14 @@
 #define __ADIOL100_H_
 
 #include "no_os_spi.h"
+#include "no_os_gpio.h"
+#include "no_os_irq.h"
 #include "no_os_util.h"
 #include <stdint.h>
 #include "no_os_delay.h"
+
+/* Number of IO-Link channels. */
+#define ADIOL100_NUM_CHANNELS  2
 
 /* USER_direct registers — channel A */
 #define ADIOL100_REG_INTERRUPTG         0x0000
@@ -384,6 +389,9 @@ enum adiol100_clock_src {
     ADIOL100_CLK_EXTERNAL = 2,
 };
 
+/* IRQ callback type — called from ISR context, must be fast. */
+typedef void (*adiol100_irq_cb_t)(void *ctx);
+
 /**
  * @struct adiol100_init_param
  * @brief Initialization parameters for the ADIOL100 driver.
@@ -397,6 +405,14 @@ struct adiol100_init_param {
     uint8_t clock_src;
     /* Clock divider (ClkDiv[1:0]). */
     uint8_t clk_div;
+    /* Optional IRQ GPIO for global interrupts (NULL = no driver-managed IRQ). */
+    struct no_os_gpio_init_param *irq_gpio_g;
+    /* Optional IRQ GPIO for channel A (NULL = no driver-managed IRQ). */
+    struct no_os_gpio_init_param *irq_gpio_a;
+    /* Optional IRQ GPIO for channel B (NULL = no driver-managed IRQ). */
+    struct no_os_gpio_init_param *irq_gpio_b;
+    /* IRQ controller init (required if any irq_gpio is set). */
+    struct no_os_irq_init_param *irq_ip;
 };
 
 /**
@@ -410,6 +426,18 @@ struct adiol100_dev {
     uint8_t chip_addr;
     /* Auto-incrementing FIFO message ID. */
     uint8_t msg_id;
+    /* IRQ GPIO descriptors (NULL if not configured). */
+    struct no_os_gpio_desc *irq_gpio_g;
+    struct no_os_gpio_desc *irq_gpio_a;
+    struct no_os_gpio_desc *irq_gpio_b;
+    /* IRQ controller descriptor (NULL if not configured). */
+    struct no_os_irq_ctrl_desc *irq_ctrl;
+    /* Per-channel user callbacks and contexts. */
+    adiol100_irq_cb_t irq_cb[ADIOL100_NUM_CHANNELS];
+    void *irq_cb_ctx[ADIOL100_NUM_CHANNELS];
+    /* Global IRQ callback and context. */
+    adiol100_irq_cb_t irq_cb_g;
+    void *irq_cb_ctx_g;
 };
 
 /** Read RevisionID and DeviceID to verify the chip is present. */
@@ -556,6 +584,17 @@ int adiol100_config_watchdog(struct adiol100_dev *dev,
 
 /** Clear the watchdog timer (write-1-to-clear). */
 int adiol100_clear_watchdog(struct adiol100_dev *dev);
+
+/** Register an IRQ callback for a channel (called from ISR context). */
+int adiol100_register_irq_callback(struct adiol100_dev *dev,
+                                   enum adiol100_channel ch,
+                                   adiol100_irq_cb_t cb,
+                                   void *ctx);
+
+/** Register an IRQ callback for global interrupts (called from ISR context). */
+int adiol100_register_global_irq_callback(struct adiol100_dev *dev,
+                                          adiol100_irq_cb_t cb,
+                                          void *ctx);
 
 /** Run EstablishCommunication: wake-up, poll for success/fail, return baud. */
 int adiol100_estcom(struct adiol100_dev *dev, enum adiol100_channel ch);

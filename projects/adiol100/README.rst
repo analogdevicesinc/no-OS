@@ -140,6 +140,42 @@ All IO-Link protocol steps (M-sequence framing, ISDU parsing, state
 transitions) are implemented directly in the example code using the
 driver's ``load_and_send_msg`` and ``read_msg`` functions.
 
+i-link Stack Example (FreeRTOS)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This example integrates the `rt-labs i-link <https://github.com/rtlabs-com/i-link>`__
+open-source IO-Link master stack, running on FreeRTOS. Instead of manually
+driving the protocol like the basic example, the i-link stack handles the
+full IO-Link state machine (DL, SM, CM, DS, AL layers) autonomously. The
+ADIOL100 driver acts as the physical layer (PL) backend via a port layer
+that implements the stack's ``iolink_hw_ops_t`` interface.
+
+The example:
+
+1. Initializes the ADIOL100 and the port layer with IRQ GPIO configuration.
+2. Configures channel A as an SDCI (IO-Link) port and channel B as inactive.
+3. Creates a FreeRTOS task that runs the i-link application handler, which
+   manages device discovery, identification, and cyclic process data exchange.
+
+Key components:
+
+* **Port layer** (``adiol100_ilink_pl.c/h``) — Bridges the i-link stack
+  to the ADIOL100 driver. Implements all 14 ``iolink_hw_ops_t`` callbacks:
+  baudrate/cycletime get/set, mode switching, cycle timer control, FIFO
+  messaging, EstablishCommunication, and interrupt handling. ISRs signal
+  FreeRTOS event groups to wake the DL thread.
+
+* **OSAL** (``osal_freertos.c``) — FreeRTOS implementation of the i-link
+  OS abstraction layer (mutexes, events, threads, mailboxes, timers).
+
+* **Application handler** (``app_handler.c``) — Adapted from the i-link
+  sample application. Uses the SMI (System Management Interface) to
+  interact with discovered devices. Vendor-specific device handling has
+  been replaced with a generic handler that reads and prints process data.
+
+Build with the ``ilink`` variant. Requires FreeRTOS (pulled in
+automatically via Kconfig).
+
 No-OS Supported Platforms
 --------------------------
 
@@ -162,6 +198,9 @@ SCLK             SCLK      SPI clock              P0.5
 SDI              MOSI      SPI master out         P0.6
 SDO              MISO      SPI master in          P0.7
 CSB              CS        SPI chip select        P0.11
+IRQA             IRQA      Channel A interrupt    TBD
+IRQB             IRQB      Channel B interrupt    TBD
+IRQG             IRQG      Global interrupt       TBD
 GND              GND       Ground                 GND
 VL               VL        Logic supply           3V3
 ===============  ========  =====================  ===================
@@ -172,7 +211,7 @@ Build Command
 ^^^^^^^^^^^^^^
 
 The Maxim platform uses the CMake/Ninja build system via the
-``no_os_build.py`` helper script. Available variants: ``basic``.
+``no_os_build.py`` helper script. Available variants: ``basic``, ``ilink``.
 Available boards: ``max78000fthr``.
 
 For toolchain setup and prerequisites, see the
@@ -190,6 +229,10 @@ For toolchain setup and prerequisites, see the
    # build the basic example on the MAX78000FTHR
    python tools/scripts/no_os_build.py build \
       --project adiol100 --variant basic --board max78000fthr
+
+   # build the i-link stack example
+   python tools/scripts/no_os_build.py build \
+      --project adiol100 --variant ilink --board max78000fthr
 
    # build and flash (requires a connected debug probe)
    python tools/scripts/no_os_build.py build \

@@ -211,6 +211,58 @@ Use **adiol100_enable_channel_irq** and **adiol100_enable_global_irq** to
 set the interrupt enable masks. Note that interrupt flags latch regardless
 of the enable mask — the mask only controls whether the IRQ pin is asserted.
 
+IRQ Callbacks
+~~~~~~~~~~~~~
+
+The driver optionally manages the IRQG, IRQA, and IRQB GPIO pins. To enable
+this, pass ``irq_gpio_g``, ``irq_gpio_a``, ``irq_gpio_b``, and ``irq_ip``
+in the init parameters. When provided, the driver configures the GPIOs as
+falling-edge inputs and registers internal ISRs during **adiol100_init**.
+All GPIO fields default to NULL, in which case no GPIO or IRQ setup is
+performed and the driver behaves as a pure register interface (the consumer
+manages the pins). Each GPIO is independent, so you can pass only the ones you
+need.
+
+Use **adiol100_register_irq_callback** to register a per-channel callback
+that is invoked from ISR context when the IRQA or IRQB pin fires.
+
+Use **adiol100_register_global_irq_callback** to register a callback for
+the IRQG pin (thermal, V24, watchdog, SPI CRC errors).
+
+Both callbacks receive a user-provided context pointer. The ISRs do not
+perform any SPI access, they only forward the notification. The consumer is
+responsible for reading and clearing the interrupt register from thread
+context (e.g. in a main-loop flag handler or an RTOS task).
+
+Both return ``-ENOTSUP`` if the driver was initialized without IRQ GPIO
+parameters.
+
+.. code-block:: c
+
+	volatile bool got_irq = false;
+
+	static void my_irq_cb(void *ctx)
+	{
+		got_irq = true;
+	}
+
+	/* After adiol100_init() with irq_gpio_a set: */
+	adiol100_register_irq_callback(dev, ADIOL100_CH_A, my_irq_cb, NULL);
+	adiol100_enable_channel_irq(dev, ADIOL100_CH_A, ADIOL100_RXDARDYINT);
+
+	/* In main loop: */
+	if (got_irq) {
+		got_irq = false;
+		adiol100_get_channel_irq(dev, ADIOL100_CH_A, &flags);
+		/* handle flags */
+	}
+
+Consumers that need full control of the ISR (e.g. an RTOS-based IO-Link
+stack that signals an event group from ISR context) should leave the GPIO
+fields NULL and set up the IRQ pin independently. The driver's register
+access functions (``adiol100_get_channel_irq``, ``adiol100_enable_channel_irq``,
+etc.) work regardless of whether the driver manages the GPIO.
+
 Watchdog
 ~~~~~~~~
 
@@ -261,6 +313,11 @@ ADIOL100 Driver Initialization Example
 		.chip_addr = 0,
 		.clock_src = ADIOL100_CLK_CRYSTAL,
 		.clk_div = 0,
+		/* NULL = no driver-managed IRQ (consumer handles GPIO). */
+		.irq_gpio_g = NULL,
+		.irq_gpio_a = NULL,
+		.irq_gpio_b = NULL,
+		.irq_ip = NULL,
 	};
 
 	int main(void)
