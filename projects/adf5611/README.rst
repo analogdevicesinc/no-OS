@@ -179,7 +179,8 @@ In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-	make EXAMPLE=basic
+	python tools/scripts/no_os_build.py build \
+		--project adf5611 --variant basic --board sdp-ck1z
 
 IIO example
 ^^^^^^^^^^^
@@ -202,13 +203,14 @@ In order to build the IIO project make sure you are using this command:
 
 .. code-block:: bash
 
-	make EXAMPLE=iio_example
+	python tools/scripts/no_os_build.py build \
+		--project adf5611 --variant iio --board sdp-ck1z
 
 No-OS Supported Platforms
 -------------------------
 
-Mbed Platform
-^^^^^^^^^^^^^
+STM32 Platform
+^^^^^^^^^^^^^^
 
 **Used hardware**
 
@@ -217,20 +219,37 @@ Mbed Platform
 
 **Connections**:
 
-The Arduino of the SDP-K1 needs to be connected to Arduino header of the 
+The Arduino of the SDP-K1 needs to be connected to Arduino header of the
 Evaluation board.
-Additionally a 6V power supply needs to be connected to either J4 
+Additionally a 6V power supply needs to be connected to either J4
 (the SMA interface).
 
 **Build Command**
 
+The STM32 platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``basic``, ``iio``.
+Available boards: ``sdp-ck1z``.
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
+
 .. code-block:: bash
 
-	# to delete current build
-	make reset
-	# to build the basic project
-	make EXAMPLE=basic
-	# to build the IIO project
-	make EXAMPLE=iio_example
-	# copy the adf5611.bin to the mounted SDP-K1
-	cp build/adf5611.bin </path/to/SDP-K1/mounted/folder>
+	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+	# in a default install location)
+	export STM32CUBEMX=</path/to/stm32cubemx>
+	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# PowerShell (Windows) equivalent:
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
+
+	cd no-OS
+
+	# build the example on the SDP-K1 board (replace --variant as needed)
+	python tools/scripts/no_os_build.py build \
+		--project adf5611 --variant basic --board sdp-ck1z
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project adf5611 --variant basic --board sdp-ck1z \
+		--probe openocd --flash
