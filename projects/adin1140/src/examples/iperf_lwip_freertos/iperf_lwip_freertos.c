@@ -68,7 +68,7 @@ static void adin1140_irq_cb(void *ctx)
 	adin1140_set_irq_flag(data->adin1140);
 
 	no_os_irq_disable(data->gpio_irq, ADIN1140_INT_PIN);
-	// no_os_irq_disable(data->nvic, ADIN1140_INT_GPIO_IRQn);
+	no_os_irq_disable(data->nvic, ADIN1140_INT_GPIO_IRQn);
 
 	xTaskNotifyFromISR(data->net_task_handle, 1, eSetBits,
 			   &higher_prio_woken);
@@ -133,13 +133,13 @@ static int setup_interrupt(struct adin1140_net_data *data)
 	if (ret)
 		return ret;
 
-	// ret = no_os_irq_enable(data->gpio_irq, ADIN1140_INT_PIN);
-	// if (ret)
-	// 	return ret;
+	ret = no_os_irq_enable(data->gpio_irq, ADIN1140_INT_PIN);
+	if (ret)
+		return ret;
 
-	// ret = no_os_irq_enable(data->nvic, ADIN1140_INT_GPIO_IRQn);
-	// if (ret)
-	// 	return ret;
+	ret = no_os_irq_enable(data->nvic, ADIN1140_INT_GPIO_IRQn);
+	if (ret)
+		return ret;
 
 	return 0;
 }
