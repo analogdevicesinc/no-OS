@@ -520,10 +520,6 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 
 	struct oa_tc6_frame_buffer *frame_buffer = NULL;
 
-	ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, false);
-	if (ret)
-		return ret;
-
 	for (uint32_t i = 0; i < len; i++) {
 		footer = no_os_get_unaligned_be32(&chunks[OA_CHUNK_SIZE]);
 
@@ -548,12 +544,10 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 			chunks += OA_CHUNK_SIZE + OA_FOOTER_LEN;
 			continue;
 		} else {
-			printf("valid data\n");
 			if (!frame_buffer) {
-				printf("Alloc frame buffer\n");
-				// ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, false);
-				// if (ret)
-				// 	goto out;
+				ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, false);
+				if (ret)
+					goto out;
 			}
 		}
 
@@ -584,7 +578,6 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 			} else {
 				/* A single frame in current chunk. It will be completed */
 				frame_buffer->state = OA_BUFF_RX_COMPLETE;
-				printf("Complete frame\n");
 			}
 
 			/*
@@ -621,8 +614,6 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 			memcpy(&(frame_buffer->data[frame_buffer->index]), chunks, ebo + 1);
 			frame_buffer->len = frame_buffer->index + ebo + 1;
 			frame_buffer->state = OA_BUFF_RX_COMPLETE;
-
-			printf("Complete frame\n");
 
 			/* Flags valid when EV=1 Only */
 			frame_buffer->frame_drop = !!(footer & OA_DATA_FOOTER_FD_MASK);
@@ -725,7 +716,7 @@ static void oa_tc6_add_empty_chunk(struct oa_tc6_desc *desc)
 	uint32_t header;
 
 	header = no_os_field_prep(OA_DATA_HEADER_DNC_MASK, 1);
-	header |= no_os_field_prep(OA_DATA_HEADER_DV_MASK, 1);
+	header |= no_os_field_prep(OA_DATA_HEADER_DV_MASK, 0);
 	header |= oa_tc6_crc1(header);
 
 	no_os_put_unaligned_be32(header, desc->data_chunks);
@@ -760,12 +751,10 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 	if (!ret)
 		tx_chunks_avail = frame_buffer->len;
 
-	// if (desc->bufst_polling == OA_TC6_REG_POLL) {\
-	// 	if (!desc->data_rx_credit && !tx_chunks_avail)
-	// 		goto unlock;
-	// } else {
-	// 	printf("Trying to transfer\n");
-	// }
+	if (desc->bufst_polling == OA_TC6_REG_POLL) {\
+		if (!desc->data_rx_credit && !tx_chunks_avail)
+			goto unlock;
+	}
 
 	do {
 		oa_tc6_tx_frame_to_chunks(desc, desc->data_chunks, desc->data_tx_credit,
@@ -773,8 +762,6 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 		if (!bytes_total) {
 			oa_tc6_add_empty_chunk(desc);
 			bytes_total = OA_CHUNK_SIZE + OA_HEADER_LEN;
-		} else {
-			printf("Write %d chunk data\n", bytes_total);
 		}
 
 		xfer.tx_buff = desc->data_chunks;
