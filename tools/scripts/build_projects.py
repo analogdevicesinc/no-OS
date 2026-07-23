@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/env python3
 
 import argparse
 import json
@@ -164,16 +164,25 @@ NEW_HW_DIR_NAME = 'new_hardware'
 
 def process_blacklist():
 	blacklist = []
-	err = os.system('curl -L -H "Accept: application/vnd.github.v3.raw" -H "Authorization: Bearer {}" \'{}\' -o blacklist.txt >> {} 2>&1'
-				.format(TOKEN, blacklist_url, log_file))
-	if err != 0 or (not os.path.isfile('blacklist.txt')):
-		log_err('Can not download blacklist file')
+	if not TOKEN:
+		log_err('TOKEN (GH_GHDL_TOKEN) environment variable is not set')
 		return blacklist
-	file = open('blacklist.txt', 'r')
-	for line in file.readlines():
-		project = line.split('#')[0].rstrip().replace('.', '_')
-		if project != '':
-			blacklist.append(project)
+	if not blacklist_url or blacklist_url == 'None':
+		log_err('BLACKLIST_URL environment variable is not set')
+		return blacklist
+	err = os.system('curl -f -L -H "Accept: application/vnd.github.v3.raw" -H "Authorization: Bearer {}" \'{}\' -o blacklist.txt >> {} 2>&1'
+				.format(TOKEN, blacklist_url, log_file))
+	if err != 0:
+		log_err('Failed to download blacklist file (curl exit %d) -- check TOKEN and BLACKLIST_URL' % err)
+		return blacklist
+	if not os.path.isfile('blacklist.txt'):
+		log_err('Blacklist file was not created after download')
+		return blacklist
+	with open('blacklist.txt', 'r') as file:
+		for line in file.readlines():
+			project = line.split('#')[0].rstrip().replace('.', '_')
+			if project != '':
+				blacklist.append(project)
 	return blacklist
 
 def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
@@ -215,7 +224,7 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 		blacklist = process_blacklist()
 		new_hardwares = os.path.join(builds_dir, NEW_HW_DIR_NAME)
 		ensure_dir(new_hardwares)
-		err = os.system("python3 {}/tools/scripts/download_files.py {} {} {} \"{}\""
+		err = os.system("{}/tools/scripts/download_files.py {} {} {} \"{}\""
 				  .format(noos, noos, builds_dir, server_full_path, blacklist))
 		if err != 0:
 			# Exit instead of returning None (caller unpacks a tuple -> TypeError).
@@ -305,7 +314,8 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 
 		# Bring in the platform SDK environment (MAXIM_LIBRARIES, STM32CUBEMX, ...).
 		env = dict(os.environ)
-		shell_source(environment_path_files + platform + "_environment.sh")
+		if platform not in ["maxim", "pico", "xilinx"]:
+			shell_source(environment_path_files + platform + "_environment.sh")
 
 		# The final link + .hex/.bin generation runs as a custom command whose
 		# failure does NOT report as a non-zero exit. So the .elf is the source
@@ -358,6 +368,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 			fresh_flag = ""
 		else:
 			fresh_flag = " --fresh"
+		
 		build_cmd = ("python3 %s/tools/scripts/no_os_build.py build"
 			     " --project %s --variant %s --board %s"
 			     " --build-dir %s --jobs %d --probe openocd%s%s"
@@ -383,6 +394,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		if not success:
 			log_err("ERROR")
 			log("See log %s" % dst_log)
+			os.system("cat %s" % dst_log)
 			ERR = 1
 
 		# The final link + .hex/.bin runs as a cmake custom command whose failure
