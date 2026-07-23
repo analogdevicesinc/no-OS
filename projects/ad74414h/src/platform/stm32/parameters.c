@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for Mbed platform of ad74414h project.
+ *   @file   parameters.c
+ *   @brief  Definition of STM32 platform data used by ad74414h project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2026(c) Analog Devices, Inc.
@@ -32,34 +32,11 @@
 *******************************************************************************/
 
 #include "parameters.h"
-#include "common_data.h"
 
-extern int example_main();
+struct stm32_uart_init_param ad74414h_uart_extra_ip = {
+	.huart = &huart5,
+};
 
-/***************************************************************************//**
- * @brief Main function for Mbed platform.
- *
- * @return ret - Result of the enabled examples.
-*******************************************************************************/
-
-int main()
-{
-	int ret;
-	struct no_os_uart_desc *uart_desc;
-
-	ad74414h_ip.spi_ip = ad74414h_spi_ip;
-
-	ret = no_os_uart_init(&uart_desc, &ad74414h_uart_ip);
-	if (ret)
-		return ret;
-
-	no_os_uart_stdio(uart_desc);
-
-	ret = example_main();
-	if (ret) {
-		no_os_uart_remove(uart_desc);
-		return ret;
-	}
-
-	return 0;
-}
+struct stm32_spi_init_param ad74414h_spi_extra = {
+	.chip_select_port = SPI_CS_PORT,
+};

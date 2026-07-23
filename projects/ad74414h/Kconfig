@@ -1,0 +1,45 @@
+menu "AD74414H Configuration"
+
+choice AD74414H_EXAMPLE
+	prompt "Example variant"
+	default AD74414H_BASIC_EXAMPLE
+
+config AD74414H_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Basic example that initializes the AD74414H ADC-DAC device
+	  and performs GPIO operations over SPI interface.
+
+config AD74414H_CURRENT_INPUT_EXT_EXAMPLE
+	bool "Current input external example"
+	help
+	  Current input measurement in externally powered mode.
+
+config AD74414H_CURRENT_INPUT_LOOP_EXAMPLE
+	bool "Current input loop example"
+	help
+	  Current input measurement in loop powered mode.
+
+config AD74414H_CURRENT_OUTPUT_EXAMPLE
+	bool "Current output example"
+	help
+	  Configures a channel as a current output (source) DAC.
+
+config AD74414H_DIGITAL_INPUT_LOGIC_EXAMPLE
+	bool "Digital input logic example"
+	help
+	  Reads a channel configured as a digital (logic) input.
+
+config AD74414H_DIGITAL_INPUT_LOOP_EXAMPLE
+	bool "Digital input loop example"
+	help
+	  Reads a channel configured as a loop powered digital input.
+
+config AD74414H_DIGITAL_OUTPUT_EXAMPLE
+	bool "Digital output example"
+	help
+	  Drives a channel configured as a digital output.
+
+endchoice
+
+endmenu
