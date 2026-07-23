@@ -11,7 +11,7 @@ message(STATUS "LVGL requested version: ${CONFIG_LVGL_VERSION}")
 resolve_library_source(
     lvgl
     "${CONFIG_LVGL_VERSION}"
-    "${NO_OS_DIR}/libraries/lvgl/lvgl"
+    "${NO_OS_DIR}/libraries/lvgl"
     "https://github.com/lvgl/lvgl.git"
     LVGL_SOURCE_DIR
     LVGL_BINARY_DIR

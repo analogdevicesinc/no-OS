@@ -13,13 +13,13 @@ message(STATUS "esh requested version: ${CONFIG_ESH_VERSION}")
 resolve_library_source(
     esh
     "${CONFIG_ESH_VERSION}"
-    "${NO_OS_DIR}/libraries/esh/esh"
+    "${NO_OS_DIR}/libraries/esh"
     "https://github.com/google/esh.git"
     ESH_SOURCE_DIR
     ESH_BINARY_DIR
 )
 
-set(ESH_WRAPPER_DIR "${NO_OS_DIR}/libraries/esh")
+set(ESH_WRAPPER_DIR "${NO_OS_DIR}/libraries/esh-glue")
 
 file(GLOB_RECURSE ESH_SHELL_SRCS
     "${ESH_SOURCE_DIR}/shell/shell/*.c"

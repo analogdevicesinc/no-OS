@@ -14,7 +14,7 @@ message(STATUS "TMC-API requested version: ${CONFIG_TMC_API_VERSION}")
 resolve_library_source(
     tmc
     "${CONFIG_TMC_API_VERSION}"
-    "${NO_OS_DIR}/libraries/tmc/TMC-API"
+    "${NO_OS_DIR}/libraries/TMC-API"
     "https://github.com/analogdevicesinc/TMC-API.git"
     TMC_SOURCE_DIR
     TMC_BINARY_DIR
