@@ -1,5 +1,5 @@
 # mqtt.cmake - Paho MQTT Embedded-C library with hybrid caching
-# Priority: Submodule -> Global Cache -> FetchContent
+# Source tree resolved by resolve_library_source (override -> managed clone).
 #
 # The paho CMakeLists.txt builds shared libraries not suitable for embedded,
 # so we compile the required source files directly.

@@ -1,5 +1,5 @@
 # esh.cmake - Embedded Shell library with hybrid caching
-# Priority: Submodule -> Global Cache -> FetchContent
+# Source tree resolved by resolve_library_source (override -> managed clone).
 #
 # esh has no CMakeLists.txt, so we compile the source files directly.
 include(LibraryCacheUtils)
