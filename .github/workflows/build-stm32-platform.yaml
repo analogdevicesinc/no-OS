@@ -17,6 +17,7 @@ concurrency:
 
 jobs:
   build-stm32-platform:
+    timeout-minutes: 5
     env:
       CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
       TOOLS_REPO: ${{ secrets.TOOLS_REPO }}
@@ -58,18 +59,27 @@ jobs:
         with:
           path: ${{ env.RELEASES_DIR }}
           name: release_stm32_${{ github.job }}
-      - name: Collect all build logs
+      - name: Upload cmake build logs
         if: always()
         shell: sh
         run: |
-          mkdir -p ${{ env.LOGS_DIR }}/builds_main_cmake
-          cp -r ${{ github.workspace }}/builds_main_cmake/* ${{ env.LOGS_DIR }}/builds_main_cmake/ 2>/dev/null || true
+          mkdir -p ${{ github.workspace }}/cmake_logs
+          find ${{ github.workspace }} -path "*/cmake_logs" -prune -o -name "build.log" -print -exec cp --parents {} ${{ github.workspace }}/cmake_logs/ \;
+          find ${{ github.workspace }} -path "*/cmake_logs" -prune -o -name "CMakeOutput.log" -print -exec cp --parents {} ${{ github.workspace }}/cmake_logs/ \;
+          find ${{ github.workspace }} -path "*/cmake_logs" -prune -o -name "CMakeError.log" -print -exec cp --parents {} ${{ github.workspace }}/cmake_logs/ \;
+          find ${{ github.workspace }} -path "*/cmake_logs" -prune -o -name "*.txt" -print -exec cp --parents {} ${{ github.workspace }}/cmake_logs/ \;
+      - name: Upload cmake logs artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          path: ${{ github.workspace }}/cmake_logs
+          name: cmake_logs_${{ github.job }}
       - name: Upload STM32 build logs
         if: always()
         uses: actions/upload-artifact@v7
         with:
           path: ${{ env.LOGS_DIR }}
-          name: logs_stm32_${{ github.job }}
+          name: logs_${{ github.job }}
       - name: Clean workspace
         if: always()
         shell: sh
