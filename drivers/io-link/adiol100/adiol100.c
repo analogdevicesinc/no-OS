@@ -248,7 +248,7 @@ int adiol100_update(struct adiol100_dev *dev, uint16_t reg, uint16_t mask,
 }
 
 /**
- * @brief Load IO-Link payload into TxFIFO and trigger CQSend.
+ * @brief Load IO-Link payload into TxFIFO without triggering CQSend.
  * @param dev     - The device structure.
  * @param ch      - Channel selection (A or B).
  * @param data    - IO-Link payload bytes (MC + CKT + OD).
@@ -257,7 +257,7 @@ int adiol100_update(struct adiol100_dev *dev, uint16_t reg, uint16_t mask,
  * @param keep    - Retain message in TxFIFO for cyclic re-sending.
  * @return 0 in case of success, negative error code otherwise.
  */
-int adiol100_send_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
+int adiol100_load_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
                       uint8_t *data, uint8_t txbytes, uint8_t rxbytes,
                       enum adiol100_keep_msg keep)
 {
@@ -266,8 +266,6 @@ int adiol100_send_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
     uint8_t read_len = 2 + rxbytes;
     uint16_t data_reg;
     uint16_t fc1_reg;
-    uint16_t mask;
-    uint16_t val;
     int ret;
 
     if (ch == ADIOL100_CH_A) {
@@ -296,10 +294,49 @@ int adiol100_send_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
     if (ret)
         return ret;
 
-    mask = ADIOL100_CQSEND | ADIOL100_TXKEEPMSG;
-    val = ADIOL100_CQSEND | no_os_field_prep(ADIOL100_TXKEEPMSG, keep);
+    return adiol100_update(dev, fc1_reg, ADIOL100_TXKEEPMSG,
+                           no_os_field_prep(ADIOL100_TXKEEPMSG, keep));
+}
 
-    return adiol100_update(dev, fc1_reg, mask, val);
+/**
+ * @brief Assert CQSend to trigger transmission of the message in the TxFIFO.
+ * @param dev - The device structure.
+ * @param ch  - Channel selection (A or B).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adiol100_send_msg(struct adiol100_dev *dev, enum adiol100_channel ch)
+{
+    uint16_t fc1_reg;
+
+    if (ch == ADIOL100_CH_A)
+        fc1_reg = ADIOL100_REG_FRAMCTRL1_A;
+    else
+        fc1_reg = ADIOL100_REG_FRAMCTRL1_B;
+
+    return adiol100_update(dev, fc1_reg, ADIOL100_CQSEND, ADIOL100_CQSEND);
+}
+
+/**
+ * @brief Load IO-Link payload into TxFIFO and trigger CQSend.
+ * @param dev     - The device structure.
+ * @param ch      - Channel selection (A or B).
+ * @param data    - IO-Link payload bytes (MC + CKT + OD).
+ * @param txbytes - Number of payload bytes to transmit.
+ * @param rxbytes - Number of response bytes expected from the device.
+ * @param keep    - Retain message in TxFIFO for cyclic re-sending.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adiol100_load_and_send_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
+                               uint8_t *data, uint8_t txbytes, uint8_t rxbytes,
+                               enum adiol100_keep_msg keep)
+{
+    int ret;
+
+    ret = adiol100_load_msg(dev, ch, data, txbytes, rxbytes, keep);
+    if (ret)
+        return ret;
+
+    return adiol100_send_msg(dev, ch);
 }
 
 /**

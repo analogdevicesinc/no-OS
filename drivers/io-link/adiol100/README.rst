@@ -25,8 +25,7 @@ burst transfers. The device address is selected by the ADRSEL pin at power-up (4
 possible addresses), allowing up to 4 chips on one SPI bus.
 
 The ADIOL101 is the same die in a smaller 40-pin package, without the
-external high-side FET controller pins. The register map and driver are
-identical for both variants.
+external high-side FET controller pins.
 
 Key specifications:
 
@@ -62,16 +61,16 @@ through several protocol phases:
                                   │              │   at every ComRate)  │
                                   │              └──────────────────────┘
                                   │                       │
-   ┌─────────────────┐      ┌─────▼────┐      ┌───────────▼───────────────┐
-   │   Master sets   │◄─────┤PREOPERATE│      │          Slave            │
-   │ MasterCycleTime │      └─────┬────┘      │      Identification       │
-   └────────┬────────┘            │           │ (reading slave parameters │
-            │                     │           │required for communication │
-   ┌────────▼────────┐            │           │   and identification)     │
-   │   (Optional)    │            │           └────────────┬──────────────┘
-   │Master reads ISDU│            │                        │
-   │     pages       │            │             ┌──────────▼───────────┐
-   └─────────────────┘            │             │       Sending        │
+┌─────────────────┐         ┌─────▼────┐      ┌───────────▼───────────────┐
+│   Master sets   │◄────────┤PREOPERATE│      │        Slave              │
+│ MasterCycleTime │         └─────┬────┘      │    Identification         │
+└────────┬────────┘               │           │ (reading slave parameters │
+         │                        │           │required for communication │
+┌────────▼────────┐               │           │   and identification)     │
+│   (Optional)    │               │           └────────────┬──────────────┘
+│Master reads ISDU│               │                        │
+│     pages       │               │             ┌──────────▼───────────┐
+└─────────────────┘               │             │       Sending        │
                                   │             │ MasterIdent command  │
                                   │             └──────────────────────┘
                                   │
@@ -83,11 +82,10 @@ through several protocol phases:
 
 This driver provides hardware control and configuration up through the
 EstablishCommunication step. It provides the building blocks for transceiver
-configuration, FIFO messaging, and cycle timer control. The higher-level IO-Link
-protocol state machine (STARTUP to PREOPERATE to OPERATE transitions, M-sequence
-framing, ISDU handling, process data management) must be implemented by the
-application or by integrating an external IO-Link stack. Examples for both cases
-can be found in the `adiol100 project <projects/adiol100>`_.
+configuration, FIFO messaging, and cycle timer control. The higher-level
+IO-Link protocol state machine (STARTUP to PREOPERATE to OPERATE transitions,
+M-sequence framing, ISDU handling, process data management) must be
+implemented by the application or by integrating an external IO-Link stack.
 
 Applications
 ------------
@@ -169,10 +167,17 @@ bit. It polls the channel interrupt register at 1 ms intervals for up to
 Use **adiol100_get_comrt** to read the detected baud rate after a successful
 EstCom (1 = COM1, 2 = COM2, 3 = COM3).
 
-Use **adiol100_send_msg** to load IO-Link payload bytes into the TxFIFO and
-trigger transmission. The caller provides only the IO-Link payload (MC + CKT
-+ OD bytes). The driver prepends the FIFO header (MsgID, RxBytes, TxBytes),
-sets the SPI burst length, and asserts CQSend internally.
+Use **adiol100_load_and_send_msg** to load IO-Link payload bytes into the
+TxFIFO and trigger transmission. The caller provides only the IO-Link payload
+(MC + CKT + OD bytes). The driver prepends the FIFO header (MsgID, RxBytes,
+TxBytes), sets the SPI burst length, and asserts CQSend internally.
+
+Use **adiol100_load_msg** to load the TxFIFO without triggering CQSend. This
+is used when preparing a message for cyclic re-transmission or when the
+transmission trigger is handled separately.
+
+Use **adiol100_send_msg** to assert CQSend and trigger transmission of the
+message already in the TxFIFO.
 
 Use **adiol100_read_msg** to read the device response from the RxFIFO. The
 driver strips the MsgID and RxBytesAct header and returns only the IO-Link
@@ -188,9 +193,10 @@ Use **adiol100_set_cycle_tmr** to write the IO-Link encoded cycle time byte
 Use **adiol100_enable_cycle_timer** and **adiol100_disable_cycle_timer** to
 start and stop autonomous cyclic operation. When enabled, the chip
 automatically re-transmits the TxFIFO contents at the configured cycle
-interval. For cyclic process data exchange, call **adiol100_send_msg** with
+interval. For cyclic process data exchange, call **adiol100_load_msg** with
 ``ADIOL100_KEEP_MSG`` to retain the master message in the TxFIFO for
-re-transmission.
+re-transmission, then use **adiol100_send_msg** to trigger the first
+transmission.
 
 Interrupts
 ~~~~~~~~~~
@@ -203,7 +209,7 @@ and SPI CRC errors.
 
 Use **adiol100_enable_channel_irq** and **adiol100_enable_global_irq** to
 set the interrupt enable masks. Note that interrupt flags latch regardless
-of the enable mask - the mask only controls whether the IRQ pin is asserted.
+of the enable mask — the mask only controls whether the IRQ pin is asserted.
 
 Watchdog
 ~~~~~~~~
@@ -315,7 +321,7 @@ ADIOL100 Driver Initialization Example
 
 		/*
 		 * Application code goes here:
-		 * - Read DPP parameters using send_msg/read_msg
+		 * - Read DPP parameters using load_and_send_msg/read_msg
 		 * - Transition through STARTUP -> PREOPERATE -> OPERATE
 		 * - Exchange cyclic process data
 		 * These steps require IO-Link protocol handling above

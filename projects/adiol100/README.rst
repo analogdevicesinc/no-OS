@@ -138,7 +138,7 @@ The example walks through each phase:
 
 All IO-Link protocol steps (M-sequence framing, ISDU parsing, state
 transitions) are implemented directly in the example code using the
-driver's ``send_msg`` and ``read_msg`` functions.
+driver's ``load_and_send_msg`` and ``read_msg`` functions.
 
 No-OS Supported Platforms
 --------------------------

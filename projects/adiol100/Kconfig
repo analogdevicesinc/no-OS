@@ -7,6 +7,9 @@ choice ADIOL100_EXAMPLE
 config ADIOL100_BASIC_EXAMPLE
 	bool "Basic example"
 
+config ADIOL100_ILINK_EXAMPLE
+	bool "i-link IO-Link stack example (FreeRTOS)"
+
 endchoice
 
 endmenu

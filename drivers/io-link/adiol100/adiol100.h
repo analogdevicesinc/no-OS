@@ -230,14 +230,14 @@
 #define ADIOL100_CLOCKCFG_MSK           NO_OS_GENMASK(1, 0)
 
 /* CQCurLim bit masks (0x000A / 0x001A) */
-#define ADIOL100_CQVTHRH_MSK           NO_OS_GENMASK(15, 14)
-#define ADIOL100_CQVTHRL_MSK           NO_OS_GENMASK(13, 12)
-#define ADIOL100_RXVTHRH_MSK           NO_OS_GENMASK(11, 10)
-#define ADIOL100_RXVTHRL_MSK           NO_OS_GENMASK(9, 8)
-#define ADIOL100_CQCL_MSK              NO_OS_GENMASK(7, 5)
-#define ADIOL100_CLBL_MSK              NO_OS_GENMASK(4, 3)
-#define ADIOL100_ARTTMO_MSK            NO_OS_GENMASK(2, 1)
-#define ADIOL100_ARTEN                 NO_OS_BIT(0)
+#define ADIOL100_CQVTHRH_MSK            NO_OS_GENMASK(15, 14)
+#define ADIOL100_CQVTHRL_MSK            NO_OS_GENMASK(13, 12)
+#define ADIOL100_RXVTHRH_MSK            NO_OS_GENMASK(11, 10)
+#define ADIOL100_RXVTHRL_MSK            NO_OS_GENMASK(9, 8)
+#define ADIOL100_CQCL_MSK               NO_OS_GENMASK(7, 5)
+#define ADIOL100_CLBL_MSK               NO_OS_GENMASK(4, 3)
+#define ADIOL100_ARTTMO_MSK             NO_OS_GENMASK(2, 1)
+#define ADIOL100_ARTEN                  NO_OS_BIT(0)
 
 /* FIFO constants */
 #define ADIOL100_FIFO_MAX_LEN           66
@@ -435,10 +435,18 @@ int adiol100_write(struct adiol100_dev *dev, uint16_t reg, uint16_t value);
 int adiol100_update(struct adiol100_dev *dev, uint16_t reg, uint16_t mask,
                     uint16_t value);
 
-/** Load IO-Link payload into TxFIFO and trigger CQSend. */
-int adiol100_send_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
+/** Load IO-Link payload into TxFIFO without triggering CQSend. */
+int adiol100_load_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
                       uint8_t *data, uint8_t txbytes, uint8_t rxbytes,
                       enum adiol100_keep_msg keep);
+
+/** Assert CQSend to trigger transmission of the message in the TxFIFO. */
+int adiol100_send_msg(struct adiol100_dev *dev, enum adiol100_channel ch);
+
+/** Load IO-Link payload into TxFIFO and trigger CQSend. */
+int adiol100_load_and_send_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
+                               uint8_t *data, uint8_t txbytes, uint8_t rxbytes,
+                               enum adiol100_keep_msg keep);
 
 /** Read device response from RxFIFO, stripping the MsgID/RxBytesAct header. */
 int adiol100_read_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
