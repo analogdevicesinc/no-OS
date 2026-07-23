@@ -170,6 +170,17 @@ int capi_gpio_port_get_raw_value(struct capi_gpio_port_handle *handle,
 				 uint64_t *value_bitmask);
 
 /**
+ * @brief Toggle the output value of the specified pins in a port.
+ *
+ * @param [in] handle The GPIO port.
+ * @param [in] pins_bitmask Bitmask of pins to toggle.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int capi_gpio_port_toggle(struct capi_gpio_port_handle *handle,
+			  uint64_t pins_bitmask);
+
+/**
  * @brief Set the direction of the specified GPIO pin.
  *
  * @param [in] pin The GPIO pin.
@@ -233,6 +244,15 @@ int capi_gpio_pin_set_raw_value(struct capi_gpio_pin *pin, uint8_t value);
 int capi_gpio_pin_get_raw_value(struct capi_gpio_pin *pin, uint8_t *value);
 
 /**
+ * @brief Toggle the output value of the specified GPIO pin.
+ *
+ * @param [in] pin The GPIO pin.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int capi_gpio_pin_toggle(struct capi_gpio_pin *pin);
+
+/**
  * Container for the GPIO specific operations.
  */
 struct capi_gpio_ops {
@@ -259,6 +279,8 @@ struct capi_gpio_ops {
 	/** See capi_gpio_port_get_raw_value() */
 	int (*port_get_raw_value)(struct capi_gpio_port_handle *handle,
 				  uint64_t *value_bitmask);
+	/** See capi_gpio_port_toggle() */
+	int (*port_toggle)(struct capi_gpio_port_handle *handle, uint64_t pins_bitmask);
 	/** See capi_gpio_pin_set_direction() */
 	int (*pin_set_direction)(struct capi_gpio_pin *pin, uint8_t direction);
 	/** See capi_gpio_pin_get_direction() */
@@ -271,6 +293,8 @@ struct capi_gpio_ops {
 	int (*pin_set_raw_value)(struct capi_gpio_pin *pin, uint8_t value);
 	/** See capi_gpio_pin_get_raw_value() */
 	int (*pin_get_raw_value)(struct capi_gpio_pin *pin, uint8_t *value);
+	/** See capi_gpio_pin_toggle() */
+	int (*pin_toggle)(struct capi_gpio_pin *pin);
 };
 
 #ifdef __cplusplus

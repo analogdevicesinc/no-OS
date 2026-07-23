@@ -90,6 +90,15 @@ int capi_gpio_port_get_raw_value(struct capi_gpio_port_handle *handle,
 	return handle->ops->port_get_raw_value(handle, value_bitmask);
 }
 
+int capi_gpio_port_toggle(struct capi_gpio_port_handle *handle,
+			  uint64_t pins_bitmask)
+{
+	if (!handle || !handle->ops || !handle->ops->port_toggle) {
+		return -EINVAL;
+	}
+	return handle->ops->port_toggle(handle, pins_bitmask);
+}
+
 int capi_gpio_pin_set_direction(struct capi_gpio_pin *pin, uint8_t direction)
 {
 	if (!pin || !pin->port_handle || !pin->port_handle->ops ||
@@ -142,4 +151,13 @@ int capi_gpio_pin_get_raw_value(struct capi_gpio_pin *pin, uint8_t *value)
 		return -EINVAL;
 	}
 	return pin->port_handle->ops->pin_get_raw_value(pin, value);
+}
+
+int capi_gpio_pin_toggle(struct capi_gpio_pin *pin)
+{
+	if (!pin || !pin->port_handle || !pin->port_handle->ops ||
+	    !pin->port_handle->ops->pin_toggle) {
+		return -EINVAL;
+	}
+	return pin->port_handle->ops->pin_toggle(pin);
 }

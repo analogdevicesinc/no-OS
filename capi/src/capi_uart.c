@@ -160,6 +160,24 @@ int capi_uart_get_line_status(struct capi_uart_handle *handle,
 	return handle->ops->get_line_status(handle, status_flags);
 }
 
+int capi_uart_set_flow_control_state(struct capi_uart_handle *handle,
+				     bool rts_state, bool cts_state)
+{
+	if (!handle || !handle->ops || !handle->ops->set_flow_control_state) {
+		return -EINVAL;
+	}
+	return handle->ops->set_flow_control_state(handle, rts_state, cts_state);
+}
+
+int capi_uart_get_flow_control_state(struct capi_uart_handle *handle,
+				     bool *rts_state, bool *cts_state)
+{
+	if (!handle || !handle->ops || !handle->ops->get_flow_control_state) {
+		return -EINVAL;
+	}
+	return handle->ops->get_flow_control_state(handle, rts_state, cts_state);
+}
+
 void capi_uart_isr(void *handle)
 {
 	struct capi_uart_handle *ch = (struct capi_uart_handle *)handle;
