@@ -406,6 +406,12 @@ int oa_tc6_put_rx_frame(struct oa_tc6_desc *desc,
 	return 0;
 }
 
+static void oa_tc6_invoke_callback(struct oa_tc6_desc *desc, uint32_t event)
+{
+	if (desc->callback)
+		desc->callback(desc, event, desc->callback_arg);
+}
+
 /**
  * @brief Convert frames in the OA_BUFF_TX_READY state to chunks.
  * Configure empty chunks if we need to receive more then transmit.
@@ -578,6 +584,7 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 			} else {
 				/* A single frame in current chunk. It will be completed */
 				frame_buffer->state = OA_BUFF_RX_COMPLETE;
+				oa_tc6_invoke_callback(desc, OA_TC6_EVENT_RX);
 			}
 
 			/*
@@ -614,6 +621,8 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 			memcpy(&(frame_buffer->data[frame_buffer->index]), chunks, ebo + 1);
 			frame_buffer->len = frame_buffer->index + ebo + 1;
 			frame_buffer->state = OA_BUFF_RX_COMPLETE;
+
+			oa_tc6_invoke_callback(desc, OA_TC6_EVENT_RX);
 
 			/* Flags valid when EV=1 Only */
 			frame_buffer->frame_drop = !!(footer & OA_DATA_FOOTER_FD_MASK);
