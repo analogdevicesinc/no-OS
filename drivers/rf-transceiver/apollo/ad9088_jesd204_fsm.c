@@ -334,6 +334,32 @@ static int ad9088_jesd204_clks_enable(struct jesd204_dev *jdev,
 	return JESD204_STATE_CHANGE_DONE;
 }
 
+static int ad9088_jesd204_link_enable(struct jesd204_dev *jdev,
+				      enum jesd204_state_op_reason reason,
+				      struct jesd204_link *lnk)
+{
+	struct ad9088_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct ad9088_phy *phy = priv->phy;
+	struct adi_apollo_device_t *device = &phy->ad9088;
+	int ret;
+
+	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
+		 lnk->link_id, jesd204_state_op_reason_str(reason));
+
+	/* Deframer (JRx) links: enable on init, disable on teardown */
+	if (lnk->is_transmit) {
+		ret = adi_apollo_jrx_link_enable_set(device,
+						     ad9088_to_link(lnk->link_id),
+						     reason == JESD204_STATE_OP_REASON_INIT);
+		ret = ad9088_check_apollo_error(ret,
+						"adi_apollo_jrx_link_enable_set");
+		if (ret)
+			return ret;
+	}
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
 static int ad9088_jesd204_uninit(struct jesd204_dev *jdev,
 				 enum jesd204_state_op_reason reason)
 {
@@ -360,6 +386,10 @@ const struct jesd204_dev_data jesd204_ad9088_init = {
 		},
 		[JESD204_OP_CLOCKS_ENABLE] = {
 			.per_link = ad9088_jesd204_clks_enable,
+		},
+		[JESD204_OP_LINK_ENABLE] = {
+			.per_link = ad9088_jesd204_link_enable,
+			.post_state_sysref = true,
 		},
 	},
 
