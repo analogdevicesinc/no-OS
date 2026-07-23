@@ -429,6 +429,29 @@ int oa_tc6_put_rx_frame(struct oa_tc6_desc *desc,
 	return 0;
 }
 
+/*
+ * Events are only recorded while the data lock is held and delivered by
+ * oa_tc6_dispatch_events() after it's released, so that the user callback
+ * may call back into the driver.
+ */
+static void oa_tc6_queue_event(struct oa_tc6_desc *desc, uint32_t event)
+{
+	desc->pending_events |= NO_OS_BIT(event);
+}
+
+static void oa_tc6_dispatch_events(struct oa_tc6_desc *desc, uint32_t events)
+{
+	uint32_t event;
+
+	if (!desc->callback)
+		return;
+
+	for (event = 0; events; event++, events >>= 1) {
+		if (events & 1)
+			desc->callback(desc, event, desc->callback_arg);
+	}
+}
+
 /**
  * @brief Convert frames in the OA_BUFF_TX_READY state to chunks.
  * Configure empty chunks if we need to receive more then transmit.
@@ -754,6 +777,7 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 	uint32_t tx_chunks_avail = 0;
 	uint32_t rx_limit = 0;
 	uint32_t bytes_total;
+	uint32_t events;
 	int ret = 0;
 	int tx_ret;
 
@@ -818,7 +842,11 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 	} while (desc->data_rx_credit || tx_chunks_avail);
 
 unlock:
+	events = desc->pending_events;
+	desc->pending_events = 0;
 	no_os_mutex_unlock(desc->data_lock);
+
+	oa_tc6_dispatch_events(desc, events);
 
 	return ret;
 }
@@ -853,6 +881,19 @@ int oa_tc6_sw_reset(struct oa_tc6_desc *desc)
 		return -ENODEV;
 
 	return oa_tc6_reg_write(desc, OA_TC6_STATUS0_REG, OA_TC6_STATUS0_RESETC);
+}
+
+int oa_tc6_register_callback(struct oa_tc6_desc *desc,
+			     void (*callback)(struct oa_tc6_desc *, uint32_t, void *),
+			     void *arg)
+{
+	if (!desc)
+		return -EINVAL;
+
+	desc->callback = callback;
+	desc->callback_arg = arg;
+
+	return 0;
 }
 
 /**
