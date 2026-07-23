@@ -11,7 +11,7 @@ message(STATUS "Azure SDK requested version: ${CONFIG_AZURE_VERSION}")
 resolve_library_source(
     azure_sdk
     "${CONFIG_AZURE_VERSION}"
-    "${NO_OS_DIR}/libraries/azure/azure-sdk-for-c"
+    "${NO_OS_DIR}/libraries/azure-sdk-for-c"
     "https://github.com/Azure/azure-sdk-for-c.git"
     AZURE_SOURCE_DIR
     AZURE_BINARY_DIR

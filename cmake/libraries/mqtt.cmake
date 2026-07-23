@@ -14,7 +14,7 @@ message(STATUS "MQTT requested version: ${CONFIG_MQTT_VERSION}")
 resolve_library_source(
     paho_mqtt
     "${CONFIG_MQTT_VERSION}"
-    "${NO_OS_DIR}/libraries/mqtt/paho.mqtt.embedded-c"
+    "${NO_OS_DIR}/libraries/paho.mqtt.embedded-c"
     "https://github.com/eclipse/paho.mqtt.embedded-c"
     PAHO_SOURCE_DIR
     PAHO_BINARY_DIR

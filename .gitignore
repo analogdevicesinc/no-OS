@@ -29,6 +29,18 @@ aducm_build
 .github/PULL_REQUEST_TEMPLATE.md
 libraries/ftd2xx
 
+# Dependencies fetched in-tree at configure time (previously git submodules)
+libraries/lwip/
+libraries/lvgl/
+libraries/mbedtls/
+libraries/FreeRTOS-Kernel/
+libraries/paho.mqtt.embedded-c/
+libraries/azure-sdk-for-c/
+libraries/esh/
+libraries/TMC-API/
+libraries/precision-converters-library/
+libraries/pico-sdk/
+
 *.a
 *.o
 *.d

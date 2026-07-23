@@ -12,7 +12,7 @@ message(STATUS "FreeRTOS requested version: ${CONFIG_FREERTOS_VERSION}")
 resolve_library_source(
     freertos
     "${CONFIG_FREERTOS_VERSION}"
-    "${NO_OS_DIR}/libraries/free_rtos/free_rtos"
+    "${NO_OS_DIR}/libraries/FreeRTOS-Kernel"
     "https://github.com/FreeRTOS/FreeRTOS-Kernel.git"
     FREERTOS_SOURCE_DIR
     FREERTOS_BINARY_DIR
