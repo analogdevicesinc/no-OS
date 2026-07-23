@@ -18,10 +18,10 @@ It provides:
 
 New to no-OS? Follow these steps:
 
-1. **Clone the repository** with the `--recursive` flag to pull in all submodules:
+1. **Clone the repository:**
 
    ```
-   git clone --recursive https://github.com/analogdevicesinc/no-OS
+   git clone https://github.com/analogdevicesinc/no-OS
    ```
 
 2. **Set up your toolchain and build** by following the [Build Guide](https://analogdevicesinc.github.io/no-OS/build_guide.html) for your platform.
