@@ -517,7 +517,7 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 	uint32_t sv;
 	int ret;
 
-	struct oa_tc6_frame_buffer *frame_buffer;
+	struct oa_tc6_frame_buffer *frame_buffer = NULL;
 
 	ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, false);
 	if (ret)
@@ -562,7 +562,7 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 				/* Now get a new buffer for the second frame */
 				ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, true);
 				if (ret)
-					return ret;
+					goto out;
 
 				/*
 				 * Overwrite the EBO to be the end of the chunk so the next
@@ -597,7 +597,7 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 				/* Get a new buffer for the next iteration */
 				ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, true);
 				if (ret)
-					return ret;
+					goto out;
 			}
 
 			chunks += OA_CHUNK_SIZE + OA_FOOTER_LEN;
@@ -618,7 +618,7 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 			/* Get a new buffer for the next iteration */
 			ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, true);
 			if (ret)
-				return ret;
+				goto out;
 
 			frame_buffer->state = OA_BUFF_RX_IN_PROGRESS;
 
@@ -657,10 +657,13 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 		chunks += OA_CHUNK_SIZE + OA_FOOTER_LEN;
 	}
 
-	desc->data_rx_credit = no_os_field_get(OA_DATA_FOOTER_RCA_MASK, footer);
-	desc->data_tx_credit = no_os_field_get(OA_DATA_FOOTER_TXC_MASK, footer);
+out:
+	if (len) {
+		desc->data_rx_credit = no_os_field_get(OA_DATA_FOOTER_RCA_MASK, footer);
+		desc->data_tx_credit = no_os_field_get(OA_DATA_FOOTER_TXC_MASK, footer);
+	}
 
-	return 0;
+	return ret;
 }
 
 /**
@@ -705,6 +708,17 @@ int oa_tc6_get_xfer_flags(struct oa_tc6_desc *desc, struct oa_tc6_flags *flags,
 	return 0;
 }
 
+static void oa_tc6_add_empty_chunk(struct oa_tc6_desc *desc)
+{
+	uint32_t header;
+
+	header = no_os_field_prep(OA_DATA_HEADER_DNC_MASK, 1);
+	header |= no_os_field_prep(OA_DATA_HEADER_DV_MASK, 0);
+	header |= oa_tc6_crc1(header);
+
+	no_os_put_unaligned_be32(header, desc->data_chunks);
+}
+
 /**
  * @brief Transmit all the frames in the OA_BUFF_TX_READY state and receive the
  * frames in the OA_BUFF_RX_COMPLETE state.
@@ -716,26 +730,36 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 	uint32_t tx_chunks_avail = 0;
 	uint32_t rx_limit = 0;
 	uint32_t bytes_total;
-	int ret;
+	int ret = 0;
+	int tx_ret;
 
 	struct oa_tc6_frame_buffer *frame_buffer;
 	struct no_os_spi_msg xfer = {0};
 
 	no_os_mutex_lock(desc->data_lock);
 
-	ret = oa_tc6_update_stats(desc);
-	if (ret)
-		goto unlock;
-
-	if (desc->data_tx_credit) {
-		ret = oa_tc6_get_first_tx_frame(desc, &frame_buffer);
-		if (!ret)
-			tx_chunks_avail = frame_buffer->len;
+	if (desc->bufst_polling == OA_TC6_REG_POLL) {
+		ret = oa_tc6_update_stats(desc);
+		if (ret)
+			goto unlock;
 	}
 
-	while (desc->data_rx_credit || tx_chunks_avail) {
+	tx_ret = oa_tc6_get_first_tx_frame(desc, &frame_buffer);
+	if (!tx_ret)
+		tx_chunks_avail = frame_buffer->len;
+
+	if (desc->bufst_polling == OA_TC6_REG_POLL) {
+		if (!desc->data_rx_credit && !tx_chunks_avail)
+			goto unlock;
+	}
+
+	do {
 		oa_tc6_tx_frame_to_chunks(desc, desc->data_chunks, desc->data_tx_credit,
 					  desc->data_rx_credit, &bytes_total);
+		if (!bytes_total) {
+			oa_tc6_add_empty_chunk(desc);
+			bytes_total = OA_CHUNK_SIZE + OA_HEADER_LEN;
+		}
 
 		xfer.tx_buff = desc->data_chunks;
 		xfer.rx_buff = desc->data_chunks;
@@ -754,8 +778,8 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 		if (ret)
 			goto unlock;
 
-		ret = oa_tc6_get_first_tx_frame(desc, &frame_buffer);
-		if (!ret)
+		tx_ret = oa_tc6_get_first_tx_frame(desc, &frame_buffer);
+		if (!tx_ret)
 			tx_chunks_avail = frame_buffer->len;
 		else
 			tx_chunks_avail = 0;
@@ -764,7 +788,7 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 
 		if (rx_limit > CONFIG_OA_THREAD_RX_LIMIT)
 			break;
-	}
+	} while (desc->data_rx_credit || tx_chunks_avail);
 
 unlock:
 	no_os_mutex_unlock(desc->data_lock);
@@ -837,6 +861,8 @@ int oa_tc6_init(struct oa_tc6_desc **desc, struct oa_tc6_init_param *param)
 	if (ret)
 		goto free_lock;
 #endif
+
+	descriptor->bufst_polling = param->bufst_polling;
 
 	*desc = descriptor;
 
