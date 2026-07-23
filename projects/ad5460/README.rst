@@ -17,9 +17,9 @@ Overview
 The EVAL-AD5460ARDZ is an evaluation board designed to facilitate the
 use and understanding of the AD5460, a quad-channel, voltage, and
 current output, 16-bit digital-to-analog converter (DAC). The board
-integrates seamlessly with the Mbed OS platform via the EVAL-SDP-CK1Z,
-commonly referred to as the SDP-K1, enabling rapid prototyping and
-system integration. It features a user-friendly interface for easy
+integrates seamlessly with the EVAL-SDP-CK1Z, commonly referred to as
+the SDP-K1, enabling rapid prototyping and system integration. It
+features a user-friendly interface for easy
 programming and configuration, supporting various power supply options
 to cater to diverse application needs. The evaluation board is ideal for
 a range of applications, particularly where high-resolution signal
@@ -82,7 +82,7 @@ The initialization data used in the examples is taken out from:
 `Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad5460/src/common>`_
 
 The macros used in Common Data are defined in platform specific files found in:
-`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad5460/src/platform/mbed>`_
+`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad5460/src/platform>`_
 
 Basic Example
 ^^^^^^^^^^^^^
@@ -91,12 +91,12 @@ The basic example code demonstrates the initialization and basic
 operation of the AD5460 device, including setting a general-purpose
 Input Output (GPIO) pin to a high state.
 
-In order to build the basic example, make sure you have the following
-configuration in the Makefile:
+In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-	RELEASE=y EXAMPLE=basic
+	python tools/scripts/no_os_build.py build \
+		--project ad5460 --variant basic --board sdp-ck1z
 
 Channel Output Example
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -113,11 +113,12 @@ supports both voltage and current modes, allowing users to customize
 output requirements and includes error handling to address
 initialization and configuration failures, ensuring efficient execution.
 
-To enable this example, use the following setting in the Makefile:
+In order to build this example make sure you are using this command:
 
 .. code-block:: bash
 
-	RELEASE=y EXAMPLE=channel_output_example
+	python tools/scripts/no_os_build.py build \
+		--project ad5460 --variant channel_output_example --board sdp-ck1z
 
 Current Output Example
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -131,11 +132,12 @@ diagnostic settings to retrieve active DAC codes and status.
 Error handling mechanisms are incorporated to ensure reliable execution
 in case of initialization or configuration failures.
 
-To enable this example, use the following setting in the Makefile:
+In order to build this example make sure you are using this command:
 
 .. code-block:: bash
 
-	RELEASE=y EXAMPLE=current_output_example
+	python tools/scripts/no_os_build.py build \
+		--project ad5460 --variant current_output_example --board sdp-ck1z
 
 Voltage Output Example
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -151,17 +153,18 @@ to read the active DAC code and verify the DAC's operational output,
 serving as a practical guide for utilizing and testing the AD5460's
 voltage output features in a no-OS environment.
 
-To enable this example, use the following setting in the Makefile:
+In order to build this example make sure you are using this command:
 
 .. code-block:: bash
 
-	RELEASE=y EXAMPLE=voltage_output_example
+	python tools/scripts/no_os_build.py build \
+		--project ad5460 --variant voltage_output_example --board sdp-ck1z
 
 No-OS Supported Platforms
 -------------------------
 
-Mbed Platform
-^^^^^^^^^^^^^
+STM32 Platform
+^^^^^^^^^^^^^^
 
 **Used Hardware**
 
@@ -178,11 +181,31 @@ Connect the EVAL-AD5460ARDZ to the EVAL-SDP-CK1Z via the Arduino socket headers.
 
 **Build Command**
 
+The STM32 platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``basic``,
+``channel_output_example``, ``current_output_example``,
+``voltage_output_example``. Available boards: ``sdp-ck1z``.
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
+
 .. code-block:: bash
 
-	# to delete current build
-	make reset PLATFORM=mbed
-	# to build the project
-	make PLATFORM=mbed
-	# to flash the code, copy the ad5460.bin to the mounted SDP-K1
-	cp build/ad5460.bin </path/to/SDP-K1/mounted/folder>
+	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+	# in a default install location)
+	export STM32CUBEMX=</path/to/stm32cubemx>
+	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# PowerShell (Windows) equivalent:
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
+
+	cd no-OS
+
+	# build the example on the SDP-K1 board (replace --variant as needed)
+	python tools/scripts/no_os_build.py build \
+		--project ad5460 --variant basic --board sdp-ck1z
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project ad5460 --variant basic --board sdp-ck1z \
+		--probe openocd --flash
