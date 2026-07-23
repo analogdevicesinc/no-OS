@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   parameters.c
- *   @brief  Definition of Mbed platform data used by ADF4368 project.
+ *   @file   parameters.h
+ *   @brief  Definitions specific to STM32 platform used by ADF4368 project.
  *   @author Sirac Kucukarabacioglu (sirac.kucukarabacioglu@analog.com)
 ********************************************************************************
- * Copyright 2024(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,17 +30,35 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
-#include "parameters.h"
+#include "stm32_irq.h"
+#include "stm32_spi.h"
+#include "stm32_uart.h"
+#include "stm32_uart_stdio.h"
 
-struct mbed_uart_init_param adf4368_uart_extra_ip = {
-	.uart_tx_pin = UART_TX_PIN,
-	.uart_rx_pin = UART_RX_PIN
-};
+extern UART_HandleTypeDef huart5;
 
-extern struct mbed_spi_init_param adf4368_spi_extra = {
-	.spi_miso_pin = SDP_SPI_MISO,
-	.spi_mosi_pin = SDP_SPI_MOSI,
-	.spi_clk_pin = SDP_SPI_SCK,
-	.use_sw_csb = false
-};
+#ifdef IIO_SUPPORT
+#define INTC_DEVICE_ID  0
+#define IIO_APP_HUART   (&huart5)
+#endif
+#define UART_IRQ_ID     UART5_IRQn
+
+#define UART_DEVICE_ID  5
+#define UART_BAUDRATE   115200
+#define UART_EXTRA      &adf4368_uart_extra_ip
+#define UART_OPS        &stm32_uart_ops
+
+#define SPI_DEVICE_ID   5
+#define SPI_BAUDRATE    4000000
+#define SPI_CS          9
+#define SPI_CS_PORT     1
+#define SPI_OPS         &stm32_spi_ops
+#define SPI_EXTRA       &adf4368_spi_extra
+
+extern struct stm32_uart_init_param	adf4368_uart_extra_ip;
+extern struct stm32_spi_init_param	adf4368_spi_extra;
+
+#endif /* __PARAMETERS_H__ */

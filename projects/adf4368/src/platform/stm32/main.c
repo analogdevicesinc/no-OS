@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Definitions specific to Mbed platform used by ADF4368 project.
+ *   @file   main.c
+ *   @brief  Main file for STM32 platform of ADF4368 project.
  *   @author Sirac Kucukarabacioglu (sirac.kucukarabacioglu@analog.com)
 ********************************************************************************
- * Copyright 2024(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,29 +30,22 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
 
-#include <PinNames.h>
-#include "mbed_uart.h"
-#include "mbed_spi.h"
-#include "no_os_uart.h"
+#include "parameters.h"
+#include "common_data.h"
+#include "no_os_error.h"
 
-#define UART_TX_PIN	CONSOLE_TX
-#define	UART_RX_PIN	CONSOLE_RX
-#define UART_DEVICE_ID  5
-#define UART_IRQ_ID     53
-#define UART_BAUDRATE   115200
-#define UART_EXTRA	&adf4368_uart_extra_ip
-#define UART_OPS        &mbed_uart_ops
+extern int example_main();
 
-#define SPI_BAUDRATE    4000000
-#define SPI_OPS         &mbed_spi_ops
-#define SPI_EXTRA       &adf4368_spi_extra
-#define SPI_DEVICE_ID   5
-#define SPI_CS          SDP_SPI_CS_A
+/**
+ * @brief Main function execution for STM32 platform.
+ * @return ret - Result of the enabled examples execution.
+ */
+int main()
+{
+	adf4368_spi_extra.get_input_clock = HAL_RCC_GetPCLK1Freq;
 
-extern struct mbed_uart_init_param adf4368_uart_extra_ip;
-extern struct mbed_spi_init_param adf4368_spi_extra;
+	stm32_init();
 
-#endif /* __PARAMETERS_H__ */
+	return example_main();
+}

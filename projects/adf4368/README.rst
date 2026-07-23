@@ -366,7 +366,8 @@ In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-    make EXAMPLE=basic
+	python tools/scripts/no_os_build.py build \
+		--project adf4368 --variant basic --board sdp-ck1z
 
 IIO example
 ^^^^^^^^^^^
@@ -384,18 +385,19 @@ of all the back-end logic needed to setup the IIO server.
 This example initializes the IIO device and calls the IIO app as shown in:
 `IIO Example <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4368/src/examples/iio_example>`_
 
-In order to build the IIO project make sure you you are using this command:
+In order to build the IIO project make sure you are using this command:
 
 .. code-block:: bash
 
-    make EXAMPLE=iio_example
+	python tools/scripts/no_os_build.py build \
+		--project adf4368 --variant iio --board sdp-ck1z
 
 
 No-OS Supported Platforms
 -------------------------
 
-Mbed Platform
-^^^^^^^^^^^^^
+STM32 Platform
+^^^^^^^^^^^^^^
 
 **Used hardware**
 
@@ -410,15 +412,30 @@ or to J12 (the SMA interface).
 
 **Build Command**
 
+The STM32 platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``basic``, ``iio``.
+Available boards: ``sdp-ck1z``.
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
+
 .. code-block:: bash
 
-	# add the arm gcc to the PATH variable
-	export PATH=</path/to/arm/gcc/bin>:$PATH
-	# to delete current build
-	make reset
-	# to build the project
-	make PLATFORM=mbed
-	# to flash the code
-	make
-	# copy the adf4368.bin to the mounted SDP-K1
-	cp build/adf4368.bin </path/to/SDP-K1/mounted/folder>
+	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+	# in a default install location)
+	export STM32CUBEMX=</path/to/stm32cubemx>
+	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# PowerShell (Windows) equivalent:
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
+
+	cd no-OS
+
+	# build the example on the SDP-K1 board (replace --variant as needed)
+	python tools/scripts/no_os_build.py build \
+		--project adf4368 --variant basic --board sdp-ck1z
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project adf4368 --variant basic --board sdp-ck1z \
+		--probe openocd --flash

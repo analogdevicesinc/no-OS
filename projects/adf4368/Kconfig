@@ -1,0 +1,22 @@
+menu "ADF4368 Configuration"
+
+choice ADF4368_EXAMPLE
+	prompt "Example variant"
+	default ADF4368_BASIC_EXAMPLE
+
+config ADF4368_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Simple example that configures the ADF4368 microwave wideband
+	  synthesizer and prints the resulting register state over UART.
+
+config ADF4368_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO framework example. Launches an IIOD server for remote
+	  data acquisition using IIO Oscilloscope or libiio clients.
+
+endchoice
+
+endmenu
