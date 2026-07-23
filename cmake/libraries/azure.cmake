@@ -1,5 +1,5 @@
 # azure.cmake - Azure SDK for C with hybrid caching
-# Priority: Submodule -> Global Cache -> FetchContent
+# Source tree resolved by resolve_library_source (override -> managed clone).
 include(LibraryCacheUtils)
 
 if(NOT DEFINED CONFIG_AZURE_VERSION OR "${CONFIG_AZURE_VERSION}" STREQUAL "")
@@ -11,7 +11,7 @@ message(STATUS "Azure SDK requested version: ${CONFIG_AZURE_VERSION}")
 resolve_library_source(
     azure_sdk
     "${CONFIG_AZURE_VERSION}"
-    "${NO_OS_DIR}/libraries/azure/azure-sdk-for-c"
+    "${NO_OS_DIR}/libraries/azure-sdk-for-c"
     "https://github.com/Azure/azure-sdk-for-c.git"
     AZURE_SOURCE_DIR
     AZURE_BINARY_DIR

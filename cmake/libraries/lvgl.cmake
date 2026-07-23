@@ -1,5 +1,5 @@
 # lvgl.cmake - LVGL graphics library with hybrid caching
-# Priority: Submodule -> Global Cache -> FetchContent
+# Source tree resolved by resolve_library_source (override -> managed clone).
 include(LibraryCacheUtils)
 
 if(NOT DEFINED CONFIG_LVGL_VERSION OR "${CONFIG_LVGL_VERSION}" STREQUAL "")
@@ -11,7 +11,7 @@ message(STATUS "LVGL requested version: ${CONFIG_LVGL_VERSION}")
 resolve_library_source(
     lvgl
     "${CONFIG_LVGL_VERSION}"
-    "${NO_OS_DIR}/libraries/lvgl/lvgl"
+    "${NO_OS_DIR}/libraries/lvgl"
     "https://github.com/lvgl/lvgl.git"
     LVGL_SOURCE_DIR
     LVGL_BINARY_DIR

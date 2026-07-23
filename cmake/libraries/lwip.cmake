@@ -1,5 +1,5 @@
 # lwip.cmake - lwIP library with hybrid caching
-# Priority: Submodule → Global Cache → FetchContent
+# Source tree resolved by resolve_library_source (override -> managed clone).
 include(LibraryCacheUtils)
 
 # Default version if not set via Kconfig
@@ -13,13 +13,13 @@ message(STATUS "lwIP requested version: ${CONFIG_LWIP_VERSION}")
 resolve_library_source(
     lwip
     "${CONFIG_LWIP_VERSION}"
-    "${NO_OS_DIR}/libraries/lwip/lwip"
+    "${NO_OS_DIR}/libraries/lwip"
     "https://github.com/lwip-tcpip/lwip"
     LWIP_SOURCE_DIR
     LWIP_BINARY_DIR
 )
 
-# If we already used FetchContent, lwip targets exist
+# If a prior include added lwip targets, reuse them
 # Otherwise, we need to add the subdirectory
 if(NOT TARGET lwipcore)
     add_subdirectory("${LWIP_SOURCE_DIR}" "${LWIP_BINARY_DIR}" EXCLUDE_FROM_ALL)
@@ -32,12 +32,12 @@ set(LWIP_INCLUDE_DIRS
     "${LWIP_SOURCE_DIR}/contrib/examples/example_app"
 )
 
-target_include_directories(lwipcore PUBLIC ${NO_OS_DIR}/libraries/lwip/configs)
-target_include_directories(lwipcore PUBLIC ${NO_OS_DIR}/libraries/lwip)
+target_include_directories(lwipcore PUBLIC ${NO_OS_DIR}/libraries/lwip-glue/configs)
+target_include_directories(lwipcore PUBLIC ${NO_OS_DIR}/libraries/lwip-glue)
 target_include_directories(lwipcore PUBLIC ${LWIP_INCLUDE_DIRS})
 
-target_include_directories(lwipallapps PRIVATE ${NO_OS_DIR}/libraries/lwip/configs)
-target_include_directories(lwipallapps PRIVATE ${NO_OS_DIR}/libraries/lwip)
+target_include_directories(lwipallapps PRIVATE ${NO_OS_DIR}/libraries/lwip-glue/configs)
+target_include_directories(lwipallapps PRIVATE ${NO_OS_DIR}/libraries/lwip-glue)
 target_include_directories(lwipallapps PRIVATE ${LWIP_INCLUDE_DIRS})
 
 target_compile_definitions(no-os PUBLIC -DNO_OS_LWIP_NETWORKING=1)

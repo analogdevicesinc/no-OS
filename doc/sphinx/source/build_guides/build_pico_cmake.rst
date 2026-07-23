@@ -12,11 +12,12 @@ fragments inside each project). The ``rpi-pico`` preset selects the board and
 toolchain, while ``PROJECT_DEFCONFIG`` selects the project and variant to
 build.
 
-The Pico SDK is vendored as a git submodule under ``libraries/pico-sdk``, so no
-external SDK install is required. no-OS uses the Pico SDK's own CMake
-(``pico_sdk_init()``) to provide the SDK sources, headers, the second-stage
-bootloader, the linker script and the libc/soft-float wrapping, linking them
-into the no-OS executable automatically.
+The Pico SDK is fetched automatically at configure time (cloned once, in-tree
+under ``libraries/pico-sdk``), so no external SDK install or submodule init is
+required. no-OS
+uses the Pico SDK's own CMake (``pico_sdk_init()``) to provide the SDK sources,
+headers, the second-stage bootloader, the linker script and the libc/soft-float
+wrapping, linking them into the no-OS executable automatically.
 
 .. note::
    Pico platform builds are supported on Linux only. The build targets the
@@ -55,25 +56,19 @@ Prerequisites
 
         $ sudo apt install openocd
 
-Initialize the Pico SDK submodule
----------------------------------
-The Pico SDK is vendored as a git submodule. Initialize it from the root of the
-no-OS repository before configuring:
-
-    .. code-block:: bash
-
-        $ git submodule update --init libraries/pico-sdk
+Pico SDK resolution
+-------------------
+The Pico SDK is resolved automatically at configure time, so no manual step is
+required. The build clones the SDK once (non-recursively — an RP2040 no-OS build
+does not need the SDK's own submodules such as tinyusb, cyw43 or lwip) in-tree at
+``libraries/pico-sdk`` and reuses it thereafter.
 
 .. note::
-   Use ``--init`` (not ``--recursive``): an RP2040 no-OS build does not need the
-   Pico SDK's own submodules (tinyusb, cyw43, lwip, ...).
-
-.. note::
-   The build always uses this vendored copy: ``PICO_SDK_PATH`` is pinned to
-   ``libraries/pico-sdk`` internally, so any externally exported value is
-   ignored. This avoids a stale ``PICO_SDK_PATH`` in the environment breaking
-   the build. If the submodule is not initialized, configuration fails with a
-   message pointing at the ``git submodule update --init`` command above.
+   Resolution priority for ``PICO_SDK_PATH``: the ``NO_OS_PICO_SDK_DIR`` override
+   (CMake var or environment) → in-tree ``libraries/pico-sdk`` (cloned once by
+   default) → a version-keyed shared store when ``NO_OS_CACHE_DIR`` is set. Any
+   externally exported ``PICO_SDK_PATH`` is ignored so a stale value cannot break
+   the build.
 
 Install picotool (optional)
 ---------------------------
