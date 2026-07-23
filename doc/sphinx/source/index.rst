@@ -28,18 +28,19 @@ Getting started
 
 New to no-OS? Start here:
 
-#. **Clone the repository** (with submodules) and set up your toolchain by
-   following the :doc:`build_guide` for your platform.
+#. **Clone the repository** and set up your toolchain by following the
+   :doc:`build_guide` for your platform.
 #. **Pick a project** from the :doc:`projects_doc` that matches your evaluation
    board, then build and flash it.
 #. **Explore the drivers** you need in the :doc:`drivers_doc`, and read the
    :doc:`drivers_guide` if you plan to write or adapt one.
 
-Clone no-OS with the **--recursive** flag to pull in all submodules:
+Clone no-OS (external libraries are fetched automatically at configure time,
+in-tree under ``libraries/``):
 
 .. code-block::
 
-    git clone --recursive https://github.com/analogdevicesinc/no-OS
+    git clone https://github.com/analogdevicesinc/no-OS
 
 Documentation guide
 -------------------

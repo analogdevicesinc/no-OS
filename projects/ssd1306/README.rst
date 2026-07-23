@@ -97,11 +97,8 @@ Available variants: ``example``.
 Available boards: ``max78000fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
-This project depends on the LVGL submodule. Initialize it before building:
-
-.. code-block:: bash
-
-   git submodule update --init --remote libraries/lvgl/lvgl
+This project depends on LVGL, which the CMake build fetches automatically at
+configure time into ``libraries/lvgl`` (no submodule init required).
 
 .. code-block:: bash
 
