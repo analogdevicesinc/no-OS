@@ -1,0 +1,30 @@
+menu "AD5460 Configuration"
+
+choice AD5460_EXAMPLE
+	prompt "Example variant"
+	default AD5460_BASIC_EXAMPLE
+
+config AD5460_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Basic example that initializes the AD5460 quad-channel
+	  software-configurable output device and drives its GPIOs.
+
+config AD5460_CHANNEL_OUTPUT_EXAMPLE
+	bool "Channel output example"
+	help
+	  Configures the AD5460 output channels and updates their values.
+
+config AD5460_CURRENT_OUTPUT_EXAMPLE
+	bool "Current output example"
+	help
+	  Configures an AD5460 channel as a current output (source) DAC.
+
+config AD5460_VOLTAGE_OUTPUT_EXAMPLE
+	bool "Voltage output example"
+	help
+	  Configures an AD5460 channel as a voltage output (source) DAC.
+
+endchoice
+
+endmenu

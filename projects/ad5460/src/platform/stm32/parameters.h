@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for Mbed platform of ad5460 project.
+ *   @file   parameters.h
+ *   @brief  Definitions specific to STM32 platform used by ad5460 project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2024(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,35 +30,36 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
-#include "parameters.h"
-#include "common_data.h"
+#include "stm32_irq.h"
+#include "stm32_spi.h"
+#include "stm32_uart.h"
+#include "stm32_uart_stdio.h"
+#include "no_os_uart.h"
 
-extern int example_main();
+extern UART_HandleTypeDef huart5;
 
-/***************************************************************************//**
- * @brief Main function for Mbed platform.
- *
- * @return ret - Result of the enabled examples.
-*******************************************************************************/
+#ifdef IIO_SUPPORT
+#define INTC_DEVICE_ID  0
+#define IIO_APP_HUART   (&huart5)
+#endif
+#define UART_IRQ_ID     UART5_IRQn
 
-int main()
-{
-	int ret;
-	ad5460_ip.spi_ip = ad5460_spi_ip;
+#define UART_DEVICE_ID  5
+#define UART_BAUDRATE   115200
+#define UART_EXTRA      &ad5460_uart_extra_ip
+#define UART_OPS        &stm32_uart_ops
 
-	struct no_os_uart_desc* uart;
-	ret = no_os_uart_init(&uart, &ad5460_uart_ip);
-	if (ret) {
-		no_os_uart_remove(uart);
-		return ret;
-	}
-	no_os_uart_stdio(uart);
-	ret = example_main();
-	if (ret) {
-		no_os_uart_remove(uart);
-		return ret;
-	}
+#define SPI_DEVICE_ID   1
+#define SPI_BAUDRATE    1000000
+#define SPI_CS          15
+#define SPI_CS_PORT     0
+#define SPI_OPS         &stm32_spi_ops
+#define SPI_EXTRA       &ad5460_spi_extra
 
-	return 0;
-}
+extern struct stm32_uart_init_param	ad5460_uart_extra_ip;
+extern struct stm32_spi_init_param	ad5460_spi_extra;
+
+#endif /* __PARAMETERS_H__ */
