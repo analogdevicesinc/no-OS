@@ -1,7 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Definitions specific to Mbed platform used by ad74414h
- *           project.
+ *   @file   main.c
+ *   @brief  Main file for STM32 platform of ad74414h project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2026(c) Analog Devices, Inc.
@@ -31,46 +30,33 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
 
-#include <PinNames.h>
-#include "mbed_uart.h"
-#include "mbed_spi.h"
-#include "no_os_uart.h"
-#include "no_os_gpio.h"
-#include "mbed_gpio.h"
-#include "no_os_irq.h"
-#include "mbed_irq.h"
-#include "mbed_gpio_irq.h"
+#include "parameters.h"
+#include "common_data.h"
+#include "no_os_error.h"
 
-#define UART_TX_PIN	    CONSOLE_TX
-#define	UART_RX_PIN	    CONSOLE_RX
-#define UART_DEVICE_ID  0
-#define UART_IRQ_ID     0
-#define UART_BAUDRATE   115200
-#define UART_EXTRA	&ad74414h_uart_extra_ip
-#define UART_OPS        &mbed_uart_ops
+extern int example_main();
 
-#define SPI_BAUDRATE    1000000
-#define SPI_OPS         &mbed_spi_ops
-#define SPI_EXTRA       &ad74414h_spi_extra
-#define SPI_DEVICE_ID   0
-#define SPI_CS          ARDUINO_UNO_D10
+/***************************************************************************//**
+ * @brief Main function execution for STM32 platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+*******************************************************************************/
+int main()
+{
+	int ret;
+	struct no_os_uart_desc *uart_desc;
 
-#define GPIO_OPS	&mbed_gpio_ops
-#define GPIO_ADC_RDY	ARDUINO_UNO_D2
-#define GPIO_EXTRA 	&ad74414h_gpio_extra
+	ad74414h_ip.spi_ip = ad74414h_spi_ip;
+	ad74414h_spi_extra.get_input_clock = HAL_RCC_GetPCLK2Freq;
 
-#define GPIO_IRQ_ADC_ID		0
-#define GPIO_IRQ_OPS		&mbed_gpio_irq_ops
-#define GPIO_IRQ_ADC_EXTRA	&mbed_adc_rdy_gpio_irq_extra
+	stm32_init();
 
-extern struct mbed_uart_init_param ad74414h_uart_extra_ip;
-extern struct mbed_spi_init_param ad74414h_spi_extra;
-extern struct no_os_gpio_init_param adc_rdy_gpio_ip;
-extern struct no_os_irq_init_param adc_rdy_gpio_irq_ip;
-extern struct mbed_gpio_init_param ad74414h_gpio_extra;
-extern struct mbed_gpio_irq_init_param mbed_adc_rdy_gpio_irq_extra;
+	ret = no_os_uart_init(&uart_desc, &ad74414h_uart_ip);
+	if (ret)
+		return ret;
 
-#endif /* __PARAMETERS_H__ */
+	no_os_uart_stdio(uart_desc);
+
+	return example_main();
+}

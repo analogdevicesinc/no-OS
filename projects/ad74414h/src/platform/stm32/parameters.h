@@ -1,6 +1,7 @@
 /***************************************************************************//**
- *   @file   parameters.c
- *   @brief  Definition of Mbed platform data used by ad74414h project.
+ *   @file   parameters.h
+ *   @brief  Definitions specific to STM32 platform used by ad74414h
+ *           project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2026(c) Analog Devices, Inc.
@@ -30,42 +31,33 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
-#include "parameters.h"
+#include "stm32_hal.h"
+#include "stm32_irq.h"
+#include "stm32_spi.h"
+#include "stm32_uart.h"
+#include "stm32_uart_stdio.h"
+#include "no_os_uart.h"
 
-struct mbed_uart_init_param ad74414h_uart_extra_ip = {
-	.uart_tx_pin = UART_TX_PIN,
-	.uart_rx_pin = UART_RX_PIN
-};
+extern UART_HandleTypeDef huart5;
 
-struct mbed_spi_init_param ad74414h_spi_extra = {
-	.spi_miso_pin = ARDUINO_UNO_D12,
-	.spi_mosi_pin = ARDUINO_UNO_D11,
-	.spi_clk_pin = ARDUINO_UNO_D13,
-	.use_sw_csb = false
-};
+#define UART_IRQ_ID     UART5_IRQn
 
-/* ADC_RDY GPIO parameters*/
-struct no_os_gpio_init_param adc_rdy_gpio_ip = {
-	.port = 0,
-	.pull = NO_OS_PULL_NONE,
-	.number = GPIO_ADC_RDY,
-	.platform_ops = GPIO_OPS,
-	.extra = GPIO_EXTRA
-};
+#define UART_DEVICE_ID  5
+#define UART_BAUDRATE   115200
+#define UART_EXTRA      &ad74414h_uart_extra_ip
+#define UART_OPS        &stm32_uart_ops
 
-/* ADC_RDY GPIO IRQ parameters */
-struct no_os_irq_init_param adc_rdy_gpio_irq_ip = {
-	.irq_ctrl_id = GPIO_IRQ_ADC_ID,
-	.platform_ops = GPIO_IRQ_OPS,
-	.extra = GPIO_IRQ_ADC_EXTRA
-};
+#define SPI_DEVICE_ID   1
+#define SPI_BAUDRATE    1000000
+#define SPI_CS          15
+#define SPI_CS_PORT     0
+#define SPI_OPS         &stm32_spi_ops
+#define SPI_EXTRA       &ad74414h_spi_extra
 
-struct mbed_gpio_init_param ad74414h_gpio_extra = {
-	.pin_mode = 0 //NA
-};
+extern struct stm32_uart_init_param ad74414h_uart_extra_ip;
+extern struct stm32_spi_init_param ad74414h_spi_extra;
 
-/*ADC_RDY interrupt Mbed platform specific parameters */
-struct mbed_gpio_irq_init_param mbed_adc_rdy_gpio_irq_extra = {
-	.gpio_irq_pin = ARDUINO_UNO_D2,
-};
+#endif /* __PARAMETERS_H__ */

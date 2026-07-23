@@ -47,103 +47,95 @@ Basic Example
 The Basic Example demonstrates the fundamental initialization and
 configuration of the AD74414H device by setting up communication
 interfaces such as UART and SPI using common data structures in a
-no-OS environment. To enable the Basic Example and disable other
-examples, update the :git-no-OS:`Makefile </projects/ad74414h/Makefile>`
-with the following settings:
+no-OS environment. In order to build this example make sure you are
+using this command:
 
 .. code-block:: bash
 
-    # Enable Basic Example
-    EXAMPLE = basic
+    python tools/scripts/no_os_build.py build \
+        --project ad74414h --variant basic --board sdp-ck1z
 
 Current Input External Power Example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Current Input External Power Example demonstrates channel
 configuration in externally powered current input mode. It reads the
-ADC value and computes the input current. To enable this example, update
-the :git-no-OS:`Makefile </projects/ad74414h/Makefile>` with the
-following settings:
+ADC value and computes the input current. In order to build this example
+make sure you are using this command:
 
 .. code-block:: bash
 
-    # Enable Current Input External Power Example
-    EXAMPLE = current_input_ext
+    python tools/scripts/no_os_build.py build \
+        --project ad74414h --variant current_input_ext --board sdp-ck1z
 
 Current Input Loop Power Example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Current Input Loop Power Example demonstrates channel configuration
 in loop-powered current input mode. It reads the ADC value and computes
-the input current. To enable this example, update the
-:git-no-OS:`Makefile </projects/ad74414h/Makefile>` with the following
-settings:
+the input current. In order to build this example make sure you are
+using this command:
 
 .. code-block:: bash
 
-    # Enable Current Input Loop Power Example
-    EXAMPLE = current_input_loop
+    python tools/scripts/no_os_build.py build \
+        --project ad74414h --variant current_input_loop --board sdp-ck1z
 
 Current Output Example
 ~~~~~~~~~~~~~~~~~~~~~~
 
 The Current Output Example demonstrates channel configuration in
 current output mode. It sets a DAC code to drive a specified output
-current on the configured channel. To enable this example, update the
-:git-no-OS:`Makefile </projects/ad74414h/Makefile>` with the following
-settings:
+current on the configured channel. In order to build this example make
+sure you are using this command:
 
 .. code-block:: bash
 
-    # Enable Current Output Example
-    EXAMPLE = current_output
+    python tools/scripts/no_os_build.py build \
+        --project ad74414h --variant current_output --board sdp-ck1z
 
 Digital Input Logic Example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Digital Input Logic Example demonstrates channel configuration in
 digital input mode with a fixed comparator threshold for logic-level
-detection. To enable this example, update the
-:git-no-OS:`Makefile </projects/ad74414h/Makefile>` with the following
-settings:
+detection. In order to build this example make sure you are using this
+command:
 
 .. code-block:: bash
 
-    # Enable Digital Input Logic Example
-    EXAMPLE = digital_input_logic
+    python tools/scripts/no_os_build.py build \
+        --project ad74414h --variant digital_input_logic --board sdp-ck1z
 
 Digital Input Loop Example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Digital Input Loop Example demonstrates channel configuration in
-digital input mode with loop-powered operation. To enable this example,
-update the :git-no-OS:`Makefile </projects/ad74414h/Makefile>` with the
-following settings:
+digital input mode with loop-powered operation. In order to build this
+example make sure you are using this command:
 
 .. code-block:: bash
 
-    # Enable Digital Input Loop Example
-    EXAMPLE = digital_input_loop
+    python tools/scripts/no_os_build.py build \
+        --project ad74414h --variant digital_input_loop --board sdp-ck1z
 
 Digital Output Example
 ~~~~~~~~~~~~~~~~~~~~~~
 
 The Digital Output Example demonstrates channel configuration in
-digital output mode with GPIO-based control of the output state. To
-enable this example, update the
-:git-no-OS:`Makefile </projects/ad74414h/Makefile>` with the following
-settings:
+digital output mode with GPIO-based control of the output state. In
+order to build this example make sure you are using this command:
 
 .. code-block:: bash
 
-    # Enable Digital Output Example
-    EXAMPLE = digital_output
+    python tools/scripts/no_os_build.py build \
+        --project ad74414h --variant digital_output --board sdp-ck1z
 
 No-OS Supported Platforms
 -------------------------
 
-Mbed Platform
-~~~~~~~~~~~~~
+STM32
+~~~~~
 
 Used Hardware
 ^^^^^^^^^^^^^
@@ -151,19 +143,42 @@ Used Hardware
 - :adi:`EVAL-AD74414H`
 - :adi:`EVAL-SDP-CK1Z`
 
+Connections
+^^^^^^^^^^^
+
+Connect the EVAL-AD74414H to the EVAL-SDP-CK1Z (SDP-K1) through the SDP
+connector. The SDP-K1 is powered and communicates with the host over its
+USB-C port, which also exposes the UART console.
+
 Build Command
 ^^^^^^^^^^^^^
 
+The STM32 platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``basic``,
+``current_input_ext``, ``current_input_loop``, ``current_output``,
+``digital_input_logic``, ``digital_input_loop``, ``digital_output``.
+Available boards: ``sdp-ck1z``.
+
+For toolchain setup and prerequisites, see the
+`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
+
 .. code-block:: bash
 
-    # Clean previous build artifacts
-    make clean
+    # set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+    # in a default install location)
+    export STM32CUBEMX=</path/to/stm32cubemx>
+    export STM32CUBEIDE=</path/to/stm32cubeide>
+    # PowerShell (Windows) equivalent:
+    #   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+    #   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
-    # Build the project for the Mbed platform
-    make PLATFORM=mbed
+    cd no-OS
 
-    # Flash the firmware
-    make flash
+    # build the example on the SDP-K1 board (replace --variant as needed)
+    python tools/scripts/no_os_build.py build \
+        --project ad74414h --variant basic --board sdp-ck1z
 
-    # Start a debugging session
-    make debug
+    # build and flash (requires a connected debug probe)
+    python tools/scripts/no_os_build.py build \
+        --project ad74414h --variant basic --board sdp-ck1z \
+        --probe openocd --flash
