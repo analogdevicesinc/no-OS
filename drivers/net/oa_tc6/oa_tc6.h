@@ -219,6 +219,17 @@ struct oa_tc6_flags {
 };
 
 /**
+ * @brief TX/RX credit updating method before starting a data transaction.
+ * 	  OA_TC6_REG_POLL - read the BUFST (0xB) register
+ * 	  OA_TC6_FOOTER_POLL - send a data chunk and read the information
+ * 			       from the footer.
+ */
+enum oa_tc6_bufst_polling {
+	OA_TC6_REG_POLL,
+	OA_TC6_FOOTER_POLL,
+};
+
+/**
  * @brief Holds the frame buffers and the communication descriptor for the OA TC6 driver.
  */
 struct oa_tc6_desc {
@@ -238,6 +249,7 @@ struct oa_tc6_desc {
 	uint32_t ctrl_tx_credit;
 	uint32_t ctrl_rx_credit;
 
+	enum oa_tc6_bufst_polling bufst_polling;
 	struct oa_tc6_flags	xfer_flags;
 	bool	 prote_spi;
 };
@@ -248,6 +260,7 @@ struct oa_tc6_desc {
 struct oa_tc6_init_param {
 	struct no_os_spi_desc *comm_desc;
 
+	enum oa_tc6_bufst_polling bufst_polling;
 	/* The OASPI device uses Protected SPI for control transactions */
 	bool prote_spi;
 };
