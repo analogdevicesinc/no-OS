@@ -831,6 +831,19 @@ int oa_tc6_sw_reset(struct oa_tc6_desc *desc)
 	return oa_tc6_reg_write(desc, OA_TC6_STATUS0_REG, OA_TC6_STATUS0_RESETC);
 }
 
+int oa_tc6_register_callback(struct oa_tc6_desc *desc,
+			     void (*callback)(struct oa_tc6_desc *, uint32_t, void *),
+			     void *arg)
+{
+	if (!desc)
+		return -EINVAL;
+
+	desc->callback = callback;
+	desc->callback_arg = arg;
+
+	return 0;
+}
+
 /**
  * @brief Allocate resources for the OA TC6 driver.
  * @param desc - the device descriptor to be initialized
