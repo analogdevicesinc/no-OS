@@ -128,6 +128,11 @@ a lot of data that needs to be copied, this should be set high. */
 
 #define LWIP_TCP_TIMESTAMPS   			1
 
+/* Send TCP SACK options so the remote sender can selectively retransmit only
+ * the lost segments instead of falling into multi-second RTO backoff. Critical
+ * on the half-duplex 10BASE-T1S link where ACK/data collisions cause loss. */
+#define LWIP_TCP_SACK_OUT			1
+
 /* TCP Maximum segment size. */
 #define TCP_MSS                 		1460
 /* TCP sender buffer space (bytes). */
@@ -142,8 +147,11 @@ a lot of data that needs to be copied, this should be set high. */
    available in the tcp snd_buf for select to return writable */
 #define TCP_SNDLOWAT           			(TCP_SND_BUF / 2)
 
-/* TCP receive window. */
-#define TCP_WND                 		(8 * TCP_MSS)
+/* TCP receive window. 16 MSS (~23 KB). A 32-MSS experiment showed the link
+ * is bandwidth-limited (half-duplex 10BASE-T1S bidirectional contention),
+ * not window-limited: doubling the window doubled RTT with no throughput
+ * gain, so the larger window was pure bufferbloat and was reverted. */
+#define TCP_WND                 		(16 * TCP_MSS)
 
 #define TCP_OVERSIZE				TCP_MSS
 
