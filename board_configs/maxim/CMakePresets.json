@@ -123,6 +123,19 @@
 				"TARGET_NUM": "32690",
 				"BOARD_CONFIG_FILE": "max32690fthr_defconfig"
 			}
+		},
+		{
+			"name": "max32690evkit",
+			"description": "MAX32690 Evaluation Kit (ARM Cortex-M4)",
+			"inherits": "maxim-base",
+			"cacheVariables": {
+				"BOARD": "max32690evkit",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "maxim",
+				"TARGET": "max32690",
+				"TARGET_NUM": "32690",
+				"BOARD_CONFIG_FILE": "max32690evkit_defconfig"
+			}
 		}
 	]
 }
