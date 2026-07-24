@@ -514,6 +514,45 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 	return 0;
 }
 
+static int oa_tc6_handle_exst(struct oa_tc6_desc *desc)
+{
+	uint32_t status0;
+	uint32_t status1;
+	int ret;
+
+	ret = oa_tc6_reg_read(desc, OA_TC6_STATUS0_REG, &status0);
+	if (ret)
+		return ret;
+
+	ret = oa_tc6_reg_read(desc, OA_TC6_STATUS1_REG, &status1);
+	if (ret)
+		return ret;
+
+	if (no_os_field_get(OA_TC6_IMASK0_TXPEM, status0))
+		oa_tc6_invoke_callback(desc, OA_TC6_EVENT_TXPE);
+
+	if (no_os_field_get(OA_TC6_IMASK0_TXBOEM, status0))
+		oa_tc6_invoke_callback(desc, OA_TC6_EVENT_TXBOE);
+
+	if (no_os_field_get(OA_TC6_IMASK0_TXBUEM, status0))
+		oa_tc6_invoke_callback(desc, OA_TC6_EVENT_TXBUE);
+
+	if (no_os_field_get(OA_TC6_IMASK0_RXBOEM, status0))
+		oa_tc6_invoke_callback(desc, OA_TC6_EVENT_RXBOE);
+
+	if (no_os_field_get(OA_TC6_IMASK0_LOFEM, status0))
+		oa_tc6_invoke_callback(desc, OA_TC6_EVENT_LOFE);
+
+	if (no_os_field_get(OA_TC6_IMASK0_HDREM, status0))
+		oa_tc6_invoke_callback(desc, OA_TC6_EVENT_HDRE);
+
+	ret = oa_tc6_reg_write(desc, OA_TC6_STATUS0_REG, status0);
+	if (ret)
+		return ret;
+
+	return oa_tc6_reg_write(desc, OA_TC6_STATUS1_REG, status1);
+}
+
 /**
  * @brief Convert the received chunks into frames.
  * @param desc - the OA TC6 descriptor
@@ -551,6 +590,9 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 		if (footer & OA_DATA_FOOTER_EXST_MASK) {
 			desc->xfer_flags.exst = 1; /* Latched */
 			desc->stats.exst_events++;
+			ret = oa_tc6_handle_exst(desc);
+			if (ret)
+				goto out;
 		}
 		desc->xfer_flags.hdrb |= !!(footer & OA_DATA_FOOTER_HDRB_MASK); /* Latched */
 		desc->xfer_flags.sync = !!(footer &
