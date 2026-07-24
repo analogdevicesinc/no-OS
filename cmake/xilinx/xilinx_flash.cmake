@@ -86,4 +86,29 @@ function(add_xilinx_flash_target TARGET_NAME)
         COMMENT "Programming bitstream and running ${TARGET_NAME}.elf on target (Xilinx JTAG)..."
         USES_TERMINAL
         VERBATIM)
+
+    # erase / debug / debug_server exist on OpenOCD/J-Link platforms but have no
+    # Xilinx equivalent in this flow:
+    #   - Bare-metal Zynq/ZynqMP/MicroBlaze run the ELF straight into DDR/OCM over
+    #     JTAG; there is no on-chip flash to erase (a power cycle clears it).
+    #   - Interactive debugging is done from the Vitis GUI. `--open` populates a
+    #     Vitis workspace with the no-OS sources and the generated
+    #     _ide/launch.json debug config, then opens it.
+    # Define them anyway so `--target erase/debug/debug_server` prints guidance
+    # instead of failing with "No rule to make target".
+    add_custom_target(erase
+        COMMAND ${CMAKE_COMMAND} -E echo
+            "'erase' is not applicable to Xilinx: the application runs from RAM over JTAG; a power cycle clears it."
+        VERBATIM)
+
+    # `--open` materializes the Vitis workspace on demand (under
+    # xsa_work/ide/workspace) and launches the GUI; point users there rather
+    # than at a raw path that may not exist until --open has run.
+    set(_vitis_hint "Use the Vitis IDE to debug: 'no_os_build.py build ... --open' then launch the generated debug configuration.")
+    add_custom_target(debug
+        COMMAND ${CMAKE_COMMAND} -E echo "${_vitis_hint}"
+        VERBATIM)
+    add_custom_target(debug_server
+        COMMAND ${CMAKE_COMMAND} -E echo "${_vitis_hint}"
+        VERBATIM)
 endfunction()

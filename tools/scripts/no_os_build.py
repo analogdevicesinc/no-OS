@@ -14,6 +14,7 @@ import argparse
 import itertools
 import json
 import os
+import shlex
 import shutil
 import subprocess
 import sys
@@ -78,6 +79,141 @@ def open_vscode_workspace(repo_root):
         subprocess.run([editor, str(workspace)], check=True)
     except subprocess.CalledProcessError as e:
         print(f"--open: failed to launch '{editor}': {e}", file=sys.stderr)
+
+
+def read_cmake_cache_value(build_dir, key):
+    """Return the value of a CMakeCache.txt entry (KEY:TYPE=VALUE), or None."""
+    cache = build_dir / "CMakeCache.txt"
+    if not cache.exists():
+        return None
+    prefix = f"{key}:"
+    with open(cache) as f:
+        for line in f:
+            if line.startswith(prefix) and "=" in line:
+                return line.split("=", 1)[1].strip()
+    return None
+
+
+def harvest_compile_manifest(build_dir):
+    """Extract the source/include/define set from compile_commands.json.
+
+    CMake writes compile_commands.json (CMAKE_EXPORT_COMPILE_COMMANDS) at the
+    build-dir root with one entry per compiled translation unit. It is the
+    ground truth for what the no-OS ELF is built from: the union of the project
+    target and the `no-os` OBJECT library. We parse the -I/-D flags out of each
+    command so the Vitis app component indexes headers and macros exactly as
+    ninja did.
+
+    Returns a dict {"sources": [...], "includes": [...], "defines": [...]} with
+    duplicates removed and insertion order preserved, or None if the compile
+    database is missing.
+    """
+    cc = build_dir / "compile_commands.json"
+    if not cc.exists():
+        return None
+    with open(cc) as f:
+        entries = json.load(f)
+
+    sources, includes, defines = [], [], []
+    seen_src, seen_inc, seen_def = set(), set(), set()
+    for e in entries:
+        src = e.get("file")
+        if src and src not in seen_src:
+            seen_src.add(src)
+            sources.append(src)
+        tokens = shlex.split(e.get("command", ""))
+        i = 0
+        while i < len(tokens):
+            tok = tokens[i]
+            if tok.startswith("-I"):
+                val = tok[2:] or (tokens[i + 1] if tok == "-I" else "")
+                if tok == "-I":
+                    i += 1
+                if val and val not in seen_inc:
+                    seen_inc.add(val)
+                    includes.append(val)
+            elif tok.startswith("-D"):
+                val = tok[2:] or (tokens[i + 1] if tok == "-D" else "")
+                if tok == "-D":
+                    i += 1
+                if val and val not in seen_def:
+                    seen_def.add(val)
+                    defines.append(val)
+            i += 1
+    return {"sources": sources, "includes": includes, "defines": defines}
+
+
+def open_vitis_workspace(repo_root, build_dir, combo):
+    """Populate and open a Vitis Unified IDE workspace for a Xilinx project.
+
+    Xilinx debugging/browsing happens in the Vitis GUI, not VS Code + OpenOCD.
+    Unlike the BSP-only xsa_work that config_xilinx_sdk leaves behind, this
+    materializes a real, openable workspace under
+    <build>/projects/<project>/xsa_work/ide/workspace containing:
+
+      - the hw0 platform (BSP), and
+      - an 'app' component whose sources are the no-OS files CMake actually
+        compiled, referenced in place (import_files is_skip_copy_sources) with
+        the include paths and -D defines harvested from compile_commands.json.
+
+    This mirrors the intent of the legacy `make` flow (which symlinked the
+    required no-OS sources under build/app so they showed up in Vitis), adapted
+    to the CMake build: CMake still owns the flashed ELF; Vitis gets a browsable
+    /buildable view of the same sources. Then launches `vitis -w <workspace>`.
+    """
+    proj_bin = build_dir / "projects" / combo["project"]
+    xsa_work = proj_bin / "xsa_work"
+    workspace = xsa_work / "ide" / "workspace"
+    if not xsa_work.exists():
+        print(f"--open: BSP work dir not found at {xsa_work} "
+              "(build the project first).", file=sys.stderr)
+        return
+    vitis = shutil.which("vitis")
+    if not vitis:
+        print("--open: 'vitis' not found on PATH. Source settings64.sh from "
+              f"your Vitis install, then re-run --open.", file=sys.stderr)
+        return
+
+    manifest = harvest_compile_manifest(build_dir)
+    if manifest is None:
+        print(f"--open: compile_commands.json not found in {build_dir} "
+              "(configure/build the project first).", file=sys.stderr)
+        return
+    # The BSP CPU/arch is resolved by the toolchain and cached; pass it through
+    # so util.py need not depend on a freshly staged arch.txt.
+    arch = read_cmake_cache_value(build_dir, "XILINX_ARCH")
+    if arch:
+        manifest["arch"] = arch
+    manifest_path = xsa_work / "ide_manifest.json"
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(manifest_path, "w") as f:
+        json.dump(manifest, f, indent="\t")
+
+    # xsa_work holds a copy of the .xsa and arch.txt (staged by
+    # config_xilinx_sdk); util.py reads both from hw_path.
+    xsa_files = list(xsa_work.glob("*.xsa"))
+    if not xsa_files:
+        print(f"--open: no .xsa found in {xsa_work}.", file=sys.stderr)
+        return
+    util_py = repo_root / "tools" / "scripts" / "platform" / "xilinx" / "util.py"
+
+    print(f"Populating Vitis workspace ({len(manifest['sources'])} sources)...")
+    try:
+        subprocess.run(
+            [vitis, "-s", str(util_py), "create_ide_workspace",
+             str(xsa_work), str(xsa_work), xsa_files[0].name,
+             str(manifest_path)],
+            check=True, cwd=str(repo_root))
+    except subprocess.CalledProcessError as e:
+        print(f"--open: failed to populate Vitis workspace: {e}",
+              file=sys.stderr)
+        return
+
+    print(f"Opening Vitis IDE workspace: {workspace}")
+    try:
+        subprocess.run([vitis, "-w", str(workspace)], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"--open: failed to launch 'vitis': {e}", file=sys.stderr)
 
 
 class Spinner:
@@ -723,7 +859,18 @@ def cmd_build(args, repo_root, presets):
         sys.exit(1)
 
     if args.open:
-        open_vscode_workspace(repo_root)
+        # --open targets a single project's IDE. When the filter matched exactly
+        # one combination, open that; otherwise fall back to the repo-root VS
+        # Code workspace (the multi-project view).
+        if len(filtered) == 1:
+            combo = filtered[0]
+            build_dir = combo_build_dir(build_dir_base, combo)
+            if combo["platform"] == "xilinx":
+                open_vitis_workspace(repo_root, build_dir, combo)
+            else:
+                open_vscode_workspace(repo_root)
+        else:
+            open_vscode_workspace(repo_root)
 
 
 def main():
