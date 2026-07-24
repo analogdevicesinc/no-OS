@@ -1,0 +1,114 @@
+---
+:project:
+  :use_exceptions: FALSE
+  :use_test_preprocessor: :all
+  :use_auxiliary_dependencies: TRUE
+  :build_root: build
+  :test_file_prefix: test_
+  :which_ceedling: gem
+  :ceedling_version: 1.0.1
+  :default_tasks:
+    - test:all
+
+:environment:
+
+:extension:
+  :executable: .out
+
+:paths:
+  :test:
+    - test
+  :source:
+    - ../../../../drivers/afe/max30009/
+  :include:
+    - ../../../../include/**
+    - ../../../../drivers/afe/max30009/**
+  :support:
+  :libraries: []
+
+:files:
+  :test:
+    - test/test_max30009.c
+  :source:
+    - ../../../../drivers/afe/max30009/max30009.c
+
+:defines:
+  :common: &common_defines []
+  :test:
+    - *common_defines
+    - TEST
+  :test_preprocess:
+    - *common_defines
+    - TEST
+
+:cmock:
+  :mock_prefix: mock_
+  :when_no_prototypes: :warn
+  :callback_include_count: FALSE
+  :callback_after_arg_check: FALSE
+  :enforce_strict_ordering: FALSE
+  :plugins:
+    - :ignore
+    - :callback
+  :treat_as:
+    uint8_t:  HEX8
+    uint16_t: HEX16
+    uint32_t: UINT32
+    int8_t:   INT8
+    int16_t:  INT16
+    int32_t:  INT32
+    bool:     UINT8
+
+:gcov:
+  :reports:
+    - HtmlDetailed
+  :gcovr:
+    :html_medium_threshold: 75
+    :html_high_threshold: 90
+    :report_include: "../../../../drivers/afe/max30009/.*"
+    :report_exclude: ".*test.*"
+
+:libraries:
+  :placement: :end
+  :flag: "-l${1}"
+  :path_flag: "-L ${1}"
+  :system: [m]
+  :test: []
+  :release: []
+
+:report_tests_log_factory:
+  :reports:
+    - junit
+
+:plugins:
+  :enabled:
+    - report_tests_pretty_stdout
+    - module_generator
+    - report_tests_raw_output_log
+    - gcov
+    - report_tests_log_factory
+
+:flags:
+  :test:
+    :compile:
+      :*:
+        - -std=c99
+        - -Wall
+        - -Wextra
+        - -Wno-unused-parameter
+        - -Wno-missing-field-initializers
+        - -g
+        - -O0
+        - -I../../../../include
+        - -include no_os_alloc.h
+
+:test_max30009:
+  :compile:
+    :includes:
+      - ../../../../include/no_os_i2c.h
+      - ../../../../include/no_os_spi.h
+      - ../../../../include/no_os_gpio.h
+      - ../../../../include/no_os_util.h
+      - ../../../../include/no_os_alloc.h
+      - ../../../../include/no_os_delay.h
+      - ../../../../include/no_os_print_log.h
