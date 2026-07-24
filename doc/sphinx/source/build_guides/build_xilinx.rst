@@ -30,71 +30,88 @@ Run:
 Building a project
 ------------------
 
-Copy the **.xsa** file into the project folder.
+no-OS uses a **CMake** build driven by board presets and Kconfig defconfigs,
+orchestrated by ``tools/scripts/no_os_build.py``. Configure with the target
+board preset, the project/variant defconfig, and the ``.xsa`` hardware file,
+then build the project target:
 
 .. code-block:: bash
 
-    $ ls
-    Makefile  profiles  src  src.mk  system_top.xsa
-    $ make
+    $ cmake -B build-<project> --preset <board> \
+          -DPROJECT_DEFCONFIG=<project>/<variant>.conf \
+          -DHARDWARE=path/to/system_top.xsa
+    $ cmake --build build-<project> --target <project>
 
-    # Alternatively you may select an .xsa file explicitly by:
-    $ make HARDWARE=path/to/file.xsa
+Or, in one step with the helper (pass the ``.xsa`` via ``--hardware``):
 
-The build process creates a **build** directory in the project folder:
+.. code-block:: bash
 
-.. code-block::
+    $ python tools/scripts/no_os_build.py build \
+          --project <project> --variant <variant> --board <board> \
+          --hardware path/to/system_top.xsa
 
-    build
-    ├── app
-    ├── bsp
-    ├── obj
-    ├── project_name.elf
-    └── tmp
+The firmware (``build/<project>.elf``) and the intermediate Vitis BSP/FSBL work
+directories are created under ``build-<project>/``. See the
+:doc:`../cmake_cheatsheet` for the full set of build, configure and cleanup
+commands.
 
 Running/Debugging
 -----------------
 
-Once the **.elf** file has been generated, make sure the board is powered on,
-JTAG cable connected and use the following commands to upload the program to
-the board or debug.
-
-Uploading the binary to target is achieved with:
+Once the **.elf** file has been generated, make sure the board is powered on
+and the JTAG cable connected. Uploading the binary to the target is done with
+the ``flash`` target:
 
 .. code-block:: bash
 
-    $ make run
+    $ cmake --build build-<project> --target flash
 
-To open the Vitis IDE for debugging:
+This programs the FPGA bitstream (extracted from the ``.xsa``), initialises the
+PS, and downloads and runs the ELF over JTAG. It is driven by the Vitis Python
+API in ``tools/scripts/platform/xilinx/util.py`` (invoked via ``vitis -s``); for
+``cortexa53`` (ZynqMP) and ``cortexr5`` targets an FSBL is generated
+automatically first. The equivalent helper one-liner appends ``--flash``:
 
 .. code-block:: bash
 
-    $ make sdkopen
+    $ python tools/scripts/no_os_build.py build \
+          --project <project> --variant <variant> --board <board> \
+          --hardware path/to/system_top.xsa --flash --probe openocd
+
+.. note::
+   ``no_os_build.py --flash`` still requires a ``--probe`` value even though the
+   Xilinx JTAG flow ignores it. Invoking the ``flash`` target through ``cmake``
+   directly avoids the dummy probe argument.
+
+If multiple JTAG probes are connected, or a specific core must be targeted, set
+the ``JTAG_CABLE_ID`` and/or ``TARGET_CPU`` cache variables at configure time:
+
+.. code-block:: bash
+
+    $ cmake -B build-<project> --preset <board> \
+          -DPROJECT_DEFCONFIG=<project>/<variant>.conf \
+          -DHARDWARE=path/to/system_top.xsa \
+          -DJTAG_CABLE_ID=<id> -DTARGET_CPU=<cpu>
+
+For interactive debugging, use the Vitis IDE.
 
 .. tip::
    For detailed Vitis IDE debugging instructions, see
    :doc:`build_xilinx_vitis2025`.
 
-Booting from SD Card
-^^^^^^^^^^^^^^^^^^^^
-
-You may also boot a Xilinx project from an SD card. Copy the generated
-``build/BOOT.BIN`` file onto the first partition of the card, ensuring it is
-formatted as FAT32. Insert the card, set the jumpers for SD boot, and power
-on the system.
-
 Remote Host
 ^^^^^^^^^^^
 
-For Xilinx projects you can flash the board connected to a remote host. On the
-remote host make sure to start ``hw_server``. On your development environment
-run:
+For Xilinx projects you can flash a board connected to a remote host. On the
+remote host make sure to start ``hw_server``. On your development environment,
+export the host and port before running the ``flash`` target; the Vitis JTAG
+session picks them up automatically:
 
 .. code-block:: bash
 
     $ export XSCT_REMOTE_HOST=<remote host ip>
     $ export XSCT_REMOTE_PORT=<remote host hw_server port>
-    $ make run
+    $ cmake --build build-<project> --target flash
 
 .. note::
    By default the ``hw_server`` port should be 3121.
@@ -133,23 +150,22 @@ Or alternatively, add the desired paths manually:
 Building a project
 ------------------
 
-Copy the **.xsa** file into the project folder and run:
+The build steps are the same as on Linux — configure with the board preset,
+project/variant defconfig and ``.xsa`` hardware, then build the project target:
 
 .. code-block:: bash
 
-    $ ls
-    Makefile  profiles  src  src.mk  system_top.xsa
-    $ make
-
-    # Alternatively you may select an .xsa file explicitly by:
-    $ make HARDWARE=path/to/file.xsa
+    $ cmake -B build-<project> --preset <board> \
+          -DPROJECT_DEFCONFIG=<project>/<variant>.conf \
+          -DHARDWARE=path/to/system_top.xsa
+    $ cmake --build build-<project> --target <project>
 
 Running/Debugging
 -----------------
 
 The running and debugging steps are the same as on Linux. See the Linux section
-above for ``make run``, ``make sdkopen``, SD card boot, and remote host
-instructions.
+above for the ``flash`` target, the ``JTAG_CABLE_ID`` / ``TARGET_CPU`` cache
+variables, the Vitis IDE, and remote host instructions.
 
 .. toctree::
    :hidden:

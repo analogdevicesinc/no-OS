@@ -3,8 +3,8 @@ WSL2 USB Passthrough Guide
 ***************************
 
 If you use WSL you cannot access USB devices directly because WSL does not
-natively support USB. If you try to load the binary into the target with
-``make run``, you will encounter errors about missing JTAG targets.
+natively support USB. If you try to load the binary into the target with the
+``flash`` target, you will encounter errors about missing JTAG targets.
 
 This guide explains how to pass USB devices from Windows to WSL2 so that
 JTAG debugging and flashing work from within WSL.
