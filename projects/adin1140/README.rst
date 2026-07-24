@@ -1,4 +1,4 @@
-ADIN1140 no-OS Example Project
+ADIN1140 no-OS Project
 ==============================
 
 .. no-os-doxygen::
@@ -9,7 +9,7 @@ ADIN1140 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-ADIN1140 <https://www.analog.com/EVAL-ADIN1140>`_
+* `EVAL-ADIN1140`_
 
 Overview
 --------
@@ -31,15 +31,6 @@ exercise the no-OS ADIN1140 driver in three modes:
 * Networked sensor access via the IIO server over lwIP, using an
   ADT7422 temperature sensor as the IIO device
 
-Applications
-------------
-
-* Building and factory automation
-* HVAC and lighting control
-* Field instruments and edge sensors
-* Multi-drop sensor and actuator networks
-* Industrial process monitoring
-
 Hardware Specifications
 -----------------------
 
@@ -47,20 +38,11 @@ Power Supply Requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The EVAL-ADIN1140 evaluation board operates with a 3.3 V supply, sourced
-from the host MCU board through the SPI/IO header. The board's VDDIO
-domain is selected to match the host (typically 3.3 V); confirm jumper
-selection on the eval board before powering up.
+from the host MCU board through the SPI/IO header or 6-30 V sourced from the 
+P4 connector. The board's VDDIO domain is selected to match the host
+(typically 3.3 V); confirm jumper selection on the eval board before powering up.
 
-For the IIO over lwIP example, an ADT7422 temperature sensor (for
-example on a `EVAL-ADT7422 <https://www.analog.com/EVAL-ADT7422>`_
-breakout) is connected over I2C and shares the host's 3.3 V supply.
-
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
-No-OS Supported Examples
+Supported Examples
 ------------------------
 
 The initialization data used in the examples is taken out from the
@@ -78,9 +60,9 @@ selected by pointing ``PROJECT_DEFCONFIG`` at one of the project's
 * ``iperf_lwip_example.conf``
 * ``iperf_lwip_freertos.conf``
 
-The target board is selected with a CMake preset (``max32690fthr`` or
-``max78000fthr``). See the `Build Command`_ section below for the full
-invocation.
+The target board is selected with a CMake preset (``max32690fthr``,
+``max78000fthr`` or ``nucleo-h563zi``). See the Build Command sections
+under each supported platform below for the full invocation.
 
 frame_rx_tx example
 ~~~~~~~~~~~~~~~~~~~
@@ -143,7 +125,7 @@ CMake:
 
 .. code-block:: bash
 
-   -DPROJECT_DEFCONFIG=adin1140/iperf_lwip_example.conf
+   -DPROJECT_DEFCONFIG="adin1140/iperf_lwip_example.conf"
 
 iperf_lwip_freertos example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -172,38 +154,6 @@ defconfig to CMake:
 .. code-block:: bash
 
    -DPROJECT_DEFCONFIG=adin1140/iperf_lwip_freertos.conf
-
-iio_lwip_example
-~~~~~~~~~~~~~~~~
-
-The ``iio_lwip_example`` brings up an IIO server on top of the ADIN1140
-+ lwIP transport so that an IIO client can reach the device over
-10BASE-T1S Ethernet. The exposed IIO device is an ADT7422 temperature
-sensor connected to the host MCU over I2C; the ADIN1140 is used purely
-as the network interface.
-
-The IIO demo is a standard example, provided in most `no-OS
-projects <https://github.com/analogdevicesinc/no-OS/tree/main/projects>`__,
-that launches an IIOD server on the board so that the user may connect
-to it via an IIO client.
-
-If you are not familiar with ADI IIO Application, please take a look
-at: `IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`__
-
-If you are not familiar with ADI IIO Oscilloscope Client, please take
-a look at: `IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`__
-
-The board listens on the IIOD network port at the IP configured in the
-project defconfig (default ``192.168.97.40``). Connect with, for
-example::
-
-   iio_info -u ip:192.168.97.40
-
-.. note::
-
-   The ``iio_lwip_example`` is not yet available in the CMake build.
-   Only ``frame_rx_tx``, ``iperf_lwip_example`` and
-   ``iperf_lwip_freertos`` are currently supported.
 
 No-OS Supported Platforms
 -------------------------
@@ -304,3 +254,126 @@ To build a different example, point ``PROJECT_DEFCONFIG`` at another
 ``adin1140/iperf_lwip_freertos.conf``). The resulting ``adin1140.elf``,
 ``adin1140.hex`` and ``adin1140.bin`` are placed in the ``build``
 directory.
+
+STM32 Platform
+~~~~~~~~~~~~~~
+
+Hardware Used
+^^^^^^^^^^^^^
+
+* `EVAL-ADIN1140`_
+* `NUCLEO-H563ZI <https://www.st.com/en/evaluation-tools/nucleo-h563zi.html>`_
+  (STM32H563ZIT6 host MCU)
+* A USB-C cable (powers the Nucleo and provides the ST-LINK debug probe
+  plus the Virtual COM Port used for the UART log)
+* For the ``iio_lwip_example`` only: an ADT7422 temperature sensor
+  breakout (for example `EVAL-ADT7422 <https://www.analog.com/EVAL-ADT7422>`_)
+
+Prerequisites
+^^^^^^^^^^^^^
+
+The STM32 build regenerates the low-level HAL/CubeMX sources from the
+project's ``.ioc`` file (``nucleo-h563zi.ioc``) as part of the CMake
+configure step, so both **STM32CubeMX** and **STM32CubeIDE** must be
+installed on the build host:
+
+* `STM32CubeMX <https://www.st.com/en/development-tools/stm32cubemx.html>`_
+  — code generator, invoked to produce the HAL sources from the ``.ioc``.
+* `STM32CubeIDE <https://www.st.com/en/development-tools/stm32cubeide.html>`_
+  — provides the bundled ``arm-none-eabi`` toolchain and the flash/debug
+  tools (ST-LINK GDB server / ``STM32_Programmer_CLI``).
+
+The build locates them through two environment variables. Set them if the
+tools are not in a default install location (point them at the executables,
+or on Windows at the install directories):
+
+.. code-block:: bash
+
+   export STM32CUBEMX=</path/to/stm32cubemx>
+   export STM32CUBEIDE=</path/to/stm32cubeide>
+   # Windows (PowerShell):
+   #   $env:STM32CUBEMX = "C:\ST\STM32CubeMX\STM32CubeMX.exe"
+   #   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
+
+See the `STM32 CMake build guide
+<https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__
+for the full toolchain setup and prerequisites.
+
+Connections
+^^^^^^^^^^^
+
+The ADIN1140 is driven from **SPI1** (no-OS chip-select handled as a
+software GPIO on port D, mode 0, 13 MHz) and its ``INT`` line is routed to
+``PD15`` (``EXTI15``). The UART log is on **USART3**, which on the
+NUCLEO-H563ZI is wired to the on-board ST-LINK Virtual COM Port and appears
+as a serial device on the host over the same USB-C connection (115200
+8N1) — no external USB-UART adapter is needed.
+
+=============== ==================== ==================
+Signal          NUCLEO-H563ZI Pin    EVAL-ADIN1140 Pin
+=============== ==================== ==================
+GND             GND                  GND
+3V3             3V3
+SPI SCLK        PA5  (SPI1 SCK)      SCK
+SPI SS (CS)     PD14 (GPIO SW-CS)    D6
+SPI MOSI        PB5  (SPI1 MOSI)     MO
+SPI MISO        PG9  (SPI1 MISO)     MI
+ADIN1140 INT    PD15 (EXTI15)        D13
+=============== ==================== ==================
+
+Build Command
+^^^^^^^^^^^^^
+
+The build uses the CMake preset flow. Configure with the
+``nucleo-h563zi`` preset and a project defconfig, then build (and
+optionally flash) the ``adin1140`` target. Run the commands from the
+no-OS repository root.
+
+.. code-block:: bash
+
+   # Configure for the NUCLEO-H563ZI, iperf_lwip_freertos example
+   cmake --preset nucleo-h563zi -B build-adin1140 \
+         -DPROJECT_DEFCONFIG=adin1140/"iperf_lwip_freertos.conf" --fresh
+
+   # Build the project
+   cmake --build build-adin1140 --target adin1140
+
+Currently, the STM32H563 cannot be programmed using the no-OS build system,
+so an alternative such as STM32CubeProgrammer can be used. The build artifacts
+can be found in ``build-adin1140/build/``.
+
+To build a different example, point ``PROJECT_DEFCONFIG`` at another
+``.conf`` file (``adin1140/frame_rx_tx.conf``,
+``adin1140/iperf_lwip_example.conf`` or
+``adin1140/iperf_lwip_freertos.conf``). The resulting ``adin1140.elf``,
+``adin1140.hex`` and ``adin1140.bin`` are placed in the ``build``
+directory.
+
+Testing with iperf
+^^^^^^^^^^^^^^^^^^^
+
+Both ``iperf_lwip_example`` and ``iperf_lwip_freertos`` bring up an
+lwiperf TCP server on the board (default IP ``192.168.97.40``, port
+``5001``). To measure throughput:
+
+#. Connect the EVAL-ADIN1140 to the 10BASE-T1S segment shared with the
+   host (directly, or through a 10BASE-T1S ↔ standard-Ethernet media
+   converter).
+#. Give the host interface a static address on the same subnet, e.g.
+   ``192.168.97.50/16``.
+#. Open the ST-LINK Virtual COM Port (115200 8N1) to watch the board log.
+   Wait until it reports that the iperf server is up.
+#. Run the iperf **client** on the host against the board (the board is
+   the server):
+
+   .. code-block:: bash
+
+      iperf -c 192.168.97.40 -p 5001 -i 1 -t 15
+
+Throughput is reported once per second by the host iperf client and, via
+the ``lwiperf_report`` callback, on the board's UART. The
+``iperf_lwip_freertos`` example additionally prints a periodic driver
+statistics line (RX/TX bandwidth and frame/error counters from
+``oa_tc6_get_stats`` / ``adin1140_get_stats``) on the same UART, which is
+useful for confirming there are no CRC/alignment errors or buffer drops
+during the transfer.
