@@ -344,14 +344,14 @@ def _write_pl(session, cpu, hw_path, hw_file, jtagtarget):
     session.targets('-s', filter=_build_filter(name, jtagtarget))
 
     import glob as _glob
+    # The bitstream is extracted from the .xsa at configure time (CMake
+    # extract_xsa_members -> hw_path); just pick it up here.
     bit_files = _glob.glob(os.path.join(hw_path, "*.bit"))
     if not bit_files:
-        # Fall back to name derived from XSA
-        bitstream = os.path.join(hw_path,
-                                 os.path.splitext(hw_file)[0] + ".bit")
-    else:
-        bitstream = bit_files[0]
-    session.fpga(file=os.path.normpath(bitstream))
+        print(f"ERROR: No .bit bitstream found in {hw_path}. It should have "
+              "been extracted from the .xsa at configure time.")
+        sys.exit(1)
+    session.fpga(file=os.path.normpath(bit_files[0]))
 
 
 def _run_init_sequence(session, init_data):
@@ -417,13 +417,9 @@ def _init_ps_zynq(session, hw_path, hw_file, jtagtarget):
     """
     session.targets('-s', filter=_build_filter('APU*', jtagtarget))
 
+    # ps7_init.tcl is extracted from the .xsa at configure time (CMake
+    # extract_xsa_members -> hw_path).
     init_tcl = os.path.join(hw_path, "ps7_init.tcl")
-    if not os.path.exists(init_tcl):
-        # Extract from XSA if not already present
-        xsa = os.path.join(hw_path, hw_file)
-        subprocess.run(["unzip", "-o", "-q", xsa, "ps7_init.tcl",
-                        "-d", hw_path], check=False)
-
     if os.path.exists(init_tcl):
         init_data = _parse_ps_init_tcl(init_tcl, proc_name="ps7_init")
         if init_data:
@@ -457,12 +453,9 @@ def _init_ps_cortexr5(session, hw_path, hw_file, jtagtarget):
     session.targets('-s', '--nocase',
                     filter=_build_filter('PSU', jtagtarget))
 
+    # psu_init.tcl is extracted from the .xsa at configure time (CMake
+    # extract_xsa_members -> hw_path).
     init_tcl = os.path.join(hw_path, "psu_init.tcl")
-    if not os.path.exists(init_tcl):
-        xsa = os.path.join(hw_path, hw_file)
-        subprocess.run(["unzip", "-o", "-q", xsa, "psu_init.tcl",
-                        "-d", hw_path], check=False)
-
     if os.path.exists(init_tcl):
         # psu_init
         init_data = _parse_ps_init_tcl(init_tcl, proc_name="psu_init")
@@ -682,18 +675,14 @@ def upload(hw_path, hw_file, binary, target, fsbl_file, jtagtarget):
 
 def _upload_versal(session, hw_path, hw_file, cpu, binary, jtagtarget):
     """Upload flow for Versal: device_program + A72 init + ELF download."""
-    xsa_path = os.path.join(hw_path, hw_file)
-
-    # Extract PDI from XSA if no .pdi files present
+    # The PDI is extracted from the .xsa at configure time (CMake
+    # extract_xsa_members -> hw_path). Its name inside the XSA may differ from
+    # the XSA filename, so glob for it.
     import glob as _glob
-    if not _glob.glob(os.path.join(hw_path, "*.pdi")):
-        subprocess.run(["unzip", "-o", "-q", xsa_path, "*.pdi",
-                        "-d", hw_path], check=False)
-
-    # Find the extracted PDI (name inside XSA may differ from XSA filename)
     pdi_files = _glob.glob(os.path.join(hw_path, "*.pdi"))
     if not pdi_files:
-        print(f"ERROR: No PDI file found in {hw_path}")
+        print(f"ERROR: No PDI file found in {hw_path}. It should have been "
+              "extracted from the .xsa at configure time.")
         sys.exit(1)
     pdi_path = pdi_files[0]
 
