@@ -1,4 +1,4 @@
-name: Deploy docs for ToF
+name: Deploy docs for NO-OS
 
 on:
   workflow_dispatch:
@@ -10,6 +10,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '**/*.rst'
+      - '**/*.md'
 
 permissions:
   contents: write
