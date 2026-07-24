@@ -116,7 +116,7 @@ function(maxim_add_riscv_coprocessor ARM_TARGET)
     # scope) applies to both the ARM target and the premap twin below.
     string(REPLACE
         "-T${_gcc}/max${TARGET_NUM}.ld"
-        "-T${_arm_ld} -L${_gcc}"
+        "-T${_arm_ld} -L${_gcc} -L${NO_OS_DIR}/drivers/platform/maxim/max${TARGET_NUM}"
         _flags "${CMAKE_EXE_LINKER_FLAGS}")
     set(CMAKE_EXE_LINKER_FLAGS "${_flags}" PARENT_SCOPE)
     set(CMAKE_EXE_LINKER_FLAGS "${_flags}")
@@ -216,9 +216,10 @@ function(maxim_add_riscv_coprocessor ARM_TARGET)
     # --- Pass 2b: link the RISC-V ELF to run in place from flash --------------
     set(_rv_elf ${_bin}/riscv.elf)
     set(_rv_bin ${_bin}/riscv.bin)
+    set(_rv_ld ${NO_OS_DIR}/drivers/platform/maxim/max${TARGET_NUM}/max${TARGET_NUM}_riscv.ld)
     add_custom_command(OUTPUT ${_rv_elf}
         COMMAND ${RISCV_GCC} ${_march} ${_mabi}
-            -T${_gcc}/max${TARGET_NUM}_riscv.ld
+            -T${_rv_ld}
             -L${_bin} -L${_gcc}
             -nostartfiles -Wl,--gc-sections -Wl,-Map=${_bin}/riscv.map
             # Redirect MXC_SYS_Reset_Periph to the RMW wrapper defined in the
