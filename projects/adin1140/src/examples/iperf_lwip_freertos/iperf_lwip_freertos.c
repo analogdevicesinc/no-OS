@@ -38,6 +38,7 @@
 #include "lwip_socket.h"
 #include "lwip_adin1140.h"
 #include "adin1140.h"
+#include "oa_tc6.h"
 #include "lwip/apps/lwiperf.h"
 #include "lwip/ip_addr.h"
 #include "no_os_delay.h"
@@ -62,8 +63,6 @@ static void adin1140_irq_cb(void *ctx)
 {
 	struct adin1140_net_data *data = ctx;
 	BaseType_t higher_prio_woken = pdFALSE;
-
-	printf("IRQ\n");
 
 	adin1140_set_irq_flag(data->adin1140);
 
@@ -147,14 +146,31 @@ static int setup_interrupt(struct adin1140_net_data *data)
 static void net_task(void *param)
 {
 	struct adin1140_net_data *data = param;
-	struct adin1140_init_param adin1140_ip;
+	struct adin1140_init_param adin1140_ip = { 0 };
 	struct lwip_network_param lwip_param = { 0 };
+	uint32_t reg_val;
 	int ret;
 
 	adin1140_ip.comm_param = adin1140_spi_ip;
 	adin1140_ip.mac_cfg = (struct adin1140_mac_cfg) {
 		.cps   = 0x6,
 		.zarfe = true,
+	};
+	/*
+	 * PLCA follower (node 1). The media converter is the coordinator/beacon
+	 * source. PLCA_NODE_CNT is being swept to find the value the converter
+	 * expects: on some coordinators a follower is only admitted if its
+	 * node_id is within the coordinator's configured node count, so this
+	 * must be >= 2 and typically matches the converter's setting (common
+	 * defaults: 8).
+	 */
+	adin1140_ip.plca_cfg = (struct adin1140_plca_cfg) {
+		.enabled   = true,
+		.node_id   = 1,
+		.node_cnt  = 8,
+		.to_tmr    = 0x20,
+		.burst_cnt = 0,
+		.burst_tmr = 0,
 	};
 	memcpy(adin1140_ip.mac_address, adin1140_mac_address,
 	       NETIF_MAX_HWADDR_LEN);
@@ -173,23 +189,60 @@ static void net_task(void *param)
 
 	data->adin1140 = data->lwip->mac_desc;
 
-	// ret = setup_interrupt(data);
-	// if (ret) {
-	// 	pr_info("setup_interrupt failed: %d\n", ret);
-	// 	vTaskDelete(NULL);
-	// 	return;
-	// }
+	ret = setup_interrupt(data);
+	if (ret) {
+		pr_info("setup_interrupt failed: %d\n", ret);
+		vTaskDelete(NULL);
+		return;
+	}
 
 	pr_info("Starting lwiperf server on port %d\n",
 		LWIPERF_TCP_PORT_DEFAULT);
 	lwiperf_start_tcp_server_default(lwiperf_report, NULL);
 
+	struct oa_tc6_stats sw_prev = {0};
+	struct oa_tc6_stats sw_now;
+	struct adin1140_stats hw;
+	struct no_os_time t_prev = no_os_get_time();
+
 	while (1) {
-		// ulTaskNotifyTake(pdTRUE, 0xFFFFFFFF);
+		ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(1000));
 
 		no_os_lwip_step(data->lwip, NULL);
 
-		// no_os_irq_enable(data->gpio_irq, ADIN1140_INT_PIN);
+		no_os_irq_enable(data->gpio_irq, ADIN1140_INT_PIN);
+
+		struct no_os_time t_now = no_os_get_time();
+		uint32_t elapsed_ms = (t_now.s - t_prev.s) * 1000 +
+				      (t_now.us - t_prev.us) / 1000;
+		if (elapsed_ms >= 10000) {
+			int sret = oa_tc6_get_stats(data->adin1140->oa_desc, &sw_now);
+			int hret = adin1140_get_stats(data->adin1140, &hw);
+			if (!sret && !hret) {
+				uint64_t rx_dbytes = sw_now.rx_bytes - sw_prev.rx_bytes;
+				uint64_t tx_dbytes = sw_now.tx_bytes - sw_prev.tx_bytes;
+				/* kbit/s = bytes*8 / ms  (bytes/ms * 8 = kbit/s) */
+				uint32_t rx_kbps = (uint32_t)((rx_dbytes * 8) / elapsed_ms);
+				uint32_t tx_kbps = (uint32_t)((tx_dbytes * 8) / elapsed_ms);
+
+				pr_info("stats: rx %lu kbit/s tx %lu kbit/s | "
+					"rx_fr=%llu tx_fr=%llu drop_fd=%lu nobuf=%lu exst=%lu | "
+					"hw rx=%lu tx=%lu crc=%lu algn=%lu\n",
+					(unsigned long)rx_kbps, (unsigned long)tx_kbps,
+					(unsigned long long)sw_now.rx_frames,
+					(unsigned long long)sw_now.tx_frames,
+					(unsigned long)sw_now.rx_drop_fd,
+					(unsigned long)sw_now.rx_drop_nobuf,
+					(unsigned long)sw_now.exst_events,
+					(unsigned long)hw.rx_frames,
+					(unsigned long)hw.tx_frames,
+					(unsigned long)hw.rx_crc_err,
+					(unsigned long)hw.rx_align_err);
+
+				sw_prev = sw_now;
+				t_prev = t_now;
+			}
+		}
 	}
 }
 
