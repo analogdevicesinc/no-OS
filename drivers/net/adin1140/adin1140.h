@@ -154,6 +154,9 @@ struct adin1140_desc {
 	uint8_t mac_address[ADIN1140_ETH_ALEN];
 	struct oa_tc6_desc *oa_desc;
 	volatile bool irq_pending;
+
+	void (*callback)(struct adin1140_desc *, uint32_t, void *);
+	void *callback_arg;
 };
 
 /**
