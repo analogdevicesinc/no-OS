@@ -8,6 +8,7 @@
 #include "ad9088.h"
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
+#include "no_os_util.h"
 #include <string.h>
 
 #include "adi_cms_api_common.h"
@@ -201,6 +202,85 @@ uint8_t ad9088_to_link(uint8_t linkid)
 
 	return lut[linkid];
 }
+
+int ad9088_inspect_jrx_link_all(struct ad9088_phy *phy)
+{
+	int err;
+	struct adi_apollo_device_t *device = &phy->ad9088;
+	adi_apollo_jesd_rx_inspect_t jrx_status;
+	uint16_t links_to_inspect[] = {
+		ADI_APOLLO_LINK_A0, ADI_APOLLO_LINK_A1,
+		ADI_APOLLO_LINK_B0, ADI_APOLLO_LINK_B1
+	};
+	const char *const links_to_inspect_str[] = { "A0", "A1", "B0", "B1" };
+	uint8_t phys_lane;
+	uint32_t i, l;
+
+	phy->jrx_lanes_used = 0;
+
+	for (l = 0; l < NO_OS_ARRAY_SIZE(links_to_inspect); l++) {
+		err = adi_apollo_jrx_link_inspect(device, links_to_inspect[l],
+						  &jrx_status);
+		err = ad9088_check_apollo_error(err,
+						"adi_apollo_jrx_link_inspect");
+		if (err)
+			return err;
+
+		pr_info("JRX ADI_APOLLO_LINK_%s: L=%2d M=%2d F=%2d S=%2d Np=%2d CS=%2d link_en= %-8s\n",
+			links_to_inspect_str[l],
+			jrx_status.l_minus1 + 1,
+			jrx_status.m_minus1 + 1,
+			jrx_status.f_minus1 + 1,
+			jrx_status.s_minus1 + 1,
+			jrx_status.np_minus1 + 1,
+			jrx_status.cs,
+			jrx_status.link_en ? "Enabled" : "Disabled");
+
+		if (jrx_status.link_en)
+			for (i = 0; i < (uint32_t)jrx_status.l_minus1 + 1; i++) {
+				phys_lane = phy->profile.jrx[(l / 2) & 1].rx_link_cfg[(l % 2) & 1].lane_xbar[i];
+				phy->jrx_lanes[phy->jrx_lanes_used++] =
+					phys_lane + (((l / 2) & 1) * 12);
+			}
+	}
+
+	return API_CMS_ERROR_OK;
+}
+
+int ad9088_inspect_jtx_link_all(struct ad9088_phy *phy)
+{
+	int err;
+	struct adi_apollo_device_t *device = &phy->ad9088;
+	adi_apollo_jesd_tx_inspect_t jtx_status;
+	uint16_t links_to_inspect[] = {
+		ADI_APOLLO_LINK_A0, ADI_APOLLO_LINK_A1,
+		ADI_APOLLO_LINK_B0, ADI_APOLLO_LINK_B1
+	};
+	const char *const links_to_inspect_str[] = { "A0", "A1", "B0", "B1" };
+	uint32_t l;
+
+	for (l = 0; l < NO_OS_ARRAY_SIZE(links_to_inspect); l++) {
+		err = adi_apollo_jtx_link_inspect(device, links_to_inspect[l],
+						  &jtx_status);
+		err = ad9088_check_apollo_error(err,
+						"adi_apollo_jtx_link_inspect");
+		if (err)
+			return err;
+
+		pr_info("JTX ADI_APOLLO_LINK_%s: L=%2d M=%2d F=%2d S=%2d Np=%2d CS=%2d link_en= %-8s\n",
+			links_to_inspect_str[l],
+			jtx_status.l_minus1 + 1,
+			jtx_status.m_minus1 + 1,
+			jtx_status.f_minus1 + 1,
+			jtx_status.s_minus1 + 1,
+			jtx_status.np_minus1 + 1,
+			jtx_status.cs,
+			jtx_status.link_en ? "Enabled" : "Disabled");
+	}
+
+	return API_CMS_ERROR_OK;
+}
+
 struct fw_entry {
 	const uint8_t *start;
 	const uint8_t *end;

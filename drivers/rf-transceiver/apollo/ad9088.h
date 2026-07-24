@@ -22,6 +22,8 @@
 #include "public/inc/adi_apollo.h"
 #include "adi_apollo_bf_custom.h"
 #include "adi_apollo_adc.h"
+#include "adi_apollo_cfg.h"
+#include "adi_apollo_sysclk_cond.h"
 #include "adi_apollo_hal.h"
 #include "adi_apollo_mailbox.h"
 #include "adi_apollo_loopback.h"
@@ -317,6 +319,8 @@ extern const struct jesd204_dev_data jesd204_ad9088_init;
 
 int ad9088_check_apollo_error(int ret, const char *api_name);
 uint8_t ad9088_to_link(uint8_t linkid);
+int ad9088_inspect_jrx_link_all(struct ad9088_phy *phy);
+int ad9088_inspect_jtx_link_all(struct ad9088_phy *phy);
 int ad9088_parse_struct(struct ad9088_phy **device,
 			const struct ad9088_init_param *init_param);
 int ad9088_init(struct ad9088_phy **device,

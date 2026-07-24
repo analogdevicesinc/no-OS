@@ -253,6 +253,152 @@ static int ad9088_jesd204_link_setup(struct jesd204_dev *jdev,
 	return JESD204_STATE_CHANGE_DONE;
 }
 
+static int ad9088_jesd204_setup_stage1(struct jesd204_dev *jdev,
+				       enum jesd204_state_op_reason reason)
+{
+	struct ad9088_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct ad9088_phy *phy = priv->phy;
+	struct adi_apollo_device_t *device = &phy->ad9088;
+	uint32_t adc_cal_chans = device->dev_info.is_8t8r ?
+				 ADI_APOLLO_ADC_ALL : ADI_APOLLO_ADC_ALL_4T4R;
+	uint32_t n_adc = device->dev_info.is_8t8r ?
+			 ADI_APOLLO_ADC_ALL : ADI_APOLLO_ADC_ALL_4T4R;
+	/* no-OS stores rx_nyquist_zone as (zone - 1); HAL expects 1 or 2 */
+	uint32_t nyquist_zone = phy->rx_nyquist_zone[0][0] + 1;
+	adi_apollo_sysclock_cond_cfg_e cc_cal_cfg;
+	adi_apollo_init_cal_cfg_e init_cal_cfg;
+	uint16_t jrx_phase_adjust;
+	int ret;
+
+	if (reason != JESD204_STATE_OP_REASON_INIT)
+		return JESD204_STATE_CHANGE_DONE;
+
+	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
+		 jesd204_state_op_reason_str(reason));
+
+	phy->rx_en_mask = ADI_APOLLO_RXEN_ADC_ALL;
+	phy->tx_en_mask = ADI_APOLLO_TXEN_DAC_ALL;
+
+	ret = adi_apollo_adc_nyquist_zone_set(device, n_adc, nyquist_zone);
+	if (ret) {
+		pr_err("Error setting ADC Nyquist zone %d\n", ret);
+		return ret;
+	}
+
+	/* Warmboot-from-user cal data is not supported yet in no-OS */
+	cc_cal_cfg = ADI_APOLLO_SYSCLKCONDITIONING_ENABLED;
+	pr_info("Run clock conditioning cal (can take up to %d secs)...\n",
+		ADI_APOLLO_SYSCLK_COND_CENTER_MAX_TO);
+
+	ret = adi_apollo_cfg_clk_cond_cal_cfg_set(device, cc_cal_cfg);
+	if (ret) {
+		pr_err("Error in adi_apollo_cfg_clk_cond_cal_cfg_set %d\n", ret);
+		return ret;
+	}
+
+	ret = adi_apollo_sysclk_cond_cal(device);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_sysclk_cond_cal");
+	if (ret)
+		return ret;
+
+	/* Inspect the Apollo JRx and JTx link config */
+	ret = ad9088_inspect_jrx_link_all(phy);
+	if (ret) {
+		pr_err("Error in ad9088_inspect_jrx_link_all %d\n", ret);
+		return ret;
+	}
+	ret = ad9088_inspect_jtx_link_all(phy);
+	if (ret) {
+		pr_err("Error in ad9088_inspect_jtx_link_all %d\n", ret);
+		return ret;
+	}
+
+	ret = adi_apollo_jrx_phase_adjust_calc(device,
+					       ADI_APOLLO_LINK_A0 | ADI_APOLLO_LINK_B0,
+					       ADI_APOLLO_JRX_PHASE_ADJ_MARGIN_DEFAULT,
+					       &jrx_phase_adjust);
+	if (ret) {
+		pr_err("Error in adi_apollo_jrx_phase_adjust_calc %d\n", ret);
+		return ret;
+	}
+
+	pr_debug("JRX Phase Adjust: %d\n", jrx_phase_adjust);
+
+	/* Set the jrx phase adjust */
+	ret = adi_apollo_jrx_phase_adjust_set(device,
+					      ADI_APOLLO_LINK_A0 | ADI_APOLLO_LINK_B0,
+					      jrx_phase_adjust);
+	if (ret) {
+		pr_err("Error in adi_apollo_jrx_phase_adjust_set %d\n", ret);
+		return ret;
+	}
+
+	/* Set the jtx phase adjust */
+	ret = adi_apollo_jtx_phase_adjust_set(device,
+					      ADI_APOLLO_LINK_A0 | ADI_APOLLO_LINK_B0,
+					      0);
+	if (ret) {
+		pr_err("Error in adi_apollo_jtx_phase_adjust_set %d\n", ret);
+		return ret;
+	}
+
+	/* ADC calibration - warmboot/NVM paths not supported yet in no-OS */
+	init_cal_cfg = ADI_APOLLO_INIT_CAL_ENABLED;
+	pr_info("Run ADC cal from scratch (can take up to 100 secs)...\n");
+
+	ret = adi_apollo_adc_init_cal_start(device, adc_cal_chans, init_cal_cfg);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_adc_init_cal_start");
+	if (ret)
+		return ret;
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+static int ad9088_jesd204_setup_stage2(struct jesd204_dev *jdev,
+				       enum jesd204_state_op_reason reason)
+{
+	struct ad9088_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct ad9088_phy *phy = priv->phy;
+	struct adi_apollo_device_t *device = &phy->ad9088;
+	uint32_t n_adc = device->dev_info.is_8t8r ?
+			 ADI_APOLLO_ADC_ALL : ADI_APOLLO_ADC_ALL_4T4R;
+	/* no-OS stores rx_nyquist_zone as (zone - 1); HAL expects 1 or 2 */
+	uint32_t nyquist_zone = phy->rx_nyquist_zone[0][0] + 1;
+	int ret;
+
+	if (reason != JESD204_STATE_OP_REASON_INIT)
+		return JESD204_STATE_CHANGE_DONE;
+
+	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
+		 jesd204_state_op_reason_str(reason));
+
+	ret = adi_apollo_adc_init_cal_complete(device, n_adc);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_adc_init_cal_complete");
+	if (ret)
+		return ret;
+
+	ret = adi_apollo_adc_nyquist_zone_set(device, n_adc, nyquist_zone);
+	if (ret) {
+		pr_err("Error setting ADC Nyquist zone %d\n", ret);
+		return ret;
+	}
+
+	ret = adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run(device);
+	if (ret) {
+		pr_err("Error in adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run %d\n",
+		       ret);
+		return ret;
+	}
+
+	/*
+	 * Block-memory CDDC/FDDC sample-delay calibration is deferred:
+	 * phy->cddc_sample_delay_en / fddc_sample_delay_en are not yet
+	 * ported to no-OS.
+	 */
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
 static int ad9088_jesd204_clks_enable(struct jesd204_dev *jdev,
 				      enum jesd204_state_op_reason reason,
 				      struct jesd204_link *lnk)
@@ -382,6 +528,14 @@ const struct jesd204_dev_data jesd204_ad9088_init = {
 		},
 		[JESD204_OP_LINK_SETUP] = {
 			.per_device = ad9088_jesd204_link_setup,
+			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
+		},
+		[JESD204_OP_OPT_SETUP_STAGE1] = {
+			.per_device = ad9088_jesd204_setup_stage1,
+			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
+		},
+		[JESD204_OP_OPT_SETUP_STAGE2] = {
+			.per_device = ad9088_jesd204_setup_stage2,
 			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
 		},
 		[JESD204_OP_CLOCKS_ENABLE] = {
