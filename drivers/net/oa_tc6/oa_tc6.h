@@ -237,6 +237,19 @@ enum oa_tc6_bufst_polling {
 };
 
 /**
+ * @brief oa_tc6 software statistics counters.
+ */
+struct oa_tc6_stats {
+	uint64_t rx_frames;     /* frames fully de-framed to a buffer */
+	uint64_t rx_bytes;      /* payload bytes received (sum of frame len) */
+	uint64_t tx_frames;     /* frames fully framed out to SPI */
+	uint64_t tx_bytes;      /* payload bytes transmitted */
+	uint32_t rx_drop_fd;    /* footer frame-drop (FD) flagged frames */
+	uint32_t rx_drop_nobuf; /* RX frame-buffer pool exhausted (-ENOBUFS) */
+	uint32_t exst_events;   /* EXST latched in a data-chunk footer */
+};
+
+/**
  * @brief Holds the frame buffers and the communication descriptor for the OA TC6 driver.
  */
 struct oa_tc6_desc {
@@ -262,6 +275,9 @@ struct oa_tc6_desc {
 
 	void (*callback)(struct oa_tc6_desc *, uint32_t, void *);
 	void *callback_arg;
+
+	/** Software statistics counters. */
+	struct oa_tc6_stats stats;
 };
 
 /**
@@ -322,5 +338,10 @@ int oa_tc6_init(struct oa_tc6_desc **, struct oa_tc6_init_param *);
 
 /* Free the resources allocated by the oa_tc6_init() function */
 int oa_tc6_remove(struct oa_tc6_desc *);
+
+/* Get a snapshot of the software statistics counters. */
+int oa_tc6_get_stats(struct oa_tc6_desc *desc, struct oa_tc6_stats *stats);
+/* Reset the software statistics counters to zero. */
+int oa_tc6_reset_stats(struct oa_tc6_desc *desc);
 
 #endif /* _NO_OS_OA_TC6_H */

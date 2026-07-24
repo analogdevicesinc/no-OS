@@ -216,6 +216,17 @@ struct adin1140_eth_buff {
 	uint8_t *payload;
 };
 
+/**
+ * @brief MAC hardware statistics counters (free-running accumulators read
+ *        from the device counter registers).
+ */
+struct adin1140_stats {
+	uint32_t rx_frames;    /**< RX frame count (reg 0xA1) */
+	uint32_t tx_frames;    /**< TX frame count (reg 0xB1) */
+	uint32_t rx_crc_err;   /**< RX CRC error count (reg 0xA5) */
+	uint32_t rx_align_err; /**< RX alignment error count (reg 0xA6) */
+};
+
 static bool adin1140_irq_triggered(struct adin1140_desc *desc)
 {
 	return desc->irq_pending;
@@ -307,6 +318,9 @@ int adin1140_poll(struct adin1140_desc *desc);
 
 /* Get the link state */
 int adin1140_link_state(struct adin1140_desc *desc, uint32_t *state);
+
+/* Read the MAC hardware statistics counters */
+int adin1140_get_stats(struct adin1140_desc *desc, struct adin1140_stats *stats);
 
 /* Initialize the device */
 int adin1140_init(struct adin1140_desc **desc,

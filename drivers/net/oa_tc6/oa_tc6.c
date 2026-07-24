@@ -337,6 +337,8 @@ static int oa_tc6_get_empty_rx_buff(struct oa_tc6_desc *desc,
 		}
 	}
 
+	desc->stats.rx_drop_nobuf++;
+
 	return -ENOBUFS;
 }
 
@@ -483,9 +485,14 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 		chunks_written += tx_frame_num_chunks;
 
 		if (frame_buffer->index >= frame_buffer->len) {
+			uint32_t tx_len = frame_buffer->len; /* capture before reset */
+
 			frame_buffer->len = 0;
 			frame_buffer->index = 0;
 			frame_buffer->state = OA_BUFF_FREE;
+
+			desc->stats.tx_frames++;
+			desc->stats.tx_bytes += tx_len;
 		}
 	} while (1);
 
@@ -541,7 +548,10 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 
 		/* Always update the transfer flags, even if DV=0 */
 		desc->xfer_flags.flags_valid = true;
-		desc->xfer_flags.exst |= !!(footer & OA_DATA_FOOTER_EXST_MASK); /* Latched */
+		if (footer & OA_DATA_FOOTER_EXST_MASK) {
+			desc->xfer_flags.exst = 1; /* Latched */
+			desc->stats.exst_events++;
+		}
 		desc->xfer_flags.hdrb |= !!(footer & OA_DATA_FOOTER_HDRB_MASK); /* Latched */
 		desc->xfer_flags.sync = !!(footer &
 					   OA_DATA_FOOTER_SYNC_MASK);  /* Instantaneous */
@@ -565,8 +575,13 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 				frame_buffer->len = frame_buffer->index;
 				frame_buffer->state = OA_BUFF_RX_COMPLETE;
 
+				desc->stats.rx_frames++;
+				desc->stats.rx_bytes += frame_buffer->len;
+
 				/* Flags valid when EV=1 Only */
 				frame_buffer->frame_drop = !!(footer & OA_DATA_FOOTER_FD_MASK);
+				if (frame_buffer->frame_drop)
+					desc->stats.rx_drop_fd++;
 
 				/* Now get a new buffer for the second frame */
 				ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, true);
@@ -604,6 +619,9 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 			frame_buffer->vs = no_os_field_get(OA_DATA_FOOTER_VS_MASK, footer);
 
 			if (frame_buffer->state == OA_BUFF_RX_COMPLETE) {
+				desc->stats.rx_frames++;
+				desc->stats.rx_bytes += frame_buffer->len;
+
 				/* Get a new buffer for the next iteration */
 				ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, true);
 				if (ret)
@@ -622,10 +640,15 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 			frame_buffer->len = frame_buffer->index + ebo + 1;
 			frame_buffer->state = OA_BUFF_RX_COMPLETE;
 
+			desc->stats.rx_frames++;
+			desc->stats.rx_bytes += frame_buffer->len;
+
 			oa_tc6_invoke_callback(desc, OA_TC6_EVENT_RX);
 
 			/* Flags valid when EV=1 Only */
 			frame_buffer->frame_drop = !!(footer & OA_DATA_FOOTER_FD_MASK);
+			if (frame_buffer->frame_drop)
+				desc->stats.rx_drop_fd++;
 
 			/* Get a new buffer for the next iteration */
 			ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, true);
@@ -849,6 +872,37 @@ int oa_tc6_register_callback(struct oa_tc6_desc *desc,
 
 	desc->callback = callback;
 	desc->callback_arg = arg;
+
+	return 0;
+}
+
+/**
+ * @brief Get a snapshot of the software statistics counters.
+ * @param desc - the device descriptor.
+ * @param stats - storage for the snapshot.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int oa_tc6_get_stats(struct oa_tc6_desc *desc, struct oa_tc6_stats *stats)
+{
+	if (!desc || !stats)
+		return -EINVAL;
+
+	*stats = desc->stats;
+
+	return 0;
+}
+
+/**
+ * @brief Reset the software statistics counters to zero.
+ * @param desc - the device descriptor.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int oa_tc6_reset_stats(struct oa_tc6_desc *desc)
+{
+	if (!desc)
+		return -EINVAL;
+
+	memset(&desc->stats, 0, sizeof(desc->stats));
 
 	return 0;
 }
