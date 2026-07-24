@@ -4,10 +4,10 @@
 """
 Xilinx/AMD platform utilities for no-OS build system.
 
-Replacement for util.tcl using the Vitis 2025+ Python API (xsdb/hsi).
-Invoked via: vitis -s util.py <function> <args...>
+Drives BSP/FSBL generation and JTAG programming via the Vitis 2025+ Python
+API (xsdb/hsi). Invoked via: vitis -s util.py <function> <args...>
 
-Arguments (positional, matching util.tcl):
+Arguments (positional):
   function  - Function to call: get_arch, create_project, create_fsbl,
                clean_build, upload
   ws        - Workspace/project path
@@ -29,7 +29,7 @@ from hsi import HwManager
 
 
 # ---------------------------------------------------------------------------
-# Target filter dictionaries (matching util.tcl pl_dict / ps_dict)
+# Target filter dictionaries (PL bitstream / PS core name patterns)
 # ---------------------------------------------------------------------------
 
 PL_DICT = {
