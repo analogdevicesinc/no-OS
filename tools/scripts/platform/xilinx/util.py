@@ -8,12 +8,12 @@ Drives BSP/FSBL generation and JTAG programming via the Vitis 2025+ Python
 API (xsdb/hsi). Invoked via: vitis -s util.py <function> <args...>
 
 Arguments (positional):
-  function  - Function to call: get_arch, create_project, create_fsbl,
-               clean_build, upload
+  function  - Function to call: get_arch, create_project, create_ide_workspace,
+               create_fsbl, clean_build, upload
   ws        - Workspace/project path
   hw_path   - Hardware definition directory
   hw_file   - Hardware file name (e.g. system_top.xsa)
-  binary    - ELF binary path
+  binary    - ELF binary path (for create_ide_workspace: the manifest JSON path)
   target    - Target CPU filter (empty or "0" for auto-select)
   template  - App template name (unused in 2025+ flow)
   fsbl_file - FSBL ELF path (optional, for upload)
@@ -246,6 +246,127 @@ def create_project(ws, hw_path, hw_file, target):
 
     vitis.dispose()
     print("INFO: Project created successfully")
+
+
+# ---------------------------------------------------------------------------
+# create_ide_workspace
+# ---------------------------------------------------------------------------
+
+def create_ide_workspace(ws, hw_path, hw_file, manifest_path):
+    """Build a persistent Vitis workspace populated with the no-OS sources.
+
+    Unlike create_project (which builds into a throwaway tmp/output and copies
+    only the BSP + linker script out), this materializes a workspace that Vitis
+    can open directly with `vitis -w <workspace>`:
+
+      - an 'hw0' platform component (BSP), and
+      - an 'app' application component whose sources are the no-OS files the
+        CMake build actually compiled, referenced in place (not copied) via
+        import_files(is_skip_copy_sources=True) -- the modern equivalent of the
+        legacy `make` symlink mirror under build/app.
+
+    The include paths and compile definitions are taken from the CMake build so
+    Vitis's indexer resolves headers/macros exactly as ninja did. CMake still
+    owns the real build (the flashed ELF); this component exists for browsing
+    and (optionally) building inside the GUI.
+
+    manifest_path points at a JSON file written by no_os_build.py:
+        {"sources": [...abs paths...],
+         "includes": [...abs dirs...],
+         "defines": ["NAME=VAL", "NAME", ...]}
+    """
+    import json
+    import vitis
+
+    with open(manifest_path, "r") as f:
+        manifest = json.load(f)
+    sources = manifest.get("sources", [])
+    includes = manifest.get("includes", [])
+    defines = manifest.get("defines", [])
+
+    # Arch comes from the manifest (no_os_build reads XILINX_ARCH from the CMake
+    # cache); fall back to a staged arch.txt if present. Unlike create_project,
+    # this path may run long after the BSP was generated, so we don't rely on
+    # config_xilinx_sdk having just written arch.txt into hw_path.
+    cpu = manifest.get("arch")
+    if not cpu:
+        arch_file = os.path.join(hw_path, "arch.txt")
+        with open(arch_file, "r") as f:
+            cpu = f.read().strip()
+    vcpu = _vitis_cpu_name(cpu)
+
+    xsa = os.path.join(hw_path, hw_file)
+    # Persistent workspace: sibling of tmp/ so it survives after this run and a
+    # subsequent create_project (which only wipes tmp/output) leaves it intact.
+    out_dir = os.path.join(ws, "ide", "workspace")
+
+    xpfm = os.path.join(out_dir, "hw0", "export", "hw0", "hw0.xpfm")
+
+    # --- Step 1: Platform (BSP). Skip the slow rebuild if it already exists. ---
+    if not os.path.exists(xpfm):
+        print(f"INFO: Creating IDE platform component (cpu={vcpu})...")
+        client = vitis.create_client(workspace=out_dir)
+        client.create_platform_component(
+            name="hw0", hw_design=xsa, cpu=vcpu, os="standalone")
+        vitis.dispose()
+
+        print("INFO: Building IDE platform (BSP)...")
+        client = vitis.create_client(workspace=out_dir)
+        platform = client.get_component(name="hw0")
+        platform.build()
+        vitis.dispose()
+    else:
+        print("INFO: IDE platform component already present; reusing.")
+
+    # --- Step 2: App component populated with the no-OS sources ---
+    # Recreate the app component every run so a re-run of --open picks up source
+    # or flag changes from a refreshed manifest. The app references sources in
+    # place (no compile here), so this is cheap; the slow platform build above
+    # is what we preserve. Vitis refuses create_app_component if the component
+    # dir already exists, so remove it first.
+    import shutil
+    app_dir = os.path.join(out_dir, "app")
+    if os.path.exists(app_dir):
+        shutil.rmtree(app_dir)
+    print("INFO: Creating app component and importing no-OS sources...")
+    client = vitis.create_client(workspace=out_dir)
+    app = client.create_app_component(
+        name="app", platform=xpfm, template="empty_application")
+
+    # Reference each source in place (no copy). import_files takes a common
+    # from_loc + file list, so group by containing directory to keep paths
+    # absolute and avoid copying the whole tree.
+    from collections import defaultdict
+    by_dir = defaultdict(list)
+    for src in sources:
+        if os.path.exists(src):
+            by_dir[os.path.dirname(src)].append(os.path.basename(src))
+    for from_loc, files in by_dir.items():
+        app.import_files(from_loc=from_loc, files=files,
+                         is_skip_copy_sources=True)
+
+    if includes:
+        app.set_app_config(key="USER_INCLUDE_DIRECTORIES", values=includes)
+    if defines:
+        app.set_app_config(key="USER_COMPILE_DEFINITIONS", values=defines)
+
+    ld = app.get_ld_script()
+    ld.set_heap_size('0x100000')
+
+    vitis.dispose()
+
+    # Copy the pre-staged debug artifacts (launch.json + extracted bitstream /
+    # ps7_init.tcl) into the workspace now that Vitis has initialized it. They
+    # must NOT be present before create_client, or Vitis refuses the workspace
+    # ("cannot recognize the workspace version"). Staged by ide_vitis_configure
+    # at <ws>/ide/staging/_ide.
+    staged_ide = os.path.join(ws, "ide", "staging", "_ide")
+    if os.path.isdir(staged_ide):
+        shutil.copytree(staged_ide, os.path.join(out_dir, "_ide"),
+                        dirs_exist_ok=True)
+        print("INFO: Debug configuration (_ide/launch.json) staged in workspace.")
+
+    print(f"INFO: IDE workspace ready: {out_dir}")
 
 
 # ---------------------------------------------------------------------------
@@ -771,6 +892,8 @@ def main():
     dispatch = {
         "get_arch": lambda: get_arch(hw_path, hw_file, target),
         "create_project": lambda: create_project(ws, hw_path, hw_file, target),
+        "create_ide_workspace": lambda: create_ide_workspace(
+            ws, hw_path, hw_file, binary),
         "create_fsbl": lambda: create_fsbl(ws, hw_path, hw_file, target),
         "upload": lambda: upload(hw_path, hw_file, binary, target,
                                  fsbl_file, jtagtarget),
