@@ -8,6 +8,8 @@ no_os_sources_ifdef(CONFIG_GPIO_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxi
 no_os_sources_ifdef(CONFIG_GPIO_IRQ_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_gpio_irq.c)
 no_os_sources_ifdef(CONFIG_I2C_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_i2c.c)
 no_os_sources_ifdef(CONFIG_SPI_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_spi.c)
+no_os_sources_ifdef(CONFIG_SPI_GPIO_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_gpio_spi.c)
+no_os_sources_ifdef(CONFIG_SYS_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_sys.c)
 no_os_sources_ifdef(CONFIG_UART_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_uart.c)
 no_os_sources_ifdef(CONFIG_UART_STDIO_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_uart_stdio.c)
 no_os_sources_ifdef(CONFIG_IRQ_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_irq.c)
@@ -33,6 +35,10 @@ no_os_sources_ifdef(CONFIG_I2C_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim
 no_os_sources_ifdef(CONFIG_SPI_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_spi.c)
 
 no_os_sources_ifdef(CONFIG_DMA_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/common/maxim_dma.c)
+
+no_os_sources_ifdef(CONFIG_IPC_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_ipc.c)
+
+no_os_sources_ifdef(CONFIG_COPROCESSOR_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_coprocessor.c)
 
 target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_init.c)
 
