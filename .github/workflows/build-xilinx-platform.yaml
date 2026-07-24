@@ -34,7 +34,7 @@ jobs:
       TOOLS_REPO: ${{ secrets.TOOLS_REPO }}
       BLACKLIST_URL: ${{ secrets.BLACKLIST_URL }}
       HDL_BRANCH: 'main'
-      BRANCH: 'main'
+      BRANCH: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
       BUILDS_DIR: ${{ github.workspace }}/builds
       RELEASES_DIR: ${{ github.workspace }}/latest_build
       LOGS_DIR: ${{ github.workspace }}/logs
