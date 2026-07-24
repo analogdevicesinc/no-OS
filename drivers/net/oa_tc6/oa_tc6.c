@@ -825,7 +825,7 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 	if (!ret)
 		tx_chunks_avail = frame_buffer->len;
 
-	if (desc->bufst_polling == OA_TC6_REG_POLL) {\
+	if (desc->bufst_polling == OA_TC6_REG_POLL) {
 		if (!desc->data_rx_credit && !tx_chunks_avail)
 			goto unlock;
 	}
