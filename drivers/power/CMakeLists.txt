@@ -59,6 +59,11 @@ no_os_sources_ifdef(CONFIG_POWER_LTC4162L ${CMAKE_CURRENT_SOURCE_DIR}/ltc4162l/l
 no_os_sources_ifdef(CONFIG_POWER_IIO_LTC4162L ${CMAKE_CURRENT_SOURCE_DIR}/ltc4162l/iio_ltc4162l.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ltc4162l)
 
+# ltc4284
+no_os_sources_ifdef(CONFIG_POWER_LTC4284 ${CMAKE_CURRENT_SOURCE_DIR}/ltc4284/ltc4284.c)
+no_os_sources_ifdef(CONFIG_POWER_IIO_LTC4284 ${CMAKE_CURRENT_SOURCE_DIR}/ltc4284/iio_ltc4284.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ltc4284)
+
 # ltc4296
 no_os_sources_ifdef(CONFIG_POWER_LTC4296 ${CMAKE_CURRENT_SOURCE_DIR}/ltc4296/ltc4296.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ltc4296)
