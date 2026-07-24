@@ -2,10 +2,10 @@
 #
 # Unlike maxim/stm32, the target CPU architecture is not known up front -- it is
 # encoded in the .xsa hardware-description file. We determine it here by running
-# the HSI-based get_arch helper (tools/scripts/platform/xilinx/util.tcl) via
-# xsct, then pick the matching bare-metal compiler shipped inside the Vitis
-# install. The BSP + linker script are generated later, at configure time, by
-# config_xilinx_sdk() (cmake/xilinx/xilinx_platform_sdk.cmake).
+# the HSI-based get_arch helper (tools/scripts/platform/xilinx/util.py) via
+# `vitis -s`, then pick the matching bare-metal compiler shipped inside the
+# Vitis install. The BSP + linker script are generated later, at configure time,
+# by config_xilinx_sdk() (cmake/xilinx/xilinx_platform_sdk.cmake).
 
 if(NOT DEFINED ENV{XILINX_VITIS})
     message(FATAL_ERROR
@@ -55,19 +55,19 @@ if(NOT DEFINED XILINX_ARCH)
     file(MAKE_DIRECTORY "${_arch_work}")
     file(COPY "${HARDWARE}" DESTINATION "${_arch_work}")
 
-    find_program(XSCT_EXECUTABLE xsct HINTS "${XILINX_VITIS}/bin")
-    if(NOT XSCT_EXECUTABLE)
-        message(FATAL_ERROR "xsct not found under ${XILINX_VITIS}/bin")
+    find_program(VITIS_EXECUTABLE vitis HINTS "${XILINX_VITIS}/bin")
+    if(NOT VITIS_EXECUTABLE)
+        message(FATAL_ERROR "vitis not found under ${XILINX_VITIS}/bin")
     endif()
 
     execute_process(
-        COMMAND ${XSCT_EXECUTABLE} -nodisp
-                "${CMAKE_CURRENT_LIST_DIR}/../../../tools/scripts/platform/xilinx/util.tcl"
+        COMMAND ${VITIS_EXECUTABLE} -s
+                "${CMAKE_CURRENT_LIST_DIR}/../../../tools/scripts/platform/xilinx/util.py"
                 get_arch "${_arch_work}" "${_arch_work}" "${_xsa_file}"
         RESULT_VARIABLE _arch_rc
         OUTPUT_QUIET)
     if(NOT _arch_rc EQUAL 0)
-        message(FATAL_ERROR "xsct get_arch failed on ${HARDWARE} (rc=${_arch_rc})")
+        message(FATAL_ERROR "vitis get_arch failed on ${HARDWARE} (rc=${_arch_rc})")
     endif()
     file(READ "${_arch_work}/arch.txt" _arch_raw)
     string(STRIP "${_arch_raw}" XILINX_ARCH)
