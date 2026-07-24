@@ -113,6 +113,13 @@ function(add_openocd_flash_target TARGET_NAME)
 endfunction()
 
 function(add_flash_target TARGET_NAME)
+	# Xilinx uses its own JTAG flow (Vitis Python API), not OpenOCD/J-Link.
+	if(PLATFORM STREQUAL "xilinx")
+		include(${NO_OS_DIR}/cmake/xilinx/xilinx_flash.cmake)
+		add_xilinx_flash_target(${TARGET_NAME})
+		return()
+	endif()
+
 	if(NOT PROBE)
 		message(WARNING
 			"PROBE is empty; no 'flash'/'debug' targets will be created. "

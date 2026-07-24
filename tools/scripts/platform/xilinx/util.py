@@ -344,13 +344,21 @@ def _write_pl(session, cpu, hw_path, hw_file, jtagtarget):
     session.targets('-s', filter=_build_filter(name, jtagtarget))
 
     import glob as _glob
+    # The bitstream ships inside the .xsa (a zip archive). Extract it next to
+    # the .xsa on first use if it isn't already there, mirroring the .pdi and
+    # ps7_init.tcl extraction elsewhere in this module.
     bit_files = _glob.glob(os.path.join(hw_path, "*.bit"))
     if not bit_files:
+        xsa = os.path.join(hw_path, hw_file)
+        subprocess.run(["unzip", "-o", "-q", xsa, "*.bit", "-d", hw_path],
+                       check=False)
+        bit_files = _glob.glob(os.path.join(hw_path, "*.bit"))
+    if bit_files:
+        bitstream = bit_files[0]
+    else:
         # Fall back to name derived from XSA
         bitstream = os.path.join(hw_path,
                                  os.path.splitext(hw_file)[0] + ".bit")
-    else:
-        bitstream = bit_files[0]
     session.fpga(file=os.path.normpath(bitstream))
 
 
