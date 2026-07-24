@@ -17,8 +17,8 @@ static void ad9088_jesd_lane_setup(struct ad9088_phy *phy,
 	for (i = 0; i < 12; i++){
 		phy->profile.jtx[0].tx_link_cfg[0].lane_xbar[i] = init_param->jtx0_logical_lane_mapping[i];
 		phy->profile.jtx[1].tx_link_cfg[0].lane_xbar[i] = init_param->jtx1_logical_lane_mapping[i];
-		phy->profile.jrx[0].rx_link_cfg[0].lane_xbar[i] = init_param->jrx0_logical_lane_mapping[i];
-		phy->profile.jrx[1].rx_link_cfg[0].lane_xbar[i] = init_param->jrx1_logical_lane_mapping[i];
+		phy->profile.jrx[0].rx_link_cfg[0].lane_xbar[i] = init_param->jrx0_physical_lane_mapping[i];
+		phy->profile.jrx[1].rx_link_cfg[0].lane_xbar[i] = init_param->jrx1_physical_lane_mapping[i];
 	}
 	
 	phy->profile.jrx[0].common_link_cfg.lane_enables = 0;
@@ -72,11 +72,9 @@ static void ad9088_jesd_lane_setup(struct ad9088_phy *phy,
 			if ((int32_t)phy->profile.jtx[1].tx_link_cfg[1].lane_xbar[i] <= (int32_t)phy->profile.jtx[1].tx_link_cfg[1].l_minus1)
 				phy->profile.jtx[1].common_link_cfg.lane_enables |= (1 << i);
 	}
-
-	return 0;
 }
 
-int ad9088_get_profile(struct ad9088_phy *phy, 
+int ad9088_get_profile(struct ad9088_phy *phy,
 		       const struct ad9088_init_param *init_param)
 {
 	adi_apollo_top_t *p = &phy->profile;
@@ -149,7 +147,7 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 		goto error_reset;
 	}
 
-	ad9088_jesd_lane_setup(&phy, init_param);
+	ad9088_jesd_lane_setup(phy, init_param);
 	
 	phy->profile.jtx[0].common_link_cfg.subclass = init_param->subclass;
 	phy->profile.jtx[1].common_link_cfg.subclass = init_param->subclass;

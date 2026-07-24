@@ -185,8 +185,8 @@ struct ad9088_init_param {
 	uint32_t subclass;
 	uint32_t jtx0_logical_lane_mapping[12]; //
 	uint32_t jtx1_logical_lane_mapping[12]; //
-	uint32_t jrx0_logical_lane_mapping[12]; //
-	uint32_t jrx1_logical_lane_mapping[12]; //
+	uint32_t jrx0_physical_lane_mapping[12]; //
+	uint32_t jrx1_physical_lane_mapping[12]; //
 	uint32_t jtx_ser_amplitude;
 	uint32_t jtx_ser_pre_emphasis;
 	uint32_t jtx_ser_post_emphasis;
