@@ -164,35 +164,50 @@ NEW_HW_DIR_NAME = 'new_hardware'
 
 def process_blacklist():
 	blacklist = []
-	if not TOKEN:
-		log_err('TOKEN (GH_GHDL_TOKEN) environment variable is not set')
-		return blacklist
-	if not blacklist_url or blacklist_url == 'None':
-		log_err('BLACKLIST_URL environment variable is not set')
-		return blacklist
-	err = os.system('curl -f -L -H "Accept: application/vnd.github.v3.raw" -H "Authorization: Bearer {}" \'{}\' -o blacklist.txt >> {} 2>&1'
-				.format(TOKEN, blacklist_url, log_file))
-	if err != 0:
-		log_err('Failed to download blacklist file (curl exit %d) -- check TOKEN and BLACKLIST_URL' % err)
-		return blacklist
-	if not os.path.isfile('blacklist.txt'):
-		log_err('Blacklist file was not created after download')
-		return blacklist
-	with open('blacklist.txt', 'r') as file:
-		for line in file.readlines():
-			project = line.split('#')[0].rstrip().replace('.', '_')
-			if project != '':
-				blacklist.append(project)
+	log('Fetching blacklist from %s' % blacklist_url)
+	result = subprocess.run(
+		['curl', '-f', '-L',
+		 '-H', 'Accept: application/vnd.github.v3.raw',
+		 '-H', 'Authorization: Bearer %s' % TOKEN,
+		 '-o', 'blacklist.txt', blacklist_url],
+		capture_output=True)
+	if result.returncode != 0:
+		fallback_url = str(os.environ.get('BLACKLIST_URL')).format('main')
+		if fallback_url != blacklist_url:
+			log('Blacklist for branch %s not found, falling back to main' % BRANCH)
+			result = subprocess.run(
+				['curl', '-f', '-L',
+				 '-H', 'Accept: application/vnd.github.v3.raw',
+				 '-H', 'Authorization: Bearer %s' % TOKEN,
+				 '-o', 'blacklist.txt', fallback_url],
+				capture_output=True)
+		if result.returncode != 0:
+			log_err('Failed to download blacklist (curl exit %d) -- proceeding without filtering'
+				% result.returncode)
+			return blacklist
+	try:
+		with open('blacklist.txt', 'r') as f:
+			for line in f:
+				project = line.split('#')[0].rstrip().replace('.', '_')
+				if project != '':
+					blacklist.append(project)
+	finally:
+		if os.path.isfile('blacklist.txt'):
+			os.remove('blacklist.txt')
+	if blacklist:
+		log('Blacklist loaded: %d project(s) excluded' % len(blacklist))
+	else:
+		log('Blacklist file is empty -- no projects excluded')
 	return blacklist
 
 def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
-	server_base_path="hdl/"
+	server_base_path = "hdl/"
 	hdl_repo = 'sdg-hdl'
-	pattern = '\d{4}_\d{2}_\d{2}-\d{2}_\d{2}_\d{2}'
+	pattern = r'\d{4}_\d{2}_\d{2}-\d{2}_\d{2}_\d{2}'
 	blacklist = []
 	timestamp_match = re.search(pattern, hdl_branch)
 	if timestamp_match:
-		hdl_branch = re.split('\/', hdl_branch)[0]
+		hdl_branch = hdl_branch.split('/')[0]
 		timestamp_folder = timestamp_match.group()
 
 	if hdl_branch == "main":
@@ -203,15 +218,15 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 		elif check_path(package_version=server_base_path + 'dev/' + hdl_branch + '/', repo=hdl_repo):
 			hdl_branch_path = 'dev/' + hdl_branch + '/hdl_output/'
 		else:
-			print("Error related to hdl branch name: " + hdl_branch)
-			exit()
+			log_err("HDL branch '%s' not found in releases/ or dev/" % hdl_branch)
+			sys.exit(1)
 
 	if timestamp_match:
 		if check_path(package_version=server_base_path + hdl_branch_path + timestamp_folder + '/', repo=hdl_repo):
 			hdl_branch_path += timestamp_folder + '/'
 		else:
-			print("Error related to timestamp folder: " + timestamp_folder + " not existing in hdl_branch: " + hdl_branch)
-			exit()
+			log_err("Timestamp folder '%s' not found in hdl_branch '%s'" % (timestamp_folder, hdl_branch))
+			sys.exit(1)
 
 	builds_dir = _builds_dir + '_' + hdl_branch
 	ensure_dir(builds_dir)
@@ -221,14 +236,20 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 	ensure_dir(hardwares)
 	server_full_path = server_base_path + hdl_branch_path
 	if (_platform is None or _platform == 'xilinx'):
-		blacklist = process_blacklist()
+		if not TOKEN:
+			log('Skipping blacklist: TOKEN not set')
+		elif not blacklist_url or blacklist_url == 'None':
+			log('Skipping blacklist: BLACKLIST_URL not set')
+		else:
+			blacklist = process_blacklist()
 		new_hardwares = os.path.join(builds_dir, NEW_HW_DIR_NAME)
 		ensure_dir(new_hardwares)
-		err = os.system("{}/tools/scripts/download_files.py {} {} {} \"{}\""
-				  .format(noos, noos, builds_dir, server_full_path, blacklist))
-		if err != 0:
-			# Exit instead of returning None (caller unpacks a tuple -> TypeError).
-			log_err("Hardware download failed (exit %d); see download_files.py output above" % err)
+		download_cmd = [
+			os.path.join(noos, 'tools', 'scripts', 'download_files.py'),
+			noos, builds_dir, server_full_path, str(blacklist)]
+		result = subprocess.run(download_cmd)
+		if result.returncode != 0:
+			log_err("Hardware download failed (exit %d)" % result.returncode)
 			sys.exit(1)
 	return (builds_dir, blacklist)
 
