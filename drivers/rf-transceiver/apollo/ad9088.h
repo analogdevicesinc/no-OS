@@ -321,6 +321,12 @@ int ad9088_check_apollo_error(int ret, const char *api_name);
 uint8_t ad9088_to_link(uint8_t linkid);
 int ad9088_inspect_jrx_link_all(struct ad9088_phy *phy);
 int ad9088_inspect_jtx_link_all(struct ad9088_phy *phy);
+void ad9088_print_link_phase(struct ad9088_phy *phy, struct jesd204_link *lnk);
+int ad9088_jesd_tx_link_status_print(struct ad9088_phy *phy,
+				     struct jesd204_link *lnk, int retry);
+int ad9088_jesd_rx_link_status_print(struct ad9088_phy *phy,
+				     struct jesd204_link *lnk, int retry);
+extern const char *const ad9088_fsm_links_to_str[];
 int ad9088_parse_struct(struct ad9088_phy **device,
 			const struct ad9088_init_param *init_param);
 int ad9088_init(struct ad9088_phy **device,

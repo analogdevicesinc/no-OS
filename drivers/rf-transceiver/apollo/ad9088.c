@@ -281,6 +281,187 @@ int ad9088_inspect_jtx_link_all(struct ad9088_phy *phy)
 	return API_CMS_ERROR_OK;
 }
 
+const char *const ad9088_fsm_links_to_str[] = {
+	[DEFRAMER_LINK_A0_TX] = "JESD TX (JRX Deframer Link A0)",
+	[DEFRAMER_LINK_A1_TX] = "JESD TX (JRX Deframer Link A1)",
+	[DEFRAMER_LINK_B0_TX] = "JESD TX (JRX Deframer Link B0)",
+	[DEFRAMER_LINK_B1_TX] = "JESD TX (JRX Deframer Link B1)",
+	[FRAMER_LINK_A0_RX] = "JESD RX (JTX Framer Link A0)",
+	[FRAMER_LINK_A1_RX] = "JESD RX (JTX Framer Link A1)",
+	[FRAMER_LINK_B0_RX] = "JESD RX (JTX Framer Link B0)",
+	[FRAMER_LINK_B1_RX] = "JESD RX (JTX Framer Link B1)",
+};
+
+static const char *const ad9088_jrx_204c_states[] = {
+	"Reset", "Undef", "Sync header alignment done",
+	"Extended multiblock sync complete",
+	"Extended multiblock alignment complete",
+	"Undef", "Link is good", "Undef",
+};
+
+void ad9088_print_link_phase(struct ad9088_phy *phy,
+			     struct jesd204_link *lnk)
+{
+	struct adi_apollo_device_t *device = &phy->ad9088;
+	uint8_t id = ad9088_to_link(lnk->link_id);
+	uint16_t jrx_phase_diff;
+
+	adi_apollo_jrx_phase_diff_get(device, id, &jrx_phase_diff);
+	pr_info("%s Phase Difference %d\n",
+		ad9088_fsm_links_to_str[lnk->link_id], jrx_phase_diff);
+}
+
+int ad9088_jesd_tx_link_status_print(struct ad9088_phy *phy,
+				     struct jesd204_link *lnk, int retry)
+{
+	int ret;
+	uint16_t stat;
+
+	do {
+		ret = adi_apollo_jtx_link_status_get(&phy->ad9088,
+						     ad9088_to_link(lnk->link_id),
+						     &stat);
+
+		if (ret)
+			return -EFAULT;
+
+		if (lnk->jesd_version == JESD204_VERSION_C) {
+			if ((stat & 0x60) == 0x60)
+				ret = 0;
+			else
+				ret = -EIO;
+
+			if (ret == 0 || retry == 0)
+				pr_info("%s Link%d 204C PLL %s, PHASE %s, MODE %s\n",
+					ad9088_fsm_links_to_str[lnk->link_id],
+					(int)lnk->link_id,
+					stat & NO_OS_BIT(5) ? "locked" : "unlocked",
+					stat & NO_OS_BIT(6) ? "established" : "lost",
+					stat & NO_OS_BIT(7) ? "invalid" : "valid");
+			else
+				no_os_mdelay(20);
+		} else {
+			if ((stat & 0xF0) == 0x70)
+				ret = 0;
+			else
+				ret = -EIO;
+
+			if (ret == 0 || retry == 0)
+				pr_info("%s Link%d 204B SYNC %s, PLL %s, PHASE %s, MODE %s, STAT 0x%X\n",
+					ad9088_fsm_links_to_str[lnk->link_id],
+					(int)lnk->link_id,
+					stat & NO_OS_BIT(4) ? "deasserted" : "asserted",
+					stat & NO_OS_BIT(5) ? "locked" : "unlocked",
+					stat & NO_OS_BIT(6) ? "established" : "lost",
+					stat & NO_OS_BIT(7) ? "invalid" : "valid",
+					stat);
+			else
+				no_os_mdelay(20);
+		}
+	} while (ret && retry--);
+
+	return ret;
+}
+
+int ad9088_jesd_rx_link_status_print(struct ad9088_phy *phy,
+				     struct jesd204_link *lnk, int retry)
+{
+	int ret, i, err;
+	uint16_t stat, l_stat, mask;
+	uint8_t id = ad9088_to_link(lnk->link_id);
+
+	do {
+		ret = adi_apollo_jrx_link_status_get(&phy->ad9088, id, &stat);
+		if (ret)
+			return -EFAULT;
+
+		if (lnk->jesd_version == JESD204_VERSION_C) {
+			if (phy->profile.jrx[(lnk->link_id / 2) & 1].common_link_cfg.subclass)
+				mask = 0x60; /* Subclass 1 */
+			else
+				mask = 0x20; /* Ignore SYSREF Phase */
+
+			if ((stat & mask) == mask)
+				ret = 0;
+			else
+				ret = -EIO;
+
+			if (ret == 0 || retry == 0) {
+				for (i = 0; i < lnk->num_lanes; i++) {
+					uint8_t phys_lane = phy->profile.jrx[(lnk->link_id / 2) & 1].rx_link_cfg[(lnk->link_id % 2) & 1].lane_xbar[i];
+
+					err = adi_apollo_jrx_j204c_lane_status_get(&phy->ad9088,
+							id, phys_lane, &l_stat);
+					if (err)
+						return -EFAULT;
+					if ((l_stat & 0x7) == 0x6)
+						pr_info("%s Link%d 204C Lane-%d@%d status: %s\n",
+							ad9088_fsm_links_to_str[lnk->link_id],
+							(int)lnk->link_id, i, phys_lane,
+							ad9088_jrx_204c_states[l_stat & 0x7]);
+					else
+						pr_err("%s Link%d 204C Lane-%d@%d status: %s\n",
+						       ad9088_fsm_links_to_str[lnk->link_id],
+						       (int)lnk->link_id, i, phys_lane,
+						       ad9088_jrx_204c_states[l_stat & 0x7]);
+				}
+
+				pr_info("%s Link%d 204C User status: %s, SYSREF Phase: %s\n",
+					ad9088_fsm_links_to_str[lnk->link_id],
+					(int)lnk->link_id,
+					(stat & 0x20) ? "Ready" : "Fail",
+					(stat & 0x40) ? "Locked" : "Unlocked");
+			} else {
+				no_os_mdelay(20);
+			}
+		} else {
+			if (phy->profile.jrx[(lnk->link_id / 2) & 1].common_link_cfg.subclass)
+				mask = 0x60; /* Subclass 1 */
+			else
+				mask = 0x20; /* Ignore SYSREF Phase */
+
+			if ((stat & mask) == mask)
+				ret = 0;
+			else
+				ret = -EIO;
+
+			if (ret == 0 || retry == 0) {
+				for (i = 0; i < lnk->num_lanes; i++) {
+					uint8_t phys_lane = phy->profile.jrx[(lnk->link_id / 2) & 1].rx_link_cfg[(lnk->link_id % 2) & 1].lane_xbar[i];
+
+					err = adi_apollo_jrx_j204b_lane_status_get(&phy->ad9088,
+							id, phys_lane, &l_stat);
+					if (err)
+						return -EFAULT;
+
+					if ((l_stat & 0x3C) == 0x38)
+						pr_info("%s Link%d 204B Lane-%d@%d status: Link is good (0x%X)\n",
+							ad9088_fsm_links_to_str[lnk->link_id],
+							(int)lnk->link_id, i, phys_lane, l_stat);
+					else
+						pr_err("%s Link%d 204B Lane-%d@%d status: 0x%X Frame Sync:%s SYNC:%s DATA:%s Checksum:%s\n",
+						       ad9088_fsm_links_to_str[lnk->link_id],
+						       (int)lnk->link_id, i, phys_lane, l_stat & 0x3C,
+						       l_stat & NO_OS_BIT(2) ? "Lost" : "Found",
+						       l_stat & NO_OS_BIT(3) ? "Ok" : "Fail",
+						       l_stat & NO_OS_BIT(4) ? "Ready" : "Fail",
+						       l_stat & NO_OS_BIT(5) ? "Good" : "Bad");
+				}
+
+				pr_info("%s Link%d 204B User status: %s, SYSREF Phase: %s\n",
+					ad9088_fsm_links_to_str[lnk->link_id],
+					(int)lnk->link_id,
+					(stat & 0x20) ? "Ready" : "Fail",
+					(stat & 0x40) ? "Locked" : "Unlocked");
+			} else {
+				no_os_mdelay(20);
+			}
+		}
+	} while (ret && retry--);
+
+	return ret;
+}
+
 struct fw_entry {
 	const uint8_t *start;
 	const uint8_t *end;

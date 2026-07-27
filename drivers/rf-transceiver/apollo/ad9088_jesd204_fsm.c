@@ -506,6 +506,37 @@ static int ad9088_jesd204_link_enable(struct jesd204_dev *jdev,
 	return JESD204_STATE_CHANGE_DONE;
 }
 
+static int ad9088_jesd204_link_running(struct jesd204_dev *jdev,
+				       enum jesd204_state_op_reason reason,
+				       struct jesd204_link *lnk)
+{
+	struct ad9088_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct ad9088_phy *phy = priv->phy;
+	int ret;
+
+	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
+		 lnk->link_id, jesd204_state_op_reason_str(reason));
+
+	if (reason != JESD204_STATE_OP_REASON_INIT) {
+		phy->is_initialized = false;
+
+		return JESD204_STATE_CHANGE_DONE;
+	}
+
+	if (lnk->is_transmit) {
+		ad9088_print_link_phase(phy, lnk);
+		ret = ad9088_jesd_rx_link_status_print(phy, lnk, 3);
+		if (ret < 0)
+			return JESD204_STATE_CHANGE_ERROR;
+	} else {
+		ret = ad9088_jesd_tx_link_status_print(phy, lnk, 3);
+		if (ret < 0)
+			return JESD204_STATE_CHANGE_ERROR;
+	}
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
 static int ad9088_jesd204_uninit(struct jesd204_dev *jdev,
 				 enum jesd204_state_op_reason reason)
 {
@@ -544,6 +575,9 @@ const struct jesd204_dev_data jesd204_ad9088_init = {
 		[JESD204_OP_LINK_ENABLE] = {
 			.per_link = ad9088_jesd204_link_enable,
 			.post_state_sysref = true,
+		},
+		[JESD204_OP_LINK_RUNNING] = {
+			.per_link = ad9088_jesd204_link_running,
 		},
 	},
 
