@@ -431,7 +431,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 			ok = 0
 			continue
 
-		for ext in ('elf', 'hex', 'bin'):
+		for ext in ('elf', 'hex', 'bin', 'uf2'):
 			src = out_dir / ('%s.%s' % (project, ext))
 			if src.is_file():
 				run_cmd("cp %s %s" % (src, os.path.join(project_export, '%s.%s' % (name, ext))))
