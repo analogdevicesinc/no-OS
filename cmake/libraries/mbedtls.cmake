@@ -2,10 +2,6 @@
 # Source tree resolved by resolve_library_source (override -> managed clone).
 include(LibraryCacheUtils)
 
-if(NOT DEFINED CONFIG_MBEDTLS_VERSION OR "${CONFIG_MBEDTLS_VERSION}" STREQUAL "")
-    set(CONFIG_MBEDTLS_VERSION "mbedtls-2.28.0")
-endif()
-
 message(STATUS "mbedTLS requested version: ${CONFIG_MBEDTLS_VERSION}")
 
 resolve_library_source(

@@ -2,10 +2,6 @@
 # Source tree resolved by resolve_library_source (override -> managed clone).
 include(LibraryCacheUtils)
 
-if(NOT DEFINED CONFIG_LVGL_VERSION OR "${CONFIG_LVGL_VERSION}" STREQUAL "")
-    set(CONFIG_LVGL_VERSION "v8.3.0")
-endif()
-
 message(STATUS "LVGL requested version: ${CONFIG_LVGL_VERSION}")
 
 resolve_library_source(

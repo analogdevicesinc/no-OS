@@ -2,11 +2,6 @@
 # Source tree resolved by resolve_library_source (override -> managed clone).
 include(LibraryCacheUtils)
 
-# Default version if not set via Kconfig
-if(NOT DEFINED CONFIG_LWIP_VERSION OR "${CONFIG_LWIP_VERSION}" STREQUAL "")
-    set(CONFIG_LWIP_VERSION "STABLE-2_2_1_RELEASE")
-endif()
-
 message(STATUS "lwIP requested version: ${CONFIG_LWIP_VERSION}")
 
 # Resolve library source using hybrid priority chain

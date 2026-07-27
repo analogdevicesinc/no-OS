@@ -4,10 +4,6 @@
 # esh has no CMakeLists.txt, so we compile the source files directly.
 include(LibraryCacheUtils)
 
-if(NOT DEFINED CONFIG_ESH_VERSION OR "${CONFIG_ESH_VERSION}" STREQUAL "")
-    set(CONFIG_ESH_VERSION "main")
-endif()
-
 message(STATUS "esh requested version: ${CONFIG_ESH_VERSION}")
 
 resolve_library_source(

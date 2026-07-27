@@ -1,11 +1,6 @@
 # Source tree resolved by resolve_library_source (override -> managed clone).
 include(LibraryCacheUtils)
 
-# Default version if not set via Kconfig
-if(NOT DEFINED CONFIG_FREERTOS_VERSION OR "${CONFIG_FREERTOS_VERSION}" STREQUAL "")
-    set(CONFIG_FREERTOS_VERSION "V11.2.0")
-endif()
-
 message(STATUS "FreeRTOS requested version: ${CONFIG_FREERTOS_VERSION}")
 
 # Resolve library source using hybrid priority chain

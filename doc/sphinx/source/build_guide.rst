@@ -20,6 +20,10 @@ multiple checkouts/worktrees). To point a single library at a local working
 copy, set ``NO_OS_DEP_<LIB>_PATH`` (e.g. ``NO_OS_DEP_LWIP_PATH``,
 ``NO_OS_DEP_MBEDTLS_PATH``); it takes priority over everything else.
 
+The default pinned version of every dependency is its ``CONFIG_<LIB>_VERSION``
+Kconfig default (a git tag, branch or commit); set that config to fetch a
+different version.
+
 
 XILINX
 ======
