@@ -5,14 +5,10 @@
 # so we compile the required source files directly.
 include(LibraryCacheUtils)
 
-if(NOT DEFINED CONFIG_MQTT_VERSION OR "${CONFIG_MQTT_VERSION}" STREQUAL "")
-    set(CONFIG_MQTT_VERSION "master")
-endif()
-
 message(STATUS "MQTT requested version: ${CONFIG_MQTT_VERSION}")
 
 resolve_library_source(
-    paho_mqtt
+    mqtt
     "${CONFIG_MQTT_VERSION}"
     "${NO_OS_DIR}/libraries/paho.mqtt.embedded-c"
     "https://github.com/eclipse/paho.mqtt.embedded-c"
