@@ -311,6 +311,19 @@ void ad9088_print_link_phase(struct ad9088_phy *phy,
 		ad9088_fsm_links_to_str[lnk->link_id], jrx_phase_diff);
 }
 
+void ad9088_print_sysref_phase(struct ad9088_phy *phy)
+{
+	struct adi_apollo_device_t *device = &phy->ad9088;
+	uint32_t sysref_phase;
+	int i;
+
+	for (i = 0; i < 5; i++) {
+		adi_apollo_clk_mcs_sysref_phase_get(device, &sysref_phase);
+		pr_info("SYSREF_PHASE = %d (TRY%d)\n",
+			no_os_sign_extend32(sysref_phase, 9), i);
+	}
+}
+
 int ad9088_jesd_tx_link_status_print(struct ad9088_phy *phy,
 				     struct jesd204_link *lnk, int retry)
 {

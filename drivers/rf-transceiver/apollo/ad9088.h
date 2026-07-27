@@ -322,6 +322,7 @@ uint8_t ad9088_to_link(uint8_t linkid);
 int ad9088_inspect_jrx_link_all(struct ad9088_phy *phy);
 int ad9088_inspect_jtx_link_all(struct ad9088_phy *phy);
 void ad9088_print_link_phase(struct ad9088_phy *phy, struct jesd204_link *lnk);
+void ad9088_print_sysref_phase(struct ad9088_phy *phy);
 int ad9088_jesd_tx_link_status_print(struct ad9088_phy *phy,
 				     struct jesd204_link *lnk, int retry);
 int ad9088_jesd_rx_link_status_print(struct ad9088_phy *phy,

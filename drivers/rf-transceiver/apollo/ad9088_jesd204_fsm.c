@@ -6,6 +6,8 @@
  */
 
 #include "ad9088.h"
+#include "no_os_delay.h"
+#include "no_os_util.h"
 
 static int ad9088_jesd204_link_init(struct jesd204_dev *jdev,
 				    enum jesd204_state_op_reason reason,
@@ -537,6 +539,209 @@ static int ad9088_jesd204_link_running(struct jesd204_dev *jdev,
 	return JESD204_STATE_CHANGE_DONE;
 }
 
+static int ad9088_jesd204_post_setup_stage1(struct jesd204_dev *jdev,
+		enum jesd204_state_op_reason reason)
+{
+	struct ad9088_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct ad9088_phy *phy = priv->phy;
+
+	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
+		 jesd204_state_op_reason_str(reason));
+
+	if (!phy->iio_adf4030 || !phy->iio_adf4382) {
+		if (reason == JESD204_STATE_OP_REASON_INIT)
+			pr_info("Skipping MCS calibration\n");
+		return JESD204_STATE_CHANGE_DONE;
+	}
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+static int ad9088_jesd204_post_setup_stage2(struct jesd204_dev *jdev,
+		enum jesd204_state_op_reason reason)
+{
+	struct ad9088_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct ad9088_phy *phy = priv->phy;
+	struct adi_apollo_device_t *device = &phy->ad9088;
+	int ret;
+
+	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
+		 jesd204_state_op_reason_str(reason));
+
+	if (reason != JESD204_STATE_OP_REASON_INIT) {
+		adi_apollo_clk_mcs_trig_sync_enable(device, 0);
+		adi_apollo_clk_mcs_trig_reset_disable(device);
+
+		return JESD204_STATE_CHANGE_DONE;
+	}
+
+	if (phy->trig_sync_en) {
+		/* Use Trigger pin A0 to sync Rx and Tx */
+		ret = adi_apollo_clk_mcs_sync_trig_map(device, ADI_APOLLO_RX_TX_ALL,
+						       ADI_APOLLO_TRIG_PIN_A0);
+		if (ret) {
+			pr_err("Error in adi_apollo_clk_mcs_sync_trig_map %d\n", ret);
+			return ret;
+		}
+
+		/* Resync the Rx and Tx dig only during trig sync */
+		ret = adi_apollo_clk_mcs_trig_sync_enable(device, 0);
+		if (ret) {
+			pr_err("Error in adi_apollo_clk_mcs_trig_sync_enable %d\n",
+			       ret);
+			return ret;
+		}
+		ret = adi_apollo_clk_mcs_trig_reset_disable(device);
+		if (ret) {
+			pr_err("Error in adi_apollo_clk_mcs_trig_reset_disable %d\n",
+			       ret);
+			return ret;
+		}
+
+		ret = adi_apollo_clk_mcs_trig_reset_dsp_enable(device);
+		if (ret) {
+			pr_err("Error in adi_apollo_clk_mcs_trig_reset_dsp_enable %d\n",
+			       ret);
+			return ret;
+		}
+
+		/*
+		 * Set trig_syn to 1. Apollo will wait for a trigger from the FPGA. When
+		 * received, the FSRC will be reset.
+		 *
+		 * trig_sync is not self-clearing
+		 */
+		ret = adi_apollo_clk_mcs_trig_sync_enable(device, 1);
+		if (ret) {
+			pr_err("Error in adi_apollo_clk_mcs_trig_sync_enable %d\n",
+			       ret);
+			return ret;
+		}
+	}
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+static int ad9088_jesd204_post_setup_stage3(struct jesd204_dev *jdev,
+		enum jesd204_state_op_reason reason)
+{
+	struct ad9088_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct ad9088_phy *phy = priv->phy;
+
+	if (reason != JESD204_STATE_OP_REASON_INIT)
+		return JESD204_STATE_CHANGE_DONE;
+
+	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
+		 jesd204_state_op_reason_str(reason));
+
+	if (phy->triq_req_gpio && phy->trig_sync_en) {
+		no_os_gpio_set_value(phy->triq_req_gpio, 1);
+		no_os_udelay(1);
+		no_os_gpio_set_value(phy->triq_req_gpio, 0);
+	}
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+static int ad9088_jesd204_post_setup_stage4(struct jesd204_dev *jdev,
+		enum jesd204_state_op_reason reason)
+{
+	struct ad9088_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct ad9088_phy *phy = priv->phy;
+	struct adi_apollo_device_t *device = &phy->ad9088;
+	uint32_t period_fs, temp;
+	uint64_t period_rem;
+	int ret;
+
+	if (reason != JESD204_STATE_OP_REASON_INIT) {
+		phy->is_initialized = false;
+		return JESD204_STATE_CHANGE_DONE;
+	}
+
+	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
+		 jesd204_state_op_reason_str(reason));
+
+	if (phy->trig_sync_en) {
+		uint16_t phase, phase1;
+		uint16_t period, margin_low, margin_high;
+
+		/* Wait for the trigger sync to finish. */
+		ret = adi_apollo_hal_bf_wait_to_set(device,
+						    BF_TRIGGER_SYNC_DONE_A0_INFO(MCS_SYNC_MCSTOP0),
+						    1000000, 100);
+		if (ret) {
+			pr_err("Error in adi_apollo_hal_bf_wait_to_set %d\n", ret);
+			return ret;
+		}
+		ret = adi_apollo_clk_mcs_trig_phase_get(device,
+							ADI_APOLLO_TRIG_PIN_A0,
+							&phase, &phase1);
+		if (ret) {
+			pr_err("Error in adi_apollo_clk_mcs_trig_phase_get %d\n",
+			       ret);
+			return ret;
+		}
+
+		if (phy->profile.clk_cfg.clocking_mode ==
+		    ADI_APOLLO_CLOCKING_MODE_SDR_DIV_8)
+			temp = 8;
+		else
+			temp = 4;
+
+		period_fs = no_os_div64_u64_rem(1000000000000000ULL * temp,
+						phy->profile.clk_cfg.dev_clk_freq_Hz,
+						&period_rem);
+
+		pr_info("Trigger Phase %d (ideal %u) period %u fs\n", phase,
+			phy->profile.mcs_cfg.internal_sysref_prd_digclk_cycles_center / 2,
+			(unsigned int)period_fs);
+
+		/*
+		 * Validate trigger phase is within safe margin. Per UG-2300:
+		 * "The user is recommended to maintain the trigger phase close to
+		 * internal_sysref_prd_digclk_cycles/2. If the trigger is too close
+		 * to the rising edge of the internal SYSREF, the jitter on the
+		 * trigger path may cause the latency varying +/-1 internal SYSREF
+		 * clock cycle."
+		 *
+		 * Use 25%-75% of period as safe range (centered around ideal 50%).
+		 */
+		period = phy->profile.mcs_cfg.internal_sysref_prd_digclk_cycles_center;
+		margin_low = period / 4;
+		margin_high = (period * 3) / 4;
+
+		if (phase < margin_low || phase > margin_high)
+			pr_warning("Trigger phase %u outside safe margin [%u, %u]. Risk of +/-1 SYSREF cycle latency jitter.\n",
+				   phase, margin_low, margin_high);
+
+		ret = adi_apollo_clk_mcs_trig_sync_enable(device, 0);
+		if (ret) {
+			pr_err("Error in adi_apollo_clk_mcs_trig_sync_enable %d\n",
+			       ret);
+			return ret;
+		}
+		ret = adi_apollo_clk_mcs_trig_reset_disable(device);
+		if (ret) {
+			pr_err("Error in adi_apollo_clk_mcs_trig_reset_disable %d\n",
+			       ret);
+			return ret;
+		}
+	}
+
+	ad9088_print_sysref_phase(phy);
+
+	ret = adi_apollo_adc_bgcal_unfreeze(device, device->dev_info.is_8t8r ?
+					    ADI_APOLLO_ADC_ALL : ADI_APOLLO_ADC_ALL_4T4R);
+	if (ret) {
+		pr_err("Error in adi_apollo_adc_bgcal_unfreeze %d\n", ret);
+		return ret;
+	}
+
+	phy->is_initialized = true;
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
 static int ad9088_jesd204_uninit(struct jesd204_dev *jdev,
 				 enum jesd204_state_op_reason reason)
 {
@@ -578,6 +783,22 @@ const struct jesd204_dev_data jesd204_ad9088_init = {
 		},
 		[JESD204_OP_LINK_RUNNING] = {
 			.per_link = ad9088_jesd204_link_running,
+		},
+		[JESD204_OP_OPT_POST_SETUP_STAGE1] = {
+			.per_device = ad9088_jesd204_post_setup_stage1,
+			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
+		},
+		[JESD204_OP_OPT_POST_SETUP_STAGE2] = {
+			.per_device = ad9088_jesd204_post_setup_stage2,
+			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
+		},
+		[JESD204_OP_OPT_POST_SETUP_STAGE3] = {
+			.per_device = ad9088_jesd204_post_setup_stage3,
+			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
+		},
+		[JESD204_OP_OPT_POST_RUNNING_STAGE] = {
+			.per_device = ad9088_jesd204_post_setup_stage4,
+			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
 		},
 	},
 
