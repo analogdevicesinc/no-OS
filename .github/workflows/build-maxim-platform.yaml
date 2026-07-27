@@ -16,6 +16,10 @@ on:
       - 'drivers/platform/pico/**'
       - '.github/config/**'
       - '.github/scripts/**'
+      - '.github/workflows/build-xilinx.yaml'
+      - '.github/workflows/build-pico.yaml'
+      - '.github/workflows/build-common.yaml'
+      - '.github/workflows/deploy-docs.yaml'
   push:
     branches:
       - main
@@ -31,6 +35,10 @@ on:
       - 'drivers/platform/pico/**'
       - '.github/config/**'
       - '.github/scripts/**'
+      - '.github/workflows/build-xilinx.yaml'
+      - '.github/workflows/build-pico.yaml'
+      - '.github/workflows/build-common.yaml'
+      - '.github/workflows/deploy-docs.yaml'
 
 permissions:
   contents: read
@@ -53,7 +61,7 @@ jobs:
       RELEASES_DIR: ${{ github.workspace }}/latest_build
       LOGS_DIR: ${{ github.workspace }}/logs
     container:
-      image: ${{ vars.DOCKER_REGISTRY }}/maxim-platform:1.0.0
+      image: ${{ vars.DOCKER_REGISTRY }}/maxim-platform:latest
       credentials:
         username: ${{ secrets.CLOUDSMITH_USER }}
         password: ${{ secrets.CLOUDSMITH_API_KEY }}
@@ -84,7 +92,7 @@ jobs:
             -hdl_branch ${{ env.HDL_BRANCH }}
         env:
           CLOUDSMITH_API_KEY: ${{ env.CLOUDSMITH_API_KEY }}
-          TOKEN: ${{ secrets.GH_IS_TOKEN }}
+          TOKEN: ${{ secrets.GH_GHDL_TOKEN }}
       - name: Upload release artifact
         uses: actions/upload-artifact@v7
         with:
