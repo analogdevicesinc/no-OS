@@ -118,6 +118,7 @@ config TRNG
 endmenu
 
 source "iio/Kconfig"
+source "capi/Kconfig"
 source "drivers/Kconfig"
 source "libraries/Kconfig"
 source "network/Kconfig"

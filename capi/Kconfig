@@ -1,0 +1,50 @@
+menuconfig CAPI
+	bool "CAPI (Common API) abstraction layer"
+	default n
+	help
+	  Enable the CAPI common-API abstraction layer. CAPI provides a
+	  platform-neutral dispatcher layer (capi/src) with platform-specific
+	  backends (capi/platform/<platform>). Each peripheral module below
+	  enables its dispatcher; the matching backend is compiled from the
+	  active platform's directory and selects PS vs PL hardware internally
+	  via #ifdef on the BSP-provided XPAR_* macros.
+
+if CAPI
+
+config CAPI_UART
+	bool "CAPI UART"
+	default n
+
+config CAPI_ALLOC
+	bool "CAPI alloc"
+	default n
+
+config CAPI_TIME
+	bool "CAPI time"
+	default n
+
+config CAPI_GPIO
+	bool "CAPI GPIO"
+	default n
+
+config CAPI_IRQ
+	bool "CAPI IRQ"
+	default n
+
+config CAPI_SPI
+	bool "CAPI SPI"
+	default n
+
+config CAPI_TIMER
+	bool "CAPI timer"
+	default n
+
+config CAPI_I2C
+	bool "CAPI I2C"
+	default n
+
+config CAPI_DMA
+	bool "CAPI DMA"
+	default n
+
+endif # CAPI
