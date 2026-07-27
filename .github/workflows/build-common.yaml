@@ -32,6 +32,7 @@ jobs:
           ${{ github.workspace }}/.github/scripts/astyle.sh
         env:
           NUM_JOBS: ${{ env.NUM_JOBS }}
+          TARGET_BRANCH: ${{ github.base_ref }}
       - name: Check-cpp format
         shell: sh
         run: |
@@ -74,5 +75,5 @@ jobs:
           pr_id: ${{ github.event == 'pull_request' && github.event.pull_request.number }}
           comment: ${{ github.event == 'pull_request' && 'true' }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          updateComment: ${{ github.event == 'pull_request' && 'true' }}
+          updateComment: ${{ github.event_name == 'pull_request' && 'true' }}
       

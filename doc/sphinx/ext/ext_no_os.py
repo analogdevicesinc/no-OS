@@ -53,7 +53,7 @@ def builder_inited_no_os_doxygen(app) -> None:
                     return
         return
 
-    get_exclusions(path.join(root_path, "ci", "gen_dox.sh"))
+    get_exclusions(path.join(root_path, ".github", "scripts", "gen_dox.sh"))
 
     base_path = path.join(root_path, "doc", "doxygen", "build",
                           "doxygen_doc", "html")

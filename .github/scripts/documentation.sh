@@ -26,6 +26,8 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+set -e
+
 COMMIT_RANGE="$1"
 
 parse_commit_range() {
@@ -45,15 +47,15 @@ parse_commit_range() {
 
 	if [ -z "$COMMIT_RANGE" ]
 	then
-		echo_green "Using only latest commit, since there is no Pull Request"
+		echo "Using only latest commit, since there is no Pull Request"
 		COMMIT_RANGE=HEAD~1
 	fi
 
-	echo_green "Running $operation_name on commit range '$COMMIT_RANGE'"
-	echo_green "Commits should be:"
+	echo "Running $operation_name on commit range '$COMMIT_RANGE'"
+	echo "Commits should be:"
 	if ! git rev-parse $COMMIT_RANGE ; then
-		echo_red "Failed to parse commit range '$COMMIT_RANGE'"
-		echo_green "Using only latest commit"
+		echo "Failed to parse commit range '$COMMIT_RANGE'"
+		echo "Using only latest commit"
 		COMMIT_RANGE=HEAD~1
 	fi
 }
@@ -259,7 +261,7 @@ build_doxygen
 
 build_sphinx
 
-if [[ "UPDATE_GH_PAGES" == 'true' ]]; then
+if [[ "$UPDATE_GH_PAGES" == 'true' ]]; then
         update_gh_pages
 else
         echo "Not updating gh-pages ..."

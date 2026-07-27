@@ -32,6 +32,20 @@ set -e
 ASTYLE_EXT_LIST="${ASTYLE_EXT_LIST} .c .h"
 COMMIT_RANGE="$1"
 
+get_script_path() {
+	local script="$1"
+
+	[ -n "$script" ] || return 1
+
+	if [ -f ".github/scripts/$script" ] ; then
+		echo ".github/scripts/$script"
+	elif [ -f "build/$script" ] ; then
+		echo "build/$script"
+	else
+		return 1
+	fi
+}
+
 parse_commit_range() {
 	local operation_name="${1:-check}"
 
