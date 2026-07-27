@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 DEPS_DIR=${TOP_DIR}/deps
 
 echo "Building and deploying docs for no-os ..."
@@ -10,19 +12,19 @@ sudo apt-get install -y graphviz python3-pip
 pip3 install pip --upgrade
 pip3 install -r ${TOP_DIR}/doc/sphinx/source/requirements.txt
 
-DOXYGEN_URL="https://sourceforge.net/projects/doxygen/files/rel-${VERSION}/doxygen-${VERSION}.src.tar.gz/"
+DOXYGEN_URL="https://sourceforge.net/projects/doxygen/files/rel-${VERSION}/doxygen-${VERSION}.src.tar.gz"
 DOXYGEN_THEME_URL="https://github.com/analogdevicesinc/doctools/releases/download/latest/adi-harmonic-doxygen-theme.tar.gz"
 
 mkdir -p ${DEPS_DIR}/doxygen ${DEPS_DIR}/doxygen-theme
 cd ${DEPS_DIR}
 
 # Download doxygen tools
-wget ${DOXYGEN_URL} >/dev/null
+wget --no-check-certificate --quiet ${DOXYGEN_URL} > /dev/null
 tar --strip-components=1 -xvf doxygen-${VERSION}.src.tar.gz -C doxygen
 
 # Download doxygen theme
-wget ${DOXYGEN_THEME_URL} >/dev/null
-tar --strip-components=1 -xvf adi-harmonic-doxygen-theme.tar.gz -C doxygen
+wget --no-check-certificate --quiet ${DOXYGEN_THEME_URL} > /dev/null
+tar --strip-components=1 -xvf adi-harmonic-doxygen-theme.tar.gz -C doxygen-theme
 
 # Install doxygen
 cd doxygen

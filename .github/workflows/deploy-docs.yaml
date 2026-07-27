@@ -7,12 +7,20 @@ on:
         required: false
         default: 'false'
 
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**/*.rst'
+      - '**/*.md'
+      - '.github/workflows/deploy-docs.yaml'
   push:
     branches:
       - main
     paths:
       - '**/*.rst'
       - '**/*.md'
+      - '.github/workflows/deploy-docs.yaml'
 
 permissions:
   contents: write
@@ -50,4 +58,4 @@ jobs:
           TOP_DIR: ${{ github.workspace }}
           NUM_JOBS: ${{ env.NUM_JOBS }}
           VERSION: '1.13.2'
-          UPDATE_GH_PAGES: ${{ github.event == 'workflow_dispatch' && inputs.update-gh-pages || 'true' }}
+          UPDATE_GH_PAGES: ${{ github.event_name == 'workflow_dispatch' && inputs.update-gh-pages || github.event == 'push' && github.ref == 'main' && 'true' || 'false' }}
