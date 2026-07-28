@@ -62,10 +62,15 @@ def parse_input():
 	parser.add_argument('-hdl_branch', default='main', help="Name of hdl_branch from which to downlaod hardware or \
 					 we can also specify a timestamp folder from the specific branch but needs to have a specific format, \
 					 of 'branch_name/YYYY_mm_dd-HH_MM_SS' example: main/2023_09_20-06_52_29")
+	parser.add_argument('-combos_file', help="Path to a JSON filter produced by "
+					 "ci_select_builds.py. When given, only the listed "
+					 "(project, variant, board) combinations are built (unless "
+					 "the filter has build_all=true, which builds everything).")
 	args = parser.parse_args()
 
 	return (args.noos_location, args.export_dir, args.log_dir, args.project,
-		args.platform, args.build_name, args.builds_dir, args.hardware, args.hdl_branch)
+		args.platform, args.build_name, args.builds_dir, args.hardware, args.hdl_branch,
+		args.combos_file)
 
 ERR = 0
 LOG_START = " -> "
@@ -250,8 +255,27 @@ def get_hardware(hardware, platform, builds_dir):
 
 	return (filename, 1, err)
 
+def load_combos_filter(combos_file):
+	"""Load a ci_select_builds.py filter.
+
+	Returns None to mean "no restriction, build everything" (either no filter
+	was given or the filter has build_all=true). Otherwise returns a set of
+	(project, variant, board) tuples to restrict the build to.
+	"""
+	if not combos_file:
+		return None
+	with open(combos_file) as f:
+		data = json.load(f)
+	if data.get("build_all"):
+		return None
+	return {
+		(c["project"], c["variant"], c["board"])
+		for c in data.get("combos", [])
+	}
+
+
 def build_cmake_project(noos, project, _platform, _build_name, export_dir,
-			log_dir, cmake_builds_dir, builds_dir):
+			log_dir, cmake_builds_dir, builds_dir, combos_allow=None):
 	"""Build the CMake/Kconfig (Maxim/STM32/Pico/Xilinx) side of a project.
 
 	Discovers the project's project/variant/board combinations from the board
@@ -281,6 +305,11 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		combos = [c for c in combos if c['platform'] == _platform]
 	if _build_name is not None:
 		combos = [c for c in combos if c['variant'] == _build_name]
+	# CI change-based selection: keep only the combinations the selector chose.
+	# combos_allow is None when no filter applies (build everything).
+	if combos_allow is not None:
+		combos = [c for c in combos
+			  if (c['project'], c['variant'], c['board']) in combos_allow]
 
 	if not combos:
 		return None
@@ -409,15 +438,23 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 
 def main():
 	(noos, export_dir, log_dir, _project,
-	 _platform, _build_name, _builds_dir, _hw, hdl_branch) = parse_input()
+	 _platform, _build_name, _builds_dir, _hw, hdl_branch, combos_file) = parse_input()
 	projets = os.path.join(noos,'projects')
 	ensure_dir(export_dir)
 	ensure_dir(log_dir)
+	combos_allow = load_combos_filter(combos_file)
+	# Projects with at least one selected combo; lets us skip the rest (and
+	# their hardware download) outright when a filter is active.
+	selected_projects = (
+		None if combos_allow is None
+		else {p for (p, _v, _b) in combos_allow})
 	(builds_dir, blacklist) = configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch)
 	for project in os.listdir(projets):
 		if _project is not None:
 			if _project != project:
 				continue
+		if selected_projects is not None and project not in selected_projects:
+			continue
 		project_dir = os.path.join(projets, project)
 		# CMake is the only build system; skip projects without a CMakeLists.txt.
 		if not os.path.isfile(os.path.join(project_dir, 'CMakeLists.txt')):
@@ -431,7 +468,8 @@ def main():
 		cmake_builds_dir = builds_dir + '_cmake'
 		ensure_dir(cmake_builds_dir)
 		cmake_ok = build_cmake_project(noos, project, _platform, _build_name,
-					 export_dir, log_dir, cmake_builds_dir, builds_dir)
+					 export_dir, log_dir, cmake_builds_dir, builds_dir,
+					 combos_allow=combos_allow)
 		if cmake_ok is not None:
 			status = 'OK' if cmake_ok == 1 else 'Fail'
 			os.system('echo Project %20s -- %s >> %s' % (project, status, all_status))
