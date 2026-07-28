@@ -51,7 +51,9 @@ Or, in one step with the helper (pass the ``.xsa`` via ``--hardware``):
           --hardware path/to/system_top.xsa
 
 The firmware (``build/<project>.elf``) and the intermediate Vitis BSP/FSBL work
-directories are created under ``build-<project>/``. See the
+directories are created under the configured build directory — the one passed to
+``cmake -B`` above, or ``build/<project>-<variant>-<board>/`` when using the
+helper. See the
 :doc:`../cmake_cheatsheet` for the full set of build, configure and cleanup
 commands.
 

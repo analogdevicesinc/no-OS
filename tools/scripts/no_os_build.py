@@ -52,7 +52,7 @@ CMAKE = _resolve_cmake()
 
 def combo_build_dir(build_dir_base, combo):
     """Return the build directory path for a given combination."""
-    name = f"build-{combo['project']}-{combo['variant']}-{combo['board']}"
+    name = f"{combo['project']}-{combo['variant']}-{combo['board']}"
     return build_dir_base / name
 
 
@@ -513,7 +513,7 @@ def cmd_build(args, repo_root, presets):
         if not build_dir_base.is_absolute():
             build_dir_base = repo_root / build_dir_base
     else:
-        build_dir_base = repo_root
+        build_dir_base = repo_root / "build"
     total = len(filtered)
 
     if args.dry_run:
@@ -745,7 +745,7 @@ def main():
     build_parser.add_argument("--variant", help="Variant to build")
     build_parser.add_argument("--board", help="Board to build for")
     build_parser.add_argument(
-        "--build-dir", help="Base directory where build-<project>-<variant>-<board> directories are created (default: repo root)"
+        "--build-dir", help="Base directory where <project>-<variant>-<board> directories are created (default: build/ at the repo root)"
     )
     build_parser.add_argument(
         "--jobs", "-j", type=int, help="Parallel jobs for cmake --build"
