@@ -12,6 +12,7 @@
 #include <xparameters.h>
 #include "capi_uart.h"
 #include "xilinx_capi_gpio.h"
+#include "xilinx_capi_irq.h"
 
 extern struct capi_uart_ops capi_uart_xilinx_ps_ops;
 
@@ -94,5 +95,76 @@ extern struct capi_uart_ops capi_uart_xilinx_ps_ops;
 #define GPIO_HAS_PIN_LOOPBACK	1
 #define GPIO_OUTPUT_PIN_NUMBERS	{ 0U }
 #define GPIO_INPUT_PIN_NUMBERS	{ 0U }
+
+/*
+ * Physical (global) input pin the GPIO-IRQ hooks configure directly through
+ * XGpioPs. This is the JA1 EMIO line the test samples for its edge interrupt.
+ */
+#define GPIO_INPUT_PIN		54U
+
+/*
+ * Interrupts one low->high pulse on the loopback pin actually raises, which is
+ * a property of the input's detector and so differs per backend:
+ *
+ *   PS (XGpioPs): armed XGPIOPS_IRQ_TYPE_EDGE_RISING, a real single-edge
+ *     detector -- the falling half of the pulse is ignored. One event.
+ *   PL (AXI GPIO): channel-2 raises ip2intc_irpt on ANY change to the input
+ *     register; the IP has no edge-type control at all. Both halves of the
+ *     pulse are interrupt-worthy. Two events.
+ *
+ * The IRQ suite's exact-count case multiplies its pulse count by this, so a
+ * change-triggered input is not mistaken for duplicate delivery. Cases that
+ * only assert "something arrived" ignore it.
+ */
+#if defined(GPIO_SEL_PL)
+#define GPIO_IRQ_EVENTS_PER_EDGE	2U
+#else
+#define GPIO_IRQ_EVENTS_PER_EDGE	1U
+#endif
+
+/*
+ * IRQ controller topology, selected from the BSP. IRQ_CTRL_IDENTIFIER is the
+ * root controller capi_irq_init() brings up; the IRQ test and every IRQ-backed
+ * async peripheral initialize through it. IRQ_CTRL_EXTRA is config->extra.
+ *
+ *   1. Cascade (GIC + AXI INTC) - GIC root, INTC sub-controller. extra = &cascade
+ *   2. PS GIC only              - GIC is root, no PL INTC.        extra = NULL
+ *   3. AXI INTC only            - MicroBlaze root, no GIC.        extra = NULL
+ *      !! NOT DESIGNED YET, NEEDS SPECIAL MAILBOX INTERMEDIATE
+ *
+ * Note the AXI INTC's presence macro is XPAR_XINTC_NUM_INSTANCES (the canonical
+ * XIntc name the SDT BSP emits), NOT XPAR_AXI_INTC_NUM_INSTANCES.
+ *
+ * When both controllers exist the hardware is a cascade (the AXI INTC's output
+ * is a GIC SPI), so cascade is the default. Define IRQ_SEL_GIC before this
+ * point to force GIC-only regardless (the INTC is then left unused by the API).
+ */
+#if !defined(IRQ_SEL_GIC) && !defined(IRQ_SEL_CASCADE)
+#if defined(XPAR_XSCUGIC_NUM_INSTANCES) && defined(XPAR_XINTC_NUM_INSTANCES)
+#define IRQ_SEL_CASCADE
+#endif
+#endif
+
+#if defined(IRQ_SEL_CASCADE)
+/* Cascade: the GIC owns the API as root, the AXI INTC hangs off it. */
+#define IRQ_CTRL_IDENTIFIER	XPAR_XSCUGIC_0_BASEADDR
+#define IRQ_CTRL_EXTRA		(&(struct capi_irq_xilinx_extra) { \
+			.subctrl = &xilinx_capi_irq_intc_subctrl, \
+			.subctrl_ctrl_id = XPAR_AXI_INTC_0_BASEADDR, \
+			.cascade_gic_irq = CAPI_IRQ_XILINX_CASCADE_AUTO })
+#elif defined(XPAR_XSCUGIC_NUM_INSTANCES)
+/* PS GIC only. On Zynq the GIC is always present, so a polled ("noirq") build
+ * still lands here; the GPIO-IRQ test skips at runtime when no fabric IRQ is
+ * wired (main.c returns -ENOTSUP), not by leaving the root undefined. */
+#define IRQ_CTRL_IDENTIFIER	XPAR_XSCUGIC_0_BASEADDR
+#define IRQ_CTRL_EXTRA		NULL
+#elif defined(XPAR_XINTC_NUM_INSTANCES)
+/* AXI INTC only (MicroBlaze root). */
+#define IRQ_CTRL_IDENTIFIER	XPAR_AXI_INTC_0_BASEADDR
+#define IRQ_CTRL_EXTRA		NULL
+#else
+/* No interrupt controller in the BSP: leave IRQ_CTRL_IDENTIFIER undefined so
+ * the IRQ test and every IRQ-backed async path compile out. */
+#endif
 
 #endif /* __PARAMETERS_H__ */
