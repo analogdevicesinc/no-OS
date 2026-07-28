@@ -174,7 +174,94 @@ int basic_example_main()
 		goto error_topology;
 	}
 
+	axi_jesd204_tx_status_read(tx_jesd);
+	axi_jesd204_rx_status_read(rx_jesd);
+
 	pr_info("Project configured\n");
+
+	/* NCO smoke test: tune RX CNCO0 side A, read it back. */
+	{
+		int64_t nco_set = 125000000; /* 125 MHz */
+		int64_t nco_get = 0;
+
+		ret = ad9088_set_cnco_freq(ad9088_phy, ADI_APOLLO_RX, 0, 0,
+					   nco_set);
+		if (ret) {
+			pr_err("NCO test: set CNCO freq failed (%d)\n", ret);
+		} else {
+			ret = ad9088_get_cnco_freq(ad9088_phy, ADI_APOLLO_RX, 0,
+						   0, &nco_get);
+			if (ret)
+				pr_err("NCO test: get CNCO freq failed (%d)\n",
+				       ret);
+			else
+				pr_info("NCO test: RX CNCO0-A set %lld Hz, read %lld Hz\n",
+					nco_set, nco_get);
+		}
+	}
+
+	/* NCO smoke test: tune RX FNCO0 side A, read it back. */
+	{
+		int64_t nco_set = 40200000; /* 40 MHz */
+		int64_t nco_get = 0;
+
+		ret = ad9088_set_fnco_freq(ad9088_phy, ADI_APOLLO_RX, 0, 0,
+					   nco_set);
+		if (ret) {
+			pr_err("NCO test: set FNCO freq failed (%d)\n", ret);
+		} else {
+			ret = ad9088_get_fnco_freq(ad9088_phy, ADI_APOLLO_RX, 0,
+						   0, &nco_get);
+			if (ret)
+				pr_err("NCO test: get FNCO freq failed (%d)\n",
+				       ret);
+			else
+				pr_info("NCO test: RX FNCO0-A set %lld Hz, read %lld Hz\n",
+					nco_set, nco_get);
+		}
+	}
+
+	/* NCO smoke test: tune TX CNCO0 side A, read it back. */
+	{
+		int64_t nco_set = 125000000; /* 125 MHz */
+		int64_t nco_get = 0;
+
+		ret = ad9088_set_cnco_freq(ad9088_phy, ADI_APOLLO_TX, 0, 0,
+					   nco_set);
+		if (ret) {
+			pr_err("NCO test: set TX CNCO freq failed (%d)\n", ret);
+		} else {
+			ret = ad9088_get_cnco_freq(ad9088_phy, ADI_APOLLO_TX, 0,
+						   0, &nco_get);
+			if (ret)
+				pr_err("NCO test: get TX CNCO freq failed (%d)\n",
+				       ret);
+			else
+				pr_info("NCO test: TX CNCO0-A set %lld Hz, read %lld Hz\n",
+					nco_set, nco_get);
+		}
+	}
+
+	/* NCO smoke test: tune TX FNCO0 side A, read it back. */
+	{
+		int64_t nco_set = 40200000; /* 40 MHz */
+		int64_t nco_get = 0;
+
+		ret = ad9088_set_fnco_freq(ad9088_phy, ADI_APOLLO_TX, 0, 0,
+					   nco_set);
+		if (ret) {
+			pr_err("NCO test: set TX FNCO freq failed (%d)\n", ret);
+		} else {
+			ret = ad9088_get_fnco_freq(ad9088_phy, ADI_APOLLO_TX, 0,
+						   0, &nco_get);
+			if (ret)
+				pr_err("NCO test: get TX FNCO freq failed (%d)\n",
+				       ret);
+			else
+				pr_info("NCO test: TX FNCO0-A set %lld Hz, read %lld Hz\n",
+					nco_set, nco_get);
+		}
+	}
 
 	return 0;
 

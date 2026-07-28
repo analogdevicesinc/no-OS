@@ -33,6 +33,11 @@
 #include "adi_apollo_bf_txrx_prefsrc_reconf.h"
 #include "adi_apollo_bf_master_bias_ctrl.h"
 #include "adi_apollo_sniffer.h"
+#include "adi_apollo_cnco.h"
+#include "adi_apollo_fnco.h"
+#include "adi_apollo_cddc.h"
+#include "adi_apollo_cduc.h"
+#include "adi_utils.h"
 
 
 // #include "../cf_axi_adc.h"
@@ -142,6 +147,26 @@ enum ad9088_clocks {
 	TX_SAMPL_CLK,
 	RX_SAMPL_CLK_LINK2, /* Dual Link */
 	NUM_AD9088_CLKS,
+};
+
+/* CNCO block-select masks indexed by [side][cddc_num] */
+static const uint32_t cnco_masks[ADI_APOLLO_NUM_SIDES][4] = {
+	{ ADI_APOLLO_CNCO_A0, ADI_APOLLO_CNCO_A1,
+	  ADI_APOLLO_CNCO_A2, ADI_APOLLO_CNCO_A3 },
+	{ ADI_APOLLO_CNCO_B0, ADI_APOLLO_CNCO_B1,
+	  ADI_APOLLO_CNCO_B2, ADI_APOLLO_CNCO_B3 },
+};
+
+/* FNCO/FDDC block-select masks indexed by [side][fddc_num] */
+static const uint32_t fnco_masks[ADI_APOLLO_NUM_SIDES][8] = {
+	{ ADI_APOLLO_FDDC_A0, ADI_APOLLO_FDDC_A1,
+	  ADI_APOLLO_FDDC_A2, ADI_APOLLO_FDDC_A3,
+	  ADI_APOLLO_FDDC_A4, ADI_APOLLO_FDDC_A5,
+	  ADI_APOLLO_FDDC_A6, ADI_APOLLO_FDDC_A7 },
+	{ ADI_APOLLO_FDDC_B0, ADI_APOLLO_FDDC_B1,
+	  ADI_APOLLO_FDDC_B2, ADI_APOLLO_FDDC_B3,
+	  ADI_APOLLO_FDDC_B4, ADI_APOLLO_FDDC_B5,
+	  ADI_APOLLO_FDDC_B6, ADI_APOLLO_FDDC_B7 },
 };
 
 // struct ad9088_clock {
@@ -259,6 +284,9 @@ struct ad9088_phy {
 	uint16_t fnco_test_tone_offset[NUM_RXTX][ADI_APOLLO_NUM_SIDES][MAX_NUM_CHANNELIZER];
 	bool fnco_test_tone_en[NUM_RXTX][ADI_APOLLO_NUM_SIDES][MAX_NUM_CHANNELIZER];
 
+	bool cnco_dual_modulus_mode_en;
+	bool fnco_dual_modulus_mode_en;
+
 	uint8_t cfir_profile[NUM_RXTX][ADI_APOLLO_CFIR_ALL][ADI_APOLLO_CFIR_DP_ALL];
 	uint8_t cfir_enable[NUM_RXTX][ADI_APOLLO_CFIR_ALL][ADI_APOLLO_CFIR_DP_ALL];
 
@@ -328,6 +356,23 @@ int ad9088_jesd_tx_link_status_print(struct ad9088_phy *phy,
 int ad9088_jesd_rx_link_status_print(struct ad9088_phy *phy,
 				     struct jesd204_link *lnk, int retry);
 extern const char *const ad9088_fsm_links_to_str[];
+
+/* NCO (Numerically Controlled Oscillator) control -- Step 6 */
+int adi_ad9088_calc_nco_ftw(struct ad9088_phy *phy, uint64_t freq,
+			    int64_t nco_shift, uint32_t div, uint32_t bits,
+			    uint64_t *ftw, uint64_t *frac_a, uint64_t *frac_b);
+int adi_ad9088_calc_nco_freq(struct ad9088_phy *phy, uint64_t freq,
+			     uint64_t ftw, uint32_t a, uint32_t b,
+			     uint32_t bits, int64_t *nco_shift);
+int ad9088_set_cnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
+			 uint8_t side, uint8_t cddc_num, int64_t freq_hz);
+int ad9088_get_cnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
+			 uint8_t side, uint8_t cddc_num, int64_t *freq_hz);
+int ad9088_set_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
+			 uint8_t side, uint8_t fddc_num, int64_t freq_hz);
+int ad9088_get_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
+			 uint8_t side, uint8_t fddc_num, int64_t *freq_hz);
+
 int ad9088_parse_struct(struct ad9088_phy **device,
 			const struct ad9088_init_param *init_param);
 int ad9088_init(struct ad9088_phy **device,

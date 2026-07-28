@@ -24,6 +24,280 @@ static const uint8_t lanes_all[] = {
 	14, 15, 16, 17, 18, 19, 20, 21, 22, 23
 };
 
+/*
+ * Calculate the NCO frequency tuning word (FTW) from a frequency shift in Hz.
+ * Ported from the kernel ad9088 driver. div is the datapath decimation/
+ * interpolation ratio, bits is 32 for CNCOs and 48 for FNCOs.
+ */
+int adi_ad9088_calc_nco_ftw(struct ad9088_phy *phy, uint64_t freq,
+			    int64_t nco_shift, uint32_t div, uint32_t bits,
+			    uint64_t *ftw, uint64_t *frac_a, uint64_t *frac_b)
+{
+	bool neg = false;
+	int ret;
+	uint64_t f_clamp = freq;
+	int64_t val;
+
+	if (!freq || !bits || bits > 48 || !ftw || !frac_a || !frac_b || !div)
+		return -EINVAL;
+
+	f_clamp /= div;
+
+	pr_debug("%s: freq=%llu, nco_shift=%lld, bits=%u\n",
+		 __func__, f_clamp, nco_shift, bits);
+
+	val = (int64_t)(f_clamp >> 1);
+	nco_shift = no_os_clamp(nco_shift, -val, val);
+
+	if (nco_shift < 0) {
+		nco_shift = -nco_shift;
+		neg = true;
+	}
+
+	ret = adi_api_utils_ratio_decomposition(nco_shift * div, freq, bits,
+						ftw, frac_a, frac_b);
+	if (ret) {
+		pr_err("Error in ratio decomposition: (%d)\n", ret);
+		return ret;
+	}
+
+	if (bits == 32 && !phy->cnco_dual_modulus_mode_en) {
+		*frac_a = 0;
+		*frac_b = 1;
+	} else if ((bits == 48) && !phy->fnco_dual_modulus_mode_en) {
+		*frac_a = 0;
+		*frac_b = 1;
+	} else if ((bits == 48) && phy->fnco_dual_modulus_mode_en) {
+		/* frac_a and frac_b are 24-bit registers */
+		while (*frac_a >= (1 << 24) || *frac_b >= (1 << 24)) {
+			*frac_a >>= 1;
+			*frac_b >>= 1;
+		};
+	};
+
+	if (neg)
+		*ftw = (1ULL << bits) - *ftw;
+
+	pr_debug("%s: ftw=%llx, frac_a=%llu, frac_b=%llu\n",
+		 __func__, *ftw, *frac_a, *frac_b);
+
+	return 0;
+}
+
+/*
+ * Calculate the NCO frequency shift in Hz from a frequency tuning word (FTW).
+ * Reverse of adi_ad9088_calc_nco_ftw(). Ported from the kernel ad9088 driver.
+ */
+int adi_ad9088_calc_nco_freq(struct ad9088_phy *phy, uint64_t freq,
+			     uint64_t ftw, uint32_t a, uint32_t b,
+			     uint32_t bits, int64_t *nco_shift)
+{
+	uint64_t hi, lo, mod;
+	bool neg = false;
+
+	pr_debug("%s: freq=%llu, ftw=%llu, a=%u, b=%u, bits=%u\n",
+		 __func__, freq, ftw, a, b, bits);
+
+	if (!b)
+		b = 1;
+
+	if (!freq || !bits || bits > 48 || a > b)
+		return -EINVAL;
+
+	mod = (1ULL << bits);
+
+	if (ftw > (mod >> 1)) {
+		ftw = mod - ftw;
+		neg = true;
+	}
+
+	adi_api_utils_mult_128(freq, (ftw * 100ULL) + ((100 * a) / b), &hi, &lo);
+	adi_api_utils_add_128(hi, lo, 0, (mod * 100) >> 1, &hi, &lo);
+	adi_api_utils_div_128(hi, lo, 0, (mod * 100), &hi,
+			      (uint64_t *)nco_shift);
+
+	if (neg)
+		*nco_shift *= -1;
+
+	return 0;
+}
+
+/*
+ * Set the coarse NCO (CNCO) frequency shift for a given side/CDDC.
+ * terminal selects TX (CDUC) or RX (CDDC).
+ */
+int ad9088_set_cnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
+			 uint8_t side, uint8_t cddc_num, int64_t freq_hz)
+{
+	struct adi_apollo_cnco_cfg *nco;
+	uint64_t ftw, frac_a, frac_b, f;
+	uint32_t mask;
+	uint8_t cddc_pi;
+	int ret;
+
+	if (!phy || side >= ADI_APOLLO_NUM_SIDES || cddc_num >= 4)
+		return -EINVAL;
+
+	mask = cnco_masks[side][cddc_num];
+	cddc_pi = cddc_num % ADI_APOLLO_CDUCS_PER_SIDE;
+
+	if (terminal == ADI_APOLLO_TX)
+		f = phy->profile.dac_cfg[side].dac_sampling_rate_Hz;
+	else
+		f = phy->profile.adc_cfg[side].adc_sampling_rate_Hz;
+
+	ret = adi_ad9088_calc_nco_ftw(phy, f, freq_hz, 1, 32, &ftw,
+				      &frac_a, &frac_b);
+	if (ret)
+		return ret;
+
+	ret = adi_apollo_cnco_ftw_set(&phy->ad9088, terminal, mask, 0, 1, ftw);
+	if (ret)
+		return ret;
+
+	ret = adi_apollo_cnco_mod_set(&phy->ad9088, terminal, mask,
+				      frac_a, frac_b);
+	if (ret)
+		return ret;
+
+	if (terminal == ADI_APOLLO_TX)
+		nco = &phy->profile.tx_path[side].tx_cduc[cddc_pi].nco[0];
+	else
+		nco = &phy->profile.rx_path[side].rx_cddc[cddc_pi].nco[0];
+
+	nco->nco_phase_inc = ftw;
+	nco->nco_phase_inc_frac_a = frac_a;
+	nco->nco_phase_inc_frac_b = frac_b;
+
+	return 0;
+}
+
+/* Read back the coarse NCO (CNCO) frequency shift for a given side/CDDC. */
+int ad9088_get_cnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
+			 uint8_t side, uint8_t cddc_num, int64_t *freq_hz)
+{
+	struct adi_apollo_cnco_cfg *nco;
+	uint8_t cddc_pi;
+	uint64_t f;
+
+	if (!phy || !freq_hz || side >= ADI_APOLLO_NUM_SIDES || cddc_num >= 4)
+		return -EINVAL;
+
+	cddc_pi = cddc_num % ADI_APOLLO_CDUCS_PER_SIDE;
+
+	if (terminal == ADI_APOLLO_TX) {
+		nco = &phy->profile.tx_path[side].tx_cduc[cddc_pi].nco[0];
+		f = phy->profile.dac_cfg[side].dac_sampling_rate_Hz;
+	} else {
+		nco = &phy->profile.rx_path[side].rx_cddc[cddc_pi].nco[0];
+		f = phy->profile.adc_cfg[side].adc_sampling_rate_Hz;
+	}
+
+	return adi_ad9088_calc_nco_freq(phy, f, nco->nco_phase_inc,
+					nco->nco_phase_inc_frac_a,
+					nco->nco_phase_inc_frac_b, 32,
+					freq_hz);
+}
+
+/*
+ * Set the fine NCO (FNCO) frequency shift for a given side/FDDC.
+ * terminal selects TX (FDUC) or RX (FDDC).
+ */
+int ad9088_set_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
+			 uint8_t side, uint8_t fddc_num, int64_t freq_hz)
+{
+	adi_apollo_fine_nco_main_pgm_t config = {0};
+	struct adi_apollo_fnco_cfg *nco;
+	adi_apollo_cduc_ratio_e drc_ratio;
+	uint64_t ftw, frac_a, frac_b, f;
+	uint32_t mask, cddc_dcm;
+	int64_t fnco_phase;
+	uint8_t fddc_pi, cddc_pi;
+	int ret;
+
+	if (!phy || side >= ADI_APOLLO_NUM_SIDES || fddc_num >= 8)
+		return -EINVAL;
+
+	mask = fnco_masks[side][fddc_num];
+	fddc_pi = fddc_num % ADI_APOLLO_FDUCS_PER_SIDE;
+	cddc_pi = (fddc_num / 2) % ADI_APOLLO_CDUCS_PER_SIDE;
+
+	if (terminal == ADI_APOLLO_TX) {
+		drc_ratio = phy->profile.tx_path[side].tx_cduc[cddc_pi].drc_ratio;
+		f = phy->profile.dac_cfg[side].dac_sampling_rate_Hz;
+	} else {
+		drc_ratio = phy->profile.rx_path[side].rx_cddc[cddc_pi].drc_ratio;
+		f = phy->profile.adc_cfg[side].adc_sampling_rate_Hz;
+	}
+	adi_apollo_cddc_dcm_bf_to_val(&phy->ad9088, drc_ratio, &cddc_dcm);
+
+	ret = adi_ad9088_calc_nco_ftw(phy, f, freq_hz, cddc_dcm, 48, &ftw,
+				      &frac_a, &frac_b);
+	if (ret)
+		return ret;
+
+	fnco_phase = phy->fnco_phase[terminal][side][fddc_num];
+	config.main_phase_inc = ftw;
+	config.main_phase_offset = no_os_div_s64(fnco_phase * 14073748835533,
+						 18000LL);
+	config.drc_phase_inc_frac_a = frac_a;
+	config.drc_phase_inc_frac_b = frac_b;
+
+	ret = adi_apollo_fnco_main_pgm(&phy->ad9088, terminal, mask, &config);
+	if (ret)
+		return ret;
+
+	if (terminal == ADI_APOLLO_TX)
+		nco = &phy->profile.tx_path[side].tx_fduc[fddc_pi].nco[0];
+	else
+		nco = &phy->profile.rx_path[side].rx_fddc[fddc_pi].nco[0];
+
+	nco->nco_phase_inc = ftw;
+	nco->nco_phase_inc_frac_a = frac_a;
+	nco->nco_phase_inc_frac_b = frac_b;
+
+	return 0;
+}
+
+/* Read back the fine NCO (FNCO) frequency shift for a given side/FDDC. */
+int ad9088_get_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
+			 uint8_t side, uint8_t fddc_num, int64_t *freq_hz)
+{
+	struct adi_apollo_fnco_cfg *nco;
+	uint64_t f;
+	uint32_t cddc_dcm;
+	uint8_t fddc_pi, cddc_pi;
+
+	if (!phy || !freq_hz || side >= ADI_APOLLO_NUM_SIDES || fddc_num >= 8)
+		return -EINVAL;
+
+	fddc_pi = fddc_num % ADI_APOLLO_FDUCS_PER_SIDE;
+	cddc_pi = (fddc_num / 2) % ADI_APOLLO_CDUCS_PER_SIDE;
+
+	if (terminal == ADI_APOLLO_TX) {
+		nco = &phy->profile.tx_path[side].tx_fduc[fddc_pi].nco[0];
+
+		adi_apollo_cduc_interp_bf_to_val(&phy->ad9088,
+			phy->profile.tx_path[side].tx_cduc[cddc_pi].drc_ratio,
+			&cddc_dcm);
+		f = phy->profile.dac_cfg[side].dac_sampling_rate_Hz;
+		f /= cddc_dcm;
+	} else {
+		nco = &phy->profile.rx_path[side].rx_fddc[fddc_pi].nco[0];
+
+		adi_apollo_cddc_dcm_bf_to_val(&phy->ad9088,
+			phy->profile.rx_path[side].rx_cddc[cddc_pi].drc_ratio,
+			&cddc_dcm);
+		f = phy->profile.adc_cfg[side].adc_sampling_rate_Hz;
+		f /= cddc_dcm;
+	}
+
+	return adi_ad9088_calc_nco_freq(phy, f, nco->nco_phase_inc,
+					nco->nco_phase_inc_frac_a,
+					nco->nco_phase_inc_frac_b, 48,
+					freq_hz);
+}
+
 static const char *adi_cms_error_to_string(int error_code)
 {
 	switch (error_code) {
@@ -542,7 +816,7 @@ static int ad9088_spi_xfer(void *dev_obj, uint8_t *wbuf, uint8_t *rbuf,
 {
 	struct ad9088_phy *phy = dev_obj;
 	int ret;
-	
+
 	ret = no_os_spi_write_and_read(phy->spi, wbuf, len);
 	if (ret) {
 		pr_err("SPI transfer failed: %d\n", ret);
@@ -595,7 +869,7 @@ static int ad9088_reset_pin_ctrl(void *user_data, uint8_t enable)
 {
 	struct ad9088_phy *phy = user_data;
 
-	return no_os_gpio_set_value(phy->reset_gpio, enable);	
+	return no_os_gpio_set_value(phy->reset_gpio, enable);
 }
 
 static int ad9088_udelay(void *user_data, unsigned int us)
