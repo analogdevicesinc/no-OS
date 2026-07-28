@@ -7,4 +7,3 @@
 --pad-header       # Add spaces between 'if', 'for', 'while' 
 --unpad-paren      # Remove spaces inside parentheses
 --pad-comma        # Add space after commas
-

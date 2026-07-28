@@ -76,4 +76,3 @@ jobs:
           comment: ${{ github.event == 'pull_request' && 'true' }}
           token: ${{ secrets.GITHUB_TOKEN }}
           updateComment: ${{ github.event_name == 'pull_request' && 'true' }}
-      
