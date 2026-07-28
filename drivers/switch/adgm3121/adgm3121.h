@@ -58,7 +58,7 @@
 
 /* Default timeout values */
 #define ADGM3121_SWITCHING_TIME_US	200
-#define ADGM3121_POWER_UP_TIME_MS	45
+#define ADGM3121_POWER_UP_TIME_MS	5
 #define ADGM3053_POWER_UP_TIME_MS	5
 
 /**
