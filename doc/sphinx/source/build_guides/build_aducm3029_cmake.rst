@@ -142,7 +142,7 @@ Useful options:
     - ``--dry-run`` — print the ``cmake`` commands without running them.
 
 Each combination is built into its own directory named
-``build-<project>-<variant>-<board>`` at the repo root (override the location
+``build/<project>-<variant>-<board>`` at the repo root (override the location
 with ``--build-dir``). The build artifacts (``.elf``, ``.hex``, ``.bin``) are
 placed in ``<build-dir>/build``.
 
