@@ -234,20 +234,19 @@ update_gh_pages() {
 
         # Create .nojekyll file
         touch ${TOP_DIR}/.nojekyll
-        CURRENT_COMMIT=$(git log -1 --pretty=%B)
-        
-        if [[ ${CURRENT_COMMIT:(-7)} != ${MAIN_COMMIT:0:7} ]]; then
-                git add --all .
-                git commit --allow-empty -m "Update documentation to ${MAIN_COMMIT:0:7}"
+        git add --all .
+
+        # Only commit and push if there are actual changes
+        if git diff --cached --quiet; then
+                echo "Documentation already up to date - no changes to commit"
+        else
+                git commit -m "Update documentation to ${MAIN_COMMIT:0:7}"
                 if [ -n "$GITHUB_DOC_TOKEN" ] ; then
                         git push https://${GITHUB_DOC_TOKEN}@github.com/${REPO_SLUG} gh-pages
                 else
                         git push origin gh-pages
                 fi
-
-                echo "Documetation updated!"
-        else
-                echo "Documentation already up to date!"
+                echo "Documentation updated!"
         fi
 }
 
