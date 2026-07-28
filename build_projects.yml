@@ -46,6 +46,7 @@ jobs:
     persistCredentials: true
   - script: 'echo "Using Xilinx version: $(XILINX_VERSION)"'
     displayName: 'Show Xilinx version'
+  - template: ci/steps-select-builds.yml
   - script: |
       export BRANCH=$(branch)
       wget -P ./tools/scripts/ \
@@ -55,7 +56,8 @@ jobs:
         -log_dir $(LOG_DIR) \
         -builds_dir /no-OS_builds/builds \
         -platform xilinx \
-        -hdl_branch $(HDL_BRANCH)
+        -hdl_branch $(HDL_BRANCH) \
+        -combos_file $(COMBOS_FILE)
     env:
       CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
       TOKEN: $(TOKEN)
@@ -108,6 +110,7 @@ jobs:
       echo "Bundled toolchain: ${GCC:-not found}"
       [ -n "$GCC" ] && "$GCC" -dumpfullversion 2>/dev/null | sed 's/^/Bundled arm-none-eabi-gcc version: /'
     displayName: 'Show SDK versions'
+  - template: ci/steps-select-builds.yml
   - script: |
       wget -P ./tools/scripts/ \
         https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py && \
@@ -116,7 +119,8 @@ jobs:
         -log_dir $(LOG_DIR) \
         -builds_dir /no-OS_builds/builds \
         -platform stm32 \
-        -hdl_branch $(HDL_BRANCH)
+        -hdl_branch $(HDL_BRANCH) \
+        -combos_file $(COMBOS_FILE)
     env:
       CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
       TOKEN: $(TOKEN)
@@ -149,6 +153,7 @@ jobs:
     persistCredentials: true
   - script: 'echo "Using Maxim SDK version: $(MAXIM_SDK_VERSION)"'
     displayName: 'Show Maxim SDK version'
+  - template: ci/steps-select-builds.yml
   - script: |
       wget -P ./tools/scripts/ \
         https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py && \
@@ -157,7 +162,8 @@ jobs:
         -log_dir $(LOG_DIR) \
         -builds_dir /no-OS_builds/builds \
         -platform maxim \
-        -hdl_branch $(HDL_BRANCH)
+        -hdl_branch $(HDL_BRANCH) \
+        -combos_file $(COMBOS_FILE)
     env:
       CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
       TOKEN: $(TOKEN)
@@ -190,6 +196,7 @@ jobs:
     persistCredentials: true
   - script: 'echo "Using Pico SDK version: $(PICO_SDK_VERSION)"'
     displayName: 'Show Pico SDK version'
+  - template: ci/steps-select-builds.yml
   - script: |
       wget -P ./tools/scripts/ \
         https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py && \
@@ -198,7 +205,8 @@ jobs:
         -log_dir $(LOG_DIR) \
         -builds_dir /no-OS_builds/builds \
         -platform pico \
-        -hdl_branch $(HDL_BRANCH)
+        -hdl_branch $(HDL_BRANCH) \
+        -combos_file $(COMBOS_FILE)
     env:
       CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
       TOKEN: $(TOKEN)
@@ -234,6 +242,7 @@ jobs:
       echo "Using CCES IDE version: $(CCES_VERSION)"
       echo "Using ARM CMSIS version: $(ARM_CMSIS_VERSION)"
     displayName: 'Show SDK versions'
+  - template: ci/steps-select-builds.yml
   - script: |
       wget -P ./tools/scripts/ \
         https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py && \
@@ -242,7 +251,8 @@ jobs:
         -log_dir $(LOG_DIR) \
         -builds_dir /no-OS_builds/builds \
         -platform aducm3029 \
-        -hdl_branch $(HDL_BRANCH)
+        -hdl_branch $(HDL_BRANCH) \
+        -combos_file $(COMBOS_FILE)
     env:
       CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
       TOKEN: $(TOKEN)
@@ -270,6 +280,7 @@ jobs:
     submodules: true
     clean: true
     persistCredentials: true
+  - template: ci/steps-select-builds.yml
   - script: |
       sudo apt install ruby-full
       sudo gem install ceedling
@@ -279,7 +290,9 @@ jobs:
         cd "$dir" && ceedling test:all && cd -
       done
     displayName: 'Run unit tests'
+    condition: eq(variables.RUN_TESTS, 'true')
   - task: PublishTestResults@2
+    condition: eq(variables.RUN_TESTS, 'true')
     inputs:
       testResultsFormat: 'JUnit'
       testResultsFiles: 'tests/drivers/**/build/artifacts/test/*.xml'

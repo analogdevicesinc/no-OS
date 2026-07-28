@@ -1,0 +1,50 @@
+# Reusable step: compute the change-based build filter for the current run.
+#
+# Writes a JSON filter (see tools/scripts/ci_select_builds.py) to
+# $(Build.ArtifactStagingDirectory)/ci_builds.json and exposes its location as
+# the pipeline variable COMBOS_FILE, consumed by build_projects.py -combos_file.
+#
+# On a pull request, the filter is derived from the diff against the merge base
+# with the target branch. On any other trigger (push to main / next_stable /
+# release), or if the merge base cannot be resolved, it falls back to building
+# everything - the safe default that matches the previous always-build-all CI.
+steps:
+- script: |
+    set -e
+    FILTER="$(Build.ArtifactStagingDirectory)/ci_builds.json"
+    echo "##vso[task.setvariable variable=COMBOS_FILE]$FILTER"
+
+    emit_flags() {
+      # Export RUN_TESTS / BUILD_ALL pipeline variables from the filter so job
+      # steps (e.g. unit tests) can gate on them via condition:.
+      eval "$(python3 tools/scripts/ci_select_builds.py --flags "$FILTER")"
+      echo "##vso[task.setvariable variable=BUILD_ALL]${BUILD_ALL}"
+      echo "##vso[task.setvariable variable=RUN_TESTS]${RUN_TESTS}"
+    }
+
+    if [ "$(Build.Reason)" != "PullRequest" ]; then
+      echo "Not a PR ($(Build.Reason)); building everything."
+      echo '{"build_all": true, "build_docs": true, "run_tests": true}' > "$FILTER"
+      emit_flags
+      exit 0
+    fi
+
+    # Resolve the merge base against the PR target. The checkout is shallow
+    # (fetchDepth: 50), so fetch the target branch first.
+    TARGET="$(System.PullRequest.TargetBranch)"
+    TARGET="${TARGET#refs/heads/}"
+    git fetch --no-tags --depth=50 origin "$TARGET" || true
+    BASE=$(git merge-base HEAD FETCH_HEAD 2>/dev/null || true)
+
+    if [ -z "$BASE" ]; then
+      echo "Could not resolve merge base with '$TARGET'; building everything."
+      echo '{"build_all": true, "build_docs": true, "run_tests": true}' > "$FILTER"
+      emit_flags
+      exit 0
+    fi
+
+    echo "Selecting builds for $BASE...HEAD"
+    python3 tools/scripts/ci_select_builds.py \
+      --base "$BASE" --head HEAD --output "$FILTER" --print
+    emit_flags
+  displayName: 'Select builds from change set'
