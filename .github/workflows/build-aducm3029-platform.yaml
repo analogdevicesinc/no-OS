@@ -1,0 +1,124 @@
+name: Build projects for ADuCM3029 platform
+
+on:
+  pull_request:
+    branches:
+      - main
+      - next_stable
+      - 'release/*'
+      - '20*'
+    paths-ignore:
+      - '**/*.rst'
+      - '**/*.md'
+      - 'drivers/platform/xilinx/**'
+      - 'drivers/platform/pico/**'
+      - 'drivers/platform/stm32/**'
+      - 'drivers/platform/maxim/**'
+      - '.github/config/**'
+      - '.github/scripts/**'
+      - '.github/workflows/build-pico-platform.yaml'
+      - '.github/workflows/build-maxim-platform.yaml'
+      - '.github/workflows/build-xilinx-platform.yaml'
+      - '.github/workflows/build-stm32-platform.yaml'
+      - '.github/workflows/build-common.yaml'
+      - '.github/workflows/deploy-docs.yaml'
+  push:
+    branches:
+      - main
+      - next_stable
+      - 'release/*'
+      - '20*'
+      - migration/migrate-stm32-aducm-to-github-actions
+    paths-ignore:
+      - '**/*.rst'
+      - '**/*.md'
+      - 'drivers/platform/xilinx/**'
+      - 'drivers/platform/pico/**'
+      - 'drivers/platform/stm32/**'
+      - 'drivers/platform/maxim/**'
+      - '.github/config/**'
+      - '.github/scripts/**'
+      - '.github/workflows/build-pico-platform.yaml'
+      - '.github/workflows/build-maxim-platform.yaml'
+      - '.github/workflows/build-xilinx-platform.yaml'
+      - '.github/workflows/build-stm32-platform.yaml'
+      - '.github/workflows/build-common.yaml'
+      - '.github/workflows/deploy-docs.yaml'
+
+permissions:
+  contents: read
+  id-token: write
+  checks: write
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build-aducm3029-projects:
+    env:
+      CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
+      ADUCM3029_DFP_VERSION: ${{ vars.ADUCM3029_DFP_VERSION }}
+      CCES_VERSION: ${{ vars.CCES_VERSION }}
+      ARM_CMSIS_VERSION: ${{ vars.ARM_CMSIS_VERSION }}
+      TOOLS_REPO: ${{ secrets.TOOLS_REPO }}
+      HDL_BRANCH: 'main'
+      BRANCH: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
+      BUILDS_DIR: ${{ github.workspace }}/builds
+      RELEASES_DIR: ${{ github.workspace }}/latest_build
+      LOGS_DIR: ${{ github.workspace }}/logs
+      NO_OS_CACHE_DIR: /no-OS_builds/deps_cache
+    runs-on: stm32-runner
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          submodules: false
+          clean: false
+      - name: Set up CCES toolchain PATH
+        shell: sh
+        run: |
+          echo "/opt/analog/cces/${{ env.CCES_VERSION }}/ARM/arm-none-eabi/bin" >> $GITHUB_PATH
+          echo "/opt/analog/cces/${{ env.CCES_VERSION }}/Eclipse" >> $GITHUB_PATH
+      - name: Show SDK versions
+        shell: sh
+        run: |
+          echo "Using ADuCM3029 DFP version: ${{ env.ADUCM3029_DFP_VERSION }}"
+          echo "Using CCES IDE version: ${{ env.CCES_VERSION }}"
+          echo "Using ARM CMSIS version: ${{ env.ARM_CMSIS_VERSION }}"
+      - name: Building for platform ADuCM3029
+        shell: sh
+        run: |
+          echo "Setup cloudsmith helper ..."
+          wget https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py \
+            -O ./tools/scripts/cloudsmith_temp.py
+          cat tools/scripts/cloudsmith_temp.py | sed 's#/usr/bin/python3#/usr/bin/env python3#' > tools/scripts/cloudsmith_helper.py
+          rm tools/scripts/cloudsmith_temp.py
+
+          echo "Running project build ..."
+          ${{ github.workspace }}/tools/scripts/build_projects.py \
+            ${{ github.workspace }} \
+            -export_dir ${{ env.RELEASES_DIR }} \
+            -log_dir ${{ env.LOGS_DIR }} \
+            -builds_dir ${{ env.BUILDS_DIR }} \
+            -platform aducm3029 \
+            -hdl_branch ${{ env.HDL_BRANCH }}
+        env:
+          CLOUDSMITH_API_KEY: ${{ env.CLOUDSMITH_API_KEY }}
+          TOKEN: ${{ secrets.GH_GHDL_TOKEN }}
+      - name: Upload ADuCM3029 artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          path: ${{ env.RELEASES_DIR }}
+          name: release_aducm3029_${{ github.job }}
+      - name: Upload ADuCM3029 build logs
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          path: ${{ env.LOGS_DIR }}
+          name: logs_aducm3029_${{ github.job }}
+      - name: Remove logs and release output
+        shell: sh
+        run: |
+          rm -rf ${{ env.RELEASES_DIR }} ${{ env.LOGS_DIR }}
