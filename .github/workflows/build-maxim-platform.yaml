@@ -16,8 +16,8 @@ on:
       - 'drivers/platform/pico/**'
       - '.github/config/**'
       - '.github/scripts/**'
-      - '.github/workflows/build-xilinx.yaml'
-      - '.github/workflows/build-pico.yaml'
+      - '.github/workflows/build-xilinx-platform.yaml'
+      - '.github/workflows/build-pico-platform.yaml'
       - '.github/workflows/build-common.yaml'
       - '.github/workflows/deploy-docs.yaml'
   push:
@@ -35,8 +35,8 @@ on:
       - 'drivers/platform/pico/**'
       - '.github/config/**'
       - '.github/scripts/**'
-      - '.github/workflows/build-xilinx.yaml'
-      - '.github/workflows/build-pico.yaml'
+      - '.github/workflows/build-xilinx-platform.yaml'
+      - '.github/workflows/build-pico-platform.yaml'
       - '.github/workflows/build-common.yaml'
       - '.github/workflows/deploy-docs.yaml'
 

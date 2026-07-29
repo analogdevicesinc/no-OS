@@ -16,8 +16,8 @@ on:
       - 'drivers/platform/maxim/**'
       - '.github/config/**'
       - '.github/scripts/**'
-      - '.github/workflows/build-pico.yaml'
-      - '.github/workflows/build-maxim.yaml'
+      - '.github/workflows/build-pico-platform.yaml'
+      - '.github/workflows/build-maxim-platform.yaml'
       - '.github/workflows/build-common.yaml'
       - '.github/workflows/deploy-docs.yaml'
   push:
@@ -35,8 +35,8 @@ on:
       - 'drivers/platform/maxim/**'
       - '.github/config/**'
       - '.github/scripts/**'
-      - '.github/workflows/build-pico.yaml'
-      - '.github/workflows/build-maxim.yaml'
+      - '.github/workflows/build-pico-platform.yaml'
+      - '.github/workflows/build-maxim-platform.yaml'
       - '.github/workflows/build-common.yaml'
       - '.github/workflows/deploy-docs.yaml'
 
