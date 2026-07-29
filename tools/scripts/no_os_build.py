@@ -100,13 +100,13 @@ def harvest_compile_manifest(build_dir):
     CMake writes compile_commands.json (CMAKE_EXPORT_COMPILE_COMMANDS) at the
     build-dir root with one entry per compiled translation unit. It is the
     ground truth for what the no-OS ELF is built from: the union of the project
-    target and the `no-os` OBJECT library. We parse the -I/-D flags out of each
-    command so the Vitis app component indexes headers and macros exactly as
-    ninja did.
+    target and the `no-os` OBJECT library. We parse the -I/-D/-include flags
+    out of each command so the Vitis app component indexes headers and macros
+    exactly as ninja did.
 
-    Returns a dict {"sources": [...], "includes": [...], "defines": [...]} with
-    duplicates removed and insertion order preserved, or None if the compile
-    database is missing.
+    Returns a dict {"sources": [...], "includes": [...], "defines": [...],
+    "force_includes": [...]} with duplicates removed and insertion order
+    preserved, or None if the compile database is missing.
     """
     cc = build_dir / "compile_commands.json"
     if not cc.exists():
@@ -114,8 +114,8 @@ def harvest_compile_manifest(build_dir):
     with open(cc) as f:
         entries = json.load(f)
 
-    sources, includes, defines = [], [], []
-    seen_src, seen_inc, seen_def = set(), set(), set()
+    sources, includes, defines, force_includes = [], [], [], []
+    seen_src, seen_inc, seen_def, seen_finc = set(), set(), set(), set()
     for e in entries:
         src = e.get("file")
         if src and src not in seen_src:
@@ -139,8 +139,16 @@ def harvest_compile_manifest(build_dir):
                 if val and val not in seen_def:
                     seen_def.add(val)
                     defines.append(val)
+            elif tok == "-include":
+                i += 1
+                if i < len(tokens):
+                    val = tokens[i]
+                    if val and val not in seen_finc:
+                        seen_finc.add(val)
+                        force_includes.append(val)
             i += 1
-    return {"sources": sources, "includes": includes, "defines": defines}
+    return {"sources": sources, "includes": includes, "defines": defines,
+            "force_includes": force_includes}
 
 
 def open_vitis_workspace(repo_root, build_dir, combo):

@@ -283,6 +283,7 @@ def create_ide_workspace(ws, hw_path, hw_file, manifest_path):
     sources = manifest.get("sources", [])
     includes = manifest.get("includes", [])
     defines = manifest.get("defines", [])
+    force_includes = manifest.get("force_includes", [])
 
     # Arch comes from the manifest (no_os_build reads XILINX_ARCH from the CMake
     # cache); fall back to a staged arch.txt if present. Unlike create_project,
@@ -357,6 +358,23 @@ def create_ide_workspace(ws, hw_path, hw_file, manifest_path):
     ld.set_heap_size('0x100000')
 
     vitis.dispose()
+
+    # Patch UserConfig.cmake to add force-include flags for Kconfig-generated
+    # headers (e.g., -include no_os_config.h). The Vitis API doesn't support
+    # arbitrary compiler flags, so we edit the file directly after Vitis
+    # creates it.
+    if force_includes:
+        user_config = os.path.join(out_dir, "app", "src", "UserConfig.cmake")
+        if os.path.exists(user_config):
+            with open(user_config, "r") as f:
+                content = f.read()
+            flags = " ".join(f"-include {h}" for h in force_includes)
+            # Replace empty USER_COMPILE_OTHER_FLAGS with the force-include flags
+            content = content.replace(
+                "set(USER_COMPILE_OTHER_FLAGS )",
+                f"set(USER_COMPILE_OTHER_FLAGS {flags})")
+            with open(user_config, "w") as f:
+                f.write(content)
 
     # Copy the pre-staged debug artifacts (launch.json + extracted bitstream /
     # ps7_init.tcl) into the workspace now that Vitis has initialized it. They
