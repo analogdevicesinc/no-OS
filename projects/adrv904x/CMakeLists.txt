@@ -57,3 +57,6 @@ config_platform_sdk(adrv904x)
 add_flash_target(adrv904x)
 post_build_config(adrv904x)
 target_link_libraries(adrv904x no-os)
+
+# Wrap fseek/fclose so the custom implementations in no_os_platform.c are used
+target_link_options(adrv904x PRIVATE -Wl,--wrap=fseek -Wl,--wrap=fclose)
