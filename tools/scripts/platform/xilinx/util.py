@@ -350,6 +350,9 @@ def create_ide_workspace(ws, hw_path, hw_file, manifest_path):
     if defines:
         app.set_app_config(key="USER_COMPILE_DEFINITIONS", values=defines)
 
+    # Link math library (-lm) for projects that use log10, pow, etc.
+    app.set_app_config(key="USER_LINK_LIBRARIES", values=["m"])
+
     ld = app.get_ld_script()
     ld.set_heap_size('0x100000')
 
