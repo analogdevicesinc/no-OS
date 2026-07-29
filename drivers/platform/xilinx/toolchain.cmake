@@ -76,35 +76,45 @@ endif()
 message(STATUS "Xilinx arch (from XSA): ${XILINX_ARCH}")
 
 # --- Select compiler + CPU flags per arch -------------------------------------
+# Use set() with explicit paths instead of file(GLOB). GLOB returns empty when
+# the directory doesn't exist, causing find_program() to silently fall back to
+# PATH -- which may find a system compiler (wrong version) or fail with a
+# confusing error. Explicit paths + existence check give a clear diagnostic.
 if(XILINX_ARCH MATCHES "cortexa9")
     set(_xl_prefix arm-none-eabi)
-    file(GLOB _xl_bin "${XILINX_VITIS}/gnu/aarch32/lin/gcc-arm-none-eabi/bin")
+    set(_xl_bin "${XILINX_VITIS}/gnu/aarch32/lin/gcc-arm-none-eabi/bin")
     set(_xl_cpu_flags "-mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard")
 elseif(XILINX_ARCH MATCHES "cortexa53")
     set(_xl_prefix aarch64-none-elf)
-    file(GLOB _xl_bin "${XILINX_VITIS}/gnu/aarch64/lin/aarch64-none/bin")
+    set(_xl_bin "${XILINX_VITIS}/gnu/aarch64/lin/aarch64-none/bin")
     set(_xl_cpu_flags "")
 elseif(XILINX_ARCH MATCHES "cortexr5")
     set(_xl_prefix armr5-none-eabi)
-    file(GLOB _xl_bin "${XILINX_VITIS}/gnu/armr5/lin/gcc-arm-none-eabi/bin")
+    set(_xl_bin "${XILINX_VITIS}/gnu/armr5/lin/gcc-arm-none-eabi/bin")
     set(_xl_cpu_flags "-mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16")
 elseif(XILINX_ARCH MATCHES "sys_mb")
     set(_xl_prefix microblaze-xilinx-elf)
-    file(GLOB _xl_bin "${XILINX_VITIS}/gnu/microblaze/lin/bin")
+    set(_xl_bin "${XILINX_VITIS}/gnu/microblaze/lin/bin")
     set(_xl_cpu_flags "-mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mno-xl-soft-div -mcpu=v11.0 -mno-xl-soft-mul -mxl-multiply-high")
 else()
     message(FATAL_ERROR "Unsupported Xilinx arch '${XILINX_ARCH}'")
 endif()
 
-find_program(CMAKE_C_COMPILER   ${_xl_prefix}-gcc     HINTS ${_xl_bin})
-find_program(CMAKE_CXX_COMPILER ${_xl_prefix}-g++     HINTS ${_xl_bin})
-find_program(CMAKE_ASM_COMPILER ${_xl_prefix}-gcc     HINTS ${_xl_bin})
-find_program(CMAKE_OBJCOPY      ${_xl_prefix}-objcopy HINTS ${_xl_bin})
-find_program(CMAKE_SIZE         ${_xl_prefix}-size    HINTS ${_xl_bin})
+if(NOT EXISTS "${_xl_bin}")
+    message(FATAL_ERROR
+        "Xilinx toolchain not found: ${_xl_bin}\n"
+        "Verify your Vitis installation includes the ${_xl_prefix} toolchain.")
+endif()
+
+find_program(CMAKE_C_COMPILER   ${_xl_prefix}-gcc     HINTS ${_xl_bin} NO_DEFAULT_PATH)
+find_program(CMAKE_CXX_COMPILER ${_xl_prefix}-g++     HINTS ${_xl_bin} NO_DEFAULT_PATH)
+find_program(CMAKE_ASM_COMPILER ${_xl_prefix}-gcc     HINTS ${_xl_bin} NO_DEFAULT_PATH)
+find_program(CMAKE_OBJCOPY      ${_xl_prefix}-objcopy HINTS ${_xl_bin} NO_DEFAULT_PATH)
+find_program(CMAKE_SIZE         ${_xl_prefix}-size    HINTS ${_xl_bin} NO_DEFAULT_PATH)
 
 if(NOT CMAKE_C_COMPILER)
     message(FATAL_ERROR
-        "Xilinx bare-metal compiler ${_xl_prefix}-gcc not found under ${_xl_bin}")
+        "Xilinx bare-metal compiler ${_xl_prefix}-gcc not found in ${_xl_bin}")
 endif()
 
 set(CMAKE_C_FLAGS_INIT   "${_xl_cpu_flags}")
