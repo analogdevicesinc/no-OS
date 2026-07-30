@@ -91,7 +91,11 @@
 #endif
 #if defined(PLATFORM_ZC702) || defined(PLATFORM_ZC706) || \
 		defined(PLATFORM_ZED)
+#ifdef SDT
+#define ADMA_DEVICE_ID		XPAR_XDMAPS_0_BASEADDR
+#else
 #define ADMA_DEVICE_ID		XPAR_XDMAPS_1_DEVICE_ID
+#endif
 #endif
 
 #if defined(PLATFORM_KC705) || defined(PLATFORM_AC701) || \

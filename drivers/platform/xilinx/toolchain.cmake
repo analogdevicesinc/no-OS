@@ -46,6 +46,13 @@ set(CMAKE_SYSTEM_PROCESSOR arm)
 # no linker script or BSP yet at this point.
 set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 
+# Vitis >= 2025 emits SDT-style BSP headers; they gate the newer macro set on
+# -DSDT. Detect the release year from the install path, matching xilinx.mk.
+set(_vitis_year 0)
+if("${XILINX_VITIS}" MATCHES "([0-9][0-9][0-9][0-9])\\.[0-9]+")
+    set(_vitis_year "${CMAKE_MATCH_1}")
+endif()
+
 # --- Determine the processor architecture from the XSA (once, cached) ---------
 # get_arch writes arch.txt (e.g. "ps7_cortexa9_0") next to the XSA copy.
 if(NOT DEFINED XILINX_ARCH)
@@ -107,9 +114,13 @@ if(NOT CMAKE_C_COMPILER)
         "Xilinx bare-metal compiler ${_xl_prefix}-gcc not found under ${_xl_bin}")
 endif()
 
-set(CMAKE_C_FLAGS_INIT   "${_xl_cpu_flags}")
-set(CMAKE_CXX_FLAGS_INIT "${_xl_cpu_flags}")
-set(CMAKE_ASM_FLAGS_INIT "${_xl_cpu_flags}")
+set(_xl_extra_flags "")
+if(_vitis_year GREATER_EQUAL 2025)
+    set(_xl_extra_flags " -DSDT")
+endif()
+set(CMAKE_C_FLAGS_INIT   "${_xl_cpu_flags}${_xl_extra_flags}")
+set(CMAKE_CXX_FLAGS_INIT "${_xl_cpu_flags}${_xl_extra_flags}")
+set(CMAKE_ASM_FLAGS_INIT "${_xl_cpu_flags}${_xl_extra_flags}")
 
 # Emit the executable as <project>.elf, matching the maxim/stm32/pico
 # toolchains. The CI success gate (build_projects.py) and FlashTools

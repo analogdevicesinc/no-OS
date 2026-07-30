@@ -1,5 +1,13 @@
 The ADV7511 project works using the API library found at https://www.analog.com/media/en/dsp-hardware-software/software-modules/ADV7511_API_Library.exe
 
 To build the project copy the "TX" folder from the "Src" folder in the
-library installation folder before calling the "make" command.
+library installation folder into this project directory.
 
+For the Xilinx CMake flow, source the Vitis environment and provide the exported
+hardware design with ``--hardware``:
+
+```
+source ~/.xilinx/2025.1/Vitis/settings64.sh
+python3 tools/scripts/no_os_build.py build --project adv7511 --variant demo \
+  --board zed --hardware /path/to/adv7511_zed.xsa
+```

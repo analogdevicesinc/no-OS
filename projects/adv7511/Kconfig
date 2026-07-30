@@ -1,0 +1,14 @@
+menu "adv7511 Configuration"
+
+choice ADV7511_EXAMPLE
+	prompt "Example variant"
+	default ADV7511_DEMO_EXAMPLE
+
+config ADV7511_DEMO_EXAMPLE
+	bool "Demo"
+	help
+	  ADV7511 HDMI transmitter demo for the ZedBoard platform.
+
+endchoice
+
+endmenu
