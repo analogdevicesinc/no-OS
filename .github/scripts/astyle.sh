@@ -37,10 +37,10 @@ get_script_path() {
 
 	[ -n "$script" ] || return 1
 
-	if [ -f ".github/scripts/$script" ] ; then
+	if [ -f "${WORKSPACE}/.github/scripts/$script" ] ; then
 		echo ".github/scripts/$script"
-	elif [ -f "build/$script" ] ; then
-		echo "build/$script"
+	elif [ -f "${WORKSPACE}/build/$script" ] ; then
+		echo "${WORKSPACE}/build/$script"
 	else
 		return 1
 	fi
@@ -111,7 +111,7 @@ run_astyle() {
 	git diff --name-only --diff-filter=d $COMMIT_RANGE | while read -r file; do
 		if is_source_file "$file" && is_valid_file "$file"
 		then
-			./build/astyle/build/gcc/bin/astyle --options="$(get_script_path .github/config/astyle_config)" "$file"
+			${WORKSPACE}/./build/astyle/build/gcc/bin/astyle --options="${WORKSPACE}/.github/config/astyle_config" "$file"
 		fi
 	done;
 
