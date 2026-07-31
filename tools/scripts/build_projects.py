@@ -415,7 +415,6 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		if not success:
 			log_err("ERROR")
 			log("See log %s" % dst_log)
-			os.system("cat %s" % dst_log)
 			ERR = 1
 
 		# The final link + .hex/.bin runs as a cmake custom command whose failure
