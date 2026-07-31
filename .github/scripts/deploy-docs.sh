@@ -45,8 +45,8 @@ mkdir -p build && cd build
 cmake ..
 cd ../../..
 
-# Run build and upload documentation script
-echo "Uploading the documentation to gh-pages ..."
+# Run documentation validation and build script
+echo "Validating and building the documentation ..."
 . ${TOP_DIR}/.github/scripts/documentation.sh
 
 echo "Finished!"

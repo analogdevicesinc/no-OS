@@ -203,53 +203,6 @@ build_sphinx() {
         popd
 }
 
-############################################################################
-# If the current build is not a pull request and it is on main the 
-# documentation will be pushed to the gh-pages branch
-############################################################################
-update_gh_pages() {
-        REPO_SLUG="${REPO_SLUG:-analogdevicesinc/no-OS}"
-
-        git config --global user.email "cse-ci-notifications@analog.com"
-        git config --global user.name "CSE-CI"
-
-        MAIN_COMMIT=$(git rev-parse --short HEAD)
-
-        echo "Running Github docs update on commit '$MAIN_COMMIT'"
-
-        git fetch --depth 1 origin +refs/heads/gh-pages:gh-pages
-        rm -rf ${DEPS_DIR}
-        git checkout gh-pages
-
-        # Clear previous content in the root folder except the doc path which holds new builds
-        find ${TOP_DIR} -mindepth 1 -maxdepth 1 ! \( -name "doc" -o -name ".git" \) -exec rm -r {} \;
-
-        # Create doxygen folder holding new build content
-        mkdir -p ${TOP_DIR}/doxygen
-        rsync -a "${TOP_DIR}/doc/doxygen/build/doxygen_doc/html/" "${TOP_DIR}/doxygen/"
-
-        # Add sphinx build content to root folder
-        cp -R ${TOP_DIR}/doc/sphinx/build/html/* ${TOP_DIR}
-        rm -rf ${TOP_DIR}/doc
-
-        # Create .nojekyll file
-        touch ${TOP_DIR}/.nojekyll
-        git add --all .
-
-        # Only commit and push if there are actual changes
-        if git diff --cached --quiet; then
-                echo "Documentation already up to date - no changes to commit"
-        else
-                git commit -m "Update documentation to ${MAIN_COMMIT:0:7}"
-                if [ -n "$GITHUB_DOC_TOKEN" ] ; then
-                        git push https://${GITHUB_DOC_TOKEN}@github.com/${REPO_SLUG} gh-pages
-                else
-                        git push origin gh-pages
-                fi
-                echo "Documentation updated!"
-        fi
-}
-
 parse_commit_range
 
 check_new_components_readme
@@ -259,9 +212,3 @@ check_sphinx_doc
 build_doxygen
 
 build_sphinx
-
-if [[ "$UPDATE_GH_PAGES" == 'true' ]]; then
-        update_gh_pages
-else
-        echo "Not updating gh-pages ..."
-fi
