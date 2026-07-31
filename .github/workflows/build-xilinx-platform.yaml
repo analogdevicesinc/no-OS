@@ -63,6 +63,7 @@ jobs:
       LOGS_DIR: ${{ github.workspace }}/logs
       NO_OS_CACHE_DIR: ${{ github.workspace }}/deps_cache
     runs-on: noos-runner-xilinx
+    timeout-minutes: 600
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -101,6 +102,7 @@ jobs:
           path: ${{ env.LOGS_DIR }}
           name: logs_xilinx_${{ github.job }}
       - name: Remove logs, new_hardware and release output
+        if: always()
         shell: sh
         run: |
           rm -rf ${{ env.RELEASES_DIR }} ${{ env.LOGS_DIR }} ${{ env.BUILDS_DIR }}_${{ env.HDL_BRANCH }}/new_hardware
