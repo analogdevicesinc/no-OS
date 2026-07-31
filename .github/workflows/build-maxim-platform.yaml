@@ -97,9 +97,9 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           path: ${{ env.RELEASES_DIR }}
-          name: release_maxim_${{ github.job }}
+          name: ${{ github.job }}-binaries
       - name: Upload logs artifact
         uses: actions/upload-artifact@v7
         with:
           path: ${{ env.LOGS_DIR }}
-          name: logs_maxim_${{ github.job }}
+          name: logs_${{ github.job }}

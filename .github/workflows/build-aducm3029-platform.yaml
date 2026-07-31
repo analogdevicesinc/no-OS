@@ -28,7 +28,6 @@ on:
       - next_stable
       - 'release/*'
       - '20*'
-      - migration/migrate-stm32-aducm-to-github-actions
     paths-ignore:
       - '**/*.rst'
       - '**/*.md'
@@ -111,13 +110,13 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           path: ${{ env.RELEASES_DIR }}
-          name: release_aducm3029_${{ github.job }}
+          name: ${{ github.job }}-binaries
       - name: Upload ADuCM3029 build logs
         if: always()
         uses: actions/upload-artifact@v7
         with:
           path: ${{ env.LOGS_DIR }}
-          name: logs_aducm3029_${{ github.job }}
+          name: logs_${{ github.job }}
       - name: Remove logs and release output
         shell: sh
         run: |

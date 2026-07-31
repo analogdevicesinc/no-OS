@@ -28,7 +28,6 @@ on:
       - next_stable
       - 'release/*'
       - '20*'
-      - migration/migrate-stm32-aducm-to-github-actions
     paths-ignore:
       - '**/*.rst'
       - '**/*.md'
@@ -99,17 +98,15 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           path: ${{ env.RELEASES_DIR }}
-          name: release_stm32_${{ github.job }}
+          name: ${{ github.job }}-binaries
       - name: Upload STM32 build logs
         if: always()
         uses: actions/upload-artifact@v7
         with:
           path: ${{ env.LOGS_DIR }}
-          name: logs_stm32_${{ github.job }}
+          name: logs_${{ github.job }}
       - name: Remove logs, new_hardware and release output
         if: always()
         shell: sh
         run: |
-          rm -rf ${{ env.RELEASES_DIR }} ${{ env.LOGS_DIR }} 
-        # comment out temp - need to check build path logic
-        #          ${{ env.BUILDS_DIR }}_${{ env.HDL_BRANCH }}/new_hardware
+          rm -rf ${{ env.RELEASES_DIR }} ${{ env.LOGS_DIR }} ${{ env.BUILDS_DIR }}_${{ env.HDL_BRANCH }}/new_hardware
