@@ -408,7 +408,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		cmake_log = build_dir / 'build.log'
 		if cmake_log.is_file():
 			import shutil
-			shutil.copy2(str(cmake_log), dst_log)
+			shutil.copy(str(cmake_log), dst_log)
 		else:
 			open(dst_log, 'w').close()
 
