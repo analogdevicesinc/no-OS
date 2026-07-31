@@ -335,9 +335,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 
 		# Bring in the platform SDK environment (MAXIM_LIBRARIES, STM32CUBEMX, ...).
 		env = dict(os.environ)
-		if platform not in ["maxim", "pico", "xilinx", "stm32", "aducm3029"]:
-			shell_source(environment_path_files + platform + "_environment.sh")
-
+		
 		# The final link + .hex/.bin generation runs as a custom command whose
 		# failure does NOT report as a non-zero exit. So the .elf is the source
 		# of truth: remove any stale one, build, then require it.
