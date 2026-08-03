@@ -212,7 +212,7 @@ struct ad719x_init_param {
 	enum ad719x_chip_id chip_id;
 };
 
-/*! Checks if the AD7139 part is present. */
+/*! Checks if the AD719X part is present. */
 int ad719x_init(struct ad719x_dev **device,
 		struct ad719x_init_param init_param);
 
