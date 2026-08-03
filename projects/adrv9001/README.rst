@@ -295,7 +295,7 @@ variable. The HDL design name is ``adrv9001``; the hardware name is
 composed as ``adrv9001_<board>`` (e.g. ``adrv9001_zcu102``).
 
 For toolchain setup and prerequisites, see the
-:doc:`Xilinx CMake build guide </build_guides/build_xilinx>`.
+:doc:`Xilinx CMake build guide </build_guides/build_xilinx_cmake>`.
 
 .. code-block:: bash
 

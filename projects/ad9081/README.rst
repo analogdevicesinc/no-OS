@@ -164,7 +164,7 @@ The HDL design used is ``ad9081_fmca_ebz``. The hardware name composed for the
 XSA download is ``ad9081_fmca_ebz_<board>`` (e.g. ``ad9081_fmca_ebz_vcu118``).
 
 For toolchain setup and prerequisites, see the
-:doc:`Xilinx CMake build guide </build_guides/build_xilinx>`.
+:doc:`Xilinx CMake build guide </build_guides/build_xilinx_cmake>`.
 
 .. code-block:: bash
 

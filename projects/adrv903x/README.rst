@@ -257,7 +257,7 @@ is ``adrv903x``; the hardware name is composed as ``adrv903x_<board>``
 (e.g. ``adrv903x_zcu102``).
 
 For toolchain setup and prerequisites, see the
-:doc:`Xilinx CMake build guide </build_guides/build_xilinx>`.
+:doc:`Xilinx CMake build guide </build_guides/build_xilinx_cmake>`.
 
 .. code-block:: bash
 

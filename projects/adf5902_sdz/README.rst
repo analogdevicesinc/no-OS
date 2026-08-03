@@ -97,7 +97,7 @@ variable. The HDL design used is ``adv7511`` (a generic ZedBoard design
 providing PS SPI and GPIO).
 
 For toolchain setup and prerequisites, see the
-:doc:`Xilinx CMake build guide </build_guides/build_xilinx>`.
+:doc:`Xilinx CMake build guide </build_guides/build_xilinx_cmake>`.
 
 .. code-block:: bash
 

@@ -120,7 +120,7 @@ build it yourself by following the
 `Building HDL guide <https://wiki.analog.com/resources/fpga/docs/build>`_.
 
 For toolchain setup and prerequisites, see the
-:doc:`Xilinx CMake build guide </build_guides/build_xilinx>`.
+:doc:`Xilinx CMake build guide </build_guides/build_xilinx_cmake>`.
 
 .. code-block:: bash
 
