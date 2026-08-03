@@ -120,6 +120,11 @@ function(add_flash_target TARGET_NAME)
 		return()
 	endif()
 
+	# Linux userspace produces a native executable — nothing to flash.
+	if(PLATFORM STREQUAL "linux-userspace")
+		return()
+	endif()
+
 	if(NOT PROBE)
 		message(WARNING
 			"PROBE is empty; no 'flash'/'debug' targets will be created. "

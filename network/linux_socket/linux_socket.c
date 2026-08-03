@@ -31,7 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 
-#ifdef LINUX_PLATFORM
+#ifdef LINUX_USERSPACE_PLATFORM
 #define _GNU_SOURCE
 
 #include "linux_socket.h"

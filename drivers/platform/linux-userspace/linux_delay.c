@@ -1,7 +1,6 @@
-/*******************************************************************************
- *   @file   linux/linux_spi.h
- *   @brief  Header containing extra types and spi_platform_ops used by the
- *           SPI driver.
+/***************************************************************************//**
+ *   @file   linux_delay.c
+ *   @brief  Implementation of Linux platform Delay Driver.
  *   @author Dragos Bogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
@@ -31,12 +30,24 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef LINUX_SPI_H_
-#define LINUX_SPI_H_
+
+#include <stdint.h>
+#include <unistd.h>
 
 /**
- * @brief Linux specific SPI platform ops structure
+ * @brief Generate microseconds delay.
+ * @param usecs - Delay in microseconds.
  */
-extern const struct no_os_spi_platform_ops linux_spi_ops;
+void no_os_udelay(uint32_t usecs)
+{
+	usleep(usecs);
+}
 
-#endif // LINUX_SPI_H_
+/**
+ * @brief Generate miliseconds delay.
+ * @param msecs - Delay in miliseconds.
+ */
+void no_os_mdelay(uint32_t msecs)
+{
+	usleep(msecs * 1000);
+}

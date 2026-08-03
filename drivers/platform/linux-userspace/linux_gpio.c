@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   linux/linux_gpio.c
+ *   @file   linux_gpio.c
  *   @brief  Implementation of Linux platform GPIO Driver.
  *   @author Dragos Bogdan (dragos.bogdan@analog.com)
  *   @author Jamila Macagba (Jamila.Macagba@analog.com)

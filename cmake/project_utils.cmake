@@ -33,7 +33,9 @@ function(post_build_config PROJECT_TARGET)
         # file"), and `objcopy -O binary` pads the gap between low and high
         # sections with zeros, producing multi-GB files on MicroBlaze. So on
         # xilinx emit only the ELF (already built) and the size summary.
-        if(PLATFORM STREQUAL "xilinx")
+        # Similarly, on linux-userspace the output is a native x86_64 ELF whose
+        # load addresses overflow the Intel HEX 32-bit address range.
+        if(PLATFORM STREQUAL "xilinx" OR PLATFORM STREQUAL "linux-userspace")
                 add_custom_command(
                         TARGET ${PROJECT_TARGET}
                         POST_BUILD
