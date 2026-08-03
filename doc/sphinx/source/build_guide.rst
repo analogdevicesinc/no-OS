@@ -30,7 +30,7 @@ XILINX
 .. toctree::
     :maxdepth: 1
 
-    build_guides/build_xilinx
+    build_guides/build_xilinx_cmake
 
 INTEL
 =====

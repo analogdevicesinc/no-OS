@@ -130,7 +130,7 @@ The HDL design used is ``ad9083_evb``. The hardware name composed for the XSA
 download is ``ad9083_evb_zcu102``.
 
 For toolchain setup and prerequisites, see the
-:doc:`Xilinx CMake build guide </build_guides/build_xilinx>`.
+:doc:`Xilinx CMake build guide </build_guides/build_xilinx_cmake>`.
 
 .. code-block:: bash
 

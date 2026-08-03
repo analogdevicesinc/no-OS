@@ -132,7 +132,7 @@ The HDL design used is ``dac_fmc_ebz``. The hardware name composed for the XSA
 download is ``dac_fmc_ebz_<board>`` (e.g. ``dac_fmc_ebz_zc706``).
 
 For toolchain setup and prerequisites, see the
-:doc:`Xilinx CMake build guide </build_guides/build_xilinx>`.
+:doc:`Xilinx CMake build guide </build_guides/build_xilinx_cmake>`.
 
 .. code-block:: bash
 
