@@ -41,8 +41,8 @@
 #include "xilinx/parameters.h"
 #elif defined ADUCM_PLATFORM
 #include "aducm3029/parameters.h"
-#elif defined LINUX_PLATFORM
-#include "linux/parameters.h"
+#elif defined LINUX_USERSPACE_PLATFORM
+#include "linux-userspace/parameters.h"
 #elif defined PICO_PLATFORM
 #include "pico/parameters.h"
 #endif
