@@ -64,10 +64,10 @@ int dummy_example_main()
 	if (ret)
 		return ret;
 
-	v = ad719x_convert_to_volts(dev, avg, 3.3);
+	v = ad719x_convert_to_millivolts(dev, avg, 3.3);
 
 	pr_info("Temperature = %.6f C/n", temp);
-	pr_info("Average read from 100 samples = %.6f Volts.", avg);
+	pr_info("Average read from 100 samples = %.6f mV.", v);
 
 	return 0;
 }
