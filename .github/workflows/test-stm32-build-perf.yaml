@@ -1,0 +1,317 @@
+name: STM32 Build Performance Diagnostic
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - run-stm32-diagnostic-build-suite
+
+permissions:
+  contents: read
+
+jobs:
+  stm32-build-diagnostic:
+    runs-on: stm32-runner
+    env:
+      STM32CUBEIDE: ${{ vars.STM32CUBEIDE }}
+      STM32CUBEMX: ${{ vars.STM32CUBEMX }}
+      NO_OS_CACHE_DIR: /no-OS_builds/deps_cache
+      TEST_PROJECT: ad405x
+      TEST_VARIANT: basic
+      TEST_BOARD: nucleo-h563zi
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          submodules: false
+          clean: false
+
+      - name: System info
+        run: |
+          echo "=== CPU ==="
+          nproc
+          cat /proc/cpuinfo | grep "model name" | head -1
+          echo "=== Memory ==="
+          free -h
+          echo "=== Disk ==="
+          df -h ${{ github.workspace }}
+          df -h /no-OS_builds/ 2>/dev/null || true
+          echo "=== CMake ==="
+          cmake --version | head -1
+          echo "=== Ninja ==="
+          ninja --version
+          echo "=== Workspace ==="
+          echo "${{ github.workspace }}"
+
+      - name: Count STM32 project combos
+        run: |
+          echo "=== Discovering all STM32 combos ==="
+          python3 ${{ github.workspace }}/tools/scripts/no_os_build.py list \
+            --repo-root ${{ github.workspace }} \
+            --platform stm32 2>/dev/null | tee /tmp/stm32_combos.txt || true
+          echo "=== Combo count ==="
+          wc -l < /tmp/stm32_combos.txt || echo "list command not available, counting build dirs..."
+          ls ${{ github.workspace }}/builds_main_cmake/ 2>/dev/null | grep -v "^build-" | grep -v "^builds" | wc -l
+
+      # ------------------------------------------------------------------
+      # Test 1: Profile a single build with --fresh (cold configure)
+      # ------------------------------------------------------------------
+      - name: "Test 1: Single build WITH --fresh (cold configure)"
+        run: |
+          BUILD_DIR=/tmp/diag-fresh
+          rm -rf $BUILD_DIR
+
+          echo "=== Configure (--fresh, cold) ==="
+          time cmake -B $BUILD_DIR \
+            --preset $TEST_BOARD \
+            -DPROJECT_DEFCONFIG=$TEST_PROJECT/$TEST_VARIANT.conf \
+            --fresh \
+            -DPROBE=openocd \
+            -S ${{ github.workspace }} 2>&1 | tail -20
+
+          echo ""
+          echo "=== Build ==="
+          time cmake --build $BUILD_DIR --target $TEST_PROJECT -j 4 2>&1 | tail -10
+
+          echo ""
+          echo "=== CubeMX stamp check ==="
+          find $BUILD_DIR -name ".cubemx_stamp" -exec echo "Stamp: {}" \; -exec cat {} \;
+
+      # ------------------------------------------------------------------
+      # Test 2: Re-configure with --fresh (warm CubeMX stamp, warm objects)
+      # ------------------------------------------------------------------
+      - name: "Test 2: Re-configure WITH --fresh (warm objects)"
+        run: |
+          BUILD_DIR=/tmp/diag-fresh
+
+          echo "=== Configure (--fresh, warm objects) ==="
+          time cmake -B $BUILD_DIR \
+            --preset $TEST_BOARD \
+            -DPROJECT_DEFCONFIG=$TEST_PROJECT/$TEST_VARIANT.conf \
+            --fresh \
+            -DPROBE=openocd \
+            -S ${{ github.workspace }} 2>&1 | tail -20
+
+          echo ""
+          echo "=== Build (should be near-instant if Ninja sees no changes) ==="
+          time cmake --build $BUILD_DIR --target $TEST_PROJECT -j 4 2>&1 | tail -10
+
+          echo ""
+          echo "=== Ninja build log stats ==="
+          ninja -C $BUILD_DIR -n -d stats 2>&1 | tail -20 || true
+
+      # ------------------------------------------------------------------
+      # Test 3: Configure WITHOUT --fresh (incremental, like Xilinx does)
+      # ------------------------------------------------------------------
+      - name: "Test 3: Configure WITHOUT --fresh (incremental)"
+        run: |
+          BUILD_DIR=/tmp/diag-fresh
+
+          echo "=== Configure (no --fresh, fully incremental) ==="
+          time cmake -B $BUILD_DIR \
+            --preset $TEST_BOARD \
+            -DPROJECT_DEFCONFIG=$TEST_PROJECT/$TEST_VARIANT.conf \
+            -DPROBE=openocd \
+            -S ${{ github.workspace }} 2>&1 | tail -20
+
+          echo ""
+          echo "=== Build ==="
+          time cmake --build $BUILD_DIR --target $TEST_PROJECT -j 4 2>&1 | tail -10
+
+      # ------------------------------------------------------------------
+      # Test 4: Profile 5 combos serially (mimics CI loop)
+      # ------------------------------------------------------------------
+      - name: "Test 4: Profile 5 combos serially with --fresh"
+        run: |
+          BASE_DIR=/tmp/diag-multi
+          rm -rf $BASE_DIR
+
+          COMBOS=(
+            "ad405x:basic:nucleo-h563zi"
+            "ad463x_fmcz:basic:sdp-ck1z"
+            "ad74413r:iio:nucleo-f756zg"
+            "iio_demo:iio:sdp-ck1z"
+            "eval-adxl38x:basic:nucleo-f767zi"
+          )
+
+          TOTAL_START=$SECONDS
+          for combo in "${COMBOS[@]}"; do
+            IFS=: read -r proj var board <<< "$combo"
+            BUILD_DIR="$BASE_DIR/$proj-$var-$board"
+            COMBO_START=$SECONDS
+
+            echo "=== Building $proj/$var for $board ==="
+
+            echo "  Configure..."
+            CFG_START=$SECONDS
+            cmake -B "$BUILD_DIR" \
+              --preset "$board" \
+              -DPROJECT_DEFCONFIG="$proj/$var.conf" \
+              --fresh \
+              -DPROBE=openocd \
+              -S ${{ github.workspace }} > /dev/null 2>&1
+            CFG_TIME=$((SECONDS - CFG_START))
+
+            echo "  Build..."
+            BLD_START=$SECONDS
+            cmake --build "$BUILD_DIR" --target "$proj" -j 4 > /dev/null 2>&1
+            BLD_TIME=$((SECONDS - BLD_START))
+
+            COMBO_TIME=$((SECONDS - COMBO_START))
+            echo "  Configure: ${CFG_TIME}s | Build: ${BLD_TIME}s | Total: ${COMBO_TIME}s"
+
+            # Check if CubeMX ran
+            if find "$BUILD_DIR" -name ".cubemx_stamp" -newer "$BUILD_DIR/CMakeCache.txt" 2>/dev/null | grep -q .; then
+              echo "  CubeMX: regenerated"
+            else
+              echo "  CubeMX: cached"
+            fi
+            echo ""
+          done
+          TOTAL_TIME=$((SECONDS - TOTAL_START))
+          echo "=== Total for 5 combos: ${TOTAL_TIME}s (avg $((TOTAL_TIME / 5))s per combo) ==="
+
+      # ------------------------------------------------------------------
+      # Test 5: Re-run same 5 combos (warm cache, measures --fresh overhead)
+      # ------------------------------------------------------------------
+      - name: "Test 5: Re-run same 5 combos (warm cache)"
+        run: |
+          BASE_DIR=/tmp/diag-multi
+
+          COMBOS=(
+            "ad405x:basic:nucleo-h563zi"
+            "ad463x_fmcz:basic:sdp-ck1z"
+            "ad74413r:iio:nucleo-f756zg"
+            "iio_demo:iio:sdp-ck1z"
+            "eval-adxl38x:basic:nucleo-f767zi"
+          )
+
+          TOTAL_START=$SECONDS
+          for combo in "${COMBOS[@]}"; do
+            IFS=: read -r proj var board <<< "$combo"
+            BUILD_DIR="$BASE_DIR/$proj-$var-$board"
+            COMBO_START=$SECONDS
+
+            echo "=== Rebuilding $proj/$var for $board (warm) ==="
+
+            echo "  Configure (--fresh)..."
+            CFG_START=$SECONDS
+            cmake -B "$BUILD_DIR" \
+              --preset "$board" \
+              -DPROJECT_DEFCONFIG="$proj/$var.conf" \
+              --fresh \
+              -DPROBE=openocd \
+              -S ${{ github.workspace }} > /dev/null 2>&1
+            CFG_TIME=$((SECONDS - CFG_START))
+
+            echo "  Build..."
+            BLD_START=$SECONDS
+            cmake --build "$BUILD_DIR" --target "$proj" -j 4 > /dev/null 2>&1
+            BLD_TIME=$((SECONDS - BLD_START))
+
+            COMBO_TIME=$((SECONDS - COMBO_START))
+            echo "  Configure: ${CFG_TIME}s | Build: ${BLD_TIME}s | Total: ${COMBO_TIME}s"
+            echo ""
+          done
+          TOTAL_TIME=$((SECONDS - TOTAL_START))
+          echo "=== Total warm re-run: ${TOTAL_TIME}s (avg $((TOTAL_TIME / 5))s per combo) ==="
+
+      # ------------------------------------------------------------------
+      # Test 6: Same 5 combos WITHOUT --fresh (what removing it would gain)
+      # ------------------------------------------------------------------
+      - name: "Test 6: Same 5 combos WITHOUT --fresh"
+        run: |
+          BASE_DIR=/tmp/diag-multi
+
+          COMBOS=(
+            "ad405x:basic:nucleo-h563zi"
+            "ad463x_fmcz:basic:sdp-ck1z"
+            "ad74413r:iio:nucleo-f756zg"
+            "iio_demo:iio:sdp-ck1z"
+            "eval-adxl38x:basic:nucleo-f767zi"
+          )
+
+          TOTAL_START=$SECONDS
+          for combo in "${COMBOS[@]}"; do
+            IFS=: read -r proj var board <<< "$combo"
+            BUILD_DIR="$BASE_DIR/$proj-$var-$board"
+            COMBO_START=$SECONDS
+
+            echo "=== Rebuilding $proj/$var for $board (no --fresh) ==="
+
+            echo "  Configure..."
+            CFG_START=$SECONDS
+            cmake -B "$BUILD_DIR" \
+              --preset "$board" \
+              -DPROJECT_DEFCONFIG="$proj/$var.conf" \
+              -DPROBE=openocd \
+              -S ${{ github.workspace }} > /dev/null 2>&1
+            CFG_TIME=$((SECONDS - CFG_START))
+
+            echo "  Build..."
+            BLD_START=$SECONDS
+            cmake --build "$BUILD_DIR" --target "$proj" -j 4 > /dev/null 2>&1
+            BLD_TIME=$((SECONDS - BLD_START))
+
+            COMBO_TIME=$((SECONDS - COMBO_START))
+            echo "  Configure: ${CFG_TIME}s | Build: ${BLD_TIME}s | Total: ${COMBO_TIME}s"
+            echo ""
+          done
+          TOTAL_TIME=$((SECONDS - TOTAL_START))
+          echo "=== Total no-fresh: ${TOTAL_TIME}s (avg $((TOTAL_TIME / 5))s per combo) ==="
+
+      # ------------------------------------------------------------------
+      # Test 7: Compare builds_dir inside workspace vs persistent path
+      # ------------------------------------------------------------------
+      - name: "Test 7: Workspace path vs persistent path (/no-OS_builds/builds)"
+        run: |
+          echo "=== Workspace build dir ==="
+          WS_DIR=${{ github.workspace }}/builds_main_cmake/ad405x-basic-nucleo-h563zi
+          if [ -d "$WS_DIR" ]; then
+            echo "Exists: yes"
+            ls "$WS_DIR"/*.o 2>/dev/null | wc -l | xargs -I{} echo "Object files: {}"
+            find "$WS_DIR" -name ".cubemx_stamp" -exec echo "CubeMX stamp: {}" \;
+            echo "CMakeCache source dir:"
+            grep "CMAKE_HOME_DIRECTORY" "$WS_DIR/CMakeCache.txt" 2>/dev/null || echo "No CMakeCache"
+          else
+            echo "Exists: no"
+          fi
+
+          echo ""
+          echo "=== Persistent build dir (Azure-era) ==="
+          PERS_DIR=/no-OS_builds/builds_main_cmake/ad405x-basic-nucleo-h563zi
+          if [ -d "$PERS_DIR" ]; then
+            echo "Exists: yes"
+            ls "$PERS_DIR"/*.o 2>/dev/null | wc -l | xargs -I{} echo "Object files: {}"
+            find "$PERS_DIR" -name ".cubemx_stamp" -exec echo "CubeMX stamp: {}" \;
+            echo "CMakeCache source dir:"
+            grep "CMAKE_HOME_DIRECTORY" "$PERS_DIR/CMakeCache.txt" 2>/dev/null || echo "No CMakeCache"
+          else
+            echo "Exists: no"
+          fi
+
+      # ------------------------------------------------------------------
+      # Test 8: CubeMX regeneration count across existing build dirs
+      # ------------------------------------------------------------------
+      - name: "Test 8: CubeMX stamp freshness across build dirs"
+        run: |
+          BUILD_BASE=${{ github.workspace }}/builds_main_cmake
+          if [ ! -d "$BUILD_BASE" ]; then
+            echo "No builds_main_cmake directory found"
+            exit 0
+          fi
+
+          TOTAL=$(find "$BUILD_BASE" -maxdepth 1 -type d | wc -l)
+          WITH_STAMP=$(find "$BUILD_BASE" -name ".cubemx_stamp" | wc -l)
+          echo "Build dirs: $((TOTAL - 1))"
+          echo "CubeMX stamps found: $WITH_STAMP"
+
+          echo ""
+          echo "=== Sample stamp contents (first 5) ==="
+          find "$BUILD_BASE" -name ".cubemx_stamp" | head -5 | while read f; do
+            echo "$f: $(cat "$f")"
+          done
+
+      - name: Cleanup diagnostic builds
+        if: always()
+        run: rm -rf /tmp/diag-fresh /tmp/diag-multi
