@@ -38,7 +38,7 @@
 #include "iio_trigger.h"
 #include "iio_ad7091r8.h"
 
-#ifndef LINUX_PLATFORM
+#ifndef LINUX_USERSPACE_PLATFORM
 struct iio_trigger ad7091r8_iio_timer_trig_desc = {
 	.is_synchronous = true,
 	.enable = iio_trig_enable,

@@ -38,7 +38,7 @@
 #include "iio.h"
 #include "iio_trigger.h"
 
-#ifndef LINUX_PLATFORM
+#ifndef LINUX_USERSPACE_PLATFORM
 /**
  * @brief Initialize hardware trigger.
  *
