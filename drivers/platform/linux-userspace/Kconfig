@@ -1,0 +1,48 @@
+menuconfig LINUX_USERSPACE
+	bool "Linux Userspace Platform Drivers"
+	default n
+	help
+	  Enable support for Linux userspace platform drivers.
+
+	  These drivers communicate with hardware through Linux kernel
+	  interfaces (spidev, i2c-dev, gpio-cdev, etc.), allowing no-OS
+	  projects to run as native Linux userspace applications.
+
+if LINUX_USERSPACE
+
+config GPIO_LINUX_USERSPACE
+	bool "Enable Linux userspace GPIO driver"
+	depends on GPIO
+	default n
+	help
+	  Enable GPIO driver using the Linux GPIO character device interface.
+
+config I2C_LINUX_USERSPACE
+	bool "Enable Linux userspace I2C driver"
+	depends on I2C
+	default n
+	help
+	  Enable I2C driver using the Linux i2c-dev interface.
+
+config SPI_LINUX_USERSPACE
+	bool "Enable Linux userspace SPI driver"
+	depends on SPI
+	default n
+	help
+	  Enable SPI driver using the Linux spidev interface.
+
+config UART_LINUX_USERSPACE
+	bool "Enable Linux userspace UART driver"
+	depends on UART
+	default n
+	help
+	  Enable UART driver using the Linux serial interface.
+
+config TIMER_LINUX_USERSPACE
+	bool "Enable Linux userspace timer driver"
+	depends on TIMER
+	default n
+	help
+	  Enable timer driver using Linux userspace timing interfaces.
+
+endif # LINUX_USERSPACE

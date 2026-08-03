@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   linux/linux_uart.c
+ *   @file   linux_uart.c
  *   @brief  Implementation of Linux platform UART Driver.
  *   @author Dragos Bogdan (dragos.bogdan@analog.com)
 ********************************************************************************

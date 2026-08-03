@@ -1,6 +1,6 @@
 /*******************************************************************************
- *   @file   linux/linux_gpio.h
- *   @brief  Header containing no_os_gpio_platform_ops used by the GPIO driver.
+ *   @file   linux_uart.h
+ *   @brief  Header containing extra types used by the UART driver.
  *   @author Dragos Bogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
@@ -30,12 +30,24 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef LINUX_GPIO_H_
-#define LINUX_GPIO_H_
+#ifndef LINUX_UART_H_
+#define LINUX_UART_H_
+
+#include "no_os_uart.h"
 
 /**
- * @brief Linux specific GPIO platform ops structure
+ * @struct linux_uart_init_param
+ * @brief Structure holding the initialization parameters for Linux platform
+ * specific UART parameters.
  */
-extern const struct no_os_gpio_platform_ops linux_gpio_ops;
+struct linux_uart_init_param {
+	/** UART device ID (/dev/"device_id") */
+	const char *device_id;
+};
 
-#endif // LINUX_GPIO_H_
+/**
+ * @brief Linux platform specific UART platform ops structure
+ */
+extern const struct no_os_uart_platform_ops linux_uart_ops;
+
+#endif // LINUX_UART_H_

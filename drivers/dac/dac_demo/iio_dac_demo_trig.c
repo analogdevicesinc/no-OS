@@ -51,7 +51,7 @@ struct iio_trigger dac_iio_sw_trig_desc = {
 	.attributes = trig_attr,
 };
 
-#ifndef LINUX_PLATFORM
+#ifndef LINUX_USERSPACE_PLATFORM
 struct iio_trigger dac_iio_timer_trig_desc = {
 	.is_synchronous = true,
 	.enable = iio_trig_enable,
