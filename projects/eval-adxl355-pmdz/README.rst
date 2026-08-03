@@ -181,7 +181,7 @@ Build Command
 ^^^^^^^^^^^^^
 
 For toolchain setup and prerequisites, see the
-`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
+:doc:`ADuCM3029 CMake build guide </build_guides/build_aducm3029_cmake>`.
 
 Available variants: ``dummy``, ``iio``, ``iio_trigger``.
 Available boards: ``eval-adicup3029``.
@@ -236,7 +236,7 @@ Build Command
 ^^^^^^^^^^^^^
 
 For toolchain setup and prerequisites, see the
-`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
 
 Available variants: ``dummy``, ``dummy_adxl357``, ``dummy_adxl359``, ``iio``, ``iio_adxl357``, ``iio_adxl359``, ``iio_trigger``, ``iio_trigger_adxl357``, ``iio_trigger_adxl359``.
 Available boards: ``ad-apard32690-sl``, ``max32650fthr``, ``max32655fthr``, ``max32660fthr``, ``max32666fthr``, ``max78000fthr``.
@@ -298,7 +298,7 @@ Build Command
 ^^^^^^^^^^^^^
 
 For toolchain setup and prerequisites, see the
-`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
+:doc:`STM32 CMake build guide </build_guides/build_stm32_cmake>`.
 
 Available variants: ``dummy``, ``iio``, ``iio_trigger``, ``iio_lwip``.
 Available boards: ``sdp-ck1z``, ``adin1110ebz``.
@@ -362,7 +362,7 @@ Build Command
 ^^^^^^^^^^^^^
 
 For toolchain setup and prerequisites, see the
-`Raspberry Pi Pico CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_pico_cmake.html>`__.
+:doc:`Raspberry Pi Pico CMake build guide </build_guides/build_pico_cmake>`.
 
 Available variants: ``dummy``, ``iio``, ``iio_trigger``.
 Available boards: ``rpi-pico``.

@@ -80,7 +80,7 @@ Build Command
 ^^^^^^^^^^^^^
 
 For toolchain setup and prerequisites, see the
-`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
+:doc:`ADuCM3029 CMake build guide </build_guides/build_aducm3029_cmake>`.
 
 Available variants: ``flash``.
 Available boards: ``eval-adicup3029``.

@@ -11,7 +11,7 @@ Prerequisites
 
 Prior to building the project, a couple steps are necessary in order to get the
 Maxim Micros SDK and setup the environment. These are presented in the
-`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
 
 The MaximSDK provides distributions of ``arm-none-eabi-`` GCC compiler +
 utilities and ``OpenOCD``, so you don't have to install these separately.
@@ -35,7 +35,7 @@ No-OS Supported Examples
 The project is built with CMake through the ``no_os_build.py`` helper. Each
 firmware configuration is selected with a ``--variant`` (the ``.conf`` files in
 this directory). For toolchain setup and prerequisites, see the
-`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__:
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`:
 
 * ``swiot1l_static_ip`` - IIO firmware with a static IP address.
 * ``swiot1l_dhcp`` - IIO firmware with the IP assigned over DHCP.

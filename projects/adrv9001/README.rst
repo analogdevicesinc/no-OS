@@ -51,7 +51,7 @@ Applications
 No-OS Build Setup
 -----------------
 
-Please see: `No-OS Build Guide <https://analogdevicesinc.github.io/no-OS/build_guide.html>`__
+Please see: :doc:`No-OS Build Guide </build_guide>`
 
 Driver Layout
 -------------
@@ -295,7 +295,7 @@ variable. The HDL design name is ``adrv9001``; the hardware name is
 composed as ``adrv9001_<board>`` (e.g. ``adrv9001_zcu102``).
 
 For toolchain setup and prerequisites, see the
-`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
+:doc:`Xilinx CMake build guide </build_guides/build_xilinx>`.
 
 .. code-block:: bash
 

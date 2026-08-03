@@ -146,19 +146,20 @@ Build Command
 .. build-and-flash. Show the env var with Unix `export` first, then the
 .. PowerShell equivalent right after for Windows users.
 ..
-.. Link to the platform's CMake build guide on GitHub Pages for toolchain
-.. setup and prerequisites. Use the guide matching this platform, e.g.:
-..    Maxim     -> build_maxim_cmake.html
-..    ADuCM3029 -> build_aducm3029_cmake.html
-..    STM32     -> build_stm32_cmake.html
-..    Xilinx    -> build_xilinx_cmake.html
+.. Cross-reference the platform's CMake build guide with a Sphinx :doc: role
+.. for toolchain setup and prerequisites. Use the absolute target (leading
+.. slash) matching this platform, e.g.:
+..    Maxim     -> </build_guides/build_maxim_cmake>
+..    ADuCM3029 -> </build_guides/build_aducm3029_cmake>
+..    STM32     -> </build_guides/build_stm32_cmake>
+..    Xilinx    -> </build_guides/build_xilinx>
 
 The <Platform> platform uses the CMake/Ninja build system via the
 ``no_os_build.py`` helper script. Available variants: ``<variant>``.
 Available boards: ``<board>``.
 
 For toolchain setup and prerequisites, see the
-`<Platform> CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_<platform>_cmake.html>`__.
+:doc:`<Platform> CMake build guide </build_guides/build_<platform>_cmake>`.
 
 .. code-block:: bash
 

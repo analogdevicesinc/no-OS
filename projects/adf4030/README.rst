@@ -200,7 +200,7 @@ board. 12V power supply needs to be connected. Reference clock can be provided u
 **Build Command**
 
 For toolchain setup and prerequisites, see the
-`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
+:doc:`STM32 CMake build guide </build_guides/build_stm32_cmake>`.
 
 Available variants: ``basic``, ``iio``.
 Available boards: ``sdp-ck1z``.

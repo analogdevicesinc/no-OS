@@ -60,11 +60,11 @@ placeholder rather than guessing.
 
   ```rst
   For toolchain setup and prerequisites, see the
-  `<Platform> CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_<platform>_cmake.html>`__.
+  `<Platform> CMake build guide <https://developer.analog.com/docs/no-os/build_guides/build_<platform>_cmake.html>`__.
   ```
 
   Guide filenames: `build_maxim_cmake.html`, `build_aducm3029_cmake.html`,
-  `build_stm32_cmake.html`, `build_xilinx_cmake.html`. Make sure **every**
+  `build_stm32_cmake.html`, `build_xilinx.html`. Make sure **every**
   platform section gets its matching link — do not link only some platforms.
 
 - For IIO variants, include the IIO No-OS and IIO-Oscilloscope dokuwiki pointers

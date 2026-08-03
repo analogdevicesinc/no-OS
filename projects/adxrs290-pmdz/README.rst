@@ -173,7 +173,7 @@ Build Command
 ^^^^^^^^^^^^^
 
 For toolchain setup and prerequisites, see the
-`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
+:doc:`ADuCM3029 CMake build guide </build_guides/build_aducm3029_cmake>`.
 
 Available variants: ``iio``, ``iio_timer_trigger``.
 Available boards: ``eval-adicup3029``.
@@ -251,7 +251,7 @@ Build Command
 ^^^^^^^^^^^^^
 
 For toolchain setup and prerequisites, see the
-`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
 
 Available variants: ``iio``, ``iio_trigger``.
 Available boards: ``max32655fthr``.
@@ -319,7 +319,7 @@ Build Command
 ^^^^^^^^^^^^^
 
 For toolchain setup and prerequisites, see the
-`Raspberry Pi Pico CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_pico_cmake.html>`__.
+:doc:`Raspberry Pi Pico CMake build guide </build_guides/build_pico_cmake>`.
 
 Available variants: ``iio``, ``iio_timer_trigger``, ``iio_trigger``.
 Available boards: ``rpi-pico``.
@@ -388,7 +388,7 @@ Build Command
 ^^^^^^^^^^^^^
 
 For toolchain setup and prerequisites, see the
-`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
+:doc:`STM32 CMake build guide </build_guides/build_stm32_cmake>`.
 
 Available variants: ``iio``.
 Available boards: ``sdp-ck1z``.

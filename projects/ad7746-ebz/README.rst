@@ -136,7 +136,7 @@ bus.
 **Build Command**
 
 For toolchain setup and prerequisites, see the
-`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
+:doc:`ADuCM3029 CMake build guide </build_guides/build_aducm3029_cmake>`.
 
 Available variants: ``capacitive_length_demo``, ``iio_capacitive_length_demo``.
 Available boards: ``eval-adicup3029``.

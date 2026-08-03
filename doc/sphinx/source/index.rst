@@ -16,13 +16,6 @@ applications, highly customizable according to users' requirements. It provides:
 - **Ready-to-build project examples** you can flash to supported evaluation
   boards to get started quickly.
 
-.. note::
-
-   We are in the process of moving the no-OS documentation from `wiki.analog.com <https://wiki.analog.com/resources/no-os>`_
-   to  `analogdevicesinc.github.io/no-OS <http://analogdevicesinc.github.io/no-OS/>`_.
-
-   We apologize for any inconvenience that may occur due to this migration.
-
 Getting started
 ---------------
 
@@ -77,5 +70,5 @@ Additional resources
 
 - **Source code**: `github.com/analogdevicesinc/no-OS <https://github.com/analogdevicesinc/no-OS>`_
 - **API reference**: for code documentation automatically generated from the
-  sources, see our `No-OS Doxygen Documentation <https://analogdevicesinc.github.io/no-OS/doxygen>`_.
+  sources, see our `No-OS Doxygen Documentation <https://developer.analog.com/docs/no-os/doxygen>`_.
 - **Community support**: ask questions on the `EngineerZone <https://ez.analog.com/>`_ forums.

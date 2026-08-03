@@ -77,7 +77,7 @@ The Xilinx platform uses the CMake/Ninja build system via the
 Available boards: ``zed``.
 
 For toolchain setup and prerequisites, see the
-`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
+:doc:`Xilinx CMake build guide </build_guides/build_xilinx>`.
 
 .. code-block:: bash
 
@@ -115,7 +115,7 @@ your board, pass it directly with ``--hardware``::
 
 The `ADI HDL repository <https://github.com/analogdevicesinc/hdl>`__ contains
 reference designs for many boards. Follow the
-`ADI HDL build guide <https://analogdevicesinc.github.io/hdl/user_guide/build_hdl.html>`__
+`ADI HDL build guide <https://developer.analog.com/docs/hdl/user_guide/build_hdl.html>`__
 to generate a ``system_top.xsa`` for your board.
 
 Expected Output

@@ -51,7 +51,7 @@ The board is powered through the USB port of the EVAL-ADIN1110.
 No-OS Build Setup
 -----------------
 
-Please see: https://analogdevicesinc.github.io/no-OS/build_guide.html
+Please see the :doc:`No-OS Build Guide </build_guide>`.
 
 No-OS Supported Examples
 -------------------------
@@ -132,7 +132,7 @@ STM32 Platform
 **Build Command**
 
 For toolchain setup and prerequisites, see the
-`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
+:doc:`STM32 CMake build guide </build_guides/build_stm32_cmake>`.
 
 Available variants: ``basic``, ``iio_lwip``, ``iio_lwip_cn0391``.
 Available boards: ``adin1110ebz``.

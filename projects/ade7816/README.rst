@@ -118,7 +118,7 @@ SS          P17.5                         P4.1
 **Build Command**
 
 For toolchain setup and prerequisites, see the
-`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
 
 Available variants: ``basic``.
 Available boards: ``ad-apard32690-sl``.

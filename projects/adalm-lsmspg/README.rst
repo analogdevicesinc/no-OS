@@ -87,7 +87,7 @@ Build Setup
 ^^^^^^^^^^^
 
 For toolchain setup and prerequisites, see the
-`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
 
 Available variants: ``curvetrace_example``, ``iio``.
 Available boards: ``max32666fthr``.
