@@ -720,28 +720,29 @@ int ad719x_temperature_read(struct ad719x_dev *dev, float *temp)
 }
 
 /***************************************************************************//**
- * @brief Converts 24-bit raw data to milivolts.
+ * @brief Converts 24-bit raw data to millivolts.
  *
  * @param dev       - The device structure.
  * @param raw_data  - 24-bit data sample.
  * @param v_ref     - The value of the voltage reference used by the device.
  *
- * @return voltage - The result of the conversion expressed as volts.
+ * @return millivolts - The result of the conversion expressed as millivolts.
 *******************************************************************************/
-float ad719x_convert_to_volts(struct ad719x_dev *dev,
-			      uint32_t raw_data,
-			      float v_ref)
+float ad719x_convert_to_millivolts(struct ad719x_dev *dev,
+				   uint32_t raw_data,
+				   float v_ref)
 {
-	float voltage = 0;
+	float millivolts = 0;
 
 	if (dev->current_polarity == 0) { // Bipolar mode
-		voltage = 1000 * (((float)raw_data / (1ul << 23)) - 1) * v_ref /
-			  dev->current_gain;
+		millivolts = 1000 * (((float)raw_data / (1ul << 23)) - 1) * v_ref /
+			     dev->current_gain;
 	} else {                    // Unipolar mode
-		voltage = 1000 * ((float)raw_data * v_ref) / (1ul << 24) / dev->current_gain;
+		millivolts = 1000 * ((float)raw_data * v_ref) / (1ul << 24) /
+			     dev->current_gain;
 	}
 
-	return voltage;
+	return millivolts;
 }
 
 /***************************************************************************//**
