@@ -54,12 +54,12 @@ outputs and utilizing EEPROM for settings retention. Additionally, power
 is supplied via USB for communication with a PC, enabling configuration
 through the provided Windows-based software.
 
-Connectors
-~~~~~~~~~~
+On-board Connectors
+~~~~~~~~~~~~~~~~~~~~
 
 +-----------------------+-----------------------+-----------------------+
-| Connector Type        | Description           | Functionality         |
-+-----------------------+-----------------------+-----------------------+
+| Connector             | Description           | Functionality         |
++=======================+=======================+=======================+
 | J300                  | SMB Connector         | Reference input for   |
 |                       |                       | single-ended or       |
 |                       |                       | differential signals  |
@@ -83,70 +83,103 @@ Connectors
 |                       |                       | configuration         |
 +-----------------------+-----------------------+-----------------------+
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
-The initialization data used in the example is taken out from the
-`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9545/src/common>`__.
+This project is organized around the no-OS variant based build flow.
+Selecting a variant at build time (``--variant <name>``) chooses which
+application is compiled. The platform ``main()`` is a thin dispatcher
+that calls ``example_main()``, provided by the selected example. Shared
+initialization data is defined in
+`src/common <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9545/src/common>`__,
+and platform-specific macros and extra init parameters are in
+`src/platform <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9545/src/platform>`__.
 
-The macros used in Common Data are defined in platform specific files
-found in the
-`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9545/src/platform>`__.
-
-Basic example
+Basic Example
 ~~~~~~~~~~~~~
 
-The basic example code for the AD9545 device within the no-OS project
-showcases the initialization and configuration of the device's clock
-systems. This includes the setup of reference clocks, PLLs, NCOs, and
-output clocks. Configuration begins by specifying initialization
-parameters for communication interfaces like UART, SPI, and I2C via
-structures including ``ad9545_uart_ip``, ``ad9545_spi_ip``, and
-``ad9545_i2c_ip``. The ``basic_example_main`` function oversees the
-initialization and configuration process, setting clock rates, assigning
-parent clocks, and recalibrating PLLs through functions such as
-``ad9545_init``, ``ad9545_setup``, and ``ad9545_calib_aplls``. This
-ensures accurate clock source management. Error handling is incorporated
-to address possible initialization failures, with ongoing verification
-through continuous operation checks.
+The basic example initializes and configures the AD9545 clock synthesizer
+end-to-end. It sets up the system reference clock (52 MHz crystal), two
+PLLs (PLL0 targeting 1.4 GHz, PLL1 targeting 1.75 GHz), an NCO, four
+output clocks (Q0A/Q0B at 10 MHz, Q1A at 25 MHz, Q1B at 10 MHz), and an
+auxiliary TDC, then recalibrates the APLLs. Status and any errors are
+printed to standard output.
 
-In order to build the basic example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad9545/Makefile>`__:
-
-.. code-block:: bash
-
-   # Select the example you want to enable
-   EXAMPLE = basic_example
+The communication interface (SPI or I2C) is selected by the ``COMM_TYPE``
+macro in
+`src/platform/linux-userspace/parameters.h <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9545/src/platform/linux-userspace/parameters.h>`__
+(defaults to SPI). Tunable clock parameters are in
+`src/examples/basic_example/basic_example.c <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9545/src/examples/basic_example/basic_example.c>`__.
 
 No-OS Supported Platforms
 -------------------------
 
-Linux Platform
-~~~~~~~~~~~~~~
+Linux Userspace
+~~~~~~~~~~~~~~~
+
+Used Hardware
+^^^^^^^^^^^^^
+
+* `EVAL-AD9545 <https://www.analog.com/EVAL-AD9545>`_
+* A Linux host with a SPI or I2C bus exposed via kernel device nodes
+  (e.g. a Raspberry Pi, Beaglebone, or any single-board computer running
+  Linux with spidev/i2c-dev enabled).
 
 Connections
 ^^^^^^^^^^^
 
-* Connect the 6V wall power supply to the main power connector labeled
-  P700.
-* Connect the USB cable to the EVAL-AD9545 evaluation board and the
-  Linux platform. The red LED labeled 'DS301' should illuminate, and the
-  LED labeled 'USB_STA' should blink.
+The AD9545 communicates over SPI or I2C. Connect the EVAL-AD9545 to the
+Linux host's bus header:
+
+**SPI (default)**
+
+=========== =========================================
+Signal      Linux spidev node / pin
+=========== =========================================
+SCLK        SPI bus clock (``/dev/spidev0.0`` by default)
+MOSI        SPI MOSI
+MISO        SPI MISO
+CS          SPI chip select 0
+3.3V / GND  Host 3.3V rail and ground
+=========== =========================================
+
+The SPI bus and chip-select indices are controlled by ``SPI_DEVICE_ID``
+and ``SPI_CS`` in ``parameters.h`` (defaults: device 0, CS 0).
+
+**I2C (alternative)**
+
+Set ``COMM_TYPE`` to ``I2C`` in ``parameters.h`` and wire the SDA/SCL
+lines. The I2C bus index is set by ``device_id`` in ``parameters.c``
+(default: 0, mapping to ``/dev/i2c-0``).
+
+No UART console is needed — the example prints directly to ``stdout``.
 
 Build Command
 ^^^^^^^^^^^^^
 
+The Linux userspace platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variants: ``basic_example``.
+Available boards: ``rpi4``.
+
+No toolchain environment variable is required — the system ``gcc`` is
+used automatically.
+
 .. code-block:: bash
 
-   # navigate to the project directory
-   cd no-OS/projects/ad9545
-   # to build the project
-   make PLATFORM=linux
-   # to flash the code
-   make run
+   cd no-OS
+
+   # Build the basic example for Raspberry Pi 4
+   python tools/scripts/no_os_build.py build \
+      --project ad9545 --variant basic_example --board rpi4
+
+The resulting executable is placed at:
+
+.. code-block:: bash
+
+   build/ad9545-basic_example-rpi4/build/ad9545
+
+Run it directly on the target Linux system:
+
+.. code-block:: bash
+
+   sudo ./build/ad9545-basic_example-rpi4/build/ad9545
