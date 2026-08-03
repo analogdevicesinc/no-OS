@@ -1,0 +1,54 @@
+{
+	"version": 7,
+	"configurePresets": [
+		{
+			"name": "linux-userspace-base",
+			"hidden": true,
+			"description": "Base config for Linux userspace platform",
+			"generator": "Ninja"
+		},
+		{
+			"name": "native",
+			"description": "Native Linux host (no specific hardware)",
+			"inherits": "linux-userspace-base",
+			"cacheVariables": {
+				"BOARD": "native",
+				"PLATFORM": "linux-userspace",
+				"BOARD_CONFIG_FILE": "linux-userspace_defconfig"
+			}
+		},
+		{
+			"name": "rpi4",
+			"description": "Raspberry Pi 4 (aarch64 cross-compile)",
+			"inherits": "linux-userspace-base",
+			"cacheVariables": {
+				"BOARD": "rpi4",
+				"PLATFORM": "linux-userspace",
+				"BOARD_CONFIG_FILE": "linux-userspace_defconfig",
+				"CMAKE_C_COMPILER": "aarch64-linux-gnu-gcc"
+			}
+		},
+		{
+			"name": "rpi5",
+			"description": "Raspberry Pi 5 (aarch64 cross-compile)",
+			"inherits": "linux-userspace-base",
+			"cacheVariables": {
+				"BOARD": "rpi5",
+				"PLATFORM": "linux-userspace",
+				"BOARD_CONFIG_FILE": "linux-userspace_defconfig",
+				"CMAKE_C_COMPILER": "aarch64-linux-gnu-gcc"
+			}
+		},
+		{
+			"name": "zed-linux",
+			"description": "ZedBoard running Linux",
+			"inherits": "linux-userspace-base",
+			"cacheVariables": {
+				"BOARD": "zed-linux",
+				"PLATFORM": "linux-userspace",
+				"BOARD_CONFIG_FILE": "linux-userspace_defconfig",
+				"CMAKE_C_COMPILER": "arm-linux-gnueabihf-gcc"
+			}
+		}
+	]
+}

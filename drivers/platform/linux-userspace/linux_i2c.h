@@ -1,9 +1,10 @@
-/***************************************************************************//**
- *   @file   linux/linux_delay.c
- *   @brief  Implementation of Linux platform Delay Driver.
+/*******************************************************************************
+ *   @file   linux_i2c.h
+ *   @brief  Header containing extra types used by the I2C driver.
  *   @author Dragos Bogdan (dragos.bogdan@analog.com)
+ *   @author Jamila Macagba (Jamila.Macagba@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2020, 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,24 +31,24 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef LINUX_I2C_H_
+#define LINUX_I2C_H_
 
 #include <stdint.h>
-#include <unistd.h>
 
 /**
- * @brief Generate microseconds delay.
- * @param usecs - Delay in microseconds.
+ * @struct linux_i2c_init_param
+ * @brief Structure holding the initialization parameters for Linux platform
+ * specific I2C parameters.
  */
-void no_os_udelay(uint32_t usecs)
-{
-	usleep(usecs);
-}
+struct linux_i2c_init_param {
+	/** I2C bus ID (/dev/i2c-"device_id") */
+	uint32_t device_id;
+};
 
 /**
- * @brief Generate miliseconds delay.
- * @param msecs - Delay in miliseconds.
+ * @brief Linux specific I2C platform ops structure
  */
-void no_os_mdelay(uint32_t msecs)
-{
-	usleep(msecs * 1000);
-}
+extern const struct no_os_i2c_platform_ops linux_i2c_ops;
+
+#endif // LINUX_I2C_H_
