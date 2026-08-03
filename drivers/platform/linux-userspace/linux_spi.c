@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   linux/linux_spi.c
+ *   @file   linux_spi.c
  *   @brief  Implementation of Linux platform SPI Driver.
  *   @author Dragos Bogdan (dragos.bogdan@analog.com)
 ********************************************************************************

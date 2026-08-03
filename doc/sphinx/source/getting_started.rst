@@ -95,6 +95,10 @@ for the full install steps, exact variable, and supported presets:
      - ZedBoard, ZCU102
      - Vitis (``XILINX_VITIS``) + board ``.xsa`` file (``--hardware``)
      - :doc:`build_guides/build_xilinx_cmake`
+   * - Linux userspace
+     - Any Linux host (spidev / i2c-dev / gpio-cdev)
+     - System GCC — no vendor SDK required
+     - :doc:`build_guides/build_linux_userspace_cmake`
 
 The build utility auto-detects default SDK install locations, so you only export
 a variable when your SDK lives somewhere non-standard, e.g.:

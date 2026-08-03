@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   linux/linux_i2c.c
+ *   @file   linux_i2c.c
  *   @brief  Implementation of Linux platform I2C Driver.
  *   @author Dragos Bogdan (dragos.bogdan@analog.com)
  *   @author Rene Arthur Necesito (Renearthur.Necesito@analog.com)
