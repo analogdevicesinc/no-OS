@@ -25,6 +25,13 @@ Kconfig default (a git tag, branch or commit); set that config to fetch a
 different version.
 
 
+LINUX USERSPACE
+===============
+.. toctree::
+    :maxdepth: 1
+
+    build_guides/build_linux_userspace_cmake
+
 XILINX
 ======
 .. toctree::
