@@ -1,109 +1,171 @@
-name: Build projects for Xilinx platform
+name: Test Xilinx runner
 
 on:
-  pull_request:
-    branches:
-      - main
-      - next_stable
-      - 'release/*'
-      - '20*'
-    paths-ignore:
-      - '**/*.rst'
-      - '**/*.md'
-      - 'drivers/platform/stm32/**'
-      - 'drivers/platform/pico/**'
-      - 'drivers/platform/aducm3029/**'
-      - 'drivers/platform/maxim/**'
-      - '.github/config/**'
-      - '.github/scripts/**'
-      - '.github/workflows/build-pico-platform.yaml'
-      - '.github/workflows/build-maxim-platform.yaml'
-      - '.github/workflows/build-common.yaml'
-      - '.github/workflows/deploy-docs.yaml'
   push:
-    branches:
-      - main
-      - next_stable
-      - 'release/*'
-      - '20*'
-    paths-ignore:
-      - '**/*.rst'
-      - '**/*.md'
-      - 'drivers/platform/stm32/**'
-      - 'drivers/platform/pico/**'
-      - 'drivers/platform/aducm3029/**'
-      - 'drivers/platform/maxim/**'
-      - '.github/config/**'
-      - '.github/scripts/**'
-      - '.github/workflows/build-pico-platform.yaml'
-      - '.github/workflows/build-maxim-platform.yaml'
-      - '.github/workflows/build-common.yaml'
-      - '.github/workflows/deploy-docs.yaml'
 
 permissions:
   contents: read
-  id-token: write
-  checks: write
-  pull-requests: write
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  build-xilinx-projects:
-    env:
-      CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
-      TOOLS_REPO: ${{ secrets.TOOLS_REPO }}
-      BLACKLIST_URL: ${{ secrets.BLACKLIST_URL }}
-      HDL_BRANCH: 'main'
-      BRANCH: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
-      BUILDS_DIR: ${{ github.workspace }}/builds
-      RELEASES_DIR: ${{ github.workspace }}/latest_build
-      LOGS_DIR: ${{ github.workspace }}/logs
-      NO_OS_CACHE_DIR: ${{ github.workspace }}/deps_cache
+  test-xilinx-runner:
     runs-on: noos-runner-xilinx
-    timeout-minutes: 600
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-        with:
-          submodules: false
-          clean: false
-      - name: Building for platform Xilinx 
+      - name: Check runner isolation
         shell: sh
         run: |
-          echo "Setup cloudsmith helper ..."
-          wget https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py \
-            -O ./tools/scripts/cloudsmith_temp.py
-          cat tools/scripts/cloudsmith_temp.py | sed 's#/usr/bin/python3#/usr/bin/env python3#' > tools/scripts/cloudsmith_helper.py
-          rm tools/scripts/cloudsmith_temp.py
+          failed=0
 
-          echo "Running project build ..."
-          ${{ github.workspace }}/tools/scripts/build_projects.py \
-            ${{ github.workspace }} \
-            -export_dir ${{ env.RELEASES_DIR }} \
-            -log_dir ${{ env.LOGS_DIR }} \
-            -builds_dir ${{ env.BUILDS_DIR }} \
-            -platform xilinx \
-            -hdl_branch ${{ env.HDL_BRANCH }}
-        env:
-          CLOUDSMITH_API_KEY: ${{ env.CLOUDSMITH_API_KEY }}
-          TOKEN: ${{ secrets.GH_GHDL_TOKEN }}
-      - name: Upload Xilinx artifacts
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          path: ${{ env.RELEASES_DIR }}
-          name: release_xilinx_${{ github.job }}
-      - name: Upload Xilinx build logs
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          path: ${{ env.LOGS_DIR }}
-          name: logs_xilinx_${{ github.job }}
-      - name: Remove logs, new_hardware and release output
-        if: always()
-        shell: sh
-        run: |
-          rm -rf ${{ env.RELEASES_DIR }} ${{ env.LOGS_DIR }} ${{ env.BUILDS_DIR }}_${{ env.HDL_BRANCH }}/new_hardware
+          fail() {
+            echo "FAIL: $*"
+            failed=1
+          }
+
+          pass() {
+            echo "PASS: $*"
+          }
+
+          check() {
+            label=$1
+            shift
+            if "$@"; then
+              pass "$label"
+            else
+              fail "$label"
+            fi
+          }
+
+          echo "== identity =="
+          whoami || true
+          id || true
+          uname -a || true
+          pwd || true
+
+          echo "== privilege checks =="
+          check "not running as root" test "$(id -u)" -ne 0
+          check "docker socket is not mounted" test ! -S /var/run/docker.sock
+          check "no /dev/kvm" test ! -e /dev/kvm
+          check "no /dev/mem" test ! -e /dev/mem
+          check "no /dev/fuse" test ! -e /dev/fuse
+          check "hostname proc control is not writable" test ! -w /proc/sys/kernel/hostname
+          check "sysrq trigger is not writable" test ! -w /proc/sysrq-trigger
+
+          if id | grep -Eq 'groups=.*\b27\(sudo\)|groups=.*\bsudo\b'; then
+            fail "runner user is in sudo group"
+          else
+            pass "runner user is not in sudo group"
+          fi
+          if id | grep -Eq 'groups=.*\b123\(docker\)|groups=.*\bdocker\b'; then
+            fail "runner user is in docker group"
+          else
+            pass "runner user is not in docker group"
+          fi
+
+          echo "== capabilities =="
+          cap_hex=$(awk '/^CapEff:/ {print $2}' /proc/self/status 2>/dev/null || echo 0)
+          python3 - "$cap_hex" <<'PY' || failed=1
+          import sys
+          caps = int(sys.argv[1], 16)
+          bad = {
+              12: "CAP_NET_ADMIN",
+              16: "CAP_SYS_MODULE",
+              17: "CAP_SYS_RAWIO",
+              19: "CAP_SYS_PTRACE",
+              21: "CAP_SYS_ADMIN",
+              22: "CAP_SYS_BOOT",
+              25: "CAP_SYS_TIME",
+              27: "CAP_MKNOD",
+              38: "CAP_PERFMON",
+              39: "CAP_BPF",
+              40: "CAP_CHECKPOINT_RESTORE",
+          }
+          present = [name for bit, name in bad.items() if caps & (1 << bit)]
+          print(f"CapEff=0x{caps:x}")
+          if present:
+              print("FAIL: elevated capabilities present: " + ", ".join(present))
+              sys.exit(1)
+          print("PASS: no elevated capabilities found")
+          PY
+
+          echo "== writable mounts =="
+          awk '
+            function allowed(path, fstype) {
+              if (path ~ "^/(tmp|run|var/tmp|dev|dev/shm|home|mnt|workspace|__w|github|usr/local/etc/gh-runners)(/|$)") return 1
+              if (path ~ "^/etc/(resolv.conf|hostname|hosts)$") return 1
+              if (path ~ "^/proc/(interrupts|kcore|keys|timer_list)$" && fstype == "tmpfs") return 1
+              return 0
+            }
+            {
+              opts=$6
+              split($0, parts, " - ")
+              split(parts[2], tail, " ")
+              fstype=tail[1]
+              mp=$5
+              if (opts ~ /(^|,)rw(,|$)/ && fstype !~ /^(proc|sysfs|cgroup|cgroup2|devpts|mqueue|overlay)$/ && !allowed(mp, fstype))
+                print "FAIL: unexpected writable mount: " mp " type=" fstype " opts=" opts
+            }' /proc/self/mountinfo | tee /tmp/xilinx-runner-mount-failures
+          if [ -s /tmp/xilinx-runner-mount-failures ]; then
+            failed=1
+          else
+            pass "no unexpected writable mounts found"
+          fi
+
+          echo "== xilinx tools =="
+          echo "PATH=$PATH"
+          if command -v vitis >/dev/null 2>&1; then
+            vitis_path=$(command -v vitis)
+            echo "vitis: $vitis_path"
+            readlink -f "$vitis_path" || true
+            vitis -version || true
+            pass "vitis is on PATH"
+          else
+            fail "vitis is not on PATH"
+          fi
+          if command -v xsct >/dev/null 2>&1; then
+            xsct_path=$(command -v xsct)
+            echo "xsct: $xsct_path"
+            readlink -f "$xsct_path" || true
+            pass "xsct is on PATH"
+          else
+            fail "xsct is not on PATH"
+          fi
+          for var in XILINX_VITIS XILINX_VIVADO XILINX_HLS; do
+            eval val=\${$var:-}
+            if [ -n "$val" ]; then
+              echo "$var=$val"
+              if [ -e "$val" ]; then
+                realpath "$val" || true
+                pass "$var points to an existing path"
+              else
+                fail "$var points to a missing path"
+              fi
+            else
+              echo "$var is not set"
+            fi
+          done
+          echo "Xilinx-looking filesystems/mounts:"
+          awk 'tolower($0) ~ /xilinx|vitis|vivado/ { print }' /proc/self/mountinfo || true
+
+          if command -v vitis >/dev/null 2>&1; then
+            vitis_real=$(readlink -f "$(command -v vitis)" || command -v vitis)
+            case "$vitis_real" in
+              /opt/Xilinx/*) pass "vitis comes from /opt/Xilinx" ;;
+              *) fail "vitis comes from unexpected path: $vitis_real" ;;
+            esac
+          fi
+
+          if [ -d /opt/Xilinx ]; then
+            if [ -w /opt/Xilinx ]; then
+              fail "/opt/Xilinx is writable"
+            else
+              pass "/opt/Xilinx is not writable"
+            fi
+          else
+            fail "/opt/Xilinx is missing"
+          fi
+
+          echo "== result =="
+          if [ "$failed" -ne 0 ]; then
+            echo "Runner isolation test failed"
+            exit 1
+          fi
+          echo "Runner isolation test passed"
