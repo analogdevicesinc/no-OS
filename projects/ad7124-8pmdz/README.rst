@@ -118,7 +118,7 @@ The ADuCM3029 platform uses the CMake/Ninja build system via the
 ``iio_wifi``. Available board: ``eval-adicup3029``.
 
 For toolchain setup and prerequisites, see the
-`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
+:doc:`ADuCM3029 CMake build guide </build_guides/build_aducm3029_cmake>`.
 
 .. code-block:: bash
 
@@ -163,7 +163,7 @@ Build Command
 ^^^^^^^^^^^^^
 
 For toolchain setup and prerequisites, see the
-`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
 
 The Maxim platform uses the CMake/Ninja build system via the
 ``no_os_build.py`` helper script. Available boards:

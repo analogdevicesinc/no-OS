@@ -85,7 +85,7 @@ pqlib is not part of the repository; point the ``PQLIB_PATH`` environment
 variable at its directory before building. Select the interface with
 ``--variant`` and build (append ``--probe`` / ``--flash`` to program the board).
 For toolchain setup and prerequisites, see the
-`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__:
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`:
 
 .. code-block:: bash
 
@@ -358,5 +358,5 @@ Additional Resources
 ---------------------
 
 The complete User Guide for the AD-PQMON-SL solution is available at
-`AD-PQMON-SL GitHub Page
-<https://analogdevicesinc.github.io/documentation/solutions/reference-designs/ad-pqmon-sl/index.html>`__.
+`AD-PQMON-SL Documentation
+<https://developer.analog.com/docs/system-level/solutions/reference-designs/ad-pqmon-sl/index.html>`__.

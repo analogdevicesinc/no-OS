@@ -11,7 +11,7 @@ from adi_doctools.directive.node import node_a
 
 logger = logging.getLogger(__name__)
 
-base_url_doc = "https://analogdevicesinc.github.io/no-OS/doxygen/"
+base_url_doc = "https://developer.analog.com/docs/no-os/doxygen/"
 
 def builder_inited_no_os_doxygen(app) -> None:
     """

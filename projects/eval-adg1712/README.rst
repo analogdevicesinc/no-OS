@@ -141,7 +141,7 @@ The labels on the eval board are wrong. DIGIO2 (IN2) controls SW4 (S4, D4), and 
 **Build Command**
 
 For toolchain setup and prerequisites, see the
-`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
 
 Available variants: ``basic``.
 Available boards: ``max32655fthr``.

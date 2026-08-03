@@ -265,7 +265,7 @@ is ``adrv9026``; the hardware name is composed as ``adrv9026_<board>``
 (e.g. ``adrv9026_zcu102``).
 
 For toolchain setup and prerequisites, see the
-`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
+:doc:`Xilinx CMake build guide </build_guides/build_xilinx>`.
 
 .. code-block:: bash
 

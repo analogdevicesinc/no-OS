@@ -159,7 +159,7 @@ Other connection:
 **Build Command**
 
 For toolchain setup and prerequisites, see the
-`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
 
 Available variants: ``basic``, ``iio_example``.
 Available boards: ``max32666fthr``.

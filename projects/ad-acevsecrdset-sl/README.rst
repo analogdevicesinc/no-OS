@@ -140,7 +140,7 @@ To flash the MAX32625PICO with the correct firmware image:
 **Build Command**
 
 For toolchain setup and prerequisites, see the
-`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
 
 Available variants: ``stout_application_rev_a``, ``stout_application_rev_d``.
 Available boards: ``max32655fthr``.

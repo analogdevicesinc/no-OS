@@ -75,7 +75,7 @@ Build Command
 ^^^^^^^^^^^^^
 
 For toolchain setup and prerequisites, see the
-`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
+:doc:`ADuCM3029 CMake build guide </build_guides/build_aducm3029_cmake>`.
 
 Available variants: ``basic``.
 Available boards: ``eval-adicup3029``.
@@ -131,7 +131,7 @@ Build Command
 ^^^^^^^^^^^^^
 
 For toolchain setup and prerequisites, see the
-`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
 
 Available variants: ``basic``.
 Available boards: ``ad-apard32690-sl``.

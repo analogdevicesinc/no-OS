@@ -146,7 +146,7 @@ The Xilinx platform uses the CMake/Ninja build system via the
 Available boards: ``zc706``.
 
 For toolchain setup and prerequisites, see the
-`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
+:doc:`Xilinx CMake build guide </build_guides/build_xilinx>`.
 
 .. code-block:: bash
 

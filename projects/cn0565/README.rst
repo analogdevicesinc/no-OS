@@ -184,7 +184,7 @@ IO28                    GPIO28
 **Build Command**
 
 For toolchain setup and prerequisites, see the
-`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
+:doc:`ADuCM3029 CMake build guide </build_guides/build_aducm3029_cmake>`.
 
 Available variants: ``eit``, ``eit_iio``.
 Available boards: ``eval-adicup3029``.
@@ -231,7 +231,7 @@ USB Communication                               Connect SDP-K1 to PC via USB
 **Build Command**
 
 For toolchain setup and prerequisites, see the
-`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
+:doc:`STM32 CMake build guide </build_guides/build_stm32_cmake>`.
 
 Available variants: ``eit``, ``eit_iio``.
 Available boards: ``sdp-ck1z``.

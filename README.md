@@ -24,29 +24,27 @@ New to no-OS? Follow these steps:
    git clone https://github.com/analogdevicesinc/no-OS
    ```
 
-2. **Set up your toolchain and build** by following the [Build Guide](https://analogdevicesinc.github.io/no-OS/build_guide.html) for your platform.
+2. **Set up your toolchain and build** by following the [Build Guide](https://developer.analog.com/docs/no-os/build_guide.html) for your platform.
 
-3. **Pick a project** from the [projects list](https://analogdevicesinc.github.io/no-OS/projects_doc.html) that matches your evaluation board, then build and flash it.
+3. **Pick a project** from the [projects list](https://developer.analog.com/docs/no-os/projects_doc.html) that matches your evaluation board, then build and flash it.
 
-4. **Explore the drivers** you need in the [drivers list](https://analogdevicesinc.github.io/no-OS/drivers_doc.html).
+4. **Explore the drivers** you need in the [drivers list](https://developer.analog.com/docs/no-os/drivers_doc.html).
 
 ## Documentation
 
-Full documentation is hosted at [analogdevicesinc.github.io/no-OS](https://analogdevicesinc.github.io/no-OS/):
+Full documentation is hosted at [developer.analog.com/docs/no-os](https://developer.analog.com/docs/no-os/):
 
-* [Build Guide](https://analogdevicesinc.github.io/no-OS/build_guide.html) — set up your toolchain and build no-OS for your platform.
-* [Projects list](https://analogdevicesinc.github.io/no-OS/projects_doc.html) — ready-to-build example projects, grouped by application area.
-* [Drivers list](https://analogdevicesinc.github.io/no-OS/drivers_doc.html) — reference documentation for every no-OS device driver.
-* [Drivers guide](https://analogdevicesinc.github.io/no-OS/drivers_guide.html) — how no-OS drivers are structured and how to create or port one.
-* [Contributing](https://analogdevicesinc.github.io/no-OS/contributing.html) — submission checklist and coding style for pull requests.
+* [Build Guide](https://developer.analog.com/docs/no-os/build_guide.html) — set up your toolchain and build no-OS for your platform.
+* [Projects list](https://developer.analog.com/docs/no-os/projects_doc.html) — ready-to-build example projects, grouped by application area.
+* [Drivers list](https://developer.analog.com/docs/no-os/drivers_doc.html) — reference documentation for every no-OS device driver.
+* [Drivers guide](https://developer.analog.com/docs/no-os/drivers_guide.html) — how no-OS drivers are structured and how to create or port one.
+* [Contributing](https://developer.analog.com/docs/no-os/contributing.html) — submission checklist and coding style for pull requests.
 
-Code documentation is automatically generated using Doxygen and is available at [no-OS GitHub Pages](http://analogdevicesinc.github.io/no-OS/doxygen/).
-
-> **Note:** We are migrating the no-OS documentation from [wiki.analog.com](https://wiki.analog.com/resources/no-os) to the [GitHub Pages site](https://analogdevicesinc.github.io/no-OS/). Some content may still only be available on the wiki during this transition.
+Code documentation is automatically generated using Doxygen and is available in the [Doxygen Documentation](http://developer.analog.com/docs/no-os/doxygen/).
 
 ## Contributing
 
-Contributions are welcome! Please read the [Contributing guide](https://analogdevicesinc.github.io/no-OS/contributing.html) for the submission checklist and coding style before opening a pull request.
+Contributions are welcome! Please read the [Contributing guide](https://developer.analog.com/docs/no-os/contributing.html) for the submission checklist and coding style before opening a pull request.
 
 ## Which branch should I use?
 

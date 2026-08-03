@@ -213,7 +213,7 @@ There are a number of connections to make between the ADC evaluation board and t
 **Build Command**
 
 For toolchain setup and prerequisites, see the
-`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
 
 Available variants: ``basic``, ``iio_r2``, ``iio_r4``, ``iio_r8``,
 ``iio_timer_trigger_r2``, ``iio_timer_trigger_r4``, ``iio_timer_trigger_r8``.

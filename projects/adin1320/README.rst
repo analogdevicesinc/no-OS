@@ -155,7 +155,7 @@ Build Command
 ^^^^^^^^^^^^^
 
 For toolchain setup and prerequisites, see the
-`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
 
 Available variants: ``basic_init``, ``basic_init_2devices``, ``cmd``, ``wake_on_lan``.
 Available boards: ``max32670evkit``.

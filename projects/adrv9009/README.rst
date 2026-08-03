@@ -136,7 +136,7 @@ is ``adrv9009``; the hardware name is composed as ``adrv9009_<board>``
 (e.g. ``adrv9009_zcu102``).
 
 For toolchain setup and prerequisites, see the
-`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
+:doc:`Xilinx CMake build guide </build_guides/build_xilinx>`.
 
 .. code-block:: bash
 

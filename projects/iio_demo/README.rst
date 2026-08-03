@@ -166,7 +166,7 @@ Available boards: ``eval-adicup3029``.
 Replace ``--variant`` accordingly.
 
 For toolchain setup and prerequisites, see the
-`ADuCM3029 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_aducm3029_cmake.html>`__.
+:doc:`ADuCM3029 CMake build guide </build_guides/build_aducm3029_cmake>`.
 
 .. code-block:: bash
 
@@ -230,7 +230,7 @@ on every board; see the combination list with
 ``python tools/scripts/no_os_build.py list --project iio_demo``.
 
 For toolchain setup and prerequisites, see the
-`Maxim CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_maxim_cmake.html>`__.
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
 
 .. code-block:: bash
 
@@ -277,7 +277,7 @@ on every board; see the combination list with
 ``python tools/scripts/no_os_build.py list --project iio_demo``.
 
 For toolchain setup and prerequisites, see the
-`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
+:doc:`STM32 CMake build guide </build_guides/build_stm32_cmake>`.
 
 .. code-block:: bash
 
@@ -359,7 +359,7 @@ Available variants: ``iio``.
 Available boards: ``zed``.
 
 For toolchain setup and prerequisites, see the
-`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
+:doc:`Xilinx CMake build guide </build_guides/build_xilinx>`.
 
 .. code-block:: bash
 

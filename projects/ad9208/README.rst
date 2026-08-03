@@ -136,7 +136,7 @@ The HDL design used is ``ad9208_dual_ebz``. The hardware name composed for the
 XSA download is ``ad9208_dual_ebz_vcu118``.
 
 For toolchain setup and prerequisites, see the
-`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
+:doc:`Xilinx CMake build guide </build_guides/build_xilinx>`.
 
 .. code-block:: bash
 

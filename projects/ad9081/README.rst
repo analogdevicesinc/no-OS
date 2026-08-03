@@ -164,7 +164,7 @@ The HDL design used is ``ad9081_fmca_ebz``. The hardware name composed for the
 XSA download is ``ad9081_fmca_ebz_<board>`` (e.g. ``ad9081_fmca_ebz_vcu118``).
 
 For toolchain setup and prerequisites, see the
-`Xilinx CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_xilinx_cmake.html>`__.
+:doc:`Xilinx CMake build guide </build_guides/build_xilinx>`.
 
 .. code-block:: bash
 
@@ -194,5 +194,5 @@ For toolchain setup and prerequisites, see the
 For more information on the AD9081 device and available JESD204 profiles,
 refer to the `AD9081 User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-ad9082-ug-1578.pdf>`__
 and the HDL reference designs for
-`AD9081-FMCA-EBZ <https://analogdevicesinc.github.io/hdl/projects/ad9081_fmca_ebz/>`__
-and `QUAD-MxFE <https://analogdevicesinc.github.io/hdl/projects/ad_quadmxfe1_ebz/>`__.
+`AD9081-FMCA-EBZ <https://developer.analog.com/docs/hdl/projects/ad9081_fmca_ebz/>`__
+and `QUAD-MxFE <https://developer.analog.com/docs/hdl/projects/ad_quadmxfe1_ebz/>`__.
