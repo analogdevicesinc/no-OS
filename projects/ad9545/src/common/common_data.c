@@ -36,7 +36,7 @@
 #include "ad9545.h"
 
 
-#ifndef LINUX_PLATFORM
+#ifndef LINUX_USERSPACE_PLATFORM
 struct no_os_uart_init_param ad9545_uart_ip = {
 	.device_id = UART_DEVICE_ID,
 	.irq_id = UART_IRQ_ID,

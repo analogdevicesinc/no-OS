@@ -1,0 +1,15 @@
+menu "ad9545 Configuration"
+
+choice AD9545_EXAMPLE
+	prompt "Example variant"
+	default AD9545_BASIC_EXAMPLE
+
+config AD9545_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Basic example demonstrating AD9545 clock synthesizer initialization,
+	  PLL configuration, and output clock generation.
+
+endchoice
+
+endmenu
