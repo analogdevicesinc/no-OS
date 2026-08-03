@@ -1,0 +1,273 @@
+trigger:
+  branches:
+    include:
+    - main
+    - next_stable
+    - 20*
+pr:
+  branches:
+    include:
+    - main
+    - next_stable
+    - 20*
+  paths:
+    exclude:
+    - doc/**
+    - '**/*.md'
+    - '**/*.rst'
+variables:
+- group: noos_releases_group_variables
+- name: isMain
+  value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+- name: isNextStable
+  value: $[eq(variables['Build.SourceBranch'], 'refs/heads/next_stable')]
+- name: isRelease
+  value: $[contains(variables['Build.SourceBranch'], 'refs/heads/20')]
+- name: branch
+  value: $(Build.SourceBranchName)
+stages:
+- stage: __default
+  jobs:
+  - job: STM32
+    timeoutInMinutes: 200
+    pool:
+      name: Default
+      demands:
+      - agent.name -equals no-OS
+    steps:
+    - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
+      inputs:
+        repository: self
+        fetchDepth: 50
+        submodules: true
+        clean: true
+        persistCredentials: true
+    - task: CmdLine@2
+      displayName: 'Show SDK versions'
+      inputs:
+        script: |
+          [ -f /no-OS_agent/.stm32_environment.sh ] && . /no-OS_agent/.stm32_environment.sh
+          STM32CUBEIDE="${STM32CUBEIDE:-/opt/stm32cubeide}"
+          STM32CUBEMX="${STM32CUBEMX:-/opt/stm32cubemx}"
+
+          echo "STM32CubeIDE path: $STM32CUBEIDE"
+          echo "STM32CubeMX path:  $STM32CUBEMX"
+
+          # CubeIDE version from its product descriptor.
+          IDE_VER=$(sed -n 's/^version=//p' "$STM32CUBEIDE/.eclipseproduct" 2>/dev/null)
+          echo "Using STM32CubeIDE version: ${IDE_VER:-unknown}"
+
+          # CubeMX version
+          MX_VER=$(strings "$STM32CUBEMX/.installationinformation" 2>/dev/null \
+                   | grep -A1 'APP_VER' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+          echo "Using STM32CubeMX version: ${MX_VER:-unknown}"
+
+          # arm-none-eabi-gcc version
+          GCC=$(find "$STM32CUBEIDE/plugins" -name arm-none-eabi-gcc -path '*gnu-tools*' 2>/dev/null | head -1)
+          echo "Bundled toolchain: ${GCC:-not found}"
+          [ -n "$GCC" ] && "$GCC" -dumpfullversion 2>/dev/null | sed 's/^/Bundled arm-none-eabi-gcc version: /'
+    - task: CmdLine@2
+      displayName: '[DEBUG] Pre-build diagnostics'
+      inputs:
+        script: |
+          echo "=== AGENT / ENV INFO ==="
+          echo "Hostname: $(hostname)"
+          echo "Agent name: $(Agent.MachineName)"
+          echo "CPU cores: $(nproc)"
+          free -h
+          df -h /no-OS_builds || true
+
+          echo ""
+          echo "=== BUILDS_DIR STATE ==="
+          echo "Contents of /no-OS_builds/builds (top 2 levels):"
+          find /no-OS_builds/builds -maxdepth 2 -type d 2>/dev/null | head -60 || echo "(empty or missing)"
+          echo ""
+          echo "Total size of /no-OS_builds/builds:"
+          du -sh /no-OS_builds/builds 2>/dev/null || echo "(missing)"
+          echo ""
+          echo "File count in /no-OS_builds/builds:"
+          find /no-OS_builds/builds -type f 2>/dev/null | wc -l
+
+          echo ""
+          echo "=== DEPS CACHE STATE ==="
+          echo "Contents of /no-OS_builds/deps_cache (top 2 levels):"
+          find /no-OS_builds/deps_cache -maxdepth 2 -type d 2>/dev/null | head -60 || echo "(empty or missing)"
+          echo ""
+          echo "Total size of /no-OS_builds/deps_cache:"
+          du -sh /no-OS_builds/deps_cache 2>/dev/null || echo "(missing)"
+
+          echo ""
+          echo "=== STM32 PROJECTS TO BUILD ==="
+          find $(Build.Repository.LocalPath)/projects -type f -name '*.ioc' -path '*stm32*' 2>/dev/null | sort || true
+          find $(Build.Repository.LocalPath)/projects -type f -name 'Makefile' -path '*stm32*' 2>/dev/null | sort || true
+          echo ""
+          echo "=== WORKSPACE CLEAN STATE ==="
+          echo "Source dir size:"
+          du -sh $(Build.Repository.LocalPath) 2>/dev/null || true
+
+          echo ""
+          echo "=== TIMESTAMP START ==="
+          date -u +"%Y-%m-%dT%H:%M:%SZ"
+    - task: CmdLine@2
+      env:
+        CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
+        TOKEN: $(TOKEN)
+        NO_OS_CACHE_DIR: /no-OS_builds/deps_cache
+      displayName: 'Run project build'
+      inputs:
+        script: |
+          BUILD_START=$(date +%s)
+
+          wget -P ./tools/scripts/ \
+            https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py && \
+          python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
+            -export_dir $(RELEASE_DIR) \
+            -log_dir $(LOG_DIR) \
+            -builds_dir /no-OS_builds/builds \
+            -platform stm32 \
+            -hdl_branch $(HDL_BRANCH)
+          BUILD_RC=$?
+
+          BUILD_END=$(date +%s)
+          TOTAL_SEC=$((BUILD_END - BUILD_START))
+          echo ""
+          echo "=== [DEBUG] BUILD TIMING ==="
+          echo "Total build step duration: ${TOTAL_SEC}s ($(($TOTAL_SEC / 60))m $(($TOTAL_SEC % 60))s)"
+
+          # Per-project timing from log files
+          LOG_BASE="$(Build.Repository.LocalPath)/$(LOG_DIR)"
+          COUNT=0
+          SUM=0
+          echo ""
+          echo "=== [DEBUG] PER-PROJECT TIMING ==="
+          for log in $(find "$LOG_BASE" -type f -name '*.log' 2>/dev/null | sort); do
+            PROJECT=$(basename "$log" .log)
+            # Extract elapsed/duration lines the build script may have printed
+            ELAPSED=$(grep -iE 'elapsed|duration|time|took' "$log" 2>/dev/null | tail -1)
+            # Fallback: measure from file timestamps (creation vs last modification)
+            MOD_TIME=$(stat -c %Y "$log" 2>/dev/null || echo 0)
+            BIRTH_TIME=$(stat -c %W "$log" 2>/dev/null || echo 0)
+            if [ "$BIRTH_TIME" != "0" ] && [ "$BIRTH_TIME" != "-" ] && [ "$MOD_TIME" != "0" ]; then
+              FILE_DUR=$((MOD_TIME - BIRTH_TIME))
+            else
+              FILE_DUR=-1
+            fi
+            echo "  $PROJECT: file_duration=${FILE_DUR}s  log_line=\"${ELAPSED:-n/a}\""
+            if [ "$FILE_DUR" -ge 0 ] 2>/dev/null; then
+              SUM=$((SUM + FILE_DUR))
+              COUNT=$((COUNT + 1))
+            fi
+          done
+          echo ""
+          if [ "$COUNT" -gt 0 ]; then
+            AVG=$((SUM / COUNT))
+            echo "Projects with timing: $COUNT"
+            echo "Sum of per-project durations: ${SUM}s"
+            echo "Average per-project build time: ${AVG}s ($(($AVG / 60))m $(($AVG % 60))s)"
+          else
+            echo "No per-project timing data available from logs."
+          fi
+
+          exit $BUILD_RC
+    - task: CmdLine@2
+      displayName: '[DEBUG] Post-build diagnostics'
+      condition: always()
+      inputs:
+        script: |
+          echo "=== TIMESTAMP END ==="
+          date -u +"%Y-%m-%dT%H:%M:%SZ"
+
+          echo ""
+          echo "=== BUILDS_DIR AFTER BUILD ==="
+          echo "Total size of /no-OS_builds/builds:"
+          du -sh /no-OS_builds/builds 2>/dev/null || echo "(missing)"
+          echo ""
+          echo "File count in /no-OS_builds/builds:"
+          find /no-OS_builds/builds -type f 2>/dev/null | wc -l
+          echo ""
+          echo "Recently modified files (last 10 min):"
+          find /no-OS_builds/builds -type f -mmin -10 2>/dev/null | head -40
+
+          echo ""
+          echo "=== EXPORT_DIR CONTENTS ==="
+          echo "Contents of $(RELEASE_DIR):"
+          find $(Build.Repository.LocalPath)/$(RELEASE_DIR) -type f 2>/dev/null | head -40 || echo "(empty or missing)"
+
+          echo ""
+          echo "=== LOG_DIR CONTENTS ==="
+          echo "Contents of $(LOG_DIR):"
+          find $(Build.Repository.LocalPath)/$(LOG_DIR) -type f 2>/dev/null | head -40 || echo "(empty or missing)"
+          echo ""
+          echo "Build log snippets (last 30 lines of each log):"
+          for log in $(find $(Build.Repository.LocalPath)/$(LOG_DIR) -type f -name '*.log' 2>/dev/null | head -10); do
+            echo "--- $log ---"
+            tail -30 "$log"
+            echo ""
+          done
+
+          echo ""
+          echo "=== DEPS CACHE AFTER BUILD ==="
+          du -sh /no-OS_builds/deps_cache 2>/dev/null || echo "(missing)"
+    - task: PublishPipelineArtifact@1
+      timeoutInMinutes: 10
+      condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
+      inputs:
+        targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
+        artifact: '$(ARTIFACT_NAME)_STM32'
+        publishLocation: 'pipeline'
+    - task: PublishPipelineArtifact@1
+      condition: true
+      inputs:
+        targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
+        artifact: 'logs_STM32_$(System.JobId)'
+        publishLocation: 'pipeline'
+  - job: ADuCM3029
+    timeoutInMinutes: 200
+    pool:
+      name: Default
+      demands:
+      - agent.name -equals no-OS
+    steps:
+    - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
+      inputs:
+        repository: self
+        fetchDepth: 50
+        submodules: true
+        clean: true
+        persistCredentials: true
+    - task: CmdLine@2
+      displayName: 'Show SDK versions'
+      inputs:
+        script: |
+          echo "Using ADuCM3029 DFP version: $(ADUCM3029_DFP_VERSION)"
+          echo "Using CCES IDE version: $(CCES_VERSION)"
+          echo "Using ARM CMSIS version: $(ARM_CMSIS_VERSION)"
+    - task: CmdLine@2
+      env:
+        CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
+        TOKEN: $(TOKEN)
+        NO_OS_CACHE_DIR: /no-OS_builds/deps_cache
+      displayName: 'Run project build'
+      inputs:
+        script: |
+          wget -P ./tools/scripts/ \
+            https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py && \
+          python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
+            -export_dir $(RELEASE_DIR) \
+            -log_dir $(LOG_DIR) \
+            -builds_dir /no-OS_builds/builds \
+            -platform aducm3029 \
+            -hdl_branch $(HDL_BRANCH)
+    - task: PublishPipelineArtifact@1
+      timeoutInMinutes: 10
+      condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
+      inputs:
+        targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
+        artifact: '$(ARTIFACT_NAME)_ADuCM3029'
+        publishLocation: 'pipeline'
+    - task: PublishPipelineArtifact@1
+      condition: true
+      inputs:
+        targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
+        artifact: 'logs_ADuCM3029_$(System.JobId)'
+        publishLocation: 'pipeline'
