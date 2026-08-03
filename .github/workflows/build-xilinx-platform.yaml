@@ -91,6 +91,7 @@ jobs:
           CLOUDSMITH_API_KEY: ${{ env.CLOUDSMITH_API_KEY }}
           TOKEN: ${{ secrets.GH_GHDL_TOKEN }}
       - name: Upload Xilinx artifacts
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           path: ${{ env.RELEASES_DIR }}
