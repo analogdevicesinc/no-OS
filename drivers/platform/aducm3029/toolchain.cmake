@@ -138,10 +138,13 @@ set(CMAKE_CXX_FLAGS "${COMMON_CPU_FLAGS} ${ADUCM_DEFS} -ffunction-sections -fdat
 # Requires the code cache to stay disabled (default); see system_ADuCM3029.c.
 set(CMAKE_ASM_FLAGS "${COMMON_CPU_FLAGS} ${ADUCM_DEFS} -DADI_DISABLE_INSTRUCTION_SRAM -x assembler-with-cpp" CACHE STRING "ASM compiler flags" FORCE)
 
-# Debug build flags - Full debug info, no optimization
-set(CMAKE_C_FLAGS_DEBUG "-g -gdwarf-2 -O0 -D_DEBUG" CACHE STRING "C compiler flags for Debug" FORCE)
-set(CMAKE_CXX_FLAGS_DEBUG "-g -gdwarf-2 -O0 -D_DEBUG" CACHE STRING "C++ compiler flags for Debug" FORCE)
-set(CMAKE_ASM_FLAGS_DEBUG "-g -gdwarf-2 -D_DEBUG" CACHE STRING "ASM compiler flags for Debug" FORCE)
+# Debug build flags - Full debug info, no optimization.
+# Use GCC's default DWARF version (4 for this toolchain) rather than forcing
+# -gdwarf-2: the older format lacks the location lists cortex-debug/GDB need to
+# render source and locals, which broke source-level debugging on this platform.
+set(CMAKE_C_FLAGS_DEBUG "-g -O0 -D_DEBUG" CACHE STRING "C compiler flags for Debug" FORCE)
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -D_DEBUG" CACHE STRING "C++ compiler flags for Debug" FORCE)
+set(CMAKE_ASM_FLAGS_DEBUG "-g -D_DEBUG" CACHE STRING "ASM compiler flags for Debug" FORCE)
 
 # Release build flags - Optimize for speed, disable assertions
 set(CMAKE_C_FLAGS_RELEASE "-O2 -DNDEBUG" CACHE STRING "C compiler flags for Release" FORCE)
@@ -149,9 +152,9 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG" CACHE STRING "C++ compiler flags for 
 set(CMAKE_ASM_FLAGS_RELEASE "-DNDEBUG" CACHE STRING "ASM compiler flags for Release" FORCE)
 
 # RelWithDebInfo build flags - Optimize with debug info
-set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g -gdwarf-2 -DNDEBUG" CACHE STRING "C compiler flags for RelWithDebInfo" FORCE)
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g -gdwarf-2 -DNDEBUG" CACHE STRING "C++ compiler flags for RelWithDebInfo" FORCE)
-set(CMAKE_ASM_FLAGS_RELWITHDEBINFO "-g -gdwarf-2 -DNDEBUG" CACHE STRING "ASM compiler flags for RelWithDebInfo" FORCE)
+set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g -DNDEBUG" CACHE STRING "C compiler flags for RelWithDebInfo" FORCE)
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g -DNDEBUG" CACHE STRING "C++ compiler flags for RelWithDebInfo" FORCE)
+set(CMAKE_ASM_FLAGS_RELWITHDEBINFO "-g -DNDEBUG" CACHE STRING "ASM compiler flags for RelWithDebInfo" FORCE)
 
 # MinSizeRel build flags - Optimize for size
 set(CMAKE_C_FLAGS_MINSIZEREL "-Os -DNDEBUG" CACHE STRING "C compiler flags for MinSizeRel" FORCE)
