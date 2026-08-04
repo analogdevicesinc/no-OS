@@ -155,7 +155,7 @@
 #define ADC_BUFFER_SAMPLES 16384
 #define ADC_CHANNELS 4
 
-#if defined LINUX_PLATFORM || defined GENERIC_PLATFORM
+#if defined LINUX_USERSPACE_PLATFORM || defined GENERIC_PLATFORM
 #define RX_CORE_BASEADDR			0
 #define TX_CORE_BASEADDR			1
 #define CF_AD9361_RX_DMA_BASEADDR	2
@@ -163,13 +163,14 @@
 
 #define SPI_DEVICE_ID		0
 #define SPI_CS			0
+#define SPI_MAX_FREQ		1000000
 
 #define MAX_SIZE_BASE_ADDR 0x1000
 
 #define DAC_DDR_BASEADDR	((uintptr_t)out_buff)
 #define ADC_DDR_BASEADDR	((uintptr_t)in_buff)
 
-#define GPIO_RESET_PIN	1006
+#define GPIO_RESET_PIN	100
 #endif
 
 /* Workaround for correcting the erroneous generation of defines

@@ -50,7 +50,7 @@
 #include "altera_gpio.h"
 #endif
 #endif
-#ifdef LINUX_PLATFORM
+#ifdef LINUX_USERSPACE_PLATFORM
 #include "linux_spi.h"
 #include "linux_gpio.h"
 #else
@@ -75,7 +75,7 @@
 #include "xil_cache.h"
 #endif //XILINX
 
-#if defined LINUX_PLATFORM || defined GENERIC_PLATFORM
+#if defined LINUX_USERSPACE_PLATFORM || defined GENERIC_PLATFORM
 static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
 static uint8_t out_buff[MAX_SIZE_BASE_ADDR];
 #endif
@@ -139,7 +139,7 @@ struct xil_gpio_init_param xil_gpio_param = {
 #endif
 #ifdef XILINX_PLATFORM
 #endif
-#ifdef LINUX_PLATFORM
+#ifdef LINUX_USERSPACE_PLATFORM
 #define GPIO_OPS	&linux_gpio_ops
 #define SPI_OPS		&linux_spi_ops
 #define GPIO_PARAM	NULL
@@ -613,6 +613,9 @@ int main(void)
 	// NOTE: The user has to choose the GPIO numbers according to desired
 	// carrier board.
 	default_init_param.gpio_resetb.number = GPIO_RESET_PIN;
+#ifdef LINUX_USERSPACE_PLATFORM
+	default_init_param.spi_param.max_speed_hz = SPI_MAX_FREQ;
+#endif
 
 #ifdef FMCOMMS5
 	default_init_param.gpio_sync.number = GPIO_SYNC_PIN;
@@ -661,12 +664,12 @@ int main(void)
 	ad9361_set_rx_fir_config(ad9361_phy, rx_fir_config);
 
 #ifdef FMCOMMS5
-#ifdef LINUX_PLATFORM
+#ifdef LINUX_USERSPACE_PLATFORM
 	gpio_init(default_init_param.gpio_sync);
 #endif
 	default_init_param.spi_param.chip_select = SPI_CS_2;
 	default_init_param.gpio_resetb.number = GPIO_RESET_PIN_2;
-#ifdef LINUX_PLATFORM
+#ifdef LINUX_USERSPACE_PLATFORM
 	gpio_init(default_init_param.gpio_resetb);
 #endif
 	default_init_param.gpio_sync.number = -1;
@@ -695,7 +698,7 @@ int main(void)
 		return status;
 	}
 #ifndef AXI_ADC_NOT_PRESENT
-#if defined XILINX_PLATFORM || defined LINUX_PLATFORM || defined ALTERA_PLATFORM
+#if defined XILINX_PLATFORM || defined LINUX_USERSPACE_PLATFORM || defined ALTERA_PLATFORM
 #ifdef DMA_EXAMPLE
 #ifdef FMCOMMS5
 	axi_dac_init(&ad9361_phy_b->tx_dac, &tx_dac_init);
