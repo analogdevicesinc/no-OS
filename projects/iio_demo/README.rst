@@ -380,3 +380,52 @@ For toolchain setup and prerequisites, see the
       --project iio_demo --variant iio --board zed \
       --hardware /path/to/system_top.xsa \
       --probe openocd --flash
+
+Linux Userspace Platform
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Used Hardware
+^^^^^^^^^^^^^
+
+* Any Linux host (no external sensor hardware required — the demo devices
+  are software loopbacks)
+
+Connections
+^^^^^^^^^^^
+
+No external connections are required. The IIOD server runs as a process on
+the native Linux host. Connect to it from the same machine or over the
+network using any libiio client (``iio_readdev``, ``iio_writedev``, IIO
+Oscilloscope).
+
+Build Command
+^^^^^^^^^^^^^
+
+Available variants: ``iio``, ``iio_sw_trigger``.
+Available boards: ``native``.
+
+No toolchain environment variable is required — the system ``gcc`` is
+used automatically.
+
+For toolchain setup and prerequisites, see the
+`Linux Userspace CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_linux_userspace_cmake.html>`__.
+
+.. code-block:: bash
+
+   cd no-OS
+
+   # build the iio example for native Linux
+   python tools/scripts/no_os_build.py build \
+      --project iio_demo --variant iio --board native
+
+The resulting executable is placed at:
+
+.. code-block:: bash
+
+   build/iio_demo-iio-native/build/iio_demo
+
+Run it directly on the Linux host:
+
+.. code-block:: bash
+
+   sudo ./build/iio_demo-iio-native/build/iio_demo
