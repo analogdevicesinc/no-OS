@@ -324,3 +324,66 @@ Replace ``--variant`` / ``--board`` accordingly.
 	python tools/scripts/no_os_build.py build \
 		--project eval-adis1647x --variant basic --board rpi-pico \
 		--probe openocd --flash
+
+Linux Userspace Platform
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Used hardware**:
+
+* `EVAL-ADIS16477 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16477.html>`_ with
+* Raspberry Pi 5
+
+**Connections**:
+
+Connect the EVAL-ADIS1647X to the Raspberry Pi 5 SPI0 bus and a GPIO
+pin for the active-low reset signal (pin numbers match the defaults in
+``parameters.h``):
+
++---------------------------+----------+-------------------------------------------------------+------------------+
+| EVAL-ADIS1647X Pin Number | Mnemonic | Function                                              | RPi5 Pin Number  |
++---------------------------+----------+-------------------------------------------------------+------------------+
+| 1                         | ~RST     | Reset, active low                                     | GPIO 12 (Pin 32) |
++---------------------------+----------+-------------------------------------------------------+------------------+
+| 2                         | SCLK     | Serial Clock                                          | GPIO 11 (Pin 23) |
++---------------------------+----------+-------------------------------------------------------+------------------+
+| 3                         | ~CS      | Chip Select, Active Low                               | GPIO 8  (Pin 24) |
++---------------------------+----------+-------------------------------------------------------+------------------+
+| 4                         | DOUT     | Data Output (MISO)                                    | GPIO 9  (Pin 21) |
++---------------------------+----------+-------------------------------------------------------+------------------+
+| 6                         | DIN      | Data Input (MOSI)                                     | GPIO 10 (Pin 19) |
++---------------------------+----------+-------------------------------------------------------+------------------+
+| 7                         | GND      | Ground                                                | GND              |
++---------------------------+----------+-------------------------------------------------------+------------------+
+| 10                        | VDD      | Power Supply, +3.3V                                   | 3.3V (Pin 1)     |
++---------------------------+----------+-------------------------------------------------------+------------------+
+
+Note: the ``iio_trigger`` variant is not supported on linux-userspace
+(it requires a hardware IRQ driver not present in this platform).
+
+**Build Command**
+
+For toolchain setup and prerequisites, see the
+`Linux Userspace CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_linux_userspace_cmake.html>`__.
+
+Available variants: ``basic``.
+Available boards: ``rpi5``.
+
+.. code-block:: bash
+
+	cd no-OS
+
+	# build the basic example on Raspberry Pi 5
+	python tools/scripts/no_os_build.py build \
+		--project eval-adis1647x --variant basic --board rpi5
+
+The resulting executable is placed at:
+
+.. code-block:: bash
+
+	build/eval-adis1647x-basic-rpi5/build/eval-adis1647x
+
+Run it directly on the Raspberry Pi 5:
+
+.. code-block:: bash
+
+	sudo ./build/eval-adis1647x-basic-rpi5/build/eval-adis1647x
