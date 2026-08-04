@@ -18,6 +18,8 @@ on:
       - '.github/scripts/**'
       - '.github/workflows/build-xilinx-platform.yaml'
       - '.github/workflows/build-maxim-platform.yaml'
+      - '.github/workflows/build-aducm3029-platform.yaml'
+      - '.github/workflows/build-stm32-platform.yaml'
       - '.github/workflows/build-common.yaml'
       - '.github/workflows/deploy-docs.yaml'
   push:
@@ -37,6 +39,8 @@ on:
       - '.github/scripts/**'
       - '.github/workflows/build-xilinx-platform.yaml'
       - '.github/workflows/build-maxim-platform.yaml'
+      - '.github/workflows/build-aducm3029-platform.yaml'
+      - '.github/workflows/build-stm32-platform.yaml'
       - '.github/workflows/build-common.yaml'
       - '.github/workflows/deploy-docs.yaml'
 
@@ -94,13 +98,15 @@ jobs:
         env:
           CLOUDSMITH_API_KEY: ${{ env.CLOUDSMITH_API_KEY }}
           TOKEN: ${{ secrets.GH_GHDL_TOKEN }}
-      - name: Upload release artifact
+      - name: Upload artifacts
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           path: ${{ env.RELEASES_DIR }}
-          name: release_pico_${{ github.job }}
+          name: ${{ github.job }}-binaries
       - name: Upload logs artifact
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           path: ${{ env.LOGS_DIR }}
-          name: logs_pico_${{ github.job }}
+          name: ${{ github.job }}-logs
