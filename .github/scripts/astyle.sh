@@ -111,7 +111,7 @@ run_astyle() {
 	git diff --name-only --diff-filter=d $COMMIT_RANGE | while read -r file; do
 		if is_source_file "$file" && is_valid_file "$file"
 		then
-			${WORKSPACE}/./build/astyle/build/gcc/bin/astyle --options="${WORKSPACE}/.github/config/astyle_config" "$file"
+			${WORKSPACE}/build/astyle/build/gcc/bin/astyle --options="${WORKSPACE}/.github/config/astyle_config" "$file"
 		fi
 	done;
 

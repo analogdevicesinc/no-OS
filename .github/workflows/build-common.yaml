@@ -33,6 +33,7 @@ jobs:
         env:
           NUM_JOBS: ${{ env.NUM_JOBS }}
           TARGET_BRANCH: ${{ github.base_ref }}
+          WORKSPACE: ${{ github.workspace }}
       - name: Check-cpp format
         shell: sh
         run: |
