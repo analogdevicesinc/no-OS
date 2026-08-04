@@ -95,6 +95,15 @@ function(ide_vscode_configure PROJECT_TARGET)
         @ONLY
     )
 
+    # --- Generate extensions.json ---
+    # no-OS drives builds via tasks.json (cmake --build) and debugging via
+    # cortex-debug, so recommend the C/C++ and cortex-debug extensions.
+    configure_file(
+        "${VSCODE_TEMPLATES_DIR}/extensions.json.in"
+        "${VSCODE_DIR}/extensions.json"
+        @ONLY
+    )
+
     # --- Generate tasks.json (Ctrl+Shift+B build tasks) ---
     # The build/clean/flash tasks just drive `cmake --build <build-dir>`; the
     # toolchain and target are baked into the cache at configure time, so the
