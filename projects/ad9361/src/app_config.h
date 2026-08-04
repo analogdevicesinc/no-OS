@@ -41,7 +41,7 @@
 
 //#define XILINX_PLATFORM
 //#define ALTERA_PLATFORM
-//#define LINUX_PLATFORM
+//#define LINUX_USERSPACE_PLATFORM
 //#define FMCOMMS5
 //#define ADI_RF_SOM
 //#define ADI_RF_SOM_CMOS
