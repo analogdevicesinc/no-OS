@@ -4,16 +4,19 @@ add_executable(ad9361)
 # "ps7_cortexa9_0", "psu_cortexa53_0", "sys_mb_0") before CMakeLists runs.
 # main.c uses #ifdef PLATFORM_MB to select PL (AXI) SPI/GPIO on MicroBlaze
 # vs PS (PSS) SPI/GPIO on Zynq-7000/ZynqMP.  Emit PLATFORM_MB for kcu105.
-if(XILINX_ARCH MATCHES "sys_mb")
-    target_compile_definitions(ad9361 PRIVATE PLATFORM_MB)
-endif()
-
 target_sources(ad9361 PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.c
 )
 
-# XILINX_PLATFORM is always needed so main.c takes the Xilinx code path.
-target_compile_definitions(ad9361 PRIVATE XILINX_PLATFORM)
+if(PLATFORM STREQUAL "linux-userspace")
+    target_compile_definitions(ad9361 PRIVATE LINUX_USERSPACE_PLATFORM)
+else()
+    # XILINX_ARCH is set by drivers/platform/xilinx/toolchain.cmake
+    if(XILINX_ARCH MATCHES "sys_mb")
+        target_compile_definitions(ad9361 PRIVATE PLATFORM_MB)
+    endif()
+    target_compile_definitions(ad9361 PRIVATE XILINX_PLATFORM)
+endif()
 
 # demo variant — standard bring-up, no extra flags
 if(CONFIG_AD9361_DEMO_EXAMPLE)
