@@ -130,7 +130,7 @@ def _generate_fabric_irq_macros(xsa_path, cpu):
     defines = []
 
     # MicroBlaze uses AXI interrupt controller with different naming
-    if cpu == "sys_mb":
+    if "sys_mb" in cpu or "microblaze" in cpu.lower():
         defines = _generate_mb_irq_macros(hw_design)
         hw_design.close()
         return defines
@@ -723,7 +723,7 @@ def clean_build(ws):
 
 def _cpu_reset(session, cpu, jtagtarget):
     """Reset the CPU before FPGA programming."""
-    if cpu == "sys_mb":
+    if "sys_mb" in cpu or "microblaze" in cpu.lower():
         return
     if "cortexa72" in cpu:
         # Versal: PLM handles reset
