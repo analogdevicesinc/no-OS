@@ -18,6 +18,8 @@ on:
       - '.github/scripts/**'
       - '.github/workflows/build-pico-platform.yaml'
       - '.github/workflows/build-maxim-platform.yaml'
+      - '.github/workflows/build-aducm3029-platform.yaml'
+      - '.github/workflows/build-stm32-platform.yaml'
       - '.github/workflows/build-common.yaml'
       - '.github/workflows/deploy-docs.yaml'
   push:
@@ -37,6 +39,8 @@ on:
       - '.github/scripts/**'
       - '.github/workflows/build-pico-platform.yaml'
       - '.github/workflows/build-maxim-platform.yaml'
+      - '.github/workflows/build-aducm3029-platform.yaml'
+      - '.github/workflows/build-stm32-platform.yaml'
       - '.github/workflows/build-common.yaml'
       - '.github/workflows/deploy-docs.yaml'
 
@@ -95,13 +99,13 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           path: ${{ env.RELEASES_DIR }}
-          name: release_xilinx_${{ github.job }}
+          name: ${{ github.job }}-binaries
       - name: Upload Xilinx build logs
         if: always()
         uses: actions/upload-artifact@v7
         with:
           path: ${{ env.LOGS_DIR }}
-          name: logs_xilinx_${{ github.job }}
+          name: ${{ github.job }}-logs
       - name: Remove logs, new_hardware and release output
         if: always()
         shell: sh
