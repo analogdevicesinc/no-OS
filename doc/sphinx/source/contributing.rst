@@ -84,3 +84,7 @@ this is the form used throughout no-OS.
 - When adding non-permissive code under an allowed exception, update the
   top-level ``LICENSE`` file so its tables continue to list every
   non-permissive and non-BSD tree.
+
+See :doc:`license_rules` for how licenses are declared with SPDX tags, the
+meaning of the ``LICENSES/`` buckets, and the repository-local
+``LicenseRef-`` identifier.

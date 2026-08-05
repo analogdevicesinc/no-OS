@@ -6,16 +6,35 @@
 
 \section license License
 
-Majority of the files located in this repository are released under the
-\ref license_page "LICENSE_BSD" terms. However, there may exist files accompanied by separate
-and unique license terms (such as GPL, LGPL, BSD, modified BSD, commercial or
-others). Your license rights with respect to individual file accompanied by
-separate license terms are defined by those terms. The license agreement for
-each file is generally located in the header of the file itself. Nothing else
-shall restrict, limit, or otherwise affect any rights or obligations you may
-have, or conditions to which you may be subject, under such license terms. This
-agreement does not limit your rights under, or grant you rights that supersede,
-the license terms of any particular file.
+no-OS is, by default, permissively licensed under
+\ref license_page "BSD-3-Clause". Each source file declares its own license
+with an SPDX identifier in its header, for example:
+
+\code
+/* SPDX-License-Identifier: BSD-3-Clause */
+\endcode
+
+The SPDX tag in a file is authoritative for that file. A few files carry
+different terms (such as GPL, Apache-2.0, modified BSD, or proprietary vendor
+device-API licenses), always stated in the file's own header, which takes
+precedence. Nothing else shall restrict, limit, or otherwise affect any rights
+or obligations you may have, or conditions to which you may be subject, under
+such license terms. This agreement does not limit your rights under, or grant
+you rights that supersede, the license terms of any particular file.
+
+Where to find the licensing information:
+
+- \b COPYING &mdash; short pointer to the default license and to the
+  \c LICENSES/ directory.
+- \b LICENSE &mdash; human-readable map of which directory trees use which
+  license, and whether they are permissive, non-permissive, or bundled
+  third-party code.
+- \b LICENSES/ &mdash; the full text of every license used by Analog Devices'
+  own no-OS code, one file per license, grouped by role (preferred,
+  permissive, copyleft, proprietary).
+- \b doc/sphinx/source/license_rules.rst &mdash; how licenses are declared
+  with SPDX tags, the meaning of the \c LICENSES/ buckets, and the acceptable
+  licenses for new contributions.
 
 The mere aggregation of these files (putting them side by side in the same
 source code repository or on a hard disk) does not mean that there is one master

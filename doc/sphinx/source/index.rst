@@ -64,6 +64,7 @@ Contents
    build_guide
    cmake_cheatsheet
    contributing
+   license_rules
 
 Additional resources
 --------------------

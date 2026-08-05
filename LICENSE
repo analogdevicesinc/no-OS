@@ -139,6 +139,18 @@ own terms. Where a file header and this document appear to disagree, the
 file header governs.
 
 
+Machine-readable license data
+-----------------------------
+
+The full text of every license used by Analog Devices' own no-OS code is
+collected under the LICENSES/ directory, one file per license, grouped by
+role (preferred, permissive, copyleft, proprietary). The
+top-level COPYING file is a short pointer to the default license and to
+that directory. The rules for how source files declare their license, and
+which licenses are acceptable for new contributions, are described in
+doc/sphinx/source/license_rules.rst.
+
+
 Legal note on aggregation
 -------------------------
 
