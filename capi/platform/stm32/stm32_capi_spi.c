@@ -100,7 +100,7 @@ static int stm32_capi_spi_config_peripheral(struct stm32_spi_priv_handle
 	int ret = 0;
 
 	/* Verify SPI instance is configured */
-	if (!priv_handle->hspi.Instance)
+	if (!priv_handle->hspi->Instance)
 		return -EINVAL;
 
 	/* automatically select prescaler based on max_speed_hz */
@@ -138,31 +138,31 @@ static int stm32_capi_spi_config_peripheral(struct stm32_spi_priv_handle
 	}
 
 	/* Use the SPI instance that was set during init */
-	priv_handle->hspi.Init.Mode = SPI_MODE_MASTER;
-	priv_handle->hspi.Init.Direction = SPI_DIRECTION_2LINES;
-	priv_handle->hspi.Init.DataSize = SPI_DATASIZE_8BIT;
-	priv_handle->hspi.Init.CLKPolarity = device->mode & CAPI_SPI_CPOL ?
-					     SPI_POLARITY_HIGH :
-					     SPI_POLARITY_LOW;
-	priv_handle->hspi.Init.CLKPhase = device->mode & CAPI_SPI_CPHA ?
-					  SPI_PHASE_2EDGE :
-					  SPI_PHASE_1EDGE;
-	priv_handle->hspi.Init.NSS = SPI_NSS_SOFT;
-	priv_handle->hspi.Init.BaudRatePrescaler = prescaler;
-	priv_handle->hspi.Init.FirstBit = device->lsb_first ?
-					  SPI_FIRSTBIT_LSB :
-					  SPI_FIRSTBIT_MSB;
-	priv_handle->hspi.Init.TIMode = SPI_TIMODE_DISABLE;
-	priv_handle->hspi.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-	priv_handle->hspi.Init.CRCPolynomial = STM32_SPI_CRC_POLYNOMIAL;
+	priv_handle->hspi->Init.Mode = SPI_MODE_MASTER;
+	priv_handle->hspi->Init.Direction = SPI_DIRECTION_2LINES;
+	priv_handle->hspi->Init.DataSize = SPI_DATASIZE_8BIT;
+	priv_handle->hspi->Init.CLKPolarity = device->mode & CAPI_SPI_CPOL ?
+					      SPI_POLARITY_HIGH :
+					      SPI_POLARITY_LOW;
+	priv_handle->hspi->Init.CLKPhase = device->mode & CAPI_SPI_CPHA ?
+					   SPI_PHASE_2EDGE :
+					   SPI_PHASE_1EDGE;
+	priv_handle->hspi->Init.NSS = SPI_NSS_SOFT;
+	priv_handle->hspi->Init.BaudRatePrescaler = prescaler;
+	priv_handle->hspi->Init.FirstBit = device->lsb_first ?
+					   SPI_FIRSTBIT_LSB :
+					   SPI_FIRSTBIT_MSB;
+	priv_handle->hspi->Init.TIMode = SPI_TIMODE_DISABLE;
+	priv_handle->hspi->Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+	priv_handle->hspi->Init.CRCPolynomial = STM32_SPI_CRC_POLYNOMIAL;
 
-	ret = HAL_SPI_Init(&priv_handle->hspi);
+	ret = HAL_SPI_Init(priv_handle->hspi);
 	if (ret != HAL_OK) {
 		return -EIO;
 	}
 
 #ifdef SPI_SR_TXE
-	__HAL_SPI_ENABLE(&priv_handle->hspi);
+	__HAL_SPI_ENABLE(priv_handle->hspi);
 #endif
 
 	return 0;
@@ -260,16 +260,39 @@ static int stm32_capi_spi_init(struct capi_spi_controller_handle **handle,
 
 	/* Set up SPI instance */
 	if (spi_extra_config && spi_extra_config->hspi) {
-		spi_priv_handle->hspi = *spi_extra_config->hspi;
+		/*
+		 * Alias the caller's HAL handle - do NOT copy it. IT/DMA transfers
+		 * are serviced by the platform NVIC vector (e.g. CubeMX's
+		 * SPI1_IRQHandler -> HAL_SPI_IRQHandler(&hspi1)), which acts on the
+		 * caller's handle object. Operating on the same object keeps the HAL
+		 * state machine and completion-callback routing consistent between
+		 * the driver and the ISR.
+		 */
+		spi_priv_handle->hspi = spi_extra_config->hspi;
 	} else {
-		/* Auto-configure based on identifier */
+		/* Auto-configure based on identifier using internal storage. */
 		base = get_spi_base_from_identifier(config->identifier);
 		if (!base) {
 			ret = -EINVAL;
 			goto error;
 		}
-		spi_priv_handle->hspi.Instance = base;
+		spi_priv_handle->hspi = &spi_priv_handle->hspi_storage;
+		spi_priv_handle->hspi->Instance = base;
 	}
+
+	/*
+	 * Force the handle into the RESET state so the first HAL_SPI_Init()
+	 * runs HAL_SPI_MspInit() (peripheral clock + GPIO + NVIC).
+	 *
+	 * HAL_SPI_Init() only calls MspInit when State == HAL_SPI_STATE_RESET.
+	 * When hspi is copied from a user template (e.g. CubeMX's global, which
+	 * boots in the READY state) or reused after a previous deinit, the copy
+	 * would otherwise carry a non-RESET state and MspInit would be skipped -
+	 * leaving the peripheral clock gated off after a deinit/init cycle and
+	 * hanging the first transfer. Family-generic (HAL state machine is
+	 * common to all STM32 SPI IPs).
+	 */
+	spi_priv_handle->hspi->State = HAL_SPI_STATE_RESET;
 
 	/* Initialize other fields */
 	spi_priv_handle->callback = NULL;
@@ -277,6 +300,8 @@ static int stm32_capi_spi_init(struct capi_spi_controller_handle **handle,
 	spi_priv_handle->current_transfer = NULL;
 	spi_priv_handle->async_in_progress = false;
 	spi_priv_handle->dma_done = false;
+	spi_priv_handle->sync_cfg_cached = false;
+	spi_priv_handle->sync_cfg_key = 0;
 
 	if (spi_extra_config) {
 		if (spi_extra_config->get_input_clock)
@@ -334,7 +359,7 @@ static int stm32_capi_spi_init(struct capi_spi_controller_handle **handle,
 	}
 
 	/* Register handle mapping for callbacks */
-	ret = register_handle_mapping(&spi_priv_handle->hspi, spi_priv_handle);
+	ret = register_handle_mapping(spi_priv_handle->hspi, spi_priv_handle);
 	if (ret != 0) {
 		goto error;
 	}
@@ -385,12 +410,12 @@ static int stm32_capi_spi_deinit(struct capi_spi_controller_handle *handle)
 		}
 
 #ifdef SPI_SR_TXE
-		__HAL_SPI_DISABLE(&spi_priv_handle->hspi);
+		__HAL_SPI_DISABLE(spi_priv_handle->hspi);
 #endif
-		HAL_SPI_DeInit(&spi_priv_handle->hspi);
+		HAL_SPI_DeInit(spi_priv_handle->hspi);
 
 		/* Unregister handle mapping */
-		unregister_handle_mapping(&spi_priv_handle->hspi);
+		unregister_handle_mapping(spi_priv_handle->hspi);
 
 		/* Clean up CAPI GPIO for CS */
 		if (spi_priv_handle->cs_initialized) {
@@ -483,20 +508,30 @@ static int perform_spi_transfer_with_cs(struct stm32_spi_priv_handle
 					bool assert_cs, bool deassert_cs)
 {
 	struct stm32_spi_device_extra *dev_extra = device->extra;
-	uint64_t slave_id;
-	static uint64_t last_slave_id = 0;
+	uint64_t cfg_key;
 	int ret = 0;
 	HAL_StatusTypeDef hal_ret;
 
-	/* Compute slave ID for configuration optimization */
-	slave_id = ((uint64_t)(uintptr_t)priv_handle->hspi.Instance << 32) |
-		   (device->cs_gpio ? device->cs_gpio->number : device->native_cs);
+	/*
+	 * Reconfigure the peripheral only when the effective device settings
+	 * change. The key is stored per-controller (not file-static) so it is
+	 * reset by init and a fresh/re-initialized controller always configures
+	 * on its first transfer; it also folds in every field config_peripheral
+	 * consumes (CS, clock mode, bit order, speed) so a change to any of them
+	 * re-applies the config.
+	 */
+	cfg_key = ((uint64_t)(device->cs_gpio ? device->cs_gpio->number :
+			      device->native_cs)) |
+		  ((uint64_t)device->mode << 8) |
+		  ((uint64_t)(device->lsb_first ? 1U : 0U) << 16) |
+		  ((uint64_t)device->max_speed_hz << 32);
 
-	if (slave_id != last_slave_id) {
-		last_slave_id = slave_id;
+	if (!priv_handle->sync_cfg_cached || cfg_key != priv_handle->sync_cfg_key) {
 		ret = stm32_capi_spi_config_peripheral(priv_handle, device);
 		if (ret)
 			return ret;
+		priv_handle->sync_cfg_key = cfg_key;
+		priv_handle->sync_cfg_cached = true;
 	}
 
 	/* Assert CS if requested (drive low for active-low CS) */
@@ -516,7 +551,7 @@ static int perform_spi_transfer_with_cs(struct stm32_spi_priv_handle
 				       transfer->timeout : HAL_MAX_DELAY;
 
 		if (transfer->tx_size == transfer->rx_size) {
-			hal_ret = HAL_SPI_TransmitReceive(&priv_handle->hspi,
+			hal_ret = HAL_SPI_TransmitReceive(priv_handle->hspi,
 							  (uint8_t *)transfer->tx_buf,
 							  transfer->rx_buf,
 							  xfer_len, timeout_val);
@@ -531,7 +566,7 @@ static int perform_spi_transfer_with_cs(struct stm32_spi_priv_handle
 				goto cs_deassert;
 			}
 			memcpy(tmp_tx, transfer->tx_buf, transfer->tx_size);
-			hal_ret = HAL_SPI_TransmitReceive(&priv_handle->hspi,
+			hal_ret = HAL_SPI_TransmitReceive(priv_handle->hspi,
 							  tmp_tx, tmp_rx,
 							  xfer_len, timeout_val);
 			if (hal_ret == HAL_OK)
@@ -540,7 +575,7 @@ static int perform_spi_transfer_with_cs(struct stm32_spi_priv_handle
 			capi_free(tmp_rx);
 		}
 	} else if (transfer->tx_buf) {
-		hal_ret = HAL_SPI_Transmit(&priv_handle->hspi,
+		hal_ret = HAL_SPI_Transmit(priv_handle->hspi,
 					   (uint8_t *)transfer->tx_buf,
 					   transfer->tx_size,
 					   transfer->timeout > 0 ? transfer->timeout : HAL_MAX_DELAY);
@@ -551,7 +586,7 @@ static int perform_spi_transfer_with_cs(struct stm32_spi_priv_handle
 			ret = -ENOMEM;
 			goto cs_deassert;
 		}
-		hal_ret = HAL_SPI_TransmitReceive(&priv_handle->hspi,
+		hal_ret = HAL_SPI_TransmitReceive(priv_handle->hspi,
 						  zero_tx, transfer->rx_buf,
 						  transfer->rx_size,
 						  transfer->timeout > 0 ? transfer->timeout : HAL_MAX_DELAY);
@@ -657,16 +692,16 @@ static int stm32_capi_spi_transceive_async(struct capi_spi_device *device,
 		capi_wait_us(dev_extra->cs_delay_first);
 
 	if (transfer->tx_buf && transfer->rx_buf) {
-		hal_ret = HAL_SPI_TransmitReceive_IT(&priv_handle->hspi,
+		hal_ret = HAL_SPI_TransmitReceive_IT(priv_handle->hspi,
 						     (uint8_t *)transfer->tx_buf,
 						     transfer->rx_buf,
 						     max(transfer->tx_size, transfer->rx_size));
 	} else if (transfer->tx_buf) {
-		hal_ret = HAL_SPI_Transmit_IT(&priv_handle->hspi,
+		hal_ret = HAL_SPI_Transmit_IT(priv_handle->hspi,
 					      (uint8_t *)transfer->tx_buf,
 					      transfer->tx_size);
 	} else if (transfer->rx_buf) {
-		hal_ret = HAL_SPI_Receive_IT(&priv_handle->hspi,
+		hal_ret = HAL_SPI_Receive_IT(priv_handle->hspi,
 					     transfer->rx_buf,
 					     transfer->rx_size);
 	} else {
@@ -736,7 +771,7 @@ static int stm32_capi_spi_read_command(struct capi_spi_device *device,
 
 	/* First transmit command/address */
 	if (transfer->tx_buf && transfer->tx_size > 0) {
-		hal_ret = HAL_SPI_Transmit(&priv_handle->hspi,
+		hal_ret = HAL_SPI_Transmit(priv_handle->hspi,
 					   (uint8_t *)transfer->tx_buf,
 					   transfer->tx_size,
 					   transfer->timeout > 0 ? transfer->timeout : HAL_MAX_DELAY);
@@ -758,7 +793,15 @@ static int stm32_capi_spi_read_command(struct capi_spi_device *device,
 
 	/* Then receive data */
 	if (transfer->rx_buf && transfer->rx_size > 0) {
-		hal_ret = HAL_SPI_Receive(&priv_handle->hspi,
+		/*
+		 * In master + 2-line mode HAL_SPI_Receive() redirects to
+		 * HAL_SPI_TransmitReceive(hspi, rx_buf, rx_buf, ...): it clocks
+		 * the RX buffer's *current* contents out on MOSI. Zero it first
+		 * so we clock defined 0x00 dummy bytes (never the caller's stale
+		 * data) during the read phase.
+		 */
+		memset(transfer->rx_buf, 0, transfer->rx_size);
+		hal_ret = HAL_SPI_Receive(priv_handle->hspi,
 					  transfer->rx_buf,
 					  transfer->rx_size,
 					  transfer->timeout > 0 ? transfer->timeout : HAL_MAX_DELAY);
@@ -838,11 +881,11 @@ static int stm32_capi_spi_read_command_async(struct capi_spi_device *device,
 		capi_wait_us(dev_extra->cs_delay_first);
 
 	if (transfer->tx_buf && transfer->tx_size > 0) {
-		hal_ret = HAL_SPI_Transmit_IT(&priv_handle->hspi,
+		hal_ret = HAL_SPI_Transmit_IT(priv_handle->hspi,
 					      (uint8_t *)transfer->tx_buf,
 					      transfer->tx_size);
 	} else if (transfer->rx_buf && transfer->rx_size > 0) {
-		hal_ret = HAL_SPI_Receive_IT(&priv_handle->hspi,
+		hal_ret = HAL_SPI_Receive_IT(priv_handle->hspi,
 					     transfer->rx_buf,
 					     transfer->rx_size);
 	} else {
@@ -873,6 +916,47 @@ static int stm32_capi_spi_read_command_async(struct capi_spi_device *device,
 }
 
 /**
+ * @brief Tear down an in-flight IT transfer without relying on the SPI ISR.
+ *
+ * Both HAL_SPI_Abort() and HAL_SPI_Abort_IT() busy-wait for the abort ISR
+ * (SPI_AbortTx_ISR / SPI_AbortRx_ISR, driven from HAL_SPI_IRQHandler) to move
+ * the handle to HAL_SPI_STATE_ABORT. When the caller has masked global
+ * interrupts that ISR never runs, so both HAL paths time out and fail. This
+ * does the equivalent unwind synchronously at the register level: mask the SPI
+ * interrupt sources, disable the peripheral, clear residual error flags and
+ * reset the HAL transfer state machine back to READY.
+ *
+ * @param hspi - Pointer to the HAL SPI handle to abort.
+ */
+static void stm32_capi_spi_abort_hw(SPI_HandleTypeDef *hspi)
+{
+	/* Mask every SPI interrupt source so no ISR is needed to unwind. */
+#if defined(SPI_CR2_TXEIE)
+	/* Classic SPI IP: interrupt enables live in CR2. */
+	CLEAR_BIT(hspi->Instance->CR2,
+		  SPI_CR2_TXEIE | SPI_CR2_RXNEIE | SPI_CR2_ERRIE);
+#else
+	/* Newer SPI IP (H7/H5/...): interrupt enables live in IER. */
+	hspi->Instance->IER = 0U;
+#endif
+
+	/* Disable the peripheral and clear any residual error flags. */
+	__HAL_SPI_DISABLE(hspi);
+	__HAL_SPI_CLEAR_OVRFLAG(hspi);
+	__HAL_SPI_CLEAR_FREFLAG(hspi);
+
+	/* Reset the HAL transfer state machine by hand. */
+	hspi->TxISR = NULL;
+	hspi->RxISR = NULL;
+	hspi->pTxBuffPtr = NULL;
+	hspi->pRxBuffPtr = NULL;
+	hspi->TxXferCount = 0U;
+	hspi->RxXferCount = 0U;
+	hspi->ErrorCode = HAL_SPI_ERROR_NONE;
+	hspi->State = HAL_SPI_STATE_READY;
+}
+
+/**
  * @brief Abort an ongoing asynchronous SPI operation.
  * @param device - Pointer to the SPI device descriptor.
  * @return 0 on success, negative error code otherwise.
@@ -880,7 +964,6 @@ static int stm32_capi_spi_read_command_async(struct capi_spi_device *device,
 static int stm32_capi_spi_abort_async(struct capi_spi_device *device)
 {
 	struct stm32_spi_priv_handle *priv_handle;
-	HAL_StatusTypeDef hal_ret;
 	int ret = 0;
 
 	if (!device || !device->controller)
@@ -899,25 +982,24 @@ static int stm32_capi_spi_abort_async(struct capi_spi_device *device)
 			return ret;
 	}
 
-	hal_ret = HAL_SPI_Abort_IT(&priv_handle->hspi);
+	/*
+	 * Tear the transfer down synchronously at the register level rather
+	 * than via HAL_SPI_Abort[_IT]() — both of those busy-wait for the abort
+	 * ISR, which cannot run when the caller has masked global interrupts
+	 * (as the abort test does). This unwind does not drive HAL's
+	 * AbortCpltCallback, so deassert CS and fire the terminal callback here.
+	 */
+	stm32_capi_spi_abort_hw(priv_handle->hspi);
 
-	if (hal_ret != HAL_OK) {
-		/*
-		 * HAL_SPI_Abort_IT failed — HAL_SPI_AbortCpltCallback was NOT
-		 * called, so clean up and fire the callback.
-		 */
-		if (priv_handle->cs_initialized)
-			capi_gpio_pin_set_raw_value(&priv_handle->chip_select,
-						    CAPI_GPIO_HIGH);
-		priv_handle->async_in_progress = false;
-		priv_handle->current_transfer = NULL;
+	if (priv_handle->cs_initialized)
+		capi_gpio_pin_set_raw_value(&priv_handle->chip_select,
+					    CAPI_GPIO_HIGH);
+	priv_handle->async_in_progress = false;
+	priv_handle->current_transfer = NULL;
 
-		if (priv_handle->callback)
-			priv_handle->callback(CAPI_SPI_EVENT_ERROR,
-					      priv_handle->callback_arg,
-					      -ECANCELED);
-		return -EIO;
-	}
+	if (priv_handle->callback)
+		priv_handle->callback(CAPI_SPI_EVENT_ERROR,
+				      priv_handle->callback_arg, 0);
 
 	return 0;
 }
@@ -962,20 +1044,27 @@ static int stm32_capi_spi_set_cs(struct capi_spi_device *device,
 
 	priv_handle = device->controller->priv;
 
-	if (!priv_handle->cs_initialized)
-		return -ENOSYS;
-
 	switch (cs_control) {
 	case CAPI_SPI_CS_AUTO:
 		/* HAL handles CS automatically - nothing to do */
 		break;
 	case CAPI_SPI_CS_MANUAL_ASSERT:
-		/* Assert CS (drive low for active-low CS) */
-		capi_gpio_pin_set_raw_value(&priv_handle->chip_select, CAPI_GPIO_LOW);
+		/*
+		 * With a GPIO CS, assert it (drive low for active-low CS).
+		 * With native CS (no GPIO CS configured), soft-NSS master mode
+		 * has no externally-driven CS line to hold, so manual assert is
+		 * a harmless no-op that still reports success.
+		 */
+		if (priv_handle->cs_initialized)
+			capi_gpio_pin_set_raw_value(&priv_handle->chip_select,
+						    CAPI_GPIO_LOW);
 		break;
 	case CAPI_SPI_CS_MANUAL_DEASSERT:
-		/* Deassert CS (drive high for active-low CS) */
-		capi_gpio_pin_set_raw_value(&priv_handle->chip_select, CAPI_GPIO_HIGH);
+		/* Deassert GPIO CS (drive high for active-low CS); no-op for
+		 * native CS - see CAPI_SPI_CS_MANUAL_ASSERT above. */
+		if (priv_handle->cs_initialized)
+			capi_gpio_pin_set_raw_value(&priv_handle->chip_select,
+						    CAPI_GPIO_HIGH);
 		break;
 	default:
 		return -EINVAL;
@@ -998,7 +1087,7 @@ static void stm32_capi_spi_isr(void *handle)
 		return;
 
 	priv_handle = controller_handle->priv;
-	HAL_SPI_IRQHandler(&priv_handle->hspi);
+	HAL_SPI_IRQHandler(priv_handle->hspi);
 }
 
 /**
@@ -1144,7 +1233,7 @@ static int stm32_capi_config_dma_and_start(struct capi_spi_device *device,
 	struct stm32_spi_priv_handle *priv_handle = device->controller->priv;
 	struct capi_dma_transfer *rx_ch_xfer;
 	struct capi_dma_transfer *tx_ch_xfer;
-	SPI_TypeDef *SPIx = priv_handle->hspi.Instance;
+	SPI_TypeDef *SPIx = priv_handle->hspi->Instance;
 	int ret;
 	uint32_t i;
 
@@ -1227,17 +1316,17 @@ static int stm32_capi_config_dma_and_start(struct capi_spi_device *device,
 	/* Enable SPI DMA requests */
 	if (priv_handle->txdma_ch) {
 #if defined (STM32H5)
-		SET_BIT(priv_handle->hspi.Instance->CFG1, SPI_CFG1_TXDMAEN);
+		SET_BIT(priv_handle->hspi->Instance->CFG1, SPI_CFG1_TXDMAEN);
 #else
-		SET_BIT(priv_handle->hspi.Instance->CR2, SPI_CR2_TXDMAEN);
+		SET_BIT(priv_handle->hspi->Instance->CR2, SPI_CR2_TXDMAEN);
 #endif
 	}
 
 	if (priv_handle->rxdma_ch) {
 #if defined (STM32H5)
-		SET_BIT(priv_handle->hspi.Instance->CFG1, SPI_CFG1_RXDMAEN);
+		SET_BIT(priv_handle->hspi->Instance->CFG1, SPI_CFG1_RXDMAEN);
 #else
-		SET_BIT(priv_handle->hspi.Instance->CR2, SPI_CR2_RXDMAEN);
+		SET_BIT(priv_handle->hspi->Instance->CR2, SPI_CR2_RXDMAEN);
 #endif
 	}
 
@@ -1295,7 +1384,7 @@ static int stm32_capi_spi_dma_abort(struct capi_spi_device *device)
 	if (!priv_handle)
 		return -EINVAL;
 
-	SPIx = priv_handle->hspi.Instance;
+	SPIx = priv_handle->hspi->Instance;
 
 	if (priv_handle->rxdma_ch) {
 		ret = capi_dma_xfer_abort(priv_handle->rxdma_ch);
@@ -1496,9 +1585,16 @@ void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi)
 	/* For read command async, check if we need to start RX phase */
 	if (transfer && transfer->rx_buf && transfer->rx_size > 0
 	    && transfer->tx_size > 0) {
-		/* Start RX phase for read command */
-		HAL_StatusTypeDef hal_ret = HAL_SPI_Receive_IT(hspi, transfer->rx_buf,
-					    transfer->rx_size);
+		/*
+		 * Start RX phase for read command. HAL_SPI_Receive_IT() in
+		 * master + 2-line mode redirects to TransmitReceive_IT(rx, rx),
+		 * clocking the RX buffer's current contents out on MOSI; zero it
+		 * first so defined 0x00 dummy bytes are clocked, not stale data.
+		 */
+		HAL_StatusTypeDef hal_ret;
+		memset(transfer->rx_buf, 0, transfer->rx_size);
+		hal_ret = HAL_SPI_Receive_IT(hspi, transfer->rx_buf,
+					     transfer->rx_size);
 		if (hal_ret != HAL_OK) {
 			/* Error in RX phase - deassert CS */
 			if (priv_handle->cs_initialized)
