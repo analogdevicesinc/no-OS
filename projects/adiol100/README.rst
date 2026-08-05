@@ -10,6 +10,8 @@ Supported Evaluation Boards
 ----------------------------
 
 * TO MODIFY AFTER RECEIVING EVAL-BOARD
+* `MAXREFDES171# <https://www.analog.com/en/resources/reference-designs/maxrefdes171.html>`__
+  — IO-Link distance sensor, used as the target device in the basic example
 
 Overview
 --------
@@ -97,7 +99,7 @@ driving the protocol state machine through all phases:
                                   │              │   at every ComRate)  │
                                   │              └──────────────────────┘
                                   │                       │
-   ┌─────────────────┐      ┌─────▼────┐      ┌──────────▼────────────────┐
+   ┌─────────────────┐      ┌─────▼────┐      ┌───────────▼───────────────┐
    │   Master sets   │◄─────┤PREOPERATE│      │          Slave            │
    │ MasterCycleTime │      └─────┬────┘      │      Identification       │
    └────────┬────────┘            │           │ (reading slave parameters │
@@ -116,29 +118,127 @@ driving the protocol state machine through all phases:
                               └───────┘
                        (live data every cycle)
 
-The example walks through each phase:
+IO-Link FIFO Framing
+^^^^^^^^^^^^^^^^^^^^^
+
+All IO-Link communication goes through the ADIOL100's per-channel FIFO.
+The application writes a frame into the TxFIFO and reads the device's
+response from the RxFIFO. The actual SPI command byte (chip address +
+register + R/W bit) is handled by the driver, the application only deals
+with the FIFO payload.
+
+**Write frame** (master to device, via ``adiol100_load_and_send_msg``):
+
+.. code-block:: text
+
+   ┌───────┬─────────┬─────────┬──────┬──────┬──────┐
+   │ MsgID │ RxBytes │ TxBytes │  MC  │  CKT │ Data │
+   └───────┴─────────┴─────────┴──────┴──────┴──────┘
+    driver   caller    caller  ├── IO-Link payload ─┤
+    adds     provides  provides  (caller provides)
+
+* **MsgID** — Auto-incrementing message ID (prepended by the driver).
+* **RxBytes** — Number of response bytes to expect (including CKS).
+* **TxBytes** — Number of IO-Link payload bytes that follow.
+* **MC** — M-sequence Control byte. Encodes the operation, IO-Link
+  communication channel, and address in a single byte:
+
+  .. code-block:: text
+
+     Bit   7      6:5       4:0
+         ┌────┬─────────┬─────────┐
+         │R/W │ Channel │ Address │
+         └────┴─────────┴─────────┘
+
+  * **R/W** — 1 = read from device, 0 = write to device.
+  * **Channel** — IO-Link communication channel:
+    0 = Process, 1 = Page, 2 = Diagnosis, 3 = ISDU.
+  * **Address** — Register or page address within the selected channel.
+
+  When the Channel is set to Page (1), the Address selects a register in
+  the Direct Parameter Page (DPP), defined in the IO-Link spec Table B.1.
+  DPP registers 0x00–0x0D contain standard device parameters such as
+  MinCycleTime, MSeqCapability, VendorID, DeviceID, and MasterCommand.
+
+  The example uses the ``IOL_MC(rw, ch, addr)`` macro to build this byte.
+  For example, reading DPP address 0x02 (MinCycleTime) on the Page channel:
+  ``IOL_MC(IOL_READ, IOL_CH_PAGE, 0x02)`` = ``0xA2``.
+
+* **CKT** — Checksum/Type byte. Bits [7:6] select the M-sequence type,
+  which determines the frame structure (how many OD and PD bytes are
+  exchanged):
+
+  * **TYPE_0** (``0x00``) — 1 OD byte, no PD. Used in STARTUP for
+    single register reads and writes.
+  * **TYPE_1** (``0x40``) — Variable OD bytes, no PD. Used in
+    PREOPERATE for ISDU transfers and multi-byte parameter writes.
+  * **TYPE_2** (``0x80``) — OD + PD bytes. Used in OPERATE for cyclic
+    process data exchange.
+
+  Bits [5:0] carry the 6-bit IO-Link checksum. When the framer's checksum
+  insertion is enabled (``ADIOL100_CHKS_EN``), the chip computes and
+  inserts the checksum automatically — the application only needs to set
+  the type bits.
+
+* **Data** — On-request Data (OD) bytes. Content depends on the operation
+  (e.g. register value for a write, ISDU command for an ISDU request).
+
+**Read frame** (device response, via ``adiol100_read_msg``):
+
+.. code-block:: text
+
+   ┌───────┬────────────┬──────┬─────┐
+   │ MsgID │ RxBytesAct │ Data │ CKS │
+   └───────┴────────────┴──────┴─────┘
+   ├─── FIFO header  ──┤├─ returned ─┤
+    (stripped by driver)   to caller
+
+* **MsgID** — Echoed message ID (stripped by the driver).
+* **RxBytesAct** — Actual number of response bytes (stripped by the driver).
+* **Data** — OD bytes from the device (register value, ISDU response, or
+  process data depending on the M-sequence type).
+* **CKS** — Checksum/Status byte: bit 7 = Event flag, bit 6 = PD valid,
+  bits [5:0] = 6-bit checksum.
+
+Example Flow
+^^^^^^^^^^^^^
+
+With this framing, IO-Link communication is a sequence of write-frame /
+read-response pairs. Each protocol phase uses a different M-sequence type:
 
 1. **STARTUP** — Configure channel A: enable L+ supply, set CQ driver to
    push-pull mode, enable framer and checksum insertion. Then run
    EstablishCommunication, which probes the sensor at COM3, COM2, and COM1
-   until a baud rate is established. Read required DPP parameters from the sensor
-   (MinCycleTime, MSeqCap, PDIn, PDOut) using TYPE_0 M-sequences. Read
-   optional identification parameters (VendorID, DeviceID, FunctionID).
-   Send the MasterIdent command.
+   until a baud rate is established. Read required DPP parameters from the
+   sensor (MinCycleTime, MSeqCap, PDIn, PDOut) using TYPE_0 M-sequences.
+   Read optional identification parameters (VendorID, DeviceID, FunctionID).
+   Send the MasterIdent and PreOperate commands.
 
-2. **PREOPERATE** — Send the PreOperate command. Perform ISDU reads
-   (serial number, vendor name, product name, etc.) using the 3-step
-   send/poll/close pattern with TYPE_1_V M-sequences. Set the cycle time.
-   Send the Operate command.
+2. **PREOPERATE** — Perform ISDU reads (serial number, vendor name,
+   product name, etc.) using TYPE_1 M-sequences. ISDU reads follow a
+   3-step pattern: the master sends the read command to the ISDU Start
+   address, polls until the device responds (it returns "No Service"
+   while busy), then closes the transaction by reading the ISDU Idle
+   address. Set the cycle time. Send the Operate command.
 
 3. **OPERATE** — Start cyclic process data exchange using TYPE_2
    M-sequences with ``ADIOL100_KEEP_MSG``. The cycle timer automatically
    re-transmits the master message each cycle. The example polls and
    prints 20 cycles of sensor data.
 
-All IO-Link protocol steps (M-sequence framing, ISDU parsing, state
-transitions) are implemented directly in the example code using the
-driver's ``load_and_send_msg`` and ``read_msg`` functions.
+The example code uses two helper functions built on top of the driver:
+
+* ``iol_send_frame`` — Packs MC + CKT + OD into the IO-Link payload and
+  calls ``adiol100_load_and_send_msg``.
+* ``iol_send_frame_and_read`` — Calls ``iol_send_frame`` followed by
+  ``adiol100_read_msg`` to retrieve the device response.
+
+For more information about the IO-Link protocol, see the
+`IO-Link specification <https://io-link.com/downloads>`__.
+
+Example Output
+^^^^^^^^^^^^^^^
+TO DO
 
 i-link Stack Example (FreeRTOS)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

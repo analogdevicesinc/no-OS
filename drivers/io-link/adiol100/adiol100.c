@@ -405,7 +405,7 @@ int adiol100_update(struct adiol100_dev *dev, uint16_t reg, uint16_t mask,
  * @param ch      - Channel selection (A or B).
  * @param data    - IO-Link payload bytes (MC + CKT + OD).
  * @param txbytes - Number of payload bytes to transmit.
- * @param rxbytes - Number of response bytes expected from the device.
+ * @param rxbytes - Number of response bytes expected from the device (including CKS).
  * @param keep    - Retain message in TxFIFO for cyclic re-sending.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -414,8 +414,8 @@ int adiol100_load_msg(struct adiol100_dev *dev, enum adiol100_channel ch,
                       enum adiol100_keep_msg keep)
 {
     uint8_t buf[ADIOL100_FIFO_MAX_LEN + 1];
-    uint8_t write_len = 3 + txbytes;
-    uint8_t read_len = 2 + rxbytes;
+    uint8_t write_len = 3 + txbytes;    // MsgID + RxBytes + TxBytes + payload
+    uint8_t read_len = 2 + rxbytes;     // MsgID + RxBytesAct + response
     uint16_t data_reg;
     uint16_t fc1_reg;
     int ret;
@@ -474,7 +474,7 @@ int adiol100_send_msg(struct adiol100_dev *dev, enum adiol100_channel ch)
  * @param ch      - Channel selection (A or B).
  * @param data    - IO-Link payload bytes (MC + CKT + OD).
  * @param txbytes - Number of payload bytes to transmit.
- * @param rxbytes - Number of response bytes expected from the device.
+ * @param rxbytes - Number of response bytes expected from the device (including CKS).
  * @param keep    - Retain message in TxFIFO for cyclic re-sending.
  * @return 0 in case of success, negative error code otherwise.
  */
