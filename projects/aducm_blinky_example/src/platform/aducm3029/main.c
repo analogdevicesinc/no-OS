@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
 /*****************************************************************************
  * main.c
  * Main file for ADuCM3029 platform of aducm_blinky_example project.
