@@ -64,29 +64,45 @@ void capi_wait_ms_impl(uint32_t ms)
 /**
  * @brief Return monotonic uptime in microseconds since boot.
  *
- * The millisecond portion comes from HAL_GetTick() (SysTick).  On cores with
- * the DWT cycle counter the sub-millisecond fraction is derived from CYCCNT
- * for microsecond-level resolution; otherwise the fractional part is zero.
+ * The millisecond portion comes from HAL_GetTick() (SysTick).  The sub-
+ * millisecond fraction is derived from the SysTick current-value register,
+ * which is the very counter that drives the millisecond tick, so the two are
+ * phase-locked: (LOAD - VAL) is exactly the number of core cycles elapsed
+ * within the current millisecond.  DWT->CYCCNT is deliberately NOT used - it
+ * free-runs independently of SysTick, so mixing it with HAL_GetTick() yields a
+ * random 0..999 us offset (up to +/-1 ms of error) instead of the true
+ * fraction.  SysTick exists on every Cortex-M and is the default HAL time
+ * base, so this stays generic across STM32 families.
  *
  * @param[out] us Receives uptime in microseconds.
  * @return 0 on success.
  */
 int capi_uptime_impl(uint64_t *us)
 {
-	uint32_t ms = HAL_GetTick();
-	uint64_t result = (uint64_t)ms * 1000U;
+	uint32_t load = SysTick->LOAD + 1U;		/* core cycles per ms */
+	uint32_t cyc_per_us = SystemCoreClock / 1000000U;
+	uint32_t ms;
+	uint32_t val;
+	uint32_t frac_us = 0U;
 
-#if defined(DWT)
-	{
-		uint32_t cycles_per_ms = SystemCoreClock / 1000U;
-		uint32_t cyccnt = DWT->CYCCNT;
-		uint32_t frac_us = (cyccnt % cycles_per_ms) / (SystemCoreClock / 1000000U);
+	/*
+	 * Sample the millisecond count and the SysTick value as a consistent
+	 * pair. SysTick counts DOWN and reloads on the same event that advances
+	 * HAL_GetTick(); if a tick lands between the two reads, HAL_GetTick()
+	 * changes and we retry, so val always belongs to the sampled ms.
+	 */
+	do {
+		ms = HAL_GetTick();
+		val = SysTick->VAL;
+	} while (ms != HAL_GetTick());
 
-		result += frac_us;
+	if (cyc_per_us) {
+		frac_us = (load - val) / cyc_per_us;
+		if (frac_us > 999U)
+			frac_us = 999U;
 	}
-#endif
 
-	*us = result;
+	*us = (uint64_t)ms * 1000ULL + frac_us;
 
 	return 0;
 }
