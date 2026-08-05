@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
 /*****************************************************************************
  * basic_example.c
  * Blinky basic example for aducm_blinky_example project.

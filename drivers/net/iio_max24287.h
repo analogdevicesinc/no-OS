@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
 #ifndef IIO_MAX24287_H
 #define IIO_MAX24287_H
 
