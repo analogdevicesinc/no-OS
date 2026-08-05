@@ -18,9 +18,23 @@ function(config_xilinx_sdk BUILD_TARGET)
     set(_bsp_lib "${_ws}/bsp/${XILINX_ARCH}/lib")
     set(_lscript "${_ws}/app/src/lscript.ld")
 
-    # Regenerate only when the BSP artifacts are missing (BSP generation is slow;
-    # the .xsa rarely changes within a working tree).
+    # Regenerate when BSP artifacts are missing OR when BSP scripts changed
+    # (indicated by .bsp_regen_needed marker file from build_projects.py).
+    get_filename_component(_hw_dir "${HARDWARE}" DIRECTORY)
+    set(_regen_marker "${_hw_dir}/.bsp_regen_needed")
+    set(_need_regen FALSE)
     if(NOT EXISTS "${_bsp_lib}/libxil.a" OR NOT EXISTS "${_lscript}")
+        message(STATUS "BSP artifacts missing, will regenerate")
+        set(_need_regen TRUE)
+    elseif(EXISTS "${_regen_marker}")
+        message(STATUS "BSP scripts changed (marker file found), will regenerate")
+        set(_need_regen TRUE)
+    endif()
+    if(_need_regen)
+        # Remove stale BSP so Vitis regenerates it
+        if(EXISTS "${_ws}")
+            file(REMOVE_RECURSE "${_ws}")
+        endif()
         file(MAKE_DIRECTORY "${_ws}")
         file(COPY "${HARDWARE}" DESTINATION "${_ws}")
         # create_project reads the CPU from arch.txt (normally written by
