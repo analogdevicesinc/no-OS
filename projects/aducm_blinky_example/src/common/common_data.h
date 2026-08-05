@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
 /*****************************************************************************
  * common_data.h
  * Defines common data to be used by aducm_blinky_example examples.
