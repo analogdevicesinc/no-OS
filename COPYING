@@ -1,0 +1,29 @@
+no-OS is provided, by default, under the permissive:
+
+	SPDX-License-Identifier: BSD-3-Clause
+
+as found in LICENSES/preferred/BSD-3-Clause (the repository's canonical
+copy, with the Analog Devices copyright line, is LICENSE_BSD).
+
+In addition, other licenses apply to specific files and directory trees.
+The authoritative license for any file is the one declared in that file's
+own header (an SPDX-License-Identifier tag or a license header). For a
+human-readable map of which trees use which license, and whether they are
+permissive, non-permissive, or bundled third-party code, see the
+top-level LICENSE file.
+
+The full text of every license used by Analog Devices' own no-OS code is
+collected under LICENSES/, grouped by role:
+
+	LICENSES/preferred/    licenses to use for new code
+	LICENSES/permissive/   permissive, allowed, but not the default
+	LICENSES/copyleft/     copyleft licenses present in the tree
+	LICENSES/proprietary/  vendor device APIs; non-permissive
+
+Bundled third-party libraries under libraries/ each carry their own
+LICENSE / COPYING file in their directory.
+
+The rules for how source files must declare their license, and which
+licenses are acceptable for new contributions, are described in
+doc/sphinx/source/license_rules.rst and
+doc/sphinx/source/contributing.rst.
