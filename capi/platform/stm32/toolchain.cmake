@@ -55,12 +55,22 @@ else()
     set(CMAKE_OBJCOPY arm-none-eabi-objcopy)
 endif()
 
-# Find OpenOCD — prefer CubeIDE-bundled version, then system.
+# Find OpenOCD — an explicit -DOPENOCD_PATH wins, then CubeIDE-bundled, then
+# system. The CLI override matters on hosts where the CubeIDE-bundled fork is
+# unusable from the command line (its st_scripts hit an "Infinite eval
+# recursion" TCL bug when driven outside the IDE); point it at a mainline
+# OpenOCD with -DOPENOCD_PATH=/usr/bin/openocd -DOPENOCD_SCRIPTS=... instead.
+#
 # Only search when CUBEIDE_DIR is set; an empty value would expand the glob to
 # "/plugins/*/openocd" (filesystem root) and match unrelated host paths.
 # The recursive glob can also match *directories* named "openocd" (CubeIDE ships
 # several), so pick the first entry that is an actual executable file.
-if(CUBEIDE_DIR)
+if(OPENOCD_PATH)
+    # Explicit -DOPENOCD_PATH (or a cached value): respect it verbatim and do
+    # not pull in the CubeIDE scripts, so a mainline OpenOCD is driven with its
+    # own scripts (supply -DOPENOCD_SCRIPTS to match).
+    message(STATUS "Using provided OpenOCD: ${OPENOCD_PATH}")
+elseif(CUBEIDE_DIR)
     file(GLOB_RECURSE _cubeide_openocd ${CUBEIDE_DIR}/plugins/*/openocd)
     foreach(_candidate ${_cubeide_openocd})
         if(NOT IS_DIRECTORY "${_candidate}")
@@ -68,14 +78,14 @@ if(CUBEIDE_DIR)
             break()
         endif()
     endforeach()
-endif()
-if(OPENOCD_PATH)
-    file(GLOB_RECURSE _cubeide_scripts ${CUBEIDE_DIR}/plugins/*/mem_helper.tcl)
-    if(_cubeide_scripts)
-        list(GET _cubeide_scripts 0 _scripts_file)
-        cmake_path(GET _scripts_file PARENT_PATH OPENOCD_SCRIPTS)
+    if(OPENOCD_PATH)
+        file(GLOB_RECURSE _cubeide_scripts ${CUBEIDE_DIR}/plugins/*/mem_helper.tcl)
+        if(_cubeide_scripts)
+            list(GET _cubeide_scripts 0 _scripts_file)
+            cmake_path(GET _scripts_file PARENT_PATH OPENOCD_SCRIPTS)
+        endif()
+        message(STATUS "Found CubeIDE-bundled OpenOCD: ${OPENOCD_PATH}")
     endif()
-    message(STATUS "Found CubeIDE-bundled OpenOCD: ${OPENOCD_PATH}")
 endif()
 
 if(NOT OPENOCD_PATH)
