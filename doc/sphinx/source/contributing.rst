@@ -62,3 +62,25 @@ repository, each commit should respect a few rules:
   ``doc/driver_readme_template.rst`` so it follows the standard driver
   documentation structure, and add the matching Sphinx include stub under
   ``doc/sphinx/source/drivers/<category>/``.
+
+Licensing of contributions
+==========================
+
+To keep the no-OS core permissively licensed, new contributions must be
+released under the repository's default **BSD 3-Clause** license
+(``LICENSE_BSD``). Declare it by adding an
+``SPDX-License-Identifier: BSD-3-Clause`` tag to every new source file;
+this is the form used throughout no-OS.
+
+- **Do not** introduce copyleft (GPL, LGPL) or proprietary code into the
+  linkable library core (``util/``, ``include/``, ``iio/``, ``network/``,
+  ``jesd204/``) or into general-purpose drivers.
+- The only exception is **vendor-supplied device APIs** that cannot be
+  relicensed (for example the ADI RF-transceiver API code). Such code
+  must be confined to its own ``drivers/<category>/<part>/`` subtree, must
+  carry an accurate ``SPDX-License-Identifier`` (or license header) in
+  every file, and its addition must be raised with a no-OS maintainer
+  before the pull request is opened.
+- When adding non-permissive code under an allowed exception, update the
+  top-level ``LICENSE`` file so its tables continue to list every
+  non-permissive and non-BSD tree.
