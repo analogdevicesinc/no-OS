@@ -11,14 +11,33 @@
 
 #include <xparameters.h>
 #include "capi_uart.h"
+#include "xilinx_capi_uart.h"
 #include "xilinx_capi_gpio.h"
 #include "xilinx_capi_spi.h"
 #include "xilinx_capi_timer.h"
+#include "xilinx_capi_i2c.h"
 #include "xilinx_capi_irq.h"
 #include "capi_timer.h"
 #include "xinterrupt_wrap.h"
 
-extern struct capi_uart_ops capi_uart_xilinx_ps_ops;
+/*
+ * ======================= BACKEND SELECTOR PANEL =======================
+ * One place to force which hardware backend each peripheral role maps to.
+ * Uncomment a line to pin that role; leave it commented to auto-detect the
+ * form present in the BSP (the per-peripheral blocks further down do the
+ * auto-detect when no override is defined here). The comment after each knob
+ * lists the accepted values.
+ *
+ * These must be defined BEFORE the per-peripheral selection blocks below,
+ * which is why the panel sits at the very top of the file.
+ */
+/* #define GPIO_SEL_PS */		/* GPIO_SEL_PS / GPIO_SEL_PL */
+/* #define IRQ_SEL_GIC */		/* IRQ_SEL_GIC / IRQ_SEL_CASCADE */
+#define SPI_SEL_PS			/* SPI_SEL_PS / SPI_SEL_PL */
+/* #define TIMER_SELECT 1 */		/* 1=TTC / 2=AXI / 3=SCU (TIMER_SEL_*) */
+/* #define I2C_SEL_PL	*/		/* I2C_SEL_PS / I2C_SEL_PL (initiator) */
+/* #define I2C_TARGET_SEL_PS */		/* I2C_TARGET_SEL_PS / I2C_TARGET_SEL_PL */
+/* ====================================================================== */
 
 #define UART_IDENTIFIER		XPAR_XUARTPS_0_BASEADDR
 
@@ -172,8 +191,14 @@ extern struct capi_uart_ops capi_uart_xilinx_ps_ops;
  * the IRQ test and every IRQ-backed async path compile out. */
 #endif
 
-/* SPI async delivery mode selection (pinned with GIC/INTC/none build axis). */
-#define SPI_HAS_IRQ  1   /* async via interrupt available */
+/*
+ * SPI async delivery mode selection.
+ *
+ * SPI_HAS_IRQ is derived after the backend block below, from whether the BSP
+ * actually describes an interrupt for the SELECTED controller -- it cannot be
+ * pinned here because which controller that is has not been decided yet.
+ * SPI_HAS_DMA stays a manual switch (no BSP evidence distinguishes it).
+ */
 #define SPI_HAS_DMA  0   /* async via DMA available */
 
 /*
@@ -186,13 +211,13 @@ extern struct capi_uart_ops capi_uart_xilinx_ps_ops;
  *
  *   PL SPI (XSpi, AXI Quad SPI): base at XPAR_XSPI_0_BASEADDR; its fabric line
  *     feeds the GIC (SPI) or the AXI INTC input depending on the build, chosen
- *     from XPAR_XSPI_0_INTERRUPT_PARENT low bit (1 = INTC).
+ *     by the IRQ_SEL_CASCADE selection (INTC id under a cascade root, GIC id
+ *     otherwise).
  *
  * PS is preferred when XSpiPs exists in the BSP; otherwise fall back to the PL
- * AXI SPI. Define SPI_SEL_PL / SPI_SEL_PS before this point to force one.
+ * AXI SPI. Define SPI_SEL_PL / SPI_SEL_PS before this point to force one
+ * (see the BACKEND SELECTOR PANEL at the top of this file).
  */
-#define SPI_SEL_PL
-
 #if !defined(SPI_SEL_PS) && !defined(SPI_SEL_PL)
 #if defined(XPAR_XSPIPS_NUM_INSTANCES) || defined(XPAR_XSPIPS_0_BASEADDR)
 #define SPI_SEL_PS
@@ -206,16 +231,29 @@ extern struct capi_uart_ops capi_uart_xilinx_ps_ops;
 #define SPI_IDENTIFIER		XPAR_XSPIPS_0_BASEADDR
 #define SPI_OPS			&capi_spi_xilinx_ps_ops
 #define SPI_EXTRA_TYPE		struct capi_spi_xilinx_config
+#if defined(XPAR_XSPIPS_0_INTERRUPTS)
 #define SPI_IRQ_ID		(XGet_IntrId(XPAR_XSPIPS_0_INTERRUPTS) + \
 				 XGet_IntrOffset(XPAR_XSPIPS_0_INTERRUPTS))
 #define SPI_EXTRA_INIT		{ .use_irq = true, \
 				  .irq_id = CAPI_IRQ_XILINX_GIC(SPI_IRQ_ID) }
+#else
+/* No interrupt entry in the BSP (polled build): sync transfers only. */
+#define SPI_EXTRA_INIT		{ .use_irq = false }
+#endif /* XPAR_XSPIPS_0_INTERRUPTS */
 
 #elif defined(SPI_SEL_PL)
 
 #define SPI_IDENTIFIER		XPAR_XSPI_0_BASEADDR
 #define SPI_OPS			&capi_spi_xilinx_pl_ops
 #define SPI_EXTRA_TYPE		struct capi_spi_xilinx_config
+/*
+ * An XSA built without fabric interrupts emits no XPAR_XSPI_0_INTERRUPTS at
+ * all, so the presence of that macro decides whether an IRQ exists. When it is
+ * present the fabric line goes to the AXI INTC (cascade root) or straight to
+ * the GIC, chosen by the IRQ_SEL_CASCADE selection rather than by a per-node
+ * INTERRUPT_PARENT check.
+ */
+#if defined(XPAR_XSPI_0_INTERRUPTS)
 #if defined(IRQ_SEL_CASCADE)
 /* Cascade root: the fabric line is an AXI INTC input (raw local number). */
 #define SPI_IRQ_ID		XPAR_FABRIC_XSPI_0_INTR
@@ -228,8 +266,25 @@ extern struct capi_uart_ops capi_uart_xilinx_ps_ops;
 #define SPI_EXTRA_INIT		{ .use_irq = true, \
 				  .irq_id = CAPI_IRQ_XILINX_GIC(SPI_IRQ_ID) }
 #endif
+#else
+/* No fabric interrupt wired (polled build): sync transfers only. */
+#define SPI_EXTRA_INIT		{ .use_irq = false }
+#endif /* XPAR_XSPI_0_INTERRUPTS */
 
 #endif /* SPI_SEL_* */
+
+/*
+ * Async-via-interrupt availability, derived from the selected backend rather
+ * than pinned by hand: on an XSA with no fabric interrupt the branches above
+ * fall back to .use_irq = false, and the async cases must SKIP rather than run
+ * and fail -ENOTSUP. Keyed on SPI_IRQ_ID, which only those branches define.
+ */
+#if defined(SPI_IRQ_ID)
+#define SPI_HAS_IRQ  1
+#else
+#define SPI_HAS_IRQ  0
+#endif
+
 /*
  * clk_freq_hz is the controller REFERENCE clock, not the requested SCLK. Leave
  * it 0 so the driver keeps the BSP value (XPAR_XSPIPS_0_SPI_CLK_FREQ_HZ,
@@ -332,9 +387,9 @@ extern struct capi_uart_ops capi_uart_xilinx_ps_ops;
  * GIC (SPI) or the AXI INTC input depending on the build, chosen the same way
  * as the PL SPI: INTC id under a cascade root, GIC id otherwise.
  */
-#define TIMER_IDENTIFIER	XPAR_TMRCTR_0_BASEADDR
+#define TIMER_IDENTIFIER	XPAR_XTMRCTR_0_BASEADDR
 #define TIMER_OPS		&capi_timer_xilinx_pl_ops
-#define TIMER_INPUT_CLK_HZ	XPAR_TMRCTR_0_CLOCK_FREQ
+#define TIMER_INPUT_CLK_HZ	XPAR_XTMRCTR_0_CLOCK_FREQUENCY
 #define TIMER_OUTPUT_FREQ_HZ	1000U
 #define TIMER_EXTRA_TYPE	struct capi_timer_xilinx_config
 #if defined(IRQ_SEL_CASCADE)
@@ -430,7 +485,6 @@ extern struct capi_uart_ops capi_uart_xilinx_ps_ops;
 #define TIMER_HAS_COMPARE	1
 
 #define TIMER_DIRECTION		CAPI_TIMER_COUNT_DOWN
-/*
  * Counter span the free-running cases request, not the counter's physical
  * width (that is TIMER_COUNTER_WIDTH below, a full 32 bits). For this
  * down-counter `max` is the reload value, so it sets the overflow period --
@@ -444,10 +498,15 @@ extern struct capi_uart_ops capi_uart_xilinx_ps_ops;
  */
 #define TIMER_COUNTER_MAX	0x01000000U	/* ~52 ms at ~325 MHz */
 #define TIMER_COUNTER_WIDTH	32U
-#define TIMER_COMPARE_VALUE	0x00010000U
+#define TIMER_COMPARE_VALUE	0x00080000U
 
 #define TIMER_RATE_WINDOW_US	100U
-#define TIMER_RATE_COUNTER_MASK	0xFFFFFFFFU
+/*
+ * Masks the counter delta, so it must track the RELOAD value the counter wraps
+ * at (TIMER_COUNTER_MAX), not the 32-bit register width -- a sample pair that
+ * straddles a reload would otherwise compute a delta off by the difference.
+ */
+#define TIMER_RATE_COUNTER_MASK	(TIMER_COUNTER_MAX - 1U)
 #define TIMER_RATE_TOLERANCE_PCT 10U
 
 /*
@@ -461,5 +520,171 @@ extern struct capi_uart_ops capi_uart_xilinx_ps_ops;
 #else
 #error "TIMER_SELECT must be TIMER_SEL_TTC, TIMER_SEL_AXI or TIMER_SEL_SCU"
 #endif /* TIMER_SELECT */
+
+/*
+ * I2C initiator/target loopback. Each role picks its backend independently
+ * (mirroring the GPIO/SPI schemes), so all four wirings are expressible:
+ * PS/PL initiator x PS/PL target.
+ *
+ *   PS I2C (XIicPs, EMIO): behind the GIC, its interrupt is always a GIC id.
+ *   PL AXI IIC (XIic, fabric): its IRQ_F2P line feeds the GIC (SPI) or the AXI
+ *     INTC input depending on the build, chosen the same way as the PL SPI:
+ *     INTC id under a cascade root (IRQ_SEL_CASCADE), GIC id otherwise. A polled
+ *     ("noirq") build has the core but no wired interrupt (no
+ *     XPAR_XIIC_0_INTERRUPTS), so use_irq falls back to false.
+ *
+ * Selection per role (define before this point to force):
+ *   Initiator: I2C_SEL_PS / I2C_SEL_PL
+ *   Target:    I2C_TARGET_SEL_PS / I2C_TARGET_SEL_PL
+ * With no override each role auto-detects the form present in the BSP,
+ * preferring the one used now: PL initiator, PS target. A role whose backend is
+ * absent from the BSP leaves its macros undefined so the build still compiles.
+ * Wire the two buses together (SCL<->SCL, SDA<->SDA) with pull-ups; the target
+ * answers I2C_TARGET_ADDR, the initiator addresses that same address.
+ */
+#define I2C_TARGET_ADDR		0x42U
+
+/*
+ * input_clock_hz (PL only) enables the AXI IIC runtime SCL timing writes
+ * (THIGH/TLOW). The core is synthesized at C_S_AXI_ACLK_FREQ_HZ = 100 MHz;
+ * feeding it lets configure_bus_speed reprogram the bus rate, at the driver
+ * default register offsets (0x13C/0x140) and 50% duty.
+ */
+#define I2C_PL_INPUT_CLK_HZ	100000000U
+
+/* --- Initiator role: PL AXI IIC preferred, else PS I2C. --- */
+#if !defined(I2C_SEL_PS) && !defined(I2C_SEL_PL)
+#if defined(XPAR_XIIC_NUM_INSTANCES) || defined(XPAR_XIIC_0_BASEADDR)
+#define I2C_SEL_PL
+#elif defined(XPAR_XIICPS_NUM_INSTANCES) || defined(XPAR_XIICPS_0_BASEADDR)
+#define I2C_SEL_PS
+#endif
+#endif
+
+#if defined(I2C_SEL_PL)
+
+#define I2C_IDENTIFIER		XPAR_XIIC_0_BASEADDR
+#define I2C_OPS			&capi_i2c_xilinx_pl_ops
+#define I2C_EXTRA_TYPE		struct capi_i2c_xilinx_config
+#if defined(XPAR_XIIC_0_INTERRUPTS)
+#if defined(IRQ_SEL_CASCADE)
+/* Cascade root: the fabric line is an AXI INTC input (raw local number). */
+#define I2C_IRQ_ID		XPAR_FABRIC_XIIC_0_INTR
+#define I2C_EXTRA_INIT		{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_INTC(I2C_IRQ_ID), \
+				  .input_clock_hz = I2C_PL_INPUT_CLK_HZ }
+#else
+/*
+ * GIC root. CAPI_IRQ_XILINX_GIC() wants the fully-resolved GIC id in its low
+ * half; the GIC backend passes it straight to XScuGic_Connect() with no offset
+ * added. XPAR_FABRIC_XIIC_0_INTR is the raw fabric input (36), NOT a GIC id, so
+ * resolve it as XGet_IntrId() + the SPI base from XGet_IntrOffset() (+32) =>
+ * real GIC id 68.
+ */
+#define I2C_IRQ_ID		(XGet_IntrId(XPAR_XIIC_0_INTERRUPTS) + \
+				 XGet_IntrOffset(XPAR_XIIC_0_INTERRUPTS))
+#define I2C_EXTRA_INIT		{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_GIC(I2C_IRQ_ID), \
+				  .input_clock_hz = I2C_PL_INPUT_CLK_HZ }
+#endif
+#else
+/* No fabric interrupt wired (polled build): initiator runs sync only. */
+#define I2C_EXTRA_INIT		{ .use_irq = false, \
+				  .input_clock_hz = I2C_PL_INPUT_CLK_HZ }
+#endif /* XPAR_XIIC_0_INTERRUPTS */
+
+#elif defined(I2C_SEL_PS)
+
+#define I2C_IDENTIFIER		XPAR_XIICPS_0_BASEADDR
+#define I2C_OPS			&capi_i2c_xilinx_ps_ops
+#define I2C_EXTRA_TYPE		struct capi_i2c_xilinx_config
+#if defined(XPAR_XIICPS_0_INTERRUPTS)
+#define I2C_IRQ_ID		(XGet_IntrId(XPAR_XIICPS_0_INTERRUPTS) + \
+				 XGet_IntrOffset(XPAR_XIICPS_0_INTERRUPTS))
+#define I2C_EXTRA_INIT		{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_GIC(I2C_IRQ_ID) }
+#else
+#define I2C_EXTRA_INIT		{ .use_irq = false }
+#endif /* XPAR_XIICPS_0_INTERRUPTS */
+
+#endif /* I2C_SEL_* */
+
+/* --- Target role: PS I2C preferred, else PL AXI IIC. --- */
+#if !defined(I2C_TARGET_SEL_PS) && !defined(I2C_TARGET_SEL_PL)
+#if defined(XPAR_XIICPS_NUM_INSTANCES) || defined(XPAR_XIICPS_0_BASEADDR)
+#define I2C_TARGET_SEL_PS
+#elif defined(XPAR_XIIC_NUM_INSTANCES) || defined(XPAR_XIIC_0_BASEADDR)
+#define I2C_TARGET_SEL_PL
+#endif
+#endif
+
+#if defined(I2C_TARGET_SEL_PS)
+
+#define I2C_TARGET_IDENTIFIER	XPAR_XIICPS_0_BASEADDR
+#define I2C_TARGET_OPS		&capi_i2c_xilinx_ps_ops
+#define I2C_TARGET_EXTRA_TYPE	struct capi_i2c_xilinx_config
+#if defined(XPAR_XIICPS_0_INTERRUPTS)
+#define I2C_TARGET_PS_IRQ_ID	(XGet_IntrId(XPAR_XIICPS_0_INTERRUPTS) + \
+				 XGet_IntrOffset(XPAR_XIICPS_0_INTERRUPTS))
+#define I2C_TARGET_EXTRA_INIT	{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_GIC(I2C_TARGET_PS_IRQ_ID) }
+#else
+#define I2C_TARGET_EXTRA_INIT	{ .use_irq = false }
+#endif /* XPAR_XIICPS_0_INTERRUPTS */
+
+#elif defined(I2C_TARGET_SEL_PL)
+
+#define I2C_TARGET_IDENTIFIER	XPAR_XIIC_0_BASEADDR
+#define I2C_TARGET_OPS		&capi_i2c_xilinx_pl_ops
+#define I2C_TARGET_EXTRA_TYPE	struct capi_i2c_xilinx_config
+#if defined(XPAR_XIIC_0_INTERRUPTS)
+#if defined(IRQ_SEL_CASCADE)
+/* Cascade root: the fabric line is an AXI INTC input (raw local number). */
+#define I2C_TARGET_IRQ_ID	XPAR_FABRIC_XIIC_0_INTR
+#define I2C_TARGET_EXTRA_INIT	{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_INTC(I2C_TARGET_IRQ_ID), \
+				  .input_clock_hz = I2C_PL_INPUT_CLK_HZ }
+#else
+/* GIC root: resolve the SDT-encoded fabric line to a GIC id. */
+#define I2C_TARGET_IRQ_ID	(XGet_IntrId(XPAR_XIIC_0_INTERRUPTS) + \
+				 XGet_IntrOffset(XPAR_XIIC_0_INTERRUPTS))
+#define I2C_TARGET_EXTRA_INIT	{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_GIC(I2C_TARGET_IRQ_ID), \
+				  .input_clock_hz = I2C_PL_INPUT_CLK_HZ }
+#endif
+#else
+#define I2C_TARGET_EXTRA_INIT	{ .use_irq = false, \
+				  .input_clock_hz = I2C_PL_INPUT_CLK_HZ }
+#endif /* XPAR_XIIC_0_INTERRUPTS */
+
+#endif /* I2C_TARGET_SEL_* */
+
+/*
+ * Per-role IRQ capability: a role's async/listen ops work only when the
+ * selected backend's interrupt macro exists. Set them here per selection; a
+ * polled build (no XPAR_XIIC_0_INTERRUPTS) clears the relevant one. common_data.h
+ * derives I2C_PAIR_TARGET_ASYNC and I2C_MASTER_ASYNC from these plus presence.
+ */
+#if (defined(I2C_SEL_PL) && defined(XPAR_XIIC_0_INTERRUPTS)) || \
+    (defined(I2C_SEL_PS) && defined(XPAR_XIICPS_0_INTERRUPTS))
+#define I2C_MASTER_HAS_IRQ	1
+#else
+#define I2C_MASTER_HAS_IRQ	0
+#endif
+
+#if (defined(I2C_TARGET_SEL_PL) && defined(XPAR_XIIC_0_INTERRUPTS)) || \
+    (defined(I2C_TARGET_SEL_PS) && defined(XPAR_XIICPS_0_INTERRUPTS))
+#define I2C_TARGET_HAS_IRQ	1
+#else
+#define I2C_TARGET_HAS_IRQ	0
+#endif
+
+/*
+ * The CAPI IRQ singleton and BSP handle IRQ routing and clocking/pinmux, so the
+ * test's platform hooks are no-ops (unlike STM32, which brings these up by hand).
+ */
+#define I2C_PLATFORM_INIT()		0
+#define I2C_PLATFORM_DEINIT()		((void)0)
+#define I2C_PLATFORM_SET_TARGET(h)	((void)(h))
 
 #endif /* __PARAMETERS_H__ */
