@@ -1,0 +1,18 @@
+no-OS is provided, by default, under the permissive:
+
+	SPDX-License-Identifier: BSD-3-Clause
+
+as found in LICENSES/preferred/BSD-3-Clause (the repository's canonical
+copy, with the Analog Devices copyright line, is LICENSE_BSD).
+
+In addition, other licenses apply to specific files and directory trees.
+The authoritative license for any file is the one declared in that file's
+own header (an SPDX-License-Identifier tag or a license header).
+
+The full text of every license used by Analog Devices' own no-OS code is
+collected under LICENSES/, grouped by role:
+
+	LICENSES/preferred/    licenses to use for new code
+
+Bundled third-party libraries under libraries/ each carry their own
+LICENSE / COPYING file in their directory.
