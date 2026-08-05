@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
 #ifndef _STM32_HAL_H
 #define _STM32_HAL_H
 

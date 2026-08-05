@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
 /*****************************************************************************
  * parameters.h
  * Definitions specific to ADuCM3029 platform used by aducm_blinky_example.

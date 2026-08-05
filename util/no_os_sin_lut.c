@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
 #include <stdint.h>
 
 const uint16_t no_os_sine_lut_16[512] = {
