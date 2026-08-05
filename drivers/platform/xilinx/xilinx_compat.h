@@ -188,9 +188,14 @@
 #endif
 #endif
 
-/* MicroBlaze DDR4 memory controller: Vitis 2025+ may use different naming. */
+/* MicroBlaze DDR4 memory controller: Vitis 2025+ uses different naming.
+ * Old: XPAR_AXI_DDR_CNTRL_C0_DDR4_MEMORY_MAP_BASEADDR (from hsi::generate_bsp)
+ * New: XPAR_DDR4_0_BASEADDRESS (from vitis.create_platform_component)
+ * Note the suffix: BASEADDR vs BASEADDRESS */
 #if !defined(XPAR_AXI_DDR_CNTRL_C0_DDR4_MEMORY_MAP_BASEADDR)
-#if defined(XPAR_MIG_0_BASEADDR)
+#if defined(XPAR_DDR4_0_BASEADDRESS)
+#define XPAR_AXI_DDR_CNTRL_C0_DDR4_MEMORY_MAP_BASEADDR	XPAR_DDR4_0_BASEADDRESS
+#elif defined(XPAR_MIG_0_BASEADDR)
 #define XPAR_AXI_DDR_CNTRL_C0_DDR4_MEMORY_MAP_BASEADDR	XPAR_MIG_0_BASEADDR
 #elif defined(XPAR_DDR4_0_BASEADDR)
 #define XPAR_AXI_DDR_CNTRL_C0_DDR4_MEMORY_MAP_BASEADDR	XPAR_DDR4_0_BASEADDR
