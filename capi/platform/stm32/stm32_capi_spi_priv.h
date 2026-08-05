@@ -17,8 +17,13 @@ extern "C" {
  * @brief STM32 SPI private handle with full feature support
  */
 struct stm32_spi_priv_handle {
-	/** SPI HAL Handle */
-	SPI_HandleTypeDef hspi;
+	/** Active HAL SPI handle. Points at the caller-supplied handle (the same
+	 *  object the NVIC vector services) so IT/DMA transfers and HAL completion
+	 *  callbacks all act on one handle. Falls back to hspi_storage when the
+	 *  caller provides only an identifier. */
+	SPI_HandleTypeDef *hspi;
+	/** Backing storage used only when no external handle is supplied. */
+	SPI_HandleTypeDef hspi_storage;
 	/** SPI input clock frequency */
 	uint32_t input_clock;
 	/** Chip select alternate function */
@@ -71,13 +76,21 @@ struct stm32_spi_priv_handle {
 	struct stm32_capi_gpio_port_config cs_gpio_config;
 	/** Flag indicating if CS GPIO is initialized */
 	bool cs_initialized;
+	/** True once the sync-path peripheral config has been applied for this
+	 *  controller. Zeroed at init so a fresh (or re-initialized) controller
+	 *  always configures on its first transfer - must not persist across a
+	 *  deinit/init cycle. */
+	bool sync_cfg_cached;
+	/** Key of the last device config applied in the sync path. Reconfigure
+	 *  when it changes (CS, clock mode, bit order or speed). */
+	uint64_t sync_cfg_key;
 };
 
 #define CAPI_SPI_CONTROLLER_HANDLE_STM32_INIT() \
 	(&(struct capi_spi_controller_handle){ \
 		.ops = NULL, \
 		.init_allocated = false, \
-		.priv = &(struct stm32_spi_priv_handle){ .hspi = { 0 } }})
+		.priv = &(struct stm32_spi_priv_handle){ .hspi = NULL }})
 
 #if defined(__cplusplus)
 }
