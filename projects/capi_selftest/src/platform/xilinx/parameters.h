@@ -21,27 +21,62 @@
 #include "xinterrupt_wrap.h"
 
 /*
- * ======================= BACKEND SELECTOR PANEL =======================
- * One place to force which hardware backend each peripheral role maps to.
- * Uncomment a line to pin that role; leave it commented to auto-detect the
- * form present in the BSP (the per-peripheral blocks further down do the
- * auto-detect when no override is defined here). The comment after each knob
- * lists the accepted values.
+ * Cora Z7 configuration, keyed to the IRQ delivery mode so each of the three
+ * builds exercises a different set of backends off one board file. The mode is
+ * auto-detected from the BSP just below (override by defining IRQ_SEL_GIC,
+ * IRQ_SEL_CASCADE, or IRQ_SEL_NOIRQ before this file); the IRQ topology section
+ * further down consumes the same decision.
  *
- * These must be defined BEFORE the per-peripheral selection blocks below,
- * which is why the panel sits at the very top of the file.
+ *   mode      GPIO  SPI  I2C  I2C-tgt  Timer  UART-async
+ *   GIC       PS    PL   PL   PS       TTC    NS550
+ *   CASCADE   PL    PS   PS   PL       AXI    Lite
+ *   no-IRQ    PS    PL   PL   PS       SCU    PS
+ *
+ * The 2-way peripherals swap PS<->PL between GIC and CASCADE, and no-IRQ mirrors
+ * GIC. The 3-way peripherals (Timer, UART) take their third option under no-IRQ:
+ * SCU and PS. PS UART async still works with no fabric IRQ wired because the PS
+ * UART keeps its own GIC line (XPAR_XUARTPS_0_INTERRUPTS is present regardless).
  */
-/* #define GPIO_SEL_PS */		/* GPIO_SEL_PS / GPIO_SEL_PL */
-/* #define IRQ_SEL_GIC */		/* IRQ_SEL_GIC / IRQ_SEL_CASCADE */
-#define SPI_SEL_PS			/* SPI_SEL_PS / SPI_SEL_PL */
-/* #define TIMER_SELECT 1 */		/* 1=TTC / 2=AXI / 3=SCU (TIMER_SEL_*) */
-/* #define I2C_SEL_PL	*/		/* I2C_SEL_PS / I2C_SEL_PL (initiator) */
-/* #define I2C_TARGET_SEL_PS */		/* I2C_TARGET_SEL_PS / I2C_TARGET_SEL_PL */
-/* ====================================================================== */
+#if !defined(IRQ_SEL_GIC) && !defined(IRQ_SEL_CASCADE) && !defined(IRQ_SEL_NOIRQ)
+#if defined(XPAR_XINTC_NUM_INSTANCES)
+#define IRQ_SEL_CASCADE
+#elif defined(XPAR_XIIC_0_INTERRUPTS) || defined(XPAR_XSPI_0_INTERRUPTS) || \
+      defined(XPAR_XUARTNS550_0_INTERRUPTS) || defined(XPAR_XUARTLITE_0_INTERRUPTS)
+#define IRQ_SEL_GIC
+#else
+#define IRQ_SEL_NOIRQ
+#endif
+#endif
+
+#if defined(IRQ_SEL_CASCADE)
+#define GPIO_SEL_PL
+#define SPI_SEL_PS
+#define I2C_SEL_PS
+#define I2C_TARGET_SEL_PL
+#define TIMER_SELECT		TIMER_SEL_AXI
+#define UART_ASYNC_SEL_PL_LITE
+#elif defined(IRQ_SEL_NOIRQ)
+#define GPIO_SEL_PS
+#define SPI_SEL_PL
+#define I2C_SEL_PL
+#define I2C_TARGET_SEL_PS
+#define TIMER_SELECT		TIMER_SEL_SCU
+#define UART_ASYNC_SEL_PS
+#else /* IRQ_SEL_GIC */
+#define GPIO_SEL_PS
+#define SPI_SEL_PL
+#define I2C_SEL_PL
+#define I2C_TARGET_SEL_PS
+#define TIMER_SELECT		TIMER_SEL_TTC
+#define UART_ASYNC_SEL_PL_NS550
+#endif
+/* #define UART_ASYNC_SEL_PL_LITE */
 
 #define UART_IDENTIFIER		XPAR_XUARTPS_0_BASEADDR
 
 #define UART_OPS		&capi_uart_xilinx_ps_ops
+#define UART_EXTRA_TYPE		struct capi_uart_xilinx_config
+#define UART_EXTRA_INIT		{ .use_irq = false }
 #define UART_BAUDRATE		115200U
 #define PLATFORM_NAME		"XILINX"
 
@@ -192,14 +227,189 @@
 #endif
 
 /*
- * SPI async delivery mode selection.
+ * Second UART, wired in EXTERNAL loopback (TX strapped to RX on the board) and
+ * driven by test_uart.c. It is never the console mapped above: the speed case
+ * reprograms the line rate mid-run, and doing that to the report transport
+ * would silence the log. Two PL cores can carry it:
  *
- * SPI_HAS_IRQ is derived after the backend block below, from whether the BSP
- * actually describes an interrupt for the SELECTED controller -- it cannot be
- * pinned here because which controller that is has not been decided yet.
- * SPI_HAS_DMA stays a manual switch (no BSP evidence distinguishes it).
+ *   AXI UART 16550 (XUartNs550, capi_uart_xilinx_pl_ns550_ops):
+ *     Full CAPI surface -- runtime line config (baud/parity/stop) and per-source
+ *     interrupt masking. Its baud divider is computed from the synthesized
+ *     input clock, so XPAR_XUARTNS550_0_CLOCK_FREQ must be passed through.
+ *
+ *   AXI UART Lite (XUartLite, capi_uart_xilinx_pl_lite_ops):
+ *     Line format is fixed in the IP (set_line_config is always -ENOTSUP) and
+ *     there is a single shared interrupt-enable bit rather than per-source
+ *     masks, so ASYNC_SPEED and ASYNC_IRQ have nothing to exercise on it.
+ *
+ * Pick one with UART_ASYNC_SEL_PL_NS550 / UART_ASYNC_SEL_PL_LITE in the board
+ * configuration at the top of this file -- which core the strap is actually
+ * soldered to is a board fact the BSP cannot report, so it is stated by hand
+ * like every other _SEL_ here. Left unset, NS550 is auto-picked when present
+ * because it covers strictly more of the API, falling back to UART Lite. With
+ * neither core in the BSP, UART_ASYNC_OPS stays undefined and the whole group
+ * compiles out to a stub (test_uart.c gates on #ifdef UART_ASYNC_OPS).
+ *
+ * This block sits BELOW the IRQ topology above on purpose: the fabric line is
+ * encoded as an AXI INTC input or a GIC id from IRQ_SEL_CASCADE, which that
+ * section may set by default rather than by hand at the top of this file.
  */
-#define SPI_HAS_DMA  0   /* async via DMA available */
+#if !defined(UART_ASYNC_SEL_PL_NS550) && !defined(UART_ASYNC_SEL_PL_LITE) && \
+    !defined(UART_ASYNC_SEL_PS)
+#if defined(XPAR_XUARTNS550_NUM_INSTANCES) || defined(XPAR_XUARTNS550_0_BASEADDR)
+#define UART_ASYNC_SEL_PL_NS550
+#elif defined(XPAR_XUARTLITE_NUM_INSTANCES) || defined(XPAR_XUARTLITE_0_BASEADDR)
+#define UART_ASYNC_SEL_PL_LITE
+#endif
+#endif
+
+#if defined(UART_ASYNC_SEL_PL_NS550)
+
+#define UART_ASYNC_IDENTIFIER	XPAR_XUARTNS550_0_BASEADDR
+#define UART_ASYNC_OPS		&capi_uart_xilinx_pl_ns550_ops
+#define UART_ASYNC_EXTRA_TYPE	struct capi_uart_xilinx_config
+/*
+ * The 16550's baud generator divides this clock; the BSP does not program it,
+ * so the synthesized value has to be handed over or every rate comes out wrong.
+ */
+#define UART_ASYNC_CLK_FREQ_HZ	XPAR_XUARTNS550_0_CLOCK_FREQ
+/*
+ * As with the PL SPI/I2C above, an XSA built without fabric interrupts emits no
+ * XPAR_XUARTNS550_0_INTERRUPTS, so its presence is what decides whether an IRQ
+ * exists. When present, the line goes to the AXI INTC (cascade root) or straight
+ * to the GIC, chosen by the IRQ_SEL_CASCADE selection.
+ */
+#if defined(XPAR_XUARTNS550_0_INTERRUPTS)
+#if defined(IRQ_SEL_CASCADE)
+/* Cascade root: the fabric line is an AXI INTC input (raw local number). */
+#define UART_ASYNC_IRQ_ID	XPAR_FABRIC_XUARTNS550_0_INTR
+#define UART_ASYNC_EXTRA_INIT	{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_INTC(UART_ASYNC_IRQ_ID) }
+#else
+/* GIC root: resolve the SDT-encoded fabric line to a GIC id. */
+#define UART_ASYNC_IRQ_ID	(XGet_IntrId(XPAR_XUARTNS550_0_INTERRUPTS) + \
+				 XGet_IntrOffset(XPAR_XUARTNS550_0_INTERRUPTS))
+#define UART_ASYNC_EXTRA_INIT	{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_GIC(UART_ASYNC_IRQ_ID) }
+#endif
+#else
+/* No fabric interrupt wired (polled build): sync transfers only. */
+#define UART_ASYNC_EXTRA_INIT	{ .use_irq = false }
+#endif /* XPAR_XUARTNS550_0_INTERRUPTS */
+
+/* The 16550 implements line config, per-source masks, and RX timeout events. */
+#define UART_ASYNC_HAS_LINE_CONFIG	1
+#define UART_ASYNC_HAS_IRQ_CTL		1
+#define UART_ASYNC_HAS_RX_TIMEOUT	1
+
+#elif defined(UART_ASYNC_SEL_PL_LITE)
+
+#define UART_ASYNC_IDENTIFIER	XPAR_XUARTLITE_0_BASEADDR
+#define UART_ASYNC_OPS		&capi_uart_xilinx_pl_lite_ops
+#define UART_ASYNC_EXTRA_TYPE	struct capi_uart_xilinx_config
+/* UART Lite's rate is fixed at synthesis; there is no divider to feed. */
+#define UART_ASYNC_CLK_FREQ_HZ	0U
+#if defined(XPAR_XUARTLITE_0_INTERRUPTS)
+#if defined(IRQ_SEL_CASCADE)
+/* Cascade root: the fabric line is an AXI INTC input (raw local number). */
+#define UART_ASYNC_IRQ_ID	XPAR_FABRIC_XUARTLITE_0_INTR
+#define UART_ASYNC_EXTRA_INIT	{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_INTC(UART_ASYNC_IRQ_ID) }
+#else
+/* GIC root: resolve the SDT-encoded fabric line to a GIC id. */
+#define UART_ASYNC_IRQ_ID	(XGet_IntrId(XPAR_XUARTLITE_0_INTERRUPTS) + \
+				 XGet_IntrOffset(XPAR_XUARTLITE_0_INTERRUPTS))
+#define UART_ASYNC_EXTRA_INIT	{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_GIC(UART_ASYNC_IRQ_ID) }
+#endif
+#else
+/* No fabric interrupt wired (polled build): sync transfers only. */
+#define UART_ASYNC_EXTRA_INIT	{ .use_irq = false }
+#endif /* XPAR_XUARTLITE_0_INTERRUPTS */
+
+/*
+ * The IP fixes the line format at synthesis (set_line_config is unconditionally
+ * -ENOTSUP) and exposes one shared interrupt-enable bit instead of per-source
+ * masks (set_irq_tx/rx/err are -ENOTSUP). It also has no receive-timeout
+ * interrupt, so the timeout-continuation part of ASYNC_BASIC is inapplicable.
+ */
+#define UART_ASYNC_HAS_LINE_CONFIG	0
+#define UART_ASYNC_HAS_IRQ_CTL		0
+#define UART_ASYNC_HAS_RX_TIMEOUT	0
+
+#elif defined(UART_ASYNC_SEL_PS)
+
+/*
+ * PS UART 1, NOT 0: UART_IDENTIFIER above maps UART 0 as the console, and the
+ * loopback UART must be a different instance (test_uart reprograms the line
+ * rate and strap-loops TX into RX -- doing that to the report transport kills
+ * the log). main.c enforces the distinction with a #error, so mapping instance
+ * 0 here fails the build rather than silently hanging the run. The Zynq PS has
+ * two UARTs and the BSP reports both.
+ */
+#define UART_ASYNC_IDENTIFIER	XPAR_XUARTPS_1_BASEADDR
+#define UART_ASYNC_OPS		&capi_uart_xilinx_ps_ops
+#define UART_ASYNC_EXTRA_TYPE	struct capi_uart_xilinx_config
+/* The PS UART's baud generator is programmed by the driver from the fixed
+ * PS peripheral clock; nothing has to be handed over here. */
+#define UART_ASYNC_CLK_FREQ_HZ	0U
+/*
+ * The PS UART interrupt is a fixed PS SPI line, so it is always a GIC id (never
+ * an AXI INTC input) and is present regardless of whether any fabric interrupt
+ * was wired. That is what lets the no-IRQ build still run async on it: the PL
+ * cores lose their fabric lines, but XPAR_XUARTPS_1_INTERRUPTS stays. Note this
+ * tracks instance 1, the loopback UART mapped above -- not the console's 0.
+ */
+#if defined(XPAR_XUARTPS_1_INTERRUPTS)
+#define UART_ASYNC_IRQ_ID	(XGet_IntrId(XPAR_XUARTPS_1_INTERRUPTS) + \
+				 XGet_IntrOffset(XPAR_XUARTPS_1_INTERRUPTS))
+#define UART_ASYNC_EXTRA_INIT	{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_GIC(UART_ASYNC_IRQ_ID) }
+#else
+#define UART_ASYNC_EXTRA_INIT	{ .use_irq = false }
+#endif /* XPAR_XUARTPS_1_INTERRUPTS */
+
+/* The PS UART implements line config, per-source masks, and RX timeout events. */
+#define UART_ASYNC_HAS_LINE_CONFIG	1
+#define UART_ASYNC_HAS_IRQ_CTL		1
+#define UART_ASYNC_HAS_RX_TIMEOUT	1
+
+#endif /* UART_ASYNC_SEL_* */
+
+/*
+ * Async delivery for the loopback UART, pinned to the GIC/INTC/none build axis
+ * exactly as SPI_HAS_IRQ and I2C_MASTER_HAS_IRQ are: it MUST be derived from the
+ * same XPAR_*_INTERRUPTS macro that made UART_ASYNC_EXTRA_INIT set use_irq, or
+ * the async subtests run against a polled controller and FAIL (-ENOTSUP) where
+ * they should SKIP. Note it is defined AFTER the backend selection above, so it
+ * tracks whichever core was actually mapped.
+ */
+#if (defined(UART_ASYNC_SEL_PL_NS550) && defined(XPAR_XUARTNS550_0_INTERRUPTS)) || \
+    (defined(UART_ASYNC_SEL_PL_LITE) && defined(XPAR_XUARTLITE_0_INTERRUPTS)) || \
+    (defined(UART_ASYNC_SEL_PS) && defined(XPAR_XUARTPS_1_INTERRUPTS))
+#define UART_ASYNC_HAS_IRQ	1	/* async via interrupt available */
+#else
+#define UART_ASYNC_HAS_IRQ	0
+#endif
+
+/*
+ * The two rates ASYNC_SPEED times against each other, and the payload it times.
+ * 256 bytes is ~266 ms at 9600 and ~22 ms at 115200 -- both far above the
+ * software floor, and a ~12x ratio leaves the 10% direction margin untroubled.
+ */
+#define UART_ASYNC_BAUDRATE	115200U
+#define UART_ASYNC_BAUD_SLOW	9600U
+#define UART_ASYNC_BAUD_FAST	115200U
+#define UART_ASYNC_SPEED_LEN	256U
+
+/*
+ * TX buffer length for the async TX_BUSY case. It must be larger than the
+ * deepest backend TX FIFO so the transfer cannot drain synchronously and drop
+ * straight to done: the PS UART holds 64 bytes, so anything at or below that
+ * completed in the fill and left TX_BUSY nothing to reject against. 128 clears
+ * it with margin on every mapped core.
+ */
+#define UART_ASYNC_LEN		128U
 
 /*
  * SPI backend selection, mirroring the GPIO scheme:
@@ -215,8 +425,7 @@
  *     otherwise).
  *
  * PS is preferred when XSpiPs exists in the BSP; otherwise fall back to the PL
- * AXI SPI. Define SPI_SEL_PL / SPI_SEL_PS before this point to force one
- * (see the BACKEND SELECTOR PANEL at the top of this file).
+ * AXI SPI. Define SPI_SEL_PL / SPI_SEL_PS before this point to force one.
  */
 #if !defined(SPI_SEL_PS) && !defined(SPI_SEL_PL)
 #if defined(XPAR_XSPIPS_NUM_INSTANCES) || defined(XPAR_XSPIPS_0_BASEADDR)
@@ -237,7 +446,7 @@
 #define SPI_EXTRA_INIT		{ .use_irq = true, \
 				  .irq_id = CAPI_IRQ_XILINX_GIC(SPI_IRQ_ID) }
 #else
-/* No interrupt entry in the BSP (polled build): sync transfers only. */
+/* No interrupt wired (polled build): sync transfers only. */
 #define SPI_EXTRA_INIT		{ .use_irq = false }
 #endif /* XPAR_XSPIPS_0_INTERRUPTS */
 
@@ -274,16 +483,21 @@
 #endif /* SPI_SEL_* */
 
 /*
- * Async-via-interrupt availability, derived from the selected backend rather
- * than pinned by hand: on an XSA with no fabric interrupt the branches above
- * fall back to .use_irq = false, and the async cases must SKIP rather than run
- * and fail -ENOTSUP. Keyed on SPI_IRQ_ID, which only those branches define.
+ * SPI async delivery mode (pinned with the GIC/INTC/none build axis). Derived
+ * from the selected backend's interrupt macro, exactly as I2C_MASTER_HAS_IRQ is
+ * below: an XSA built without fabric interrupts emits no XPAR_XSPI_0_INTERRUPTS,
+ * so SPI_EXTRA_INIT above sets use_irq = false and the driver rejects every
+ * async op with -ENOTSUP. SPI_HAS_IRQ must track that, or the async subtests run
+ * against a polled controller and FAIL instead of SKIP.
  */
-#if defined(SPI_IRQ_ID)
-#define SPI_HAS_IRQ  1
+#if (defined(SPI_SEL_PS) && defined(XPAR_XSPIPS_0_INTERRUPTS)) || \
+    (defined(SPI_SEL_PL) && defined(XPAR_XSPI_0_INTERRUPTS))
+#define SPI_HAS_IRQ		1	/* async via interrupt available */
 #else
-#define SPI_HAS_IRQ  0
+#define SPI_HAS_IRQ		0
 #endif
+
+#define SPI_HAS_DMA		0	/* async via DMA available */
 
 /*
  * clk_freq_hz is the controller REFERENCE clock, not the requested SCLK. Leave
@@ -331,7 +545,7 @@
 #ifndef TIMER_SELECT
 #if defined(XPAR_XTTCPS_NUM_INSTANCES)
 #define TIMER_SELECT	TIMER_SEL_TTC
-#elif defined(XPAR_TMRCTR_NUM_INSTANCES) || defined(XPAR_AXI_TIMER_NUM_INSTANCES)
+#elif defined(XPAR_XTMRCTR_NUM_INSTANCES) || defined(XPAR_AXI_TIMER_NUM_INSTANCES)
 #define TIMER_SELECT	TIMER_SEL_AXI
 #elif defined(XPAR_XSCUTIMER_NUM_INSTANCES) || defined(XPAR_SCUTIMER_NUM_INSTANCES)
 #define TIMER_SELECT	TIMER_SEL_SCU
@@ -354,12 +568,18 @@
 #define TIMER_INPUT_CLK_HZ	XPAR_XTTCPS_0_CLOCK_FREQ
 #define TIMER_OUTPUT_FREQ_HZ	0U	/* TTC free-runs, no target frequency */
 #define TIMER_EXTRA_TYPE	struct capi_timer_xilinx_config
+#if defined(XPAR_XTTCPS_0_INTERRUPTS)
 #define TIMER_IRQ_ID		(XGet_IntrId(XPAR_XTTCPS_0_INTERRUPTS) + \
 				 XGet_IntrOffset(XPAR_XTTCPS_0_INTERRUPTS))
 #define TIMER_EXTRA_INIT	{ .use_irq = true, \
 				  .irq_id = CAPI_IRQ_XILINX_GIC(TIMER_IRQ_ID) }
-
 #define TIMER_HAS_IRQ		1
+#else
+/* No interrupt wired (polled build): counter reads only. */
+#define TIMER_EXTRA_INIT	{ .use_irq = false }
+#define TIMER_HAS_IRQ		0
+#endif /* XPAR_XTTCPS_0_INTERRUPTS */
+
 #define TIMER_HAS_COMPARE	1
 
 #define TIMER_DIRECTION		CAPI_TIMER_COUNT_UP
@@ -392,20 +612,32 @@
 #define TIMER_INPUT_CLK_HZ	XPAR_XTMRCTR_0_CLOCK_FREQUENCY
 #define TIMER_OUTPUT_FREQ_HZ	1000U
 #define TIMER_EXTRA_TYPE	struct capi_timer_xilinx_config
+/*
+ * Like the PL SPI and PL I2C above, an XSA built without fabric interrupts
+ * emits no XPAR_XTMRCTR_0_INTERRUPTS, so its presence decides whether this timer
+ * has an IRQ at all. TIMER_HAS_IRQ tracks it so the IRQ subtests SKIP on a
+ * polled build instead of running against a controller with use_irq = false.
+ */
+#if defined(XPAR_XTMRCTR_0_INTERRUPTS)
 #if defined(IRQ_SEL_CASCADE)
 /* Cascade root: the fabric line is an AXI INTC input (raw local number). */
-#define TIMER_IRQ_ID		XPAR_FABRIC_TMRCTR_0_INTR
+#define TIMER_IRQ_ID		XPAR_FABRIC_XTMRCTR_0_INTR
 #define TIMER_EXTRA_INIT	{ .use_irq = true, \
 				  .irq_id = CAPI_IRQ_XILINX_INTC(TIMER_IRQ_ID) }
 #else
 /* GIC root: resolve the SDT-encoded fabric line to a GIC id. */
-#define TIMER_IRQ_ID		(XGet_IntrId(XPAR_TMRCTR_0_INTERRUPTS) + \
-				 XGet_IntrOffset(XPAR_TMRCTR_0_INTERRUPTS))
+#define TIMER_IRQ_ID		(XGet_IntrId(XPAR_XTMRCTR_0_INTERRUPTS) + \
+				 XGet_IntrOffset(XPAR_XTMRCTR_0_INTERRUPTS))
 #define TIMER_EXTRA_INIT	{ .use_irq = true, \
 				  .irq_id = CAPI_IRQ_XILINX_GIC(TIMER_IRQ_ID) }
 #endif
-
 #define TIMER_HAS_IRQ		1
+#else
+/* No fabric interrupt wired (polled build): counter reads only. */
+#define TIMER_EXTRA_INIT	{ .use_irq = false }
+#define TIMER_HAS_IRQ		0
+#endif /* XPAR_XTMRCTR_0_INTERRUPTS */
+
 #define TIMER_HAS_CAPTURE	1
 #define TIMER_HAS_COMPARE	1
 
@@ -485,6 +717,7 @@
 #define TIMER_HAS_COMPARE	1
 
 #define TIMER_DIRECTION		CAPI_TIMER_COUNT_DOWN
+/*
  * Counter span the free-running cases request, not the counter's physical
  * width (that is TIMER_COUNTER_WIDTH below, a full 32 bits). For this
  * down-counter `max` is the reload value, so it sets the overflow period --
@@ -498,15 +731,10 @@
  */
 #define TIMER_COUNTER_MAX	0x01000000U	/* ~52 ms at ~325 MHz */
 #define TIMER_COUNTER_WIDTH	32U
-#define TIMER_COMPARE_VALUE	0x00080000U
+#define TIMER_COMPARE_VALUE	0x00010000U
 
 #define TIMER_RATE_WINDOW_US	100U
-/*
- * Masks the counter delta, so it must track the RELOAD value the counter wraps
- * at (TIMER_COUNTER_MAX), not the 32-bit register width -- a sample pair that
- * straddles a reload would otherwise compute a delta off by the difference.
- */
-#define TIMER_RATE_COUNTER_MASK	(TIMER_COUNTER_MAX - 1U)
+#define TIMER_RATE_COUNTER_MASK	0xFFFFFFFFU
 #define TIMER_RATE_TOLERANCE_PCT 10U
 
 /*

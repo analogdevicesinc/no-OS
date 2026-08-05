@@ -53,12 +53,20 @@ static XGpio gpio_irq_inst;
 
 int platform_gpio_irq_arm(uint32_t *irq_line)
 {
-	XGpio_Config *cfg;
-
 	if (irq_line == NULL)
 		return -EINVAL;
 
-	cfg = XGpio_LookupConfig((UINTPTR)GPIO_INPUT_IDENTIFIER);
+#if !defined(XPAR_XGPIO_1_INTERRUPTS)
+	/*
+	 * An XSA built without fabric interrupts emits no XPAR_XGPIO_1_INTERRUPTS
+	 * (nor the _INTERRUPT_PARENT / XPAR_FABRIC_* macros the encoding below
+	 * needs), so the loopback core has no IRQ to arm. Report it the way the
+	 * contract expects and let the IRQ suite skip.
+	 */
+	return -ENOTSUP;
+#else
+	XGpio_Config *cfg = XGpio_LookupConfig((UINTPTR)GPIO_INPUT_IDENTIFIER);
+
 	if (cfg == NULL)
 		return -ENODEV;
 	if (XGpio_CfgInitialize(&gpio_irq_inst, cfg, cfg->BaseAddress) !=
@@ -79,6 +87,7 @@ int platform_gpio_irq_arm(uint32_t *irq_line)
 					XGet_IntrOffset(XPAR_XGPIO_1_INTERRUPTS));
 #endif
 	return 0;
+#endif /* XPAR_XGPIO_1_INTERRUPTS */
 }
 
 bool platform_gpio_irq_ack(void)
@@ -149,6 +158,41 @@ void platform_gpio_irq_disarm(void)
 }
 
 #endif /* GPIO_SEL_PL / GPIO_SEL_PS */
+
+#ifdef UART_ASYNC_OPS
+/*
+ * ---------------------------------------------------------------------------
+ * Loopback UART sanity checks for test_uart (see common_data.h).
+ *
+ * The UART tests need no runtime platform hook -- the mapped core is reached
+ * entirely through CAPI, and its interrupt is connected by the driver off the
+ * irq_id in UART_ASYNC_EXTRA_INIT, on top of the one capi_irq_init() below. What
+ * they DO need is that parameters.h mapped a sane instance, and both ways of
+ * getting that wrong are silent at runtime, so they are caught here instead.
+ * ---------------------------------------------------------------------------
+ */
+
+/*
+ * The loopback UART must not be the console. test_uart reconfigures the line
+ * rate mid-run and strap-loops TX into RX; pointed at the report transport that
+ * kills the log, and the failure looks like a hang rather than a bad mapping.
+ */
+#if UART_ASYNC_IDENTIFIER == UART_IDENTIFIER
+#error "UART_ASYNC_IDENTIFIER must not be the console UART (UART_IDENTIFIER)"
+#endif
+
+/*
+ * The async cases are gated on UART_ASYNC_HAS_IRQ, which only skips them
+ * correctly if it agrees with the use_irq the driver was configured with. Both
+ * come out of parameters.h from the same XPAR_*_INTERRUPTS macro; if an edit
+ * ever separates them, the async ops return -ENOTSUP and the cases FAIL where
+ * they should SKIP. capi_irq_init() is what makes that IRQ deliverable, so a
+ * build claiming one without an interrupt controller is the same mistake.
+ */
+#if UART_ASYNC_HAS_IRQ && !defined(IRQ_CTRL_IDENTIFIER)
+#error "UART_ASYNC_HAS_IRQ set but no IRQ controller mapped (IRQ_CTRL_IDENTIFIER)"
+#endif
+#endif /* UART_ASYNC_OPS */
 
 /**
  * @brief Main function execution for Xilinx platform.
