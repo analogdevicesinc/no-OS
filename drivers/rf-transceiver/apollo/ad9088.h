@@ -78,12 +78,13 @@
 	for ((bit) = 0; (bit) < MAX_NUM_CHANNELIZER; (bit)++) \
 		if ((mask) & BIT(bit))
 
+/* Datapath loopback modes. Modes 2 (FDUC) and 3 (JESD) are not ported yet. */
 enum {
-    ADI_APOLLO_LOOPBACK_NONE,
-    ADI_APOLLO_LOOPBACK_0,
-    ADI_APOLLO_LOOPBACK_1,
-    ADI_APOLLO_LOOPBACK_2,
-    ADI_APOLLO_LOOPBACK_3,
+	ADI_APOLLO_LOOPBACK_NONE,
+	ADI_APOLLO_LOOPBACK_0,
+	ADI_APOLLO_LOOPBACK_1,
+	ADI_APOLLO_LOOPBACK_2,
+	ADI_APOLLO_LOOPBACK_3,
 };
 
 enum {
@@ -151,22 +152,30 @@ enum ad9088_clocks {
 
 /* CNCO block-select masks indexed by [side][cddc_num] */
 static const uint32_t cnco_masks[ADI_APOLLO_NUM_SIDES][4] = {
-	{ ADI_APOLLO_CNCO_A0, ADI_APOLLO_CNCO_A1,
-	  ADI_APOLLO_CNCO_A2, ADI_APOLLO_CNCO_A3 },
-	{ ADI_APOLLO_CNCO_B0, ADI_APOLLO_CNCO_B1,
-	  ADI_APOLLO_CNCO_B2, ADI_APOLLO_CNCO_B3 },
+	{
+		ADI_APOLLO_CNCO_A0, ADI_APOLLO_CNCO_A1,
+		ADI_APOLLO_CNCO_A2, ADI_APOLLO_CNCO_A3
+	},
+	{
+		ADI_APOLLO_CNCO_B0, ADI_APOLLO_CNCO_B1,
+		ADI_APOLLO_CNCO_B2, ADI_APOLLO_CNCO_B3
+	},
 };
 
 /* FNCO/FDDC block-select masks indexed by [side][fddc_num] */
 static const uint32_t fnco_masks[ADI_APOLLO_NUM_SIDES][8] = {
-	{ ADI_APOLLO_FDDC_A0, ADI_APOLLO_FDDC_A1,
-	  ADI_APOLLO_FDDC_A2, ADI_APOLLO_FDDC_A3,
-	  ADI_APOLLO_FDDC_A4, ADI_APOLLO_FDDC_A5,
-	  ADI_APOLLO_FDDC_A6, ADI_APOLLO_FDDC_A7 },
-	{ ADI_APOLLO_FDDC_B0, ADI_APOLLO_FDDC_B1,
-	  ADI_APOLLO_FDDC_B2, ADI_APOLLO_FDDC_B3,
-	  ADI_APOLLO_FDDC_B4, ADI_APOLLO_FDDC_B5,
-	  ADI_APOLLO_FDDC_B6, ADI_APOLLO_FDDC_B7 },
+	{
+		ADI_APOLLO_FDDC_A0, ADI_APOLLO_FDDC_A1,
+		ADI_APOLLO_FDDC_A2, ADI_APOLLO_FDDC_A3,
+		ADI_APOLLO_FDDC_A4, ADI_APOLLO_FDDC_A5,
+		ADI_APOLLO_FDDC_A6, ADI_APOLLO_FDDC_A7
+	},
+	{
+		ADI_APOLLO_FDDC_B0, ADI_APOLLO_FDDC_B1,
+		ADI_APOLLO_FDDC_B2, ADI_APOLLO_FDDC_B3,
+		ADI_APOLLO_FDDC_B4, ADI_APOLLO_FDDC_B5,
+		ADI_APOLLO_FDDC_B6, ADI_APOLLO_FDDC_B7
+	},
 };
 
 // struct ad9088_clock {
@@ -310,8 +319,8 @@ struct ad9088_phy {
 	struct iio_channel	*iio_adf4030;
 	struct iio_channel	*iio_adf4382;
 
-    adi_apollo_sniffer_param_t sniffer_config;
-    adi_apollo_sniffer_fft_data_t fft_data;
+	adi_apollo_sniffer_param_t sniffer_config;
+	adi_apollo_sniffer_fft_data_t fft_data;
 
 	// u8 hsci_buf[32767 + 4];
 	uint8_t gpios_exported[ADI_APOLLO_NUM_GPIO];
@@ -321,27 +330,46 @@ struct ad9088_phy {
 	uint8_t lb1_blend[ADI_APOLLO_NUM_SIDES];
 };
 
-extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_start[];
-extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_end[];
-extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_size[];
+extern const uint8_t
+_binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_start[];
+extern const uint8_t
+_binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_end[];
+extern const uint8_t
+_binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_size[];
 
-extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x01030000_bin_start[];
-extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x01030000_bin_end[];
-extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x20000000_bin_start[];
-extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x20000000_bin_end[];
-extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x02000000_bin_start[];
-extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x02000000_bin_end[];
-extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x21000000_bin_start[];
-extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x21000000_bin_end[];
+extern const uint8_t
+_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x01030000_bin_start[];
+extern const uint8_t
+_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x01030000_bin_end[];
+extern const uint8_t
+_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x20000000_bin_start[];
+extern const uint8_t
+_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x20000000_bin_end[];
+extern const uint8_t
+_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x02000000_bin_start[];
+extern const uint8_t
+_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x02000000_bin_end[];
+extern const uint8_t
+_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x21000000_bin_start[];
+extern const uint8_t
+_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x21000000_bin_end[];
 
-extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x01030000_bin_start[];
-extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x01030000_bin_end[];
-extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x20000000_bin_start[];
-extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x20000000_bin_end[];
-extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x02000000_bin_start[];
-extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x02000000_bin_end[];
-extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x21000000_bin_start[];
-extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x21000000_bin_end[];
+extern const uint8_t
+_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x01030000_bin_start[];
+extern const uint8_t
+_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x01030000_bin_end[];
+extern const uint8_t
+_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x20000000_bin_start[];
+extern const uint8_t
+_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x20000000_bin_end[];
+extern const uint8_t
+_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x02000000_bin_start[];
+extern const uint8_t
+_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x02000000_bin_end[];
+extern const uint8_t
+_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x21000000_bin_start[];
+extern const uint8_t
+_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x21000000_bin_end[];
 
 extern const struct jesd204_dev_data jesd204_ad9088_init;
 
@@ -372,6 +400,16 @@ int ad9088_set_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 			 uint8_t side, uint8_t fddc_num, int64_t freq_hz);
 int ad9088_get_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 			 uint8_t side, uint8_t fddc_num, int64_t *freq_hz);
+
+/* NCO test tones and datapath loopback -- Step 9 (partial) */
+int ad9088_set_cnco_test_tone(struct ad9088_phy *phy,
+			      adi_apollo_terminal_e terminal, uint8_t side,
+			      uint8_t cddc_num, bool enable, uint16_t offset);
+int ad9088_set_fnco_test_tone(struct ad9088_phy *phy,
+			      adi_apollo_terminal_e terminal, uint8_t side,
+			      uint8_t fddc_num, bool enable, uint16_t offset);
+int ad9088_set_loopback_mode(struct ad9088_phy *phy, uint8_t side,
+			     uint8_t mode);
 
 int ad9088_parse_struct(struct ad9088_phy **device,
 			const struct ad9088_init_param *init_param);

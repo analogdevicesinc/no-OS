@@ -224,12 +224,14 @@ int ad9088_set_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 
 	if (terminal == ADI_APOLLO_TX) {
 		drc_ratio = phy->profile.tx_path[side].tx_cduc[cddc_pi].drc_ratio;
+		adi_apollo_cduc_interp_bf_to_val(&phy->ad9088, drc_ratio,
+						 &cddc_dcm);
 		f = phy->profile.dac_cfg[side].dac_sampling_rate_Hz;
 	} else {
 		drc_ratio = phy->profile.rx_path[side].rx_cddc[cddc_pi].drc_ratio;
+		adi_apollo_cddc_dcm_bf_to_val(&phy->ad9088, drc_ratio, &cddc_dcm);
 		f = phy->profile.adc_cfg[side].adc_sampling_rate_Hz;
 	}
-	adi_apollo_cddc_dcm_bf_to_val(&phy->ad9088, drc_ratio, &cddc_dcm);
 
 	ret = adi_ad9088_calc_nco_ftw(phy, f, freq_hz, cddc_dcm, 48, &ftw,
 				      &frac_a, &frac_b);

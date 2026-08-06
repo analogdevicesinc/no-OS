@@ -6,6 +6,12 @@ SRCS += $(PROJECT)/src/examples/basic/basic_example.c
 INCS += $(PROJECT)/src/examples/basic/basic_example.h
 endif
 
+ifeq (y,$(strip $(DMA_EXAMPLE)))
+CFLAGS += -DDMA_EXAMPLE
+SRCS += $(PROJECT)/src/examples/dma/dma_example.c
+INCS += $(PROJECT)/src/examples/dma/dma_example.h
+endif
+
 ifeq (y,$(strip $(IIO_EXAMPLE)))
 IIOD=y
 CFLAGS += -DIIO_EXAMPLE

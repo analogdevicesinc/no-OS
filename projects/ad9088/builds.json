@@ -3,11 +3,8 @@
 		"basic_example": {
 			"flags" : "BASIC_EXAMPLE=y"
 		},
-		"iio_zed": {
-			"flags": "IIO_EXAMPLE=y IIO_SW_TRIGGER_EXAMPLE=n",
-			"hardware": [
-				"ADF4382"
-			]
+		"dma_example": {
+			"flags" : "DMA_EXAMPLE=y"
 		}
 	}
 }
