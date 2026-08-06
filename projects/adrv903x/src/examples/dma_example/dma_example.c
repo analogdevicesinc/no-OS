@@ -47,7 +47,11 @@
 #include "no_os_error.h"
 #include "no_os_gpio.h"
 #include "no_os_util.h"
+#ifdef PLATFORM_VERSAL
+#include "hmc7044.h"
+#else
 #include "ad9528.h"
+#endif
 #include "axi_jesd204_rx.h"
 #include "axi_jesd204_tx.h"
 #include "axi_adxcvr.h"
@@ -55,71 +59,272 @@
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
 #include "jesd204.h"
+#include "adi_adrv903x_datainterface.h"
 #include <string.h>
 #include "no_os_axi_io.h"
+#include "no_os_delay.h"
 #include <xil_cache.h>
 
+static inline uint32_t time_delta_ms(struct no_os_time start,
+				     struct no_os_time end)
+{
+	int32_t ds  = (int32_t)(end.s  - start.s);
+	int32_t dus = (int32_t)(end.us - start.us);
+	return (uint32_t)(ds * 1000 + dus / 1000);
+}
+
 /*
- * Must match the FPGA HDL TPL channel count (8 for ADRV9032R on ZCU102).
- * Using 4 produces scrambled data: the TPL interleaves 8 streams in the
- * DMA path even though Linux IIO exposes only 4 IIO channels.
+ * Must match the FPGA HDL TPL channel count.
+ * CONVS_PER_DEVICE is the JESD M parameter — counts individual
+ * converters (I and Q separately).
+ * 8T8R profile → M=16 (8 RF channels × I/Q) → 16 DMA channels.
  */
-#define DMA_NUM_CHANNELS	8
+#define DMA_NUM_CHANNELS	ADRV903X_TX_JESD_CONVS_PER_DEVICE
+
+/* AXI data offload IP registers */
+#define AXI_DO_REG_MEMORY_SIZE_LSB	0x0014
+#define AXI_DO_REG_MEMORY_SIZE_MSB	0x0018
+#define AXI_DO_REG_TRANSFER_LENGTH	0x001C
+#define AXI_DO_REG_RESETN_OFFLOAD	0x0084
+#define AXI_DO_REG_CONTROL		0x0088
 
 /* DMA buffers — 1024-byte aligned for Zynq MPSoC cache line compatibility */
 uint32_t dac_buffer_dma[DAC_BUFFER_SAMPLES] __attribute__((aligned(1024)));
 uint16_t adc_buffer_dma[ADC_BUFFER_SAMPLES *
 					   DMA_NUM_CHANNELS] __attribute__((aligned(1024)));
 
+#ifdef PLATFORM_VERSAL
+/*
+ * Versal GT lane clock stub — the GT transceiver is pre-configured by the
+ * Versal fabric (PDI).  The JESD204 driver calls set_rate / enable on
+ * lane_clk; these ops simply succeed without touching hardware.
+ */
+static int versal_lane_clk_enable(struct no_os_clk_desc *desc) { return 0; }
+static int versal_lane_clk_disable(struct no_os_clk_desc *desc) { return 0; }
+static int versal_lane_clk_set_rate(struct no_os_clk_desc *desc,
+				    uint64_t rate) { return 0; }
+static int versal_lane_clk_recalc_rate(struct no_os_clk_desc *desc,
+				       uint64_t *rate)
+{
+	*rate = (uint64_t)ADRV903X_LANE_RATE_KHZ * 1000ULL;
+	return 0;
+}
+
+static const struct no_os_clk_platform_ops versal_lane_clk_ops = {
+	.clk_enable = versal_lane_clk_enable,
+	.clk_disable = versal_lane_clk_disable,
+	.clk_set_rate = versal_lane_clk_set_rate,
+	.clk_recalc_rate = versal_lane_clk_recalc_rate,
+};
+#endif
+
 /**
  * @brief DMA example main function.
  *
- * Brings up the full JESD204 link and demonstrates DMA data transfer:
- *   1.  AD9528 clock synthesizer setup (DEVCLK + SYSREF)
- *   2.  SYSREF_REQ GPIO configuration
- *   3.  ADXCVR initialization (TX and RX)
+ * Brings up the full JESD204 link and demonstrates TX + RX DMA transfers:
+ *   1.  Clock synthesizer setup (HMC7044 on Versal, AD9528 on ZynqMP)
+ *   2.  SYSREF_REQ GPIO configuration (ZynqMP only)
+ *   3.  ADXCVR initialization (TX and RX, ZynqMP only)
  *   4.  AXI JESD204 TX and RX controller initialization
  *   5.  ADRV903X initialization (firmware load up to PreMcsInit_NonBroadcast)
- *   6.  AXI clkgen setup (lane_rate / 66 for JESD204C)
- *   7.  AXI DAC core init — load sine wave LUT into TX DMA buffer
+ *   6.  AXI clkgen setup (lane_rate / 66 for JESD204C, ZynqMP only)
+ *   7.  AXI DAC core init (begin only — finish deferred to after JESD)
  *   8.  AXI ADC core init — reset TPL ADC core + IQ correction
- *   9.  TX and RX DMAC initialization
- *   10. JESD204 topology initialization and FSM start
+ *   9.  RX data offload configuration (normal mode, read BRAM size)
+ *   10. TX and RX DMAC initialization
+ *   11. JESD204 topology initialization and FSM start
  *       FSM drives: MCS (LINK_SETUP/OPT_SETUP_STAGE1/2) + link enable
- *   11. Start TX DMA (continuous sine wave to DAC)
- *   12. Wait 1 s then capture RX DMA samples
- *   13. Print buffer addresses for inspection
+ *   12. TX data offload (bypass) + TX DMA sine wave (cyclic)
+ *   13. RX DMA capture (capped to data offload BRAM size)
+ *   14. Print buffer addresses for inspection
  *
  * @return 0 on success, negative error code on failure.
  */
 int example_main()
 {
-	struct no_os_gpio_init_param sysref_gip = { 0 };
-	struct no_os_gpio_desc *sysref_gpio = NULL;
 	struct adrv903x_init_param init_param = { 0 };
-	struct ad9528_platform_data ad9528_pdata = { 0 };
-	struct ad9528_channel_spec ad9528_channels[14];
-	struct ad9528_init_param ad9528_param = { 0 };
-	struct ad9528_dev *ad9528_device = NULL;
 	struct jesd204_topology *topology = NULL;
 	struct adrv903x_rf_phy *phy = NULL;
-	struct axi_clkgen *rx_clkgen = NULL;
-	struct axi_clkgen *tx_clkgen = NULL;
 	struct axi_jesd204_rx *rx_jesd = NULL;
 	struct axi_jesd204_tx *tx_jesd = NULL;
-	struct adxcvr *tx_adxcvr = NULL;
-	struct adxcvr *rx_adxcvr = NULL;
+#ifdef ORX_JESD_BASEADDR
+	struct axi_jesd204_rx *orx_jesd = NULL;
+#endif
 	struct axi_adc *rx_adc = NULL;
 	struct axi_dac *tx_dac = NULL;
 	struct axi_dmac *rx_dmac = NULL;
 	struct axi_dmac *tx_dmac = NULL;
 	int ret;
+	struct no_os_time t0, t1, t_total;
+
+#ifdef PLATFORM_VERSAL
+	struct no_os_gpio_desc *hmc7044_reset_gpio = NULL;
+	struct hmc7044_chan_spec hmc7044_channels[5];
+	struct hmc7044_init_param hmc7044_param = { 0 };
+	struct hmc7044_dev *hmc7044_device = NULL;
+	struct no_os_clk_desc *tx_lane_clk = NULL;
+	struct no_os_clk_desc *rx_lane_clk = NULL;
+#ifdef ORX_JESD_BASEADDR
+	struct no_os_clk_desc *orx_lane_clk = NULL;
+#endif
+#else
+	struct no_os_gpio_init_param sysref_gip = { 0 };
+	struct no_os_gpio_desc *sysref_gpio = NULL;
+	struct ad9528_platform_data ad9528_pdata = { 0 };
+	struct ad9528_channel_spec ad9528_channels[14];
+	struct ad9528_init_param ad9528_param = { 0 };
+	struct ad9528_dev *ad9528_device = NULL;
+	struct axi_clkgen *rx_clkgen = NULL;
+	struct axi_clkgen *tx_clkgen = NULL;
+	struct adxcvr *tx_adxcvr = NULL;
+	struct adxcvr *rx_adxcvr = NULL;
+#endif
 
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 
+
+	t_total = no_os_get_time();
 	pr_info("ADRV903X DMA example\n");
 
+#ifdef PLATFORM_VERSAL
+	/*
+	 * ----------------------------------------------------------------
+	 * HMC7044 clock synthesizer setup (Versal Tetra).
+	 * Provides DEVCLK (491.52 MHz on ch0) and SYSREF for MCS.
+	 * Configuration matches DTS: versal-tetra-15mhz-nls.dts
+	 * ----------------------------------------------------------------
+	 */
+
+	/* HMC7044 hardware reset pulse (active-high reset) */
+	ret = no_os_gpio_get(&hmc7044_reset_gpio, &clkchip_gpio_init_param);
+	if (ret) {
+		pr_err("HMC7044 reset GPIO get failed: %d\n", ret);
+		return ret;
+	}
+	/* Assert reset (drive HIGH) */
+	ret = no_os_gpio_direction_output(hmc7044_reset_gpio, NO_OS_GPIO_HIGH);
+	if (ret) {
+		pr_err("HMC7044 reset GPIO set failed: %d\n", ret);
+		no_os_gpio_remove(hmc7044_reset_gpio);
+		return ret;
+	}
+	no_os_mdelay(10);
+	/* De-assert reset (drive LOW) */
+	ret = no_os_gpio_set_value(hmc7044_reset_gpio, NO_OS_GPIO_LOW);
+	if (ret) {
+		pr_err("HMC7044 reset de-assert failed: %d\n", ret);
+		no_os_gpio_remove(hmc7044_reset_gpio);
+		return ret;
+	}
+	no_os_mdelay(20);
+
+	memset(hmc7044_channels, 0, sizeof(hmc7044_channels));
+
+	/* Channel 0: DEV_CLK — ADRV903X reference clock (491.52 MHz) */
+	hmc7044_channels[0].num = 0;
+	hmc7044_channels[0].divider = HMC7044_DEV_CLK_DIV;
+	hmc7044_channels[0].driver_mode = 2; /* LVDS */
+
+	/* Channel 1: DEV_SYSREF */
+	hmc7044_channels[1].num = 1;
+	hmc7044_channels[1].divider = HMC7044_DEV_SYSREF_DIV;
+	hmc7044_channels[1].driver_mode = 1; /* LVPECL */
+	hmc7044_channels[1].is_sysref = true;
+	hmc7044_channels[1].start_up_mode_dynamic_enable = true;
+	hmc7044_channels[1].high_performance_mode_dis = true;
+
+	/* Channel 6: FPGA_CORE_REFCLK */
+	hmc7044_channels[2].num = 6;
+	hmc7044_channels[2].divider = HMC7044_FPGA_CORE_REFCLK_DIV;
+	hmc7044_channels[2].driver_mode = 2; /* LVDS */
+
+	/* Channel 7: FPGA_CORE_SYSREF */
+	hmc7044_channels[3].num = 7;
+	hmc7044_channels[3].divider = HMC7044_FPGA_CORE_SYSREF_DIV;
+	hmc7044_channels[3].driver_mode = 2; /* LVDS */
+
+	/* Channel 12: FPGA_REFCLK */
+	hmc7044_channels[4].num = 12;
+	hmc7044_channels[4].divider = HMC7044_FPGA_REFCLK_DIV;
+	hmc7044_channels[4].driver_mode = 2; /* LVDS */
+
+	hmc7044_param.spi_init = (struct no_os_spi_init_param *)&hmc7044_spi_param;
+	hmc7044_param.export_no_os_clk = true;
+	/* PLL1: no external CLKIN references — VCXO only (DTS: all zeros) */
+	hmc7044_param.vcxo_freq = HMC7044_VCXO_FREQ_HZ;
+	hmc7044_param.pll2_freq = HMC7044_PLL2_FREQ_HZ;
+	hmc7044_param.pll1_loop_bw = 200;
+	hmc7044_param.pll1_ref_prio_ctrl = 0xe4;
+	hmc7044_param.pll1_ref_autorevert_en = true;
+	hmc7044_param.pll1_cp_current = 1920;
+	hmc7044_param.pfd1_limit = HMC7044_PFD1_LIMIT_HZ;
+	hmc7044_param.sysref_timer_div = HMC7044_SYSREF_TIMER_DIV;
+	hmc7044_param.pulse_gen_mode = HMC7044_PULSE_GEN_8_PULSE;
+	hmc7044_param.sync_pin_mode = HMC7044_SYNC_PIN_SYNC;
+	hmc7044_param.high_performance_mode_clock_dist_en = false;
+	hmc7044_param.in_buf_mode[0] = 0x06;
+	hmc7044_param.in_buf_mode[1] = 0x06;
+	hmc7044_param.in_buf_mode[4] = HMC7044_OSCIN_BUF_MODE;
+	hmc7044_param.gpo_ctrl[0] = 0x37;
+	hmc7044_param.gpo_ctrl[1] = 0x33;
+	hmc7044_param.jesd204_sysref_provider = true;
+	hmc7044_param.jesd204_max_sysref_frequency_hz = 2000000;
+	hmc7044_param.num_channels = NO_OS_ARRAY_SIZE(hmc7044_channels);
+	hmc7044_param.channels = hmc7044_channels;
+
+	ret = hmc7044_init(&hmc7044_device, &hmc7044_param);
+	if (ret) {
+		pr_err("hmc7044_init() failed: %d\n", ret);
+		no_os_gpio_remove(hmc7044_reset_gpio);
+		return ret;
+	}
+
+	pr_info("HMC7044 init done, DEVCLK on channel 0\n");
+
+	/*
+	 * Reset the Versal GT PLL + datapath so the GT re-locks its PLL
+	 * to the HMC7044 reference clock that just became available.
+	 * Without this, the first cold boot often fails (GT CDR not locked).
+	 */
+	{
+		struct no_os_gpio_desc *gt_rst = NULL;
+		struct no_os_gpio_desc *gt_done = NULL;
+		struct no_os_gpio_init_param gt_gpio_param = {
+			.platform_ops = clkchip_gpio_init_param.platform_ops,
+			.extra = clkchip_gpio_init_param.extra,
+		};
+		uint32_t gt_pll_gpios[] = { TX_GT_PLL_RESET, RX_GT_PLL_RESET };
+		uint32_t gt_done_gpios[] = { TX_GT_RESET_DONE, RX_GT_RESET_DONE };
+		uint8_t done_val;
+
+		for (int i = 0; i < 2; i++) {
+			gt_gpio_param.number = gt_pll_gpios[i];
+			ret = no_os_gpio_get(&gt_rst, &gt_gpio_param);
+			if (ret)
+				continue;
+			no_os_gpio_direction_output(gt_rst, NO_OS_GPIO_HIGH);
+			no_os_mdelay(2);
+			no_os_gpio_set_value(gt_rst, NO_OS_GPIO_LOW);
+			no_os_gpio_remove(gt_rst);
+
+			/* Poll reset-done GPIO */
+			gt_gpio_param.number = gt_done_gpios[i];
+			ret = no_os_gpio_get(&gt_done, &gt_gpio_param);
+			if (!ret) {
+				no_os_gpio_direction_input(gt_done);
+				int timeout = 100;
+				do {
+					no_os_mdelay(5);
+					no_os_gpio_get_value(gt_done, &done_val);
+				} while (!done_val && --timeout);
+				no_os_gpio_remove(gt_done);
+			}
+		}
+		pr_info("GT PLL reset done\n");
+	}
+
+#else /* ZynqMP */
 	/*
 	 * ----------------------------------------------------------------
 	 * AD9528 clock synthesizer setup.
@@ -214,7 +419,7 @@ int example_main()
 	ret = no_os_gpio_get(&sysref_gpio, &sysref_gip);
 	if (ret) {
 		pr_err("SYSREF_REQ gpio_get failed: %d\n", ret);
-		goto error_ad9528;
+		goto error_clkchip;
 	}
 
 	ret = no_os_gpio_direction_output(sysref_gpio, NO_OS_GPIO_LOW);
@@ -263,10 +468,13 @@ int example_main()
 		pr_err("rx_adxcvr_init() failed: %d\n", ret);
 		goto error_tx_adxcvr;
 	}
+#endif /* PLATFORM_VERSAL */
 
 	/*
 	 * ----------------------------------------------------------------
-	 * AXI JESD204 TX and RX controller initialization
+	 * AXI JESD204 TX and RX controller initialization.
+	 * On ZynqMP, lane_clk comes from the ADXCVR clk_out.
+	 * On Versal, lane_clk is a stub (GT managed by Versal fabric).
 	 * ----------------------------------------------------------------
 	 */
 	struct jesd204_tx_init tx_jesd_init = {
@@ -294,13 +502,99 @@ int example_main()
 		.lane_clk_khz = ADRV903X_LANE_RATE_KHZ,
 	};
 
+#ifdef ORX_JESD_BASEADDR
+	struct jesd204_rx_init orx_jesd_init = {
+		.name = "orx_jesd",
+		.base = ORX_JESD_BASEADDR,
+		.octets_per_frame = ADRV903X_ORX_JESD_OCTETS_PER_FRAME,
+		.frames_per_multiframe = ADRV903X_ORX_JESD_FRAMES_PER_MULTIFRAME,
+		.subclass = ADRV903X_ORX_JESD_SUBCLASS,
+		.device_clk_khz = ADRV903X_DEVICE_CLK_KHZ,
+		.lane_clk_khz = ADRV903X_LANE_RATE_KHZ,
+	};
+#endif
+
+#ifdef PLATFORM_VERSAL
+	struct no_os_clk_init_param tx_lane_clk_param = {
+		.name = "tx_lane_clk",
+		.platform_ops = &versal_lane_clk_ops,
+	};
+	struct no_os_clk_init_param rx_lane_clk_param = {
+		.name = "rx_lane_clk",
+		.platform_ops = &versal_lane_clk_ops,
+	};
+
+	ret = no_os_clk_init(&tx_lane_clk, &tx_lane_clk_param);
+	if (ret) {
+		pr_err("tx_lane_clk init failed: %d\n", ret);
+		goto error_clkchip;
+	}
+	ret = no_os_clk_init(&rx_lane_clk, &rx_lane_clk_param);
+	if (ret) {
+		pr_err("rx_lane_clk init failed: %d\n", ret);
+		no_os_clk_remove(tx_lane_clk);
+		goto error_clkchip;
+	}
+	tx_jesd_init.lane_clk = tx_lane_clk;
+	rx_jesd_init.lane_clk = rx_lane_clk;
+
+	/* GT reset GPIOs — wired into JESD FSM callbacks */
+	struct no_os_gpio_init_param gt_gpio_base = {
+		.platform_ops = clkchip_gpio_init_param.platform_ops,
+		.extra = clkchip_gpio_init_param.extra,
+	};
+	struct no_os_gpio_init_param tx_gt_pll_rst = gt_gpio_base;
+	tx_gt_pll_rst.number = TX_GT_PLL_RESET;
+	struct no_os_gpio_init_param tx_gt_dp_rst = gt_gpio_base;
+	tx_gt_dp_rst.number = TX_GT_DP_RESET;
+	struct no_os_gpio_init_param tx_gt_done = gt_gpio_base;
+	tx_gt_done.number = TX_GT_RESET_DONE;
+
+	struct no_os_gpio_init_param rx_gt_pll_rst = gt_gpio_base;
+	rx_gt_pll_rst.number = RX_GT_PLL_RESET;
+	struct no_os_gpio_init_param rx_gt_dp_rst = gt_gpio_base;
+	rx_gt_dp_rst.number = RX_GT_DP_RESET;
+	struct no_os_gpio_init_param rx_gt_done = gt_gpio_base;
+	rx_gt_done.number = RX_GT_RESET_DONE;
+
+	tx_jesd_init.gt_reset_pll = &tx_gt_pll_rst;
+	tx_jesd_init.gt_reset_dp = &tx_gt_dp_rst;
+	tx_jesd_init.gt_reset_done = &tx_gt_done;
+
+	rx_jesd_init.gt_reset_pll = &rx_gt_pll_rst;
+	rx_jesd_init.gt_reset_dp = &rx_gt_dp_rst;
+	rx_jesd_init.gt_reset_done = &rx_gt_done;
+
+#ifdef ORX_JESD_BASEADDR
+	struct no_os_clk_init_param orx_lane_clk_param = {
+		.name = "orx_lane_clk",
+		.platform_ops = &versal_lane_clk_ops,
+	};
+	ret = no_os_clk_init(&orx_lane_clk, &orx_lane_clk_param);
+	if (ret) {
+		pr_err("orx_lane_clk init failed: %d\n", ret);
+		no_os_clk_remove(rx_lane_clk);
+		no_os_clk_remove(tx_lane_clk);
+		goto error_clkchip;
+	}
+	orx_jesd_init.lane_clk = orx_lane_clk;
+	/* ORX shares the same GT quad as RX — RX reset handles both.
+	 * Don't wire GT GPIOs to ORX to avoid a double-reset that
+	 * would disrupt RX CDR lock and cause 64B66B errors. */
+#endif
+#else
 	tx_jesd_init.lane_clk = tx_adxcvr->clk_out;
 	rx_jesd_init.lane_clk = rx_adxcvr->clk_out;
+#endif
 
 	ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
 	if (ret) {
 		pr_err("axi_jesd204_tx_init() failed: %d\n", ret);
+#ifdef PLATFORM_VERSAL
+		goto error_clkchip;
+#else
 		goto error_rx_adxcvr;
+#endif
 	}
 
 	ret = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
@@ -309,12 +603,24 @@ int example_main()
 		goto error_tx_jesd;
 	}
 
+#ifdef ORX_JESD_BASEADDR
+	ret = axi_jesd204_rx_init(&orx_jesd, &orx_jesd_init);
+	if (ret) {
+		pr_err("axi_jesd204_rx_init(orx) failed: %d\n", ret);
+		goto error_rx_jesd;
+	}
+#endif
+
 	/*
 	 * ----------------------------------------------------------------
 	 * ADRV903X initialization
 	 * ----------------------------------------------------------------
 	 */
+#ifdef PLATFORM_VERSAL
+	init_param.dev_clk = hmc7044_device->clk_desc[0];
+#else
 	init_param.dev_clk = ad9528_device->clk_desc[1];
+#endif
 	init_param.post_mcs_init = &utilityInit;
 	init_param.profile_file = ADRV903X_PROFILE_FILE;
 	init_param.cpu_fw_file = ADRV903X_CPU_FW_FILE;
@@ -325,12 +631,17 @@ int example_main()
 	ret = adrv903x_init(&phy, &init_param);
 	if (ret) {
 		pr_err("adrv903x_init() failed: %d\n", ret);
+#ifdef ORX_JESD_BASEADDR
+		goto error_orx_jesd;
+#else
 		goto error_rx_jesd;
+#endif
 	}
 
+#ifndef PLATFORM_VERSAL
 	/*
 	 * ----------------------------------------------------------------
-	 * AXI clkgen setup — JESD204C: lane_rate / 66
+	 * AXI clkgen setup — JESD204C: lane_rate / 66 (ZynqMP only)
 	 * ----------------------------------------------------------------
 	 */
 	ret = clkgen_setup(&rx_clkgen, &tx_clkgen);
@@ -338,12 +649,12 @@ int example_main()
 		pr_err("clkgen_setup() failed: %d\n", ret);
 		goto error_phy;
 	}
+#endif
 
 	/*
 	 * ----------------------------------------------------------------
-	 * AXI DAC core initialization.
-	 * Load the built-in sine wave LUT (sine_lut_iq) into the DMA
-	 * buffer so the DAC continuously transmits a tone once DMA starts.
+	 * AXI DAC core initialization (begin only).
+	 * Full init_finish is deferred to after JESD link-up.
 	 * ----------------------------------------------------------------
 	 */
 	struct axi_dac_init tx_dac_init = {
@@ -354,34 +665,11 @@ int example_main()
 		.rate = 0,
 	};
 
-	ret = axi_dac_init(&tx_dac, &tx_dac_init);
+	ret = axi_dac_init_begin(&tx_dac, &tx_dac_init);
 	if (ret) {
 		pr_err("axi_dac_init() failed: %d\n", ret);
 		goto error_clkgen;
 	}
-
-	ret = axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
-	if (ret) {
-		pr_err("axi_dac_set_datasel() failed: %d\n", ret);
-		goto error_tx_dac;
-	}
-
-	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
-				 NO_OS_ARRAY_SIZE(sine_lut_iq),
-				 (uintptr_t)dac_buffer_dma);
-
-	/*
-	 * Replicate the sine pattern to fill the full 256KB TX offload BRAM.
-	 * axi_dac_load_custom_data() writes one block of 16384 bytes (1024
-	 * samples × 4 IQ pairs × 4 bytes).  The TX data offload XFER_LENGTH
-	 * power-on default is 0x1000 (256KB).  Filling the entire BRAM
-	 * prevents the offload from replaying uninitialized memory as noise.
-	 */
-	uint32_t tx_dma_size = sizeof(sine_lut_iq) * (DMA_NUM_CHANNELS / 2) * 16;
-	uint32_t one_rep = tx_dma_size / 16;
-	for (int rep = 1; rep < 16; rep++)
-		memcpy((uint8_t *)dac_buffer_dma + rep * one_rep,
-		       dac_buffer_dma, one_rep);
 
 	/*
 	 * ----------------------------------------------------------------
@@ -402,51 +690,124 @@ int example_main()
 		goto error_tx_dac;
 	}
 
+	/* Reset ADC and DAC cores */
 	axi_adc_write(rx_adc, AXI_ADC_REG_RSTN, 0);
-	axi_adc_write(rx_adc, AXI_ADC_REG_RSTN, AXI_ADC_MMCM_RSTN | AXI_ADC_RSTN);
+	axi_adc_write(rx_adc, AXI_ADC_REG_RSTN,
+		      AXI_ADC_MMCM_RSTN | AXI_ADC_RSTN);
+	no_os_axi_io_write(tx_dac->base, 0x40, 0);
+	no_os_axi_io_write(tx_dac->base, 0x40, NO_OS_BIT(1) | NO_OS_BIT(0));
 
-	/*
-	 * ADC post_setup: IQ correction matching adrv904x_post_setup()
-	 * and Linux adrv903x_conv.c adrv903x_post_setup().
-	 * Without these writes the ADC data path produces noise.
-	 */
+	/* Readback ADC TPL configuration to verify HDL build */
+	{
+		uint32_t val;
+		pr_info("=== ADC TPL common registers ===\n");
+		for (uint32_t r = 0x0000; r <= 0x0080; r += 4) {
+			no_os_axi_io_read(RX_CORE_BASEADDR, r, &val);
+			if (val)
+				pr_info("  ADC[0x%04x] = 0x%08x\n", r, val);
+		}
+		pr_info("=== ADC TPL per-channel registers (ch0-3) ===\n");
+		for (int ch = 0; ch < 4; ch++) {
+			uint32_t base = 0x0400 + ch * 0x40;
+			for (uint32_t r = base; r < base + 0x40; r += 4) {
+				no_os_axi_io_read(RX_CORE_BASEADDR, r, &val);
+				if (val)
+					pr_info("  ADC[0x%04x] = 0x%08x  (ch%d+0x%02x)\n",
+						r, val, ch, r - base);
+			}
+		}
+		pr_info("=== DAC TPL common registers ===\n");
+		for (uint32_t r = 0x0000; r <= 0x0080; r += 4) {
+			no_os_axi_io_read(tx_dac->base, r, &val);
+			if (val)
+				pr_info("  DAC[0x%04x] = 0x%08x\n", r, val);
+		}
+		pr_info("=== JESD RX synthesis registers ===\n");
+		no_os_axi_io_read(rx_jesd->base, 0x00, &val);
+		pr_info("  JESD_RX[0x00] VERSION    = 0x%08x\n", val);
+		no_os_axi_io_read(rx_jesd->base, 0x10, &val);
+		pr_info("  JESD_RX[0x10] NUM_LANES  = %lu\n", (unsigned long)val);
+		no_os_axi_io_read(rx_jesd->base, 0x14, &val);
+		pr_info("  JESD_RX[0x14] DATA_WIDTH = 0x%08x (synth=%lu tpl=%lu)\n",
+			val, (unsigned long)(1 << (val & 0xFF)),
+			(unsigned long)((val >> 8) & 0xFF));
+		no_os_axi_io_read(rx_jesd->base, 0x18, &val);
+		pr_info("  JESD_RX[0x18] SYNTH_REG1 = 0x%08x (encoder=%lu)\n",
+			val, (unsigned long)((val >> 8) & 0x3));
+		no_os_axi_io_read(rx_jesd->base, 0x210, &val);
+		pr_info("  JESD_RX[0x210] LINK_CONF0 = 0x%08x (F=%lu K*F=%lu)\n",
+			val, (unsigned long)((val >> 16) & 0xFF) + 1,
+			(unsigned long)(val & 0xFFFF) + 1);
+		no_os_axi_io_read(rx_jesd->base, 0x21C, &val);
+		pr_info("  JESD_RX[0x21C] LINK_CONF4 = 0x%08x (beats_per_mf=%lu)\n",
+			val, (unsigned long)val + 1);
+		pr_info("=== JESD TX synthesis registers ===\n");
+		no_os_axi_io_read(tx_jesd->base, 0x10, &val);
+		pr_info("  JESD_TX[0x10] NUM_LANES  = %lu\n", (unsigned long)val);
+		no_os_axi_io_read(tx_jesd->base, 0x14, &val);
+		pr_info("  JESD_TX[0x14] DATA_WIDTH = 0x%08x (synth=%lu tpl=%lu)\n",
+			val, (unsigned long)(1 << (val & 0xFF)),
+			(unsigned long)((val >> 8) & 0xFF));
+		no_os_axi_io_read(tx_jesd->base, 0x18, &val);
+		pr_info("  JESD_TX[0x18] SYNTH_REG1 = 0x%08x (encoder=%lu)\n",
+			val, (unsigned long)((val >> 8) & 0x3));
+	}
+
+	/* ADC IQ correction */
 	axi_adc_write(rx_adc, AXI_ADC_REG_CNTRL, 0);
-	for (uint8_t ch = 0; ch < rx_adc->num_channels; ch++) {
-		axi_adc_write(rx_adc, AXI_ADC_REG_CHAN_CNTRL_1(ch),
+	for (int i = 0; i < rx_adc->num_channels; i++) {
+		axi_adc_write(rx_adc, AXI_ADC_REG_CHAN_CNTRL_1(i),
 			      AXI_ADC_DCFILT_OFFSET(0));
-		axi_adc_write(rx_adc, AXI_ADC_REG_CHAN_CNTRL_2(ch),
-			      (ch & 1) ? 0x00004000 : 0x40000000);
-		axi_adc_write(rx_adc, AXI_ADC_REG_CHAN_CNTRL(ch),
+		axi_adc_write(rx_adc, AXI_ADC_REG_CHAN_CNTRL_2(i),
+			      (i & 1) ? 0x00004000 : 0x40000000);
+		axi_adc_write(rx_adc, AXI_ADC_REG_CHAN_CNTRL(i),
 			      AXI_ADC_FORMAT_SIGNEXT | AXI_ADC_FORMAT_ENABLE |
 			      AXI_ADC_ENABLE | AXI_ADC_IQCOR_ENB);
 	}
 
-	/*
-	 * ----------------------------------------------------------------
-	 * RX data offload — normal (store-and-forward) mode.
-	 * CONTROL=0 (default after reset): ADC → BRAM → DMAC.
-	 * The IP fills the BRAM first, then forwards the stored data to
-	 * the DMAC — no bypass FIFO, no per-capture priming artifact.
-	 *
-	 * Register map (axi_data_offload IP):
-	 *   0x0014  AXI_DO_REG_MEMORY_SIZE_LSB — RO: actual BRAM size (bytes)
-	 *   0x001C  AXI_DO_REG_TRANSFER_LENGTH — RW: store length (bytes >> 6)
-	 *   0x0084  AXI_DO_REG_RESETN_OFFLOAD  — RW: bit 0: 1 = out of reset
-	 *   0x0088  AXI_DO_REG_CONTROL         — RW: bit 0: bypass, bit 1: oneshot
-	 * ----------------------------------------------------------------
-	 */
-#define AXI_DO_REG_MEMORY_SIZE_LSB	0x0014
-#define AXI_DO_REG_TRANSFER_LENGTH	0x001C
-#define AXI_DO_REG_RESETN_OFFLOAD	0x0084
-#define AXI_DO_REG_CONTROL		0x0088
+	/* Verify channel config readback */
+	{
+		uint32_t val;
+		for (int i = 0; i < 4; i++) {
+			axi_adc_read(rx_adc, AXI_ADC_REG_CHAN_CNTRL(i), &val);
+			pr_info("ADC ch%d CNTRL=0x%08x (en=%lu fmt_en=%lu signext=%lu iqcor=%lu)\n",
+				i, val,
+				(unsigned long)(val & 1),
+				(unsigned long)((val >> 4) & 1),
+				(unsigned long)((val >> 6) & 1),
+				(unsigned long)((val >> 9) & 1));
+		}
+	}
 
 	/*
-	 * Leave the IP in power-on reset (RESETN=0) until the first capture.
-	 * A single clean 0→1 transition at capture time starts a fresh store
-	 * phase from a known state.  Asserting RESETN=1 here then pulsing
-	 * RESETN=0→1 again at capture would leave the IP FSM in a bad state.
+	 * ----------------------------------------------------------------
+	 * RX data offload configuration.
+	 *
+	 * The data offload IP sits between the ADC TPL and the RX DMAC.
+	 * In normal mode (CONTROL=0) it stores ADC data in BRAM and then
+	 * forwards it to the DMAC (store-and-forward).  Read the BRAM
+	 * size so the RX DMA capture can be capped accordingly.
+	 * ----------------------------------------------------------------
 	 */
-	pr_info("RX data offload: normal mode (store+forward)\n");
+	uint32_t do_mem_lsb, do_mem_msb;
+	no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR,
+			  AXI_DO_REG_MEMORY_SIZE_LSB, &do_mem_lsb);
+	no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR,
+			  AXI_DO_REG_MEMORY_SIZE_MSB, &do_mem_msb);
+	uint64_t rx_do_mem_size = do_mem_lsb |
+				  ((uint64_t)(do_mem_msb & 0x3) << 32);
+	pr_info("RX data offload: BRAM size = %lu bytes\n",
+		(unsigned long)rx_do_mem_size);
+
+	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR,
+			   AXI_DO_REG_CONTROL, 0x0); /* normal mode */
+	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR,
+			   AXI_DO_REG_RESETN_OFFLOAD, 0x0);
+	no_os_mdelay(1);
+	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR,
+			   AXI_DO_REG_RESETN_OFFLOAD, 0x1);
+
+	/* TX data offload + TX DMA are configured after JESD link-up. */
 
 	/*
 	 * ----------------------------------------------------------------
@@ -480,13 +841,28 @@ int example_main()
 	/*
 	 * ----------------------------------------------------------------
 	 * JESD204 topology initialization and FSM start.
+	 *
+	 * Link IDs:
+	 *   DEFRAMER0_LINK_TX (0) = FPGA TX → ADRV903X RX (deframer)
+	 *   FRAMER0_LINK_RX   (2) = ADRV903X TX → FPGA RX (framer)
+	 *   FRAMER1_LINK_RX   (3) = ADRV903X ORX → FPGA RX (framer, Versal)
 	 * ----------------------------------------------------------------
 	 */
 	struct jesd204_topology_dev devs[] = {
 		{
+#ifdef PLATFORM_VERSAL
+			.jdev = hmc7044_device->jdev,
+#else
 			.jdev = ad9528_device->jdev,
+#endif
+#ifdef ORX_JESD_BASEADDR
+			.link_ids = { DEFRAMER0_LINK_TX, FRAMER0_LINK_RX,
+				      FRAMER1_LINK_RX },
+			.links_number = 3,
+#else
 			.link_ids = { DEFRAMER0_LINK_TX, FRAMER0_LINK_RX },
 			.links_number = 2,
+#endif
 			.is_sysref_provider = true,
 		},
 		{
@@ -499,10 +875,23 @@ int example_main()
 			.link_ids = { DEFRAMER0_LINK_TX },
 			.links_number = 1,
 		},
+#ifdef ORX_JESD_BASEADDR
+		{
+			.jdev = orx_jesd->jdev,
+			.link_ids = { FRAMER1_LINK_RX },
+			.links_number = 1,
+		},
+#endif
 		{
 			.jdev = phy->jdev,
+#ifdef ORX_JESD_BASEADDR
+			.link_ids = { DEFRAMER0_LINK_TX, FRAMER0_LINK_RX,
+				      FRAMER1_LINK_RX },
+			.links_number = 3,
+#else
 			.link_ids = { DEFRAMER0_LINK_TX, FRAMER0_LINK_RX },
 			.links_number = 2,
+#endif
 			.is_top_device = true,
 		},
 	};
@@ -519,97 +908,273 @@ int example_main()
 		goto error_fsm;
 	}
 
-	pr_info("ADRV903X JESD204 link up\n");
+	/* Fast TX deframer retry: if the ADRV903x deframer didn't sync,
+	 * pulse TX GT DP reset and re-enable the TX JESD link. */
+#ifdef PLATFORM_VERSAL
+	if (tx_jesd->gt_reset_dp) {
+		adi_adrv903x_DeframerStatus_v2_t dfrmSt = { 0 };
+		int tx_retry;
+
+		for (tx_retry = 0; tx_retry < 3; tx_retry++) {
+			adi_adrv903x_DeframerStatusGet_v2(phy->palmaDevice,
+				ADI_ADRV903X_DEFRAMER_0, &dfrmSt);
+			if (dfrmSt.linkState & 0x2)
+				break;
+			pr_warning("TX deframer not synced (0x%X), retry %d\n",
+				   dfrmSt.linkState, tx_retry + 1);
+			axi_jesd204_tx_lane_clk_disable(tx_jesd);
+			no_os_gpio_set_value(tx_jesd->gt_reset_dp,
+					     NO_OS_GPIO_HIGH);
+			no_os_udelay(20);
+			no_os_gpio_set_value(tx_jesd->gt_reset_dp,
+					     NO_OS_GPIO_LOW);
+			for (int w = 0; w < 32; w++) {
+				uint8_t dv;
+				no_os_mdelay(1);
+				no_os_gpio_get_value(tx_jesd->gt_reset_done,
+						     &dv);
+				if (dv)
+					break;
+			}
+			axi_jesd204_tx_lane_clk_enable(tx_jesd);
+			no_os_mdelay(20);
+		}
+		adi_adrv903x_DeframerStatusGet_v2(phy->palmaDevice,
+			ADI_ADRV903X_DEFRAMER_0, &dfrmSt);
+		pr_info("TX deframer linkState 0x%X after %d retries\n",
+			dfrmSt.linkState, tx_retry);
+		for (int i = 0; i < 4; i++)
+			pr_info("TX deframer lane%d status 0x%X\n",
+				i, dfrmSt.laneStatus[i]);
+		if (!(dfrmSt.linkState & 0x2))
+			pr_err("TX deframer failed after %d retries\n",
+			       tx_retry);
+	}
+#endif
 
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_jesd);
+#ifdef ORX_JESD_BASEADDR
+	axi_jesd204_rx_status_read(orx_jesd);
+#endif
 
-	/*
-	 * The driver's post_running_stage callback (JESD204_OP_OPT_POST_RUNNING_STAGE)
-	 * already activated the signal chain and set TX attenuation to 6 dB.
-	 * Override TX0 and TX4 to 0 dB for maximum loopback signal level.
-	 * TX0 and TX4 are the two TX channels connected to SMA loopback cables
-	 * on the ZCU102 evaluation platform; the remaining channels are left at
-	 * the 6 dB default.
-	 */
-	adi_adrv903x_TxAtten_t txAtten[] = {
-		{ .txChannelMask = ADI_ADRV903X_TX0, .txAttenuation_mdB = 0 },
-		{ .txChannelMask = ADI_ADRV903X_TX4, .txAttenuation_mdB = 0 },
-	};
-	ret = (int)adi_adrv903x_TxAttenSet(phy->palmaDevice, txAtten,
-					   NO_OS_ARRAY_SIZE(txAtten));
-	if (ret)
-		pr_err("TxAttenSet failed: %d\n", ret);
+	/* JESD link config readback (after FSM configured them) */
+	{
+		uint32_t val;
+		pr_info("=== JESD RX link config (post-FSM) ===\n");
+		no_os_axi_io_read(rx_jesd->base, 0x210, &val);
+		pr_info("  RX LINK_CONF0 = 0x%08x (octets_per_frame=%lu octets_per_mf=%lu)\n",
+			val, (unsigned long)((val >> 16) & 0xFFFF) + 1,
+			(unsigned long)(val & 0xFFFF) + 1);
+		no_os_axi_io_read(rx_jesd->base, 0x214, &val);
+		pr_info("  RX LINK_CONF1 = 0x%08x\n", val);
+		no_os_axi_io_read(rx_jesd->base, 0x21C, &val);
+		pr_info("  RX LINK_CONF4 = 0x%08x (beats_per_mf=%lu)\n",
+			val, (unsigned long)(val & 0xFFFF) + 1);
+		no_os_axi_io_read(rx_jesd->base, 0x240, &val);
+		pr_info("  RX LINK_CONF2 = 0x%08x\n", val);
+		no_os_axi_io_read(rx_jesd->base, 0x280, &val);
+		pr_info("  RX LINK_STATUS = 0x%08x\n", val);
+		for (int l = 0; l < 4; l++) {
+			no_os_axi_io_read(rx_jesd->base, 0x300 + l * 32, &val);
+			pr_info("  RX lane%d STATUS = 0x%08x\n", l, val);
+			no_os_axi_io_read(rx_jesd->base, 0x304 + l * 32, &val);
+			pr_info("  RX lane%d LATENCY = %lu\n", l, (unsigned long)val);
+		}
 
-	/*
-	 * Set maximum RX gain on RX0 and RX4 — the channels paired with TX0
-	 * and TX4 via the SMA loopback cables.
-	 */
-	adi_adrv903x_RxGain_t rxGain[] = {
-		{ .rxChannelMask = ADI_ADRV903X_RX0, .gainIndex = 255 },
-		{ .rxChannelMask = ADI_ADRV903X_RX4, .gainIndex = 255 },
-	};
-	ret = (int)adi_adrv903x_RxGainSet(phy->palmaDevice, rxGain,
-					  NO_OS_ARRAY_SIZE(rxGain));
+		pr_info("=== JESD TX link config (post-FSM) ===\n");
+		no_os_axi_io_read(tx_jesd->base, 0x210, &val);
+		pr_info("  TX LINK_CONF0 = 0x%08x (octets_per_frame=%lu octets_per_mf=%lu)\n",
+			val, (unsigned long)((val >> 16) & 0xFFFF) + 1,
+			(unsigned long)(val & 0xFFFF) + 1);
+		no_os_axi_io_read(tx_jesd->base, 0x21C, &val);
+		pr_info("  TX LINK_CONF4 = 0x%08x (beats_per_mf=%lu)\n",
+			val, (unsigned long)(val & 0xFFFF) + 1);
+		no_os_axi_io_read(tx_jesd->base, 0x280, &val);
+		pr_info("  TX LINK_STATUS = 0x%08x\n", val);
+	}
+
+	/* Check RX/ORX lanes for errors after link-up */
+	{
+		#define JESD_LANE_ERRORS_REG(lane) (0x308 + (lane) * 32)
+		uint32_t lane_errors;
+
+		for (uint32_t l = 0; l < rx_jesd->num_lanes; l++) {
+			no_os_axi_io_read(rx_jesd->base,
+					  JESD_LANE_ERRORS_REG(l), &lane_errors);
+			if (lane_errors)
+				pr_err("rx_jesd lane %lu: %lu errors\n",
+				       (unsigned long)l, (unsigned long)lane_errors);
+		}
+#ifdef ORX_JESD_BASEADDR
+		for (uint32_t l = 0; l < orx_jesd->num_lanes; l++) {
+			no_os_axi_io_read(orx_jesd->base,
+					  JESD_LANE_ERRORS_REG(l), &lane_errors);
+			if (lane_errors)
+				pr_err("orx_jesd lane %lu: %lu errors\n",
+				       (unsigned long)l, (unsigned long)lane_errors);
+		}
+#endif
+	}
+
+	t1 = no_os_get_time();
+	pr_info("=== JESD204 link verified: %lu ms from start ===\n",
+		(unsigned long)time_delta_ms(t_total, t1));
+
+	/* Set MIO11 HIGH to signal link is up */
+#ifdef PLATFORM_VERSAL
+	{
+		struct xil_gpio_init_param ps_gpio_extra = {
+			.device_id = PS_GPIO_DEVICE_ID,
+			.type = GPIO_PS,
+		};
+		struct no_os_gpio_init_param link_gpio_param = {
+			.number = LINK_STATUS_GPIO_MIO,
+			.platform_ops = &xil_gpio_ops,
+			.extra = &ps_gpio_extra,
+		};
+		struct no_os_gpio_desc *link_gpio = NULL;
+		ret = no_os_gpio_get(&link_gpio, &link_gpio_param);
+		if (!ret) {
+			no_os_gpio_direction_output(link_gpio, NO_OS_GPIO_HIGH);
+			pr_info("MIO11 set HIGH — link up\n");
+		} else {
+			pr_err("MIO11 gpio_get failed: %d\n", ret);
+		}
+	}
+#endif
+
+	/* Check ADRV903x CPU is still responsive after JESD link-up */
+	adi_adrv903x_DevTempData_t devTemp = { 0 };
+	ret = (int)adi_adrv903x_TemperatureGet(phy->palmaDevice, 0, &devTemp);
 	if (ret)
-		pr_err("RxGainSet failed: %d\n", ret);
+		pr_err("TemperatureGet failed: %d — device CPU not responsive\n", ret);
+	else
+		pr_info("ADRV903x alive, temp sensor[0] = %d C\n",
+			devTemp.tempDegreesCelsius[0]);
+
+	/* Set LO to 1 GHz */
+	{
+		adi_adrv903x_LoConfig_t loCfg = { 0 };
+		loCfg.loName = ADI_ADRV903X_LO0;
+		loCfg.loFrequency_Hz = 1500000000ULL;
+		loCfg.loConfigSel = 0;
+		ret = (int)adi_adrv903x_LoFrequencySet(phy->palmaDevice, &loCfg);
+		if (ret)
+			pr_err("LoFrequencySet LO0 failed: %d\n", ret);
+		else
+			pr_info("LO0 set to 1500 MHz\n");
+	}
+
+	/* RX gain: per channel. Valid range 191 (0 dB) to 255 (32 dB). */
+	adi_adrv903x_RxGain_t rxGain;
+	for (uint8_t chan = 0; chan < 8; chan++) {
+		rxGain.rxChannelMask = ADI_ADRV903X_RX0 << chan;
+		rxGain.gainIndex = 230;
+		ret = (int)adi_adrv903x_RxGainSet(phy->palmaDevice, &rxGain, 1);
+		if (ret) {
+			pr_err("RxGainSet chan %u failed: %d\n", chan, ret);
+			return ret;
+		}
+	}
 
 	/*
 	 * ----------------------------------------------------------------
-	 * TX DMA: push the sine wave LUT to the DAC.
+	 * TX data offload — bypass mode.
+	 *
+	 * The TX data offload sits between the DAC TPL and JESD TX.
+	 * Bypass is required for cyclic DMA transfers.  Pulse RESETN
+	 * (0→1) after JESD link-up to initialize the CDC FIFO.
 	 * ----------------------------------------------------------------
 	 */
+	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR,
+			   AXI_DO_REG_CONTROL, 0x1); /* bypass */
+	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR,
+			   AXI_DO_REG_RESETN_OFFLOAD, 0x0);
+	no_os_mdelay(1);
+	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR,
+			   AXI_DO_REG_RESETN_OFFLOAD, 0x1);
+
+	/*
+	 * ----------------------------------------------------------------
+	 * TX DMA: continuous sine wave via cyclic DMA.
+	 *
+	 * Load the built-in IQ sine LUT (sine_lut_iq) into DDR,
+	 * replicated across all TX channels (num_channels/2 I/Q pairs).
+	 * The cyclic DMA continuously replays this buffer through the
+	 * data offload (bypass) to the JESD TX link.
+	 * ----------------------------------------------------------------
+	 */
+	ret = axi_dac_init_finish(tx_dac);
+	if (ret) {
+		pr_err("axi_dac_init_finish() failed: %d\n", ret);
+		goto error_fsm;
+	}
+	pr_info("DAC clock_hz = %lu\n", (unsigned long)tx_dac->clock_hz);
+#if 1
+	uintptr_t tx_dma_addr = DDR_MEM_BASEADDR + 0x1000000UL; /* 16MB — past app */
+
+	axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
+	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
+				 NO_OS_ARRAY_SIZE(sine_lut_iq),
+				 (uintptr_t)tx_dma_addr);
+
+	/* Total DMA size = LUT size * num_tx_channels (interleaved) */
+	uint32_t tx_dma_size = sizeof(sine_lut_iq) * (tx_dac->num_channels / 2);
+
+	/* Flush cache to DDR before starting DMA */
+	Xil_DCacheFlushRange(tx_dma_addr, tx_dma_size);
+
 	struct axi_dma_transfer tx_transfer = {
 		.size = tx_dma_size,
 		.transfer_done = 0,
-		.cyclic = NO,
-		.src_addr = (uintptr_t)dac_buffer_dma,
+		.cyclic = CYCLIC,
+		.src_addr = tx_dma_addr,
 		.dest_addr = 0
 	};
 
-	pr_info("DMA TX: address=0x%08lx size=%lu\n",
-		(uintptr_t)dac_buffer_dma,
-		(unsigned long)tx_transfer.size);
+	pr_info("DMA TX: address=0x%08lx size=%lu channels=%u\n",
+		(unsigned long)tx_dma_addr,
+		(unsigned long)tx_dma_size,
+		tx_dac->num_channels);
 
-	Xil_DCacheFlushRange((uintptr_t)dac_buffer_dma, tx_dma_size);
-	axi_dmac_transfer_start(tx_dmac, &tx_transfer);
+	ret = axi_dmac_transfer_start(tx_dmac, &tx_transfer);
+	if (ret) {
+		pr_err("TX DMA start failed: %d\n", ret);
+		goto error_fsm;
+	}
 
-	/* Allow the tone to settle for 1 s before capturing RX data */
-	no_os_mdelay(1000);
+#else /* DDS mode — use FPGA internal tone generator instead of DMA */
+	axi_dac_data_setup(tx_dac);
+	axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
+	no_os_axi_io_write(tx_dac->base, 0x44, 0x1); /* sync */
+#endif
+
+	/* DDS on all TX outputs */
+
+
+	/* Allow the tone to settle for 0.1 s before capturing RX data */
+	no_os_mdelay(100);
 
 	/*
 	 * ----------------------------------------------------------------
 	 * RX DMA: capture one buffer of ADC samples.
+	 *
+	 * The RX data offload IP sits between the ADC TPL and the DMAC.
+	 * In normal (store-and-forward) mode, the capture size must not
+	 * exceed the offload BRAM.  Use the size read at init time.
 	 * ----------------------------------------------------------------
 	 */
-	/*
-	 * Normal mode capture sequence.
-	 *
-	 * AXI_DO_REG_TRANSFER_LENGTH (0x001C) is 12 bits wide.  Writing
-	 * bram_size >> 6 = 4096 = 0x1000 overflows to 0, causing the offload
-	 * to forward an empty BRAM immediately.  Do NOT write XFER_LENGTH.
-	 * The IP hardware default stores the full BRAM then forwards it.
-	 * Read bram_size only to size the DMAC transfer correctly.
-	 *
-	 *   1. Read bram_size from MEMORY_SIZE_LSB (0x0014).
-	 *   2. Assert RESETN=1 (single 0→1 from power-on reset state).
-	 *   3. Start DMAC for rx_bytes = min(sizeof(buffer), bram_size).
-	 *   4. Offload stores bram_size bytes, forwards to DMAC → clean data.
-	 */
-	uint32_t bram_size, rx_bytes;
-	no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR,
-			  AXI_DO_REG_MEMORY_SIZE_LSB, &bram_size);
-	rx_bytes = no_os_min((uint32_t)sizeof(adc_buffer_dma), bram_size);
-	rx_bytes &= ~(uint32_t)0x3F;	/* floor to 64-byte boundary */
-	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR,
-			   AXI_DO_REG_RESETN_OFFLOAD, 0x1);
+	uint32_t rx_bytes = (uint32_t)rx_do_mem_size;
+
+	uintptr_t rx_dma_addr = DDR_MEM_BASEADDR + 0x2000000UL; /* 32MB — past app */
 
 	struct axi_dma_transfer rx_transfer = {
 		.size = rx_bytes,
 		.transfer_done = 0,
 		.cyclic = NO,
 		.src_addr = 0,
-		.dest_addr = (uintptr_t)adc_buffer_dma
+		.dest_addr = rx_dma_addr
 	};
 
 	ret = axi_dmac_transfer_start(rx_dmac, &rx_transfer);
@@ -618,21 +1183,44 @@ int example_main()
 		goto error_fsm;
 	}
 
-	ret = axi_dmac_transfer_wait_completion(rx_dmac, 1000);
+	ret = axi_dmac_transfer_wait_completion(rx_dmac, 5000);
 	if (ret) {
 		pr_err("RX DMA wait_completion failed: %d\n", ret);
 		goto error_fsm;
 	}
 
-	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer_dma, rx_bytes);
+	Xil_DCacheInvalidateRange(rx_dma_addr, rx_bytes);
 
-	pr_info("DMA RX: address=0x%08lx bytes=%lu samples_per_ch=%lu channels=%u bits=%lu\n",
-		(uintptr_t)adc_buffer_dma,
-		(unsigned long)rx_bytes,
-		(unsigned long)(rx_bytes / (rx_adc_init.num_channels * sizeof(
-				adc_buffer_dma[0]))),
-		rx_adc_init.num_channels,
-		8 * sizeof(adc_buffer_dma[0]));
+	// /* Print 256 sample periods as signed 16-bit, 16 channels per line */
+	// {
+	// 	int16_t *s = (int16_t *)rx_dma_addr;
+	// 	uint32_t num_samples = rx_bytes / (DMA_NUM_CHANNELS * sizeof(int16_t));
+	// 	if (num_samples > 256)
+	// 		num_samples = 256;
+	// 	for (uint32_t n = 0; n < num_samples; n++) {
+	// 		pr_info("S[%03lu]: %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d\n",
+	// 			(unsigned long)n,
+	// 			s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7],
+	// 			s[8], s[9], s[10], s[11], s[12], s[13], s[14], s[15]);
+	// 		s += DMA_NUM_CHANNELS;
+	// 	}
+	// }
+
+	pr_info("DMA RX: address=0x%08lx size=%lu channels=%u bits_per_sample=16 samples_per_ch=%lu\n",
+		rx_dma_addr,
+		(unsigned long)rx_bytes / 2,
+		DMA_NUM_CHANNELS,
+		(unsigned long)(rx_bytes / (DMA_NUM_CHANNELS * sizeof(uint16_t))));
+
+	/* Check RX lanes for errors accumulated during capture */
+	for (uint32_t l = 0; l < rx_jesd->num_lanes; l++) {
+		uint32_t post_errors;
+		no_os_axi_io_read(rx_jesd->base,
+				  JESD_LANE_ERRORS_REG(l), &post_errors);
+		if (post_errors)
+			pr_err("rx_jesd lane %lu: %lu errors after capture\n",
+			       (unsigned long)l, (unsigned long)post_errors);
+	}
 
 	pr_info("ADRV903X DMA example complete\n");
 
@@ -648,13 +1236,20 @@ error_rx_adc:
 error_tx_dac:
 	axi_dac_remove(tx_dac);
 error_clkgen:
+#ifndef PLATFORM_VERSAL
 	clkgen_remove(rx_clkgen, tx_clkgen);
 error_phy:
+#endif
 	adrv903x_remove(phy);
+#ifdef ORX_JESD_BASEADDR
+error_orx_jesd:
+	axi_jesd204_rx_remove(orx_jesd);
+#endif
 error_rx_jesd:
 	axi_jesd204_rx_remove(rx_jesd);
 error_tx_jesd:
 	axi_jesd204_tx_remove(tx_jesd);
+#ifndef PLATFORM_VERSAL
 error_rx_adxcvr:
 	adxcvr_remove(rx_adxcvr);
 error_tx_adxcvr:
@@ -667,7 +1262,13 @@ error_sysref_gpio:
 	 */
 	if (!ad9528_device || ad9528_device->sysref_req_gpio != sysref_gpio)
 		no_os_gpio_remove(sysref_gpio);
-error_ad9528:
+#endif
+error_clkchip:
+#ifdef PLATFORM_VERSAL
+	hmc7044_remove(hmc7044_device);
+	no_os_gpio_remove(hmc7044_reset_gpio);
+#else
 	ad9528_remove(ad9528_device);
+#endif
 	return ret;
 }
