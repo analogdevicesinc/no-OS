@@ -93,6 +93,18 @@
 #define ADIOL100_REG_LPSLOPE_B          0x1F23
 #define ADIOL100_REG_LPRETRY_B          0x1F24
 
+/* USER_direct registers — CQ external FET config */
+#define ADIOL100_REG_CQEXTCFG_A         0x000B
+#define ADIOL100_REG_CQEXTCFG_B         0x001B
+
+/* CQExtCfg bit masks (0x000B / 0x001B) */
+#define ADIOL100_CQCL_S                 NO_OS_BIT(13)
+#define ADIOL100_CQCL_L                 NO_OS_BIT(12)
+#define ADIOL100_CQTO_L                 NO_OS_BIT(11)
+#define ADIOL100_CQSLOERR_L             NO_OS_BIT(10)
+#define ADIOL100_CQOL_L                 NO_OS_BIT(9)
+#define ADIOL100_CQEXTCLNOM_MSK         NO_OS_GENMASK(7, 0)
+
 /* ExtraPage register — gateway to USER_paged map */
 #define ADIOL100_REG_EXTRAPAGE          0x001F
 #define ADIOL100_PAGED_BASE             0x1F00
@@ -244,6 +256,39 @@
 #define ADIOL100_ARTTMO_MSK             NO_OS_GENMASK(2, 1)
 #define ADIOL100_ARTEN                  NO_OS_BIT(0)
 
+/* USER_paged registers — CQ external FET protection, channel A */
+#define ADIOL100_REG_CQFETPWRCFG_A      0x1F18
+#define ADIOL100_REG_CQCURRENTCFG_A     0x1F19
+#define ADIOL100_REG_CQFETPROTECT_A     0x1F1A
+#define ADIOL100_REG_CQSLOPE_A          0x1F1B
+#define ADIOL100_REG_CQRETRY_A          0x1F1C
+
+/* USER_paged registers — CQ external FET protection, channel B */
+#define ADIOL100_REG_CQFETPWRCFG_B      0x1F28
+#define ADIOL100_REG_CQCURRENTCFG_B     0x1F29
+#define ADIOL100_REG_CQFETPROTECT_B     0x1F2A
+#define ADIOL100_REG_CQSLOPE_B          0x1F2B
+#define ADIOL100_REG_CQRETRY_B          0x1F2C
+
+/* CQFETPwrCfg bit masks (0x1F18 / 0x1F28) */
+#define ADIOL100_CQFETPWRMAX_MSK        NO_OS_GENMASK(7, 0)
+
+/* CQCurrentCfg bit masks (0x1F19 / 0x1F29) */
+#define ADIOL100_CQCURRMAX_MSK          NO_OS_GENMASK(15, 8)
+#define ADIOL100_CQCURRMIN_MSK          NO_OS_GENMASK(7, 0)
+
+/* CQFETProtect bit masks (0x1F1A / 0x1F2A) */
+#define ADIOL100_CQOLTIMOUT_MSK         NO_OS_GENMASK(15, 8)
+#define ADIOL100_CQCLTIMOUT_MSK         NO_OS_GENMASK(7, 0)
+
+/* CQFETSlope bit masks (0x1F1B / 0x1F2B) */
+#define ADIOL100_CQFETSLOPE_MSK         NO_OS_GENMASK(15, 8)
+#define ADIOL100_CQFETSLOPEBL_MSK       NO_OS_GENMASK(7, 0)
+
+/* CQRetry bit masks (0x1F1C / 0x1F2C) */
+#define ADIOL100_CQARTIM_MSK            NO_OS_GENMASK(13, 8)
+#define ADIOL100_CQAR_MSK               NO_OS_GENMASK(3, 0)
+
 /* ADC data registers — global */
 #define ADIOL100_REG_V24VOLT            0x1F30
 #define ADIOL100_REG_V24VOLTMIN         0x1F31
@@ -291,6 +336,25 @@
 
 /* ADC data mask (13-bit, bits [12:0]) */
 #define ADIOL100_ADC_DATA_MSK           NO_OS_GENMASK(12, 0)
+
+/* LED registers */
+#define ADIOL100_REG_LED12BGT           0x1F60
+#define ADIOL100_REG_LED1RSEQ           0x1F61
+#define ADIOL100_REG_LED1GSEQ           0x1F62
+#define ADIOL100_REG_LED2RSEQ           0x1F63
+#define ADIOL100_REG_LED2GSEQ           0x1F64
+#define ADIOL100_REG_LED34BGT           0x1F65
+#define ADIOL100_REG_LED3RSEQ           0x1F66
+#define ADIOL100_REG_LED3GSEQ           0x1F67
+#define ADIOL100_REG_LED4RSEQ           0x1F68
+#define ADIOL100_REG_LED4GSEQ           0x1F69
+#define ADIOL100_REG_LEDCONFIG          0x1F6A
+
+/* LEDConfig bit masks (0x1F6A) */
+#define ADIOL100_LED4CFG_MSK            NO_OS_GENMASK(14, 12)
+#define ADIOL100_LED3CFG_MSK            NO_OS_GENMASK(10, 8)
+#define ADIOL100_LED2CFG_MSK            NO_OS_GENMASK(6, 4)
+#define ADIOL100_LED1CFG_MSK            NO_OS_GENMASK(2, 0)
 
 /* FIFO constants */
 #define ADIOL100_FIFO_MAX_LEN           66
@@ -464,6 +528,53 @@ enum adiol100_adc_chan {
     ADIOL100_ADC_LP_CUR_MAX   = 0x1F4B,
 };
 
+/* LED index (1–4). */
+enum adiol100_led {
+    ADIOL100_LED1 = 0,
+    ADIOL100_LED2 = 1,
+    ADIOL100_LED3 = 2,
+    ADIOL100_LED4 = 3,
+};
+
+/* LED operating mode (LEDConfig register, 3-bit field per LED). */
+enum adiol100_led_mode {
+    ADIOL100_LED_BLINK      = 0,
+    ADIOL100_LED_BLINK_EDGE = 1,
+    ADIOL100_LED_ON_HIGH    = 2,
+    ADIOL100_LED_ON_LOW     = 3,
+    ADIOL100_LED_BLINK_FAST = 4,
+};
+
+/* LED brightness (percentage of 50% duty cycle, 16 steps). */
+enum adiol100_led_brightness {
+    ADIOL100_LED_BGT_6    = 0,
+    ADIOL100_LED_BGT_12   = 1,
+    ADIOL100_LED_BGT_18   = 2,
+    ADIOL100_LED_BGT_25   = 3,
+    ADIOL100_LED_BGT_31   = 4,
+    ADIOL100_LED_BGT_37   = 5,
+    ADIOL100_LED_BGT_43   = 6,
+    ADIOL100_LED_BGT_50   = 7,
+    ADIOL100_LED_BGT_56   = 8,
+    ADIOL100_LED_BGT_62   = 9,
+    ADIOL100_LED_BGT_68   = 10,
+    ADIOL100_LED_BGT_75   = 11,
+    ADIOL100_LED_BGT_81   = 12,
+    ADIOL100_LED_BGT_87   = 13,
+    ADIOL100_LED_BGT_93   = 14,
+    ADIOL100_LED_BGT_100  = 15,
+};
+
+/* Common LED blink sequences. Each bit = 63ms, scanned MSB first, 16-bit cycle.
+ * Pass any uint16_t for custom patterns. */
+enum adiol100_led_seq {
+    ADIOL100_LED_SEQ_OFF        = 0x0000,
+    ADIOL100_LED_SEQ_ON         = 0xFFFF,
+    ADIOL100_LED_SEQ_BLINK_SLOW = 0xFF00,  /* 504ms on, 504ms off */
+    ADIOL100_LED_SEQ_BLINK_FAST = 0xF0F0,  /* 252ms on, 252ms off */
+    ADIOL100_LED_SEQ_PULSE      = 0x8000,  /* 63ms on, 945ms off */
+};
+
 /* IRQ callback type — called from ISR context, must be fast. */
 typedef void (*adiol100_irq_cb_t)(void *ctx);
 
@@ -600,6 +711,15 @@ int adiol100_config_lp_protection(struct adiol100_dev *dev,
                                   uint8_t slope, uint8_t slope_bl,
                                   uint8_t ar_time, uint8_t ar_count);
 
+/** Configure CQ external high-side FET protection: current, power, timeouts, slope, retry. */
+int adiol100_config_cq_protection_ext(struct adiol100_dev *dev,
+                                      enum adiol100_channel ch,
+                                      uint8_t cl_nom, uint8_t pwr_max,
+                                      uint8_t curr_max, uint8_t curr_min,
+                                      uint8_t ol_timeout, uint8_t cl_timeout,
+                                      uint8_t slope, uint8_t slope_bl,
+                                      uint8_t ar_time, uint8_t ar_count);
+
 /** Configure the IO-Link framer: checksum insertion and framer enable. */
 int adiol100_config_framer(struct adiol100_dev *dev, enum adiol100_channel ch,
                            enum adiol100_ins_chks ins_chks,
@@ -685,5 +805,19 @@ int adiol100_read_adc_chan(struct adiol100_dev *dev,
 
 /** Reset all ADC min/max statistics (V24, Temp, CQ and LP for both channels). */
 int adiol100_reset_adc_stats(struct adiol100_dev *dev);
+
+/** Set the brightness for one LED. */
+int adiol100_set_led_brightness(struct adiol100_dev *dev, enum adiol100_led led,
+                                enum adiol100_led_brightness red_bgt,
+                                enum adiol100_led_brightness green_bgt);
+
+/** Set the blink sequence for one LED (16-bit pattern, each bit = 63ms). */
+int adiol100_set_led_sequence(struct adiol100_dev *dev, enum adiol100_led led,
+                              enum adiol100_led_seq red_seq,
+                              enum adiol100_led_seq green_seq);
+
+/** Set the operating mode for one LED. */
+int adiol100_set_led_mode(struct adiol100_dev *dev, enum adiol100_led led,
+                          enum adiol100_led_mode mode);
 
 #endif

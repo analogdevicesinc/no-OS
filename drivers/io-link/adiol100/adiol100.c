@@ -849,6 +849,91 @@ int adiol100_config_lp_protection(struct adiol100_dev *dev,
 }
 
 /**
+ * @brief Configure CQ external high-side FET protection.
+ * @param dev        - The device structure.
+ * @param ch         - Channel selection (A or B).
+ * @param cl_nom     - Nominal current limit (CQExtCfg, 8-bit, 20mA/step with 10mOhm Rsense).
+ * @param pwr_max    - Maximum power dissipation (8-bit, 1W/step).
+ * @param curr_max   - Maximum current (8-bit, 20mA/step).
+ * @param curr_min   - Minimum current at turn-on (8-bit, 20mA/step).
+ * @param ol_timeout - Overload timeout (8-bit, ~2ms/step).
+ * @param cl_timeout - Current limit timeout (8-bit, ~2ms/step).
+ * @param slope      - Minimum voltage slope (8-bit, ~19.5V/s per step).
+ * @param slope_bl   - Slope blanking time (8-bit, ~2ms/step).
+ * @param ar_time    - Autoretry time (6-bit, 25ms/step).
+ * @param ar_count   - Autoretry count (4-bit, 0 = unlimited).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adiol100_config_cq_protection_ext(struct adiol100_dev *dev,
+                                      enum adiol100_channel ch,
+                                      uint8_t cl_nom, uint8_t pwr_max,
+                                      uint8_t curr_max, uint8_t curr_min,
+                                      uint8_t ol_timeout, uint8_t cl_timeout,
+                                      uint8_t slope, uint8_t slope_bl,
+                                      uint8_t ar_time, uint8_t ar_count)
+{
+    uint16_t val;
+    int ret;
+
+    uint16_t extcfg_reg, pwrcfg_reg, currcfg_reg;
+    uint16_t protect_reg, slope_reg, retry_reg;
+
+    if (ch == ADIOL100_CH_A) {
+        extcfg_reg  = ADIOL100_REG_CQEXTCFG_A;
+        pwrcfg_reg  = ADIOL100_REG_CQFETPWRCFG_A;
+        currcfg_reg = ADIOL100_REG_CQCURRENTCFG_A;
+        protect_reg = ADIOL100_REG_CQFETPROTECT_A;
+        slope_reg   = ADIOL100_REG_CQSLOPE_A;
+        retry_reg   = ADIOL100_REG_CQRETRY_A;
+    } else {
+        extcfg_reg  = ADIOL100_REG_CQEXTCFG_B;
+        pwrcfg_reg  = ADIOL100_REG_CQFETPWRCFG_B;
+        currcfg_reg = ADIOL100_REG_CQCURRENTCFG_B;
+        protect_reg = ADIOL100_REG_CQFETPROTECT_B;
+        slope_reg   = ADIOL100_REG_CQSLOPE_B;
+        retry_reg   = ADIOL100_REG_CQRETRY_B;
+    }
+
+    /* CQExtCfg — nominal current limit */
+    ret = adiol100_update(dev, extcfg_reg, ADIOL100_CQEXTCLNOM_MSK,
+                          no_os_field_prep(ADIOL100_CQEXTCLNOM_MSK, cl_nom));
+    if (ret)
+        return ret;
+
+    /* CQFETPwrCfg */
+    val = no_os_field_prep(ADIOL100_CQFETPWRMAX_MSK, pwr_max);
+    ret = adiol100_write(dev, pwrcfg_reg, val);
+    if (ret)
+        return ret;
+
+    /* CQCurrentCfg */
+    val = no_os_field_prep(ADIOL100_CQCURRMAX_MSK, curr_max) |
+          no_os_field_prep(ADIOL100_CQCURRMIN_MSK, curr_min);
+    ret = adiol100_write(dev, currcfg_reg, val);
+    if (ret)
+        return ret;
+
+    /* CQFETProtect */
+    val = no_os_field_prep(ADIOL100_CQOLTIMOUT_MSK, ol_timeout) |
+          no_os_field_prep(ADIOL100_CQCLTIMOUT_MSK, cl_timeout);
+    ret = adiol100_write(dev, protect_reg, val);
+    if (ret)
+        return ret;
+
+    /* CQFETSlope */
+    val = no_os_field_prep(ADIOL100_CQFETSLOPE_MSK, slope) |
+          no_os_field_prep(ADIOL100_CQFETSLOPEBL_MSK, slope_bl);
+    ret = adiol100_write(dev, slope_reg, val);
+    if (ret)
+        return ret;
+
+    /* CQRetry */
+    val = no_os_field_prep(ADIOL100_CQARTIM_MSK, ar_time) |
+          no_os_field_prep(ADIOL100_CQAR_MSK, ar_count);
+    return adiol100_write(dev, retry_reg, val);
+}
+
+/**
  * @brief Configure the IO-Link framer: checksum insertion and framer enable.
  * @param dev       - The device structure.
  * @param ch        - Channel selection (A or B).
@@ -1247,6 +1332,123 @@ int adiol100_reset_adc_stats(struct adiol100_dev *dev)
                           ADIOL100_TEMPRESSTAT | ADIOL100_RESV24STAT |
                           ADIOL100_RESLPSTATB | ADIOL100_RESLPSTATA |
                           ADIOL100_RESCQSTATB | ADIOL100_RESCQSTATA);
+}
+
+/**
+ * @brief Set the brightness for one LED.
+ * @param dev       - The device structure.
+ * @param led       - LED index (1–4).
+ * @param red_bgt   - Red brightness (see enum adiol100_led_brightness).
+ * @param green_bgt - Green brightness (see enum adiol100_led_brightness).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adiol100_set_led_brightness(struct adiol100_dev *dev, enum adiol100_led led,
+                                enum adiol100_led_brightness red_bgt,
+                                enum adiol100_led_brightness green_bgt)
+{
+    uint16_t reg;
+    uint16_t mask;
+    uint16_t val;
+
+    switch (led) {
+    case ADIOL100_LED1:
+        reg = ADIOL100_REG_LED12BGT;
+        mask = 0x00FF;
+        val = ((green_bgt & 0xF) << 4) | (red_bgt & 0xF);
+        break;
+    case ADIOL100_LED2:
+        reg = ADIOL100_REG_LED12BGT;
+        mask = 0xFF00;
+        val = ((green_bgt & 0xF) << 12) | ((red_bgt & 0xF) << 8);
+        break;
+    case ADIOL100_LED3:
+        reg = ADIOL100_REG_LED34BGT;
+        mask = 0x00FF;
+        val = ((green_bgt & 0xF) << 4) | (red_bgt & 0xF);
+        break;
+    case ADIOL100_LED4:
+        reg = ADIOL100_REG_LED34BGT;
+        mask = 0xFF00;
+        val = ((green_bgt & 0xF) << 12) | ((red_bgt & 0xF) << 8);
+        break;
+    default:
+        return -EINVAL;
+    }
+
+    return adiol100_update(dev, reg, mask, val);
+}
+
+/**
+ * @brief Set the blink sequence for one LED.
+ * @param dev       - The device structure.
+ * @param led       - LED index (1–4).
+ * @param red_seq   - Red blink pattern (see enum adiol100_led_seq or custom).
+ * @param green_seq - Green blink pattern (see enum adiol100_led_seq or custom).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adiol100_set_led_sequence(struct adiol100_dev *dev, enum adiol100_led led,
+                              enum adiol100_led_seq red_seq,
+                              enum adiol100_led_seq green_seq)
+{
+    uint16_t rseq_reg, gseq_reg;
+    int ret;
+
+    switch (led) {
+    case ADIOL100_LED1:
+        rseq_reg = ADIOL100_REG_LED1RSEQ;
+        break;
+    case ADIOL100_LED2:
+        rseq_reg = ADIOL100_REG_LED2RSEQ;
+        break;
+    case ADIOL100_LED3:
+        rseq_reg = ADIOL100_REG_LED3RSEQ;
+        break;
+    case ADIOL100_LED4:
+        rseq_reg = ADIOL100_REG_LED4RSEQ;
+        break;
+    default:
+        return -EINVAL;
+    }
+    gseq_reg = rseq_reg + 1;
+
+    ret = adiol100_write(dev, rseq_reg, red_seq);
+    if (ret)
+        return ret;
+
+    return adiol100_write(dev, gseq_reg, green_seq);
+}
+
+/**
+ * @brief Set the operating mode for one LED.
+ * @param dev  - The device structure.
+ * @param led  - LED index (1–4).
+ * @param mode - Operating mode (see enum adiol100_led_mode).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adiol100_set_led_mode(struct adiol100_dev *dev, enum adiol100_led led,
+                          enum adiol100_led_mode mode)
+{
+    uint16_t mask;
+
+    switch (led) {
+    case ADIOL100_LED1:
+        mask = ADIOL100_LED1CFG_MSK;
+        break;
+    case ADIOL100_LED2:
+        mask = ADIOL100_LED2CFG_MSK;
+        break;
+    case ADIOL100_LED3:
+        mask = ADIOL100_LED3CFG_MSK;
+        break;
+    case ADIOL100_LED4:
+        mask = ADIOL100_LED4CFG_MSK;
+        break;
+    default:
+        return -EINVAL;
+    }
+
+    return adiol100_update(dev, ADIOL100_REG_LEDCONFIG, mask,
+                           no_os_field_prep(mask, mode));
 }
 
 /**
