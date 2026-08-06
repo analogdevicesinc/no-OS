@@ -62,22 +62,27 @@ endif()
 # OpenOCD with -DOPENOCD_PATH=/usr/bin/openocd -DOPENOCD_SCRIPTS=... instead.
 #
 # Only search when CUBEIDE_DIR is set; an empty value would expand the glob to
-# "/plugins/*/openocd" (filesystem root) and match unrelated host paths.
-# The recursive glob can also match *directories* named "openocd" (CubeIDE ships
-# several), so pick the first entry that is an actual executable file.
+# "/plugins/*" (filesystem root) and match unrelated host paths.
 if(OPENOCD_PATH)
     # Explicit -DOPENOCD_PATH (or a cached value): respect it verbatim and do
     # not pull in the CubeIDE scripts, so a mainline OpenOCD is driven with its
     # own scripts (supply -DOPENOCD_SCRIPTS to match).
     message(STATUS "Using provided OpenOCD: ${OPENOCD_PATH}")
 elseif(CUBEIDE_DIR)
-    file(GLOB_RECURSE _cubeide_openocd ${CUBEIDE_DIR}/plugins/*/openocd)
-    foreach(_candidate ${_cubeide_openocd})
-        if(NOT IS_DIRECTORY "${_candidate}")
-            set(OPENOCD_PATH "${_candidate}")
-            break()
-        endif()
-    endforeach()
+    # The CubeIDE plugin directories carry version suffixes that change between
+    # releases, so glob them and let find_program() locate the executable inside.
+    file(GLOB _cubeide_plugins "${CUBEIDE_DIR}/plugins/*")
+    find_program(OPENOCD_CUBEIDE_PATH
+        NAMES openocd
+        HINTS ${_cubeide_plugins}
+        PATH_SUFFIXES tools/bin bin ""
+        NO_DEFAULT_PATH
+        DOC "Path to the STM32CubeIDE-bundled OpenOCD executable"
+    )
+    mark_as_advanced(OPENOCD_CUBEIDE_PATH)
+    if(OPENOCD_CUBEIDE_PATH)
+        set(OPENOCD_PATH "${OPENOCD_CUBEIDE_PATH}")
+    endif()
     if(OPENOCD_PATH)
         file(GLOB_RECURSE _cubeide_scripts ${CUBEIDE_DIR}/plugins/*/mem_helper.tcl)
         if(_cubeide_scripts)
