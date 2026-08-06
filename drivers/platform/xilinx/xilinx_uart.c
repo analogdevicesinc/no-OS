@@ -37,7 +37,39 @@
 #include "no_os_irq.h"
 #include "xilinx_uart.h"
 #include "xilinx_irq.h"
-#ifdef XPAR_XUARTPS_NUM_INSTANCES
+#ifdef XPAR_XUARTPSV_NUM_INSTANCES
+#include "no_os_irq.h"
+#include "no_os_fifo.h"
+#include <xil_exception.h>
+#include <xuartpsv.h>
+typedef XUartPsv XUartPs;
+typedef XUartPsv_Config XUartPs_Config;
+#define XUartPs_LookupConfig      XUartPsv_LookupConfig
+#define XUartPs_CfgInitialize     XUartPsv_CfgInitialize
+#define XUartPs_SetOperMode       XUartPsv_SetOperMode
+#define XUartPs_SetBaudRate       XUartPsv_SetBaudRate
+#define XUartPs_SetRecvTimeout(inst, val)  do {} while (0)
+#define XUartPs_SetHandler        XUartPsv_SetHandler
+#define XUartPs_SetInterruptMask  XUartPsv_SetInterruptMask
+#define XUartPs_InterruptHandler  XUartPsv_InterruptHandler
+#define XUartPs_Send              XUartPsv_Send
+#define XUartPs_Recv(inst, buf, num) XUartPsv_Recv((inst), (buf), (num))
+#define XUARTPS_OPER_MODE_NORMAL  XUARTPSV_OPER_MODE_NORMAL
+#define XUARTPS_EVENT_RECV_DATA       XUARTPSV_EVENT_RECV_DATA
+#define XUARTPS_EVENT_RECV_TOUT       XUARTPSV_EVENT_RECV_TOUT
+#define XUARTPS_EVENT_RECV_ERROR      XUARTPSV_EVENT_RECV_ERROR
+#define XUARTPS_EVENT_PARE_FRAME_BRKE XUARTPSV_EVENT_PARE_FRAME_BRKE
+#define XUARTPS_EVENT_RECV_ORERR      XUARTPSV_EVENT_RECV_ORERR
+#define XUARTPS_IXR_TOUT    XUARTPSV_UARTIMSC_RTIM
+#define XUARTPS_IXR_PARITY  XUARTPSV_UARTIMSC_PEIM
+#define XUARTPS_IXR_FRAMING XUARTPSV_UARTIMSC_FEIM
+#define XUARTPS_IXR_OVER    XUARTPSV_UARTIMSC_OEIM
+#define XUARTPS_IXR_TXEMPTY 0
+#define XUARTPS_IXR_RXFULL  XUARTPSV_UARTIMSC_RXIM
+#define XUARTPS_IXR_RXOVR   XUARTPSV_UARTIMSC_OEIM
+#define XUARTPS_IXR_RBRK    XUARTPSV_UARTIMSC_BEIM
+#define XUARTPS_H
+#elif defined(XPAR_XUARTPS_NUM_INSTANCES)
 #include "no_os_irq.h"
 #include "no_os_fifo.h"
 #include <xil_exception.h>
@@ -252,6 +284,11 @@ static void uart_irq_handler(void *call_back_ref, uint32_t event,
 		 */
 		case XUARTPS_EVENT_RECV_ORERR:
 			xil_uart_desc->total_error_count++;
+			if (data_len)
+				xil_uart_desc->bytes_received = data_len;
+			XUartPs_Recv(xil_uart_desc->instance,
+				     (u8 *)(xil_uart_desc->buff),
+				     UART_BUFF_LENGTH);
 			break;
 		default:
 			break;
@@ -356,7 +393,7 @@ static int32_t xil_uart_init(struct no_os_uart_desc **desc,
 	XUartPs_Config *config;
 #endif // XUARTPS_H
 #ifdef XUARTLITE_H
-	XUartLite_Config *config;
+	XUartLite_Config *lite_config;
 #endif // XUARTLITE_H
 	int32_t status;
 
@@ -440,15 +477,15 @@ static int32_t xil_uart_init(struct no_os_uart_desc **desc,
 			goto error_free_xil_uart_desc;
 
 #ifdef SDT
-		config = XUartLite_LookupConfig(xil_uart_desc->base_addr);
+		lite_config = XUartLite_LookupConfig(xil_uart_desc->base_addr);
 #else
-		config = XUartLite_LookupConfig(descriptor->device_id);
+		lite_config = XUartLite_LookupConfig(descriptor->device_id);
 #endif
-		if (!config)
+		if (!lite_config)
 			goto error_free_instance;
 
-		status = XUartLite_CfgInitialize(xil_uart_desc->instance, config,
-						 config->RegBaseAddr);
+		status = XUartLite_CfgInitialize(xil_uart_desc->instance, lite_config,
+						 lite_config->RegBaseAddr);
 		if (status != XST_SUCCESS)
 			goto error_free_instance;
 
