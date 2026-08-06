@@ -53,6 +53,8 @@
 #include "no_os_print_log.h"
 #include "no_os_util.h"
 
+#include "xilinx_spi.h"
+#include <xspips.h>
 #include <string.h>
 
 /******************************************************************************/
@@ -66,7 +68,7 @@ struct adrv903x_jesd204_link {
 
 struct adrv903x_jesd204_priv {
 	struct adrv903x_rf_phy *phy;
-	struct adrv903x_jesd204_link link[3];
+	struct adrv903x_jesd204_link link[4];
 };
 
 /******************************************************************************/
@@ -128,6 +130,12 @@ static int adrv903x_jesd204_setup_stage1(struct jesd204_dev *jdev,
 	if (reason != JESD204_STATE_OP_REASON_INIT)
 		return JESD204_STATE_CHANGE_DONE;
 
+	/* Slow down PS SPI for HMC7044 SYSREF access (shared bus) */
+	{
+		struct xil_spi_desc *xdesc = (struct xil_spi_desc *)phy->hal.spi->extra;
+		XSpiPs_SetClkPrescaler(xdesc->instance, XSPIPS_CLK_PRESCALE_256);
+	}
+
 	for (i = 0; i < 255; i++) {
 		ret = adi_adrv903x_MultichipSyncStatusGet(phy->palmaDevice,
 				&mcsStatus);
@@ -147,6 +155,12 @@ static int adrv903x_jesd204_setup_stage1(struct jesd204_dev *jdev,
 		pr_err("adrv903x: MCS did not complete after %d pulses (status=0x%x)\n",
 		       i, mcsStatus);
 		return JESD204_STATE_CHANGE_ERROR;
+	}
+
+	/* Restore PS SPI speed for ADRV903x (25 MHz) */
+	{
+		struct xil_spi_desc *xdesc = (struct xil_spi_desc *)phy->hal.spi->extra;
+		XSpiPs_SetClkPrescaler(xdesc->instance, XSPIPS_CLK_PRESCALE_8);
 	}
 
 	pr_info("adrv903x: MCS complete (status=0x%x, %d pulse(s))\n",
@@ -188,7 +202,7 @@ static int adrv903x_jesd204_setup_stage2(struct jesd204_dev *jdev,
 		return JESD204_STATE_CHANGE_ERROR;
 	}
 
-	pr_info("adrv903x: PostMcsInit complete\n");
+	pr_debug("adrv903x: PostMcsInit complete\n");
 
 	ret = adi_adrv903x_SerializerReset(phy->palmaDevice);
 	if (ret) {
@@ -255,7 +269,7 @@ static int adrv903x_jesd204_link_init(struct jesd204_dev *jdev,
 		lnk->is_transmit = true;
 		lnk->sample_rate = deframerCfg.iqRate_kHz * 1000ULL;
 
-		pr_info("adrv903x: deframer0 M=%u F=%u K=%u Np=%u lanes=%u %s\n",
+		pr_debug("adrv903x: deframer0 M=%u F=%u K=%u Np=%u lanes=%u %s\n",
 			deframerCfg.jesd204M, deframerCfg.jesd204F,
 			deframerCfg.jesd204K, deframerCfg.jesd204Np,
 			lnk->num_lanes,
@@ -297,7 +311,49 @@ static int adrv903x_jesd204_link_init(struct jesd204_dev *jdev,
 		lnk->is_transmit = false;
 		lnk->sample_rate = framerCfg.iqRate_kHz * 1000ULL;
 
-		pr_info("adrv903x: framer0 M=%u F=%u K=%u Np=%u lanes=%u %s\n",
+		pr_debug("adrv903x: framer0 M=%u F=%u K=%u Np=%u lanes=%u %s\n",
+			framerCfg.jesd204M, framerCfg.jesd204F,
+			framerCfg.jesd204K, framerCfg.jesd204Np,
+			lnk->num_lanes,
+			framerCfg.enableJesd204C ? "204C" : "204B");
+		break;
+	}
+	case FRAMER1_LINK_RX: {
+		adi_adrv903x_FramerCfg_t framerCfg = { 0 };
+
+		ret = adi_adrv903x_FramerCfgGet(phy->palmaDevice,
+						ADI_ADRV903X_FRAMER_1,
+						&framerCfg);
+		if (ret) {
+			pr_err("adrv903x: FramerCfgGet(1) failed (%d)\n", ret);
+			return JESD204_STATE_CHANGE_ERROR;
+		}
+
+		priv->link[lnk->link_id].source_id = ADI_ADRV903X_FRAMER_1;
+		priv->link[lnk->link_id].is_framer = true;
+
+		lnk->num_lanes = no_os_hweight8(
+					 framerCfg.serializerLanesEnabled);
+		lnk->num_converters = framerCfg.jesd204M;
+		lnk->bits_per_sample = framerCfg.jesd204Np;
+		lnk->octets_per_frame = framerCfg.jesd204F;
+		lnk->frames_per_multiframe = framerCfg.jesd204K;
+		lnk->device_id = framerCfg.deviceId;
+		lnk->bank_id = framerCfg.bankId;
+		lnk->scrambling = framerCfg.scramble;
+		lnk->converter_resolution = framerCfg.jesd204Np;
+		lnk->num_of_multiblocks_in_emb = framerCfg.jesd204E;
+		lnk->ctrl_bits_per_sample = 0;
+		lnk->jesd_version = framerCfg.enableJesd204C ?
+				    JESD204_VERSION_C : JESD204_VERSION_B;
+		lnk->jesd_encoder = framerCfg.enableJesd204C ?
+				    JESD204_ENCODER_64B66B :
+				    JESD204_ENCODER_8B10B;
+		lnk->subclass = JESD204_SUBCLASS_1;
+		lnk->is_transmit = false;
+		lnk->sample_rate = framerCfg.iqRate_kHz * 1000ULL;
+
+		pr_debug("adrv903x: framer1 M=%u F=%u K=%u Np=%u lanes=%u %s\n",
 			framerCfg.jesd204M, framerCfg.jesd204F,
 			framerCfg.jesd204K, framerCfg.jesd204Np,
 			lnk->num_lanes,
@@ -362,8 +418,8 @@ static int adrv903x_jesd204_clks_enable(struct jesd204_dev *jdev,
 			return JESD204_STATE_CHANGE_ERROR;
 		}
 
-		pr_info("adrv903x: framer %u enabled\n",
-			priv->link[lnk->link_id].source_id);
+		pr_debug("adrv903x: framer %u enabled\n",
+			 priv->link[lnk->link_id].source_id);
 
 		ret = adi_adrv903x_FramerSysrefCtrlSet(phy->palmaDevice,
 						       priv->link[lnk->link_id].source_id, 0);
@@ -431,25 +487,33 @@ static int adrv903x_jesd204_link_enable(struct jesd204_dev *jdev,
 			return JESD204_STATE_CHANGE_ERROR;
 		}
 
-		/* Run SERDES initial calibration for deframer alignment */
-		serdesCal.calMask = ADI_ADRV903X_IC_SERDES;
-		serdesCal.rxChannelMask = 0xFF;
+		/* SERDES cal only required for lane rates >= 16 Gbps */
+		unsigned long lane_rate_khz = 0;
+		jesd204_link_get_rate_khz(lnk, &lane_rate_khz);
+		pr_debug("adrv903x: deframer lane rate = %lu kHz\n", lane_rate_khz);
 
-		ret = adi_adrv903x_InitCalsRun(phy->palmaDevice, &serdesCal);
-		if (ret) {
-			pr_err("adrv903x: InitCalsRun SERDES failed (%d)\n",
-			       ret);
-			return JESD204_STATE_CHANGE_ERROR;
-		}
+		if (lane_rate_khz >= 16000000UL) {
+			serdesCal.calMask = ADI_ADRV903X_IC_SERDES;
+			serdesCal.rxChannelMask = 0xFF;
 
-		ret = adi_adrv903x_InitCalsWait_v2(phy->palmaDevice,
-						   60000, NULL);
-		if (ret) {
-			pr_err("adrv903x: InitCalsWait SERDES failed (%d)\n",
-			       ret);
-			pr_warning("adrv903x: continuing despite SERDES cal error\n");
+			ret = adi_adrv903x_InitCalsRun(phy->palmaDevice, &serdesCal);
+			if (ret) {
+				pr_err("adrv903x: InitCalsRun SERDES failed (%d)\n",
+				       ret);
+				return JESD204_STATE_CHANGE_ERROR;
+			}
+
+			ret = adi_adrv903x_InitCalsWait_v2(phy->palmaDevice,
+							   60000, NULL);
+			if (ret) {
+				pr_err("adrv903x: InitCalsWait SERDES failed (%d)\n",
+				       ret);
+				pr_warning("adrv903x: continuing despite SERDES cal error\n");
+			} else {
+				pr_debug("adrv903x: SERDES calibration complete\n");
+			}
 		} else {
-			pr_info("adrv903x: SERDES calibration complete\n");
+			pr_debug("adrv903x: SERDES cal skipped (lane rate < 16 Gbps)\n");
 		}
 
 		/* Disable SYSREF before enabling the deframer link */
@@ -477,7 +541,7 @@ static int adrv903x_jesd204_link_enable(struct jesd204_dev *jdev,
 			return JESD204_STATE_CHANGE_ERROR;
 		}
 
-		pr_info("adrv903x: deframers enabled, JESD204 link ready\n");
+		pr_debug("adrv903x: deframers enabled, JESD204 link ready\n");
 	}
 
 	return JESD204_STATE_CHANGE_DONE;
@@ -513,8 +577,8 @@ static int adrv903x_jesd204_link_running(struct jesd204_dev *jdev,
 			return JESD204_STATE_CHANGE_ERROR;
 		}
 
-		pr_info("adrv903x: link%u framer status 0x%X\n",
-			lnk->link_id, framerStatus.status);
+		pr_debug("adrv903x: link%u framer status 0x%X\n",
+			 lnk->link_id, framerStatus.status);
 
 		if ((framerStatus.status & 0x02) != 0x02)
 			pr_warning("adrv903x: link%u framer not synced (status=0x%X)\n",
@@ -530,13 +594,13 @@ static int adrv903x_jesd204_link_running(struct jesd204_dev *jdev,
 			return JESD204_STATE_CHANGE_ERROR;
 		}
 
-		pr_info("adrv903x: link%u deframer linkState 0x%X\n",
-			lnk->link_id, deframerStatus.linkState);
+		pr_debug("adrv903x: link%u deframer linkState 0x%X\n",
+			 lnk->link_id, deframerStatus.linkState);
 
 		for (int i = 0; i < (int)lnk->num_lanes; i++)
-			pr_info("adrv903x: link%u lane%d status 0x%X\n",
-				lnk->link_id, i,
-				deframerStatus.laneStatus[i]);
+			pr_debug("adrv903x: link%u lane%d status 0x%X\n",
+				 lnk->link_id, i,
+				 deframerStatus.laneStatus[i]);
 	}
 
 	return JESD204_STATE_CHANGE_DONE;
@@ -546,20 +610,17 @@ static int adrv903x_jesd204_link_running(struct jesd204_dev *jdev,
  * @brief JESD204 post_running_stage callback — activate signal chain.
  *
  * Mirrors the Linux driver's adrv903x_jesd204_post_running_stage():
- *   1. Enable-disable-enable cycle on TX and RX channels.
+ *   1. Enable-disable-enable cycle on TX, RX, and ORX channels.
  *      A single enable is insufficient — the device's internal data path
  *      from deframer→TX DAC and RX ADC→framer requires this "kick".
  *   2. Set default TX attenuation (6 dB).
- *
- * Note: ORX channels are excluded — they require observation path mapping
- * (adi_adrv903x_OrxEnableSet) not configured in the basic/DMA examples.
  */
 static int adrv903x_jesd204_post_running_stage(struct jesd204_dev *jdev,
 		enum jesd204_state_op_reason reason)
 {
 	struct adrv903x_jesd204_priv *priv = jesd204_dev_priv(jdev);
 	struct adrv903x_rf_phy *phy = priv->phy;
-	uint32_t init_chans, tx_mask = 0, rx_mask = 0;
+	uint32_t init_chans, tx_mask = 0, rx_mask = 0, orx_mask = 0;
 	adi_adrv903x_TxAtten_t txAtten[1];
 	int ret;
 	uint8_t i;
@@ -570,7 +631,7 @@ static int adrv903x_jesd204_post_running_stage(struct jesd204_dev *jdev,
 	if (reason != JESD204_STATE_OP_REASON_INIT)
 		return JESD204_STATE_CHANGE_DONE;
 
-	/* Build TX/RX channel masks from the device's initialized bitmap */
+	/* Build TX/RX/ORX channel masks from the device's initialized bitmap */
 	init_chans = phy->palmaDevice->devStateInfo.initializedChannels;
 
 	for (i = 0; i < ADI_ADRV903X_MAX_TXCHANNELS; i++) {
@@ -583,12 +644,17 @@ static int adrv903x_jesd204_post_running_stage(struct jesd204_dev *jdev,
 			rx_mask |= (ADI_ADRV903X_RX0 << i);
 	}
 
-	pr_info("adrv903x: initialized channels 0x%x (TX=0x%x RX=0x%x)\n",
-		init_chans, tx_mask, rx_mask);
+	if (init_chans & (1U << ADI_ADRV903X_MAX_RX_ONLY))
+		orx_mask |= ADI_ADRV903X_ORX0;
+	if (init_chans & (1U << (ADI_ADRV903X_MAX_RX_ONLY + 1)))
+		orx_mask |= ADI_ADRV903X_ORX1;
+
+	pr_debug("adrv903x: initialized channels 0x%x (TX=0x%x RX=0x%x ORX=0x%x)\n",
+		 init_chans, tx_mask, rx_mask, orx_mask);
 
 	/* Enable-disable-enable cycle: required to activate the signal chain */
 	ret = (int)adi_adrv903x_RxTxEnableSet(phy->palmaDevice,
-					      0, 0,
+					      orx_mask, orx_mask,
 					      rx_mask, rx_mask,
 					      tx_mask, tx_mask);
 	if (ret) {
@@ -597,7 +663,7 @@ static int adrv903x_jesd204_post_running_stage(struct jesd204_dev *jdev,
 	}
 
 	ret = (int)adi_adrv903x_RxTxEnableSet(phy->palmaDevice,
-					      0, 0,
+					      orx_mask, 0,
 					      rx_mask, 0,
 					      tx_mask, 0);
 	if (ret) {
@@ -606,7 +672,7 @@ static int adrv903x_jesd204_post_running_stage(struct jesd204_dev *jdev,
 	}
 
 	ret = (int)adi_adrv903x_RxTxEnableSet(phy->palmaDevice,
-					      0, 0,
+					      orx_mask, orx_mask,
 					      rx_mask, rx_mask,
 					      tx_mask, tx_mask);
 	if (ret) {
@@ -623,16 +689,18 @@ static int adrv903x_jesd204_post_running_stage(struct jesd204_dev *jdev,
 	 */
 	no_os_mdelay(100);
 
-	/* Set TX attenuation to 6 dB (matches Linux default) */
-	txAtten[0].txChannelMask = tx_mask;
-	txAtten[0].txAttenuation_mdB = 6000;
-	ret = (int)adi_adrv903x_TxAttenSet(phy->palmaDevice, txAtten, 1);
-	if (ret) {
-		pr_err("adrv903x: TxAttenSet failed (%d)\n", ret);
-		return JESD204_STATE_CHANGE_ERROR;
+	/* Set TX attenuation to 6 dB per channel (matches Linux default) */
+	for (uint8_t chan = 0; chan < 8; chan++) {
+		if (!(tx_mask & (ADI_ADRV903X_TX0 << chan)))
+			continue;
+		txAtten[0].txChannelMask = ADI_ADRV903X_TX0 << chan;
+		txAtten[0].txAttenuation_mdB = 6000;
+		ret = (int)adi_adrv903x_TxAttenSet(phy->palmaDevice, txAtten, 1);
+		if (ret) {
+			pr_err("adrv903x: TxAttenSet chan %u failed (%d)\n", chan, ret);
+			return JESD204_STATE_CHANGE_ERROR;
+		}
 	}
-
-	pr_info("adrv903x: signal chain activated\n");
 
 	return JESD204_STATE_CHANGE_DONE;
 }
@@ -677,7 +745,7 @@ static const struct jesd204_dev_data jesd204_adrv903x_init = {
 		},
 	},
 
-	.max_num_links = 3, /* link[] array holds indices 0–2; max used link_id is FRAMER0_LINK_RX=2 */
+	.max_num_links = 4, /* link[] indices 0–3; max link_id is FRAMER1_LINK_RX=3 */
 	.sizeof_priv = sizeof(struct adrv903x_jesd204_priv),
 };
 
@@ -805,7 +873,7 @@ int adrv903x_init(struct adrv903x_rf_phy **phy,
 		goto error_hw_close;
 	}
 
-	pr_info("adrv903x-phy Rev %d, API version: %u.%u.%u.%u found\n",
+	pr_debug("adrv903x-phy Rev %d, API version: %u.%u.%u.%u found\n",
 		p->palmaDevice->devStateInfo.deviceSiRev,
 		apiVersion.majorVer, apiVersion.minorVer,
 		apiVersion.maintenanceVer, apiVersion.buildVer);
@@ -824,10 +892,10 @@ int adrv903x_init(struct adrv903x_rf_phy **phy,
 
 	switch (extractOutput) {
 	case ADI_ADRV903X_EXTRACT_INIT_DATA_LEGACY_PROFILE_BIN:
-		pr_info("adrv903x: using default Init and PostMcsInit structures\n");
+		pr_debug("adrv903x: using default Init and PostMcsInit structures\n");
 		break;
 	case ADI_ADRV903X_EXTRACT_INIT_DATA_POPULATED:
-		pr_info("adrv903x: using profile Init and PostMcsInit structures\n");
+		pr_debug("adrv903x: using profile Init and PostMcsInit structures\n");
 		break;
 	default:
 		pr_err("adrv903x: InitDataExtract: unexpected output %d\n",
@@ -835,7 +903,7 @@ int adrv903x_init(struct adrv903x_rf_phy **phy,
 		goto error_hw_close;
 	}
 
-	pr_info("adrv903x: FW %u.%u.%u.%u, stream %u.%u.%u.%u\n",
+	pr_debug("adrv903x: FW %u.%u.%u.%u, stream %u.%u.%u.%u\n",
 		armVersion.commVer.majorVer, armVersion.commVer.minorVer,
 		armVersion.commVer.maintenanceVer, armVersion.commVer.buildVer,
 		streamVersion.majorVer, streamVersion.minorVer,
@@ -859,8 +927,7 @@ int adrv903x_init(struct adrv903x_rf_phy **phy,
 		pr_err("adrv903x: PreMcsInit_NonBroadcast failed (%d)\n", ret);
 		goto error_hw_close;
 	}
-
-	pr_info("adrv903x: firmware loaded, ARM CPU running\n");
+	pr_debug("adrv903x: firmware loaded, ARM CPU running\n");
 
 	/*
 	 * MCS (MultichipSyncSet_v2 START, SYSREF polling loop, OFF) and
