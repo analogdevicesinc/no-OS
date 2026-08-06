@@ -665,7 +665,7 @@ static int max96792_pipe_enable_stream_select(struct gmsl_dev *dev,
 int max96792_csi_update_pipe_remaps(struct gmsl_dev *dev,
 				    struct gmsl_pipe_des_pipe_cfg *pipe)
 {
-	uint8_t vc_id;
+	unsigned int vc_id;
 	struct gmsl_pipe_des_dt_vc_remap *remap;
 	struct gmsl_dev_csi_des_init_param *init_param = (struct
 			gmsl_dev_csi_des_init_param *)dev->dev_config;

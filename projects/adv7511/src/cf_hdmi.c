@@ -89,12 +89,13 @@ void DDRVideoWr(unsigned short horizontalActiveTime,
 			for (repetition = 0; repetition < ((IMG_DATA[index] >> 24) & 0xff);
 			     repetition++) {
 				backup = pixel;
-				while ((pixel - line * horizontalActiveTime) < horizontalActiveTime) {
+				while ((pixel - (unsigned long)line * horizontalActiveTime) <
+				       horizontalActiveTime) {
 					Xil_Out32((VIDEO_BASEADDR + (pixel * 4)), (IMG_DATA[index] & 0xffffff));
 					pixel += 640;
 				}
 				pixel = backup;
-				if ((pixel - line * horizontalActiveTime) < 639) {
+				if ((pixel - (unsigned long)line * horizontalActiveTime) < 639) {
 					pixel++;
 				} else {
 					line++;
@@ -102,7 +103,7 @@ void DDRVideoWr(unsigned short horizontalActiveTime,
 						Xil_DCacheFlush();
 						return;
 					}
-					pixel = line * horizontalActiveTime;
+					pixel = (unsigned long)line * horizontalActiveTime;
 				}
 			}
 		}

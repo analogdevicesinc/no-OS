@@ -106,7 +106,7 @@ void ParseResultMode(struct measurement_config *pMeasCfg)
 	pMeasCfg->bImpedanceReadMode = false; //default
 	if (cmd_ptr) { // If last parameter exists read it
 		strcpy(hex_string_byte_param, cmd_ptr);
-		cmd_ok = sscanf(hex_string_byte_param, "%c", &cTmp);
+		cmd_ok = (sscanf(hex_string_byte_param, "%c", &cTmp) == 1);
 		if (cmd_ok) {
 			if (cTmp == 'Z')
 				pMeasCfg->bImpedanceReadMode = true;
@@ -117,7 +117,7 @@ void ParseResultMode(struct measurement_config *pMeasCfg)
 	pMeasCfg->bMagnitudeMode = false;
 	if (cmd_ptr) { // If parameter exists read it
 		strcpy(hex_string_byte_param, cmd_ptr);
-		cmd_ok = sscanf(hex_string_byte_param, "%c", &cTmp);
+		cmd_ok = (sscanf(hex_string_byte_param, "%c", &cTmp) == 1);
 		if (cmd_ok) {
 			if (cTmp == 'M')
 				pMeasCfg->bMagnitudeMode = true;
@@ -135,27 +135,29 @@ int32_t ParseConfig(char  *pStr,
 	*pStr = 0;
 	cmd_ptr = strtok(pStr + 1, ",");
 	strcpy(hex_string_byte_param, cmd_ptr);
-	cmd_ok = sscanf(hex_string_byte_param, "%hu", &pMeasCfg->nFrequency);
+	cmd_ok = (sscanf(hex_string_byte_param, "%hu", &pMeasCfg->nFrequency) == 1);
 	if (cmd_ok) {
 		cmd_ptr = strtok(NULL, ",");
 		strcpy(hex_string_byte_param, cmd_ptr);
-		cmd_ok = sscanf(hex_string_byte_param, "%hu",
-				&pEitCfg->nElectrodeCnt);
+		cmd_ok = (sscanf(hex_string_byte_param, "%hu",
+				 &pEitCfg->nElectrodeCnt) == 1);
 	}
 	if (cmd_ok) {
 		cmd_ptr = strtok(NULL, ",");
 		strcpy(hex_string_byte_param, cmd_ptr);
-		cmd_ok = sscanf(hex_string_byte_param, "%hu", &pEitCfg->nForceDist);
+		cmd_ok = (sscanf(hex_string_byte_param, "%hu",
+				 &pEitCfg->nForceDist) == 1);
 	}
 	if (cmd_ok) {
 		cmd_ptr = strtok(NULL, ",");
 		strcpy(hex_string_byte_param, cmd_ptr);
-		cmd_ok = sscanf(hex_string_byte_param, "%hu", &pEitCfg->nSenseDist);
+		cmd_ok = (sscanf(hex_string_byte_param, "%hu",
+				 &pEitCfg->nSenseDist) == 1);
 	}
 	if (cmd_ok) {
 		cmd_ptr = strtok(NULL, ",");
 		strcpy(hex_string_byte_param, cmd_ptr);
-		cmd_ok = sscanf(hex_string_byte_param, "%hu", &pEitCfg->nRefEl);
+		cmd_ok = (sscanf(hex_string_byte_param, "%hu", &pEitCfg->nRefEl) == 1);
 	}
 	if (cmd_ok)
 		ParseResultMode(pMeasCfg);
@@ -176,26 +178,26 @@ int32_t ParseQuery(char *pStr,
 	*pStr = 0;
 	cmd_ptr = strtok(pStr + 1, ",");
 	strcpy(hex_string_byte_param, cmd_ptr);
-	cmd_ok = sscanf(hex_string_byte_param, "%hu", &pMeasCfg->nFrequency);
+	cmd_ok = (sscanf(hex_string_byte_param, "%hu", &pMeasCfg->nFrequency) == 1);
 	if (cmd_ok) {
 		cmd_ptr = strtok(NULL, ",");
 		strcpy(hex_string_byte_param, cmd_ptr);
-		cmd_ok = sscanf(hex_string_byte_param, "%hu", &pElCmb->F_plus);
+		cmd_ok = (sscanf(hex_string_byte_param, "%hu", &pElCmb->F_plus) == 1);
 	}
 	if (cmd_ok) {
 		cmd_ptr = strtok(NULL, ",");
 		strcpy(hex_string_byte_param, cmd_ptr);
-		cmd_ok = sscanf(hex_string_byte_param, "%hu", &pElCmb->F_minus);
+		cmd_ok = (sscanf(hex_string_byte_param, "%hu", &pElCmb->F_minus) == 1);
 	}
 	if (cmd_ok) {
 		cmd_ptr = strtok(NULL, ",");
 		strcpy(hex_string_byte_param, cmd_ptr);
-		cmd_ok = sscanf(hex_string_byte_param, "%hu", &pElCmb->S_plus);
+		cmd_ok = (sscanf(hex_string_byte_param, "%hu", &pElCmb->S_plus) == 1);
 	}
 	if (cmd_ok) {
 		cmd_ptr = strtok(NULL, ",");
 		strcpy(hex_string_byte_param, cmd_ptr);
-		cmd_ok = sscanf(hex_string_byte_param, "%hu", &pElCmb->S_minus);
+		cmd_ok = (sscanf(hex_string_byte_param, "%hu", &pElCmb->S_minus) == 1);
 	}
 	if (cmd_ok)
 		ParseResultMode(pMeasCfg);
@@ -211,10 +213,10 @@ void SendResultUint32(uint32_t *pData, uint32_t nDataCount)
 	uint32_t i;
 
 	for (i = 0; i < nDataCount - 1; i++) {
-		printf("%lx,", pData[i]);
+		printf("%lx,", (unsigned long)pData[i]);
 	}
 
-	printf("%lx", pData[i]);
+	printf("%lx", (unsigned long)pData[i]);
 }
 
 void SendResultFloat32(float *data, uint32_t DataCount)
@@ -235,10 +237,10 @@ void SendResultIeee754(float *data, uint32_t DataCount)
 	uint32_t i;
 
 	for (i = 0; i < DataCount - 1; i++) {
-		printf("%lx,", pVal[i]);
+		printf("%lx,", (unsigned long)pVal[i]);
 	}
 
-	printf("%lx", pVal[i]);
+	printf("%lx", (unsigned long)pVal[i]);
 }
 
 void SendResult(uint32_t *pData, uint16_t len,

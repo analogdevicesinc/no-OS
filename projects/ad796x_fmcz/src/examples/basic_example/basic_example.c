@@ -63,7 +63,7 @@ int basic_example_main()
 	}
 
 	for (i = 0; i < SAMPLES_PER_CHANNEL; i++, buf++)
-		printf("CH1: %ld\n", *buf);
+		printf("CH1: %ld\n", (long)*buf);
 
 	pr_info("\n Capture done.\n");
 

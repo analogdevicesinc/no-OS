@@ -312,8 +312,8 @@ value for the selected spacing. Try with a higher spacing value.\r\n");
 	adf4156_set(dev,
 		    dev->adf4156_st.reg_val[ADF4156_REG3]);
 
-	result = dev->adf4156_st.r0_int * (float)(dev->adf4156_st.fpfd / 1000000);
-	result = result + ((float)dev->adf4156_st.r0_fract / dev->adf4156_st.r2_mod) *\
+	result = dev->adf4156_st.r0_int * (double)(dev->adf4156_st.fpfd / 1000000);
+	result = result + ((double)dev->adf4156_st.r0_fract / dev->adf4156_st.r2_mod) *\
 		 (dev->adf4156_st.fpfd / 1000000);
 
 	return result;

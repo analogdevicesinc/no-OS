@@ -74,7 +74,7 @@ int32_t adpd410x_reg_read_bytes(struct adpd410x_dev *dev, uint16_t address,
 				uint8_t *data, uint16_t num_bytes)
 {
 	int32_t ret;
-	uint8_t i;
+	uint16_t i;
 	uint8_t *buff;
 
 	switch (dev->dev_type) {
@@ -552,7 +552,8 @@ int32_t adpd410x_read_fifo(struct adpd410x_dev *dev, uint32_t *data,
 			   uint8_t datawidth)
 {
 	int32_t ret = 0;
-	uint8_t *data_byte_buff, i, j;
+	uint8_t *data_byte_buff;
+	uint16_t i, j;
 	uint16_t next_packet_size, bytes_read = 0,
 				   total_bytes = num_samples * datawidth;
 	if (datawidth > 4 || total_bytes > ADPD410X_FIFO_DEPTH || data == NULL)

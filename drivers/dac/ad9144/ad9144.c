@@ -1304,8 +1304,8 @@ int32_t ad9144_short_pattern_test(struct ad9144_dev *dev,
 						      0x01, 0x00);
 			if (ret == -1)
 				printf("%s : short-pattern-test mismatch (%#06lx, %#06lx, %#06lx)!.\n",
-				       __func__, dac, sample,
-				       init_param->stpl_samples[dac][sample]);
+				       __func__, (unsigned long)dac, (unsigned long)sample,
+				       (unsigned long)init_param->stpl_samples[dac][sample]);
 		}
 	}
 	return 0;

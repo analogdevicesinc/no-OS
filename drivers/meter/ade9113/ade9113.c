@@ -173,7 +173,7 @@ int ade9113_read_dc(struct ade9113_dev *dev, uint8_t reg_addr,
 	/* buffer for data read (large enough for a long read) */
 	uint8_t buff[64] = { 0 };
 	/* index */
-	uint8_t i;
+	unsigned int i;
 
 	if (dev->no_devs < 2 || dev->no_devs > 4)
 		return -EINVAL;

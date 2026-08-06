@@ -183,7 +183,7 @@ static int32_t send_command(struct sd_desc *sd_desc, struct cmd_desc *cmd_desc)
 	/* Read response */
 	if (0 != wait_for_response(sd_desc, cmd_desc->response))
 		return -1;
-	if (cmd_desc->response_len - 1 > 0) {
+	if (cmd_desc->response_len > 1) {
 		memset(cmd_desc->response + 1, 0xFF, cmd_desc->response_len - 1);
 		if (0 != no_os_spi_write_and_read(sd_desc->spi_desc, cmd_desc->response + 1,
 						  cmd_desc->response_len - 1))

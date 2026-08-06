@@ -1545,7 +1545,8 @@ int gnss_configure_baudrate_via_nmea(struct gnss_dev *dev,
 		return -EINVAL;
 
 	/* Build standard baudrate configuration command */
-	snprintf(sentence_content, sizeof(sentence_content), "BRC,%lu", baudrate);
+	snprintf(sentence_content, sizeof(sentence_content), "BRC,%lu",
+		 (unsigned long)baudrate);
 
 	/* Calculate checksum */
 	checksum = gnss_calculate_nmea_checksum(sentence_content);
@@ -1772,7 +1773,7 @@ static int gnss_read_nmea_sentence(struct gnss_dev *dev,
 		return -EINVAL;
 
 	/* Read until we find a complete GPRMC sentence */
-	while (total_read < max_len - 1) {
+	while ((size_t)total_read < max_len - 1) {
 		ret = gnss_read(dev, &byte, 1);
 		if (ret <= 0) {
 			pr_warning("NMEA read timeout at position %d\n", total_read);
