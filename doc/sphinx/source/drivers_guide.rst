@@ -32,19 +32,19 @@ License Header
 Each source or header file should include a license header - this will allow customers to quickly determine if the module can be used in their system.
 
 Declare the license with an ``SPDX-License-Identifier: BSD-3-Clause`` tag in
-the file header. See :doc:`license_rules` for the full policy.
+the file header. See :doc:`license_rules` for the full policy. Copy one of the
+ready-to-use stubs below and replace the ``<...>`` placeholders.
 
-.. code-block:: C
+Source file (``doc/source_header_template.c``):
 
-	/***************************************************************************//**
-	*   @file   ad1234.c
-	*   @brief  Implementation of AD1234 Driver
-	*   @author Your Name (your.name@analog.com)
-	********************************************************************************
-	* Copyright 2023(c) Analog Devices, Inc.
-	*
-	* SPDX-License-Identifier: BSD-3-Clause
-	*******************************************************************************/
+.. literalinclude:: ../../source_header_template.c
+	:language: C
+
+Header file, which additionally needs include guards
+(``doc/source_header_template.h``):
+
+.. literalinclude:: ../../source_header_template.h
+	:language: C
 
 Include Guards
 --------------

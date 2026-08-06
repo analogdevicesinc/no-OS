@@ -70,7 +70,9 @@ To keep the no-OS core permissively licensed, new contributions must be
 released under the repository's default **BSD 3-Clause** license
 (``LICENSE_BSD``). Declare it by adding an
 ``SPDX-License-Identifier: BSD-3-Clause`` tag to every new source file;
-this is the form used throughout no-OS.
+this is the form used throughout no-OS. Ready-to-copy header stubs are
+provided at ``doc/source_header_template.c`` and
+``doc/source_header_template.h``.
 
 - **Do not** introduce copyleft (GPL, LGPL) or proprietary code into the
   linkable library core (``util/``, ``include/``, ``iio/``, ``network/``,
