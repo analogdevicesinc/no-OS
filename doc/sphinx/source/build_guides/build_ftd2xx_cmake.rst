@@ -40,7 +40,9 @@ Prerequisites
 CMake and build tools
 ---------------------
 
-All host OSes require **CMake 3.28+** and **Ninja**.
+All host OSes require **CMake 3.27+** and **Ninja** — see
+:ref:`Common Prerequisites <common-prerequisites>` in the top-level build
+guide.
 
 .. tab-set::
 
@@ -48,14 +50,12 @@ All host OSes require **CMake 3.28+** and **Ninja**.
 
       .. code-block:: bash
 
-         sudo apt install cmake ninja-build build-essential python3 python3-venv
+         sudo apt install build-essential python3 python3-venv
 
    .. tab-item:: Windows
 
       Install the following tools (ensure they are on ``PATH``):
 
-      - `CMake <https://cmake.org/download/>`_ 3.28+
-      - `Ninja <https://ninja-build.org/>`_
       - `MinGW-w64 <https://www.mingw-w64.org/>`_ (GCC for Windows) or
         MSVC (Visual Studio Build Tools)
       - `Python 3 <https://www.python.org/downloads/>`_
@@ -66,7 +66,7 @@ All host OSes require **CMake 3.28+** and **Ninja**.
 
       .. code-block:: bash
 
-         brew install cmake ninja python3
+         brew install python3
 
 ftd2xx library setup
 --------------------
