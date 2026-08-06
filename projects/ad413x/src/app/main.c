@@ -141,7 +141,7 @@ int main()
 		return -1;
 
 	for (i = 0; i < 20; i++)
-		printf("DATA[%"PRIi32"], chan %d = %f V \n", i, i % 3, buffer[i],
+		printf("DATA[%"PRIi32"], chan %d = %f V \n", i, i % 3,
 		       (float)buffer[i] / 0xFFFFFF * 2.5);
 
 	return 0;

@@ -68,9 +68,10 @@ int basic_example_main()
 
 	for (i = 0, data = ADC_DDR_BASEADDR; i < SAMPLES_PER_CHANNEL; i++, data++) {
 		if (sign == 's')
-			printf("ADC: %ld\n\r", no_os_sign_extend32(*data, resolution - 1));
+			printf("ADC: %ld\n\r",
+			       (long)no_os_sign_extend32(*data, resolution - 1));
 		else
-			printf("ADC: %ld\n\r", *data);
+			printf("ADC: %ld\n\r", (long)*data);
 	}
 
 	return pulsar_adc_remove(dev);

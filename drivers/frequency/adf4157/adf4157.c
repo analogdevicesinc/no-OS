@@ -296,8 +296,8 @@ double adf4157_set_freq(struct adf4157_dev *dev,
 	adf4157_set(dev,
 		    dev->adf4157_st.reg_val[ADF4157_REG3]);
 
-	result = dev->adf4157_st.r0_int * (float)(dev->adf4157_st.fpfd / 1000000);
-	result = result + ((float)dev->adf4157_st.r0_fract / dev->adf4157_st.r2_mod) *
+	result = dev->adf4157_st.r0_int * (double)(dev->adf4157_st.fpfd / 1000000);
+	result = result + ((double)dev->adf4157_st.r0_fract / dev->adf4157_st.r2_mod) *
 		 (dev->adf4157_st.fpfd / 1000000);
 
 	return result;

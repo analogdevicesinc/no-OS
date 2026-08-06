@@ -64,7 +64,7 @@ int example_main()
 				goto out;
 			for (j = 0; j <  NUM_SAMPLES; j++) {
 				printf("ch: %ld %ld\r\n",
-				       i,  buf[(i * num_channels) + j]);
+				       (long)i, (long)buf[(i * num_channels) + j]);
 			}
 		}
 	} else {
@@ -76,10 +76,10 @@ int example_main()
 			for (j = 0; j < num_channels; j++) {
 				uint32_t index = (i * num_channels) + j;
 				if (ad469x_is_temp_channel(dev, j)) {
-					printf(" temp: %ld", buf[index]);
+					printf(" temp: %ld", (long)buf[index]);
 					continue;
 				}
-				printf(" ch%ld: %ld", j, buf[index]);
+				printf(" ch%ld: %ld", (long)j, (long)buf[index]);
 			}
 			printf("\r\n");
 		}

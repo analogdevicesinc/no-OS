@@ -146,7 +146,7 @@ int stm32_dma_init(struct no_os_dma_desc** desc,
 {
 	struct no_os_dma_desc* descriptor;
 	int ret;
-	uint8_t i;
+	uint32_t i;
 	struct no_os_irq_init_param irq_param = {
 		.irq_ctrl_id = 0,
 		.platform_ops = &stm32_irq_ops,

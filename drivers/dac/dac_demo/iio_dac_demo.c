@@ -126,7 +126,7 @@ int dac_submit_samples(struct iio_device_data *dev_data)
 
 		while (get_next_ch_idx(desc->active_ch, ch, &ch)) {
 			uint16_t* ch_buffer = (uint16_t*)(desc->loopback_buffers +
-							  (ch * desc->loopback_buffer_len *
+							  ((size_t)ch * desc->loopback_buffer_len *
 							   sizeof(uint16_t) / sizeof(ch_buffer)));
 			ch_buffer[i] = data[k++];
 		}
@@ -169,7 +169,7 @@ int dac_demo_trigger_handler(struct iio_device_data *dev_data)
 	/* Write data to the device one sample/channel at a time */
 	while (get_next_ch_idx(desc->active_ch, ch, &ch)) {
 		uint16_t* ch_buffer = (uint16_t*)(desc->loopback_buffers +
-						  (ch * desc->loopback_buffer_len *
+						  ((size_t)ch * desc->loopback_buffer_len *
 						   sizeof(uint16_t) / sizeof(ch_buffer)));
 		ch_buffer[i] = data[k++];
 	}

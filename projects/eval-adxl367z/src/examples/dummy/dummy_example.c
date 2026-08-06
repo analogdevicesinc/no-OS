@@ -87,7 +87,7 @@ int example_main()
 
 	pr_info("Number of read entries from the FIFO %d \n", entries);
 
-	for (uint8_t i = 0; i < entries / 4; i ++) {
+	for (unsigned int i = 0; i < entries / 4u; i ++) {
 		pr_info("x=%d"".%09u m/s^2\n", (int)x[i].integer, (abs)(x[i].fractional));
 		pr_info("y=%d"".%09u m/s^2\n", (int)y[i].integer, (abs)(y[i].fractional));
 		pr_info("z=%d"".%09u m/s^2\n", (int)z[i].integer, (abs)(z[i].fractional));

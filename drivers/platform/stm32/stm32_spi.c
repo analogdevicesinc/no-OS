@@ -497,7 +497,7 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 	struct no_os_dma_xfer_desc* tx_ch_xfer;
 	SPI_TypeDef* SPIx = sdesc->hspi->Instance;
 	int ret;
-	uint8_t i;
+	uint32_t i;
 
 	if (!desc || !msgs)
 		return -EINVAL;

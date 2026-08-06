@@ -238,7 +238,7 @@ int32_t ad9517_write(struct ad9517_dev *dev,
 		     uint32_t reg_addr,
 		     uint16_t reg_val)
 {
-	uint8_t i = 0;
+	uint32_t i = 0;
 	int32_t ret = 0;
 	uint16_t reg_address = 0;
 	int8_t reg_value = 0;
@@ -278,7 +278,7 @@ int32_t ad9517_read(struct ad9517_dev *dev,
 	uint32_t reg_address = 0;
 	int32_t ret = 0;
 	uint8_t tx_buffer[3] = {0, 0, 0};
-	uint8_t i = 0;
+	uint32_t i = 0;
 	*reg_value = 0;
 
 	reg_address = AD9517_READ + AD9517_ADDR(reg_addr);

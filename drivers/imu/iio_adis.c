@@ -797,7 +797,8 @@ static int adis_iio_read_firm_date(struct adis_dev* adis, char *buf,
 	if (ret)
 		return ret;
 
-	return snprintf(buf, size, "%.2lx-%.2lx-%.4lx", firm_m, firm_d, firm_y);
+	return snprintf(buf, size, "%.2lx-%.2lx-%.4lx", (unsigned long)firm_m,
+			(unsigned long)firm_d, (unsigned long)firm_y);
 }
 
 /**
@@ -818,7 +819,8 @@ static int adis_iio_read_firm_rev(struct adis_dev* adis, char *buf,
 	if (ret)
 		return ret;
 
-	return snprintf(buf, size, "%ld.%ld", firm_rev >> 8, firm_rev & 0xff);
+	return snprintf(buf, size, "%ld.%ld", (long)(firm_rev >> 8),
+			(long)(firm_rev & 0xff));
 }
 
 /**
@@ -839,7 +841,7 @@ static int adis_iio_read_serial_num(struct adis_dev* adis, char *buf,
 	if (ret)
 		return ret;
 
-	return snprintf(buf, size, "0x%.4lx", serial_num);
+	return snprintf(buf, size, "0x%.4lx", (unsigned long)serial_num);
 }
 
 /**
@@ -1735,7 +1737,7 @@ int adis_iio_trigger_handler_with_fifo(struct iio_device_data *dev_data)
 	struct adis_dev *adis;
 	int ret;
 	uint32_t fifo_cnt;
-	uint16_t j;
+	uint32_t j;
 
 	if (!dev_data)
 		return -EINVAL;

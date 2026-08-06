@@ -278,7 +278,7 @@ int main(void)
 
 	printf("DMA_EXAMPLE: address=%#x samples=%lu channels=%u bits=%u\n",
 	       (uintptr_t)ADC_DDR_BASEADDR,
-	       read_transfer.size / 2,
+	       (unsigned long)(read_transfer.size / 2),
 	       ad9656_core->num_channels, 16);
 
 	ad9656_user_input_test(ad9656_device, AD9656_TEST_OFF, user_input_test_pattern);
