@@ -173,12 +173,26 @@ if(NOT EXISTS "${VENV_PYTHON_EXE}")
   no_os_run_checked(
     WHAT "creating the Python virtual environment in ${VENV_DIR}"
     COMMAND ${Python3_EXECUTABLE} -m venv ${VENV_DIR})
+endif()
 
-  set(REQS_FILE "${NO_OS_DIR}/tools/scripts/requirements.txt")
+# Decoupled from venv creation so it self-heals a manual/stale/half-installed
+# venv; the requirements.txt hash stamp keeps repeat configures a no-op.
+set(REQS_FILE "${NO_OS_DIR}/tools/scripts/requirements.txt")
+set(REQS_STAMP "${VENV_DIR}/.requirements.stamp")
+file(SHA256 "${REQS_FILE}" REQS_HASH)
+set(VENV_DEPS_STALE TRUE)
+if(EXISTS "${REQS_STAMP}")
+  file(READ "${REQS_STAMP}" REQS_STAMP_HASH)
+  if(REQS_STAMP_HASH STREQUAL REQS_HASH)
+    set(VENV_DEPS_STALE FALSE)
+  endif()
+endif()
+if(VENV_DEPS_STALE)
   message(STATUS "Installing Python dependencies from ${REQS_FILE}")
   no_os_run_checked(
     WHAT "installing Python dependencies from ${REQS_FILE}"
     COMMAND ${VENV_PYTHON_EXE} -m pip install -r ${REQS_FILE})
+  file(WRITE "${REQS_STAMP}" "${REQS_HASH}")
 endif()
 
 if(NOT ${NATIVE_BUILD})
