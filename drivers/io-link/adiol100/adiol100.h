@@ -244,6 +244,54 @@
 #define ADIOL100_ARTTMO_MSK             NO_OS_GENMASK(2, 1)
 #define ADIOL100_ARTEN                  NO_OS_BIT(0)
 
+/* ADC data registers — global */
+#define ADIOL100_REG_V24VOLT            0x1F30
+#define ADIOL100_REG_V24VOLTMIN         0x1F31
+#define ADIOL100_REG_V24VOLTMAX         0x1F32
+#define ADIOL100_REG_TEMP               0x1F33
+#define ADIOL100_REG_TEMPMIN            0x1F34
+#define ADIOL100_REG_TEMPMAX            0x1F35
+
+/* ADC data registers — channel A */
+#define ADIOL100_REG_CQAVOLT            0x1F40
+#define ADIOL100_REG_CQAVOLTMIN         0x1F41
+#define ADIOL100_REG_CQAVOLTMAX         0x1F42
+#define ADIOL100_REG_CQACUR             0x1F43
+#define ADIOL100_REG_CQACURMIN          0x1F44
+#define ADIOL100_REG_CQACURMAX          0x1F45
+#define ADIOL100_REG_LPAVOLT            0x1F46
+#define ADIOL100_REG_LPAVOLTMIN         0x1F47
+#define ADIOL100_REG_LPAVOLTMAX         0x1F48
+#define ADIOL100_REG_LPACUR             0x1F49
+#define ADIOL100_REG_LPACURMIN          0x1F4A
+#define ADIOL100_REG_LPACURMAX          0x1F4B
+
+/* ADC data registers — channel B */
+#define ADIOL100_REG_CQBVOLT            0x1F50
+#define ADIOL100_REG_CQBVOLTMIN         0x1F51
+#define ADIOL100_REG_CQBVOLTMAX         0x1F52
+#define ADIOL100_REG_CQBCUR             0x1F53
+#define ADIOL100_REG_CQBCURMIN          0x1F54
+#define ADIOL100_REG_CQBCURMAX          0x1F55
+#define ADIOL100_REG_LPBVOLT            0x1F56
+#define ADIOL100_REG_LPBVOLTMIN         0x1F57
+#define ADIOL100_REG_LPBVOLTMAX         0x1F58
+#define ADIOL100_REG_LPBCUR             0x1F59
+#define ADIOL100_REG_LPBCURMIN          0x1F5A
+#define ADIOL100_REG_LPBCURMAX          0x1F5B
+
+/* CQMeasConf register (0x1F5F) — reset min/max statistics */
+#define ADIOL100_REG_CQMEASCONF         0x1F5F
+#define ADIOL100_TEMPRESSTAT            NO_OS_BIT(5)
+#define ADIOL100_RESV24STAT             NO_OS_BIT(4)
+#define ADIOL100_RESLPSTATB             NO_OS_BIT(3)
+#define ADIOL100_RESLPSTATA             NO_OS_BIT(2)
+#define ADIOL100_RESCQSTATB             NO_OS_BIT(1)
+#define ADIOL100_RESCQSTATA             NO_OS_BIT(0)
+
+/* ADC data mask (13-bit, bits [12:0]) */
+#define ADIOL100_ADC_DATA_MSK           NO_OS_GENMASK(12, 0)
+
 /* FIFO constants */
 #define ADIOL100_FIFO_MAX_LEN           66
 
@@ -387,6 +435,33 @@ enum adiol100_clock_src {
     ADIOL100_CLK_INTERNAL = 0,
     ADIOL100_CLK_CRYSTAL  = 1,
     ADIOL100_CLK_EXTERNAL = 2,
+};
+
+/* Global ADC sources (V24 supply voltage, die temperature). */
+enum adiol100_adc_global {
+    ADIOL100_ADC_V24_VOLT     = 0x1F30,
+    ADIOL100_ADC_V24_VOLT_MIN = 0x1F31,
+    ADIOL100_ADC_V24_VOLT_MAX = 0x1F32,
+    ADIOL100_ADC_TEMP         = 0x1F33,
+    ADIOL100_ADC_TEMP_MIN     = 0x1F34,
+    ADIOL100_ADC_TEMP_MAX     = 0x1F35,
+};
+
+/* Per-channel ADC sources (CQ/LP voltage and current).
+ * Values are channel A register addresses; channel B = A + 0x10. */
+enum adiol100_adc_chan {
+    ADIOL100_ADC_CQ_VOLT      = 0x1F40,
+    ADIOL100_ADC_CQ_VOLT_MIN  = 0x1F41,
+    ADIOL100_ADC_CQ_VOLT_MAX  = 0x1F42,
+    ADIOL100_ADC_CQ_CUR       = 0x1F43,
+    ADIOL100_ADC_CQ_CUR_MIN   = 0x1F44,
+    ADIOL100_ADC_CQ_CUR_MAX   = 0x1F45,
+    ADIOL100_ADC_LP_VOLT      = 0x1F46,
+    ADIOL100_ADC_LP_VOLT_MIN  = 0x1F47,
+    ADIOL100_ADC_LP_VOLT_MAX  = 0x1F48,
+    ADIOL100_ADC_LP_CUR       = 0x1F49,
+    ADIOL100_ADC_LP_CUR_MIN   = 0x1F4A,
+    ADIOL100_ADC_LP_CUR_MAX   = 0x1F4B,
 };
 
 /* IRQ callback type — called from ISR context, must be fast. */
@@ -598,5 +673,17 @@ int adiol100_register_global_irq_callback(struct adiol100_dev *dev,
 
 /** Run EstablishCommunication: wake-up, poll for success/fail, return baud. */
 int adiol100_estcom(struct adiol100_dev *dev, enum adiol100_channel ch);
+
+/** Read a raw 13-bit global ADC value (V24 voltage or temperature). */
+int adiol100_read_adc_global(struct adiol100_dev *dev,
+                             enum adiol100_adc_global source, uint16_t *value);
+
+/** Read a raw 13-bit per-channel ADC value (CQ/LP voltage or current). */
+int adiol100_read_adc_chan(struct adiol100_dev *dev,
+                           enum adiol100_adc_chan source,
+                           enum adiol100_channel ch, uint16_t *value);
+
+/** Reset all ADC min/max statistics (V24, Temp, CQ and LP for both channels). */
+int adiol100_reset_adc_stats(struct adiol100_dev *dev);
 
 #endif

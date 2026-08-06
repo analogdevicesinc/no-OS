@@ -1188,6 +1188,68 @@ int adiol100_register_global_irq_callback(struct adiol100_dev *dev,
 }
 
 /**
+ * @brief Read a raw 13-bit global ADC measurement (V24 voltage or temperature).
+ * @param dev    - The device structure.
+ * @param source - Global ADC source (V24_VOLT/MIN/MAX or TEMP/MIN/MAX).
+ * @param value  - Raw 13-bit value (2's complement).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adiol100_read_adc_global(struct adiol100_dev *dev,
+                             enum adiol100_adc_global source, uint16_t *value)
+{
+    uint16_t reg = (uint16_t)source;
+    uint16_t raw;
+    int ret;
+
+    ret = adiol100_read(dev, reg, &raw);
+    if (ret)
+        return ret;
+
+    *value = raw & ADIOL100_ADC_DATA_MSK;
+    return 0;
+}
+
+/**
+ * @brief Read a raw 13-bit per-channel ADC measurement (CQ/LP voltage or current).
+ * @param dev    - The device structure.
+ * @param source - Per-channel ADC source (CQ_VOLT/CUR or LP_VOLT/CUR with MIN/MAX).
+ * @param ch     - Channel selection (A or B).
+ * @param value  - Raw 13-bit value (2's complement).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adiol100_read_adc_chan(struct adiol100_dev *dev,
+                           enum adiol100_adc_chan source,
+                           enum adiol100_channel ch, uint16_t *value)
+{
+    uint16_t reg = (uint16_t)source;
+    uint16_t raw;
+    int ret;
+
+    if (ch == ADIOL100_CH_B)
+        reg += 0x10;
+
+    ret = adiol100_read(dev, reg, &raw);
+    if (ret)
+        return ret;
+
+    *value = raw & ADIOL100_ADC_DATA_MSK;
+    return 0;
+}
+
+/**
+ * @brief Reset all ADC min/max statistics (V24, Temp, CQ and LP for both channels).
+ * @param dev - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adiol100_reset_adc_stats(struct adiol100_dev *dev)
+{
+    return adiol100_write(dev, ADIOL100_REG_CQMEASCONF,
+                          ADIOL100_TEMPRESSTAT | ADIOL100_RESV24STAT |
+                          ADIOL100_RESLPSTATB | ADIOL100_RESLPSTATA |
+                          ADIOL100_RESCQSTATB | ADIOL100_RESCQSTATA);
+}
+
+/**
  * @brief Run EstablishCommunication: reset FIFOs, set EstCom, poll for result.
  * @param dev - The device structure.
  * @param ch  - Channel selection (A or B).
