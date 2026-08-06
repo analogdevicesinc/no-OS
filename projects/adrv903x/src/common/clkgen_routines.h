@@ -37,9 +37,26 @@
 #define __CLKGEN_ROUTINES_H__
 
 #include "no_os_print_log.h"
+
+#ifdef PLATFORM_VERSAL
+/* No AXI CLKGEN on Versal — clkgen_setup/remove are no-ops */
+static inline int clkgen_setup(void *unused1, void *unused2)
+{
+	(void)unused1;
+	(void)unused2;
+	return 0;
+}
+static inline int clkgen_remove(void *unused1, void *unused2)
+{
+	(void)unused1;
+	(void)unused2;
+	return 0;
+}
+#else
 #include "clk_axi_clkgen.h"
 
 int clkgen_setup(struct axi_clkgen **rx_clkgen, struct axi_clkgen **tx_clkgen);
 int clkgen_remove(struct axi_clkgen *rx_clkgen, struct axi_clkgen *tx_clkgen);
+#endif
 
 #endif /* __CLKGEN_ROUTINES_H__ */

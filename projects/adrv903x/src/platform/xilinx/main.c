@@ -48,7 +48,7 @@ static adi_adrv903x_SpiConfigSettings_t spiSettings = {
 };
 
 static adi_adrv903x_SpiOptions_t spiOptions = {
-	.allowSpiStreaming = 0,
+	.allowSpiStreaming = 1,
 	.allowAhbAutoIncrement = 1,
 	.allowAhbSpiFifoMode = 0,
 };

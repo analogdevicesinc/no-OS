@@ -44,24 +44,26 @@
 /******************************************************************************/
 /* SPI bus speeds                                                             */
 /******************************************************************************/
+#ifndef PLATFORM_VERSAL
 #define AD9528_SPI_SPEED_HZ			10000000u
-#define ADRV903X_SPI_SPEED_HZ			5000000u
+#endif
+#define ADRV903X_SPI_SPEED_HZ			25000000u
 
 /******************************************************************************/
 /* Clock and lane rate configuration                                          */
-/* From profile: ADRV903X_UC101_204B_4T4R1OR_NLS                             */
+/* From profile: Paris_Thresher_Test_xbar (JESD204C, 8T8R, Np=12)            */
 /******************************************************************************/
-#define ADRV903X_DEVICE_CLK_KHZ			245760
-#define ADRV903X_LANE_RATE_KHZ			16220160
+#define ADRV903X_DEVICE_CLK_KHZ			184320
+#define ADRV903X_LANE_RATE_KHZ			12165120
 
 /******************************************************************************/
 /* JESD204 framer/deframer parameters                                        */
-/* From profile: ADRV903X_UC101_204B_4T4R1OR_NLS                             */
+/* From profile: Paris_Thresher_Test_xbar (JESD204C, M=16, Np=12, L=4)      */
 /******************************************************************************/
-#define ADRV903X_TX_JESD_OCTETS_PER_FRAME	4
-#define ADRV903X_TX_JESD_FRAMES_PER_MULTIFRAME	64
-#define ADRV903X_RX_JESD_OCTETS_PER_FRAME	4
-#define ADRV903X_RX_JESD_FRAMES_PER_MULTIFRAME	64
+#define ADRV903X_TX_JESD_OCTETS_PER_FRAME	6
+#define ADRV903X_TX_JESD_FRAMES_PER_MULTIFRAME	128
+#define ADRV903X_RX_JESD_OCTETS_PER_FRAME	6
+#define ADRV903X_RX_JESD_FRAMES_PER_MULTIFRAME	128
 
 /******************************************************************************/
 /* Firmware and profile file names                                            */
@@ -74,26 +76,46 @@
 #define ADRV903X_RX_GAIN_TABLE_FILE		"RxGainTable.csv"
 
 /******************************************************************************/
-/* Gain table channel mask: bit per RX channel (0xFF = all 8 channels)       */
+/* Gain table channel mask: bit per RX channel (0xFF = 8 channels)           */
 /******************************************************************************/
 #define ADRV903X_RX_GAIN_TABLE_MASK		0xFF
 
 /******************************************************************************/
-/* ADXCVR and JESD204 configuration                                           */
-/* From profile: ADRV903X_UC101_204B_4T4R1OR_NLS                             */
+/* JESD204 configuration                                                      */
+/* From profile: Paris_Thresher_Test_xbar (JESD204C, M=16, Np=12, L=4)      */
 /******************************************************************************/
-#define ADRV903X_ADXCVR_REF_RATE_KHZ			491520	/* AD9528 ch13 REF_CLK0 */
-
 /* TX JESD204 parameters */
 #define ADRV903X_TX_JESD_SUBCLASS			1
-#define ADRV903X_TX_JESD_CONVS_PER_DEVICE		4
-#define ADRV903X_TX_JESD_CONV_RESOLUTION		16
-#define ADRV903X_TX_JESD_BITS_PER_SAMPLE		16
+#define ADRV903X_TX_JESD_CONVS_PER_DEVICE		16
+#define ADRV903X_TX_JESD_CONV_RESOLUTION		12
+#define ADRV903X_TX_JESD_BITS_PER_SAMPLE		12
 #define ADRV903X_TX_JESD_HIGH_DENSITY			0
 #define ADRV903X_TX_JESD_CTRL_BITS_PER_SAMPLE		0
 
 /* RX JESD204 parameters */
 #define ADRV903X_RX_JESD_SUBCLASS			1
+
+#ifdef PLATFORM_VERSAL
+/******************************************************************************/
+/* HMC7044 Clock Synthesizer configuration                                    */
+/* From DTS: versal-tetra-15mhz-nls.dts                                      */
+/******************************************************************************/
+#define HMC7044_VCXO_FREQ_HZ			122880000
+#define HMC7044_PLL2_FREQ_HZ			2949120000UL
+#define HMC7044_DEV_CLK_DIV			6	/* ch0:  DEV_CLK */
+#define HMC7044_DEV_SYSREF_DIV			3072	/* ch1:  DEV_SYSREF */
+#define HMC7044_FPGA_CORE_REFCLK_DIV		16	/* ch6:  FPGA_CORE_REFCLK 184.32 MHz */
+#define HMC7044_FPGA_CORE_SYSREF_DIV		3072	/* ch7:  FPGA_CORE_SYSREF */
+#define HMC7044_FPGA_REFCLK_DIV		16	/* ch12: FPGA_REFCLK 184.32 MHz */
+#define HMC7044_SYSREF_TIMER_DIV		1024
+#define HMC7044_PFD1_LIMIT_HZ			30720000
+#define HMC7044_OSCIN_BUF_MODE			0x07
+
+#else /* ZynqMP */
+/******************************************************************************/
+/* ADXCVR configuration (ZynqMP only)                                         */
+/******************************************************************************/
+#define ADRV903X_ADXCVR_REF_RATE_KHZ			491520	/* AD9528 ch13 REF_CLK0 */
 
 /******************************************************************************/
 /* AD9528 Clock Synthesizer configuration                                     */
@@ -119,5 +141,6 @@
 #define AD9528_REF_CLK1_DIV			2	/* ch11: REF_CLK1   */
 #define AD9528_FPGA_SYSREF_DIV			4	/* ch12: FPGA_SYSREF */
 #define AD9528_REF_CLK0_DIV			2	/* ch13: REF_CLK0   */
+#endif /* PLATFORM_VERSAL */
 
 #endif /* APP_CONFIG_H_ */

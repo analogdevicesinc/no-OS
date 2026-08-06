@@ -94,6 +94,17 @@
 				"PLATFORM": "xilinx",
 				"BOARD_CONFIG_FILE": "kcu105_defconfig"
 			}
+		},
+		{
+			"name": "vck190",
+			"description": "VCK190 (Versal AI Core, cortexa72). Requires -DHARDWARE=<abs path to system_top.xsa>",
+			"inherits": "xilinx-base",
+			"cacheVariables": {
+				"BOARD": "vck190",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "xilinx",
+				"BOARD_CONFIG_FILE": "vck190_defconfig"
+			}
 		}
 	]
 }
