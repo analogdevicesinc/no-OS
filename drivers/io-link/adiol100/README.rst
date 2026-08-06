@@ -61,16 +61,16 @@ through several protocol phases:
                                   │              │   at every ComRate)  │
                                   │              └──────────────────────┘
                                   │                       │
-┌─────────────────┐         ┌─────▼────┐      ┌───────────▼───────────────┐
-│   Master sets   │◄────────┤PREOPERATE│      │        Slave              │
-│ MasterCycleTime │         └─────┬────┘      │    Identification         │
-└────────┬────────┘               │           │ (reading slave parameters │
-         │                        │           │required for communication │
-┌────────▼────────┐               │           │   and identification)     │
-│   (Optional)    │               │           └────────────┬──────────────┘
-│Master reads ISDU│               │                        │
-│     pages       │               │             ┌──────────▼───────────┐
-└─────────────────┘               │             │       Sending        │
+   ┌─────────────────┐      ┌─────▼────┐      ┌───────────▼───────────────┐
+   │   Master sets   │◄─────┤PREOPERATE│      │          Slave            │
+   │ MasterCycleTime │      └─────┬────┘      │      Identification       │
+   └────────┬────────┘            │           │ (reading slave parameters │
+            │                     │           │required for communication │
+   ┌────────▼────────┐            │           │   and identification)     │
+   │   (Optional)    │            │           └────────────┬──────────────┘
+   │Master reads ISDU│            │                        │
+   │     pages       │            │             ┌──────────▼───────────┐
+   └─────────────────┘            │             │       Sending        │
                                   │             │ MasterIdent command  │
                                   │             └──────────────────────┘
                                   │
