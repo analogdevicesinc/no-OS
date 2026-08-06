@@ -63,11 +63,8 @@ Follow the on-screen prompts. Verify the compiler is available:
 CMake and Ninja
 ---------------
 
-Install **CMake 3.28+** and **Ninja** via `Homebrew <https://brew.sh/>`_:
-
-.. code-block:: bash
-
-   brew install cmake ninja
+See :ref:`Common Prerequisites <common-prerequisites>` in the top-level build
+guide for **CMake 3.27+** and **Ninja** install commands.
 
 Verify:
 

@@ -56,10 +56,8 @@ Close and reopen PowerShell after installation so that ``git`` is on
 CMake and Ninja
 ---------------
 
-.. code-block:: powershell
-
-   winget install Kitware.CMake
-   winget install Ninja-build.Ninja
+See :ref:`Common Prerequisites <common-prerequisites>` in the top-level build
+guide for **CMake 3.27+** and **Ninja** install commands.
 
 Verify:
 

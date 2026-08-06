@@ -38,8 +38,10 @@ The following Pico board (preset) is available out of the box:
 Prerequisites
 =============
 
-- **CMake** 3.28 or newer (presets v7 are used).
-- **Ninja** (the presets use the Ninja generator).
+- **CMake 3.27 or newer** and **Ninja** — see
+  :ref:`Common Prerequisites <common-prerequisites>` in the top-level build
+  guide for Linux and Windows install commands.
+
 - **Python 3**. The build creates a private virtual environment under
   ``.no_os_venv`` on first configure and installs the dependencies listed in
   ``tools/scripts/requirements.txt`` (``kconfiglib``, ``pylink-square`` and,
