@@ -1,5 +1,10 @@
 target_compile_definitions(no-os PUBLIC -DXILINX_PLATFORM)
 
+if(DEFINED XILINX_ARCH AND "${XILINX_ARCH}" MATCHES "cortexa72")
+    target_compile_definitions(no-os PUBLIC PLATFORM_VERSAL)
+    target_compile_definitions(no-os PUBLIC SDT)
+endif()
+
 # Arch-conditionality (PS vs PL peripherals, PS7 vs PSU) is handled inside the
 # driver sources via #ifdef on the BSP-provided XPAR_* / header guards, so the
 # sources are added whenever their Kconfig symbol is on.

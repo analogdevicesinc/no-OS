@@ -348,8 +348,13 @@ adi_hal_Err_e no_os_HwOpen(void *devHalCfg)
 	sip.max_speed_hz = ADRV903X_SPI_SPEED_HZ;
 	sip.mode = NO_OS_SPI_MODE_0;
 	sip.chip_select = ADRV903X_CS;
+#ifdef PLATFORM_VERSAL
+	sip.platform_ops = hmc7044_spi_param.platform_ops;
+	sip.extra = hmc7044_spi_param.extra;
+#else
 	sip.platform_ops = ad9528_spi_param.platform_ops;
 	sip.extra = ad9528_spi_param.extra;
+#endif
 
 	ret = no_os_spi_init(&phal->spi, &sip);
 	if (ret)
