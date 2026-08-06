@@ -263,6 +263,60 @@ fields NULL and set up the IRQ pin independently. The driver's register
 access functions (``adiol100_get_channel_irq``, ``adiol100_enable_channel_irq``,
 etc.) work regardless of whether the driver manages the GPIO.
 
+ADC Monitoring
+~~~~~~~~~~~~~~
+
+The ADIOL100 has a 12-bit ADC that continuously monitors supply voltage,
+die temperature, and per-channel CQ/LP voltages and currents. Measurements
+are updated every 400 us. The chip also tracks min/max values since the
+last statistics reset.
+
+Use **adiol100_read_adc_global** to read global ADC sources: V24 supply
+voltage (``ADIOL100_ADC_V24_VOLT``, ``_MIN``, ``_MAX``) and die temperature
+(``ADIOL100_ADC_TEMP``, ``_MIN``, ``_MAX``). Returns a raw 13-bit value in
+2's complement.
+
+Use **adiol100_read_adc_chan** to read per-channel ADC sources: CQ voltage
+(``ADIOL100_ADC_CQ_VOLT``), CQ current (``ADIOL100_ADC_CQ_CUR``), LP voltage
+(``ADIOL100_ADC_LP_VOLT``), and LP current (``ADIOL100_ADC_LP_CUR``), each
+with ``_MIN`` and ``_MAX`` variants. The channel parameter selects A or B.
+
+Use **adiol100_reset_adc_stats** to clear all min/max statistics (V24,
+temperature, CQ and LP for both channels).
+
+LED Configuration
+~~~~~~~~~~~~~~~~~
+
+The ADIOL100 has four bicolor (red/green) LED drivers with a built-in
+sequencer. Each LED has independent brightness, blink sequence, and
+operating mode settings.
+
+Use **adiol100_set_led_brightness** to set the red and green brightness for
+one LED. Brightness is controlled in 16 steps (see ``enum
+adiol100_led_brightness``), where each step represents a percentage of the
+50% maximum duty cycle.
+
+Use **adiol100_set_led_sequence** to set the 16-bit blink pattern for each
+color. Each bit corresponds to a 63 ms time slot; the hardware scans the
+pattern MSB-first and wraps after 16 bits (~1 s cycle). Common patterns
+are provided in ``enum adiol100_led_seq`` (off, on, slow blink, fast blink,
+pulse), but any 16-bit value can be used.
+
+Use **adiol100_set_led_mode** to set the operating mode for one LED (see
+``enum adiol100_led_mode``): free-run blink, edge-triggered blink, static
+on when CQ/DI is high, or static on when CQ/DI is low.
+
+CQ External FET Protection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use **adiol100_config_cq_protection_ext** to configure the external
+high-side FET protection parameters across six registers: nominal current
+limit (CQExtCfg), power limit (CQFETPwrCfg), current min/max
+(CQCurrentCfg), overload and current-limit timeouts (CQFETProtect), slope
+control (CQFETSlope), and autoretry settings (CQRetry). This function
+mirrors **adiol100_config_lp_protection** in structure. Note that
+ADIOL101 (40-pin package) does not have the external FET controller pins.
+
 Watchdog
 ~~~~~~~~
 
