@@ -18,6 +18,7 @@
 #include "tests/test_spi.h"
 #include "tests/test_timer.h"
 #include "tests/test_i2c.h"
+#include "tests/test_uart.h"
 #include "tests/test_dma.h"
 /**
  * @brief Common function signature for a top-level test group.
@@ -49,6 +50,7 @@ static const struct test_entry tests[] = {
 	{ 0, "SPI", test_spi, false },
 	{ 0, "TIMER", test_timer, false },
 	{ 0, "I2C", test_i2c, false },
+	{ 0, "UART", test_uart, false },
 	{ 0, "DMA", test_dma, false },
 };
 

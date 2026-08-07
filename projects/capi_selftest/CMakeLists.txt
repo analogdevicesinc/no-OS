@@ -6,7 +6,7 @@ target_sources(capi_selftest PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/test_framework.c
 )
 
-if(PLATFORM STREQUAL "stm32")
+if(PLATFORM STREQUAL "stm32" AND CONFIG_CAPI_I2C)
 	target_sources(capi_selftest PRIVATE
 		${CMAKE_CURRENT_SOURCE_DIR}/src/platform/stm32/i2c_platform_init.c
 	)
@@ -29,6 +29,7 @@ if(CONFIG_CAPI_SELFTEST_LOOPBACK_EXAMPLE)
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/capi_loopback/tests/test_spi.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/capi_loopback/tests/test_timer.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/capi_loopback/tests/test_i2c.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/capi_loopback/tests/test_uart.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/capi_loopback/tests/test_dma.c
     )
     target_include_directories(capi_selftest PUBLIC
