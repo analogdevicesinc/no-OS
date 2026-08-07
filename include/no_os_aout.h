@@ -69,7 +69,7 @@ struct no_os_aout_desc {
 int32_t no_os_aout_set_voltage(struct no_os_aout_desc *desc, float value);
 
 /* Initialize the analog output peripheral */
-int32_t no_so_aout_init(struct no_os_aout_desc **desc,
+int32_t no_os_aout_init(struct no_os_aout_desc **desc,
 			const struct no_os_aout_init_param *param);
 
 /* Free the resources allocated by no_os_aout_init() */
