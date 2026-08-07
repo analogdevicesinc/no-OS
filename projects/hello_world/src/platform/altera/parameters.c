@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   altera/altera_delay.c
- *   @brief  Implementation of Altera Delay Functions.
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @file   altera/parameters.c
+ *   @brief  Definitions specific to Nios V hello_world example.
+ *   @author Aurel Miron (aurel.miron@analog.com)
 ********************************************************************************
- * Copyright 2019(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,36 +30,10 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#include "parameters.h"
 
-#include "no_os_delay.h"
-#if defined(CONFIG_ALTERA_PLATFORM_NIOSV)
-#include <sys/alt_alarm.h>
-#else
-#include <unistd.h>
-#endif
-
-/**
- * @brief Generate microseconds delay.
- * @param usecs - Delay in microseconds.
+/*
+ * The Altera/Nios V test uses the BSP HAL's existing JTAG UART stdio hooks via
+ * the normal libc/stdio path. No custom no-OS UART platform ops are required
+ * here because the BSP already provides the transport layer.
  */
-void no_os_udelay(uint32_t usecs)
-{
-#if defined(CONFIG_ALTERA_PLATFORM_NIOSV)
-	alt_busy_sleep(usecs);
-#else
-	usleep(usecs);
-#endif
-}
-
-/**
- * @brief Generate miliseconds delay.
- * @param msecs - Delay in miliseconds.
- */
-void no_os_mdelay(uint32_t msecs)
-{
-#if defined(CONFIG_ALTERA_PLATFORM_NIOSV)
-	alt_busy_sleep(msecs * 1000U);
-#else
-	usleep(msecs * 1000U);
-#endif
-}

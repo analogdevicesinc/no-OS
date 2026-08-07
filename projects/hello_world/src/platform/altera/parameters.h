@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   altera/altera_delay.c
- *   @brief  Implementation of Altera Delay Functions.
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @file   altera/parameters.h
+ *   @brief  Definitions specific to Nios V hello_world example.
+ *   @author Aurel Miron (aurel.miron@analog.com)
 ********************************************************************************
- * Copyright 2019(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,36 +30,22 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
-#include "no_os_delay.h"
-#if defined(CONFIG_ALTERA_PLATFORM_NIOSV)
-#include <sys/alt_alarm.h>
-#else
-#include <unistd.h>
-#endif
+#include <stddef.h>
+#include <stdint.h>
 
-/**
- * @brief Generate microseconds delay.
- * @param usecs - Delay in microseconds.
+/*
+ * For the Nios V / Intel FPGA BSP test, the target UART is the BSP-provided
+ * JTAG UART. The application uses the generic no-OS UART API, but the actual
+ * transport is the HAL's existing stdio implementation from the BSP rather than
+ * a custom reimplementation in no-OS.
  */
-void no_os_udelay(uint32_t usecs)
-{
-#if defined(CONFIG_ALTERA_PLATFORM_NIOSV)
-	alt_busy_sleep(usecs);
-#else
-	usleep(usecs);
-#endif
-}
 
-/**
- * @brief Generate miliseconds delay.
- * @param msecs - Delay in miliseconds.
- */
-void no_os_mdelay(uint32_t msecs)
-{
-#if defined(CONFIG_ALTERA_PLATFORM_NIOSV)
-	alt_busy_sleep(msecs * 1000U);
-#else
-	usleep(msecs * 1000U);
-#endif
-}
+#define UART_DEVICE_ID 0
+#define UART_BAUDRATE 115200
+#define UART_EXTRA NULL
+#define UART_OPS NULL
+
+#endif /* __PARAMETERS_H__ */

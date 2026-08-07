@@ -16,6 +16,31 @@ if(NOT GDB_PATH)
 	message(STATUS "GDB not found; 'debug' target will be unavailable")
 endif()
 
+# Intel FPGA / Nios V download utility used by the Altera flash flow.
+# ALTERA_NIOSV_HOME points at the niosv/ install directory; tools are found inside.
+if(DEFINED ENV{ALTERA_NIOSV_HOME} AND NOT "$ENV{ALTERA_NIOSV_HOME}" STREQUAL "")
+	set(_altera_niosv_hints "$ENV{ALTERA_NIOSV_HOME}/bin")
+elseif(DEFINED ENV{NIOSV_DOWNLOAD_PATH} AND NOT "$ENV{NIOSV_DOWNLOAD_PATH}" STREQUAL "")
+	set(NIOSV_DOWNLOAD_PATH "$ENV{NIOSV_DOWNLOAD_PATH}" CACHE FILEPATH "Path to the Intel Nios V downloader" FORCE)
+	set(_altera_niosv_hints "")
+else()
+	set(_altera_niosv_hints "")
+endif()
+
+if(NOT DEFINED NIOSV_DOWNLOAD_PATH OR NIOSV_DOWNLOAD_PATH STREQUAL "")
+	find_program(NIOSV_DOWNLOAD_PATH
+		NAMES niosv-download niosv-download.exe
+		HINTS
+			${_altera_niosv_hints}
+			"${_toolchain_bin_dir}"
+			"${CROSS_COMPILER_BIN}"
+		DOC "Path to the Intel Nios V downloader"
+	)
+	if(NIOSV_DOWNLOAD_PATH)
+		set(NIOSV_DOWNLOAD_PATH "${NIOSV_DOWNLOAD_PATH}" CACHE FILEPATH "Path to the Intel Nios V downloader" FORCE)
+	endif()
+endif()
+
 # Default GDB port (must match gdb_port in openocd.cfg)
 if(NOT DEFINED GDB_PORT)
 	set(GDB_PORT 50000)
@@ -112,11 +137,63 @@ function(add_openocd_flash_target TARGET_NAME)
 	endif()
 endfunction()
 
+function(add_niosv_download_flash_target TARGET_NAME)
+	if(NOT NIOSV_DOWNLOAD_PATH)
+		message(WARNING
+			"niosv-download was not found; 'flash' target will be unavailable. "
+			"Install it or set -DNIOSV_DOWNLOAD_PATH=...")
+		return()
+	endif()
+
+	if(NOT DEFINED ALTERA_NIOSV_DOWNLOAD_CPU OR ALTERA_NIOSV_DOWNLOAD_CPU STREQUAL "")
+		set(_altera_download_cpu "1")
+	else()
+		set(_altera_download_cpu "${ALTERA_NIOSV_DOWNLOAD_CPU}")
+	endif()
+
+	if(NOT DEFINED ALTERA_NIOSV_DOWNLOAD_CABLE OR ALTERA_NIOSV_DOWNLOAD_CABLE STREQUAL "")
+		set(_altera_download_cable "")
+	else()
+		set(_altera_download_cable "--cable=${ALTERA_NIOSV_DOWNLOAD_CABLE}")
+	endif()
+
+	if(NOT DEFINED ALTERA_NIOSV_DOWNLOAD_DEVICE OR ALTERA_NIOSV_DOWNLOAD_DEVICE STREQUAL "")
+		set(_altera_download_device "")
+	elseif(ALTERA_NIOSV_DOWNLOAD_DEVICE STREQUAL "1")
+		set(_altera_download_device "")
+	else()
+		set(_altera_download_device "--device=${ALTERA_NIOSV_DOWNLOAD_DEVICE}")
+	endif()
+
+	if(NOT DEFINED ALTERA_NIOSV_DOWNLOAD_INSTANCE OR ALTERA_NIOSV_DOWNLOAD_INSTANCE STREQUAL "")
+		set(_altera_download_instance "")
+	elseif(ALTERA_NIOSV_DOWNLOAD_INSTANCE STREQUAL "1")
+		set(_altera_download_instance "")
+	else()
+		set(_altera_download_instance "--instance=${ALTERA_NIOSV_DOWNLOAD_INSTANCE}")
+	endif()
+
+	set(_altera_target_elf "$<TARGET_FILE:${TARGET_NAME}>")
+	add_custom_target(flash
+		COMMAND "${CMAKE_COMMAND}" -E echo "Flashing ELF: ${_altera_target_elf}"
+		COMMAND "${NIOSV_DOWNLOAD_PATH}" -g "${_altera_target_elf}" -c "${_altera_download_cpu}" ${_altera_download_cable} ${_altera_download_device} ${_altera_download_instance}
+		DEPENDS ${TARGET_NAME}
+		COMMENT "Flashing ${TARGET_NAME} with niosv-download..."
+		VERBATIM
+	)
+endfunction()
+
 function(add_flash_target TARGET_NAME)
 	# Xilinx uses its own JTAG flow (Vitis Python API), not OpenOCD/J-Link.
 	if(PLATFORM STREQUAL "xilinx")
 		include(${NO_OS_DIR}/cmake/xilinx/xilinx_flash.cmake)
 		add_xilinx_flash_target(${TARGET_NAME})
+		return()
+	endif()
+
+	# Altera/Nios V uses the Intel downloader rather than OpenOCD.
+	if(PLATFORM STREQUAL "altera")
+		add_niosv_download_flash_target(${TARGET_NAME})
 		return()
 	endif()
 

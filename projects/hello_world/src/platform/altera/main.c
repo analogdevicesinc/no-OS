@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   altera/altera_delay.c
- *   @brief  Implementation of Altera Delay Functions.
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @file   altera/main.c
+ *   @brief  Nios V hello_world example.
+ *   @author Aurel Miron (aurel.miron@analog.com)
 ********************************************************************************
- * Copyright 2019(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,36 +30,36 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#include <inttypes.h>
+#include <stdint.h>
+#include <stdio.h>
 
-#include "no_os_delay.h"
-#if defined(CONFIG_ALTERA_PLATFORM_NIOSV)
-#include <sys/alt_alarm.h>
-#else
-#include <unistd.h>
-#endif
-
-/**
- * @brief Generate microseconds delay.
- * @param usecs - Delay in microseconds.
- */
-void no_os_udelay(uint32_t usecs)
-{
-#if defined(CONFIG_ALTERA_PLATFORM_NIOSV)
-	alt_busy_sleep(usecs);
-#else
-	usleep(usecs);
-#endif
-}
+#include "parameters.h"
+#include <no_os_delay.h>
+#include <no_os_print_log.h>
 
 /**
- * @brief Generate miliseconds delay.
- * @param msecs - Delay in miliseconds.
+ * @brief Main function.
+ * @return int - always runs forever, never returns.
  */
-void no_os_mdelay(uint32_t msecs)
+int main(void)
 {
-#if defined(CONFIG_ALTERA_PLATFORM_NIOSV)
-	alt_busy_sleep(msecs * 1000U);
-#else
-	usleep(msecs * 1000U);
-#endif
+	uint32_t count = 0;
+
+	pr_info("hello_world: hello from Nios V\n");
+
+	while (1) {
+		count++;
+
+		pr_info("Hello World #%" PRIu32 "\n", count);
+
+		/*
+		 * no_os_mdelay() is the no-OS millisecond delay function.
+		 * It uses the platform timer underneath, so the exact
+		 * implementation differs per target but the API is identical.
+		 */
+		no_os_mdelay(1000);
+	}
+
+	return 0;
 }
