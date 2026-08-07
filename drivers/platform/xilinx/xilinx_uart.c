@@ -53,7 +53,8 @@ typedef XUartPsv_Config XUartPs_Config;
 #define XUartPs_SetInterruptMask  XUartPsv_SetInterruptMask
 #define XUartPs_InterruptHandler  XUartPsv_InterruptHandler
 #define XUartPs_Send              XUartPsv_Send
-#define XUartPs_Recv(inst, buf, num) XUartPsv_Recv((inst), (buf), (num))
+/* PL011 BSP only fires callback when all requested bytes arrive; request 1 */
+#define XUartPs_Recv(inst, buf, num) XUartPsv_Recv((inst), (buf), 1)
 #define XUARTPS_OPER_MODE_NORMAL  XUARTPSV_OPER_MODE_NORMAL
 #define XUARTPS_EVENT_RECV_DATA       XUARTPSV_EVENT_RECV_DATA
 #define XUARTPS_EVENT_RECV_TOUT       XUARTPSV_EVENT_RECV_TOUT
