@@ -4,8 +4,7 @@ config ALTERA_PLATFORM_NIOSV
 	help
 	  Enable the external BSP compatibility layer for Nios V / Intel FPGA.
 	  When enabled, the Altera toolchain selects the Nios V flow and expects
-	  ALTERA_BSP_DIR plus ALTERA_TOOLCHAIN_CC (the full path to the C compiler,
-	  for example /path/to/niosv-gnu-gcc) to be exported.
+	  ALTERA_NIOSV_REPO_DIR(reference design with hw/, sw/), ALTERA_NIOSV_BSP(niosv-bsp path)
 
 if ALTERA_PLATFORM_NIOSV
 
