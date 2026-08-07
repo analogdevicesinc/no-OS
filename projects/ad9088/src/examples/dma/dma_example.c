@@ -256,6 +256,14 @@ static uint32_t dma_example_coherence(const uint16_t *buf, uint32_t samples,
 	uint64_t power = 0;
 	uint32_t phase = 0;
 	uint32_t step;
+	int32_t ref_re;
+	int32_t ref_im;
+	int32_t s_i;
+	int32_t s_q;
+	uint32_t idx;
+	uint64_t env;
+	uint32_t rms_max;
+	uint32_t rms_min;
 	int64_t mean_re;
 	int64_t mean_im;
 	uint64_t mag;
@@ -273,12 +281,8 @@ static uint32_t dma_example_coherence(const uint16_t *buf, uint32_t samples,
 		step = (uint32_t)no_os_div_u64((uint64_t)freq_hz << 32, rate_hz);
 
 	for (i = 0; i < samples; i++) {
-		int32_t s_i = (int16_t)buf[i * num_conv + TONE_CONV_I];
-		int32_t s_q = (int16_t)buf[i * num_conv + TONE_CONV_Q];
-		uint32_t idx = phase >> SIN_TABLE_PHASE_SHIFT;
-		int32_t ref_re = dma_example_cos_q15(idx);
-		int32_t ref_im = -dma_example_sin_q15(idx);
-		uint64_t env;
+		s_i = (int16_t)buf[i * num_conv + TONE_CONV_I];
+		s_q = (int16_t)buf[i * num_conv + TONE_CONV_Q];
 
 		/*
 		 * Table lookup rather than an iterated rotation: the phase
@@ -286,6 +290,10 @@ static uint32_t dma_example_coherence(const uint16_t *buf, uint32_t samples,
 		 * recurrence would accumulate rounding error. Negating the sine
 		 * gives the conjugate reference exp(-jwn).
 		 */
+		idx = phase >> SIN_TABLE_PHASE_SHIFT;
+		ref_re = dma_example_cos_q15(idx);
+		ref_im = -dma_example_sin_q15(idx);
+
 		acc_re += ((int64_t)s_i * ref_re - (int64_t)s_q * ref_im)
 			  >> SIN_TABLE_SHIFT;
 		acc_im += ((int64_t)s_i * ref_im + (int64_t)s_q * ref_re)
@@ -308,8 +316,8 @@ static uint32_t dma_example_coherence(const uint16_t *buf, uint32_t samples,
 					     samples)) : 0;
 
 	if (spread) {
-		uint32_t rms_max = (uint32_t)dma_example_sqrt64(env_max);
-		uint32_t rms_min = (uint32_t)dma_example_sqrt64(env_min);
+		rms_max = (uint32_t)dma_example_sqrt64(env_max);
+		rms_min = (uint32_t)dma_example_sqrt64(env_min);
 
 		*spread = rms_max ?
 			  (uint32_t)(((uint64_t)(rms_max - rms_min) *
@@ -337,44 +345,6 @@ static uint32_t dma_example_coherence(const uint16_t *buf, uint32_t samples,
 		return 0;
 
 	return (uint32_t)no_os_div_u64(mag * COHERENCE_SCALE, norm);
-}
-
-/**
- * @brief Print a short sample dump plus per-converter min/max/mean.
- * @param buf - Capture buffer holding interleaved converter samples.
- * @param samples_per_conv - Samples captured per converter.
- * @param num_conv - Number of interleaved converters.
- */
-static void dma_example_report(const uint16_t *buf, uint32_t samples_per_conv,
-			       uint8_t num_conv)
-{
-	uint32_t i;
-	uint8_t c;
-
-	for (c = 0; c < num_conv; c++) {
-		int16_t min = (int16_t)buf[c];
-		int16_t max = (int16_t)buf[c];
-		int64_t sum = 0;
-
-		pr_info("  conv%u:", c);
-		for (i = 0; i < samples_per_conv; i++) {
-			int16_t s = (int16_t)buf[i * num_conv + c];
-
-			if (i < DUMP_SAMPLES)
-				printf(" %04x", (uint16_t)s);
-
-			if (s < min)
-				min = s;
-			if (s > max)
-				max = s;
-			sum += s;
-		}
-		printf("\n");
-
-		pr_info("  conv%u: min %d max %d mean %d p-p %lu\n", c, min, max,
-			(int)no_os_div_s64(sum, (int32_t)samples_per_conv),
-			(unsigned long)((int32_t)max - (int32_t)min));
-	}
 }
 
 /**
@@ -438,6 +408,7 @@ static int dma_example_get_capture_rate(struct ad9088_phy *phy,
 	uint8_t cddc_pi;
 	uint8_t fddc_pi;
 	uint64_t adc_rate;
+	uint64_t delta;
 	int ret;
 
 	cddc_pi = (TEST_TONE_FDDC / 2) % ADI_APOLLO_CDUCS_PER_SIDE;
@@ -483,9 +454,9 @@ static int dma_example_get_capture_rate(struct ad9088_phy *phy,
 	 * frequency would be off by that factor.
 	 */
 	if (rx_adc->clock_hz) {
-		uint64_t delta = rx_adc->clock_hz > *capture_rate ?
-				 rx_adc->clock_hz - *capture_rate :
-				 *capture_rate - rx_adc->clock_hz;
+		delta = rx_adc->clock_hz > *capture_rate ?
+			rx_adc->clock_hz - *capture_rate :
+			*capture_rate - rx_adc->clock_hz;
 
 		pr_info("TPL core reports %lu kHz\n",
 			(unsigned long)no_os_div_u64(rx_adc->clock_hz, 1000));
@@ -526,6 +497,8 @@ int dma_example_main()
 	uint32_t envelope_spread;
 	uint32_t amplitude;
 	uint32_t floor_coherence;
+	bool tone_pass;
+	bool floor_pass;
 
 	int ret = 0;
 
@@ -703,7 +676,49 @@ int dma_example_main()
 		goto error_tx_dac;
 
 	tone_hz = (int64_t)no_os_div_u64(capture_rate, TEST_TONE_RATE_DIV);
-	pr_info("--- FNCO %ld kHz ---\n", (long)no_os_div_s64(tone_hz, 1000));
+
+	/*
+	 * Baseline first, with the datapath idle. Test mode is off after
+	 * bring-up, but disable it explicitly so the floor measures a state this
+	 * block guarantees rather than one it assumes. Coherence here should
+	 * collapse to roughly COHERENCE_SCALE/N, which is what shows the
+	 * estimator rejects noise instead of scoring anything handed to it.
+	 */
+	ret = ad9088_set_fnco_test_tone(ad9088_phy, ADI_APOLLO_RX,
+					TEST_TONE_SIDE, TEST_TONE_FDDC, false,
+					0);
+	if (ret) {
+		pr_err("Disabling the RX FNCO test tone failed (%d)\n", ret);
+		goto error_tx_dac;
+	}
+
+	no_os_mdelay(10);
+
+	ret = dma_example_capture(rx_dmac, transfer_size);
+	if (ret)
+		goto error_tx_dac;
+
+	floor_coherence = dma_example_coherence(adc_buffer_dma, samples_per_conv,
+						num_conv, -tone_hz,
+						capture_rate, NULL, NULL);
+
+	/*
+	 * Held in its own flag rather than ret: the tone block below issues
+	 * device calls that overwrite ret, so the two verdicts are combined only
+	 * once both blocks have run.
+	 */
+	floor_pass = floor_coherence < COHERENCE_PASS;
+
+	pr_info("--- Noise floor ---\n");
+	pr_info("  coh %lu/%u (expect near %lu)\n",
+		(unsigned long)floor_coherence, COHERENCE_SCALE,
+		(unsigned long)(COHERENCE_SCALE / samples_per_conv + 1));
+
+	if (!floor_pass)
+		pr_err("  the estimator scores the idle capture as a tone; "
+		       "the measurement itself is not trustworthy\n");
+
+	pr_info("  %s\n\n", floor_pass ? "PASS" : "FAIL");
 
 	/*
 	 * Test mode replaces the mixer input with a constant which the NCO then
@@ -724,6 +739,12 @@ int dma_example_main()
 		goto error_tone;
 	}
 
+	pr_info("--- FNCO tone test: %ld kHz ---\n",
+		(long)no_os_div_s64(tone_hz, 1000));
+	pr_info("  expected amplitude %lu LSB (offset 0x%x)\n",
+		(unsigned long)(TEST_TONE_OFFSET * 2828 / 1000),
+		TEST_TONE_OFFSET);
+
 	no_os_mdelay(10);
 
 	ret = dma_example_capture(rx_dmac, transfer_size);
@@ -743,69 +764,23 @@ int dma_example_main()
 					  num_conv, -tone_hz, capture_rate,
 					  &amplitude, &envelope_spread);
 
-	/*
-	 * Reference capture with the tone off. Coherence here should collapse to
-	 * roughly COHERENCE_SCALE/N, which is what shows the estimator rejects
-	 * noise instead of scoring anything handed to it.
-	 */
-	ret = ad9088_set_fnco_test_tone(ad9088_phy, ADI_APOLLO_RX,
-					TEST_TONE_SIDE, TEST_TONE_FDDC, false,
-					0);
-	if (ret) {
-		pr_err("Disabling the RX FNCO test tone failed (%d)\n", ret);
-		goto error_tx_dac;
-	}
+	tone_pass = coherence >= COHERENCE_PASS &&
+		    envelope_spread <= ENVELOPE_SPREAD_MAX;
 
-	no_os_mdelay(10);
-
-	ret = dma_example_capture(rx_dmac, transfer_size);
-	if (ret)
-		goto error_tx_dac;
-
-	floor_coherence = dma_example_coherence(adc_buffer_dma, samples_per_conv,
-						num_conv, -tone_hz,
-						capture_rate, NULL, NULL);
-
-	pr_info("=== FNCO tone, %lu samples/conv at %lu kHz ===\n",
-		(unsigned long)samples_per_conv,
-		(unsigned long)no_os_div_u64(capture_rate, 1000));
-	pr_info("  expected amplitude %lu LSB for offset 0x%x\n",
-		(unsigned long)(TEST_TONE_OFFSET * 2828 / 1000),
-		TEST_TONE_OFFSET);
-
-	ret = (coherence >= COHERENCE_PASS &&
-	       envelope_spread <= ENVELOPE_SPREAD_MAX) ? 0 : -EIO;
-
-	pr_info("  %ld kHz: coh %lu/%u spread %lu amp %lu -- %s\n",
-		(long)no_os_div_s64(tone_hz, 1000),
+	pr_info("  coh %lu/%u spread %lu amp %lu\n",
 		(unsigned long)coherence, COHERENCE_SCALE,
 		(unsigned long)envelope_spread,
-		(unsigned long)amplitude,
-		ret ? "FAIL" : "PASS");
+		(unsigned long)amplitude);
+	pr_info("  %s\n", tone_pass ? "PASS" : "FAIL");
 
-	pr_info("  noise floor: coh %lu/%u (expect coh near %lu)\n",
-		(unsigned long)floor_coherence, COHERENCE_SCALE,
-		(unsigned long)(COHERENCE_SCALE / samples_per_conv + 1));
-
-	if (floor_coherence >= COHERENCE_PASS) {
-		pr_err("FAIL: the estimator scores the idle capture as a tone; "
-		       "the measurement itself is not trustworthy\n");
-		ret = -EIO;
-	}
-
-	if (ret)
-		pr_err("FAIL: the captured tone does not match the programmed "
-		       "FNCO frequency\n");
-	else
-		pr_info("PASS: the captured tone matches the programmed FNCO "
-			"frequency\n");
+	ret = (floor_pass && tone_pass) ? 0 : -EIO;
 
 	/*
-	 * The teardown below is the same sequence the error ladder runs, so a
-	 * passing run shares it. ret carries the verdict rather than a separate
-	 * flag, which is why the ladder must not overwrite it.
+	 * The tone is left enabled on the pass path: error_tone is the disable,
+	 * and the teardown below is the same sequence the error ladder runs, so
+	 * a passing run shares it from that label on.
 	 */
-	goto error_tx_dac;
+	goto error_tone;
 
 error_tone:
 	ad9088_set_fnco_test_tone(ad9088_phy, ADI_APOLLO_RX, TEST_TONE_SIDE,
