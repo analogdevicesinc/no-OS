@@ -61,6 +61,7 @@ enum iiod_cmd {
 	IIOD_CMD_HELP,
 	IIOD_CMD_EXIT,
 	IIOD_CMD_PRINT,
+	IIOD_CMD_BINARY,
 	IIOD_CMD_VERSION,
 	IIOD_CMD_TIMEOUT,
 	IIOD_CMD_OPEN,
@@ -72,6 +73,39 @@ enum iiod_cmd {
 	IIOD_CMD_GETTRIG,
 	IIOD_CMD_SETTRIG,
 	IIOD_CMD_SET
+};
+
+enum iiod_opcode {
+	IIOD_OP_RESPONSE,
+	IIOD_OP_PRINT,
+	IIOD_OP_TIMEOUT,
+	IIOD_OP_READ_ATTR,
+	IIOD_OP_READ_DBG_ATTR,
+	IIOD_OP_READ_BUF_ATTR,
+	IIOD_OP_READ_CHN_ATTR,
+	IIOD_OP_WRITE_ATTR,
+	IIOD_OP_WRITE_DBG_ATTR,
+	IIOD_OP_WRITE_BUF_ATTR,
+	IIOD_OP_WRITE_CHN_ATTR,
+	IIOD_OP_GETTRIG,
+	IIOD_OP_SETTRIG,
+
+	IIOD_OP_CREATE_BUFFER,
+	IIOD_OP_FREE_BUFFER,
+	IIOD_OP_ENABLE_BUFFER,
+	IIOD_OP_DISABLE_BUFFER,
+
+	IIOD_OP_CREATE_BLOCK,
+	IIOD_OP_FREE_BLOCK,
+	IIOD_OP_TRANSFER_BLOCK,
+	IIOD_OP_ENQUEUE_BLOCK_CYCLIC,
+	IIOD_OP_RETRY_DEQUEUE_BLOCK,
+
+	IIOD_OP_CREATE_EVSTREAM,
+	IIOD_OP_FREE_EVSTREAM,
+	IIOD_OP_READ_EVENT,
+
+	IIOD_NB_OPCODES,
 };
 
 /*
@@ -91,6 +125,11 @@ struct comand_desc {
 	char attr[MAX_ATTR_NAME];
 	char trigger[MAX_TRIG_ID];
 	enum iio_attr_type type;
+	enum iiod_opcode op_code;
+	uint16_t block_id[MAX_NUM_BLOCKS];
+	uint32_t block_size[MAX_NUM_BLOCKS];
+	uint32_t bytes_size[MAX_NUM_BLOCKS];
+	uint8_t curr;
 };
 
 /* Used to store buffer indexes for non blocking transfers */
@@ -100,6 +139,13 @@ struct iiod_buff {
 	uint32_t len;
 };
 
+struct iiod_binary_cmd {
+	uint16_t client_id;
+	uint8_t op;
+	uint8_t dev;
+	int32_t code;
+};
+
 /* Result after executing a command. */
 struct iiod_run_cmd_result {
 	uint32_t val;
@@ -107,6 +153,7 @@ struct iiod_run_cmd_result {
 	bool write_val;
 	/* If buf.len != 0 buf has to be sent */
 	struct iiod_buff buf;
+	bool second_write;
 };
 
 /* Internal structure to handle a connection state */
@@ -118,6 +165,8 @@ struct iiod_conn_priv {
 
 	/* Command data after parsed */
 	struct comand_desc cmd_data;
+
+	struct iiod_binary_cmd cmd_data_bin;
 	/* Result of an executed cmd */
 	struct iiod_run_cmd_result res;
 	/* IIOD States */
@@ -128,6 +177,7 @@ struct iiod_conn_priv {
 		IIOD_RUNNING_CMD,
 		/* Write result of executed cmd */
 		IIOD_WRITING_CMD_RESULT,
+		IIOD_WRITING_BIN_RESPONSE,
 		/* I/O operations for READBUF and WRITEBUF cmds */
 		IIOD_RW_BUF,
 		/* I/O operations for WRITE cmd */
@@ -157,6 +207,9 @@ struct iiod_conn_priv {
 	char *strtok_ctx;
 	/* True if the device was open with cyclic buffer flag */
 	bool is_cyclic_buffer;
+	// flag for binary protocol indication
+	bool is_binary_protocol;
+	struct iiod_binary_cmd cmd_response_data;
 };
 
 /* Private iiod information */
@@ -173,6 +226,30 @@ struct iiod_desc {
 	uint32_t xml_len;
 	/* Backend used by IIOD */
 	enum physical_link_type phy_type;
+};
+
+struct iiod_binary_resp {
+	uint8_t cmd_id;
+	uint8_t status;
+	uint16_t length;
+	uint8_t payload[];
+};
+
+struct iiod_event_desc {
+	uint16_t client_id;
+	uint16_t event_read_count;
+	struct no_os_fifo_element *event_data;
+};
+
+struct __attribute__((packed)) iiod_event_data {
+	uint64_t channel_id: 16;
+	uint64_t diff_channel_id: 16;
+	uint64_t channel_type: 8;
+	uint64_t modifier: 8;
+	uint64_t event_dir: 7;
+	uint64_t is_differential: 1;
+	uint64_t event_type: 8;
+	int64_t timestamp: 64;
 };
 
 #endif //IIOD_PRIVATE_H
