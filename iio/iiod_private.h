@@ -47,6 +47,8 @@
 			      .conn = (conn)->conn,\
 				  .binary = (conn)->protocol}
 
+struct iiod_desc;
+
 /* Used to store a string and its size */
 struct iiod_str {
 	char *str;
@@ -131,8 +133,6 @@ struct command_data_binary {
 	uint16_t client_id;
 	/* OP Code */
 	enum iiod_opcode op_code;
-	/* Code Value */
-	 int32_t code; // TODO: Remove this variable. Parse the value and keep in different variables
 	/* Device ID */
 	uint16_t device;
 	/* Channel ID */
@@ -206,6 +206,9 @@ struct iiod_conn_priv {
 	void *conn;
 	/* Unset when can be used from the connection pool */
 	bool used;
+	/* State Machine */
+	int32_t (*run_state)(struct iiod_desc *,
+			      struct iiod_conn_priv *);
 
 	/* Command data after parsed */
 	struct comand_desc cmd_data;
@@ -214,10 +217,10 @@ struct iiod_conn_priv {
 	struct iiod_run_cmd_result res;
 	/* IIOD States */
 	enum {
-		/* Write buffer if available */
-		IIOD_WRITING_BUF_DATA,
 		/* Write Event Data if available */
 		IIOD_WRITING_EVENT_DATA,
+		/* Write buffer if available */
+		IIOD_WRITING_BUF_DATA,
 		/* Reading line until \n */
 		IIOD_READING_LINE,
 		/* Execute cmd without I/O operations */
@@ -281,9 +284,6 @@ struct iiod_desc {
 	uint32_t xml_len;
 	/* Backend used by IIOD */
 	enum physical_link_type phy_type;
-	/* State Machine */
-	int32_t (*run_state)(struct iiod_desc *,
-			      struct iiod_conn_priv *);
 };
 
 #endif //IIOD_PRIVATE_H
