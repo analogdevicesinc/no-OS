@@ -67,6 +67,8 @@ struct iiod_attr {
 	 */
 	const char *name;
 	const char *channel;
+	int16_t idx;
+	int16_t ch_id;
 };
 
 struct iiod_ctx {
@@ -74,6 +76,8 @@ struct iiod_ctx {
 	void *instance;
 	/* Value specified in iiod_conn_data.conn in iiod_conn_add */
 	void *conn;
+	/* Binary or Ascii Data */
+	bool binary;
 };
 
 struct iiod_conn_data {
@@ -107,47 +111,47 @@ struct iiod_ops {
 	 * All calls with the same ctx will refer to this buffer until close is
 	 * called.
 	 */
-	int (*open)(struct iiod_ctx *ctx, const char *device, uint32_t samples,
+	int (*open)(struct iiod_ctx *ctx, const void *device, uint32_t samples,
 		    uint32_t mask, bool cyclic);
 	/* Equivalent of iio_buffer_destroy */
-	int (*close)(struct iiod_ctx *ctx, const char *device);
+	int (*close)(struct iiod_ctx *ctx, const void *device);
 
 	/* Read data from opened buffer */
-	int (*read_buffer)(struct iiod_ctx *ctx, const char *device, char *buf,
+	int (*read_buffer)(struct iiod_ctx *ctx, const void *device, char *buf,
 			   uint32_t bytes);
 	/* Called to notify that buffer must be refiiled */
-	int (*refill_buffer)(struct iiod_ctx *ctx, const char *device);
+	int (*refill_buffer)(struct iiod_ctx *ctx, const void *device);
 
 	/* Write data to opened buffer */
-	int (*write_buffer)(struct iiod_ctx *ctx, const char *device,
+	int (*write_buffer)(struct iiod_ctx *ctx, const void *device,
 			    const char *buf, uint32_t bytes);
 	/* Called to notify that buffer must be pushed to hardware */
-	int (*push_buffer)(struct iiod_ctx *ctx, const char *device);
+	int (*push_buffer)(struct iiod_ctx *ctx, const void *device);
 
 	/*
 	 * Attribute has to be read in buf and return the number of bytes
 	 * written.
 	 */
-	int (*read_attr)(struct iiod_ctx *ctx, const char *device,
+	int (*read_attr)(struct iiod_ctx *ctx, const void *device,
 			 struct iiod_attr *attr, char *buf, uint32_t len);
 	/* Attribute buf is filled with the attribute value. */
-	int (*write_attr)(struct iiod_ctx *ctx, const char *device,
+	int (*write_attr)(struct iiod_ctx *ctx, const void *device,
 			  struct iiod_attr *attr, char *buf, uint32_t len);
 	/* Simular with read_attr but trigger must be filled */
-	int (*get_trigger)(struct iiod_ctx *ctx, const char *device,
+	int (*get_trigger)(struct iiod_ctx *ctx, const void *device,
 			   char *trigger, uint32_t len);
 	/*
 	 * Simular with write_attr but trigger name is in trigger.
 	 * If trigger is equals to "". Trigger must be removed.
 	 */
-	int (*set_trigger)(struct iiod_ctx *ctx, const char *device,
+	int (*set_trigger)(struct iiod_ctx *ctx, const void *device,
 			   const char *trigger, uint32_t len);
 
 	/* I don't know what this should be used for :) */
 	int (*set_timeout)(struct iiod_ctx *ctx, uint32_t timeout);
 
 	/* I don't know what this should be used for :) */
-	int (*set_buffers_count)(struct iiod_ctx *ctx, const char *device,
+	int (*set_buffers_count)(struct iiod_ctx *ctx, const void *device,
 				 uint32_t buffers_count);
 };
 
