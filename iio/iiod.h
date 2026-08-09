@@ -49,6 +49,7 @@
 #define MAX_CHN_ID		64
 #define MAX_ATTR_NAME		256
 #define MAX_NUM_BLOCKS 16
+#define MAX_NUM_EVENTS 16
 
 enum iio_attr_type {
 	IIO_ATTR_TYPE_DEBUG,
@@ -120,7 +121,7 @@ struct iiod_ops {
 	int (*read_buffer)(struct iiod_ctx *ctx, const void *device, char *buf,
 			   uint32_t bytes);
 	/* Called to notify that buffer must be refiiled */
-	int (*refill_buffer)(struct iiod_ctx *ctx, const void *device);
+	int (*refill_buffer)(struct iiod_ctx *ctx, const void *device, uint8_t block_id);
 
 	/* Write data to opened buffer */
 	int (*write_buffer)(struct iiod_ctx *ctx, const void *device,
@@ -153,6 +154,13 @@ struct iiod_ops {
 	/* I don't know what this should be used for :) */
 	int (*set_buffers_count)(struct iiod_ctx *ctx, const void *device,
 				 uint32_t buffers_count);
+
+	int (*create_block)(struct iiod_ctx *ctx, const void *device, struct iio_block *block, uint32_t block_size_bytes);
+	int (*pre_enable)(struct iiod_ctx *ctx, const void *device, uint32_t mask, uint16_t *block_ids);
+
+	int (*create_event_stream)(struct iiod_ctx *ctx, const void *device, const uint32_t priv);
+	int (*read_event)(struct iiod_ctx *ctx, const void *device, const uint32_t priv, uint8_t *buf);
+	int (*free_event_stream)(struct iiod_ctx *ctx, const void *device, const uint32_t priv);
 };
 
 /*

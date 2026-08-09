@@ -267,6 +267,17 @@ struct iio_stream {
 	bool started, buf_enabled, all_enqueued;
 };
 
+struct __attribute__((packed)) iio_event {
+	uint64_t channel_id: 16;
+	uint64_t diff_channel_id: 16;
+	uint64_t channel_type: 8;
+	uint64_t modifier: 8;
+	uint64_t event_dir: 7;
+	uint64_t is_differential: 1;
+	uint64_t event_type: 8;
+	int64_t timestamp: 64;
+};
+
 struct iio_device_data {
 	void *dev;
 	struct iio_buffer *buffer;
@@ -315,7 +326,7 @@ struct iio_device {
 
 	/* Bufer callbacks */
 	/** Called before enabling buffer */
-	int (*pre_enable)(void *dev, uint32_t mask);
+	int32_t (*pre_enable)(void *dev, uint32_t mask, uint16_t *block_ids);
 	/** Called after disabling buffer */
 	int (*post_disable)(void *dev);
 	/** Called when buffer ready to transfer. Write/read to/from dev */
@@ -327,6 +338,9 @@ struct iio_device {
 	int (*debug_reg_read)(void *dev, uint32_t reg, uint32_t *readval);
 	/* Write device register */
 	int (*debug_reg_write)(void *dev, uint32_t reg, uint32_t writeval);
+
+	int32_t (*create_block)(struct iio_device_data *dev, struct iio_block *block, uint32_t block_size_bytes);
+	int32_t	(*transfer_block)(struct iio_device_data *dev, uint8_t block_id);
 
 };
 
