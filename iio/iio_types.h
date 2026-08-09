@@ -89,6 +89,41 @@ enum iio_modifier {
 };
 
 /**
+ * @enum iio_event_type
+ * @brief IIO event type
+ *
+ * Some IIO devices can deliver events. The type of the event can be specified
+ * by one of the iio_event_type values.
+ */
+enum iio_event_type {
+	IIO_EV_TYPE_THRESH,
+	IIO_EV_TYPE_MAG,
+	IIO_EV_TYPE_ROC,
+	IIO_EV_TYPE_THRESH_ADAPTIVE,
+	IIO_EV_TYPE_MAG_ADAPTIVE,
+	IIO_EV_TYPE_CHANGE,
+	IIO_EV_TYPE_MAG_REFERENCED,
+	IIO_EV_TYPE_GESTURE,
+	IIO_EV_TYPE_FAULT,
+};
+
+/**
+ * @enum iio_event_direction
+ * @brief IIO event direction
+ *
+ * When applicable, this enum specifies the direction of the iio_event_type.
+ */
+enum iio_event_direction {
+	IIO_EV_DIR_EITHER,
+	IIO_EV_DIR_RISING,
+	IIO_EV_DIR_FALLING,
+	IIO_EV_DIR_NONE,
+	IIO_EV_DIR_SINGLETAP,
+	IIO_EV_DIR_DOUBLETAP,
+	IIO_EV_DIR_FAULT_OPENWIRE,
+};
+
+/**
  * @struct iio_ch_info
  * @brief Structure holding channel attributess.
  */
@@ -213,6 +248,23 @@ struct iio_buffer {
 	struct no_os_circular_buffer *buf;
 	/* Stores cyclic buffer specific information */
 	struct iio_cyclic_buffer_info cyclic_info;
+};
+
+struct iio_block {
+	struct iio_buffer *buffer;
+	uint8_t *data;
+	uint32_t size;
+	uint16_t cl_id;
+
+	uint32_t bytes_used;
+};
+
+struct iio_stream {
+	struct iio_buffer *buffer;
+	struct iio_block **blocks;
+	uint32_t nb_blocks;
+	uint8_t curr;
+	bool started, buf_enabled, all_enqueued;
 };
 
 struct iio_device_data {

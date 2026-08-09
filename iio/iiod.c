@@ -37,6 +37,10 @@
 #include <stdio.h>
 #include <assert.h>
 
+#include "no_os_fifo.h"
+#include "no_os_list.h"
+#include "no_os_alloc.h"
+
 #include "iiod.h"
 #include "iiod_private.h"
 
@@ -56,9 +60,10 @@ static const char *attr_types_strs[] = {
 };
 
 static struct iiod_str cmds[] = {
-	[IIOD_CMD_HELP]		= IIOD_STR("HELP"),
+	[IIOD_CMD_HELP]		= IIOD_STR("HELP"), //I'm here
 	[IIOD_CMD_EXIT]		= IIOD_STR("EXIT"),
 	[IIOD_CMD_PRINT]	= IIOD_STR("PRINT"),
+	[IIOD_CMD_BINARY]   = IIOD_STR("BINARY"),
 	[IIOD_CMD_VERSION]	= IIOD_STR("VERSION"),
 	[IIOD_CMD_TIMEOUT]	= IIOD_STR("TIMEOUT"),
 	[IIOD_CMD_OPEN]		= IIOD_STR("OPEN"),
@@ -80,6 +85,7 @@ static const uint32_t priority_array[] = {
 	IIOD_CMD_WRITE,
 	IIOD_CMD_OPEN,
 	IIOD_CMD_CLOSE,
+	IIOD_CMD_BINARY,
 	IIOD_CMD_PRINT,
 	IIOD_CMD_EXIT,
 	IIOD_CMD_TIMEOUT,
@@ -92,6 +98,12 @@ static const uint32_t priority_array[] = {
 
 static_assert(NO_OS_ARRAY_SIZE(cmds) == NO_OS_ARRAY_SIZE(priority_array),
 	      "Arrays must have the same size");
+
+static int32_t iio_event_cmp(void *data1, void *data2)
+{
+	return ((struct iiod_event_desc *)data1)->client_id -
+	       ((struct iiod_event_desc *)data2)->client_id;
+}
 
 /* Set res->cmd to corresponding cmd and return the processed length of buf */
 static int32_t parse_cmd(const char *token, struct comand_desc *res)
@@ -244,6 +256,7 @@ int32_t iiod_parse_line(char *buf, struct comand_desc *res, char **ctx)
 	case IIOD_CMD_EXIT:
 	case IIOD_CMD_PRINT:
 	case IIOD_CMD_VERSION:
+	case IIOD_CMD_BINARY:
 		return 0;
 	case IIOD_CMD_TIMEOUT:
 		return parse_num(token, &res->timeout, 10);
@@ -283,6 +296,15 @@ int32_t iiod_parse_line(char *buf, struct comand_desc *res, char **ctx)
 
 	return -EINVAL;
 }
+
+// static int32_t iiod_parse_binary_cmd(struct iiod_conn_priv *conn, struct iiod_binary_cmd *cmd){
+// 	conn->cmd_data.cmd = cmd->cmd_id;
+// 	conn->cmd_data.bytes_count = cmd->length;
+// 	memcpy(conn->cmd_data.device, cmd->payload, cmd->length);
+// 	return 0;
+// }
+
+
 
 static int dummy_open(struct iiod_ctx *ctx, const char *device,
 		      uint32_t samples, uint32_t mask, bool cyclic)
@@ -370,12 +392,29 @@ int32_t iiod_init(struct iiod_desc **desc, struct iiod_init_param *param)
 		return ret;
 	}
 
+	//ldesc->ops = param->ops;
 	ldesc->xml = param->xml;
 	ldesc->xml_len = param->xml_len;
 	ldesc->app_instance = param->instance;
 	ldesc->phy_type = param->phy_type;
 
 	*desc = ldesc;
+
+	return 0;
+}
+
+static int32_t detect_protocol(struct iiod_conn_priv *conn,
+			       struct iiod_desc *desc)
+{
+	uint8_t header[4];
+	int32_t ret = desc->ops.recv(conn, header, sizeof(header));
+	if (ret < 0)
+		return ret;
+
+	if (header[0] == 0)
+		conn->is_binary_protocol = true;
+	else
+		conn->is_binary_protocol = false;
 
 	return 0;
 }
@@ -502,6 +541,33 @@ static int32_t rw_iiod_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn,
 			return ret;
 
 		if (ret != 1)
+			return -EAGAIN;
+	}
+
+	return 0;
+}
+
+static int32_t rw_iiod_binary_buff(struct iiod_desc *desc,
+				   struct iiod_conn_priv *conn,
+				   struct iiod_buff *buf, uint8_t flags)
+{
+	struct iiod_ctx ctx = IIOD_CTX(desc, conn);
+	int32_t ret;
+	int32_t len;
+
+	len = buf->len - buf->idx;
+	if (len) {
+		if (flags & IIOD_WR)
+			ret = desc->ops.send(&ctx, (uint8_t *)buf->buf + buf->idx,
+					     len);
+		else
+			ret = desc->ops.recv(&ctx, (uint8_t *)buf->buf + buf->idx,
+					     len);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+
+		buf->idx += ret;
+		if (ret < len)
 			return -EAGAIN;
 	}
 
@@ -653,6 +719,12 @@ static int32_t iiod_run_cmd(struct iiod_desc *desc,
 		conn->res.buf.buf = desc->xml;
 		conn->res.buf.len = desc->xml_len;
 		break;
+	case IIOD_CMD_BINARY:
+		conn->is_binary_protocol = true;
+
+		conn->res.write_val = 1;
+		conn->res.val = 0;
+		break;
 	case IIOD_CMD_VERSION:
 		conn->res.buf.buf = IIOD_VERSION;
 		conn->res.buf.len = IIOD_VERSION_LEN;
@@ -706,6 +778,26 @@ static int32_t iiod_run_cmd(struct iiod_desc *desc,
 	return 0;
 }
 
+// static int32_t iiod_run_binary_cmd(struct iiod_desc *desc, struct iiod_conn_priv *conn){
+// 	struct iiod_binary_cmd *cmd = (struct iiod_binary_cmd *)conn->payload_buf;
+// 	struct iiod_ctx ctx = IIOD_CTX(desc, conn);
+
+// 	switch(cmd->cmd_id) {
+// 	case IIOD_CMD_WRITE:
+// 		conn->cmd_data.bytes_count = cmd->length;
+// 		memcpy(conn->cmd_data.device, cmd->payload, cmd->length);
+// 		break;
+// 	case IIOD_CMD_READ:
+// 		conn->cmd_data.bytes_count = cmd->length;
+// 		memcpy(conn->cmd_data.device, cmd->payload, cmd->length);
+// 		break;
+// 	default:
+// 		return -EINVAL;
+// 	}
+
+// 	return 0;
+// }
+
 static int32_t iiod_read_line(struct iiod_desc *desc,
 			      struct iiod_conn_priv *conn)
 {
@@ -742,6 +834,770 @@ end:
 	return ret;
 }
 
+static int32_t iiod_read_cmd_header(struct iiod_desc *desc,
+				    struct iiod_conn_priv *conn)
+{
+	struct iiod_ctx ctx = {
+		.instance = desc->app_instance,
+		.conn = conn->conn
+	};
+	int32_t ret;
+	uint8_t *ch = (uint8_t *)&conn->cmd_data_bin;
+
+	uint8_t len = sizeof(struct iiod_binary_cmd);
+
+	while (len > 0) {
+		ret = desc->ops.recv(&ctx, ch, len);
+		if (NO_OS_IS_ERR_VALUE(ret)) {
+			if (ret == -EAGAIN)
+				continue;
+			else
+				return ret;
+		}
+		if (ret <= sizeof(struct iiod_binary_cmd)) {
+			// if ret is less than the size of the command, it means that we have
+			// not received the full command yet, so we need to read more data
+			len -= ret;
+			ch += ret;
+			continue;
+		}
+	}
+
+	return 0;
+}
+
+//can remove
+static int32_t iiod_read_cmd_header_2(struct iiod_desc *desc,
+				      struct iiod_conn_priv *conn)
+{
+	struct iiod_ctx ctx = {
+		.instance = desc->app_instance,
+		.conn = conn->conn
+	};
+	int32_t ret;
+	uint8_t *ch = (uint8_t *)&conn->cmd_data_bin;
+
+	uint8_t len = sizeof(struct iiod_binary_cmd);
+
+	while (len > 0) {
+		ret = desc->ops.recv(&ctx, ch, 1);
+		if (NO_OS_IS_ERR_VALUE(ret)) {
+			if (ret == -EAGAIN)
+				continue;
+			else
+				return ret;
+		}
+		len -= ret;
+		ch += ret;
+	}
+
+	return 0;
+}
+
+static int32_t iiod_read_generic(struct iiod_desc *desc,
+				 struct iiod_conn_priv *conn, uint8_t* buff, uint8_t len)
+{
+	struct iiod_ctx ctx = {
+		.instance = desc->app_instance,
+		.conn = conn->conn
+	};
+	int32_t ret;
+	uint8_t *ch = (uint8_t *)buff;
+
+	while (len > 0) {
+		ret = desc->ops.recv(&ctx, ch, 1);
+		if (NO_OS_IS_ERR_VALUE(ret)) {
+			if (ret == -EAGAIN)
+				continue;
+			else
+				return ret;
+		}
+		len -= ret;
+		ch += ret;
+	}
+
+	return 0;
+}
+
+static int32_t iiod_read_binary_cmd(struct iiod_desc *desc,
+				    struct iiod_conn_priv *conn)
+{
+	static int cnt = 0;
+	struct iiod_ctx ctx = {
+		.instance = desc->app_instance,
+		.conn = conn->conn
+	};
+	int32_t ret;
+	struct iiod_binary_cmd cmd;
+
+	memset(&cmd, 0, sizeof(struct iiod_binary_cmd));
+
+	ret = desc->ops.recv(&ctx, (uint8_t *)&cmd, sizeof(cmd));
+	if (NO_OS_IS_ERR_VALUE(ret))
+		return ret;
+
+	// if (cmd.length > 0){
+	// 	ret = desc->ops.recv(&ctx, (uint8_t *)conn->payload_buf,
+	// 			     cmd.length);
+	// 	if (NO_OS_IS_ERR_VALUE(ret))
+	// 		return ret;
+	// }
+
+	//Parse binary command
+	conn->cmd_data.op_code = cmd.op;
+
+	memset(&conn->cmd_response_data, 0, sizeof(conn->cmd_response_data));
+//	conn->cmd_response_data.client_id = 0;
+//	conn->cmd_response_data.dev = 0;
+	//sprintf(conn->cmd_data.device, "%d", cmd.dev);
+
+	static uint8_t curr;
+
+
+	switch (cmd.op) {
+		uint8_t len;
+//		case IIOD_OP_WRITE_CHN_ATTR:
+//		case IIOD_OP_WRITE_ATTR:
+//
+//			sprintf(conn->cmd_data.attr, "%d", (int16_t)cmd.code);
+//			sprintf(conn->cmd_data.channel, "%d", (int16_t)(cmd.code>>16));
+//			// Handle binary write command
+//			ret = desc->ops.recv(&ctx, (uint8_t *)&len,
+//				     1);
+//			if (NO_OS_IS_ERR_VALUE(ret))
+//				return ret;
+//
+//			ret = desc->ops.recv(&ctx, (uint8_t *)conn->payload_buf,
+//				     len);
+//			if (NO_OS_IS_ERR_VALUE(ret))
+//				return ret;
+//
+//			break;
+//		case IIOD_OP_READ_ATTR:
+//		case IIOD_OP_READ_CHN_ATTR:
+//			sprintf(conn->cmd_data.attr, "%d", (int16_t)cmd.code);
+//			sprintf(conn->cmd_data.channel, "%d", (int16_t)(cmd.code>>16));
+//			// Handle binary read command
+//			break;
+	//case IIOD_OP_TIMEOUT: //2
+	case 1:
+	case 2:
+	case 4:
+		if (!cnt) {
+			conn->res.val = 0;
+			conn->res.write_val = 1;
+			conn->res.second_write = false;
+			//conn->state = IIOD_WRITING_CMD_RESULT; //todo: need to update this as well i think
+
+			conn->state = IIOD_READING_LINE; //IIOD_WRITING_BIN_RESPONSE;
+
+			//Send response cmd
+			ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+					     sizeof(conn->cmd_response_data));
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+
+			cnt++;
+		} else {
+			conn->res.val = desc->xml_len;
+			conn->res.write_val = 1;
+			conn->res.buf.buf = desc->xml;
+			conn->res.buf.len = desc->xml_len;
+			conn->state = IIOD_READING_LINE; //IIOD_WRITING_BIN_RESPONSE;
+			conn->res.buf.idx = 0;
+
+			conn->cmd_response_data.code = desc->xml_len; //0
+			conn->res.second_write = true;
+
+			//Send response cmd
+			ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+					     sizeof(conn->cmd_response_data));
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+
+			if (conn->res.second_write) {
+				/* Send buf from result. Non blocking */
+				if (conn->res.buf.buf &&
+				    conn->res.buf.idx < conn->res.buf.len) {
+					ret = rw_iiod_buff(desc, conn, &conn->res.buf,
+							   IIOD_WR);
+					if (NO_OS_IS_ERR_VALUE(ret))
+						return ret;
+				}
+			}
+		}
+
+		//conn->cmd_response_data.code = 0; //can be given though to mask value recieved as client expects something
+		break;
+	//case IIOD_OP_PRINT: //1
+//		case 8:
+//			conn->res.val= desc->xml_len;
+//			conn->res.write_val = 1;
+//			conn->res.buf.buf = desc->xml;
+//			conn->res.buf.len = desc->xml_len;
+//			conn->state = IIOD_READING_LINE; //IIOD_WRITING_BIN_RESPONSE;
+//			conn->res.buf.idx = 0;
+//
+//			conn->cmd_response_data.code = desc->xml_len; //0
+//			conn->res.second_write = true;
+//
+//			//Send response cmd
+//			ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+//					     sizeof(conn->cmd_response_data));
+//			if (NO_OS_IS_ERR_VALUE(ret))
+//				return ret;
+//
+//			if(conn->res.second_write){
+//			/* Send buf from result. Non blocking */
+//				if (conn->res.buf.buf &&
+//					conn->res.buf.idx < conn->res.buf.len) {
+//					ret = rw_iiod_buff(desc, conn, &conn->res.buf,
+//							IIOD_WR);
+//					if (NO_OS_IS_ERR_VALUE(ret))
+//						return ret;
+//				}
+//			}
+//
+//			break;
+//		case IIOD_OP_CREATE_BUFFER:
+//			ret = desc->ops.recv(&ctx, (uint8_t *)&conn->cmd_data.mask, 4);
+//			if (NO_OS_IS_ERR_VALUE(ret))
+//				return ret;
+//			conn->res.val = 0;
+//			conn->res.write_val = 1;
+//			conn->state = IIOD_WRITING_BIN_RESPONSE; //todo: hopefully res.buf is vacated/emptied
+//
+//			conn->cmd_response_data.code = 0; //can be given though to mask value recieved as client expects something
+//			break;
+//		case IIOD_OP_CREATE_BLOCK: // 4 times create block
+//			//take block index from (int16_t)(cmd.code>>16)
+//			sprintf(conn->cmd_data.block_id[curr], "%d", (int16_t)(cmd.code>>16));
+//
+//			//  receive block size
+//			ret = desc->ops.recv(&ctx, (uint8_t *)&conn->cmd_data.block_size[curr], 8);
+//			if (NO_OS_IS_ERR_VALUE(ret))
+//				return ret;
+//
+//			curr = (curr + 1) % 4;
+//			conn->res.val = 0;
+//			conn->res.write_val = 1;
+//			conn->state = IIOD_WRITING_BIN_RESPONSE;
+//
+//			conn->cmd_response_data.code = 0; //for precaution
+//			break;
+//
+//		case IIOD_OP_TRANSFER_BLOCK:
+//			//take block index from (int16_t)(cmd.code>>16)
+//			//op for enqueue block
+//			sprintf(conn->cmd_data.block_id[curr], "%d", (int16_t)(cmd.code>>16)); //todo: see
+//
+//			//  receive block size
+//			ret = desc->ops.recv(&ctx, (uint8_t *)&conn->cmd_data.bytes_size[curr], 8);
+//			if (NO_OS_IS_ERR_VALUE(ret))
+//				return ret;
+//
+//
+//			conn->state = IIOD_WRITING_BIN_RESPONSE;//IIOD_READING_LINE; //first send cmd then transfer block
+//
+//			conn->cmd_response_data.code = conn->cmd_data.bytes_size[curr];
+//			curr = (curr + 1) % 4;
+//			//transfer block to client
+//			break;
+//
+//		case IIOD_OP_ENABLE_BUFFER:
+//			// enable/start buffer streaming
+//			// call submit buffer here
+//			// fill some dummy data to the buffer
+//
+//			ret = do_read_buff(desc, conn); //todo: not sure of enabling and others
+//			if (NO_OS_IS_ERR_VALUE(ret))
+//				return ret;
+//
+//			conn->state = IIOD_LINE_DONE;
+//
+//			//ret = rw_iiod_buff(desc, conn, &conn->nb_buf, IIOD_WR);
+//
+//			break;
+//
+//		case IIOD_OP_RETRY_DEQUEUE_BLOCK:
+//			// dequeue block from the buffer
+//			// fill some dummy data to the buffer
+//			// only when previous deque fails
+//			break;
+
+	// Add cases for other binary commands
+	default:
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+static int32_t iiod_read_binary_cmd_new(struct iiod_desc *desc,
+					struct iiod_conn_priv *conn)
+{
+
+	static uint8_t buffer[1024];
+	static int cnt = 0;
+	struct iiod_ctx ctx = {
+		.instance = desc->app_instance,
+		.conn = conn->conn
+	};
+	int32_t ret;
+	struct iiod_binary_cmd cmd;
+	static uint8_t *blocks[16];
+	static struct iio_stream *stream;
+	static struct no_os_list_desc *event_list;
+	static struct lf256fifo *fifo_stream;
+	struct iiod_event_desc *evt_data;
+	static struct iiod_buff buff;
+
+	struct iiod_event_data data = {
+		.channel_id = 0,
+		.diff_channel_id = 0,
+		.channel_type = IIO_VOLTAGE,
+		.modifier = IIO_NO_MOD,
+		.event_dir = IIO_EV_DIR_NONE,
+		.is_differential = 0,
+		.event_type = IIO_EV_TYPE_THRESH,
+		.timestamp = 1
+	};
+
+	memset(&cmd, 0, sizeof(struct iiod_binary_cmd));
+
+#if 0
+	ret = desc->ops.recv(&ctx, (uint8_t *)&cmd, sizeof(cmd));
+	if (NO_OS_IS_ERR_VALUE(ret))
+		return ret;
+
+	conn->cmd_data.op_code = cmd.op;
+#else
+	ret = iiod_read_cmd_header(desc, conn);
+	if (NO_OS_IS_ERR_VALUE(ret))
+		return ret;
+
+	memcpy(&cmd, &conn->cmd_data_bin, sizeof(struct iiod_binary_cmd));
+#endif
+
+	// if (cmd.length > 0){
+	// 	ret = desc->ops.recv(&ctx, (uint8_t *)conn->payload_buf,
+	// 			     cmd.length);
+	// 	if (NO_OS_IS_ERR_VALUE(ret))
+	// 		return ret;
+	// }
+
+
+
+	memset(&conn->cmd_response_data, 0, sizeof(conn->cmd_response_data));
+//	conn->cmd_response_data.client_id = 0;
+//	conn->cmd_response_data.dev = 0;
+	//sprintf(conn->cmd_data.device, "%d", cmd.dev);
+
+	static uint8_t curr, curr_1;
+	static uint8_t cl_id = 1;
+	static uint8_t buf_id;
+	struct iiod_event_desc evt_data_key = {.client_id = cmd.client_id};
+
+	switch (cmd.op) {
+		//switch(conn->cmd_data_bin.op) {
+		uint8_t len;
+	case IIOD_OP_TIMEOUT: //2: //timeout
+		conn->res.val = 0;
+		conn->res.write_val = 1;
+		conn->res.second_write = false;
+		//conn->state = IIOD_WRITING_CMD_RESULT; //todo: need to update this as well i think
+
+		conn->state = IIOD_READING_LINE; //IIOD_WRITING_BIN_RESPONSE;
+
+		//Send response cmd
+		ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+				     sizeof(conn->cmd_response_data));
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+
+		break;
+
+	case IIOD_OP_PRINT: //print 1
+		conn->res.val = desc->xml_len;
+		conn->res.write_val = 1;
+		conn->res.buf.buf = desc->xml;
+		conn->res.buf.len = desc->xml_len;
+		conn->state = IIOD_READING_LINE; //IIOD_WRITING_BIN_RESPONSE;
+		conn->res.buf.idx = 0;
+
+		conn->cmd_response_data.code = desc->xml_len; //0
+		conn->res.second_write = true;
+
+		//Send response cmd
+		ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+				     sizeof(conn->cmd_response_data));
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+
+		if (conn->res.second_write) {
+			/* Send buf from result. Non blocking */
+			if (conn->res.buf.buf &&
+			    conn->res.buf.idx < conn->res.buf.len) {
+				do {
+					ret = rw_iiod_buff(desc, conn, &conn->res.buf,
+							   IIOD_WR);
+				} while (ret == -EAGAIN);
+				if (NO_OS_IS_ERR_VALUE(ret))
+					return ret;
+			}
+		}
+
+
+		//conn->cmd_response_data.code = 0; //can be given though to mask value recieved as client expects something
+		break;
+
+	case 8:
+		break;
+
+	case 5:
+		break;
+
+	case IIOD_OP_CREATE_BUFFER: //13: //create buffer
+		// we currently support single buffer applications with multiple blocks
+
+#if 0
+		ret = desc->ops.recv(&ctx, (uint8_t *)&conn->cmd_data.mask,
+				     4); //read mask in next header
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+#else
+		//get ch-mask from this cmd payload
+		ret = iiod_read_generic(desc, conn, (uint8_t *)&conn->cmd_data.mask,
+					4);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+#endif
+
+		conn->res.val = 0;
+		conn->res.write_val = 1;
+		conn->state = IIOD_READING_LINE; //IIOD_WRITING_BIN_RESPONSE;
+
+		//Send response cmd
+		ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+				     sizeof(conn->cmd_response_data));
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+		break;
+
+	case IIOD_OP_CREATE_BLOCK: //17: //create block
+		/* get block index, client id from cmd and block size from cmd payload */
+		//take block index from (cmd.code>>16)
+		sprintf(&conn->cmd_data.block_id[curr], "%d", (int16_t)(cmd.code >> 16));
+
+		//  receive block size
+#if 0
+		ret = desc->ops.recv(&ctx, (uint8_t *)&conn->cmd_data.block_size[curr], 8);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+#else
+		//get corresponding block size
+		ret = iiod_read_generic(desc, conn, (uint8_t *)&conn->cmd_data.block_size[curr],
+					8);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+#endif
+
+		conn->res.val = 0;
+		conn->res.write_val = 1;
+		conn->state = IIOD_READING_LINE; //IIOD_WRITING_BIN_RESPONSE;
+
+		/* Send response with block size as code created and cl id */
+		conn->cmd_response_data.code = conn->cmd_data.block_size[curr];
+
+		//new responder io is created in the client..  so create a corresponding one in here
+		conn->cmd_response_data.client_id = cmd.client_id;
+
+		//malloc buffers of size given
+		if (!curr) {
+			stream = calloc(1, sizeof(*stream));
+			if (!stream)
+				return -ENOMEM;
+
+			stream->blocks = calloc(MAX_NUM_BLOCKS, sizeof(*stream->blocks));
+			if (!stream->blocks)
+				return -ENOMEM;
+
+			ret = lf256fifo_init(&fifo_stream);
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+		}
+
+		stream->blocks[curr] = calloc(1, sizeof(*stream->blocks[curr]));
+		if (!stream->blocks[curr])
+			return -ENOMEM;
+		stream->blocks[curr]->cl_id = cmd.client_id;
+		stream->blocks[curr]->size = conn->cmd_data.block_size[curr];
+		stream->blocks[curr]->data = (uint8_t *)calloc(1,
+					     conn->cmd_data.block_size[curr] * sizeof(uint8_t));
+		if (!stream->blocks[curr]->data)
+			return -ENOMEM;
+
+		stream->nb_blocks++;
+
+		memset(stream->blocks[curr]->data, (curr + 1) << 4,
+		       conn->cmd_data.block_size[curr]);
+
+		//Send response cmd
+		ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+				     sizeof(conn->cmd_response_data));
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+
+		curr = (curr + 1) % MAX_NUM_BLOCKS;
+		break;
+
+	case IIOD_OP_TRANSFER_BLOCK: //19: //transfer op
+		/* get block index, client id from cmd and block size from cmd payload */
+		//take block index from (cmd.code>>16)
+		uint8_t wr = (uint8_t)(int16_t)(cmd.code >> 16);
+		//sprintf(&wr, "%d", (int16_t)(cmd.code >> 16));
+
+		//enqueue buf idx
+		lf256fifo_write(fifo_stream, wr);
+		//  receive block size
+#if 0
+		ret = desc->ops.recv(&ctx, (uint8_t *)&conn->cmd_data.bytes_size[curr_1], 8);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+#else
+		//get corresponding requested bytes size //TODO: see what to do with these
+		ret = iiod_read_generic(desc, conn,
+					(uint8_t *)&conn->cmd_data.bytes_size[curr_1],
+					8);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+#endif
+
+		if (stream->started) {
+			ret = lf256fifo_read(fifo_stream, &buf_id);
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+			conn->cmd_response_data.client_id = stream->blocks[buf_id]->cl_id;
+			conn->cmd_response_data.code = stream->blocks[buf_id]->size;
+			//before payload.. header to be sent again with corresponding cl id and code
+			ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+					     sizeof(conn->cmd_response_data));
+
+			//Now send the response back buffer payload req bytes
+			// ret = desc->ops.send(&ctx, stream->blocks[buf_id]->data,
+			// 		     stream->blocks[buf_id]->size);
+			// if (NO_OS_IS_ERR_VALUE(ret))
+			// 	return ret;
+
+			buff.buf = stream->blocks[buf_id]->data;
+			buff.len = stream->blocks[buf_id]->size;
+			buff.idx = 0;
+
+			do {
+				ret = rw_iiod_buff(desc, conn,
+						   &buff,
+						   IIOD_WR);
+			} while (ret == -EAGAIN);
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+		}
+		//curr_1++;
+		conn->state = IIOD_READING_LINE;
+
+		break;
+
+	case IIOD_OP_ENABLE_BUFFER: //15: //start streaming
+		conn->state = IIOD_READING_LINE; //IIOD_WRITING_BIN_RESPONSE;
+
+		//Send response cmd
+		ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+				     sizeof(conn->cmd_response_data));
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+
+		conn->res.val = 0; //dummy op
+		stream->started = true;
+
+		//memset(buffer, 0x10, sizeof(buffer));
+
+
+		//transfer here
+		for (int i = 0; i < stream->nb_blocks; i++) {
+
+			ret = lf256fifo_read(fifo_stream, &buf_id);
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+			conn->cmd_response_data.client_id = stream->blocks[buf_id]->cl_id;
+			conn->cmd_response_data.code = stream->blocks[buf_id]->size;
+			//before payload.. header to be sent again with corresponding cl id and code
+			ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+					     sizeof(conn->cmd_response_data));
+
+			//Now send the response back buffer payload req bytes
+			// ret = desc->ops.send(&ctx, stream->blocks[buf_id]->data,
+			// 		     stream->blocks[buf_id]->size);
+			// if (NO_OS_IS_ERR_VALUE(ret))
+			// 	return ret;
+
+			buff.buf = stream->blocks[buf_id]->data;
+			buff.len = stream->blocks[buf_id]->size;
+			buff.idx = 0;
+
+			do {
+				ret = rw_iiod_buff(desc, conn,
+						   &buff,
+						   IIOD_WR);
+			} while (ret == -EAGAIN);
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+
+		}
+
+		break;
+
+	case IIOD_OP_FREE_BLOCK:
+		//Dealloc blocks created
+		if (stream && stream->blocks) {
+			for (int i = 0; i < stream->nb_blocks; i++) {
+				if (stream->blocks[i]) {
+					free(stream->blocks[i]->data);
+					free(stream->blocks[i]);
+				}
+			}
+			free(stream->blocks);
+			stream->blocks = NULL;
+			stream->nb_blocks = 0;
+		}
+
+		//send response.. calls 4 times for all blocks
+
+		//Send response cmd
+		ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+				     sizeof(conn->cmd_response_data));
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+
+		break;
+
+	case IIOD_OP_FREE_BUFFER:
+		//dealloc buffer
+
+		//Send response cmd
+		ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+				     sizeof(conn->cmd_response_data));
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+
+		break;
+
+	case IIOD_OP_RETRY_DEQUEUE_BLOCK:
+		// dequeue block from the buffer
+		// fill some dummy data to the buffer
+		// only when previous deque fails
+		break;
+
+	case IIOD_OP_CREATE_EVSTREAM:
+		/* Create a list of events, if not done already */
+		if (!event_list) {
+			ret = no_os_list_init(&event_list, NO_OS_LIST_PRIORITY_LIST,
+					      iio_event_cmp);
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+		}
+
+		/* Find the element for the Client ID */
+		ret = no_os_list_read_find(event_list, (void **)&evt_data, &evt_data_key);
+
+		/* If no event data is found insert a new one */
+		if (ret) {
+			evt_data = (struct iiod_event_desc *) no_os_calloc(1, sizeof(*evt_data));
+			if (!evt_data)
+				return -ENOMEM;
+
+			evt_data->client_id = cmd.client_id;
+			evt_data->event_data = NULL;
+
+			ret = no_os_list_add_last(event_list, evt_data);
+			if (ret)
+				goto free_action;
+		} else {
+			return -EINVAL;
+		}
+
+		conn->cmd_response_data.client_id = cmd.client_id;
+		//Send response cmd
+		ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+				     sizeof(conn->cmd_response_data));
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+		break;
+free_action:
+		no_os_free(evt_data);
+		return -EINVAL;
+	case IIOD_OP_FREE_EVSTREAM:
+		struct iiod_event_desc discard_evt_key = {.client_id = cmd.client_id};
+		struct iiod_event_desc *discard_evt;
+		if (!event_list) {
+			return -EINVAL;
+		}
+
+		/* Find the element for the Client ID */
+		ret = no_os_list_read_find(event_list, (void **)&discard_evt, &discard_evt_key);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+
+		while (discard_evt->event_data) {
+			discard_evt->event_data = no_os_fifo_remove(discard_evt->event_data);
+		}
+
+		no_os_free(discard_evt);
+
+		//Send response cmd
+		ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+				     sizeof(conn->cmd_response_data));
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+		break;
+	case IIOD_OP_READ_EVENT:
+		if (!event_list) {
+			return -EINVAL;
+		}
+
+		/* Find the element for the Client ID */
+		ret = no_os_list_read_find(event_list, (void **)&evt_data, &evt_data_key);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+
+		no_os_fifo_insert(&evt_data->event_data, &data, sizeof(data));
+
+		if (evt_data->event_data != NULL) {
+			conn->cmd_response_data.client_id = cmd.client_id;
+			conn->cmd_response_data.code = evt_data->event_data->len;
+			//Send response cmd
+			ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+					     sizeof(conn->cmd_response_data));
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+
+			//Send response payload
+			ret = desc->ops.send(&ctx, (uint8_t *)evt_data->event_data->data,
+					     evt_data->event_data->len);
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+
+			evt_data->event_data = no_os_fifo_remove(evt_data->event_data);
+		} else {
+			evt_data->event_read_count++;
+		}
+
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
 /*
  * Function will return SUCCESS when a state was processed.
  * If a state is still in processing state, it will return -EAGAIN.
@@ -759,27 +1615,41 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 
 	switch (conn->state) {
 	case IIOD_READING_LINE:
-		/* Read input data until \n. I/O Calls */
-		ret = iiod_read_line(desc, conn);
-		if (NO_OS_IS_ERR_VALUE(ret))
-			return ret;
+		if (!conn->is_binary_protocol) {
+			/* Read input data until \n. I/O Calls */
+			ret = iiod_read_line(desc, conn);
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
 
-		/* Fill struct comand_desc with data from line. No I/O */
-		ret = iiod_parse_line(conn->parser_buf, &conn->cmd_data,
-				      &conn->strtok_ctx);
-		if (NO_OS_IS_ERR_VALUE(ret)) {
-			/* Parsing line failed */
-			conn->res.write_val = 1;
-			conn->res.val = ret;
-			conn->state = IIOD_WRITING_CMD_RESULT;
-		} else if (conn->cmd_data.cmd == IIOD_CMD_WRITE) {
-			/* Special case. Attribute needs to be read */
-			conn->nb_buf.buf = conn->payload_buf;
-			conn->nb_buf.len = conn->cmd_data.bytes_count;
-			conn->nb_buf.idx = 0;
-			conn->state = IIOD_READING_WRITE_DATA;
+			/* Fill struct comand_desc with data from line. No I/O */
+			ret = iiod_parse_line(conn->parser_buf, &conn->cmd_data,
+					      &conn->strtok_ctx);
+			if (NO_OS_IS_ERR_VALUE(ret)) {
+				/* Parsing line failed */
+				conn->res.write_val = 1;
+				conn->res.val = ret;
+				conn->state = IIOD_WRITING_CMD_RESULT;
+			} else if (conn->cmd_data.cmd == IIOD_CMD_WRITE) {
+				/* Special case. Attribute needs to be read */
+				conn->nb_buf.buf = conn->payload_buf;
+				conn->nb_buf.len = conn->cmd_data.bytes_count;
+				conn->nb_buf.idx = 0;
+				conn->state = IIOD_READING_WRITE_DATA;
+			} else {
+				conn->state = IIOD_RUNNING_CMD;
+			}
 		} else {
-			conn->state = IIOD_RUNNING_CMD;
+			// ret = iiod_parse_binary_cmd(conn, (struct iiod_binary_cmd *)conn->parser_buf);
+			// if (NO_OS_IS_ERR_VALUE(ret)) {
+			// 	conn->res.write_val = 1;
+			// 	conn->res.val = ret;
+			// 	conn->state = IIOD_WRITING_CMD_RESULT;
+			// }else{
+			ret = iiod_read_binary_cmd_new(desc, conn);
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+			//conn->state = IIOD_READING_LINE; //IIOD_RUNNING_CMD;
+			//}
 		}
 
 		return 0;
@@ -832,6 +1702,32 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 		}
 
 		return 0;
+
+	case IIOD_WRITING_BIN_RESPONSE:
+		if (conn->res.write_val) {
+			//conn->cmd_response_data.op = IIOD_OP_RESPONSE;
+
+			//Send response cmd
+			ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+					     sizeof(conn->cmd_response_data));
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+
+			if (conn->res.second_write) {
+				/* Send buf from result. Non blocking */
+				if (conn->res.buf.buf &&
+				    conn->res.buf.idx < conn->res.buf.len) {
+					ret = rw_iiod_buff(desc, conn, &conn->res.buf,
+							   IIOD_WR);
+					if (NO_OS_IS_ERR_VALUE(ret))
+						return ret;
+				}
+			}
+		}
+
+		conn->state =  IIOD_READING_LINE; //IIOD_LINE_DONE;
+		return 0;
+
 	case IIOD_RW_BUF:
 		/* IIOD_CMD_READBUF and IIOD_CMD_WRITEBUF special case */
 		/* Non blocking read/write until all data is processed */
