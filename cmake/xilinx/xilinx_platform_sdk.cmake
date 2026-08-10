@@ -61,6 +61,26 @@ function(config_xilinx_sdk BUILD_TARGET)
                 "Xilinx BSP generation failed (rc=${_rc}).\n"
                 "stdout:\n${_out}\nstderr:\n${_err}")
         endif()
+        # Kill the Vitis gRPC server create_project left behind, then generate
+        # XPAR_* macros in a fresh standalone vitis -s (like get_arch).
+        # HwManager.open_hw_design uses direct HSI only when no server is
+        # alive; with a server present it routes through java and triggers an
+        # XSDB launch that hangs without hardware.
+        execute_process(COMMAND pkill -9 -f "RigelApp" TIMEOUT 5)
+        execute_process(COMMAND ${CMAKE_COMMAND} -E sleep 1 TIMEOUT 5)
+        execute_process(
+            COMMAND ${VITIS_EXECUTABLE} -s
+                    "${NO_OS_DIR}/tools/scripts/platform/xilinx/util.py"
+                    generate_macros "${_ws}" "${_ws}" "${_xsa_file}"
+            RESULT_VARIABLE _macros_rc
+            OUTPUT_VARIABLE _macros_out
+            ERROR_VARIABLE _macros_err
+            TIMEOUT 300)
+        if(NOT _macros_rc EQUAL 0)
+            message(WARNING "XPAR macro generation failed (rc=${_macros_rc}); "
+                            "PL interrupt macros may be missing from xparameters.h.\n"
+                            "${_macros_err}")
+        endif()
     endif()
 
     if(NOT EXISTS "${_lscript}")
