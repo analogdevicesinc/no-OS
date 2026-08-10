@@ -135,46 +135,95 @@ Replace ``--variant`` / ``--board`` accordingly.
       --project max14916 --variant basic --board ad-apard32690-sl \
       --probe openocd --flash
 
-Linux
-~~~~~
+Linux Host (USB2PMB2) Platform
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Used Hardware
 ^^^^^^^^^^^^^
 
 * `MAX14916EVKIT <https://www.analog.com/MAX14916EVKIT>`_
-* Any SPI-capable Linux host
+* `USB2PMB2 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/usb2pmb2.html>`_
+  (FTDI FT2232HQ-based USB-to-PMOD adapter)
+
+Connections
+^^^^^^^^^^^
+
+The MAX14916EVKIT communicates via SPI. Connect the board to the USB2PMB2
+adapter as follows:
+
++-------------------+-----------------------------+
+| MAX14916EVKIT Pin | USB2PMB2 Pin                |
++===================+=============================+
+| VDD (3.3 V logic) | 3.3 V output                |
++-------------------+-----------------------------+
+| GND               | GND                         |
++-------------------+-----------------------------+
+| SCLK              | ADBUS0 (SPI Clock)          |
++-------------------+-----------------------------+
+| SDI (MOSI)        | ADBUS1 (SPI MOSI)           |
++-------------------+-----------------------------+
+| SDO (MISO)        | ADBUS2 (SPI MISO)           |
++-------------------+-----------------------------+
+| CS                | ADBUS3 (SPI Chip Select)    |
++-------------------+-----------------------------+
+
+Prerequisites
+^^^^^^^^^^^^^
+
+The linux-userspace build for the USB2PMB2 board uses the FTDI D2XX and
+LibMPSSE libraries. Because the FTDI website requires a browser-based download,
+obtain the archives manually first and then install them with the provided
+helper script:
+
+.. code-block:: bash
+
+   # Install libftd2xx and LibMPSSE from locally downloaded archives
+   python3 tools/scripts/config_ftd2xx.py \
+      --local-mpsse D2XX_MPSSE_1.0.7_Linux.zip \
+      --local-d2xx libftd2xx-linux-x86_64-1.4.35.tgz
+
+Before running the compiled binary, unload the ``ftdi_sio`` kernel module so
+the D2XX library can claim the USB device directly:
+
+.. code-block:: bash
+
+   sudo rmmod ftdi_sio usbserial
 
 Build Command
 ^^^^^^^^^^^^^
 
-For the make-based build flow and prerequisites, see the
-`No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_.
+For toolchain setup and prerequisites, see the
+`Linux Userspace CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_linux_userspace_cmake.html>`__.
 
-In order to build the basic example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/max14916/Makefile>`__:
+Available variants: ``basic``, ``iio_example``.
+Available boards: ``usb2pmb2``.
+Replace ``--variant`` accordingly.
 
-.. code-block:: bash
-
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = y
-   IIO_EXAMPLE = n
-
-In order to build the IIO example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/max14916/Makefile>`__:
+No toolchain environment variable is required — the system ``gcc`` is
+used automatically.
 
 .. code-block:: bash
 
-   # Select the example you want to enable by choosing y for enabling and n for disabling
-   BASIC_EXAMPLE = n
-   IIO_EXAMPLE = y
+   cd no-OS
+
+   # build the basic example for the USB2PMB2 board
+   python3 tools/scripts/no_os_build.py build \
+      --project max14916 --variant basic --board usb2pmb2
+
+   # build the iio_example for the USB2PMB2 board
+   python3 tools/scripts/no_os_build.py build \
+      --project max14916 --variant iio_example --board usb2pmb2
+
+Run the resulting binary directly on the Linux host (``sudo`` is required for
+D2XX USB access):
 
 .. code-block:: bash
 
-   # to delete current build
-   make reset
-   # to build the project
-   make PLATFORM=linux
-   # to flash the code
-   make run
+   sudo ./build/max14916-basic-usb2pmb2/build/max14916
+
+For the ``iio_example`` variant, the IIOD server listens on the loopback
+interface. Connect an IIO client once the binary is running:
+
+.. code-block:: bash
+
+   iio_info -u ip:127.0.0.1
