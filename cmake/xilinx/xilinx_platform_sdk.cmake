@@ -49,16 +49,25 @@ function(config_xilinx_sdk BUILD_TARGET)
 
         message(STATUS "Generating Xilinx BSP + linker script from ${_xsa_file} "
                        "(arch ${XILINX_ARCH})... this can take a few minutes")
+        # Bound the vitis call: with no JTAG target attached, vitis's XSDB
+        # server launch can hang forever (TCF locator stalls on target
+        # discovery), and execute_process would block configure with no output.
+        # Fail loudly instead of hanging the whole build.
         execute_process(
             COMMAND ${VITIS_EXECUTABLE} -s
                     "${NO_OS_DIR}/tools/scripts/platform/xilinx/util.py"
                     create_project "${_ws}" "${_ws}" "${_xsa_file}"
             RESULT_VARIABLE _rc
             OUTPUT_VARIABLE _out
-            ERROR_VARIABLE _err)
+            ERROR_VARIABLE _err
+            TIMEOUT 900)
         if(NOT _rc EQUAL 0 OR NOT EXISTS "${_bsp_lib}/libxil.a")
             message(FATAL_ERROR
                 "Xilinx BSP generation failed (rc=${_rc}).\n"
+                "This usually means vitis hung on XSDB server startup "
+                "(no JTAG hardware attached, or TCF target discovery stalled).\n"
+                "See ${_ws}/tmp/output/_ide/logs/vitis.log and kill "
+                "leftover processes with: pkill -f 'RigelApp'\n"
                 "stdout:\n${_out}\nstderr:\n${_err}")
         endif()
         # Kill the Vitis gRPC server create_project left behind, then generate

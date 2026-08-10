@@ -16,6 +16,7 @@ import json
 import os
 import shlex
 import shutil
+import signal
 import subprocess
 import sys
 import threading
@@ -501,18 +502,53 @@ def echo_cmd(cmd):
     print(f"  $ {quote_cmd(cmd)}", flush=True)
 
 
-def append_log(log_path, section, result):
+def append_log(log_path, section, result, note=None):
     """Append a labelled section of captured output to the build log."""
     with open(log_path, "a") as f:
         f.write(f"=== {section} ===\n")
-        if result.stdout:
+        if note:
+            f.write(f"[{note}]\n")
+        if result and result.stdout:
             f.write(result.stdout)
-        if result.stderr:
+        if result and result.stderr:
             f.write(result.stderr)
         f.write("\n")
 
 
-def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None, flash=False, fresh=False, hardware=None):
+def _run_cmd(cmd, cwd, timeout, capture=True, check=True):
+    """Run a command with a hard timeout, killing its whole process tree on expiry.
+
+    The Xilinx BSP generation (`vitis -s util.py create_project`) can hang
+    forever when no JTAG hardware is attached: vitis's XSDB server launch
+    stalls on target discovery and nothing above it times out. The child runs
+    in its own session/process group so killpg() reaps the vitis/java
+    grandchildren that would otherwise orphan and hold workspace/TCF locks.
+    """
+    kwargs = dict(cwd=cwd, text=True, start_new_session=True)
+    if capture:
+        kwargs["stdout"] = subprocess.PIPE
+        kwargs["stderr"] = subprocess.PIPE
+    with subprocess.Popen(cmd, **kwargs) as proc:
+        try:
+            stdout, stderr = proc.communicate(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            # proc.pid is the process-group id (start_new_session=True):
+            # SIGKILL the whole group so vitis/java servers spawned by cmake
+            # die too instead of orphaning and holding workspace/TCF locks.
+            try:
+                os.killpg(proc.pid, signal.SIGKILL)
+            except (ProcessLookupError, PermissionError):
+                pass
+            proc.wait()
+            raise
+        retcode = proc.poll()
+        if check and retcode:
+            raise subprocess.CalledProcessError(
+                retcode, cmd, output=stdout, stderr=stderr)
+        return subprocess.CompletedProcess(cmd, retcode, stdout, stderr)
+
+
+def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None, flash=False, fresh=False, hardware=None, timeout=1800):
     """Run cmake configure + build (and optionally flash) for a single combination.
 
     Returns (combo, success, detail). On failure, detail is the error message.
@@ -576,15 +612,16 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
     with Spinner(f"Configuring {label}") as spinner:
         echo_cmd(configure_cmd)
         try:
-            result = subprocess.run(
-                configure_cmd,
-                cwd=str(repo_root),
-                check=True,
-                capture_output=True,
-                text=True,
-            )
+            result = _run_cmd(configure_cmd, str(repo_root), timeout)
             append_log(log_path, "Configure", result)
             spinner.finish("OK")
+        except subprocess.TimeoutExpired:
+            append_log(log_path, "Configure", None, note=f"TIMEOUT after {timeout}s")
+            spinner.finish("TIMEOUT")
+            return combo, False, (
+                f"Configure timed out after {timeout}s (vitis BSP generation hung; "
+                f"no JTAG hardware attached?). See {log_path} for details. "
+                f"Kill leftover vitis processes: pkill -f 'RigelApp'")
         except subprocess.CalledProcessError as e:
             append_log(log_path, "Configure", e)
             spinner.finish("FAILED")
@@ -593,15 +630,13 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
     with Spinner(f"Building {label}") as spinner:
         echo_cmd(build_cmd)
         try:
-            result = subprocess.run(
-                build_cmd,
-                cwd=str(repo_root),
-                check=True,
-                capture_output=True,
-                text=True,
-            )
+            result = _run_cmd(build_cmd, str(repo_root), timeout)
             append_log(log_path, "Build", result)
             spinner.finish("OK")
+        except subprocess.TimeoutExpired:
+            append_log(log_path, "Build", None, note=f"TIMEOUT after {timeout}s")
+            spinner.finish("TIMEOUT")
+            return combo, False, f"Build timed out after {timeout}s"
         except subprocess.CalledProcessError as e:
             append_log(log_path, "Build", e)
             spinner.finish("FAILED")
@@ -610,12 +645,9 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
     if flash:
         echo_cmd(flash_cmd)
         try:
-            subprocess.run(
-                flash_cmd,
-                cwd=str(repo_root),
-                check=True,
-                text=True,
-            )
+            _run_cmd(flash_cmd, str(repo_root), timeout, capture=False)
+        except subprocess.TimeoutExpired:
+            return combo, False, f"Flash timed out after {timeout}s"
         except subprocess.CalledProcessError as e:
             stderr_tail = e.stderr[-500:] if e.stderr else "(see terminal output above)"
             return combo, False, f"Flash failed:\n{stderr_tail}"
@@ -711,15 +743,17 @@ def cmd_build(args, repo_root, presets):
                 print(f"  [{idx}/{total}] Configuring {label}...", flush=True)
                 echo_cmd(configure_cmd)
                 try:
-                    result = subprocess.run(
-                        configure_cmd,
-                        cwd=str(repo_root),
-                        check=True,
-                        capture_output=True,
-                        text=True,
-                    )
+                    result = _run_cmd(configure_cmd, str(repo_root), args.timeout)
                     append_log(log_path, "Configure", result)
                     print("OK")
+                except subprocess.TimeoutExpired:
+                    append_log(log_path, "Configure", None,
+                               note=f"TIMEOUT after {args.timeout}s")
+                    print("TIMEOUT")
+                    configure_failed.add((combo["project"], combo["variant"], combo["board"]))
+                    failures.append((combo, f"Configure timed out after {args.timeout}s "
+                                           f"(vitis BSP generation hung; no JTAG hardware attached?)"))
+                    failed += 1
                 except subprocess.CalledProcessError as e:
                     append_log(log_path, "Configure", e)
                     print("FAILED")
@@ -774,14 +808,11 @@ def cmd_build(args, repo_root, presets):
 
             echo_cmd(build_cmd)
             try:
-                result = subprocess.run(
-                    build_cmd,
-                    cwd=str(repo_root),
-                    check=True,
-                    capture_output=True,
-                    text=True,
-                )
+                result = _run_cmd(build_cmd, str(repo_root), args.timeout)
                 append_log(log_path, "Build", result)
+            except subprocess.TimeoutExpired:
+                append_log(log_path, "Build", None, note=f"TIMEOUT after {args.timeout}s")
+                return combo, False, f"Build timed out after {args.timeout}s"
             except subprocess.CalledProcessError as e:
                 append_log(log_path, "Build", e)
                 return combo, False, f"Build failed:\n{e.stderr[-500:]}"
@@ -794,12 +825,9 @@ def cmd_build(args, repo_root, presets):
                 # programmed at a time, even though builds run in parallel.
                 with flash_lock:
                     try:
-                        subprocess.run(
-                            flash_cmd,
-                            cwd=str(repo_root),
-                            check=True,
-                            text=True,
-                        )
+                        _run_cmd(flash_cmd, str(repo_root), args.timeout, capture=False)
+                    except subprocess.TimeoutExpired:
+                        return combo, False, f"Flash timed out after {args.timeout}s"
                     except subprocess.CalledProcessError as e:
                         stderr_tail = e.stderr[-500:] if e.stderr else "(see terminal output above)"
                         return combo, False, f"Flash failed:\n{stderr_tail}"
@@ -838,7 +866,7 @@ def cmd_build(args, repo_root, presets):
             combo_result, success, msg = run_build(
                 repo_root, combo, build_dir_base, args.jobs, args.clean, args.dry_run,
                 probe=args.probe, flash=args.flash, fresh=args.fresh,
-                hardware=args.hardware,
+                hardware=args.hardware, timeout=args.timeout,
             )
 
             if args.dry_run:
@@ -904,6 +932,15 @@ def main():
     )
     build_parser.add_argument(
         "--jobs", "-j", type=int, help="Parallel jobs for cmake --build"
+    )
+    build_parser.add_argument(
+        "--timeout",
+        type=int,
+        default=1800,
+        help="Max seconds for each cmake configure/build step before it is "
+             "killed with a clear error (default: 1800). vitis BSP generation "
+             "can legitimately take several minutes, but hangs forever when no "
+             "JTAG hardware is attached, so a bound is needed.",
     )
     build_parser.add_argument(
         "--clean", action="store_true", help="Remove build dir before configure"

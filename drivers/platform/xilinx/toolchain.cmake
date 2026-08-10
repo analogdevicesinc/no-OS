@@ -65,7 +65,8 @@ if(NOT DEFINED XILINX_ARCH)
                 "${CMAKE_CURRENT_LIST_DIR}/../../../tools/scripts/platform/xilinx/util.py"
                 get_arch "${_arch_work}" "${_arch_work}" "${_xsa_file}"
         RESULT_VARIABLE _arch_rc
-        OUTPUT_QUIET)
+        OUTPUT_QUIET
+        TIMEOUT 300)
     if(NOT _arch_rc EQUAL 0)
         message(FATAL_ERROR "vitis get_arch failed on ${HARDWARE} (rc=${_arch_rc})")
     endif()
