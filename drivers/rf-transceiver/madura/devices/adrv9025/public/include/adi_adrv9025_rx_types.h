@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9025-SLA */
 /**
  * \file adi_adrv9025_rx_types.h
  * \brief Contains ADRV9025 API Rx datapath data types
