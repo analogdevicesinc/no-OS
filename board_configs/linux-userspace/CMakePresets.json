@@ -49,6 +49,16 @@
 				"BOARD_CONFIG_FILE": "linux-userspace_defconfig",
 				"CMAKE_C_COMPILER": "arm-linux-gnueabihf-gcc"
 			}
+		},
+		{
+			"name": "usb2pmb2",
+			"description": "Linux host with USB2PMB2 FTDI adapter (FT2232HQ)",
+			"inherits": "linux-userspace-base",
+			"cacheVariables": {
+				"BOARD": "usb2pmb2",
+				"PLATFORM": "linux-userspace",
+				"BOARD_CONFIG_FILE": "usb2pmb2_defconfig"
+			}
 		}
 	]
 }

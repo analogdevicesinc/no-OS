@@ -82,6 +82,20 @@ int ftd2xx_i2c_init(struct no_os_i2c_desc **desc,
 		channelConf.Pin = extra_init->channel_config_pin;
 	}
 
+	/* Reset MPSSE engine mode via raw D2XX before LibMPSSE init. If the
+	 * device was previously used in SPI mode the MPSSE engine stays
+	 * configured for SPI until explicitly cleared. FT_SetBitMode with
+	 * mode 0x00 resets the chip's bit-bang/MPSSE mode back to default
+	 * without triggering a USB bus reset (unlike FT_ResetDevice), so
+	 * there is no re-enumeration delay before I2C_GetNumChannels runs. */
+	{
+		FT_HANDLE rawHandle;
+		if (FT_Open(param->device_id, &rawHandle) == FT_OK) {
+			FT_SetBitMode(rawHandle, 0x00, 0x00);
+			FT_Close(rawHandle);
+		}
+	}
+
 	Init_libMPSSE();
 
 	status = I2C_GetNumChannels(&num_channels);

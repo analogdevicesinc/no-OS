@@ -53,11 +53,10 @@ int32_t ftd2xx_gpio_get(struct no_os_gpio_desc **desc,
 	struct ftd2xx_gpio_init *extra_init;
 	struct no_os_gpio_desc *descriptor;
 	FT_STATUS status;
-	bool gpio_dir;
 	int32_t ret;
 
 	if (!param || param->port >= FTD2XX_MAX_DEV_PER_CHIP
-	    || !param->number > FTD2XX_MAX_PIN_NB)
+	    || param->number > FTD2XX_MAX_PIN_NB)
 		return -EINVAL;
 
 	descriptor = no_os_calloc(1, sizeof(*descriptor));
@@ -73,7 +72,6 @@ int32_t ftd2xx_gpio_get(struct no_os_gpio_desc **desc,
 
 	extra_init = param->extra;
 	if (ftHandle[param->port] == NULL) {
-		Init_libMPSSE();
 		status = FT_Open(param->port, &extra_desc->ftHandle);
 		if (status != FT_OK) {
 			ret = status;
@@ -105,8 +103,7 @@ free_extra:
 	no_os_free(extra_desc);
 error:
 	no_os_free(descriptor);
-	if (ret)
-		return ret;
+	return ret;
 }
 
 /**
@@ -133,11 +130,8 @@ int32_t ftd2xx_gpio_get_optional(struct no_os_gpio_desc **desc,
  */
 int32_t ftd2xx_gpio_remove(struct no_os_gpio_desc *desc)
 {
-	struct ftd2xx_gpio_desc *extra_desc;
 	if (!desc)
 		return -EINVAL;
-
-	extra_desc = desc->extra;
 
 	no_os_free(desc->extra);
 	no_os_free(desc);
@@ -229,9 +223,6 @@ int32_t ftd2xx_gpio_direction_output(struct no_os_gpio_desc *desc,
 int32_t ftd2xx_gpio_get_direction(struct no_os_gpio_desc *desc,
 				  uint8_t *direction)
 {
-	struct ftd2xx_gpio_desc *extra_desc;
-	extra_desc = desc->extra;
-
 	*direction = no_os_field_get(FTD2XX_GPIO_PIN(desc->number),
 				     ftd2xx_gpio_pins_dir[desc->port]);
 
