@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9025-SLA */
 /**
 * \file adi_adrv9025.h
 * \brief Contains top level Adrv9025 related function prototypes for
