@@ -253,29 +253,10 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 			sys.exit(1)
 	return (builds_dir, blacklist)
 
-# Files that affect BSP generation - changes invalidate the BSP cache
-XILINX_BSP_DEPS = [
-	'tools/scripts/platform/xilinx/util.py',
-	'drivers/platform/xilinx/xilinx_compat.h',
-]
-# Bump this version to force BSP regeneration on all CI runners
-BSP_CACHE_VERSION = 5
+# Xilinx BSP freshness is validated per-build-dir via xsa_work/.bsp_stamp
+# in config_xilinx_sdk (cmake/xilinx/xilinx_platform_sdk.cmake).
 
-
-def _get_bsp_deps_hash(noos_dir):
-	"""Compute combined hash of files that affect BSP generation."""
-	import hashlib
-	combined = hashlib.md5()
-	combined.update(str(BSP_CACHE_VERSION).encode())
-	for relpath in XILINX_BSP_DEPS:
-		filepath = os.path.join(noos_dir, relpath)
-		if os.path.isfile(filepath):
-			with open(filepath, 'rb') as f:
-				combined.update(f.read())
-	return combined.hexdigest()
-
-
-def get_hardware(hardware, platform, builds_dir, noos_dir=None):
+def get_hardware(hardware, platform, builds_dir):
 	if platform == 'xilinx':
 		ext = 'xsa'
 		base_name = 'system_top'
@@ -288,36 +269,7 @@ def get_hardware(hardware, platform, builds_dir, noos_dir=None):
 	old_name = "%s.%s" % (hardware, ext)
 	filename = os.path.join(builds_dir, HW_DIR_NAME, old_name)
 
-	# Check if BSP generation scripts changed (Xilinx only)
-	# Use a marker file to track if we already detected a change this run -
-	# all hardware files must regenerate, not just the first one
-	bsp_scripts_changed = False
-	if platform == 'xilinx' and noos_dir:
-		hash_file = os.path.join(builds_dir, HW_DIR_NAME, '.bsp_deps_hash')
-		regen_marker = os.path.join(builds_dir, HW_DIR_NAME, '.bsp_regen_needed')
-		current_hash = _get_bsp_deps_hash(noos_dir)
-
-		# Check if we already marked this run as needing regeneration
-		if os.path.isfile(regen_marker):
-			bsp_scripts_changed = True
-			log("BSP regeneration in progress (marker file exists)")
-		elif os.path.isfile(hash_file):
-			with open(hash_file, 'r') as f:
-				cached_hash = f.read().strip()
-			if cached_hash != current_hash:
-				bsp_scripts_changed = True
-				log("BSP scripts changed, regenerating all bsps")
-				# Create marker so all subsequent hardware also regenerates
-				with open(regen_marker, 'w') as f:
-					f.write('1')
-		else:
-			# No hash file yet - force regeneration
-			bsp_scripts_changed = True
-			log("No BSP hash file, regenerating all bsps")
-			with open(regen_marker, 'w') as f:
-				f.write('1')
-
-	if os.path.isfile(filename) and not bsp_scripts_changed:
+	if os.path.isfile(filename):
 		#If equal
 		if filecmp.cmp(filename, tmp_filename):
 			log("Same hardware from last build, use existing bsp")
@@ -410,7 +362,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 				ok = 0
 				os.environ.clear(); os.environ.update(env)
 				continue
-			(hardware_file, new_hdf, hw_err) = get_hardware(hw_name, 'xilinx', builds_dir, noos)
+			(hardware_file, new_hdf, hw_err) = get_hardware(hw_name, 'xilinx', builds_dir)
 			if hw_err != 0 or not hardware_file:
 				log_err("ERROR")
 				log("%s: could not resolve .xsa for hardware '%s' (not downloaded?)" % (
@@ -488,21 +440,6 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 
 	return ok
 
-def _finalize_bsp_hash(builds_dir, noos_dir):
-	"""Update BSP hash file and remove regeneration marker after build completes."""
-	if not noos_dir:
-		return
-	hash_file = os.path.join(builds_dir, HW_DIR_NAME, '.bsp_deps_hash')
-	regen_marker = os.path.join(builds_dir, HW_DIR_NAME, '.bsp_regen_needed')
-	# Update hash file with current hash
-	current_hash = _get_bsp_deps_hash(noos_dir)
-	with open(hash_file, 'w') as f:
-		f.write(current_hash)
-	# Remove regeneration marker
-	if os.path.isfile(regen_marker):
-		os.remove(regen_marker)
-
-
 def main():
 	(noos, export_dir, log_dir, _project,
 	 _platform, _build_name, _builds_dir, _hw, hdl_branch) = parse_input()
@@ -531,10 +468,6 @@ def main():
 		if cmake_ok is not None:
 			status = 'OK' if cmake_ok == 1 else 'Fail'
 			os.system('echo Project %20s -- %s >> %s' % (project, status, all_status))
-
-	# Finalize BSP hash after all builds complete (Xilinx only)
-	if _platform == 'xilinx':
-		_finalize_bsp_hash(builds_dir, noos)
 
 main()
 

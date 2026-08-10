@@ -17,41 +17,52 @@ function(config_xilinx_sdk BUILD_TARGET)
     set(_bsp_inc "${_ws}/bsp/${XILINX_ARCH}/include")
     set(_bsp_lib "${_ws}/bsp/${XILINX_ARCH}/lib")
     set(_lscript "${_ws}/app/src/lscript.ld")
+    set(_stamp "${_ws}/.bsp_stamp")
+    set(_util_py "${NO_OS_DIR}/tools/scripts/platform/xilinx/util.py")
+    set(_compat_h "${NO_OS_DIR}/drivers/platform/xilinx/xilinx_compat.h")
 
-    # Regenerate when BSP artifacts are missing OR when BSP scripts changed
-    # (indicated by .bsp_regen_needed marker file from build_projects.py).
-    get_filename_component(_hw_dir "${HARDWARE}" DIRECTORY)
-    set(_regen_marker "${_hw_dir}/.bsp_regen_needed")
-    set(_need_regen FALSE)
-    if(NOT EXISTS "${_bsp_lib}/libxil.a" OR NOT EXISTS "${_lscript}")
-        message(STATUS "BSP artifacts missing, will regenerate")
-        set(_need_regen TRUE)
-    elseif(EXISTS "${_regen_marker}")
-        message(STATUS "BSP scripts changed (marker file found), will regenerate")
-        set(_need_regen TRUE)
+    # Vitis install path is version-stamped (.../2025.1/.../vitis) so it
+    # doubles as a toolchain version in the fingerprint below.
+    find_program(VITIS_EXECUTABLE vitis HINTS "$ENV{XILINX_VITIS}/bin")
+
+    # Per-build-dir stamp: regenerate when .xsa, generator scripts, arch or
+    # Vitis change (mirrors the STM32 .cubemx_stamp pattern).
+    file(SHA256 "${HARDWARE}" _xsa_hash)
+    file(SHA256 "${_util_py}" _util_hash)
+    file(SHA256 "${_compat_h}" _compat_hash)
+    set(_fingerprint
+        "${_xsa_hash}:${_util_hash}:${_compat_hash}:${XILINX_ARCH}:${VITIS_EXECUTABLE}")
+
+    set(_need_regen TRUE)
+    if(EXISTS "${_bsp_lib}/libxil.a" AND EXISTS "${_lscript}" AND EXISTS "${_stamp}")
+        file(READ "${_stamp}" _stored)
+        string(STRIP "${_stored}" _stored)
+        if("${_stored}" STREQUAL "${_fingerprint}")
+            set(_need_regen FALSE)
+        else()
+            message(STATUS "Xilinx BSP inputs changed, will regenerate")
+        endif()
+    else()
+        message(STATUS "Xilinx BSP missing or unstamped, will regenerate")
     endif()
+
     if(_need_regen)
-        # Remove stale BSP so Vitis regenerates it
+        if(NOT VITIS_EXECUTABLE)
+            message(FATAL_ERROR "vitis not found under $ENV{XILINX_VITIS}/bin")
+        endif()
         if(EXISTS "${_ws}")
             file(REMOVE_RECURSE "${_ws}")
         endif()
         file(MAKE_DIRECTORY "${_ws}")
         file(COPY "${HARDWARE}" DESTINATION "${_ws}")
-        # create_project reads the CPU from arch.txt (normally written by
-        # get_arch); the arch was already resolved in the toolchain file, so
-        # stage it directly instead of re-running get_arch.
+        # Stage arch.txt so create_project skips the get_arch step.
         file(WRITE "${_ws}/arch.txt" "${XILINX_ARCH}")
-
-        find_program(VITIS_EXECUTABLE vitis HINTS "$ENV{XILINX_VITIS}/bin")
-        if(NOT VITIS_EXECUTABLE)
-            message(FATAL_ERROR "vitis not found under $ENV{XILINX_VITIS}/bin")
-        endif()
 
         message(STATUS "Generating Xilinx BSP + linker script from ${_xsa_file} "
                        "(arch ${XILINX_ARCH})... this can take a few minutes")
         execute_process(
             COMMAND ${VITIS_EXECUTABLE} -s
-                    "${NO_OS_DIR}/tools/scripts/platform/xilinx/util.py"
+                    "${_util_py}"
                     create_project "${_ws}" "${_ws}" "${_xsa_file}"
             RESULT_VARIABLE _rc
             OUTPUT_VARIABLE _out
@@ -61,14 +72,15 @@ function(config_xilinx_sdk BUILD_TARGET)
                 "Xilinx BSP generation failed (rc=${_rc}).\n"
                 "stdout:\n${_out}\nstderr:\n${_err}")
         endif()
+        # Stamp only on success; a failed run is retried next configure.
+        file(WRITE "${_stamp}" "${_fingerprint}")
     endif()
 
     if(NOT EXISTS "${_lscript}")
         message(FATAL_ERROR "Xilinx linker script not found: ${_lscript}")
     endif()
 
-    # BSP headers/libs are shared -> attach to the no-os library (PUBLIC so the
-    # executable inherits the include path for xparameters.h etc.).
+    # BSP headers/libs: PUBLIC on no-os so the executable inherits them.
     target_include_directories(no-os PUBLIC "${_bsp_inc}")
     target_link_directories(${BUILD_TARGET} PUBLIC "${_bsp_lib}")
 
@@ -78,9 +90,8 @@ function(config_xilinx_sdk BUILD_TARGET)
         target_link_options(${BUILD_TARGET} PRIVATE
             -specs=${_ws}/app/src/Xilinx.spec)
     endif()
-    # Vitis 2025 splits the standalone BSP into libxil.a plus libxilstandalone.a
-    # (syscall stubs: _exit/_sbrk/read/write...) and libxiltimer.a. Older layouts
-    # bundle everything into libxil.a, so link the extras only when present.
+    # Vitis 2025 split libxil.a into libxilstandalone.a and libxiltimer.a;
+    # link them when present so older single-lib layouts still work.
     set(_bsp_libs -lxil)
     if(EXISTS "${_bsp_lib}/libxilstandalone.a")
         list(APPEND _bsp_libs -lxilstandalone)
