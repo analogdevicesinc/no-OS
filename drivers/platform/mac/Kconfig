@@ -1,0 +1,24 @@
+menuconfig MAC
+	bool "macOS Platform Drivers"
+	default n
+	help
+	  Enable support for macOS platform drivers.
+
+	  These drivers run natively on macOS and provide hardware
+	  abstraction for delay and optional UART (serial port) functionality.
+
+	  For SPI, I2C and GPIO over a FTDI USB-to-MPSSE bridge, enable
+	  the FTD2XX library option in External Libraries.
+
+if MAC
+
+config UART_MAC
+	bool "Enable macOS UART driver"
+	depends on UART
+	default n
+	help
+	  Enable UART driver using the macOS serial-port API (open /dev/tty.*,
+	  termios).  Used when communicating with a device via a native macOS
+	  serial port (e.g. /dev/tty.usbserial-*).
+
+endif # MAC
