@@ -1,0 +1,24 @@
+menuconfig WIN
+	bool "Windows Platform Drivers"
+	default n
+	help
+	  Enable support for Windows platform drivers.
+
+	  These drivers run natively on Windows and provide hardware
+	  abstraction for delay and optional UART (COM port) functionality.
+
+	  For SPI, I2C and GPIO over a FTDI USB-to-MPSSE bridge, enable
+	  the FTD2XX library option in External Libraries.
+
+if WIN
+
+config UART_WIN
+	bool "Enable Windows UART driver"
+	depends on UART
+	default n
+	help
+	  Enable UART driver using the Windows COM port API (CreateFile,
+	  ReadFile, WriteFile).  Used when communicating with a device via
+	  a native Windows serial port (COMx).
+
+endif # WIN
