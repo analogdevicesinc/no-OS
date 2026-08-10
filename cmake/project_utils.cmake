@@ -35,6 +35,16 @@ function(post_build_config PROJECT_TARGET)
         # xilinx emit only the ELF (already built) and the size summary.
         # Similarly, on linux-userspace the output is a native x86_64 ELF whose
         # load addresses overflow the Intel HEX 32-bit address range.
+        # macOS's `size` (cctools) doesn't understand GNU's --format=berkeley;
+        # its default output is already a Berkeley-style column layout, so
+        # just omit the flag there instead of failing and falling through to
+        # the `|| true` no-op.
+        if(APPLE)
+                set(_size_flags "")
+        else()
+                set(_size_flags --format=berkeley)
+        endif()
+
         if(PLATFORM STREQUAL "xilinx" OR
            PLATFORM STREQUAL "linux-userspace" OR
            PLATFORM STREQUAL "win" OR
@@ -42,7 +52,7 @@ function(post_build_config PROJECT_TARGET)
                 add_custom_command(
                         TARGET ${PROJECT_TARGET}
                         POST_BUILD
-                        COMMAND ${CMAKE_COMMAND} -E echo "Binary size:" && (${CMAKE_SIZE} --format=berkeley $<TARGET_FILE:${PROJECT_TARGET}> || ${CMAKE_COMMAND} -E true)
+                        COMMAND ${CMAKE_COMMAND} -E echo "Binary size:" && (${CMAKE_SIZE} ${_size_flags} $<TARGET_FILE:${PROJECT_TARGET}> || ${CMAKE_COMMAND} -E true)
                         COMMENT "Reporting ${PROJECT_TARGET} size"
                 )
         else()
@@ -51,7 +61,7 @@ function(post_build_config PROJECT_TARGET)
                         POST_BUILD
                         COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${PROJECT_TARGET}> ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_TARGET}.hex
                         COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${PROJECT_TARGET}> ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_TARGET}.bin
-                        COMMAND ${CMAKE_COMMAND} -E echo "Binary size:" && (${CMAKE_SIZE} --format=berkeley $<TARGET_FILE:${PROJECT_TARGET}> || ${CMAKE_COMMAND} -E true)
+                        COMMAND ${CMAKE_COMMAND} -E echo "Binary size:" && (${CMAKE_SIZE} ${_size_flags} $<TARGET_FILE:${PROJECT_TARGET}> || ${CMAKE_COMMAND} -E true)
                         COMMENT "Generating ${PROJECT_TARGET}.hex"
                 )
         endif()

@@ -1,0 +1,34 @@
+{
+	"version": 7,
+	"configurePresets": [
+		{
+			"name": "mac-base",
+			"hidden": true,
+			"description": "Base config for macOS host platform",
+			"generator": "Ninja",
+			"cacheVariables": {
+				"PLATFORM": "mac"
+			}
+		},
+		{
+			"name": "mac-host",
+			"description": "macOS host (native, no FTDI hardware)",
+			"inherits": "mac-base",
+			"cacheVariables": {
+				"PLATFORM": "mac",
+				"BOARD": "mac-host",
+				"BOARD_CONFIG_FILE": "mac_defconfig"
+			}
+		},
+		{
+			"name": "mac-usb2pmb2",
+			"description": "macOS host with USB2PMB2 FTDI adapter (FT2232HQ)",
+			"inherits": "mac-base",
+			"cacheVariables": {
+				"PLATFORM": "mac",
+				"BOARD": "mac-usb2pmb2",
+				"BOARD_CONFIG_FILE": "usb2pmb2_defconfig"
+			}
+		}
+	]
+}
