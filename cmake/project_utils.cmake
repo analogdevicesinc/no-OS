@@ -56,6 +56,44 @@ function(post_build_config PROJECT_TARGET)
                 )
         endif()
 
+        # On Windows and macOS, copy FTDI runtime libraries next to the
+        # executable so that it runs without any user PATH/env configuration.
+        if((WIN32 OR APPLE) AND DEFINED FTD2XX_RUNTIME_DLLS)
+                foreach(_dll IN LISTS FTD2XX_RUNTIME_DLLS)
+                        if(EXISTS "${_dll}")
+                                add_custom_command(
+                                        TARGET ${PROJECT_TARGET}
+                                        POST_BUILD
+                                        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                                                "${_dll}"
+                                                "$<TARGET_FILE_DIR:${PROJECT_TARGET}>"
+                                        COMMENT "Copying ${_dll} to build directory"
+                                        VERBATIM
+                                )
+                        endif()
+                endforeach()
+        endif()
+
+        # On macOS, dyld does not search the executable's directory by default.
+        # Rewrite each dylib reference in the executable from a bare name
+        # (e.g. libmpsse.dylib) to @executable_path/libmpsse.dylib so that
+        # the copied dylibs are found at runtime without DYLD_LIBRARY_PATH.
+        if(APPLE AND DEFINED FTD2XX_RUNTIME_DLLS)
+                foreach(_dll IN LISTS FTD2XX_RUNTIME_DLLS)
+                        get_filename_component(_dll_name "${_dll}" NAME)
+                        add_custom_command(
+                                TARGET ${PROJECT_TARGET}
+                                POST_BUILD
+                                COMMAND install_name_tool -change
+                                        "${_dll_name}"
+                                        "@executable_path/${_dll_name}"
+                                        "$<TARGET_FILE:${PROJECT_TARGET}>"
+                                COMMENT "Fixing dylib rpath for ${_dll_name}"
+                                VERBATIM
+                        )
+                endforeach()
+        endif()
+
         # IDE project file generation (replaces cmake -P vscode_config.cmake
         # and generate_stm32cubeide_project calls)
         ide_generate(${PROJECT_TARGET})

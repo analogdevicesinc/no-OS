@@ -66,7 +66,7 @@ struct ftd2xx_gpio_init {
  */
 struct ftd2xx_gpio_desc {
 	/** Specific device handle */
-	FT_HANDLE *ftHandle;
+	FT_HANDLE ftHandle;
 };
 
 #endif /* FTD2XX_GPIO_H*/
