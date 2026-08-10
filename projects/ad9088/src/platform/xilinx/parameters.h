@@ -97,6 +97,10 @@ extern struct xil_gpio_init_param	xil_gpio_param;
 #define RX_DMA_BASEADDR			XPAR_AXI_APOLLO_RX_DMA_BASEADDR
 #define TX_DMA_BASEADDR			XPAR_AXI_APOLLO_TX_DMA_BASEADDR
 
+/* Data offload IPs, read only to size a transfer against the actual BRAM */
+#define TX_DATA_OFFLOAD_BASEADDR	\
+	XPAR_APOLLO_TX_DATA_OFFLOAD_I_DATA_OFFLOAD_BASEADDR
+
 /* JESD204 transport layer (TPL) cores */
 #define RX_CORE_BASEADDR		\
 	XPAR_RX_APOLLO_TPL_CORE_ADC_TPL_CORE_BASEADDR

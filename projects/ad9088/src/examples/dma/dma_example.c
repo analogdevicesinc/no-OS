@@ -39,11 +39,14 @@
 #include "ad9088.h"
 #include "adi_apollo_cddc.h"
 #include "adi_apollo_fddc.h"
+#include "adi_apollo_cduc.h"
+#include "adi_apollo_fduc.h"
 #include "jesd204.h"
 #include "axi_adxcvr.h"
 #include "axi_adc_core.h"
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
+#include "no_os_axi_io.h"
 #include "jesd204_clk.h"
 #include "parameters.h"
 #include "xil_cache.h"
@@ -57,9 +60,21 @@
 /*
  * Test tone frequency as a divisor of the capture rate rather than an absolute
  * value, so it stays inside the FDDC passband whatever the profile decimates by.
- * At 512 the phase advances exactly one sine table entry per sample.
+ * A power of two no larger than 256 keeps the tone an integer number of Hz and
+ * its phase step an exact multiple of the table stride, so the accumulator
+ * lands on a table entry every sample rather than between two of them. At 256
+ * it advances exactly two entries.
  */
-#define TEST_TONE_RATE_DIV	512
+#define TEST_TONE_RATE_DIV	256
+
+/*
+ * Default coarse NCO, as a divisor of the DAC rate. The fractional part of the
+ * frequency tuning word is discarded unless dual modulus mode is on
+ * (ad9088.c:64-66), so only frequencies that divide the DAC rate exactly are
+ * tuned without residual error -- a power of two guarantees it.
+ */
+#define DEFAULT_CNCO_RATE_DIV	8
+#define DEFAULT_FNCO_HZ		0
 
 /*
  * Converter pair the FDDC under test lands on. The FDDC emits a complex tone,
@@ -71,18 +86,50 @@
 /* Number of I/Q pairs printed per converter when dumping a capture */
 #define DUMP_SAMPLES		16
 
+/*
+ * Half scale for the transmitted tone. The first passing run measured the tone
+ * coming back at 3.5% of ADC full scale, 17 dB down, so the receiver has ample
+ * headroom and the earlier quarter-scale setting only cost signal-to-noise --
+ * which the envelope spread, a min/max statistic, is the first thing to feel.
+ */
+#define LOOPBACK_TX_AMPLITUDE	16384
+
+/*
+ * The TX data offload replays its whole BRAM regardless of how much was written
+ * into it, so anything left unwritten comes back as noise. Sized from
+ * mem-size-log2 = 19 and cross-checked at runtime against MEMORY_SIZE_LSB.
+ */
+#define TX_OFFLOAD_BRAM_BYTES		(512 * 1024)
+#define AXI_DO_REG_MEMORY_SIZE_LSB	0x0014
+
+/*
+ * AXI data path width of the TX DMAC (dma-data-width-src = 1024). The driver
+ * rejects a source address that is not a multiple of it; the transfer size is
+ * floored to the same boundary so the last beat is whole.
+ */
+#define DMA_SRC_WIDTH_BYTES	128
+
 /* Largest M the JESD204 link can report (ADI_APOLLO_CONV_PER_LINK_16) */
 #define MAX_LINK_CONVERTERS	16
 
 #define DMA_BUFFER_ALIGN	1024
 
 /*
- * Coherence is reported in per-mille to keep the whole estimator in integers.
- * A tone sitting exactly where predicted scores ~1000; noise or a tone at any
- * other frequency collapses toward 1000/N.
+ * Coherence is carried in per-mille to keep the whole estimator in integers,
+ * and printed as a percentage with one decimal. A tone sitting exactly where
+ * predicted scores ~1000; noise or a tone at any other frequency collapses
+ * toward 1000/N.
  */
 #define COHERENCE_SCALE		1000
 #define COHERENCE_PASS		900
+
+/*
+ * Per-mille printed as a percentage with one decimal, which it divides into
+ * exactly. Two arguments against a "%lu.%lu%%" format, since there is no
+ * floating point in this build.
+ */
+#define PCT_WHOLE(x)		((unsigned long)(x) / 10)
+#define PCT_TENTH(x)		((unsigned long)(x) % 10)
 
 /*
  * Envelope of a single complex tone is constant, so the spread of I^2+Q^2 is a
@@ -109,43 +156,46 @@
 /* Phase is a 32-bit accumulator, so the top 9 bits index the table. */
 #define SIN_TABLE_PHASE_SHIFT	23
 
+/* Peak of a 16-bit signed converter sample, to report a level in context. */
+#define SAMPLE_FULL_SCALE	32767
+
 static const int16_t sin_table_q15[SIN_TABLE_LEN] = {
-	     0,    402,    804,   1206,   1608,   2009,   2410,   2811,
-	  3212,   3612,   4011,   4410,   4808,   5205,   5602,   5998,
-	  6393,   6786,   7179,   7571,   7962,   8351,   8739,   9126,
-	  9512,   9896,  10278,  10659,  11039,  11417,  11793,  12167,
-	 12539,  12910,  13279,  13645,  14010,  14372,  14732,  15090,
-	 15446,  15800,  16151,  16499,  16846,  17189,  17530,  17869,
-	 18204,  18537,  18868,  19195,  19519,  19841,  20159,  20475,
-	 20787,  21096,  21403,  21705,  22005,  22301,  22594,  22884,
-	 23170,  23452,  23731,  24007,  24279,  24547,  24811,  25072,
-	 25329,  25582,  25832,  26077,  26319,  26556,  26790,  27019,
-	 27245,  27466,  27683,  27896,  28105,  28310,  28510,  28706,
-	 28898,  29085,  29268,  29447,  29621,  29791,  29956,  30117,
-	 30273,  30424,  30571,  30714,  30852,  30985,  31113,  31237,
-	 31356,  31470,  31580,  31685,  31785,  31880,  31971,  32057,
-	 32137,  32213,  32285,  32351,  32412,  32469,  32521,  32567,
-	 32609,  32646,  32678,  32705,  32728,  32745,  32757,  32765,
-	 32767,  32765,  32757,  32745,  32728,  32705,  32678,  32646,
-	 32609,  32567,  32521,  32469,  32412,  32351,  32285,  32213,
-	 32137,  32057,  31971,  31880,  31785,  31685,  31580,  31470,
-	 31356,  31237,  31113,  30985,  30852,  30714,  30571,  30424,
-	 30273,  30117,  29956,  29791,  29621,  29447,  29268,  29085,
-	 28898,  28706,  28510,  28310,  28105,  27896,  27683,  27466,
-	 27245,  27019,  26790,  26556,  26319,  26077,  25832,  25582,
-	 25329,  25072,  24811,  24547,  24279,  24007,  23731,  23452,
-	 23170,  22884,  22594,  22301,  22005,  21705,  21403,  21096,
-	 20787,  20475,  20159,  19841,  19519,  19195,  18868,  18537,
-	 18204,  17869,  17530,  17189,  16846,  16499,  16151,  15800,
-	 15446,  15090,  14732,  14372,  14010,  13645,  13279,  12910,
-	 12539,  12167,  11793,  11417,  11039,  10659,  10278,   9896,
-	  9512,   9126,   8739,   8351,   7962,   7571,   7179,   6786,
-	  6393,   5998,   5602,   5205,   4808,   4410,   4011,   3612,
-	  3212,   2811,   2410,   2009,   1608,   1206,    804,    402,
-	     0,   -402,   -804,  -1206,  -1608,  -2009,  -2410,  -2811,
-	 -3212,  -3612,  -4011,  -4410,  -4808,  -5205,  -5602,  -5998,
-	 -6393,  -6786,  -7179,  -7571,  -7962,  -8351,  -8739,  -9126,
-	 -9512,  -9896, -10278, -10659, -11039, -11417, -11793, -12167,
+	0,    402,    804,   1206,   1608,   2009,   2410,   2811,
+	3212,   3612,   4011,   4410,   4808,   5205,   5602,   5998,
+	6393,   6786,   7179,   7571,   7962,   8351,   8739,   9126,
+	9512,   9896,  10278,  10659,  11039,  11417,  11793,  12167,
+	12539,  12910,  13279,  13645,  14010,  14372,  14732,  15090,
+	15446,  15800,  16151,  16499,  16846,  17189,  17530,  17869,
+	18204,  18537,  18868,  19195,  19519,  19841,  20159,  20475,
+	20787,  21096,  21403,  21705,  22005,  22301,  22594,  22884,
+	23170,  23452,  23731,  24007,  24279,  24547,  24811,  25072,
+	25329,  25582,  25832,  26077,  26319,  26556,  26790,  27019,
+	27245,  27466,  27683,  27896,  28105,  28310,  28510,  28706,
+	28898,  29085,  29268,  29447,  29621,  29791,  29956,  30117,
+	30273,  30424,  30571,  30714,  30852,  30985,  31113,  31237,
+	31356,  31470,  31580,  31685,  31785,  31880,  31971,  32057,
+	32137,  32213,  32285,  32351,  32412,  32469,  32521,  32567,
+	32609,  32646,  32678,  32705,  32728,  32745,  32757,  32765,
+	32767,  32765,  32757,  32745,  32728,  32705,  32678,  32646,
+	32609,  32567,  32521,  32469,  32412,  32351,  32285,  32213,
+	32137,  32057,  31971,  31880,  31785,  31685,  31580,  31470,
+	31356,  31237,  31113,  30985,  30852,  30714,  30571,  30424,
+	30273,  30117,  29956,  29791,  29621,  29447,  29268,  29085,
+	28898,  28706,  28510,  28310,  28105,  27896,  27683,  27466,
+	27245,  27019,  26790,  26556,  26319,  26077,  25832,  25582,
+	25329,  25072,  24811,  24547,  24279,  24007,  23731,  23452,
+	23170,  22884,  22594,  22301,  22005,  21705,  21403,  21096,
+	20787,  20475,  20159,  19841,  19519,  19195,  18868,  18537,
+	18204,  17869,  17530,  17189,  16846,  16499,  16151,  15800,
+	15446,  15090,  14732,  14372,  14010,  13645,  13279,  12910,
+	12539,  12167,  11793,  11417,  11039,  10659,  10278,   9896,
+	9512,   9126,   8739,   8351,   7962,   7571,   7179,   6786,
+	6393,   5998,   5602,   5205,   4808,   4410,   4011,   3612,
+	3212,   2811,   2410,   2009,   1608,   1206,    804,    402,
+	0,   -402,   -804,  -1206,  -1608,  -2009,  -2410,  -2811,
+	-3212,  -3612,  -4011,  -4410,  -4808,  -5205,  -5602,  -5998,
+	-6393,  -6786,  -7179,  -7571,  -7962,  -8351,  -8739,  -9126,
+	-9512,  -9896, -10278, -10659, -11039, -11417, -11793, -12167,
 	-12539, -12910, -13279, -13645, -14010, -14372, -14732, -15090,
 	-15446, -15800, -16151, -16499, -16846, -17189, -17530, -17869,
 	-18204, -18537, -18868, -19195, -19519, -19841, -20159, -20475,
@@ -171,9 +221,9 @@ static const int16_t sin_table_q15[SIN_TABLE_LEN] = {
 	-18204, -17869, -17530, -17189, -16846, -16499, -16151, -15800,
 	-15446, -15090, -14732, -14372, -14010, -13645, -13279, -12910,
 	-12539, -12167, -11793, -11417, -11039, -10659, -10278,  -9896,
-	 -9512,  -9126,  -8739,  -8351,  -7962,  -7571,  -7179,  -6786,
-	 -6393,  -5998,  -5602,  -5205,  -4808,  -4410,  -4011,  -3612,
-	 -3212,  -2811,  -2410,  -2009,  -1608,  -1206,   -804,   -402
+	-9512,  -9126,  -8739,  -8351,  -7962,  -7571,  -7179,  -6786,
+	-6393,  -5998,  -5602,  -5205,  -4808,  -4410,  -4011,  -3612,
+	-3212,  -2811,  -2410,  -2009,  -1608,  -1206,   -804,   -402
 };
 
 static inline int32_t dma_example_sin_q15(uint32_t idx)
@@ -193,6 +243,29 @@ static inline int32_t dma_example_cos_q15(uint32_t idx)
  */
 static uint16_t adc_buffer_dma[ADC_BUFFER_SAMPLES * 8]
 __attribute__((aligned(DMA_BUFFER_ALIGN)));
+
+/* Sized to the whole TX offload BRAM, see TX_OFFLOAD_BRAM_BYTES. */
+static uint16_t dac_buffer_dma[TX_OFFLOAD_BRAM_BYTES / sizeof(uint16_t)]
+__attribute__((aligned(DMA_BUFFER_ALIGN)));
+
+/**
+ * @brief Phase step the tone generator and the estimator both derive.
+ *
+ * Shared so a transmitted frequency and the frequency it is scored at cannot
+ * disagree about what a given rate means.
+ *
+ * @param freq_hz - Frequency, may be negative.
+ * @param rate_hz - Sample rate in Hz.
+ * @return Step in 32-bit phase turns per sample.
+ */
+static uint32_t dma_example_phase_step(int64_t freq_hz, uint64_t rate_hz)
+{
+	if (freq_hz < 0)
+		return (uint32_t) - (int32_t)no_os_div_u64(
+			       (uint64_t)(-freq_hz) << 32, rate_hz);
+
+	return (uint32_t)no_os_div_u64((uint64_t)freq_hz << 32, rate_hz);
+}
 
 /**
  * @brief Integer square root of a 64-bit value.
@@ -274,11 +347,7 @@ static uint32_t dma_example_coherence(const uint16_t *buf, uint32_t samples,
 	 * Phase increment in 32-bit turns. Negative frequencies wrap to the top
 	 * half of the accumulator, which is exactly the conjugate reference.
 	 */
-	if (freq_hz < 0)
-		step = (uint32_t) - (int32_t)no_os_div_u64(
-			       (uint64_t)(-freq_hz) << 32, rate_hz);
-	else
-		step = (uint32_t)no_os_div_u64((uint64_t)freq_hz << 32, rate_hz);
+	step = dma_example_phase_step(freq_hz, rate_hz);
 
 	for (i = 0; i < samples; i++) {
 		s_i = (int16_t)buf[i * num_conv + TONE_CONV_I];
@@ -465,9 +534,217 @@ static int dma_example_get_capture_rate(struct ad9088_phy *phy,
 			pr_info("Warning: TPL rate disagrees with the profile "
 				"by more than 5%%\n");
 	}
-	
+
 	pr_info("\n");
 	return 0;
+}
+
+/**
+ * @brief Derive the rate the transmitted samples leave the DMA at.
+ *
+ * The mirror of dma_example_get_capture_rate() for the transmit direction. The
+ * interpolation enums are encoded differently from the decimation ones, so the
+ * CDUC/FDUC converters must be used rather than the CDDC/FDDC pair, otherwise
+ * every transmitted frequency lands off by that ratio.
+ *
+ * @param phy - AD9088 device.
+ * @param tx_dac - TX TPL core, used only to cross-check the derived rate.
+ * @param tx_rate - Returns the FDUC input rate in Hz.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int dma_example_get_tx_rate(struct ad9088_phy *phy,
+				   struct axi_dac *tx_dac, uint64_t *tx_rate)
+{
+	adi_apollo_txpath_t *tx_path = &phy->profile.tx_path[TEST_TONE_SIDE];
+	uint32_t cduc_int;
+	uint32_t fduc_int;
+	uint8_t cduc_pi;
+	uint8_t fduc_pi;
+	uint64_t dac_rate;
+	uint64_t delta;
+	int ret;
+
+	cduc_pi = (TEST_TONE_FDDC / 2) % ADI_APOLLO_CDUCS_PER_SIDE;
+	ret = adi_apollo_cduc_interp_bf_to_val(&phy->ad9088,
+					       tx_path->tx_cduc[cduc_pi].drc_ratio,
+					       &cduc_int);
+	if (ret) {
+		pr_err("Reading the CDUC interpolation failed (%d)\n", ret);
+		return ret;
+	}
+
+	fduc_pi = TEST_TONE_FDDC % ADI_APOLLO_FDUCS_PER_SIDE;
+	ret = adi_apollo_fduc_interp_bf_to_val(&phy->ad9088,
+					       tx_path->tx_fduc[fduc_pi].drc_ratio,
+					       &fduc_int);
+	if (ret) {
+		pr_err("Reading the FDUC interpolation failed (%d)\n", ret);
+		return ret;
+	}
+
+	if (!cduc_int || !fduc_int) {
+		pr_err("Invalid interpolation CDUC=%lu FDUC=%lu\n",
+		       (unsigned long)cduc_int, (unsigned long)fduc_int);
+		return -EINVAL;
+	}
+
+	dac_rate = phy->profile.dac_cfg[TEST_TONE_SIDE].dac_sampling_rate_Hz;
+	*tx_rate = no_os_div_u64(dac_rate, cduc_int * fduc_int);
+
+	if (!*tx_rate) {
+		pr_err("Invalid transmit rate\n");
+		return -EINVAL;
+	}
+
+	pr_info("Profile Rates: DAC %lu kHz / CDUC %lu / FDUC %lu = "
+		"transmit %lu kHz\n",
+		(unsigned long)no_os_div_u64(dac_rate, 1000),
+		(unsigned long)cduc_int, (unsigned long)fduc_int,
+		(unsigned long)no_os_div_u64(*tx_rate, 1000));
+
+	if (tx_dac->clock_hz) {
+		delta = tx_dac->clock_hz > *tx_rate ?
+			tx_dac->clock_hz - *tx_rate :
+			*tx_rate - tx_dac->clock_hz;
+
+		pr_info("TPL core reports %lu kHz\n",
+			(unsigned long)no_os_div_u64(tx_dac->clock_hz, 1000));
+
+		if (no_os_div_u64(delta * 100, *tx_rate) > 5)
+			pr_info("Warning: TPL rate disagrees with the profile "
+				"by more than 5%%\n");
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Put both sides' NCOs on a known default frequency.
+ *
+ * A CDUC/FDUC upconverts and a CDDC/FDDC downconverts, so a tone written at
+ * f_lut comes back at f_lut + (tx shifts) - (rx shifts). The profile places the
+ * two sides 1.4 GHz apart, which puts the received tone outside the FDDC
+ * passband whatever it was transmitted at. Tuning both to the same frequency
+ * cancels the translation, so a tone arrives where it was sent.
+ *
+ * Idempotent, so it doubles as the undo for anything that retunes an NCO.
+ *
+ * @param phy - AD9088 device.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int dma_example_set_default_nco(struct ad9088_phy *phy)
+{
+	uint64_t dac_rate = phy->profile.dac_cfg[TEST_TONE_SIDE]
+			    .dac_sampling_rate_Hz;
+	int64_t cnco_hz;
+	int64_t tx_cnco = 0;
+	int64_t tx_fnco = 0;
+	int64_t rx_cnco = 0;
+	int64_t rx_fnco = 0;
+	uint8_t cddc = (TEST_TONE_FDDC / 2) % ADI_APOLLO_CDUCS_PER_SIDE;
+	int ret;
+
+	cnco_hz = (int64_t)no_os_div_u64(dac_rate, DEFAULT_CNCO_RATE_DIV);
+
+	ret = ad9088_set_cnco_freq(phy, ADI_APOLLO_TX, TEST_TONE_SIDE, cddc,
+				   cnco_hz);
+	if (!ret)
+		ret = ad9088_set_cnco_freq(phy, ADI_APOLLO_RX, TEST_TONE_SIDE,
+					   cddc, cnco_hz);
+	if (!ret)
+		ret = ad9088_set_fnco_freq(phy, ADI_APOLLO_TX, TEST_TONE_SIDE,
+					   TEST_TONE_FDDC, DEFAULT_FNCO_HZ);
+	if (!ret)
+		ret = ad9088_set_fnco_freq(phy, ADI_APOLLO_RX, TEST_TONE_SIDE,
+					   TEST_TONE_FDDC, DEFAULT_FNCO_HZ);
+	if (ret) {
+		pr_err("Tuning the NCOs failed (%d)\n", ret);
+		return ret;
+	}
+
+	ret = ad9088_get_cnco_freq(phy, ADI_APOLLO_TX, TEST_TONE_SIDE, cddc,
+				   &tx_cnco);
+	if (!ret)
+		ret = ad9088_get_fnco_freq(phy, ADI_APOLLO_TX, TEST_TONE_SIDE,
+					   TEST_TONE_FDDC, &tx_fnco);
+	if (!ret)
+		ret = ad9088_get_cnco_freq(phy, ADI_APOLLO_RX, TEST_TONE_SIDE,
+					   cddc, &rx_cnco);
+	if (!ret)
+		ret = ad9088_get_fnco_freq(phy, ADI_APOLLO_RX, TEST_TONE_SIDE,
+					   TEST_TONE_FDDC, &rx_fnco);
+	if (ret) {
+		pr_err("Reading back the NCOs failed (%d)\n", ret);
+		return ret;
+	}
+
+	pr_info("  NCO tx c/f %ld/%ld kHz  rx c/f %ld/%ld kHz  net %ld kHz\n",
+		(long)no_os_div_s64(tx_cnco, 1000),
+		(long)no_os_div_s64(tx_fnco, 1000),
+		(long)no_os_div_s64(rx_cnco, 1000),
+		(long)no_os_div_s64(rx_fnco, 1000),
+		(long)no_os_div_s64((tx_cnco + tx_fnco) - (rx_cnco + rx_fnco),
+				    1000));
+
+	/*
+	 * The tuning word drops its fractional part, so a rate that the divisor
+	 * does not divide exactly lands a few Hz off. Far too little to move the
+	 * tone off its bin, but it should not pass unremarked.
+	 */
+	if (tx_cnco != cnco_hz || rx_cnco != cnco_hz)
+		pr_info("  Warning: CNCO asked %ld Hz, tuned tx %ld rx %ld\n",
+			(long)cnco_hz, (long)tx_cnco, (long)rx_cnco);
+
+	if ((tx_cnco + tx_fnco) != (rx_cnco + rx_fnco)) {
+		pr_err("The NCOs did not take the default tuning\n");
+		return -EIO;
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Fill a transmit buffer with a complex tone.
+ *
+ * Uses the same phase accumulator and table as dma_example_coherence(), so the
+ * transmitted frequency and the probed frequency cannot disagree about what a
+ * given rate means. Converters beyond the I/Q pair are zeroed so an unrelated
+ * datapath cannot contribute to the capture.
+ *
+ * @param buf - Destination buffer, num_conv interleaved converters.
+ * @param samples - Samples per converter to write.
+ * @param num_conv - Converters per sample.
+ * @param freq_hz - Tone frequency, may be negative.
+ * @param rate_hz - Transmit sample rate in Hz.
+ * @param amplitude - Peak amplitude in LSB.
+ */
+static void dma_example_fill_tone(uint16_t *buf, uint32_t samples,
+				  uint8_t num_conv, int64_t freq_hz,
+				  uint64_t rate_hz, int32_t amplitude)
+{
+	uint32_t phase = 0;
+	uint32_t step;
+	uint32_t idx;
+	uint32_t i;
+	uint8_t c;
+
+	step = dma_example_phase_step(freq_hz, rate_hz);
+
+	for (i = 0; i < samples; i++) {
+		idx = phase >> SIN_TABLE_PHASE_SHIFT;
+
+		for (c = 0; c < num_conv; c++)
+			buf[i * num_conv + c] = 0;
+
+		buf[i * num_conv + TONE_CONV_I] = (uint16_t)(int16_t)
+						  ((amplitude * dma_example_cos_q15(idx))
+						   >> SIN_TABLE_SHIFT);
+		buf[i * num_conv + TONE_CONV_Q] = (uint16_t)(int16_t)
+						  ((amplitude * dma_example_sin_q15(idx))
+						   >> SIN_TABLE_SHIFT);
+
+		phase += step;
+	}
 }
 
 int dma_example_main()
@@ -499,6 +776,16 @@ int dma_example_main()
 	uint32_t floor_coherence;
 	bool tone_pass;
 	bool floor_pass;
+	struct axi_dma_transfer tx_transfer;
+	uint64_t tx_rate;
+	uint32_t tx_bram_size = 0;
+	uint32_t tx_samples;
+	uint32_t tx_size;
+	uint32_t conj_coherence;
+	uint32_t amplitude_tx;
+	uint32_t amplitude_fs;
+	uint8_t tx_num_conv;
+	bool loopback_pass;
 
 	int ret = 0;
 
@@ -678,6 +965,14 @@ int dma_example_main()
 	tone_hz = (int64_t)no_os_div_u64(capture_rate, TEST_TONE_RATE_DIV);
 
 	/*
+	 * Every measurement below runs from this operating point rather than
+	 * wherever the profile happened to leave the NCOs.
+	 */
+	ret = dma_example_set_default_nco(ad9088_phy);
+	if (ret)
+		goto error_tx_dac;
+
+	/*
 	 * Baseline first, with the datapath idle. Test mode is off after
 	 * bring-up, but disable it explicitly so the floor measures a state this
 	 * block guarantees rather than one it assumes. Coherence here should
@@ -709,10 +1004,11 @@ int dma_example_main()
 	 */
 	floor_pass = floor_coherence < COHERENCE_PASS;
 
-	pr_info("--- Noise floor ---\n");
-	pr_info("  coh %lu/%u (expect near %lu)\n",
-		(unsigned long)floor_coherence, COHERENCE_SCALE,
-		(unsigned long)(COHERENCE_SCALE / samples_per_conv + 1));
+	pr_info("--- Noise floor: probed at %ld Hz ---\n", (long)(-tone_hz));
+	pr_info("  coh %lu.%lu%% (expect near %lu.%lu%%)\n",
+		PCT_WHOLE(floor_coherence), PCT_TENTH(floor_coherence),
+		PCT_WHOLE(COHERENCE_SCALE / samples_per_conv + 1),
+		PCT_TENTH(COHERENCE_SCALE / samples_per_conv + 1));
 
 	if (!floor_pass)
 		pr_err("  the estimator scores the idle capture as a tone; "
@@ -739,11 +1035,11 @@ int dma_example_main()
 		goto error_tone;
 	}
 
-	pr_info("--- FNCO tone test: %ld kHz ---\n",
-		(long)no_os_div_s64(tone_hz, 1000));
-	pr_info("  expected amplitude %lu LSB (offset 0x%x)\n",
+	pr_info("--- FNCO tone test: %ld Hz (capture rate / %u) ---\n",
+		(long)tone_hz, TEST_TONE_RATE_DIV);
+	pr_info("  expected amplitude %lu LSB (offset 0x%x), scored %ld Hz\n",
 		(unsigned long)(TEST_TONE_OFFSET * 2828 / 1000),
-		TEST_TONE_OFFSET);
+		TEST_TONE_OFFSET, (long)(-tone_hz));
 
 	no_os_mdelay(10);
 
@@ -767,21 +1063,177 @@ int dma_example_main()
 	tone_pass = coherence >= COHERENCE_PASS &&
 		    envelope_spread <= ENVELOPE_SPREAD_MAX;
 
-	pr_info("  coh %lu/%u spread %lu amp %lu\n",
-		(unsigned long)coherence, COHERENCE_SCALE,
+	pr_info("  coh %lu.%lu%% spread %lu amp %lu\n",
+		PCT_WHOLE(coherence), PCT_TENTH(coherence),
 		(unsigned long)envelope_spread,
 		(unsigned long)amplitude);
-	pr_info("  %s\n", tone_pass ? "PASS" : "FAIL");
-
-	ret = (floor_pass && tone_pass) ? 0 : -EIO;
+	pr_info("  %s\n\n", tone_pass ? "PASS" : "FAIL");
 
 	/*
-	 * The tone is left enabled on the pass path: error_tone is the disable,
-	 * and the teardown below is the same sequence the error ladder runs, so
-	 * a passing run shares it from that label on.
+	 * Everything above validates the RX datapath only: test mode discards
+	 * the FDDC mixer input, so the tone never passes through the DAC, the
+	 * cables or the ADC. Drive the DAC from DMA instead and capture what
+	 * comes back, which is the first measurement that covers the whole
+	 * chain. Test mode has to go first -- it would discard the loopback
+	 * signal exactly as it discards everything else upstream.
 	 */
-	goto error_tone;
+	ret = ad9088_set_fnco_test_tone(ad9088_phy, ADI_APOLLO_RX,
+					TEST_TONE_SIDE, TEST_TONE_FDDC, false,
+					0);
+	if (ret) {
+		pr_err("Disabling the RX FNCO test tone failed (%d)\n", ret);
+		goto error_tone;
+	}
 
+	pr_info("--- DAC loopback test ---\n");
+
+	ret = dma_example_get_tx_rate(ad9088_phy, tx_dac, &tx_rate);
+	if (ret)
+		goto error_tone;
+
+	/*
+	 * The tone test retuned the RX FNCO, which stays where it was left and
+	 * would otherwise translate the loopback signal by that much.
+	 */
+	ret = dma_example_set_default_nco(ad9088_phy);
+	if (ret)
+		goto error_tone;
+
+	tx_num_conv = ad9088_phy->profile.jrx[TEST_TONE_SIDE]
+		      .rx_link_cfg[0].m_minus1 + 1;
+
+	if (!tx_num_conv || tx_num_conv > MAX_LINK_CONVERTERS) {
+		pr_err("Unexpected transmit converter count M=%u\n",
+		       tx_num_conv);
+		ret = -EINVAL;
+		goto error_tone;
+	}
+
+	/*
+	 * The offload replays its whole BRAM whatever was written into it, so
+	 * fill all of it rather than leaving the tail to come back as noise.
+	 */
+	no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, AXI_DO_REG_MEMORY_SIZE_LSB,
+			  &tx_bram_size);
+
+	tx_size = sizeof(dac_buffer_dma);
+	if (tx_bram_size && tx_bram_size < tx_size)
+		tx_size = tx_bram_size;
+
+	/* The DMAC rejects a source address off its data path width. */
+	tx_size &= ~(uint32_t)(DMA_SRC_WIDTH_BYTES - 1);
+	tx_samples = tx_size / (tx_num_conv * sizeof(dac_buffer_dma[0]));
+	tx_size = tx_samples * tx_num_conv * sizeof(dac_buffer_dma[0]);
+
+	pr_info("  tone %ld Hz (capture rate / %u), M=%u, %lu samples/conv, "
+		"%lu bytes\n", (long)tone_hz, TEST_TONE_RATE_DIV, tx_num_conv,
+		(unsigned long)tx_samples, (unsigned long)tx_size);
+
+	/*
+	 * The same frequency the tone test uses. With both sides' NCOs on the
+	 * same default it comes back where it was sent, on a capture bin, and a
+	 * whole number of cycles fits the transmit buffer, so the cyclic wrap
+	 * leaves no phase discontinuity for a capture to straddle -- which
+	 * matters because the capture is shorter than the replay and can start
+	 * anywhere in it.
+	 */
+	dma_example_fill_tone(dac_buffer_dma, tx_samples, tx_num_conv,
+			      tone_hz, tx_rate, LOOPBACK_TX_AMPLITUDE);
+
+	/* MEM_TO_DEV reads DDR, so dirty lines have to land there first. */
+	Xil_DCacheFlushRange((uintptr_t)dac_buffer_dma, tx_size);
+
+	ret = axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
+	if (ret) {
+		pr_err("Selecting the DMA data source failed (%d)\n", ret);
+		goto error_tone;
+	}
+
+	tx_transfer.size = tx_size;
+	tx_transfer.transfer_done = 0;
+	tx_transfer.cyclic = CYCLIC;
+	tx_transfer.src_addr = (uintptr_t)dac_buffer_dma;
+	tx_transfer.dest_addr = 0;
+
+	/*
+	 * Cyclic keeps the tone running for the whole capture. It is a build
+	 * option of the DMAC rather than a guarantee, so fall back to a single
+	 * pass if the core rejects it. Never wait for completion either way: a
+	 * cyclic transfer raises no end-of-transfer and would only time out.
+	 */
+	ret = axi_dmac_transfer_start(tx_dmac, &tx_transfer);
+	if (ret) {
+		pr_info("  cyclic transfer unavailable, using a single pass\n");
+		tx_transfer.cyclic = NO;
+		ret = axi_dmac_transfer_start(tx_dmac, &tx_transfer);
+	}
+
+	if (ret) {
+		pr_err("TX DMA transfer start failed (%d)\n", ret);
+		goto error_tx_stream;
+	}
+
+	no_os_mdelay(10);
+
+	ret = dma_example_capture(rx_dmac, transfer_size);
+	if (ret)
+		goto error_tx_stream;
+
+	/*
+	 * The tone test scores -tone_hz because test mode injects a constant
+	 * ahead of a downconverting mixer. This one transmits a real +tone_hz
+	 * and the aligned mixers cancel, so it arrives at +tone_hz. The second
+	 * probe covers the transmitted I/Q ordering, the one convention in this
+	 * path no measurement has confirmed yet: a swapped pair sends -f.
+	 */
+	coherence = dma_example_coherence(adc_buffer_dma, samples_per_conv,
+					  num_conv, tone_hz, capture_rate,
+					  &amplitude, &envelope_spread);
+
+	conj_coherence = dma_example_coherence(adc_buffer_dma, samples_per_conv,
+					       num_conv, -tone_hz, capture_rate,
+					       NULL, NULL);
+
+	loopback_pass = envelope_spread <= ENVELOPE_SPREAD_MAX &&
+			(coherence >= COHERENCE_PASS ||
+			 conj_coherence >= COHERENCE_PASS);
+
+	/*
+	 * Two different denominators, so both are named: the fraction of what
+	 * was transmitted is the loss through the cables, while the fraction of
+	 * full scale is the headroom left at the ADC.
+	 */
+	amplitude_tx = amplitude * COHERENCE_SCALE / LOOPBACK_TX_AMPLITUDE;
+	amplitude_fs = amplitude * COHERENCE_SCALE / SAMPLE_FULL_SCALE;
+
+	pr_info("  coh +f %lu.%lu%%  -f %lu.%lu%%  spread %lu\n",
+		PCT_WHOLE(coherence), PCT_TENTH(coherence),
+		PCT_WHOLE(conj_coherence), PCT_TENTH(conj_coherence),
+		(unsigned long)envelope_spread);
+	pr_info("  amp %lu LSB: %lu.%lu%% of tx %u, %lu.%lu%% of fullscale\n",
+		(unsigned long)amplitude,
+		PCT_WHOLE(amplitude_tx), PCT_TENTH(amplitude_tx),
+		LOOPBACK_TX_AMPLITUDE,
+		PCT_WHOLE(amplitude_fs), PCT_TENTH(amplitude_fs));
+
+	if (conj_coherence >= COHERENCE_PASS && coherence < COHERENCE_PASS)
+		pr_info("  matched the conjugate: transmitted I and Q are "
+			"swapped\n");
+
+	pr_info("  %s\n", loopback_pass ? "PASS" : "FAIL");
+
+	ret = (floor_pass && tone_pass && loopback_pass) ? 0 : -EIO;
+
+	/*
+	 * The TX stream is left running on the pass path: error_tx_stream is the
+	 * stop, and the teardown below is the same sequence the error ladder
+	 * runs, so a passing run shares it from that label on.
+	 */
+	goto error_tx_stream;
+
+error_tx_stream:
+	axi_dmac_transfer_stop(tx_dmac);
+	axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_ZERO);
 error_tone:
 	ad9088_set_fnco_test_tone(ad9088_phy, ADI_APOLLO_RX, TEST_TONE_SIDE,
 				  TEST_TONE_FDDC, false, 0);
