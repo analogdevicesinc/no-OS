@@ -72,7 +72,7 @@ MAC
 .. toctree::
     :maxdepth: 1
 
-    build_guides/build_mac
+    build_guides/build_mac_cmake
 
 STM32
 =====
