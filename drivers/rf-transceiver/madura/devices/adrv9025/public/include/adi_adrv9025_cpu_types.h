@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9025-SLA */
 /**
 * \file adi_adrv9025_cpu_types.h
 * \brief Contains ADRV9025 data types for on board cpus feature
