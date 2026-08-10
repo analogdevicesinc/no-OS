@@ -1,0 +1,34 @@
+{
+	"version": 7,
+	"configurePresets": [
+		{
+			"name": "win-base",
+			"hidden": true,
+			"description": "Base config for Windows host platform",
+			"generator": "Ninja",
+			"cacheVariables": {
+				"PLATFORM": "win"
+			}
+		},
+		{
+			"name": "win-host",
+			"description": "Windows host (native, no FTDI hardware)",
+			"inherits": "win-base",
+			"cacheVariables": {
+				"PLATFORM": "win",
+				"BOARD": "win-host",
+				"BOARD_CONFIG_FILE": "win_defconfig"
+			}
+		},
+		{
+			"name": "win-usb2pmb2",
+			"description": "Windows host with USB2PMB2 FTDI adapter (FT2232HQ)",
+			"inherits": "win-base",
+			"cacheVariables": {
+				"PLATFORM": "win",
+				"BOARD": "win-usb2pmb2",
+				"BOARD_CONFIG_FILE": "usb2pmb2_defconfig"
+			}
+		}
+	]
+}
