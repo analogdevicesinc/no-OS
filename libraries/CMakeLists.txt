@@ -1,3 +1,7 @@
+if(${CONFIG_FTD2XX})
+        include(ftd2xx)
+endif()
+
 if(${CONFIG_FREERTOS})
         include(FreeRTOS)
 endif()

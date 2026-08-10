@@ -58,7 +58,7 @@ FTD2XX
 .. toctree::
     :maxdepth: 1
 
-    build_guides/build_ftd2xx
+    build_guides/build_ftd2xx_cmake
 
 WIN
 ===

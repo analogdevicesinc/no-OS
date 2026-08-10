@@ -98,6 +98,10 @@ under :doc:`build_guide` for the exact value):
    * - Xilinx
      - ``XILINX_VITIS`` (set by sourcing Vitis ``settings64.sh``)
      - the Xilinx Vitis install
+   * - FTD2XX (optional, linux-userspace/win/mac)
+     - ``FTD2XX_LIBRARY``
+     - the ``release/`` dir from ``config_ftd2xx.py`` (only needed if installed
+       outside the default location)
 
 A variant/board combination is rejected
 ---------------------------------------
