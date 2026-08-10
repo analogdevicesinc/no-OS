@@ -1,6 +1,6 @@
 /*******************************************************************************
  *   @file   main.c
- *   @brief  Main file for linux platform of max31827 project.
+ *   @brief  Main file for the linux-userspace platform of max31827-evkit project.
  *   @author Radu Sabau (radu.sabau@analog.com)
  *******************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -19,7 +19,7 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -31,14 +31,11 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 #include "common_data.h"
+#include "no_os_error.h"
+#include "parameters.h"
 
 extern int example_main();
 
-/******************************************************************************
- * @brief Main function execution for FTD2XX platform.
- *
- * @return ret - Result of the enabled examples execution.
- *****************************************************************************/
 int main()
 {
 	return example_main();
