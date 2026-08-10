@@ -120,8 +120,10 @@ function(add_flash_target TARGET_NAME)
 		return()
 	endif()
 
-	# Linux userspace produces a native executable — nothing to flash.
-	if(PLATFORM STREQUAL "linux-userspace")
+	# Host-platform builds produce a native executable — nothing to flash.
+	if(PLATFORM STREQUAL "linux-userspace" OR
+	   PLATFORM STREQUAL "win" OR
+	   PLATFORM STREQUAL "mac")
 		return()
 	endif()
 

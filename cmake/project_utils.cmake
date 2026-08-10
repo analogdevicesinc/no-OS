@@ -35,7 +35,10 @@ function(post_build_config PROJECT_TARGET)
         # xilinx emit only the ELF (already built) and the size summary.
         # Similarly, on linux-userspace the output is a native x86_64 ELF whose
         # load addresses overflow the Intel HEX 32-bit address range.
-        if(PLATFORM STREQUAL "xilinx" OR PLATFORM STREQUAL "linux-userspace")
+        if(PLATFORM STREQUAL "xilinx" OR
+           PLATFORM STREQUAL "linux-userspace" OR
+           PLATFORM STREQUAL "win" OR
+           PLATFORM STREQUAL "mac")
                 add_custom_command(
                         TARGET ${PROJECT_TARGET}
                         POST_BUILD

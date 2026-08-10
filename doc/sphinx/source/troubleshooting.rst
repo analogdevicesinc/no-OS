@@ -244,8 +244,8 @@ supported board reachable over USB is enough — no sensor wiring required. See
 Which platforms are supported?
 ------------------------------
 
-Xilinx, Maxim, STM32, ADuCM3029, Raspberry Pi Pico and linux-userspace, among
-others. Each has a setup page under :doc:`build_guide`, and the
+Xilinx, Maxim, STM32, ADuCM3029, Raspberry Pi Pico, linux-userspace and win,
+among others. Each has a setup page under :doc:`build_guide`, and the
 platform backends live under ``drivers/platform/`` (see :doc:`architecture`).
 
 Can the same driver run on a different MCU?

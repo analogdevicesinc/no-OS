@@ -32,7 +32,7 @@ Analog Devices parts. An application is composed from three layers:
 
 Because drivers depend on the abstraction layer rather than a specific MCU, the
 same driver builds and runs across every supported platform (Xilinx, Maxim,
-STM32, ADuCM, Raspberry Pi Pico, and linux-userspace). For the full picture —
+STM32, ADuCM, Raspberry Pi Pico, linux-userspace, and win). For the full picture —
 ``platform_ops`` dispatch, the init_param/descriptor idiom, and the source-tree
 map — see :doc:`architecture`.
 
@@ -99,6 +99,10 @@ for the full install steps, exact variable, and supported presets:
      - Any Linux host (spidev / i2c-dev / gpio-cdev)
      - System GCC — no vendor SDK required
      - :doc:`build_guides/build_linux_userspace_cmake`
+   * - Windows
+     - Windows host (x86_64)
+     - MSYS2 GCC — no vendor SDK required
+     - :doc:`build_guides/build_win_cmake`
 
 The build utility auto-detects default SDK install locations, so you only export
 a variable when your SDK lives somewhere non-standard, e.g.:
