@@ -59,7 +59,7 @@ backend:
 
    drivers/platform/
    ├── aducm3029/   maxim/      pico/      stm32/     xilinx/
-   ├── linux-userspace/  win/  mac/  ...
+   ├── linux-userspace/  win/  mac/  ftd2xx/  ...
 
 Each platform provides the vendor-SDK-backed implementation of the HAL: the
 code that actually configures a peripheral and moves bytes.

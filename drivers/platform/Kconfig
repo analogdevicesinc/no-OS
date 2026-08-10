@@ -17,6 +17,8 @@ source "drivers/platform/pico/Kconfig"
 source "drivers/platform/aducm3029/Kconfig"
 source "drivers/platform/xilinx/Kconfig"
 source "drivers/platform/linux-userspace/Kconfig"
+source "drivers/platform/win/Kconfig"
+source "drivers/platform/mac/Kconfig"
 
 config PLATFORM_I2C_BITBANG
 	default n

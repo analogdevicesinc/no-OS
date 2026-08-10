@@ -324,7 +324,9 @@ Troubleshooting
    The vendor SDK is not installed or its environment variable is not set.
    Re-check the platform's build guide (see the table in Prerequisites) and
    confirm the relevant variable (``MAXIM_LIBRARIES``, ``STM32CUBEMX``,
-   ``CCES_HOME``, ...) points at the right path.
+   ``CCES_HOME``, ...) points at the right path. For the optional FTD2XX
+   library, this is ``FTD2XX_LIBRARY`` — only needed if it was installed
+   somewhere other than the default location.
 
 **Nothing to flash / flashing fails.**
    Confirm the board is powered and its probe is connected, and that you passed
