@@ -21,6 +21,7 @@ Arguments (positional):
 """
 
 import os
+import re
 import sys
 import time
 import subprocess
@@ -493,6 +494,11 @@ def create_project(ws, hw_path, hw_file, target):
     if os.path.exists(out_dir):
         shutil.rmtree(out_dir)
 
+    # Read XPAR_* IRQ/DDR macros from the .xsa before the client exists, so HSI
+    # uses the direct path (like get_arch); appended to xparameters.h below.
+    fabric_irq_defines = _generate_fabric_irq_macros(xsa, cpu)
+    ddr_defines = _generate_ddr_macros(xsa, cpu)
+
     # --- Step 1: Platform build (BSP + FSBL) ---
     print(f"INFO: Creating platform component (cpu={vcpu})...")
     client = vitis.create_client(workspace=out_dir)
@@ -509,8 +515,21 @@ def create_project(ws, hw_path, hw_file, target):
     print("INFO: Creating app component for linker script...")
     app = client.create_app_component(
         name="app", platform=xpfm, template="empty_application")
-    ld = app.get_ld_script()
-    ld.set_heap_size('0x100000')
+
+    # Dispose now and patch lscript.ld directly: app.get_ld_script() would
+    # launch XSDB and hang with no JTAG attached.
+    vitis.dispose()
+
+    _ld_src = os.path.join(out_dir, "app", "src", "lscript.ld")
+    if os.path.exists(_ld_src):
+        with open(_ld_src, "r") as _f:
+            _ld_text = _f.read()
+        _ld_text = re.sub(
+            r'(_HEAP_SIZE\s*=\s*DEFINED\(_HEAP_SIZE\)\s*\?\s*_HEAP_SIZE\s*:\s*)0x[0-9a-fA-F]+',
+            r'\g<1>0x100000',
+            _ld_text)
+        with open(_ld_src, "w") as _f:
+            _f.write(_ld_text)
 
     # --- Step 3: Copy BSP to Makefile-expected paths ---
     # Platform output uses the short CPU name; Makefile expects arch.txt name.
@@ -553,28 +572,14 @@ def create_project(ws, hw_path, hw_file, target):
         with open(xpar_h, "a") as f:
             f.write('\n/* Vitis 2025+ compatibility defines */\n')
             f.write('#include "xilinx_compat.h"\n')
-
-    # Generate XPAR_FABRIC_*_INTR macros for PL interrupts.
-    # Vitis 2025+ create_platform_component does not generate these, but the
-    # old HSI generate_bsp did.  Extract interrupt connections from the XSA
-    # and append the defines to xparameters.h.
-    fabric_irq_defines = _generate_fabric_irq_macros(xsa, cpu)
-    if fabric_irq_defines and os.path.exists(xpar_h):
-        with open(xpar_h, "a") as f:
-            f.write('\n/* Fabric interrupt defines (generated from XSA) */\n')
-            for define in fabric_irq_defines:
-                f.write(define + '\n')
-        print(f"INFO: Generated {len(fabric_irq_defines)} fabric IRQ macros")
-
-    # Generate DDR memory base address macros for MicroBlaze.
-    # Vitis 2025+ doesn't generate XPAR_AXI_DDR_CNTRL_* macros.
-    ddr_defines = _generate_ddr_macros(xsa, cpu)
-    if ddr_defines and os.path.exists(xpar_h):
-        with open(xpar_h, "a") as f:
-            f.write('\n/* DDR memory defines (generated from XSA) */\n')
-            for define in ddr_defines:
-                f.write(define + '\n')
-        print(f"INFO: Generated {len(ddr_defines)} DDR macros")
+            if fabric_irq_defines:
+                f.write('\n/* Fabric interrupt defines (generated from XSA) */\n')
+                f.write('\n'.join(fabric_irq_defines) + '\n')
+            if ddr_defines:
+                f.write('\n/* DDR memory defines (generated from XSA) */\n')
+                f.write('\n'.join(ddr_defines) + '\n')
+        print(f"INFO: Generated {len(fabric_irq_defines)} fabric IRQ, "
+              f"{len(ddr_defines)} DDR macros")
 
     print(f"INFO: BSP copied to bsp/{cpu}/")
 
@@ -619,7 +624,6 @@ def create_project(ws, hw_path, hw_file, target):
     else:
         print(f"WARNING: FSBL not found at {fsbl_src}")
 
-    vitis.dispose()
     print("INFO: Project created successfully")
 
 
