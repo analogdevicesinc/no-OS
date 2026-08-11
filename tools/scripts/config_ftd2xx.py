@@ -1,4 +1,6 @@
 #!/bin/python
+# SPDX-License-Identifier: BSD-3-Clause
+# Copyright (c) 2026 Analog Devices, Inc. All rights reserved.
 
 import argparse
 import urllib.request
