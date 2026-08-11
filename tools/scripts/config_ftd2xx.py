@@ -1,40 +1,6 @@
-#!/usr/bin/env python3
-"""
-Install the FTDI LibMPSSE and D2XX libraries into libraries/ftd2xx/.
-
-Two packages are required:
-  1. LibMPSSE  — the MPSSE protocol layer (SPI, I2C)
-  2. libftd2xx — the D2XX USB driver layer (GPIO, and runtime dependency of LibMPSSE)
-
-The installed tree is git-ignored (like all other no-OS fetched libraries).
-CMake finds it automatically at the default location — no FTD2XX_LIBRARY
-environment variable needed unless you install somewhere else.
-
-FTDI's website blocks automated downloads (Cloudflare). Download both
-archives manually from the links below, then pass them with --local-mpsse
-and --local-d2xx.
-
-LibMPSSE download links:
-  Linux:   https://ftdichip.com/wp-content/uploads/2025/05/D2XX_MPSSE_1.0.7_Linux.zip
-  macOS:   https://ftdichip.com/wp-content/uploads/2025/05/D2XX_MPSSE_1.0.7_MacOS.zip
-  Windows: https://ftdichip.com/wp-content/uploads/2025/02/LibMPSSE_1.0.7.zip
-
-D2XX (libftd2xx) download links:
-  Linux x86_64:        https://ftdichip.com/wp-content/uploads/2026/06/libftd2xx-linux-x86_64-1.4.35.tgz
-  Linux x86_32:        https://ftdichip.com/wp-content/uploads/2026/06/libftd2xx-linux-x86_32-1.4.35.tgz
-  Linux arm-v8:        https://ftdichip.com/wp-content/uploads/2026/06/libftd2xx-linux-arm-v8-1.4.35.tgz
-  Linux arm-v7-hf:     https://ftdichip.com/wp-content/uploads/2026/06/libftd2xx-linux-arm-v7-hf-1.4.35.tgz
-  Linux arm-v7-hf-uclibc: https://ftdichip.com/wp-content/uploads/2026/06/libftd2xx-linux-arm-v7-hf-uclibc-1.4.35.tgz
-  Linux arm-v7-sf:     https://ftdichip.com/wp-content/uploads/2026/06/libftd2xx-linux-arm-v7-sf-1.4.35.tgz
-  Linux arm-v6-hf:     https://ftdichip.com/wp-content/uploads/2026/06/libftd2xx-linux-arm-v6-hf-1.4.35.tgz
-  macOS:               https://ftdichip.com/wp-content/uploads/2026/06/D2XX1.4.35.dmg
-  Windows:             https://ftdichip.com/wp-content/uploads/2025/03/CDM-v2.12.36.20-WHQL-Certified.zip
-
-Usage:
-  python3 config_ftd2xx.py \\
-      --local-mpsse D2XX_MPSSE_1.0.7_Linux.zip \\
-      --local-d2xx  libftd2xx-linux-x86_64-1.4.35.tgz
-"""
+#!/bin/python
+# SPDX-License-Identifier: BSD-3-Clause
+# Copyright (c) 2026 Analog Devices, Inc. All rights reserved.
 
 import argparse
 import os
