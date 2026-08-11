@@ -847,6 +847,9 @@ def _cpu_reset(session, cpu, jtagtarget):
 
     if "cortexa9" in cpu:
         session.rst()
+        # rst releases the A9; halt it again so the bitstream download and
+        # ps7_init run against a stopped core (Zynq-7000 JTAG boot flow).
+        session.stop()
     elif "cortexa53" in cpu:
         session.rst(type='system')
 
