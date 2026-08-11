@@ -65,7 +65,7 @@ WIN
 .. toctree::
     :maxdepth: 1
 
-    build_guides/build_win
+    build_guides/build_win_cmake
 
 MAC
 ======
