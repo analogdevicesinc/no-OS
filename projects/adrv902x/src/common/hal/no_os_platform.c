@@ -1,7 +1,6 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9025-SLA */
 /**
 * Copyright 2015 - 2023 Analog Devices Inc.
-* Released under the ADRV9025 API license, for more information.
-* see the "LICENSE.txt" file in this zip file.
 */
 
 #include "ADRV9025_stream_image.h"

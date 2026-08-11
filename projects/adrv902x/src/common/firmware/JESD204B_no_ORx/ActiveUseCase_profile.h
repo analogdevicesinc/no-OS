@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9025-SLA */
 const char *json_profile_active_use_case = "{ \n\
   \"dataInterface\": { \n\
     \"framer\": [ \n\
