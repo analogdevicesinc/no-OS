@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_cals_types.h
  * \brief Contains Talise API Calibration data types

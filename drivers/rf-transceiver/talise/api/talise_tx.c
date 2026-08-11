@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_tx.c
  * \brief Contains functions to support Talise Tx data path control

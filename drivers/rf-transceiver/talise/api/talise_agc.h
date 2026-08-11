@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_agc.h
  * \brief Contains Talise API AGC function prototypes for talise_agc.c

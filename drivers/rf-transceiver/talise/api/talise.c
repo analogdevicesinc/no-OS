@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise.c
  * \brief Contains top level functions to support initialization and ctrol of

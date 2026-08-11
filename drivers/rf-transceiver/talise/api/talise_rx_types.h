@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_rx_types.h
  * \brief Contains Talise API Rx datapath data types

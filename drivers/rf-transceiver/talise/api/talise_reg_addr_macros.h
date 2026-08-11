@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_reg_addr_macros.h
  * \brief Contains Talise API address macro definitions
