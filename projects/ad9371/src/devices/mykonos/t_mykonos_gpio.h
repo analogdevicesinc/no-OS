@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /*!
  * \file t_mykonos_gpio.h
  * \brief Mykonos GPIO error handling and type defines
