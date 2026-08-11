@@ -46,7 +46,7 @@
 #define BUFFER_VAL_PRECISSION           1000.0
 
 // Buffer sizes for IIO attribute arrays
-#define FREQUENCY_RANGES_BUFFER_SIZE    256   // For 8 frequency ranges
+#define FREQUENCY_RANGES_BUFFER_SIZE    256   // For 11 frequency ranges
 
 // IIO channel indices
 #define IIO_CH_V_IN_CORRECTED           0
@@ -82,7 +82,7 @@
 // Frequency range processing constants
 #define FREQ_RANGE_VALUES_PER_RANGE     28    // 28 precision values per frequency range
 #define TEMP_COEFFS_PER_RANGE           3    // 3 temperature coefficients per frequency range
-#define MAX_FREQ_RANGE_INDEX            7    // 0-7 for 8 frequency ranges
+#define MAX_FREQ_RANGE_INDEX            10   // 0-10 for 11 frequency ranges
 #define MIN_FREQ_RANGE_INDEX            0
 
 // Buffer sizes for parsing calibration data

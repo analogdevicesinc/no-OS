@@ -45,6 +45,9 @@ uint32_t frequency_MHz_ranges[FREQUENCY_RANGE_NR] = {
 	3000,
 	4000,
 	5000,
+	5250,
+	5500,
+	5750,
 	6000,
 };
 
@@ -131,8 +134,11 @@ double temperature_precision_values[TEMPERATURE_CORRECTION_COEFFS *
 	0.08790697, -0.09423475, 0.01784584,
 	1.005991, -0.5792234, 0.08180364,
 	-6.526894, 4.923146, -1.258186,
-	6.637077, -4.713627, 1.078375,
-	-3.673048, 2.75258, -0.7360349,
+	6.637077, -4.713627, 1.078375,		// 5000MHz
+	6.637077, -4.713627, 1.078375,		// 5250MHz (placeholder: copy of 5000MHz)
+	6.637077, -4.713627, 1.078375,		// 5500MHz (placeholder: copy of 5000MHz)
+	6.637077, -4.713627, 1.078375,		// 5750MHz (placeholder: copy of 5000MHz)
+	-3.673048, 2.75258, -0.7360349,		// 6000MHz
 };
 
 
@@ -252,10 +258,10 @@ int _calc_interpolating_values(double *x_values, double *y_values,
 		}
 		return 0;
 	} else if (freq_index == (FREQUENCY_RANGE_NR - 1)) {
-		// Extrapolation beyond the highest frequency range using the last two frequency ranges (5GHz and 6GHz)
-		// Use linear extrapolation based on the trend between 5GHz and 6GHz ranges
-		int prev_range_idx = FREQUENCY_RANGE_NR - 2;  // Index for 5GHz range (6)
-		int curr_range_idx = FREQUENCY_RANGE_NR - 1;  // Index for 6GHz range (7)
+		// Extrapolation beyond the highest frequency range using the last two frequency ranges (5.75GHz and 6GHz)
+		// Use linear extrapolation based on the trend between 5.75GHz and 6GHz ranges
+		int prev_range_idx = FREQUENCY_RANGE_NR - 2;  // Index for 5.75GHz range (9)
+		int curr_range_idx = FREQUENCY_RANGE_NR - 1;  // Index for 6GHz range (10)
 
 		// Calculate extrapolation factor based on how far beyond 6GHz we are
 		float extrap_factor = (float)(local_frequency_MHz -

@@ -228,10 +228,28 @@ struct iio_attribute powrms_precision_attributes[] = {
 		.priv = MIN_FREQ_RANGE_INDEX + 6,  // frequency index 6
 	},
 	{
+		.name = "calib_5250MHz",
+		.show = read_calib_freq_range,
+		.store = write_calib_freq_range,
+		.priv = MIN_FREQ_RANGE_INDEX + 7,  // frequency index 7
+	},
+	{
+		.name = "calib_5500MHz",
+		.show = read_calib_freq_range,
+		.store = write_calib_freq_range,
+		.priv = MIN_FREQ_RANGE_INDEX + 8,  // frequency index 8
+	},
+	{
+		.name = "calib_5750MHz",
+		.show = read_calib_freq_range,
+		.store = write_calib_freq_range,
+		.priv = MIN_FREQ_RANGE_INDEX + 9,  // frequency index 9
+	},
+	{
 		.name = "calib_6000MHz",
 		.show = read_calib_freq_range,
 		.store = write_calib_freq_range,
-		.priv = MAX_FREQ_RANGE_INDEX,  // frequency index 7
+		.priv = MAX_FREQ_RANGE_INDEX,  // frequency index 10
 	},
 	// New per-frequency range attributes for reverse correction values
 	{
@@ -277,10 +295,28 @@ struct iio_attribute powrms_precision_attributes[] = {
 		.priv = MIN_FREQ_RANGE_INDEX + 6,  // frequency index 6
 	},
 	{
+		.name = "calib_5250MHz_reverse",
+		.show = read_calib_freq_range_reverse,
+		.store = write_calib_freq_range_reverse,
+		.priv = MIN_FREQ_RANGE_INDEX + 7,  // frequency index 7
+	},
+	{
+		.name = "calib_5500MHz_reverse",
+		.show = read_calib_freq_range_reverse,
+		.store = write_calib_freq_range_reverse,
+		.priv = MIN_FREQ_RANGE_INDEX + 8,  // frequency index 8
+	},
+	{
+		.name = "calib_5750MHz_reverse",
+		.show = read_calib_freq_range_reverse,
+		.store = write_calib_freq_range_reverse,
+		.priv = MIN_FREQ_RANGE_INDEX + 9,  // frequency index 9
+	},
+	{
 		.name = "calib_6000MHz_reverse",
 		.show = read_calib_freq_range_reverse,
 		.store = write_calib_freq_range_reverse,
-		.priv = MAX_FREQ_RANGE_INDEX,  // frequency index 7
+		.priv = MAX_FREQ_RANGE_INDEX,  // frequency index 10
 	},
 	{
 		.name = "temperature_compensation_value",
@@ -876,7 +912,7 @@ int powrms_eeprom_write_def_v_temp_comp_val(int32_t value)
 static int read_calib_freq_range(void *device, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel, intptr_t priv)
 {
-	int freq_index = (int)priv;  // frequency range index (0-7)
+	int freq_index = (int)priv;  // frequency range index (0-10)
 	int written = 0;
 	int remaining = len;
 	int start_idx = freq_index *
@@ -908,7 +944,7 @@ static int read_calib_freq_range(void *device, char *buf, uint32_t len,
 static int write_calib_freq_range(void *device, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel, intptr_t priv)
 {
-	int freq_index = (int)priv;  // frequency range index (0-7)
+	int freq_index = (int)priv;  // frequency range index (0-10)
 	char *token;
 	char *saveptr;
 	char buf_copy[CALIB_VALUES_BUFFER_SIZE];  // Buffer for 6 values
@@ -954,7 +990,7 @@ static int write_calib_freq_range(void *device, char *buf, uint32_t len,
 static int read_calib_freq_range_reverse(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
-	int freq_index = (int)priv;  // frequency range index (0-7)
+	int freq_index = (int)priv;  // frequency range index (0-10)
 	int written = 0;
 	int remaining = len;
 	int start_idx = freq_index *
@@ -986,7 +1022,7 @@ static int read_calib_freq_range_reverse(void *device, char *buf, uint32_t len,
 static int write_calib_freq_range_reverse(void *device, char *buf, uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv)
 {
-	int freq_index = (int)priv;  // frequency range index (0-7)
+	int freq_index = (int)priv;  // frequency range index (0-10)
 	char *token;
 	char *saveptr;
 	char buf_copy[CALIB_VALUES_BUFFER_SIZE];  // Buffer for 14 values

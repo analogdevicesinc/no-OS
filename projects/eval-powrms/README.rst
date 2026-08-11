@@ -36,7 +36,7 @@ The board utilizes multiple ADC channels for comprehensive signal acquisition:
 Frequency Range Support
 -----------------------
 
-The system supports calibration across 8 frequency ranges:
+The system supports calibration across 11 frequency ranges:
 
 * 10 MHz
 * 100 MHz
@@ -45,6 +45,9 @@ The system supports calibration across 8 frequency ranges:
 * 3000 MHz (3 GHz)
 * 4000 MHz (4 GHz)
 * 5000 MHz (5 GHz)
+* 5250 MHz (5.25 GHz)
+* 5500 MHz (5.5 GHz)
+* 5750 MHz (5.75 GHz)
 * 6000 MHz (6 GHz)
 
 User Interface Options
@@ -165,7 +168,7 @@ Each frequency range supports three temperature compensation coefficients stored
    # Temperature calibration for each frequency range
    iio_attr -c powrms precision_array calib_temp_10MHz_values "coeff1,coeff2,coeff3"
    iio_attr -c powrms precision_array calib_temp_100MHz_values "coeff1,coeff2,coeff3"
-   # ... for all 8 frequency ranges
+   # ... for all 11 frequency ranges
 
 **Temperature Compensation Value:**
 
@@ -196,12 +199,15 @@ Each frequency range requires six precision values for comprehensive calibration
    iio_attr -c powrms precision_array calib_3000MHz_values "val1,val2,val3,val4,val5,val6"
    iio_attr -c powrms precision_array calib_4000MHz_values "val1,val2,val3,val4,val5,val6"
    iio_attr -c powrms precision_array calib_5000MHz_values "val1,val2,val3,val4,val5,val6"
+   iio_attr -c powrms precision_array calib_5250MHz_values "val1,val2,val3,val4,val5,val6"
+   iio_attr -c powrms precision_array calib_5500MHz_values "val1,val2,val3,val4,val5,val6"
+   iio_attr -c powrms precision_array calib_5750MHz_values "val1,val2,val3,val4,val5,val6"
    iio_attr -c powrms precision_array calib_6000MHz_values "val1,val2,val3,val4,val5,val6"
 
 **Calibration Data Organization:**
 
-* **48 Precision Values**: 6 values × 8 frequency ranges = 48 total precision coefficients
-* **24 Temperature Coefficients**: 3 coefficients × 8 frequency ranges = 24 temperature correction values
+* **Precision Values**: 28 values × 11 frequency ranges = 308 total precision coefficients
+* **Temperature Coefficients**: 3 coefficients × 11 frequency ranges = 33 temperature correction values
 * **EEPROM Persistence**: All calibration data stored in non-volatile memory
 
 Custom Calibration Data Sets
@@ -323,27 +329,33 @@ Prerequisites
 
 * Maxim SDK installed and configured
 * GCC ARM toolchain
-* Make build system
+* CMake and Ninja
+
+The project is built through the CMake/Kconfig flow driven by
+``tools/scripts/no_os_build.py``. Point ``MAXIM_LIBRARIES`` at the Maxim SDK
+``Libraries`` directory, then select the variant and board. The LVGL graphics
+library is pulled in automatically by the build (matching the project's
+``lv_conf.h``). For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
+Available variants: ``eval_powrms``. Available boards: ``max32662``.
 
 **Build Commands:**
 
 .. code-block:: bash
 
-   # Build the project
-   make PLATFORM=maxim TARGET=max32662
+   export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
 
-   # Build and run
-   make run PLATFORM=maxim TARGET=max32662
+   cd no-OS
 
-   # Clean build artifacts
-   make clean
+   # build the project (eval_powrms variant on the max32662 board)
+   python3 tools/scripts/no_os_build.py build \
+       --project eval-powrms --variant eval_powrms --board max32662
 
-**Development Tasks:**
-
-The project includes predefined VS Code tasks for development:
-
-* **maxim Build**: Compile the project for MAX32662 target
-* **maxim Run**: Build and execute the firmware on target hardware
+   # build and flash (requires a connected debug probe)
+   python3 tools/scripts/no_os_build.py build \
+       --project eval-powrms --variant eval_powrms --board max32662 \
+       --probe openocd --flash
 
 **Project Structure:**
 
@@ -351,16 +363,18 @@ The project includes predefined VS Code tasks for development:
 
    eval-powrms/
    ├── src/
-   │   ├── common/          # Common data structures and syscalls  
+   │   ├── common/          # Common data structures and syscalls
    │   ├── examples/        # Main application logic
    │   │   ├── example/     # Core measurement and IIO functionality
    │   │   └── screens/     # OLED display interface screens
    │   └── platform/        # Platform-specific implementation
    │       └── maxim/       # MAX32662 platform support
-   ├── build/               # Build artifacts and object files
-   ├── Makefile            # Main build configuration
-   ├── src.mk              # Source file definitions
-   └── README.rst          # This documentation
+   ├── boards/              # Per-board Kconfig overlays
+   ├── CMakeLists.txt       # Project build description
+   ├── Kconfig              # Project configuration options
+   ├── eval_powrms.conf     # Variant defconfig (drivers/libraries selected)
+   ├── lv_conf.h            # LVGL configuration
+   └── README.rst           # This documentation
 
 **Firmware Version:**
 

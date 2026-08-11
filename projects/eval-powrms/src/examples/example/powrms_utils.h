@@ -45,27 +45,21 @@
     0x0003: Calibration data usage for temperature compensation (1 byte)
         - 0: Do not use temperature compensation
         - 1: Use temperature compensation
-    0x0004 - 0x00C3: Precision values array (112 int32_t values, 4 bytes each, total 448 bytes)
-        - Stored in little-endian format
-    0x00C4 - 0x0113: Temperature compensation coefficients array (24 int32_t values, 4 bytes each, total 96 bytes)
-        - Stored in little-endian format
-    0x0114 - 0x0117: Voltage temperature compensation value (int32_t, 4 bytes)
-        - Stored in little-endian format
-    0x0118 - 0x01D7: Default factory precision values array (112 int32_t values, 4 bytes each, total 448 bytes)
-        - Stored in little-endian format
-    0x01D8 - 0x0237: Default factory temperature compensation coefficients array (24 int32_t values, 4 bytes each, total 96 bytes)
-        - Stored in little-endian format
-    0x0238 - 0x023B: Default factory voltage temperature compensation value (int32_t, 4 bytes)
-        - Stored in little-endian format
-    0x023C - 0x03FB: Reverse precision values array (112 int32_t values, 4 bytes each, total 448 bytes)
-        - Stored in little-endian format
-    0x03FC - 0x05BB: Default factory reverse precision values array (112 int32_t values, 4 bytes each, total 448 bytes)
-        - Stored in little-endian format
-    0x05BC - 0x05E3: Polynomial calibration coefficients for 5000MHz (10 int32_t values, 4 bytes each, total 40 bytes)
-        - Stored in little-endian format
-        - Order: intercept, c_x, c_f, c_x2, c_xf, c_f2, c_x3, c_x2f, c_xf2, c_f3
-    0x05E4 - 0x060B: Default factory polynomial calibration coefficients for 5000MHz (10 int32_t values, 4 bytes each, total 40 bytes)
-        - Stored in little-endian format
+    Note: exact addresses below are derived from the MEM_*_POZ/SIZE macros;
+    the values shown are illustrative. Each precision array now holds 308
+    int32_t values (14 X/Y point pairs * 11 frequency ranges = 308).
+        - Precision values array (308 int32_t values, 4 bytes each, total 1232 bytes)
+        - Temperature compensation coefficients array (24 int32_t values, 4 bytes each, total 96 bytes)
+        - Voltage temperature compensation value (int32_t, 4 bytes)
+        - Default factory precision values array (308 int32_t values, 4 bytes each, total 1232 bytes)
+        - Default factory temperature compensation coefficients array (24 int32_t values, 4 bytes each, total 96 bytes)
+        - Default factory voltage temperature compensation value (int32_t, 4 bytes)
+        - Reverse precision values array (308 int32_t values, 4 bytes each, total 1232 bytes)
+        - Default factory reverse precision values array (308 int32_t values, 4 bytes each, total 1232 bytes)
+        - All values stored in little-endian format
+        - Polynomial calibration coefficients for 5000MHz (10 double values, 8 bytes each, total 80 bytes)
+          Order: intercept, c_x, c_f, c_x2, c_xf, c_f2, c_x3, c_x2f, c_xf2, c_f3
+        - Default factory polynomial calibration coefficients for 5000MHz (10 double values, 8 bytes each, total 80 bytes)
 */
 
 // Note: Polynomial coefficients changed to double (8 bytes each) for 20 decimal precision
@@ -82,7 +76,7 @@
 // User configurable parameters in EEPROM
 
 #define MEM_PRECISION_ARRAY_POZ         (MEM_TEMP_COMP_DATA_POZ + MEM_TEMP_COMP_DATA_LEN)
-#define MEM_PRECISION_ARRAY_SIZE        960
+#define MEM_PRECISION_ARRAY_SIZE        1232  // 308 int32_t values * 4 bytes each (11 freq ranges)
 
 #define MEM_TEMP_COMP_ARRAY_POZ         (MEM_PRECISION_ARRAY_POZ + MEM_PRECISION_ARRAY_SIZE)
 #define MEM_TEMP_COMP_ARRAY_SIZE        96
@@ -93,7 +87,7 @@
 // Default values in EEPROM
 
 #define MEM_DEF_PRECISION_ARRAY_POZ     (MEM_V_TEMP_COMP_VAL_POZ + MEM_V_TEMP_COMP_VAL_SIZE)
-#define MEM_DEF_PRECISION_ARRAY_SIZE    960
+#define MEM_DEF_PRECISION_ARRAY_SIZE    1232  // 308 int32_t values * 4 bytes each (11 freq ranges)
 
 #define MEM_DEF_TEMP_COMP_ARRAY_POZ     (MEM_DEF_PRECISION_ARRAY_POZ + MEM_DEF_PRECISION_ARRAY_SIZE)
 #define MEM_DEF_TEMP_COMP_ARRAY_SIZE     96
@@ -104,12 +98,12 @@
 // Reverse precision array values in EEPROM (user configurable)
 
 #define MEM_PRECISION_ARRAY_REVERSE_POZ         (MEM_DEF_V_TEMP_COMP_VAL_POZ + MEM_DEF_V_TEMP_COMP_VAL_SIZE)
-#define MEM_PRECISION_ARRAY_REVERSE_SIZE        960
+#define MEM_PRECISION_ARRAY_REVERSE_SIZE        1232  // 308 int32_t values * 4 bytes each (11 freq ranges)
 
 // Default reverse precision array values in EEPROM (factory settings)
 
 #define MEM_DEF_PRECISION_ARRAY_REVERSE_POZ     (MEM_PRECISION_ARRAY_REVERSE_POZ + MEM_PRECISION_ARRAY_REVERSE_SIZE)
-#define MEM_DEF_PRECISION_ARRAY_REVERSE_SIZE    960
+#define MEM_DEF_PRECISION_ARRAY_REVERSE_SIZE    1232  // 308 int32_t values * 4 bytes each (11 freq ranges)
 
 // Polynomial calibration coefficients for 5000MHz (user configurable)
 
