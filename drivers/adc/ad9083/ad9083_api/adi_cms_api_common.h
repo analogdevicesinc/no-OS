@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /*!
  * @brief     Common API definitions header file.
  *            This file contains all common API definitions.
