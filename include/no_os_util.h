@@ -153,6 +153,8 @@ uint64_t no_os_field_max_u64(uint64_t mask);
 
 /* Log base 2 of the given number. */
 int32_t no_os_log_base_2(uint32_t x);
+/* Integer square root of a 64-bit value. */
+uint64_t no_os_sqrt64(uint64_t x);
 /* Find greatest common divisor of the given two numbers. */
 uint32_t no_os_greatest_common_divisor(uint32_t a,
 				       uint32_t b);

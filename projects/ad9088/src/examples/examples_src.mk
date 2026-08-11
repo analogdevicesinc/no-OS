@@ -10,6 +10,8 @@ ifeq (y,$(strip $(DMA_EXAMPLE)))
 CFLAGS += -DDMA_EXAMPLE
 SRCS += $(PROJECT)/src/examples/dma/dma_example.c
 INCS += $(PROJECT)/src/examples/dma/dma_example.h
+SRCS += $(NO-OS)/util/no_os_tone.c
+INCS += $(INCLUDE)/no_os_tone.h
 endif
 
 ifeq (y,$(strip $(IIO_EXAMPLE)))

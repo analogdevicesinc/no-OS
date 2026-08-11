@@ -187,6 +187,28 @@ int32_t no_os_log_base_2(uint32_t x)
 }
 
 /**
+ * Integer square root of a 64-bit value.
+ */
+uint64_t no_os_sqrt64(uint64_t x)
+{
+	uint64_t rem = 0;
+	uint64_t root = 0;
+	int i;
+
+	for (i = 0; i < 32; i++) {
+		root <<= 1;
+		rem = (rem << 2) | (x >> 62);
+		x <<= 2;
+		if (root < rem) {
+			rem -= root | 1;
+			root += 2;
+		}
+	}
+
+	return root >> 1;
+}
+
+/**
  * Find greatest common divisor of the given two numbers.
  */
 uint32_t no_os_greatest_common_divisor(uint32_t a,
