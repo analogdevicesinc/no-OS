@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9001-SLA */
 /* Auto-generated file */
 
 #ifndef _ADRV9001PROFILETYPES_SERVER_SHIMS_H_
