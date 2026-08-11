@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file common.c
  * \brief Contains Mykonos API common wrapper functions for user hardware platform drivers

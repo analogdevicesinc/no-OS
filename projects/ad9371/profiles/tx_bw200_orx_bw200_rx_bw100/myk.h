@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file ad9371/profiles/tx_bw200_orx_bw200_rx_bw100/myk.h
  *
