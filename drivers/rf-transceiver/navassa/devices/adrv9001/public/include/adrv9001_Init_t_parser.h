@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9001-SLA */
 /* Auto-generated file - DO NOT MANUALLY EDIT */
 /* Filename: C:\Jenkins\workspace\vice-driver_profile-types_master\ProfileTypes\AnalogDevices.Adrv9001.ProfileTypes.Native\include\adrv9001_Init_t_parser.h */
 /* Created on: 6/22/2023 3:23:16 PM */

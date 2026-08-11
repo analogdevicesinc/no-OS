@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9001-SLA */
 /**
  * \file
  * \brief Contains ADRV9001 API macro definitions and global structure declarations for adi_adrv9001_user.c
