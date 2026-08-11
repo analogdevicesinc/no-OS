@@ -63,13 +63,13 @@ enum transmit_type {
 
 /*
  * Command-byte builders derived from SSD1306_ROTATION. A 180-degree rotation
- * mirrors both the segment remap (0xA0) and the COM output scan direction
- * (0xC0).
+ * mirrors both the segment remap (0xA1) and the COM output scan direction
+ * (0xC8); the 0-degree orientation uses the un-mirrored 0xA0/0xC0 defaults.
  */
 #define SSD1306_SEG_REMAP_CMD \
-	(0xA0U | (((SSD1306_ROTATION) == 180) ?  0x00U : 0x01U))
+	(0xA0U | (((SSD1306_ROTATION) == 180) ?  0x01U : 0x00U))
 #define SSD1306_COM_SCAN_CMD \
-	(0xC0U | (((SSD1306_ROTATION) == 180) ? 0x00U : 0x08U))
+	(0xC0U | (((SSD1306_ROTATION) == 180) ? 0x08U : 0x00U))
 
 /**
  * @struct ssd_1306_extra
