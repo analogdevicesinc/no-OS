@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_arm.h
  * \brief Contains Talise ARM related function prototypes for talise_arm.c
