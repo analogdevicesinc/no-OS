@@ -1,3 +1,13 @@
+/***************************************************************************//**
+ *   @file   main.c
+ *   @brief  Main program for the wethlink project.
+ *   @author Darius Berghe (darius.berghe@analog.com)
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+********************************************************************************
+ * Copyright 2023~2026(c) Analog Devices, Inc.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+*******************************************************************************/
 #include <string.h>
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
