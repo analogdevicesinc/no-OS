@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9001-SLA */
 /** 
 * \file 
 * \brief Functions for working with ADRV9001 profiles

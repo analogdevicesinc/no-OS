@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9001-SLA */
 /**
 * \file
 * \brief Contains related function implementation defined in adi_adrv9001_stream.h

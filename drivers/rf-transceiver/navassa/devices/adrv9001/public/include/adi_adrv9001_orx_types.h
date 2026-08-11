@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9001-SLA */
 /**
 * \file
 * \brief Contains ADRV9001 API ORx datapath data types

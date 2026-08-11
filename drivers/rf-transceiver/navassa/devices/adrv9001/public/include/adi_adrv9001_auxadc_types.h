@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9001-SLA */
 /**
  * \file
  * \brief Contains functions to configure AUX ADC channels on the ADRV9001 device
