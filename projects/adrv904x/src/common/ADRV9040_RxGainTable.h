@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: Apache-2.0 */
 #ifndef ADRV9040_RX_GAIN_TABLE_H
 #define ADRV9040_RX_GAIN_TABLE_H
 

@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: Apache-2.0 */
 const char *json_profile_active_use_case = "\
 {\n\
   \"dataInterface\": {\n\
