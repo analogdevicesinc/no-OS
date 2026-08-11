@@ -1,3 +1,12 @@
+/***************************************************************************//**
+ *   @file   net.h
+ *   @brief  Network interface header for the wethlink project.
+ *   @author Darius Berghe (darius.berghe@analog.com)
+********************************************************************************
+ * Copyright 2023~2024(c) Analog Devices, Inc.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+*******************************************************************************/
 #include "iio_adin1300.h"
 #include "iio_max24287.h"
 #include "mwc.h"
