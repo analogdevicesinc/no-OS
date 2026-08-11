@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_cals.h
  * \brief Contains Talise calibration related function prototypes for

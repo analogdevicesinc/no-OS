@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_hal.h
  * \brief Contains prototypes and macro definitions for Private ADI HAL wrapper

@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_gpio_types.h
  * \brief Contains functions to allow control of the General Purpose IO functions on the Talise device

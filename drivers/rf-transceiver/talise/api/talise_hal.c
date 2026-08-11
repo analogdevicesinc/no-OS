@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_hal.c
  * \brief Contains TALISE API Hardware Abstraction Layer (HAL) functions

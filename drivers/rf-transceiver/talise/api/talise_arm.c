@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_arm.c
  * \brief Contains functions to support interfacing with the TALISE internal
