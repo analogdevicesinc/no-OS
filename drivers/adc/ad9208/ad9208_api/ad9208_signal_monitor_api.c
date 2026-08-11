@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file ad9208_signal_monitor_api.c
  *

@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file ad917x_reg.h
  *
