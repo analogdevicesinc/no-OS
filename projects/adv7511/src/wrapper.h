@@ -1,9 +1,12 @@
-/**********************************************************************************************
-*																						      *
-* Copyright (c) 2012 Analog Devices, Inc.  All Rights Reserved.                               *
-* This software is proprietary and confidential to Analog Devices, Inc. and its licensors.    *
-*                                                                                             *
-***********************************************************************************************/
+/***************************************************************************//**
+ *   @file   wrapper.h
+ *   @brief  ADV7511 transmitter library wrapper for no-OS.
+ *   @author Analog Devices Inc.
+********************************************************************************
+ * Copyright 2012(c) Analog Devices, Inc.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+*******************************************************************************/
 #ifndef _WRAPPER_H_
 #define _WRAPPER_H_
 
