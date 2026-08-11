@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_radioctrl_types.h
  * \brief Contains Talise API Radio Control data types
