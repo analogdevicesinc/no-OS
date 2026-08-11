@@ -1,3 +1,13 @@
+/***************************************************************************//**
+ *   @file   parameters.h
+ *   @brief  Maxim platform parameters header for the wethlink project.
+ *   @author Darius Berghe (darius.berghe@analog.com)
+ *   @author Ramona Gradinariu (ramona.gradinariu@analog.com)
+********************************************************************************
+ * Copyright 2023~2026(c) Analog Devices, Inc.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+*******************************************************************************/
 #ifndef __PARAMETERS_H__
 #define __PARAMETERS_H__
 
