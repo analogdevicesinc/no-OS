@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /*!
  * \file mykonos_gpio.h
  * \brief Contains macro definitions and function prototypes for mykonos_gpio.c
