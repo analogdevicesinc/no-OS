@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
 /*
  **
  ** Source file generated on August 3, 2021 at 14:00:23.
