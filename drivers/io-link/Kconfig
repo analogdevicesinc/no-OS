@@ -12,4 +12,9 @@ config IO_LINK_MAX22516
 	bool "Enable MAX22516 IO-Link driver"
 	default n
 
+config IO_LINK_ADIOL100
+	depends on SPI
+	bool "Enable ADIOL100/ADIOL101 IO-Link driver"
+	default n
+
 endif # IO_LINK
