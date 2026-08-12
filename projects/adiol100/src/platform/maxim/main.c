@@ -17,6 +17,10 @@
 extern int basic_example_main(void);
 #endif
 
+#ifdef CONFIG_ADIOL100_ILINK_EXAMPLE
+extern int ilink_example_main(void);
+#endif
+
 int main(void)
 {
 	struct no_os_uart_desc *uart;
@@ -25,5 +29,9 @@ int main(void)
 
 #ifdef CONFIG_ADIOL100_BASIC_EXAMPLE
 	return basic_example_main();
+#endif
+
+#ifdef CONFIG_ADIOL100_ILINK_EXAMPLE
+	return ilink_example_main();
 #endif
 }
