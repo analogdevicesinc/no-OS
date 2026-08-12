@@ -1,20 +1,32 @@
+no-OS licensing
+===============
 
-Majority of the files located in this repository are released under the
-LICENSE_BSD terms. However, there may exist files accompanied by separate
-and unique license terms (such as GPL, LGPL, BSD, modified BSD, commercial or
-others). Your license rights with respect to individual file accompanied by
-separate license terms are defined by those terms. The license agreement for
-each file is generally located in the header of the file itself. Nothing else
-shall restrict, limit, or otherwise affect any rights or obligations you may
-have, or conditions to which you may be subject, under such license terms. This
-agreement does not limit your rights under, or grant you rights that supersede,
-the license terms of any particular file.
+no-OS is, by default, licensed under the permissive BSD-3-Clause license.
+The full text of that default license is in the LICENSE_BSD file.
 
-The mere aggregation of these files (putting them side by side in the same
-source code repository or on a hard disk) does not mean that there is one master
-license for all the files. It is up to you, the user, to ensure that during the
-building of a project, which combines these files together, all the individual
-licenses are compatible. For example, if a single file is covered by the GPL,
-the whole combination must also be released under the GPL. If you can't, or
-won't, do that, you may not distribute the resulting binary.
+The authoritative license for any individual file is the one declared in
+that file's own header: an SPDX-License-Identifier tag or, for some
+third-party and vendor code, a full license header. Some files and whole
+directory trees are under other terms -- other permissive licenses or
+proprietary vendor device-API licenses.
 
+For the complete picture -- how licenses are declared, the LICENSES/
+directory of full license texts, and the repository-local LicenseRef-
+identifiers used for proprietary vendor device-API code -- see:
+
+    doc/sphinx/source/license_rules.rst
+
+
+A note on aggregation
+---------------------
+
+The mere aggregation of these files (putting them side by side in one
+source repository) does not create a single master license for all of
+them. When you build a project that combines files, it is up to you to
+ensure the individual licenses are compatible. Some proprietary ADI
+vendor-API trees forbid combination with incompatible code outright, and
+you may not distribute a binary that violates the terms of any file it
+includes.
+
+Nothing in this file restricts, limits, or supersedes the license terms of
+any particular file.
