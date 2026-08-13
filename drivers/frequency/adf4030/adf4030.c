@@ -2200,36 +2200,6 @@ static void adf4030_align_regs_dump(struct adf4030_dev *dev, uint8_t channel)
 	       (unsigned int)no_os_field_get(ADF4030_PLL_LD, r90));
 }
 
-/*
- * Measure a channel's phase against the TDC reference and log it. Independent
- * of the alignment FSM: a sane femtosecond reading proves the reference clock,
- * the receiver termination and the TDC itself are all working, so an alignment
- * failure is then a convergence problem rather than a missing signal.
- */
-static void adf4030_tdc_probe(struct adf4030_dev *dev, uint8_t channel,
-			      uint8_t reference_chan)
-{
-	int64_t delay_fs = 0;
-	int ret;
-
-	ret = adf4030_set_tdc_measurement(dev, channel);
-	if (ret) {
-		pr_err("ch%u TDC arm against ch%u failed (%d)\n", channel,
-		       reference_chan, ret);
-		return;
-	}
-
-	ret = adf4030_get_tdc_measurement(dev, &delay_fs);
-	if (ret) {
-		pr_err("ch%u TDC read against ch%u failed (%d)\n", channel,
-		       reference_chan, ret);
-		return;
-	}
-
-	pr_info("ch%u TDC vs ch%u: %lld fs\n", channel, reference_chan,
-		delay_fs);
-}
-
 /**
  * @brief JESD204 CLK_SYNC_STAGE4 callback: align the BSYNC outputs.
  *
@@ -2288,13 +2258,6 @@ static int adf4030_jesd204_clks_sync4(struct jesd204_dev *jdev,
 		ret = adf4030_set_tdc_source(dev, chan->reference_chan);
 		if (ret)
 			return ret;
-
-		/*
-		 * Probe the phase first. This also tells us whether the TDC
-		 * can see this channel at all, which the alignment FSM's
-		 * timeout alone does not distinguish.
-		 */
-		adf4030_tdc_probe(dev, i, chan->reference_chan);
 
 		ret = adf4030_set_single_ch_alignment(dev, i);
 		if (ret) {
