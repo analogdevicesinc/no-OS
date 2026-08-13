@@ -84,5 +84,9 @@ int main()
 	ret = dma_example_main();
 #endif
 
+#ifdef IIO_EXAMPLE
+	ret = iio_example_main();
+#endif
+
 	return ret;
 }

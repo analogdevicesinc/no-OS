@@ -19,6 +19,8 @@ IIOD=y
 CFLAGS += -DIIO_EXAMPLE
 SRCS += $(PROJECT)/src/examples/iio_example/iio_example.c
 INCS += $(PROJECT)/src/examples/iio_example/iio_example.h
+SRCS += $(DRIVERS)/frequency/adf4382/iio_adf4382.c
+INCS += $(DRIVERS)/frequency/adf4382/iio_adf4382.h
 endif
 
 ifeq (y,$(strip $(IIOD)))
