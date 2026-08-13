@@ -2216,6 +2216,8 @@ static int adf4030_jesd204_clks_sync4(struct jesd204_dev *jdev,
 	struct adf4030_jesd204_priv *priv = jesd204_dev_priv(jdev);
 	struct adf4030_dev *dev = priv->dev;
 	struct adf4030_chan_spec *chan;
+	uint8_t tdc_err, align_err;
+	uint8_t status = 0;
 	int first_err = 0;
 	uint8_t i;
 	int ret;
@@ -2274,8 +2276,32 @@ static int adf4030_jesd204_clks_sync4(struct jesd204_dev *jdev,
 			continue;
 		}
 
-		pr_info("%s: aligned ch%u against ch%u\n", __func__, i,
-			chan->reference_chan);
+		/*
+		 * adf4030_set_single_ch_alignment() returns 0 even when its
+		 * retries run out with TDC_ERR or TMP_ALIGN_ERR still latched,
+		 * and nothing clears those bits between iterations - so a
+		 * bare "aligned" only proves the FSM stopped, not that it
+		 * converged. Report the sticky bits so the distinction is
+		 * visible in the log. The return code stays as the reference
+		 * driver has it; this only surfaces state.
+		 */
+		ret = adf4030_spi_read(dev, 0x90, &status);
+		if (ret)
+			return ret;
+
+		tdc_err = no_os_field_get(ADF4030_TDC_ERR, status);
+		align_err = no_os_field_get(ADF4030_TMP_ALIGN_ERR, status);
+
+		if (tdc_err || align_err)
+			pr_warning("%s: ch%u aligned against ch%u but did "
+				   "not converge (tdc_err=%u align_err=%u)\n",
+				   __func__, i, chan->reference_chan,
+				   (unsigned int)tdc_err,
+				   (unsigned int)align_err);
+		else
+			pr_info("%s: aligned ch%u against ch%u "
+				"(tdc_err=0 align_err=0)\n",
+				__func__, i, chan->reference_chan);
 	}
 
 	if (first_err)
