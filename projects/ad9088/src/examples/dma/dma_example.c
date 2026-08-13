@@ -909,14 +909,23 @@ int dma_example_main()
 
 	loopback_pass = no_os_tone_report(&test, &measured);
 
-	ret = (floor_pass && tone_pass && loopback_pass) ? 0 : -EIO;
-
 	/*
-	 * The TX stream is left running on the pass path: error_tx_stream is the
-	 * stop, and the teardown below is the same sequence the error ladder
-	 * runs, so a passing run shares it from that label on.
+	 * Sample count is the total across converters, not per converter, which
+	 * is what the capture script's de-interleave expects: every field here
+	 * transfers to its command line unchanged.
 	 */
-	goto error_tx_stream;
+	pr_info("RX buffer address: 0x%08lx samples=%lu channels=%u bits=%u\n",
+		(unsigned long)adc_buffer_dma,
+		(unsigned long)samples_per_conv * num_conv,
+		num_conv, np);
+
+	ret = (floor_pass && tone_pass && loopback_pass) ? 0 : -EIO;
+	if (ret)
+		goto error_tx_stream;
+
+	pr_info("Parked for JTAG capture; reset the board to continue\n");
+	while (1)
+      		no_os_mdelay(1000);
 
 error_tx_stream:
 	axi_dmac_transfer_stop(tx_dmac);
