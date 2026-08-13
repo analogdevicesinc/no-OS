@@ -23,7 +23,8 @@ SRCS += $(DRIVERS)/api/no_os_uart.c     	\
         $(NO-OS)/util/no_os_list.c      	\
         $(NO-OS)/util/no_os_util.c      	\
         $(NO-OS)/util/no_os_alloc.c		\
-	$(NO-OS)/util/no_os_clk.c
+	$(NO-OS)/util/no_os_clk.c		\
+	$(NO-OS)/util/no_os_crc32.c
 
 INCS += $(INCLUDE)/no_os_delay.h     		\
         $(INCLUDE)/no_os_error.h     		\
@@ -42,6 +43,7 @@ INCS += $(INCLUDE)/no_os_delay.h     		\
         $(INCLUDE)/no_os_dma.h       		\
 	$(INCLUDE)/no_os_clk.h 			\
 	$(INCLUDE)/no_os_axi_io.h 		\
+	$(INCLUDE)/no_os_crc32.h 		\
         $(INCLUDE)/no_os_alloc.h
 		
 INCS += $(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h 	\

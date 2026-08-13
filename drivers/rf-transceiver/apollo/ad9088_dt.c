@@ -7,6 +7,7 @@
 //#define DEBUG
 
 #include "ad9088.h"
+#include "no_os_crc32.h"
 
 static void ad9088_jesd_lane_setup(struct ad9088_phy *phy, 
 				      const struct ad9088_init_param *init_param)
@@ -144,6 +145,7 @@ static void ad9088_print_profile_sysref_cfg(const struct ad9088_phy *phy)
 int ad9088_parse_struct(struct ad9088_phy **device,
 			const struct ad9088_init_param *init_param)
 {
+	const adi_apollo_profile_version_t *ver;
 	struct ad9088_phy *phy;
 	uint32_t nz;
 	int i, j;
@@ -195,6 +197,22 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 		goto error_reset;
 	}
 
+	/*
+	 * The loader only checks the profile's size, and every version of the
+	 * struct has the same size, so a stale binary loads silently and then
+	 * has its fields interpreted under the wrong layout.
+	 */
+	ver = &phy->profile.profile_cfg.profile_version;
+	if (ver->major != ADI_APOLLO_PROFILE_VERSION_MAJOR ||
+	    ver->minor != ADI_APOLLO_PROFILE_VERSION_MINOR) {
+		pr_err("Incompatible profile version %u.%u != %u.%u\n",
+		       (unsigned int)ver->major, (unsigned int)ver->minor,
+		       (unsigned int)ADI_APOLLO_PROFILE_VERSION_MAJOR,
+		       (unsigned int)ADI_APOLLO_PROFILE_VERSION_MINOR);
+		ret = -EINVAL;
+		goto error_reset;
+	}
+
 	ad9088_jesd_lane_setup(phy, init_param);
 
 	ad9088_print_profile_sysref_cfg(phy);
@@ -203,6 +221,31 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 	phy->profile.jtx[1].common_link_cfg.subclass = init_param->subclass;
 	phy->profile.jrx[0].common_link_cfg.subclass = init_param->subclass;
 	phy->profile.jrx[1].common_link_cfg.subclass = init_param->subclass;
+
+	/*
+	 * Subclass 1 needs the CPU firmware told to expect an external SYSREF.
+	 * The profiles shipped here carry sysref_present = 0 on all three MCS
+	 * inputs, so without this the SYSREF receiver is enabled on the host
+	 * side while the firmware still believes there is nothing to receive.
+	 */
+	if (init_param->subclass) {
+		adi_apollo_mcs_cfg_t *mcs = &phy->profile.mcs_cfg;
+
+		if (!mcs->side_a_sysref.sysref_present ||
+		    !mcs->side_b_sysref.sysref_present)
+			mcs->center_sysref.sysref_present = true;
+	}
+
+	/*
+	 * Last, after every mutation above. The firmware CRC-checks the profile
+	 * it is handed and warns when it disagrees; recomputing keeps that
+	 * check meaningful instead of permanently failed. profile_checksum is
+	 * the final member of the packed struct and is excluded from its own
+	 * checksum.
+	 */
+	phy->profile.profile_checksum =
+		no_os_crc32_be(0, (const uint8_t *)&phy->profile,
+			       sizeof(phy->profile) - sizeof(uint32_t));
 
 	*device = phy;
 	return 0;
