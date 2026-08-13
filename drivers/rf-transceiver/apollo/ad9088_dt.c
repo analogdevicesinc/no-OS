@@ -93,7 +93,55 @@ int ad9088_get_profile(struct ad9088_phy *phy,
 	return 0;
 }
 
-int ad9088_parse_struct(struct ad9088_phy **device, 
+static void ad9088_print_sysref_inp_cfg(const char *name,
+					const adi_apollo_sysref_inp_cfg_t *cfg,
+					uint16_t int_prd)
+{
+	pr_info("profile: %s_sysref present=%u term=%u cm900=%u "
+		"ref_to_int_ratio=%llu int_prd_digclk=%u\n",
+		name, (unsigned int)cfg->sysref_present,
+		(unsigned int)cfg->rx_term_en,
+		(unsigned int)cfg->cm_above_900mv,
+		cfg->ref_to_int_period_ratio, (unsigned int)int_prd);
+}
+
+/*
+ * Dump the SYSREF/MCS configuration carried by the device profile, before any
+ * host-side override is applied.
+ *
+ * These fields are consumed by the on-chip CPU firmware and no host code reads
+ * them (only internal_sysref_prd_digclk_cycles_center, for the trigger-phase
+ * margin check), so a runtime dump is the only way to see what the profile
+ * binary actually asks for. Needed when moving to subclass 1: sysref_present
+ * tells the firmware to expect an external SYSREF, and the internal SYSREF
+ * period sets the ratio the external BSYNC has to satisfy.
+ */
+static void ad9088_print_profile_sysref_cfg(const struct ad9088_phy *phy)
+{
+	const adi_apollo_mcs_cfg_t *mcs = &phy->profile.mcs_cfg;
+
+	pr_info("profile: subclass jtx0=%u jtx1=%u jrx0=%u jrx1=%u\n",
+		(unsigned int)phy->profile.jtx[0].common_link_cfg.subclass,
+		(unsigned int)phy->profile.jtx[1].common_link_cfg.subclass,
+		(unsigned int)phy->profile.jrx[0].common_link_cfg.subclass,
+		(unsigned int)phy->profile.jrx[1].common_link_cfg.subclass);
+
+	ad9088_print_sysref_inp_cfg("center", &mcs->center_sysref,
+				    mcs->internal_sysref_prd_digclk_cycles_center);
+	ad9088_print_sysref_inp_cfg("side_a", &mcs->side_a_sysref,
+				    mcs->internal_sysref_prd_digclk_cycles_side_a);
+	ad9088_print_sysref_inp_cfg("side_b", &mcs->side_b_sysref,
+				    mcs->internal_sysref_prd_digclk_cycles_side_b);
+
+	pr_info("profile: gapped_sysref=%u leave_sysref_rx_on=%u "
+		"num_avg=%u lock_window=%u\n",
+		(unsigned int)mcs->use_gapped_sysref,
+		(unsigned int)mcs->leave_sysref_rx_on,
+		(unsigned int)mcs->num_sysref_avg_mcs_fw,
+		(unsigned int)mcs->sysref_lock_window_mcs_fw);
+}
+
+int ad9088_parse_struct(struct ad9088_phy **device,
 			const struct ad9088_init_param *init_param)
 {
 	struct ad9088_phy *phy;
@@ -148,7 +196,9 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 	}
 
 	ad9088_jesd_lane_setup(phy, init_param);
-	
+
+	ad9088_print_profile_sysref_cfg(phy);
+
 	phy->profile.jtx[0].common_link_cfg.subclass = init_param->subclass;
 	phy->profile.jtx[1].common_link_cfg.subclass = init_param->subclass;
 	phy->profile.jrx[0].common_link_cfg.subclass = init_param->subclass;

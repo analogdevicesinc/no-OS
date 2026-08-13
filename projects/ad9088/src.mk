@@ -73,11 +73,13 @@ SRC_DIRS += $(DRIVERS)/rf-transceiver/apollo			\
 
 IGNORED_FILES += $(DRIVERS)/rf-transceiver/apollo/private/inc/bitfields/a0
 
-INCS += $(DRIVERS)/frequency/adf4382/adf4382.h			\
+INCS += $(DRIVERS)/frequency/adf4030/adf4030.h			\
+	$(DRIVERS)/frequency/adf4382/adf4382.h			\
 	$(DRIVERS)/frequency/hmc7044/hmc7044.h			\
 	$(DRIVERS)/rf-transceiver/apollo/ad9088.h
-	
-SRCS += $(DRIVERS)/frequency/adf4382/adf4382.c			\
+
+SRCS += $(DRIVERS)/frequency/adf4030/adf4030.c			\
+	$(DRIVERS)/frequency/adf4382/adf4382.c			\
 	$(DRIVERS)/frequency/hmc7044/hmc7044.c			\
 	$(DRIVERS)/rf-transceiver/apollo/ad9088.c		\
 	$(DRIVERS)/rf-transceiver/apollo/ad9088_jesd204_fsm.c	\

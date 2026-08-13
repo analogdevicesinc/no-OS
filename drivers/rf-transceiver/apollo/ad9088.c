@@ -502,7 +502,7 @@ int ad9088_inspect_jrx_link_all(struct ad9088_phy *phy)
 		if (err)
 			return err;
 
-		pr_info("JRX ADI_APOLLO_LINK_%s: L=%2d M=%2d F=%2d S=%2d Np=%2d CS=%2d link_en= %-8s\n",
+		pr_info("JRX ADI_APOLLO_LINK_%s: L=%2d M=%2d F=%2d S=%2d Np=%2d CS=%2d Subclass=%u link_en= %-8s\n",
 			links_to_inspect_str[l],
 			jrx_status.l_minus1 + 1,
 			jrx_status.m_minus1 + 1,
@@ -510,6 +510,7 @@ int ad9088_inspect_jrx_link_all(struct ad9088_phy *phy)
 			jrx_status.s_minus1 + 1,
 			jrx_status.np_minus1 + 1,
 			jrx_status.cs,
+			(unsigned int)jrx_status.subclass,
 			jrx_status.link_en ? "Enabled" : "Disabled");
 
 		if (jrx_status.link_en)
@@ -543,7 +544,7 @@ int ad9088_inspect_jtx_link_all(struct ad9088_phy *phy)
 		if (err)
 			return err;
 
-		pr_info("JTX ADI_APOLLO_LINK_%s: L=%2d M=%2d F=%2d S=%2d Np=%2d CS=%2d link_en= %-8s\n",
+		pr_info("JTX ADI_APOLLO_LINK_%s: L=%2d M=%2d F=%2d S=%2d Np=%2d CS=%2d Subclass=%u link_en= %-8s\n",
 			links_to_inspect_str[l],
 			jtx_status.l_minus1 + 1,
 			jtx_status.m_minus1 + 1,
@@ -551,6 +552,7 @@ int ad9088_inspect_jtx_link_all(struct ad9088_phy *phy)
 			jtx_status.s_minus1 + 1,
 			jtx_status.np_minus1 + 1,
 			jtx_status.cs,
+			(unsigned int)jtx_status.subclass,
 			jtx_status.link_en ? "Enabled" : "Disabled");
 	}
 

@@ -200,16 +200,21 @@ int adf4030_spi_update_bits(struct adf4030_dev *dev, uint16_t reg_addr,
  * @param reg_addr - The address of the register.
  * @param mask - The mask that is applied.
  * @param data - The expected data.
+ * @param timeout_ms - How long to keep polling before giving up.
  *
  * @return Returns 0 in case of success or negative error code.
  */
 static int adf4030_poll(struct adf4030_dev *dev, uint32_t reg_addr,
 			uint32_t mask,
-			uint32_t data)
+			uint32_t data,
+			uint32_t timeout_ms)
 {
 	uint8_t reg_data;
-	uint16_t timeout = 1000;
+	uint32_t timeout = timeout_ms / ADF4030_POLL_STEP_MS;
 	int32_t ret;
+
+	if (!timeout)
+		timeout = 1;
 
 	do {
 		ret = adf4030_spi_read(dev,
@@ -217,7 +222,7 @@ static int adf4030_poll(struct adf4030_dev *dev, uint32_t reg_addr,
 				       &reg_data);
 		if (ret)
 			return ret;
-		no_os_mdelay(2);
+		no_os_mdelay(ADF4030_POLL_STEP_MS);
 	} while (((reg_data & mask) != data) && --timeout);
 
 	return timeout ? 0 : -ETIMEDOUT;
@@ -314,6 +319,9 @@ static uint32_t adf4030_adel_m_compute(struct adf4030_dev *dev, uint8_t delcal)
 {
 	uint64_t vco_period_fs;
 	uint64_t vco_delay_lsb;
+
+	if (!delcal)
+		return ADF4030_ADEL_M_STEP_FS;
 
 	vco_period_fs = NO_OS_DIV_ROUND_CLOSEST(1000000000000000ULL, dev->vco_freq);
 	vco_delay_lsb = NO_OS_DIV_ROUND_CLOSEST(vco_period_fs, 8);
@@ -770,7 +778,8 @@ int adf4030_set_vco_freq(struct adf4030_dev *dev, uint32_t vco_freq)
 		return ret;
 
 	// Wait for Lock Detect
-	ret = adf4030_poll(dev, 0x90, ADF4030_PLL_LD, true);
+	ret = adf4030_poll(dev, 0x90, ADF4030_PLL_LD, true,
+			   ADF4030_PLL_LOCK_TIMEOUT_MS);
 	if (ret)
 		pr_warning("%s:%d PLL failed to lock within the expected time. %x", __FILE__,
 			   __LINE__, ret);
@@ -976,16 +985,45 @@ int adf4030_set_tdc_measurement(struct adf4030_dev *dev, uint8_t tdc_target)
 	if (!dev)
 		return -EINVAL;
 
+	/*
+	 * Re-assert the TDC source on every measurement. The reset default of
+	 * 0x11 is 0x1F, i.e. a channel that does not exist, so relying on a
+	 * previous caller to have selected a source leaves the TDC comparing
+	 * against nothing: it arms, never completes, and reports no error.
+	 */
+	ret = adf4030_spi_update_bits(dev, 0x11, ADF4030_TDC_SOURCE,
+				      no_os_field_prep(ADF4030_TDC_SOURCE,
+						      dev->tdc_source));
+	if (ret)
+		return ret;
+
+	/* Measure rising edges on both source and target. */
+	ret = adf4030_spi_update_bits(dev, 0x15, ADF4030_FALL_EDGE_SRC |
+				      ADF4030_FALL_EDGE_TGT, 0x0);
+	if (ret)
+		return ret;
+
 	ret = adf4030_spi_update_bits(dev, 0x11, ADF4030_MANUAL_MODE, 0xFF);
 	if (ret)
 		return ret;
 
 	dev->tdc_target = tdc_target;
-	ret = adf4030_spi_write(dev, 0x10, dev->tdc_target);
+	ret = adf4030_spi_update_bits(dev, 0x10, ADF4030_TDC_TARGET,
+				      no_os_field_prep(ADF4030_TDC_TARGET,
+						      dev->tdc_target));
 	if (ret)
 		return ret;
 
+	/*
+	 * Pulse the TDC error monitor reset. Leaving it asserted holds the
+	 * monitor in reset, so TDC_ERR can never latch and a failed
+	 * measurement is indistinguishable from a clean one.
+	 */
 	ret = adf4030_spi_update_bits(dev, 0x61, ADF4030_RST_TDC_ERR, 0xFF);
+	if (ret)
+		return ret;
+
+	ret = adf4030_spi_update_bits(dev, 0x61, ADF4030_RST_TDC_ERR, 0x0);
 	if (ret)
 		return ret;
 
@@ -996,6 +1034,44 @@ int adf4030_set_tdc_measurement(struct adf4030_dev *dev, uint8_t tdc_target)
 	dev->tdc_status = true;
 
 	return 0;
+}
+
+/**
+ * @brief BSYNC frequency seen by the current TDC source channel.
+ *
+ * tdc_source can legitimately hold the 0x1F reset value, which is outside the
+ * channel array, so bounds-check before indexing it.
+ * @param dev - The device structure.
+ * @return    - The BSYNC frequency in Hz, or 0 if no source is selected.
+ */
+static uint32_t adf4030_tdc_source_bsync(struct adf4030_dev *dev)
+{
+	if (dev->tdc_source >= ADF4030_CHANNEL_NUMBER)
+		return 0;
+
+	return dev->channels[dev->tdc_source].odivb_en ?
+	       dev->bsync_freq_odiv_b : dev->bsync_freq_odiv_a;
+}
+
+/**
+ * @brief Duration of a single TDC measurement, in microseconds.
+ *
+ * The TDC accumulates 2^(AVGEXP + 6) BSYNC periods per measurement, so the
+ * measurement time scales with both the averaging exponent and the BSYNC rate.
+ * @param dev - The device structure.
+ * @return    - The measurement time in microseconds.
+ */
+static uint64_t adf4030_tdc_meas_time_us(struct adf4030_dev *dev)
+{
+	uint64_t samples;
+	uint32_t bsync_freq = adf4030_tdc_source_bsync(dev);
+
+	if (!bsync_freq)
+		return 0;
+
+	samples = 1ULL << (dev->avgexp + 6);
+
+	return NO_OS_DIV_ROUND_UP(samples * 1000000ULL, bsync_freq);
 }
 
 /**
@@ -1011,6 +1087,7 @@ int adf4030_get_tdc_measurement(struct adf4030_dev *dev, int64_t *tdc_result_fs)
 	uint8_t tmp;
 	int64_t tdc_tmp = 0;
 	uint32_t bsync_freq = 0;
+	uint64_t meas_time_us;
 
 	if (!dev)
 		return -EINVAL;
@@ -1022,7 +1099,18 @@ int adf4030_get_tdc_measurement(struct adf4030_dev *dev, int64_t *tdc_result_fs)
 			return ret;
 	}
 
-	ret = adf4030_poll(dev, 0x8F, ADF4030_TDC_BUSY, false);
+	/*
+	 * Wait out the measurement before polling. At AVGEXP 15 and a 9.765625
+	 * MHz BSYNC this is ~215 ms, so polling from zero would only burn SPI
+	 * transactions.
+	 */
+	meas_time_us = adf4030_tdc_meas_time_us(dev);
+	if (meas_time_us)
+		no_os_mdelay((uint32_t)(meas_time_us / 1000) + 1);
+
+	/* The result is only stable once the math block has finished too. */
+	ret = adf4030_poll(dev, 0x8F, ADF4030_TDC_BUSY | ADF4030_MATH_BUSY,
+			   false, ADF4030_TDC_BUSY_TIMEOUT_MS);
 	if (ret)
 		return ret;
 
@@ -1045,8 +1133,9 @@ int adf4030_get_tdc_measurement(struct adf4030_dev *dev, int64_t *tdc_result_fs)
 	tdc_tmp = ((tdc_tmp * 1000000000L) / ((1 << 24)));
 	tdc_tmp = tdc_tmp * 1000000L;
 
-	bsync_freq = dev->channels[dev->tdc_source].odivb_en ?
-		     dev->bsync_freq_odiv_b : dev->bsync_freq_odiv_a;
+	bsync_freq = adf4030_tdc_source_bsync(dev);
+	if (!bsync_freq)
+		return -EINVAL;
 
 	*tdc_result_fs = (tdc_tmp / ((int64_t)bsync_freq));
 
@@ -1070,12 +1159,13 @@ int adf4030_set_alignment_iter(struct adf4030_dev *dev, uint8_t iter_number)
 	    || iter_number > ADF4030_ALIGN_CYCLES_MAX)
 		return -EINVAL;
 
-	val = no_os_field_prep(ADF4030_EN_ITER, false) |
-	      no_os_field_prep(ADF4030_EN_CYCS_RED, true) |
-	      no_os_field_prep(ADF4030_ALIGN_CYCLES, iter_number - 1);
-	return adf4030_spi_update_bits(dev, 0x37,
-				       ADF4030_EN_ITER | ADF4030_EN_CYCS_RED |
-				       ADF4030_ALIGN_CYCLES, val);
+	/*
+	 * Only touch ALIGN_CYCLES. EN_ITER and EN_CYCS_RED are independent
+	 * controls; folding them in here silently undid whatever
+	 * adf4030_set_alignment_threshold_en() had just configured.
+	 */
+	val = no_os_field_prep(ADF4030_ALIGN_CYCLES, iter_number - 1);
+	return adf4030_spi_update_bits(dev, 0x37, ADF4030_ALIGN_CYCLES, val);
 }
 
 /**
@@ -1095,13 +1185,18 @@ int adf4030_get_alignment_iter(struct adf4030_dev *dev, uint8_t *iter_number)
 	ret = adf4030_spi_read(dev, 0x37, &tmp);
 	if (ret)
 		return ret;
-	*iter_number = no_os_field_get(ADF4030_ALIGN_CYCLES, tmp);
+	/* The register field holds iter - 1; report the iteration count. */
+	*iter_number = no_os_field_get(ADF4030_ALIGN_CYCLES, tmp) + 1;
 
 	return 0;
 }
 
 /**
  * @brief Set the alignment threshold in femtoseconds.
+ *
+ * Programs the threshold value only. Whether the alignment FSM actually
+ * iterates against it is a separate control - see
+ * adf4030_set_alignment_threshold_en().
  * @param dev         - The device structure.
  * @param threshold_fs - The alignment threshold in femtoseconds.
  * @return            - 0 in case of success or negative error code otherwise.
@@ -1118,23 +1213,34 @@ int adf4030_set_alignment_threshold(struct adf4030_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	if (!threshold_fs)
-		return adf4030_spi_update_bits(dev, 0x37, ADF4030_EN_ITER, 0x0);
+	if (threshold_fs > ADF4030_MAX_THRESHOLD_FS)
+		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x34, &delcal);
 	if (ret)
 		return ret;
 
-	adel_m_step = adf4030_adel_m_compute(dev, delcal);
+	adel_m_step = adf4030_adel_m_compute(dev,
+					    no_os_field_get(ADF4030_DELCAL, delcal));
 	reg_th = threshold_fs / adel_m_step;
-
-	ret = adf4030_spi_update_bits(dev, 0x37,
-				      ADF4030_EN_ITER | ADF4030_EN_CYCS_RED, 0xFF);
-	if (ret)
-		return ret;
 
 	return adf4030_spi_update_bits(dev, 0x35, ADF4030_ALIGN_THOLD,
 				       no_os_field_prep(ADF4030_ALIGN_THOLD, reg_th));
+}
+
+/**
+ * @brief Enable or disable iterative alignment against the threshold.
+ * @param dev    - The device structure.
+ * @param enable - Whether the alignment FSM iterates against ALIGN_THOLD.
+ * @return       - 0 in case of success or negative error code otherwise.
+ */
+int adf4030_set_alignment_threshold_en(struct adf4030_dev *dev, bool enable)
+{
+	if (!dev)
+		return -EINVAL;
+
+	return adf4030_spi_update_bits(dev, 0x37, ADF4030_EN_ITER,
+				       no_os_field_prep(ADF4030_EN_ITER, enable));
 }
 
 /**
@@ -1154,7 +1260,8 @@ int adf4030_get_alignment_threshold(struct adf4030_dev *dev,
 	ret = adf4030_spi_read(dev, 0x34, &delcal);
 	if (ret)
 		return ret;
-	adel_m_step = adf4030_adel_m_compute(dev, delcal);
+	adel_m_step = adf4030_adel_m_compute(dev,
+					    no_os_field_get(ADF4030_DELCAL, delcal));
 
 	ret = adf4030_spi_read(dev, 0x35, &tmp);
 	if (ret)
@@ -1167,8 +1274,10 @@ int adf4030_get_alignment_threshold(struct adf4030_dev *dev,
 }
 
 /**
- * @brief Perform single-channel alignment. Before calling this function,
- * please set tdc_source to the desired bsync channel.
+ * @brief Perform single-channel alignment against dev->tdc_source.
+ *
+ * Set the TDC source with adf4030_set_tdc_source() beforehand; this function
+ * re-asserts it from the driver's shadow on every call.
  * @param dev          - The device structure.
  * @param tdc_target_ch - The TDC Target channel for alignment.
  * @return             - 0 in case of success or negative error code otherwise.
@@ -1184,14 +1293,19 @@ int adf4030_set_single_ch_alignment(struct adf4030_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	val = no_os_field_prep(ADF4030_MANUAL_MODE, false) |
-	      no_os_field_prep(ADF4030_EN_ALIGN, true);
-	ret = adf4030_spi_update_bits(dev, 0x11, ADF4030_MANUAL_MODE |
-				      ADF4030_EN_ALIGN, val);
+	ret = adf4030_spi_update_bits(dev, 0x37, ADF4030_EN_SERIAL_ALIGN, 0x0);
 	if (ret)
 		return ret;
 
-	ret = adf4030_spi_update_bits(dev, 0x37, ADF4030_EN_SERIAL_ALIGN, 0x0);
+	/*
+	 * Single full-byte write: selects the TDC source, enables alignment and
+	 * clears MANUAL_MODE in one go. Writing only MANUAL_MODE/EN_ALIGN left
+	 * TDC_SOURCE at its 0x1F reset value, i.e. a channel that does not
+	 * exist, so the alignment FSM never completed.
+	 */
+	val = no_os_field_prep(ADF4030_TDC_SOURCE, dev->tdc_source) |
+	      no_os_field_prep(ADF4030_EN_ALIGN, true);
+	ret = adf4030_spi_write(dev, 0x11, val);
 	if (ret)
 		return ret;
 
@@ -1202,7 +1316,17 @@ int adf4030_set_single_ch_alignment(struct adf4030_dev *dev,
 
 		dev->tdc_target = tdc_target_ch;
 
-		ret = adf4030_poll(dev, 0x8F, ADF4030_FSM_BUSY, false);
+		/*
+		 * Discarded read, kept to match the reference driver: it gives
+		 * the FSM a SPI cycle to assert FSM_BUSY before we poll for it
+		 * to clear.
+		 */
+		ret = adf4030_spi_read(dev, 0x8F, &tmp);
+		if (ret)
+			return ret;
+
+		ret = adf4030_poll(dev, 0x8F, ADF4030_FSM_BUSY, false,
+				   ADF4030_FSM_BUSY_TIMEOUT_MS);
 		if (ret)
 			return ret;
 
@@ -1493,15 +1617,18 @@ int adf4030_set_channel_direction(struct adf4030_dev *dev, uint8_t channel,
 	if (!dev)
 		return -EINVAL;
 
-	// Write TX_PD
+	/*
+	 * Power up the TX path unconditionally and let EN_DRIVE alone express
+	 * the direction, as the reference driver does. The default register
+	 * table powers every TX path down, and an input channel still needs its
+	 * path alive for the TDC to observe it.
+	 */
 	if (channel < ADF4030_CHANNEL_TX_PD_SEPARATOR) {
 		msk = (ADF4030_PD_TX_PATH0) << channel;
-		ret = adf4030_spi_update_bits(dev, 0x3B,
-					      msk, no_os_field_prep(msk, !tx_en));
+		ret = adf4030_spi_update_bits(dev, 0x3B, msk, 0x0);
 	} else {
 		msk = (ADF4030_PD_TX_PATH6) << (channel - ADF4030_CHANNEL_TX_PD_SEPARATOR);
-		ret = adf4030_spi_update_bits(dev, 0x3C,
-					      msk, no_os_field_prep(msk, !tx_en));
+		ret = adf4030_spi_update_bits(dev, 0x3C, msk, 0x0);
 	}
 	if (ret)
 		return ret;
@@ -1970,6 +2097,425 @@ int adf4030_get_channel_voltage(struct adf4030_dev *dev, uint8_t channel,
 }
 
 /**
+ * @brief JESD204 SYSREF callback.
+ *
+ * Nothing to do: the ADF4030 emits BSYNC continuously, so there is no pulse to
+ * request. The callback exists so the framework can name this device as the
+ * topology's SYSREF provider - jesd204_sysref_async() calls it without checking
+ * for NULL. Matches adf4030_jesd204_sysref() in the Linux driver.
+ * @param jdev	     - The JESD204 device.
+ * @return 	     - 0 always.
+ */
+static int adf4030_jesd204_sysref(struct jesd204_dev *jdev)
+{
+	return 0;
+}
+
+/**
+ * @brief JESD204 LINK_SUPPORTED callback: match BSYNC to the link's LEMC rate.
+ * @param jdev	     - The JESD204 device.
+ * @param reason     - The state transition reason.
+ * @param lnk	     - The JESD204 link.
+ * @return 	     - JESD204_STATE_CHANGE_DONE or negative error code.
+ */
+static int adf4030_jesd204_link_supported(struct jesd204_dev *jdev,
+		enum jesd204_state_op_reason reason,
+		struct jesd204_link *lnk)
+{
+	struct adf4030_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct adf4030_dev *dev = priv->dev;
+	unsigned long rate;
+	int ret;
+
+	if (reason != JESD204_STATE_OP_REASON_INIT)
+		return JESD204_STATE_CHANGE_DONE;
+
+	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
+		 lnk->link_id, jesd204_state_op_reason_str(reason));
+
+	ret = jesd204_link_get_lmfc_lemc_rate(lnk, &rate);
+	if (ret < 0) {
+		pr_err("%s: failed to get LMFC/LEMC rate (%d)\n", __func__,
+		       ret);
+		return ret;
+	}
+
+	if ((uint32_t)rate != dev->bsync_freq_odiv_a) {
+		pr_debug("%s: retuning BSYNC ODIVA from %u to %lu Hz\n",
+			 __func__, dev->bsync_freq_odiv_a, rate);
+
+		ret = adf4030_set_bsync_freq(dev, (uint32_t)rate, false);
+		if (ret)
+			return ret;
+	}
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+/*
+ * Dump the registers that govern whether the alignment FSM can converge, plus
+ * the TDC source/target selection and the sticky TDC/alignment error bits.
+ * Called when an alignment attempt fails, to tell "cannot converge" apart from
+ * "the TDC was never pointed at the reference".
+ */
+static void adf4030_align_regs_dump(struct adf4030_dev *dev, uint8_t channel)
+{
+	uint8_t r37 = 0, r35 = 0, r16 = 0, r90 = 0, r8f = 0, r11 = 0, r10 = 0;
+
+	adf4030_spi_read(dev, 0x37, &r37);
+	adf4030_spi_read(dev, 0x35, &r35);
+	adf4030_spi_read(dev, 0x16, &r16);
+	adf4030_spi_read(dev, 0x11, &r11);
+	adf4030_spi_read(dev, 0x10, &r10);
+	adf4030_spi_read(dev, 0x8F, &r8f);
+	adf4030_spi_read(dev, 0x90, &r90);
+
+	pr_err("ch%u align regs: 0x37=0x%02X (en_iter=%u cycs_red=%u cycles=%u) "
+	       "0x35=0x%02X (thold=%u) 0x16=0x%02X (avgexp=%u)\n",
+	       channel, r37,
+	       (unsigned int)no_os_field_get(ADF4030_EN_ITER, r37),
+	       (unsigned int)no_os_field_get(ADF4030_EN_CYCS_RED, r37),
+	       (unsigned int)no_os_field_get(ADF4030_ALIGN_CYCLES, r37) + 1,
+	       r35, (unsigned int)no_os_field_get(ADF4030_ALIGN_THOLD, r35),
+	       r16, (unsigned int)no_os_field_get(ADF4030_AVGEXP, r16));
+
+	pr_err("ch%u align tdc: 0x11=0x%02X (src=%u manual=%u en_align=%u) "
+	       "0x10=0x%02X (tgt=%u)\n",
+	       channel, r11,
+	       (unsigned int)no_os_field_get(ADF4030_TDC_SOURCE, r11),
+	       (unsigned int)no_os_field_get(ADF4030_MANUAL_MODE, r11),
+	       (unsigned int)no_os_field_get(ADF4030_EN_ALIGN, r11),
+	       r10, (unsigned int)no_os_field_get(ADF4030_TDC_TARGET, r10));
+
+	pr_err("ch%u align status: 0x8F=0x%02X (fsm_busy=%u tdc_busy=%u "
+	       "math_busy=%u ref_ok=%u) 0x90=0x%02X (tdc_err=%u "
+	       "tmp_align_err=%u pll_ld=%u)\n",
+	       channel, r8f,
+	       (unsigned int)no_os_field_get(ADF4030_FSM_BUSY, r8f),
+	       (unsigned int)no_os_field_get(ADF4030_TDC_BUSY, r8f),
+	       (unsigned int)no_os_field_get(ADF4030_MATH_BUSY, r8f),
+	       (unsigned int)no_os_field_get(ADF4030_REF_OK, r8f),
+	       r90, (unsigned int)no_os_field_get(ADF4030_TDC_ERR, r90),
+	       (unsigned int)no_os_field_get(ADF4030_TMP_ALIGN_ERR, r90),
+	       (unsigned int)no_os_field_get(ADF4030_PLL_LD, r90));
+}
+
+/*
+ * Measure a channel's phase against the TDC reference and log it. Independent
+ * of the alignment FSM: a sane femtosecond reading proves the reference clock,
+ * the receiver termination and the TDC itself are all working, so an alignment
+ * failure is then a convergence problem rather than a missing signal.
+ */
+static void adf4030_tdc_probe(struct adf4030_dev *dev, uint8_t channel,
+			      uint8_t reference_chan)
+{
+	int64_t delay_fs = 0;
+	int ret;
+
+	ret = adf4030_set_tdc_measurement(dev, channel);
+	if (ret) {
+		pr_err("ch%u TDC arm against ch%u failed (%d)\n", channel,
+		       reference_chan, ret);
+		return;
+	}
+
+	ret = adf4030_get_tdc_measurement(dev, &delay_fs);
+	if (ret) {
+		pr_err("ch%u TDC read against ch%u failed (%d)\n", channel,
+		       reference_chan, ret);
+		return;
+	}
+
+	pr_info("ch%u TDC vs ch%u: %lld fs\n", channel, reference_chan,
+		delay_fs);
+}
+
+/**
+ * @brief JESD204 CLK_SYNC_STAGE4 callback: align the BSYNC outputs.
+ *
+ * Realigns every channel flagged with align_on_sync_en against its reference
+ * channel. This is the alignment event that gives subclass 1 its deterministic
+ * SYSREF phase; nothing else in the bring-up sequence performs one.
+ * @param jdev	     - The JESD204 device.
+ * @param reason     - The state transition reason.
+ * @return 	     - JESD204_STATE_CHANGE_DONE or negative error code.
+ */
+static int adf4030_jesd204_clks_sync4(struct jesd204_dev *jdev,
+				      enum jesd204_state_op_reason reason)
+{
+	struct adf4030_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct adf4030_dev *dev = priv->dev;
+	struct adf4030_chan_spec *chan;
+	int first_err = 0;
+	uint8_t i;
+	int ret;
+
+	if (reason != JESD204_STATE_OP_REASON_INIT)
+		return JESD204_STATE_CHANGE_DONE;
+
+	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
+		 jesd204_state_op_reason_str(reason));
+
+	for (i = 0; i < ADF4030_CHANNEL_NUMBER; i++) {
+		chan = &dev->channels[i];
+
+		if (!chan->align_on_sync_en)
+			continue;
+
+		/*
+		 * Skip the reference channel itself. Alignment works by
+		 * trimming a channel's output delay until its edge matches the
+		 * TDC reference, so a channel cannot be aligned against
+		 * itself - the measurement is degenerate and the alignment FSM
+		 * never completes (observed as -ETIMEDOUT on ch0, which is an
+		 * input and has no output delay to trim in the first place).
+		 * The reference channel still carries align_on_sync_en because
+		 * that flag also describes membership of the serial-alignment
+		 * set.
+		 */
+		if (chan->reference_chan == i)
+			continue;
+
+		/*
+		 * Always write the TDC source. The previous version skipped
+		 * this whenever the driver's shadow already matched, but the
+		 * shadow starts at 0 while the register resets to 0x1F, so for
+		 * a reference channel of 0 the write never happened and both
+		 * the probe and the alignment ran against channel 31 - which
+		 * does not exist. The TDC then armed and never completed,
+		 * reporting -ETIMEDOUT with no error bit set.
+		 */
+		ret = adf4030_set_tdc_source(dev, chan->reference_chan);
+		if (ret)
+			return ret;
+
+		/*
+		 * Probe the phase first. This also tells us whether the TDC
+		 * can see this channel at all, which the alignment FSM's
+		 * timeout alone does not distinguish.
+		 */
+		adf4030_tdc_probe(dev, i, chan->reference_chan);
+
+		ret = adf4030_set_single_ch_alignment(dev, i);
+		if (ret) {
+			/*
+			 * Keep going: one unalignable channel must not hide
+			 * the state of the others. The first error is still
+			 * reported to the caller.
+			 */
+			pr_err("%s: aligning ch%u to ch%u failed (%d)\n",
+			       __func__, i, chan->reference_chan, ret);
+			adf4030_align_regs_dump(dev, i);
+			if (!first_err)
+				first_err = ret;
+			continue;
+		}
+
+		pr_info("%s: aligned ch%u against ch%u\n", __func__, i,
+			chan->reference_chan);
+	}
+
+	if (first_err)
+		return first_err;
+
+	return JESD204_STATE_CHANGE_DONE;
+}
+
+static const struct jesd204_dev_data jesd204_adf4030_init = {
+	.sysref_cb = adf4030_jesd204_sysref,
+	.sizeof_priv = sizeof(struct adf4030_jesd204_priv),
+	.state_ops = {
+		[JESD204_OP_LINK_SUPPORTED] = {
+			.per_link = adf4030_jesd204_link_supported,
+		},
+		[JESD204_OP_CLK_SYNC_STAGE4] = {
+			.per_device = adf4030_jesd204_clks_sync4,
+			.mode = JESD204_STATE_OP_MODE_PER_DEVICE,
+		},
+	},
+};
+
+/**
+ * @brief Applies the electrical configuration of one channel.
+ *
+ * no-OS equivalent of adf4030_chan_dir_set(..., initial = true) in the Linux
+ * driver, which programs the same registers as one block; here they are reached
+ * through the individual public setters.
+ * @param dev	     - The device structure.
+ * @param chan	     - The channel description.
+ * @return 	     - 0 in case of success or negative error code.
+ */
+static int adf4030_chan_dir_set(struct adf4030_dev *dev,
+				const struct adf4030_chan_spec *chan)
+{
+	int ret;
+
+	/* 0x3F + 2n: RCM and BOOST */
+	if (chan->rcm_mv) {
+		ret = adf4030_set_channel_voltage(dev, chan->num,
+						  chan->rcm_mv);
+		if (ret)
+			return ret;
+	}
+
+	/* 0x3F + 2n: ODIV_SEL */
+	ret = adf4030_set_channel_odivb(dev, chan->num, chan->odivb_en);
+	if (ret)
+		return ret;
+
+	/* 0x40 + 2n: AC coupling, LINK_TX/RX, FLOAT_TX/RX */
+	ret = adf4030_set_channel_termination(dev, chan->num,
+					      chan->termination);
+	if (ret)
+		return ret;
+
+	/* 0x14 / 0x15: CHAN_INVx */
+	ret = adf4030_set_channel_invert(dev, chan->num, chan->invert_en);
+	if (ret)
+		return ret;
+
+	/* 0x12 / 0x13: EN_DRIVE, and 0x3B / 0x3C: PD_TX_PATH */
+	return adf4030_set_channel_direction(dev, chan->num, chan->tx_en);
+}
+
+/**
+ * @brief Applies the init-time channel list and alignment settings.
+ *
+ * no-OS equivalent of the post-startup half of adf4030_configure() in the Linux
+ * driver: alignment threshold, iteration count, then per channel the electrical
+ * config and the static delay.
+ * @param dev	     - The device structure.
+ * @param init_param - The structure containing the device initial parameters.
+ * @return 	     - 0 in case of success or negative error code.
+ */
+/**
+ * @brief Report whether the reference input amplitude is above threshold.
+ *
+ * Deliberately non-fatal, unlike the Linux driver, which aborts probe. This is
+ * a shared driver and the check is new, so a marginal board that has been
+ * working should keep working - loudly.
+ * @param dev - The device structure.
+ * @return    - 0 in case of success or negative error code otherwise.
+ */
+static int adf4030_check_ref_ok(struct adf4030_dev *dev)
+{
+	uint8_t tmp;
+	int ret;
+
+	ret = adf4030_spi_read(dev, 0x8F, &tmp);
+	if (ret)
+		return ret;
+
+	if (!no_os_field_get(ADF4030_REF_OK, tmp))
+		pr_warning("ADF4030: reference input amplitude below threshold "
+			   "(0x8F=0x%02X)\n", tmp);
+
+	return 0;
+}
+
+/**
+ * @brief Program the TDC averaging exponent for the configured BSYNC rate.
+ * @param dev - The device structure.
+ * @return    - 0 in case of success or negative error code otherwise.
+ */
+static int adf4030_set_avgexp(struct adf4030_dev *dev)
+{
+	dev->avgexp = dev->bsync_freq_odiv_a > ADF4030_AVGEXP_BSYNC_THRESH_HZ ?
+		      ADF4030_AVGEXP_FAST_BSYNC : ADF4030_AVGEXP_SLOW_BSYNC;
+
+	return adf4030_spi_update_bits(dev, 0x16, ADF4030_AVGEXP,
+				       no_os_field_prep(ADF4030_AVGEXP,
+						       dev->avgexp));
+}
+
+/**
+ * @brief Log the ADF4030's configuration and lock state after init.
+ * @param dev - The device structure.
+ */
+static void adf4030_print_status(struct adf4030_dev *dev)
+{
+	uint8_t r8f = 0, r90 = 0;
+
+	adf4030_spi_read(dev, 0x8F, &r8f);
+	adf4030_spi_read(dev, 0x90, &r90);
+
+	pr_info("ADF4030: ref %u Hz, VCO %u Hz, BSYNC %u Hz, avgexp %u, "
+		"PLL %s, REF %s\n",
+		(unsigned int)dev->ref_freq, (unsigned int)dev->vco_freq,
+		(unsigned int)dev->bsync_freq_odiv_a,
+		(unsigned int)dev->avgexp,
+		no_os_field_get(ADF4030_PLL_LD, r90) ? "locked" : "UNLOCKED",
+		no_os_field_get(ADF4030_REF_OK, r8f) ? "OK" : "LOW");
+}
+
+static int adf4030_configure(struct adf4030_dev *dev,
+			     const struct adf4030_init_param *init_param)
+{
+	const struct adf4030_chan_spec *chan;
+	uint8_t i;
+	int ret;
+
+	/*
+	 * Threshold, then iteration count, then per-channel setup - the order
+	 * the reference driver uses. The three 0x37 controls are now
+	 * independent, so no call undoes another.
+	 */
+	ret = adf4030_set_alignment_threshold(dev,
+					     init_param->alignment_threshold_fs ?
+					     init_param->alignment_threshold_fs :
+					     ADF4030_ALIGN_THOLD_FS_DEFAULT);
+	if (ret)
+		return ret;
+
+	/*
+	 * Off by default. The reference driver only ever enables EN_ITER from
+	 * sysfs, so its hardware converges on ALIGN_CYCLES alone; enabling it
+	 * here would be a deviation, not a fix.
+	 */
+	ret = adf4030_set_alignment_threshold_en(dev,
+			init_param->alignment_threshold_en);
+	if (ret)
+		return ret;
+
+	ret = adf4030_set_alignment_iter(dev,
+					 init_param->alignment_iter ?
+					 init_param->alignment_iter :
+					 ADF4030_ALIGN_ITER_DEFAULT);
+	if (ret)
+		return ret;
+
+	for (i = 0; i < init_param->num_channels; i++) {
+		chan = &init_param->channels[i];
+
+		if (chan->num >= ADF4030_CHANNEL_NUMBER) {
+			pr_err("%s: invalid channel %u\n", __func__, chan->num);
+			return -EINVAL;
+		}
+
+		ret = adf4030_chan_dir_set(dev, chan);
+		if (ret)
+			return ret;
+
+		if (chan->delay_fs) {
+			ret = adf4030_set_channel_delay(dev, chan->num,
+							chan->delay_fs);
+			if (ret)
+				return ret;
+		}
+
+		/*
+		 * Not programmed into the part - consumed by the JESD204
+		 * CLK_SYNC_STAGE4 callback.
+		 */
+		dev->channels[chan->num].align_on_sync_en =
+			chan->align_on_sync_en;
+		dev->channels[chan->num].reference_chan = chan->reference_chan;
+	}
+
+	return 0;
+}
+
+/**
  * @brief Initializes the adf4030.
  * @param dev	     - The device structure.
  * @param init_param - The structure containing the device initial parameters.
@@ -1978,6 +2524,7 @@ int adf4030_get_channel_voltage(struct adf4030_dev *dev, uint8_t channel,
 int adf4030_init(struct adf4030_dev **dev,
 		 struct adf4030_init_param *init_param)
 {
+	struct adf4030_jesd204_priv *priv;
 	struct adf4030_dev *device;
 	int ret;
 
@@ -1995,6 +2542,11 @@ int adf4030_init(struct adf4030_dev **dev,
 	device->vco_freq = init_param->vco_freq;
 	device->ref_div = init_param->ref_div;
 	device->bsync_freq_odiv_a = init_param->bsync_freq;
+	/*
+	 * Mirror the reset value of 0x11 rather than leaving the calloc zero,
+	 * so the shadow is never mistaken for "channel 0 is already selected".
+	 */
+	device->tdc_source = ADF4030_TDC_SOURCE_RESET;
 
 	ret = adf4030_set_default_regs(device, device->spi_4wire_en);
 	if (ret)
@@ -2004,9 +2556,19 @@ int adf4030_init(struct adf4030_dev **dev,
 	if (ret)
 		goto error_spi;
 
+	/*
+	 * Keep the interrupt sources masked as the default register table set
+	 * them; a bare CMOS_OV write here would unmask all four.
+	 */
 	ret = adf4030_spi_write(device, 0x5C,
+				ADF4030_MASK_TDC_ERR | ADF4030_MASK_LD |
+				ADF4030_MASK_ALIGN_IRQ | ADF4030_MASK_TEMP |
 				no_os_field_prep(ADF4030_CMOS_OV,
 						device->cmos_3v3));
+	if (ret)
+		goto error_spi;
+
+	ret = adf4030_check_ref_ok(device);
 	if (ret)
 		goto error_spi;
 
@@ -2024,10 +2586,30 @@ int adf4030_init(struct adf4030_dev **dev,
 	if (ret)
 		goto error_spi;
 
-	// Set CH 1 as TX
-	ret = adf4030_set_channel_direction(device, 1, true);
+	/* Needs the BSYNC rate, so it has to follow the ODIV programming. */
+	ret = adf4030_set_avgexp(device);
 	if (ret)
 		goto error_spi;
+
+	if (init_param->channels && init_param->num_channels) {
+		ret = adf4030_configure(device, init_param);
+		if (ret)
+			goto error_spi;
+	} else {
+		// Set CH 1 as TX
+		ret = adf4030_set_channel_direction(device, 1, true);
+		if (ret)
+			goto error_spi;
+	}
+
+	ret = jesd204_dev_register(&device->jdev, &jesd204_adf4030_init);
+	if (ret)
+		goto error_spi;
+
+	priv = jesd204_dev_priv(device->jdev);
+	priv->dev = device;
+
+	adf4030_print_status(device);
 
 	*dev = device;
 
@@ -2050,9 +2632,15 @@ int adf4030_remove(struct adf4030_dev *dev)
 {
 	int ret;
 
-	ret = no_os_spi_remove(dev->spi_desc);
-	if (ret)
-		no_os_free(dev);
+	if (!dev)
+		return -EINVAL;
 
-	return 0;
+	if (dev->jdev)
+		jesd204_dev_unregister(dev->jdev);
+
+	ret = no_os_spi_remove(dev->spi_desc);
+
+	no_os_free(dev);
+
+	return ret;
 }

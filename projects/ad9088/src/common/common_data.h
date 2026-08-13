@@ -34,6 +34,7 @@
 #define __COMMON_DATA_H__
 
 #include "platform_includes.h"
+#include "adf4030.h"
 #include "adf4382.h"
 #include "hmc7044.h"
 #include "ad9088.h"
@@ -67,6 +68,23 @@
 #define AD9088_DEVICE_CLK_KHZ			20000000
 #define AD9088_LANE_RATE_KHZ			20625000
 
+/*
+ * BSYNC / SYSREF rate. This is the 204C LEMC rate of the link:
+ *   lane_rate / (66 * 32 * E) = 20.625e9 / 2112 = 9765625 Hz
+ * It matches SYSREF_CLK_MHz in the kernel devicetree
+ * (vcu118_ad9084_204C_M4_L8_NP16_20p0_4x2_CLL.dts). The ADF4030 distributes it
+ * to both the Apollo (ch5) and the FPGA (ch8); the HMC7044 supplies the
+ * ADF4030's own BSYNC0 input on its ch3 and the 125 MHz reference on ch1.
+ */
+#define AD9088_SYSREF_CLK_HZ			9765625
+#define ADF4030_VCO_FREQ_HZ			2500000000
+#define ADF4030_REF_FREQ_HZ			125000000
+
+/* ADF4030 channel assignment, per the kernel devicetree */
+#define ADF4030_CH_HMC_REF			0	/* ADF4030_SCLKOUT3 */
+#define ADF4030_CH_APOLLO_SYSREF		5	/* APOLLO_SYSREF */
+#define ADF4030_CH_FPGA_SYSREF			8	/* SYSREF_IN_F */
+
 #define AD9088_MULTIDEVICE_INST_CNT		1
 #define AD9088_NYQUIST_ZONE			1
 #define AD9088_TX0_LOGICAL_LANE_MAPPING		{11, 2, 3, 5, 10, 1, 9, 0, 6, 7, 8, 4}
@@ -76,6 +94,7 @@
 
 extern struct no_os_spi_init_param		adf4382_spi_param;
 extern struct adf4382_init_param 		adf4382_ip;
+extern struct adf4030_init_param		adf4030_ip;
 extern struct hmc7044_init_param		hmc7044_ip;
 extern struct no_os_gpio_init_param		reset_gpio_param;
 extern struct no_os_uart_init_param		platform_uart_ip;

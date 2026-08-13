@@ -51,6 +51,7 @@ int basic_example_main()
 {
 	struct adf4382_dev *adf4382_dev;
 	struct hmc7044_dev *hmc7044_dev;
+	struct adf4030_dev *adf4030_dev;
 	struct axi_jesd204_rx *rx_jesd;
 	struct axi_jesd204_tx *tx_jesd;
 	struct adxcvr *rx_adxcvr;
@@ -79,10 +80,17 @@ int basic_example_main()
 		goto error_adf4382;
 	}
 
+	/* After the HMC7044: the ADF4030's reference comes from HMC7044 ch1. */
+	ret = adf4030_init(&adf4030_dev, &adf4030_ip);
+	if (ret) {
+		pr_info("ADF4030 initialization failed\n");
+		goto error_hmc7044;
+	}
+
 	ret = axi_dmac_init(&rx_dmac, &rx_dmac_ip);
 	if (ret) {
 		pr_info("RX DMAC initialization failed\n");
-		goto error_hmc7044;
+		goto error_adf4030;
 	}
 
 	ret = axi_dmac_init(&tx_dmac, &tx_dmac_ip);
@@ -134,13 +142,20 @@ int basic_example_main()
 	}
 
 	struct jesd204_topology *topology;
+	/* ADF4030 is the SYSREF provider and must precede the top device. */
 	struct jesd204_topology_dev devs[] = {
+		{
+			.jdev = adf4030_dev->jdev,
+			.link_ids = {FRAMER_LINK_A0_RX,
+				     DEFRAMER_LINK_A0_TX},
+			.links_number = 2,
+			.is_sysref_provider = true,
+		},
 		{
 			.jdev = hmc7044_dev->jdev,
 			.link_ids = {FRAMER_LINK_A0_RX,
 				     DEFRAMER_LINK_A0_TX},
 			.links_number = 2,
-			.is_sysref_provider = true,
 		},
 		{
 			.jdev = rx_jesd->jdev,
@@ -281,6 +296,8 @@ error_tx_dmac:
 	axi_dmac_remove(tx_dmac);
 error_rx_dmac:
 	axi_dmac_remove(rx_dmac);
+error_adf4030:
+	adf4030_remove(adf4030_dev);
 error_hmc7044:
 	hmc7044_remove(hmc7044_dev);
 error_adf4382:

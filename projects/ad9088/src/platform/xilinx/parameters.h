@@ -80,6 +80,7 @@ extern struct xil_gpio_init_param	xil_gpio_param;
 #define SPI_EXTRA_CLK			&clk_spi_extra_ip
 #define SPI_CS_ADF4382			0
 #define SPI_CS_HMC7044			1
+#define SPI_CS_ADF4030			4
 
 #define SPI_OPS_APOLLO			&xil_spi_ops
 #define SPI_EXTRA_APOLLO		&apollo_spi_extra_ip

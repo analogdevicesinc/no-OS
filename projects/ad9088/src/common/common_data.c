@@ -65,6 +65,16 @@ struct no_os_spi_init_param hmc7044_spi_ip = {
 	.chip_select = SPI_CS_HMC7044,
 };
 
+struct no_os_spi_init_param adf4030_spi_ip = {
+	.device_id = CLK_SPI_DEVICE_ID,
+	.max_speed_hz = 1000000,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_0,
+	.platform_ops = SPI_OPS_CLK,
+	.extra = SPI_EXTRA_CLK,
+	.chip_select = SPI_CS_ADF4030,
+};
+
 struct no_os_spi_init_param ad9088_spi_ip = {
 	.device_id = APOLLO_SPI_DEVICE_ID,
 	.max_speed_hz = 13000000,
@@ -96,35 +106,50 @@ struct adf4382_init_param adf4382_ip = {
 };
 
 
+/*
+ * PLL2 runs at 2.5 GHz, so each output is 2500 MHz / divider.
+ *
+ * Channel 3 feeds the ADF4030's BSYNC0 input, not the FPGA - the FPGA SYSREF
+ * comes from the ADF4030 (ch8). It is marked .is_sysref so
+ * hmc7044_jesd204_link_pre_setup() retunes it to the link's LEMC rate
+ * (9.765625 MHz, divider 256) rather than leaving the static /512 = 4.88 MHz,
+ * which is only half the LEMC rate.
+ */
 struct hmc7044_chan_spec chan_spec[] = {
 	{
-		.num = 3,		// FPGA_SYSREF
-		.divider = 512,		// 4.882
+		.num = 1,		// ADF4030_REFIN
+		.divider = 20,		// 125 MHz
 		.driver_mode = 2,	// LVDS
 	},
 	{
+		.num = 3,		// ADF4030_BSYNC0
+		.divider = 512,		// retuned to 256 -> 9.765625 MHz
+		.driver_mode = 1,	// LVPECL
+		.is_sysref = true,
+	},
+	{
 		.num = 8,		// CORE_CLK_TX
-		.divider = 8,		// 156.25
+		.divider = 8,		// 312.5 MHz
 		.driver_mode = 2,	// LVDS
 	},
 	{
 		.num = 9,		// CORE_CLK_RX
-		.divider = 8,		// 156.25
+		.divider = 8,		// 312.5 MHz
 		.driver_mode = 2,	// LVDS
 	},
 	{
 		.num = 10,		// FPGA_REFCLK
-		.divider = 8,		// 156.25
+		.divider = 8,		// 312.5 MHz
 		.driver_mode = 2,	// LVDS
 	},
 	{
 		.num = 11,		// CORE_CLK_RX_B
-		.divider = 8,		// 156.25
+		.divider = 8,		// 312.5 MHz
 		.driver_mode = 2,	// LVDS
 	},
 	{
 		.num = 12,		// CORE_CLK_TX_B
-		.divider = 8,		// 156.25
+		.divider = 8,		// 312.5 MHz
 		.driver_mode = 2,	// LVDS
 	}
 };
@@ -147,6 +172,74 @@ struct hmc7044_init_param hmc7044_ip = {
 	.high_performance_mode_clock_dist_en = false,
 	.pulse_gen_mode = HMC7044_PULSE_GEN_CONT_PULSE,
 	.channels = chan_spec
+};
+
+/*
+ * ADF4030 BSYNC distribution, mirroring the adf4030 node of the kernel
+ * devicetree (vcu118_ad9084.dts). ch0 receives the HMC7044's BSYNC0 and is the
+ * auto-align reference; ch5 drives the Apollo's SYSREF pin; ch8 drives the
+ * FPGA's sysref_in. All three are realigned on JESD204 CLK_SYNC_STAGE4.
+ *
+ * All channels use adi,link-rx-en + adi,float-rx-en with no adi,ac-coupled-en,
+ * which is RX_DC_COUPLED_CLKS in the no-OS termination enum.
+ *
+ * Deviation: the devicetree sets adi,rcm = <1> on ch0 and ch5, a raw RCM
+ * register code. The no-OS API takes millivolts instead
+ * (adf4030_set_channel_voltage), and code 1 works out to 497 mV, below its own
+ * ADF4030_RCM_VOLTAGE_MIN0 of 504 - so the code is not reachable through that
+ * API. rcm_mv is left at 0, which skips the write and keeps the part's reset
+ * default. Revisit if the BSYNC levels need trimming on the bench.
+ */
+struct adf4030_chan_spec adf4030_chan_spec[] = {
+	{
+		.num = ADF4030_CH_HMC_REF,	// ADF4030_SCLKOUT3, from HMC ch3
+		.termination = RX_DC_COUPLED_CLKS,
+		.tx_en = false,			// input
+		.align_on_sync_en = true,
+		.reference_chan = ADF4030_CH_HMC_REF,
+	},
+	{
+		.num = ADF4030_CH_APOLLO_SYSREF,	// APOLLO_SYSREF
+		.termination = RX_DC_COUPLED_CLKS,
+		.tx_en = true,
+		.align_on_sync_en = true,
+		.reference_chan = ADF4030_CH_HMC_REF,
+	},
+	{
+		.num = ADF4030_CH_FPGA_SYSREF,	// SYSREF_IN_F, to the FPGA
+		.termination = RX_DC_COUPLED_CLKS,
+		.tx_en = true,
+		.align_on_sync_en = true,
+		.reference_chan = ADF4030_CH_HMC_REF,
+	}
+};
+
+struct adf4030_init_param adf4030_ip = {
+	.spi_init = &adf4030_spi_ip,
+	.spi_4wire_en = false,		// MB is using 3-wire SPI
+	.cmos_3v3 = false,
+	.ref_freq = ADF4030_REF_FREQ_HZ,
+	.vco_freq = ADF4030_VCO_FREQ_HZ,
+	.bsync_freq = AD9088_SYSREF_CLK_HZ,
+	.ref_div = 1,
+	.chip_addr = 0,
+	/*
+	 * Both values match what the kernel driver actually programs, which is
+	 * not what the devicetree asks for. The driver reads its properties
+	 * under misspelled names - "adi,bsync-autoalign-interation-count" and
+	 * "adi,bsync-autoalign-thehsold-fs" - so the devicetree's
+	 * adi,bsync-autoalign-iteration-count = <6> is silently ignored and the
+	 * reference hardware runs the driver's own defaults: 8 iterations and a
+	 * 1400 fs threshold.
+	 *
+	 * alignment_threshold_en is deliberately left false. The kernel enables
+	 * EN_ITER only from sysfs, so its alignment converges on ALIGN_CYCLES
+	 * alone; turning iteration on here would be a deviation.
+	 */
+	.alignment_threshold_fs = 1400,
+	.alignment_iter = 8,
+	.num_channels = NO_OS_ARRAY_SIZE(adf4030_chan_spec),
+	.channels = adf4030_chan_spec,
 };
 
 struct axi_dmac_init rx_dmac_ip = {
