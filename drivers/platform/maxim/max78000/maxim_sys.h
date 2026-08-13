@@ -1,9 +1,9 @@
-/***************************************************************************//**
- *   @file   maxim_spi.h
- *   @brief  maxim specific header for SPI driver
- *   @author Ciprian Regus (ciprian.regus@analog.com)
+/*******************************************************************************
+ *   @file   maxim_sys.h
+ *   @brief  MAX78000 system-level helpers shared across cores/examples.
+ *   @author Victor Pascu (victor.pascu@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,47 +30,30 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef MAXIM_SYS_H_
+#define MAXIM_SYS_H_
 
-#ifndef MAXIM_SPI_H_
-#define MAXIM_SPI_H_
-
-#include <stdint.h>
-#include "gpio.h"
-#include "no_os_spi.h"
-#include "no_os_dma.h"
-#include "maxim_dma.h"
-
-struct no_os_gpio_desc;
-struct no_os_gpio_init_param;
+#include "mxc_sys.h"
 
 /**
- * @brief maxim specific SPI platform ops structure
+ * @brief Read-modify-write replacement for the SDK's MXC_SYS_Reset_Periph().
+ *
+ * The Maxim SDK's MXC_SYS_Reset_Periph() (sys_ai85.c) resets a peripheral by
+ * writing GCR->rst0/rst1 (or LPGCR->rst) as a plain single-bit assignment:
+ *   MXC_GCR->rst1 = (1 << bit);
+ * That store clears every other bit in the register at the same time -- for
+ * rst1 that includes RST1_SMPHR (bit 16) and RST1_SIMO (bit 25). Resetting
+ * SMPHR destroys the hardware semaphore some designs use as a cross-core lock,
+ * and glitching SIMO can disturb the supply rail (observed as SPI corruption
+ * and dropped JTAG). This wrapper sets only the requested bit and spins until
+ * the hardware clears it.
+ *
+ * Enable by adding "-Wl,--wrap=MXC_SYS_Reset_Periph" to the link flags; the
+ * linker then redirects every call site here. The SDK's original definition
+ * remains as __real_MXC_SYS_Reset_Periph but is never called.
+ *
+ * @param reset Peripheral reset selector (mxc_sys_reset_t).
  */
-extern const struct no_os_spi_platform_ops max_spi_ops;
+void __wrap_MXC_SYS_Reset_Periph(mxc_sys_reset_t reset);
 
-enum spi_ss_polarity {
-	SPI_SS_POL_LOW,
-	SPI_SS_POL_HIGH
-};
-
-struct max_spi_init_param {
-	uint32_t num_slaves;
-	enum spi_ss_polarity polarity;
-	mxc_gpio_vssel_t vssel;
-	struct no_os_dma_init_param *dma_param;
-	uint32_t dma_rx_priority;
-	uint32_t dma_tx_priority;
-	struct no_os_gpio_init_param *gpio_cs;
-};
-
-struct max_spi_state {
-	struct max_spi_init_param *init_param;
-	struct no_os_gpio_desc *gpio_cs;
-	uint32_t cs_delay_first;
-	uint32_t cs_delay_last;
-	struct no_os_dma_desc *dma;
-	uint32_t dma_req_rx;
-	uint32_t dma_req_tx;
-};
-
-#endif
+#endif /* MAXIM_SYS_H_ */

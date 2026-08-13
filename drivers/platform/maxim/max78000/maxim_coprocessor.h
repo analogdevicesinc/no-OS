@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   maxim_spi.h
- *   @brief  maxim specific header for SPI driver
- *   @author Ciprian Regus (ciprian.regus@analog.com)
-********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ *   @file   maxim_coprocessor.h
+ *   @brief  Maxim MAX78000 coprocessor (RISC-V CPU1) platform driver header.
+ *   @author Victor Pascu (victor.pascu@analog.com)
+ *
+ ******************************************************************************
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -19,7 +20,7 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -29,48 +30,33 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*******************************************************************************/
+ *******************************************************************************/
 
-#ifndef MAXIM_SPI_H_
-#define MAXIM_SPI_H_
+#ifndef _MAXIM_COPROCESSOR_H_
+#define _MAXIM_COPROCESSOR_H_
 
 #include <stdint.h>
-#include "gpio.h"
-#include "no_os_spi.h"
-#include "no_os_dma.h"
-#include "maxim_dma.h"
-
-struct no_os_gpio_desc;
-struct no_os_gpio_init_param;
+#include <stdbool.h>
+#include "no_os_coprocessor.h"
 
 /**
- * @brief maxim specific SPI platform ops structure
+ * @struct max_coprocessor_init_param
+ * @brief Maxim-specific coprocessor initialization parameters.
  */
-extern const struct no_os_spi_platform_ops max_spi_ops;
-
-enum spi_ss_polarity {
-	SPI_SS_POL_LOW,
-	SPI_SS_POL_HIGH
+struct max_coprocessor_init_param {
+	/**
+	 * RISC-V boot address (written to FCR->urvbootaddr).
+	 * If 0, the driver uses the linker-supplied __FlashStart_ symbol.
+	 */
+	uint32_t boot_addr;
+	/**
+	 * If true, configure the RISC-V JTAG debug pins during boot so a debugger
+	 * can attach to the coprocessor.
+	 */
+	bool enable_debug;
 };
 
-struct max_spi_init_param {
-	uint32_t num_slaves;
-	enum spi_ss_polarity polarity;
-	mxc_gpio_vssel_t vssel;
-	struct no_os_dma_init_param *dma_param;
-	uint32_t dma_rx_priority;
-	uint32_t dma_tx_priority;
-	struct no_os_gpio_init_param *gpio_cs;
-};
+/** Platform ops table for MAX78000 coprocessor driver */
+extern const struct no_os_coprocessor_platform_ops max_coprocessor_ops;
 
-struct max_spi_state {
-	struct max_spi_init_param *init_param;
-	struct no_os_gpio_desc *gpio_cs;
-	uint32_t cs_delay_first;
-	uint32_t cs_delay_last;
-	struct no_os_dma_desc *dma;
-	uint32_t dma_req_rx;
-	uint32_t dma_req_tx;
-};
-
-#endif
+#endif /* _MAXIM_COPROCESSOR_H_ */
