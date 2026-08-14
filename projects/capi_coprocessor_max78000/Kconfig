@@ -1,0 +1,17 @@
+menu "capi_coprocessor_max78000 Configuration"
+
+choice CAPI_COPROCESSOR_MAX78000_EXAMPLE
+	prompt "Example variant"
+	default CAPI_COPROCESSOR_DEMO_EXAMPLE
+
+config CAPI_COPROCESSOR_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Drives the MAX78000 RV32 core (CPU1) through the CAPI coprocessor
+	  API and narrates each step over the stdio UART: boot capability
+	  negotiation, reset-vector programming with read-back, coprocessor-
+	  scoped mode transitions, and resource enable/disable.
+
+endchoice
+
+endmenu

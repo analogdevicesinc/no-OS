@@ -110,4 +110,5 @@ source "projects/ssd1306/Kconfig"
 source "projects/wethlink/Kconfig"
 source "projects/eval-ade9430/Kconfig"
 source "projects/eval-pqmon/Kconfig"
+source "projects/capi_coprocessor_max78000/Kconfig"
 endmenu
