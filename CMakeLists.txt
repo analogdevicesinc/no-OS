@@ -330,6 +330,7 @@ add_subdirectory(network)
 add_subdirectory(util)
 add_subdirectory(iio)
 add_subdirectory(drivers)
+add_subdirectory(capi)
 
 add_custom_target(KconfigVars ALL
     DEPENDS ${KCONFIG_VARS_FILE} ${CONFIG_HEADER_FILE}

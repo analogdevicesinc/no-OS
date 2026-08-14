@@ -142,6 +142,7 @@ endmenu
 
 source "iio/Kconfig"
 source "drivers/Kconfig"
+source "capi/Kconfig"
 source "libraries/Kconfig"
 source "network/Kconfig"
 source "projects/Kconfig"
