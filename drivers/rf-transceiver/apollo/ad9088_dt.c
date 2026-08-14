@@ -180,6 +180,13 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 	phy->multidevice_instance_count = init_param->multidevice_instance_count;
 	phy->trig_sync_en = init_param->trig_sync_en;
 	phy->standalone = init_param->standalone_en;
+	phy->bsync_ops = init_param->bsync_ops;
+	phy->clk_ops = init_param->clk_ops;
+	phy->aion_background_serial_alignment_en =
+		init_param->aion_background_serial_alignment_en;
+	phy->mcs_track_decimation = init_param->mcs_track_decimation ?
+				    init_param->mcs_track_decimation :
+				    AD9088_MCS_TRACK_DECIMATION_DEFAULT;
 	nz = init_param->nyquist_zone;
 
 	if (nz != 1 && nz != 2) {
@@ -234,6 +241,19 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 		if (!mcs->side_a_sysref.sysref_present ||
 		    !mcs->side_b_sysref.sysref_present)
 			mcs->center_sysref.sysref_present = true;
+	}
+
+	/*
+	 * MCS tracking cal corrects the device clock once it drifts past this
+	 * window. Overriding it is optional: 0 keeps whatever the loaded device
+	 * profile carries, read back here so the tracking cal can use it.
+	 */
+	if (init_param->mcs_track_win) {
+		phy->mcs_track_win = init_param->mcs_track_win;
+		phy->profile.mcs_cfg.adf4382_cfg.track_win[0] = phy->mcs_track_win;
+		phy->profile.mcs_cfg.adf4382_cfg.track_win[1] = phy->mcs_track_win;
+	} else {
+		phy->mcs_track_win = phy->profile.mcs_cfg.adf4382_cfg.track_win[0];
 	}
 
 	/*

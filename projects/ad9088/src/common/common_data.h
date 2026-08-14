@@ -65,22 +65,28 @@
 #define AD9088_TX_JESD_CS			0
 #define AD9088_TX_JESD_SUBCLASS			1
 
-#define AD9088_DEVICE_CLK_KHZ			20000000
 #define AD9088_LANE_RATE_KHZ			20625000
 
 /*
- * BSYNC / SYSREF rate. This is the 204C LEMC rate of the link:
- *   lane_rate / (66 * 32 * E) = 20.625e9 / 2112 = 9765625 Hz
- * It matches SYSREF_CLK_MHz in the kernel devicetree
- * (vcu118_ad9084_204C_M4_L8_NP16_20p0_4x2_CLL.dts). The ADF4030 distributes it
- * to both the Apollo (ch5) and the FPGA (ch8); the HMC7044 supplies the
- * ADF4030's own BSYNC0 input on its ch3 and the 125 MHz reference on ch1.
+ * Link clock of the axi_jesd204_{tx,rx} cores. With 64b66b line coding
+ * (JESD204C) this is the lane rate divided by 66. It is what the cores'
+ * "Measured Link Clock" counter reports; the drivers only use it to print
+ * "Reported Link Clock".
+ */
+#define AD9088_DEVICE_CLK_KHZ			(AD9088_LANE_RATE_KHZ / 66)
+
+/*
+ * BSYNC / SYSREF rate. This is the 204C LEMC rate of the link,
+ * lane_rate / (66 * 32 * E), and must stay consistent with
+ * AD9088_LANE_RATE_KHZ above. The ADF4030 distributes it to both the Apollo
+ * (ch5) and the FPGA (ch8); the HMC7044 supplies the ADF4030's own BSYNC0
+ * input on its ch3 and the reference clock on ch1.
  */
 #define AD9088_SYSREF_CLK_HZ			9765625
 #define ADF4030_VCO_FREQ_HZ			2500000000
 #define ADF4030_REF_FREQ_HZ			125000000
 
-/* ADF4030 channel assignment, per the kernel devicetree */
+/* ADF4030 channel assignment on this board */
 #define ADF4030_CH_HMC_REF			0	/* ADF4030_SCLKOUT3 */
 #define ADF4030_CH_APOLLO_SYSREF		5	/* APOLLO_SYSREF */
 #define ADF4030_CH_FPGA_SYSREF			8	/* SYSREF_IN_F */
@@ -106,5 +112,19 @@ extern struct adxcvr_init			rx_adxcvr_ip;
 extern struct adxcvr_init			tx_adxcvr_ip;
 extern struct ad9088_init_param			ad9088_ip;
 
+/**
+ * @brief Hand the AD9088 the clock chips its MCS calibration drives.
+ *
+ * Publishes the accessor tables into ad9088_ip along with the runtime device
+ * handles, which do not exist until the chips are probed. Call this after
+ * adf4030_init() and adf4382_init(), and before ad9088_init(). Skipping it
+ * leaves MCS calibration disabled rather than broken.
+ *
+ * @param adf4030 - The BSYNC (SYSREF) provider.
+ * @param adf4382 - The AD9088 device clock PLL.
+ * @return        - 0 in case of success, negative error code otherwise.
+ */
+int ad9088_mcs_ops_bind(struct adf4030_dev *adf4030,
+			struct adf4382_dev *adf4382);
 
 #endif /* __COMMON_DATA_H__ */

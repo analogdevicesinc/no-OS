@@ -70,6 +70,16 @@
 
 #define NUM_RXTX 2
 
+/* MCS tracking cal decimation used when the init parameter leaves it at 0. */
+#define AD9088_MCS_TRACK_DECIMATION_DEFAULT	1023
+
+/*
+ * Phase adjustment handed to the device-clock PLL when MCS tracking cal is
+ * armed. Deliberately a minimal nudge: what matters is that the PLL has a
+ * standing correction for the tracking loop to steer, not its magnitude.
+ */
+#define AD9088_MCS_CLK_PHASE_FS			125
+
 #define for_each_cddc(bit, mask) \
 	for ((bit) = 0; (bit) < MAX_NUM_MAIN_DATAPATHS; (bit)++) \
 		if ((mask) & BIT(bit))
@@ -197,6 +207,48 @@ struct ad9088_debugfs_entry {
 	uint8_t cmd;
 };
 
+/**
+ * @struct ad9088_bsync_ops
+ * @brief Accessors for the board's BSYNC (SYSREF) provider, used by MCS
+ *	  calibration.
+ *
+ * MCS calibration has to drive and measure the SYSREF source, but which chip
+ * that is belongs to the board rather than to this driver. The board supplies
+ * these callbacks so the driver stays independent of the clock chip.
+ */
+struct ad9088_bsync_ops {
+	/** Opaque handle passed back to every callback. */
+	void *ctx;
+	/** BSYNC output rate, in Hz. */
+	int (*freq_get)(void *ctx, uint32_t *freq_hz);
+	/** Drive the SYSREF line (true) or release it so the AD9088 can (false). */
+	int (*output_en_set)(void *ctx, bool en);
+	/**
+	 * Time difference from the alignment reference, in fs. State-perturbing:
+	 * it arms the provider's TDC, so a following delay_set() is required to
+	 * return the provider to its aligned state.
+	 */
+	int (*tdc_measure)(void *ctx, int64_t *tdc_fs);
+	/** Set the SYSREF channel delay, in fs, and realign the channel. */
+	int (*delay_set)(void *ctx, int64_t delay_fs);
+	/** Enable continuous background realignment of all synced channels. */
+	int (*bg_align_set)(void *ctx, bool en);
+};
+
+/**
+ * @struct ad9088_clk_ops
+ * @brief Accessors for the board's device-clock PLL, used by MCS tracking
+ *	  calibration to correct clock drift.
+ */
+struct ad9088_clk_ops {
+	/** Opaque handle passed back to every callback. */
+	void *ctx;
+	/** Re-apply the phase adjustment on every resync rather than once. */
+	int (*auto_align_set)(void *ctx, bool en);
+	/** Set the signed clock phase adjustment, in fs. */
+	int (*phase_set_fs)(void *ctx, int32_t phase_fs);
+};
+
 struct ad9088_init_param {
 	struct no_os_spi_init_param *spi_init; //
 	struct no_os_gpio_init_param *gpio_reset; //
@@ -224,6 +276,25 @@ struct ad9088_init_param {
 	uint32_t jtx_ser_amplitude;
 	uint32_t jtx_ser_pre_emphasis;
 	uint32_t jtx_ser_post_emphasis;
+	/*
+	 * Optional. Supply both to enable MCS calibration; leave either NULL and
+	 * it is skipped, which is the correct configuration for a board with no
+	 * BSYNC provider wired to the AD9088's SYSREF pin.
+	 */
+	const struct ad9088_bsync_ops *bsync_ops;
+	const struct ad9088_clk_ops *clk_ops;
+	/**
+	 * MCS tracking cal decimation. 0 selects
+	 * AD9088_MCS_TRACK_DECIMATION_DEFAULT.
+	 */
+	uint32_t mcs_track_decimation;
+	/**
+	 * Device-clock drift window in fs. 0 leaves the value carried by the
+	 * loaded device profile in place.
+	 */
+	uint32_t mcs_track_win;
+	/** Run the BSYNC provider's background serial alignment while linked. */
+	bool aion_background_serial_alignment_en;
 };
 
 struct ad9088_phy {
@@ -316,8 +387,20 @@ struct ad9088_phy {
 	// bool hsci_use_auto_linkup_mode;
 	// bool hsci_disable_after_initial_configuration;
 
-	struct iio_channel	*iio_adf4030;
-	struct iio_channel	*iio_adf4382;
+	/*
+	 * MCS calibration accessors for the board's BSYNC (SYSREF) source and
+	 * device-clock PLL. NULL when the board has no such chips wired, in
+	 * which case MCS calibration is skipped.
+	 */
+	const struct ad9088_bsync_ops *bsync_ops;
+	const struct ad9088_clk_ops *clk_ops;
+
+	/** MCS tracking cal decimation. */
+	uint32_t mcs_track_decimation;
+	/** Device-clock drift window, in fs, before tracking cal corrects. */
+	uint32_t mcs_track_win;
+	/** Run the BSYNC provider's background serial alignment while linked. */
+	bool aion_background_serial_alignment_en;
 
 	adi_apollo_sniffer_param_t sniffer_config;
 	adi_apollo_sniffer_fft_data_t fft_data;
@@ -384,6 +467,22 @@ int ad9088_jesd_tx_link_status_print(struct ad9088_phy *phy,
 int ad9088_jesd_rx_link_status_print(struct ad9088_phy *phy,
 				     struct jesd204_link *lnk, int retry);
 extern const char *const ad9088_fsm_links_to_str[];
+
+/* MCS (Multi-Chip Synchronization) calibration -- ad9088_mcs.c */
+int ad9088_mcs_init_cal_setup(struct ad9088_phy *phy);
+int ad9088_delta_t_measurement_set(struct ad9088_phy *phy, uint32_t mode);
+int ad9088_delta_t_measurement_get(struct ad9088_phy *phy, uint32_t mode,
+				   int64_t *apollo_delta_t);
+int ad9088_mcs_init_cal_validate(struct ad9088_phy *phy,
+				 adi_apollo_mcs_cal_init_status_t *cal_status);
+void ad9088_mcs_init_cal_status_print(struct ad9088_phy *phy,
+				      adi_apollo_mcs_cal_init_status_t *cal_status);
+void ad9088_mcs_track_cal_status_print(struct ad9088_phy *phy,
+				       adi_apollo_mcs_cal_status_t *cal_status,
+				       uint8_t print_full_state);
+int ad9088_mcs_tracking_cal_setup(struct ad9088_phy *phy,
+				  uint32_t mcs_track_decimation,
+				  uint16_t initialize_track_cal);
 
 /* NCO (Numerically Controlled Oscillator) control -- Step 6 */
 int adi_ad9088_calc_nco_ftw(struct ad9088_phy *phy, uint64_t freq,

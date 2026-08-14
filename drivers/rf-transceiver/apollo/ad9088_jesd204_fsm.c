@@ -5,6 +5,8 @@
  * Copyright 2026 Analog Devices Inc.
  */
 
+#include <string.h>
+
 #include "ad9088.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
@@ -539,22 +541,275 @@ static int ad9088_jesd204_link_running(struct jesd204_dev *jdev,
 	return JESD204_STATE_CHANGE_DONE;
 }
 
+/**
+ * @brief Are all the accessors MCS calibration needs present?
+ */
+static bool ad9088_mcs_ops_complete(struct ad9088_phy *phy)
+{
+	return phy->bsync_ops && phy->clk_ops &&
+	       phy->bsync_ops->freq_get && phy->bsync_ops->output_en_set &&
+	       phy->bsync_ops->tdc_measure && phy->bsync_ops->delay_set;
+}
+
+/**
+ * @brief Measure the round-trip BSYNC path delay between provider and device.
+ *
+ * Runs the measurement twice with the SYSREF line driven from opposite ends.
+ * The first leg has the provider driving and the device measuring; the second
+ * releases the provider's driver and has the device drive BSYNC back out so the
+ * provider measures the return path. The difference of the two differences is
+ * the round trip, and half of it is the one-way trace delay.
+ *
+ * Leaves the provider driving the line again on every exit path, including
+ * failures -- the link is up while this runs, so a SYSREF line left undriven
+ * would take it down.
+ *
+ * @param phy             - The device structure.
+ * @param bsync_period_fs - BSYNC period, used to unwrap the delay.
+ * @param path_delay_fs   - One-way path delay, in femtoseconds.
+ * @return                - 0 in case of success, negative error otherwise.
+ */
+static int ad9088_mcs_bsync_path_delay(struct ad9088_phy *phy,
+				       uint64_t bsync_period_fs,
+				       uint64_t *path_delay_fs)
+{
+	const struct ad9088_bsync_ops *bsync = phy->bsync_ops;
+	int64_t apollo_delta_t0 = 0;
+	int64_t apollo_delta_t1 = 0;
+	int64_t bsync_delta_t0 = 0;
+	int64_t bsync_delta_t1 = 0;
+	uint64_t round_trip_delay;
+	int64_t calc_delay;
+	int ret, ret2;
+
+	/* Leg 1: provider drives SYSREF, device measures it. */
+	ret = ad9088_delta_t_measurement_set(phy, 0);
+	if (ret) {
+		pr_err("Failed to set delta_t measurement 0\n");
+		return ret;
+	}
+
+	ret = ad9088_delta_t_measurement_get(phy, 0, &apollo_delta_t0);
+	if (ret) {
+		pr_err("Failed to get delta_t measurement 0\n");
+		return ret;
+	}
+
+	ret = bsync->tdc_measure(bsync->ctx, &bsync_delta_t0);
+	if (ret) {
+		pr_err("Failed to measure bsync phase 0\n");
+		return ret;
+	}
+
+	pr_debug("apollo_delta_t0 %lld fs, bsync_delta_t0 %lld fs\n",
+		 apollo_delta_t0, bsync_delta_t0);
+
+	/* Leg 2: release the provider's driver so the device can drive back. */
+	ret = bsync->output_en_set(bsync->ctx, false);
+	if (ret) {
+		pr_err("Failed to disable bsync output\n");
+		return ret;
+	}
+
+	ret = ad9088_delta_t_measurement_set(phy, 1);
+	if (ret) {
+		pr_err("Failed to set delta_t measurement 1\n");
+		goto restore;
+	}
+
+	ret = ad9088_delta_t_measurement_get(phy, 1, &apollo_delta_t1);
+	if (ret) {
+		pr_err("Failed to get delta_t measurement 1\n");
+		goto restore;
+	}
+
+	ret = bsync->tdc_measure(bsync->ctx, &bsync_delta_t1);
+	if (ret) {
+		pr_err("Failed to measure bsync phase 1\n");
+		goto restore;
+	}
+
+	pr_debug("apollo_delta_t1 %lld fs, bsync_delta_t1 %lld fs\n",
+		 apollo_delta_t1, bsync_delta_t1);
+
+restore:
+	/* Stop the device driving BSYNC and hand the line back to the provider. */
+	ret2 = ad9088_delta_t_measurement_set(phy, 2);
+	if (ret2) {
+		pr_err("Failed to set delta_t measurement 2\n");
+		if (!ret)
+			ret = ret2;
+	}
+
+	ret2 = bsync->output_en_set(bsync->ctx, true);
+	if (ret2) {
+		pr_err("Failed to re-enable bsync output\n");
+		if (!ret)
+			ret = ret2;
+	}
+
+	if (ret)
+		return ret;
+
+	/*
+	 * Both legs traverse the same path in opposite directions, so their
+	 * difference is the round trip. Adding one period before the modulo
+	 * keeps a negative difference in range.
+	 */
+	calc_delay = (bsync_delta_t0 - bsync_delta_t1) -
+		     (apollo_delta_t1 - apollo_delta_t0);
+	pr_debug("calc_delay %lld fs\n", calc_delay);
+
+	no_os_div64_u64_rem((uint64_t)(calc_delay + (int64_t)bsync_period_fs),
+			    bsync_period_fs, &round_trip_delay);
+
+	*path_delay_fs = round_trip_delay >> 1;
+
+	return 0;
+}
+
 static int ad9088_jesd204_post_setup_stage1(struct jesd204_dev *jdev,
 		enum jesd204_state_op_reason reason)
 {
 	struct ad9088_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	adi_apollo_mcs_cal_init_status_t init_cal_status;
 	struct ad9088_phy *phy = priv->phy;
+	struct adi_apollo_device_t *device = &phy->ad9088;
+	uint64_t bsync_period_fs;
+	uint64_t path_delay = 0;
+	uint32_t bsync_freq_hz;
+	int ret;
+
+	memset(&init_cal_status, 0, sizeof(init_cal_status));
 
 	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
 		 jesd204_state_op_reason_str(reason));
 
-	if (!phy->iio_adf4030 || !phy->iio_adf4382) {
+	if (!ad9088_mcs_ops_complete(phy)) {
 		if (reason == JESD204_STATE_OP_REASON_INIT)
 			pr_info("Skipping MCS calibration\n");
 		return JESD204_STATE_CHANGE_DONE;
 	}
 
+	if (reason != JESD204_STATE_OP_REASON_INIT) {
+		adi_apollo_mcs_cal_bg_tracking_abort(device);
+		adi_apollo_mcs_cal_tracking_enable(device, 0);
+		phy->mcs_cal_bg_tracking_run = false;
+
+		return JESD204_STATE_CHANGE_DONE;
+	}
+
+	ret = phy->bsync_ops->freq_get(phy->bsync_ops->ctx, &bsync_freq_hz);
+	if (ret) {
+		pr_err("Failed to read bsync frequency\n");
+		return ret;
+	}
+
+	if (!bsync_freq_hz) {
+		pr_err("bsync frequency is 0\n");
+		return -EINVAL;
+	}
+
+	bsync_period_fs = no_os_div_u64(1000000000000000ULL, bsync_freq_hz);
+	pr_debug("bsync_period_fs %llu\n", bsync_period_fs);
+
+	/* Start from a known state: driving, with no delay programmed. */
+	ret = phy->bsync_ops->output_en_set(phy->bsync_ops->ctx, true);
+	if (ret) {
+		pr_err("Failed to enable bsync output\n");
+		return ret;
+	}
+
+	ret = phy->bsync_ops->delay_set(phy->bsync_ops->ctx, 0);
+	if (ret) {
+		pr_err("Failed to clear bsync delay\n");
+		return ret;
+	}
+
+	ret = ad9088_mcs_init_cal_setup(phy);
+	if (ret) {
+		pr_err("Failed to setup MCS init cal\n");
+		return ret;
+	}
+
+	ret = ad9088_mcs_bsync_path_delay(phy, bsync_period_fs, &path_delay);
+	if (ret)
+		return ret;
+
+	pr_info("Total BSYNC path delay %llu fs\n", path_delay);
+
+	/*
+	 * Advance the provider's SYSREF by the path delay so the edge arrives at
+	 * the device when an undelayed one would have left the provider.
+	 */
+	ret = phy->bsync_ops->delay_set(phy->bsync_ops->ctx,
+					-(int64_t)path_delay);
+	if (ret) {
+		pr_err("Failed to set bsync delay\n");
+		return ret;
+	}
+
+	ret = adi_apollo_mcs_cal_init_run(device);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_mcs_cal_init_run");
+	if (ret)
+		return ret;
+
+	ret = adi_apollo_mcs_cal_init_status_get(device, &init_cal_status);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_mcs_cal_init_status_get");
+	if (ret)
+		return ret;
+
+	ret = ad9088_mcs_init_cal_validate(phy, &init_cal_status);
+	if (ret) {
+		ad9088_mcs_init_cal_status_print(phy, &init_cal_status);
+		pr_err("MCS Initcal Status: Failed\n");
+		return ret;
+	}
+
+	pr_info("MCS Initcal Status: Passed\n");
+
+	/*
+	 * Tracking cal steers the device clock PLL, which the hardware only
+	 * supports in single clock mode.
+	 */
+	if (device->dev_info.is_dual_clk) {
+		pr_info("Dual clock mode: skipping MCS tracking calibration\n");
+
+		return JESD204_STATE_CHANGE_DONE;
+	}
+
+	ret = ad9088_mcs_tracking_cal_setup(phy, phy->mcs_track_decimation, 1);
+	if (ret) {
+		pr_err("Failed to setup MCS tracking cal\n");
+		return ret;
+	}
+
+	ret = adi_apollo_mcs_cal_fg_tracking_run(device);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_mcs_cal_fg_tracking_run");
+	if (ret)
+		return ret;
+
+	ret = adi_apollo_mcs_cal_bg_tracking_run(device);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_mcs_cal_bg_tracking_run");
+	if (ret)
+		return ret;
+
+	phy->mcs_cal_bg_tracking_run = true;
+
 	return JESD204_STATE_CHANGE_DONE;
+}
+
+/**
+ * @brief Should this device drive the provider's background serial alignment?
+ *
+ * Only the topology's top device may, since the provider is shared, and only
+ * when the board asked for it and supplied the accessor.
+ */
+static bool ad9088_mcs_bg_align_available(struct ad9088_phy *phy,
+		struct jesd204_dev *jdev)
+{
+	return phy->aion_background_serial_alignment_en && phy->bsync_ops &&
+	       phy->bsync_ops->bg_align_set && jesd204_dev_is_top(jdev);
 }
 
 static int ad9088_jesd204_post_setup_stage2(struct jesd204_dev *jdev,
@@ -572,7 +827,27 @@ static int ad9088_jesd204_post_setup_stage2(struct jesd204_dev *jdev,
 		adi_apollo_clk_mcs_trig_sync_enable(device, 0);
 		adi_apollo_clk_mcs_trig_reset_disable(device);
 
+		if (ad9088_mcs_bg_align_available(phy, jdev)) {
+			ret = phy->bsync_ops->bg_align_set(phy->bsync_ops->ctx,
+							   false);
+			if (ret)
+				pr_err("Failed to disable bsync background serial alignment\n");
+		}
+
 		return JESD204_STATE_CHANGE_DONE;
+	}
+
+	/*
+	 * Keeps the provider's synced outputs continuously realigned once the
+	 * link is up, rather than only at the one-shot alignment during clock
+	 * sync. Off by default; it costs ongoing SPI traffic on the provider.
+	 */
+	if (ad9088_mcs_bg_align_available(phy, jdev)) {
+		ret = phy->bsync_ops->bg_align_set(phy->bsync_ops->ctx, true);
+		if (ret) {
+			pr_err("Failed to enable bsync background serial alignment\n");
+			return ret;
+		}
 	}
 
 	if (phy->trig_sync_en) {

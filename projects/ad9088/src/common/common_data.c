@@ -175,20 +175,19 @@ struct hmc7044_init_param hmc7044_ip = {
 };
 
 /*
- * ADF4030 BSYNC distribution, mirroring the adf4030 node of the kernel
- * devicetree (vcu118_ad9084.dts). ch0 receives the HMC7044's BSYNC0 and is the
- * auto-align reference; ch5 drives the Apollo's SYSREF pin; ch8 drives the
- * FPGA's sysref_in. All three are realigned on JESD204 CLK_SYNC_STAGE4.
+ * ADF4030 BSYNC distribution on this board. ch0 receives the HMC7044's BSYNC0
+ * and is the auto-align reference; ch5 drives the Apollo's SYSREF pin; ch8
+ * drives the FPGA's sysref_in. All three are realigned on JESD204
+ * CLK_SYNC_STAGE4.
  *
- * All channels use adi,link-rx-en + adi,float-rx-en with no adi,ac-coupled-en,
- * which is RX_DC_COUPLED_CLKS in the no-OS termination enum.
+ * All three channels are DC coupled with the receiver enabled, which is
+ * RX_DC_COUPLED_CLKS in the no-OS termination enum.
  *
- * Deviation: the devicetree sets adi,rcm = <1> on ch0 and ch5, a raw RCM
- * register code. The no-OS API takes millivolts instead
- * (adf4030_set_channel_voltage), and code 1 works out to 497 mV, below its own
- * ADF4030_RCM_VOLTAGE_MIN0 of 504 - so the code is not reachable through that
- * API. rcm_mv is left at 0, which skips the write and keeps the part's reset
- * default. Revisit if the BSYNC levels need trimming on the bench.
+ * rcm_mv is left at 0, which skips the receiver common-mode write and keeps the
+ * part's reset default. The comparator level this board would otherwise ask for
+ * works out to 497 mV, below the driver's own ADF4030_RCM_VOLTAGE_MIN0 of 504,
+ * so it is not reachable through adf4030_set_channel_voltage(). Revisit if the
+ * BSYNC levels need trimming on the bench.
  */
 struct adf4030_chan_spec adf4030_chan_spec[] = {
 	{
@@ -224,17 +223,12 @@ struct adf4030_init_param adf4030_ip = {
 	.ref_div = 1,
 	.chip_addr = 0,
 	/*
-	 * Both values match what the kernel driver actually programs, which is
-	 * not what the devicetree asks for. The driver reads its properties
-	 * under misspelled names - "adi,bsync-autoalign-interation-count" and
-	 * "adi,bsync-autoalign-thehsold-fs" - so the devicetree's
-	 * adi,bsync-autoalign-iteration-count = <6> is silently ignored and the
-	 * reference hardware runs the driver's own defaults: 8 iterations and a
-	 * 1400 fs threshold.
+	 * 8 alignment iterations against a 1400 fs threshold. These are the
+	 * values the alignment is known to converge with on this board.
 	 *
-	 * alignment_threshold_en is deliberately left false. The kernel enables
-	 * EN_ITER only from sysfs, so its alignment converges on ALIGN_CYCLES
-	 * alone; turning iteration on here would be a deviation.
+	 * alignment_threshold_en is deliberately left false, so alignment
+	 * converges on ALIGN_CYCLES alone rather than exiting early once the
+	 * threshold is met. Enable it only if convergence needs the extra help.
 	 */
 	.alignment_threshold_fs = 1400,
 	.alignment_iter = 8,
@@ -301,6 +295,139 @@ struct adxcvr_init rx_adxcvr_ip = {
 	.export_no_os_clk = true,
 };
 
+/*
+ * MCS calibration accessors.
+ *
+ * The AD9088 driver drives the SYSREF provider and the device clock PLL during
+ * MCS calibration but must not know which chips those are, so the board adapts
+ * its own to the driver's callbacks here. On this board the provider is the
+ * ADF4030 channel feeding the AD9088's SYSREF pin, and the clock PLL is the
+ * ADF4382. Handles are filled in by ad9088_mcs_ops_bind() once both are probed.
+ */
+static struct adf4030_dev *mcs_bsync_dev;
+static struct adf4382_dev *mcs_clk_dev;
+
+static int mcs_bsync_freq_get(void *ctx, uint32_t *freq_hz)
+{
+	return adf4030_get_bsync_freq((struct adf4030_dev *)ctx, freq_hz, false);
+}
+
+static int mcs_bsync_output_en_set(void *ctx, bool en)
+{
+	return adf4030_set_channel_direction((struct adf4030_dev *)ctx,
+					     ADF4030_CH_APOLLO_SYSREF, en);
+}
+
+/*
+ * Time difference of the SYSREF channel from its alignment reference. Arms the
+ * TDC, which asserts MANUAL_MODE; the caller's following delay_set() clears it
+ * again via the alignment write.
+ */
+static int mcs_bsync_tdc_measure(void *ctx, int64_t *tdc_fs)
+{
+	struct adf4030_dev *dev = (struct adf4030_dev *)ctx;
+	uint8_t reference_chan;
+	int ret;
+
+	reference_chan = dev->channels[ADF4030_CH_APOLLO_SYSREF].reference_chan;
+
+	ret = adf4030_set_tdc_source(dev, reference_chan);
+	if (ret)
+		return ret;
+
+	ret = adf4030_set_tdc_measurement(dev, ADF4030_CH_APOLLO_SYSREF);
+	if (ret)
+		return ret;
+
+	return adf4030_get_tdc_measurement(dev, tdc_fs);
+}
+
+static int mcs_bsync_delay_set(void *ctx, int64_t delay_fs)
+{
+	struct adf4030_dev *dev = (struct adf4030_dev *)ctx;
+	uint8_t reference_chan;
+	int ret;
+
+	reference_chan = dev->channels[ADF4030_CH_APOLLO_SYSREF].reference_chan;
+
+	ret = adf4030_set_channel_delay(dev, ADF4030_CH_APOLLO_SYSREF, delay_fs);
+	if (ret)
+		return ret;
+
+	/* The delay only takes effect once the channel is realigned. */
+	ret = adf4030_set_tdc_source(dev, reference_chan);
+	if (ret)
+		return ret;
+
+	return adf4030_set_single_ch_alignment(dev, ADF4030_CH_APOLLO_SYSREF);
+}
+
+static int mcs_bsync_bg_align_set(void *ctx, bool en)
+{
+	struct adf4030_dev *dev = (struct adf4030_dev *)ctx;
+	uint16_t mask = 0;
+	uint8_t i;
+
+	/* Background alignment covers exactly the channels synced on link-up. */
+	if (en)
+		for (i = 0; i < ADF4030_CHANNEL_NUMBER; i++)
+			if (dev->channels[i].align_on_sync_en)
+				mask |= NO_OS_BIT(i);
+
+	return adf4030_set_background_serial_alignment(dev, mask);
+}
+
+static int mcs_clk_auto_align_set(void *ctx, bool en)
+{
+	return adf4382_set_auto_align((struct adf4382_dev *)ctx, en);
+}
+
+static int mcs_clk_phase_set_fs(void *ctx, int32_t phase_fs)
+{
+	struct adf4382_dev *dev = (struct adf4382_dev *)ctx;
+	int ret;
+
+	/* The magnitude goes in the register, the sign in the polarity bit. */
+	ret = adf4382_set_phase_pol(dev, phase_fs < 0);
+	if (ret)
+		return ret;
+
+	return adf4382_set_phase_adjust(dev, (uint32_t)(phase_fs < 0 ?
+					-(int64_t)phase_fs : phase_fs));
+}
+
+static struct ad9088_bsync_ops ad9088_bsync_ops = {
+	.freq_get = mcs_bsync_freq_get,
+	.output_en_set = mcs_bsync_output_en_set,
+	.tdc_measure = mcs_bsync_tdc_measure,
+	.delay_set = mcs_bsync_delay_set,
+	.bg_align_set = mcs_bsync_bg_align_set,
+};
+
+static struct ad9088_clk_ops ad9088_clk_ops = {
+	.auto_align_set = mcs_clk_auto_align_set,
+	.phase_set_fs = mcs_clk_phase_set_fs,
+};
+
+int ad9088_mcs_ops_bind(struct adf4030_dev *adf4030,
+			struct adf4382_dev *adf4382)
+{
+	if (!adf4030 || !adf4382)
+		return -EINVAL;
+
+	mcs_bsync_dev = adf4030;
+	mcs_clk_dev = adf4382;
+
+	ad9088_bsync_ops.ctx = mcs_bsync_dev;
+	ad9088_clk_ops.ctx = mcs_clk_dev;
+
+	/* Publishing the tables is what enables MCS calibration. */
+	ad9088_ip.bsync_ops = &ad9088_bsync_ops;
+	ad9088_ip.clk_ops = &ad9088_clk_ops;
+
+	return 0;
+}
+
 struct ad9088_init_param ad9088_ip = {
 	.spi_init = &ad9088_spi_ip, // to be set by the user
 	.gpio_reset = &gpio_reset_ip, // to be set by the user
@@ -326,5 +453,18 @@ struct ad9088_init_param ad9088_ip = {
 	.jrx1_physical_lane_mapping = AD9088_RX1_PHYSICAL_LANE_MAPPING,
 	.jtx_ser_amplitude = ADI_APOLLO_JESD_DRIVE_SWING_VTT_100,
 	.jtx_ser_pre_emphasis = ADI_APOLLO_JESD_PRE_TAP_LEVEL_6_DB,
-	.jtx_ser_post_emphasis = ADI_APOLLO_JESD_POST_TAP_LEVEL_3_DB
+	.jtx_ser_post_emphasis = ADI_APOLLO_JESD_POST_TAP_LEVEL_3_DB,
+	/*
+	 * bsync_ops/clk_ops stay NULL until ad9088_mcs_ops_bind() runs, so MCS
+	 * calibration is skipped in examples that never call it. That is the
+	 * right default: without the clock-chip handles the accessors have
+	 * nothing to drive.
+	 */
+	.mcs_track_decimation = 0,	/* use the driver default */
+	.mcs_track_win = 0,		/* keep the device profile's window */
+	/*
+	 * The one-shot alignment performed during clock sync is enough here, so
+	 * the provider is not left realigning in the background.
+	 */
+	.aion_background_serial_alignment_en = false,
 };
