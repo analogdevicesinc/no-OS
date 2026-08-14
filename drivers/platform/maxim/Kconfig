@@ -59,6 +59,13 @@ config SYS_MAXIM
 	  linker wrap option. Callers must serialize shared-register changes
 	  between cores; a read-modify-write is not a cross-core lock.
 
+config CAMERA_OV7692_MAXIM
+	bool "Enable Maxim SDK OV7692 camera support"
+	default n
+	help
+	  Enable the MAX78000 camera interface, pulse train clock, and OV7692
+	  sensor drivers. The application supplies board.h for its camera pins.
+
 config UART_MAXIM
 	bool "Enable Maxim UART driver"
 	depends on UART
