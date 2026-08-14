@@ -21,6 +21,19 @@
 			}
 		},
 		{
+			"name": "max78000evkit",
+			"description": "MAX78000 EvKit board",
+			"inherits": "maxim-base",
+			"cacheVariables": {
+				"BOARD": "max78000evkit",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "maxim",
+				"TARGET": "max78000",
+				"TARGET_NUM": "78000",
+				"BOARD_CONFIG_FILE": "max78000evkit_defconfig"
+			}
+		},
+		{
 			"name": "max32650fthr",
 			"description": "MAX32650 feather board",
 			"inherits": "maxim-base",
