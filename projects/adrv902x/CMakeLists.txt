@@ -92,6 +92,21 @@ target_include_directories(no-os PUBLIC
 # classic ABI until individually validated (see config_xilinx_sdk).
 set(NOOS_XILINX_SDT ON)
 
+# Cap the ADI SPI access batch to fit the Xilinx AXI Quad SPI 16-byte TX FIFO.
+# The madura HAL packs register writes into a single CS-held SPI transfer
+# (ADI_COMMON_HAL_SPIARRAYSIZE bytes; default 256 -> 255-byte bursts). On the
+# no-OS polled AXI Quad SPI path (e.g. VCU118/MicroBlaze) a transfer larger than
+# the 16-byte TX FIFO underruns during the un-inhibited BSP refill, corrupting
+# the ADRV9025 stream/firmware DMA load so the on-chip ARM never boots. 15 bytes
+# = 5 register accesses x 3 bytes, which fits the FIFO with no mid-CS refill.
+# MicroBlaze (vcu118) only -- the ZynqMP (zcu102) PS SPI has no 16-byte FIFO
+# limit, so it keeps the faster default batch size. The macro is consumed inside
+# the madura driver (compiled into the no-os target), so it must be defined here
+# rather than in app_config.h, which those driver files do not include.
+if(XILINX_ARCH MATCHES "sys_mb")
+    target_compile_definitions(no-os PUBLIC ADI_COMMON_HAL_SPIARRAYSIZE=15)
+endif()
+
 config_platform_sdk(adrv902x)
 add_flash_target(adrv902x)
 post_build_config(adrv902x)
