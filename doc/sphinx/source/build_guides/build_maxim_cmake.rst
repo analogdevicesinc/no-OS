@@ -24,6 +24,8 @@ use the vendor toolchain bundled with the Maxim SDK:
          - Target chip
        * - ``max78000fthr``
          - max78000
+       * - ``max78000evkit``
+         - max78000
        * - ``max32650fthr``
          - max32650
        * - ``max32655fthr``
