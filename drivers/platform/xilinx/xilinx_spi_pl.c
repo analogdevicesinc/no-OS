@@ -43,6 +43,7 @@
 #include "no_os_delay.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
+#include "xilinx_spi.h"
 
 #define XPS_TYPE_WRITE		0x1
 #define XPS_TYPE_READ		0x2
@@ -107,8 +108,8 @@ static void _update_mode(struct no_os_spi_desc *desc)
 		return ;
 
 	/* Update mode */
-	val = desc->mode | NO_OS_SPI_CPOL ? XSP_CR_CLK_POLARITY_MASK : 0;
-	val |= desc->mode | NO_OS_SPI_CPHA ? XSP_CR_CLK_PHASE_MASK : 0;
+	val = desc->mode & NO_OS_SPI_CPOL ? XSP_CR_CLK_POLARITY_MASK : 0;
+	val |= desc->mode & NO_OS_SPI_CPHA ? XSP_CR_CLK_PHASE_MASK : 0;
 	mask = XSP_CR_CLK_POLARITY_MASK | XSP_CR_CLK_PHASE_MASK;
 
 	val |= desc->bit_order == NO_OS_SPI_BIT_ORDER_LSB_FIRST ?
