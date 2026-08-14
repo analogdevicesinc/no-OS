@@ -494,6 +494,16 @@ int dma_example_main()
 		goto error_hmc7044;
 	}
 
+	/*
+	 * Enables MCS calibration, which trims the AD9088's internal SYSREF onto
+	 * the external edge. Needs both clock chips probed, so it goes here.
+	 */
+	ret = ad9088_mcs_ops_bind(adf4030_dev, adf4382_dev);
+	if (ret) {
+		pr_info("MCS ops bind failed\n");
+		goto error_adf4030;
+	}
+
 	ret = axi_dmac_init(&rx_dmac, &rx_dmac_ip);
 	if (ret) {
 		pr_info("RX DMAC initialization failed\n");
