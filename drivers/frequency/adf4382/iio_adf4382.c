@@ -409,6 +409,7 @@ static int adf4382_iio_read_chan_attr(void *dev, char *buf, uint32_t len,
 	struct adf4382_dev *adf4382;
 	int32_t val = -EINVAL;
 	uint64_t val_64 = 0;
+	uint32_t phase_fs;
 	bool en, pol;
 	int ret;
 
@@ -447,7 +448,12 @@ static int adf4382_iio_read_chan_attr(void *dev, char *buf, uint32_t len,
 		break;
 
 	case ADF4382_IIO_CH_ATTR_PHASE_ADJ:
-		val = adf4382->phase_adj;
+		ret = adf4382_get_phase_adjust(adf4382, &phase_fs);
+		if (ret)
+			return ret;
+
+		val = (int32_t)phase_fs;
+
 		ret = adf4382_get_phase_pol(adf4382, &pol);
 		if (ret)
 			return ret;

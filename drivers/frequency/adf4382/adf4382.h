@@ -497,7 +497,9 @@
 #define ADF4382_VCTAT_CALGEN			82
 #define ADF4382_FASTCAL_VPTAT_CALGEN		7
 #define ADF4382_FASTCAL_VCTAT_CALGEN		21
-#define ADF4382_PHASE_BLEED_CNST		2044000
+
+#define ADF4382_PHASE_BLEED_CNST_MUL		511
+#define ADF4382_PHASE_BLEED_CNST_DIV		250
 #define ADF4382_VCO_CAL_CNT			202
 #define ADF4382_VCO_CAL_VTUNE			124
 #define ADF4382_VCO_CAL_ALC			250
@@ -517,9 +519,16 @@
 #define ADF4382_CHIP_VER_U5_D			18
 
 #define MHZ					MEGA
-#define S_TO_NS					NANO
 #define PS_TO_S					PICO
-#define NS_TO_PS				KHZ_PER_MHZ
+
+/* Unit ladder for the femtosecond-domain phase adjustment. */
+#define FS_PER_NS				MICRO
+#define NS_PER_MS				MICRO
+#define MS_PER_NS				MICRO
+#define NS_PER_FS				MICRO
+
+#define PERIOD_IN_DEG				360
+#define PERIOD_IN_DEG_MS			360000
 
 /**
  * @brief Supported device ids.
@@ -569,6 +578,7 @@ struct adf4382_dev {
 	uint16_t			bleed_word;
 	uint8_t				ld_count;
 	uint32_t			phase_adj;
+	bool				auto_align_en;
 	uint8_t				en_lut_gen;
 	uint8_t				en_lut_cal;
 	uint64_t			vco_max;
@@ -946,8 +956,14 @@ int adf4382_set_start_calibration(struct adf4382_dev *dev);
 /** ADF4382 Get the NDIV register attribute value as 0 */
 int adf4382_get_start_calibration(struct adf4382_dev *dev, bool *start_cal);
 
-/** ADF4382 Sets Phase adjustment */
-int adf4382_set_phase_adjust(struct adf4382_dev *dev, uint32_t phase_ps);
+/** ADF4382 Sets Phase adjustment, in femtoseconds */
+int adf4382_set_phase_adjust(struct adf4382_dev *dev, uint32_t phase_fs);
+
+/** ADF4382 Gets Phase adjustment, in femtoseconds */
+int adf4382_get_phase_adjust(struct adf4382_dev *dev, uint32_t *phase_fs);
+
+/** ADF4382 Enables or disables automatic clock alignment */
+int adf4382_set_auto_align(struct adf4382_dev *dev, bool en);
 
 /** ADF4382 Sets Phase adjustment polarity*/
 int adf4382_set_phase_pol(struct adf4382_dev *dev, bool polarity);
