@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -9,7 +8,7 @@
 * 
 *   \brief  Declarations for Generic ADI Platform
 *
-*   ADRV904X API Version: 2.10.0.4
+*   ADRV904X API Version: 2.15.0.4
 *
 *   \note   Implementation required to guarantee ADI Device functionality
 *
@@ -405,6 +404,7 @@ ADI_API_EX adi_hal_Err_e (*adi_hal_BbicRegistersWrite)( void* const     devHalCf
                                                         const uint32_t  data[],
                                                         const uint32_t  numDataWords);
 
+#ifndef __KERNEL__
 /**
  * \brief Returns the ID of the calling thread.
  *
@@ -412,6 +412,7 @@ ADI_API_EX adi_hal_Err_e (*adi_hal_BbicRegistersWrite)( void* const     devHalCf
  * of the calling thread.
  */
 ADI_API_EX adi_hal_thread_t (*adi_hal_ThreadSelf)(void);
+#endif
 
 /**
  * \brief Before being used a mutex must be initialized with this function. The mutex is
