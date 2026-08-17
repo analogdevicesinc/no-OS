@@ -499,10 +499,16 @@ def create_project(ws, hw_path, hw_file, target):
     client.create_platform_component(
         name="hw0", hw_design=xsa, cpu=vcpu, os="standalone")
 
-    # Build the platform. No need to reconnect - just get the component.
-    print("INFO: Building platform (BSP + FSBL)...")
+    # Build the platform only if Quick Build didn't already produce the BSP.
+    # create_platform_component() sometimes triggers an internal "Quick Build"
+    # that produces libxil.a — calling platform.build() again can crash the
+    # gRPC server with "Application error processing RPC".
     platform = client.get_component(name="hw0")
-    platform.build()
+    libxil_path = os.path.join(out_dir, "hw0", "export", "hw0", "sw",
+                               f"standalone_{vcpu}", "lib", "libxil.a")
+    if not os.path.exists(libxil_path):
+        print("INFO: Building platform (BSP + FSBL)...")
+        platform.build()
 
     # --- Step 2: App component (linker script) ---
     xpfm = os.path.join(out_dir, "hw0", "export", "hw0", "hw0.xpfm")
