@@ -1,0 +1,19 @@
+menu "maxm86161 Configuration"
+
+choice MAXM86161_EXAMPLE
+prompt "Example variant"
+default MAXM86161_BASIC_EXAMPLE
+
+config MAXM86161_BASIC_EXAMPLE
+bool "Basic example"
+
+config MAXM86161_IIO_EXAMPLE
+bool "IIO example"
+depends on IIO
+
+config MAXM86161_ATTRIBUTE_TEST_EXAMPLE
+bool "Attribute test example"
+
+endchoice
+
+endmenu
