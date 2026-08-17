@@ -1,8 +1,8 @@
-/*/*
+/* SPDX-License-Identifier: BSD-3-Clause */
+/*
  * ADRV9025
  *
  * Copyright 2020-2023 Analog Devices Inc.
- *
  */
 
 #ifndef IIO_TRX_ADRV9025_H_
