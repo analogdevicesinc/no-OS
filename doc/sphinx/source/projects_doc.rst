@@ -36,6 +36,14 @@ ANALOG FRONT-ENDS
 
    projects/afe/*
 
+HEALTH
+======
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   projects/health/*
+
 FREQUENCY GENERATORS
 ====================
 .. toctree::
