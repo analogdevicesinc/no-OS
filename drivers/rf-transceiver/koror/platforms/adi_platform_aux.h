@@ -1,3 +1,7 @@
+/**
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
+*/
 #ifndef _ADI_PLATFORM_AUX_H__
 #define _ADI_PLATFORM_AUX_H__
 
