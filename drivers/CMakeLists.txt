@@ -75,6 +75,10 @@ if(CONFIG_GYRO)
     add_subdirectory(gyro)
 endif()
 
+if(CONFIG_HEALTH)
+    add_subdirectory(health)
+endif()
+
 if(CONFIG_IMPEDANCE_ANALYZER)
     add_subdirectory(impedance-analyzer)
 endif()
