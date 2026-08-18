@@ -313,6 +313,9 @@ int adin1140_poll(struct adin1140_desc *desc);
 /* Get the link state */
 int adin1140_link_state(struct adin1140_desc *desc, uint32_t *state);
 
+/* Read the MAC hardware statistics counters */
+int adin1140_get_stats(struct adin1140_desc *desc, struct adin1140_stats *stats);
+
 /* Initialize the device */
 int adin1140_init(struct adin1140_desc **desc,
 		  struct adin1140_init_param *param);
