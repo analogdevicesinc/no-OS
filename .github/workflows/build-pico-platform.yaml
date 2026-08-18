@@ -1,5 +1,7 @@
 name: Build projects for Pico platform
 
+# TEST
+
 on:
   pull_request:
     branches:
@@ -72,14 +74,15 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build-pico-projects:
     if: |
-      github.event_name != 'pull_request' ||
-      github.event.pull_request.head.repo.full_name == github.repository
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) ||
+      (github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository)
     env:
       CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
       TOOLS_REPO: ${{ secrets.TOOLS_REPO }}
@@ -103,6 +106,7 @@ jobs:
         with:
           submodules: recursive
           ref: ${{ github.event.pull_request.head.sha }}
+          allow-unsafe-pr-checkout: true
       - name: Building for platform Pico
         shell: sh
         run: |
