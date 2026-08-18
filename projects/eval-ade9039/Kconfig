@@ -1,0 +1,12 @@
+menu "eval-ade9039 Configuration"
+
+choice EVAL_ADE9039_EXAMPLE
+	prompt "Example variant"
+	default EVAL_ADE9039_ADE9039_EXAMPLE
+
+config EVAL_ADE9039_ADE9039_EXAMPLE
+	bool "ADE9039 example"
+
+endchoice
+
+endmenu
