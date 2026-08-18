@@ -10,22 +10,4 @@ ifeq (y,$(strip $(DMA_EXAMPLE)))
 CFLAGS += -DDMA_EXAMPLE
 SRCS += $(PROJECT)/src/examples/dma/dma_example.c
 INCS += $(PROJECT)/src/examples/dma/dma_example.h
-SRCS += $(NO-OS)/util/no_os_tone.c
-INCS += $(INCLUDE)/no_os_tone.h
-endif
-
-ifeq (y,$(strip $(IIO_EXAMPLE)))
-IIOD=y
-CFLAGS += -DIIO_EXAMPLE
-SRCS += $(PROJECT)/src/examples/iio_example/iio_example.c
-INCS += $(PROJECT)/src/examples/iio_example/iio_example.h
-SRCS += $(DRIVERS)/frequency/adf4382/iio_adf4382.c
-INCS += $(DRIVERS)/frequency/adf4382/iio_adf4382.h
-endif
-
-ifeq (y,$(strip $(IIOD)))
-SRC_DIRS += $(NO-OS)/iio/iio_app
-
-INCS += $(INCLUDE)/no_os_list.h \
-	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h
 endif

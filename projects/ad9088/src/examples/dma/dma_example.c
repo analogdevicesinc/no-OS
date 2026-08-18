@@ -35,13 +35,8 @@
 #include "common_data.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
-#include "no_os_tone.h"
 #include "no_os_util.h"
 #include "ad9088.h"
-#include "adi_apollo_cddc.h"
-#include "adi_apollo_fddc.h"
-#include "adi_apollo_cduc.h"
-#include "adi_apollo_fduc.h"
 #include "jesd204.h"
 #include "axi_adxcvr.h"
 #include "axi_adc_core.h"
@@ -52,23 +47,16 @@
 #include "parameters.h"
 #include "xil_cache.h"
 
-/* Side and datapath the test tone is injected on */
-#define TEST_TONE_SIDE		0
-#define TEST_TONE_FDDC		0
-/* Mid-scale test tone amplitude, within the RX FNCO 0x1FFF limit */
-#define TEST_TONE_OFFSET	0x1000
+/* Side and datapath the loopback runs on */
+#define LOOPBACK_SIDE		0
+#define LOOPBACK_FDUC		0
 
 /*
- * Test tone frequency as a divisor of the capture rate rather than an absolute
- * value, so it stays inside the FDDC passband whatever the profile decimates by.
- * A power of two keeps the tone an integer number of Hz whenever the divisor
- * divides the rate, and keeps the tone module's phase step exact: the step is
- * (freq << 32) / rate, so a divisor D gives 2^32 / D, which for any power of
- * two up to the sine table length is an exact multiple of the accumulator's
- * fractional field. The phase then lands on a table entry every sample rather
- * than between two of them.
+ * Side 0 / link 0 only, which carries AD9088_TX_JESD_M converters. The capture
+ * buffer geometry and the I/Q pairing below both assume it, so a wider link is
+ * rejected rather than captured half-wrong.
  */
-#define TEST_TONE_RATE_DIV	256
+#define LOOPBACK_CONVERTERS	4
 
 /*
  * Default coarse NCO, as a divisor of the DAC rate. The fractional part of the
@@ -78,21 +66,6 @@
  */
 #define DEFAULT_CNCO_RATE_DIV	8
 #define DEFAULT_FNCO_HZ		0
-
-/*
- * Converter pair the FDDC under test lands on. The FDDC emits a complex tone,
- * so its I and Q arrive on two adjacent converters of the JESD204 link.
- */
-#define TONE_CONV_I		0
-#define TONE_CONV_Q		1
-
-/*
- * Half scale for the transmitted tone. Cable and converter loss leave the
- * received tone well inside range at this level, and driving any lower only
- * costs signal-to-noise -- which the envelope spread, a min/max statistic, is
- * the first threshold to feel.
- */
-#define LOOPBACK_TX_AMPLITUDE	16384
 
 /*
  * The TX data offload replays its whole BRAM regardless of how much was written
@@ -105,33 +78,36 @@
 
 /*
  * Width of the TX DMAC source AXI data path in bytes, which has to match the
- * HDL build. The driver rejects a source address that is not a multiple of it;
- * the transfer size is floored to the same boundary so the last beat is whole.
+ * HDL build. The driver rejects a transfer that is not a multiple of it.
  */
 #define DMA_SRC_WIDTH_BYTES	128
-
-/* Largest M the JESD204 link can report (ADI_APOLLO_CONV_PER_LINK_16) */
-#define MAX_LINK_CONVERTERS	16
 
 #define DMA_BUFFER_ALIGN	1024
 
 /*
- * Peak of a signed converter sample, to report a level in context. Presumes the
- * 16-bit sample width the link reports as NP, which the capture geometry line
- * prints; a narrower NP would need scaling.
+ * The transmitted tone is sine_lut_iq[], the shared quadrature table declared
+ * by axi_dac_core.h. Each entry packs one I/Q pair, I in the low half and Q in
+ * the high half, so on little-endian it lands as converter 0 then converter 1
+ * of the transmit link. A quarter period spans 32 entries, so the table holds
+ * eight cycles over its 1024 entries and the tone comes out at the DAC
+ * datapath rate over 128 -- well inside the FDDC passband. Peak per component
+ * is 0x2666, about 30% of full scale, which leaves the received tone inside
+ * range after cable and converter loss.
  */
-#define SAMPLE_FULL_SCALE	32767
 
 /*
- * Fixed-capacity static capture buffer. Samples-per-converter is derived from
- * the link's M at runtime and clamped to what fits here, so a profile with more
- * converters shortens the capture instead of overrunning the buffer.
+ * Fixed-capacity static capture buffer, one side of the link. Samples per
+ * converter is derived from the link's M at runtime and clamped to what fits
+ * here.
  */
-static uint16_t adc_buffer_dma[ADC_BUFFER_SAMPLES * 8]
+static uint16_t adc_buffer_dma[ADC_BUFFER_SAMPLES * LOOPBACK_CONVERTERS]
 __attribute__((aligned(DMA_BUFFER_ALIGN)));
 
-/* Sized to the whole TX offload BRAM, see TX_OFFLOAD_BRAM_BYTES. */
-static uint16_t dac_buffer_dma[TX_OFFLOAD_BRAM_BYTES / sizeof(uint16_t)]
+/*
+ * Sized to the whole TX offload BRAM, see TX_OFFLOAD_BRAM_BYTES. Held as 32-bit
+ * words so a sine table entry can be written straight into it.
+ */
+static uint32_t dac_buffer_dma[TX_OFFLOAD_BRAM_BYTES / sizeof(uint32_t)]
 __attribute__((aligned(DMA_BUFFER_ALIGN)));
 
 /**
@@ -173,171 +149,7 @@ static int dma_example_capture(struct axi_dmac *rx_dmac, uint32_t size)
 }
 
 /**
- * @brief Derive the rate the captured samples arrive at.
- *
- * The FNCO mixes at the CDDC output rate and the FDDC decimates after it, so the
- * captured rate carries both ratios. The decimations are read back from the
- * profile the JESD204 FSM populated rather than assuming a value, so a profile
- * change cannot silently shift every predicted frequency.
- *
- * @param phy - AD9088 device.
- * @param rx_adc - RX TPL core, used only to cross-check the derived rate.
- * @param capture_rate - Returns the FDDC output rate in Hz.
- * @return 0 on success, negative error code otherwise.
- */
-static int dma_example_get_capture_rate(struct ad9088_phy *phy,
-					struct axi_adc *rx_adc,
-					uint64_t *capture_rate)
-{
-	adi_apollo_rxpath_t *rx_path = &phy->profile.rx_path[TEST_TONE_SIDE];
-	uint32_t cddc_dcm;
-	uint32_t fddc_dcm;
-	uint8_t cddc_pi;
-	uint8_t fddc_pi;
-	uint64_t adc_rate;
-	uint64_t delta;
-	int ret;
-
-	cddc_pi = (TEST_TONE_FDDC / 2) % ADI_APOLLO_CDUCS_PER_SIDE;
-	ret = adi_apollo_cddc_dcm_bf_to_val(&phy->ad9088,
-					    rx_path->rx_cddc[cddc_pi].drc_ratio,
-					    &cddc_dcm);
-	if (ret) {
-		pr_err("Reading the CDDC decimation failed (%d)\n", ret);
-		return ret;
-	}
-
-	fddc_pi = TEST_TONE_FDDC % ADI_APOLLO_FDUCS_PER_SIDE;
-	ret = adi_apollo_fddc_dcm_bf_to_val(&phy->ad9088,
-					    rx_path->rx_fddc[fddc_pi].drc_ratio,
-					    &fddc_dcm);
-	if (ret) {
-		pr_err("Reading the FDDC decimation failed (%d)\n", ret);
-		return ret;
-	}
-
-	if (!cddc_dcm || !fddc_dcm) {
-		pr_err("Invalid decimation CDDC=%lu FDDC=%lu\n",
-		       (unsigned long)cddc_dcm, (unsigned long)fddc_dcm);
-		return -EINVAL;
-	}
-
-	adc_rate = phy->profile.adc_cfg[TEST_TONE_SIDE].adc_sampling_rate_Hz;
-	*capture_rate = no_os_div_u64(adc_rate, cddc_dcm * fddc_dcm);
-
-	if (!*capture_rate) {
-		pr_err("Invalid capture rate\n");
-		return -EINVAL;
-	}
-
-	pr_info("Profile Rates: ADC %lu kHz / CDDC %lu / FDDC %lu = capture %lu kHz\n",
-		(unsigned long)no_os_div_u64(adc_rate, 1000),
-		(unsigned long)cddc_dcm, (unsigned long)fddc_dcm,
-		(unsigned long)no_os_div_u64(*capture_rate, 1000));
-
-	/*
-	 * The TPL core derives the same rate from its own clock registers, so a
-	 * mismatch means the decimation model above is wrong and every predicted
-	 * frequency would be off by that factor.
-	 */
-	if (rx_adc->clock_hz) {
-		delta = rx_adc->clock_hz > *capture_rate ?
-			rx_adc->clock_hz - *capture_rate :
-			*capture_rate - rx_adc->clock_hz;
-
-		pr_info("TPL core reports %lu kHz\n",
-			(unsigned long)no_os_div_u64(rx_adc->clock_hz, 1000));
-
-		if (no_os_div_u64(delta * 100, *capture_rate) > 5)
-			pr_info("Warning: TPL rate disagrees with the profile "
-				"by more than 5%%\n");
-	}
-
-	pr_info("\n");
-	return 0;
-}
-
-/**
- * @brief Derive the rate the transmitted samples leave the DMA at.
- *
- * The mirror of dma_example_get_capture_rate() for the transmit direction. The
- * interpolation enums are encoded differently from the decimation ones, so the
- * CDUC/FDUC converters must be used rather than the CDDC/FDDC pair, otherwise
- * every transmitted frequency lands off by that ratio.
- *
- * @param phy - AD9088 device.
- * @param tx_dac - TX TPL core, used only to cross-check the derived rate.
- * @param tx_rate - Returns the FDUC input rate in Hz.
- * @return 0 on success, negative error code otherwise.
- */
-static int dma_example_get_tx_rate(struct ad9088_phy *phy,
-				   struct axi_dac *tx_dac, uint64_t *tx_rate)
-{
-	adi_apollo_txpath_t *tx_path = &phy->profile.tx_path[TEST_TONE_SIDE];
-	uint32_t cduc_int;
-	uint32_t fduc_int;
-	uint8_t cduc_pi;
-	uint8_t fduc_pi;
-	uint64_t dac_rate;
-	uint64_t delta;
-	int ret;
-
-	cduc_pi = (TEST_TONE_FDDC / 2) % ADI_APOLLO_CDUCS_PER_SIDE;
-	ret = adi_apollo_cduc_interp_bf_to_val(&phy->ad9088,
-					       tx_path->tx_cduc[cduc_pi].drc_ratio,
-					       &cduc_int);
-	if (ret) {
-		pr_err("Reading the CDUC interpolation failed (%d)\n", ret);
-		return ret;
-	}
-
-	fduc_pi = TEST_TONE_FDDC % ADI_APOLLO_FDUCS_PER_SIDE;
-	ret = adi_apollo_fduc_interp_bf_to_val(&phy->ad9088,
-					       tx_path->tx_fduc[fduc_pi].drc_ratio,
-					       &fduc_int);
-	if (ret) {
-		pr_err("Reading the FDUC interpolation failed (%d)\n", ret);
-		return ret;
-	}
-
-	if (!cduc_int || !fduc_int) {
-		pr_err("Invalid interpolation CDUC=%lu FDUC=%lu\n",
-		       (unsigned long)cduc_int, (unsigned long)fduc_int);
-		return -EINVAL;
-	}
-
-	dac_rate = phy->profile.dac_cfg[TEST_TONE_SIDE].dac_sampling_rate_Hz;
-	*tx_rate = no_os_div_u64(dac_rate, cduc_int * fduc_int);
-
-	if (!*tx_rate) {
-		pr_err("Invalid transmit rate\n");
-		return -EINVAL;
-	}
-
-	pr_info("Profile Rates: DAC %lu kHz / CDUC %lu / FDUC %lu = "
-		"transmit %lu kHz\n",
-		(unsigned long)no_os_div_u64(dac_rate, 1000),
-		(unsigned long)cduc_int, (unsigned long)fduc_int,
-		(unsigned long)no_os_div_u64(*tx_rate, 1000));
-
-	if (tx_dac->clock_hz) {
-		delta = tx_dac->clock_hz > *tx_rate ?
-			tx_dac->clock_hz - *tx_rate :
-			*tx_rate - tx_dac->clock_hz;
-
-		pr_info("TPL core reports %lu kHz\n",
-			(unsigned long)no_os_div_u64(tx_dac->clock_hz, 1000));
-
-		if (no_os_div_u64(delta * 100, *tx_rate) > 5)
-			pr_info("Warning: TPL rate disagrees with the profile "
-				"by more than 5%%\n");
-	}
-
-	return 0;
-}
-
-/**
- * @brief Put both sides' NCOs on a known default frequency.
+ * @brief Put the loopback side's NCOs on a known default frequency.
  *
  * A CDUC/FDUC upconverts and a CDDC/FDDC downconverts, so a tone written at
  * f_lut comes back at f_lut + (tx shifts) - (rx shifts). A profile is free to
@@ -347,52 +159,50 @@ static int dma_example_get_tx_rate(struct ad9088_phy *phy,
  * the same frequency cancels the translation, so a tone arrives where it was
  * sent.
  *
- * Idempotent, so it doubles as the undo for anything that retunes an NCO.
- *
  * @param phy - AD9088 device.
  * @return 0 on success, negative error code otherwise.
  */
 static int dma_example_set_default_nco(struct ad9088_phy *phy)
 {
-	uint64_t dac_rate = phy->profile.dac_cfg[TEST_TONE_SIDE]
+	uint64_t dac_rate = phy->profile.dac_cfg[LOOPBACK_SIDE]
 			    .dac_sampling_rate_Hz;
 	int64_t cnco_hz;
 	int64_t tx_cnco = 0;
 	int64_t tx_fnco = 0;
 	int64_t rx_cnco = 0;
 	int64_t rx_fnco = 0;
-	uint8_t cddc = (TEST_TONE_FDDC / 2) % ADI_APOLLO_CDUCS_PER_SIDE;
+	uint8_t cddc = (LOOPBACK_FDUC / 2) % ADI_APOLLO_CDUCS_PER_SIDE;
 	int ret;
 
 	cnco_hz = (int64_t)no_os_div_u64(dac_rate, DEFAULT_CNCO_RATE_DIV);
 
-	ret = ad9088_set_cnco_freq(phy, ADI_APOLLO_TX, TEST_TONE_SIDE, cddc,
+	ret = ad9088_set_cnco_freq(phy, ADI_APOLLO_TX, LOOPBACK_SIDE, cddc,
 				   cnco_hz);
 	if (!ret)
-		ret = ad9088_set_cnco_freq(phy, ADI_APOLLO_RX, TEST_TONE_SIDE,
+		ret = ad9088_set_cnco_freq(phy, ADI_APOLLO_RX, LOOPBACK_SIDE,
 					   cddc, cnco_hz);
 	if (!ret)
-		ret = ad9088_set_fnco_freq(phy, ADI_APOLLO_TX, TEST_TONE_SIDE,
-					   TEST_TONE_FDDC, DEFAULT_FNCO_HZ);
+		ret = ad9088_set_fnco_freq(phy, ADI_APOLLO_TX, LOOPBACK_SIDE,
+					   LOOPBACK_FDUC, DEFAULT_FNCO_HZ);
 	if (!ret)
-		ret = ad9088_set_fnco_freq(phy, ADI_APOLLO_RX, TEST_TONE_SIDE,
-					   TEST_TONE_FDDC, DEFAULT_FNCO_HZ);
+		ret = ad9088_set_fnco_freq(phy, ADI_APOLLO_RX, LOOPBACK_SIDE,
+					   LOOPBACK_FDUC, DEFAULT_FNCO_HZ);
 	if (ret) {
 		pr_err("Tuning the NCOs failed (%d)\n", ret);
 		return ret;
 	}
 
-	ret = ad9088_get_cnco_freq(phy, ADI_APOLLO_TX, TEST_TONE_SIDE, cddc,
+	ret = ad9088_get_cnco_freq(phy, ADI_APOLLO_TX, LOOPBACK_SIDE, cddc,
 				   &tx_cnco);
 	if (!ret)
-		ret = ad9088_get_fnco_freq(phy, ADI_APOLLO_TX, TEST_TONE_SIDE,
-					   TEST_TONE_FDDC, &tx_fnco);
+		ret = ad9088_get_fnco_freq(phy, ADI_APOLLO_TX, LOOPBACK_SIDE,
+					   LOOPBACK_FDUC, &tx_fnco);
 	if (!ret)
-		ret = ad9088_get_cnco_freq(phy, ADI_APOLLO_RX, TEST_TONE_SIDE,
+		ret = ad9088_get_cnco_freq(phy, ADI_APOLLO_RX, LOOPBACK_SIDE,
 					   cddc, &rx_cnco);
 	if (!ret)
-		ret = ad9088_get_fnco_freq(phy, ADI_APOLLO_RX, TEST_TONE_SIDE,
-					   TEST_TONE_FDDC, &rx_fnco);
+		ret = ad9088_get_fnco_freq(phy, ADI_APOLLO_RX, LOOPBACK_SIDE,
+					   LOOPBACK_FDUC, &rx_fnco);
 	if (ret) {
 		pr_err("Reading back the NCOs failed (%d)\n", ret);
 		return ret;
@@ -423,6 +233,29 @@ static int dma_example_set_default_nco(struct ad9088_phy *phy)
 	return 0;
 }
 
+/**
+ * @brief Fill the transmit buffer with the shared sine table.
+ *
+ * One table entry carries a single I/Q pair, so a link with more than one
+ * complex channel needs the entry repeated once per channel at every sample
+ * time. Tiling the table whole keeps the transmitted tone continuous across the
+ * cyclic wrap, which matters because the capture is shorter than the replay and
+ * can start anywhere in it.
+ *
+ * @param num_conv - Converters on the transmit link.
+ * @param size - Buffer length to fill, in bytes.
+ */
+static void dma_example_fill_tone(uint8_t num_conv, uint32_t size)
+{
+	uint32_t lut_len = NO_OS_ARRAY_SIZE(sine_lut_iq);
+	uint32_t words = size / sizeof(dac_buffer_dma[0]);
+	uint32_t stride = num_conv / 2;
+	uint32_t i;
+
+	for (i = 0; i < words; i++)
+		dac_buffer_dma[i] = sine_lut_iq[(i / stride) % lut_len];
+}
+
 int dma_example_main()
 {
 	struct adf4382_dev *adf4382_dev;
@@ -445,31 +278,12 @@ int dma_example_main()
 	uint32_t transfer_size;
 	uint8_t num_conv;
 	uint8_t np;
-	int64_t tone_hz;
-	uint64_t capture_rate;
-	struct no_os_tone_layout rx_layout;
-	struct no_os_tone_layout tx_layout;
-	struct no_os_tone_result measured;
-	struct no_os_tone_result conjugate;
-	/*
-	 * Reused across the three measurements: every field that distinguishes
-	 * them is set at the call site, and the thresholds are common.
-	 */
-	struct no_os_tone_test test = {
-		.limits = {
-			.coherence_min = NO_OS_TONE_COHERENCE_PASS,
-			.spread_max = NO_OS_TONE_SPREAD_MAX,
-		},
-	};
-	bool tone_pass;
-	bool floor_pass;
 	struct axi_dma_transfer tx_transfer;
-	uint64_t tx_rate;
 	uint32_t tx_bram_size = 0;
+	uint32_t tx_lut_bytes;
 	uint32_t tx_samples;
 	uint32_t tx_size;
 	uint8_t tx_num_conv;
-	bool loopback_pass;
 
 	int ret = 0;
 
@@ -626,11 +440,12 @@ int dma_example_main()
 	 * rather than hardcoding it, so a profile change cannot silently
 	 * corrupt the buffer layout.
 	 */
-	num_conv = ad9088_phy->profile.jtx[TEST_TONE_SIDE].tx_link_cfg[0].m_minus1 + 1;
-	np = ad9088_phy->profile.jtx[TEST_TONE_SIDE].tx_link_cfg[0].np_minus1 + 1;
+	num_conv = ad9088_phy->profile.jtx[LOOPBACK_SIDE].tx_link_cfg[0].m_minus1 + 1;
+	np = ad9088_phy->profile.jtx[LOOPBACK_SIDE].tx_link_cfg[0].np_minus1 + 1;
 
-	if (!num_conv || num_conv > MAX_LINK_CONVERTERS) {
-		pr_err("Unexpected converter count M=%u\n", num_conv);
+	if (!num_conv || num_conv > LOOPBACK_CONVERTERS) {
+		pr_err("Converter count M=%u, this example covers one side of "
+		       "up to %u\n", num_conv, LOOPBACK_CONVERTERS);
 		ret = -EINVAL;
 		goto error_topology;
 	}
@@ -641,10 +456,6 @@ int dma_example_main()
 		samples_per_conv = NO_OS_ARRAY_SIZE(adc_buffer_dma) / num_conv;
 
 	transfer_size = samples_per_conv * num_conv * sizeof(adc_buffer_dma[0]);
-
-	rx_layout.num_conv = num_conv;
-	rx_layout.conv_i = TONE_CONV_I;
-	rx_layout.conv_q = TONE_CONV_Q;
 
 	pr_info("Capture geometry: M=%u NP=%u samples/conv=%lu bytes=%lu\n",
 		num_conv, np, (unsigned long)samples_per_conv,
@@ -674,165 +485,33 @@ int dma_example_main()
 		goto error_rx_adc;
 	}
 
-	/* Leave the TX datapath idle: the FNCO tone is injected inside RX. */
+	/* Keep the DAC quiet until the transmit buffer is in place. */
 	axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_ZERO);
 	pr_info("Project configured\n\n");
 
-	ret = dma_example_get_capture_rate(ad9088_phy, rx_adc, &capture_rate);
-	if (ret)
-		goto error_tx_dac;
-
-	tone_hz = (int64_t)no_os_div_u64(capture_rate, TEST_TONE_RATE_DIV);
-
 	/*
-	 * Every measurement below runs from this operating point rather than
-	 * wherever the profile happened to leave the NCOs.
+	 * The loopback runs from this operating point rather than wherever the
+	 * profile happened to leave the NCOs.
 	 */
 	ret = dma_example_set_default_nco(ad9088_phy);
 	if (ret)
 		goto error_tx_dac;
 
-	/*
-	 * Baseline first, with the datapath idle. Test mode is off after
-	 * bring-up, but disable it explicitly so the floor measures a state this
-	 * block guarantees rather than one it assumes. Coherence here should
-	 * collapse to roughly NO_OS_TONE_SCALE/N, which is what shows the
-	 * estimator rejects noise instead of scoring anything handed to it.
-	 */
-	ret = ad9088_set_fnco_test_tone(ad9088_phy, ADI_APOLLO_RX,
-					TEST_TONE_SIDE, TEST_TONE_FDDC, false,
-					0);
-	if (ret) {
-		pr_err("Disabling the RX FNCO test tone failed (%d)\n", ret);
-		goto error_tx_dac;
-	}
-
-	no_os_mdelay(10);
-
-	ret = dma_example_capture(rx_dmac, transfer_size);
-	if (ret)
-		goto error_tx_dac;
-
-	ret = no_os_tone_coherence(adc_buffer_dma, samples_per_conv, &rx_layout,
-				   -tone_hz, capture_rate, &measured);
-	if (ret) {
-		pr_err("Scoring the idle capture failed (%d)\n", ret);
-		goto error_tx_dac;
-	}
-
-	/*
-	 * Held in its own flag rather than ret, since the tone block below issues
-	 * device calls that overwrite ret and the verdicts are combined only once
-	 * every block has run.
-	 */
-	test.name = "Noise floor, datapath idle";
-	test.freq_hz = -tone_hz;
-	test.samples = samples_per_conv;
-	test.sense = NO_OS_TONE_SENSE_QUIET;
-	test.conjugate = NULL;
-	test.tx_amplitude = 0;
-	test.full_scale = 0;
-
-	floor_pass = no_os_tone_report(&test, &measured);
-
-	/*
-	 * Test mode replaces the mixer input with a constant which the NCO then
-	 * rotates, so the FDDC emits a complex tone at the FNCO frequency.
-	 */
-	ret = ad9088_set_fnco_test_tone(ad9088_phy, ADI_APOLLO_RX,
-					TEST_TONE_SIDE, TEST_TONE_FDDC, true,
-					TEST_TONE_OFFSET);
-	if (ret) {
-		pr_err("Enabling the RX FNCO test tone failed (%d)\n", ret);
-		goto error_tx_dac;
-	}
-
-	ret = ad9088_set_fnco_freq(ad9088_phy, ADI_APOLLO_RX, TEST_TONE_SIDE,
-				   TEST_TONE_FDDC, tone_hz);
-	if (ret) {
-		pr_err("Setting the RX FNCO frequency failed (%d)\n", ret);
-		goto error_tone;
-	}
-
-	no_os_mdelay(10);
-
-	ret = dma_example_capture(rx_dmac, transfer_size);
-	if (ret)
-		goto error_tone;
-
-	/*
-	 * An RX FDDC downconverts: it multiplies by exp(-jwn) so that a signal
-	 * at +f_nco lands at DC. The test tone is a constant injected ahead of
-	 * that mixer, so it comes out rotating at -f_nco. Verified on HW -- a
-	 * positive programmed frequency captures as a rotation of the same
-	 * magnitude in the negative direction. A TX FDUC upconverts and would
-	 * need the opposite sign here.
-	 */
-	ret = no_os_tone_coherence(adc_buffer_dma, samples_per_conv, &rx_layout,
-				   -tone_hz, capture_rate, &measured);
-	if (ret) {
-		pr_err("Scoring the tone capture failed (%d)\n", ret);
-		goto error_tone;
-	}
-
-	/*
-	 * A constant of magnitude TEST_TONE_OFFSET rotated by the NCO arrives as
-	 * a complex tone of sqrt(2) times it, so that is the level to reference
-	 * the measurement against. The integer sqrt(2) is why the reported
-	 * ratio lands near rather than exactly at its predicted value.
-	 */
-	test.name = "RX FNCO test tone";
-	test.freq_hz = -tone_hz;
-	test.samples = samples_per_conv;
-	test.sense = NO_OS_TONE_SENSE_TONE;
-	test.conjugate = NULL;
-	test.tx_amplitude = TEST_TONE_OFFSET * 2828 / 1000;
-	test.full_scale = SAMPLE_FULL_SCALE;
-
-	tone_pass = no_os_tone_report(&test, &measured);
-
-	/*
-	 * Everything above validates the RX datapath only: test mode discards
-	 * the FDDC mixer input, so the tone never passes through the DAC, the
-	 * cables or the ADC. Drive the DAC from DMA instead and capture what
-	 * comes back, which is the first measurement that covers the whole
-	 * chain. Test mode has to go first -- it would discard the loopback
-	 * signal exactly as it discards everything else upstream.
-	 */
-	ret = ad9088_set_fnco_test_tone(ad9088_phy, ADI_APOLLO_RX,
-					TEST_TONE_SIDE, TEST_TONE_FDDC, false,
-					0);
-	if (ret) {
-		pr_err("Disabling the RX FNCO test tone failed (%d)\n", ret);
-		goto error_tone;
-	}
-
-	ret = dma_example_get_tx_rate(ad9088_phy, tx_dac, &tx_rate);
-	if (ret)
-		goto error_tone;
-
-	/*
-	 * The tone test retuned the RX FNCO, which stays where it was left and
-	 * would otherwise translate the loopback signal by that much.
-	 */
-	ret = dma_example_set_default_nco(ad9088_phy);
-	if (ret)
-		goto error_tone;
-
-	tx_num_conv = ad9088_phy->profile.jrx[TEST_TONE_SIDE]
+	tx_num_conv = ad9088_phy->profile.jrx[LOOPBACK_SIDE]
 		      .rx_link_cfg[0].m_minus1 + 1;
 
-	if (!tx_num_conv || tx_num_conv > MAX_LINK_CONVERTERS) {
-		pr_err("Unexpected transmit converter count M=%u\n",
-		       tx_num_conv);
+	/*
+	 * A sine table entry is one I/Q pair, so the link has to carry a whole
+	 * number of complex channels for the tiling below to line up.
+	 */
+	if (!tx_num_conv || tx_num_conv > LOOPBACK_CONVERTERS ||
+	    tx_num_conv % 2) {
+		pr_err("Transmit converter count M=%u, this example covers one "
+		       "side of up to %u, in I/Q pairs\n", tx_num_conv,
+		       LOOPBACK_CONVERTERS);
 		ret = -EINVAL;
-		goto error_tone;
+		goto error_tx_dac;
 	}
-
-	/* The transmit link carries its own M, so it needs its own layout. */
-	tx_layout.num_conv = tx_num_conv;
-	tx_layout.conv_i = TONE_CONV_I;
-	tx_layout.conv_q = TONE_CONV_Q;
 
 	/*
 	 * The offload replays its whole BRAM whatever was written into it, so
@@ -845,28 +524,32 @@ int dma_example_main()
 	if (tx_bram_size && tx_bram_size < tx_size)
 		tx_size = tx_bram_size;
 
-	/* The DMAC rejects a source address off its data path width. */
-	tx_size &= ~(uint32_t)(DMA_SRC_WIDTH_BYTES - 1);
-	tx_samples = tx_size / (tx_num_conv * sizeof(dac_buffer_dma[0]));
-	tx_size = tx_samples * tx_num_conv * sizeof(dac_buffer_dma[0]);
-
-	pr_info("Transmitting: M=%u, %lu samples/conv, %lu bytes cyclic\n",
-		tx_num_conv, (unsigned long)tx_samples, (unsigned long)tx_size);
+	/*
+	 * Floor to a whole pass of the sine table so the cyclic wrap leaves no
+	 * phase discontinuity for a capture to straddle -- which matters because
+	 * the capture is shorter than the replay and can start anywhere in it.
+	 */
+	tx_lut_bytes = NO_OS_ARRAY_SIZE(sine_lut_iq) * tx_num_conv *
+		       sizeof(uint16_t);
+	tx_size -= tx_size % tx_lut_bytes;
 
 	/*
-	 * The same frequency the tone test uses. With both sides' NCOs on the
-	 * same default it comes back where it was sent, on a capture bin, and a
-	 * whole number of cycles fits the transmit buffer, so the cyclic wrap
-	 * leaves no phase discontinuity for a capture to straddle -- which
-	 * matters because the capture is shorter than the replay and can start
-	 * anywhere in it.
+	 * A table pass is a whole number of DMAC source beats at every converter
+	 * count this example accepts, so the floor above already satisfies the
+	 * source width. Check it rather than assume it, since the DMAC rejects a
+	 * misaligned transfer with a much less obvious error.
 	 */
-	ret = no_os_tone_fill_iq(dac_buffer_dma, tx_samples, &tx_layout, tone_hz,
-				 tx_rate, LOOPBACK_TX_AMPLITUDE);
-	if (ret) {
-		pr_err("Filling the transmit buffer failed (%d)\n", ret);
-		goto error_tone;
+	if (!tx_size || tx_size % DMA_SRC_WIDTH_BYTES) {
+		pr_err("TX size %lu is not a usable multiple of the %u byte "
+		       "DMAC source width\n", (unsigned long)tx_size,
+		       DMA_SRC_WIDTH_BYTES);
+		ret = -EINVAL;
+		goto error_tx_dac;
 	}
+
+	tx_samples = tx_size / (tx_num_conv * sizeof(uint16_t));
+
+	dma_example_fill_tone(tx_num_conv, tx_size);
 
 	/* MEM_TO_DEV reads DDR, so dirty lines have to land there first. */
 	Xil_DCacheFlushRange((uintptr_t)dac_buffer_dma, tx_size);
@@ -874,7 +557,7 @@ int dma_example_main()
 	ret = axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
 	if (ret) {
 		pr_err("Selecting the DMA data source failed (%d)\n", ret);
-		goto error_tone;
+		goto error_tx_dac;
 	}
 
 	tx_transfer.size = tx_size;
@@ -901,71 +584,29 @@ int dma_example_main()
 		goto error_tx_stream;
 	}
 
+	pr_info("DMA_EXAMPLE Tx: address=%#lx samples=%lu channels=%u bits=%lu\n",
+		(unsigned long)(uintptr_t)dac_buffer_dma,
+		(unsigned long)tx_samples,
+		tx_num_conv, (unsigned long)(8 * sizeof(uint16_t)));
+
 	no_os_mdelay(10);
 
 	ret = dma_example_capture(rx_dmac, transfer_size);
 	if (ret)
 		goto error_tx_stream;
 
-	/*
-	 * The tone test scores -tone_hz because test mode injects a constant
-	 * ahead of a downconverting mixer. This one transmits a real +tone_hz
-	 * and the aligned mixers cancel, so it arrives at +tone_hz. The second
-	 * probe covers the transmitted I/Q ordering, the one convention in this
-	 * path no measurement has confirmed yet: a swapped pair sends -f.
-	 */
-	ret = no_os_tone_coherence(adc_buffer_dma, samples_per_conv, &rx_layout,
-				   tone_hz, capture_rate, &measured);
-	if (ret) {
-		pr_err("Scoring the loopback capture failed (%d)\n", ret);
-		goto error_tx_stream;
-	}
-
-	ret = no_os_tone_coherence(adc_buffer_dma, samples_per_conv, &rx_layout,
-				   -tone_hz, capture_rate, &conjugate);
-	if (ret) {
-		pr_err("Probing the loopback conjugate failed (%d)\n", ret);
-		goto error_tx_stream;
-	}
-
-	/*
-	 * Either sign passes: the conjugate probe is what covers the transmitted
-	 * I/Q ordering, and the report names a swap rather than failing on it.
-	 */
-	test.name = "Cabled DAC -> ADC loopback";
-	test.freq_hz = tone_hz;
-	test.samples = samples_per_conv;
-	test.sense = NO_OS_TONE_SENSE_EITHER;
-	test.conjugate = &conjugate;
-	test.tx_amplitude = LOOPBACK_TX_AMPLITUDE;
-	test.full_scale = SAMPLE_FULL_SCALE;
-
-	loopback_pass = no_os_tone_report(&test, &measured);
-
-	/*
-	 * Sample count is the total across converters, not per converter, which
-	 * is what the capture script's de-interleave expects: every field here
-	 * transfers to its command line unchanged.
-	 */
-	pr_info("RX buffer address: 0x%08lx samples=%lu channels=%u bits=%u\n",
-		(unsigned long)adc_buffer_dma,
-		(unsigned long)samples_per_conv * num_conv,
+	pr_info("DMA_EXAMPLE Rx: address=%#lx samples=%lu channels=%u bits=%u\n",
+		(unsigned long)(uintptr_t)adc_buffer_dma,
+		(unsigned long)samples_per_conv,
 		num_conv, np);
 
-	ret = (floor_pass && tone_pass && loopback_pass) ? 0 : -EIO;
-	if (ret)
-		goto error_tx_stream;
+	while (1);
 
-	pr_info("Parked for JTAG capture; reset the board to continue\n");
-	while (1)
-      		no_os_mdelay(1000);
+	jesd204_fsm_stop(topology, JESD204_LINKS_ALL);
 
 error_tx_stream:
 	axi_dmac_transfer_stop(tx_dmac);
 	axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_ZERO);
-error_tone:
-	ad9088_set_fnco_test_tone(ad9088_phy, ADI_APOLLO_RX, TEST_TONE_SIDE,
-				  TEST_TONE_FDDC, false, 0);
 error_tx_dac:
 	axi_dac_remove(tx_dac);
 error_rx_adc:

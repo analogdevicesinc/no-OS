@@ -463,8 +463,14 @@ struct ad9088_init_param ad9088_ip = {
 	.mcs_track_decimation = 0,	/* use the driver default */
 	.mcs_track_win = 0,		/* keep the device profile's window */
 	/*
-	 * The one-shot alignment performed during clock sync is enough here, so
-	 * the provider is not left realigning in the background.
+	 * The one-shot alignment during clock sync puts the Apollo's SYSREF
+	 * (ADF4030 ch5) and the FPGA's (ch8) on the same reference, but MCS
+	 * calibration then moves ch5 alone -- it gates that channel's driver
+	 * for the path-delay round trip and realigns it against the measured
+	 * delay, leaving ch8 where clock sync left it. Background alignment
+	 * covers every channel synced on link-up, so ch8 follows ch5 instead of
+	 * drifting away from it and taking the FPGA's receiver out of DATA.
+	 * Costs ongoing SPI traffic on the provider.
 	 */
-	.aion_background_serial_alignment_en = false,
+	.aion_background_serial_alignment_en = true,
 };

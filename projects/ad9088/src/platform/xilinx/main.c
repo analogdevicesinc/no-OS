@@ -49,10 +49,6 @@
 #include "dma_example.h"
 #endif
 
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
-
 /**
  * @brief Main function execution for xilinx platform.
  * @return ret - Result of the enabled examples execution.
@@ -66,7 +62,6 @@ int main()
 	/* Enable the data cache. */
 	Xil_DCacheEnable();
 
-#if defined(BASIC_EXAMPLE) || defined(DMA_EXAMPLE)
 	struct no_os_uart_desc *uart_desc;
 
 	ret = no_os_uart_init(&uart_desc, &platform_uart_ip);
@@ -74,7 +69,6 @@ int main()
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
-#endif
 
 #ifdef BASIC_EXAMPLE
 	ret = basic_example_main();
@@ -82,10 +76,6 @@ int main()
 
 #ifdef DMA_EXAMPLE
 	ret = dma_example_main();
-#endif
-
-#ifdef IIO_EXAMPLE
-	ret = iio_example_main();
 #endif
 
 	return ret;
