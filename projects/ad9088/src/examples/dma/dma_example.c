@@ -39,17 +39,14 @@
 #include "ad9088.h"
 #include "jesd204.h"
 #include "axi_adxcvr.h"
-#include "axi_adc_core.h"
-#include "axi_dac_core.h"
 #include "axi_dmac.h"
 #include "no_os_axi_io.h"
 #include "jesd204_clk.h"
 #include "parameters.h"
 #include "xil_cache.h"
 
-/* Side and datapath the loopback runs on */
+/* Side the loopback runs on; every datapath on it is used. */
 #define LOOPBACK_SIDE		0
-#define LOOPBACK_FDUC		0
 
 /*
  * Side 0 / link 0 only, which carries AD9088_TX_JESD_M converters. The capture
@@ -81,19 +78,7 @@
  * HDL build. The driver rejects a transfer that is not a multiple of it.
  */
 #define DMA_SRC_WIDTH_BYTES	128
-
 #define DMA_BUFFER_ALIGN	1024
-
-/*
- * The transmitted tone is sine_lut_iq[], the shared quadrature table declared
- * by axi_dac_core.h. Each entry packs one I/Q pair, I in the low half and Q in
- * the high half, so on little-endian it lands as converter 0 then converter 1
- * of the transmit link. A quarter period spans 32 entries, so the table holds
- * eight cycles over its 1024 entries and the tone comes out at the DAC
- * datapath rate over 128 -- well inside the FDDC passband. Peak per component
- * is 0x2666, about 30% of full scale, which leaves the received tone inside
- * range after cable and converter loss.
- */
 
 /*
  * Fixed-capacity static capture buffer, one side of the link. Samples per
@@ -111,53 +96,20 @@ static uint32_t dac_buffer_dma[TX_OFFLOAD_BRAM_BYTES / sizeof(uint32_t)]
 __attribute__((aligned(DMA_BUFFER_ALIGN)));
 
 /**
- * @brief Capture one buffer from the RX DMAC into DDR.
- * @param rx_dmac - RX DMA controller.
- * @param size - Transfer size in bytes.
- * @return 0 on success, negative error code otherwise.
- */
-static int dma_example_capture(struct axi_dmac *rx_dmac, uint32_t size)
-{
-	struct axi_dma_transfer read_transfer = {
-		.size = size,
-		.transfer_done = 0,
-		.cyclic = NO,
-		.src_addr = 0,
-		.dest_addr = (uintptr_t)adc_buffer_dma,
-	};
-	int ret;
-
-	ret = axi_dmac_transfer_start(rx_dmac, &read_transfer);
-	if (ret) {
-		pr_err("RX DMA transfer start failed (%d)\n", ret);
-		return ret;
-	}
-
-	ret = axi_dmac_transfer_wait_completion(rx_dmac, 1000);
-	if (ret) {
-		pr_err("RX DMA transfer timed out (%d)\n", ret);
-		return ret;
-	}
-
-	/*
-	 * main() enables the data cache unconditionally, so the CPU would
-	 * otherwise read stale lines instead of what the DMA just wrote.
-	 */
-	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer_dma, size);
-
-	return 0;
-}
-
-/**
  * @brief Put the loopback side's NCOs on a known default frequency.
  *
  * A CDUC/FDUC upconverts and a CDDC/FDDC downconverts, so a tone written at
  * f_lut comes back at f_lut + (tx shifts) - (rx shifts). A profile is free to
  * leave the transmit and receive NCOs on different frequencies, and any offset
  * between them translates the tone by that much -- generally far enough to put
- * it outside the FDDC passband whatever it was transmitted at. Tuning both to
- * the same frequency cancels the translation, so a tone arrives where it was
- * sent.
+ * it outside the FDDC passband whatever it was transmitted at. Tuning all of
+ * them to the same frequency cancels the translation, so a tone arrives where
+ * it was sent.
+ *
+ * Every datapath on the side is tuned, not just the one carrying the first I/Q
+ * pair: the link's converters are spread across several FDUC/FDDC pairs, and a
+ * pair left on the profile's own frequencies loses its tone off the passband
+ * while the rest of the capture looks fine.
  *
  * @param phy - AD9088 device.
  * @return 0 on success, negative error code otherwise.
@@ -171,64 +123,91 @@ static int dma_example_set_default_nco(struct ad9088_phy *phy)
 	int64_t tx_fnco = 0;
 	int64_t rx_cnco = 0;
 	int64_t rx_fnco = 0;
-	uint8_t cddc = (LOOPBACK_FDUC / 2) % ADI_APOLLO_CDUCS_PER_SIDE;
+	uint8_t cddc;
+	uint8_t fddc;
 	int ret;
 
 	cnco_hz = (int64_t)no_os_div_u64(dac_rate, DEFAULT_CNCO_RATE_DIV);
 
-	ret = ad9088_set_cnco_freq(phy, ADI_APOLLO_TX, LOOPBACK_SIDE, cddc,
-				   cnco_hz);
-	if (!ret)
-		ret = ad9088_set_cnco_freq(phy, ADI_APOLLO_RX, LOOPBACK_SIDE,
+	for (cddc = 0; cddc < ADI_APOLLO_CDDCS_PER_SIDE; cddc++) {
+		ret = ad9088_set_cnco_freq(phy, ADI_APOLLO_TX, LOOPBACK_SIDE,
 					   cddc, cnco_hz);
-	if (!ret)
+		if (!ret)
+			ret = ad9088_set_cnco_freq(phy, ADI_APOLLO_RX,
+						   LOOPBACK_SIDE, cddc,
+						   cnco_hz);
+		if (ret) {
+			pr_err("Tuning CDDC/CDUC %u failed (%d)\n", cddc, ret);
+			return ret;
+		}
+	}
+
+	for (fddc = 0; fddc < ADI_APOLLO_FDDCS_PER_SIDE; fddc++) {
 		ret = ad9088_set_fnco_freq(phy, ADI_APOLLO_TX, LOOPBACK_SIDE,
-					   LOOPBACK_FDUC, DEFAULT_FNCO_HZ);
-	if (!ret)
-		ret = ad9088_set_fnco_freq(phy, ADI_APOLLO_RX, LOOPBACK_SIDE,
-					   LOOPBACK_FDUC, DEFAULT_FNCO_HZ);
-	if (ret) {
-		pr_err("Tuning the NCOs failed (%d)\n", ret);
-		return ret;
+					   fddc, DEFAULT_FNCO_HZ);
+		if (!ret)
+			ret = ad9088_set_fnco_freq(phy, ADI_APOLLO_RX,
+						   LOOPBACK_SIDE, fddc,
+						   DEFAULT_FNCO_HZ);
+		if (ret) {
+			pr_err("Tuning FDDC/FDUC %u failed (%d)\n", fddc, ret);
+			return ret;
+		}
 	}
-
-	ret = ad9088_get_cnco_freq(phy, ADI_APOLLO_TX, LOOPBACK_SIDE, cddc,
-				   &tx_cnco);
-	if (!ret)
-		ret = ad9088_get_fnco_freq(phy, ADI_APOLLO_TX, LOOPBACK_SIDE,
-					   LOOPBACK_FDUC, &tx_fnco);
-	if (!ret)
-		ret = ad9088_get_cnco_freq(phy, ADI_APOLLO_RX, LOOPBACK_SIDE,
-					   cddc, &rx_cnco);
-	if (!ret)
-		ret = ad9088_get_fnco_freq(phy, ADI_APOLLO_RX, LOOPBACK_SIDE,
-					   LOOPBACK_FDUC, &rx_fnco);
-	if (ret) {
-		pr_err("Reading back the NCOs failed (%d)\n", ret);
-		return ret;
-	}
-
-	pr_info("  NCO tx c/f %ld/%ld kHz  rx c/f %ld/%ld kHz  net %ld kHz\n",
-		(long)no_os_div_s64(tx_cnco, 1000),
-		(long)no_os_div_s64(tx_fnco, 1000),
-		(long)no_os_div_s64(rx_cnco, 1000),
-		(long)no_os_div_s64(rx_fnco, 1000),
-		(long)no_os_div_s64((tx_cnco + tx_fnco) - (rx_cnco + rx_fnco),
-				    1000));
 
 	/*
-	 * The tuning word drops its fractional part, so a rate that the divisor
-	 * does not divide exactly lands a few Hz off. Far too little to move the
-	 * tone off its bin, but it should not pass unremarked.
+	 * Read every one of them back rather than trusting the writes: a tone is
+	 * only where it was sent if the whole side agrees, so one datapath that
+	 * did not take the tuning is enough to leave a converter pair empty.
 	 */
-	if (tx_cnco != cnco_hz || rx_cnco != cnco_hz)
-		pr_info("  Warning: CNCO asked %ld Hz, tuned tx %ld rx %ld\n",
-			(long)cnco_hz, (long)tx_cnco, (long)rx_cnco);
+	for (fddc = 0; fddc < ADI_APOLLO_FDDCS_PER_SIDE; fddc++) {
+		cddc = (fddc / 2) % ADI_APOLLO_CDDCS_PER_SIDE;
 
-	if ((tx_cnco + tx_fnco) != (rx_cnco + rx_fnco)) {
-		pr_err("The NCOs did not take the default tuning\n");
-		return -EIO;
+		ret = ad9088_get_cnco_freq(phy, ADI_APOLLO_TX, LOOPBACK_SIDE,
+					   cddc, &tx_cnco);
+		if (!ret)
+			ret = ad9088_get_fnco_freq(phy, ADI_APOLLO_TX,
+						   LOOPBACK_SIDE, fddc,
+						   &tx_fnco);
+		if (!ret)
+			ret = ad9088_get_cnco_freq(phy, ADI_APOLLO_RX,
+						   LOOPBACK_SIDE, cddc,
+						   &rx_cnco);
+		if (!ret)
+			ret = ad9088_get_fnco_freq(phy, ADI_APOLLO_RX,
+						   LOOPBACK_SIDE, fddc,
+						   &rx_fnco);
+		if (ret) {
+			pr_err("Reading back the NCOs failed (%d)\n", ret);
+			return ret;
+		}
+
+		/*
+		 * The tuning word drops its fractional part, so a rate that the
+		 * divisor does not divide exactly lands a few Hz off. Far too
+		 * little to move the tone off its bin, but it should not pass
+		 * unremarked.
+		 */
+		if (tx_cnco != cnco_hz || rx_cnco != cnco_hz)
+			pr_info("  Warning: CDDC%u asked %ld Hz, tuned tx %ld "
+				"rx %ld\n", cddc, (long)cnco_hz, (long)tx_cnco,
+				(long)rx_cnco);
+
+		if ((tx_cnco + tx_fnco) != (rx_cnco + rx_fnco)) {
+			pr_err("CDDC%u/FDDC%u did not take the default tuning: "
+			       "tx c/f %ld/%ld kHz  rx c/f %ld/%ld kHz\n", cddc,
+			       fddc, (long)no_os_div_s64(tx_cnco, 1000),
+			       (long)no_os_div_s64(tx_fnco, 1000),
+			       (long)no_os_div_s64(rx_cnco, 1000),
+			       (long)no_os_div_s64(rx_fnco, 1000));
+			return -EIO;
+		}
 	}
+
+	pr_info("  NCOs: %u coarse at %ld kHz, %u fine at %ld Hz, tx and rx "
+		"matched\n", (unsigned)ADI_APOLLO_CDDCS_PER_SIDE,
+		(long)no_os_div_s64(cnco_hz, 1000),
+		(unsigned)ADI_APOLLO_FDDCS_PER_SIDE, (long)DEFAULT_FNCO_HZ);
 
 	return 0;
 }
@@ -278,14 +257,29 @@ int dma_example_main()
 	uint32_t transfer_size;
 	uint8_t num_conv;
 	uint8_t np;
-	struct axi_dma_transfer tx_transfer;
 	uint32_t tx_bram_size = 0;
 	uint32_t tx_lut_bytes;
 	uint32_t tx_samples;
 	uint32_t tx_size;
 	uint8_t tx_num_conv;
-
 	int ret = 0;
+
+	struct axi_dma_transfer tx_transfer = {
+		.size = 0,
+		.transfer_done = 0,
+		.cyclic = CYCLIC,
+		.src_addr = (uintptr_t)dac_buffer_dma,
+		.dest_addr = 0,
+	};
+
+	struct axi_dma_transfer rx_transfer = {
+		.size = 0,
+		.transfer_done = 0,
+		.cyclic = NO,
+		.src_addr = 0,
+		.dest_addr = (uintptr_t)adc_buffer_dma,
+	};
+
 
 	pr_info("Enter DMA example\n");
 
@@ -461,24 +455,14 @@ int dma_example_main()
 		num_conv, np, (unsigned long)samples_per_conv,
 		(unsigned long)transfer_size);
 
-	struct axi_adc_init rx_adc_init = {
-		.name = "rx_adc",
-		.base = RX_CORE_BASEADDR,
-		.num_channels = num_conv,
-	};
-
-	struct axi_dac_init tx_dac_init = {
-		.name = "tx_dac",
-		.base = TX_CORE_BASEADDR,
-		.num_channels = num_conv,
-	};
-
+	rx_adc_init.num_channels = num_conv;
 	ret = axi_adc_init(&rx_adc, &rx_adc_init);
 	if (ret) {
 		pr_err("RX TPL core init failed (%d)\n", ret);
 		goto error_topology;
 	}
 
+	tx_dac_init.num_channels = num_conv;
 	ret = axi_dac_init(&tx_dac, &tx_dac_init);
 	if (ret) {
 		pr_err("TX TPL core init failed (%d)\n", ret);
@@ -561,10 +545,6 @@ int dma_example_main()
 	}
 
 	tx_transfer.size = tx_size;
-	tx_transfer.transfer_done = 0;
-	tx_transfer.cyclic = CYCLIC;
-	tx_transfer.src_addr = (uintptr_t)dac_buffer_dma;
-	tx_transfer.dest_addr = 0;
 
 	/*
 	 * Cyclic keeps the tone running for the whole capture. It is a build
@@ -589,11 +569,22 @@ int dma_example_main()
 		(unsigned long)tx_samples,
 		tx_num_conv, (unsigned long)(8 * sizeof(uint16_t)));
 
-	no_os_mdelay(10);
+	no_os_mdelay(50);
 
-	ret = dma_example_capture(rx_dmac, transfer_size);
-	if (ret)
+	rx_transfer.size = transfer_size;
+	ret = axi_dmac_transfer_start(rx_dmac, &rx_transfer);
+	if (ret) {
+		pr_err("RX DMA transfer start failed (%d)\n", ret);
 		goto error_tx_stream;
+	}
+
+	ret = axi_dmac_transfer_wait_completion(rx_dmac, 1000);
+	if (ret) {
+		pr_err("RX DMA transfer timed out (%d)\n", ret);
+		goto error_tx_stream;
+	}
+
+	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer_dma, transfer_size);
 
 	pr_info("DMA_EXAMPLE Rx: address=%#lx samples=%lu channels=%u bits=%u\n",
 		(unsigned long)(uintptr_t)adc_buffer_dma,

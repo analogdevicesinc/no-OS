@@ -47,6 +47,8 @@
 #include "axi_jesd204_rx.h"
 #include "axi_jesd204_tx.h"
 #include "axi_adxcvr.h"
+#include "axi_adc_core.h"
+#include "axi_dac_core.h"
 #include "jesd204_clk.h"
 
 #include "apollo_cpu_device_profile_types.h"
@@ -111,6 +113,8 @@ extern struct jesd204_tx_init			tx_jesd204_ip;
 extern struct adxcvr_init			rx_adxcvr_ip;
 extern struct adxcvr_init			tx_adxcvr_ip;
 extern struct ad9088_init_param			ad9088_ip;
+extern struct axi_adc_init 			rx_adc_init;
+extern struct axi_dac_init 			tx_dac_init;	
 
 /**
  * @brief Hand the AD9088 the clock chips its MCS calibration drives.

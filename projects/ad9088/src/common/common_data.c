@@ -295,6 +295,18 @@ struct adxcvr_init rx_adxcvr_ip = {
 	.export_no_os_clk = true,
 };
 
+struct axi_adc_init rx_adc_init = {
+	.name = "rx_adc",
+	.base = RX_CORE_BASEADDR,
+	.num_channels = 0,
+};
+
+struct axi_dac_init tx_dac_init = {
+	.name = "tx_dac",
+	.base = TX_CORE_BASEADDR,
+	.num_channels = 0,
+};
+
 /*
  * MCS calibration accessors.
  *
