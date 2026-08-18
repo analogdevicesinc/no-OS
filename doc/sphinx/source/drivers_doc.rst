@@ -234,3 +234,11 @@ COLOR
    :glob:
 
    drivers/color/*
+
+HEALTH
+======
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   drivers/health/*
