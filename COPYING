@@ -13,6 +13,7 @@ The full text of every license used by Analog Devices' own no-OS code is
 collected under LICENSES/, grouped by role:
 
 	LICENSES/preferred/    licenses to use for new code
+	LICENSES/permissive/   permissive, allowed, but not the default
 
 Bundled third-party libraries under libraries/ each carry their own
 LICENSE / COPYING file in their directory.
