@@ -41,6 +41,10 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ade9000)
 no_os_sources_ifdef(CONFIG_METER_ADE9078 ${CMAKE_CURRENT_SOURCE_DIR}/ade9078/ade9078.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ade9078)
 
+# ade9039
+no_os_sources_ifdef(CONFIG_METER_ADE9039 ${CMAKE_CURRENT_SOURCE_DIR}/ade9039/ade9039.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ade9039)
+
 # ade9113
 no_os_sources_ifdef(CONFIG_METER_ADE9113 ${CMAKE_CURRENT_SOURCE_DIR}/ade9113/ade9113.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ade9113)
