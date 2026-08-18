@@ -53,20 +53,7 @@
 
 #include "apollo_cpu_device_profile_types.h"
 
-/*UC42*/
-#define AD9088_RX_JESD_F			1
-#define AD9088_RX_JESD_K			256
-#define AD9088_RX_JESD_SUBCLASS			1
-
-#define AD9088_TX_JESD_F			1
-#define AD9088_TX_JESD_K			256
-#define AD9088_TX_JESD_M 			4
-#define AD9088_TX_JESD_N			16
-#define AD9088_TX_JESD_NP			16
-#define AD9088_TX_JESD_HD			0
-#define AD9088_TX_JESD_CS			0
-#define AD9088_TX_JESD_SUBCLASS			1
-
+#define AD9088_JESD_SUBCLASS			1
 #define AD9088_LANE_RATE_KHZ			20625000
 
 /*

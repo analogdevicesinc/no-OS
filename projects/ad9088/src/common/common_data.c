@@ -105,16 +105,6 @@ struct adf4382_init_param adf4382_ip = {
 	.id = ID_ADF4382A,
 };
 
-
-/*
- * PLL2 runs at 2.5 GHz, so each output is 2500 MHz / divider.
- *
- * Channel 3 feeds the ADF4030's BSYNC0 input, not the FPGA - the FPGA SYSREF
- * comes from the ADF4030 (ch8). It is marked .is_sysref so
- * hmc7044_jesd204_link_pre_setup() retunes it to the link's LEMC rate
- * (9.765625 MHz, divider 256) rather than leaving the static /512 = 4.88 MHz,
- * which is only half the LEMC rate.
- */
 struct hmc7044_chan_spec chan_spec[] = {
 	{
 		.num = 1,		// ADF4030_REFIN
@@ -248,27 +238,22 @@ struct axi_dmac_init tx_dmac_ip = {
 	IRQ_DISABLED
 };
 
+/*
+ * Only the clock rates are given here. The link parameters these structures
+ * also carry are applied by axi_jesd204_{rx,tx}_init_legacy(); on the JESD204
+ * FSM path the cores are configured from the link the FSM derives from the
+ * device profile instead, so setting them here would document nothing.
+ */
 struct jesd204_rx_init rx_jesd204_ip = {
 	.name = "rx_jesd",
 	.base = RX_JESD_BASEADDR,
-	.octets_per_frame = AD9088_RX_JESD_F,
-	.frames_per_multiframe = AD9088_RX_JESD_K,
-	.subclass = AD9088_RX_JESD_SUBCLASS,
 	.device_clk_khz = AD9088_DEVICE_CLK_KHZ,
-	.lane_clk_khz = AD9088_LANE_RATE_KHZ	
+	.lane_clk_khz = AD9088_LANE_RATE_KHZ
 };
 
 struct jesd204_tx_init tx_jesd204_ip = {
 	.name = "tx_jesd",
 	.base = TX_JESD_BASEADDR,
-	.octets_per_frame = AD9088_TX_JESD_F,
-	.frames_per_multiframe = AD9088_TX_JESD_K,
-	.converters_per_device = AD9088_TX_JESD_M,
-	.converter_resolution = AD9088_TX_JESD_N,
-	.bits_per_sample = AD9088_TX_JESD_NP,
-	.high_density = AD9088_TX_JESD_HD,
-	.control_bits_per_sample = AD9088_TX_JESD_CS,
-	.subclass = AD9088_TX_JESD_SUBCLASS,
 	.device_clk_khz = AD9088_DEVICE_CLK_KHZ,
 	.lane_clk_khz = AD9088_LANE_RATE_KHZ
 };
@@ -444,12 +429,7 @@ struct ad9088_init_param ad9088_ip = {
 	.spi_init = &ad9088_spi_ip, // to be set by the user
 	.gpio_reset = &gpio_reset_ip, // to be set by the user
 	.gpio_tri_req = NULL, // to be set by the user
-	.gpio_rx1_en = NULL, // to be set by the user
-	.gpio_rx2_en = NULL, // to be set by the user
-	.gpio_tx1_en = NULL, // to be set by the user
-	.gpio_tx2_en = NULL, // to be set by the user
 	.versal_xvr_reset = NULL, // to be set by the user
-	.device_profile_fw_name = "id01_uc42_ce_vck190.bin",
 	.spi_3wire_en = false,
 	.rx_real_channel_en = false,
 	.tx_real_channel_en = false,
@@ -458,7 +438,7 @@ struct ad9088_init_param ad9088_ip = {
 	.trig_sync_en = false,
 	.standalone_en = false,
 	.nyquist_zone = AD9088_NYQUIST_ZONE,
-	.subclass = AD9088_TX_JESD_SUBCLASS,
+	.subclass = AD9088_JESD_SUBCLASS,
 	.jtx0_logical_lane_mapping = AD9088_TX0_LOGICAL_LANE_MAPPING,
 	.jtx1_logical_lane_mapping = AD9088_TX1_LOGICAL_LANE_MAPPING,
 	.jrx0_physical_lane_mapping = AD9088_RX0_PHYSICAL_LANE_MAPPING,
@@ -475,14 +455,12 @@ struct ad9088_init_param ad9088_ip = {
 	.mcs_track_decimation = 0,	/* use the driver default */
 	.mcs_track_win = 0,		/* keep the device profile's window */
 	/*
-	 * The one-shot alignment during clock sync puts the Apollo's SYSREF
-	 * (ADF4030 ch5) and the FPGA's (ch8) on the same reference, but MCS
-	 * calibration then moves ch5 alone -- it gates that channel's driver
-	 * for the path-delay round trip and realigns it against the measured
-	 * delay, leaving ch8 where clock sync left it. Background alignment
-	 * covers every channel synced on link-up, so ch8 follows ch5 instead of
-	 * drifting away from it and taking the FPGA's receiver out of DATA.
-	 * Costs ongoing SPI traffic on the provider.
+	 * The one-shot alignment performed during clock sync is enough here, so
+	 * the provider is not left realigning in the background. Note it would
+	 * not undo the deskew MCS programs onto the Apollo's SYSREF channel
+	 * either: the provider aligns each channel to its reference plus that
+	 * channel's own delay, so background alignment preserves a programmed
+	 * offset rather than removing it.
 	 */
-	.aion_background_serial_alignment_en = true,
+	.aion_background_serial_alignment_en = false,
 };

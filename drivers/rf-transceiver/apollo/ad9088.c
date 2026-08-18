@@ -1187,10 +1187,6 @@ int ad9088_remove(struct ad9088_phy *phy)
 	jesd204_dev_unregister(phy->jdev);
 	adi_apollo_device_hw_close(&phy->ad9088);
 
-	no_os_gpio_remove(phy->tx2_en_gpio);
-	no_os_gpio_remove(phy->tx1_en_gpio);
-	no_os_gpio_remove(phy->rx2_en_gpio);
-	no_os_gpio_remove(phy->rx1_en_gpio);
 	no_os_gpio_remove(phy->triq_req_gpio);
 	no_os_gpio_remove(phy->reset_gpio);
 	no_os_spi_remove(phy->spi);

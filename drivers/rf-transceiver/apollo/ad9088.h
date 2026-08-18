@@ -253,10 +253,6 @@ struct ad9088_init_param {
 	struct no_os_spi_init_param *spi_init; //
 	struct no_os_gpio_init_param *gpio_reset; //
 	struct no_os_gpio_init_param *gpio_tri_req; //
-	struct no_os_gpio_init_param *gpio_rx1_en; //
-	struct no_os_gpio_init_param *gpio_rx2_en; //
-	struct no_os_gpio_init_param *gpio_tx1_en; //
-	struct no_os_gpio_init_param *gpio_tx2_en; //
 	struct no_os_gpio_init_param *versal_xvr_reset; //
 	const char *device_profile_fw_name;
 	// struct no_os_regulator_init_param *supply_reg;
@@ -310,10 +306,6 @@ struct ad9088_phy {
 	// struct bin_attribute cfir;
 	// struct gpio_chip gpiochip;
 
-	struct no_os_gpio_desc *rx1_en_gpio;
-	struct no_os_gpio_desc *rx2_en_gpio;
-	struct no_os_gpio_desc *tx1_en_gpio;
-	struct no_os_gpio_desc *tx2_en_gpio;
 	struct no_os_gpio_desc *triq_req_gpio;
 	struct no_os_gpio_desc *reset_gpio;
 	// struct regulator *supply_reg;

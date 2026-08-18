@@ -45,13 +45,16 @@
 #include "parameters.h"
 #include "xil_cache.h"
 
-/* Side the loopback runs on; every datapath on it is used. */
+/*
+ * Side the loopback runs on. The first link of that side carries it, and every
+ * datapath on the side is used.
+ */
 #define LOOPBACK_SIDE		0
 
 /*
- * Side 0 / link 0 only, which carries AD9088_TX_JESD_M converters. The capture
- * buffer geometry and the I/Q pairing below both assume it, so a wider link is
- * rejected rather than captured half-wrong.
+ * Most converters this example handles on that link. The capture buffer
+ * geometry and the I/Q pairing below both assume it, so a link carrying more
+ * is rejected rather than captured half-wrong.
  */
 #define LOOPBACK_CONVERTERS	4
 
@@ -65,12 +68,13 @@
 #define DEFAULT_FNCO_HZ		0
 
 /*
- * The TX data offload replays its whole BRAM regardless of how much was written
- * into it, so anything left unwritten comes back as noise. This bounds the
- * static buffer; the depth the offload actually has is read back from its
- * memory size register at runtime and the transfer clamped to the smaller.
+ * The TX data offload replays all of its memory regardless of how much was
+ * written into it, so anything left unwritten comes back as noise. This is a
+ * ceiling for the static buffer below; the depth the offload actually has is
+ * read back from its memory size register at runtime and the transfer clamped
+ * to the smaller of the two.
  */
-#define TX_OFFLOAD_BRAM_BYTES		(512 * 1024)
+#define TX_OFFLOAD_MAX_BYTES		(512 * 1024)
 #define AXI_DO_REG_MEMORY_SIZE_LSB	0x0014
 
 /*
@@ -81,18 +85,17 @@
 #define DMA_BUFFER_ALIGN	1024
 
 /*
- * Fixed-capacity static capture buffer, one side of the link. Samples per
- * converter is derived from the link's M at runtime and clamped to what fits
- * here.
+ * Fixed-capacity static capture buffer. Samples per converter is derived from
+ * the link's M at runtime and clamped to what fits here.
  */
 static uint16_t adc_buffer_dma[ADC_BUFFER_SAMPLES * LOOPBACK_CONVERTERS]
 __attribute__((aligned(DMA_BUFFER_ALIGN)));
 
 /*
- * Sized to the whole TX offload BRAM, see TX_OFFLOAD_BRAM_BYTES. Held as 32-bit
- * words so a sine table entry can be written straight into it.
+ * Sized to cover the whole TX offload memory, see TX_OFFLOAD_MAX_BYTES. Held as
+ * 32-bit words so a sine table entry can be written straight into it.
  */
-static uint32_t dac_buffer_dma[TX_OFFLOAD_BRAM_BYTES / sizeof(uint32_t)]
+static uint32_t dac_buffer_dma[TX_OFFLOAD_MAX_BYTES / sizeof(uint32_t)]
 __attribute__((aligned(DMA_BUFFER_ALIGN)));
 
 /**
@@ -118,11 +121,11 @@ static int dma_example_set_default_nco(struct ad9088_phy *phy)
 {
 	uint64_t dac_rate = phy->profile.dac_cfg[LOOPBACK_SIDE]
 			    .dac_sampling_rate_Hz;
-	int64_t cnco_hz;
 	int64_t tx_cnco = 0;
 	int64_t tx_fnco = 0;
 	int64_t rx_cnco = 0;
 	int64_t rx_fnco = 0;
+	int64_t cnco_hz;
 	uint8_t cddc;
 	uint8_t fddc;
 	int ret;
@@ -237,31 +240,31 @@ static void dma_example_fill_tone(uint8_t num_conv, uint32_t size)
 
 int dma_example_main()
 {
+	struct no_os_clk_desc rx_lane_clk = {0};
+	struct no_os_clk_desc tx_lane_clk = {0};
+	struct jesd204_clk rx_jesd_clk = {0};
+	struct jesd204_clk tx_jesd_clk = {0};
+	struct axi_jesd204_rx *rx_jesd;
+	struct axi_jesd204_tx *tx_jesd;
+	uint32_t tx_offload_size = 0;
 	struct adf4382_dev *adf4382_dev;
 	struct hmc7044_dev *hmc7044_dev;
 	struct adf4030_dev *adf4030_dev;
-	struct axi_jesd204_rx *rx_jesd;
-	struct axi_jesd204_tx *tx_jesd;
+	struct ad9088_phy *ad9088_phy;
+	uint32_t samples_per_conv;
 	struct adxcvr *rx_adxcvr;
 	struct adxcvr *tx_adxcvr;
-	struct jesd204_clk rx_jesd_clk = {0};
-	struct jesd204_clk tx_jesd_clk = {0};
-	struct no_os_clk_desc rx_lane_clk = {0};
-	struct no_os_clk_desc tx_lane_clk = {0};
 	struct axi_dmac *rx_dmac;
 	struct axi_dmac *tx_dmac;
-	struct ad9088_phy *ad9088_phy;
+	uint32_t transfer_size;
+	uint32_t tx_lut_bytes;
 	struct axi_adc *rx_adc;
 	struct axi_dac *tx_dac;
-	uint32_t samples_per_conv;
-	uint32_t transfer_size;
-	uint8_t num_conv;
-	uint8_t np;
-	uint32_t tx_bram_size = 0;
-	uint32_t tx_lut_bytes;
+	uint8_t tx_num_conv;
 	uint32_t tx_samples;
 	uint32_t tx_size;
-	uint8_t tx_num_conv;
+	uint8_t num_conv;
+	uint8_t np;
 	int ret = 0;
 
 	struct axi_dma_transfer tx_transfer = {
@@ -295,7 +298,7 @@ int dma_example_main()
 		goto error_adf4382;
 	}
 
-	/* After the HMC7044: the ADF4030's reference comes from HMC7044 ch1. */
+	/* After the HMC7044, which supplies the ADF4030's reference clock. */
 	ret = adf4030_init(&adf4030_dev, &adf4030_ip);
 	if (ret) {
 		pr_info("ADF4030 initialization failed\n");
@@ -368,11 +371,11 @@ int dma_example_main()
 
 	struct jesd204_topology *topology;
 	/*
-	 * The ADF4030 is the SYSREF provider: it drives both the Apollo's SYSREF
-	 * pin and the FPGA's sysref_in. It must be listed before the top device -
-	 * jesd204_topology_init() reads is_sysref_provider from this array but
-	 * takes the jdev pointer from the top-device-filtered copy, so the two
-	 * indices only agree while the provider precedes the top device.
+	 * The SYSREF provider - here the ADF4030, which clocks the SYSREF input
+	 * of both the AD9088 and the FPGA - has to be listed before the top
+	 * device: jesd204_topology_init() reads is_sysref_provider from this
+	 * array but takes the jdev pointer from the top-device-filtered copy, so
+	 * the two indices only agree while the provider precedes the top device.
 	 */
 	struct jesd204_topology_dev devs[] = {
 		{
@@ -498,15 +501,16 @@ int dma_example_main()
 	}
 
 	/*
-	 * The offload replays its whole BRAM whatever was written into it, so
-	 * fill all of it rather than leaving the tail to come back as noise.
+	 * The offload replays all of its memory whatever was written into it, so
+	 * fill as much as this buffer covers rather than leaving the tail to come
+	 * back as noise.
 	 */
 	no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, AXI_DO_REG_MEMORY_SIZE_LSB,
-			  &tx_bram_size);
+			  &tx_offload_size);
 
 	tx_size = sizeof(dac_buffer_dma);
-	if (tx_bram_size && tx_bram_size < tx_size)
-		tx_size = tx_bram_size;
+	if (tx_offload_size && tx_offload_size < tx_size)
+		tx_size = tx_offload_size;
 
 	/*
 	 * Floor to a whole pass of the sine table so the cyclic wrap leaves no
@@ -518,9 +522,9 @@ int dma_example_main()
 	tx_size -= tx_size % tx_lut_bytes;
 
 	/*
-	 * A table pass is a whole number of DMAC source beats at every converter
-	 * count this example accepts, so the floor above already satisfies the
-	 * source width. Check it rather than assume it, since the DMAC rejects a
+	 * A whole table pass is a multiple of the source width at every converter
+	 * count this example accepts, so the floor above should already have
+	 * satisfied it. Check rather than assume, since the DMAC rejects a
 	 * misaligned transfer with a much less obvious error.
 	 */
 	if (!tx_size || tx_size % DMA_SRC_WIDTH_BYTES) {
@@ -535,7 +539,7 @@ int dma_example_main()
 
 	dma_example_fill_tone(tx_num_conv, tx_size);
 
-	/* MEM_TO_DEV reads DDR, so dirty lines have to land there first. */
+	/* The DMAC reads memory, not the cache, so write the dirty lines out. */
 	Xil_DCacheFlushRange((uintptr_t)dac_buffer_dma, tx_size);
 
 	ret = axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
@@ -584,6 +588,7 @@ int dma_example_main()
 		goto error_tx_stream;
 	}
 
+	/* The DMAC wrote around the cache, so drop the stale lines. */
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer_dma, transfer_size);
 
 	pr_info("DMA_EXAMPLE Rx: address=%#lx samples=%lu channels=%u bits=%u\n",
