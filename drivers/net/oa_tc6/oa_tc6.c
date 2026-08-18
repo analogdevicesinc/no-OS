@@ -693,6 +693,7 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 		xfer.tx_buff = desc->data_chunks;
 		xfer.rx_buff = desc->data_chunks;
 		xfer.bytes_number = bytes_total;
+		xfer.cs_change = 1;
 
 		ret = no_os_spi_transfer(desc->comm_desc, &xfer, 1);
 		if (ret) {
