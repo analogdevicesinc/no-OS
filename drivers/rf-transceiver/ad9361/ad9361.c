@@ -1497,13 +1497,20 @@ static int32_t ad9361_load_gt(struct ad9361_rf_phy *phy, uint64_t freq,
 	phy->tx_quad_lpf_tia_match = -EINVAL;
 
 	for (i = 0; i < index_max; i++) {
-		ad9361_spi_write(spi, REG_GAIN_TABLE_ADDRESS, i); /* Gain Table Index */
-		ad9361_spi_write(spi, REG_GAIN_TABLE_WRITE_DATA1,
-				 tab[i][0] | lna); /* Ext LNA, Int LNA, & Mixer Gain Word */
-		ad9361_spi_write(spi, REG_GAIN_TABLE_WRITE_DATA2,
-				 tab[i][1]); /* TIA & LPF Word */
-		ad9361_spi_write(spi, REG_GAIN_TABLE_WRITE_DATA3,
-				 tab[i][2]); /* DC Cal bit & Dig Gain Word */
+		/* The index and the three data words are consecutive
+		 * registers (0x130..0x133), so a single multibyte
+		 * transaction replaces four single-byte writes. Multibyte
+		 * writes address the highest register first and descend,
+		 * hence the DATA3..ADDRESS order.
+		 */
+		uint8_t row[4];
+
+		row[0] = tab[i][2];		/* 0x133 DC Cal bit & Dig Gain Word */
+		row[1] = tab[i][1];		/* 0x132 TIA & LPF Word */
+		row[2] = tab[i][0] | lna;	/* 0x131 Ext LNA, Int LNA, & Mixer */
+		row[3] = i;			/* 0x130 Gain Table Index */
+		ad9361_spi_writem(spi, REG_GAIN_TABLE_WRITE_DATA3, row, 4);
+
 		ad9361_spi_write(spi, REG_GAIN_TABLE_CONFIG,
 				 START_GAIN_TABLE_CLOCK |
 				 WRITE_GAIN_TABLE |
