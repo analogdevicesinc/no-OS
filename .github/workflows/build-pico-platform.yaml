@@ -43,27 +43,6 @@ on:
       - '.github/workflows/build-stm32-platform.yaml'
       - '.github/workflows/build-common.yaml'
       - '.github/workflows/deploy-docs.yaml'
-  pull_request_target:
-    branches:
-      - main
-      - next_stable
-      - 'release/*'
-      - '20*'
-    paths-ignore:
-      - '**/*.rst'
-      - '**/*.md'
-      - 'drivers/platform/stm32/**'
-      - 'drivers/platform/pico/**'
-      - 'drivers/platform/aducm3029/**'
-      - 'drivers/platform/maxim/**'
-      - '.github/config/**'
-      - '.github/scripts/**'
-      - '.github/workflows/build-xilinx-platform.yaml'
-      - '.github/workflows/build-maxim-platform.yaml'
-      - '.github/workflows/build-aducm3029-platform.yaml'
-      - '.github/workflows/build-stm32-platform.yaml'
-      - '.github/workflows/build-common.yaml'
-      - '.github/workflows/deploy-docs.yaml'
 
 permissions:
   contents: read
@@ -77,9 +56,6 @@ concurrency:
 
 jobs:
   build-pico-projects:
-    if: |
-      github.event_name != 'pull_request' ||
-      github.event.pull_request.head.repo.full_name == github.repository
     env:
       CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
       TOOLS_REPO: ${{ secrets.TOOLS_REPO }}
@@ -102,7 +78,6 @@ jobs:
         uses: actions/checkout@v5
         with:
           submodules: recursive
-          ref: ${{ github.event.pull_request.head.sha }}
       - name: Building for platform Pico
         shell: sh
         run: |
