@@ -40,4 +40,25 @@ target_compile_definitions(no-os PUBLIC -DDISABLE_SECURE_SOCKET=1)
 
 target_link_libraries(no-os PUBLIC lwipallapps lwipcore)
 
+# Wire in FreeRTOS sys_arch port when FreeRTOS is also enabled.
+# lwipcore/lwipallapps are compiled without -include no_os_config.h, so the
+# CONFIG_FREERTOS macro that lwipopts.h keys NO_SYS off is defined here to keep
+# lwipcore and no-os consistent (NO_SYS==0 with FreeRTOS, NO_SYS==1 otherwise).
+if(CONFIG_FREERTOS)
+    target_compile_definitions(lwipcore PUBLIC CONFIG_FREERTOS=1)
+    target_compile_definitions(lwipallapps PUBLIC CONFIG_FREERTOS=1)
+    target_sources(lwipcore PRIVATE
+        ${LWIP_SOURCE_DIR}/contrib/ports/freertos/sys_arch.c
+    )
+    # Both lwipcore and lwipallapps pull in lwip/sys.h, which includes
+    # arch/sys_arch.h under NO_SYS==0, so the port include dir is needed on both.
+    target_include_directories(lwipcore PUBLIC
+        ${LWIP_SOURCE_DIR}/contrib/ports/freertos/include
+    )
+    target_include_directories(lwipallapps PUBLIC
+        ${LWIP_SOURCE_DIR}/contrib/ports/freertos/include
+    )
+    target_link_libraries(lwipcore PUBLIC freertos_kernel)
+endif()
+
 message(STATUS "lwIP configured from: ${LWIP_SOURCE_DIR}")
