@@ -690,6 +690,43 @@ int adin1140_link_state(struct adin1140_desc *desc, uint32_t *state)
 }
 
 /**
+ * @brief Read the MAC hardware statistics counters.
+ * @param desc - the device descriptor.
+ * @param stats - storage for the counter snapshot.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adin1140_get_stats(struct adin1140_desc *desc, struct adin1140_stats *stats)
+{
+	uint32_t val;
+	int ret;
+
+	if (!desc || !stats)
+		return -EINVAL;
+
+	ret = adin1140_reg_read(desc, ADIN1140_RX_FRAME_CNT_REG, &val);
+	if (ret)
+		return ret;
+	stats->rx_frames = val;
+
+	ret = adin1140_reg_read(desc, ADIN1140_TX_FRAME_CNT_REG, &val);
+	if (ret)
+		return ret;
+	stats->tx_frames = val;
+
+	ret = adin1140_reg_read(desc, ADIN1140_RX_CRC_ERR_CNT_REG, &val);
+	if (ret)
+		return ret;
+	stats->rx_crc_err = val;
+
+	ret = adin1140_reg_read(desc, ADIN1140_RX_ALGN_ERR_CNT_REG, &val);
+	if (ret)
+		return ret;
+	stats->rx_align_err = val;
+
+	return 0;
+}
+
+/**
  * @brief Configure the MAC: apply user CONFIG0 settings, disable loopback,
  *        and install default filters.
  * @param desc - the device descriptor.
