@@ -32,8 +32,19 @@
 #ifndef LWIP_LWIPOPTS_H
 #define LWIP_LWIPOPTS_H
 
-/* NO_SYS==1: Use lwIP without OS-awareness (no thread and etc.) */
+/* NO_SYS==1: Use lwIP without OS-awareness (no thread and etc.)
+ * With FreeRTOS we use the OS-aware sys_arch port (NO_SYS==0); every
+ * other configuration uses the raw API driven by no_os_lwip_step().
+ * CONFIG_FREERTOS is defined on the lwip targets by cmake/libraries/lwip.cmake
+ * (and force-included via no_os_config.h for the no-os target), so both
+ * lwipcore and no-os agree on this value. */
+#ifndef NO_SYS
+#if defined(CONFIG_FREERTOS)
+#define NO_SYS                     		0
+#else
 #define NO_SYS                     		1
+#endif
+#endif
 #define LWIP_SOCKET                		0
 #define LWIP_NETCONN               		0
 #define LWIP_NETIF_API             		0
@@ -175,5 +186,16 @@ a lot of data that needs to be copied, this should be set high. */
 
 /* ---------- RAW Options ---------- */
 #define LWIP_RAW                		1
+
+#define LWIP_PROVIDE_ERRNO 1
+
+/* Use sys_now() from lwip_socket.c (no_os_get_time), not FreeRTOS tick counter */
+#define LWIP_FREERTOS_SYS_NOW_FROM_FREERTOS 0
+
+/* ERR_NEED_SCHED was added after STABLE-2_2_1. The FreeRTOS sys_arch port
+ * defines its own value, so only provide a fallback for the raw-API build. */
+#if !defined(CONFIG_FREERTOS) && !defined(ERR_NEED_SCHED)
+#define ERR_NEED_SCHED ERR_OK
+#endif
 
 #endif /* LWIP_LWIPOPTS_H */
