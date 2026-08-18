@@ -1515,10 +1515,14 @@ static int32_t ad9361_load_gt(struct ad9361_rf_phy *phy, uint64_t freq,
 				 START_GAIN_TABLE_CLOCK |
 				 WRITE_GAIN_TABLE |
 				 RECEIVER_SELECT(dest)); /* Gain Table Index */
-		ad9361_spi_write(spi, REG_GAIN_TABLE_READ_DATA1,
-				 0); /* Dummy Write to delay 3 ADCCLK/16 cycles */
-		ad9361_spi_write(spi, REG_GAIN_TABLE_READ_DATA1,
-				 0); /* Dummy Write to delay ~1u */
+
+		/* Delay 3 ADCCLK/16 cycles and ~1 us before the next row.
+		 * Upstream spent two dummy register writes on this, which is
+		 * free on a directly attached SPI master but costs a full bus
+		 * round trip each on a remote one. no_os_udelay() states the
+		 * same requirement without turning it into bus traffic.
+		 */
+		no_os_udelay(2);
 
 		if ((tab[i][1] & lpf_tia_mask) == 0x20)
 			phy->tx_quad_lpf_tia_match = i;
