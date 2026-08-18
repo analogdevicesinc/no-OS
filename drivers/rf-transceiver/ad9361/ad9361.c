@@ -1298,11 +1298,24 @@ static int32_t ad9361_check_cal_done(struct ad9361_rf_phy *phy, uint32_t reg,
 				     uint32_t mask, uint32_t done_state)
 {
 	uint32_t timeout = 20000; /* RFDC_CAL can take long */
-	uint32_t state;
+	int32_t state;
+	int32_t first = -1, last = -1;
 
 	while (timeout > 0) {
 		state = ad9361_spi_readf(phy->spi, reg, mask);
-		if (state == done_state)
+		if (first < 0)
+			first = state;
+		last = state;
+
+		/* A failed read returns a negative errno, which can never
+		 * equal done_state. Treating it as "not done yet" spins the
+		 * whole loop against a dead bus and then blames the
+		 * calibration engine for what was a SPI failure.
+		 */
+		if (state < 0)
+			return state;
+
+		if ((uint32_t)state == done_state)
 			return 0;
 
 		if (reg == REG_CALIBRATION_CTRL)
@@ -1312,8 +1325,11 @@ static int32_t ad9361_check_cal_done(struct ad9361_rf_phy *phy, uint32_t reg,
 		timeout--;
 	}
 
-	dev_err(&phy->spi->dev, "Calibration TIMEOUT (0x%"PRIX32", 0x%"PRIX32")", reg,
-		mask);
+	/* Report what happened*/
+	dev_err(&phy->spi->dev,
+		"Calibration TIMEOUT (0x%"PRIX32", 0x%"PRIX32")"
+		" first=0x%"PRIX32" last=0x%"PRIX32,
+		reg, mask, (uint32_t)first, (uint32_t)last);
 
 	return -ETIMEDOUT;
 }
