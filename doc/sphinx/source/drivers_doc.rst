@@ -226,3 +226,11 @@ GYROSCOPES
    :glob:
 
    drivers/gyroscope/*
+
+HEALTH
+======
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   drivers/health/*
