@@ -58,7 +58,7 @@ on:
       - 'drivers/platform/maxim/**'
       - '.github/config/**'
       - '.github/scripts/**'
-      - '.github/workflows/build-pico-platform.yaml'
+      - '.github/workflows/build-xilinx-platform.yaml'
       - '.github/workflows/build-maxim-platform.yaml'
       - '.github/workflows/build-aducm3029-platform.yaml'
       - '.github/workflows/build-stm32-platform.yaml'
