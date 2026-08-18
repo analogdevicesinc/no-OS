@@ -4227,22 +4227,6 @@ static int32_t ad9361_auxadc_setup(struct ad9361_rf_phy *phy,
 }
 
 /**
- * Get the measured temperature of the device.
- * @param phy The AD9361 state structure.
- * @return The measured temperature of the device.
- */
-int32_t ad9361_get_temp(struct ad9361_rf_phy *phy)
-{
-	uint32_t val;
-
-	ad9361_spi_writef(phy->spi, REG_AUXADC_CONFIG, AUXADC_POWER_DOWN, 1);
-	val = ad9361_spi_read(phy->spi, REG_TEMPERATURE);
-	ad9361_spi_writef(phy->spi, REG_AUXADC_CONFIG, AUXADC_POWER_DOWN, 0);
-
-	return NO_OS_DIV_ROUND_CLOSEST(val * 1000000, 1140);
-}
-
-/**
  * Get the Aux ADC value.
  * @param phy The AD9361 state structure.
  * @return The value in case of success, negative error code otherwise.

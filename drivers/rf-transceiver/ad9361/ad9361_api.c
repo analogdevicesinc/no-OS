@@ -2235,7 +2235,40 @@ int32_t ad9361_do_dcxo_tune_fine(struct ad9361_rf_phy *phy,
 int32_t ad9361_get_temperature(struct ad9361_rf_phy *phy,
 			       int32_t *temp)
 {
-	*temp = ad9361_get_temp(phy);
+	int32_t cfg, val, ret;
+
+	cfg = ad9361_spi_read(phy->spi, REG_AUXADC_CONFIG);
+	if (cfg < 0)
+		return cfg;
+
+	ret = ad9361_spi_write(phy->spi, REG_AUXADC_CONFIG,
+			       cfg | AUXADC_POWER_DOWN);
+	if (ret < 0)
+		return ret;
+
+	val = ad9361_spi_read(phy->spi, REG_TEMPERATURE);
+	if (val < 0) {
+		/* Power the AuxADC back up before reporting the read error.
+		 * Nothing else clears AUXADC_POWER_DOWN, so returning with it
+		 * set leaves the converter off for every later caller.
+		 */
+		ad9361_spi_write(phy->spi, REG_AUXADC_CONFIG,
+				 cfg & ~AUXADC_POWER_DOWN);
+		return val;
+	}
+
+	ret = ad9361_spi_write(phy->spi, REG_AUXADC_CONFIG,
+			       cfg & ~AUXADC_POWER_DOWN);
+	if (ret < 0)
+		return ret;
+
+	/* REG_TEMPERATURE holds a signed 8-bit reading. Widening it as
+	 * unsigned turns every sub-zero measurement into a plausible-looking
+	 * high one: 0xE7 is -25 counts (-21.9 C) but reads back as 231 counts
+	 * and comes out as 202.6 C. The Linux driver casts this to s8; no-OS
+	 * is the port that dropped it.
+	 */
+	*temp = NO_OS_DIV_ROUND_CLOSEST((int8_t)val * 1000000, 1140);
 
 	return 0;
 }
