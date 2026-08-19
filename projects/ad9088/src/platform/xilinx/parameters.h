@@ -54,14 +54,12 @@
 /******************************************************************************/
 #ifdef _XPARAMETERS_PS_H_
 #define UART_DEVICE_ID			XPAR_XUARTPSV_0_DEVICE_ID
-#define INTC_DEVICE_ID			XPAR_SCUGIC_SINGLE_DEVICE_ID
 #define CLK_SPI_DEVICE_ID		XPAR_XSPIPS_0_DEVICE_ID
 #define APOLLO_SPI_DEVICE_ID		XPAR_SPI_0_DEVICE_ID
 #define GPIO_DEVICE_ID			XPAR_GPIO_0_DEVICE_ID
 #define UART_IRQ_ID			XPAR_XUARTPS_0_INTR
 #elif defined(PLATFORM_MB)
 #define UART_DEVICE_ID			XPAR_AXI_UART_DEVICE_ID
-#define INTC_DEVICE_ID			XPAR_INTC_SINGLE_DEVICE_ID
 #define CLK_SPI_DEVICE_ID		XPAR_AXI_SPI_DEVICE_ID
 #ifndef XPAR_SPI_1_DEVICE_ID
 #define XPAR_SPI_1_DEVICE_ID		1
@@ -108,8 +106,7 @@ extern struct xil_gpio_init_param	xil_gpio_param;
 #define TX_CORE_BASEADDR		\
 	XPAR_TX_APOLLO_TPL_CORE_DAC_TPL_CORE_BASEADDR
 
-/* DMA capture buffer sizes, in samples per converter */
-#define DAC_BUFFER_SAMPLES		8192
+/* Capture depth, in samples per converter */
 #define ADC_BUFFER_SAMPLES		16384
 
 #define RX_JESD_BASEADDR		XPAR_AXI_JESD204_RX_0_BASEADDR

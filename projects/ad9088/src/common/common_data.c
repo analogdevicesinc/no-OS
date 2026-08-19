@@ -1,9 +1,9 @@
 /***************************************************************************//**
  *   @file   common_data.c
- *   @brief  Defines common data to be used by adf4382 examples.
+ *   @brief  Defines common data to be used by the ad9088 examples.
  *   @author CHegbeli (ciprian.hegbeli@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,7 +45,7 @@ struct no_os_uart_init_param platform_uart_ip = {
 	.platform_ops = UART_OPS,
 };
 
-struct no_os_spi_init_param adf4382_spi_ip = {
+static struct no_os_spi_init_param adf4382_spi_ip = {
 	.device_id = CLK_SPI_DEVICE_ID,
 	.max_speed_hz = 1500000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
@@ -55,7 +55,7 @@ struct no_os_spi_init_param adf4382_spi_ip = {
 	.chip_select = SPI_CS_ADF4382,
 };
 
-struct no_os_spi_init_param hmc7044_spi_ip = {
+static struct no_os_spi_init_param hmc7044_spi_ip = {
 	.device_id = CLK_SPI_DEVICE_ID,
 	.max_speed_hz = 1000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
@@ -65,7 +65,7 @@ struct no_os_spi_init_param hmc7044_spi_ip = {
 	.chip_select = SPI_CS_HMC7044,
 };
 
-struct no_os_spi_init_param adf4030_spi_ip = {
+static struct no_os_spi_init_param adf4030_spi_ip = {
 	.device_id = CLK_SPI_DEVICE_ID,
 	.max_speed_hz = 1000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
@@ -75,17 +75,17 @@ struct no_os_spi_init_param adf4030_spi_ip = {
 	.chip_select = SPI_CS_ADF4030,
 };
 
-struct no_os_spi_init_param ad9088_spi_ip = {
+static struct no_os_spi_init_param ad9088_spi_ip = {
 	.device_id = APOLLO_SPI_DEVICE_ID,
 	.max_speed_hz = 13000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
-	.platform_ops = SPI_OPS_CLK,
+	.platform_ops = SPI_OPS_APOLLO,
 	.extra = SPI_EXTRA_APOLLO,
 	.chip_select = SPI_CS_APOLLO,
 };
 
-struct no_os_gpio_init_param gpio_reset_ip = {
+static struct no_os_gpio_init_param gpio_reset_ip = {
 	.platform_ops = GPIO_OPS,
 	.extra = GPIO_EXTRA,
 	.number = GPIO_OFFSET + GPIO_RESET_N,
@@ -105,7 +105,7 @@ struct adf4382_init_param adf4382_ip = {
 	.id = ID_ADF4382A,
 };
 
-struct hmc7044_chan_spec chan_spec[] = {
+static struct hmc7044_chan_spec hmc7044_chans[] = {
 	{
 		.num = 1,		// ADF4030_REFIN
 		.divider = 20,		// 125 MHz
@@ -154,14 +154,13 @@ struct hmc7044_init_param hmc7044_ip = {
 	.in_buf_mode = {0x07, 0x07, 0x00, 0x00, 0x5},
 	.gpi_ctrl = {0x00, 0x00, 0x00, 0x00},
 	.gpo_ctrl = {0x37, 0x33, 0x00, 0x00},
-	.num_channels = sizeof(chan_spec) /
-	sizeof(struct hmc7044_chan_spec),
+	.num_channels = NO_OS_ARRAY_SIZE(hmc7044_chans),
 	.pll1_ref_prio_ctrl = 0xE1,
 	.pll1_ref_autorevert_en = true,
 	.sync_pin_mode = 0x1,
 	.high_performance_mode_clock_dist_en = false,
 	.pulse_gen_mode = HMC7044_PULSE_GEN_CONT_PULSE,
-	.channels = chan_spec
+	.channels = hmc7044_chans
 };
 
 /*
@@ -179,7 +178,7 @@ struct hmc7044_init_param hmc7044_ip = {
  * so it is not reachable through adf4030_set_channel_voltage(). Revisit if the
  * BSYNC levels need trimming on the bench.
  */
-struct adf4030_chan_spec adf4030_chan_spec[] = {
+static struct adf4030_chan_spec adf4030_chans[] = {
 	{
 		.num = ADF4030_CH_HMC_REF,	// ADF4030_SCLKOUT3, from HMC ch3
 		.termination = RX_DC_COUPLED_CLKS,
@@ -222,20 +221,20 @@ struct adf4030_init_param adf4030_ip = {
 	 */
 	.alignment_threshold_fs = 1400,
 	.alignment_iter = 8,
-	.num_channels = NO_OS_ARRAY_SIZE(adf4030_chan_spec),
-	.channels = adf4030_chan_spec,
+	.num_channels = NO_OS_ARRAY_SIZE(adf4030_chans),
+	.channels = adf4030_chans,
 };
 
 struct axi_dmac_init rx_dmac_ip = {
-	"rx_dmac",
-	RX_DMA_BASEADDR,
-	IRQ_DISABLED
+	.name = "rx_dmac",
+	.base = RX_DMA_BASEADDR,
+	.irq_option = IRQ_DISABLED
 };
 
 struct axi_dmac_init tx_dmac_ip = {
-	"tx_dmac",
-	TX_DMA_BASEADDR,
-	IRQ_DISABLED
+	.name = "tx_dmac",
+	.base = TX_DMA_BASEADDR,
+	.irq_option = IRQ_DISABLED
 };
 
 /*
@@ -425,18 +424,17 @@ int ad9088_mcs_ops_bind(struct adf4030_dev *adf4030,
 	return 0;
 }
 
+/*
+ * The device profile is not selected here: it is linked into the image from the
+ * binary named by FIRMWARE in the project Makefile, so pick one with
+ * `make FIRMWARE=<path to a profile .bin>`.
+ */
 struct ad9088_init_param ad9088_ip = {
-	.spi_init = &ad9088_spi_ip, // to be set by the user
-	.gpio_reset = &gpio_reset_ip, // to be set by the user
-	.gpio_tri_req = NULL, // to be set by the user
-	.versal_xvr_reset = NULL, // to be set by the user
+	.spi_init = &ad9088_spi_ip,
+	.gpio_reset = &gpio_reset_ip,
+	.gpio_tri_req = NULL,
 	.spi_3wire_en = false,
-	.rx_real_channel_en = false,
-	.tx_real_channel_en = false,
-	.side_b_use_own_tpl_en = false,
-	.multidevice_instance_count = AD9088_MULTIDEVICE_INST_CNT,
 	.trig_sync_en = false,
-	.standalone_en = false,
 	.nyquist_zone = AD9088_NYQUIST_ZONE,
 	.subclass = AD9088_JESD_SUBCLASS,
 	.jtx0_logical_lane_mapping = AD9088_TX0_LOGICAL_LANE_MAPPING,

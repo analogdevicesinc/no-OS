@@ -1,9 +1,9 @@
 /***************************************************************************//**
  *   @file   common_data.h
- *   @brief  Defines common data to be used by adf4382 examples.
+ *   @brief  Defines common data to be used by the ad9088 examples.
  *   @author CHegbeli (ciprian.hegbeli@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -49,7 +49,6 @@
 #include "axi_adxcvr.h"
 #include "axi_adc_core.h"
 #include "axi_dac_core.h"
-#include "jesd204_clk.h"
 
 #include "apollo_cpu_device_profile_types.h"
 
@@ -80,18 +79,15 @@
 #define ADF4030_CH_APOLLO_SYSREF		5	/* APOLLO_SYSREF */
 #define ADF4030_CH_FPGA_SYSREF			8	/* SYSREF_IN_F */
 
-#define AD9088_MULTIDEVICE_INST_CNT		1
 #define AD9088_NYQUIST_ZONE			1
 #define AD9088_TX0_LOGICAL_LANE_MAPPING		{11, 2, 3, 5, 10, 1, 9, 0, 6, 7, 8, 4}
 #define AD9088_TX1_LOGICAL_LANE_MAPPING		{3, 9, 5, 4, 2, 6, 1, 7, 8, 11, 0, 10}
 #define AD9088_RX0_PHYSICAL_LANE_MAPPING	{10, 8, 9, 11, 5, 1, 3, 7, 4, 6, 2, 0}
 #define AD9088_RX1_PHYSICAL_LANE_MAPPING	{4, 6, 2, 0, 1, 7, 10, 3, 5, 8, 9, 11}
 
-extern struct no_os_spi_init_param		adf4382_spi_param;
 extern struct adf4382_init_param 		adf4382_ip;
 extern struct adf4030_init_param		adf4030_ip;
 extern struct hmc7044_init_param		hmc7044_ip;
-extern struct no_os_gpio_init_param		reset_gpio_param;
 extern struct no_os_uart_init_param		platform_uart_ip;
 extern struct axi_dmac_init 			rx_dmac_ip;
 extern struct axi_dmac_init 			tx_dmac_ip;
@@ -101,7 +97,7 @@ extern struct adxcvr_init			rx_adxcvr_ip;
 extern struct adxcvr_init			tx_adxcvr_ip;
 extern struct ad9088_init_param			ad9088_ip;
 extern struct axi_adc_init 			rx_adc_init;
-extern struct axi_dac_init 			tx_dac_init;	
+extern struct axi_dac_init 			tx_dac_init;
 
 /**
  * @brief Hand the AD9088 the clock chips its MCS calibration drives.

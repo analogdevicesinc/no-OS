@@ -53,7 +53,7 @@
  * @brief Main function execution for xilinx platform.
  * @return ret - Result of the enabled examples execution.
 */
-int main()
+int main(void)
 {
 	int ret = -EINVAL;
 

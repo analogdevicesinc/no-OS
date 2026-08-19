@@ -75,8 +75,7 @@ static void ad9088_jesd_lane_setup(struct ad9088_phy *phy,
 	}
 }
 
-int ad9088_get_profile(struct ad9088_phy *phy,
-		       const struct ad9088_init_param *init_param)
+int ad9088_get_profile(struct ad9088_phy *phy)
 {
 	adi_apollo_top_t *p = &phy->profile;
 	size_t firmware_size = _binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_end -
@@ -174,12 +173,7 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 	}
 
 	phy->spi_3wire_en = init_param->spi_3wire_en;
-	phy->complex_rx = init_param->rx_real_channel_en;
-	phy->complex_tx = init_param->tx_real_channel_en;
-	phy->side_b_use_own_tpl_en = init_param->side_b_use_own_tpl_en;
-	phy->multidevice_instance_count = init_param->multidevice_instance_count;
 	phy->trig_sync_en = init_param->trig_sync_en;
-	phy->standalone = init_param->standalone_en;
 	phy->bsync_ops = init_param->bsync_ops;
 	phy->clk_ops = init_param->clk_ops;
 	phy->aion_background_serial_alignment_en =
@@ -198,7 +192,7 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 		for (j = 0; j < MAX_NUM_MAIN_DATAPATHS; j++)
 			phy->rx_nyquist_zone[i][j] = nz - 1;
 
-	ret = ad9088_get_profile(phy, init_param);
+	ret = ad9088_get_profile(phy);
 	if (ret) {
 		pr_err("Failed to get profile: %d\n", ret);
 		goto error_reset;

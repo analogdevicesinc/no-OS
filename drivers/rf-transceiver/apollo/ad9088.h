@@ -250,25 +250,17 @@ struct ad9088_clk_ops {
 };
 
 struct ad9088_init_param {
-	struct no_os_spi_init_param *spi_init; //
-	struct no_os_gpio_init_param *gpio_reset; //
-	struct no_os_gpio_init_param *gpio_tri_req; //
-	struct no_os_gpio_init_param *versal_xvr_reset; //
-	const char *device_profile_fw_name;
-	// struct no_os_regulator_init_param *supply_reg;
-	bool spi_3wire_en; //
-	bool rx_real_channel_en; //
-	bool tx_real_channel_en; //
-	bool side_b_use_own_tpl_en; //
-	uint32_t multidevice_instance_count; //
-	bool trig_sync_en; //
-	bool standalone_en; //
-	uint32_t nyquist_zone; //
+	struct no_os_spi_init_param *spi_init;
+	struct no_os_gpio_init_param *gpio_reset;
+	struct no_os_gpio_init_param *gpio_tri_req;
+	bool spi_3wire_en;
+	bool trig_sync_en;
+	uint32_t nyquist_zone;
 	uint32_t subclass;
-	uint32_t jtx0_logical_lane_mapping[12]; //
-	uint32_t jtx1_logical_lane_mapping[12]; //
-	uint32_t jrx0_physical_lane_mapping[12]; //
-	uint32_t jrx1_physical_lane_mapping[12]; //
+	uint32_t jtx0_logical_lane_mapping[12];
+	uint32_t jtx1_logical_lane_mapping[12];
+	uint32_t jrx0_physical_lane_mapping[12];
+	uint32_t jrx1_physical_lane_mapping[12];
 	uint32_t jtx_ser_amplitude;
 	uint32_t jtx_ser_pre_emphasis;
 	uint32_t jtx_ser_post_emphasis;
@@ -325,17 +317,12 @@ struct ad9088_phy {
 	// struct mutex		lock;
 
 	bool is_initialized;
-	bool standalone; //
 	bool device_profile_firmware_load;
-	bool side_b_use_own_tpl_en; //
-	bool complex_tx;
-	bool complex_rx;
-	bool spi_3wire_en; //
+	bool spi_3wire_en;
 	bool log_silent;
-	bool trig_sync_en; //
+	bool trig_sync_en;
 	bool mcs_cal_bg_tracking_run;
 	bool mcs_cal_bg_tracking_freeze;
-	uint32_t multidevice_instance_count; //
 
 	struct ad9088_debugfs_entry debugfs_entry[16];
 	uint32_t ad9088_debugfs_entry_index;

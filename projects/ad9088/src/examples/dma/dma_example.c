@@ -43,7 +43,6 @@
 #include "no_os_axi_io.h"
 #include "jesd204_clk.h"
 #include "parameters.h"
-#include "xil_cache.h"
 
 /*
  * Side the loopback runs on. The first link of that side carries it, and every
@@ -85,8 +84,10 @@
 #define DMA_BUFFER_ALIGN	1024
 
 /*
- * Fixed-capacity static capture buffer. Samples per converter is derived from
- * the link's M at runtime and clamped to what fits here.
+ * Static capture buffer, sized for the widest link this example accepts. The
+ * converter count is read back from the link at runtime and rejected if it
+ * exceeds LOOPBACK_CONVERTERS, so the depth per converter is always the full
+ * ADC_BUFFER_SAMPLES.
  */
 static uint16_t adc_buffer_dma[ADC_BUFFER_SAMPLES * LOOPBACK_CONVERTERS]
 __attribute__((aligned(DMA_BUFFER_ALIGN)));
@@ -238,7 +239,7 @@ static void dma_example_fill_tone(uint8_t num_conv, uint32_t size)
 		dac_buffer_dma[i] = sine_lut_iq[(i / stride) % lut_len];
 }
 
-int dma_example_main()
+int dma_example_main(void)
 {
 	struct no_os_clk_desc rx_lane_clk = {0};
 	struct no_os_clk_desc tx_lane_clk = {0};
@@ -267,22 +268,18 @@ int dma_example_main()
 	uint8_t np;
 	int ret = 0;
 
+	struct jesd204_topology *topology;
+
+	/* Sizes are filled in once the link geometry is known. */
 	struct axi_dma_transfer tx_transfer = {
-		.size = 0,
-		.transfer_done = 0,
 		.cyclic = CYCLIC,
 		.src_addr = (uintptr_t)dac_buffer_dma,
-		.dest_addr = 0,
 	};
 
 	struct axi_dma_transfer rx_transfer = {
-		.size = 0,
-		.transfer_done = 0,
 		.cyclic = NO,
-		.src_addr = 0,
 		.dest_addr = (uintptr_t)adc_buffer_dma,
 	};
-
 
 	pr_info("Enter DMA example\n");
 
@@ -369,7 +366,6 @@ int dma_example_main()
 		goto error_tx_jesd;
 	}
 
-	struct jesd204_topology *topology;
 	/*
 	 * The SYSREF provider - here the ADF4030, which clocks the SYSREF input
 	 * of both the AD9088 and the FPGA - has to be listed before the top
@@ -439,6 +435,8 @@ int dma_example_main()
 	 */
 	num_conv = ad9088_phy->profile.jtx[LOOPBACK_SIDE].tx_link_cfg[0].m_minus1 + 1;
 	np = ad9088_phy->profile.jtx[LOOPBACK_SIDE].tx_link_cfg[0].np_minus1 + 1;
+	tx_num_conv = ad9088_phy->profile.jrx[LOOPBACK_SIDE]
+		      .rx_link_cfg[0].m_minus1 + 1;
 
 	if (!num_conv || num_conv > LOOPBACK_CONVERTERS) {
 		pr_err("Converter count M=%u, this example covers one side of "
@@ -447,11 +445,20 @@ int dma_example_main()
 		goto error_topology;
 	}
 
-	/* Clamp the capture depth to what the static buffer can hold. */
-	samples_per_conv = ADC_BUFFER_SAMPLES;
-	if (samples_per_conv * num_conv > NO_OS_ARRAY_SIZE(adc_buffer_dma))
-		samples_per_conv = NO_OS_ARRAY_SIZE(adc_buffer_dma) / num_conv;
+	/*
+	 * A sine table entry is one I/Q pair, so the transmit link has to carry a
+	 * whole number of complex channels for the tiling further down to line up.
+	 */
+	if (!tx_num_conv || tx_num_conv > LOOPBACK_CONVERTERS ||
+	    tx_num_conv % 2) {
+		pr_err("Transmit converter count M=%u, this example covers one "
+		       "side of up to %u, in I/Q pairs\n", tx_num_conv,
+		       LOOPBACK_CONVERTERS);
+		ret = -EINVAL;
+		goto error_topology;
+	}
 
+	samples_per_conv = ADC_BUFFER_SAMPLES;
 	transfer_size = samples_per_conv * num_conv * sizeof(adc_buffer_dma[0]);
 
 	pr_info("Capture geometry: M=%u NP=%u samples/conv=%lu bytes=%lu\n",
@@ -465,7 +472,8 @@ int dma_example_main()
 		goto error_topology;
 	}
 
-	tx_dac_init.num_channels = num_conv;
+	/* The transmit core belongs to the other link, which carries its own M. */
+	tx_dac_init.num_channels = tx_num_conv;
 	ret = axi_dac_init(&tx_dac, &tx_dac_init);
 	if (ret) {
 		pr_err("TX TPL core init failed (%d)\n", ret);
@@ -483,22 +491,6 @@ int dma_example_main()
 	ret = dma_example_set_default_nco(ad9088_phy);
 	if (ret)
 		goto error_tx_dac;
-
-	tx_num_conv = ad9088_phy->profile.jrx[LOOPBACK_SIDE]
-		      .rx_link_cfg[0].m_minus1 + 1;
-
-	/*
-	 * A sine table entry is one I/Q pair, so the link has to carry a whole
-	 * number of complex channels for the tiling below to line up.
-	 */
-	if (!tx_num_conv || tx_num_conv > LOOPBACK_CONVERTERS ||
-	    tx_num_conv % 2) {
-		pr_err("Transmit converter count M=%u, this example covers one "
-		       "side of up to %u, in I/Q pairs\n", tx_num_conv,
-		       LOOPBACK_CONVERTERS);
-		ret = -EINVAL;
-		goto error_tx_dac;
-	}
 
 	/*
 	 * The offload replays all of its memory whatever was written into it, so
@@ -596,6 +588,11 @@ int dma_example_main()
 		(unsigned long)samples_per_conv,
 		num_conv, np);
 
+	/*
+	 * Park here with the link up rather than tearing down, so the capture
+	 * buffer stays intact and readable from a debugger. Everything below is
+	 * reached only from the error paths.
+	 */
 	while (1);
 
 	jesd204_fsm_stop(topology, JESD204_LINKS_ALL);
