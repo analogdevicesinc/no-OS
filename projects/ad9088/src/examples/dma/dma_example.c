@@ -75,7 +75,15 @@
  * to the smaller of the two.
  */
 #define TX_OFFLOAD_MAX_BYTES		(512 * 1024)
+
+/*
+ * axi_data_offload register map, the part of it this example needs.
+ *
+ * MEMORY_SIZE_LSB is the storage depth in bytes, read only. RESETN_OFFLOAD bit
+ * 0 low holds the IP in reset.
+ */
 #define AXI_DO_REG_MEMORY_SIZE_LSB	0x0014
+#define AXI_DO_REG_RESETN_OFFLOAD	0x0084
 
 /*
  * Width of the TX DMAC source AXI data path in bytes, which has to match the
@@ -713,7 +721,14 @@ int dma_example_main(void)
 		(unsigned long)tx_samples,
 		tx_num_conv, (unsigned long)(8 * sizeof(uint16_t)));
 
-	no_os_mdelay(500);
+	no_os_mdelay(10);
+
+	/*
+	 * Re-arm the receive offload, which is what makes the capture below see
+	 * live converter data rather than time out.
+	 */
+	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, AXI_DO_REG_RESETN_OFFLOAD, 0);
+	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, AXI_DO_REG_RESETN_OFFLOAD, 1);
 
 	rx_transfer.size = transfer_size;
 	ret = axi_dmac_transfer_start(rx_dmac, &rx_transfer);
