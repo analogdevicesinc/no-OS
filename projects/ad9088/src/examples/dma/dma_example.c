@@ -37,6 +37,7 @@
 #include "no_os_print_log.h"
 #include "no_os_util.h"
 #include "ad9088.h"
+#include "adi_apollo_clk_mcs.h"
 #include "jesd204.h"
 #include "axi_adxcvr.h"
 #include "axi_dmac.h"
@@ -84,6 +85,47 @@
 #define DMA_BUFFER_ALIGN	1024
 
 /*
+ * Bring the receive link back if MCS calibration knocks it out.
+ *
+ * MCS runs at OPT_POST_SETUP_STAGE1, one stage after LINK_RUNNING has already
+ * waited for the receiver to reach DATA. Measuring the BSYNC path delay hands
+ * the SYSREF line back and forth and then moves the provider's Apollo channel
+ * by the measured delay, which can drop the receiver to WAIT_BS -- and no
+ * later stage looks at the link again, so jesd204_fsm_start() still reports
+ * success and the first sign of trouble is the capture timing out.
+ *
+ * Clear this to watch that happen untouched, which is how to measure how often
+ * it does.
+ */
+#define RX_LINK_RECOVER		1
+#define RX_LINK_ATTEMPTS	3
+
+/*
+ * Re-time the Apollo's own links before bouncing the receiver.
+ *
+ * Bouncing the receiver alone does not clear WAIT_BS, which is the receiver
+ * saying it cannot find 64b/66b block sync in the incoming stream -- the
+ * source is what is wrong, not the receiver. The sequence below syncs the
+ * converter FIFOs, the Rx and Tx digital and the JTx and JRx links, and
+ * bring-up runs it at link_setup and setup_stage2. Neither is after MCS, so
+ * the framer is left timed against the SYSREF phase it had before MCS moved
+ * it. Re-running it here is the only thing in reach that re-times the framer.
+ *
+ * Kept separate from RX_LINK_RECOVER so the two halves can be told apart: the
+ * receiver bounce on its own is already known not to be enough.
+ */
+#define RX_LINK_RESYNC_APOLLO	1
+
+/*
+ * Receive core link status, from axi_jesd204_rx.c. Carried here because the
+ * driver exports no accessor for the state -- axi_jesd204_rx_status_read()
+ * prints it and returns 0 regardless.
+ */
+#define JESD204_RX_REG_LINK_STATUS	0x280
+#define JESD204_RX_LINK_STATUS_MASK	0x3
+#define JESD204_RX_LINK_STATUS_DATA	3
+
+/*
  * Static capture buffer, sized for the widest link this example accepts. The
  * converter count is read back from the link at runtime and rejected if it
  * exceeds LOOPBACK_CONVERTERS, so the depth per converter is always the full
@@ -98,6 +140,109 @@ __attribute__((aligned(DMA_BUFFER_ALIGN)));
  */
 static uint32_t dac_buffer_dma[TX_OFFLOAD_MAX_BYTES / sizeof(uint32_t)]
 __attribute__((aligned(DMA_BUFFER_ALIGN)));
+
+#if RX_LINK_RECOVER
+/*
+ * 64b/66b link states, mirroring axi_jesd204_rx_link_status_64b66b_l[] in
+ * axi_jesd204_rx.c. Copied rather than referenced: the driver leaves the table
+ * non-static but declares it in no header.
+ */
+static const char *const rx_link_state[] = {
+	"RESET",
+	"WAIT_BS",
+	"BLOCK_SYNC",
+	"DATA",
+};
+
+/**
+ * @brief Current receive link state, as the core reports it.
+ * @return The two-bit link status: 0 reset, 1 WAIT_BS, 2 block sync, 3 data.
+ */
+static uint32_t dma_example_rx_link_status(void)
+{
+	uint32_t status = 0;
+
+	no_os_axi_io_read(RX_JESD_BASEADDR, JESD204_RX_REG_LINK_STATUS,
+			  &status);
+
+	return status & JESD204_RX_LINK_STATUS_MASK;
+}
+
+/**
+ * @brief Get the receive link back to DATA if MCS calibration dropped it.
+ *
+ * Same shape as adrv903x_jesd204_setup_stage1() in the palma driver -- a
+ * bounded loop that acts and re-polls until the link reports good -- but the
+ * action differs. Palma pulses SYSREF each iteration, which works because its
+ * AD9528 fires a burst on demand. Here the provider is the ADF4030, whose
+ * jesd204 SYSREF callback is deliberately empty because it emits BSYNC
+ * continuously, so jesd204_sysref_async_force() would do nothing. What does
+ * work is taking the receiver down and bringing it back up, which is what the
+ * kernel's watchdog does for its own case: the enable clears SYSREF_STATUS
+ * before releasing the link, so the core re-acquires against whatever phase
+ * MCS left behind.
+ *
+ * The whole FSM is never restarted: that would re-run MCS and break the link
+ * again.
+ *
+ * @param phy - AD9088 device, for the Apollo side of the re-sync.
+ * @param rx_jesd - Receive JESD204 core.
+ * @return 0 if the link is in DATA, negative error code otherwise.
+ */
+static int dma_example_rx_link_recover(struct ad9088_phy *phy,
+				       struct axi_jesd204_rx *rx_jesd)
+{
+	uint32_t status = dma_example_rx_link_status();
+	uint32_t attempt;
+	uint32_t poll;
+	int ret;
+
+	if (status == JESD204_RX_LINK_STATUS_DATA)
+		return 0;
+
+	pr_info("rx_jesd: link is %s after the FSM, recovering\n",
+		rx_link_state[status]);
+
+	for (attempt = 1; attempt <= RX_LINK_ATTEMPTS; attempt++) {
+#if RX_LINK_RESYNC_APOLLO
+		/*
+		 * The source first: a receiver cannot block-sync a stream the
+		 * framer is not timing correctly.
+		 */
+		ret = adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run(
+			      &phy->ad9088);
+		if (ret)
+			pr_err("Apollo link re-sync failed (%d)\n", ret);
+#else
+		(void)ret;
+		(void)phy;
+#endif
+		axi_jesd204_rx_lane_clk_disable(rx_jesd);
+		no_os_mdelay(100);
+		axi_jesd204_rx_lane_clk_enable(rx_jesd);
+
+		/* The same budget LINK_RUNNING allows the link on bring-up. */
+		for (poll = 0; poll < 20; poll++) {
+			no_os_mdelay(4);
+			status = dma_example_rx_link_status();
+			if (status == JESD204_RX_LINK_STATUS_DATA)
+				break;
+		}
+
+		if (status == JESD204_RX_LINK_STATUS_DATA) {
+			pr_info("rx_jesd: link is DATA after %lu attempt%s\n",
+				(unsigned long)attempt,
+				(attempt == 1) ? "" : "s");
+			return 0;
+		}
+	}
+
+	pr_err("rx_jesd: link stuck at %s after %u attempts\n",
+	       rx_link_state[status], RX_LINK_ATTEMPTS);
+
+	return -EIO;
+}
+#endif
 
 /**
  * @brief Put the loopback side's NCOs on a known default frequency.
@@ -428,6 +573,17 @@ int dma_example_main(void)
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_jesd);
 
+#if RX_LINK_RECOVER
+	/*
+	 * Before anything is derived from the link, so a receiver MCS left in
+	 * WAIT_BS is reported here rather than surfacing as a capture timeout a
+	 * second later.
+	 */
+	ret = dma_example_rx_link_recover(ad9088_phy, rx_jesd);
+	if (ret)
+		goto error_topology;
+#endif
+
 	/*
 	 * Derive the capture geometry from the link the FSM just brought up
 	 * rather than hardcoding it, so a profile change cannot silently
@@ -529,11 +685,9 @@ int dma_example_main(void)
 
 	tx_samples = tx_size / (tx_num_conv * sizeof(uint16_t));
 
+	Xil_DCacheDisable();
+
 	dma_example_fill_tone(tx_num_conv, tx_size);
-
-	/* The DMAC reads memory, not the cache, so write the dirty lines out. */
-	Xil_DCacheFlushRange((uintptr_t)dac_buffer_dma, tx_size);
-
 	ret = axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
 	if (ret) {
 		pr_err("Selecting the DMA data source failed (%d)\n", ret);
@@ -550,12 +704,6 @@ int dma_example_main(void)
 	 */
 	ret = axi_dmac_transfer_start(tx_dmac, &tx_transfer);
 	if (ret) {
-		pr_info("  cyclic transfer unavailable, using a single pass\n");
-		tx_transfer.cyclic = NO;
-		ret = axi_dmac_transfer_start(tx_dmac, &tx_transfer);
-	}
-
-	if (ret) {
 		pr_err("TX DMA transfer start failed (%d)\n", ret);
 		goto error_tx_stream;
 	}
@@ -565,7 +713,7 @@ int dma_example_main(void)
 		(unsigned long)tx_samples,
 		tx_num_conv, (unsigned long)(8 * sizeof(uint16_t)));
 
-	no_os_mdelay(50);
+	no_os_mdelay(500);
 
 	rx_transfer.size = transfer_size;
 	ret = axi_dmac_transfer_start(rx_dmac, &rx_transfer);
@@ -575,13 +723,14 @@ int dma_example_main(void)
 	}
 
 	ret = axi_dmac_transfer_wait_completion(rx_dmac, 1000);
+
+	Xil_DCacheEnable();
+	Xil_DCacheInvalidate();
+
 	if (ret) {
 		pr_err("RX DMA transfer timed out (%d)\n", ret);
 		goto error_tx_stream;
 	}
-
-	/* The DMAC wrote around the cache, so drop the stale lines. */
-	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer_dma, transfer_size);
 
 	pr_info("DMA_EXAMPLE Rx: address=%#lx samples=%lu channels=%u bits=%u\n",
 		(unsigned long)(uintptr_t)adc_buffer_dma,
