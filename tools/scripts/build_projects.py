@@ -464,28 +464,25 @@ def build_loop(projects, noos_dir, projects_dir, export_dir, log_dir, builds_dir
 		# None when the current -platform job has nothing to build here.
 		cmake_builds_dir = builds_dir + '_cmake'
 		ensure_dir(cmake_builds_dir)
-	
-		# Check if the projects is currently in another building process or reserve it otherwise
-		lockfile_path = os.path.join(cmake_builds_dir, f"{project}.lock")
+
+		lockfile_path = os.path.join(cmake_builds_dir, f"{project}_{platform}.lock")
 		if not os.path.isfile(lockfile_path):
-			lockfile = open(lockfile_path, "w")
+			lockfile_validation_path = os.path.join(noos_dir, f"{project}_{platform}.lock")
+			try:
+				open(lockfile_path, "w").close()
+				open(lockfile_validation_path, "w").close()
 
-			# Store the current building project in the github workspace path for extra validation
-			# This will ensure in case of job cancellation, the lockfile will be deleted as well
-			lockfile_validation_path = os.path.join(noos_dir, f"{project}.lock")
-			lockfile_validation = open(lockfile_validation_path, "w")
-	
-			cmake_ok = build_cmake_project(noos_dir, project, platform, export_dir, log_dir, cmake_builds_dir, builds_dir)
-			if cmake_ok is not None:
-				status = 'OK' if cmake_ok == 1 else 'Fail'
-				os.system('echo Project %20s -- %s >> %s' % (project, status, all_status))
-	
+				cmake_ok = build_cmake_project(noos_dir, project, platform, export_dir, log_dir, cmake_builds_dir, builds_dir)
+				if cmake_ok is not None:
+					status = 'OK' if cmake_ok == 1 else 'Fail'
+					os.system('echo Project %20s -- %s >> %s' % (project, status, all_status))
+			finally:
+				if os.path.isfile(lockfile_path):
+					os.remove(lockfile_path)
+				if os.path.isfile(lockfile_validation_path):
+					os.remove(lockfile_validation_path)
+
 			new_projects[project] = "done"
-			lockfile_validation.close()
-			lockfile.close()
-
-			os.remove(lockfile_path)
-			os.remove(lockfile_validation_path)
 		else:
 			new_projects[project] = "not_built"
 			log("%s is already in another build process. Skipping and building it later ..." % project)
