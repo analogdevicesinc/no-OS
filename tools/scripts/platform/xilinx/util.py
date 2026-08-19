@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SPDX-License-Identifier: BSD-2-Clause
+# SPDX-License-Identifier: BSD-3-Clause
 # Copyright (c) 2026 Analog Devices, Inc. All rights reserved.
 """
 Xilinx/AMD platform utilities for no-OS build system.
