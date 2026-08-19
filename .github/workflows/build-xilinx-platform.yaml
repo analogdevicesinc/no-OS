@@ -118,8 +118,7 @@ jobs:
         run: |
           rm -rf ${{ env.RELEASES_DIR }} ${{ env.LOGS_DIR }}
           if [[ "${{ job.status }}" == "cancelled" ]]; then
-            lockfile=$(find ${{ github.workspace }}/ -maxdepth 1 | grep ".lock" | sed 's:.*/::')
-            if [[ ! -z "$lockfile" ]]; then
-              rm -rf ${{ env.BUILDS_DIR }}_${{ env.HDL_BRANCH }}_cmake/$lockfile ${{ github.workspace }}/$lockfile
-            fi
+            for lockfile in $(find ${{ github.workspace }}/ -maxdepth 1 -name "*_xilinx.lock" -printf '%f\n'); do
+              rm -f "${{ env.BUILDS_DIR }}_${{ env.HDL_BRANCH }}_cmake/$lockfile" "${{ github.workspace }}/$lockfile"
+            done
           fi

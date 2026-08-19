@@ -69,7 +69,7 @@ jobs:
       RELEASES_DIR: ${{ github.workspace }}/latest_build
       LOGS_DIR: ${{ github.workspace }}/logs
       NO_OS_CACHE_DIR: ${{ github.workspace }}/deps_cache
-    runs-on: stm32-runner
+    runs-on: aducm3029-runner
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
