@@ -23,35 +23,12 @@
 # Supported host platforms: Linux, macOS, Windows (MinGW / MSVC).
 
 # ---------------------------------------------------------------------------
-# Step 1: Locate FTD2XX_LIBRARY
+# Step 1: Gather environment variables dependencies paths
 # ---------------------------------------------------------------------------
-
-if(NOT DEFINED FTD2XX_LIBRARY)
-    if(DEFINED ENV{FTD2XX_LIBRARY})
-        set(FTD2XX_LIBRARY "$ENV{FTD2XX_LIBRARY}" CACHE PATH
-            "Path to the LibMPSSE release/ directory")
-    else()
-        set(_default_ftd2xx "${NO_OS_DIR}/libraries/ftd2xx/release")
-        if(EXISTS "${_default_ftd2xx}")
-            set(FTD2XX_LIBRARY "${_default_ftd2xx}" CACHE PATH
-                "Path to the LibMPSSE release/ directory")
-        else()
-            message(FATAL_ERROR
-                "FTD2XX_LIBRARY is not set and the default location does not exist:\n"
-                "  ${_default_ftd2xx}\n"
-                "Run tools/scripts/config_ftd2xx.py to install LibMPSSE and libftd2xx,\n"
-                "or set -DFTD2XX_LIBRARY=<path-to-release-dir> on the cmake command line.")
-        endif()
-    endif()
-endif()
-
-if(NOT EXISTS "${FTD2XX_LIBRARY}")
-    message(FATAL_ERROR
-        "FTD2XX_LIBRARY directory does not exist: ${FTD2XX_LIBRARY}\n"
-        "Run tools/scripts/config_ftd2xx.py to install the libraries.")
-endif()
-
-message(STATUS "FTD2XX_LIBRARY: ${FTD2XX_LIBRARY}")
+set(FTD2XX_D2XX_HEADERS "$ENV{FTD2XX_D2XX_HEADERS}")
+set(FTD2XX_MPSSE_HEADERS "$ENV{FTD2XX_MPSSE_HEADERS}")
+set(FTD2XX_D2XX_LIB "$ENV{FTD2XX_D2XX_LIB}")
+set(FTD2XX_MPSSE_LIB "$ENV{FTD2XX_MPSSE_LIB}")
 
 # ---------------------------------------------------------------------------
 # Step 2: Add MPSSE wrapper sources to no-os
@@ -79,8 +56,6 @@ no_os_sources_ifdef(CONFIG_UART_FTD2XX ${_ftd2xx_mpsse}/ftd2xx_uart.c)
 #   include/            — libmpsse_spi.h, libmpsse_i2c.h (from LibMPSSE package)
 #   libftd2xx/          — ftd2xx.h, WinTypes.h (from LibMPSSE package)
 target_include_directories(no-os PUBLIC ${_ftd2xx_mpsse})
-target_include_directories(no-os PUBLIC "${FTD2XX_LIBRARY}/include")
-target_include_directories(no-os PUBLIC "${FTD2XX_LIBRARY}/libftd2xx")
 
 # ---------------------------------------------------------------------------
 # Step 3: Find and link the pre-built LibMPSSE and libftd2xx
@@ -100,44 +75,35 @@ if(WIN32)
             "${FTD2XX_LIBRARY}/build/Win32/LIB")
     endif()
     set(_mpsse_names libmpsse)
-else()
-    # Linux / macOS layout:
-    #   release/build/  — libmpsse.so, libmpsse.a  (Linux)
-    #                    — libmpsse.dylib, libmpsse.a  (macOS)
-    set(_mpsse_hints "${FTD2XX_LIBRARY}/build")
-    set(_mpsse_names mpsse libmpsse)
 endif()
-
-find_library(FTD2XX_MPSSE_LIB
-    NAMES ${_mpsse_names}
-    HINTS ${_mpsse_hints}
-    NO_DEFAULT_PATH
-    DOC "LibMPSSE shared/static library"
-)
-
-if(NOT FTD2XX_MPSSE_LIB)
-    message(FATAL_ERROR
-        "LibMPSSE library not found in:\n  ${_mpsse_hints}\n"
-        "Run tools/scripts/config_ftd2xx.py to install the library.")
-endif()
-message(STATUS "Found LibMPSSE: ${FTD2XX_MPSSE_LIB}")
-
-find_library(FTD2XX_D2XX_LIB
-    NAMES ftd2xx libftd2xx
-    HINTS ${_mpsse_hints}
-    NO_DEFAULT_PATH
-    DOC "FTDI D2XX library"
-)
-
-if(NOT FTD2XX_D2XX_LIB)
-    message(FATAL_ERROR
-        "libftd2xx not found in:\n  ${_mpsse_hints}\n"
-        "Run tools/scripts/config_ftd2xx.py --local-d2xx <archive> to install it.")
-endif()
-message(STATUS "Found libftd2xx: ${FTD2XX_D2XX_LIB}")
 
 # Link PUBLIC so that project executables linking no-os inherit both libraries.
-target_link_libraries(no-os PUBLIC "${FTD2XX_MPSSE_LIB}" "${FTD2XX_D2XX_LIB}")
+
+target_include_directories(no-os PUBLIC "${FTD2XX_D2XX_HEADERS}")
+target_include_directories(no-os PUBLIC "${FTD2XX_MPSSE_HEADERS}")
+
+find_library(
+        d2xx
+        NAMES ftd2xx libftd2xx
+        HINTS ${FTD2XX_D2XX_LIB}
+)
+find_library(
+        mpsse
+        NAMES mpsse libmpsse
+        HINTS ${FTD2XX_MPSSE_LIB}
+)
+
+if(NOT d2xx)
+        message(FATAL_ERROR "libftd2xx not found!")
+endif()
+if(NOT mpsse)
+        message(FATAL_ERROR "LibMPSSE not found!")
+endif()
+
+message(STATUS "Found libftd2xx: ${d2xx}")
+message(STATUS "Found LibMPSSE: ${mpsse}")
+
+target_link_libraries(no-os PUBLIC ${d2xx} ${mpsse})
 
 # ---------------------------------------------------------------------------
 # Step 4 (Windows / macOS): register runtime libraries for post-build copy
