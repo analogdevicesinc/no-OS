@@ -87,6 +87,11 @@ target_include_directories(no-os PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/hal
 )
 
+# adrv902x's app and the madura/xilinx drivers it uses are SDT-clean, so opt in
+# to the Vitis 2025+ SDT ABI when the BSP is SDT. Other projects keep the
+# classic ABI until individually validated (see config_xilinx_sdk).
+set(NOOS_XILINX_SDT ON)
+
 config_platform_sdk(adrv902x)
 add_flash_target(adrv902x)
 post_build_config(adrv902x)
