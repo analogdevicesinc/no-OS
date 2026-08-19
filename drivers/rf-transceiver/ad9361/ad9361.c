@@ -5118,6 +5118,40 @@ int32_t ad9361_fastlock_store(struct ad9361_rf_phy *phy, bool tx,
 }
 
 /**
+ * Leave fastlock mode on one direction's synthesizer.
+ *
+ * Forces the ALC word and VCO tune, releases both, re-enables VCO
+ * calibration and drops the synth-ready override. Shared by
+ * ad9361_fastlock_prepare() and ad9361_fastlock_exit_foreign().
+ * @param phy The AD9361 state structure.
+ * @param tx True for the TX synthesizer, false for RX.
+ * @param offs Address offset from the RX register bank to the TX one: zero
+ * for RX, or REG_TX_FAST_LOCK_SETUP - REG_RX_FAST_LOCK_SETUP (0x40) for TX.
+ * Added to REG_RX_FORCE_ALC and REG_RX_FORCE_VCO_TUNE_1 to reach their TX
+ * counterparts.
+ * @param ready_mask The REG_ENSM_CONFIG_2 synth-ready mask bit for this
+ * direction, TX_SYNTH_READY_MASK or RX_SYNTH_READY_MASK. Clearing it puts
+ * the ENSM back to waiting on RF Tuner Ready before entering the Rx/Tx
+ * state; fastlock had set it because a recalled profile loads the VCO
+ * directly and never recalibrates it, so Tuner Ready would never assert.
+ */
+static void ad9361_fastlock_exit_workaround(struct ad9361_rf_phy *phy, bool tx,
+		uint32_t offs, uint32_t ready_mask)
+{
+	ad9361_spi_writef(phy->spi, REG_RX_FORCE_ALC + offs, FORCE_ALC_ENABLE, 1);
+	ad9361_spi_writef(phy->spi, REG_RX_FORCE_VCO_TUNE_1 + offs,
+			  FORCE_VCO_TUNE_ENABLE, 1);
+	ad9361_spi_writef(phy->spi, REG_RX_FORCE_ALC + offs, FORCE_ALC_ENABLE, 0);
+	ad9361_spi_writef(phy->spi, REG_RX_FORCE_VCO_TUNE_1 + offs,
+			  FORCE_VCO_TUNE_ENABLE, 0);
+
+	ad9361_trx_vco_cal_control(phy, tx, true);
+	ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_2, ready_mask, 0);
+
+	phy->fastlock.current_profile[tx] = 0;
+}
+
+/**
  * Fastlock prepare.
  * @param phy The AD9361 state structure.
  * @param tx
@@ -5162,18 +5196,49 @@ static int32_t ad9361_fastlock_prepare(struct ad9361_rf_phy *phy, bool tx,
 		ad9361_spi_write(phy->spi, REG_RX_FAST_LOCK_SETUP + offs, 0);
 
 		/* Workaround: Exiting Fastlock Mode */
-		ad9361_spi_writef(phy->spi, REG_RX_FORCE_ALC + offs, FORCE_ALC_ENABLE, 1);
-		ad9361_spi_writef(phy->spi, REG_RX_FORCE_VCO_TUNE_1 + offs,
-				  FORCE_VCO_TUNE_ENABLE, 1);
-		ad9361_spi_writef(phy->spi, REG_RX_FORCE_ALC + offs, FORCE_ALC_ENABLE, 0);
-		ad9361_spi_writef(phy->spi, REG_RX_FORCE_VCO_TUNE_1 + offs,
-				  FORCE_VCO_TUNE_ENABLE, 0);
-
-		ad9361_trx_vco_cal_control(phy, tx, true);
-		ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_2, ready_mask, 0);
-
-		phy->fastlock.current_profile[tx] = 0;
+		ad9361_fastlock_exit_workaround(phy, tx, offs, ready_mask);
 	}
+
+	return 0;
+}
+
+/**
+ * Leave fastlock mode when it was entered outside this driver.
+ *
+ * A fast lock profile can be recalled by an agent this driver does not see
+ * (on a bladeRF 2.0 micro, the FPGA's Nios core). current_profile stays
+ * zero, so ad9361_fastlock_prepare() never runs its exit sequence and later
+ * tuning programs the RFPLL with FORCE_ALC_ENABLE still asserted, which
+ * shows up as a lock failure with the charge pump saturated.
+ *
+ * Writes nothing when the part is not in fastlock, so it may be called
+ * unconditionally; every path that programs the synthesiser should, since a
+ * foreign recall is asynchronous and the leak surfaces on the next tune.
+ *
+ * @param phy The AD9361 state structure.
+ * @param tx  True for TX, false for RX.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_fastlock_exit_foreign(struct ad9361_rf_phy *phy, bool tx)
+{
+	uint32_t offs = tx ? REG_TX_FAST_LOCK_SETUP - REG_RX_FAST_LOCK_SETUP : 0;
+	uint32_t ready_mask = tx ? TX_SYNTH_READY_MASK : RX_SYNTH_READY_MASK;
+	int32_t setup;
+
+	setup = ad9361_spi_read(phy->spi, REG_RX_FAST_LOCK_SETUP + offs);
+	if (setup < 0)
+		return setup;
+
+	if (!(setup & RX_FAST_LOCK_MODE_ENABLE))
+		return 0;
+
+	ad9361_spi_write(phy->spi, REG_RX_FAST_LOCK_SETUP + offs, 0);
+
+	/* Workaround: Exiting Fastlock Mode. The same sequence ad9361_fastlock_prepare()
+	 * runs, reached directly here because that function is gated on this driver's
+	 * own bookkeeping, which by definition does not cover a foreign recall.
+	 */
+	ad9361_fastlock_exit_workaround(phy, tx, offs, ready_mask);
 
 	return 0;
 }
