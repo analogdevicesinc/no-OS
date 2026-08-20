@@ -77,10 +77,13 @@
 #define TX_OFFLOAD_MAX_BYTES		(512 * 1024)
 
 /*
- * axi_data_offload register map, the part of it this example needs.
+ * axi_data_offload register map, the part of it this example needs, from
+ * data_offload_regmap.v. MEMORY_SIZE_LSB is the storage depth in bytes, read
+ * only; RESETN_OFFLOAD bit 0 low holds the IP in reset.
  *
- * MEMORY_SIZE_LSB is the storage depth in bytes, read only. RESETN_OFFLOAD bit
- * 0 low holds the IP in reset.
+ * The rest of the map, and the reset values this build inherits rather than
+ * the ones the adrv903x examples assume, are in dev_doc/DATA_OFFLOAD.md. Read
+ * it before writing anything else here.
  */
 #define AXI_DO_REG_MEMORY_SIZE_LSB	0x0014
 #define AXI_DO_REG_RESETN_OFFLOAD	0x0084
@@ -96,14 +99,18 @@
  * Bring the receive link back if MCS calibration knocks it out.
  *
  * MCS runs at OPT_POST_SETUP_STAGE1, one stage after LINK_RUNNING has already
- * waited for the receiver to reach DATA. Measuring the BSYNC path delay hands
- * the SYSREF line back and forth and then moves the provider's Apollo channel
- * by the measured delay, which can drop the receiver to WAIT_BS -- and no
- * later stage looks at the link again, so jesd204_fsm_start() still reports
+ * waited for the receiver to reach DATA. It programs the measured BSYNC path
+ * delay onto the provider channel feeding the Apollo and realigns that channel
+ * alone; the channel feeding the FPGA is left where it was, so the two SYSREFs
+ * separate by the path delay -- 2.2 ns here, most of a 3.2 ns link clock. The
+ * Apollo re-times off the edge that moved and the receiver does not, which is
+ * what drops it to WAIT_BS.
+ *
+ * It happens on some runs and not others, and nothing reports it: no stage
+ * after MCS looks at the link again, so jesd204_fsm_start() still returns
  * success and the first sign of trouble is the capture timing out.
  *
- * Clear this to watch that happen untouched, which is how to measure how often
- * it does.
+ * Clear this to leave the link however MCS left it.
  */
 #define RX_LINK_RECOVER		1
 #define RX_LINK_ATTEMPTS	3
@@ -113,11 +120,13 @@
  *
  * Bouncing the receiver alone does not clear WAIT_BS, which is the receiver
  * saying it cannot find 64b/66b block sync in the incoming stream -- the
- * source is what is wrong, not the receiver. The sequence below syncs the
- * converter FIFOs, the Rx and Tx digital and the JTx and JRx links, and
- * bring-up runs it at link_setup and setup_stage2. Neither is after MCS, so
- * the framer is left timed against the SYSREF phase it had before MCS moved
- * it. Re-running it here is the only thing in reach that re-times the framer.
+ * source is what is wrong, not the receiver.
+ * adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run() re-syncs the JTx and
+ * JRx link clocks a group at a time, with the Rx/Tx digital root clocks masked
+ * off so those are left alone. Bring-up runs it at link_setup and setup_stage2
+ * and nowhere later, so after MCS the framer is still timed against the SYSREF
+ * phase it had before MCS moved it. Re-running it here is the only thing in
+ * reach that re-times the framer.
  *
  * Kept separate from RX_LINK_RECOVER so the two halves can be told apart: the
  * receiver bounce on its own is already known not to be enough.
@@ -184,10 +193,12 @@ static uint32_t dma_example_rx_link_status(void)
  * action differs. Palma pulses SYSREF each iteration, which works because its
  * AD9528 fires a burst on demand. Here the provider is the ADF4030, whose
  * jesd204 SYSREF callback is deliberately empty because it emits BSYNC
- * continuously, so jesd204_sysref_async_force() would do nothing. What does
- * work is taking the receiver down and bringing it back up, which is what the
- * kernel's watchdog does for its own case: the enable clears SYSREF_STATUS
- * before releasing the link, so the core re-acquires against whatever phase
+ * continuously, so jesd204_sysref_async_force() would do nothing.
+ *
+ * What is left is taking the receiver down and bringing it back up -- the same
+ * bounce the kernel's watchdog uses when it finds a lane in error, LINK_DISABLE
+ * asserted, 100 ms, deasserted. axi_jesd204_rx_lane_clk_enable() also clears
+ * SYSREF_STATUS on the way out, so the core re-acquires against whatever phase
  * MCS left behind.
  *
  * The whole FSM is never restarted: that would re-run MCS and break the link
@@ -313,9 +324,10 @@ static int dma_example_set_default_nco(struct ad9088_phy *phy)
 	}
 
 	/*
-	 * Read every one of them back rather than trusting the writes: a tone is
-	 * only where it was sent if the whole side agrees, so one datapath that
-	 * did not take the tuning is enough to leave a converter pair empty.
+	 * Read every one of them back rather than trusting the writes: a tone
+	 * is only where it was sent if the whole side agrees, so one datapath
+	 * that did not take the tuning is enough to leave a converter pair
+	 * empty.
 	 */
 	for (fddc = 0; fddc < ADI_APOLLO_FDDCS_PER_SIDE; fddc++) {
 		cddc = (fddc / 2) % ADI_APOLLO_CDDCS_PER_SIDE;
@@ -405,7 +417,6 @@ int dma_example_main(void)
 	struct hmc7044_dev *hmc7044_dev;
 	struct adf4030_dev *adf4030_dev;
 	struct ad9088_phy *ad9088_phy;
-	uint32_t samples_per_conv;
 	struct adxcvr *rx_adxcvr;
 	struct adxcvr *tx_adxcvr;
 	struct axi_dmac *rx_dmac;
@@ -456,8 +467,8 @@ int dma_example_main(void)
 	}
 
 	/*
-	 * Enables MCS calibration, which trims the AD9088's internal SYSREF onto
-	 * the external edge. Needs both clock chips probed, so it goes here.
+	 * Enables MCS calibration, which trims the AD9088's internal SYSREF
+	 * onto the external edge. Needs both clock chips probed.
 	 */
 	ret = ad9088_mcs_ops_bind(adf4030_dev, adf4382_dev);
 	if (ret) {
@@ -523,8 +534,9 @@ int dma_example_main(void)
 	 * The SYSREF provider - here the ADF4030, which clocks the SYSREF input
 	 * of both the AD9088 and the FPGA - has to be listed before the top
 	 * device: jesd204_topology_init() reads is_sysref_provider from this
-	 * array but takes the jdev pointer from the top-device-filtered copy, so
-	 * the two indices only agree while the provider precedes the top device.
+	 * array but takes the jdev pointer from the top-device-filtered copy,
+	 * so the two indices only agree while the provider precedes the top
+	 * device.
 	 */
 	struct jesd204_topology_dev devs[] = {
 		{
@@ -610,8 +622,9 @@ int dma_example_main(void)
 	}
 
 	/*
-	 * A sine table entry is one I/Q pair, so the transmit link has to carry a
-	 * whole number of complex channels for the tiling further down to line up.
+	 * A sine table entry is one I/Q pair, so the transmit link has to carry
+	 * a whole number of complex channels for the tiling further down to
+	 * line up.
 	 */
 	if (!tx_num_conv || tx_num_conv > LOOPBACK_CONVERTERS ||
 	    tx_num_conv % 2) {
@@ -622,11 +635,11 @@ int dma_example_main(void)
 		goto error_topology;
 	}
 
-	samples_per_conv = ADC_BUFFER_SAMPLES;
-	transfer_size = samples_per_conv * num_conv * sizeof(adc_buffer_dma[0]);
+	transfer_size = ADC_BUFFER_SAMPLES * num_conv *
+			sizeof(adc_buffer_dma[0]);
 
 	pr_info("Capture geometry: M=%u NP=%u samples/conv=%lu bytes=%lu\n",
-		num_conv, np, (unsigned long)samples_per_conv,
+		num_conv, np, (unsigned long)ADC_BUFFER_SAMPLES,
 		(unsigned long)transfer_size);
 
 	rx_adc_init.num_channels = num_conv;
@@ -636,7 +649,7 @@ int dma_example_main(void)
 		goto error_topology;
 	}
 
-	/* The transmit core belongs to the other link, which carries its own M. */
+	/* The transmit core belongs to the other link, with its own M. */
 	tx_dac_init.num_channels = tx_num_conv;
 	ret = axi_dac_init(&tx_dac, &tx_dac_init);
 	if (ret) {
@@ -657,9 +670,9 @@ int dma_example_main(void)
 		goto error_tx_dac;
 
 	/*
-	 * The offload replays all of its memory whatever was written into it, so
-	 * fill as much as this buffer covers rather than leaving the tail to come
-	 * back as noise.
+	 * The offload replays all of its memory whatever was written into it,
+	 * so fill as much as this buffer covers rather than leaving the tail to
+	 * come back as noise.
 	 */
 	no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, AXI_DO_REG_MEMORY_SIZE_LSB,
 			  &tx_offload_size);
@@ -670,18 +683,19 @@ int dma_example_main(void)
 
 	/*
 	 * Floor to a whole pass of the sine table so the cyclic wrap leaves no
-	 * phase discontinuity for a capture to straddle -- which matters because
-	 * the capture is shorter than the replay and can start anywhere in it.
+	 * phase discontinuity for a capture to straddle -- which matters
+	 * because the capture is shorter than the replay and can start anywhere
+	 * in it.
 	 */
 	tx_lut_bytes = NO_OS_ARRAY_SIZE(sine_lut_iq) * tx_num_conv *
 		       sizeof(uint16_t);
 	tx_size -= tx_size % tx_lut_bytes;
 
 	/*
-	 * A whole table pass is a multiple of the source width at every converter
-	 * count this example accepts, so the floor above should already have
-	 * satisfied it. Check rather than assume, since the DMAC rejects a
-	 * misaligned transfer with a much less obvious error.
+	 * A whole table pass is a multiple of the source width at every
+	 * converter count this example accepts, so the floor above should
+	 * already have satisfied it. Check rather than assume, since the DMAC
+	 * rejects a misaligned transfer with a much less obvious error.
 	 */
 	if (!tx_size || tx_size % DMA_SRC_WIDTH_BYTES) {
 		pr_err("TX size %lu is not a usable multiple of the %u byte "
@@ -693,6 +707,11 @@ int dma_example_main(void)
 
 	tx_samples = tx_size / (tx_num_conv * sizeof(uint16_t));
 
+	/*
+	 * Both DMACs move data behind the cache, and from here to the end of
+	 * the capture there is always one in flight, so the cache is kept out
+	 * of the way wholesale rather than flushed and invalidated by range.
+	 */
 	Xil_DCacheDisable();
 
 	dma_example_fill_tone(tx_num_conv, tx_size);
@@ -706,9 +725,11 @@ int dma_example_main(void)
 
 	/*
 	 * Cyclic keeps the tone running for the whole capture. It is a build
-	 * option of the DMAC rather than a guarantee, so fall back to a single
-	 * pass if the core rejects it. Never wait for completion either way: a
-	 * cyclic transfer raises no end-of-transfer and would only time out.
+	 * option of the DMAC rather than a guarantee: axi_dmac_transfer_start()
+	 * rejects CYCLIC outright on a core synthesised without it, so an HDL
+	 * build that lacks it fails here rather than transmitting one pass.
+	 * Completion is never waited on -- a cyclic transfer raises no
+	 * end-of-transfer and would only time out.
 	 */
 	ret = axi_dmac_transfer_start(tx_dmac, &tx_transfer);
 	if (ret) {
@@ -724,11 +745,20 @@ int dma_example_main(void)
 	no_os_mdelay(10);
 
 	/*
-	 * Re-arm the receive offload, which is what makes the capture below see
-	 * live converter data rather than time out.
+	 * Re-arm the receive offload. This build synthesises it with
+	 * AUTO_BRINGUP, so it has been running since power-on, and the receive
+	 * instance defaults to one-shot -- by now it holds a fill captured
+	 * before the link existed and its store phase is long over. A low-high
+	 * edge on RESETN_OFFLOAD drops that fill and starts a fresh store,
+	 * which is what makes the capture below see live converter data rather
+	 * than time out. It belongs immediately before the DMAC is started, so
+	 * the store runs against the current converter phase and the DMAC
+	 * back-pressures until it completes.
 	 */
-	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, AXI_DO_REG_RESETN_OFFLOAD, 0);
-	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, AXI_DO_REG_RESETN_OFFLOAD, 1);
+	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR,
+			   AXI_DO_REG_RESETN_OFFLOAD, 0);
+	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR,
+			   AXI_DO_REG_RESETN_OFFLOAD, 1);
 
 	rx_transfer.size = transfer_size;
 	ret = axi_dmac_transfer_start(rx_dmac, &rx_transfer);
@@ -739,6 +769,7 @@ int dma_example_main(void)
 
 	ret = axi_dmac_transfer_wait_completion(rx_dmac, 1000);
 
+	/* The capture is in memory; drop whatever the cache comes back with. */
 	Xil_DCacheEnable();
 	Xil_DCacheInvalidate();
 
@@ -749,17 +780,14 @@ int dma_example_main(void)
 
 	pr_info("DMA_EXAMPLE Rx: address=%#lx samples=%lu channels=%u bits=%u\n",
 		(unsigned long)(uintptr_t)adc_buffer_dma,
-		(unsigned long)samples_per_conv,
-		num_conv, np);
+		(unsigned long)ADC_BUFFER_SAMPLES, num_conv, np);
 
 	/*
 	 * Park here with the link up rather than tearing down, so the capture
-	 * buffer stays intact and readable from a debugger. Everything below is
-	 * reached only from the error paths.
+	 * buffer stays intact and readable from a debugger. Nothing below is
+	 * reached except by jumping to one of the error labels.
 	 */
 	while (1);
-
-	jesd204_fsm_stop(topology, JESD204_LINKS_ALL);
 
 error_tx_stream:
 	axi_dmac_transfer_stop(tx_dmac);
