@@ -35,18 +35,20 @@
 
 #include <stdint.h>
 #include "no_os_i2c.h"
+#include "no_os_util.h"
+#include "no_os_delay.h"
 
 /* AD5933 Registers */
-#define AD5933_REG_CONTROL_HB       0x80    // HB of the Control register
-#define AD5933_REG_CONTROL_LB       0x81    // LB of the Control register
-#define AD5933_REG_FREQ_START       0x82    // Start frequency
-#define AD5933_REG_FREQ_INC         0x85    // Frequency increment
-#define AD5933_REG_INC_NUM          0x88    // Number of increments
-#define AD5933_REG_SETTLING_CYCLES  0x8A    // Number of settling time cycles
-#define AD5933_REG_STATUS           0x8F    // Status
-#define AD5933_REG_TEMP_DATA        0x92    // Temperature data
-#define AD5933_REG_REAL_DATA        0x94    // Real data
-#define AD5933_REG_IMAG_DATA        0x96    // Imaginary data
+#define AD5933_REG_CONTROL_HB       0x80    // HB of the Control register, R/W 1 byte
+#define AD5933_REG_CONTROL_LB       0x81    // LB of the Control register, R/W 1 byte
+#define AD5933_REG_FREQ_START       0x82    // Start frequency, R/W 3 bytes
+#define AD5933_REG_FREQ_INC         0x85    // Frequency increment, R/W 3 bytes
+#define AD5933_REG_INC_NUM          0x88    // Number of increments, R/W 2 bytes
+#define AD5933_REG_SETTLING_CYCLES  0x8A    // Number of settling time cycles, R/W 2 bytes
+#define AD5933_REG_STATUS           0x8F    // Status, R 1 byte
+#define AD5933_REG_TEMP_DATA        0x92    // Temperature data, R 2 bytes
+#define AD5933_REG_REAL_DATA        0x96    // Real data, R 2 bytes
+#define AD5933_REG_IMAG_DATA        0x94    // Imaginary data, R 2 bytes
 
 /* AD5933_REG_CONTROL_HB Bits */
 #define AD5933_CONTROL_FUNCTION(x)  ((x) << 4)
@@ -54,9 +56,9 @@
 #define AD5933_CONTROL_PGA_GAIN(x)  ((x) << 0)
 
 /* AD5933_REG_CONTROL_LB Bits */
-#define AD5933_CONTROL_RESET        (0x1 << 4)
+#define AD5933_CONTROL_RESET        NO_OS_BIT(4)
 #define AD5933_CONTROL_INT_SYSCLK   (0x0 << 3)
-#define AD5933_CONTROL_EXT_SYSCLK   (0x1 << 3)
+#define AD5933_CONTROL_EXT_SYSCLK   NO_OS_BIT(3)
 
 /* AD5933_CONTROL_FUNCTION(x) options */
 #define AD5933_FUNCTION_NOP                 0x0
@@ -68,123 +70,196 @@
 #define AD5933_FUNCTION_POWER_DOWN          0xA
 #define AD5933_FUNCTION_STANDBY             0xB
 
+enum ad5933_clock_source {
+	AD5933_CLOCK_SOURCE_INTERNAL = AD5933_CONTROL_INT_SYSCLK,
+	AD5933_CLOCK_SOURCE_EXTERNAL = AD5933_CONTROL_EXT_SYSCLK
+};
+
 /* AD5933_CONTROL_RANGE(x) options */
-#define AD5933_RANGE_2000mVpp       0x0
-#define AD5933_RANGE_200mVpp        0x1
-#define AD5933_RANGE_400mVpp        0x2
-#define AD5933_RANGE_1000mVpp       0x3
+enum ad5933_output_range {
+	AD5933_RANGE_2000mVpp,
+	AD5933_RANGE_200mVpp,
+	AD5933_RANGE_400mVpp,
+	AD5933_RANGE_1000mVpp
+};
 
 /* AD5933_CONTROL_PGA_GAIN(x) options */
-#define AD5933_GAIN_X5              0
-#define AD5933_GAIN_X1              1
+enum ad5933_pga_gain {
+	AD5933_GAIN_X5,
+	AD5933_GAIN_X1
+};
 
 /* AD5933 Default number of settling cycles */
-#define AD5933_15_CYCLES			15
+#define AD5933_SETTLING_CYCLES			50
 
-/* AD5933 settling cycles mulitiplier */
-#define AD5933_SETTLING_X1			0
-#define AD5933_SETTLING_X2			1
-#define AD5933_SETTLING_X4			3
+/* AD5933 settling cycles multiplier (settling register bits D10:D9) */
+enum ad5933_settling_cycle_multiplier {
+	AD5933_SETTLING_X1 = 0,
+	AD5933_SETTLING_X2 = 1,
+	AD5933_SETTLING_X4 = 3
+};
+
+/* AD5933 max 9-bit (D8:D0) settling cycle count 511 x 4x multiplier*/
+#define AD5933_MAX_SETTLING_CYCLES  0x7FC	// 2044
 
 /* AD5933_REG_STATUS Bits */
-#define AD5933_STAT_TEMP_VALID      (0x1 << 0)
-#define AD5933_STAT_DATA_VALID      (0x1 << 1)
-#define AD5933_STAT_SWEEP_DONE      (0x1 << 2)
+#define AD5933_STAT_TEMP_VALID      NO_OS_BIT(0)
+#define AD5933_STAT_DATA_VALID      NO_OS_BIT(1)
+#define AD5933_STAT_SWEEP_DONE      NO_OS_BIT(2)
 
-/* AD5933 Address */
+/* AD5933 Default I2C Address */
 #define AD5933_ADDRESS              0x0D
 
-/* AD5933 Block Commands */
-#define AD5933_BLOCK_WRITE          0xA0
-#define AD5933_BLOCK_READ           0xA1
 #define AD5933_ADDR_POINTER         0xB0
 
 /* AD5933 Specifications */
-#define AD5933_INTERNAL_SYS_CLK     16000000ul      // 16MHz
+#define AD5933_INTERNAL_SYS_CLK     16776000ul      // 16.776 MHz
 #define AD5933_MAX_INC_NUM          511             // Maximum increment number
+#define AD5933_MAX_RETRIES          100             // Maximum number of retries for waiting for a status bit to be set
+#define AD5933_POWERUP_RETRIES      300             // Retries for the power-up I2C probe (cold-start supply ramp)
+#define AD5933_POWERUP_RETRY_MS     10              // Delay between power-up probe attempts, in milliseconds
+#define AD5933_MAX_OUTPUT_FREQ      100000   		// 100 kHz
+#define AD5933_MIN_OUTPUT_FREQ      0.1   			// 0.1 Hz
 
 struct ad5933_dev {
 	/* I2C */
 	struct no_os_i2c_desc	*i2c_desc;
-	/* Device Settings */
-	uint32_t current_sys_clk;
-	uint8_t current_clock_source;
-	uint8_t current_gain;
-	uint8_t current_range;
+	/* Current system clock frequency */
+	uint32_t clock_freq;
+	enum ad5933_clock_source clock_source;
+	enum ad5933_pga_gain pga_gain;
+	enum ad5933_output_range output_range;
+	uint16_t settling_cycles;
+	uint32_t start_freq;
+	uint32_t freq_increment;
+	uint16_t num_increments;
+	uint16_t sweep_point;
+	uint32_t current_output_freq;
 };
 
 struct ad5933_init_param {
 	/* I2C */
 	struct no_os_i2c_init_param	i2c_init;
 	/* Device Settings */
-	uint32_t current_sys_clk;
-	uint8_t current_clock_source;
-	uint8_t current_gain;
-	uint8_t current_range;
+	uint32_t clock_freq;
+	enum ad5933_clock_source clock_source;
+	enum ad5933_pga_gain pga_gain;
+	enum ad5933_output_range output_range;
+	uint16_t settling_cycles;
 };
 
 /*! Initializes the communication peripheral. */
-int32_t ad5933_init(struct ad5933_dev **device,
-		    struct ad5933_init_param init_param);
+int ad5933_init(struct ad5933_dev **device,
+		struct ad5933_init_param *init_param);
 
-/*! Free the resources allocated by ad5686_init(). */
-int32_t ad5933_remove(struct ad5933_dev *dev);
+/*! Setup the device clock, range and gain. */
+int ad5933_setup(struct ad5933_dev *dev);
 
-/*! Writes data into a register. */
-void ad5933_set_register_value(struct ad5933_dev *dev,
-			       uint8_t register_address,
-			       uint32_t register_value,
-			       uint8_t bytes_number);
+/*! Free the resources allocated by ad5933_init(). */
+int ad5933_remove(struct ad5933_dev *dev);
 
-/*! Reads the value of a register. */
-uint32_t ad5933_get_register_value(struct ad5933_dev *dev,
-				   uint8_t register_address,
-				   uint8_t bytes_number);
+/*! Writes a single byte into a register. */
+int ad5933_reg_write(struct ad5933_dev *dev, uint8_t reg, uint8_t val);
+
+/*! Reads a single byte from a register. */
+int ad5933_reg_read(struct ad5933_dev *dev, uint8_t reg, uint8_t *val);
+
+/*! Writes a multi-byte, MSB-first value into a register. */
+int ad5933_set_register_value(struct ad5933_dev *dev,
+			      uint8_t register_address,
+			      uint32_t register_value,
+			      uint8_t bytes_number);
+
+/*! Reads a multi-byte, MSB-first value from a register. */
+int ad5933_get_register_value(struct ad5933_dev *dev,
+			      uint32_t *data,
+			      uint8_t register_address,
+			      uint8_t bytes_number);
 
 /*! Resets the device. */
-void ad5933_reset(struct ad5933_dev *dev);
+int ad5933_reset(struct ad5933_dev *dev);
 
 /*! Selects the source of the system clock. */
-void ad5933_set_system_clk(struct ad5933_dev *dev,
-			   int8_t clk_source,
-			   uint32_t ext_clk_freq);
+int ad5933_set_system_clk(struct ad5933_dev *dev,
+			  enum ad5933_clock_source clk_source,
+			  uint32_t ext_clk_freq);
 
 /*! Selects the range and gain of the device. */
-void ad5933_set_range_and_gain(struct ad5933_dev *dev,
-			       int8_t range,
-			       int8_t gain);
+int ad5933_set_range_and_gain(struct ad5933_dev *dev,
+			      enum ad5933_output_range range,
+			      enum ad5933_pga_gain gain);
 
-/*! Reads the temp. from the part and returns the data in degrees Celsius. */
-float ad5933_get_temperature(struct ad5933_dev *dev);
+/*! Selects the range of the device. */
+int ad5933_set_range(struct ad5933_dev *dev, enum ad5933_output_range range);
+
+/*! Selects the gain of the device. */
+int ad5933_set_gain(struct ad5933_dev *dev, enum ad5933_pga_gain gain);
+
+/*! Reads the temperature value and converts it to degrees Celsius. */
+int ad5933_get_temperature(struct ad5933_dev *dev, float *temperature);
 
 /*! Configures the sweep parameters. */
-void ad5933_config_sweep(struct ad5933_dev *dev,
-			 uint32_t  start_freq,
-			 uint32_t  inc_freq,
-			 uint16_t inc_num);
+int ad5933_config_sweep(struct ad5933_dev *dev,
+			uint32_t start_freq,
+			uint32_t inc_freq,
+			uint16_t num_increments);
 
-/*! Starts the sweep operation. */
-void ad5933_start_sweep(struct ad5933_dev *dev);
-
-/*! Reads the real and imaginary value from register. */
-void ad5933_get_data(struct ad5933_dev *dev,
-		     uint8_t freq_function,
-		     short *imag_data,
-		     short *real_data);
+/*! Reads the real and imaginary value for a given frequency function. */
+int ad5933_get_data(struct ad5933_dev *dev,
+		    uint8_t freq_function,
+		    int16_t *real,
+		    int16_t *imag);
 
 /*! Reads the real and the imaginary data and calculates the Gain Factor. */
-double ad5933_calculate_gain_factor(struct ad5933_dev *dev,
-				    uint32_t calibration_impedance,
-				    uint8_t freq_function);
+int ad5933_calculate_gain_factor(struct ad5933_dev *dev,
+				 double *gain_factor,
+				 uint32_t calibration_impedance);
 
 /*! Reads the real and the imaginary data and calculates the Impedance. */
-double ad5933_calculate_impedance(struct ad5933_dev *dev,
-				  double gain_factor,
-				  uint8_t freq_function);
+int ad5933_calculate_impedance(struct ad5933_dev *dev,
+			       double gain_factor,
+			       double *impedance);
 
 /*! Selects the number of settling cycles. */
-void ad5933_set_settling_time(struct ad5933_dev *dev,
-			      uint8_t mulitplier,
-			      uint16_t number_cycles);
+int ad5933_set_settling_time(struct ad5933_dev *dev,
+			     uint16_t number_cycles);
+
+/*! Polls the status register until (status & mask) or timeout. */
+int ad5933_wait_status(struct ad5933_dev *dev, uint8_t mask,
+		       uint8_t *status_out);
+
+/*! Reads the raw temperature (14-bit two's complement) from the part. */
+int ad5933_get_raw_temperature(struct ad5933_dev *dev, int32_t *temperature);
+
+/*! Reads the real and imaginary data and calculates the magnitude. */
+int ad5933_get_magnitude(struct ad5933_dev *dev,
+			 double *magnitude);
+
+/*! Reads the real and imaginary data and calculates the phase (radians). */
+int ad5933_get_phase(struct ad5933_dev *dev,
+		     double system_phase,
+		     double *phase_rad);
+
+int ad5933_initialize_sweep(struct ad5933_dev *dev);
+
+int ad5933_init_start_freq(struct ad5933_dev *dev);
+
+int ad5933_start_sweep(struct ad5933_dev *dev);
+
+int ad5933_increment_freq(struct ad5933_dev *dev);
+
+int ad5933_repeat_freq(struct ad5933_dev *dev);
+
+int ad5933_power_down(struct ad5933_dev *dev);
+
+int ad5933_standby(struct ad5933_dev *dev);
+
+uint32_t ad5933_convert_freq_to_reg(struct ad5933_dev *dev, uint32_t frequency);
+
+/*! Reads the real and imaginary value from register. */
+int ad5933_get_current_data(struct ad5933_dev *dev, int16_t *real,
+			    int16_t *imag);
+
+int ad5933_sweep_done(struct ad5933_dev *dev, int32_t *done);
 
 #endif /* __AD5933_H__ */
