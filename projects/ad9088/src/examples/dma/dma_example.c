@@ -46,17 +46,34 @@
 #include "parameters.h"
 
 /*
- * Side the loopback runs on. The first link of that side carries it, and every
- * datapath on the side is used.
+ * Sides the example drives.
+ *
+ * The board's HDL is built ASYMMETRIC_A_B_MODE=0, so both sides share one JESD
+ * core, one transport layer and one DMA: the core reports NUM_LINKS=2 over 16
+ * lanes and the TPL 8 converters. A capture is therefore both sides at once,
+ * side A's converters first and side B's after them, and side B reaches it
+ * only when its own link pair is brought up alongside side A's. There is no
+ * second chain to point at -- `_B` register bases exist only in the split
+ * .orig bitstream.
+ */
+#define LOOPBACK_SIDES		2
+
+/*
+ * Which side the capture report points at. It selects nothing about the
+ * configuration: every side the profile has in use is tuned, brought up and
+ * captured either way. Side A's window starts at converter 0, side B's at
+ * side A's converter count.
  */
 #define LOOPBACK_SIDE		0
 
 /*
- * Most converters this example handles on that link. The capture buffer
- * geometry and the I/Q pairing below both assume it, so a link carrying more
- * is rejected rather than captured half-wrong.
+ * Most converters this example handles per side. The I/Q pairing below assumes
+ * it, so a link carrying more is rejected rather than captured half-wrong.
  */
 #define LOOPBACK_CONVERTERS	4
+
+/* Widest capture: every side's converters land in the one buffer. */
+#define CAPTURE_CONVERTERS	(LOOPBACK_CONVERTERS * LOOPBACK_SIDES)
 
 /*
  * Default coarse NCO, as a divisor of the DAC rate. The fractional part of the
@@ -80,10 +97,6 @@
  * axi_data_offload register map, the part of it this example needs, from
  * data_offload_regmap.v. MEMORY_SIZE_LSB is the storage depth in bytes, read
  * only; RESETN_OFFLOAD bit 0 low holds the IP in reset.
- *
- * The rest of the map, and the reset values this build inherits rather than
- * the ones the adrv903x examples assume, are in dev_doc/DATA_OFFLOAD.md. Read
- * it before writing anything else here.
  */
 #define AXI_DO_REG_MEMORY_SIZE_LSB	0x0014
 #define AXI_DO_REG_RESETN_OFFLOAD	0x0084
@@ -105,33 +118,9 @@
  * separate by the path delay -- 2.2 ns here, most of a 3.2 ns link clock. The
  * Apollo re-times off the edge that moved and the receiver does not, which is
  * what drops it to WAIT_BS.
- *
- * It happens on some runs and not others, and nothing reports it: no stage
- * after MCS looks at the link again, so jesd204_fsm_start() still returns
- * success and the first sign of trouble is the capture timing out.
- *
- * Clear this to leave the link however MCS left it.
  */
 #define RX_LINK_RECOVER		1
 #define RX_LINK_ATTEMPTS	3
-
-/*
- * Re-time the Apollo's own links before bouncing the receiver.
- *
- * Bouncing the receiver alone does not clear WAIT_BS, which is the receiver
- * saying it cannot find 64b/66b block sync in the incoming stream -- the
- * source is what is wrong, not the receiver.
- * adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run() re-syncs the JTx and
- * JRx link clocks a group at a time, with the Rx/Tx digital root clocks masked
- * off so those are left alone. Bring-up runs it at link_setup and setup_stage2
- * and nowhere later, so after MCS the framer is still timed against the SYSREF
- * phase it had before MCS moved it. Re-running it here is the only thing in
- * reach that re-times the framer.
- *
- * Kept separate from RX_LINK_RECOVER so the two halves can be told apart: the
- * receiver bounce on its own is already known not to be enough.
- */
-#define RX_LINK_RESYNC_APOLLO	1
 
 /*
  * Receive core link status, from axi_jesd204_rx.c. Carried here because the
@@ -143,12 +132,12 @@
 #define JESD204_RX_LINK_STATUS_DATA	3
 
 /*
- * Static capture buffer, sized for the widest link this example accepts. The
- * converter count is read back from the link at runtime and rejected if it
- * exceeds LOOPBACK_CONVERTERS, so the depth per converter is always the full
- * ADC_BUFFER_SAMPLES.
+ * Static capture buffer, sized for the widest capture this example accepts --
+ * every side at its full converter count. Each side's count is read back from
+ * its link at runtime and rejected if it exceeds LOOPBACK_CONVERTERS, so the
+ * depth per converter is always the full ADC_BUFFER_SAMPLES.
  */
-static uint16_t adc_buffer_dma[ADC_BUFFER_SAMPLES * LOOPBACK_CONVERTERS]
+static uint16_t adc_buffer_dma[ADC_BUFFER_SAMPLES * CAPTURE_CONVERTERS]
 __attribute__((aligned(DMA_BUFFER_ALIGN)));
 
 /*
@@ -157,6 +146,22 @@ __attribute__((aligned(DMA_BUFFER_ALIGN)));
  */
 static uint32_t dac_buffer_dma[TX_OFFLOAD_MAX_BYTES / sizeof(uint32_t)]
 __attribute__((aligned(DMA_BUFFER_ALIGN)));
+
+/*
+ * First link of each side. Which of these the topology declares is decided at
+ * runtime from the profile's link_in_use, so a profile that leaves a side
+ * unused simply yields a narrower capture instead of the FSM being asked to
+ * bring up a link that was never configured.
+ */
+static const unsigned int framer_link_id[LOOPBACK_SIDES] = {
+	FRAMER_LINK_A0_RX,
+	FRAMER_LINK_B0_RX,
+};
+
+static const unsigned int deframer_link_id[LOOPBACK_SIDES] = {
+	DEFRAMER_LINK_A0_TX,
+	DEFRAMER_LINK_B0_TX,
+};
 
 #if RX_LINK_RECOVER
 /*
@@ -223,19 +228,12 @@ static int dma_example_rx_link_recover(struct ad9088_phy *phy,
 		rx_link_state[status]);
 
 	for (attempt = 1; attempt <= RX_LINK_ATTEMPTS; attempt++) {
-#if RX_LINK_RESYNC_APOLLO
-		/*
-		 * The source first: a receiver cannot block-sync a stream the
-		 * framer is not timing correctly.
-		 */
+
 		ret = adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run(
 			      &phy->ad9088);
 		if (ret)
 			pr_err("Apollo link re-sync failed (%d)\n", ret);
-#else
-		(void)ret;
-		(void)phy;
-#endif
+
 		axi_jesd204_rx_lane_clk_disable(rx_jesd);
 		no_os_mdelay(100);
 		axi_jesd204_rx_lane_clk_enable(rx_jesd);
@@ -264,7 +262,7 @@ static int dma_example_rx_link_recover(struct ad9088_phy *phy,
 #endif
 
 /**
- * @brief Put the loopback side's NCOs on a known default frequency.
+ * @brief Put one side's NCOs on a known default frequency.
  *
  * A CDUC/FDUC upconverts and a CDDC/FDDC downconverts, so a tone written at
  * f_lut comes back at f_lut + (tx shifts) - (rx shifts). A profile is free to
@@ -279,13 +277,16 @@ static int dma_example_rx_link_recover(struct ad9088_phy *phy,
  * pair left on the profile's own frequencies loses its tone off the passband
  * while the rest of the capture looks fine.
  *
+ * Both sides share the transport but keep their own datapaths, so this runs
+ * once per side in use rather than once for the capture.
+ *
  * @param phy - AD9088 device.
+ * @param side - Side to tune.
  * @return 0 on success, negative error code otherwise.
  */
-static int dma_example_set_default_nco(struct ad9088_phy *phy)
+static int dma_example_set_default_nco(struct ad9088_phy *phy, uint8_t side)
 {
-	uint64_t dac_rate = phy->profile.dac_cfg[LOOPBACK_SIDE]
-			    .dac_sampling_rate_Hz;
+	uint64_t dac_rate = phy->profile.dac_cfg[side].dac_sampling_rate_Hz;
 	int64_t tx_cnco = 0;
 	int64_t tx_fnco = 0;
 	int64_t rx_cnco = 0;
@@ -298,27 +299,27 @@ static int dma_example_set_default_nco(struct ad9088_phy *phy)
 	cnco_hz = (int64_t)no_os_div_u64(dac_rate, DEFAULT_CNCO_RATE_DIV);
 
 	for (cddc = 0; cddc < ADI_APOLLO_CDDCS_PER_SIDE; cddc++) {
-		ret = ad9088_set_cnco_freq(phy, ADI_APOLLO_TX, LOOPBACK_SIDE,
-					   cddc, cnco_hz);
+		ret = ad9088_set_cnco_freq(phy, ADI_APOLLO_TX, side, cddc,
+					   cnco_hz);
 		if (!ret)
-			ret = ad9088_set_cnco_freq(phy, ADI_APOLLO_RX,
-						   LOOPBACK_SIDE, cddc,
-						   cnco_hz);
+			ret = ad9088_set_cnco_freq(phy, ADI_APOLLO_RX, side,
+						   cddc, cnco_hz);
 		if (ret) {
-			pr_err("Tuning CDDC/CDUC %u failed (%d)\n", cddc, ret);
+			pr_err("Side %u: tuning CDDC/CDUC %u failed (%d)\n",
+			       side, cddc, ret);
 			return ret;
 		}
 	}
 
 	for (fddc = 0; fddc < ADI_APOLLO_FDDCS_PER_SIDE; fddc++) {
-		ret = ad9088_set_fnco_freq(phy, ADI_APOLLO_TX, LOOPBACK_SIDE,
-					   fddc, DEFAULT_FNCO_HZ);
+		ret = ad9088_set_fnco_freq(phy, ADI_APOLLO_TX, side, fddc,
+					   DEFAULT_FNCO_HZ);
 		if (!ret)
-			ret = ad9088_set_fnco_freq(phy, ADI_APOLLO_RX,
-						   LOOPBACK_SIDE, fddc,
-						   DEFAULT_FNCO_HZ);
+			ret = ad9088_set_fnco_freq(phy, ADI_APOLLO_RX, side,
+						   fddc, DEFAULT_FNCO_HZ);
 		if (ret) {
-			pr_err("Tuning FDDC/FDUC %u failed (%d)\n", fddc, ret);
+			pr_err("Side %u: tuning FDDC/FDUC %u failed (%d)\n",
+			       side, fddc, ret);
 			return ret;
 		}
 	}
@@ -332,22 +333,20 @@ static int dma_example_set_default_nco(struct ad9088_phy *phy)
 	for (fddc = 0; fddc < ADI_APOLLO_FDDCS_PER_SIDE; fddc++) {
 		cddc = (fddc / 2) % ADI_APOLLO_CDDCS_PER_SIDE;
 
-		ret = ad9088_get_cnco_freq(phy, ADI_APOLLO_TX, LOOPBACK_SIDE,
-					   cddc, &tx_cnco);
+		ret = ad9088_get_cnco_freq(phy, ADI_APOLLO_TX, side, cddc,
+					   &tx_cnco);
 		if (!ret)
-			ret = ad9088_get_fnco_freq(phy, ADI_APOLLO_TX,
-						   LOOPBACK_SIDE, fddc,
-						   &tx_fnco);
+			ret = ad9088_get_fnco_freq(phy, ADI_APOLLO_TX, side,
+						   fddc, &tx_fnco);
 		if (!ret)
-			ret = ad9088_get_cnco_freq(phy, ADI_APOLLO_RX,
-						   LOOPBACK_SIDE, cddc,
-						   &rx_cnco);
+			ret = ad9088_get_cnco_freq(phy, ADI_APOLLO_RX, side,
+						   cddc, &rx_cnco);
 		if (!ret)
-			ret = ad9088_get_fnco_freq(phy, ADI_APOLLO_RX,
-						   LOOPBACK_SIDE, fddc,
-						   &rx_fnco);
+			ret = ad9088_get_fnco_freq(phy, ADI_APOLLO_RX, side,
+						   fddc, &rx_fnco);
 		if (ret) {
-			pr_err("Reading back the NCOs failed (%d)\n", ret);
+			pr_err("Side %u: reading back the NCOs failed (%d)\n",
+			       side, ret);
 			return ret;
 		}
 
@@ -358,14 +357,15 @@ static int dma_example_set_default_nco(struct ad9088_phy *phy)
 		 * unremarked.
 		 */
 		if (tx_cnco != cnco_hz || rx_cnco != cnco_hz)
-			pr_info("  Warning: CDDC%u asked %ld Hz, tuned tx %ld "
-				"rx %ld\n", cddc, (long)cnco_hz, (long)tx_cnco,
-				(long)rx_cnco);
+			pr_info("  Warning: side %u CDDC%u asked %ld Hz, tuned "
+				"tx %ld rx %ld\n", side, cddc, (long)cnco_hz,
+				(long)tx_cnco, (long)rx_cnco);
 
 		if ((tx_cnco + tx_fnco) != (rx_cnco + rx_fnco)) {
-			pr_err("CDDC%u/FDDC%u did not take the default tuning: "
-			       "tx c/f %ld/%ld kHz  rx c/f %ld/%ld kHz\n", cddc,
-			       fddc, (long)no_os_div_s64(tx_cnco, 1000),
+			pr_err("Side %u CDDC%u/FDDC%u did not take the default "
+			       "tuning: tx c/f %ld/%ld kHz  rx c/f %ld/%ld "
+			       "kHz\n", side, cddc, fddc,
+			       (long)no_os_div_s64(tx_cnco, 1000),
 			       (long)no_os_div_s64(tx_fnco, 1000),
 			       (long)no_os_div_s64(rx_cnco, 1000),
 			       (long)no_os_div_s64(rx_fnco, 1000));
@@ -373,8 +373,8 @@ static int dma_example_set_default_nco(struct ad9088_phy *phy)
 		}
 	}
 
-	pr_info("  NCOs: %u coarse at %ld kHz, %u fine at %ld Hz, tx and rx "
-		"matched\n", (unsigned)ADI_APOLLO_CDDCS_PER_SIDE,
+	pr_info("  Side %u NCOs: %u coarse at %ld kHz, %u fine at %ld Hz, tx "
+		"and rx matched\n", side, (unsigned)ADI_APOLLO_CDDCS_PER_SIDE,
 		(long)no_os_div_s64(cnco_hz, 1000),
 		(unsigned)ADI_APOLLO_FDDCS_PER_SIDE, (long)DEFAULT_FNCO_HZ);
 
@@ -421,14 +421,22 @@ int dma_example_main(void)
 	struct adxcvr *tx_adxcvr;
 	struct axi_dmac *rx_dmac;
 	struct axi_dmac *tx_dmac;
-	uint32_t transfer_size;
+	uint32_t rx_size;
 	uint32_t tx_lut_bytes;
+	uint8_t side_conv[LOOPBACK_SIDES] = {0};
+	uint8_t side_first_conv[LOOPBACK_SIDES] = {0};
+	unsigned int link_ids[2 * LOOPBACK_SIDES];
+	unsigned int links_number = 0;
+	unsigned int dev_idx;
+	unsigned int link_idx;
+	uint8_t link_conv;
 	struct axi_adc *rx_adc;
 	struct axi_dac *tx_dac;
 	uint8_t tx_num_conv;
 	uint32_t tx_samples;
 	uint32_t tx_size;
-	uint8_t num_conv;
+	uint8_t rx_num_conv;
+	uint8_t side;
 	uint8_t np;
 	int ret = 0;
 
@@ -531,30 +539,46 @@ int dma_example_main(void)
 	}
 
 	/*
+	 * Bring up the first link of every side the profile has in use. Both
+	 * sides frame into the one JESD core and transport layer, so this list
+	 * is what decides whether the capture is one side wide or both -- there
+	 * is no second chain to enable instead. A side left unused by the
+	 * profile is skipped rather than handed to the FSM as a link that was
+	 * never configured.
+	 */
+	for (side = 0; side < LOOPBACK_SIDES; side++) {
+		if (ad9088_phy->profile.jtx[side].tx_link_cfg[0].link_in_use)
+			link_ids[links_number++] = framer_link_id[side];
+		if (ad9088_phy->profile.jrx[side].rx_link_cfg[0].link_in_use)
+			link_ids[links_number++] = deframer_link_id[side];
+	}
+
+	if (!links_number) {
+		pr_err("The profile has no JESD204 link in use\n");
+		ret = -EINVAL;
+		goto error_ad9088;
+	}
+
+	/*
 	 * The SYSREF provider - here the ADF4030, which clocks the SYSREF input
 	 * of both the AD9088 and the FPGA - has to be listed before the top
 	 * device: jesd204_topology_init() reads is_sysref_provider from this
 	 * array but takes the jdev pointer from the top-device-filtered copy,
 	 * so the two indices only agree while the provider precedes the top
 	 * device.
+	 *
+	 * The FPGA cores name side A's link and nothing else: the core is one
+	 * register set shared by both links, so side B's link has nothing of
+	 * its own to attach to. Entries left without links here are given every
+	 * link in use just below.
 	 */
 	struct jesd204_topology_dev devs[] = {
 		{
 			.jdev = adf4030_dev->jdev,
-			.link_ids = {
-				FRAMER_LINK_A0_RX,
-				DEFRAMER_LINK_A0_TX
-			},
-			.links_number = 2,
 			.is_sysref_provider = true,
 		},
 		{
 			.jdev = hmc7044_dev->jdev,
-			.link_ids = {
-				FRAMER_LINK_A0_RX,
-				DEFRAMER_LINK_A0_TX
-			},
-			.links_number = 2,
 		},
 		{
 			.jdev = rx_jesd->jdev,
@@ -568,14 +592,19 @@ int dma_example_main(void)
 		},
 		{
 			.jdev = ad9088_phy->jdev,
-			.link_ids = {
-				FRAMER_LINK_A0_RX,
-				DEFRAMER_LINK_A0_TX
-			},
-			.links_number = 2,
 			.is_top_device = true,
 		},
 	};
+
+	for (dev_idx = 0; dev_idx < NO_OS_ARRAY_SIZE(devs); dev_idx++) {
+		if (devs[dev_idx].links_number)
+			continue;
+
+		for (link_idx = 0; link_idx < links_number; link_idx++)
+			devs[dev_idx].link_ids[link_idx] = link_ids[link_idx];
+
+		devs[dev_idx].links_number = links_number;
+	}
 
 	ret = jesd204_topology_init(&topology, devs,
 				    NO_OS_ARRAY_SIZE(devs));
@@ -603,46 +632,98 @@ int dma_example_main(void)
 	if (ret)
 		goto error_topology;
 #endif
+	np = ad9088_phy->profile.jtx[LOOPBACK_SIDE]
+	     .tx_link_cfg[0].np_minus1 + 1;
 
 	/*
-	 * Derive the capture geometry from the link the FSM just brought up
+	 * Derive the capture geometry from the links the FSM just brought up
 	 * rather than hardcoding it, so a profile change cannot silently
-	 * corrupt the buffer layout.
+	 * corrupt the buffer layout. Every side frames into the one transport
+	 * layer, so the capture is as wide as their converter counts together
+	 * and each side owns a contiguous window in converter order.
 	 */
-	num_conv = ad9088_phy->profile.jtx[LOOPBACK_SIDE].tx_link_cfg[0].m_minus1 + 1;
-	np = ad9088_phy->profile.jtx[LOOPBACK_SIDE].tx_link_cfg[0].np_minus1 + 1;
-	tx_num_conv = ad9088_phy->profile.jrx[LOOPBACK_SIDE]
-		      .rx_link_cfg[0].m_minus1 + 1;
+	rx_num_conv = 0;
 
-	if (!num_conv || num_conv > LOOPBACK_CONVERTERS) {
-		pr_err("Converter count M=%u, this example covers one side of "
-		       "up to %u\n", num_conv, LOOPBACK_CONVERTERS);
+	for (side = 0; side < LOOPBACK_SIDES; side++) {
+		if (!ad9088_phy->profile.jtx[side].tx_link_cfg[0].link_in_use)
+			continue;
+
+		link_conv = ad9088_phy->profile.jtx[side]
+			    .tx_link_cfg[0].m_minus1 + 1;
+
+		if (!link_conv || link_conv > LOOPBACK_CONVERTERS) {
+			pr_err("Side %u converter count M=%u, this example "
+			       "covers up to %u per side\n", side, link_conv,
+			       LOOPBACK_CONVERTERS);
+			ret = -EINVAL;
+			goto error_topology;
+		}
+
+		side_first_conv[side] = rx_num_conv;
+		side_conv[side] = link_conv;
+		rx_num_conv += link_conv;
+	}
+
+	if (!rx_num_conv) {
+		pr_err("No receive link in use, nothing to capture\n");
 		ret = -EINVAL;
 		goto error_topology;
 	}
 
 	/*
-	 * A sine table entry is one I/Q pair, so the transmit link has to carry
-	 * a whole number of complex channels for the tiling further down to
-	 * line up.
+	 * A sine table entry is one I/Q pair, so every transmit link has to
+	 * carry a whole number of complex channels for the tiling further down
+	 * to line up.
 	 */
-	if (!tx_num_conv || tx_num_conv > LOOPBACK_CONVERTERS ||
-	    tx_num_conv % 2) {
-		pr_err("Transmit converter count M=%u, this example covers one "
-		       "side of up to %u, in I/Q pairs\n", tx_num_conv,
-		       LOOPBACK_CONVERTERS);
+	tx_num_conv = 0;
+
+	for (side = 0; side < LOOPBACK_SIDES; side++) {
+		if (!ad9088_phy->profile.jrx[side].rx_link_cfg[0].link_in_use)
+			continue;
+
+		link_conv = ad9088_phy->profile.jrx[side]
+			    .rx_link_cfg[0].m_minus1 + 1;
+
+		if (!link_conv || link_conv > LOOPBACK_CONVERTERS ||
+		    link_conv % 2) {
+			pr_err("Side %u transmit converter count M=%u, this "
+			       "example covers up to %u per side, in I/Q "
+			       "pairs\n", side, link_conv, LOOPBACK_CONVERTERS);
+			ret = -EINVAL;
+			goto error_topology;
+		}
+
+		tx_num_conv += link_conv;
+	}
+
+	if (!tx_num_conv) {
+		pr_err("No transmit link in use, nothing to replay\n");
 		ret = -EINVAL;
 		goto error_topology;
 	}
 
-	transfer_size = ADC_BUFFER_SAMPLES * num_conv *
+	rx_size = ADC_BUFFER_SAMPLES * rx_num_conv *
 			sizeof(adc_buffer_dma[0]);
 
 	pr_info("Capture geometry: M=%u NP=%u samples/conv=%lu bytes=%lu\n",
-		num_conv, np, (unsigned long)ADC_BUFFER_SAMPLES,
-		(unsigned long)transfer_size);
+		rx_num_conv, np, (unsigned long)ADC_BUFFER_SAMPLES,
+		(unsigned long)rx_size);
 
-	rx_adc_init.num_channels = num_conv;
+	for (side = 0; side < LOOPBACK_SIDES; side++) {
+		if (!side_conv[side])
+			continue;
+
+		pr_info("  Side %u: converters %u..%u%s\n", side,
+			side_first_conv[side],
+			side_first_conv[side] + side_conv[side] - 1,
+			(side == LOOPBACK_SIDE) ? "  <- reported window" : "");
+	}
+
+	if (!side_conv[LOOPBACK_SIDE])
+		pr_info("  Warning: side %u is not in use in this profile, so "
+			"its window is empty\n", LOOPBACK_SIDE);
+
+	rx_adc_init.num_channels = rx_num_conv;
 	ret = axi_adc_init(&rx_adc, &rx_adc_init);
 	if (ret) {
 		pr_err("RX TPL core init failed (%d)\n", ret);
@@ -663,11 +744,19 @@ int dma_example_main(void)
 
 	/*
 	 * The loopback runs from this operating point rather than wherever the
-	 * profile happened to leave the NCOs.
+	 * profile happened to leave the NCOs. Each side keeps its own
+	 * datapaths, so every side in use is tuned -- one left on the profile's
+	 * frequencies would come back as noise in its half of the capture.
 	 */
-	ret = dma_example_set_default_nco(ad9088_phy);
-	if (ret)
-		goto error_tx_dac;
+	for (side = 0; side < LOOPBACK_SIDES; side++) {
+		if (!ad9088_phy->profile.jtx[side].tx_link_cfg[0].link_in_use &&
+		    !ad9088_phy->profile.jrx[side].rx_link_cfg[0].link_in_use)
+			continue;
+
+		ret = dma_example_set_default_nco(ad9088_phy, side);
+		if (ret)
+			goto error_tx_dac;
+	}
 
 	/*
 	 * The offload replays all of its memory whatever was written into it,
@@ -760,7 +849,7 @@ int dma_example_main(void)
 	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR,
 			   AXI_DO_REG_RESETN_OFFLOAD, 1);
 
-	rx_transfer.size = transfer_size;
+	rx_transfer.size = rx_size;
 	ret = axi_dmac_transfer_start(rx_dmac, &rx_transfer);
 	if (ret) {
 		pr_err("RX DMA transfer start failed (%d)\n", ret);
@@ -780,7 +869,18 @@ int dma_example_main(void)
 
 	pr_info("DMA_EXAMPLE Rx: address=%#lx samples=%lu channels=%u bits=%u\n",
 		(unsigned long)(uintptr_t)adc_buffer_dma,
-		(unsigned long)ADC_BUFFER_SAMPLES, num_conv, np);
+		(unsigned long)ADC_BUFFER_SAMPLES, rx_num_conv, np);
+
+	/*
+	 * Samples interleave across the whole capture, so a side's window is a
+	 * stride of rx_num_conv starting at its first converter.
+	 */
+	pr_info("DMA_EXAMPLE Rx side %u: first sample at byte %lu, stride %lu "
+		"bytes, %u converters\n", LOOPBACK_SIDE,
+		(unsigned long)(side_first_conv[LOOPBACK_SIDE] *
+				sizeof(adc_buffer_dma[0])),
+		(unsigned long)(rx_num_conv * sizeof(adc_buffer_dma[0])),
+		side_conv[LOOPBACK_SIDE]);
 
 	/*
 	 * Park here with the link up rather than tearing down, so the capture
