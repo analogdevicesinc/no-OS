@@ -100,6 +100,14 @@ GNSS-GPS
 
    drivers/gnss-gps/*
 
+IMPEDANCE ANALYZERS
+===================
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   drivers/impedance-analyzer/*
+
 INERTIAL MEASUREMENT UNITS
 ==========================
 .. toctree::
