@@ -27,6 +27,7 @@ on:
       - '.github/workflows/build-mac-platform.yaml'
       - '.github/workflows/build-aducm3029-platform.yaml'
       - '.github/workflows/build-stm32-platform.yaml'
+      - '.github/workflows/build-linux-ftdi-platform.yaml'
       - '.github/workflows/build-common.yaml'
       - '.github/workflows/deploy-docs.yaml'
   push:
@@ -54,6 +55,7 @@ on:
       - '.github/workflows/build-mac-platform.yaml'
       - '.github/workflows/build-aducm3029-platform.yaml'
       - '.github/workflows/build-stm32-platform.yaml'
+      - '.github/workflows/build-linux-ftdi-platform.yaml'
       - '.github/workflows/build-common.yaml'
       - '.github/workflows/deploy-docs.yaml'
 
@@ -68,7 +70,7 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  build-linux-us-projects:
+  build-linux-userspace-projects:
     env:
       CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
       TOOLS_REPO: ${{ secrets.TOOLS_REPO }}
@@ -79,7 +81,7 @@ jobs:
       LOGS_DIR: ${{ github.workspace }}/logs
     runs-on: ubuntu-latest
     container:
-      image: ${{ vars.DOCKER_REGISTRY }}/linux-us-platform:latest
+      image: ${{ vars.DOCKER_REGISTRY }}/linux-userspace-platform:latest
       credentials:
         username: ${{ secrets.CLOUDSMITH_USER }}
         password: ${{ secrets.CLOUDSMITH_API_KEY }}

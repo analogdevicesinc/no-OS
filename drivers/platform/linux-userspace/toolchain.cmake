@@ -1,5 +1,7 @@
 message(STATUS "Linux Userspace Platform")
 
+find_program(CMAKE_SIZE size)
+
 # Native Linux build - use the host system compiler.
 # No cross-compilation toolchain is required; CMake will discover the
 # default system C/C++ compilers automatically.
