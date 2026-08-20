@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.27)
 list(APPEND CMAKE_MODULE_PATH
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/stm32"
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/maxim"
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/libraries"
 )
 
