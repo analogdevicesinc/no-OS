@@ -153,7 +153,7 @@ def _generate_fabric_irq_macros(xsa_path, cpu):
     concat_map = {}  # concat_name -> {input_idx -> net_name}
 
     for cell in cells:
-        cell_name = cell.get('NAME')
+        cell_name = cell.NAME
         if cell_name not in irq_base:
             continue
 
@@ -163,7 +163,7 @@ def _generate_fabric_irq_macros(xsa_path, cpu):
             continue
 
         for pin in pins:
-            pin_name = pin.get('NAME')
+            pin_name = pin.NAME
             if not pin_name.startswith('In'):
                 continue
             try:
@@ -173,11 +173,11 @@ def _generate_fabric_irq_macros(xsa_path, cpu):
 
             nets = hw_design.get_nets(of_objects=pin)
             if nets:
-                concat_map[cell_name][idx] = nets[0].get('NAME')
+                concat_map[cell_name][idx] = nets[0].NAME
 
     # Find all PL peripherals with IRQ outputs and trace to concat inputs
     for cell in cells:
-        cell_name = cell.get('NAME')
+        cell_name = cell.NAME
         pins = hw_design.get_pins(of_objects=cell)
         if not pins:
             continue
@@ -185,9 +185,9 @@ def _generate_fabric_irq_macros(xsa_path, cpu):
         for pin in pins:
             # Detect interrupt outputs via TYPE property, with fallback to
             # common pin names for custom IPs that don't set TYPE properly
-            pin_type = pin.get('TYPE')
-            pin_dir = pin.get('DIRECTION')
-            pin_name = pin.get('NAME')
+            pin_type = pin.TYPE
+            pin_dir = pin.DIRECTION
+            pin_name = pin.NAME
             is_irq_output = (pin_type == 'INTERRUPT' and pin_dir == 'O')
             if not is_irq_output and pin_dir == 'O':
                 is_irq_output = pin_name.lower() in ('irq', 'interrupt')
@@ -197,7 +197,7 @@ def _generate_fabric_irq_macros(xsa_path, cpu):
             nets = hw_design.get_nets(of_objects=pin)
             if not nets:
                 continue
-            net_name = nets[0].get('NAME')
+            net_name = nets[0].NAME
 
             # Find which concat input this net connects to
             for concat_name, inputs in concat_map.items():
@@ -232,10 +232,10 @@ def _generate_mb_irq_macros(hw_design):
     pins = hw_design.get_pins(of_objects=intc_cell)
     if pins:
         for pin in pins:
-            if pin.get('NAME') == 'intr':
+            if pin.NAME == 'intr':
                 nets = hw_design.get_nets(of_objects=pin)
                 if nets:
-                    intr_net_name = nets[0].get('NAME')
+                    intr_net_name = nets[0].NAME
                 break
 
     if not intr_net_name:
@@ -248,9 +248,9 @@ def _generate_mb_irq_macros(hw_design):
         if 'xlconcat' in vlnv:
             pins = hw_design.get_pins(of_objects=cell)
             for pin in pins:
-                if pin.get('NAME') == 'dout':
+                if pin.NAME == 'dout':
                     nets = hw_design.get_nets(of_objects=pin)
-                    if nets and nets[0].get('NAME') == intr_net_name:
+                    if nets and nets[0].NAME == intr_net_name:
                         concat_cell = cell
                         break
             if concat_cell:
@@ -264,19 +264,19 @@ def _generate_mb_irq_macros(hw_design):
     concat_pins = hw_design.get_pins(of_objects=concat_cell)
     if concat_pins:
         for pin in concat_pins:
-            pin_name = pin.get('NAME')
-            if pin_name.startswith('In') and pin.get('DIRECTION') == 'I':
+            pin_name = pin.NAME
+            if pin_name.startswith('In') and pin.DIRECTION == 'I':
                 try:
                     idx = int(pin_name[2:])
                 except ValueError:
                     continue
                 nets = hw_design.get_nets(of_objects=pin)
                 if nets:
-                    concat_map[idx] = nets[0].get('NAME')
+                    concat_map[idx] = nets[0].NAME
 
     # Find peripherals and match their IRQ nets to concat inputs
     for cell in cells:
-        cell_name = cell.get('NAME')
+        cell_name = cell.NAME
         pins = hw_design.get_pins(of_objects=cell)
         if not pins:
             continue
@@ -284,9 +284,9 @@ def _generate_mb_irq_macros(hw_design):
         for pin in pins:
             # Detect interrupt outputs via TYPE property, with fallback to
             # common pin names for custom IPs that don't set TYPE properly
-            pin_type = pin.get('TYPE')
-            pin_dir = pin.get('DIRECTION')
-            pin_name = pin.get('NAME')
+            pin_type = pin.TYPE
+            pin_dir = pin.DIRECTION
+            pin_name = pin.NAME
             is_irq_output = (pin_type == 'INTERRUPT' and pin_dir == 'O')
             if not is_irq_output and pin_dir == 'O':
                 is_irq_output = pin_name.lower() in ('irq', 'interrupt')
@@ -296,7 +296,7 @@ def _generate_mb_irq_macros(hw_design):
             nets = hw_design.get_nets(of_objects=pin)
             if not nets:
                 continue
-            net_name = nets[0].get('NAME')
+            net_name = nets[0].NAME
 
             for idx, input_net in concat_map.items():
                 if input_net == net_name:
@@ -322,7 +322,7 @@ def _generate_versal_irq_macros(hw_design):
     # Find the top-level CIPS block and its pl_ps_irq inputs
     cips_irq_map = {}  # irq_index -> net_name
     for cell in top_cells:
-        cell_name = cell.get('NAME')
+        cell_name = cell.NAME
         if 'cips' not in cell_name.lower():
             continue
 
@@ -331,7 +331,7 @@ def _generate_versal_irq_macros(hw_design):
             continue
 
         for pin in pins:
-            pin_name = pin.get('NAME')
+            pin_name = pin.NAME
             if not pin_name.startswith('pl_ps_irq'):
                 continue
             try:
@@ -341,12 +341,12 @@ def _generate_versal_irq_macros(hw_design):
 
             nets = hw_design.get_nets(of_objects=pin)
             if nets:
-                cips_irq_map[idx] = nets[0].get('NAME')
+                cips_irq_map[idx] = nets[0].NAME
 
     # Find peripherals (need hierarchical to find all IP) and match IRQs
     cells = hw_design.get_cells(hierarchical='true')
     for cell in cells:
-        cell_name = cell.get('NAME')
+        cell_name = cell.NAME
         pins = hw_design.get_pins(of_objects=cell)
         if not pins:
             continue
@@ -354,9 +354,9 @@ def _generate_versal_irq_macros(hw_design):
         for pin in pins:
             # Detect interrupt outputs via TYPE property, with fallback to
             # common pin names for custom IPs that don't set TYPE properly
-            pin_type = pin.get('TYPE')
-            pin_dir = pin.get('DIRECTION')
-            pin_name = pin.get('NAME')
+            pin_type = pin.TYPE
+            pin_dir = pin.DIRECTION
+            pin_name = pin.NAME
             is_irq_output = (pin_type == 'INTERRUPT' and pin_dir == 'O')
             if not is_irq_output and pin_dir == 'O':
                 is_irq_output = pin_name.lower() in ('irq', 'interrupt')
@@ -366,7 +366,7 @@ def _generate_versal_irq_macros(hw_design):
             nets = hw_design.get_nets(of_objects=pin)
             if not nets:
                 continue
-            net_name = nets[0].get('NAME')
+            net_name = nets[0].NAME
 
             for idx, input_net in cips_irq_map.items():
                 if input_net == net_name:
@@ -410,11 +410,11 @@ def _generate_ddr_macros(xsa_path, cpu):
     # Get memory ranges from MicroBlaze's perspective
     mem_ranges = hw_design.get_mem_ranges(of_objects=mb_cell)
     for mem in mem_ranges:
-        instance_obj = mem.get('INSTANCE')
+        instance_obj = mem.INSTANCE
         # INSTANCE returns an HwCell object, get its NAME
-        instance = instance_obj.get('NAME') if instance_obj else ''
-        base = mem.get('BASE_VALUE')
-        high = mem.get('HIGH_VALUE')
+        instance = instance_obj.NAME if instance_obj else ''
+        base = mem.BASE_VALUE
+        high = mem.HIGH_VALUE
 
         if base is None or not instance:
             continue
