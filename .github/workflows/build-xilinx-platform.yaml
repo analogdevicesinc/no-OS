@@ -60,7 +60,7 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        runs-on: [noos-runner-xilinx-test, noos-runner-xilinx-test, noos-runner-xilinx-test, noos-runner-xilinx-test]
+        runs-on: [noos-runner-xilinx-test, noos-runner-xilinx-test, noos-runner-xilinx-test]
     env:
       CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
       TOOLS_REPO: ${{ secrets.TOOLS_REPO }}

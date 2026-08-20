@@ -368,19 +368,6 @@ def build_cmake_project(noos, project, _platform, export_dir, log_dir, cmake_bui
 
 		# Pass an absolute --build-dir: no_os_build anchors a relative one to the
 		# repo root, which would not match the build_dir we clean/probe here.
-<<<<<<< HEAD
-		# Xilinx: keep the cached BSP, clean only objects unless the .xsa changed
-		# or the cache came from a different source path (another CI agent).
-		stale_cache = platform == 'xilinx' and cmake_cache_source_mismatch(str(build_dir), noos)
-		if platform == 'xilinx' and build_dir.exists() and not new_hdf and not stale_cache:
-			# CMAKE, not bare 'cmake': the sourced xilinx env leads PATH with Vitis's broken one.
-			clean_cmd = "%s --build %s --target clean > %s 2>&1" % (CMAKE, build_dir, os.devnull)
-			os.system(clean_cmd)
-			fresh_flag = ""
-		else:
-			fresh_flag = " --fresh"
-		
-=======
 		# Xilinx: reuse cached BSP unless the .xsa changed (new_hdf) or no cache file exists yet. 
 		# Shared build dirs mean CMakeCache paths won't match the current checkout, but the BSP
 		# artifacts don't depend on source paths - only the .xsa matters.
@@ -407,7 +394,6 @@ def build_cmake_project(noos, project, _platform, export_dir, log_dir, cmake_bui
 					os.remove(cmake_cache_file)
 					os.rename(cmake_cache_file_new, cmake_cache_file)
 
->>>>>>> 918617138 (ci: create shared build workspace and filters)
 		build_cmd = ("python3 %s/tools/scripts/no_os_build.py build"
 			     " --project %s --variant %s --board %s"
 			     " --build-dir %s --jobs %d --probe openocd%s%s"
@@ -483,25 +469,28 @@ def build_loop(projects, noos_dir, projects_dir, export_dir, log_dir, builds_dir
 		# None when the current -platform job has nothing to build here.
 		cmake_builds_dir = builds_dir + '_cmake'
 		ensure_dir(cmake_builds_dir)
-
-		lockfile_path = os.path.join(cmake_builds_dir, f"{project}_{platform}.lock")
+	
+		# Check if the projects is currently in another building process or reserve it otherwise
+		lockfile_path = os.path.join(cmake_builds_dir, f"{project}.lock")
 		if not os.path.isfile(lockfile_path):
-			lockfile_validation_path = os.path.join(noos_dir, f"{project}_{platform}.lock")
-			try:
-				open(lockfile_path, "w").close()
-				open(lockfile_validation_path, "w").close()
+			lockfile = open(lockfile_path, "w")
 
-				cmake_ok = build_cmake_project(noos_dir, project, platform, export_dir, log_dir, cmake_builds_dir, builds_dir)
-				if cmake_ok is not None:
-					status = 'OK' if cmake_ok == 1 else 'Fail'
-					os.system('echo Project %20s -- %s >> %s' % (project, status, all_status))
-			finally:
-				if os.path.isfile(lockfile_path):
-					os.remove(lockfile_path)
-				if os.path.isfile(lockfile_validation_path):
-					os.remove(lockfile_validation_path)
-
+			# Store the current building project in the github workspace path for extra validation
+			# This will ensure in case of job cancellation, the lockfile will be deleted as well
+			lockfile_validation_path = os.path.join(noos_dir, f"{project}.lock")
+			lockfile_validation = open(lockfile_validation_path, "w")
+	
+			cmake_ok = build_cmake_project(noos_dir, project, platform, export_dir, log_dir, cmake_builds_dir, builds_dir)
+			if cmake_ok is not None:
+				status = 'OK' if cmake_ok == 1 else 'Fail'
+				os.system('echo Project %20s -- %s >> %s' % (project, status, all_status))
+	
 			new_projects[project] = "done"
+			lockfile_validation.close()
+			lockfile.close()
+
+			os.remove(lockfile_path)
+			os.remove(lockfile_validation_path)
 		else:
 			new_projects[project] = "not_built"
 			log("%s is already in another build process. Skipping and building it later ..." % project)
