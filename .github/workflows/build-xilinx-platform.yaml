@@ -51,22 +51,28 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build-xilinx-projects:
+    # TEST
+    continue-on-error: true
+    strategy:
+      matrix:
+        runs-on: [noos-runner-xilinx-test, noos-runner-xilinx-test, noos-runner-xilinx-test]
     env:
       CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
       TOOLS_REPO: ${{ secrets.TOOLS_REPO }}
       BLACKLIST_URL: ${{ secrets.BLACKLIST_URL }}
       HDL_BRANCH: 'main'
       BRANCH: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
-      BUILDS_DIR: ${{ github.workspace }}/builds
+      BUILDS_DIR: ${{ secrets.PRIVATE_WORKSPACE }}/builds
       RELEASES_DIR: ${{ github.workspace }}/latest_build
       LOGS_DIR: ${{ github.workspace }}/logs
       NO_OS_CACHE_DIR: ${{ github.workspace }}/deps_cache
-    runs-on: noos-runner-xilinx
+    # TEST
+    runs-on: ${{ matrix.runs-on }}
     timeout-minutes: 600
     steps:
       - name: Checkout code
@@ -74,26 +80,26 @@ jobs:
         with:
           submodules: false
           clean: false
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47.0.6
+      - name: Get changed projects
+        id: projects-list
+        shell: sh
+        run: |
+          ${{ github.workspace }}/.github/scripts/get-changed-projects.sh
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
       - name: Building for platform Xilinx 
         shell: sh
         run: |
-          echo "Setup cloudsmith helper ..."
-          wget https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py \
-            -O ./tools/scripts/cloudsmith_temp.py
-          cat tools/scripts/cloudsmith_temp.py | sed 's#/usr/bin/python3#/usr/bin/env python3#' > tools/scripts/cloudsmith_helper.py
-          rm tools/scripts/cloudsmith_temp.py
-
-          echo "Running project build ..."
-          ${{ github.workspace }}/tools/scripts/build_projects.py \
-            ${{ github.workspace }} \
-            -export_dir ${{ env.RELEASES_DIR }} \
-            -log_dir ${{ env.LOGS_DIR }} \
-            -builds_dir ${{ env.BUILDS_DIR }} \
-            -platform xilinx \
-            -hdl_branch ${{ env.HDL_BRANCH }}
+          ${{ github.workspace }}/.github/scripts/build-projects.sh
         env:
+          WORKSPACE: ${{ github.workspace }}
+          PLATFORM: xilinx
           CLOUDSMITH_API_KEY: ${{ env.CLOUDSMITH_API_KEY }}
           TOKEN: ${{ secrets.GH_GHDL_TOKEN }}
+          PROJECTS: ${{ steps.projects-list.outputs.projects }}
       - name: Upload Xilinx artifacts
         if: always()
         uses: actions/upload-artifact@v7
@@ -106,8 +112,13 @@ jobs:
         with:
           path: ${{ env.LOGS_DIR }}
           name: ${{ github.job }}-logs
-      - name: Remove logs, new_hardware and release output
+      - name: Remove logs, release output and lockfile
         if: always()
-        shell: sh
+        shell: bash
         run: |
-          rm -rf ${{ env.RELEASES_DIR }} ${{ env.LOGS_DIR }} ${{ env.BUILDS_DIR }}_${{ env.HDL_BRANCH }}/new_hardware
+          rm -rf ${{ env.RELEASES_DIR }} ${{ env.LOGS_DIR }}
+          if [[ "${{ job.status }}" == "cancelled" ]]; then
+            for lockfile in $(find ${{ github.workspace }}/ -maxdepth 1 -name "*_xilinx.lock" -printf '%f\n'); do
+              rm -f "${{ env.BUILDS_DIR }}_${{ env.HDL_BRANCH }}_cmake/$lockfile" "${{ github.workspace }}/$lockfile"
+            done
+          fi

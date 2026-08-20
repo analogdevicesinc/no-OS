@@ -19,12 +19,15 @@ NOOS_PATH = sys.argv[1]
 BUILD_PATH = sys.argv[2]
 HDL_SERVER_BASE_PATH = sys.argv[3]
 blacklist = ast.literal_eval(sys.argv[4])
+PROJECTS = str(sys.argv[5]).split(',')
 NEW_HW_DIR_NAME = 'new_hardware'
 FOLDERS_NR = 30 #number of folders to check for missing hardware file
 
 list_hardware = []
-for dir in os.listdir(NOOS_PATH + '/projects'):
-    file = NOOS_PATH + '/projects/' + str(dir) + '/builds.json'
+if PROJECTS == "all": projects = os.listdir(NOOS_PATH + '/projects')
+else: projects = [ NOOS_PATH + "/projects/" + project for project in PROJECTS ]      # append noos path to every project
+for dir in projects:
+    file = str(dir) + '/builds.json'
     if os.path.exists(file):
         with open(file) as f:
             data = json.load(f)
@@ -65,7 +68,6 @@ except Exception as e:
     log_warn("Could not scan CMake .conf for xilinx hardware: %s" % e)
 
 new_harware_dir= os.path.join(BUILD_PATH, NEW_HW_DIR_NAME)
-os.system("rm -rf %s/*" % (new_harware_dir))
 unique_hardware_list = set(list_hardware)
 for item in blacklist:
     if item in unique_hardware_list:
