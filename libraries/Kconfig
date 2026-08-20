@@ -38,6 +38,14 @@ config LWIP_VERSION
 	  Resolved via the NO_OS_DEP_LWIP_PATH override, else cloned in-tree
 	  (or into a version-keyed NO_OS_CACHE_DIR store when that is set).
 
+config LWIP_CONF_PATH
+	string "Path to directory containing lwipopts.h"
+	depends on LWIP
+	help
+	  Directory containing a project/board-specific lwipopts.h that
+	  overrides the generic libraries/lwip/configs one. Can be absolute or
+	  relative to the source dir. Leave empty to use the generic config.
+
 config CORDIO
 	bool "Enable CORDIO"
 	default n
