@@ -99,6 +99,25 @@ function(config_aducm3029_sdk BUILD_TARGET)
 		set(_max_attempts 5)
 		set(_generated FALSE)
 
+		# CCES is Eclipse-based and needs two things the CI runner may lack:
+		#  1. A writable Eclipse configuration area (defaults to ~/.eclipse,
+		#     which may not exist or be read-only on containerised runners).
+		#  2. An X display for SWT/GTK initialisation even in headless mode.
+		# Fix (1) by pointing -configuration at a temp dir inside the build
+		# tree, and (2) by prefixing the command with xvfb-run on Linux.
+		set(_cces_config_dir "${CCES_WORKSPACE}/.eclipse_config")
+
+		if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
+			find_program(_xvfb_run xvfb-run)
+			if(_xvfb_run)
+				set(_cces_prefix ${_xvfb_run} -a)
+			else()
+				set(_cces_prefix)
+			endif()
+		else()
+			set(_cces_prefix)
+		endif()
+
 		foreach(_attempt RANGE 1 ${_max_attempts})
 			# Full workspace cleanup each attempt: stale CCES metadata (which
 			# tracks the imported project by name) would otherwise make a repeat
@@ -108,8 +127,9 @@ function(config_aducm3029_sdk BUILD_TARGET)
 
 			message(STATUS "Generating ADuCM3029 CCES project (attempt ${_attempt}/${_max_attempts})...")
 			execute_process(
-				COMMAND ${CCES_LAUNCHER} -nosplash
+				COMMAND ${_cces_prefix} ${CCES_LAUNCHER} -nosplash
 					-application com.analog.crosscore.headlesstools
+					-configuration ${_cces_config_dir}
 					-command projectcreate
 					-data ${CCES_WORKSPACE}
 					-project ${CCES_PROJECT_DIR}
@@ -132,8 +152,9 @@ function(config_aducm3029_sdk BUILD_TARGET)
 			)
 
 			execute_process(
-				COMMAND ${CCES_LAUNCHER} -nosplash
+				COMMAND ${_cces_prefix} ${CCES_LAUNCHER} -nosplash
 					-application com.analog.crosscore.headlesstools
+					-configuration ${_cces_config_dir}
 					-command addaddin
 					-data ${CCES_WORKSPACE}
 					-project ${CCES_PROJECT_NAME}
