@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/power/ltc4284/README.rst
