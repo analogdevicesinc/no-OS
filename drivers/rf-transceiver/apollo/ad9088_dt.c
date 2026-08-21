@@ -6,12 +6,12 @@
  */
 
 #include "ad9088.h"
+#include "no_os_alloc.h"
 #include "no_os_crc32.h"
 
 static void ad9088_jesd_lane_setup(struct ad9088_phy *phy, 
 				      const struct ad9088_init_param *init_param)
-{	
-	uint32_t lane_xbar[12];
+{
 	int i;
 
 	for (i = 0; i < 12; i++){
@@ -157,22 +157,37 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 		return -ENOMEM;
 
 	ret = no_os_gpio_get(&phy->reset_gpio, init_param->gpio_reset);
-	if (ret) {
-		goto error_spi;
-	}
+	if (ret)
+		goto error_dev;
 
 	ret = no_os_gpio_direction_output(phy->reset_gpio, NO_OS_GPIO_HIGH);
-	if (ret) {
+	if (ret)
 		goto error_reset;
+
+	/*
+	 * Optional: the trigger-sync request pulse in post_setup_stage3 is
+	 * skipped when the board leaves this unwired.
+	 */
+	if (init_param->gpio_tri_req) {
+		ret = no_os_gpio_get(&phy->triq_req_gpio,
+				     init_param->gpio_tri_req);
+		if (ret)
+			goto error_reset;
+
+		ret = no_os_gpio_direction_output(phy->triq_req_gpio,
+						  NO_OS_GPIO_LOW);
+		if (ret)
+			goto error_tri_req;
 	}
 
 	ret = no_os_spi_init(&phy->spi, init_param->spi_init);
-	if (ret) {
-		goto error_dev;
-	}
+	if (ret)
+		goto error_tri_req;
 
 	phy->spi_3wire_en = init_param->spi_3wire_en;
 	phy->trig_sync_en = init_param->trig_sync_en;
+	phy->cnco_dual_modulus_mode_en = init_param->cnco_dual_modulus_mode_en;
+	phy->fnco_dual_modulus_mode_en = init_param->fnco_dual_modulus_mode_en;
 	phy->bsync_ops = init_param->bsync_ops;
 	phy->clk_ops = init_param->clk_ops;
 	phy->aion_background_serial_alignment_en =
@@ -184,7 +199,8 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 
 	if (nz != 1 && nz != 2) {
 		pr_err("Invalid Nyquist zone %u\n", nz);
-		return -EINVAL;
+		ret = -EINVAL;
+		goto error_spi;
 	}
 
 	for (i = 0; i < ADI_APOLLO_NUM_SIDES; i++)
@@ -194,7 +210,7 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 	ret = ad9088_get_profile(phy);
 	if (ret) {
 		pr_err("Failed to get profile: %d\n", ret);
-		goto error_reset;
+		goto error_spi;
 	}
 
 	/*
@@ -210,7 +226,7 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 		       (unsigned int)ADI_APOLLO_PROFILE_VERSION_MAJOR,
 		       (unsigned int)ADI_APOLLO_PROFILE_VERSION_MINOR);
 		ret = -EINVAL;
-		goto error_reset;
+		goto error_spi;
 	}
 
 	ad9088_jesd_lane_setup(phy, init_param);
@@ -263,13 +279,13 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 	*device = phy;
 	return 0;
 
-error_reset:
-	no_os_gpio_remove(phy->reset_gpio);
 error_spi:
 	no_os_spi_remove(phy->spi);
+error_tri_req:
+	no_os_gpio_remove(phy->triq_req_gpio);
+error_reset:
+	no_os_gpio_remove(phy->reset_gpio);
 error_dev:
 	no_os_free(phy);
 	return ret;
 }
-
-EXPORT_SYMBOL(ad9088_parse_dt);

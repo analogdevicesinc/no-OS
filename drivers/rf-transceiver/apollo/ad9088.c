@@ -927,7 +927,7 @@ int ad9088_log_write(void *user_data, int32_t log_type, const char *message,
 		pr_debug("%s\n", logMessage);
 		break;
 	case ADI_CMS_LOG_ALL:
-		printf("%s\n", logMessage);
+		pr_notice("%s\n", logMessage);
 		break;
 	}
 

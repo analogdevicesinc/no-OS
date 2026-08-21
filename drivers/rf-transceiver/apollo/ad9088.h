@@ -7,9 +7,6 @@
 #ifndef __AD9088_H__
 #define __AD9088_H__
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "no_os_error.h"
 #include "no_os_gpio.h"
 #include "no_os_print_log.h"
@@ -151,6 +148,14 @@ struct ad9088_init_param {
 	struct no_os_gpio_init_param *gpio_tri_req;
 	bool spi_3wire_en;
 	bool trig_sync_en;
+	/*
+	 * Dual-modulus NCO mode, per the kernel's adi,cnco-dual-modulus-mode-en
+	 * / adi,fnco-dual-modulus-mode-en devicetree properties. Off keeps the
+	 * fractional part of the tuning word at 0/1, which is what a plain
+	 * integer FTW wants.
+	 */
+	bool cnco_dual_modulus_mode_en;
+	bool fnco_dual_modulus_mode_en;
 	uint32_t nyquist_zone;
 	uint32_t subclass;
 	uint32_t jtx0_logical_lane_mapping[12];
