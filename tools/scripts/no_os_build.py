@@ -192,6 +192,8 @@ def open_vitis_workspace(repo_root, build_dir, combo):
     arch = read_cmake_cache_value(build_dir, "XILINX_ARCH")
     if arch:
         manifest["arch"] = arch
+    # Pass repo root so util.py can create symlinks preserving directory structure
+    manifest["repo_root"] = str(repo_root)
     manifest_path = xsa_work / "ide_manifest.json"
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     with open(manifest_path, "w") as f:
