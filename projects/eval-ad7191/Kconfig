@@ -1,0 +1,18 @@
+menu "eval-ad7191 Configuration"
+
+choice EVAL_AD7191_EXAMPLE
+	prompt "Example variant"
+	default EVAL_AD7191_BASIC_EXAMPLE
+
+config EVAL_AD7191_BASIC_EXAMPLE
+	bool "Basic example"
+	select ADC_AD7191
+
+config EVAL_AD7191_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	select ADC_IIO_AD7191
+
+endchoice
+
+endmenu
