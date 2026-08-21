@@ -80,25 +80,46 @@ message(STATUS "Xilinx arch (from XSA): ${XILINX_ARCH}")
 # the directory doesn't exist, causing find_program() to silently fall back to
 # PATH -- which may find a system compiler (wrong version) or fail with a
 # confusing error. Explicit paths + existence check give a clear diagnostic.
+#
+# _xl_bin_fmt / _xl_bin_arch are the BFD target and architecture that
+# `objcopy -I binary -O <fmt> -B <arch>` needs to turn a firmware blob into a
+# linkable object (see cmake/FirmwareBlob.cmake).  They are published below as
+# NO_OS_OBJCOPY_BIN_*.  Note MicroBlaze defaults to the big-endian
+# elf32-microblaze, so -O must always be passed explicitly.
 if(XILINX_ARCH MATCHES "cortexa9")
     set(_xl_prefix arm-none-eabi)
     set(_xl_bin "${XILINX_VITIS}/gnu/aarch32/lin/gcc-arm-none-eabi/bin")
     set(_xl_cpu_flags "-mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard")
+    set(_xl_bin_fmt elf32-littlearm)
+    set(_xl_bin_arch arm)
 elseif(XILINX_ARCH MATCHES "cortexa53")
     set(_xl_prefix aarch64-none-elf)
     set(_xl_bin "${XILINX_VITIS}/gnu/aarch64/lin/aarch64-none/bin")
     set(_xl_cpu_flags "")
+    set(_xl_bin_fmt elf64-littleaarch64)
+    set(_xl_bin_arch aarch64)
 elseif(XILINX_ARCH MATCHES "cortexr5")
     set(_xl_prefix armr5-none-eabi)
     set(_xl_bin "${XILINX_VITIS}/gnu/armr5/lin/gcc-arm-none-eabi/bin")
     set(_xl_cpu_flags "-mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16")
+    set(_xl_bin_fmt elf32-littlearm)
+    set(_xl_bin_arch arm)
 elseif(XILINX_ARCH MATCHES "sys_mb")
     set(_xl_prefix microblaze-xilinx-elf)
     set(_xl_bin "${XILINX_VITIS}/gnu/microblaze/lin/bin")
     set(_xl_cpu_flags "-mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mno-xl-soft-div -mcpu=v11.0 -mno-xl-soft-mul -mxl-multiply-high")
+    set(_xl_bin_fmt elf32-microblazeel)
+    set(_xl_bin_arch microblaze)
 else()
     message(FATAL_ERROR "Unsupported Xilinx arch '${XILINX_ARCH}'")
 endif()
+
+# Cache these the same way XILINX_ARCH is, so they cross out of the toolchain
+# file's scope into the main project and survive CMake's try_compile probe.
+set(NO_OS_OBJCOPY_BIN_FORMAT "${_xl_bin_fmt}" CACHE INTERNAL
+    "objcopy -O target for binary blobs embedded in the ELF")
+set(NO_OS_OBJCOPY_BIN_ARCH "${_xl_bin_arch}" CACHE INTERNAL
+    "objcopy -B architecture for binary blobs embedded in the ELF")
 
 if(NOT EXISTS "${_xl_bin}")
     message(FATAL_ERROR
