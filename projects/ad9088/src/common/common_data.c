@@ -338,24 +338,63 @@ static int mcs_bsync_tdc_measure(void *ctx, int64_t *tdc_fs)
 	return adf4030_get_tdc_measurement(dev, tdc_fs);
 }
 
+/*
+ * Both SYSREF channels carry the delay MCS asks for, not just the Apollo's.
+ *
+ * MCS measures the BSYNC path delay to the Apollo (~2.2 ns on this board) and
+ * asks for it to be compensated. Applying that to the Apollo channel alone
+ * leaves the FPGA's SYSREF where it was, so the two end up ~2.2 ns apart on a
+ * 3.2 ns link clock -- 68% of a period, close enough to a link-clock boundary
+ * that the receiver resolves its LEMC to a different edge from one bring-up to
+ * the next. That shows up as an intermittently misaligned capture: the link
+ * still reaches DATA and the DMA still completes, but the samples come back at
+ * the wrong frame phase and read as noise. Roughly one bring-up in three.
+ *
+ * Delaying both keeps their relative phase exactly as it was before MCS ran,
+ * which is the part the receiver depends on. Note this is the Apollo's path
+ * delay, not the FPGA's -- it preserves the ch5<->ch8 relationship rather than
+ * absolutely compensating the FPGA's own SYSREF trace. Absolute compensation
+ * would need a separate TDC measurement on the FPGA channel.
+ */
+static const uint8_t mcs_bsync_sysref_chans[] = {
+	ADF4030_CH_APOLLO_SYSREF,
+	ADF4030_CH_FPGA_SYSREF,
+};
+
 static int mcs_bsync_delay_set(void *ctx, int64_t delay_fs)
 {
 	struct adf4030_dev *dev = (struct adf4030_dev *)ctx;
 	uint8_t reference_chan;
+	uint8_t chan;
+	unsigned int i;
 	int ret;
 
-	reference_chan = dev->channels[ADF4030_CH_APOLLO_SYSREF].reference_chan;
+	for (i = 0; i < NO_OS_ARRAY_SIZE(mcs_bsync_sysref_chans); i++) {
+		chan = mcs_bsync_sysref_chans[i];
 
-	ret = adf4030_set_channel_delay(dev, ADF4030_CH_APOLLO_SYSREF, delay_fs);
-	if (ret)
-		return ret;
+		ret = adf4030_set_channel_delay(dev, chan, delay_fs);
+		if (ret)
+			return ret;
 
-	/* The delay only takes effect once the channel is realigned. */
-	ret = adf4030_set_tdc_source(dev, reference_chan);
-	if (ret)
-		return ret;
+		reference_chan = dev->channels[chan].reference_chan;
 
-	return adf4030_set_single_ch_alignment(dev, ADF4030_CH_APOLLO_SYSREF);
+		/*
+		 * The delay only takes effect once the channel is realigned.
+		 * Realigned one at a time rather than through
+		 * adf4030_set_serial_alignment(): the single-channel call polls
+		 * FSM_BUSY to completion, so the delay is in effect before the
+		 * MCS init cal that follows reads the edge back.
+		 */
+		ret = adf4030_set_tdc_source(dev, reference_chan);
+		if (ret)
+			return ret;
+
+		ret = adf4030_set_single_ch_alignment(dev, chan);
+		if (ret)
+			return ret;
+	}
+
+	return 0;
 }
 
 static int mcs_bsync_bg_align_set(void *ctx, bool en)
