@@ -3364,6 +3364,13 @@ struct ad9361_rf_phy {
 	uint8_t			cached_synth_pd[2];
 	int32_t			tx_quad_lpf_tia_match;
 	uint32_t		current_table;
+	/* Last RF PLL rate actually programmed, indexed [0] = RX, [1] = TX.
+	 * clks[]->rate holds the rate read back from the dividers, which
+	 * differs from the request whenever they cannot hit it exactly, so
+	 * the guard in clk_set_rate() cannot use it to detect a no-op
+	 * retune. See clk_set_rate() in ad9361_util.c. */
+	uint32_t		rfpll_requested[2];
+	bool			rfpll_requested_valid[2];
 	struct gain_table_info  *gt_info;
 	bool 			ensm_pin_ctl_en;
 
