@@ -1,0 +1,61 @@
+menuconfig LINUX
+	bool "Linux Platform Drivers"
+	default n
+	help
+	  Enable support for Linux platform drivers.
+
+	  This section contains userspace platform drivers that run on top of
+	  the Linux kernel character-device interfaces (spidev, gpiochip, i2c-dev,
+	  tty) rather than talking to a microcontroller's peripherals directly.
+	  Useful for single-board computers such as the Raspberry Pi.
+
+if LINUX
+
+config SPI_LINUX
+	bool "Enable Linux SPI driver"
+	depends on SPI
+	default n
+	help
+	  Enable the Linux-specific SPI driver implemented on top of the
+	  spidev character device (/dev/spidevB.C).
+
+config GPIO_LINUX
+	bool "Enable Linux GPIO driver"
+	depends on GPIO
+	default n
+	help
+	  Enable the Linux-specific GPIO driver implemented on top of the
+	  gpiochip character device (/dev/gpiochipN) using the GPIO v2 uAPI.
+
+config I2C_LINUX
+	bool "Enable Linux I2C driver"
+	depends on I2C
+	default n
+	help
+	  Enable the Linux-specific I2C driver implemented on top of the
+	  i2c-dev character device (/dev/i2c-N).
+
+config UART_LINUX
+	bool "Enable Linux UART driver"
+	depends on UART
+	default n
+	help
+	  Enable the Linux-specific UART driver implemented on top of a tty
+	  character device (/dev/ttyN).
+
+config TIMER_LINUX
+	bool "Enable Linux timer driver"
+	depends on TIMER
+	default n
+	help
+	  Enable the Linux-specific timer driver implemented on top of the
+	  POSIX clock interface.
+
+config AXI_IO_LINUX
+	bool "Enable Linux AXI IO driver"
+	default n
+	help
+	  Enable the Linux-specific AXI memory-mapped IO driver implemented on
+	  top of /dev/mem.
+
+endif # LINUX
