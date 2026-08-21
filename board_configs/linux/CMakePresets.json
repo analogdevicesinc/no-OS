@@ -1,0 +1,21 @@
+{
+	"version": 7,
+	"configurePresets": [
+		{
+			"name": "linux-base",
+			"hidden": true,
+			"description": "Base config for Linux single-board computers",
+			"generator": "Ninja"
+		},
+		{
+			"name": "rpi5",
+			"description": "Raspberry Pi 5 (Linux userspace)",
+			"inherits": "linux-base",
+			"cacheVariables": {
+				"BOARD": "rpi5",
+				"PLATFORM": "linux",
+				"BOARD_CONFIG_FILE": "rpi5_defconfig"
+			}
+		}
+	]
+}
