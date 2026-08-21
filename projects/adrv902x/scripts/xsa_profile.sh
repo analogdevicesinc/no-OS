@@ -35,7 +35,7 @@ fi
 if [ "$link" = 204c ]; then
 	profile=JESD204C_ORx
 elif [ "$orx" = 1 ]; then
-	profile=JESD204B_ORx_nls
+	profile=JESD204B_ORx
 else
 	profile=JESD204B_no_ORx
 fi
