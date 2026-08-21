@@ -25,6 +25,35 @@ Kconfig default (a git tag, branch or commit); set that config to fetch a
 different version.
 
 
+Common Prerequisites
+====================
+
+The following tools are required by all CMake-based platform builds.
+
+**CMake 3.28 or newer** (presets v7 are used):
+
+    .. code-block:: bash
+
+        # Linux (Debian/Ubuntu)
+        $ sudo apt install cmake
+
+    .. code-block:: bat
+
+        :: Windows
+        > winget install Kitware.CMake
+
+**Ninja** (the CMake presets use the Ninja generator):
+
+    .. code-block:: bash
+
+        # Linux (Debian/Ubuntu)
+        $ sudo apt install ninja-build
+
+    .. code-block:: bat
+
+        :: Windows
+        > winget install Ninja-build.Ninja
+
 XILINX
 ======
 .. toctree::
@@ -52,13 +81,6 @@ FTD2XX
     :maxdepth: 1
 
     build_guides/build_ftd2xx
-
-WIN
-===
-.. toctree::
-    :maxdepth: 1
-
-    build_guides/build_win
 
 MAC
 ======
