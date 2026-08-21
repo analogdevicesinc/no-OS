@@ -19,10 +19,24 @@
 #define INDIRECT_REG_TEST_ADDR  (0x60366045)
 #define ARM_REG_TEST_BASE_ADDR  (0x20000000U)
 
-/*
- * Calculate the NCO frequency tuning word (FTW) from a frequency shift in Hz. 
- * Div is the datapath decimation/interpolation ratio, bits is 32 for CNCOs and 
- * 48 for FNCOs.
+/**
+ * @brief Convert an NCO frequency shift into a frequency tuning word.
+ *
+ * The tuning word is the shift expressed as a fraction of the NCO clock, scaled
+ * to the accumulator width. Whatever the integer word cannot express is
+ * returned as the fraction frac_a / frac_b, which the dual-modulus modes use to
+ * reach an exact shift.
+ *
+ * @param phy       - The device structure.
+ * @param freq      - Converter sample rate, in Hz.
+ * @param nco_shift - Signed frequency shift to encode, in Hz.
+ * @param div       - Decimation or interpolation ratio between the converter
+ *		      and the NCO, so that freq / div is the NCO clock.
+ * @param bits      - Accumulator width of the target NCO, in bits.
+ * @param ftw       - Integer frequency tuning word.
+ * @param frac_a    - Numerator of the leftover fraction.
+ * @param frac_b    - Denominator of the leftover fraction.
+ * @return          - 0 in case of success, negative error code otherwise.
  */
 int adi_ad9088_calc_nco_ftw(struct ad9088_phy *phy, uint64_t freq,
 			    int64_t nco_shift, uint32_t div, uint32_t bits,
@@ -79,9 +93,20 @@ int adi_ad9088_calc_nco_ftw(struct ad9088_phy *phy, uint64_t freq,
 	return 0;
 }
 
-/*
- * Calculate the NCO frequency shift in Hz from a frequency tuning word (FTW).
- * Reverse of adi_ad9088_calc_nco_ftw().
+/**
+ * @brief Convert a frequency tuning word back into a frequency shift.
+ *
+ * The inverse of adi_ad9088_calc_nco_ftw(). Tuning words in the upper half of
+ * the accumulator range encode a negative shift.
+ *
+ * @param phy       - The device structure.
+ * @param freq      - NCO clock rate, in Hz.
+ * @param ftw       - Integer frequency tuning word.
+ * @param a         - Numerator of the fractional part.
+ * @param b         - Denominator of the fractional part.
+ * @param bits      - Accumulator width of the source NCO, in bits.
+ * @param nco_shift - Decoded signed frequency shift, in Hz.
+ * @return          - 0 in case of success, negative error code otherwise.
  */
 int adi_ad9088_calc_nco_freq(struct ad9088_phy *phy, uint64_t freq,
 			     uint64_t ftw, uint32_t a, uint32_t b,
@@ -117,9 +142,15 @@ int adi_ad9088_calc_nco_freq(struct ad9088_phy *phy, uint64_t freq,
 	return 0;
 }
 
-/*
- * Set the coarse NCO (CNCO) frequency shift for a given side/CDDC.
- * terminal selects TX (CDUC) or RX (CDDC).
+/**
+ * @brief Set the coarse NCO frequency shift.
+ *
+ * @param phy      - The device structure.
+ * @param terminal - Selects the transmit or receive datapath.
+ * @param side     - Datapath side index.
+ * @param cddc_num - Coarse datapath index within the side.
+ * @param freq_hz  - Signed frequency shift, in Hz.
+ * @return         - 0 in case of success, negative error code otherwise.
  */
 int ad9088_set_cnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 			 uint8_t side, uint8_t cddc_num, int64_t freq_hz)
@@ -167,7 +198,16 @@ int ad9088_set_cnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 	return 0;
 }
 
-/* Read back the coarse NCO (CNCO) frequency shift for a given side/CDDC. */
+/**
+ * @brief Read back the coarse NCO frequency shift.
+ *
+ * @param phy      - The device structure.
+ * @param terminal - Selects the transmit or receive datapath.
+ * @param side     - Datapath side index.
+ * @param cddc_num - Coarse datapath index within the side.
+ * @param freq_hz  - Signed frequency shift, in Hz.
+ * @return         - 0 in case of success, negative error code otherwise.
+ */
 int ad9088_get_cnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 			 uint8_t side, uint8_t cddc_num, int64_t *freq_hz)
 {
@@ -194,9 +234,15 @@ int ad9088_get_cnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 					freq_hz);
 }
 
-/*
- * Set the fine NCO (FNCO) frequency shift for a given side/FDDC.
- * terminal selects TX (FDUC) or RX (FDDC).
+/**
+ * @brief Set the fine NCO frequency shift.
+ *
+ * @param phy      - The device structure.
+ * @param terminal - Selects the transmit or receive datapath.
+ * @param side     - Datapath side index.
+ * @param fddc_num - Fine datapath index within the side.
+ * @param freq_hz  - Signed frequency shift, in Hz.
+ * @return         - 0 in case of success, negative error code otherwise.
  */
 int ad9088_set_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 			 uint8_t side, uint8_t fddc_num, int64_t freq_hz)
@@ -274,7 +320,16 @@ int ad9088_set_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 	return 0;
 }
 
-/* Read back the fine NCO (FNCO) frequency shift for a given side/FDDC. */
+/**
+ * @brief Read back the fine NCO frequency shift.
+ *
+ * @param phy      - The device structure.
+ * @param terminal - Selects the transmit or receive datapath.
+ * @param side     - Datapath side index.
+ * @param fddc_num - Fine datapath index within the side.
+ * @param freq_hz  - Signed frequency shift, in Hz.
+ * @return         - 0 in case of success, negative error code otherwise.
+ */
 int ad9088_get_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 			 uint8_t side, uint8_t fddc_num, int64_t *freq_hz)
 {
@@ -327,6 +382,13 @@ int ad9088_get_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 					freq_hz);
 }
 
+/**
+ * @brief Human-readable name for a vendor API error code.
+ *
+ * @param error_code - An API_CMS_ERROR_* code.
+ * @return           - The matching description, or a placeholder for an unknown
+ *		       code.
+ */
 static const char *adi_cms_error_to_string(int error_code)
 {
 	switch (error_code) {
@@ -483,6 +545,17 @@ static const char *adi_cms_error_to_string(int error_code)
 	}
 }
 
+/**
+ * @brief Translate a vendor API return code into an errno value.
+ *
+ * The vendor API has its own error space and does not log, so every call site
+ * funnels through here to get the failure reported once, with the name of the
+ * call that produced it.
+ *
+ * @param ret      - Value returned by the vendor API call.
+ * @param api_name - Name of that call, used in the error message.
+ * @return         - 0 when the call succeeded, -EIO otherwise.
+ */
 int ad9088_check_apollo_error(int ret, const char *api_name)
 {
 	if (ret != API_CMS_ERROR_OK) {
@@ -494,6 +567,16 @@ int ad9088_check_apollo_error(int ret, const char *api_name)
 	return 0;
 }
 
+/**
+ * @brief Map a state-machine link identifier onto a device link identifier.
+ *
+ * The state machine numbers the transmit and receive links in one sequence,
+ * while the device numbers each direction from zero, so the two halves of the
+ * range fold onto the same device identifiers.
+ *
+ * @param linkid - State-machine link identifier.
+ * @return       - The corresponding device link identifier.
+ */
 uint8_t ad9088_to_link(uint8_t linkid)
 {
 	uint8_t lut[8] = {
@@ -506,6 +589,15 @@ uint8_t ad9088_to_link(uint8_t linkid)
 	return lut[linkid];
 }
 
+/**
+ * @brief Print the negotiated link parameters of every deframer link.
+ *
+ * Reports what the device ended up with rather than what was requested, so it
+ * can be compared against the peer side.
+ *
+ * @param phy - The device structure.
+ * @return    - 0 in case of success, negative error code otherwise.
+ */
 int ad9088_inspect_jrx_link_all(struct ad9088_phy *phy)
 {
 	int err;
@@ -542,6 +634,15 @@ int ad9088_inspect_jrx_link_all(struct ad9088_phy *phy)
 	return 0;
 }
 
+/**
+ * @brief Print the negotiated link parameters of every framer link.
+ *
+ * Reports what the device ended up with rather than what was requested, so it
+ * can be compared against the peer side.
+ *
+ * @param phy - The device structure.
+ * @return    - 0 in case of success, negative error code otherwise.
+ */
 int ad9088_inspect_jtx_link_all(struct ad9088_phy *phy)
 {
 	int err;
@@ -596,6 +697,12 @@ static const char *const ad9088_jrx_204c_states[] = {
 	"Undef", "Link is good", "Undef",
 };
 
+/**
+ * @brief Print the deframer phase difference for one link.
+ *
+ * @param phy - The device structure.
+ * @param lnk - The JESD204 link.
+ */
 void ad9088_print_link_phase(struct ad9088_phy *phy,
 			     struct jesd204_link *lnk)
 {
@@ -608,6 +715,16 @@ void ad9088_print_link_phase(struct ad9088_phy *phy,
 		ad9088_fsm_links_to_str[lnk->link_id], jrx_phase_diff);
 }
 
+/**
+ * @brief Print the captured SYSREF phase several times over.
+ *
+ * The value is a signed count of device clock periods between the external and
+ * internal SYSREF edges. It is sampled repeatedly because a phase that moves
+ * between reads means the capture is not deterministic, which a single read
+ * would hide.
+ *
+ * @param phy - The device structure.
+ */
 void ad9088_print_sysref_phase(struct ad9088_phy *phy)
 {
 	struct adi_apollo_device_t *device = &phy->ad9088;
@@ -621,6 +738,18 @@ void ad9088_print_sysref_phase(struct ad9088_phy *phy)
 	}
 }
 
+/**
+ * @brief Poll a framer link until it reports good, then print its status.
+ *
+ * Which status bits have to be set depends on the JESD204 version in use. The
+ * status is only printed once settled, or on the final attempt, so a link that
+ * comes up normally logs a single line.
+ *
+ * @param phy   - The device structure.
+ * @param lnk   - The JESD204 link.
+ * @param retry - Number of extra attempts before giving up.
+ * @return      - 0 in case of success, negative error code otherwise.
+ */
 int ad9088_jesd_tx_link_status_print(struct ad9088_phy *phy,
 				     struct jesd204_link *lnk, int retry)
 {
@@ -673,6 +802,18 @@ int ad9088_jesd_tx_link_status_print(struct ad9088_phy *phy,
 	return ret;
 }
 
+/**
+ * @brief Poll a deframer link until it reports good, then print its status.
+ *
+ * Which status bits have to be set depends on the JESD204 version and, for
+ * subclass 1, additionally on the SYSREF phase having locked. Per-lane state is
+ * printed alongside the link state so a single bad lane is visible.
+ *
+ * @param phy   - The device structure.
+ * @param lnk   - The JESD204 link.
+ * @param retry - Number of extra attempts before giving up.
+ * @return      - 0 in case of success, negative error code otherwise.
+ */
 int ad9088_jesd_rx_link_status_print(struct ad9088_phy *phy,
 				     struct jesd204_link *lnk, int retry)
 {
@@ -802,6 +943,18 @@ static const struct fw_entry fw_table[ADI_APOLLO_FW_ID_MAX] = {
 		app_signed_encrypted_prod_B_flash_image_0x21000000_bin),
 };
 
+/**
+ * @brief Vendor API callback: hand out one of the linked-in firmware images.
+ *
+ * The images are linked into the binary rather than read from storage, so this
+ * just resolves an identifier to the symbols bounding that image.
+ *
+ * @param obj        - The firmware provider, unused.
+ * @param fw_id      - Identifies which image is wanted.
+ * @param byte_arr   - Set to the start of the image.
+ * @param bytes_read - Set to the length of the image, in bytes.
+ * @return           - 0 on success, an API_CMS_ERROR_* code otherwise.
+ */
 static int ad9088_fw_provider_get(adi_apollo_fw_provider_t *obj,
 				  adi_apollo_startup_fw_id_e fw_id,
 				  uint8_t **byte_arr, uint32_t *bytes_read)
@@ -817,6 +970,15 @@ static int ad9088_fw_provider_get(adi_apollo_fw_provider_t *obj,
 	return API_CMS_ERROR_OK;
 }
 
+/**
+ * @brief Vendor API callback: release a firmware image.
+ *
+ * Nothing to release, since the images are linked in rather than allocated.
+ *
+ * @param obj   - The firmware provider, unused.
+ * @param fw_id - Identifies which image is being released, unused.
+ * @return      - 0 on success, an API_CMS_ERROR_* code otherwise.
+ */
 static int ad9088_fw_provider_close(adi_apollo_fw_provider_t *obj,
 				    adi_apollo_startup_fw_id_e fw_id)
 {
@@ -824,6 +986,18 @@ static int ad9088_fw_provider_close(adi_apollo_fw_provider_t *obj,
 }
 
 
+/**
+ * @brief Vendor API callback: full-duplex SPI transfer.
+ *
+ * The underlying transfer is in place, so the received bytes are copied out of
+ * the write buffer afterwards.
+ *
+ * @param dev_obj - The device structure.
+ * @param wbuf    - Bytes to send.
+ * @param rbuf    - Bytes received.
+ * @param len     - Transfer length, in bytes.
+ * @return        - 0 in case of success, negative error code otherwise.
+ */
 static int ad9088_spi_xfer(void *dev_obj, uint8_t *wbuf, uint8_t *rbuf,
 			   uint32_t len)
 {
@@ -841,6 +1015,19 @@ static int ad9088_spi_xfer(void *dev_obj, uint8_t *wbuf, uint8_t *rbuf,
 	return 0;
 }
 
+/**
+ * @brief Vendor API callback: SPI read.
+ *
+ * The caller's buffers are const and may alias, so the transfer runs through a
+ * local buffer.
+ *
+ * @param dev_obj         - The device structure.
+ * @param tx_data         - Bytes to send, carrying the address.
+ * @param rx_data         - Bytes received.
+ * @param num_tx_rx_bytes - Transfer length, in bytes.
+ * @param txn_config      - Vendor transaction configuration, unused.
+ * @return                - 0 in case of success, negative error code otherwise.
+ */
 static int ad9088_spi_read(void *dev_obj, const uint8_t tx_data[],
 			   uint8_t rx_data[], uint32_t num_tx_rx_bytes,
 			   adi_apollo_hal_txn_config_t *txn_config)
@@ -864,6 +1051,18 @@ static int ad9088_spi_read(void *dev_obj, const uint8_t tx_data[],
 	return 0;
 }
 
+/**
+ * @brief Vendor API callback: SPI write.
+ *
+ * The caller's buffer is const and the transfer is in place, so it runs through
+ * a local buffer.
+ *
+ * @param dev_obj      - The device structure.
+ * @param tx_data      - Bytes to send.
+ * @param num_tx_bytes - Transfer length, in bytes.
+ * @param txn_config   - Vendor transaction configuration, unused.
+ * @return             - 0 in case of success, negative error code otherwise.
+ */
 static int32_t ad9088_spi_write(void *dev_obj, const uint8_t tx_data[],
 			    uint32_t num_tx_bytes, adi_apollo_hal_txn_config_t *txn_config)
 {
@@ -878,6 +1077,13 @@ static int32_t ad9088_spi_write(void *dev_obj, const uint8_t tx_data[],
 	return no_os_spi_write_and_read(phy->spi, buf, num_tx_bytes);
 }
 
+/**
+ * @brief Vendor API callback: drive the reset pin.
+ *
+ * @param user_data - The device structure.
+ * @param enable    - Level to drive on the pin.
+ * @return          - 0 in case of success, negative error code otherwise.
+ */
 static int ad9088_reset_pin_ctrl(void *user_data, uint8_t enable)
 {
 	struct ad9088_phy *phy = user_data;
@@ -885,6 +1091,13 @@ static int ad9088_reset_pin_ctrl(void *user_data, uint8_t enable)
 	return no_os_gpio_set_value(phy->reset_gpio, enable);
 }
 
+/**
+ * @brief Vendor API callback: busy-wait.
+ *
+ * @param user_data - The device structure, unused.
+ * @param us        - Delay, in microseconds.
+ * @return          - 0 in case of success, negative error code otherwise.
+ */
 static int ad9088_udelay(void *user_data, unsigned int us)
 {
 	//us = us * 2;
@@ -892,6 +1105,19 @@ static int ad9088_udelay(void *user_data, unsigned int us)
 	return 0;
 }
 
+/**
+ * @brief Vendor API callback: emit a log message.
+ *
+ * Maps the vendor severity onto the local log levels. Register-level tracing is
+ * dropped before formatting, since it is high volume and the format cost would
+ * be paid even when the message is discarded.
+ *
+ * @param user_data - The device structure, unused.
+ * @param log_type  - Vendor log severity.
+ * @param message   - Format string.
+ * @param argp      - Arguments for the format string.
+ * @return          - 0 in case of success, negative error code otherwise.
+ */
 int ad9088_log_write(void *user_data, int32_t log_type, const char *message,
 		     va_list argp)
 {
@@ -928,6 +1154,17 @@ int ad9088_log_write(void *user_data, int32_t log_type, const char *message,
 	return 0;
 }
 
+/**
+ * @brief Check that the device is reachable and its buses work.
+ *
+ * Writes and reads back known patterns over the direct register interface, the
+ * indirect one and the processor memory window. Run before firmware is loaded,
+ * so that a wiring or bus-configuration fault is reported as such instead of
+ * surfacing later as an unexplained startup failure.
+ *
+ * @param device - The vendor API device structure.
+ * @return       - 0 on success, an API_CMS_ERROR_* code otherwise.
+ */
 static int ad9088_reg_test(adi_apollo_device_t *device)
 {
 	int32_t err;
@@ -1035,6 +1272,16 @@ static int ad9088_reg_test(adi_apollo_device_t *device)
 	return API_CMS_ERROR_OK;
 }
 
+/**
+ * @brief Print the API and firmware versions, and confirm the firmware
+ * responds.
+ *
+ * The running firmware is pinged as well as queried, so a firmware that loaded
+ * but is not servicing requests is caught here.
+ *
+ * @param phy - The device structure.
+ * @return    - 0 in case of success, negative error code otherwise.
+ */
 static int ad9088_version_info(struct ad9088_phy *phy)
 {
 	adi_apollo_mailbox_resp_get_fw_version_t fw_ver;
@@ -1089,6 +1336,19 @@ static int ad9088_version_info(struct ad9088_phy *phy)
 	return 0;
 }
 
+/**
+ * @brief Initialize the device.
+ *
+ * Allocates the device structure, wires up the vendor API to the SPI and GPIO
+ * descriptors, verifies the buses, loads the firmware and device profile, and
+ * registers the device with the JESD204 state machine. The links themselves are
+ * brought up by that state machine, not here.
+ *
+ * @param device     - The device structure.
+ * @param init_param - The structure that contains the device initialisation
+ *		       parameters.
+ * @return           - 0 in case of success, negative error code otherwise.
+ */
 int ad9088_init(struct ad9088_phy **device,
 		const struct ad9088_init_param *init_param)
 {
@@ -1195,6 +1455,12 @@ error:
 	return ret;
 }
 
+/**
+ * @brief Free the resources allocated by ad9088_init().
+ *
+ * @param phy - The device structure.
+ * @return    - 0 in case of success, negative error code otherwise.
+ */
 int ad9088_remove(struct ad9088_phy *phy)
 {
 	if (!phy)

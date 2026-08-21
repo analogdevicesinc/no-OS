@@ -10,8 +10,17 @@
 
 #include "adi_apollo_loopback.h"
 
-/*
- * Restore an NCO to the mixer mode requested by the profile.
+/**
+ * @brief Coarse NCO mixer mode requested by the device profile.
+ *
+ * Used to put a coarse NCO back the way the profile configured it once a test
+ * tone is switched off.
+ *
+ * @param phy      - The device structure.
+ * @param terminal - Selects the transmit or receive datapath.
+ * @param side     - Datapath side index.
+ * @param cddc_pi  - Coarse datapath index within the side.
+ * @return         - The mixer mode the profile asks for.
  */
 static adi_apollo_nco_mixer_mode_e
 ad9088_cnco_profile_mode(struct ad9088_phy *phy,
@@ -24,6 +33,18 @@ ad9088_cnco_profile_mode(struct ad9088_phy *phy,
 	return phy->profile.rx_path[side].rx_cddc[cddc_pi].nco[0].nco_if_mode;
 }
 
+/**
+ * @brief Fine NCO mixer mode requested by the device profile.
+ *
+ * Used to put a fine NCO back the way the profile configured it once a test
+ * tone is switched off.
+ *
+ * @param phy      - The device structure.
+ * @param terminal - Selects the transmit or receive datapath.
+ * @param side     - Datapath side index.
+ * @param fddc_pi  - Fine datapath index within the side.
+ * @return         - The mixer mode the profile asks for.
+ */
 static adi_apollo_nco_mixer_mode_e
 ad9088_fnco_profile_mode(struct ad9088_phy *phy,
 			 adi_apollo_terminal_e terminal, uint8_t side,
@@ -35,10 +56,21 @@ ad9088_fnco_profile_mode(struct ad9088_phy *phy,
 	return phy->profile.rx_path[side].rx_fddc[fddc_pi].nco[0].nco_if_mode;
 }
 
-/*
- * Enable or disable the coarse NCO (CNCO) DC test tone for a given side/CDDC.
- * When enabled the mixer is switched to test mode and offset selects the test
- * tone amplitude. offset is clamped to the datapath maximum.
+/**
+ * @brief Enable or disable the coarse NCO DC test tone.
+ *
+ * While the tone is enabled the mixer runs in test mode and emits a DC offset
+ * instead of mixing; disabling it restores the mixer mode the device profile
+ * asks for.
+ *
+ * @param phy      - The device structure.
+ * @param terminal - Selects the transmit or receive datapath.
+ * @param side     - Datapath side index.
+ * @param cddc_num - Coarse datapath index within the side.
+ * @param enable   - True to emit the tone, false to restore normal mixing.
+ * @param offset   - Tone amplitude as a raw DC offset, clamped to the maximum
+ *		     the datapath accepts.
+ * @return         - 0 in case of success, negative error code otherwise.
  */
 int ad9088_set_cnco_test_tone(struct ad9088_phy *phy,
 			      adi_apollo_terminal_e terminal, uint8_t side,
@@ -81,9 +113,21 @@ int ad9088_set_cnco_test_tone(struct ad9088_phy *phy,
 	return 0;
 }
 
-/*
- * Enable or disable the fine NCO (FNCO) DC test tone for a given side/FDDC.
- * terminal selects TX (FDUC) or RX (FDDC).
+/**
+ * @brief Enable or disable the fine NCO DC test tone.
+ *
+ * While the tone is enabled the mixer runs in test mode and emits a DC offset
+ * instead of mixing; disabling it restores the mixer mode the device profile
+ * asks for.
+ *
+ * @param phy      - The device structure.
+ * @param terminal - Selects the transmit or receive datapath.
+ * @param side     - Datapath side index.
+ * @param fddc_num - Fine datapath index within the side.
+ * @param enable   - True to emit the tone, false to restore normal mixing.
+ * @param offset   - Tone amplitude as a raw DC offset, clamped to the maximum
+ *		     the datapath accepts.
+ * @return         - 0 in case of success, negative error code otherwise.
  */
 int ad9088_set_fnco_test_tone(struct ad9088_phy *phy,
 			      adi_apollo_terminal_e terminal, uint8_t side,
@@ -126,6 +170,15 @@ int ad9088_set_fnco_test_tone(struct ad9088_phy *phy,
 	return 0;
 }
 
+/**
+ * @brief Block-select mask covering every coarse interpolator on one side.
+ *
+ * How many there are depends on the transmit channel count the device reports.
+ *
+ * @param device - The vendor API device structure.
+ * @param side   - Datapath side index.
+ * @return       - Mask of the coarse interpolators on that side.
+ */
 static uint16_t ad9088_lb1_cduc_mask_get(adi_apollo_device_t *device,
 		uint8_t side)
 {
@@ -144,7 +197,17 @@ static uint16_t ad9088_lb1_cduc_mask_get(adi_apollo_device_t *device,
 	return ADI_APOLLO_CDUC_A0 | ADI_APOLLO_CDUC_A1;
 }
 
-/* Loopback 0: ADC output folded back into the TX datapath before the DACs. */
+/**
+ * @brief Fold the converter output back into the transmit datapath.
+ *
+ * Takes the digitised receive data ahead of the receive datapath and feeds it
+ * into the transmit datapath just before the converters, so the whole digital
+ * chain is bypassed.
+ *
+ * @param phy  - The device structure.
+ * @param side - Datapath side index.
+ * @return     - 0 in case of success, negative error code otherwise.
+ */
 static int ad9088_device_loopback0(struct ad9088_phy *phy, uint8_t side)
 {
 	adi_apollo_side_select_e sides = side ? ADI_APOLLO_SIDE_B :
@@ -192,7 +255,17 @@ static int ad9088_device_loopback0(struct ad9088_phy *phy, uint8_t side)
 	return 0;
 }
 
-/* Loopback 1: TX CDUC output folded back into the RX CDDC datapath. */
+/**
+ * @brief Fold the coarse interpolator output back into the coarse decimators.
+ *
+ * Keeps both digital datapaths in circuit, so the transmit signal reaches the
+ * receive side already interpolated. The blend mode selects how the looped-back
+ * signal is combined with the live one.
+ *
+ * @param phy  - The device structure.
+ * @param side - Datapath side index.
+ * @return     - 0 in case of success, negative error code otherwise.
+ */
 static int ad9088_device_loopback1(struct ad9088_phy *phy, uint8_t side)
 {
 	adi_apollo_side_select_e sides = side ? ADI_APOLLO_SIDE_B :
@@ -226,7 +299,16 @@ static int ad9088_device_loopback1(struct ad9088_phy *phy, uint8_t side)
 	return 0;
 }
 
-/* Tear down whichever loopback is currently active on this side. */
+/**
+ * @brief Tear down whichever loopback is currently active on one side.
+ *
+ * Does nothing when no loopback is active, so it is safe to call
+ * unconditionally.
+ *
+ * @param phy  - The device structure.
+ * @param side - Datapath side index.
+ * @return     - 0 in case of success, negative error code otherwise.
+ */
 static int ad9088_device_loopback_disable(struct ad9088_phy *phy, uint8_t side)
 {
 	adi_apollo_side_select_e sides = side ? ADI_APOLLO_SIDE_B :
@@ -282,9 +364,17 @@ static int ad9088_device_loopback_disable(struct ad9088_phy *phy, uint8_t side)
 	return 0;
 }
 
-/*
- * Select the datapath loopback mode for one side. Modes 2 (FDUC) and 3 (JESD)
- * are not ported yet. Loopback requires matching ADC and DAC sampling rates.
+/**
+ * @brief Select the datapath loopback mode for one side.
+ *
+ * Any active loopback is torn down first, so switching modes needs a single
+ * call. A loopback only makes sense when the two directions run at the same
+ * sample rate, which is checked here.
+ *
+ * @param phy  - The device structure.
+ * @param side - Datapath side index.
+ * @param mode - One of the ADI_APOLLO_LOOPBACK_* modes.
+ * @return     - 0 in case of success, negative error code otherwise.
  */
 int ad9088_set_loopback_mode(struct ad9088_phy *phy, uint8_t side, uint8_t mode)
 {

@@ -9,16 +9,22 @@
 #include "no_os_alloc.h"
 #include "no_os_crc32.h"
 
-/*
- * Apply the board's lane crossbar and serializer settings on top of the loaded
- * profile, then recompute each side's lane_enables mask from the links the
- * profile marks in use.
+/**
+ * @brief Apply the board lane mapping on top of the loaded device profile.
  *
- * Only link 0's crossbar comes from the init parameters; link 1 keeps whatever
- * the profile binary carried, so the enables pass reads both back rather than
- * assuming the mapping above. Note the two directions do not compute the mask
- * the same way: JRx enables the physical lane the crossbar points at, JTx
- * enables the logical lane index.
+ * Overlays the caller-supplied lane crossbars and serializer settings, then
+ * recomputes each side's lane-enable mask from the links the profile marks in
+ * use.
+ *
+ * Only the first link of each direction takes its crossbar from the
+ * initialisation parameters; the second keeps whatever the profile carried, so
+ * the enable pass reads the crossbars back rather than assuming the mapping
+ * just written. The two directions do not derive the mask the same way: the
+ * receive side enables the physical lane the crossbar points at, the transmit
+ * side enables the logical lane index.
+ *
+ * @param phy        - The device structure.
+ * @param init_param - Initialisation parameters carrying the lane mapping.
  */
 static void ad9088_jesd_lane_setup(struct ad9088_phy *phy,
 				   const struct ad9088_init_param *init_param)
@@ -74,6 +80,15 @@ static void ad9088_jesd_lane_setup(struct ad9088_phy *phy,
 	}
 }
 
+/**
+ * @brief Load the device profile image into the device structure.
+ *
+ * The image is a flat copy of the profile structure, so its size is checked
+ * against the structure before copying.
+ *
+ * @param phy - The device structure.
+ * @return    - 0 in case of success, negative error code otherwise.
+ */
 static int ad9088_get_profile(struct ad9088_phy *phy)
 {
 	adi_apollo_top_t *p = &phy->profile;
@@ -92,6 +107,13 @@ static int ad9088_get_profile(struct ad9088_phy *phy)
 	return 0;
 }
 
+/**
+ * @brief Print one SYSREF input configuration block.
+ *
+ * @param name    - Label identifying which SYSREF input this is.
+ * @param cfg     - SYSREF input configuration to print.
+ * @param int_prd - Internal SYSREF period, in digital clock cycles.
+ */
 static void ad9088_print_sysref_inp_cfg(const char *name,
 					const adi_apollo_sysref_inp_cfg_t *cfg,
 					uint16_t int_prd)
@@ -104,16 +126,15 @@ static void ad9088_print_sysref_inp_cfg(const char *name,
 		cfg->ref_to_int_period_ratio, (unsigned int)int_prd);
 }
 
-/*
- * Dump the SYSREF/MCS configuration carried by the device profile, before any
- * host-side override is applied.
+/**
+ * @brief Dump the SYSREF and multi-chip synchronisation configuration.
  *
- * These fields are consumed by the on-chip CPU firmware and no host code reads
- * them (only internal_sysref_prd_digclk_cycles_center, for the trigger-phase
- * margin check), so a runtime dump is the only way to see what the profile
- * binary actually asks for. Needed when moving to subclass 1: sysref_present
- * tells the firmware to expect an external SYSREF, and the internal SYSREF
- * period sets the ratio the external BSYNC has to satisfy.
+ * Reports what the device profile asks for, before any override is applied.
+ * These fields are consumed by the on-chip firmware and almost none of them are
+ * read back by host code, so a dump is the only way to see what the profile
+ * actually requests.
+ *
+ * @param phy - The device structure.
  */
 static void ad9088_print_profile_sysref_cfg(const struct ad9088_phy *phy)
 {
@@ -140,6 +161,22 @@ static void ad9088_print_profile_sysref_cfg(const struct ad9088_phy *phy)
 		(unsigned int)mcs->sysref_lock_window_mcs_fw);
 }
 
+/**
+ * @brief Allocate the device structure and apply the initialisation parameters.
+ *
+ * Acquires the SPI and GPIO descriptors, loads and version-checks the device
+ * profile, then applies the caller's overrides to it: lane mapping, JESD204
+ * subclass, Nyquist zone and multi-chip synchronisation settings. The profile
+ * checksum is recomputed last so the on-chip firmware still accepts the
+ * modified profile.
+ *
+ * On failure everything acquired so far is released.
+ *
+ * @param device     - The device structure to allocate.
+ * @param init_param - The structure that contains the device initialisation
+ *		       parameters.
+ * @return           - 0 in case of success, negative error code otherwise.
+ */
 int ad9088_parse_struct(struct ad9088_phy **device,
 			const struct ad9088_init_param *init_param)
 {

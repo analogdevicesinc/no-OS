@@ -11,6 +11,20 @@
 #include "no_os_delay.h"
 #include "no_os_util.h"
 
+/**
+ * @brief JESD204 LINK_INIT callback: describe each link from the device
+ * profile.
+ *
+ * Fills in the link parameters the rest of the state machine and the peer logic
+ * need -- lane and converter counts, framing, sample width and lane rate --
+ * from the link configuration the profile carries, so both ends of the link
+ * agree without any of it being restated by the caller.
+ *
+ * @param jdev   - The JESD204 device.
+ * @param reason - The state transition reason.
+ * @param lnk    - The JESD204 link.
+ * @return       - JESD204_STATE_CHANGE_DONE or negative error code.
+ */
 static int ad9088_jesd204_link_init(struct jesd204_dev *jdev,
 				    enum jesd204_state_op_reason reason,
 				    struct jesd204_link *lnk)
@@ -134,6 +148,19 @@ static int ad9088_jesd204_link_init(struct jesd204_dev *jdev,
 	return JESD204_STATE_CHANGE_DONE;
 }
 
+/**
+ * @brief JESD204 LINK_SETUP callback: prepare the device for link bring-up.
+ *
+ * Enables the links the profile uses, puts the converter power-up control under
+ * host control, pulses both digital datapaths through reset, and selects the
+ * JESD204 subclass -- enabling the SYSREF receiver when the profile asks for
+ * subclass 1. The converter background calibrations are frozen for the rest of
+ * bring-up and the clock synchronisation sequences are run.
+ *
+ * @param jdev   - The JESD204 device.
+ * @param reason - The state transition reason.
+ * @return       - JESD204_STATE_CHANGE_DONE or negative error code.
+ */
 static int ad9088_jesd204_link_setup(struct jesd204_dev *jdev,
 				     enum jesd204_state_op_reason reason)
 {
@@ -246,6 +273,17 @@ static int ad9088_jesd204_link_setup(struct jesd204_dev *jdev,
 	return JESD204_STATE_CHANGE_DONE;
 }
 
+/**
+ * @brief JESD204 OPT_SETUP_STAGE1 callback: start the converter calibrations.
+ *
+ * Applies the requested Nyquist zone, runs clock conditioning calibration and
+ * kicks off the converter initial calibrations. These take a while, so they are
+ * only started here; stage 2 waits for them.
+ *
+ * @param jdev   - The JESD204 device.
+ * @param reason - The state transition reason.
+ * @return       - JESD204_STATE_CHANGE_DONE or negative error code.
+ */
 static int ad9088_jesd204_setup_stage1(struct jesd204_dev *jdev,
 				       enum jesd204_state_op_reason reason)
 {
@@ -341,6 +379,18 @@ static int ad9088_jesd204_setup_stage1(struct jesd204_dev *jdev,
 	return JESD204_STATE_CHANGE_DONE;
 }
 
+/**
+ * @brief JESD204 OPT_SETUP_STAGE2 callback: wait for the converter
+ * calibrations.
+ *
+ * Blocks until the initial calibrations started in stage 1 report complete, re-
+ * applies the Nyquist zone on top of the calibrated state, and resynchronises
+ * the link clocks.
+ *
+ * @param jdev   - The JESD204 device.
+ * @param reason - The state transition reason.
+ * @return       - JESD204_STATE_CHANGE_DONE or negative error code.
+ */
 static int ad9088_jesd204_setup_stage2(struct jesd204_dev *jdev,
 				       enum jesd204_state_op_reason reason)
 {
@@ -384,6 +434,20 @@ static int ad9088_jesd204_setup_stage2(struct jesd204_dev *jdev,
 	return JESD204_STATE_CHANGE_DONE;
 }
 
+/**
+ * @brief JESD204 CLOCKS_ENABLE callback: calibrate the receivers, enable the
+ * framers.
+ *
+ * The deframer receivers need an initial equaliser calibration above a lane
+ * rate threshold, and their background calibration has to be frozen across
+ * teardown above a second, higher one. Framer links are simply enabled here and
+ * disabled again on teardown.
+ *
+ * @param jdev   - The JESD204 device.
+ * @param reason - The state transition reason.
+ * @param lnk    - The JESD204 link.
+ * @return       - JESD204_STATE_CHANGE_DONE or negative error code.
+ */
 static int ad9088_jesd204_clks_enable(struct jesd204_dev *jdev,
 				      enum jesd204_state_op_reason reason,
 				      struct jesd204_link *lnk)
@@ -466,6 +530,17 @@ static int ad9088_jesd204_clks_enable(struct jesd204_dev *jdev,
 	return JESD204_STATE_CHANGE_DONE;
 }
 
+/**
+ * @brief JESD204 LINK_ENABLE callback: enable or disable the deframer links.
+ *
+ * The framer links were already handled at clock enable; this is the matching
+ * step for the other direction.
+ *
+ * @param jdev   - The JESD204 device.
+ * @param reason - The state transition reason.
+ * @param lnk    - The JESD204 link.
+ * @return       - JESD204_STATE_CHANGE_DONE or negative error code.
+ */
 static int ad9088_jesd204_link_enable(struct jesd204_dev *jdev,
 				      enum jesd204_state_op_reason reason,
 				      struct jesd204_link *lnk)
@@ -492,6 +567,18 @@ static int ad9088_jesd204_link_enable(struct jesd204_dev *jdev,
 	return JESD204_STATE_CHANGE_DONE;
 }
 
+/**
+ * @brief JESD204 LINK_RUNNING callback: confirm the link came up.
+ *
+ * Reports the link status and fails the transition if it does not settle within
+ * a few polls, so a link that never reaches a good state is caught here rather
+ * than surfacing later as corrupt data.
+ *
+ * @param jdev   - The JESD204 device.
+ * @param reason - The state transition reason.
+ * @param lnk    - The JESD204 link.
+ * @return       - JESD204_STATE_CHANGE_DONE or negative error code.
+ */
 static int ad9088_jesd204_link_running(struct jesd204_dev *jdev,
 				       enum jesd204_state_op_reason reason,
 				       struct jesd204_link *lnk)
@@ -650,6 +737,21 @@ restore:
 	return 0;
 }
 
+/**
+ * @brief JESD204 OPT_POST_SETUP_STAGE1 callback: run MCS calibration.
+ *
+ * Measures the round-trip delay on the SYSREF line, compensates for it, and
+ * runs the multi-chip synchronisation initial calibration so the internal
+ * SYSREF lands on the external edge. Tracking calibration is armed afterwards
+ * where the device supports it.
+ *
+ * Skipped entirely when the board did not supply the accessors this needs, in
+ * which case the link simply runs without deterministic latency.
+ *
+ * @param jdev   - The JESD204 device.
+ * @param reason - The state transition reason.
+ * @return       - JESD204_STATE_CHANGE_DONE or negative error code.
+ */
 static int ad9088_jesd204_post_setup_stage1(struct jesd204_dev *jdev,
 		enum jesd204_state_op_reason reason)
 {
@@ -794,6 +896,18 @@ static bool ad9088_mcs_bg_align_available(struct ad9088_phy *phy,
 	       phy->bsync_ops->bg_align_set && jesd204_dev_is_top(jdev);
 }
 
+/**
+ * @brief JESD204 OPT_POST_SETUP_STAGE2 callback: arm the trigger sync.
+ *
+ * Maps the trigger input, arms it and leaves the device waiting for an external
+ * trigger edge that resets the sample-rate counters on both directions at once.
+ * Optionally also asks the SYSREF provider to keep its synchronised outputs
+ * continuously realigned.
+ *
+ * @param jdev   - The JESD204 device.
+ * @param reason - The state transition reason.
+ * @return       - JESD204_STATE_CHANGE_DONE or negative error code.
+ */
 static int ad9088_jesd204_post_setup_stage2(struct jesd204_dev *jdev,
 		enum jesd204_state_op_reason reason)
 {
@@ -875,6 +989,17 @@ static int ad9088_jesd204_post_setup_stage2(struct jesd204_dev *jdev,
 	return JESD204_STATE_CHANGE_DONE;
 }
 
+/**
+ * @brief JESD204 OPT_POST_SETUP_STAGE3 callback: request the trigger sync.
+ *
+ * Pulses the trigger request output that the previous stage armed the device to
+ * wait for. Skipped when trigger sync is disabled or the board left the request
+ * line unwired.
+ *
+ * @param jdev   - The JESD204 device.
+ * @param reason - The state transition reason.
+ * @return       - JESD204_STATE_CHANGE_DONE or negative error code.
+ */
 static int ad9088_jesd204_post_setup_stage3(struct jesd204_dev *jdev,
 		enum jesd204_state_op_reason reason)
 {
@@ -896,6 +1021,18 @@ static int ad9088_jesd204_post_setup_stage3(struct jesd204_dev *jdev,
 	return JESD204_STATE_CHANGE_DONE;
 }
 
+/**
+ * @brief JESD204 OPT_POST_RUNNING_STAGE callback: verify the sync and finish.
+ *
+ * Waits for the trigger sync to complete and warns when the captured trigger
+ * phase sits too close to a SYSREF edge, where jitter could shift the sampled
+ * latency by a whole SYSREF cycle. Then it releases the converter background
+ * calibrations frozen during bring-up and marks the device initialised.
+ *
+ * @param jdev   - The JESD204 device.
+ * @param reason - The state transition reason.
+ * @return       - JESD204_STATE_CHANGE_DONE or negative error code.
+ */
 static int ad9088_jesd204_post_setup_stage4(struct jesd204_dev *jdev,
 		enum jesd204_state_op_reason reason)
 {
@@ -993,6 +1130,16 @@ static int ad9088_jesd204_post_setup_stage4(struct jesd204_dev *jdev,
 	return JESD204_STATE_CHANGE_DONE;
 }
 
+/**
+ * @brief JESD204 DEVICE_INIT callback: nothing to do on this device.
+ *
+ * The device is already configured by the time the state machine starts, so
+ * only the teardown pass is meaningful, and it has nothing to undo.
+ *
+ * @param jdev   - The JESD204 device.
+ * @param reason - The state transition reason.
+ * @return       - JESD204_STATE_CHANGE_DONE or negative error code.
+ */
 static int ad9088_jesd204_uninit(struct jesd204_dev *jdev,
 				 enum jesd204_state_op_reason reason)
 {
