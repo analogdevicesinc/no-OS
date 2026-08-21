@@ -25,10 +25,17 @@
 # ---------------------------------------------------------------------------
 # Step 1: Gather environment variables dependencies paths
 # ---------------------------------------------------------------------------
-set(FTD2XX_D2XX_HEADERS "$ENV{FTD2XX_D2XX_HEADERS}")
-set(FTD2XX_MPSSE_HEADERS "$ENV{FTD2XX_MPSSE_HEADERS}")
-set(FTD2XX_D2XX_LIB "$ENV{FTD2XX_D2XX_LIB}")
-set(FTD2XX_MPSSE_LIB "$ENV{FTD2XX_MPSSE_LIB}")
+if(CMAKE_C_FLAGS STREQUAL "-m32")
+    set(FTD2XX_D2XX_HEADERS "$ENV{FTD2XX_D2XX_HEADERS_32}")
+    set(FTD2XX_MPSSE_HEADERS "$ENV{FTD2XX_MPSSE_HEADERS_32}")
+    set(FTD2XX_D2XX_LIB "$ENV{FTD2XX_D2XX_LIB_32}")
+    set(FTD2XX_MPSSE_LIB "$ENV{FTD2XX_MPSSE_LIB_32}")
+else()
+    set(FTD2XX_D2XX_HEADERS "$ENV{FTD2XX_D2XX_HEADERS_64}")
+    set(FTD2XX_MPSSE_HEADERS "$ENV{FTD2XX_MPSSE_HEADERS_64}")
+    set(FTD2XX_D2XX_LIB "$ENV{FTD2XX_D2XX_LIB_64}")
+    set(FTD2XX_MPSSE_LIB "$ENV{FTD2XX_MPSSE_LIB_64}")
+endif()
 
 # ---------------------------------------------------------------------------
 # Step 2: Add MPSSE wrapper sources to no-os

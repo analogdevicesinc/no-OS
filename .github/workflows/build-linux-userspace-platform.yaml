@@ -27,7 +27,6 @@ on:
       - '.github/workflows/build-mac-platform.yaml'
       - '.github/workflows/build-aducm3029-platform.yaml'
       - '.github/workflows/build-stm32-platform.yaml'
-      - '.github/workflows/build-linux-ftdi-platform.yaml'
       - '.github/workflows/build-common.yaml'
       - '.github/workflows/deploy-docs.yaml'
   push:
@@ -55,7 +54,6 @@ on:
       - '.github/workflows/build-mac-platform.yaml'
       - '.github/workflows/build-aducm3029-platform.yaml'
       - '.github/workflows/build-stm32-platform.yaml'
-      - '.github/workflows/build-linux-ftdi-platform.yaml'
       - '.github/workflows/build-common.yaml'
       - '.github/workflows/deploy-docs.yaml'
 
