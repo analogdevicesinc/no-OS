@@ -20,9 +20,9 @@
 #define ARM_REG_TEST_BASE_ADDR  (0x20000000U)
 
 /*
- * Calculate the NCO frequency tuning word (FTW) from a frequency shift in Hz.
- * Ported from the kernel ad9088 driver. div is the datapath decimation/
- * interpolation ratio, bits is 32 for CNCOs and 48 for FNCOs.
+ * Calculate the NCO frequency tuning word (FTW) from a frequency shift in Hz. 
+ * Div is the datapath decimation/interpolation ratio, bits is 32 for CNCOs and 
+ * 48 for FNCOs.
  */
 int adi_ad9088_calc_nco_ftw(struct ad9088_phy *phy, uint64_t freq,
 			    int64_t nco_shift, uint32_t div, uint32_t bits,
@@ -81,7 +81,7 @@ int adi_ad9088_calc_nco_ftw(struct ad9088_phy *phy, uint64_t freq,
 
 /*
  * Calculate the NCO frequency shift in Hz from a frequency tuning word (FTW).
- * Reverse of adi_ad9088_calc_nco_ftw(). Ported from the kernel ad9088 driver.
+ * Reverse of adi_ad9088_calc_nco_ftw().
  */
 int adi_ad9088_calc_nco_freq(struct ad9088_phy *phy, uint64_t freq,
 			     uint64_t ftw, uint32_t a, uint32_t b,
@@ -203,7 +203,6 @@ int ad9088_set_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 {
 	adi_apollo_fine_nco_main_pgm_t config = {0};
 	struct adi_apollo_fnco_cfg *nco;
-	adi_apollo_cduc_ratio_e drc_ratio;
 	uint64_t ftw, frac_a, frac_b, f;
 	uint32_t mask, cddc_dcm;
 	int64_t fnco_phase;
@@ -218,15 +217,19 @@ int ad9088_set_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 	cddc_pi = (fddc_num / 2) % ADI_APOLLO_CDUCS_PER_SIDE;
 
 	if (terminal == ADI_APOLLO_TX) {
-		drc_ratio = phy->profile.tx_path[side].tx_cduc[cddc_pi].drc_ratio;
-		ret = adi_apollo_cduc_interp_bf_to_val(&phy->ad9088, drc_ratio,
+		adi_apollo_cduc_ratio_e ratio =
+			phy->profile.tx_path[side].tx_cduc[cddc_pi].drc_ratio;
+
+		ret = adi_apollo_cduc_interp_bf_to_val(&phy->ad9088, ratio,
 						       &cddc_dcm);
 		ret = ad9088_check_apollo_error(ret,
 						"adi_apollo_cduc_interp_bf_to_val");
 		f = phy->profile.dac_cfg[side].dac_sampling_rate_Hz;
 	} else {
-		drc_ratio = phy->profile.rx_path[side].rx_cddc[cddc_pi].drc_ratio;
-		ret = adi_apollo_cddc_dcm_bf_to_val(&phy->ad9088, drc_ratio,
+		adi_apollo_cddc_ratio_e ratio =
+			phy->profile.rx_path[side].rx_cddc[cddc_pi].drc_ratio;
+
+		ret = adi_apollo_cddc_dcm_bf_to_val(&phy->ad9088, ratio,
 						    &cddc_dcm);
 		ret = ad9088_check_apollo_error(ret,
 						"adi_apollo_cddc_dcm_bf_to_val");
@@ -523,7 +526,8 @@ int ad9088_inspect_jrx_link_all(struct ad9088_phy *phy)
 		if (err)
 			return err;
 
-		pr_info("JRX ADI_APOLLO_LINK_%s: L=%2d M=%2d F=%2d S=%2d Np=%2d CS=%2d Subclass=%u link_en= %-8s\n",
+		pr_info("JRX ADI_APOLLO_LINK_%s: L=%2d M=%2d F=%2d "
+			"S=%2d Np=%2d CS=%2d Subclass=%u link_en= %-8s\n",
 			links_to_inspect_str[l],
 			jrx_status.l_minus1 + 1,
 			jrx_status.m_minus1 + 1,
@@ -558,7 +562,8 @@ int ad9088_inspect_jtx_link_all(struct ad9088_phy *phy)
 		if (err)
 			return err;
 
-		pr_info("JTX ADI_APOLLO_LINK_%s: L=%2d M=%2d F=%2d S=%2d Np=%2d CS=%2d Subclass=%u link_en= %-8s\n",
+		pr_info("JTX ADI_APOLLO_LINK_%s: L=%2d M=%2d F=%2d "
+			"S=%2d Np=%2d CS=%2d Subclass=%u link_en= %-8s\n",
 			links_to_inspect_str[l],
 			jtx_status.l_minus1 + 1,
 			jtx_status.m_minus1 + 1,
@@ -611,8 +616,8 @@ void ad9088_print_sysref_phase(struct ad9088_phy *phy)
 
 	for (i = 0; i < 5; i++) {
 		adi_apollo_clk_mcs_sysref_phase_get(device, &sysref_phase);
-		pr_info("SYSREF_PHASE = %d (TRY%d)\n",
-			no_os_sign_extend32(sysref_phase, 9), i);
+		pr_info("SYSREF_PHASE = %ld (TRY%d)\n",
+			(long)no_os_sign_extend32(sysref_phase, 9), i);
 	}
 }
 
@@ -671,6 +676,10 @@ int ad9088_jesd_tx_link_status_print(struct ad9088_phy *phy,
 int ad9088_jesd_rx_link_status_print(struct ad9088_phy *phy,
 				     struct jesd204_link *lnk, int retry)
 {
+	adi_apollo_jesd_rx_cfg_t *jrx =
+		&phy->profile.jrx[(lnk->link_id / 2) & 1];
+	adi_apollo_jesd_rx_link_cfg_t *rl =
+		&jrx->rx_link_cfg[(lnk->link_id % 2) & 1];
 	int ret, i, err;
 	uint16_t stat, l_stat, mask;
 	uint8_t id = ad9088_to_link(lnk->link_id);
@@ -681,7 +690,7 @@ int ad9088_jesd_rx_link_status_print(struct ad9088_phy *phy,
 			return -EFAULT;
 
 		if (lnk->jesd_version == JESD204_VERSION_C) {
-			if (phy->profile.jrx[(lnk->link_id / 2) & 1].common_link_cfg.subclass)
+			if (jrx->common_link_cfg.subclass)
 				mask = 0x60; /* Subclass 1 */
 			else
 				mask = 0x20; /* Ignore SYSREF Phase */
@@ -693,7 +702,7 @@ int ad9088_jesd_rx_link_status_print(struct ad9088_phy *phy,
 
 			if (ret == 0 || retry == 0) {
 				for (i = 0; i < lnk->num_lanes; i++) {
-					uint8_t phys_lane = phy->profile.jrx[(lnk->link_id / 2) & 1].rx_link_cfg[(lnk->link_id % 2) & 1].lane_xbar[i];
+					uint8_t phys_lane = rl->lane_xbar[i];
 
 					err = adi_apollo_jrx_j204c_lane_status_get(&phy->ad9088,
 							id, phys_lane, &l_stat);
@@ -720,7 +729,7 @@ int ad9088_jesd_rx_link_status_print(struct ad9088_phy *phy,
 				no_os_mdelay(20);
 			}
 		} else {
-			if (phy->profile.jrx[(lnk->link_id / 2) & 1].common_link_cfg.subclass)
+			if (jrx->common_link_cfg.subclass)
 				mask = 0x60; /* Subclass 1 */
 			else
 				mask = 0x20; /* Ignore SYSREF Phase */
@@ -732,7 +741,7 @@ int ad9088_jesd_rx_link_status_print(struct ad9088_phy *phy,
 
 			if (ret == 0 || retry == 0) {
 				for (i = 0; i < lnk->num_lanes; i++) {
-					uint8_t phys_lane = phy->profile.jrx[(lnk->link_id / 2) & 1].rx_link_cfg[(lnk->link_id % 2) & 1].lane_xbar[i];
+					uint8_t phys_lane = rl->lane_xbar[i];
 
 					err = adi_apollo_jrx_j204b_lane_status_get(&phy->ad9088,
 							id, phys_lane, &l_stat);
@@ -744,7 +753,9 @@ int ad9088_jesd_rx_link_status_print(struct ad9088_phy *phy,
 							ad9088_fsm_links_to_str[lnk->link_id],
 							(int)lnk->link_id, i, phys_lane, l_stat);
 					else
-						pr_err("%s Link%d 204B Lane-%d@%d status: 0x%X Frame Sync:%s SYNC:%s DATA:%s Checksum:%s\n",
+						pr_err("%s Link%d 204B Lane-%d@%d "
+						       "status: 0x%X Frame Sync:%s "
+						       "SYNC:%s DATA:%s Checksum:%s\n",
 						       ad9088_fsm_links_to_str[lnk->link_id],
 						       (int)lnk->link_id, i, phys_lane, l_stat & 0x3C,
 						       l_stat & NO_OS_BIT(2) ? "Lost" : "Found",
@@ -773,38 +784,22 @@ struct fw_entry {
 };
 
 static const struct fw_entry fw_table[ADI_APOLLO_FW_ID_MAX] = {
-	[ADI_APOLLO_FW_ID_SECR_BOOT_HDR_BIN] = {
-		.start = AD9088_FW_SYM(app_signed_encrypted_B_flash_image_0x01030000_bin_start),
-		.end   = AD9088_FW_SYM(app_signed_encrypted_B_flash_image_0x01030000_bin_end),
-	},
-	[ADI_APOLLO_FW_ID_CORE_0_TYE_FW_BIN] = {
-		.start = AD9088_FW_SYM(app_signed_encrypted_B_flash_image_0x20000000_bin_start),
-		.end   = AD9088_FW_SYM(app_signed_encrypted_B_flash_image_0x20000000_bin_end),
-	},
-	[ADI_APOLLO_FW_ID_CORE_1_TYE_FW_BIN] = {
-		.start = AD9088_FW_SYM(app_signed_encrypted_B_flash_image_0x02000000_bin_start),
-		.end   = AD9088_FW_SYM(app_signed_encrypted_B_flash_image_0x02000000_bin_end),
-	},
-	[ADI_APOLLO_FW_ID_TYE_OPER_FW_BIN] = {
-		.start = AD9088_FW_SYM(app_signed_encrypted_B_flash_image_0x21000000_bin_start),
-		.end   = AD9088_FW_SYM(app_signed_encrypted_B_flash_image_0x21000000_bin_end),
-	},
-	[ADI_APOLLO_FW_ID_PROD_SECR_BOOT_HDR_BIN] = {
-		.start = AD9088_FW_SYM(app_signed_encrypted_prod_B_flash_image_0x01030000_bin_start),
-		.end   = AD9088_FW_SYM(app_signed_encrypted_prod_B_flash_image_0x01030000_bin_end),
-	},
-	[ADI_APOLLO_FW_ID_PROD_CORE_0_TYE_FW_BIN] = {
-		.start = AD9088_FW_SYM(app_signed_encrypted_prod_B_flash_image_0x20000000_bin_start),
-		.end   = AD9088_FW_SYM(app_signed_encrypted_prod_B_flash_image_0x20000000_bin_end),
-	},
-	[ADI_APOLLO_FW_ID_PROD_CORE_1_TYE_FW_BIN] = {
-		.start = AD9088_FW_SYM(app_signed_encrypted_prod_B_flash_image_0x02000000_bin_start),
-		.end   = AD9088_FW_SYM(app_signed_encrypted_prod_B_flash_image_0x02000000_bin_end),
-	},
-	[ADI_APOLLO_FW_ID_PROD_TYE_OPER_FW_BIN] = {
-		.start = AD9088_FW_SYM(app_signed_encrypted_prod_B_flash_image_0x21000000_bin_start),
-		.end   = AD9088_FW_SYM(app_signed_encrypted_prod_B_flash_image_0x21000000_bin_end),
-	},
+	[ADI_APOLLO_FW_ID_SECR_BOOT_HDR_BIN] = AD9088_FW_ENTRY(
+		app_signed_encrypted_B_flash_image_0x01030000_bin),
+	[ADI_APOLLO_FW_ID_CORE_0_TYE_FW_BIN] = AD9088_FW_ENTRY(
+		app_signed_encrypted_B_flash_image_0x20000000_bin),
+	[ADI_APOLLO_FW_ID_CORE_1_TYE_FW_BIN] = AD9088_FW_ENTRY(
+		app_signed_encrypted_B_flash_image_0x02000000_bin),
+	[ADI_APOLLO_FW_ID_TYE_OPER_FW_BIN] = AD9088_FW_ENTRY(
+		app_signed_encrypted_B_flash_image_0x21000000_bin),
+	[ADI_APOLLO_FW_ID_PROD_SECR_BOOT_HDR_BIN] = AD9088_FW_ENTRY(
+		app_signed_encrypted_prod_B_flash_image_0x01030000_bin),
+	[ADI_APOLLO_FW_ID_PROD_CORE_0_TYE_FW_BIN] = AD9088_FW_ENTRY(
+		app_signed_encrypted_prod_B_flash_image_0x20000000_bin),
+	[ADI_APOLLO_FW_ID_PROD_CORE_1_TYE_FW_BIN] = AD9088_FW_ENTRY(
+		app_signed_encrypted_prod_B_flash_image_0x02000000_bin),
+	[ADI_APOLLO_FW_ID_PROD_TYE_OPER_FW_BIN] = AD9088_FW_ENTRY(
+		app_signed_encrypted_prod_B_flash_image_0x21000000_bin),
 };
 
 static int ad9088_fw_provider_get(adi_apollo_fw_provider_t *obj,
@@ -869,7 +864,7 @@ static int ad9088_spi_read(void *dev_obj, const uint8_t tx_data[],
 	return 0;
 }
 
-static int ad9088_spi_write(void *dev_obj, const uint8_t tx_data[],
+static int32_t ad9088_spi_write(void *dev_obj, const uint8_t tx_data[],
 			    uint32_t num_tx_bytes, adi_apollo_hal_txn_config_t *txn_config)
 {
 	struct ad9088_phy *phy = dev_obj;
@@ -900,7 +895,6 @@ static int ad9088_udelay(void *user_data, unsigned int us)
 int ad9088_log_write(void *user_data, int32_t log_type, const char *message,
 		     va_list argp)
 {
-	struct ad9088_phy *phy = user_data;
 	char logMessage[160];
 
 	if (log_type == ADI_CMS_LOG_SPI)
@@ -941,33 +935,42 @@ static int ad9088_reg_test(adi_apollo_device_t *device)
 	uint8_t data8, stat;
 	adi_apollo_hal_protocol_e protocol;
 
-	const uint32_t direct_addr[] = { 0x4700000a, 0x4700000a, 0x47000200, 0x47000200 };    // HSCI can't write 0x4700000A, SPI only
-	const uint8_t  direct_data[] = { 0x55,       0xaa,       0xcc,       0x33 };
+	const uint32_t direct_addr[] = {
+		0x4700000a, 0x4700000a, 0x47000200, 0x47000200
+	};
+	const uint8_t direct_data[] = { 0x55, 0xaa, 0xcc, 0x33 };
 
-	uint32_t indirect_addr[] = { INDIRECT_REG_TEST_ADDR + 0, INDIRECT_REG_TEST_ADDR + 1,
-					INDIRECT_REG_TEST_ADDR + 2, INDIRECT_REG_TEST_ADDR + 3 }; /* indirect register address */
-	const uint8_t  indirect_data[] = { 0x12,       0x34,       0x56,       0x78 };
+	const uint32_t indirect_addr[] = {
+		INDIRECT_REG_TEST_ADDR + 0, INDIRECT_REG_TEST_ADDR + 1,
+		INDIRECT_REG_TEST_ADDR + 2, INDIRECT_REG_TEST_ADDR + 3
+	};
+	const uint8_t indirect_data[] = { 0x12, 0x34, 0x56, 0x78 };
 
-	uint32_t arm_addr[] = { ARM_REG_TEST_BASE_ADDR + 0, ARM_REG_TEST_BASE_ADDR + 4,
-				ARM_REG_TEST_BASE_ADDR + 8, ARM_REG_TEST_BASE_ADDR + 12 }; /* ARM core1 register addresses */
-	const uint32_t arm_data[] = { 0x55aa55aa, 0xdeadbeef, 0xbeefdead, 0xaa55aa55 };
+	/* ARM core1 register addresses */
+	const uint32_t arm_addr[] = {
+		ARM_REG_TEST_BASE_ADDR + 0, ARM_REG_TEST_BASE_ADDR + 4,
+		ARM_REG_TEST_BASE_ADDR + 8, ARM_REG_TEST_BASE_ADDR + 12
+	};
+	const uint32_t arm_data[] = {
+		0x55aa55aa, 0xdeadbeef, 0xbeefdead, 0xaa55aa55
+	};
 
 	adi_apollo_hal_active_protocol_get(device, &protocol);
 
 	/* Direct register SPI scratch loop rd/wr test */
 	stat = 0;
-	for (i=0; i<sizeof(direct_addr) / sizeof(direct_addr[0]); i++) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(direct_addr); i++) {
 
-		if ((protocol == ADI_APOLLO_HAL_PROTOCOL_HSCI) && (direct_addr[i] <= 0x4700000Fu)) {
+		if (protocol == ADI_APOLLO_HAL_PROTOCOL_HSCI &&
+		    direct_addr[i] <= 0x4700000Fu)
 			continue;
-		}
 
-		if (err = adi_apollo_hal_reg_set(device, direct_addr[i], direct_data[i]), err != API_CMS_ERROR_OK) {
+		err = adi_apollo_hal_reg_set(device, direct_addr[i], direct_data[i]);
+		if (err != API_CMS_ERROR_OK)
 			return err;
-		}
-		if (err = adi_apollo_hal_reg_get(device, direct_addr[i], &data8), err != API_CMS_ERROR_OK) {
+		err = adi_apollo_hal_reg_get(device, direct_addr[i], &data8);
+		if (err != API_CMS_ERROR_OK)
 			return err;
-		}
 
 		if (data8 != direct_data[i]) {
 			pr_err("data8 0x%X != direct_data[i] 0x%X\n", data8, direct_data[i]);
@@ -983,13 +986,14 @@ static int ad9088_reg_test(adi_apollo_device_t *device)
 
 	/* Indirect register SPI loop rd/wr test */
 	stat = 0;
-	for (i = 0; i < sizeof(indirect_addr) / sizeof(indirect_addr[0]); i++) {
-		if (err = adi_apollo_hal_reg_set(device, indirect_addr[i], indirect_data[i]), err != API_CMS_ERROR_OK) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(indirect_addr); i++) {
+		err = adi_apollo_hal_reg_set(device, indirect_addr[i],
+					     indirect_data[i]);
+		if (err != API_CMS_ERROR_OK)
 			return err;
-		}
-		if (err = adi_apollo_hal_reg_get(device, indirect_addr[i], &data8), err != API_CMS_ERROR_OK) {
+		err = adi_apollo_hal_reg_get(device, indirect_addr[i], &data8);
+		if (err != API_CMS_ERROR_OK)
 			return err;
-		}
 
 		if (data8 != indirect_data[i]) {
 			pr_err("Test indirect register 0x%X - 0x%X\n", data8, indirect_data[i]);
@@ -1005,13 +1009,13 @@ static int ad9088_reg_test(adi_apollo_device_t *device)
 
 	/* 32-bit ARM mem rd/wr test */
 	stat = 0;
-	for (i = 0; i < sizeof(arm_addr) / sizeof(arm_addr[0]); i++) {
-		if (err = adi_apollo_hal_reg32_set(device, arm_addr[i], arm_data[i]), err != API_CMS_ERROR_OK) {
+	for (i = 0; i < NO_OS_ARRAY_SIZE(arm_addr); i++) {
+		err = adi_apollo_hal_reg32_set(device, arm_addr[i], arm_data[i]);
+		if (err != API_CMS_ERROR_OK)
 			return err;
-		}
-		if (err = adi_apollo_hal_reg32_get(device, arm_addr[i], &data32), err != API_CMS_ERROR_OK) {
+		err = adi_apollo_hal_reg32_get(device, arm_addr[i], &data32);
+		if (err != API_CMS_ERROR_OK)
 			return err;
-		}
 
 
 		if (data32 != arm_data[i]) {
@@ -1088,6 +1092,7 @@ static int ad9088_version_info(struct ad9088_phy *phy)
 int ad9088_init(struct ad9088_phy **device,
 		const struct ad9088_init_param *init_param)
 {
+	adi_apollo_device_spi_settings_t *spi_cfg;
 	struct ad9088_jesd204_priv *priv;
 	struct ad9088_phy *phy;
 	uint16_t api_rev[3];
@@ -1099,8 +1104,9 @@ int ad9088_init(struct ad9088_phy **device,
 
 	phy->ad9088.hal_info.spi0_desc.spi_config.sdo = (phy->spi_3wire_en) ?
 			ADI_APOLLO_DEVICE_SPI_SDIO : ADI_APOLLO_DEVICE_SPI_SDO;
-	phy->ad9088.hal_info.spi0_desc.spi_config.msb = ADI_APOLLO_DEVICE_SPI_MSB_FIRST;
-	phy->ad9088.hal_info.spi0_desc.spi_config.addr_inc = ADI_APOLLO_DEVICE_SPI_ADDR_INC_AUTO;
+	spi_cfg = &phy->ad9088.hal_info.spi0_desc.spi_config;
+	spi_cfg->msb = ADI_APOLLO_DEVICE_SPI_MSB_FIRST;
+	spi_cfg->addr_inc = ADI_APOLLO_DEVICE_SPI_ADDR_INC_AUTO;
 	phy->ad9088.hal_info.spi0_desc.is_used = 1;
 	phy->ad9088.hal_info.spi0_desc.dev_obj = phy;
 	phy->ad9088.hal_info.user_data = phy;

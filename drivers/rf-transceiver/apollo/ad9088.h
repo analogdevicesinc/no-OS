@@ -148,12 +148,6 @@ struct ad9088_init_param {
 	struct no_os_gpio_init_param *gpio_tri_req;
 	bool spi_3wire_en;
 	bool trig_sync_en;
-	/*
-	 * Dual-modulus NCO mode, per the kernel's adi,cnco-dual-modulus-mode-en
-	 * / adi,fnco-dual-modulus-mode-en devicetree properties. Off keeps the
-	 * fractional part of the tuning word at 0/1, which is what a plain
-	 * integer FTW wants.
-	 */
 	bool cnco_dual_modulus_mode_en;
 	bool fnco_dual_modulus_mode_en;
 	uint32_t nyquist_zone;
@@ -243,6 +237,12 @@ struct ad9088_phy {
 #define AD9088_FW_DECL(sym)						\
 	extern const uint8_t AD9088_FW_SYM(sym##_start)[];		\
 	extern const uint8_t AD9088_FW_SYM(sym##_end)[]
+
+/* One fw_table entry: the _start/_end pair for the named image. */
+#define AD9088_FW_ENTRY(sym) {						\
+	.start = AD9088_FW_SYM(sym##_start),				\
+	.end   = AD9088_FW_SYM(sym##_end),				\
+}
 
 AD9088_FW_DECL(usecase_bin);
 

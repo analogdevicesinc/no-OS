@@ -9,78 +9,78 @@
 #include "no_os_alloc.h"
 #include "no_os_crc32.h"
 
-static void ad9088_jesd_lane_setup(struct ad9088_phy *phy, 
-				      const struct ad9088_init_param *init_param)
+/*
+ * Apply the board's lane crossbar and serializer settings on top of the loaded
+ * profile, then recompute each side's lane_enables mask from the links the
+ * profile marks in use.
+ *
+ * Only link 0's crossbar comes from the init parameters; link 1 keeps whatever
+ * the profile binary carried, so the enables pass reads both back rather than
+ * assuming the mapping above. Note the two directions do not compute the mask
+ * the same way: JRx enables the physical lane the crossbar points at, JTx
+ * enables the logical lane index.
+ */
+static void ad9088_jesd_lane_setup(struct ad9088_phy *phy,
+				   const struct ad9088_init_param *init_param)
 {
-	int i;
+	const uint32_t *jtx_map[ADI_APOLLO_NUM_SIDES] = {
+		init_param->jtx0_logical_lane_mapping,
+		init_param->jtx1_logical_lane_mapping,
+	};
+	const uint32_t *jrx_map[ADI_APOLLO_NUM_SIDES] = {
+		init_param->jrx0_physical_lane_mapping,
+		init_param->jrx1_physical_lane_mapping,
+	};
+	unsigned int side, link, i;
 
-	for (i = 0; i < 12; i++){
-		phy->profile.jtx[0].tx_link_cfg[0].lane_xbar[i] = init_param->jtx0_logical_lane_mapping[i];
-		phy->profile.jtx[1].tx_link_cfg[0].lane_xbar[i] = init_param->jtx1_logical_lane_mapping[i];
-		phy->profile.jrx[0].rx_link_cfg[0].lane_xbar[i] = init_param->jrx0_physical_lane_mapping[i];
-		phy->profile.jrx[1].rx_link_cfg[0].lane_xbar[i] = init_param->jrx1_physical_lane_mapping[i];
-	}
-	
-	phy->profile.jrx[0].common_link_cfg.lane_enables = 0;
-	phy->profile.jrx[1].common_link_cfg.lane_enables = 0;
-	phy->profile.jtx[0].common_link_cfg.lane_enables = 0;
-	phy->profile.jtx[1].common_link_cfg.lane_enables = 0;
-	for (i = 0; i < 12; i++) {
-		phy->profile.jtx[0].serializer_lane[i].ser_amplitude = init_param->jtx_ser_amplitude;
-		phy->profile.jtx[0].serializer_lane[i].ser_pre_emphasis = init_param->jtx_ser_pre_emphasis;
-		phy->profile.jtx[0].serializer_lane[i].ser_post_emphasis = init_param->jtx_ser_post_emphasis;
+	for (side = 0; side < ADI_APOLLO_NUM_SIDES; side++) {
+		adi_apollo_jesd_tx_cfg_t *jtx = &phy->profile.jtx[side];
+		adi_apollo_jesd_rx_cfg_t *jrx = &phy->profile.jrx[side];
 
-		phy->profile.jtx[1].serializer_lane[i].ser_amplitude = init_param->jtx_ser_amplitude;
-		phy->profile.jtx[1].serializer_lane[i].ser_pre_emphasis = init_param->jtx_ser_pre_emphasis;
-		phy->profile.jtx[1].serializer_lane[i].ser_post_emphasis = init_param->jtx_ser_post_emphasis;
+		for (i = 0; i < ADI_APOLLO_JESD_MAX_LANES_PER_SIDE; i++) {
+			jtx->tx_link_cfg[0].lane_xbar[i] = jtx_map[side][i];
+			jrx->rx_link_cfg[0].lane_xbar[i] = jrx_map[side][i];
 
-		/* JRX */
-		if (phy->profile.jrx[0].rx_link_cfg[0].link_in_use)
-			if (i <= (phy->profile.jrx[0].rx_link_cfg[0].l_minus1))
-				phy->profile.jrx[0].common_link_cfg.lane_enables |= (1 << phy->profile.jrx[0].rx_link_cfg[0].lane_xbar[i]);
+			jtx->serializer_lane[i].ser_amplitude =
+				init_param->jtx_ser_amplitude;
+			jtx->serializer_lane[i].ser_pre_emphasis =
+				init_param->jtx_ser_pre_emphasis;
+			jtx->serializer_lane[i].ser_post_emphasis =
+				init_param->jtx_ser_post_emphasis;
+		}
 
-		if (phy->profile.jrx[1].rx_link_cfg[0].link_in_use)
-			if (i <= (phy->profile.jrx[1].rx_link_cfg[0].l_minus1))
-				phy->profile.jrx[1].common_link_cfg.lane_enables |= (1 << phy->profile.jrx[1].rx_link_cfg[0].lane_xbar[i]);
+		jtx->common_link_cfg.lane_enables = 0;
+		jrx->common_link_cfg.lane_enables = 0;
 
-		/* JRX Link2 */
+		for (link = 0; link < ADI_APOLLO_JESD_LINKS; link++) {
+			adi_apollo_jesd_tx_link_cfg_t *tl =
+				&jtx->tx_link_cfg[link];
+			adi_apollo_jesd_rx_link_cfg_t *rl =
+				&jrx->rx_link_cfg[link];
 
-		if (phy->profile.jrx[0].rx_link_cfg[1].link_in_use)
-			if (i <= (phy->profile.jrx[0].rx_link_cfg[1].l_minus1))
-				phy->profile.jrx[0].common_link_cfg.lane_enables |= (1 << phy->profile.jrx[0].rx_link_cfg[1].lane_xbar[i]);
+			for (i = 0; i < ADI_APOLLO_JESD_MAX_LANES_PER_SIDE;
+			     i++) {
+				if (rl->link_in_use && i <= rl->l_minus1)
+					jrx->common_link_cfg.lane_enables |=
+						1 << rl->lane_xbar[i];
 
-		if (phy->profile.jrx[1].rx_link_cfg[1].link_in_use)
-			if (i <= (phy->profile.jrx[1].rx_link_cfg[1].l_minus1))
-				phy->profile.jrx[1].common_link_cfg.lane_enables |= (1 << phy->profile.jrx[1].rx_link_cfg[1].lane_xbar[i]);
-
-		/* JTX */
-		if (phy->profile.jtx[0].tx_link_cfg[0].link_in_use)
-			if ((int32_t)phy->profile.jtx[0].tx_link_cfg[0].lane_xbar[i] <= (int32_t)phy->profile.jtx[0].tx_link_cfg[0].l_minus1)
-				phy->profile.jtx[0].common_link_cfg.lane_enables |= (1 << i);
-
-		if (phy->profile.jtx[1].tx_link_cfg[0].link_in_use)
-			if ((int32_t)phy->profile.jtx[1].tx_link_cfg[0].lane_xbar[i] <= (int32_t)phy->profile.jtx[1].tx_link_cfg[0].l_minus1)
-				phy->profile.jtx[1].common_link_cfg.lane_enables |= (1 << i);
-
-		/* JTX Link2 */
-
-		if (phy->profile.jtx[0].tx_link_cfg[1].link_in_use)
-			if ((int32_t)phy->profile.jtx[0].tx_link_cfg[1].lane_xbar[i] <= (int32_t)phy->profile.jtx[0].tx_link_cfg[1].l_minus1)
-				phy->profile.jtx[0].common_link_cfg.lane_enables |= (1 << i);
-
-		if (phy->profile.jtx[1].tx_link_cfg[1].link_in_use)
-			if ((int32_t)phy->profile.jtx[1].tx_link_cfg[1].lane_xbar[i] <= (int32_t)phy->profile.jtx[1].tx_link_cfg[1].l_minus1)
-				phy->profile.jtx[1].common_link_cfg.lane_enables |= (1 << i);
+				if (tl->link_in_use &&
+				    (int32_t)tl->lane_xbar[i] <=
+				    (int32_t)tl->l_minus1)
+					jtx->common_link_cfg.lane_enables |=
+						1 << i;
+			}
+		}
 	}
 }
 
-int ad9088_get_profile(struct ad9088_phy *phy)
+static int ad9088_get_profile(struct ad9088_phy *phy)
 {
 	adi_apollo_top_t *p = &phy->profile;
 	size_t firmware_size = AD9088_FW_SYM(usecase_bin_end) -
 			       AD9088_FW_SYM(usecase_bin_start);
 	const uint8_t *firmware_ptr = AD9088_FW_SYM(usecase_bin_start);
-	
+
 	if (sizeof(*p) != firmware_size) {
 		pr_err("Invalid size of profile structure %zu, expected %zu\n",
 		       sizeof(*p), firmware_size);

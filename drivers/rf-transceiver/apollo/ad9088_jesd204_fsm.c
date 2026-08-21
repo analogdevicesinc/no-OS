@@ -430,8 +430,9 @@ static int ad9088_jesd204_clks_enable(struct jesd204_dev *jdev,
 		/* Warmboot from FW cal data is not supported yet in no-OS */
 		adi_apollo_init_cal_cfg_e init_cal = ADI_APOLLO_INIT_CAL_ENABLED;
 
-		pr_info("Link%u: SERDES JRx cal Rate %u kBps via INIT_CAL ...\n",
-			lnk->link_id, lane_rate_khz);
+		pr_info("Link%lu: SERDES JRx cal Rate %lu kBps via INIT_CAL ...\n",
+			(unsigned long)lnk->link_id,
+			(unsigned long)lane_rate_khz);
 
 		ret = adi_apollo_serdes_jrx_init_cal(device, serdes, init_cal);
 		ret = ad9088_check_apollo_error(ret,
@@ -962,7 +963,9 @@ static int ad9088_jesd204_post_setup_stage4(struct jesd204_dev *jdev,
 		margin_high = (period * 3) / 4;
 
 		if (phase < margin_low || phase > margin_high)
-			pr_warning("Trigger phase %u outside safe margin [%u, %u]. Risk of +/-1 SYSREF cycle latency jitter.\n",
+			pr_warning("Trigger phase %u outside safe margin "
+				   "[%u, %u]. Risk of +/-1 SYSREF cycle "
+				   "latency jitter.\n",
 				   phase, margin_low, margin_high);
 
 		ret = adi_apollo_clk_mcs_trig_sync_enable(device, 0);

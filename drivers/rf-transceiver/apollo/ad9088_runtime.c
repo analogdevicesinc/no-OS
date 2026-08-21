@@ -11,9 +11,7 @@
 #include "adi_apollo_loopback.h"
 
 /*
- * Restore an NCO to the mixer mode requested by the profile. Used when a test
- * tone is disabled - the kernel keeps the profile as the source of truth for
- * the "normal" mode rather than caching the previous value.
+ * Restore an NCO to the mixer mode requested by the profile.
  */
 static adi_apollo_nco_mixer_mode_e
 ad9088_cnco_profile_mode(struct ad9088_phy *phy,
@@ -40,8 +38,7 @@ ad9088_fnco_profile_mode(struct ad9088_phy *phy,
 /*
  * Enable or disable the coarse NCO (CNCO) DC test tone for a given side/CDDC.
  * When enabled the mixer is switched to test mode and offset selects the test
- * tone amplitude. offset is clamped to the datapath maximum (kernel
- * ad9088.c:1918-1931).
+ * tone amplitude. offset is clamped to the datapath maximum.
  */
 int ad9088_set_cnco_test_tone(struct ad9088_phy *phy,
 			      adi_apollo_terminal_e terminal, uint8_t side,
@@ -129,7 +126,6 @@ int ad9088_set_fnco_test_tone(struct ad9088_phy *phy,
 	return 0;
 }
 
-/* CDUC block mask for loopback 1 on a given side (kernel ad9088.c:2071-2087). */
 static uint16_t ad9088_lb1_cduc_mask_get(adi_apollo_device_t *device,
 		uint8_t side)
 {
@@ -288,8 +284,7 @@ static int ad9088_device_loopback_disable(struct ad9088_phy *phy, uint8_t side)
 
 /*
  * Select the datapath loopback mode for one side. Modes 2 (FDUC) and 3 (JESD)
- * are not ported yet. Loopback requires matching ADC and DAC sampling rates,
- * mirroring the kernel's ad9088_assert_fs() check.
+ * are not ported yet. Loopback requires matching ADC and DAC sampling rates.
  */
 int ad9088_set_loopback_mode(struct ad9088_phy *phy, uint8_t side, uint8_t mode)
 {
