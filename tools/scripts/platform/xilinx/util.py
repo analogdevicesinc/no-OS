@@ -665,6 +665,7 @@ def create_ide_workspace(ws, hw_path, hw_file, manifest_path):
     includes = manifest.get("includes", [])
     defines = manifest.get("defines", [])
     force_includes = manifest.get("force_includes", [])
+    repo_root = manifest.get("repo_root", "")
 
     # Arch comes from the manifest (no_os_build reads XILINX_ARCH from the CMake
     # cache); fall back to a staged arch.txt if present. Unlike create_project,
@@ -715,17 +716,38 @@ def create_ide_workspace(ws, hw_path, hw_file, manifest_path):
     app = client.create_app_component(
         name="app", platform=xpfm, template="empty_application")
 
-    # Reference each source in place (no copy). import_files takes a common
-    # from_loc + file list, so group by containing directory to keep paths
-    # absolute and avoid copying the whole tree.
-    from collections import defaultdict
-    by_dir = defaultdict(list)
-    for src in sources:
-        if os.path.exists(src):
-            by_dir[os.path.dirname(src)].append(os.path.basename(src))
-    for from_loc, files in by_dir.items():
-        app.import_files(from_loc=from_loc, files=files,
-                         is_skip_copy_sources=True)
+    # Create symlink tree preserving directory structure. Vitis import_files
+    # flattens everything and drops .h files, so we build the tree ourselves
+    # and point UserConfig.cmake at it.
+    app_src_dir = os.path.join(out_dir, "app", "src")
+    symlink_root = os.path.join(app_src_dir, "no-os")
+
+    # Collect all files: sources + headers from include directories
+    all_files = list(sources)
+    for inc_dir in includes:
+        if os.path.isdir(inc_dir):
+            for fname in os.listdir(inc_dir):
+                if fname.endswith(('.h', '.hpp')):
+                    all_files.append(os.path.join(inc_dir, fname))
+
+    # Create symlinks preserving relative paths from repo root
+    symlinked = []
+    for src in all_files:
+        if not os.path.exists(src):
+            continue
+        if repo_root and src.startswith(repo_root):
+            rel = os.path.relpath(src, repo_root)
+        else:
+            # Files outside repo (e.g., BSP headers) go flat under _external/
+            rel = os.path.join("_external", os.path.basename(src))
+        link_path = os.path.join(symlink_root, rel)
+        os.makedirs(os.path.dirname(link_path), exist_ok=True)
+        if os.path.exists(link_path):
+            os.remove(link_path)
+        os.symlink(src, link_path)
+        symlinked.append(os.path.relpath(link_path, app_src_dir))
+
+    print(f"INFO: Created {len(symlinked)} symlinks in {symlink_root}")
 
     if includes:
         app.set_app_config(key="USER_INCLUDE_DIRECTORIES", values=includes)
@@ -740,22 +762,32 @@ def create_ide_workspace(ws, hw_path, hw_file, manifest_path):
 
     vitis.dispose()
 
-    # Patch UserConfig.cmake to add force-include flags for Kconfig-generated
-    # headers (e.g., -include no_os_config.h). The Vitis API doesn't support
-    # arbitrary compiler flags, so we edit the file directly after Vitis
-    # creates it.
-    if force_includes:
-        user_config = os.path.join(out_dir, "app", "src", "UserConfig.cmake")
-        if os.path.exists(user_config):
-            with open(user_config, "r") as f:
-                content = f.read()
+    # Patch UserConfig.cmake to:
+    # 1. Replace USER_COMPILE_SOURCES with symlinked files (preserves tree structure)
+    # 2. Add force-include flags for Kconfig-generated headers
+    user_config = os.path.join(out_dir, "app", "src", "UserConfig.cmake")
+    if os.path.exists(user_config):
+        with open(user_config, "r") as f:
+            content = f.read()
+
+        # Replace USER_COMPILE_SOURCES with symlinked .c files
+        import re
+        c_files = [f for f in symlinked if f.endswith('.c')]
+        c_lines = "\n".join(f'"{f}"' for f in sorted(c_files))
+        content = re.sub(
+            r'set\(USER_COMPILE_SOURCES[^)]*\)',
+            f'set(USER_COMPILE_SOURCES\n{c_lines}\n)',
+            content, count=1)
+
+        # Add force-include flags
+        if force_includes:
             flags = " ".join(f"-include {h}" for h in force_includes)
-            # Replace empty USER_COMPILE_OTHER_FLAGS with the force-include flags
             content = content.replace(
                 "set(USER_COMPILE_OTHER_FLAGS )",
                 f"set(USER_COMPILE_OTHER_FLAGS {flags})")
-            with open(user_config, "w") as f:
-                f.write(content)
+
+        with open(user_config, "w") as f:
+            f.write(content)
 
     # Copy the pre-staged debug artifacts (launch.json + extracted bitstream /
     # ps7_init.tcl) into the workspace now that Vitis has initialized it. They
