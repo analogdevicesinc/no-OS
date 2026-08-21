@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /*!
  * \file talise_types.h
  * \brief Contains Talise API configuration and run-time type definitions

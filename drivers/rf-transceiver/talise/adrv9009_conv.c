@@ -3,6 +3,7 @@
  *
  * Copyright 2020-2024 Analog Devices Inc.
  *
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "no_os_print_log.h"

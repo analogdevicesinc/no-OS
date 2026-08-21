@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9025-SLA */
 /**
 * \file adrv9025_dfe.c
 * \brief Contains ADRV9025 dfe related private function implementations

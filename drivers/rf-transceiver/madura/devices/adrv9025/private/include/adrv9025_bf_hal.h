@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9025-SLA */
 #ifndef ADRV9025_BF_HAL_H_
 #define ADRV9025_BF_HAL_H_
 
