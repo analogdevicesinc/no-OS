@@ -6,7 +6,6 @@
  */
 #ifndef __AD9088_H__
 #define __AD9088_H__
-//#define DEBUG
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,7 +18,7 @@
 #include "jesd204.h"
 #include "adi_apollo_bf_serdes_txdig_phy_core1p2.h"
 #include "adi_apollo_bf_serdes_rxdig_phy_core1p3.h"
-#include "public/inc/adi_apollo.h"
+#include "adi_apollo.h"
 #include "adi_apollo_bf_custom.h"
 #include "adi_apollo_adc.h"
 #include "adi_apollo_cfg.h"
@@ -39,14 +38,6 @@
 #include "adi_apollo_cduc.h"
 #include "adi_utils.h"
 
-
-// #include "../cf_axi_adc.h"
-
-// #include <dt-bindings/iio/adc/adi,ad9088.h>
-// #include "../../../misc/adi-axi-hsci.h"
-
-#define JESD204_OF_PREFIX	"adi,"
-
 #define DEFRAMER_LINK_A0_TX	0
 #define DEFRAMER_LINK_A1_TX	1
 #define DEFRAMER_LINK_B0_TX	2
@@ -56,17 +47,8 @@
 #define FRAMER_LINK_B0_RX	6
 #define FRAMER_LINK_B1_RX	7
 
-#define CHIPID_AD9084 0x9084
-#define CHIPID_AD9088 0x9088
-
-#define CHIPID_MASK 0xFFFF
-#define FW_TRANSFER_CHUNK_SIZE	(16 * 1024)
-
-
 #define MAX_NUM_MAIN_DATAPATHS ADI_APOLLO_CNCO_NUM
 #define MAX_NUM_CHANNELIZER ADI_APOLLO_FNCO_NUM
-#define MAX_NUM_RX_NCO_CHAN_REGS 16
-#define MAX_NUM_TX_NCO_CHAN_REGS 31
 
 #define NUM_RXTX 2
 
@@ -80,14 +62,6 @@
  */
 #define AD9088_MCS_CLK_PHASE_FS			125
 
-#define for_each_cddc(bit, mask) \
-	for ((bit) = 0; (bit) < MAX_NUM_MAIN_DATAPATHS; (bit)++) \
-		if ((mask) & BIT(bit))
-
-#define for_each_fddc(bit, mask) \
-	for ((bit) = 0; (bit) < MAX_NUM_CHANNELIZER; (bit)++) \
-		if ((mask) & BIT(bit))
-
 /* Datapath loopback modes. Modes 2 (FDUC) and 3 (JESD) are not ported yet. */
 enum {
 	ADI_APOLLO_LOOPBACK_NONE,
@@ -97,67 +71,8 @@ enum {
 	ADI_APOLLO_LOOPBACK_3,
 };
 
-enum {
-	CDDC_NCO_FREQ,
-	FDDC_NCO_FREQ,
-	CDDC_NCO_FREQ_AVAIL,
-	FDDC_NCO_FREQ_AVAIL,
-	CDDC_NCO_PHASE,
-	FDDC_NCO_PHASE,
-	FDDC_NCO_GAIN,
-	CDDC_HB1_6DB_GAIN,
-	CDDC_TB1_6DB_GAIN,
-	FDDC_6DB_GAIN,
-	CDDC_TEST_TONE_EN,
-	FDDC_TEST_TONE_EN,
-	CDDC_TEST_TONE_OFFSET,
-	FDDC_TEST_TONE_OFFSET,
-	TRX_CONVERTER_RATE,
-	TRX_ENABLE,
-	CDDC_FFH_HOPF_SET,
-	ADC_CDDC_FFH_TRIG_HOP_EN,
-	ADC_FFH_GPIO_MODE_SET,
-	CDDC_FFH_INDEX_SET,
-	DAC_FFH_GPIO_MODE_SET,
-	DAC_FFH_FREQ_SET,
-	DAC_INVSINC_EN,
-	CFIR_PROFILE_SEL,
-	CFIR_ENABLE,
-};
-
-enum ad9088_iio_dev_attr {
-	AD9088_JESD204_FSM_ERROR,
-	AD9088_JESD204_FSM_PAUSED,
-	AD9088_JESD204_FSM_STATE,
-	AD9088_JESD204_FSM_RESUME,
-	AD9088_JESD204_FSM_CTRL,
-	AD9088_MCS_INIT,
-	AD9088_DT0_MEASUREMENT,
-	AD9088_DT1_MEASUREMENT,
-	AD9088_DT_MEASUREMENT_RESTORE,
-	AD9088_MCS_CAL_RUN,
-	AD9088_MCS_TRACK_CAL_SETUP,
-	AD9088_MCS_FG_TRACK_CAL_RUN,
-	AD9088_MCS_BG_TRACK_CAL_RUN,
-	AD9088_MCS_BG_TRACK_CAL_FREEZE,
-	AD9088_MCS_TRACK_STATUS,
-	AD9088_MCS_INIT_CAL_STATUS,
-	AD9088_LOOPBACK_MODE_SIDE_A,
-	AD9088_LOOPBACK_MODE_SIDE_B,
-	AD9088_LOOPBACK1_BLEND_SIDE_A,
-	AD9088_LOOPBACK1_BLEND_SIDE_B,
-};
-
 struct ad9088_jesd204_priv {
 	struct ad9088_phy *phy;
-	bool serdes_jrx_cal_run;
-};
-
-enum ad9088_clocks {
-	RX_SAMPL_CLK,
-	TX_SAMPL_CLK,
-	RX_SAMPL_CLK_LINK2, /* Dual Link */
-	NUM_AD9088_CLKS,
 };
 
 /* CNCO block-select masks indexed by [side][cddc_num] */
@@ -186,25 +101,6 @@ static const uint32_t fnco_masks[ADI_APOLLO_NUM_SIDES][8] = {
 		ADI_APOLLO_FDDC_B4, ADI_APOLLO_FDDC_B5,
 		ADI_APOLLO_FDDC_B6, ADI_APOLLO_FDDC_B7
 	},
-};
-
-// struct ad9088_clock {
-// 	struct clk_hw hw;
-// 	struct spi_device *spi;
-// 	struct ad9088_phy *phy;
-// 	unsigned long rate;
-// 	enum ad9088_clocks source;
-// };
-
-// #define to_clk_priv(_hw) container_of(_hw, struct ad9088_clock, hw)
-
-struct ad9088_debugfs_entry {
-	struct iio_dev *indio_dev;
-	const char *propname;
-	void *out_value;
-	uint32_t val;
-	uint8_t size;
-	uint8_t cmd;
 };
 
 /**
@@ -292,79 +188,23 @@ struct ad9088_phy {
 	adi_apollo_fw_provider_t fw_provider;
 	adi_apollo_top_t profile;
 	adi_cms_chip_id_t chip_id;
-	// struct axiadc_chip_info chip_info;
-	// struct clk *dev_clk;
-	// struct bin_attribute pfilt;
-	// struct bin_attribute cfir;
-	// struct gpio_chip gpiochip;
 
 	struct no_os_gpio_desc *triq_req_gpio;
 	struct no_os_gpio_desc *reset_gpio;
-	// struct regulator *supply_reg;
-
-	// struct clk *clks[NUM_AD9088_CLKS];
-	// struct clock_scale clkscale[NUM_AD9088_CLKS];
-	// struct ad9088_clock clk_priv[NUM_AD9088_CLKS];
-	// struct clk_onecell_data clk_data;
-
-	// struct delayed_work dwork;
-
-
-	// /*
-	//  * Synchronize access to members of driver state, and ensure atomicity
-	//  * of consecutive regmap operations.
-	//  */
-	// struct mutex		lock;
 
 	bool is_initialized;
-	bool device_profile_firmware_load;
 	bool spi_3wire_en;
-	bool log_silent;
 	bool trig_sync_en;
 	bool mcs_cal_bg_tracking_run;
-	bool mcs_cal_bg_tracking_freeze;
 
-	struct ad9088_debugfs_entry debugfs_entry[16];
-	uint32_t ad9088_debugfs_entry_index;
-
-	const char **rx_labels;
-	const char **tx_labels;
-
-	char rx_chan_labels[MAX_NUM_CHANNELIZER][32];
-	char tx_chan_labels[MAX_NUM_CHANNELIZER][32];
-
-	//long long cnco_freq[NUM_RXTX][ADI_APOLLO_NUM_SIDES][MAX_NUM_MAIN_DATAPATHS];
-	long long cnco_phase[NUM_RXTX][ADI_APOLLO_NUM_SIDES][MAX_NUM_MAIN_DATAPATHS];
-	uint16_t cnco_test_tone_offset[NUM_RXTX][ADI_APOLLO_NUM_SIDES][MAX_NUM_MAIN_DATAPATHS];
-	bool cnco_test_tone_en[NUM_RXTX][ADI_APOLLO_NUM_SIDES][MAX_NUM_MAIN_DATAPATHS];
-
-	//long long fnco_freq[NUM_RXTX][ADI_APOLLO_NUM_SIDES][MAX_NUM_CHANNELIZER];
-	long long fnco_phase[NUM_RXTX][ADI_APOLLO_NUM_SIDES][MAX_NUM_CHANNELIZER];
-	uint16_t fnco_test_tone_offset[NUM_RXTX][ADI_APOLLO_NUM_SIDES][MAX_NUM_CHANNELIZER];
-	bool fnco_test_tone_en[NUM_RXTX][ADI_APOLLO_NUM_SIDES][MAX_NUM_CHANNELIZER];
+	/* Read by ad9088_set_fnco_freq() as the FNCO main phase offset. */
+	long long fnco_phase[NUM_RXTX][ADI_APOLLO_NUM_SIDES]
+			    [MAX_NUM_CHANNELIZER];
 
 	bool cnco_dual_modulus_mode_en;
 	bool fnco_dual_modulus_mode_en;
 
-	uint8_t cfir_profile[NUM_RXTX][ADI_APOLLO_CFIR_ALL][ADI_APOLLO_CFIR_DP_ALL];
-	uint8_t cfir_enable[NUM_RXTX][ADI_APOLLO_CFIR_ALL][ADI_APOLLO_CFIR_DP_ALL];
-
 	uint8_t rx_nyquist_zone[ADI_APOLLO_NUM_SIDES][MAX_NUM_MAIN_DATAPATHS];
-	uint8_t jrx_lanes[24]; //
-	uint8_t jtx_lanes[24]; //
-	uint8_t jrx_lanes_used;
-	uint8_t jtx_lanes_used;
-
-	uint8_t rx_en_mask; //
-	uint8_t tx_en_mask; //
-
-	// u32 hsci_rx_clk_adj;
-	// u32 hsci_tx_clk_adj;
-	// bool hsci_rx_clk_inv;
-	// bool hsci_tx_clk_inv;
-	// bool hsci_use_dt_param;
-	// bool hsci_use_auto_linkup_mode;
-	// bool hsci_disable_after_initial_configuration;
 
 	/*
 	 * MCS calibration accessors for the board's BSYNC (SYSREF) source and
@@ -381,57 +221,35 @@ struct ad9088_phy {
 	/** Run the BSYNC provider's background serial alignment while linked. */
 	bool aion_background_serial_alignment_en;
 
-	adi_apollo_sniffer_param_t sniffer_config;
-	adi_apollo_sniffer_fft_data_t fft_data;
-
-	// u8 hsci_buf[32767 + 4];
-	uint8_t gpios_exported[ADI_APOLLO_NUM_GPIO];
-	char dbuf[1024];
-
 	uint8_t loopback_mode[ADI_APOLLO_NUM_SIDES];
 	uint8_t lb1_blend[ADI_APOLLO_NUM_SIDES];
 };
 
-extern const uint8_t
-_binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_start[];
-extern const uint8_t
-_binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_end[];
-extern const uint8_t
-_binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_size[];
 
-extern const uint8_t
-_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x01030000_bin_start[];
-extern const uint8_t
-_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x01030000_bin_end[];
-extern const uint8_t
-_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x20000000_bin_start[];
-extern const uint8_t
-_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x20000000_bin_end[];
-extern const uint8_t
-_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x02000000_bin_start[];
-extern const uint8_t
-_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x02000000_bin_end[];
-extern const uint8_t
-_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x21000000_bin_start[];
-extern const uint8_t
-_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x21000000_bin_end[];
+/*
+ * Profile and core-firmware images linked in from firmware/ by the build.
+ * The linker derives each symbol from the object's path, so the names are
+ * built here rather than spelled out: AD9088_FW_SYM() prefixes the path part
+ * and AD9088_FW_DECL() declares the _start/_end pair for one image.
+ */
+#define AD9088_FW_SYM(sym)						\
+	_binary_drivers_rf_transceiver_apollo_firmware_##sym
 
-extern const uint8_t
-_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x01030000_bin_start[];
-extern const uint8_t
-_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x01030000_bin_end[];
-extern const uint8_t
-_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x20000000_bin_start[];
-extern const uint8_t
-_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x20000000_bin_end[];
-extern const uint8_t
-_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x02000000_bin_start[];
-extern const uint8_t
-_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x02000000_bin_end[];
-extern const uint8_t
-_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x21000000_bin_start[];
-extern const uint8_t
-_binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x21000000_bin_end[];
+#define AD9088_FW_DECL(sym)						\
+	extern const uint8_t AD9088_FW_SYM(sym##_start)[];		\
+	extern const uint8_t AD9088_FW_SYM(sym##_end)[]
+
+AD9088_FW_DECL(usecase_bin);
+
+AD9088_FW_DECL(app_signed_encrypted_B_flash_image_0x01030000_bin);
+AD9088_FW_DECL(app_signed_encrypted_B_flash_image_0x20000000_bin);
+AD9088_FW_DECL(app_signed_encrypted_B_flash_image_0x02000000_bin);
+AD9088_FW_DECL(app_signed_encrypted_B_flash_image_0x21000000_bin);
+
+AD9088_FW_DECL(app_signed_encrypted_prod_B_flash_image_0x01030000_bin);
+AD9088_FW_DECL(app_signed_encrypted_prod_B_flash_image_0x20000000_bin);
+AD9088_FW_DECL(app_signed_encrypted_prod_B_flash_image_0x02000000_bin);
+AD9088_FW_DECL(app_signed_encrypted_prod_B_flash_image_0x21000000_bin);
 
 extern const struct jesd204_dev_data jesd204_ad9088_init;
 

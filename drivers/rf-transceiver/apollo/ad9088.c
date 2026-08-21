@@ -484,10 +484,7 @@ int ad9088_inspect_jrx_link_all(struct ad9088_phy *phy)
 		ADI_APOLLO_LINK_B0, ADI_APOLLO_LINK_B1
 	};
 	const char *const links_to_inspect_str[] = { "A0", "A1", "B0", "B1" };
-	uint8_t phys_lane;
-	uint32_t i, l;
-
-	phy->jrx_lanes_used = 0;
+	uint32_t l;
 
 	for (l = 0; l < NO_OS_ARRAY_SIZE(links_to_inspect); l++) {
 		err = adi_apollo_jrx_link_inspect(device, links_to_inspect[l],
@@ -507,13 +504,6 @@ int ad9088_inspect_jrx_link_all(struct ad9088_phy *phy)
 			jrx_status.cs,
 			(unsigned int)jrx_status.subclass,
 			jrx_status.link_en ? "Enabled" : "Disabled");
-
-		if (jrx_status.link_en)
-			for (i = 0; i < (uint32_t)jrx_status.l_minus1 + 1; i++) {
-				phys_lane = phy->profile.jrx[(l / 2) & 1].rx_link_cfg[(l % 2) & 1].lane_xbar[i];
-				phy->jrx_lanes[phy->jrx_lanes_used++] =
-					phys_lane + (((l / 2) & 1) * 12);
-			}
 	}
 
 	return API_CMS_ERROR_OK;
@@ -755,36 +745,36 @@ struct fw_entry {
 
 static const struct fw_entry fw_table[ADI_APOLLO_FW_ID_MAX] = {
 	[ADI_APOLLO_FW_ID_SECR_BOOT_HDR_BIN] = {
-		.start = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x01030000_bin_start,
-		.end   = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x01030000_bin_end,
+		.start = AD9088_FW_SYM(app_signed_encrypted_B_flash_image_0x01030000_bin_start),
+		.end   = AD9088_FW_SYM(app_signed_encrypted_B_flash_image_0x01030000_bin_end),
 	},
 	[ADI_APOLLO_FW_ID_CORE_0_TYE_FW_BIN] = {
-		.start = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x20000000_bin_start,
-		.end   = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x20000000_bin_end,
+		.start = AD9088_FW_SYM(app_signed_encrypted_B_flash_image_0x20000000_bin_start),
+		.end   = AD9088_FW_SYM(app_signed_encrypted_B_flash_image_0x20000000_bin_end),
 	},
 	[ADI_APOLLO_FW_ID_CORE_1_TYE_FW_BIN] = {
-		.start = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x02000000_bin_start,
-		.end   = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x02000000_bin_end,
+		.start = AD9088_FW_SYM(app_signed_encrypted_B_flash_image_0x02000000_bin_start),
+		.end   = AD9088_FW_SYM(app_signed_encrypted_B_flash_image_0x02000000_bin_end),
 	},
 	[ADI_APOLLO_FW_ID_TYE_OPER_FW_BIN] = {
-		.start = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x21000000_bin_start,
-		.end   = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_B_flash_image_0x21000000_bin_end,
+		.start = AD9088_FW_SYM(app_signed_encrypted_B_flash_image_0x21000000_bin_start),
+		.end   = AD9088_FW_SYM(app_signed_encrypted_B_flash_image_0x21000000_bin_end),
 	},
 	[ADI_APOLLO_FW_ID_PROD_SECR_BOOT_HDR_BIN] = {
-		.start = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x01030000_bin_start,
-		.end   = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x01030000_bin_end,
+		.start = AD9088_FW_SYM(app_signed_encrypted_prod_B_flash_image_0x01030000_bin_start),
+		.end   = AD9088_FW_SYM(app_signed_encrypted_prod_B_flash_image_0x01030000_bin_end),
 	},
 	[ADI_APOLLO_FW_ID_PROD_CORE_0_TYE_FW_BIN] = {
-		.start = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x20000000_bin_start,
-		.end   = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x20000000_bin_end,
+		.start = AD9088_FW_SYM(app_signed_encrypted_prod_B_flash_image_0x20000000_bin_start),
+		.end   = AD9088_FW_SYM(app_signed_encrypted_prod_B_flash_image_0x20000000_bin_end),
 	},
 	[ADI_APOLLO_FW_ID_PROD_CORE_1_TYE_FW_BIN] = {
-		.start = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x02000000_bin_start,
-		.end   = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x02000000_bin_end,
+		.start = AD9088_FW_SYM(app_signed_encrypted_prod_B_flash_image_0x02000000_bin_start),
+		.end   = AD9088_FW_SYM(app_signed_encrypted_prod_B_flash_image_0x02000000_bin_end),
 	},
 	[ADI_APOLLO_FW_ID_PROD_TYE_OPER_FW_BIN] = {
-		.start = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x21000000_bin_start,
-		.end   = _binary_drivers_rf_transceiver_apollo_firmware_app_signed_encrypted_prod_B_flash_image_0x21000000_bin_end,
+		.start = AD9088_FW_SYM(app_signed_encrypted_prod_B_flash_image_0x21000000_bin_start),
+		.end   = AD9088_FW_SYM(app_signed_encrypted_prod_B_flash_image_0x21000000_bin_end),
 	},
 };
 

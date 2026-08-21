@@ -619,9 +619,6 @@ int dma_example_main(void)
 		goto error_topology;
 	}
 
-	axi_jesd204_tx_status_read(tx_jesd);
-	axi_jesd204_rx_status_read(rx_jesd);
-
 #if RX_LINK_RECOVER
 	/*
 	 * Before anything is derived from the link, so a receiver MCS left in
@@ -740,6 +737,9 @@ int dma_example_main(void)
 
 	/* Keep the DAC quiet until the transmit buffer is in place. */
 	axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_ZERO);
+
+	axi_jesd204_tx_status_read(tx_jesd);
+	axi_jesd204_rx_status_read(rx_jesd);
 	pr_info("Project configured\n\n");
 
 	/*

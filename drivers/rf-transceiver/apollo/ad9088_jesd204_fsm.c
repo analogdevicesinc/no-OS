@@ -75,7 +75,6 @@ static int ad9088_jesd204_link_init(struct jesd204_dev *jdev,
 			phy->profile.dac_cfg[sideIdx].dac_sampling_rate_Hz;
 		lnk->sample_rate_div =
 			jrx->rx_link_cfg[linkIdx].link_total_ratio;
-		priv->serdes_jrx_cal_run = false;
 		break;
 	case FRAMER_LINK_A0_RX:
 	case FRAMER_LINK_A1_RX:
@@ -279,9 +278,6 @@ static int ad9088_jesd204_setup_stage1(struct jesd204_dev *jdev,
 
 	pr_debug("%s:%d reason %s\n", __func__, __LINE__,
 		 jesd204_state_op_reason_str(reason));
-
-	phy->rx_en_mask = ADI_APOLLO_RXEN_ADC_ALL;
-	phy->tx_en_mask = ADI_APOLLO_TXEN_DAC_ALL;
 
 	ret = adi_apollo_adc_nyquist_zone_set(device, n_adc, nyquist_zone);
 	if (ret) {

@@ -4,7 +4,6 @@
  *
  * Copyright 2025 Analog Devices Inc.
  */
-//#define DEBUG
 
 #include "ad9088.h"
 #include "no_os_crc32.h"
@@ -78,9 +77,9 @@ static void ad9088_jesd_lane_setup(struct ad9088_phy *phy,
 int ad9088_get_profile(struct ad9088_phy *phy)
 {
 	adi_apollo_top_t *p = &phy->profile;
-	size_t firmware_size = _binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_end -
-			       _binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_start;
-	const uint8_t *firmware_ptr = _binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_start;
+	size_t firmware_size = AD9088_FW_SYM(usecase_bin_end) -
+			       AD9088_FW_SYM(usecase_bin_start);
+	const uint8_t *firmware_ptr = AD9088_FW_SYM(usecase_bin_start);
 	
 	if (sizeof(*p) != firmware_size) {
 		pr_err("Invalid size of profile structure %zu, expected %zu\n",
