@@ -504,14 +504,32 @@ def create_project(ws, hw_path, hw_file, target):
     # that produces libxil.a — calling platform.build() again can crash the
     # gRPC server with "Application error processing RPC".
     platform = client.get_component(name="hw0")
+    xpfm = os.path.join(out_dir, "hw0", "export", "hw0", "hw0.xpfm")
     libxil_path = os.path.join(out_dir, "hw0", "export", "hw0", "sw",
                                f"standalone_{vcpu}", "lib", "libxil.a")
+    export_dir = os.path.join(out_dir, "hw0", "export", "hw0")
+
+    # Debug: check what Quick Build produced
+    print(f"DEBUG: export_dir exists: {os.path.exists(export_dir)}")
+    print(f"DEBUG: xpfm exists: {os.path.exists(xpfm)}")
+    print(f"DEBUG: libxil.a exists: {os.path.exists(libxil_path)}")
+    if os.path.exists(export_dir):
+        print(f"DEBUG: export_dir contents: {os.listdir(export_dir)}")
+        sw_dir = os.path.join(export_dir, "sw")
+        if os.path.exists(sw_dir):
+            print(f"DEBUG: sw/ contents: {os.listdir(sw_dir)}")
+            standalone_dir = os.path.join(sw_dir, f"standalone_{vcpu}")
+            if os.path.exists(standalone_dir):
+                print(f"DEBUG: standalone_{vcpu}/ contents: {os.listdir(standalone_dir)}")
+                lib_dir = os.path.join(standalone_dir, "lib")
+                if os.path.exists(lib_dir):
+                    print(f"DEBUG: lib/ contents: {os.listdir(lib_dir)}")
+
     if not os.path.exists(libxil_path):
         print("INFO: Building platform (BSP + FSBL)...")
         platform.build()
 
     # --- Step 2: App component (linker script) ---
-    xpfm = os.path.join(out_dir, "hw0", "export", "hw0", "hw0.xpfm")
     print("INFO: Creating app component for linker script...")
     app = client.create_app_component(
         name="app", platform=xpfm, template="empty_application")
