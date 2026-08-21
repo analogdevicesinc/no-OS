@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: BSD-3-Clause
 /*!
  * @brief     API header file
  *            This file contains all the publicly exposed methods and data

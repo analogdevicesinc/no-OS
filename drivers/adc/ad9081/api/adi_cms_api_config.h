@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: BSD-3-Clause
 /*!
  * @brief     API configuration header file.
  *            This file contains API configuration parameters.

@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file mykonos_user.c
  * \brief Contains Mykonos default gain table values for Rx, ObsRx, and SnRx

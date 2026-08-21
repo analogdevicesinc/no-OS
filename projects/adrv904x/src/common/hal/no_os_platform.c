@@ -1,8 +1,6 @@
-// SPDX-License-Identifier: GPL-2.0
+// SPDX-License-Identifier: BSD-3-Clause
 /**
 * Copyright 2015 - 2023 Analog Devices Inc.
-* Released under the ADRV9025 API license, for more information.
-* see the "LICENSE.txt" file in this zip file.
 */
 
 #include "ADRV9040_RxGainTable.h"

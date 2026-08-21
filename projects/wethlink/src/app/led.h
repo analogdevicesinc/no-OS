@@ -1,3 +1,12 @@
+/***************************************************************************//**
+ *   @file   led.h
+ *   @brief  LED control header for the wethlink project.
+ *   @author Darius Berghe (darius.berghe@analog.com)
+********************************************************************************
+ * Copyright 2023(c) Analog Devices, Inc.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+*******************************************************************************/
 #include <stdbool.h>
 #include <stdint.h>
 
