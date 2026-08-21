@@ -144,8 +144,29 @@ int32_t clk_set_rate(struct ad9361_rf_phy *phy,
 		case TX_RFPLL:
 		case RX_RFPLL:
 			round_rate = ad9361_rfpll_round_rate(clk_priv, rate);
+			/* The guard above compares the request against
+			 * phy->clks[source]->rate, which for these two sources is
+			 * read back from the synthesiser dividers rather than
+			 * remembered from the request. Whenever the dividers cannot
+			 * hit the request exactly the two never match, so the RF PLL
+			 * is reprogrammed on every call - including calls that ask
+			 * for the frequency that is already tuned.
+			 *
+			 * Comparing against round_rate does not help: for the
+			 * internal LO ad9361_rfpll_round_rate() forwards to
+			 * ad9361_rfpll_int_round_rate(), which only range-checks and
+			 * returns the request unchanged. Remember what was actually
+			 * programmed instead and leave the read-back cache alone, so
+			 * clk_get_rate() keeps reporting the achievable rate. */
+			if (phy->rfpll_requested_valid[source == TX_RFPLL] &&
+			    phy->rfpll_requested[source == TX_RFPLL] ==
+			    (uint32_t)round_rate)
+				break;
 			ad9361_rfpll_set_rate(clk_priv, round_rate);
 			phy->clks[source]->rate = ad9361_rfpll_recalc_rate(clk_priv);
+			phy->rfpll_requested[source == TX_RFPLL] =
+				(uint32_t)round_rate;
+			phy->rfpll_requested_valid[source == TX_RFPLL] = true;
 			break;
 		case BBPLL_CLK:
 			round_rate = ad9361_bbpll_round_rate(clk_priv, rate,
