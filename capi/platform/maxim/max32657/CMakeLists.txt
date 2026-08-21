@@ -1,0 +1,16 @@
+no_os_sources_ifdef(CONFIG_CAPI       ${CMAKE_CURRENT_SOURCE_DIR}/maxim_capi_init.c)
+
+no_os_sources_ifdef(CONFIG_CAPI_UART  ${CMAKE_CURRENT_SOURCE_DIR}/maxim_capi_uart.c)
+no_os_sources_ifdef(CONFIG_CAPI_ALLOC ${CMAKE_CURRENT_SOURCE_DIR}/maxim_capi_alloc.c)
+no_os_sources_ifdef(CONFIG_CAPI_TIME  ${CMAKE_CURRENT_SOURCE_DIR}/maxim_capi_time.c)
+no_os_sources_ifdef(CONFIG_CAPI_GPIO  ${CMAKE_CURRENT_SOURCE_DIR}/maxim_capi_gpio.c)
+no_os_sources_ifdef(CONFIG_CAPI_IRQ   ${CMAKE_CURRENT_SOURCE_DIR}/maxim_capi_irq.c)
+no_os_sources_ifdef(CONFIG_CAPI_SPI   ${CMAKE_CURRENT_SOURCE_DIR}/maxim_capi_spi.c)
+no_os_sources_ifdef(CONFIG_CAPI_TIMER ${CMAKE_CURRENT_SOURCE_DIR}/maxim_capi_timer.c)
+no_os_sources_ifdef(CONFIG_CAPI_I2C   ${CMAKE_CURRENT_SOURCE_DIR}/maxim_capi_i2c.c)
+no_os_sources_ifdef(CONFIG_CAPI_DMA   ${CMAKE_CURRENT_SOURCE_DIR}/maxim_capi_dma.c)
+no_os_sources_ifdef(CONFIG_CAPI_RTC   ${CMAKE_CURRENT_SOURCE_DIR}/maxim_capi_rtc.c)
+no_os_sources_ifdef(CONFIG_CAPI_WDT   ${CMAKE_CURRENT_SOURCE_DIR}/maxim_capi_wdt.c)
+no_os_sources_ifdef(CONFIG_CAPI_TRNG  ${CMAKE_CURRENT_SOURCE_DIR}/maxim_capi_trng.c)
+
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
