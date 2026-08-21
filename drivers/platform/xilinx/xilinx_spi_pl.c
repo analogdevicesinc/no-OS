@@ -43,6 +43,7 @@
 #include "no_os_delay.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
+#include "xilinx_spi.h"
 
 #define XPS_TYPE_WRITE		0x1
 #define XPS_TYPE_READ		0x2
