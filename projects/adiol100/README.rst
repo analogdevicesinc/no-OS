@@ -271,6 +271,53 @@ Example Output
    ...
    Cyclic #19 dist=38mm raw(10): 00 00 00 26 3B 00 00 18 00 10
 
+i-link Stack Example (FreeRTOS)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This example integrates the `rt-labs i-link <https://github.com/rtlabs-com/i-link>`__
+open-source IO-Link master stack, running on FreeRTOS. Instead of manually
+driving the protocol like the basic example, the i-link stack handles the
+full IO-Link state machine (DL, SM, CM, DS, AL layers) autonomously. The
+ADIOL100 driver acts as the physical layer (PL) backend via a port layer
+that implements the stack's ``iolink_hw_ops_t`` interface.
+
+The example:
+
+1. Creates a FreeRTOS task that initializes the ADIOL100 port layer
+   (SPI, IRQ GPIO, NVIC) and the i-link stack.
+2. Configures channel A as an SDCI (IO-Link) port and channel B as inactive.
+3. Runs the application event loop, which manages device discovery,
+   identification, COMLOST recovery, and cyclic process data printing.
+
+Key components:
+
+* **Port layer** (``drivers/io-link/adiol100/adiol100_ilink_pl.c/h``) —
+  Bridges the i-link stack to the ADIOL100 driver. Implements the
+  ``iolink_hw_ops_t`` callbacks: baudrate/cycletime get/set, mode switching
+  (including L+ enable and channel IRQ configuration), cycle timer control,
+  FIFO messaging, and EstablishCommunication. An ISR registered with the
+  driver signals FreeRTOS event groups to wake the DL thread on ADIOL100
+  interrupts.
+
+* **OSAL** (``libraries/ilink-glue/osal/osal_freertos.c``) — FreeRTOS
+  implementation of the i-link OS abstraction layer (mutexes, events,
+  threads, mailboxes, timers).
+
+* **Application layer** (``libraries/ilink-glue/app/iolink_app.c/h``) —
+  Generic IO-Link application built on top of the i-link SMI (Standardized
+  Master Interface). Handles port configuration, device identification,
+  process data callbacks, COMLOST recovery, and ISDU read/write helpers.
+
+Build with the ``ilink`` variant. Requires FreeRTOS (enabled
+automatically by the ``ilink`` variant config).
+
+.. note::
+
+   The i-link stack is licensed under GPL-3.0-only. Because the glue code
+   (port layer, OSAL, application layer) and the i-link example link against
+   the GPL-licensed stack, the resulting binary is a combined work and must
+   be distributed under the terms of the GPL-3.0-only license.
+
 No-OS Supported Platforms
 --------------------------
 
@@ -306,7 +353,7 @@ Build Command
 ^^^^^^^^^^^^^^
 
 The Maxim platform uses the CMake/Ninja build system via the
-``no_os_build.py`` helper script. Available variants: ``basic``.
+``no_os_build.py`` helper script. Available variants: ``basic``, ``ilink``.
 Available boards: ``max78000fthr``.
 
 For toolchain setup and prerequisites, see the
@@ -325,9 +372,17 @@ For toolchain setup and prerequisites, see the
    python tools/scripts/no_os_build.py build \
       --project adiol100 --variant basic --board max78000fthr
 
+   # build the i-link stack example
+   python tools/scripts/no_os_build.py build \
+      --project adiol100 --variant ilink --board max78000fthr
+
    # build and flash (requires a connected debug probe)
    python tools/scripts/no_os_build.py build \
       --project adiol100 --variant basic --board max78000fthr \
+      --probe openocd --flash
+
+   python tools/scripts/no_os_build.py build \
+      --project adiol100 --variant ilink --board max78000fthr \
       --probe openocd --flash
 
 STM32
@@ -363,8 +418,12 @@ VL               VL        Logic supply           3V3
 Build Command
 ^^^^^^^^^^^^^^
 
-The STM32 platform uses CubeMX-generated initialization code.
-Available variants: ``basic``.
+The STM32 platform uses CubeMX-generated initialization code. Two
+CubeMX ``.ioc`` files are provided: ``sdp-ck1z-basic.ioc`` (SysTick
+timebase, for the basic example) and ``sdp-ck1z-ilink.ioc`` (TIM6
+timebase, required when FreeRTOS owns the SysTick).
+
+Available variants: ``basic``, ``ilink``.
 Available boards: ``sdp-ck1z``.
 
 For toolchain setup and prerequisites, see the
@@ -378,8 +437,16 @@ For toolchain setup and prerequisites, see the
    python tools/scripts/no_os_build.py build \
       --project adiol100 --variant basic --board sdp-ck1z
 
+   # build the i-link stack example
+   python tools/scripts/no_os_build.py build \
+      --project adiol100 --variant ilink --board sdp-ck1z
+
    # build and flash (requires a connected debug probe)
    python tools/scripts/no_os_build.py build \
       --project adiol100 --variant basic --board sdp-ck1z \
+      --probe openocd --flash
+
+   python tools/scripts/no_os_build.py build \
+      --project adiol100 --variant ilink --board sdp-ck1z \
       --probe openocd --flash
 
