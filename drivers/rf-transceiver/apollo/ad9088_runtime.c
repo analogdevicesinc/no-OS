@@ -64,10 +64,9 @@ int ad9088_set_cnco_test_tone(struct ad9088_phy *phy,
 	       ad9088_cnco_profile_mode(phy, terminal, side, cddc_pi);
 
 	ret = adi_apollo_cnco_mode_set(&phy->ad9088, terminal, mask, mode);
-	if (ret) {
-		pr_err("Error in adi_apollo_cnco_mode_set %d\n", ret);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_cnco_mode_set");
+	if (ret)
 		return ret;
-	}
 
 	if (!enable)
 		return 0;
@@ -77,10 +76,10 @@ int ad9088_set_cnco_test_tone(struct ad9088_phy *phy,
 
 	ret = adi_apollo_cnco_test_mode_val_set(&phy->ad9088, terminal, mask,
 						offset);
-	if (ret) {
-		pr_err("Error in adi_apollo_cnco_test_mode_val_set %d\n", ret);
+	ret = ad9088_check_apollo_error(ret,
+					"adi_apollo_cnco_test_mode_val_set");
+	if (ret)
 		return ret;
-	}
 
 	return 0;
 }
@@ -110,10 +109,9 @@ int ad9088_set_fnco_test_tone(struct ad9088_phy *phy,
 	       ad9088_fnco_profile_mode(phy, terminal, side, fddc_pi);
 
 	ret = adi_apollo_fnco_mode_set(&phy->ad9088, terminal, mask, mode);
-	if (ret) {
-		pr_err("Error in adi_apollo_fnco_mode_set %d\n", ret);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_fnco_mode_set");
+	if (ret)
 		return ret;
-	}
 
 	if (!enable)
 		return 0;
@@ -123,10 +121,10 @@ int ad9088_set_fnco_test_tone(struct ad9088_phy *phy,
 
 	ret = adi_apollo_fnco_test_mode_val_set(&phy->ad9088, terminal, mask,
 						offset);
-	if (ret) {
-		pr_err("Error in adi_apollo_fnco_test_mode_val_set %d\n", ret);
+	ret = ad9088_check_apollo_error(ret,
+					"adi_apollo_fnco_test_mode_val_set");
+	if (ret)
 		return ret;
-	}
 
 	return 0;
 }
@@ -164,38 +162,34 @@ static int ad9088_device_loopback0(struct ad9088_phy *phy, uint8_t side)
 	int ret;
 
 	ret = adi_apollo_loopback_lb0_read_ptr_rst_set(device, select_adc, 2);
-	if (ret) {
-		pr_err("Error in adi_apollo_loopback_lb0_read_ptr_rst_set %d\n",
-		       ret);
+	ret = ad9088_check_apollo_error(ret,
+			"adi_apollo_loopback_lb0_read_ptr_rst_set");
+	if (ret)
 		return ret;
-	}
 
 	ret = adi_apollo_loopback_lb0_write_ptr_rst_set(device, sides, 2);
-	if (ret) {
-		pr_err("Error in adi_apollo_loopback_lb0_write_ptr_rst_set %d\n",
-		       ret);
+	ret = ad9088_check_apollo_error(ret,
+			"adi_apollo_loopback_lb0_write_ptr_rst_set");
+	if (ret)
 		return ret;
-	}
 
 	ret = adi_apollo_loopback_lb0_tx_xbar_set(device, sides, xbar, 2);
-	if (ret) {
-		pr_err("Error in adi_apollo_loopback_lb0_tx_xbar_set %d\n", ret);
+	ret = ad9088_check_apollo_error(ret,
+					"adi_apollo_loopback_lb0_tx_xbar_set");
+	if (ret)
 		return ret;
-	}
 
 	ret = adi_apollo_loopback_lb0_rx_enable_set(device, sides, 1);
-	if (ret) {
-		pr_err("Error in adi_apollo_loopback_lb0_rx_enable_set %d\n",
-		       ret);
+	ret = ad9088_check_apollo_error(ret,
+			"adi_apollo_loopback_lb0_rx_enable_set");
+	if (ret)
 		return ret;
-	}
 
 	ret = adi_apollo_loopback_lb0_tx_enable_set(device, select_adc, 1);
-	if (ret) {
-		pr_err("Error in adi_apollo_loopback_lb0_tx_enable_set %d\n",
-		       ret);
+	ret = ad9088_check_apollo_error(ret,
+			"adi_apollo_loopback_lb0_tx_enable_set");
+	if (ret)
 		return ret;
-	}
 
 	phy->loopback_mode[side] = ADI_APOLLO_LOOPBACK_0;
 
@@ -212,25 +206,24 @@ static int ad9088_device_loopback1(struct ad9088_phy *phy, uint8_t side)
 	int ret;
 
 	ret = adi_apollo_loopback_lb1_enable_set(device, sides, 1);
-	if (ret) {
-		pr_err("Error in adi_apollo_loopback_lb1_enable_set %d\n", ret);
+	ret = ad9088_check_apollo_error(ret,
+					"adi_apollo_loopback_lb1_enable_set");
+	if (ret)
 		return ret;
-	}
 
 	ret = adi_apollo_loopback_lb1_cduc_enable_set(device, lb1_cducs, 1);
-	if (ret) {
-		pr_err("Error in adi_apollo_loopback_lb1_cduc_enable_set %d\n",
-		       ret);
+	ret = ad9088_check_apollo_error(ret,
+			"adi_apollo_loopback_lb1_cduc_enable_set");
+	if (ret)
 		return ret;
-	}
 
 	ret = adi_apollo_loopback_lb1_blend_set(device, lb1_cducs,
 						(adi_apollo_loopback_lb1_blend_mode_e)
 						phy->lb1_blend[side]);
-	if (ret) {
-		pr_err("Error in adi_apollo_loopback_lb1_blend_set %d\n", ret);
+	ret = ad9088_check_apollo_error(ret,
+					"adi_apollo_loopback_lb1_blend_set");
+	if (ret)
 		return ret;
-	}
 
 	phy->loopback_mode[side] = ADI_APOLLO_LOOPBACK_1;
 
@@ -252,42 +245,37 @@ static int ad9088_device_loopback_disable(struct ad9088_phy *phy, uint8_t side)
 	case ADI_APOLLO_LOOPBACK_0:
 		ret = adi_apollo_loopback_lb0_tx_enable_set(device, select_adc,
 				0);
-		if (ret) {
-			pr_err("Error in adi_apollo_loopback_lb0_tx_enable_set %d\n",
-			       ret);
+		ret = ad9088_check_apollo_error(ret,
+				"adi_apollo_loopback_lb0_tx_enable_set");
+		if (ret)
 			return ret;
-		}
 
 		ret = adi_apollo_loopback_lb0_rx_enable_set(device, sides, 0);
-		if (ret) {
-			pr_err("Error in adi_apollo_loopback_lb0_rx_enable_set %d\n",
-			       ret);
+		ret = ad9088_check_apollo_error(ret,
+				"adi_apollo_loopback_lb0_rx_enable_set");
+		if (ret)
 			return ret;
-		}
 		break;
 	case ADI_APOLLO_LOOPBACK_1:
 		ret = adi_apollo_loopback_lb1_cduc_enable_set(device, lb1_cducs,
 				0);
-		if (ret) {
-			pr_err("Error in adi_apollo_loopback_lb1_cduc_enable_set %d\n",
-			       ret);
+		ret = ad9088_check_apollo_error(ret,
+				"adi_apollo_loopback_lb1_cduc_enable_set");
+		if (ret)
 			return ret;
-		}
 
 		ret = adi_apollo_loopback_lb1_enable_set(device, sides, 0);
-		if (ret) {
-			pr_err("Error in adi_apollo_loopback_lb1_enable_set %d\n",
-			       ret);
+		ret = ad9088_check_apollo_error(ret,
+				"adi_apollo_loopback_lb1_enable_set");
+		if (ret)
 			return ret;
-		}
 
 		ret = adi_apollo_loopback_lb1_blend_set(device, lb1_cducs,
 							ADI_APOLLO_LB1_BLEND_DISABLE);
-		if (ret) {
-			pr_err("Error in adi_apollo_loopback_lb1_blend_set %d\n",
-			       ret);
+		ret = ad9088_check_apollo_error(ret,
+				"adi_apollo_loopback_lb1_blend_set");
+		if (ret)
 			return ret;
-		}
 		break;
 	default:
 		break;

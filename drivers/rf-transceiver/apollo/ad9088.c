@@ -219,13 +219,28 @@ int ad9088_set_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 
 	if (terminal == ADI_APOLLO_TX) {
 		drc_ratio = phy->profile.tx_path[side].tx_cduc[cddc_pi].drc_ratio;
-		adi_apollo_cduc_interp_bf_to_val(&phy->ad9088, drc_ratio,
-						 &cddc_dcm);
+		ret = adi_apollo_cduc_interp_bf_to_val(&phy->ad9088, drc_ratio,
+						       &cddc_dcm);
+		ret = ad9088_check_apollo_error(ret,
+						"adi_apollo_cduc_interp_bf_to_val");
 		f = phy->profile.dac_cfg[side].dac_sampling_rate_Hz;
 	} else {
 		drc_ratio = phy->profile.rx_path[side].rx_cddc[cddc_pi].drc_ratio;
-		adi_apollo_cddc_dcm_bf_to_val(&phy->ad9088, drc_ratio, &cddc_dcm);
+		ret = adi_apollo_cddc_dcm_bf_to_val(&phy->ad9088, drc_ratio,
+						    &cddc_dcm);
+		ret = ad9088_check_apollo_error(ret,
+						"adi_apollo_cddc_dcm_bf_to_val");
 		f = phy->profile.adc_cfg[side].adc_sampling_rate_Hz;
+	}
+
+	/* Handed to calc_nco_ftw as the divisor, so it must be sane. */
+	if (ret)
+		return ret;
+
+	if (!cddc_dcm) {
+		pr_err("Zero decimation ratio for side %u fddc %u\n",
+		       side, fddc_num);
+		return -EINVAL;
 	}
 
 	ret = adi_ad9088_calc_nco_ftw(phy, f, freq_hz, cddc_dcm, 48, &ftw,
@@ -264,6 +279,7 @@ int ad9088_get_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 	uint64_t f;
 	uint32_t cddc_dcm;
 	uint8_t fddc_pi, cddc_pi;
+	int ret;
 
 	if (!phy || !freq_hz || side >= ADI_APOLLO_NUM_SIDES || fddc_num >= 8)
 		return -EINVAL;
@@ -274,20 +290,33 @@ int ad9088_get_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 	if (terminal == ADI_APOLLO_TX) {
 		nco = &phy->profile.tx_path[side].tx_fduc[fddc_pi].nco[0];
 
-		adi_apollo_cduc_interp_bf_to_val(&phy->ad9088,
+		ret = adi_apollo_cduc_interp_bf_to_val(&phy->ad9088,
 			phy->profile.tx_path[side].tx_cduc[cddc_pi].drc_ratio,
 			&cddc_dcm);
+		ret = ad9088_check_apollo_error(ret,
+						"adi_apollo_cduc_interp_bf_to_val");
 		f = phy->profile.dac_cfg[side].dac_sampling_rate_Hz;
-		f /= cddc_dcm;
 	} else {
 		nco = &phy->profile.rx_path[side].rx_fddc[fddc_pi].nco[0];
 
-		adi_apollo_cddc_dcm_bf_to_val(&phy->ad9088,
+		ret = adi_apollo_cddc_dcm_bf_to_val(&phy->ad9088,
 			phy->profile.rx_path[side].rx_cddc[cddc_pi].drc_ratio,
 			&cddc_dcm);
+		ret = ad9088_check_apollo_error(ret,
+						"adi_apollo_cddc_dcm_bf_to_val");
 		f = phy->profile.adc_cfg[side].adc_sampling_rate_Hz;
-		f /= cddc_dcm;
 	}
+
+	if (ret)
+		return ret;
+
+	if (!cddc_dcm) {
+		pr_err("Zero decimation ratio for side %u fddc %u\n",
+		       side, fddc_num);
+		return -EINVAL;
+	}
+
+	f /= cddc_dcm;
 
 	return adi_ad9088_calc_nco_freq(phy, f, nco->nco_phase_inc,
 					nco->nco_phase_inc_frac_a,
@@ -506,7 +535,7 @@ int ad9088_inspect_jrx_link_all(struct ad9088_phy *phy)
 			jrx_status.link_en ? "Enabled" : "Disabled");
 	}
 
-	return API_CMS_ERROR_OK;
+	return 0;
 }
 
 int ad9088_inspect_jtx_link_all(struct ad9088_phy *phy)
@@ -541,7 +570,7 @@ int ad9088_inspect_jtx_link_all(struct ad9088_phy *phy)
 			jtx_status.link_en ? "Enabled" : "Disabled");
 	}
 
-	return API_CMS_ERROR_OK;
+	return 0;
 }
 
 const char *const ad9088_fsm_links_to_str[] = {
@@ -1012,25 +1041,23 @@ static int ad9088_version_info(struct ad9088_phy *phy)
 	uint16_t maj, min, rc;
 
 	ret = adi_apollo_device_api_revision_get(device, &maj, &min, &rc);
-	if (ret) {
-		pr_err("API revision get error (%d)\n", ret);
+	ret = ad9088_check_apollo_error(ret,
+					"adi_apollo_device_api_revision_get");
+	if (ret)
 		return ret;
-	}
 
 	pr_info("API ver: %d.%d.%d\n", maj, min, rc);
 
 	ret = adi_apollo_mailbox_ready_check(device);
-	if (ret) {
-		pr_err("Mailbox Ready error (%d)\n", ret);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_mailbox_ready_check");
+	if (ret)
 		return ret;
-	}
 
 	ping_cmd.echo_data = 0x00000000;
 	ret = adi_apollo_mailbox_ping(device, &ping_cmd, &ping_resp);
-	if (ret) {
-		pr_err("Mailbox ping error (%d)\n", ret);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_mailbox_ping");
+	if (ret)
 		return ret;
-	}
 
 	pr_info("Ping (core 1) cmd/res: 0x%08x/0x%08x\n",
 		(unsigned int)ping_cmd.echo_data,
@@ -1038,20 +1065,19 @@ static int ad9088_version_info(struct ad9088_phy *phy)
 
 	ping_cmd.echo_data = 0x12345678;
 	ret = adi_apollo_mailbox_ping(device, &ping_cmd, &ping_resp);
-	if (ret) {
-		pr_err("Mailbox ping error (%d)\n", ret);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_mailbox_ping");
+	if (ret)
 		return ret;
-	}
 
 	pr_info("Ping (core 0) cmd/res: 0x%08x/0x%08x\n",
 		(unsigned int)ping_cmd.echo_data,
 		(unsigned int)ping_resp.echo_data);
 
 	ret = adi_apollo_mailbox_get_fw_version(device, &fw_ver);
-	if (ret) {
-		pr_err("Mailbox fw error (%d)\n", ret);
+	ret = ad9088_check_apollo_error(ret,
+					"adi_apollo_mailbox_get_fw_version");
+	if (ret)
 		return ret;
-	}
 
 	pr_info("FW ver: %d.%d.%d\n", fw_ver.major, fw_ver.minor,
 		fw_ver.patch);
@@ -1129,10 +1155,9 @@ int ad9088_init(struct ad9088_phy **device,
 		goto error_hw_close;
 
 	ret = adi_apollo_device_chip_id_get(&phy->ad9088, &phy->chip_id);
-	if (ret) {
-		pr_err("chip_id failed (%d)\n", ret);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_device_chip_id_get");
+	if (ret)
 		goto error_hw_close;
-	}
 
 	adi_apollo_device_api_revision_get(&phy->ad9088,
 					   &api_rev[0], &api_rev[1],

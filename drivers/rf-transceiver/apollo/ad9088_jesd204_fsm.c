@@ -165,49 +165,43 @@ static int ad9088_jesd204_link_setup(struct jesd204_dev *jdev,
 	ret = adi_apollo_jtx_link_enable_set(device,
 					     ADI_APOLLO_LINK_A0 | ADI_APOLLO_LINK_B0,
 					     ADI_APOLLO_ENABLE);
-	if (ret) {
-		pr_err("Error enabling JTx links %d\n", ret);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_jtx_link_enable_set");
+	if (ret)
 		return ret;
-	}
 	ret = adi_apollo_jtx_link_enable_set(device,
 					     ADI_APOLLO_LINK_A1 | ADI_APOLLO_LINK_B1,
 					     ADI_APOLLO_DISABLE);
-	if (ret) {
-		pr_err("Error enabling JTx links %d\n", ret);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_jtx_link_enable_set");
+	if (ret)
 		return ret;
-	}
 
 	/* Enable Apollo JRx links */
 	ret = adi_apollo_jrx_link_enable_set(device,
 					     ADI_APOLLO_LINK_A0 | ADI_APOLLO_LINK_B0,
 					     ADI_APOLLO_ENABLE);
-	if (ret) {
-		pr_err("Error enabling JRx links %d\n", ret);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_jrx_link_enable_set");
+	if (ret)
 		return ret;
-	}
 	ret = adi_apollo_jrx_link_enable_set(device,
 					     ADI_APOLLO_LINK_A1 | ADI_APOLLO_LINK_B1,
 					     ADI_APOLLO_DISABLE);
-	if (ret) {
-		pr_err("Error enabling JRx links %d\n", ret);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_jrx_link_enable_set");
+	if (ret)
 		return ret;
-	}
 
 	/* Enable Rx blocks - enable/disable via spi */
 	ret = adi_apollo_rxen_pwrup_ctrl_set(device, ADI_APOLLO_RXEN_ADC_ALL,
 					     &rxen_config);
-	if (ret) {
-		pr_err("Error activating Rx blocks (%d)\n", ret);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_rxen_pwrup_ctrl_set");
+	if (ret)
 		return ret;
-	}
 
 	/* Enable Tx blocks - enable/disable via spi */
 	ret = adi_apollo_txen_pwrup_ctrl_set(device, ADI_APOLLO_TXEN_DAC_ALL,
 					     &txen_config);
-	if (ret) {
-		pr_err("Error activating Tx blocks (%d)\n", ret);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_txen_pwrup_ctrl_set");
+	if (ret)
 		return ret;
-	}
 
 	/* Datapath reset */
 	adi_apollo_rxmisc_dp_reset(device, ADI_APOLLO_SIDE_ALL, 1);
@@ -220,38 +214,34 @@ static int ad9088_jesd204_link_setup(struct jesd204_dev *jdev,
 		subclass = 1;
 
 	ret = adi_apollo_clk_mcs_subclass_set(device, subclass);
-	if (ret) {
-		pr_err("Error setting subclass %d\n", ret);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_clk_mcs_subclass_set");
+	if (ret)
 		return ret;
-	}
 
 	/* Enable the MCS SYSREF receiver if subclass 1 */
 	ret = adi_apollo_clk_mcs_sysref_en_set(device, (subclass == 1) ?
 					       ADI_APOLLO_ENABLE : ADI_APOLLO_DISABLE);
-	if (ret) {
-		pr_err("Error setting MCS SYSREF receiver %d\n", ret);
+	ret = ad9088_check_apollo_error(ret,
+					"adi_apollo_clk_mcs_sysref_en_set");
+	if (ret)
 		return ret;
-	}
 
 	ret = adi_apollo_adc_bgcal_freeze(device, device->dev_info.is_8t8r ?
 					  ADI_APOLLO_ADC_ALL : ADI_APOLLO_ADC_ALL_4T4R);
-	if (ret) {
-		pr_err("Error in adi_apollo_adc_bgcal_freeze %d\n", ret);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_adc_bgcal_freeze");
+	if (ret)
 		return ret;
-	}
 
 	ret = adi_apollo_clk_mcs_dyn_sync_sequence_run(device);
-	if (ret) {
-		pr_err("Error in adi_apollo_clk_mcs_dyn_sync_sequence_run %d\n",
-		       ret);
+	ret = ad9088_check_apollo_error(ret,
+			"adi_apollo_clk_mcs_dyn_sync_sequence_run");
+	if (ret)
 		return ret;
-	}
 	ret = adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run(device);
-	if (ret) {
-		pr_err("Error in adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run %d\n",
-		       ret);
+	ret = ad9088_check_apollo_error(ret,
+			"adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run");
+	if (ret)
 		return ret;
-	}
 
 	return JESD204_STATE_CHANGE_DONE;
 }
@@ -280,10 +270,9 @@ static int ad9088_jesd204_setup_stage1(struct jesd204_dev *jdev,
 		 jesd204_state_op_reason_str(reason));
 
 	ret = adi_apollo_adc_nyquist_zone_set(device, n_adc, nyquist_zone);
-	if (ret) {
-		pr_err("Error setting ADC Nyquist zone %d\n", ret);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_adc_nyquist_zone_set");
+	if (ret)
 		return ret;
-	}
 
 	/* Warmboot-from-user cal data is not supported yet in no-OS */
 	cc_cal_cfg = ADI_APOLLO_SYSCLKCONDITIONING_ENABLED;
@@ -291,10 +280,10 @@ static int ad9088_jesd204_setup_stage1(struct jesd204_dev *jdev,
 		ADI_APOLLO_SYSCLK_COND_CENTER_MAX_TO);
 
 	ret = adi_apollo_cfg_clk_cond_cal_cfg_set(device, cc_cal_cfg);
-	if (ret) {
-		pr_err("Error in adi_apollo_cfg_clk_cond_cal_cfg_set %d\n", ret);
+	ret = ad9088_check_apollo_error(ret,
+					"adi_apollo_cfg_clk_cond_cal_cfg_set");
+	if (ret)
 		return ret;
-	}
 
 	ret = adi_apollo_sysclk_cond_cal(device);
 	ret = ad9088_check_apollo_error(ret, "adi_apollo_sysclk_cond_cal");
@@ -317,10 +306,10 @@ static int ad9088_jesd204_setup_stage1(struct jesd204_dev *jdev,
 					       ADI_APOLLO_LINK_A0 | ADI_APOLLO_LINK_B0,
 					       ADI_APOLLO_JRX_PHASE_ADJ_MARGIN_DEFAULT,
 					       &jrx_phase_adjust);
-	if (ret) {
-		pr_err("Error in adi_apollo_jrx_phase_adjust_calc %d\n", ret);
+	ret = ad9088_check_apollo_error(ret,
+					"adi_apollo_jrx_phase_adjust_calc");
+	if (ret)
 		return ret;
-	}
 
 	pr_debug("JRX Phase Adjust: %d\n", jrx_phase_adjust);
 
@@ -328,19 +317,17 @@ static int ad9088_jesd204_setup_stage1(struct jesd204_dev *jdev,
 	ret = adi_apollo_jrx_phase_adjust_set(device,
 					      ADI_APOLLO_LINK_A0 | ADI_APOLLO_LINK_B0,
 					      jrx_phase_adjust);
-	if (ret) {
-		pr_err("Error in adi_apollo_jrx_phase_adjust_set %d\n", ret);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_jrx_phase_adjust_set");
+	if (ret)
 		return ret;
-	}
 
 	/* Set the jtx phase adjust */
 	ret = adi_apollo_jtx_phase_adjust_set(device,
 					      ADI_APOLLO_LINK_A0 | ADI_APOLLO_LINK_B0,
 					      0);
-	if (ret) {
-		pr_err("Error in adi_apollo_jtx_phase_adjust_set %d\n", ret);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_jtx_phase_adjust_set");
+	if (ret)
 		return ret;
-	}
 
 	/* ADC calibration - warmboot/NVM paths not supported yet in no-OS */
 	init_cal_cfg = ADI_APOLLO_INIT_CAL_ENABLED;
@@ -378,17 +365,15 @@ static int ad9088_jesd204_setup_stage2(struct jesd204_dev *jdev,
 		return ret;
 
 	ret = adi_apollo_adc_nyquist_zone_set(device, n_adc, nyquist_zone);
-	if (ret) {
-		pr_err("Error setting ADC Nyquist zone %d\n", ret);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_adc_nyquist_zone_set");
+	if (ret)
 		return ret;
-	}
 
 	ret = adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run(device);
-	if (ret) {
-		pr_err("Error in adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run %d\n",
-		       ret);
+	ret = ad9088_check_apollo_error(ret,
+			"adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run");
+	if (ret)
 		return ret;
-	}
 
 	/*
 	 * Block-memory CDDC/FDDC sample-delay calibration is deferred:
@@ -850,31 +835,28 @@ static int ad9088_jesd204_post_setup_stage2(struct jesd204_dev *jdev,
 		/* Use Trigger pin A0 to sync Rx and Tx */
 		ret = adi_apollo_clk_mcs_sync_trig_map(device, ADI_APOLLO_RX_TX_ALL,
 						       ADI_APOLLO_TRIG_PIN_A0);
-		if (ret) {
-			pr_err("Error in adi_apollo_clk_mcs_sync_trig_map %d\n", ret);
+		ret = ad9088_check_apollo_error(ret,
+				"adi_apollo_clk_mcs_sync_trig_map");
+		if (ret)
 			return ret;
-		}
 
 		/* Resync the Rx and Tx dig only during trig sync */
 		ret = adi_apollo_clk_mcs_trig_sync_enable(device, 0);
-		if (ret) {
-			pr_err("Error in adi_apollo_clk_mcs_trig_sync_enable %d\n",
-			       ret);
+		ret = ad9088_check_apollo_error(ret,
+				"adi_apollo_clk_mcs_trig_sync_enable");
+		if (ret)
 			return ret;
-		}
 		ret = adi_apollo_clk_mcs_trig_reset_disable(device);
-		if (ret) {
-			pr_err("Error in adi_apollo_clk_mcs_trig_reset_disable %d\n",
-			       ret);
+		ret = ad9088_check_apollo_error(ret,
+				"adi_apollo_clk_mcs_trig_reset_disable");
+		if (ret)
 			return ret;
-		}
 
 		ret = adi_apollo_clk_mcs_trig_reset_dsp_enable(device);
-		if (ret) {
-			pr_err("Error in adi_apollo_clk_mcs_trig_reset_dsp_enable %d\n",
-			       ret);
+		ret = ad9088_check_apollo_error(ret,
+				"adi_apollo_clk_mcs_trig_reset_dsp_enable");
+		if (ret)
 			return ret;
-		}
 
 		/*
 		 * Set trig_syn to 1. Apollo will wait for a trigger from the FPGA. When
@@ -883,11 +865,10 @@ static int ad9088_jesd204_post_setup_stage2(struct jesd204_dev *jdev,
 		 * trig_sync is not self-clearing
 		 */
 		ret = adi_apollo_clk_mcs_trig_sync_enable(device, 1);
-		if (ret) {
-			pr_err("Error in adi_apollo_clk_mcs_trig_sync_enable %d\n",
-			       ret);
+		ret = ad9088_check_apollo_error(ret,
+				"adi_apollo_clk_mcs_trig_sync_enable");
+		if (ret)
 			return ret;
-		}
 	}
 
 	return JESD204_STATE_CHANGE_DONE;
@@ -940,18 +921,17 @@ static int ad9088_jesd204_post_setup_stage4(struct jesd204_dev *jdev,
 		ret = adi_apollo_hal_bf_wait_to_set(device,
 						    BF_TRIGGER_SYNC_DONE_A0_INFO(MCS_SYNC_MCSTOP0),
 						    1000000, 100);
-		if (ret) {
-			pr_err("Error in adi_apollo_hal_bf_wait_to_set %d\n", ret);
+		ret = ad9088_check_apollo_error(ret,
+				"adi_apollo_hal_bf_wait_to_set");
+		if (ret)
 			return ret;
-		}
 		ret = adi_apollo_clk_mcs_trig_phase_get(device,
 							ADI_APOLLO_TRIG_PIN_A0,
 							&phase, &phase1);
-		if (ret) {
-			pr_err("Error in adi_apollo_clk_mcs_trig_phase_get %d\n",
-			       ret);
+		ret = ad9088_check_apollo_error(ret,
+				"adi_apollo_clk_mcs_trig_phase_get");
+		if (ret)
 			return ret;
-		}
 
 		if (phy->profile.clk_cfg.clocking_mode ==
 		    ADI_APOLLO_CLOCKING_MODE_SDR_DIV_8)
@@ -986,27 +966,24 @@ static int ad9088_jesd204_post_setup_stage4(struct jesd204_dev *jdev,
 				   phase, margin_low, margin_high);
 
 		ret = adi_apollo_clk_mcs_trig_sync_enable(device, 0);
-		if (ret) {
-			pr_err("Error in adi_apollo_clk_mcs_trig_sync_enable %d\n",
-			       ret);
+		ret = ad9088_check_apollo_error(ret,
+				"adi_apollo_clk_mcs_trig_sync_enable");
+		if (ret)
 			return ret;
-		}
 		ret = adi_apollo_clk_mcs_trig_reset_disable(device);
-		if (ret) {
-			pr_err("Error in adi_apollo_clk_mcs_trig_reset_disable %d\n",
-			       ret);
+		ret = ad9088_check_apollo_error(ret,
+				"adi_apollo_clk_mcs_trig_reset_disable");
+		if (ret)
 			return ret;
-		}
 	}
 
 	ad9088_print_sysref_phase(phy);
 
 	ret = adi_apollo_adc_bgcal_unfreeze(device, device->dev_info.is_8t8r ?
 					    ADI_APOLLO_ADC_ALL : ADI_APOLLO_ADC_ALL_4T4R);
-	if (ret) {
-		pr_err("Error in adi_apollo_adc_bgcal_unfreeze %d\n", ret);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_adc_bgcal_unfreeze");
+	if (ret)
 		return ret;
-	}
 
 	phy->is_initialized = true;
 
