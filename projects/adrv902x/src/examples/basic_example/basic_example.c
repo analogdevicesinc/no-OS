@@ -128,7 +128,11 @@ int example_main(void)
 	ad9528_channels[1].channel_num = 1;
 	ad9528_channels[1].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[1].divider_phase = 0;
+#if defined(JESD204B_NP12_PROFILE)
+	ad9528_channels[1].channel_divider = 3;
+#else
 	ad9528_channels[1].channel_divider = 4;
+#endif
 	ad9528_channels[1].signal_source = SOURCE_VCO;
 	ad9528_channels[1].output_dis = 0;
 
@@ -136,7 +140,11 @@ int example_main(void)
 	ad9528_channels[3].channel_num = 3;
 	ad9528_channels[3].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[3].divider_phase = 0;
+#if defined(JESD204B_NP12_PROFILE)
+	ad9528_channels[3].channel_divider = 3;
+#else
 	ad9528_channels[3].channel_divider = 4;
+#endif
 	ad9528_channels[3].signal_source = SOURCE_VCO;
 	ad9528_channels[3].output_dis = 0;
 
@@ -152,10 +160,10 @@ int example_main(void)
 	ad9528_channels[13].channel_num = 13;
 	ad9528_channels[13].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[13].divider_phase = 0;
-#ifndef JESD204C_PROFILE
-	ad9528_channels[13].channel_divider = 4;
-#else
+#if defined(JESD204B_NP12_PROFILE) || defined(JESD204C_PROFILE)
 	ad9528_channels[13].channel_divider = 2;
+#else
+	ad9528_channels[13].channel_divider = 4;
 #endif
 	ad9528_channels[13].signal_source = SOURCE_VCO;
 	ad9528_channels[13].output_dis = 0;
@@ -169,19 +177,32 @@ int example_main(void)
 	ad9528_param.pdata->refb_diff_rcv_en = 0;
 	ad9528_param.pdata->osc_in_diff_en = 0;
 	/* JESD */
+#if defined(JESD204B_NP12_PROFILE)
+	ad9528_param.pdata->jdev_desired_sysref_freq = 960000;
+#else
 	ad9528_param.pdata->jdev_desired_sysref_freq = 7680000 / 32;
+#endif
 	/* PLL1 config */
 	ad9528_param.pdata->pll1_feedback_div = 4;
 	ad9528_param.pdata->pll1_charge_pump_current_nA = 5000;
 	ad9528_param.pdata->ref_mode = REF_MODE_EXT_REF;
 	/* PLL2 config */
 	ad9528_param.pdata->pll2_charge_pump_current_nA = 805000;
+#if defined(JESD204B_NP12_PROFILE)
+	ad9528_param.pdata->pll2_vco_div_m1 = 5;
+#else
 	ad9528_param.pdata->pll2_vco_div_m1 = 4;
+#endif
 	ad9528_param.pdata->pll2_r1_div = 1;
 	ad9528_param.pdata->pll2_ndiv_a_cnt = 3;
 	ad9528_param.pdata->pll2_ndiv_b_cnt = 27;
+#if defined(JESD204B_NP12_PROFILE)
+	ad9528_param.pdata->pll2_n2_div = 6;
+	ad9528_param.pdata->pll2_freq_doubler_en = 0;
+#else
 	ad9528_param.pdata->pll2_n2_div = 4;
 	ad9528_param.pdata->pll2_freq_doubler_en = 1;
+#endif
 	/* SYSREF config */
 	ad9528_param.pdata->sysref_src = SYSREF_SRC_INTERNAL;
 	ad9528_param.pdata->sysref_k_div = 512;
@@ -267,10 +288,12 @@ int example_main(void)
 		.out_clk_sel = ADXCVR_REFCLK,
 		.lpm_enable = 0,
 		.lane_rate_khz = ADRV9025_LANE_RATE_KHZ,
-#ifndef JESD204C_PROFILE
-		.ref_rate_khz = ADRV9025_DEVICE_CLK_KHZ,
-#else
+#if defined(JESD204B_NP12_PROFILE)
+		.ref_rate_khz = ADRV9025_LANE_RATE_KHZ / 40,
+#elif defined(JESD204C_PROFILE)
 		.ref_rate_khz = ADRV9025_DEVICE_CLK_KHZ * 2,
+#else
+		.ref_rate_khz = ADRV9025_DEVICE_CLK_KHZ,
 #endif
 		.export_no_os_clk = true
 	};
@@ -279,22 +302,24 @@ int example_main(void)
 	struct adxcvr_init rx_adxcvr_init = {
 		.name = "rx_adxcvr",
 		.base = RX_XCVR_BASEADDR,
-#ifndef JESD204C_PROFILE
-		.sys_clk_sel = ADXCVR_SYS_CLK_CPLL,
-#else
+#if defined(JESD204B_NP12_PROFILE) || defined(JESD204C_PROFILE)
 		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
+#else
+		.sys_clk_sel = ADXCVR_SYS_CLK_CPLL,
 #endif
 		.out_clk_sel = ADXCVR_REFCLK,
-#ifndef JESD204C_PROFILE
-		.lpm_enable = 1,
-#else
+#if defined(JESD204B_NP12_PROFILE) || defined(JESD204C_PROFILE)
 		.lpm_enable = 0,
+#else
+		.lpm_enable = 1,
 #endif
 		.lane_rate_khz = ADRV9025_LANE_RATE_KHZ,
-#ifndef JESD204C_PROFILE
-		.ref_rate_khz = ADRV9025_DEVICE_CLK_KHZ,
-#else
+#if defined(JESD204B_NP12_PROFILE)
+		.ref_rate_khz = ADRV9025_LANE_RATE_KHZ / 40,
+#elif defined(JESD204C_PROFILE)
 		.ref_rate_khz = ADRV9025_DEVICE_CLK_KHZ * 2,
+#else
+		.ref_rate_khz = ADRV9025_DEVICE_CLK_KHZ,
 #endif
 		.export_no_os_clk = true
 	};
@@ -304,22 +329,24 @@ int example_main(void)
 	struct adxcvr_init orx_adxcvr_init = {
 		.name = "orx_adxcvr",
 		.base = ORX_XCVR_BASEADDR,
-#ifndef JESD204C_PROFILE
-		.sys_clk_sel = ADXCVR_SYS_CLK_CPLL,
-#else
+#if defined(JESD204B_NP12_PROFILE) || defined(JESD204C_PROFILE)
 		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
+#else
+		.sys_clk_sel = ADXCVR_SYS_CLK_CPLL,
 #endif
 		.out_clk_sel = ADXCVR_REFCLK,
-#ifndef JESD204C_PROFILE
-		.lpm_enable = 1,
-#else
+#if defined(JESD204B_NP12_PROFILE) || defined(JESD204C_PROFILE)
 		.lpm_enable = 0,
+#else
+		.lpm_enable = 1,
 #endif
 		.lane_rate_khz = ADRV9025_LANE_RATE_KHZ,
-#ifndef JESD204C_PROFILE
-		.ref_rate_khz = ADRV9025_DEVICE_CLK_KHZ,
-#else
+#if defined(JESD204B_NP12_PROFILE)
+		.ref_rate_khz = ADRV9025_LANE_RATE_KHZ / 40,
+#elif defined(JESD204C_PROFILE)
 		.ref_rate_khz = ADRV9025_DEVICE_CLK_KHZ * 2,
+#else
+		.ref_rate_khz = ADRV9025_DEVICE_CLK_KHZ,
 #endif
 		.export_no_os_clk = true
 	};
