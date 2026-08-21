@@ -456,9 +456,6 @@ int ad9088_mcs_init_cal_validate(struct ad9088_phy *phy,
 				 adi_apollo_mcs_cal_init_status_t *cal_status);
 void ad9088_mcs_init_cal_status_print(struct ad9088_phy *phy,
 				      adi_apollo_mcs_cal_init_status_t *cal_status);
-void ad9088_mcs_track_cal_status_print(struct ad9088_phy *phy,
-				       adi_apollo_mcs_cal_status_t *cal_status,
-				       uint8_t print_full_state);
 int ad9088_mcs_tracking_cal_setup(struct ad9088_phy *phy,
 				  uint32_t mcs_track_decimation,
 				  uint16_t initialize_track_cal);
@@ -494,7 +491,5 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 int ad9088_init(struct ad9088_phy **device,
 		const struct ad9088_init_param *init_param);
 int ad9088_remove(struct ad9088_phy *phy);
-int ad9088_fft_sniffer_probe(struct ad9088_phy *phy,
-			     adi_apollo_side_select_e side_sel);
 
 #endif /* __AD9088_H__ */

@@ -332,67 +332,6 @@ void ad9088_mcs_init_cal_status_print(struct ad9088_phy *phy,
 }
 
 /**
- * @brief Print the MCS tracking cal status.
- * @param phy              - The device structure.
- * @param cal_status       - Tracking cal status read back from the device.
- * @param print_full_state - Print every field rather than just the clock PLL
- *			     correction currently applied.
- */
-void ad9088_mcs_track_cal_status_print(struct ad9088_phy *phy,
-				       adi_apollo_mcs_cal_status_t *cal_status,
-				       uint8_t print_full_state)
-{
-	adi_apollo_mcs_private_cal_status_t *mcs_cal_status;
-	int i;
-
-	if (!phy || !cal_status)
-		return;
-
-	mcs_cal_status = &cal_status->mcs_tracking_cal_status;
-
-	if (!print_full_state) {
-		pr_info("MCS tracking cal[0]: bleed_pol %u coarse %d fine %d "
-			"measure %lld fs\n",
-			(unsigned int)mcs_cal_status->adf4382_specific_status[0].bleed_pol,
-			(int)mcs_cal_status->adf4382_specific_status[0].current_coarse_value,
-			(int)mcs_cal_status->adf4382_specific_status[0].current_fine_value,
-			mcs_cal_status->current_measure[0]);
-		return;
-	}
-
-	pr_info("MCS tracking cal: errorCode %u percentComplete %u "
-		"performanceMetric %u\n",
-		(unsigned int)cal_status->hdr.errorCode,
-		(unsigned int)cal_status->hdr.percentComplete,
-		(unsigned int)cal_status->hdr.performanceMetric);
-	pr_info("MCS tracking cal: iterCount %u updateCount %u\n",
-		(unsigned int)cal_status->hdr.iterCount,
-		(unsigned int)cal_status->hdr.updateCount);
-	pr_info("MCS tracking cal: foreground_done %u halt_active %u abort_done %u\n",
-		(unsigned int)mcs_cal_status->foreground_done,
-		(unsigned int)mcs_cal_status->halt_active,
-		(unsigned int)mcs_cal_status->abort_done);
-
-	for (i = 0; i < 2; i++) {
-		pr_info("MCS tracking cal[%d]: state %u lock %u force_bg_done %u\n",
-			i, (unsigned int)mcs_cal_status->track_state[i],
-			(unsigned int)mcs_cal_status->track_lock[i],
-			(unsigned int)mcs_cal_status->force_background_done[i]);
-		pr_info("MCS tracking cal[%d]: bleed_pol %u coarse %d fine %d\n",
-			i,
-			(unsigned int)mcs_cal_status->adf4382_specific_status[i].bleed_pol,
-			(int)mcs_cal_status->adf4382_specific_status[i].current_coarse_value,
-			(int)mcs_cal_status->adf4382_specific_status[i].current_fine_value);
-		pr_info("MCS tracking cal[%d]: EOR pos %u neg %u coarse %u measure %lld fs\n",
-			i,
-			(unsigned int)mcs_cal_status->adf4382_specific_status[i].EOR_POS,
-			(unsigned int)mcs_cal_status->adf4382_specific_status[i].EOR_NEG,
-			(unsigned int)mcs_cal_status->adf4382_specific_status[i].EOR_Coarse,
-			mcs_cal_status->current_measure[i]);
-	}
-}
-
-/**
  * @brief Arm MCS tracking calibration.
  *
  * Tracking cal keeps the internal SYSREF on the external edge as the device

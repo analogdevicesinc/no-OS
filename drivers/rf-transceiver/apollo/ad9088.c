@@ -19,11 +19,6 @@
 #define INDIRECT_REG_TEST_ADDR  (0x60366045)
 #define ARM_REG_TEST_BASE_ADDR  (0x20000000U)
 
-static const uint8_t lanes_all[] = {
-	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
-	14, 15, 16, 17, 18, 19, 20, 21, 22, 23
-};
-
 /*
  * Calculate the NCO frequency tuning word (FTW) from a frequency shift in Hz.
  * Ported from the kernel ad9088 driver. div is the datapath decimation/
