@@ -1,5 +1,49 @@
 menu "External Libraries"
 
+config FTD2XX
+	bool "Enable FTD2XX (LibMPSSE) support"
+	default n
+	help
+	  Enable support for FTDI USB-to-MPSSE bridges (FT2232H, FT4232H, …)
+	  via the pre-built LibMPSSE and libftd2xx libraries.
+
+	  Install the libraries first with tools/scripts/config_ftd2xx.py.
+
+	  The library can be used on any host platform (Linux, macOS, Windows)
+	  to provide SPI, I2C, GPIO and UART drivers over a FTDI USB bridge.
+
+if FTD2XX
+
+config SPI_FTD2XX
+	bool "Enable FTD2XX SPI driver"
+	depends on SPI
+	default n
+	help
+	  Enable SPI driver using FTDI MPSSE SPI engine.
+
+config I2C_FTD2XX
+	bool "Enable FTD2XX I2C driver"
+	depends on I2C
+	default n
+	help
+	  Enable I2C driver using FTDI MPSSE I2C engine.
+
+config GPIO_FTD2XX
+	bool "Enable FTD2XX GPIO driver"
+	depends on GPIO
+	default n
+	help
+	  Enable GPIO driver using FTDI low-byte GPIO lines.
+
+config UART_FTD2XX
+	bool "Enable FTD2XX UART driver"
+	depends on UART
+	default n
+	help
+	  Enable UART driver using the FTDI virtual serial port channel.
+
+endif # FTD2XX
+
 config FREERTOS
 	bool "Enable FreeRTOS"
 	default n

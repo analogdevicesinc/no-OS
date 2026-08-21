@@ -25,6 +25,13 @@ Kconfig default (a git tag, branch or commit); set that config to fetch a
 different version.
 
 
+LINUX USERSPACE
+===============
+.. toctree::
+    :maxdepth: 1
+
+    build_guides/build_linux_userspace_cmake
+
 XILINX
 ======
 .. toctree::
@@ -51,21 +58,21 @@ FTD2XX
 .. toctree::
     :maxdepth: 1
 
-    build_guides/build_ftd2xx
+    build_guides/build_ftd2xx_cmake
 
 WIN
 ===
 .. toctree::
     :maxdepth: 1
 
-    build_guides/build_win
+    build_guides/build_win_cmake
 
 MAC
 ======
 .. toctree::
     :maxdepth: 1
 
-    build_guides/build_mac
+    build_guides/build_mac_cmake
 
 STM32
 =====

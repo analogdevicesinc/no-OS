@@ -242,3 +242,75 @@ For toolchain setup and prerequisites, see the
    python tools/scripts/no_os_build.py build \
       --project ad9361 --variant dma-irq-example --board kcu105 \
       --hardware /path/to/system_top.xsa
+
+Linux Userspace (ZedBoard)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Used Hardware
+^^^^^^^^^^^^^
+
+* `AD-FMCOMMS2-EBZ <https://www.analog.com/AD-FMCOMMS2-EBZ>`_,
+  `AD-FMCOMMS3-EBZ <https://www.analog.com/AD-FMCOMMS3-EBZ>`_, or
+  `AD-FMCOMMS4-EBZ <https://www.analog.com/AD-FMCOMMS4-EBZ>`_
+* `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board/>`_
+  running embedded Linux (PetaLinux or buildroot) with the fmcomms2
+  reference HDL design loaded in the PL
+
+Connections
+^^^^^^^^^^^
+
+The FMComms board connects to the ZedBoard via its FMC LPC connector. The
+AD9361 is reachable from Linux userspace through:
+
+* **SPI**: ``/dev/spidev0.0`` (``SPI_DEVICE_ID=0``, ``SPI_CS=0`` in
+  ``parameters.h``)
+* **GPIO** (reset): gpiochip0 line 1006 (``GPIO_RESET_PIN`` in
+  ``parameters.h``; adjust to match your device tree assignment)
+* **AXI cores**: accessed via ``/dev/mem`` using the base addresses
+  defined in ``parameters.h`` (``RX_CORE_BASEADDR``,
+  ``TX_CORE_BASEADDR``, ``CF_AD9361_RX_DMA_BASEADDR``,
+  ``CF_AD9361_TX_DMA_BASEADDR``). These must match the addresses
+  assigned by the PL reference design.
+
+The PL bitstream with the fmcomms2 reference HDL design must be loaded
+before running the application.
+
+Build Command
+^^^^^^^^^^^^^
+
+Available variants: ``demo``.
+Available boards: ``zed-linux``.
+
+.. note::
+
+   The ``iio`` variant is not supported on the linux-userspace platform.
+   The IIO section of ``main.c`` relies on Xilinx-specific UART and cache
+   APIs that have no linux-userspace equivalent.
+
+No cross-compiler is needed when building directly on the ZedBoard. For
+cross-compilation from an x86-64 host, set ``CMAKE_C_COMPILER`` to the
+ARM cross-compiler and ``CMAKE_SYSROOT`` to the target sysroot in a
+custom toolchain file.
+
+For toolchain setup and prerequisites, see the
+`Linux Userspace CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_linux_userspace_cmake.html>`__.
+
+.. code-block:: bash
+
+   cd no-OS
+
+   # build the demo example on ZedBoard running Linux
+   python tools/scripts/no_os_build.py build \
+      --project ad9361 --variant demo --board zed-linux
+
+The resulting executable is placed at:
+
+.. code-block:: bash
+
+   build/ad9361-demo-zed-linux/build/ad9361
+
+Copy it to the ZedBoard if built on a separate host, then run:
+
+.. code-block:: bash
+
+   sudo ./build/ad9361-demo-zed-linux/build/ad9361

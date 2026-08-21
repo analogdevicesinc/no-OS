@@ -1,7 +1,0 @@
-{
-  "linux": {
-    "basic_example": {
-      "flags" : "EXAMPLE=basic_example"
-    }
-  }
-}

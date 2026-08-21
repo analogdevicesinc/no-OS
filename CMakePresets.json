@@ -11,7 +11,10 @@
 		"board_configs/stm32/CMakePresets.json",
 		"board_configs/pico/CMakePresets.json",
 		"board_configs/aducm3029/CMakePresets.json",
-		"board_configs/xilinx/CMakePresets.json"
+		"board_configs/xilinx/CMakePresets.json",
+		"board_configs/linux-userspace/CMakePresets.json",
+		"board_configs/win/CMakePresets.json",
+		"board_configs/mac/CMakePresets.json"
 	],
 
 	"configurePresets": [

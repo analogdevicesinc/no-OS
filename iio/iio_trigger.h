@@ -113,7 +113,7 @@ struct iio_sw_trig_init_param {
 	const char *name;
 };
 
-#ifndef LINUX_PLATFORM
+#ifndef LINUX_USERSPACE_PLATFORM
 /** API to initialize a hardware trigger */
 int iio_hw_trig_init(struct iio_hw_trig **iio_trig,
 		     struct iio_hw_trig_init_param *init_param);

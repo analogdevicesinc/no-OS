@@ -327,15 +327,15 @@ add_custom_command(
 
 include(${KCONFIG_VARS_FILE})
 
-if(NATIVE_BUILD)
-    add_subdirectory(projects)
-endif()
 add_subdirectory(libraries)
 add_subdirectory(network)
 add_subdirectory(util)
 add_subdirectory(iio)
 add_subdirectory(jesd204)
 add_subdirectory(drivers)
+if(NATIVE_BUILD)
+    add_subdirectory(projects)
+endif()
 
 add_custom_target(KconfigVars ALL
     DEPENDS ${KCONFIG_VARS_FILE} ${CONFIG_HEADER_FILE}

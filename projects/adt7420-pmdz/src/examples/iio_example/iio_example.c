@@ -73,7 +73,9 @@ int example_main()
 
 	app_init_param.devices = iio_devices;
 	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+#ifndef LINUX_USERSPACE_PLATFORM
 	app_init_param.uart_init_params = uip;
+#endif
 
 	ret = iio_app_init(&app, app_init_param);
 	if (ret)

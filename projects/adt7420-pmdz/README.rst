@@ -170,3 +170,74 @@ Replace ``--variant`` / ``--board`` accordingly.
    python tools/scripts/no_os_build.py build \
       --project adt7420-pmdz --variant dummy --board ad-apard32690-sl \
       --probe openocd --flash
+
+Linux Userspace Platform
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Used Hardware
+^^^^^^^^^^^^^
+
+* `EVAL-ADT7420-PMDZ <https://www.analog.com/EVAL-ADT7420-PMDZ>`_
+* Raspberry Pi 5 or Compute Module 5 (CM5) with I2C enabled
+
+Connections
+^^^^^^^^^^^
+
+Connect the EVAL-ADT7420-PMDZ PMOD connector to the Raspberry Pi I2C
+header pins. The ADT7420 communicates via I2C at address 0x48 (default
+jumper configuration JP1/JP2 both in 2&3 short position). The 3.3 V
+supply and GND are provided through the PMOD connector from the Pi GPIO
+header.
+
+=========  ================================
+Signal     Raspberry Pi Header Pin
+=========  ================================
+SDA        GPIO 2 (Pin 3, I2C1 SDA)
+SCL        GPIO 3 (Pin 5, I2C1 SCL)
+VDD        3.3 V (Pin 1)
+GND        GND (Pin 6)
+=========  ================================
+
+Enable I2C on the Raspberry Pi if not already active:
+
+.. code-block:: bash
+
+   sudo raspi-config  # Interface Options → I2C → Enable
+
+Verify the device is visible on bus 1:
+
+.. code-block:: bash
+
+   i2cdetect -y 1  # should show 0x48 (or other address per jumper)
+
+Build Command
+^^^^^^^^^^^^^
+
+Available variants: ``dummy``, ``iio_example``.
+Available boards: ``rpi5``.
+
+No toolchain environment variable is required — the system ``gcc`` is
+used automatically.
+
+For toolchain setup and prerequisites, see the
+`Linux Userspace CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_linux_userspace_cmake.html>`__.
+
+.. code-block:: bash
+
+   cd no-OS
+
+   # build the dummy example for Raspberry Pi 5
+   python tools/scripts/no_os_build.py build \
+      --project adt7420-pmdz --variant dummy --board rpi5
+
+The resulting executable is placed at:
+
+.. code-block:: bash
+
+   build/adt7420-pmdz-dummy-rpi5/build/adt7420-pmdz
+
+Run it directly on the Raspberry Pi:
+
+.. code-block:: bash
+
+   sudo ./build/adt7420-pmdz-dummy-rpi5/build/adt7420-pmdz
