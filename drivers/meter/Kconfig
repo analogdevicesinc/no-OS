@@ -65,6 +65,11 @@ config METER_ADE9078
 	bool "Enable ADE9078 energy meter driver"
 	default n
 
+config METER_ADE9039
+	depends on SPI
+	bool "Enable ADE9039 energy meter driver"
+	default n
+
 config METER_ADE9113
 	depends on SPI
 	select GPIO
