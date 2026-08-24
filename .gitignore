@@ -43,6 +43,11 @@ libraries/esh/
 libraries/TMC-API/
 libraries/precision-converters-library/
 libraries/pico-sdk/
+libraries/azure/azure-sdk-for-c/
+libraries/free_rtos/free_rtos/
+libraries/mbed/mbed-os/
+libraries/mqtt/paho.mqtt.embedded-c/
+libraries/tmc/TMC-API/
 
 *.a
 *.o
