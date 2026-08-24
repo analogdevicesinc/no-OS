@@ -79,6 +79,7 @@ static int ftd2xx_uart_write(struct no_os_uart_desc *desc,
 
 	while (count < bytes_number) {
 		printf("%c", data[count]);
+		count++;
 	}
 
 	return 0;

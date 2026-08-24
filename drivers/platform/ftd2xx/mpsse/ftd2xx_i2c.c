@@ -74,6 +74,10 @@ int ftd2xx_i2c_init(struct no_os_i2c_desc **desc,
 
 	i2c_desc->extra = extra_desc;
 	extra_init = param->extra;
+	if (!extra_init) {
+		ret = -EINVAL;
+		goto error;
+	}
 
 	channelConf.ClockRate = (I2C_CLOCKRATE)param->max_speed_hz;
 	channelConf.LatencyTimer = 10;
