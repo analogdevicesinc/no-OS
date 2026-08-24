@@ -58,7 +58,7 @@ int ftd2xx_i2c_init(struct no_os_i2c_desc **desc,
 	FT_STATUS status;
 	int ret;
 
-	if (!desc || !param || param->device_id > FTD2XX_MAX_DEV_PER_CHIP)
+	if (!desc || !param || param->device_id >= FTD2XX_MAX_DEV_PER_CHIP)
 		return -EINVAL;
 
 	i2c_desc = (struct no_os_i2c_desc *)no_os_calloc(1, sizeof(*i2c_desc));
@@ -74,6 +74,10 @@ int ftd2xx_i2c_init(struct no_os_i2c_desc **desc,
 
 	i2c_desc->extra = extra_desc;
 	extra_init = param->extra;
+	if (!extra_init) {
+		ret = -EINVAL;
+		goto error;
+	}
 
 	channelConf.ClockRate = (I2C_CLOCKRATE)param->max_speed_hz;
 	channelConf.LatencyTimer = 10;
