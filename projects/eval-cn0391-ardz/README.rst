@@ -51,7 +51,7 @@ The board is powered through the USB port of the EVAL-ADIN1110.
 No-OS Build Setup
 -----------------
 
-Please see: https://analogdevicesinc.github.io/no-OS/build_guide.html
+Please see the :doc:`No-OS Build Guide </build_guide>`.
 
 No-OS Supported Examples
 -------------------------
@@ -131,7 +131,22 @@ STM32 Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`STM32 CMake build guide </build_guides/build_stm32_cmake>`.
+
+Available variants: ``basic``, ``iio_lwip``, ``iio_lwip_cn0391``.
+Available boards: ``adin1110ebz``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
+
+        # set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+        # in a default install location)
+        export STM32CUBEMX=</path/to/stm32cubemx>
+        export STM32CUBEIDE=</path/to/stm32cubeide>
+        # Windows (PowerShell):
+        #   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+        #   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
         # build the IIO over lwIP example (default)
         python3 tools/scripts/no_os_build.py build \

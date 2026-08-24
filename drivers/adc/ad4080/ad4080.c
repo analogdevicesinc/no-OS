@@ -47,6 +47,12 @@ const struct ad4080_chip_info ad4080_chip_info_tbl[NUM_AD4080_DEVICES] = {
 		.num_bits = 20,
 		.lvds_cnv_clk_cnt_max = 7,
 	},
+	[ID_AD4081] = {
+		.name = "ad4081",
+		.product_id = AD4081_PRODUCT_ID,
+		.num_bits = 20,
+		.lvds_cnv_clk_cnt_max = 2,
+	},
 	[ID_AD4082] = {
 		.name = "ad4082",
 		.product_id = AD4082_PRODUCT_ID,

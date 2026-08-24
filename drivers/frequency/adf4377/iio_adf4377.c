@@ -120,13 +120,14 @@ static int adf4377_iio_find_element_in_tbl(const int *tbl, const int size,
  * @param readval - Read data.
  * @return	  - Result of the reading procedure.
  */
-static int adf4377_iio_read_reg(struct adf4377_iio_dev *dev, uint32_t reg,
+static int adf4377_iio_read_reg(void *dev, uint32_t reg,
 				uint32_t *readval)
 {
+	struct adf4377_iio_dev *iio_adf4377 = dev;
 	uint8_t tmp;
 	int ret;
 
-	ret = adf4377_spi_read(dev->adf4377_dev, (uint16_t)reg, &tmp);
+	ret = adf4377_spi_read(iio_adf4377->adf4377_dev, (uint16_t)reg, &tmp);
 	if (ret)
 		return ret;
 
@@ -141,10 +142,12 @@ static int adf4377_iio_read_reg(struct adf4377_iio_dev *dev, uint32_t reg,
 * @param writeval - Data to be written.
 * @return	   - Result of the writing procedure.
 */
-static int adf4377_iio_write_reg(struct adf4377_iio_dev *dev, uint32_t reg,
+static int adf4377_iio_write_reg(void *dev, uint32_t reg,
 				 uint32_t writeval)
 {
-	return adf4377_spi_write(dev->adf4377_dev, (uint16_t)reg,
+	struct adf4377_iio_dev *iio_adf4377 = dev;
+
+	return adf4377_spi_write(iio_adf4377->adf4377_dev, (uint16_t)reg,
 				 (uint8_t)writeval);
 }
 
@@ -166,6 +169,7 @@ static int adf4377_iio_read_dev_attr(void *dev, char *buf, uint32_t len,
 	struct adf4377_dev *adf4377;
 	int32_t val = -EINVAL;
 	uint64_t val_64 = 0;
+	int64_t int_val_64 = 0;
 	int32_t val_b[2];
 	char buffer[5];
 	int32_t cp_i;
@@ -234,6 +238,15 @@ static int adf4377_iio_read_dev_attr(void *dev, char *buf, uint32_t len,
 
 		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
 		break;
+
+	case ADF4377_IIO_DEV_ATTR_BLEED_DELAY:
+		ret = adf4377_get_bleed_delay(adf4377, &int_val_64);
+		if (ret)
+			return ret;
+
+		ret = snprintf(buf, len, "%lli", int_val_64);
+		break;
+
 	case ADF4377_IIO_DEV_ATTR_RFOUT_DIV:
 		ret = adf4377_get_rfout_divider(adf4377, &div);
 		if (ret)
@@ -312,6 +325,7 @@ static int adf4377_iio_write_dev_attr(void *dev, char *buf, uint32_t len,
 	struct adf4377_dev *adf4377;
 	int32_t val = -EINVAL;
 	uint64_t val_64 = 0;
+	int64_t int_val_64 = 0;
 	int32_t val_b[2];
 	bool en;
 	int8_t index;
@@ -353,6 +367,10 @@ static int adf4377_iio_write_dev_attr(void *dev, char *buf, uint32_t len,
 	case ADF4377_IIO_DEV_ATTR_BLEED_CURRENT:
 		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
 		ret = adf4377_set_bleed_word(adf4377, val);
+		break;
+	case ADF4377_IIO_DEV_ATTR_BLEED_DELAY:
+		sscanf(buf, "%lli", &int_val_64);
+		ret = adf4377_set_bleed_delay(adf4377, int_val_64);
 		break;
 	case ADF4377_IIO_DEV_ATTR_RFOUT_DIV:
 		ret = iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
@@ -418,6 +436,7 @@ static int adf4377_iio_read_chan_attr(void *dev, char *buf, uint32_t len,
 	int32_t val = -EINVAL;
 	uint64_t val_64 = 0;
 	int8_t opwr;
+	uint8_t clk_inv;
 	bool en;
 	int ret;
 
@@ -453,6 +472,13 @@ static int adf4377_iio_read_chan_attr(void *dev, char *buf, uint32_t len,
 			return ret;
 
 		val = en;
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+	case ADF4377_IIO_DEV_ATTR_CLK_INV:
+		ret = adf4377_get_channel_inv(adf4377, channel->ch_num, &clk_inv);
+		if (ret)
+			return ret;
+		val = clk_inv;
 		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
 		break;
 	default:
@@ -507,6 +533,10 @@ static int adf4377_iio_write_chan_attr(void *dev, char *buf, uint32_t len,
 		en = val;
 		ret = adf4377_set_en_chan(adf4377, channel->ch_num, en);
 		break;
+	case ADF4377_IIO_DEV_ATTR_CLK_INV:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+		ret = adf4377_set_channel_inv(adf4377, channel->ch_num, val);
+		break;
 	default:
 		return -EINVAL;
 	}
@@ -519,82 +549,103 @@ static int adf4377_iio_write_chan_attr(void *dev, char *buf, uint32_t len,
 static struct iio_attribute adf4377_iio_dev_attributes[] = {
 	{
 		.name = "reference_clock",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = adf4377_iio_read_dev_attr,
 		.store = adf4377_iio_write_dev_attr,
 		.priv = ADF4377_IIO_DEV_ATTR_REF_CLK,
 	},
 	{
 		.name = "reference_divider",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = adf4377_iio_read_dev_attr,
 		.store = adf4377_iio_write_dev_attr,
 		.priv = ADF4377_IIO_DEV_ATTR_REF_DIV,
 	},
 	{
 		.name = "reference_doubler_enable",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = adf4377_iio_read_dev_attr,
 		.store = adf4377_iio_write_dev_attr,
 		.priv = ADF4377_IIO_DEV_ATTR_REF_DOUBLER_EN,
 	},
 	{
 		.name = "charge_pump_current",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = adf4377_iio_read_dev_attr,
 		.store = adf4377_iio_write_dev_attr,
 		.priv = ADF4377_IIO_DEV_ATTR_CP_I,
 	},
 	{
 		.name = "charge_pump_available",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = adf4377_iio_read_dev_attr,
 		.priv = ADF4377_IIO_DEV_ATTR_CP_AVAIL,
 	},
 	{
 		.name = "bleed_current",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = adf4377_iio_read_dev_attr,
 		.store = adf4377_iio_write_dev_attr,
 		.priv = ADF4377_IIO_DEV_ATTR_BLEED_CURRENT,
 	},
 	{
+		.name = "bleed_delay",
+		.shared = IIO_SHARED_BY_ALL,
+		.show = adf4377_iio_read_dev_attr,
+		.store = adf4377_iio_write_dev_attr,
+		.priv = ADF4377_IIO_DEV_ATTR_BLEED_DELAY,
+	},
+	{
 		.name = "rfout_divider",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = adf4377_iio_read_dev_attr,
 		.store = adf4377_iio_write_dev_attr,
 		.priv = ADF4377_IIO_DEV_ATTR_RFOUT_DIV,
 	},
 	{
 		.name = "rfout_divider_available",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = adf4377_iio_read_dev_attr,
 		.priv = ADF4377_IIO_DEV_ATTR_RFOUT_DIV_AVAIL,
 	},
 	{
 		.name = "ndel",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = adf4377_iio_read_dev_attr,
 		.store = adf4377_iio_write_dev_attr,
 		.priv = ADF4377_IIO_DEV_ATTR_NDEL,
 	},
 	{
 		.name = "rdel",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = adf4377_iio_read_dev_attr,
 		.store = adf4377_iio_write_dev_attr,
 		.priv = ADF4377_IIO_DEV_ATTR_RDEL,
 	},
 	{
 		.name = "sysref_delay_adjust",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = adf4377_iio_read_dev_attr,
 		.store = adf4377_iio_write_dev_attr,
 		.priv = ADF4377_IIO_DEV_ATTR_SR_DEL_ADJ,
 	},
 	{
 		.name = "sysref_invert_adjust",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = adf4377_iio_read_dev_attr,
 		.store = adf4377_iio_write_dev_attr,
 		.priv = ADF4377_IIO_DEV_ATTR_SR_INV_ADJ,
 	},
 	{
 		.name = "sysref_monitoring",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = adf4377_iio_read_dev_attr,
 		.store = adf4377_iio_write_dev_attr,
 		.priv = ADF4377_IIO_DEV_ATTR_SR_MONITORING,
 	},
 	{
 		.name = "default_register",
+		.shared = IIO_SHARED_BY_ALL,
 		.show = adf4377_iio_read_dev_attr,
 		.store = adf4377_iio_write_dev_attr,
 		.priv = ADF4377_IIO_DEV_ATTR_DEFAULT_REG,
@@ -623,6 +674,13 @@ static struct iio_attribute adf4377_iio_ch_attributes[] = {
 		.show = adf4377_iio_read_chan_attr,
 		.store = adf4377_iio_write_chan_attr,
 		.priv = ADF4377_IIO_CH_ATTR_EN,
+	},
+	{
+		.name = "inv",
+		.shared = IIO_SEPARATE,
+		.show = adf4377_iio_read_chan_attr,
+		.store = adf4377_iio_write_chan_attr,
+		.priv = ADF4377_IIO_DEV_ATTR_CLK_INV,
 	},
 	END_ATTRIBUTES_ARRAY
 };

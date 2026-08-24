@@ -234,6 +234,9 @@ no-OS compatible GNSS driver providing unified support for both **UBX-capable de
 **Maxim Build Command**
 ~~~~~~~~~~~~~~~~~~~~~~~
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``.
 Available boards: ``ad-apard32690-sl``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -241,6 +244,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
@@ -270,11 +274,14 @@ Replace ``--variant`` / ``--board`` accordingly.
    ├── include/
    │   └── no_os_gnss.h                    # Public API header
    └── projects/eval-ublox-gnss/
-       ├── src.mk                          # Build configuration
+       ├── CMakeLists.txt                  # Build configuration
+       ├── Kconfig                         # Build options
+       ├── basic.conf                      # Variant defconfig
+       ├── boards/                         # Per-board overlays
        └── src/
            ├── main.c                      # Example application
-           ├── interrupt.c                 # Interrupt handling
-           └── platform.c                  # Platform utilities
+           ├── interrupt/                  # Interrupt handling
+           └── platform/                   # Platform utilities
 
 **Example Output**
 ---------------------

@@ -13,6 +13,8 @@ Usage:
 import argparse
 import itertools
 import json
+import os
+import shlex
 import shutil
 import subprocess
 import sys
@@ -25,9 +27,33 @@ from pathlib import Path
 USE_TTY = sys.stdout.isatty()
 
 
+def _resolve_cmake():
+    """Return the first cmake on PATH that is not the Vitis-bundled one.
+
+    Sourcing settings64.sh prepends Vitis's ancient bundled cmake, which is
+    linked against libs absent on modern distros and fails to run. Fall back to
+    'cmake' if no other candidate exists.
+    """
+    for directory in os.environ.get("PATH", "").split(os.pathsep):
+        if not directory:
+            continue
+        candidate = os.path.join(directory, "cmake")
+        if not (os.path.isfile(candidate) and os.access(candidate, os.X_OK)):
+            continue
+        parts = Path(candidate).resolve().parts
+        # Vitis bundles cmake at <root>/tps/lnx64/cmake-<ver>/bin/cmake.
+        if "tps" in parts and any(p.startswith("cmake-") for p in parts):
+            continue
+        return candidate
+    return "cmake"
+
+
+CMAKE = _resolve_cmake()
+
+
 def combo_build_dir(build_dir_base, combo):
     """Return the build directory path for a given combination."""
-    name = f"build-{combo['project']}-{combo['variant']}-{combo['board']}"
+    name = f"{combo['project']}-{combo['variant']}-{combo['board']}"
     return build_dir_base / name
 
 
@@ -53,6 +79,149 @@ def open_vscode_workspace(repo_root):
         subprocess.run([editor, str(workspace)], check=True)
     except subprocess.CalledProcessError as e:
         print(f"--open: failed to launch '{editor}': {e}", file=sys.stderr)
+
+
+def read_cmake_cache_value(build_dir, key):
+    """Return the value of a CMakeCache.txt entry (KEY:TYPE=VALUE), or None."""
+    cache = build_dir / "CMakeCache.txt"
+    if not cache.exists():
+        return None
+    prefix = f"{key}:"
+    with open(cache) as f:
+        for line in f:
+            if line.startswith(prefix) and "=" in line:
+                return line.split("=", 1)[1].strip()
+    return None
+
+
+def harvest_compile_manifest(build_dir):
+    """Extract the source/include/define set from compile_commands.json.
+
+    CMake writes compile_commands.json (CMAKE_EXPORT_COMPILE_COMMANDS) at the
+    build-dir root with one entry per compiled translation unit. It is the
+    ground truth for what the no-OS ELF is built from: the union of the project
+    target and the `no-os` OBJECT library. We parse the -I/-D/-include flags
+    out of each command so the Vitis app component indexes headers and macros
+    exactly as ninja did.
+
+    Returns a dict {"sources": [...], "includes": [...], "defines": [...],
+    "force_includes": [...]} with duplicates removed and insertion order
+    preserved, or None if the compile database is missing.
+    """
+    cc = build_dir / "compile_commands.json"
+    if not cc.exists():
+        return None
+    with open(cc) as f:
+        entries = json.load(f)
+
+    sources, includes, defines, force_includes = [], [], [], []
+    seen_src, seen_inc, seen_def, seen_finc = set(), set(), set(), set()
+    for e in entries:
+        src = e.get("file")
+        if src and src not in seen_src:
+            seen_src.add(src)
+            sources.append(src)
+        tokens = shlex.split(e.get("command", ""))
+        i = 0
+        while i < len(tokens):
+            tok = tokens[i]
+            if tok.startswith("-I"):
+                val = tok[2:] or (tokens[i + 1] if tok == "-I" else "")
+                if tok == "-I":
+                    i += 1
+                if val and val not in seen_inc:
+                    seen_inc.add(val)
+                    includes.append(val)
+            elif tok.startswith("-D"):
+                val = tok[2:] or (tokens[i + 1] if tok == "-D" else "")
+                if tok == "-D":
+                    i += 1
+                if val and val not in seen_def:
+                    seen_def.add(val)
+                    defines.append(val)
+            elif tok == "-include":
+                i += 1
+                if i < len(tokens):
+                    val = tokens[i]
+                    if val and val not in seen_finc:
+                        seen_finc.add(val)
+                        force_includes.append(val)
+            i += 1
+    return {"sources": sources, "includes": includes, "defines": defines,
+            "force_includes": force_includes}
+
+
+def open_vitis_workspace(repo_root, build_dir, combo):
+    """Populate and open a Vitis Unified IDE workspace for a Xilinx project.
+
+    Xilinx debugging/browsing happens in the Vitis GUI, not VS Code + OpenOCD.
+    Unlike the BSP-only xsa_work that config_xilinx_sdk leaves behind, this
+    materializes a real, openable workspace under
+    <build>/projects/<project>/xsa_work/ide/workspace containing:
+
+      - the hw0 platform (BSP), and
+      - an 'app' component whose sources are the no-OS files CMake actually
+        compiled, referenced in place (import_files is_skip_copy_sources) with
+        the include paths and -D defines harvested from compile_commands.json.
+
+    This mirrors the intent of the legacy `make` flow (which symlinked the
+    required no-OS sources under build/app so they showed up in Vitis), adapted
+    to the CMake build: CMake still owns the flashed ELF; Vitis gets a browsable
+    /buildable view of the same sources. Then launches `vitis -w <workspace>`.
+    """
+    proj_bin = build_dir / "projects" / combo["project"]
+    xsa_work = proj_bin / "xsa_work"
+    workspace = xsa_work / "ide" / "workspace"
+    if not xsa_work.exists():
+        print(f"--open: BSP work dir not found at {xsa_work} "
+              "(build the project first).", file=sys.stderr)
+        return
+    vitis = shutil.which("vitis")
+    if not vitis:
+        print("--open: 'vitis' not found on PATH. Source settings64.sh from "
+              f"your Vitis install, then re-run --open.", file=sys.stderr)
+        return
+
+    manifest = harvest_compile_manifest(build_dir)
+    if manifest is None:
+        print(f"--open: compile_commands.json not found in {build_dir} "
+              "(configure/build the project first).", file=sys.stderr)
+        return
+    # The BSP CPU/arch is resolved by the toolchain and cached; pass it through
+    # so util.py need not depend on a freshly staged arch.txt.
+    arch = read_cmake_cache_value(build_dir, "XILINX_ARCH")
+    if arch:
+        manifest["arch"] = arch
+    manifest_path = xsa_work / "ide_manifest.json"
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(manifest_path, "w") as f:
+        json.dump(manifest, f, indent="\t")
+
+    # xsa_work holds a copy of the .xsa and arch.txt (staged by
+    # config_xilinx_sdk); util.py reads both from hw_path.
+    xsa_files = list(xsa_work.glob("*.xsa"))
+    if not xsa_files:
+        print(f"--open: no .xsa found in {xsa_work}.", file=sys.stderr)
+        return
+    util_py = repo_root / "tools" / "scripts" / "platform" / "xilinx" / "util.py"
+
+    print(f"Populating Vitis workspace ({len(manifest['sources'])} sources)...")
+    try:
+        subprocess.run(
+            [vitis, "-s", str(util_py), "create_ide_workspace",
+             str(xsa_work), str(xsa_work), xsa_files[0].name,
+             str(manifest_path)],
+            check=True, cwd=str(repo_root))
+    except subprocess.CalledProcessError as e:
+        print(f"--open: failed to populate Vitis workspace: {e}",
+              file=sys.stderr)
+        return
+
+    print(f"Opening Vitis IDE workspace: {workspace}")
+    try:
+        subprocess.run([vitis, "-w", str(workspace)], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"--open: failed to launch 'vitis': {e}", file=sys.stderr)
 
 
 class Spinner:
@@ -199,6 +368,41 @@ def discover_boards_for_variant(repo_root, project, variant):
     return [], "none"
 
 
+def _read_conf_string(conf_path, symbol):
+    """Return the value of a CONFIG_<symbol>="..." assignment in a .conf file.
+
+    Kconfig string fragments look like CONFIG_FOO="bar". Returns the unquoted
+    value, or None if the file or symbol is absent. Deliberately a plain text
+    scan so it runs before (and without) any cmake/Kconfig invocation.
+    """
+    if not conf_path.is_file():
+        return None
+    key = f"CONFIG_{symbol}"
+    for line in conf_path.read_text().splitlines():
+        line = line.strip()
+        if line.startswith("#") or "=" not in line:
+            continue
+        name, _, value = line.partition("=")
+        if name.strip() == key:
+            return value.strip().strip('"')
+    return None
+
+
+def xilinx_hardware_name(repo_root, project, variant, board):
+    """Compose the HDL hardware name for a Xilinx (project, variant, board).
+
+    The name is <CONFIG_XILINX_HDL_DESIGN>_<board> (e.g. adv7511_zed), matching
+    the artifact-server folder that holds system_top.xsa. The design prefix
+    lives in the variant .conf; the board suffix is the CMake board. Returns
+    None when the variant declares no design (i.e. not a Xilinx build).
+    """
+    conf = repo_root / "projects" / project / f"{variant}.conf"
+    design = _read_conf_string(conf, "XILINX_HDL_DESIGN")
+    if not design:
+        return None
+    return f"{design}_{board}"
+
+
 def discover_all_combinations(repo_root, presets):
     """Build the full list of valid (project, variant, board, platform) tuples."""
     # Map board name -> preset info
@@ -308,7 +512,7 @@ def append_log(log_path, section, result):
         f.write("\n")
 
 
-def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None, flash=False, fresh=False):
+def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None, flash=False, fresh=False, hardware=None):
     """Run cmake configure + build (and optionally flash) for a single combination.
 
     Returns (combo, success, detail). On failure, detail is the error message.
@@ -334,7 +538,7 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
     defconfig = f"{project}/{variant}.conf"
 
     configure_cmd = [
-        "cmake",
+        CMAKE,
         "-B", str(build_dir),
         "--preset", preset,
         f"-DPROJECT_DEFCONFIG={defconfig}",
@@ -343,9 +547,11 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
         configure_cmd.append("--fresh")
     if probe:
         configure_cmd.append(f"-DPROBE={probe}")
+    if hardware:
+        configure_cmd.append(f"-DHARDWARE={Path(hardware).resolve()}")
 
     build_cmd = [
-        "cmake",
+        CMAKE,
         "--build", str(build_dir),
         "--target", project,
     ]
@@ -353,7 +559,7 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
         build_cmd.extend(["-j", str(jobs)])
 
     flash_cmd = [
-        "cmake",
+        CMAKE,
         "--build", str(build_dir),
         "--target", "flash",
     ]
@@ -451,7 +657,7 @@ def cmd_build(args, repo_root, presets):
         if not build_dir_base.is_absolute():
             build_dir_base = repo_root / build_dir_base
     else:
-        build_dir_base = repo_root
+        build_dir_base = repo_root / "build"
     total = len(filtered)
 
     if args.dry_run:
@@ -485,7 +691,7 @@ def cmd_build(args, repo_root, presets):
                     shutil.rmtree(build_dir)
 
                 configure_cmd = [
-                    "cmake",
+                    CMAKE,
                     "-B", str(build_dir),
                     "--preset", combo["preset"],
                     f"-DPROJECT_DEFCONFIG={defconfig}",
@@ -494,6 +700,8 @@ def cmd_build(args, repo_root, presets):
                     configure_cmd.append("--fresh")
                 if args.probe:
                     configure_cmd.append(f"-DPROBE={args.probe}")
+                if args.hardware:
+                    configure_cmd.append(f"-DHARDWARE={Path(args.hardware).resolve()}")
 
                 if args.dry_run:
                     print(f"  [{idx}/{total}] {quote_cmd(configure_cmd)}")
@@ -545,7 +753,7 @@ def cmd_build(args, repo_root, presets):
             build_dir = combo_build_dir(build_dir_base, combo)
             log_path = build_dir / "build.log"
             build_cmd = [
-                "cmake",
+                CMAKE,
                 "--build", str(build_dir),
                 "--target", combo["project"],
             ]
@@ -553,7 +761,7 @@ def cmd_build(args, repo_root, presets):
                 build_cmd.extend(["-j", str(args.jobs)])
 
             flash_cmd = [
-                "cmake",
+                CMAKE,
                 "--build", str(build_dir),
                 "--target", "flash",
             ]
@@ -630,6 +838,7 @@ def cmd_build(args, repo_root, presets):
             combo_result, success, msg = run_build(
                 repo_root, combo, build_dir_base, args.jobs, args.clean, args.dry_run,
                 probe=args.probe, flash=args.flash, fresh=args.fresh,
+                hardware=args.hardware,
             )
 
             if args.dry_run:
@@ -658,7 +867,18 @@ def cmd_build(args, repo_root, presets):
         sys.exit(1)
 
     if args.open:
-        open_vscode_workspace(repo_root)
+        # --open targets a single project's IDE. When the filter matched exactly
+        # one combination, open that; otherwise fall back to the repo-root VS
+        # Code workspace (the multi-project view).
+        if len(filtered) == 1:
+            combo = filtered[0]
+            build_dir = combo_build_dir(build_dir_base, combo)
+            if combo["platform"] == "xilinx":
+                open_vitis_workspace(repo_root, build_dir, combo)
+            else:
+                open_vscode_workspace(repo_root)
+        else:
+            open_vscode_workspace(repo_root)
 
 
 def main():
@@ -680,7 +900,7 @@ def main():
     build_parser.add_argument("--variant", help="Variant to build")
     build_parser.add_argument("--board", help="Board to build for")
     build_parser.add_argument(
-        "--build-dir", help="Base directory where build-<project>-<variant>-<board> directories are created (default: repo root)"
+        "--build-dir", help="Base directory where <project>-<variant>-<board> directories are created (default: build/ at the repo root)"
     )
     build_parser.add_argument(
         "--jobs", "-j", type=int, help="Parallel jobs for cmake --build"
@@ -703,6 +923,11 @@ def main():
         "--probe",
         choices=["jlink", "openocd"],
         help="Debug probe type; sets -DPROBE=<value> at configure time",
+    )
+    build_parser.add_argument(
+        "--hardware",
+        help="Path to a Xilinx .xsa hardware file; passed to cmake as "
+             "-DHARDWARE=<abs path> (required for xilinx builds)",
     )
     build_parser.add_argument(
         "--flash",

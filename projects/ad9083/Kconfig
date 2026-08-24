@@ -1,0 +1,22 @@
+menu "ad9083 Configuration"
+
+choice AD9083_EXAMPLE
+	prompt "Example variant"
+	default AD9083_DEMO_EXAMPLE
+
+config AD9083_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Demo example that initializes the AD9083 RF ADC via JESD204 RX,
+	  AXI ADC core, and DMA, and captures data to DDR.
+
+config AD9083_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the AD9083 ADC through the IIO framework
+	  via iio_axi_adc, enabling host-side data capture over UART.
+
+endchoice
+
+endmenu

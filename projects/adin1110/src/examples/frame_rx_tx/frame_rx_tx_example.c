@@ -223,7 +223,8 @@ int example_main()
 			printf("\nSource MAC: %02X:%02X:%02X:%02X:%02X:%02X",
 			       eth_rx.mac_source[0], eth_rx.mac_source[1], eth_rx.mac_source[2],
 			       eth_rx.mac_source[3], eth_rx.mac_source[4], eth_rx.mac_source[5]);
-			printf("\nEthertype: 0x%02X", eth_rx.ethertype);
+			printf("\nEthertype: 0x%02X%02X", eth_rx.ethertype[0],
+			       eth_rx.ethertype[1]);
 			printf("\n\nPayload: \n");
 			for (i = 0; i < eth_rx.len; i++) {
 				printf("0x%02X ", eth_rx.payload[i]);

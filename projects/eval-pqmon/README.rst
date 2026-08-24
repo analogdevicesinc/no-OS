@@ -83,11 +83,14 @@ Build and run
 The project is based on a :adi:`MAX32650` microcontroller. The proprietary
 pqlib is not part of the repository; point the ``PQLIB_PATH`` environment
 variable at its directory before building. Select the interface with
-``--variant`` and build (append ``--probe`` / ``--flash`` to program the board):
+``--variant`` and build (append ``--probe`` / ``--flash`` to program the board).
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`:
 
 .. code-block:: bash
 
         export PQLIB_PATH=<path_to_library>
+        # Windows (PowerShell): $env:PQLIB_PATH = "C:\path\to\library"
 
         # build the USB interface variant
         python3 tools/scripts/no_os_build.py build \
@@ -355,5 +358,5 @@ Additional Resources
 ---------------------
 
 The complete User Guide for the AD-PQMON-SL solution is available at
-`AD-PQMON-SL GitHub Page
-<https://analogdevicesinc.github.io/documentation/solutions/reference-designs/ad-pqmon-sl/index.html>`__.
+`AD-PQMON-SL Documentation
+<https://developer.analog.com/docs/system-level/solutions/reference-designs/ad-pqmon-sl/index.html>`__.

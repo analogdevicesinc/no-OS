@@ -36,16 +36,19 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/iio_axi_adc)
 no_os_sources_ifdef(CONFIG_AXI_CORE_IIO_AXI_DAC ${CMAKE_CURRENT_SOURCE_DIR}/iio_axi_dac/iio_axi_dac.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/iio_axi_dac)
 
-# jesd204
+# jesd204 (Xilinx transceiver path)
 no_os_sources_ifdef(CONFIG_AXI_CORE_JESD204
-    ${CMAKE_CURRENT_SOURCE_DIR}/jesd204/altera_a10_atx_pll.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/jesd204/altera_a10_cdr_pll.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/jesd204/altera_adxcvr.c
     ${CMAKE_CURRENT_SOURCE_DIR}/jesd204/axi_adxcvr.c
     ${CMAKE_CURRENT_SOURCE_DIR}/jesd204/axi_jesd204_rx.c
     ${CMAKE_CURRENT_SOURCE_DIR}/jesd204/axi_jesd204_tx.c
     ${CMAKE_CURRENT_SOURCE_DIR}/jesd204/jesd204_clk.c
     ${CMAKE_CURRENT_SOURCE_DIR}/jesd204/xilinx_transceiver.c)
+# Altera/Intel transceiver sources (need the Quartus BSP io.h, absent on
+# Xilinx) are gated by the Altera FPLL symbol, not the generic JESD204 one.
+no_os_sources_ifdef(CONFIG_AXI_CORE_CLK_ALTERA_A10_FPLL
+    ${CMAKE_CURRENT_SOURCE_DIR}/jesd204/altera_a10_atx_pll.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/jesd204/altera_a10_cdr_pll.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/jesd204/altera_adxcvr.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/jesd204)
 
 # spi_engine

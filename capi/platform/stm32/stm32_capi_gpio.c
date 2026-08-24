@@ -315,6 +315,21 @@ static int stm32_capi_gpio_port_init(struct capi_gpio_port_handle **handle,
 	priv->num_pins = config->num_pins ? config->num_pins : STM32_GPIO_PINS_PER_PORT;
 	priv->direction_mask = STM32_GPIO_ALL_INPUTS;
 
+	/*
+	 * Fold the per-pin ACTIVE_LOW flags into a single mask. The CAPI flags
+	 * array is one entry per pin and only lives as long as the caller's
+	 * config, so snapshot it here; the port-level logical value ops use this
+	 * mask to invert the wire level (raw = logical ^ active_low).
+	 */
+	priv->active_low_mask = 0U;
+	if (config->flags) {
+		for (uint8_t i = 0U; i < priv->num_pins && i < STM32_GPIO_PINS_PER_PORT;
+		     i++) {
+			if (config->flags[i] & CAPI_GPIO_ACTIVE_LOW)
+				priv->active_low_mask |= (uint16_t)(1U << i);
+		}
+	}
+
 	/* Apply extra configuration if provided */
 	if (config->extra) {
 		extra_config = (struct stm32_capi_gpio_port_config *)config->extra;
@@ -426,8 +441,16 @@ static int stm32_capi_gpio_port_get_direction(struct capi_gpio_port_handle
 static int stm32_capi_gpio_port_set_value(struct capi_gpio_port_handle *handle,
 		uint64_t value_bitmask)
 {
-	/* For port-level operations without per-pin flags, use raw value */
-	return stm32_capi_gpio_port_set_raw_value(handle, value_bitmask);
+	struct stm32_capi_gpio_port_priv *priv;
+
+	if (!handle || !handle->priv)
+		return -EINVAL;
+
+	priv = handle->priv;
+
+	/* Logical -> raw: invert the electrical level of active-low pins. */
+	return stm32_capi_gpio_port_set_raw_value(handle,
+			value_bitmask ^ (uint64_t)priv->active_low_mask);
 }
 
 /**
@@ -439,8 +462,21 @@ static int stm32_capi_gpio_port_set_value(struct capi_gpio_port_handle *handle,
 static int stm32_capi_gpio_port_get_value(struct capi_gpio_port_handle *handle,
 		uint64_t *value_bitmask)
 {
-	/* For port-level operations without per-pin flags, use raw value */
-	return stm32_capi_gpio_port_get_raw_value(handle, value_bitmask);
+	struct stm32_capi_gpio_port_priv *priv;
+	int ret;
+
+	if (!handle || !handle->priv || !value_bitmask)
+		return -EINVAL;
+
+	priv = handle->priv;
+
+	ret = stm32_capi_gpio_port_get_raw_value(handle, value_bitmask);
+	if (ret)
+		return ret;
+
+	/* Raw -> logical: invert the reported level of active-low pins. */
+	*value_bitmask ^= (uint64_t)priv->active_low_mask;
+	return 0;
 }
 
 /**
@@ -491,6 +527,45 @@ static int stm32_capi_gpio_port_get_raw_value(struct capi_gpio_port_handle
 
 	/* Read input data register */
 	*value_bitmask = priv->port->IDR & GPIO_PIN_All;
+
+	return 0;
+}
+
+/**
+ * @brief Toggle the selected output pins of the port.
+ * @param handle - Pointer to the GPIO port handle.
+ * @param pins_bitmask - Bitmask of pins to toggle (1 = toggle that pin).
+ * @return 0 on success, negative error code otherwise.
+ *
+ * Toggling is defined against the current output state (ODR), not the input
+ * line: each selected pin that is currently driven high is reset and each
+ * currently driven low is set. The flip is committed through BSRR in a single
+ * write so the whole mask changes atomically with respect to interrupts and
+ * other bus masters. ODR/BSRR are identical on every STM32 GPIO block, so this
+ * is family-agnostic.
+ */
+static int stm32_capi_gpio_port_toggle(struct capi_gpio_port_handle *handle,
+				       uint64_t pins_bitmask)
+{
+	struct stm32_capi_gpio_port_priv *priv;
+	uint16_t pins;
+	uint16_t odr;
+	uint16_t set_pins;
+	uint16_t reset_pins;
+
+	if (!handle || !handle->priv)
+		return -EINVAL;
+
+	priv = handle->priv;
+
+	pins = (uint16_t)pins_bitmask;
+	odr = (uint16_t)priv->port->ODR;
+
+	/* Currently-low selected pins get set; currently-high ones get reset. */
+	set_pins = (uint16_t)(pins & ~odr);
+	reset_pins = (uint16_t)(pins & odr);
+
+	priv->port->BSRR = ((uint32_t)reset_pins << STM32_BSRR_RESET_SHIFT) | set_pins;
 
 	return 0;
 }
@@ -670,6 +745,39 @@ static int stm32_capi_gpio_pin_get_raw_value(struct capi_gpio_pin *pin,
 }
 
 /**
+ * @brief Toggle a single output pin.
+ * @param pin - Pointer to the GPIO pin descriptor.
+ * @return 0 on success, negative error code otherwise.
+ *
+ * Flips the pin relative to its current output state (ODR) and commits the
+ * change atomically through BSRR. This toggles the raw electrical level; the
+ * ACTIVE_LOW flag is a logical attribute and does not affect a toggle (an
+ * inversion of an inversion is a no-op). ODR/BSRR are common to all STM32
+ * families.
+ */
+static int stm32_capi_gpio_pin_toggle(struct capi_gpio_pin *pin)
+{
+	struct stm32_capi_gpio_port_priv *priv;
+	uint32_t mask;
+
+	if (!pin || !pin->port_handle || !pin->port_handle->priv)
+		return -EINVAL;
+
+	if (pin->number >= STM32_GPIO_PINS_PER_PORT)
+		return -EINVAL;
+
+	priv = pin->port_handle->priv;
+	mask = (1U << (pin->number));
+
+	if (priv->port->ODR & mask)
+		priv->port->BSRR = mask << STM32_BSRR_RESET_SHIFT;
+	else
+		priv->port->BSRR = mask;
+
+	return 0;
+}
+
+/**
  * @brief STM32 platform specific GPIO operations for CAPI
  */
 const struct capi_gpio_ops stm32_capi_gpio_ops = {
@@ -681,10 +789,12 @@ const struct capi_gpio_ops stm32_capi_gpio_ops = {
 	.port_get_value = stm32_capi_gpio_port_get_value,
 	.port_set_raw_value = stm32_capi_gpio_port_set_raw_value,
 	.port_get_raw_value = stm32_capi_gpio_port_get_raw_value,
+	.port_toggle = stm32_capi_gpio_port_toggle,
 	.pin_set_direction = stm32_capi_gpio_pin_set_direction,
 	.pin_get_direction = stm32_capi_gpio_pin_get_direction,
 	.pin_set_value = stm32_capi_gpio_pin_set_value,
 	.pin_get_value = stm32_capi_gpio_pin_get_value,
 	.pin_set_raw_value = stm32_capi_gpio_pin_set_raw_value,
 	.pin_get_raw_value = stm32_capi_gpio_pin_get_raw_value,
+	.pin_toggle = stm32_capi_gpio_pin_toggle,
 };

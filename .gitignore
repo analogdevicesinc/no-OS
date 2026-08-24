@@ -1,4 +1,7 @@
 .metadata
+.no_os_venv
+.cubeide
+no-os.code-workspace
 SDK.log
 bsp
 hw
@@ -11,6 +14,7 @@ build
 build-*
 BUILD
 builds
+build-*
 exports
 logs
 log.txt
@@ -27,6 +31,18 @@ compile_commands.json
 .github/CODEOWNERS
 .github/PULL_REQUEST_TEMPLATE.md
 libraries/ftd2xx
+
+# Dependencies fetched in-tree at configure time (previously git submodules)
+libraries/lwip/
+libraries/lvgl/
+libraries/mbedtls/
+libraries/FreeRTOS-Kernel/
+libraries/paho.mqtt.embedded-c/
+libraries/azure-sdk-for-c/
+libraries/esh/
+libraries/TMC-API/
+libraries/precision-converters-library/
+libraries/pico-sdk/
 
 *.a
 *.o

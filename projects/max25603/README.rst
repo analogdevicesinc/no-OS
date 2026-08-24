@@ -32,11 +32,6 @@ Applications
 * Automotive headlamps
 * LED lighting controllers
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -55,11 +50,7 @@ comparator, enables EN2 with PWM dimming, configures a low beam
 output, waits 5 seconds, then disables the beam and enable outputs
 before removing the device.
 
-This is the only example in this project, so it builds by default:
-
-.. code-block:: bash
-
-	make
+This is the only example in this project, so it builds by default.
 
 No-OS Supported Platforms
 -------------------------
@@ -76,6 +67,9 @@ Used Hardware
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``.
 Available boards: ``ad-apard32690-sl``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -83,6 +77,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

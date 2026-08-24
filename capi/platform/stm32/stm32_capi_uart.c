@@ -538,6 +538,527 @@ static int stm32_capi_uart_get_line_status(struct capi_uart_handle *handle,
 	return 0;
 }
 
+/*
+ * ---------------------------------------------------------------------------
+ * FIFO / byte-level / interrupt-control ops.
+ *
+ * These ops target the whole STM32 UART family through the HAL. Flag reads
+ * (TXE/RXNE/TC via __HAL_UART_GET_FLAG) and interrupt controls are identical
+ * across families; only the raw data-register access differs between the two
+ * USART generations and is bracketed on USART_RDR_RDR / USART_TDR_TDR:
+ *   - new generation (F0/F3/F7/L0/L4/L5/G0/G4/H7/H5/U5/WB/WL/C0...): separate
+ *     ISR/RDR/TDR/RQR registers;
+ *   - old generation (F1/F2/F4/L1): a single SR/DR register, no RQR.
+ *
+ * "FIFO count" collapses to a 0/1 occupancy of the data register: TXE=1 means
+ * the TX data register is empty (nothing queued -> 0), RXNE=1 means a byte is
+ * waiting (-> 1). On the parts that do have a real hardware FIFO (H7/L4+/G0/
+ * G4/H5/U5...) this reports 0/1 rather than the true FIFO depth, which is
+ * sufficient for the ready/not-ready semantics these tests rely on.
+ * enable_fifo is a no-op success for parity with backends whose FIFO is not
+ * switchable.
+ * ---------------------------------------------------------------------------
+ */
+
+/**
+ * @brief Enable/disable the hardware FIFO (no-op on STM32).
+ * @param handle - Pointer to the UART handle.
+ * @param enable - Requested FIFO state (ignored).
+ * @return 0 on success, -EINVAL on a NULL handle.
+ *
+ * The FIFO is either absent (older parts) or managed by the HAL init config,
+ * not toggled here; the call succeeds as a no-op so callers that
+ * opportunistically toggle FIFO mode behave the same on every family.
+ */
+static int stm32_capi_uart_enable_fifo(struct capi_uart_handle *handle,
+				       bool enable)
+{
+	(void)enable;
+
+	if (!handle || !handle->priv)
+		return -EINVAL;
+
+	return 0;
+}
+
+/**
+ * @brief Drain the TX path (wait for transmission complete).
+ * @param handle - Pointer to the UART handle.
+ * @return 0 on success, -EINVAL on a NULL handle.
+ *
+ * With no TX FIFO, "flush" means let the last byte leave the shift register.
+ * Waits for TC so a following deinit/reconfigure does not truncate output.
+ */
+static int stm32_capi_uart_flush_tx_fifo(struct capi_uart_handle *handle)
+{
+	struct stm32_uart_priv_handle *priv;
+
+	if (!handle || !handle->priv)
+		return -EINVAL;
+
+	priv = handle->priv;
+
+	while (!__HAL_UART_GET_FLAG(priv->huart, UART_FLAG_TC))
+		;
+
+	return 0;
+}
+
+/**
+ * @brief Discard any pending received data.
+ * @param handle - Pointer to the UART handle.
+ * @return 0 on success, -EINVAL on a NULL handle.
+ *
+ * Issues the RX-data flush request and clears the overrun flag so a stale byte
+ * or a latched overrun left by a previous transfer cannot leak into the next
+ * receive.
+ */
+static int stm32_capi_uart_flush_rx_fifo(struct capi_uart_handle *handle)
+{
+	struct stm32_uart_priv_handle *priv;
+
+	if (!handle || !handle->priv)
+		return -EINVAL;
+
+	priv = handle->priv;
+
+#if defined(USART_RDR_RDR)
+	/* New-generation USART (ISR/RDR/TDR/RQR). */
+	__HAL_UART_SEND_REQ(priv->huart, UART_RXDATA_FLUSH_REQUEST);
+	__HAL_UART_CLEAR_OREFLAG(priv->huart);
+#else
+	/*
+	 * Old-generation USART (SR/DR, no RQR): there is no flush request.
+	 * Reading DR pops any waiting byte and clears RXNE, and the canonical
+	 * read-SR-then-read-DR sequence clears a latched overrun (ORE).
+	 */
+	{
+		volatile uint32_t tmp;
+
+		tmp = priv->huart->Instance->SR;
+		tmp = priv->huart->Instance->DR;
+		(void)tmp;
+	}
+#endif
+
+	return 0;
+}
+
+/**
+ * @brief Report RX data-register occupancy (0 or 1).
+ * @param handle - Pointer to the UART handle.
+ * @param count - Output: 1 if a byte is waiting in RDR, else 0.
+ * @return 0 on success, -EINVAL on a NULL argument.
+ */
+static int stm32_capi_uart_get_rx_fifo_count(struct capi_uart_handle *handle,
+		uint16_t *count)
+{
+	struct stm32_uart_priv_handle *priv;
+
+	if (!handle || !handle->priv || !count)
+		return -EINVAL;
+
+	priv = handle->priv;
+	*count = __HAL_UART_GET_FLAG(priv->huart, UART_FLAG_RXNE) ? 1U : 0U;
+
+	return 0;
+}
+
+/**
+ * @brief Report TX data-register occupancy (0 or 1).
+ * @param handle - Pointer to the UART handle.
+ * @param count - Output: 0 if TDR is empty (TXE), else 1 byte still queued.
+ * @return 0 on success, -EINVAL on a NULL argument.
+ */
+static int stm32_capi_uart_get_tx_fifo_count(struct capi_uart_handle *handle,
+		uint16_t *count)
+{
+	struct stm32_uart_priv_handle *priv;
+
+	if (!handle || !handle->priv || !count)
+		return -EINVAL;
+
+	priv = handle->priv;
+	*count = __HAL_UART_GET_FLAG(priv->huart, UART_FLAG_TXE) ? 0U : 1U;
+
+	return 0;
+}
+
+/**
+ * @brief Non-blocking single-byte read from RDR.
+ * @param handle - Pointer to the UART handle.
+ * @param byte - Output: the byte read (untouched when none is available).
+ * @return 1 if a byte was read, 0 if RDR was empty or on a NULL argument.
+ */
+static uint32_t stm32_capi_uart_read_byte(struct capi_uart_handle *handle,
+		uint8_t *byte)
+{
+	struct stm32_uart_priv_handle *priv;
+
+	if (!handle || !handle->priv || !byte)
+		return 0U;
+
+	priv = handle->priv;
+
+	if (!__HAL_UART_GET_FLAG(priv->huart, UART_FLAG_RXNE))
+		return 0U;
+
+#if defined(USART_RDR_RDR)
+	*byte = (uint8_t)(priv->huart->Instance->RDR & 0xFFU);
+#else
+	*byte = (uint8_t)(priv->huart->Instance->DR & 0xFFU);
+#endif
+
+	return 1U;
+}
+
+/**
+ * @brief Non-blocking single-byte write to TDR.
+ * @param handle - Pointer to the UART handle.
+ * @param byte - Byte to transmit.
+ * @return 1 if the byte was queued, 0 if TDR was full or on a NULL handle.
+ */
+static uint32_t stm32_capi_uart_write_byte(struct capi_uart_handle *handle,
+		uint8_t byte)
+{
+	struct stm32_uart_priv_handle *priv;
+
+	if (!handle || !handle->priv)
+		return 0U;
+
+	priv = handle->priv;
+
+	if (!__HAL_UART_GET_FLAG(priv->huart, UART_FLAG_TXE))
+		return 0U;
+
+#if defined(USART_TDR_TDR)
+	priv->huart->Instance->TDR = (uint16_t)byte;
+#else
+	priv->huart->Instance->DR = (uint16_t)(byte & 0x1FFU);
+#endif
+
+	return 1U;
+}
+
+/**
+ * @brief Enable or disable the TX-data-register-empty interrupt.
+ * @param handle - Pointer to the UART handle.
+ * @param enable - true to enable, false to disable.
+ * @return 0 on success, -EINVAL on a NULL handle.
+ */
+static int stm32_capi_uart_set_irq_tx(struct capi_uart_handle *handle,
+				      bool enable)
+{
+	struct stm32_uart_priv_handle *priv;
+
+	if (!handle || !handle->priv)
+		return -EINVAL;
+
+	priv = handle->priv;
+
+	if (enable)
+		__HAL_UART_ENABLE_IT(priv->huart, UART_IT_TXE);
+	else
+		__HAL_UART_DISABLE_IT(priv->huart, UART_IT_TXE);
+
+	return 0;
+}
+
+/**
+ * @brief Report whether TDR can accept a new byte.
+ * @param handle - Pointer to the UART handle.
+ * @param ready - Output: true if TXE is set.
+ * @return 0 on success, -EINVAL on a NULL argument.
+ */
+static int stm32_capi_uart_irq_tx_ready(struct capi_uart_handle *handle,
+					bool *ready)
+{
+	struct stm32_uart_priv_handle *priv;
+
+	if (!handle || !handle->priv || !ready)
+		return -EINVAL;
+
+	priv = handle->priv;
+	*ready = __HAL_UART_GET_FLAG(priv->huart, UART_FLAG_TXE) ? true : false;
+
+	return 0;
+}
+
+/**
+ * @brief Report whether the last transmission has fully completed.
+ * @param handle - Pointer to the UART handle.
+ * @param complete - Output: true if TC (shift register drained) is set.
+ * @return 0 on success, -EINVAL on a NULL argument.
+ */
+static int stm32_capi_uart_irq_tx_complete(struct capi_uart_handle *handle,
+		bool *complete)
+{
+	struct stm32_uart_priv_handle *priv;
+
+	if (!handle || !handle->priv || !complete)
+		return -EINVAL;
+
+	priv = handle->priv;
+	*complete = __HAL_UART_GET_FLAG(priv->huart, UART_FLAG_TC) ? true : false;
+
+	return 0;
+}
+
+/**
+ * @brief Enable or disable the RX-data-register-not-empty interrupt.
+ * @param handle - Pointer to the UART handle.
+ * @param enable - true to enable, false to disable.
+ * @return 0 on success, -EINVAL on a NULL handle.
+ */
+static int stm32_capi_uart_set_irq_rx(struct capi_uart_handle *handle,
+				      bool enable)
+{
+	struct stm32_uart_priv_handle *priv;
+
+	if (!handle || !handle->priv)
+		return -EINVAL;
+
+	priv = handle->priv;
+
+	if (enable)
+		__HAL_UART_ENABLE_IT(priv->huart, UART_IT_RXNE);
+	else
+		__HAL_UART_DISABLE_IT(priv->huart, UART_IT_RXNE);
+
+	return 0;
+}
+
+/**
+ * @brief Report whether a received byte is waiting in RDR.
+ * @param handle - Pointer to the UART handle.
+ * @param ready - Output: true if RXNE is set.
+ * @return 0 on success, -EINVAL on a NULL argument.
+ */
+static int stm32_capi_uart_irq_rx_ready(struct capi_uart_handle *handle,
+					bool *ready)
+{
+	struct stm32_uart_priv_handle *priv;
+
+	if (!handle || !handle->priv || !ready)
+		return -EINVAL;
+
+	priv = handle->priv;
+	*ready = __HAL_UART_GET_FLAG(priv->huart, UART_FLAG_RXNE) ? true : false;
+
+	return 0;
+}
+
+/**
+ * @brief Enable or disable the RX error interrupts (parity + frame/noise/overrun).
+ * @param handle - Pointer to the UART handle.
+ * @param enable - true to enable, false to disable.
+ * @return 0 on success, -EINVAL on a NULL handle.
+ *
+ * PE has its own enable bit; framing, noise and overrun share the single error
+ * interrupt (UART_IT_ERR), so both are toggled together.
+ */
+static int stm32_capi_uart_set_irq_err(struct capi_uart_handle *handle,
+				       bool enable)
+{
+	struct stm32_uart_priv_handle *priv;
+
+	if (!handle || !handle->priv)
+		return -EINVAL;
+
+	priv = handle->priv;
+
+	if (enable) {
+		__HAL_UART_ENABLE_IT(priv->huart, UART_IT_PE);
+		__HAL_UART_ENABLE_IT(priv->huart, UART_IT_ERR);
+	} else {
+		__HAL_UART_DISABLE_IT(priv->huart, UART_IT_PE);
+		__HAL_UART_DISABLE_IT(priv->huart, UART_IT_ERR);
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Report whether any enabled UART interrupt currently has its flag set.
+ * @param handle - Pointer to the UART handle.
+ * @param pending - Output: true if an enabled source is asserting.
+ * @return 0 on success, -EINVAL on a NULL argument.
+ *
+ * A flag alone is not enough (TXE, for instance, sits high whenever the line is
+ * idle); each flag is qualified by its interrupt-enable so the result reflects
+ * a genuinely pending interrupt. Framing/noise/overrun share UART_IT_ERR.
+ */
+static int stm32_capi_uart_is_irq_pending(struct capi_uart_handle *handle,
+		bool *pending)
+{
+	struct stm32_uart_priv_handle *priv;
+	UART_HandleTypeDef *huart;
+	bool pend = false;
+
+	if (!handle || !handle->priv || !pending)
+		return -EINVAL;
+
+	priv = handle->priv;
+	huart = priv->huart;
+
+	if (__HAL_UART_GET_FLAG(huart, UART_FLAG_RXNE) &&
+	    __HAL_UART_GET_IT_SOURCE(huart, UART_IT_RXNE))
+		pend = true;
+	if (__HAL_UART_GET_FLAG(huart, UART_FLAG_TXE) &&
+	    __HAL_UART_GET_IT_SOURCE(huart, UART_IT_TXE))
+		pend = true;
+	if (__HAL_UART_GET_FLAG(huart, UART_FLAG_TC) &&
+	    __HAL_UART_GET_IT_SOURCE(huart, UART_IT_TC))
+		pend = true;
+	if (__HAL_UART_GET_FLAG(huart, UART_FLAG_PE) &&
+	    __HAL_UART_GET_IT_SOURCE(huart, UART_IT_PE))
+		pend = true;
+	if ((__HAL_UART_GET_FLAG(huart, UART_FLAG_ORE) ||
+	     __HAL_UART_GET_FLAG(huart, UART_FLAG_FE) ||
+	     __HAL_UART_GET_FLAG(huart, UART_FLAG_NE)) &&
+	    __HAL_UART_GET_IT_SOURCE(huart, UART_IT_ERR))
+		pend = true;
+
+	*pending = pend;
+
+	return 0;
+}
+
+/**
+ * @brief Transmit one 9-bit frame (multi-drop address or data).
+ * @param handle - Pointer to the UART handle.
+ * @param data - Value to send; only the low 9 bits are used.
+ * @param is_address - true to set the 9th (address-mark) bit.
+ * @return 0 on success, -EINVAL on a NULL handle, -ENOTSUP if the port is not
+ *         configured for a 9-bit word length.
+ *
+ * 9-bit framing requires the port to have been opened with a 9-bit word length
+ * (WordLength_9B); otherwise the 9th bit cannot be expressed and the call is
+ * rejected rather than silently truncated.
+ */
+static int stm32_capi_uart_transmit_9bit(struct capi_uart_handle *handle,
+		uint16_t data, bool is_address)
+{
+	struct stm32_uart_priv_handle *priv;
+	uint16_t frame;
+	int ret;
+
+	if (!handle || !handle->priv)
+		return -EINVAL;
+
+	priv = handle->priv;
+
+	if (priv->huart->Init.WordLength != UART_WORDLENGTH_9B ||
+	    priv->huart->Init.Parity != UART_PARITY_NONE)
+		return -ENOTSUP;
+
+	frame = (uint16_t)((data & 0xFFU) | (is_address ? 0x100U : 0x000U));
+
+	ret = HAL_UART_Transmit(priv->huart, (uint8_t *)&frame, 1, HAL_MAX_DELAY);
+	switch (ret) {
+	case HAL_OK:
+		break;
+	case HAL_BUSY:
+		return -EBUSY;
+	case HAL_TIMEOUT:
+		return -ETIMEDOUT;
+	default:
+		return -EIO;
+	};
+
+	return 0;
+}
+
+/**
+ * @brief Receive one 9-bit frame (multi-drop address or data).
+ * @param handle - Pointer to the UART handle.
+ * @param data - Output: the received 9-bit value.
+ * @param is_address - Output: true if the 9th (address-mark) bit was set.
+ * @return 0 on success, -EINVAL on a NULL argument, -ENOTSUP if the port is not
+ *         configured for a 9-bit word length.
+ */
+static int stm32_capi_uart_receive_9bit(struct capi_uart_handle *handle,
+					uint16_t *data, bool *is_address)
+{
+	struct stm32_uart_priv_handle *priv;
+	uint16_t frame;
+	int ret;
+
+	if (!handle || !handle->priv || !data || !is_address)
+		return -EINVAL;
+
+	priv = handle->priv;
+
+	if (priv->huart->Init.WordLength != UART_WORDLENGTH_9B ||
+	    priv->huart->Init.Parity != UART_PARITY_NONE)
+		return -ENOTSUP;
+
+	ret = HAL_UART_Receive(priv->huart, (uint8_t *)&frame, 1, HAL_MAX_DELAY);
+	switch (ret) {
+	case HAL_OK:
+		break;
+	case HAL_BUSY:
+		return -EBUSY;
+	case HAL_TIMEOUT:
+		return -ETIMEDOUT;
+	default:
+		return -EIO;
+	};
+
+	*data = (uint16_t)(frame & 0x1FFU);
+	*is_address = (frame & 0x100U) ? true : false;
+
+	return 0;
+}
+
+/**
+ * @brief Manually drive RTS/CTS (not supported on STM32).
+ * @return -EINVAL on a NULL handle, otherwise -ENOTSUP.
+ *
+ * The STM32 USART manages RTS/CTS in hardware when flow control is enabled;
+ * there is no register to override the line state by hand, so the request is
+ * refused with -ENOTSUP rather than pretending to have applied it.
+ */
+static int stm32_capi_uart_set_flow_control_state(struct capi_uart_handle
+		*handle,
+		bool rts_state, bool cts_state)
+{
+	(void)rts_state;
+	(void)cts_state;
+
+	if (!handle || !handle->priv)
+		return -EINVAL;
+
+	return -ENOTSUP;
+}
+
+/**
+ * @brief Read back the RTS/CTS line state.
+ * @param handle - Pointer to the UART handle.
+ * @param rts_state - Output: unused.
+ * @param cts_state - Output: live CTS line level from the status register.
+ * @return 0 on success, -EINVAL on a NULL argument.
+ *
+ * CTS is observable via the status register; the RTS output level is not
+ * read-back-able on the STM32 USART, so it is reported as deasserted.
+ */
+static int stm32_capi_uart_get_flow_control_state(struct capi_uart_handle
+		*handle,
+		bool *rts_state, bool *cts_state)
+{
+	struct stm32_uart_priv_handle *priv;
+
+	if (!handle || !handle->priv || !rts_state || !cts_state)
+		return -EINVAL;
+
+	priv = handle->priv;
+
+	*rts_state = false;
+	*cts_state = __HAL_UART_GET_FLAG(priv->huart, UART_FLAG_CTS) ? true : false;
+
+	return 0;
+}
+
 /**
  * @brief UART ISR entry point — delegates to HAL_UART_IRQHandler.
  * @param handle - Pointer to the UART handle (cast from void *).
@@ -641,6 +1162,24 @@ const struct capi_uart_ops stm32_capi_uart_ops = {
 	.receive_async = stm32_capi_uart_receive_async,
 	.get_interrupt_reason = stm32_capi_uart_get_interrupt_reason,
 	.get_line_status = stm32_capi_uart_get_line_status,
+	.enable_fifo = stm32_capi_uart_enable_fifo,
+	.flush_tx_fifo = stm32_capi_uart_flush_tx_fifo,
+	.flush_rx_fifo = stm32_capi_uart_flush_rx_fifo,
+	.get_rx_fifo_count = stm32_capi_uart_get_rx_fifo_count,
+	.get_tx_fifo_count = stm32_capi_uart_get_tx_fifo_count,
+	.transmit_9bit = stm32_capi_uart_transmit_9bit,
+	.receive_9bit = stm32_capi_uart_receive_9bit,
+	.set_flow_control_state = stm32_capi_uart_set_flow_control_state,
+	.get_flow_control_state = stm32_capi_uart_get_flow_control_state,
+	.read_byte = stm32_capi_uart_read_byte,
+	.write_byte = stm32_capi_uart_write_byte,
+	.set_irq_tx = stm32_capi_uart_set_irq_tx,
+	.irq_tx_ready = stm32_capi_uart_irq_tx_ready,
+	.irq_tx_complete = stm32_capi_uart_irq_tx_complete,
+	.set_irq_rx = stm32_capi_uart_set_irq_rx,
+	.irq_rx_ready = stm32_capi_uart_irq_rx_ready,
+	.set_irq_err = stm32_capi_uart_set_irq_err,
+	.is_irq_pending = stm32_capi_uart_is_irq_pending,
 	.isr = stm32_capi_uart_isr,
 };
 

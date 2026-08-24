@@ -11,7 +11,6 @@ Supported Evaluation Boards
 
 * `ADG1712 <https://www.analog.com/ADG1712>`_
 
-
 Overview
 --------
 
@@ -90,12 +89,6 @@ The ADG1712 eval devices have to be supplied with +5V voltage on VDD pin. Connec
        - JP2, JP3, JP4, JP5: removed
        - P11, P12, P13, P14: inserted
 
-
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -111,12 +104,8 @@ Basic example
 This is a simple example which initializes the ADG1712 and sets switch 1 on and off in a while loop
 with a period of 2s. The data is printed on the serial interface.
 
-To build the basic example, add the following to the Makefile:
-
-.. code-block:: bash
-
-        EXAMPLE = basic
-
+This example is built by selecting the ``basic`` variant (see the Build
+Command section below).
 
 No-OS Supported Platforms
 -------------------------
@@ -151,6 +140,9 @@ The labels on the eval board are wrong. DIGIO2 (IN2) controls SW4 (S4, D4), and 
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``.
 Available boards: ``max32655fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -158,6 +150,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

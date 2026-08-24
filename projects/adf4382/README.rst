@@ -14,7 +14,7 @@ Supported Evaluation Boards
 
 * `EVAL-ADF4382 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4382.html>`_
 * `EVAL-ADF4382A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4382a.html>`_
-* `EVAL-ADF43823 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4383.html>`_
+* `EVAL-ADF4383 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4383.html>`_
 
 Overview
 --------
@@ -331,26 +331,21 @@ connectors (P5 and P2).
     +-----+-------------------+------------------------------------------+
     | 7   | SCLK              | Connected to SCLK of the ADF4382         |
     +-----+-------------------+------------------------------------------+
-    | 8   | CSB                | Connected to CSB of the ADF4382         |
+    | 8   | CSB               | Connected to CSB of the ADF4382          |
     +-----+-------------------+------------------------------------------+
     | 9   | GND               | Connected to Ground                      |
     +-----+-------------------+------------------------------------------+
     | 10  | NC                | Not connected                            |
     +-----+-------------------+------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
 The initialization data used in the examples is taken out from:
-`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4382/src/common>`_
+`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adf4382/src/common>`_
 
 The macros used in Common Data are defined in platform specific files found in:
-`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4382/src/platform>`_
+`Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adf4382/src/platform>`_
 
 Basic example
 ^^^^^^^^^^^^^
@@ -360,17 +355,6 @@ above mentioned common files and applies them to the IC. By default reference
 frequency is provided by the local oscillator of the board and channel 0 is
 active with a power level of 9. Subsequently the example sets a test frequency
 of 20 GHz and adjusts the phase by 1ns.
-
-
-In order to build the basic example make sure you have the following
-configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4382/Makefile>`_
-
-.. code-block:: bash
-
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = y
-	IIO_EXAMPLE = n
 
 IIO example
 ^^^^^^^^^^^
@@ -387,15 +371,6 @@ of all the back-end logic needed to setup the IIO server.
 
 This example initializes the IIO device and calls the IIO app as shown in:
 `IIO Example <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4382/src/examples/iio_example>`_
-
-In order to build the IIO project make sure you have the following configuration in:
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4382/Makefile>`_
-
-.. code-block:: bash
-
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = n
-	IIO_EXAMPLE = y
 
 No-OS Supported Platforms
 -------------------------
@@ -416,7 +391,12 @@ or to J18 (the SMA interface).
 
 **Build Command**
 
-Available variants: ``basic``, ``iio``. Replace ``--variant`` accordingly.
+For toolchain setup and prerequisites, see the
+:doc:`STM32 CMake build guide </build_guides/build_stm32_cmake>`.
+
+Available variants: ``basic``, ``iio``.
+Available boards: ``sdp-ck1z``.
+Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
@@ -424,6 +404,9 @@ Available variants: ``basic``, ``iio``. Replace ``--variant`` accordingly.
 	# in a default install location)
 	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 	cd no-OS
 
@@ -451,6 +434,29 @@ board. Additionally a 6V power supply needs to be connected to either J14 - J15
 or to J18 (the SMA interface).
 
 **Build Command**
+
+For the make-based build flow and prerequisites, see the
+`No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_.
+
+In order to build the basic example, make sure you have the following
+configuration in the
+`Makefile <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4382/Makefile>`_:
+
+.. code-block:: bash
+
+	# Select the example you want to enable by choosing y for enabling and n for disabling
+	BASIC_EXAMPLE = y
+	IIO_EXAMPLE = n
+
+In order to build the IIO project, make sure you have the following
+configuration in the
+`Makefile <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4382/Makefile>`_:
+
+.. code-block:: bash
+
+	# Select the example you want to enable by choosing y for enabling and n for disabling
+	BASIC_EXAMPLE = n
+	IIO_EXAMPLE = y
 
 .. code-block:: bash
 

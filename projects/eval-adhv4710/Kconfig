@@ -9,4 +9,19 @@ config EVAL_ADHV4710_ADHV4710_EXAMPLE
 
 endchoice
 
+choice EVAL_ADHV4710_VARIANT
+	prompt "Device variant"
+	default EVAL_ADHV4710_VARIANT_ADHV4710
+	help
+	  Select the amplifier variant on the evaluation board. The driver
+	  validates CTRL_REG_26 against the expected product-version at init.
+
+config EVAL_ADHV4710_VARIANT_ADHV4710
+	bool "ADHV4710"
+
+config EVAL_ADHV4710_VARIANT_ADHV4711
+	bool "ADHV4711"
+
+endchoice
+
 endmenu

@@ -1,0 +1,23 @@
+menu "ad7606x-fmc Configuration"
+
+choice AD7606X_FMC_EXAMPLE
+	prompt "Example variant"
+	default AD7606X_FMC_BASIC_EXAMPLE
+
+config AD7606X_FMC_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Basic example that initializes the AD7606X ADC over the SPI Engine or
+	  parallel AXI interface, captures samples via AXI DMA, and prints the
+	  results over UART.
+
+config AD7606X_FMC_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the AD7606X ADC through the IIO framework,
+	  enabling host-side data capture via libiio over UART.
+
+endchoice
+
+endmenu

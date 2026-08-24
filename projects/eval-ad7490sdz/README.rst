@@ -78,11 +78,6 @@ voltage of the SPI communication).
 	| LK17	 | A		|
 	+--------+--------------+
 
-No-OS Build Setup
------------------
-
-`Please see: <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -98,13 +93,8 @@ Basic Example
 This is a simple example which initializes the ad7490 and reads a single
 voltage channel continuoussly applying scale to it.
 
-In order to build the basic example make sure you have the following configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-ad7490sdz/Makefile>`_
-
-.. code-block:: bash
-
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	EXAMPLE ?= basic
+This example is built by selecting the ``basic`` variant (see the Build
+Command section below).
 
 IIO example
 ^^^^^^^^^^^
@@ -116,13 +106,8 @@ running an IIO app through the IIO lib. Finally the client can
 configure the ad7490 in every way possible througout an IIO
 interface such as IIO oscilloscope.
 
-In order to build the IIO example make sure you have the following configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-ad7490sdz/Makefile>`_
-
-.. code-block:: bash
-
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	EXAMPLE ?= iio_example
+This example is built by selecting the ``iio_example`` variant (see the Build
+Command section below).
 
 No-OS Supported Platforms
 -------------------------
@@ -155,6 +140,9 @@ Maxim Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``, ``iio_example``.
 Available boards: ``ad-apard32690-sl``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -162,6 +150,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

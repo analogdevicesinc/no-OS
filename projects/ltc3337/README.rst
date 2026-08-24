@@ -48,11 +48,6 @@ Power Supply Requirements
 * 8 selectable peak input current limits: 5 mA, 10 mA, 15 mA, 20 mA,
   25 mA, 50 mA, 75 mA, 100 mA
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -70,11 +65,7 @@ The basic example initializes the LTC3337 device and continuously reads
 accumulated charge, battery input/output voltages (with iPeak on and off),
 and die temperature, printing the results over UART.
 
-This is the only example in this project, so it builds by default:
-
-.. code-block:: bash
-
-	make
+This is the only example in this project, so it builds by default.
 
 No-OS Supported Platforms
 -------------------------
@@ -107,6 +98,9 @@ DC2973A and the MAX32655 board:
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``.
 Available boards: ``max32655fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -114,6 +108,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

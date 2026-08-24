@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/env python3
 
 import argparse
 import json
@@ -15,16 +15,18 @@ from pathlib import Path
 # Discovery helpers for the CMake build system. no_os_build.py guards its CLI
 # under "if __name__ == '__main__':", so importing it has no side effects.
 from no_os_build import (
+	CMAKE,
 	load_presets,
 	discover_all_combinations,
 	filter_combinations,
 	combo_build_dir,
+	xilinx_hardware_name,
 )
 
 # Platforms handled by the CMake build system (the only ones with board
 # presets under board_configs/). A project's builds.json is expected to carry
 # only the platforms NOT in this set; its CMake combos cover these.
-CMAKE_PLATFORMS = {'maxim', 'stm32', 'pico', 'aducm3029'}
+CMAKE_PLATFORMS = {'maxim', 'stm32', 'pico', 'aducm3029', 'xilinx'}
 
 TGREEN =  '\033[32m' # Green Text	
 TBLUE =  '\033[34m' # Green Text	
@@ -108,35 +110,9 @@ def shell_source(script):
 
 	os.environ.update(env)
 
-def re_run_stm32(cmd):
-	global ERR
-	log("Project first failed, rebuild to check if the error persists")
-	log("make reset")
-	cmd_reset = cmd.replace("all", "reset")
-	err = os.system(cmd_reset + ' >> %s 2>&1' % log_file)
-	if err != 0:
-		ERR = 1
-		log_err("ERROR")
-		return err
-
-	log("make all")
-	err = os.system(cmd + ' >> %s 2>&1' % log_file)
-	if err != 0:
-		log("Error persits, not a random fail, please check!")
-	else:
-		log("First fail was possibly a random one")
-	return err
-
 def run_cmd(cmd):
 	global ERR
-	tmp = cmd.split(' ')
-	if tmp[0] == 'make':
-		log('make ' + tmp[-1])
-	else:
-		if tmp[2] == 'make':
-			log('make ' + tmp[-1])
-		else:
-			log(cmd)
+	log(cmd)
 	sys.stdout.flush()
 	err = os.system('echo %s >> %s' % (cmd, log_file))
 	if err != 0:
@@ -144,11 +120,6 @@ def run_cmd(cmd):
 		return err
 	err = os.system(cmd + ' >> %s 2>&1' % log_file)
 	if err != 0:
-		if 'timeout' in cmd:
-			err = re_run_stm32(cmd)
-			if err == 0:
-				return err
-
 		log_err("ERROR")
 		log("See log %s " \
 		    "-- Use cat (linux) or type (windows) to see colored output"
@@ -159,6 +130,27 @@ def run_cmd(cmd):
 
 def to_blue(str):
 	return TBLUE + str + TWHITE
+
+def cmake_cache_source_mismatch(build_dir, noos):
+	"""True if build_dir's CMakeCache.txt was generated from a different source path.
+
+	CMake refuses to reuse a cache whose CMAKE_HOME_DIRECTORY differs, which
+	happens when CI agents check the repo out under different absolute paths.
+	"""
+	cache = os.path.join(build_dir, 'CMakeCache.txt')
+	if not os.path.isfile(cache):
+		return False
+	want = os.path.realpath(noos)
+	try:
+		with open(cache) as f:
+			for line in f:
+				if line.startswith('CMAKE_HOME_DIRECTORY:'):
+					have = line.split('=', 1)[1].strip()
+					return os.path.realpath(have) != want
+	except OSError:
+		# Unreadable cache: treat as mismatch so --fresh regenerates it cleanly.
+		return True
+	return False
 
 SKIP_DOWNLOAD = None
 key = 'SKIP_DOWNLOAD'
@@ -172,26 +164,50 @@ NEW_HW_DIR_NAME = 'new_hardware'
 
 def process_blacklist():
 	blacklist = []
-	err = os.system('curl -L -H "Accept: application/vnd.github.v3.raw" -H "Authorization: Bearer {}" \'{}\' -o blacklist.txt >> {} 2>&1'
-				.format(TOKEN, blacklist_url, log_file))
-	if err != 0 or (not os.path.isfile('blacklist.txt')):
-		log_err('Can not download blacklist file')
-		return blacklist
-	file = open('blacklist.txt', 'r')
-	for line in file.readlines():
-		project = line.split('#')[0].rstrip().replace('.', '_')
-		if project != '':
-			blacklist.append(project)
+	log('Fetching blacklist from %s' % blacklist_url)
+	result = subprocess.run(
+		['curl', '-f', '-L',
+		 '-H', 'Accept: application/vnd.github.v3.raw',
+		 '-H', 'Authorization: Bearer %s' % TOKEN,
+		 '-o', 'blacklist.txt', blacklist_url],
+		capture_output=True)
+	if result.returncode != 0:
+		fallback_url = str(os.environ.get('BLACKLIST_URL')).format('main')
+		if fallback_url != blacklist_url:
+			log('Blacklist for branch %s not found, falling back to main' % BRANCH)
+			result = subprocess.run(
+				['curl', '-f', '-L',
+				 '-H', 'Accept: application/vnd.github.v3.raw',
+				 '-H', 'Authorization: Bearer %s' % TOKEN,
+				 '-o', 'blacklist.txt', fallback_url],
+				capture_output=True)
+		if result.returncode != 0:
+			log_err('Failed to download blacklist (curl exit %d) -- proceeding without filtering'
+				% result.returncode)
+			return blacklist
+	try:
+		with open('blacklist.txt', 'r') as f:
+			for line in f:
+				project = line.split('#')[0].rstrip().replace('.', '_')
+				if project != '':
+					blacklist.append(project)
+	finally:
+		if os.path.isfile('blacklist.txt'):
+			os.remove('blacklist.txt')
+	if blacklist:
+		log('Blacklist loaded: %d project(s) excluded' % len(blacklist))
+	else:
+		log('Blacklist file is empty -- no projects excluded')
 	return blacklist
 
 def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
-	server_base_path="hdl/"
+	server_base_path = "hdl/"
 	hdl_repo = 'sdg-hdl'
-	pattern = '\d{4}_\d{2}_\d{2}-\d{2}_\d{2}_\d{2}'
+	pattern = r'\d{4}_\d{2}_\d{2}-\d{2}_\d{2}_\d{2}'
 	blacklist = []
 	timestamp_match = re.search(pattern, hdl_branch)
 	if timestamp_match:
-		hdl_branch = re.split('\/', hdl_branch)[0]
+		hdl_branch = hdl_branch.split('/')[0]
 		timestamp_folder = timestamp_match.group()
 
 	if hdl_branch == "main":
@@ -202,15 +218,15 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 		elif check_path(package_version=server_base_path + 'dev/' + hdl_branch + '/', repo=hdl_repo):
 			hdl_branch_path = 'dev/' + hdl_branch + '/hdl_output/'
 		else:
-			print("Error related to hdl branch name: " + hdl_branch)
-			exit()
+			log_err("HDL branch '%s' not found in releases/ or dev/" % hdl_branch)
+			sys.exit(1)
 
 	if timestamp_match:
 		if check_path(package_version=server_base_path + hdl_branch_path + timestamp_folder + '/', repo=hdl_repo):
 			hdl_branch_path += timestamp_folder + '/'
 		else:
-			print("Error related to timestamp folder: " + timestamp_folder + " not existing in hdl_branch: " + hdl_branch)
-			exit()
+			log_err("Timestamp folder '%s' not found in hdl_branch '%s'" % (timestamp_folder, hdl_branch))
+			sys.exit(1)
 
 	builds_dir = _builds_dir + '_' + hdl_branch
 	ensure_dir(builds_dir)
@@ -220,14 +236,25 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 	ensure_dir(hardwares)
 	server_full_path = server_base_path + hdl_branch_path
 	if (_platform is None or _platform == 'xilinx'):
-		blacklist = process_blacklist()
+		if not TOKEN:
+			log('Skipping blacklist: TOKEN not set')
+		elif not blacklist_url or blacklist_url == 'None':
+			log('Skipping blacklist: BLACKLIST_URL not set')
+		else:
+			blacklist = process_blacklist()
 		new_hardwares = os.path.join(builds_dir, NEW_HW_DIR_NAME)
 		ensure_dir(new_hardwares)
-		err = os.system("python3 {}/tools/scripts/download_files.py {} {} {} \"{}\""
-				  .format(noos, noos, builds_dir, server_full_path, blacklist))
-		if err != 0:
-			return
+		download_cmd = [
+			os.path.join(noos, 'tools', 'scripts', 'download_files.py'),
+			noos, builds_dir, server_full_path, str(blacklist)]
+		result = subprocess.run(download_cmd)
+		if result.returncode != 0:
+			log_err("Hardware download failed (exit %d)" % result.returncode)
+			sys.exit(1)
 	return (builds_dir, blacklist)
+
+# Xilinx BSP freshness is validated per-build-dir via xsa_work/.bsp_stamp
+# in config_xilinx_sdk (cmake/xilinx/xilinx_platform_sdk.cmake).
 
 def get_hardware(hardware, platform, builds_dir):
 	if platform == 'xilinx':
@@ -247,7 +274,7 @@ def get_hardware(hardware, platform, builds_dir):
 		if filecmp.cmp(filename, tmp_filename):
 			log("Same hardware from last build, use existing bsp")
 			return (filename, 0, 0)
-	
+
 	err = run_cmd('cp %s %s' % (tmp_filename, filename))
 	if err != 0:
 		return ('', 1, err)
@@ -256,108 +283,20 @@ def get_hardware(hardware, platform, builds_dir):
 
 	return (filename, 1, err)
 
-class BuildConfig:
-	def __init__(self, project_dir, platform, flags, build_name, hardware,
-	             _builds_dir, log_dir):
-		self.project_dir = project_dir
-		self.builds_dir = _builds_dir
-		self.log_dir = log_dir
-		self.project = os.path.basename(project_dir)
-		self.platform = platform
-		self.flags = flags
-		self.build_name = build_name
-		self.hardware = hardware
-		short_build_dir = 'build_%s' % platform
-		self._binary = "%s_%s_%s.elf" % (self.project, platform, build_name)
-		self.boot_dir = "%s_%s_%s" % (self.project, platform, build_name)
-		if hardware != '':
-			short_build_dir = short_build_dir + '_' + hardware
-			self._binary = "%s_%s_%s_%s.elf" % (
-				self.project, platform, build_name, hardware)
-			self.boot_dir = "%s_%s_%s_%s" % (
-				self.project, platform, build_name, hardware)
-		if (platform == 'stm32'):
-			self.build_dir = os.path.join(self.project_dir, 'build')
-		else:
-			self.build_dir = os.path.join(self.builds_dir, short_build_dir)
-		self.binary = os.path.join(self.build_dir, self._binary)
-		self.export_file = os.path.join(self.build_dir, self.binary)
-		if (platform == 'aducm3029' or platform == 'stm32' or platform == 'maxim'):
-			self.export_elf_file = self.export_file
-			self.export_file = self.export_file.replace('.elf', '.hex')
-		if (platform == 'xilinx'):
-			self.export_boot_bin = os.path.join(self.build_dir, "output_boot_bin/BOOT.BIN")
-			self.export_archive = os.path.join(self.build_dir, "bootgen_sysfiles.tar.gz")
-
-	def build(self):
-		global log_file
-	
-		log_file = self._binary.replace('.elf', '.txt')
-		log_file = os.path.join(self.log_dir, log_file)
-
-		log_str = "Building %10s (%8s) -- %s " % (
-			to_blue(self.project), to_blue(self.build_name), to_blue(self.platform))
-		if self.hardware != '':
-			log_str = log_str + "-- %20s" % to_blue(self.hardware)	
-		log(log_str)
-
-		cmd = "make -C " + self.project_dir + \
-			" PLATFORM=" + self.platform + \
-			" BUILD_DIR=" + self.build_dir + \
-			" BINARY=" + self.binary + \
-			" LOCAL_BUILD=n" + \
-			" LINK_SRCS=y " + self.flags
-			
-		if self.hardware != '':
-			(hardware_file, new_hdf, err) = get_hardware(self.hardware,
-						self.platform, self.builds_dir)
-			if err != 0:
-				return err
-			cmd = cmd + ' HARDWARE=%s' % hardware_file
-		else:
-			if os.path.isdir(self.build_dir):
-				new_hdf = False
-			else:
-				new_hdf = True
-		if self.platform == 'stm32':
-			err = run_cmd(cmd + ' reset')
-			if err != 0:
-				return err
-			err = run_cmd("timeout 200s " + cmd + ' VERBOSE=y -j%d all' % (multiprocessing.cpu_count() / 2))
-			if err != 0:
-				if err == 124:
-					log("Build not finished, stopped by timeout")
-				return err
-		else:
-			if new_hdf:
-				err = run_cmd(cmd + ' reset')
-				if err != 0:
-					return err
-
-			err = run_cmd(cmd + ' update')
-			if err != 0:
-				return err
-			err = run_cmd(cmd + ' clean')
-			if err != 0:
-				return err
-			err = run_cmd(cmd + ' -j%d all' % (multiprocessing.cpu_count() / 2))
-			if err != 0:
-				return err
-		
-		log_success("DONE")
-		log_file = DEFAULT_LOG_FILE
-
-		return 0
-
 def build_cmake_project(noos, project, _platform, _build_name, export_dir,
-			log_dir, cmake_builds_dir):
-	"""Build the CMake/Kconfig (Maxim/STM32) side of a project.
+			log_dir, cmake_builds_dir, builds_dir):
+	"""Build the CMake/Kconfig (Maxim/STM32/Pico/Xilinx) side of a project.
 
 	Discovers the project's project/variant/board combinations from the board
 	presets and per-project *.conf files (reusing no_os_build.py for discovery)
 	and builds each by invoking no_os_build.py as a subprocess, so the CI console
 	shows the invocation while its output is redirected into the per-combination
 	log.
+
+	For xilinx combos the per-(variant, board) hardware name is resolved and its
+	downloaded .xsa (in <builds_dir>/hardware/, placed by get_hardware) is passed
+	through to cmake as --hardware. builds_dir is the hardware-cache root (the
+	same dir configfile_and_download_all_hw populated).
 
 	Returns 1 if all combinations succeeded, 0 if any failed, or None if there
 	were no combinations for the requested platform (so the caller can tell a
@@ -399,13 +338,40 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 
 		# Bring in the platform SDK environment (MAXIM_LIBRARIES, STM32CUBEMX, ...).
 		env = dict(os.environ)
-		shell_source(environment_path_files + platform + "_environment.sh")
-
+		
 		# The final link + .hex/.bin generation runs as a custom command whose
 		# failure does NOT report as a non-zero exit. So the .elf is the source
 		# of truth: remove any stale one, build, then require it.
 		if elf.is_file():
 			elf.unlink()
+
+		# Xilinx builds need the board .xsa: resolve the hardware name for this
+		# (variant, board) and pass the downloaded file through to cmake. The
+		# .xsa was fetched into <builds_dir>/new_hardware/<name>/system_top.xsa
+		# by configfile_and_download_all_hw; get_hardware copies/renames it into
+		# <builds_dir>/hardware/<name>.xsa and returns that path.
+		hardware_arg = ""
+		new_hdf = False
+		if platform == 'xilinx':
+			hw_name = xilinx_hardware_name(Path(noos), project, variant, board)
+			if not hw_name:
+				log_err("ERROR")
+				log("%s/%s/%s: no CONFIG_XILINX_HDL_DESIGN in %s.conf" % (
+					project, variant, board, variant))
+				ERR = 1
+				ok = 0
+				os.environ.clear(); os.environ.update(env)
+				continue
+			(hardware_file, new_hdf, hw_err) = get_hardware(hw_name, 'xilinx', builds_dir)
+			if hw_err != 0 or not hardware_file:
+				log_err("ERROR")
+				log("%s: could not resolve .xsa for hardware '%s' (not downloaded?)" % (
+					project, hw_name))
+				ERR = 1
+				ok = 0
+				os.environ.clear(); os.environ.update(env)
+				continue
+			hardware_arg = " --hardware %s" % hardware_file
 
 		# Delegate the actual build to no_os_build.py. Suppress its
 		# spinner/summary (not useful on CI); the real cmake output lands in
@@ -414,11 +380,22 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		jobs = int(multiprocessing.cpu_count() / 2) or 1
 		# Pass an absolute --build-dir: no_os_build anchors a relative one to the
 		# repo root, which would not match the build_dir we clean/probe here.
+		# Xilinx: keep the cached BSP, clean only objects unless the .xsa changed
+		# or the cache came from a different source path (another CI agent).
+		stale_cache = platform == 'xilinx' and cmake_cache_source_mismatch(str(build_dir), noos)
+		if platform == 'xilinx' and build_dir.exists() and not new_hdf and not stale_cache:
+			# CMAKE, not bare 'cmake': the sourced xilinx env leads PATH with Vitis's broken one.
+			clean_cmd = "%s --build %s --target clean > /dev/null 2>&1" % (CMAKE, build_dir)
+			os.system(clean_cmd)
+			fresh_flag = ""
+		else:
+			fresh_flag = " --fresh"
+		
 		build_cmd = ("python3 %s/tools/scripts/no_os_build.py build"
 			     " --project %s --variant %s --board %s"
-			     " --build-dir %s --jobs %d --probe openocd --fresh"
+			     " --build-dir %s --jobs %d --probe openocd%s%s"
 			     % (noos, project, variant, board,
-				os.path.abspath(build_dir_base), jobs))
+				os.path.abspath(build_dir_base), jobs, fresh_flag, hardware_arg))
 		log(build_cmd)
 		sys.stdout.flush()
 		err = os.system(build_cmd + ' > /dev/null 2>&1')
@@ -432,7 +409,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		cmake_log = build_dir / 'build.log'
 		if cmake_log.is_file():
 			import shutil
-			shutil.copy2(str(cmake_log), dst_log)
+			shutil.copy(str(cmake_log), dst_log)
 		else:
 			open(dst_log, 'w').close()
 
@@ -454,7 +431,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 			ok = 0
 			continue
 
-		for ext in ('elf', 'hex', 'bin'):
+		for ext in ('elf', 'hex', 'bin', 'uf2'):
 			src = out_dir / ('%s.%s' % (project, ext))
 			if src.is_file():
 				run_cmd("cp %s %s" % (src, os.path.join(project_export, '%s.%s' % (name, ext))))
@@ -471,120 +448,27 @@ def main():
 	ensure_dir(log_dir)
 	(builds_dir, blacklist) = configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch)
 	for project in os.listdir(projets):
-		binary_created = False
 		if _project is not None:
 			if _project != project:
 				continue
 		project_dir = os.path.join(projets, project)
-		build_file = os.path.join(project_dir, 'builds.json')
-		# A project can have a CMakeLists.txt (Maxim/STM32 via CMake), a
-		# builds.json (other platforms via legacy make), or both. The two are
-		# detected independently rather than keying solely on builds.json.
-		has_cmake = os.path.isfile(os.path.join(project_dir, 'CMakeLists.txt'))
-		has_builds = os.path.isfile(build_file)
-		if not has_cmake and not has_builds:
+		# CMake is the only build system; skip projects without a CMakeLists.txt.
+		if not os.path.isfile(os.path.join(project_dir, 'CMakeLists.txt')):
 			continue
 
 		all_status = os.path.join(log_dir, 'all_builds.txt')
 
-		# CMake/Kconfig side: the Maxim/STM32 combos discovered from the board
-		# presets. build_cmake_project filters to CMAKE_PLATFORMS internally and
-		# returns None when the current -platform job has nothing to build here.
-		if has_cmake:
-			cmake_builds_dir = builds_dir + '_cmake'
-			ensure_dir(cmake_builds_dir)
-			cmake_ok = build_cmake_project(noos, project, _platform, _build_name,
-						 export_dir, log_dir, cmake_builds_dir)
-			if cmake_ok is not None:
-				status = 'OK' if cmake_ok == 1 else 'Fail'
-				os.system('echo Project %20s -- %s >> %s' % (project, status, all_status))
+		# CMake/Kconfig side: combos discovered from the board presets.
+		# build_cmake_project filters to CMAKE_PLATFORMS internally and returns
+		# None when the current -platform job has nothing to build here.
+		cmake_builds_dir = builds_dir + '_cmake'
+		ensure_dir(cmake_builds_dir)
+		cmake_ok = build_cmake_project(noos, project, _platform, _build_name,
+					 export_dir, log_dir, cmake_builds_dir, builds_dir)
+		if cmake_ok is not None:
+			status = 'OK' if cmake_ok == 1 else 'Fail'
+			os.system('echo Project %20s -- %s >> %s' % (project, status, all_status))
 
-		if not has_builds:
-			continue
-
-		fp = open(build_file)
-		configs = json.loads(fp.read())
-		ok = 1
-		legacy_ran = False
-		for (platform, config) in configs.items():
-			if _platform is not None:
-				if _platform != platform:
-					continue
-			for (build_name, params) in config.items():
-				if _build_name is not None:
-					if _build_name != build_name:
-						continue
-				project_export = os.path.join(export_dir, project)
-				ensure_dir(project_export)
-				flags = params['flags']
-				if 'hardware' in params:
-					hardwares = params['hardware']
-				else:
-					hardwares = [""]
-				
-				for hardware in hardwares:
-					if _hw is not None:
-						if _hw != hardware:
-							continue
-					if hardware in blacklist:
-						continue
-					legacy_ran = True
-					env = dict(os.environ)
-					shell_source(environment_path_files + platform + "_environment.sh")
-
-					new_build = BuildConfig(project_dir,
-								platform,
-								flags,
-								build_name,
-								hardware,
-								builds_dir,
-								log_dir)
-					err = new_build.build()
-					os.environ.clear()
-					os.environ.update(env)
-					if err != 0:
-						ok = 0
-						if err == 2:
-							#Keyboard interrupt
-							exit()
-						continue
-					else:
-						if platform == 'xilinx':
-							project_export_dir = os.path.join(project_export, new_build.boot_dir)
-							ensure_dir(project_export_dir)
-							run_cmd("cp %s %s" %
-								(new_build.export_archive, project_export_dir))
-							file = open(os.path.join(new_build.build_dir,"tmp/arch.txt"))
-							if 'sys_mb' not in file.read(): #for sys_mb no BOOT.BIN is created
-								run_cmd("cp %s %s" %
-									(new_build.export_boot_bin, project_export_dir))
-							binary_created = True
-						else:
-							run_cmd("cp %s %s" %
-								(new_build.export_file, project_export))
-							run_cmd("cp %s %s" %
-								(new_build.export_elf_file, project_export))
-							binary_created = True
-			
-		fp.close()
-
-		# Nothing in builds.json matched this -platform job (e.g. a hybrid
-		# project whose only match was the CMake side handled above): don't
-		# emit a misleading legacy status line.
-		if not legacy_ran:
-			continue
-
-		if ok == 1:
-			status = 'OK'
-		else:
-			status = 'Fail'
-		os.system('echo Project %20s -- %s >> %s' % (project, status, all_status))
-		if binary_created:
-			cwd = os.getcwd()
-			os.chdir(project_export)
-			os.system("zip -mr -FS %s.zip . >> %s 2>&1" % ("../"+project, "../../"+log_file))
-			os.chdir(cwd)
-			run_cmd("rm -r %s" % project_export)
 main()
 
 if ERR != 0:

@@ -60,7 +60,8 @@ static int ad5706r_transfer_with_crc(struct ad5706r_dev *dev,
 	int32_t addr;
 	uint8_t cnt = 0;
 	uint8_t crc_cnt = 0;
-	uint8_t i, crc_seed;
+	uint32_t i;
+	uint8_t crc_seed;
 	uint8_t crc_buf[4] = {0};
 	uint8_t byte_cnt = 0;
 	int inc;

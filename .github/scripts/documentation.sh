@@ -1,0 +1,214 @@
+#!/bin/bash
+# Copyright 2023(c) Analog Devices, Inc.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice,
+#    this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+#    this list of conditions and the following disclaimer in the documentation
+#    and/or other materials provided with the distribution.
+#
+# 3. Neither the name of Analog Devices, Inc. nor the names of its
+#    contributors may be used to endorse or promote products derived from this
+#    software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+# EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+# OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+# LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+# EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+set -e
+
+COMMIT_RANGE="$1"
+
+parse_commit_range() {
+        local operation_name="${1:-check}"
+
+	if [ -z "$COMMIT_RANGE" ]
+	then
+		COMMIT_RANGE="${COMMIT_RANGE}"
+	fi
+
+	if [ -z "$COMMIT_RANGE" ]  && [ -n "$TARGET_BRANCH" ]
+	then
+		git fetch --depth=50 origin $TARGET_BRANCH
+		git branch $TARGET_BRANCH origin/$TARGET_BRANCH
+		COMMIT_RANGE="${TARGET_BRANCH}.."
+	fi
+
+	if [ -z "$COMMIT_RANGE" ]
+	then
+		echo "Using only latest commit, since there is no Pull Request"
+		COMMIT_RANGE=HEAD~1
+	fi
+
+	echo "Running $operation_name on commit range '$COMMIT_RANGE'"
+	echo "Commits should be:"
+	if ! git rev-parse $COMMIT_RANGE ; then
+		echo "Failed to parse commit range '$COMMIT_RANGE'"
+		echo "Using only latest commit"
+		COMMIT_RANGE=HEAD~1
+	fi
+}
+
+#################################################################
+# Check if new drivers/projects have README.rst files
+#################################################################
+check_new_components_readme() {
+	echo "Checking for new drivers/projects and their README.rst files..."
+
+	# Excluded driver categories that don't require README.rst
+	# Note: "imu" uses a flat structure with a single shared README.rst
+	local excluded_categories=("api" "platform" "imu")
+
+	# Get all added files only
+	git diff --name-only --diff-filter=A $COMMIT_RANGE | while read -r file; do
+		# Check if this is a file in drivers/ or projects/ directory
+		if [[ "$file" == drivers/*/* ]] || [[ "$file" == projects/* ]]; then
+			local top_dir=$(echo "$file" | cut -d'/' -f1)
+			local component_dir=""
+
+			if [ "$top_dir" = "drivers" ]; then
+				# For drivers: drivers/category/driver_name/...
+				local category=$(echo "$file" | cut -d'/' -f2)
+
+				# Skip excluded driver categories
+				for excluded in "${excluded_categories[@]}"; do
+					if [ "$category" = "$excluded" ]; then
+						continue 2
+					fi
+				done
+
+				component_dir=$(echo "$file" | cut -d'/' -f3)
+				local component_path="drivers/$category/$component_dir"
+			elif [ "$top_dir" = "projects" ]; then
+				# For projects: projects/project_name/...
+				component_dir=$(echo "$file" | cut -d'/' -f2)
+				local component_path="projects/$component_dir"
+			fi
+
+			# Skip if we can't determine component directory
+			if [ -z "$component_dir" ]; then
+				continue
+			fi
+
+			# Check if this appears to be a new component (has source files)
+			if [[ "$file" == *".c" ]] || [[ "$file" == *".h" ]] || [[ "$file" == "Makefile" ]]; then
+				# Check if README.rst exists in the component directory
+				local readme_path="$component_path/README.rst"
+
+				if [ ! -f "$readme_path" ]; then
+					echo "ERROR: New component '$component_dir' in '$top_dir' is missing README.rst file"
+					echo "Please add a README.rst file at: $readme_path"
+					exit 1
+				else
+					echo "Found README.rst for new component: $component_dir"
+				fi
+			fi
+		fi
+	done
+}
+
+#################################################################
+# Check if the sphinx documentation is properly linked to the ToC
+#################################################################
+check_sphinx_doc() {
+
+        git diff --name-only --diff-filter=d $COMMIT_RANGE | while read -r file
+        do
+                if [ $(basename "$file") = "README.rst" ]
+                then
+                        local fn_dir=$(basename "$(dirname "$file")")
+                        local sphinx_path="doc/sphinx/source"
+                        local top_dir=$(echo "$file" | cut -d'/' -f1)
+                        local second_dir=$(echo "$file" | cut -d'/' -f2)
+
+                        # Skip imu category - uses flat structure with single shared README.rst
+                        if [ "$top_dir" = "drivers" ] && [ "$second_dir" = "imu" ]; then
+                                continue
+                        fi
+
+                        # Handle different directory structures for drivers vs projects
+                        if [ "$top_dir" = "projects" ]; then
+                                # Projects are directly under projects/ but docs are categorized
+                                # Find the .rst file anywhere under doc/sphinx/source/projects/
+                                if find "$sphinx_path/$top_dir" -name "$fn_dir.rst" -type f | grep -q .; then
+                                        # File exists, find its category and check if wildcard is in toctree
+                                        actual_location=$(find "$sphinx_path/$top_dir" -name "$fn_dir.rst" -type f | head -1)
+                                        category_dir=$(basename "$(dirname "$actual_location")")
+                                        wildcard_pattern="$top_dir/$category_dir/\*"
+                                        if ! grep -q "$wildcard_pattern" "$sphinx_path/${top_dir}_doc.rst"; then
+                                                echo "Missing wildcard pattern '$wildcard_pattern' in $sphinx_path/${top_dir}_doc.rst"
+                                                exit 1
+                                        fi
+                                else
+                                        # File doesn't exist at all
+                                        echo "Missing $fn_dir.rst file under $sphinx_path/$top_dir"
+                                        exit 1
+                                fi
+                        else
+                                # For drivers and other top-level directories, use the original logic
+                                # Check if the corresponding .rst file exists in the expected subdirectory
+                                if [ -f "$sphinx_path/$top_dir/$second_dir/$fn_dir.rst" ]; then
+                                        # File exists in the expected subdirectory, now check if category is in toctree
+                                        wildcard_pattern="$top_dir/$second_dir/\*"
+                                        if ! grep -q "$wildcard_pattern" "$sphinx_path/${top_dir}_doc.rst"; then
+                                                echo "Missing wildcard pattern '$wildcard_pattern' in $sphinx_path/${top_dir}_doc.rst"
+                                                exit 1
+                                        fi
+                                elif find "$sphinx_path/$top_dir" -name "$fn_dir.rst" -type f | grep -q .; then
+                                        # File exists but in wrong subdirectory
+                                        actual_location=$(find "$sphinx_path/$top_dir" -name "$fn_dir.rst" -type f | head -1)
+                                        expected_location="$sphinx_path/$top_dir/$second_dir/$fn_dir.rst"
+                                        echo "File $fn_dir.rst found at $actual_location but expected at $expected_location"
+                                        exit 1
+                                else
+                                        # File doesn't exist at all
+                                        echo "Missing $fn_dir.rst file under $sphinx_path/$top_dir"
+                                        exit 1
+                                fi
+                        fi
+                fi
+        done
+}
+
+############################################################################
+# Check if the documentation will be generated w/o warnings or errors
+############################################################################
+build_doxygen() {
+        pushd ${TOP_DIR}/doc/doxygen
+        (cd build && ! make -j${NUM_JOBS} doc TOP_DIR=${TOP_DIR} 2>&1 | grep -E "warning:|error:") || {
+                echo "Documentation incomplete or errors in the generation of it have occured!"
+                exit 1
+        }
+        popd
+
+        echo "Documentation was generated successfully!"
+}
+
+build_sphinx() {
+        pushd ${TOP_DIR}/doc/sphinx/source
+
+        make SPHINXOPTS="-W -j${NUM_JOBS}" html
+
+        popd
+}
+
+parse_commit_range
+
+check_new_components_readme
+
+check_sphinx_doc
+
+build_doxygen
+
+build_sphinx

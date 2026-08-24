@@ -254,13 +254,20 @@ target_compile_options(no-os PRIVATE -Wall)
 target_link_options(no-os PRIVATE -Wl,--gc-sections)
 
 # Collect all Kconfig files for dependency tracking
+# This skips builds_main_cmake/, .no_os_venv/, .git/, libraries/ — no broad wildcards that scan the entire source tree.
 file(GLOB_RECURSE ALL_KCONFIG_FILES
-  ${CMAKE_CURRENT_SOURCE_DIR}/Kconfig
-  ${CMAKE_CURRENT_SOURCE_DIR}/*/Kconfig
-  ${CMAKE_CURRENT_SOURCE_DIR}/*/*/Kconfig
-  ${CMAKE_CURRENT_SOURCE_DIR}/*/*/*/Kconfig
-  ${CMAKE_CURRENT_SOURCE_DIR}/*/*/*/*/Kconfig
+  ${CMAKE_CURRENT_SOURCE_DIR}/drivers/Kconfig
+  ${CMAKE_CURRENT_SOURCE_DIR}/iio/Kconfig
+  ${CMAKE_CURRENT_SOURCE_DIR}/network/Kconfig
+  ${CMAKE_CURRENT_SOURCE_DIR}/projects/Kconfig
 )
+list(APPEND ALL_KCONFIG_FILES
+  ${CMAKE_CURRENT_SOURCE_DIR}/Kconfig
+  ${CMAKE_CURRENT_SOURCE_DIR}/libraries/Kconfig
+)
+
+# Drop Kconfigs inside cloned dependency trees; they get re-cloned and break ninja.
+list(FILTER ALL_KCONFIG_FILES EXCLUDE REGEX "/libraries/[^/]+/")
 
 set_property(
   DIRECTORY
@@ -329,6 +336,7 @@ add_subdirectory(libraries)
 add_subdirectory(network)
 add_subdirectory(util)
 add_subdirectory(iio)
+add_subdirectory(jesd204)
 add_subdirectory(drivers)
 add_subdirectory(capi)
 

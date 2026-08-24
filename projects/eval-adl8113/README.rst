@@ -48,11 +48,6 @@ Board Connector and Jumper Settings
 	| VB       | Data bit 1 (GPIO controlled)              |
 	+----------+-------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -131,6 +126,9 @@ Maxim Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``, ``iio_example``.
 Available boards: ``max32655fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -138,6 +136,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

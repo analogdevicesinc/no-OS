@@ -57,14 +57,6 @@ Please see the following table for the pin assignments for the interface
 |    Heartbeat LED |      P0_21       |    LED    |   
 +------------------+------------------+-----------+
 
-
-No-OS Build Setup
------------------
-
-Please see the Build Command section below for the no_os_build.py flow, or
-https://wiki.analog.com/resources/no-os/build for more information.
-
-
 No-OS Supported Examples
 -------------------------
 
@@ -94,30 +86,34 @@ Maxim Platform
 Build Setup
 ^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``curvetrace_example``, ``iio``.
-Available boards: ``max32665fthr``.
+Available boards: ``max32666fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
-   # build the project (iio example on the max32665fthr board)
+   # build the project (iio example on the max32666fthr board)
    python tools/scripts/no_os_build.py build \
-      --project adalm-lsmspg --variant iio --board max32665fthr
+      --project adalm-lsmspg --variant iio --board max32666fthr
 
    # build and flash (requires a connected debug probe)
    python tools/scripts/no_os_build.py build \
-      --project adalm-lsmspg --variant iio --board max32665fthr \
+      --project adalm-lsmspg --variant iio --board max32666fthr \
       --probe openocd --flash
 
 
 Connection Setup
 ^^^^^^^^^^^^^^^^
 
-#. Use a USB Type A to mini-B cable to Connect the Max32665 FTHR board to the 
+#. Use a USB Type A to mini-B cable to Connect the Max32666 FTHR board to the 
    feather connector header of the adalm-lsmspg board.
 #. The adalm-lsmspg board will be powered up and the red HEARTBEAT LED should
    start blinking a pre-defined pattern similar to a plane's beacon.

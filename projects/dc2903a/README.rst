@@ -97,11 +97,6 @@ Connections
 | E23, E25 to E28                  | External supplies for VDDx pins  |
 +----------------------------------+----------------------------------+
 
-No-OS Build Setup
-------------------
-
-Please see: `https://wiki.analog.com/resources/no-os/build`
-
 No-OS Supported Examples
 ------------------------
 
@@ -135,13 +130,13 @@ Hardware Used
 ^^^^^^^^^^^^^
 
 - DC2903A
-- MAX32665
+- MAX32666FTHR
 
 Connections
 ^^^^^^^^^^^
 
 +-----------------------+-----------------------+-----------------------+
-| Description           | DC2903A Connection    | MAX32665 Connection   |
+| Description           | DC2903A Connection    | MAX32666 Connection   |
 +-----------------------+-----------------------+-----------------------+
 | Power Connection      | E6 (VCC)              | Connect to the power  |
 | (VCC)                 |                       | source providing 2.1V |
@@ -154,15 +149,15 @@ Connections
 |                       |                       | required              |
 +-----------------------+-----------------------+-----------------------+
 | SPI Chip Select       | J1 Pin 6 (CS)         | Chip select signal    |
-|                       |                       | from MAX32665         |
+|                       |                       | from MAX32666         |
 +-----------------------+-----------------------+-----------------------+
 | SPI Clock Signal      | J1 Pin 4 (SCL/SCK)    | Serial clock signal   |
-|                       |                       | from MAX32665         |
+|                       |                       | from MAX32666         |
 +-----------------------+-----------------------+-----------------------+
-| SPI Master-Out        | J1 Pin 7 (SDA/MOSI)   | Data from MAX32665 to |
+| SPI Master-Out        | J1 Pin 7 (SDA/MOSI)   | Data from MAX32666 to |
 | Slave-In              |                       | DC2903A               |
 +-----------------------+-----------------------+-----------------------+
-| SPI Master-In         | J1 Pin 5 (MISO)       | Data to MAX32665 from |
+| SPI Master-In         | J1 Pin 5 (MISO)       | Data to MAX32666 from |
 | Slave-Out             |                       | DC2903A               |
 +-----------------------+-----------------------+-----------------------+
 | EEPROM Data           | J1 Pin 9 (EEDA)       | Connect for data      |
@@ -177,21 +172,25 @@ Connections
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``.
-Available boards: ``max32665fthr``.
+Available boards: ``max32666fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
-   # build the project (basic example on the max32665fthr board)
+   # build the project (basic example on the max32666fthr board)
    python tools/scripts/no_os_build.py build \
-      --project dc2903a --variant basic --board max32665fthr
+      --project dc2903a --variant basic --board max32666fthr
 
    # build and flash (requires a connected debug probe)
    python tools/scripts/no_os_build.py build \
-      --project dc2903a --variant basic --board max32665fthr \
+      --project dc2903a --variant basic --board max32666fthr \
       --probe openocd --flash

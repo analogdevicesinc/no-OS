@@ -4,7 +4,7 @@
 *   	     Devices: AD7124-4, AD7124-8
 *
 ********************************************************************************
-* Copyright 2015-2019, 2023(c) Analog Devices, Inc.
+* Copyright 2015-2019, 2023, 2026(c) Analog Devices, Inc.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are met:
@@ -407,6 +407,24 @@ enum ad7124_pga {
 };
 
 /**
+ * @enum ad7124_filter_type
+ * @brief Filter types (matching Linux kernel ad7124 driver)
+ */
+enum ad7124_filter_type {
+	AD7124_FILTER_TYPE_SINC3,
+	AD7124_FILTER_TYPE_SINC3_PF1,
+	AD7124_FILTER_TYPE_SINC3_PF2,
+	AD7124_FILTER_TYPE_SINC3_PF3,
+	AD7124_FILTER_TYPE_SINC3_PF4,
+	AD7124_FILTER_TYPE_SINC3_REJ60,
+	AD7124_FILTER_TYPE_SINC3_SINC1,
+	AD7124_FILTER_TYPE_SINC4,
+	AD7124_FILTER_TYPE_SINC4_REJ60,
+	AD7124_FILTER_TYPE_SINC4_SINC1,
+	AD7124_FILTER_TYPE_NUM,
+};
+
+/**
   * @struct ad7124_channel_setup
   * @brief Channel setup
 **/
@@ -522,6 +540,8 @@ struct ad7124_dev {
 	struct ad7124_channel_setup setups[AD7124_MAX_SETUPS];
 	/* Channel Mapping*/
 	struct ad7124_channel_map chan_map[AD7124_MAX_CHANNELS];
+	/* Reference voltage per setup, mV */
+	uint32_t vref_mv[AD7124_MAX_SETUPS];
 };
 
 struct ad7124_init_param {
@@ -684,6 +704,60 @@ int32_t ad7124_setup(struct ad7124_dev **device,
 
 /* Free the resources allocated by ad7124_setup(). */
 int32_t ad7124_remove(struct ad7124_dev *dev);
+
+/* Get the setup assigned to a channel (reads from hardware). */
+int32_t ad7124_get_ch_setup(struct ad7124_dev *dev,
+			    uint8_t ch_no,
+			    uint8_t *setup_id);
+
+/* Get bipolar/unipolar mode for a channel. */
+int32_t ad7124_get_bipolar(struct ad7124_dev *dev,
+			   uint8_t ch_no,
+			   bool *bipolar);
+
+/* Get PGA bits for a channel. */
+int32_t ad7124_get_pga(struct ad7124_dev *dev,
+		       uint8_t ch_no,
+		       uint8_t *pga_bits);
+
+/* Get reference voltage (mV) for a channel. */
+int32_t ad7124_get_vref_mv(struct ad7124_dev *dev,
+			   uint8_t ch_no,
+			   uint32_t *vref_mv);
+
+/* Set reference voltage (mV) for a setup. */
+int32_t ad7124_set_vref_mv(struct ad7124_dev *dev,
+			   uint8_t setup_id,
+			   uint32_t vref_mv);
+
+/* Get filter type for a setup. */
+int32_t ad7124_get_filter_type(struct ad7124_dev *dev,
+			       uint8_t setup_id,
+			       enum ad7124_filter_type *ftype);
+
+/* Set filter type for a setup. */
+int32_t ad7124_set_filter_type(struct ad7124_dev *dev,
+			       uint8_t setup_id,
+			       enum ad7124_filter_type ftype);
+
+/* Get the 3dB cutoff factor (×1000) for a filter type. */
+uint32_t ad7124_get_3db_filter_factor(enum ad7124_filter_type ftype);
+
+/* Get ODR for a channel (resolves setup via register). Returns Hz, or <0 on error. */
+int32_t ad7124_get_odr_ch(struct ad7124_dev *dev, uint8_t ch_no);
+
+/* Set ODR for a channel (resolves setup via register). odr_hz in integer Hz. */
+int32_t ad7124_set_odr_ch(struct ad7124_dev *dev,
+			  int32_t odr_hz,
+			  uint8_t ch_no);
+
+/* Perform system calibration on a channel. */
+int32_t ad7124_do_calibration(struct ad7124_dev *dev,
+			      uint8_t ch_no,
+			      bool full_scale);
+
+/* Read one raw sample from the internal temperature sensor (hw ch 15). */
+int32_t ad7124_read_temp_raw(struct ad7124_dev *dev, int32_t *val);
 
 #endif /* __AD7124_H__ */
 

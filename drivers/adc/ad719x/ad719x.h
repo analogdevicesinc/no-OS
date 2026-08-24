@@ -212,7 +212,7 @@ struct ad719x_init_param {
 	enum ad719x_chip_id chip_id;
 };
 
-/*! Checks if the AD7139 part is present. */
+/*! Checks if the AD719X part is present. */
 int ad719x_init(struct ad719x_dev **device,
 		struct ad719x_init_param init_param);
 
@@ -280,8 +280,8 @@ int ad719x_continuous_read_avg(struct ad719x_dev *dev,
 /*! Read data from temperature sensor and converts it to Celsius degrees. */
 int ad719x_temperature_read(struct ad719x_dev *dev, float *temp);
 
-/*! Converts 24-bit raw data to volts. */
-float ad719x_convert_to_volts(struct ad719x_dev *dev,
-			      uint32_t raw_data, float v_ref);
+/*! Converts 24-bit raw data to millivolts. */
+float ad719x_convert_to_millivolts(struct ad719x_dev *dev,
+				   uint32_t raw_data, float v_ref);
 
 #endif /* __AD719X_H__ */

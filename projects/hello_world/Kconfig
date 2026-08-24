@@ -1,0 +1,14 @@
+menu "hello_world Configuration"
+
+choice HELLO_WORLD_EXAMPLE
+	prompt "Example variant"
+	default HELLO_WORLD_BASIC_EXAMPLE
+
+config HELLO_WORLD_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Minimal UART hello-world example.
+
+endchoice
+
+endmenu

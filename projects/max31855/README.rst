@@ -68,11 +68,6 @@ Pmod-compatible port (configured for SPI) through connector J1.
 | 6       | VCC     | Power supply                                  |
 +---------+---------+-----------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -176,13 +171,17 @@ Pin 6 (VCC)           VCC
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``, ``iio``.
-Available boards: ``max32650fthr``, ``max32655fthr``, ``max32665fthr``, ``max78000fthr``.
+Available boards: ``max32650fthr``, ``max32655fthr``, ``max32666fthr``, ``max78000fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

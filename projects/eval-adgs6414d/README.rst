@@ -1,7 +1,7 @@
 ADGS6414D Family no-OS Example Project
 ======================================
 
-.. no-os-doxygen::https://www.analog.com/ADGS6414D
+.. no-os-doxygen::
 
 .. contents::
     :depth: 3
@@ -10,7 +10,6 @@ Supported Evaluation Boards
 ---------------------------
 
 * `ADGS6414D <https://www.analog.com/ADGS6414D>`_
-
 
 Overview
 --------
@@ -110,11 +109,6 @@ The ADGS6414D eval devices have to be supplied with +5V voltage on VDD pin. Conn
        JP1, JP2, JP5, JP6, JP7: position A
        JP3, JP4: position B
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -147,11 +141,8 @@ allows the user to set and get switches state using the serial interface.
         h - Help                                                                                                
         q - Quit 
 
-To build the basic example, add the following to the Makefile:
-
-.. code-block:: bash
-
-        EXAMPLE = basic
+This example is built by selecting the ``basic`` variant (see the Build
+Command section below).
 
 No-OS Supported Platforms
 -------------------------
@@ -161,7 +152,7 @@ Maxim Platform
 
 **Used hardware**:
 
-* `EVAL-ADGS-6414D <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adgs6414d.html>`_  and
+* `EVAL-ADGS6414D <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adgs6414d.html>`_  and
 * `MAX32655FTHR <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32655fthr.html>`_
 
 **Connections**:
@@ -184,8 +175,10 @@ Maxim Platform
 | P3                 | SDO      | Data Output (Serial Peripheral Interface)             | P0_22                   |
 +--------------------+----------+-------------------------------------------------------+-------------------------+
 
-
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
 
 Available variants: ``basic``.
 Available boards: ``max32655fthr``.
@@ -194,6 +187,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

@@ -3,7 +3,6 @@ Evaluating the LT3074
 
 .. no-os-doxygen::
 
-
 Contents
 --------
 
@@ -71,11 +70,6 @@ An external power supply between 2.4V to 5.5V can be used for this project.
 	+-----+----------+-------------------------------------------+
 	
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -96,7 +90,7 @@ In order to build the basic example:
 .. code-block:: bash
 
 	python tools/scripts/no_os_build.py build \
-	   --project lt3074 --variant basic --board max32665fthr
+	   --project lt3074 --variant basic --board max32666fthr
 
 IIO example
 ^^^^^^^^^^^
@@ -123,7 +117,7 @@ In order to build the IIO project:
 .. code-block:: bash
 
 	python tools/scripts/no_os_build.py build \
-	   --project lt3074 --variant iio_example --board max32665fthr
+	   --project lt3074 --variant iio_example --board max32666fthr
 
 No-OS Supported Platforms
 -------------------------
@@ -164,21 +158,25 @@ Other connection:
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``, ``iio_example``.
-Available boards: ``max32665fthr``.
+Available boards: ``max32666fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
-   # build the project (basic example on the max32665fthr board)
+   # build the project (basic example on the max32666fthr board)
    python tools/scripts/no_os_build.py build \
-      --project lt3074 --variant basic --board max32665fthr
+      --project lt3074 --variant basic --board max32666fthr
 
    # build and flash (requires a connected debug probe)
    python tools/scripts/no_os_build.py build \
-      --project lt3074 --variant basic --board max32665fthr \
+      --project lt3074 --variant basic --board max32666fthr \
       --probe openocd --flash

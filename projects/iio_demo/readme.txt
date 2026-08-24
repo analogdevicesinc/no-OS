@@ -48,6 +48,15 @@ configured access point and the IIO client connects to the reported IP
 address. The software trigger example requires networking (it is not
 supported over UART).
 
+The EVAL-ADICUP3029 does not carry an on-board Wi-Fi module: an external
+ESP8266 module has to be connected to the EVAL-ADICUP3029 P1 connector. Set
+the UART switch S2 to the "WiFi Module" (right) position to route UART0 to
+the P1 Wi-Fi connector (UART0_TX = P0.10, UART0_RX = P0.11); the module is
+driven over UART0 at 115200 baud and its reset line is not connected (the
+module is reset in software). The ESP8266 must run AT firmware configured
+for 115200 baud, and its CH_PD/EN pin must be tied high (and GPIO0 left high
+at boot) for the module to start; otherwise initialization times out.
+
 Set the network credentials in the iio_wifi (or iio_wifi_with_sw_trig)
 defconfig via CONFIG_WIFI_SSID and CONFIG_WIFI_PWD before building, for
 example:

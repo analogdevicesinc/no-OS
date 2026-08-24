@@ -66,11 +66,6 @@ OS/ALERT  Overtemperature indicator (optional)
 A0-A2     I2C address selection pins
 ========  ==========================================
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -144,6 +139,9 @@ VDD (Pin 8)       Power Supply        3V3
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``, ``iio``.
 Available boards: ``max32650fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -151,6 +149,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

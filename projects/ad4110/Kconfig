@@ -1,0 +1,15 @@
+menu "ad4110 Configuration"
+
+choice AD4110_EXAMPLE
+	prompt "Example variant"
+	default AD4110_UART_EXAMPLE
+
+config AD4110_UART_EXAMPLE
+	bool "UART example"
+	help
+	  Basic UART example that initializes the AD4110 AFE/ADC, configures
+	  it for continuous data capture and prints the results over UART.
+
+endchoice
+
+endmenu

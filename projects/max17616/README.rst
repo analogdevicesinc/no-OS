@@ -69,11 +69,6 @@ For reference, consult the Quick Start Procedure section in the user guide for t
 `MAX17616EVKIT user guide <https://www.analog.com/media/en/technical-documentation/user-guides/max17616evkit.pdf>`_
 `MAX17616AEVKIT user guide <https://www.analog.com/media/en/technical-documentation/user-guides/max17616aevkit.pdf>`_
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -90,13 +85,8 @@ This is a simple example that initializes the MAX17616, and performs telemetry
 readings of the voltage, current and temperature. Status bytes/words are also
 monitored in the example.
 
-In order to build the basic example make sure you have the following
-configuration in the Makefile
-`Basic Example Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max17616/Makefile>`_
-
-.. code-block:: bash
-
-	EXAMPLE ?= basic
+This example is built by selecting the ``basic`` variant (see the Build
+Command section below).
 
 IIO example
 ^^^^^^^^^^^
@@ -117,13 +107,8 @@ all the back-end logic needed to setup the IIO server.
 This example initializes the IIO device and calls the IIO app as shown in:
 `IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max17616/src/examples/iio_example>`_
 
-In order to build the IIO project make sure you have the following
-configuration in the
-`IIO Example Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max17616/Makefile>`_
-
-.. code-block:: bash
-
-	EXAMPLE ?= iio_example
+This example is built by selecting the ``iio_example`` variant (see the Build
+Command section below).
 
 No-OS Supported Platforms
 -------------------------
@@ -153,21 +138,25 @@ Maxim Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``, ``iio_example``.
-Available boards: ``max32665fthr``.
+Available boards: ``max32666fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
-   # build the project (basic example on the max32665fthr board)
+   # build the project (basic example on the max32666fthr board)
    python tools/scripts/no_os_build.py build \
-      --project max17616 --variant basic --board max32665fthr
+      --project max17616 --variant basic --board max32666fthr
 
    # build and flash (requires a connected debug probe)
    python tools/scripts/no_os_build.py build \
-      --project max17616 --variant basic --board max32665fthr \
+      --project max17616 --variant basic --board max32666fthr \
       --probe openocd --flash

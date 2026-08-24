@@ -1,0 +1,30 @@
+menu "ad9371 Configuration"
+
+choice AD9371_EXAMPLE
+	prompt "Example variant"
+	default AD9371_DEMO_EXAMPLE
+
+config AD9371_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Basic initialization and bring-up example for the AD9371 transceiver
+	  via AXI ADC/DAC cores, JESD204 and DMAC, targeting zc706, zcu102, or
+	  kcu105.
+
+config AD9371_DMA_EXAMPLE
+	bool "DMA example"
+	help
+	  DMA-based data capture and playback example for the AD9371 transceiver.
+	  Enables -DDMA_EXAMPLE to activate the DMA transfer code paths.
+
+config AD9371_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the AD9371 transceiver through the IIO
+	  framework via iio_axi_adc and iio_axi_dac, enabling host-side data
+	  capture and playback over UART (IIOD).  Enables -DIIO_SUPPORT.
+
+endchoice
+
+endmenu

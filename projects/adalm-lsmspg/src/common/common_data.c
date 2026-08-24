@@ -44,14 +44,6 @@ struct no_os_spi_init_param ad5592r_spi_ip = {
 	.extra = AD5592R_SPI_EXTRA,
 };
 
-struct no_os_gpio_init_param ad5592r_spi_ss_ip = {
-	.port = AD5592R_SPI_SS_PORT,
-	.number = AD5592R_SPI_SS_NUMBER,
-	.pull = AD5592R_SPI_SS_PULL,
-	.platform_ops = AD5592R_SPI_SS_OPS,
-	.extra = AD5592R_SPI_SS_EXTRA,
-};
-
 struct no_os_uart_init_param uart_ip = {
 	.device_id = UART_DEVICE_ID,
 	.irq_id = UART_IRQ_ID,

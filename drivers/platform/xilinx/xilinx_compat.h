@@ -118,21 +118,20 @@
 #define XPAR_INTC_SINGLE_DEVICE_ID	0
 #endif
 
-/* Note: XPAR_INTC_MAX_NUM_INTR_INPUTS is intentionally NOT provided here.
- * On Vitis 2025+ the BSP's xintc.h pulls in xintc_drv_config.h, which always
- * defines this macro.  Providing a fallback from xparameters.h (which only
- * exposes XPAR_XINTC_0_NUM_INTR_INPUTS) would be redefined later by
- * xintc_drv_config.h, triggering a redefinition warning.  No no-OS code uses
- * this macro outside the xintc.h include chain, so the BSP definition suffices. */
+/* MicroBlaze interrupt controller: Vitis 2025+ moved XPAR_INTC_MAX_NUM_INTR_INPUTS
+ * to xintc_drv_config.h, but that header is only included when SDT (System Device
+ * Tree) mode is enabled (#ifdef SDT in xintc.h).  In the legacy (non-SDT) BSP flow
+ * that no-OS uses, xintc.h includes xparameters.h instead — which no longer defines
+ * this macro in Vitis 2025+.  Provide the fallback here. */
+#if !defined(XPAR_INTC_MAX_NUM_INTR_INPUTS) && defined(XPAR_XINTC_0_NUM_INTR_INPUTS)
+#define XPAR_INTC_MAX_NUM_INTR_INPUTS	XPAR_XINTC_0_NUM_INTR_INPUTS
+#endif
 
 /* Interrupt ID renames: old XPAR_AXI_INTC_<periph>_INTERRUPT_INTR
- * became XPAR_FABRIC_<periph>_INTR in Vitis 2025+. */
-#if !defined(XPAR_AXI_INTC_AXI_TIMER_INTERRUPT_INTR) && defined(XPAR_FABRIC_AXI_TIMER_INTR)
-#define XPAR_AXI_INTC_AXI_TIMER_INTERRUPT_INTR	XPAR_FABRIC_AXI_TIMER_INTR
-#endif
-#if !defined(XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR) && defined(XPAR_FABRIC_AXI_UART_INTR)
-#define XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR	XPAR_FABRIC_AXI_UART_INTR
-#endif
+ * became XPAR_FABRIC_<periph>_INTR in Vitis 2025+.
+ * NOTE: As of the util.py fix that generates XPAR_AXI_INTC_* macros directly
+ * from the XSA for MicroBlaze designs, these fallbacks are no longer needed.
+ * They're removed to avoid redefinition warnings. */
 
 /* SPI device ID and clock frequency renames: Vitis 2025+ uses XPAR_XSPIPS_*
  * instead of the platform-specific XPAR_PS7_SPI_* / XPAR_PSU_SPI_* names,
@@ -169,6 +168,38 @@
 #endif
 #if !defined(XPAR_XUARTPS_1_INTR) && defined(XPAR_XUARTPS_1_INTERRUPTS)
 #define XPAR_XUARTPS_1_INTR			XPAR_XUARTPS_1_INTERRUPTS
+#endif
+
+/* DDR memory base address renames: Vitis 2025+ changed the macro names.
+ * Old: XPAR_PSU_DDR_0_S_AXI_BASEADDR, XPAR_PS7_DDR_0_S_AXI_BASEADDR
+ * New: XPAR_PSU_DDR_0_BASEADDRESS, XPAR_PS7_DDR_0_BASEADDRESS
+ * Also provide XPAR_DDR_MEM_BASEADDR which some projects use as a generic name. */
+#if !defined(XPAR_PSU_DDR_0_S_AXI_BASEADDR) && defined(XPAR_PSU_DDR_0_BASEADDRESS)
+#define XPAR_PSU_DDR_0_S_AXI_BASEADDR		XPAR_PSU_DDR_0_BASEADDRESS
+#endif
+#if !defined(XPAR_PS7_DDR_0_S_AXI_BASEADDR) && defined(XPAR_PS7_DDR_0_BASEADDRESS)
+#define XPAR_PS7_DDR_0_S_AXI_BASEADDR		XPAR_PS7_DDR_0_BASEADDRESS
+#endif
+#if !defined(XPAR_DDR_MEM_BASEADDR)
+#if defined(XPAR_PSU_DDR_0_BASEADDRESS)
+#define XPAR_DDR_MEM_BASEADDR			XPAR_PSU_DDR_0_BASEADDRESS
+#elif defined(XPAR_PS7_DDR_0_BASEADDRESS)
+#define XPAR_DDR_MEM_BASEADDR			XPAR_PS7_DDR_0_BASEADDRESS
+#endif
+#endif
+
+/* MicroBlaze DDR4 memory controller: Vitis 2025+ uses different naming.
+ * Old: XPAR_AXI_DDR_CNTRL_C0_DDR4_MEMORY_MAP_BASEADDR (from hsi::generate_bsp)
+ * New: XPAR_DDR4_0_BASEADDRESS (from vitis.create_platform_component)
+ * Note the suffix: BASEADDR vs BASEADDRESS */
+#if !defined(XPAR_AXI_DDR_CNTRL_C0_DDR4_MEMORY_MAP_BASEADDR)
+#if defined(XPAR_DDR4_0_BASEADDRESS)
+#define XPAR_AXI_DDR_CNTRL_C0_DDR4_MEMORY_MAP_BASEADDR	XPAR_DDR4_0_BASEADDRESS
+#elif defined(XPAR_MIG_0_BASEADDR)
+#define XPAR_AXI_DDR_CNTRL_C0_DDR4_MEMORY_MAP_BASEADDR	XPAR_MIG_0_BASEADDR
+#elif defined(XPAR_DDR4_0_BASEADDR)
+#define XPAR_AXI_DDR_CNTRL_C0_DDR4_MEMORY_MAP_BASEADDR	XPAR_DDR4_0_BASEADDR
+#endif
 #endif
 
 #endif /* _XILINX_COMPAT_H_ */

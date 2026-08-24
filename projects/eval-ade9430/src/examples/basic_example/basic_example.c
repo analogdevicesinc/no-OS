@@ -88,6 +88,12 @@ static int basic_read_temp(struct ade9430_dev *dev)
 			return -ENODATA;
 	}
 
+	/* if conversion succeeded clear the staus bit */
+	ret = ade9430_update_bits(dev, ADE9430_REG_STATUS0, ADE9430_STATUS0_TEMP_RDY,
+				  no_os_field_prep(ADE9430_STATUS0_TEMP_RDY, 1));
+	if (ret)
+		return ret;
+
 	/* if conversion succeeded compute the temperature */
 	ret = ade9430_read(dev, ADE9430_REG_TEMP_RSLT, &temp_raw);
 	if (ret)

@@ -34,6 +34,7 @@
 #include <errno.h>
 #include "example.h"
 #include "common_data.h"
+#include "parameters.h"
 #include "iio_app.h"
 #include "iio_ad559xr.h"
 #include "iio_lm75.h"
@@ -176,7 +177,11 @@ static int init_iio_context(struct iio_app_init_param *iio_app_ip)
 
 	static struct iio_ctx_attr adalm_lsmspg_ctx_attrs[] = {
 		{ .name = "fw_version", .value = "1.0.0" },
+#if (TARGET_NUM == 32655)
+		{ .name = "fw_carrier", .value = "max32655_fthr" },
+#elif (TARGET_NUM == 32665)
 		{ .name = "fw_carrier", .value = "max32666_fthr" },
+#endif
 		{ .name = "hw_mezzanine", .value = "0000" },
 		{ .name = "hw_name", .value = "adalm-lsmspg" },
 		{ .name = "hw_mezzanine_status", .value = "detected" },
@@ -201,7 +206,7 @@ int iio_example(void)
 	struct iio_data_buffer ad5592r_read_data_buffer;
 	struct iio_data_buffer ad5593r_read_data_buffer;
 	struct ad5592r_init_param ad559xr_ip = DEFINE_AD559XR_IP(&ad5592r_spi_ip,
-					       &ad5592r_spi_ss_ip, &ad5593r_i2c_ip);
+					       AD5592R_SPI_SS_IP, &ad5593r_i2c_ip);
 	struct lm75_init_param lm75_ip = {
 		.fault_count = 0, /* POR state */
 		.os_polarity = lm75_os_active_low,

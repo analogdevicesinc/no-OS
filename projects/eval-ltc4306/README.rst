@@ -57,11 +57,6 @@ Board Connectors
 * **RDY LED** - Lights when upstream is disconnected from all downstream
   buses; turns off when at least one connection is established
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -124,14 +119,18 @@ devices.
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``.
-Available boards: ``max32650fthr``, ``max32655fthr``, ``max32660fthr``, ``max32665fthr``.
+Available boards: ``max32650fthr``, ``max32655fthr``, ``max32660fthr``, ``max32666fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
    # point at the Maxim SDK libraries (only if not auto-detected)
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
@@ -163,6 +162,9 @@ downstream devices.
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`ADuCM3029 CMake build guide </build_guides/build_aducm3029_cmake>`.
+
 Available variants: ``basic``.
 Available boards: ``eval-adicup3029``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -171,6 +173,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 
    # point at the CrossCore Embedded Studio install (only if not auto-detected)
    export CCES_HOME=/opt/analog/cces/3.0.3
+   # Windows (PowerShell): $env:CCES_HOME = "C:\analog\cces\3.0.3"
 
    cd no-OS
 

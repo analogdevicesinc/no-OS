@@ -24,7 +24,6 @@ Overview
 - SDP-K1 controller board functions as an interface between a PC and the evaluation board
 - Up to 16 EV-ADF4030SD1Z evaluation boards can be stacked up using the Arduino connector
 
-
 Hardware Specifications
 -----------------------
 
@@ -40,14 +39,12 @@ Reference Input Requirements
 The EV-ADF4030SD1Z has two ways to create the ADF4030 RE-FIN clock, a clock between 10 MHz and 250 MHz as
 follows:
 
-
 * Using a J1 Subminiature Version A (SMA) connector REF_CLK S/E in. Apply a 4 dBm signal, which means a 1 V p-p clock. A 50 Ω load resistor to ground (R1) is populated on board.
 
 * Using a P1 twinax connector (REFIN DIFF). Apply a 320 mV p-p to 2 V p-p differential voltage. 
 
 This must be a AC-coupled input to the ADF4030. This connector is suitable for
 connecting the reference clock from another EV-ADF4030SD1Z.
-
 
 	P5:
 
@@ -137,12 +134,6 @@ connecting the reference clock from another EV-ADF4030SD1Z.
     | 6   | GND               | Not connected                            |
     +-----+-------------------+------------------------------------------+
 
-
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -152,8 +143,6 @@ The initialization data used in the examples is taken out from:
 The macros used in Common Data are defined in platform specific files found in:
 `Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4030/src/platform>`_
 
-
-
 Basic example
 ^^^^^^^^^^^^^
 
@@ -161,14 +150,14 @@ This example initializes the ADF4030 with the configurations provided in the
 above mentioned common files and applies them to the IC. By default reference
 frequency is provided as 125 MHz. Example assign BSYNC1 and BSYNC 2 channels 
 as TX and align them with the 200 ps delay. Then it perform a TDC measurement
-to check the delay between the two channels. 
+to check the delay between the two channels.
 
 In order to build the basic example make sure you are using this command:
 
 .. code-block:: bash
 
-    make EXAMPLE=basic
-
+    python tools/scripts/no_os_build.py build \
+        --project adf4030 --variant basic --board sdp-ck1z
 
 IIO example
 ^^^^^^^^^^^
@@ -190,8 +179,8 @@ In order to build the IIO project make sure you are using this command:
 
 .. code-block:: bash
 
-    make EXAMPLE=iio
-
+    python tools/scripts/no_os_build.py build \
+        --project adf4030 --variant iio --board sdp-ck1z
 
 No-OS Supported Platforms
 -------------------------
@@ -203,7 +192,6 @@ STM32 Platform
 * `EVAL-ADF4030 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4030.html>`_
 * `SDP-K1 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
 
-
 **Connections**:
 
 The SDP connector of the SDP-K1 needs to be connected to P5, P17, P18 and P16 of the EVAL-ADF4030
@@ -211,15 +199,30 @@ board. 12V power supply needs to be connected. Reference clock can be provided u
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`STM32 CMake build guide </build_guides/build_stm32_cmake>`.
+
+Available variants: ``basic``, ``iio``.
+Available boards: ``sdp-ck1z``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-	# add the arm gcc to the PATH variable
-	export PATH=</path/to/arm/gcc/bin>:$PATH
-	# to delete current build
-	make reset
-	# to build the project (selecting the example to run)
-	make EXAMPLE=iio PLATFORM=stm32 HARDWARE=sdp-ck1z.ioc
-	# to flash the code
-	make
-	# copy the adf4030.bin to the mounted SDP-K1
-	cp build/adf4030.bin </path/to/SDP-K1/mounted/folder>
+	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
+	# in a default install location)
+	export STM32CUBEMX=</path/to/stm32cubemx>
+	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
+
+	cd no-OS
+
+	# build the project (iio example on the SDP-K1 board)
+	python tools/scripts/no_os_build.py build \
+		--project adf4030 --variant iio --board sdp-ck1z
+
+	# build and flash (requires a connected debug probe)
+	python tools/scripts/no_os_build.py build \
+		--project adf4030 --variant iio --board sdp-ck1z \
+		--probe openocd --flash

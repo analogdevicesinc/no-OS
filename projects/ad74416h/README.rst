@@ -185,18 +185,13 @@ Facilitates integration with the Arduino ecosystem by providing power
 through isolators and enabling signals; works in conjunction with jumper
 settings on P36 and P38.
 
-No-OS Build Setup
------------------
-
-Please see: :dokuwiki:`No-OS Build Setup </resources/no-os/build>`
-
 No-OS Supported Examples
 ------------------------
 
 The initialization data used in the examples is taken from the
 :git-no-OS:`Project Common Data Path </projects/ad74416h/src/common>`. 
 The macros used in Common Data are defined in platform-specific files found in:
-:git-no-OS:`Platform Platform Configuration Path </projects/ad74416h/src/platform>`.
+:git-no-OS:`Project Platform Configuration Path </projects/ad74416h/src/platform>`.
 
 Basic Example
 ~~~~~~~~~~~~~
@@ -204,14 +199,7 @@ Basic Example
 The Basic Example demonstrates the fundamental initialization and
 configuration of the AD74416H device by setting up communication
 interfaces such as UART, SPI, and GPIO using common data structures in a
-no-OS environment. To enable the Basic Example and disable other
-examples, update the :git-no-OS:`Makefile </projects/ad74416h/Makefile>` 
-with the following settings:
-
-.. code-block:: bash
-
-    # Enable Basic Example 
-    EXAMPLE = basic
+no-OS environment.
 
 No-OS Supported Platforms
 -------------------------
@@ -285,12 +273,22 @@ EVAL-AD74416H board and the EVAL-SDP-CK1Z evaluation board:
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`STM32 CMake build guide </build_guides/build_stm32_cmake>`.
+
+Available variants: ``basic``.
+Available boards: ``sdp-ck1z``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
     # set the path to STM32CubeMX and STM32CubeIDE (only if they are not
     # in a default install location)
     export STM32CUBEMX=</path/to/stm32cubemx>
     export STM32CUBEIDE=</path/to/stm32cubeide>
+    # Windows (PowerShell):
+    #   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+    #   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
     cd no-OS
 
@@ -302,83 +300,3 @@ Build Command
     python tools/scripts/no_os_build.py build \
         --project ad74416h --variant basic --board sdp-ck1z \
         --probe openocd --flash
-
-Mbed Platform
-~~~~~~~~~~~~~
-
-Used Hardware
-^^^^^^^^^^^^^
-
-- :adi:`EVAL-AD74416H`
-- :adi:`EVAL-SDP-CK1Z`
-
-Connections
-^^^^^^^^^^^
-
-The table below summarizes the wiring between the EVAL‑AD74416H board
-and the EVAL‑SDP‑CK1Z evaluation board:
-
-+-----------------+-----------------+-----------------+-----------------+
-| Connection      | EVAL‑AD74416H   | EVAL‑SDP‑CK1Z   | Function /      |
-| Mnemonic        | Board           | Board           | Description     |
-|                 | (Pin/Connector) | (Pin/Connector) |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| SPI_MISO        | MISO pin        | Arduino Uno D12 | SPI data        |
-|                 |                 |                 | Master In,      |
-|                 |                 |                 | Slave Out       |
-+-----------------+-----------------+-----------------+-----------------+
-| SPI_MOSI        | MOSI pin        | Arduino Uno D11 | SPI data        |
-|                 |                 |                 | Master Out,     |
-|                 |                 |                 | Slave In        |
-+-----------------+-----------------+-----------------+-----------------+
-| SPI_SCLK        | SPI_CLK pin     | Arduino Uno D13 | SPI clock       |
-|                 |                 |                 | signal          |
-+-----------------+-----------------+-----------------+-----------------+
-| SPI_CS (SYNC)   | SYNC (via       | Arduino header  | SPI chip select |
-|                 | header P8,      | (chip select    | (active low)    |
-|                 | jumper between  | via header P8)  | - ensure proper |
-|                 | Pin 1 and 3)    |                 | jumper settings |
-+-----------------+-----------------+-----------------+-----------------+
-| UART_TX         | UART_TX_PIN (as | UART_RX pin (as | Serial          |
-|                 | defined in      | defined in      | transmission    |
-|                 | parameters)     | parameters)     | from AD74416H   |
-+-----------------+-----------------+-----------------+-----------------+
-| UART_RX         | UART_RX_PIN (as | UART_TX pin (as | Serial          |
-|                 | defined in      | defined in      | reception to    |
-|                 | parameters)     | parameters)     | AD74416H from   |
-|                 |                 |                 | SDP‑CK1Z board  |
-+-----------------+-----------------+-----------------+-----------------+
-| I2C_SDA         | I2C_SDA line    | SDA_0 (per      | I2C data line   |
-|                 |                 | SDP‑CK1Z        |                 |
-|                 |                 | mapping)        |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| I2C_SCL         | I2C_SCL line    | SCL_0 (per      | I2C clock line  |
-|                 |                 | SDP‑CK1Z        |                 |
-|                 |                 | mapping)        |                 |
-+-----------------+-----------------+-----------------+-----------------+
-
-Build Command
-^^^^^^^^^^^^^
-
-.. code-block:: bash
-
-    # Ensure you are in the project directory where the Makefile is located                                                                                                           
-    cd path/to/your/project                                                                                                                                                          
-                                                                                                                                                                         
-    # Set the target platform                                                                                                               
-    make TARGET=mbed                                                                                                                                                                
-                                                                                                                                                                                     
-    # Set the board type                                                                                                                          
-    make BOARD=EVAL-AD74416H
-
-   # Clean previous build artifacts (if applicable)                                                                                                                                 
-    make clean                                                                                                                                                                       
-                                                                                                                                                                                     
-    # Build the project with MBED-specific drivers and configuration                                                                                                                 
-    make all                                                                                                                                                                         
-                                                                                                                                                                                     
-    # Flash the project to your hardware (modify to your flash tool if needed)                                                                                                       
-    make flash  # or use: mbed flash                                                                                                                                                 
-                                                                                                                                                                                     
-    # Start a debugging session                                                                                                                
-    make debug  # or use: mbed debug --run  

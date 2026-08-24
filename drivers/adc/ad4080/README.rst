@@ -5,6 +5,7 @@ Supported Devices
 -----------------
 
 * `AD4080 <https://www.analog.com/AD4080>`_
+* `AD4081 <https://www.analog.com/AD4081>`_
 * `AD4082 <https://www.analog.com/AD4082>`_
 * `AD4083 <https://www.analog.com/AD4083>`_
 * `AD4085 <https://www.analog.com/AD4085>`_
@@ -26,8 +27,8 @@ to reduce noise and lower the output data rate for applications that do not
 require the lowest latency of the AD4080.
 
 The driver supports several parts of the AD408x family. These parts are
-register-compatible and differ in ADC resolution: the AD4080 and AD4082 are
-20-bit, the AD4083 and AD4085 are 16-bit, and the AD4086, AD4087 and AD4088
+register-compatible and differ in ADC resolution: the AD4080, AD4081 and AD4082
+are 20-bit, the AD4083 and AD4085 are 16-bit, and the AD4086, AD4087 and AD4088
 are 14-bit. The specific part is selected through the ``id`` field of the
 initialization parameter.
 

@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
-# SPDX-License-Identifier: BSD-2-Clause
+# SPDX-License-Identifier: BSD-3-Clause
 # Copyright (c) 2026 Analog Devices, Inc. All rights reserved.
 """
 Xilinx/AMD platform utilities for no-OS build system.
 
-Replacement for util.tcl using the Vitis 2025+ Python API (xsdb/hsi).
-Invoked via: vitis -s util.py <function> <args...>
+Drives BSP/FSBL generation and JTAG programming via the Vitis 2025+ Python
+API (xsdb/hsi). Invoked via: vitis -s util.py <function> <args...>
 
-Arguments (positional, matching util.tcl):
-  function  - Function to call: get_arch, create_project, create_fsbl,
-               clean_build, upload
+Arguments (positional):
+  function  - Function to call: get_arch, create_project, create_ide_workspace,
+               create_fsbl, clean_build, upload
   ws        - Workspace/project path
   hw_path   - Hardware definition directory
   hw_file   - Hardware file name (e.g. system_top.xsa)
-  binary    - ELF binary path
+  binary    - ELF binary path (for create_ide_workspace: the manifest JSON path)
   target    - Target CPU filter (empty or "0" for auto-select)
   template  - App template name (unused in 2025+ flow)
   fsbl_file - FSBL ELF path (optional, for upload)
@@ -29,7 +29,7 @@ from hsi import HwManager
 
 
 # ---------------------------------------------------------------------------
-# Target filter dictionaries (matching util.tcl pl_dict / ps_dict)
+# Target filter dictionaries (PL bitstream / PS core name patterns)
 # ---------------------------------------------------------------------------
 
 PL_DICT = {
@@ -94,6 +94,359 @@ def _build_filter(name_pattern, jtagtarget=None):
 
 
 # ---------------------------------------------------------------------------
+# Fabric interrupt macro generation
+# ---------------------------------------------------------------------------
+
+# GIC IRQ base for PS platforms. The concat output connects to pl_ps_irq,
+# which maps to these GIC IRQ IDs based on the platform.
+# Zynq-7000: sys_concat_intc[15:0] -> IRQ_F2P[15:0] -> GIC 61-68 (0-7), 84-91 (8-15)
+# ZynqMP: sys_concat_intc_0[7:0] -> pl_ps_irq0 -> GIC 121-128
+#         sys_concat_intc_1[7:0] -> pl_ps_irq1 -> GIC 136-143
+# Versal: sys_cips/pl_ps_irq[15:0] -> GIC 116-131
+FABRIC_IRQ_BASE = {
+    "ps7_cortexa9_0": {
+        "sys_concat_intc": lambda idx: 61 + idx if idx < 8 else 84 + (idx - 8),
+    },
+    "psu_cortexa53_0": {
+        "sys_concat_intc_0": lambda idx: 121 + idx,
+        "sys_concat_intc_1": lambda idx: 136 + idx,
+    },
+}
+
+
+def _generate_fabric_irq_macros(xsa_path, cpu):
+    """Extract PL interrupt connections and generate XPAR_FABRIC_* macros.
+
+    The Vitis 2025+ Python API (create_platform_component) does not generate
+    XPAR_FABRIC_*_INTR macros for PL peripherals. This function replicates what
+    the old HSI generate_bsp command did by tracing interrupt signals from
+    peripheral IRQ pins through the concat blocks to the PS interrupt ports.
+
+    For MicroBlaze, generates XPAR_AXI_INTC_*_INTR macros instead.
+
+    Returns a list of C #define lines.
+    """
+    hw_design = HwManager.open_hw_design(xsa_path)
+    defines = []
+
+    # MicroBlaze uses AXI interrupt controller with different naming
+    # Check for any MicroBlaze CPU (sys_mb, or custom names like IOP1_IOP1_mb)
+    if cpu == "sys_mb" or "_mb" in cpu.lower():
+        defines = _generate_mb_irq_macros(hw_design)
+        hw_design.close()
+        return defines
+
+    # Versal has a different interrupt topology (direct pl_ps_irq connections)
+    if "psv_cortexa72" in cpu:
+        defines = _generate_versal_irq_macros(hw_design)
+        hw_design.close()
+        return defines
+
+    # PS platforms (Zynq-7000, ZynqMP): trace through concat blocks
+    irq_base = FABRIC_IRQ_BASE.get(cpu)
+    if not irq_base:
+        hw_design.close()
+        return defines
+
+    # Find all interrupt concat blocks and their input connections
+    cells = hw_design.get_cells(hierarchical='true')
+    concat_map = {}  # concat_name -> {input_idx -> net_name}
+
+    for cell in cells:
+        cell_name = cell.NAME
+        if cell_name not in irq_base:
+            continue
+
+        concat_map[cell_name] = {}
+        pins = hw_design.get_pins(of_objects=cell)
+        if not pins:
+            continue
+
+        for pin in pins:
+            pin_name = pin.NAME
+            if not pin_name.startswith('In'):
+                continue
+            try:
+                idx = int(pin_name[2:])
+            except ValueError:
+                continue
+
+            nets = hw_design.get_nets(of_objects=pin)
+            if nets:
+                concat_map[cell_name][idx] = nets[0].NAME
+
+    # Find all PL peripherals with IRQ outputs and trace to concat inputs
+    for cell in cells:
+        cell_name = cell.NAME
+        pins = hw_design.get_pins(of_objects=cell)
+        if not pins:
+            continue
+
+        for pin in pins:
+            # Detect interrupt outputs via TYPE property, with fallback to
+            # common pin names for custom IPs that don't set TYPE properly
+            pin_type = pin.TYPE
+            pin_dir = pin.DIRECTION
+            pin_name = pin.NAME
+            is_irq_output = (pin_type == 'INTERRUPT' and pin_dir == 'O')
+            if not is_irq_output and pin_dir == 'O':
+                is_irq_output = pin_name.lower() in ('irq', 'interrupt')
+            if not is_irq_output:
+                continue
+
+            nets = hw_design.get_nets(of_objects=pin)
+            if not nets:
+                continue
+            net_name = nets[0].NAME
+
+            # Find which concat input this net connects to
+            for concat_name, inputs in concat_map.items():
+                for idx, input_net in inputs.items():
+                    if input_net == net_name:
+                        irq_id = irq_base[concat_name](idx)
+                        macro = f"XPAR_FABRIC_{cell_name.upper()}_{pin_name.upper()}_INTR"
+                        defines.append(f"#define {macro} {irq_id}U")
+
+    hw_design.close()
+    return defines
+
+
+def _generate_mb_irq_macros(hw_design):
+    """Generate XPAR_AXI_INTC_*_INTR macros for MicroBlaze designs."""
+    defines = []
+    cells = hw_design.get_cells(hierarchical='true')
+
+    # Find the AXI interrupt controller by VLNV (more reliable than name)
+    intc_cell = None
+    for cell in cells:
+        vlnv = cell.get('VLNV') or ''
+        if 'axi_intc' in vlnv:
+            intc_cell = cell
+            break
+
+    if not intc_cell:
+        return defines
+
+    # Trace the intc's intr pin to find the connected concat block
+    intr_net_name = None
+    pins = hw_design.get_pins(of_objects=intc_cell)
+    if pins:
+        for pin in pins:
+            if pin.NAME == 'intr':
+                nets = hw_design.get_nets(of_objects=pin)
+                if nets:
+                    intr_net_name = nets[0].NAME
+                break
+
+    if not intr_net_name:
+        return defines
+
+    # Find the concat block whose dout drives the intc's intr pin
+    concat_cell = None
+    for cell in cells:
+        vlnv = cell.get('VLNV') or ''
+        if 'xlconcat' in vlnv:
+            pins = hw_design.get_pins(of_objects=cell)
+            for pin in pins:
+                if pin.NAME == 'dout':
+                    nets = hw_design.get_nets(of_objects=pin)
+                    if nets and nets[0].NAME == intr_net_name:
+                        concat_cell = cell
+                        break
+            if concat_cell:
+                break
+
+    if not concat_cell:
+        return defines
+
+    # Build map of concat inputs to connected nets
+    concat_map = {}
+    concat_pins = hw_design.get_pins(of_objects=concat_cell)
+    if concat_pins:
+        for pin in concat_pins:
+            pin_name = pin.NAME
+            if pin_name.startswith('In') and pin.DIRECTION == 'I':
+                try:
+                    idx = int(pin_name[2:])
+                except ValueError:
+                    continue
+                nets = hw_design.get_nets(of_objects=pin)
+                if nets:
+                    concat_map[idx] = nets[0].NAME
+
+    # Find peripherals and match their IRQ nets to concat inputs
+    for cell in cells:
+        cell_name = cell.NAME
+        pins = hw_design.get_pins(of_objects=cell)
+        if not pins:
+            continue
+
+        for pin in pins:
+            # Detect interrupt outputs via TYPE property, with fallback to
+            # common pin names for custom IPs that don't set TYPE properly
+            pin_type = pin.TYPE
+            pin_dir = pin.DIRECTION
+            pin_name = pin.NAME
+            is_irq_output = (pin_type == 'INTERRUPT' and pin_dir == 'O')
+            if not is_irq_output and pin_dir == 'O':
+                is_irq_output = pin_name.lower() in ('irq', 'interrupt')
+            if not is_irq_output:
+                continue
+
+            nets = hw_design.get_nets(of_objects=pin)
+            if not nets:
+                continue
+            net_name = nets[0].NAME
+
+            for idx, input_net in concat_map.items():
+                if input_net == net_name:
+                    macro = f"XPAR_AXI_INTC_{cell_name.upper()}_{pin_name.upper()}_INTR"
+                    defines.append(f"#define {macro} {idx}U")
+
+    return defines
+
+
+def _generate_versal_irq_macros(hw_design):
+    """Generate XPAR_FABRIC_*_INTR macros for Versal designs.
+
+    Versal uses direct pl_ps_irq connections to the CIPS block rather than
+    concat blocks. The GIC mapping is pl_ps_irq[N] -> GIC IRQ 116+N.
+    """
+    defines = []
+
+    # Use non-hierarchical lookup for the top-level CIPS block to get correct
+    # net names. The hierarchical lookup returns internal cells with different
+    # net names that don't match peripheral IRQ outputs.
+    top_cells = hw_design.get_cells()  # Non-hierarchical
+
+    # Find the top-level CIPS block and its pl_ps_irq inputs
+    cips_irq_map = {}  # irq_index -> net_name
+    for cell in top_cells:
+        cell_name = cell.NAME
+        if 'cips' not in cell_name.lower():
+            continue
+
+        pins = hw_design.get_pins(of_objects=cell)
+        if not pins:
+            continue
+
+        for pin in pins:
+            pin_name = pin.NAME
+            if not pin_name.startswith('pl_ps_irq'):
+                continue
+            try:
+                idx = int(pin_name[9:])  # Extract number after 'pl_ps_irq'
+            except ValueError:
+                continue
+
+            nets = hw_design.get_nets(of_objects=pin)
+            if nets:
+                cips_irq_map[idx] = nets[0].NAME
+
+    # Find peripherals (need hierarchical to find all IP) and match IRQs
+    cells = hw_design.get_cells(hierarchical='true')
+    for cell in cells:
+        cell_name = cell.NAME
+        pins = hw_design.get_pins(of_objects=cell)
+        if not pins:
+            continue
+
+        for pin in pins:
+            # Detect interrupt outputs via TYPE property, with fallback to
+            # common pin names for custom IPs that don't set TYPE properly
+            pin_type = pin.TYPE
+            pin_dir = pin.DIRECTION
+            pin_name = pin.NAME
+            is_irq_output = (pin_type == 'INTERRUPT' and pin_dir == 'O')
+            if not is_irq_output and pin_dir == 'O':
+                is_irq_output = pin_name.lower() in ('irq', 'interrupt')
+            if not is_irq_output:
+                continue
+
+            nets = hw_design.get_nets(of_objects=pin)
+            if not nets:
+                continue
+            net_name = nets[0].NAME
+
+            for idx, input_net in cips_irq_map.items():
+                if input_net == net_name:
+                    irq_id = 116 + idx  # Versal GIC mapping
+                    macro = f"XPAR_FABRIC_{cell_name.upper()}_{pin_name.upper()}_INTR"
+                    defines.append(f"#define {macro} {irq_id}U")
+
+    return defines
+
+
+def _generate_ddr_macros(xsa_path, cpu):
+    """Generate DDR memory base address macros for MicroBlaze designs.
+
+    Vitis 2025+ doesn't generate the XPAR_AXI_DDR_CNTRL_* macros that projects
+    expect. This function extracts DDR controller information from the XSA
+    and generates compatible macros.
+
+    Returns a list of C #define lines.
+    """
+    # Check for any MicroBlaze CPU (sys_mb, or custom names like IOP1_IOP1_mb)
+    if cpu != "sys_mb" and "_mb" not in cpu.lower():
+        return []
+
+    hw_design = HwManager.open_hw_design(xsa_path)
+    defines = []
+    seen = set()
+
+    # Find MicroBlaze processor
+    mb_cell = None
+    cells = hw_design.get_cells()
+    for cell in cells:
+        vlnv = cell.get('VLNV') or ''
+        if 'microblaze' in vlnv.lower():
+            mb_cell = cell
+            break
+
+    if not mb_cell:
+        hw_design.close()
+        return defines
+
+    # Get memory ranges from MicroBlaze's perspective
+    mem_ranges = hw_design.get_mem_ranges(of_objects=mb_cell)
+    for mem in mem_ranges:
+        instance_obj = mem.INSTANCE
+        # INSTANCE returns an HwCell object, get its NAME
+        instance = instance_obj.NAME if instance_obj else ''
+        base = mem.BASE_VALUE
+        high = mem.HIGH_VALUE
+
+        if base is None or not instance:
+            continue
+
+        # Check if this is a DDR/MIG controller by looking at the instance name
+        instance_lower = instance.lower()
+        if 'ddr' not in instance_lower and 'mig' not in instance_lower:
+            continue
+
+        # Skip duplicates (same instance can appear multiple times)
+        if instance in seen:
+            continue
+        seen.add(instance)
+
+        # Generate the old-style macro that projects expect
+        # Format: XPAR_AXI_DDR_CNTRL_C0_DDR4_MEMORY_MAP_BASEADDR
+        old_macro = f"XPAR_{instance.upper()}_C0_DDR4_MEMORY_MAP_BASEADDR"
+        defines.append(f"#define {old_macro} {base}")
+
+        # Also generate simpler macros
+        simple_macro = f"XPAR_{instance.upper()}_BASEADDR"
+        defines.append(f"#define {simple_macro} {base}")
+
+        if high is not None:
+            simple_high = f"XPAR_{instance.upper()}_HIGHADDR"
+            defines.append(f"#define {simple_high} {high}")
+
+    hw_design.close()
+    return defines
+
+
+# ---------------------------------------------------------------------------
 # get_arch
 # ---------------------------------------------------------------------------
 
@@ -146,10 +499,16 @@ def create_project(ws, hw_path, hw_file, target):
     client.create_platform_component(
         name="hw0", hw_design=xsa, cpu=vcpu, os="standalone")
 
-    # Build the platform. No need to reconnect - just get the component.
-    print("INFO: Building platform (BSP + FSBL)...")
+    # Build the platform only if Quick Build didn't already produce the BSP.
+    # create_platform_component() sometimes triggers an internal "Quick Build"
+    # that produces libxil.a — calling platform.build() again can crash the
+    # gRPC server with "Application error processing RPC".
     platform = client.get_component(name="hw0")
-    platform.build()
+    libxil_path = os.path.join(out_dir, "hw0", "export", "hw0", "sw",
+                               f"standalone_{vcpu}", "lib", "libxil.a")
+    if not os.path.exists(libxil_path):
+        print("INFO: Building platform (BSP + FSBL)...")
+        platform.build()
 
     # --- Step 2: App component (linker script) ---
     xpfm = os.path.join(out_dir, "hw0", "export", "hw0", "hw0.xpfm")
@@ -201,6 +560,28 @@ def create_project(ws, hw_path, hw_file, target):
             f.write('\n/* Vitis 2025+ compatibility defines */\n')
             f.write('#include "xilinx_compat.h"\n')
 
+    # Generate XPAR_FABRIC_*_INTR macros for PL interrupts.
+    # Vitis 2025+ create_platform_component does not generate these, but the
+    # old HSI generate_bsp did.  Extract interrupt connections from the XSA
+    # and append the defines to xparameters.h.
+    fabric_irq_defines = _generate_fabric_irq_macros(xsa, cpu)
+    if fabric_irq_defines and os.path.exists(xpar_h):
+        with open(xpar_h, "a") as f:
+            f.write('\n/* Fabric interrupt defines (generated from XSA) */\n')
+            for define in fabric_irq_defines:
+                f.write(define + '\n')
+        print(f"INFO: Generated {len(fabric_irq_defines)} fabric IRQ macros")
+
+    # Generate DDR memory base address macros for MicroBlaze.
+    # Vitis 2025+ doesn't generate XPAR_AXI_DDR_CNTRL_* macros.
+    ddr_defines = _generate_ddr_macros(xsa, cpu)
+    if ddr_defines and os.path.exists(xpar_h):
+        with open(xpar_h, "a") as f:
+            f.write('\n/* DDR memory defines (generated from XSA) */\n')
+            for define in ddr_defines:
+                f.write(define + '\n')
+        print(f"INFO: Generated {len(ddr_defines)} DDR macros")
+
     print(f"INFO: BSP copied to bsp/{cpu}/")
 
     # --- Step 4: Copy linker script ---
@@ -246,6 +627,148 @@ def create_project(ws, hw_path, hw_file, target):
 
     vitis.dispose()
     print("INFO: Project created successfully")
+
+
+# ---------------------------------------------------------------------------
+# create_ide_workspace
+# ---------------------------------------------------------------------------
+
+def create_ide_workspace(ws, hw_path, hw_file, manifest_path):
+    """Build a persistent Vitis workspace populated with the no-OS sources.
+
+    Unlike create_project (which builds into a throwaway tmp/output and copies
+    only the BSP + linker script out), this materializes a workspace that Vitis
+    can open directly with `vitis -w <workspace>`:
+
+      - an 'hw0' platform component (BSP), and
+      - an 'app' application component whose sources are the no-OS files the
+        CMake build actually compiled, referenced in place (not copied) via
+        import_files(is_skip_copy_sources=True) -- the modern equivalent of the
+        legacy `make` symlink mirror under build/app.
+
+    The include paths and compile definitions are taken from the CMake build so
+    Vitis's indexer resolves headers/macros exactly as ninja did. CMake still
+    owns the real build (the flashed ELF); this component exists for browsing
+    and (optionally) building inside the GUI.
+
+    manifest_path points at a JSON file written by no_os_build.py:
+        {"sources": [...abs paths...],
+         "includes": [...abs dirs...],
+         "defines": ["NAME=VAL", "NAME", ...]}
+    """
+    import json
+    import vitis
+
+    with open(manifest_path, "r") as f:
+        manifest = json.load(f)
+    sources = manifest.get("sources", [])
+    includes = manifest.get("includes", [])
+    defines = manifest.get("defines", [])
+    force_includes = manifest.get("force_includes", [])
+
+    # Arch comes from the manifest (no_os_build reads XILINX_ARCH from the CMake
+    # cache); fall back to a staged arch.txt if present. Unlike create_project,
+    # this path may run long after the BSP was generated, so we don't rely on
+    # config_xilinx_sdk having just written arch.txt into hw_path.
+    cpu = manifest.get("arch")
+    if not cpu:
+        arch_file = os.path.join(hw_path, "arch.txt")
+        with open(arch_file, "r") as f:
+            cpu = f.read().strip()
+    vcpu = _vitis_cpu_name(cpu)
+
+    xsa = os.path.join(hw_path, hw_file)
+    # Persistent workspace: sibling of tmp/ so it survives after this run and a
+    # subsequent create_project (which only wipes tmp/output) leaves it intact.
+    out_dir = os.path.join(ws, "ide", "workspace")
+
+    xpfm = os.path.join(out_dir, "hw0", "export", "hw0", "hw0.xpfm")
+
+    # --- Step 1: Platform (BSP). Skip the slow rebuild if it already exists. ---
+    if not os.path.exists(xpfm):
+        print(f"INFO: Creating IDE platform component (cpu={vcpu})...")
+        client = vitis.create_client(workspace=out_dir)
+        client.create_platform_component(
+            name="hw0", hw_design=xsa, cpu=vcpu, os="standalone")
+        vitis.dispose()
+
+        print("INFO: Building IDE platform (BSP)...")
+        client = vitis.create_client(workspace=out_dir)
+        platform = client.get_component(name="hw0")
+        platform.build()
+        vitis.dispose()
+    else:
+        print("INFO: IDE platform component already present; reusing.")
+
+    # --- Step 2: App component populated with the no-OS sources ---
+    # Recreate the app component every run so a re-run of --open picks up source
+    # or flag changes from a refreshed manifest. The app references sources in
+    # place (no compile here), so this is cheap; the slow platform build above
+    # is what we preserve. Vitis refuses create_app_component if the component
+    # dir already exists, so remove it first.
+    import shutil
+    app_dir = os.path.join(out_dir, "app")
+    if os.path.exists(app_dir):
+        shutil.rmtree(app_dir)
+    print("INFO: Creating app component and importing no-OS sources...")
+    client = vitis.create_client(workspace=out_dir)
+    app = client.create_app_component(
+        name="app", platform=xpfm, template="empty_application")
+
+    # Reference each source in place (no copy). import_files takes a common
+    # from_loc + file list, so group by containing directory to keep paths
+    # absolute and avoid copying the whole tree.
+    from collections import defaultdict
+    by_dir = defaultdict(list)
+    for src in sources:
+        if os.path.exists(src):
+            by_dir[os.path.dirname(src)].append(os.path.basename(src))
+    for from_loc, files in by_dir.items():
+        app.import_files(from_loc=from_loc, files=files,
+                         is_skip_copy_sources=True)
+
+    if includes:
+        app.set_app_config(key="USER_INCLUDE_DIRECTORIES", values=includes)
+    if defines:
+        app.set_app_config(key="USER_COMPILE_DEFINITIONS", values=defines)
+
+    # Link math library (-lm) for projects that use log10, pow, etc.
+    app.set_app_config(key="USER_LINK_LIBRARIES", values=["m"])
+
+    ld = app.get_ld_script()
+    ld.set_heap_size('0x100000')
+
+    vitis.dispose()
+
+    # Patch UserConfig.cmake to add force-include flags for Kconfig-generated
+    # headers (e.g., -include no_os_config.h). The Vitis API doesn't support
+    # arbitrary compiler flags, so we edit the file directly after Vitis
+    # creates it.
+    if force_includes:
+        user_config = os.path.join(out_dir, "app", "src", "UserConfig.cmake")
+        if os.path.exists(user_config):
+            with open(user_config, "r") as f:
+                content = f.read()
+            flags = " ".join(f"-include {h}" for h in force_includes)
+            # Replace empty USER_COMPILE_OTHER_FLAGS with the force-include flags
+            content = content.replace(
+                "set(USER_COMPILE_OTHER_FLAGS )",
+                f"set(USER_COMPILE_OTHER_FLAGS {flags})")
+            with open(user_config, "w") as f:
+                f.write(content)
+
+    # Copy the pre-staged debug artifacts (launch.json + extracted bitstream /
+    # ps7_init.tcl) into the workspace now that Vitis has initialized it. They
+    # must NOT be present before create_client, or Vitis refuses the workspace
+    # ("cannot recognize the workspace version"). Staged by ide_vitis_configure
+    # at <ws>/ide/staging/_ide.
+    staged_ide = os.path.join(ws, "ide", "staging", "_ide")
+    if os.path.isdir(staged_ide):
+        shutil.copytree(staged_ide, os.path.join(out_dir, "_ide"),
+                        dirs_exist_ok=True)
+        print("INFO: Debug configuration (_ide/launch.json) staged in workspace.")
+
+    print(f"INFO: IDE workspace ready: {out_dir}")
 
 
 # ---------------------------------------------------------------------------
@@ -330,6 +853,9 @@ def _cpu_reset(session, cpu, jtagtarget):
 
     if "cortexa9" in cpu:
         session.rst()
+        # rst releases the A9; halt it again so the bitstream download and
+        # ps7_init run against a stopped core (Zynq-7000 JTAG boot flow).
+        session.stop()
     elif "cortexa53" in cpu:
         session.rst(type='system')
 
@@ -344,14 +870,14 @@ def _write_pl(session, cpu, hw_path, hw_file, jtagtarget):
     session.targets('-s', filter=_build_filter(name, jtagtarget))
 
     import glob as _glob
+    # The bitstream is extracted from the .xsa at configure time (CMake
+    # extract_xsa_members -> hw_path); just pick it up here.
     bit_files = _glob.glob(os.path.join(hw_path, "*.bit"))
     if not bit_files:
-        # Fall back to name derived from XSA
-        bitstream = os.path.join(hw_path,
-                                 os.path.splitext(hw_file)[0] + ".bit")
-    else:
-        bitstream = bit_files[0]
-    session.fpga(file=os.path.normpath(bitstream))
+        print(f"ERROR: No .bit bitstream found in {hw_path}. It should have "
+              "been extracted from the .xsa at configure time.")
+        sys.exit(1)
+    session.fpga(file=os.path.normpath(bit_files[0]))
 
 
 def _run_init_sequence(session, init_data):
@@ -417,13 +943,9 @@ def _init_ps_zynq(session, hw_path, hw_file, jtagtarget):
     """
     session.targets('-s', filter=_build_filter('APU*', jtagtarget))
 
+    # ps7_init.tcl is extracted from the .xsa at configure time (CMake
+    # extract_xsa_members -> hw_path).
     init_tcl = os.path.join(hw_path, "ps7_init.tcl")
-    if not os.path.exists(init_tcl):
-        # Extract from XSA if not already present
-        xsa = os.path.join(hw_path, hw_file)
-        subprocess.run(["unzip", "-o", "-q", xsa, "ps7_init.tcl",
-                        "-d", hw_path], check=False)
-
     if os.path.exists(init_tcl):
         init_data = _parse_ps_init_tcl(init_tcl, proc_name="ps7_init")
         if init_data:
@@ -457,12 +979,9 @@ def _init_ps_cortexr5(session, hw_path, hw_file, jtagtarget):
     session.targets('-s', '--nocase',
                     filter=_build_filter('PSU', jtagtarget))
 
+    # psu_init.tcl is extracted from the .xsa at configure time (CMake
+    # extract_xsa_members -> hw_path).
     init_tcl = os.path.join(hw_path, "psu_init.tcl")
-    if not os.path.exists(init_tcl):
-        xsa = os.path.join(hw_path, hw_file)
-        subprocess.run(["unzip", "-o", "-q", xsa, "psu_init.tcl",
-                        "-d", hw_path], check=False)
-
     if os.path.exists(init_tcl):
         # psu_init
         init_data = _parse_ps_init_tcl(init_tcl, proc_name="psu_init")
@@ -682,18 +1201,14 @@ def upload(hw_path, hw_file, binary, target, fsbl_file, jtagtarget):
 
 def _upload_versal(session, hw_path, hw_file, cpu, binary, jtagtarget):
     """Upload flow for Versal: device_program + A72 init + ELF download."""
-    xsa_path = os.path.join(hw_path, hw_file)
-
-    # Extract PDI from XSA if no .pdi files present
+    # The PDI is extracted from the .xsa at configure time (CMake
+    # extract_xsa_members -> hw_path). Its name inside the XSA may differ from
+    # the XSA filename, so glob for it.
     import glob as _glob
-    if not _glob.glob(os.path.join(hw_path, "*.pdi")):
-        subprocess.run(["unzip", "-o", "-q", xsa_path, "*.pdi",
-                        "-d", hw_path], check=False)
-
-    # Find the extracted PDI (name inside XSA may differ from XSA filename)
     pdi_files = _glob.glob(os.path.join(hw_path, "*.pdi"))
     if not pdi_files:
-        print(f"ERROR: No PDI file found in {hw_path}")
+        print(f"ERROR: No PDI file found in {hw_path}. It should have been "
+              "extracted from the .xsa at configure time.")
         sys.exit(1)
     pdi_path = pdi_files[0]
 
@@ -782,6 +1297,8 @@ def main():
     dispatch = {
         "get_arch": lambda: get_arch(hw_path, hw_file, target),
         "create_project": lambda: create_project(ws, hw_path, hw_file, target),
+        "create_ide_workspace": lambda: create_ide_workspace(
+            ws, hw_path, hw_file, binary),
         "create_fsbl": lambda: create_fsbl(ws, hw_path, hw_file, target),
         "upload": lambda: upload(hw_path, hw_file, binary, target,
                                  fsbl_file, jtagtarget),

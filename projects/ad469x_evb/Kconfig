@@ -1,0 +1,38 @@
+menu "ad469x_evb Configuration"
+
+choice AD469X_EVB_EXAMPLE
+	prompt "Example variant"
+	default AD469X_EVB_BASIC_EXAMPLE
+
+config AD469X_EVB_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Basic example that initializes the AD469X ADC in single-cycle
+	  conversion mode, captures samples via AXI DMA, and prints the
+	  results over UART.
+
+config AD469X_EVB_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the AD469X ADC through the IIO framework,
+	  enabling host-side data capture via libiio over UART. Uses standard
+	  sequence conversion mode.
+
+config AD469X_EVB_STANDARD_SEQ_EXAMPLE
+	bool "Standard sequence example"
+	help
+	  Basic example that uses the AD469X ADC in standard sequence
+	  conversion mode (AD469X_SEQ_STANDARD), capturing samples via
+	  AXI DMA and printing results over UART.
+
+config AD469X_EVB_ADVANCE_SEQ_EXAMPLE
+	bool "Advanced sequence example"
+	help
+	  Basic example that uses the AD469X ADC in advanced sequence
+	  conversion mode (AD469X_SEQ_ADVANCED), capturing samples via
+	  AXI DMA and printing results over UART.
+
+endchoice
+
+endmenu

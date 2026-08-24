@@ -393,15 +393,15 @@ int main()
 
 	for (i = 0; i < AD7134_FMC_SAMPLE_NO; i++) {
 		j = 0;
-		printf("%lu: ", i);
+		printf("%lu: ", (unsigned long)i);
 		while (j < 8) {
 			adc_buffer[AD7134_FMC_CH_NO * i + j] &= 0xffffff00;
 			adc_buffer[AD7134_FMC_CH_NO * i + j] >>= 8;
 			data = lsb * (int32_t)adc_buffer[AD7134_FMC_CH_NO * i + j];
 			if (data > 4.095)
 				data = data - 8.192;
-			printf("CH%lu: 0x%08lx = %+1.5fV ", j,
-			       adc_buffer[AD7134_FMC_CH_NO * i + j], data);
+			printf("CH%lu: 0x%08lx = %+1.5fV ", (unsigned long)j,
+			       (unsigned long)adc_buffer[AD7134_FMC_CH_NO * i + j], data);
 			if (j == 7)
 				printf("\n");
 			j++;

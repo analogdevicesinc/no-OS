@@ -76,11 +76,6 @@ On-board Connections
 | Connector       | Programming     | unit            |                 |
 +-----------------+-----------------+-----------------+-----------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 -------------------------
 
@@ -144,14 +139,17 @@ To flash the MAX32625PICO with the correct firmware image:
 
 **Build Command**
 
-Available variants: ``stout_application_rev_a``, ``stout_application_rev_d``
-(one per board revision).
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
+Available variants: ``stout_application_rev_a``, ``stout_application_rev_d``.
 Available boards: ``max32655fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

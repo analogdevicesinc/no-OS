@@ -1,8 +1,21 @@
 # ADuCM3029 platform driver sources
 target_compile_definitions(no-os PUBLIC -DADUCM_PLATFORM)
 
-# Heap size required by the RTE startup (from aducm.mk:104).
-target_compile_definitions(no-os PUBLIC -D__HEAP_SIZE=15000)
+# Heap and stack sizes for the RTE startup. The INSTREN=0 SRAM remap exposes
+# two 32 KiB data banks (see toolchain.cmake / aducm3029_platform_sdk.cmake),
+# and the linker rework there puts .data/.bss and the stack in DSRAM_A while
+# giving the whole of DSRAM_B to the heap. So the heap[] array fills a full
+# 32 KiB bank (DSRAM_B).
+#
+# The stack lives in DSRAM_A above .data/.bss (~14 KiB), growing down into what
+# would otherwise be stranded RAM - so a larger stack costs the heap nothing.
+# Static whole-image analysis of the WiFi/IIOD image puts the worst-case depth
+# at ~3.0 KiB (the iio attr -> sprintf/_dtoa/_malloc and at_init -> sscanf
+# chains dominate, plus ISR + exception frame). 8 KiB gives >150% margin over
+# that for deeper future apps, and DSRAM_A still has ~10 KiB to spare. The
+# linker ASSERT(__StackLimit >= __bss_end__) guards the bank.
+target_compile_definitions(no-os PUBLIC -D__HEAP_SIZE=32768)
+target_compile_definitions(no-os PUBLIC -D__STACK_SIZE=8192)
 
 # no-OS platform driver sources, gated by Kconfig.
 no_os_sources_ifdef(CONFIG_UART_ADUCM3029       ${CMAKE_CURRENT_SOURCE_DIR}/aducm3029_uart.c)
@@ -30,13 +43,13 @@ endif()
 
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-# Device Family Pack + CMSIS Core includes (from aducm.mk:79-80).
+# Device Family Pack + CMSIS Core includes.
 target_include_directories(no-os PUBLIC ${ADUCM_DFP}/Include)
 target_include_directories(no-os PUBLIC ${ADUCM_CMSIS_CORE}/Include)
 
 # DFP driver sources. The full set is compiled (matches the legacy build which
 # wildcards $(DFP_DRIVERS)/*.c); two data files are excluded because they are
-# not used on the ADuCM3029 (aducm.mk:73-77).
+# not used on the ADuCM3029.
 file(GLOB_RECURSE _dfp_sources "${ADUCM_DFP}/Source/drivers/*.c")
 list(REMOVE_ITEM _dfp_sources
     "${ADUCM_DFP}/Source/drivers/flash/adi_flash_data.c"

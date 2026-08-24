@@ -3,7 +3,6 @@ Evaluating the LTC7871
 ======================
 .. no-os-doxygen::
 
-
 .. contents::
 	:depth: 3
 
@@ -77,12 +76,6 @@ Several Pins are exposed on the board
 6. SYNC adn CLKOUT pin
 7. SETCUR pin
 8. IMON pin
-
-
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
 
 No-OS Supported Examples
 ------------------------
@@ -173,6 +166,9 @@ Maxim Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``, ``iio_example``.
 Available boards: ``ad-apard32690-sl``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -180,6 +176,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

@@ -129,11 +129,6 @@ SPI-to-UART
 	|  TXP	    |   Connect to RXP signal of MAX17851EVKIT	      |
 	+-----------+-------------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Wiki <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -154,13 +149,8 @@ Steps of the examples:
 * In case any alerts are detected the example is stopped.
 * If the example is stopped a specific message is shown on the Std I/O UART.
 
-In order to build the default uart example make sure you have the following
-configuration in the Makefile:
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ades1754/Makefile>`_
-
-.. code-block:: bash
-
-	EXAMPLE ?= def_uart_example
+This example is built by selecting the ``basic`` variant (see the Build
+Command section below).
 
 SPI-to-UART Bridge Example
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -174,13 +164,8 @@ Steps of the examples:
 * In case any alerts are detected the example is stopped.
 * If the example is stopped a specific message is shown on the Std I/O UART.
 
-In order to build the spi uart example make sure you have the following
-configuration in the Makefile:
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ades1754/Makefile>`_
-
-.. code-block:: bash
-
-	EXAMPLE ?= spi_uart_example
+This example is built by selecting the ``spi_uart_bridge`` variant (see the
+Build Command section below).
 
 No-OS Supported Platforms
 -------------------------
@@ -225,9 +210,17 @@ Maxim Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
+Available variants: ``basic``, ``spi_uart_bridge``.
+Available boards: ``ad-apard32690-sl``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

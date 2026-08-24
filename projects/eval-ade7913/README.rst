@@ -117,11 +117,6 @@ Auxiliary Voltage Sense Inputs
 |                 |                 |                 | TP5 and TP1.    |
 +-----------------+-----------------+-----------------+-----------------+
 
-No-OS Build Setup
------------------
-
-Please see: :dokuwiki:`No-OS Build Setup </resources/no-os/build>`
-
 No-OS Supported Examples
 ------------------------
 
@@ -173,6 +168,9 @@ GND          GND
 Build Command
 ^^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``ade7913_example``.
 Available boards: ``ad-apard32690-sl``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -180,6 +178,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

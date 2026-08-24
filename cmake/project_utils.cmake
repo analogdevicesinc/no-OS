@@ -25,15 +25,31 @@ function(post_build_config PROJECT_TARGET)
         # Generate OpenOCD config file
         generate_openocd_config()
 
-        # Binary generation (hex/bin/size)
-        add_custom_command(
-                TARGET ${PROJECT_TARGET}
-                POST_BUILD
-                COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${PROJECT_TARGET}> ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_TARGET}.hex
-                COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${PROJECT_TARGET}> ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_TARGET}.bin
-                COMMAND ${CMAKE_COMMAND} -E echo "Binary size:" && (${CMAKE_SIZE} --format=berkeley $<TARGET_FILE:${PROJECT_TARGET}> || ${CMAKE_COMMAND} -E true)
-                COMMENT "Generating ${PROJECT_TARGET}.hex"
-        )
+        # Binary generation (hex/bin/size). On xilinx, neither a flat .bin nor an
+        # Intel .hex is the deployment artifact (the ELF is packaged into BOOT.BIN
+        # via bootgen for Zynq/ZynqMP, or a .tar.gz for MicroBlaze), and both raw
+        # dumps misbehave: Intel HEX cannot hold the 64-bit aarch64 load addresses
+        # (ZynqMP DDR at 0x800000000 -> "address out of range for Intel Hex
+        # file"), and `objcopy -O binary` pads the gap between low and high
+        # sections with zeros, producing multi-GB files on MicroBlaze. So on
+        # xilinx emit only the ELF (already built) and the size summary.
+        if(PLATFORM STREQUAL "xilinx")
+                add_custom_command(
+                        TARGET ${PROJECT_TARGET}
+                        POST_BUILD
+                        COMMAND ${CMAKE_COMMAND} -E echo "Binary size:" && (${CMAKE_SIZE} --format=berkeley $<TARGET_FILE:${PROJECT_TARGET}> || ${CMAKE_COMMAND} -E true)
+                        COMMENT "Reporting ${PROJECT_TARGET} size"
+                )
+        else()
+                add_custom_command(
+                        TARGET ${PROJECT_TARGET}
+                        POST_BUILD
+                        COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${PROJECT_TARGET}> ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_TARGET}.hex
+                        COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${PROJECT_TARGET}> ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_TARGET}.bin
+                        COMMAND ${CMAKE_COMMAND} -E echo "Binary size:" && (${CMAKE_SIZE} --format=berkeley $<TARGET_FILE:${PROJECT_TARGET}> || ${CMAKE_COMMAND} -E true)
+                        COMMENT "Generating ${PROJECT_TARGET}.hex"
+                )
+        endif()
 
         # IDE project file generation (replaces cmake -P vscode_config.cmake
         # and generate_stm32cubeide_project calls)

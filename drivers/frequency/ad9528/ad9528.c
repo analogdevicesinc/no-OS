@@ -138,7 +138,7 @@ int32_t ad9528_spi_read_n(struct ad9528_dev *dev,
 	uint8_t buf[3];
 
 	int32_t ret = 0;
-	uint8_t index;
+	uint32_t index;
 
 	*reg_data = 0;
 	for (index = 0; index < AD9528_TRANSF_LEN(reg_addr); index++) {
@@ -174,7 +174,7 @@ int32_t ad9528_spi_write_n(struct ad9528_dev *dev,
 	uint8_t buf[3];
 
 	int32_t ret = 0;
-	uint8_t index;
+	uint32_t index;
 
 	for (index = 0; index < AD9528_TRANSF_LEN(reg_addr); index++) {
 		buf[0] = reg_addr >> 8;

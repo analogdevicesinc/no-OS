@@ -1,7 +1,0 @@
-{
-    "mbed": {
-      "dummy_example_mbed": {
-        "flags" : "EXAMPLE=dummy"
-      }
-    }
-}

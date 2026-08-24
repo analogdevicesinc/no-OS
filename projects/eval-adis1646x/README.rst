@@ -95,11 +95,6 @@ The ADIS1646X eval devices have to be supplied with 3.3V voltage on VDD pin.
 
         At the time of initial release for these breakout boards, we were most familiar with the `TCSD Series from Samtec <https://www.samtec.com/products/tcsd>`_.
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -185,12 +180,22 @@ STM32 Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`STM32 CMake build guide </build_guides/build_stm32_cmake>`.
+
+Available variants: ``basic``, ``iio_trigger``.
+Available boards: ``sdp-ck1z``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
 	# in a default install location)
 	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 	cd no-OS
 
@@ -202,8 +207,6 @@ STM32 Platform
 	python tools/scripts/no_os_build.py build \
 		--project eval-adis1646x --variant basic --board sdp-ck1z \
 		--probe openocd --flash
-
-Available variants: ``basic``, ``iio_trigger``. Replace ``--variant`` accordingly.
 
 Maxim Platform
 ^^^^^^^^^^^^^^
@@ -240,10 +243,18 @@ Maxim Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
+Available variants: ``basic``, ``iio_trigger``.
+Available boards: ``max78000fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# point at the Maxim SDK libraries (only if not auto-detected)
 	export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+	# Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
 	cd no-OS
 
@@ -255,8 +266,6 @@ Maxim Platform
 	python tools/scripts/no_os_build.py build \
 		--project eval-adis1646x --variant basic --board max78000fthr \
 		--probe openocd --flash
-
-Available variants: ``basic``, ``iio_trigger``. Replace ``--variant`` accordingly.
 
 Pico Platform
 ^^^^^^^^^^^^^
@@ -273,7 +282,7 @@ Pico Platform
 **Connections**:
 
 +---------------------------+----------+-------------------------------------------------------+---------------------+
-| EVAL-ADIS1646X Pin Number | Mnemonic | Function                                              | MAX78000 Pin Number |
+| EVAL-ADIS1646X Pin Number | Mnemonic | Function                                              | RPi Pico Pin Number |
 +---------------------------+----------+-------------------------------------------------------+---------------------+
 | 1                         | ~RST     | Reset, active low                                     | GP20                |
 +---------------------------+----------+-------------------------------------------------------+---------------------+
@@ -308,6 +317,13 @@ The following table shows how the connection between ADALM-UARTJTAG and Raspberr
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Raspberry Pi Pico CMake build guide </build_guides/build_pico_cmake>`.
+
+Available variants: ``basic``, ``iio_trigger``.
+Available boards: ``rpi-pico``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	cd no-OS
@@ -320,5 +336,3 @@ The following table shows how the connection between ADALM-UARTJTAG and Raspberr
 	python tools/scripts/no_os_build.py build \
 		--project eval-adis1646x --variant basic --board rpi-pico \
 		--probe openocd --flash
-
-Available variants: ``basic``, ``iio_trigger``. Replace ``--variant`` accordingly.

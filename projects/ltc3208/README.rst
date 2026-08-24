@@ -1,12 +1,10 @@
 Evaluating the LTC3208
 ======================
 
-
 Supported Evaluation Boards
 ---------------------------
 
 * DC824A (LTC3208)
-
 
 Overview
 --------
@@ -96,12 +94,6 @@ uses 3.3V via the controller as a logic high reference.
 | 33  | GND       | Ground Pad                                |
 +-----+-----------+-------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
-
 No-OS Supported Platforms
 -------------------------
 
@@ -120,13 +112,8 @@ LTC3208 multidisplay LED controller.
 The example runs continuously in a loop, cycling through all LED configurations
 with timing delays to visually demonstrate each feature.
 
-In order to build the basic example make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltc3208/Makefile>`_
-
-.. code-block:: bash
-
-	EXAMPLE = basic_example
+This example is built by selecting the ``basic`` variant (see the Build
+Command section below).
 
 Maxim Platform
 --------------
@@ -157,6 +144,9 @@ Maxim Platform
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``.
 Available boards: ``ad-apard32690-sl``, ``max32655fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -164,6 +154,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

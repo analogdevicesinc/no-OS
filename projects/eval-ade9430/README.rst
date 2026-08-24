@@ -17,11 +17,6 @@ minimal SPI read example and a Sensor-to-Cloud IoT application. The
 application is selected at build time through the ``--variant`` option, and
 each variant maps to a ``.conf`` defconfig in the project directory.
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -79,16 +74,20 @@ Maxim Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic_example``, ``basic_example_hw_reset``,
-``iot_example``, ``iot_example_rtc``, ``iot_example_azure_iot_hub``,
-``iot_example_azure_iot_hub_rtc``, ``iot_example_azure_iot_hub_dps``,
-``iot_example_azure_iot_hub_dps_rtc``.
+``iot_example``, ``iot_example_azure_iot_hub``,
+``iot_example_azure_iot_hub_dps``, ``iot_example_azure_iot_hub_dps_rtc``,
+``iot_example_azure_iot_hub_rtc``, ``iot_example_rtc``.
 Available boards: ``max32650fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

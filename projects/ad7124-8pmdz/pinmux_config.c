@@ -45,4 +45,3 @@ int32_t adi_initpinmux(void)
 
 	return 0;
 }
-

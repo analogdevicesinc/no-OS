@@ -1,0 +1,23 @@
+menu "ad9656_fmc Configuration"
+
+choice AD9656_FMC_EXAMPLE
+	prompt "Example variant"
+	default AD9656_FMC_DEMO_EXAMPLE
+
+config AD9656_FMC_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Demo example that initializes the AD9656 quad ADC via JESD204 RX,
+	  AXI ADC core, and DMA, performs PN sequence tests and captures data
+	  to DDR.
+
+config AD9656_FMC_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the AD9656 ADC through the IIO framework
+	  via iio_axi_adc, enabling host-side data capture over UART.
+
+endchoice
+
+endmenu

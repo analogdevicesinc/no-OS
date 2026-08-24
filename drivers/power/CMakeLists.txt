@@ -82,6 +82,11 @@ no_os_sources_ifdef(CONFIG_POWER_LTM4686 ${CMAKE_CURRENT_SOURCE_DIR}/ltm4686/ltm
 no_os_sources_ifdef(CONFIG_POWER_IIO_LTM4686 ${CMAKE_CURRENT_SOURCE_DIR}/ltm4686/iio_ltm4686.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ltm4686)
 
+# ltm4700
+no_os_sources_ifdef(CONFIG_POWER_LTM4700 ${CMAKE_CURRENT_SOURCE_DIR}/ltm4700/ltm4700.c)
+no_os_sources_ifdef(CONFIG_POWER_IIO_LTM4700 ${CMAKE_CURRENT_SOURCE_DIR}/ltm4700/iio_ltm4700.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ltm4700)
+
 # ltp8800
 no_os_sources_ifdef(CONFIG_POWER_LTP8800 ${CMAKE_CURRENT_SOURCE_DIR}/ltp8800/ltp8800.c)
 no_os_sources_ifdef(CONFIG_POWER_IIO_LTP8800 ${CMAKE_CURRENT_SOURCE_DIR}/ltp8800/iio_ltp8800.c)

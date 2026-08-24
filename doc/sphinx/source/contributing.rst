@@ -21,10 +21,12 @@ Submission Checklist
 Before being reviewed by the no-OS maintainers and then accepted to the GitHub
 repository, each commit should respect a few rules:
 
-- The commit contains a **Signed-off-by** trailer by the committer at the end
-  of the commit log message - it certifies that the committer has the rights to
-  submit the work under the project's license.
-
+- The commit must contain a **Signed-off-by** trailer by the committer at the end
+  of the commit log message. Produce it with ``git commit -s``.
+- If an **AI agent** was used to author or modify the commit, add an
+  **Assisted-by** trailer naming the agent and model, for example
+  ``Assisted-by: Claude Sonnet 4.6``. Place it before the
+  **Signed-off-by** trailer.
 - The commit message should follow the **50/72 rule** :
 
   - The first line (the subject) should be **at most 50 characters** long.
@@ -51,3 +53,12 @@ repository, each commit should respect a few rules:
   information can be written in the pull request description. If the driver
   was tested on one of the supported no-OS platforms, it is recommended to also
   add a project example which uses the newly added driver.
+
+- When adding a new project, base its ``README.rst`` on the template at
+  ``doc/project_readme_template.rst`` so it follows the standard structure and
+  the current CMake/no_os_build.py build conventions.
+
+- When adding a new driver, base its ``README.rst`` on the template at
+  ``doc/driver_readme_template.rst`` so it follows the standard driver
+  documentation structure, and add the matching Sphinx include stub under
+  ``doc/sphinx/source/drivers/<category>/``.

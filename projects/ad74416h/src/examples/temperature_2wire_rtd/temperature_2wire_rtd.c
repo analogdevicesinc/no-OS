@@ -83,7 +83,7 @@ int example_main()
 		goto error;
 
 	//Configure the ADC conversion rate
-	ret = ad74416h_get_adc_rate(ad74416h_desc, 0, AD74416H_20SPS_50_60HZ_REJECTION);
+	ret = ad74416h_set_adc_rate(ad74416h_desc, 0, AD74416H_20SPS_50_60HZ_REJECTION);
 	if (ret)
 		goto error;
 

@@ -52,11 +52,6 @@ of the power source is configurable via jumpers, supporting various
 development or testing configurations. The kit includes a USB-A to Micro
 USB-B cable for connection purposes.
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -82,14 +77,8 @@ the ADIN1110, integrating descriptors and error checking into the
 control flow. Dependencies include other functions for SPI transfers and
 register operations essential for the communication process.
 
-In order to build the example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/blob/main/projects/adin1110/Makefile>`__:
-
-.. code-block:: bash
-
-   # Select the example
-   EXAMPLE = frame_rx_tx
+This example is built by selecting the ``frame_rx_tx`` variant (see the Build
+Command section below).
 
 No-OS Supported Platforms
 -------------------------
@@ -137,6 +126,9 @@ Ensure voltage levels are compatible (typically 3.3V).
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``frame_rx_tx``.
 Available boards: ``max32650fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -144,6 +136,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

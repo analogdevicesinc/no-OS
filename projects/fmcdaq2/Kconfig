@@ -1,0 +1,30 @@
+menu "fmcdaq2 Configuration"
+
+choice FMCDAQ2_EXAMPLE
+	prompt "Example variant"
+	default FMCDAQ2_DEMO_EXAMPLE
+
+config FMCDAQ2_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Demo example that initializes the AD9144 DAC + AD9680 ADC via JESD204
+	  (TX and RX), AXI DAC/ADC cores, AD9523 clock, and AXI DMAC. Runs
+	  pattern and PN tests. No DMA capture, no IIO.
+
+config FMCDAQ2_DMA_EXAMPLE
+	bool "DMA example"
+	help
+	  DMA-based data capture/playback example. Loads a sine LUT into the
+	  DAC via DMA and captures ADC samples into DDR via DMA.
+
+config FMCDAQ2_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the AD9144 DAC and AD9680 ADC through the IIO
+	  framework via iio_axi_dac and iio_axi_adc, enabling host-side data
+	  transfer over UART.
+
+endchoice
+
+endmenu

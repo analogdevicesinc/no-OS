@@ -13,6 +13,15 @@ config ADMT4000_IIO_TRIGGER_EXAMPLE
 
 endchoice
 
+config PCL_VERSION
+	string "precision-converters-library version tag/commit"
+	default "7af7d492b075538d11534f0db11e005c930b804c"
+	depends on ADMT4000_IIO_TRIGGER_EXAMPLE
+	help
+	  Git tag, branch or commit for precision-converters-library.
+	  Resolved via the NO_OS_DEP_PCL_PATH override, else cloned in-tree
+	  (or into a version-keyed NO_OS_CACHE_DIR store when that is set).
+
 config ADMT4000_TMC5240
 	bool "Enable TMC5240 motor driver support"
 	depends on ADMT4000_IIO_TRIGGER_EXAMPLE

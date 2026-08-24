@@ -90,11 +90,6 @@ For reference, follow the Quick Start Procedure section of the corresponding
 demo board.
 `user guide <https://www.analog.com/media/en/technical-documentation/user-guides/dc3190a-a.pdf>`_.
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -116,7 +111,7 @@ In order to build the basic example make sure you are using this command:
 .. code-block:: bash
 
 	python tools/scripts/no_os_build.py build \
-	   --project ltp8800 --variant basic --board max32665fthr
+	   --project ltp8800 --variant basic --board max32666fthr
 
 IIO example
 ^^^^^^^^^^^
@@ -142,7 +137,7 @@ In order to build the IIO project make sure you are using this command:
 .. code-block:: bash
 
 	python tools/scripts/no_os_build.py build \
-	   --project ltp8800 --variant iio --board max32665fthr
+	   --project ltp8800 --variant iio --board max32666fthr
 
 No-OS Supported Platforms
 -------------------------
@@ -185,21 +180,25 @@ Maxim Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``, ``iio``.
-Available boards: ``max32665fthr``.
+Available boards: ``max32666fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
-   # build the project (basic example on the max32665fthr board)
+   # build the project (basic example on the max32666fthr board)
    python tools/scripts/no_os_build.py build \
-      --project ltp8800 --variant basic --board max32665fthr
+      --project ltp8800 --variant basic --board max32666fthr
 
    # build and flash (requires a connected debug probe)
    python tools/scripts/no_os_build.py build \
-      --project ltp8800 --variant basic --board max32665fthr \
+      --project ltp8800 --variant basic --board max32666fthr \
       --probe openocd --flash

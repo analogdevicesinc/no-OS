@@ -1,0 +1,23 @@
+menu "ad9081 Configuration"
+
+choice AD9081_EXAMPLE
+	prompt "Example variant"
+	default AD9081_DEMO_EXAMPLE
+
+config AD9081_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Demo example that initializes the AD9081 MxFE (ADC+DAC) via JESD204
+	  RX/TX, AXI ADC/DAC core, and DMAC, and captures/plays back data to DDR.
+
+config AD9081_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the AD9081 MxFE through the IIO framework via
+	  iio_axi_adc and iio_axi_dac, enabling host-side data capture and
+	  injection over UART.
+
+endchoice
+
+endmenu

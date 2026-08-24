@@ -74,11 +74,6 @@ Pin Number Pin Function        Mnemonic
 12         Digital Power       VDD
 ========== =================== ========
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -185,6 +180,9 @@ EVAL-ADXL355-PMDZ through the PMOD connector.
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`ADuCM3029 CMake build guide </build_guides/build_aducm3029_cmake>`.
+
 Available variants: ``dummy``, ``iio``, ``iio_trigger``.
 Available boards: ``eval-adicup3029``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -193,6 +191,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 
    # point at the CrossCore Embedded Studio install (only if not auto-detected)
    export CCES_HOME=/opt/analog/cces/3.0.3
+   # Windows (PowerShell): $env:CCES_HOME = "C:\analog\cces\3.0.3"
 
    cd no-OS
 
@@ -236,8 +235,11 @@ Pin 10           P1_9          Data Ready (DRDY)       Indicates new data is ava
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``dummy``, ``dummy_adxl357``, ``dummy_adxl359``, ``iio``, ``iio_adxl357``, ``iio_adxl359``, ``iio_trigger``, ``iio_trigger_adxl357``, ``iio_trigger_adxl359``.
-Available boards: ``ad-apard32690-sl``, ``max32650fthr``, ``max32655fthr``, ``max32660fthr``, ``max32665fthr``, ``max78000fthr``.
+Available boards: ``ad-apard32690-sl``, ``max32650fthr``, ``max32655fthr``, ``max32660fthr``, ``max32666fthr``, ``max78000fthr``.
 Replace ``--variant`` / ``--board`` accordingly. Not every variant is
 available on every board; see the combination list with
 ``python tools/scripts/no_os_build.py list --project eval-adxl355-pmdz``.
@@ -246,6 +248,7 @@ available on every board; see the combination list with
 
    # point at the Maxim SDK libraries (only if not auto-detected)
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
@@ -294,6 +297,9 @@ to match the operating voltage of the EVAL-ADXL355-PMDZ board.
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`STM32 CMake build guide </build_guides/build_stm32_cmake>`.
+
 Available variants: ``dummy``, ``iio``, ``iio_trigger``, ``iio_lwip``.
 Available boards: ``sdp-ck1z``, ``adin1110ebz``.
 Replace ``--variant`` / ``--board`` accordingly. The ``iio_lwip`` variant
@@ -305,6 +311,9 @@ is only available on ``adin1110ebz``.
    # in a default install location)
    export STM32CUBEMX=</path/to/stm32cubemx>
    export STM32CUBEIDE=</path/to/stm32cubeide>
+   # Windows (PowerShell):
+   #   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+   #   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
    cd no-OS
 
@@ -351,6 +360,9 @@ Pico.
 
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+:doc:`Raspberry Pi Pico CMake build guide </build_guides/build_pico_cmake>`.
 
 Available variants: ``dummy``, ``iio``, ``iio_trigger``.
 Available boards: ``rpi-pico``.

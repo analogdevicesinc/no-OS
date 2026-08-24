@@ -68,11 +68,6 @@ by the 3V3 supply from MAX32666FTHR.
 	| RESET    | Connect to GPIO pin (RESET)	       |
 	+----------+-------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -93,7 +88,7 @@ In order to build the basic example make sure you are using this command:
 .. code-block:: bash
 
 	python tools/scripts/no_os_build.py build \
-	   --project ltc2983 --variant basic_max32665 --board max32665fthr
+	   --project ltc2983 --variant basic --board max32666fthr
 
 IIO example
 ^^^^^^^^^^^
@@ -121,7 +116,7 @@ In order to build the IIO project make sure you are using this command:
 .. code-block:: bash
 
         python tools/scripts/no_os_build.py build \
-           --project ltc2983 --variant iio_max32665 --board max32665fthr
+           --project ltc2983 --variant iio --board max32666fthr
 
 No-OS Supported Platforms
 -------------------------
@@ -158,23 +153,27 @@ Maxim Platform
 
 **Build Command**
 
-Available variants: ``basic_max32665``, ``iio_max32665``.
-Available boards: ``max32665fthr``.
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
+Available variants: ``basic``, ``iio``.
+Available boards: ``max32666fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
-   # build the project (iio_max32665 example on the max32665fthr board)
+   # build the project (iio example on the max32666fthr board)
    python tools/scripts/no_os_build.py build \
-      --project ltc2983 --variant iio_max32665 --board max32665fthr
+      --project ltc2983 --variant iio --board max32666fthr
 
    # build and flash (requires a connected debug probe)
    python tools/scripts/no_os_build.py build \
-      --project ltc2983 --variant iio_max32665 --board max32665fthr \
+      --project ltc2983 --variant iio --board max32666fthr \
       --probe openocd --flash
 
 EVAL-ADT7604-AZ
@@ -250,10 +249,16 @@ detector coverage, and PT100 temperature, and prints results over UART.
 
 In order to build the ADT7604 basic example make sure you are using this command:
 
+Available variants: ``adt7604_basic``, ``adt7604_iio``, ``basic``, ``iio``.
+Available boards: ``max32666fthr``, ``max78000fthr``.
+Replace ``--variant`` / ``--board`` accordingly. Not every variant is available
+on every board; see the combination list with
+``python tools/scripts/no_os_build.py list --project ltc2983``.
+
 .. code-block:: bash
 
 	python tools/scripts/no_os_build.py build \
-	   --project ltc2983 --variant adt7604_basic_max78000 --board max78000fthr
+	   --project ltc2983 --variant adt7604_basic --board max78000fthr
 
 ADT7604 IIO example
 """"""""""""""""""""
@@ -269,10 +274,16 @@ If you are not familiar with ADI IIO Application, please take a look at:
 
 In order to build the ADT7604 IIO example make sure you are using this command:
 
+Available variants: ``adt7604_basic``, ``adt7604_iio``, ``basic``, ``iio``.
+Available boards: ``max32666fthr``, ``max78000fthr``.
+Replace ``--variant`` / ``--board`` accordingly. Not every variant is available
+on every board; see the combination list with
+``python tools/scripts/no_os_build.py list --project ltc2983``.
+
 .. code-block:: bash
 
 	python tools/scripts/no_os_build.py build \
-	   --project ltc2983 --variant adt7604_iio_max78000 --board max78000fthr
+	   --project ltc2983 --variant adt7604_iio --board max78000fthr
 
 No-OS Supported Platforms
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -307,21 +318,25 @@ Maxim Platform
 
 **Build Command**
 
-Available variants: ``adt7604_basic_max78000``, ``adt7604_iio_max78000``.
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
+Available variants: ``adt7604_basic``, ``adt7604_iio``.
 Available boards: ``max78000fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
-   # build the project (adt7604_iio_max78000 example on the max78000fthr board)
+   # build the project (adt7604_iio example on the max78000fthr board)
    python tools/scripts/no_os_build.py build \
-      --project ltc2983 --variant adt7604_iio_max78000 --board max78000fthr
+      --project ltc2983 --variant adt7604_iio --board max78000fthr
 
    # build and flash (requires a connected debug probe)
    python tools/scripts/no_os_build.py build \
-      --project ltc2983 --variant adt7604_iio_max78000 --board max78000fthr \
+      --project ltc2983 --variant adt7604_iio --board max78000fthr \
       --probe openocd --flash

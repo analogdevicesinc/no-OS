@@ -70,11 +70,6 @@ The ADGM3121 eval device has to be supplied with 3.3V voltage on VDD pin.
 	| 11  | VDD     | Power Supply, +3.3V                        |
 	+-----+---------+--------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -92,13 +87,8 @@ mode and provides a serial console menu to control the four switches. The user
 can toggle individual switches, enable or disable all switches, and read the
 current switch status. Commands are entered via the serial interface.
 
-In order to build the basic example make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adgm3121/Makefile>`_
-
-.. code-block:: bash
-
-	EXAMPLE = basic
+This example is built by selecting the ``basic`` variant (see the Build
+Command section below).
 
 No-OS Supported Platforms
 -------------------------
@@ -141,6 +131,9 @@ Maxim Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``.
 Available boards: ``max32655fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -148,6 +141,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

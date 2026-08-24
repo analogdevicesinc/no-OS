@@ -1,0 +1,38 @@
+menu "cn0561 Configuration"
+
+choice CN0561_EXAMPLE
+	prompt "Example variant"
+	default CN0561_UART_EXAMPLE
+
+config CN0561_UART_EXAMPLE
+	bool "UART (basic) example"
+	help
+	  Basic example that initializes the CN0561 (AD4134 quad-channel ADC)
+	  via the AXI SPI Engine offload with DMA, captures samples and prints
+	  results over UART.
+
+config CN0561_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the CN0561 through the IIO framework,
+	  enabling host-side data capture over UART.
+
+endchoice
+
+config CN0561_ZED_CARRIER
+	bool "ZedBoard carrier"
+	default n
+	help
+	  Select when targeting the ZedBoard carrier. Enables the extra GPIO
+	  lines (MODE, RESETN) present on the ZedBoard FMC connector and
+	  sets the higher SPI clock frequency for that board.
+
+config CN0561_CORAZ7S_CARRIER
+	bool "Cora Z7-07S carrier"
+	default n
+	help
+	  Select when targeting the Cora Z7-07S carrier. Uses the lower SPI
+	  clock frequency suited for that board.
+
+endmenu

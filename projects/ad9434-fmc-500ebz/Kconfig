@@ -1,0 +1,22 @@
+menu "ad9434-fmc-500ebz Configuration"
+
+choice AD9434_FMC_500EBZ_EXAMPLE
+	prompt "Example variant"
+	default AD9434_FMC_500EBZ_DEMO_EXAMPLE
+
+config AD9434_FMC_500EBZ_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Demo example that initializes the AD9434 ADC via AXI ADC core and
+	  AXI DMA, runs pattern tests, and captures data to DDR.
+
+config AD9434_FMC_500EBZ_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the AD9434 ADC through the IIO framework
+	  via iio_axi_adc, enabling host-side data capture over UART.
+
+endchoice
+
+endmenu

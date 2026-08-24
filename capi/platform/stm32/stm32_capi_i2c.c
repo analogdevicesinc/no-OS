@@ -168,7 +168,8 @@ static int stm32_capi_i2c_init(struct capi_i2c_controller_handle **handle,
 	else
 		priv_handle->hi2c.Init.Timing = STM32_I2C_DEFAULT_TIMING;
 #endif
-	priv_handle->hi2c.Init.OwnAddress1 = config->address;
+	priv_handle->hi2c.Init.OwnAddress1 = config->initiator ? 0 :
+					     (config->address << 1);
 	priv_handle->hi2c.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
 	priv_handle->hi2c.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
 	priv_handle->hi2c.Init.OwnAddress2 = 0;
@@ -188,10 +189,21 @@ static int stm32_capi_i2c_init(struct capi_i2c_controller_handle **handle,
 	priv_handle->callback = NULL;
 	priv_handle->callback_arg = NULL;
 	priv_handle->async_in_progress = false;
+	priv_handle->is_initiator = config->initiator;
+	priv_handle->target_addr = config->initiator ? 0 : config->address;
+
+	if (!config->initiator && config->address != 0) {
+		if (HAL_I2C_EnableListen_IT(&priv_handle->hi2c) != HAL_OK) {
+			ret = -EIO;
+			goto error_unmap;
+		}
+	}
 
 	*handle = i2c_handle;
 	return 0;
 
+error_unmap:
+	unregister_handle_mapping(&priv_handle->hi2c);
 error_deinit:
 	HAL_I2C_DeInit(&priv_handle->hi2c);
 error:
@@ -471,22 +483,28 @@ static int stm32_capi_i2c_transmit_async(struct capi_i2c_device *device,
 	priv_handle->async_in_progress = true;
 	priv_handle->current_transfer = transfer;
 
-	dev_addr = (transfer->target_addr ? transfer->target_addr : device->address) <<
-		   1;
+	if (priv_handle->is_initiator) {
+		dev_addr = (transfer->target_addr ? transfer->target_addr :
+			    device->address) << 1;
 
-	if (transfer->sub_address && transfer->sub_address_len > 0) {
-		hal_ret = HAL_I2C_Mem_Write_IT(&priv_handle->hi2c,
-					       dev_addr,
-					       transfer->sub_address[0],
-					       transfer->sub_address_len == 1 ?
-					       I2C_MEMADD_SIZE_8BIT : I2C_MEMADD_SIZE_16BIT,
-					       transfer->buf,
-					       transfer->len);
+		if (transfer->sub_address && transfer->sub_address_len > 0) {
+			hal_ret = HAL_I2C_Mem_Write_IT(&priv_handle->hi2c,
+						       dev_addr,
+						       transfer->sub_address[0],
+						       transfer->sub_address_len == 1 ?
+						       I2C_MEMADD_SIZE_8BIT :
+						       I2C_MEMADD_SIZE_16BIT,
+						       transfer->buf,
+						       transfer->len);
+		} else {
+			hal_ret = HAL_I2C_Master_Transmit_IT(&priv_handle->hi2c,
+							     dev_addr,
+							     transfer->buf,
+							     transfer->len);
+		}
 	} else {
-		hal_ret = HAL_I2C_Master_Transmit_IT(&priv_handle->hi2c,
-						     dev_addr,
-						     transfer->buf,
-						     transfer->len);
+		/* Target mode: just arm; AddrCallback starts the transfer. */
+		return 0;
 	}
 
 	if (hal_ret != HAL_OK) {
@@ -532,22 +550,28 @@ static int stm32_capi_i2c_receive_async(struct capi_i2c_device *device,
 	priv_handle->async_in_progress = true;
 	priv_handle->current_transfer = transfer;
 
-	dev_addr = (transfer->target_addr ? transfer->target_addr : device->address) <<
-		   1;
+	if (priv_handle->is_initiator) {
+		dev_addr = (transfer->target_addr ? transfer->target_addr :
+			    device->address) << 1;
 
-	if (transfer->sub_address && transfer->sub_address_len > 0) {
-		hal_ret = HAL_I2C_Mem_Read_IT(&priv_handle->hi2c,
-					      dev_addr,
-					      transfer->sub_address[0],
-					      transfer->sub_address_len == 1 ?
-					      I2C_MEMADD_SIZE_8BIT : I2C_MEMADD_SIZE_16BIT,
-					      transfer->buf,
-					      transfer->len);
+		if (transfer->sub_address && transfer->sub_address_len > 0) {
+			hal_ret = HAL_I2C_Mem_Read_IT(&priv_handle->hi2c,
+						      dev_addr,
+						      transfer->sub_address[0],
+						      transfer->sub_address_len == 1 ?
+						      I2C_MEMADD_SIZE_8BIT :
+						      I2C_MEMADD_SIZE_16BIT,
+						      transfer->buf,
+						      transfer->len);
+		} else {
+			hal_ret = HAL_I2C_Master_Receive_IT(&priv_handle->hi2c,
+							    dev_addr,
+							    transfer->buf,
+							    transfer->len);
+		}
 	} else {
-		hal_ret = HAL_I2C_Master_Receive_IT(&priv_handle->hi2c,
-						    dev_addr,
-						    transfer->buf,
-						    transfer->len);
+		/* Target mode: just arm; AddrCallback starts the transfer. */
+		return 0;
 	}
 
 	if (hal_ret != HAL_OK) {
@@ -583,6 +607,9 @@ static int stm32_capi_i2c_recover_bus(struct capi_i2c_controller_handle *handle)
 	if (HAL_I2C_Init(&priv_handle->hi2c) != HAL_OK)
 		return -EIO;
 
+	if (!priv_handle->is_initiator && priv_handle->target_addr != 0)
+		HAL_I2C_EnableListen_IT(&priv_handle->hi2c);
+
 	return 0;
 }
 
@@ -610,6 +637,12 @@ static int stm32_capi_i2c_register_target(struct capi_i2c_controller_handle
 	if (HAL_I2C_Init(&priv_handle->hi2c) != HAL_OK)
 		return -EIO;
 
+	priv_handle->is_initiator = false;
+	priv_handle->target_addr = addr;
+
+	if (HAL_I2C_EnableListen_IT(&priv_handle->hi2c) != HAL_OK)
+		return -EIO;
+
 	return 0;
 }
 
@@ -634,6 +667,9 @@ static int stm32_capi_i2c_unregister_target(struct capi_i2c_controller_handle
 
 	if (HAL_I2C_Init(&priv_handle->hi2c) != HAL_OK)
 		return -EIO;
+
+	priv_handle->is_initiator = true;
+	priv_handle->target_addr = 0;
 
 	return 0;
 }
@@ -780,6 +816,69 @@ void HAL_I2C_AbortCpltCallback(I2C_HandleTypeDef *hi2c)
 
 	if (priv_handle->callback)
 		priv_handle->callback(CAPI_I2C_NAKD, priv_handle->callback_arg, -ECANCELED);
+}
+
+void HAL_I2C_SlaveTxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+	struct stm32_i2c_priv_handle *priv_handle;
+
+	priv_handle = find_priv_handle(hi2c);
+	if (!priv_handle)
+		return;
+
+	priv_handle->async_in_progress = false;
+	priv_handle->current_transfer = NULL;
+
+	if (priv_handle->callback)
+		priv_handle->callback(CAPI_I2C_XFR_DONE, priv_handle->callback_arg, 0);
+
+	HAL_I2C_EnableListen_IT(hi2c);
+}
+
+void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+	struct stm32_i2c_priv_handle *priv_handle;
+
+	priv_handle = find_priv_handle(hi2c);
+	if (!priv_handle)
+		return;
+
+	priv_handle->async_in_progress = false;
+	priv_handle->current_transfer = NULL;
+
+	if (priv_handle->callback)
+		priv_handle->callback(CAPI_I2C_XFR_DONE, priv_handle->callback_arg, 0);
+
+	HAL_I2C_EnableListen_IT(hi2c);
+}
+
+void HAL_I2C_AddrCallback(I2C_HandleTypeDef *hi2c, uint8_t TransferDirection,
+			  uint16_t AddrMatchCode)
+{
+	struct stm32_i2c_priv_handle *priv_handle;
+
+	(void)AddrMatchCode;
+
+	priv_handle = find_priv_handle(hi2c);
+	if (!priv_handle || !priv_handle->current_transfer)
+		return;
+
+	if (TransferDirection == I2C_DIRECTION_TRANSMIT) {
+		HAL_I2C_Slave_Seq_Receive_IT(hi2c,
+					     priv_handle->current_transfer->buf,
+					     priv_handle->current_transfer->len,
+					     I2C_LAST_FRAME);
+	} else {
+		HAL_I2C_Slave_Seq_Transmit_IT(hi2c,
+					      priv_handle->current_transfer->buf,
+					      priv_handle->current_transfer->len,
+					      I2C_LAST_FRAME);
+	}
+}
+
+void HAL_I2C_ListenCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+	HAL_I2C_EnableListen_IT(hi2c);
 }
 
 const struct capi_i2c_ops stm32_capi_i2c_ops = {

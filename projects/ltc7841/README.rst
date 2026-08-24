@@ -36,11 +36,6 @@ For reference, follow the Quick Start Procedure section of the corresponding
 demo board.
 `user guide <https://www.analog.com/media/en/technical-documentation/user-guides/dc2798a.pdf>`_.
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -113,8 +108,10 @@ Maxim Platform
 | SCL                 | Serial Clock Line   | P2_8                        |
 +---------------------+---------------------+-----------------------------+
 
-
 **Build Command**
+
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
 
 Available variants: ``basic``, ``iio_example``.
 Available boards: ``ad-apard32690-sl``.
@@ -123,6 +120,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

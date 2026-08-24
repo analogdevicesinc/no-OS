@@ -73,11 +73,6 @@ Onboard Connectors
 |                                   | voltage detection across phases.  |
 +-----------------------------------+-----------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: `https://wiki.analog.com/resources/no-os/build`
-
 No-OS Supported Examples
 ------------------------
 
@@ -143,6 +138,9 @@ J3 Header          P2 Header
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``ade9000_example``.
 Available boards: ``ad-apard32690-sl``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -150,6 +148,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

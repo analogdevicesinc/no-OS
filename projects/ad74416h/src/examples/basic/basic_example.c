@@ -48,14 +48,6 @@ int example_main()
 	struct ad74416h_desc *ad74416h_desc;
 	int ret;
 
-	struct no_os_uart_desc *uart_desc;
-
-	ret = no_os_uart_init(&uart_desc, &ad74416h_uart_ip);
-	if (ret)
-		return ret;
-
-	no_os_uart_stdio(uart_desc);
-
 	ret = ad74416h_init(&ad74416h_desc, &ad74416h_ip);
 	if (ret)
 		goto error;

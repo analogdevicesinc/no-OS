@@ -68,11 +68,6 @@ The MAX14919PMB device needs to be supplied with a 3.3V voltage.
 	| 12  | VL	 | Power Supply, +3.3V			     |
 	+-----+----------+-------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -89,12 +84,7 @@ This is a simple example which initializes the max14919 and sets the output
 channel 2 on, after which is detects faults, reverse polarity and sets 2x
 current limit for the device.
 
-
-This is the only example in this project, so it builds by default:
-
-.. code-block:: bash
-
-	make
+This is the only example in this project, so it builds by default.
 
 No-OS Supported Platforms
 -------------------------
@@ -116,7 +106,7 @@ Maxim Platform
 +------------------------+----------+-------------------------------------------+-----------------------------+
 | IN1(3)		 | IN3      | IN3 LOGIC INPUT(GPIO)			| P1_2		      	      |
 +------------------------+----------+-------------------------------------------+-----------------------------+
-| IN1(4)		 | IN4      | IN LOGIC INPUT(GPIO)			| P1_3		      	      |
+| IN1(4)		 | IN4      | IN4 LOGIC INPUT(GPIO)			| P1_3		      	      |
 +------------------------+----------+-------------------------------------------+-----------------------------+
 | FAULT			 | FAULT    | FAULT LOGIC OUTPUT(GPIO)			| P1_6			      |
 +------------------------+----------+-------------------------------------------+-----------------------------+
@@ -133,9 +123,17 @@ Maxim Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
+Available variants: ``basic``.
+Available boards: ``ad-apard32690-sl``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

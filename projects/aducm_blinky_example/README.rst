@@ -24,11 +24,6 @@ The ADuCM3029 features single-supply operation from 1.74 V to 3.6 V, with
 active mode dynamic current of 30 uA/MHz and hibernate mode current of
 750 nA.
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -68,6 +63,9 @@ switch is set to the USB position for serial terminal communication.
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`ADuCM3029 CMake build guide </build_guides/build_aducm3029_cmake>`.
+
 Available variants: ``basic``.
 Available boards: ``eval-adicup3029``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -76,6 +74,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 
    # point at the CrossCore Embedded Studio install (only if not auto-detected)
    export CCES_HOME=/opt/analog/cces/3.0.3
+   # Windows (PowerShell): $env:CCES_HOME = "C:\analog\cces\3.0.3"
 
    cd no-OS
 

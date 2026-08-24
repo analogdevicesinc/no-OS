@@ -23,6 +23,10 @@ struct stm32_capi_gpio_port_priv {
 	uint8_t num_pins;
 	/** Current direction configuration for all pins (1=input, 0=output) */
 	uint16_t direction_mask;
+	/** Per-pin ACTIVE_LOW mask (1=pin is active-low). Captured from the
+	 *  port config flags at init so the port-level logical value ops can
+	 *  invert the wire level without retaining the caller's flags array. */
+	uint16_t active_low_mask;
 	/** Default configuration */
 	struct stm32_capi_gpio_port_config default_config;
 };

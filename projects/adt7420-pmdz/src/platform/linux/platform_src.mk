@@ -1,6 +1,0 @@
-INCS += $(INCLUDE)/no_os_rtc.h
-
-INCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_i2c.h		\
-
-SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c	\
-	$(PLATFORM_DRIVERS)/$(PLATFORM)_i2c.c		\

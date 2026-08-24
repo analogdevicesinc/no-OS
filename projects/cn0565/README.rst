@@ -75,11 +75,6 @@ P7-4       SCK                 SPI Clock - synchronizes data transfer
 P7-6       GND                 Ground
 ========== =================== ==========================================
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -188,6 +183,9 @@ IO28                    GPIO28
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`ADuCM3029 CMake build guide </build_guides/build_aducm3029_cmake>`.
+
 Available variants: ``eit``, ``eit_iio``.
 Available boards: ``eval-adicup3029``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -196,6 +194,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 
 	# point at the CrossCore Embedded Studio install (only if not auto-detected)
 	export CCES_HOME=/opt/analog/cces/3.0.3
+	# Windows (PowerShell): $env:CCES_HOME = "C:\analog\cces\3.0.3"
 
 	cd no-OS
 
@@ -231,6 +230,9 @@ USB Communication                               Connect SDP-K1 to PC via USB
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`STM32 CMake build guide </build_guides/build_stm32_cmake>`.
+
 Available variants: ``eit``, ``eit_iio``.
 Available boards: ``sdp-ck1z``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -241,6 +243,9 @@ Replace ``--variant`` / ``--board`` accordingly.
 	# in a default install location)
 	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 	cd no-OS
 

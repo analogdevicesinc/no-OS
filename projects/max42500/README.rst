@@ -3,7 +3,7 @@ MAX42500 no-OS Example Project
 
 .. no-os-doxygen::
 
-..contents::
+.. contents::
         :depth: 3
 
 Supported Evaluation Boards
@@ -36,11 +36,6 @@ Power Supply Requirements
 
 The MAX42500 evaluation device must be supplied with 3.3V or 5V.
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -57,11 +52,7 @@ loop, the example reads the status of the voltage monitor input and prints the
 results to the console. Optionally, varying input signals can be applied to the 
 input voltage monitor pin to test and see the status of the pin.
 
-This is the only example in this project, so it builds by default:
-
-.. code-block:: bash
-
-	make
+This is the only example in this project, so it builds by default.
 
 No-OS Supported Platforms
 -------------------------
@@ -92,6 +83,9 @@ Maxim Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``.
 Available boards: ``ad-apard32690-sl``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -99,6 +93,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

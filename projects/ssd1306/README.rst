@@ -72,17 +72,6 @@ Hardware Requirements
 * **Maxim Platform**: A development board compatible with the Maxim SDK.
 * **I2C Interface**: For communication with the SSD1306 display.
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
-This project depends on the LVGL submodule. Initialize it before building:
-
-.. code-block:: bash
-
-   git submodule update --init --remote libraries/lvgl/lvgl
-
 No-OS Supported Examples
 ------------------------
 
@@ -101,13 +90,20 @@ Maxim Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``example``.
 Available boards: ``max78000fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
+This project depends on LVGL, which the CMake build fetches automatically at
+configure time into ``libraries/lvgl`` (no submodule init required).
+
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

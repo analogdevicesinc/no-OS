@@ -65,12 +65,6 @@ Pin Description
 +-----------------+-----------------+----------------------------------------------------------+
 
 
-No-OS Build Setup
------------------
-
-For detailed build setup instructions, please refer to the 
-:dokuwiki:`no-OS build guide </resources/no-os/build>`.
-
 No-OS Supported Examples
 ------------------------
 
@@ -178,6 +172,9 @@ number), a suggested connection mnemonic, and the pin function.
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`ADuCM3029 CMake build guide </build_guides/build_aducm3029_cmake>`.
+
 Available variants: ``iio``, ``iio_timer_trigger``.
 Available boards: ``eval-adicup3029``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -186,6 +183,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 
 	# point at the CrossCore Embedded Studio install (only if not auto-detected)
 	export CCES_HOME=/opt/analog/cces/3.0.3
+	# Windows (PowerShell): $env:CCES_HOME = "C:\analog\cces\3.0.3"
 
 	cd no-OS
 
@@ -252,6 +250,9 @@ a brief description of the pin function.
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``iio``, ``iio_trigger``.
 Available boards: ``max32655fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -260,6 +261,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 
 	# point at the Maxim SDK libraries (only if not auto-detected)
 	export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+	# Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
 	cd no-OS
 
@@ -316,7 +318,10 @@ wiring the boards.
 Build Command
 ^^^^^^^^^^^^^
 
-Available variants: ``iio``, ``iio_trigger``, ``iio_timer_trigger``.
+For toolchain setup and prerequisites, see the
+:doc:`Raspberry Pi Pico CMake build guide </build_guides/build_pico_cmake>`.
+
+Available variants: ``iio``, ``iio_timer_trigger``, ``iio_trigger``.
 Available boards: ``rpi-pico``.
 Replace ``--variant`` / ``--board`` accordingly.
 
@@ -382,6 +387,9 @@ Connections
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`STM32 CMake build guide </build_guides/build_stm32_cmake>`.
+
 Available variants: ``iio``.
 Available boards: ``sdp-ck1z``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -392,6 +400,9 @@ Replace ``--variant`` / ``--board`` accordingly.
 	# in a default install location)
 	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 	cd no-OS
 

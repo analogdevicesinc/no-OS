@@ -2,7 +2,7 @@
  *   @file   adf4377.h
  *   @brief  Header file for adf4377 Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
- *   @author  Jude Osemene (jude.osemene@analog.com)
+ *   @author Jude Osemene (jude.osemene@analog.com)
  *   @author Sirac Kucukarabacioglu (sirac.kucukarabacioglu@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -41,7 +41,7 @@
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
 #include "no_os_util.h"
-
+#include "no_os_units.h"
 /* Registers Control Bits */
 #define ADF4377_REG(x)					(x)
 
@@ -79,7 +79,7 @@
 
 /* ADF4377 REG0001 Map */
 #define ADF4377_SINGLE_INSTR_MSK	NO_OS_BIT(7)
-#define ADF4377_SINGLE_INSTR(x)   	no_os_field_prep(ADF4377_SINGLE_INSTRUCTION_MSK, x)
+#define ADF4377_SINGLE_INSTR(x)   	no_os_field_prep(ADF4377_SINGLE_INSTR_MSK, x)
 #define ADF4377_MASTER_RB_CTRL_MSK	NO_OS_BIT(5)
 #define ADF4377_MASTER_RB_CTRL(x)	no_os_field_prep(ADF4377_MASTER_RB_CTRL_MSK, x)
 
@@ -616,6 +616,8 @@
 #define ADF4377_SR_DEL_MAX		    127
 #define ADF4377_SR_MON_DELAY_US		    100U
 
+#define ADF4377_BLEED_CONST1			536 // 536 nA
+
 /* ADF4377 Extra Definitions */
 #define ADF4377_SPI_SCRATCHPAD_TEST_A	    0xA5u
 #define ADF4377_SPI_SCRATCHPAD_TEST_B	    0x5Au
@@ -705,7 +707,7 @@ struct adf4377_dev {
 	/** Output Amplitude */
 	uint8_t	clkout_op;
 	/** Bleed Word */
-	uint16_t bleed_word;
+	int16_t bleed_word;
 	/** sr_del adjust */
 	uint8_t sr_del_adj;
 	/** sr_inv adjust */
@@ -762,6 +764,12 @@ int adf4377_set_rfout(struct adf4377_dev *dev, uint64_t val);
 /** ADF4377 Get output frequency attribute */
 int adf4377_get_rfout(struct adf4377_dev *dev, uint64_t *val);
 
+/** ADF4377 Set bleed delay attribute */
+int adf4377_set_bleed_delay(struct adf4377_dev *dev, int64_t bleed_delay_fs);
+
+/** ADF4377 Get bleed delay attribute */
+int adf4377_get_bleed_delay(struct adf4377_dev *dev, int64_t *bleed_delay_fs);
+
 /** ADF4377 Set channel enable attributes */
 int adf4377_set_en_chan(struct adf4377_dev *dev, uint8_t ch, bool en);
 
@@ -801,6 +809,12 @@ int adf4377_set_en_sysref_monitor(struct adf4377_dev *dev, bool en);
 /** ADF4377 Get sysref Monitoring attribute */
 int adf4377_get_en_sysref_monitor(struct adf4377_dev *dev, bool *en);
 
+/** ADF4377 Set clock output inversion attribute */
+int adf4377_set_clk_inv(struct adf4377_dev *dev, uint8_t inv);
+
+/** ADF4377 Get clock output inversion attribute */
+int adf4377_get_clk_inv(struct adf4377_dev *dev, uint8_t *inv);
+
 /** ADF4377 Set NDEL (N divider Delay) register value */
 int adf4377_set_ndel(struct adf4377_dev *dev, int32_t val);
 
@@ -818,6 +832,12 @@ int adf4377_set_freq(struct adf4377_dev *dev);
 
 /* Soft reseting device and Load default registers */
 int adf4377_soft_reset(struct adf4377_dev *dev, bool spi_4wire);
+
+/** ADF4377 Set channel inversion attribute */
+int adf4377_set_channel_inv(struct adf4377_dev *dev, uint8_t ch, uint8_t inv);
+
+/** ADF4377 Get channel inversion attribute */
+int adf4377_get_channel_inv(struct adf4377_dev *dev, uint8_t ch, uint8_t *inv);
 
 /** ADF4377 Initialization */
 int32_t adf4377_init(struct adf4377_dev **device,

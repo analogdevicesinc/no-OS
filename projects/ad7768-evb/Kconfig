@@ -1,0 +1,22 @@
+menu "ad7768-evb Configuration"
+
+choice AD7768_EVB_EXAMPLE
+	prompt "Example variant"
+	default AD7768_EVB_DEMO_EXAMPLE
+
+config AD7768_EVB_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Demo example that initializes the AD7768 ADC via AXI ADC core and
+	  AXI DMA, and captures samples to DDR.
+
+config AD7768_EVB_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the AD7768 ADC through the IIO framework
+	  via iio_axi_adc, enabling host-side data capture over UART.
+
+endchoice
+
+endmenu

@@ -46,8 +46,17 @@ int main()
 {
 	ad74416h_ip.spi_ip = ad74416h_spi_ip;
 	ad74416h_spi_extra_ip.get_input_clock = HAL_RCC_GetPCLK1Freq;
+	int ret;
 
 	stm32_init();
+
+	struct no_os_uart_desc *uart_desc;
+
+	ret = no_os_uart_init(&uart_desc, &ad74416h_uart_ip);
+	if (ret)
+		return ret;
+
+	no_os_uart_stdio(uart_desc);
 
 	return example_main();
 }

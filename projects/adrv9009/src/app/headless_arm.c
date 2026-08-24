@@ -157,6 +157,29 @@ int32_t start_iiod(struct axi_dmac *rx_dmac, struct axi_dmac *tx_dmac,
 /**********************************************************/
 /**********************************************************/
 
+/***************************************************************************//**
+ * @brief Function for obtaining SPI settings.
+ *
+ * @return SPI settings
+*******************************************************************************/
+taliseSpiSettings_t *adrv9009_spi_settings_get(void)
+{
+	return &talInit.spiSettings;
+}
+
+/***************************************************************************//**
+ * @brief Function for obtaining initial settings.
+ *
+ * @return initial settings
+*******************************************************************************/
+taliseInit_t *adrv9009_initial_settings_get(void)
+{
+	return &talInit;
+}
+
+/**********************************************************/
+/**********************************************************/
+
 int main(void)
 {
 	adiHalErr_t err;

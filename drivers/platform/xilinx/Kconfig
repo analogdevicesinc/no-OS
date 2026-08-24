@@ -1,0 +1,69 @@
+menuconfig XILINX
+	bool "Xilinx Platform Drivers"
+	default n
+	help
+	  Enable support for Xilinx platform drivers.
+
+	  Low-level platform drivers for Xilinx Zynq-7000, ZynqMP, Versal
+	  and MicroBlaze targets (GPIO, SPI, I2C, UART, IRQ, Timer),
+	  built on top of a Vitis-generated standalone BSP.
+
+if XILINX
+
+config XILINX_HDL_DESIGN
+	string "HDL design name for the CI .xsa download"
+	default ""
+	help
+	  Name of the HDL design whose exported system_top.xsa this project
+	  builds against (e.g. "adv7511", "pulsar_adc", "adrv9009"). The build
+	  tooling composes the artifact server folder name as
+	  <this>_<board> (e.g. adv7511_zed) and downloads system_top.xsa from
+	  the sdg-hdl Cloudsmith repo for CI builds. The board suffix comes from
+	  the CMake board/preset, so only the design prefix belongs here. This
+	  symbol is read by the build scripts only; it does not affect compiled
+	  sources.
+
+config UART_XILINX
+	bool "Enable Xilinx UART driver"
+	depends on UART
+	select IRQ
+	select IRQ_XILINX
+	default n
+	help
+	  The Xilinx PS UART driver is interrupt-driven (it calls
+	  no_os_irq_ctrl_init and references xil_irq_ops unconditionally on
+	  Zynq/ZynqMP), so it requires the IRQ subsystem and the Xilinx IRQ
+	  platform driver. Select them here so a project enabling UART_XILINX
+	  does not have to remember the dependency.
+
+config SPI_XILINX
+	bool "Enable Xilinx SPI driver"
+	depends on SPI
+	default n
+
+config I2C_XILINX
+	bool "Enable Xilinx I2C driver"
+	depends on I2C
+	default n
+
+config GPIO_XILINX
+	bool "Enable Xilinx GPIO driver"
+	depends on GPIO
+	default n
+
+config GPIO_IRQ_XILINX
+	bool "Enable Xilinx GPIO IRQ driver"
+	depends on GPIO && IRQ
+	default n
+
+config IRQ_XILINX
+	bool "Enable Xilinx IRQ driver"
+	depends on IRQ
+	default n
+
+config TIMER_XILINX
+	bool "Enable Xilinx Timer driver"
+	depends on TIMER
+	default n
+
+endif

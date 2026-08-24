@@ -3,13 +3,11 @@ LTC4296 no-OS Example Project
 
 .. no-os-doxygen::
 
-
 Contents
 --------
 
 .. contents:: Table of Contents
 	:depth: 3
-
 
 Overview
 --------
@@ -19,11 +17,6 @@ external components.
 
 Full performance details are provided in the LTC4296 data sheet, which should
 be consulted in conjunction with user guide.
-
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
 
 No-OS Supported Examples
 ------------------------
@@ -40,12 +33,7 @@ Basic example
 This is a simple example that initializes the LTC4296, unlock the chip and enables power on all
 avaliable ports.
 
-
-This is the only example in this project, so it builds by default:
-
-.. code-block:: bash
-
-	make
+This is the only example in this project, so it builds by default.
 
 No-OS Supported Platforms
 -------------------------
@@ -55,6 +43,9 @@ Maxim Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``.
 Available boards: ``ad-apard32690-sl``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -62,6 +53,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

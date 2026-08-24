@@ -47,9 +47,10 @@
 int example_main()
 {
 	struct ad5460_desc *ad5460_desc;
-	union ad5460_live_status *live_status;
+	union ad5460_live_status live_status;
 	int ret, status;
-	uint16_t dac_code0, gpi_0, val;
+	uint16_t dac_code0, val;
+	uint8_t gpi_0;
 	int32_t output_in_uamps_ch0 = 10000;
 	int32_t output_in_mvolts_ch0 = 6000;
 
@@ -129,7 +130,7 @@ int example_main()
 	pr_info("DAC ACTIVE CODE of channel 0 = %d \n", val);
 
 	/* Get live status */
-	ret = ad5460_get_live(ad5460_desc, live_status->value);
+	ret = ad5460_get_live(ad5460_desc, &live_status);
 	if (ret)
 		goto error_ad5460;
 

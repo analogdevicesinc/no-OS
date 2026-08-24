@@ -54,12 +54,14 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad7091r8)
 
 # AD7124
 no_os_sources_ifdef(CONFIG_ADC_AD7124 ${CMAKE_CURRENT_SOURCE_DIR}/ad7124/ad7124.c)
+no_os_sources_ifdef(CONFIG_ADC_AD7124 ${CMAKE_CURRENT_SOURCE_DIR}/ad7124/ad7124_regs.c)
 no_os_sources_ifdef(CONFIG_ADC_IIO_AD7124 ${CMAKE_CURRENT_SOURCE_DIR}/ad7124/iio_ad7124.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad7124)
 
 # AD713X
 no_os_sources_ifdef(CONFIG_ADC_AD713X ${CMAKE_CURRENT_SOURCE_DIR}/ad713x/ad713x.c)
 no_os_sources_ifdef(CONFIG_ADC_IIO_AD713X ${CMAKE_CURRENT_SOURCE_DIR}/ad713x/iio_ad713x.c)
+no_os_sources_ifdef(CONFIG_ADC_IIO_DUAL_AD713X ${CMAKE_CURRENT_SOURCE_DIR}/ad713x/iio_dual_ad713x.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad713x)
 
 # AD717X
@@ -111,7 +113,7 @@ no_os_sources_ifdef(CONFIG_ADC_AD7768 ${CMAKE_CURRENT_SOURCE_DIR}/ad7768/ad7768.
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad7768)
 
 # AD7768-1
-no_os_sources_ifdef(CONFIG_ADC_AD7768_1 ${CMAKE_CURRENT_SOURCE_DIR}/ad7768-1/ad7768-1.c)
+no_os_sources_ifdef(CONFIG_ADC_AD7768_1 ${CMAKE_CURRENT_SOURCE_DIR}/ad7768-1/ad77681.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad7768-1)
 
 # AD7779
@@ -141,17 +143,26 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad799x)
 
 # AD9081
 no_os_sources_ifdef(CONFIG_ADC_AD9081 ${CMAKE_CURRENT_SOURCE_DIR}/ad9081/ad9081.c)
+# AD9081 vendor API sources (compiled alongside the wrapper; legacy Make picked these
+# up automatically via SRC_DIRS recursive wildcard — CMake needs them explicit)
+no_os_sources_dir_ifdef(CONFIG_ADC_AD9081 ${CMAKE_CURRENT_SOURCE_DIR}/ad9081/api)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad9081)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad9081/api)
 
 # AD9083
 no_os_sources_ifdef(CONFIG_ADC_AD9083 ${CMAKE_CURRENT_SOURCE_DIR}/ad9083/ad9083.c)
 no_os_sources_ifdef(CONFIG_ADC_IIO_AD9083 ${CMAKE_CURRENT_SOURCE_DIR}/ad9083/iio_ad9083.c)
+# AD9083 vendor API sources (compiled alongside the wrapper; legacy Make picked these
+# up automatically via SRC_DIRS recursive wildcard — CMake needs them explicit)
+no_os_sources_dir_ifdef(CONFIG_ADC_AD9083 ${CMAKE_CURRENT_SOURCE_DIR}/ad9083/ad9083_api)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad9083)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad9083/ad9083_api)
 
 # AD9208
 no_os_sources_ifdef(CONFIG_ADC_AD9208 ${CMAKE_CURRENT_SOURCE_DIR}/ad9208/ad9208.c)
+# AD9208 vendor API sources (compiled alongside the wrapper; legacy Make picked these
+# up automatically via SRC_DIRS recursive wildcard — CMake needs them explicit)
+no_os_sources_dir_ifdef(CONFIG_ADC_AD9208 ${CMAKE_CURRENT_SOURCE_DIR}/ad9208/ad9208_api)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad9208)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad9208/ad9208_api)
 

@@ -53,11 +53,6 @@ Hardware Specifications
 
 Refer to EV-ADIN1320FMCZ UG available in the `product website <https://www.analog.com/en/products/adin1320.html>`_
 
-No-OS Build Setup
------------------
-
-Refer to `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -159,6 +154,9 @@ Connections
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic_init``, ``basic_init_2devices``, ``cmd``, ``wake_on_lan``.
 Available boards: ``max32670evkit``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -166,6 +164,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

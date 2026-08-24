@@ -1,0 +1,107 @@
+name: Deploy docs for NO-OS
+
+on:
+  workflow_dispatch:
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**/*.rst'
+      - '**/*.md'
+      - '.github/workflows/deploy-docs.yaml'
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.rst'
+      - '**/*.md'
+      - '.github/workflows/deploy-docs.yaml'
+
+permissions:
+  contents: read
+
+env:
+  NUM_JOBS: 4
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    outputs:
+      built: ${{ steps.stage.outcome == 'success' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+          # documentation.sh diffs against the target branch to validate that
+          # new drivers/projects ship a README.rst wired into the toctree.
+          fetch-depth: 0
+
+      - name: Verify changed files
+        id: verify_changed_files
+        uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 #v3
+        with:
+          filters: |
+            docs:
+              - 'doc/**'
+              - '.github/scripts/documentation.sh'
+              - '.github/scripts/gen_dox.sh'
+              - '.github/scripts/deploy-docs.sh'
+              - '.github/workflows/deploy-docs.yaml'
+            drivers:
+              - 'drivers/**'
+
+      - name: Build documentation
+        id: build
+        if: ${{ steps.verify_changed_files.outputs.docs == 'true' || steps.verify_changed_files.outputs.drivers == 'true' }}
+        shell: bash
+        run: |
+          ${{ github.workspace }}/.github/scripts/deploy-docs.sh
+        env:
+          TOP_DIR: ${{ github.workspace }}
+          DEPS_DIR: ${{ github.workspace }}/deps
+          NUM_JOBS: ${{ env.NUM_JOBS }}
+          VERSION: '1.13.2'
+          TARGET_BRANCH: ${{ github.base_ref }}
+
+      # Site layout: sphinx html at the root, doxygen under /doxygen/, plus
+      # .nojekyll so that the _sources/ and _static/ directories are served.
+      - name: Stage site
+        id: stage
+        if: ${{ steps.build.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -e
+          rm -rf _site
+          mkdir -p _site/doxygen
+          cp -R doc/sphinx/build/html/. _site/
+          rsync -a doc/doxygen/build/doxygen_doc/html/ _site/doxygen/
+          touch _site/.nojekyll
+
+          # Fail loudly on layout drift rather than publishing a broken site.
+          test -f _site/index.html
+          test -f _site/doxygen/index.html
+          test -f _site/.nojekyll
+          echo "Staged $(du -sh _site | cut -f1) in $(find _site -type f | wc -l) files"
+
+      - name: Upload Pages artifact
+        if: ${{ steps.stage.outcome == 'success' }}
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy-docs:
+    needs: build-docs
+    if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && needs.build-docs.outputs.built == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

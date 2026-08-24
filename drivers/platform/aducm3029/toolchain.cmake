@@ -3,7 +3,7 @@
 # The ADuCM3029 build relies on Analog Devices CrossCore Embedded Studio (CCES)
 # both for the cross compiler / OpenOCD and (later, in the platform SDK module)
 # for generating the project startup, pinmux, RTE config and linker script.
-# This file mirrors the discovery the legacy tools/scripts/aducm.mk performs.
+# This file performs the CCES/DFP discovery for the ADuCM3029 platform.
 
 message(STATUS "ADuCM3029 Platform")
 
@@ -41,10 +41,18 @@ if(NOT CCES_HOME OR NOT EXISTS "${CCES_HOME}")
         "export CCES_HOME=/opt/analog/cces/3.0.3) or pass -DCCES_HOME=...")
 endif()
 
+# Normalize to forward slashes. On Windows CCES_HOME arrives with backslashes
+# (e.g. C:\analog\cces\3.0.3), and paths derived from it are emitted verbatim
+# into .vscode/launch.json (searchDir) and openocd.cfg. Backslash sequences like
+# \a \c \3 are invalid JSON string escapes, so Cortex-Debug mangles the OpenOCD
+# -s search dir (C:\analog\cces\3.0.3 -> C:nalogces.0.3) and fails to parse the
+# launch config. Forward slashes are valid JSON and accepted by all Windows
+# tools (OpenOCD, GCC, GDB), so convert once here and every derived path is safe.
+file(TO_CMAKE_PATH "${CCES_HOME}" CCES_HOME)
 set(CCES_HOME "${CCES_HOME}" CACHE PATH "CrossCore Embedded Studio install root" FORCE)
 message(STATUS "CCES_HOME: ${CCES_HOME}")
 
-# Tool / SDK locations derived from CCES_HOME (mirrors aducm.mk:27-50).
+# Tool / SDK locations derived from CCES_HOME.
 set(CCES_COMPILER_BIN "${CCES_HOME}/ARM/gcc-arm-embedded/bin")
 set(CCES_OPENOCD_BIN "${CCES_HOME}/ARM/openocd/bin")
 set(CCES_OPENOCD_SCRIPTS "${CCES_HOME}/ARM/openocd/share/openocd/scripts")
@@ -113,7 +121,7 @@ set(CMAKE_EXECUTABLE_SUFFIX_C ".elf")
 set(CMAKE_EXECUTABLE_SUFFIX_CXX ".elf")
 
 # ---------------------------------------------------------------------------
-# Compiler / linker flags (from aducm.mk:97-117)
+# Compiler / linker flags
 # ---------------------------------------------------------------------------
 set(COMMON_CPU_FLAGS "-mcpu=cortex-m3 -mthumb")
 
@@ -122,12 +130,21 @@ set(ADUCM_DEFS "-DCORE0 -D_RTE_ -D__ADUCM3029__ -D__SILICON_REVISION__=0xffff")
 
 set(CMAKE_C_FLAGS "${COMMON_CPU_FLAGS} ${ADUCM_DEFS} -ffunction-sections -fdata-sections -MD" CACHE STRING "C compiler flags" FORCE)
 set(CMAKE_CXX_FLAGS "${COMMON_CPU_FLAGS} ${ADUCM_DEFS} -ffunction-sections -fdata-sections -MD" CACHE STRING "C++ compiler flags" FORCE)
-set(CMAKE_ASM_FLAGS "${COMMON_CPU_FLAGS} ${ADUCM_DEFS} -x assembler-with-cpp" CACHE STRING "ASM compiler flags" FORCE)
+# ADI_DISABLE_INSTRUCTION_SRAM selects the DFP's strong Reset_Handler in
+# reset_ADuCM3029.S, which clears PMG_TST_SRAM_CTL.INSTREN before any data
+# access. That remaps the 32 KiB of instruction SRAM (unused - code runs from
+# flash) as data SRAM, doubling DSRAM_A/DSRAM_B to 32 KiB each (SRAM MODE2).
+# The linker regions are widened to match (see aducm3029_platform_sdk.cmake).
+# Requires the code cache to stay disabled (default); see system_ADuCM3029.c.
+set(CMAKE_ASM_FLAGS "${COMMON_CPU_FLAGS} ${ADUCM_DEFS} -DADI_DISABLE_INSTRUCTION_SRAM -x assembler-with-cpp" CACHE STRING "ASM compiler flags" FORCE)
 
-# Debug build flags - Full debug info, no optimization
-set(CMAKE_C_FLAGS_DEBUG "-g -gdwarf-2 -O0 -D_DEBUG" CACHE STRING "C compiler flags for Debug" FORCE)
-set(CMAKE_CXX_FLAGS_DEBUG "-g -gdwarf-2 -O0 -D_DEBUG" CACHE STRING "C++ compiler flags for Debug" FORCE)
-set(CMAKE_ASM_FLAGS_DEBUG "-g -gdwarf-2 -D_DEBUG" CACHE STRING "ASM compiler flags for Debug" FORCE)
+# Debug build flags - Full debug info, no optimization.
+# Use GCC's default DWARF version (4 for this toolchain) rather than forcing
+# -gdwarf-2: the older format lacks the location lists cortex-debug/GDB need to
+# render source and locals, which broke source-level debugging on this platform.
+set(CMAKE_C_FLAGS_DEBUG "-g -O0 -D_DEBUG" CACHE STRING "C compiler flags for Debug" FORCE)
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -D_DEBUG" CACHE STRING "C++ compiler flags for Debug" FORCE)
+set(CMAKE_ASM_FLAGS_DEBUG "-g -D_DEBUG" CACHE STRING "ASM compiler flags for Debug" FORCE)
 
 # Release build flags - Optimize for speed, disable assertions
 set(CMAKE_C_FLAGS_RELEASE "-O2 -DNDEBUG" CACHE STRING "C compiler flags for Release" FORCE)
@@ -135,9 +152,9 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG" CACHE STRING "C++ compiler flags for 
 set(CMAKE_ASM_FLAGS_RELEASE "-DNDEBUG" CACHE STRING "ASM compiler flags for Release" FORCE)
 
 # RelWithDebInfo build flags - Optimize with debug info
-set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g -gdwarf-2 -DNDEBUG" CACHE STRING "C compiler flags for RelWithDebInfo" FORCE)
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g -gdwarf-2 -DNDEBUG" CACHE STRING "C++ compiler flags for RelWithDebInfo" FORCE)
-set(CMAKE_ASM_FLAGS_RELWITHDEBINFO "-g -gdwarf-2 -DNDEBUG" CACHE STRING "ASM compiler flags for RelWithDebInfo" FORCE)
+set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g -DNDEBUG" CACHE STRING "C compiler flags for RelWithDebInfo" FORCE)
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g -DNDEBUG" CACHE STRING "C++ compiler flags for RelWithDebInfo" FORCE)
+set(CMAKE_ASM_FLAGS_RELWITHDEBINFO "-g -DNDEBUG" CACHE STRING "ASM compiler flags for RelWithDebInfo" FORCE)
 
 # MinSizeRel build flags - Optimize for size
 set(CMAKE_C_FLAGS_MINSIZEREL "-Os -DNDEBUG" CACHE STRING "C compiler flags for MinSizeRel" FORCE)
@@ -166,8 +183,7 @@ if(OPENOCD_PATH)
 
     # target/aducm3029.cfg ships in the DFP's own openocd scripts directory, not
     # the standard CCES scripts dir (-s OPENOCD_SCRIPTS). Add it to OpenOCD's
-    # search path so `source [find target/aducm3029.cfg]` resolves (mirrors the
-    # second -s in tools/scripts/aducm.mk).
+    # search path so `source [find target/aducm3029.cfg]` resolves.
     set(OPENOCD_EXTRA_COMMANDS "add_script_search_dir \"${ADUCM_DFP}/openocd/scripts\"")
 
     if(NOT PROBE)

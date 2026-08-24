@@ -46,11 +46,6 @@ Board Connector and Jumper Settings
 	| SDA      | Connect to I2C Data (SDA)		       |
 	+----------+-------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -104,7 +99,7 @@ in the
 
         # Select the example you want to enable by choosing y for enabling and n for disabling
         BASIC_EXAMPLE = n
-        IIO__EXAMPLE = y
+        IIO_EXAMPLE = y
 
 No-OS Supported Platforms
 -------------------------
@@ -133,28 +128,26 @@ Maxim Platform
 
 **Build Command**
 
-.. code-block:: bash
-
-	# to delete current build
-	make PLATFORM=maxim TARGET=max32665 reset
-	# to build the project and flash the code
-	make PLATFORM=maxim TARGET=max32665 run
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
 
 Available variants: ``basic``, ``iio_example``.
-Available boards: ``max32665fthr``.
+Available boards: ``max32666fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
+   # point at the Maxim SDK libraries (only if not auto-detected)
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
-   # build the project (basic example on the max32665fthr board)
+   # build the project (basic example on the max32666fthr board)
    python tools/scripts/no_os_build.py build \
-      --project max31827-evkit --variant basic --board max32665fthr
+      --project max31827-evkit --variant basic --board max32666fthr
 
    # build and flash (requires a connected debug probe)
    python tools/scripts/no_os_build.py build \
-      --project max31827-evkit --variant basic --board max32665fthr \
+      --project max31827-evkit --variant basic --board max32666fthr \
       --probe openocd --flash

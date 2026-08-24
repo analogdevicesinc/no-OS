@@ -244,6 +244,14 @@ static void _wifi_connection_callback(void *ctx, enum at_event event,
 	struct socket_desc	*sock;
 	int32_t			sock_id;
 
+	/*
+	 * conn_id indexes conn_id_to_sock_id[MAX_CONNECTIONS]. The parser
+	 * already rejects out-of-range link ids, but guard here too since a bad
+	 * index would read/write past the wifi descriptor and corrupt the heap.
+	 */
+	if (conn_id >= MAX_CONNECTIONS)
+		return;
+
 	sock_id = desc->conn_id_to_sock_id[conn_id];
 	if (event == AT_NEW_CONNECTION) {
 		if (sock_id != INVALID_ID) {
@@ -498,6 +506,33 @@ static int32_t wifi_socket_close(struct wifi_desc *desc, uint32_t sock_id)
 	ret = wifi_socket_disconnect(desc, sock_id);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
+
+	/*
+	 * Backlog client sockets are created once at listen and reused for the
+	 * lifetime of the server: _get_initialized_client_id only ever re-offers
+	 * a client slot that is in SOCKET_DISCONNECTED state. Closing one such
+	 * client (e.g. IIOD tearing down a finished/aborted connection) must
+	 * therefore leave it DISCONNECTED with its circular buffer intact, so it
+	 * can accept the next connection. The wifi_socket_disconnect() above has
+	 * already put it in SOCKET_DISCONNECTED; releasing it to SOCKET_UNUSED
+	 * here would strand the slot forever (never re-offered), so the server
+	 * would stop accepting clients after back_log_clients connections -
+	 * observed as the client getting EPIPE on connect. Only tear the
+	 * buffers/slots down when the server socket itself is closed.
+	 *
+	 * The RX circular buffer must be reset so no bytes left unconsumed by the
+	 * previous connection (e.g. a trailing/partial command) carry over into
+	 * the next one - that would desync the request/response stream and the
+	 * new client would receive the stale command's response instead of its
+	 * own. no_os_cb_cfg re-initializes the buffer pointers without freeing the
+	 * backing storage.
+	 */
+	if (_is_server_socket(desc, sock_id) && sock_id != desc->server.id) {
+		if (sock->cb)
+			no_os_cb_cfg(sock->cb, sock->cb->buff, sock->cb->size);
+
+		return 0;
+	}
 
 	/* Server socket circular buffer will be released only when server
 	 * is removed */
@@ -755,15 +790,17 @@ static int32_t wifi_socket_listen(struct wifi_desc *desc, uint32_t sock_id,
 			break;
 
 		cli_sock = &desc->sockets[id];
+		/*
+		 * wifi_socket_open already allocated cli_sock->cb of cb_size, so
+		 * it must not be re-allocated here (that would leak the buffer).
+		 * For the first client reuse the server socket's buffer instead
+		 * and release the freshly allocated one, so the (otherwise unused)
+		 * server buffer is not leaked either.
+		 */
 		if (*i == 0 && server_sock->cb) {
+			no_os_cb_remove(cli_sock->cb);
 			cli_sock->cb = server_sock->cb;
 			server_sock->cb = NULL;
-		} else {
-			ret = no_os_cb_init(&cli_sock->cb, server_sock->cb_size);
-			if (NO_OS_IS_ERR_VALUE(ret)) {
-				wifi_socket_close(desc, id);
-				break;
-			}
 		}
 		cli_sock->state = SOCKET_DISCONNECTED;
 		desc->server.client_ids[*i] = id;

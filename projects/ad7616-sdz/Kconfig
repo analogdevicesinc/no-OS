@@ -1,0 +1,15 @@
+menu "ad7616-sdz Configuration"
+
+choice AD7616_SDZ_EXAMPLE
+	prompt "Example variant"
+	default AD7616_SDZ_DEMO_EXAMPLE
+
+config AD7616_SDZ_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Basic demo that initializes the AD7616 ADC, captures samples via the
+	  AXI SPI Engine offload with DMA, and prints the conversion results.
+
+endchoice
+
+endmenu

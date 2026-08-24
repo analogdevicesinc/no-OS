@@ -46,11 +46,6 @@ voltage of the SPI communication).
 
 	Please refer to the `MAX22007EVKIT Board user guide <https://www.analog.com/media/en/technical-documentation/data-sheets/max22007evkit.pdf>`_ for more details on jumper positions.
 
-No-OS Build Setup
------------------
-
-`Please see: <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -66,13 +61,8 @@ Basic Example
 This is a simple example which initializes the MAX22007 and writes to the data register of channel 0 and 3 with a value 
 equivalent to 2v and 4v respectively.
 
-In order to build the basic example make sure you have the following configuration in the Makefile
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/max22007/Makefile>`_
-
-.. code-block:: bash
-
-	EXAMPLE ?= basic_example
-
+This example is built by selecting the ``basic`` variant (see the Build
+Command section below).
 
 No-OS Supported Platforms
 -------------------------
@@ -103,12 +93,22 @@ STM32 Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`STM32 CMake build guide </build_guides/build_stm32_cmake>`.
+
+Available variants: ``basic``.
+Available boards: ``sdp-ck1z``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
 	# in a default install location)
 	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 	cd no-OS
 
@@ -120,4 +120,3 @@ STM32 Platform
 	python tools/scripts/no_os_build.py build \
 		--project max22007 --variant basic --board sdp-ck1z \
 		--probe openocd --flash
-

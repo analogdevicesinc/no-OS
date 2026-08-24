@@ -1,10 +1,5 @@
-# Priority: Submodule -> FetchContent
+# Source tree resolved by resolve_library_source (override -> managed clone).
 include(LibraryCacheUtils)
-
-# Default version if not set via Kconfig
-if(NOT DEFINED CONFIG_FREERTOS_VERSION OR "${CONFIG_FREERTOS_VERSION}" STREQUAL "")
-    set(CONFIG_FREERTOS_VERSION "V11.2.0")
-endif()
 
 message(STATUS "FreeRTOS requested version: ${CONFIG_FREERTOS_VERSION}")
 
@@ -12,7 +7,7 @@ message(STATUS "FreeRTOS requested version: ${CONFIG_FREERTOS_VERSION}")
 resolve_library_source(
     freertos
     "${CONFIG_FREERTOS_VERSION}"
-    "${NO_OS_DIR}/libraries/free_rtos/free_rtos"
+    "${NO_OS_DIR}/libraries/FreeRTOS-Kernel"
     "https://github.com/FreeRTOS/FreeRTOS-Kernel.git"
     FREERTOS_SOURCE_DIR
     FREERTOS_BINARY_DIR
@@ -57,7 +52,7 @@ else()
     )
 endif()
 
-# If we already used FetchContent, freertos_kernel target exists
+# If a prior include added freertos_kernel, reuse it
 # Otherwise, we need to add the subdirectory
 if(NOT TARGET freertos_kernel)
     add_subdirectory("${FREERTOS_SOURCE_DIR}" "${FREERTOS_BINARY_DIR}" EXCLUDE_FROM_ALL)

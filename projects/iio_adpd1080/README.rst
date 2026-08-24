@@ -75,11 +75,6 @@ standard I2C Pmod specification.
 | 6       | VCC     | Pmod VCC input power                          |
 +---------+---------+-----------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -132,6 +127,28 @@ via ``CONFIG_WIFI_SSID`` and ``CONFIG_WIFI_PWD`` before building, for example:
 This example is built by selecting the ``iio_wifi`` variant (see the Build
 Command below). It is available on the ADuCM/eval-adicup3029 target only.
 
+The EVAL-ADICUP3029 does **not** carry an on-board Wi-Fi module: an
+external ESP8266 module has to be connected to the EVAL-ADICUP3029 **P1**
+connector. Set the UART switch **S2** to the "WiFi Module" (right)
+position to route UART0 to the P1 Wi-Fi connector; the module is driven
+over UART0 at 115200 baud and its reset line is not connected (the module
+is reset in software).
+
+=================== =========================== ==============================================
+P1 Wi-Fi Net        ADuCM3029 Pin               Function
+=================== =========================== ==============================================
+UART0_TX            P0.10 (UART0 TX)            Data from the ADuCM3029 to the module
+UART0_RX            P0.11 (UART0 RX)            Data from the module to the ADuCM3029
+Reset               Not connected               Module is reset in software
+Power (pin 8)       +3.3V                       Module power supply
+Ground (pin 1)      DGND                        Common ground
+=================== =========================== ==============================================
+
+The ESP8266 must run AT firmware configured for 115200 baud, and its
+``CH_PD``/``EN`` pin must be tied high (and ``GPIO0`` left high at boot)
+for the module to start; otherwise no response is received and
+initialization times out.
+
 No-OS Supported Platforms
 -------------------------
 
@@ -145,6 +162,7 @@ Used Hardware
 * `EVAL-ADICUP3029 <https://www.analog.com/EVAL-ADICUP3029>`_
 * Micro-USB to USB cable
 * Breadboard wire (for INT/GPIO0 connection)
+* An external ESP8266 Wi-Fi module (``iio_wifi`` variant only)
 
 Connections
 ^^^^^^^^^^^
@@ -192,6 +210,9 @@ establishes the serial communication link used by the IIO server.
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`ADuCM3029 CMake build guide </build_guides/build_aducm3029_cmake>`.
+
 Available variants: ``iio``, ``iio_wifi``.
 Available boards: ``eval-adicup3029``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -200,6 +221,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 
    # point at the CrossCore Embedded Studio install (only if not auto-detected)
    export CCES_HOME=/opt/analog/cces/3.0.3
+   # Windows (PowerShell): $env:CCES_HOME = "C:\analog\cces\3.0.3"
 
    cd no-OS
 

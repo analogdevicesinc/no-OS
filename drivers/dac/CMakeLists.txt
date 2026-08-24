@@ -88,7 +88,11 @@ no_os_sources_ifdef(CONFIG_DAC_IIO_AD9152 ${CMAKE_CURRENT_SOURCE_DIR}/ad9152/iio
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad9152)
 
 # AD917X
-no_os_sources_ifdef(CONFIG_DAC_AD917X ${CMAKE_CURRENT_SOURCE_DIR}/ad917x/ad917x.c)
+no_os_sources_ifdef(CONFIG_DAC_AD917X ${CMAKE_CURRENT_SOURCE_DIR}/ad917x/ad9172.c)
+no_os_sources_ifdef(CONFIG_DAC_AD917X ${CMAKE_CURRENT_SOURCE_DIR}/ad917x/ad917x_api/ad917x_api.c)
+no_os_sources_ifdef(CONFIG_DAC_AD917X ${CMAKE_CURRENT_SOURCE_DIR}/ad917x/ad917x_api/ad917x_jesd_api.c)
+no_os_sources_ifdef(CONFIG_DAC_AD917X ${CMAKE_CURRENT_SOURCE_DIR}/ad917x/ad917x_api/ad917x_nco_api.c)
+no_os_sources_ifdef(CONFIG_DAC_AD917X ${CMAKE_CURRENT_SOURCE_DIR}/ad917x/ad917x_api/ad917x_reg.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad917x)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad917x/ad917x_api)
 

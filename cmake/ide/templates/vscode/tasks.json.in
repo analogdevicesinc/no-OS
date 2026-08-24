@@ -1,0 +1,45 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "no-OS: Build (@NO_OS_PROJECT_NAME@ / @PLATFORM@ / @TARGET@)",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "@CMAKE_BINARY_DIR@",
+                "--target",
+                "@PROJECT_TARGET_NAME@"
+            ],
+            "problemMatcher": "$gcc",
+            "group": "build"
+        },
+        {
+            "label": "no-OS: Clean rebuild (@NO_OS_PROJECT_NAME@ / @PLATFORM@ / @TARGET@)",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "@CMAKE_BINARY_DIR@",
+                "--target",
+                "@PROJECT_TARGET_NAME@",
+                "--clean-first"
+            ],
+            "problemMatcher": "$gcc",
+            "group": "build"
+        },
+        {
+            "label": "no-OS: Flash (@NO_OS_PROJECT_NAME@ / @PLATFORM@ / @TARGET@)",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "@CMAKE_BINARY_DIR@",
+                "--target",
+                "flash"
+            ],
+            "problemMatcher": "$gcc",
+            "group": "build"
+        }
+    ]
+}

@@ -41,6 +41,8 @@
 #include "stm32_gpio.h"
 #include "stm32_uart.h"
 #include "stm32_uart_stdio.h"
+#include "no_os_gpio.h"
+#include "no_os_irq.h"
 
 extern UART_HandleTypeDef huart5;
 
@@ -58,7 +60,21 @@ extern UART_HandleTypeDef huart5;
 #define SPI_OPS         &stm32_spi_ops
 #define SPI_EXTRA       &ad74416h_spi_extra_ip
 
+/* ADC_RDY GPIO/IRQ mapping for the SDP-CK1Z board.
+   PA2 is routed to the ADC_RDY signal and configured as GPIO_EXTI2. */
+#define GPIO_ADC_RDY_PORT   0 /* Port A */
+#define GPIO_ADC_RDY_PIN    2 /* Pin 2 */
+#define GPIO_OPS            &stm32_gpio_ops
+#define GPIO_EXTRA          NULL
+
+#define GPIO_IRQ_ID1        GPIO_ADC_RDY_PIN
+#define GPIO_IRQ_OPS        &stm32_gpio_irq_ops
+#define GPIO_IRQ_ADC_EXTRA  &ad74416h_gpio_irq_extra_ip
+
 extern struct stm32_uart_init_param ad74416h_uart_extra_ip;
 extern struct stm32_spi_init_param ad74416h_spi_extra_ip;
+extern struct stm32_gpio_irq_init_param ad74416h_gpio_irq_extra_ip;
+extern struct no_os_gpio_init_param adc_rdy_gpio_ip;
+extern struct no_os_irq_init_param adc_rdy_gpio_irq_ip;
 
 #endif /* __PARAMETERS_H__ */

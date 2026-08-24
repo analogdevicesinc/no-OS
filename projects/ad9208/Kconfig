@@ -1,0 +1,22 @@
+menu "ad9208 Configuration"
+
+choice AD9208_EXAMPLE
+	prompt "Example variant"
+	default AD9208_DEMO_EXAMPLE
+
+config AD9208_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Demo example that initializes dual AD9208 RF ADCs via JESD204 RX,
+	  AXI ADC core, and DMA, capturing data to DDR.
+
+config AD9208_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the dual AD9208 ADCs through the IIO
+	  framework via iio_axi_adc, enabling host-side data capture over UART.
+
+endchoice
+
+endmenu

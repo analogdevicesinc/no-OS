@@ -70,9 +70,9 @@ int example_main()
 	printf("UART online.\n");
 
 	no_os_flash_read(flash_dut, 0x3E000, &flash_val, 4);
-	printf("Address 0x3E000: %lX\n", flash_val);
+	printf("Address 0x3E000: %lX\n", (unsigned long)flash_val);
 	no_os_flash_read(flash_dut, 0x3E004, &flash_val, 4);
-	printf("Address 0x3E004: %lX\n", flash_val);
+	printf("Address 0x3E004: %lX\n", (unsigned long)flash_val);
 
 	flash_val = 0xAABBCCDD;
 
@@ -82,9 +82,9 @@ int example_main()
 		return ret;
 
 	no_os_flash_read(flash_dut, 0x3E000, &flash_val, 1);
-	printf("Address 0x3E000: %lX\n", flash_val);
+	printf("Address 0x3E000: %lX\n", (unsigned long)flash_val);
 	no_os_flash_read(flash_dut, 0x3E004, &flash_val, 1);
-	printf("Address 0x3E004: %lX\n", flash_val);
+	printf("Address 0x3E004: %lX\n", (unsigned long)flash_val);
 
 	flash_val = 0xCCDDAABB;
 
@@ -94,9 +94,9 @@ int example_main()
 		return ret;
 
 	no_os_flash_read(flash_dut, 0x3E000, &flash_val, 1);
-	printf("Address 0x3E000: %lX\n", flash_val);
+	printf("Address 0x3E000: %lX\n", (unsigned long)flash_val);
 	no_os_flash_read(flash_dut, 0x3E004, &flash_val, 1);
-	printf("Address 0x3E004: %lX\n", flash_val);
+	printf("Address 0x3E004: %lX\n", (unsigned long)flash_val);
 
 	ret = no_os_irq_global_disable(irq_dut);
 	if (ret < 0)

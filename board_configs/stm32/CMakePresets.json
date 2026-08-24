@@ -100,7 +100,8 @@
 				"USE_VENDOR_TOOLCHAIN": "ON",
 				"PLATFORM": "stm32",
 				"TARGET": "stm32h563",
-				"BOARD_CONFIG_FILE": "nucleo-h563zi_defconfig"
+				"BOARD_CONFIG_FILE": "nucleo-h563zi_defconfig",
+				"OPENOCD_INTERFACE": "interface/stlink-dap.cfg"
 			}
 		}
 	]

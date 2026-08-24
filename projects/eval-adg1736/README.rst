@@ -82,11 +82,6 @@ Before connecting the MCU, configure the EVAL-ADG1736 jumpers.
 | P12      | **Insert**       | Connect IN2 to DIGIO2 for MCU control         |
 +----------+------------------+-----------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -201,6 +196,9 @@ Note: P1.6 is on J7 header (pin 4), P2.0 is on J9 header (pin 5).
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``.
 Available boards: ``max32655fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -208,6 +206,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

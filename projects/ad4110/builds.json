@@ -1,8 +1,0 @@
-{
-	"xilinx": {
-		"uart": {
-			"flags" : "",
-			"hardware" : ["ad4110_zed"]
-	  	}
-	}
-}

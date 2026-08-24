@@ -21,11 +21,6 @@ The macros used in Common Data are defined in platform specific files
 found in the
 `Project Platform Configuration Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/demo_esp/src/platform>`__.
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -48,16 +43,18 @@ ADuCM3029
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_ (on-board ESP8266 Wi-Fi module)
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
+* An external ESP8266 Wi-Fi module
 
 Connections
 ^^^^^^^^^^^
 
-The EVAL-ADICUP3029 carries an on-board ESP8266 Wi-Fi module wired to
-connector P1, so no external module has to be added. Set the UART switch
-**S2** to the "WiFi Module" (right) position to route UART0 to the P1
-Wi-Fi connector; the module is driven over UART0 at 115200 baud and its
-reset line is not connected (the module is reset in software).
+The EVAL-ADICUP3029 does **not** carry an on-board Wi-Fi module: an
+external ESP8266 module has to be connected to the **P1** connector. Set
+the UART switch **S2** to the "WiFi Module" (right) position to route
+UART0 to the P1 Wi-Fi connector; the module is driven over UART0 at
+115200 baud and its reset line is not connected (the module is reset in
+software).
 
 =================== =========================== ==============================================
 P1 Wi-Fi Net        ADuCM3029 Pin               Function
@@ -69,8 +66,16 @@ Power (pin 8)       +3.3V                       Module power supply
 Ground (pin 1)      DGND                        Common ground
 =================== =========================== ==============================================
 
+The ESP8266 must run AT firmware configured for 115200 baud, and its
+``CH_PD``/``EN`` pin must be tied high (and ``GPIO0`` left high at boot)
+for the module to start; otherwise no response is received and
+initialization times out.
+
 Build Command
 ^^^^^^^^^^^^^
+
+For toolchain setup and prerequisites, see the
+:doc:`ADuCM3029 CMake build guide </build_guides/build_aducm3029_cmake>`.
 
 Available variants: ``basic``.
 Available boards: ``eval-adicup3029``.
@@ -80,6 +85,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 
    # point at the CrossCore Embedded Studio install (only if not auto-detected)
    export CCES_HOME=/opt/analog/cces/3.0.3
+   # Windows (PowerShell): $env:CCES_HOME = "C:\analog\cces\3.0.3"
 
    cd no-OS
 
@@ -124,6 +130,9 @@ Ground              GND                         Common ground
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``.
 Available boards: ``ad-apard32690-sl``.
 Replace ``--variant`` / ``--board`` accordingly.
@@ -131,6 +140,7 @@ Replace ``--variant`` / ``--board`` accordingly.
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

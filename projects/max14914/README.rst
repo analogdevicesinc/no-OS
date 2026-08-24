@@ -71,11 +71,6 @@ with voltage of 3.3V.
 	| 12  | VL	 | Power Supply, +3.3V			     |
 	+-----+----------+-------------------------------------------+
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -91,11 +86,7 @@ Basic example
 This is a simple example which initializes the max14914 and sets the state of
 the device to a DIGITAL INPUT IEC TYPE 2.
 
-This is the only example in this project, so it builds by default:
-
-.. code-block:: bash
-
-	make
+This is the only example in this project, so it builds by default.
 
 No-OS Supported Platforms
 -------------------------
@@ -130,13 +121,17 @@ Maxim Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
+Available variants: ``basic``.
+Available boards: ``ad-apard32690-sl``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
-   Available variants: ``basic``.
-   Available boards: ``ad-apard32690-sl``.
-   Replace ``--variant`` / ``--board`` accordingly.
-
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 

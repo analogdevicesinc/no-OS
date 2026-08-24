@@ -55,11 +55,6 @@ Power Supply Requirements
 * On-resistance: 200 mOhm (typ) at +25 C
 * Continuous output current: up to 1 A RMS per half-bridge
 
-No-OS Build Setup
------------------
-
-Please see: `No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_
-
 No-OS Supported Examples
 ------------------------
 
@@ -113,26 +108,30 @@ Used Hardware
 ^^^^^^^^^^^^^
 
 * MAX22200EVKIT
-* MAX32665
+* MAX32666FTHR
 
 Build Command
 ^^^^^^^^^^^^^
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``, ``iio``.
-Available boards: ``ad-apard32690-sl``, ``max32665fthr``.
+Available boards: ``ad-apard32690-sl``, ``max32666fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
-   # build the project (basic example on the max32665fthr board)
+   # build the project (basic example on the max32666fthr board)
    python tools/scripts/no_os_build.py build \
-      --project max22200 --variant basic --board max32665fthr
+      --project max22200 --variant basic --board max32666fthr
 
    # build and flash (requires a connected debug probe)
    python tools/scripts/no_os_build.py build \
-      --project max22200 --variant basic --board max32665fthr \
+      --project max22200 --variant basic --board max32666fthr \
       --probe openocd --flash

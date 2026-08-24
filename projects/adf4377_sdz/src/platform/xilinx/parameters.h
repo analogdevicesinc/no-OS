@@ -57,6 +57,11 @@
 #define GPIO_CE				GPIO_OFFSET + 3
 #define GPIO_ENCLK1                 	GPIO_OFFSET + 4
 
+/* Port is unused on the Xilinx platform (kept for common_data.c portability). */
+#define GPIO_CE_PORT			0
+#define GPIO_ENCLK1_PORT		0
+#define GPIO_ENCLK2_PORT		0
+
 extern struct xil_spi_init_param xil_spi_extra;
 extern struct xil_gpio_init_param xil_gpio_init_param;
 

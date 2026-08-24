@@ -61,11 +61,6 @@ from a regulated 2.5V supply that is generated on-board.
 For reference, consult the Quick Start Procedure section in the user guide for the corresponding demo board:
 `DC2135A user guide <https://www.analog.com/media/en/technical-documentation/user-guides/DC2135AF.PDF>`_.
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -86,7 +81,7 @@ To build the basic example, run:
 .. code-block:: bash
 
 	python tools/scripts/no_os_build.py build \
-	   --project ltc2378 --variant basic --board max32665fthr
+	   --project ltc2378 --variant basic --board max32666fthr
 
 IIO example
 ^^^^^^^^^^^
@@ -114,7 +109,7 @@ To build the IIO example, run:
 .. code-block:: bash
 
 	python tools/scripts/no_os_build.py build \
-	   --project ltc2378 --variant iio --board max32665fthr
+	   --project ltc2378 --variant iio --board max32666fthr
 
 No-OS Supported Platforms
 -------------------------
@@ -128,7 +123,6 @@ Maxim Platform
 * `MAX32666FTHR <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32666fthr.html>`_
 
 **Connections**:
-
 
 +--------------------------+----------------------------------------------+------------------+
 | DC2135A Pin              | Function					  | MAX32666FTHR Pin |
@@ -148,21 +142,25 @@ Maxim Platform
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
 Available variants: ``basic``, ``iio``.
-Available boards: ``max32665fthr``.
+Available boards: ``max32666fthr``.
 Replace ``--variant`` / ``--board`` accordingly.
 
 .. code-block:: bash
 
    export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+   # Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
    cd no-OS
 
-   # build the project (basic example on the max32665fthr board)
+   # build the project (basic example on the max32666fthr board)
    python tools/scripts/no_os_build.py build \
-      --project ltc2378 --variant basic --board max32665fthr
+      --project ltc2378 --variant basic --board max32666fthr
 
    # build and flash (requires a connected debug probe)
    python tools/scripts/no_os_build.py build \
-      --project ltc2378 --variant basic --board max32665fthr \
+      --project ltc2378 --variant basic --board max32666fthr \
       --probe openocd --flash

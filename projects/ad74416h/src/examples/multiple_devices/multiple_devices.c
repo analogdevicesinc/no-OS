@@ -48,7 +48,7 @@ int example_main()
 	struct ad74416h_desc *ad74416h_desc, *ad74416h_ad1_desc;
 	int ret;
 	uint16_t reg_value;
-	uint32_t dac_code;
+	uint16_t dac_code;
 
 	ret = ad74416h_init(&ad74416h_desc, &ad74416h_ip); //Device address 0
 	if (ret)

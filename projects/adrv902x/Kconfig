@@ -1,0 +1,29 @@
+menu "adrv902x Configuration"
+
+choice ADRV902X_EXAMPLE
+	prompt "Example variant"
+	default ADRV902X_BASIC_EXAMPLE
+
+config ADRV902X_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Basic initialization and bring-up example for the ADRV9025
+	  transceiver via JESD204 RX/TX, AXI ADC/DAC cores, and DMA.
+
+config ADRV902X_DMA_EXAMPLE
+	bool "DMA example"
+	help
+	  DMA-based data capture and playback example for the ADRV9025
+	  transceiver.
+
+config ADRV902X_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the ADRV9025 transceiver through the IIO
+	  framework via iio_axi_adc and iio_axi_dac, enabling host-side data
+	  capture and playback over UART.
+
+endchoice
+
+endmenu

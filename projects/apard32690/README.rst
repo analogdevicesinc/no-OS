@@ -6,7 +6,7 @@ AD-APARD32690-SL no-OS Example Project
 Prerequisites
 -------------
 
-Prior to building the project, a couple steps are necessary in order to get the Maxim Micros SDK and setup the environment. These are presented in the ***Build Prerequisites*** section of no-OS build guide available here: https://wiki.analog.com/resources/no-os/build .
+Prior to building the project, a couple steps are necessary in order to get the Maxim Micros SDK and setup the environment. These are presented in the :doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
 
 The MaximSDK provides distributions of `arm-none-eabi-` GCC compiler + utilities and `OpenOCD`, so you don't have to install these separately.
 
@@ -37,9 +37,9 @@ The project may be tested by using netcat on the host:
 
 	netcat 192.168.97.40 10000
 
-#. Open a terminal and navigate to the repository root (if building on Windows, `Git Bash` has to be used).
+#. Open a terminal and navigate to the repository root.
 
-#. Build the project with the ``no_os_build.py`` helper, selecting the desired variant (the build defaults to a release, ``-O2``, build):
+#. Build the project with the ``no_os_build.py`` helper, selecting the desired variant (the build defaults to a release, ``-O2``, build). For toolchain setup and prerequisites, see the :doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`:
 
 .. code-block:: bash
 

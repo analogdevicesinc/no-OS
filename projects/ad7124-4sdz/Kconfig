@@ -1,0 +1,16 @@
+menu "ad7124-4sdz Configuration"
+
+choice AD7124_4SDZ_EXAMPLE
+	prompt "Example variant"
+	default AD7124_4SDZ_DEMO_EXAMPLE
+
+config AD7124_4SDZ_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Basic demo example that initializes the AD7124 ADC over SPI,
+	  reads all registers, then continuously reads and prints ADC
+	  conversion results.
+
+endchoice
+
+endmenu

@@ -537,4 +537,22 @@ int32_t ad9361_do_dcxo_tune_fine(struct ad9361_rf_phy *phy,
 /* Get the temperature. */
 int32_t ad9361_get_temperature(struct ad9361_rf_phy *phy,
 			       int32_t *temp);
+/* Mute/unmute TX output (also used internally during calibration). */
+int32_t ad9361_tx_mute(struct ad9361_rf_phy *phy, uint32_t state);
+/* Temporarily disable / restore ENSM pin control. */
+int32_t ad9361_ensm_mode_disable_pinctrl(struct ad9361_rf_phy *phy);
+int32_t ad9361_ensm_mode_restore_pinctrl(struct ad9361_rf_phy *phy);
+/* Save / restore digital interface tuning delay registers. */
+int32_t ad9361_write_clock_data_delays(struct ad9361_rf_phy *phy);
+int32_t ad9361_read_clock_data_delays(struct ad9361_rf_phy *phy);
+/* Drive calibration switch GPIOs. */
+int32_t ad9361_set_cal_sw(struct ad9361_rf_phy *phy, uint32_t val);
+/* Direct BIST register write. */
+int32_t ad9361_write_bist_reg(struct ad9361_rf_phy *phy, uint32_t val);
+/* Query current digital tune state. */
+int32_t ad9361_get_dig_tune_data(struct ad9361_rf_phy *phy,
+				 struct ad9361_dig_tune_data *data);
+/* RSSI gain-step error table helpers. */
+int32_t ad9361_rssi_program_lna_gain(struct ad9361_rf_phy *phy);
+int32_t ad9361_rssi_write_err_tbl(struct ad9361_rf_phy *phy);
 #endif

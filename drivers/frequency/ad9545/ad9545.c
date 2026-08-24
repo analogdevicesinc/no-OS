@@ -514,7 +514,7 @@ static uint64_t ad9545_calc_pll_params(struct ad9545_pll_clk *clk,
 	dpll_n_div = no_os_clamp_t(uint32_t, dpll_n_div, min_dpll_n_div,
 				   AD9545_DPLL_MAX_N);
 
-	num = rate - (dpll_n_div * m_div * parent_rate);
+	num = rate - ((uint64_t)dpll_n_div * m_div * parent_rate);
 	den = m_div * parent_rate;
 	no_os_rational_best_approximation_u64(num, den, AD9545_DPLL_MAX_FRAC,
 					      AD9545_DPLL_MAX_MOD, frac, mod);

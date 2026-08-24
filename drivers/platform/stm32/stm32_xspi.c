@@ -570,7 +570,7 @@ static int32_t stm32_xspi_config_dma_and_start(struct no_os_spi_desc* desc,
 	XSPI_TypeDef* XSPIx = sdesc->hxspi.Instance;
 	struct no_os_dma_xfer_desc* ch_xfer = NULL;
 	int32_t ret;
-	uint8_t i;
+	uint32_t i;
 	bool xfer_tx; // Flag to indicate transmit
 
 	if (!desc || !msgs)

@@ -72,11 +72,6 @@ GND Test Point        Ground connection for 24 V DC power supply and scope probe
 DOI Test Points       Oscilloscope probe points for digital output signal verification
 ====================  ==================================================================
 
-No-OS Build Setup
------------------
-
-Please see: https://wiki.analog.com/resources/no-os/build
-
 No-OS Supported Examples
 ------------------------
 
@@ -132,7 +127,7 @@ Maxim Platform
 **Used Hardware**
 
 * `AD-APARD32690-SL <https://www.analog.com/AD-APARD32690-SL>`_
-* `MAX32666FTHR <https://www.analog.com/MAX32666FTHR>`_
+* `max32666fthr <https://www.analog.com/max32666fthr>`_
 
 **Connections**
 
@@ -142,7 +137,7 @@ jumper wires for point-to-point wiring between the J13 header and the target
 board.
 
 +-------------------+-------------+---------------------+------------------+
-| Function          | MAX14906    | AD-APARD32690-SL    | MAX32666FTHR     |
+| Function          | MAX14906    | AD-APARD32690-SL    | max32666fthr     |
 |                   | Interface   |                     |                  |
 +===================+=============+=====================+==================+
 | SPI Device ID     | SPI         | 4                   | 1                |
@@ -160,10 +155,18 @@ board.
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
+
+Available variants: ``basic``, ``iio``.
+Available boards: ``ad-apard32690-sl``, ``max32666fthr``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# point at the Maxim SDK libraries (only if not auto-detected)
 	export MAXIM_LIBRARIES=</path/to/MaximSDK/Libraries>
+	# Windows (PowerShell): $env:MAXIM_LIBRARIES = "C:\MaximSDK\Libraries"
 
 	cd no-OS
 
@@ -172,7 +175,7 @@ board.
 		--project max14906 --variant iio --board ad-apard32690-sl
 
 	# Available variants: ``basic``, ``iio``. Replace ``--variant`` accordingly.
-	# Alternative board: ``max32665fthr``. Replace ``--board`` accordingly.
+	# Alternative board: ``max32666fthr``. Replace ``--board`` accordingly.
 
 	# build and flash (requires a connected debug probe)
 	python tools/scripts/no_os_build.py build \
@@ -209,20 +212,28 @@ the NUCLEO-F401RE board and the MAX14906EVKIT J13 header:
 
 **Build Command**
 
+For toolchain setup and prerequisites, see the
+:doc:`STM32 CMake build guide </build_guides/build_stm32_cmake>`.
+
+Available variants: ``basic``, ``iio``.
+Available boards: ``nucleo-f401re``.
+Replace ``--variant`` / ``--board`` accordingly.
+
 .. code-block:: bash
 
 	# set the path to STM32CubeMX and STM32CubeIDE (only if they are not
 	# in a default install location)
 	export STM32CUBEMX=</path/to/stm32cubemx>
 	export STM32CUBEIDE=</path/to/stm32cubeide>
+	# Windows (PowerShell):
+	#   $env:STM32CUBEMX = "C:\ST\STM32CubeMX"
+	#   $env:STM32CUBEIDE = "C:\ST\STM32CubeIDE"
 
 	cd no-OS
 
 	# build the project (basic example on the NUCLEO-F401RE board)
 	python tools/scripts/no_os_build.py build \
 		--project max14906 --variant basic --board nucleo-f401re
-
-	# Available variants: ``basic``, ``iio``. Replace ``--variant`` accordingly.
 
 	# build and flash (requires a connected debug probe)
 	python tools/scripts/no_os_build.py build \

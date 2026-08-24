@@ -86,16 +86,16 @@
 			}
 		},
 		{
-			"name": "max32665fthr",
-			"description": "MAX32665 board",
+			"name": "max32666fthr",
+			"description": "MAX32666 board",
 			"inherits": "maxim-base",
 			"cacheVariables": {
-				"BOARD": "max32665fthr",
+				"BOARD": "max32666fthr",
 				"USE_VENDOR_TOOLCHAIN": "ON",
 				"PLATFORM": "maxim",
 				"TARGET": "max32665",
 				"TARGET_NUM": "32665",
-				"BOARD_CONFIG_FILE": "max32665fthr_defconfig"
+				"BOARD_CONFIG_FILE": "max32666fthr_defconfig"
 			}
 		},
 		{
@@ -122,6 +122,19 @@
 				"TARGET": "max32650",
 				"TARGET_NUM": "32650",
 				"BOARD_CONFIG_FILE": "ad-swiot1l-sl_defconfig"
+			}
+		},
+		{
+			"name": "max32690fthr",
+			"description": "MAX32690 FTHR board",
+			"inherits": "maxim-base",
+			"cacheVariables": {
+				"BOARD": "max32690fthr",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "maxim",
+				"TARGET": "max32690",
+				"TARGET_NUM": "32690",
+				"BOARD_CONFIG_FILE": "max32690fthr_defconfig"
 			}
 		}
 	]
