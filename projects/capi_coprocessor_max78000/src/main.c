@@ -251,7 +251,7 @@ static int toggle_resources(struct capi_coprocessor_handle *copro)
 
 		for (index = 0; index < count; index++) {
 			ret = capi_coprocessor_resource_get_enabled(copro, types[i],
-				index, &enabled);
+					index, &enabled);
 			if (ret)
 				return ret;
 			printf("      [%lu] initially %s\n", (unsigned long)index,
@@ -259,22 +259,22 @@ static int toggle_resources(struct capi_coprocessor_handle *copro)
 
 			/* Off, then back on, reporting the state each time. */
 			ret = capi_coprocessor_resource_set_enabled(copro, types[i],
-				index, false);
+					index, false);
 			if (ret)
 				return ret;
 			ret = capi_coprocessor_resource_get_enabled(copro, types[i],
-				index, &enabled);
+					index, &enabled);
 			if (ret)
 				return ret;
 			printf("      [%lu] after disable -> %s\n",
 			       (unsigned long)index, enabled ? "enabled" : "disabled");
 
 			ret = capi_coprocessor_resource_set_enabled(copro, types[i],
-				index, true);
+					index, true);
 			if (ret)
 				return ret;
 			ret = capi_coprocessor_resource_get_enabled(copro, types[i],
-				index, &enabled);
+					index, &enabled);
 			if (ret)
 				return ret;
 			printf("      [%lu] after enable  -> %s\n",
