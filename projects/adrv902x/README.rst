@@ -29,9 +29,9 @@ transceiver with digital predistortion (DPD) and crest factor reduction
 
 The ADRV9025/ADRV9026/ADRV9029 devices feature four transmitters, four
 receivers, and dual observation receivers covering a frequency range of
-75 MHz to 6 GHz. They integrate JESD204B interfaces for high-speed
-digital data transfer and ARM Cortex-M3 based firmware (Madura API) for
-device control.
+75 MHz to 6 GHz. They integrate JESD204B and JESD204C interfaces for
+high-speed digital data transfer and ARM Cortex-M3 based firmware
+(Madura API) for device control.
 
 Driver Layout
 -------------
@@ -57,11 +57,43 @@ The Madura API is located in the no-OS driver directory under:
        ├── adi_platform.h
        └── adi_platform_types.h
 
-Switching Between Use Cases
+Selecting the JESD Use Case
 ---------------------------
 
-When the implementation of a different use case than the one in the
-project folder is desired, the following steps have to be followed:
+The JESD use case is selected **automatically from the bitstream** at
+configure time - there is normally nothing to edit by hand.
+``scripts/xsa_profile.sh`` reads the hardware handoff (``system.hwh``)
+inside the ``.xsa`` and reports which firmware profile the design needs:
+
+* ``LINK_MODE 2`` in the handoff selects **JESD204C**, otherwise JESD204B;
+* an ``axi_adrv9026_rx_os_jesd_rx`` core means **ORx** is present;
+* the main-Rx ``adc_tpl_core`` ``NUM_CHANNELS`` gives the Rx converter count.
+
+``CMakeLists.txt`` uses that result to put exactly one firmware profile
+directory on the include path and to derive the build-time settings, so
+``#include "ActiveUseCase_profile.h"`` always resolves to the profile that
+matches the loaded bitstream:
+
+=========================  =======  ==========================  ====================
+JESD link mode (from XSA)  ORx      Firmware profile directory  Compile settings
+=========================  =======  ==========================  ====================
+JESD204B                   absent   ``JESD204B_no_ORx``         204B
+JESD204B                   present  ``JESD204B_ORx``            204B
+JESD204C                   present  ``JESD204C_ORx``            ``JESD204C_PROFILE``
+=========================  =======  ==========================  ====================
+
+The main-Rx converter count is passed as
+``-DADRV9025_RX_JESD_CONVS_PER_DEVICE=<n>`` and the 204C profile also
+defines ``JESD204C_PROFILE``; ``app_config.h`` picks up both, so those
+axes need no manual editing. If the XSA asks for a profile whose directory
+is missing, the configure step stops with an error telling you which one
+to generate.
+
+Adding or Updating a Use Case
+-----------------------------
+
+You only need these steps to introduce a new profile directory or refresh
+an existing one from Madura TES:
 
 #. From the Madura TES GUI, generate the resources folder that contains
    the files listed below:
@@ -70,40 +102,39 @@ project folder is desired, the following steps have to be followed:
    * Stream binary (e.g., stream_image_6E3E00EFB74FE7D465FA88A171B81B8F.bin),
    * ActiveUseCase.profile and ActiveUtilInit.profile.
 
-#. Since no-OS does not have mechanisms for manipulating files, create a
-   hex dump for each .bin file. As can be seen in the project structure,
-   these are added as header files to the project.
+#. no-OS cannot read files at runtime, so the .bin files are committed as
+   C arrays. These are shared across all profiles and live at the root of
+   ``src/common/firmware/``. Regenerate them only when the firmware or
+   stream image itself changes:
+   ::
 
-   * Use the following command for storing the hex dump in a file:
-     ::
+      xxd -i ADRV9025_FW.bin > ADRV9025_FW.h
 
-        xxd -i ADRV9025_FW.bin > ADRV9025_FW.h
+   Copy the generated unsigned char array into the corresponding header
+   file in the
+   `project structure <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv902x/src/common/firmware>`__
+   (ADRV9025_FW.h, ADRV9025_DPDCORE_FW.h or ADRV9025_stream_image.h).
 
-   * Copy the generated unsigned char array to the corresponding header
-     file in the
-     `project structure <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv902x/src/common/firmware>`__
-     (ADRV9025_FW.h, ADRV9025_DPDCORE_FW.h or ADRV9025_stream_image.h).
+#. Convert the ``.profile`` JSON into the header the firmware expects with
+   `profile_to_header.py <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv902x/scripts/profile_to_header.py>`__,
+   writing it into the profile directory that ``xsa_profile.sh`` selects
+   for the target bitstream:
+   ::
 
-#. Profile files also have to be transformed for being included in the
-   project:
+      scripts/profile_to_header.py ActiveUseCase.profile \
+          src/common/firmware/JESD204C_ORx/ActiveUseCase_profile.h
 
-   * Generate string literals from the json files using the
-     `json2cstring.sh <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv902x/json2cstring.sh>`__
-     script in the no-OS project:
-     ::
+   ``profile_to_header.py`` is whitespace-exact - round-tripping an
+   unchanged ``.profile`` reproduces the committed header byte-for-byte,
+   so it doubles as a parity check against the Linux ``firmware/*.profile``
+   the same bitstream is validated against. (The older ``json2cstring.sh``
+   only adds the C-string wrapper for a file literally named
+   ``ActiveUseCase.profile``; prefer the Python script for the per-profile
+   headers.) ``ActiveUtilInit_profile.h`` is shared and lives at the
+   firmware root.
 
-       ./json2cstring path/ActiveUseCase.profile
-
-   * Copy the contents of the generated files to the corresponding header
-     files in the
-     `project structure <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv902x/src/common/firmware>`__
-     (ActiveUseCase_profile.h and ActiveUtilInit_profile.h).
-
-#. Modify the code in the project so that the new settings are correctly
-   used (e.g.,
-   `app_config.h <https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv902x/src/common/app_config.h>`__).
-
-#. Build the project.
+#. Build the project. The profile is selected from the XSA; no source edit
+   is required.
 
 No-OS Supported Examples
 -------------------------
@@ -121,10 +152,10 @@ driver. The output looks like the one below:
 
 .. code-block:: bash
 
-   adrv9025-phy Rev 0, API version: 6.4.0.14 found
+   adrv9025-phy Rev 0, API version: 7.0.0.14 found
    tx_adxcvr: OK (9830400 kHz)
    rx_adxcvr: OK (9830400 kHz)
-   adrv9025-phy Rev 176, Firmware 6.4.0.6 API version: 6.4.0.14 Stream version: 9.4.0.1 successfully initialized via jesd204-fsm
+   adrv9025-phy Rev 176, Firmware 6.4.0.6 API version: 7.0.0.14 Stream version: 9.4.0.1 successfully initialized via jesd204-fsm
    tx_jesd status:
        Link is enabled
        Measured Link Clock: 245.778 MHz
