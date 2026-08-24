@@ -11,4 +11,10 @@ config IMPEDANCE_ANALYZER_AD5933
 	bool "Enable AD5933 impedance analyzer driver"
 	default n
 
+config IMPEDANCE_ANALYZER_IIO_AD5933
+    depends on I2C
+    select IMPEDANCE_ANALYZER_AD5933
+    bool "Enable the AD5933 IIO driver"
+    default n
+
 endif # IMPEDANCE_ANALYZER
