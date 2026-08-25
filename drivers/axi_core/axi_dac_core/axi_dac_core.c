@@ -614,6 +614,24 @@ int32_t axi_dac_set_datasel(struct axi_dac *dac,
 }
 
 /**
+ * @brief Re-measure the DAC interface clock and update dac->clock_hz.
+ * @param dac - The device structure.
+ */
+static void axi_dac_refresh_clock(struct axi_dac *dac)
+{
+	uint32_t freq, ratio;
+	uint64_t clk;
+
+	axi_dac_read(dac, AXI_DAC_REG_CLK_FREQ, &freq);
+	axi_dac_read(dac, AXI_DAC_REG_CLK_RATIO, &ratio);
+	if (!freq || !ratio)
+		return;
+
+	clk = (uint64_t) freq * ratio;
+	dac->clock_hz = (clk * 390625) >> 8;
+}
+
+/**
  * @brief AXI DAC Set DDS frequency for specific channel
  * @param dac - The device structure.
  * @param chan - The DAC channel.
@@ -624,11 +642,20 @@ int32_t axi_dac_dds_set_frequency(struct axi_dac *dac,
 				  uint32_t chan, uint32_t freq_hz)
 {
 	uint64_t val64;
-	uint32_t reg;
+	uint32_t reg, rate;
+
+	/* The interface clock is re-measured here: axi_dac_init_finish() latches
+	 * clock_hz once, but the transceiver clock chain can change afterwards. */
+	axi_dac_refresh_clock(dac);
+
+	/* dac_valid asserts once every (RATE + 1) interface clocks, so the
+	 * per-channel sample rate is clock_hz / (RATE + 1). */
+	axi_dac_read(dac, AXI_DAC_REG_RATECNTRL, &rate);
+	rate = AXI_DAC_TO_RATE(rate) + 1;
 
 	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, 0);
 	axi_dac_read(dac, AXI_DAC_REG_DDS_INIT_INCR(chan), &reg);
-	val64 = (uint64_t) freq_hz * 0xFFFFULL;
+	val64 = (uint64_t) freq_hz * 0x10000ULL * rate;
 	val64 = val64 / dac->clock_hz;
 	reg = (reg & ~AXI_DAC_DDS_INCR(~0)) | AXI_DAC_DDS_INCR(val64) | 1;
 	axi_dac_write(dac, AXI_DAC_REG_DDS_INIT_INCR(chan), reg);
@@ -647,15 +674,19 @@ int32_t axi_dac_dds_set_frequency(struct axi_dac *dac,
 int32_t axi_dac_dds_get_frequency(struct axi_dac *dac,
 				  uint32_t chan, uint32_t *freq)
 {
-	uint32_t reg;
+	uint32_t reg, rate;
 	uint64_t val64;
+
+	axi_dac_refresh_clock(dac);
+	axi_dac_read(dac, AXI_DAC_REG_RATECNTRL, &rate);
+	rate = AXI_DAC_TO_RATE(rate) + 1;
 
 	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, 0);
 	axi_dac_read(dac, AXI_DAC_REG_DDS_INIT_INCR(chan), &reg);
 	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, AXI_DAC_SYNC);
 	reg = (reg & AXI_DAC_DDS_INCR(~0));
 	val64 = (uint64_t) reg * dac->clock_hz;
-	no_os_do_div(&val64, 0xFFFF);
+	val64 = val64 / (0x10000ULL * rate);
 	*freq = val64;
 
 	return 0;
