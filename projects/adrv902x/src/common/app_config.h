@@ -80,6 +80,15 @@
 #define ADRV9025_RX_JESD_OCTETS_PER_FRAME		4
 #endif
 #define ADRV9025_RX_JESD_FRAMES_PER_MULTIFRAME		32
+/*
+ * The main-Rx converter count is derived from the bitstream's Rx ADC-TPL core
+ * at configure time (-DADRV9025_RX_JESD_CONVS_PER_DEVICE, see CMakeLists.txt /
+ * scripts/xsa_profile.sh). The fallback covers a manual/IDE build that did not
+ * run the probe; all current reference designs expose M=8 (all 4 Rx, I+Q).
+ */
+#ifndef ADRV9025_RX_JESD_CONVS_PER_DEVICE
+#define ADRV9025_RX_JESD_CONVS_PER_DEVICE		8
+#endif
 #define ADRV9025_RX_JESD_SUBCLASS		        1
 
 #if defined(JESD204B_NP12_PROFILE)
