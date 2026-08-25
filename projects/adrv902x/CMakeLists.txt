@@ -79,6 +79,8 @@ target_compile_definitions(adrv902x PUBLIC
 )
 if(ADRV902X_PROFILE STREQUAL "JESD204C_ORx")
     target_compile_definitions(adrv902x PUBLIC JESD204C_PROFILE)
+elseif(ADRV902X_PROFILE STREQUAL "JESD204B_ORx_NP12")
+    target_compile_definitions(adrv902x PUBLIC JESD204B_NP12_PROFILE)
 endif()
 
 # The madura driver (in no-os library) includes the project-supplied no_os_platform.h
