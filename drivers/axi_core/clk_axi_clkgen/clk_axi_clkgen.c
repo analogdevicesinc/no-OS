@@ -418,6 +418,7 @@ int32_t axi_clkgen_set_rate(struct axi_clkgen *clkgen,
 	uint32_t filter  = 0;
 	uint32_t lock	 = 0;
 	uint32_t reg_val;
+	uint32_t timeout = 0;
 
 	if (clkgen->parent_rate == 0 || rate == 0)
 		return 0;
@@ -462,9 +463,15 @@ int32_t axi_clkgen_set_rate(struct axi_clkgen *clkgen,
 
 	axi_clkgen_mmcm_enable(clkgen, 1);
 
-	no_os_mdelay(10);
+	/* Poll for MMCM lock (up to ~100 ms) instead of a single 10 ms check, so a
+	 * slightly late-settling reference is not misreported as a lock failure.
+	 * Returns as soon as the lock bit asserts. */
+	timeout = 100;
+	do {
+		no_os_mdelay(1);
+		axi_clkgen_read(clkgen, AXI_CLKGEN_REG_STATUS, &reg_val);
+	} while (((reg_val & AXI_CLKGEN_STATUS) == 0x0) && --timeout);
 
-	axi_clkgen_read(clkgen, AXI_CLKGEN_REG_STATUS, &reg_val);
 	if ((reg_val & AXI_CLKGEN_STATUS) == 0x0) {
 		printf("%s: MMCM-PLL NOT locked (%"PRIu32" Hz)\n", clkgen->name, rate);
 		return -1;
