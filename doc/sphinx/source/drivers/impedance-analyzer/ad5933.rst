@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/impedance-analyzer/ad5933/README.rst
