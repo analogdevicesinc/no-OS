@@ -1315,5 +1315,5 @@ int _fstat(int fd, struct stat *st)
 	}
 
 	errno = EBADF;
-	return 0;
+	return -1;
 }
