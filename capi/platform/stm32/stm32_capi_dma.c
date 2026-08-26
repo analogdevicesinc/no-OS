@@ -146,7 +146,9 @@ static int stm32_capi_dma_deinit(struct capi_dma_handle *handle)
 	if (dma_priv) {
 		for (i = 0; i < dma_priv->num_chans; i++) {
 			if (dma_priv->chan_privs[i]) {
-				HAL_DMA_DeInit(&dma_priv->chan_privs[i]->hdma);
+
+				if (dma_priv->chan_privs[i]->hdma.Instance)
+					HAL_DMA_DeInit(&dma_priv->chan_privs[i]->hdma);
 				if (handle->init_allocated)
 					capi_free(dma_priv->chan_privs[i]);
 			}
@@ -240,7 +242,9 @@ static int stm32_capi_dma_deinit_chan(struct capi_dma_chan *chan)
 	dma_priv = chan->handle->priv;
 
 	if (chan_priv) {
-		HAL_DMA_DeInit(&chan_priv->hdma);
+
+		if (chan_priv->hdma.Instance)
+			HAL_DMA_DeInit(&chan_priv->hdma);
 
 		if (chan->id < MAX_DMA_CHANNELS)
 			chan_priv_map[chan->id] = NULL;
