@@ -17,6 +17,42 @@ if(CONFIG_ADIOL100_BASIC_EXAMPLE)
     )
 endif()
 
+# i-link IO-Link stack example (FreeRTOS)
+if(CONFIG_ADIOL100_ILINK_EXAMPLE)
+    if(NOT DEFINED ILINK_SOURCE_DIR)
+        include(ilink)
+    endif()
+
+    set(IOLINK_DIR ${NO_OS_DIR}/libraries/ilink-glue)
+
+    target_sources(adiol100 PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/ilink/ilink_example.c
+        ${ILINK_SOURCE_DIR}/src/iolink_main.c
+        ${ILINK_SOURCE_DIR}/src/iolink_al.c
+        ${ILINK_SOURCE_DIR}/src/iolink_cm.c
+        ${ILINK_SOURCE_DIR}/src/iolink_dl.c
+        ${ILINK_SOURCE_DIR}/src/iolink_ds.c
+        ${ILINK_SOURCE_DIR}/src/iolink_sm.c
+        ${ILINK_SOURCE_DIR}/src/iolink_pl.c
+        ${ILINK_SOURCE_DIR}/src/iolink_ode.c
+        ${ILINK_SOURCE_DIR}/src/iolink_pde.c
+        ${IOLINK_DIR}/app/iolink_app.c
+        ${IOLINK_DIR}/osal/osal_freertos.c
+        ${NO_OS_DIR}/drivers/io-link/adiol100/adiol100_ilink_pl.c
+    )
+
+    target_include_directories(adiol100 PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/ilink
+        ${IOLINK_DIR}
+        ${IOLINK_DIR}/osal
+        ${IOLINK_DIR}/app
+        ${ILINK_SOURCE_DIR}/include
+        ${ILINK_SOURCE_DIR}/src
+    )
+
+    target_link_libraries(adiol100 freertos_kernel)
+endif()
+
 target_include_directories(adiol100 PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common
     ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}

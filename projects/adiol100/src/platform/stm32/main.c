@@ -11,6 +11,7 @@
 #include "parameters.h"
 #include "common_data.h"
 #include "no_os_uart.h"
+#include "stm32f4xx_hal.h"
 
 #ifdef CONFIG_ADIOL100_BASIC_EXAMPLE
 extern int basic_example_main(void);
@@ -18,6 +19,18 @@ extern int basic_example_main(void);
 
 #ifdef CONFIG_ADIOL100_ILINK_EXAMPLE
 #include "no_os_irq.h"
+#include "FreeRTOS.h"
+#include "task.h"
+
+extern void xPortSysTickHandler(void);
+
+void SysTick_Handler(void)
+{
+	HAL_IncTick();
+	if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED)
+		xPortSysTickHandler();
+}
+
 extern int ilink_example_main(void);
 #endif
 
