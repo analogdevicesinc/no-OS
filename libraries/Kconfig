@@ -128,4 +128,19 @@ config AZURE_VERSION
 	  Resolved via the NO_OS_DEP_AZURE_PATH override, else cloned in-tree
 	  (or into a version-keyed NO_OS_CACHE_DIR store when that is set).
 
+config ILINK
+	bool "Enable i-link IO-Link stack"
+	default n
+	depends on FREERTOS
+
+config ILINK_VERSION
+	string "i-link version tag"
+	default "public"
+	depends on ILINK
+	help
+	  Git tag, branch or commit for i-link.
+	  Examples: public, public/v1.0.0
+	  Resolved via the NO_OS_DEP_ILINK_PATH override, else cloned in-tree
+	  (or into a version-keyed NO_OS_CACHE_DIR store when that is set).
+
 endmenu
