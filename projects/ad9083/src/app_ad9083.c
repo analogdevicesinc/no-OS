@@ -43,7 +43,7 @@
 #include "no_os_util.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief Check sysref is submultiple of lmfc.
@@ -179,14 +179,14 @@ int32_t app_ad9083_init(struct app_ad9083 **app,
 		.jesd_rx_clk_desc = init_param->jesd_rx_clk_desc,
 	};
 
-	app_ad9083 = (struct app_ad9083 *)no_os_calloc(1, sizeof(*app_ad9083));
+	app_ad9083 = (struct app_ad9083 *)capi_calloc(1, sizeof(*app_ad9083));
 	if (!app_ad9083)
 		return -1;
 
 	status = ad9083_init(&app_ad9083->ad9083_phy, &ad9083_init_param);
 	if (status != 0) {
 		pr_err("error: %"PRId32" ad9083_initialize() \n", status);
-		no_os_free(app_ad9083);
+		capi_free(app_ad9083);
 
 		return -1;
 	}
@@ -206,7 +206,7 @@ int32_t app_ad9083_remove(struct app_ad9083 *app)
 	if (!app)
 		return -1;
 
-	no_os_free(app);
+	capi_free(app);
 
 	return 0;
 }

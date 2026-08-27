@@ -42,7 +42,7 @@
 #include "no_os_print_log.h"
 #include "parameters.h"
 #include "uc_settings.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief Application JESD setup.
@@ -59,7 +59,7 @@ int32_t app_jesd_init(struct app_jesd **app, struct app_jesd_init *init_param)
 	adi_cms_jesd_param_t *jtx_param = &uc_settings->jtx_param[init_param->uc];
 	uint64_t *clk_hz = uc_settings->clk_hz[init_param->uc];
 
-	app_jesd = (struct app_jesd *)no_os_calloc(1, sizeof(*app_jesd));
+	app_jesd = (struct app_jesd *)capi_calloc(1, sizeof(*app_jesd));
 	if (!app_jesd)
 		return -1;
 
@@ -113,7 +113,7 @@ int32_t app_jesd_init(struct app_jesd **app, struct app_jesd_init *init_param)
 error_1:
 	axi_jesd204_rx_remove(app_jesd->rx_jesd);
 error_0:
-	no_os_free(app_jesd);
+	capi_free(app_jesd);
 
 	return -1;
 }
@@ -143,7 +143,7 @@ int32_t app_jesd_remove(struct app_jesd *app)
 	if (ret < 0)
 		return ret;
 
-	no_os_free(app);
+	capi_free(app);
 
 	return 0;
 }
