@@ -40,7 +40,7 @@
 #include "swiot.h"
 #include "no_os_gpio.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "iio_ad74413r.h"
 #include "iio_max14906.h"
 #include "flc.h"
@@ -648,7 +648,7 @@ int swiot_iio_init(struct swiot_iio_desc **swiot_desc,
 	if (!init_param)
 		return -EINVAL;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
