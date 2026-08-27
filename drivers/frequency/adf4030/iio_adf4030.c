@@ -37,7 +37,7 @@
 #include "no_os_util.h"
 #include "iio_adf4030.h"
 #include "adf4030.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 
 /**
@@ -791,7 +791,7 @@ int adf4030_iio_init(struct adf4030_iio_dev **iio_dev,
 	struct adf4030_iio_dev *dev;
 	int ret;
 
-	dev = (struct adf4030_iio_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct adf4030_iio_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -806,7 +806,7 @@ int adf4030_iio_init(struct adf4030_iio_dev **iio_dev,
 	return ret;
 
 error:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -823,7 +823,7 @@ int adf4030_iio_remove(struct adf4030_iio_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

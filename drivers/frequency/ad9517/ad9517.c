@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "ad9517.h"
 
 /***************************************************************************//**
@@ -62,7 +62,7 @@ int32_t ad9517_setup(struct ad9517_dev **device,
 		AD9517_REG_LVPECL_OUT3
 	};
 
-	dev = (struct ad9517_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad9517_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -220,7 +220,7 @@ int32_t ad9517_remove(struct ad9517_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

@@ -36,7 +36,7 @@
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief Writes 4 bytes of data to ADF5902.
@@ -472,7 +472,7 @@ int32_t adf5902_init(struct adf5902_dev **device,
 	if (ret != 0)
 		return ret;
 
-	dev = (struct adf5902_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct adf5902_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -656,7 +656,7 @@ error_gpio:
 	no_os_gpio_remove(dev->gpio_ce);
 
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -904,7 +904,7 @@ int32_t adf5902_remove(struct adf5902_dev *dev)
 
 	ret = no_os_gpio_remove(dev->gpio_ce);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

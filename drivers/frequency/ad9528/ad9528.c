@@ -35,7 +35,7 @@
 #include <limits.h>
 #include <stdio.h>
 #include "no_os_print_log.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_clk.h"
@@ -720,21 +720,21 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 		"ad9528-1_out10", "ad9528-1_out11", "ad9528-1_out12", "ad9528-1_out13"
 	};
 
-	dev = (struct ad9528_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ad9528_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -1;
 
 	if (init_param.export_no_os_clk) {
-		clocks = no_os_calloc(AD9528_NUM_CHAN, sizeof(struct no_os_clk_desc *));
+		clocks = capi_calloc(AD9528_NUM_CHAN, sizeof(struct no_os_clk_desc *));
 		if (!clocks) {
-			no_os_free(dev);
+			capi_free(dev);
 			return -1;
 		}
 		for (i = 0; i < AD9528_NUM_CHAN; i++) {
-			clocks[i] = no_os_calloc(1, sizeof(struct no_os_clk_desc));
+			clocks[i] = capi_calloc(1, sizeof(struct no_os_clk_desc));
 			if (!clocks[i]) {
 				for (j = 0; j < i; j++) {
-					no_os_free(clocks[j]);
+					capi_free(clocks[j]);
 				}
 				return -1;
 			}
@@ -747,7 +747,7 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 			ret = no_os_clk_init(&clocks[i], &clk_init);
 			if (ret) {
 				for (j = 0; j < i; j++) {
-					no_os_free(clocks[j]);
+					capi_free(clocks[j]);
 				}
 				return ret;
 			}
@@ -1103,9 +1103,9 @@ pll2_bypassed:
 error:
 
 	for (i = 0; i < AD9528_NUM_CHAN; i++) {
-		no_os_free(clocks[i]);
+		capi_free(clocks[i]);
 	}
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -1143,7 +1143,7 @@ int32_t ad9528_remove(struct ad9528_dev *dev)
 	ret = no_os_spi_remove(dev->spi_desc);
 	if (ret)
 		return ret;
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

@@ -34,7 +34,7 @@
 #include <malloc.h>
 #include "admv1014.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 static const int mixer_vgate_table[] = {
 	106, 107, 108, 110, 111, 112, 113, 114,
@@ -363,7 +363,7 @@ int admv1014_init(struct admv1014_dev **device,
 	uint16_t chip_id, enable_reg, enable_reg_msk;
 	int ret;
 
-	dev = (struct admv1014_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct admv1014_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -443,7 +443,7 @@ int admv1014_init(struct admv1014_dev **device,
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -461,7 +461,7 @@ int admv1014_remove(struct admv1014_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

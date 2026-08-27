@@ -37,7 +37,7 @@
 #include "no_os_print_log.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_clk.h"
 #include "hmc7044.h"
 #include "jesd204.h"
@@ -1485,7 +1485,7 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 		"clock_10", "clock_11", "clock_12", "clock_13"
 	};
 
-	dev = (struct hmc7044_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct hmc7044_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -1494,11 +1494,11 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 		return ret;
 
 	if (init_param->export_no_os_clk) {
-		clocks = no_os_calloc(HMC7044_NUM_CHAN, sizeof(struct no_os_clk_desc *));
+		clocks = capi_calloc(HMC7044_NUM_CHAN, sizeof(struct no_os_clk_desc *));
 		if (!clocks)
 			return -1;
 		for (i = 0; i < HMC7044_NUM_CHAN; i++) {
-			clocks[i] = no_os_calloc(1, sizeof(struct no_os_clk_desc));
+			clocks[i] = capi_calloc(1, sizeof(struct no_os_clk_desc));
 			if (!clocks[i])
 				return -1;
 			/* Initialize clk component */
@@ -1587,7 +1587,7 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 
 	dev->num_channels = init_param->num_channels;
 	dev->channels = (struct hmc7044_chan_spec *)
-			no_os_malloc(sizeof(*dev->channels) * dev->num_channels);
+			capi_malloc(sizeof(*dev->channels) * dev->num_channels);
 
 	for (i = 0; i < dev->num_channels; i++) {
 		dev->channels[i].num = init_param->channels[i].num;
@@ -1639,8 +1639,8 @@ int32_t hmc7044_remove(struct hmc7044_dev *device)
 	int32_t ret;
 
 	ret = no_os_spi_remove(device->spi_desc);
-	no_os_free(device->channels);
-	no_os_free(device);
+	capi_free(device->channels);
+	capi_free(device);
 
 	return ret;
 }
