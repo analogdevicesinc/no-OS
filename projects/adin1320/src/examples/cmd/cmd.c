@@ -38,7 +38,7 @@
 #include "adin1320.h"
 #include "common_data.h"
 #include "mdio_spi.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_gpio.h"
 #include "no_os_mdio.h"
@@ -253,7 +253,7 @@ int board_init(struct no_os_uart_desc **uart_desc,
 
 	no_os_uart_stdio(*uart_desc);
 
-	struct cmd_gpio *temp_cmd_gpio = (struct cmd_gpio *) no_os_calloc(1,
+	struct cmd_gpio *temp_cmd_gpio = (struct cmd_gpio *) capi_calloc(1,
 					 sizeof(*temp_cmd_gpio));
 	if (!temp_cmd_gpio) {
 		ret = -ENOMEM;
@@ -430,7 +430,7 @@ remove_cfg1:
 remove_cfg0:
 	no_os_gpio_remove(temp_cmd_gpio->gpio_uc_cfg0_desc);
 remove_calloc:
-	no_os_free(temp_cmd_gpio);
+	capi_free(temp_cmd_gpio);
 remove_uart:
 	no_os_uart_remove(*uart_desc);
 	return ret;
@@ -580,7 +580,7 @@ err_board:
 	no_os_gpio_remove(cmd_gpio->gpio_uc_cfg2_desc);
 	no_os_gpio_remove(cmd_gpio->gpio_uc_cfg1_desc);
 	no_os_gpio_remove(cmd_gpio->gpio_uc_cfg0_desc);
-	no_os_free(cmd_gpio);
+	capi_free(cmd_gpio);
 	no_os_uart_remove(uart_desc);
 	return ret;
 }
