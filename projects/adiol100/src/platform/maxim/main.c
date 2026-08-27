@@ -12,9 +12,14 @@
 #include "common_data.h"
 #include "maxim_uart_stdio.h"
 #include "no_os_uart.h"
+#include "no_os_irq.h"
 
 #ifdef CONFIG_ADIOL100_BASIC_EXAMPLE
 extern int basic_example_main(void);
+#endif
+
+#ifdef CONFIG_ADIOL100_ILINK_EXAMPLE
+extern int ilink_example_main(void);
 #endif
 
 int main(void)
@@ -32,6 +37,24 @@ int main(void)
 	ret = basic_example_main();
 #endif
 
+#ifdef CONFIG_ADIOL100_ILINK_EXAMPLE
+	struct no_os_irq_ctrl_desc *nvic_ctrl;
+
+	ret = no_os_irq_ctrl_init(&nvic_ctrl, &nvic_ip);
+	if (ret)
+		goto uart_remove;
+
+	ret = no_os_irq_enable(nvic_ctrl, NVIC_GPIO_IRQ);
+	if (ret)
+		goto nvic_remove;
+
+	ret = ilink_example_main();
+
+nvic_remove:
+	no_os_irq_ctrl_remove(nvic_ctrl);
+#endif
+
+uart_remove:
 	no_os_uart_remove(uart);
 
 	return ret;
