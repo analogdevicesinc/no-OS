@@ -31,7 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "ad7490.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
 
@@ -431,7 +431,7 @@ int ad7490_init(struct ad7490_desc **desc,
 	uint16_t reg_val;
 	int ret;
 
-	descriptor = (struct ad7490_desc *)no_os_calloc(1, sizeof(*descriptor));
+	descriptor = (struct ad7490_desc *)capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -463,7 +463,7 @@ int ad7490_init(struct ad7490_desc **desc,
 free_spi:
 	no_os_spi_remove(descriptor->spi_desc);
 free_desc:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -478,7 +478,7 @@ int ad7490_remove(struct ad7490_desc *desc)
 	ad7490_stop_seq(desc);
 	ad7490_set_op_mode(desc, AD7490_MODE_FULLSHUTDOWN);
 	no_os_spi_remove(desc->spi_desc);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

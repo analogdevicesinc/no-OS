@@ -36,7 +36,7 @@
 #include <string.h>
 #include "no_os_error.h"
 #include "ad7799.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 static const uint8_t ad7798_reg_size[] = {
 	[AD7799_REG_COMM] = AD7799_REG_SIZE_1B,
@@ -386,7 +386,7 @@ int32_t ad7799_init(struct ad7799_dev **device,
 	uint32_t chip_id = 0;
 
 
-	dev = (struct ad7799_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ad7799_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -404,13 +404,13 @@ int32_t ad7799_init(struct ad7799_dev **device,
 		dev->reg_size = ad7799_reg_size;
 		break;
 	default:
-		no_os_free(dev);
+		capi_free(dev);
 		return -EINVAL;
 	}
 
 	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if (ret) {
-		no_os_free(dev);
+		capi_free(dev);
 		return ret;
 	}
 
@@ -460,7 +460,7 @@ int32_t ad7799_init(struct ad7799_dev **device,
 
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -477,7 +477,7 @@ int32_t ad7799_remove(struct ad7799_dev *device)
 		return -EINVAL;
 
 	ret = no_os_spi_remove(device->spi_desc);
-	no_os_free(device);
+	capi_free(device);
 
 	return ret;
 }

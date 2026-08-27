@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include "max11205.h"
 #include "errno.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief GPIO interrupt handler for data ready.
@@ -87,7 +87,7 @@ int max11205_init(struct max11205_dev **device,
 	if (init_param.vref_mv > MAX11205_VREF_MAX_MV)
 		return -EINVAL;
 
-	dev = (struct max11205_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct max11205_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -146,7 +146,7 @@ error_gpio:
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -216,7 +216,7 @@ int max11205_remove(struct max11205_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

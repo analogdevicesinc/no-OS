@@ -37,7 +37,7 @@
 #include <stdlib.h>
 #include "ad717x.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /* Error codes */
 #define INVALID_VAL -1 /* Invalid argument */
@@ -786,7 +786,7 @@ int32_t AD717X_Init(ad717x_dev **device,
 	uint8_t setup_index;
 	uint8_t ch_index;
 
-	dev = (ad717x_dev *)no_os_malloc(sizeof(*dev));
+	dev = (ad717x_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -910,7 +910,7 @@ int32_t AD717X_remove(ad717x_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

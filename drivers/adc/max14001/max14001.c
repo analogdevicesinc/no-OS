@@ -36,7 +36,7 @@
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief Read from device.
@@ -188,7 +188,7 @@ int max14001_init(struct max14001_dev **device,
 
 	no_os_mdelay(100);
 
-	dev = (struct max14001_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct max14001_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -201,7 +201,7 @@ int max14001_init(struct max14001_dev **device,
 	return ret;
 
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 
@@ -669,7 +669,7 @@ int max14001_remove(struct max14001_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

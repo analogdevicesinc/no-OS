@@ -32,7 +32,7 @@
 ******************************************************************************/
 #include <stdlib.h>
 #include "adm1177.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
 
@@ -53,14 +53,14 @@ int adm1177_init(struct adm1177_dev **device,
 	struct adm1177_dev *dev;
 	int status;
 
-	dev = (struct adm1177_dev *)no_os_calloc(sizeof(*dev), 1);
+	dev = (struct adm1177_dev *)capi_calloc(sizeof(*dev), 1);
 	if (!dev)
 		return -ENOMEM;
 
 	/* Initialize I2C peripheral */
 	status = no_os_i2c_init(&dev->i2c_desc, &init_param->i2c_init);
 	if (status) {
-		no_os_free(dev);
+		capi_free(dev);
 		return status;
 	}
 
@@ -82,7 +82,7 @@ int adm1177_remove(struct adm1177_dev *device)
 
 	ret = no_os_i2c_remove(device->i2c_desc);
 
-	no_os_free(device);
+	capi_free(device);
 
 	return ret;
 }

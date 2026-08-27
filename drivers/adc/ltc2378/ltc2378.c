@@ -33,7 +33,7 @@
 
 #include "ltc2378.h"
 #include <stdlib.h>
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
 
@@ -52,7 +52,7 @@ int ltc2378_init(struct ltc2378_dev **device,
 	if (!device || !init_param)
 		return -EINVAL;
 
-	dev = (struct ltc2378_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ltc2378_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -91,7 +91,7 @@ error_cnv:
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -109,7 +109,7 @@ int ltc2378_remove(struct ltc2378_dev *dev)
 	no_os_gpio_remove(dev->gpio_cnv);
 	if (dev->gpio_busy)
 		no_os_gpio_remove(dev->gpio_busy);
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

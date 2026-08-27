@@ -35,7 +35,7 @@
 #include <stdbool.h>
 #include "ad7124.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 
 /*
@@ -1484,7 +1484,7 @@ int32_t ad7124_setup(struct ad7124_dev **device,
 	uint8_t setup_index;
 	uint8_t ch_index;
 
-	dev = (struct ad7124_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad7124_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -1640,7 +1640,7 @@ int32_t ad7124_remove(struct ad7124_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

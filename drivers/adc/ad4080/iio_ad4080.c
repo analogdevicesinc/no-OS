@@ -37,7 +37,7 @@
 #include <string.h>
 #include <assert.h>
 
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 #include "iio_ad4080.h"
 
@@ -1431,13 +1431,13 @@ void iio_ad4080_fifo_unset_watermark(struct iio_ad4080_fifo_struct *fifo)
 			     AD4080_FIFO_DISABLE);
 
 	if (fifo->formatted_fifo) {
-		no_os_free(fifo->formatted_fifo);
+		capi_free(fifo->formatted_fifo);
 		fifo->formatted_fifo = NULL;
 		fifo->formatted_bufsize = 0;
 	}
 
 	if (fifo->raw_fifo) {
-		no_os_free(fifo->raw_fifo);
+		capi_free(fifo->raw_fifo);
 		fifo->raw_fifo = NULL;
 		fifo->bufsize = 0;
 	}
@@ -1473,7 +1473,7 @@ int iio_ad4080_fifo_set_watermark(struct iio_ad4080_fifo_struct *fifo,
 	fifo_size = (fifo_size * watermark);
 	fifo_size = fifo_size + 1; /* account for the 0xAA synchro byte */
 
-	raw_fifo = no_os_malloc(fifo_size);
+	raw_fifo = capi_malloc(fifo_size);
 	if (!raw_fifo) {
 		return -ENOMEM;
 	}
@@ -1482,7 +1482,7 @@ int iio_ad4080_fifo_set_watermark(struct iio_ad4080_fifo_struct *fifo,
 	fifo->bufsize = fifo_size;
 
 	formatted_bufsize = watermark * sizeof(uint32_t);
-	formatted_fifo = no_os_malloc(formatted_bufsize);
+	formatted_fifo = capi_malloc(formatted_bufsize);
 	if (!formatted_fifo)
 		goto err_malloc_formatted_fifo;
 	fifo->formatted_fifo = formatted_fifo;
@@ -1495,9 +1495,9 @@ int iio_ad4080_fifo_set_watermark(struct iio_ad4080_fifo_struct *fifo,
 
 	return 0;
 err_set_fifo_watermark:
-	no_os_free(formatted_fifo);
+	capi_free(formatted_fifo);
 err_malloc_formatted_fifo:
-	no_os_free(raw_fifo);
+	capi_free(raw_fifo);
 	return err;
 }
 

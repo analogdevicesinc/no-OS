@@ -41,7 +41,7 @@
 #include "no_os_clk.h"
 #include "uc_settings.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_print_log.h"
 
 extern int32_t adi_ad9083_jtx_startup(adi_ad9083_device_t *device,
@@ -327,7 +327,7 @@ int32_t ad9083_init(struct ad9083_phy **device,
 	uint8_t api_rev[3];
 	int32_t ret;
 
-	phy = (struct ad9083_phy *)no_os_calloc(1, sizeof(*phy));
+	phy = (struct ad9083_phy *)capi_calloc(1, sizeof(*phy));
 	if (!phy)
 		return -ENOMEM;
 
@@ -406,7 +406,7 @@ error_2:
 	no_os_gpio_remove(phy->gpio_reset);
 error_1:
 	if (phy)
-		no_os_free(phy);
+		capi_free(phy);
 
 	return ret;
 }
@@ -435,7 +435,7 @@ int32_t ad9083_remove(struct ad9083_phy *dev)
 	if (ret != 0)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

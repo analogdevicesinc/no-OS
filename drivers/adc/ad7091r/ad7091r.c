@@ -33,7 +33,7 @@
 
 #include <stdlib.h>
 #include "ad7091r.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 
 /***************************************************************************//**
@@ -57,7 +57,7 @@ int8_t ad7091r_init(struct ad7091r_dev **device,
 	uint8_t status = 0;
 	uint8_t tmp_val = 0xFF;
 
-	dev = (struct ad7091r_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad7091r_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -87,7 +87,7 @@ int32_t ad7091r_remove(struct ad7091r_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

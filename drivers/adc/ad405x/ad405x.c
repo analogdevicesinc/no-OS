@@ -38,7 +38,7 @@
 #include <string.h>
 #include "ad405x.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 static const uint8_t reset_pattern_buff[18] = {
 	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFE,
@@ -93,7 +93,7 @@ int ad405x_init(struct ad405x_dev **device,
 		return -EINVAL;
 	}
 
-	dev = (struct ad405x_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ad405x_dev *)capi_calloc(1, sizeof(*dev));
 
 	if (!dev)
 		return -ENOMEM;
@@ -174,7 +174,7 @@ error_gpio:
 	if (dev->comm_type == AD405X_SPI_COMM)
 		no_os_gpio_remove(dev->extra.spi_extra.gpio_cnv);
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -207,7 +207,7 @@ int ad405x_remove(struct ad405x_dev *dev)
 	} else
 		ret = no_os_i3c_remove(dev->com_desc.i3c_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

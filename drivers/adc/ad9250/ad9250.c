@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include "ad9250.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 const int32_t shadow_regs[SHADOW_REGISTER_COUNT] = {
 	0,
@@ -76,7 +76,7 @@ int32_t ad9250_setup(struct ad9250_dev **device,
 	struct ad9250_dev *dev;
 	int32_t ret, i;
 
-	dev = (struct ad9250_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad9250_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -178,7 +178,7 @@ int32_t ad9250_remove(struct ad9250_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

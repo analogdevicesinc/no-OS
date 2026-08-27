@@ -37,7 +37,7 @@
 #include "iio.h"
 #include "iio_ad463x.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 static int ad463x_iio_read_raw(void *dev, char *buf, uint32_t len,
 			       const struct iio_ch_info *channel, intptr_t priv);
@@ -322,7 +322,7 @@ int32_t iio_ad463x_init(struct iio_ad463x **desc,
 {
 	struct iio_ad463x *iio_ad463x;
 
-	iio_ad463x = (struct iio_ad463x *)no_os_calloc(1, sizeof(struct iio_ad463x));
+	iio_ad463x = (struct iio_ad463x *)capi_calloc(1, sizeof(struct iio_ad463x));
 	if (!iio_ad463x)
 		return -1;
 
@@ -355,7 +355,7 @@ int32_t iio_ad463x_remove(struct iio_ad463x *desc)
 	if (!desc)
 		return -1;
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

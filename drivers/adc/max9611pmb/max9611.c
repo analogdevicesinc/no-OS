@@ -38,7 +38,7 @@
 #include "no_os_util.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "max9611.h"
 
 /***************************************************************************//**
@@ -97,7 +97,7 @@ int max9611_init(struct max9611_dev **device,
 	int ret;
 	struct max9611_dev *dev;
 
-	dev = (struct max9611_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct max9611_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -110,7 +110,7 @@ int max9611_init(struct max9611_dev **device,
 	return 0;
 
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -125,7 +125,7 @@ int max9611_remove(struct max9611_dev *dev)
 	int ret;
 
 	ret = no_os_i2c_remove(dev->i2c_desc);
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

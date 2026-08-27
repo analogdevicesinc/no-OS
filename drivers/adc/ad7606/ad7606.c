@@ -40,7 +40,7 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_crc.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 #ifdef XILINX_PLATFORM
 #include "no_os_axi_io.h"
@@ -1783,7 +1783,7 @@ int32_t ad7606_init(struct ad7606_dev **device,
 	no_os_crc8_populate_msb(ad7606_crc8, 0x7);
 	no_os_crc16_populate_msb(ad7606_crc16, 0x755b);
 
-	dev = (struct ad7606_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ad7606_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -2033,7 +2033,7 @@ int32_t ad7606_remove(struct ad7606_dev *dev)
 	ad7606_axi_remove(dev);
 #endif
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
