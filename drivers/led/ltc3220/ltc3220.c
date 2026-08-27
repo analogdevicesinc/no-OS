@@ -42,7 +42,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "ltc3220.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_i2c.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"
@@ -59,7 +59,7 @@ int ltc3220_init(struct ltc3220_dev **device,
 	struct ltc3220_dev *dev;
 	int ret;
 
-	dev = (struct ltc3220_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ltc3220_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -110,7 +110,7 @@ int ltc3220_remove(struct ltc3220_dev *device)
 		device->gpio_rst_desc = NULL;
 	}
 
-	no_os_free(device);
+	capi_free(device);
 
 	return 0;
 }
