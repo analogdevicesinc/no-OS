@@ -30,7 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_units.h"
 #include "ade7816.h"
@@ -1423,7 +1423,7 @@ int ade7816_init(struct ade7816_desc **desc,
 	uint32_t reg_val;
 	int ret;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -1644,7 +1644,7 @@ remove_irq:
 remove_irq0:
 	no_os_gpio_remove(descriptor->gpio_irq0_desc);
 remove_ade7816:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -1688,7 +1688,7 @@ int ade7816_remove(struct ade7816_desc *desc)
 	}
 	no_os_gpio_remove(desc->gpio_irq1_desc);
 	no_os_gpio_remove(desc->gpio_irq0_desc);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }
