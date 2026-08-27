@@ -38,7 +38,7 @@
 #include "admt4000.h"
 #include "iio.h"
 #include "iio_trigger.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_gpio.h"
 #include "no_os_util.h"
@@ -422,7 +422,7 @@ int admt4000_iio_init(struct admt4000_iio_dev **iio_dev,
 	if (!init_param)
 		return -EINVAL;
 
-	descriptor = (struct admt4000_iio_dev *)no_os_calloc(1, sizeof(*descriptor));
+	descriptor = (struct admt4000_iio_dev *)capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -437,7 +437,7 @@ int admt4000_iio_init(struct admt4000_iio_dev **iio_dev,
 
 	return 0;
 init_err:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -450,7 +450,7 @@ init_err:
 int admt4000_iio_remove(struct admt4000_iio_dev *desc)
 {
 	admt4000_remove(desc->admt4000_desc);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

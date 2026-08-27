@@ -41,7 +41,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "admt4000.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 
 static int admt4000_set_page(struct admt4000_dev *device, uint8_t page);
@@ -195,7 +195,7 @@ int admt4000_init(struct admt4000_dev **device,
 	if (!device || !init_param)
 		return -EINVAL;
 
-	dev = (struct admt4000_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct admt4000_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -278,7 +278,7 @@ err_gpio_reset:
 	no_os_spi_remove(dev->spi_desc);
 
 err:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -318,7 +318,7 @@ int admt4000_remove(struct admt4000_dev *device)
 		device->gpio_reset_desc = NULL;
 	}
 
-	no_os_free(device);
+	capi_free(device);
 
 	return 0;
 }
