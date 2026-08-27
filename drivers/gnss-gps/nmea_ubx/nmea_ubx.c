@@ -41,7 +41,7 @@
 #include "no_os_gpio.h"
 #include "no_os_irq.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_print_log.h"
 #include <stdlib.h>
 #include <errno.h>
@@ -109,7 +109,7 @@ int gnss_init(struct gnss_dev **device,
 	if (!device)
 		return -EINVAL;
 
-	dev = (struct gnss_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct gnss_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 	init_param.uart_init->baud_rate = init_param.baud_rate;
@@ -179,9 +179,9 @@ int gnss_init(struct gnss_dev **device,
 		no_os_mdelay(100);
 
 		/* flush the UART port */
-		scrap = no_os_calloc(500, sizeof(uint8_t));
+		scrap = capi_calloc(500, sizeof(uint8_t));
 		no_os_uart_read_nonblocking(dev->uart_desc, scrap, 500);
-		no_os_free(scrap);
+		capi_free(scrap);
 
 		/* Configure baudrate via UBX commands (if specified) */
 		if (init_param.baud_rate > 0) {
@@ -217,7 +217,7 @@ error_reset:
 error_uart:
 	no_os_uart_remove(dev->uart_desc);
 remove_device:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -237,7 +237,7 @@ int gnss_remove(struct gnss_dev *dev)
 	if (dev->uart_desc)
 		no_os_uart_remove(dev->uart_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }
@@ -358,7 +358,7 @@ int gnss_ubx_send_packet(struct gnss_dev *dev, uint8_t cls,
 		return -ERANGE;
 
 	/* packet header is 6 bytes and CRC is 2 bytes */
-	packet = no_os_calloc(length + 8, sizeof(uint8_t));
+	packet = capi_calloc(length + 8, sizeof(uint8_t));
 
 	/* Build packet header */
 	packet[0] = UBX_SYNCH_1;
@@ -384,11 +384,11 @@ int gnss_ubx_send_packet(struct gnss_dev *dev, uint8_t cls,
 	/* Send packet */
 	ret = gnss_write(dev, packet, packet_size);
 	if (ret < 0) {
-		no_os_free(packet);
+		capi_free(packet);
 		return ret;
 	}
 
-	no_os_free(packet);
+	capi_free(packet);
 	return 0;
 }
 
@@ -411,7 +411,7 @@ int gnss_ubx_receive_packet(struct gnss_dev *dev,
 	if (!dev || !packet)
 		return -EINVAL;
 
-	header = no_os_calloc(6, sizeof(uint8_t));
+	header = capi_calloc(6, sizeof(uint8_t));
 	/* Read 6 bytes that represent the UBX header */
 	ret = gnss_read(dev, header, 6);
 	if (ret < 0)
@@ -428,8 +428,8 @@ int gnss_ubx_receive_packet(struct gnss_dev *dev,
 	/* bytes 5-6 - length bytes (little endian) */
 	packet->length = no_os_get_unaligned_le16(&header[4]);
 	/* Prepare buffer for payload depending on the packet length + 2 bytes CRC */
-	byte = no_os_calloc(packet->length + 2, sizeof(uint8_t));
-	packet->payload = no_os_calloc(packet->length, sizeof(uint8_t));
+	byte = capi_calloc(packet->length + 2, sizeof(uint8_t));
+	packet->payload = capi_calloc(packet->length, sizeof(uint8_t));
 	/* Read payload + 2 checksum bytes */
 	ret = gnss_read(dev, byte, packet->length + 2);
 	if (ret < 0)
@@ -446,7 +446,7 @@ int gnss_ubx_receive_packet(struct gnss_dev *dev,
 	no_os_put_unaligned_le16(packet->length, &header[2]);
 
 	/* Calculate checksum over header and payload */
-	data = no_os_calloc(packet->length + 4, sizeof(uint8_t));
+	data = capi_calloc(packet->length + 4, sizeof(uint8_t));
 	memcpy(&data[0], header, 4);
 	if (packet->payload && packet->length > 0) {
 		memcpy(&data[4], packet->payload, packet->length);
@@ -473,12 +473,12 @@ int gnss_ubx_receive_packet(struct gnss_dev *dev,
 	}
 
 free_payload:
-	no_os_free(packet->payload);
+	capi_free(packet->payload);
 free_data:
-	no_os_free(data);
-	no_os_free(byte);
+	capi_free(data);
+	capi_free(byte);
 free_header:
-	no_os_free(header);
+	capi_free(header);
 
 	return ret;
 }
@@ -523,7 +523,7 @@ int gnss_ubx_wait_for_ack(struct gnss_dev *dev, uint8_t cls, uint8_t id)
 
 free_payload:
 	if (packet.payload)
-		no_os_free(packet.payload);
+		capi_free(packet.payload);
 	return ret;
 }
 
@@ -567,7 +567,7 @@ int gnss_ubx_set_val_no_ack(struct gnss_dev *dev, uint32_t key_id,
 		return -EINVAL;
 	}
 
-	payload = no_os_calloc(value_size + 8, sizeof(uint8_t));
+	payload = capi_calloc(value_size + 8, sizeof(uint8_t));
 	/* Build payload */
 	payload[0] = 0;			/* Version */
 	payload[1] = layer_val;		/* Layer */
@@ -603,7 +603,7 @@ int gnss_ubx_set_val_no_ack(struct gnss_dev *dev, uint32_t key_id,
 	ret = 0;
 
 free_payload:
-	no_os_free(payload);
+	capi_free(payload);
 	return ret;
 }
 
@@ -648,7 +648,7 @@ int gnss_ubx_set_val(struct gnss_dev *dev, uint32_t key_id,
 		return -EINVAL;
 	}
 
-	payload = no_os_calloc(value_size + 8, sizeof(uint8_t));
+	payload = capi_calloc(value_size + 8, sizeof(uint8_t));
 	/* Build payload */
 	payload[0] = 0;			/* Version */
 	payload[1] = layer_val;		/* Layer */
@@ -672,7 +672,7 @@ int gnss_ubx_set_val(struct gnss_dev *dev, uint32_t key_id,
 		no_os_put_unaligned_le64(value, &payload[8]);
 		break;
 	default:
-		no_os_free(payload);
+		capi_free(payload);
 		return -EINVAL;
 	}
 
@@ -690,7 +690,7 @@ int gnss_ubx_set_val(struct gnss_dev *dev, uint32_t key_id,
 	ret = 0;
 
 free_payload:
-	no_os_free(payload);
+	capi_free(payload);
 	return ret;
 }
 
@@ -733,7 +733,7 @@ int gnss_ubx_get_val(struct gnss_dev *dev, uint32_t key_id,
 		return -EINVAL;
 	}
 
-	payload = no_os_calloc(value_size + 8, sizeof(uint8_t));
+	payload = capi_calloc(value_size + 8, sizeof(uint8_t));
 	/* Build payload */
 	payload[0] = 0;			/* Version */
 	payload[1] = layer_val;		/* Layer */
@@ -795,9 +795,9 @@ int gnss_ubx_get_val(struct gnss_dev *dev, uint32_t key_id,
 	ret = 0;
 
 free_response:
-	no_os_free(response.payload);
+	capi_free(response.payload);
 free_payload:
-	no_os_free(payload);
+	capi_free(payload);
 
 	return ret;
 }
@@ -1062,13 +1062,13 @@ int gnss_ubx_poll_nav_pvt(struct gnss_dev *dev,
 	/* Verify response */
 	if (response.cls != UBX_CLASS_NAV || response.id != UBX_NAV_PVT) {
 		if (response.payload)
-			no_os_free(response.payload);
+			capi_free(response.payload);
 		return -EIO;
 	}
 
 	if (response.length < sizeof(struct gnss_ubx_nav_pvt)) {
 		if (response.payload)
-			no_os_free(response.payload);
+			capi_free(response.payload);
 		return -EIO;
 	}
 
@@ -1076,7 +1076,7 @@ int gnss_ubx_poll_nav_pvt(struct gnss_dev *dev,
 	memcpy(nav_data, response.payload, sizeof(struct gnss_ubx_nav_pvt));
 
 	if (response.payload)
-		no_os_free(response.payload);
+		capi_free(response.payload);
 
 	return 0;
 }
@@ -1112,13 +1112,13 @@ int gnss_ubx_poll_nav_timeutc(struct gnss_dev *dev,
 	/* Verify response */
 	if (response.cls != UBX_CLASS_NAV || response.id != UBX_NAV_TIMEUTC) {
 		if (response.payload)
-			no_os_free(response.payload);
+			capi_free(response.payload);
 		return -EIO;
 	}
 
 	if (response.length < sizeof(struct gnss_ubx_nav_timeutc)) {
 		if (response.payload)
-			no_os_free(response.payload);
+			capi_free(response.payload);
 		return -EIO;
 	}
 
@@ -1126,7 +1126,7 @@ int gnss_ubx_poll_nav_timeutc(struct gnss_dev *dev,
 	memcpy(time_data, response.payload, sizeof(struct gnss_ubx_nav_timeutc));
 
 	if (response.payload)
-		no_os_free(response.payload);
+		capi_free(response.payload);
 
 	return 0;
 }
@@ -1886,7 +1886,7 @@ int gnss_parse_gprmc_sentence(const char *sentence,
 
 	/* Create working copy for parsing */
 	len = strlen(sentence);
-	sentence_copy = no_os_calloc(len + 1, sizeof(char));
+	sentence_copy = capi_calloc(len + 1, sizeof(char));
 	if (!sentence_copy)
 		return -ENOMEM;
 	strcpy(sentence_copy, sentence);
@@ -1980,7 +1980,7 @@ int gnss_parse_gprmc_sentence(const char *sentence,
 		ret = -EINVAL;
 	}
 
-	no_os_free(sentence_copy);
+	capi_free(sentence_copy);
 	return ret;
 }
 
@@ -2313,7 +2313,7 @@ int gnss_parse_gpgga_sentence(const char *sentence,
 
 	/* Create working copy for parsing */
 	len = strlen(sentence);
-	sentence_copy = no_os_calloc(len + 1, sizeof(char));
+	sentence_copy = capi_calloc(len + 1, sizeof(char));
 	if (!sentence_copy) {
 		return -ENOMEM;
 	}
@@ -2388,7 +2388,7 @@ int gnss_parse_gpgga_sentence(const char *sentence,
 		ret = -EINVAL;
 	}
 
-	no_os_free(sentence_copy);
+	capi_free(sentence_copy);
 	return ret;
 }
 
