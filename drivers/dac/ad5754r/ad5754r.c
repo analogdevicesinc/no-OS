@@ -34,7 +34,7 @@
 
 #include <stdlib.h>
 #include "ad5754r.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 
 /* AD5754R gain values scaled up to avoid float computations */
@@ -747,7 +747,7 @@ int ad5754r_init(struct ad5754r_dev **device,
 	if (!device || !init_param)
 		return -EINVAL;
 
-	dev = (struct ad5754r_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad5754r_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -787,7 +787,7 @@ error_spi:
 error_gpio:
 	ad5754r_remove_gpios(dev);
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -836,7 +836,7 @@ int ad5754r_remove(struct ad5754r_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

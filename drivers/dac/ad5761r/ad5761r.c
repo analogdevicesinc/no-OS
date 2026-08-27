@@ -35,7 +35,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ad5761r.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * SPI write to device.
@@ -650,7 +650,7 @@ int32_t ad5761r_init(struct ad5761r_dev **device,
 	struct ad5761r_dev *dev;
 	int32_t ret = 0;
 
-	dev = (struct ad5761r_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad5761r_dev *)capi_malloc(sizeof(*dev));
 	if (!dev) {
 		return -1;
 	}
@@ -716,7 +716,7 @@ int32_t ad5761r_remove(struct ad5761r_dev *dev)
 	if (dev->gpio_ldac)
 		ret |= no_os_gpio_remove(dev->gpio_ldac);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

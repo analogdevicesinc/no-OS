@@ -34,7 +34,7 @@
 
 #include <stdlib.h>
 #include "ad5791.h"    // AD5791 definitions.
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 static const struct ad5791_chip_info chip_info[] = {
 	[ID_AD5760] = {
@@ -71,7 +71,7 @@ int32_t ad5791_init(struct ad5791_dev **device,
 	struct ad5791_dev *dev;
 	int32_t status;
 
-	dev = (struct ad5791_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad5791_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -114,7 +114,7 @@ int32_t ad5791_remove(struct ad5791_dev *dev)
 	ret |= no_os_gpio_remove(dev->gpio_clr);
 	ret |= no_os_gpio_remove(dev->gpio_ldac);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

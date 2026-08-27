@@ -40,7 +40,7 @@
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_util.h"
 
 /******************************************************************************/
@@ -1702,7 +1702,7 @@ int ad5706r_init(struct ad5706r_dev **device,
 	if (!init_param)
 		return -EINVAL;
 
-	dev = (struct ad5706r_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ad5706r_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -1829,7 +1829,7 @@ error_spi:
 	no_os_spi_remove(dev->spi_desc);
 
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -1854,7 +1854,7 @@ int ad5706r_remove(struct ad5706r_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

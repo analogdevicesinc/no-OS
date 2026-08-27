@@ -32,7 +32,7 @@
 *******************************************************************************/
 #include "no_os_print_log.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_crc8.h"
 #include "no_os_spi.h"
@@ -515,7 +515,7 @@ int max22007_init(struct max22007_dev **device,
 	uint8_t ch;
 	int ret;
 
-	dev = (struct max22007_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct max22007_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -591,7 +591,7 @@ int max22007_remove(struct max22007_dev *dev)
 
 	no_os_spi_remove(dev->comm_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

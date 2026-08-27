@@ -34,7 +34,7 @@
 #include <errno.h>
 #include "iio_ad8460.h"
 #include "ad8460.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 
 #define AD8460_CHAN_EXT_INFO(_name, _what, _read, _write) {	\
@@ -427,13 +427,13 @@ int ad8460_iio_init(struct ad8460_iio_device **iio_device,
 	if (!iio_init_param || !iio_init_param->init_param)
 		return -EINVAL;
 
-	iio_device_temp = no_os_calloc(1, sizeof(*iio_device_temp));
+	iio_device_temp = capi_calloc(1, sizeof(*iio_device_temp));
 	if (!iio_device_temp)
 		return -ENOMEM;
 
 	ret = ad8460_init(&iio_device_temp->dev, iio_init_param->init_param);
 	if (ret) {
-		no_os_free(iio_device_temp);
+		capi_free(iio_device_temp);
 		return ret;
 	}
 
@@ -465,7 +465,7 @@ int ad8460_iio_remove(struct ad8460_iio_device *iio_device)
 	if (ret)
 		return ret;
 
-	no_os_free(iio_device);
+	capi_free(iio_device);
 
 	return 0;
 }

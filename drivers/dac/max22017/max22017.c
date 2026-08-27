@@ -35,7 +35,7 @@
 #include "max22017.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_crc8.h"
 
 NO_OS_DECLARE_CRC8_TABLE(table);
@@ -58,7 +58,7 @@ int32_t max22017_gpio_get(struct no_os_gpio_desc **desc,
 
 	gpio_extra = param->extra;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -79,7 +79,7 @@ int32_t max22017_gpio_get(struct no_os_gpio_desc **desc,
 	return 0;
 
 free_descriptor:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -105,7 +105,7 @@ int32_t max22017_gpio_remove(struct no_os_gpio_desc *desc)
 	if (ret)
 		return ret;
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }
@@ -569,7 +569,7 @@ int max22017_init(struct max22017_desc **desc,
 	struct max22017_desc *descriptor;
 	int ret;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -666,7 +666,7 @@ int max22017_remove(struct max22017_desc *desc)
 
 	no_os_spi_remove(desc->comm_desc);
 	no_os_gpio_remove(desc->ldac_desc);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

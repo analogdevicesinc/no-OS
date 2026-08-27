@@ -38,7 +38,7 @@
 #include "ad3552r.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 #define AD3552R_ATTR(_name, _priv) {\
 	.name = _name,\
@@ -219,13 +219,13 @@ int32_t iio_ad3552r_init(struct iio_ad3552r_desc **iio_dac,
 	if (!iio_dac || !param)
 		return -EINVAL;
 
-	liio_dac = (struct iio_ad3552r_desc *)no_os_calloc(1, sizeof(*liio_dac));
+	liio_dac = (struct iio_ad3552r_desc *)capi_calloc(1, sizeof(*liio_dac));
 	if (!liio_dac)
 		return -ENOMEM;
 
 	err = ad3552r_init(&liio_dac->dac, param);
 	if (NO_OS_IS_ERR_VALUE(err)) {
-		no_os_free(liio_dac);
+		capi_free(liio_dac);
 		return err;
 	}
 
@@ -253,7 +253,7 @@ int32_t iio_ad3552r_remove(struct iio_ad3552r_desc *iio_dac)
 
 	ad3552r_remove(iio_dac->dac);
 
-	no_os_free(iio_dac);
+	capi_free(iio_dac);
 
 	return 0;
 }

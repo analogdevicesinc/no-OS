@@ -42,7 +42,7 @@
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /******************************************************************************/
 
@@ -102,7 +102,7 @@ int ltc2672_remove(struct ltc2672_dev *device)
 	if (ret)
 		return ret;
 
-	no_os_free(device);
+	capi_free(device);
 
 	return ret;
 }
@@ -836,7 +836,7 @@ int ltc2672_init(struct ltc2672_dev **device,
 	int ret;
 	struct ltc2672_dev *descriptor;
 
-	descriptor = (struct ltc2672_dev *)no_os_calloc(1, sizeof(*descriptor));
+	descriptor = (struct ltc2672_dev *)capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -902,7 +902,7 @@ error_spi:
 	no_os_spi_remove(descriptor->comm_desc);
 
 error_init:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }

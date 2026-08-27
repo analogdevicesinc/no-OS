@@ -35,7 +35,7 @@
 
 #include <stdlib.h>
 #include "ad5446.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 #define MAX_RESOLUTION  16      /* Maximum resolution of supported devices */
 #define DATA_MASK(x)    (0xFFFF >> (MAX_RESOLUTION - (x)))
@@ -129,7 +129,7 @@ int8_t ad5446_init(struct ad5446_dev **device,
 	struct ad5446_dev *dev;
 	int8_t status;
 
-	dev = (struct ad5446_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad5446_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -178,7 +178,7 @@ int32_t ad5446_remove(struct ad5446_dev *dev)
 	ret |= no_os_gpio_remove(dev->gpio_ladc);
 	ret |= no_os_gpio_remove(dev->gpio_clrout);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

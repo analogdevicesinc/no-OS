@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include "ad5755.h"         // AD5755 definitions.
 #include "ad5755_cfg.h"     // AD5755_cfg definitions.
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /***************************************************************************//**
  * @brief Initializes the device and powers-up all channels. The device is
@@ -56,7 +56,7 @@ int8_t ad5755_init(struct ad5755_dev **device,
 	uint8_t channel = 0;
 	uint16_t dac_control_buff[4] = {0, 0, 0, 0};
 
-	dev = (struct ad5755_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad5755_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -159,7 +159,7 @@ int32_t ad5755_remove(struct ad5755_dev *dev)
 	ret |= no_os_gpio_remove(dev->gpio_clr);
 	ret |= no_os_gpio_remove(dev->gpio_poc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
