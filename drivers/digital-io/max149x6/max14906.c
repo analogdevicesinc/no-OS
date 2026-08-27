@@ -35,7 +35,7 @@
 #include <string.h>
 #include "max14906.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief Read the (voltage) state of a channel (works for both input or output).
@@ -173,7 +173,7 @@ int max14906_init(struct max149x6_desc **desc,
 	int ret;
 	int i;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -265,7 +265,7 @@ gpio_err:
 spi_err:
 	no_os_spi_remove(descriptor->comm_desc);
 err:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -295,7 +295,7 @@ int max14906_remove(struct max149x6_desc *desc)
 	no_os_gpio_remove(desc->ready_gpio);
 	no_os_gpio_remove(desc->synch_gpio);
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

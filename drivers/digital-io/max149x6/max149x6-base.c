@@ -36,7 +36,7 @@
 #include <string.h>
 #include "max149x6-base.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief Compute the CRC5 value for an array of bytes when writing to MAX149X6

@@ -36,7 +36,7 @@
 #include "no_os_error.h"
 #include "no_os_units.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 #include "max22196.h"
 #include "iio_max22196.h"
@@ -775,7 +775,7 @@ int max22196_iio_setup_channels(struct max22196_iio_desc *desc)
 	struct iio_channel *max22196_iio_channels;
 	int i;
 
-	max22196_iio_channels = no_os_calloc(desc->max22196_desc->max_chn_nb,
+	max22196_iio_channels = capi_calloc(desc->max22196_desc->max_chn_nb,
 					     sizeof(*max22196_iio_channels));
 
 	if (!max22196_iio_channels)
@@ -835,7 +835,7 @@ int max22196_iio_init(struct max22196_iio_desc **iio_desc,
 	if (!init_param || !init_param->max22196_init_param)
 		return -EINVAL;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -870,8 +870,8 @@ int max22196_iio_remove(struct max22196_iio_desc *iio_desc)
 		return -ENODEV;
 
 	max22196_remove(iio_desc->max22196_desc);
-	no_os_free(iio_desc->iio_dev->channels);
-	no_os_free(iio_desc);
+	capi_free(iio_desc->iio_dev->channels);
+	capi_free(iio_desc);
 
 	return 0;
 }
