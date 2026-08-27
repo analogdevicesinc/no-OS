@@ -31,7 +31,7 @@ SOFTWARE.
 #include <string.h>
 #include <errno.h>
 #include "ad5293.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 
 /***************************************************************************//**
@@ -78,7 +78,7 @@ int32_t ad5293_init(struct ad5293_dev **device,
 	if ((! device) || (! init_param))
 		return - EINVAL;
 
-	dev = (struct ad5293_dev*)no_os_malloc(sizeof(* dev));
+	dev = (struct ad5293_dev*)capi_malloc(sizeof(* dev));
 	if (! dev)
 		return - ENOMEM;
 
@@ -104,7 +104,7 @@ int32_t ad5293_init(struct ad5293_dev **device,
 	}
 
 	dev->chip_num = init_param->chip_num;
-	chp = (struct ad5293_chip_info*)no_os_malloc(dev->chip_num * sizeof(* chp));
+	chp = (struct ad5293_chip_info*)capi_malloc(dev->chip_num * sizeof(* chp));
 	if (! chp) {
 		ret = - ENOMEM;
 		goto error;
@@ -134,8 +134,8 @@ error:
 		ret = no_os_gpio_remove(dev->gpio_reset);
 	if (dev->spi_desc)
 		ret = no_os_spi_remove(dev->gpio_reset);
-	no_os_free(chp);
-	no_os_free(dev);
+	capi_free(chp);
+	capi_free(dev);
 	return ret;
 }
 
@@ -163,8 +163,8 @@ int32_t ad5293_remove(struct ad5293_dev* dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev->chip);
-	no_os_free(dev);
+	capi_free(dev->chip);
+	capi_free(dev);
 
 	return ret;
 }
