@@ -32,7 +32,7 @@
  ******************************************************************************/
 
 #include "iio_adis1655x.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_units.h"
 
 static const char * const adis1655x_rang_mdl_txt[] = {
@@ -477,7 +477,7 @@ int adis1655x_iio_init(struct adis_iio_dev **iio_dev,
 	int ret;
 	struct adis_iio_dev *desc;
 
-	desc = (struct adis_iio_dev *)no_os_calloc(1, sizeof(*desc));
+	desc = (struct adis_iio_dev *)capi_calloc(1, sizeof(*desc));
 	if (!desc)
 		return -ENOMEM;
 
@@ -495,7 +495,7 @@ int adis1655x_iio_init(struct adis_iio_dev **iio_dev,
 	return 0;
 
 error_adis1655x_init:
-	no_os_free(desc);
+	capi_free(desc);
 	return ret;
 }
 
@@ -508,5 +508,5 @@ void adis1655x_iio_remove(struct adis_iio_dev *desc)
 	if (!desc)
 		return;
 	adis_remove(desc->adis_dev);
-	no_os_free(desc);
+	capi_free(desc);
 }
