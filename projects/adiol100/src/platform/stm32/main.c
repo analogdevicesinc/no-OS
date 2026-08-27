@@ -11,11 +11,28 @@
 #include "parameters.h"
 #include "common_data.h"
 #include "no_os_uart.h"
+#include "stm32f4xx_hal.h"
 
 #ifdef CONFIG_ADIOL100_BASIC_EXAMPLE
 extern int basic_example_main(void);
 #endif
 
+#ifdef CONFIG_ADIOL100_ILINK_EXAMPLE
+#include "no_os_irq.h"
+#include "FreeRTOS.h"
+#include "task.h"
+
+extern void xPortSysTickHandler(void);
+
+void SysTick_Handler(void)
+{
+	HAL_IncTick();
+	if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED)
+		xPortSysTickHandler();
+}
+
+extern int ilink_example_main(void);
+#endif
 int main(void)
 {
 	int ret;
@@ -25,6 +42,10 @@ int main(void)
 
 	stm32_init();
 
+#ifdef CONFIG_ADIOL100_ILINK_EXAMPLE
+	HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);
+#endif
+
 	ret = no_os_uart_init(&uart, &adiol100_uart_ip);
 	if (ret)
 		return ret;
@@ -33,6 +54,10 @@ int main(void)
 
 #ifdef CONFIG_ADIOL100_BASIC_EXAMPLE
 	ret = basic_example_main();
+#endif
+
+#ifdef CONFIG_ADIOL100_ILINK_EXAMPLE
+	ret = ilink_example_main();
 #endif
 
 	no_os_uart_remove(uart);

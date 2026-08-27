@@ -18,6 +18,10 @@
 extern int basic_example_main(void);
 #endif
 
+#ifdef CONFIG_ADIOL100_ILINK_EXAMPLE
+extern int ilink_example_main(void);
+#endif
+
 int main(void)
 {
 	int ret;
@@ -41,6 +45,10 @@ int main(void)
 
 #ifdef CONFIG_ADIOL100_BASIC_EXAMPLE
 	ret = basic_example_main();
+#endif
+
+#ifdef CONFIG_ADIOL100_ILINK_EXAMPLE
+	ret = ilink_example_main();
 #endif
 
 nvic_remove:
