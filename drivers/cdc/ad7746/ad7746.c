@@ -35,7 +35,7 @@
 #include <string.h>
 #include "no_os_error.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "ad7746.h"
 
 /***************************************************************************//**
@@ -56,7 +56,7 @@ int32_t ad7746_init(struct ad7746_dev **device,
 	int32_t ret;
 	struct ad7746_dev *dev;
 
-	dev = (struct ad7746_dev *)no_os_calloc(1, sizeof(struct ad7746_dev));
+	dev = (struct ad7746_dev *)capi_calloc(1, sizeof(struct ad7746_dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -95,7 +95,7 @@ int32_t ad7746_init(struct ad7746_dev **device,
 error_2:
 	no_os_i2c_remove(dev->i2c_dev);
 error_1:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -185,7 +185,7 @@ int32_t ad7746_remove(struct ad7746_dev *dev)
 
 	no_os_i2c_remove(dev->i2c_dev);
 	dev->i2c_dev = NULL;
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }
