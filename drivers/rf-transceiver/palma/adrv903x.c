@@ -46,7 +46,7 @@
 #include "adi_adrv903x_tx.h"
 #include "adi_common_error.h"
 #include "jesd204.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_clk.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
@@ -732,7 +732,7 @@ int adrv903x_init(struct adrv903x_rf_phy **phy,
 	if (!phy || !init_param)
 		return -EINVAL;
 
-	p = no_os_calloc(1, sizeof(*p));
+	p = capi_calloc(1, sizeof(*p));
 	if (!p)
 		return -ENOMEM;
 
@@ -745,7 +745,7 @@ int adrv903x_init(struct adrv903x_rf_phy **phy,
 	p->palmaDevice->common.devHalInfo = &p->hal;
 
 	/* Allocate error data block required by the API */
-	errPtr = no_os_calloc(1, sizeof(*errPtr));
+	errPtr = capi_calloc(1, sizeof(*errPtr));
 	if (!errPtr) {
 		ret = -ENOMEM;
 		goto error_free_phy;
@@ -893,9 +893,9 @@ error_disable_clk:
 	if (p->dev_clk)
 		no_os_clk_disable(p->dev_clk);
 error_free_errptr:
-	no_os_free(errPtr);
+	capi_free(errPtr);
 error_free_phy:
-	no_os_free(p);
+	capi_free(p);
 	return ret;
 }
 
@@ -919,7 +919,7 @@ int adrv903x_remove(struct adrv903x_rf_phy *phy)
 	if (phy->dev_clk)
 		no_os_clk_disable(phy->dev_clk);
 
-	no_os_free(phy->palmaDevice->common.errPtr);
-	no_os_free(phy);
+	capi_free(phy->palmaDevice->common.errPtr);
+	capi_free(phy);
 	return 0;
 }

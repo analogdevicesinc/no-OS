@@ -18,7 +18,7 @@
 #include "no_os_print_log.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_util.h"
 #include "no_os_spi.h"
 #include "adrv904x.h"
@@ -1000,7 +1000,7 @@ int32_t adrv904x_init(struct adrv904x_rf_phy **dev,
 	struct adrv904x_rf_phy *phy;
 	int ret;
 
-	phy = (struct adrv904x_rf_phy *)no_os_calloc(1, sizeof(*phy));
+	phy = (struct adrv904x_rf_phy *)capi_calloc(1, sizeof(*phy));
 	if (!phy) {
 		ret = -ENOMEM;
 		goto error;
@@ -1049,7 +1049,7 @@ int32_t adrv904x_init(struct adrv904x_rf_phy **dev,
 
 	return 0;
 error_setup:
-	no_os_free(phy);
+	capi_free(phy);
 	*dev = NULL;
 error:
 	return ret;
@@ -1127,7 +1127,7 @@ int adrv904x_setup(struct adrv904x_rf_phy *phy)
 	if (ret)
 		return ret;
 
-	errPtr = (adi_common_ErrData_t *)no_os_calloc(1, sizeof(adi_common_ErrData_t));
+	errPtr = (adi_common_ErrData_t *)capi_calloc(1, sizeof(adi_common_ErrData_t));
 	if (!errPtr)
 		return -ENOMEM;
 
@@ -1140,7 +1140,7 @@ int adrv904x_setup(struct adrv904x_rf_phy *phy)
 	if (ret)
 		goto error_free_errptr;
 
-	rx_sample_clk = no_os_calloc(1, sizeof(*rx_sample_clk));
+	rx_sample_clk = capi_calloc(1, sizeof(*rx_sample_clk));
 	if (!rx_sample_clk)
 		goto rx_out_clk_error;
 
@@ -1156,7 +1156,7 @@ int adrv904x_setup(struct adrv904x_rf_phy *phy)
 
 	phy->clks[ADRV904X_RX_SAMPL_CLK] = rx_sample_clk;
 
-	tx_sample_clk = no_os_calloc(1, sizeof(*tx_sample_clk));
+	tx_sample_clk = capi_calloc(1, sizeof(*tx_sample_clk));
 	if (!tx_sample_clk)
 		goto rx_out_clk_init_error;
 
@@ -1172,7 +1172,7 @@ int adrv904x_setup(struct adrv904x_rf_phy *phy)
 
 	phy->clks[ADRV904X_TX_SAMPL_CLK] = tx_sample_clk;
 
-	orx_sample_clk = no_os_calloc(1, sizeof(*orx_sample_clk));
+	orx_sample_clk = capi_calloc(1, sizeof(*orx_sample_clk));
 	if (!orx_sample_clk)
 		goto tx_out_clk_init_error;
 
@@ -1254,14 +1254,14 @@ int adrv904x_setup(struct adrv904x_rf_phy *phy)
 	return 0;
 
 orx_out_clk_init_error:
-	no_os_free(orx_sample_clk);
+	capi_free(orx_sample_clk);
 tx_out_clk_init_error:
-	no_os_free(tx_sample_clk);
+	capi_free(tx_sample_clk);
 rx_out_clk_init_error:
-	no_os_free(rx_sample_clk);
+	capi_free(rx_sample_clk);
 rx_out_clk_error:
 error_free_errptr:
-	no_os_free(errPtr);
+	capi_free(errPtr);
 	return ret;
 }
 
@@ -1276,7 +1276,7 @@ int adrv904x_remove(struct adrv904x_rf_phy *phy)
 	if (phy->is_initialized)
 		adrv904x_shutdown(phy);
 
-	no_os_free(phy);
+	capi_free(phy);
 
 	return 0;
 }

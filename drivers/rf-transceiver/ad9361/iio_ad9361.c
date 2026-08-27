@@ -40,7 +40,7 @@
 #include "iio_ad9361.h"
 #include "ad9361_api.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #ifndef AXI_ADC_NOT_PRESENT
 #include "axi_adc_core.h"
 #endif
@@ -3125,7 +3125,7 @@ int32_t iio_ad9361_init(struct iio_ad9361_desc **desc,
 {
 	struct iio_ad9361_desc *iio_ad9361_inst;
 
-	iio_ad9361_inst = (struct iio_ad9361_desc *)no_os_calloc(1,
+	iio_ad9361_inst = (struct iio_ad9361_desc *)capi_calloc(1,
 			  sizeof(struct iio_ad9361_desc));
 	if (!iio_ad9361_inst)
 		return -1;
@@ -3153,7 +3153,7 @@ int32_t iio_ad9361_remove(struct iio_ad9361_desc *desc)
 	if (!desc)
 		return -1;
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }
