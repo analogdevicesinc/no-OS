@@ -36,7 +36,7 @@
 #include "sd.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 #define BIT_CCS				(1u<<30)
 #define BIT_APPLICATION_CMD		(1u<<7)
@@ -518,7 +518,7 @@ int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 	if (!sd_desc || !param)
 		return -1;
 
-	local_desc = no_os_calloc(1, sizeof(*local_desc));
+	local_desc = capi_calloc(1, sizeof(*local_desc));
 	if (!local_desc)
 		return -1;
 	local_desc->spi_desc = param->spi_desc;
@@ -610,7 +610,7 @@ int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 
 	return 0;
 failure:
-	no_os_free(local_desc);
+	capi_free(local_desc);
 	return -1;
 }
 
@@ -624,6 +624,6 @@ int32_t sd_remove(struct sd_desc *desc)
 	if (desc == NULL)
 		return -1;
 
-	no_os_free(desc);
+	capi_free(desc);
 	return 0;
 }
