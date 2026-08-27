@@ -33,7 +33,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_crc8.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
@@ -1038,7 +1038,7 @@ int lt8722_init(struct lt8722_dev **device,
 	if (!device || !init_param)
 		return -EINVAL;
 
-	dev = (struct lt8722_dev *)no_os_calloc(sizeof(*dev), 1);
+	dev = (struct lt8722_dev *)capi_calloc(sizeof(*dev), 1);
 	if (!dev)
 		return -ENOMEM;
 
@@ -1153,7 +1153,7 @@ int lt8722_remove(struct lt8722_dev *dev)
 	no_os_gpio_remove(dev->gpio_en);
 	no_os_gpio_remove(dev->gpio_swen);
 	no_os_spi_remove(dev->spi);
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

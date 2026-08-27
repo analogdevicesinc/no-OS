@@ -33,7 +33,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
@@ -704,7 +704,7 @@ int ltc7871_init(struct ltc7871_dev **device,
 	if (!device || !init_param)
 		return -EINVAL;
 
-	dev = (struct ltc7871_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ltc7871_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -746,7 +746,7 @@ int ltc7871_remove(struct ltc7871_dev *dev)
 
 	no_os_gpio_remove(dev->gpio_pwmen);
 	no_os_spi_remove(dev->spi);
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

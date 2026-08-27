@@ -31,6 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "ltc7841.h"
+#include "capi_alloc.h"
 
 const uint8_t ltc7841_write_only_registers[WRITE_ONLY_REGISTERS_NUMBER] = {
 	LTC7841_MFR_CLEAR_PEAKS,
@@ -52,7 +53,7 @@ int ltc7841_remove(struct ltc7841_desc *desc)
 	if (ret)
 		return ret;
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }
@@ -130,7 +131,7 @@ int ltc7841_init(struct ltc7841_desc **device,
 
 	return 0;
 i2c_err:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

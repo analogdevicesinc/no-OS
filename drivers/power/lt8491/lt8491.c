@@ -32,7 +32,7 @@
 *******************************************************************************/
 
 #include "lt8491.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_i2c.h"
 #include "no_os_print_log.h"
@@ -112,7 +112,7 @@ int lt8491_init(struct lt8491_desc **dev,
 	struct lt8491_desc *temp_dev;
 	int ret;
 
-	temp_dev = no_os_calloc(1, sizeof(*temp_dev));
+	temp_dev = capi_calloc(1, sizeof(*temp_dev));
 	if (!temp_dev)
 		return -ENOMEM;
 
@@ -125,7 +125,7 @@ int lt8491_init(struct lt8491_desc **dev,
 	return 0;
 
 free_dev:
-	no_os_free(temp_dev);
+	capi_free(temp_dev);
 
 	return ret;
 }
@@ -146,7 +146,7 @@ int lt8491_remove(struct lt8491_desc *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

@@ -31,7 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "max17851.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 
 /**
@@ -115,7 +115,7 @@ static int32_t max17851_uart_init(struct no_os_uart_desc **desc,
 	if (!param || !param->extra)
 		return -EINVAL;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -148,7 +148,7 @@ static int32_t max17851_uart_init(struct no_os_uart_desc **desc,
 	return 0;
 
 error:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -168,7 +168,7 @@ static int32_t max17851_uart_remove(struct no_os_uart_desc *desc)
 	extra = desc->extra;
 
 	max17851_remove(extra);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }
@@ -583,7 +583,7 @@ int max17851_init(struct max17851_desc **desc,
 	uint8_t reg_val;
 	int ret;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -715,7 +715,7 @@ free_gpio1:
 free_spi:
 	no_os_spi_remove(descriptor->spi_desc);
 free_desc:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -730,7 +730,7 @@ int max17851_remove(struct max17851_desc *desc)
 	no_os_gpio_remove(desc->gpio2_desc);
 	no_os_gpio_remove(desc->gpio1_desc);
 	no_os_spi_remove(desc->spi_desc);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

@@ -33,7 +33,7 @@
 #include "adp1055.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 
 /**
@@ -147,7 +147,7 @@ int adp1055_init(struct adp1055_desc **desc,
 	int ret;
 	uint8_t val;
 
-	descriptor = (struct adp1055_desc *)no_os_calloc(sizeof(*descriptor), 1);
+	descriptor = (struct adp1055_desc *)capi_calloc(sizeof(*descriptor), 1);
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -252,7 +252,7 @@ int adp1055_remove(struct adp1055_desc *desc)
 	no_os_pwm_remove(desc->syni_desc);
 	no_os_gpio_remove(desc->pg_alt_desc);
 	no_os_i2c_remove(desc->i2c_desc);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

@@ -35,7 +35,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_i2c.h"
 #include "no_os_units.h"
 
@@ -182,7 +182,7 @@ int ltc2992_init(struct ltc2992_dev **device,
 	if (!device)
 		return -EINVAL;
 
-	dev = no_os_calloc(1, sizeof(struct ltc2992_dev));
+	dev = capi_calloc(1, sizeof(struct ltc2992_dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -256,7 +256,7 @@ dev_err:
 	no_os_gpio_remove(dev->alert_gpio_desc);
 	no_os_i2c_remove(dev->i2c_desc);
 i2c_err:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -272,7 +272,7 @@ int ltc2992_remove(struct ltc2992_dev *dev)
 
 	no_os_gpio_remove(dev->alert_gpio_desc);
 	no_os_i2c_remove(dev->i2c_desc);
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

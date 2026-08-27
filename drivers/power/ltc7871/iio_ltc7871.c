@@ -35,7 +35,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_units.h"
 #include "no_os_util.h"
@@ -1455,7 +1455,7 @@ int ltc7871_iio_init(struct ltc7871_iio_dev **iio_dev,
 	if (!iio_dev || !init_param || !init_param->ltc7871_init_param)
 		return -EINVAL;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -1487,7 +1487,7 @@ int ltc7871_iio_remove(struct ltc7871_iio_dev *desc)
 		return -ENODEV;
 
 	ltc7871_remove(desc->ltc7871_dev);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

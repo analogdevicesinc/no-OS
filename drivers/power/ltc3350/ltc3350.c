@@ -38,7 +38,7 @@
 
 #include "no_os_util.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_i2c.h"
 
 #include "ltc3350.h"
@@ -58,7 +58,7 @@ int ltc3350_init(struct ltc3350_dev **device,
 {
 	struct ltc3350_dev *dev;
 	int ret;
-	dev = (struct ltc3350_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ltc3350_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -70,7 +70,7 @@ int ltc3350_init(struct ltc3350_dev **device,
 	return 0;
 
 err:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -89,7 +89,7 @@ int ltc3350_remove(struct ltc3350_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

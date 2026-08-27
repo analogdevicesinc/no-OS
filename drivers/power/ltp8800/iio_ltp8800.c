@@ -33,7 +33,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_units.h"
 #include "no_os_util.h"
@@ -771,7 +771,7 @@ int ltp8800_iio_init(struct ltp8800_iio_desc **iio_desc,
 	if (!init_param || !init_param->ltp8800_init_param)
 		return -EINVAL;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -787,7 +787,7 @@ int ltp8800_iio_init(struct ltp8800_iio_desc **iio_desc,
 	return 0;
 
 dev_err:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -802,9 +802,9 @@ int ltp8800_iio_remove(struct ltp8800_iio_desc *iio_desc)
 	if (!iio_desc)
 		return -ENODEV;
 
-	no_os_free(iio_desc->iio_dev->channels);
+	capi_free(iio_desc->iio_dev->channels);
 	ltp8800_remove(iio_desc->ltp8800_dev);
-	no_os_free(iio_desc);
+	capi_free(iio_desc);
 
 	return 0;
 }

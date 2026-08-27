@@ -33,7 +33,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_units.h"
 #include "no_os_util.h"
@@ -1293,7 +1293,7 @@ int adp1050_iio_init(struct adp1050_iio_desc **iio_desc,
 	if (!init_param || !init_param->adp1050_init_param)
 		return -EINVAL;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -1355,9 +1355,9 @@ int adp1050_iio_remove(struct adp1050_iio_desc *iio_desc)
 	if (!iio_desc)
 		return -ENODEV;
 
-	no_os_free(iio_desc->iio_dev->channels);
+	capi_free(iio_desc->iio_dev->channels);
 	adp1050_remove(iio_desc->adp1050_desc);
-	no_os_free(iio_desc);
+	capi_free(iio_desc);
 
 	return 0;
 }

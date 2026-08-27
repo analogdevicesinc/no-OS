@@ -33,7 +33,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "adp1050.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
 
@@ -1249,7 +1249,7 @@ int adp1050_init(struct adp1050_desc **desc,
 	struct adp1050_desc *descriptor;
 	int ret;
 
-	descriptor = (struct adp1050_desc *)no_os_calloc(sizeof(*descriptor), 1);
+	descriptor = (struct adp1050_desc *)capi_calloc(sizeof(*descriptor), 1);
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -1349,7 +1349,7 @@ int adp1050_remove(struct adp1050_desc *desc)
 	no_os_pwm_remove(desc->syni_desc);
 	no_os_gpio_remove(desc->pg_alt_desc);
 	no_os_i2c_remove(desc->i2c_desc);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

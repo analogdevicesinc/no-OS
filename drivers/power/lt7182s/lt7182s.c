@@ -39,7 +39,7 @@
 #include "no_os_units.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_pwm.h"
 #include "no_os_i2c.h"
 #include "no_os_gpio.h"
@@ -531,7 +531,7 @@ int lt7182s_init(struct lt7182s_dev **device,
 	uint16_t word;
 	uint8_t block[7];
 
-	dev = (struct lt7182s_dev *)no_os_calloc(1, sizeof(struct lt7182s_dev));
+	dev = (struct lt7182s_dev *)capi_calloc(1, sizeof(struct lt7182s_dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -706,7 +706,7 @@ dev_err:
 	no_os_gpio_remove(dev->pg0_desc);
 	no_os_i2c_remove(dev->i2c_desc);
 i2c_err:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -758,7 +758,7 @@ int lt7182s_remove(struct lt7182s_dev *dev)
 			return ret;
 	}
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

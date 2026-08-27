@@ -45,7 +45,7 @@
 #include "no_os_units.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_pwm.h"
 #include "no_os_i2c.h"
 #include "no_os_gpio.h"
@@ -309,7 +309,7 @@ int lt7170_init(struct lt7170_dev **device,
 	uint16_t word;
 	uint8_t block[lt7170_info[init_param->chip_id].name_size];
 
-	dev = (struct lt7170_dev *)no_os_calloc(1, sizeof(struct lt7170_dev));
+	dev = (struct lt7170_dev *)capi_calloc(1, sizeof(struct lt7170_dev));
 	if (!dev) {
 		ret = -ENOMEM;
 	}
@@ -416,7 +416,7 @@ int lt7170_init(struct lt7170_dev **device,
 dev_err:
 	no_os_i2c_remove(dev->i2c_desc);
 i2c_err:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -455,7 +455,7 @@ int lt7170_remove(struct lt7170_dev *dev)
 			return ret;
 	}
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

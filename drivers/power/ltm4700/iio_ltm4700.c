@@ -33,7 +33,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_units.h"
 #include "no_os_util.h"
@@ -928,7 +928,7 @@ int ltm4700_iio_init(struct ltm4700_iio_desc **iio_desc,
 	if (!iio_desc || !init_param || !init_param->ltm4700_init_param)
 		return -EINVAL;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -943,7 +943,7 @@ int ltm4700_iio_init(struct ltm4700_iio_desc **iio_desc,
 	return 0;
 
 error:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 	return ret;
 }
 
@@ -963,7 +963,7 @@ int ltm4700_iio_remove(struct ltm4700_iio_desc *desc)
 	if (ret)
 		return ret;
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }
