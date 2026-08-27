@@ -36,7 +36,7 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "oa_tc6.h"
 
 int oa_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
@@ -732,7 +732,7 @@ int oa_tc6_init(struct oa_tc6_desc **desc, struct oa_tc6_init_param *param)
 {
 	struct oa_tc6_desc *descriptor;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -745,7 +745,7 @@ int oa_tc6_init(struct oa_tc6_desc **desc, struct oa_tc6_init_param *param)
 				    OA_TC6_CONFIG0_ZARFE_MASK,
 				    OA_TC6_CONFIG0_ZARFE_MASK);
 	if (ret) {
-		no_os_free(descriptor);
+		capi_free(descriptor);
 
 		return ret;
 	}
@@ -766,7 +766,7 @@ int oa_tc6_remove(struct oa_tc6_desc *desc)
 	if (!desc)
 		return -ENODEV;
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

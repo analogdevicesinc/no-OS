@@ -32,7 +32,7 @@
 *******************************************************************************/
 
 #include <errno.h>
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "mdio_spi.h"
 
 /**
@@ -64,11 +64,11 @@ int mdio_spi_init(struct no_os_mdio_desc **dev,
 
 	msip = ip->extra;
 
-	mse = no_os_calloc(1, sizeof(*mse));
+	mse = capi_calloc(1, sizeof(*mse));
 	if (!mse)
 		return -ENOMEM;
 
-	d = no_os_calloc(1, sizeof(*d));
+	d = capi_calloc(1, sizeof(*d));
 	if (!d) {
 		ret = -ENOMEM;
 		goto error_mdio_spi_calloc;
@@ -84,9 +84,9 @@ int mdio_spi_init(struct no_os_mdio_desc **dev,
 	return 0;
 
 error_mdio_calloc:
-	no_os_free(d);
+	capi_free(d);
 error_mdio_spi_calloc:
-	no_os_free(mse);
+	capi_free(mse);
 
 	return ret;
 }
@@ -222,8 +222,8 @@ static int mdio_spi_remove(struct no_os_mdio_desc *dev)
 	mse = dev->extra;
 
 	no_os_spi_remove(mse->mdio);
-	no_os_free(mse);
-	no_os_free(dev);
+	capi_free(mse);
+	capi_free(dev);
 
 	return 0;
 }

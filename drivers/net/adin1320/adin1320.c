@@ -32,7 +32,7 @@
 *******************************************************************************/
 
 #include <errno.h>
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_gpio.h"
 #include "adin1320.h"
@@ -55,7 +55,7 @@ int adin1320_init(struct adin1320_desc **dev,
 	if (!dev || !param)
 		return -EINVAL;
 
-	d = (struct adin1320_desc *) no_os_calloc(1, sizeof(*d));
+	d = (struct adin1320_desc *) capi_calloc(1, sizeof(*d));
 	if (!d)
 		return -ENOMEM;
 
@@ -117,7 +117,7 @@ free_reset:
 free_mdio:
 	no_os_mdio_remove(d->mdio);
 free_d:
-	no_os_free(d);
+	capi_free(d);
 	return ret;
 }
 
@@ -168,7 +168,7 @@ int adin1320_remove(struct adin1320_desc *dev)
 	if (dev->reset_gpio)
 		ret_gpio = no_os_gpio_remove(dev->reset_gpio);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret_mdio ? ret_mdio : ret_gpio;
 }

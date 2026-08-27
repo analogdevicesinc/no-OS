@@ -37,7 +37,7 @@
 #include <string.h>
 #include "no_os_spi.h"
 #include "adin1110.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_crc8.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
@@ -947,7 +947,7 @@ int adin1110_init(struct adin1110_desc **desc,
 	struct adin1110_desc *descriptor;
 	int ret;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -1003,7 +1003,7 @@ int adin1110_init(struct adin1110_desc **desc,
 		if (ret)
 			goto free_spi;
 	} else {
-		descriptor->data = no_os_calloc(ADIN1110_BUFF_LEN,
+		descriptor->data = capi_calloc(ADIN1110_BUFF_LEN,
 						sizeof(*descriptor->data));
 		if (!descriptor->data) {
 			ret = -ENOMEM;
@@ -1028,14 +1028,14 @@ int adin1110_init(struct adin1110_desc **desc,
 	return 0;
 
 free_oa:
-	no_os_free(descriptor->data);
+	capi_free(descriptor->data);
 	oa_tc6_remove(descriptor->oa_desc);
 free_spi:
 	no_os_spi_remove(descriptor->comm_desc);
 free_rst_gpio:
 	no_os_gpio_remove(descriptor->reset_gpio);
 free_desc:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -1062,9 +1062,9 @@ int adin1110_remove(struct adin1110_desc *desc)
 			return ret;
 	}
 
-	no_os_free(desc->data);
+	capi_free(desc->data);
 	oa_tc6_remove(desc->oa_desc);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

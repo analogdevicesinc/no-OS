@@ -35,7 +35,7 @@
 
 #include <errno.h>
 #include <string.h>
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 
 /***************************************************************************//**
@@ -1051,7 +1051,7 @@ int w5500_init(struct w5500_dev **device,
 	struct w5500_dev *dev;
 	int ret;
 
-	dev = (struct w5500_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct w5500_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -1088,7 +1088,7 @@ free_gpio_int:
 free_gpio_reset:
 	no_os_gpio_remove(dev->gpio_reset);
 free_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -1108,7 +1108,7 @@ int w5500_remove(struct w5500_dev *dev)
 	ret |= no_os_gpio_remove(dev->gpio_reset);
 	ret |= no_os_gpio_remove(dev->gpio_int);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

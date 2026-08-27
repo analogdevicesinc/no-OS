@@ -33,7 +33,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_gpio.h"
 #include "no_os_mdio.h"
 #include "mdio_bitbang.h"
@@ -49,11 +49,11 @@ int mdio_bitbang_init(struct no_os_mdio_desc **dev,
 	int ret;
 	struct mdio_bitbang_init_param *mbip = ip->extra;
 
-	struct mdio_bitbang_extra *mbe = no_os_calloc(1, sizeof(*mbe));
+	struct mdio_bitbang_extra *mbe = capi_calloc(1, sizeof(*mbe));
 	if (!mbe)
 		return -ENOMEM;
 
-	struct no_os_mdio_desc *d = no_os_calloc(1, sizeof(*dev));
+	struct no_os_mdio_desc *d = capi_calloc(1, sizeof(*dev));
 	if (!d)
 		goto error;
 
@@ -83,9 +83,9 @@ error_2:
 error_1:
 	no_os_gpio_remove(mbe->mdc);
 error_0:
-	no_os_free(d);
+	capi_free(d);
 error:
-	no_os_free(mbe);
+	capi_free(mbe);
 
 	return ret;
 }
@@ -179,8 +179,8 @@ int mdio_bitbang_remove(struct no_os_mdio_desc *dev)
 
 	no_os_gpio_remove(mbe->mdio);
 	no_os_gpio_remove(mbe->mdc);
-	no_os_free(mbe);
-	no_os_free(dev);
+	capi_free(mbe);
+	capi_free(dev);
 
 	return 0;
 }

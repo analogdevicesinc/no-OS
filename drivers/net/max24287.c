@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <errno.h>
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_gpio.h"
 #include "mdio_bitbang.h"
@@ -15,7 +15,7 @@ int max24287_init(struct max24287_desc **dev, struct max24287_init_param *param)
 	if (!dev || !param)
 		return -EINVAL;
 
-	d = (struct max24287_desc *) no_os_calloc(1, sizeof(*d));
+	d = (struct max24287_desc *) capi_calloc(1, sizeof(*d));
 	if (!d)
 		return -ENOMEM;
 
