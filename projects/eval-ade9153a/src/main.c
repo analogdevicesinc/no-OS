@@ -32,6 +32,7 @@
 *******************************************************************************/
 #include <stdio.h>
 #include "no_os_uart.h"
+#include "capi_alloc.h"
 #include "no_os_pwm.h"
 #include "no_os_delay.h"
 #include "no_os_gpio.h"
@@ -164,7 +165,7 @@ int main(void)
 	pr_info("ADE9153A SPI example \n");
 
 	/* Init ade9153a struct */
-	ade9153a_dev = (struct ade9153a_dev *)no_os_calloc(1, sizeof(*ade9153a_dev));
+	ade9153a_dev = (struct ade9153a_dev *)capi_calloc(1, sizeof(*ade9153a_dev));
 	if (!ade9153a_dev)
 		return -ENOMEM;
 
@@ -208,7 +209,7 @@ int main(void)
 	}
 
 free_dev:
-	no_os_free(ade9153a_dev);
+	capi_free(ade9153a_dev);
 remove_reset:
 	no_os_gpio_remove(reset_desc);
 remove_sck:
