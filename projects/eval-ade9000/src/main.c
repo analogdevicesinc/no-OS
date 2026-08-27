@@ -40,7 +40,7 @@
 #include "no_os_units.h"
 #include "no_os_util.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "maxim_uart.h"
 #include "maxim_gpio.h"
 #include "maxim_uart_stdio.h"
@@ -90,7 +90,7 @@ int main(void)
 	pr_info("ADE9000 SPI example \n");
 
 	/* Init ade9000 struct */
-	ade9000_dev = (struct ade9000_dev *)no_os_calloc(1, sizeof(*ade9000_dev));
+	ade9000_dev = (struct ade9000_dev *)capi_calloc(1, sizeof(*ade9000_dev));
 	if (!ade9000_dev)
 		return -ENOMEM;
 
@@ -129,7 +129,7 @@ int main(void)
 	}
 
 free_dev:
-	no_os_free(ade9000_dev);
+	capi_free(ade9000_dev);
 remove_led:
 	no_os_gpio_remove(gpio_desc);
 remove_uart:
