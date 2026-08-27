@@ -35,7 +35,7 @@
 #include <stdlib.h>
 #include "adl8113.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * Set operation mode (LNA or Bypass).
@@ -129,7 +129,7 @@ int adl8113_init(struct adl8113_dev **device,
 	if (!device || !init_param)
 		return -EINVAL;
 
-	dev = (struct adl8113_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct adl8113_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -162,7 +162,7 @@ error_config:
 error_vb:
 	no_os_gpio_remove(dev->gpio_va);
 error_va:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -180,7 +180,7 @@ int adl8113_remove(struct adl8113_dev *dev)
 	no_os_gpio_remove(dev->gpio_va);
 	no_os_gpio_remove(dev->gpio_vb);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }
