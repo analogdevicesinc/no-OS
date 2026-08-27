@@ -35,7 +35,7 @@
 #include <string.h>
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "adpd410x.h"
 
 /**
@@ -79,13 +79,13 @@ int32_t adpd410x_reg_read_bytes(struct adpd410x_dev *dev, uint16_t address,
 
 	switch (dev->dev_type) {
 	case ADPD4100:
-		buff = (uint8_t *) no_os_calloc(num_bytes + 2, sizeof(*buff));
+		buff = (uint8_t *) capi_calloc(num_bytes + 2, sizeof(*buff));
 		buff[0] = no_os_field_get(ADPD410X_UPPDER_BYTE_SPI_MASK, address);
 		buff[1] = (address << 1) & ADPD410X_LOWER_BYTE_SPI_MASK;
 
 		ret = no_os_spi_write_and_read(dev->dev_ops.spi_phy_dev, buff, num_bytes + 2);
 		if (ret != 0) {
-			no_os_free(buff);
+			capi_free(buff);
 			return ret;
 		}
 		for (i = 0; i < num_bytes; i++) {
@@ -96,7 +96,7 @@ int32_t adpd410x_reg_read_bytes(struct adpd410x_dev *dev, uint16_t address,
 		// Number of bytes for an I2C read is an 8-bit number, or at most 255
 		if (num_bytes > 255)
 			return -1;
-		buff = (uint8_t *) no_os_calloc(2, sizeof(*buff));
+		buff = (uint8_t *) capi_calloc(2, sizeof(*buff));
 		buff[0] = no_os_field_get(ADPD410X_UPPDER_BYTE_I2C_MASK, address);
 		buff[0] |= 0x80;
 		buff[1] = address & ADPD410X_LOWER_BYTE_I2C_MASK;
@@ -104,19 +104,19 @@ int32_t adpd410x_reg_read_bytes(struct adpd410x_dev *dev, uint16_t address,
 		/* No stop bit */
 		ret = no_os_i2c_write(dev->dev_ops.i2c_phy_dev, buff, 2, 0);
 		if (ret != 0) {
-			no_os_free(buff);
+			capi_free(buff);
 			return ret;
 		}
 		ret = no_os_i2c_read(dev->dev_ops.i2c_phy_dev, data, (uint8_t) num_bytes, 1);
 		if (ret != 0) {
-			no_os_free(buff);
+			capi_free(buff);
 			return ret;
 		}
 		break;
 	default:
 		return -1;
 	}
-	no_os_free(buff);
+	capi_free(buff);
 	return 0;
 }
 
@@ -501,7 +501,7 @@ static int32_t adpd410x_get_data_packet(struct adpd410x_dev *dev,
 	int8_t i, got_one = 0;
 	uint8_t *slot_bytecount_tab;
 
-	slot_bytecount_tab = (uint8_t *)no_os_calloc(no_slots,
+	slot_bytecount_tab = (uint8_t *)capi_calloc(no_slots,
 			     sizeof(*slot_bytecount_tab));
 	if (!slot_bytecount_tab)
 		return -ENOMEM;
@@ -528,11 +528,11 @@ static int32_t adpd410x_get_data_packet(struct adpd410x_dev *dev,
 		}
 	} while (i < no_slots);
 
-	no_os_free(slot_bytecount_tab);
+	capi_free(slot_bytecount_tab);
 	return 0;
 
 error_slot:
-	no_os_free(slot_bytecount_tab);
+	capi_free(slot_bytecount_tab);
 
 	return ret;
 }
@@ -559,7 +559,7 @@ int32_t adpd410x_read_fifo(struct adpd410x_dev *dev, uint32_t *data,
 	if (datawidth > 4 || total_bytes > ADPD410X_FIFO_DEPTH || data == NULL)
 		return -1;
 
-	data_byte_buff = (uint8_t *) no_os_calloc(total_bytes,
+	data_byte_buff = (uint8_t *) capi_calloc(total_bytes,
 			 sizeof(*data_byte_buff));
 	if (!data_byte_buff)
 		return -ENOMEM;
@@ -605,7 +605,7 @@ int32_t adpd410x_read_fifo(struct adpd410x_dev *dev, uint32_t *data,
 	}
 
 fifo_free_return:
-	no_os_free(data_byte_buff);
+	capi_free(data_byte_buff);
 	return ret;
 }
 
@@ -654,7 +654,7 @@ int32_t adpd410x_setup(struct adpd410x_dev **device,
 	struct adpd410x_dev *dev;
 	uint16_t reg_temp;
 
-	dev = no_os_calloc(1, sizeof * dev);
+	dev = capi_calloc(1, sizeof * dev);
 	if (!dev)
 		return -ENOMEM;
 
@@ -748,7 +748,7 @@ error_phy:
 	else
 		no_os_i2c_remove(dev->dev_ops.i2c_phy_dev);
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -785,7 +785,7 @@ int32_t adpd410x_remove(struct adpd410x_dev *dev)
 	if (ret != 0)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

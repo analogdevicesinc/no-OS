@@ -37,7 +37,7 @@
 #include "iio_adpd188.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include <stdio.h>
 
 static int adpd188_iio_read_offset_chan(void *device, char *buf, uint32_t len,
@@ -459,7 +459,7 @@ int32_t adpd188_iio_init(struct adpd188_iio_desc **device,
 			 struct adpd188_iio_init_param *init_param)
 {
 	struct adpd188_iio_desc *dev =
-		(struct adpd188_iio_desc *)no_os_calloc(1, sizeof(*dev));
+		(struct adpd188_iio_desc *)capi_calloc(1, sizeof(*dev));
 	int32_t ret;
 	uint16_t reg_data;
 	struct adpd188_slot_config slota = {
@@ -535,7 +535,7 @@ int32_t adpd188_iio_init(struct adpd188_iio_desc **device,
 error_drv:
 	adpd188_remove(dev->drv_dev);
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return -1;
 }
@@ -553,7 +553,7 @@ int32_t adpd188_iio_remove(struct adpd188_iio_desc *dev)
 	if (ret != 0)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }
