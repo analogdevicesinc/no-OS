@@ -36,7 +36,7 @@
 #include <string.h>
 #include "no_os_gpio.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "iio.h"
 #include "iio_admt_evb.h"
@@ -83,7 +83,7 @@ int admt_evb_iio_init(struct admt_evb_iio_desc **iio_desc,
 	if (!init_param)
 		return -EINVAL;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -130,7 +130,7 @@ v_en_out_err:
 v_en_err:
 	no_os_gpio_remove(descriptor->gpio_shdn_n_desc);
 err:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -145,7 +145,7 @@ int admt_evb_iio_remove(struct admt_evb_iio_desc *desc)
 {
 	no_os_gpio_remove(desc->gpio_v_en_desc);
 	no_os_gpio_remove(desc->gpio_shdn_n_desc);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }
