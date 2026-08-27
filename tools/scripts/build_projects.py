@@ -33,7 +33,7 @@ TBLUE =  '\033[34m' # Green Text
 TRED =  '\033[31m' # Red Text	
 TWHITE = '\033[39m' #Withe text
 
-description_help='''Build noos projects
+description_help=r'''Build noos projects
 Examples:\n
 	Build all noos projects
     	>python build_projects.py ..\.. export_dir log_dir
@@ -331,7 +331,12 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		name = "%s-%s-%s" % (project, variant, board)
 		build_dir = combo_build_dir(build_dir_base, combo)
 		out_dir = build_dir / 'build'
-		elf = out_dir / ('%s.elf' % project)
+		# Every toolchain forces CMAKE_EXECUTABLE_SUFFIX to .elf except win
+		# (drivers/platform/win/toolchain.cmake), which leaves MinGW/MSVC's
+		# native .exe suffix so the binary stays directly runnable/double
+		# clickable on Windows.
+		bin_ext = 'exe' if platform == 'win' else 'elf'
+		elf = out_dir / ('%s.%s' % (project, bin_ext))
 
 		log("Building %10s (%8s) -- %s -- %s" % (
 			to_blue(project), to_blue(variant), to_blue(platform), to_blue(board)))
@@ -385,7 +390,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		stale_cache = platform == 'xilinx' and cmake_cache_source_mismatch(str(build_dir), noos)
 		if platform == 'xilinx' and build_dir.exists() and not new_hdf and not stale_cache:
 			# CMAKE, not bare 'cmake': the sourced xilinx env leads PATH with Vitis's broken one.
-			clean_cmd = "%s --build %s --target clean > /dev/null 2>&1" % (CMAKE, build_dir)
+			clean_cmd = "%s --build %s --target clean > %s 2>&1" % (CMAKE, build_dir, os.devnull)
 			os.system(clean_cmd)
 			fresh_flag = ""
 		else:
@@ -398,7 +403,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 				os.path.abspath(build_dir_base), jobs, fresh_flag, hardware_arg))
 		log(build_cmd)
 		sys.stdout.flush()
-		err = os.system(build_cmd + ' > /dev/null 2>&1')
+		err = os.system(build_cmd + ' > %s 2>&1' % os.devnull)
 		success = err == 0
 
 		os.environ.clear()
@@ -422,7 +427,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		# does NOT propagate as a non-zero exit. Check for the .elf explicitly.
 		if success and not elf.is_file():
 			log_err("ERROR")
-			log("See log %s -- no .elf produced (link likely failed)" % dst_log)
+			log("See log %s -- no %s produced (link likely failed)" % (dst_log, elf.name))
 			ERR = 1
 			success = False
 
@@ -431,7 +436,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 			ok = 0
 			continue
 
-		for ext in ('elf', 'hex', 'bin', 'uf2'):
+		for ext in ('elf', 'exe', 'hex', 'bin', 'uf2'):
 			src = out_dir / ('%s.%s' % (project, ext))
 			if src.is_file():
 				run_cmd("cp %s %s" % (src, os.path.join(project_export, '%s.%s' % (name, ext))))
