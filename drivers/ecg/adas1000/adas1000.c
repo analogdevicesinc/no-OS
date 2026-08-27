@@ -37,7 +37,7 @@
 #include "no_os_error.h"
 #include "adas1000.h"
 #include "no_os_crc.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief Preliminary function which computes the spi frequency based on the
@@ -90,7 +90,7 @@ int32_t adas1000_init(struct adas1000_dev **device,
 	int32_t ret;
 	struct adas1000_dev *dev;
 
-	dev = (struct adas1000_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct adas1000_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -100,7 +100,7 @@ int32_t adas1000_init(struct adas1000_dev **device,
 	/** Initialize the SPI controller. */
 	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if (ret != 0) {
-		no_os_free(dev);
+		capi_free(dev);
 		return ret;
 	}
 
