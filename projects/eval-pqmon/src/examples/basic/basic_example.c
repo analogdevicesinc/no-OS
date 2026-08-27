@@ -33,12 +33,13 @@
 
 #ifdef BASIC_EXAMPLE
 #include "basic_example.h"
+#include "capi_alloc.h"
 #endif
 
 int32_t pqm_init(struct pqm_desc **desc, struct pqm_init_para *param)
 {
 	struct pqm_desc *d;
-	d = (struct pqm_desc *)no_os_calloc(1, sizeof(*d));
+	d = (struct pqm_desc *)capi_calloc(1, sizeof(*d));
 
 	if (!d)
 		return -ENOMEM;
@@ -62,7 +63,7 @@ int32_t pqm_remove(struct pqm_desc *desc)
 {
 	if (!desc)
 		return -EINVAL;
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }
