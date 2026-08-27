@@ -36,7 +36,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "adxl372.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 
 /**
@@ -692,7 +692,7 @@ int32_t adxl372_init(struct adxl372_dev **device,
 	uint8_t dev_id, part_id, rev_id;
 	int32_t ret;
 
-	dev = (struct adxl372_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct adxl372_dev *)capi_malloc(sizeof(*dev));
 	if (!dev) {
 		ret = -ENOMEM;
 		goto error;
@@ -834,7 +834,7 @@ int32_t adxl372_init(struct adxl372_dev **device,
 
 error:
 	printf("adxl372 initialization error (%d)\n", ret);
-	no_os_free(dev);
+	capi_free(dev);
 	no_os_mdelay(1000);
 	return ret;
 }

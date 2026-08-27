@@ -35,7 +35,7 @@
 #include <errno.h>
 #include "adxl355.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 static uint8_t shadow_reg_val[5] = {0, 0, 0, 0, 0};
 static const uint8_t adxl355_scale_mul[4] = {0, 1, 2, 4};
@@ -138,7 +138,7 @@ int adxl355_init(struct adxl355_dev **device,
 		return -EINVAL;
 	}
 
-	dev = (struct adxl355_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct adxl355_dev *)capi_calloc(1, sizeof(*dev));
 
 	if (!dev)
 		return -ENOMEM;
@@ -212,10 +212,10 @@ error_com:
 		no_os_spi_remove(dev->com_desc.spi_desc);
 	else
 		no_os_i2c_remove(dev->com_desc.i2c_desc);
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -235,7 +235,7 @@ int adxl355_remove(struct adxl355_dev *dev)
 	else
 		ret = no_os_i2c_remove(dev->com_desc.i2c_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

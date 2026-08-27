@@ -35,7 +35,7 @@
 #include <errno.h>
 #include "adxl38x.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_util.h"
 
 static const uint8_t adxl38x_scale_mul[3] = {1, 2, 4};
@@ -160,7 +160,7 @@ int adxl38x_init(struct adxl38x_dev **device,
 	int ret;
 	uint8_t reg_value;
 
-	dev = (struct adxl38x_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct adxl38x_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -234,10 +234,10 @@ error_com:
 		no_os_spi_remove(dev->com_desc.spi_desc);
 	else
 		no_os_i2c_remove(dev->com_desc.i2c_desc);
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -256,7 +256,7 @@ int adxl38x_remove(struct adxl38x_dev *dev)
 		ret = no_os_spi_remove(dev->com_desc.spi_desc);
 	else
 		ret = no_os_i2c_remove(dev->com_desc.i2c_desc);
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
