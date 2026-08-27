@@ -34,7 +34,7 @@
 #include <errno.h>
 #include <assert.h>
 #include <string.h>
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_list.h"
 #include "iio_ad559xr.h"
 #include "ad5592r.h"
@@ -370,7 +370,7 @@ static int new_ad559xr_add_port(struct iio_ad559xr_desc *desc,
 	if (!name)
 		return -EINVAL;
 
-	port = no_os_calloc(1, sizeof * port);
+	port = capi_calloc(1, sizeof * port);
 	if (port) {
 		snprintf(port->name, AD559XR_MAX_PORT_NAMELEN, "%s%d", name, number);
 		port->mode = mode;
@@ -380,7 +380,7 @@ static int new_ad559xr_add_port(struct iio_ad559xr_desc *desc,
 
 		err = no_os_list_add_last(desc->aio_ports, port);
 		if (err)
-			no_os_free(port);
+			capi_free(port);
 	}
 	return err;
 }
@@ -609,7 +609,7 @@ static int populate_iio_channels(struct iio_ad559xr_desc *desc, bool analog)
 	if (err)
 		return err;
 
-	iio_chptr = no_os_calloc(port_count, sizeof(struct iio_channel));
+	iio_chptr = capi_calloc(port_count, sizeof(struct iio_channel));
 	if (!iio_chptr)
 		return -ENOMEM;
 
@@ -682,7 +682,7 @@ int iio_ad559xr_aio_init(struct iio_ad559xr_desc **desc,
 	if (!ad5592r)
 		return -ENODEV;
 
-	ldesc = no_os_calloc(1, sizeof * ldesc);
+	ldesc = capi_calloc(1, sizeof * ldesc);
 	if (!ldesc)
 		return -ENOMEM;
 
@@ -721,7 +721,7 @@ int iio_ad559xr_aio_init(struct iio_ad559xr_desc **desc,
 
 	scan_size = (ldesc->port_count * AD559XR_STORAGE_BYTES)
 		    * AD5599XR_MAX_SAMPLE_SIZE;
-	ldesc->raw_buffer = no_os_malloc(scan_size);
+	ldesc->raw_buffer = capi_malloc(scan_size);
 	if (!ldesc->raw_buffer)
 		goto err_free_channels;
 	ldesc->raw_buffer_size = scan_size;
@@ -735,11 +735,11 @@ int iio_ad559xr_aio_init(struct iio_ad559xr_desc **desc,
 
 	return 0;
 err_free_channels:
-	no_os_free(ldesc->channels);
+	capi_free(ldesc->channels);
 err_free_list:
 	ad559xr_list_free(ldesc);
 err_free_ldesc:
-	no_os_free(ldesc);
+	capi_free(ldesc);
 	return err;
 }
 
@@ -774,7 +774,7 @@ int iio_ad559xr_gpio_init(struct iio_ad559xr_desc **desc,
 	if (!gpio_map)
 		return -EINVAL;
 
-	ldesc = no_os_calloc(1, sizeof * ldesc);
+	ldesc = capi_calloc(1, sizeof * ldesc);
 	if (!ldesc)
 		return -ENOMEM;
 
@@ -831,7 +831,7 @@ int iio_ad559xr_gpio_init(struct iio_ad559xr_desc **desc,
 err_free_list:
 	ad559xr_list_free(ldesc);
 err_free_ldesc:
-	no_os_free(ldesc);
+	capi_free(ldesc);
 	return err;
 }
 
@@ -850,13 +850,13 @@ int iio_ad559xr_remove(struct iio_ad559xr_desc *desc)
 	if (!desc)
 		return -EINVAL;
 	if (desc->channels)
-		no_os_free(desc->channels);
+		capi_free(desc->channels);
 	if (desc->raw_buffer)
-		no_os_free(desc->raw_buffer);
+		capi_free(desc->raw_buffer);
 
 	err = ad559xr_list_free(desc);
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return err;
 }

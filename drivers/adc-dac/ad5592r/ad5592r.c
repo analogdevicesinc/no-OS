@@ -32,6 +32,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "no_os_error.h"
+#include "capi_alloc.h"
 #include "ad5592r-base.h"
 #include "ad5592r.h"
 
@@ -343,7 +344,7 @@ int32_t ad5592r_init(struct ad5592r_dev **device,
 	struct ad5592r_dev *dev;
 	uint8_t i;
 
-	dev = (struct ad5592r_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ad5592r_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -415,7 +416,7 @@ err_remove_spi_ss:
 err_remove_spi:
 	no_os_spi_remove(dev->spi);
 err_free_device:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -451,7 +452,7 @@ int32_t ad5592r_remove(struct ad5592r_dev *dev)
 		return err;
 
 	/* finally we can remove our descriptor object */
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }
