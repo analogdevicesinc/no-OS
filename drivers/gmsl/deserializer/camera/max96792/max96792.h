@@ -37,7 +37,7 @@
 #include "gmsl_common.h"
 #include "gmsl_dbg.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "gmsl_cam_des.h"
 
 #define MAX96792_DEV_STATE_MEM_SIZE         (sizeof(struct max96792_state))
