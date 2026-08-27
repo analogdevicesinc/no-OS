@@ -35,7 +35,7 @@
 #include <stdlib.h>
 #include "adg2404.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * Select the multiplexer channel.
@@ -98,7 +98,7 @@ int adg2404_init(struct adg2404_dev **device,
 	if (!device || !init_param)
 		return -EINVAL;
 
-	dev = (struct adg2404_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct adg2404_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -138,7 +138,7 @@ error_en:
 error_a1:
 	no_os_gpio_remove(dev->gpio_a0);
 error_a0:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -157,7 +157,7 @@ int adg2404_remove(struct adg2404_dev *dev)
 	no_os_gpio_remove(dev->gpio_a1);
 	no_os_gpio_remove(dev->gpio_en);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }
