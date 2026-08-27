@@ -29,3 +29,7 @@ endif()
 if(${CONFIG_AZURE})
         include(azure)
 endif()
+
+if(${CONFIG_ILINK})
+        include(ilink)
+endif()
