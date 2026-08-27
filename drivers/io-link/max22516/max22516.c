@@ -35,7 +35,7 @@
 #include "max22516.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief Writes data to max22516 over SPI.
@@ -835,7 +835,7 @@ int max22516_init(struct max22516_dev **device,
 	int ret;
 	struct max22516_dev *dev;
 
-	dev = (struct max22516_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct max22516_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
