@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "max31343.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief Read device register.
@@ -110,7 +110,7 @@ int max31343_init(struct max31343_dev **device,
 	struct max31343_dev *dev;
 	int ret;
 
-	dev = (struct max31343_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct max31343_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 	*device = dev;
@@ -144,7 +144,7 @@ int max31343_init(struct max31343_dev **device,
 error:
 	no_os_i2c_remove(dev->i2c_desc);
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -263,7 +263,7 @@ int max31343_remove(struct max31343_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }
