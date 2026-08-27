@@ -33,7 +33,7 @@
 
 #include <stdlib.h>
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "adg1712.h"
 
 /**
@@ -137,7 +137,7 @@ int adg1712_init(struct adg1712_dev **device,
 	if (!device || !init_param)
 		return -EINVAL;
 
-	dev = no_os_calloc(1, sizeof(*dev));
+	dev = capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -188,7 +188,7 @@ error_gpio2:
 error_gpio1:
 	no_os_gpio_remove(dev->gpio_in1);
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -207,7 +207,7 @@ int adg1712_remove(struct adg1712_dev *dev)
 	no_os_gpio_remove(dev->gpio_in2);
 	no_os_gpio_remove(dev->gpio_in3);
 	no_os_gpio_remove(dev->gpio_in4);
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

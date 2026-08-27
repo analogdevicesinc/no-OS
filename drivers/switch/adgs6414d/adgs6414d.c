@@ -35,7 +35,7 @@
 #include <stdlib.h>
 #include "adgs6414d.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_crc8.h"
 
 NO_OS_DECLARE_CRC8_TABLE(adgs6414d_crc8);
@@ -343,7 +343,7 @@ int adgs6414d_init(struct adgs6414d_dev **device,
 
 	no_os_crc8_populate_msb(adgs6414d_crc8, ADGS6414D_CRC8_POLYNOMIAL);
 
-	dev = (struct adgs6414d_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct adgs6414d_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -390,7 +390,7 @@ int adgs6414d_init(struct adgs6414d_dev **device,
 error_config:
 	no_os_spi_remove(dev->spi_desc);
 error_spi:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -406,7 +406,7 @@ int adgs6414d_remove(struct adgs6414d_dev *dev)
 		return -EINVAL;
 
 	no_os_spi_remove(dev->spi_desc);
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

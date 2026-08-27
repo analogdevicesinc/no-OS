@@ -33,7 +33,7 @@
 
 #include <stdlib.h>
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "adg1736.h"
 
 /**
@@ -132,7 +132,7 @@ int adg1736_init(struct adg1736_dev **device,
 	    init_param->gpio_en)
 		return -EINVAL;
 
-	dev = no_os_calloc(1, sizeof(*dev));
+	dev = capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -177,7 +177,7 @@ error_gpio2:
 error_gpio1:
 	no_os_gpio_remove(dev->gpio_in1);
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -196,7 +196,7 @@ int adg1736_remove(struct adg1736_dev *dev)
 	no_os_gpio_remove(dev->gpio_in2);
 	if ((dev->type == ADG1736 || dev->type == ADG2736) && dev->gpio_en)
 		no_os_gpio_remove(dev->gpio_en);
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }
