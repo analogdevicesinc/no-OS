@@ -327,6 +327,11 @@ add_custom_command(
 
 include(${KCONFIG_VARS_FILE})
 
+# add capi dir into `no-os` before projects are added
+# capi_alloc_add_link_guard() is defined when a project's
+# post_build_config() calls it.
+add_subdirectory(capi)
+
 if(NATIVE_BUILD)
     add_subdirectory(projects)
 endif()
