@@ -36,7 +36,7 @@
 #include "no_os_error.h"
 #include "no_os_spi.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include <string.h>
 
 static const uint8_t ASC16[256][8] = {
@@ -459,7 +459,7 @@ int nhd_c12832a1z_init(struct nhd_c12832a1z_dev **device,
 	struct nhd_c12832a1z_dev *dev;
 	int ret;
 
-	dev = (struct nhd_c12832a1z_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct nhd_c12832a1z_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -538,7 +538,7 @@ error_dc:
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -564,7 +564,7 @@ int nhd_c12832a1z_remove(struct nhd_c12832a1z_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }
