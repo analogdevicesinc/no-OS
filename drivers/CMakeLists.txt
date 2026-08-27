@@ -31,10 +31,6 @@ if(CONFIG_CDC)
     add_subdirectory(cdc)
 endif()
 
-if(CONFIG_CHARGER)
-    add_subdirectory(charger)
-endif()
-
 if(CONFIG_DAC)
     add_subdirectory(dac)
 endif()
