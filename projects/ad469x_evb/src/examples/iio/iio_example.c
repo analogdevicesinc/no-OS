@@ -36,6 +36,7 @@
 #include "iio_app.h"
 #include "ad469x.h"
 #include "no_os_util.h"
+#include "capi_alloc.h"
 #include "no_os_print_log.h"
 
 /* Data channel mask */
@@ -144,7 +145,7 @@ int example_main()
 	app_init_param.uart_init_params = iio_uart_ip;
 
 	ad469x_iio_channels =
-		no_os_calloc(1, num_channels * sizeof(*ad469x_iio_channels));
+		capi_calloc(1, num_channels * sizeof(*ad469x_iio_channels));
 	if (!ad469x_iio_channels)
 		return -ENOMEM;
 
@@ -177,7 +178,7 @@ int example_main()
 
 	iio_app_remove(app);
 err:
-	no_os_free(ad469x_iio_channels);
+	capi_free(ad469x_iio_channels);
 err_remove:
 	ad469x_remove(dev);
 
