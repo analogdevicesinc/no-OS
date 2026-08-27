@@ -36,7 +36,7 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_units.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /******************************************************************************/
 
@@ -128,7 +128,7 @@ int adt75_init(struct adt75_desc **desc, struct adt75_init_param *init_param)
 	struct adt75_desc *descriptor;
 	int ret;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -141,7 +141,7 @@ int adt75_init(struct adt75_desc **desc, struct adt75_init_param *init_param)
 	return 0;
 
 free_desc:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -162,7 +162,7 @@ int adt75_remove(struct adt75_desc *desc)
 	if (ret)
 		return ret;
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

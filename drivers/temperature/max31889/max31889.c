@@ -32,7 +32,7 @@
 *******************************************************************************/
 
 #include "max31889.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
 
@@ -131,14 +131,14 @@ int32_t max31889_init(struct max31889_desc **desc,
 	if (!desc || !param)
 		return -EINVAL;
 
-	max31889_desc_tmp = (struct max31889_desc *)no_os_malloc(sizeof(
+	max31889_desc_tmp = (struct max31889_desc *)capi_malloc(sizeof(
 				    *max31889_desc_tmp));
 	if (!max31889_desc_tmp)
 		return -ENOMEM;
 
 	ret = no_os_i2c_init(&max31889_desc_tmp->i2c_desc, param->i2c_ip);
 	if (ret) {
-		no_os_free(max31889_desc_tmp);
+		capi_free(max31889_desc_tmp);
 		return ret;
 	}
 
@@ -153,7 +153,7 @@ int32_t max31889_remove(struct max31889_desc *desc)
 		return -EINVAL;
 	if (desc->i2c_desc)
 		no_os_i2c_remove(desc->i2c_desc);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

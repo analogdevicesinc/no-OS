@@ -34,7 +34,7 @@
 #include <errno.h>
 #include "iio_max31827.h"
 #include "max31827.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 
 #define MAX31827_IIO_CH_ATTR_RW(_name, _priv)  \
@@ -356,13 +356,13 @@ int max31827_iio_init(struct max31827_iio_device **iio_device,
 	if (!iio_init_param || !iio_init_param->init_param)
 		return -EINVAL;
 
-	iio_device_temp = no_os_calloc(1, sizeof(*iio_device_temp));
+	iio_device_temp = capi_calloc(1, sizeof(*iio_device_temp));
 	if (!iio_device_temp)
 		return -ENOMEM;
 
 	ret = max31827_init(&iio_device_temp->dev, iio_init_param->init_param);
 	if (ret) {
-		no_os_free(iio_device_temp);
+		capi_free(iio_device_temp);
 		return ret;
 	}
 
@@ -386,7 +386,7 @@ int max31827_iio_remove(struct max31827_iio_device *iio_device)
 	if (ret)
 		return ret;
 
-	no_os_free(iio_device);
+	capi_free(iio_device);
 
 	return 0;
 }
