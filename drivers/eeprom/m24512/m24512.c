@@ -34,7 +34,7 @@
 #include <string.h>
 
 #include "m24512.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_gpio.h"
 #include "no_os_eeprom.h"
@@ -94,13 +94,13 @@ int32_t m24512_init(struct no_os_eeprom_desc **desc,
 	if (!desc || !param)
 		return -EINVAL;
 
-	eeprom_desc = (struct no_os_eeprom_desc *)no_os_calloc(1, sizeof(*eeprom_desc));
+	eeprom_desc = (struct no_os_eeprom_desc *)capi_calloc(1, sizeof(*eeprom_desc));
 	if (!eeprom_desc)
 		return -ENOMEM;
 
 	eeprom_desc->device_id = param->device_id;
 
-	m24512_dev = (struct m24512_dev *)no_os_calloc(1, sizeof(*m24512_dev));
+	m24512_dev = (struct m24512_dev *)capi_calloc(1, sizeof(*m24512_dev));
 	if (!m24512_dev) {
 		ret = -ENOMEM;
 		goto remove_eeprom_desc;
@@ -148,9 +148,9 @@ remove_wc_gpio_desc:
 remove_i2c_desc:
 	no_os_i2c_remove(m24512_dev->i2c_desc);
 remove_m24512_dev:
-	no_os_free(m24512_dev);
+	capi_free(m24512_dev);
 remove_eeprom_desc:
-	no_os_free(eeprom_desc);
+	capi_free(eeprom_desc);
 	return ret;
 }
 
@@ -173,8 +173,8 @@ int32_t m24512_remove(struct no_os_eeprom_desc *desc)
 	if (dev->i2c_desc)
 		no_os_i2c_remove(dev->i2c_desc);
 
-	no_os_free(dev);
-	no_os_free(desc);
+	capi_free(dev);
+	capi_free(desc);
 
 	return 0;
 }
@@ -399,7 +399,7 @@ static int m24512_write_raw(struct m24512_dev *dev, uint16_t addr,
 		return -EINVAL;
 
 	// Allocate buffer for address + data
-	write_buf = (uint8_t *)no_os_calloc(len + 2, sizeof(uint8_t));
+	write_buf = (uint8_t *)capi_calloc(len + 2, sizeof(uint8_t));
 	if (!write_buf)
 		return -ENOMEM;
 
@@ -413,7 +413,7 @@ static int m24512_write_raw(struct m24512_dev *dev, uint16_t addr,
 	// Ensure write protection is disabled right before write
 	ret = m24512_set_write_protection(dev, false);
 	if (ret) {
-		no_os_free(write_buf);
+		capi_free(write_buf);
 		return ret;
 	}
 
@@ -425,7 +425,7 @@ static int m24512_write_raw(struct m24512_dev *dev, uint16_t addr,
 		no_os_udelay(500);  // 500 microseconds delay
 	}
 
-	no_os_free(write_buf);
+	capi_free(write_buf);
 	return ret;
 }
 
