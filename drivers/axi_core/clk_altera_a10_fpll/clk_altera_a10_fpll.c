@@ -40,7 +40,7 @@
 #include "io.h"
 #include "no_os_util.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "clk_altera_a10_fpll.h"
 
 #define FPLL_REG_C_COUNTER0			0x10D
@@ -458,7 +458,7 @@ int32_t altera_a10_fpll_init(struct altera_a10_fpll **a10_fpll,
 {
 	struct altera_a10_fpll *fpll;
 
-	fpll = (struct altera_a10_fpll *)no_os_malloc(sizeof(*fpll));
+	fpll = (struct altera_a10_fpll *)capi_malloc(sizeof(*fpll));
 	if (!fpll)
 		return -1;
 
@@ -476,7 +476,7 @@ int32_t altera_a10_fpll_init(struct altera_a10_fpll **a10_fpll,
  */
 int32_t altera_a10_fpll_remove(struct altera_a10_fpll *fpll)
 {
-	no_os_free(fpll);
+	capi_free(fpll);
 
 	return 0;
 }

@@ -39,7 +39,7 @@
 #include "no_os_axi_io.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "axi_dmac.h"
 
 /*******************************************************************************
@@ -328,7 +328,7 @@ int32_t axi_dmac_init(struct axi_dmac **dmac_core,
 {
 	struct axi_dmac *dmac;
 
-	dmac = (struct axi_dmac *)no_os_calloc(1, sizeof(*dmac));
+	dmac = (struct axi_dmac *)capi_calloc(1, sizeof(*dmac));
 	if (!dmac)
 		return -1;
 
@@ -345,7 +345,7 @@ int32_t axi_dmac_init(struct axi_dmac **dmac_core,
 	return 0;
 
 free:
-	no_os_free(dmac);
+	capi_free(dmac);
 	return -1;
 }
 
@@ -361,7 +361,7 @@ int32_t axi_dmac_remove(struct axi_dmac *dmac)
 	if (!dmac)
 		return -1;
 
-	no_os_free(dmac);
+	capi_free(dmac);
 
 	return 0;
 }

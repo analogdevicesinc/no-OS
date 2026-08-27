@@ -32,7 +32,7 @@
 *******************************************************************************/
 
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_clk.h"
 #include "jesd204_clk.h"
 
@@ -130,7 +130,7 @@ static int jesd204_no_os_clk_init(struct no_os_clk_desc **desc,
 		return -EINVAL;
 	}
 
-	*desc = no_os_calloc(1, sizeof(**desc));
+	*desc = capi_calloc(1, sizeof(**desc));
 	/* Exit if memory cannot be allocated */
 	if (!*desc)
 		goto error;
@@ -143,7 +143,7 @@ static int jesd204_no_os_clk_init(struct no_os_clk_desc **desc,
 	(*desc)->name = init_param->name;
 	(*desc)->hw_ch_num = init_param->hw_ch_num;
 
-	(*desc)->dev_desc = (void *)no_os_calloc(1, sizeof(struct jesd204_clk));
+	(*desc)->dev_desc = (void *)capi_calloc(1, sizeof(struct jesd204_clk));
 
 	(*desc)->dev_desc = init_param->dev_desc;
 
