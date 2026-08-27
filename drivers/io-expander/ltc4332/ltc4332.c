@@ -33,7 +33,7 @@
 
 #include "ltc4332.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -82,8 +82,8 @@ int32_t ltc4332_spi_remove(struct no_os_spi_desc *desc)
 	if (!desc)
 		return -EINVAL;
 
-	no_os_free(desc->extra);
-	no_os_free(desc);
+	capi_free(desc->extra);
+	capi_free(desc);
 	return 0;
 }
 
@@ -107,7 +107,7 @@ int32_t ltc4332_spi_write_and_read(struct no_os_spi_desc *desc, uint8_t *data,
 	temp_ops = desc->platform_ops;
 	desc->platform_ops = desc->parent->platform_ops;
 
-	buff = no_os_calloc(bytes_number + 1, sizeof * buff);
+	buff = capi_calloc(bytes_number + 1, sizeof * buff);
 	if (!buff)
 		return -ENOMEM;
 
@@ -118,11 +118,11 @@ int32_t ltc4332_spi_write_and_read(struct no_os_spi_desc *desc, uint8_t *data,
 
 	memcpy(data, buff + 1, bytes_number);
 	desc->platform_ops = temp_ops;
-	no_os_free(buff);
+	capi_free(buff);
 
 	return ret;
 error:
-	no_os_free(buff);
+	capi_free(buff);
 	return ret;
 }
 
