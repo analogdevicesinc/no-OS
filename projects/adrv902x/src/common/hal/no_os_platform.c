@@ -17,7 +17,7 @@
 #include "no_os_delay.h"
 #include "common_data.h"
 #include "ADRV9025_FW.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "parameters.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
@@ -701,19 +701,19 @@ long int ftell(FILE *stream)
 
 FILE* __fopen(const char * filename, const char *mode)
 {
-	FILE *stream = no_os_calloc(1, sizeof(*stream));
+	FILE *stream = capi_calloc(1, sizeof(*stream));
 	unsigned int length;
 	char *temp;
 
 	if (!strcmp(filename, "ActiveUseCase.profile")) {
-		temp = (char *)no_os_malloc((strlen(json_profile_active_use_case) + 1) * sizeof(
+		temp = (char *)capi_malloc((strlen(json_profile_active_use_case) + 1) * sizeof(
 						    char));
 		strcpy(temp, json_profile_active_use_case);
 		profile.data = temp;
 		profile.start = profile.ptr = profile.data;
 		profile.end = profile.start + strlen(profile.data);
 	} else if (!strcmp(filename, "ActiveUtilInit.profile")) {
-		temp = (char *)no_os_malloc((strlen(json_profile_active_util_init) + 1) *
+		temp = (char *)capi_malloc((strlen(json_profile_active_util_init) + 1) *
 					    sizeof(
 						    char));
 		strcpy(temp, json_profile_active_util_init);
@@ -723,41 +723,41 @@ FILE* __fopen(const char * filename, const char *mode)
 	} else if (!strcmp(filename,
 			   ADRV9025_STREAM_IMAGE_FILE)) {
 		length = sizeof(stream_image_bin);
-		temp = (unsigned char *)no_os_calloc(length, sizeof(unsigned char));
+		temp = (unsigned char *)capi_calloc(length, sizeof(unsigned char));
 		memcpy(temp, stream_image_bin, length);
 		profile.data = temp;
 		profile.start = profile.ptr = profile.data;
 		profile.end = profile.start + length;
 	} else if (!strcmp(filename, "ADRV9025_FW.bin")) {
 		length = sizeof(ADRV9025_FW_bin);
-		temp = (unsigned char *)no_os_calloc(length, sizeof(unsigned char));
+		temp = (unsigned char *)capi_calloc(length, sizeof(unsigned char));
 		memcpy(temp, ADRV9025_FW_bin, sizeof(ADRV9025_FW_bin));
 		profile.data = temp;
 		profile.start = profile.ptr = profile.data;
 		profile.end = profile.start + length;
 	} else if (!strcmp(filename, "ADRV9025_DPDCORE_FW.bin")) {
 		length = sizeof(ADRV9025_DPDCORE_FW_bin);
-		temp = (unsigned char *)no_os_calloc(length, sizeof(unsigned char));
+		temp = (unsigned char *)capi_calloc(length, sizeof(unsigned char));
 		memcpy(temp, ADRV9025_DPDCORE_FW_bin, sizeof(ADRV9025_DPDCORE_FW_bin));
 		profile.data = temp;
 		profile.start = profile.ptr = profile.data;
 		profile.end = profile.start + length;
 	} else if (!strcmp(filename, "ADRV9025_RxGainTable.h")) {
 		length = strlen(ADRV9025_RxGainTable_text);
-		temp = (unsigned char *)no_os_calloc(length, sizeof(unsigned char));
+		temp = (unsigned char *)capi_calloc(length, sizeof(unsigned char));
 		strcpy(temp, ADRV9025_RxGainTable_text);
 		profile.data = temp;
 		profile.start = profile.ptr = profile.data;
 		profile.end = profile.start + strlen(profile.data);
 	} else if (!strcmp(filename, "ADRV9025_TxAttenTable.h")) {
 		length = strlen(ADRV9025_TxAttenTable_text);
-		temp = (unsigned char *)no_os_calloc(length, sizeof(unsigned char));
+		temp = (unsigned char *)capi_calloc(length, sizeof(unsigned char));
 		strcpy(temp, ADRV9025_TxAttenTable_text);
 		profile.data = temp;
 		profile.start = profile.ptr = profile.data;
 		profile.end = profile.start + strlen(profile.data);
 	} else {
-		no_os_free(stream);
+		capi_free(stream);
 	}
 
 	return stream;
@@ -795,7 +795,7 @@ int __fclose(FILE *stream)
 		return -ENODEV;
 
 	memset(&profile, 0, sizeof(profile));
-	no_os_free(stream);
+	capi_free(stream);
 
 	return 0;
 }
