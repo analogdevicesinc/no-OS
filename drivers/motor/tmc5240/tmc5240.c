@@ -31,7 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_spi.h"
 #include "no_os_util.h"
@@ -166,7 +166,7 @@ int tmc5240_init(struct tmc5240_dev **device,
 	if (!device || !init_param)
 		return -EINVAL;
 
-	dev = (struct tmc5240_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct tmc5240_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -253,7 +253,7 @@ err_remove:
 	if (dev->spi_desc)
 		no_os_spi_remove(dev->spi_desc);
 err_free:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -280,7 +280,7 @@ int tmc5240_remove(struct tmc5240_dev *device)
 		device->spi_desc = NULL;
 	}
 
-	no_os_free(device);
+	capi_free(device);
 
 	return ret;
 }
