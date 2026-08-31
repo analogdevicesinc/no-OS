@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.27)
 list(APPEND CMAKE_MODULE_PATH
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/stm32"
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/maxim"
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/libraries"
 )
 
@@ -204,6 +205,7 @@ target_include_directories(
         PUBLIC
         ${CMAKE_CURRENT_BINARY_DIR}/build  # Generated no_os_config.h (takes precedence)
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/capi/inc
 )
 
 # Force-include the generated config header so source files don't need
@@ -336,6 +338,7 @@ add_subdirectory(util)
 add_subdirectory(iio)
 add_subdirectory(jesd204)
 add_subdirectory(drivers)
+add_subdirectory(capi)
 
 add_custom_target(KconfigVars ALL
     DEPENDS ${KCONFIG_VARS_FILE} ${CONFIG_HEADER_FILE}

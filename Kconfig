@@ -115,10 +115,34 @@ config TRNG
 	  API: drivers/api/no_os_trng.c, include/no_os_trng.h
 	  Hardware-based random number generation for cryptographic applications.
 
+config CAPI_COPROCESSOR
+	bool "Enable CAPI coprocessor"
+	default n
+	help
+	  Enable CAPI auxiliary processor core lifecycle management.
+	  API: capi/src/capi_coprocessor.c, capi/inc/capi_coprocessor.h
+	  Supports boot, halt, and resource management for secondary CPU cores.
+
+config CAPI_MAILBOX
+	bool "Enable CAPI mailbox"
+	default n
+	help
+	  Enable the CAPI mailbox API: message handoff, doorbell notifications,
+	  and acknowledge handling between initiators.
+	  API: capi/src/capi_mailbox.c, capi/inc/capi_mailbox.h
+
+config CAPI_SEM
+	bool "Enable CAPI semaphore"
+	default n
+	help
+	  Enable the CAPI semaphore API.
+	  API: capi/src/capi_sem.c, capi/inc/capi_sem.h
+
 endmenu
 
 source "iio/Kconfig"
 source "drivers/Kconfig"
+source "capi/Kconfig"
 source "libraries/Kconfig"
 source "network/Kconfig"
 source "projects/Kconfig"

@@ -1,0 +1,23 @@
+menu "Common API (CAPI)"
+
+config CAPI_MAXIM
+	bool "Maxim CAPI platform support"
+	depends on MAXIM
+	default n
+	help
+	  Build the Maxim-specific CAPI support code, including the allocation
+	  shim that maps capi_malloc()/capi_free() onto no_os_malloc()/
+	  no_os_free().
+
+config CAPI_COPROCESSOR_MAXIM
+	bool "Maxim CAPI coprocessor driver"
+	depends on CAPI_MAXIM
+	select CAPI_COPROCESSOR
+	default n
+	help
+	  CAPI coprocessor driver for the MAX78000 RV32 core (CPU1). Provides
+	  boot-vector configuration, coprocessor-scoped mode control, and
+	  enable/disable of the RV32's cache, the CNN accelerator, and the
+	  host-to-RV32 data lane.
+
+endmenu
