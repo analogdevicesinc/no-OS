@@ -1,0 +1,38 @@
+config ALTERA_PLATFORM_NIOSV
+	bool "Use Nios V / Intel FPGA BSP compatibility"
+	default n
+	help
+	  Enable the external BSP compatibility layer for Nios V / Intel FPGA.
+	  When enabled, the Altera toolchain selects the Nios V flow and expects
+	  ALTERA_NIOSV_REPO_DIR(reference design with hw/, sw/), ALTERA_NIOSV_BSP(niosv-bsp path)
+
+if ALTERA_PLATFORM_NIOSV
+
+config GPIO_ALTERA
+	bool "Enable Altera GPIO driver"
+	depends on GPIO
+	default n
+	help
+	  Enable the legacy Altera Avalon-SOPC GPIO driver implementation.
+	  Requires CONFIG_GPIO=y and a hardware design with the corresponding
+	  Avalon GPIO IP core.
+
+config I2C_ALTERA
+	bool "Enable Altera I2C driver"
+	depends on I2C
+	default n
+	help
+	  Enable the legacy Altera Avalon-SOPC I2C driver implementation.
+	  Requires CONFIG_I2C=y and a hardware design with the corresponding
+	  Avalon I2C IP core.
+
+config SPI_ALTERA
+	bool "Enable Altera SPI driver"
+	depends on SPI
+	default n
+	help
+	  Enable the legacy Altera Avalon-SOPC SPI driver implementation.
+	  Requires CONFIG_SPI=y and a hardware design with the corresponding
+	  Avalon SPI IP core.
+
+endif # ALTERA_PLATFORM_NIOSV
