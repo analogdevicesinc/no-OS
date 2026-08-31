@@ -117,10 +117,17 @@ if(OPENOCD_PATH)
     # bare "-s" on the command line.
     cmake_path(GET OPENOCD_PATH PARENT_PATH _ocd_bin_dir)
     cmake_path(GET _ocd_bin_dir PARENT_PATH _ocd_prefix)
-    cmake_path(SET _ocd_scripts NORMALIZE "${_ocd_prefix}/share/openocd/scripts")
-    if(EXISTS "${_ocd_scripts}")
-        set(OPENOCD_SCRIPTS "${_ocd_scripts}")
-    endif()
+    # Probe common scripts directory layouts:
+    #   - standard installs (apt, brew, cmake.org): share/openocd/scripts
+    #   - xPack portable packages:                  openocd/scripts
+    foreach(_candidate
+            "${_ocd_prefix}/share/openocd/scripts"
+            "${_ocd_prefix}/openocd/scripts")
+        if(EXISTS "${_candidate}")
+            set(OPENOCD_SCRIPTS "${_candidate}")
+            break()
+        endif()
+    endforeach()
     message(STATUS "Found OpenOCD: ${OPENOCD_PATH}")
 else()
     message(STATUS "OpenOCD not found")

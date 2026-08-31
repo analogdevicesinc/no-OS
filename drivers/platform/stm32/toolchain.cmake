@@ -58,7 +58,18 @@ endif()
 # The recursive glob can also match *directories* named "openocd" (CubeIDE ships
 # several), so pick the first entry that is an actual executable file.
 if(CUBEIDE_DIR)
-    file(GLOB_RECURSE _cubeide_openocd ${CUBEIDE_DIR}/plugins/*/openocd)
+    # On Windows search for openocd.exe; on Linux/macOS search for openocd only.
+    # Never include openocd.exe on a POSIX host (e.g. WSL): the Windows PE binary
+    # cannot be executed there and would cause an 'Exec format error' at flash time.
+    if(CMAKE_HOST_WIN32)
+        set(_ocd_names openocd openocd.exe)
+    else()
+        set(_ocd_names openocd)
+    endif()
+    foreach(_ocd_name IN LISTS _ocd_names)
+        file(GLOB_RECURSE _found ${CUBEIDE_DIR}/plugins/*/${_ocd_name})
+        list(APPEND _cubeide_openocd ${_found})
+    endforeach()
     foreach(_candidate ${_cubeide_openocd})
         if(NOT IS_DIRECTORY "${_candidate}")
             set(OPENOCD_PATH "${_candidate}")
