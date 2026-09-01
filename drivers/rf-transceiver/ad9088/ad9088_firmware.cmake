@@ -56,8 +56,20 @@ function(ad9088_add_firmware TARGET_NAME)
         SYMBOL_PATH "${_sym_root}/usecase.bin")
 
     # Signed core firmware: an engineering and a production set, each a boot
-    # header plus the three images the driver loads after it.
-    foreach(_set app_signed_encrypted_B app_signed_encrypted_prod_B)
+    # header plus the three images the driver loads after it. Each set is
+    # ~570 KB; embedding both needs over 1 MB for firmware alone, which small
+    # soft-SoC targets lack, so a project may embed just the set matching its
+    # silicon (AD9088_FW_SET in the project Kconfig). "Neither the PROD-only nor
+    # the ENG-only symbol set" means embed both, so builds that never define
+    # these Kconfig symbols keep their current behaviour.
+    set(_fw_sets "")
+    if(NOT CONFIG_AD9088_FW_SET_PROD)
+        list(APPEND _fw_sets app_signed_encrypted_B)
+    endif()
+    if(NOT CONFIG_AD9088_FW_SET_ENG)
+        list(APPEND _fw_sets app_signed_encrypted_prod_B)
+    endif()
+    foreach(_set ${_fw_sets})
         foreach(_img 0x01030000 0x02000000 0x20000000 0x21000000)
             no_os_add_firmware_blob(${TARGET_NAME}
                 SOURCE      "${_fw_dir}/${_set}/flash_image_${_img}.bin"

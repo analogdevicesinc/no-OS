@@ -925,6 +925,7 @@ struct fw_entry {
 };
 
 static const struct fw_entry fw_table[ADI_APOLLO_FW_ID_MAX] = {
+#ifndef CONFIG_AD9088_FW_SET_PROD	/* engineering set: embedded unless PROD-only */
 	[ADI_APOLLO_FW_ID_SECR_BOOT_HDR_BIN] = AD9088_FW_ENTRY(
 		app_signed_encrypted_B_flash_image_0x01030000_bin),
 	[ADI_APOLLO_FW_ID_CORE_0_TYE_FW_BIN] = AD9088_FW_ENTRY(
@@ -933,6 +934,8 @@ static const struct fw_entry fw_table[ADI_APOLLO_FW_ID_MAX] = {
 		app_signed_encrypted_B_flash_image_0x02000000_bin),
 	[ADI_APOLLO_FW_ID_TYE_OPER_FW_BIN] = AD9088_FW_ENTRY(
 		app_signed_encrypted_B_flash_image_0x21000000_bin),
+#endif
+#ifndef CONFIG_AD9088_FW_SET_ENG	/* production set: embedded unless ENG-only */
 	[ADI_APOLLO_FW_ID_PROD_SECR_BOOT_HDR_BIN] = AD9088_FW_ENTRY(
 		app_signed_encrypted_prod_B_flash_image_0x01030000_bin),
 	[ADI_APOLLO_FW_ID_PROD_CORE_0_TYE_FW_BIN] = AD9088_FW_ENTRY(
@@ -941,6 +944,7 @@ static const struct fw_entry fw_table[ADI_APOLLO_FW_ID_MAX] = {
 		app_signed_encrypted_prod_B_flash_image_0x02000000_bin),
 	[ADI_APOLLO_FW_ID_PROD_TYE_OPER_FW_BIN] = AD9088_FW_ENTRY(
 		app_signed_encrypted_prod_B_flash_image_0x21000000_bin),
+#endif
 };
 
 /**
@@ -1144,7 +1148,7 @@ int ad9088_log_write(void *user_data, int32_t log_type, const char *message,
 		pr_debug("%s\n", logMessage);
 		break;
 	case ADI_CMS_LOG_API:
-		pr_debug("%s\n", logMessage);
+		pr_debug("%s\n", logMessage);	/* API function-entry trace (LOG_DEBUG only) */
 		break;
 	case ADI_CMS_LOG_ALL:
 		pr_notice("%s\n", logMessage);
