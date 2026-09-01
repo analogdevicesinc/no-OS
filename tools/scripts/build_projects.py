@@ -33,7 +33,7 @@ TBLUE =  '\033[34m' # Green Text
 TRED =  '\033[31m' # Red Text	
 TWHITE = '\033[39m' #Withe text
 
-description_help='''Build noos projects
+description_help=r'''Build noos projects
 Examples:\n
 	Build all noos projects
     	>python build_projects.py ..\.. export_dir log_dir
