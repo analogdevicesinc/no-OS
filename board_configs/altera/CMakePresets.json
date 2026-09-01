@@ -13,6 +13,19 @@
         "CONFIG_ALTERA_PLATFORM_NIOSV": "ON",
         "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/drivers/platform/altera/toolchain.cmake"
       }
+    },
+    {
+      "name": "agilex5",
+      "displayName": "Agilex 5 (Nios V)",
+      "description": "Intel Agilex 5 SoC with a Nios V soft core",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "BOARD": "agilex5",
+        "PLATFORM": "altera",
+        "BOARD_CONFIG_FILE": "agilex5_defconfig",
+        "CONFIG_ALTERA_PLATFORM_NIOSV": "ON",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/drivers/platform/altera/toolchain.cmake"
+      }
     }
   ]
 }

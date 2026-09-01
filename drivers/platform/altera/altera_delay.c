@@ -33,7 +33,7 @@
 
 #include "no_os_delay.h"
 #if defined(CONFIG_ALTERA_PLATFORM_NIOSV)
-#include <sys/alt_alarm.h>
+#include <priv/alt_busy_sleep.h>
 #else
 #include <unistd.h>
 #endif

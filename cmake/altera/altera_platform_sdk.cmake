@@ -56,9 +56,18 @@ function(_altera_resolve_tool_path OUT_VAR TOOL_NAME)
 endfunction()
 
 function(_altera_resolve_bsp_dir OUT_VAR)
-    # Allow direct BSP override (pre-built BSP, no generation needed)
-    if(DEFINED ENV{ALTERA_BSP_DIR} AND NOT "$ENV{ALTERA_BSP_DIR}" STREQUAL "")
-        set(_bsp_dir "$ENV{ALTERA_BSP_DIR}")
+    # Allow direct BSP override (pre-built BSP, no generation needed) from
+    # either a CMake variable (e.g. set in a CMakePreset or via -D) or the
+    # environment. The CMake variable takes precedence so a preset can wire the
+    # BSP path without exporting anything.
+    set(_bsp_override "")
+    if(DEFINED ALTERA_BSP_DIR AND NOT "${ALTERA_BSP_DIR}" STREQUAL "")
+        set(_bsp_override "${ALTERA_BSP_DIR}")
+    elseif(DEFINED ENV{ALTERA_BSP_DIR} AND NOT "$ENV{ALTERA_BSP_DIR}" STREQUAL "")
+        set(_bsp_override "$ENV{ALTERA_BSP_DIR}")
+    endif()
+    if(NOT "${_bsp_override}" STREQUAL "")
+        set(_bsp_dir "${_bsp_override}")
         if(EXISTS "${_bsp_dir}/system.h")
             set(${OUT_VAR} "${_bsp_dir}" PARENT_SCOPE)
             return()
@@ -196,7 +205,9 @@ function(config_altera_sdk BUILD_TARGET)
 
     # Locate the pre-built BSP archive.
     set(_bsp_archive "")
-    if(DEFINED ENV{ALTERA_BSP_LIB} AND EXISTS "$ENV{ALTERA_BSP_LIB}")
+    if(DEFINED ALTERA_BSP_LIB AND EXISTS "${ALTERA_BSP_LIB}")
+        set(_bsp_archive "${ALTERA_BSP_LIB}")
+    elseif(DEFINED ENV{ALTERA_BSP_LIB} AND EXISTS "$ENV{ALTERA_BSP_LIB}")
         set(_bsp_archive "$ENV{ALTERA_BSP_LIB}")
     elseif(EXISTS "${_bsp_dir}/../app_pio/build/bsp/libhal2_bsp.a")
         set(_bsp_archive "${_bsp_dir}/../app_pio/build/bsp/libhal2_bsp.a")
@@ -213,8 +224,10 @@ function(config_altera_sdk BUILD_TARGET)
 
     target_compile_definitions(${BUILD_TARGET} PRIVATE ALT_SINGLE_THREADED __hal__)
     target_link_options(${BUILD_TARGET} PRIVATE -nostdlib "-T${_bsp_linker_script}")
+    # Plain signature to match the project's target_link_libraries(<exe> no-os);
+    # mixing keyword and plain forms on one target is a CMake error.
     if(_bsp_archive)
-        target_link_libraries(${BUILD_TARGET} PUBLIC
+        target_link_libraries(${BUILD_TARGET}
             -Wl,--start-group
             "${_bsp_archive}"
             -lc
@@ -224,7 +237,7 @@ function(config_altera_sdk BUILD_TARGET)
             -Wl,--end-group
         )
     else()
-        target_link_libraries(${BUILD_TARGET} PUBLIC
+        target_link_libraries(${BUILD_TARGET}
             -Wl,--start-group
             -lc
             -lstdc++

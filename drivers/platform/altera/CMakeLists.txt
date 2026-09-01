@@ -4,6 +4,12 @@ endif()
 
 target_compile_definitions(no-os PRIVATE CONFIG_ALTERA_PLATFORM_NIOSV=1)
 
+# The Avalon peripheral drivers' headers (altera_spi.h, altera_gpio.h, ...) are
+# referenced by the project's parameters.h, which lives in a different
+# directory, so put this directory on the include path (mirrors the sibling
+# platform/i2c handling in ../CMakeLists.txt).
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
 # altera_delay.c and altera_axi_io.c are used unconditionally by the platform.
 # altera_axi_io.c provides no_os_axi_io_read/write, needed by every axi_core
 # driver (axi_dmac, spi_engine, axi_adc_core, ...).

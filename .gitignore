@@ -14,6 +14,7 @@ build
 BUILD
 builds
 build-*
+/build_*/
 exports
 logs
 log.txt
@@ -27,6 +28,13 @@ aducm_build
 .vscode
 .Xil
 .github/CODEOWNERS
+
+# User/machine-local CMake presets (absolute toolchain/BSP paths)
+CMakeUserPresets.json
+# RiscFree / Nios V debugger session config (regenerated per debug session)
+gdbopxdriscv.ini
+# WSL "downloaded-from-Windows" NTFS alternate-data-stream markers
+*:Zone.Identifier
 .github/PULL_REQUEST_TEMPLATE.md
 libraries/ftd2xx
 

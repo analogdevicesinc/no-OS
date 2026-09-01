@@ -97,9 +97,37 @@ if(_altera_objdump)
     set(CMAKE_OBJDUMP "${_altera_objdump}" CACHE FILEPATH "Objdump" FORCE)
 endif()
 
-set(CMAKE_C_FLAGS "-ffunction-sections -fdata-sections -std=gnu11 -Wall -Wextra" CACHE STRING "C compiler flags" FORCE)
-set(CMAKE_CXX_FLAGS "-ffunction-sections -fdata-sections -Wall -Wextra" CACHE STRING "C++ compiler flags" FORCE)
-set(CMAKE_ASM_FLAGS "-D__ASSEMBLY__" CACHE STRING "ASM compiler flags" FORCE)
+# BFD names for embedding binary blobs (firmware images, profiles) into the ELF
+# via `objcopy -I binary -O <fmt> -B <arch>`. Nios V is a little-endian RV32
+# target, so its object format is elf32-littleriscv / architecture riscv
+# (confirmed with `riscv32-unknown-elf-objcopy --info`). FirmwareBlob.cmake
+# hard-errors if these are unset, so define them for every Altera build.
+set(NO_OS_OBJCOPY_BIN_FORMAT "elf32-littleriscv" CACHE INTERNAL
+    "objcopy -O target for binary blobs embedded in the ELF")
+set(NO_OS_OBJCOPY_BIN_ARCH "riscv" CACHE INTERNAL
+    "objcopy -B architecture for binary blobs embedded in the ELF")
+
+# The RISC-V newlib toolchain defines int32_t as `long int` (not `int`), so the
+# many no-OS drivers that mix `int` and `int32_t` in function-pointer types trip
+# -Wincompatible-pointer-types, which GCC 14+ treats as a hard error by default.
+# On the RV32 ABI `int` and `long` are both 32-bit and passed identically, so
+# these assignments are call-compatible; downgrade the diagnostic to a warning
+# for the Nios V build rather than editing drivers shared by every platform.
+# The Nios V/g soft core is an RV32IM part with the Zicbom cache-management
+# extension and no hardware FPU (soft-float). Build the application to match the
+# core so it uses hardware mul/div and cache-block ops instead of libgcc soft
+# routines, and so it matches the BSP archive (also built -march=rv32im_zicbom).
+# Scoped to the Nios V branch: the legacy Altera/Nios II flow (and every non-
+# Altera platform, which uses its own toolchain file) is unaffected. Folded into
+# the full-string FORCE set()s below so repeated toolchain reads stay idempotent.
+set(_altera_arch_flags "")
+if(_altera_use_niosv)
+    set(_altera_arch_flags " -march=rv32im_zicbom -mabi=ilp32")
+endif()
+
+set(CMAKE_C_FLAGS "-ffunction-sections -fdata-sections -std=gnu11 -Wall -Wextra -Wno-error=incompatible-pointer-types${_altera_arch_flags}" CACHE STRING "C compiler flags" FORCE)
+set(CMAKE_CXX_FLAGS "-ffunction-sections -fdata-sections -Wall -Wextra${_altera_arch_flags}" CACHE STRING "C++ compiler flags" FORCE)
+set(CMAKE_ASM_FLAGS "-D__ASSEMBLY__${_altera_arch_flags}" CACHE STRING "ASM compiler flags" FORCE)
 
 if(DEFINED ENV{ALTERA_CFLAGS} AND NOT "$ENV{ALTERA_CFLAGS}" STREQUAL "")
     string(APPEND CMAKE_C_FLAGS " $ENV{ALTERA_CFLAGS}")
@@ -109,6 +137,12 @@ endif()
 
 if(DEFINED ENV{ALTERA_LDFLAGS} AND NOT "$ENV{ALTERA_LDFLAGS}" STREQUAL "")
     set(CMAKE_EXE_LINKER_FLAGS "$ENV{ALTERA_LDFLAGS}" CACHE STRING "Linker flags" FORCE)
+endif()
+
+# Match the link-time libgcc multilib to the core (see the -march note above).
+# Guarded against re-append on repeated toolchain reads.
+if(_altera_use_niosv AND NOT CMAKE_EXE_LINKER_FLAGS MATCHES "march=rv32im")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -march=rv32im_zicbom -mabi=ilp32" CACHE STRING "Linker flags" FORCE)
 endif()
 
 message(STATUS "Configured Altera toolchain mode: ${_altera_use_niosv}")
