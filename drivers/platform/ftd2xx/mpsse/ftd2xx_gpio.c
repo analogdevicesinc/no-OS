@@ -306,9 +306,6 @@ int32_t ftd2xx_gpio_get_value(struct no_os_gpio_desc *desc, uint8_t *value)
 	} else
 		return -EINVAL;
 
-	*value = no_os_field_get(FTD2XX_GPIO_PIN(desc->number),
-				 ftd2xx_gpio_pins_dir[desc->port]);
-
 	return 0;
 }
 
