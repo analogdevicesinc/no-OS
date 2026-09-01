@@ -385,7 +385,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		stale_cache = platform == 'xilinx' and cmake_cache_source_mismatch(str(build_dir), noos)
 		if platform == 'xilinx' and build_dir.exists() and not new_hdf and not stale_cache:
 			# CMAKE, not bare 'cmake': the sourced xilinx env leads PATH with Vitis's broken one.
-			clean_cmd = "%s --build %s --target clean > /dev/null 2>&1" % (CMAKE, build_dir)
+			clean_cmd = "%s --build %s --target clean > %s 2>&1" % (CMAKE, build_dir, os.devnull)
 			os.system(clean_cmd)
 			fresh_flag = ""
 		else:
@@ -398,7 +398,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 				os.path.abspath(build_dir_base), jobs, fresh_flag, hardware_arg))
 		log(build_cmd)
 		sys.stdout.flush()
-		err = os.system(build_cmd + ' > /dev/null 2>&1')
+		err = os.system(build_cmd + ' > %s 2>&1' % os.devnull)
 		success = err == 0
 
 		os.environ.clear()
