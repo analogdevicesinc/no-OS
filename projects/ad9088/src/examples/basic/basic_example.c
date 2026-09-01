@@ -40,6 +40,10 @@
 #include "jesd204.h"
 #include "axi_adxcvr.h"
 #include "jesd204_clk.h"
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+#include "no_os_gpio.h"
+#include "io.h"
+#endif
 
 /**
  * @brief Basic example main execution.
@@ -54,8 +58,16 @@ int basic_example_main()
 	struct adf4030_dev *adf4030_dev;
 	struct axi_jesd204_rx *rx_jesd;
 	struct axi_jesd204_tx *tx_jesd;
+#ifndef CONFIG_ALTERA_PLATFORM_NIOSV
+	/*
+	 * The AD9084-EBZ Agilex 5 bitstream uses Intel E-Tile PHY cores
+	 * (jesd204_phy_a/b) whose reset is driven by the axi_jesd204 link
+	 * cores, not by an ADI adxcvr wrapper. There is no adxcvr to
+	 * configure there, so these handles exist only on the Xilinx path.
+	 */
 	struct adxcvr *rx_adxcvr;
 	struct adxcvr *tx_adxcvr;
+#endif
 	struct jesd204_clk rx_jesd_clk = {0};
 	struct jesd204_clk tx_jesd_clk = {0};
 	struct no_os_clk_desc rx_lane_clk = {0};
@@ -83,7 +95,7 @@ int basic_example_main()
 	/* After the HMC7044: the ADF4030's reference comes from HMC7044 ch1. */
 	ret = adf4030_init(&adf4030_dev, &adf4030_ip);
 	if (ret) {
-		pr_info("ADF4030 initialization failed\n");
+		pr_info("ADF4030 initialization failed (ret=%d)\n", ret);
 		goto error_hmc7044;
 	}
 
@@ -109,6 +121,13 @@ int basic_example_main()
 		goto error_rx_dmac;
 	}
 
+#ifndef CONFIG_ALTERA_PLATFORM_NIOSV
+	/*
+	 * Xilinx path only: configure the ADI adxcvr transceivers. On Agilex
+	 * the E-Tile PHYs are configured by the bitstream and reset by the
+	 * axi_jesd204 link cores, so the lane clocks keep xcvr == NULL and
+	 * jesd204_clk_{enable,set_rate} no-op on the transceiver.
+	 */
 	ret = adxcvr_init(&tx_adxcvr, &tx_adxcvr_ip);
 	if (ret) {
 		pr_info("TX ADXCVR initialization failed\n");
@@ -122,6 +141,7 @@ int basic_example_main()
 		goto error_tx_adxcvr;
 	}
 	rx_jesd_clk.xcvr = rx_adxcvr;
+#endif
 
 	rx_lane_clk.platform_ops = &jesd204_clk_ops;
 	rx_lane_clk.dev_desc = &rx_jesd_clk;
@@ -192,6 +212,62 @@ int basic_example_main()
 		pr_info("JESD204 topology init failed\n");
 		goto error_ad9088;
 	}
+
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+	/*
+	 * GTS transceiver refclk bring-up (probe). On Agilex the GTS PHYs are not
+	 * touched by an adxcvr wrapper, so software must (a) raise the refclk-ready
+	 * GPIOs that gate the HDL gts_refclk_reset SM and (b) request the GTS TX PLL
+	 * refclk buffers on. Without this the transceiver PLL has no reference, the
+	 * link clock reads ~24 MHz and the links never reach DATA. This mirrors the
+	 * known-good Linux altera_adxcvr GTS path and runs after the HMC7044 refclks
+	 * are stable, just before the JESD links come up.
+	 */
+	{
+		struct no_os_gpio_desc *gpio_refclk_rx = NULL;
+		struct no_os_gpio_desc *gpio_refclk_tx = NULL;
+		struct no_os_gpio_init_param refclk_rx_ip = {
+			.platform_ops = GPIO_OPS,
+			.extra = GPIO_EXTRA,
+			.number = GPIO_REFCLK_READY_RX,
+		};
+		struct no_os_gpio_init_param refclk_tx_ip = {
+			.platform_ops = GPIO_OPS,
+			.extra = GPIO_EXTRA,
+			.number = GPIO_REFCLK_READY_TX,
+		};
+
+		ret = no_os_gpio_get(&gpio_refclk_rx, &refclk_rx_ip);
+		if (!ret)
+			ret = no_os_gpio_direction_output(gpio_refclk_rx,
+							  NO_OS_GPIO_HIGH);
+		if (!ret)
+			ret = no_os_gpio_get(&gpio_refclk_tx, &refclk_tx_ip);
+		if (!ret)
+			ret = no_os_gpio_direction_output(gpio_refclk_tx,
+							  NO_OS_GPIO_HIGH);
+		if (ret) {
+			pr_info("GTS refclk-ready GPIO setup failed (%d)\n", ret);
+			goto error_topology;
+		}
+		pr_debug("GTS: refclk-ready RX/TX (gpio 56/57) driven high\n");
+
+		/* Let the gts_refclk_reset SM ack and the FPGA PLLs lock. */
+		no_os_mdelay(100);
+
+		/*
+		 * Request each bank's GTS PLL refclk buffers on (reg 0x0e byte +2
+		 * <- 0xff). Both banks must be poked - one PLL per bank in the HDL.
+		 * NOTE: the request bit is self-clearing, so the register readback is
+		 * not a success indicator - only the axi_jesd Measured Link Clock is.
+		 * Bank B (TX) locks this way; bank A (RX) does not - tracked as an
+		 * HDL/GTS-IP issue (gts_pll_a not locking on its own refclk).
+		 */
+		IOWR_8DIRECT(GTS_PLL_RX_BASEADDR, GTS_REFCLK_BUFFER_REQ_OFFSET, 0xFF);
+		IOWR_8DIRECT(GTS_PLL_TX_BASEADDR, GTS_REFCLK_BUFFER_REQ_OFFSET, 0xFF);
+		no_os_mdelay(10);
+	}
+#endif
 
 	ret = jesd204_fsm_start(topology, JESD204_LINKS_ALL);
 	if (ret) {
@@ -299,10 +375,12 @@ error_tx_jesd:
 error_rx_jesd:
 	axi_jesd204_rx_remove(rx_jesd);
 error_rx_adxcvr:
+#ifndef CONFIG_ALTERA_PLATFORM_NIOSV
 	adxcvr_remove(rx_adxcvr);
 error_tx_adxcvr:
 	adxcvr_remove(tx_adxcvr);
 error_tx_dmac:
+#endif
 	axi_dmac_remove(tx_dmac);
 error_rx_dmac:
 	axi_dmac_remove(rx_dmac);

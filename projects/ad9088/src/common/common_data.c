@@ -47,7 +47,7 @@ struct no_os_uart_init_param platform_uart_ip = {
 
 static struct no_os_spi_init_param adf4382_spi_ip = {
 	.device_id = CLK_SPI_DEVICE_ID,
-	.max_speed_hz = 1500000,
+	.max_speed_hz = AD9088_ADF4382_SPI_HZ,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = SPI_OPS_CLK,
@@ -93,16 +93,27 @@ static struct no_os_gpio_init_param gpio_reset_ip = {
 
 struct adf4382_init_param adf4382_ip = {
 	.spi_init = &adf4382_spi_ip,
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+	.spi_3wire_en = true,  /* AD9084-EBZ (Agilex 5) wires the ADF4382 SDIO
+				* 3-wire (the ad_3w_spi HDL block merges MOSI/MISO
+				* onto spi2_sdio); matches the reference DT
+				* "adi,spi-3wire-enable". Verified on hardware:
+				* after soft reset in 3-wire the ID/scratchpad
+				* regs read back correctly (0x06/0x0456, 0x5A/0xA5);
+				* enabling 4-wire (SDO_ACTIVE) makes reads return
+				* 0x00. */
+#else
 	.spi_3wire_en = true, //MB is using 3-wire SPI
+#endif
 	.cmos_3v3 = false,
 	.ref_freq_hz = 125000000,
-	.freq = 20000000000,
+	.freq = AD9088_ADF4382_FREQ_HZ,
 	.ref_doubler_en = 0,
 	.ref_div = 1,
 	.cp_i = 15,
 	.bleed_word = 0,
 	.ld_count = 10,
-	.id = ID_ADF4382A,
+	.id = AD9088_ADF4382_ID,
 };
 
 static struct hmc7044_chan_spec hmc7044_chans[] = {
@@ -112,37 +123,49 @@ static struct hmc7044_chan_spec hmc7044_chans[] = {
 		.driver_mode = 2,	// LVDS
 	},
 	{
-		.num = 3,		// ADF4030_BSYNC0
-		.divider = 512,		// retuned to 256 -> 9.765625 MHz
-		.driver_mode = 1,	// LVPECL
+		.num = 3,			// ADF4030_BSYNC0
+		.divider = AD9088_HMC_SYSREF_DIV,	// SYSREF (profile-dependent)
+		.driver_mode = 1,		// LVPECL
 		.is_sysref = true,
 	},
 	{
-		.num = 8,		// CORE_CLK_TX
-		.divider = 8,		// 312.5 MHz
-		.driver_mode = 2,	// LVDS
+		.num = 8,			// CORE_CLK_TX
+		.divider = AD9088_HMC_CORECLK_DIV,	// link clock (profile-dependent)
+		.driver_mode = 2,		// LVDS
 	},
 	{
-		.num = 9,		// CORE_CLK_RX
-		.divider = 8,		// 312.5 MHz
-		.driver_mode = 2,	// LVDS
+		.num = 9,			// CORE_CLK_RX
+		.divider = AD9088_HMC_CORECLK_DIV,	// link clock (profile-dependent)
+		.driver_mode = 2,		// LVDS
 	},
 	{
-		.num = 10,		// FPGA_REFCLK
-		.divider = 8,		// 312.5 MHz
-		.driver_mode = 2,	// LVDS
+		.num = 10,			// FPGA_REFCLK
+		.divider = AD9088_HMC_CORECLK_DIV,	// link clock (profile-dependent)
+		.driver_mode = 2,		// LVDS
 	},
 	{
-		.num = 11,		// CORE_CLK_RX_B
-		.divider = 8,		// 312.5 MHz
-		.driver_mode = 2,	// LVDS
+		.num = 11,			// CORE_CLK_RX_B
+		.divider = AD9088_HMC_CORECLK_DIV,	// link clock (profile-dependent)
+		.driver_mode = 2,		// LVDS
 	},
 	{
-		.num = 12,		// CORE_CLK_TX_B
-		.divider = 8,		// 312.5 MHz
-		.driver_mode = 2,	// LVDS
+		.num = 12,			// CORE_CLK_TX_B
+		.divider = AD9088_HMC_CORECLK_DIV,	// link clock (profile-dependent)
+		.driver_mode = 2,		// LVDS
 	}
 };
+
+/*
+ * OSCIN input-buffer mode is carrier-specific on the AD9084-EBZ: the Agilex 5
+ * reference design (socfpga_agilex5_socdk_ad9084.dts) sets bit 4 (0x15) while
+ * all Xilinx carriers (vcu118 / versal) use 0x05. Match the corresponding
+ * reference DT per platform.
+ */
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+#define AD9088_HMC7044_OSCIN_BUF_MODE 0x15
+#else
+#define AD9088_HMC7044_OSCIN_BUF_MODE 0x05
+#endif
 
 struct hmc7044_init_param hmc7044_ip = {
 	.spi_init = &hmc7044_spi_ip,
@@ -151,7 +174,7 @@ struct hmc7044_init_param hmc7044_ip = {
 	.pll2_freq = 2500000000,
 	.pll1_loop_bw = 200,
 	.sysref_timer_div = 1024,
-	.in_buf_mode = {0x07, 0x07, 0x00, 0x00, 0x5},
+	.in_buf_mode = {0x07, 0x07, 0x00, 0x00, AD9088_HMC7044_OSCIN_BUF_MODE},
 	.gpi_ctrl = {0x00, 0x00, 0x00, 0x00},
 	.gpo_ctrl = {0x37, 0x33, 0x00, 0x00},
 	.num_channels = NO_OS_ARRAY_SIZE(hmc7044_chans),
@@ -264,7 +287,7 @@ struct adxcvr_init tx_adxcvr_ip = {
 	.out_clk_sel = ADXCVR_PROGDIV_CLK,
 	.lpm_enable = 0,
 	.lane_rate_khz = AD9088_LANE_RATE_KHZ,
-	.ref_rate_khz = 312500,
+	.ref_rate_khz = AD9088_ADXCVR_REF_KHZ,
 	.export_no_os_clk = true,
 };
 
@@ -275,7 +298,7 @@ struct adxcvr_init rx_adxcvr_ip = {
 	.out_clk_sel = ADXCVR_PROGDIV_CLK,
 	.lpm_enable = 1,
 	.lane_rate_khz = AD9088_LANE_RATE_KHZ,
-	.ref_rate_khz = 312500,
+	.ref_rate_khz = AD9088_ADXCVR_REF_KHZ,
 	.export_no_os_clk = true,
 };
 

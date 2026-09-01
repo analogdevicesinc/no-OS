@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by ADF4382 project.
- *   @author CHegbeli (ciprian.hegbeli@analog.com)
+ *   @file   altera/main.c
+ *   @brief  Main file for the Altera/Nios V platform of the ad9088 project
+ *           (AD9084-EBZ on Agilex 5).
+ *   @author Mihaela-Georgeta Petrea (Mihaela-georgeta.Petrea@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -19,7 +20,7 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -30,22 +31,55 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#ifdef XILINX_PLATFORM
-#include "xilinx/parameters.h"
+#include <stdio.h>
+#include "platform_includes.h"
+#include "common_data.h"
+#include "no_os_error.h"
+#include "no_os_print_log.h"
+
+#ifdef BASIC_EXAMPLE
+#include "basic_example.h"
 #endif
 
-#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
-#include "altera/parameters.h"
+#ifdef DMA_EXAMPLE
+#include "dma_example.h"
 #endif
 
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
+/**
+ * @brief Main function execution for the Altera/Nios V platform.
+ *
+ * stdout is routed to the EBZ JTAG UART (sys_uart @ 0x100) by the project-local
+ * _write() override in parameters.c - the generic BSP's _write() targets a
+ * nonexistent JTAG UART (0x90158), so pr_*() would otherwise be discarded.
+ * Console is up as soon as main() runs.
+ *
+ * @return ret - Result of the enabled example's execution.
+ */
+int main(void)
+{
+	int ret = -EINVAL;
+
+	/*
+	 * newlib fully buffers stdout by default -- output would then only appear
+	 * once ~1 KB has accumulated or the program exits, so an early hang looks
+	 * like total silence. Make stdout unbuffered so every pr_*() reaches the
+	 * polled JTAG UART immediately.
+	 */
+	setvbuf(stdout, NULL, _IONBF, 0);
+
+	pr_info("ad9088: Nios V (Agilex 5) bring-up\n");
+
+#ifdef BASIC_EXAMPLE
+	ret = basic_example_main();
 #endif
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+#ifdef DMA_EXAMPLE
+	ret = dma_example_main();
+#endif
+
+	return ret;
+}

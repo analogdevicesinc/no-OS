@@ -32,4 +32,27 @@ config AD9088_PROFILE
 	  one is picked, it is embedded under the name usecase.bin so the
 	  symbols the driver looks for never change.
 
+choice AD9088_FW_SET
+	prompt "Embedded core-firmware silicon set"
+	default AD9088_FW_SET_ALL
+	help
+	  Which signed core-firmware set(s) to embed in the ELF. Each set is
+	  ~570 KB; embedding both needs over 1 MB of contiguous memory for
+	  firmware alone, which small soft-SoC targets (e.g. Nios V on-chip
+	  memory) do not have. Pick the set matching the silicon on the board to
+	  halve the firmware footprint. The vendor API requests one set based on
+	  the detected part, so a mismatch fails startup with "Unknown firmware
+	  ID".
+
+config AD9088_FW_SET_ALL
+	bool "Engineering and production"
+
+config AD9088_FW_SET_ENG
+	bool "Engineering silicon only (app_signed_encrypted_B)"
+
+config AD9088_FW_SET_PROD
+	bool "Production silicon only (app_signed_encrypted_prod_B)"
+
+endchoice
+
 endmenu
