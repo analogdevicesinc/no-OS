@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# Copyright (c) 2026 Analog Devices, Inc. All rights reserved.
+
 from os import path, environ
 from time import time
 from urllib.request import urlopen
