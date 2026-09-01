@@ -330,8 +330,8 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 
 		name = "%s-%s-%s" % (project, variant, board)
 		build_dir = combo_build_dir(build_dir_base, combo)
-		out_dir = os.path.abspath(f"{build_dir}/'build'")
-		elf = os.path.abspath(f"{out_dir}/{project}.elf")
+		out_dir = build_dir / 'build'
+		elf = out_dir / ('%s.elf' % project)
 
 		log("Building %10s (%8s) -- %s -- %s" % (
 			to_blue(project), to_blue(variant), to_blue(platform), to_blue(board)))
@@ -383,7 +383,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		# Xilinx: keep the cached BSP, clean only objects unless the .xsa changed
 		# or the cache came from a different source path (another CI agent).
 		stale_cache = platform == 'xilinx' and cmake_cache_source_mismatch(str(build_dir), noos)
-		if platform == 'xilinx' and os.path.exists(build_dir) and not new_hdf and not stale_cache:
+		if platform == 'xilinx' and build_dir.exists() and not new_hdf and not stale_cache:
 			# CMAKE, not bare 'cmake': the sourced xilinx env leads PATH with Vitis's broken one.
 			clean_cmd = "%s --build %s --target clean > /dev/null 2>&1" % (CMAKE, build_dir)
 			os.system(clean_cmd)
@@ -391,10 +391,10 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		else:
 			fresh_flag = " --fresh"
 		
-		build_cmd = ("python3 %s build"
+		build_cmd = ("python3 %s/tools/scripts/no_os_build.py build"
 			     " --project %s --variant %s --board %s"
 			     " --build-dir %s --jobs %d --probe openocd%s%s"
-			     % (os.path.abspath(noos + "/tools/scripts/no_os_build.py"), project, variant, board,
+			     % (noos, project, variant, board,
 				os.path.abspath(build_dir_base), jobs, fresh_flag, hardware_arg))
 		log(build_cmd)
 		sys.stdout.flush()
@@ -406,7 +406,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 
 		# Copy the cmake configure+build log (written by no_os_build into the
 		# build dir) into the per-combo CI log artifact.
-		cmake_log = os.path.abspath(f"{build_dir}/build.log")
+		cmake_log = build_dir / 'build.log'
 		if cmake_log.is_file():
 			import shutil
 			shutil.copy(str(cmake_log), dst_log)
@@ -432,7 +432,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 			continue
 
 		for ext in ('elf', 'hex', 'bin', 'uf2'):
-			src = os.path.abspath(f"{out_dir}/{project}.{ext}")
+			src = out_dir / ('%s.%s' % (project, ext))
 			if src.is_file():
 				run_cmd("cp %s %s" % (src, os.path.join(project_export, '%s.%s' % (name, ext))))
 

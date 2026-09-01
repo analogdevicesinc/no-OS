@@ -54,7 +54,7 @@ CMAKE = _resolve_cmake()
 def combo_build_dir(build_dir_base, combo):
     """Return the build directory path for a given combination."""
     name = f"{combo['project']}-{combo['variant']}-{combo['board']}"
-    return os.path.abspath(f"{build_dir_base}/{name}")
+    return build_dir_base / name
 
 
 def open_vscode_workspace(repo_root):
@@ -64,8 +64,8 @@ def open_vscode_workspace(repo_root):
     configure. VS Code does not reliably prompt to open it, so --open launches
     it explicitly.
     """
-    workspace = os.path.abspath(f"{repo_root}/no-os.code-workspace")
-    if not os.path.exists(workspace):
+    workspace = repo_root / "no-os.code-workspace"
+    if not workspace.exists():
         print(f"--open: workspace not found at {workspace} "
               "(it is generated during configure).", file=sys.stderr)
         return
@@ -83,8 +83,8 @@ def open_vscode_workspace(repo_root):
 
 def read_cmake_cache_value(build_dir, key):
     """Return the value of a CMakeCache.txt entry (KEY:TYPE=VALUE), or None."""
-    cache = os.path.abspath(f"{build_dir}/CMakeCache.txt")
-    if not os.path.exists(cache):
+    cache = build_dir / "CMakeCache.txt"
+    if not cache.exists():
         return None
     prefix = f"{key}:"
     with open(cache) as f:
@@ -108,8 +108,8 @@ def harvest_compile_manifest(build_dir):
     "force_includes": [...]} with duplicates removed and insertion order
     preserved, or None if the compile database is missing.
     """
-    cc = f"{build_dir}/compile_commands.json"
-    if not os.path.exists(cc):
+    cc = build_dir / "compile_commands.json"
+    if not cc.exists():
         return None
     with open(cc) as f:
         entries = json.load(f)
@@ -169,10 +169,10 @@ def open_vitis_workspace(repo_root, build_dir, combo):
     to the CMake build: CMake still owns the flashed ELF; Vitis gets a browsable
     /buildable view of the same sources. Then launches `vitis -w <workspace>`.
     """
-    proj_bin = os.path.abspath(f"{build_dir}/projects/{combo['project']}")
-    xsa_work = os.path.abspath(f"{proj_bin}/xsa_work")
-    workspace = os.path.abspath(f"{xsa_work}/ide/workspace")
-    if not os.path.exists(xsa_work):
+    proj_bin = build_dir / "projects" / combo["project"]
+    xsa_work = proj_bin / "xsa_work"
+    workspace = xsa_work / "ide" / "workspace"
+    if not xsa_work.exists():
         print(f"--open: BSP work dir not found at {xsa_work} "
               "(build the project first).", file=sys.stderr)
         return
@@ -192,7 +192,7 @@ def open_vitis_workspace(repo_root, build_dir, combo):
     arch = read_cmake_cache_value(build_dir, "XILINX_ARCH")
     if arch:
         manifest["arch"] = arch
-    manifest_path = os.path.abspath(f"{xsa_work}/ide_manifest.json")
+    manifest_path = xsa_work / "ide_manifest.json"
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     with open(manifest_path, "w") as f:
         json.dump(manifest, f, indent="\t")
@@ -203,7 +203,7 @@ def open_vitis_workspace(repo_root, build_dir, combo):
     if not xsa_files:
         print(f"--open: no .xsa found in {xsa_work}.", file=sys.stderr)
         return
-    util_py = os.path.abspath(f"{repo_root}/tools/scripts/platform/xilinx/util.py")
+    util_py = repo_root / "tools" / "scripts" / "platform" / "xilinx" / "util.py"
 
     print(f"Populating Vitis workspace ({len(manifest['sources'])} sources)...")
     try:
@@ -267,7 +267,7 @@ def find_repo_root():
     """Walk up from script location to find the repo root (contains CMakePresets.json)."""
     path = Path(__file__).resolve().parent
     while path != path.parent:
-        if (os.path.exists(os.path.abspath(f"{path}/CMakePresets.json"))) and os.path.isdir((os.path.abspath(f"{path}/projects"))):
+        if (path / "CMakePresets.json").exists() and (path / "projects").is_dir():
             return path
         path = path.parent
     sys.exit("Error: Could not find no-OS repo root (no CMakePresets.json found)")
@@ -286,8 +286,8 @@ def load_presets(repo_root):
 
         # Process includes relative to the file's directory
         for inc in data.get("include", []):
-            inc_path = os.path.abspath(f"{repo_root}/inc")
-            if os.path.exists(inc_path):
+            inc_path = repo_root / inc
+            if inc_path.exists():
                 parse_file(inc_path)
 
         for preset in data.get("configurePresets", []):
@@ -304,7 +304,7 @@ def load_presets(repo_root):
                     "description": preset.get("description", ""),
                 }
 
-    parse_file(os.path.abspath(f"{repo_root}/CMakePresets.json"))
+    parse_file(repo_root / "CMakePresets.json")
     return presets
 
 
@@ -313,12 +313,12 @@ def discover_projects(repo_root):
 
     Returns list of project names, excluding template and no-os-sample-project.
     """
-    projects_dir = os.path.abspath(f"{repo_root}/projects")
+    projects_dir = repo_root / "projects"
     skip = {"template", "no-os-sample-project"}
     projects = []
-    for entry in sorted(os.listdir(projects_dir)):
-        if os.path.isdir(entry) and entry.name not in skip:
-            if os.path.exists(os.path.abspath(f"{entry}/CMakeLists.txt")):
+    for entry in sorted(projects_dir.iterdir()):
+        if entry.is_dir() and entry.name not in skip:
+            if (entry / "CMakeLists.txt").exists():
                 projects.append(entry.name)
     return projects
 
@@ -328,7 +328,7 @@ def discover_variants(repo_root, project):
 
     Returns list of variant names (filename without .conf extension).
     """
-    project_dir = os.path.abspath(f"{repo_root}/projects/{project}")
+    project_dir = repo_root / "projects" / project
     variants = []
     for conf in sorted(project_dir.glob("*.conf")):
         variants.append(conf.stem)
@@ -347,17 +347,17 @@ def discover_boards_for_variant(repo_root, project, variant):
     Returns (list of board names, source_type) where source_type is
     'variant', 'flat', or 'none'.
     """
-    boards_dir = os.path.abspath(f"{repo_root}/projects/{project}/boards")
+    boards_dir = repo_root / "projects" / project / "boards"
 
     # Try variant-specific directory first
-    variant_dir = os.path.abspath(f"{boards_dir}/{variant}")
-    if os.path.isdir(variant_dir):
+    variant_dir = boards_dir / variant
+    if variant_dir.is_dir():
         boards = sorted(f.stem for f in variant_dir.glob("*.conf"))
         if boards:
             return boards, "variant"
 
     # Fall back to flat boards/
-    if os.path.isdir(boards_dir):
+    if boards_dir.is_dir():
         # Check that there are actual .conf files (not just subdirectories)
         flat_boards = sorted(
             f.stem for f in boards_dir.glob("*.conf") if f.is_file()
@@ -396,7 +396,7 @@ def xilinx_hardware_name(repo_root, project, variant, board):
     lives in the variant .conf; the board suffix is the CMake board. Returns
     None when the variant declares no design (i.e. not a Xilinx build).
     """
-    conf = os.path.abspath(f"{repo_root}/projects/{project}/{variant}.conf")
+    conf = repo_root / "projects" / project / f"{variant}.conf"
     design = _read_conf_string(conf, "XILINX_HDL_DESIGN")
     if not design:
         return None
@@ -524,15 +524,15 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
     preset = combo["preset"]
 
     build_dir = combo_build_dir(build_dir_base, combo)
-    log_path = os.path.abspath(f"{build_dir}/build.log")
+    log_path = build_dir / "build.log"
 
-    if clean and os.path.exists(build_dir) and not dry_run:
+    if clean and build_dir.exists() and not dry_run:
         import shutil
         shutil.rmtree(build_dir)
 
     # append_log() opens in append mode; on a reused build_dir that accumulates
     # stale output. Start each run with a fresh log.
-    if not dry_run and os.path.exists(log_path):
+    if not dry_run and log_path.exists():
         log_path.unlink()
 
     defconfig = f"{project}/{variant}.conf"
@@ -620,7 +620,7 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
             stderr_tail = e.stderr[-500:] if e.stderr else "(see terminal output above)"
             return combo, False, f"Flash failed:\n{stderr_tail}"
 
-    return combo, True, str(os.path.abspath(f"{build_dir}/build"))
+    return combo, True, str(build_dir / "build")
 
 
 def cmd_list(args, repo_root, presets):
@@ -655,9 +655,9 @@ def cmd_build(args, repo_root, presets):
     if args.build_dir:
         build_dir_base = Path(args.build_dir)
         if not build_dir_base.is_absolute():
-            build_dir_base = os.path.abspath(f"{repo_root}/build_dir_base")
+            build_dir_base = repo_root / build_dir_base
     else:
-        build_dir_base = os.path.abspath(f"{repo_root}/build")
+        build_dir_base = repo_root / "build"
     total = len(filtered)
 
     if args.dry_run:
@@ -686,7 +686,7 @@ def cmd_build(args, repo_root, presets):
                 defconfig = f"{combo['project']}/{combo['variant']}.conf"
                 build_dir = combo_build_dir(build_dir_base, combo)
 
-                if args.clean and os.path.exists(build_dir) and not args.dry_run:
+                if args.clean and build_dir.exists() and not args.dry_run:
                     import shutil
                     shutil.rmtree(build_dir)
 
@@ -707,7 +707,7 @@ def cmd_build(args, repo_root, presets):
                     print(f"  [{idx}/{total}] {quote_cmd(configure_cmd)}")
                     continue
 
-                log_path = os.path.abspath(f"{build_dir}/build.log")
+                log_path = build_dir / "build.log"
                 print(f"  [{idx}/{total}] Configuring {label}...", flush=True)
                 echo_cmd(configure_cmd)
                 try:
@@ -751,7 +751,7 @@ def cmd_build(args, repo_root, presets):
         def do_build(combo):
             board = combo["board"]
             build_dir = combo_build_dir(build_dir_base, combo)
-            log_path = os.path.abspath(f"{build_dir}/build.log")
+            log_path = build_dir / "build.log"
             build_cmd = [
                 CMAKE,
                 "--build", str(build_dir),
@@ -786,7 +786,7 @@ def cmd_build(args, repo_root, presets):
                 append_log(log_path, "Build", e)
                 return combo, False, f"Build failed:\n{e.stderr[-500:]}"
 
-            artifacts_msg = f"Build artifacts: {build_dir}/build"
+            artifacts_msg = f"Build artifacts: {build_dir / 'build'}"
 
             if args.flash:
                 echo_cmd(flash_cmd)
