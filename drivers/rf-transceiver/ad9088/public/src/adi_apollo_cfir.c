@@ -79,6 +79,27 @@ int32_t adi_apollo_cfir_coeff_pgm(adi_apollo_device_t *device, adi_apollo_termin
     ADI_APOLLO_NULL_POINTER_RETURN(cfir_coeff_q);
     ADI_APOLLO_CFIR_BLK_SEL_MASK(cfirs);
 
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+    /* cfir_coeff_i/q[] may alias int16_t members of a pack(1) profile struct
+     * (adi_apollo_cfir_cfg_t::coeffs_i/coeffs_q). Passed by pointer decay, the
+     * packed context is lost and cfir_coeff_i[k] compiles to an aligned 16-bit
+     * load -> Nios V/g traps on the misaligned address. Copy to aligned locals
+     * via LE byte reassembly (host is little-endian), then use those below. */
+    int16_t ci_aligned[ADI_APOLLO_CFIR_COEFF_NUM];
+    int16_t cq_aligned[ADI_APOLLO_CFIR_COEFF_NUM];
+    {
+        const uint8_t *si = (const uint8_t *)cfir_coeff_i;
+        const uint8_t *sq = (const uint8_t *)cfir_coeff_q;
+        uint8_t n;
+        for (n = 0; n < ADI_APOLLO_CFIR_COEFF_NUM; n++) {
+            ci_aligned[n] = (int16_t)((uint16_t)si[2 * n] | ((uint16_t)si[2 * n + 1] << 8));
+            cq_aligned[n] = (int16_t)((uint16_t)sq[2 * n] | ((uint16_t)sq[2 * n + 1] << 8));
+        }
+        cfir_coeff_i = ci_aligned;
+        cfir_coeff_q = cq_aligned;
+    }
+#endif
+
     for (i = 0; i < ADI_APOLLO_CFIR_NUM; i++) {
         cfir = cfirs & (ADI_APOLLO_CFIR_A0 << i);
         if (cfir > 0) {

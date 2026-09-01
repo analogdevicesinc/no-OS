@@ -51,6 +51,26 @@ int32_t adi_apollo_fnco_profile_load(adi_apollo_device_t *device, adi_apollo_ter
                 err = adi_apollo_hal_paged_bf_set(device, BF_HOP_PROFILE_PAGE_INFO(regmap_base_addr), j);
                 ADI_APOLLO_ERROR_RETURN(err);
 
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+                /*
+                 * words[] may alias a pack(1) profile-struct member, so its
+                 * address is not guaranteed 4-byte aligned. Nios V/g has no
+                 * hardware unaligned-load support: a misaligned lw traps to the
+                 * default handler and hangs. Reassemble the word from bytes
+                 * (host/Nios V is little-endian).
+                 */
+                {
+                    const uint8_t *wp = (const uint8_t *)&words[j - first];
+                    uint32_t w = (uint32_t)wp[0] | ((uint32_t)wp[1] << 8) |
+                                 ((uint32_t)wp[2] << 16) | ((uint32_t)wp[3] << 24);
+
+                    if (word_sel == ADI_APOLLO_NCO_PROFILE_PHASE_INCREMENT)
+                        err = adi_apollo_hal_paged_bf_set(device, BF_HOP_PHASE_INC_INFO(regmap_base_addr), w);
+                    else
+                        err = adi_apollo_hal_paged_bf_set(device, BF_HOP_PHASE_OFFSET_INFO(regmap_base_addr), w);
+                    ADI_APOLLO_ERROR_RETURN(err);
+                }
+#else
                 if (word_sel == ADI_APOLLO_NCO_PROFILE_PHASE_INCREMENT) {
                     err = adi_apollo_hal_paged_bf_set(device, BF_HOP_PHASE_INC_INFO(regmap_base_addr), words[j-first]);
                     ADI_APOLLO_ERROR_RETURN(err);
@@ -58,6 +78,7 @@ int32_t adi_apollo_fnco_profile_load(adi_apollo_device_t *device, adi_apollo_ter
                     err = adi_apollo_hal_paged_bf_set(device, BF_HOP_PHASE_OFFSET_INFO(regmap_base_addr), words[j-first]);
                     ADI_APOLLO_ERROR_RETURN(err);
                 }
+#endif
            }
         }
     }
