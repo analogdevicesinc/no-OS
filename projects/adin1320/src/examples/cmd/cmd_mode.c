@@ -36,7 +36,7 @@
 #include "adin1320.h"
 #include "common_data.h"
 #include "mdio_spi.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_gpio.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
@@ -235,7 +235,7 @@ int fw_mode_sgmii_path_test(struct cmd_gpio *cmd_gpio,
 			return ret;
 	} while ((data & 0x0001) == 0); /* Wait for FG done */
 
-	no_os_mdelay(10000); /* Allow time window for frames to come back */
+	capi_wait_ms(10000); /* Allow time window for frames to come back */
 
 	/* Read frame error count to enable reading of frame counts */
 	ret = adin1320_read(dev_8, 0x0014, &data); /* RX_ERR_CNT */
@@ -402,7 +402,7 @@ int fw_mode_mdi_path_test(struct cmd_gpio *cmd_gpio,
 			return ret;
 	} while ((data & 0x0001) == 0); /* Wait for FG done */
 
-	no_os_mdelay(10000); /* Allow time window for frames to come back */
+	capi_wait_ms(10000); /* Allow time window for frames to come back */
 
 	/* Read frame error count to enable reading of frame counts */
 	ret = adin1320_read(dev_0, 0x0014, &data); /* RX_ERR_CNT */
