@@ -37,7 +37,7 @@
 #include "no_os_util.h"
 #include "display.h"
 #include "ssd_1306.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_i2c.h"
 #include "maxim_i2c.h"
 #include "example.h"
