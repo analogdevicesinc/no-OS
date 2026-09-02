@@ -35,7 +35,7 @@
 #include "no_os_uart.h"
 #include "max31855.h"
 #include "no_os_print_log.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /*****************************************************************************
  * @brief Basic example main execution.
@@ -75,7 +75,7 @@ int example_main()
 		pr_info("Ambient temperature %.02d.%.02d\n", ambient_temp.integer,
 			ambient_temp.decimal);
 
-		no_os_mdelay(2000);
+		capi_wait_ms(2000);
 	}
 
 free_dev:
