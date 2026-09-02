@@ -32,6 +32,7 @@
 *******************************************************************************/
 
 #include "common_data.h"
+#include "capi_time.h"
 
 struct max_uart_init_param max_uart_extra_ip = {
 	.flow = MAX_UART_FLOW_DIS
@@ -363,13 +364,13 @@ int autocalibration_start(struct ade9153a_dev *dev)
 	pr_info("IA autocalibration started \n");
 
 	// wait 2s so the current autocalibration is ready
-	no_os_mdelay(20000);
+	capi_wait_ms(20000);
 
 	ret = ade9153a_write(dev, ADE9153A_REG_MS_ACAL_CFG, 0x00000000);
 	if (ret)
 		return ret;
 
-	no_os_mdelay(200);
+	capi_wait_ms(200);
 
 	ret = ade9153a_start_autocal_av(dev, NORMAL);
 	if (ret) {
@@ -380,13 +381,13 @@ int autocalibration_start(struct ade9153a_dev *dev)
 	pr_info("VA autocalibration started \n");
 
 	// wait 5s so the voltage autocalibration is ready
-	no_os_mdelay(50000);
+	capi_wait_ms(50000);
 
 	ret = ade9153a_write(dev, ADE9153A_REG_MS_ACAL_CFG, 0x00000000);
 	if (ret)
 		return ret;
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	return 0;
 }
