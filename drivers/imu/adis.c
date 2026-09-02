@@ -33,7 +33,7 @@
 
 #include "adis.h"
 #include "adis_internals.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_gpio.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
@@ -116,7 +116,7 @@ int adis_init(struct adis_dev **adis, const struct adis_init_param *ip)
 						  NO_OS_GPIO_LOW);
 		if (ret)
 			goto error;
-		no_os_mdelay(ip->info->timeouts->reset_ms);
+		capi_wait_ms(ip->info->timeouts->reset_ms);
 	}
 
 	dev->info = ip->info;
@@ -174,7 +174,7 @@ int adis_initial_startup(struct adis_dev *adis)
 		ret = no_os_gpio_set_value(adis->gpio_reset, NO_OS_GPIO_HIGH);
 		if (ret)
 			return ret;
-		no_os_mdelay(timeouts->reset_ms);
+		capi_wait_ms(timeouts->reset_ms);
 	} else {
 		ret = adis_cmd_sw_res(adis);
 		if (ret)
@@ -1971,7 +1971,7 @@ int adis_write_filt_size_var_b(struct adis_dev *adis, uint32_t filt_size_var_b)
 	if (ret)
 		return ret;
 
-	no_os_udelay(adis->info->timeouts->filt_size_var_b_update_us);
+	capi_wait_us(adis->info->timeouts->filt_size_var_b_update_us);
 
 	return 0;
 }
@@ -2563,7 +2563,7 @@ int adis_write_dr_selection(struct adis_dev *adis, uint32_t dr_selection)
 	if (ret)
 		return ret;
 
-	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+	capi_wait_us(adis->info->timeouts->msc_reg_update_us);
 
 	return 0;
 }
@@ -2598,7 +2598,7 @@ int adis_write_dr_polarity(struct adis_dev *adis, uint32_t dr_polarity)
 	if (ret)
 		return ret;
 
-	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+	capi_wait_us(adis->info->timeouts->msc_reg_update_us);
 
 	return 0;
 }
@@ -2633,7 +2633,7 @@ int adis_write_dr_enable(struct adis_dev *adis, uint32_t dr_enable)
 	if (ret)
 		return ret;
 
-	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+	capi_wait_us(adis->info->timeouts->msc_reg_update_us);
 
 	return 0;
 }
@@ -2673,7 +2673,7 @@ int adis_write_sync_selection(struct adis_dev *adis, uint32_t sync_selection)
 	if (ret)
 		return ret;
 
-	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+	capi_wait_us(adis->info->timeouts->msc_reg_update_us);
 
 	return 0;
 }
@@ -2708,7 +2708,7 @@ int adis_write_sync_polarity(struct adis_dev *adis, uint32_t sync_polarity)
 	if (ret)
 		return ret;
 
-	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+	capi_wait_us(adis->info->timeouts->msc_reg_update_us);
 
 	return 0;
 }
@@ -2807,7 +2807,7 @@ int adis_write_alarm_selection(struct adis_dev *adis, uint32_t alarm_selection)
 	if (ret)
 		return ret;
 
-	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+	capi_wait_us(adis->info->timeouts->msc_reg_update_us);
 
 	return 0;
 }
@@ -2842,7 +2842,7 @@ int adis_write_alarm_polarity(struct adis_dev *adis, uint32_t alarm_polarity)
 	if (ret)
 		return ret;
 
-	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+	capi_wait_us(adis->info->timeouts->msc_reg_update_us);
 
 	return 0;
 }
@@ -2877,7 +2877,7 @@ int adis_write_alarm_enable(struct adis_dev *adis, uint32_t alarm_enable)
 	if (ret)
 		return ret;
 
-	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+	capi_wait_us(adis->info->timeouts->msc_reg_update_us);
 
 	return 0;
 }
@@ -3037,7 +3037,7 @@ int adis_write_sens_bw(struct adis_dev *adis, uint32_t sens_bw)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(adis->info->timeouts->sens_bw_update_ms);
+	capi_wait_ms(adis->info->timeouts->sens_bw_update_ms);
 
 	return 0;
 }
@@ -3121,7 +3121,7 @@ int adis_write_pt_of_perc_algnmt(struct adis_dev *adis,
 	if (ret)
 		return ret;
 
-	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+	capi_wait_us(adis->info->timeouts->msc_reg_update_us);
 
 	return 0;
 }
@@ -3157,7 +3157,7 @@ int adis_write_linear_accl_comp(struct adis_dev *adis,
 	if (ret)
 		return ret;
 
-	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+	capi_wait_us(adis->info->timeouts->msc_reg_update_us);
 
 	return 0;
 }
@@ -3197,7 +3197,7 @@ int adis_write_burst_sel(struct adis_dev *adis, uint32_t burst_sel)
 
 	adis->burst_sel = burst_sel;
 
-	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+	capi_wait_us(adis->info->timeouts->msc_reg_update_us);
 
 	return 0;
 }
@@ -3237,7 +3237,7 @@ int adis_write_burst32(struct adis_dev *adis, uint32_t burst32)
 
 	adis->burst32 = (burst32 == 1);
 
-	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+	capi_wait_us(adis->info->timeouts->msc_reg_update_us);
 
 	return 0;
 }
@@ -3269,7 +3269,7 @@ int adis_write_timestamp32(struct adis_dev *adis, uint32_t timestamp32)
 	if (ret)
 		return ret;
 
-	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+	capi_wait_us(adis->info->timeouts->msc_reg_update_us);
 
 	return 0;
 }
@@ -3301,7 +3301,7 @@ int adis_write_sync_4khz(struct adis_dev *adis, uint32_t sync_4khz)
 
 	adis->int_clk = sync_4khz ? 4000 : 2000;
 
-	no_os_udelay(adis->info->timeouts->msc_reg_update_us);
+	capi_wait_us(adis->info->timeouts->msc_reg_update_us);
 
 	return 0;
 }
@@ -3375,7 +3375,7 @@ int adis_write_dec_rate(struct adis_dev *adis, uint32_t dec_rate)
 	if (ret)
 		return ret;
 
-	no_os_udelay(adis->info->timeouts->dec_rate_update_us);
+	capi_wait_us(adis->info->timeouts->dec_rate_update_us);
 
 	return 0;
 }
@@ -3588,7 +3588,7 @@ int adis_cmd_fact_calib_restore(struct adis_dev *adis)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(adis->info->timeouts->fact_calib_restore_ms);
+	capi_wait_ms(adis->info->timeouts->fact_calib_restore_ms);
 
 	return 0;
 }
@@ -3607,7 +3607,7 @@ int adis_cmd_snsr_self_test(struct adis_dev *adis)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(adis->info->timeouts->self_test_ms);
+	capi_wait_ms(adis->info->timeouts->self_test_ms);
 
 	return 0;
 }
@@ -3627,7 +3627,7 @@ int adis_cmd_fls_mem_update(struct adis_dev *adis)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(adis->info->timeouts->fls_mem_update_ms);
+	capi_wait_ms(adis->info->timeouts->fls_mem_update_ms);
 
 	/* Make sure flash counter is read after each flash update */
 	return adis_read_fls_mem_wr_cntr(adis, &flash_cnt);
@@ -3647,7 +3647,7 @@ int adis_cmd_fls_mem_test(struct adis_dev *adis)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(adis->info->timeouts->fls_mem_test_ms);
+	capi_wait_ms(adis->info->timeouts->fls_mem_test_ms);
 
 	return 0;
 }
@@ -3677,7 +3677,7 @@ int adis_cmd_sw_res(struct adis_dev *adis)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(adis->info->timeouts->sw_reset_ms);
+	capi_wait_ms(adis->info->timeouts->sw_reset_ms);
 
 	adis->is_locked = false;
 

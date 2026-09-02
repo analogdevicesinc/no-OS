@@ -32,7 +32,7 @@
  ******************************************************************************/
 
 #include "iio_adis_internals.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_units.h"
 #include <stdio.h>
 #include <string.h>
@@ -1442,7 +1442,7 @@ int adis_iio_pre_enable(void* dev, uint32_t mask)
 		if (ret)
 			return ret;
 		/* From data-sheet, wait time to finalize the fifo flush command */
-		no_os_udelay(500);
+		capi_wait_us(500);
 		ret = adis_write_fifo_overflow(adis, 1);
 		if (ret)
 			return ret;
@@ -1756,7 +1756,7 @@ int adis_iio_trigger_handler_with_fifo(struct iio_device_data *dev_data)
 		goto trig_enable;
 
 	/* From data-sheet, minimum time between reads */
-	no_os_udelay(10);
+	capi_wait_us(10);
 	if (fifo_cnt > dev_data->buffer->samples)
 		fifo_cnt = dev_data->buffer->samples;
 
@@ -1768,7 +1768,7 @@ int adis_iio_trigger_handler_with_fifo(struct iio_device_data *dev_data)
 			goto trig_enable;
 
 		/* From data-sheet, minimum time between reads */
-		no_os_udelay(10);
+		capi_wait_us(10);
 
 		for (j = 0; j < fifo_cnt - 1; j++) {
 			ret = adis_iio_trigger_push_single_sample(iio_adis,
@@ -1777,12 +1777,12 @@ int adis_iio_trigger_handler_with_fifo(struct iio_device_data *dev_data)
 				goto trig_enable;
 
 			/* From data-sheet, minimum time between reads */
-			no_os_udelay(10);
+			capi_wait_us(10);
 		}
 		ret = adis_iio_trigger_push_single_sample(iio_adis,
 				dev_data->buffer->active_mask, dev_data->buffer, false);
 		/* From data-sheet, minimum time between reads */
-		no_os_udelay(10);
+		capi_wait_us(10);
 	}
 
 trig_enable:
