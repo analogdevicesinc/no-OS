@@ -33,7 +33,7 @@
 
 #include "ad9361.h"
 #include "ad9361_api.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_spi.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
@@ -2050,7 +2050,7 @@ int32_t ad9361_do_mcs(struct ad9361_rf_phy *phy_master,
 	for (step = 0; step <= 5; step++) {
 		ad9361_mcs(phy_slave, step);
 		ad9361_mcs(phy_master, step);
-		no_os_mdelay(100);
+		capi_wait_ms(100);
 	}
 
 	ad9361_set_en_state_machine_mode(phy_master, ensm_mode);

@@ -35,7 +35,7 @@
 #include "no_os_print_log.h"
 #include "no_os_error.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_util.h"
 #include "no_os_clk.h"
 #include "adrv9002.h"
@@ -487,7 +487,7 @@ static int adrv9002_chan_to_state_poll(const struct adrv9002_rf_phy *phy,
 
 		if (__state == state)
 			break;
-		no_os_udelay(1000);
+		capi_wait_us(1000);
 	} while (++try < n_tries);
 
 	if (try == n_tries)
@@ -817,7 +817,7 @@ static int adrv9002_mcs_run(struct adrv9002_rf_phy *phy, const char *buf)
 
 		if (radio.mcsState == ADI_ADRV9001_ARMMCSSTATES_DONE)
 			break;
-		no_os_udelay(20 * 1000);
+		capi_wait_us(20 * 1000);
 	} while (++try < 10 * 1000);
 
 

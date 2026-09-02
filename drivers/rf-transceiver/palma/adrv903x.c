@@ -48,7 +48,7 @@
 #include "jesd204.h"
 #include "capi_alloc.h"
 #include "no_os_clk.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
@@ -621,7 +621,7 @@ static int adrv903x_jesd204_post_running_stage(struct jesd204_dev *jdev,
 	 * bare-metal no-OS the commands fire back-to-back and TxAttenSet
 	 * triggers an ARM CPU exception without this settling window.
 	 */
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	/* Set TX attenuation to 6 dB (matches Linux default) */
 	txAtten[0].txChannelMask = tx_mask;

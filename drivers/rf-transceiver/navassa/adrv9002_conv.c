@@ -35,7 +35,7 @@
 #include <string.h>
 #include "no_os_util.h"
 #include "no_os_print_log.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "parameters.h"
 #include "adrv9002.h"
 #include "axi_adc_core.h"
@@ -292,7 +292,7 @@ static int adrv9002_axi_pn_check(const struct adrv9002_rf_phy *phy,
 		axi_adc_write(phy->rx1_adc, AIM_AXI_REG(off, AXI_ADC_REG_CHAN_STATUS(c)),
 			      AXI_ADC_PN_ERR | AXI_ADC_PN_OOS);
 
-	no_os_udelay(5000);
+	capi_wait_us(5000);
 
 	/* check for errors in any channel */
 	for (c = 0; c < n_chan; c++) {

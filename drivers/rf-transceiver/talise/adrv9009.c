@@ -40,7 +40,7 @@
 #include "no_os_print_log.h"
 #include "no_os_error.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_util.h"
 
 // talise
@@ -548,7 +548,7 @@ static int adrv9009_jesd204_setup_stage2(struct jesd204_dev *jdev,
 
 	ret = TALISE_getPllsLockStatus(phy->talDevice, &pllLockStatus);
 	if ((pllLockStatus & pllLockStatus_mask) != pllLockStatus_mask) {
-		no_os_mdelay(200);
+		capi_wait_ms(200);
 		ret = TALISE_getPllsLockStatus(phy->talDevice, &pllLockStatus);
 		if ((pllLockStatus & pllLockStatus_mask) != pllLockStatus_mask) {
 			pr_err("%s:%d RF PLL unlocked (0x%x)\n",
