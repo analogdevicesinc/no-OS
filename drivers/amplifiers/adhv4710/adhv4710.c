@@ -39,7 +39,7 @@
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
 #include "no_os_irq.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_units.h"
 #include "capi_alloc.h"
 #include "no_os_crc16.h"
@@ -289,7 +289,7 @@ int adhv4710_hw_reset(struct adhv4710_dev *dev)
 			return ret;
 	}
 	/* delay for toggeling the reset pin (minimum 10ns see datasheet) */
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	if (dev->gpio_reset) {
 		ret = no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_HIGH);
