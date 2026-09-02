@@ -36,7 +36,7 @@
 
 #include "gmsl_common.h"
 #include "gmsl_cam_ser.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 int32_t max96793_csi_change_ser_address(struct gmsl_dev *dev,
 					unsigned int new_addr);
 

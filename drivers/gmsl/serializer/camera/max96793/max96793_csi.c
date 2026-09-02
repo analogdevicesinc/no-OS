@@ -36,6 +36,7 @@
 #include "gmsl_reg_access.h"
 #include "no_os_error.h"
 #include "max96793_regs.h"
+#include "capi_time.h"
 /** \addtogroup ADI_GMSL_CAM_SERIALIZER GMSL Camera Serializers
  *  @{
  */
@@ -347,13 +348,13 @@ int max96793_gpio_cam_cfg(struct gmsl_dev *dev)
 	int ret = 0;
 	do {
 		REG_WRITE_BREAK_ON_ERR(ret, dev->i2c_desc, GPIO0_0_GPIO_A_ADDR, 0x90);
-		no_os_mdelay(100);
+		capi_wait_ms(100);
 		REG_WRITE_BREAK_ON_ERR(ret, dev->i2c_desc, GPIO0_0_GPIO_B_ADDR, 0X60);
-		no_os_mdelay(100);
+		capi_wait_ms(100);
 		REG_WRITE_BREAK_ON_ERR(ret, dev->i2c_desc, REF_VTG_REF_VTG1_ADDR, 0X89);
-		no_os_mdelay(100);
+		capi_wait_ms(100);
 		REG_WRITE_BREAK_ON_ERR(ret, dev->i2c_desc, MISC_PIO_SLEW_1_ADDR, 0X0C);
-		no_os_mdelay(100);
+		capi_wait_ms(100);
 	} while (false);
 	return ret;
 }

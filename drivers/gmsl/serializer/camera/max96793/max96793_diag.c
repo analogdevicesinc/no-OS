@@ -38,7 +38,7 @@
 #include "no_os_error.h"
 #include "max96793_regs.h"
 #include "max96793.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /** \addtogroup ADI_GMSL_CAM_SERIALIZER GMSL Camera Serializers
  *  @{
@@ -1798,7 +1798,7 @@ int max96793_csi_diag_check_mipi_phy_pkt_cnt_status(struct gmsl_dev *dev,
 
 			phy_clk_cnt_sum += mipi_pkt_cnt_err_sts->phy_clk_cnt[index];
 
-			no_os_mdelay(
+			capi_wait_ms(
 				MAX96793_CSI_DIAG_MIPI_PKT_READ_DELAY); /* Delay to read the next packet count */
 		}
 
