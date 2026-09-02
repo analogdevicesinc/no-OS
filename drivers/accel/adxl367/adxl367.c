@@ -33,7 +33,7 @@
 
 #include <stdlib.h>
 #include "adxl367.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
@@ -194,7 +194,7 @@ int adxl367_self_test(struct adxl367_dev *dev)
 	if (ret)
 		return ret;
 	// 4 / ODR delay
-	no_os_mdelay(st_delay_ms);
+	capi_wait_ms(st_delay_ms);
 	ret = adxl367_get_register_value(dev, &read_val, ADXL367_REG_XDATA_H, 1);
 	if (ret)
 		return ret;
@@ -212,7 +212,7 @@ int adxl367_self_test(struct adxl367_dev *dev)
 	if (ret)
 		return ret;
 	// 4 / ODR delay
-	no_os_mdelay(st_delay_ms);
+	capi_wait_ms(st_delay_ms);
 	ret = adxl367_get_register_value(dev, &read_val, ADXL367_REG_XDATA_H, 1);
 	if (ret)
 		return ret;
@@ -419,7 +419,7 @@ int adxl367_software_reset(struct adxl367_dev *dev)
 	dev->z_offset = 0;
 
 	//initialization delay
-	no_os_mdelay(20);
+	capi_wait_ms(20);
 
 	return 0;
 }
@@ -448,7 +448,7 @@ int adxl367_set_power_mode(struct adxl367_dev *dev,
 
 	//100 ms wait time before reading acceleration data.
 	if (mode == ADXL367_OP_MEASURE)
-		no_os_mdelay(100);
+		capi_wait_ms(100);
 
 	dev->op_mode = mode;
 

@@ -38,6 +38,7 @@
 #include "adxl372.h"
 #include "capi_alloc.h"
 #include "no_os_error.h"
+#include "capi_time.h"
 
 /**
  * Wrapper used to read device registers.
@@ -456,7 +457,7 @@ int32_t adxl372_reset(struct adxl372_dev *dev)
 	if (ret < 0)
 		return ret;
 
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	return ret;
 }
@@ -829,12 +830,12 @@ int32_t adxl372_init(struct adxl372_dev **device,
 
 	*device = dev;
 	printf("adxl372 successfully initialized\n");
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 	return ret;
 
 error:
 	printf("adxl372 initialization error (%d)\n", ret);
 	capi_free(dev);
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 	return ret;
 }
