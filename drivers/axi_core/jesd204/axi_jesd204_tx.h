@@ -89,6 +89,12 @@ struct axi_jesd204_tx {
 	struct no_os_gpio_desc *gt_reset_pll;
 	struct no_os_gpio_desc *gt_reset_dp;
 	struct no_os_gpio_desc *gt_reset_done;
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+	/** Optional Intel GTS refclk-ready GPIO */
+	struct no_os_gpio_desc *refclk_ready;
+	/** Optional Intel GTS PLL reconfiguration window base address */
+	uint32_t gts_pll_base;
+#endif
 };
 
 /**
@@ -126,6 +132,12 @@ struct jesd204_tx_init {
 	struct no_os_gpio_init_param *gt_reset_pll;
 	struct no_os_gpio_init_param *gt_reset_dp;
 	struct no_os_gpio_init_param *gt_reset_done;
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+	/** Optional Intel GTS refclk-ready GPIO init param */
+	struct no_os_gpio_init_param *refclk_ready;
+	/** Optional Intel GTS PLL reconfiguration window base address */
+	uint32_t gts_pll_base;
+#endif
 };
 
 /** JESD204 TX Lane Clock Enable */

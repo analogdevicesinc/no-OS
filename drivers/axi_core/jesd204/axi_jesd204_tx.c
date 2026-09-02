@@ -131,6 +131,50 @@ static int axi_jesd_ext_reset(struct no_os_gpio_desc *reset,
 	return -ETIMEDOUT;
 }
 
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+/*
+ * Intel GTS PLL refclk-buffer request, reg 0x0e bits [23:16]. The field must be
+ * written as a byte: reg 0x0e also carries state that a 32-bit write clobbers.
+ * The request bit self-clears, so a readback is not a success indicator - only
+ * the measured link clock is.
+ */
+#define GTS_REFCLK_BUFFER_REQ_BYTE	(0x0e * 4 + 2)
+
+/**
+ * @brief Bring up an Intel GTS transceiver reference clock.
+ * @param refclk_ready - GPIO gating the HDL gts_refclk_reset state machine.
+ * @param gts_pll_base - Base address of the bank's GTS PLL reconfig window.
+ * @return 0 on success, negative error code otherwise.
+ *
+ * GTS PHYs (Agilex 5) get no reference clock until software gates them on, and
+ * there is one intel_systemclk_gts PLL per transceiver bank, so each link core
+ * brings up its own bank. Ported from Linux altera_adxcvr.c
+ * adxcvr_jesd204_link_setup().
+ */
+static int axi_jesd_gts_refclk_setup(struct no_os_gpio_desc *refclk_ready,
+				     uint32_t gts_pll_base)
+{
+	int ret;
+
+	if (refclk_ready) {
+		ret = no_os_gpio_direction_output(refclk_ready, NO_OS_GPIO_HIGH);
+		if (ret)
+			return ret;
+
+		/* Let the state machine ack and the FPGA-internal PLL lock. */
+		no_os_mdelay(100);
+	}
+
+	if (gts_pll_base) {
+		*(volatile uint8_t *)(uintptr_t)(gts_pll_base +
+						 GTS_REFCLK_BUFFER_REQ_BYTE) = 0xff;
+		no_os_mdelay(10);
+	}
+
+	return 0;
+}
+#endif
+
 /**
  * @brief JESD204 TX AXI Data Write.
  * @param jesd - The device structure.
@@ -627,6 +671,15 @@ static int axi_jesd204_tx_jesd204_link_setup(struct jesd204_dev *jdev,
 	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
 		 lnk->link_id, jesd204_state_op_reason_str(reason));
 
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+	ret = axi_jesd_gts_refclk_setup(jesd->refclk_ready, jesd->gts_pll_base);
+	if (ret) {
+		pr_err("%s: Link%u GTS refclk setup failed (%d)\n",
+		       __func__, lnk->link_id, ret);
+		return ret;
+	}
+#endif
+
 	if (jesd->gt_reset_pll)
 		axi_jesd_ext_reset(jesd->gt_reset_pll, jesd->gt_reset_done);
 
@@ -929,6 +982,13 @@ int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
 		no_os_gpio_direction_output(jesd->gt_reset_dp, NO_OS_GPIO_LOW);
 	if (jesd->gt_reset_done)
 		no_os_gpio_direction_input(jesd->gt_reset_done);
+
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+	/* Optional Intel GTS refclk bring-up; driven at JESD204 link setup. */
+	if (init->refclk_ready)
+		no_os_gpio_get_optional(&jesd->refclk_ready, init->refclk_ready);
+	jesd->gts_pll_base = init->gts_pll_base;
+#endif
 
 	ret = jesd204_dev_register(&jesd->jdev, &jesd204_axi_jesd204_tx_init);
 	if (ret)
