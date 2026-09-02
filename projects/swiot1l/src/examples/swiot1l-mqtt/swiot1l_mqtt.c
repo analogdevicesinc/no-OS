@@ -39,7 +39,7 @@
 #include "common_data.h"
 #include "no_os_util.h"
 #include "no_os_gpio.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "mqtt_client.h"
 #include "mqtt_noos_support.h"
@@ -210,7 +210,7 @@ int swiot1l_mqtt()
 
 	while (connect_timeout--) {
 		no_os_lwip_step(tcp_socket->net->net, NULL);
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 	}
 
 	ret = mqtt_connect(mqtt, &conn_config, NULL);
@@ -290,7 +290,7 @@ int swiot1l_mqtt()
 			goto free_mqtt;
 		}
 
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 	}
 
 	return 0;

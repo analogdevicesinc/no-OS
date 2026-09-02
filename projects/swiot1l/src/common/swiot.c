@@ -39,7 +39,7 @@
 #include "iio.h"
 #include "swiot.h"
 #include "no_os_gpio.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 #include "iio_ad74413r.h"
 #include "iio_max14906.h"
@@ -459,9 +459,9 @@ static int swiot_write_identify(void *dev, char *buf, uint32_t len,
 
 	for (int i = 0; i < 15; i++) {
 		no_os_gpio_set_value(desc->identify_gpio, 1);
-		no_os_mdelay(100);
+		capi_wait_ms(100);
 		no_os_gpio_set_value(desc->identify_gpio, 0);
-		no_os_mdelay(100);
+		capi_wait_ms(100);
 	}
 
 	return 0;
