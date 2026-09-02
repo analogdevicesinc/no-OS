@@ -34,7 +34,7 @@
 #include "common_data.h"
 #include "adxl313.h"
 #include "no_os_uart.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_error.h"
 
@@ -142,7 +142,7 @@ int example_main()
 		goto error;
 
 	/* Wait for 2 seconds. */
-	no_os_mdelay(2000);
+	capi_wait_ms(2000);
 
 	struct adxl313_frac_repr x[ADXL313_MAX_FIFO_ENTRIES] = {0};
 	struct adxl313_frac_repr y[ADXL313_MAX_FIFO_ENTRIES] = {0};
@@ -203,7 +203,7 @@ int example_main()
 		pr_info("===========================================================\n");
 
 		/* Wait for one second. */
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 	}
 
 error:
