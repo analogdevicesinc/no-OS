@@ -33,7 +33,7 @@
 #include "common_data.h"
 #include "no_os_uart.h"
 #include "max25603.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_irq.h"
 
@@ -64,7 +64,7 @@ int example_main()
 	if (ret)
 		goto remove_max25603;
 
-	no_os_mdelay(5000);
+	capi_wait_ms(5000);
 
 	ret = max25603_set_beam(max25603_desc, MAX25603_DISABLE_BEAM, 0, 0);
 	if (ret)
