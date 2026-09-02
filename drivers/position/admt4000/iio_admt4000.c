@@ -608,6 +608,9 @@ static int admt4000_iio_show_conv_sync_mode_avail(void *dev, char *buf,
 	int ret;
 
 	for (i = 0; i < NO_OS_ARRAY_SIZE(admt4000_conv_sync_mode_avail); i++) {
+		if (!admt4000_conv_sync_mode_avail[i])
+			continue;
+
 		ret = snprintf(buf + length, len - length, "%s ",
 			       admt4000_conv_sync_mode_avail[i]);
 		if (ret < 0 || ret >= (int)(len - length))
@@ -666,7 +669,9 @@ static int admt4000_iio_store_conv_sync_mode(void *dev, char *buf, uint32_t len,
 	iio_admt4000 = (struct admt4000_iio_dev *)dev;
 	admt4000 = iio_admt4000->admt4000_desc;
 
-	for (i = 0; i < NO_OS_ARRAY_SIZE(admt4000_conv_sync_mode_avail); i++)
+	for (i = 0; i < NO_OS_ARRAY_SIZE(admt4000_conv_sync_mode_avail); i++) {
+		if (!admt4000_conv_sync_mode_avail[i])
+			continue;
 		if (!strcmp(buf, admt4000_conv_sync_mode_avail[i])) {
 			ret = admt4000_set_conv_sync_mode(admt4000, i);
 			if (ret)
@@ -674,6 +679,7 @@ static int admt4000_iio_store_conv_sync_mode(void *dev, char *buf, uint32_t len,
 
 			return len;
 		}
+	}
 
 	return -EINVAL;
 }
