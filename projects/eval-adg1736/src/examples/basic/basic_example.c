@@ -32,7 +32,7 @@
 *******************************************************************************/
 
 #include "common_data.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_gpio.h"
 #include "adg1736.h"
@@ -105,7 +105,7 @@ int example_main(void)
 		ret = adg1736_set_switch_state(dev, test_sw, target_state);
 		if (ret)
 			break;
-		no_os_mdelay(10);
+		capi_wait_ms(10);
 		ret = no_os_gpio_get_value(gpio_s, &s_val);
 		if (ret)
 			break;
@@ -114,7 +114,7 @@ int example_main(void)
 			s_val, s_val == 1 ? "[PASS]" : "[FAIL]");
 		pass = (s_val == 1);
 
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 
 		/* Test 2: Set to opposite position, S should be disconnected */
 		ret = adg1736_set_switch_state(dev, test_sw,
@@ -122,7 +122,7 @@ int example_main(void)
 					       ADG1736_CONNECT_B : ADG1736_CONNECT_A);
 		if (ret)
 			break;
-		no_os_mdelay(10);
+		capi_wait_ms(10);
 		ret = no_os_gpio_get_value(gpio_s, &s_val);
 		if (ret)
 			break;
@@ -142,7 +142,7 @@ int example_main(void)
 			pr_info("=== FAIL ===\r\n\r\n");
 		}
 
-		no_os_mdelay(2000);
+		capi_wait_ms(2000);
 	}
 
 	adg1736_remove(dev);
