@@ -35,7 +35,7 @@
 #include "no_os_uart.h"
 #include "ltc3337.h"
 #include "no_os_print_log.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /*****************************************************************************
  * @brief Basic example main execution.
@@ -102,7 +102,7 @@ int example_main()
 
 		pr_info("Die Temp %d C\n", temp_value);
 
-		no_os_mdelay(2000);
+		capi_wait_ms(2000);
 	}
 
 free_dev:
