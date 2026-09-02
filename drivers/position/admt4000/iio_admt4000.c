@@ -304,7 +304,7 @@ static struct scan_type admt4000_iio_temp_scan_type = {
 
 static struct scan_type admt4000_iio_turns_scan_type = {
 	.sign = 's',
-	.realbits = 8,
+	.realbits = 9,
 	.storagebits = 16,
 	.shift = 0,
 	.is_big_endian = false
