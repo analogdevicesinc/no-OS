@@ -67,6 +67,7 @@
 #include "clkgen_routines.h"
 #include "adrv904x.h"
 #include "ad9528.h"
+#include "capi_time.h"
 
 uint32_t dac_buffer_dma[DAC_BUFFER_SAMPLES] __attribute__((aligned(1024)));
 uint16_t adc_buffer_dma[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__((
@@ -417,7 +418,7 @@ int example_main(void)
 	/* Flush cache data. */
 	Xil_DCacheInvalidateRange((uintptr_t)dac_buffer_dma, sizeof(sine_lut_iq));
 
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 
 	struct axi_dma_transfer read_transfer = {
 		// Number of bytes to write/read

@@ -73,6 +73,7 @@
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
 #include "iio_app.h"
+#include "capi_time.h"
 
 uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__((aligned(1024)));
 uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__((
@@ -504,7 +505,7 @@ int example_main(void)
 	app_init_param.uart_init_params = iio_uart_ip;
 
 	/* Wait to display previous messages */
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	status = iio_app_init(&app, app_init_param);
 	if (status)
