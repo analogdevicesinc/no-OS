@@ -3,7 +3,7 @@
 #include <inttypes.h>
 #include <math.h>
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "iio.h"
 #include "iio_ad7746.h"
 #include "no_os_util.h"
@@ -193,7 +193,7 @@ static int ad7746_iio_read_raw(void *device, char *buf, uint32_t len,
 			return ret;
 	}
 
-	no_os_mdelay(delay);
+	capi_wait_ms(delay);
 
 	switch (channel->type) {
 	case IIO_TEMP:
