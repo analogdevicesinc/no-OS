@@ -58,6 +58,7 @@
 #include "clkgen_routines.h"
 #include "adrv9025.h"
 #include "ad9528.h"
+#include "capi_time.h"
 
 /***************************************************************************//**
  * @brief Basic example main execution.
@@ -408,7 +409,7 @@ int example_main(void)
 		      AXI_ADC_MMCM_RSTN | AXI_ADC_RSTN);
 #endif
 
-	no_os_mdelay(200);
+	capi_wait_ms(200);
 
 	status = clkgen_setup(&rx_clkgen, &tx_clkgen, &orx_clkgen,
 			      phy->deviceInitStruct.dataInterface.deframer[0].enableJesd204C);
