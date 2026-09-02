@@ -33,7 +33,7 @@
 #include <stdio.h>
 #include "no_os_uart.h"
 #include "no_os_pwm.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
 #include "no_os_print_log.h"
@@ -188,7 +188,7 @@ int main(void)
 	}
 
 	// Delay for ADE power up
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 
 	// Disable the burst mode
 	ade7913_ip.burst_mode = DISABLE;
