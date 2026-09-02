@@ -33,7 +33,7 @@
 #include <stdio.h>
 #include "no_os_uart.h"
 #include "no_os_pwm.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
 #include "no_os_print_log.h"
@@ -153,11 +153,11 @@ int main(void)
 	if (ret)
 		goto free_dev;
 
-	no_os_mdelay(RESET_TIME);
+	capi_wait_ms(RESET_TIME);
 
 	while (1) {
 		// time delay between readings
-		no_os_mdelay(READ_INTERVAL);
+		capi_wait_ms(READ_INTERVAL);
 		/* read and print the ade9078 rms measured values for PHASE A */
 		ret = ade9078_read_data_ph(ade9078_dev, ADE9078_PHASE_A);
 		if (ret)
