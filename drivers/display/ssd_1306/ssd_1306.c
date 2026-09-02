@@ -36,7 +36,7 @@
 #include "no_os_error.h"
 #include "no_os_spi.h"
 #include "no_os_i2c.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include <string.h>
 
 /* @defines for ssd_1306 pins signal level */
@@ -152,93 +152,93 @@ int32_t ssd_1306_init(struct display_dev *device)
 
 	}
 	// Post reset delay, Treset=3us (See datasheet -> power on sequence)
-	no_os_udelay(3U);
+	capi_wait_us(3U);
 	if (extra->reset_pin) {
 		ret = no_os_gpio_set_value(extra->reset_pin, SSD1306_RST_OFF);
 		if (ret != 0)
 			return -1;
 	}
 
-	no_os_udelay(3U);
+	capi_wait_us(3U);
 	command[0] = 0xA8;
 	command[1] = 0x3F;
 	ret = ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
-	no_os_udelay(3U);
+	capi_wait_us(3U);
 	command[0] = 0xD3;
 	command[1] = 0x00;
 	ret = ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
-	no_os_udelay(3U);
+	capi_wait_us(3U);
 	command[0] = 0x40;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
-	no_os_udelay(3U);
+	capi_wait_us(3U);
 	command[0] = 0xA1;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
-	no_os_udelay(3U);
+	capi_wait_us(3U);
 	command[0] = 0xC8;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
-	no_os_udelay(3U);
+	capi_wait_us(3U);
 	command[0] = 0xDA;
 	command[1] = 0xD2;
 	ret = ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
-	no_os_udelay(3U);
+	capi_wait_us(3U);
 	command[0] = 0x81;
 	command[1] = 0x7F;
 	ret = ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
-	no_os_udelay(3U);
+	capi_wait_us(3U);
 	command[0] = 0xA4;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
-	no_os_udelay(3U);
+	capi_wait_us(3U);
 	command[0] = 0xA7;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
-	no_os_udelay(3U);
+	capi_wait_us(3U);
 	command[0] = 0xD5;
 	command[1] = 0x80;
 	ret = ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
-	no_os_udelay(3U);
+	capi_wait_us(3U);
 	command[0] = 0x8D;
 	command[1] = 0x14;
 	ret = ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
-	no_os_udelay(3U);
+	capi_wait_us(3U);
 	command[0] = 0xAF;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
 	// set addressing mode
-	no_os_udelay(3U);
+	capi_wait_us(3U);
 	command[0] = 0x20;
 	command[1] = 0x00;
 	return ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
