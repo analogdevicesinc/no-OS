@@ -57,6 +57,7 @@
 #include "jesd204.h"
 #include <string.h>
 #include "no_os_axi_io.h"
+#include "capi_time.h"
 #include <xil_cache.h>
 
 /*
@@ -575,7 +576,7 @@ int example_main()
 	axi_dmac_transfer_start(tx_dmac, &tx_transfer);
 
 	/* Allow the tone to settle for 1 s before capturing RX data */
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 
 	/*
 	 * ----------------------------------------------------------------

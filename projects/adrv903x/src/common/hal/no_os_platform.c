@@ -17,7 +17,7 @@
 #include "no_os_platform.h"
 #include "adi_platform.h"
 #include "no_os_mutex.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "common_data.h"
 #include "capi_alloc.h"
 #include "parameters.h"
@@ -281,13 +281,13 @@ int32_t no_os_TimerInit(void *devHalCfg)
 
 adi_hal_Err_e no_os_TimerWait_ms(void *devHalCfg, uint32_t time_ms)
 {
-	no_os_mdelay(time_ms);
+	capi_wait_ms(time_ms);
 	return ADI_HAL_ERR_OK;
 }
 
 adi_hal_Err_e no_os_TimerWait_us(void *devHalCfg, uint32_t time_us)
 {
-	no_os_udelay(time_us);
+	capi_wait_us(time_us);
 	return ADI_HAL_ERR_OK;
 }
 
