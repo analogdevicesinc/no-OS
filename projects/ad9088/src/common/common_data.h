@@ -85,6 +85,8 @@
 #define AD9088_TX1_LOGICAL_LANE_MAPPING		{11, 11,  1,  0, 11,  2, 11,  3, 11, 11, 11, 11}
 #define AD9088_RX0_PHYSICAL_LANE_MAPPING	{ 5,  1,  3,  7, 11, 11, 11, 11, 11, 11, 11, 11}
 #define AD9088_RX1_PHYSICAL_LANE_MAPPING	{ 1,  7, 10,  3, 11, 11, 11, 11, 11, 11, 11, 11}
+
+#define ADF4030_CH_FPGA_SYSREF			9	/* SYSREF_OUT_F */
 #else
 /* VCU118 (MicroBlaze): JESD204C, 20.625 Gbps lanes, 312.5 MHz link. */
 #define AD9088_LANE_RATE_KHZ			20625000
@@ -100,6 +102,8 @@
 #define AD9088_TX1_LOGICAL_LANE_MAPPING		{3, 9, 5, 4, 2, 6, 1, 7, 8, 11, 0, 10}
 #define AD9088_RX0_PHYSICAL_LANE_MAPPING	{10, 8, 9, 11, 5, 1, 3, 7, 4, 6, 2, 0}
 #define AD9088_RX1_PHYSICAL_LANE_MAPPING	{4, 6, 2, 0, 1, 7, 10, 3, 5, 8, 9, 11}
+
+#define ADF4030_CH_FPGA_SYSREF			8	/* SYSREF_IN_F */
 #endif
 
 /*
@@ -115,8 +119,7 @@
 
 /* ADF4030 channel assignment on this board */
 #define ADF4030_CH_HMC_REF			0	/* ADF4030_SCLKOUT3 */
-#define ADF4030_CH_APOLLO_SYSREF		5	/* APOLLO_SYSREF */
-#define ADF4030_CH_FPGA_SYSREF			8	/* SYSREF_IN_F */
+#define ADF4030_CH_APOLLO_SYSREF	5	/* APOLLO_SYSREF */
 
 #define AD9088_NYQUIST_ZONE			1
 
