@@ -42,7 +42,7 @@
 #include <stdbool.h>
 #include "admt4000.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 static int admt4000_set_page(struct admt4000_dev *device, uint8_t page);
 static int admt4000_ecc_config(struct admt4000_dev *device, bool is_en);
@@ -103,7 +103,7 @@ static int admt4000_config(struct admt4000_dev *device,
 	}
 
 	/* Delay for GPIO lines to settle before clearing faults */
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	ret = admt4000_clear_all_faults(device);
 	if (ret)
@@ -164,7 +164,7 @@ int admt4000_hard_reset(struct admt4000_dev *device)
 		return ret;
 
 	/* Hold for 1ms */
-	no_os_mdelay(ADMT4000_RESET_HOLD_TIME_MS);
+	capi_wait_ms(ADMT4000_RESET_HOLD_TIME_MS);
 
 	/* Deassert reset */
 	ret = no_os_gpio_set_value(device->gpio_reset_desc, NO_OS_GPIO_HIGH);
@@ -172,7 +172,7 @@ int admt4000_hard_reset(struct admt4000_dev *device)
 		return ret;
 
 	/* Wait for device startup */
-	no_os_mdelay(ADMT4000_STARTUP_TIME_MS);
+	capi_wait_ms(ADMT4000_STARTUP_TIME_MS);
 
 	/* Invalidate page cache */
 	device->page_cache_valid = false;
@@ -710,7 +710,7 @@ int admt4000_toggle_cnv(struct admt4000_dev *device)
 		if (ret)
 			return ret;
 
-		no_os_udelay(ADMT4000_CNV_PULSE_WIDTH_US);
+		capi_wait_us(ADMT4000_CNV_PULSE_WIDTH_US);
 		ret = no_os_gpio_set_value(device->gpio_cnv_desc, NO_OS_GPIO_LOW);
 		if (ret)
 			return ret;

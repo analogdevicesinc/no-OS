@@ -39,7 +39,7 @@
 #include "iio.h"
 #include "iio_trigger.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_gpio.h"
 #include "no_os_util.h"
 
@@ -1198,7 +1198,7 @@ static int admt4000_iio_read_raw(void *dev, char *buf, uint32_t len,
 			if (ret)
 				return ret;
 
-			no_os_mdelay(ADMT4000_CONVERSION_DELAY_MS);
+			capi_wait_ms(ADMT4000_CONVERSION_DELAY_MS);
 		}
 
 		ret = admt4000_get_raw_turns_and_angle(admt4000, &raw_quarter_turns, angle);
@@ -1360,7 +1360,7 @@ static int admt4000_iio_submit_buffer(struct iio_device_data *dev_data)
 			return ret;
 
 		/* Wait for conversion to complete */
-		no_os_mdelay(ADMT4000_CONVERSION_DELAY_MS);
+		capi_wait_ms(ADMT4000_CONVERSION_DELAY_MS);
 	}
 
 	/* Call trigger handler to read and push data */
