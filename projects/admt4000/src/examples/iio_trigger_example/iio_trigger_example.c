@@ -41,6 +41,7 @@
 #endif
 #include "iio_trigger.h"
 #include "iio_app.h"
+#include "capi_time.h"
 
 #define DATA_BUFFER_SIZE 400
 uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 5 * sizeof(uint32_t)];
@@ -99,13 +100,13 @@ int example_main()
 #endif
 	uint32_t nb_ctx_attr;
 	bool hw_mezzanine_is_valid = false;
-	no_os_mdelay(2000);
+	capi_wait_ms(2000);
 
 	ret = no_os_eeprom_init(&eeprom_desc, &eeprom_ip);
 	if (ret)
 		return ret;
 
-	no_os_mdelay(2000);
+	capi_wait_ms(2000);
 	ret = get_iio_context_attributes_ex(&iio_ctx_attrs,
 					    &nb_ctx_attr,
 					    eeprom_desc,
@@ -117,7 +118,7 @@ int example_main()
 	if (ret)
 		return ret;
 
-	no_os_mdelay(3);
+	capi_wait_ms(3);
 
 	ret = admt_evb_iio_init(&admt_evb_desc, &admt_evb_ip);
 	if (ret)

@@ -34,7 +34,7 @@
 #include "basic_example.h"
 #include "common_data.h"
 #include "admt4000.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_uart.h"
 #include <stdint.h>
@@ -78,7 +78,7 @@ int example_main()
 	if (ret)
 		goto err_gpio_ven;
 
-	no_os_mdelay(ADMT4000_STARTUP_TIME_MS);
+	capi_wait_ms(ADMT4000_STARTUP_TIME_MS);
 	/* Initialize ADMT4000 device */
 	pr_info("Initializing ADMT4000...\r\n");
 	admt4000_ip.gpio_fault_ip = gpio_fault_ip;
@@ -198,7 +198,7 @@ int example_main()
 		pr_info("-------------------------------------------\r\n");
 
 		/* Delay 500ms before next reading */
-		no_os_mdelay(500);
+		capi_wait_ms(500);
 	}
 
 exit_example:

@@ -37,7 +37,7 @@
 #include "no_os_gpio.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "iio.h"
 #include "iio_admt_evb.h"
 
@@ -105,7 +105,7 @@ int admt_evb_iio_init(struct admt_evb_iio_desc **iio_desc,
 					  NO_OS_GPIO_HIGH);
 	if (ret)
 		goto err;
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	ret = no_os_gpio_get(&descriptor->gpio_coil_rs_desc,
 			     &init_param->gpio_coil_rs_ip);
