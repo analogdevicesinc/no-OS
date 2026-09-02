@@ -8,14 +8,18 @@ on. They live in the HDL repo on branch **`dev_agilex5_ad9084`**
 > peripheral base addresses and enlarge on-chip memory, so `system.h` and the
 > linker script change — an old BSP will not match the new bitstream.
 
-## 1. SYSREF port renamed `sysref_out` -> `sysref_in` (committed / pending)
+## 1. SYSREF port `sysref_out` used as an input (committed / pending)
 
-`projects/ad9084_ebz/nios_a5e/system_project.tcl`
+`projects/ad9084_ebz/nios_a5e/system_top.v`, `system_project.tcl`,
+`system_constr.sdc`
 
-The CLK2 bidirectional pins (PIN_T65 / PIN_P65) are used as an **input** on the
-AD9084-EBZ (SYSREF is driven into the FPGA). The port, its `IO_STANDARD`,
-`INPUT_TERMINATION` and both pin-location assignments were renamed from
-`sysref_out` to `sysref_in` to match. No pin locations changed.
+On the AD9084-EBZ, SYSREF is generated externally (ADF4030) and driven **into**
+the FPGA, so the CLK2 bidirectional pins (PIN_T65 / PIN_P65) are used as an
+**input**. The top-level port keeps the base design's name `sysref_out` but is
+declared `input`, carries `INPUT_TERMINATION DIFFERENTIAL`, and feeds both the
+JESD204 PHY `rx_sysref_export` and `tx_sysref_export`. (An earlier revision
+renamed this port to `sysref_in`; that rename has since been reverted - the
+name is `sysref_out` again, still wired as an input. No pin locations changed.)
 
 ## 2. On-chip memory 256 KB -> 1.5 MB, peripherals relocated (pending)
 

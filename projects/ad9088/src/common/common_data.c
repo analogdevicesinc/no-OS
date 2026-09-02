@@ -188,8 +188,8 @@ struct hmc7044_init_param hmc7044_ip = {
 
 /*
  * ADF4030 BSYNC distribution on this board. ch0 receives the HMC7044's BSYNC0
- * and is the auto-align reference; ch5 drives the Apollo's SYSREF pin; ch8
- * drives the FPGA's sysref_in. All three are realigned on JESD204
+ * and is the auto-align reference; ch5 drives the Apollo's SYSREF pin; ch9
+ * drives the FPGA's sysref_out. All three are realigned on JESD204
  * CLK_SYNC_STAGE4.
  *
  * All three channels are DC coupled with the receiver enabled, which is
@@ -217,7 +217,7 @@ static struct adf4030_chan_spec adf4030_chans[] = {
 		.reference_chan = ADF4030_CH_HMC_REF,
 	},
 	{
-		.num = ADF4030_CH_FPGA_SYSREF,	// SYSREF_IN_F, to the FPGA
+		.num = ADF4030_CH_FPGA_SYSREF,	// SYSREF_OUT_F, to the FPGA
 		.termination = RX_DC_COUPLED_CLKS,
 		.tx_en = true,
 		.align_on_sync_en = true,
