@@ -36,7 +36,7 @@
 #include "max22200.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /**
  * @brief Read data from desired register for MAX22200
@@ -738,7 +738,7 @@ int max22200_init(struct max22200_desc **desc,
 		goto err;
 
 	/* Time between enable pin set and device power-up. */
-	no_os_udelay(500);
+	capi_wait_us(500);
 
 	ret = no_os_gpio_get(&descriptor->cmd_desc,
 			     init_param->cmd_param);
@@ -829,7 +829,7 @@ int max22200_init(struct max22200_desc **desc,
 
 	/* Delay needed from setting active bit to 1 and configuring channels
 	   to normal operation. */
-	no_os_udelay(2500);
+	capi_wait_us(2500);
 
 	/* Reading from the status register again to clear faults. */
 	ret = max22200_reg_read(descriptor, MAX22200_STATUS_REG, &reg_val);
