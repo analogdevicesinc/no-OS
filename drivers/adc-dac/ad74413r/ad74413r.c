@@ -33,7 +33,7 @@
 
 #include "ad74413r.h"
 #include "no_os_crc8.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
@@ -379,7 +379,7 @@ int ad74413r_reset(struct ad74413r_desc *desc)
 			return ret;
 
 		/* Minimum RESET signal pulse duration */
-		no_os_udelay(50);
+		capi_wait_us(50);
 		ret = no_os_gpio_set_value(desc->reset_gpio, NO_OS_GPIO_HIGH);
 		if (ret)
 			return ret;
@@ -394,7 +394,7 @@ int ad74413r_reset(struct ad74413r_desc *desc)
 	}
 
 	/* Time taken for device reset (datasheet value = 1ms) */
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	return 0;
 }
@@ -421,7 +421,7 @@ int ad74413r_set_channel_function(struct ad74413r_desc *desc,
 		return ret;
 
 	/* Each function should be selected for at least 130 us. */
-	no_os_udelay(130);
+	capi_wait_us(130);
 	ret = ad74413r_reg_update(desc, AD74413R_CH_FUNC_SETUP(ch),
 				  AD74413R_CH_FUNC_SETUP_MASK, ch_func);
 	if (ret)
@@ -433,7 +433,7 @@ int ad74413r_set_channel_function(struct ad74413r_desc *desc,
 		return ret;
 
 	/* No writes to the DACx registers may be done for 150 us after changing function */
-	no_os_udelay(150);
+	capi_wait_us(150);
 
 	desc->channel_configs[ch].function = ch_func;
 
@@ -677,7 +677,7 @@ int ad74413r_set_adc_conv_seq(struct ad74413r_desc *desc,
 	 * The write to CONV_SEQ powers up the ADC. If the ADC was powered down, the user must wait
 	 * for 100us before the ADC starts doing conversions.
 	 */
-	no_os_udelay(100);
+	capi_wait_us(100);
 
 	return 0;
 }
@@ -732,9 +732,9 @@ int ad74413r_get_adc_single(struct ad74413r_desc *desc, uint32_t ch,
 
 	/** Wait for all channels to complete the conversion. */
 	if (delay < 1000)
-		no_os_udelay(delay * nb_active_channels);
+		capi_wait_us(delay * nb_active_channels);
 	else
-		no_os_mdelay((delay * nb_active_channels) / 1000);
+		capi_wait_ms((delay * nb_active_channels) / 1000);
 
 	if (is_diag)
 		ret = ad74413r_get_diag(desc, ch, val);

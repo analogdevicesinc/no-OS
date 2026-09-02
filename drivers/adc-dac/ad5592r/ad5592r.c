@@ -35,6 +35,7 @@
 #include "capi_alloc.h"
 #include "ad5592r-base.h"
 #include "ad5592r.h"
+#include "capi_time.h"
 
 const struct ad5592r_rw_ops ad5592r_rw_ops = {
 	.write_dac = ad5592r_write_dac,
@@ -163,7 +164,7 @@ int32_t ad5592r_read_adc(struct ad5592r_dev *dev, uint8_t chan,
 		track_time = AD5592R_TEMPERATURE_TRACK_TIME_UNBUFFERED;
 		if (dev->adc_buf)
 			track_time = AD5592R_TEMPERATURE_TRACK_TIME_BUFFERED;
-		no_os_udelay(track_time);
+		capi_wait_us(track_time);
 	}
 
 	/*
