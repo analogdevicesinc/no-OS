@@ -33,7 +33,7 @@
 
 #include "no_os_print_log.h"
 #include "common_data.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "parameters.h"
 #include "no_os_util.h"
 #include "self_test.h"
@@ -107,7 +107,7 @@ int self_test_supply(struct stout *stout, struct rms_adc_values *rms_adc_values)
 		goto error1;
 	pr_debug("PASSED \n");
 	// Allow time for relay to switch
-	no_os_mdelay(DELAY_SELF_TEST_READING);
+	capi_wait_ms(DELAY_SELF_TEST_READING);
 	// Test Vin value within limits
 	// Skip SELF_TEST_SKIP_CYCLES_NO periods
 	while (!get_zero_cross_flag_state());
@@ -137,7 +137,7 @@ int self_test_supply(struct stout *stout, struct rms_adc_values *rms_adc_values)
 	ret = relay_open(stout->relay);
 	if (ret)
 		goto error1;
-	no_os_mdelay(DELAY_SELF_TEST_READING);
+	capi_wait_ms(DELAY_SELF_TEST_READING);
 	// Test Vin value within limits
 	// Skip SELF_TEST_SKIP_CYCLES_NO periods
 	while (!get_zero_cross_flag_state());
@@ -211,14 +211,14 @@ int self_test_rcd(struct stout *stout)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(60);
+	capi_wait_ms(60);
 
 	ret = no_os_gpio_set_value(stout->gpio_rcm_test, NO_OS_GPIO_HIGH);
 	if (ret)
 		return ret;
 
 	// Wait for 700 ms and sample rcddc and rcdac pins (we should have rcddc 1 and rcdac 0)
-	no_os_mdelay(700);
+	capi_wait_ms(700);
 	ret = no_os_gpio_get_value(stout->gpio_rcddc, &val_rcddc);
 	if (ret)
 		return ret;
@@ -230,7 +230,7 @@ int self_test_rcd(struct stout *stout)
 		goto error;
 
 	// wait for another 700 ms, we should have both values 1
-	no_os_mdelay(700);
+	capi_wait_ms(700);
 	ret = no_os_gpio_get_value(stout->gpio_rcddc, &val_rcddc);
 	if (ret)
 		return ret;
@@ -242,7 +242,7 @@ int self_test_rcd(struct stout *stout)
 		goto error;
 
 	// Wait for another 600 ms, we should have both values 0
-	no_os_mdelay(720);
+	capi_wait_ms(720);
 	ret = no_os_gpio_get_value(stout->gpio_rcddc, &val_rcddc);
 	if (ret)
 		return ret;
@@ -472,7 +472,7 @@ int self_test_startup(struct stout *stout,
 	// Start the CP signal, so we can test it
 	// Test only the high portion of the CP
 	pilot_pwm_timer_set_duty_cycle(stout, PWM_DC);
-	no_os_mdelay(200);
+	capi_wait_ms(200);
 	ret = self_test_rcd(stout);
 	if (ret)
 		goto error;
