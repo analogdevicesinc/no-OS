@@ -33,7 +33,7 @@
 
 #include "adf4368.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 
@@ -1576,7 +1576,7 @@ int adf4368_set_default_regs(struct adf4368_dev *dev, bool spi_4wire)
 	if (ret)
 		return ret;
 
-	no_os_udelay(ADF4368_POR_DELAY_US);
+	capi_wait_us(ADF4368_POR_DELAY_US);
 
 	ret = adf4368_spi_write(dev, 0x00,
 				ADF4368_SPI_4W_CFG(spi_4wire) |
@@ -1876,7 +1876,7 @@ int adf4368_set_freq(struct adf4368_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(ADF4368_LKD_DELAY_MS);
+	capi_wait_ms(ADF4368_LKD_DELAY_MS);
 	ret = adf4368_spi_read(dev, 0x58, &val);
 	if (ret)
 		return ret;

@@ -34,7 +34,7 @@
 
 #include "adf4382.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
@@ -854,7 +854,7 @@ int adf4382_set_en_fast_calibration(struct adf4382_dev *dev, bool en_fast_cal)
 	while (fsm_busy == 1) {
 		if (timeout++ > ADF4382_FSM_BUSY_LOOP_CNT)
 			break;
-		no_os_mdelay(10);
+		capi_wait_ms(10);
 		ret = adf4382_spi_read(dev, 0x58, &val);
 		if (ret)
 			return ret;
@@ -1586,7 +1586,7 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_udelay(ADF4382_LKD_DELAY_US);
+	capi_wait_us(ADF4382_LKD_DELAY_US);
 	ret = adf4382_spi_read(dev, 0x58, &val);
 	if (ret)
 		return ret;
@@ -2048,7 +2048,7 @@ int adf4382_init(struct adf4382_dev **dev,
 	if (ret)
 		goto error_spi;
 
-	no_os_udelay(ADF4382_POR_DELAY_US);
+	capi_wait_us(ADF4382_POR_DELAY_US);
 
 	if (device->spi_3wire_en)
 		en = false;

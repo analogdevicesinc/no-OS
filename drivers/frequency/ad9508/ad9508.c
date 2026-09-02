@@ -36,7 +36,7 @@
 #include <stdio.h>
 #include "no_os_error.h"
 #include "ad9508.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 
 /**
@@ -125,7 +125,7 @@ int32_t ad9508_setup(struct ad9508_dev **device,
 	if (ret != 0)
 		return ret;
 
-	no_os_mdelay(250);
+	capi_wait_ms(250);
 
 	/*
 	 * read family part id: 0x0C contains the least significant byte,

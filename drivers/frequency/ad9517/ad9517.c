@@ -33,7 +33,7 @@
 
 #include <stdlib.h>
 #include <errno.h>
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 #include "ad9517.h"
 
@@ -199,7 +199,7 @@ int32_t ad9517_setup(struct ad9517_dev **device,
 			return ret;
 
 		/* Time to complete a VCO calibration (Table 29, datasheet). */
-		no_os_mdelay(88);
+		capi_wait_ms(88);
 	}
 
 	*device = dev;
