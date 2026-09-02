@@ -34,7 +34,7 @@
 #include "common_data.h"
 #include "ltc4306.h"
 #include "no_os_uart.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 
 int LTC4306_USED_DOWNSTREAM_CHANNELS[] = {1, 2};
@@ -93,25 +93,25 @@ int example_main()
 		if (ret)
 			goto error_ltc4306;
 
-		no_os_mdelay(50);
+		capi_wait_ms(50);
 
 		ret = ltc4306_set_gpio_output_state(ltc4306, 1, false);
 		if (ret)
 			goto error_ltc4306;
 
-		no_os_mdelay(50);
+		capi_wait_ms(50);
 
 		ret = ltc4306_set_gpio_output_state(ltc4306, 2, true);
 		if (ret)
 			goto error_ltc4306;
 
-		no_os_mdelay(50);
+		capi_wait_ms(50);
 
 		ret = ltc4306_set_gpio_output_state(ltc4306, 1, true);
 		if (ret)
 			goto error_ltc4306;
 
-		no_os_mdelay(50);
+		capi_wait_ms(50);
 	}
 
 	/* Turn OFF LTC4306 Green GPIO LEDs */
@@ -133,7 +133,7 @@ int example_main()
 		pr_info("\n");
 	}
 
-	no_os_mdelay(50);
+	capi_wait_ms(50);
 
 	/* Multiple DAC Configuration Loop */
 	while (1) {
