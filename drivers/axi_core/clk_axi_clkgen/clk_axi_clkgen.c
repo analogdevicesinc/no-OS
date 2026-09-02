@@ -40,7 +40,7 @@
 #include "no_os_util.h"
 #include "capi_alloc.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_axi_io.h"
 
 #define AXI_PCORE_VER(major, minor, letter)     ((major << 16) | (minor << 8) | letter)
@@ -462,7 +462,7 @@ int32_t axi_clkgen_set_rate(struct axi_clkgen *clkgen,
 
 	axi_clkgen_mmcm_enable(clkgen, 1);
 
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	axi_clkgen_read(clkgen, AXI_CLKGEN_REG_STATUS, &reg_val);
 	if ((reg_val & AXI_CLKGEN_STATUS) == 0x0) {

@@ -35,7 +35,7 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
 #include "axi_dac_core.h"
@@ -421,7 +421,7 @@ int32_t axi_dac_read_poll_timeout(struct axi_dac *dac, uint32_t reg_addr,
 		if ((reg & mask) == value)
 			return 0;
 
-		no_os_udelay(sleep_us);
+		capi_wait_us(sleep_us);
 		timeout_us -= sleep_us;
 	}
 
@@ -464,7 +464,7 @@ int32_t axi_dac_bus_write(struct axi_dac *dac, uint32_t reg_addr,
 	if (err)
 		return err;
 
-	no_os_udelay(100);
+	capi_wait_us(100);
 
 	axi_dac_update_bits(dac, AXI_DAC_REG_CUSTOM_CTRL,
 			    AXI_DAC_TRANSFER_DATA, 0);
@@ -499,7 +499,7 @@ int32_t axi_dac_bus_read(struct axi_dac *dac,
 	if (err)
 		return err;
 
-	no_os_udelay(100);
+	capi_wait_us(100);
 
 	no_os_axi_io_read(dac->base, AXI_DAC_CNTRL_DATA_RD, reg_data);
 
@@ -1176,7 +1176,7 @@ int32_t axi_dac_init(struct axi_dac **dac_core,
 
 	axi_dac_write(dac, AXI_DAC_REG_RATECNTRL, AXI_DAC_RATE(init->rate));
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	ret = axi_dac_init_finish(dac);
 	if (ret)
