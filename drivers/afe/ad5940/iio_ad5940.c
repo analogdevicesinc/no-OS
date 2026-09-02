@@ -35,7 +35,7 @@
 #include <inttypes.h>
 #include <math.h>
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
 #include "iio.h"
@@ -79,7 +79,7 @@ static int ad5940_iio_read_chan_raw(void *device, char *buf, uint32_t len,
 		no_os_gpio_get_value(iiodev->ad5940->gp0_gpio, &gpio);
 		if (!gpio)
 			break;
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 		timeout--;
 	}
 
@@ -217,7 +217,7 @@ int ad5940_iio_set_attr(void *device, char *buf, uint32_t len,
 		ret = ad5940_WriteReg(iiodev->ad5940, REG_AGPIO_GP0OUT, 0);
 		if (ret < 0)
 			return ret;
-		no_os_udelay(10);
+		capi_wait_us(10);
 		ret = ad5940_WriteReg(iiodev->ad5940, REG_AGPIO_GP0OUT, AGPIO_Pin1);
 		if (ret < 0)
 			return ret;

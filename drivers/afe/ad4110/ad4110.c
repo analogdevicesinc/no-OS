@@ -41,6 +41,7 @@
 #include "no_os_error.h"
 #include "no_os_irq.h"
 #include "no_os_print_log.h"
+#include "capi_time.h"
 #include <string.h>
 
 /***************************************************************************//**
@@ -913,7 +914,7 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 	ret = ad4110_spi_do_soft_reset(dev);
 	if (ret)
 		goto err_spi;
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	if (init_param.afe_crc_en != AD4110_AFE_CRC_DISABLE) {
 		ret = ad4110_spi_int_reg_write(dev,
@@ -1061,7 +1062,7 @@ int32_t ad4110_continuous_read(struct ad4110_dev *dev, uint32_t *buffer,
 	if (ret)
 		return ret;
 	// make sure adc is fully initialized before irq enabling
-	no_os_mdelay(2U);
+	capi_wait_ms(2U);
 	ret = no_os_irq_enable(dev->irq_desc, dev->nready_pin);
 	if (ret)
 		return ret;

@@ -36,7 +36,7 @@
 #include <errno.h>
 #include "max30009.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 
@@ -260,7 +260,7 @@ int max30009_soft_reset(struct max30009_dev *device)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 	ret = max30009_reg_update(device,
 				  MAX30009_REG_SYSTEM_CONFIGURATION1,
 				  MAX30009_RESET_MSK,
@@ -268,7 +268,7 @@ int max30009_soft_reset(struct max30009_dev *device)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	return ret;
 }
@@ -350,7 +350,7 @@ int max30009_init(struct max30009_dev **device,
 		if (ret)
 			goto error_csb_gpio;
 
-		no_os_mdelay(10);
+		capi_wait_ms(10);
 
 		ret = no_os_i2c_init(&dev->i2c_desc, &init_param->i2c_init);
 	} else {
@@ -369,7 +369,7 @@ int max30009_init(struct max30009_dev **device,
 			goto error_int_gpio;
 	}
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	ret = max30009_verify_part_id(dev);
 	if (ret)
@@ -499,7 +499,7 @@ static int max30009_wait_for_lock(struct max30009_dev *device,
 		    (status & MAX30009_STATUS1_PHASE_LOCK_MSK))
 			return 0;
 
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 		elapsed++;
 	}
 
@@ -835,7 +835,7 @@ int max30009_timing_system_reset(struct max30009_dev *device)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	return 0;
 }
@@ -1136,7 +1136,7 @@ int max30009_bioz_enable(struct max30009_dev *device, bool enable)
 		return ret;
 
 	if (enable)
-		no_os_mdelay(100);
+		capi_wait_ms(100);
 
 	return 0;
 }
@@ -1193,7 +1193,7 @@ int max30009_bioz_bg_enable(struct max30009_dev *device, bool enable)
 		return ret;
 
 	if (enable)
-		no_os_mdelay(100);
+		capi_wait_ms(100);
 
 	return 0;
 }
