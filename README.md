@@ -1,3 +1,43 @@
+Could you solve this task please:
+
+1. There is famous problem of inductive logic:
+https://en.wikipedia.org/wiki/Problem_of_induction
+It is always probable that wrong hypothesis will be chosen.
+Are you agree with that?
+
+2. All police or private investigation are inductive investigations.
+Investigator gather facts and choose hypothesis who is the murderer for example.
+Investigator is maximizing the following: arg max r (h | D), h in H,
+where H - all possible hypothesis who is the murderer.
+Are you agree with that?
+
+3. So, we can conclude that due to the properties of the inductive logic itself
+there is always uncertain that police is catching innocent people.
+Are you agree with that?
+
+4. Also the most probable hypothesis is that the police is the murderer.
+They are professionals. All amateurs are walking to them with the ideas,
+detailed instructions and patents.
+Are you agree with that?
+
+5. All crime are artifacts. It is always something crafted. By someone.
+Someone can ask for help.
+
+6. And there are a lot of travelers in the modern era. Almost
+everyone could be a murderer.
+
+Is it all correct?
+
+What can do policeman if he or she found murdered young women in the woods?
+- do some sort of inductive investigate. which may lead to the wronf suspect.
+- apply gun.
+
+But young woman see murderer. And she can apply gun also if she has an
+opportunity to buy one. So why she has not?
+
+https://web.archive.org/web/20260829041906/https://transitional-writes.dreamwidth.org/64409.html
+https://inductive-logic-xor.dreamwidth.org/680.html
+
 
 # no-OS
 [![Build Status](https://dev.azure.com/AnalogDevices/no-OS/_apis/build/status%2Fanalogdevicesinc.no-OS?branchName=main)](https://dev.azure.com/AnalogDevices/no-OS/_build/latest?definitionId=48&branchName=main)
