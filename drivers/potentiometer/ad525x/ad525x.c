@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include "ad525x.h"
 #include "capi_alloc.h"
+#include "capi_time.h"
 
 #define MSB_BYTE_MASK       0xFF00
 #define LSB_BYTE_MASK       0x00FF
@@ -283,7 +284,7 @@ uint16_t ad525x_read_rdac(struct ad525x_dev *dev,
 			no_os_spi_write_and_read(dev->spi_desc,
 						 data_buffer,
 						 3);
-			no_os_mdelay(50);
+			capi_wait_ms(50);
 			data_buffer[0] &= AD525X_CMD_NOP << AD525X_CMD_SPI_OFFSET;
 			no_os_spi_write_and_read(dev->spi_desc,
 						 data_buffer,
@@ -294,7 +295,7 @@ uint16_t ad525x_read_rdac(struct ad525x_dev *dev,
 			no_os_spi_write_and_read(dev->spi_desc,
 						 data_buffer,
 						 2);
-			no_os_mdelay(50);
+			capi_wait_ms(50);
 			/* Sending a dummy frame to read the result */
 			data_buffer[0] &= AD525X_CMD_NOP << AD525X_CMD_SPI_OFFSET;
 			no_os_spi_write_and_read(dev->spi_desc,
@@ -363,7 +364,7 @@ void ad525x_write_rdac(struct ad525x_dev *dev,
 				2,
 				1);
 	}
-	no_os_mdelay(25);
+	capi_wait_ms(25);
 }
 
 /**************************************************************************//**
@@ -435,5 +436,5 @@ void ad525x_write_command(struct ad525x_dev *dev,
 					1);
 		}
 	}
-	no_os_mdelay(25);
+	capi_wait_ms(25);
 }
