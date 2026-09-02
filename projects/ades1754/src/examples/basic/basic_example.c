@@ -31,7 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "common_data.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 
 #define ADES1754_CELL_RESOLUTION		16383.0f
@@ -92,7 +92,7 @@ int example_main()
 		if (alert)
 			pr_info("Alert detected, solve alert related failures and start again!\n");
 		else
-			no_os_mdelay(500);
+			capi_wait_ms(500);
 	}
 
 remove_ades1754:
