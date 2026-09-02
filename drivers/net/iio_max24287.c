@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
 #include "iio_max24287.h"

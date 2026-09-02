@@ -33,7 +33,7 @@
 
 #include <errno.h>
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_gpio.h"
 #include "adin1320.h"
 
@@ -138,13 +138,13 @@ int adin1320_hard_reset(struct adin1320_desc *dev)
 		return ret;
 
 	/* Minimum reset pulse length is 1 microsecond */
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 	ret = no_os_gpio_direction_output(dev->reset_gpio, NO_OS_GPIO_HIGH);
 	if (ret)
 		return ret;
 
 	/* Minimum 5ms required after reset deassertion before device can be used */
-	no_os_mdelay(20);
+	capi_wait_ms(20);
 
 	return 0;
 }
