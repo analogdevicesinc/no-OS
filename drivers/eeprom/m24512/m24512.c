@@ -35,7 +35,7 @@
 
 #include "m24512.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_gpio.h"
 #include "no_os_eeprom.h"
 
@@ -307,7 +307,7 @@ int m24512_wait_ready(struct m24512_dev *dev, uint32_t timeout_ms)
 			return 0;
 
 		// Wait 1ms between polling attempts
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 	}
 
 	return -ETIME;
@@ -350,7 +350,7 @@ static int m24512_set_write_protection(struct m24512_dev *dev, bool protect)
 
 	if (ret == 0) {
 		// Add small delay to ensure WC pin settles
-		no_os_udelay(10); // 10 microseconds should be sufficient
+		capi_wait_us(10); // 10 microseconds should be sufficient
 	}
 
 	return ret;
@@ -422,7 +422,7 @@ static int m24512_write_raw(struct m24512_dev *dev, uint16_t addr,
 
 	// Give EEPROM time to start internal write cycle
 	if (ret == 0) {
-		no_os_udelay(500);  // 500 microseconds delay
+		capi_wait_us(500);  // 500 microseconds delay
 	}
 
 	capi_free(write_buf);
