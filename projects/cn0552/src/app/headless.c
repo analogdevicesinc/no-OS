@@ -45,7 +45,7 @@
 #include "no_os_i2c.h"
 #include "aducm3029_i2c.h"
 #include "aducm3029_uart.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "platform_init.h"
 #include "parameters.h"
