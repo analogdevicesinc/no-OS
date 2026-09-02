@@ -1414,6 +1414,20 @@ int ad9088_init(struct ad9088_phy **device,
 		goto error_hw_close;
 	}
 
+	/*
+	 * For non-8t8r (4t4r) profiles the ADC slice mode-switch must be enabled
+	 * before device startup. This mirrors the Linux ad9088 driver, which
+	 * performs this write for every non-8t8r profile prior to
+	 * adi_apollo_startup_execute().
+	 */
+	if (!phy->profile.profile_cfg.is_8t8r) {
+		ret = adi_apollo_adc_mode_switch_enable_set(&phy->ad9088, 1);
+		ret = ad9088_check_apollo_error(ret,
+						"adi_apollo_adc_mode_switch_enable_set");
+		if (ret)
+			goto error_hw_close;
+	}
+
 	ret = adi_apollo_startup_execute(&phy->ad9088, &phy->profile,
 					 ADI_APOLLO_STARTUP_SEQ_DEFAULT);
 	ret = ad9088_check_apollo_error(ret, "adi_apollo_startup_execute");
