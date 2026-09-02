@@ -31,7 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_uart.h"
 #include "no_os_error.h"
 #include "common_data.h"
