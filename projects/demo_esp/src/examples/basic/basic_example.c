@@ -33,7 +33,7 @@
 
 #include <string.h>
 #include "common_data.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_gpio.h"
 #include "no_os_timer.h"
@@ -64,7 +64,7 @@ int32_t init_and_connect_wifi(struct wifi_desc **wifi)
 			goto error_gpio;
 		}
 
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 
 		ret = no_os_gpio_set_value(wifi_rst_gpio, NO_OS_GPIO_HIGH);
 		if (ret) {
@@ -73,7 +73,7 @@ int32_t init_and_connect_wifi(struct wifi_desc **wifi)
 		}
 
 		/* Allow the wifi module to bring up after reset */
-		no_os_mdelay(3000);
+		capi_wait_ms(3000);
 	}
 
 	ret = no_os_irq_ctrl_init(&irq_ctrl, &irq_ip);
