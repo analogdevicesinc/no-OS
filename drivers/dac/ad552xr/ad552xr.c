@@ -35,7 +35,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "ad552xr.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "capi_alloc.h"
 #include "no_os_util.h"
@@ -141,7 +141,7 @@ static int ad552xr_check_scratch_pad(struct ad552xr_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	ret = ad552xr_spi_reg_read(dev, AD552XR_REG_SCRATCH_PAD, &val);
 	if (ret)
@@ -789,14 +789,14 @@ int ad552xr_hw_ldac_trigger(struct ad552xr_dev *dev,
 	if (ret)
 		return ret;
 
-	no_os_udelay(delay_us >> 1);
+	capi_wait_us(delay_us >> 1);
 
 	ret = no_os_gpio_set_value(dev->gpio_ldac_tgp[ldac_hw_sel], NO_OS_GPIO_HIGH);
 	if (ret)
 		return ret;
 
 	/* Provide delay to achieve 50% duty cycle */
-	no_os_udelay(delay_us >> 1);
+	capi_wait_us(delay_us >> 1);
 
 	return 0;
 }
@@ -923,7 +923,7 @@ int ad552xr_hw_reset(struct ad552xr_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	ret = no_os_gpio_set_value(dev->gpio_resetb, NO_OS_GPIO_HIGH);
 	if (ret)
@@ -1003,7 +1003,7 @@ int ad552xr_init(struct ad552xr_dev **device,
 		if (ret)
 			goto err_gpio;
 
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 
 		ret = no_os_gpio_set_value(dev->gpio_clearb, NO_OS_GPIO_HIGH);
 		if (ret)

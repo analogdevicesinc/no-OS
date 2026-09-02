@@ -33,7 +33,7 @@
 
 #include "ad5460.h"
 #include "no_os_crc8.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
@@ -250,7 +250,7 @@ int ad5460_set_channel_function(struct ad5460_desc *desc,
 		return ret;
 
 	/* Datasheet delay required before transition to new desired mode */
-	no_os_udelay(200);
+	capi_wait_us(200);
 
 	ret = ad5460_reg_update(desc, AD5460_CH_FUNC_SETUP(ch),
 				AD5460_CH_FUNC_SETUP_MSK, ch_func);
@@ -488,7 +488,7 @@ int ad5460_reset(struct ad5460_desc *desc)
 			return ret;
 
 		/* Minimum RESET signal pulse duration */
-		no_os_udelay(50);
+		capi_wait_us(50);
 		ret = no_os_gpio_set_value(desc->reset_gpio, NO_OS_GPIO_HIGH);
 		if (ret)
 			return ret;
@@ -502,7 +502,7 @@ int ad5460_reset(struct ad5460_desc *desc)
 			return ret;
 	}
 	/* Time taken for device reset (datasheet value = 1ms) */
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	return 0;
 }

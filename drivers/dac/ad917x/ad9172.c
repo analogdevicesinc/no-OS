@@ -32,7 +32,7 @@
 *******************************************************************************/
 
 #include "no_os_print_log.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 #include "no_os_clk.h"
 #include <inttypes.h>
@@ -187,7 +187,7 @@ static int32_t ad9172_setup(struct ad9172_state *st)
 		return ret;
 	}
 
-	no_os_mdelay(100); /* Wait 100 ms for PLL to lock */
+	capi_wait_ms(100); /* Wait 100 ms for PLL to lock */
 
 	ret = ad917x_get_dac_clk_status(ad917x_h,
 					&pll_lock_status, &dll_lock_stat);
@@ -252,7 +252,7 @@ static int32_t ad9172_setup(struct ad9172_state *st)
 		return ret;
 	}
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	ret = ad917x_jesd_get_pll_status(ad917x_h, &pll_lock_status);
 	if (ret != 0) {
@@ -296,7 +296,7 @@ static int32_t ad9172_setup(struct ad9172_state *st)
 		return -EIO;
 	}
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	ret = ad9172_link_status_get(st, lane_rate_kHz);
 	if (ret != 0) {
@@ -316,7 +316,7 @@ static int32_t ad9172_setup(struct ad9172_state *st)
  */
 static int32_t ad9172_delay_us(void *user_data, uint32_t us)
 {
-	no_os_udelay(us);
+	capi_wait_us(us);
 
 	return 0;
 }

@@ -39,7 +39,7 @@
 #include "ltc2672.h"
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
@@ -134,7 +134,7 @@ int ltc2672_reset(struct ltc2672_dev *device)
 	if (ret)
 		return ret;
 
-	no_os_udelay(1);
+	capi_wait_us(1);
 
 	ret = no_os_gpio_set_value(device->gpio_clear, NO_OS_GPIO_HIGH);
 	if (ret)
@@ -815,7 +815,7 @@ int ltc2672_hw_ldac_update(struct ltc2672_dev *device)
 	if (ret)
 		return ret;
 
-	no_os_udelay(1);
+	capi_wait_us(1);
 
 	ret = no_os_gpio_set_value(device->gpio_ldac, NO_OS_GPIO_HIGH);
 	if (ret)

@@ -42,7 +42,7 @@
 #include "clk_axi_clkgen.h"
 #endif
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_gpio.h"
 #include "no_os_print_log.h"
@@ -1515,7 +1515,7 @@ int32_t ad3552r_reset(struct ad3552r_desc *desc)
 	 */
 	if (desc->reset) {
 		no_os_gpio_set_value(desc->reset, NO_OS_GPIO_LOW);
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 		no_os_gpio_set_value(desc->reset, NO_OS_GPIO_HIGH);
 	} else if (!desc->axi) {
 		err = _ad3552r_update_reg_field(desc,
@@ -1528,7 +1528,7 @@ int32_t ad3552r_reset(struct ad3552r_desc *desc)
 
 	if (desc->axi) {
 		/* Device init may take up to 100 ms */
-		no_os_mdelay(100);
+		capi_wait_ms(100);
 		return 0;
 	}
 
@@ -1572,7 +1572,7 @@ int32_t ad3552r_ldac_trigger(struct ad3552r_desc *desc, uint16_t mask,
 	if (NO_OS_IS_ERR_VALUE(err))
 		return err;
 
-	no_os_udelay(AD3552R_LDAC_PULSE_US);
+	capi_wait_us(AD3552R_LDAC_PULSE_US);
 	err = no_os_gpio_set_value(desc->ldac, NO_OS_GPIO_HIGH);
 	if (NO_OS_IS_ERR_VALUE(err))
 		return err;
@@ -1811,9 +1811,9 @@ int32_t ad3552r_axi_write_data(struct ad3552r_desc *desc, uint32_t *buf,
 	if (cyclic) {
 		if (cyclic_secs == 0)
 			while (true)
-				no_os_mdelay(1000);
+				capi_wait_ms(1000);
 		else
-			no_os_mdelay(cyclic_secs * 1000);
+			capi_wait_ms(cyclic_secs * 1000);
 	} else
 		axi_dmac_transfer_wait_completion(desc->dmac_ip, 10000);
 

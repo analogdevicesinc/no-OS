@@ -34,7 +34,7 @@
 #define AD5766_H_
 
 #include <stdint.h>
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
 

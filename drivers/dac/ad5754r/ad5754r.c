@@ -35,7 +35,7 @@
 #include <stdlib.h>
 #include "ad5754r.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /* AD5754R gain values scaled up to avoid float computations */
 const unsigned int ad5754r_gain_values_scaled[AD5754R_SPAN_M10V8_TO_10V8 + 1] =
@@ -219,7 +219,7 @@ int ad5754r_ldac_trigger(struct ad5754r_dev *dev)
 			return ret;
 
 		/* Delay must be greater than 20ns, per the datasheet. */
-		no_os_udelay(1);
+		capi_wait_us(1);
 
 		return no_os_gpio_set_value(dev->gpio_ldac, NO_OS_GPIO_HIGH);
 	}

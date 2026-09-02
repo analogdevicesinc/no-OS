@@ -42,7 +42,7 @@
 #include "ad5710r.h"
 #include <stdlib.h>
 #include <string.h>
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 #include "no_os_gpio.h"
@@ -845,7 +845,7 @@ int ad5710r_hw_ldac_trigger(struct ad5710r_desc *desc)
 	if (ret)
 		return ret;
 
-	no_os_udelay(AD5710R_LDAC_PULSE_US);
+	capi_wait_us(AD5710R_LDAC_PULSE_US);
 
 	ret = no_os_gpio_set_value(desc->ldac, NO_OS_GPIO_HIGH);
 	if (ret)
@@ -871,7 +871,7 @@ int ad5710r_reset(struct ad5710r_desc *desc)
 		ret = no_os_gpio_set_value(desc->reset, NO_OS_GPIO_LOW);
 		if (ret)
 			return ret;
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 		ret = no_os_gpio_set_value(desc->reset, NO_OS_GPIO_HIGH);
 		if (ret)
 			return ret;
@@ -884,7 +884,7 @@ int ad5710r_reset(struct ad5710r_desc *desc)
 			return ret;
 	}
 
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	/* Default interface configuration after reset */
 	memset(&desc->spi_cfg, 0, sizeof(desc->spi_cfg));

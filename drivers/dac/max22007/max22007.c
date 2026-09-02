@@ -33,7 +33,7 @@
 #include "no_os_print_log.h"
 #include "no_os_error.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_crc8.h"
 #include "no_os_spi.h"
 #include "max22007.h"

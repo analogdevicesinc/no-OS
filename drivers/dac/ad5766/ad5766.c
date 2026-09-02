@@ -36,6 +36,7 @@
 #include "ad5766.h"
 #include "no_os_error.h"
 #include "capi_alloc.h"
+#include "capi_time.h"
 
 /**
  * SPI command write to device.
@@ -294,9 +295,9 @@ int32_t ad5766_init(struct ad5766_dev **device,
 	/* GPIO */
 	ret |= no_os_gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
 	ret |= no_os_gpio_direction_output(dev->gpio_reset, NO_OS_GPIO_LOW);
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 	ret |= no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_HIGH);
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	/* Device Settings */
 	dev->daisy_chain_en = init_param.daisy_chain_en;

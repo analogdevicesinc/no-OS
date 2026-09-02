@@ -37,6 +37,7 @@
 #include "capi_alloc.h"
 
 #include "ltc268x.h" /* LTC268X definitions. */
+#include "capi_time.h"
 
 static const struct ltc268x_span_tbl ltc268x_span_tbl[] = {
 	[LTC268X_VOLTAGE_RANGE_0V_5V] = {0, 5},
@@ -425,7 +426,7 @@ int32_t ltc268x_init(struct ltc268x_dev **device,
 	if (ret < 0)
 		goto error;
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	dev->dev_id = init_param.dev_id;
 	if (init_param.dev_id == LTC2686) {
