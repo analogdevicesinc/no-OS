@@ -32,7 +32,7 @@
 *******************************************************************************/
 #include "common_data.h"
 #include "no_os_uart.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_spi.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
@@ -65,7 +65,7 @@ int example_main()
 	if (ret)
 		goto err;
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	ltc4296_port_prebias(ltc4296_desc, LTC_PORT1, LTC_CFG_APL_MODE);
 	if (ret)
@@ -75,7 +75,7 @@ int example_main()
 	if (ret)
 		goto err;
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	ret = ltc4296_port_prebias(ltc4296_desc, LTC_PORT2, LTC_CFG_APL_MODE);
 	if (ret)
@@ -85,7 +85,7 @@ int example_main()
 	if (ret)
 		goto err;
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	ret = ltc4296_port_prebias(ltc4296_desc, LTC_PORT3, LTC_CFG_APL_MODE);
 	if (ret)
@@ -95,7 +95,7 @@ int example_main()
 	if (ret)
 		goto err;
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	return 0;
 
