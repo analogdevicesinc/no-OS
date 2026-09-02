@@ -141,7 +141,9 @@ if(OPENOCD_PATH)
         cmake_path(SET OPENOCD_SCRIPTS NORMALIZE "${MAXIM_LIBRARIES}/../Tools/OpenOCD/scripts")
     endif()
 
-    set(OPENOCD_INTERFACE "interface/cmsis-dap.cfg")
+    if (NOT DEFINED OPENOCD_INTERFACE)
+        set(OPENOCD_INTERFACE "interface/cmsis-dap.cfg")
+    endif()
     set(OPENOCD_CHIPNAME ${TARGET})
     set(OPENOCD_TARGETCFG "target/${TARGET}.cfg")
 
