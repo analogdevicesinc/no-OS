@@ -44,7 +44,7 @@
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
 #include "no_os_util.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "xilinx_spi.h"
 #include "xilinx_gpio.h"
 #include "ad3552r.h"
@@ -171,7 +171,7 @@ int32_t run_example(struct ad3552r_desc *dac)
 		return err;
 	}
 
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 
 	samples[0] = 0;
 	samples[1] = 65534;
@@ -187,7 +187,7 @@ int32_t run_example(struct ad3552r_desc *dac)
 		return err;
 	}
 
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 
 	pr_info("Fast cyclic dma transfer starts now, for 20 seconds ...\n");
 
