@@ -266,18 +266,40 @@ struct axi_dmac_init tx_dmac_ip = {
  * FSM path the cores are configured from the link the FSM derives from the
  * device profile instead, so setting them here would document nothing.
  */
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+static struct no_os_gpio_init_param rx_refclk_ready_ip = {
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA,
+	.number = GPIO_REFCLK_READY_RX,
+};
+
+static struct no_os_gpio_init_param tx_refclk_ready_ip = {
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA,
+	.number = GPIO_REFCLK_READY_TX,
+};
+#endif
+
 struct jesd204_rx_init rx_jesd204_ip = {
 	.name = "rx_jesd",
 	.base = RX_JESD_BASEADDR,
 	.device_clk_khz = AD9088_DEVICE_CLK_KHZ,
-	.lane_clk_khz = AD9088_LANE_RATE_KHZ
+	.lane_clk_khz = AD9088_LANE_RATE_KHZ,
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+	.refclk_ready = &rx_refclk_ready_ip,
+	.gts_pll_base = GTS_PLL_RX_BASEADDR,
+#endif
 };
 
 struct jesd204_tx_init tx_jesd204_ip = {
 	.name = "tx_jesd",
 	.base = TX_JESD_BASEADDR,
 	.device_clk_khz = AD9088_DEVICE_CLK_KHZ,
-	.lane_clk_khz = AD9088_LANE_RATE_KHZ
+	.lane_clk_khz = AD9088_LANE_RATE_KHZ,
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+	.refclk_ready = &tx_refclk_ready_ip,
+	.gts_pll_base = GTS_PLL_TX_BASEADDR,
+#endif
 };
 
 struct adxcvr_init tx_adxcvr_ip = {

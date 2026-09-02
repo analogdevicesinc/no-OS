@@ -80,12 +80,12 @@
  * not exist on this board, so pr_*() must NOT go through libc stdio here - it is
  * routed through a polled no-OS JTAG UART at UART_JTAG_BASEADDR (see main.c).
  */
-#define UART_DEVICE_ID			0
-#define UART_BAUDRATE			115200
+#define UART_DEVICE_ID		0
+#define UART_BAUDRATE		115200
 #define UART_OPS			NULL
 #define UART_EXTRA			NULL
 #define UART_IRQ_ID			0
-#define UART_JTAG_BASEADDR		0x00000100 /* sys_uart (JTAG UART) */
+#define UART_JTAG_BASEADDR	0x00000100 /* sys_uart (JTAG UART) */
 
 /*
  * SPI: the EBZ has two Avalon SPI cores.
@@ -100,13 +100,13 @@ extern struct altera_spi_init_param	apollo_spi_extra_ip;
 #define APOLLO_SPI_BASEADDR		0x000EA000 /* apollo_spi (AD9084) */
 
 #define CLK_SPI_DEVICE_ID		0
-#define SPI_OPS_CLK			&altera_spi_ops
+#define SPI_OPS_CLK			    &altera_spi_ops
 #define SPI_EXTRA_CLK			&clk_spi_extra_ip
 #define SPI_CS_ADF4382			0
 #define SPI_CS_HMC7044			1
 #define SPI_CS_ADF4030			4
 
-#define APOLLO_SPI_DEVICE_ID		0
+#define APOLLO_SPI_DEVICE_ID	0
 #define SPI_OPS_APOLLO			&altera_spi_ops
 #define SPI_EXTRA_APOLLO		&apollo_spi_extra_ip
 #define SPI_CS_APOLLO			0
@@ -123,11 +123,11 @@ extern struct altera_spi_init_param	apollo_spi_extra_ip;
  */
 extern struct altera_gpio_init_param	altera_gpio_param;
 
-#define GPIO_BASEADDR			0x00000020 /* sys_gpio_out (resetb=bit 30)*/
+#define GPIO_BASEADDR		0x00000020 /* sys_gpio_out (resetb=bit 30)*/
 #define GPIO_OPS			&altera_gpio_ops
 #define GPIO_EXTRA			&altera_gpio_param
 #define GPIO_OFFSET			32
-#define GPIO_RESET_N			30
+#define GPIO_RESET_N		30
 
 /*
  * GTS transceiver refclk bring-up (Agilex 5, GTS PHY). The GTS PHYs get no
@@ -145,12 +145,10 @@ extern struct altera_gpio_init_param	altera_gpio_param;
  * A PIO data bit is addressed as (number - 32), so gpio_o[56]/[57] are
  * GPIO_OFFSET + 24/25 = 56/57.
  */
-#define GPIO_REFCLK_READY_RX		(GPIO_OFFSET + 24) /* gpio_o[56] */
-#define GPIO_REFCLK_READY_TX		(GPIO_OFFSET + 25) /* gpio_o[57] */
+#define GPIO_REFCLK_READY_RX    (GPIO_OFFSET + 24) /* gpio_o[56] */
+#define GPIO_REFCLK_READY_TX    (GPIO_OFFSET + 25) /* gpio_o[57] */
 #define GTS_PLL_RX_BASEADDR		0x010A6000 /* gts_pll_a (PHY A / RX) */
 #define GTS_PLL_TX_BASEADDR		0x020A6000 /* gts_pll_b (PHY B / TX) */
-#define GTS_REFCLK_BUFFER_WORD		0x38	/* reg 0x0e * 4 */
-#define GTS_REFCLK_BUFFER_REQ_OFFSET	0x3A	/* reg 0x0e byte +2 */
 
 /* Capture depth, in samples per converter. */
 #define ADC_BUFFER_SAMPLES		16384
@@ -170,15 +168,15 @@ extern struct altera_gpio_init_param	altera_gpio_param;
  * The raw E-Tile PHY reconfig buses (jesd204_phy_a/b @ 0x1000000 / 0x2000000)
  * are low-level Avalon slaves NOT driven by the adxcvr driver.
  */
-#define RX_DMA_BASEADDR			0x000D8000 /* apollo_rx_dma           */
-#define TX_DMA_BASEADDR			0x000DC000 /* apollo_tx_dma           */
+#define RX_DMA_BASEADDR			    0x000D8000 /* apollo_rx_dma           */
+#define TX_DMA_BASEADDR			    0x000DC000 /* apollo_tx_dma           */
 #define TX_DATA_OFFLOAD_BASEADDR	0x00110000 /* apollo_tx_data_offload  */
 #define RX_DATA_OFFLOAD_BASEADDR	0x00100000 /* apollo_rx_data_offload  */
-#define RX_CORE_BASEADDR		0x000D2000 /* apollo_rx_tpl           */
-#define TX_CORE_BASEADDR		0x000D4000 /* apollo_tx_tpl           */
-#define RX_JESD_BASEADDR		0x000C0000 /* apollo_rx_jesd204 link  */
-#define TX_JESD_BASEADDR		0x000C8000 /* apollo_tx_jesd204 link  */
-#define RX_XCVR_BASEADDR		0x000C4000 /* apollo_rx_jesd204 adxcvr*/
-#define TX_XCVR_BASEADDR		0x000CC000 /* apollo_tx_jesd204 adxcvr*/
+#define RX_CORE_BASEADDR		    0x000D2000 /* apollo_rx_tpl           */
+#define TX_CORE_BASEADDR		    0x000D4000 /* apollo_tx_tpl           */
+#define RX_JESD_BASEADDR		    0x000C0000 /* apollo_rx_jesd204 link  */
+#define TX_JESD_BASEADDR		    0x000C8000 /* apollo_tx_jesd204 link  */
+#define RX_XCVR_BASEADDR		    0x000C4000 /* apollo_rx_jesd204 adxcvr*/
+#define TX_XCVR_BASEADDR		    0x000CC000 /* apollo_tx_jesd204 adxcvr*/
 
 #endif /* __PARAMETERS_H__ */

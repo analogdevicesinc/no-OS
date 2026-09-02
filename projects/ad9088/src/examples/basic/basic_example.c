@@ -40,10 +40,6 @@
 #include "jesd204.h"
 #include "axi_adxcvr.h"
 #include "jesd204_clk.h"
-#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
-#include "no_os_gpio.h"
-#include "io.h"
-#endif
 
 /**
  * @brief Basic example main execution.
@@ -212,62 +208,6 @@ int basic_example_main()
 		pr_info("JESD204 topology init failed\n");
 		goto error_ad9088;
 	}
-
-#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
-	/*
-	 * GTS transceiver refclk bring-up (probe). On Agilex the GTS PHYs are not
-	 * touched by an adxcvr wrapper, so software must (a) raise the refclk-ready
-	 * GPIOs that gate the HDL gts_refclk_reset SM and (b) request the GTS TX PLL
-	 * refclk buffers on. Without this the transceiver PLL has no reference, the
-	 * link clock reads ~24 MHz and the links never reach DATA. This mirrors the
-	 * known-good Linux altera_adxcvr GTS path and runs after the HMC7044 refclks
-	 * are stable, just before the JESD links come up.
-	 */
-	{
-		struct no_os_gpio_desc *gpio_refclk_rx = NULL;
-		struct no_os_gpio_desc *gpio_refclk_tx = NULL;
-		struct no_os_gpio_init_param refclk_rx_ip = {
-			.platform_ops = GPIO_OPS,
-			.extra = GPIO_EXTRA,
-			.number = GPIO_REFCLK_READY_RX,
-		};
-		struct no_os_gpio_init_param refclk_tx_ip = {
-			.platform_ops = GPIO_OPS,
-			.extra = GPIO_EXTRA,
-			.number = GPIO_REFCLK_READY_TX,
-		};
-
-		ret = no_os_gpio_get(&gpio_refclk_rx, &refclk_rx_ip);
-		if (!ret)
-			ret = no_os_gpio_direction_output(gpio_refclk_rx,
-							  NO_OS_GPIO_HIGH);
-		if (!ret)
-			ret = no_os_gpio_get(&gpio_refclk_tx, &refclk_tx_ip);
-		if (!ret)
-			ret = no_os_gpio_direction_output(gpio_refclk_tx,
-							  NO_OS_GPIO_HIGH);
-		if (ret) {
-			pr_info("GTS refclk-ready GPIO setup failed (%d)\n", ret);
-			goto error_topology;
-		}
-		pr_debug("GTS: refclk-ready RX/TX (gpio 56/57) driven high\n");
-
-		/* Let the gts_refclk_reset SM ack and the FPGA PLLs lock. */
-		no_os_mdelay(100);
-
-		/*
-		 * Request each bank's GTS PLL refclk buffers on (reg 0x0e byte +2
-		 * <- 0xff). Both banks must be poked - one PLL per bank in the HDL.
-		 * NOTE: the request bit is self-clearing, so the register readback is
-		 * not a success indicator - only the axi_jesd Measured Link Clock is.
-		 * Bank B (TX) locks this way; bank A (RX) does not - tracked as an
-		 * HDL/GTS-IP issue (gts_pll_a not locking on its own refclk).
-		 */
-		IOWR_8DIRECT(GTS_PLL_RX_BASEADDR, GTS_REFCLK_BUFFER_REQ_OFFSET, 0xFF);
-		IOWR_8DIRECT(GTS_PLL_TX_BASEADDR, GTS_REFCLK_BUFFER_REQ_OFFSET, 0xFF);
-		no_os_mdelay(10);
-	}
-#endif
 
 	ret = jesd204_fsm_start(topology, JESD204_LINKS_ALL);
 	if (ret) {
