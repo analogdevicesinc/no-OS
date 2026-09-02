@@ -60,7 +60,7 @@
 #include <inttypes.h>
 #include "parameters.h"
 #include "no_os_uart.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 #include "basic_example.h"
@@ -137,11 +137,11 @@ int basic_example_main(void)
 		pr_info("Hello World #%"PRIu32"\n", count);
 
 		/*
-		 * no_os_mdelay() is the no-OS millisecond delay function.
+		 * capi_wait_ms() is the no-OS millisecond delay function.
 		 * It uses the platform timer underneath, so the exact
 		 * implementation differs per target but the API is identical.
 		 */
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 	}
 
 	/*
