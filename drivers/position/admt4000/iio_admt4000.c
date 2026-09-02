@@ -1284,6 +1284,7 @@ static int admt4000_iio_trigger_handler(struct iio_device_data *dev_data)
 	struct admt4000_dev *admt4000;
 	int i = 0;
 	int ret;
+	int16_t data_samples[ADMT4000_NUM_CHANNELS];
 	uint16_t angles[2];
 	uint8_t turns;
 
@@ -1299,44 +1300,44 @@ static int admt4000_iio_trigger_handler(struct iio_device_data *dev_data)
 		return ret;
 
 	if (dev_data->buffer->active_mask & NO_OS_BIT(ADMT4000_TURNS)) {
-		ret = admt4000_quarter_turns_cnt(turns, &iio_admt4000->data[i]);
+		ret = admt4000_quarter_turns_cnt(turns, &data_samples[i]);
 		i++;
 		if (ret)
 			return ret;
 	}
 
 	if (dev_data->buffer->active_mask & NO_OS_BIT(ADMT4000_ANGLE))
-		iio_admt4000->data[i++] = (int16_t) angles[1];
+		data_samples[i++] = (int16_t) angles[1];
 
 	if (dev_data->buffer->active_mask & NO_OS_BIT(ADMT4000_TEMP)) {
-		ret = admt4000_get_temp(admt4000, &iio_admt4000->data[i]);
+		ret = admt4000_get_temp(admt4000, &data_samples[i]);
 		i++;
 		if (ret)
 			return ret;
 	}
 
 	if (dev_data->buffer->active_mask & NO_OS_BIT(ADMT4000_COSINE)) {
-		ret = admt4000_get_cos(admt4000, &iio_admt4000->data[i], NULL);
+		ret = admt4000_get_cos(admt4000, &data_samples[i], NULL);
 		i++;
 		if (ret)
 			return ret;
 	}
 
 	if (dev_data->buffer->active_mask & NO_OS_BIT(ADMT4000_SINE)) {
-		ret = admt4000_get_sin(admt4000, &iio_admt4000->data[i], NULL);
+		ret = admt4000_get_sin(admt4000, &data_samples[i], NULL);
 		i++;
 		if (ret)
 			return ret;
 	}
 
 	if (dev_data->buffer->active_mask & NO_OS_BIT(ADMT4000_RADIUS)) {
-		ret = admt4000_get_radius(admt4000, &iio_admt4000->data[i], NULL);
+		ret = admt4000_get_radius(admt4000, &data_samples[i], NULL);
 		i++;
 		if (ret)
 			return ret;
 	}
 
-	return iio_buffer_push_scan(dev_data->buffer, &iio_admt4000->data[0]);
+	return iio_buffer_push_scan(dev_data->buffer, &data_samples[0]);
 }
 
 /**
