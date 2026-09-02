@@ -38,7 +38,7 @@
 #include "no_os_print_log.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 static int64_t adxl313_accel_conv(struct adxl313_dev *dev, int16_t raw_accel);
 static void adxl313_compute_multiplier(struct adxl313_dev *dev);
@@ -158,7 +158,7 @@ int adxl313_init(struct adxl313_dev **device,
 	uint8_t reg_value = 0;
 
 
-	dev = (struct adxl313_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct adxl313_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -326,10 +326,10 @@ error_com:
 		no_os_spi_remove(dev->com_desc.spi_desc);
 	else
 		no_os_i2c_remove(dev->com_desc.i2c_desc);
-	no_os_free(dev);
+	capi_free(dev);
 	return -EPIPE;
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 	return -ENODEV;
 }
 
@@ -349,7 +349,7 @@ int adxl313_remove(struct adxl313_dev *dev)
 	else
 		ret = no_os_i2c_remove(dev->com_desc.i2c_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

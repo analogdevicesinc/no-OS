@@ -33,7 +33,7 @@
 
 #include <errno.h>
 #include "ltc2983.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 
@@ -51,7 +51,7 @@ int ltc2983_init(struct ltc2983_desc **device,
 	int ret, i;
 	struct ltc2983_desc *descriptor;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -115,7 +115,7 @@ gpio_err:
 spi_err:
 	no_os_spi_remove(descriptor->comm_desc);
 free_err:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 	return ret;
 }
 
@@ -138,7 +138,7 @@ int ltc2983_remove(struct ltc2983_desc *device)
 	if (ret)
 		return -EINVAL;
 
-	no_os_free(device);
+	capi_free(device);
 
 	return 0;
 }

@@ -31,7 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "max14919.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief Set the OUT channels state
@@ -124,7 +124,7 @@ int max14919_init(struct max14919_desc **desc,
 	struct max14919_desc *descriptor;
 	int ret, i;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -197,7 +197,7 @@ int max14919_remove(struct max14919_desc *desc)
 	no_os_gpio_remove(desc->inrush_desc);
 	no_os_gpio_remove(desc->rev_desc);
 	no_os_gpio_remove(desc->fault_desc);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

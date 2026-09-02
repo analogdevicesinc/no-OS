@@ -39,7 +39,7 @@
 #include "no_os_print_log.h"
 #include "no_os_units.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #include "maxim_uart.h"
 #include "maxim_gpio.h"
@@ -139,7 +139,7 @@ int main(void)
 	uint8_t val;
 
 	/* Init ade9078 struct */
-	ade9078_dev = (struct ade9078_dev *)no_os_calloc(1, sizeof(*ade9078_dev));
+	ade9078_dev = (struct ade9078_dev *)capi_calloc(1, sizeof(*ade9078_dev));
 	if (!ade9078_dev)
 		return -ENOMEM;
 
@@ -173,7 +173,7 @@ int main(void)
 	}
 
 free_dev:
-	no_os_free(ade9078_dev);
+	capi_free(ade9078_dev);
 remove_reset:
 	no_os_gpio_remove(reset_desc);
 remove_psm1:

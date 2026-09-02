@@ -33,7 +33,7 @@
 
 #include <stdlib.h>
 #include "ad799x.h"    // AD799x definitions.
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /***************************************************************************//**
  * @brief Initializes I2C.
@@ -52,7 +52,7 @@ int8_t ad799x_init(struct ad799x_dev **device,
 	struct ad799x_dev *dev;
 	int8_t status = -1;
 
-	dev = (struct ad799x_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad799x_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -90,7 +90,7 @@ int32_t ad799x_remove(struct ad799x_dev *dev)
 
 	ret = no_os_i2c_remove(dev->i2c_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

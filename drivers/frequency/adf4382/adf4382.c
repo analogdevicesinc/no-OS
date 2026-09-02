@@ -33,7 +33,7 @@
 *******************************************************************************/
 
 #include "adf4382.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
@@ -1998,7 +1998,7 @@ int adf4382_init(struct adf4382_dev **dev,
 	uint8_t i;
 	int ret;
 
-	device = (struct adf4382_dev *)no_os_calloc(1, sizeof(*device));
+	device = (struct adf4382_dev *)capi_calloc(1, sizeof(*device));
 	if (!device)
 		return -ENOMEM;
 
@@ -2102,7 +2102,7 @@ int adf4382_init(struct adf4382_dev **dev,
 error_spi:
 	no_os_spi_remove(device->spi_desc);
 error_dev:
-	no_os_free(device);
+	capi_free(device);
 	return ret;
 }
 
@@ -2117,7 +2117,7 @@ int adf4382_remove(struct adf4382_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 	if (ret)
-		no_os_free(dev);
+		capi_free(dev);
 
 	return 0;
 }

@@ -39,7 +39,7 @@
 #include "no_os_units.h"
 #include "ad463x.h"
 #include "no_os_print_log.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_spi.h"
 
 #define AD463x_TEST_DATA 0xAA
@@ -595,7 +595,7 @@ static int32_t ad463x_read_data_dma(struct ad463x_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	rx_buf = no_os_calloc(1, samples * dev->read_bytes_no);
+	rx_buf = capi_calloc(1, samples * dev->read_bytes_no);
 	if (!rx_buf)
 		return -ENOMEM;
 
@@ -622,7 +622,7 @@ static int32_t ad463x_read_data_dma(struct ad463x_dev *dev,
 		p_buf += 2;
 	}
 out:
-	no_os_free(rx_buf);
+	capi_free(rx_buf);
 	return ret;
 }
 
@@ -706,7 +706,7 @@ int32_t ad463x_init(struct ad463x_dev **device,
 		return -1;
 	}
 
-	dev = (struct ad463x_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ad463x_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -879,7 +879,7 @@ error_gpio:
 	no_os_gpio_remove(dev->gpio_pgia_a0);
 	no_os_gpio_remove(dev->gpio_pgia_a1);
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return -1;
 }
@@ -988,7 +988,7 @@ int32_t ad463x_remove(struct ad463x_dev *dev)
 			return ret;
 	}
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

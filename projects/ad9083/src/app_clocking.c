@@ -44,7 +44,7 @@
 #include "no_os_print_log.h"
 #include "parameters.h"
 #include "uc_settings.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 #define FPGA_SYSREF_CLK	0
 #define FPGA_GLBL_CLK	1
@@ -74,7 +74,7 @@ int32_t app_clocking_init(struct app_clocking **app,
 	struct ad9528_init_param ad9528_param;
 	struct ad9528_platform_data ad9528_pdata;
 
-	app_clocking = (struct app_clocking *)no_os_calloc(1, sizeof(*app_clocking));
+	app_clocking = (struct app_clocking *)capi_calloc(1, sizeof(*app_clocking));
 	if (!app_clocking)
 		return -1;
 
@@ -233,7 +233,7 @@ int32_t app_clocking_init(struct app_clocking **app,
 error_1:
 	ad9528_remove(app_clocking->clkchip_device);
 error_0:
-	no_os_free(app_clocking);
+	capi_free(app_clocking);
 
 	return -1;
 }
@@ -254,7 +254,7 @@ int32_t app_clocking_remove(struct app_clocking *app)
 	if (ret < 0)
 		return ret;
 
-	no_os_free(app);
+	capi_free(app);
 
 	return 0;
 }

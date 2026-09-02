@@ -33,7 +33,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_units.h"
 #include "no_os_util.h"
@@ -250,7 +250,7 @@ int ltc2378_iio_init(struct ltc2378_iio_desc **iio_desc,
 	if (!iio_desc || !init_param || !init_param->ltc2378_init_param)
 		return -EINVAL;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -265,7 +265,7 @@ int ltc2378_iio_init(struct ltc2378_iio_desc **iio_desc,
 	return 0;
 
 error_free_desc:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 	return ret;
 }
 
@@ -280,7 +280,7 @@ int ltc2378_iio_remove(struct ltc2378_iio_desc *iio_desc)
 		return -EINVAL;
 
 	ltc2378_remove(iio_desc->ltc2378_dev);
-	no_os_free(iio_desc);
+	capi_free(iio_desc);
 
 	return 0;
 }

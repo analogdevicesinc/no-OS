@@ -35,7 +35,7 @@
 #include <string.h>
 #include "max22196.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief Compute the CRC5 value for an array of bytes when writing to MAX22196
@@ -505,7 +505,7 @@ int max22196_init(struct max22196_desc **desc,
 	uint32_t reg_val;
 	int ret;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -571,7 +571,7 @@ int max22196_remove(struct max22196_desc *desc)
 
 	no_os_spi_remove(desc->comm_desc);
 	no_os_gpio_remove(desc->crc_desc);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

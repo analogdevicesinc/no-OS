@@ -43,7 +43,7 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_units.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /** X is set based on the pull configuration of the ADDR pin */
 #define TWO_BYTES_LENGTH                       2

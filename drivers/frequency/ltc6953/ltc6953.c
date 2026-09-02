@@ -40,7 +40,7 @@
 #include "no_os_spi.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 static const uint8_t LTC6953_LUT[2][LTC6953_NUM_REGADDR] = {
 	{
@@ -73,7 +73,7 @@ int ltc6953_init(struct ltc6953_dev **device,
 	int ret;
 	struct ltc6953_dev *dev;
 
-	dev = (struct ltc6953_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ltc6953_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -93,7 +93,7 @@ int ltc6953_init(struct ltc6953_dev **device,
 error:
 	no_os_spi_remove(dev->spi_desc);
 error_init:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -190,7 +190,7 @@ int ltc6953_remove(struct ltc6953_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

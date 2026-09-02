@@ -34,7 +34,7 @@
 #include <errno.h>
 #include "iio_lt8491.h"
 #include "lt8491.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 
 #define LT8491_IIO_CH_ATTR_RW(_name, _priv)	\
@@ -460,7 +460,7 @@ int lt8491_iio_init(struct lt8491_iio_device **iio_device,
 	if (!iio_init_param || !iio_init_param->init_param)
 		return -EINVAL;
 
-	iio_device_temp = no_os_calloc(1, sizeof(*iio_device_temp));
+	iio_device_temp = capi_calloc(1, sizeof(*iio_device_temp));
 	if (!iio_device_temp)
 		return -ENOMEM;
 
@@ -490,7 +490,7 @@ int lt8491_iio_init(struct lt8491_iio_device **iio_device,
 remove_dev:
 	lt8491_remove(iio_device_temp->dev);
 free_dev:
-	no_os_free(iio_device_temp);
+	capi_free(iio_device_temp);
 
 	return ret;
 }
@@ -504,7 +504,7 @@ int lt8491_iio_remove(struct lt8491_iio_device *iio_device)
 {
 	lt8491_remove(iio_device->dev);
 
-	no_os_free(iio_device);
+	capi_free(iio_device);
 
 	return 0;
 }

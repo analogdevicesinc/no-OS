@@ -34,7 +34,7 @@
 #include <malloc.h>
 #include "admv1013.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 #define MIXER_GATE_0_TO_1_8_V(x)		((2389 * x/ 1000000 + 8100) / 100)
 #define MIXER_GATE_1_8_TO_2_6_V(x)		((2375 * x/ 1000000 + 125) / 100)
@@ -294,7 +294,7 @@ int admv1013_init(struct admv1013_dev **device,
 	uint16_t data;
 	int ret;
 
-	dev = (struct admv1013_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct admv1013_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -366,7 +366,7 @@ int admv1013_init(struct admv1013_dev **device,
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -384,7 +384,7 @@ int admv1013_remove(struct admv1013_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

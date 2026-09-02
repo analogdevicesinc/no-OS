@@ -35,7 +35,7 @@
 #include "cn0391.h"
 #include "no_os_thermocouple.h"
 #include "no_os_rtd.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 
@@ -92,7 +92,7 @@ int cn0391_init(struct cn0391_dev **dev,
 	struct cn0391_dev *d;
 	int ret;
 
-	d = (struct cn0391_dev *)no_os_calloc(1, sizeof(*d));
+	d = (struct cn0391_dev *)capi_calloc(1, sizeof(*d));
 	if (!d)
 		return -ENOMEM;
 
@@ -129,7 +129,7 @@ int cn0391_init(struct cn0391_dev **dev,
 error_ad7124:
 	ad7124_remove(d->ad7124_dev);
 error_free:
-	no_os_free(d);
+	capi_free(d);
 
 	return ret;
 }
@@ -142,7 +142,7 @@ int cn0391_remove(struct cn0391_dev *dev)
 		return -EINVAL;
 
 	ret = ad7124_remove(dev->ad7124_dev);
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

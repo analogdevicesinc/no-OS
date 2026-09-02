@@ -38,7 +38,7 @@
 #include "no_os_units.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_i2c.h"
 #include "no_os_gpio.h"
 #include "no_os_crc8.h"
@@ -276,7 +276,7 @@ int lt3074_init(struct lt3074_dev **device,
 	uint32_t value;
 	uint8_t block[7];
 
-	dev = (struct lt3074_dev *)no_os_calloc(1, sizeof(struct lt3074_dev));
+	dev = (struct lt3074_dev *)capi_calloc(1, sizeof(struct lt3074_dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -356,7 +356,7 @@ int lt3074_init(struct lt3074_dev **device,
 dev_err:
 	no_os_i2c_remove(dev->i2c_desc);
 i2c_err:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -386,7 +386,7 @@ int lt3074_remove(struct lt3074_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

@@ -34,7 +34,7 @@
 #include "no_os_print_log.h"
 #include "state_machine.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "common_data.h"
 #include "no_os_error.h"
 #include "self_test.h"
@@ -143,31 +143,31 @@ int state_machine()
 #endif
 
 	/* Allocate memory for application structure */
-	stout = (struct stout *)no_os_calloc(1, sizeof(*stout));
+	stout = (struct stout *)capi_calloc(1, sizeof(*stout));
 	if (!stout)
 		return -ENOMEM;
 
 	/* Allocate memory for rms & adc values structure */
-	rms_adc_values = (struct rms_adc_values *)no_os_calloc(1,
+	rms_adc_values = (struct rms_adc_values *)capi_calloc(1,
 			 sizeof(*rms_adc_values));
 	if (!rms_adc_values) {
-		no_os_free(stout);
+		capi_free(stout);
 		return -ENOMEM;
 	}
 
 	/* Initialize I2C adt75*/
 	ret = adt75_init(&adt75_desc, &adt75_ip);
 	if (ret) {
-		no_os_free(stout);
-		no_os_free(rms_adc_values);
+		capi_free(stout);
+		capi_free(rms_adc_values);
 		return ret;
 	}
 
 	/* Initialize LEDs and buttons */
 	ret = interface_init(&stout->gpio_led[0]);
 	if (ret) {
-		no_os_free(stout);
-		no_os_free(rms_adc_values);
+		capi_free(stout);
+		capi_free(rms_adc_values);
 		adt75_remove(adt75_desc);
 		return ret;
 	}

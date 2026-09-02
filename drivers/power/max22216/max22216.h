@@ -37,7 +37,7 @@
 #include <stdbool.h>
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_util.h"
 #include "no_os_error.h"
 

@@ -38,7 +38,7 @@
 #include <string.h>
 #include "iio_ad5791.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief IIO get method to the 'scale' attribute of the channel.
@@ -381,7 +381,7 @@ int32_t ad5791_iio_init(struct ad5791_iio_desc **iio_dev,
 	int32_t ret;
 	struct ad5791_iio_desc *desc;
 
-	desc = (struct ad5791_iio_desc *)no_os_calloc(1, sizeof(*desc));
+	desc = (struct ad5791_iio_desc *)capi_calloc(1, sizeof(*desc));
 	if (!desc)
 		return -1;
 
@@ -398,7 +398,7 @@ int32_t ad5791_iio_init(struct ad5791_iio_desc **iio_dev,
 
 	return 0;
 error_desc:
-	no_os_free(desc);
+	capi_free(desc);
 
 	return ret;
 }
@@ -416,7 +416,7 @@ int32_t ad5791_iio_remove(struct ad5791_iio_desc *desc)
 	if (ret != 0)
 		return ret;
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

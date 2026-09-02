@@ -34,6 +34,7 @@
 
 #include "ad5592r-base.h"
 #include "no_os_error.h"
+#include "capi_alloc.h"
 #include "ad5593r.h"
 
 const struct ad5592r_rw_ops ad5593r_rw_ops = {
@@ -266,7 +267,7 @@ int32_t ad5593r_init(struct ad5592r_dev **device,
 	uint8_t i;
 	struct ad5592r_dev *dev;
 
-	dev = (struct ad5592r_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ad5592r_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -324,7 +325,7 @@ int32_t ad5593r_init(struct ad5592r_dev **device,
 err_remove_i2c:
 	no_os_i2c_remove(dev->i2c);
 err_free_device:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -353,7 +354,7 @@ int32_t ad5593r_remove(struct ad5592r_dev *dev)
 		return err;
 
 	/* finally we can remove our descriptor object */
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

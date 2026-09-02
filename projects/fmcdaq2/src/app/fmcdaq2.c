@@ -70,7 +70,7 @@
 #endif
 
 #include "no_os_print_log.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "jesd204.h"
 #include "jesd204_clk.h"
 
@@ -1177,7 +1177,7 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 	dev->ad9144_device->link_config.sysref.mode = JESD204_SYSREF_ONESHOT;
 	dev->ad9144_device->link_config.sysref.lmfc_offset = 0;
 
-	dev->ad9144_device->link_config.lane_ids = no_os_calloc(
+	dev->ad9144_device->link_config.lane_ids = capi_calloc(
 				dev->ad9144_device->link_config.num_lanes, sizeof(uint8_t));
 	if (!dev->ad9144_device->link_config.lane_ids)
 		return -ENOMEM;

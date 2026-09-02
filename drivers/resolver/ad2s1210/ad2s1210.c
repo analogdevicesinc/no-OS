@@ -37,7 +37,7 @@
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 static int ad2s1210_set_mode_pins(struct ad2s1210_dev *dev,
 				  enum ad2s1210_mode mode);
@@ -313,7 +313,7 @@ int ad2s1210_init(struct ad2s1210_dev **dev,
 		return -EINVAL;
 	}
 
-	d = (struct ad2s1210_dev *)no_os_calloc(1, sizeof(*d));
+	d = (struct ad2s1210_dev *)capi_calloc(1, sizeof(*d));
 	if (!d)
 		return -ENOMEM;
 
@@ -392,7 +392,7 @@ err_a1:
 err_a0:
 	no_os_gpio_remove(d->gpio_sample);
 err_sample:
-	no_os_free(d);
+	capi_free(d);
 	pr_err("%s initialization failed with status %ld\n", d->name, ret);
 
 	return ret;
@@ -533,7 +533,7 @@ int ad2s1210_remove(struct ad2s1210_dev *dev)
 			return ret;
 	}
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

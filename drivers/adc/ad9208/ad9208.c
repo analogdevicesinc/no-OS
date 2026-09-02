@@ -37,7 +37,7 @@
 #include "ad9208.h"
 #include <inttypes.h>
 #include "api_def.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * Spi write and read compatible with ad9208 API
@@ -51,7 +51,7 @@ static int ad9208_spi_xfer(void *user_data, uint8_t *wbuf,
 			   uint8_t *rbuf, int len)
 {
 	struct no_os_spi_desc *spi = user_data;
-	uint8_t * buffer = (uint8_t *) no_os_malloc(len);
+	uint8_t * buffer = (uint8_t *) capi_malloc(len);
 	int32_t ret;
 
 	if (!buffer)
@@ -65,7 +65,7 @@ static int ad9208_spi_xfer(void *user_data, uint8_t *wbuf,
 	else
 		memcpy(rbuf, buffer, len);
 
-	no_os_free(buffer);
+	capi_free(buffer);
 
 	return ret;
 }
@@ -375,11 +375,11 @@ int32_t ad9208_initialize(ad9208_dev **device, ad9208_init_param *init_param)
 	ad9208_dev *dev;
 	int32_t i, ret;
 
-	dev = (ad9208_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (ad9208_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
-	dev->st = (struct ad9208_state *)no_os_calloc(1, sizeof(*dev->st));
+	dev->st = (struct ad9208_state *)capi_calloc(1, sizeof(*dev->st));
 	if (!dev->st) {
 		ret = -ENOMEM;
 		goto error;
@@ -402,19 +402,19 @@ int32_t ad9208_initialize(ad9208_dev **device, ad9208_init_param *init_param)
 	if (ret < 0)
 		goto error;
 
-	struct ad9208_state *st = (struct ad9208_state *)no_os_calloc(1, sizeof(*st));
+	struct ad9208_state *st = (struct ad9208_state *)capi_calloc(1, sizeof(*st));
 	if (!st) {
 		ret = -ENOMEM;
 		goto error;
 	}
 
-	st->jesd_param = (jesd_param_t *)no_os_calloc(1, sizeof(*st->jesd_param));
+	st->jesd_param = (jesd_param_t *)capi_calloc(1, sizeof(*st->jesd_param));
 	if (!st->jesd_param) {
 		ret = -ENOMEM;
 		goto error;
 	}
 
-	st->adc_h = (ad9208_handle_t *)no_os_calloc(1, sizeof(*st->adc_h));
+	st->adc_h = (ad9208_handle_t *)capi_calloc(1, sizeof(*st->adc_h));
 	if (!st->adc_h) {
 		ret = -ENOMEM;
 		goto error;
@@ -476,19 +476,19 @@ int32_t ad9208_initialize(ad9208_dev **device, ad9208_init_param *init_param)
 
 error:
 	if (st->adc_h)
-		no_os_free(st->adc_h);
+		capi_free(st->adc_h);
 	if (st->jesd_param)
-		no_os_free(st->jesd_param);
+		capi_free(st->jesd_param);
 	if (st)
-		no_os_free(st);
+		capi_free(st);
 	if (dev->gpio_powerdown)
 		no_os_gpio_remove(dev->gpio_powerdown);
 	if (dev->spi_desc)
 		no_os_spi_remove(dev->spi_desc);
 	if (dev->st)
-		no_os_free(dev->st);
+		capi_free(dev->st);
 	if (dev)
-		no_os_free(dev);
+		capi_free(dev);
 
 	return ret;
 }
@@ -501,11 +501,11 @@ int32_t ad9208_remove(ad9208_dev *device)
 	ret |= no_os_spi_remove(device->spi_desc);
 
 	if (device->st->adc_h)
-		no_os_free(device->st->adc_h);
+		capi_free(device->st->adc_h);
 	if (device->st)
-		no_os_free(device->st);
+		capi_free(device->st);
 	if (device)
-		no_os_free(device);
+		capi_free(device);
 
 	return ret;
 }

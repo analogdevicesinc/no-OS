@@ -34,7 +34,7 @@
 #include <errno.h>
 #include "iio_ltc4162l.h"
 #include "ltc4162l.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 
 #define LT8491_IIO_CH_ATTR_RW(_name, _priv)	\
@@ -490,7 +490,7 @@ int ltc4162l_iio_init(struct ltc4162l_iio_device **iio_device,
 	if (!iio_init_param || !iio_init_param->init_param)
 		return -EINVAL;
 
-	iio_device_temp = no_os_calloc(1, sizeof(*iio_device_temp));
+	iio_device_temp = capi_calloc(1, sizeof(*iio_device_temp));
 	if (!iio_device_temp)
 		return -ENOMEM;
 
@@ -505,7 +505,7 @@ int ltc4162l_iio_init(struct ltc4162l_iio_device **iio_device,
 	return 0;
 
 free_dev:
-	no_os_free(iio_device_temp);
+	capi_free(iio_device_temp);
 
 	return ret;
 }
@@ -519,7 +519,7 @@ int ltc4162l_iio_remove(struct ltc4162l_iio_device *iio_device)
 {
 	ltc4162l_remove(iio_device->dev);
 
-	no_os_free(iio_device);
+	capi_free(iio_device);
 
 	return 0;
 }

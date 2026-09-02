@@ -37,7 +37,7 @@
 #include "ad552xr.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_util.h"
 
 static const uint16_t ad552xr_supported_product_ids[AD552XR_NUM_TYPES][1] = {
@@ -956,7 +956,7 @@ int ad552xr_init(struct ad552xr_dev **device,
 	if (init_param->dev_addr > 3 || init_param->type >= AD552XR_NUM_TYPES)
 		return -EINVAL;
 
-	dev = (struct ad552xr_dev*)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ad552xr_dev*)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -1065,7 +1065,7 @@ err_gpio:
 err_spi:
 	no_os_spi_remove(dev->spi_desc);
 err_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -1092,7 +1092,7 @@ int ad552xr_remove(struct ad552xr_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

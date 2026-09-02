@@ -36,7 +36,7 @@
 #include "max96792_csi.h"
 #include "gmsl_dbg.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "gmsl_cam_des.h"
 #include "max96792_diag.h"
 
@@ -128,14 +128,14 @@ int32_t max96792_init(struct gmsl_dev** device, struct no_os_i2c_desc* i2c_desc,
 			break;
 		}
 
-		dev = no_os_calloc(1, sizeof(*dev));
+		dev = capi_calloc(1, sizeof(*dev));
 		if (!dev) {
 			ret = -ENOMEM;
 			init_error = true;
 			break;
 		}
 
-		dev_cap = no_os_calloc(1, sizeof(*dev_cap));
+		dev_cap = capi_calloc(1, sizeof(*dev_cap));
 		if (dev_cap == NULL) {
 			ret = -ENOMEM;
 			error_remove_dev = true;
@@ -175,7 +175,7 @@ int32_t max96792_init(struct gmsl_dev** device, struct no_os_i2c_desc* i2c_desc,
 		else
 			strcpy(dev->dev_name, DEV_NAME);
 
-		dev->dev_state = no_os_calloc(1, MAX96792_DEV_STATE_MEM_SIZE);
+		dev->dev_state = capi_calloc(1, MAX96792_DEV_STATE_MEM_SIZE);
 		if (!dev->dev_state) {
 			ret = -ENOMEM;
 			error_remove_cap = true;
@@ -189,11 +189,11 @@ int32_t max96792_init(struct gmsl_dev** device, struct no_os_i2c_desc* i2c_desc,
 	} while (false);
 
 	if (error_remove_cap) {
-		no_os_free(dev_cap);
+		capi_free(dev_cap);
 	}
 
 	if (error_remove_cap || error_remove_dev) {
-		no_os_free(dev);
+		capi_free(dev);
 	}
 	if (error_remove_cap || error_remove_dev || init_error) {
 		GMSL_LOG_ERROR("MAX96792 Initialization failed");
@@ -221,7 +221,7 @@ int32_t max96792_remove(struct gmsl_dev* dev)
 	slave_addr = dev->i2c_desc->slave_address;
 #endif
 	if (dev->dev_state != NULL) {
-		no_os_free(dev->dev_state);
+		capi_free(dev->dev_state);
 	} else {
 		GMSL_LOG_ERROR("%s-0x%x Freeing of device state memory failed",
 			       (char *)DEV_NAME, slave_addr);
@@ -229,14 +229,14 @@ int32_t max96792_remove(struct gmsl_dev* dev)
 	}
 
 	if (dev->dev_cap != NULL) {
-		no_os_free(dev->dev_cap);
+		capi_free(dev->dev_cap);
 	} else {
 		GMSL_LOG_ERROR("%s-0x%x Freeing of device capability memory failed",
 			       (char *)DEV_NAME, slave_addr);
 		ret = -EINVAL;
 	}
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	GMSL_LOG_INFO("%s-0x%x remove passed", (char *)DEV_NAME, slave_addr);
 

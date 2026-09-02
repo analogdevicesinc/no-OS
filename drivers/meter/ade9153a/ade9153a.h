@@ -42,7 +42,7 @@
 #include "no_os_irq.h"
 #include "no_os_delay.h"
 #include "no_os_units.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_crc16.h"
 #include "no_os_print_log.h"
 #include <stdlib.h>

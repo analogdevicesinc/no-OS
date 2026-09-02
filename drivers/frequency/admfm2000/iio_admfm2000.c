@@ -37,7 +37,7 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "iio_admfm2000.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief Get the channel gain.
@@ -169,7 +169,7 @@ int admfm2000_iio_init(struct admfm2000_iio_dev **iio_dev,
 	struct admfm2000_dev *admfm2000_dev;
 	int32_t ret;
 
-	iio_admfm2000 = (struct admfm2000_iio_dev *)no_os_calloc(1,
+	iio_admfm2000 = (struct admfm2000_iio_dev *)capi_calloc(1,
 			sizeof(*iio_admfm2000));
 	if (!iio_admfm2000)
 		return -ENOMEM;
@@ -199,8 +199,8 @@ int admfm2000_iio_remove(struct admfm2000_iio_dev *desc)
 	if (ret)
 		return ret;
 
-	no_os_free(desc->admfm2000_dev);
-	no_os_free(desc);
+	capi_free(desc->admfm2000_dev);
+	capi_free(desc);
 
 	return 0;
 }

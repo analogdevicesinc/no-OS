@@ -40,7 +40,7 @@
 #include "no_os_util.h"
 #include "no_os_clk.h"
 #include "ad9545.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "sys/types.h"
 
 static const char *ad9545_aux_dpll_name = "AUX_DPLL";
@@ -1531,7 +1531,7 @@ int32_t ad9545_init(struct ad9545_dev **device,
 	struct ad9545_dev *dev;
 	int32_t ret;
 
-	dev = (struct ad9545_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad9545_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -1585,7 +1585,7 @@ int32_t ad9545_init(struct ad9545_dev **device,
 	return ret;
 error:
 	printf("ad9545 initialization error (%d)\n", ret);
-	no_os_free(dev);
+	capi_free(dev);
 	no_os_mdelay(1000);
 	return ret;
 }
@@ -1803,7 +1803,7 @@ static int ad9545_aux_ncos_setup(struct ad9545_dev *dev)
 	int ret;
 	uint8_t i;
 
-	dev->clks[AD9545_CLK_NCO] = no_os_calloc(NO_OS_ARRAY_SIZE(
+	dev->clks[AD9545_CLK_NCO] = capi_calloc(NO_OS_ARRAY_SIZE(
 					    ad9545_aux_nco_clk_names),
 				    sizeof(struct no_os_clk_desc *));
 	if (!dev->clks[AD9545_CLK_NCO])
@@ -1881,7 +1881,7 @@ static int ad9545_aux_tdcs_setup(struct ad9545_dev *dev)
 	int ret;
 	uint8_t i;
 
-	dev->clks[AD9545_CLK_AUX_TDC] = (struct no_os_clk_desc **)no_os_calloc(
+	dev->clks[AD9545_CLK_AUX_TDC] = (struct no_os_clk_desc **)capi_calloc(
 						NO_OS_ARRAY_SIZE(ad9545_aux_tdc_clk_names),
 						sizeof(*dev->clks[AD9545_CLK_AUX_TDC]));
 	if (!dev->clks[AD9545_CLK_AUX_TDC])
@@ -2122,7 +2122,7 @@ static int ad9545_plls_setup(struct ad9545_dev *dev)
 	int i;
 	int j;
 
-	dev->clks[AD9545_CLK_PLL] = (struct no_os_clk_desc **)no_os_calloc(
+	dev->clks[AD9545_CLK_PLL] = (struct no_os_clk_desc **)capi_calloc(
 					    NO_OS_ARRAY_SIZE(ad9545_pll_clk_names),
 					    sizeof(struct no_os_clk_desc *));
 	if (!dev->clks[AD9545_CLK_PLL])
@@ -2146,7 +2146,7 @@ static int ad9545_plls_setup(struct ad9545_dev *dev)
 			if (pll->profiles[j].en)
 				pll->num_parents++;
 
-		pll->parents = (struct no_os_clk_desc **)no_os_calloc(pll->num_parents,
+		pll->parents = (struct no_os_clk_desc **)capi_calloc(pll->num_parents,
 				sizeof(*pll->parents));
 		if (!pll->parents)
 			return -ENOMEM;
@@ -2265,7 +2265,7 @@ static int ad9545_outputs_setup(struct ad9545_dev *dev)
 			return ret;
 	}
 
-	dev->clks[AD9545_CLK_OUT] = no_os_calloc(NO_OS_ARRAY_SIZE(ad9545_out_clk_names),
+	dev->clks[AD9545_CLK_OUT] = capi_calloc(NO_OS_ARRAY_SIZE(ad9545_out_clk_names),
 				    sizeof(struct no_os_clk_desc *));
 	if (!dev->clks[AD9545_CLK_OUT])
 		return -ENOMEM;
@@ -2412,10 +2412,10 @@ int32_t ad9545_remove(struct ad9545_dev *dev)
 
 	for (i = 0; i < NO_OS_ARRAY_SIZE(dev->clks); i++) {
 		if (dev->clks[i])
-			no_os_free(dev->clks[i]);
+			capi_free(dev->clks[i]);
 	}
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

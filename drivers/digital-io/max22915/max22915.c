@@ -33,7 +33,7 @@
 
 #include "max22915.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_spi.h"
 #include "no_os_print_log.h"
 #include <stdio.h>
@@ -369,7 +369,7 @@ int max22915_init(struct max22915_desc **device,
 	uint8_t i;
 	uint8_t reg_data;
 
-	dev = (struct max22915_desc *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct max22915_desc *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -435,7 +435,7 @@ err:
 	if (dev->spi_desc)
 		no_os_spi_remove(dev->spi_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -451,7 +451,7 @@ int max22915_remove(struct max22915_desc *dev)
 		return -EINVAL;
 
 	no_os_spi_remove(dev->spi_desc);
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

@@ -37,7 +37,7 @@
 #include "no_os_error.h"
 #include "no_os_gpio.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "mcs_gpio.h"
 #include "jesd204.h"
 
@@ -93,7 +93,7 @@ int32_t mcs_gpio_init(struct mcs_gpio_dev **device,
 	struct mcs_gpio_dev *dev;
 	int32_t ret;
 
-	dev = (struct mcs_gpio_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct mcs_gpio_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -115,7 +115,7 @@ int32_t mcs_gpio_init(struct mcs_gpio_dev **device,
 err_gpio:
 	no_os_gpio_remove(dev->gpio_req);
 error:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -129,7 +129,7 @@ int32_t mcs_gpio_remove(struct mcs_gpio_dev *device)
 	int32_t ret;
 
 	ret = no_os_gpio_remove(device->gpio_req);
-	no_os_free(device);
+	capi_free(device);
 
 	return ret;
 }

@@ -35,7 +35,7 @@
 #include "no_os_spi.h"
 #include "no_os_units.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "iio.h"
 #include "iio_tmc5240.h"
 #include "tmc5240.h"
@@ -267,7 +267,7 @@ int tmc5240_iio_init(struct tmc5240_iio_dev **iio_dev,
 	if (!iio_dev || !init_param)
 		return -EINVAL;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -283,7 +283,7 @@ int tmc5240_iio_init(struct tmc5240_iio_dev **iio_dev,
 	return 0;
 
 init_tmc_err:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -302,7 +302,7 @@ int tmc5240_iio_remove(struct tmc5240_iio_dev *desc)
 		return -EINVAL;
 
 	tmc5240_remove(desc->tmc5240_dev);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

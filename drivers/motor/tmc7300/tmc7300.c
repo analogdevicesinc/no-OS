@@ -35,7 +35,7 @@
 #include <stdbool.h>
 
 #include "no_os_uart.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 
@@ -501,7 +501,7 @@ int tmc7300_init(struct tmc7300_desc **desc,
 	if (!param || !param->comm_desc)
 		return -EINVAL;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -538,7 +538,7 @@ int tmc7300_init(struct tmc7300_desc **desc,
 free_gpio:
 	no_os_gpio_remove(descriptor->en_gpio);
 free_desc:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -554,7 +554,7 @@ int tmc7300_remove(struct tmc7300_desc *desc)
 		return -ENODEV;
 
 	no_os_gpio_remove(desc->en_gpio);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

@@ -35,7 +35,7 @@
 #include <string.h>
 #include <errno.h>
 #include "max30009.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
@@ -62,7 +62,7 @@ static int max30009_spi_reg_access(struct max30009_dev *device,
 	uint32_t i;
 	int ret;
 
-	buf = no_os_calloc(len + 2, sizeof(*buf));
+	buf = capi_calloc(len + 2, sizeof(*buf));
 	if (!buf)
 		return -ENOMEM;
 
@@ -81,7 +81,7 @@ static int max30009_spi_reg_access(struct max30009_dev *device,
 			data[i] = buf[2 + i]; /* Data is on 3rd byte */
 	}
 
-	no_os_free(buf);
+	capi_free(buf);
 
 	return ret;
 }
@@ -113,7 +113,7 @@ static int max30009_i2c_reg_access(struct max30009_dev *device,
 		return no_os_i2c_read(device->i2c_desc, data, len, 1);
 	}
 
-	buf = no_os_calloc(len + 1, sizeof(*buf));
+	buf = capi_calloc(len + 1, sizeof(*buf));
 	if (!buf)
 		return -ENOMEM;
 
@@ -122,7 +122,7 @@ static int max30009_i2c_reg_access(struct max30009_dev *device,
 		buf[1 + i] = data[i];
 
 	ret = no_os_i2c_write(device->i2c_desc, buf, len + 1, 1);
-	no_os_free(buf);
+	capi_free(buf);
 
 	return ret;
 }
@@ -328,11 +328,11 @@ int max30009_init(struct max30009_dev **device,
 	if (!device || !init_param)
 		return -EINVAL;
 
-	dev = (struct max30009_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct max30009_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
-	dev->fifo_read_buf = no_os_calloc(
+	dev->fifo_read_buf = capi_calloc(
 				     MAX30009_FIFO_DEPTH * MAX30009_FIFO_DATA_SIZE,
 				     sizeof(*dev->fifo_read_buf));
 	if (!dev->fifo_read_buf) {
@@ -395,8 +395,8 @@ error_csb_gpio:
 	if (dev->csb_gpio_desc)
 		no_os_gpio_remove(dev->csb_gpio_desc);
 error_alloc:
-	no_os_free(dev->fifo_read_buf);
-	no_os_free(dev);
+	capi_free(dev->fifo_read_buf);
+	capi_free(dev);
 	return ret;
 }
 
@@ -426,8 +426,8 @@ int max30009_remove(struct max30009_dev *device)
 	else if (device->i2c_desc)
 		ret |= no_os_i2c_remove(device->i2c_desc);
 
-	no_os_free(device->fifo_read_buf);
-	no_os_free(device);
+	capi_free(device->fifo_read_buf);
+	capi_free(device);
 
 	return ret;
 }

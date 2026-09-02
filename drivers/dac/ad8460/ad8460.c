@@ -32,7 +32,7 @@
 *******************************************************************************/
 
 #include "ad8460.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_spi.h"
@@ -118,7 +118,7 @@ int ad8460_init(struct ad8460_device **dev,
 	struct ad8460_device *temp_dev;
 	int ret;
 
-	temp_dev = no_os_calloc(1, sizeof(*temp_dev));
+	temp_dev = capi_calloc(1, sizeof(*temp_dev));
 	if (!temp_dev)
 		return -ENOMEM;
 
@@ -147,7 +147,7 @@ remove_spi:
 		pr_err("Failed to remove SPI descriptor\r\n");
 
 free_dev:
-	no_os_free(temp_dev);
+	capi_free(temp_dev);
 
 	return ret;
 }
@@ -168,7 +168,7 @@ int ad8460_remove(struct ad8460_device *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

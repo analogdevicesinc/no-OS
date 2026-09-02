@@ -36,7 +36,7 @@
 #include "max96793_csi.h"
 #include "gmsl_dbg.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "gmsl_reg_access.h"
 
 #define MAX96793_MAX_LINKS          (1U)
@@ -121,13 +121,13 @@ int32_t max96793_init(struct gmsl_dev **device, struct no_os_i2c_desc *i2c_desc,
 		goto init_error;
 	}
 
-	dev = no_os_calloc(1, sizeof(*dev));
+	dev = capi_calloc(1, sizeof(*dev));
 	if (!dev) {
 		ret = -ENOMEM;
 		goto init_error;
 	}
 
-	dev_cap = no_os_calloc(1, sizeof(*dev_cap));
+	dev_cap = capi_calloc(1, sizeof(*dev_cap));
 	if (!dev_cap) {
 		ret = -ENOMEM;
 		goto error_remove_dev;
@@ -152,7 +152,7 @@ int32_t max96793_init(struct gmsl_dev **device, struct no_os_i2c_desc *i2c_desc,
 	else
 		strcpy(dev->dev_name, DEV_NAME);         /*!< Default device name */
 
-	dev->dev_state = no_os_calloc(1, MAX96793_DEV_STATE_MEM_SIZE);
+	dev->dev_state = capi_calloc(1, MAX96793_DEV_STATE_MEM_SIZE);
 	if (!dev->dev_state) {
 		ret = -ENOMEM;
 		goto error_remove_cap;
@@ -166,10 +166,10 @@ int32_t max96793_init(struct gmsl_dev **device, struct no_os_i2c_desc *i2c_desc,
 	goto exit;
 
 error_remove_cap:
-	no_os_free(dev_cap);
+	capi_free(dev_cap);
 
 error_remove_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 init_error:
 	GMSL_LOG_ERROR("MAX96793 Initialization failed");
@@ -199,7 +199,7 @@ int32_t max96793_remove(struct gmsl_dev *dev)
 	slave_addr = dev->i2c_desc->slave_address;
 #endif
 	if (dev->dev_state != NULL) {
-		no_os_free(dev->dev_state);
+		capi_free(dev->dev_state);
 	} else {
 		GMSL_LOG_ERROR("%s-0x%x Freeing of device state memory failed",
 			       (char *)DEV_NAME, slave_addr);
@@ -207,14 +207,14 @@ int32_t max96793_remove(struct gmsl_dev *dev)
 	}
 
 	if (dev->dev_cap != NULL) {
-		no_os_free(dev->dev_cap);
+		capi_free(dev->dev_cap);
 	} else {
 		GMSL_LOG_ERROR("%s-0x%x Freeing of device capabilities memory failed",
 			       (char *)DEV_NAME, slave_addr);
 		ret = -EINVAL;
 	}
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	GMSL_LOG_INFO("%s-0x%x remove passed", (char *)DEV_NAME, slave_addr);
 

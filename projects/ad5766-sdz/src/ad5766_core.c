@@ -37,7 +37,7 @@
 #include "spi_engine_private.h"
 #include <xil_io.h>
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "ad5766_core.h"
 
 const uint16_t sine_lut[512] = {
@@ -167,7 +167,7 @@ int32_t ad5766_core_setup(struct spi_engine_desc *eng_desc,
 	uint32_t	sync_id = 0;
 	uint8_t		size = 3;
 
-	core = (ad5766_core *)no_os_malloc(sizeof(*core));
+	core = (ad5766_core *)capi_malloc(sizeof(*core));
 	if (!core)
 		return -1;
 
@@ -179,7 +179,7 @@ int32_t ad5766_core_setup(struct spi_engine_desc *eng_desc,
 
 	rate_reg = ref_clk_hz / core->rate_hz;
 	if (rate_reg > 0xFFFF) {
-		no_os_free(core);
+		capi_free(core);
 		return -1;
 	}
 

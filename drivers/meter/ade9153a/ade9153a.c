@@ -41,7 +41,7 @@
 #include "no_os_irq.h"
 #include "no_os_delay.h"
 #include "no_os_units.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_crc16.h"
 #include "no_os_print_log.h"
 #include <stdlib.h>
@@ -159,7 +159,7 @@ int ade9153a_init(struct ade9153a_dev **device,
 	if (!init_param.irq_ctrl)
 		return -EINVAL;
 
-	dev = (struct ade9153a_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ade9153a_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -274,7 +274,7 @@ error_irq:
 error_gpio_rdy:
 	no_os_gpio_remove(dev->gpio_rdy);
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -535,7 +535,7 @@ int ade9153a_remove(struct ade9153a_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

@@ -35,7 +35,7 @@
 #include <errno.h>
 #include "pcf85263.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief Read device register.
@@ -109,7 +109,7 @@ int pcf85263_init(struct pcf85263_dev **device,
 	struct pcf85263_dev *dev;
 	int ret;
 
-	dev = (struct pcf85263_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct pcf85263_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -133,7 +133,7 @@ int pcf85263_init(struct pcf85263_dev **device,
 error_i2c:
 	no_os_i2c_remove(dev->i2c_desc);
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -249,7 +249,7 @@ int pcf85263_remove(struct pcf85263_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

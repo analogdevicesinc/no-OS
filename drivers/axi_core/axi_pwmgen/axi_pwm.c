@@ -36,7 +36,7 @@
 #include "axi_pwm_extra.h"
 #include "no_os_axi_io.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 
 #define AXI_PWMGEN_REG_CORE_VERSION	0x00
@@ -278,11 +278,11 @@ int32_t axi_pwm_init(struct no_os_pwm_desc **desc,
 
 	axi_init = param->extra;
 
-	pwm_desc = (struct no_os_pwm_desc *)no_os_calloc(1, sizeof(*pwm_desc));
+	pwm_desc = (struct no_os_pwm_desc *)capi_calloc(1, sizeof(*pwm_desc));
 	if (!pwm_desc)
 		return -1;
 
-	axi_desc = (struct axi_pwm_desc *)no_os_calloc(1, sizeof(*axi_desc));
+	axi_desc = (struct axi_pwm_desc *)capi_calloc(1, sizeof(*axi_desc));
 	if (!axi_desc)
 		goto error_desc;
 
@@ -358,9 +358,9 @@ int32_t axi_pwm_init(struct no_os_pwm_desc **desc,
 	return 0;
 
 error_xdesc:
-	no_os_free(axi_desc);
+	capi_free(axi_desc);
 error_desc:
-	no_os_free(pwm_desc);
+	capi_free(pwm_desc);
 
 	return -1;
 }
@@ -384,8 +384,8 @@ int32_t axi_pwm_remove(struct no_os_pwm_desc *desc)
 	if (ret != 0)
 		return -1;
 
-	no_os_free(axi_desc);
-	no_os_free(desc);
+	capi_free(axi_desc);
+	capi_free(desc);
 
 	return 0;
 }

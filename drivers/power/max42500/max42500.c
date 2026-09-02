@@ -41,7 +41,7 @@
 #include "max42500.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_crc8.h"
 
 #define CRC8_PEC        0x07      /* Implements Polynomial X^8 + X^2 + X^1 +1 */
@@ -627,7 +627,7 @@ int max42500_init(struct max42500_dev **desc,
 
 	no_os_crc8_populate_msb(max42500_crc8, CRC8_PEC);
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -780,7 +780,7 @@ free_en1:
 free_en0:
 	no_os_gpio_remove(descriptor->en0);
 free_desc:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -813,7 +813,7 @@ int max42500_remove(struct max42500_dev *desc)
 	if (ret)
 		return ret;
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

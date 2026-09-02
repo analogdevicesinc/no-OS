@@ -33,7 +33,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_units.h"
 #include "no_os_util.h"
@@ -822,7 +822,7 @@ int max17616_iio_init(struct max17616_iio_desc **iio_desc,
 	if (!iio_desc || !init_param || !init_param->max17616_init_param)
 		return -EINVAL;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -838,7 +838,7 @@ int max17616_iio_init(struct max17616_iio_desc **iio_desc,
 	return 0;
 
 dev_err:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -856,7 +856,7 @@ int max17616_iio_remove(struct max17616_iio_desc *iio_desc)
 	if (iio_desc->max17616_dev)
 		max17616_remove(iio_desc->max17616_dev);
 
-	no_os_free(iio_desc);
+	capi_free(iio_desc);
 
 	return 0;
 }

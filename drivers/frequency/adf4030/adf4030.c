@@ -32,7 +32,7 @@
 *******************************************************************************/
 
 #include "adf4030.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
@@ -2064,7 +2064,7 @@ int adf4030_init(struct adf4030_dev **dev,
 	struct adf4030_dev *device;
 	int ret;
 
-	device = (struct adf4030_dev *)no_os_calloc(1, sizeof(*device));
+	device = (struct adf4030_dev *)capi_calloc(1, sizeof(*device));
 	if (!device)
 		return -ENOMEM;
 
@@ -2125,7 +2125,7 @@ int adf4030_init(struct adf4030_dev **dev,
 error_spi:
 	no_os_spi_remove(device->spi_desc);
 error_dev:
-	no_os_free(device);
+	capi_free(device);
 
 	return ret;
 }
@@ -2146,7 +2146,7 @@ int adf4030_remove(struct adf4030_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

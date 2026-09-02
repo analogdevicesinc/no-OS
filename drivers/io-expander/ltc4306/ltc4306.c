@@ -36,7 +36,7 @@
 #include "no_os_i2c.h"
 #include "no_os_util.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "ltc4306.h"
 
 /* Pin configurable LTC4306 addresses */
@@ -90,7 +90,7 @@ int ltc4306_init(struct ltc4306_dev **device,
 	struct ltc4306_dev *dev;
 	int ret;
 
-	dev = (struct ltc4306_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ltc4306_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -103,7 +103,7 @@ int ltc4306_init(struct ltc4306_dev **device,
 	return 0;
 
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -121,7 +121,7 @@ int ltc4306_remove(struct ltc4306_dev *dev)
 
 	ret = no_os_i2c_remove(dev->i2c_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

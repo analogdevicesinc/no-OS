@@ -51,6 +51,13 @@ function(post_build_config PROJECT_TARGET)
                 )
         endif()
 
+        # Fail the build if this executable uses capi_alloc but no strong
+        # platform backend was linked (weak no-op would return NULL at runtime).
+        # Passes silently for projects that do not use capi_alloc.
+        if(COMMAND capi_alloc_add_link_guard)
+                capi_alloc_add_link_guard(${PROJECT_TARGET})
+        endif()
+
         # IDE project file generation (replaces cmake -P vscode_config.cmake
         # and generate_stm32cubeide_project calls)
         ide_generate(${PROJECT_TARGET})

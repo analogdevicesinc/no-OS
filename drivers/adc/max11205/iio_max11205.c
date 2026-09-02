@@ -36,7 +36,7 @@
 #include "iio_max11205.h"
 #include "errno.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 #define MAX11205_BIT_SCALE		15
 #define MAX11205_NEW_DATA_TIMEOUT	12000000
@@ -248,7 +248,7 @@ int max11205_iio_init(struct max11205_iio_dev **iio_dev,
 	int ret;
 	struct max11205_iio_dev *desc;
 
-	desc = (struct max11205_iio_dev *)no_os_calloc(1, sizeof(*desc));
+	desc = (struct max11205_iio_dev *)capi_calloc(1, sizeof(*desc));
 	if (!desc)
 		return -ENOMEM;
 
@@ -267,7 +267,7 @@ int max11205_iio_init(struct max11205_iio_dev **iio_dev,
 	return 0;
 
 error_max11205_init:
-	no_os_free(desc);
+	capi_free(desc);
 	return ret;
 }
 
@@ -284,7 +284,7 @@ int max11205_iio_remove(struct max11205_iio_dev *desc)
 	if (ret)
 		return ret;
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

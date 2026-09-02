@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include "ad6673.h"
 #include "ad6673_cfg.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 static const int32_t shadow_regs[SHADOW_REGISTER_COUNT] = {
 	0,
@@ -79,7 +79,7 @@ int32_t ad6673_setup(struct ad6673_dev **device,
 	int32_t ret = 0;
 	int8_t i = 0;
 
-	dev = (struct ad6673_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad6673_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -178,7 +178,7 @@ int32_t ad6673_remove(struct ad6673_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

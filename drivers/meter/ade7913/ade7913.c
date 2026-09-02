@@ -37,7 +37,7 @@
 #include "ade7913.h"
 #include "no_os_delay.h"
 #include "no_os_units.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_crc8.h"
 #include "no_os_crc16.h"
 #include "no_os_print_log.h"
@@ -360,7 +360,7 @@ int ade7913_init(struct ade7913_dev **device,
 		return -EINVAL;
 
 	// allocate memory for the dev strucuture
-	dev = (struct ade7913_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ade7913_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -370,17 +370,17 @@ int ade7913_init(struct ade7913_dev **device,
 	dev->burst_mode = init_param.burst_mode;
 
 	// allocate memory for the waveforms depending on the number of dev
-	i_wav = (int32_t *)no_os_calloc(dev->no_devs, sizeof(*i_wav));
+	i_wav = (int32_t *)capi_calloc(dev->no_devs, sizeof(*i_wav));
 	if (!i_wav)
 		goto err_alloc_i_wav;
-	v1_wav = (int32_t *)no_os_calloc(dev->no_devs, sizeof(*v1_wav));
+	v1_wav = (int32_t *)capi_calloc(dev->no_devs, sizeof(*v1_wav));
 	if (!v1_wav)
 		goto err_alloc_v1_wav;
-	v2_wav = (int32_t *)no_os_calloc(dev->no_devs, sizeof(*v2_wav));
+	v2_wav = (int32_t *)capi_calloc(dev->no_devs, sizeof(*v2_wav));
 	if (!v2_wav)
 		goto err_alloc_v2_wav;
 
-	v_product = (uint8_t *)no_os_calloc(dev->no_devs, sizeof(*v_product));
+	v_product = (uint8_t *)capi_calloc(dev->no_devs, sizeof(*v_product));
 	if (!v_product)
 		goto err_alloc_v_product;
 
@@ -534,15 +534,15 @@ error_spi1:
 error_spi0:
 	no_os_spi_remove(dev->spi_desc0);
 error_dev:
-	no_os_free(v_product);
+	capi_free(v_product);
 err_alloc_v_product:
-	no_os_free(v2_wav);
+	capi_free(v2_wav);
 err_alloc_v2_wav:
-	no_os_free(v1_wav);
+	capi_free(v1_wav);
 err_alloc_v1_wav:
-	no_os_free(i_wav);
+	capi_free(i_wav);
 err_alloc_i_wav:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -569,11 +569,11 @@ int ade7913_remove(struct ade7913_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev->ver_product);
-	no_os_free(dev->i_wav_m);
-	no_os_free(dev->v1_wav_m);
-	no_os_free(dev->v2_wav_m);
-	no_os_free(dev);
+	capi_free(dev->ver_product);
+	capi_free(dev->i_wav_m);
+	capi_free(dev->v1_wav_m);
+	capi_free(dev->v2_wav_m);
+	capi_free(dev);
 
 	return 0;
 }

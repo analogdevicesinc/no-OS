@@ -43,7 +43,7 @@
 #include "spi_engine.h"
 #endif
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_util.h"
 
 const struct pulsar_adc_dev_info pulsar_adc_devices[] = {
@@ -304,7 +304,7 @@ int32_t pulsar_adc_init(struct pulsar_adc_dev **device,
 	if (!init_param)
 		return -1;
 
-	dev = (struct pulsar_adc_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct pulsar_adc_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -405,7 +405,7 @@ int32_t pulsar_adc_remove(struct pulsar_adc_dev *dev)
 #endif
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

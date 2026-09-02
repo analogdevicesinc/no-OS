@@ -33,7 +33,7 @@
 
 #include <stdlib.h>
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
 #include "adgm3121.h"
@@ -441,7 +441,7 @@ int adgm3121_init(struct adgm3121_dev **device,
 	if (!device || !init_param)
 		return -EINVAL;
 
-	dev = no_os_calloc(1, sizeof(*dev));
+	dev = capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -541,7 +541,7 @@ error_gpio1:
 error_pin_spi:
 	no_os_gpio_remove(dev->gpio_pin_spi);
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -578,7 +578,7 @@ int adgm3121_remove(struct adgm3121_dev *dev)
 	if (dev->gpio_pin_spi)
 		no_os_gpio_remove(dev->gpio_pin_spi);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

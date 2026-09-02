@@ -33,7 +33,7 @@
 
 #include "no_os_print_log.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_clk.h"
 #include <inttypes.h>
 #include "jesd204.h"
@@ -334,7 +334,7 @@ static int32_t ad9172_spi_xfer(void *user_data, uint8_t *wbuf,
 {
 	int32_t ret;
 	struct no_os_spi_desc *spi = user_data;
-	uint8_t * buffer = (uint8_t *) no_os_malloc(len);
+	uint8_t * buffer = (uint8_t *) capi_malloc(len);
 
 	if (!buffer)
 		return -ENOMEM;
@@ -346,7 +346,7 @@ static int32_t ad9172_spi_xfer(void *user_data, uint8_t *wbuf,
 	} else {
 		memcpy(rbuf, buffer, len);
 	}
-	no_os_free(buffer);
+	capi_free(buffer);
 
 	return ret;
 }
@@ -515,11 +515,11 @@ int32_t ad9172_init(ad9172_dev **device, ad9172_init_param * init_param)
 	ad9172_dev *dev;
 	int32_t ret, i;
 
-	dev = (ad9172_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (ad9172_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
-	struct ad9172_state *st = (struct ad9172_state *)no_os_calloc(1, sizeof(*st));
+	struct ad9172_state *st = (struct ad9172_state *)capi_calloc(1, sizeof(*st));
 	if (!st) {
 		ret = -ENOMEM;
 		goto error_1;
@@ -605,9 +605,9 @@ int32_t ad9172_init(ad9172_dev **device, ad9172_init_param * init_param)
 error_3:
 	no_os_spi_remove(dev->spi_desc);
 error_2:
-	no_os_free(st);
+	capi_free(st);
 error_1:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -626,9 +626,9 @@ int32_t ad9172_remove(ad9172_dev *device)
 	ret += no_os_gpio_remove(device->gpio_txen0);
 	ret += no_os_gpio_remove(device->gpio_txen1);
 
-	no_os_free(device->st);
+	capi_free(device->st);
 
-	no_os_free(device);
+	capi_free(device);
 
 	return ret;
 }

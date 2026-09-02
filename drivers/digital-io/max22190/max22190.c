@@ -35,7 +35,7 @@
 #include <string.h>
 #include "max22190.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief Compute the CRC5 value for MAX22190
@@ -430,7 +430,7 @@ int max22190_init(struct max22190_desc **desc,
 	struct max22190_desc *descriptor;
 	int ret;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -472,7 +472,7 @@ gpio_err:
 spi_err:
 	no_os_spi_remove(descriptor->comm_desc);
 err:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -498,7 +498,7 @@ int max22190_remove(struct max22190_desc *desc)
 
 	no_os_spi_remove(desc->comm_desc);
 	no_os_gpio_remove(desc->en_gpio);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

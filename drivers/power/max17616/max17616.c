@@ -40,7 +40,7 @@
 #include "no_os_units.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_i2c.h"
 #include "no_os_crc8.h"
 
@@ -1098,7 +1098,7 @@ int max17616_init(struct max17616_dev **device,
 	struct max17616_dev *dev;
 	int ret = -EINVAL;
 
-	dev = (struct max17616_dev *)no_os_calloc(1, sizeof(struct max17616_dev));
+	dev = (struct max17616_dev *)capi_calloc(1, sizeof(struct max17616_dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -1132,7 +1132,7 @@ int max17616_init(struct max17616_dev **device,
 dev_err:
 	no_os_i2c_remove(dev->i2c_desc);
 i2c_err:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -1145,7 +1145,7 @@ i2c_err:
 int max17616_remove(struct max17616_dev *dev)
 {
 	no_os_i2c_remove(dev->i2c_desc);
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

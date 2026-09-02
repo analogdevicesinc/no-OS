@@ -39,7 +39,7 @@
 #include "no_os_print_log.h"
 #include "no_os_units.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #include "maxim_uart.h"
 #include "maxim_gpio.h"
@@ -126,19 +126,19 @@ int main(void)
 	}
 
 	// allocate memory depending on the number of devices
-	i_rms = (int32_t *)no_os_calloc(ade7913_ip.no_devs,
+	i_rms = (int32_t *)capi_calloc(ade7913_ip.no_devs,
 					sizeof(i_rms));
 	if (!i_rms) {
 		ret = -ENOMEM;
 		goto remove_led;
 	}
-	v1_rms = (int32_t *)no_os_calloc(ade7913_ip.no_devs,
+	v1_rms = (int32_t *)capi_calloc(ade7913_ip.no_devs,
 					 sizeof(v1_rms));
 	if (!v1_rms) {
 		ret = -ENOMEM;
 		goto remove_led;
 	}
-	v2_rms = (int32_t *)no_os_calloc(ade7913_ip.no_devs,
+	v2_rms = (int32_t *)capi_calloc(ade7913_ip.no_devs,
 					 sizeof(v2_rms));
 	if (!v2_rms) {
 		ret = -ENOMEM;
@@ -149,19 +149,19 @@ int main(void)
 	rms_values.v1_rms = v1_rms;
 	rms_values.v2_rms = v2_rms;
 
-	i_rms_adc = (int32_t *)no_os_calloc(ade7913_ip.no_devs,
+	i_rms_adc = (int32_t *)capi_calloc(ade7913_ip.no_devs,
 					    sizeof(i_rms_adc));
 	if (!i_rms_adc) {
 		ret = -ENOMEM;
 		goto remove_led;
 	}
-	v1_rms_adc = (int32_t *)no_os_calloc(ade7913_ip.no_devs,
+	v1_rms_adc = (int32_t *)capi_calloc(ade7913_ip.no_devs,
 					     sizeof(v1_rms_adc));
 	if (!v1_rms_adc) {
 		ret = -ENOMEM;
 		goto remove_led;
 	}
-	v2_rms_adc = (int32_t *)no_os_calloc(ade7913_ip.no_devs,
+	v2_rms_adc = (int32_t *)capi_calloc(ade7913_ip.no_devs,
 					     sizeof(v2_rms_adc));
 	if (!v2_rms_adc) {
 		ret = -ENOMEM;
@@ -181,7 +181,7 @@ int main(void)
 
 	/* Init ade7913 struct */
 	ade7913_dev = (struct ade7913_dev *)
-		      no_os_calloc(1, sizeof(*ade7913_dev));
+		      capi_calloc(1, sizeof(*ade7913_dev));
 	if (!ade7913_dev) {
 		ret = -ENOMEM;
 		goto remove_led;
@@ -340,7 +340,7 @@ int main(void)
 	}
 
 free_dev:
-	no_os_free(ade7913_dev);
+	capi_free(ade7913_dev);
 remove_led:
 	no_os_gpio_remove(gpio_desc);
 remove_uart:

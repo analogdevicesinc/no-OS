@@ -36,7 +36,7 @@
 #include "no_os_error.h"
 #include "no_os_units.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 #include "max22017.h"
 #include "iio_max22017.h"
@@ -753,7 +753,7 @@ int max22017_iio_init(struct max22017_iio_desc **iio_desc,
 	if (!init_param || !init_param->max22017_init_param)
 		return -EINVAL;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -780,11 +780,11 @@ int max22017_iio_remove(struct max22017_iio_desc *iio_desc)
 		return -ENODEV;
 
 	if (iio_desc->iio_dev->channels)
-		no_os_free(iio_desc->iio_dev->channels);
+		capi_free(iio_desc->iio_dev->channels);
 	if (iio_desc->max22017_desc)
 		max22017_remove(iio_desc->max22017_desc);
 
-	no_os_free(iio_desc);
+	capi_free(iio_desc);
 
 	return 0;
 }

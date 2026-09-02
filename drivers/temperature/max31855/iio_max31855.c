@@ -36,7 +36,7 @@
 #include "iio_max31855.h"
 #include "max31855.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "iio.h"
 
 static int max31855_iio_read_raw(void *dev, char *buf, uint32_t len,
@@ -123,7 +123,7 @@ int max31855_iio_init(struct max31855_iio_dev **iio_dev,
 	if (!init_param)
 		return -EINVAL;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -137,7 +137,7 @@ int max31855_iio_init(struct max31855_iio_dev **iio_dev,
 
 	return 0;
 init_err:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -155,7 +155,7 @@ int max31855_iio_remove(struct max31855_iio_dev *desc)
 	if (ret)
 		return ret;
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

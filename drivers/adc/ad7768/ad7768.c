@@ -34,7 +34,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ad7768.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"
@@ -634,7 +634,7 @@ int32_t ad7768_setup(ad7768_dev **device,
 error:
 	no_os_spi_remove(dev->spi_desc);
 	no_os_gpio_remove(dev->gpio_reset);
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -652,7 +652,7 @@ int32_t ad7768_setup_begin(ad7768_dev **device,
 	ad7768_dev *dev;
 	int32_t ret;
 
-	dev = (ad7768_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (ad7768_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev) {
 		return -ENOMEM;
 	}
@@ -684,7 +684,7 @@ int32_t ad7768_setup_begin(ad7768_dev **device,
 error_1:
 	no_os_spi_remove(dev->spi_desc);
 error:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -928,7 +928,7 @@ int ad7768_remove(ad7768_dev *dev)
 		no_os_gpio_remove(dev->gpio_mode3);
 	}
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

@@ -34,7 +34,7 @@
 #include <stdio.h>
 
 #include "iio_adl8113.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 
@@ -222,7 +222,7 @@ static int adl8113_iio_init_gain_configs(struct adl8113_iio_dev *desc,
 	if (init_param->has_external_bypass_b)
 		n++;
 
-	desc->gain_configs = no_os_calloc(n, sizeof(*desc->gain_configs));
+	desc->gain_configs = capi_calloc(n, sizeof(*desc->gain_configs));
 	if (!desc->gain_configs)
 		return -ENOMEM;
 
@@ -278,7 +278,7 @@ int adl8113_iio_init(struct adl8113_iio_dev **iio_dev,
 	if (!iio_dev || !init_param || !init_param->adl8113_init_param)
 		return -EINVAL;
 
-	desc = no_os_calloc(1, sizeof(*desc));
+	desc = capi_calloc(1, sizeof(*desc));
 	if (!desc)
 		return -ENOMEM;
 
@@ -297,9 +297,9 @@ int adl8113_iio_init(struct adl8113_iio_dev **iio_dev,
 	return 0;
 
 err_gain:
-	no_os_free(desc->gain_configs);
+	capi_free(desc->gain_configs);
 err_desc:
-	no_os_free(desc);
+	capi_free(desc);
 	return ret;
 }
 
@@ -314,8 +314,8 @@ int adl8113_iio_remove(struct adl8113_iio_dev *iio_dev)
 		return -EINVAL;
 
 	adl8113_remove(iio_dev->adl8113_dev);
-	no_os_free(iio_dev->gain_configs);
-	no_os_free(iio_dev);
+	capi_free(iio_dev->gain_configs);
+	capi_free(iio_dev);
 
 	return 0;
 }

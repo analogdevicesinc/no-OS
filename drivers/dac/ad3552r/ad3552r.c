@@ -41,7 +41,7 @@
 #include "axi_dmac.h"
 #include "clk_axi_clkgen.h"
 #endif
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_gpio.h"
@@ -1349,7 +1349,7 @@ int32_t ad3552r_init(struct ad3552r_desc **desc,
 	if (!desc || !param)
 		return -EINVAL;
 
-	ldesc = (struct ad3552r_desc*)no_os_calloc(1, sizeof(*ldesc));
+	ldesc = (struct ad3552r_desc*)capi_calloc(1, sizeof(*ldesc));
 	if (!ldesc)
 		return -ENOMEM;
 
@@ -1482,7 +1482,7 @@ err_reset:
 err_spi:
 	no_os_spi_remove(ldesc->spi);
 err:
-	no_os_free(ldesc);
+	capi_free(ldesc);
 
 	return err;
 }
@@ -1496,7 +1496,7 @@ int32_t ad3552r_remove(struct ad3552r_desc *desc)
 	if (!desc->axi)
 		no_os_spi_remove(desc->spi);
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

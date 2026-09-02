@@ -36,7 +36,7 @@
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_print_log.h"
 
 static const uint8_t adxl367_scale_mul[3] = {1, 2, 4};
@@ -59,7 +59,7 @@ int adxl367_init(struct adxl367_dev **device,
 	uint8_t reg_value;
 	int status;
 
-	dev = (struct adxl367_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct adxl367_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -122,7 +122,7 @@ err:
 	else
 		no_os_i2c_remove(dev->i2c_desc);
 comm_err:
-	no_os_free(dev);
+	capi_free(dev);
 	return status;
 }
 
@@ -142,7 +142,7 @@ int adxl367_remove(struct adxl367_dev *dev)
 	else
 		ret = no_os_i2c_remove(dev->i2c_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

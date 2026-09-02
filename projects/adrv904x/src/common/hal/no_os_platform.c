@@ -17,7 +17,7 @@
 #include "no_os_mutex.h"
 #include "no_os_delay.h"
 #include "common_data.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "parameters.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
@@ -800,7 +800,7 @@ long int ftell(FILE *stream)
 
 FILE* fopen(const char * filename, const char *mode)
 {
-	FILE *stream = no_os_calloc(1, sizeof(*stream));
+	FILE *stream = capi_calloc(1, sizeof(*stream));
 	unsigned int length;
 	char *temp;
 
@@ -809,9 +809,9 @@ FILE* fopen(const char * filename, const char *mode)
 
 	if (!strcmp(filename, "DeviceProfileTest.bin")) {
 		length = sizeof(DeviceProfileTest_bin);
-		temp = (char *)no_os_calloc(length, sizeof(char));
+		temp = (char *)capi_calloc(length, sizeof(char));
 		if (!temp) {
-			no_os_free(stream);
+			capi_free(stream);
 			return NULL;
 		}
 		memcpy(temp, DeviceProfileTest_bin, length);
@@ -820,9 +820,9 @@ FILE* fopen(const char * filename, const char *mode)
 		profile.end = profile.start + length;
 	} else if (!strcmp(filename, "stream_image.bin")) {
 		length = sizeof(stream_image_bin);
-		temp = (char *)no_os_calloc(length, sizeof(char));
+		temp = (char *)capi_calloc(length, sizeof(char));
 		if (!temp) {
-			no_os_free(stream);
+			capi_free(stream);
 			return NULL;
 		}
 		memcpy(temp, stream_image_bin, length);
@@ -831,9 +831,9 @@ FILE* fopen(const char * filename, const char *mode)
 		profile.end = profile.start + length;
 	} else if (!strcmp(filename, "ADRV9040_FW.bin")) {
 		length = sizeof(ADRV9040_FW_bin);
-		temp = (char *)no_os_calloc(length, sizeof(char));
+		temp = (char *)capi_calloc(length, sizeof(char));
 		if (!temp) {
-			no_os_free(stream);
+			capi_free(stream);
 			return NULL;
 		}
 		memcpy(temp, ADRV9040_FW_bin, sizeof(ADRV9040_FW_bin));
@@ -842,9 +842,9 @@ FILE* fopen(const char * filename, const char *mode)
 		profile.end = profile.start + length;
 	} else if (!strcmp(filename, "ADRV9040_DFE_CALS_FW.bin")) {
 		length = sizeof(ADRV9040_DFE_CALS_FW_bin);
-		temp = (char *)no_os_calloc(length, sizeof(char));
+		temp = (char *)capi_calloc(length, sizeof(char));
 		if (!temp) {
-			no_os_free(stream);
+			capi_free(stream);
 			return NULL;
 		}
 		memcpy(temp, ADRV9040_DFE_CALS_FW_bin, sizeof(ADRV9040_DFE_CALS_FW_bin));
@@ -853,9 +853,9 @@ FILE* fopen(const char * filename, const char *mode)
 		profile.end = profile.start + length;
 	} else if (!strcmp(filename, "RxGainTable.csv")) {
 		length = strlen(ADRV9040_RxGainTable_text);
-		temp = (char *)no_os_calloc(length, sizeof(char));
+		temp = (char *)capi_calloc(length, sizeof(char));
 		if (!temp) {
-			no_os_free(stream);
+			capi_free(stream);
 			return NULL;
 		}
 		strcpy(temp, ADRV9040_RxGainTable_text);
@@ -863,7 +863,7 @@ FILE* fopen(const char * filename, const char *mode)
 		profile.start = profile.ptr = profile.data;
 		profile.end = profile.start + strlen(profile.data);
 	} else {
-		no_os_free(stream);
+		capi_free(stream);
 		stream = NULL;
 	}
 
@@ -903,7 +903,7 @@ int __wrap_fclose(FILE *stream)
 		return -ENODEV;
 
 	memset(&profile, 0, sizeof(profile));
-	no_os_free(stream);
+	capi_free(stream);
 
 	return 0;
 }

@@ -41,7 +41,7 @@
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 #define AD469x_TEST_DATA 0xEA
 
@@ -1061,7 +1061,7 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	uint8_t max_data_ch;
 	uint32_t sample_frequncy_ksps;
 
-	dev = (struct ad469x_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad469x_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -1171,7 +1171,7 @@ error_clkgen:
 	axi_clkgen_remove(dev->clkgen);
 #endif
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -1216,7 +1216,7 @@ int32_t ad469x_remove(struct ad469x_dev *dev)
 		return ret;
 #endif
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

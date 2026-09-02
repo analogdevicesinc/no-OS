@@ -35,7 +35,7 @@
 #include <errno.h>
 
 #include "ad7091r8.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"
@@ -386,7 +386,7 @@ int ad7091r8_init(struct ad7091r8_dev **device,
 	if (!device)
 		return -EINVAL;
 
-	dev = (struct ad7091r8_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ad7091r8_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -444,7 +444,7 @@ err_release_spi:
 	no_os_spi_remove(dev->spi_desc);
 
 err_free_dev:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -471,7 +471,7 @@ int ad7091r8_remove(struct ad7091r8_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 	return 0;
 }
 

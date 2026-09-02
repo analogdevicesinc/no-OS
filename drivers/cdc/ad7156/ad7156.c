@@ -33,7 +33,7 @@
 
 #include <stdlib.h>
 #include "ad7156.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /***************************************************************************//**
  * @brief Performs a burst read of a specified number of registers.
@@ -94,7 +94,7 @@ int8_t ad7156_init(struct ad7156_dev **device,
 	int8_t status = -1;
 	uint8_t test = 0;
 
-	dev = (struct ad7156_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad7156_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -128,7 +128,7 @@ int32_t ad7156_remove(struct ad7156_dev *dev)
 
 	status = no_os_i2c_remove(dev->i2c_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return status;
 }

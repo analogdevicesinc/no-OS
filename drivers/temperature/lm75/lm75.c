@@ -31,7 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include <errno.h>
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "lm75.h"
 
 static const struct lm75_reg_permissions {
@@ -266,7 +266,7 @@ static int new_lm75(struct lm75_dev **lm75pp,
 	if (!lm75_addr_ok(ip->slave_address))
 		return -EINVAL;
 
-	lm75 = no_os_malloc(sizeof(*lm75));
+	lm75 = capi_malloc(sizeof(*lm75));
 	if (!lm75)
 		return -ENOMEM;
 
@@ -293,7 +293,7 @@ static int new_lm75(struct lm75_dev **lm75pp,
 err_iic_remove:
 	no_os_i2c_remove(iic);
 err_iic_failed:
-	no_os_free(lm75);
+	capi_free(lm75);
 	return err;
 }
 
@@ -314,7 +314,7 @@ static int delete_lm75(struct lm75_dev *lm75)
 	if (lm75->i2c)
 		err = no_os_i2c_remove(lm75->i2c);
 
-	no_os_free(lm75);
+	capi_free(lm75);
 
 	return err;
 }

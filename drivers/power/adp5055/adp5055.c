@@ -33,7 +33,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "adp5055.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
 
@@ -472,7 +472,7 @@ int adp5055_init(struct adp5055_desc **desc,
 	struct adp5055_desc *descriptor;
 	int ret;
 
-	descriptor = (struct adp5055_desc *)no_os_calloc(sizeof(*descriptor), 1);
+	descriptor = (struct adp5055_desc *)capi_calloc(sizeof(*descriptor), 1);
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -513,7 +513,7 @@ int adp5055_remove(struct adp5055_desc *desc)
 	}
 
 	no_os_i2c_remove(desc->i2c_desc);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

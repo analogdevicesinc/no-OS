@@ -32,7 +32,7 @@
  ********************************************************************************/
 #include <errno.h>
 #include "iio_lm75.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_util.h"
 
 static int lm75_ch_attr_show(void *device, char *buf, uint32_t len,
@@ -243,7 +243,7 @@ int iio_lm75_init(struct iio_lm75 **iio_lm75pp,
 	if (!dev)
 		return -EINVAL;
 
-	liio_desc = no_os_calloc(1, sizeof * liio_desc);
+	liio_desc = capi_calloc(1, sizeof * liio_desc);
 	if (!liio_desc)
 		return -ENOMEM;
 
@@ -258,7 +258,7 @@ int iio_lm75_init(struct iio_lm75 **iio_lm75pp,
 	return 0;
 
 err_cleanup:
-	no_os_free(liio_desc);
+	capi_free(liio_desc);
 	return err;
 }
 
@@ -275,7 +275,7 @@ int iio_lm75_remove(struct iio_lm75 *iio_lm75)
 	if (!iio_lm75)
 		return -EINVAL;
 
-	no_os_free(iio_lm75);
+	capi_free(iio_lm75);
 
 	return 0;
 }

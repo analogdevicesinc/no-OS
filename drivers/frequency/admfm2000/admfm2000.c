@@ -32,7 +32,7 @@
 *******************************************************************************/
 
 #include "admfm2000.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 
@@ -134,7 +134,7 @@ int admfm2000_init(struct admfm2000_dev **device,
 	uint8_t i, j;
 	struct admfm2000_dev *dev;
 
-	dev = (struct admfm2000_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct admfm2000_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -181,7 +181,7 @@ int admfm2000_init(struct admfm2000_dev **device,
 	return 0;
 
 error:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -203,7 +203,7 @@ int admfm2000_remove(struct admfm2000_dev *dev)
 		for (j = 0; j < ADMFM2000_DSA_GPIOS; j++)
 			no_os_gpio_remove(dev->gpio_dsa[i][j]);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

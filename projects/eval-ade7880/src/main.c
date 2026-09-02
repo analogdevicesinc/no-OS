@@ -40,7 +40,7 @@
 #include "no_os_units.h"
 #include "no_os_util.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "maxim_uart.h"
 #include "maxim_gpio.h"
 #include "maxim_uart_stdio.h"
@@ -139,7 +139,7 @@ int main(void)
 	pr_info("ADE7880 SPI example \n");
 
 	/* Init ade7880 struct */
-	ade7880_dev = (struct ade7880_dev *)no_os_calloc(1, sizeof(*ade7880_dev));
+	ade7880_dev = (struct ade7880_dev *)capi_calloc(1, sizeof(*ade7880_dev));
 	if (!ade7880_dev)
 		return -ENOMEM;
 
@@ -173,7 +173,7 @@ int main(void)
 	}
 
 free_dev:
-	no_os_free(ade7880_dev);
+	capi_free(ade7880_dev);
 remove_reset:
 	no_os_gpio_remove(gpio_reset_desc);
 remove_psm1:

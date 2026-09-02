@@ -38,7 +38,7 @@
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * Read from device.
@@ -533,7 +533,7 @@ int32_t ad7091r5_init(struct ad7091r5_dev **device,
 	if (!device || !init_param)
 		return -EINVAL;
 
-	dev = (struct ad7091r5_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad7091r5_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -560,7 +560,7 @@ error_i2c:
 error_gpio:
 	no_os_gpio_remove(dev->gpio_resetn);
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -585,7 +585,7 @@ int32_t ad7091r5_remove(struct ad7091r5_dev *dev)
 	if (ret < 0)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

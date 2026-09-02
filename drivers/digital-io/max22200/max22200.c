@@ -35,7 +35,7 @@
 #include <string.h>
 #include "max22200.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 
 /**
@@ -729,7 +729,7 @@ int max22200_init(struct max22200_desc **desc,
 	uint32_t status_reg = 0;
 	int ret, i;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -854,7 +854,7 @@ cmd_err:
 spi_err:
 	no_os_spi_remove(descriptor->comm_desc);
 err:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 	return ret;
 }
 
@@ -891,7 +891,7 @@ int max22200_remove(struct max22200_desc *desc)
 	no_os_gpio_remove(desc->trig_desc);
 	no_os_gpio_remove(desc->fault_desc);
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

@@ -37,7 +37,7 @@
 #include "no_os_error.h"
 #include "no_os_units.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "ad74413r.h"
 #include "iio_ad74413r.h"
 
@@ -1253,7 +1253,7 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 		channel_buff_cnt++;
 	}
 
-	chan_buffer = no_os_calloc(channel_buff_cnt, sizeof(*chan_buffer));
+	chan_buffer = capi_calloc(channel_buff_cnt, sizeof(*chan_buffer));
 	if (!chan_buffer)
 		return -ENOMEM;
 
@@ -1332,7 +1332,7 @@ static int ad74413r_iio_setup_channels(struct ad74413r_iio_desc *iio_desc)
 	return 0;
 
 free_channels:
-	no_os_free(chan_buffer);
+	capi_free(chan_buffer);
 
 	return ret;
 }
@@ -1524,7 +1524,7 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
 	if (!init_param || !init_param->ad74413r_init_param)
 		return -EINVAL;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -1556,7 +1556,7 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **iio_desc,
 	return 0;
 err:
 	ad74413r_remove(descriptor->ad74413r_desc);
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -1574,8 +1574,8 @@ int ad74413r_iio_remove(struct ad74413r_iio_desc *desc)
 	if (ret)
 		return ret;
 
-	no_os_free(desc->iio_dev->channels);
-	no_os_free(desc);
+	capi_free(desc->iio_dev->channels);
+	capi_free(desc);
 
 	return 0;
 }

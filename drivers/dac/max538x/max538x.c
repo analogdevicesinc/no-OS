@@ -38,7 +38,7 @@
 #include "no_os_i2c.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 const struct max538x_chip_info chip_info[] = {
 	[MAX5380L] = {
@@ -115,7 +115,7 @@ int max538x_init(struct max538x_dev **device,
 	    && init_param.active_device > MAX5381K)
 		return -EINVAL;
 
-	dev = (struct max538x_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct max538x_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -137,7 +137,7 @@ int max538x_init(struct max538x_dev **device,
 	return 0;
 
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -151,7 +151,7 @@ int max538x_remove(struct max538x_dev *dev)
 	int ret;
 
 	ret = no_os_i2c_remove(dev->i2c_desc);
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

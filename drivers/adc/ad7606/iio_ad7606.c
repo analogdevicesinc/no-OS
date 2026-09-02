@@ -18,7 +18,7 @@
 #include "iio_ad7606.h"
 #include "iio.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 
 #define AD7606_CH(_idx, bits) {\
@@ -98,7 +98,7 @@ static int get_raw(void *device,
 	uint32_t *res;
 	int ret;
 
-	res = no_os_calloc(num_chan, sizeof(*res));
+	res = capi_calloc(num_chan, sizeof(*res));
 	if (!res)
 		return -ENOMEM;
 
@@ -115,7 +115,7 @@ static int get_raw(void *device,
 	ret = sprintf(buf, "%ld", no_os_sign_extend32(res[channel->ch_num],
 			iio_dev->sign_bit));
 error:
-	no_os_free(res);
+	capi_free(res);
 
 	return ret;
 }
@@ -440,7 +440,7 @@ int ad7606_iio_init(struct ad7606_iio_dev **dev,
 	struct ad7606_iio_dev *desc;
 	int ret;
 
-	desc = no_os_calloc(1, sizeof(*desc));
+	desc = capi_calloc(1, sizeof(*desc));
 	if (!desc)
 		return -ENOMEM;
 
@@ -460,7 +460,7 @@ int ad7606_iio_init(struct ad7606_iio_dev **dev,
 	return 0;
 
 error_setup:
-	no_os_free(desc);
+	capi_free(desc);
 	return ret;
 }
 
@@ -471,7 +471,7 @@ int ad7606_iio_remove(struct ad7606_iio_dev *dev)
 
 	ad7606_remove(dev->ad7606_dev);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

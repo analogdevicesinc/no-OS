@@ -32,6 +32,7 @@
 *******************************************************************************/
 #include <stdio.h>
 #include "no_os_uart.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
@@ -116,7 +117,7 @@ int main(void)
 	pr_info("ADHV4710 SPI example \n");
 
 	/* Init adhv4710 struct */
-	adhv4710_dev = (struct adhv4710_dev *)no_os_calloc(1, sizeof(*adhv4710_dev));
+	adhv4710_dev = (struct adhv4710_dev *)capi_calloc(1, sizeof(*adhv4710_dev));
 	if (!adhv4710_dev)
 		return -ENOMEM;
 
@@ -263,7 +264,7 @@ int main(void)
 	}
 
 free_dev:
-	no_os_free(adhv4710_dev);
+	capi_free(adhv4710_dev);
 remove_reset:
 	no_os_gpio_remove(reset_desc);
 remove_led:

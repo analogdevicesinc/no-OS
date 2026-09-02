@@ -37,7 +37,7 @@
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "axi_dac_core.h"
 #include "no_os_axi_io.h"
 
@@ -1109,7 +1109,7 @@ int32_t axi_dac_init_begin(struct axi_dac **dac_core,
 {
 	struct axi_dac *dac;
 
-	dac = (struct axi_dac *)no_os_malloc(sizeof(*dac));
+	dac = (struct axi_dac *)capi_malloc(sizeof(*dac));
 	if (!dac)
 		return -1;
 
@@ -1189,7 +1189,7 @@ int32_t axi_dac_init(struct axi_dac **dac_core,
 
 	return 0;
 error:
-	no_os_free(dac);
+	capi_free(dac);
 
 	return -1;
 }
@@ -1246,7 +1246,7 @@ int32_t axi_dac_data_setup(struct axi_dac *dac)
  */
 int32_t axi_dac_remove(struct axi_dac *dac)
 {
-	no_os_free(dac);
+	capi_free(dac);
 
 	return 0;
 }

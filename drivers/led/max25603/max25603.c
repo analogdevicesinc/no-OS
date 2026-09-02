@@ -33,7 +33,7 @@
 #include "max25603.h"
 #include "no_os_delay.h"
 #include "no_os_units.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief MAX25603 select comparator function
@@ -238,7 +238,7 @@ int max25603_init(struct max25603_desc **desc,
 	struct max25603_desc *descriptor;
 	int ret;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -328,7 +328,7 @@ en2_err:
 en1_err:
 	no_os_pwm_remove(descriptor->en1_desc);
 err:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -351,7 +351,7 @@ int max25603_remove(struct max25603_desc *desc)
 	no_os_pwm_remove(desc->turn_desc);
 	no_os_pwm_remove(desc->en2_desc);
 	no_os_pwm_remove(desc->en1_desc);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

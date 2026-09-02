@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include "adf7023_config.h"
 #include "adf7023.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 #define ADF7023_CS_ASSERT   no_os_gpio_set_value(dev->gpio_cs,  \
 			    NO_OS_GPIO_LOW)
@@ -82,7 +82,7 @@ int32_t adf7023_init(struct adf7023_dev **device,
 	uint8_t status = 0;
 	int32_t ret = 0;
 
-	dev = (struct adf7023_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct adf7023_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -133,7 +133,7 @@ int32_t adf7023_remove(struct adf7023_dev *dev)
 	ret |= no_os_gpio_remove(dev->gpio_cs);
 	ret |= no_os_gpio_remove(dev->gpio_miso);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

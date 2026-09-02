@@ -38,7 +38,7 @@
 #include "iio_pulsar_adc.h"
 #include "iio.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 
 /**
@@ -182,7 +182,7 @@ int pulsar_adc_iio_init(struct pulsar_adc_iio_dev **dev,
 	struct pulsar_adc_iio_dev *desc;
 	int ret;
 
-	desc = no_os_calloc(1, sizeof(*desc));
+	desc = capi_calloc(1, sizeof(*desc));
 	if (!desc)
 		return -ENOMEM;
 
@@ -206,7 +206,7 @@ int pulsar_adc_iio_init(struct pulsar_adc_iio_dev **dev,
 	return 0;
 
 error_setup:
-	no_os_free(desc);
+	capi_free(desc);
 	return ret;
 }
 
@@ -222,6 +222,6 @@ int pulsar_adc_iio_remove(struct pulsar_adc_iio_dev *iio_dev)
 
 	pulsar_adc_remove(iio_dev->pulsar_adc_dev);
 
-	no_os_free(iio_dev);
+	capi_free(iio_dev);
 	return 0;
 }

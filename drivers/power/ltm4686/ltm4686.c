@@ -38,7 +38,7 @@
 #include "no_os_units.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_i2c.h"
 #include "no_os_gpio.h"
 #include "no_os_crc8.h"
@@ -464,7 +464,7 @@ int ltm4686_init(struct ltm4686_dev **device,
 	int ret, i;
 	uint8_t byte;
 
-	dev = (struct ltm4686_dev *)no_os_calloc(1, sizeof(struct ltm4686_dev));
+	dev = (struct ltm4686_dev *)capi_calloc(1, sizeof(struct ltm4686_dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -579,7 +579,7 @@ dev_err:
 		no_os_gpio_remove(dev->fault_descs[i]);
 	}
 i2c_err:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -603,7 +603,7 @@ int ltm4686_remove(struct ltm4686_dev *dev)
 		no_os_gpio_remove(dev->fault_descs[i]);
 	}
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

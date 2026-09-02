@@ -32,7 +32,7 @@
 *******************************************************************************/
 
 #include "max31827.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_i2c.h"
@@ -150,7 +150,7 @@ int max31827_init(struct max31827_device **dev,
 	struct max31827_device *temp_dev;
 	int ret;
 
-	temp_dev = no_os_calloc(1, sizeof(*temp_dev));
+	temp_dev = capi_calloc(1, sizeof(*temp_dev));
 	if (!temp_dev)
 		return -ENOMEM;
 
@@ -176,7 +176,7 @@ remove_i2c:
 		pr_err("Failed to remove I2C descriptor\r\n");
 
 free_dev:
-	no_os_free(temp_dev);
+	capi_free(temp_dev);
 
 	return ret;
 }
@@ -197,7 +197,7 @@ int max31827_remove(struct max31827_device *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

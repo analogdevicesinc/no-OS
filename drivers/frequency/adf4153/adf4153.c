@@ -33,7 +33,7 @@
 
 #include <stdlib.h>
 #include "adf4153.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /* For round up division */
 #define CEIL(a, b) (((a) / (b)) + (((a) % (b)) > 0 ? 1 : 0))
@@ -63,7 +63,7 @@ int8_t adf4153_init(struct adf4153_dev **device,
 	struct adf4153_dev *dev;
 	int8_t status;
 
-	dev = (struct adf4153_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct adf4153_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -176,7 +176,7 @@ int32_t adf4153_remove(struct adf4153_dev *dev)
 	ret |= no_os_gpio_remove(dev->gpio_le2);
 	ret |= no_os_gpio_remove(dev->gpio_ce2);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

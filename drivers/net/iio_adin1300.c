@@ -4,7 +4,7 @@
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "iio_adin1300.h"
 #include "adin1300.h"
 #include "iio.h"
@@ -152,11 +152,11 @@ int32_t adin1300_iio_init(struct adin1300_iio_desc **iiodev,
 	struct adin1300_iio_desc *d;
 	struct iio_device *d2;
 
-	d = (struct adin1300_iio_desc *)no_os_calloc(1, sizeof(*d));
+	d = (struct adin1300_iio_desc *)capi_calloc(1, sizeof(*d));
 	if (!d)
 		return -ENOMEM;
 
-	d2 = (struct iio_device *)no_os_calloc(1, sizeof(*d2));
+	d2 = (struct iio_device *)capi_calloc(1, sizeof(*d2));
 	if (!d2) {
 		ret = -ENOMEM;
 		goto end_0;
@@ -171,7 +171,7 @@ int32_t adin1300_iio_init(struct adin1300_iio_desc **iiodev,
 
 	return 0;
 end_0:
-	no_os_free(d);
+	capi_free(d);
 
 	return ret;
 }
@@ -179,9 +179,9 @@ end_0:
 int32_t adin1300_iio_remove(struct adin1300_iio_desc *iiodev)
 {
 	if (iiodev)
-		no_os_free(iiodev->iio_dev);
+		capi_free(iiodev->iio_dev);
 
-	no_os_free(iiodev);
+	capi_free(iiodev);
 
 	return 0;
 }

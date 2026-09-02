@@ -38,7 +38,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "iio.h"
 #include "iio_axi_dac.h"
 
@@ -556,10 +556,10 @@ static int iio_axi_dac_delete_device_descriptor(
 		return -1;
 
 	if (desc->dev_descriptor.channels)
-		no_os_free(desc->dev_descriptor.channels);
+		capi_free(desc->dev_descriptor.channels);
 
 	if (desc->ch_names)
-		no_os_free(desc->ch_names);
+		capi_free(desc->ch_names);
 
 	return 0;
 }
@@ -609,12 +609,12 @@ static int32_t iio_axi_dac_create_device_descriptor(
 	altvoltage_ch_no = desc->dac->num_channels * 2;
 	iio_device->num_ch = voltage_ch_no + altvoltage_ch_no;
 	iio_device->attributes = NULL; /* no device attribute */
-	iio_device->channels = no_os_calloc(iio_device->num_ch,
+	iio_device->channels = capi_calloc(iio_device->num_ch,
 					    sizeof(struct iio_channel));
 	if (!iio_device->channels)
 		goto error;
 
-	desc->ch_names = no_os_calloc(iio_device->num_ch, sizeof(*desc->ch_names));
+	desc->ch_names = capi_calloc(iio_device->num_ch, sizeof(*desc->ch_names));
 	if (!desc->ch_names)
 		goto error;
 
@@ -686,7 +686,7 @@ int32_t iio_axi_dac_init(struct iio_axi_dac_desc **desc,
 	if (!init->tx_dac)
 		return -1;
 
-	iio_axi_dac_inst = (struct iio_axi_dac_desc *)no_os_calloc(1,
+	iio_axi_dac_inst = (struct iio_axi_dac_desc *)capi_calloc(1,
 			   sizeof(struct iio_axi_dac_desc));
 	if (!iio_axi_dac_inst)
 		return -1;
@@ -701,7 +701,7 @@ int32_t iio_axi_dac_init(struct iio_axi_dac_desc **desc,
 	status = iio_axi_dac_create_device_descriptor(iio_axi_dac_inst,
 			&iio_axi_dac_inst->dev_descriptor);
 	if (NO_OS_IS_ERR_VALUE(status)) {
-		no_os_free(iio_axi_dac_inst);
+		capi_free(iio_axi_dac_inst);
 		return status;
 	}
 
@@ -726,7 +726,7 @@ int32_t iio_axi_dac_remove(struct iio_axi_dac_desc *desc)
 	if (status < 0)
 		return status;
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

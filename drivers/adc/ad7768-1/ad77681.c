@@ -38,7 +38,7 @@
 #include "ad77681.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * Compute CRC8 checksum.
@@ -1750,14 +1750,14 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 	int32_t ret;
 	uint8_t scratchpad_check = 0xAD;
 
-	dev = (struct ad77681_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad77681_dev *)capi_malloc(sizeof(*dev));
 	if (!dev) {
 		return -1;
 	}
 
-	stat = (struct ad77681_status_registers *)no_os_malloc(sizeof(*stat));
+	stat = (struct ad77681_status_registers *)capi_malloc(sizeof(*stat));
 	if (!stat) {
-		no_os_free(dev);
+		capi_free(dev);
 		return -1;
 	}
 
@@ -1783,8 +1783,8 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 
 	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_eng_dev_init);
 	if (ret < 0) {
-		no_os_free(dev);
-		no_os_free(stat);
+		capi_free(dev);
+		capi_free(stat);
 		return ret;
 	}
 
@@ -1797,8 +1797,8 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 		scratchpad_check = 0xAD;/* If failure, second try */
 		ret |= (ad77681_scratchpad(dev, &scratchpad_check));
 		if (ret == -1) {
-			no_os_free(dev);
-			no_os_free(stat);
+			capi_free(dev);
+			capi_free(stat);
 			return ret;
 		}
 	}

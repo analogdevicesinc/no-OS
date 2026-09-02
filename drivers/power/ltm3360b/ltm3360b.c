@@ -38,7 +38,7 @@
 
 #include "no_os_util.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_i2c.h"
 #include "no_os_error.h"
 #include "ltm3360b.h"
@@ -251,7 +251,7 @@ int ltm3360b_init(struct ltm3360b_dev **device,
 	if (!device || !init_param || !init_param->i2c_init)
 		return -EINVAL;
 
-	dev = (struct ltm3360b_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ltm3360b_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -283,7 +283,7 @@ int ltm3360b_init(struct ltm3360b_dev **device,
 error_i2c:
 	no_os_i2c_remove(dev->i2c_desc);
 error_free:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -302,7 +302,7 @@ int ltm3360b_remove(struct ltm3360b_dev *dev)
 
 	no_os_i2c_remove(dev->i2c_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

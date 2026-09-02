@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "ad796x.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_print_log.h"
 
 #define AD796X_BYTES_PER_SAMPLE		4
@@ -151,7 +151,7 @@ int ad796x_init(struct ad796x_dev **device,
 	struct ad796x_dev *dev;
 	int ret;
 
-	dev = (struct ad796x_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ad796x_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -236,7 +236,7 @@ int ad796x_remove(struct ad796x_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

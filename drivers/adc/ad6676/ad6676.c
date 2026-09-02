@@ -35,7 +35,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "ad6676.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 
 /***************************************************************************//**
@@ -637,7 +637,7 @@ int32_t ad6676_setup(struct ad6676_dev **device,
 	uint8_t scale;
 	struct ad6676_dev *dev;
 
-	dev = (struct ad6676_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad6676_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 

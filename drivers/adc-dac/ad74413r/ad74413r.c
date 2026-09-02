@@ -36,7 +36,7 @@
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 #define AD74413R_FRAME_SIZE 		4
 #define AD74413R_CRC_POLYNOMIAL 	0x7
@@ -1171,7 +1171,7 @@ int ad74413r_init(struct ad74413r_desc **desc,
 	if (!init_param)
 		return -EINVAL;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -1209,7 +1209,7 @@ free_reset:
 comm_err:
 	no_os_spi_remove(descriptor->comm_desc);
 err:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -1241,7 +1241,7 @@ int ad74413r_remove(struct ad74413r_desc *desc)
 	if (ret)
 		return ret;
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

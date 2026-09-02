@@ -37,7 +37,7 @@
 #include "ade9113.h"
 #include "no_os_delay.h"
 #include "no_os_units.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_crc8.h"
 #include "no_os_crc16.h"
 #include "no_os_print_log.h"
@@ -409,21 +409,21 @@ int ade9113_init(struct ade9113_dev **device,
 		if (!init_param.irq_ctrl)
 			return -EINVAL;
 
-	dev = (struct ade9113_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ade9113_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
 	dev->no_devs = init_param.no_devs;
 
-	i_wav = (int32_t *)no_os_calloc(dev->no_devs, sizeof(*i_wav));
+	i_wav = (int32_t *)capi_calloc(dev->no_devs, sizeof(*i_wav));
 	if (!i_wav)
 		goto err_alloc_i_wav;
 
-	v1_wav = (int32_t *)no_os_calloc(dev->no_devs, sizeof(*v1_wav));
+	v1_wav = (int32_t *)capi_calloc(dev->no_devs, sizeof(*v1_wav));
 	if (!v1_wav)
 		goto err_alloc_v1_wav;
 
-	v2_wav = (int32_t *)no_os_calloc(dev->no_devs, sizeof(*v2_wav));
+	v2_wav = (int32_t *)capi_calloc(dev->no_devs, sizeof(*v2_wav));
 	if (!v2_wav)
 		goto err_alloc_v2_wav;
 
@@ -595,13 +595,13 @@ error_gpio:
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_dev:
-	no_os_free(v2_wav);
+	capi_free(v2_wav);
 err_alloc_v2_wav:
-	no_os_free(v1_wav);
+	capi_free(v1_wav);
 err_alloc_v1_wav:
-	no_os_free(i_wav);
+	capi_free(i_wav);
 err_alloc_i_wav:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -632,7 +632,7 @@ int ade9113_remove(struct ade9113_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

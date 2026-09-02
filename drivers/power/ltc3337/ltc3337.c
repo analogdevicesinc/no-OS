@@ -34,7 +34,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include "ltc3337.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 
 /**
@@ -94,7 +94,7 @@ int ltc3337_init(struct ltc3337_dev** device,
 	if ((!device) || (!init_param))
 		return -EINVAL;
 
-	dev = (struct ltc3337_dev*)no_os_calloc(1, sizeof(struct ltc3337_dev));
+	dev = (struct ltc3337_dev*)capi_calloc(1, sizeof(struct ltc3337_dev));
 	if (!dev)
 		return  -ENOMEM;
 
@@ -120,7 +120,7 @@ int ltc3337_init(struct ltc3337_dev** device,
 comm_err:
 	no_os_i2c_remove(dev->i2c_desc);
 err:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -138,7 +138,7 @@ int ltc3337_remove(struct ltc3337_dev* dev)
 		return -EINVAL;
 
 	ret = no_os_i2c_remove(dev->i2c_desc);
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

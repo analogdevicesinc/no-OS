@@ -34,7 +34,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include "ltc4296.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
@@ -1023,7 +1023,7 @@ int ltc4296_init(struct ltc4296_dev **device,
 	if ((!device) || (!init_param))
 		return -EINVAL;
 
-	dev = (struct ltc4296_dev*)no_os_calloc(1, sizeof(struct ltc4296_dev));
+	dev = (struct ltc4296_dev*)capi_calloc(1, sizeof(struct ltc4296_dev));
 	if (!dev)
 		return  -ENOMEM;
 
@@ -1056,7 +1056,7 @@ int ltc4296_init(struct ltc4296_dev **device,
 err_spi:
 	no_os_spi_remove(dev->spi_desc);
 err:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -1074,7 +1074,7 @@ int ltc4296_remove(struct ltc4296_dev* dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

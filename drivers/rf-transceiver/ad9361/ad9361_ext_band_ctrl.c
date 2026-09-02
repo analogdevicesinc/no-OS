@@ -14,7 +14,7 @@
 #include "ad9361_ext_band_ctrl.h"
 #include "no_os_gpio.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_spi.h"
 
 /**
@@ -219,7 +219,7 @@ static struct ad9361_band_setting **grow_settings_array(
 	uint32_t i;
 
 	new_arr = (struct ad9361_band_setting **)
-		  no_os_calloc(old_count + 1, sizeof(*new_arr));
+		  capi_calloc(old_count + 1, sizeof(*new_arr));
 	if (!new_arr)
 		return NULL;
 
@@ -228,7 +228,7 @@ static struct ad9361_band_setting **grow_settings_array(
 
 	new_arr[old_count] = new_elem;
 
-	no_os_free(old_arr);
+	capi_free(old_arr);
 	return new_arr;
 }
 
@@ -248,14 +248,14 @@ ad9361_band_setting_alloc(const char *name, uint64_t freq_min,
 	uint32_t i;
 
 	s = (struct ad9361_band_setting *)
-	    no_os_calloc(1, sizeof(*s));
+	    capi_calloc(1, sizeof(*s));
 	if (!s)
 		return NULL;
 
 	if (name) {
-		char *name_copy = (char *)no_os_calloc(1, strlen(name) + 1);
+		char *name_copy = (char *)capi_calloc(1, strlen(name) + 1);
 		if (!name_copy) {
-			no_os_free(s);
+			capi_free(s);
 			return NULL;
 		}
 		strcpy(name_copy, name);
@@ -269,10 +269,10 @@ ad9361_band_setting_alloc(const char *name, uint64_t freq_min,
 
 	if (ngpios > 0) {
 		s->gpio_values = (uint32_t *)
-				 no_os_calloc(ngpios, sizeof(uint32_t));
+				 capi_calloc(ngpios, sizeof(uint32_t));
 		if (!s->gpio_values) {
-			no_os_free((void *)s->name);
-			no_os_free(s);
+			capi_free((void *)s->name);
+			capi_free(s);
 			return NULL;
 		}
 		for (i = 0; i < ngpios; i++)
@@ -294,22 +294,22 @@ void ad9361_band_setting_free(struct ad9361_band_setting *s)
 	if (!s)
 		return;
 
-	no_os_free((void *)s->name);
-	no_os_free(s->gpio_values);
+	capi_free((void *)s->name);
+	capi_free(s->gpio_values);
 
 	if (s->pre_seq) {
 		for (i = 0; i < s->pre_seq_len; i++)
-			no_os_free(s->pre_seq[i].gpio_values);
-		no_os_free(s->pre_seq);
+			capi_free(s->pre_seq[i].gpio_values);
+		capi_free(s->pre_seq);
 	}
 
 	if (s->post_seq) {
 		for (i = 0; i < s->post_seq_len; i++)
-			no_os_free(s->post_seq[i].gpio_values);
-		no_os_free(s->post_seq);
+			capi_free(s->post_seq[i].gpio_values);
+		capi_free(s->post_seq);
 	}
 
-	no_os_free(s);
+	capi_free(s);
 }
 
 /**
@@ -371,7 +371,7 @@ void ad9361_band_setting_set_delay(struct ad9361_band_setting *s,
 struct ad9361_ext_band_ctl *ad9361_ext_band_ctl_alloc(void)
 {
 	return (struct ad9361_ext_band_ctl *)
-	       no_os_calloc(1, sizeof(struct ad9361_ext_band_ctl));
+	       capi_calloc(1, sizeof(struct ad9361_ext_band_ctl));
 }
 
 /**
@@ -392,9 +392,9 @@ void ad9361_ext_band_ctl_free(struct ad9361_ext_band_ctl *ctl)
 	for (i = 0; i < ctl->tx_count; i++)
 		ad9361_band_setting_free(ctl->tx_settings[i]);
 
-	no_os_free(ctl->rx_settings);
-	no_os_free(ctl->tx_settings);
-	no_os_free(ctl);
+	capi_free(ctl->rx_settings);
+	capi_free(ctl->tx_settings);
+	capi_free(ctl);
 }
 
 /**

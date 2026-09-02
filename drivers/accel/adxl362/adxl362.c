@@ -33,7 +33,7 @@
 
 #include <stdlib.h>
 #include "adxl362.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /***************************************************************************//**
  * @brief Initializes communication with the device and checks if the part is
@@ -53,7 +53,7 @@ int32_t adxl362_init(struct adxl362_dev **device,
 	uint8_t reg_value = 0;
 	int32_t status = -1;
 
-	dev = (struct adxl362_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct adxl362_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -84,7 +84,7 @@ int32_t adxl362_remove(struct adxl362_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

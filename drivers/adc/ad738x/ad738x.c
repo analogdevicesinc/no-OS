@@ -42,7 +42,7 @@
 #include "ad738x.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_pwm.h"
 /**
  * Read from device.
@@ -428,7 +428,7 @@ int32_t ad738x_init(struct ad738x_dev **device,
 	struct ad738x_dev *dev;
 	int32_t ret = 0;
 
-	dev = (struct ad738x_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ad738x_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -511,7 +511,7 @@ int32_t ad738x_remove(struct ad738x_dev *dev)
 
 	ret |= no_os_pwm_remove(dev->pwm_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

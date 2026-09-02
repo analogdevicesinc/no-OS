@@ -38,7 +38,7 @@
 #include "no_os_print_log.h"
 #include "no_os_axi_io.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "axi_sysid.h"
 
 static inline uint32_t axi_sysid_ioread(const struct axi_sysid *st,
@@ -166,7 +166,7 @@ static int axi_sysid_validate(struct axi_sysid *st)
 	struct sysid_header_v1 *header;
 	uint32_t *build_raw;
 
-	st->mem = no_os_calloc(st->size, sizeof(uint32_t));
+	st->mem = capi_calloc(st->size, sizeof(uint32_t));
 	if (!st->mem)
 		return -ENOMEM;
 
@@ -215,7 +215,7 @@ int32_t axi_sysid_init(struct axi_sysid **sysid_core,
 	struct axi_sysid *sysid;
 	int ret;
 
-	sysid = (struct axi_sysid *)no_os_calloc(1, sizeof(*sysid));
+	sysid = (struct axi_sysid *)capi_calloc(1, sizeof(*sysid));
 	if (!sysid)
 		return -ENOMEM;
 
@@ -223,7 +223,7 @@ int32_t axi_sysid_init(struct axi_sysid **sysid_core,
 	sysid->size = (1 << axi_sysid_ioread(sysid, AXI_SYSID_REG_ROM_ADDR_WIDTH)) *
 		      AXI_SYSID_WORD_SIZE;
 
-	info = (struct axi_sysid_core_info *)no_os_calloc(1, sizeof(*info));
+	info = (struct axi_sysid_core_info *)capi_calloc(1, sizeof(*info));
 	if (!info) {
 		ret = -ENOMEM;
 		goto error;
@@ -253,9 +253,9 @@ int32_t axi_sysid_init(struct axi_sysid **sysid_core,
 
 	return 0;
 error1:
-	no_os_free(info);
+	capi_free(info);
 error:
-	no_os_free(sysid);
+	capi_free(sysid);
 	return ret;
 }
 
@@ -271,7 +271,7 @@ int32_t axi_sysid_remove(struct axi_sysid *sysid)
 	if (!sysid)
 		return -1;
 
-	no_os_free(sysid);
+	capi_free(sysid);
 
 	return 0;
 }

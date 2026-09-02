@@ -38,7 +38,7 @@
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_units.h"
 
 const int ad4692_int_osc_val[16] = {
@@ -693,7 +693,7 @@ int ad4692_init(struct ad4692_desc **desc, struct ad4692_init_param *init_param)
 	struct ad4692_desc *descriptor;
 	int ret;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -776,7 +776,7 @@ reset_err:
 spi_err:
 	no_os_spi_remove(descriptor->comm_desc);
 err:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -795,7 +795,7 @@ int ad4692_remove(struct ad4692_desc *desc)
 	no_os_pwm_remove(desc->conv_desc);
 	no_os_gpio_remove(desc->reset_desc);
 	no_os_spi_remove(desc->comm_desc);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

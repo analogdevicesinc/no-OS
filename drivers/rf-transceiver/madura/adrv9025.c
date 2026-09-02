@@ -8,7 +8,7 @@
 #include "xilinx_transceiver.h"
 #include "no_os_print_log.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_util.h"
 #include "no_os_spi.h"
 #include "adrv9025.h"
@@ -1240,11 +1240,11 @@ int32_t adrv9025_init(struct adrv9025_rf_phy **dev,
 	struct adrv9025_rf_phy *phy;
 	int ret;
 
-	phy = (struct adrv9025_rf_phy *)no_os_calloc(1, sizeof(*phy));
+	phy = (struct adrv9025_rf_phy *)capi_calloc(1, sizeof(*phy));
 	if (!phy)
 		goto error;
 
-	agcConfig = no_os_calloc(1, sizeof(adi_adrv9025_AgcCfg_t));
+	agcConfig = capi_calloc(1, sizeof(adi_adrv9025_AgcCfg_t));
 	if (!agcConfig)
 		goto error_setup;
 
@@ -1285,9 +1285,9 @@ int32_t adrv9025_init(struct adrv9025_rf_phy **dev,
 
 	return 0;
 error_agc_config:
-	no_os_free(agcConfig);
+	capi_free(agcConfig);
 error_setup:
-	no_os_free(phy);
+	capi_free(phy);
 error:
 	return ret;
 }
@@ -1391,7 +1391,7 @@ int adrv9025_setup(struct adrv9025_rf_phy *phy)
 	if (ret)
 		return adrv9025_dev_err(phy);
 
-	rx_sample_clk = no_os_calloc(1, sizeof(rx_sample_clk));
+	rx_sample_clk = capi_calloc(1, sizeof(rx_sample_clk));
 	if (!rx_sample_clk)
 		goto rx_out_clk_error;
 
@@ -1407,7 +1407,7 @@ int adrv9025_setup(struct adrv9025_rf_phy *phy)
 
 	phy->clks[ADRV9025_RX_SAMPL_CLK] = rx_sample_clk;
 
-	tx_sample_clk = no_os_calloc(1, sizeof(tx_sample_clk));
+	tx_sample_clk = capi_calloc(1, sizeof(tx_sample_clk));
 	if (!tx_sample_clk)
 		goto rx_out_clk_init_error;
 
@@ -1423,7 +1423,7 @@ int adrv9025_setup(struct adrv9025_rf_phy *phy)
 
 	phy->clks[ADRV9025_TX_SAMPL_CLK] = tx_sample_clk;
 
-	orx_sample_clk = no_os_calloc(1, sizeof(orx_sample_clk));
+	orx_sample_clk = capi_calloc(1, sizeof(orx_sample_clk));
 	if (!orx_sample_clk)
 		goto tx_out_clk_init_error;
 
@@ -1448,11 +1448,11 @@ int adrv9025_setup(struct adrv9025_rf_phy *phy)
 	return 0;
 
 orx_out_clk_init_error:
-	no_os_free(orx_sample_clk);
+	capi_free(orx_sample_clk);
 tx_out_clk_init_error:
-	no_os_free(tx_sample_clk);
+	capi_free(tx_sample_clk);
 rx_out_clk_init_error:
-	no_os_free(rx_sample_clk);
+	capi_free(rx_sample_clk);
 rx_out_clk_error:
 	return ret;
 }

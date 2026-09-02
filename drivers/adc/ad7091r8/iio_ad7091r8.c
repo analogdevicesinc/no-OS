@@ -38,7 +38,7 @@
 #include "iio_ad7091r8.h"
 #include "ad7091r8.h"
 #include "no_os_units.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 static int ad7091r8_iio_read_reg(void *dev, uint32_t reg,
 				 uint32_t *readval);
@@ -298,7 +298,7 @@ int ad7091r8_iio_init(struct ad7091r8_iio_dev **iio_dev,
 	if (!init_param || !init_param->ad7091r8_dev_init)
 		return -EINVAL;
 
-	desc = (struct ad7091r8_iio_dev *)no_os_calloc(1, sizeof(*desc));
+	desc = (struct ad7091r8_iio_dev *)capi_calloc(1, sizeof(*desc));
 	if (!desc)
 		return -ENOMEM;
 
@@ -327,7 +327,7 @@ int ad7091r8_iio_init(struct ad7091r8_iio_dev **iio_dev,
 	return 0;
 
 error_ad7091r8_init:
-	no_os_free(desc);
+	capi_free(desc);
 	return ret;
 }
 
@@ -346,7 +346,7 @@ int ad7091r8_iio_remove(struct ad7091r8_iio_dev *desc)
 	if (ret)
 		return ret;
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

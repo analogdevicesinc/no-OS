@@ -35,7 +35,7 @@
 #include "adrf6780.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief Writes data to ADRF6780 over SPI.
@@ -267,7 +267,7 @@ int adrf6780_init(struct adrf6780_dev **device,
 	struct adrf6780_dev *dev;
 	int ret;
 
-	dev = (struct adrf6780_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct adrf6780_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -345,7 +345,7 @@ int adrf6780_init(struct adrf6780_dev **device,
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -363,7 +363,7 @@ int adrf6780_remove(struct adrf6780_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

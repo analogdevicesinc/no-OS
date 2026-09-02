@@ -19,7 +19,7 @@
 #include "iio_ad7616.h"
 #include "iio.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 
 #define AD7616_CH(_idx) {\
@@ -314,7 +314,7 @@ static int iio_ad7616_submit_buffer(struct iio_device_data *iio_dev_data)
 	uint32_t j;
 	uint32_t k;
 
-	results = no_os_calloc(dev->layers_nb * iio_dev_data->buffer->samples, sizeof(
+	results = capi_calloc(dev->layers_nb * iio_dev_data->buffer->samples, sizeof(
 				       *results));
 	if (!results)
 		return -ENOMEM;
@@ -354,7 +354,7 @@ static int iio_ad7616_submit_buffer(struct iio_device_data *iio_dev_data)
 	return 0;
 
 cleanup:
-	no_os_free(results);
+	capi_free(results);
 	return ret;
 }
 
@@ -427,7 +427,7 @@ int ad7616_iio_init(struct ad7616_iio_dev **dev,
 		{ AD7616_VA6, AD7616_VB6 },
 		{ AD7616_VA7, AD7616_VB7 },
 	};
-	struct ad7616_iio_dev *desc = no_os_calloc(1, sizeof(*desc));
+	struct ad7616_iio_dev *desc = capi_calloc(1, sizeof(*desc));
 	if (!desc)
 		return -ENOMEM;
 
@@ -444,7 +444,7 @@ int ad7616_iio_init(struct ad7616_iio_dev **dev,
 	return 0;
 
 error_setup:
-	no_os_free(desc);
+	capi_free(desc);
 	return ret;
 }
 
@@ -455,7 +455,7 @@ int ad7616_iio_remove(struct ad7616_iio_dev *dev)
 
 	ad7616_remove(dev->ad7616_dev);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return 0;
 }

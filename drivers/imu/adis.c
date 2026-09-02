@@ -36,7 +36,7 @@
 #include "no_os_delay.h"
 #include "no_os_gpio.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_print_log.h"
 #include <string.h>
 
@@ -92,7 +92,7 @@ int adis_init(struct adis_dev **adis, const struct adis_init_param *ip)
 	if (!ip || !ip->info)
 		return -EINVAL;
 
-	dev = (struct adis_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct adis_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -139,7 +139,7 @@ error:
 	no_os_gpio_remove(dev->gpio_reset);
 	no_os_spi_remove(dev->spi_desc);
 error_spi:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -156,7 +156,7 @@ void adis_remove(struct adis_dev *adis)
 	if (adis->spi_desc)
 		no_os_spi_remove(adis->spi_desc);
 
-	no_os_free(adis);
+	capi_free(adis);
 }
 
 /**

@@ -35,7 +35,7 @@
 #include <stdlib.h>
 #include "axi_adc_core.h"
 #include "ad9265.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 #define DCO_DEBUG
 
@@ -283,7 +283,7 @@ int32_t ad9265_setup(struct ad9265_dev **device,
 	int32_t ret;
 	struct ad9265_dev *dev;
 
-	dev = (struct ad9265_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad9265_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -321,7 +321,7 @@ int32_t ad9265_remove(struct ad9265_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

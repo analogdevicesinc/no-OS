@@ -41,7 +41,7 @@
 #include "iio_ad713x.h"
 #include "iio_types.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "spi_engine.h"
 
 #define MEGA 1000000UL
@@ -483,7 +483,7 @@ int iio_ad713x_init(struct ad713x_iio **desc,
 	if (!param)
 		return -EINVAL;
 
-	device = (struct ad713x_iio *)no_os_calloc(1, sizeof(*device));
+	device = (struct ad713x_iio *)capi_calloc(1, sizeof(*device));
 	if (!device)
 		return -1;
 
@@ -516,7 +516,7 @@ int iio_ad713x_init(struct ad713x_iio **desc,
 
 	return 0;
 dev_err:
-	no_os_free(device);
+	capi_free(device);
 
 	return ret;
 }
@@ -531,7 +531,7 @@ int iio_ad713x_remove(struct ad713x_iio *desc)
 	if (!desc)
 		return -EINVAL;
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

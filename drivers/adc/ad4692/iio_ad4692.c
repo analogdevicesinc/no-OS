@@ -33,7 +33,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_units.h"
 #include "no_os_util.h"
@@ -770,12 +770,12 @@ int ad4692_iio_init(struct ad4692_iio_desc **iio_desc,
 	struct iio_device *iio_dev;
 	int ret;
 
-	descriptor = (struct ad4692_iio_desc *)no_os_calloc(1, sizeof(*descriptor));
+	descriptor = (struct ad4692_iio_desc *)capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
 	/* Allocate a copy of the iio_device to avoid modifying the shared static */
-	iio_dev = (struct iio_device *)no_os_calloc(1, sizeof(*iio_dev));
+	iio_dev = (struct iio_device *)capi_calloc(1, sizeof(*iio_dev));
 	if (!iio_dev) {
 		ret = -ENOMEM;
 		goto error;
@@ -807,9 +807,9 @@ int ad4692_iio_init(struct ad4692_iio_desc **iio_desc,
 	return 0;
 
 iio_dev_error:
-	no_os_free(iio_dev);
+	capi_free(iio_dev);
 error:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 	return ret;
 }
 
@@ -821,8 +821,8 @@ int ad4692_iio_remove(struct ad4692_iio_desc *iio_desc)
 	if (ret)
 		return ret;
 
-	no_os_free(iio_desc->iio_dev);
-	no_os_free(iio_desc);
+	capi_free(iio_desc->iio_dev);
+	capi_free(iio_desc);
 
 	return 0;
 }

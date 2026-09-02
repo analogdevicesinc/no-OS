@@ -32,7 +32,7 @@
 ******************************************************************************/
 #include <string.h>
 #include "iio_ad7490.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 
 #define AD7490_V_FS_2V5		2500
@@ -385,7 +385,7 @@ int ad7490_iio_init(struct ad7490_iio_desc **iio_desc,
 	struct ad7490_iio_desc *iio_descriptor;
 	int ret;
 
-	iio_descriptor = (struct ad7490_iio_desc *)no_os_calloc(1,
+	iio_descriptor = (struct ad7490_iio_desc *)capi_calloc(1,
 			 sizeof(*iio_descriptor));
 	if (!iio_descriptor)
 		return -ENOMEM;
@@ -410,7 +410,7 @@ int ad7490_iio_init(struct ad7490_iio_desc **iio_desc,
 free_ad7490:
 	ad7490_remove(iio_descriptor->ad7490_desc);
 free_desc:
-	no_os_free(iio_descriptor);
+	capi_free(iio_descriptor);
 
 	return 0;
 }
@@ -418,7 +418,7 @@ free_desc:
 int ad7490_iio_remove(struct ad7490_iio_desc *iio_desc)
 {
 	ad7490_remove(iio_desc->ad7490_desc);
-	no_os_free(iio_desc);
+	capi_free(iio_desc);
 
 	return 0;
 }

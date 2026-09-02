@@ -38,7 +38,7 @@
 #include "no_os_units.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_i2c.h"
 #include "no_os_gpio.h"
 #include "no_os_crc8.h"
@@ -311,7 +311,7 @@ int ltm4700_init(struct ltm4700_dev **device,
 	if (!device || !init_param || !init_param->i2c_init)
 		return -EINVAL;
 
-	dev = no_os_calloc(1, sizeof(*dev));
+	dev = capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -353,7 +353,7 @@ int ltm4700_init(struct ltm4700_dev **device,
 	}
 
 	if (init_param->pgood_params) {
-		dev->pgood_descs = no_os_calloc(dev->num_channels, sizeof(*dev->pgood_descs));
+		dev->pgood_descs = capi_calloc(dev->num_channels, sizeof(*dev->pgood_descs));
 		if (!dev->pgood_descs) {
 			ret = -ENOMEM;
 			goto error_alert;
@@ -370,7 +370,7 @@ int ltm4700_init(struct ltm4700_dev **device,
 	}
 
 	if (init_param->run_params) {
-		dev->run_descs = no_os_calloc(dev->num_channels, sizeof(*dev->run_descs));
+		dev->run_descs = capi_calloc(dev->num_channels, sizeof(*dev->run_descs));
 		if (!dev->run_descs) {
 			ret = -ENOMEM;
 			goto error_pgood;
@@ -387,7 +387,7 @@ int ltm4700_init(struct ltm4700_dev **device,
 	}
 
 	if (init_param->fault_params) {
-		dev->fault_descs = no_os_calloc(dev->num_channels, sizeof(*dev->fault_descs));
+		dev->fault_descs = capi_calloc(dev->num_channels, sizeof(*dev->fault_descs));
 		if (!dev->fault_descs) {
 			ret = -ENOMEM;
 			goto error_run;
@@ -411,26 +411,26 @@ error_fault:
 	if (dev->fault_descs) {
 		for (int i = 0; i < dev->num_channels; i++)
 			no_os_gpio_remove(dev->fault_descs[i]);
-		no_os_free(dev->fault_descs);
+		capi_free(dev->fault_descs);
 	}
 error_run:
 	if (dev->run_descs) {
 		for (int i = 0; i < dev->num_channels; i++)
 			no_os_gpio_remove(dev->run_descs[i]);
-		no_os_free(dev->run_descs);
+		capi_free(dev->run_descs);
 	}
 error_pgood:
 	if (dev->pgood_descs) {
 		for (int i = 0; i < dev->num_channels; i++)
 			no_os_gpio_remove(dev->pgood_descs[i]);
-		no_os_free(dev->pgood_descs);
+		capi_free(dev->pgood_descs);
 	}
 error_alert:
 	no_os_gpio_remove(dev->alert_desc);
 error_i2c:
 	no_os_i2c_remove(dev->i2c_desc);
 error_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -452,19 +452,19 @@ int ltm4700_remove(struct ltm4700_dev *dev)
 	if (dev->fault_descs) {
 		for (int i = 0; i < dev->num_channels; i++)
 			no_os_gpio_remove(dev->fault_descs[i]);
-		no_os_free(dev->fault_descs);
+		capi_free(dev->fault_descs);
 	}
 
 	if (dev->run_descs) {
 		for (int i = 0; i < dev->num_channels; i++)
 			no_os_gpio_remove(dev->run_descs[i]);
-		no_os_free(dev->run_descs);
+		capi_free(dev->run_descs);
 	}
 
 	if (dev->pgood_descs) {
 		for (int i = 0; i < dev->num_channels; i++)
 			no_os_gpio_remove(dev->pgood_descs[i]);
-		no_os_free(dev->pgood_descs);
+		capi_free(dev->pgood_descs);
 	}
 
 	if (dev->alert_desc) {
@@ -479,7 +479,7 @@ int ltm4700_remove(struct ltm4700_dev *dev)
 			ret = tmp_ret;
 	}
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

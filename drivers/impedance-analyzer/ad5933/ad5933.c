@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include "ad5933.h"
 #include <math.h>
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 const int32_t pow_2_27 = 134217728ul;      // 2 to the power of 27
 
@@ -58,7 +58,7 @@ int32_t ad5933_init(struct ad5933_dev **device,
 	struct ad5933_dev *dev;
 	int32_t status;
 
-	dev = (struct ad5933_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad5933_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -69,7 +69,7 @@ int32_t ad5933_init(struct ad5933_dev **device,
 
 	status = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 	if (status) {
-		no_os_free(dev);
+		capi_free(dev);
 		return status;
 	}
 
@@ -91,7 +91,7 @@ int32_t ad5933_remove(struct ad5933_dev *dev)
 
 	status = no_os_i2c_remove(dev->i2c_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return status;
 }

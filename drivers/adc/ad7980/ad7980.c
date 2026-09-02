@@ -33,7 +33,7 @@
 
 #include <stdlib.h>
 #include "ad7980.h"           // AD7980 definitions.
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 
 /***************************************************************************//**
@@ -53,7 +53,7 @@ int8_t ad7980_init(struct ad7980_dev **device,
 	struct ad7980_dev *dev;
 	uint8_t status;
 
-	dev = (struct ad7980_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad7980_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -89,7 +89,7 @@ int32_t ad7980_remove(struct ad7980_dev *dev)
 
 	ret |= no_os_gpio_remove(dev->gpio_cs);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

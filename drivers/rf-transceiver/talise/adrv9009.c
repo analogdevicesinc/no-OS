@@ -39,7 +39,7 @@
 // platform drivers
 #include "no_os_print_log.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
 
@@ -1206,7 +1206,7 @@ int32_t adrv9009_init(struct adrv9009_rf_phy **dev,
 	struct adrv9009_rf_phy *phy;
 	int ret;
 
-	phy = (struct adrv9009_rf_phy *)no_os_calloc(1, sizeof(*phy));
+	phy = (struct adrv9009_rf_phy *)capi_calloc(1, sizeof(*phy));
 	if (!phy)
 		goto error;
 
@@ -1271,7 +1271,7 @@ int32_t adrv9009_init(struct adrv9009_rf_phy **dev,
 
 	return 0;
 error_setup:
-	no_os_free(phy);
+	capi_free(phy);
 error:
 	return ret;
 }
@@ -1385,7 +1385,7 @@ int adrv9009_setup(struct adrv9009_rf_phy *phy)
 	}
 
 	/* Initialize clk components */
-	rx_sample_clk = no_os_calloc(1, sizeof(*rx_sample_clk));
+	rx_sample_clk = capi_calloc(1, sizeof(*rx_sample_clk));
 	if (!rx_sample_clk)
 		goto error;
 
@@ -1400,7 +1400,7 @@ int adrv9009_setup(struct adrv9009_rf_phy *phy)
 
 	phy->clks[RX_SAMPL_CLK] = rx_sample_clk;
 
-	orx_sample_clk = no_os_calloc(1, sizeof(*orx_sample_clk));
+	orx_sample_clk = capi_calloc(1, sizeof(*orx_sample_clk));
 	if (!orx_sample_clk)
 		goto rx_out_clk_init_error;
 
@@ -1415,7 +1415,7 @@ int adrv9009_setup(struct adrv9009_rf_phy *phy)
 
 	phy->clks[OBS_SAMPL_CLK] = orx_sample_clk;
 
-	tx_sample_clk = no_os_calloc(1, sizeof(*tx_sample_clk));
+	tx_sample_clk = capi_calloc(1, sizeof(*tx_sample_clk));
 	if (!tx_sample_clk)
 		goto orx_out_clk_init_error;
 
@@ -1448,11 +1448,11 @@ int adrv9009_setup(struct adrv9009_rf_phy *phy)
 	return 0;
 
 tx_out_clk_init_error:
-	no_os_free(tx_sample_clk);
+	capi_free(tx_sample_clk);
 orx_out_clk_init_error:
-	no_os_free(orx_sample_clk);
+	capi_free(orx_sample_clk);
 rx_out_clk_init_error:
-	no_os_free(rx_sample_clk);
+	capi_free(rx_sample_clk);
 error:
 	return ret;
 }

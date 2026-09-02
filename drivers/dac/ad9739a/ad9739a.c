@@ -36,7 +36,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "ad9739a.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 #define FDATA 2500	// for 2.5 GSPS
 
@@ -272,7 +272,7 @@ int32_t ad9739a_setup(struct ad9739a_dev **device,
 	uint8_t ad9739a_reg_lvds_rec_stat9_buf;
 	struct ad9739a_dev *dev;
 
-	dev = (struct ad9739a_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad9739a_dev *)capi_malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -451,7 +451,7 @@ int32_t ad9739a_remove(struct ad9739a_dev *dev)
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

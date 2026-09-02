@@ -36,7 +36,7 @@
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 #define AD5460_CRC_POLYNOMIAL 	0x7
 #define AD5460_DIN_DEBOUNCE_LEN 	NO_OS_BIT(5)
@@ -547,7 +547,7 @@ int ad5460_init(struct ad5460_desc **desc,
 	if (!init_param)
 		return -EINVAL;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -581,7 +581,7 @@ gpio_err:
 comm_err:
 	no_os_spi_remove(descriptor->spi_desc);
 err:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -612,7 +612,7 @@ int ad5460_remove(struct ad5460_desc *desc)
 
 	desc->spi_desc = NULL;
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

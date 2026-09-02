@@ -46,7 +46,7 @@
 #include "no_os_gpio.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_util.h"
 
 #ifdef XILINX_PLATFORM
@@ -942,7 +942,7 @@ int32_t ad7616_setup(struct ad7616_dev **device,
 	uint8_t i;
 	int32_t ret = 0;
 
-	dev = (struct ad7616_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ad7616_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev) {
 		return -1;
 	}
@@ -1081,5 +1081,5 @@ void ad7616_remove(struct ad7616_dev *dev)
 	no_os_gpio_remove(dev->gpio_convst);
 	no_os_gpio_remove(dev->gpio_busy);
 
-	no_os_free(dev);
+	capi_free(dev);
 }

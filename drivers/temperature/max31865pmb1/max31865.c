@@ -39,7 +39,7 @@
 #include "max31865.h"
 #include "no_os_spi.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_delay.h"
 
 /******************************************************************************/
@@ -59,7 +59,7 @@ int max31865_init(struct max31865_dev **device,
 	if (!init_param)
 		return -EINVAL;
 
-	descriptor = (struct max31865_dev *)no_os_calloc(1, sizeof(*descriptor));
+	descriptor = (struct max31865_dev *)capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -81,7 +81,7 @@ int max31865_init(struct max31865_dev **device,
 	return 0;
 
 err:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -102,7 +102,7 @@ int max31865_remove(struct max31865_dev *device)
 	if (ret)
 		return ret;
 
-	no_os_free(device);
+	capi_free(device);
 
 	return 0;
 }

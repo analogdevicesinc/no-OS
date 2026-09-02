@@ -35,7 +35,7 @@
 #include "max14914.h"
 #include "no_os_util.h"
 #include "no_os_error.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief Set the state of the MAX14914
@@ -127,7 +127,7 @@ int max14914_init(struct max14914_desc **desc,
 	struct max14914_desc *descriptor;
 	int ret;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -191,7 +191,7 @@ pp_error:
 di_en_error:
 	no_os_gpio_remove(descriptor->di_en_gpio);
 error:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -211,7 +211,7 @@ int max14914_remove(struct max14914_desc *desc)
 	no_os_gpio_remove(desc->in_gpio);
 	no_os_gpio_remove(desc->pp_gpio);
 	no_os_gpio_remove(desc->di_en_gpio);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

@@ -19,7 +19,7 @@
 #include "iio_ad738x.h"
 #include "iio.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_error.h"
 #if !defined(USE_STANDARD_SPI)
 #include "spi_engine.h"
@@ -122,7 +122,7 @@ static struct iio_channel *ad738x_iio_alloc_channels(uint8_t num_channels,
 	struct iio_channel *channels;
 	int i;
 
-	channels = no_os_calloc(num_channels, sizeof(*channels));
+	channels = capi_calloc(num_channels, sizeof(*channels));
 	if (!channels)
 		return NULL;
 
@@ -279,7 +279,7 @@ int ad738x_iio_init(struct ad738x_iio_dev **dev,
 	uint8_t storage_bits;
 	int ret;
 
-	desc = no_os_calloc(1, sizeof(*desc));
+	desc = capi_calloc(1, sizeof(*desc));
 	if (!desc)
 		return -ENOMEM;
 
@@ -301,7 +301,7 @@ int ad738x_iio_init(struct ad738x_iio_dev **dev,
 #endif
 
 	/* Allocate IIO device structure */
-	iio_dev = no_os_calloc(1, sizeof(*iio_dev));
+	iio_dev = capi_calloc(1, sizeof(*iio_dev));
 	if (!iio_dev) {
 		ret = -ENOMEM;
 		goto error_dev;
@@ -327,11 +327,11 @@ int ad738x_iio_init(struct ad738x_iio_dev **dev,
 	return 0;
 
 error_iio_dev:
-	no_os_free(iio_dev);
+	capi_free(iio_dev);
 error_dev:
 	ad738x_remove(desc->ad738x_dev);
 error_desc:
-	no_os_free(desc);
+	capi_free(desc);
 	return ret;
 }
 
@@ -342,14 +342,14 @@ int ad738x_iio_remove(struct ad738x_iio_dev *dev)
 
 	if (dev->iio_dev) {
 		if (dev->iio_dev->channels)
-			no_os_free(dev->iio_dev->channels);
-		no_os_free(dev->iio_dev);
+			capi_free(dev->iio_dev->channels);
+		capi_free(dev->iio_dev);
 	}
 
 	if (dev->ad738x_dev)
 		ad738x_remove(dev->ad738x_dev);
 
-	no_os_free(dev);
+	capi_free(dev);
 	return 0;
 }
 

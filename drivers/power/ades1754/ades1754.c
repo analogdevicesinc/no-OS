@@ -31,7 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "ades1754.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_crc8.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
@@ -1186,7 +1186,7 @@ int ades1754_init(struct ades1754_desc **desc,
 	if (init_param->dev_addr > ADES1754_DEV_ADDR_MAX)
 		return -EINVAL;
 
-	descriptor = (struct ades1754_desc *)no_os_calloc(sizeof(*descriptor),
+	descriptor = (struct ades1754_desc *)capi_calloc(sizeof(*descriptor),
 			1);
 	if (!descriptor)
 		return -ENOMEM;
@@ -1216,7 +1216,7 @@ int ades1754_init(struct ades1754_desc **desc,
 free_comm:
 	no_os_uart_remove(descriptor->uart_desc);
 free_desc:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 
 	return ret;
 }
@@ -1230,7 +1230,7 @@ int ades1754_remove(struct ades1754_desc *desc)
 {
 	no_os_mdelay(10);
 	no_os_uart_remove(desc->uart_desc);
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

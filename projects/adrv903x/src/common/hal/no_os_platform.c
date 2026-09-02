@@ -19,7 +19,7 @@
 #include "no_os_mutex.h"
 #include "no_os_delay.h"
 #include "common_data.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "parameters.h"
 #include "app_config.h"
 #include "no_os_gpio.h"
@@ -542,7 +542,7 @@ FILE *fopen(const char *filename, const char *mode)
 	if (!filename)
 		return NULL;
 
-	p = no_os_calloc(1, sizeof(*p));
+	p = capi_calloc(1, sizeof(*p));
 	if (!p)
 		return NULL;
 
@@ -569,7 +569,7 @@ FILE *fopen(const char *filename, const char *mode)
 	} else {
 		pr_warning("ADRV903X HAL: fopen(\"%s\") - unknown file\n",
 			   filename);
-		no_os_free(p);
+		capi_free(p);
 		return NULL;
 	}
 
@@ -609,7 +609,7 @@ int __wrap_fclose(FILE *stream)
 {
 	if (!stream)
 		return -ENODEV;
-	no_os_free(stream);
+	capi_free(stream);
 	return 0;
 }
 

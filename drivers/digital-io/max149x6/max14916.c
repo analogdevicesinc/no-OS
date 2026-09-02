@@ -35,7 +35,7 @@
 #include <string.h>
 #include "max14916.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 
 /**
  * @brief Read the high-side state of a channel's switch.
@@ -207,7 +207,7 @@ int max14916_init(struct max149x6_desc **desc,
 	uint32_t reg_val;
 	int ret, i;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -303,7 +303,7 @@ gpio_err:
 spi_err:
 	no_os_spi_remove(descriptor->comm_desc);
 err:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 	return ret;
 }
 
@@ -324,7 +324,7 @@ int max14916_remove(struct max149x6_desc *desc)
 	no_os_gpio_remove(desc->ready_gpio);
 	no_os_gpio_remove(desc->synch_gpio);
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

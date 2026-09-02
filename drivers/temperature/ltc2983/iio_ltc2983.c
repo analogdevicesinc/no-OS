@@ -35,7 +35,7 @@
 #include "iio_ltc2983.h"
 #include "ltc2983.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "iio.h"
 
 #define LTC2983_CHAN(_type, _index) ({ \
@@ -145,7 +145,7 @@ int ltc2983_iio_init(struct ltc2983_iio_desc **iio_dev,
 	if (!init_param || !init_param->ltc2983_desc_init_param)
 		return -EINVAL;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
+	descriptor = capi_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -175,7 +175,7 @@ int ltc2983_iio_init(struct ltc2983_iio_desc **iio_dev,
 			iio_chan_count++;
 	}
 
-	ltc2983_channels = no_os_calloc(iio_chan_count, sizeof(*ltc2983_channels));
+	ltc2983_channels = capi_calloc(iio_chan_count, sizeof(*ltc2983_channels));
 	if (!ltc2983_channels) {
 		ret = -ENOMEM;
 		goto free_dev;
@@ -213,7 +213,7 @@ int ltc2983_iio_init(struct ltc2983_iio_desc **iio_dev,
 free_dev:
 	ltc2983_remove(descriptor->ltc2983_dev);
 free_desc:
-	no_os_free(descriptor);
+	capi_free(descriptor);
 	return ret;
 }
 
@@ -230,7 +230,7 @@ int ltc2983_iio_remove(struct ltc2983_iio_desc *desc)
 	if (ret)
 		return ret;
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

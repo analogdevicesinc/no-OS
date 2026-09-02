@@ -38,7 +38,7 @@
 #include "no_os_units.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_pwm.h"
 #include "no_os_i2c.h"
 #include "no_os_gpio.h"
@@ -295,7 +295,7 @@ int ltp8800_init(struct ltp8800_dev **device,
 	uint8_t ic_device_id[2] = LTP8800_IC_DEVICE_ID_VALUE;
 	uint8_t val;
 
-	dev = (struct ltp8800_dev *)no_os_calloc(1, sizeof(struct ltp8800_dev));
+	dev = (struct ltp8800_dev *)capi_calloc(1, sizeof(struct ltp8800_dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -391,7 +391,7 @@ dev_err:
 	no_os_gpio_remove(dev->smbalert_desc);
 	no_os_i2c_remove(dev->i2c_desc);
 i2c_err:
-	no_os_free(dev);
+	capi_free(dev);
 	return ret;
 }
 
@@ -423,7 +423,7 @@ int ltp8800_remove(struct ltp8800_dev *dev)
 			return ret;
 	}
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }

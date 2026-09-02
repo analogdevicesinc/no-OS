@@ -35,7 +35,7 @@
 #include <stdio.h>
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "iio_adxl367.h"
 #include "adxl367.h"
 #include <string.h>
@@ -714,7 +714,7 @@ int adxl367_iio_init(struct adxl367_iio_dev **iio_dev,
 	int ret;
 	struct adxl367_iio_dev *desc;
 
-	desc = (struct adxl367_iio_dev *)no_os_calloc(1, sizeof(*desc));
+	desc = (struct adxl367_iio_dev *)capi_calloc(1, sizeof(*desc));
 	if (!desc)
 		return -ENOMEM;
 
@@ -745,11 +745,11 @@ int adxl367_iio_init(struct adxl367_iio_dev **iio_dev,
 	return 0;
 
 error_adxl367_init:
-	no_os_free(desc);
+	capi_free(desc);
 	return ret;
 error_config:
 	adxl367_remove(desc->adxl367_dev);
-	no_os_free(desc);
+	capi_free(desc);
 	return ret;
 }
 
@@ -768,7 +768,7 @@ int adxl367_iio_remove(struct adxl367_iio_dev *desc)
 	if (ret)
 		return ret;
 
-	no_os_free(desc);
+	capi_free(desc);
 
 	return 0;
 }

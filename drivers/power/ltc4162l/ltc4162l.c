@@ -36,7 +36,7 @@
 
 #include "no_os_util.h"
 #include "no_os_delay.h"
-#include "no_os_alloc.h"
+#include "capi_alloc.h"
 #include "no_os_i2c.h"
 
 #include "ltc4162l.h"
@@ -257,7 +257,7 @@ int ltc4162l_init(struct ltc4162l_desc **device,
 	struct ltc4162l_desc *dev;
 	int ret;
 
-	dev = no_os_calloc(1, sizeof(*dev));
+	dev = capi_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
@@ -275,7 +275,7 @@ int ltc4162l_init(struct ltc4162l_desc **device,
 	return 0;
 
 free_dev:
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
@@ -293,7 +293,7 @@ int ltc4162l_remove(struct ltc4162l_desc *dev)
 	if (ret)
 		return ret;
 
-	no_os_free(dev);
+	capi_free(dev);
 
 	return ret;
 }
