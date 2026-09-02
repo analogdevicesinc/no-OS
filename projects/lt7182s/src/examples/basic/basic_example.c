@@ -32,7 +32,7 @@
 *******************************************************************************/
 #include "common_data.h"
 #include "no_os_uart.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "lt7182s.h"
 
@@ -98,7 +98,7 @@ int example_main()
 		}
 
 		pr_info("\n");
-		no_os_mdelay(500);
+		capi_wait_ms(500);
 	}
 
 exit:
