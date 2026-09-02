@@ -38,6 +38,7 @@
 #include "iio_example.h"
 #include "iio_ad4080.h"
 #include "iio_app.h"
+#include "capi_time.h"
 
 static struct ad4080_init_param default_ad4080_init_param = {
 	.cfg = {
@@ -214,7 +215,7 @@ int iio_example_main(void)
 	struct iio_data_buffer read_data_buffer;
 
 	/* give the mezannine time to ramp up its power rails */
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	err = iio_ad4080_init(&iio_ad4080, &iio_ad4080_init_param);
 	if (err)
