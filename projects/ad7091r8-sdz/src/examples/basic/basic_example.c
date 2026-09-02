@@ -34,7 +34,7 @@
 #include "common_data.h"
 #include "ad7091r8.h"
 #include "no_os_uart.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
 
@@ -76,7 +76,7 @@ int example_main()
 		printf("Channel %d raw ADC output: %d\n\r",
 		       no_os_field_get(AD7091R8_REG_RESULT_CH_ID_MASK, val),
 		       no_os_field_get(AD7091R8_REG_RESULT_DATA_MASK, val));
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 	}
 
 error:
