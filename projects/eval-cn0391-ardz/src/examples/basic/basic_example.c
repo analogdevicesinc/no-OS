@@ -33,7 +33,7 @@
 
 #include "common_data.h"
 #include "cn0391.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_uart.h"
 
@@ -72,7 +72,7 @@ int example_main(void)
 		}
 		printf("---\n");
 
-		no_os_mdelay(2000);
+		capi_wait_ms(2000);
 	}
 
 free_dev:
