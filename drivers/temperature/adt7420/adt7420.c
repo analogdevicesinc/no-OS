@@ -35,7 +35,7 @@
 #include <stdlib.h>
 #include "no_os_error.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "adt7420.h"
 
 const struct adt7420_chip_info chip_info[] = {
@@ -353,7 +353,7 @@ int32_t adt7420_reset(struct adt7420_dev *dev)
 			return -1;
 		}
 	}
-	no_os_mdelay(ADT7420_RESET_DELAY); /* device restart */
+	capi_wait_ms(ADT7420_RESET_DELAY); /* device restart */
 	dev->resolution_setting = 0;
 	return 0;
 }

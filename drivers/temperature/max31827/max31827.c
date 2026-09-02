@@ -33,7 +33,7 @@
 
 #include "max31827.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_i2c.h"
 #include "no_os_print_log.h"
@@ -280,7 +280,7 @@ int max31827_read_temp_input(struct max31827_device *dev, int32_t *val)
 		if (ret)
 			return ret;
 
-		no_os_udelay(max31827_conv_times[dev->resolution]);
+		capi_wait_us(max31827_conv_times[dev->resolution]);
 	}
 
 	/**
@@ -290,7 +290,7 @@ int max31827_read_temp_input(struct max31827_device *dev, int32_t *val)
 	 */
 	if (dev->resolution == MAX31827_RES_12_BIT &&
 	    dev->update_interval == max31827_conversions[MAX31827_CNV_8_HZ])
-		no_os_udelay(15000);
+		capi_wait_us(15000);
 
 	return max31827_read_temp(dev, MAX31827_T_REG, val);
 }

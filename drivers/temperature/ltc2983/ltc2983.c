@@ -34,7 +34,7 @@
 #include <errno.h>
 #include "ltc2983.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 
 /******************************************************************************/
@@ -98,7 +98,7 @@ int ltc2983_init(struct ltc2983_desc **device,
 		goto gpio_err;
 
 	/* bring the device out of reset */
-	no_os_udelay(1200);
+	capi_wait_us(1200);
 	ret = no_os_gpio_set_value(descriptor->gpio_rstn, NO_OS_GPIO_HIGH);
 	if (ret)
 		goto gpio_err;
@@ -235,7 +235,7 @@ int ltc2983_setup(struct ltc2983_desc *device)
 		ret = ltc2983_reg_read(device, LTC2983_STATUS_REG, &status);
 		if (ret)
 			return ret;
-		no_os_udelay(25000);
+		capi_wait_us(25000);
 	} while (LTC2983_STATUS_UP(status) != 1 && --timeout);
 	if (!timeout)
 		return -EINVAL;
@@ -343,7 +343,7 @@ int ltc2983_chan_read_resistance(struct ltc2983_desc *device, const int chan,
 		return ret;
 
 	/* wait for conversion to complete */
-	no_os_mdelay(300);
+	capi_wait_ms(300);
 
 	raw_array[0] = LTC2983_SPI_READ_BYTE;
 	no_os_put_unaligned_be16(ADT7604_RES_RES_ADDR(chan), raw_array + 1);
@@ -416,7 +416,7 @@ int ltc2983_chan_read_raw(struct ltc2983_desc *device, const int chan,
 	if (ret)
 		return ret;
 
-	no_os_mdelay(300);
+	capi_wait_ms(300);
 
 	/* read the converted data */
 	raw_array[0] = LTC2983_SPI_READ_BYTE;

@@ -40,7 +40,7 @@
 #include "no_os_spi.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /******************************************************************************/
 
@@ -401,9 +401,9 @@ int max31865_read_rtd(struct max31865_dev *device, uint16_t *rtd_reg)
 		return ret;
 
 	if (device->is_filt_50)
-		no_os_udelay(62500 + device->t_rc_delay);
+		capi_wait_us(62500 + device->t_rc_delay);
 	else
-		no_os_udelay(52000 + device->t_rc_delay);
+		capi_wait_us(52000 + device->t_rc_delay);
 
 	ret = max31865_read(device, MAX31865_RTDMSB_REG, &reg_data);
 	if (ret)
