@@ -37,7 +37,7 @@
 #include "axi_dmac.h"
 #include "no_os_print_log.h"
 #include "no_os_gpio.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "xilinx_spi.h"
 #include "xilinx_gpio.h"
 #include "no_os_error.h"
@@ -134,13 +134,13 @@ int main(void)
 	if (ret)
 		goto error_1;
 	/* minimum 2 / mclck */
-	no_os_udelay(100);
+	capi_wait_us(100);
 	ret = no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_HIGH);
 	if (ret != 0)
 		goto error_1;
 
 	// allow at least 1.66 ms after reset, (ADC start-up time)
-	no_os_udelay(1660);
+	capi_wait_us(1660);
 
 	/* Check Rev ID */
 	ret = ad7768_spi_read(dev, AD7768_REG_REV_ID, &reg_data);
@@ -173,7 +173,7 @@ int main(void)
 			      AXI_ADC_FORMAT_SIGNEXT | AXI_ADC_FORMAT_ENABLE |
 			      AXI_ADC_ENABLE);
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	/* Finish AXI ADC initialization */
 	axi_adc_write(axi_adc_core_desc, AXI_ADC_REG_CNTRL_3, AXI_ADC_CRC_EN);
