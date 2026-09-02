@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "ade9430.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_units.h"
 #include "capi_alloc.h"
 
@@ -133,7 +133,7 @@ int ade9430_read_temp(struct ade9430_dev *dev)
 		return ret;
 
 	/* New temperature reading available after 1.25ms */
-	no_os_mdelay(2);
+	capi_wait_ms(2);
 
 	ret = ade9430_read(dev, ADE9430_REG_TEMP_RSLT, &temp_raw);
 	if (ret)
@@ -295,7 +295,7 @@ int ade9430_init(struct ade9430_dev **device,
 	if (ret)
 		goto error_spi;
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	ret = ade9430_update_bits(dev, ADE9430_REG_CONFIG1, ADE9430_SWRST,
 				  no_os_field_prep(ADE9430_SWRST, 0));

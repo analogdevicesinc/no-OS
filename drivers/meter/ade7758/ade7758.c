@@ -39,7 +39,7 @@
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
 #include "no_os_irq.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_units.h"
 #include "capi_alloc.h"
 #include "no_os_crc16.h"
@@ -346,7 +346,7 @@ int ade7758_sw_reset(struct ade7758_dev *dev)
 		return ret;
 
 	/* Wait for device to initialize */
-	no_os_mdelay(ADE7758_RESET_DEL);
+	capi_wait_ms(ADE7758_RESET_DEL);
 
 	return 0;
 }

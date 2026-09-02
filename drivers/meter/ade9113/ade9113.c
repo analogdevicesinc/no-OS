@@ -35,7 +35,7 @@
 #include <errno.h>
 #include <math.h>
 #include "ade9113.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_units.h"
 #include "capi_alloc.h"
 #include "no_os_crc8.h"
@@ -507,13 +507,13 @@ int ade9113_init(struct ade9113_dev **device,
 	if (ret)
 		goto error_gpio;
 
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	ret = no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_HIGH);
 	if (ret)
 		goto error_gpio;
 
-	no_os_mdelay(50);
+	capi_wait_ms(50);
 
 	// Check if device 0 communication is up
 	if (dev->no_devs < 2) {
@@ -522,7 +522,7 @@ int ade9113_init(struct ade9113_dev **device,
 			if (ret)
 				goto error_gpio;
 
-			no_os_mdelay(5);
+			capi_wait_ms(5);
 			timeout++;
 			if (timeout == 20) {
 				ret = -ENOTCONN;
@@ -535,7 +535,7 @@ int ade9113_init(struct ade9113_dev **device,
 			if (ret)
 				goto error_gpio;
 
-			no_os_mdelay(5);
+			capi_wait_ms(5);
 			timeout++;
 			if (timeout == 20) {
 				ret = -ENOTCONN;
@@ -558,7 +558,7 @@ int ade9113_init(struct ade9113_dev **device,
 				if (ret)
 					goto error_gpio;
 
-				no_os_mdelay(5);
+				capi_wait_ms(5);
 				timeout++;
 				if (timeout == 20) {
 					ret = -ENOTCONN;
@@ -654,7 +654,7 @@ int ade9113_sw_reset(struct ade9113_dev *dev)
 	dev->crc_en = 1;
 
 	/* Wait for device to initialize */ // ToDo - check required timing
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	/* Read version product */
 	ret = ade9113_get_version_product(dev, &ver_product);
@@ -680,7 +680,7 @@ int ade9113_hw_reset(struct ade9113_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	ret = no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_HIGH);
 	if (ret)
@@ -689,7 +689,7 @@ int ade9113_hw_reset(struct ade9113_dev *dev)
 	dev->crc_en = 1;
 
 	/* Wait for device to initialize */ // ToDo - check required timing
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	/* Read version product */
 	ret = ade9113_get_version_product(dev, &ver_product);

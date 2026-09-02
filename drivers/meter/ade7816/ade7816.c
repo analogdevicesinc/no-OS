@@ -31,7 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_units.h"
 #include "ade7816.h"
 
@@ -98,7 +98,7 @@ int ade7816_sw_reset(struct ade7816_desc *desc)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(ADE7816_INIT_DELAY);
+	capi_wait_ms(ADE7816_INIT_DELAY);
 
 	return 0;
 }
@@ -116,13 +116,13 @@ int ade7816_hw_reset(struct ade7816_desc *desc)
 	if (ret)
 		return ret;
 
-	no_os_udelay(ADE7816_HWRST_DELAY);
+	capi_wait_us(ADE7816_HWRST_DELAY);
 
 	ret = no_os_gpio_set_value(desc->reset_desc, NO_OS_GPIO_HIGH);
 	if (ret)
 		return ret;
 
-	no_os_mdelay(ADE7816_INIT_DELAY);
+	capi_wait_ms(ADE7816_INIT_DELAY);
 
 	return 0;
 }
@@ -1075,7 +1075,7 @@ int ade7816_zx_detect(struct ade7816_desc *desc, enum ade7816_channel chan)
 	/* Delay required for settling after changing channel selection for zx
 	 * detection.
 	 */
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	return 0;
 }
@@ -1206,7 +1206,7 @@ int ade7816_read_period(struct ade7816_desc *desc, uint32_t *period_us)
 	int ret;
 
 	/* Delay required for internal filtering. */
-	no_os_mdelay(40);
+	capi_wait_ms(40);
 
 	ret = ade7816_read_reg(desc, ADE7816_PERIOD_REG, &reg_val);
 	if (ret)
@@ -1602,7 +1602,7 @@ int ade7816_init(struct ade7816_desc **desc,
 		goto remove_reset;
 	}
 
-	no_os_mdelay(ADE7816_INIT_DELAY);
+	capi_wait_ms(ADE7816_INIT_DELAY);
 
 	ret = ade7816_write_reg(descriptor, ADE7816_RUN_REG, 0x01);
 	if (ret)

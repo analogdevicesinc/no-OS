@@ -39,7 +39,7 @@
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
 #include "no_os_irq.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_units.h"
 #include "capi_alloc.h"
 #include "no_os_crc16.h"
@@ -242,7 +242,7 @@ int ade9153a_init(struct ade9153a_dev **device,
 			goto error_spi;
 	}
 
-	no_os_mdelay(ADE9153A_RESET_DEL);
+	capi_wait_ms(ADE9153A_RESET_DEL);
 
 	ret = ade9153a_run(dev);
 	if (ret)
@@ -558,7 +558,7 @@ int ade9153a_sw_reset(struct ade9153a_dev *dev)
 		return ret;
 
 	/* Wait for device to initialize */
-	no_os_mdelay(ADE9153A_RESET_DEL);
+	capi_wait_ms(ADE9153A_RESET_DEL);
 
 	return 0;
 }
@@ -580,7 +580,7 @@ int ade9153a_hw_reset(struct ade9153a_dev *dev)
 		if (ret)
 			return ret;
 	}
-	no_os_mdelay(ADE9153A_RESET_DEL);
+	capi_wait_ms(ADE9153A_RESET_DEL);
 
 	if (dev->gpio_reset)
 		ret = no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_HIGH);
@@ -588,7 +588,7 @@ int ade9153a_hw_reset(struct ade9153a_dev *dev)
 		return ret;
 
 	/* Wait for device to initialize */
-	no_os_mdelay(ADE9153A_RESET_DEL);
+	capi_wait_ms(ADE9153A_RESET_DEL);
 
 	return 0;
 }
@@ -4018,7 +4018,7 @@ int ade9153a_temp_val(struct ade9153a_dev *dev,
 	// wait for conversion result
 	while (!(status)) {
 		ret = ade9153a_get_temp_rdy(dev, &status);
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 		timeout++;
 		if (timeout == 2000) {
 			ret = -ENODATA;

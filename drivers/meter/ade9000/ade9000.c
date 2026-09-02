@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "ade9000.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_units.h"
 #include "capi_alloc.h"
 
@@ -200,7 +200,7 @@ int ade9000_read_temp(struct ade9000_dev *dev)
 	// wait for conversion result
 	while (!(status)) {
 		ret = ade9000_get_int_status0(dev, ADE9000_MASK0_TEMP_RDY, &status);
-		no_os_mdelay(2);
+		capi_wait_ms(2);
 		timeout++;
 		if (timeout == 2000) {
 			ret = -ENODATA;
@@ -398,7 +398,7 @@ int ade9000_init(struct ade9000_dev **device,
 
 	// wait for device to initialize after software reset
 	// > 46 ms see datasheet.
-	no_os_mdelay(50);
+	capi_wait_ms(50);
 
 	/* Use a valid register with default value different from 0*/
 	ret = ade9000_read(dev, ADE9000_REG_CONFIG5, &chip_id);

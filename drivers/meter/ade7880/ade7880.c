@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "ade7880.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_units.h"
 #include "capi_alloc.h"
 
@@ -342,7 +342,7 @@ int ade7880_init(struct ade7880_dev **device,
 	if (ret)
 		goto error_dev;
 	// delay reset
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 	ret = no_os_gpio_set_value(dev->reset_desc,
 				   NO_OS_GPIO_HIGH);
 	if (ret)
@@ -350,7 +350,7 @@ int ade7880_init(struct ade7880_dev **device,
 
 	// wait for device to initialize after hardware reset
 	// >= 100 ms see datasheet.
-	no_os_mdelay(ADE7880_RESET_RECOVER);
+	capi_wait_ms(ADE7880_RESET_RECOVER);
 
 	/* SPI Initialization */
 	ret = no_os_spi_init(&dev->spi_desc, init_param.spi_init);
