@@ -31,7 +31,7 @@
 * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "common_data.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "lt3074.h"
 
@@ -102,7 +102,7 @@ int example_main()
 		pr_info("vin = %d mV | vout = %d mV | vbias = %d mV | iout = %d mA | temp = %d C\n",
 			vals[0], vals[1], vals[2], vals[3], vals[4] / 1000);
 
-		no_os_mdelay(500);
+		capi_wait_ms(500);
 	}
 
 exit:
