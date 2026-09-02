@@ -60,7 +60,7 @@ ongoing work.
 #define LTC2312_READ_VALUES_NUMBER 100
 
 #include <stdint.h>
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_spi.h"
 
 enum device_type {

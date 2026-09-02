@@ -33,7 +33,7 @@
 #include "ad7490.h"
 #include "capi_alloc.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 #define AD7490_DUMMY_TRANSFER		0xFFFF
 
@@ -101,7 +101,7 @@ int ad7490_set_op_mode(struct ad7490_desc *desc, enum ad7490_op_mode op_mode)
 
 		break;
 	case AD7490_MODE_AUTOSHUTDOWN:
-		no_os_udelay(1);
+		capi_wait_us(1);
 
 		break;
 	case AD7490_MODE_FULLSHUTDOWN:

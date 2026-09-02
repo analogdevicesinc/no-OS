@@ -36,6 +36,7 @@
 #include "axi_adc_core.h"
 #include "ad9265.h"
 #include "capi_alloc.h"
+#include "capi_time.h"
 
 #define DCO_DEBUG
 
@@ -166,7 +167,7 @@ int32_t ad9265_calibrate(struct ad9265_dev *dev,
 
 			axi_adc_write(&core, AXI_ADC_REG_CHAN_STATUS(0), ~0);
 
-			no_os_mdelay(1);
+			capi_wait_ms(1);
 
 			axi_adc_read(&core, AXI_ADC_REG_CHAN_STATUS(0), &stat);
 

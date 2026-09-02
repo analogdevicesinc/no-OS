@@ -35,7 +35,7 @@
 #include "stdlib.h"
 #include "adaq7980.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 
 /**
@@ -101,12 +101,12 @@ int32_t adaq7980_setup(struct adaq7980_dev **device,
 		if (ret != 0)
 			goto error_dev;
 
-		no_os_mdelay(10);
+		capi_wait_ms(10);
 		ret = no_os_gpio_set_value(dev->gpio_pd_ldo, NO_OS_GPIO_HIGH);
 		if (ret != 0)
 			goto error_dev;
 
-		no_os_mdelay(10);
+		capi_wait_ms(10);
 	}
 	ret = no_os_pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
 	if (ret != 0)

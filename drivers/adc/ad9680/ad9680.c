@@ -37,6 +37,7 @@
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 #include "capi_alloc.h"
+#include "capi_time.h"
 
 struct ad9680_jesd204_priv {
 	struct ad9680_dev *dev;
@@ -242,7 +243,7 @@ int32_t ad9680_setup(struct ad9680_dev **device,
 	ad9680_spi_write(dev,
 			 AD9680_REG_INTERFACE_CONF_A,
 			 0x81);	// RESET
-	no_os_mdelay(250);
+	capi_wait_ms(250);
 
 	ad9680_spi_write(dev,
 			 AD9680_REG_LINK_CONTROL,
@@ -270,7 +271,7 @@ int32_t ad9680_setup(struct ad9680_dev **device,
 	ad9680_spi_write(dev,
 			 AD9680_REG_LINK_CONTROL,
 			 0x14);	// link enable
-	no_os_mdelay(250);
+	capi_wait_ms(250);
 
 	ad9680_spi_read(dev,
 			AD9680_REG_JESD204B_PLL_LOCK_STATUS,
@@ -317,7 +318,7 @@ int32_t ad9680_setup_jesd_fsm(struct ad9680_dev **device,
 	ad9680_spi_write(dev,
 			 AD9680_REG_INTERFACE_CONF_A,
 			 0x81);	// RESET
-	no_os_mdelay(250);
+	capi_wait_ms(250);
 
 	ad9680_spi_write(dev,
 			 AD9680_REG_LINK_CONTROL,
@@ -345,7 +346,7 @@ int32_t ad9680_setup_jesd_fsm(struct ad9680_dev **device,
 	ad9680_spi_write(dev,
 			 AD9680_REG_LINK_CONTROL,
 			 0x14);	// link enable
-	no_os_mdelay(250);
+	capi_wait_ms(250);
 
 	ad9680_spi_read(dev,
 			AD9680_REG_JESD204B_PLL_LOCK_STATUS,

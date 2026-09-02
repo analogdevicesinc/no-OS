@@ -38,6 +38,7 @@
 #include <inttypes.h>
 #include "api_def.h"
 #include "capi_alloc.h"
+#include "capi_time.h"
 
 /**
  * Spi write and read compatible with ad9208 API
@@ -331,7 +332,7 @@ static int32_t ad9208_setup(struct ad9208_state *st)
 	timeout = 10;
 
 	do {
-		no_os_mdelay(10);
+		capi_wait_ms(10);
 		ret = ad9208_jesd_get_pll_status(ad9208_h, &pll_stat);
 		if (ret < 0) {
 			printf("Failed to get pll status (%d)\n", ret);
@@ -358,7 +359,7 @@ error:
  */
 static int ad9208_udelay(void *user_data, unsigned int us)
 {
-	no_os_udelay(us);
+	capi_wait_us(us);
 
 	return 0;
 }

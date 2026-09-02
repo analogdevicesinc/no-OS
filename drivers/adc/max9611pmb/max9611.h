@@ -39,7 +39,7 @@
 #include "no_os_i2c.h"
 #include "no_os_util.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 #define MAX9611_MUX_MASK		NO_OS_GENMASK(2, 0)
 #define MAX9611_MODE_MASK		NO_OS_GENMASK(7, 5)

@@ -36,7 +36,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
 #include "no_os_util.h"

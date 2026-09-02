@@ -44,6 +44,7 @@
 
 #ifdef XILINX_PLATFORM
 #include "no_os_axi_io.h"
+#include "capi_time.h"
 #include <unistd.h>
 #include <errno.h>
 #endif
@@ -610,7 +611,7 @@ int32_t ad7606_convst(struct ad7606_dev *dev)
 		return ret;
 
 	/* wait LP_CNV time */
-	no_os_udelay(1);
+	capi_wait_us(1);
 
 	return no_os_gpio_set_value(dev->gpio_convst, 1);
 }
@@ -924,7 +925,7 @@ int32_t ad7606_read_one_sample(struct ad7606_dev *dev, uint32_t * data)
 			if (busy == 0)
 				break;
 
-			no_os_udelay(1);
+			capi_wait_us(1);
 			timeout--;
 		}
 
@@ -932,7 +933,7 @@ int32_t ad7606_read_one_sample(struct ad7606_dev *dev, uint32_t * data)
 			return -ETIME;
 	} else {
 		/* wait CONV time */
-		no_os_udelay(tconv_max[dev->oversampling.os_ratio]);
+		capi_wait_us(tconv_max[dev->oversampling.os_ratio]);
 	}
 
 	return ad7606_spi_data_read(dev, data);
@@ -1089,7 +1090,7 @@ int32_t ad7606_reset(struct ad7606_dev *dev)
 	if (ret < 0)
 		return ret;
 
-	no_os_udelay(3);
+	capi_wait_us(3);
 
 	ret = no_os_gpio_set_value(dev->gpio_reset, 0);
 	if (ret < 0)
@@ -1843,7 +1844,7 @@ int32_t ad7606_init(struct ad7606_dev **device,
 	memcpy(dev->offset_ch, init_param->offset_ch, sizeof(dev->offset_ch));
 
 	/* wait DEVICE_SETUP time */
-	no_os_udelay(253);
+	capi_wait_us(253);
 
 	if (!dev->parallel_interface) {
 		ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);

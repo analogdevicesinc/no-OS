@@ -38,7 +38,7 @@
 #if !defined(USE_STANDARD_SPI)
 #include "spi_engine.h"
 #endif
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
@@ -842,13 +842,13 @@ int32_t ad469x_reset_dev(struct ad469x_dev *dev)
 	if (ret != 0)
 		return ret;
 
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	ret = no_os_gpio_set_value(dev->gpio_resetn, NO_OS_GPIO_HIGH);
 	if (ret != 0)
 		return ret;
 
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	ret = ad469x_spi_reg_read(dev, AD469x_REG_STATUS, &reset_status);
 	if (ret != 0)

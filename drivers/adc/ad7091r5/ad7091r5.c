@@ -36,7 +36,7 @@
 #include <errno.h>
 #include "stdlib.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
 
@@ -145,7 +145,7 @@ int32_t ad7091r5_i2c_write_mask(struct ad7091r5_dev *dev,
 	reg_data |= data;
 
 	/* Allow time for register modification to take effect before write */
-	no_os_udelay(100);
+	capi_wait_us(100);
 
 	return ad7091r5_i2c_reg_write(dev, reg_addr, reg_data);
 }
@@ -447,7 +447,7 @@ int32_t ad7091r5_reset(struct ad7091r5_dev *dev, bool is_software)
 			return ret;
 
 		/* Reset pulse width extended to ensure proper device reset */
-		no_os_udelay(100);
+		capi_wait_us(100);
 		return no_os_gpio_set_value(dev->gpio_resetn, NO_OS_GPIO_HIGH);
 	}
 }
@@ -503,7 +503,7 @@ int32_t ad7091r5_read_one(struct ad7091r5_dev *dev,
 		return ret;
 
 	/* Wait for channel switch and conversion to complete before reading result */
-	no_os_udelay(100);
+	capi_wait_us(100);
 
 	ret = ad7091r5_i2c_reg_read(dev, AD7091R5_REG_RESULT, &val);
 	if (ret)

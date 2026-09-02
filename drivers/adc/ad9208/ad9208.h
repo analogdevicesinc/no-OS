@@ -40,7 +40,7 @@
 #include "ad9208_reg.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 #define AD9208_FULL_BANDWIDTH_MODE 0
 #define AD9208_1_DDC_MODE 1

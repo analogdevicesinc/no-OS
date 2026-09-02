@@ -37,7 +37,7 @@
 #include "adi_ad9083_hal.h"
 #include "no_os_error.h"
 #include <inttypes.h>
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_clk.h"
 #include "uc_settings.h"
 #include "no_os_util.h"
@@ -188,7 +188,7 @@ int32_t ad9083_log_write(void *user_data, int32_t log_type, const char *message,
  */
 static int ad9083_udelay(void *user_data, unsigned int us)
 {
-	no_os_udelay(us);
+	capi_wait_us(us);
 
 	return 0;
 }
@@ -229,12 +229,12 @@ static int32_t ad9083_link_reset(struct ad9083_phy *device, uint8_t uc)
 	if (ret != 0)
 		return ret;
 
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 	ret = adi_ad9083_jesd_tx_link_digital_reset(&device->adi_ad9083, 0);
 	if (ret != 0)
 		return ret;
 
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	return 0;
 }

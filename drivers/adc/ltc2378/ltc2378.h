@@ -37,7 +37,7 @@
 #include <stdint.h>
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 
 #define LTC2378_RESOLUTION_UNIPOLAR (1 << 20) /* 2^20 = 1048576 */

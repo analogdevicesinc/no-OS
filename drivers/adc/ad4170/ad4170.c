@@ -37,7 +37,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_crc8.h"
 #include "ad4170.h"
 
@@ -984,7 +984,7 @@ int ad4170_reset(struct ad4170_dev *dev)
 		return ret;
 
 	/* Turn-on settling time */
-	no_os_udelay(200);
+	capi_wait_us(200);
 
 	// Reset the driver representation of the chip to a default state
 	// that matches the chip configuration right after reset.
@@ -1785,7 +1785,7 @@ int ad4170_init(struct ad4170_dev **device,
 	if (ret)
 		goto error;
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	ret = ad4170_reset(dev);
 	if (ret)

@@ -35,7 +35,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ad4692.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
@@ -438,7 +438,7 @@ int ad4692_get_ch(struct ad4692_desc *desc, uint8_t ch, uint32_t *val)
 	if (ret)
 		return ret;
 
-	no_os_udelay(AD4692_MAX_CONV_PERIOD_US);
+	capi_wait_us(AD4692_MAX_CONV_PERIOD_US);
 
 	ret = ad4692_sampling_enable(desc, false);
 	if (ret)
@@ -575,13 +575,13 @@ int ad4692_hardware_reset(struct ad4692_desc *desc)
 	if (ret)
 		return ret;
 
-	no_os_udelay(1);
+	capi_wait_us(1);
 
 	ret = no_os_gpio_set_value(desc->reset_desc, NO_OS_GPIO_HIGH);
 	if (ret)
 		return ret;
 
-	no_os_udelay(300);
+	capi_wait_us(300);
 
 	/* Clearing STATUS Register. */
 	ret = ad4692_reg_read(desc, AD4692_STATUS_REG, &reg_val);
@@ -600,7 +600,7 @@ int ad4692_software_reset(struct ad4692_desc *desc)
 	if (ret)
 		return ret;
 
-	no_os_udelay(300);
+	capi_wait_us(300);
 
 	return 0;
 }

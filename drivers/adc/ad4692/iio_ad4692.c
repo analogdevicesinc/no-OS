@@ -37,7 +37,7 @@
 #include "no_os_error.h"
 #include "no_os_units.h"
 #include "no_os_util.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 #include "ad4692.h"
 #include "iio_ad4692.h"
@@ -726,7 +726,7 @@ static int ad4692_iio_submit_buffer(struct iio_device_data *iio_dev_data)
 
 		while (sample_idx < buffer->samples) {
 			/* Wait for all channels to be sampled */
-			no_os_udelay(delay_us);
+			capi_wait_us(delay_us);
 
 			ad4692_sampling_enable(ad4692, false);
 

@@ -45,7 +45,7 @@
 #include "ad7616.h"
 #include "no_os_gpio.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 #include "no_os_util.h"
 
@@ -457,10 +457,10 @@ int32_t ad7616_reset(struct ad7616_dev *dev)
 
 	ret = no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_LOW);
 	/* Low pulse width for a full reset should be at least 1200 ns */
-	no_os_mdelay(20);
+	capi_wait_ms(20);
 	ret |= no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_HIGH);
 	/* 15 ms are required to completely reconfigure the device */
-	no_os_mdelay(150);
+	capi_wait_ms(150);
 
 	return ret;
 }
@@ -706,10 +706,10 @@ int32_t ad7616_par_read(struct ad7616_dev *dev, uint8_t reg_addr,
 
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_WRITE_DATA,
 			   0x0000 | ((reg_addr & 0x3F) << 9));
-	no_os_udelay(50);
+	capi_wait_us(50);
 	no_os_axi_io_read(dev->core_baseaddr, AD7616_REG_UP_READ_DATA, &read);
 	*reg_data = read & 0xFF;
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	return 0;
 #endif
@@ -731,7 +731,7 @@ int32_t ad7616_par_write(struct ad7616_dev *dev, uint8_t reg_addr,
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_WRITE_DATA,
 			   0x8000 | ((reg_addr & 0x3F) << 9) |
 			   (reg_data & 0xFF));
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	return 0;
 #endif
@@ -808,14 +808,14 @@ int32_t ad7616_core_setup(struct ad7616_dev *dev)
 	uint32_t type;
 
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, 0x00);
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CONV_RATE, 100);
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL,
 			   AD7616_CTRL_RESETN | AD7616_CTRL_CNVST_EN);
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 	no_os_axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	no_os_axi_io_read(dev->core_baseaddr, AD7616_REG_UP_IF_TYPE, &type);
 
