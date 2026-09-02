@@ -31,7 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "common_data.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "ltc7841.h"
 
@@ -118,7 +118,7 @@ int example_main(void)
 		error = ltc7841_reg_read(ltc7841_desc, LTC7841_MFR_VOUT_MARGIN_LOW, value);
 		if (error)
 			goto remove_ltc7841;
-		no_os_mdelay(500);
+		capi_wait_ms(500);
 	}
 remove_ltc7841:
 	ltc7841_remove(ltc7841_desc);

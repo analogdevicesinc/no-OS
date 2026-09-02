@@ -35,7 +35,7 @@
 
 #include "no_os_uart.h"
 #include "no_os_util.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "ltc7841.h"
 #include "parameters.h"
 
