@@ -32,7 +32,7 @@
 *******************************************************************************/
 #include <string.h>
 #include "common_data.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 
 #include "adin1110.h"
@@ -233,7 +233,7 @@ int example_main()
 			}
 		}
 
-		no_os_mdelay(5000);
+		capi_wait_ms(5000);
 	}
 
 error:
