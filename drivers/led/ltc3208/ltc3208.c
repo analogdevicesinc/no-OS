@@ -45,7 +45,7 @@
 #include "capi_alloc.h"
 #include "no_os_i2c.h"
 #include "no_os_util.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /***************************************************************************//**
  * @brief Initializes the LTC3208 device structure.
