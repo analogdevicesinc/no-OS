@@ -58,6 +58,12 @@ function(post_build_config PROJECT_TARGET)
                 capi_alloc_add_link_guard(${PROJECT_TARGET})
         endif()
 
+        # Same for capi_time: fail if delays/uptime resolve to the weak no-op
+        # default (no strong backend). Passes silently if capi_time is unused.
+        if(COMMAND capi_time_add_link_guard)
+                capi_time_add_link_guard(${PROJECT_TARGET})
+        endif()
+
         # IDE project file generation (replaces cmake -P vscode_config.cmake
         # and generate_stm32cubeide_project calls)
         ide_generate(${PROJECT_TARGET})
