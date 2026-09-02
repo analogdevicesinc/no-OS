@@ -35,7 +35,7 @@
 
 #include "common_data.h"
 #include "adt7420.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 
 #ifdef LINUX_PLATFORM
@@ -90,7 +90,7 @@ int example_main()
 		goto error_adt7420;
 
 	/* Datasheet specified delay between conversions. */
-	no_os_mdelay(240);
+	capi_wait_ms(240);
 
 	while (1) {
 		ret = adt7420_reg_read(adt7420, ADT7420_REG_T_HIGH_MSB, &temp_msb_l);
@@ -152,7 +152,7 @@ int example_main()
 		pr_info("Temp read is %lf\r\n", temp_now);
 		pr_info("Current temp high setpoint is %d\r\n", (int) temp_c_max);
 		pr_info("Current temp low setpoint is %d\r\n", (int) temp_c_min);
-		no_os_mdelay(3000);
+		capi_wait_ms(3000);
 	}
 error_adt7420:
 	adt7420_remove(adt7420);
