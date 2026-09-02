@@ -38,7 +38,7 @@
 *******************************************************************************/
 
 #include "common_data.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "ad405x.h"
 
@@ -131,7 +131,7 @@ int example_main()
 		while (i < 50) {
 			ret = ad405x_get_adc(dev, &data);
 			pr_info("\rADC(%02d): %05ld", ++i, data);
-			no_os_mdelay(50); // Cosmetic delay
+			capi_wait_ms(50); // Cosmetic delay
 		}
 
 		pr_info("\nWaiting threshold event .");
@@ -147,7 +147,7 @@ int example_main()
 		while (block_non_blocking) {
 			// Other task...
 			pr_info("\b%c", loading_wheel[++i & 0x3]);
-			no_os_mdelay(100); // Cosmetic delay
+			capi_wait_ms(100); // Cosmetic delay
 		};
 		/* Left wait loop, continue execution */
 		pr_info("\rGot threshold event!     ");

@@ -41,7 +41,7 @@
 #include "common_data.h"
 #include "no_os_util.h"
 #include "no_os_print_log.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "iio_ad405x.h"
 
 #define DATA_BUFFER_SIZE 1000
