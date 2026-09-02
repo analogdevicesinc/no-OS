@@ -31,7 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "common_data.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "ltm4700.h"
 #include <stdlib.h>
@@ -92,7 +92,7 @@ int example_main()
 		}
 
 		pr_info("\n");
-		no_os_mdelay(TELEMETRY_DISPLAY_DELAY_MS);
+		capi_wait_ms(TELEMETRY_DISPLAY_DELAY_MS);
 	}
 
 
