@@ -38,7 +38,7 @@
 
 // platform drivers
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_util.h"
 
 // talise
@@ -251,7 +251,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 	}
 
 	/*** < wait 200ms for PLLs to lock - user code here > ***/
-	no_os_mdelay(200);
+	capi_wait_ms(200);
 
 	talAction = TALISE_getPllsLockStatus(pd, &pllLockStatus);
 	if ((pllLockStatus & 0x07) != 0x07) {
@@ -401,7 +401,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 
 	ADIHAL_sysrefReq(pd->devHalInfo, SYSREF_CONT_OFF);
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	/*** < Insert User JESD204B Sync Verification Code Here > ***/
 

@@ -19,7 +19,7 @@
 #include "axi_dac_core.h"
 #include "axi_adc_core.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "xilinx_gpio.h"
 #include "no_os_gpio.h"
 #include "parameters.h"
@@ -575,7 +575,7 @@ int main(void)
 	Xil_DCacheInvalidateRange((uintptr_t)dac_buffer_dma,
 				  sizeof(sine_lut_iq) * phy[TALISE_A]->tx_dac->num_channels);
 
-	no_os_mdelay(50);
+	capi_wait_ms(50);
 
 	/* Transfer 16384 samples from ADC to MEM */
 	struct axi_dma_transfer transfer_rx = {
@@ -607,7 +607,7 @@ int main(void)
 		.dest_addr = (uintptr_t)(DDR_MEM_BASEADDR + 0xC00000)
 	};
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	status = axi_dmac_transfer_start(rx_dmac, &transfer_rx);
 	if (status)
@@ -639,7 +639,7 @@ int main(void)
 	axi_dac_set_datasel(phy[TALISE_A]->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
 	axi_dac_data_setup(phy[TALISE_A]->tx_dac);
 
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	status = axi_dmac_transfer_start(rx_os_dmac, &transfer_os_rx);
 	if (status)

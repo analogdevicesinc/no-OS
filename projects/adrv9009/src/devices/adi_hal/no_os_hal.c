@@ -37,7 +37,7 @@
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #ifndef ALTERA_PLATFORM
 #include "xilinx_spi.h"
 #include "xilinx_gpio.h"
@@ -125,11 +125,11 @@ adiHalErr_t ADIHAL_resetHw(void *devHalInfo)
 	struct adi_hal *devHalData = (struct adi_hal *)devHalInfo;
 
 	no_os_gpio_direction_output(devHalData->gpio_adrv_resetb, 1);
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 	no_os_gpio_direction_output(devHalData->gpio_adrv_resetb, 0);
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 	no_os_gpio_direction_output(devHalData->gpio_adrv_resetb, 1);
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	return ADIHAL_OK;
 }
@@ -144,7 +144,7 @@ adiHalErr_t ADIHAL_sysrefReq(void *devHalInfo, sysrefReqMode_t mode)
 		no_os_gpio_direction_output(devHalData->gpio_adrv_sysref_req, 0);
 	else if (mode == SYSREF_PULSE) {
 		no_os_gpio_direction_output(devHalData->gpio_adrv_sysref_req, 1);
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 		no_os_gpio_direction_output(devHalData->gpio_adrv_sysref_req, 0);
 	} else
 		return ADIHAL_ERR;
@@ -254,7 +254,7 @@ adiHalErr_t ADIHAL_spiReadField(void *devHalInfo,
 
 adiHalErr_t  ADIHAL_wait_us(void *devHalInfo, uint32_t time_us)
 {
-	no_os_udelay(time_us);
+	capi_wait_us(time_us);
 
 	return ADIHAL_OK;
 }
