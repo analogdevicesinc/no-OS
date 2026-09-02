@@ -34,7 +34,7 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /**
  * @brief Send command byte/word to ADP1055
@@ -206,7 +206,7 @@ int adp1055_init(struct adp1055_desc **desc,
 		goto free_desc;
 
 	/* Time needed for the adp1055 to power-up. */
-	no_os_mdelay(52);
+	capi_wait_ms(52);
 
 	ret = adp1055_send_command(descriptor, ADP1055_CLEAR_FAULTS);
 	if (ret)

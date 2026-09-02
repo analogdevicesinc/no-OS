@@ -37,7 +37,7 @@
 #include <errno.h>
 
 #include "no_os_util.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 #include "no_os_i2c.h"
 #include "no_os_error.h"
@@ -231,7 +231,7 @@ int ltm3360b_adc_read_raw(struct ltm3360b_dev *dev,
 	if (ret)
 		return ret;
 
-	no_os_mdelay(LTM3360B_ADC_CONV_TIME_MS);
+	capi_wait_ms(LTM3360B_ADC_CONV_TIME_MS);
 
 	return ltm3360b_reg_read(dev, LTM3360B_ADC_OUTPUT, result);
 }

@@ -33,7 +33,7 @@
 #include "ades1754.h"
 #include "capi_alloc.h"
 #include "no_os_crc8.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 
 NO_OS_DECLARE_CRC8_TABLE(crc_table);
@@ -1228,7 +1228,7 @@ free_desc:
  */
 int ades1754_remove(struct ades1754_desc *desc)
 {
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 	no_os_uart_remove(desc->uart_desc);
 	capi_free(desc);
 

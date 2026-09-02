@@ -35,7 +35,7 @@
 #include <string.h>
 #include "capi_alloc.h"
 #include "no_os_crc8.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 #include "lt8722.h"
@@ -1098,7 +1098,7 @@ int lt8722_init(struct lt8722_dev **device,
 		if (ret)
 			goto free_desc;
 
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 
 		// 5. Ramp the output voltage control DAC from 0xFF000000 to 0x00000000
 		start_voltage = lt8722_dac_to_voltage(0xFF000000);
@@ -1112,7 +1112,7 @@ int lt8722_init(struct lt8722_dev **device,
 			if (ret)
 				goto free_desc;
 
-			no_os_mdelay(1);
+			capi_wait_ms(1);
 		}
 
 		// 6. Enable the PWM switching behavior
@@ -1124,7 +1124,7 @@ int lt8722_init(struct lt8722_dev **device,
 		if (ret)
 			goto free_desc;
 
-		no_os_udelay(160);
+		capi_wait_us(160);
 
 		// 7. Set the desired output voltage
 	}
