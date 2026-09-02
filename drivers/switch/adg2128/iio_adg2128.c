@@ -3,7 +3,7 @@
 #include <inttypes.h>
 #include <math.h>
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_i2c.h"
 #include "iio.h"
 #include "iio_adg2128.h"
