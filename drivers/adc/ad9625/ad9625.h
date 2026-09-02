@@ -34,7 +34,7 @@
 #define AD9625_H_
 
 #include <stdint.h>
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_spi.h"
 
 #define AD9625_REG_CHIP_PORT_CONF				0x000

@@ -33,7 +33,7 @@
 
 #include "common_data.h"
 #include "adgs6414d.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_error.h"
 #include "no_os_uart.h"
@@ -310,7 +310,7 @@ int example_main(void)
 		if (ret)
 			goto exit;
 
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 	}
 
 

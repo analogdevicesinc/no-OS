@@ -41,6 +41,7 @@
 #include "no_os_clk.h"
 #include "ad9528.h"
 #include "jesd204.h"
+#include "capi_time.h"
 
 struct ad9528_jesd204_priv {
 	struct ad9528_dev *device;
@@ -215,7 +216,7 @@ int32_t ad9528_poll(struct ad9528_dev *dev,
 					&reg_data);
 		if (ret < 0)
 			return ret;
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 	} while (((reg_data & mask) != data) && --timeout);
 
 	return timeout ? 0 : -1;
@@ -584,7 +585,7 @@ static int ad9528_jesd204_sysref(struct jesd204_dev *jdev)
 
 	if (dev->sysref_req_gpio && dev->pdata->sysref_req_en) {
 		no_os_gpio_direction_output(dev->sysref_req_gpio, 1);
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 		ret = no_os_gpio_direction_output(dev->sysref_req_gpio, 0);
 	} else {
 		ret = ad9528_spi_read_n(dev, AD9528_SYSREF_CTRL, &val);
@@ -1298,12 +1299,12 @@ int32_t ad9528_reset(struct ad9528_dev *dev)
 		if (s < 0)
 			return s;
 
-		no_os_mdelay(100);
+		capi_wait_ms(100);
 
 		s = no_os_gpio_direction_output(dev->gpio_resetb, 1);
 		if (s < 0)
 			return s;
-		no_os_mdelay(100);
+		capi_wait_ms(100);
 	}
 
 	s = ad9528_spi_write_n(dev,
@@ -1314,13 +1315,13 @@ int32_t ad9528_reset(struct ad9528_dev *dev)
 	if (s < 0)
 		return s;
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	s = ad9528_spi_write_n(dev, AD9528_SERIAL_PORT_CONFIG_B, 0x00);
 	if (s < 0)
 		return s;
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	return 0;
 }

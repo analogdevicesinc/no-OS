@@ -40,7 +40,7 @@
 #include "no_os_eeprom.h"
 #include "no_os_i2c.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
 
@@ -166,7 +166,7 @@ int32_t eeprom_24xx32a_write(struct no_os_eeprom_desc *desc, uint32_t address,
 				return ret;
 
 			/* Write cycle time (typ 5msec as per datasheet) */
-			no_os_mdelay(5);
+			capi_wait_ms(5);
 		}
 	} else {
 		/* Perform byte by byte write */
@@ -179,7 +179,7 @@ int32_t eeprom_24xx32a_write(struct no_os_eeprom_desc *desc, uint32_t address,
 				return ret;
 
 			/* Write cycle time (typ 5msec as per datasheet) */
-			no_os_mdelay(5);
+			capi_wait_ms(5);
 
 			curr_address++;
 		}

@@ -45,7 +45,7 @@
 #include "ad713x.h"
 #include "no_os_spi.h"
 #include "xilinx_spi.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_gpio.h"
 #include "xilinx_gpio.h"
 #include "no_os_util.h"
@@ -219,7 +219,7 @@ int main()
 			return -1;
 	} /* Select SINC3 filtering, enable higher data convertion rates */
 
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 
 	ret = ad713x_spi_reg_write(cn0561_dev, AD713X_REG_GPIO_DIR_CTRL, 0xE7);
 	if (ret != 0)

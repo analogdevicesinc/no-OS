@@ -32,7 +32,7 @@ SOFTWARE.
 #include <errno.h>
 #include "ad5293.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /***************************************************************************//**
  * @brief Reset ad5293 chip info
@@ -190,13 +190,13 @@ int32_t ad5293_hard_reset(struct ad5293_dev* dev)
 	if (ret)
 		return ret;
 
-	no_os_udelay(1);  // >20ns pulse width
+	capi_wait_us(1);  // >20ns pulse width
 
 	ret = no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_HIGH);
 	if (ret)
 		return ret;
 
-	no_os_mdelay(2); // t12: max 1.5ms reset time
+	capi_wait_ms(2); // t12: max 1.5ms reset time
 
 	ad5293_reset_chip_info(dev);
 
@@ -229,7 +229,7 @@ int32_t ad5293_soft_reset(struct ad5293_dev* dev)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(2); // t12: max 1.5ms reset time
+	capi_wait_ms(2); // t12: max 1.5ms reset time
 
 	ad5293_reset_chip_info(dev);
 
@@ -425,7 +425,7 @@ int32_t ad5293_write_wiper(struct ad5293_dev* dev)
 	if (ret)
 		return ret;
 
-	no_os_udelay(3); // performance mode, t12 > 2.4us
+	capi_wait_us(3); // performance mode, t12 > 2.4us
 
 	return ad5293_write_protect(dev, PROTECT_LOCK);
 

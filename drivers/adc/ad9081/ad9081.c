@@ -36,7 +36,7 @@
 #include "no_os_error.h"
 #include "adi_cms_api_common.h"
 #include "no_os_util.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 #include "adi_ad9081_hal.h"
 #include "no_os_print_log.h"
@@ -409,7 +409,7 @@ static int32_t ad9081_jesd_rx_link_status_print(struct ad9081_phy *phy,
 					lnk->link_id, ad9081_jrx_204c_states[stat & 0x7],
 					stat);
 			else
-				no_os_mdelay(20);
+				capi_wait_ms(20);
 		} else {
 			mask = (1 << lnk->num_lanes) - 1;
 
@@ -424,7 +424,7 @@ static int32_t ad9081_jesd_rx_link_status_print(struct ad9081_phy *phy,
 				pr_info("JESD TX (JRX) Link%d 0x%X lanes in DATA\n",
 					lnk->link_id, stat);
 			else
-				no_os_mdelay(20);
+				capi_wait_ms(20);
 		}
 	} while (ret && retry--);
 
@@ -473,7 +473,7 @@ int ad9081_jesd_tx_link_status_print(struct ad9081_phy *phy,
 					stat & NO_OS_BIT(6) ? "established" : "lost",
 					stat & NO_OS_BIT(7) ? "invalid" : "valid");
 			else
-				no_os_mdelay(20);
+				capi_wait_ms(20);
 		} else {
 			if ((stat & 0xFF) == 0x7D)
 				ret = 0;
@@ -488,7 +488,7 @@ int ad9081_jesd_tx_link_status_print(struct ad9081_phy *phy,
 					stat & NO_OS_BIT(6) ? "established" : "lost",
 					stat & NO_OS_BIT(7) ? "invalid" : "valid");
 			else
-				no_os_mdelay(20);
+				capi_wait_ms(20);
 		}
 	} while (ret && retry--);
 
@@ -821,7 +821,7 @@ static int ad9081_setup(struct ad9081_phy *phy)
 
 static int32_t ad9081_udelay(void *user_data, uint32_t us)
 {
-	no_os_udelay(us);
+	capi_wait_us(us);
 
 	return 0;
 }
@@ -1105,7 +1105,7 @@ static int ad9081_jesd204_clks_enable(struct jesd204_dev *jdev,
 		if (ret != 0)
 			return ret;
 
-		no_os_mdelay(4);
+		capi_wait_ms(4);
 	}
 
 	return JESD204_STATE_CHANGE_DONE;
@@ -1275,7 +1275,7 @@ static int ad9081_jesd204_setup_stage1(struct jesd204_dev *jdev,
 	if (ret != 0)
 		return ret;
 
-	no_os_mdelay(4);
+	capi_wait_ms(4);
 
 	/* JESD OneShot Sync */
 	ret = adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYNC_DEBUG0_ADDR,

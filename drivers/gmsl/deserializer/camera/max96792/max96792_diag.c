@@ -38,7 +38,7 @@
 #include "gmsl_dbg.h"
 #include "gmsl_reg_access.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 /** \addtogroup ADI_GMSL_CAM_DESERIALIZER GMSL Camera Deserializers
  *  @{
  */
@@ -504,7 +504,7 @@ int max96792_csi_diag_check_mipi_status(struct gmsl_dev *dev, void *mipi_status,
 				phy_pkt_cnt_sum[mipi_phy_index] +=
 					mipi_stat->phy_pkt_cnt[mipi_phy_index][pkt_index];
 
-				no_os_mdelay(10); /* Delay to read the next packet count */
+				capi_wait_ms(10); /* Delay to read the next packet count */
 			}
 			BREAK_ON_ERR(ret);
 			if (csi2_pkt_cnt_sum[csi_index] == 0u) {

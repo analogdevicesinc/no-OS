@@ -34,7 +34,7 @@
 #include <inttypes.h>
 #include <string.h>
 #include "ad9361.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "ad9361_util.h"
 #include "axi_adc_core.h"
 #include "app_config.h"
@@ -76,7 +76,7 @@ static int32_t ad9361_check_pn(struct ad9361_rf_phy *phy, bool tx,
 	for (chan = 0; chan < num_chan; chan++)
 		axi_adc_write(axi_adc, AXI_ADC_REG_CHAN_STATUS(chan),
 			      AXI_ADC_PN_ERR | AXI_ADC_PN_OOS);
-	no_os_mdelay(delay);
+	capi_wait_ms(delay);
 
 	axi_adc_read(axi_adc, AXI_ADC_REG_STATUS, &adi_reg_status);
 	if (!tx && !(adi_reg_status & AXI_ADC_STATUS))
@@ -195,7 +195,7 @@ static int32_t ad9361_dig_tune_iodelay(struct ad9361_rf_phy *phy, bool tx)
 	for (i = 0; i < 7; i++) {
 		for (j = 0; j < 32; j++) {
 			ad9361_iodelay_set(st, i, j, tx);
-			no_os_mdelay(1);
+			capi_wait_ms(1);
 			field[j] = ad9361_check_pn(phy, tx, 10);
 		}
 

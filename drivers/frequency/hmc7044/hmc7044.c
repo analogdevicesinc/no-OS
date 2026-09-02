@@ -41,6 +41,7 @@
 #include "no_os_clk.h"
 #include "hmc7044.h"
 #include "jesd204.h"
+#include "capi_time.h"
 
 #define HMC7044_WRITE		(0 << 15)
 #define HMC7044_READ		(1 << 15)
@@ -358,7 +359,7 @@ static int hmc7044_toggle_bit(struct hmc7044_dev *dev,
 		return ret;
 
 	if (us_delay)
-		no_os_udelay(us_delay);
+		capi_wait_us(us_delay);
 
 	return 0;
 }
@@ -488,7 +489,7 @@ static int hmc7044_info(struct hmc7044_dev *dev)
 			return ret;
 
 		if (HMC7044_PLL1_FSM_STATE(pll1_stat) != 2) { /* Lock */
-			no_os_mdelay(NO_OS_DIV_ROUND_UP(5000, dev->pll1_loop_bw));
+			capi_wait_ms(NO_OS_DIV_ROUND_UP(5000, dev->pll1_loop_bw));
 			ret = hmc7044_read(dev,
 					   HMC7044_REG_PLL1_STATUS, &pll1_stat);
 			if (ret < 0)
@@ -844,7 +845,7 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 			return ret;
 	}
 
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	/* Program the output channels */
 	for (i = 0; i < dev->num_channels; i++) {
@@ -891,7 +892,7 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 		if (ret)
 			return ret;
 	}
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	/* Do a restart to reset the system and initiate calibration */
 	ret = hmc7044_toggle_bit(dev, HMC7044_REG_REQ_MODE_0,
@@ -958,9 +959,9 @@ static int32_t hmc7043_setup(struct hmc7044_dev *dev)
 
 	/* Resets all registers to default values */
 	hmc7044_write(dev, HMC7044_REG_SOFT_RESET, HMC7044_SOFT_RESET);
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 	hmc7044_write(dev, HMC7044_REG_SOFT_RESET, 0);
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	hmc7044_read_write_check(dev);
 
@@ -1039,17 +1040,17 @@ static int32_t hmc7043_setup(struct hmc7044_dev *dev)
 			       0 : HMC7044_HI_PERF_MODE) | HMC7044_SYNC_EN |
 			      HMC7044_CH_EN);
 	}
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 
 	/* Do a restart to reset the system and initiate calibration */
 	hmc7044_write(dev, HMC7044_REG_REQ_MODE_0,
 		      HMC7044_RESTART_DIV_FSM);
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 	hmc7044_write(dev, HMC7044_REG_REQ_MODE_0,
 		      (dev->high_performance_mode_clock_dist_en ?
 		       HMC7044_HIGH_PERF_DISTRIB_PATH : 0));
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	return 0;
 }
@@ -1249,7 +1250,7 @@ reseed:
 
 		hmc7044_write(hmc, HMC7044_REG_PULSE_GEN,
 			      HMC7044_PULSE_GEN_MODE(HMC7044_PULSE_GEN_LEVEL_SENSITIVE));
-		no_os_mdelay(10);
+		capi_wait_ms(10);
 	}
 
 	if (!hmc->sync_pin_mode) {
@@ -1287,7 +1288,7 @@ static int hmc7044_jesd204_clks_sync2(struct jesd204_dev *jdev,
 		int ret = hmc7044_jesd204_sysref(jdev);
 		if (ret)
 			return ret;
-		no_os_mdelay(2);
+		capi_wait_ms(2);
 	}
 
 	return JESD204_STATE_CHANGE_DONE;
@@ -1322,7 +1323,7 @@ static int hmc7044_jesd204_clks_sync3(struct jesd204_dev *jdev,
 
 		if (hmc->sync_pin_mode) {
 			while (HMC7044_SYSREF_SYNC_STAT(val)) {
-				no_os_mdelay(2);
+				capi_wait_ms(2);
 
 				ret = hmc7044_read(hmc, HMC7044_REG_ALARM_READBACK, &val);
 				if (ret < 0) {

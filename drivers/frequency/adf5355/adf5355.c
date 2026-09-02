@@ -35,7 +35,7 @@
 #include <stdio.h>
 #include "no_os_error.h"
 #include <malloc.h>
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
 #include "adf5355.h"
@@ -166,7 +166,7 @@ static int32_t adf5355_reg_config(struct adf5355_dev *dev, bool sync_all)
 			return ret;
 	}
 
-	no_os_udelay(dev->delay_us);
+	capi_wait_us(dev->delay_us);
 
 	return adf5355_write(dev, ADF5355_REG(0), dev->regs[0]);
 }

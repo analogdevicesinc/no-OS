@@ -36,7 +36,7 @@
 #include <errno.h>
 #include <string.h>
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /***************************************************************************//**
  * @brief Write data to a W5500 register
@@ -624,7 +624,7 @@ int w5500_socket_send(struct w5500_dev *dev, uint8_t sock_id, const void *buf,
 			    status != W5500_Sn_SR_MACRAW)
 				return -ECONNRESET;
 
-			no_os_mdelay(1);
+			capi_wait_ms(1);
 			continue;
 		}
 
@@ -709,7 +709,7 @@ int w5500_socket_recv(struct w5500_dev *dev, uint8_t sock_id, void *buf,
 		    status != W5500_Sn_SR_MACRAW)
 			return -ECONNRESET;
 
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 	}
 
 	if (len > rx_size)
@@ -799,7 +799,7 @@ int w5500_socket_sendto(struct w5500_dev *dev, uint8_t sock_id, const void *buf,
 		if (status != W5500_Sn_SR_UDP)
 			return -EPROTOTYPE;
 
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 	}
 
 	ret = w5500_read_16bit_reg(dev, W5500_SOCKET_REG_BLOCK(sock_id),
@@ -979,7 +979,7 @@ int w5500_reset(struct w5500_dev *dev)
 			return ret;
 
 		/* Hold reset low for at least 500us per datasheet */
-		no_os_udelay(500);
+		capi_wait_us(500);
 
 		ret = no_os_gpio_set_value(dev->gpio_reset, 1);
 		if (ret)
@@ -992,7 +992,7 @@ int w5500_reset(struct w5500_dev *dev)
 	}
 
 	/* Wait for reset to complete */
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	ret = w5500_reg_read(dev, W5500_COMMON_REG, W5500_MR, &mr, 1);
 	if (ret)

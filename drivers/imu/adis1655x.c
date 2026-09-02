@@ -35,7 +35,7 @@
 #include "adis_internals.h"
 #include "adis1655x.h"
 #include "no_os_units.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include <string.h>
 
 #define ADIS1655X_ID_NO_OFFSET(x) 	((x) - ADIS16550)
@@ -672,7 +672,7 @@ static int adis1655x_read_burst_data(struct adis_dev *adis,
 	if (ret)
 		return ret;
 
-	no_os_udelay(ADIS1655X_STALL_PERIOD_BURST_US);
+	capi_wait_us(ADIS1655X_STALL_PERIOD_BURST_US);
 
 	/* First 4 bytes are the header, any valid command can be sent: sending a burst read command. */
 	buffer[0] = 0;

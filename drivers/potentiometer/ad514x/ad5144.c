@@ -30,7 +30,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "ad5144.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /* AD5144 dpot command address mapped to channel type */
 uint8_t ad5144_dpot_cmd_addr[] = {
@@ -266,7 +266,7 @@ int ad5144_dpot_init(struct dpot_init_param *param, struct dpot_dev **desc)
 	if (ret)
 		goto err_dpot_init;
 	/* The reset command loads the RDAC register with the contents of the EEPROM and takes approximately 30 µs. */
-	no_os_udelay(AD5144_RESET_DELAY);
+	capi_wait_us(AD5144_RESET_DELAY);
 	/* Set operating mode */
 	ret = ad5144_dpot_set_operating_mode(dev, ad5144_params->eoperating_mode);
 	if (ret)
@@ -371,7 +371,7 @@ int ad5144_dpot_reset(struct dpot_dev *desc)
 			return ret;
 
 		/* Min reset low time as per datasheet spec is 0.1usec */
-		no_os_udelay(1);
+		capi_wait_us(1);
 
 		ret = no_os_gpio_set_value(ad5144_desc->reset_gpio_desc, NO_OS_GPIO_HIGH);
 		if (ret)
@@ -391,7 +391,7 @@ int ad5144_dpot_reset(struct dpot_dev *desc)
 	/* Reset EEPROM restore time as per datasheet spec.
 	 * This delay ensures RDAC contents are loaded into EEPROM
 	 * after device reset */
-	no_os_udelay(AD5144_RESET_DELAY);
+	capi_wait_us(AD5144_RESET_DELAY);
 
 	return 0;
 }
@@ -750,7 +750,7 @@ int ad5144_dpot_nvm_write(struct dpot_dev *desc,
 		return ret;
 
 	/* EEPROM write delay as per device specifications */
-	no_os_mdelay(18);
+	capi_wait_ms(18);
 
 	return 0;
 }
@@ -784,7 +784,7 @@ int ad5144_dpot_copy_rdac_to_nvm(struct dpot_dev *desc, enum dpot_chn_type chn)
 		return ret;
 
 	/* EEPROM write delay as per device specifications */
-	no_os_mdelay(18);
+	capi_wait_ms(18);
 
 	return 0;
 }

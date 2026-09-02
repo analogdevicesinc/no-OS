@@ -34,7 +34,7 @@
 #include <malloc.h>
 #include "adrf6780.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 
 /**
@@ -216,7 +216,7 @@ int adrf6780_read_adc_raw(struct adrf6780_dev *dev, uint16_t *data)
 		return ret;
 
 	/* Recommended delay for the ADC to be ready */
-	no_os_udelay(200);
+	capi_wait_us(200);
 
 	ret = adrf6780_spi_read(dev, ADRF6780_REG_ADC_OUTPUT, data);
 	if (ret)

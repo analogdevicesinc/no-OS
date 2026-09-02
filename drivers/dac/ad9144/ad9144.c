@@ -38,6 +38,7 @@
 #include "no_os_error.h"
 #include "capi_alloc.h"
 #include "no_os_print_log.h"
+#include "capi_time.h"
 
 struct ad9144_jesd204_link_mode {
 	uint8_t id;
@@ -135,7 +136,7 @@ int32_t ad9144_spi_check_status(struct ad9144_dev *dev,
 			return 0;
 		} else {
 			timeout++;
-			no_os_mdelay(1);
+			capi_wait_ms(1);
 		}
 	} while (timeout < 100);
 
@@ -680,7 +681,7 @@ static void ad9144_set_nco_freq(struct ad9144_dev *dev, uint32_t sample_rate,
 	if (mod_type == AD9144_MOD_TYPE_FINE)
 		ad9144_spi_write(dev, REG_NCO_FTW_UPDATE, 1);
 
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 }
 
 static void ad9144_setup_samplerate(struct ad9144_dev *dev)
@@ -725,7 +726,7 @@ static void ad9144_setup_samplerate(struct ad9144_dev *dev)
 	ad9144_spi_write(dev, REG_REF_CLK_DIVIDER_LDO, serdes_plldiv);
 
 	ad9144_spi_write(dev, REG_SYNTH_ENABLE_CNTRL, 0x01);	// enable serdes pll
-	no_os_mdelay(20);
+	capi_wait_ms(20);
 
 	ad9144_spi_read(dev, 0x281, &val);
 	if ((val & 0x01) == 0x00)
@@ -987,7 +988,7 @@ int32_t ad9144_setup_legacy(struct ad9144_dev **device,
 	// reset
 	ad9144_spi_write(dev, REG_SPI_INTFCONFA, SOFTRESET_M | SOFTRESET);
 	ad9144_spi_write(dev, REG_SPI_INTFCONFA, init_param->spi3wire ? 0x00 : 0x18);
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	ad9144_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
 	if (chip_id != AD9144_CHIP_ID) {
@@ -1078,7 +1079,7 @@ int32_t ad9144_setup_legacy(struct ad9144_dev **device,
 	ad9144_spi_write(dev, REG_SYNTH_ENABLE_CNTRL, 0x01);	// enable serdes pll
 	ad9144_spi_write(dev, REG_SYNTH_ENABLE_CNTRL,
 			 0x05);	// enable serdes calibration
-	no_os_mdelay(20);
+	capi_wait_ms(20);
 
 	ret = ad9144_spi_check_status(dev, REG_PLL_STATUS, 0x01, 0x01);
 	if (ret == -1)
@@ -1143,7 +1144,7 @@ int32_t ad9144_setup_jesd_fsm(struct ad9144_dev **device,
 	// reset
 	ad9144_spi_write(dev, REG_SPI_INTFCONFA, SOFTRESET_M | SOFTRESET);
 	ad9144_spi_write(dev, REG_SPI_INTFCONFA, init_param->spi3wire ? 0x00 : 0x18);
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	ad9144_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
 	if (chip_id != AD9144_CHIP_ID) {
@@ -1201,7 +1202,7 @@ int32_t ad9144_dac_calibrate(struct ad9144_dev *dev)
 	ad9144_spi_write(dev, REG_CAL_INDX, dac_mask);	// select all active DACs
 	ad9144_spi_write(dev, REG_CAL_CTRL, 0x01);	// single cal enable
 	ad9144_spi_write(dev, REG_CAL_CTRL, 0x03);	// single cal start
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	for (i = 0; i < dev->num_converters; i++) {
 		ad9144_spi_write(dev, REG_CAL_INDX, NO_OS_BIT(i));	// read dac-i
@@ -1324,7 +1325,7 @@ int32_t ad9144_datapath_prbs_test(struct ad9144_dev *dev,
 
 	ad9144_spi_write(dev, REG_PRBS, ((init_param->prbs_type << 2) | 0x03));
 	ad9144_spi_write(dev, REG_PRBS, ((init_param->prbs_type << 2) | 0x01));
-	no_os_mdelay(500);
+	capi_wait_ms(500);
 
 	ad9144_spi_write(dev, REG_SPI_PAGEINDX, 0x01);
 	ad9144_spi_read(dev, REG_PRBS, &status);

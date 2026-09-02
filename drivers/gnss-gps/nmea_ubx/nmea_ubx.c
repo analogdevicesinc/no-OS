@@ -40,7 +40,7 @@
 #include "no_os_uart.h"
 #include "no_os_gpio.h"
 #include "no_os_irq.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 #include "no_os_print_log.h"
 #include <stdlib.h>
@@ -176,7 +176,7 @@ int gnss_init(struct gnss_dev **device,
 		if (ret)
 			pr_warning("Failed to enable NMEA input protocol: %d\n", ret);
 
-		no_os_mdelay(100);
+		capi_wait_ms(100);
 
 		/* flush the UART port */
 		scrap = capi_calloc(500, sizeof(uint8_t));
@@ -263,7 +263,7 @@ int gnss_hw_reset(struct gnss_dev *dev)
 		return ret;
 
 	/* Hold reset for 100ms */
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	/* Release reset */
 	ret = no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_HIGH);
@@ -271,7 +271,7 @@ int gnss_hw_reset(struct gnss_dev *dev)
 		return ret;
 
 	/* Wait for device to boot */
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 
 	return 0;
 }
@@ -294,7 +294,7 @@ int gnss_ubx_sw_reset(struct gnss_dev *dev)
 		return ret;
 
 	/* Wait for reset to complete */
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 
 	return 0;
 }
@@ -1029,7 +1029,7 @@ int gnss_ubx_configure_baudrate(struct gnss_dev *dev,
 	}
 
 	/* Small delay to allow configuration to take effect */
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	return 0;
 }
@@ -1563,7 +1563,7 @@ int gnss_configure_baudrate_via_nmea(struct gnss_dev *dev,
 	}
 
 	/* Wait for command to take effect */
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 
 	return 0;
 }
@@ -1619,7 +1619,7 @@ int gnss_configure_messages_via_nmea(struct gnss_dev *dev,
 					   constellation_prefixes[j], messages_to_disable[i], ret);
 			}
 
-			no_os_mdelay(50); /* Short delay between commands */
+			capi_wait_ms(50); /* Short delay between commands */
 		}
 	}
 
@@ -1640,7 +1640,7 @@ int gnss_configure_messages_via_nmea(struct gnss_dev *dev,
 				   ret);
 		}
 
-		no_os_mdelay(50); /* Short delay between commands */
+		capi_wait_ms(50); /* Short delay between commands */
 	}
 
 	/* Disable all RMC variants except the one we want to enable */
@@ -1664,7 +1664,7 @@ int gnss_configure_messages_via_nmea(struct gnss_dev *dev,
 				 rmc_variants[i], ret);
 		}
 
-		no_os_mdelay(50); /* Short delay between commands */
+		capi_wait_ms(50); /* Short delay between commands */
 	}
 
 	/* Enable the desired RMC message at specified rate */
@@ -1680,7 +1680,7 @@ int gnss_configure_messages_via_nmea(struct gnss_dev *dev,
 		return ret;
 	}
 
-	no_os_mdelay(500); /* Wait for configuration to take effect */
+	capi_wait_ms(500); /* Wait for configuration to take effect */
 
 	/* Enable GPGGA at 1Hz (will be read every 10th cycle in software) */
 	snprintf(sentence_content, sizeof(sentence_content), "MSG,%s,1", target_gga);
@@ -1694,7 +1694,7 @@ int gnss_configure_messages_via_nmea(struct gnss_dev *dev,
 		/* Non-fatal - continue without position data */
 	}
 
-	no_os_mdelay(500); /* Wait for configuration to take effect */
+	capi_wait_ms(500); /* Wait for configuration to take effect */
 
 	return 0;
 }
@@ -1745,7 +1745,7 @@ int gnss_configure_nmea_device(struct gnss_dev *dev,
 		if (ret < 0) {
 			pr_warning("Failed to send time sync command %d: %d\n", i + 1, ret);
 		}
-		no_os_mdelay(1000); /* Wait between commands */
+		capi_wait_ms(1000); /* Wait between commands */
 	}
 
 	return 0;
@@ -2016,7 +2016,7 @@ int gnss_get_nmea_timing_data(struct gnss_dev *dev,
 		}
 
 		attempts++;
-		no_os_mdelay(100);  /* Small delay between attempts */
+		capi_wait_ms(100);  /* Small delay between attempts */
 	}
 
 	pr_warning("Failed to get valid GPRMC data after %d attempts\n", max_attempts);
@@ -2055,7 +2055,7 @@ static int gnss_get_nmea_position_data_internal(struct gnss_dev *dev,
 		}
 
 		attempts++;
-		no_os_mdelay(100);  /* Small delay between attempts */
+		capi_wait_ms(100);  /* Small delay between attempts */
 	}
 
 	pr_debug("Failed to get valid GPGGA data after %d attempts\n", max_attempts);

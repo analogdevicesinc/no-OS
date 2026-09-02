@@ -34,7 +34,7 @@
 #include "adin1320.h"
 #include "common_data.h"
 #include "mdio_spi.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
 
@@ -331,7 +331,7 @@ int example_main(void)
 	}
 
 	/* Allow time for UART buffer to flush before cleanup */
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 
 err_adin8:
 	adin1320_remove(adin1320_8_desc);

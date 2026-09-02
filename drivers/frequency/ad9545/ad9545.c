@@ -42,6 +42,7 @@
 #include "ad9545.h"
 #include "capi_alloc.h"
 #include "sys/types.h"
+#include "capi_time.h"
 
 static const char *ad9545_aux_dpll_name = "AUX_DPLL";
 
@@ -1581,12 +1582,12 @@ int32_t ad9545_init(struct ad9545_dev **device,
 
 	*device = dev;
 	printf("ad9545 successfully initialized\n");
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 	return ret;
 error:
 	printf("ad9545 initialization error (%d)\n", ret);
 	capi_free(dev);
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 	return ret;
 }
 
@@ -1855,7 +1856,7 @@ static int ad9545_calib_system_clock(struct ad9545_dev *dev)
 		}
 
 		/* wait for sys pll to lock and become stable */
-		no_os_mdelay(50 + AD9545_SYS_CLK_STABILITY_MS);
+		capi_wait_ms(50 + AD9545_SYS_CLK_STABILITY_MS);
 
 		ret = ad9545_read_reg(dev, AD9545_PLL_STATUS, &reg);
 		if (ret)
@@ -2013,7 +2014,7 @@ static int ad9545_calib_apll(struct ad9545_dev *dev, int i)
 			return ret;
 
 		cal_count += 1;
-		no_os_mdelay(100);
+		capi_wait_ms(100);
 
 		ret = ad9545_read_reg(dev, AD9545_PLLX_STATUS(i), &reg);
 		if (ret)

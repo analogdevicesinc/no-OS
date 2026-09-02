@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 #include "ltc7871.h"

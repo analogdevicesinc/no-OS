@@ -41,7 +41,7 @@
 #include "no_os_spi.h"
 #include "xilinx_spi.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "adi_common_error.h"
 #include "Navassa_EvaluationFw.h"
 #include "Navassa_Stream.h"
@@ -413,7 +413,7 @@ int32_t no_os_timer_wait_us(void *devHalCfg, uint32_t time_us)
 {
 	int32_t halError = (int32_t)ADI_COMMON_ERR_OK;
 
-	no_os_udelay(time_us);
+	capi_wait_us(time_us);
 
 	return halError;
 }

@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "adxl38x.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 #include "no_os_util.h"
 
@@ -280,7 +280,7 @@ int adxl38x_soft_reset(struct adxl38x_dev *dev)
 		return ret;
 	// Delay is needed between soft reset and initialization (From SOFT_RESET
 	// bit description in REG_RESET)
-	no_os_udelay(500);
+	capi_wait_us(500);
 	ret = adxl38x_read_device_data(dev, ADXL38X_DEVID_AD, 1, &reg_value);
 	if (reg_value != 0xAD)
 		return -EAGAIN;
@@ -306,7 +306,7 @@ int adxl38x_set_op_mode(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode)
 	if (!ret)
 		dev->op_mode = op_mode;
 	// 2ms wait for op_mode to settle (See Operating Modes section of datasheet)
-	no_os_mdelay(2);
+	capi_wait_ms(2);
 
 	return ret;
 }
@@ -806,7 +806,7 @@ int adxl38x_selftest(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode,
 
 	/* Measure output on all three axes for at least 25 samples and compute average*/
 	for (int k = 0; k < 25; k++) {
-		no_os_mdelay(10);
+		capi_wait_ms(10);
 		ret = adxl38x_read_device_data(dev, ADXL38X_XDATA_H, 6, array_raw_data);
 
 		x_sum += (int64_t)(no_os_get_unaligned_be16(array_raw_data));
@@ -827,7 +827,7 @@ int adxl38x_selftest(struct adxl38x_dev *dev, enum adxl38x_op_mode op_mode,
 	y_sum = 0;
 	z_sum = 0;
 	for (int k = 0; k < 25; k++) {
-		no_os_mdelay(10);
+		capi_wait_ms(10);
 		ret = adxl38x_read_device_data(dev, ADXL38X_XDATA_H, 6, array_raw_data);
 
 		x_sum += (int64_t)(no_os_get_unaligned_be16(array_raw_data));

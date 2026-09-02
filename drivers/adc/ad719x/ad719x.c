@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include "ad719x.h"    // AD719X definitions.
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 #include <string.h>
 
@@ -312,7 +312,7 @@ int ad719x_reset(struct ad719x_dev *dev)
 		return ret;
 
 	// user must allow a period of 500 us
-	no_os_udelay(500);
+	capi_wait_us(500);
 
 	return ret;
 }

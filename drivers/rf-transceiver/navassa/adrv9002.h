@@ -34,7 +34,7 @@
 #define IIO_TRX_ADRV9002_H_
 
 #include "no_os_gpio.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_clk.h"
 
 #include "adi_common_log.h"
@@ -374,7 +374,7 @@ static inline void adrv9002_sync_gpio_toggle(const struct adrv9002_rf_phy *phy)
 	if (phy->rx2tx2) {
 		/* toggle ssi sync gpio */
 		no_os_gpio_set_value(phy->ssi_sync, 1);
-		no_os_udelay(5000);
+		capi_wait_us(5000);
 		no_os_gpio_set_value(phy->ssi_sync, 0);
 	}
 }

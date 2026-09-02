@@ -45,7 +45,7 @@
 #include "capi_alloc.h"
 #include "no_os_i2c.h"
 #include "no_os_util.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /***************************************************************************//**
  * @brief Initializes the LTC3220 device structure.
@@ -128,7 +128,7 @@ int ltc3220_reset(struct ltc3220_dev *device)
 	if (ret)
 		return ret;
 
-	no_os_udelay(LTC3220_RESET_DELAY_USEC); /* at least 20ns */
+	capi_wait_us(LTC3220_RESET_DELAY_USEC); /* at least 20ns */
 
 	ret = no_os_gpio_set_value(device->gpio_rst_desc, NO_OS_GPIO_HIGH);
 	if (ret)

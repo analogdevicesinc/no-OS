@@ -30,7 +30,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "ad5143.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /* AD5143 dpot command address mapped to channel type */
 uint8_t ad5143_dpot_cmd_addr[] = {
@@ -196,7 +196,7 @@ int ad5143_dpot_reset(struct dpot_dev *desc)
 	/* Reset EEPROM restore time as per datasheet spec.
 	 * This delay ensures RDAC contents are loaded into EEPROM
 	 * after device reset */
-	no_os_udelay(30);
+	capi_wait_us(30);
 
 	return 0;
 }
@@ -557,7 +557,7 @@ int ad5143_dpot_nvm_write(struct dpot_dev *desc,
 		return ret;
 
 	/* EEPROM write delay as per device specifications */
-	no_os_mdelay(18);
+	capi_wait_ms(18);
 
 	return 0;
 }
@@ -591,7 +591,7 @@ int ad5143_dpot_copy_rdac_to_nvm(struct dpot_dev *desc, enum dpot_chn_type chn)
 		return ret;
 
 	/* EEPROM write delay as per device specifications */
-	no_os_mdelay(18);
+	capi_wait_ms(18);
 
 	return 0;
 }

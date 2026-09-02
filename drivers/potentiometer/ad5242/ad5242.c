@@ -30,7 +30,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "ad5242.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /* Contains the address that need to be programmed while configuring the two different channels of AD5242*/
 static uint8_t ad5242_dpot_cmd_addr[] = {

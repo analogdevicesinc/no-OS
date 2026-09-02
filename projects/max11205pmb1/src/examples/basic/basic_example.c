@@ -35,7 +35,7 @@
 #include "common_data.h"
 #include "no_os_uart.h"
 #include "no_os_print_log.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /***************************************************************************//**
  * @brief basic example main execution.

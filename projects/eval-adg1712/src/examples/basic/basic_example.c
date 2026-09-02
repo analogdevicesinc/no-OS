@@ -33,7 +33,7 @@
 
 #include "common_data.h"
 #include "adg1712.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 
 /***************************************************************************//**
@@ -84,7 +84,7 @@ int example_main()
 			}
 			pr_info("\r\n");
 
-			no_os_mdelay(1000);
+			capi_wait_ms(1000);
 
 			ret = adg1712_set_switch_state(dev, sw, false);
 			if (ret) {

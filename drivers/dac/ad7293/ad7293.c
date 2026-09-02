@@ -34,7 +34,7 @@
 #include <malloc.h>
 #include "ad7293.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 
 /**
@@ -379,14 +379,14 @@ int ad7293_ch_read_raw(struct ad7293_dev *dev, enum ad7293_ch_type type,
 			if (ret)
 				return ret;
 
-			no_os_mdelay(9);
+			capi_wait_ms(9);
 		} else if (type == AD7293_ADC_ISENSE) {
 			ret = ad7293_spi_write(dev, AD7293_REG_ISENSE_BG_EN,
 					       NO_OS_BIT(ch));
 			if (ret)
 				return ret;
 
-			no_os_mdelay(9);
+			capi_wait_ms(9);
 		}
 
 		ret = ad7293_spi_write(dev, reg_wr, data_wr);
@@ -433,10 +433,10 @@ int ad7293_reset(struct ad7293_dev *dev)
 	if (dev->gpio_reset) {
 		no_os_gpio_direction_output(dev->gpio_reset, NO_OS_GPIO_LOW);
 		/* Datasheet: Minimum Reset pulse width: 90ns */
-		no_os_udelay(1);
+		capi_wait_us(1);
 		no_os_gpio_direction_output(dev->gpio_reset, NO_OS_GPIO_HIGH);
 		/* Datasheet: Minimum Reset pulse width: 90ns */
-		no_os_udelay(1);
+		capi_wait_us(1);
 
 		return 0;
 	}

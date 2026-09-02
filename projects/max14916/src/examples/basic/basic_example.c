@@ -33,7 +33,7 @@
 #include "common_data.h"
 #include "max149x6-base.h"
 #include "max14916.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_irq.h"
 
@@ -72,14 +72,14 @@ int example_main()
 			ret = max14916_sled_set(max14916_desc, i, MAX14916_SLED_ON);
 			if (ret)
 				goto remove_max14916;
-			no_os_mdelay(200);
+			capi_wait_ms(200);
 		}
 
 		for (i = 0; i < MAX14916_CHANNELS; i++) {
 			ret = max14916_sled_set(max14916_desc, i, MAX14916_SLED_OFF);
 			if (ret)
 				goto remove_max14916;
-			no_os_mdelay(200);
+			capi_wait_ms(200);
 		}
 		j++;
 	}

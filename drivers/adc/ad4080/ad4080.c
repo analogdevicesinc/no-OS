@@ -36,7 +36,7 @@
 #include <assert.h>
 #include <errno.h>
 #include "ad4080.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /******************************************************************************/
 

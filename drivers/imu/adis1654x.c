@@ -37,7 +37,7 @@
 #include "no_os_units.h"
 #include <string.h>
 #include "no_os_util.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #define ADIS1654X_CRC32_SEED		0xFFFFFFFF
 
 static const struct adis_data_field_map_def adis1654x_def = {
@@ -660,7 +660,7 @@ static int adis1654x_write_lpf(struct adis_dev *adis, enum adis_chan_type chan,
 		return ret;
 
 	/* Typical delay needed to enable and select filter bank. */
-	no_os_udelay(65);
+	capi_wait_us(65);
 
 	return 0;
 }

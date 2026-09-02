@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "ade9078.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_units.h"
 #include "capi_alloc.h"
 
@@ -412,7 +412,7 @@ int ade9078_init(struct ade9078_dev **device,
 	if (ret)
 		return ret;
 	// delay reset
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 	ret = no_os_gpio_set_value(dev->reset_desc,
 				   NO_OS_GPIO_HIGH);
 	if (ret)
@@ -420,7 +420,7 @@ int ade9078_init(struct ade9078_dev **device,
 
 	// wait for device to initialize after hardware reset
 	// >= 100 ms see datasheet.
-	no_os_mdelay(ADE9078_RESET_RECOVER);
+	capi_wait_ms(ADE9078_RESET_RECOVER);
 
 	/* Use a valid register with default value different from 0 */
 	ret = ade9078_read(dev, ADE9078_REG_CONFIG5, &chip_id);

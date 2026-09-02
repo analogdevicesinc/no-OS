@@ -45,7 +45,7 @@
 #include "xilinx_spi.h"
 #include "parameters.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 #ifdef IIO_SUPPORT
 #include "iio_app.h"
@@ -212,7 +212,7 @@ int main(void)
 	}
 
 	// Allow link to reach DATA
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	status = axi_jesd204_rx_status_read(ad9656_jesd);
 	if (status != 0) {
@@ -285,7 +285,7 @@ int main(void)
 
 	printf("ad9656: setup, configuration and test program is done\n");
 
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 #ifdef IIO_SUPPORT
 	struct xil_uart_init_param platform_uart_init_par = {

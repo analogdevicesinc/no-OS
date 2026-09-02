@@ -32,7 +32,7 @@
 *******************************************************************************/
 
 #include "adt75.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_units.h"
@@ -108,7 +108,7 @@ int adt75_get_single_temp(struct adt75_desc *desc, int32_t *val)
 		return ret;
 
 	/** Wait for a new conversion to finish */
-	no_os_mdelay(ADT75_CONV_DELAY_MS);
+	capi_wait_ms(ADT75_CONV_DELAY_MS);
 
 	reg_val = no_os_field_get(ADT75_TEMP_MASK, reg_val);
 	*val = no_os_sign_extend32(reg_val, ADT75_SIGN_BIT);

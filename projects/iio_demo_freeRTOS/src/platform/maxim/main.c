@@ -32,6 +32,7 @@
 *******************************************************************************/
 
 #include "common_data.h"
+#include "capi_time.h"
 
 extern int example_main();
 
@@ -73,14 +74,14 @@ void blinkingTask(void *arg)
 			if (ret)
 				goto error_pin;
 			led_on = true;
-			no_os_mdelay(100);
+			capi_wait_ms(100);
 		}
 		if (led_on) {
 			ret = no_os_gpio_set_value(led_pin, NO_OS_GPIO_LOW);
 			if (ret)
 				goto error_pin;
 			led_on = false;
-			no_os_mdelay(100);
+			capi_wait_ms(100);
 		}
 	}
 

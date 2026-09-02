@@ -34,7 +34,7 @@
 #include "no_os_uart.h"
 #include "capi_alloc.h"
 #include "no_os_pwm.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
 #include "no_os_print_log.h"
@@ -178,7 +178,7 @@ int main(void)
 	// burst disable
 	ade9153a_dev->burst_en = 0;
 
-	no_os_mdelay(RESET_TIME);
+	capi_wait_ms(RESET_TIME);
 
 	ret = ade9153a_setup(ade9153a_dev, ade9153a_ip);
 	if (ret)
@@ -198,7 +198,7 @@ int main(void)
 
 	while (1) {
 		// time delay between readings
-		no_os_mdelay(READ_INTERVAL);
+		capi_wait_ms(READ_INTERVAL);
 		/* read and print the ade9153a measured values */
 		ret = read_measurements(ade9153a_dev);
 		if (ret)

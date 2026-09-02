@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_gpio.h"
 #include "mdio_bitbang.h"
 #include "max24287.h"
@@ -47,7 +47,7 @@ int max24287_init(struct max24287_desc **dev, struct max24287_init_param *param)
 		// Rev B sequence
 		max24287_write(d, MAX24287_PTPCR1,
 			       MAX24287_PTPCR1_W_MASK | MAX24287_RX_PWDN_MASK);
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 		max24287_write(d, MAX24287_PTPCR1, MAX24287_PTPCR1_W_MASK);
 		max24287_write(d, MAX24287_BMCR, MAX24287_DP_RST_MASK);
 	}
@@ -87,7 +87,7 @@ int max24287_soft_reset(struct max24287_desc *dev)
 	if (ret < 0)
 		return ret;
 
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	return 0;
 }
@@ -99,12 +99,12 @@ int max24287_hard_reset(struct max24287_desc *dev)
 	ret = no_os_gpio_direction_output(dev->reset_gpio, NO_OS_GPIO_LOW);
 	if (ret)
 		return ret;
-	no_os_udelay(100);
+	capi_wait_us(100);
 	ret = no_os_gpio_direction_output(dev->reset_gpio, NO_OS_GPIO_HIGH);
 	if (ret)
 		return ret;
 
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	return 0;
 }

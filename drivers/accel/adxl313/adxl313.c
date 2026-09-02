@@ -37,7 +37,7 @@
 #include "adxl313.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 
 static int64_t adxl313_accel_conv(struct adxl313_dev *dev, int16_t raw_accel);
@@ -904,7 +904,7 @@ int adxl313_get_raw_fifo_data(struct adxl313_dev *dev, uint8_t *entries,
 				return ret;
 
 			//wait 5us
-			no_os_udelay(5);
+			capi_wait_us(5);
 		}
 
 		for (uint8_t idx = 0; idx < (*entries); idx++) {
@@ -2167,7 +2167,7 @@ int adxl313_self_test(struct adxl313_dev *dev)
 		return ret;
 
 	/* Output settling time, min 4 samples. 10ms per sample at 100Hz. */
-	no_os_mdelay(50);
+	capi_wait_ms(50);
 
 	/* 4. Read and store the 10 samples in the FIFO. */
 	ret = adxl313_get_raw_fifo_data(dev, &fifo_entries, x, y, z);
@@ -2200,7 +2200,7 @@ int adxl313_self_test(struct adxl313_dev *dev)
 		return ret;
 
 	/* Output settling time, min 4 samples. 10ms per sample at 100Hz. */
-	no_os_mdelay(50);
+	capi_wait_ms(50);
 
 	/* 6. Read and store samples in the FIFO. */
 	ret = adxl313_get_raw_fifo_data(dev, &fifo_entries, x, y, z);

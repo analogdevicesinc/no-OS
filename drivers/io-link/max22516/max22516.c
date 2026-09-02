@@ -33,7 +33,7 @@
 
 #include <stdlib.h>
 #include "max22516.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "capi_alloc.h"
 

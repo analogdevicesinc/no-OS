@@ -35,7 +35,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_units.h"
 #include "ad463x.h"
 #include "no_os_print_log.h"
@@ -372,12 +372,12 @@ static int32_t ad463x_init_gpio(struct ad463x_dev *dev,
 	if (ret != 0)
 		goto error_gpio_reset;
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 	ret = no_os_gpio_set_value(dev->gpio_resetn, NO_OS_GPIO_HIGH);
 	if (ret != 0)
 		goto error_gpio_reset;
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	ret = no_os_gpio_get_optional(&dev->gpio_cnv, init_param->gpio_cnv);
 	if (ret != 0)

@@ -40,7 +40,7 @@
 
 #include <stdlib.h>
 #include "ad713x.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "capi_alloc.h"
 
@@ -459,14 +459,14 @@ static int32_t ad713x_init_gpio(struct ad713x_dev *dev,
 		ret = no_os_gpio_direction_output(dev->gpio_resetn, false);
 		if (NO_OS_IS_ERR_VALUE(ret))
 			return -1;
-		no_os_mdelay(100);
+		capi_wait_ms(100);
 		ret = no_os_gpio_set_value(dev->gpio_resetn, true);
 		if (NO_OS_IS_ERR_VALUE(ret))
 			return -1;
-		no_os_mdelay(100);
+		capi_wait_ms(100);
 	}
 
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	return 0;
 }

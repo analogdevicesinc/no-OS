@@ -35,7 +35,7 @@
 #include <errno.h>
 #include <math.h>
 #include "ade7913.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_units.h"
 #include "capi_alloc.h"
 #include "no_os_crc8.h"
@@ -402,7 +402,7 @@ int ade7913_init(struct ade7913_dev **device,
 		/* Wait until devices comm is initialized*/
 		do {
 			ret = ade7913_read(dev, ADE7913_REG_STATUS0, &data);
-			no_os_mdelay(5);
+			capi_wait_ms(5);
 			timeout++;
 			if (timeout == 20) {
 				ret = -ENOTCONN;
@@ -422,7 +422,7 @@ int ade7913_init(struct ade7913_dev **device,
 		/* Wait until devices comm is initialized*/
 		do {
 			ret = ade7913_read(dev, ADE7913_REG_STATUS0, &data);
-			no_os_mdelay(5);
+			capi_wait_ms(5);
 			timeout++;
 			if (timeout == 20) {
 				ret = -ENOTCONN;
@@ -442,7 +442,7 @@ int ade7913_init(struct ade7913_dev **device,
 		/* Wait until devices comm is initialized*/
 		do {
 			ret = ade7913_read(dev, ADE7913_REG_STATUS0, &data);
-			no_os_mdelay(5);
+			capi_wait_ms(5);
 			timeout++;
 			if (timeout == 20) {
 				ret = -ENOTCONN;
@@ -464,7 +464,7 @@ int ade7913_init(struct ade7913_dev **device,
 		/* Wait until devices comm is initialized*/
 		do {
 			ret = ade7913_read(dev, ADE7913_REG_STATUS0, &data);
-			no_os_mdelay(5);
+			capi_wait_ms(5);
 			timeout++;
 			if (timeout == 20) {
 				ret = -ENOTCONN;
@@ -484,7 +484,7 @@ int ade7913_init(struct ade7913_dev **device,
 		/* Wait until devices comm is initialized*/
 		do {
 			ret = ade7913_read(dev, ADE7913_REG_STATUS0, &data);
-			no_os_mdelay(5);
+			capi_wait_ms(5);
 			timeout++;
 			if (timeout == 20) {
 				ret = -ENOTCONN;
@@ -506,7 +506,7 @@ int ade7913_init(struct ade7913_dev **device,
 		/* Wait until devices comm is initialized*/
 		do {
 			ret = ade7913_read(dev, ADE7913_REG_STATUS0, &data);
-			no_os_mdelay(5);
+			capi_wait_ms(5);
 			timeout++;
 			if (timeout == 20) {
 				ret = -ENOTCONN;

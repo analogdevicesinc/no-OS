@@ -37,7 +37,7 @@
 #include "no_os_error.h"
 #include "no_os_irq.h"
 #include "no_os_print_log.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_crc8.h"
 #include "no_os_spi.h"
 #include "capi_alloc.h"
@@ -638,7 +638,7 @@ int32_t ad413x_do_soft_reset(struct ad413x_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(5); // TBD
+	capi_wait_ms(5); // TBD
 
 	return 0;
 }

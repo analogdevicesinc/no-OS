@@ -40,7 +40,7 @@
 #include "spi_engine.h"
 #endif
 #include "ad738x.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "capi_alloc.h"
 #include "no_os_pwm.h"
@@ -470,7 +470,7 @@ int32_t ad738x_init(struct ad738x_dev **device,
 	if (ret)
 		goto err;
 
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 	/* 1-wire or 2-wire mode */
 	ret = ad738x_set_conversion_mode(dev, dev->conv_mode);
 	if (ret)
@@ -487,7 +487,7 @@ int32_t ad738x_init(struct ad738x_dev **device,
 
 	*device = dev;
 	printf("ad738x successfully initialized\n");
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 	return 0;
 err:
 	printf("ad738x failed to initialize\n");

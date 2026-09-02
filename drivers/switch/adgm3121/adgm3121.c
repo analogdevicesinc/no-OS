@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include "no_os_error.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_util.h"
 #include "adgm3121.h"
 
@@ -215,7 +215,7 @@ static int adgm3121_set_switch_spi(struct adgm3121_dev *dev,
 	dev->switch_states = switch_data;
 
 	/* Wait for switching time */
-	no_os_udelay(ADGM3121_SWITCHING_TIME_US);
+	capi_wait_us(ADGM3121_SWITCHING_TIME_US);
 
 	return 0;
 }
@@ -319,7 +319,7 @@ int adgm3121_set_switches(struct adgm3121_dev *dev, uint8_t switch_mask)
 		dev->switch_states = switch_mask;
 
 		/* Wait for switching time */
-		no_os_udelay(ADGM3121_SWITCHING_TIME_US);
+		capi_wait_us(ADGM3121_SWITCHING_TIME_US);
 	}
 
 	return 0;
@@ -504,9 +504,9 @@ int adgm3121_init(struct adgm3121_dev **device,
 
 	/* Wait for power-up time */
 	if (dev->type == ID_ADGM3053)
-		no_os_mdelay(ADGM3053_POWER_UP_TIME_MS);
+		capi_wait_ms(ADGM3053_POWER_UP_TIME_MS);
 	else
-		no_os_mdelay(ADGM3121_POWER_UP_TIME_MS);
+		capi_wait_ms(ADGM3121_POWER_UP_TIME_MS);
 
 	/* Reset all switches to off state */
 	ret = adgm3121_reset_switches(dev);

@@ -32,6 +32,7 @@
  *******************************************************************************/
 
 #include "afe_config.h"
+#include "capi_time.h"
 
 struct no_os_spi_desc *hSPI;
 struct no_os_spi_msg spiMsg;
@@ -503,11 +504,11 @@ int reset_afe(void)
 	status = no_os_gpio_set_value(sw_reset_gpio_desc, 0);
 	if (status)
 		goto exit;
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 	status = no_os_gpio_set_value(sw_reset_gpio_desc, 1);
 	if (status)
 		goto exit;
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 	return status;
 
 exit:

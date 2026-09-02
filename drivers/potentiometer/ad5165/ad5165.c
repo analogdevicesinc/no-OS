@@ -30,7 +30,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "ad5165.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 static int ad5165_dpot_send_cmd_write(struct dpot_dev *desc,
 				      struct dpot_command *cmd);

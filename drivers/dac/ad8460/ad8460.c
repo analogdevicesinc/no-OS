@@ -33,7 +33,7 @@
 
 #include "ad8460.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_spi.h"
 #include "no_os_print_log.h"
@@ -187,7 +187,7 @@ int ad8460_reset(struct ad8460_device *dev)
 		return ret;
 
 	/* minimum duration of 10ns */
-	no_os_udelay(1);
+	capi_wait_us(1);
 
 	ret = no_os_gpio_set_value(dev->gpio_rstn, NO_OS_GPIO_HIGH);
 	if (ret)
@@ -293,7 +293,7 @@ int ad8460_hv_reset(struct ad8460_device *dev)
 	if (ret)
 		return ret;
 
-	no_os_udelay(20);
+	capi_wait_us(20);
 
 	return ad8460_reg_update_bits(dev, 0x00, AD8460_HV_RESET_MSK, 0);
 }

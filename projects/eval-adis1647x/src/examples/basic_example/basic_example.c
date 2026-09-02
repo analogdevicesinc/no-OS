@@ -33,7 +33,7 @@
 
 #include "common_data.h"
 #include "adis1647x.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_units.h"
 
@@ -107,7 +107,7 @@ int example_main()
 
 	while (1) {
 		pr_info("while loop \n");
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 		ret = adis_read_x_gyro(adis1647x_desc, &val[0]);
 		if (ret)
 			goto exit;

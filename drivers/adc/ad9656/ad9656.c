@@ -36,7 +36,7 @@
 #include <stdio.h>
 #include "no_os_error.h"
 #include "ad9656.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 
 /**
@@ -199,7 +199,7 @@ int32_t ad9656_setup(struct ad9656_dev **device,
 	if (ret != 0)
 		goto error_comm;
 
-	no_os_mdelay(250);
+	capi_wait_ms(250);
 
 	ret = ad9656_reg_read(dev, AD9656_REG_CHIP_ID, &chip_id);
 	if (ret != 0)
@@ -261,7 +261,7 @@ int32_t ad9656_setup(struct ad9656_dev **device,
 	if (ret != 0)
 		goto error_comm;
 
-	no_os_mdelay(250);
+	capi_wait_ms(250);
 
 	ret = ad9656_reg_read(dev, AD9656_REG_JESD204B_PLL_LOCK_STATUS, &pll_stat);
 	if (ret != 0)

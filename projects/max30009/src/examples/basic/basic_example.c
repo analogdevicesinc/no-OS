@@ -36,7 +36,7 @@
 
 #include "max30009.h"
 #include "common_data.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_irq.h"
 #include "no_os_print_log.h"
 #include "no_os_uart.h"
@@ -374,7 +374,7 @@ int example_main(void)
 next:
 			max30009_clear_status(dev);
 		}
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 		elapsed++;
 	}
 

@@ -40,7 +40,7 @@
 #include "parameters.h"
 #include "no_os_util.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #ifdef ALTERA_PLATFORM
 #include "clk_altera_a10_fpll.h"
 #include "altera_adxcvr.h"
@@ -496,13 +496,13 @@ int main(void)
 	/* Minimum 3 SYSREF pulses from Clock Device has to be produced for MulticChip Sync */
 
 	AD9528_requestSysref(clockAD9528_device, 1);
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 	AD9528_requestSysref(clockAD9528_device, 1);
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 	AD9528_requestSysref(clockAD9528_device, 1);
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 	AD9528_requestSysref(clockAD9528_device, 1);
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	/*************************************************************************/
 	/*****                Mykonos Verify MultiChip Sync                 *****/
@@ -569,7 +569,7 @@ int main(void)
 	}
 
 	/* Wait 200ms for PLLs to lock */
-	no_os_mdelay(200);
+	capi_wait_ms(200);
 
 	if ((mykError = MYKONOS_checkPllsLockStatus(&mykDevice,
 			&pllLockStatus)) != MYKONOS_ERR_OK) {
@@ -787,7 +787,7 @@ int main(void)
 
 	/* Request a SYSREF from the AD9528 */
 	AD9528_requestSysref(clockAD9528_device, 1);
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	/*** < Info: Mykonos is actively transmitting CGS from the RxFramer> ***/
 
@@ -812,9 +812,9 @@ int main(void)
 
 	/* Request two SYSREFs from the AD9528 */
 	AD9528_requestSysref(clockAD9528_device, 1);
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 	AD9528_requestSysref(clockAD9528_device, 1);
-	no_os_mdelay(5);
+	capi_wait_ms(5);
 
 	/*************************************************************************/
 	/*****               Check Mykonos Framer Status                     *****/
@@ -880,7 +880,7 @@ int main(void)
 	axi_jesd204_rx_watchdog(rx_jesd);
 	axi_jesd204_rx_watchdog(rx_os_jesd);
 
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 
 	/* Print JESD status */
 	axi_jesd204_rx_status_read(rx_jesd);
@@ -929,7 +929,7 @@ int main(void)
 	/* Flush cache data. */
 	Xil_DCacheInvalidateRange((uintptr_t)dac_buffer, sizeof(sine_lut_iq));
 
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 
 	/* Initialize the DMAC and transfer 16384 samples from ADC to MEM */
 	axi_dmac_init(&rx_dmac, &rx_dmac_init);

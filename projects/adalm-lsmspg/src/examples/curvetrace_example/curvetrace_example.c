@@ -34,7 +34,7 @@
 #include "example.h"
 #include "common_data.h"
 #include "parameters.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_uart.h"
 #include "ad5592r.h"
@@ -200,7 +200,7 @@ static int dac_test_sweep_run(struct no_os_uart_desc *uart_desc,
 		ret = cfg->write_dac(dev, 2, test_val);
 		if (ret)
 			continue;
-		no_os_mdelay(10);
+		capi_wait_ms(10);
 		ret = cfg->read_adc(dev, 2, &readback_raw);
 		if (ret == 0) {
 			readback_raw &= 0x0FFF;
@@ -294,7 +294,7 @@ static void plot_ascii_graph(struct no_os_uart_desc *uart_desc,
 	}
 
 	/* Print graph header */
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 	sprintf(buf, "\r\n\r\n === %s (%s) - %s Curve Tracer (Ic vs Vc) ===\r\n",
 		cfg->device_name, cfg->bus_label, cfg->bjt_label);
 	no_os_uart_write(uart_desc, buf, strlen(buf));
@@ -506,7 +506,7 @@ static int curve_trace_common(struct no_os_uart_desc *uart_desc,
 
 		/* Verify by reading back channel 2 (DAC+ADC mode) */
 		uint16_t readback_raw;
-		no_os_mdelay(10);
+		capi_wait_ms(10);
 		ret = cfg->read_adc(dev, 2, &readback_raw);
 		if (ret == 0) {
 			readback_raw &= 0x0FFF;
@@ -555,7 +555,7 @@ static int curve_trace_common(struct no_os_uart_desc *uart_desc,
 		}
 
 		/* Allow base current to settle */
-		no_os_mdelay(50);
+		capi_wait_ms(50);
 
 		float vb_voltage = (vbdrive_raw * mV_per_lsb) / 1000.0f;
 		ib = (vb_voltage - Vbe) / Rbase;
@@ -586,7 +586,7 @@ static int curve_trace_common(struct no_os_uart_desc *uart_desc,
 			}
 
 			/* Small delay for settling */
-			no_os_mdelay(10);
+			capi_wait_ms(10);
 
 			/* Read ADC channels */
 			ret = cfg->read_adc(dev, 1, &Vcsense_raw);
@@ -642,7 +642,7 @@ static int curve_trace_common(struct no_os_uart_desc *uart_desc,
 	/* Output CSV data */
 	output_csv_data(uart_desc, cfg, curve_vcs, curve_ics);
 
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 
 cleanup:
 	if (dev)
@@ -731,7 +731,7 @@ int lm75_example(struct no_os_uart_desc *uart_desc)
 		goto cleanup;
 	}
 
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 	for (int m = 0; m < 100; m++) {
 
 		ret = lm75_read_temperature(lm75, lm75_die_temperature, &temp_raw);
@@ -745,12 +745,12 @@ int lm75_example(struct no_os_uart_desc *uart_desc)
 		sprintf(temp_msg, "LM75 Temperature: %d.%d°C (raw=%u)\n\r", temp / 1000,
 			temp % 1000, temp_raw);
 		no_os_uart_write(uart_desc, temp_msg, strlen(temp_msg));
-		no_os_mdelay(100);
+		capi_wait_ms(100);
 	}
 	char csv_footer[] = "=== LM75 TEST END ===\n\r\n\r";
 	no_os_uart_write(uart_desc, csv_footer, sizeof(csv_footer) - 1);
 
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 
 cleanup:
 	if (lm75)
@@ -771,7 +771,7 @@ int curvetrace_example(void)
 	}
 
 	/* Add delay to ensure UART connection is fully established */
-	no_os_mdelay(2000);
+	capi_wait_ms(2000);
 
 	char msg_clear[] = "\e[2J\e[H";
 	no_os_uart_write(uart_desc, msg_clear, sizeof(msg_clear) - 1);
@@ -791,7 +791,7 @@ int curvetrace_example(void)
 	}
 
 	/* Add delay between tests */
-	no_os_mdelay(2000);
+	capi_wait_ms(2000);
 
 	/* Run AD5593R curve tracer (I2C) */
 	ret = ad5593r_curve_example(uart_desc);
@@ -802,7 +802,7 @@ int curvetrace_example(void)
 	}
 
 	/* Add delay between tests */
-	no_os_mdelay(2000);
+	capi_wait_ms(2000);
 
 	/* Run AD5593R curve tracer (I2C) */
 	ret = lm75_example(uart_desc);

@@ -33,7 +33,7 @@
 
 #include "common_data.h"
 #include "ltc3220.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "basic_example.h"
 
 /***************************************************************************//**
@@ -60,7 +60,7 @@ int example_main()
 		/* regular light mode */
 		ltc3220_test_led_singles(ltc3220, LTC3220_MODE_NORMAL);
 
-		no_os_mdelay(3000);
+		capi_wait_ms(3000);
 
 		ret = ltc3220_reset(ltc3220);
 		if (ret)
@@ -71,7 +71,7 @@ int example_main()
 		ltc3220_set_blink_long(ltc3220, false);
 		ltc3220_test_led_singles(ltc3220, LTC3220_MODE_BLINK);
 
-		no_os_mdelay(3000);
+		capi_wait_ms(3000);
 
 		ret = ltc3220_reset(ltc3220);
 		if (ret)
@@ -82,7 +82,7 @@ int example_main()
 		ltc3220_set_blink_long(ltc3220, true);
 		ltc3220_test_led_singles(ltc3220, LTC3220_MODE_BLINK);
 
-		no_os_mdelay(3000);
+		capi_wait_ms(3000);
 
 		ret = ltc3220_reset(ltc3220);
 		if (ret)
@@ -97,7 +97,7 @@ int example_main()
 		ltc3220_set_grad_speed(ltc3220, LTC3220_GRAD_MAX_SPD);
 		ltc3220_test_led_singles(ltc3220, LTC3220_MODE_GRADATION);
 
-		no_os_mdelay(3000);
+		capi_wait_ms(3000);
 
 		ret = ltc3220_reset(ltc3220);
 		if (ret)
@@ -108,7 +108,7 @@ int example_main()
 		ltc3220_set_grad_speed(ltc3220, LTC3220_GRAD_MAX_SPD);
 		ltc3220_test_led_singles(ltc3220, LTC3220_MODE_GRADATION);
 
-		no_os_mdelay(3000);
+		capi_wait_ms(3000);
 
 		ret = ltc3220_reset(ltc3220);
 		if (ret)
@@ -118,7 +118,7 @@ int example_main()
 		ltc3220_set_grad_speed(ltc3220, 0);
 		ltc3220_test_led_singles(ltc3220, LTC3220_MODE_GRADATION);
 
-		no_os_mdelay(3000);
+		capi_wait_ms(3000);
 
 		ret = ltc3220_reset(ltc3220);
 		if (ret)
@@ -129,7 +129,7 @@ int example_main()
 		ltc3220_set_grad_speed(ltc3220, LTC3220_GRAD_MAX_SPD);
 		ltc3220_test_led_singles_alt_modes(ltc3220);
 
-		no_os_mdelay(3000);
+		capi_wait_ms(3000);
 
 		ret = ltc3220_reset(ltc3220);
 		if (ret)
@@ -143,7 +143,7 @@ int example_main()
 		ltc3220_set_blink_long(ltc3220, true);
 		ltc3220_test_led_quick_write_with_indiv(ltc3220, LTC3220_MODE_BLINK);
 
-		no_os_mdelay(3000);
+		capi_wait_ms(3000);
 
 		ret = ltc3220_reset(ltc3220);
 		if (ret)
@@ -156,11 +156,11 @@ int example_main()
 		ltc3220_test_led_singles_alt_modes(ltc3220);
 		ltc3220_set_shutdown(ltc3220, true);
 
-		no_os_mdelay(5000);
+		capi_wait_ms(5000);
 
 		ltc3220_set_shutdown(ltc3220, false);
 
-		no_os_mdelay(5000);
+		capi_wait_ms(5000);
 	}
 
 error_ltc3220:
@@ -193,7 +193,7 @@ int ltc3220_test_led_singles(struct ltc3220_dev *ltc3220,
 		ltc3220_set_uled_current(ltc3220, i, power * i);
 		if (ret)
 			return ret;
-		no_os_mdelay(1500);
+		capi_wait_ms(1500);
 	}
 
 	return 0;
@@ -221,7 +221,7 @@ int ltc3220_test_led_singles_alt_modes(struct ltc3220_dev *ltc3220)
 		ltc3220_set_uled_current(ltc3220, i, power * i);
 		if (ret)
 			return ret;
-		no_os_mdelay(1500);
+		capi_wait_ms(1500);
 	}
 
 	return 0;
@@ -254,7 +254,7 @@ int ltc3220_test_led_quick_write_with_indiv(struct ltc3220_dev *ltc3220,
 		if (ret)
 			return ret;
 
-		no_os_mdelay(1500);
+		capi_wait_ms(1500);
 	}
 
 	ret = ltc3220_set_uled_mode(ltc3220, 1, LTC3220_MODE_NORMAL);
@@ -262,7 +262,7 @@ int ltc3220_test_led_quick_write_with_indiv(struct ltc3220_dev *ltc3220,
 	if (ret)
 		return ret;
 
-	no_os_mdelay(3000);
+	capi_wait_ms(3000);
 
 	for (int i = LTC3220_REG_END_ULED / 2;
 	     i <= LTC3220_REG_END_ULED;
@@ -274,7 +274,7 @@ int ltc3220_test_led_quick_write_with_indiv(struct ltc3220_dev *ltc3220,
 		if (ret)
 			return ret;
 
-		no_os_mdelay(1500);
+		capi_wait_ms(1500);
 	}
 
 	ret = ltc3220_set_quick_write(ltc3220, false);
@@ -285,7 +285,7 @@ int ltc3220_test_led_quick_write_with_indiv(struct ltc3220_dev *ltc3220,
 	if (ret)
 		return ret;
 
-	no_os_mdelay(3000);
+	capi_wait_ms(3000);
 
 	return 0;
 }

@@ -34,7 +34,7 @@
 #include <string.h>
 #include "adp1050.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 
 /**
@@ -1306,7 +1306,7 @@ int adp1050_init(struct adp1050_desc **desc,
 		goto free_desc;
 
 	/* Time needed for the ADP1050 to power-up. */
-	no_os_mdelay(52);
+	capi_wait_ms(52);
 
 	ret = adp1050_send_command(descriptor, ADP1050_CLEAR_FAULTS);
 	if (ret)

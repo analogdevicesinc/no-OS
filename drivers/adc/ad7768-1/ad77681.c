@@ -37,7 +37,7 @@
 #include <string.h>
 #include "ad77681.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 
 /**
@@ -1210,7 +1210,7 @@ int32_t ad77681_programmable_filter(struct ad77681_dev *dev,
 			return ret;
 
 		/* Wait for Twait uSeconds*/
-		no_os_udelay(twait);
+		capi_wait_us(twait);
 
 		/* Padding of zeros before the desired coef in case the coef count in less than 56 */
 		if ((num_coeffs + i) < coeff_reg_length) {
@@ -1241,7 +1241,7 @@ int32_t ad77681_programmable_filter(struct ad77681_dev *dev,
 		/* Increment the address*/
 		address++;
 		/* Wait for Twait uSeconds*/
-		no_os_udelay(twait);
+		capi_wait_us(twait);
 	}
 
 	/* Disable coefficient write */
@@ -1254,7 +1254,7 @@ int32_t ad77681_programmable_filter(struct ad77681_dev *dev,
 	if (ret < 0)
 		return ret;
 
-	no_os_udelay(twait);
+	capi_wait_us(twait);
 
 	/* Disable coefficient access */
 	ret = ad77681_spi_write_mask(dev,
@@ -1790,7 +1790,7 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 
 	ret |= ad77681_soft_reset(dev);
 
-	no_os_udelay(200);
+	capi_wait_us(200);
 
 	/* Check physical connection using scratchpad*/
 	if (ad77681_scratchpad(dev, &scratchpad_check) == -1) {

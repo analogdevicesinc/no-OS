@@ -33,6 +33,7 @@
 
 #include "max96792_csi.h"
 #include "max96792_regs.h"
+#include "capi_time.h"
 /** \addtogroup ADI_GMSL_CAM_DESERIALIZER GMSL Camera Deserializers
  *  @{
  */
@@ -696,7 +697,7 @@ int max96792_csi_select_links(struct gmsl_dev *dev, unsigned int mask)
 	do {
 		REG_UPDATE_BREAK_ON_ERR(ret, dev->i2c_desc, GMSL1_COMMON_GMSL1_EN_ADDR, mask,
 					LINK_EN_A_GMSL1_COMMON_GMSL1_EN_MASK | LINK_EN_B_GMSL1_COMMON_GMSL1_EN_MASK);
-		no_os_mdelay(60);
+		capi_wait_ms(60);
 
 	} while (false);
 

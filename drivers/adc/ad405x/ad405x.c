@@ -37,7 +37,7 @@
 #include <errno.h>
 #include <string.h>
 #include "ad405x.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 
 static const uint8_t reset_pattern_buff[18] = {
@@ -242,7 +242,7 @@ int ad405x_soft_reset(struct ad405x_dev *dev)
 			}
 		} else {
 			/* Wait at least Tswreset time - 500us */
-			no_os_mdelay(5);
+			capi_wait_ms(5);
 		}
 	} else {
 		/* Perform soft reset */
@@ -1068,7 +1068,7 @@ int ad405x_trigger_adc_conv(struct ad405x_dev *dev)
 		return ret;
 
 	/* CNV High Time 10 ns. */
-	no_os_udelay(1);
+	capi_wait_us(1);
 
 	ret = no_os_gpio_set_value(dev->extra.spi_extra.gpio_cnv,
 				   NO_OS_GPIO_LOW);
@@ -1076,7 +1076,7 @@ int ad405x_trigger_adc_conv(struct ad405x_dev *dev)
 		return ret;
 
 	/* Conversion Time (CNV Rising Edge to Data Ready) 250ns. */
-	no_os_udelay(1);
+	capi_wait_us(1);
 
 	return ret;
 }

@@ -34,7 +34,7 @@
 #include "ltc2672.h"
 #include "common_data.h"
 #include "no_os_print_log.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_util.h"
 #include "no_os_uart.h"
 
@@ -90,7 +90,7 @@ int example_main()
 				(double)currents_to_set[i]);
 
 			/*Lengthy delay to better visualize the change in values*/
-			no_os_mdelay(1500);
+			capi_wait_ms(1500);
 		}
 
 		/* Configure MUX pin to output the VREF measurement */
@@ -102,7 +102,7 @@ int example_main()
 		}
 
 		/*Lengthy delay to better visualize the change in values*/
-		no_os_mdelay(2000);
+		capi_wait_ms(2000);
 
 		/* Chip Power Down */
 		pr_info("Chip Power Down. All Channels and VREF should measure 0.\n");
@@ -113,7 +113,7 @@ int example_main()
 		}
 
 		/*Lengthy delay to better visualize the change in values*/
-		no_os_mdelay(2000);
+		capi_wait_ms(2000);
 
 		/* Setup and Demo toggle function on OUT3 */
 		pr_info("Toggle function on OUT3. Current toggles between %0.2f and %0.2f mA.\n",
@@ -139,7 +139,7 @@ int example_main()
 			}
 
 			/*Lengthy delay to better visualize the change in values*/
-			no_os_mdelay(2000);
+			capi_wait_ms(2000);
 		}
 
 		ret = ltc2672_enable_toggle_channel(ltc2672_desc, 0);
@@ -148,7 +148,7 @@ int example_main()
 		}
 
 		/*Lengthy delay to better visualize the change in values*/
-		no_os_mdelay(2000);
+		capi_wait_ms(2000);
 
 	}// end while
 

@@ -36,7 +36,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_uart.h"
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
@@ -65,7 +65,7 @@ int ADG2128_SwRst(struct ad5940_dev *dev)
 	int ret = ad5940_WriteReg(dev, REG_AGPIO_GP0OUT, 0);
 	if (ret < 0)
 		return ret;
-	no_os_udelay(1);
+	capi_wait_us(1);
 	return ad5940_WriteReg(dev, REG_AGPIO_GP0OUT, AGPIO_Pin1);
 }
 
@@ -435,10 +435,10 @@ int app_main(struct no_os_i2c_desc *i2c, struct ad5940_init_param *ad5940_ip)
 						printf("%s", "!CMD Q OK\n");
 						configMeasurement(&oldMeasCfg, newMeasCfg);
 						AppBiaInit(ad5940, AppBuff, APPBUFF_SIZE);
-						no_os_udelay(10);
+						capi_wait_us(10);
 						printf("%s", "!Q ");
 						setMuxSwitch(i2c, ad5940, newElCfg, MUXBOARD_SIZE);
-						no_os_udelay(3);
+						capi_wait_us(3);
 						AppBiaCtrl(ad5940, BIACTRL_START, 0);
 						lastConfig = 'Q';
 					} else {
@@ -465,7 +465,7 @@ int app_main(struct no_os_i2c_desc *i2c, struct ad5940_init_param *ad5940_ip)
 								swComboSeq);
 						configMeasurement(&oldMeasCfg, newMeasCfg);
 						AppBiaInit(ad5940, AppBuff, APPBUFF_SIZE);
-						no_os_udelay(10);
+						capi_wait_us(10);
 						printf("%s", "!C OK\n");
 						lastConfig = 'C';
 					} else {
@@ -481,7 +481,7 @@ int app_main(struct no_os_i2c_desc *i2c, struct ad5940_init_param *ad5940_ip)
 						switchSeqNum = 0;
 						setMuxSwitch(i2c, ad5940, swComboSeq[switchSeqNum++], newEitCfg.nElectrodeCnt);
 						AppBiaInit(ad5940, AppBuff, APPBUFF_SIZE);
-						no_os_udelay(10);
+						capi_wait_us(10);
 						AppBiaCtrl(ad5940, BIACTRL_START, 0);
 						printf("%s", "!V ");
 					} else
@@ -523,7 +523,7 @@ int app_main(struct no_os_i2c_desc *i2c, struct ad5940_init_param *ad5940_ip)
 						   newMeasCfg.bMagnitudeMode);
 					putchar(',');
 					setMuxSwitch(i2c, ad5940, swComboSeq[switchSeqNum++], newEitCfg.nElectrodeCnt);
-					no_os_udelay(3);
+					capi_wait_us(3);
 					AppBiaCtrl(ad5940, BIACTRL_START, 0);
 				}
 			}

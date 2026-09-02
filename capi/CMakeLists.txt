@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # Copyright (c) 2026 Analog Devices, Inc.
 #
-# Generic wiring for capi_alloc
+# Generic wiring for capi_alloc and capi_time
 # Will become generic wiring for entire CAPI
 
 # 1. Header path (always on -- harmless where capi is unused).
@@ -54,4 +54,45 @@ function(capi_alloc_add_link_guard _target)
                 -P ${CAPI_ALLOC_GUARD_SCRIPT}
         VERBATIM
         COMMENT "capi_alloc: verifying strong allocation backend for ${_target}")
+endfunction()
+
+# --- capi_time (mirrors the capi_alloc wiring above) ---------------------------
+
+# Generic wrapper (always compiled).
+target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/capi_time.c)
+
+# Platform backend, only if this PLATFORM provides one.
+set(_capi_time_backend
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/${PLATFORM}/${PLATFORM}_capi_time.c)
+if(EXISTS "${_capi_time_backend}")
+    target_sources(no-os PRIVATE ${_capi_time_backend})
+    message(STATUS "capi_time: using ${PLATFORM} backend")
+else()
+    message(STATUS "capi_time: no ${PLATFORM} backend -- weak no-op defaults "
+                   "in effect (a link guard fails any project that uses capi_time)")
+endif()
+
+# Reuse the toolchain 'nm' already resolved for capi_alloc above.
+set(CAPI_TIME_NM "${_capi_nm}" CACHE INTERNAL "nm used by the capi_time link guard")
+set(CAPI_TIME_GUARD_SCRIPT "${CMAKE_CURRENT_LIST_DIR}/capi_time_guard.cmake"
+    CACHE INTERNAL "path to the capi_time post-link guard script")
+
+# Attach the post-link weak-symbol guard to an executable target. Safe to call
+# on every project: it passes silently unless capi_wait_us_impl / capi_uptime_impl
+# is referenced but resolves to the weak no-op default (no strong backend linked).
+function(capi_time_add_link_guard _target)
+    if(NOT CAPI_TIME_NM)
+        message(WARNING "capi_time: no 'nm' found; skipping weak-symbol link "
+                        "guard for ${_target} (time backend not verified)")
+        return()
+    endif()
+    add_custom_command(
+        TARGET ${_target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND}
+                -DELF=$<TARGET_FILE:${_target}>
+                -DNM=${CAPI_TIME_NM}
+                -DPLATFORM=${PLATFORM}
+                -P ${CAPI_TIME_GUARD_SCRIPT}
+        VERBATIM
+        COMMENT "capi_time: verifying strong time backend for ${_target}")
 endfunction()

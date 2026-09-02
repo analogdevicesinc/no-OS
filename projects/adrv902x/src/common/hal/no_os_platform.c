@@ -14,7 +14,7 @@
 #include "no_os_print_log.h"
 #include "no_os_platform.h"
 #include "adi_platform.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "common_data.h"
 #include "ADRV9025_FW.h"
 #include "capi_alloc.h"
@@ -437,7 +437,7 @@ int32_t no_os_TimerWait_us(void *devHalCfg, uint32_t time_us)
 {
 	int32_t halError = (int32_t)ADI_HAL_OK;
 
-	no_os_udelay(time_us);
+	capi_wait_us(time_us);
 
 	return halError;
 }
@@ -455,7 +455,7 @@ int32_t no_os_TimerWait_ms(void *devHalCfg, uint32_t time_ms)
 {
 	int32_t halError = (int32_t)ADI_HAL_OK;
 
-	no_os_mdelay(time_ms);
+	capi_wait_ms(time_ms);
 
 	return halError;
 }

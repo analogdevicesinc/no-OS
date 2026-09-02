@@ -33,7 +33,7 @@
 
 #include "no_os_print_log.h"
 #include "state_machine.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 #include "common_data.h"
 #include "no_os_error.h"
@@ -53,6 +53,24 @@
 uint16_t zcross_cnt;
 // Charging state
 uint8_t is_charging;
+
+// Monotonic time since boot, split into whole seconds and the microseconds
+// within the current second (the shape the state machine timing logic expects).
+struct sm_time {
+	uint32_t s, us;
+};
+
+static struct sm_time sm_get_time(void)
+{
+	uint64_t now_us = 0;
+
+	capi_uptime(&now_us);
+
+	return (struct sm_time) {
+		.s = (uint32_t)(now_us / 1000000ULL),
+		.us = (uint32_t)(now_us % 1000000ULL),
+	};
+}
 
 /**
  * @brief State machine main execution
@@ -82,7 +100,7 @@ int state_machine()
 	// Variable used for skipping the repeated execution of RCD test steps
 	uint8_t count_rcd_state = 0;
 	// Curent time value read from RTC
-	struct no_os_time current_time = no_os_get_time();
+	struct sm_time current_time = sm_get_time();
 	// The time interval in which the RCD test is disabled
 	uint32_t rcd_test_s = current_time.s;
 	// The time interval in which the print values is disabled
@@ -133,7 +151,7 @@ int state_machine()
 	/**************************************************************************/
 	/* Clear the screen. */
 	printf("%c%c%c%c", 27, '[', '2', 'J');
-	no_os_mdelay(5);
+	capi_wait_ms(5);
 	pr_debug("\nSTOUT app FIRMWARE VERSION: %s\n", FIRMWARE_VERSION);
 	/*Board revision*/
 #if defined(REV_A)
@@ -303,7 +321,7 @@ int state_machine()
 			// Compute PWM LOW and PWM HIGH averages
 			pilot_write_new_values(stout);
 			// Get current time since device powered
-			current_time = no_os_get_time();
+			current_time = sm_get_time();
 
 			if (current_time.us < recalc_time_us)
 				us_elapsed_since_recalc = current_time.us + 1000000 - recalc_time_us;
@@ -311,7 +329,7 @@ int state_machine()
 				us_elapsed_since_recalc = current_time.us - recalc_time_us;
 
 			if (VALUE_20MS < us_elapsed_since_recalc) {
-				current_time = no_os_get_time();
+				current_time = sm_get_time();
 				recalc_time_us = current_time.us;
 				// The CP event is determined only if the the special cases are not present
 				if ((event != S_M_CHECK_STUCK_RELAY) && (event != S_M_DIODE_ERR_CHECK)
@@ -515,7 +533,7 @@ int state_machine()
 							stout->err_status = INTF_RCD_ERROR;
 						}
 						// Reset values to disable RCD test for the time specified by RCD_TIME_REPEAT_INTERVAL
-						current_time = no_os_get_time();
+						current_time = sm_get_time();
 						rcd_test_s = current_time.s;
 						reset_count_ms();
 					} else if (S_M_RCD_TEST_TRIGGERED == event) {
@@ -898,7 +916,7 @@ error:
 		ret = interface_disp(stout);
 		if (ret)
 			return ret;
-		no_os_mdelay(50);
+		capi_wait_ms(50);
 	}
 	return ret;
 	/*****************************************ERROR latching and display END****************************************/

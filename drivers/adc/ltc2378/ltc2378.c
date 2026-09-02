@@ -34,7 +34,7 @@
 #include "ltc2378.h"
 #include <stdlib.h>
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_util.h"
 
 /**
@@ -130,7 +130,7 @@ int ltc2378_start_conversion(struct ltc2378_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_udelay(LTC2378_CNV_PULSE_WIDTH_US);
+	capi_wait_us(LTC2378_CNV_PULSE_WIDTH_US);
 
 	ret = no_os_gpio_set_value(dev->gpio_cnv, 0);
 	if (ret)
@@ -165,13 +165,13 @@ int ltc2378_read_raw(struct ltc2378_dev *dev, uint32_t *data)
 			ret = no_os_gpio_get_value(dev->gpio_busy, &val);
 			if (ret)
 				return ret;
-			no_os_udelay(1);
+			capi_wait_us(1);
 		} while (val && --timeout);
 
 		if (timeout == 0)
 			return -ETIMEDOUT;
 	} else {
-		no_os_udelay(LTC2378_CONVERSION_DELAY_US);
+		capi_wait_us(LTC2378_CONVERSION_DELAY_US);
 	}
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, sizeof(buf));
@@ -263,6 +263,6 @@ int ltc2378_power_down(struct ltc2378_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_udelay(LTC2378_POWERDOWN_DELAY_US);
+	capi_wait_us(LTC2378_POWERDOWN_DELAY_US);
 	return 0;
 }

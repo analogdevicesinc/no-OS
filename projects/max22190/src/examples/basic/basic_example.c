@@ -33,7 +33,7 @@
 #include "common_data.h"
 #include "no_os_uart.h"
 #include "max22190.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_irq.h"
 
@@ -78,7 +78,7 @@ int example_main()
 	ret = max22190_filter_set(max22190_desc, 3, 0, 1, MAX22190_DELAY_50US);
 	if (ret)
 		goto remove_max22190;
-	no_os_udelay(50);
+	capi_wait_us(50);
 
 	ret = max22190_filter_get(max22190_desc, 3, &clrf, &fbp, &delay);
 	if (ret)

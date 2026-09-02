@@ -36,7 +36,7 @@
 #include <stdlib.h>
 #include "adf4377.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
@@ -433,7 +433,7 @@ int adf4377_soft_reset(struct adf4377_dev *dev, bool spi_4wire)
 	if (ret < 0)
 		return ret;
 
-	no_os_udelay(ADF4377_POR_DELAY_US);
+	capi_wait_us(ADF4377_POR_DELAY_US);
 
 	/* SPI Configuration */
 	ret = adf4377_spi_write(dev, 0x00,
@@ -852,7 +852,7 @@ int adf4377_set_freq(struct adf4377_dev *dev)
 	if (ret < 0)
 		return ret;
 
-	no_os_udelay(ADF4377_LKD_DELAY_US);
+	capi_wait_us(ADF4377_LKD_DELAY_US);
 	ret = adf4377_spi_read(dev, 0x49, &val);
 	if (ret)
 		return ret;
@@ -1173,7 +1173,7 @@ int adf4377_set_en_sysref_monitor(struct adf4377_dev *dev, bool en)
 		if (ret)
 			return ret;
 
-		no_os_udelay(ADF4377_SR_MON_DELAY_US);
+		capi_wait_us(ADF4377_SR_MON_DELAY_US);
 
 		ret = adf4377_spi_update_bit(dev, 0x42, ADF4377_RST_SR_MON_MSK,
 					     ADF4377_RST_SR_MON(!en));

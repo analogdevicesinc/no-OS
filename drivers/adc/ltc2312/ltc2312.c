@@ -48,6 +48,7 @@ ongoing work.
 #include <math.h>
 #include "ltc2312.h"
 #include "capi_alloc.h"
+#include "capi_time.h"
 
 /**
  * Initializes the ltc2312 device handler.
@@ -160,7 +161,7 @@ int32_t ltc2312_read(struct ltc2312_dev *dev, uint16_t *ptr_adc_code)
 
 	/* Gather values for averaging */
 	for (i = 0; i < LTC2312_READ_VALUES_NUMBER; ++i) {
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 
 		/* Read the value of the ADC */
 		ret = no_os_spi_write_and_read(dev->spi_desc, adc_array, bytes_no);

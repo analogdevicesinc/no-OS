@@ -33,7 +33,7 @@
 #include "common_data.h"
 #include "no_os_uart.h"
 #include "max22017.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_irq.h"
 
@@ -123,7 +123,7 @@ int example_main()
 
 		data += sign * increment;
 
-		no_os_mdelay(1000 / freq);
+		capi_wait_ms(1000 / freq);
 	}
 
 remove_gpio0:

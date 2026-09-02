@@ -39,7 +39,7 @@
 #include "adin1110.h"
 #include "capi_alloc.h"
 #include "no_os_crc8.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_util.h"
 
 #include "oa_tc6.h"
@@ -795,13 +795,13 @@ int adin1110_phy_reset(struct adin1110_desc *desc)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	ret = no_os_gpio_set_value(desc->reset_gpio, NO_OS_GPIO_HIGH);
 	if (ret)
 		return ret;
 
-	no_os_mdelay(90);
+	capi_wait_ms(90);
 
 	ret = adin1110_reg_read(desc, ADIN1110_PHY_ID_REG, &phy_id);
 	if (ret)
@@ -964,14 +964,14 @@ int adin1110_init(struct adin1110_desc **desc,
 		 * Minimum required time for the reset GPIO to be in the low state
 		 * in order to reset the ADIN1110.
 		 */
-		no_os_mdelay(10);
+		capi_wait_ms(10);
 
 		ret = no_os_gpio_set_value(descriptor->reset_gpio, NO_OS_GPIO_HIGH);
 		if (ret)
 			goto free_rst_gpio;
 
 		/* Wait for the MAC and PHY digital interface to intialize after reset */
-		no_os_mdelay(90);
+		capi_wait_ms(90);
 	}
 
 	ret = no_os_spi_init(&descriptor->comm_desc, &param->comm_param);
@@ -992,7 +992,7 @@ int adin1110_init(struct adin1110_desc **desc,
 			goto free_spi;
 
 		/* Wait for the MAC and PHY digital interface to intialize */
-		no_os_mdelay(90);
+		capi_wait_ms(90);
 	}
 
 	descriptor->oa_tc6_spi = param->oa_tc6_spi;

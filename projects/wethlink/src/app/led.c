@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "no_os_gpio.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "parameters.h"
 #include "led.h"
 
@@ -119,12 +119,12 @@ void led_blink_all(unsigned int times, unsigned int duration_ms)
 		led_rx_lock(true);
 		led_tx_det_green(true);
 		led_rx_det_green(true);
-		no_os_mdelay(duration_ms / times / 2);
+		capi_wait_ms(duration_ms / times / 2);
 		led_tx_lock(false);
 		led_rx_lock(false);
 		led_tx_det_green(false);
 		led_rx_det_green(false);
-		no_os_mdelay(duration_ms / times / 2);
+		capi_wait_ms(duration_ms / times / 2);
 	}
 }
 

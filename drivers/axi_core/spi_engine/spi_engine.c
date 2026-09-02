@@ -42,7 +42,7 @@ significant delays */
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include <inttypes.h>
 
 #include "axi_dmac.h"
@@ -651,7 +651,7 @@ int32_t spi_engine_init(struct no_os_spi_desc **desc,
 
 	/* Perform a reset */
 	spi_engine_write(eng_desc, SPI_ENGINE_REG_RESET, 0x01);
-	no_os_udelay(1000);
+	capi_wait_us(1000);
 	spi_engine_write(eng_desc, SPI_ENGINE_REG_RESET, 0x00);
 
 	/* Get current data width */
@@ -880,7 +880,7 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 			goto error;
 	}
 
-	no_os_udelay(1000);
+	capi_wait_us(1000);
 
 error:
 	spi_engine_queue_no_os_free(&transfer.cmds);

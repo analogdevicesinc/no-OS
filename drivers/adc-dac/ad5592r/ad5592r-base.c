@@ -33,6 +33,7 @@
 *******************************************************************************/
 #include "no_os_error.h"
 #include "ad5592r-base.h"
+#include "capi_time.h"
 
 /**
  * Write register.
@@ -190,7 +191,7 @@ int32_t ad5592r_software_reset(struct ad5592r_dev *dev)
 	/* Writing this magic value resets the device */
 	ret = ad5592r_base_reg_write(dev, AD5592R_REG_RESET, 0xdac);
 
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	return ret;
 }

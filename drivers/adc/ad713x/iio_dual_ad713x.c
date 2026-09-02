@@ -42,7 +42,7 @@
 #include "iio_types.h"
 #include "spi_engine.h"
 #include "iio_dual_ad713x.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 
 #define BITS_PER_SAMPLE 32

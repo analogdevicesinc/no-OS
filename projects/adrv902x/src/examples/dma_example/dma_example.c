@@ -59,6 +59,7 @@
 #include "clkgen_routines.h"
 #include "adrv9025.h"
 #include "ad9528.h"
+#include "capi_time.h"
 
 uint32_t dac_buffer_dma[DAC_BUFFER_SAMPLES] __attribute__((aligned(16)));
 uint16_t adc_buffer_dma[ADC_BUFFER_SAMPLES * ADRV9025_RX_JESD_CONVS_PER_DEVICE]
@@ -419,7 +420,7 @@ int example_main(void)
 		      AXI_ADC_MMCM_RSTN | AXI_ADC_RSTN);
 #endif
 
-	no_os_mdelay(200);
+	capi_wait_ms(200);
 
 	status = clkgen_setup(&rx_clkgen, &tx_clkgen, &orx_clkgen,
 			      phy->deviceInitStruct.dataInterface.deframer[0].enableJesd204C);
@@ -558,7 +559,7 @@ int example_main(void)
 	/* Flush cache data. */
 	Xil_DCacheInvalidateRange((uintptr_t)dac_buffer_dma, sizeof(dac_buffer_dma));
 
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 
 	struct axi_dma_transfer read_transfer = {
 		// Number of bytes to write/read

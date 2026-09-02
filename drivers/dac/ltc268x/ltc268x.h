@@ -35,7 +35,7 @@
 
 #include "no_os_spi.h"
 #include "no_os_util.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "errno.h"
 
 #define LTC268X_CHANNEL_SEL(x, id)			(id ? x : (x << 1))

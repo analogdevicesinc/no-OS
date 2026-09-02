@@ -13,7 +13,7 @@
 #include "ad9361_util.h"
 #include "ad9361_ext_band_ctrl.h"
 #include "no_os_gpio.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 #include "no_os_spi.h"
 
@@ -130,7 +130,7 @@ static int apply_setting(struct ad9361_rf_phy *phy,
 			if (ret < 0)
 				return ret;
 			if (new_sett->pre_seq[i].delay_us)
-				no_os_udelay(new_sett->pre_seq[i].delay_us);
+				capi_wait_us(new_sett->pre_seq[i].delay_us);
 		}
 	}
 
@@ -193,7 +193,7 @@ static int apply_setting(struct ad9361_rf_phy *phy,
 			if (ret < 0)
 				return ret;
 			if (new_sett->post_seq[i].delay_us)
-				no_os_udelay(new_sett->post_seq[i].delay_us);
+				capi_wait_us(new_sett->post_seq[i].delay_us);
 		}
 	}
 

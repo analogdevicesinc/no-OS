@@ -57,6 +57,7 @@
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
 #include "iio_app.h"
+#include "capi_time.h"
 #include <string.h>
 #include <xil_cache.h>
 
@@ -632,7 +633,7 @@ int example_main()
 	app_init_param.uart_init_params = iio_uart_ip;
 
 	/* Allow previous log messages to flush before IIO takes over UART */
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	ret = iio_app_init(&app, app_init_param);
 	if (ret)

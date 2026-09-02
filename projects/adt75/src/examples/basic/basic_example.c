@@ -33,7 +33,7 @@
 
 #include "common_data.h"
 #include "no_os_uart.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_i2c.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
@@ -74,7 +74,7 @@ int example_main()
 			goto error;
 
 		pr_info("Temperature: %.03f C\n", (double)val / 1000);
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 	}
 
 error:

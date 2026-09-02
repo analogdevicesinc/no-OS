@@ -37,7 +37,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "ad5706r.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 #include "capi_alloc.h"
@@ -1335,7 +1335,7 @@ int ad5706r_hw_ldac_trigger(struct ad5706r_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_udelay(AD5706R_LDAC_PULSE_US);
+	capi_wait_us(AD5706R_LDAC_PULSE_US);
 
 	return no_os_gpio_set_value(dev->gpio_ldac_tgp, NO_OS_GPIO_LOW);
 }
@@ -1396,7 +1396,7 @@ int ad5706r_sw_ldac_trigger(struct ad5706r_dev *dev)
 static int ad5706r_cfg_reset(struct ad5706r_dev *dev, bool sw_reset)
 {
 	bool tmp = false;
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	/* For SW reset, address ascension mode is retained. */
 	if (sw_reset)
@@ -1454,7 +1454,7 @@ int ad5706r_hw_reset(struct ad5706r_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	ret = no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_HIGH);
 	if (ret)

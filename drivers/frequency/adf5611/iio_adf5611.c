@@ -38,7 +38,7 @@
 #include "iio_adf5611.h"
 #include "adf5611.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /**
  * @brief Supported charge pump currents

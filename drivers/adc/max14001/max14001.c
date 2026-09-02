@@ -33,7 +33,7 @@
 
 #include <stdlib.h>
 #include "max14001.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
@@ -186,7 +186,7 @@ int max14001_init(struct max14001_dev **device,
 	struct max14001_dev *dev;
 	int ret;
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	dev = (struct max14001_dev *)capi_calloc(1, sizeof(*dev));
 	if (!dev)
@@ -217,7 +217,7 @@ int max14001_init_config(struct max14001_dev *dev)
 	int i, ret;
 	uint16_t data;
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	ret = max14001_read(dev, MAX14001_FLAGS_REG, &data);
 	if (ret)

@@ -39,7 +39,7 @@
 
 #include "no_os_units.h"
 #include "no_os_util.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 #include "no_os_i2c.h"
 #include "no_os_crc8.h"

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_mdio.h"
 #include "no_os_gpio.h"
 #include "no_os_irq.h"

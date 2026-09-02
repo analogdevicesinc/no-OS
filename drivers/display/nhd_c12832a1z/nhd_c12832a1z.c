@@ -35,7 +35,7 @@
 #include "nhd_c12832a1z.h"
 #include "no_os_error.h"
 #include "no_os_spi.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 #include <string.h>
 
@@ -485,7 +485,7 @@ int nhd_c12832a1z_init(struct nhd_c12832a1z_dev **device,
 		if (ret)
 			goto error_rst;
 
-		no_os_udelay(3U);
+		capi_wait_us(3U);
 		ret = no_os_gpio_set_value(dev->reset_pin, NHD_C12832A1Z_RST_OFF);
 		if (ret)
 			goto error_rst;

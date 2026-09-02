@@ -33,7 +33,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "ad4858.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 
 /**
@@ -845,7 +845,7 @@ int ad4858_soft_reset(struct ad4858_dev *dev)
 		return ret;
 
 	/* Reset delay */
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	return 0;
 }

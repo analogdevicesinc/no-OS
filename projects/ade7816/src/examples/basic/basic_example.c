@@ -31,7 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 #include "common_data.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_irq.h"
 #include "no_os_uart.h"
@@ -186,7 +186,7 @@ int example_main()
 			interrupt = true;
 		}
 
-		no_os_mdelay(500);
+		capi_wait_ms(500);
 	}
 
 remove_ade7816:

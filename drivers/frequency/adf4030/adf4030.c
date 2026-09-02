@@ -33,7 +33,7 @@
 
 #include "adf4030.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 
@@ -217,7 +217,7 @@ static int adf4030_poll(struct adf4030_dev *dev, uint32_t reg_addr,
 				       &reg_data);
 		if (ret)
 			return ret;
-		no_os_mdelay(2);
+		capi_wait_ms(2);
 	} while (((reg_data & mask) != data) && --timeout);
 
 	return timeout ? 0 : -ETIMEDOUT;
@@ -261,7 +261,7 @@ int adf4030_set_default_regs(struct adf4030_dev *dev, bool spi_4wire)
 	if (ret)
 		return ret;
 
-	no_os_udelay(ADF4030_POR_DELAY_US);
+	capi_wait_us(ADF4030_POR_DELAY_US);
 
 	ret = adf4030_spi_write(dev, 0x00,
 				ADF4030_SPI_4W_CFG(spi_4wire) |

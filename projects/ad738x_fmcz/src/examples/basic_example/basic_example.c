@@ -34,7 +34,7 @@
 
 #include "basic_example.h"
 #include "common_data.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 
 #ifdef NUMBER_OF_CHANNELS
@@ -89,7 +89,7 @@ int basic_example_main()
 			pr_info("\r\n");
 		}
 #endif
-		no_os_mdelay(5000);
+		capi_wait_ms(5000);
 	}
 
 	return ad738x_remove(dev);

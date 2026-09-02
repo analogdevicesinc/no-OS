@@ -33,7 +33,7 @@
 #include <stdlib.h>
 #include "adm1177.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 
 /**************************************************************************//**
@@ -211,7 +211,7 @@ int adm1177_read_conv(struct adm1177_dev *device,
 	uint8_t data[3];
 
 	/* Time taken for device conversion (datasheet value = 150us) */
-	no_os_udelay(150);
+	capi_wait_us(150);
 
 	switch (device->last_command) {
 	case ADM1177_CURRENT_EN:

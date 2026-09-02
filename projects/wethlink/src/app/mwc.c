@@ -4,7 +4,7 @@
 #include <inttypes.h>
 #include <math.h>
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_crc8.h"
 #include "iio.h"
 #include "mwc.h"
@@ -258,9 +258,9 @@ int mwc_tx_rx_reset(struct mwc_iio_dev *mwc)
 		return -EINVAL;
 
 	no_os_gpio_set_value(mwc->reset_gpio, NO_OS_GPIO_HIGH);
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 	no_os_gpio_set_value(mwc->reset_gpio, NO_OS_GPIO_LOW);
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	return 0;
 }

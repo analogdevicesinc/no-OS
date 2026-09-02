@@ -41,7 +41,7 @@
 #include "ssd_1306.h"
 #include "display.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /***************************************************************************//**
  * @brief main

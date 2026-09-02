@@ -33,7 +33,7 @@
 
 #include "common_data.h"
 #include "adxl355.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 
 /***************************************************************************//**
@@ -119,7 +119,7 @@ int example_main()
 		pr_info(" Temp =%d"".%09u millidegress Celsius \n", (int)temp.integer,
 			(abs)(temp.fractional));
 
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 	}
 
 error:

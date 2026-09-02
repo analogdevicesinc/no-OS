@@ -33,7 +33,7 @@
 
 #include "adg2404.h"
 #include "common_data.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_uart.h"
 
@@ -67,28 +67,28 @@ int example_main(void)
 	if (ret)
 		goto error_uart;
 
-	no_os_udelay(1);
+	capi_wait_us(1);
 
 	/* Disable mux to start in a known state */
 	ret = adg2404_enable(adg2404_dev, false);
 	if (ret)
 		goto error;
 
-	no_os_udelay(1);
+	capi_wait_us(1);
 
 	/* Enable mux */
 	ret = adg2404_enable(adg2404_dev, true);
 	if (ret)
 		goto error;
 
-	no_os_udelay(1);
+	capi_wait_us(1);
 
 	/* Cycle through channels to cover truth table */
 	for (i = 0; i < 5; i++) {
 		ret = adg2404_select_channel(adg2404_dev, channels[i]);
 		if (ret)
 			goto error;
-		no_os_mdelay(3000);
+		capi_wait_ms(3000);
 	}
 
 	/* Disable mux */
@@ -96,7 +96,7 @@ int example_main(void)
 	if (ret)
 		goto error;
 
-	no_os_udelay(1);
+	capi_wait_us(1);
 
 	adg2404_remove(adg2404_dev);
 	no_os_uart_remove(uart_desc);

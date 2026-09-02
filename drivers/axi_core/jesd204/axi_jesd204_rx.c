@@ -36,7 +36,7 @@
 #include <inttypes.h>
 #include "no_os_clk.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
 #include "axi_jesd204_rx.h"
@@ -160,11 +160,11 @@ static int axi_jesd_ext_reset(struct no_os_gpio_desc *reset,
 		return 0;
 
 	no_os_gpio_set_value(reset, NO_OS_GPIO_HIGH);
-	no_os_udelay(20);
+	capi_wait_us(20);
 	no_os_gpio_set_value(reset, NO_OS_GPIO_LOW);
 
 	for (count = 0; count < 32; count++) {
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 		no_os_gpio_get_value(done, &val);
 		if (val)
 			return 0;
@@ -517,7 +517,7 @@ int32_t axi_jesd204_rx_watchdog(struct axi_jesd204_rx *jesd)
 
 		if (restart) {
 			axi_jesd204_rx_write(jesd, JESD204_RX_REG_LINK_DISABLE, 0x1);
-			no_os_mdelay(100);
+			capi_wait_ms(100);
 			axi_jesd204_rx_write(jesd, JESD204_RX_REG_LINK_DISABLE, 0x0);
 		}
 	}
@@ -817,7 +817,7 @@ static int axi_jesd204_rx_jesd204_link_running(struct jesd204_dev *jdev,
 
 	if (reason == JESD204_STATE_OP_REASON_INIT) {
 		do {
-			no_os_mdelay(4);
+			capi_wait_ms(4);
 			axi_jesd204_rx_read(jesd, JESD204_RX_REG_LINK_STATUS, &link_status);
 			link_status &= 0x3;
 		} while (link_status != JESD204_LINK_STATUS_DATA && retry--);

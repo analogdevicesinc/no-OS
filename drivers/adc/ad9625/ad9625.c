@@ -36,6 +36,7 @@
 #include "ad9625.h"
 #include "capi_alloc.h"
 #include "no_os_error.h"
+#include "capi_time.h"
 
 /***************************************************************************//**
  * @brief ad9625_spi_read
@@ -100,7 +101,7 @@ int32_t ad9625_setup(struct ad9625_dev **device,
 
 	ad9625_spi_write(dev, AD9625_REG_CHIP_PORT_CONF, 0x18);
 	ad9625_spi_write(dev, AD9625_REG_TRANSFER, 0x01);
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	ad9625_spi_write(dev, AD9625_REG_POWER_MODE, 0x00);
 	ad9625_spi_write(dev, AD9625_REG_TRANSFER, 0x01);
@@ -112,7 +113,7 @@ int32_t ad9625_setup(struct ad9625_dev **device,
 	ad9625_spi_write(dev, AD9625_REG_OUTPUT_ADJUST, 0x10);
 	ad9625_spi_write(dev, AD9625_REG_JESD204B_LINK_CNTRL_1, 0x14);
 	ad9625_spi_write(dev, AD9625_REG_TRANSFER, 0x01);
-	no_os_mdelay(10);
+	capi_wait_ms(10);
 
 	ad9625_spi_read(dev, AD9625_REG_CHIP_ID, &chip_id);
 	if (chip_id != AD9625_CHIP_ID) {

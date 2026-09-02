@@ -4,7 +4,7 @@
 #include <math.h>
 #include <string.h>
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "iio.h"
 #include "iio_ad413x.h"
 #include "no_os_util.h"

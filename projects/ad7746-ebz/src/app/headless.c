@@ -45,7 +45,7 @@
 #include "ad7746.h"
 #include "no_os_i2c.h"
 #include "aducm3029_i2c.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_uart.h"
 #include "aducm3029_uart.h"
@@ -185,7 +185,7 @@ int main(void)
 
 		pr_info("Position: %d mm, Temperature: %d *C\n", capData, temperature);
 
-		no_os_mdelay(2000);
+		capi_wait_ms(2000);
 	}
 
 error:

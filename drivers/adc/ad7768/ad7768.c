@@ -37,7 +37,7 @@
 #include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 const uint8_t standard_pin_ctrl_mode_sel[3][4] = {
 //		MCLK/1,	MCLK/2,	MCLK/4,	MCLK/8
@@ -716,7 +716,7 @@ int32_t ad7768_setup_finish(ad7768_dev *dev,
 	ret |= no_os_gpio_direction_output(dev->gpio_reset, dev->gpio_reset_value);
 
 	/* Delay to ensure device is out of reset */
-	no_os_mdelay(2);
+	capi_wait_ms(2);
 
 	dev->sleep_mode = init_param.sleep_mode;
 	dev->mclk_div = init_param.mclk_div;

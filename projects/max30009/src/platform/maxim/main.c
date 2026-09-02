@@ -33,7 +33,7 @@
 
 #include "common_data.h"
 #include "no_os_irq.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "parameters.h"
 
 int example_main();
@@ -63,7 +63,7 @@ int main(void)
 	no_os_uart_stdio(uart_desc);
 
 	/* Add delay to ensure UART is fully initialized after power-on reset */
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	ret = example_main();
 	if (ret)

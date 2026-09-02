@@ -31,7 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_spi.h"
 #include "no_os_util.h"
@@ -82,7 +82,7 @@ int example_main()
 
 		pr_info("Raw: %lu, Voltage: %ld uV\n", raw, voltage_uv);
 
-		no_os_mdelay(BASIC_EXAMPLE_DELAY_MS);
+		capi_wait_ms(BASIC_EXAMPLE_DELAY_MS);
 	}
 
 	ltc2378_remove(dev);

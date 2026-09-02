@@ -33,7 +33,7 @@
 
 #include "common_data.h"
 #include "ad74413r.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 
 /***************************************************************************//**
@@ -179,7 +179,7 @@ int example_main()
 		pr_info("Channel C fault: %d\n", status.status_bits.VI_ERR_C);
 		pr_info("Channel D fault: %d\n", status.status_bits.VI_ERR_D);
 
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 	}
 
 error:

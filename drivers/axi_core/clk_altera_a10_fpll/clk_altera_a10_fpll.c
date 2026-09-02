@@ -42,6 +42,7 @@
 #include "no_os_error.h"
 #include "capi_alloc.h"
 #include "clk_altera_a10_fpll.h"
+#include "capi_time.h"
 
 #define FPLL_REG_C_COUNTER0			0x10D
 #define FPLL_REG_C_COUNTER1			0x10E
@@ -103,7 +104,7 @@ uint32_t altera_a10_acquire_arbitration(struct altera_a10_fpll *fpll)
 		status = altera_a10_fpll_read(fpll, 0x280);
 		if ((status & NO_OS_BIT(2)) == 0)
 			return 0;
-		no_os_udelay(10);
+		capi_wait_us(10);
 	} while (timeout++ < 10000);
 
 	printf("%s: Failed to acquire arbitration\n", fpll->name);
@@ -308,7 +309,7 @@ int32_t altera_a10_fpll_pll_calibration_check(struct altera_a10_fpll *fpll)
 
 	/* Wait max 100ms for cal_busy to de-assert */
 	do {
-		no_os_udelay(200);
+		capi_wait_us(200);
 
 		/* Read FPLL calibration status from capability register */
 		val = altera_a10_fpll_read(fpll, 0x280);

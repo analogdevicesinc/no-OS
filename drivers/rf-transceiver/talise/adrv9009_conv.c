@@ -8,7 +8,7 @@
 #include "no_os_print_log.h"
 #include "axi_adc_core.h"
 #include "axi_dac_core.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "adrv9009.h"
@@ -57,7 +57,7 @@ int adrv9009_post_setup(struct adrv9009_rf_phy *phy)
 			      AXI_ADC_ENABLE | AXI_ADC_IQCOR_ENB);
 	}
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 	// Read frequency and ratio from DAC
 	axi_adc_read(phy->rx_adc, 0x4054, &freq);
 	axi_adc_read(phy->rx_adc, 0x4058, &ratio);

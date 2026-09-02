@@ -33,7 +33,7 @@
 
 #include "ad9361_util.h"
 #include "string.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 #define NO_OS_BITS_PER_LONG		32
 

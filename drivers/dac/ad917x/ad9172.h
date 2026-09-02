@@ -34,7 +34,7 @@
 #define __AD9172_H__
 
 #include "AD917x.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
 

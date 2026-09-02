@@ -34,7 +34,7 @@
 *******************************************************************************/
 
 #include "sd.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "capi_alloc.h"
 
@@ -95,7 +95,7 @@ static int32_t wait_for_response(struct sd_desc *sd_desc, uint8_t *data_out)
 			ret = 0;
 			break;
 		}
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 	} while (not_timeout--);
 
 	return ret;
@@ -122,7 +122,7 @@ static int32_t wait_until_not_busy(struct sd_desc *sd_desc)
 			ret = 0;
 			break;
 		}
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 	} while (not_timeout--);
 
 	return ret;

@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "adaq8092.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 
 /******************************************************************************/
@@ -159,19 +159,19 @@ int adaq8092_init(struct adaq8092_dev **device,
 	if (ret)
 		goto error_par_ser;
 
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 
 	ret = no_os_gpio_set_value(dev->gpio_en_1p8, NO_OS_GPIO_HIGH);
 	if (ret)
 		goto error_par_ser;
 
-	no_os_mdelay(500);
+	capi_wait_ms(500);
 
 	ret = no_os_gpio_set_value(dev->gpio_adc_pd1, NO_OS_GPIO_HIGH);
 	if (ret)
 		goto error_par_ser;
 
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	ret = no_os_gpio_set_value(dev->gpio_adc_pd2, NO_OS_GPIO_HIGH);
 	if (ret)
@@ -183,7 +183,7 @@ int adaq8092_init(struct adaq8092_dev **device,
 	if (ret)
 		goto error_par_ser;
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	/* Device Initialization */
 	ret = adaq8092_set_pd_mode(dev, init_param.pd_mode);

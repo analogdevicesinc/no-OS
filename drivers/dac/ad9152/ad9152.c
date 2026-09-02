@@ -35,6 +35,7 @@
 #include <stdio.h>
 #include "ad9152.h"
 #include "capi_alloc.h"
+#include "capi_time.h"
 
 /***************************************************************************//**
  * @brief ad9152_spi_read
@@ -108,12 +109,12 @@ int32_t ad9152_setup(struct ad9152_dev **device,
 	}
 
 	// power-up and dac initialization
-	no_os_mdelay(5);
+	capi_wait_ms(5);
 
 	ad9152_spi_write(dev, REG_SPI_INTFCONFA, SOFTRESET_M | SOFTRESET);	// reset
 	ad9152_spi_write(dev, REG_SPI_INTFCONFA, 0x00);	// reset
 
-	no_os_mdelay(4);
+	capi_wait_ms(4);
 
 	ad9152_spi_write(dev, REG_PWRCNTRL0, 0x00);	// dacs - power up everything
 	ad9152_spi_write(dev, REG_CLKCFG0, 0x00);	// clocks - power up everything
@@ -164,7 +165,7 @@ int32_t ad9152_setup(struct ad9152_dev **device,
 	ad9152_spi_write(dev, REG_SYNTH_ENABLE_CNTRL, 0x01);	// enable serdes pll
 	ad9152_spi_write(dev, REG_SYNTH_ENABLE_CNTRL,
 			 0x05);	// enable serdes calibration
-	no_os_mdelay(20);
+	capi_wait_ms(20);
 
 	ad9152_spi_read(dev, REG_PLL_STATUS, &pll_stat);
 	if (pll_stat == 0) {
@@ -233,7 +234,7 @@ int32_t ad9152_short_pattern_test(struct ad9152_dev *dev,
 					 ((sample << 4) | (dac << 2) | 0x03));
 			ad9152_spi_write(dev, REG_SHORT_TPL_TEST_0,
 					 ((sample << 4) | (dac << 2) | 0x01));
-			no_os_mdelay(1);
+			capi_wait_ms(1);
 
 			ad9152_spi_read(dev, REG_SHORT_TPL_TEST_3, &status);
 			if ((status & 0x1) == 0x1)
@@ -265,7 +266,7 @@ int32_t ad9152_datapath_prbs_test(struct ad9152_dev *dev,
 
 	ad9152_spi_write(dev, REG_PRBS, ((init_param.prbs_type << 2) | 0x03));
 	ad9152_spi_write(dev, REG_PRBS, ((init_param.prbs_type << 2) | 0x01));
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	ad9152_spi_read(dev, REG_PRBS, &status);
 	if ((status & 0xc0) != 0xc0) {

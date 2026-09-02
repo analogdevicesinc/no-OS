@@ -34,7 +34,7 @@
 #include <stdbool.h>
 #include "adl8113.h"
 #include "common_data.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_uart.h"
 
@@ -54,7 +54,7 @@ static bool handle_button_press(struct no_os_gpio_desc *button)
 
 	if (val == 0) {
 		/* Wait for debounce */
-		no_os_mdelay(50);
+		capi_wait_ms(50);
 		ret = no_os_gpio_get_value(button, &val);
 		if (ret)
 			return false;
@@ -66,9 +66,9 @@ static bool handle_button_press(struct no_os_gpio_desc *button)
 				ret = no_os_gpio_get_value(button, &val);
 				if (ret)
 					return false;
-				no_os_mdelay(10);
+				capi_wait_ms(10);
 			}
-			no_os_mdelay(50);
+			capi_wait_ms(50);
 			return true;
 		}
 	}
@@ -278,7 +278,7 @@ int example_main(void)
 		default:
 			break;
 		}
-		no_os_mdelay(50);
+		capi_wait_ms(50);
 	}
 
 	pr_info("Exiting example.\n");

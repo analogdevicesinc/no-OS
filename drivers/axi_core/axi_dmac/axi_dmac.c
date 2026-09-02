@@ -38,7 +38,7 @@
 #include <stdint.h>
 #include "no_os_axi_io.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 #include "axi_dmac.h"
 
@@ -523,7 +523,7 @@ int32_t axi_dmac_transfer_wait_completion(struct axi_dmac *dmac,
 	if (dmac->irq_option == IRQ_ENABLED) {
 		while (!dmac->transfer.transfer_done) {
 			timeout++;
-			no_os_mdelay(1);
+			capi_wait_ms(1);
 			if (timeout == timeout_ms) {
 				printf("Error transferring data using DMA.\n");
 				return -1;
@@ -533,7 +533,7 @@ int32_t axi_dmac_transfer_wait_completion(struct axi_dmac *dmac,
 		axi_dmac_read(dmac, AXI_DMAC_REG_IRQ_PENDING, &reg_val);
 		while (reg_val != (AXI_DMAC_IRQ_SOT | AXI_DMAC_IRQ_EOT)) {
 			timeout++;
-			no_os_mdelay(1);
+			capi_wait_ms(1);
 			if (timeout == timeout_ms) {
 				printf("Error transferring data using DMA.\n");
 				return -1;

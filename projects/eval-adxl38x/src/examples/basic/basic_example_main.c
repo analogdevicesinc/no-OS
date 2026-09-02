@@ -33,7 +33,7 @@
 
 #include "common_data.h"
 #include "adxl38x.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include <errno.h>
 
@@ -83,7 +83,7 @@ int example_main()
 		pr_info(" Device Type = ADXL382\n");
 	else
 		pr_info(" Device Type = ADXL380\n");
-	no_os_mdelay(500);
+	capi_wait_ms(500);
 
 	while (1) {
 		ret = adxl38x_get_sts_reg(adxl38x_desc, &device_flags);
@@ -113,7 +113,7 @@ int example_main()
 		pr_info(" y = %lld.%07dg\n", yf.integer, abs(yf.fractional));
 		pr_info(" z = %lld.%07dg\n", zf.integer, abs(zf.fractional));
 
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 
 		ret = adxl38x_get_op_mode(adxl38x_desc, &opmode);
 		if (ret)
@@ -128,7 +128,7 @@ int example_main()
 		pr_info(" y = %d\n", (int)y);
 		pr_info(" z = %d\n", (int)z);
 		pr_info(" t = %d\n", (int)t);
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 	}
 
 error:

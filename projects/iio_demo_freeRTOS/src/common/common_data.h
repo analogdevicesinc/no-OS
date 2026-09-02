@@ -50,7 +50,7 @@
 #include "wut.h"
 #include "uart.h"
 #include "lp.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #endif
 
 extern struct no_os_uart_init_param iio_demo_uart_ip;

@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "ad7124.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 #include "no_os_error.h"
 
@@ -272,7 +272,7 @@ int32_t ad7124_reset(struct ad7124_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(AD7124_POST_RESET_DELAY);
+	capi_wait_ms(AD7124_POST_RESET_DELAY);
 
 	return 0;
 }

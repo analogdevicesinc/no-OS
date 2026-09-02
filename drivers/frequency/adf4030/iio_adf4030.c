@@ -38,7 +38,7 @@
 #include "iio_adf4030.h"
 #include "adf4030.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /**
  * @brief Wrapper for reading adf4030 register.

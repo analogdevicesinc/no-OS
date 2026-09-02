@@ -49,7 +49,7 @@
 #include "no_os_gpio.h"
 #include "xilinx_spi.h"
 #include "xilinx_gpio.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "ad9152.h"
 #include "ad9528.h"
@@ -652,7 +652,7 @@ int main(void)
 	       (uintptr_t)adc_buffer, transfer_rx.size / 2,
 	       ad9680_core->num_channels, ad9152_jesd_param.bits_per_sample);
 #ifdef IIO_SUPPORT
-	no_os_mdelay(100); // Allow time for displaying DMA transfer message
+	capi_wait_ms(100); // Allow time for displaying DMA transfer message
 
 	struct xil_uart_init_param platform_uart_init_par = {
 #ifdef XPAR_XUARTLITE_NUM_INSTANCES

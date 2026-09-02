@@ -30,7 +30,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "ad5259.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 static int ad5259_dpot_send_cmd_write(struct dpot_dev *desc,
 				      struct dpot_command *cmd);
@@ -308,7 +308,7 @@ int ad5259_dpot_nvm_write(struct dpot_dev *desc,
 		return ret;
 
 	/* EEPROM write delay as per device specifications */
-	no_os_mdelay(180);
+	capi_wait_ms(180);
 	return 0;
 }
 
@@ -338,7 +338,7 @@ int ad5259_dpot_copy_rdac_to_nvm(struct dpot_dev *desc, enum dpot_chn_type chn)
 		return ret;
 
 	/* EEPROM write delay as per device specifications */
-	no_os_mdelay(18);
+	capi_wait_ms(18);
 
 	return 0;
 }

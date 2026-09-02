@@ -65,6 +65,7 @@
 #include "Navassa_LVDS_profile.h"
 #else
 #include "Navassa_CMOS_profile.h"
+#include "capi_time.h"
 #endif
 
 /* ADC/DAC Buffers */
@@ -528,7 +529,7 @@ int main(void)
 #endif
 #endif /* XILINX_PLATFORM */
 
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 
 	struct axi_dma_transfer read_transfer1 = {
 		// Number of bytes to write/read
@@ -591,7 +592,7 @@ int main(void)
 	       rx1_adc_init.num_channels, 8 * sizeof(adc_buffers[0][0]));
 #endif
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 #ifdef IIO_SUPPORT
 	struct iio_axi_adc_init_param iio_axi_adcs_init_par[] = {{

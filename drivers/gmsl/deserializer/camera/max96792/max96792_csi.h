@@ -38,7 +38,7 @@
 #include "gmsl_cam_des.h"
 #include "gmsl_dbg.h"
 #include "gmsl_reg_access.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "max96792.h"
 

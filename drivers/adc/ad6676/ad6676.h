@@ -36,7 +36,7 @@
 
 #include <stdint.h>
 #include "no_os_util.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_spi.h"
 
 #define AD6676_SPI_CONFIG		0x000

@@ -35,7 +35,7 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
 #include "axi_adc_core.h"
@@ -142,12 +142,12 @@ int32_t axi_adc_pn_mon(struct axi_adc *adc,
 		axi_adc_write(adc, AXI_ADC_REG_CHAN_CNTRL(ch), reg_data);
 		axi_adc_set_pnsel(adc, ch, sel);
 	}
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	for (ch = 0; ch < adc->num_channels; ch++) {
 		axi_adc_write(adc, AXI_ADC_REG_CHAN_STATUS(ch), 0xff);
 	}
-	no_os_mdelay(delay_ms);
+	capi_wait_ms(delay_ms);
 
 	for (ch = 0; ch < adc->num_channels; ch++) {
 		axi_adc_read(adc, AXI_ADC_REG_CHAN_STATUS(ch), &reg_data);
@@ -256,7 +256,7 @@ int32_t axi_adc_delay_calibrate(struct axi_adc *adc,
 
 	for (delay = 0; delay < 32; delay++) {
 		axi_adc_delay_set(adc, no_of_lanes, delay);
-		no_os_mdelay(20);
+		capi_wait_ms(20);
 		if (axi_adc_pn_mon(adc, sel, 100) == 0) {
 			err_field[delay] = 0;
 			start_valid_delay = start_valid_delay == 32 ?
@@ -655,7 +655,7 @@ int32_t axi_adc_init(struct axi_adc **adc_core,
 			      AXI_ADC_FORMAT_SIGNEXT | AXI_ADC_FORMAT_ENABLE |
 			      AXI_ADC_ENABLE);
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	ret = axi_adc_init_finish(adc);
 	if (ret)

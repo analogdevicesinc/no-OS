@@ -36,6 +36,7 @@
 #include "ad9434.h"
 #include "capi_alloc.h"
 #include "no_os_error.h"
+#include "capi_time.h"
 
 #define DCO_DEBUG
 
@@ -107,7 +108,7 @@ int32_t ad9434_testmode_set(struct ad9434_dev *dev,
 
 	ad9434_spi_write(dev, AD9434_REG_TEST_IO, 0x10);
 	ad9434_spi_write(dev, AD9434_REG_TRANSFER, TRANSFER_SYNC);
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 	ad9434_spi_write(dev, AD9434_REG_TEST_IO, 0x0);
 	ad9434_spi_write(dev, AD9434_REG_TRANSFER, TRANSFER_SYNC);
 	ad9434_spi_write(dev, AD9434_REG_TEST_IO, mode);

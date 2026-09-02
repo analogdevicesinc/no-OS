@@ -42,7 +42,7 @@
 #include "no_os_gpio.h"
 #include "xilinx_spi.h"
 #include "xilinx_gpio.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "ad6676.h"
 #include "axi_adc_core.h"
@@ -492,7 +492,7 @@ int main(void)
 
 #ifdef IIO_SUPPORT
 	// Allow time for UART messages to be displayed
-	no_os_mdelay(200);
+	capi_wait_ms(200);
 
 	struct xil_uart_init_param platform_uart_init_par = {
 #ifdef XPAR_XUARTLITE_NUM_INSTANCES

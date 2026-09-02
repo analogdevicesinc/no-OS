@@ -35,7 +35,7 @@
 #include "no_os_util.h"
 #include <stdint.h>
 #include <stdio.h>
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_i2c.h"
 #include "display.h"
 #include "ssd_1306.h"
@@ -241,7 +241,7 @@ void startup_screen()
 	lv_display_t * disp = lv_display_get_default();
 	lv_area_t area = {0, 0, SSD1306_HOR_REZ - 1, SSD1306_VER_REZ - 1};
 	my_flush_cb(disp, &area, &display_buffer[8]);
-	no_os_mdelay(5000);
+	capi_wait_ms(5000);
 	lv_refr_now(NULL);
 }
 
@@ -278,7 +278,7 @@ int example_main(void)
 	test_draw();
 
 	while (1) {
-		no_os_mdelay(20);
+		capi_wait_ms(20);
 		lv_timer_handler();
 	}
 	return 0;

@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "adxl355.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 
 static uint8_t shadow_reg_val[5] = {0, 0, 0, 0, 0};
@@ -314,7 +314,7 @@ int adxl355_soft_reset(struct adxl355_dev *dev)
 		return -EAGAIN;
 
 	// Delay is needed between soft reset command and shadow registers reading
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	// Read the shadow registers
 	ret = adxl355_read_device_data(dev,

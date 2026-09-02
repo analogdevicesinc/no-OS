@@ -33,7 +33,7 @@
 
 #include "max31889.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_util.h"
 
 int32_t max31889_write_reg(struct max31889_desc *desc, uint8_t reg_addr,
@@ -105,7 +105,7 @@ int32_t max31889_trig_and_read_temp(struct max31889_desc *desc,
 		if (ret)
 			return ret;
 		++step_counter;
-		no_os_mdelay(
+		capi_wait_ms(
 			TEMP_MEAS_WAIT_UNTIL_ERROR_MS); // Delay to allow the conversion to complete
 	} while (!(reg_tmp & NO_OS_BIT(1)) && step_counter < MAX31889_MAX_CONV_STEPS);
 

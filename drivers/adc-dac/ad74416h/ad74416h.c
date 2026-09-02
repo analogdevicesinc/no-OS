@@ -33,7 +33,7 @@
 
 #include "ad74416h.h"
 #include "no_os_crc8.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "capi_alloc.h"
@@ -473,7 +473,7 @@ int ad74416h_set_adc_conv_seq(struct ad74416h_desc *desc,
 	 * If the ADC was powered down, wait for 100us before the ADC starts
 	 * doing conversions.
 	 */
-	no_os_udelay(100);
+	capi_wait_us(100);
 
 	return 0;
 }
@@ -514,7 +514,7 @@ int ad74416h_get_adc_single(struct ad74416h_desc *desc, uint32_t ch,
 
 	delay = AD74116H_CONV_TIME_US / conv_rate_ad74416h[rate];
 
-	no_os_udelay(delay * nb_active_channels);
+	capi_wait_us(delay * nb_active_channels);
 
 	ret = ad74416h_get_raw_adc_result(desc, ch, val);
 	if (ret)
@@ -589,7 +589,7 @@ int ad74416h_set_channel_function(struct ad74416h_desc *desc,
 		return ret;
 
 	/* Datasheet delay required before transition to new desired mode */
-	no_os_udelay(200);
+	capi_wait_us(200);
 
 	ret = ad74416h_reg_update(desc, AD74416H_CH_FUNC_SETUP(ch),
 				  AD74416H_CH_FUNC_SETUP_MSK, ch_func);
@@ -599,7 +599,7 @@ int ad74416h_set_channel_function(struct ad74416h_desc *desc,
 	desc->channel_configs[ch].function = ch_func;
 
 	/* Datasheet delay required before updating the new DAC code */
-	no_os_udelay(200);
+	capi_wait_us(200);
 
 	return 0;
 }
@@ -918,7 +918,7 @@ int ad74416h_reset(struct ad74416h_desc *desc)
 			return ret;
 
 		/* Minimum RESET signal pulse duration */
-		no_os_udelay(50);
+		capi_wait_us(50);
 		ret = no_os_gpio_set_value(desc->reset_gpio, NO_OS_GPIO_HIGH);
 		if (ret)
 			return ret;
@@ -932,7 +932,7 @@ int ad74416h_reset(struct ad74416h_desc *desc)
 			return ret;
 	}
 	/* Time taken for device reset (datasheet value = 1ms) */
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	return 0;
 }

@@ -35,7 +35,7 @@
 #include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_print_log.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 //Charge pump current values expressed in uA
 static const int adf5611_cp_ua[] = {
@@ -860,7 +860,7 @@ int adf5611_set_freq(struct adf5611_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_udelay(ADF5611_LKD_DELAY_US);
+	capi_wait_us(ADF5611_LKD_DELAY_US);
 	ret = adf5611_spi_read(dev, 0x48, &val);
 	if (ret)
 		return ret;
@@ -919,7 +919,7 @@ int adf5611_init(struct adf5611_dev **dev,
 	if (ret)
 		goto error_spi;
 
-	no_os_udelay(ADF5611_POR_DELAY_US);
+	capi_wait_us(ADF5611_POR_DELAY_US);
 
 	/* Setup SPI for 4 Wire */
 	ret = adf5611_spi_write(device, 0x00, ADF5611_SPI_4W_CFG(device->spi4wire));

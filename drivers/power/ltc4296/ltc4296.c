@@ -35,7 +35,7 @@
 #include <errno.h>
 #include "ltc4296.h"
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
 
@@ -168,7 +168,7 @@ int ltc4296_reset(struct ltc4296_dev *dev)
 		return ret;
 
 	/* Delay required after performing a software reset */
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 
 	return 0;
 }
@@ -333,7 +333,7 @@ int ltc4296_set_gadc_vin(struct ltc4296_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(4); /* Delay of 4ms*/
+	capi_wait_ms(4); /* Delay of 4ms*/
 
 	return 0;
 }
@@ -403,7 +403,7 @@ int ltc4296_disable_gadc(struct ltc4296_dev *dev)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(4); /* Delay of 4ms*/
+	capi_wait_ms(4); /* Delay of 4ms*/
 
 	return 0;
 }

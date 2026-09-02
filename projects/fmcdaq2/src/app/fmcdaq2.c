@@ -49,7 +49,7 @@
 #include "no_os_gpio.h"
 #include "xilinx_spi.h"
 #include "xilinx_gpio.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 #include "ad9144.h"
 #include "ad9523.h"
@@ -233,7 +233,7 @@ static int fmcdaq2_gpio_init(struct fmcdaq2_dev *dev)
 	if (status < 0)
 		return status;
 
-	no_os_mdelay(5);
+	capi_wait_ms(5);
 
 	status = no_os_gpio_set_value(dev->gpio_clkd_sync, NO_OS_GPIO_HIGH);
 	if (status < 0)
@@ -1321,7 +1321,7 @@ int main(void)
 		// Address of data destination
 		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
 	};
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 	status = axi_dmac_transfer_start(fmcdaq2.ad9680_dmac, &transfer_rx);
 	if (status)
 		return status;

@@ -33,7 +33,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include "hmc630x.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 
 #define HMC630X_ARRAY_ADDRESS_MASK NO_OS_GENMASK(13, 8)
@@ -308,9 +308,9 @@ int hmc630x_write_row(struct hmc630x_dev *dev, uint8_t row, uint8_t val)
 	no_os_gpio_set_value(dev->en, NO_OS_GPIO_LOW);
 	for (b = 0; b < HMC630X_FRAME_SIZE; b++) {
 		no_os_gpio_set_value(dev->data, send & 0x1);
-		no_os_udelay(HMC6300_BITBANG_DELAY_US);
+		capi_wait_us(HMC6300_BITBANG_DELAY_US);
 		no_os_gpio_set_value(dev->clk, NO_OS_GPIO_HIGH);
-		no_os_udelay(HMC6300_BITBANG_DELAY_US);
+		capi_wait_us(HMC6300_BITBANG_DELAY_US);
 		no_os_gpio_set_value(dev->clk, NO_OS_GPIO_LOW);
 		send >>= 1;
 	}
@@ -340,9 +340,9 @@ int hmc630x_read_row(struct hmc630x_dev *dev, uint8_t row, uint8_t *val)
 	no_os_gpio_set_value(dev->en, NO_OS_GPIO_LOW);
 	for (b = 0; b < HMC630X_FRAME_SIZE; b++) {
 		no_os_gpio_set_value(dev->data, send & 0x1);
-		no_os_udelay(HMC6300_BITBANG_DELAY_US);
+		capi_wait_us(HMC6300_BITBANG_DELAY_US);
 		no_os_gpio_set_value(dev->clk, NO_OS_GPIO_HIGH);
-		no_os_udelay(HMC6300_BITBANG_DELAY_US);
+		capi_wait_us(HMC6300_BITBANG_DELAY_US);
 		no_os_gpio_set_value(dev->clk, NO_OS_GPIO_LOW);
 		send >>= 1;
 	}
@@ -350,22 +350,22 @@ int hmc630x_read_row(struct hmc630x_dev *dev, uint8_t row, uint8_t *val)
 	no_os_gpio_set_value(dev->en, NO_OS_GPIO_HIGH);
 
 	// extra pulse while cs is high
-	no_os_udelay(HMC6300_BITBANG_DELAY_US);
+	capi_wait_us(HMC6300_BITBANG_DELAY_US);
 	no_os_gpio_set_value(dev->clk, NO_OS_GPIO_HIGH);
-	no_os_udelay(HMC6300_BITBANG_DELAY_US);
+	capi_wait_us(HMC6300_BITBANG_DELAY_US);
 	no_os_gpio_set_value(dev->clk, NO_OS_GPIO_LOW);
-	no_os_udelay(HMC6300_BITBANG_DELAY_US);
+	capi_wait_us(HMC6300_BITBANG_DELAY_US);
 
 	*val = 0;
 	no_os_gpio_set_value(dev->en, NO_OS_GPIO_LOW);
 	for (b = 0; b < 8; b++) {
 		// scanout changes on sck rising edge
 		no_os_gpio_set_value(dev->clk, NO_OS_GPIO_HIGH);
-		no_os_udelay(HMC6300_BITBANG_DELAY_US);
+		capi_wait_us(HMC6300_BITBANG_DELAY_US);
 		// sample scanout along with sck faling edge
 		no_os_gpio_set_value(dev->clk, NO_OS_GPIO_LOW);
 		no_os_gpio_get_value(dev->scanout, &recv);
-		no_os_udelay(HMC6300_BITBANG_DELAY_US);
+		capi_wait_us(HMC6300_BITBANG_DELAY_US);
 		*val |= recv << b;
 	}
 	no_os_gpio_set_value(dev->en, NO_OS_GPIO_HIGH);
@@ -773,7 +773,7 @@ int hmc630x_set_vco(struct hmc630x_dev *dev, uint64_t frequency)
 			return ret;
 
 		/* TODO: update this when it'll be specified in the datasheet. */
-		no_os_mdelay(HMC6300_SETTLING_DELAY_MS);
+		capi_wait_ms(HMC6300_SETTLING_DELAY_MS);
 
 		/* Detect range of VCO_BANDSEL for which PLL locks. */
 		ret = hmc630x_read(dev, HMC630X_LOCKDET, &lock);
@@ -797,7 +797,7 @@ int hmc630x_set_vco(struct hmc630x_dev *dev, uint64_t frequency)
 	if (ret)
 		return ret;
 
-	no_os_mdelay(HMC6300_SETTLING_DELAY_MS);
+	capi_wait_ms(HMC6300_SETTLING_DELAY_MS);
 
 	/* Make sure it locks. */
 	ret = hmc630x_read(dev, HMC630X_LOCKDET, &lock);

@@ -32,7 +32,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include <stdbool.h>
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "mux_board.h"
 #include "app.h"
 
@@ -112,6 +112,6 @@ void setMuxSwitch(struct no_os_i2c_desc *i2c, struct ad5940_dev *ad5940,
 				no_os_i2c_write(i2c, muxData, 2, true);
 			}
 		}
-		no_os_udelay(1);
+		capi_wait_us(1);
 	}
 }

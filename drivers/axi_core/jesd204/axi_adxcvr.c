@@ -38,7 +38,7 @@
 #include "no_os_util.h"
 #include "capi_alloc.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "xilinx_transceiver.h"
 #include "axi_adxcvr.h"
 #include "no_os_print_log.h"
@@ -139,7 +139,7 @@ int32_t adxcvr_drp_wait_idle(struct adxcvr *xcvr,
 		if (!(val & ADXCVR_DRP_STATUS_BUSY))
 			return ADXCVR_DRP_STATUS_RDATA(val);
 
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 		timeout--;
 	}
 
@@ -431,7 +431,7 @@ int32_t adxcvr_status_error(struct adxcvr *xcvr)
 	uint32_t status;
 
 	do {
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 		adxcvr_read(xcvr, ADXCVR_REG_STATUS, &status);
 	} while ((timeout--) && !(status & ADXCVR_STATUS));
 
@@ -454,7 +454,7 @@ static int adxcvr_reset(struct adxcvr *xcvr)
 
 	do {
 		adxcvr_write(xcvr, ADXCVR_REG_RESETN, 0);
-		no_os_udelay(2);
+		capi_wait_us(2);
 		adxcvr_write(xcvr, ADXCVR_REG_RESETN, ADXCVR_RESETN);
 		pr_debug("%s: %s %s Reset\n",
 			 __func__,
@@ -487,7 +487,7 @@ int adxcvr_clk_enable(struct adxcvr *xcvr)
 		do {
 			adxcvr_write(xcvr, ADXCVR_REG_RESETN, ADXCVR_BUFSTATUS_RST | ADXCVR_RESETN);
 			adxcvr_write(xcvr, ADXCVR_REG_RESETN, ADXCVR_RESETN);
-			no_os_mdelay(1);
+			capi_wait_ms(1);
 			adxcvr_read(xcvr, ADXCVR_REG_STATUS, &status);
 			bufstatus_err = ((status & ADXCVR_BUFSTATUS_UNDERFLOW)
 					 || (status & ADXCVR_BUFSTATUS_OVERFLOW));

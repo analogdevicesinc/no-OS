@@ -34,7 +34,7 @@
 #include "max149x6-base.h"
 #include "max14906.h"
 #include "no_os_uart.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_irq.h"
 
@@ -129,14 +129,14 @@ int example_main()
 		if (ret)
 			goto gpio_irq_unregister_callback;
 
-		no_os_mdelay(500);
+		capi_wait_ms(500);
 
 		ret = max149x6_reg_update(max14906_desc, MAX14906_SETLED_REG,
 					  MAX14906_SLED_CH(i), no_os_field_prep(MAX14906_SLED_CH(i), 0));
 		if (ret)
 			goto gpio_irq_unregister_callback;
 
-		no_os_mdelay(500);
+		capi_wait_ms(500);
 	}
 
 	/** Setting a current limit for channel 0. */

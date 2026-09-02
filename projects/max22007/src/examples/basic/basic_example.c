@@ -38,7 +38,7 @@
 *******************************************************************************/
 
 #include "no_os_print_log.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "common_data.h"
 #include "max22007.h"
 
@@ -77,7 +77,7 @@ int example_main()
 
 	while (1) {
 		// Main loop - DAC channels are now set to test values
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 	}
 
 error:

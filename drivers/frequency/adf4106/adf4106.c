@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include "adf4106.h"
 #include "capi_alloc.h"
+#include "capi_time.h"
 
 #define DATA_MASK_MSB8      0xFF0000
 #define DATA_OFFSET_MSB8    16
@@ -278,7 +279,7 @@ void adf4106_init_cepin_method(struct adf4106_dev *dev)
 	/* Bring CE high to take the device out of power-down */
 	ADF4106_CE_HIGH;
 	/* Wait for the input buffer bias to reach steady state */
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 }
 
 /**************************************************************************//**

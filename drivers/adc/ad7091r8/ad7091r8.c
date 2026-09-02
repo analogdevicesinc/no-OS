@@ -38,7 +38,7 @@
 #include "capi_alloc.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /**
  * Pull the CONVST line up then down to signal to the start of a read/write
@@ -360,7 +360,7 @@ int ad7091r8_reset(struct ad7091r8_dev *dev, bool is_software)
 	if (ret)
 		return ret;
 
-	no_os_udelay(1);
+	capi_wait_us(1);
 	return no_os_gpio_set_value(dev->gpio_reset, NO_OS_GPIO_HIGH);
 }
 

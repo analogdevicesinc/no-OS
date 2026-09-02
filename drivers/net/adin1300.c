@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include "capi_alloc.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_gpio.h"
 #include "mdio_bitbang.h"
 #include "adin1300.h"
@@ -88,7 +88,7 @@ int adin1300_soft_reset(struct adin1300_desc *dev)
 	if (ret < 0)
 		return ret;
 
-	no_os_mdelay(20);
+	capi_wait_ms(20);
 
 	return 0;
 }
@@ -100,11 +100,11 @@ int adin1300_hard_reset(struct adin1300_desc *dev)
 	ret = no_os_gpio_direction_output(dev->reset_gpio, NO_OS_GPIO_LOW);
 	if (ret)
 		return ret;
-	no_os_mdelay(1);
+	capi_wait_ms(1);
 	ret = no_os_gpio_direction_output(dev->reset_gpio, NO_OS_GPIO_HIGH);
 	if (ret)
 		return ret;
-	no_os_mdelay(20);
+	capi_wait_ms(20);
 
 	return 0;
 }

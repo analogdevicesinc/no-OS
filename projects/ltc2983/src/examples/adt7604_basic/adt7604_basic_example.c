@@ -33,7 +33,7 @@
 #include "common_data.h"
 #include "ltc2983.h"
 #include "no_os_uart.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 
 /*****************************************************************************
@@ -114,7 +114,7 @@ int example_main()
 			}
 		}
 
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 	}
 
 free_dev:

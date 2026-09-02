@@ -32,7 +32,7 @@
 *******************************************************************************/
 #include "common_data.h"
 #include "no_os_uart.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "ltp8800.h"
 
@@ -117,7 +117,7 @@ int example_main()
 		pr_info("vin = %d mV | vout = %d mV | iout = %d mA | temp0 = %d C\n",
 			vals[0], vals[1], vals[2], vals[3] / 1000);
 
-		no_os_mdelay(500);
+		capi_wait_ms(500);
 	}
 
 exit:

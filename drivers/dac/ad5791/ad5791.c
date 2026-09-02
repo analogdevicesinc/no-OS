@@ -35,6 +35,7 @@
 #include <stdlib.h>
 #include "ad5791.h"    // AD5791 definitions.
 #include "capi_alloc.h"
+#include "capi_time.h"
 
 static const struct ad5791_chip_info chip_info[] = {
 	[ID_AD5760] = {
@@ -284,7 +285,7 @@ int32_t ad5791_soft_instruction(struct ad5791_dev *dev,
 	if (status < 0) {
 		return status;
 	}
-	no_os_mdelay(1);    // Wait for the instruction to take effect.
+	capi_wait_ms(1);    // Wait for the instruction to take effect.
 
 	return status;
 }
@@ -430,7 +431,7 @@ int ad5791_ldac_trigger(struct ad5791_dev *dev)
 			return ret;
 
 		/* Delay must be greater than 14ns, per the datasheet. */
-		no_os_udelay(1);
+		capi_wait_us(1);
 
 		return no_os_gpio_set_value(dev->gpio_ldac, NO_OS_GPIO_HIGH);
 	}
@@ -458,7 +459,7 @@ int ad5791_clear_async(struct ad5791_dev *dev)
 			return ret;
 
 		/* Delay must be greater than 50ns, per the datasheet. */
-		no_os_udelay(1);
+		capi_wait_us(1);
 
 		return no_os_gpio_set_value(dev->gpio_clr, NO_OS_GPIO_HIGH);
 	}

@@ -14,7 +14,7 @@
 #include "adi_hal.h"
 #include "no_os_spi.h"
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "parameters.h"
 #include "no_os_util.h"
 #include "axi_dac_core.h"
@@ -470,7 +470,7 @@ int main(void)
 	axi_dmac_transfer_start(tx_dmac, &transfer_tx);
 	Xil_DCacheInvalidateRange((uintptr_t)DAC_DDR_BASEADDR, sizeof(sine_lut_iq));
 
-	no_os_mdelay(1000);
+	capi_wait_ms(1000);
 #endif
 
 	/* Transfer 16384 samples from ADC to MEM */
@@ -518,7 +518,7 @@ int main(void)
 
 #ifdef IIO_SUPPORT
 	// Allow time to display messages correctly
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 #ifdef ADRV9008_2
 	status = start_iiod(rx_os_dmac, tx_dmac, rx_os_adc, tx_dac);
 #else

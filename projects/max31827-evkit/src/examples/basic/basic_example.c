@@ -32,7 +32,7 @@
  *******************************************************************************/
 #include "common_data.h"
 #include "max31827.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_units.h"
 /*****************************************************************************
@@ -68,7 +68,7 @@ int example_main()
 
 		pr_info("Temperature: %d mC\r\n", val);
 
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 	}
 
 free_dev:

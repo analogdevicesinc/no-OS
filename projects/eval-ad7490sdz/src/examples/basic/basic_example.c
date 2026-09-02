@@ -32,7 +32,7 @@
  *******************************************************************************/
 #include "ad7490.h"
 #include "common_data.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 
 #define AD7490_VREF		2.5
@@ -71,7 +71,7 @@ int example_main()
 				((float)val * AD7490_VREF) / AD7490_FULLSCALE);
 		}
 
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 	}
 
 	return 0;

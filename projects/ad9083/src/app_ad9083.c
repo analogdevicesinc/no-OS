@@ -41,7 +41,7 @@
 #include "xilinx_gpio.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "capi_alloc.h"
 
@@ -117,7 +117,7 @@ int32_t app_ad9083_status(struct app_ad9083 *app)
 				stat & NO_OS_BIT(6) ? "established" : "lost",
 				stat & NO_OS_BIT(7) ? "invalid" : "valid");
 		else
-			no_os_udelay(20000);
+			capi_wait_us(20000);
 
 	} while (ret && retry--);
 

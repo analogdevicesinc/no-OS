@@ -38,7 +38,7 @@
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
 #include "no_os_util.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "xilinx_spi.h"
 #include "xilinx_gpio.h"
 #include "ad3552r.h"
@@ -157,7 +157,7 @@ int32_t run_example(struct ad3552r_desc *dac)
 		if (NO_OS_IS_ERR_VALUE(err))
 			return err;
 
-		no_os_udelay(time_between_samples_us);
+		capi_wait_us(time_between_samples_us);
 
 		i = (i + 1) % nb_samples;
 		err = ad3552r_ldac_trigger(dac, AD3552R_MASK_ALL_CH, false);

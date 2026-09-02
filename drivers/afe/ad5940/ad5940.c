@@ -36,7 +36,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <errno.h>
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
 #include "capi_alloc.h"
@@ -2952,9 +2952,9 @@ int ad5940_HWReset(struct ad5940_dev *dev)
 	uint32_t tempreg;
 
 	no_os_gpio_set_value(dev->reset_gpio, NO_OS_GPIO_LOW);
-	no_os_udelay(10); /* Delay some time */
+	capi_wait_us(10); /* Delay some time */
 	no_os_gpio_set_value(dev->reset_gpio, NO_OS_GPIO_HIGH);
-	no_os_mdelay(1); /* AD5940 need some time to exit reset status */
+	capi_wait_ms(1); /* AD5940 need some time to exit reset status */
 
 	ret = ad5940_ReadReg(dev, REG_AFECON_ADIID, &tempreg);
 	if (ret < 0)

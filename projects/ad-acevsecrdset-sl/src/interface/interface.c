@@ -33,7 +33,7 @@
 
 #include "no_os_print_log.h"
 #include "state_machine.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "common_data.h"
 #include "interface.h"
 

@@ -36,7 +36,7 @@
 
 #include "common_data.h"
 #include "ad74416h.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_util.h"
 
@@ -158,7 +158,7 @@ int example_main()
 
 
 	while (1) {
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 		ret = ad74416h_gpio_get(ad74414h_desc, 0, &dig_input);
 		if (ret) {
 			pr_info("Error getting DIN value\r\n");

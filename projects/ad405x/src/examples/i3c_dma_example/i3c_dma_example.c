@@ -38,7 +38,7 @@
 *******************************************************************************/
 
 #include "common_data.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "ad405x.h"
 
@@ -126,7 +126,7 @@ int example_main()
 		data = no_os_get_unaligned_be32((uint8_t *)&data);
 
 		pr_info("\rADC(%02d): %05ld", ++i, data);
-		no_os_mdelay(50); // Cosmetic delay
+		capi_wait_ms(50); // Cosmetic delay
 	}
 
 error_dev:
