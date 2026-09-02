@@ -37,6 +37,8 @@
 #include "iio.h"
 #include "no_os_gpio.h"
 
+#define ADMT4000_NUM_CHANNELS	6
+
 /** @enum admt4000_iio_chan_type
  *  @brief ADMT4000 IIO channels enumeration
  */
@@ -64,8 +66,6 @@ struct admt4000_iio_dev {
 	struct admt4000_dev *admt4000_desc;
 	/** IIO device descriptor for framework registration and management */
 	struct iio_device *iio_dev;
-	/** Data buffer for storing channel samples (max 6 channels) */
-	int16_t data[ADMT4000_NUM_CHAN];
 };
 
 /**
