@@ -42,7 +42,7 @@
 #include "parameters.h"
 #include "no_os_uart.h"
 #include "no_os_util.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "max42500.h"
 
 extern struct no_os_uart_init_param uart_ip;
