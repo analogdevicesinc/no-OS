@@ -95,7 +95,8 @@ static int admt4000_config(struct admt4000_dev *device,
 	if (ret)
 		return ret;
 
-	ret = admt4000_reg_read(device, ADMT4000_AGP_REG_FAULT, &temp, NULL);
+	/* Clear faults before GPIO config so ECC writes are accepted */
+	ret = admt4000_clear_all_faults(device);
 	if (ret)
 		return ret;
 
