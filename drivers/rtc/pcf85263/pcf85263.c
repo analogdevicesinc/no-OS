@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "pcf85263.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "capi_alloc.h"
 
 /**
