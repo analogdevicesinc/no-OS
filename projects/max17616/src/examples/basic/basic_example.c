@@ -31,7 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "common_data.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "max17616.h"
 #include <stdlib.h>
@@ -385,7 +385,7 @@ int example_main(void)
 
 		pr_info("\n\r");
 
-		no_os_mdelay(2000);
+		capi_wait_ms(2000);
 	}
 
 exit:
