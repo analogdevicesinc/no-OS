@@ -45,7 +45,7 @@
 #include "xil_printf.h"
 #include <xparameters.h>
 #include "no_os_error.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_spi.h"
 #include "xilinx_spi.h"
 #include "no_os_gpio.h"
@@ -479,7 +479,7 @@ int main(void)
 		goto error_1;
 	}
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	status = ad9208_initialize(&ad9208_1_device, &ad9208_1_param);
 	if (status != 0) {
