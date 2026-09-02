@@ -34,7 +34,7 @@
 #include "common_data.h"
 #include "no_os_uart.h"
 #include "lt8491.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_print_log.h"
 #include "no_os_units.h"
 /*****************************************************************************
@@ -176,7 +176,7 @@ int example_main()
 
 		pr_info("LT8491 VIN: %d\r\n", uval);
 
-		no_os_mdelay(5000);
+		capi_wait_ms(5000);
 	}
 
 	return 0;
