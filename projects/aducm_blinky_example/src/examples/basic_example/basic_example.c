@@ -5,7 +5,7 @@
 
 #include "common_data.h"
 #include "no_os_gpio.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 
 /*****************************************************************************
  * @brief Toggle a GPIO-connected LED.
@@ -49,9 +49,9 @@ int example_main()
 	while (1) {
 		toggle(blue);
 		toggle(green);
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 		toggle(green);
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 	}
 
 	return 0;
