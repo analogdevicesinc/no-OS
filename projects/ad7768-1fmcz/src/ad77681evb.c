@@ -43,7 +43,7 @@
 #include "ad77681.h"
 #include "spi_engine.h"
 #include "parameters.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_error.h"
 
 uint32_t spi_msg_cmds[6] = {CS_LOW, CS_HIGH, CS_LOW, WRITE_READ(1), CS_HIGH};
@@ -135,7 +135,7 @@ int main()
 				printf("%x", adc_data[i]);
 			}
 			printf("\r\n");
-			no_os_mdelay(1000);
+			capi_wait_ms(1000);
 		}
 	} else {
 		ret = spi_engine_offload_init(adc_dev->spi_desc,
@@ -154,7 +154,7 @@ int main()
 		if (ret != 0)
 			return ret;
 
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 
 		Xil_DCacheInvalidateRange(spi_engine_offload_message.rx_addr,
 					  AD77681_EVB_SAMPLE_NO * 4);
