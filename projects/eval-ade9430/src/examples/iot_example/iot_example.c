@@ -38,7 +38,7 @@
 
 #include "no_os_uart.h"
 #include "no_os_gpio.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_timer.h"
 #include "no_os_i2c.h"
 #include "mqtt_client.h"
@@ -481,7 +481,7 @@ int example_main()
 		goto error_gpio_rst;
 	}
 
-	no_os_mdelay(500);
+	capi_wait_ms(500);
 
 	ret = no_os_gpio_set_value(wifi_rst_gpio, NO_OS_GPIO_HIGH);
 	if (ret) {
@@ -490,7 +490,7 @@ int example_main()
 	}
 
 	/* Allow the wifi module to bring up after reset */
-	no_os_mdelay(3000);
+	capi_wait_ms(3000);
 
 	ret = ade9430_init(&ade9430_device, ade9430_ip);
 	if (ret) {
@@ -834,7 +834,7 @@ int example_main()
 
 		pr_info("Data sent to broker\n");
 
-		no_os_mdelay(1000);
+		capi_wait_ms(1000);
 
 		/* Dispatch new mqtt mesages if any during SCAN_SENSOR_TIME */
 		ret = mqtt_yield(mqtt, SCAN_SENSOR_TIME);
@@ -874,7 +874,7 @@ error_pcf:
 			goto error_red_gpio_led;
 		}
 
-		no_os_mdelay(500);
+		capi_wait_ms(500);
 
 		ret = no_os_gpio_set_value(red_led_gpio, NO_OS_GPIO_LOW);
 		if (ret) {
@@ -882,7 +882,7 @@ error_pcf:
 			goto error_red_gpio_led;
 		}
 
-		no_os_mdelay(500);
+		capi_wait_ms(500);
 	}
 
 error_red_gpio_led:

@@ -33,7 +33,7 @@
 
 #include "common_data.h"
 #include "ade9430.h"
-#include "no_os_delay.h"
+#include "capi_time.h"
 #include "no_os_gpio.h"
 #include "no_os_print_log.h"
 
@@ -82,7 +82,7 @@ static int basic_read_temp(struct ade9430_dev *dev)
 
 		status = no_os_field_get(ADE9430_STATUS0_TEMP_RDY, status0);
 
-		no_os_mdelay(2);
+		capi_wait_ms(2);
 		timeout++;
 		if (timeout == 2000)
 			return -ENODATA;
@@ -157,19 +157,19 @@ int example_main(void)
 	if (ret)
 		goto remove_reset;
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	ret = no_os_gpio_set_value(gpio_reset_desc, NO_OS_GPIO_LOW);
 	if (ret)
 		goto remove_reset;
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 
 	ret = no_os_gpio_set_value(gpio_reset_desc, NO_OS_GPIO_HIGH);
 	if (ret)
 		goto remove_reset;
 
-	no_os_mdelay(100);
+	capi_wait_ms(100);
 #endif
 
 	ret = ade9430_init(&ade9430_device, ade9430_ip);
@@ -186,7 +186,7 @@ int example_main(void)
 	}
 
 	while (1) {
-		no_os_mdelay(READ_INTERVAL);
+		capi_wait_ms(READ_INTERVAL);
 
 		/* Read and print the RMS measured values for PHASE A */
 		ret = ade9430_read_data_ph(ade9430_device, ADE9430_PHASE_A);
