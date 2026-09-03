@@ -86,6 +86,28 @@ else()
     endif()
 endif()
 
+# A CAPI project uses its platform's CAPI-local toolchain when one exists;
+# otherwise it keeps the shared drivers toolchain set above. Kconfig has not run
+# yet at this point, so CONFIG_CAPI is not a CMake variable -- read it straight
+# from the project defconfig, the only intent signal available this early.
+# Keying on CONFIG_CAPI rather than a project or platform name survives renames
+# and picks up new CAPI platforms as they add a toolchain. In-tree only: CAPI
+# projects build from the repo root, so the ${CMAKE_SOURCE_DIR}-relative form
+# used above applies here too.
+if(NATIVE_BUILD AND DEFINED PROJECT_DEFCONFIG)
+    set(_capi_defconfig "${CMAKE_SOURCE_DIR}/projects/${PROJECT_DEFCONFIG}")
+    set(_capi_toolchain "capi/platform/${PLATFORM}/toolchain.cmake")
+    if(EXISTS "${_capi_defconfig}" AND EXISTS "${CMAKE_SOURCE_DIR}/${_capi_toolchain}")
+        file(READ "${_capi_defconfig}" _capi_defconfig_txt)
+        # Match CONFIG_CAPI=y as a whole token (not CONFIG_CAPI_UART etc.),
+        # anchored at line start so a commented-out line does not count.
+        if(_capi_defconfig_txt MATCHES "(^|\n)CONFIG_CAPI=y")
+            set(NO_OS_TOOLCHAIN_PATH "${_capi_toolchain}")
+            message(STATUS "CAPI build: using ${NO_OS_TOOLCHAIN_PATH}")
+        endif()
+    endif()
+endif()
+
 # Set toolchain file if not already set
 if(DEFINED NO_OS_TOOLCHAIN_PATH AND NOT CMAKE_TOOLCHAIN_FILE)
     set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/${NO_OS_TOOLCHAIN_PATH}")
@@ -336,6 +358,7 @@ add_subdirectory(util)
 add_subdirectory(iio)
 add_subdirectory(jesd204)
 add_subdirectory(drivers)
+add_subdirectory(capi)
 
 add_custom_target(KconfigVars ALL
     DEPENDS ${KCONFIG_VARS_FILE} ${CONFIG_HEADER_FILE}
