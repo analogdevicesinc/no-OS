@@ -107,9 +107,6 @@ static inline int altera_gts_xcvr_reset(const char *name, uint32_t xcvr_base)
 		no_os_mdelay(1);
 	}
 
-	pr_warning("%s: transceiver not ready %"PRIu32" ms after reset (status 0x%08"PRIx32")\n",
-		   name, (uint32_t)ADXCVR_RESET_TIMEOUT_MS, *status);
-
 	return 0;
 }
 
