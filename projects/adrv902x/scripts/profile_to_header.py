@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# Copyright 2026(c) Analog Devices, Inc.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+# 
 # Convert a Madura TES ".profile" (JSON) into the C header the adrv902x
 # firmware expects: a single string literal named json_profile_active_use_case,
 # one source line per continued C line.

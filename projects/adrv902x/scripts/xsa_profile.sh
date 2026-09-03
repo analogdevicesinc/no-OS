@@ -1,4 +1,8 @@
 #!/bin/sh
+# Copyright 2026(c) Analog Devices, Inc.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+# 
 # Derive the ADRV902x JESD use-case profile from a bitstream .xsa.
 #
 # The two bits that select the profile are embedded in the hardware handoff
