@@ -14,6 +14,7 @@
 #include "stm32_capi_gpio.h"
 #include "stm32_capi_spi.h"
 #include "stm32_capi_irq.h"
+#include "stm32_capi_timer.h"
 #include "capi_uart.h"
 
 extern UART_HandleTypeDef huart3;
@@ -101,5 +102,41 @@ extern SPI_HandleTypeDef hspi1;
 #define SPI_DEVICE_NATIVE_CS	0x01U
 #define SPI_DEVICE_MODE		CAPI_SPI_MODE_0
 #define SPI_DEVICE_SPEED_HZ	1000000U
+
+/*
+ * TIM2 on NUCLEO-F767ZI: 32-bit general-purpose timer on APB1.
+ * The driver uses identifier=2 to select TIM2 via get_timer_base_from_identifier()
+ * and auto-detects the APB1 clock. output_freq_hz=1 MHz gives 1 us resolution.
+ */
+#define TIMER_IDENTIFIER	2U
+#define TIMER_OPS		&stm32_capi_timer_ops
+#define TIMER_INPUT_CLK_HZ	0U		/* auto-detected from APB1 */
+#define TIMER_OUTPUT_FREQ_HZ	1000000U	/* 1 MHz -> 1 us resolution */
+#define TIMER_EXTRA_TYPE	struct stm32_capi_timer_extra_config
+#define TIMER_EXTRA_INIT	{ .htim = NULL, \
+				  .get_input_clock = NULL, \
+				  .irq_num = TIM2_IRQn }
+
+#define TIMER_DIRECTION		CAPI_TIMER_COUNT_UP
+/*
+ * Counter wrap point. Although TIM2 is 32 bits wide, the rollover period must
+ * sit between two test windows: wider than the BASIC rate window (10 ms) so a
+ * rate sample never straddles more than one wrap, yet narrower than the
+ * ASYNC_IRQ overflow timeout (1 s) so the counter-overflow interrupt actually
+ * fires within it. At the 1 MHz output rate a full 0xFFFFFFFF span rolls over
+ * only every ~71 min, so ASYNC_IRQ never sees an overflow; 0x1FFFF gives a
+ * ~131 ms period (13x the rate window, ~7x under the IRQ timeout).
+ *
+ * TIMER_RATE_COUNTER_MASK must equal TIMER_COUNTER_MAX so the BASIC delta
+ * (second - first) & mask stays correct across a wrap; that requires max+1 to
+ * be a power of two, which 0x1FFFF satisfies.
+ */
+#define TIMER_COUNTER_MAX	0x1FFFFU
+#define TIMER_COMPARE_VALUE	0x8000U
+#define TIMER_RATE_WINDOW_US	10000U
+#define TIMER_RATE_COUNTER_MASK	0x1FFFFU
+#define TIMER_RATE_TOLERANCE_PCT 5U
+#define TIMER_HAS_IRQ		1
+#define TIMER_HAS_COMPARE	1
 
 #endif /* __PARAMETERS_H__ */
