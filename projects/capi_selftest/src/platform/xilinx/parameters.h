@@ -11,6 +11,7 @@
 
 #include <xparameters.h>
 #include "xilinx_capi_gpio.h"
+#include "xilinx_capi_spi.h"
 #include "xilinx_capi_irq.h"
 #include "xinterrupt_wrap.h"
 
@@ -25,6 +26,7 @@
  */
 /* GIC only — no CASCADE, no NOIRQ */
 #define GPIO_SEL_PS
+#define SPI_SEL_PS
 #define PLATFORM_NAME		"XILINX"
 
 /*
@@ -134,5 +136,117 @@
 /* GIC-only IRQ topology */
 #define IRQ_CTRL_IDENTIFIER	XPAR_XSCUGIC_0_BASEADDR
 #define IRQ_CTRL_EXTRA		NULL
+
+/*
+ * SPI backend selection, mirroring the GPIO scheme:
+ *
+ *   PS SPI (XSpiPs, SPI0 EMIO routed to a PMOD):
+ *     SCLK / MOSI / MISO / SS0 (CS0) on the PMOD. External loopback needs MOSI
+ *     wired to MISO. 3 native CS: CS0, CS1, CS2. The PS SPI interrupt is a
+ *     fixed PS SPI, always a GIC id.
+ *
+ *   PL SPI (XSpi, AXI Quad SPI): base at XPAR_XSPI_0_BASEADDR; its fabric line
+ *     feeds the GIC (SPI) or the AXI INTC input depending on the build, chosen
+ *     by the IRQ_SEL_CASCADE selection (INTC id under a cascade root, GIC id
+ *     otherwise).
+ *
+ * PS is preferred when XSpiPs exists in the BSP; otherwise fall back to the PL
+ * AXI SPI. Define SPI_SEL_PL / SPI_SEL_PS before this point to force one.
+ */
+#if !defined(SPI_SEL_PS) && !defined(SPI_SEL_PL)
+#if defined(XPAR_XSPIPS_NUM_INSTANCES) || defined(XPAR_XSPIPS_0_BASEADDR)
+#define SPI_SEL_PS
+#elif defined(XPAR_XSPI_NUM_INSTANCES) || defined(XPAR_XSPI_0_BASEADDR)
+#define SPI_SEL_PL
+#endif
+#endif
+
+#if defined(SPI_SEL_PS)
+
+#define SPI_IDENTIFIER		XPAR_XSPIPS_0_BASEADDR
+#define SPI_OPS			&capi_spi_xilinx_ps_ops
+#define SPI_EXTRA_TYPE		struct capi_spi_xilinx_config
+#if defined(XPAR_XSPIPS_0_INTERRUPTS)
+#define SPI_IRQ_ID		(XGet_IntrId(XPAR_XSPIPS_0_INTERRUPTS) + \
+				 XGet_IntrOffset(XPAR_XSPIPS_0_INTERRUPTS))
+#define SPI_EXTRA_INIT		{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_GIC(SPI_IRQ_ID) }
+#else
+/* No interrupt wired (polled build): sync transfers only. */
+#define SPI_EXTRA_INIT		{ .use_irq = false }
+#endif /* XPAR_XSPIPS_0_INTERRUPTS */
+
+#elif defined(SPI_SEL_PL)
+
+#define SPI_IDENTIFIER		XPAR_XSPI_0_BASEADDR
+#define SPI_OPS			&capi_spi_xilinx_pl_ops
+#define SPI_EXTRA_TYPE		struct capi_spi_xilinx_config
+/*
+ * An XSA built without fabric interrupts emits no XPAR_XSPI_0_INTERRUPTS at
+ * all, so the presence of that macro decides whether an IRQ exists. When it is
+ * present the fabric line goes to the AXI INTC (cascade root) or straight to
+ * the GIC, chosen by the IRQ_SEL_CASCADE selection rather than by a per-node
+ * INTERRUPT_PARENT check.
+ */
+#if defined(XPAR_XSPI_0_INTERRUPTS)
+#if defined(IRQ_SEL_CASCADE)
+/* Cascade root: the fabric line is an AXI INTC input (raw local number). */
+#define SPI_IRQ_ID		XPAR_FABRIC_XSPI_0_INTR
+#define SPI_EXTRA_INIT		{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_INTC(SPI_IRQ_ID) }
+#else
+/* GIC root: resolve the SDT-encoded fabric line to a GIC id. */
+#define SPI_IRQ_ID		(XGet_IntrId(XPAR_XSPI_0_INTERRUPTS) + \
+				 XGet_IntrOffset(XPAR_XSPI_0_INTERRUPTS))
+#define SPI_EXTRA_INIT		{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_GIC(SPI_IRQ_ID) }
+#endif
+#else
+/* No fabric interrupt wired (polled build): sync transfers only. */
+#define SPI_EXTRA_INIT		{ .use_irq = false }
+#endif /* XPAR_XSPI_0_INTERRUPTS */
+
+#endif /* SPI_SEL_* */
+
+/*
+ * SPI async delivery mode (pinned with the GIC/INTC/none build axis). Derived
+ * from the selected backend's interrupt macro, exactly as I2C_MASTER_HAS_IRQ is
+ * below: an XSA built without fabric interrupts emits no XPAR_XSPI_0_INTERRUPTS,
+ * so SPI_EXTRA_INIT above sets use_irq = false and the driver rejects every
+ * async op with -ENOTSUP. SPI_HAS_IRQ must track that, or the async subtests run
+ * against a polled controller and FAIL instead of SKIP.
+ */
+#if (defined(SPI_SEL_PS) && defined(XPAR_XSPIPS_0_INTERRUPTS)) || \
+    (defined(SPI_SEL_PL) && defined(XPAR_XSPI_0_INTERRUPTS))
+#define SPI_HAS_IRQ		1	/* async via interrupt available */
+#else
+#define SPI_HAS_IRQ		0
+#endif
+
+#define SPI_HAS_DMA		0	/* async via DMA available */
+
+/*
+ * clk_freq_hz is the controller REFERENCE clock, not the requested SCLK. Leave
+ * it 0 so the driver keeps the BSP value (XPAR_XSPIPS_0_SPI_CLK_FREQ_HZ,
+ * ~166.67 MHz); the requested bus rate is set via SPI_DEVICE_SPEED_HZ
+ * (max_speed_hz) below. Passing the intended SCLK here instead would overwrite
+ * InputClockHz and make the prescaler divide the wrong base, running SCLK far
+ * too fast.
+ */
+#define SPI_CLK_FREQ		0U
+
+#define SPI_DEVICE_NATIVE_CS	0x01U
+#define SPI_DEVICE_MODE		CAPI_SPI_MODE_0
+/*
+ * max_speed_hz. PS SPI (XSpiPs) has a runtime prescaler and accepts a requested
+ * rate. PL AXI Quad SPI has NO runtime divider — its SCLK ratio is fixed in HDL
+ * (C_SCK_RATIO), so any non-zero max_speed_hz makes the driver return -ENOTSUP
+ * (=134 in newlib baremetal). Request 0 for PL to keep the HDL-fixed rate.
+ */
+#if defined(SPI_SEL_PL)
+#define SPI_DEVICE_SPEED_HZ	0U
+#else
+#define SPI_DEVICE_SPEED_HZ	1000000U
+#endif
 
 #endif /* __PARAMETERS_H__ */
