@@ -304,6 +304,115 @@ extern const struct capi_i2c_config i2c_target_config;
 extern struct capi_i2c_device i2c_target_dev;
 #endif /* I2C_TARGET_OPS */
 
+#ifdef UART_ASYNC_OPS
+/*
+ * Second UART instance, wired in EXTERNAL loopback (TX strapped to RX on the
+ * board) and used only by test_uart.c. It is deliberately NOT the console UART
+ * above: the framework's report transport must stay untouched, since the speed
+ * case reprograms the line rate mid-run and a console reconfigured underneath
+ * the log would silence it.
+ *
+ * Internal/local loopback is never used -- uart_async_line_config.loopback is
+ * false -- so every case moves bytes over the real wire.
+ */
+
+/* Line rate the loopback UART is brought up at and restored to. */
+#ifndef UART_ASYNC_BAUDRATE
+#define UART_ASYNC_BAUDRATE	115200U
+#endif /* UART_ASYNC_BAUDRATE */
+
+/*
+ * Reference clock feeding the UART's baud generator. 0 keeps whatever the BSP
+ * configured; a core whose clock the BSP does not publish (a PL UART) sets its
+ * synthesized frequency here, since the baud divider is computed from it.
+ */
+#ifndef UART_ASYNC_CLK_FREQ_HZ
+#define UART_ASYNC_CLK_FREQ_HZ	0U
+#endif /* UART_ASYNC_CLK_FREQ_HZ */
+
+/*
+ * The two rates the speed case times against each other. They must be far
+ * enough apart that the ratio survives the software floor; ~12x here.
+ */
+#ifndef UART_ASYNC_BAUD_SLOW
+#define UART_ASYNC_BAUD_SLOW	9600U
+#endif /* UART_ASYNC_BAUD_SLOW */
+
+#ifndef UART_ASYNC_BAUD_FAST
+#define UART_ASYNC_BAUD_FAST	115200U
+#endif /* UART_ASYNC_BAUD_FAST */
+
+/*
+ * Speed-case payload. At 9600 baud, 256 bytes is ~266 ms on the wire, well
+ * clear of the floor below; at 115200 it is ~22 ms, still clear.
+ */
+#ifndef UART_ASYNC_SPEED_LEN
+#define UART_ASYNC_SPEED_LEN	256U
+#endif /* UART_ASYNC_SPEED_LEN */
+
+/*
+ * TX buffer length for the TX_BUSY case. It must exceed the deepest backend TX
+ * FIFO or the transfer drains during the fill and drops straight to done,
+ * leaving TX_BUSY nothing to reject against. A platform whose FIFO is deeper
+ * than this raises it in parameters.h.
+ */
+#ifndef UART_ASYNC_LEN
+#define UART_ASYNC_LEN		128U
+#endif /* UART_ASYNC_LEN */
+
+/*
+ * Floor (microseconds) below which a measured transfer time is dominated by the
+ * async poll granularity + ISR latency + timer resolution rather than on-wire
+ * time, so a fast-vs-slow comparison cannot resolve the baud change. Legs
+ * shorter than this skip the direction assert. Override in parameters.h to
+ * match a platform's measured floor.
+ */
+#ifndef UART_ASYNC_SPEED_MIN_RESOLVABLE_US
+#define UART_ASYNC_SPEED_MIN_RESOLVABLE_US	5000U
+#endif /* UART_ASYNC_SPEED_MIN_RESOLVABLE_US */
+
+/*
+ * Capability axes, one per gated case. A platform sets these in parameters.h
+ * from its selected backend; the defaults below assume a fully-featured,
+ * IRQ-wired UART.
+ *
+ *   UART_ASYNC_HAS_IRQ - an interrupt is wired to the mapped UART, so use_irq
+ *                  is true and the driver accepts the async ops. A polled build
+ *                  clears it and every async case skips instead of failing on
+ *                  -ENOTSUP. MUST be derived from the same XPAR_*_INTERRUPTS
+ *                  macro that decides use_irq, or the two disagree.
+ *   UART_ASYNC_HAS_LINE_CONFIG - the line format can be reprogrammed at runtime.
+ *                  UART Lite fixes it in the IP, so its set_line_config is
+ *                  unconditionally -ENOTSUP and the speed case has nothing to
+ *                  measure.
+ *   UART_ASYNC_HAS_IRQ_CTL - the backend exposes per-source interrupt masking
+ *                  (set_irq_tx / set_irq_rx / set_irq_err). UART Lite has a
+ *                  single shared enable bit and STM32 lacks the calls entirely.
+ *   UART_ASYNC_HAS_RX_TIMEOUT - an incomplete receive can raise a non-terminal
+ *                  RX_TIMEOUT event. UART Lite has no receive-timeout source.
+ */
+#ifndef UART_ASYNC_HAS_IRQ
+#define UART_ASYNC_HAS_IRQ	1
+#endif /* UART_ASYNC_HAS_IRQ */
+
+#ifndef UART_ASYNC_HAS_LINE_CONFIG
+#define UART_ASYNC_HAS_LINE_CONFIG	1
+#endif /* UART_ASYNC_HAS_LINE_CONFIG */
+
+#ifndef UART_ASYNC_HAS_IRQ_CTL
+#define UART_ASYNC_HAS_IRQ_CTL	1
+#endif /* UART_ASYNC_HAS_IRQ_CTL */
+
+#ifndef UART_ASYNC_HAS_RX_TIMEOUT
+#define UART_ASYNC_HAS_RX_TIMEOUT	1
+#endif /* UART_ASYNC_HAS_RX_TIMEOUT */
+
+/**
+ * @brief CAPI UART configuration for the external-loopback tests.
+ */
+extern const struct capi_uart_config uart_async_config;
+#endif /* UART_ASYNC_OPS */
+
 #ifdef DMA_OPS
 #include "capi_dma.h"
 

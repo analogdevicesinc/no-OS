@@ -22,6 +22,10 @@
 #endif
 
 /**
+* @brief Wait callback for the test framework; delays the specified microseconds.
+* @param context - Unused.
+* @param us - Microseconds to delay.
+*/
 static void test_wait_us(void *context, uint32_t us)
 {
 	(void)context;
@@ -35,6 +39,8 @@ static void test_wait_us(void *context, uint32_t us)
  * @return 0 in case of success, negative error code otherwise.
  */
 /*
+ * The polled CAPI transmit may fill the UART TX FIFO in one shot(bad implementation or device specific);
+ * a request larger than the FIFO leaves bytes undrained and wedges the console. Send in
  * FIFO-sized chunks so every call completes cleanly.
  */
 #define TEST_UART_TX_CHUNK	32U
@@ -73,12 +79,28 @@ static struct capi_uart_line_config uart_line_config = {
 };
 
 /**
+ * @brief Platform-specific extra data for the console UART.
+ */
+static UART_EXTRA_TYPE uart_extra = UART_EXTRA_INIT;
+
+/*
+ * Console clock select. A platform's parameters.h may pin this (e.g. the Maxim
+ * MAX32690 boards clock the console from IBRO); default 0 lets the backend pick
+ * its own clock (APB on Maxim), which is what every other platform expects.
+ */
+#ifndef UART_CLK_FREQ_HZ
+#define UART_CLK_FREQ_HZ 0U
+#endif
+
+/**
  * @brief CAPI UART configuration used as the test report transport.
  */
 const struct capi_uart_config uart_config = {
 	.identifier = UART_IDENTIFIER,
 	.dma_handle = NULL,
+	.clk_freq_hz = UART_CLK_FREQ_HZ,
 	.line_config = &uart_line_config,
+	.extra = &uart_extra,
 	.ops = UART_OPS,
 };
 
@@ -299,6 +321,44 @@ struct capi_i2c_device i2c_target_dev = {
 	.extra = NULL,
 };
 #endif /* I2C_TARGET_OPS */
+
+#ifdef UART_ASYNC_OPS
+/**
+ * @brief Line configuration for the external-loopback UART.
+ *
+ * loopback stays FALSE on purpose: the fixture is an EXTERNAL strap (TX pin
+ * wired to RX pin on the board), so the internal/local loopback mode would
+ * bypass exactly the wire the tests are meant to exercise.
+ */
+static struct capi_uart_line_config uart_async_line_config = {
+	.baudrate = UART_ASYNC_BAUDRATE,
+	.size = CAPI_UART_DATA_BITS_8,
+	.parity = CAPI_UART_PARITY_NONE,
+	.stop_bits = CAPI_UART_STOP_1_BIT,
+	.flow_control = CAPI_UART_FLOW_CONTROL_NONE,
+	.address_mode = CAPI_UART_ADDRESS_MODE_DISABLED,
+	.device_address = 0U,
+	.sticky_parity = false,
+	.loopback = false,
+};
+
+/**
+ * @brief Platform-specific extra data for the external-loopback UART.
+ */
+static UART_ASYNC_EXTRA_TYPE uart_async_extra = UART_ASYNC_EXTRA_INIT;
+
+/**
+ * @brief CAPI UART configuration for the external-loopback tests.
+ */
+const struct capi_uart_config uart_async_config = {
+	.identifier = UART_ASYNC_IDENTIFIER,
+	.dma_handle = NULL,
+	.clk_freq_hz = UART_ASYNC_CLK_FREQ_HZ,
+	.line_config = &uart_async_line_config,
+	.extra = &uart_async_extra,
+	.ops = UART_ASYNC_OPS,
+};
+#endif /* UART_ASYNC_OPS */
 
 #ifdef DMA_OPS
 /**
