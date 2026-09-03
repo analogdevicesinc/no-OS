@@ -11,6 +11,8 @@
 
 #include <xparameters.h>
 #include "xilinx_capi_gpio.h"
+#include "xilinx_capi_irq.h"
+#include "xinterrupt_wrap.h"
 
 /*
  * Cora Z7 configuration
@@ -21,6 +23,7 @@
  *      	   					        SCU    PS
  *
  */
+/* GIC only — no CASCADE, no NOIRQ */
 #define GPIO_SEL_PS
 #define PLATFORM_NAME		"XILINX"
 
@@ -127,5 +130,9 @@
 #else
 #define GPIO_IRQ_EVENTS_PER_EDGE	1U
 #endif
+
+/* GIC-only IRQ topology */
+#define IRQ_CTRL_IDENTIFIER	XPAR_XSCUGIC_0_BASEADDR
+#define IRQ_CTRL_EXTRA		NULL
 
 #endif /* __PARAMETERS_H__ */
