@@ -200,9 +200,11 @@ int basic_example_main()
 		},
 		{
 			.jdev = ad9088_phy->jdev,
-			.link_ids = {FRAMER_LINK_A0_RX,
-				     DEFRAMER_LINK_A0_TX},
-			.links_number = 2,
+			.link_ids = {DEFRAMER_LINK_A0_TX,
+				     DEFRAMER_LINK_B0_TX,
+				     FRAMER_LINK_A0_RX,
+				     FRAMER_LINK_B0_RX},
+			.links_number = 4,
 			.is_top_device = true,
 		},
 	};
