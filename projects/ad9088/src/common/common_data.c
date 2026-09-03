@@ -288,6 +288,7 @@ struct jesd204_rx_init rx_jesd204_ip = {
 #ifdef CONFIG_ALTERA_PLATFORM_NIOSV
 	.refclk_ready = &rx_refclk_ready_ip,
 	.gts_pll_base = GTS_PLL_RX_BASEADDR,
+	.xcvr_base = RX_XCVR_BASEADDR,
 #endif
 };
 
@@ -299,6 +300,7 @@ struct jesd204_tx_init tx_jesd204_ip = {
 #ifdef CONFIG_ALTERA_PLATFORM_NIOSV
 	.refclk_ready = &tx_refclk_ready_ip,
 	.gts_pll_base = GTS_PLL_TX_BASEADDR,
+	.xcvr_base = TX_XCVR_BASEADDR,
 #endif
 };
 

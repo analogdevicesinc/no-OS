@@ -56,10 +56,15 @@ int basic_example_main()
 	struct axi_jesd204_tx *tx_jesd;
 #ifndef CONFIG_ALTERA_PLATFORM_NIOSV
 	/*
-	 * The AD9084-EBZ Agilex 5 bitstream uses Intel E-Tile PHY cores
-	 * (jesd204_phy_a/b) whose reset is driven by the axi_jesd204 link
-	 * cores, not by an ADI adxcvr wrapper. There is no adxcvr to
-	 * configure there, so these handles exist only on the Xilinx path.
+	 * The Agilex 5 bitstream does have an ADI adxcvr control core per
+	 * direction (hdl library/intel/adi_jesd204 instantiates axi_adxcvr as
+	 * "axi_xcvr", exported as the link_management window), but neither
+	 * adxcvr driver in the tree fits it: axi_adxcvr.c is Xilinx-only and
+	 * altera_adxcvr.c reprograms Arria10/Stratix10 ATX and CDR PLLs through
+	 * per-lane PMA windows that GTS does not expose. The GTS PHY is fully
+	 * configured by the bitstream, so all that is left is releasing the
+	 * transceiver from reset, which axi_jesd204_{rx,tx}.c does directly from
+	 * xcvr_base. These handles therefore exist only on the Xilinx path.
 	 */
 	struct adxcvr *rx_adxcvr;
 	struct adxcvr *tx_adxcvr;
@@ -119,10 +124,10 @@ int basic_example_main()
 
 #ifndef CONFIG_ALTERA_PLATFORM_NIOSV
 	/*
-	 * Xilinx path only: configure the ADI adxcvr transceivers. On Agilex
-	 * the E-Tile PHYs are configured by the bitstream and reset by the
-	 * axi_jesd204 link cores, so the lane clocks keep xcvr == NULL and
-	 * jesd204_clk_{enable,set_rate} no-op on the transceiver.
+	 * Xilinx path only: configure the ADI adxcvr transceivers. On Agilex the
+	 * lane clocks keep xcvr == NULL - jesd204_clk.c speaks the Xilinx adxcvr
+	 * API - and the transceiver is instead released from reset inside the
+	 * link cores' CLOCKS_ENABLE handler.
 	 */
 	ret = adxcvr_init(&tx_adxcvr, &tx_adxcvr_ip);
 	if (ret) {

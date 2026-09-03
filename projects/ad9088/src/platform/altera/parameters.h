@@ -147,8 +147,8 @@ extern struct altera_gpio_init_param	altera_gpio_param;
  */
 #define GPIO_REFCLK_READY_RX    (GPIO_OFFSET + 24) /* gpio_o[56] */
 #define GPIO_REFCLK_READY_TX    (GPIO_OFFSET + 25) /* gpio_o[57] */
-#define GTS_PLL_RX_BASEADDR		0x010A6000 /* gts_pll_a (PHY A / RX) */
-#define GTS_PLL_TX_BASEADDR		0x020A6000 /* gts_pll_b (PHY B / TX) */
+#define GTS_PLL_RX_BASEADDR		0
+#define GTS_PLL_TX_BASEADDR		0x020A6000 /* gts_pll_b, matches the DT */
 
 /* Capture depth, in samples per converter. */
 #define ADC_BUFFER_SAMPLES		16384
