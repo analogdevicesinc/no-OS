@@ -83,6 +83,8 @@ struct axi_jesd204_rx {
 	struct no_os_gpio_desc *refclk_ready;
 	/** Optional Intel GTS PLL reconfiguration window base address */
 	uint32_t gts_pll_base;
+	/** Optional Intel axi_xcvr (link_management) window base address */
+	uint32_t xcvr_base;
 #endif
 };
 
@@ -116,6 +118,8 @@ struct jesd204_rx_init {
 	struct no_os_gpio_init_param *refclk_ready;
 	/** Optional Intel GTS PLL reconfiguration window base address */
 	uint32_t gts_pll_base;
+	/** Optional Intel axi_xcvr (link_management) window base address */
+	uint32_t xcvr_base;
 #endif
 };
 

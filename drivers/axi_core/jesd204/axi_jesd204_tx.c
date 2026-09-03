@@ -42,6 +42,9 @@
 #include "no_os_axi_io.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+#include "altera_gts_xcvr.h"
+#endif
 
 #define JESD204_TX_REG_VERSION			0x00
 #define JESD204_TX_REG_MAGIC			0x0c
@@ -131,49 +134,6 @@ static int axi_jesd_ext_reset(struct no_os_gpio_desc *reset,
 	return -ETIMEDOUT;
 }
 
-#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
-/*
- * Intel GTS PLL refclk-buffer request, reg 0x0e bits [23:16]. The field must be
- * written as a byte: reg 0x0e also carries state that a 32-bit write clobbers.
- * The request bit self-clears, so a readback is not a success indicator - only
- * the measured link clock is.
- */
-#define GTS_REFCLK_BUFFER_REQ_BYTE	(0x0e * 4 + 2)
-
-/**
- * @brief Bring up an Intel GTS transceiver reference clock.
- * @param refclk_ready - GPIO gating the HDL gts_refclk_reset state machine.
- * @param gts_pll_base - Base address of the bank's GTS PLL reconfig window.
- * @return 0 on success, negative error code otherwise.
- *
- * GTS PHYs (Agilex 5) get no reference clock until software gates them on, and
- * there is one intel_systemclk_gts PLL per transceiver bank, so each link core
- * brings up its own bank. Ported from Linux altera_adxcvr.c
- * adxcvr_jesd204_link_setup().
- */
-static int axi_jesd_gts_refclk_setup(struct no_os_gpio_desc *refclk_ready,
-				     uint32_t gts_pll_base)
-{
-	int ret;
-
-	if (refclk_ready) {
-		ret = no_os_gpio_direction_output(refclk_ready, NO_OS_GPIO_HIGH);
-		if (ret)
-			return ret;
-
-		/* Let the state machine ack and the FPGA-internal PLL lock. */
-		no_os_mdelay(100);
-	}
-
-	if (gts_pll_base) {
-		*(volatile uint8_t *)(uintptr_t)(gts_pll_base +
-						 GTS_REFCLK_BUFFER_REQ_BYTE) = 0xff;
-		no_os_mdelay(10);
-	}
-
-	return 0;
-}
-#endif
 
 /**
  * @brief JESD204 TX AXI Data Write.
@@ -647,6 +607,19 @@ static int axi_jesd204_tx_jesd204_link_pre_setup(struct jesd204_dev *jdev,
 			 __func__, lnk->link_id, lane_rate);
 	}
 
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+	/*
+	 * Reset is released here, at LINK_PRE_SETUP - which is BEFORE refclk_ready is
+	 * gated on at LINK_SETUP. That looks backwards but is what Linux does: its
+	 * adxcvr hangs off the lane clock, so the set_rate above is what toggles
+	 * RESETN (altera_adxcvr.c adxcvr_dummy_pll_set_rate ->
+	 * adxcvr_finalize_lane_rate_change) and clk_set_rate(lane_clk) likewise sits
+	 * in axi_jesd204_rx_jesd204_link_pre_setup there. The GTS reset controller
+	 * waits for the reference clock, so it completes once LINK_SETUP arrives.
+	 */
+	altera_gts_xcvr_reset(jesd->name, jesd->xcvr_base);
+#endif
+
 	return JESD204_STATE_CHANGE_DONE;
 }
 
@@ -672,7 +645,7 @@ static int axi_jesd204_tx_jesd204_link_setup(struct jesd204_dev *jdev,
 		 lnk->link_id, jesd204_state_op_reason_str(reason));
 
 #ifdef CONFIG_ALTERA_PLATFORM_NIOSV
-	ret = axi_jesd_gts_refclk_setup(jesd->refclk_ready, jesd->gts_pll_base);
+	ret = altera_gts_refclk_setup(jesd->refclk_ready, jesd->gts_pll_base);
 	if (ret) {
 		pr_err("%s: Link%u GTS refclk setup failed (%d)\n",
 		       __func__, lnk->link_id, ret);
@@ -988,6 +961,7 @@ int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
 	if (init->refclk_ready)
 		no_os_gpio_get_optional(&jesd->refclk_ready, init->refclk_ready);
 	jesd->gts_pll_base = init->gts_pll_base;
+	jesd->xcvr_base = init->xcvr_base;
 #endif
 
 	ret = jesd204_dev_register(&jesd->jdev, &jesd204_axi_jesd204_tx_init);
