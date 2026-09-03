@@ -10,6 +10,8 @@
 #define __PARAMETERS_H__
 
 #include <xparameters.h>
+#include "capi_uart.h"
+#include "xilinx_capi_uart.h"
 #include "xilinx_capi_gpio.h"
 #include "xilinx_capi_spi.h"
 #include "xilinx_capi_timer.h"
@@ -33,6 +35,15 @@
 #define I2C_SEL_PL
 #define I2C_TARGET_SEL_PS
 #define TIMER_SELECT		TIMER_SEL_AXI
+#define UART_ASYNC_SEL_PS
+/* #define UART_ASYNC_SEL_PL_LITE */
+
+#define UART_IDENTIFIER		XPAR_XUARTPS_0_BASEADDR
+
+#define UART_OPS		&capi_uart_xilinx_ps_ops
+#define UART_EXTRA_TYPE		struct capi_uart_xilinx_config
+#define UART_EXTRA_INIT		{ .use_irq = false }
+#define UART_BAUDRATE		115200U
 #define PLATFORM_NAME		"XILINX"
 
 /*
@@ -142,6 +153,167 @@
 /* GIC-only IRQ topology */
 #define IRQ_CTRL_IDENTIFIER	XPAR_XSCUGIC_0_BASEADDR
 #define IRQ_CTRL_EXTRA		NULL
+
+/*
+ * Second UART, wired in EXTERNAL loopback (TX strapped to RX on the board) and
+ * driven by test_uart.c. It is never the console mapped above: the speed case
+ * reprograms the line rate mid-run, and doing that to the report transport
+ * would silence the log. Two PL cores can carry it:
+ *
+ *   AXI UART 16550 (XUartNs550, capi_uart_xilinx_pl_ns550_ops):
+ *     Full CAPI surface -- runtime line config (baud/parity/stop) and per-source
+ *     interrupt masking. Its baud divider is computed from the synthesized
+ *     input clock, so XPAR_XUARTNS550_0_CLOCK_FREQ must be passed through.
+ *
+ *   AXI UART Lite (XUartLite, capi_uart_xilinx_pl_lite_ops):
+ *     Line format is fixed in the IP (set_line_config is always -ENOTSUP) and
+ *     there is a single shared interrupt-enable bit rather than per-source
+ *     masks, so ASYNC_SPEED and ASYNC_IRQ have nothing to exercise on it.
+ *
+ * Pick one with UART_ASYNC_SEL_PL_NS550 / UART_ASYNC_SEL_PL_LITE in the board
+ * configuration at the top of this file -- which core the strap is actually
+ * soldered to is a board fact the BSP cannot report, so it is stated by hand
+ * like every other _SEL_ here. Left unset, NS550 is auto-picked when present
+ * because it covers strictly more of the API, falling back to UART Lite. With
+ * neither core in the BSP, UART_ASYNC_OPS stays undefined and the whole group
+ * compiles out to a stub (test_uart.c gates on #ifdef UART_ASYNC_OPS).
+ *
+ * This block sits BELOW the IRQ topology above on purpose: the fabric line is
+ * encoded as an AXI INTC input or a GIC id from IRQ_SEL_CASCADE, which that
+ * section may set by default rather than by hand at the top of this file.
+ */
+#if !defined(UART_ASYNC_SEL_PL_NS550) && !defined(UART_ASYNC_SEL_PL_LITE) && \
+    !defined(UART_ASYNC_SEL_PS)
+#if defined(XPAR_XUARTNS550_NUM_INSTANCES) || defined(XPAR_XUARTNS550_0_BASEADDR)
+#define UART_ASYNC_SEL_PL_NS550
+#elif defined(XPAR_XUARTLITE_NUM_INSTANCES) || defined(XPAR_XUARTLITE_0_BASEADDR)
+#define UART_ASYNC_SEL_PL_LITE
+#endif
+#endif
+
+#if defined(UART_ASYNC_SEL_PL_NS550)
+
+#define UART_ASYNC_IDENTIFIER	XPAR_XUARTNS550_0_BASEADDR
+#define UART_ASYNC_OPS		&capi_uart_xilinx_pl_ns550_ops
+#define UART_ASYNC_EXTRA_TYPE	struct capi_uart_xilinx_config
+/*
+ * The 16550's baud generator divides this clock; the BSP does not program it,
+ * so the synthesized value has to be handed over or every rate comes out wrong.
+ */
+#define UART_ASYNC_CLK_FREQ_HZ	XPAR_XUARTNS550_0_CLOCK_FREQ
+#if defined(XPAR_XUARTNS550_0_INTERRUPTS)
+#define UART_ASYNC_IRQ_ID	(XGet_IntrId(XPAR_XUARTNS550_0_INTERRUPTS) + \
+				 XGet_IntrOffset(XPAR_XUARTNS550_0_INTERRUPTS))
+#define UART_ASYNC_EXTRA_INIT	{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_GIC(UART_ASYNC_IRQ_ID) }
+#else
+#define UART_ASYNC_EXTRA_INIT	{ .use_irq = false }
+#endif
+
+/* The 16550 implements line config, per-source masks, and RX timeout events. */
+#define UART_ASYNC_HAS_LINE_CONFIG	1
+#define UART_ASYNC_HAS_IRQ_CTL		1
+#define UART_ASYNC_HAS_RX_TIMEOUT	1
+
+#elif defined(UART_ASYNC_SEL_PL_LITE)
+
+#define UART_ASYNC_IDENTIFIER	XPAR_XUARTLITE_0_BASEADDR
+#define UART_ASYNC_OPS		&capi_uart_xilinx_pl_lite_ops
+#define UART_ASYNC_EXTRA_TYPE	struct capi_uart_xilinx_config
+/* UART Lite's rate is fixed at synthesis; there is no divider to feed. */
+#define UART_ASYNC_CLK_FREQ_HZ	0U
+#if defined(XPAR_XUARTLITE_0_INTERRUPTS)
+#define UART_ASYNC_IRQ_ID	(XGet_IntrId(XPAR_XUARTLITE_0_INTERRUPTS) + \
+				 XGet_IntrOffset(XPAR_XUARTLITE_0_INTERRUPTS))
+#define UART_ASYNC_EXTRA_INIT	{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_GIC(UART_ASYNC_IRQ_ID) }
+#else
+#define UART_ASYNC_EXTRA_INIT	{ .use_irq = false }
+#endif
+
+/*
+ * The IP fixes the line format at synthesis (set_line_config is unconditionally
+ * -ENOTSUP) and exposes one shared interrupt-enable bit instead of per-source
+ * masks (set_irq_tx/rx/err are -ENOTSUP). It also has no receive-timeout
+ * interrupt, so the timeout-continuation part of ASYNC_BASIC is inapplicable.
+ */
+#define UART_ASYNC_HAS_LINE_CONFIG	0
+#define UART_ASYNC_HAS_IRQ_CTL		0
+#define UART_ASYNC_HAS_RX_TIMEOUT	0
+
+#elif defined(UART_ASYNC_SEL_PS)
+
+/*
+ * PS UART 1, NOT 0: UART_IDENTIFIER above maps UART 0 as the console, and the
+ * loopback UART must be a different instance (test_uart reprograms the line
+ * rate and strap-loops TX into RX -- doing that to the report transport kills
+ * the log). main.c enforces the distinction with a #error, so mapping instance
+ * 0 here fails the build rather than silently hanging the run. The Zynq PS has
+ * two UARTs and the BSP reports both.
+ */
+#define UART_ASYNC_IDENTIFIER	XPAR_XUARTPS_1_BASEADDR
+#define UART_ASYNC_OPS		&capi_uart_xilinx_ps_ops
+#define UART_ASYNC_EXTRA_TYPE	struct capi_uart_xilinx_config
+/* The PS UART's baud generator is programmed by the driver from the fixed
+ * PS peripheral clock; nothing has to be handed over here. */
+#define UART_ASYNC_CLK_FREQ_HZ	0U
+/*
+ * The PS UART interrupt is a fixed PS SPI line, so it is always a GIC id (never
+ * an AXI INTC input) and is present regardless of whether any fabric interrupt
+ * was wired. That is what lets the no-IRQ build still run async on it: the PL
+ * cores lose their fabric lines, but XPAR_XUARTPS_1_INTERRUPTS stays. Note this
+ * tracks instance 1, the loopback UART mapped above -- not the console's 0.
+ */
+#if defined(XPAR_XUARTPS_1_INTERRUPTS)
+#define UART_ASYNC_IRQ_ID	(XGet_IntrId(XPAR_XUARTPS_1_INTERRUPTS) + \
+				 XGet_IntrOffset(XPAR_XUARTPS_1_INTERRUPTS))
+#define UART_ASYNC_EXTRA_INIT	{ .use_irq = true, \
+				  .irq_id = CAPI_IRQ_XILINX_GIC(UART_ASYNC_IRQ_ID) }
+#else
+#define UART_ASYNC_EXTRA_INIT	{ .use_irq = false }
+#endif /* XPAR_XUARTPS_1_INTERRUPTS */
+
+/* The PS UART implements line config, per-source masks, and RX timeout events. */
+#define UART_ASYNC_HAS_LINE_CONFIG	1
+#define UART_ASYNC_HAS_IRQ_CTL		1
+#define UART_ASYNC_HAS_RX_TIMEOUT	1
+
+#endif /* UART_ASYNC_SEL_* */
+
+/*
+ * Async delivery for the loopback UART, pinned to the GIC/INTC/none build axis
+ * exactly as SPI_HAS_IRQ and I2C_MASTER_HAS_IRQ are: it MUST be derived from the
+ * same XPAR_*_INTERRUPTS macro that made UART_ASYNC_EXTRA_INIT set use_irq, or
+ * the async subtests run against a polled controller and FAIL (-ENOTSUP) where
+ * they should SKIP. Note it is defined AFTER the backend selection above, so it
+ * tracks whichever core was actually mapped.
+ */
+#if (defined(UART_ASYNC_SEL_PL_NS550) && defined(XPAR_XUARTNS550_0_INTERRUPTS)) || \
+    (defined(UART_ASYNC_SEL_PL_LITE) && defined(XPAR_XUARTLITE_0_INTERRUPTS)) || \
+    (defined(UART_ASYNC_SEL_PS) && defined(XPAR_XUARTPS_1_INTERRUPTS))
+#define UART_ASYNC_HAS_IRQ	1	/* async via interrupt available */
+#else
+#define UART_ASYNC_HAS_IRQ	0
+#endif
+
+/*
+ * The two rates ASYNC_SPEED times against each other, and the payload it times.
+ * 256 bytes is ~266 ms at 9600 and ~22 ms at 115200 -- both far above the
+ * software floor, and a ~12x ratio leaves the 10% direction margin untroubled.
+ */
+#define UART_ASYNC_BAUDRATE	115200U
+#define UART_ASYNC_BAUD_SLOW	9600U
+#define UART_ASYNC_BAUD_FAST	115200U
+#define UART_ASYNC_SPEED_LEN	256U
+
+/*
+ * TX buffer length for the async TX_BUSY case. It must be larger than the
+ * deepest backend TX FIFO so the transfer cannot drain synchronously and drop
+ * straight to done: the PS UART holds 64 bytes, so anything at or below that
+ * completed in the fill and left TX_BUSY nothing to reject against. 128 clears
+ * it with margin on every mapped core.
+ */
+#define UART_ASYNC_LEN		128U
 
 /*
  * SPI backend selection, mirroring the GPIO scheme:
