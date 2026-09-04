@@ -81,8 +81,9 @@ extern SPI_HandleTypeDef hspi1;
 #define SPI_HAS_IRQ  1
 #define SPI_HAS_DMA  0
 
-/* IRQ controller — NVIC, no base address needed. */
+/* IRQ controller — NVIC, no base address and no extra config needed. */
 #define IRQ_CTRL_IDENTIFIER		0U
+#define IRQ_CTRL_EXTRA			NULL
 
 /*
  * SPI1 on NUCLEO-F767ZI:
@@ -190,5 +191,16 @@ void i2c_platform_set_target_handle(struct capi_i2c_controller_handle *handle);
 				  .trig = NULL }
 #define DMA_PLATFORM_INIT()	__HAL_RCC_DMA2_CLK_ENABLE()
 #define DMA_XFER_SIZE		64U
+
+/*
+ * The STM32 CAPI DMA backend is polling-only: it implements no
+ * register_complete_callback op, so the CAPI wrapper returns -EINVAL and no
+ * completion interrupt can be delivered. xfer_start() blocks until the transfer
+ * finishes. The DMA ASYNC case is therefore skipped on this platform.
+ */
+#define DMA_HAS_IRQ		0
+
+/* Largest buffer the DMA sizes sweep / increment cases allocate (bytes). */
+#define DMA_MAX_XFER_SIZE	256U
 
 #endif /* __PARAMETERS_H__ */
