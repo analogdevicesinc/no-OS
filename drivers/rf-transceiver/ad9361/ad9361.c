@@ -4206,11 +4206,35 @@ static int32_t ad9361_auxadc_setup(struct ad9361_rf_phy *phy,
  */
 int32_t ad9361_get_temp(struct ad9361_rf_phy *phy)
 {
-	uint32_t val;
+	int32_t val;
 
 	ad9361_spi_writef(phy->spi, REG_AUXADC_CONFIG, AUXADC_POWER_DOWN, 1);
 	val = ad9361_spi_read(phy->spi, REG_TEMPERATURE);
 	ad9361_spi_writef(phy->spi, REG_AUXADC_CONFIG, AUXADC_POWER_DOWN, 0);
+
+	if (val < 0)
+		return val;
+
+	/* REG_TEMPERATURE holds a signed 8-bit reading. Widening it as
+	 * unsigned turns every sub-zero measurement into a plausible-looking
+	 * high one: 0xE7 is -25 counts, or -21.9 C, but reads back as 231
+	 * counts and comes out as 202.6 C.
+	 *
+	 * The part treats this reading as signed elsewhere in the same block,
+	 * which is what the offset is named after: temp_sense_offset_signed,
+	 * written to REG_TEMP_OFFSET and defaulting to 0xCE.
+	 *
+	 * Observed on a bladeRF 2.0 micro xA4 over 9894 readings taken during
+	 * sweeps: 9762 landed in 49.1-57.0 C and a separate cluster of 132 sat
+	 * at 199.1-207.9 C, with nothing in between. A junction 140 C above
+	 * its neighbours, with no intermediate samples and no thermal event,
+	 * is the sign bit rather than the die: read as signed, that cluster
+	 * is -25.4 to -16.7 C.
+	 *
+	 * ad9361_spi_read() returns a negative errno on failure, so the error
+	 * path is taken before the cast rather than being folded into it.
+	 */
+	val = (int8_t)val;
 
 	return NO_OS_DIV_ROUND_CLOSEST(val * 1000000, 1140);
 }
