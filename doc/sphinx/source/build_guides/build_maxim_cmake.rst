@@ -36,6 +36,10 @@ use the vendor toolchain bundled with the Maxim SDK:
          - max32670
        * - ``ad-apard32690-sl``
          - max32690
+       * - ``max32690evkit``
+         - max32690
+       * - ``max32690fthr``
+         - max32690
        * - ``ad-swiot1l-sl``
          - max32650
 
