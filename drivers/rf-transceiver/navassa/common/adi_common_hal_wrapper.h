@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9001-SLA */
 /**
  * \file
  * \brief Contains ADI Hardware Abstraction layer function prototypes and type definitions for adi_common_hal.c
