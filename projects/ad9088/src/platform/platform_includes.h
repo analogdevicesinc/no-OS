@@ -1,9 +1,9 @@
 /***************************************************************************//**
  *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by ADF4382 project.
+ *   @brief  Includes for used platforms used by ad9088 project.
  *   @author CHegbeli (ciprian.hegbeli@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:

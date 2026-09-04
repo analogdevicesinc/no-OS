@@ -200,11 +200,10 @@ static uint32_t dma_example_rx_link_status(void)
  * jesd204 SYSREF callback is deliberately empty because it emits BSYNC
  * continuously, so jesd204_sysref_async_force() would do nothing.
  *
- * What is left is taking the receiver down and bringing it back up -- the same
- * bounce the kernel's watchdog uses when it finds a lane in error, LINK_DISABLE
- * asserted, 100 ms, deasserted. axi_jesd204_rx_lane_clk_enable() also clears
- * SYSREF_STATUS on the way out, so the core re-acquires against whatever phase
- * MCS left behind.
+ * What is left is taking the receiver down and bringing it back up:
+ * LINK_DISABLE asserted, 100 ms, deasserted. axi_jesd204_rx_lane_clk_enable()
+ * also clears SYSREF_STATUS on the way out, so the core re-acquires against
+ * whatever phase MCS left behind.
  *
  * The whole FSM is never restarted: that would re-run MCS and break the link
  * again.

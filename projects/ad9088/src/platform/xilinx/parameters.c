@@ -1,9 +1,9 @@
 /***************************************************************************//**
  *   @file   parameters.c
- *   @brief  Definition of xilinx platform data used by iio_demo project.
+ *   @brief  Definition of xilinx platform data used by ad9088 project.
  *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
