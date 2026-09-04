@@ -84,6 +84,28 @@ function(config_xilinx_sdk BUILD_TARGET)
     target_include_directories(no-os PUBLIC "${_bsp_inc}")
     target_link_directories(${BUILD_TARGET} PUBLIC "${_bsp_lib}")
 
+    # Vitis 2025+ emits SDT (System Device Tree) BSPs: driver config tables are
+    # keyed by BASE ADDRESS and Xxx_LookupConfig() takes a base address, not a
+    # classic DeviceId. no-OS switches to that ABI under -DSDT, and the BSP is
+    # compiled with -DSDT, so the no-OS app MUST match -- otherwise SPI/GPIO
+    # lookups resolve to the wrong (base 0) controller at runtime. Detect SDT by
+    # the absence of the classic numeric XPAR_*_DEVICE_ID macros in the generated
+    # xparameters.h (xilinx_compat.h re-adds fallbacks via a separate #include,
+    # so xparameters.h itself stays a reliable signal).
+    #
+    # Opt-in per project: only projects whose app and drivers have been validated
+    # under SDT set NOOS_XILINX_SDT before config_platform_sdk(). This keeps the
+    # ABI switch from silently flipping on for boards/projects never exercised
+    # under SDT (e.g. Zynq-7000 ps7); those keep building exactly as before.
+    if(NOOS_XILINX_SDT)
+        file(STRINGS "${_bsp_inc}/xparameters.h" _classic_devid
+             REGEX "_DEVICE_ID[ \t]+[0-9]")
+        if(NOT _classic_devid)
+            message(STATUS "Xilinx BSP is SDT; compiling no-os with -DSDT")
+            target_compile_definitions(no-os PUBLIC SDT)
+        endif()
+    endif()
+
     # Linker script + Xilinx BSP libraries on the final executable.
     target_link_options(${BUILD_TARGET} PRIVATE -T${_lscript} -Wl,-build-id=none)
     if("${XILINX_ARCH}" MATCHES "cortexa9")

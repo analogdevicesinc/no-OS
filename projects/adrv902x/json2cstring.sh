@@ -31,7 +31,11 @@
 #     ./json2cstring.sh path/to/file.json
 #
 # Check if the first argument is equal to a specific string
-CFILE="${1%.json}.h"
+CFILE="${1%.json}"
+case "$CFILE" in
+	*.profile) CFILE="${CFILE%.profile}_profile.h" ;;
+	*)         CFILE="${CFILE}.h" ;;
+esac
 \cp -f $1 $CFILE
 sed -i '$ ! s/$/ \\n\\/' $CFILE
 sed -i '$s/$/ \\/' $CFILE
