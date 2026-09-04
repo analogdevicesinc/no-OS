@@ -1,0 +1,40 @@
+menu "LTC4284 Configuration"
+
+choice LTC4284_EXAMPLE
+	prompt "Example variant"
+	default LTC4284_BASIC_EXAMPLE
+
+config LTC4284_BASIC_EXAMPLE
+	bool "Basic monitoring example"
+	help
+	  Continuously monitors LTC4284 telemetry (VIN, IIN, VOUT, power,
+	  energy, temperature) and decodes fault bits. Suitable for both
+	  ARM and RISC-V cores.
+
+config LTC4284_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  Demonstrates IIO integration with LTC4284 telemetry. Requires
+	  CONFIG_IIO=y. Suitable for both ARM and RISC-V cores.
+
+config LTC4284_OVERCURRENT_EXAMPLE
+	bool "Overcurrent protection example"
+	help
+	  Demonstrates overcurrent protection with fault decode, retry
+	  narration, and configurable protection parameters. Shows the
+	  OC retry loop and reports fault register values with
+	  human-readable descriptions.
+
+config LTC4284_DUAL_CORE_EXAMPLE
+	bool "Dual-core monitoring example (ARM + RISC-V)"
+	depends on COPROCESSOR && IPC_MAXIM
+	help
+	  This example demonstrates dual-core hot swap monitoring using both
+	  ARM Cortex-M4 (I2C telemetry) and RISC-V RV32 (real-time ALERT pin
+	  monitoring) cores on MAX32690. Requires CONFIG_COPROCESSOR=y and
+	  CONFIG_IPC_MAXIM=y.
+
+endchoice
+
+endmenu
