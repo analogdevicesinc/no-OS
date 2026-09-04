@@ -12,7 +12,14 @@ set num_of_samples [lindex $argv 2]  ;# decinal
 set num_of_channels [lindex $argv 3] ;# for RF projects consider 2x nr of channels(I and Q)
 set storage_bits  [lindex $argv 4]   ;# for 8-16bit rezolution data is stored on 16bit (max 32)
 
-connect
+# Same convention as util.tcl: point at a remote hw_server when the environment
+# names one, otherwise let xsct find or spawn a local one.
+if { [info exists ::env(XSCT_REMOTE_HOST)] && [info exists ::env(XSCT_REMOTE_PORT)] } {
+	puts "Connecting to hw_server at $::env(XSCT_REMOTE_HOST):$::env(XSCT_REMOTE_PORT)"
+	connect -host "$::env(XSCT_REMOTE_HOST)" -port "$::env(XSCT_REMOTE_PORT)"
+} else {
+	connect
+}
 
 if {$m_type == "ZYNQ_PSU"} {
   targets -set -filter {name =~ "*A53*#0*"}
