@@ -41,7 +41,7 @@
  * @struct adf4030_reg_sequence
  * @brief ADF4030 register format structure for default values
  */
-static struct adf4030_reg_sequence {
+struct adf4030_reg_sequence {
 	uint16_t reg;
 	uint8_t val;
 };

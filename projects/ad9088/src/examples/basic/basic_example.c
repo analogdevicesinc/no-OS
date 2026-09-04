@@ -1,9 +1,9 @@
 /***************************************************************************//**
  *   @file   basic_example.c
- *   @brief  Basic example eval-adf4382 project
+ *   @brief  Basic example for the ad9088 project
  *   @author CHegbeli (ciprian.hegbeli@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:

@@ -1,9 +1,35 @@
-// SPDX-License-Identifier: GPL-2.0
-/*
- * Driver for AD9088 and similar mixed signal front end (MxFE®)
+/***************************************************************************//**
+ *   @file   ad9088.c
+ *   @brief  Implementation of the AD9088/AD9084 (Apollo) MxFE driver.
+ *   @author CHegbeli (ciprian.hegbeli@analog.com)
+********************************************************************************
+ * Copyright 2022-2026(c) Analog Devices, Inc.
  *
- * Copyright 2022 Analog Devices Inc.
- */
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of Analog Devices, Inc. nor the names of its
+ *    contributors may be used to endorse or promote products derived from this
+ *    software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+ * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+ * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*******************************************************************************/
 
 #include "ad9088.h"
 #include "no_os_delay.h"
@@ -955,9 +981,9 @@ static const struct fw_entry fw_table[ADI_APOLLO_FW_ID_MAX] = {
  * @param bytes_read - Set to the length of the image, in bytes.
  * @return           - 0 on success, an API_CMS_ERROR_* code otherwise.
  */
-static int ad9088_fw_provider_get(adi_apollo_fw_provider_t *obj,
-				  adi_apollo_startup_fw_id_e fw_id,
-				  uint8_t **byte_arr, uint32_t *bytes_read)
+static int32_t ad9088_fw_provider_get(adi_apollo_fw_provider_t *obj,
+				      adi_apollo_startup_fw_id_e fw_id,
+				      uint8_t **byte_arr, uint32_t *bytes_read)
 {
 	if (fw_id >= ADI_APOLLO_FW_ID_MAX || !fw_table[fw_id].start) {
 		pr_err("Unknown firmware ID %d\n", fw_id);
@@ -979,8 +1005,8 @@ static int ad9088_fw_provider_get(adi_apollo_fw_provider_t *obj,
  * @param fw_id - Identifies which image is being released, unused.
  * @return      - 0 on success, an API_CMS_ERROR_* code otherwise.
  */
-static int ad9088_fw_provider_close(adi_apollo_fw_provider_t *obj,
-				    adi_apollo_startup_fw_id_e fw_id)
+static int32_t ad9088_fw_provider_close(adi_apollo_fw_provider_t *obj,
+					adi_apollo_startup_fw_id_e fw_id)
 {
 	return API_CMS_ERROR_OK;
 }
@@ -998,8 +1024,8 @@ static int ad9088_fw_provider_close(adi_apollo_fw_provider_t *obj,
  * @param len     - Transfer length, in bytes.
  * @return        - 0 in case of success, negative error code otherwise.
  */
-static int ad9088_spi_xfer(void *dev_obj, uint8_t *wbuf, uint8_t *rbuf,
-			   uint32_t len)
+static int32_t ad9088_spi_xfer(void *dev_obj, uint8_t *wbuf, uint8_t *rbuf,
+			       uint32_t len)
 {
 	struct ad9088_phy *phy = dev_obj;
 	int ret;
@@ -1028,9 +1054,9 @@ static int ad9088_spi_xfer(void *dev_obj, uint8_t *wbuf, uint8_t *rbuf,
  * @param txn_config      - Vendor transaction configuration, unused.
  * @return                - 0 in case of success, negative error code otherwise.
  */
-static int ad9088_spi_read(void *dev_obj, const uint8_t tx_data[],
-			   uint8_t rx_data[], uint32_t num_tx_rx_bytes,
-			   adi_apollo_hal_txn_config_t *txn_config)
+static int32_t ad9088_spi_read(void *dev_obj, const uint8_t tx_data[],
+			       uint8_t rx_data[], uint32_t num_tx_rx_bytes,
+			       adi_apollo_hal_txn_config_t *txn_config)
 {
 	struct ad9088_phy *phy = dev_obj;
 	uint8_t buf[16];
@@ -1084,7 +1110,7 @@ static int32_t ad9088_spi_write(void *dev_obj, const uint8_t tx_data[],
  * @param enable    - Level to drive on the pin.
  * @return          - 0 in case of success, negative error code otherwise.
  */
-static int ad9088_reset_pin_ctrl(void *user_data, uint8_t enable)
+static int32_t ad9088_reset_pin_ctrl(void *user_data, uint8_t enable)
 {
 	struct ad9088_phy *phy = user_data;
 
@@ -1098,9 +1124,8 @@ static int ad9088_reset_pin_ctrl(void *user_data, uint8_t enable)
  * @param us        - Delay, in microseconds.
  * @return          - 0 in case of success, negative error code otherwise.
  */
-static int ad9088_udelay(void *user_data, unsigned int us)
+static int32_t ad9088_udelay(void *user_data, uint32_t us)
 {
-	//us = us * 2;
 	no_os_udelay(us);
 	return 0;
 }
@@ -1118,8 +1143,8 @@ static int ad9088_udelay(void *user_data, unsigned int us)
  * @param argp      - Arguments for the format string.
  * @return          - 0 in case of success, negative error code otherwise.
  */
-int ad9088_log_write(void *user_data, int32_t log_type, const char *message,
-		     va_list argp)
+int32_t ad9088_log_write(void *user_data, int32_t log_type, const char *message,
+			 va_list argp)
 {
 	char logMessage[160];
 

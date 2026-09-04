@@ -1,9 +1,9 @@
 /***************************************************************************//**
  *   @file   main.c
- *   @brief  Main file for Xilinx platform of ADF4382 project.
+ *   @brief  Main file for Xilinx platform of ad9088 project.
  *   @author CHegbeli (ciprian.hegbeli@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
