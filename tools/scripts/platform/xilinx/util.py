@@ -516,10 +516,23 @@ def create_project(ws, hw_path, hw_file, target):
                 continue
             raise
 
-    # Build the platform only if Quick Build didn't already produce the BSP.
-    # create_platform_component() sometimes triggers an internal "Quick Build"
-    # that produces libxil.a — calling platform.build() again can crash the
-    # gRPC server with "Application error processing RPC".
+    # Wait for any async Quick Build to complete before proceeding.
+    # create_platform_component() sometimes triggers an async build; calling
+    # platform.build() while it's running crashes with "Application error
+    # processing RPC".
+    from vitis import _build
+    build_svc = _build.Build(client._serverObj)
+
+    print("INFO: Waiting for platform build to complete...")
+    for _ in range(90):
+        running = build_svc.listRunningBuilds()
+        if not running:
+            break
+        time.sleep(1)
+    else:
+        raise RuntimeError(f"Platform build timed out. Running: {running}")
+
+    # Build explicitly if Quick Build didn't produce the BSP
     platform = client.get_component(name="hw0")
     libxil_path = os.path.join(out_dir, "hw0", "export", "hw0", "sw",
                                f"standalone_{vcpu}", "lib", "libxil.a")
@@ -528,7 +541,6 @@ def create_project(ws, hw_path, hw_file, target):
         platform.build()
 
     # --- Step 2: App component (linker script) ---
-    xpfm = os.path.join(out_dir, "hw0", "export", "hw0", "hw0.xpfm")
     print("INFO: Creating app component for linker script...")
     app = client.create_app_component(
         name="app", platform=xpfm, template="empty_application")
