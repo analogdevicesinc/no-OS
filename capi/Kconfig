@@ -47,4 +47,12 @@ config CAPI_DMA
 	bool "CAPI DMA"
 	default n
 
+config CAPI_WDT
+	bool "CAPI WDT"
+	default n
+
+config CAPI_PINT
+	bool "CAPI PINT"
+	default n
+
 endif # CAPI
