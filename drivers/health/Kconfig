@@ -1,0 +1,22 @@
+menuconfig HEALTH
+	bool "Healthcare Drivers"
+	default n
+	help
+	  Enable support for Healthcare drivers.
+
+if HEALTH
+
+config HEALTH_MAXM86161
+    depends on I2C
+    select GPIO
+    select IRQ
+    bool "Enable MAXM86161 driver"
+    default n
+
+config HEALTH_IIO_MAXM86161
+    depends on IIO
+    select HEALTH_MAXM86161
+    bool "Enable MAXM86161 IIO driver"
+    default n
+
+endif
