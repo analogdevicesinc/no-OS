@@ -150,8 +150,14 @@ extern struct altera_gpio_init_param	altera_gpio_param;
 #define GTS_PLL_RX_BASEADDR		0
 #define GTS_PLL_TX_BASEADDR		0x020A6000 /* gts_pll_b, matches the DT */
 
-/* Capture depth, in samples per converter. */
-#define ADC_BUFFER_SAMPLES		16384
+/*
+ * Capture depth, in samples per converter. The Nios V build keeps its DMA
+ * buffers in the 1.5 MB on-chip memory alongside code/data/stack (no DDR
+ * buffer path on this design), so the depth is kept shallow: 4096 samples x
+ * CAPTURE_CONVERTERS x 2 bytes = 64 KB, versus 256 KB at 16384. See the
+ * TX_OFFLOAD_MAX_BYTES note in the DMA example.
+ */
+#define ADC_BUFFER_SAMPLES		4096
 
 /*
  * AD9084 datapath - absolute CPU-view addresses from system_bd.sopcinfo,

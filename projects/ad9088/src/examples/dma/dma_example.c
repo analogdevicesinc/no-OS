@@ -44,6 +44,10 @@
 #include "no_os_axi_io.h"
 #include "jesd204_clk.h"
 #include "parameters.h"
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+#include <stdio.h>		/* snprintf for the sample-dump diagnostic */
+#include "sys/alt_cache.h"
+#endif
 
 /*
  * Sides the example drives.
@@ -91,7 +95,18 @@
  * read back from its memory size register at runtime and the transfer clamped
  * to the smaller of the two.
  */
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+/*
+ * The Agilex 5 Nios V build runs the whole application from the 1.5 MB on-chip
+ * memory, so the DMA buffers share that region with code/data/stack rather than
+ * living in DDR. Cap the TX buffer at 128 KB (with the shallower ADC_BUFFER_SAMPLES
+ * set in the altera parameters.h) so .bss fits OCM. The transfer is still clamped
+ * to the offload memory size read back at runtime.
+ */
+#define TX_OFFLOAD_MAX_BYTES		(128 * 1024)
+#else
 #define TX_OFFLOAD_MAX_BYTES		(512 * 1024)
+#endif
 
 /*
  * axi_data_offload register map, the part of it this example needs, from
@@ -417,8 +432,21 @@ int dma_example_main(void)
 	struct hmc7044_dev *hmc7044_dev;
 	struct adf4030_dev *adf4030_dev;
 	struct ad9088_phy *ad9088_phy;
+#ifndef CONFIG_ALTERA_PLATFORM_NIOSV
+	/*
+	 * The Agilex 5 bitstream does have an ADI adxcvr control core per
+	 * direction (hdl library/intel/adi_jesd204 instantiates axi_adxcvr as
+	 * "axi_xcvr", exported as the link_management window), but neither
+	 * adxcvr driver in the tree fits it: axi_adxcvr.c is Xilinx-only and
+	 * altera_adxcvr.c reprograms Arria10/Stratix10 ATX and CDR PLLs through
+	 * per-lane PMA windows that GTS does not expose. The GTS PHY is fully
+	 * configured by the bitstream, so all that is left is releasing the
+	 * transceiver from reset, which axi_jesd204_{rx,tx}.c does directly from
+	 * xcvr_base. These handles therefore exist only on the Xilinx path.
+	 */
 	struct adxcvr *rx_adxcvr;
 	struct adxcvr *tx_adxcvr;
+#endif
 	struct axi_dmac *rx_dmac;
 	struct axi_dmac *tx_dmac;
 	uint32_t rx_size;
@@ -496,6 +524,13 @@ int dma_example_main(void)
 		goto error_rx_dmac;
 	}
 
+#ifndef CONFIG_ALTERA_PLATFORM_NIOSV
+	/*
+	 * Xilinx path only: configure the ADI adxcvr transceivers. On Agilex the
+	 * lane clocks keep xcvr == NULL - jesd204_clk.c speaks the Xilinx adxcvr
+	 * API - and the transceiver is instead released from reset inside the
+	 * link cores' CLOCKS_ENABLE handler.
+	 */
 	ret = adxcvr_init(&tx_adxcvr, &tx_adxcvr_ip);
 	if (ret) {
 		pr_info("TX ADXCVR initialization failed\n");
@@ -509,6 +544,7 @@ int dma_example_main(void)
 		goto error_tx_adxcvr;
 	}
 	rx_jesd_clk.xcvr = rx_adxcvr;
+#endif
 
 	rx_lane_clk.platform_ops = &jesd204_clk_ops;
 	rx_lane_clk.dev_desc = &rx_jesd_clk;
@@ -796,14 +832,24 @@ int dma_example_main(void)
 
 	tx_samples = tx_size / (tx_num_conv * sizeof(uint16_t));
 
+#ifndef CONFIG_ALTERA_PLATFORM_NIOSV
 	/*
 	 * Both DMACs move data behind the cache, and from here to the end of
 	 * the capture there is always one in flight, so the cache is kept out
 	 * of the way wholesale rather than flushed and invalidated by range.
 	 */
 	Xil_DCacheDisable();
+#endif
 
 	dma_example_fill_tone(tx_num_conv, tx_size);
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+	/*
+	 * Nios V cannot switch the cache off wholesale, so write the freshly
+	 * filled tone back by range instead: the TX DMA then reads current data
+	 * from memory rather than lines still sitting in the D-cache.
+	 */
+	alt_dcache_flush((void *)dac_buffer_dma, tx_size);
+#endif
 	ret = axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
 	if (ret) {
 		pr_err("Selecting the DMA data source failed (%d)\n", ret);
@@ -858,9 +904,18 @@ int dma_example_main(void)
 
 	ret = axi_dmac_transfer_wait_completion(rx_dmac, 1000);
 
+#ifndef CONFIG_ALTERA_PLATFORM_NIOSV
 	/* The capture is in memory; drop whatever the cache comes back with. */
 	Xil_DCacheEnable();
 	Xil_DCacheInvalidate();
+#else
+	/*
+	 * Invalidate the capture range so the CPU sees the DMA'd samples, not
+	 * stale cache lines. Invalidate only -- a writeback here would clobber
+	 * the DMA's data with whatever the cache still held.
+	 */
+	alt_dcache_flush_no_writeback((void *)adc_buffer_dma, rx_size);
+#endif
 
 	if (ret) {
 		pr_err("RX DMA transfer timed out (%d)\n", ret);
@@ -881,6 +936,33 @@ int dma_example_main(void)
 				sizeof(adc_buffer_dma[0])),
 		(unsigned long)(rx_num_conv * sizeof(adc_buffer_dma[0])),
 		side_conv[LOOPBACK_SIDE]);
+
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+	/*
+	 * Diagnostic dump: the ADC init cal fails (-134) and the deframer reports
+	 * Checksum:Bad, so print the first captured samples over the JTAG UART to
+	 * eyeball the data without a debugger. Samples interleave by converter, so
+	 * side LOOPBACK_SIDE's converter c sits at stride rx_num_conv.
+	 */
+	{
+		unsigned int s, c;
+		unsigned int base = side_first_conv[LOOPBACK_SIDE];
+		unsigned int nconv = side_conv[LOOPBACK_SIDE];
+
+		pr_info("DMA_EXAMPLE dump side %u: first 16 samples, signed 16-bit, "
+			"columns = converters %u..%u\n",
+			LOOPBACK_SIDE, base, base + nconv - 1);
+		for (s = 0; s < 16; s++) {
+			char line[96];
+			int off = snprintf(line, sizeof(line), "  [%3u]", s);
+			for (c = 0; c < nconv; c++)
+				off += snprintf(line + off, sizeof(line) - off, " %7d",
+						(int)(int16_t)adc_buffer_dma[s * rx_num_conv +
+									      base + c]);
+			pr_info("%s\n", line);
+		}
+	}
+#endif
 
 	/*
 	 * Park here with the link up rather than tearing down, so the capture
@@ -905,10 +987,12 @@ error_tx_jesd:
 error_rx_jesd:
 	axi_jesd204_rx_remove(rx_jesd);
 error_rx_adxcvr:
+#ifndef CONFIG_ALTERA_PLATFORM_NIOSV
 	adxcvr_remove(rx_adxcvr);
 error_tx_adxcvr:
 	adxcvr_remove(tx_adxcvr);
 error_tx_dmac:
+#endif
 	axi_dmac_remove(tx_dmac);
 error_rx_dmac:
 	axi_dmac_remove(rx_dmac);
