@@ -61,6 +61,11 @@ string(REPLACE "  /* Infinite loop */
   /* USER CODE END 3 */" "  /* Initialization complete, return to caller */
   return 0;" MAIN_PATCHED_CONTENTS "${MAIN_PATCHED_CONTENTS}")
 
+# Make HAL_TIM_PeriodElapsedCallback __weak so that stm32_irq.c's version wins.
+string(REPLACE "void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)"
+               "__attribute__((weak)) void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)"
+     MAIN_PATCHED_CONTENTS "${MAIN_PATCHED_CONTENTS}")
+
 file(WRITE "${STM32_PROJECT_BUILD}/Core/Src/main.c" "${MAIN_PATCHED_CONTENTS}")
 
 message(STATUS "Patched ${CMAKE_FILE_TO_PATCH} to use STM32_PROJECT_BUILD.")
