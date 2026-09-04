@@ -5168,6 +5168,89 @@ static int32_t ad9361_fastlock_prepare(struct ad9361_rf_phy *phy, bool tx,
 }
 
 /**
+ * Leave fastlock mode when it was entered outside this driver.
+ *
+ * A fast lock profile can be recalled by an agent this driver does not
+ * see. On a bladeRF 2.0 micro the FPGA's Nios core performs the recall
+ * itself, writing REG_RX_FAST_LOCK_SETUP directly, and leaves the part in
+ * fastlock mode with FORCE_ALC_ENABLE asserted.
+ *
+ * phy->fastlock.current_profile stays zero throughout, because nothing in
+ * this driver performed the recall. ad9361_fastlock_prepare() therefore
+ * takes its "not prepared" path and its exit sequence never runs. Host
+ * tuning resumes and programs the RFPLL as if ALC were automatic, while
+ * it is in fact still forced.
+ *
+ * Measured on that board, interleaving a profile recall with ordinary
+ * tuning every fifth stop of a 242-point sweep across 82-5988 MHz:
+ *
+ *   leaked state left in place   49 lock failures in 643 tunes, first 280
+ *   this sequence after recall    1 lock failure  in 702 tunes, first 495
+ *
+ * The distinction is not the rate but the shape. Without the exit the
+ * failures form a series that never recovers: 44 consecutive failures in
+ * one run with no successful tune inside them, and 0x247 reading 0x40
+ * throughout, meaning the charge pump has saturated low rather than the
+ * synthesiser merely being slow. With the exit there are no consecutive
+ * failures at all.
+ *
+ * Three independent runs confirmed the leak is present on every single
+ * recall, not occasionally: 145 of 145, 146 of 146, 146 of 146.
+ *
+ * The pump can saturate either way, so both readings of 0x247 point here:
+ * 0x80 (CP overrange high, no lock) is what the failing tune itself
+ * reports, and 0x40 is what a later read finds. A caller looking only for
+ * 0x40 will not recognise the leak in a failing tune.
+ *
+ * The function reads REG_RX_FAST_LOCK_SETUP first and writes nothing when
+ * the part is not in fastlock mode, so a caller that cannot tell whether
+ * a foreign recall happened may call it unconditionally. That matters
+ * because a recall issued by separate hardware completes asynchronously:
+ * the leak surfaces on the next ordinary tune, not at the recall site, so
+ * every path that programs the synthesiser needs this call and not just
+ * the one that performed a recall. Measured on the same board with a
+ * sweep mixing asynchronous recalls and ordinary tuning, 360 s per run:
+ * 190/327/587/330/667 lock failures with the ordinary tuning path left
+ * uncovered, 0 and 0 once it calls this too.
+ *
+ * @param phy The AD9361 state structure.
+ * @param tx  True for TX, false for RX.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_fastlock_exit_foreign(struct ad9361_rf_phy *phy, bool tx)
+{
+	uint32_t offs = tx ? REG_TX_FAST_LOCK_SETUP - REG_RX_FAST_LOCK_SETUP : 0;
+	uint32_t ready_mask = tx ? TX_SYNTH_READY_MASK : RX_SYNTH_READY_MASK;
+	int32_t setup;
+
+	setup = ad9361_spi_read(phy->spi, REG_RX_FAST_LOCK_SETUP + offs);
+	if (setup < 0)
+		return setup;
+
+	if (!(setup & RX_FAST_LOCK_MODE_ENABLE))
+		return 0;
+
+	ad9361_spi_write(phy->spi, REG_RX_FAST_LOCK_SETUP + offs, 0);
+
+	/* Workaround: Exiting Fastlock Mode. The same sequence as the one in
+	 * ad9361_fastlock_prepare(), repeated rather than shared because that
+	 * function is gated on this driver's own bookkeeping, which by
+	 * definition does not cover a foreign recall.
+	 */
+	ad9361_spi_writef(phy->spi, REG_RX_FORCE_ALC + offs, FORCE_ALC_ENABLE, 1);
+	ad9361_spi_writef(phy->spi, REG_RX_FORCE_VCO_TUNE_1 + offs, FORCE_VCO_TUNE, 1);
+	ad9361_spi_writef(phy->spi, REG_RX_FORCE_ALC + offs, FORCE_ALC_ENABLE, 0);
+	ad9361_spi_writef(phy->spi, REG_RX_FORCE_VCO_TUNE_1 + offs, FORCE_VCO_TUNE, 0);
+
+	ad9361_trx_vco_cal_control(phy, tx, true);
+	ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_2, ready_mask, 0);
+
+	phy->fastlock.current_profile[tx] = 0;
+
+	return 0;
+}
+
+/**
  * Fastlock recall.
  * @param phy The AD9361 state structure.
  * @param tx
