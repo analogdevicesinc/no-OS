@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file mykonosMmap.c
  * \brief Contains the Mykonos memory mapping

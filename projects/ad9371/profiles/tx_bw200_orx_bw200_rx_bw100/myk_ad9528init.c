@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /* AD9528 data structure initialization file */
 #include <stdint.h>
 #include "common.h"

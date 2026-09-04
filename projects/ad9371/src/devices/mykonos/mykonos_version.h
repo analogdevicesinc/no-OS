@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file mykonos_version.h
  * \brief Contains the version number for the Mykonos API

@@ -1,3 +1,13 @@
+/***************************************************************************//**
+ *   @file   net.c
+ *   @brief  Network interface for the wethlink project.
+ *   @author Darius Berghe (darius.berghe@analog.com)
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+********************************************************************************
+ * Copyright 2023~2024(c) Analog Devices, Inc.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+*******************************************************************************/
 #include <stdio.h>
 #include "no_os_delay.h"
 #include "no_os_mdio.h"

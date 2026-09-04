@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file adrv9009/src/devices/adi_hal/adi_hal.h
  * \brief Contains Talise ADI HAL function prototypes type definitions for adi_hal.c

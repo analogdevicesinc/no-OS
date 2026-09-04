@@ -1,3 +1,13 @@
+/***************************************************************************//**
+ *   @file   app_ad9083.h
+ *   @brief  Header file of app_ad9083.
+ *   @author Cristian Pop (cristian.pop@analog.com)
+********************************************************************************
+ * Copyright 2021(c) Analog Devices, Inc.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+*******************************************************************************/
+
 #ifndef __APP_AD9083_H
 #define __APP_AD9083_H
 

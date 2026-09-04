@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file mykonos_macros.h
  * \brief Contains address and miscellaneous macro definitions for Mykonos API
