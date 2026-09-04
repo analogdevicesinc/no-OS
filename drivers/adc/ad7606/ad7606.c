@@ -71,7 +71,7 @@
 #define AD7606_SERIAL_CORE_ENABLE			0x00
 #define AD7606_SERIAL_CORE_DISABLE			0x01
 
-#define AD7606_PARALLEL_CORE_ENABLE			0x01
+#define AD7606_PARALLEL_CORE_ENABLE			0x03
 #define AD7606_PARALLEL_CORE_DISABLE			0x00
 
 struct ad7606_chip_info {
@@ -731,7 +731,14 @@ static int32_t ad7606_parallel_capture_pre_enable(struct ad7606_dev *dev)
 				   AD7606_CHAN_CTRL_ENABLE);
 	}
 
-	return no_os_pwm_enable(axi->trigger_pwm_desc);
+	if (dev->reg_mode) {
+		ret = ad7606_reg_write(dev, 0, 0);
+		if (ret)
+				return ret;
+		dev->reg_mode = false;
+	}
+
+	return 0;
 #endif
 }
 
@@ -777,7 +784,7 @@ static int32_t ad7606_read_raw_data_parallel(struct ad7606_dev *dev,
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 	struct axi_dma_transfer transfer = {
 		// Number of bytes to writen/read
-		.size = samples * 8,
+		.size = samples * 32,
 		// Transfer done flag
 		.transfer_done = 0,
 		// Signal transfer mode (CYCLIC?)
@@ -790,6 +797,10 @@ static int32_t ad7606_read_raw_data_parallel(struct ad7606_dev *dev,
 	int32_t ret;
 
 	ret = axi_dmac_transfer_start(axi->dmac, &transfer);
+	if (ret)
+		return ret;
+
+	ret = no_os_pwm_enable(axi->trigger_pwm_desc);
 	if (ret)
 		return ret;
 
