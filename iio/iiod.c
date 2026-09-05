@@ -410,6 +410,11 @@ static int dummy_close(struct iiod_ctx *ctx, const void *device)
 	return -EINVAL;
 }
 
+static int dummy_refill_buffer(struct iiod_ctx *ctx, const void *device, uint8_t block_id)
+{
+	return -EINVAL;
+}
+
 static int dummy_rw_attr(struct iiod_ctx *ctx, const void *device,
 			 struct iiod_attr *attr, char *buf, uint32_t len)
 {
@@ -443,7 +448,7 @@ static int dummy_create_block(struct iiod_ctx *ctx, const void *device, struct i
 	return -EINVAL;
 }
 
-static int dummy_pre_enable(struct iiod_ctx *ctx, const void *device, uint32_t mask){
+static int dummy_pre_enable(struct iiod_ctx *ctx, const void *device, uint32_t mask, uint16_t *block_ids){
 	return -EINVAL;
 }
 
@@ -481,7 +486,7 @@ int32_t iiod_copy_ops(struct iiod_ops *ops, struct iiod_ops *new_ops)
 	ops->set_buffers_count = SET_DUMMY_IF_NULL(new_ops->set_buffers_count,
 				 dummy_set_buffers_count);
 	ops->refill_buffer = SET_DUMMY_IF_NULL(new_ops->refill_buffer,
-					       dummy_close);
+					       dummy_refill_buffer);
 	ops->push_buffer = SET_DUMMY_IF_NULL(new_ops->push_buffer,
 					     dummy_close);
 	ops->create_block = SET_DUMMY_IF_NULL(new_ops->create_block, dummy_create_block);
