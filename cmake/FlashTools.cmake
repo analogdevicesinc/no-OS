@@ -67,8 +67,14 @@ function(add_openocd_flash_target TARGET_NAME)
 		COMMAND ${OPENOCD_PATH}
 			-s ${OPENOCD_SCRIPTS}
 			-f ${OPENOCD_CFG}
-			-c "init\; halt\; flash erase_sector 0 0 last\; exit"
-		DEPENDS ${TARGET_NAME}
+			# One -c per command. A single "init; halt; ..." string does
+			# not work: CMake keeps the backslash that escapes the list
+			# separator, so Tcl receives the literal command name "init;"
+			# and aborts with 'invalid command name "init;"'.
+			-c "init"
+			-c "halt"
+			-c "flash erase_sector 0 0 last"
+			-c "exit"
 		COMMENT "Erasing..."
 		VERBATIM
 	)
