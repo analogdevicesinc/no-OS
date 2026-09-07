@@ -16,6 +16,7 @@ Supported Carriers
 ------------------
 
 * `ZCU102 <https://www.xilinx.com/ZCU102>`_
+* `VCU118 <https://www.xilinx.com/VCU118>`_
 
 Overview
 --------
@@ -206,7 +207,11 @@ store it into .csv files for processing:
 
 .. code-block:: bash
 
+   # ZCU102 (ZynqMP APU)
    xsct tools/scripts/platform/xilinx/capture.tcl ZYNQ_PSU 0x1e4900 65536 8 16
+
+   # VCU118 (MicroBlaze) - pass MICROBLAZE as the processor type instead
+   xsct tools/scripts/platform/xilinx/capture.tcl MICROBLAZE 0x1e4900 65536 8 16
 
 You can find more information about the data `here <https://wiki.analog.com/resources/no-os/dac_dma_example>`_.
 
@@ -274,6 +279,7 @@ Used Hardware
 ^^^^^^^^^^^^^
 
 * `ZCU102 Evaluation Kit <https://www.xilinx.com/ZCU102>`__ (Zynq UltraScale+ MPSoC)
+* `VCU118 Evaluation Kit <https://www.xilinx.com/VCU118>`__ (Virtex UltraScale+, MicroBlaze soft-core)
 * ADRV9026 or ADRV9029 evaluation board
 
 Connections
@@ -289,11 +295,17 @@ Build Command
 
 The Xilinx platform uses the CMake/Ninja build system via the
 ``no_os_build.py`` helper script. Available variants: ``basic_example``,
-``dma_example``, ``iio_example``. Available boards: ``zcu102``.
+``dma_example``, ``iio_example``. Available boards: ``zcu102``,
+``vcu118``.
+
+The ZCU102 runs on the ZynqMP APU (Cortex-A53); the VCU118 runs on a
+MicroBlaze soft-core. The build selects the toolchain and any core-specific
+workarounds from the XSA automatically, so the only difference is the
+``--board`` argument and its matching hardware handoff.
 
 A Xilinx XSA hardware description file is required. The HDL design name
 is ``adrv9026``; the hardware name is composed as ``adrv9026_<board>``
-(e.g. ``adrv9026_zcu102``).
+(e.g. ``adrv9026_zcu102`` or ``adrv9026_vcu118``).
 
 For toolchain setup and prerequisites, see the
 :doc:`Xilinx CMake build guide </build_guides/build_xilinx_cmake>`.
@@ -327,3 +339,9 @@ For toolchain setup and prerequisites, see the
    python tools/scripts/no_os_build.py build \
        --project adrv902x --variant iio_example --board zcu102 \
        --hardware /path/to/adrv9026_zcu102/system_top.xsa
+
+   # Build (and flash) an example for VCU118 - only --board and --hardware
+   # change; the same command shape works for every variant
+   python tools/scripts/no_os_build.py build \
+       --project adrv902x --variant basic_example --board vcu118 \
+       --hardware /path/to/adrv9026_vcu118/system_top.xsa
