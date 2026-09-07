@@ -1,3 +1,12 @@
+/***************************************************************************//**
+ *   @file   parameters.c
+ *   @brief  Maxim platform parameters for the wethlink project.
+ *   @author Darius Berghe (darius.berghe@analog.com)
+********************************************************************************
+ * Copyright 2023~2025(c) Analog Devices, Inc.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+*******************************************************************************/
 #include "parameters.h"
 
 struct max_uart_init_param uart_extra_ip = {

@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9025-SLA */
 const char *json_profile_active_util_init = "{ \n\
   \"radioCtrlInit\": { \n\
     \"radioCtrlModeCfg\": { \n\

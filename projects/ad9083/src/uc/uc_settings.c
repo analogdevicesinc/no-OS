@@ -1,11 +1,12 @@
-/*!
-  @brief     Use Case Settings
+/***************************************************************************//**
+ *   @file   uc_settings.c
+ *   @brief  Use Case Settings of AD9083 project.
+ *   @author Cristian Pop (cristian.pop@analog.com)
+********************************************************************************
+ * Copyright 2021(c) Analog Devices, Inc.
  *
- * @copyright copyright(c) 2018 analog devices, inc. all rights reserved.
- *            This software is proprietary to Analog Devices, Inc. and its
- *            licensor. By using this software you agree to the terms of the
- *            associated analog devices software license agreement.
- */
+ * SPDX-License-Identifier: BSD-3-Clause
+*******************************************************************************/
 
 /*!
  * @addtogroup __ADI_AD9083_APP__

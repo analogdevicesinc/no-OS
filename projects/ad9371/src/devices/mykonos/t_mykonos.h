@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /*!
  * \file t_mykonos.h
  * \brief Contains type definitions for Mykonos API

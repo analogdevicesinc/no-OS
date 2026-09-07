@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: BSD-3-Clause
 /*!
  * @brief     APIs for JESD configuration and control
  *

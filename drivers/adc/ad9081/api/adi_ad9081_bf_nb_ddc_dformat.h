@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: BSD-3-Clause
 /*!
  * @brief     SPI Register Definition Header File, automatically generated file at 1/20/2020 6:24:26 AM.
  *

@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file adrv9009/profiles/tx_bw200_ir245p76_rx_bw200_or245p76_orx_bw200_or245p76_dc245p76/talise_config.h
  * \brief Talise configuration external declarations

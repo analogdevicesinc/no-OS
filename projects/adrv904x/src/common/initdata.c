@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: Apache-2.0 */
 #include "initdata.h"
 
 adi_adrv904x_Version_t initStructApiVersion = {2, 10, 0, 4};

@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file ad9371/src/devices/ad9528/ad9528.c
  * \brief Contains source code for configuring and initializing AD9528 clock device

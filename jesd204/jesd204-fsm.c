@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: BSD-3-Clause
 /**
  * The JESD204 framework - finite state machine logic
  *

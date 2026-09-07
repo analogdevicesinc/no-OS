@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 
 #ifndef _COMMON_H_
 #define _COMMON_H_
