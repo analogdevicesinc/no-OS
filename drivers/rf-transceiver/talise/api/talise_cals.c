@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_cals.c
  * \brief Contains functions to support Talise init and tracking calibrations

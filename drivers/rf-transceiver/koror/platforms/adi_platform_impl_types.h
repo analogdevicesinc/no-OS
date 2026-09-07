@@ -1,3 +1,7 @@
+/**
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
+*/
 /*
  * HAL implementors/porters may modify this file to suit the underlying OS
  * and hardware.  For instance to map abstract HAL types to concrete
@@ -7,9 +11,13 @@
 #ifndef __ADI_PLATFORM_IMPL_TYPES_H__
 #define __ADI_PLATFORM_IMPL_TYPES_H__
 
+#ifndef __KERNEL__
 #include <pthread.h>
 typedef pthread_mutex_t adi_hal_mutex_t;
 typedef pthread_t adi_hal_thread_t;
+#else
+typedef struct mutex adi_hal_mutex_t;
+#endif
 /**
  *  \brief  Default filepath for logfiles if none provided
  *

@@ -1,4 +1,13 @@
-﻿﻿Analog Devices, Inc. ("ADI")
+Valid-License-Identifier: LicenseRef-ADI-API-License
+Usage-Guide:
+  PROPRIETARY. Do NOT use for new files. The Analog Devices "Source Code
+  Software License Agreement" (ADI "API license" / CTSLA) governing the
+  talise and navassa vendor API code under drivers/rf-transceiver.
+  Canonical copy: drivers/rf-transceiver/talise/api/LICENSE.txt.
+  Repository-local LicenseRef; no SPDX-URL.
+License-Text:
+
+Analog Devices, Inc. ("ADI")
 Source Code Software License Agreement
 20130524-CISC-CTSLA
 

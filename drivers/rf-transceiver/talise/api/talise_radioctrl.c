@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_radioctrl.c
  * \brief Contains functions to support Talise radio control and pin control

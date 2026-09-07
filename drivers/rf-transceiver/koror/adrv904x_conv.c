@@ -1,9 +1,8 @@
-// SPDX-License-Identifier: GPL-2.0
+/* SPDX-License-Identifier: BSD-3-Clause */
 /*
  * ADRV904x RF Transceiver
  *
  * Copyright 2020-2023 Analog Devices Inc.
- *
  */
 
 #include "no_os_print_log.h"

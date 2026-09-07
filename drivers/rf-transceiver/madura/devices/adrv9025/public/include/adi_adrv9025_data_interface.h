@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9025-SLA */
 /**
  * \file adi_adrv9025_data_interface.h
  * \brief Contains ADRV9025 JESD204b data path related function prototypes for

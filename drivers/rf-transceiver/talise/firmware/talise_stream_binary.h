@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-AD937X-Firmware-CTSLA */
 /**
 
 SOFTWARE LICENSE AGREEMENT

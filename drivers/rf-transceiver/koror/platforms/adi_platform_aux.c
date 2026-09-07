@@ -1,3 +1,7 @@
+/**
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
+*/
 /*
  * Functions to read I2C EEPROM info based on FMC EEPROM format
  */

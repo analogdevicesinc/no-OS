@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_rx.c
  * \brief Contains functions to support Talise Rx and Observation Rx data path

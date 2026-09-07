@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_user.c
  * \brief Contains Talise API default gain table values for Rx and ObsRx channels.  This file contains information which can be modified by the user.

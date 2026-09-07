@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9025-SLA */
 /**
 * \file adi_adrv9025_dynamic_slicer.c
 * \brief Contains dynamic slicer function implementation defined in adi_adrv9025_dynamic_slicer.h

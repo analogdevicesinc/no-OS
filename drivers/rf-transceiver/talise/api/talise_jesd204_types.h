@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_jesd204_types.h
  * \brief Contains Talise API JESD data types

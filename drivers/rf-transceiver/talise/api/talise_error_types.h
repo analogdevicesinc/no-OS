@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_error_types.h
  * \brief Contains Talise data types for API Error messaging

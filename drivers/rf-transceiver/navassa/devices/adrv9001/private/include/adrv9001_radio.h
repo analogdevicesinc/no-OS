@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9001-SLA */
 /**
 * \file
 * \brief Contains ADRV9001 Rx/Tx WB/NB PFIR Channel filter related function prototypes for

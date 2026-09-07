@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_rx.h
  * \brief Contains Talise receive related function prototypes for
