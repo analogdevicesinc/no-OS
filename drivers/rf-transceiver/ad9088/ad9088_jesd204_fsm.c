@@ -8,6 +8,7 @@
 #include <string.h>
 
 #include "ad9088.h"
+#include "no_os_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
 
@@ -34,7 +35,9 @@ static int ad9088_jesd204_link_init(struct jesd204_dev *jdev,
 	adi_apollo_jesd_tx_cfg_t *jtx;
 	adi_apollo_jesd_rx_cfg_t *jrx;
 	uint8_t sideIdx, linkIdx;
+	uint8_t base_lane_id = 0;
 	unsigned long lane_rate_kbps;
+	unsigned int i;
 	int ret;
 
 	switch (reason) {
@@ -85,6 +88,10 @@ static int ad9088_jesd204_link_init(struct jesd204_dev *jdev,
 		lnk->samples_per_conv_frame =
 			jrx->rx_link_cfg[linkIdx].s_minus1 + 1;
 
+		lnk->device_id = jrx->rx_link_cfg[linkIdx].dev_id;
+		lnk->bank_id = jrx->rx_link_cfg[linkIdx].bank_id;
+		base_lane_id = jrx->rx_link_cfg[linkIdx].base_lane_id;
+
 		lnk->sample_rate =
 			phy->profile.dac_cfg[sideIdx].dac_sampling_rate_Hz;
 		lnk->sample_rate_div =
@@ -127,6 +134,10 @@ static int ad9088_jesd204_link_init(struct jesd204_dev *jdev,
 		lnk->samples_per_conv_frame =
 			jtx->tx_link_cfg[linkIdx].s_minus1 + 1;
 
+		lnk->device_id = jtx->tx_link_cfg[linkIdx].dev_id;
+		lnk->bank_id = jtx->tx_link_cfg[linkIdx].bank_id;
+		base_lane_id = jtx->tx_link_cfg[linkIdx].base_lane_id;
+
 		lnk->sample_rate =
 			phy->profile.adc_cfg[sideIdx].adc_sampling_rate_Hz;
 		lnk->sample_rate_div =
@@ -135,6 +146,15 @@ static int ad9088_jesd204_link_init(struct jesd204_dev *jdev,
 	default:
 		return -EINVAL;
 	}
+
+	if (!lnk->lane_ids) {
+		lnk->lane_ids = no_os_calloc(lnk->num_lanes,
+					     sizeof(*lnk->lane_ids));
+		if (!lnk->lane_ids)
+			return -ENOMEM;
+	}
+	for (i = 0; i < lnk->num_lanes; i++)
+		lnk->lane_ids[i] = base_lane_id + i;
 
 	if (lnk->jesd_version == JESD204_VERSION_C)
 		lnk->jesd_encoder = JESD204_ENCODER_64B66B;
