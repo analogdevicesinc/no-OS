@@ -68,6 +68,8 @@ def parse_input():
 		args.platform, args.build_name, args.builds_dir, args.hardware, args.hdl_branch)
 
 ERR = 0
+BUILD_TIMEOUT = 120
+XILINX_BUILD_TIMEOUT = 600
 LOG_START = " -> "
 TOKEN = os.environ.get('TOKEN')
 BRANCH = os.environ.get('BRANCH')
@@ -403,8 +405,20 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 				os.path.abspath(build_dir_base), jobs, fresh_flag, hardware_arg))
 		log(build_cmd)
 		sys.stdout.flush()
-		err = os.system(build_cmd + ' > %s 2>&1' % os.devnull)
-		success = err == 0
+		timeout = XILINX_BUILD_TIMEOUT if platform == 'xilinx' else BUILD_TIMEOUT
+		try:
+			result = subprocess.run(
+				build_cmd, shell=True,
+				stdout=subprocess.DEVNULL,
+				stderr=subprocess.DEVNULL,
+				timeout=timeout,
+			)
+			success = result.returncode == 0
+		except subprocess.TimeoutExpired:
+			success = False
+			log_err("TIMEOUT")
+			log("Project configuration and compilation took more than %d s, "
+			    "please check the logs: %s" % (timeout, dst_log))
 
 		os.environ.clear()
 		os.environ.update(env)
