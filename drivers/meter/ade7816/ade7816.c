@@ -81,7 +81,7 @@ int ade7816_reg_update(struct ade7816_desc *desc, uint16_t reg, uint32_t mask,
 	reg_val &= ~mask;
 	reg_val |= val;
 
-	return ade7816_write_reg(desc, reg, val);
+	return ade7816_write_reg(desc, reg, reg_val);
 }
 
 /**
