@@ -72,8 +72,6 @@ struct tmc5240_dev {
 	uint32_t vstop;
 	/** Internal clock frequency in Hz */
 	uint32_t clock;
-	/** Motor step angle in millidegrees */
-	uint32_t step_angle_millidegrees;
 	/** Microstepping resolution (0=256, 1=128, etc.) */
 	uint8_t microsteps_res;
 	/** Device ID for multi-instance support */
@@ -111,8 +109,6 @@ struct tmc5240_init_param {
 	uint32_t vstop;
 	/** Internal clock frequency in Hz */
 	uint32_t clock;
-	/** Motor step angle in millidegrees */
-	uint32_t step_angle_millidegrees;
 	/** Microstepping resolution */
 	uint8_t microsteps_res;
 	/** Hold current delay */
