@@ -392,8 +392,7 @@ free_ad7490:
 	ad7490_remove(iio_descriptor->ad7490_desc);
 free_desc:
 	no_os_free(iio_descriptor);
-
-	return 0;
+	return ret;
 }
 
 int ad7490_iio_remove(struct ad7490_iio_desc *iio_desc)

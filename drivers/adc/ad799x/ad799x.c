@@ -58,6 +58,10 @@ int8_t ad799x_init(struct ad799x_dev **device,
 
 	/* Initialize I2C peripheral. */
 	status = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
+	if (status) {
+		no_os_free(dev);
+		return status;
+	}
 
 	/* Determine the number of bits available for a conversion. */
 	switch (init_param.part_number) {
