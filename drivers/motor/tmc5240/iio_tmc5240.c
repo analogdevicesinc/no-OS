@@ -155,8 +155,6 @@ static struct iio_attribute tmc5240_iio_acceleration_attrs[] = {
 		.priv = TMC5240_CH_ATTR_CALIBSCALE,
 		.store = tmc5240_iio_attr_store,
 		.show = tmc5240_iio_attr_show,
-		.shared = IIO_SHARED_BY_ALL,
-
 	},
 	END_ATTRIBUTES_ARRAY
 };
@@ -173,15 +171,12 @@ static struct iio_attribute tmc5240_iio_velocity_attrs[] = {
 		.priv = TMC5240_CH_ATTR_SCALE,
 		.store = NULL,
 		.show = tmc5240_iio_attr_show,
-
 	},
 	{
 		.name = "calibscale",
 		.priv = TMC5240_CH_ATTR_CALIBSCALE,
 		.store = tmc5240_iio_attr_store,
 		.show = tmc5240_iio_attr_show,
-		.shared = IIO_SHARED_BY_ALL,
-
 	},
 	END_ATTRIBUTES_ARRAY
 };
@@ -205,8 +200,6 @@ static struct iio_attribute tmc5240_iio_position_attrs[] = {
 		.priv = TMC5240_CH_ATTR_CALIBSCALE,
 		.store = tmc5240_iio_attr_store,
 		.show = tmc5240_iio_attr_show,
-		.shared = IIO_SHARED_BY_ALL,
-
 	},
 	{
 		.name = "preset",
