@@ -914,10 +914,13 @@ int max_capi_timer_channel_disable(struct capi_timer_handle *handle,
 	if (!timer_priv->channel[chan])
 		return -EINVAL;
 
-	if (chan == 0)
+	if (chan == 0) {
 		tmr_reg->ctrl0 &= ~MXC_F_TMR_CTRL0_CLKEN_A;
-	else
+		tmr_reg->ctrl1 &= ~MXC_F_TMR_CTRL1_IE_A;
+	} else {
 		tmr_reg->ctrl0 &= ~MXC_F_TMR_CTRL0_CLKEN_B;
+		tmr_reg->ctrl1 &= ~MXC_F_TMR_CTRL1_IE_B;
+	}
 
 	timer_priv->channel[chan]->enabled = false;
 
