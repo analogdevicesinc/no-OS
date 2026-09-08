@@ -134,11 +134,13 @@ for background.
 
 .. note::
 
-   The DMA example currently ships a board config for VCU118 only
-   (``boards/dma_example/vcu118.conf``); there is no ``agilex5.conf`` for it
-   yet. Building it for Agilex 5 requires adding that board config (selecting
-   the 204B profile and the engineering firmware set, as the basic example
-   does) and validating the datapath addresses against the Agilex 5 bitstream.
+   The DMA example ships board configs for both VCU118
+   (``boards/dma_example/vcu118.conf``) and Agilex 5
+   (``boards/dma_example/agilex5.conf``, which selects the 204B profile and the
+   engineering firmware set). On Agilex 5 the capture/playback buffers live in
+   on-chip memory (there is no DDR buffer path on this design), so the capture
+   depth is kept shallow — see ``ADC_BUFFER_SAMPLES`` and
+   ``TX_OFFLOAD_MAX_BYTES``.
 
 No-OS Supported Platforms
 -------------------------

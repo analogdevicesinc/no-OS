@@ -123,16 +123,36 @@ The application ISA/ABI is set in `drivers/platform/altera/toolchain.cmake`
 (Nios V branch): `-march=rv32im_zicbom -mabi=ilp32`, matching the core and the
 BSP archive.
 
-### One-command build (this checkout)
+### Build / re-sync (this checkout)
 
-The machine-specific BSP/toolchain paths are wired in an untracked
-`CMakeUserPresets.json` preset `agilex5-ebz` (inherits the tracked `agilex5`
-preset), so:
+After any HDL rebuild, three caches below the handoff must be refreshed **in
+order** — none auto-invalidates the next:
 
-```
-cmake --preset agilex5-ebz
-cmake --build build_agilex5_ebz --target ad9088
-```
+1. `niosv-bsp --update <bsp>/settings.bsp` (with the three
+   `enable_alt_load … false` `--cmd` settings from above) — pulls the new
+   memory map into `system.h` / `linker.x`.
+2. Rebuild the BSP archive: `cmake -S <bsp> -B <bsp>/build
+   -DCMAKE_BUILD_TYPE=Release && cmake --build <bsp>/build` → `libhal2_bsp.a`.
+3. Wipe the app build dir (`rm -rf build_agilex5_dma`) — CMake pins the BSP by
+   absolute path with no dependency edge, so an incremental build otherwise
+   relinks against the stale BSP — then reconfigure + build:
+
+   ```
+   cmake --preset agilex5 -B build_agilex5_dma \
+     -DCMAKE_BUILD_TYPE=MinSizeRel \
+     -DPROJECT_DEFCONFIG=ad9088/dma_example.conf \
+     -DALTERA_BSP_DIR=<bsp> -DALTERA_BSP_LIB=<bsp>/build/libhal2_bsp.a \
+     -DCMAKE_C_COMPILER=<tc>/riscv32-unknown-elf-gcc \
+     -DCMAKE_ASM_COMPILER=<tc>/riscv32-unknown-elf-gcc \
+     -DCMAKE_CXX_COMPILER=<tc>/riscv32-unknown-elf-g++
+   cmake --build build_agilex5_dma --target ad9088
+   ```
+
+(Swap `dma_example.conf` / `build_agilex5_dma` for `basic_example.conf` /
+`build_agilex5_ebz` to build the basic example.) The machine-specific BSP and
+toolchain paths can instead be wired into an untracked `CMakeUserPresets.json`
+(gitignored) as an `agilex5-ebz` preset inheriting the tracked `agilex5` one;
+on this checkout these three steps are wrapped by a local `refresh_agilex.sh`.
 
 ## What must be kept in sync between HDL and no-OS
 
@@ -159,7 +179,7 @@ Everything the app needs about the fabric is in `system.h` and `linker.x`:
 - Nios V/g is Harvard-like on AXI: the **instruction master reaches only
   `sys_int_mem` (OCM) + dm_agent**; the data master reaches everything; DDR is
   data-master-only. The full app therefore has to live in OCM (this design
-  enlarges OCM to 1.5 MB to fit it — see the Qsys carrier tcl).
+  enlarges OCM to 2 MB to fit it — see the Qsys carrier tcl).
 - Interrupt controller is **CLIC** (not CLINT/PLIC), 48 interrupts.
 - Core is `rv32im` + Zicbom (4 KB I/D caches, 32 B lines); no FPU → soft-float.
 - Software is JTAG-downloaded (`niosv-download`), not booted from the bitstream;

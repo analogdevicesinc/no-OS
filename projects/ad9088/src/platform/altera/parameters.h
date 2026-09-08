@@ -71,7 +71,7 @@
  *   apollo_gpio   0xe8000 (Apollo IRQ/status, input-only)
  *   apollo_rx_data_offload 0x100000   apollo_tx_data_offload 0x110000
  *   jesd204_phy_a 0x1000000 (RX xcvr)  jesd204_phy_b 0x2000000 (TX xcvr)
- *   sys_int_mem   0x10000000 (1.5M OCM) sys_ddr_window 0x10200000 (1M window)
+ *   sys_int_mem   0x10000000 (2M OCM)   sys_ddr_window 0x10500000 (1M window)
  */
 
 /*
@@ -152,7 +152,7 @@ extern struct altera_gpio_init_param	altera_gpio_param;
 
 /*
  * Capture depth, in samples per converter. The Nios V build keeps its DMA
- * buffers in the 1.5 MB on-chip memory alongside code/data/stack (no DDR
+ * buffers in the 2 MB on-chip memory alongside code/data/stack (no DDR
  * buffer path on this design), so the depth is kept shallow: 4096 samples x
  * CAPTURE_CONVERTERS x 2 bytes = 64 KB, versus 256 KB at 16384. See the
  * TX_OFFLOAD_MAX_BYTES note in the DMA example.

@@ -97,7 +97,7 @@
  */
 #ifdef CONFIG_ALTERA_PLATFORM_NIOSV
 /*
- * The Agilex 5 Nios V build runs the whole application from the 1.5 MB on-chip
+ * The Agilex 5 Nios V build runs the whole application from the 2 MB on-chip
  * memory, so the DMA buffers share that region with code/data/stack rather than
  * living in DDR. Cap the TX buffer at 128 KB (with the shallower ADC_BUFFER_SAMPLES
  * set in the altera parameters.h) so .bss fits OCM. The transfer is still clamped
