@@ -10,7 +10,7 @@ config FTD2XX
 	  Install the libraries first with tools/scripts/config_ftd2xx.py.
 
 	  The library can be used on any host platform (Linux, macOS, Windows)
-	  to provide SPI, I2C, GPIO and UART drivers over a FTDI USB bridge.
+	  to provide SPI, I2C and GPIO drivers over a FTDI USB bridge.
 
 if FTD2XX
 
@@ -34,13 +34,6 @@ config GPIO_FTD2XX
 	default n
 	help
 	  Enable GPIO driver using FTDI low-byte GPIO lines.
-
-config UART_FTD2XX
-	bool "Enable FTD2XX UART driver"
-	depends on UART
-	default n
-	help
-	  Enable UART driver using the FTDI virtual serial port channel.
 
 endif # FTD2XX
 

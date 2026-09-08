@@ -72,10 +72,9 @@ if(NOT DEFINED "ENV{FTD2XX_D2XX_HEADERS_32}" OR NOT DEFINED "ENV{FTD2XX_D2XX_HEA
     no_os_sources_ifdef(CONFIG_SPI_FTD2XX  ${_ftd2xx_mpsse}/ftd2xx_spi.c)
     no_os_sources_ifdef(CONFIG_I2C_FTD2XX  ${_ftd2xx_mpsse}/ftd2xx_i2c.c)
     no_os_sources_ifdef(CONFIG_GPIO_FTD2XX ${_ftd2xx_mpsse}/ftd2xx_gpio.c)
-    no_os_sources_ifdef(CONFIG_UART_FTD2XX ${_ftd2xx_mpsse}/ftd2xx_uart.c)
 
     # Include paths needed by the wrapper sources and by project code:
-    #   mpsse/              — ftd2xx_spi.h, ftd2xx_i2c.h, ftd2xx_gpio.h, ftd2xx_uart.h
+    #   mpsse/              — ftd2xx_spi.h, ftd2xx_i2c.h, ftd2xx_gpio.h
     #   include/            — libmpsse_spi.h, libmpsse_i2c.h (from LibMPSSE package)
     #   libftd2xx/          — ftd2xx.h, WinTypes.h (from LibMPSSE package)
     target_include_directories(no-os PUBLIC ${_ftd2xx_mpsse})
@@ -193,10 +192,9 @@ else()      # Static libraries installed setup
     no_os_sources_ifdef(CONFIG_SPI_FTD2XX  ${_ftd2xx_mpsse}/ftd2xx_spi.c)
     no_os_sources_ifdef(CONFIG_I2C_FTD2XX  ${_ftd2xx_mpsse}/ftd2xx_i2c.c)
     no_os_sources_ifdef(CONFIG_GPIO_FTD2XX ${_ftd2xx_mpsse}/ftd2xx_gpio.c)
-    no_os_sources_ifdef(CONFIG_UART_FTD2XX ${_ftd2xx_mpsse}/ftd2xx_uart.c)
 
     # Include paths needed by the wrapper sources and by project code:
-    #   mpsse/              — ftd2xx_spi.h, ftd2xx_i2c.h, ftd2xx_gpio.h, ftd2xx_uart.h
+    #   mpsse/              — ftd2xx_spi.h, ftd2xx_i2c.h, ftd2xx_gpio.h
     #   include/            — libmpsse_spi.h, libmpsse_i2c.h (from LibMPSSE package)
     #   libftd2xx/          — ftd2xx.h, WinTypes.h (from LibMPSSE package)
     target_include_directories(no-os PUBLIC ${_ftd2xx_mpsse})
