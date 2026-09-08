@@ -218,8 +218,6 @@ int tmc5240_init(struct tmc5240_dev **device,
 	if (ret)
 		goto err_remove;
 
-	dev->step_angle_millidegrees = init_param->step_angle_millidegrees;
-
 	/* Set ramp mode to position */
 	ret = tmc5240_reg_write(dev, TMC5240_RAMPMODE, TMC5240_MODE_POSITION);
 	if (ret)

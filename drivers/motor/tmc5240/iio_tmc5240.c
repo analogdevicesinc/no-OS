@@ -155,8 +155,6 @@ static struct iio_attribute tmc5240_iio_acceleration_attrs[] = {
 		.priv = TMC5240_CH_ATTR_CALIBSCALE,
 		.store = tmc5240_iio_attr_store,
 		.show = tmc5240_iio_attr_show,
-		.shared = IIO_SHARED_BY_ALL,
-
 	},
 	END_ATTRIBUTES_ARRAY
 };
@@ -173,15 +171,12 @@ static struct iio_attribute tmc5240_iio_velocity_attrs[] = {
 		.priv = TMC5240_CH_ATTR_SCALE,
 		.store = NULL,
 		.show = tmc5240_iio_attr_show,
-
 	},
 	{
 		.name = "calibscale",
 		.priv = TMC5240_CH_ATTR_CALIBSCALE,
 		.store = tmc5240_iio_attr_store,
 		.show = tmc5240_iio_attr_show,
-		.shared = IIO_SHARED_BY_ALL,
-
 	},
 	END_ATTRIBUTES_ARRAY
 };
@@ -205,8 +200,6 @@ static struct iio_attribute tmc5240_iio_position_attrs[] = {
 		.priv = TMC5240_CH_ATTR_CALIBSCALE,
 		.store = tmc5240_iio_attr_store,
 		.show = tmc5240_iio_attr_show,
-		.shared = IIO_SHARED_BY_ALL,
-
 	},
 	{
 		.name = "preset",
@@ -275,6 +268,24 @@ int tmc5240_iio_init(struct tmc5240_iio_dev **iio_dev,
 			   init_param->tmc5240_init_param);
 	if (ret)
 		goto init_tmc_err;
+
+	if (init_param->acceleration_calibscale == 0)
+		/* Default scaling values set to 1 if unset or 0 */
+		descriptor->acceleration_calibscale = 1000;
+	else
+		descriptor->acceleration_calibscale = init_param->acceleration_calibscale;
+
+	if (init_param->velocity_calibscale == 0)
+		/* Default scaling values set to 1 if unset or 0 */
+		descriptor->velocity_calibscale = 1000;
+	else
+		descriptor->velocity_calibscale = init_param->velocity_calibscale;
+
+	if (init_param->position_calibscale == 0)
+		/* Default scaling values set to 1 if unset or 0 */
+		descriptor->position_calibscale = 1000;
+	else
+		descriptor->position_calibscale = init_param->position_calibscale;
 
 	descriptor->iio_dev = &tmc5240_iio_dev;
 
@@ -502,8 +513,22 @@ static int tmc5240_iio_attr_show(void *dev, char *buf, uint32_t len,
 			return -ENOTSUP;
 		}
 	case TMC5240_CH_ATTR_CALIBSCALE:
-		vals[0] = iio_tmc5240->tmc5240_dev->step_angle_millidegrees / 1000;
-		vals[1] = (iio_tmc5240->tmc5240_dev->step_angle_millidegrees % 1000) * 1000;
+		switch (channel->type) {
+		case IIO_ACCEL:
+			vals[0] = iio_tmc5240->acceleration_calibscale / 1000;
+			vals[1] = (iio_tmc5240->acceleration_calibscale % 1000) * 1000;
+			break;
+		case IIO_ANGL_VEL:
+			vals[0] = iio_tmc5240->velocity_calibscale / 1000;
+			vals[1] = (iio_tmc5240->velocity_calibscale % 1000) * 1000;
+			break;
+		case IIO_ANGL:
+			vals[0] = iio_tmc5240->position_calibscale / 1000;
+			vals[1] = (iio_tmc5240->position_calibscale % 1000) * 1000;
+			break;
+		default:
+			return -ENOTSUP;
+		}
 
 		return iio_format_value(buf, len, IIO_VAL_INT_PLUS_MICRO, 2, vals);
 	case TMC5240_CH_ATTR_PRESET:
@@ -706,7 +731,22 @@ static int tmc5240_iio_attr_store(void *dev, char *buf, uint32_t len,
 			return ret;
 
 		val = val * 1000 + val2 / 1000;
-		iio_tmc5240->tmc5240_dev->step_angle_millidegrees = val;
+		if (val == 0)
+			return -EINVAL;
+
+		switch (channel->type) {
+		case IIO_ACCEL:
+			iio_tmc5240->acceleration_calibscale = val;
+			break;
+		case IIO_ANGL_VEL:
+			iio_tmc5240->velocity_calibscale = val;
+			break;
+		case IIO_ANGL:
+			iio_tmc5240->position_calibscale = val;
+			break;
+		default:
+			return -ENOTSUP;
+		}
 		break;
 	case TMC5240_CH_ATTR_PRESET:
 		/*

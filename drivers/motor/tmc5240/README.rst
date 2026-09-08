@@ -89,7 +89,6 @@ rates at different velocity ranges, providing better control over motor dynamics
 
 **Motor Mechanical Parameters:**
 
-* ``step_angle_millidegrees``: Motor step angle in millidegrees (e.g., 900 for 0.9°)
 * ``microsteps_res``: Microstepping resolution (0 = 256 microsteps, 1 = 128, 2 = 64, etc.)
 
 **Current Control:**
@@ -285,7 +284,6 @@ The following example demonstrates how to initialize the TMC5240 driver and perf
 
 		/* Hardware configuration */
 		.clock = 12500000,		/* 12.5 MHz internal clock */
-		.step_angle_millidegrees = 900, /* 0.9 degrees per full step */
 		.microsteps_res = 0,		/* 0 = 256 microsteps (native) */
 
 		/* Current control */
@@ -341,6 +339,10 @@ The driver exposes three output channels for motor control:
 
    * ``scale``: Read-only velocity scale factor. Converts internal velocity units to full-steps per second
 
+   * ``calibscale``: Read/write motor step angular velocity calibration. Can be used to adjust for mechanical requirements or to compensate for gear ratios.
+	 - **Read:** Returns current calibration scale factor for angular velocity
+	 - **Write:** Sets calibration scale factor for angular velocity.
+
 2. **accel**: angular_acceleration (output)
 
    * ``raw``: Read acceleration
@@ -350,6 +352,9 @@ The driver exposes three output channels for motor control:
 
    * ``scale``: Read-only acceleration scale factor. Converts internal acceleration units to full-steps per second²
 
+   * ``calibscale``: Read/write motor step angular acceleration calibration. Can be used to adjust for mechanical requirements or to compensate for gear ratios.
+	 - **Read:** Returns current calibration scale factor for angular acceleration
+	 - **Write:** Sets calibration scale factor for angular acceleration.
 3. **angl**: angular_position (output)
 
    * ``raw``: Read/write target position
@@ -359,14 +364,14 @@ The driver exposes three output channels for motor control:
 
    * ``scale``: Read-only position scale factor. Converts microsteps to full-steps.
 
+   * ``calibscale``: Read/write motor step angular position calibration. Can be used to adjust for mechanical requirements or to compensate for gear ratios.
+	 - **Read:** Returns current calibration scale factor for angular position
+	 - **Write:** Sets calibration scale factor for angular position.
+
    * ``preset``: Read/write position preset
 
      - **Read:** Returns current position from XACTUAL register
      - **Write:** Overrides current position counter (motor enters HOLD mode first). Useful for homing/zeroing operations
-
-**Shared Channel Attributes**
-
-* ``calibscale``: Read/write motor step angle calibration (shared by all channels). Can be used for converting motor full-step to degrees gear scaling.
 
 **Device Attributes**
 
@@ -484,7 +489,6 @@ TMC5240 IIO Driver Initialization Example
 		.d1 = 65536,
 		.vstop = 10,
 		.clock = 12500000,
-		.step_angle_millidegrees = 900,
 		.microsteps_res = 0,
 		.current_run = 16,
 		.current_hold = 0,
@@ -500,6 +504,9 @@ TMC5240 IIO Driver Initialization Example
 	/* IIO TMC5240 initialization parameters */
 	struct tmc5240_iio_dev_init_param tmc5240_iio_ip = {
 		.tmc5240_init_param = &tmc5240_ip_iio,
+		.acceleration_calibscale = 1000,	/* Initial scaling values set to 1 */
+		.velocity_calibscale = 1000,	/* Initial scaling values set to 1 */
+		.position_calibscale = 1000,	/* Initial scaling values set to 1 */
 	};
 
 	/* Initialize the IIO TMC5240 driver */
