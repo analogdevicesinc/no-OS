@@ -500,10 +500,11 @@ int32_t ad9208_remove(ad9208_dev *device)
 	ret = no_os_gpio_remove(device->gpio_powerdown);
 	ret |= no_os_spi_remove(device->spi_desc);
 
-	if (device->st->adc_h)
-		no_os_free(device->st->adc_h);
-	if (device->st)
+	if (device->st) {
+		if (device->st->adc_h)
+			no_os_free(device->st->adc_h);
 		no_os_free(device->st);
+	}
 	if (device)
 		no_os_free(device);
 
