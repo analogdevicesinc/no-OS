@@ -13,10 +13,16 @@
 #include "capi_gpio.h"
 #include "capi_dma.h"
 #include "capi_irq.h"
+#include "capi_spi.h"
+#include "capi_timer.h"
+#include "capi_i2c.h"
 #include "maxim_capi_uart.h"
 #include "maxim_capi_gpio.h"
 #include "maxim_capi_irq.h"
 #include "maxim_capi_dma.h"
+#include "maxim_capi_spi.h"
+#include "maxim_capi_timer.h"
+#include "maxim_capi_i2c.h"
 
 /*
  * Maxim target + board selection.
@@ -462,6 +468,199 @@
 /* Memory-to-memory: no peripheral handshake line. */
 #define DMA_XFER_EXTRA_INIT		{ .reqsel = MXC_DMA_REQUEST_MEMTOMEM }
 #define DMA_XFER_SIZE			64U
+
+/* ===== SPI external loopback ===== */
+
+#if (TARGET_NUM == 32655)
+
+	/*
+	 * MAX32655FTHR: SPI1 == "QSPI1", broken out on the J9 header ---
+	 *   SCK  P0.23 (J9-11), MOSI P0.21 (J9-12), MISO P0.22 (J9-13),
+	 *   SS0  P0.20 (J7-8).  MXC_SPI_Init() muxes these internally (ALT1),
+	 *   so no pin table is needed here.
+	 *
+	 * test_spi.c is an EXTERNAL-loopback suite: it assumes MOSI is
+	 * physically tied to MISO. Strap J9-12 <-> J9-13 on the header. Without
+	 * the strap the *_MATCH assertions fail (the transferred bytes are the
+	 * only oracle) -- it does not SKIP.
+	 */
+	/*
+	 * IDENTIFIER is an *index*, and on MAX32655 the index->instance map is
+	 * INVERTED (max32655.h): MXC_SPI_GET_SPI(0)=MXC_SPI1 (QSPI1, P0.21/22/23,
+	 * the header) and MXC_SPI_GET_SPI(1)=MXC_SPI0 (P0.4-0.7, onboard microSD).
+	 * Use index 0 to land on SPI1 = the QSPI1 header pins we strap for loopback.
+	 */
+	#define SPI_IDENTIFIER			0U
+	#define SPI_OPS				&max_capi_spi_ops
+	#define SPI_CLK_FREQ			0U  /* 0 => backend default peripheral clk */
+	#define SPI_EXTRA_TYPE			struct max_capi_spi_extra
+	#define SPI_EXTRA_INIT			{ \
+		.device_role = MAX_CAPI_SPI_DEVICE_ROLE_CONTROLLER, \
+		.bus_width   = MAX_CAPI_SPI_BUS_WIDTH_STANDARD, \
+		.num_targets = 1U, \
+		.polarity_mask = 0U, \
+		.chip_select = MAX_CAPI_SPI_CS0, \
+		.vssel       = MXC_GPIO_VSSEL_VDDIO, \
+		.dma_config  = NULL }
+	#define SPI_DEVICE_SPEED_HZ		1000000U
+	#define SPI_DEVICE_MODE			CAPI_SPI_MODE_0
+	#define SPI_DEVICE_NATIVE_CS		0x01U  /* SS0 */
+
+	/* Backend connects the SPI IRQ (async supported); DMA path reserved. */
+	#define SPI_HAS_IRQ			1
+	#define SPI_HAS_DMA			0
+
+#elif (TARGET_NUM == 32690)
+
+#if defined(BOARD_APARD)
+
+	/*
+	 * AD-APARD32690-SL: SPI1 == "SPI1A", broken out on connector P5 ---
+	 *   SCK  P1.26, MOSI P1.28 (P5-2), MISO P1.29 (P5-1), SS0 P1.23.
+	 *   MXC_SPI_Init() muxes these internally (ALT1), so no pin table here.
+	 *
+	 * Unlike MAX32655, the MAX32690 index->instance map is STRAIGHT
+	 * (max32690.h: MXC_SPI_GET_SPI(1) == MXC_SPI1), so index 1 selects SPI1.
+	 *
+	 * test_spi.c is an EXTERNAL-loopback suite: it assumes MOSI tied to MISO.
+	 * On APARD that means strapping P5-2 <-> P5-1 (P1.28 <-> P1.29). NOTE: P5
+	 * is the known open-wire pair on this board (each net reaches only the MCU
+	 * pin and the header, never joined) -- a manual jumper is required and this
+	 * route is NOT HW-proven for SPI loopback. Without the strap the *_MATCH
+	 * assertions fail (transferred bytes are the only oracle) -- it does not SKIP.
+	 */
+	#define SPI_IDENTIFIER			1U  /* index 1 -> MXC_SPI1 (straight map) */
+	#define SPI_OPS				&max_capi_spi_ops
+	#define SPI_CLK_FREQ			0U  /* 0 => backend default peripheral clk */
+	#define SPI_EXTRA_TYPE			struct max_capi_spi_extra
+	#define SPI_EXTRA_INIT			{ \
+		.device_role = MAX_CAPI_SPI_DEVICE_ROLE_CONTROLLER, \
+		.bus_width   = MAX_CAPI_SPI_BUS_WIDTH_STANDARD, \
+		.num_targets = 1U, \
+		.polarity_mask = 0U, \
+		.chip_select = MAX_CAPI_SPI_CS0, \
+		.vssel       = MXC_GPIO_VSSEL_VDDIO, \
+		.dma_config  = NULL }
+	#define SPI_DEVICE_SPEED_HZ		1000000U
+	#define SPI_DEVICE_MODE			CAPI_SPI_MODE_0
+	#define SPI_DEVICE_NATIVE_CS		0x01U  /* SS0 */
+
+	/* Backend connects the SPI IRQ (async supported); DMA path reserved. */
+	#define SPI_HAS_IRQ			1
+	#define SPI_HAS_DMA			0
+
+#endif /* BOARD_APARD */
+
+#endif
+
+/* ===== Timer ===== */
+
+#if (TARGET_NUM == 32655)
+
+	/*
+	 * TMR0, 32-bit mode, IRQ-driven. No external wiring.
+	 *
+	 * The backend resolves its own counting clock (PeripheralClock, via
+	 * input_clock_identifier == 0) and derives the prescaler from
+	 * output_freq_hz; input_clock_hz is informational only, so it is set to
+	 * the nominal PCLK rather than read back at build time (PeripheralClock
+	 * is a runtime variable, not a compile-time constant).
+	 */
+	#define TIMER_IDENTIFIER		0U
+	#define TIMER_OPS			&max_capi_timer_ops
+	#define TIMER_INPUT_CLK_HZ		50000000U  /* PCLK nominal; informational */
+	/* 6.25 MHz = 50 MHz PCLK / 8 (an exact power-of-2 prescaler). The tick
+	 * must outpace two back-to-back counter_get() reads: at 781 kHz (the
+	 * 1 MHz request rounds up to /64) a ~1 us read gap lands inside one
+	 * 1.28 us tick, so BASIC's COUNTER_MOVED sees first == second. At
+	 * 6.25 MHz (0.16 us/tick) the same gap spans several ticks. */
+	#define TIMER_OUTPUT_FREQ_HZ		6250000U   /* 6.25 MHz tick */
+	#define TIMER_EXTRA_TYPE		struct max_capi_timer_extra
+	#define TIMER_EXTRA_INIT		{ \
+		.bit_mode = MAX_CAPI_TIMER_BIT_MODE_32BIT, \
+		.use_irq  = true }
+	/* Overflow period must fit the ASYNC_IRQ timeout: at the 6.25 MHz tick
+	 * this wraps in ~0.34 s (< the 1 s IRQ timeout) yet still clears the
+	 * 100 ms rate window without rolling over. Scaled x8 with the tick above
+	 * to hold the same wrap period as the prior 0x40000 @ 781 kHz. */
+	#define TIMER_COUNTER_MAX		0x200000U
+
+#elif (TARGET_NUM == 32690)
+
+	/*
+	 * TMR0, 32-bit mode, IRQ-driven. No external wiring. Same shape as the
+	 * 32655 block above; only the clock arithmetic differs because APARD's
+	 * PeripheralClock is 60 MHz (SystemCoreClock 120 MHz IPO / 2) vs the
+	 * 32655's 50 MHz. The backend still resolves the counting clock itself
+	 * (PeripheralClock, input_clock_identifier == 0) and derives the
+	 * prescaler from output_freq_hz; input_clock_hz is informational only.
+	 */
+	#define TIMER_IDENTIFIER		0U
+	#define TIMER_OPS			&max_capi_timer_ops
+	#define TIMER_INPUT_CLK_HZ		60000000U  /* PCLK nominal; informational */
+	/* 6.25 MHz request: 60 MHz / 6.25 MHz = 9.6, so the backend rounds up to
+	 * the /16 power-of-2 prescaler -> 3.75 MHz effective (0.27 us/tick). That
+	 * still spans several ticks across two back-to-back counter_get() reads,
+	 * so BASIC's COUNTER_MOVED never sees first == second (the 781 kHz trap
+	 * on the /64 prescaler that a 1 MHz request would have picked). */
+	#define TIMER_OUTPUT_FREQ_HZ		6250000U   /* -> 3.75 MHz effective */
+	#define TIMER_EXTRA_TYPE		struct max_capi_timer_extra
+	#define TIMER_EXTRA_INIT		{ \
+		.bit_mode = MAX_CAPI_TIMER_BIT_MODE_32BIT, \
+		.use_irq  = true }
+	/* At 3.75 MHz effective, 0x200000 wraps in ~0.56 s: under the 1 s
+	 * ASYNC_IRQ timeout yet well over the 100 ms rate window, so the overflow
+	 * IRQ fires within the test window without the rate window rolling over. */
+	#define TIMER_COUNTER_MAX		0x200000U
+
+#endif
+
+/* ===== I2C ===== */
+
+#if (TARGET_NUM == 32690)
+
+#if defined(BOARD_APARD)
+
+	/*
+	 * Single-board I2C loopback: initiator + target on two separate buses,
+	 * cross-wired externally.
+	 *
+	 *   Initiator = I2C0A (index 0) -> P13 "I2C Pmod": SCL P0.30 (P13-3),
+	 *                                                   SDA P0.31 (P13-4).
+	 *   Target    = I2C1A (index 1) -> P5 "Arduino SPI & I2C": SCL P2.18
+	 *                                  (P5-1), SDA P2.17 (P5-2).
+	 *
+	 * Wire P5-1 <-> P13-3 (SCL), P5-2 <-> P13-4 (SDA), and a common GND.
+	 * MXC_I2C_Init() configures BOTH pin sets per instance (the default and
+	 * the A/C alt, see i2c_me18.c), so I2C0A and I2C1A are muxed without a
+	 * pin table here. The maxim backend needs no platform fixture (init sets
+	 * the slave address-match; the target arms the MSDK slave FSM), so the
+	 * I2C_PLATFORM_* hooks below are no-ops.
+	 */
+	#define I2C_IDENTIFIER		0U  /* MXC_I2C0 (I2C0A on P13) */
+	#define I2C_OPS			&max_capi_i2c_ops
+	#define I2C_EXTRA_TYPE		struct max_capi_i2c_extra
+	#define I2C_EXTRA_INIT		{ .vssel = MAX_CAPI_GPIO_VSSEL_VDDIO }
+	#define I2C_TARGET_ADDR		0x42U
+	#define I2C_HAS_IRQ		1
+	#define I2C_MASTER_HAS_IRQ	1
+
+	#define I2C_TARGET_IDENTIFIER	1U  /* MXC_I2C1 (I2C1A on P5) */
+	#define I2C_TARGET_OPS		&max_capi_i2c_ops
+	#define I2C_TARGET_EXTRA_TYPE	struct max_capi_i2c_extra
+	#define I2C_TARGET_EXTRA_INIT	{ .vssel = MAX_CAPI_GPIO_VSSEL_VDDIO }
+	#define I2C_TARGET_HAS_IRQ	1
+
+	/* Maxim needs no separate target fixture: capi_i2c_init() brings the
+	 * target bus up as a slave and programs its address-match, and the
+	 * backend's register_target op reprograms it for the readdress case. */
+	#define I2C_PLATFORM_INIT()		0
+	#define I2C_PLATFORM_DEINIT()		((void)0)
+	#define I2C_PLATFORM_SET_TARGET(h)	((void)(h))
+
+#endif /* BOARD_APARD */
+
+#endif
 
 /* ===== Async capability gates ===== */
 
