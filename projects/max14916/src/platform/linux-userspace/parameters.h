@@ -34,8 +34,8 @@
 #define __PARAMETERS_H__
 
 #ifdef CONFIG_FTD2XX
+#include "no_os_uart.h"
 #include "ftd2xx_spi.h"
-#include "ftd2xx_uart.h"
 #else
 #include "linux_spi.h"
 #include "linux_uart.h"
@@ -50,7 +50,7 @@
 extern struct ftd2xx_spi_init max14916_spi_extra;
 #define SPI_EXTRA	&max14916_spi_extra
 #define SPI_OPS		&ftd2xx_spi_ops
-#define UART_OPS	&ftd2xx_uart_ops
+#define UART_OPS	NULL
 #else
 #define SPI_EXTRA	NULL
 #define SPI_OPS		&linux_spi_ops
