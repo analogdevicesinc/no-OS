@@ -44,7 +44,7 @@
 				"TARGET": "max32690",
 				"TARGET_NUM": "32690",
 				"BOARD_CONFIG_FILE": "ad-apard32690-sl_defconfig",
-				"CONFIG_MAXIM_SECURE_BOOT": "y"
+				"CONFIG_MAXIM_SECURE_BOOT": "n"
 			}
 		},
 		{
