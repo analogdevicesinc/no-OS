@@ -15,6 +15,7 @@
  */
 
 #include <errno.h>
+#include <string.h>
 #include "capi_spi.h"
 #include "capi_irq.h"
 #include "capi_alloc.h"
@@ -164,6 +165,16 @@ static void _max_capi_spi_complete_cb(void *req_ptr, int result)
 	priv = handle->priv;
 	priv->async_in_progress = false;
 
+	/* Async transfer done: drop the NVIC line so a later blocking
+	 * transaction is not raced by the ISR (see init). */
+	capi_irq_disable(MXC_SPI_GET_IRQ(idx));
+
+	/* Release any TX-pad allocated for an async read_command RX phase. */
+	if (priv->async_tx_pad) {
+		capi_free(priv->async_tx_pad);
+		priv->async_tx_pad = NULL;
+	}
+
 	event = (result == E_NO_ERROR || result == E_SUCCESS) ?
 		CAPI_SPI_EVENT_XFR_DONE : CAPI_SPI_EVENT_ERROR;
 
@@ -278,18 +289,39 @@ int max_capi_spi_init(struct capi_spi_controller_handle **handle,
 	priv->dma_handle = config->dma_handle;
 	priv->clock_freq = config->clk_freq_hz ? config->clk_freq_hz : 1000000;
 
+	/* Reset transient async state in case the caller reused a dirty handle. */
+	priv->async_in_progress = false;
+	priv->async_tx_pad = NULL;
+	priv->cs_hold = false;
+
 	ret = _max_spi_hw_init(priv);
 	if (ret < 0) {
 		ret = _max_capi_spi_err(ret);
 		goto free_handle;
 	}
 
+	/*
+	 * CAPI SPI transfers are byte-oriented (uint8_t buffers), so the frame
+	 * MUST be 8 bits. On reva the CTRL2 NUMBITS field resets to 0, which
+	 * MXC_SPI_GetDataSize() reports as *16* -- and the reva blocking engine
+	 * then drains 2x the requested rx count from the FIFO (rx_length =
+	 * rxLen * 2), writing past the caller's rx buffer and smashing the
+	 * stack. MXC_SPI_Init does not set this, so pin it to 8 here.
+	 */
+	MXC_SPI_SetDataSize(priv->regs, 8);
+
+	/*
+	 * Register the ISR but leave the NVIC line DISABLED. The blocking
+	 * MXC_SPI_MasterTransaction is fully self-polling: it spins on
+	 * MasterTransHandler and MST_DONE while the block's own inten bits are
+	 * set. If the NVIC SPI line were enabled, MXC_SPI_AsyncHandler would run
+	 * on the same transfer -- it clears inten and intfl (including MST_DONE)
+	 * and drains the RX FIFO -- stealing the blocking read (stale 0xFF) and
+	 * hanging the MST_DONE poll. The line is enabled only around an async
+	 * transfer (see transceive_async) and disabled again on completion/abort.
+	 */
 	irq = MXC_SPI_GET_IRQ(idx);
 	ret = capi_irq_connect(irq, max_capi_spi_isr, spi_handle);
-	if (ret)
-		goto shutdown;
-
-	ret = capi_irq_enable(irq);
 	if (ret)
 		goto shutdown;
 
@@ -358,9 +390,65 @@ int max_capi_spi_transceive(struct capi_spi_device *device,
 	if (ret)
 		return ret;
 
-	_max_capi_spi_build_req(priv, device, transfer, &req, 1, NULL);
+	/*
+	 * When CS is under manual control and currently asserted, keep it asserted
+	 * across the transfer (ssDeassert = 0); set_cs(MANUAL_DEASSERT) releases it.
+	 * Otherwise CS is auto-framed per transaction (ssDeassert = 1).
+	 */
+	_max_capi_spi_build_req(priv, device, transfer, &req,
+				priv->cs_hold ? 0 : 1, NULL);
+
+	/*
+	 * reva full-duplex clocks TX_NUM_CHAR characters; RX_NUM_CHAR only sets
+	 * the receive threshold. When rx is LONGER than tx (both buffers present),
+	 * the controller under-clocks: it stops after tx_size characters, so the
+	 * self-polling MXC_SPI_MasterTransaction spins forever waiting for the
+	 * remaining RX bytes -> hang. Pad TX up to rx_size with dummy (0x00) bytes
+	 * so enough clocks are generated; the extra RX bytes are the caller's to
+	 * ignore. (tx==NULL is handled by the MSDK itself; tx>=rx needs nothing.)
+	 */
+	uint8_t *tx_pad = NULL;
+	uint8_t *rx_pad = NULL;
+
+	if (transfer->tx_buf && transfer->rx_buf &&
+	    transfer->tx_size < transfer->rx_size) {
+		tx_pad = capi_calloc(1, transfer->rx_size);
+		if (!tx_pad)
+			return -ENOMEM;
+
+		memcpy(tx_pad, transfer->tx_buf, transfer->tx_size);
+		req.txData = tx_pad;
+		req.txLen = transfer->rx_size;
+	}
+
+	/*
+	 * Mirror case: when tx is LONGER than rx, reva clocks tx_size characters
+	 * and drains ALL of them from the RX FIFO -- writing past the caller's
+	 * rx_size and clobbering whatever follows rx_buf. Give reva a scratch RX
+	 * buffer sized to the clock count, then copy back only the requested
+	 * rx_size bytes so the caller's buffer is never overrun.
+	 */
+	if (transfer->tx_buf && transfer->rx_buf &&
+	    transfer->tx_size > transfer->rx_size) {
+		rx_pad = capi_calloc(1, transfer->tx_size);
+		if (!rx_pad) {
+			if (tx_pad)
+				capi_free(tx_pad);
+			return -ENOMEM;
+		}
+
+		req.rxData = rx_pad;
+		req.rxLen = transfer->tx_size;
+	}
 
 	ret = MXC_SPI_MasterTransaction(&req);
+
+	if (rx_pad) {
+		memcpy(transfer->rx_buf, rx_pad, transfer->rx_size);
+		capi_free(rx_pad);
+	}
+	if (tx_pad)
+		capi_free(tx_pad);
 
 	return _max_capi_spi_err(ret);
 }
@@ -394,8 +482,12 @@ int max_capi_spi_transceive_async(struct capi_spi_device *device,
 
 	priv->async_in_progress = true;
 
+	/* Arm the NVIC line only for the async transfer (see init). */
+	capi_irq_enable(MXC_SPI_GET_IRQ(priv->identifier));
+
 	ret = MXC_SPI_MasterTransactionAsync(&priv->async_req);
 	if (ret != E_NO_ERROR) {
+		capi_irq_disable(MXC_SPI_GET_IRQ(priv->identifier));
 		priv->async_in_progress = false;
 		return _max_capi_spi_err(ret);
 	}
@@ -452,15 +544,90 @@ int max_capi_spi_read_command(struct capi_spi_device *device,
 }
 
 /**
- * @brief Async command-then-read. Documented follow-up for the common backend.
+ * @brief Async command-then-read within a single CS frame.
+ *
+ * The MSDK async engine drives one request, so the command (Tx) phase is issued
+ * blocking with CS held (ssDeassert = 0, ISR line still down), then the response
+ * (Rx) phase is armed async and delivers the completion callback. A zero-length
+ * Rx degenerates into a blocking write with a synchronous XFR_DONE callback.
+ *
+ * reva under-clocks a tx-less transfer (it clocks txLen characters and only
+ * thresholds on rxLen), so the Rx phase is given a zero-filled TX-pad sized to
+ * rx_size -- mirroring the blocking transceive fix. The pad is owned by priv for
+ * the async lifetime and freed by the completion trampoline / abort path.
  */
 int max_capi_spi_read_command_async(struct capi_spi_device *device,
 				    struct capi_spi_transfer *transfer)
 {
-	(void)device;
-	(void)transfer;
+	struct max_capi_spi_priv *priv;
+	capi_spi_callback_t callback;
+	void *callback_arg;
+	mxc_spi_req_t tx_req;
+	uint8_t *tx_pad;
+	int ret;
 
-	return -ENOSYS;
+	if (!device || !device->controller || !device->controller->priv || !transfer)
+		return -EINVAL;
+
+	priv = device->controller->priv;
+
+	if (priv->async_in_progress)
+		return -EBUSY;
+
+	ret = _max_capi_spi_apply_device(priv, device);
+	if (ret)
+		return ret;
+
+	/* Tx phase: send command/address blocking, keep CS asserted if a read
+	 * follows. Runs with the ISR line disabled -- see init. */
+	if (transfer->tx_size) {
+		_max_capi_spi_build_req(priv, device, transfer, &tx_req,
+					transfer->rx_size ? 0 : 1, NULL);
+		tx_req.rxData = NULL;
+		tx_req.rxLen = 0;
+
+		ret = MXC_SPI_MasterTransaction(&tx_req);
+		if (ret != E_NO_ERROR)
+			return _max_capi_spi_err(ret);
+	}
+
+	/* No read requested: the write is already done. Deliver the terminal
+	 * callback synchronously so the caller's completion contract holds. */
+	if (!transfer->rx_size) {
+		callback = priv->callback;
+		callback_arg = priv->callback_arg;
+		if (callback)
+			callback(CAPI_SPI_EVENT_XFR_DONE, callback_arg, 0);
+		return 0;
+	}
+
+	/* Rx phase: TX-pad of zeros so reva generates rx_size clocks; the pad
+	 * lives until completion/abort frees it. */
+	tx_pad = capi_calloc(1, transfer->rx_size);
+	if (!tx_pad)
+		return -ENOMEM;
+
+	_max_capi_spi_build_req(priv, device, transfer, &priv->async_req, 1,
+				_max_capi_spi_complete_cb);
+	priv->async_req.txData = tx_pad;
+	priv->async_req.txLen = transfer->rx_size;
+	priv->async_tx_pad = tx_pad;
+
+	priv->async_in_progress = true;
+
+	/* Arm the NVIC line only for the async transfer (see init). */
+	capi_irq_enable(MXC_SPI_GET_IRQ(priv->identifier));
+
+	ret = MXC_SPI_MasterTransactionAsync(&priv->async_req);
+	if (ret != E_NO_ERROR) {
+		capi_irq_disable(MXC_SPI_GET_IRQ(priv->identifier));
+		priv->async_in_progress = false;
+		priv->async_tx_pad = NULL;
+		capi_free(tx_pad);
+		return _max_capi_spi_err(ret);
+	}
+
+	return 0;
 }
 
 /**
@@ -469,14 +636,41 @@ int max_capi_spi_read_command_async(struct capi_spi_device *device,
 int max_capi_spi_abort_async(struct capi_spi_device *device)
 {
 	struct max_capi_spi_priv *priv;
+	capi_spi_callback_t callback;
+	void *callback_arg;
+	bool was_active;
 
 	if (!device || !device->controller || !device->controller->priv)
 		return -EINVAL;
 
 	priv = device->controller->priv;
 
+	was_active = priv->async_in_progress;
+
 	MXC_SPI_AbortAsync(priv->regs);
+	capi_irq_disable(MXC_SPI_GET_IRQ(priv->identifier));
 	priv->async_in_progress = false;
+
+	/* Release any TX-pad from an aborted async read_command RX phase. */
+	if (priv->async_tx_pad) {
+		capi_free(priv->async_tx_pad);
+		priv->async_tx_pad = NULL;
+	}
+
+	/*
+	 * The CAPI abort contract requires a single terminal callback for the
+	 * transfer that was torn down. MXC_SPI_AbortAsync does NOT invoke the
+	 * registered completeCB, so deliver it here. Guard on was_active so an
+	 * abort with nothing in flight (or after the ISR already completed the
+	 * transfer) does not emit a spurious second callback. extra=0: the abort
+	 * is a clean, caller-initiated teardown, not a hardware error code.
+	 */
+	if (was_active) {
+		callback = priv->callback;
+		callback_arg = priv->callback_arg;
+		if (callback)
+			callback(CAPI_SPI_EVENT_ERROR, callback_arg, 0);
+	}
 
 	return 0;
 }
@@ -513,10 +707,29 @@ int max_capi_spi_set_cs(struct capi_spi_device *device,
 	if (!device || !device->controller || !device->controller->priv)
 		return -EINVAL;
 
-	if (cs_control == CAPI_SPI_CS_AUTO)
+	struct max_capi_spi_priv *priv = device->controller->priv;
+
+	switch (cs_control) {
+	case CAPI_SPI_CS_AUTO:
+		/* Return to per-transaction HW framing. */
+		priv->cs_hold = false;
 		return 0;
 
-	return -ENOSYS;
+	case CAPI_SPI_CS_MANUAL_ASSERT:
+		/* Hold CS asserted across the following transfer(s). */
+		priv->cs_hold = true;
+		return 0;
+
+	case CAPI_SPI_CS_MANUAL_DEASSERT:
+		/* Release a held CS: clear the SS-control/START bits reva latched
+		 * during the ssDeassert = 0 transaction. */
+		priv->cs_hold = false;
+		priv->regs->ctrl0 &= ~(MXC_F_SPI_CTRL0_SS_CTRL | MXC_F_SPI_CTRL0_START);
+		return 0;
+
+	default:
+		return -ENOSYS;
+	}
 }
 
 /**

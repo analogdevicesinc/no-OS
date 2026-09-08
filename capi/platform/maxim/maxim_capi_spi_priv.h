@@ -45,8 +45,14 @@ struct max_capi_spi_priv {
 	void *callback_arg;
 	/** In-flight async request (owned by MSDK while active). */
 	mxc_spi_req_t async_req;
+	/** Zero-filled dummy-TX pad allocated for an async read_command RX
+	 *  phase (clocks the bus, like the tx_pad in transceive); freed on
+	 *  completion/abort. NULL when the async request owns no pad. */
+	void *async_tx_pad;
 	/** Async transfer in progress. */
 	volatile bool async_in_progress;
+	/** Manual CS held asserted across transfers (set_cs MANUAL_ASSERT). */
+	bool cs_hold;
 };
 
 #define CAPI_SPI_HANDLE_MAXIM_INIT()			\
