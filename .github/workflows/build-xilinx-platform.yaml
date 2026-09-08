@@ -66,7 +66,7 @@ jobs:
       RELEASES_DIR: ${{ github.workspace }}/latest_build
       LOGS_DIR: ${{ github.workspace }}/logs
       NO_OS_CACHE_DIR: ${{ github.workspace }}/deps_cache
-    runs-on: test-vitis-error
+    runs-on: noos-runner-xilinx
     timeout-minutes: 600
     steps:
       - name: Checkout code
