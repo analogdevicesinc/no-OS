@@ -135,9 +135,9 @@ int chibios_i2c_write(struct no_os_i2c_desc *desc,
 	xdesc = desc->extra;
 
 	if (!stop_bit) {
-		chI2CBuffer = (uint8_t *)no_os_malloc(bytes_number * sizeof(uint8_t));
-		memcpy(chI2CBuffer, data, bytes_number);
-		buffSize = bytes_number;
+		xdesc->buffer = (uint8_t *)no_os_malloc(bytes_number * sizeof(uint8_t));
+		memcpy(xdesc->buffer, data, bytes_number);
+		xdesc->buffer_size = bytes_number;
 		ret = I2C_NO_ERROR;
 	} else {
 		ret = i2cMasterTransmitTimeout(xdesc->hi2c,  desc->slave_address, data,
@@ -176,10 +176,10 @@ int chibios_i2c_read(struct no_os_i2c_desc *desc,
 //		no current implementation, (from no-os drivers only adxl372 uses consequtive reads without stop bit)
 		ret = I2C_NO_ERROR;
 	} else {
-		ret = i2cMasterTransmitTimeout(xdesc->hi2c,  desc->slave_address, chI2CBuffer,
-					       buffSize, data, bytes_number, TIME_INFINITE);
-		no_os_free(chI2CBuffer);
-		buffSize = 0;
+		ret = i2cMasterTransmitTimeout(xdesc->hi2c,  desc->slave_address, xdesc->buffer,
+					       xdesc->buffer_size, data, bytes_number, TIME_INFINITE);
+		no_os_free(xdesc->buffer);
+		xdesc->buffer_size = 0;
 	}
 
 	if (ret != I2C_NO_ERROR)
