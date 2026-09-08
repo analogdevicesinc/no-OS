@@ -708,7 +708,7 @@ int32_t ad5770r_init(struct ad5770r_dev **device,
 	if (product_id_l != 0x04 || product_id_h != 0x40) {
 		printf("failed to read id (0x%X : 0x%X)\n", product_id_l,
 		       product_id_h);
-		return -1;
+		goto error_gpio;
 	}
 
 	/* Device settings */
