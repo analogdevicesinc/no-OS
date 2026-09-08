@@ -47,6 +47,7 @@ int example_main()
 	int ret;
 	int32_t val;
 
+#ifndef CONFIG_FTD2XX
 	struct no_os_uart_desc *uart;
 
 	ret = no_os_uart_init(&uart, &uip);
@@ -54,6 +55,7 @@ int example_main()
 		goto error;
 
 	no_os_uart_stdio(uart);
+#endif
 
 	pr_info("\r\nRunning MAX31827 Basic Example\r\n");
 
@@ -74,7 +76,9 @@ int example_main()
 free_dev:
 	max31827_remove(dev);
 free_uart:
+#ifndef CONFIG_FTD2XX
 	no_os_uart_remove(uart);
+#endif
 error:
 	pr_info("Error!\r\n");
 	return ret;
