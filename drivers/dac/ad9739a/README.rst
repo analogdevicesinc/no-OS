@@ -104,7 +104,7 @@ Mode and Output Current Configuration
 
 For fine-tuning the DAC's operational behavior, the driver includes
 functions that adjust both the operational mode and the full-scale
-output current. The ``ad_serdes_clk()`` function selects among different
+output current. The ``ad9739a_operation_mode()`` function selects among different
 operational modes—such as normal baseband mode or mixed mode—by
 configuring the device's mode register, and it also supports reading the
 current mode setting. In addition, the ``ad9739a_dac_fs_current()``
