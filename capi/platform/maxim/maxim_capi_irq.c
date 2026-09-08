@@ -395,6 +395,9 @@ int max_capi_irq_get_priority(uint32_t irq, uint32_t *priority)
 	if (!_max_capi_irq_is_valid_irq(irq))
 		return -EINVAL;
 
+	if (!priority)
+		return -EINVAL;
+
 	*priority = NVIC_GetPriority(irq);
 
 	return 0;
