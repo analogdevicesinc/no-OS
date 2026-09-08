@@ -87,6 +87,7 @@ int32_t linux_gpio_get(struct no_os_gpio_desc **desc,
 
 	descriptor->extra = linux_desc;
 	descriptor->number = param->number;
+	descriptor->port = param->port;
 
 	sprintf(path, "/dev/gpiochip%d", descriptor->port);
 	timeout = GPIO_TIMEOUT_MS;
