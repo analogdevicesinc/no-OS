@@ -36,8 +36,10 @@ no_os_sources_ifdef(CONFIG_DMA_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/common/maxim_dm
 
 target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_init.c)
 
-# Delay (always included when not using FreeRTOS)
-if(NOT ${CONFIG_FREERTOS})
+# Delay (always included when not using FreeRTOS). The CAPI time backend
+# (maxim_capi_time.c) owns SysTick_Handler and the time base when CONFIG_CAPI_TIME
+# is set, so skip the legacy delay file then to avoid a duplicate SysTick_Handler.
+if(NOT ${CONFIG_FREERTOS} AND NOT ${CONFIG_CAPI_TIME})
         target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_delay.c)
 endif()
 
