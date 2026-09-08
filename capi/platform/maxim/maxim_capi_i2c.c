@@ -11,7 +11,9 @@
  * against the uniform MSDK public API (3-arg MXC_I2C_Init, identical
  * mxc_i2c_req_t, MXC_I2C_MasterTransaction[Async]) so there are no per-part
  * #ifdefs in the transfer flow. Controller mode (blocking + async) is fully
- * supported; target mode is a documented follow-up (returns -ENOSYS).
+ * supported; target (peripheral) mode is driven by the MSDK slave FSM
+ * (MXC_I2C_SlaveTransactionAsync + a per-instance slave-event handler), so the
+ * target-side transmit_async/receive_async arm the same instance as a slave.
  */
 
 #include <errno.h>
@@ -31,6 +33,9 @@ static struct capi_i2c_controller_handle *i2c[MXC_I2C_INSTANCES] = {NULL};
 /** Forward declarations ******************************************************/
 
 void max_capi_i2c_isr(void *handle);
+static int _max_capi_i2c_slave_handler(mxc_i2c_regs_t *regs,
+				       mxc_i2c_slave_event_t event, void *data);
+static int _max_capi_i2c_slave_arm(struct max_capi_i2c_priv *priv);
 
 /** Helpers *******************************************************************/
 
@@ -240,6 +245,7 @@ int max_capi_i2c_init(struct capi_i2c_controller_handle **handle,
 	priv->extra = config->extra;
 	priv->dma_handle = config->dma_handle;
 	priv->freq = config->clk_freq_hz ? config->clk_freq_hz : 100000;
+	priv->is_target = !config->initiator;
 
 	/* masterMode=1 for controller, slaveAddr ignored in master mode. */
 	ret = MXC_I2C_Init(regs, config->initiator ? 1 : 0,
@@ -448,6 +454,15 @@ int max_capi_i2c_transmit_async(struct capi_i2c_device *device,
 
 	priv = device->controller->priv;
 
+	if (priv->is_target) {
+		/* Target-mode: stage the buffer the master will clock out of us
+		 * and arm the slave FSM (no sub_address, no addressing). */
+		priv->tgt_tx_buf = transfer->buf;
+		priv->tgt_tx_len = transfer->len;
+		priv->tgt_tx_cnt = 0;
+		return _max_capi_i2c_slave_arm(priv);
+	}
+
 	if (priv->async_in_progress)
 		return -EBUSY;
 
@@ -492,6 +507,15 @@ int max_capi_i2c_receive_async(struct capi_i2c_device *device,
 		return -EINVAL;
 
 	priv = device->controller->priv;
+
+	if (priv->is_target) {
+		/* Target-mode: stage the buffer the master will write into us
+		 * and arm the slave FSM. */
+		priv->tgt_rx_buf = transfer->buf;
+		priv->tgt_rx_len = transfer->len;
+		priv->tgt_rx_cnt = 0;
+		return _max_capi_i2c_slave_arm(priv);
+	}
 
 	if (priv->async_in_progress)
 		return -EBUSY;
@@ -538,28 +562,183 @@ int max_capi_i2c_recover_bus(struct capi_i2c_controller_handle *handle)
 }
 
 /**
- * @brief Register in target mode.
+ * @brief MSDK slave-event handler; moves bytes between the FIFO and the buffer
+ *	  armed by the target-side transmit_async/receive_async, and fires the
+ *	  CAPI completion callback when the master ends the transaction.
  *
- * Target (peripheral) mode is a documented follow-up for the common backend;
- * the classic MSDK slave FSM (MXC_I2C_SlaveTransaction) is not yet wired here.
+ * Runs in interrupt context (pumped by MXC_I2C_AsyncHandler in the ISR). The
+ * per-instance state is recovered from the register block, mirroring the
+ * master completion trampoline. Return value is only honoured for RX_THRESH
+ * (0 => ACK the last byte); it is ignored for every other event.
+ */
+static int _max_capi_i2c_slave_handler(mxc_i2c_regs_t *regs,
+				       mxc_i2c_slave_event_t event, void *data)
+{
+	int idx;
+	struct capi_i2c_controller_handle *handle;
+	struct max_capi_i2c_priv *priv;
+	int result;
+	uint32_t space, num;
+
+	idx = MXC_I2C_GET_IDX(regs);
+	if (idx < 0 || idx >= (int)MXC_I2C_INSTANCES)
+		return 0;
+
+	handle = i2c[idx];
+	if (!handle || !handle->priv)
+		return 0;
+
+	priv = handle->priv;
+
+	switch (event) {
+	case MXC_I2C_EVT_MASTER_WR:
+		/* Master is addressing us to write: start of an RX phase. */
+		priv->tgt_rx_cnt = 0;
+		break;
+
+	case MXC_I2C_EVT_MASTER_RD:
+		/* Master is addressing us to read: prime the TX phase. Clear the
+		 * TX-lockout and address-match flags so the FIFO can be loaded.
+		 * Feature-probed: the flat-layout parts (e.g. MAX32657) name the
+		 * INTFL0 fields differently; skip the poke there rather than
+		 * hard-fail the common build (§2.3). */
+#if defined(MXC_F_I2C_INTFL0_TX_LOCKOUT) && defined(MXC_F_I2C_INTFL0_ADDR_MATCH)
+		regs->intfl0 = MXC_F_I2C_INTFL0_TX_LOCKOUT |
+			       MXC_F_I2C_INTFL0_ADDR_MATCH;
+#endif
+		priv->tgt_tx_cnt = 0;
+		break;
+
+	case MXC_I2C_EVT_RX_THRESH:
+	case MXC_I2C_EVT_OVERFLOW:
+		if (priv->tgt_rx_buf && priv->tgt_rx_cnt < priv->tgt_rx_len) {
+			space = priv->tgt_rx_len - priv->tgt_rx_cnt;
+			num = (uint32_t)MXC_I2C_GetRXFIFOAvailable(regs);
+			if (num > space)
+				num = space;
+			priv->tgt_rx_cnt += (uint32_t)MXC_I2C_ReadRXFIFO(regs,
+					    priv->tgt_rx_buf + priv->tgt_rx_cnt,
+					    num);
+		}
+		break;
+
+	case MXC_I2C_EVT_TX_THRESH:
+	case MXC_I2C_EVT_UNDERFLOW:
+		if (priv->tgt_tx_buf && priv->tgt_tx_cnt < priv->tgt_tx_len) {
+			num = (uint32_t)MXC_I2C_GetTXFIFOAvailable(regs);
+			if (num > priv->tgt_tx_len - priv->tgt_tx_cnt)
+				num = priv->tgt_tx_len - priv->tgt_tx_cnt;
+			priv->tgt_tx_cnt += (uint32_t)MXC_I2C_WriteTXFIFO(regs,
+					    priv->tgt_tx_buf + priv->tgt_tx_cnt,
+					    num);
+		}
+		break;
+
+	case MXC_I2C_EVT_TRANS_COMP:
+	default:
+		/* Transaction ended: drain any RX bytes still in the FIFO, then
+		 * report completion to the registered CAPI callback exactly once. */
+		result = data ? *((int *)data) : E_NO_ERROR;
+
+		if (priv->tgt_rx_buf && priv->tgt_rx_cnt < priv->tgt_rx_len) {
+			space = priv->tgt_rx_len - priv->tgt_rx_cnt;
+			num = (uint32_t)MXC_I2C_GetRXFIFOAvailable(regs);
+			if (num > space)
+				num = space;
+			priv->tgt_rx_cnt += (uint32_t)MXC_I2C_ReadRXFIFO(regs,
+					    priv->tgt_rx_buf + priv->tgt_rx_cnt,
+					    num);
+		}
+
+		priv->tgt_rx_buf = NULL;
+		priv->tgt_tx_buf = NULL;
+		priv->async_in_progress = false;
+
+		if (priv->callback)
+			priv->callback((result == E_NO_ERROR ||
+					result == E_SUCCESS) ?
+				       CAPI_I2C_XFR_DONE : CAPI_I2C_NAKD,
+				       priv->callback_arg, result);
+		return 1;
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Arm the slave FSM for one target-mode transaction.
+ *
+ * Called from the target-side transmit_async/receive_async paths once the
+ * direction buffers are staged. MXC_I2C_AsyncHandler (driven by the ISR) then
+ * pumps _max_capi_i2c_slave_handler until the master ends the transaction.
+ */
+static int _max_capi_i2c_slave_arm(struct max_capi_i2c_priv *priv)
+{
+	int ret;
+
+	if (priv->async_in_progress)
+		return -EBUSY;
+
+	priv->async_in_progress = true;
+
+	ret = MXC_I2C_SlaveTransactionAsync(priv->regs,
+					    _max_capi_i2c_slave_handler);
+	if (ret != E_NO_ERROR) {
+		priv->async_in_progress = false;
+		priv->tgt_rx_buf = NULL;
+		priv->tgt_tx_buf = NULL;
+		return _max_capi_i2c_err(ret);
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Register in target (peripheral) mode at the given address.
+ *
+ * Disables initiator behaviour for this instance and programs the hardware
+ * address-match register (slave-address index 0). The instance was already
+ * brought up as a slave by init() when config->initiator was false; this lets
+ * the address be (re)set independently, per the contract.
  */
 int max_capi_i2c_register_target(struct capi_i2c_controller_handle *handle,
 				 uint16_t addr)
 {
-	(void)handle;
-	(void)addr;
+	struct max_capi_i2c_priv *priv;
+	int ret;
 
-	return -ENOSYS;
+	if (!handle || !handle->priv)
+		return -EINVAL;
+
+	priv = handle->priv;
+
+	ret = MXC_I2C_SetSlaveAddr(priv->regs, addr, 0);
+	if (ret != E_NO_ERROR)
+		return _max_capi_i2c_err(ret);
+
+	priv->is_target = true;
+
+	return 0;
 }
 
 /**
- * @brief Unregister from target mode. See max_capi_i2c_register_target().
+ * @brief Unregister from target mode. Aborts any armed slave transaction.
  */
 int max_capi_i2c_unregister_target(struct capi_i2c_controller_handle *handle)
 {
-	(void)handle;
+	struct max_capi_i2c_priv *priv;
 
-	return -ENOSYS;
+	if (!handle || !handle->priv)
+		return -EINVAL;
+
+	priv = handle->priv;
+
+	priv->is_target = false;
+	priv->tgt_rx_buf = NULL;
+	priv->tgt_tx_buf = NULL;
+	priv->async_in_progress = false;
+
+	return 0;
 }
 
 /**

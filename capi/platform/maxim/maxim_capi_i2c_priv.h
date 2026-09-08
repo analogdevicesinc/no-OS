@@ -10,7 +10,8 @@
  * Controller-mode async is driven by the MSDK interrupt engine
  * (MXC_I2C_MasterTransactionAsync + MXC_I2C_AsyncHandler), so this backend
  * keeps only one in-flight request slot and a small bookkeeping block.
- * Target (peripheral) mode is a documented follow-up.
+ * Target (peripheral) mode reuses that slot's async_in_progress flag and adds
+ * its own RX/TX buffer bookkeeping, driven by the MSDK slave FSM.
  */
 
 #ifndef MAXIM_CAPI_I2C_PRIV_H_
@@ -50,6 +51,16 @@ struct max_capi_i2c_priv {
 	uint8_t *async_combined;
 	/** Async transfer in progress. */
 	volatile bool async_in_progress;
+	/** Target (peripheral) mode active on this instance. */
+	volatile bool is_target;
+	/** Target-mode RX buffer, capacity, and running byte count. */
+	uint8_t *tgt_rx_buf;
+	uint32_t tgt_rx_len;
+	volatile uint32_t tgt_rx_cnt;
+	/** Target-mode TX buffer, length, and running byte count. */
+	uint8_t *tgt_tx_buf;
+	uint32_t tgt_tx_len;
+	volatile uint32_t tgt_tx_cnt;
 };
 
 #define CAPI_I2C_CONTROLLER_HANDLE_MAXIM_INIT()		\
