@@ -18,6 +18,10 @@
 #include "adi_apollo.h"
 #include "adi_apollo_bf_custom.h"
 #include "adi_apollo_adc.h"
+#include "adi_apollo_tmode.h"
+#include "adi_apollo_dformat.h"
+#include "adi_apollo_smon.h"
+#include "adi_apollo_bmem.h"
 #include "adi_apollo_cfg.h"
 #include "adi_apollo_sysclk_cond.h"
 #include "adi_apollo_hal.h"
@@ -191,6 +195,14 @@ struct ad9088_phy {
 	struct no_os_gpio_desc *triq_req_gpio;
 	struct no_os_gpio_desc *reset_gpio;
 
+	/*
+	 * Per-link LID storage. struct jesd204_link carries lane_ids as a bare
+	 * pointer with no backing store, and axi_jesd204_tx_apply_config() reads it
+	 * long after link_init() returns, so it has to live as long as the device.
+	 * One row per link id, so it can be indexed by lnk->link_id directly.
+	 */
+	uint8_t lane_ids[FRAMER_LINK_B1_RX + 1][ADI_APOLLO_JESD_MAX_LANES_PER_SIDE];
+
 	bool is_initialized;
 	bool spi_3wire_en;
 	bool trig_sync_en;
@@ -262,6 +274,7 @@ int ad9088_check_apollo_error(int ret, const char *api_name);
 uint8_t ad9088_to_link(uint8_t linkid);
 int ad9088_inspect_jrx_link_all(struct ad9088_phy *phy);
 int ad9088_inspect_jtx_link_all(struct ad9088_phy *phy);
+int ad9088_link_status_dump(struct ad9088_phy *phy);
 void ad9088_print_link_phase(struct ad9088_phy *phy, struct jesd204_link *lnk);
 void ad9088_print_sysref_phase(struct ad9088_phy *phy);
 int ad9088_jesd_tx_link_status_print(struct ad9088_phy *phy,

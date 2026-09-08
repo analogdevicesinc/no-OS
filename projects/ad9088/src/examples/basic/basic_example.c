@@ -225,6 +225,13 @@ int basic_example_main()
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_jesd);
 
+	/*
+	 * Converter-side view of the same links, per lane. The FPGA status above
+	 * only says what the link cores see; this says what the AD9088 sees, which
+	 * is the half that identifies a dead or mismapped lane.
+	 */
+	ad9088_link_status_dump(ad9088_phy);
+
 	pr_info("Project configured\n");
 
 	/* NCO smoke test: tune RX CNCO0 side A, read it back. */

@@ -35,6 +35,7 @@ static int ad9088_jesd204_link_init(struct jesd204_dev *jdev,
 	adi_apollo_jesd_rx_cfg_t *jrx;
 	uint8_t sideIdx, linkIdx;
 	unsigned long lane_rate_kbps;
+	unsigned int i;
 	int ret;
 
 	switch (reason) {
@@ -89,6 +90,18 @@ static int ad9088_jesd204_link_init(struct jesd204_dev *jdev,
 			phy->profile.dac_cfg[sideIdx].dac_sampling_rate_Hz;
 		lnk->sample_rate_div =
 			jrx->rx_link_cfg[linkIdx].link_total_ratio;
+
+		/*
+		 * LIDs, which nothing else fills in: struct jesd204_link carries
+		 * lane_ids as a bare pointer, and axi_jesd204_tx_apply_config() reads
+		 * it when it builds the ILAS. Left NULL it is dereferenced anyway, and
+		 * on a target where address 0 is a live peripheral that silently ships
+		 * whatever that register holds as the lane's LID.
+		 */
+		for (i = 0; i < lnk->num_lanes &&
+		     i < ADI_APOLLO_JESD_MAX_LANES_PER_SIDE; i++)
+			phy->lane_ids[lnk->link_id][i] = i;
+		lnk->lane_ids = phy->lane_ids[lnk->link_id];
 		break;
 	case FRAMER_LINK_A0_RX:
 	case FRAMER_LINK_A1_RX:
@@ -131,6 +144,18 @@ static int ad9088_jesd204_link_init(struct jesd204_dev *jdev,
 			phy->profile.adc_cfg[sideIdx].adc_sampling_rate_Hz;
 		lnk->sample_rate_div =
 			jtx->tx_link_cfg[linkIdx].link_total_ratio;
+
+		/*
+		 * LIDs, which nothing else fills in: struct jesd204_link carries
+		 * lane_ids as a bare pointer, and axi_jesd204_tx_apply_config() reads
+		 * it when it builds the ILAS. Left NULL it is dereferenced anyway, and
+		 * on a target where address 0 is a live peripheral that silently ships
+		 * whatever that register holds as the lane's LID.
+		 */
+		for (i = 0; i < lnk->num_lanes &&
+		     i < ADI_APOLLO_JESD_MAX_LANES_PER_SIDE; i++)
+			phy->lane_ids[lnk->link_id][i] = i;
+		lnk->lane_ids = phy->lane_ids[lnk->link_id];
 		break;
 	default:
 		return -EINVAL;

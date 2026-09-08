@@ -69,6 +69,7 @@
 
 #define JESD204_TX_REG_CONF0			0x210
 
+
 #define JESD204_TX_REG_LINK_CONF4		0x21C
 
 #define JESD204_TX_REG_LINK_STATUS		0x280
@@ -476,7 +477,22 @@ int32_t axi_jesd204_tx_apply_config(struct axi_jesd204_tx *jesd,
 			if (i >= config->num_lanes)
 				i = 0;
 
-			lane_id = config->lane_ids[i++];
+			/*
+			 * lane_ids has no backing store in struct jesd204_link, so a
+			 * device driver that forgets it leaves a null pointer here. Fall
+			 * back to the physical index rather than dereferencing it: on a
+			 * target where address 0 is a live peripheral the read succeeds
+			 * and ships a bogus LID, which the far end reports as a bad ILAS
+			 * checksum rather than as a fault.
+			 */
+			if (config->lane_ids) {
+				lane_id = config->lane_ids[i++];
+			} else {
+				lane_id = lane;
+				if (lane == 0)
+					pr_warning("%s: link has no lane_ids, using physical lane index as LID\n",
+						   jesd->name);
+			}
 			axi_jesd204_tx_set_lane_ilas(jesd, config, lane_id, lane);
 		}
 	}
@@ -608,17 +624,17 @@ static int axi_jesd204_tx_jesd204_link_pre_setup(struct jesd204_dev *jdev,
 	}
 
 #ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+#endif
+
 	/*
-	 * Reset is released here, at LINK_PRE_SETUP - which is BEFORE refclk_ready is
-	 * gated on at LINK_SETUP. That looks backwards but is what Linux does: its
-	 * adxcvr hangs off the lane clock, so the set_rate above is what toggles
-	 * RESETN (altera_adxcvr.c adxcvr_dummy_pll_set_rate ->
-	 * adxcvr_finalize_lane_rate_change) and clk_set_rate(lane_clk) likewise sits
-	 * in axi_jesd204_rx_jesd204_link_pre_setup there. The GTS reset controller
-	 * waits for the reference clock, so it completes once LINK_SETUP arrives.
+	 * Released here, at LINK_PRE_SETUP, and deliberately earlier than the
+	 * receive side. The converter calibrates its own deframer against this
+	 * transmitter during CLOCKS_ENABLE, so the lanes have to be running by
+	 * then: moving this to LINK_SETUP, behind the reference-clock delay and
+	 * the reset poll, made adi_apollo_serdes_jrx_init_cal fail with -85 and
+	 * left every link in CGS with SYNC asserted.
 	 */
 	altera_gts_xcvr_reset(jesd->name, jesd->xcvr_base);
-#endif
 
 	return JESD204_STATE_CHANGE_DONE;
 }

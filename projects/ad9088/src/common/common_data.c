@@ -125,7 +125,7 @@ static struct hmc7044_chan_spec hmc7044_chans[] = {
 	{
 		.num = 3,			// ADF4030_BSYNC0
 		.divider = AD9088_HMC_SYSREF_DIV,	// SYSREF (profile-dependent)
-		.driver_mode = 1,		// LVPECL
+		.driver_mode = 2,		// LVDS
 		.is_sysref = true,
 	},
 	{
@@ -152,6 +152,20 @@ static struct hmc7044_chan_spec hmc7044_chans[] = {
 		.num = 12,			// CORE_CLK_TX_B
 		.divider = AD9088_HMC_CORECLK_DIV,	// link clock (profile-dependent)
 		.driver_mode = 2,		// LVDS
+	},
+	{
+		/*
+		 * FPGA_SYSREF. The FPGA takes its SYSREF from the ADF4030
+		 * (SYSREF_OUT_FMC, pin T65 in both bitstreams), so this output
+		 * feeds no pin the design uses -- but the reference DT enables it
+		 * with the same divider and marks it a SYSREF channel, and an
+		 * output left in its reset state is not the same as one that
+		 * matches a working setup.
+		 */
+		.num = 13,			// FPGA_SYSREF
+		.divider = AD9088_HMC_SYSREF_DIV,
+		.driver_mode = 2,		// LVDS
+		.is_sysref = true,
 	}
 };
 

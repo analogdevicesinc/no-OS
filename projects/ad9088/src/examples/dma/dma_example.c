@@ -90,22 +90,90 @@
  * ceiling for the static buffer below; the depth the offload actually has is
  * read back from its memory size register at runtime and the transfer clamped
  * to the smaller of the two.
+ *
+ * A platform header may pin it to the offload its bitstream actually has, which
+ * matters where the buffer competes for on-chip memory rather than sitting in
+ * external DDR.
  */
+#ifndef TX_OFFLOAD_MAX_BYTES
 #define TX_OFFLOAD_MAX_BYTES		(512 * 1024)
+#endif
 
 /*
  * axi_data_offload register map, the part of it this example needs, from
- * data_offload_regmap.v. MEMORY_SIZE_LSB is the storage depth in bytes, read
- * only; RESETN_OFFLOAD bit 0 low holds the IP in reset.
+ * data_offload_regmap.v. That file gives word addresses; these are the byte
+ * offsets, i.e. word * 4. MEMORY_SIZE_LSB is the storage depth in bytes, read
+ * only; RESETN_OFFLOAD bit 0 low holds the IP in reset. The two STATUS flags are
+ * write-1-to-clear and latch, so they must be cleared before a run to mean
+ * anything after it.
  */
+#define AXI_DO_REG_CONFIG		0x0010
+#define AXI_DO_CONFIG_HAS_BYPASS	NO_OS_BIT(2)
 #define AXI_DO_REG_MEMORY_SIZE_LSB	0x0014
+#define AXI_DO_REG_STATUS		0x0080
+#define AXI_DO_STATUS_SRC_OVERFLOW	NO_OS_BIT(4)
+#define AXI_DO_STATUS_DST_UNDERFLOW	NO_OS_BIT(5)
 #define AXI_DO_REG_RESETN_OFFLOAD	0x0084
+#define AXI_DO_REG_CONTROL		0x0088
+#define AXI_DO_CONTROL_BYPASS		NO_OS_BIT(0)
+/*
+ * Whether the transmit data offload runs in bypass. Off makes the offload store
+ * one DMA fill and replay it, which is the path the HDL is built around; on makes
+ * the DMA feed the transport layer continuously.
+ */
+#define TX_OFFLOAD_BYPASS		0
+
+/*
+ * Converter test mode. The generator sits in the device's JTX datapath, past the
+ * ADC and past the decimators, so a capture taken with it on exercises the
+ * serial link, the FPGA deframer, the transport layer, the offload and the DMA
+ * without the converter contributing anything.
+ *
+ * That is the one measurement the loopback cannot make. Every register on the
+ * FPGA side matches a working Linux bring-up, the 8B/10B error counters are zero
+ * -- so the octets arrive with valid codes and correct disparity -- and yet the
+ * samples are uniformly distributed over full scale. Uniform is the signature of
+ * random bits, not of a converter: thermal noise is Gaussian and small. If a
+ * known pattern comes back intact, the fault is upstream of the JTX and the
+ * whole FPGA side is exonerated; if it comes back as noise, it is not.
+ *
+ * RAMP is the default because it checks sample order and converter assignment as
+ * well as bit integrity. MIDSCALE (constant zero) is the blunter test: any
+ * non-zero sample is then a defect, with no interpretation needed.
+ */
+/*
+ * SYSREF status, at the same offset in both the receive and the transmit link
+ * core (jesd204_up_sysref.v word 0x042). Bit 0 latches a captured edge and bit 1
+ * an edge that did not land on an LMFC boundary; both are write-1-to-clear, and
+ * the clear is not gated by the core being disabled.
+ */
+#define JESD_REG_SYSREF_STATUS		0x108
+#define JESD_SYSREF_CAPTURED		NO_OS_BIT(0)
+#define JESD_SYSREF_ALIGNMENT_ERROR	NO_OS_BIT(1)
+
+
+/*
+ * Periods of the transmit tone across the whole buffer. The buffer is replayed
+ * cyclically, so an integer count is what keeps the wrap free of a phase step;
+ * the capture is the same length, so the tone also lands on exactly this bin of
+ * an FFT of the capture.
+ *
+ * It must not be a multiple of 128. SYSREF here is 1.953125 MHz, which is the
+ * transport-layer sample rate over 128, so a tone at any multiple of that shares
+ * an FFT bin with SYSREF and with every harmonic of it -- a SYSREF-correlated
+ * spur and the test tone become one line and cannot be told apart. 617 is prime
+ * and 23 bins clear of the nearest SYSREF harmonic; at 250 MHz it is 9.41 MHz,
+ * about 26.6 samples per period.
+ */
+#define TX_TONE_PERIODS		617
 
 /*
  * Width of the TX DMAC source AXI data path in bytes, which has to match the
  * HDL build. The driver rejects a transfer that is not a multiple of it.
+ *
+ * DMA_DATA_WIDTH_SRC is 128 in the HDL and that is bits, so this is 16, not 128.
  */
-#define DMA_SRC_WIDTH_BYTES	128
+#define DMA_SRC_WIDTH_BYTES	16
 #define DMA_BUFFER_ALIGN	1024
 
 /*
@@ -115,9 +183,11 @@
  * waited for the receiver to reach DATA. It programs the measured BSYNC path
  * delay onto the provider channel feeding the Apollo and realigns that channel
  * alone; the channel feeding the FPGA is left where it was, so the two SYSREFs
- * separate by the path delay -- 2.2 ns here, most of a 3.2 ns link clock. The
- * Apollo re-times off the edge that moved and the receiver does not, which is
- * what drops it to WAIT_BS.
+ * separate by the path delay, which is a large fraction of a link clock either
+ * way: 2.2 ns against 3.2 ns on the 204C/VCU118 build this was written for,
+ * 2.2 ns against 4.0 ns on the 204B AD9084-EBZ. The Apollo re-times off the edge
+ * that moved and the receiver does not, which is what drops it out of DATA --
+ * to WAIT_BS on 64b66b, to CGS on 8b10b.
  */
 #define RX_LINK_RECOVER		1
 #define RX_LINK_ATTEMPTS	3
@@ -130,6 +200,33 @@
 #define JESD204_RX_REG_LINK_STATUS	0x280
 #define JESD204_RX_LINK_STATUS_MASK	0x3
 #define JESD204_RX_LINK_STATUS_DATA	3
+
+/*
+ * Frame alignment error count per lane, 8 bits, saturating. jesd204_rx is built
+ * with ENABLE_FRAME_ALIGN_CHECK=1 and ENABLE_FRAME_ALIGN_ERR_RESET=0, so the
+ * count is maintained but never acted on: state_good is hardcoded 1 in
+ * SYNCHRONIZED, the control FSM never returns to CGS, and the counter clears
+ * only on a link restart. That makes it the one register-visible proxy for the
+ * decoder failing -- LINK_STATUS reads DATA regardless.
+ */
+#define JESD204_RX_REG_LANE_FRAME_ALIGN_ERR(x)	(((x) * 32) + 0x30C)
+#define JESD204_RX_REG_LANE_ERRORS(x)		(((x) * 32) + 0x308)
+
+/*
+ * Sticky event latch in jesd204_up_common, accumulated whatever IRQ_ENABLE
+ * holds, so it records events on a build that never enables the interrupt.
+ * Bit 1 is unexpected_lane_state_error: at least one enabled lane left code
+ * group sync while the control FSM was in DATA. jesd204_rx.v:420,
+ *
+ *   unexpected_lane_state_error = |(~(cgs_ready|cfg_lanes_disable)) &
+ *                                 &status_ctrl_state;
+ *
+ * which is the condition Signal Tap showed indirectly -- see
+ * dma_example_rx_link_recover(). Cleared by writing the bit back.
+ */
+#define JESD204_RX_REG_IRQ_SOURCE		0x088
+#define JESD204_RX_IRQ_FRAME_ALIGNMENT_ERROR	NO_OS_BIT(0)
+#define JESD204_RX_IRQ_UNEXPECTED_LANE_STATE	NO_OS_BIT(1)
 
 /*
  * Static capture buffer, sized for the widest capture this example accepts --
@@ -165,20 +262,38 @@ static const unsigned int deframer_link_id[LOOPBACK_SIDES] = {
 
 #if RX_LINK_RECOVER
 /*
- * 64b/66b link states, mirroring axi_jesd204_rx_link_status_64b66b_l[] in
- * axi_jesd204_rx.c. Copied rather than referenced: the driver leaves the table
- * non-static but declares it in no header.
+ * The core's own state names. Both tables are non-static in axi_jesd204_rx.c but
+ * appear in no header, so they are declared rather than copied - a copy is what
+ * left this file naming 8b10b states after the 64b66b ones.
+ *
+ * The two encoders share the numbering but not the names: state 1 is
+ * WAIT FOR PHY / WAIT_BS and state 2 is CGS / BLOCK_SYNC, so a table picked
+ * without checking the encoder mislabels every state but RESET and DATA.
  */
-static const char *const rx_link_state[] = {
-	"RESET",
-	"WAIT_BS",
-	"BLOCK_SYNC",
-	"DATA",
-};
+extern const char *axi_jesd204_rx_link_status_label[];
+extern const char *axi_jesd204_rx_link_status_64b66b_l[];
+
+/**
+ * @brief Name of a receive link state, for the encoder in use.
+ * @param rx_jesd - The receive link core.
+ * @param status - The two-bit link status.
+ * @return The state name.
+ */
+static const char *dma_example_rx_link_state_str(struct axi_jesd204_rx *rx_jesd,
+		uint32_t status)
+{
+	status &= JESD204_RX_LINK_STATUS_MASK;
+
+	return (rx_jesd->encoder == JESD204_ENCODER_8B10B) ?
+	       axi_jesd204_rx_link_status_label[status] :
+	       axi_jesd204_rx_link_status_64b66b_l[status];
+}
 
 /**
  * @brief Current receive link state, as the core reports it.
- * @return The two-bit link status: 0 reset, 1 WAIT_BS, 2 block sync, 3 data.
+ * @return The two-bit link status. 0 and 3 are RESET and DATA on either
+ *         encoder; 1 and 2 are encoder-specific, see
+ *         dma_example_rx_link_state_str().
  */
 static uint32_t dma_example_rx_link_status(void)
 {
@@ -188,6 +303,39 @@ static uint32_t dma_example_rx_link_status(void)
 			  &status);
 
 	return status & JESD204_RX_LINK_STATUS_MASK;
+}
+
+/**
+ * @brief Per-lane frame alignment and character error counts.
+ * @param rx_jesd - The receive link core.
+ * @param tag - Printed with the counts, to tell one read from another.
+ */
+static void dma_example_rx_align_errors(struct axi_jesd204_rx *rx_jesd,
+					const char *tag)
+{
+	uint32_t lane;
+	uint32_t fa;
+	uint32_t err;
+	uint32_t irq;
+
+	no_os_axi_io_read(RX_JESD_BASEADDR, JESD204_RX_REG_IRQ_SOURCE, &irq);
+	pr_info("rx_jesd %s: irq_source 0x%08lx%s%s\n", tag,
+		(unsigned long)irq,
+		(irq & JESD204_RX_IRQ_FRAME_ALIGNMENT_ERROR) ?
+		" frame_alignment_error" : "",
+		(irq & JESD204_RX_IRQ_UNEXPECTED_LANE_STATE) ?
+		" unexpected_lane_state" : "");
+
+	for (lane = 0; lane < rx_jesd->num_lanes; lane++) {
+		no_os_axi_io_read(RX_JESD_BASEADDR,
+				  JESD204_RX_REG_LANE_FRAME_ALIGN_ERR(lane),
+				  &fa);
+		no_os_axi_io_read(RX_JESD_BASEADDR,
+				  JESD204_RX_REG_LANE_ERRORS(lane), &err);
+		pr_info("rx_jesd %s: lane %lu frame_align_err %lu errors 0x%08lx\n",
+			tag, (unsigned long)lane, (unsigned long)(fa & 0xFF),
+			(unsigned long)err);
+	}
 }
 
 /**
@@ -209,6 +357,22 @@ static uint32_t dma_example_rx_link_status(void)
  * The whole FSM is never restarted: that would re-run MCS and break the link
  * again.
  *
+ * The bounce runs unconditionally before the status is trusted. LINK_STATUS
+ * reads DATA whatever the lanes are doing -- jesd204_rx_ctrl hardcodes
+ * state_good in SYNCHRONIZED -- so an early return on DATA is an early return on
+ * nothing. The reason the bounce is needed at all is the soft PCS: its word
+ * aligner only slips while the FSM is in CGS (jesd204_pattern_align, driven by
+ * phy_en_char_align), so a bit boundary that moves after the first CGS stays
+ * latched wrong and the 8b10b decoder rejects a fifth of all octets for the life
+ * of the link. Asserting LINK_DISABLE walks the FSM back through CGS with the
+ * aligner enabled, and SYNC takes the converter's framer back to K28.5 so there
+ * is something to align to.
+ *
+ * Nothing on the Apollo side is touched for that first pass. The MCS re-sync
+ * below is the right action once the link has genuinely fallen out of DATA, but
+ * it is also a candidate for having moved the boundary, so it stays out of the
+ * unconditional path.
+ *
  * @param phy - AD9088 device, for the Apollo side of the re-sync.
  * @param rx_jesd - Receive JESD204 core.
  * @return 0 if the link is in DATA, negative error code otherwise.
@@ -216,16 +380,37 @@ static uint32_t dma_example_rx_link_status(void)
 static int dma_example_rx_link_recover(struct ad9088_phy *phy,
 				       struct axi_jesd204_rx *rx_jesd)
 {
-	uint32_t status = dma_example_rx_link_status();
+	uint32_t status;
 	uint32_t attempt;
 	uint32_t poll;
 	int ret;
 
+	dma_example_rx_align_errors(rx_jesd, "before re-CGS");
+
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+	axi_jesd204_rx_lane_clk_disable(rx_jesd);
+	no_os_mdelay(100);
+	axi_jesd204_rx_lane_clk_enable(rx_jesd);
+#endif
+
+	for (poll = 0; poll < 50; poll++) {
+		no_os_mdelay(4);
+		status = dma_example_rx_link_status();
+		if (status == JESD204_RX_LINK_STATUS_DATA)
+			break;
+	}
+
+	pr_info("rx_jesd: re-CGS reached %s after %lu ms\n",
+		dma_example_rx_link_state_str(rx_jesd, status),
+		(unsigned long)(poll * 4));
+
+	dma_example_rx_align_errors(rx_jesd, "after re-CGS");
+
 	if (status == JESD204_RX_LINK_STATUS_DATA)
 		return 0;
 
-	pr_info("rx_jesd: link is %s after the FSM, recovering\n",
-		rx_link_state[status]);
+	pr_info("rx_jesd: link is %s after the re-CGS, recovering\n",
+		dma_example_rx_link_state_str(rx_jesd, status));
 
 	for (attempt = 1; attempt <= RX_LINK_ATTEMPTS; attempt++) {
 
@@ -255,7 +440,7 @@ static int dma_example_rx_link_recover(struct ad9088_phy *phy,
 	}
 
 	pr_err("rx_jesd: link stuck at %s after %u attempts\n",
-	       rx_link_state[status], RX_LINK_ATTEMPTS);
+	       dma_example_rx_link_state_str(rx_jesd, status), RX_LINK_ATTEMPTS);
 
 	return -EIO;
 }
@@ -382,26 +567,248 @@ static int dma_example_set_default_nco(struct ad9088_phy *phy, uint8_t side)
 }
 
 /**
- * @brief Fill the transmit buffer with the shared sine table.
+ * @brief One I/Q sample of the transmit tone.
+ * @param phase - Phase, one turn per 2^32.
+ * @return The sample as the buffer stores it, I in the low half and Q in the high.
  *
- * One table entry carries a single I/Q pair, so a link with more than one
- * complex channel needs the entry repeated once per channel at every sample
- * time. Tiling the table whole keeps the transmitted tone continuous across the
- * cyclic wrap, which matters because the capture is shorter than the replay and
- * can start anywhere in it.
+ * sine_lut_iq holds eight periods in its 1024 entries, so a single period is
+ * entries 0..127 and entry j sits at phase j/128 of a turn. A tone that is not a
+ * multiple of the sample rate over 128 therefore falls between entries, and the
+ * gap is interpolated linearly: at 128 points per period that costs about -83 dBc
+ * of spur, measured over the whole buffer, and it avoids linking libm for a table
+ * that is generated once.
+ *
+ * j reaches 127, so j + 1 reaches 128 -- inside the array, and the same phase as
+ * entry 0 because the table repeats every 128 entries.
+ */
+static uint32_t dma_example_tone_sample(uint32_t phase)
+{
+	uint32_t j = phase >> 25;			/* 2^32 / 128 */
+	int32_t frac = (int32_t)((phase >> 17) & 0xFF);
+	int32_t i0 = (int16_t)(sine_lut_iq[j] & 0xFFFF);
+	int32_t q0 = (int16_t)(sine_lut_iq[j] >> 16);
+	int32_t i1 = (int16_t)(sine_lut_iq[j + 1] & 0xFFFF);
+	int32_t q1 = (int16_t)(sine_lut_iq[j + 1] >> 16);
+	int32_t iv = i0 + (((i1 - i0) * frac) >> 8);
+	int32_t qv = q0 + (((q1 - q0) * frac) >> 8);
+
+	return ((uint32_t)(uint16_t)qv << 16) | (uint16_t)iv;
+}
+
+/**
+ * @brief Fill the transmit buffer with the test tone.
+ *
+ * One buffer word carries a single I/Q pair, so a link with more than one complex
+ * channel needs the same pair repeated once per channel at every sample time --
+ * every converter then carries the same tone, which is what makes a quiet channel
+ * in the capture mean something.
  *
  * @param num_conv - Converters on the transmit link.
  * @param size - Buffer length to fill, in bytes.
  */
 static void dma_example_fill_tone(uint8_t num_conv, uint32_t size)
 {
-	uint32_t lut_len = NO_OS_ARRAY_SIZE(sine_lut_iq);
 	uint32_t words = size / sizeof(dac_buffer_dma[0]);
 	uint32_t stride = num_conv / 2;
+	uint32_t samples = stride ? words / stride : 0;
+	uint32_t step;
 	uint32_t i;
 
+	if (!samples)
+		return;
+
+	/*
+	 * Exact whenever the sample count divides 2^32, which it does here: the
+	 * size is floored to a whole number of table passes, leaving a power of
+	 * two. Any other count leaves a sub-step residual that the cyclic wrap
+	 * carries as a small phase discontinuity.
+	 */
+	step = (uint32_t)(((uint64_t)TX_TONE_PERIODS << 32) / samples);
+
 	for (i = 0; i < words; i++)
-		dac_buffer_dma[i] = sine_lut_iq[(i / stride) % lut_len];
+		dac_buffer_dma[i] = dma_example_tone_sample(step * (i / stride));
+}
+
+
+/**
+ * @brief Start the transmit tone from memory, over the DMA.
+ * @param tx_dac - The transmit transport layer core.
+ * @param tx_dmac - The transmit DMA controller.
+ * @param tx_num_conv - Converters the transmit link carries.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int dma_example_start_tx_dma(struct axi_dac *tx_dac,
+				    struct axi_dmac *tx_dmac,
+				    uint8_t tx_num_conv)
+{
+	uint32_t tx_offload_size = 0;
+	uint32_t tx_offload_cfg = 0;
+	uint32_t tx_lut_bytes;
+	uint32_t tx_samples;
+	uint32_t tx_size;
+	int ret;
+
+	/*
+	 * Cyclic only when the offload is bypassed. With the offload storing, the
+	 * repetition is its job -- oneshot resets to 0 on a transmit instance, so it
+	 * replays its memory for ever once a store completes -- and a cyclic source
+	 * actively breaks the store: the DMAC re-issues the same descriptor with no
+	 * gap and never deasserts xfer_req, so the offload's write FSM and the source
+	 * wrap together and whether WR_STATE_WR sees wr_response_eot before the next
+	 * pass starts is a race. Observed both ways on the same binary: WAIT_RD/RD on
+	 * one run, stuck in WR on the next.
+	 */
+	struct axi_dma_transfer tx_transfer = {
+		.cyclic = TX_OFFLOAD_BYPASS ? CYCLIC : NO,
+		.src_addr = (uintptr_t)dac_buffer_dma,
+	};
+
+	/*
+	 * The offload replays all of its memory whatever was written into it,
+	 * so fill as much as this buffer covers rather than leaving the tail to
+	 * come back as noise.
+	 */
+	no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, AXI_DO_REG_MEMORY_SIZE_LSB,
+			  &tx_offload_size);
+
+	tx_size = sizeof(dac_buffer_dma);
+	if (tx_offload_size && tx_offload_size < tx_size)
+		tx_size = tx_offload_size;
+
+	/*
+	 * Floor to a whole pass of the sine table. The tone itself is continuous
+	 * across the wrap by construction (TX_TONE_PERIODS whole periods), but a
+	 * table pass is a power of two in samples, which is what makes the phase
+	 * step below divide 2^32 exactly.
+	 */
+	tx_lut_bytes = NO_OS_ARRAY_SIZE(sine_lut_iq) * tx_num_conv *
+		       sizeof(uint16_t);
+	tx_size -= tx_size % tx_lut_bytes;
+
+	/*
+	 * A whole table pass is a multiple of the source width at every
+	 * converter count this example accepts, so the floor above should
+	 * already have satisfied it. Check rather than assume, since the DMAC
+	 * rejects a misaligned transfer with a much less obvious error.
+	 */
+	if (!tx_size || tx_size % DMA_SRC_WIDTH_BYTES) {
+		pr_err("TX size %lu is not a usable multiple of the %u byte "
+		       "DMAC source width\n", (unsigned long)tx_size,
+		       DMA_SRC_WIDTH_BYTES);
+		ret = -EINVAL;
+		return ret;
+	}
+
+	tx_samples = tx_size / (tx_num_conv * sizeof(uint16_t));
+
+#ifndef CONFIG_ALTERA_PLATFORM_NIOSV
+	/*
+	 * Both DMACs move data behind the cache, and from here to the end of
+	 * the capture there is always one in flight, so the cache is kept out
+	 * of the way wholesale rather than flushed and invalidated by range.
+	 */
+	Xil_DCacheDisable();
+#endif
+
+	dma_example_fill_tone(tx_num_conv, tx_size);
+
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+	/*
+	 * Nios V has no way to disable the data cache at runtime, so the two
+	 * buffers are maintained by range instead. The DMA does not snoop, so
+	 * the tone has to be written back before the transfer below starts.
+	 */
+	alt_dcache_flush(dac_buffer_dma, tx_size);
+#endif
+	ret = axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
+	if (ret) {
+		pr_err("Selecting the DMA data source failed (%d)\n", ret);
+		return ret;
+	}
+
+	/*
+	 * Re-arm the transmit offload, for the same reason the receive one is
+	 * re-armed before its capture, but a harder one: on this path the write FSM
+	 * cannot recover by itself.
+	 *
+	 * AUTO_BRINGUP is 1, so the offload leaves WR_STATE_IDLE on its own at
+	 * bring-up and stores whatever the DMA has not written yet. It then sits in
+	 * WR_STATE_WAIT_RD, which is left only on wr_rd_response_eot -- and this is
+	 * the transmit instance, so DST_CYCLIC_EN is 1 and RD_STATE_RD loops back to
+	 * itself forever instead of returning to RD_STATE_IDLE
+	 * (data_offload_fsm.v:169 and :213). That end-of-transfer therefore never
+	 * arrives, the write FSM never returns to IDLE, and init_req is sampled only
+	 * in IDLE -- so the real fill is ignored and the offload replays its
+	 * bring-up contents for good. The DAC goes quiet and no status bit says why.
+	 *
+	 * Dropping RESETN_OFFLOAD returns both FSMs to IDLE so the fill below is the
+	 * one that gets stored.
+	 */
+	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR,
+			   AXI_DO_REG_RESETN_OFFLOAD, 0);
+	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR,
+			   AXI_DO_REG_RESETN_OFFLOAD, 1);
+
+	/*
+	 * Bypass makes the DMA stream straight to the transport layer instead of
+	 * filling the offload's memory and letting it replay. That moves the
+	 * bandwidth requirement onto the DMA, which then has to keep the DAC fed
+	 * for the whole run rather than once; DST_UNDERFLOW after the capture says
+	 * whether it kept up.
+	 *
+	 * With bypass off the offload replays its own memory, so the DMA only has to
+	 * fill it. up_bypass is outside the reset above, so it is written after it
+	 * either way, and the FSM samples it when the store phase starts.
+	 */
+	no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, AXI_DO_REG_CONFIG, &tx_offload_cfg);
+	if (!(tx_offload_cfg & AXI_DO_CONFIG_HAS_BYPASS)) {
+		pr_warning("TX data offload: HDL built without bypass\n");
+	} else {
+		no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, AXI_DO_REG_CONTROL,
+				   TX_OFFLOAD_BYPASS ? AXI_DO_CONTROL_BYPASS : 0);
+		pr_info("TX data offload: bypass %s\n",
+			TX_OFFLOAD_BYPASS ? "enabled" : "disabled, replaying "
+			"from offload memory");
+	}
+
+	/* Latching and W1C, so clear both before the run to have them mean something. */
+	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, AXI_DO_REG_STATUS,
+			   AXI_DO_STATUS_SRC_OVERFLOW | AXI_DO_STATUS_DST_UNDERFLOW);
+
+	tx_transfer.size = tx_size;
+
+	/*
+	 * Cyclic is a build option of the DMAC rather than a guarantee:
+	 * axi_dmac_transfer_start() rejects CYCLIC outright on a core synthesised
+	 * without it, so an HDL build that lacks it fails here rather than
+	 * transmitting one pass.
+	 */
+	ret = axi_dmac_transfer_start(tx_dmac, &tx_transfer);
+	if (ret) {
+		pr_err("TX DMA transfer start failed (%d)\n", ret);
+		return ret;
+	}
+
+	/*
+	 * A bounded fill does raise end-of-transfer, so wait for it: that is what
+	 * makes the store deterministic, and a timeout here says the DMA never
+	 * delivered rather than leaving it to be inferred from the offload's FSM.
+	 * A cyclic transfer raises no end-of-transfer and would only time out.
+	 */
+	if (!TX_OFFLOAD_BYPASS) {
+		ret = axi_dmac_transfer_wait_completion(tx_dmac, 1000);
+		if (ret) {
+			pr_err("TX DMA fill did not complete (%d)\n", ret);
+			return ret;
+		}
+	}
+
+	pr_info("DMA_EXAMPLE Tx: address=%#lx samples=%lu channels=%u bits=%lu\n",
+		(unsigned long)(uintptr_t)dac_buffer_dma,
+		(unsigned long)tx_samples,
+		tx_num_conv, (unsigned long)(8 * sizeof(uint16_t)));
+
+	return 0;
 }
 
 int dma_example_main(void)
@@ -412,17 +819,29 @@ int dma_example_main(void)
 	struct jesd204_clk tx_jesd_clk = {0};
 	struct axi_jesd204_rx *rx_jesd;
 	struct axi_jesd204_tx *tx_jesd;
-	uint32_t tx_offload_size = 0;
+	uint32_t do_status;
 	struct adf4382_dev *adf4382_dev;
 	struct hmc7044_dev *hmc7044_dev;
 	struct adf4030_dev *adf4030_dev;
 	struct ad9088_phy *ad9088_phy;
+#ifndef CONFIG_ALTERA_PLATFORM_NIOSV
+	/*
+	 * Xilinx path only. The Agilex 5 design does have an adxcvr control core per
+	 * direction (hdl library/intel/adi_jesd204 instantiates axi_adxcvr as
+	 * "axi_xcvr", exported as the link_management window), but neither adxcvr
+	 * driver fits it: axi_adxcvr.c is Xilinx-only and altera_adxcvr.c reprograms
+	 * Arria10/Stratix10 PLLs through per-lane PMA windows GTS does not expose.
+	 * There the link cores release the transceiver themselves from xcvr_base, and
+	 * the lane clocks keep xcvr == NULL. Calling adxcvr_init() here anyway reads a
+	 * Xilinx SYNTH_CONF that does not exist and fails with
+	 * "Unknown transceiver type: 0".
+	 */
 	struct adxcvr *rx_adxcvr;
 	struct adxcvr *tx_adxcvr;
+#endif
 	struct axi_dmac *rx_dmac;
 	struct axi_dmac *tx_dmac;
 	uint32_t rx_size;
-	uint32_t tx_lut_bytes;
 	uint8_t side_conv[LOOPBACK_SIDES] = {0};
 	uint8_t side_first_conv[LOOPBACK_SIDES] = {0};
 	unsigned int link_ids[2 * LOOPBACK_SIDES];
@@ -433,8 +852,6 @@ int dma_example_main(void)
 	struct axi_adc *rx_adc;
 	struct axi_dac *tx_dac;
 	uint8_t tx_num_conv;
-	uint32_t tx_samples;
-	uint32_t tx_size;
 	uint8_t rx_num_conv;
 	uint8_t side;
 	uint8_t np;
@@ -442,12 +859,7 @@ int dma_example_main(void)
 
 	struct jesd204_topology *topology;
 
-	/* Sizes are filled in once the link geometry is known. */
-	struct axi_dma_transfer tx_transfer = {
-		.cyclic = CYCLIC,
-		.src_addr = (uintptr_t)dac_buffer_dma,
-	};
-
+	/* The size is filled in once the link geometry is known. */
 	struct axi_dma_transfer rx_transfer = {
 		.cyclic = NO,
 		.dest_addr = (uintptr_t)adc_buffer_dma,
@@ -496,6 +908,7 @@ int dma_example_main(void)
 		goto error_rx_dmac;
 	}
 
+#ifndef CONFIG_ALTERA_PLATFORM_NIOSV
 	ret = adxcvr_init(&tx_adxcvr, &tx_adxcvr_ip);
 	if (ret) {
 		pr_info("TX ADXCVR initialization failed\n");
@@ -509,6 +922,7 @@ int dma_example_main(void)
 		goto error_tx_adxcvr;
 	}
 	rx_jesd_clk.xcvr = rx_adxcvr;
+#endif
 
 	rx_lane_clk.platform_ops = &jesd204_clk_ops;
 	rx_lane_clk.dev_desc = &rx_jesd_clk;
@@ -531,6 +945,12 @@ int dma_example_main(void)
 		goto error_rx_jesd;
 	}
 	tx_jesd_clk.jesd_tx = tx_jesd;
+
+	/*
+	 * Left off: the readback shows every complex filter bypassed
+	 * (enable=0), so forcing the gain changes the profile checksum and
+	 * nothing else.
+	 */
 
 	ret = ad9088_init(&ad9088_phy, &ad9088_ip);
 	if (ret) {
@@ -628,6 +1048,7 @@ int dma_example_main(void)
 	ret = dma_example_rx_link_recover(ad9088_phy, rx_jesd);
 	if (ret)
 		goto error_topology;
+
 #endif
 	np = ad9088_phy->profile.jtx[LOOPBACK_SIDE]
 	     .tx_link_cfg[0].np_minus1 + 1;
@@ -740,6 +1161,36 @@ int dma_example_main(void)
 
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_jesd);
+
+
+
+	/*
+	 * Converter-side view of the same links, per lane. The FPGA status above
+	 * only says what the link cores see; this says what the AD9088 sees, which
+	 * is the half that identifies a dead or mismapped lane before a capture is
+	 * blamed on the datapath.
+	 */
+
+	/*
+	 * The ILAS the converter actually sent, per active lane. This is the only
+	 * place the far end's own view of L/SCR/F/K/M/N/NP/S/HD is visible, so it is
+	 * what settles a parameter disagreement that leaves the link in DATA but the
+	 * samples wrong - SCR above all, since descrambling an unscrambled stream
+	 * produces full-scale noise and no error anywhere.
+	 */
+	// for (i = 0; i < rx_jesd->num_lanes; i++)
+	// 	axi_jesd204_rx_laneinfo_read(rx_jesd, i);
+
+	/*
+	 * Whether the lanes are still erroring or only did so while coming up. The
+	 * counters are cumulative, so only a delta answers that.
+	 */
+
+	// /*
+	//  * Which LMFC offset, if any, stops the frame alignment errors. Diagnostic:
+	//  * bounces the link once per offset and restores the entry value.
+	//  */
+
 	pr_info("Project configured\n\n");
 
 	/*
@@ -758,78 +1209,13 @@ int dma_example_main(void)
 			goto error_tx_dac;
 	}
 
-	/*
-	 * The offload replays all of its memory whatever was written into it,
-	 * so fill as much as this buffer covers rather than leaving the tail to
-	 * come back as noise.
-	 */
-	no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, AXI_DO_REG_MEMORY_SIZE_LSB,
-			  &tx_offload_size);
+	/* Latching and W1C, so clear it before the run to have it mean something. */
+	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, AXI_DO_REG_STATUS,
+			   AXI_DO_STATUS_SRC_OVERFLOW | AXI_DO_STATUS_DST_UNDERFLOW);
 
-	tx_size = sizeof(dac_buffer_dma);
-	if (tx_offload_size && tx_offload_size < tx_size)
-		tx_size = tx_offload_size;
-
-	/*
-	 * Floor to a whole pass of the sine table so the cyclic wrap leaves no
-	 * phase discontinuity for a capture to straddle -- which matters
-	 * because the capture is shorter than the replay and can start anywhere
-	 * in it.
-	 */
-	tx_lut_bytes = NO_OS_ARRAY_SIZE(sine_lut_iq) * tx_num_conv *
-		       sizeof(uint16_t);
-	tx_size -= tx_size % tx_lut_bytes;
-
-	/*
-	 * A whole table pass is a multiple of the source width at every
-	 * converter count this example accepts, so the floor above should
-	 * already have satisfied it. Check rather than assume, since the DMAC
-	 * rejects a misaligned transfer with a much less obvious error.
-	 */
-	if (!tx_size || tx_size % DMA_SRC_WIDTH_BYTES) {
-		pr_err("TX size %lu is not a usable multiple of the %u byte "
-		       "DMAC source width\n", (unsigned long)tx_size,
-		       DMA_SRC_WIDTH_BYTES);
-		ret = -EINVAL;
-		goto error_tx_dac;
-	}
-
-	tx_samples = tx_size / (tx_num_conv * sizeof(uint16_t));
-
-	/*
-	 * Both DMACs move data behind the cache, and from here to the end of
-	 * the capture there is always one in flight, so the cache is kept out
-	 * of the way wholesale rather than flushed and invalidated by range.
-	 */
-	Xil_DCacheDisable();
-
-	dma_example_fill_tone(tx_num_conv, tx_size);
-	ret = axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
-	if (ret) {
-		pr_err("Selecting the DMA data source failed (%d)\n", ret);
-		goto error_tx_dac;
-	}
-
-	tx_transfer.size = tx_size;
-
-	/*
-	 * Cyclic keeps the tone running for the whole capture. It is a build
-	 * option of the DMAC rather than a guarantee: axi_dmac_transfer_start()
-	 * rejects CYCLIC outright on a core synthesised without it, so an HDL
-	 * build that lacks it fails here rather than transmitting one pass.
-	 * Completion is never waited on -- a cyclic transfer raises no
-	 * end-of-transfer and would only time out.
-	 */
-	ret = axi_dmac_transfer_start(tx_dmac, &tx_transfer);
-	if (ret) {
-		pr_err("TX DMA transfer start failed (%d)\n", ret);
+	ret = dma_example_start_tx_dma(tx_dac, tx_dmac, tx_num_conv);
+	if (ret)
 		goto error_tx_stream;
-	}
-
-	pr_info("DMA_EXAMPLE Tx: address=%#lx samples=%lu channels=%u bits=%lu\n",
-		(unsigned long)(uintptr_t)dac_buffer_dma,
-		(unsigned long)tx_samples,
-		tx_num_conv, (unsigned long)(8 * sizeof(uint16_t)));
 
 	no_os_mdelay(10);
 
@@ -859,8 +1245,24 @@ int dma_example_main(void)
 	ret = axi_dmac_transfer_wait_completion(rx_dmac, 1000);
 
 	/* The capture is in memory; drop whatever the cache comes back with. */
+#ifndef CONFIG_ALTERA_PLATFORM_NIOSV
 	Xil_DCacheEnable();
 	Xil_DCacheInvalidate();
+#else
+	alt_dcache_flush_no_writeback(adc_buffer_dma, rx_size);
+#endif
+
+	/*
+	 * Both offloads, before the timeout is reported: an underflow on TX or an
+	 * overflow on RX explains a timeout or a corrupt capture, and is lost once
+	 * the example bails out.
+	 */
+	no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, AXI_DO_REG_STATUS, &do_status);
+	if (do_status & AXI_DO_STATUS_DST_UNDERFLOW)
+		pr_err("TX data offload underflowed: the DMA did not keep the DAC fed\n");
+	no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR, AXI_DO_REG_STATUS, &do_status);
+	if (do_status & AXI_DO_STATUS_SRC_OVERFLOW)
+		pr_err("RX data offload overflowed: converter data outran its store\n");
 
 	if (ret) {
 		pr_err("RX DMA transfer timed out (%d)\n", ret);
@@ -905,10 +1307,12 @@ error_tx_jesd:
 error_rx_jesd:
 	axi_jesd204_rx_remove(rx_jesd);
 error_rx_adxcvr:
+#ifndef CONFIG_ALTERA_PLATFORM_NIOSV
 	adxcvr_remove(rx_adxcvr);
 error_tx_adxcvr:
 	adxcvr_remove(tx_adxcvr);
 error_tx_dmac:
+#endif
 	axi_dmac_remove(tx_dmac);
 error_rx_dmac:
 	axi_dmac_remove(rx_dmac);

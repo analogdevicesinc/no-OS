@@ -69,6 +69,16 @@
 
 #define JESD204_RX_REG_LINK_CONF0		0x210
 
+
+/*
+ * Multi-link, 8b10b only. One core can serve several links - this build has a
+ * 4-lane core carrying two 2-lane links - and each has its own enable here. The
+ * count the core was synthesised with is read-only in SYNTH_1.
+ */
+#define JESD204_RX_REG_SYNTH_1			0x018
+#define JESD204_RX_SYNTH_1_NUM_LINKS		NO_OS_GENMASK(7, 0)
+#define JESD204_RX_REG_MULTI_LINK_DISABLE	0x218
+
 #define JESD204_RX_REG_LINK_CONF4		0x21C
 
 #define JESD204_RX_REG_LINK_CONF2		0x240
@@ -315,19 +325,6 @@ uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd)
 }
 
 /**
- * @brief Read the JESD204 RX Lane Errors.
- * @param jesd - The JESD204 RX Device Structure.
- * @param lane - The lane ID.
- * @param errors - The errors read from the device.
- * @return Returns 0 in case of success or negative error code otherwise.
- */
-int32_t axi_jesd204_rx_get_lane_errors(struct axi_jesd204_rx *jesd,
-				       uint32_t lane, uint32_t *errors)
-{
-	return axi_jesd204_rx_read(jesd, JESD204_RX_REG_LANE_ERRORS(lane), errors);
-}
-
-/**
  * @brief Read JESD204 RX Lane Info for 8b10b enconding
  * @param jesd - The device structure.
  * @param lane - Lane ID.
@@ -431,6 +428,19 @@ static int32_t axi_jesd204_rx_laneinfo_64b66b_read(struct axi_jesd204_rx *jesd,
 	       axi_jesd204_rx_emb_state_label[extend_multiblock]);
 
 	return 0;
+}
+
+/**
+ * @brief Read the JESD204 RX Lane Errors.
+ * @param jesd - The JESD204 RX Device Structure.
+ * @param lane - The lane ID.
+ * @param errors - The errors read from the device.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
+int32_t axi_jesd204_rx_get_lane_errors(struct axi_jesd204_rx *jesd,
+				       uint32_t lane, uint32_t *errors)
+{
+	return axi_jesd204_rx_read(jesd, JESD204_RX_REG_LANE_ERRORS(lane), errors);
 }
 
 /**
@@ -564,6 +574,18 @@ static int axi_jesd204_rx_apply_config(struct axi_jesd204_rx *jesd,
 	val |= (config->octets_per_frame - 1) << 16;
 
 	axi_jesd204_rx_write(jesd, JESD204_RX_REG_LINK_CONF0, val);
+
+	if (jesd->encoder == JESD204_ENCODER_8B10B) {
+		uint32_t synth1, mld;
+
+		axi_jesd204_rx_read(jesd, JESD204_RX_REG_SYNTH_1, &synth1);
+		axi_jesd204_rx_read(jesd, JESD204_RX_REG_MULTI_LINK_DISABLE, &mld);
+		pr_info("%s: core supports %"PRIu32" link(s), MULTI_LINK_DISABLE 0x%08"PRIx32
+			", %"PRIu32" core lanes for a %"PRIu32"-lane link\n",
+			jesd->name,
+			no_os_field_get(JESD204_RX_SYNTH_1_NUM_LINKS, synth1),
+			mld, jesd->num_lanes, config->num_lanes);
+	}
 
 	if (jesd->version >= ADI_AXI_PCORE_VER(1, 7, 'a')) {
 		/* beats per multiframe */
@@ -702,16 +724,6 @@ static int axi_jesd204_rx_jesd204_link_pre_setup(struct jesd204_dev *jdev,
 	}
 
 #ifdef CONFIG_ALTERA_PLATFORM_NIOSV
-	/*
-	 * Reset is released here, at LINK_PRE_SETUP - which is BEFORE refclk_ready is
-	 * gated on at LINK_SETUP. That looks backwards but is what Linux does: its
-	 * adxcvr hangs off the lane clock, so the set_rate above is what toggles
-	 * RESETN (altera_adxcvr.c adxcvr_dummy_pll_set_rate ->
-	 * adxcvr_finalize_lane_rate_change) and clk_set_rate(lane_clk) likewise sits
-	 * in axi_jesd204_rx_jesd204_link_pre_setup there. The GTS reset controller
-	 * waits for the reference clock, so it completes once LINK_SETUP arrives.
-	 */
-	altera_gts_xcvr_reset(jesd->name, jesd->xcvr_base);
 #endif
 
 	return JESD204_STATE_CHANGE_DONE;
@@ -738,6 +750,26 @@ static int axi_jesd204_rx_jesd204_link_setup(struct jesd204_dev *jdev,
 		       __func__, lnk->link_id, ret);
 		return ret;
 	}
+
+	/*
+	 * Receive only, and after the reference clock. The GTS receiver locks and
+	 * adapts against live data, so releasing it before its reference exists
+	 * lets it settle on whatever it found and stay there: rx_lockedtodata
+	 * reads 0xf while the decoder still rejects 15-23% of octets as
+	 * not-in-table, varying run to run.
+	 *
+	 * The transmit side keeps the earlier release on purpose. Moving both was
+	 * tried and is worse -- the converter calibrates its own deframer against
+	 * this FPGA's transmitter during CLOCKS_ENABLE, and a late TX release made
+	 * adi_apollo_serdes_jrx_init_cal fail with -85 and left every link in CGS
+	 * with SYNC asserted.
+	 *
+	 * The reference driver releases both from a work item queued during the
+	 * lane-rate change (altera_adxcvr.c adxcvr_post_lane_rate_change ->
+	 * schedule_work), so on Linux the release lands wherever the scheduler
+	 * puts it rather than at a defined state.
+	 */
+	altera_gts_xcvr_reset(jesd->name, jesd->xcvr_base);
 #endif
 
 	if (jesd->num_lanes != lnk->num_lanes)

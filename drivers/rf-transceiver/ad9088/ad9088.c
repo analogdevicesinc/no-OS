@@ -698,6 +698,135 @@ static const char *const ad9088_jrx_204c_states[] = {
 };
 
 /**
+ * @brief Dump every JESD204 link, with per-lane status.
+ * @param phy - The device structure.
+ * @return 0 on success, negative error code otherwise.
+ *
+ * The on-demand counterpart of ad9088_inspect_j{r,t}x_link_all(), which the FSM
+ * calls before the links are up and which therefore reports parameters only.
+ * Port of the Linux driver's debugfs status dump: it walks all four links per
+ * direction, skips the ones the profile leaves unconfigured, and reports every
+ * lane the side has rather than only the ones the active link declares -- a lane
+ * that should be idle but is not is exactly what this is for.
+ *
+ * Lane indices here are physical, not logical: they are not run through the
+ * link's lane_xbar the way ad9088_jesd_rx_link_status_print() does.
+ */
+int ad9088_link_status_dump(struct ad9088_phy *phy)
+{
+	struct adi_apollo_device_t *device = &phy->ad9088;
+	adi_apollo_jesd_rx_inspect_t jrx_status;
+	adi_apollo_jesd_tx_inspect_t jtx_status;
+	adi_apollo_jesd_rx_link_cfg_t *rl;
+	uint16_t links[] = {
+		ADI_APOLLO_LINK_A0, ADI_APOLLO_LINK_A1,
+		ADI_APOLLO_LINK_B0, ADI_APOLLO_LINK_B1
+	};
+	const char *const links_str[] = { "A0", "A1", "B0", "B1" };
+	uint16_t stat, l_stat;
+	uint32_t l;
+	unsigned int i;
+	int ret;
+
+	for (l = 0; l < NO_OS_ARRAY_SIZE(links); l++) {
+		ret = adi_apollo_jrx_link_inspect(device, links[l], &jrx_status);
+		ret = ad9088_check_apollo_error(ret, "adi_apollo_jrx_link_inspect");
+		if (ret)
+			return ret;
+
+		/* np_minus1 == 0 means Np=1, i.e. a link the profile never set up. */
+		if (!jrx_status.np_minus1)
+			continue;
+
+		pr_info("JRX ADI_APOLLO_LINK_%s: JESD204%c Subclass=%c L=%d M=%d "
+			"F=%d S=%d Np=%d CS=%d link_en=%-8s\n",
+			links_str[l],
+			jrx_status.ver == ADI_APOLLO_JESD_204C ? 'C' : 'B',
+			jrx_status.subclass ? '1' : '0',
+			jrx_status.l_minus1 + 1, jrx_status.m_minus1 + 1,
+			jrx_status.f_minus1 + 1, jrx_status.s_minus1 + 1,
+			jrx_status.np_minus1 + 1, jrx_status.cs,
+			jrx_status.link_en ? "Enabled" : "Disabled");
+
+		ret = adi_apollo_jrx_link_status_get(&phy->ad9088, links[l], &stat);
+		if (ret)
+			return -EFAULT;
+
+		/*
+		 * Only the lanes the link actually uses, taken through its crossbar.
+		 * Walking all ADI_APOLLO_JESD_MAX_LANES_PER_SIDE of them the way the
+		 * Linux debugfs dump does buries the two that matter under ten idle
+		 * ones reporting "NOT Ready", which is their correct state.
+		 */
+		rl = &phy->profile.jrx[l / 2].rx_link_cfg[l % 2];
+
+		for (i = 0; i < jrx_status.l_minus1 + 1u &&
+		     i < ADI_APOLLO_JESD_MAX_LANES_PER_SIDE; i++) {
+			uint8_t phys = rl->lane_xbar[i];
+
+			if (jrx_status.ver == ADI_APOLLO_JESD_204C) {
+				ret = adi_apollo_jrx_j204c_lane_status_get(&phy->ad9088,
+						links[l], phys, &l_stat);
+				if (ret)
+					return -EFAULT;
+				pr_info("    Lane%u@%u status: %s\n", i, phys,
+					ad9088_jrx_204c_states[l_stat & 0x7]);
+			} else {
+				ret = adi_apollo_jrx_j204b_lane_status_get(&phy->ad9088,
+						links[l], phys, &l_stat);
+				if (ret)
+					return -EFAULT;
+				pr_info("    Lane%u@%u status: %s 0x%X\n", i, phys,
+					(l_stat & 0x3C) == 0x38 ?
+					"Link Ready" : "Link NOT Ready", l_stat);
+			}
+		}
+
+		pr_info("    User status: %s, SYSREF Phase: %s\n",
+			(stat & 0x20) ? "Ready" : "Fail",
+			(stat & 0x40) ? "Locked" : "Unlocked");
+	}
+
+	for (l = 0; l < NO_OS_ARRAY_SIZE(links); l++) {
+		ret = adi_apollo_jtx_link_inspect(device, links[l], &jtx_status);
+		ret = ad9088_check_apollo_error(ret, "adi_apollo_jtx_link_inspect");
+		if (ret)
+			return ret;
+
+		if (!jtx_status.np_minus1)
+			continue;
+
+		pr_info("JTX ADI_APOLLO_LINK_%s: JESD204%c Subclass=%c L=%d M=%d "
+			"F=%d S=%d Np=%d CS=%d link_en=%-8s\n",
+			links_str[l],
+			jtx_status.ver == ADI_APOLLO_JESD_204C ? 'C' : 'B',
+			jtx_status.subclass ? '1' : '0',
+			jtx_status.l_minus1 + 1, jtx_status.m_minus1 + 1,
+			jtx_status.f_minus1 + 1, jtx_status.s_minus1 + 1,
+			jtx_status.np_minus1 + 1, jtx_status.cs,
+			jtx_status.link_en ? "Enabled" : "Disabled");
+
+		ret = adi_apollo_jtx_link_status_get(&phy->ad9088, links[l], &stat);
+		if (ret)
+			return -EFAULT;
+
+		if (jtx_status.ver == ADI_APOLLO_JESD_204C)
+			pr_info("    PLL %s, PHASE %s, MODE %s\n",
+				stat & NO_OS_BIT(5) ? "locked" : "unlocked",
+				stat & NO_OS_BIT(6) ? "established" : "lost",
+				stat & NO_OS_BIT(7) ? "invalid" : "valid");
+		else
+			pr_info("    SYNC %s, PLL %s, PHASE %s, MODE %s\n",
+				stat & NO_OS_BIT(4) ? "deasserted" : "asserted",
+				stat & NO_OS_BIT(5) ? "locked" : "unlocked",
+				stat & NO_OS_BIT(6) ? "established" : "lost",
+				stat & NO_OS_BIT(7) ? "invalid" : "valid");
+	}
+
+	return 0;
+}
+
+/**
  * @brief Print the deframer phase difference for one link.
  *
  * @param phy - The device structure.

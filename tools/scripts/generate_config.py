@@ -76,7 +76,7 @@ if args.update:
 try:
         cmake_tmp = build_dir.joinpath("config.cmake.tmp")
         cmake_final = build_dir.joinpath("config.cmake")
-        with open(cmake_tmp, "w") as cmake_file:
+        with open(cmake_tmp, "w", encoding="utf-8") as cmake_file:
                 cmake_file.write("#Generated based on config\n")
                 if len(kconf.unique_defined_syms) == 0:
                         print("Empty config?")
@@ -117,8 +117,8 @@ except Exception as e:
 try:
         header_tmp = build_dir.joinpath("no_os_config.h.tmp")
         header_final = build_dir.joinpath("no_os_config.h")
-        with open(header_tmp, "w") as hf:
-                hf.write("/* Auto-generated configuration header — do not edit */\n")
+        with open(header_tmp, "w", encoding="utf-8") as hf:
+                hf.write("/* Auto-generated configuration header - do not edit */\n")
                 hf.write("#ifndef NO_OS_CONFIG_H\n")
                 hf.write("#define NO_OS_CONFIG_H\n\n")
                 for sym in kconf.unique_defined_syms:

@@ -38,6 +38,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
+#include <sys/alt_cache.h>	/* alt_dcache_flush{,_no_writeback}() */
 #include "system.h"		/* Generated Nios V BSP: *_BASE, *_IRQ, ... */
 #include "altera_spi.h"
 #include "altera_gpio.h"
@@ -71,7 +72,14 @@
  *   apollo_gpio   0xe8000 (Apollo IRQ/status, input-only)
  *   apollo_rx_data_offload 0x100000   apollo_tx_data_offload 0x110000
  *   jesd204_phy_a 0x1000000 (RX xcvr)  jesd204_phy_b 0x2000000 (TX xcvr)
- *   sys_int_mem   0x10000000 (1.5M OCM) sys_ddr_window 0x10200000 (1M window)
+ *   sys_int_mem   0x10000000 (2M OCM)  sys_ddr_window 0x10500000 (1M window)
+ *   dm_agent 0x10400000  timer_sw_agent 0x10410000  ddr_window.cntl 0x10420000
+ *
+ * The DMA masters see sys_int_mem at 0x10000000 too (ad_dma_interconnect wires
+ * them to its second port), so a buffer's C address is also a valid DMA address.
+ * That is the only reason dma_example can hand the DMAC a plain pointer here:
+ * without it a DMA master reaches DDR only, and an OCM pointer would silently
+ * land ~256 MB into DDR instead.
  */
 
 /*
@@ -147,11 +155,41 @@ extern struct altera_gpio_init_param	altera_gpio_param;
  */
 #define GPIO_REFCLK_READY_RX    (GPIO_OFFSET + 24) /* gpio_o[56] */
 #define GPIO_REFCLK_READY_TX    (GPIO_OFFSET + 25) /* gpio_o[57] */
-#define GTS_PLL_RX_BASEADDR		0
-#define GTS_PLL_TX_BASEADDR		0x020A6000 /* gts_pll_b, matches the DT */
+/*
+ * Both banks, not just the TX one.
+ *
+ * The reference driver maps the gts-pll window only for the transmit adxcvr, so
+ * bank A's PLL is never requested there. The HDL builds one PLL per bank
+ * (ad9084_ebz_qsys.tcl: foreach phy {jesd204_phy_a jesd204_phy_b}) and bank A's
+ * rx_clkout clocks the receive link core and both PHYs' link clocks (same file,
+ * lines 576-578), so requesting both costs nothing and matches what the HDL
+ * builds.
+ *
+ * It is not a fix for the receive path: with both banks requested, Signal Tap
+ * still measures 23% of octets not-in-table and 10% disparity errors on every
+ * lane, unchanged. Kept because it is the configuration the HDL implies, not
+ * because it repaired anything.
+ *
+ * Same +0xA6000 offset inside each PHY's reconfig aperture: bank A at
+ * 0x01000000, bank B at 0x02000000 (system_bd.sopcinfo, avl_mm_bridge_0/1).
+ */
+#define GTS_PLL_RX_BASEADDR		0x010A6000 /* gts_pll_a */
+#define GTS_PLL_TX_BASEADDR		0x020A6000 /* gts_pll_b */
 
-/* Capture depth, in samples per converter. */
+/* Capture depth, in samples per converter. Matches the RX offload's own depth
+ * (RX_KS_PER_CHANNEL 16 -> 16 Ki samples per converter in ad9084_ebz_qsys.tcl),
+ * so the buffer is neither short of nor larger than one offload fill.
+ */
 #define ADC_BUFFER_SAMPLES		16384
+
+/*
+ * The TX offload on this bitstream is 256 KB, not the 512 KB the example
+ * defaults to: ad9084_offload_size() rounds TX_KS_PER_CHANNEL 16 Ki samples x 8
+ * converters x 2 bytes up to a power of two, which is already 256 KB. Both DMA
+ * buffers live in on-chip memory here, so the extra 256 KB would cost M20K for
+ * nothing - the runtime clamp would discard it anyway.
+ */
+#define TX_OFFLOAD_MAX_BYTES		(256 * 1024)
 
 /*
  * AD9084 datapath - absolute CPU-view addresses from system_bd.sopcinfo,
