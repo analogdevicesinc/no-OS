@@ -1681,7 +1681,9 @@ int _read(int file, char *ptr, int len)
 			return -1;
 		}
 
-		return ret;
+		/* receive() blocks until the byte lands and returns 0 on success;
+		 * newlib expects the number of bytes read, so report the 1 read. */
+		return 1;
 	}
 	errno = EBADF;
 	return -1;
