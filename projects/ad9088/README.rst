@@ -125,10 +125,14 @@ DMA Example
 ~~~~~~~~~~~
 
 The DMA example (variant ``dma_example``) exercises the datapath: it captures
-from the ADCs and plays back through the DACs over AXI DMA, including an NCO
-test tone and cabled DAC-to-ADC loopback coherence checks. As with other
-no-OS DMA examples, the received data is left at a known memory address that
-the application prints, so it can be retrieved and plotted. See the
+from the ADCs and plays back through the DACs over AXI DMA, using an NCO test
+tone with an optional cabled DAC-to-ADC loopback. As with other no-OS DMA
+examples, the received data is left at a known memory address that the
+application prints (the ``DMA_EXAMPLE Rx:`` / ``Tx:`` lines), so it can be
+retrieved and plotted. On **Agilex 5 / Nios V**, retrieve and plot it with the
+helpers in ``tools/scripts/platform/altera/`` (``capture.py`` / ``plot.py`` —
+see their README); on **Xilinx**, use the ``tools/scripts/platform/xilinx/``
+flow. See the
 `DAC DMA example wiki <https://wiki.analog.com/resources/no-os/dac_dma_example>`_
 for background.
 

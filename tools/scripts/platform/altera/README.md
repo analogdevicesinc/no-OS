@@ -19,18 +19,48 @@ also draw the transmit (DAC) buffer.
 
 ## 1. Find the buffer addresses and geometry
 
-The app prints them at run time on the `DMA_EXAMPLE Rx:` / `DMA_EXAMPLE Tx:`
-lines. They are also readable from the ELF:
-
-```
-riscv32-unknown-elf-nm build/ad9088 | grep _buffer_dma
-```
-
 - **Rx** (`adc_buffer_dma`): `int16` samples, `num_channels` converters
   interleaved.
 - **Tx** (`dac_buffer_dma`): `uint32` words, each packing one complex channel
   as I (low 16 bits) and Q (high 16 bits), `tx_channels` complex channels
   interleaved.
+
+### The two addresses
+
+`<rx_addr>` and `<tx_addr>` are the link-time addresses of the `adc_buffer_dma`
+and `dac_buffer_dma` arrays. They are **not fixed constants** -- the linker
+places them, so they move whenever the app is rebuilt. Never copy the example
+values below; always read the ones for your own build, either way:
+
+- **From the running app**, which prints them itself:
+
+  ```
+  DMA_EXAMPLE Rx: address=0x... samples=... channels=... bits=...
+  DMA_EXAMPLE Tx: address=0x... samples=... channels=... bits=...
+  ```
+
+- **From the ELF**:
+
+  ```
+  riscv32-unknown-elf-nm build/ad9088 | grep _buffer_dma
+  ```
+
+### The other arguments
+
+Unlike the addresses, these follow from the buffer geometry and are stable for a
+given build config. The app also echoes them on the `DMA_EXAMPLE Rx:` line:
+
+- `<num_samples>` is the **total** Rx samples across all channels =
+  samples/converter x converters (e.g. `ADC_BUFFER_SAMPLES` 4096 x 8 = 32768 on
+  the Agilex build). It must be a multiple of `<num_channels>`; the script
+  divides it back out to samples/channel.
+- `<num_channels>` is the number of interleaved Rx converters -- the same value
+  the app reports as `channels=`.
+- `[storage_bits]` defaults to 16 (int16, 2 bytes/sample) and is omitted when
+  that holds.
+- `--tx-words` / `--tx-channels` describe the Tx buffer the same way; their
+  defaults (32768 words = 128 KiB / 4, 4 complex channels) match the Agilex
+  build, so `--tx-addr` alone is usually enough.
 
 ## 2. Capture
 
@@ -38,9 +68,8 @@ riscv32-unknown-elf-nm build/ad9088 | grep _buffer_dma
 capture.py <rx_addr> <num_samples> <num_channels> [storage_bits] [options]
 ```
 
-- `num_samples` is the **total** across all channels (samples/channel x
-  channels) and must be a multiple of `num_channels`.
-- `storage_bits` defaults to 16 (2 bytes/sample).
+See [section 1](#1-find-the-buffer-addresses-and-geometry) for where each
+argument comes from.
 
 Rx only:
 
