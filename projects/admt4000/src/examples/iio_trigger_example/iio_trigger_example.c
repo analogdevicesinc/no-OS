@@ -143,7 +143,13 @@ int example_main()
 	if (ret)
 		return ret;
 
-	ret = no_os_irq_set_priority(admt4000_irq_desc, admt4000_gpio_trig_ip.irq_id,
+	/* Disable the interrupt until iio_desc is initialized */
+	ret = no_os_irq_disable(admt4000_irq_desc, admt4000_gpio_irq_ip.irq_ctrl_id);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_set_priority(admt4000_irq_desc,
+				     admt4000_gpio_irq_ip.irq_ctrl_id,
 				     7);
 	if (ret)
 		return ret;
