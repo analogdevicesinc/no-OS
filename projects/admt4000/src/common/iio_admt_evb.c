@@ -170,7 +170,7 @@ static int admt_evb_bool_attr_show(void *dev, char *buf, uint32_t len,
 	struct admt_evb_iio_desc *iio_admt_evb_desc;
 	int ret;
 	uint8_t gpio_val;
-	int32_t vals[2];
+	int32_t vals;
 
 	if (!dev)
 		return -ENODEV;
@@ -181,17 +181,17 @@ static int admt_evb_bool_attr_show(void *dev, char *buf, uint32_t len,
 	case ADMT_EVB_SHDN:
 		ret = no_os_gpio_get_value(iio_admt_evb_desc->gpio_shdn_n_desc,
 					   &gpio_val);
-		vals[0] = !gpio_val;
+		vals = !(bool)gpio_val;
 		break;
 	case ADMT_EVB_V_EN:
 		ret = no_os_gpio_get_value(iio_admt_evb_desc->gpio_v_en_desc,
 					   &gpio_val);
-		vals[0] = gpio_val;
+		vals = (bool)gpio_val;
 		break;
 	case ADMT_COIL_RS:
 		ret = no_os_gpio_get_value(iio_admt_evb_desc->gpio_coil_rs_desc,
 					   &gpio_val);
-		vals[0] = gpio_val;
+		vals = (bool)gpio_val;
 		break;
 	default:
 		return -ENOTSUP;
@@ -200,7 +200,7 @@ static int admt_evb_bool_attr_show(void *dev, char *buf, uint32_t len,
 	if (ret)
 		return ret;
 
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, vals);
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, &vals);
 }
 
 /**
