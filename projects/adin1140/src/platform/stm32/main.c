@@ -37,11 +37,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#include <stdlib.h>
 #include "parameters.h"
 #include "common_data.h"
 #include "no_os_error.h"
+#include "stm32_hal.h"
 
 extern int example_main();
+
+/**
+ * @brief Seed the C library PRNG with a non-constant value.
+ *
+ * lwIP draws the TCP client's initial local port and ISN from LWIP_RAND()
+ * (== rand()). Without seeding, rand() returns the same sequence every boot, so
+ * the TCP client always reuses the same local port; after a reset the peer
+ * still has that 4-tuple in TIME_WAIT/half-open and the new handshake stalls
+ * (server prints "connected" but no data flows). Seed from the DWT cycle
+ * counter so each boot picks a fresh port. Best-effort: falls back to the tick.
+ */
+static void seed_rand(void)
+{
+	uint32_t seed;
+
+	CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+	DWT->CTRL |= 1U;
+	seed = DWT->CYCCNT ^ HAL_GetTick();
+	if (seed == 0)
+		seed = 1;
+	srand(seed);
+}
 
 /***************************************************************************//**
  * @brief Main function execution for STM32 platform.
@@ -55,11 +79,14 @@ int main()
 
 	stm32_init();
 
+	seed_rand();
+
 	ret = no_os_uart_init(&uart_desc, &adin1140_uart_ip);
 	if (ret)
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
+	adin1140_uart_desc = uart_desc;
 
 	return example_main();
 }

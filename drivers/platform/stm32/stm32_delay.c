@@ -33,6 +33,24 @@
 #include <stdbool.h>
 #include "stm32_hal.h"
 #include "no_os_delay.h"
+
+/*
+ * On bare-metal builds the HAL time base (HAL_GetTick/HAL_Delay and the HAL
+ * peripheral timeouts) is driven by HAL_IncTick() from the SysTick interrupt.
+ * STM32CubeMX only emits SysTick_Handler in stm32*_it.c when the project asks
+ * for it, and enabling that generation collides with FreeRTOS (whose port.c
+ * defines SysTick_Handler via xPortSysTickHandler). To keep a single CubeMX
+ * configuration working for both, provide the handler here for non-FreeRTOS
+ * builds only. It is weak so a CubeMX-generated SysTick_Handler still wins if a
+ * project chooses to emit one.
+ */
+#ifndef CONFIG_FREERTOS
+__attribute__((weak)) void SysTick_Handler(void)
+{
+	HAL_IncTick();
+}
+#endif
+
 /**
  * @brief Generate microseconds delay.
  * @param usecs - Delay in microseconds.

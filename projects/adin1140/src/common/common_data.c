@@ -33,6 +33,8 @@
 
 #include "common_data.h"
 
+struct no_os_uart_desc *adin1140_uart_desc;
+
 struct no_os_uart_init_param adin1140_uart_ip = {
 	.device_id = UART_DEVICE_ID,
 	.baud_rate = UART_BAUDRATE,

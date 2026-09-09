@@ -149,22 +149,32 @@ a lot of data that needs to be copied, this should be set high. */
 /* TCP Maximum segment size. */
 #define TCP_MSS 1460
 
-/* TCP sender buffer space (bytes). Increased to match window for full utilization */
-#define TCP_SND_BUF (TCP_WND) /* Changed from 8192 */
+/* TCP sender buffer space (bytes). This bounds how much unacked data the board
+ * (acting as the iperf TCP client/sender) keeps in flight. The link's
+ * bandwidth-delay product is small - ~10 Mbit/s x a few ms RTT is only a few
+ * KB - so a large send buffer does NOT help throughput; it just lets the board
+ * burst far more than the pipe holds. On the half-duplex 10BASE-T1S medium
+ * those long data bursts collide with the peer's returning ACKs, causing packet
+ * loss and multi-second RTO stalls. Sizing the send buffer close to the BDP
+ * (6 x MSS ~= 8.7 KB) keeps the pipe full while sharply cutting collisions, so
+ * throughput is both higher and far steadier. Decoupled from TCP_WND (the RX
+ * window) on purpose: the board mostly transmits here. */
+#define TCP_SND_BUF (6 * TCP_MSS)
 
 /* TCP sender buffer space (pbufs). This must be at least = 2 *
    TCP_SND_BUF/TCP_MSS for things to work. */
-#define TCP_SND_QUEUELEN (30 * TCP_SND_BUF / TCP_MSS)
+#define TCP_SND_QUEUELEN (4 * TCP_SND_BUF / TCP_MSS)
 
 /* TCP writable space (bytes). This must be less than or equal
    to TCP_SND_BUF. It is the amount of space which must be
    available in the tcp snd_buf for select to return writable */
 #define TCP_SNDLOWAT (TCP_SND_BUF / 2)
 
-/* TCP receive window. Increased to 32 MSS (~47 KB) for better throughput
-   on 10 Mbps link. The half-duplex nature means window isn't the primary
-   bottleneck, but larger window helps smooth out bursts. */
-#define TCP_WND (32 * TCP_MSS) /* Changed from 16 * TCP_MSS */
+/* TCP receive window. Kept moderate: the board receives little during a TX
+   test, and an oversized RX window only encourages the peer to burst (and
+   collide) when the board acts as a server. 8 MSS comfortably covers the link
+   BDP. */
+#define TCP_WND (8 * TCP_MSS)
 
 #define TCP_OVERSIZE TCP_MSS
 
