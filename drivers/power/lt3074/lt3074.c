@@ -771,8 +771,8 @@ int lt3074_vout_margin(struct lt3074_dev *dev, enum lt3074_margin margin_high,
 {
 	uint32_t raw_data;
 
-	raw_data = no_os_field_prep(LT3074_MARGIN_LOW_MSK, margin_high) |
-		   no_os_field_prep(LT3074_MARGIN_HIGH_MSK, margin_low);
+	raw_data = no_os_field_prep(LT3074_MARGIN_HIGH_MSK, margin_high) |
+		   no_os_field_prep(LT3074_MARGIN_LOW_MSK, margin_low);
 
 	return lt3074_reg_write(dev, LT3074_MFR_MARGIN, raw_data);
 }

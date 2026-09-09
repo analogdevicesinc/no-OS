@@ -58,7 +58,7 @@ static int adp5055_update_register(struct adp5055_desc *desc, uint8_t address,
 	data &= ~mask;
 	data |= no_os_field_prep(mask, val);
 
-	return adp5055_write(desc, address, val);
+	return adp5055_write(desc, address, data);
 }
 
 /**
