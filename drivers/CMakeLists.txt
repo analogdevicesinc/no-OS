@@ -31,6 +31,10 @@ if(CONFIG_CDC)
     add_subdirectory(cdc)
 endif()
 
+if(CONFIG_COLOR)
+    add_subdirectory(color)
+endif()
+
 if(CONFIG_DAC)
     add_subdirectory(dac)
 endif()

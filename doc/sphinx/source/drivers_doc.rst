@@ -226,3 +226,11 @@ GYROSCOPES
    :glob:
 
    drivers/gyroscope/*
+
+COLOR
+=====
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   drivers/color/*
