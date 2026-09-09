@@ -42,8 +42,10 @@
 #include "iio_trigger.h"
 #include "iio_app.h"
 
-#define DATA_BUFFER_SIZE 400
-uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 5 * sizeof(uint32_t)];
+#define DATA_BUFFER_SIZE 200
+#define NUM_CHANNELS 6
+
+uint8_t iio_data_buffer[DATA_BUFFER_SIZE * NUM_CHANNELS * sizeof(uint16_t)];
 
 #define ADMT4000_GPIO_TRIG_NAME "admt4000-dev0"
 
@@ -78,7 +80,7 @@ int example_main()
 	struct no_os_irq_ctrl_desc *admt4000_irq_desc;
 	struct iio_data_buffer data_buff = {
 		.buff = (void *)iio_data_buffer,
-		.size = DATA_BUFFER_SIZE * 5 * sizeof(uint16_t)
+		.size = DATA_BUFFER_SIZE * NUM_CHANNELS * sizeof(uint16_t)
 	};
 	struct admt_evb_iio_init_param admt_evb_ip = {
 		.gpio_v_en_ip = gpio_v_en_ip,
