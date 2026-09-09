@@ -123,11 +123,11 @@ int32_t ltc2358_init(struct ltc2358_dev **device,
 
 	*device = dev;
 
-	return ret;
+	return 0;
 error:
 	no_os_free(dev);
 
-	return 0;
+	return ret;
 }
 
 /**
