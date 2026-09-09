@@ -913,7 +913,7 @@ static int ad9144_link_status_get(struct ad9144_dev *dev)
 	    regs[0] != regs[1] || regs[0] != regs[3])
 		ret = -EFAULT;
 
-	return 0;
+	return ret;
 }
 
 static int ad9144_jesd204_link_running(struct jesd204_dev *jdev,
