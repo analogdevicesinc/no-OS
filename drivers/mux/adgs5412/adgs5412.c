@@ -322,29 +322,33 @@ int32_t adgs5412_init(adgs5412_dev **device,
 
 	/* SPI */
 	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
+	if (ret) {
+		no_os_free(dev);
+		return ret;
+	}
 
 	/* Device Settings */
 	dev->crc_en = ADGS5412_DISABLE;
 	dev->daisy_chain_en = ADGS5412_DISABLE;
-	adgs5412_do_soft_reset(dev);
+	ret |= adgs5412_do_soft_reset(dev);
 
 	if (init_param.crc_en == ADGS5412_ENABLE) {
-		adgs5412_spi_reg_write_mask(dev,
-					    ADGS5412_REG_ERR_CONFIG,
-					    ADGS5412_CRC_ERR_EN,
-					    ADGS5412_CRC_ERR_EN);
+		ret |= adgs5412_spi_reg_write_mask(dev,
+						   ADGS5412_REG_ERR_CONFIG,
+						   ADGS5412_CRC_ERR_EN,
+						   ADGS5412_CRC_ERR_EN);
 		dev->crc_en = ADGS5412_ENABLE;
 	}
 
 	dev->burst_mode_en = init_param.burst_mode_en;
 	if (dev->burst_mode_en == ADGS5412_ENABLE)
-		adgs5412_spi_reg_write_mask(dev,
-					    ADGS5412_REG_BURST_EN,
-					    ADGS5412_BURST_MODE_EN,
-					    ADGS5412_BURST_MODE_EN);
+		ret |= adgs5412_spi_reg_write_mask(dev,
+						   ADGS5412_REG_BURST_EN,
+						   ADGS5412_BURST_MODE_EN,
+						   ADGS5412_BURST_MODE_EN);
 
 	if (init_param.daisy_chain_en == ADGS5412_ENABLE) {
-		adgs5412_enter_daisy_chain(dev);
+		ret |= adgs5412_enter_daisy_chain(dev);
 		dev->daisy_chain_en = ADGS5412_ENABLE;
 	}
 
