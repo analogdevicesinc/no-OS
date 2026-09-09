@@ -153,8 +153,8 @@ int32_t ad9739a_power_down(struct ad9739a_dev *dev,
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-int32_t ad_serdes_clk(struct ad9739a_dev *dev,
-		      uint8_t mode)
+int32_t ad9739a_operation_mode(struct ad9739a_dev *dev,
+			       uint8_t mode)
 {
 	int32_t ret;
 	uint8_t reg_data;
