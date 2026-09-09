@@ -43,6 +43,19 @@ extern "C" {
 #endif
 
 /**
+ * MAX_CAPI_SPI_HAS_PINS - whether MXC_SPI_Init() takes a trailing pins argument.
+ * The v2 driver and the "reva-with-pins" driver (MAX32655 / MAX32657) both take
+ * an mxc_spi_pins_t. The older me11-class parts (MAX32660) ship a pinless 6-arg
+ * MXC_SPI_Init() that muxes its own pins internally and define no
+ * mxc_spi_pins_t type at all.
+ */
+#if (TARGET_NUM == 32660)
+#define MAX_CAPI_SPI_HAS_PINS 0
+#else
+#define MAX_CAPI_SPI_HAS_PINS 1
+#endif
+
+/**
  * @enum max_capi_spi_device_role
  * @brief SPI device role selection.
  */

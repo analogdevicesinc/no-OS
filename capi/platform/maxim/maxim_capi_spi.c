@@ -85,6 +85,8 @@ static int _max_spi_hw_init(struct max_capi_spi_priv *priv)
 	struct max_capi_spi_extra *extra = &priv->extra;
 	bool quad = (extra->bus_width == MAX_CAPI_SPI_BUS_WIDTH_QUAD);
 	int num_targets = extra->num_targets ? (int)extra->num_targets : 1;
+
+#if MAX_CAPI_SPI_HAS_PINS
 	mxc_spi_pins_t pins = {
 		.clock = true,
 		.miso = true,
@@ -100,6 +102,7 @@ static int _max_spi_hw_init(struct max_capi_spi_priv *priv)
 	/* Default to CS0 if the caller left the bitmask empty. */
 	if (extra->chip_select == 0)
 		pins.ss0 = true;
+#endif
 
 #if MAX_CAPI_SPI_V2
 	{
@@ -131,9 +134,16 @@ static int _max_spi_hw_init(struct max_capi_spi_priv *priv)
 		int master_mode =
 			(extra->device_role == MAX_CAPI_SPI_DEVICE_ROLE_TARGET) ? 0 : 1;
 
+#if MAX_CAPI_SPI_HAS_PINS
 		return MXC_SPI_Init(priv->regs, master_mode, quad ? 1 : 0,
 				    num_targets, extra->polarity_mask,
 				    priv->clock_freq, pins);
+#else
+		/* me11-class: pinless 6-arg Init; the driver muxes its own pins. */
+		return MXC_SPI_Init(priv->regs, master_mode, quad ? 1 : 0,
+				    num_targets, extra->polarity_mask,
+				    priv->clock_freq);
+#endif
 	}
 #endif
 }

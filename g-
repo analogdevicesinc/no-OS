@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+Accept-Ranges: bytes
+Content-Length: 9698944834
+Content-Type: application/zip
+ETag: "fc8383a69aea9bf5bfbe337633b07d88:1757331801.678727"
+Last-Modified: Mon, 08 Sep 2025 18:00:08 GMT
+Server: AkamaiNetStorage
+Date: Wed, 09 Sep 2026 09:03:58 GMT
+Connection: keep-alive
+
