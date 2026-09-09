@@ -460,7 +460,7 @@ int32_t ad7746_get_vt_data(struct ad7746_dev *dev, uint32_t *vt_data)
 
 	*vt_data = ((uint32_t)dev->buf[0] << 16) |
 		   ((uint32_t)dev->buf[1] << 8) |
-		   dev->buf[0];
+		   dev->buf[2];
 
 	if (dev->setup.config.md == AD7746_MODE_SINGLE)
 		dev->setup.config.md = AD7746_MODE_IDLE;
@@ -502,7 +502,7 @@ int32_t ad7746_get_cap_data(struct ad7746_dev *dev, uint32_t *cap_data)
 
 	*cap_data = ((uint32_t)dev->buf[0] << 16) |
 		    ((uint32_t)dev->buf[1] << 8) |
-		    dev->buf[0];
+		    dev->buf[2];
 
 	if (dev->setup.config.md == AD7746_MODE_SINGLE)
 		dev->setup.config.md = AD7746_MODE_IDLE;
