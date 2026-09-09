@@ -77,8 +77,6 @@ int admfm2000_set_dsa_raw(struct admfm2000_dev *dev, uint8_t chan,
 int admfm2000_get_dsa_raw(struct admfm2000_dev *dev, uint8_t chan,
 			  int32_t *dsa_raw);
 
-int admfm2000_get_channel_mode(struct admfm2000_dev *dev, uint8_t mode);
-
 int admfm2000_set_channel_config(struct admfm2000_dev *dev, uint8_t config);
 
 #endif /* SRC_ADMFM2000_H_ */

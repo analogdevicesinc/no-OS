@@ -397,8 +397,8 @@
 #define ADF5611_LKD_DELAY_US		500
 #define ADF5611_RFOUT_MAX               14600000000U 	//14.6GHz
 #define ADF5611_RFOUT_MIN               7300000000U 	//7.3GHz
-#define ADF5611_REF_CLK_MAX		300000000000U   //300MHz                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-#define ADF5611_REF_CLK_MIN		50000000U       //50MHz
+#define ADF5611_REF_CLK_MAX		350000000U	//350MHz
+#define ADF5611_REF_CLK_MIN		10000000U	//10MHz
 #define ADF5611_OUTPUT_DOUBLER          0x2U
 #define ADF5611_PFD_FREQ_MAX		100000000U	//100MHz
 #define ADF5612_RFOUT_MAX               8500000000U 	//8.5GHz
