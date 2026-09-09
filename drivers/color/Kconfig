@@ -1,0 +1,14 @@
+menuconfig COLOR
+	bool "Color Drivers"
+	default n
+	help
+	  Enable support for color drivers.
+
+if COLOR
+
+config COLOR_TCS34725
+	depends on I2C
+	bool "Enable TCS34725 color sensor driver"
+	default n
+
+endif # COLOR
