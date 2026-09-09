@@ -42,6 +42,8 @@ use the vendor toolchain bundled with the Maxim SDK:
          - max32690
        * - ``ad-swiot1l-sl``
          - max32650
+       * - ``max32657evkit``
+         - max32657
 
 Prerequisites
 =============
