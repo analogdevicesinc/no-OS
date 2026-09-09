@@ -283,6 +283,8 @@ int32_t ad9739a_setup(struct ad9739a_dev **device,
 	ad9739a_read(dev, AD9739A_REG_PART_ID, &chip_id);
 	if (chip_id != AD9739A_CHIP_ID) {
 		printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
+		no_os_spi_remove(dev->spi_desc);
+		no_os_free(dev);
 		return -1;
 	}
 
