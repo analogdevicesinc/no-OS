@@ -514,6 +514,8 @@ int ad7293_remove(struct ad7293_dev *dev)
 	if (ret)
 		return ret;
 
+	no_os_gpio_remove(dev->gpio_reset);
+
 	no_os_free(dev);
 
 	return 0;
