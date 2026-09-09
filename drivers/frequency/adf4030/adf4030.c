@@ -107,11 +107,17 @@ int adf4030_spi_write(struct adf4030_dev *dev, uint16_t reg_addr, uint8_t data)
 {
 	uint8_t buff[ADF4030_BUFF_SIZE_BYTES];
 	uint16_t cmd;
+	uint8_t addr;
 
 	if (!dev)
 		return -EINVAL;
 
-	cmd = ADF4030_SPI_WRITE_CMD | ADF4030_CHIP_ADDRESS(dev->chip_addr) | reg_addr;
+	/*
+	 * To write Register 0x00 and Register 0x01, the ADDR bits must be
+	 * cleared to 0000, independent of the ADDR pin code.
+	 */
+	addr = (reg_addr <= 0x01) ? 0 : dev->chip_addr;
+	cmd = ADF4030_SPI_WRITE_CMD | ADF4030_CHIP_ADDRESS(addr) | reg_addr;
 
 	if (dev->spi_desc->bit_order) {
 		buff[0] = no_os_bit_swap_constant_8(cmd & 0xFF);
@@ -140,7 +146,7 @@ int adf4030_spi_read(struct adf4030_dev *dev, uint16_t reg_addr, uint8_t *data)
 	uint16_t cmd;
 	int ret;
 
-	if (!dev)
+	if (!dev || !data)
 		return -EINVAL;
 
 	cmd = ADF4030_SPI_READ_CMD | ADF4030_CHIP_ADDRESS(dev->chip_addr) | reg_addr;
@@ -180,6 +186,9 @@ int adf4030_spi_update_bits(struct adf4030_dev *dev, uint16_t reg_addr,
 {
 	uint8_t tmp, orig;
 	int ret;
+
+	if (!dev)
+		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, reg_addr, &orig);
 	if (ret)
@@ -243,7 +252,7 @@ static int adf4030_power(struct adf4030_dev *dev, bool power_up)
 }
 
 /**
- * @brief Applys a softreset, sets the SPI 4 wire mode and
+ * @brief Applies a softreset, sets the SPI 4 wire mode and
  * writes the default registers.
  * @param dev 		- The device structure
  * @param spi_4wire 	- SPI 4 wire feature enable input
@@ -300,7 +309,7 @@ static int adf4030_check_scratchpad(struct adf4030_dev *dev)
 		return ret;
 
 	if (scratchpad != ADF4030_SPI_SCRATCHPAD_TEST)
-		return -EINVAL;
+		return -EIO;
 
 	return 0;
 }
@@ -308,12 +317,16 @@ static int adf4030_check_scratchpad(struct adf4030_dev *dev)
 /**
  * @brief Computes the ADEL_M and returns the value.
  * @param dev 	     - The device structure.
- * @return 	     - ADEL_M value.
+ * @param delcal     - DELCAL calibration value.
+ * @return 	     	 - ADEL_M value.
  */
 static uint32_t adf4030_adel_m_compute(struct adf4030_dev *dev, uint8_t delcal)
 {
 	uint64_t vco_period_fs;
 	uint64_t vco_delay_lsb;
+
+	if (!dev || !dev->vco_freq || !delcal)
+		return 0;
 
 	vco_period_fs = NO_OS_DIV_ROUND_CLOSEST(1000000000000000ULL, dev->vco_freq);
 	vco_delay_lsb = NO_OS_DIV_ROUND_CLOSEST(vco_period_fs, 8);
@@ -343,14 +356,14 @@ static uint32_t adf4030_channel_voltage_compute(struct adf4030_dev *dev,
 }
 
 /**
- * @brief Computes the RCM Regsiter Value of the channel and returns the value.
+ * @brief Computes the RCM Register Value of the channel and returns the value.
  * @param dev 	     - The device structure.
- * @param voltage_vm - Voltage value of the channel.
+ * @param voltage_mv - Voltage value of the channel in mV.
  * @param boost	     - Boost value of the channel.
- * @return 	     - RCM Register value.
+ * @return 	     	 - RCM Register value.
  */
 static uint8_t adf4030_channel_rcm_compute(struct adf4030_dev *dev,
-		uint32_t voltage_vm, uint8_t boost)
+		uint32_t voltage_mv, uint8_t boost)
 {
 	uint32_t r_value;
 	uint32_t i_value;
@@ -358,8 +371,11 @@ static uint8_t adf4030_channel_rcm_compute(struct adf4030_dev *dev,
 
 	i_value = boost ? ADF4030_RCM_CURRENT1 : ADF4030_RCM_CURRENT0;
 
+	if ((voltage_mv * ADF4030_RCM_MV_SCALE / i_value) <= ADF4030_RCM_CONST4)
+		return 0;
+
 	/* Requested resistance in milliohms: R = V[mV] * 1000 / I[mA] - 26500 */
-	r_value = (voltage_vm * ADF4030_RCM_MV_SCALE / i_value) - ADF4030_RCM_CONST4;
+	r_value = (voltage_mv * ADF4030_RCM_MV_SCALE / i_value) - ADF4030_RCM_CONST4;
 
 	/* reg = round((735 - 7000000 / R) / 10), clamped to [0, 63] */
 	reg_value = (int32_t)ADF4030_RCM_CONST2 -
@@ -382,18 +398,11 @@ static uint8_t adf4030_channel_rcm_compute(struct adf4030_dev *dev,
  */
 static int adf4030_set_vco_cal(struct adf4030_dev *dev, bool en)
 {
-
-	int ret;
-
 	if (!dev)
 		return -EINVAL;
 
-	ret = adf4030_spi_update_bits(dev, 0x57, ADF4030_PLL_CAL_EN,
+	return adf4030_spi_update_bits(dev, 0x5A, ADF4030_PLL_CAL_EN,
 				      no_os_field_prep(ADF4030_PLL_CAL_EN, en));
-	if (ret)
-		return ret;
-
-	return adf4030_spi_write(dev, 0x56, dev->ndiv);
 }
 
 /**
@@ -405,7 +414,6 @@ static int adf4030_set_vco_cal(struct adf4030_dev *dev, bool en)
  */
 int adf4030_set_temperature(struct adf4030_dev *dev, bool en)
 {
-
 	int ret;
 	uint8_t val;
 	uint8_t msk;
@@ -430,11 +438,10 @@ int adf4030_set_temperature(struct adf4030_dev *dev, bool en)
 		ret = adf4030_spi_write(dev, 0x62, ADF4030_ADC_CLK_DIV);
 		if (ret)
 			return ret;
-		return adf4030_spi_update_bits(dev, 0x72, ADF4030_ADC_ST_CNV, 0xFF);
-
+		return adf4030_spi_write(dev, 0x72, ADF4030_ADC_ST_CNV);
 	} else {
-		ret = adf4030_spi_update_bits(dev, 0x61,
-					      ADF4030_EN_ADC_CNV, 0x0);
+		msk = ADF4030_EN_ADC_CNV | ADF4030_EN_ADC_CLK | ADF4030_EN_ADC;
+		ret = adf4030_spi_update_bits(dev, 0x61, msk, 0x0);
 		if (ret)
 			return ret;
 
@@ -444,9 +451,9 @@ int adf4030_set_temperature(struct adf4030_dev *dev, bool en)
 
 /**
  * @brief Gets the value of the approximate die temperature.
- * @param dev 		- The device structure.
- * @param temperature		- The read value of the Temperature Readback.
- * @return    		- 0 in case of success or negative error code.
+ * @param dev 			- The device structure.
+ * @param temperature	- The read value of the Temperature Readback in deg C.
+ * @return    			- 0 in case of success or negative error code.
  */
 int adf4030_get_temperature(struct adf4030_dev *dev, int16_t *temperature)
 {
@@ -454,10 +461,16 @@ int adf4030_get_temperature(struct adf4030_dev *dev, int16_t *temperature)
 	uint8_t lsb, msb;
 	int16_t raw;
 
-	if (!dev)
+	if (!dev || !temperature)
 		return -EINVAL;
 
-	ret = adf4030_spi_update_bits(dev, 0x72, ADF4030_ADC_ST_CNV, 0x0);
+	/* Start ADC conversion */
+	ret = adf4030_spi_write(dev, 0x72, ADF4030_ADC_ST_CNV);
+	if (ret)
+		return ret;
+
+	/* Wait for ADC conversion to complete */
+	ret = adf4030_poll(dev, 0x8F, ADF4030_ADC_BUSY, false);
 	if (ret)
 		return ret;
 
@@ -469,11 +482,15 @@ int adf4030_get_temperature(struct adf4030_dev *dev, int16_t *temperature)
 	if (ret)
 		return ret;
 
-	/* Temperature is a 9-bit two's complement value:
-	 * bit 8 comes from REG0093, bits 7:0 from REG0092. */
-	raw = (no_os_field_get(ADF4030_TEMP_MEAS_MSB, msb) << 8) | lsb;
-	if (raw & 0x100)
-		raw -= 0x200;
+	/*
+	 * Temperature is a 9-bit sign-magnitude value:
+	 * Bit 8 comes from REG0093 and represents the sign
+	 * (0 = positive, 1 = negative). Bits 7:0 from REG0092
+	 * represent the magnitude in degrees Celsius.
+	 */
+	raw = lsb;
+	if (no_os_field_get(ADF4030_TEMP_MEAS_MSB, msb))
+		raw = -raw;
 
 	*temperature = raw;
 
@@ -512,12 +529,38 @@ int adf4030_set_rdiv(struct adf4030_dev *dev, uint8_t rdiv)
 	if (!dev)
 		return -EINVAL;
 
+	if (rdiv < ADF4030_R_DIV_MIN || rdiv > ADF4030_R_DIV_MAX)
+		return -EINVAL;
+
+	if (dev->ref_freq / rdiv < ADF4030_PFD_FREQ_MIN ||
+	    NO_OS_DIV_ROUND_UP(dev->ref_freq, rdiv) > ADF4030_PFD_FREQ_MAX)
+		return -EINVAL;
+
+	ret = adf4030_set_vco_cal(dev, true);
+	if (ret)
+		return ret;
+
 	ret = adf4030_spi_update_bits(dev, 0x57, ADF4030_RDIV,
 				      no_os_field_prep(ADF4030_RDIV, rdiv));
 	if (ret)
 		return ret;
 
+	/* Writing NDIV starts VCO calibration */
 	ret = adf4030_spi_write(dev, 0x56, dev->ndiv);
+	if (ret)
+		return ret;
+
+	/* Wait for calibration to complete */
+	ret = adf4030_poll(dev, 0xBA, ADF4030_CAL_BUSY, false);
+	if (ret)
+		return ret;
+
+	/* Wait for lock detect */
+	ret = adf4030_poll(dev, 0x90, ADF4030_PLL_LD, true);
+	if (ret)
+		return ret;
+
+	ret = adf4030_set_vco_cal(dev, false);
 	if (ret)
 		return ret;
 
@@ -537,7 +580,7 @@ int adf4030_get_rdiv(struct adf4030_dev *dev, uint8_t *rdiv)
 	uint8_t tmp;
 	int ret;
 
-	if (!dev)
+	if (!dev || !rdiv)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x57, &tmp);
@@ -563,7 +606,29 @@ int adf4030_set_ndiv(struct adf4030_dev *dev, uint8_t ndiv)
 	if (!dev)
 		return -EINVAL;
 
+	if (ndiv < ADF4030_N_DIV_MIN)
+		return -EINVAL;
+
+	ret = adf4030_set_vco_cal(dev, true);
+	if (ret)
+		return ret;
+
+	/* Writing NDIV starts VCO calibration */
 	ret = adf4030_spi_write(dev, 0x56, ndiv);
+	if (ret)
+		return ret;
+
+	/* Wait for calibration to complete */
+	ret = adf4030_poll(dev, 0xBA, ADF4030_CAL_BUSY, false);
+	if (ret)
+		return ret;
+
+	/* Wait for lock detect */
+	ret = adf4030_poll(dev, 0x90, ADF4030_PLL_LD, true);
+	if (ret)
+		return ret;
+
+	ret = adf4030_set_vco_cal(dev, false);
 	if (ret)
 		return ret;
 
@@ -583,7 +648,7 @@ int adf4030_get_ndiv(struct adf4030_dev *dev, uint8_t *ndiv)
 	uint8_t tmp;
 	int ret;
 
-	if (!dev)
+	if (!dev || !ndiv)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x56, &tmp);
@@ -609,13 +674,22 @@ int adf4030_set_odiva(struct adf4030_dev *dev, uint16_t odiva)
 	if (!dev)
 		return -EINVAL;
 
+	if (odiva < ADF4030_O_DIV_MIN || odiva > ADF4030_O_DIV_MAX)
+		return -EINVAL;
+
 	ret = adf4030_spi_write(dev, 0x53,
 				no_os_field_prep(ADF4030_ODIVA_LSB, odiva & 0xFF));
 	if (ret)
 		return ret;
 
-	return adf4030_spi_update_bits(dev, 0x54, ADF4030_ODIVA_MSB,
+	ret = adf4030_spi_update_bits(dev, 0x54, ADF4030_ODIVA_MSB,
 				       no_os_field_prep(ADF4030_ODIVA_MSB, (odiva >> 8)));
+	if (ret)
+		return ret;
+
+	dev->bsync_freq_odiv_a = dev->vco_freq / odiva;
+
+	return 0;
 }
 
 /**
@@ -630,7 +704,7 @@ int adf4030_get_odiva(struct adf4030_dev *dev, uint16_t *odiva)
 	uint16_t odiv_val;
 	int ret;
 
-	if (!dev)
+	if (!dev || !odiva)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x53, &tmp);
@@ -661,12 +735,21 @@ int adf4030_set_odivb(struct adf4030_dev *dev, uint16_t odivb)
 	if (!dev)
 		return -EINVAL;
 
+	if (odivb < ADF4030_O_DIV_MIN || odivb > ADF4030_O_DIV_MAX)
+		return -EINVAL;
+
 	ret = adf4030_spi_update_bits(dev, 0x54, ADF4030_ODIVB_LSB,
 				      no_os_field_prep(ADF4030_ODIVB_LSB, odivb & 0x0F));
 	if (ret)
 		return ret;
 
-	return adf4030_spi_write(dev, 0x55, (odivb >> 4));
+	ret = adf4030_spi_write(dev, 0x55, (odivb >> 4));
+	if (ret)
+		return ret;
+
+	dev->bsync_freq_odiv_b = dev->vco_freq / odivb;
+
+	return 0;
 }
 
 /**
@@ -681,7 +764,7 @@ int adf4030_get_odivb(struct adf4030_dev *dev, uint16_t *odivb)
 	uint16_t odiv_val;
 	int ret;
 
-	if (!dev)
+	if (!dev || !odivb)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x54, &tmp);
@@ -700,12 +783,10 @@ int adf4030_get_odivb(struct adf4030_dev *dev, uint16_t *odivb)
 }
 
 /**
- * @brief Set the desired reference frequency and reset everything over to maximum
- * supported value of 250MHz to the max. value and everything under the minimum
- * supported value of 10MHz to the min.
- * @param dev 		- The device structure.
- * @param val		- The desired reference frequency in Hz.
- * @return    		- 0 in case of success or negative error code.
+ * @brief Set the desired reference frequency.
+ * @param dev - The device structure.
+ * @param val - The desired reference frequency in Hz.
+ * @return    - 0 in case of success or negative error code.
  */
 int adf4030_set_ref_clk(struct adf4030_dev *dev, uint32_t val)
 {
@@ -722,33 +803,39 @@ int adf4030_set_ref_clk(struct adf4030_dev *dev, uint32_t val)
 
 /**
  * @brief Set the desired VCO frequency.
- * @param dev 		- The device structure.
- * @param vco_freq	- The desired reference frequency in Hz.
- * @return    		- 0 in case of success or negative error code.
+ * @param dev      - The device structure.
+ * @param vco_freq - The desired VCO frequency in Hz.
+ * @return         - 0 in case of success or negative error code.
  */
 int adf4030_set_vco_freq(struct adf4030_dev *dev, uint32_t vco_freq)
 {
-	uint32_t pfd_freq;
-	uint8_t i, max_r, min_r, rdiv = 0, ndiv;
+	uint8_t i, max_r, min_r, rdiv = 0, ndiv = 0;
 	int ret;
+
+	if (!dev)
+		return -EINVAL;
 
 	if (vco_freq < ADF4030_VCO_FREQ_MIN || vco_freq > ADF4030_VCO_FREQ_MAX)
 		return -EINVAL;
 
-	if (dev->ref_freq < ADF4030_REF_FREQ_MIN
-	    || dev->ref_freq > ADF4030_REF_FREQ_MAX)
+	if (dev->ref_freq < ADF4030_REF_FREQ_MIN ||
+	    dev->ref_freq > ADF4030_REF_FREQ_MAX)
 		return -EINVAL;
 
-	max_r = dev->ref_freq /  ADF4030_PFD_FREQ_MIN;
-	min_r = NO_OS_DIV_ROUND_UP(dev->ref_freq,  ADF4030_PFD_FREQ_MAX);
+	max_r = dev->ref_freq / ADF4030_PFD_FREQ_MIN;
+	min_r = NO_OS_DIV_ROUND_UP(dev->ref_freq, ADF4030_PFD_FREQ_MAX);
 
 	for (i = min_r; i <= max_r; i++) {
-		pfd_freq = dev->ref_freq / i;
-		ndiv = vco_freq / pfd_freq;
+		uint64_t vco_r = (uint64_t)vco_freq * i;
 
-		if ((vco_freq % pfd_freq) == 0) {
-			rdiv = i;
-			break;
+		if ((vco_r % dev->ref_freq) == 0) {
+			uint64_t n = vco_r / dev->ref_freq;
+
+			if (n >= ADF4030_N_DIV_MIN && n <= ADF4030_N_DIV_MAX) {
+				rdiv = i;
+				ndiv = (uint8_t)n;
+				break;
+			}
 		}
 	}
 	if (!rdiv)
@@ -762,26 +849,23 @@ int adf4030_set_vco_freq(struct adf4030_dev *dev, uint32_t vco_freq)
 	dev->vco_freq = vco_freq;
 	dev->ref_div = rdiv;
 
+	/* Write RDIV */
 	ret = adf4030_spi_update_bits(dev, 0x57, ADF4030_RDIV,
 				      no_os_field_prep(ADF4030_RDIV, dev->ref_div));
 	if (ret)
 		return ret;
 
-	// Write NDIV
+	/* Write NDIV (starts VCO calibration) */
 	ret = adf4030_spi_write(dev, 0x56, dev->ndiv);
 	if (ret)
 		return ret;
 
-	// Digital Reset
-	ret = adf4030_spi_update_bits(dev, 0x39, ADF4030_RST_SYS, 0xFF);
+	/* Wait for calibration to complete */
+	ret = adf4030_poll(dev, 0xBA, ADF4030_CAL_BUSY, false);
 	if (ret)
 		return ret;
 
-	ret = adf4030_spi_update_bits(dev, 0x39, ADF4030_RST_SYS, 0x0);
-	if (ret)
-		return ret;
-
-	// Wait for Lock Detect
+	/* Wait for lock detect */
 	ret = adf4030_poll(dev, 0x90, ADF4030_PLL_LD, true);
 	if (ret)
 		return ret;
@@ -791,18 +875,17 @@ int adf4030_set_vco_freq(struct adf4030_dev *dev, uint32_t vco_freq)
 
 /**
  * @brief Get the VCO frequency in Hz.
- * @param dev 		- The device structure.
- * @param vco_freq 	- The VCO frequency in Hz.
- * @return    		- 0 in case of success, negative error code otherwise.
+ * @param dev      - The device structure.
+ * @param vco_freq - The read VCO frequency in Hz.
+ * @return         - 0 in case of success or negative error code otherwise.
  */
 int adf4030_get_vco_freq(struct adf4030_dev *dev, uint32_t *vco_freq)
 {
-
 	uint32_t pfd_freq;
 	uint8_t ndiv, tmp;
 	int ret;
 
-	if (!dev)
+	if (!dev || !vco_freq)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x57, &tmp);
@@ -815,7 +898,9 @@ int adf4030_get_vco_freq(struct adf4030_dev *dev, uint32_t *vco_freq)
 	if (ret)
 		return ret;
 
-	pfd_freq = dev->ref_freq / dev->ref_div;
+	dev->ndiv = ndiv;
+
+	pfd_freq = dev->ref_freq / (dev->ref_div ? dev->ref_div : 1);
 	dev->vco_freq = pfd_freq * ndiv;
 
 	*vco_freq = dev->vco_freq;
@@ -824,18 +909,17 @@ int adf4030_get_vco_freq(struct adf4030_dev *dev, uint32_t *vco_freq)
 }
 
 /**
- * @brief Set the BSYNC frequency in Hz. Output divider will be choose according
- *  to odiv sel argument.
- * @param dev 		- The device structure.
- * @param bsync_freq 	- The VCO frequency in Hz.
- * @param odivb_sel 	- Selects the output divider which will be set.
- * @return    		- 0 in case of success, negative error code otherwise.
+ * @brief Set the BSYNC frequency in Hz. Output divider will be chosen according
+ *  to odivb_sel argument.
+ * @param dev        - The device structure.
+ * @param bsync_freq - The desired BSYNC frequency in Hz.
+ * @param odivb_sel  - Selects the output divider which will be set (true = ODIVB, false = ODIVA).
+ * @return           - 0 in case of success, negative error code otherwise.
  */
 int adf4030_set_bsync_freq(struct adf4030_dev *dev, uint32_t bsync_freq,
 			   bool odivb_sel)
 {
 	uint32_t odiv;
-	int ret;
 
 	if (!dev)
 		return -EINVAL;
@@ -846,78 +930,46 @@ int adf4030_set_bsync_freq(struct adf4030_dev *dev, uint32_t bsync_freq,
 
 	odiv = NO_OS_DIV_ROUND_CLOSEST(dev->vco_freq, bsync_freq);
 
-	if (odiv < ADF4030_O_DIV_MIN ||
-	    odiv > ADF4030_O_DIV_MAX)
+	if (odiv < ADF4030_O_DIV_MIN || odiv > ADF4030_O_DIV_MAX)
 		return -EINVAL;
 
-	if (odivb_sel) {
-		dev->bsync_freq_odiv_b = dev->vco_freq / odiv;
-		ret = adf4030_spi_update_bits(dev, 0x54, ADF4030_ODIVB_LSB,
-					      no_os_field_prep(ADF4030_ODIVB_LSB, odiv));
-		if (ret)
-			return ret;
+	if (odivb_sel)
+		return adf4030_set_odivb(dev, (uint16_t)odiv);
 
-		// Write ADF4030_ODIVB_MSB
-		return adf4030_spi_write(dev, 0x55, (odiv >> 4));
-	} else {
-		dev->bsync_freq_odiv_a = dev->vco_freq / odiv;
-		// Write ADF4030_ODIVA_LSB
-		ret = adf4030_spi_write(dev, 0x53,
-					no_os_field_prep(ADF4030_ODIVA_LSB, odiv));
-		if (ret)
-			return ret;
-
-		return adf4030_spi_update_bits(dev, 0x54, ADF4030_ODIVA_MSB,
-					       no_os_field_prep(ADF4030_ODIVA_MSB, (odiv >> 8)));
-
-	}
+	return adf4030_set_odiva(dev, (uint16_t)odiv);
 }
 
 /**
  * @brief Get the BSYNC frequency in Hz.
  * @param dev        - The device structure.
  * @param bsync_freq - The read BSYNC frequency in Hz.
- * @param odivb_sel  - Selects the output divider to read.
+ * @param odivb_sel  - Selects the output divider to read (true = ODIVB, false = ODIVA).
  * @return           - 0 in case of success or negative error code otherwise.
  */
 int adf4030_get_bsync_freq(struct adf4030_dev *dev, uint32_t *bsync_freq,
 			   bool odivb_sel)
 {
-	uint32_t odiv;
-	uint8_t tmp;
+	uint16_t odiv;
 	int ret;
 
-	if (!dev)
+	if (!dev || !bsync_freq)
 		return -EINVAL;
 
 	if (odivb_sel) {
-
-		ret = adf4030_spi_read(dev, 0x54, &tmp);
+		ret = adf4030_get_odivb(dev, &odiv);
 		if (ret)
 			return ret;
-		odiv = no_os_field_get(ADF4030_ODIVB_LSB, tmp);
-
-		// READ ADF4030_ODIVB_MSB
-		ret = adf4030_spi_read(dev, 0x55, &tmp);
-		if (ret)
-			return ret;
-		odiv |= (tmp << 4);
+		if (!odiv)
+			return -EINVAL;
 
 		dev->bsync_freq_odiv_b = NO_OS_DIV_ROUND_CLOSEST(dev->vco_freq, odiv);
 		*bsync_freq = dev->bsync_freq_odiv_b;
 	} else {
-		// Read ADF4030_ODIVA_LSB
-		ret = adf4030_spi_read(dev, 0x53, &tmp);
+		ret = adf4030_get_odiva(dev, &odiv);
 		if (ret)
 			return ret;
-		odiv = tmp;
-
-		// READ ADF4030_ODIVB_MSB
-		ret = adf4030_spi_read(dev, 0x54, &tmp);
-		if (ret)
-			return ret;
-		tmp = no_os_field_get(ADF4030_ODIVA_MSB, tmp);
-		odiv |= (tmp << 8);
+		if (!odiv)
+			return -EINVAL;
 
 		dev->bsync_freq_odiv_a = NO_OS_DIV_ROUND_CLOSEST(dev->vco_freq, odiv);
 		*bsync_freq = dev->bsync_freq_odiv_a;
@@ -929,21 +981,24 @@ int adf4030_get_bsync_freq(struct adf4030_dev *dev, uint32_t *bsync_freq,
 /**
  * @brief Set the TDC source.
  * @param dev        - The device structure.
- * @param tdc_source - The desired TDC source value.
+ * @param tdc_source - The desired TDC source value (0-9 for RX0-RX9, 26 for REFIN).
  * @return           - 0 in case of success or negative error code otherwise.
  */
 int adf4030_set_tdc_source(struct adf4030_dev *dev, uint8_t tdc_source)
 {
-
 	int ret;
+
 	if (!dev)
 		return -EINVAL;
 
-	ret = adf4030_spi_update_bits(dev, 0x11, ADF4030_TDC_SOURCE,
-				      no_os_field_prep(ADF4030_TDC_SOURCE, (tdc_source)));
+	if (tdc_source >= ADF4030_CHANNEL_NUMBER && tdc_source != 26)
+		return -EINVAL;
 
+	ret = adf4030_spi_update_bits(dev, 0x11, ADF4030_TDC_SOURCE,
+				      no_os_field_prep(ADF4030_TDC_SOURCE, tdc_source));
 	if (ret)
 		return ret;
+
 	dev->tdc_source = tdc_source;
 
 	return 0;
@@ -957,16 +1012,16 @@ int adf4030_set_tdc_source(struct adf4030_dev *dev, uint8_t tdc_source)
  */
 int adf4030_get_tdc_source(struct adf4030_dev *dev, uint8_t *tdc_source)
 {
-
 	uint8_t tmp;
 	int ret;
 
-	if (!dev)
+	if (!dev || !tdc_source)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x11, &tmp);
 	if (ret)
 		return ret;
+
 	dev->tdc_source = no_os_field_get(ADF4030_TDC_SOURCE, tmp);
 	*tdc_source = dev->tdc_source;
 
@@ -974,17 +1029,20 @@ int adf4030_get_tdc_source(struct adf4030_dev *dev, uint8_t *tdc_source)
 }
 
 /**
- * @brief Set the TDC measurement target and start the measurement. Before calling this function, please set tdc_source to the desired bsync channel.
+ * @brief Set the TDC measurement target and start the measurement.
+ * Before calling this function, please set tdc_source to the desired bsync channel or REFIN.
  * @param dev        - The device structure.
- * @param tdc_target - TDC measurement target.
+ * @param tdc_target - TDC measurement target (0-9 for RX0-RX9, 26 for REFIN).
  * @return           - 0 in case of success or negative error code otherwise.
  */
 int adf4030_set_tdc_measurement(struct adf4030_dev *dev, uint8_t tdc_target)
 {
-
 	int ret;
 
 	if (!dev)
+		return -EINVAL;
+
+	if (tdc_target >= ADF4030_CHANNEL_NUMBER && tdc_target != 26)
 		return -EINVAL;
 
 	ret = adf4030_spi_update_bits(dev, 0x11, ADF4030_MANUAL_MODE, 0xFF);
@@ -996,7 +1054,11 @@ int adf4030_set_tdc_measurement(struct adf4030_dev *dev, uint8_t tdc_target)
 	if (ret)
 		return ret;
 
-	ret = adf4030_spi_update_bits(dev, 0x61, ADF4030_RST_TDC_ERR, 0xFF);
+	ret = adf4030_spi_update_bits(dev, 0x61, ADF4030_RST_TDC_ERR, ADF4030_RST_TDC_ERR);
+	if (ret)
+		return ret;
+
+	ret = adf4030_spi_update_bits(dev, 0x61, ADF4030_RST_TDC_ERR, 0x00);
 	if (ret)
 		return ret;
 
@@ -1010,56 +1072,93 @@ int adf4030_set_tdc_measurement(struct adf4030_dev *dev, uint8_t tdc_target)
 }
 
 /**
- * @brief Get the TDC measurement result. Reads bitfileds and calculates the
- * TDC result with period of the BSYNC signal.
- * @param dev          - The device structure.
+ * @brief Get the TDC measurement result. Reads bitfields and calculates the
+ * TDC result with period of the BSYNC or REFIN signal.
+ * @param dev           - The device structure.
  * @param tdc_result_fs - Read TDC measurement result in femtoseconds.
- * @return             - 0 in case of success or negative error code otherwise.
+ * @return              - 0 in case of success or negative error code otherwise.
  */
 int adf4030_get_tdc_measurement(struct adf4030_dev *dev, int64_t *tdc_result_fs)
 {
-	int ret, i;
-	uint8_t tmp;
-	int64_t tdc_tmp = 0;
 	uint32_t bsync_freq = 0;
+	uint32_t raw_ui = 0;
+	int64_t tdc_tmp;
+	uint8_t tmp;
+	int ret, i;
 
-	if (!dev)
+	if (!dev || !tdc_result_fs)
 		return -EINVAL;
 
-	if (!dev->tdc_status) {
+	if (dev->tdc_source == 26) {
+		bsync_freq = dev->ref_freq;
+	} else if (dev->tdc_source < ADF4030_CHANNEL_NUMBER) {
+		bsync_freq = dev->channels[dev->tdc_source].odivb_en ?
+			     dev->bsync_freq_odiv_b : dev->bsync_freq_odiv_a;
+	} else {
+		return -EINVAL;
+	}
 
+	if (!bsync_freq)
+		return -EINVAL;
+
+	/* Start measurement if not already started */
+	if (!dev->tdc_status) {
 		ret = adf4030_spi_update_bits(dev, 0x16, ADF4030_TDC_ARM_M, 0xFF);
 		if (ret)
 			return ret;
 	}
 
+	/* Wait for TDC measurement to complete */
 	ret = adf4030_poll(dev, 0x8F, ADF4030_TDC_BUSY, false);
 	if (ret)
 		return ret;
 
-	dev->tdc_status = false;
+	/* Check for TDC error */
+	ret = adf4030_spi_read(dev, 0x90, &tmp);
+	if (ret)
+		return ret;
 
-	// Read TDC_RSLT_UI MSB to LSB
-	for (i = 0; i < 3 ; i++) {
+	if (no_os_field_get(ADF4030_TDC_ERR, tmp) != 0) {
+		adf4030_spi_update_bits(dev, 0x16, ADF4030_TDC_ARM_M, 0x00);
+		dev->tdc_status = false;
+		return -EIO;
+	}
+
+	/* Poll until MATH_BUSY is cleared */
+	ret = adf4030_poll(dev, 0x8F, ADF4030_MATH_BUSY, false);
+	if (ret)
+		return ret;
+
+	/* Read TDC_RSLT_UI MSB to LSB */
+	for (i = 0; i < 3; i++) {
 		ret = adf4030_spi_read(dev, 0x75 - i, &tmp);
 		if (ret)
 			return ret;
 
-		tdc_tmp = tdc_tmp << 8;
-		tdc_tmp |= tmp;
+		raw_ui = (raw_ui << 8) | tmp;
 	}
-	ret = adf4030_spi_update_bits(dev, 0x16, ADF4030_TDC_ARM_M, 0x0);
+
+	/* Clear TDC_ARM_M to stop measurement */
+	ret = adf4030_spi_update_bits(dev, 0x16, ADF4030_TDC_ARM_M, 0x00);
 	if (ret)
 		return ret;
+	dev->tdc_status = false;
 
-	tdc_tmp = ((tdc_tmp + (1 << 23)) % (1 << 24)) - (1 << 23);
-	tdc_tmp = ((tdc_tmp * 1000000000L) / ((1 << 24)));
-	tdc_tmp = tdc_tmp * 1000000L;
-
-	bsync_freq = dev->channels[dev->tdc_source].odivb_en ?
-		     dev->bsync_freq_odiv_b : dev->bsync_freq_odiv_a;
-
-	*tdc_result_fs = (tdc_tmp / ((int64_t)bsync_freq));
+	/*
+	 * TDC_RSLT_UI is a 24-bit two's complement integer representing the
+	 * measured phase difference in units of 1 / 2^24 UI of the clock.
+	 *
+	 * Time Difference (fs) = (TDC_RSLT_UI * 10^15) / (2^24 * f_BSYNC)
+	 *
+	 * Since 10^15 / 2^24 = 30517578125 / 512, this simplifies to:
+	 * Time Difference (fs) = (TDC_RSLT_UI * 30517578125) / (f_BSYNC * 512)
+	 *
+	 * Maximum numerator value: 2^23 * 30517578125 ≈ 2.56 * 10^17,
+	 * which comfortably fits in a 64-bit signed integer without overflow.
+	 */
+	tdc_tmp = (int64_t)no_os_sign_extend32(raw_ui, 23);
+	*tdc_result_fs = NO_OS_DIV_ROUND_CLOSEST(tdc_tmp * 30517578125LL,
+						 (int64_t)bsync_freq * 512LL);
 
 	return 0;
 }
@@ -1067,7 +1166,7 @@ int adf4030_get_tdc_measurement(struct adf4030_dev *dev, int64_t *tdc_result_fs)
 /**
  * @brief Set the iteration number of alignment.
  * @param dev         - The device structure.
- * @param iter_number - The number of iterations for the alignment.
+ * @param iter_number - The number of iterations for the alignment (1 to 8).
  * @return            - 0 in case of success or negative error code otherwise.
  */
 int adf4030_set_alignment_iter(struct adf4030_dev *dev, uint8_t iter_number)
@@ -1077,8 +1176,8 @@ int adf4030_set_alignment_iter(struct adf4030_dev *dev, uint8_t iter_number)
 	if (!dev)
 		return -EINVAL;
 
-	if (iter_number < ADF4030_ALIGN_CYCLES_MIN
-	    || iter_number > ADF4030_ALIGN_CYCLES_MAX)
+	if (iter_number < ADF4030_ALIGN_CYCLES_MIN ||
+	    iter_number > ADF4030_ALIGN_CYCLES_MAX)
 		return -EINVAL;
 
 	val = no_os_field_prep(ADF4030_EN_ITER, false) |
@@ -1092,39 +1191,38 @@ int adf4030_set_alignment_iter(struct adf4030_dev *dev, uint8_t iter_number)
 /**
  * @brief Get the iteration number of alignment.
  * @param dev         - The device structure.
- * @param iter_number - Read value of number of iterations in one alignment.
+ * @param iter_number - Read value of number of iterations in one alignment (1 to 8).
  * @return            - 0 in case of success or negative error code otherwise.
  */
 int adf4030_get_alignment_iter(struct adf4030_dev *dev, uint8_t *iter_number)
 {
-	int ret;
 	uint8_t tmp;
+	int ret;
 
-	if (!dev)
+	if (!dev || !iter_number)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x37, &tmp);
 	if (ret)
 		return ret;
-	*iter_number = no_os_field_get(ADF4030_ALIGN_CYCLES, tmp);
+	*iter_number = no_os_field_get(ADF4030_ALIGN_CYCLES, tmp) + 1;
 
 	return 0;
 }
 
 /**
  * @brief Set the alignment threshold in femtoseconds.
- * @param dev         - The device structure.
+ * @param dev          - The device structure.
  * @param threshold_fs - The alignment threshold in femtoseconds.
- * @return            - 0 in case of success or negative error code otherwise.
+ * @return             - 0 in case of success or negative error code otherwise.
  */
 int adf4030_set_alignment_threshold(struct adf4030_dev *dev,
 				    uint32_t threshold_fs)
 {
-
-	int ret;
-	uint8_t reg_th;
 	uint32_t adel_m_step;
+	uint8_t reg_th;
 	uint8_t delcal;
+	int ret;
 
 	if (!dev)
 		return -EINVAL;
@@ -1135,9 +1233,15 @@ int adf4030_set_alignment_threshold(struct adf4030_dev *dev,
 	ret = adf4030_spi_read(dev, 0x34, &delcal);
 	if (ret)
 		return ret;
+	delcal = no_os_field_get(ADF4030_DELCAL, delcal);
 
 	adel_m_step = adf4030_adel_m_compute(dev, delcal);
+	if (!adel_m_step)
+		return -EINVAL;
+
 	reg_th = threshold_fs / adel_m_step;
+	if (reg_th > 63)
+		reg_th = 63;
 
 	ret = adf4030_spi_update_bits(dev, 0x37,
 				      ADF4030_EN_ITER | ADF4030_EN_CYCS_RED, 0xFF);
@@ -1150,21 +1254,25 @@ int adf4030_set_alignment_threshold(struct adf4030_dev *dev,
 
 /**
  * @brief Get the alignment threshold in femtoseconds.
- * @param dev         - The device structure.
+ * @param dev          - The device structure.
  * @param threshold_fs - Read value of alignment threshold in femtoseconds.
- * @return            - 0 in case of success or negative error code otherwise.
+ * @return             - 0 in case of success or negative error code otherwise.
  */
 int adf4030_get_alignment_threshold(struct adf4030_dev *dev,
 				    uint32_t *threshold_fs)
 {
-	int ret;
+	uint32_t adel_m_step;
 	uint8_t tmp, delcal;
 	uint32_t reg_th;
-	uint32_t adel_m_step;
+	int ret;
+
+	if (!dev || !threshold_fs)
+		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x34, &delcal);
 	if (ret)
 		return ret;
+	delcal = no_os_field_get(ADF4030_DELCAL, delcal);
 	adel_m_step = adf4030_adel_m_compute(dev, delcal);
 
 	ret = adf4030_spi_read(dev, 0x35, &tmp);
@@ -1180,9 +1288,9 @@ int adf4030_get_alignment_threshold(struct adf4030_dev *dev,
 /**
  * @brief Perform single-channel alignment. Before calling this function,
  * please set tdc_source to the desired bsync channel.
- * @param dev          - The device structure.
+ * @param dev           - The device structure.
  * @param tdc_target_ch - The TDC Target channel for alignment.
- * @return             - 0 in case of success or negative error code otherwise.
+ * @return              - 0 in case of success or negative error code otherwise.
  */
 int adf4030_set_single_ch_alignment(struct adf4030_dev *dev,
 				    uint8_t tdc_target_ch)
@@ -1195,6 +1303,9 @@ int adf4030_set_single_ch_alignment(struct adf4030_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
+	if (tdc_target_ch >= ADF4030_CHANNEL_NUMBER)
+		return -EINVAL;
+
 	val = no_os_field_prep(ADF4030_MANUAL_MODE, false) |
 	      no_os_field_prep(ADF4030_EN_ALIGN, true);
 	ret = adf4030_spi_update_bits(dev, 0x11, ADF4030_MANUAL_MODE |
@@ -1202,11 +1313,20 @@ int adf4030_set_single_ch_alignment(struct adf4030_dev *dev,
 	if (ret)
 		return ret;
 
-	ret = adf4030_spi_update_bits(dev, 0x37, ADF4030_EN_SERIAL_ALIGN, 0x0);
+	ret = adf4030_spi_update_bits(dev, 0x37,
+				      ADF4030_ALIGN_CYCLES | ADF4030_EN_SERIAL_ALIGN, 0x0);
 	if (ret)
 		return ret;
 
 	do {
+		ret = adf4030_spi_update_bits(dev, 0x61, ADF4030_RST_TDC_ERR,
+					      ADF4030_RST_TDC_ERR);
+		if (ret)
+			return ret;
+		ret = adf4030_spi_update_bits(dev, 0x61, ADF4030_RST_TDC_ERR, 0x00);
+		if (ret)
+			return ret;
+
 		ret = adf4030_spi_write(dev, 0x10, tdc_target_ch);
 		if (ret)
 			return ret;
@@ -1221,9 +1341,12 @@ int adf4030_set_single_ch_alignment(struct adf4030_dev *dev,
 		if (ret)
 			return ret;
 
-	} while (tmp & (ADF4030_TDC_ERR | ADF4030_TMP_ALIGN_ERR)  && timeout--);
+		if (!(tmp & (ADF4030_TDC_ERR | ADF4030_TMP_ALIGN_ERR)))
+			return 0;
 
-	return 0;
+	} while (timeout--);
+
+	return -ETIMEDOUT;
 }
 
 /**
@@ -1235,10 +1358,13 @@ int adf4030_set_single_ch_alignment(struct adf4030_dev *dev,
 int adf4030_set_serial_alignment(struct adf4030_dev *dev,
 				 uint16_t channel_flags)
 {
-	int ret;
 	uint8_t val;
+	int ret;
 
 	if (!dev)
+		return -EINVAL;
+
+	if (!channel_flags || (channel_flags & ~NO_OS_GENMASK(9, 0)))
 		return -EINVAL;
 
 	val = no_os_field_prep(ADF4030_MANUAL_MODE, false) |
@@ -1249,13 +1375,11 @@ int adf4030_set_serial_alignment(struct adf4030_dev *dev,
 	if (ret)
 		return ret;
 
-
 	ret = adf4030_spi_update_bits(dev, 0x35, ADF4030_BSYNC_CAL_ON_1_0,
 				      no_os_field_prep(ADF4030_BSYNC_CAL_ON_1_0, channel_flags));
 	if (ret)
 		return ret;
 
-	// Write ADF4030_BSYNC_CAL_ON_9_2
 	ret = adf4030_spi_write(dev, 0x36, (channel_flags >> 2));
 	if (ret)
 		return ret;
@@ -1280,7 +1404,7 @@ int adf4030_get_serial_alignment(struct adf4030_dev *dev,
 	uint8_t tmp;
 	int ret;
 
-	if (!dev)
+	if (!dev || !channel_flags)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x35, &tmp);
@@ -1312,7 +1436,7 @@ int adf4030_set_background_serial_alignment(struct adf4030_dev *dev,
 	uint8_t val, tmp;
 	bool enabled;
 
-	if (!dev)
+	if (!dev || !channel_flags)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x37, &tmp);
@@ -1320,7 +1444,7 @@ int adf4030_set_background_serial_alignment(struct adf4030_dev *dev,
 		return ret;
 	enabled = no_os_field_get(ADF4030_EN_BKGND_ALGN, tmp);
 
-	// If enabled : Disable Background alignment
+	/* If enabled : Disable Background alignment */
 	if (enabled) {
 		ret = adf4030_spi_update_bits(dev, 0x17, ADF4030_STOP_FSM, 0xFF);
 		if (ret)
@@ -1350,7 +1474,6 @@ int adf4030_set_background_serial_alignment(struct adf4030_dev *dev,
 	if (ret)
 		return ret;
 
-	// Write ADF4030_BSYNC_CAL_ON_9_2
 	ret = adf4030_spi_write(dev, 0x36, (channel_flags >> 2));
 	if (ret)
 		return ret;
@@ -1378,14 +1501,13 @@ int adf4030_get_background_serial_alignment(struct adf4030_dev *dev,
 	uint8_t tmp;
 	int ret;
 
-	if (!dev)
+	if (!dev || !channel_flags)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x37, &tmp);
 	if (ret)
 		return ret;
 	enabled = no_os_field_get(ADF4030_EN_BKGND_ALGN, tmp);
-	// If enabled : Disable Background alignment
 	if (enabled) {
 		ret = adf4030_spi_read(dev, 0x35, &tmp);
 		if (ret)
@@ -1399,87 +1521,49 @@ int adf4030_get_background_serial_alignment(struct adf4030_dev *dev,
 
 		ch_flags |= (tmp << 2);
 		*channel_flags = ch_flags;
-	} else
+	} else {
 		*channel_flags = 0;
+	}
 
 	return 0;
 }
 
 /**
- * @brief Set the delay for a specific BSYNC channel. This Delay will show up
+ * @brief Set the delay for a specific BSYNC channel. This delay will show up
  * between TDC_SOURCE and channel.
- * @param dev       - The device structure.
- * @param channel   - The channel to set the delay for.
- * @param delay_fs  - The delay in femtoseconds.
- * @return          - 0 in case of success or negative error code otherwise.
+ * @param dev      - The device structure.
+ * @param channel  - The channel to set the delay for.
+ * @param delay_fs - The delay in femtoseconds.
+ * @return         - 0 in case of success or negative error code otherwise.
  */
 int adf4030_set_channel_delay(struct adf4030_dev *dev, uint8_t channel,
 			      int64_t delay_fs)
 {
-
 	int64_t vco_period_fs;
 	int64_t offset_int;
-	int16_t ch_offset;
-	int32_t rem;
-	int32_t com_offset;
-	uint16_t ch_reg;
-	uint32_t com_reg;
 	uint16_t reg;
 	int ret;
 
-	if (!dev)
+	if (!dev || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
 	vco_period_fs = NO_OS_DIV_ROUND_CLOSEST(1000000000000000ULL, dev->vco_freq);
 	offset_int = NO_OS_DIV_ROUND_CLOSEST(delay_fs * 512, vco_period_fs);
 
-	/* Channel TDC offset is a 16-bit signed value; clamp to its range. */
-	if (offset_int > ADF4030_TDC_OFFSET_CH_MAX)
-		ch_offset = ADF4030_TDC_OFFSET_CH_MAX;
-	else if (offset_int < ADF4030_TDC_OFFSET_CH_MIN)
-		ch_offset = ADF4030_TDC_OFFSET_CH_MIN;
-	else
-		ch_offset = (int16_t)offset_int;
-
-	/* The overflow beyond the channel range goes into the common TDC
-	 * offset, a 21-bit signed value; clamp to its range as well. */
-	rem = (int32_t)(offset_int - ch_offset);
-	if (rem > ADF4030_TDC_OFFSET_COM_MAX)
-		com_offset = ADF4030_TDC_OFFSET_COM_MAX;
-	else if (rem < ADF4030_TDC_OFFSET_COM_MIN)
-		com_offset = ADF4030_TDC_OFFSET_COM_MIN;
-	else
-		com_offset = rem;
-
-	ch_reg = (uint16_t)ch_offset;
-	com_reg = (uint32_t)com_offset & 0x1FFFFF;
+	/* Channel TDC offset is a 16-bit signed value [-32768, 32767]. */
+	if (offset_int > ADF4030_TDC_OFFSET_CH_MAX ||
+	    offset_int < ADF4030_TDC_OFFSET_CH_MIN)
+		return -EINVAL;
 
 	reg = 0x1D + (channel * 2);
 
-	// TDC OFFSET LSB
-	ret = adf4030_spi_write(dev, reg, ch_reg & 0xFF);
+	/* TDC OFFSET LSB */
+	ret = adf4030_spi_write(dev, reg, (uint16_t)offset_int & 0xFF);
 	if (ret)
 		return ret;
 
-	// TDC OFFSET MSB
-	ret = adf4030_spi_write(dev, reg + 1, (ch_reg >> 8));
-	if (ret)
-		return ret;
-
-	// TDC OFFSET COM LSB
-	ret = adf4030_spi_write(dev, 0x1A, com_reg & 0xFF);
-	if (ret)
-		return ret;
-
-	// TDC OFFSET COM MID
-	ret = adf4030_spi_write(dev, 0x1B, (com_reg >> 8) & 0xFF);
-	if (ret)
-		return ret;
-
-	// TDC OFFSET COM MSB
-	ret = adf4030_spi_update_bits(dev, 0x1C, ADF4030_TDC_OFFSET_COM_MSB,
-				      no_os_field_prep(ADF4030_TDC_OFFSET_COM_MSB,
-						      com_reg >> 16));
+	/* TDC OFFSET MSB */
+	ret = adf4030_spi_write(dev, reg + 1, ((uint16_t)offset_int >> 8) & 0xFF);
 	if (ret)
 		return ret;
 
@@ -1490,10 +1574,10 @@ int adf4030_set_channel_delay(struct adf4030_dev *dev, uint8_t channel,
 
 /**
  * @brief Get the delay for a specific channel.
- * @param dev       - The device structure.
- * @param channel   - The channel to get the delay for.
- * @param delay_fs  - Read value of the delay in femtoseconds.
- * @return          - 0 in case of success or negative error code otherwise.
+ * @param dev      - The device structure.
+ * @param channel  - The channel to get the delay for.
+ * @param delay_fs - Read value of the delay in femtoseconds.
+ * @return         - 0 in case of success or negative error code otherwise.
  */
 int adf4030_get_channel_delay(struct adf4030_dev *dev, uint8_t channel,
 			      int64_t *delay_fs)
@@ -1504,57 +1588,50 @@ int adf4030_get_channel_delay(struct adf4030_dev *dev, uint8_t channel,
 	int32_t com_offset;
 	uint32_t com_reg;
 	uint16_t reg;
-	uint8_t tmp;
+	uint8_t lsb, msb, com_lsb, com_mid, com_msb;
 	int ret;
 
-	if (!dev)
+	if (!dev || !delay_fs || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
-
-	vco_period_fs = NO_OS_DIV_ROUND_CLOSEST(1000000000000000ULL, dev->vco_freq);
-	vco_period_fs = NO_OS_DIV_ROUND_CLOSEST(vco_period_fs, 512);
 
 	reg = 0x1D + (channel * 2);
 
-	// TDC OFFSET MSB
-	ret = adf4030_spi_read(dev, reg + 1, &tmp);
+	/* TDC OFFSET LSB */
+	ret = adf4030_spi_read(dev, reg, &lsb);
 	if (ret)
 		return ret;
 
-	ch_offset = (tmp << 8);
-	// TDC OFFSET LSB
-	ret = adf4030_spi_read(dev, reg, &tmp);
+	/* TDC OFFSET MSB */
+	ret = adf4030_spi_read(dev, reg + 1, &msb);
 	if (ret)
 		return ret;
 
-	ch_offset |= tmp;
+	ch_offset = (int16_t)(((uint16_t)msb << 8) | lsb);
 
-	// TDC OFFSET COM MSB
-	ret = adf4030_spi_read(dev, 0x1C, &tmp);
+	/* TDC OFFSET COM LSB, MID, MSB */
+	ret = adf4030_spi_read(dev, 0x1A, &com_lsb);
 	if (ret)
 		return ret;
 
-	com_reg = no_os_field_get(ADF4030_TDC_OFFSET_COM_MSB, tmp) << 16;
-	// TDC OFFSET COM MID
-	ret = adf4030_spi_read(dev, 0x1B, &tmp);
+	ret = adf4030_spi_read(dev, 0x1B, &com_mid);
 	if (ret)
 		return ret;
 
-	com_reg |= (tmp << 8);
-	// TDC OFFSET COM LSB
-	ret = adf4030_spi_read(dev, 0x1A, &tmp);
+	ret = adf4030_spi_read(dev, 0x1C, &com_msb);
 	if (ret)
 		return ret;
 
-	com_reg |= tmp;
+	com_reg = ((uint32_t)no_os_field_get(ADF4030_TDC_OFFSET_COM_MSB, com_msb) << 16) |
+		  ((uint32_t)com_mid << 8) | com_lsb;
 
 	/* Sign-extend the 21-bit common offset. */
-	com_offset = (int32_t)com_reg;
-	if (com_offset & 0x100000)
-		com_offset -= 0x200000;
+	com_offset = (int32_t)no_os_sign_extend32(com_reg, 20);
 
 	total_offset = ch_offset + com_offset;
 
-	dev->channels[channel].delay_fs = total_offset * vco_period_fs;
+	vco_period_fs = NO_OS_DIV_ROUND_CLOSEST(1000000000000000ULL, dev->vco_freq);
+	dev->channels[channel].delay_fs =
+		NO_OS_DIV_ROUND_CLOSEST((int64_t)total_offset * vco_period_fs, 512);
 	*delay_fs = dev->channels[channel].delay_fs;
 
 	return 0;
@@ -1562,10 +1639,10 @@ int adf4030_get_channel_delay(struct adf4030_dev *dev, uint8_t channel,
 
 /**
  * @brief Set the TX-RX direction of a specific channel.
- * @param dev      - The device structure.
- * @param channel  - The channel to set the direction for.
- * @param tx_en    - Enable or disable the channel.
- * @return         - 0 in case of success or negative error code otherwise.
+ * @param dev     - The device structure.
+ * @param channel - The channel to set the direction for.
+ * @param tx_en   - Enable or disable the channel.
+ * @return        - 0 in case of success or negative error code otherwise.
  */
 int adf4030_set_channel_direction(struct adf4030_dev *dev, uint8_t channel,
 				  bool tx_en)
@@ -1573,10 +1650,10 @@ int adf4030_set_channel_direction(struct adf4030_dev *dev, uint8_t channel,
 	uint8_t msk;
 	int ret;
 
-	if (!dev)
+	if (!dev || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
-	// Write TX_PD
+	/* Write TX_PD */
 	if (channel < ADF4030_CHANNEL_TX_PD_SEPARATOR) {
 		msk = (ADF4030_PD_TX_PATH0) << channel;
 		ret = adf4030_spi_update_bits(dev, 0x3B,
@@ -1589,7 +1666,7 @@ int adf4030_set_channel_direction(struct adf4030_dev *dev, uint8_t channel,
 	if (ret)
 		return ret;
 
-	// Write EN_DRIVE
+	/* Write EN_DRIVE */
 	if (channel < ADF4030_CHANNEL_DRV_SEPARATOR) {
 		msk = (ADF4030_EN_DRV0) << channel;
 		ret = adf4030_spi_update_bits(dev, 0x12,
@@ -1607,10 +1684,10 @@ int adf4030_set_channel_direction(struct adf4030_dev *dev, uint8_t channel,
 
 /**
  * @brief Get the TX direction (TX/RX) of a specific channel.
- * @param dev      - The device structure.
- * @param channel  - The channel to get the direction for.
- * @param tx_en    - Read the channel's TX direction status.
- * @return         - 0 in case of success or negative error code otherwise.
+ * @param dev     - The device structure.
+ * @param channel - The channel to get the direction for.
+ * @param tx_en   - Read the channel's TX direction status.
+ * @return        - 0 in case of success or negative error code otherwise.
  */
 int adf4030_get_channel_direction(struct adf4030_dev *dev, uint8_t channel,
 				  bool *tx_en)
@@ -1620,10 +1697,10 @@ int adf4030_get_channel_direction(struct adf4030_dev *dev, uint8_t channel,
 	bool tx_pd;
 	bool en_drv;
 
-	if (!dev)
+	if (!dev || !tx_en || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
-	// Read TX_PD
+	/* Read TX_PD */
 	if (channel < ADF4030_CHANNEL_TX_PD_SEPARATOR) {
 		ret = adf4030_spi_read(dev, 0x3B, &tmp);
 		tx_pd = no_os_field_get((ADF4030_PD_TX_PATH0) << channel, tmp);
@@ -1635,7 +1712,7 @@ int adf4030_get_channel_direction(struct adf4030_dev *dev, uint8_t channel,
 	if (ret)
 		return ret;
 
-	// Read EN_DRV
+	/* Read EN_DRV */
 	if (channel < ADF4030_CHANNEL_DRV_SEPARATOR) {
 		ret = adf4030_spi_read(dev, 0x12, &tmp);
 		en_drv = no_os_field_get((ADF4030_EN_DRV0) << channel, tmp);
@@ -1668,7 +1745,7 @@ int adf4030_set_channel_termination(struct adf4030_dev *dev, uint8_t channel,
 	uint8_t msk;
 	int ret;
 
-	if (!dev)
+	if (!dev || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
 	reg = 0x40 + (channel * 2);
@@ -1740,7 +1817,7 @@ int adf4030_get_channel_termination(struct adf4030_dev *dev, uint8_t channel,
 	bool tx_en;
 	int ret;
 
-	if (!dev)
+	if (!dev || !termination || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
 	ret = adf4030_get_channel_direction(dev, channel, &tx_en);
@@ -1748,7 +1825,6 @@ int adf4030_get_channel_termination(struct adf4030_dev *dev, uint8_t channel,
 		return ret;
 
 	reg = 0x40 + (channel * 2);
-	// TDC OFFSET MSB
 	ret = adf4030_spi_read(dev, reg, &tmp);
 	if (ret)
 		return ret;
@@ -1758,7 +1834,7 @@ int adf4030_get_channel_termination(struct adf4030_dev *dev, uint8_t channel,
 	link_tx = no_os_field_get(ADF4030_LINK_TX0, tmp);
 	ac_coupled = no_os_field_get(ADF4030_AC_COUPLED0, tmp);
 
-	if (!float_tx && !link_tx && tx_en)
+	if (!float_tx && tx_en)
 		dev->channels[channel].termination = TX_VOLTAGE_DRIVER;
 	else if (float_tx && !link_tx && tx_en)
 		dev->channels[channel].termination = TX_CURRENT_DRIVER_UNTERMINATED;
@@ -1768,7 +1844,7 @@ int adf4030_get_channel_termination(struct adf4030_dev *dev, uint8_t channel,
 		dev->channels[channel].termination = RX_DC_COUPLED_CLKS;
 	else if (float_rx && ac_coupled && !tx_en)
 		dev->channels[channel].termination = RX_AC_COUPLED_CLKS;
-	else if (!float_rx && ac_coupled && !tx_en)
+	else if (!float_rx && !ac_coupled && !tx_en)
 		dev->channels[channel].termination = RX_DC_COUPLED_HCSL;
 	else
 		return -EIO;
@@ -1791,7 +1867,7 @@ int adf4030_set_channel_prbs(struct adf4030_dev *dev, uint8_t channel,
 	uint8_t msk;
 	int ret;
 
-	if (!dev)
+	if (!dev || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
 	if (channel < ADF4030_CHANNEL_PRBS_SEPARATOR) {
@@ -1824,10 +1900,10 @@ int adf4030_get_channel_prbs(struct adf4030_dev *dev, uint8_t channel,
 	int ret;
 	bool prbs;
 
-	if (!dev)
+	if (!dev || !prbs_en || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
-	// Read PRBS
+	/* Read PRBS */
 	if (channel < ADF4030_CHANNEL_PRBS_SEPARATOR) {
 		ret = adf4030_spi_read(dev, 0x13, &tmp);
 		prbs = no_os_field_get((ADF4030_PRBS0) << channel, tmp);
@@ -1859,7 +1935,7 @@ int adf4030_set_channel_odivb(struct adf4030_dev *dev, uint8_t channel,
 	uint16_t reg;
 	int ret;
 
-	if (!dev)
+	if (!dev || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
 	reg = 0x3F + (channel * 2);
@@ -1889,7 +1965,7 @@ int adf4030_get_channel_odivb(struct adf4030_dev *dev, uint8_t channel,
 	bool sel_odivb;
 	int ret;
 
-	if (!dev)
+	if (!dev || !odivb_en || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
 	reg = 0x3F + (channel * 2);
@@ -1917,7 +1993,7 @@ int adf4030_set_channel_invert(struct adf4030_dev *dev, uint8_t channel,
 	uint8_t msk;
 	int ret;
 
-	if (!dev)
+	if (!dev || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
 	if (channel < ADF4030_CHANNEL_INV_SEPARATOR) {
@@ -1950,10 +2026,10 @@ int adf4030_get_channel_invert(struct adf4030_dev *dev, uint8_t channel,
 	int ret;
 	bool invert;
 
-	if (!dev)
+	if (!dev || !invert_en || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
-	// Read PRBS
+	/* Read inversion */
 	if (channel < ADF4030_CHANNEL_INV_SEPARATOR) {
 		ret = adf4030_spi_read(dev, 0x14, &tmp);
 		invert = no_os_field_get((ADF4030_CHAN_INV0) << channel, tmp);
@@ -1983,17 +2059,16 @@ int adf4030_set_channel_voltage(struct adf4030_dev *dev, uint8_t channel,
 	uint8_t boost, rcm, val;
 	uint32_t mv_value;
 	uint16_t reg;
-
 	int ret;
 
+	if (!dev || channel >= ADF4030_CHANNEL_NUMBER)
+		return -EINVAL;
+
+	if (voltage_mv < ADF4030_RCM_VOLTAGE_MIN0 ||
+	    voltage_mv > ADF4030_RCM_VOLTAGE_MAX1)
+		return -EINVAL;
+
 	reg = 0x3F + (channel * 2);
-
-	if (!dev)
-		return -EINVAL;
-
-	if (voltage_mv < ADF4030_RCM_VOLTAGE_MIN0
-	    || voltage_mv > ADF4030_RCM_VOLTAGE_MAX1)
-		return -EINVAL;
 
 	if (voltage_mv < ADF4030_RCM_VOLTAGE_MAX0) {
 		boost = 0;
@@ -2007,8 +2082,7 @@ int adf4030_set_channel_voltage(struct adf4030_dev *dev, uint8_t channel,
 
 	val = no_os_field_prep(ADF4030_RCM0, rcm) |
 	      no_os_field_prep(ADF4030_BOOST0, boost);
-	ret = adf4030_spi_update_bits(dev, reg, ADF4030_RCM0
-				      | ADF4030_BOOST0, val);
+	ret = adf4030_spi_update_bits(dev, reg, ADF4030_RCM0 | ADF4030_BOOST0, val);
 	if (ret)
 		return ret;
 
@@ -2030,10 +2104,9 @@ int adf4030_get_channel_voltage(struct adf4030_dev *dev, uint8_t channel,
 	uint8_t boost, rcm, tmp;
 	uint32_t mv_value;
 	uint16_t reg;
-
 	int ret;
 
-	if (!dev)
+	if (!dev || !voltage_mv || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
 	reg = 0x3F + (channel * 2);
@@ -2064,6 +2137,9 @@ int adf4030_init(struct adf4030_dev **dev,
 	struct adf4030_dev *device;
 	int ret;
 
+	if (!dev || !init_param || !init_param->spi_init)
+		return -EINVAL;
+
 	device = (struct adf4030_dev *)no_os_calloc(1, sizeof(*device));
 	if (!device)
 		return -ENOMEM;
@@ -2078,6 +2154,7 @@ int adf4030_init(struct adf4030_dev **dev,
 	device->vco_freq = init_param->vco_freq;
 	device->ref_div = init_param->ref_div;
 	device->bsync_freq_odiv_a = init_param->bsync_freq;
+	device->bsync_freq_odiv_b = init_param->bsync_freq;
 
 	ret = adf4030_set_default_regs(device, device->spi_4wire_en);
 	if (ret)
@@ -2089,32 +2166,28 @@ int adf4030_init(struct adf4030_dev **dev,
 			   __FILE__,
 			   __LINE__, ret);
 
-	ret = adf4030_spi_write(device, 0x5C,
-				no_os_field_prep(ADF4030_CMOS_OV,
-						device->cmos_3v3));
+	ret = adf4030_spi_update_bits(device, 0x5C,
+				      no_os_field_prep(ADF4030_CMOS_OV,
+						      device->cmos_3v3));
 	if (ret)
 		goto error_spi;
 
 	ret = adf4030_set_vco_freq(device, device->vco_freq);
-	if (ret == ETIMEDOUT) {
+	if (ret == -ETIMEDOUT) {
 		pr_warning("%s:%d ADF4030 VCO frequency setting failed. %x\n",
 			   __FILE__,
 			   __LINE__, ret);
-	} else if (ret)
+	} else if (ret) {
 		goto error_spi;
+	}
 
-	// Set BSYNC ODIVA
+	/* Set BSYNC ODIVA */
 	ret = adf4030_set_bsync_freq(device, device->bsync_freq_odiv_a, false);
 	if (ret)
 		goto error_spi;
 
-	// Set BSYNC ODIVB
-	ret = adf4030_set_bsync_freq(device, device->bsync_freq_odiv_a, true);
-	if (ret)
-		goto error_spi;
-
-	// Set CH 1 as TX
-	ret = adf4030_set_channel_direction(device, 1, true);
+	/* Set BSYNC ODIVB */
+	ret = adf4030_set_bsync_freq(device, device->bsync_freq_odiv_b, true);
 	if (ret)
 		goto error_spi;
 
