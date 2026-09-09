@@ -41,7 +41,7 @@ int max22216_write_reg(struct max22216_desc *desc, uint8_t reg_addr,
 	if (!desc || !desc->spi_desc)
 		return -EINVAL;
 	uint8_t tx[3] = {
-		(uint8_t)(reg_addr | NO_OS_BIT(8)),
+		(uint8_t)(reg_addr | NO_OS_BIT(7)),
 		(uint8_t)no_os_field_get(0xFF00, data),
 		(uint8_t)no_os_field_get(0x00FF, data)
 	};
@@ -272,20 +272,13 @@ int max22216_init(struct max22216_desc **desc,
 	if (!desc || !param || !param->spi_ip)
 		return -EINVAL;
 
-	struct max22216_desc *dev = calloc(1, sizeof(*dev));
+	struct max22216_desc *dev = no_os_calloc(1, sizeof(*dev));
 
 	if (!dev)
 		return -ENOMEM;
 
-	struct no_os_gpio_desc *max22216_drv_en_desc = calloc(1,
-			sizeof(*max22216_drv_en_desc));
-	if (!max22216_drv_en_desc)
-		goto error1;
-	struct no_os_gpio_desc *max22216_fault_desc = calloc(1,
-			sizeof(*max22216_fault_desc));
-
-	if (!max22216_fault_desc)
-		goto error2;
+	struct no_os_gpio_desc *max22216_drv_en_desc = NULL;
+	struct no_os_gpio_desc *max22216_fault_desc = NULL;
 
 	ret = no_os_spi_init(&dev->spi_desc, param->spi_ip);
 	if (ret)
@@ -321,11 +314,10 @@ int max22216_init(struct max22216_desc **desc,
 	return 0;
 
 error1:
-	free(max22216_fault_desc);
-error2:
-	free(max22216_drv_en_desc);
-error3:
-	free(dev);
+	no_os_gpio_remove(max22216_fault_desc);
+	no_os_gpio_remove(max22216_drv_en_desc);
+	no_os_spi_remove(dev->spi_desc);
+	no_os_free(dev);
 	return ret;
 }
 
@@ -339,6 +331,6 @@ int max22216_remove(struct max22216_desc *desc)
 		no_os_gpio_remove(desc->drv_en_gpio);
 	if (desc->fault_gpio)
 		no_os_gpio_remove(desc->fault_gpio);
-	free(desc);
+	no_os_free(desc);
 	return 0;
 }
