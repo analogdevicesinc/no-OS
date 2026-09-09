@@ -156,6 +156,35 @@ int32_t adgs1408_spi_reg_write(struct adgs1408_dev *dev,
 }
 
 /**
+ * SPI register read from device using a mask.
+ * @param dev - The device structure.
+ * @param reg_addr - The register address.
+ * @param mask - The mask.
+ * @param data - The register data.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t adgs1408_spi_reg_read_mask(struct adgs1408_dev *dev,
+				   uint8_t reg_addr,
+				   uint8_t mask,
+				   uint8_t *data)
+{
+	uint8_t reg_data;
+	int32_t ret;
+
+	if (dev->daisy_chain_en == ADGS1408_ENABLE) {
+		printf("%s: This feature is not available in Daisy-Chain mode.\n",
+		       __func__);
+
+		return -1;
+	}
+
+	ret = adgs1408_spi_reg_read(dev, reg_addr, &reg_data);
+	*data = reg_data & mask;
+
+	return ret;
+}
+
+/**
  * SPI internal register write to device using a mask.
  * @param dev - The device structure.
  * @param reg_addr - The register address.
