@@ -322,8 +322,8 @@ void altera_a10_cdr_calc_params(uint32_t fref,
 /**
  * @brief altera_a10_cdr_pll_round_rate
  */
-long altera_a10_cdr_pll_round_rate(struct adxcvr *xcvr,
-				   uint32_t rate_khz)
+int32_t altera_a10_cdr_pll_round_rate(struct adxcvr *xcvr,
+				      uint32_t rate_khz)
 {
 	uint32_t n, m, lpfd, lpd;
 	uint32_t fvco;
