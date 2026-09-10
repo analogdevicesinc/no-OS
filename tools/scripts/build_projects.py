@@ -6,7 +6,6 @@ import os
 import subprocess
 import multiprocessing
 import sys
-import filecmp
 import re
 # This file can be downloaded from the wiki-scripts repository
 # https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py
@@ -269,11 +268,11 @@ def get_hardware(hardware, platform, builds_dir):
 	old_name = "%s.%s" % (hardware, ext)
 	filename = os.path.join(builds_dir, HW_DIR_NAME, old_name)
 
-	if os.path.isfile(filename):
-		#If equal
-		if filecmp.cmp(filename, tmp_filename):
+	if not os.path.isfile(tmp_filename):
+		if os.path.isfile(filename):
 			log("Same hardware from last build, use existing bsp")
 			return (filename, 0, 0)
+		return ('', 1, 1)
 
 	err = run_cmd('cp %s %s' % (tmp_filename, filename))
 	if err != 0:

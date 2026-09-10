@@ -10,17 +10,85 @@ import ast
 from cloudsmith_helper import *
 
 TYELLOW = '\033[33m'  # Yellow Text
+TGREEN = '\033[32m'   # Green Text
 TWHITE = '\033[39m' # White text
 
 def log_warn(msg):
     print(TYELLOW + msg + TWHITE)
 
+def log_info(msg):
+    print(TGREEN + " -> " + TWHITE + msg)
+
+HW_DIR_NAME = 'hardware'
+NEW_HW_DIR_NAME = 'new_hardware'
+FOLDERS_NR = 30 #number of folders to check for missing hardware file
+
+def read_local_sha(hw_dir, hardware):
+    sha_file = os.path.join(hw_dir, hardware + '.sha')
+    if os.path.isfile(sha_file):
+        with open(sha_file) as f:
+            return f.read().strip()
+    return None
+
+def write_local_sha(hw_dir, hardware, sha):
+    sha_file = os.path.join(hw_dir, hardware + '.sha')
+    with open(sha_file, 'w') as f:
+        f.write(sha)
+
+def get_remote_sha(file_path):
+    try:
+        props = get_item_properties(
+            package_version=file_path,
+            package_name='system_top.xsa',
+            repo='sdg-hdl')
+        if props and len(props) >= 2:
+            return props[1].split('-', 1)[1]
+    except Exception:
+        pass
+    return None
+
+def download_xsa(file_path, new_hw_dir, hardware):
+    os.system("mkdir -p %s" % (os.path.join(new_hw_dir, hardware)))
+    get_artifacts_from_location(
+        package_version=file_path,
+        package_name='system_top.xsa',
+        repo='sdg-hdl')
+    os.system("mv ./system_top.xsa %s" % (os.path.join(new_hw_dir, hardware)))
+
+def is_cached(hw_dir, new_hw_dir, hardware, file_path):
+    """Check if the .xsa is already cached with the same HDL git SHA.
+
+    Returns True (skip download) or False (download needed).
+    On API failure, returns False to fall back to unconditional download.
+    """
+    xsa_file = os.path.join(hw_dir, hardware + '.xsa')
+    if not os.path.isfile(xsa_file):
+        return False
+
+    remote_sha = get_remote_sha(file_path)
+    if remote_sha is None:
+        log_warn("Could not read SHA for " + hardware + ", will re-download")
+        return False
+
+    local_sha = read_local_sha(hw_dir, hardware)
+    if local_sha == remote_sha:
+        log_info("Hardware %s unchanged (HDL SHA %s), skip download" %
+                 (hardware, remote_sha))
+        return True
+
+    return False
+
+def update_sha_after_download(hw_dir, hardware, file_path):
+    """Write the remote SHA to disk after a successful download."""
+    remote_sha = get_remote_sha(file_path)
+    if remote_sha:
+        write_local_sha(hw_dir, hardware, remote_sha)
+
+
 NOOS_PATH = sys.argv[1]
 BUILD_PATH = sys.argv[2]
 HDL_SERVER_BASE_PATH = sys.argv[3]
 blacklist = ast.literal_eval(sys.argv[4])
-NEW_HW_DIR_NAME = 'new_hardware'
-FOLDERS_NR = 30 #number of folders to check for missing hardware file
 
 list_hardware = []
 for dir in os.listdir(NOOS_PATH + '/projects'):
@@ -64,24 +132,25 @@ try:
 except Exception as e:
     log_warn("Could not scan CMake .conf for xilinx hardware: %s" % e)
 
-new_harware_dir= os.path.join(BUILD_PATH, NEW_HW_DIR_NAME)
-os.system("rm -rf %s/*" % (new_harware_dir))
+new_hw_dir = os.path.join(BUILD_PATH, NEW_HW_DIR_NAME)
+hw_dir = os.path.join(BUILD_PATH, HW_DIR_NAME)
+os.system("rm -rf %s/*" % (new_hw_dir))
 unique_hardware_list = set(list_hardware)
 for item in blacklist:
     if item in unique_hardware_list:
         unique_hardware_list.remove(item)
-pattern= '\d{4}_\d{2}_\d{2}-\d{2}_\d{2}_\d{2}'
+pattern = r'\d{4}_\d{2}_\d{2}-\d{2}_\d{2}_\d{2}'
 timestamp_match = re.search(pattern, HDL_SERVER_BASE_PATH)
 
 if timestamp_match:
     for hardware in unique_hardware_list:
-        # Skip a failing hardware rather than aborting the whole scan.
         try:
             file_path = HDL_SERVER_BASE_PATH + hardware + '/'
             if 'system_top.xsa' in get_files(package_version=file_path, repo='sdg-hdl'):
-                os.system("mkdir -p %s" % (str(new_harware_dir) + '/' + hardware))
-                get_artifacts_from_location(package_version=file_path, package_name= 'system_top.xsa', repo='sdg-hdl')
-                os.system("mv ./system_top.xsa %s" % (str(new_harware_dir) + '/' + hardware))
+                if is_cached(hw_dir, new_hw_dir, hardware, file_path):
+                    continue
+                download_xsa(file_path, new_hw_dir, hardware)
+                update_sha_after_download(hw_dir, hardware, file_path)
             else:
                 log_warn("Missing " + hardware + " from specific timestamp " + timestamp_match.group())
         except Exception as e:
@@ -95,23 +164,25 @@ else:
 
     for hardware in unique_hardware_list:
         FOUND = False
-        # Skip a failing hardware rather than aborting the whole scan.
         try:
             file_path = release_link + hardware + "/"
             if 'system_top.xsa' in get_files(package_version=file_path, repo='sdg-hdl'):
-                os.system("mkdir -p %s" % (str(new_harware_dir) + '/' + hardware))
-                get_artifacts_from_location(package_version=file_path, package_name= 'system_top.xsa', repo='sdg-hdl')
-                os.system("mv ./system_top.xsa %s" % (str(new_harware_dir) + '/' + hardware))
+                if is_cached(hw_dir, new_hw_dir, hardware, file_path):
+                    FOUND = True
+                    continue
+                download_xsa(file_path, new_hw_dir, hardware)
+                update_sha_after_download(hw_dir, hardware, file_path)
                 FOUND = True
             else:
                 log_warn("Missing " + hardware + " from latest timestamp " + latest)
                 for timestamp_folder in timestamp_folders[1:]:
                     d_path = HDL_SERVER_BASE_PATH + timestamp_folder + "/" + hardware + "/"
                     if 'system_top.xsa' in get_files(package_version=d_path, repo='sdg-hdl'):
-                        os.system("mkdir -p %s" % (str(new_harware_dir) + '/' + hardware))
-                        get_artifacts_from_location(package_version=d_path, package_name= 'system_top.xsa', repo='sdg-hdl')
-                        os.system("mv ./system_top.xsa %s" % (str(new_harware_dir) + '/' + hardware))
-                        # Properties only enrich the log; never let them fail the download.
+                        if is_cached(hw_dir, new_hw_dir, hardware, d_path):
+                            FOUND = True
+                            break
+                        download_xsa(d_path, new_hw_dir, hardware)
+                        update_sha_after_download(hw_dir, hardware, d_path)
                         try:
                             file_properties = get_item_properties(package_version=d_path, package_name= 'system_top.xsa', repo='sdg-hdl')
                         except Exception as e:
