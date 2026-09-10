@@ -458,6 +458,26 @@ int32_t axi_jesd204_rx_laneinfo_read(struct axi_jesd204_rx *jesd, uint32_t lane)
 }
 
 /**
+ * @brief Dump the full JESD204 RX status: the link-level block followed by the
+ *        per-lane block for every lane. This is the no-OS analog of the Linux
+ *        "jesd_status" report (the sysfs "status" attribute plus each
+ *        "laneN_info"), gathered into one call so any project can print it.
+ * @param jesd - The device structure.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
+int32_t axi_jesd204_rx_status_dump(struct axi_jesd204_rx *jesd)
+{
+	uint32_t lane;
+
+	axi_jesd204_rx_status_read(jesd);
+
+	for (lane = 0; lane < jesd->num_lanes; lane++)
+		axi_jesd204_rx_laneinfo_read(jesd, lane);
+
+	return 0;
+}
+
+/**
  * @brief Check JESD204 RX Lane Status.
  * @param jesd - The device structure.
  * @param lane - Lane ID.

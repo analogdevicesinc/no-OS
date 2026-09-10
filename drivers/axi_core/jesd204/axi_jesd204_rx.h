@@ -116,6 +116,11 @@ uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd);
 /** JESD204 RX Lane Info read */
 int32_t axi_jesd204_rx_laneinfo_read(struct axi_jesd204_rx *jesd,
 				     uint32_t lane);
+/** JESD204 RX full status dump (link status + every lane's info) */
+int32_t axi_jesd204_rx_status_dump(struct axi_jesd204_rx *jesd);
+/** JESD204 RX Lane Status check (true if the lane is desynced) */
+bool axi_jesd204_rx_check_lane_status(struct axi_jesd204_rx *jesd,
+				      uint32_t lane);
 /** JESD204 RX Watchdog */
 int32_t axi_jesd204_rx_watchdog(struct axi_jesd204_rx *jesd);
 /** Device initialization */

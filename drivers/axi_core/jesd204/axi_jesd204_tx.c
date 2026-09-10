@@ -270,6 +270,22 @@ uint32_t axi_jesd204_tx_status_read(struct axi_jesd204_tx *jesd)
 }
 
 /**
+ * @brief Dump the full JESD204 TX status. The no-OS analog of the Linux
+ *        "jesd_status" report for a framer core; the TX side exposes only the
+ *        link-level block (no per-lane info, matching the kernel), so this is
+ *        the link status alone. Provided for API symmetry with
+ *        axi_jesd204_rx_status_dump() so callers dump both cores uniformly.
+ * @param jesd - The device structure.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
+int32_t axi_jesd204_tx_status_dump(struct axi_jesd204_tx *jesd)
+{
+	axi_jesd204_tx_status_read(jesd);
+
+	return 0;
+}
+
+/**
  * @brief Compute the JESD204 TX ILAS checksum.
  * @param config - The JESD TX configuration
  * @return Returns 0 in case of success or negative error code otherwise.
