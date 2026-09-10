@@ -304,7 +304,7 @@ static struct scan_type admt4000_iio_temp_scan_type = {
 
 static struct scan_type admt4000_iio_turns_scan_type = {
 	.sign = 's',
-	.realbits = 8,
+	.realbits = 9,
 	.storagebits = 16,
 	.shift = 0,
 	.is_big_endian = false
@@ -608,6 +608,9 @@ static int admt4000_iio_show_conv_sync_mode_avail(void *dev, char *buf,
 	int ret;
 
 	for (i = 0; i < NO_OS_ARRAY_SIZE(admt4000_conv_sync_mode_avail); i++) {
+		if (!admt4000_conv_sync_mode_avail[i])
+			continue;
+
 		ret = snprintf(buf + length, len - length, "%s ",
 			       admt4000_conv_sync_mode_avail[i]);
 		if (ret < 0 || ret >= (int)(len - length))
@@ -666,7 +669,9 @@ static int admt4000_iio_store_conv_sync_mode(void *dev, char *buf, uint32_t len,
 	iio_admt4000 = (struct admt4000_iio_dev *)dev;
 	admt4000 = iio_admt4000->admt4000_desc;
 
-	for (i = 0; i < NO_OS_ARRAY_SIZE(admt4000_conv_sync_mode_avail); i++)
+	for (i = 0; i < NO_OS_ARRAY_SIZE(admt4000_conv_sync_mode_avail); i++) {
+		if (!admt4000_conv_sync_mode_avail[i])
+			continue;
 		if (!strcmp(buf, admt4000_conv_sync_mode_avail[i])) {
 			ret = admt4000_set_conv_sync_mode(admt4000, i);
 			if (ret)
@@ -674,6 +679,7 @@ static int admt4000_iio_store_conv_sync_mode(void *dev, char *buf, uint32_t len,
 
 			return len;
 		}
+	}
 
 	return -EINVAL;
 }
@@ -1278,6 +1284,7 @@ static int admt4000_iio_trigger_handler(struct iio_device_data *dev_data)
 	struct admt4000_dev *admt4000;
 	int i = 0;
 	int ret;
+	int16_t data_samples[ADMT4000_NUM_CHANNELS];
 	uint16_t angles[2];
 	uint8_t turns;
 
@@ -1293,44 +1300,44 @@ static int admt4000_iio_trigger_handler(struct iio_device_data *dev_data)
 		return ret;
 
 	if (dev_data->buffer->active_mask & NO_OS_BIT(ADMT4000_TURNS)) {
-		ret = admt4000_quarter_turns_cnt(turns, &iio_admt4000->data[i]);
+		ret = admt4000_quarter_turns_cnt(turns, &data_samples[i]);
 		i++;
 		if (ret)
 			return ret;
 	}
 
 	if (dev_data->buffer->active_mask & NO_OS_BIT(ADMT4000_ANGLE))
-		iio_admt4000->data[i++] = (int16_t) angles[1];
+		data_samples[i++] = (int16_t) angles[1];
 
 	if (dev_data->buffer->active_mask & NO_OS_BIT(ADMT4000_TEMP)) {
-		ret = admt4000_get_temp(admt4000, &iio_admt4000->data[i]);
+		ret = admt4000_get_temp(admt4000, &data_samples[i]);
 		i++;
 		if (ret)
 			return ret;
 	}
 
 	if (dev_data->buffer->active_mask & NO_OS_BIT(ADMT4000_COSINE)) {
-		ret = admt4000_get_cos(admt4000, &iio_admt4000->data[i], NULL);
+		ret = admt4000_get_cos(admt4000, &data_samples[i], NULL);
 		i++;
 		if (ret)
 			return ret;
 	}
 
 	if (dev_data->buffer->active_mask & NO_OS_BIT(ADMT4000_SINE)) {
-		ret = admt4000_get_sin(admt4000, &iio_admt4000->data[i], NULL);
+		ret = admt4000_get_sin(admt4000, &data_samples[i], NULL);
 		i++;
 		if (ret)
 			return ret;
 	}
 
 	if (dev_data->buffer->active_mask & NO_OS_BIT(ADMT4000_RADIUS)) {
-		ret = admt4000_get_radius(admt4000, &iio_admt4000->data[i], NULL);
+		ret = admt4000_get_radius(admt4000, &data_samples[i], NULL);
 		i++;
 		if (ret)
 			return ret;
 	}
 
-	return iio_buffer_push_scan(dev_data->buffer, &iio_admt4000->data[0]);
+	return iio_buffer_push_scan(dev_data->buffer, &data_samples[0]);
 }
 
 /**

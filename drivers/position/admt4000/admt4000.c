@@ -44,6 +44,13 @@
 #include "no_os_alloc.h"
 #include "no_os_delay.h"
 
+/* Bytes required to hold the input data with parity. */
+#define ADMT4000_ECC_CODE_SIZE		(16)
+#define ADMT4000_ECC_PARITY_BITS	(8)
+/* Bytes of input data for ECC calculation */
+#define ADMT4000_ECC_CODE_BIT_WIDTH	(ADMT4000_ECC_CODE_SIZE * 8)
+#define ADMT4000_ECC_MAX_INPUT_SIZE	(ADMT4000_ECC_CODE_SIZE - 1)
+
 static int admt4000_set_page(struct admt4000_dev *device, uint8_t page);
 static int admt4000_ecc_config(struct admt4000_dev *device, bool is_en);
 static int admt4000_update_ecc(struct admt4000_dev *device, uint16_t *ecc_val);
@@ -88,7 +95,8 @@ static int admt4000_config(struct admt4000_dev *device,
 	if (ret)
 		return ret;
 
-	ret = admt4000_reg_read(device, ADMT4000_AGP_REG_FAULT, &temp, NULL);
+	/* Clear faults before GPIO config so ECC writes are accepted */
+	ret = admt4000_clear_all_faults(device);
 	if (ret)
 		return ret;
 
@@ -353,7 +361,7 @@ static int admt4000_compute_crc(uint32_t data_in, uint8_t *crc_ret)
 }
 
 /**
- * @brief Computes the Hamming Distance.
+ * @brief Computes the parity of the hamming code from the given position.
  * @param position - Bit position.
  * @param code_length - Length of code (original data + parity bits) in bits.
  * @param code - Array containing bytes to iterate through.
@@ -405,23 +413,15 @@ static int admt4000_ecc_encode(uint8_t *code, uint8_t *input,
 	int value;
 	uint8_t position;
 	uint8_t xtract;
-	uint8_t parity_num;
-	uint8_t code_length;
+	uint8_t parity_num = ADMT4000_ECC_PARITY_BITS;
+	uint8_t code_length = ADMT4000_ECC_CODE_BIT_WIDTH;
 
 	*ecc = 0;
 
-	if (input_size > 16)
+	if (!code || !input || !input_size
+	    || input_size > ADMT4000_ECC_MAX_INPUT_SIZE)
 		return -EINVAL;
 
-	/* Compute parity bits needed */
-	parity_num = 0;
-	while ((input_size * 8) > (1 << i) - (i + 1)) {
-		parity_num += 1;
-		i++;
-	}
-
-	/* In bits */
-	code_length = parity_num + (input_size * 8);
 	for (i = 0; i < code_length; i++) {
 		if (i == ((1 << k) - 1)) {
 			code[(i / 8)] &= (uint8_t)~NO_OS_BIT((i & 0x7));
@@ -469,9 +469,9 @@ static int admt4000_update_ecc(struct admt4000_dev *device, uint16_t *ecc_val)
 	int ret;
 	int i;
 	uint16_t temp;
-	uint8_t for_encode[15] = {0};
+	uint8_t for_encode[ADMT4000_ECC_MAX_INPUT_SIZE] = {0};
 	uint8_t ecc[2] = {0};
-	uint8_t encoded[16] = {0};
+	uint8_t encoded[ADMT4000_ECC_CODE_SIZE] = {0};
 
 	if (!device)
 		return -EINVAL;
@@ -494,7 +494,7 @@ static int admt4000_update_ecc(struct admt4000_dev *device, uint16_t *ecc_val)
 			for_encode[14] = no_os_field_get(ADMT4000_HI_BYTE, temp);
 	}
 
-	ret = admt4000_ecc_encode(encoded, for_encode, 16, ecc);
+	ret = admt4000_ecc_encode(encoded, for_encode, sizeof(for_encode), ecc);
 	if (ret)
 		return ret;
 
@@ -521,7 +521,7 @@ static int admt4000_update_ecc(struct admt4000_dev *device, uint16_t *ecc_val)
 	}
 
 	/* ECC1 (needs padding) */
-	ret = admt4000_ecc_encode(encoded, for_encode, 16, ecc + 1);
+	ret = admt4000_ecc_encode(encoded, for_encode, sizeof(for_encode), ecc + 1);
 	if (ret)
 		return ret;
 
