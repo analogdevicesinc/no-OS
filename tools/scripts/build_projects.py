@@ -159,7 +159,7 @@ else:
 	SKIP_DOWNLOAD = 0
 
 HW_DIR_NAME = 'hardware'
-NEW_HW_DIR_NAME = 'new_hardware'
+UPDATED_MANIFEST = '.hardware_updated'
 
 def process_blacklist():
 	blacklist = []
@@ -241,8 +241,6 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 			log('Skipping blacklist: BLACKLIST_URL not set')
 		else:
 			blacklist = process_blacklist()
-		new_hardwares = os.path.join(builds_dir, NEW_HW_DIR_NAME)
-		ensure_dir(new_hardwares)
 		download_cmd = [
 			os.path.join(noos, 'tools', 'scripts', 'download_files.py'),
 			noos, builds_dir, server_full_path, str(blacklist)]
@@ -258,29 +256,26 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 def get_hardware(hardware, platform, builds_dir):
 	if platform == 'xilinx':
 		ext = 'xsa'
-		base_name = 'system_top'
 	else:
 		ext = 'sopcinfo'
-		base_name = 'system_bd'
 
-	new_name = "%s.%s" % (base_name, ext)
-	tmp_filename = os.path.join(builds_dir, NEW_HW_DIR_NAME, hardware, new_name)
-	old_name = "%s.%s" % (hardware, ext)
-	filename = os.path.join(builds_dir, HW_DIR_NAME, old_name)
+	filename = os.path.join(builds_dir, HW_DIR_NAME, "%s.%s" % (hardware, ext))
 
-	if not os.path.isfile(tmp_filename):
-		if os.path.isfile(filename):
-			log("Same hardware from last build, use existing bsp")
-			return (filename, 0, 0)
+	if not os.path.isfile(filename):
 		return ('', 1, 1)
 
-	err = run_cmd('cp %s %s' % (tmp_filename, filename))
-	if err != 0:
-		return ('', 1, err)
+	manifest = os.path.join(builds_dir, HW_DIR_NAME, UPDATED_MANIFEST)
+	updated = set()
+	if os.path.isfile(manifest):
+		with open(manifest) as f:
+			updated = set(line.strip() for line in f if line.strip())
 
-	log("Hardware changed from last build")
+	if hardware in updated:
+		log("Hardware changed from last build")
+		return (filename, 1, 0)
 
-	return (filename, 1, err)
+	log("Same hardware from last build, use existing bsp")
+	return (filename, 0, 0)
 
 def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 			log_dir, cmake_builds_dir, builds_dir):
@@ -351,9 +346,9 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 
 		# Xilinx builds need the board .xsa: resolve the hardware name for this
 		# (variant, board) and pass the downloaded file through to cmake. The
-		# .xsa was fetched into <builds_dir>/new_hardware/<name>/system_top.xsa
-		# by configfile_and_download_all_hw; get_hardware copies/renames it into
-		# <builds_dir>/hardware/<name>.xsa and returns that path.
+		# .xsa lives in <builds_dir>/hardware/<name>.xsa (downloaded directly
+		# by download_files.py); get_hardware checks the .hardware_updated
+		# manifest to decide if BSP regeneration is needed.
 		hardware_arg = ""
 		new_hdf = False
 		if platform == 'xilinx':

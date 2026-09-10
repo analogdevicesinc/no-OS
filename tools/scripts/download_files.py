@@ -20,7 +20,7 @@ def log_info(msg):
     print(TGREEN + " -> " + TWHITE + msg)
 
 HW_DIR_NAME = 'hardware'
-NEW_HW_DIR_NAME = 'new_hardware'
+UPDATED_MANIFEST = '.hardware_updated'
 FOLDERS_NR = 30 #number of folders to check for missing hardware file
 
 def read_local_sha(hw_dir, hardware):
@@ -47,15 +47,14 @@ def get_remote_sha(file_path):
         pass
     return None
 
-def download_xsa(file_path, new_hw_dir, hardware):
-    os.system("mkdir -p %s" % (os.path.join(new_hw_dir, hardware)))
+def download_xsa(file_path, hw_dir, hardware):
     get_artifacts_from_location(
         package_version=file_path,
         package_name='system_top.xsa',
         repo='sdg-hdl')
-    os.system("mv ./system_top.xsa %s" % (os.path.join(new_hw_dir, hardware)))
+    os.system("mv ./system_top.xsa %s" % (os.path.join(hw_dir, hardware + '.xsa')))
 
-def is_cached(hw_dir, new_hw_dir, hardware, file_path):
+def is_cached(hw_dir, hardware, file_path):
     """Check if the .xsa is already cached with the same HDL git SHA.
 
     Returns True (skip download) or False (download needed).
@@ -132,9 +131,10 @@ try:
 except Exception as e:
     log_warn("Could not scan CMake .conf for xilinx hardware: %s" % e)
 
-new_hw_dir = os.path.join(BUILD_PATH, NEW_HW_DIR_NAME)
 hw_dir = os.path.join(BUILD_PATH, HW_DIR_NAME)
-os.system("rm -rf %s/*" % (new_hw_dir))
+os.system("mkdir -p %s" % hw_dir)
+manifest_path = os.path.join(hw_dir, UPDATED_MANIFEST)
+updated_hardware = []
 unique_hardware_list = set(list_hardware)
 for item in blacklist:
     if item in unique_hardware_list:
@@ -147,10 +147,11 @@ if timestamp_match:
         try:
             file_path = HDL_SERVER_BASE_PATH + hardware + '/'
             if 'system_top.xsa' in get_files(package_version=file_path, repo='sdg-hdl'):
-                if is_cached(hw_dir, new_hw_dir, hardware, file_path):
+                if is_cached(hw_dir, hardware, file_path):
                     continue
-                download_xsa(file_path, new_hw_dir, hardware)
+                download_xsa(file_path, hw_dir, hardware)
                 update_sha_after_download(hw_dir, hardware, file_path)
+                updated_hardware.append(hardware)
             else:
                 log_warn("Missing " + hardware + " from specific timestamp " + timestamp_match.group())
         except Exception as e:
@@ -167,22 +168,24 @@ else:
         try:
             file_path = release_link + hardware + "/"
             if 'system_top.xsa' in get_files(package_version=file_path, repo='sdg-hdl'):
-                if is_cached(hw_dir, new_hw_dir, hardware, file_path):
+                if is_cached(hw_dir, hardware, file_path):
                     FOUND = True
                     continue
-                download_xsa(file_path, new_hw_dir, hardware)
+                download_xsa(file_path, hw_dir, hardware)
                 update_sha_after_download(hw_dir, hardware, file_path)
+                updated_hardware.append(hardware)
                 FOUND = True
             else:
                 log_warn("Missing " + hardware + " from latest timestamp " + latest)
                 for timestamp_folder in timestamp_folders[1:]:
                     d_path = HDL_SERVER_BASE_PATH + timestamp_folder + "/" + hardware + "/"
                     if 'system_top.xsa' in get_files(package_version=d_path, repo='sdg-hdl'):
-                        if is_cached(hw_dir, new_hw_dir, hardware, d_path):
+                        if is_cached(hw_dir, hardware, d_path):
                             FOUND = True
                             break
-                        download_xsa(d_path, new_hw_dir, hardware)
+                        download_xsa(d_path, hw_dir, hardware)
                         update_sha_after_download(hw_dir, hardware, d_path)
+                        updated_hardware.append(hardware)
                         try:
                             file_properties = get_item_properties(package_version=d_path, package_name= 'system_top.xsa', repo='sdg-hdl')
                         except Exception as e:
@@ -202,3 +205,11 @@ else:
             continue
         if FOUND is False:
             log_warn("Project " + hardware + " was not found on server")
+
+with open(manifest_path, 'w') as f:
+    for hw in updated_hardware:
+        f.write(hw + '\n')
+if updated_hardware:
+    log_info("Updated hardware: " + ", ".join(updated_hardware))
+else:
+    log_info("All hardware cached, no downloads needed")
