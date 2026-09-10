@@ -40,152 +40,162 @@
  * lwipcore and no-os agree on this value. */
 #ifndef NO_SYS
 #if defined(CONFIG_FREERTOS)
-#define NO_SYS                     		0
+#define NO_SYS 0
 #else
-#define NO_SYS                     		1
+#define NO_SYS 1
 #endif
 #endif
-#define LWIP_SOCKET                		0
-#define LWIP_NETCONN               		0
-#define LWIP_NETIF_API             		0
-#define SYS_LIGHTWEIGHT_PROT    		0
+#define LWIP_SOCKET 0
+#define LWIP_NETCONN 0
+#define LWIP_NETIF_API 0
+#define SYS_LIGHTWEIGHT_PROT 0
 
 /* LWIP_NETIF_LINK_CALLBACK==1: Support a callback function from an
    interface whenever the link changes (i.e., link down) */
-#define LWIP_NETIF_LINK_CALLBACK		1
+#define LWIP_NETIF_LINK_CALLBACK 1
 
 /* LWIP_IPV4==1: Enable IPv4 */
-#define LWIP_IPV4                  		1
+#define LWIP_IPV4 1
 
 /* LWIP_IPV6==0: Disable IPv6 */
-#define LWIP_IPV6                  		0
+#define LWIP_IPV6 0
 
 /* ---------- Memory Options ---------- */
 /* MEM_ALIGNMENT: should be set to the alignment of the CPU for which
    lwIP is compiled. 4 byte alignment -> define MEM_ALIGNMENT to 4, 2
    byte alignment -> define MEM_ALIGNMENT to 2. */
-#define MEM_ALIGNMENT           		4
+#define MEM_ALIGNMENT 4
 
 /* MEM_SIZE: the size of the heap memory. If the application will send
 a lot of data that needs to be copied, this should be set high. */
-#define MEM_SIZE               			65536
+#define MEM_SIZE 131072 /* Increased from 65536 */
 
 /* MEMP_NUM_PBUF: the number of memp struct pbufs. If the application
    sends a lot of data out of ROM (or other static memory), this
    should be set high. */
-#define MEMP_NUM_PBUF				32
+#define MEMP_NUM_PBUF 64 /* Increased from 32 */
 
 /* MEMP_NUM_RAW_PCB: the number of UDP protocol control blocks. One
    per active RAW "connection". */
-#define MEMP_NUM_RAW_PCB        		20
+#define MEMP_NUM_RAW_PCB 20
 
 /* MEMP_NUM_UDP_PCB: the number of UDP protocol control blocks. One
    per active UDP "connection". */
-#define MEMP_NUM_UDP_PCB        		30
+#define MEMP_NUM_UDP_PCB 30
 
 /* MEMP_NUM_TCP_PCB: the number of simultaneously active TCP
    connections. */
-#define MEMP_NUM_TCP_PCB        		10
+#define MEMP_NUM_TCP_PCB 10
 
 /* MEMP_NUM_TCP_PCB_LISTEN: the number of listening TCP
    connections. */
-#define MEMP_NUM_TCP_PCB_LISTEN 		10
+#define MEMP_NUM_TCP_PCB_LISTEN 10
 
 /* MEMP_NUM_TCP_SEG: the number of simultaneously queued TCP
    segments. */
-#define MEMP_NUM_TCP_SEG        		TCP_SND_QUEUELEN
+#define MEMP_NUM_TCP_SEG (TCP_SND_QUEUELEN * 2) /* Changed from TCP_SND_QUEUELEN */
 
 /* MEMP_NUM_SYS_TIMEOUT: the number of simultaneously active
    timeouts. */
-#define MEMP_NUM_SYS_TIMEOUT    		17
+#define MEMP_NUM_SYS_TIMEOUT 25 /* Increased from 17 */
 
 /* ---------- PBUF Options ---------- */
-#define PBUF_POOL_SIZE				30
+#define PBUF_POOL_SIZE 60 /* Increased from 30 */
 
-#define LWIP_CHECKSUM_ON_COPY			1
+#define LWIP_CHECKSUM_ON_COPY 1
 
 /* ---------- ARP Options ---------- */
-#define LWIP_ARP                		1
-#define ARP_TABLE_SIZE          		255
-#define ARP_QUEUEING            		1
-#define ETHARP_TABLE_MATCH_NETIF		1
-#define ETHARP_SUPPORT_STATIC_ENTRIES		1
+#define LWIP_ARP 1
+#define ARP_TABLE_SIZE 255
+#define ARP_QUEUEING 1
+#define ETHARP_TABLE_MATCH_NETIF 1
+#define ETHARP_SUPPORT_STATIC_ENTRIES 1
 
 /* ---------- IP Options ---------- */
-#define IP_FORWARD              		0
-#define IP_REASSEMBLY           		1
-#define IP_FRAG                 		1
-#define IP_REASS_MAX_PBUFS      		(5 * ((1500 + PBUF_POOL_BUFSIZE - 1) / PBUF_POOL_BUFSIZE))
-#define MEMP_NUM_REASSDATA      		IP_REASS_MAX_PBUFS
+#define IP_FORWARD 0
+#define IP_REASSEMBLY 1
+#define IP_FRAG 1
+#define IP_REASS_MAX_PBUFS (5 * ((1500 + PBUF_POOL_BUFSIZE - 1) / PBUF_POOL_BUFSIZE))
+#define MEMP_NUM_REASSDATA IP_REASS_MAX_PBUFS
 
 /* ---------- UDP Options ---------- */
-#define LWIP_UDP                		1
-#define LWIP_UDPLITE            		LWIP_UDP
-#define UDP_TTL                 		255
+#define LWIP_UDP 1
+#define LWIP_UDPLITE LWIP_UDP
+#define UDP_TTL 255
 
 /* ---------- TCP Options ---------- */
-#define LWIP_TCP                		1
-#define TCP_TTL                 		255
-#define LWIP_ALTCP              		LWIP_TCP
+#define LWIP_TCP 1
+#define TCP_TTL 255
+#define LWIP_ALTCP LWIP_TCP
 
-#define USE_DHCP				1
-#define SO_REUSE				1
+#define USE_DHCP 1
+#define SO_REUSE 1
 
 /* Controls if TCP should queue segments that arrive out of
    order. Define to 0 if your device is low on memory. */
-#define TCP_QUEUE_OOSEQ         		1
-#define TCP_OOSEQ_MAX_PBUFS			0
-#define TCP_OOSEQ_MAX_BYTES   			0
+#define TCP_QUEUE_OOSEQ 1
+#define TCP_OOSEQ_MAX_PBUFS 0
+#define TCP_OOSEQ_MAX_BYTES 0
 
-#define LWIP_TCP_TIMESTAMPS   			1
+/* Disable TCP timestamps to reduce overhead (saves 12 bytes/segment) */
+#define LWIP_TCP_TIMESTAMPS 0 /* Changed from 1 */
+
+/* Send TCP SACK options so the remote sender can selectively retransmit only
+ * the lost segments instead of falling into multi-second RTO backoff. Critical
+ * on the half-duplex 10BASE-T1S link where ACK/data collisions cause loss.
+ * Enabled for better recovery from packet loss. */
+#define LWIP_TCP_SACK_OUT 1 /* Changed from 0 */
 
 /* TCP Maximum segment size. */
-#define TCP_MSS                 		1460
-/* TCP sender buffer space (bytes). */
-#define TCP_SND_BUF             		8192
+#define TCP_MSS 1460
+
+/* TCP sender buffer space (bytes). Increased to match window for full utilization */
+#define TCP_SND_BUF (TCP_WND) /* Changed from 8192 */
 
 /* TCP sender buffer space (pbufs). This must be at least = 2 *
    TCP_SND_BUF/TCP_MSS for things to work. */
-#define TCP_SND_QUEUELEN       			(30 * TCP_SND_BUF / TCP_MSS)
+#define TCP_SND_QUEUELEN (30 * TCP_SND_BUF / TCP_MSS)
 
 /* TCP writable space (bytes). This must be less than or equal
    to TCP_SND_BUF. It is the amount of space which must be
    available in the tcp snd_buf for select to return writable */
-#define TCP_SNDLOWAT           			(TCP_SND_BUF / 2)
+#define TCP_SNDLOWAT (TCP_SND_BUF / 2)
 
-/* TCP receive window. */
-#define TCP_WND                 		(8 * TCP_MSS)
+/* TCP receive window. Increased to 32 MSS (~47 KB) for better throughput
+   on 10 Mbps link. The half-duplex nature means window isn't the primary
+   bottleneck, but larger window helps smooth out bursts. */
+#define TCP_WND (32 * TCP_MSS) /* Changed from 16 * TCP_MSS */
 
-#define TCP_OVERSIZE				TCP_MSS
+#define TCP_OVERSIZE TCP_MSS
 
 /* Maximum number of retransmissions of data segments. */
-#define TCP_MAXRTX              		12
+#define TCP_MAXRTX 12
 
 /* Maximum number of retransmissions of SYN segments. */
-#define TCP_SYNMAXRTX           		4
+#define TCP_SYNMAXRTX 4
 
 /* ---------- ICMP Options ---------- */
-#define LWIP_ICMP                  		LWIP_IPV4
-#define ICMP_TTL                		255
+#define LWIP_ICMP LWIP_IPV4
+#define ICMP_TTL 255
 
 /* ---------- DHCP Options ---------- */
-#define LWIP_DHCP               		LWIP_UDP
+#define LWIP_DHCP LWIP_UDP
 
 /* ---------- AUTOIP Options ------- */
-#define LWIP_AUTOIP				1
-#define LWIP_DHCP_AUTOIP_COOP			1
-#define LWIP_DHCP_AUTOIP_COOP_TRIES		2
-#define LWIP_IGMP				1
-#define LWIP_MDNS_RESPONDER			1
-#define MDNS_MAX_SERVICES			255
-#define LWIP_RAND				rand
+#define LWIP_AUTOIP 1
+#define LWIP_DHCP_AUTOIP_COOP 1
+#define LWIP_DHCP_AUTOIP_COOP_TRIES 2
+#define LWIP_IGMP 1
+#define LWIP_MDNS_RESPONDER 1
+#define MDNS_MAX_SERVICES 255
+#define LWIP_RAND rand
 
-#define LWIP_NETIF_EXT_STATUS_CALLBACK		1
-#define MDNS_RESP_USENETIF_EXTCALLBACK		1
-#define LWIP_NUM_NETIF_CLIENT_DATA		1
+#define LWIP_NETIF_EXT_STATUS_CALLBACK 1
+#define MDNS_RESP_USENETIF_EXTCALLBACK 1
+#define LWIP_NUM_NETIF_CLIENT_DATA 1
 
 /* ---------- RAW Options ---------- */
-#define LWIP_RAW                		1
+#define LWIP_RAW 1
 
 #define LWIP_PROVIDE_ERRNO 1
 

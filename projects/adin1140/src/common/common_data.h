@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for Maxim platform of the ADIN1140 project.
+ *   @file   common_data.h
+ *   @brief  Defines common data to be used by the ADIN1140 examples.
  *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -30,35 +30,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __COMMON_DATA_H__
+#define __COMMON_DATA_H__
 
 #include "parameters.h"
-#include "common_data.h"
-#include "no_os_error.h"
-#include "no_os_print_log.h"
+#include "no_os_spi.h"
+#include "no_os_uart.h"
 
-#define _STR(x) #x
-#define STR(x)  _STR(x)
+extern struct no_os_uart_init_param adin1140_uart_ip;
+extern const struct no_os_spi_init_param adin1140_spi_ip;
 
-extern int example_main();
-
-/***************************************************************************//**
- * @brief Main function execution for Maxim platform.
- *
- * @return ret - Result of the enabled examples execution.
-*******************************************************************************/
-int main()
-{
-	int ret;
-
-	struct no_os_uart_desc *uart_desc;
-
-	ret = no_os_uart_init(&uart_desc, &adin1140_uart_ip);
-	if (ret)
-		return ret;
-
-	no_os_uart_stdio(uart_desc);
-
-	pr_info("Running " STR(EXAMPLE) " on " STR(TARGET) "\n");
-
-	return example_main();
-}
+#endif /* __COMMON_DATA_H__ */

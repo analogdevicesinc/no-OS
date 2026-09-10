@@ -1,0 +1,30 @@
+menu "ADIN1140 Configuration"
+
+choice ADIN1140_EXAMPLE
+	prompt "Example variant"
+	default ADIN1140_FRAME_RX_TX_EXAMPLE
+
+config ADIN1140_FRAME_RX_TX_EXAMPLE
+	bool "Frame RX/TX example"
+	depends on NET && ADIN1140
+	help
+	  Raw Ethernet frame transmit/receive loop that exercises the
+	  ADIN1140 MAC/PHY driver directly (driver-level smoke test).
+
+config ADIN1140_IPERF_LWIP_EXAMPLE
+	bool "iperf over lwIP example"
+	depends on LWIP && NET && ADIN1140
+	help
+	  TCP/UDP throughput measurement using lwIP + lwiperf on top of
+	  the ADIN1140 MAC/PHY over Ethernet.
+
+config ADIN1140_IPERF_LWIP_FREERTOS_EXAMPLE
+	bool "iperf over lwIP on FreeRTOS example"
+	depends on LWIP && NET && ADIN1140 && FREERTOS
+	help
+	  TCP/UDP throughput measurement using lwIP + lwiperf running
+	  on FreeRTOS on top of the ADIN1140 MAC/PHY over Ethernet.
+
+endchoice
+
+endmenu

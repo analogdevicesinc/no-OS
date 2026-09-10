@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for Maxim platform of the ADIN1140 project.
+ *   @file   lwip_adin1110.h
+ *   @brief  Header file for the ADIN1110 LWIP implementation.
  *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -19,7 +19,7 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. "AS IS" AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -31,34 +31,14 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "parameters.h"
-#include "common_data.h"
-#include "no_os_error.h"
-#include "no_os_print_log.h"
+#ifndef _LWIP_ADIN1140_H_
+#define _LWIP_ADIN1140_H_
 
-#define _STR(x) #x
-#define STR(x)  _STR(x)
+#ifdef NO_OS_LWIP_NETWORKING
 
-extern int example_main();
+#define ADIN1140_LWIP_BUFF_SIZE 2000
 
-/***************************************************************************//**
- * @brief Main function execution for Maxim platform.
- *
- * @return ret - Result of the enabled examples execution.
-*******************************************************************************/
-int main()
-{
-	int ret;
+extern const struct no_os_lwip_ops adin1140_lwip_ops;
 
-	struct no_os_uart_desc *uart_desc;
-
-	ret = no_os_uart_init(&uart_desc, &adin1140_uart_ip);
-	if (ret)
-		return ret;
-
-	no_os_uart_stdio(uart_desc);
-
-	pr_info("Running " STR(EXAMPLE) " on " STR(TARGET) "\n");
-
-	return example_main();
-}
+#endif /* NO_OS_LWIP_NETWORKING */
+#endif /* _LWIP_ADIN1140_H_ */
