@@ -62,12 +62,6 @@ const struct no_os_spi_platform_ops spi_eng_platform_ops = {
 };
 
 /**
- * @brief Static variable used to sync transfers
- *
- */
-static uint8_t _sync_id = 0x01;
-
-/**
  * @brief Write SPI Engine's axi registers
  *
  * @param desc Decriptor containing SPI Engine's parameters
@@ -534,7 +528,7 @@ static int32_t spi_engine_compile_message(struct no_os_spi_desc *desc,
 					    cfg_reg));
 
 	/* Add a sync command to signal that the transfer has finished */
-	spi_engine_queue_add_cmd(&msg->cmds, SPI_ENGINE_CMD_SYNC(_sync_id));
+	spi_engine_queue_add_cmd(&msg->cmds, SPI_ENGINE_CMD_SYNC(desc_extra->sync_id));
 
 	return 0;
 }
@@ -588,8 +582,8 @@ static int32_t spi_engine_transfer_message(struct no_os_spi_desc *desc,
 					&sync_id);
 		}
 		/* Wait for the end sync signal */
-		while (sync_id != _sync_id);
-		_sync_id++;
+		while (sync_id != desc_extra->sync_id);
+		desc_extra->sync_id++;
 
 		/* Read a number of rx_length WORDS from the SDI line and store
 		them */
@@ -648,6 +642,7 @@ int32_t spi_engine_init(struct no_os_spi_desc **desc,
 	eng_desc->ref_clk_hz = spi_engine_init->ref_clk_hz;
 	eng_desc->clk_div =  eng_desc->ref_clk_hz /
 			     (2 * param->max_speed_hz) - 1;
+	eng_desc->sync_id = 0x01;
 
 	/* Perform a reset */
 	spi_engine_write(eng_desc, SPI_ENGINE_REG_RESET, 0x01);

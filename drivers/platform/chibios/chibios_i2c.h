@@ -50,6 +50,11 @@ struct chibios_i2c_desc {
 	I2CConfig *i2ccfg;
 	/**I2C address*/
 	uint16_t i2caddr;
+	/** Temporary buffer staged by a no-stop-bit write, consumed by the
+	 *  following no-stop-bit read */
+	uint8_t *buffer;
+	/** Number of bytes staged in buffer */
+	uint16_t buffer_size;
 };
 
 /**
@@ -68,13 +73,6 @@ struct chibios_i2c_init_param {
  * @brief chibios specific I2C platform ops structure
  */
 extern const struct no_os_i2c_platform_ops chibios_i2c_ops;
-
-/**
- * @brief global variable for temporary buffers for transmit and receive
- *
- */
-static uint8_t* chI2CBuffer;
-static uint16_t buffSize;
 
 #endif // HAL_USE_I2C==TRUE
 

@@ -97,7 +97,7 @@ int max25603_set_enable(struct max25603_desc *desc, enum max25603_enable enable,
 			return ret;
 
 		ret = no_os_pwm_set_duty_cycle(desc->en1_desc,
-					       (period_ns * (100 - duty)) / 100);
+					       (period_ns * duty) / 100);
 		if (ret)
 			return ret;
 
@@ -115,7 +115,7 @@ int max25603_set_enable(struct max25603_desc *desc, enum max25603_enable enable,
 			return ret;
 
 		ret = no_os_pwm_set_duty_cycle(desc->en2_desc,
-					       (period_ns * (100 - duty)) / 100);
+					       (period_ns * duty) / 100);
 		if (ret)
 			return ret;
 

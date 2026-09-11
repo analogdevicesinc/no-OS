@@ -411,6 +411,8 @@ free_ad7490:
 	ad7490_remove(iio_descriptor->ad7490_desc);
 free_desc:
 	no_os_free(iio_descriptor);
+	if (ret)
+		return ret;
 
 	return 0;
 }

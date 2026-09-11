@@ -310,9 +310,8 @@ int lt7170_init(struct lt7170_dev **device,
 	uint8_t block[lt7170_info[init_param->chip_id].name_size];
 
 	dev = (struct lt7170_dev *)no_os_calloc(1, sizeof(struct lt7170_dev));
-	if (!dev) {
-		ret = -ENOMEM;
-	}
+	if (!dev)
+		return -ENOMEM;
 
 	ret = no_os_i2c_init(&dev->i2c_desc, init_param->i2c_init);
 	if (ret)

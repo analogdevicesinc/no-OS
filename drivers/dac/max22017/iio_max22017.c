@@ -779,8 +779,6 @@ int max22017_iio_remove(struct max22017_iio_desc *iio_desc)
 	if (!iio_desc)
 		return -ENODEV;
 
-	if (iio_desc->iio_dev->channels)
-		no_os_free(iio_desc->iio_dev->channels);
 	if (iio_desc->max22017_desc)
 		max22017_remove(iio_desc->max22017_desc);
 

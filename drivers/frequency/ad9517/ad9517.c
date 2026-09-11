@@ -863,7 +863,7 @@ int32_t ad9517_power_mode(struct ad9517_dev *dev, int32_t channel, int32_t mode)
 	} else {
 		if ((channel >= 4) && (channel <= 7)) {
 			lvds_cmos_channel = &dev->
-					    ad9517_st.lvds_cmos_channels[0];
+					    ad9517_st.lvds_cmos_channels[channel - 4];
 			switch (channel) {
 			case 4:
 				reg_address = AD9517_REG_LVDS_CMOS_OUT4;

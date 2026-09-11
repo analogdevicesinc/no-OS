@@ -34,7 +34,7 @@
 #define __PARAMETERS_H__
 
 #ifdef CONFIG_FTD2XX
-#include "ftd2xx_uart.h"
+#include "no_os_uart.h"
 #include "ftd2xx_i2c.h"
 #else
 #include "linux_uart.h"
@@ -52,7 +52,7 @@
 extern struct ftd2xx_i2c_init max31827_i2c_extra;
 #define I2C_EXTRA	&max31827_i2c_extra
 #define I2C_OPS		&ftd2xx_i2c_ops
-#define UART_OPS	&ftd2xx_uart_ops
+#define UART_OPS	NULL
 #else
 #define I2C_EXTRA	NULL
 #define I2C_OPS		&linux_i2c_ops

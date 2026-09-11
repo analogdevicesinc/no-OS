@@ -97,6 +97,8 @@ int32_t ad9434_spi_write(struct ad9434_dev *dev,
 			 uint8_t reg_data);
 int32_t ad9434_testmode_set(struct ad9434_dev *dev,
 			    uint8_t mode);
+int32_t ad9434_data_delay(struct ad9434_dev *dev,
+			  int16_t delay);
 int32_t ad9434_setup(struct ad9434_dev **device,
 		     struct ad9434_init_param init_param);
 int32_t ad9434_outputmode_set(struct ad9434_dev *dev,

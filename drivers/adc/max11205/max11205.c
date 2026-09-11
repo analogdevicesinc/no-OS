@@ -84,6 +84,9 @@ int max11205_init(struct max11205_dev **device,
 	if (!init_param.irq_ctrl)
 		return -EINVAL;
 
+	if (!init_param.gpio_rdy)
+		return -EINVAL;
+
 	if (init_param.vref_mv > MAX11205_VREF_MAX_MV)
 		return -EINVAL;
 
@@ -104,15 +107,13 @@ int max11205_init(struct max11205_dev **device,
 	if (ret)
 		goto error_dev;
 
-	ret = no_os_gpio_get_optional(&dev->gpio_rdy, init_param.gpio_rdy);
+	ret = no_os_gpio_get(&dev->gpio_rdy, init_param.gpio_rdy);
 	if (ret)
 		goto error_spi;
 
-	if (dev->gpio_rdy) {
-		ret = no_os_gpio_direction_input(dev->gpio_rdy);
-		if (ret)
-			goto error_gpio;
-	}
+	ret = no_os_gpio_direction_input(dev->gpio_rdy);
+	if (ret)
+		goto error_gpio;
 
 	ret = no_os_irq_register_callback(init_param.irq_ctrl,
 					  dev->gpio_rdy->number, &irq_cb);

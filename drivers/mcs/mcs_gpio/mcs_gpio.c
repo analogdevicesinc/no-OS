@@ -100,19 +100,23 @@ int32_t mcs_gpio_init(struct mcs_gpio_dev **device,
 	ret = no_os_gpio_get(&dev->gpio_req, init_param->gpio_req);
 	if (ret < 0)
 		goto error;
-	if (dev->gpio_req)
+
+	if (dev->gpio_req) {
 		ret = no_os_gpio_direction_output(dev->gpio_req, 0);
+		if (ret < 0)
+			goto error_gpio;
+	}
 
 	ret = jesd204_dev_register(&dev->jdev, &jesd204_mcs_gpio_init);
 	if (ret < 0)
-		goto error;
+		goto error_gpio;
 	priv = jesd204_dev_priv(dev->jdev);
 	priv->mcs_gpio = dev;
 
 	*device = dev;
 
 	return 0;
-err_gpio:
+error_gpio:
 	no_os_gpio_remove(dev->gpio_req);
 error:
 	no_os_free(dev);
