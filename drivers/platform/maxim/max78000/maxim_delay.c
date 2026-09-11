@@ -37,6 +37,7 @@
 
 static volatile unsigned long long _system_ticks = 0;
 
+#ifndef __riscv
 extern void SysTick_Handler(void);
 
 /* ************************************************************************** */
@@ -45,6 +46,7 @@ void SysTick_Handler(void)
 	MXC_DelayHandler();
 	_system_ticks++;
 }
+#endif /* __riscv */
 
 /**
  * @brief Generate microseconds delay.
@@ -52,7 +54,14 @@ void SysTick_Handler(void)
  */
 void no_os_udelay(uint32_t usecs)
 {
+#ifdef __riscv
+	while (usecs--) {
+		for (uint32_t i = 0; i < 120U; i++)
+			__asm__ volatile("nop");
+	}
+#else
 	MXC_Delay(MXC_DELAY_USEC(usecs));
+#endif
 }
 
 /**
@@ -61,7 +70,12 @@ void no_os_udelay(uint32_t usecs)
  */
 void no_os_mdelay(uint32_t msecs)
 {
+#ifdef __riscv
+	while (msecs--)
+		no_os_udelay(1000U);
+#else
 	MXC_Delay(MXC_DELAY_MSEC(msecs));
+#endif
 }
 
 /**
@@ -71,6 +85,16 @@ void no_os_mdelay(uint32_t msecs)
 struct no_os_time no_os_get_time(void)
 {
 	struct no_os_time t;
+#ifdef __riscv
+	/*
+	 * The RISC-V (CPU1) core has no SysTick peripheral (it is Cortex-M only),
+	 * so wall-clock time is not available here. Return zero; the coprocessor
+	 * firmware relies on no_os_udelay/no_os_mdelay (backed by MXC_Delay's
+	 * RISC-V cycle-counter path), not on no_os_get_time.
+	 */
+	t.s = 0;
+	t.us = 0;
+#else
 	uint64_t sub_ms;
 	uint32_t systick_val;
 	uint64_t ticks;
@@ -83,6 +107,7 @@ struct no_os_time no_os_get_time(void)
 	sub_ms = ((SysTick->LOAD - systick_val) * 1000) / SysTick->LOAD;
 	t.s = ticks / 1000;
 	t.us = (ticks - t.s * 1000) * 1000 + sub_ms;
+#endif /* __riscv */
 
 	return t;
 }
