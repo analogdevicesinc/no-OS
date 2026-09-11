@@ -34,11 +34,13 @@ no_os_sources_ifdef(CONFIG_SPI_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim
 
 no_os_sources_ifdef(CONFIG_DMA_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/common/maxim_dma.c)
 
-target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_init.c)
+if (NOT CONFIG_CAPI)
+	target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_init.c)
 
-# Delay (always included when not using FreeRTOS)
-if(NOT ${CONFIG_FREERTOS})
-        target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_delay.c)
+	# Delay (always included when not using FreeRTOS)
+	if(NOT ${CONFIG_FREERTOS})
+        	target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_delay.c)
+	endif()
 endif()
 
 no_os_include_dir_ifdef(CONFIG_USB_UART_MAXIM ${MAXIM_LIBRARIES}/MAXUSB/include/core)
