@@ -245,7 +245,7 @@ Three groups need no jumper - their loopback is internal to the SoC or the BSP:
 Wiring - STM32 (NUCLEO-F767ZI)
 ------------------------------
 
-Same groups, on-chip peripherals. 
+Same groups, on-chip peripherals.
 brings up clocks/pins/NVIC by hand, so the platform hooks are real, not no-ops.
 
 .. list-table::
@@ -271,6 +271,40 @@ brings up clocks/pins/NVIC by hand, so the platform hooks are real, not no-ops.
 	    resolution); DMA2 Stream0 is memory-to-memory, polled.
 
 USART3 is the console only
+
+Wiring - MAX32657 (MAX32657EVKIT)
+---------------------------------
+
+Same groups, on-chip peripherals. All async paths are delivered through the
+NVIC (IRQ/FIFO); DMA is memory-to-memory only.
+
+.. list-table::
+	:header-rows: 1
+	:widths: 16 26 58
+
+	* - Group
+	  - Peripheral
+	  - Strap / notes
+	* - GPIO
+	  - P0.7 -> P0.8
+	  - Jumper P0.7 (output) to P0.8 (input). Remove the on-board JP15 jumpers
+	    first so nothing else drives the pair. Pin-loopback only
+	    (``GPIO_HAS_PORT_LOOPBACK`` 0); P0.8 is also armed as the IRQ source.
+	* - SPI
+	  - SPI0
+	  - Jumper P0.2 (MOSI) to P0.4 (MISO); P0.6 is SCLK, driven not strapped.
+	    IRQ/FIFO delivery, no DMA.
+	* - I2C
+	  - I2C0
+	  - Initiator only - no second controller is wired as a target, so the whole
+	    I2C group collapses to one skipping ``BASIC``.
+	* - IRQ / Timer / DMA
+	  - NVIC / TIM0 / DMA
+	  - No strap. IRQ reuses the P0.8 GPIO edge; TIM0 is a 32-bit on-chip counter
+	    (1 us resolution); DMA is memory-to-memory.
+
+UART0 is the console only; the second (async) UART is not mapped, so the whole
+UART group skips.
 
 How a test is skipped
 ---------------------
