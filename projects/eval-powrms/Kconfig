@@ -1,0 +1,13 @@
+menu "eval-powrms Configuration"
+
+choice EVAL_POWRMS_EXAMPLE
+	prompt "Example variant"
+	default EVAL_POWRMS_EXAMPLE_EXAMPLE
+
+config EVAL_POWRMS_EXAMPLE_EXAMPLE
+	bool "Basic example"
+	depends on IIO
+
+endchoice
+
+endmenu
