@@ -11,6 +11,15 @@ config ADIN1140_FRAME_RX_TX_EXAMPLE
 	  Raw Ethernet frame transmit/receive loop that exercises the
 	  ADIN1140 MAC/PHY driver directly (driver-level smoke test).
 
+config ADIN1140_FRAME_BLAST_EXAMPLE
+	bool "Raw L2 throughput (frame blast) example"
+	depends on NET && ADIN1140
+	help
+	  Raw Ethernet (layer-2) throughput test: blasts or counts max-size
+	  frames back-to-back with no IP/TCP/UDP overhead, to measure the true
+	  MAC-layer throughput of the 10BASE-T1S link. Pairs with the host-side
+	  l2_send/l2_recv tools under projects/adin1140/host.
+
 config ADIN1140_IPERF_LWIP_EXAMPLE
 	bool "iperf over lwIP example"
 	depends on LWIP && NET && ADIN1140
@@ -26,5 +35,29 @@ config ADIN1140_IPERF_LWIP_FREERTOS_EXAMPLE
 	  on FreeRTOS on top of the ADIN1140 MAC/PHY over Ethernet.
 
 endchoice
+
+config ADIN1140_IPERF_UDP_CLIENT_IP
+	string "iperf UDP client target IP (empty = server only)"
+	depends on ADIN1140_IPERF_LWIP_FREERTOS_EXAMPLE
+	help
+	  When set to a peer's IPv4 address (e.g. "192.168.97.41"), the board
+	  also runs an iperf UDP client that streams to that peer running
+	  "iperf -s -u", in addition to the always-on TCP/UDP servers. Leave
+	  empty to keep server-only behaviour.
+
+config ADIN1140_IPERF_UDP_CLIENT_RATE
+	int "iperf UDP client target rate (bits/s)"
+	default 5000000
+	depends on ADIN1140_IPERF_LWIP_FREERTOS_EXAMPLE
+	help
+	  Target send rate for the UDP client, in bits per second. The
+	  10BASE-T1S link tops out around 10 Mbit/s.
+
+config ADIN1140_IPERF_UDP_CLIENT_TIME
+	int "iperf UDP client test duration (seconds)"
+	default 10
+	depends on ADIN1140_IPERF_LWIP_FREERTOS_EXAMPLE
+	help
+	  Duration of the UDP client test, in seconds.
 
 endmenu

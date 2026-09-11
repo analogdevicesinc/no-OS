@@ -40,4 +40,8 @@
 extern struct no_os_uart_init_param adin1140_uart_ip;
 extern const struct no_os_spi_init_param adin1140_spi_ip;
 
+/* Console UART descriptor, set by main() after no_os_uart_init(). Used by the
+ * boot-time iperf menu to read the user's selection with a bounded timeout. */
+extern struct no_os_uart_desc *adin1140_uart_desc;
+
 #endif /* __COMMON_DATA_H__ */

@@ -1,0 +1,966 @@
+diff --git a/src/apps/lwiperf/lwiperf.c b/src/apps/lwiperf/lwiperf.c
+index 26b1e3b..14db5f7 100644
+--- a/src/apps/lwiperf/lwiperf.c
++++ b/src/apps/lwiperf/lwiperf.c
+@@ -52,12 +52,15 @@
+ #include "lwip/apps/lwiperf.h"
+ 
+ #include "lwip/tcp.h"
++#include "lwip/udp.h"
+ #include "lwip/sys.h"
++#include "lwip/timeouts.h"
+ #include "lwip/inet.h"
+ 
+ #include <string.h>
+ 
+-/* Currently, only TCP is implemented */
++/* TCP client/server is implemented unconditionally; the UDP server below is
++ * compiled in addition whenever LWIP_UDP is enabled. */
+ #if LWIP_TCP && LWIP_CALLBACK_API
+ 
+ /** Specify the idle timeout (in seconds) after that the test fails */
+@@ -130,6 +133,170 @@ typedef struct _lwiperf_state_tcp {
+   ip_addr_t remote_addr;
+ } lwiperf_state_tcp_t;
+ 
++#if LWIP_UDP
++/* iperf2 UDP wire protocol
++ * -----------------------------------------------------------------------------
++ * Every UDP datagram sent by an iperf2 client begins with a 16-byte header
++ * (all fields network byte order):
++ *   int32  id       running datagram sequence number (low 32 bits), starting at
++ *                   0. The final datagram carries the negated sequence number to
++ *                   signal the end of the test.
++ *   uint32 tv_sec   client send timestamp (seconds)
++ *   uint32 tv_usec  client send timestamp (microseconds)
++ *   int32  id2      sequence number high 32 bits (iperf >= 2.0.10; zero for the
++ *                   datagram counts we deal with here)
++ *
++ * iperf 2.0.5 used a 12-byte header without 'id2'; 2.0.10 and later (e.g. the
++ * build shipped on modern Linux) grew it to 16 bytes. The client reads the
++ * server report back at offset sizeof(UDP_datagram), so the header size must
++ * match the client or every server_hdr field lands one word off.
++ *
++ * When the test ends (final datagram received), the server replies with an
++ * "AckFIN" datagram: the UDP_datagram header followed by a 40-byte server_hdr
++ * carrying the measured statistics, which the client prints as the
++ * "server report". Layout mirrors iperf 2.0.x (include/Settings.hpp). */
++
++#define LWIPERF_UDP_HEADER_VERSION1 0x80000000U
++/* Signals that a server_hdr_extension block follows the base header. The modern
++ * iperf2 client only computes the loss percentage and prints jitter when this
++ * flag is set and the extension's cntIPG field is non-zero. */
++#define LWIPERF_UDP_HEADER_EXTEND   0x40000000U
++/* Out-of-range minimum-transit sentinel (seconds). The client treats any
++ * transit outside a realistic window as "no latency data" and drops the
++ * latency / net-power columns, while still printing jitter, loss and pps. We
++ * use it because the client and server clocks are unsynchronised, so one-way
++ * latency cannot be measured. */
++#define LWIPERF_UDP_TRANSIT_UNAVAIL 0x7FFFFFFF
++
++/** iperf2 per-datagram header (16 bytes, iperf >= 2.0.10) */
++typedef struct _lwiperf_udp_datagram {
++  s32_t id;
++  u32_t tv_sec;
++  u32_t tv_usec;
++  s32_t id2;
++} lwiperf_udp_datagram_t;
++
++/** iperf2 client header, sent by the client right after the datagram header of
++ * the first datagram so the server learns the test parameters. flags==0 selects
++ * a plain unidirectional test (the server does not start a reverse stream). */
++typedef struct _lwiperf_udp_client_hdr {
++  u32_t flags;
++  u32_t numThreads;
++  u32_t mPort;
++  u32_t bufferlen;
++  u32_t mWinBand;
++  u32_t mAmount;
++} lwiperf_udp_client_hdr_t;
++
++/** iperf2 base server report header (server_hdr_v1) */
++typedef struct _lwiperf_udp_srv_hdr {
++  u32_t flags;
++  u32_t total_len1;
++  u32_t total_len2;
++  u32_t stop_sec;
++  u32_t stop_usec;
++  u32_t error_cnt;
++  u32_t outorder_cnt;
++  u32_t datagrams;
++  u32_t jitter1;
++  u32_t jitter2;
++} lwiperf_udp_srv_hdr_t;
++
++/** iperf2 extended server report header (server_hdr_extension). All transit
++ * values are split into a whole-seconds word and a microseconds word. */
++typedef struct _lwiperf_udp_srv_hdr_ext {
++  u32_t minTransit1;
++  u32_t minTransit2;
++  u32_t maxTransit1;
++  u32_t maxTransit2;
++  u32_t sumTransit1;
++  u32_t sumTransit2;
++  u32_t meanTransit1;
++  u32_t meanTransit2;
++  u32_t m2Transit1;
++  u32_t m2Transit2;
++  u32_t vdTransit1;
++  u32_t vdTransit2;
++  u32_t cntTransit;
++  u32_t cntIPG;
++  u32_t IPGsum;
++} lwiperf_udp_srv_hdr_ext_t;
++
++/** Connection handle for a UDP iperf session (server only) */
++typedef struct _lwiperf_state_udp {
++  lwiperf_state_base_t base;
++  struct udp_pcb *pcb;
++  lwiperf_report_fn report_fn;
++  void *report_arg;
++  /* 1 while a measurement from 'remote_addr'/'remote_port' is in progress */
++  u8_t have_stats;
++  /* 1 once the test has ended and the server report was sent; kept so that
++   * retransmitted end-of-test (FIN) datagrams are re-acked without being
++   * mistaken for a new measurement */
++  u8_t finished;
++  ip_addr_t remote_addr;
++  u16_t remote_port;
++  /* statistics for the running measurement */
++  u32_t time_started;      /* sys_now() at first datagram (ms) */
++  s32_t packet_id;         /* highest in-order sequence number seen */
++  u32_t cnt_datagrams;     /* total datagrams received */
++  u32_t cnt_error;         /* lost datagrams */
++  u32_t cnt_outoforder;    /* out-of-order datagrams */
++  u32_t total_len_lo;      /* received payload bytes, low 32 bits */
++  u32_t total_len_hi;      /* received payload bytes, high 32 bits */
++  double jitter;           /* RFC 1889 jitter estimate, in seconds */
++  double last_transit;     /* previous (server - client) transit, in seconds */
++  /* inter-packet-gap statistics for the extended server report (cntIPG/pps) */
++  u32_t transit_cnt;       /* number of inter-packet-gap samples */
++  u32_t ipg_last_us;       /* arrival time (us) of the previous datagram */
++  double ipg_sum;          /* sum of inter-packet gaps, in seconds */
++} lwiperf_state_udp_t;
++
++/** Datagram payload length used by the client (matches iperf's default of
++ * 1470 bytes: a full 16-byte header plus data, sized to fit one Ethernet MTU
++ * without IP fragmentation). */
++#define LWIPERF_UDP_CLIENT_MSS      1470
++
++/** Connection handle for a UDP iperf client session. Declared here (ahead of
++ * lwiperf_abort) so the abort path can free it by type. */
++typedef struct _lwiperf_state_udp_client {
++  lwiperf_state_base_t base;
++  struct udp_pcb *pcb;
++  lwiperf_report_fn report_fn;
++  void *report_arg;
++  ip_addr_t remote_addr;
++  u16_t remote_port;
++  s32_t packet_id;          /* next datagram sequence number */
++  u32_t time_started;       /* sys_now() at first datagram (ms) */
++  u32_t bytes_transferred;  /* payload bytes offered (excludes the FIN) */
++  u32_t bytes_delivered;    /* payload bytes the stack accepted for TX */
++  u16_t buffer_len;         /* datagram size in bytes */
++  u32_t rate_bps;           /* target rate, bits per second */
++  u32_t interval_ms;        /* pacing timer period (ms) */
++  u8_t time_mode;           /* 1 = time-limited, 0 = byte-limited */
++  u32_t amount;             /* bytes to send, or duration in ms if time_mode */
++  u8_t fin_tries;           /* remaining FIN retransmit attempts */
++  u8_t in_fin;              /* 1 once the end-of-test FIN phase has begun */
++  u8_t done;                /* 1 once report delivered / session finished */
++  /* scratch tx buffer: datagram header + client header + filler up to buffer_len */
++  u8_t txbuf[LWIPERF_UDP_CLIENT_MSS];
++} lwiperf_state_udp_client_t;
++
++static void lwiperf_udp_client_tick(void *arg);
++static void lwiperf_udp_client_fin_tick(void *arg);
++
++/** Microsecond-resolution timestamp for jitter/transit measurement.
++ * sys_now() only offers millisecond resolution, which rounds the sub-millisecond
++ * transit deltas on a paced link down to zero. Platforms with a finer time
++ * source (e.g. the Cortex-M DWT cycle counter) can override this weak default
++ * with a strong definition. */
++u32_t __attribute__((weak))
++lwiperf_udp_now_us(void)
++{
++  return sys_now() * 1000U;
++}
++#endif /* LWIP_UDP */
++
+ /** List of active iperf sessions */
+ static lwiperf_state_base_t *lwiperf_all_connections;
+ /** A const buffer to send from: we want to measure sending, not copying! */
+@@ -424,8 +591,32 @@ lwiperf_tx_start_impl(const ip_addr_t *remote_ip, u16_t remote_port, lwiperf_set
+   tcp_poll(newpcb, lwiperf_tcp_poll, 2U);
+   tcp_err(newpcb, lwiperf_tcp_err);
+ 
++  /* Disable Nagle for the throughput test. With Nagle on, lwIP holds a partial
++   * segment until previously sent data is ACKed; paired with the peer's delayed
++   * ACK (~40 ms) this forms a Nagle/delayed-ACK deadlock that collapses
++   * throughput to a few Mbit/s. iperf itself sets TCP_NODELAY for the same
++   * reason. */
++  tcp_nagle_disable(newpcb);
++
+   ip_addr_copy(remote_addr, *remote_ip);
+ 
++  /* Bind to a per-run-varying local port before connecting. lwIP would
++   * otherwise derive the local port from LWIP_RAND()/an internal counter seeded
++   * once at tcp_init(); on this target that produces the SAME local port every
++   * boot. Reusing the same (local_ip:port -> server:5001) 4-tuple across board
++   * resets collides with the connection the server still holds from the
++   * previous run, so the new handshake never completes (server shows
++   * "connected" but no data flows). sys_now() at connect time includes the
++   * boot-to-connect delay (DHCP + the interactive menu), so it differs run to
++   * run; map it into the ephemeral range. Fall back to auto-assignment if that
++   * specific port happens to be in use. */
++  {
++    u16_t lport = (u16_t)(0xC000U + (sys_now() % 0x3F00U));
++    if (tcp_bind(newpcb, IP_ANY_TYPE, lport) != ERR_OK) {
++      /* leave unbound; lwIP assigns one at connect */
++    }
++  }
++
+   err = tcp_connect(newpcb, &remote_addr, remote_port, lwiperf_tcp_client_connected);
+   if (err != ERR_OK) {
+     lwiperf_tcp_close(client_conn, LWIPERF_TCP_ABORTED_LOCAL);
+@@ -742,7 +933,7 @@ static err_t lwiperf_start_tcp_server_impl(const ip_addr_t *local_addr, u16_t lo
+ 
+ /**
+  * @ingroup iperf
+- * Start a TCP iperf client to the default TCP port (5001).
++ * Start a TCP iperf client to the default TCP port (5001) for a 10 s test.
+  *
+  * @returns a connection handle that can be used to abort the client
+  *          by calling @ref lwiperf_abort()
+@@ -751,7 +942,7 @@ void* lwiperf_start_tcp_client_default(const ip_addr_t* remote_addr,
+                                lwiperf_report_fn report_fn, void* report_arg)
+ {
+   return lwiperf_start_tcp_client(remote_addr, LWIPERF_TCP_PORT_DEFAULT, LWIPERF_CLIENT,
+-                                  report_fn, report_arg);
++                                  (s32_t)-1000, report_fn, report_arg);
+ }
+ 
+ /**
+@@ -762,7 +953,8 @@ void* lwiperf_start_tcp_client_default(const ip_addr_t* remote_addr,
+  *          by calling @ref lwiperf_abort()
+  */
+ void* lwiperf_start_tcp_client(const ip_addr_t* remote_addr, u16_t remote_port,
+-  enum lwiperf_client_type type, lwiperf_report_fn report_fn, void* report_arg)
++  enum lwiperf_client_type type, s32_t amount,
++  lwiperf_report_fn report_fn, void* report_arg)
+ {
+   err_t ret;
+   lwiperf_settings_t settings;
+@@ -788,8 +980,10 @@ void* lwiperf_start_tcp_client(const ip_addr_t* remote_addr, u16_t remote_port,
+   }
+   settings.num_threads = htonl(1);
+   settings.remote_port = htonl(LWIPERF_TCP_PORT_DEFAULT);
+-  /* TODO: implement passing duration/amount of bytes to transfer */
+-  settings.amount = htonl((u32_t)-1000);
++  /* amount: positive => bytes to send; negative => duration in hundredths of a
++   * second (e.g. -1000 => 10 s), matching iperf's -n/-t. Sent to the peer in the
++   * settings header and used locally by lwiperf_tcp_client_send_more(). */
++  settings.amount = htonl((u32_t)amount);
+ 
+   ret = lwiperf_tx_start_impl(remote_addr, remote_port, &settings, report_fn, report_arg, NULL, &state);
+   if (ret == ERR_OK) {
+@@ -835,7 +1029,29 @@ lwiperf_abort(void *lwiperf_session)
+       i = i->next;
+       if (last != NULL) {
+         last->next = i;
++      } else {
++        lwiperf_all_connections = i;
+       }
++#if LWIP_UDP
++      if (!dealloc->tcp) {
++        if (dealloc->server) {
++          lwiperf_state_udp_t *udp_conn = (lwiperf_state_udp_t *)dealloc;
++          if (udp_conn->pcb != NULL) {
++            udp_remove(udp_conn->pcb);
++          }
++          LWIPERF_FREE(lwiperf_state_udp_t, dealloc);
++        } else {
++          lwiperf_state_udp_client_t *udp_cl = (lwiperf_state_udp_client_t *)dealloc;
++          sys_untimeout(lwiperf_udp_client_tick, udp_cl);
++          sys_untimeout(lwiperf_udp_client_fin_tick, udp_cl);
++          if (udp_cl->pcb != NULL) {
++            udp_remove(udp_cl->pcb);
++          }
++          LWIPERF_FREE(lwiperf_state_udp_client_t, udp_cl);
++        }
++        continue;
++      }
++#endif
+       LWIPERF_FREE(lwiperf_state_tcp_t, dealloc); /* @todo: type? */
+     } else {
+       last = i;
+@@ -844,4 +1060,614 @@ lwiperf_abort(void *lwiperf_session)
+   }
+ }
+ 
++#if LWIP_UDP
++
++/** Call the report function of an iperf udp session */
++static void
++lwiperf_udp_report(lwiperf_state_udp_t *conn, enum lwiperf_report_type report_type)
++{
++  if ((conn != NULL) && (conn->report_fn != NULL)) {
++    u32_t now, duration_ms, bandwidth_kbitpsec;
++    now = sys_now();
++    duration_ms = now - conn->time_started;
++    if (duration_ms == 0) {
++      bandwidth_kbitpsec = 0;
++    } else {
++      bandwidth_kbitpsec = (conn->total_len_lo / duration_ms) * 8U;
++    }
++    conn->report_fn(conn->report_arg, report_type,
++                    &conn->pcb->local_ip, conn->pcb->local_port,
++                    &conn->remote_addr, conn->remote_port,
++                    conn->total_len_lo, duration_ms, bandwidth_kbitpsec);
++  }
++}
++
++/** (Re)start a measurement: reset all running statistics */
++static void
++lwiperf_udp_stats_reset(lwiperf_state_udp_t *conn, const ip_addr_t *addr, u16_t port)
++{
++  ip_addr_copy(conn->remote_addr, *addr);
++  conn->remote_port = port;
++  conn->have_stats = 1;
++  conn->finished = 0;
++  conn->time_started = sys_now();
++  conn->packet_id = 0;
++  conn->cnt_datagrams = 0;
++  conn->cnt_error = 0;
++  conn->cnt_outoforder = 0;
++  conn->total_len_lo = 0;
++  conn->total_len_hi = 0;
++  conn->jitter = 0.0;
++  conn->last_transit = 0.0;
++  conn->transit_cnt = 0;
++  conn->ipg_last_us = 0;
++  conn->ipg_sum = 0.0;
++}
++
++/** Add 'len' payload bytes to the 64-bit total counter */
++static void
++lwiperf_udp_add_bytes(lwiperf_state_udp_t *conn, u16_t len)
++{
++  u32_t prev = conn->total_len_lo;
++  conn->total_len_lo = prev + len;
++  if (conn->total_len_lo < prev) {
++    conn->total_len_hi++;
++  }
++}
++
++/** Split a non-negative seconds value into iperf's (seconds, microseconds)
++ * word pair, both in network byte order. */
++static void
++lwiperf_udp_split_sec(double seconds, u32_t *w1, u32_t *w2)
++{
++  u32_t whole;
++  if (seconds < 0.0) {
++    seconds = 0.0;
++  }
++  whole = (u32_t)seconds;
++  *w1 = lwip_htonl(whole);
++  *w2 = lwip_htonl((u32_t)((seconds - (double)whole) * 1000000.0));
++}
++
++/** Send the iperf server report ("AckFIN") back to the client.
++ * The report carries the base server_hdr followed by the server_hdr_extension;
++ * the HEADER_EXTEND flag plus a non-zero cntIPG are what make the client print
++ * the loss percentage and jitter (rather than zeros). */
++static void
++lwiperf_udp_send_report(lwiperf_state_udp_t *conn, const ip_addr_t *addr, u16_t port)
++{
++  struct pbuf *p;
++  lwiperf_udp_datagram_t *hdr;
++  lwiperf_udp_srv_hdr_t *srv;
++  lwiperf_udp_srv_hdr_ext_t *ext;
++  u32_t duration_ms, error_cnt;
++
++  p = pbuf_alloc(PBUF_TRANSPORT,
++                 (u16_t)(sizeof(lwiperf_udp_datagram_t) + sizeof(lwiperf_udp_srv_hdr_t) +
++                         sizeof(lwiperf_udp_srv_hdr_ext_t)),
++                 PBUF_RAM);
++  if (p == NULL) {
++    return;
++  }
++
++  hdr = (lwiperf_udp_datagram_t *)p->payload;
++  memset(hdr, 0, sizeof(*hdr));
++  hdr->id = (s32_t)lwip_htonl((u32_t)(-conn->packet_id));
++
++  srv = (lwiperf_udp_srv_hdr_t *)(hdr + 1);
++  duration_ms = sys_now() - conn->time_started;
++
++  /* iperf settles the loss count against the out-of-order count */
++  error_cnt = conn->cnt_error;
++  if (error_cnt > conn->cnt_outoforder) {
++    error_cnt -= conn->cnt_outoforder;
++  }
++
++  srv->flags        = lwip_htonl(LWIPERF_UDP_HEADER_VERSION1 | LWIPERF_UDP_HEADER_EXTEND);
++  srv->total_len1   = lwip_htonl(conn->total_len_hi);
++  srv->total_len2   = lwip_htonl(conn->total_len_lo);
++  srv->stop_sec     = lwip_htonl(duration_ms / 1000U);
++  srv->stop_usec    = lwip_htonl((duration_ms % 1000U) * 1000U);
++  srv->error_cnt    = lwip_htonl(error_cnt);
++  srv->outorder_cnt = lwip_htonl(conn->cnt_outoforder);
++  /* for UDP, iperf reports the highest sequence number as datagram count */
++  srv->datagrams    = lwip_htonl((u32_t)conn->packet_id);
++  lwiperf_udp_split_sec(conn->jitter, &srv->jitter1, &srv->jitter2);
++
++  ext = (lwiperf_udp_srv_hdr_ext_t *)(srv + 1);
++  memset(ext, 0, sizeof(*ext));
++  /* One-way latency is unmeasurable: the client and server clocks are not
++   * synchronised. Flag the transit data as unavailable so the client drops the
++   * latency avg/min/max/stdev and net-power columns (rather than showing a
++   * misleading 0.000), while still printing jitter, loss and pps. */
++  ext->minTransit1 = lwip_htonl((u32_t)LWIPERF_UDP_TRANSIT_UNAVAIL);
++  /* cntIPG must be non-zero for the client to print jitter and loss %. It is
++   * the number of inter-packet gaps; IPGsum is their total duration in seconds,
++   * together giving the packets-per-second figure. */
++  ext->cntIPG      = lwip_htonl(conn->transit_cnt);
++  ext->IPGsum      = lwip_htonl((u32_t)conn->ipg_sum);
++
++  udp_sendto(conn->pcb, p, addr, port);
++  pbuf_free(p);
++}
++
++/** UDP receive callback: process an incoming iperf datagram */
++static void
++lwiperf_udp_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p,
++                 const ip_addr_t *addr, u16_t port)
++{
++  lwiperf_state_udp_t *conn = (lwiperf_state_udp_t *)arg;
++  lwiperf_udp_datagram_t dg;
++  s32_t seq;
++  u16_t datagram_len;
++
++  LWIP_UNUSED_ARG(pcb);
++
++  if ((conn == NULL) || (p == NULL)) {
++    if (p != NULL) {
++      pbuf_free(p);
++    }
++    return;
++  }
++
++  datagram_len = p->tot_len;
++
++  /* Every iperf datagram carries at least the 12-byte header */
++  if (datagram_len < sizeof(lwiperf_udp_datagram_t)) {
++    pbuf_free(p);
++    return;
++  }
++  if (pbuf_copy_partial(p, &dg, sizeof(dg), 0) != sizeof(dg)) {
++    pbuf_free(p);
++    return;
++  }
++  pbuf_free(p);
++
++  seq = (s32_t)lwip_ntohl((u32_t)dg.id);
++
++  /* Is there a measurement in progress for exactly this client? */
++  if (conn->have_stats &&
++      ip_addr_eq(&conn->remote_addr, addr) && (conn->remote_port == port)) {
++    if (conn->finished) {
++      /* The test for this client already ended. iperf retransmits the final
++       * (negative-id) datagram up to 10 times until it reads back our server
++       * report, so re-send the report and drop the datagram without
++       * re-reporting. A non-negative id here means the client has started a
++       * brand new test, so fall through to reset. */
++      if (seq < 0) {
++        lwiperf_udp_send_report(conn, addr, port);
++        return;
++      }
++      lwiperf_udp_stats_reset(conn, addr, port);
++    }
++    /* else: measurement ongoing, keep accumulating below */
++  } else {
++    /* A different client, or the first datagram ever. A stray negative-id
++     * datagram that matches no running session is ignored. */
++    if (seq < 0) {
++      return;
++    }
++    lwiperf_udp_stats_reset(conn, addr, port);
++  }
++
++  conn->cnt_datagrams++;
++
++  if (seq < 0) {
++    /* final datagram of the running test: the client negated the sequence
++     * number. Count it, send the server report and report the result once. */
++    lwiperf_udp_add_bytes(conn, datagram_len);
++    conn->finished = 1;
++    lwiperf_udp_send_report(conn, addr, port);
++    lwiperf_udp_report(conn, LWIPERF_UDP_DONE_SERVER);
++    return;
++  }
++
++  lwiperf_udp_add_bytes(conn, datagram_len);
++
++  /* id 0 is the connection/settings datagram; skip loss & jitter for it */
++  if (seq != 0) {
++    u32_t arrival_us = lwiperf_udp_now_us();
++    double now_s = (double)arrival_us / 1000000.0;
++    double client_s = (double)lwip_ntohl(dg.tv_sec) +
++                      (double)lwip_ntohl(dg.tv_usec) / 1000000.0;
++    /* Transit carries a constant client/server clock offset (the two clocks are
++     * unsynchronised), so its absolute value is meaningless and we do not report
++     * one-way latency. The offset cancels in the jitter delta below, and the
++     * inter-packet gap is measured purely from server arrival times. */
++    double transit = now_s - client_s;
++
++    /* RFC 1889 jitter: J = J + (|D(i-1,i)| - J) / 16 */
++    if (conn->last_transit != 0.0) {
++      double delta = transit - conn->last_transit;
++      if (delta < 0.0) {
++        delta = -delta;
++      }
++      conn->jitter += (delta - conn->jitter) / 16.0;
++
++      /* inter-packet gap between consecutive arrivals (server clock only) */
++      if (conn->ipg_last_us != 0) {
++        conn->ipg_sum += (double)(arrival_us - conn->ipg_last_us) / 1000000.0;
++      }
++    }
++    conn->last_transit = transit;
++    conn->ipg_last_us = arrival_us;
++    conn->transit_cnt++; /* counts inter-packet-gap samples for cntIPG/pps */
++
++    /* packet loss / reordering: sequence numbers should be contiguous */
++    if (seq != conn->packet_id + 1) {
++      if (seq < conn->packet_id + 1) {
++        conn->cnt_outoforder++;
++      } else {
++        conn->cnt_error += (u32_t)(seq - conn->packet_id - 1);
++      }
++    }
++    if (seq > conn->packet_id) {
++      conn->packet_id = seq;
++    }
++  }
++}
++
++/**
++ * @ingroup iperf
++ * Start a UDP iperf server on a specific IP address and port and listen for
++ * incoming datagrams from iperf clients.
++ *
++ * @returns a connection handle that can be used to abort the server
++ *          by calling @ref lwiperf_abort()
++ */
++void *
++lwiperf_start_udp_server(const ip_addr_t *local_addr, u16_t local_port,
++                         lwiperf_report_fn report_fn, void *report_arg)
++{
++  err_t err;
++  struct udp_pcb *pcb;
++  lwiperf_state_udp_t *s;
++
++  LWIP_ASSERT_CORE_LOCKED();
++
++  if (local_addr == NULL) {
++    return NULL;
++  }
++
++  s = (lwiperf_state_udp_t *)LWIPERF_ALLOC(lwiperf_state_udp_t);
++  if (s == NULL) {
++    return NULL;
++  }
++  memset(s, 0, sizeof(lwiperf_state_udp_t));
++  s->base.tcp = 0;
++  s->base.server = 1;
++  s->report_fn = report_fn;
++  s->report_arg = report_arg;
++
++  pcb = udp_new_ip_type(LWIPERF_SERVER_IP_TYPE);
++  if (pcb == NULL) {
++    LWIPERF_FREE(lwiperf_state_udp_t, s);
++    return NULL;
++  }
++  err = udp_bind(pcb, local_addr, local_port);
++  if (err != ERR_OK) {
++    udp_remove(pcb);
++    LWIPERF_FREE(lwiperf_state_udp_t, s);
++    return NULL;
++  }
++  s->pcb = pcb;
++  udp_recv(pcb, lwiperf_udp_recv, s);
++
++  lwiperf_list_add(&s->base);
++  return s;
++}
++
++/**
++ * @ingroup iperf
++ * Start a UDP iperf server on the default UDP port (5001) and listen for
++ * incoming datagrams from iperf clients.
++ *
++ * @returns a connection handle that can be used to abort the server
++ *          by calling @ref lwiperf_abort()
++ */
++void *
++lwiperf_start_udp_server_default(lwiperf_report_fn report_fn, void *report_arg)
++{
++  return lwiperf_start_udp_server(IP_ADDR_ANY, LWIPERF_UDP_PORT_DEFAULT,
++                                  report_fn, report_arg);
++}
++
++/* ------------------------------------------------------------------------- */
++/* UDP client                                                                */
++/* ------------------------------------------------------------------------- */
++
++/** Default send rate when the caller passes rate_bps == 0 (~1 Mbit/s). */
++#define LWIPERF_UDP_CLIENT_RATE_DEF 1000000U
++/** Default transfer amount: negative value is time in hundredths of a second,
++ * so -1000 means a 10-second test (iperf's default). */
++#define LWIPERF_UDP_CLIENT_AMOUNT_DEF (-1000)
++/** How often the final (FIN) datagram is retransmitted while waiting for the
++ * server's report, and the maximum number of attempts. */
++#define LWIPERF_UDP_CLIENT_FIN_MS    250U
++#define LWIPERF_UDP_CLIENT_FIN_TRIES 10U
++/** Pacing timer period: the send callback reschedules this often, and also
++ * catches up on any datagrams owed since it last ran. Kept small so the rate
++ * stays smooth. */
++#define LWIPERF_UDP_CLIENT_TICK_MS   2U
++/** Upper bound on datagrams offered in a single callback, so a long scheduling
++ * gap does not turn into an unbounded burst that monopolises the CPU. This only
++ * caps per-callback catch-up work; it does not limit the offered rate over
++ * time (the remainder is offered on the next tick). */
++#define LWIPERF_UDP_CLIENT_MAX_BURST 64U
++
++/** Deliver the client-side report and tear the session down */
++static void
++lwiperf_udp_client_finish(lwiperf_state_udp_client_t *c,
++                          enum lwiperf_report_type report_type)
++{
++  if (c->done) {
++    return;
++  }
++  c->done = 1;
++  sys_untimeout(lwiperf_udp_client_tick, c);
++  sys_untimeout(lwiperf_udp_client_fin_tick, c);
++
++  if (c->report_fn != NULL) {
++    u32_t now = sys_now();
++    u32_t duration_ms = now - c->time_started;
++    /* Report the bytes actually accepted for transmission (what reached the
++     * wire), which is the honest client-side throughput. The difference from
++     * the offered total is the local drop count the server also observes. */
++    u32_t bw_kbitps = (duration_ms == 0) ? 0 :
++                      (c->bytes_delivered / duration_ms) * 8U;
++    c->report_fn(c->report_arg, report_type,
++                 &c->pcb->local_ip, c->pcb->local_port,
++                 &c->remote_addr, c->remote_port,
++                 c->bytes_delivered, duration_ms, bw_kbitps);
++  }
++
++  lwiperf_list_remove(&c->base);
++  if (c->pcb != NULL) {
++    udp_remove(c->pcb);
++    c->pcb = NULL;
++  }
++  LWIPERF_FREE(lwiperf_state_udp_client_t, c);
++}
++
++/** Fill and send one data datagram with the given sequence id.
++ *
++ * Mirrors iperf's UDP client: the datagram is stamped and handed to the stack
++ * with a single udp_sendto(), exactly as iperf hands each datagram to write().
++ * The return value is the real result: ERR_OK if the frame was accepted for
++ * transmission, or an error if the stack/driver rejected it (e.g. the MAC TX
++ * buffers are full). A rejected datagram is a genuine drop - the caller still
++ * advances the sequence number (as iperf does), so the server sees the gap and
++ * reports it as loss. This reflects the actual behaviour of the driver/link,
++ * with nothing fabricated by the client. */
++static err_t
++lwiperf_udp_client_send_one(lwiperf_state_udp_client_t *c, s32_t id)
++{
++  struct pbuf *p;
++  lwiperf_udp_datagram_t *hdr;
++  err_t err;
++  u32_t now_us = lwiperf_udp_now_us();
++
++  hdr = (lwiperf_udp_datagram_t *)c->txbuf;
++  hdr->id     = (s32_t)lwip_htonl((u32_t)id);
++  hdr->tv_sec = lwip_htonl(now_us / 1000000U);
++  hdr->tv_usec = lwip_htonl(now_us % 1000000U);
++  hdr->id2    = 0;
++
++  p = pbuf_alloc(PBUF_TRANSPORT, c->buffer_len, PBUF_RAM);
++  if (p == NULL) {
++    return ERR_MEM;
++  }
++  pbuf_take(p, c->txbuf, c->buffer_len);
++  err = udp_sendto(c->pcb, p, &c->remote_addr, c->remote_port);
++  pbuf_free(p);
++  return err;
++}
++
++/** Timer callback: send the scheduled datagrams, then reschedule or finish */
++static void
++lwiperf_udp_client_tick(void *arg)
++{
++  lwiperf_state_udp_client_t *c = (lwiperf_state_udp_client_t *)arg;
++  u32_t elapsed_ms = sys_now() - c->time_started;
++  u8_t test_done = 0;
++  u32_t burst = 0;
++  u64_t target_bytes;
++
++  if (c->time_mode && (elapsed_ms >= c->amount)) {
++    test_done = 1;
++  }
++
++  if (!test_done) {
++    /* Rate pacing, as in iperf: how many payload bytes the requested rate calls
++     * for by now. We offer datagrams up to that. Every offered datagram is
++     * stamped, handed to udp_sendto() once, and has its sequence number
++     * advanced - regardless of whether the stack accepts it. If the stack/
++     * driver rejects it (real ENOBUFS when the MAC TX buffers are full), that
++     * is a genuine drop: the sequence number is still consumed, so the server
++     * sees the gap and reports the true loss of the driver/link. Nothing about
++     * the loss is synthesised by the client. */
++    target_bytes = ((u64_t)c->rate_bps * (u64_t)elapsed_ms) / 8000U;
++
++    while ((u64_t)c->bytes_transferred < target_bytes) {
++      if (!c->time_mode && (c->bytes_transferred >= c->amount)) {
++        test_done = 1;
++        break;
++      }
++
++      if (lwiperf_udp_client_send_one(c, c->packet_id) == ERR_OK) {
++        c->bytes_delivered += c->buffer_len;
++      }
++      /* offered counters advance unconditionally (iperf increments packetID
++       * before the write and never rewinds it on failure) */
++      c->packet_id++;
++      c->bytes_transferred += c->buffer_len;
++
++      /* Bound the work per callback so a burst cannot monopolise the CPU; the
++       * remainder is offered on the next tick. This only caps catch-up work,
++       * it does not throttle the offered rate over time. */
++      if (++burst >= LWIPERF_UDP_CLIENT_MAX_BURST) {
++        break;
++      }
++    }
++  }
++
++  if (test_done) {
++    /* enter the FIN phase: retransmit the negative-id datagram until the
++     * server replies with its report (parsed in lwiperf_udp_client_recv) */
++    c->in_fin = 1;
++    c->fin_tries = LWIPERF_UDP_CLIENT_FIN_TRIES;
++    lwiperf_udp_client_fin_tick(c);
++    return;
++  }
++  sys_timeout(c->interval_ms, lwiperf_udp_client_tick, c);
++}
++
++/** Timer callback: (re)send the final datagram and await the server report */
++static void
++lwiperf_udp_client_fin_tick(void *arg)
++{
++  lwiperf_state_udp_client_t *c = (lwiperf_state_udp_client_t *)arg;
++
++  if (c->fin_tries == 0) {
++    /* server never answered; still report what we sent */
++    lwiperf_udp_client_finish(c, LWIPERF_UDP_DONE_CLIENT);
++    return;
++  }
++  c->fin_tries--;
++  /* negative sequence number signals end-of-test to the server */
++  lwiperf_udp_client_send_one(c, -c->packet_id);
++  sys_timeout(LWIPERF_UDP_CLIENT_FIN_MS, lwiperf_udp_client_fin_tick, c);
++}
++
++/** UDP receive callback: the server's report datagram ends the test */
++static void
++lwiperf_udp_client_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p,
++                        const ip_addr_t *addr, u16_t port)
++{
++  lwiperf_state_udp_client_t *c = (lwiperf_state_udp_client_t *)arg;
++
++  LWIP_UNUSED_ARG(pcb);
++  LWIP_UNUSED_ARG(addr);
++  LWIP_UNUSED_ARG(port);
++
++  if (p != NULL) {
++    pbuf_free(p);
++  }
++  /* Any datagram from the server once we are in the FIN phase is its report
++   * acknowledgement; the payload stats are not surfaced (our report uses the
++   * locally-measured send totals). */
++  if ((c != NULL) && !c->done && c->in_fin) {
++    lwiperf_udp_client_finish(c, LWIPERF_UDP_DONE_CLIENT);
++  }
++}
++
++/**
++ * @ingroup iperf
++ * Start a UDP iperf client streaming to a remote iperf server.
++ */
++void *
++lwiperf_start_udp_client(const ip_addr_t *remote_addr, u16_t remote_port,
++                         u32_t rate_bps, s32_t amount,
++                         lwiperf_report_fn report_fn, void *report_arg)
++{
++  err_t err;
++  struct udp_pcb *pcb;
++  lwiperf_state_udp_client_t *c;
++  lwiperf_udp_client_hdr_t *chdr;
++  u16_t i;
++
++  LWIP_ASSERT_CORE_LOCKED();
++
++  if (remote_addr == NULL) {
++    return NULL;
++  }
++  if (rate_bps == 0) {
++    rate_bps = LWIPERF_UDP_CLIENT_RATE_DEF;
++  }
++
++  c = (lwiperf_state_udp_client_t *)LWIPERF_ALLOC(lwiperf_state_udp_client_t);
++  if (c == NULL) {
++    return NULL;
++  }
++  memset(c, 0, sizeof(lwiperf_state_udp_client_t));
++  c->base.tcp = 0;
++  c->base.server = 0;
++  c->report_fn = report_fn;
++  c->report_arg = report_arg;
++  ip_addr_copy(c->remote_addr, *remote_addr);
++  c->remote_port = remote_port;
++  c->buffer_len = LWIPERF_UDP_CLIENT_MSS;
++  c->rate_bps = rate_bps;
++  c->packet_id = 0;
++
++  /* amount: negative => time in hundredths of a second; positive => bytes */
++  if (amount < 0) {
++    c->time_mode = 1;
++    c->amount = ((u32_t)(-amount)) * 10U; /* -> milliseconds */
++  } else {
++    c->time_mode = 0;
++    c->amount = (u32_t)amount;
++  }
++
++  /* Fixed short pacing period; lwiperf_udp_client_tick() catches up on any
++   * datagrams owed since it last ran, so the achieved rate follows rate_bps
++   * regardless of how often the callback is actually serviced. */
++  c->interval_ms = LWIPERF_UDP_CLIENT_TICK_MS;
++
++  /* Pre-build the client header once; it rides in the first datagram (and any
++   * retransmits reuse the same buffer). flags==0 => plain unidirectional test. */
++  chdr = (lwiperf_udp_client_hdr_t *)(c->txbuf + sizeof(lwiperf_udp_datagram_t));
++  chdr->flags      = 0;
++  chdr->numThreads = lwip_htonl(1);
++  chdr->mPort      = lwip_htonl(remote_port);
++  chdr->bufferlen  = lwip_htonl(c->buffer_len);
++  chdr->mWinBand   = lwip_htonl(rate_bps);
++  chdr->mAmount    = c->time_mode ?
++                     lwip_htonl((u32_t)(-(s32_t)(c->amount / 10U))) :
++                     lwip_htonl(c->amount & 0x7FFFFFFFU);
++  /* fill the remaining payload with the iperf digit pattern */
++  for (i = sizeof(lwiperf_udp_datagram_t) + sizeof(lwiperf_udp_client_hdr_t);
++       i < c->buffer_len; i++) {
++    c->txbuf[i] = (u8_t)('0' + (i % 10));
++  }
++
++  pcb = udp_new_ip_type(IP_GET_TYPE(remote_addr));
++  if (pcb == NULL) {
++    LWIPERF_FREE(lwiperf_state_udp_client_t, c);
++    return NULL;
++  }
++  /* bind to an ephemeral local port so the server's report reaches our recv */
++  err = udp_bind(pcb, IP_ANY_TYPE, 0);
++  if (err != ERR_OK) {
++    udp_remove(pcb);
++    LWIPERF_FREE(lwiperf_state_udp_client_t, c);
++    return NULL;
++  }
++  c->pcb = pcb;
++  udp_recv(pcb, lwiperf_udp_client_recv, c);
++
++  lwiperf_list_add(&c->base);
++
++  c->time_started = sys_now();
++  /* kick off sending on the next timer service */
++  sys_timeout(c->interval_ms, lwiperf_udp_client_tick, c);
++  return c;
++}
++
++/**
++ * @ingroup iperf
++ * Start a UDP iperf client to the default port (5001) at ~1 Mbit/s for 10 s.
++ */
++void *
++lwiperf_start_udp_client_default(const ip_addr_t *remote_addr,
++                                 lwiperf_report_fn report_fn, void *report_arg)
++{
++  return lwiperf_start_udp_client(remote_addr, LWIPERF_UDP_PORT_DEFAULT,
++                                  LWIPERF_UDP_CLIENT_RATE_DEF,
++                                  LWIPERF_UDP_CLIENT_AMOUNT_DEF,
++                                  report_fn, report_arg);
++}
++
++#endif /* LWIP_UDP */
++
+ #endif /* LWIP_TCP && LWIP_CALLBACK_API */
+diff --git a/src/include/lwip/apps/lwiperf.h b/src/include/lwip/apps/lwiperf.h
+index e6f4476..d327dcd 100644
+--- a/src/include/lwip/apps/lwiperf.h
++++ b/src/include/lwip/apps/lwiperf.h
+@@ -45,6 +45,7 @@ extern "C" {
+ #endif
+ 
+ #define LWIPERF_TCP_PORT_DEFAULT  5001
++#define LWIPERF_UDP_PORT_DEFAULT  5001
+ 
+ /** lwIPerf test results */
+ enum lwiperf_report_type
+@@ -60,7 +61,11 @@ enum lwiperf_report_type
+   /** Transmit error lead to test abort */
+   LWIPERF_TCP_ABORTED_LOCAL_TXERROR,
+   /** Remote side aborted the test */
+-  LWIPERF_TCP_ABORTED_REMOTE
++  LWIPERF_TCP_ABORTED_REMOTE,
++  /** The UDP server side test is done */
++  LWIPERF_UDP_DONE_SERVER,
++  /** The UDP client side test is done */
++  LWIPERF_UDP_DONE_CLIENT
+ };
+ 
+ /** Control */
+@@ -94,11 +99,28 @@ void* lwiperf_start_tcp_server(const ip_addr_t* local_addr, u16_t local_port,
+                                lwiperf_report_fn report_fn, void* report_arg);
+ void* lwiperf_start_tcp_server_default(lwiperf_report_fn report_fn, void* report_arg);
+ void* lwiperf_start_tcp_client(const ip_addr_t* remote_addr, u16_t remote_port,
+-                               enum lwiperf_client_type type,
++                               enum lwiperf_client_type type, s32_t amount,
+                                lwiperf_report_fn report_fn, void* report_arg);
+ void* lwiperf_start_tcp_client_default(const ip_addr_t* remote_addr,
+                                lwiperf_report_fn report_fn, void* report_arg);
+ 
++void* lwiperf_start_udp_server(const ip_addr_t* local_addr, u16_t local_port,
++                               lwiperf_report_fn report_fn, void* report_arg);
++void* lwiperf_start_udp_server_default(lwiperf_report_fn report_fn, void* report_arg);
++
++/** Start a UDP iperf client streaming to a remote iperf server.
++    @param remote_addr server address to send to
++    @param remote_port server UDP port (e.g. LWIPERF_UDP_PORT_DEFAULT)
++    @param rate_bps target send rate in bits per second (0 => ~1 Mbit/s default)
++    @param amount transfer size: positive = bytes to send; negative = duration in
++                  hundredths of a second (e.g. -1000 => 10 s), matching iperf's -t
++    @returns a session handle usable with lwiperf_abort(), or NULL on error */
++void* lwiperf_start_udp_client(const ip_addr_t* remote_addr, u16_t remote_port,
++                               u32_t rate_bps, s32_t amount,
++                               lwiperf_report_fn report_fn, void* report_arg);
++void* lwiperf_start_udp_client_default(const ip_addr_t* remote_addr,
++                               lwiperf_report_fn report_fn, void* report_arg);
++
+ void  lwiperf_abort(void* lwiperf_session);
+ 
+ 

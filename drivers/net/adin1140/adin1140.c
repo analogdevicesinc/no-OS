@@ -455,13 +455,22 @@ int adin1140_sw_reset(struct adin1140_desc *desc)
 }
 
 /**
- * @brief Write a frame to the TX FIFO via OA TC6.
+ * @brief Queue a frame into a TX buffer without pumping the transfer.
  * @param desc - the device descriptor.
  * @param eth_buff - the frame to be transmitted.
- * @return 0 in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise. In particular
+ *         -ENOBUFS is returned when no TX buffer is free, i.e. the transmit
+ *         path cannot keep up: the caller decides whether to retry or drop.
+ *
+ * Unlike adin1140_write_fifo() this does NOT call oa_tc6_thread(), so it does
+ * not block clocking the frame out over SPI. The frame is transmitted the next
+ * time the transfer pump runs (adin1140_poll()/oa_tc6_thread(), which the lwIP
+ * step loop already calls each iteration). This lets a fast sender genuinely
+ * overflow the finite TX buffers and observe real link-limited loss, instead of
+ * being back-pressured to line rate by a synchronous write.
  */
-int adin1140_write_fifo(struct adin1140_desc *desc,
-			struct adin1140_eth_buff *eth_buff)
+int adin1140_submit_fifo(struct adin1140_desc *desc,
+			 struct adin1140_eth_buff *eth_buff)
 {
 	struct oa_tc6_frame_buffer *oa_frame;
 	uint32_t frame_offset = 0;
@@ -486,6 +495,24 @@ int adin1140_write_fifo(struct adin1140_desc *desc,
 	oa_frame->vs = 0;
 
 	oa_tc6_put_tx_frame(desc->oa_desc, oa_frame);
+
+	return 0;
+}
+
+/**
+ * @brief Write a frame to the TX FIFO via OA TC6 and pump it out.
+ * @param desc - the device descriptor.
+ * @param eth_buff - the frame to be transmitted.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adin1140_write_fifo(struct adin1140_desc *desc,
+			struct adin1140_eth_buff *eth_buff)
+{
+	int ret;
+
+	ret = adin1140_submit_fifo(desc, eth_buff);
+	if (ret)
+		return ret;
 
 	return oa_tc6_thread(desc->oa_desc);
 }

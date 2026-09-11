@@ -33,6 +33,7 @@
 
 #include <string.h>
 #include <errno.h>
+#include <stdbool.h>
 
 #include "common_data.h"
 #include "lwip_socket.h"
@@ -40,6 +41,8 @@
 #include "adin1140.h"
 #include "lwip/apps/lwiperf.h"
 #include "lwip/ip_addr.h"
+#include "lwip/timeouts.h"
+#include "iperf_menu.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 #include "no_os_irq.h"
@@ -84,9 +87,10 @@ lwiperf_report(void *arg, enum lwiperf_report_type report_type,
 	LWIP_UNUSED_ARG(local_port);
 
 	pr_info("IPERF report: type=%d, remote: %s:%d, total bytes: %"U32_F
-		", duration in ms: %"U32_F", kbits/s: %"U32_F"\n",
+		", duration in ms: %"U32_F", Mbits/s: %"U32_F".%03"U32_F"\n",
 		(int)report_type, ipaddr_ntoa(remote_addr), (int)remote_port,
-		bytes_transferred, ms_duration, bandwidth_kbitpsec);
+		bytes_transferred, ms_duration, bandwidth_kbitpsec / 1000,
+		bandwidth_kbitpsec % 1000);
 }
 
 static int setup_interrupt(struct adin1140_net_data *data)
@@ -146,19 +150,33 @@ static void net_task(void *param)
 	struct adin1140_init_param adin1140_ip = { 0 };
 	struct lwip_network_param lwip_param = { 0 };
 	struct adin1140_net_data *data = param;
+	struct iperf_menu_selection sel;
+	struct iperf_plca_selection plca = {
+		.enabled  = true,
+		.node_id  = 1,
+		.node_cnt = 8,
+	};
+	const char *def_ip = "";
+	uint32_t def_rate = 5000000;
+	uint32_t def_secs = 10;
 	uint32_t reg_val;
 	int ret;
-	
+
 	adin1140_ip.comm_param = adin1140_spi_ip;
 	adin1140_ip.mac_cfg = (struct adin1140_mac_cfg) {
 		.cps   = 0x6,
 		.zarfe = true,
 	};
 
+	/* Prompt for PLCA settings before bringing up the MAC/PHY, so the chosen
+	 * enable/role/count are applied by no_os_lwip_init(). Pressing Enter through
+	 * keeps the defaults (PLCA on, follower id 1, 8 nodes). */
+	iperf_menu_plca_select(&plca);
+
 	adin1140_ip.plca_cfg = (struct adin1140_plca_cfg) {
-		.enabled   = true,
-		.node_id   = 1,
-		.node_cnt  = 8,
+		.enabled   = plca.enabled,
+		.node_id   = plca.node_id,
+		.node_cnt  = plca.node_cnt,
 		.to_tmr    = 0x20,
 		.burst_cnt = 0,
 		.burst_tmr = 0,
@@ -185,16 +203,71 @@ static void net_task(void *param)
 		return;
 	}
 
-	pr_info("Starting lwiperf server on port %d\n",
-		LWIPERF_TCP_PORT_DEFAULT);
-	lwiperf_start_tcp_server_default(lwiperf_report, NULL);
+	/* Defaults for the client prompt: prefer the build-time CONFIG_* values
+	 * when present, otherwise sensible built-ins. */
+#ifdef CONFIG_ADIN1140_IPERF_UDP_CLIENT_IP
+	def_ip = CONFIG_ADIN1140_IPERF_UDP_CLIENT_IP;
+	def_rate = CONFIG_ADIN1140_IPERF_UDP_CLIENT_RATE;
+	def_secs = CONFIG_ADIN1140_IPERF_UDP_CLIENT_TIME;
+#endif
+
+	iperf_menu_select(&sel, def_ip, def_rate, def_secs);
+
+	if (sel.mode == IPERF_MENU_UDP_CLIENT ||
+	    sel.mode == IPERF_MENU_TCP_CLIENT) {
+		ip_addr_t remote;
+
+		if (!ipaddr_aton(sel.ip, &remote)) {
+			pr_info("Invalid client IP '%s' - starting servers\n",
+				sel.ip);
+			sel.mode = IPERF_MENU_SERVERS;
+		} else if (sel.mode == IPERF_MENU_UDP_CLIENT) {
+			pr_info("Starting lwiperf UDP client to %s (%lu.%03lu Mbit/s, %lu s)\n",
+				sel.ip,
+				(unsigned long)(sel.rate_bps / 1000000),
+				(unsigned long)((sel.rate_bps % 1000000) / 1000),
+				(unsigned long)sel.duration_s);
+			lwiperf_start_udp_client(&remote, LWIPERF_UDP_PORT_DEFAULT,
+						 sel.rate_bps,
+						 -100 * (s32_t)sel.duration_s,
+						 lwiperf_report, NULL);
+		} else {
+			pr_info("Starting lwiperf TCP client to %s (%lu s)\n",
+				sel.ip, (unsigned long)sel.duration_s);
+			lwiperf_start_tcp_client(&remote, LWIPERF_TCP_PORT_DEFAULT,
+						 LWIPERF_CLIENT,
+						 -100 * (s32_t)sel.duration_s,
+						 lwiperf_report, NULL);
+		}
+	}
+
+	if (sel.mode == IPERF_MENU_SERVERS) {
+		pr_info("Starting lwiperf TCP server on port %d\n",
+			LWIPERF_TCP_PORT_DEFAULT);
+		lwiperf_start_tcp_server_default(lwiperf_report, NULL);
+
+		pr_info("Starting lwiperf UDP server on port %d\n",
+			LWIPERF_UDP_PORT_DEFAULT);
+		lwiperf_start_udp_server_default(lwiperf_report, NULL);
+	}
 
 	while (1) {
+		uint32_t sleep_ms;
+
 		no_os_lwip_step(data->lwip, NULL);
 
 		no_os_irq_enable(data->gpio_irq, ADIN1140_INT_PIN);
 
-		ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(100));
+		/* Block only until the next lwIP timeout is due, so timer-driven
+		 * work (e.g. the iperf UDP client's pacing) runs on schedule
+		 * instead of waiting out a fixed 100 ms. RX still wakes us early
+		 * via the task notification from the ADIN1140 IRQ. Clamp to 100 ms
+		 * so we always service the stack periodically. */
+		sleep_ms = sys_timeouts_sleeptime();
+		if (sleep_ms > 100)
+			sleep_ms = 100;
+
+		ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(sleep_ms));
 	}
 }
 
