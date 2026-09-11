@@ -202,6 +202,12 @@ config POWER_MAX17851
 	bool "Enable MAX17851 power driver"
 	default n
 
+config POWER_MAX20362
+	depends on I2C
+	select GPIO
+	bool "Enable MAX20362 power driver"
+	default n
+
 config POWER_MAX22216
 	depends on SPI
 	select GPIO
