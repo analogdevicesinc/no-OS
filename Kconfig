@@ -115,6 +115,23 @@ config TRNG
 	  API: drivers/api/no_os_trng.c, include/no_os_trng.h
 	  Hardware-based random number generation for cryptographic applications.
 
+config COPROCESSOR
+	bool "Enable Coprocessor"
+	default n
+	help
+	  Enable auxiliary processor core lifecycle management.
+	  API: drivers/api/no_os_coprocessor.c, include/no_os_coprocessor.h
+	  Supports boot, halt, and resource management for secondary CPU cores.
+
+config IPC
+	bool "Enable Inter-Processor Communication (IPC)"
+	default n
+	help
+	  Enable the generic inter-processor communication API: core-to-core
+	  doorbell notifications and mailbox word handoff between CPU cores.
+	  API: drivers/api/no_os_ipc.c, include/no_os_ipc.h
+	  A platform driver (e.g. IPC_MAXIM) provides the hardware backend.
+
 endmenu
 
 source "iio/Kconfig"
