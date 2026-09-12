@@ -169,6 +169,7 @@ static int stm32_gpdma_fill_xfer_alignment(struct stm32_dma_channel *sdma_ch,
 		struct no_os_dma_xfer_desc *xfer)
 {
 	sdma_ch->hdma->Instance = (DMA_Channel_TypeDef *) sdma_ch->ch_num;
+	sdma_ch->hdma->Init.Request = sdma_ch->request;
 
 	/* Set the direction to be Memory-to-Peripheral */
 	sdma_ch->hdma->Init.Direction = DMA_MEMORY_TO_PERIPH;

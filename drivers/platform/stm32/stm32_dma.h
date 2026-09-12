@@ -104,6 +104,8 @@ struct stm32_dma_channel {
 	DMA_HandleTypeDef *hdma;
 	/* Channel Number */
 	uint32_t ch_num;
+	/* DMA request line */
+	uint32_t request;
 	/* Memory Increment */
 	bool mem_increment;
 	/* Peripheral Increment */
