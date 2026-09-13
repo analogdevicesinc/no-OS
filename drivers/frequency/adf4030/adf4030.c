@@ -391,18 +391,11 @@ static uint8_t adf4030_channel_rcm_compute(struct adf4030_dev *dev,
  */
 static int adf4030_set_vco_cal(struct adf4030_dev *dev, bool en)
 {
-
-	int ret;
-
 	if (!dev)
 		return -EINVAL;
 
-	ret = adf4030_spi_update_bits(dev, 0x57, ADF4030_PLL_CAL_EN,
+	return adf4030_spi_update_bits(dev, 0x5A, ADF4030_PLL_CAL_EN,
 				      no_os_field_prep(ADF4030_PLL_CAL_EN, en));
-	if (ret)
-		return ret;
-
-	return adf4030_spi_write(dev, 0x56, dev->ndiv);
 }
 
 /**
@@ -521,12 +514,38 @@ int adf4030_set_rdiv(struct adf4030_dev *dev, uint8_t rdiv)
 	if (!dev)
 		return -EINVAL;
 
+	if (rdiv < ADF4030_R_DIV_MIN || rdiv > ADF4030_R_DIV_MAX)
+		return -EINVAL;
+
+	if (dev->ref_freq / rdiv < ADF4030_PFD_FREQ_MIN ||
+	    NO_OS_DIV_ROUND_UP(dev->ref_freq, rdiv) > ADF4030_PFD_FREQ_MAX)
+		return -EINVAL;
+
+	ret = adf4030_set_vco_cal(dev, true);
+	if (ret)
+		return ret;
+
 	ret = adf4030_spi_update_bits(dev, 0x57, ADF4030_RDIV,
 				      no_os_field_prep(ADF4030_RDIV, rdiv));
 	if (ret)
 		return ret;
 
+	/* Writing NDIV starts VCO calibration */
 	ret = adf4030_spi_write(dev, 0x56, dev->ndiv);
+	if (ret)
+		return ret;
+
+	/* Wait for calibration to complete */
+	ret = adf4030_poll(dev, 0xBA, ADF4030_CAL_BUSY, false);
+	if (ret)
+		return ret;
+
+	/* Wait for lock detect */
+	ret = adf4030_poll(dev, 0x90, ADF4030_PLL_LD, true);
+	if (ret)
+		return ret;
+
+	ret = adf4030_set_vco_cal(dev, false);
 	if (ret)
 		return ret;
 
@@ -546,7 +565,7 @@ int adf4030_get_rdiv(struct adf4030_dev *dev, uint8_t *rdiv)
 	uint8_t tmp;
 	int ret;
 
-	if (!dev)
+	if (!dev || !rdiv)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x57, &tmp);
@@ -572,7 +591,29 @@ int adf4030_set_ndiv(struct adf4030_dev *dev, uint8_t ndiv)
 	if (!dev)
 		return -EINVAL;
 
+	if (ndiv < ADF4030_N_DIV_MIN)
+		return -EINVAL;
+
+	ret = adf4030_set_vco_cal(dev, true);
+	if (ret)
+		return ret;
+
+	/* Writing NDIV starts VCO calibration */
 	ret = adf4030_spi_write(dev, 0x56, ndiv);
+	if (ret)
+		return ret;
+
+	/* Wait for calibration to complete */
+	ret = adf4030_poll(dev, 0xBA, ADF4030_CAL_BUSY, false);
+	if (ret)
+		return ret;
+
+	/* Wait for lock detect */
+	ret = adf4030_poll(dev, 0x90, ADF4030_PLL_LD, true);
+	if (ret)
+		return ret;
+
+	ret = adf4030_set_vco_cal(dev, false);
 	if (ret)
 		return ret;
 
@@ -592,7 +633,7 @@ int adf4030_get_ndiv(struct adf4030_dev *dev, uint8_t *ndiv)
 	uint8_t tmp;
 	int ret;
 
-	if (!dev)
+	if (!dev || !ndiv)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x56, &tmp);
@@ -709,12 +750,10 @@ int adf4030_get_odivb(struct adf4030_dev *dev, uint16_t *odivb)
 }
 
 /**
- * @brief Set the desired reference frequency and reset everything over to maximum
- * supported value of 250MHz to the max. value and everything under the minimum
- * supported value of 10MHz to the min.
- * @param dev 		- The device structure.
- * @param val		- The desired reference frequency in Hz.
- * @return    		- 0 in case of success or negative error code.
+ * @brief Set the desired reference frequency.
+ * @param dev - The device structure.
+ * @param val - The desired reference frequency in Hz.
+ * @return    - 0 in case of success or negative error code.
  */
 int adf4030_set_ref_clk(struct adf4030_dev *dev, uint32_t val)
 {
@@ -731,87 +770,95 @@ int adf4030_set_ref_clk(struct adf4030_dev *dev, uint32_t val)
 
 /**
  * @brief Set the desired VCO frequency.
- * @param dev 		- The device structure.
- * @param vco_freq	- The desired reference frequency in Hz.
- * @return    		- 0 in case of success or negative error code.
+ * @param dev      - The device structure.
+ * @param vco_freq - The desired VCO frequency in Hz.
+ * @return         - 0 in case of success or negative error code.
  */
 int adf4030_set_vco_freq(struct adf4030_dev *dev, uint32_t vco_freq)
 {
-	uint32_t pfd_freq;
-	uint8_t i, max_r, min_r, rdiv = 0, ndiv;
+	uint8_t i, max_r, min_r, rdiv = 0, ndiv = 0;
 	int ret;
+
+	if (!dev)
+		return -EINVAL;
 
 	if (vco_freq < ADF4030_VCO_FREQ_MIN || vco_freq > ADF4030_VCO_FREQ_MAX)
 		return -EINVAL;
 
-	if (dev->ref_freq < ADF4030_REF_FREQ_MIN
-	    || dev->ref_freq > ADF4030_REF_FREQ_MAX)
+	if (dev->ref_freq < ADF4030_REF_FREQ_MIN ||
+	    dev->ref_freq > ADF4030_REF_FREQ_MAX)
 		return -EINVAL;
 
-	max_r = dev->ref_freq /  ADF4030_PFD_FREQ_MIN;
-	min_r = NO_OS_DIV_ROUND_UP(dev->ref_freq,  ADF4030_PFD_FREQ_MAX);
+	max_r = dev->ref_freq / ADF4030_PFD_FREQ_MIN;
+	min_r = NO_OS_DIV_ROUND_UP(dev->ref_freq, ADF4030_PFD_FREQ_MAX);
 
 	for (i = min_r; i <= max_r; i++) {
-		pfd_freq = dev->ref_freq / i;
-		ndiv = vco_freq / pfd_freq;
+		uint64_t vco_r = (uint64_t)vco_freq * i;
 
-		if ((vco_freq % pfd_freq) == 0) {
+		if ((vco_r % dev->ref_freq) == 0) {
+			uint64_t n = vco_r / dev->ref_freq;
+
+			if (n >= ADF4030_N_DIV_MIN && n <= ADF4030_N_DIV_MAX) {
 			rdiv = i;
+				ndiv = (uint8_t)n;
 			break;
+			}
 		}
 	}
 	if (!rdiv)
 		return -EINVAL;
 
+	/* Enable VCO calibration */
 	ret = adf4030_set_vco_cal(dev, true);
 	if (ret)
 		return ret;
 
-	dev->ndiv = ndiv;
-	dev->vco_freq = vco_freq;
-	dev->ref_div = rdiv;
-
+	/* Write RDIV */
 	ret = adf4030_spi_update_bits(dev, 0x57, ADF4030_RDIV,
 				      no_os_field_prep(ADF4030_RDIV, dev->ref_div));
 	if (ret)
 		return ret;
+	dev->ref_div = rdiv;
 
-	// Write NDIV
+	/* Write NDIV (starts VCO calibration) */
 	ret = adf4030_spi_write(dev, 0x56, dev->ndiv);
 	if (ret)
 		return ret;
+	dev->ndiv = ndiv;
 
-	// Digital Reset
-	ret = adf4030_spi_update_bits(dev, 0x39, ADF4030_RST_SYS, 0xFF);
+	/* Wait for calibration to complete */
+	ret = adf4030_poll(dev, 0xBA, ADF4030_CAL_BUSY, false);
 	if (ret)
 		return ret;
 
-	ret = adf4030_spi_update_bits(dev, 0x39, ADF4030_RST_SYS, 0x0);
-	if (ret)
-		return ret;
-
-	// Wait for Lock Detect
+	/* Wait for lock detect */
 	ret = adf4030_poll(dev, 0x90, ADF4030_PLL_LD, true);
 	if (ret)
 		return ret;
 
-	return adf4030_set_vco_cal(dev, false);
+	/* Disable VCO calibration */
+	ret = adf4030_set_vco_cal(dev, false);
+	if (ret)
+		return ret;
+
+	dev->vco_freq = vco_freq;
+
+	return 0;
 }
 
 /**
  * @brief Get the VCO frequency in Hz.
- * @param dev 		- The device structure.
- * @param vco_freq 	- The VCO frequency in Hz.
- * @return    		- 0 in case of success, negative error code otherwise.
+ * @param dev      - The device structure.
+ * @param vco_freq - The read VCO frequency in Hz.
+ * @return         - 0 in case of success or negative error code otherwise.
  */
 int adf4030_get_vco_freq(struct adf4030_dev *dev, uint32_t *vco_freq)
 {
-
 	uint32_t pfd_freq;
 	uint8_t ndiv, tmp;
 	int ret;
 
-	if (!dev)
+	if (!dev || !vco_freq)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x57, &tmp);
@@ -824,7 +871,9 @@ int adf4030_get_vco_freq(struct adf4030_dev *dev, uint32_t *vco_freq)
 	if (ret)
 		return ret;
 
-	pfd_freq = dev->ref_freq / dev->ref_div;
+	dev->ndiv = ndiv;
+
+	pfd_freq = dev->ref_freq / (dev->ref_div ? dev->ref_div : 1);
 	dev->vco_freq = pfd_freq * ndiv;
 
 	*vco_freq = dev->vco_freq;
