@@ -659,13 +659,22 @@ int adf4030_set_odiva(struct adf4030_dev *dev, uint16_t odiva)
 	if (!dev)
 		return -EINVAL;
 
+	if (odiva < ADF4030_O_DIV_MIN || odiva > ADF4030_O_DIV_MAX)
+		return -EINVAL;
+
 	ret = adf4030_spi_write(dev, 0x53,
 				no_os_field_prep(ADF4030_ODIVA_LSB, odiva & 0xFF));
 	if (ret)
 		return ret;
 
-	return adf4030_spi_update_bits(dev, 0x54, ADF4030_ODIVA_MSB,
+	ret = adf4030_spi_update_bits(dev, 0x54, ADF4030_ODIVA_MSB,
 				       no_os_field_prep(ADF4030_ODIVA_MSB, (odiva >> 8)));
+	if (ret)
+		return ret;
+
+	dev->bsync_freq_odiv_a = dev->vco_freq / odiva;
+
+	return 0;
 }
 
 /**
@@ -680,7 +689,7 @@ int adf4030_get_odiva(struct adf4030_dev *dev, uint16_t *odiva)
 	uint16_t odiv_val;
 	int ret;
 
-	if (!dev)
+	if (!dev || !odiva)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x53, &tmp);
@@ -711,12 +720,21 @@ int adf4030_set_odivb(struct adf4030_dev *dev, uint16_t odivb)
 	if (!dev)
 		return -EINVAL;
 
+	if (odivb < ADF4030_O_DIV_MIN || odivb > ADF4030_O_DIV_MAX)
+		return -EINVAL;
+
 	ret = adf4030_spi_update_bits(dev, 0x54, ADF4030_ODIVB_LSB,
 				      no_os_field_prep(ADF4030_ODIVB_LSB, odivb & 0x0F));
 	if (ret)
 		return ret;
 
-	return adf4030_spi_write(dev, 0x55, (odivb >> 4));
+	ret = adf4030_spi_write(dev, 0x55, (odivb >> 4));
+	if (ret)
+		return ret;
+
+	dev->bsync_freq_odiv_b = dev->vco_freq / odivb;
+
+	return 0;
 }
 
 /**
@@ -731,7 +749,7 @@ int adf4030_get_odivb(struct adf4030_dev *dev, uint16_t *odivb)
 	uint16_t odiv_val;
 	int ret;
 
-	if (!dev)
+	if (!dev || !odivb)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x54, &tmp);
@@ -882,18 +900,17 @@ int adf4030_get_vco_freq(struct adf4030_dev *dev, uint32_t *vco_freq)
 }
 
 /**
- * @brief Set the BSYNC frequency in Hz. Output divider will be choose according
- *  to odiv sel argument.
- * @param dev 		- The device structure.
- * @param bsync_freq 	- The VCO frequency in Hz.
- * @param odivb_sel 	- Selects the output divider which will be set.
- * @return    		- 0 in case of success, negative error code otherwise.
+ * @brief Set the BSYNC frequency in Hz. Output divider will be chosen according
+ *  to odivb_sel argument.
+ * @param dev        - The device structure.
+ * @param bsync_freq - The desired BSYNC frequency in Hz.
+ * @param odivb_sel  - Selects the output divider which will be set (true = ODIVB, false = ODIVA).
+ * @return           - 0 in case of success, negative error code otherwise.
  */
 int adf4030_set_bsync_freq(struct adf4030_dev *dev, uint32_t bsync_freq,
 			   bool odivb_sel)
 {
 	uint32_t odiv;
-	int ret;
 
 	if (!dev)
 		return -EINVAL;
@@ -904,78 +921,46 @@ int adf4030_set_bsync_freq(struct adf4030_dev *dev, uint32_t bsync_freq,
 
 	odiv = NO_OS_DIV_ROUND_CLOSEST(dev->vco_freq, bsync_freq);
 
-	if (odiv < ADF4030_O_DIV_MIN ||
-	    odiv > ADF4030_O_DIV_MAX)
+	if (odiv < ADF4030_O_DIV_MIN || odiv > ADF4030_O_DIV_MAX)
 		return -EINVAL;
 
-	if (odivb_sel) {
-		dev->bsync_freq_odiv_b = dev->vco_freq / odiv;
-		ret = adf4030_spi_update_bits(dev, 0x54, ADF4030_ODIVB_LSB,
-					      no_os_field_prep(ADF4030_ODIVB_LSB, odiv));
-		if (ret)
-			return ret;
+	if (odivb_sel)
+		return adf4030_set_odivb(dev, (uint16_t)odiv);
 
-		// Write ADF4030_ODIVB_MSB
-		return adf4030_spi_write(dev, 0x55, (odiv >> 4));
-	} else {
-		dev->bsync_freq_odiv_a = dev->vco_freq / odiv;
-		// Write ADF4030_ODIVA_LSB
-		ret = adf4030_spi_write(dev, 0x53,
-					no_os_field_prep(ADF4030_ODIVA_LSB, odiv));
-		if (ret)
-			return ret;
-
-		return adf4030_spi_update_bits(dev, 0x54, ADF4030_ODIVA_MSB,
-					       no_os_field_prep(ADF4030_ODIVA_MSB, (odiv >> 8)));
-
-	}
+	return adf4030_set_odiva(dev, (uint16_t)odiv);
 }
 
 /**
  * @brief Get the BSYNC frequency in Hz.
  * @param dev        - The device structure.
  * @param bsync_freq - The read BSYNC frequency in Hz.
- * @param odivb_sel  - Selects the output divider to read.
+ * @param odivb_sel  - Selects the output divider to read (true = ODIVB, false = ODIVA).
  * @return           - 0 in case of success or negative error code otherwise.
  */
 int adf4030_get_bsync_freq(struct adf4030_dev *dev, uint32_t *bsync_freq,
 			   bool odivb_sel)
 {
-	uint32_t odiv;
-	uint8_t tmp;
+	uint16_t odiv;
 	int ret;
 
-	if (!dev)
+	if (!dev || !bsync_freq)
 		return -EINVAL;
 
 	if (odivb_sel) {
-
-		ret = adf4030_spi_read(dev, 0x54, &tmp);
+		ret = adf4030_get_odivb(dev, &odiv);
 		if (ret)
 			return ret;
-		odiv = no_os_field_get(ADF4030_ODIVB_LSB, tmp);
-
-		// READ ADF4030_ODIVB_MSB
-		ret = adf4030_spi_read(dev, 0x55, &tmp);
-		if (ret)
-			return ret;
-		odiv |= (tmp << 4);
+		if (!odiv)
+			return -EINVAL;
 
 		dev->bsync_freq_odiv_b = NO_OS_DIV_ROUND_CLOSEST(dev->vco_freq, odiv);
 		*bsync_freq = dev->bsync_freq_odiv_b;
 	} else {
-		// Read ADF4030_ODIVA_LSB
-		ret = adf4030_spi_read(dev, 0x53, &tmp);
+		ret = adf4030_get_odiva(dev, &odiv);
 		if (ret)
 			return ret;
-		odiv = tmp;
-
-		// READ ADF4030_ODIVB_MSB
-		ret = adf4030_spi_read(dev, 0x54, &tmp);
-		if (ret)
-			return ret;
-		tmp = no_os_field_get(ADF4030_ODIVA_MSB, tmp);
-		odiv |= (tmp << 8);
+		if (!odiv)
+			return -EINVAL;
 
 		dev->bsync_freq_odiv_a = NO_OS_DIV_ROUND_CLOSEST(dev->vco_freq, odiv);
 		*bsync_freq = dev->bsync_freq_odiv_a;
@@ -1917,7 +1902,7 @@ int adf4030_set_channel_odivb(struct adf4030_dev *dev, uint8_t channel,
 	uint16_t reg;
 	int ret;
 
-	if (!dev)
+	if (!dev || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
 	reg = 0x3F + (channel * 2);
@@ -1947,7 +1932,7 @@ int adf4030_get_channel_odivb(struct adf4030_dev *dev, uint8_t channel,
 	bool sel_odivb;
 	int ret;
 
-	if (!dev)
+	if (!dev || !odivb_en || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
 	reg = 0x3F + (channel * 2);
