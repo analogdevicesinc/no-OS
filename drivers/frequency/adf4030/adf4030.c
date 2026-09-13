@@ -832,9 +832,9 @@ int adf4030_set_vco_freq(struct adf4030_dev *dev, uint32_t vco_freq)
 			uint64_t n = vco_r / dev->ref_freq;
 
 			if (n >= ADF4030_N_DIV_MIN && n <= ADF4030_N_DIV_MAX) {
-			rdiv = i;
+				rdiv = i;
 				ndiv = (uint8_t)n;
-			break;
+				break;
 			}
 		}
 	}
@@ -873,7 +873,7 @@ int adf4030_set_vco_freq(struct adf4030_dev *dev, uint32_t vco_freq)
 	ret = adf4030_set_vco_cal(dev, false);
 	if (ret)
 		return ret;
-
+	
 	dev->vco_freq = vco_freq;
 
 	return 0;
@@ -1126,7 +1126,7 @@ int adf4030_get_tdc_measurement(struct adf4030_dev *dev, int64_t *tdc_result_fs)
 
 	if (no_os_field_get(ADF4030_TDC_ERR, tmp) != 0) {
 		adf4030_spi_update_bits(dev, 0x16, ADF4030_TDC_ARM_M, 0x00);
-	dev->tdc_status = false;
+		dev->tdc_status = false;
 		return -EIO;
 	}
 
@@ -1349,7 +1349,7 @@ int adf4030_set_single_ch_alignment(struct adf4030_dev *dev,
 			return ret;
 
 		if (!(tmp & (ADF4030_TDC_ERR | ADF4030_TMP_ALIGN_ERR)))
-	return 0;
+			return 0;
 
 	} while (timeout--);
 
@@ -2144,6 +2144,9 @@ int adf4030_init(struct adf4030_dev **dev,
 	struct adf4030_dev *device;
 	int ret;
 
+	if (!dev || !init_param || !init_param->spi_init)
+		return -EINVAL;
+
 	device = (struct adf4030_dev *)no_os_calloc(1, sizeof(*device));
 	if (!device)
 		return -ENOMEM;
@@ -2158,6 +2161,7 @@ int adf4030_init(struct adf4030_dev **dev,
 	device->vco_freq = init_param->vco_freq;
 	device->ref_div = init_param->ref_div;
 	device->bsync_freq_odiv_a = init_param->bsync_freq;
+	device->bsync_freq_odiv_b = init_param->bsync_freq;
 
 	ret = adf4030_set_default_regs(device, device->spi_4wire_en);
 	if (ret)
@@ -2169,32 +2173,28 @@ int adf4030_init(struct adf4030_dev **dev,
 			   __FILE__,
 			   __LINE__, ret);
 
-	ret = adf4030_spi_write(device, 0x5C,
-				no_os_field_prep(ADF4030_CMOS_OV,
-						device->cmos_3v3));
+	ret = adf4030_spi_update_bits(device, 0x5C,
+				      no_os_field_prep(ADF4030_CMOS_OV,
+						      device->cmos_3v3));
 	if (ret)
 		goto error_spi;
 
 	ret = adf4030_set_vco_freq(device, device->vco_freq);
-	if (ret == ETIMEDOUT) {
+	if (ret == -ETIMEDOUT) {
 		pr_warning("%s:%d ADF4030 VCO frequency setting failed. %x\n",
 			   __FILE__,
 			   __LINE__, ret);
-	} else if (ret)
+	} else if (ret) {
 		goto error_spi;
+	}
 
-	// Set BSYNC ODIVA
+	/* Set BSYNC ODIVA */
 	ret = adf4030_set_bsync_freq(device, device->bsync_freq_odiv_a, false);
 	if (ret)
 		goto error_spi;
 
-	// Set BSYNC ODIVB
-	ret = adf4030_set_bsync_freq(device, device->bsync_freq_odiv_a, true);
-	if (ret)
-		goto error_spi;
-
-	// Set CH 1 as TX
-	ret = adf4030_set_channel_direction(device, 1, true);
+	/* Set BSYNC ODIVB */
+	ret = adf4030_set_bsync_freq(device, device->bsync_freq_odiv_b, true);
 	if (ret)
 		goto error_spi;
 
