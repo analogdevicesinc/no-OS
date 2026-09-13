@@ -980,21 +980,24 @@ int adf4030_get_bsync_freq(struct adf4030_dev *dev, uint32_t *bsync_freq,
 /**
  * @brief Set the TDC source.
  * @param dev        - The device structure.
- * @param tdc_source - The desired TDC source value.
+ * @param tdc_source - The desired TDC source value (0-9 for RX0-RX9, 26 for REFIN).
  * @return           - 0 in case of success or negative error code otherwise.
  */
 int adf4030_set_tdc_source(struct adf4030_dev *dev, uint8_t tdc_source)
 {
-
 	int ret;
+
 	if (!dev)
 		return -EINVAL;
 
-	ret = adf4030_spi_update_bits(dev, 0x11, ADF4030_TDC_SOURCE,
-				      no_os_field_prep(ADF4030_TDC_SOURCE, (tdc_source)));
+	if (tdc_source >= ADF4030_CHANNEL_NUMBER && tdc_source != 26)
+		return -EINVAL;
 
+	ret = adf4030_spi_update_bits(dev, 0x11, ADF4030_TDC_SOURCE,
+				      no_os_field_prep(ADF4030_TDC_SOURCE, tdc_source));
 	if (ret)
 		return ret;
+
 	dev->tdc_source = tdc_source;
 
 	return 0;
@@ -1008,16 +1011,16 @@ int adf4030_set_tdc_source(struct adf4030_dev *dev, uint8_t tdc_source)
  */
 int adf4030_get_tdc_source(struct adf4030_dev *dev, uint8_t *tdc_source)
 {
-
 	uint8_t tmp;
 	int ret;
 
-	if (!dev)
+	if (!dev || !tdc_source)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x11, &tmp);
 	if (ret)
 		return ret;
+
 	dev->tdc_source = no_os_field_get(ADF4030_TDC_SOURCE, tmp);
 	*tdc_source = dev->tdc_source;
 
@@ -1025,17 +1028,20 @@ int adf4030_get_tdc_source(struct adf4030_dev *dev, uint8_t *tdc_source)
 }
 
 /**
- * @brief Set the TDC measurement target and start the measurement. Before calling this function, please set tdc_source to the desired bsync channel.
+ * @brief Set the TDC measurement target and start the measurement.
+ * Before calling this function, please set tdc_source to the desired bsync channel or REFIN.
  * @param dev        - The device structure.
- * @param tdc_target - TDC measurement target.
+ * @param tdc_target - TDC measurement target (0-9 for RX0-RX9, 26 for REFIN).
  * @return           - 0 in case of success or negative error code otherwise.
  */
 int adf4030_set_tdc_measurement(struct adf4030_dev *dev, uint8_t tdc_target)
 {
-
 	int ret;
 
 	if (!dev)
+		return -EINVAL;
+
+	if (tdc_target >= ADF4030_CHANNEL_NUMBER && tdc_target != 26)
 		return -EINVAL;
 
 	ret = adf4030_spi_update_bits(dev, 0x11, ADF4030_MANUAL_MODE, 0xFF);
@@ -1047,7 +1053,11 @@ int adf4030_set_tdc_measurement(struct adf4030_dev *dev, uint8_t tdc_target)
 	if (ret)
 		return ret;
 
-	ret = adf4030_spi_update_bits(dev, 0x61, ADF4030_RST_TDC_ERR, 0xFF);
+	ret = adf4030_spi_update_bits(dev, 0x61, ADF4030_RST_TDC_ERR, ADF4030_RST_TDC_ERR);
+	if (ret)
+		return ret;
+
+	ret = adf4030_spi_update_bits(dev, 0x61, ADF4030_RST_TDC_ERR, 0x00);
 	if (ret)
 		return ret;
 
@@ -1061,56 +1071,93 @@ int adf4030_set_tdc_measurement(struct adf4030_dev *dev, uint8_t tdc_target)
 }
 
 /**
- * @brief Get the TDC measurement result. Reads bitfileds and calculates the
- * TDC result with period of the BSYNC signal.
- * @param dev          - The device structure.
+ * @brief Get the TDC measurement result. Reads bitfields and calculates the
+ * TDC result with period of the BSYNC or REFIN signal.
+ * @param dev           - The device structure.
  * @param tdc_result_fs - Read TDC measurement result in femtoseconds.
- * @return             - 0 in case of success or negative error code otherwise.
+ * @return              - 0 in case of success or negative error code otherwise.
  */
 int adf4030_get_tdc_measurement(struct adf4030_dev *dev, int64_t *tdc_result_fs)
 {
-	int ret, i;
-	uint8_t tmp;
-	int64_t tdc_tmp = 0;
 	uint32_t bsync_freq = 0;
+	uint32_t raw_ui = 0;
+	int64_t tdc_tmp;
+	uint8_t tmp;
+	int ret, i;
 
-	if (!dev)
+	if (!dev || !tdc_result_fs)
 		return -EINVAL;
 
-	if (!dev->tdc_status) {
+	if (dev->tdc_source == 26) {
+		bsync_freq = dev->ref_freq;
+	} else if (dev->tdc_source < ADF4030_CHANNEL_NUMBER) {
+		bsync_freq = dev->channels[dev->tdc_source].odivb_en ?
+			     dev->bsync_freq_odiv_b : dev->bsync_freq_odiv_a;
+	} else {
+		return -EINVAL;
+	}
 
+	if (!bsync_freq)
+		return -EINVAL;
+
+	/* Start measurement if not already started */
+	if (!dev->tdc_status) {
 		ret = adf4030_spi_update_bits(dev, 0x16, ADF4030_TDC_ARM_M, 0xFF);
 		if (ret)
 			return ret;
 	}
 
+	/* Wait for TDC measurement to complete */
 	ret = adf4030_poll(dev, 0x8F, ADF4030_TDC_BUSY, false);
 	if (ret)
 		return ret;
 
-	dev->tdc_status = false;
+	/* Check for TDC error */
+	ret = adf4030_spi_read(dev, 0x90, &tmp);
+	if (ret)
+		return ret;
 
-	// Read TDC_RSLT_UI MSB to LSB
-	for (i = 0; i < 3 ; i++) {
+	if (no_os_field_get(ADF4030_TDC_ERR, tmp) != 0) {
+		adf4030_spi_update_bits(dev, 0x16, ADF4030_TDC_ARM_M, 0x00);
+	dev->tdc_status = false;
+		return -EIO;
+	}
+
+	/* Poll until MATH_BUSY is cleared */
+	ret = adf4030_poll(dev, 0x8F, ADF4030_MATH_BUSY, false);
+	if (ret)
+		return ret;
+
+	/* Read TDC_RSLT_UI MSB to LSB */
+	for (i = 0; i < 3; i++) {
 		ret = adf4030_spi_read(dev, 0x75 - i, &tmp);
 		if (ret)
 			return ret;
 
-		tdc_tmp = tdc_tmp << 8;
-		tdc_tmp |= tmp;
+		raw_ui = (raw_ui << 8) | tmp;
 	}
-	ret = adf4030_spi_update_bits(dev, 0x16, ADF4030_TDC_ARM_M, 0x0);
+
+	/* Clear TDC_ARM_M to stop measurement */
+	ret = adf4030_spi_update_bits(dev, 0x16, ADF4030_TDC_ARM_M, 0x00);
 	if (ret)
 		return ret;
+	dev->tdc_status = false;
 
-	tdc_tmp = ((tdc_tmp + (1 << 23)) % (1 << 24)) - (1 << 23);
-	tdc_tmp = ((tdc_tmp * 1000000000L) / ((1 << 24)));
-	tdc_tmp = tdc_tmp * 1000000L;
-
-	bsync_freq = dev->channels[dev->tdc_source].odivb_en ?
-		     dev->bsync_freq_odiv_b : dev->bsync_freq_odiv_a;
-
-	*tdc_result_fs = (tdc_tmp / ((int64_t)bsync_freq));
+	/*
+	 * TDC_RSLT_UI is a 24-bit two's complement integer representing the
+	 * measured phase difference in units of 1 / 2^24 UI of the clock.
+	 *
+	 * Time Difference (fs) = (TDC_RSLT_UI * 10^15) / (2^24 * f_BSYNC)
+	 *
+	 * Since 10^15 / 2^24 = 30517578125 / 512, this simplifies to:
+	 * Time Difference (fs) = (TDC_RSLT_UI * 30517578125) / (f_BSYNC * 512)
+	 *
+	 * Maximum numerator value: 2^23 * 30517578125 ≈ 2.56 * 10^17,
+	 * which comfortably fits in a 64-bit signed integer without overflow.
+	 */
+	tdc_tmp = (int64_t)no_os_sign_extend32(raw_ui, 23);
+	*tdc_result_fs = NO_OS_DIV_ROUND_CLOSEST(tdc_tmp * 30517578125LL,
+						 (int64_t)bsync_freq * 512LL);
 
 	return 0;
 }
