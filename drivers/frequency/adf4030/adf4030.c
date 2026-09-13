@@ -107,11 +107,17 @@ int adf4030_spi_write(struct adf4030_dev *dev, uint16_t reg_addr, uint8_t data)
 {
 	uint8_t buff[ADF4030_BUFF_SIZE_BYTES];
 	uint16_t cmd;
+	uint8_t addr;
 
 	if (!dev)
 		return -EINVAL;
 
-	cmd = ADF4030_SPI_WRITE_CMD | ADF4030_CHIP_ADDRESS(dev->chip_addr) | reg_addr;
+	/*
+	 * To write Register 0x00 and Register 0x01, the ADDR bits must be
+	 * cleared to 0000, independent of the ADDR pin code.
+	 */
+	addr = (reg_addr <= 0x01) ? 0 : dev->chip_addr;
+	cmd = ADF4030_SPI_WRITE_CMD | ADF4030_CHIP_ADDRESS(addr) | reg_addr;
 
 	if (dev->spi_desc->bit_order) {
 		buff[0] = no_os_bit_swap_constant_8(cmd & 0xFF);
@@ -140,7 +146,7 @@ int adf4030_spi_read(struct adf4030_dev *dev, uint16_t reg_addr, uint8_t *data)
 	uint16_t cmd;
 	int ret;
 
-	if (!dev)
+	if (!dev || !data)
 		return -EINVAL;
 
 	cmd = ADF4030_SPI_READ_CMD | ADF4030_CHIP_ADDRESS(dev->chip_addr) | reg_addr;
@@ -180,6 +186,9 @@ int adf4030_spi_update_bits(struct adf4030_dev *dev, uint16_t reg_addr,
 {
 	uint8_t tmp, orig;
 	int ret;
+
+	if (!dev)
+		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, reg_addr, &orig);
 	if (ret)
@@ -243,7 +252,7 @@ static int adf4030_power(struct adf4030_dev *dev, bool power_up)
 }
 
 /**
- * @brief Applys a softreset, sets the SPI 4 wire mode and
+ * @brief Applies a softreset, sets the SPI 4 wire mode and
  * writes the default registers.
  * @param dev 		- The device structure
  * @param spi_4wire 	- SPI 4 wire feature enable input
@@ -300,7 +309,7 @@ static int adf4030_check_scratchpad(struct adf4030_dev *dev)
 		return ret;
 
 	if (scratchpad != ADF4030_SPI_SCRATCHPAD_TEST)
-		return -EINVAL;
+		return -EIO;
 
 	return 0;
 }
