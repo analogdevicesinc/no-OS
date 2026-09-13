@@ -1536,80 +1536,41 @@ int adf4030_get_background_serial_alignment(struct adf4030_dev *dev,
 }
 
 /**
- * @brief Set the delay for a specific BSYNC channel. This Delay will show up
+ * @brief Set the delay for a specific BSYNC channel. This delay will show up
  * between TDC_SOURCE and channel.
- * @param dev       - The device structure.
- * @param channel   - The channel to set the delay for.
- * @param delay_fs  - The delay in femtoseconds.
- * @return          - 0 in case of success or negative error code otherwise.
+ * @param dev      - The device structure.
+ * @param channel  - The channel to set the delay for.
+ * @param delay_fs - The delay in femtoseconds.
+ * @return         - 0 in case of success or negative error code otherwise.
  */
 int adf4030_set_channel_delay(struct adf4030_dev *dev, uint8_t channel,
 			      int64_t delay_fs)
 {
-
 	int64_t vco_period_fs;
 	int64_t offset_int;
-	int16_t ch_offset;
-	int32_t rem;
-	int32_t com_offset;
-	uint16_t ch_reg;
-	uint32_t com_reg;
 	uint16_t reg;
 	int ret;
 
-	if (!dev)
+	if (!dev || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
 	vco_period_fs = NO_OS_DIV_ROUND_CLOSEST(1000000000000000ULL, dev->vco_freq);
 	offset_int = NO_OS_DIV_ROUND_CLOSEST(delay_fs * 512, vco_period_fs);
 
-	/* Channel TDC offset is a 16-bit signed value; clamp to its range. */
-	if (offset_int > ADF4030_TDC_OFFSET_CH_MAX)
-		ch_offset = ADF4030_TDC_OFFSET_CH_MAX;
-	else if (offset_int < ADF4030_TDC_OFFSET_CH_MIN)
-		ch_offset = ADF4030_TDC_OFFSET_CH_MIN;
-	else
-		ch_offset = (int16_t)offset_int;
-
-	/* The overflow beyond the channel range goes into the common TDC
-	 * offset, a 21-bit signed value; clamp to its range as well. */
-	rem = (int32_t)(offset_int - ch_offset);
-	if (rem > ADF4030_TDC_OFFSET_COM_MAX)
-		com_offset = ADF4030_TDC_OFFSET_COM_MAX;
-	else if (rem < ADF4030_TDC_OFFSET_COM_MIN)
-		com_offset = ADF4030_TDC_OFFSET_COM_MIN;
-	else
-		com_offset = rem;
-
-	ch_reg = (uint16_t)ch_offset;
-	com_reg = (uint32_t)com_offset & 0x1FFFFF;
+	/* Channel TDC offset is a 16-bit signed value [-32768, 32767]. */
+	if (offset_int > ADF4030_TDC_OFFSET_CH_MAX ||
+	    offset_int < ADF4030_TDC_OFFSET_CH_MIN)
+		return -EINVAL;
 
 	reg = 0x1D + (channel * 2);
 
-	// TDC OFFSET LSB
-	ret = adf4030_spi_write(dev, reg, ch_reg & 0xFF);
+	/* TDC OFFSET LSB */
+	ret = adf4030_spi_write(dev, reg, (uint16_t)offset_int & 0xFF);
 	if (ret)
 		return ret;
 
-	// TDC OFFSET MSB
-	ret = adf4030_spi_write(dev, reg + 1, (ch_reg >> 8));
-	if (ret)
-		return ret;
-
-	// TDC OFFSET COM LSB
-	ret = adf4030_spi_write(dev, 0x1A, com_reg & 0xFF);
-	if (ret)
-		return ret;
-
-	// TDC OFFSET COM MID
-	ret = adf4030_spi_write(dev, 0x1B, (com_reg >> 8) & 0xFF);
-	if (ret)
-		return ret;
-
-	// TDC OFFSET COM MSB
-	ret = adf4030_spi_update_bits(dev, 0x1C, ADF4030_TDC_OFFSET_COM_MSB,
-				      no_os_field_prep(ADF4030_TDC_OFFSET_COM_MSB,
-						      com_reg >> 16));
+	/* TDC OFFSET MSB */
+	ret = adf4030_spi_write(dev, reg + 1, ((uint16_t)offset_int >> 8) & 0xFF);
 	if (ret)
 		return ret;
 
@@ -1620,10 +1581,10 @@ int adf4030_set_channel_delay(struct adf4030_dev *dev, uint8_t channel,
 
 /**
  * @brief Get the delay for a specific channel.
- * @param dev       - The device structure.
- * @param channel   - The channel to get the delay for.
- * @param delay_fs  - Read value of the delay in femtoseconds.
- * @return          - 0 in case of success or negative error code otherwise.
+ * @param dev      - The device structure.
+ * @param channel  - The channel to get the delay for.
+ * @param delay_fs - Read value of the delay in femtoseconds.
+ * @return         - 0 in case of success or negative error code otherwise.
  */
 int adf4030_get_channel_delay(struct adf4030_dev *dev, uint8_t channel,
 			      int64_t *delay_fs)
@@ -1634,57 +1595,50 @@ int adf4030_get_channel_delay(struct adf4030_dev *dev, uint8_t channel,
 	int32_t com_offset;
 	uint32_t com_reg;
 	uint16_t reg;
-	uint8_t tmp;
+	uint8_t lsb, msb, com_lsb, com_mid, com_msb;
 	int ret;
 
-	if (!dev)
+	if (!dev || !delay_fs || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
-
-	vco_period_fs = NO_OS_DIV_ROUND_CLOSEST(1000000000000000ULL, dev->vco_freq);
-	vco_period_fs = NO_OS_DIV_ROUND_CLOSEST(vco_period_fs, 512);
 
 	reg = 0x1D + (channel * 2);
 
-	// TDC OFFSET MSB
-	ret = adf4030_spi_read(dev, reg + 1, &tmp);
+	/* TDC OFFSET LSB */
+	ret = adf4030_spi_read(dev, reg, &lsb);
 	if (ret)
 		return ret;
 
-	ch_offset = (tmp << 8);
-	// TDC OFFSET LSB
-	ret = adf4030_spi_read(dev, reg, &tmp);
+	/* TDC OFFSET MSB */
+	ret = adf4030_spi_read(dev, reg + 1, &msb);
 	if (ret)
 		return ret;
 
-	ch_offset |= tmp;
+	ch_offset = (int16_t)(((uint16_t)msb << 8) | lsb);
 
-	// TDC OFFSET COM MSB
-	ret = adf4030_spi_read(dev, 0x1C, &tmp);
+	/* TDC OFFSET COM LSB, MID, MSB */
+	ret = adf4030_spi_read(dev, 0x1A, &com_lsb);
 	if (ret)
 		return ret;
 
-	com_reg = no_os_field_get(ADF4030_TDC_OFFSET_COM_MSB, tmp) << 16;
-	// TDC OFFSET COM MID
-	ret = adf4030_spi_read(dev, 0x1B, &tmp);
+	ret = adf4030_spi_read(dev, 0x1B, &com_mid);
 	if (ret)
 		return ret;
 
-	com_reg |= (tmp << 8);
-	// TDC OFFSET COM LSB
-	ret = adf4030_spi_read(dev, 0x1A, &tmp);
+	ret = adf4030_spi_read(dev, 0x1C, &com_msb);
 	if (ret)
 		return ret;
 
-	com_reg |= tmp;
+	com_reg = ((uint32_t)no_os_field_get(ADF4030_TDC_OFFSET_COM_MSB, com_msb) << 16) |
+		  ((uint32_t)com_mid << 8) | com_lsb;
 
 	/* Sign-extend the 21-bit common offset. */
-	com_offset = (int32_t)com_reg;
-	if (com_offset & 0x100000)
-		com_offset -= 0x200000;
+	com_offset = (int32_t)no_os_sign_extend32(com_reg, 20);
 
 	total_offset = ch_offset + com_offset;
 
-	dev->channels[channel].delay_fs = total_offset * vco_period_fs;
+	vco_period_fs = NO_OS_DIV_ROUND_CLOSEST(1000000000000000ULL, dev->vco_freq);
+	dev->channels[channel].delay_fs =
+		NO_OS_DIV_ROUND_CLOSEST((int64_t)total_offset * vco_period_fs, 512);
 	*delay_fs = dev->channels[channel].delay_fs;
 
 	return 0;
