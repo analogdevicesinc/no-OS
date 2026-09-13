@@ -407,7 +407,6 @@ static int adf4030_set_vco_cal(struct adf4030_dev *dev, bool en)
  */
 int adf4030_set_temperature(struct adf4030_dev *dev, bool en)
 {
-
 	int ret;
 	uint8_t val;
 	uint8_t msk;
@@ -432,11 +431,10 @@ int adf4030_set_temperature(struct adf4030_dev *dev, bool en)
 		ret = adf4030_spi_write(dev, 0x62, ADF4030_ADC_CLK_DIV);
 		if (ret)
 			return ret;
-		return adf4030_spi_update_bits(dev, 0x72, ADF4030_ADC_ST_CNV, 0xFF);
-
+		return adf4030_spi_write(dev, 0x72, ADF4030_ADC_ST_CNV);
 	} else {
-		ret = adf4030_spi_update_bits(dev, 0x61,
-					      ADF4030_EN_ADC_CNV, 0x0);
+		msk = ADF4030_EN_ADC_CNV | ADF4030_EN_ADC_CLK | ADF4030_EN_ADC;
+		ret = adf4030_spi_update_bits(dev, 0x61, msk, 0x0);
 		if (ret)
 			return ret;
 
@@ -446,9 +444,9 @@ int adf4030_set_temperature(struct adf4030_dev *dev, bool en)
 
 /**
  * @brief Gets the value of the approximate die temperature.
- * @param dev 		- The device structure.
- * @param temperature		- The read value of the Temperature Readback.
- * @return    		- 0 in case of success or negative error code.
+ * @param dev 			- The device structure.
+ * @param temperature	- The read value of the Temperature Readback in deg C.
+ * @return    			- 0 in case of success or negative error code.
  */
 int adf4030_get_temperature(struct adf4030_dev *dev, int16_t *temperature)
 {
@@ -456,10 +454,16 @@ int adf4030_get_temperature(struct adf4030_dev *dev, int16_t *temperature)
 	uint8_t lsb, msb;
 	int16_t raw;
 
-	if (!dev)
+	if (!dev || !temperature)
 		return -EINVAL;
 
-	ret = adf4030_spi_update_bits(dev, 0x72, ADF4030_ADC_ST_CNV, 0x0);
+	/* Start ADC conversion */
+	ret = adf4030_spi_write(dev, 0x72, ADF4030_ADC_ST_CNV);
+	if (ret)
+		return ret;
+
+	/* Wait for ADC conversion to complete */
+	ret = adf4030_poll(dev, 0x8F, ADF4030_ADC_BUSY, false);
 	if (ret)
 		return ret;
 
@@ -471,11 +475,15 @@ int adf4030_get_temperature(struct adf4030_dev *dev, int16_t *temperature)
 	if (ret)
 		return ret;
 
-	/* Temperature is a 9-bit two's complement value:
-	 * bit 8 comes from REG0093, bits 7:0 from REG0092. */
-	raw = (no_os_field_get(ADF4030_TEMP_MEAS_MSB, msb) << 8) | lsb;
-	if (raw & 0x100)
-		raw -= 0x200;
+	/*
+	 * Temperature is a 9-bit sign-magnitude value:
+	 * Bit 8 comes from REG0093 and represents the sign
+	 * (0 = positive, 1 = negative). Bits 7:0 from REG0092
+	 * represent the magnitude in degrees Celsius.
+	 */
+	raw = lsb;
+	if (no_os_field_get(ADF4030_TEMP_MEAS_MSB, msb))
+		raw = -raw;
 
 	*temperature = raw;
 
