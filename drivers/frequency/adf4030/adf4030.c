@@ -317,12 +317,16 @@ static int adf4030_check_scratchpad(struct adf4030_dev *dev)
 /**
  * @brief Computes the ADEL_M and returns the value.
  * @param dev 	     - The device structure.
- * @return 	     - ADEL_M value.
+ * @param delcal     - DELCAL calibration value.
+ * @return 	     	 - ADEL_M value.
  */
 static uint32_t adf4030_adel_m_compute(struct adf4030_dev *dev, uint8_t delcal)
 {
 	uint64_t vco_period_fs;
 	uint64_t vco_delay_lsb;
+
+	if (!dev || !dev->vco_freq || !delcal)
+		return 0;
 
 	vco_period_fs = NO_OS_DIV_ROUND_CLOSEST(1000000000000000ULL, dev->vco_freq);
 	vco_delay_lsb = NO_OS_DIV_ROUND_CLOSEST(vco_period_fs, 8);
@@ -1165,7 +1169,7 @@ int adf4030_get_tdc_measurement(struct adf4030_dev *dev, int64_t *tdc_result_fs)
 /**
  * @brief Set the iteration number of alignment.
  * @param dev         - The device structure.
- * @param iter_number - The number of iterations for the alignment.
+ * @param iter_number - The number of iterations for the alignment (1 to 8).
  * @return            - 0 in case of success or negative error code otherwise.
  */
 int adf4030_set_alignment_iter(struct adf4030_dev *dev, uint8_t iter_number)
@@ -1175,8 +1179,8 @@ int adf4030_set_alignment_iter(struct adf4030_dev *dev, uint8_t iter_number)
 	if (!dev)
 		return -EINVAL;
 
-	if (iter_number < ADF4030_ALIGN_CYCLES_MIN
-	    || iter_number > ADF4030_ALIGN_CYCLES_MAX)
+	if (iter_number < ADF4030_ALIGN_CYCLES_MIN ||
+	    iter_number > ADF4030_ALIGN_CYCLES_MAX)
 		return -EINVAL;
 
 	val = no_os_field_prep(ADF4030_EN_ITER, false) |
@@ -1190,39 +1194,38 @@ int adf4030_set_alignment_iter(struct adf4030_dev *dev, uint8_t iter_number)
 /**
  * @brief Get the iteration number of alignment.
  * @param dev         - The device structure.
- * @param iter_number - Read value of number of iterations in one alignment.
+ * @param iter_number - Read value of number of iterations in one alignment (1 to 8).
  * @return            - 0 in case of success or negative error code otherwise.
  */
 int adf4030_get_alignment_iter(struct adf4030_dev *dev, uint8_t *iter_number)
 {
-	int ret;
 	uint8_t tmp;
+	int ret;
 
-	if (!dev)
+	if (!dev || !iter_number)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x37, &tmp);
 	if (ret)
 		return ret;
-	*iter_number = no_os_field_get(ADF4030_ALIGN_CYCLES, tmp);
+	*iter_number = no_os_field_get(ADF4030_ALIGN_CYCLES, tmp) + 1;
 
 	return 0;
 }
 
 /**
  * @brief Set the alignment threshold in femtoseconds.
- * @param dev         - The device structure.
+ * @param dev          - The device structure.
  * @param threshold_fs - The alignment threshold in femtoseconds.
- * @return            - 0 in case of success or negative error code otherwise.
+ * @return             - 0 in case of success or negative error code otherwise.
  */
 int adf4030_set_alignment_threshold(struct adf4030_dev *dev,
 				    uint32_t threshold_fs)
 {
-
-	int ret;
-	uint8_t reg_th;
 	uint32_t adel_m_step;
+	uint8_t reg_th;
 	uint8_t delcal;
+	int ret;
 
 	if (!dev)
 		return -EINVAL;
@@ -1233,9 +1236,16 @@ int adf4030_set_alignment_threshold(struct adf4030_dev *dev,
 	ret = adf4030_spi_read(dev, 0x34, &delcal);
 	if (ret)
 		return ret;
+	delcal = no_os_field_get(ADF4030_DELCAL, delcal);
 
 	adel_m_step = adf4030_adel_m_compute(dev, delcal);
-	reg_th = threshold_fs / adel_m_step;
+	if (!adel_m_step)
+		return -EINVAL;
+
+	uint32_t reg_th_full = threshold_fs / adel_m_step;
+	if (reg_th_full > 63)
+		reg_th_full = 63;
+	reg_th = (uint8_t)reg_th_full;
 
 	ret = adf4030_spi_update_bits(dev, 0x37,
 				      ADF4030_EN_ITER | ADF4030_EN_CYCS_RED, 0xFF);
@@ -1248,21 +1258,25 @@ int adf4030_set_alignment_threshold(struct adf4030_dev *dev,
 
 /**
  * @brief Get the alignment threshold in femtoseconds.
- * @param dev         - The device structure.
+ * @param dev          - The device structure.
  * @param threshold_fs - Read value of alignment threshold in femtoseconds.
- * @return            - 0 in case of success or negative error code otherwise.
+ * @return             - 0 in case of success or negative error code otherwise.
  */
 int adf4030_get_alignment_threshold(struct adf4030_dev *dev,
 				    uint32_t *threshold_fs)
 {
-	int ret;
+	uint32_t adel_m_step;
 	uint8_t tmp, delcal;
 	uint32_t reg_th;
-	uint32_t adel_m_step;
+	int ret;
+
+	if (!dev || !threshold_fs)
+		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x34, &delcal);
 	if (ret)
 		return ret;
+	delcal = no_os_field_get(ADF4030_DELCAL, delcal);
 	adel_m_step = adf4030_adel_m_compute(dev, delcal);
 
 	ret = adf4030_spi_read(dev, 0x35, &tmp);
@@ -1278,9 +1292,9 @@ int adf4030_get_alignment_threshold(struct adf4030_dev *dev,
 /**
  * @brief Perform single-channel alignment. Before calling this function,
  * please set tdc_source to the desired bsync channel.
- * @param dev          - The device structure.
+ * @param dev           - The device structure.
  * @param tdc_target_ch - The TDC Target channel for alignment.
- * @return             - 0 in case of success or negative error code otherwise.
+ * @return              - 0 in case of success or negative error code otherwise.
  */
 int adf4030_set_single_ch_alignment(struct adf4030_dev *dev,
 				    uint8_t tdc_target_ch)
@@ -1293,6 +1307,9 @@ int adf4030_set_single_ch_alignment(struct adf4030_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
+	if (tdc_target_ch >= ADF4030_CHANNEL_NUMBER)
+		return -EINVAL;
+
 	val = no_os_field_prep(ADF4030_MANUAL_MODE, false) |
 	      no_os_field_prep(ADF4030_EN_ALIGN, true);
 	ret = adf4030_spi_update_bits(dev, 0x11, ADF4030_MANUAL_MODE |
@@ -1300,11 +1317,20 @@ int adf4030_set_single_ch_alignment(struct adf4030_dev *dev,
 	if (ret)
 		return ret;
 
-	ret = adf4030_spi_update_bits(dev, 0x37, ADF4030_EN_SERIAL_ALIGN, 0x0);
+	ret = adf4030_spi_update_bits(dev, 0x37,
+				      ADF4030_ALIGN_CYCLES | ADF4030_EN_SERIAL_ALIGN, 0x0);
 	if (ret)
 		return ret;
 
 	do {
+		ret = adf4030_spi_update_bits(dev, 0x61, ADF4030_RST_TDC_ERR,
+					      ADF4030_RST_TDC_ERR);
+		if (ret)
+			return ret;
+		ret = adf4030_spi_update_bits(dev, 0x61, ADF4030_RST_TDC_ERR, 0x00);
+		if (ret)
+			return ret;
+
 		ret = adf4030_spi_write(dev, 0x10, tdc_target_ch);
 		if (ret)
 			return ret;
@@ -1319,9 +1345,12 @@ int adf4030_set_single_ch_alignment(struct adf4030_dev *dev,
 		if (ret)
 			return ret;
 
-	} while (tmp & (ADF4030_TDC_ERR | ADF4030_TMP_ALIGN_ERR)  && timeout--);
-
+		if (!(tmp & (ADF4030_TDC_ERR | ADF4030_TMP_ALIGN_ERR)))
 	return 0;
+
+	} while (timeout--);
+
+	return -ETIMEDOUT;
 }
 
 /**
@@ -1333,10 +1362,13 @@ int adf4030_set_single_ch_alignment(struct adf4030_dev *dev,
 int adf4030_set_serial_alignment(struct adf4030_dev *dev,
 				 uint16_t channel_flags)
 {
-	int ret;
 	uint8_t val;
+	int ret;
 
 	if (!dev)
+		return -EINVAL;
+
+	if (!channel_flags || (channel_flags & ~NO_OS_GENMASK(9, 0)))
 		return -EINVAL;
 
 	val = no_os_field_prep(ADF4030_MANUAL_MODE, false) |
@@ -1347,13 +1379,11 @@ int adf4030_set_serial_alignment(struct adf4030_dev *dev,
 	if (ret)
 		return ret;
 
-
 	ret = adf4030_spi_update_bits(dev, 0x35, ADF4030_BSYNC_CAL_ON_1_0,
 				      no_os_field_prep(ADF4030_BSYNC_CAL_ON_1_0, channel_flags));
 	if (ret)
 		return ret;
 
-	// Write ADF4030_BSYNC_CAL_ON_9_2
 	ret = adf4030_spi_write(dev, 0x36, (channel_flags >> 2));
 	if (ret)
 		return ret;
@@ -1378,7 +1408,7 @@ int adf4030_get_serial_alignment(struct adf4030_dev *dev,
 	uint8_t tmp;
 	int ret;
 
-	if (!dev)
+	if (!dev || !channel_flags)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x35, &tmp);
@@ -1410,7 +1440,7 @@ int adf4030_set_background_serial_alignment(struct adf4030_dev *dev,
 	uint8_t val, tmp;
 	bool enabled;
 
-	if (!dev)
+	if (!dev || !channel_flags)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x37, &tmp);
@@ -1418,7 +1448,7 @@ int adf4030_set_background_serial_alignment(struct adf4030_dev *dev,
 		return ret;
 	enabled = no_os_field_get(ADF4030_EN_BKGND_ALGN, tmp);
 
-	// If enabled : Disable Background alignment
+	/* If enabled : Disable Background alignment */
 	if (enabled) {
 		ret = adf4030_spi_update_bits(dev, 0x17, ADF4030_STOP_FSM, 0xFF);
 		if (ret)
@@ -1448,7 +1478,6 @@ int adf4030_set_background_serial_alignment(struct adf4030_dev *dev,
 	if (ret)
 		return ret;
 
-	// Write ADF4030_BSYNC_CAL_ON_9_2
 	ret = adf4030_spi_write(dev, 0x36, (channel_flags >> 2));
 	if (ret)
 		return ret;
@@ -1476,14 +1505,13 @@ int adf4030_get_background_serial_alignment(struct adf4030_dev *dev,
 	uint8_t tmp;
 	int ret;
 
-	if (!dev)
+	if (!dev || !channel_flags)
 		return -EINVAL;
 
 	ret = adf4030_spi_read(dev, 0x37, &tmp);
 	if (ret)
 		return ret;
 	enabled = no_os_field_get(ADF4030_EN_BKGND_ALGN, tmp);
-	// If enabled : Disable Background alignment
 	if (enabled) {
 		ret = adf4030_spi_read(dev, 0x35, &tmp);
 		if (ret)
@@ -1497,8 +1525,9 @@ int adf4030_get_background_serial_alignment(struct adf4030_dev *dev,
 
 		ch_flags |= (tmp << 2);
 		*channel_flags = ch_flags;
-	} else
+	} else {
 		*channel_flags = 0;
+	}
 
 	return 0;
 }
