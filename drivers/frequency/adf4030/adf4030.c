@@ -356,14 +356,14 @@ static uint32_t adf4030_channel_voltage_compute(struct adf4030_dev *dev,
 }
 
 /**
- * @brief Computes the RCM Regsiter Value of the channel and returns the value.
+ * @brief Computes the RCM Register Value of the channel and returns the value.
  * @param dev 	     - The device structure.
- * @param voltage_vm - Voltage value of the channel.
+ * @param voltage_mv - Voltage value of the channel in mV.
  * @param boost	     - Boost value of the channel.
- * @return 	     - RCM Register value.
+ * @return 	     	 - RCM Register value.
  */
 static uint8_t adf4030_channel_rcm_compute(struct adf4030_dev *dev,
-		uint32_t voltage_vm, uint8_t boost)
+		uint32_t voltage_mv, uint8_t boost)
 {
 	uint32_t r_value;
 	uint32_t i_value;
@@ -371,8 +371,11 @@ static uint8_t adf4030_channel_rcm_compute(struct adf4030_dev *dev,
 
 	i_value = boost ? ADF4030_RCM_CURRENT1 : ADF4030_RCM_CURRENT0;
 
+	if ((voltage_mv * ADF4030_RCM_MV_SCALE / i_value) <= ADF4030_RCM_CONST4)
+		return 0;
+
 	/* Requested resistance in milliohms: R = V[mV] * 1000 / I[mA] - 26500 */
-	r_value = (voltage_vm * ADF4030_RCM_MV_SCALE / i_value) - ADF4030_RCM_CONST4;
+	r_value = (voltage_mv * ADF4030_RCM_MV_SCALE / i_value) - ADF4030_RCM_CONST4;
 
 	/* reg = round((735 - 7000000 / R) / 10), clamped to [0, 63] */
 	reg_value = (int32_t)ADF4030_RCM_CONST2 -
@@ -1689,10 +1692,10 @@ int adf4030_get_channel_delay(struct adf4030_dev *dev, uint8_t channel,
 
 /**
  * @brief Set the TX-RX direction of a specific channel.
- * @param dev      - The device structure.
- * @param channel  - The channel to set the direction for.
- * @param tx_en    - Enable or disable the channel.
- * @return         - 0 in case of success or negative error code otherwise.
+ * @param dev     - The device structure.
+ * @param channel - The channel to set the direction for.
+ * @param tx_en   - Enable or disable the channel.
+ * @return        - 0 in case of success or negative error code otherwise.
  */
 int adf4030_set_channel_direction(struct adf4030_dev *dev, uint8_t channel,
 				  bool tx_en)
@@ -1700,10 +1703,10 @@ int adf4030_set_channel_direction(struct adf4030_dev *dev, uint8_t channel,
 	uint8_t msk;
 	int ret;
 
-	if (!dev)
+	if (!dev || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
-	// Write TX_PD
+	/* Write TX_PD */
 	if (channel < ADF4030_CHANNEL_TX_PD_SEPARATOR) {
 		msk = (ADF4030_PD_TX_PATH0) << channel;
 		ret = adf4030_spi_update_bits(dev, 0x3B,
@@ -1716,7 +1719,7 @@ int adf4030_set_channel_direction(struct adf4030_dev *dev, uint8_t channel,
 	if (ret)
 		return ret;
 
-	// Write EN_DRIVE
+	/* Write EN_DRIVE */
 	if (channel < ADF4030_CHANNEL_DRV_SEPARATOR) {
 		msk = (ADF4030_EN_DRV0) << channel;
 		ret = adf4030_spi_update_bits(dev, 0x12,
@@ -1734,10 +1737,10 @@ int adf4030_set_channel_direction(struct adf4030_dev *dev, uint8_t channel,
 
 /**
  * @brief Get the TX direction (TX/RX) of a specific channel.
- * @param dev      - The device structure.
- * @param channel  - The channel to get the direction for.
- * @param tx_en    - Read the channel's TX direction status.
- * @return         - 0 in case of success or negative error code otherwise.
+ * @param dev     - The device structure.
+ * @param channel - The channel to get the direction for.
+ * @param tx_en   - Read the channel's TX direction status.
+ * @return        - 0 in case of success or negative error code otherwise.
  */
 int adf4030_get_channel_direction(struct adf4030_dev *dev, uint8_t channel,
 				  bool *tx_en)
@@ -1747,10 +1750,10 @@ int adf4030_get_channel_direction(struct adf4030_dev *dev, uint8_t channel,
 	bool tx_pd;
 	bool en_drv;
 
-	if (!dev)
+	if (!dev || !tx_en || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
-	// Read TX_PD
+	/* Read TX_PD */
 	if (channel < ADF4030_CHANNEL_TX_PD_SEPARATOR) {
 		ret = adf4030_spi_read(dev, 0x3B, &tmp);
 		tx_pd = no_os_field_get((ADF4030_PD_TX_PATH0) << channel, tmp);
@@ -1762,7 +1765,7 @@ int adf4030_get_channel_direction(struct adf4030_dev *dev, uint8_t channel,
 	if (ret)
 		return ret;
 
-	// Read EN_DRV
+	/* Read EN_DRV */
 	if (channel < ADF4030_CHANNEL_DRV_SEPARATOR) {
 		ret = adf4030_spi_read(dev, 0x12, &tmp);
 		en_drv = no_os_field_get((ADF4030_EN_DRV0) << channel, tmp);
@@ -1795,7 +1798,7 @@ int adf4030_set_channel_termination(struct adf4030_dev *dev, uint8_t channel,
 	uint8_t msk;
 	int ret;
 
-	if (!dev)
+	if (!dev || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
 	reg = 0x40 + (channel * 2);
@@ -1867,7 +1870,7 @@ int adf4030_get_channel_termination(struct adf4030_dev *dev, uint8_t channel,
 	bool tx_en;
 	int ret;
 
-	if (!dev)
+	if (!dev || !termination || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
 	ret = adf4030_get_channel_direction(dev, channel, &tx_en);
@@ -1875,7 +1878,6 @@ int adf4030_get_channel_termination(struct adf4030_dev *dev, uint8_t channel,
 		return ret;
 
 	reg = 0x40 + (channel * 2);
-	// TDC OFFSET MSB
 	ret = adf4030_spi_read(dev, reg, &tmp);
 	if (ret)
 		return ret;
@@ -1885,7 +1887,7 @@ int adf4030_get_channel_termination(struct adf4030_dev *dev, uint8_t channel,
 	link_tx = no_os_field_get(ADF4030_LINK_TX0, tmp);
 	ac_coupled = no_os_field_get(ADF4030_AC_COUPLED0, tmp);
 
-	if (!float_tx && !link_tx && tx_en)
+	if (!float_tx && tx_en)
 		dev->channels[channel].termination = TX_VOLTAGE_DRIVER;
 	else if (float_tx && !link_tx && tx_en)
 		dev->channels[channel].termination = TX_CURRENT_DRIVER_UNTERMINATED;
@@ -1895,7 +1897,7 @@ int adf4030_get_channel_termination(struct adf4030_dev *dev, uint8_t channel,
 		dev->channels[channel].termination = RX_DC_COUPLED_CLKS;
 	else if (float_rx && ac_coupled && !tx_en)
 		dev->channels[channel].termination = RX_AC_COUPLED_CLKS;
-	else if (!float_rx && ac_coupled && !tx_en)
+	else if (!float_rx && !ac_coupled && !tx_en)
 		dev->channels[channel].termination = RX_DC_COUPLED_HCSL;
 	else
 		return -EIO;
@@ -1918,7 +1920,7 @@ int adf4030_set_channel_prbs(struct adf4030_dev *dev, uint8_t channel,
 	uint8_t msk;
 	int ret;
 
-	if (!dev)
+	if (!dev || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
 	if (channel < ADF4030_CHANNEL_PRBS_SEPARATOR) {
@@ -1951,10 +1953,10 @@ int adf4030_get_channel_prbs(struct adf4030_dev *dev, uint8_t channel,
 	int ret;
 	bool prbs;
 
-	if (!dev)
+	if (!dev || !prbs_en || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
-	// Read PRBS
+	/* Read PRBS */
 	if (channel < ADF4030_CHANNEL_PRBS_SEPARATOR) {
 		ret = adf4030_spi_read(dev, 0x13, &tmp);
 		prbs = no_os_field_get((ADF4030_PRBS0) << channel, tmp);
@@ -2044,7 +2046,7 @@ int adf4030_set_channel_invert(struct adf4030_dev *dev, uint8_t channel,
 	uint8_t msk;
 	int ret;
 
-	if (!dev)
+	if (!dev || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
 	if (channel < ADF4030_CHANNEL_INV_SEPARATOR) {
@@ -2077,10 +2079,10 @@ int adf4030_get_channel_invert(struct adf4030_dev *dev, uint8_t channel,
 	int ret;
 	bool invert;
 
-	if (!dev)
+	if (!dev || !invert_en || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
-	// Read PRBS
+	/* Read inversion */
 	if (channel < ADF4030_CHANNEL_INV_SEPARATOR) {
 		ret = adf4030_spi_read(dev, 0x14, &tmp);
 		invert = no_os_field_get((ADF4030_CHAN_INV0) << channel, tmp);
@@ -2110,17 +2112,16 @@ int adf4030_set_channel_voltage(struct adf4030_dev *dev, uint8_t channel,
 	uint8_t boost, rcm, val;
 	uint32_t mv_value;
 	uint16_t reg;
-
 	int ret;
 
+	if (!dev || channel >= ADF4030_CHANNEL_NUMBER)
+		return -EINVAL;
+
+	if (voltage_mv < ADF4030_RCM_VOLTAGE_MIN0 ||
+	    voltage_mv > ADF4030_RCM_VOLTAGE_MAX1)
+		return -EINVAL;
+
 	reg = 0x3F + (channel * 2);
-
-	if (!dev)
-		return -EINVAL;
-
-	if (voltage_mv < ADF4030_RCM_VOLTAGE_MIN0
-	    || voltage_mv > ADF4030_RCM_VOLTAGE_MAX1)
-		return -EINVAL;
 
 	if (voltage_mv < ADF4030_RCM_VOLTAGE_MAX0) {
 		boost = 0;
@@ -2134,8 +2135,7 @@ int adf4030_set_channel_voltage(struct adf4030_dev *dev, uint8_t channel,
 
 	val = no_os_field_prep(ADF4030_RCM0, rcm) |
 	      no_os_field_prep(ADF4030_BOOST0, boost);
-	ret = adf4030_spi_update_bits(dev, reg, ADF4030_RCM0
-				      | ADF4030_BOOST0, val);
+	ret = adf4030_spi_update_bits(dev, reg, ADF4030_RCM0 | ADF4030_BOOST0, val);
 	if (ret)
 		return ret;
 
@@ -2157,10 +2157,9 @@ int adf4030_get_channel_voltage(struct adf4030_dev *dev, uint8_t channel,
 	uint8_t boost, rcm, tmp;
 	uint32_t mv_value;
 	uint16_t reg;
-
 	int ret;
 
-	if (!dev)
+	if (!dev || !voltage_mv || channel >= ADF4030_CHANNEL_NUMBER)
 		return -EINVAL;
 
 	reg = 0x3F + (channel * 2);
