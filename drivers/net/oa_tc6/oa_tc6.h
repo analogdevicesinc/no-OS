@@ -35,6 +35,7 @@
 
 #include "no_os_spi.h"
 #include "no_os_util.h"
+#include "no_os_mutex.h"
 #include <stdint.h>
 
 #ifndef CONFIG_OA_TX_FRAME_BUFF_NUM
@@ -140,6 +141,23 @@
 #define OA_TC6_MDIOACC6_REG 		OA_MMS_REG(0x0, 0x0026)
 #define OA_TC6_MDIOACC7_REG 		OA_MMS_REG(0x0, 0x0027)
 
+#define OA_TC6_IMASK0_TXPEM		NO_OS_BIT(0)
+#define OA_TC6_IMASK0_TXBOEM		NO_OS_BIT(1)
+#define OA_TC6_IMASK0_TXBUEM		NO_OS_BIT(2)
+#define OA_TC6_IMASK0_RXBOEM		NO_OS_BIT(3)
+#define OA_TC6_IMASK0_LOFEM		NO_OS_BIT(4)
+#define OA_TC6_IMASK0_HDREM		NO_OS_BIT(5)
+
+/* Clause 22 PHY standard register window (MMS 0, offsets 0xFF00..0xFF1F) */
+#define OA_TC6_PHY_STD_REG_BASE		0xFF00
+#define OA_TC6_PHY_STD_REG_MASK		0x001F
+#define OA_TC6_PHY_STD_REG(reg)		\
+	OA_MMS_REG(0x0, OA_TC6_PHY_STD_REG_BASE | ((reg) & OA_TC6_PHY_STD_REG_MASK))
+
+#define OA_TC6_RESET_SWRESET		NO_OS_BIT(0)
+
+#define OA_TC6_STATUS0_RESETC		NO_OS_BIT(6)
+
 #define OA_TC6_CONFIG0_ZARFE_MASK	NO_OS_BIT(12)
 
 #define OA_TC6_BUFSTS_TXC_MASK 		NO_OS_GENMASK(15, 8)
@@ -178,6 +196,18 @@ enum oa_tc6_user_buffer_state {
 	OA_BUFF_TX_READY,
 };
 
+enum oa_tc6_event {
+	OA_TC6_EVENT_RX,
+	OA_TC6_EVENT_TX,
+	OA_TC6_EVENT_TXPE,
+	OA_TC6_EVENT_TXBOE,
+	OA_TC6_EVENT_TXBUE,
+	OA_TC6_EVENT_RXBOE,
+	OA_TC6_EVENT_LOFE,
+	OA_TC6_EVENT_HDRE,
+	OA_TC6_EVENT_SYNCE,
+};
+
 /**
  * @brief Stores an Ethernet frame along with metadata needed for parsing.
  * The MAC driver or the user application will receive and submit frames for transmission
@@ -208,12 +238,38 @@ struct oa_tc6_flags {
 };
 
 /**
+ * @brief TX/RX credit updating method before starting a data transaction.
+ * 	  OA_TC6_REG_POLL - read the BUFST (0xB) register
+ * 	  OA_TC6_FOOTER_POLL - send a data chunk and read the information
+ * 			       from the footer.
+ */
+enum oa_tc6_bufst_polling {
+	OA_TC6_REG_POLL,
+	OA_TC6_FOOTER_POLL,
+};
+
+/**
+ * @brief oa_tc6 software statistics counters.
+ */
+struct oa_tc6_stats {
+	uint64_t rx_frames;     /* frames fully de-framed to a buffer */
+	uint64_t rx_bytes;      /* payload bytes received (sum of frame len) */
+	uint64_t tx_frames;     /* frames fully framed out to SPI */
+	uint64_t tx_bytes;      /* payload bytes transmitted */
+	uint32_t rx_drop_fd;    /* footer frame-drop (FD) flagged frames */
+	uint32_t rx_drop_nobuf; /* RX frame-buffer pool exhausted (-ENOBUFS) */
+	uint32_t exst_events;   /* EXST latched in a data-chunk footer */
+};
+
+/**
  * @brief Holds the frame buffers and the communication descriptor for the OA TC6 driver.
  */
 struct oa_tc6_desc {
 	struct no_os_spi_desc *comm_desc;
 	uint8_t ctrl_chunks[OA_SPI_CTRL_LEN];
 	uint8_t data_chunks[OA_SPI_BUFF_LEN];
+	void *ctrl_lock;
+	void *data_lock;
 
 	struct oa_tc6_frame_buffer user_rx_frame_buffer[OA_RX_FRAME_BUFF_NUM];
 	struct oa_tc6_frame_buffer user_tx_frame_buffer[OA_TX_FRAME_BUFF_NUM];
@@ -224,8 +280,14 @@ struct oa_tc6_desc {
 	uint32_t ctrl_tx_credit;
 	uint32_t ctrl_rx_credit;
 
+	enum oa_tc6_bufst_polling bufst_polling;
 	struct oa_tc6_flags	xfer_flags;
 	bool	 prote_spi;
+
+	struct oa_tc6_stats stats;
+
+	void (*callback)(struct oa_tc6_desc *, uint32_t, void *);
+	void *callback_arg;
 };
 
 /**
@@ -234,6 +296,7 @@ struct oa_tc6_desc {
 struct oa_tc6_init_param {
 	struct no_os_spi_desc *comm_desc;
 
+	enum oa_tc6_bufst_polling bufst_polling;
 	/* The OASPI device uses Protected SPI for control transactions */
 	bool prote_spi;
 };
@@ -273,10 +336,23 @@ int oa_tc6_get_xfer_flags(struct oa_tc6_desc *, struct oa_tc6_flags *, bool);
  */
 int oa_tc6_thread(struct oa_tc6_desc *);
 
+/* Trigger a soft reset of the MAC-PHY and wait for completion */
+int oa_tc6_sw_reset(struct oa_tc6_desc *);
+
+/* Register a function that will be called as a result of OA TC6 events */
+int oa_tc6_register_callback(struct oa_tc6_desc *,
+			     void (*)(struct oa_tc6_desc *, uint32_t, void *),
+			     void *);
+
 /* Initialize the OA TC6 SPI driver */
 int oa_tc6_init(struct oa_tc6_desc **, struct oa_tc6_init_param *);
 
 /* Free the resources allocated by the oa_tc6_init() function */
 int oa_tc6_remove(struct oa_tc6_desc *);
+
+/* Get a snapshot of the software statistics counters. */
+int oa_tc6_get_stats(struct oa_tc6_desc *desc, struct oa_tc6_stats *stats);
+/* Reset the software statistics counters to zero. */
+int oa_tc6_reset_stats(struct oa_tc6_desc *desc);
 
 #endif /* _NO_OS_OA_TC6_H */
