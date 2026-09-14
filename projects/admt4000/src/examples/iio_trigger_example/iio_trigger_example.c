@@ -130,6 +130,15 @@ int example_main()
 
 #ifdef TMC
 	tmc_iio_ip.tmc5240_init_param = &tmc5240_ip;
+	/**
+	 * Initial scaling values set to 0.9 based on the stepper motor steps per
+	 * angle of the motor shipped with the ADMT4000 calibration kit. Users can
+	 * adjust these values to match their specific stepper motor and mechanical
+	 * setup in the application.
+	 */
+	tmc_iio_ip.acceleration_calibscale = 900;
+	tmc_iio_ip.velocity_calibscale = 900;
+	tmc_iio_ip.position_calibscale = 900;
 	ret = tmc5240_iio_init(&tmc_iio_desc, &tmc_iio_ip);
 	if (ret)
 		return ret;
