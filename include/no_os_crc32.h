@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   no_os_crc.h
- *   @brief  Generic header file for all CRC computation algorithms.
- *   @author Darius Berghe (darius.berghe@analog.com)
+ *   @file   no_os_crc32.h
+ *   @brief  Header file of CRC-32 computation.
+ *   @author CHegbeli (ciprian.hegbeli@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,12 +30,15 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef _NO_OS_CRC_H_
-#define _NO_OS_CRC_H_
+#ifndef _NO_OS_CRC32_H_
+#define _NO_OS_CRC32_H_
 
-#include "no_os_crc8.h"
-#include "no_os_crc16.h"
-#include "no_os_crc24.h"
-#include "no_os_crc32.h"
+#include <stdint.h>
+#include <stddef.h>
 
-#endif // _NO_OS_CRC_H_
+/** Ethernet AUTODIN II CRC-32 polynomial, MSB-first representation. */
+#define NO_OS_CRC32_POLY_BE 0x04C11DB7
+
+uint32_t no_os_crc32_be(uint32_t crc, const uint8_t *pdata, size_t nbytes);
+
+#endif // _NO_OS_CRC32_H_
