@@ -510,9 +510,13 @@ def create_project(ws, hw_path, hw_file, target):
         print("INFO: Building platform (BSP + FSBL)...")
         platform.build()
 
+    # Dispose and reconnect so gRPC server registers the new xpfm.
+    vitis.dispose()
+
     # --- Step 2: App component (linker script) ---
     xpfm = os.path.join(out_dir, "hw0", "export", "hw0", "hw0.xpfm")
     print("INFO: Creating app component for linker script...")
+    client = vitis.create_client(workspace=out_dir)
     app = client.create_app_component(
         name="app", platform=xpfm, template="empty_application")
     ld = app.get_ld_script()
