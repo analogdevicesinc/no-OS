@@ -450,7 +450,8 @@ static int adf4382_iio_read_chan_attr(void *dev, char *buf, uint32_t len,
 		break;
 
 	case ADF4382_IIO_CH_ATTR_PHASE_ADJ:
-		val = adf4382->phase_adj;
+		/* phase_adj is in fs, the attribute in ps. */
+		val = adf4382->phase_adj / KILO;
 		ret = adf4382_get_phase_pol(adf4382, &pol);
 		if (ret)
 			return ret;
@@ -522,7 +523,8 @@ static int adf4382_iio_write_chan_attr(void *dev, char *buf, uint32_t len,
 
 		val = abs(val);
 
-		ret = adf4382_set_phase_adjust(adf4382, val);
+		/* The attribute is in ps, the driver API in fs. */
+		ret = adf4382_set_phase_adjust(adf4382, val * KILO);
 		break;
 
 	default:
