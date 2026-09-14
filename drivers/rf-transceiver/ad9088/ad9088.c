@@ -15,6 +15,8 @@
 #include "adi_apollo_startup.h"
 #include "adi_apollo_device.h"
 #include "adi_apollo_mailbox.h"
+#include "adi_apollo_arm.h"
+#include "adi_apollo_bf_custom.h"
 
 #define INDIRECT_REG_TEST_ADDR  (0x60366045)
 #define ARM_REG_TEST_BASE_ADDR  (0x20000000U)
@@ -1436,6 +1438,22 @@ static int ad9088_version_info(struct ad9088_phy *phy)
 	ret = ad9088_check_apollo_error(ret, "adi_apollo_mailbox_ready_check");
 	if (ret)
 		return ret;
+
+	{
+		uint8_t core0_status = 0, core1_status = 0;
+		adi_apollo_cpu_errors_t cpu_errors;
+
+		adi_apollo_hal_bf_get(device, BF_RAM_BOOT_CORE0_STATUS,
+				      &core0_status, 1);
+		adi_apollo_hal_bf_get(device, BF_RAM_BOOT_CORE1_STATUS,
+				      &core1_status, 1);
+		adi_apollo_arm_err_codes_get(device, &cpu_errors);
+
+		pr_info("Pre-ping: core0=0x%02x core1=0x%02x err_cmd=%d err_sys=%d err_cal=%d\n",
+			core0_status, core1_status,
+			(int)cpu_errors.last_cmd, (int)cpu_errors.system,
+			(int)cpu_errors.track_cal);
+	}
 
 	ping_cmd.echo_data = 0x00000000;
 	ret = adi_apollo_mailbox_ping(device, &ping_cmd, &ping_resp);

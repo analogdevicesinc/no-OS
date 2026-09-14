@@ -2538,12 +2538,16 @@ int adf4030_init(struct adf4030_dev **dev,
 	device->tdc_source = ADF4030_TDC_SOURCE_RESET;
 
 	ret = adf4030_set_default_regs(device, device->spi_4wire_en);
-	if (ret)
+	if (ret) {
+		pr_err("ADF4030: set_default_regs failed (%d)\n", ret);
 		goto error_spi;
+	}
 
 	ret = adf4030_check_scratchpad(device);
-	if (ret)
+	if (ret) {
+		pr_err("ADF4030: scratchpad check failed (%d)\n", ret);
 		goto error_spi;
+	}
 
 	/*
 	 * Keep the interrupt sources masked as the default register table set
@@ -2561,19 +2565,29 @@ int adf4030_init(struct adf4030_dev **dev,
 	if (ret)
 		goto error_spi;
 
+	pr_info("ADF4030: ref=%u vco=%u bsync=%u\n",
+		(unsigned)device->ref_freq, (unsigned)device->vco_freq,
+		(unsigned)device->bsync_freq_odiv_a);
+
 	ret = adf4030_set_vco_freq(device, device->vco_freq);
-	if (ret)
+	if (ret) {
+		pr_err("ADF4030: set_vco_freq failed (%d)\n", ret);
 		goto error_spi;
+	}
 
 	// Set BSYNC ODIVA
 	ret = adf4030_set_bsync_freq(device, device->bsync_freq_odiv_a, false);
-	if (ret)
+	if (ret) {
+		pr_err("ADF4030: set_bsync_freq ODIVA failed (%d)\n", ret);
 		goto error_spi;
+	}
 
 	// Set BSYNC ODIVB
 	ret = adf4030_set_bsync_freq(device, device->bsync_freq_odiv_a, true);
-	if (ret)
+	if (ret) {
+		pr_err("ADF4030: set_bsync_freq ODIVB failed (%d)\n", ret);
 		goto error_spi;
+	}
 
 	/* Needs the BSYNC rate, so it has to follow the ODIV programming. */
 	ret = adf4030_set_avgexp(device);
@@ -2582,8 +2596,10 @@ int adf4030_init(struct adf4030_dev **dev,
 
 	if (init_param->channels && init_param->num_channels) {
 		ret = adf4030_configure(device, init_param);
-		if (ret)
+		if (ret) {
+			pr_err("ADF4030: configure failed (%d)\n", ret);
 			goto error_spi;
+		}
 	} else {
 		// Set CH 1 as TX
 		ret = adf4030_set_channel_direction(device, 1, true);
