@@ -514,7 +514,47 @@ def append_log(log_path, section, result):
         f.write("\n")
 
 
-def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None, flash=False, fresh=False, hardware=None):
+def load_boot_bin_module(repo_root):
+    """Import tools/scripts/platform/xilinx/boot_bin.py by path.
+
+    Loaded on demand rather than at module import: it is only needed for
+    --boot-bin, and importing by path keeps 'platform' (which shadows a stdlib
+    module) off sys.path.
+    """
+    import importlib.util
+
+    path = repo_root / "tools" / "scripts" / "platform" / "xilinx" / "boot_bin.py"
+    spec = importlib.util.spec_from_file_location("no_os_boot_bin", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def boot_bin_cmd(repo_root, combo, build_dir):
+    """Equivalent standalone command, for --dry-run output."""
+    script = repo_root / "tools" / "scripts" / "platform" / "xilinx" / "boot_bin.py"
+    return [sys.executable, str(script), "--build-dir", str(build_dir)]
+
+
+def run_boot_bin(repo_root, combo, build_dir):
+    """Package one combination's build into a BOOT.BIN. Returns (ok, message).
+
+    Everything the packager needs is in <build_dir>/bootinfo.json, written by
+    the Xilinx CMake flow at configure time.
+    """
+    if combo["platform"] != "xilinx":
+        return True, (f"--boot-bin: skipped, {combo['platform']} is not a "
+                      "Xilinx platform")
+
+    boot_bin = load_boot_bin_module(repo_root)
+    try:
+        boot_bin.make_boot_bin(build_dir)
+    except boot_bin.BootBinError as e:
+        return False, f"BOOT.BIN failed: {e}"
+    return True, ""
+
+
+def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None, flash=False, fresh=False, hardware=None, boot_bin=False):
     """Run cmake configure + build (and optionally flash) for a single combination.
 
     Returns (combo, success, detail). On failure, detail is the error message.
@@ -569,6 +609,8 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
     if dry_run:
         print(f"  {quote_cmd(configure_cmd)}")
         print(f"  {quote_cmd(build_cmd)}")
+        if boot_bin:
+            print(f"  {quote_cmd(boot_bin_cmd(repo_root, combo, build_dir))}")
         if flash:
             print(f"  {quote_cmd(flash_cmd)}")
         return combo, True, ""
@@ -608,6 +650,15 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
             append_log(log_path, "Build", e)
             spinner.finish("FAILED")
             return combo, False, f"Build failed:\n{e.stderr[-500:]}"
+
+    # Before flashing: a JTAG run and an SD-card image are independent, but the
+    # image is the artifact worth having even if the board is not connected.
+    if boot_bin:
+        ok, msg = run_boot_bin(repo_root, combo, build_dir)
+        if not ok:
+            return combo, False, msg
+        if msg:
+            print(f"  {msg}")
 
     if flash:
         echo_cmd(flash_cmd)
@@ -770,6 +821,9 @@ def cmd_build(args, repo_root, presets):
 
             if args.dry_run:
                 lines = f"  {quote_cmd(build_cmd)}"
+                if args.boot_bin:
+                    lines += ("\n  " + quote_cmd(
+                        boot_bin_cmd(repo_root, combo, build_dir)))
                 if args.flash:
                     lines += f"\n  {quote_cmd(flash_cmd)}"
                 return combo, True, lines
@@ -789,6 +843,13 @@ def cmd_build(args, repo_root, presets):
                 return combo, False, f"Build failed:\n{e.stderr[-500:]}"
 
             artifacts_msg = f"Build artifacts: {build_dir / 'build'}"
+
+            if args.boot_bin:
+                ok, msg = run_boot_bin(repo_root, combo, build_dir)
+                if not ok:
+                    return combo, False, msg
+                if msg:
+                    artifacts_msg += f"\n  {msg}"
 
             if args.flash:
                 echo_cmd(flash_cmd)
@@ -840,7 +901,7 @@ def cmd_build(args, repo_root, presets):
             combo_result, success, msg = run_build(
                 repo_root, combo, build_dir_base, args.jobs, args.clean, args.dry_run,
                 probe=args.probe, flash=args.flash, fresh=args.fresh,
-                hardware=args.hardware,
+                hardware=args.hardware, boot_bin=args.boot_bin,
             )
 
             if args.dry_run:
@@ -935,6 +996,13 @@ def main():
         "--flash",
         action="store_true",
         help="Flash the firmware after a successful build (requires --probe)",
+    )
+    build_parser.add_argument(
+        "--boot-bin",
+        action="store_true",
+        help="Xilinx only: package FSBL + bitstream + ELF into an SD-card "
+             "BOOT.BIN after a successful build (tools/scripts/platform/"
+             "xilinx/make_boot_bin.sh)",
     )
     build_parser.add_argument(
         "--open",
