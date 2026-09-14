@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9001-SLA */
 /**
  * \file
  * \brief BitField accessors for analog_rx_mem_map

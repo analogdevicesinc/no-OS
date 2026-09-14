@@ -1,8 +1,8 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
 /*
  * ADRV9025/6 RF Transceiver
  *
  * Copyright 2020-2023 Analog Devices Inc.
- *
  */
 
 #include "xilinx_transceiver.h"

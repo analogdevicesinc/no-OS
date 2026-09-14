@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9001-SLA */
 /**
  * \file
  * \brief Contains common API error handling functions implementations

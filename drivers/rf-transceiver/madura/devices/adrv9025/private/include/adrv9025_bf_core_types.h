@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9025-SLA */
 /**
  * \file adrv9025_bf_core_types.h Automatically generated file with generator ver 0.0.1.0.
  *

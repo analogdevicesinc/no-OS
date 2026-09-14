@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9001-SLA */
 /**
 * \file
 * \brief Contains prototype of ARM private features related function implemented in

@@ -1,16 +1,43 @@
 /**
-* Copyright 2015 - 2022 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
 * \file adi_library_types.h
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 #ifndef _ADI_LIBRARY_TYPES_H_
 #define _ADI_LIBRARY_TYPES_H_
+
+#ifdef __KERNEL__
+#include <linux/int_log.h>
+#include <linux/kernel.h>
+#include <linux/limits.h>
+#include <linux/ctype.h>
+#include <linux/types.h>
+#include <linux/slab.h>
+#include <linux/time.h>
+#include <linux/fs.h>
+typedef time64_t time_t;
+#define INT16_MAX                                       S16_MAX
+#define INT16_MIN                                       S16_MIN
+#define UINT16_MAX                                      U16_MAX
+#define UINT32_MAX                                      U32_MAX
+#define INT32_MIN                                       S32_MIN
+#define INT32_MAX                                       S32_MAX
+#define INT64_MIN                                       S64_MIN
+#define INT64_MAX                                       S64_MAX
+#define PRIX32                                          "lX"
+#define PRIu32                                          "u"
+#define PRId64                                          "d"
+#define PRIX64                                          "llX"
+#define time_t                                          time64_t
+/** Define to disable any code that uses floating point types */
+#define ADI_LIBRARY_RM_FLOATS 1
+#define ADI_PLATFORM_LARGE_VARS_ON_HEAP /* Use heap instead of stack for large variables */
+#else
 
 #include <stddef.h>
 #include <stdio.h>
@@ -24,6 +51,8 @@
 #include <limits.h>
 #include <ctype.h>
 #include <stdbool.h>
+
+#endif
 
 /* stddef.h */
 #define ADI_LIBRARY_OFFSETOF                            offsetof
@@ -45,6 +74,7 @@
 #define ADI_LIBRARY_FTELL                               ftell
 #define ADI_LIBRARY_FERROR                              ferror
 #define ADI_LIBRARY_SETVBUF                             setvbuf
+#define ADI_LIBRARY_FGETS                               fgets
 
 /* stdlib.h */
 #define ADI_LIBRARY_CALLOC                              calloc
@@ -103,5 +133,40 @@
 #define ADI_LIBRARY_TOUPPER                             toupper
 #define ADI_LIBRARY_TOLOWER                             tolower
 
+
+/* When ADI_PLATFORM_LARGE_VARS_ON_HEAP is defined, the memory per function frame is limited to 2k,
+ * and the heap is used instead.
+ *
+ * This works by using the ADI_PLATFORM_LARGE_VAR_ALLOC(), and ADI_PLATFORM_LARGE_ARRAY_ALLOC()
+ * macros within the code for large variables/arrays. Memory allocated using these macros is
+ * automatically freed when the variable goes out of scope, and is zeroed out. When used for arrays
+ * it gives a pointer to an array and not an actual array so be careful using sizeof() with it, or
+ * taking its address!
+ */
+/*#define ADI_PLATFORM_LARGE_VARS_ON_HEAP*/
+
+#ifdef ADI_PLATFORM_LARGE_VARS_ON_HEAP
+
+#ifndef __GNUC__
+#error "Compiler does not support ADI_PLATFORM_LARGE_VARS_ON_HEAP"
+#endif
+
+static inline void adi_platform_free_ptr(void *ptrPtr) {
+    ADI_LIBRARY_FREE(*(void**)(ptrPtr));
+}
+
+#define ADI_PLATFORM_LARGE_ARRAY_ALLOC(type, name, count) \
+    type *name __attribute__((__cleanup__(adi_platform_free_ptr))) = (type*)ADI_LIBRARY_CALLOC(count, sizeof(type))
+
+#else /* ADI_PLATFORM_LARGE_VARS_ON_HEAP */
+
+#define ADI_PLATFORM_LARGE_ARRAY_ALLOC(type, name, count) \
+    type name##_[count]; \
+    type *name = name##_; \
+    ADI_LIBRARY_MEMSET(name, 0, sizeof(name##_));
+
+#endif
+
+#define ADI_PLATFORM_LARGE_VAR_ALLOC(type, name) ADI_PLATFORM_LARGE_ARRAY_ALLOC(type, name, 1)
 
 #endif  /* _ADI_LIBRARY_TYPES_H_ */

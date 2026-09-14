@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9025-SLA */
 /**
 * \file adrv9025_utilities.h
 * \brief Contains Utility features related private function definitions

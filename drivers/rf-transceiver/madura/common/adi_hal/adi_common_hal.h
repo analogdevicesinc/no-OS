@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9025-SLA */
 /**
  * \file adi_common_hal.h
  * \brief Contains ADI Hardware Abstraction layer function prototypes and type definitions for adi_common_hal.c

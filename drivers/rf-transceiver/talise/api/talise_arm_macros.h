@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_arm_macros.h
  * \brief Contains Talise API miscellaneous macro definitions for ARM
