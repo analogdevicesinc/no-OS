@@ -56,6 +56,7 @@
 #define JESD204_TX_REG_LINK_DISABLE		0xc0
 #define JESD204_TX_REG_LINK_STATE		0xc4
 #define JESD204_TX_REG_LINK_CLK_RATIO	0xc8
+#define JESD204_TX_REG_DEVICE_CLK_RATIO	0xcc
 
 #define JESD204_TX_REG_SYSREF_CONF		0x100
 #define JESD204_TX_REG_SYSREF_CONF_SYSREF_DISABLE	NO_OS_BIT(0)
@@ -184,6 +185,9 @@ int32_t axi_jesd204_tx_lane_clk_disable(struct axi_jesd204_tx *jesd)
 	return axi_jesd204_tx_write(jesd, JESD204_TX_REG_LINK_DISABLE, 0x1);
 }
 
+static unsigned long axi_jesd204_tx_calc_device_clk(struct axi_jesd204_tx *jesd,
+		unsigned long link_rate);
+
 /**
  * @brief Read status of the JESD204 Transmit Peripherial
  * @param jesd - The device structure.
@@ -225,6 +229,35 @@ uint32_t axi_jesd204_tx_status_read(struct axi_jesd204_tx *jesd)
 	clock_rate = jesd->device_clk_khz;
 	printf("\tReported Link Clock: %"PRIu32".%.3"PRIu32" MHz\n",
 	       clock_rate / 1000, clock_rate % 1000);
+
+	if (jesd->config.version >= ADI_AXI_PCORE_VER(1, 6, 'a')) {
+		uint32_t device_clk_ratio;
+		uint32_t link_rate_khz;
+
+		if (jesd->encoder == JESD204_ENCODER_64B66B)
+			link_rate_khz = NO_OS_DIV_ROUND_CLOSEST(jesd->lane_clk_khz, 66);
+		else
+			link_rate_khz = NO_OS_DIV_ROUND_CLOSEST(jesd->lane_clk_khz, 40);
+
+		axi_jesd204_tx_read(jesd, JESD204_TX_REG_DEVICE_CLK_RATIO,
+				    &device_clk_ratio);
+		if (device_clk_ratio == 0) {
+			printf("\tMeasured Device Clock: off\n");
+		} else {
+			clock_rate = NO_OS_DIV_ROUND_CLOSEST_ULL(100000ULL *
+					device_clk_ratio, 1ULL << 16);
+			printf("\tMeasured Device Clock: %"PRIu32".%.3"PRIu32" MHz\n",
+			       clock_rate / 1000, clock_rate % 1000);
+		}
+
+		clock_rate = jesd->device_clk_khz;
+		printf("\tReported Device Clock: %"PRIu32".%.3"PRIu32" MHz\n",
+		       clock_rate / 1000, clock_rate % 1000);
+
+		clock_rate = axi_jesd204_tx_calc_device_clk(jesd, link_rate_khz);
+		printf("\tDesired Device Clock: %"PRIu32".%.3"PRIu32" MHz\n",
+		       clock_rate / 1000, clock_rate % 1000);
+	}
 
 	if (!link_disabled) {
 		status = (link_status & 0x10) ?
