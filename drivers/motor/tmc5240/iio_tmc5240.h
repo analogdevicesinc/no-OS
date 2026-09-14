@@ -84,6 +84,12 @@ struct tmc5240_iio_dev {
 	struct tmc5240_dev *tmc5240_dev;
 	/** IIO device descriptor */
 	struct iio_device *iio_dev;
+	/** Calibration scale factor for acceleration */
+	uint32_t acceleration_calibscale;
+	/** Calibration scale factor for velocity */
+	uint32_t velocity_calibscale;
+	/** Calibration scale factor for position */
+	uint32_t position_calibscale;
 };
 
 /**
@@ -93,6 +99,12 @@ struct tmc5240_iio_dev {
 struct tmc5240_iio_dev_init_param {
 	/** TMC5240 initialization parameters */
 	struct tmc5240_init_param *tmc5240_init_param;
+	/** Calibration scale factor for acceleration */
+	uint32_t acceleration_calibscale;
+	/** Calibration scale factor for velocity */
+	uint32_t velocity_calibscale;
+	/** Calibration scale factor for position */
+	uint32_t position_calibscale;
 };
 
 /** Initialize the TMC5240 IIO driver */

@@ -42,8 +42,10 @@
 #include "iio_trigger.h"
 #include "iio_app.h"
 
-#define DATA_BUFFER_SIZE 400
-uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 5 * sizeof(uint32_t)];
+#define DATA_BUFFER_SIZE 200
+
+uint8_t iio_data_buffer[DATA_BUFFER_SIZE * ADMT4000_NUM_CHANNELS * sizeof(
+						 uint16_t)];
 
 #define ADMT4000_GPIO_TRIG_NAME "admt4000-dev0"
 
@@ -78,7 +80,7 @@ int example_main()
 	struct no_os_irq_ctrl_desc *admt4000_irq_desc;
 	struct iio_data_buffer data_buff = {
 		.buff = (void *)iio_data_buffer,
-		.size = DATA_BUFFER_SIZE * 5 * sizeof(uint16_t)
+		.size = DATA_BUFFER_SIZE * ADMT4000_NUM_CHANNELS * sizeof(uint16_t)
 	};
 	struct admt_evb_iio_init_param admt_evb_ip = {
 		.gpio_v_en_ip = gpio_v_en_ip,
@@ -130,6 +132,15 @@ int example_main()
 
 #ifdef TMC
 	tmc_iio_ip.tmc5240_init_param = &tmc5240_ip;
+	/**
+	 * Initial scaling values set to 0.9 based on the stepper motor steps per
+	 * angle of the motor shipped with the ADMT4000 calibration kit. Users can
+	 * adjust these values to match their specific stepper motor and mechanical
+	 * setup in the application.
+	 */
+	tmc_iio_ip.acceleration_calibscale = 900;
+	tmc_iio_ip.velocity_calibscale = 900;
+	tmc_iio_ip.position_calibscale = 900;
 	ret = tmc5240_iio_init(&tmc_iio_desc, &tmc_iio_ip);
 	if (ret)
 		return ret;
@@ -141,7 +152,13 @@ int example_main()
 	if (ret)
 		return ret;
 
-	ret = no_os_irq_set_priority(admt4000_irq_desc, admt4000_gpio_trig_ip.irq_id,
+	/* Disable the interrupt until iio_desc is initialized */
+	ret = no_os_irq_disable(admt4000_irq_desc, admt4000_gpio_irq_ip.irq_ctrl_id);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_set_priority(admt4000_irq_desc,
+				     admt4000_gpio_irq_ip.irq_ctrl_id,
 				     7);
 	if (ret)
 		return ret;

@@ -44,6 +44,9 @@
 #include "no_os_alloc.h"
 #include "no_os_delay.h"
 
+/* Bytes required to hold the input data with parity. */
+#define ADMT4000_ECC_DATA_SIZE	(15)
+
 static int admt4000_set_page(struct admt4000_dev *device, uint8_t page);
 static int admt4000_ecc_config(struct admt4000_dev *device, bool is_en);
 static int admt4000_update_ecc(struct admt4000_dev *device, uint16_t *ecc_val);
@@ -88,7 +91,8 @@ static int admt4000_config(struct admt4000_dev *device,
 	if (ret)
 		return ret;
 
-	ret = admt4000_reg_read(device, ADMT4000_AGP_REG_FAULT, &temp, NULL);
+	/* Clear faults before GPIO config so ECC writes are accepted */
+	ret = admt4000_clear_all_faults(device);
 	if (ret)
 		return ret;
 
@@ -353,7 +357,7 @@ static int admt4000_compute_crc(uint32_t data_in, uint8_t *crc_ret)
 }
 
 /**
- * @brief Computes the Hamming Distance.
+ * @brief Computes the parity of the hamming code from the given position.
  * @param position - Bit position.
  * @param code_length - Length of code (original data + parity bits) in bits.
  * @param code - Array containing bytes to iterate through.
@@ -389,39 +393,45 @@ static int admt4000_hamming_calc(uint8_t position, uint8_t code_length,
 
 /**
  * @brief ECC Encoding process.
- * @param code - Stores the array where the computed codes will be stored.
  * @param input - Contains the input data to be encoded from certain ADMT4000
  *                registers.
  * @param input_size - Size of the input array.
  * @param ecc - Value to store ECC register compatible data.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int admt4000_ecc_encode(uint8_t *code, uint8_t *input,
+static int admt4000_ecc_encode(uint8_t *input,
 			       uint8_t input_size,
 			       uint8_t *ecc)
 {
 	int i = 0, j = 0, k = 0;
 	int eff_pos;
 	int value;
+	uint8_t *code;
 	uint8_t position;
 	uint8_t xtract;
 	uint8_t parity_num;
 	uint8_t code_length;
+	uint8_t data_bits = input_size * 8;
 
 	*ecc = 0;
 
-	if (input_size > 16)
+	if (!input || !input_size)
 		return -EINVAL;
 
 	/* Compute parity bits needed */
 	parity_num = 0;
-	while ((input_size * 8) > (1 << i) - (i + 1)) {
+	while (data_bits > (1 << i) - (i + 1)) {
 		parity_num += 1;
 		i++;
 	}
 
 	/* In bits */
-	code_length = parity_num + (input_size * 8);
+	code_length = parity_num + data_bits;
+	code = (uint8_t *)no_os_calloc(1, input_size + NO_OS_DIV_ROUND_UP(parity_num,
+				       8));
+	if (!code)
+		return -ENOMEM;
+
 	for (i = 0; i < code_length; i++) {
 		if (i == ((1 << k) - 1)) {
 			code[(i / 8)] &= (uint8_t)~NO_OS_BIT((i & 0x7));
@@ -455,6 +465,8 @@ static int admt4000_ecc_encode(uint8_t *code, uint8_t *input,
 	value &= 0x1;
 	*ecc |= (value << parity_num);
 
+	no_os_free(code);
+
 	return 0;
 }
 
@@ -468,10 +480,10 @@ static int admt4000_update_ecc(struct admt4000_dev *device, uint16_t *ecc_val)
 {
 	int ret;
 	int i;
+	int j;
 	uint16_t temp;
-	uint8_t for_encode[15] = {0};
+	uint8_t for_encode[ADMT4000_ECC_DATA_SIZE] = {0};
 	uint8_t ecc[2] = {0};
-	uint8_t encoded[16] = {0};
 
 	if (!device)
 		return -EINVAL;
@@ -482,19 +494,20 @@ static int admt4000_update_ecc(struct admt4000_dev *device, uint16_t *ecc_val)
 	 * ADMT4000_02_REG_H8MAG
 	 * ADMT4000_02_REG_H8PH
 	 */
-	for (i = 7; i < 11; i++) {
+	for (i = 7, j = 0; i < 11; i++) {
 		ret = admt4000_reg_read(device, admt4000_ecc_control_registers[i],
 					&temp, NULL);
 		if (ret)
 			return ret;
 
-		if (i != 7)
-			no_os_put_unaligned_le16(temp, for_encode + (2 * (i - 8) + 1));
-		else
-			for_encode[14] = no_os_field_get(ADMT4000_HI_BYTE, temp);
+		if (i != 7) {
+			no_os_put_unaligned_le16(temp, for_encode + j);
+			j += 2;
+		} else
+			for_encode[j++] = no_os_field_get(ADMT4000_HI_BYTE, temp);
 	}
 
-	ret = admt4000_ecc_encode(encoded, for_encode, 16, ecc);
+	ret = admt4000_ecc_encode(for_encode, sizeof(for_encode), ecc);
 	if (ret)
 		return ret;
 
@@ -517,11 +530,10 @@ static int admt4000_update_ecc(struct admt4000_dev *device, uint16_t *ecc_val)
 		if (i != 7)
 			no_os_put_unaligned_le16(temp, for_encode + (2 * i));
 		else
-			for_encode[14] = no_os_field_get(ADMT4000_LOW_BYTE, temp);
+			for_encode[(2 * i)] = no_os_field_get(ADMT4000_LOW_BYTE, temp);
 	}
 
-	/* ECC1 (needs padding) */
-	ret = admt4000_ecc_encode(encoded, for_encode, 16, ecc + 1);
+	ret = admt4000_ecc_encode(for_encode, sizeof(for_encode), ecc + 1);
 	if (ret)
 		return ret;
 

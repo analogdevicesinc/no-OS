@@ -169,7 +169,6 @@ struct tmc5240_init_param tmc5240_ip = {
 	.vmax = 254876,
 	.dmax = 131072,
 	.clock = 12500000, /* 12.5 MHz internal clock*/
-	.step_angle_millidegrees = 900, /* 0.9 degrees */
 	.microsteps_res = 0, /* Native 256 microsteps */
 	.irundelay = 4, /* 4*512 clocks */
 	.iholddelay = 4, /* 4*2^18 clocks */
