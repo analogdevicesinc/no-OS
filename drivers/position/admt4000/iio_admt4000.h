@@ -49,7 +49,6 @@ enum admt4000_iio_chan_type {
 	ADMT4000_COSINE,
 	ADMT4000_SINE,
 	ADMT4000_RADIUS,
-	ADMT4000_NUM_CHAN,
 };
 
 
