@@ -150,7 +150,7 @@ Phase Adjustment Configuration
 
 The phase of the generated output frequency can be adjusted using
 **adf4382_set_phase_adjust**. This will skew the phase of the requested
-frequency by the desired amount in pico-seconds. The API will automatically
+frequency by the desired amount in femto-seconds. The API will automatically
 transform the input value from a time adjustment to a phase adjustment relative
 to the set output frequency. If the phase exceeds 360 degrees, it will apply
 only the overshoot.
@@ -163,6 +163,7 @@ positive polarity and 1 for negative polarity.
 
 To determine the current phase adjustment and polarity,
 **adf4382_get_phase_adjust** and **adf4382_get_phase_pol** should be used.
+The phase adjustment is read back in femto-seconds.
 
 By default the polarity is positive.
 
@@ -285,11 +286,11 @@ SPI Communication Example
  	if (ret)
  		goto error;
 
- 	ret = adf4382_set_freq(dev, 20000000000);
+ 	ret = adf4382_set_rfout(dev, 20000000000);
  	if (ret)
  		goto error;
 
- 	ret = adf4382_set_phase_adjust(dev, 10);
+ 	ret = adf4382_set_phase_adjust(dev, 10000);
  	if (ret)
  		goto error;
 
