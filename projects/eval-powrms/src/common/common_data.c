@@ -160,7 +160,7 @@ struct no_os_eeprom_init_param eeprom_m24512_init_param = {
 	.extra = &m24512_init_extra_param,
 };
 
-// MAX77986 charger (adapter->SYS high-voltage buck, MODE 6)
+// MAX77986 charger (adapter->SYS buck + 1-cell Li+ charger, MODE 5)
 
 struct no_os_i2c_init_param max77986_i2c_init_param = {
 	.device_id = I2C_DEVICE_ID,

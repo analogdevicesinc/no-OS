@@ -38,6 +38,27 @@
 #include "no_os_circular_buffer.h"
 #include "powrms_data_processing.h"
 
+/*
+ * TEMPORARY -- MAX77986 charger debug attributes.
+ *
+ * Set to 0 (or delete this define) to remove the charger status attributes
+ * from the IIO device. Everything they pull in is confined to blocks guarded
+ * by "#if POWRMS_CHARGER_DEBUG_ATTRS" in iio_powrms.c -- deleting those
+ * blocks and this define removes the feature completely; nothing else in the
+ * project depends on it.
+ */
+#define POWRMS_CHARGER_DEBUG_ATTRS	1
+
+#if POWRMS_CHARGER_DEBUG_ATTRS
+/**
+ * @brief Snapshot the charger status registers at boot.
+ *
+ * Call once, right after max77986_init() and before iio_app_init(). The
+ * result is exposed through the "chg_boot_status" attribute.
+ */
+void powrms_chg_capture_boot(void);
+#endif
+
 #define INTC_DEVICE_ID                  1
 #define IIO_BUFF_TYPE                   int32_t
 #define TOTAL_PWM_CHANNELS              0  // No scannable channels (all voltage channels are now non-scannable)

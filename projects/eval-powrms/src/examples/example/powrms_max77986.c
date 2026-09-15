@@ -71,6 +71,35 @@ static int max77986_reg_write(struct no_os_i2c_desc *desc, uint8_t reg,
 	return 0;
 }
 
+/**
+ * @brief Read a single 8-bit value from a MAX77986 register.
+ *
+ * @param desc - I2C descriptor for the MAX77986.
+ * @param reg  - Register address.
+ * @param val  - Will be set to the register content on success.
+ *
+ * @return 0 on success, negative error code on failure.
+ */
+static int max77986_reg_read(struct no_os_i2c_desc *desc, uint8_t reg,
+			     uint8_t *val)
+{
+	int ret;
+
+	ret = no_os_i2c_write(desc, &reg, 1, 0);
+	if (ret) {
+		pr_err("MAX77986 addr reg 0x%02X failed: %d\n", reg, ret);
+		return ret;
+	}
+
+	ret = no_os_i2c_read(desc, val, 1, 1);
+	if (ret) {
+		pr_err("MAX77986 read reg 0x%02X failed: %d\n", reg, ret);
+		return ret;
+	}
+
+	return 0;
+}
+
 int max77986_init(struct no_os_i2c_desc **desc,
 		  const struct no_os_i2c_init_param *param)
 {
@@ -85,11 +114,11 @@ int max77986_init(struct no_os_i2c_desc **desc,
 		return ret;
 
 	/*
-	 * MODE 6 (high-voltage buck) bring-up sequence. The charger config
-	 * registers are protected, so CHGPROT must be unlocked before any
-	 * other CHG_CNFG_* write takes effect. MODE = 0x6 is enabled last so
-	 * the SYS rail only comes up after the voltage / current limits are
-	 * configured.
+	 * MODE 5 (charger on, high-voltage buck on) bring-up sequence. The
+	 * charger config registers are protected, so CHGPROT must be unlocked
+	 * before any other CHG_CNFG_* write takes effect. MODE = 0x5 is
+	 * enabled last so charging only starts once the current and voltage
+	 * limits are in place.
 	 */
 
 	/* Step 1: unlock charger registers (CHGPROT = 0b11). */
@@ -98,25 +127,49 @@ int max77986_init(struct no_os_i2c_desc **desc,
 	if (ret)
 		goto error;
 
-	/* Step 2: SYS_TRACK_DIS = 1 -> fixed SYS output (no VBATT to track). */
+	/* Step 2: trickle charge, no watchdog, restart threshold, safety timer. */
+	ret = max77986_reg_write(i2c_desc, MAX77986_REG_CHG_CNFG_01,
+				 MAX77986_CHG_CNFG_01_VAL);
+	if (ret)
+		goto error;
+
+	/* Step 3: CHG_CC -> fast-charge current. */
+	ret = max77986_reg_write(i2c_desc, MAX77986_REG_CHG_CNFG_02,
+				 MAX77986_CHG_CNFG_02_VAL);
+	if (ret)
+		goto error;
+
+	/* Step 4: top-off current threshold and timer. */
+	ret = max77986_reg_write(i2c_desc, MAX77986_REG_CHG_CNFG_03,
+				 MAX77986_CHG_CNFG_03_VAL);
+	if (ret)
+		goto error;
+
+	/* Step 5: SYS tracking enabled, MINSYS and 4.20 V termination. */
 	ret = max77986_reg_write(i2c_desc, MAX77986_REG_CHG_CNFG_04,
 				 MAX77986_CHG_CNFG_04_VAL);
 	if (ret)
 		goto error;
 
-	/* Step 3: BCKSYS -> fixed buck SYS voltage (5.0 V, maximum). */
+	/* Step 6: DISIBS = 0 -> BATT-to-SYS FET follows the power path. */
+	ret = max77986_reg_write(i2c_desc, MAX77986_REG_CHG_CNFG_07,
+				 MAX77986_CHG_CNFG_07_VAL);
+	if (ret)
+		goto error;
+
+	/* Step 7: BCKSYS -> fixed buck SYS voltage (5.0 V, maximum). */
 	ret = max77986_reg_write(i2c_desc, MAX77986_REG_CHG_CNFG_08,
 				 MAX77986_CHG_CNFG_08_VAL);
 	if (ret)
 		goto error;
 
-	/* Step 4: CHGIN_ILIM -> maximum adapter input current limit (5.5 A). */
+	/* Step 8: CHGIN_ILIM -> adapter input current limit. */
 	ret = max77986_reg_write(i2c_desc, MAX77986_REG_CHG_CNFG_09,
 				 MAX77986_CHG_CNFG_09_VAL);
 	if (ret)
 		goto error;
 
-	/* Step 5: BATRMV_MSK = 1, MODE = 0x6 -> enable the buck last. */
+	/* Step 9: BATRMV_MSK = 1, MODE = 0x5 -> enable charger + buck last. */
 	ret = max77986_reg_write(i2c_desc, MAX77986_REG_CHG_CNFG_00,
 				 MAX77986_CHG_CNFG_00_VAL);
 	if (ret)
@@ -131,10 +184,41 @@ error:
 	return ret;
 }
 
-int max77986_remove(struct no_os_i2c_desc *desc)
+int max77986_get_details(struct no_os_i2c_desc *desc, uint8_t *details_00,
+			 uint8_t *details_01)
 {
-	if (!desc)
+	int ret;
+
+	if (!desc || !details_00 || !details_01)
 		return -EINVAL;
 
-	return no_os_i2c_remove(desc);
+	ret = max77986_reg_read(desc, MAX77986_REG_CHG_DETAILS_00, details_00);
+	if (ret)
+		return ret;
+
+	return max77986_reg_read(desc, MAX77986_REG_CHG_DETAILS_01, details_01);
+}
+
+int max77986_log_status(struct no_os_i2c_desc *desc)
+{
+	uint8_t details_00, details_01;
+	int ret;
+
+	ret = max77986_get_details(desc, &details_00, &details_01);
+	if (ret)
+		return ret;
+
+	/*
+	 * CHG_DTLS: 0x0 prequal, 0x1 fast-charge CC, 0x2 fast-charge CV,
+	 * 0x3 top-off, 0x4 done, 0x6 timer fault, 0x7 QBATT disabled
+	 * (DISQBAT/DISIBS), 0x8 charger off or input invalid, 0xA overtemp,
+	 * 0xB watchdog expired, 0xC JEITA suspend, 0xD battery removal
+	 * detected on THM, 0xE SUSPEND pin high.
+	 * BAT_DTLS: 0x0 battery removed, 0x3 battery okay, 0x4 battery low.
+	 */
+	pr_info("MAX77986 CHGIN_DTLS=0x%X BAT_DTLS=0x%X CHG_DTLS=0x%X\n",
+		MAX77986_CHGIN_DTLS(details_00), MAX77986_BAT_DTLS(details_01),
+		MAX77986_CHG_DTLS(details_01));
+
+	return 0;
 }

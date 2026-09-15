@@ -34,6 +34,7 @@
 #include "powrms_gpios.h"
 #include "powrms_utils.h"
 #include "powrms_data_processing.h"
+#include "iio_powrms.h"
 #include "m24512.h"
 #include "subscreen_blank_screen.h"
 #include "no_os_alloc.h"
@@ -289,13 +290,22 @@ int example_main(void)
 	configure_gpios_upon_startup();
 	pr_debug("Startup GPIOs configured\n");
 
-	pr_info("Initializing MAX77986 charger (MODE 6, max current)...\n");
+	pr_info("Initializing MAX77986 charger (MODE 5, charge + buck)...\n");
 	ret = max77986_init(&max77986_i2c_desc, &max77986_i2c_init_param);
 	if (ret) {
 		pr_err("MAX77986 init failed: %d\n", ret);
 		return ret;
 	}
 	pr_info("MAX77986 init done\n");
+#if POWRMS_CHARGER_DEBUG_ATTRS
+	/*
+	 * TEMPORARY -- snapshot for the "chg_boot_status" IIO attribute. This
+	 * is the only charger read at boot; max77986_log_status() is not called
+	 * because stdio is not routed to a UART (see configure_debug_uart())
+	 * and it would cost a second I2C transaction for no output.
+	 */
+	powrms_chg_capture_boot();
+#endif
 
 	pr_info("Initializing ADC (AD7091R5)...\n");
 	ret = configure_adc();
