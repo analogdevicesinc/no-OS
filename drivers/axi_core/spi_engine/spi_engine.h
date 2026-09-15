@@ -117,6 +117,8 @@ struct spi_engine_desc {
 	uint8_t 		max_data_width;
 	/**  output of SDO when CS is inactive or read-only transfers */
 	uint8_t			sdo_idle_state;
+	/** Sync ID used to signal the end of a transfer, incremented per message */
+	uint8_t			sync_id;
 };
 
 

@@ -104,6 +104,8 @@ int32_t ad9152_setup(struct ad9152_dev **device,
 	ad9152_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
 	if (chip_id != AD9152_CHIP_ID) {
 		printf("AD9152: Invalid CHIP ID (0x%x)!\n", chip_id);
+		no_os_spi_remove(dev->spi_desc);
+		no_os_free(dev);
 		return -1;
 	}
 

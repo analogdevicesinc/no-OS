@@ -405,8 +405,10 @@ int ade9000_init(struct ade9000_dev **device,
 	if (ret)
 		goto error_spi;
 
-	if (chip_id != ADE9000_CHIP_ID)
+	if (chip_id != ADE9000_CHIP_ID) {
+		ret = -ENODEV;
 		goto error_spi;
+	}
 
 	/* Enable Temperature Sensor */
 	ret = ade9000_update_bits(dev, ADE9000_REG_TEMP_CFG, ADE9000_TEMP_EN,
