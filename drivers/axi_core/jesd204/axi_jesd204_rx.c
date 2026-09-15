@@ -300,6 +300,17 @@ uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd)
 		clock_rate = axi_jesd204_rx_calc_device_clk(jesd, link_rate_khz);
 		printf("\tDesired Device Clock: %"PRIu32".%.3"PRIu32" MHz\n",
 		       clock_rate / 1000, clock_rate % 1000);
+		/*
+		 * When the transport-side path is wider than the link-side path
+		 * the desired (minimum) device clock is a fraction of the link
+		 * clock; a fixed higher device clock just runs with headroom.
+		 * Only printed when the ratio is not 1:1 so Tx/ORx (and Linux
+		 * parity for the common case) stay unchanged.
+		 */
+		if (jesd->data_path_width != jesd->tpl_data_path_width)
+			printf("\t  (data-path ratio %"PRIu32"/%"PRIu32
+			       "; desired is minimum, fixed clock may run with headroom)\n",
+			       jesd->data_path_width, jesd->tpl_data_path_width);
 	}
 
 	if (!link_disabled) {
@@ -686,6 +697,17 @@ int32_t axi_jesd204_rx_apply_config_legacy(struct axi_jesd204_rx *jesd,
 	return 0;
 }
 
+/*
+ * Device clock the transport layer requires to match link throughput:
+ *   device_clk = link_rate * data_path_width / tpl_data_path_width
+ * Both widths are HDL synthesis constants of the core (reg 0x14). When the
+ * transport-side path is wider than the link-side path (tpl_data_path_width >
+ * data_path_width, e.g. a high-density Rx framing M=8 over L=2 giving F=8) the
+ * result is a fraction of the link clock. This is the minimum device clock the
+ * fabric needs; a design that feeds a higher fixed device clock (integer
+ * multiple) simply runs the transport side with headroom. Mirrors Linux
+ * axi_jesd204_rx_calc_device_clk() so the "Desired Device Clock" line matches.
+ */
 static unsigned long axi_jesd204_rx_calc_device_clk(struct axi_jesd204_rx *jesd,
 		unsigned long link_rate)
 {
