@@ -41,6 +41,12 @@
 #include "common_data.h"
 #include "powrms_data_processing.h"
 #include "powrms_utils.h"
+#if POWRMS_CHARGER_DEBUG_ATTRS
+/* TEMPORARY -- direct peripheral access, only for the charger I2C probe. */
+#include "mxc_device.h"
+#include "i2c.h"
+#include "no_os_delay.h"
+#endif
 
 // Global variables for indexed upload state
 static uint32_t precision_chunk_index =
@@ -463,6 +469,267 @@ struct iio_attribute powrms_poly_calib_reverse_attributes[] = {
 	END_ATTRIBUTES_ARRAY,
 };
 
+#if POWRMS_CHARGER_DEBUG_ATTRS
+/*
+ * TEMPORARY -- MAX77986 charger status attributes.
+ *
+ * Read-only views of CHG_DETAILS_00 / CHG_DETAILS_01 so the charge state can
+ * be polled over the IIOD link (the debug UART is shared with IIOD and is not
+ * routed to stdio).
+ *
+ * IMPORTANT: none of the *read* attributes touch I2C. They report a cached
+ * snapshot only. A failed read to the charger leaves the Maxim I2C peripheral
+ * with the bus held, which blocks the next transaction until the watchdog
+ * resets the board -- so a plain "iio_attr -a" scan must never be able to
+ * trigger a transfer. Writing to "chg_refresh" is the single, explicit way to
+ * perform one.
+ *
+ * Remove this whole block, its entries in powrms_global_attributes[], and
+ * POWRMS_CHARGER_DEBUG_ATTRS in iio_powrms.h to drop the feature.
+ */
+
+static const char *const powrms_chg_dtls_str[16] = {
+	"prequalification", "fast_charge_cc", "fast_charge_cv", "top_off",
+	"done", "reserved", "timer_fault", "qbatt_disabled",
+	"off_or_input_invalid", "reserved", "overtemperature",
+	"watchdog_expired", "jeita_suspend", "battery_removed_thm",
+	"suspend_pin_high", "reserved"
+};
+
+static const char *const powrms_bat_dtls_str[8] = {
+	"removed", "prequalification_voltage", "timer_fault", "regular_voltage",
+	"low_voltage", "overvoltage", "overcurrent", "battery_only_no_adapter"
+};
+
+static const char *const powrms_chgin_dtls_str[4] = {
+	"invalid_uvlo_or_aicl", "invalid_below_batt", "invalid_ovlo", "valid"
+};
+
+/* Boot snapshot: taken once, after max77986_init(), before iio_app_init(). */
+static int powrms_chg_boot_ret = -EAGAIN;
+static uint8_t powrms_chg_boot_d00;
+static uint8_t powrms_chg_boot_d01;
+
+/* Most recent snapshot produced by a "chg_refresh" write. */
+static int powrms_chg_last_ret = -EAGAIN;
+static uint8_t powrms_chg_last_d00;
+static uint8_t powrms_chg_last_d01;
+
+void powrms_chg_capture_boot(void)
+{
+	powrms_chg_boot_ret = max77986_get_details(max77986_i2c_desc,
+			      &powrms_chg_boot_d00,
+			      &powrms_chg_boot_d01);
+
+	/* Seed the live cache so it reads back sensibly before any refresh. */
+	powrms_chg_last_ret = powrms_chg_boot_ret;
+	powrms_chg_last_d00 = powrms_chg_boot_d00;
+	powrms_chg_last_d01 = powrms_chg_boot_d01;
+}
+
+/**
+ * @brief Format one cached snapshot into an attribute buffer.
+ */
+static int powrms_format_chg(char *buf, uint32_t len, int ret, uint8_t d00,
+			     uint8_t d01)
+{
+	if (ret)
+		return snprintf(buf, len, "read_failed ret=%d", ret);
+
+	return snprintf(buf, len, "ok 0x%02X 0x%02X chg=%s bat=%s chgin=%s",
+			d00, d01, powrms_chg_dtls_str[MAX77986_CHG_DTLS(d01)],
+			powrms_bat_dtls_str[MAX77986_BAT_DTLS(d01)],
+			powrms_chgin_dtls_str[MAX77986_CHGIN_DTLS(d00)]);
+}
+
+static int get_chg_boot_status(void *device, char *buf, uint32_t len,
+			       const struct iio_ch_info *channel, intptr_t priv)
+{
+	return powrms_format_chg(buf, len, powrms_chg_boot_ret,
+				 powrms_chg_boot_d00, powrms_chg_boot_d01);
+}
+
+static int get_chg_status(void *device, char *buf, uint32_t len,
+			  const struct iio_ch_info *channel, intptr_t priv)
+{
+	return powrms_format_chg(buf, len, powrms_chg_last_ret,
+				 powrms_chg_last_d00, powrms_chg_last_d01);
+}
+
+static int get_chg_state(void *device, char *buf, uint32_t len,
+			 const struct iio_ch_info *channel, intptr_t priv)
+{
+	if (powrms_chg_last_ret)
+		return snprintf(buf, len, "unavailable");
+
+	return snprintf(buf, len, "%s",
+			powrms_chg_dtls_str[MAX77986_CHG_DTLS(powrms_chg_last_d01)]);
+}
+
+static int get_bat_state(void *device, char *buf, uint32_t len,
+			 const struct iio_ch_info *channel, intptr_t priv)
+{
+	if (powrms_chg_last_ret)
+		return snprintf(buf, len, "unavailable");
+
+	return snprintf(buf, len, "%s",
+			powrms_bat_dtls_str[MAX77986_BAT_DTLS(powrms_chg_last_d01)]);
+}
+
+static int get_chgin_state(void *device, char *buf, uint32_t len,
+			   const struct iio_ch_info *channel, intptr_t priv)
+{
+	if (powrms_chg_last_ret)
+		return snprintf(buf, len, "unavailable");
+
+	return snprintf(buf, len, "%s",
+			powrms_chgin_dtls_str[MAX77986_CHGIN_DTLS(powrms_chg_last_d00)]);
+}
+
+static int get_chg_details_raw(void *device, char *buf, uint32_t len,
+			       const struct iio_ch_info *channel, intptr_t priv)
+{
+	if (powrms_chg_last_ret)
+		return snprintf(buf, len, "read_failed ret=%d",
+				powrms_chg_last_ret);
+
+	return snprintf(buf, len, "0x%02X 0x%02X", powrms_chg_last_d00,
+			powrms_chg_last_d01);
+}
+
+/**
+ * @brief Perform one charger read on demand and cache the result.
+ *
+ * This is the only path in the debug block that touches I2C. It never returns
+ * the driver error upward -- doing so makes iio_attr print MSDK codes through
+ * strerror() (-9 E_COMM_ERR shows as "Bad file descriptor"). Read the outcome
+ * back from "chg_status" instead.
+ */
+static int set_chg_refresh(void *device, char *buf, uint32_t len,
+			   const struct iio_ch_info *channel, intptr_t priv)
+{
+	powrms_chg_last_ret = max77986_get_details(max77986_i2c_desc,
+			      &powrms_chg_last_d00,
+			      &powrms_chg_last_d01);
+
+	return len;
+}
+
+static int get_chg_refresh(void *device, char *buf, uint32_t len,
+			   const struct iio_ch_info *channel, intptr_t priv)
+{
+	return snprintf(buf, len, "%d", powrms_chg_last_ret);
+}
+
+/*
+ * TEMPORARY -- I2C transfer-shape probe.
+ *
+ * The charger ACKs every register *write* (max77986_init() returns 0, and the
+ * MSDK checks ADDR_NACK_ERR before returning), yet every register *read*
+ * fails with -9 (E_COMM_ERR). That narrows the fault to the transfer shape,
+ * not the slave address. This probe runs the candidate shapes back to back and
+ * records both the return code and the raw I2C interrupt-flag register, so the
+ * failing condition is identified from the hardware rather than inferred.
+ *
+ * INTFL0 error bits (see MXC_I2C_REVA_ERROR):
+ *   bit 8  ADDR_NACK_ERR   bit 9  DATA_ERR   bit 10 DNR_ERR
+ *   bit 11 START_ERR       bit 12 STOP_ERR   bit 13 TO_ERR
+ *   bit 14 ARB_ERR
+ */
+#define POWRMS_CHG_PROBE_SHAPES		4
+
+static const char *const powrms_chg_probe_name[POWRMS_CHG_PROBE_SHAPES] = {
+	"repstart_rd1",		/* write(reg,nostop) + read(1,stop)  -- current */
+	"repstart_rd2",		/* write(reg,nostop) + read(2,stop)  -- AD7091R5 shape */
+	"stopped_rd1",		/* write(reg,stop)   + read(1,stop)  -- two transactions */
+	"write_only",		/* write(reg,stop)                   -- control */
+};
+
+static int powrms_chg_probe_ret[POWRMS_CHG_PROBE_SHAPES];
+static uint32_t powrms_chg_probe_flags[POWRMS_CHG_PROBE_SHAPES];
+static uint8_t powrms_chg_probe_val[POWRMS_CHG_PROBE_SHAPES];
+static int powrms_chg_probe_done;
+
+/*
+ * Release the bus between shapes. A shape that fails can leave SDA held by the
+ * slave; without this, the *next* shape blocks in one of the MSDK spin loops
+ * (which have no timeout) until the 8 s watchdog resets the board, and every
+ * result collected so far is lost with it.
+ */
+static void powrms_chg_probe_recover(struct mxc_i2c_regs *i2c)
+{
+	MXC_I2C_Recover(i2c, 16);
+	MXC_I2C_ClearFlags(i2c, 0xFFFFFFFF, 0xFFFFFFFF);
+	no_os_mdelay(5);
+}
+
+static int set_chg_probe(void *device, char *buf, uint32_t len,
+			 const struct iio_ch_info *channel, intptr_t priv)
+{
+	mxc_i2c_regs_t *i2c = MXC_I2C_GET_I2C(max77986_i2c_desc->device_id);
+	uint8_t reg = MAX77986_REG_CHG_DETAILS_01;
+	uint8_t rx[2];
+	int ret;
+
+	/* Shape 0: repeated start, 1 byte in. */
+	ret = no_os_i2c_write(max77986_i2c_desc, &reg, 1, 0);
+	if (!ret)
+		ret = no_os_i2c_read(max77986_i2c_desc, rx, 1, 1);
+	powrms_chg_probe_ret[0] = ret;
+	powrms_chg_probe_flags[0] = i2c->intfl0;
+	powrms_chg_probe_val[0] = rx[0];
+	powrms_chg_probe_recover(i2c);
+
+	/* Shape 1: repeated start, 2 bytes in (the shape ad7091r5 uses). */
+	ret = no_os_i2c_write(max77986_i2c_desc, &reg, 1, 0);
+	if (!ret)
+		ret = no_os_i2c_read(max77986_i2c_desc, rx, 2, 1);
+	powrms_chg_probe_ret[1] = ret;
+	powrms_chg_probe_flags[1] = i2c->intfl0;
+	powrms_chg_probe_val[1] = rx[0];
+	powrms_chg_probe_recover(i2c);
+
+	/* Shape 2: address write terminated by STOP, then a standalone read. */
+	ret = no_os_i2c_write(max77986_i2c_desc, &reg, 1, 1);
+	if (!ret)
+		ret = no_os_i2c_read(max77986_i2c_desc, rx, 1, 1);
+	powrms_chg_probe_ret[2] = ret;
+	powrms_chg_probe_flags[2] = i2c->intfl0;
+	powrms_chg_probe_val[2] = rx[0];
+	powrms_chg_probe_recover(i2c);
+
+	/* Shape 3: control -- a plain write, which is known to succeed. */
+	ret = no_os_i2c_write(max77986_i2c_desc, &reg, 1, 1);
+	powrms_chg_probe_ret[3] = ret;
+	powrms_chg_probe_flags[3] = i2c->intfl0;
+	powrms_chg_probe_val[3] = 0;
+
+	powrms_chg_probe_done = 1;
+
+	return len;
+}
+
+static int get_chg_probe(void *device, char *buf, uint32_t len,
+			 const struct iio_ch_info *channel, intptr_t priv)
+{
+	uint32_t used = 0;
+	int i;
+
+	if (!powrms_chg_probe_done)
+		return snprintf(buf, len, "not_run write_1_to_run");
+
+	for (i = 0; i < POWRMS_CHG_PROBE_SHAPES && used < len; i++)
+		used += snprintf(buf + used, len - used,
+				 "%s:ret=%d,intfl0=0x%08lX,val=0x%02X ",
+				 powrms_chg_probe_name[i],
+				 powrms_chg_probe_ret[i],
+				 (unsigned long)powrms_chg_probe_flags[i],
+				 powrms_chg_probe_val[i]);
+
+	return used;
+}
+#endif /* POWRMS_CHARGER_DEBUG_ATTRS */
+
 struct iio_attribute powrms_global_attributes[] = {
 	{
 		.name = "frequency_MHz",
@@ -494,6 +761,52 @@ struct iio_attribute powrms_global_attributes[] = {
 		.store = set_adc_averaging_nr,
 		.priv = IIO_ATTR_SCALE,
 	},
+#if POWRMS_CHARGER_DEBUG_ATTRS
+	/*
+	 * TEMPORARY -- MAX77986 charger status. All reads are cache-only and
+	 * safe to scan; write chg_refresh to sample the part over I2C.
+	 */
+	{
+		.name = "chg_boot_status",
+		.show = get_chg_boot_status,
+		.store = NULL,
+	},
+	{
+		.name = "chg_status",
+		.show = get_chg_status,
+		.store = NULL,
+	},
+	{
+		.name = "chg_state",
+		.show = get_chg_state,
+		.store = NULL,
+	},
+	{
+		.name = "bat_state",
+		.show = get_bat_state,
+		.store = NULL,
+	},
+	{
+		.name = "chgin_state",
+		.show = get_chgin_state,
+		.store = NULL,
+	},
+	{
+		.name = "chg_details_raw",
+		.show = get_chg_details_raw,
+		.store = NULL,
+	},
+	{
+		.name = "chg_refresh",
+		.show = get_chg_refresh,
+		.store = set_chg_refresh,
+	},
+	{
+		.name = "chg_probe",
+		.show = get_chg_probe,
+		.store = set_chg_probe,
+	},
+#endif /* POWRMS_CHARGER_DEBUG_ATTRS */
 	END_ATTRIBUTES_ARRAY,
 };
 
