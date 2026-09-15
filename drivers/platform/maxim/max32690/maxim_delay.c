@@ -71,6 +71,8 @@ void no_os_mdelay(uint32_t msecs)
 struct no_os_time no_os_get_time(void)
 {
 	struct no_os_time t;
+#ifndef __riscv
+	/* ARM Cortex-M: Use SysTick */
 	uint64_t sub_ms;
 	uint32_t systick_val;
 	uint64_t ticks;
@@ -83,6 +85,13 @@ struct no_os_time no_os_get_time(void)
 	sub_ms = ((SysTick->LOAD - systick_val) * 1000) / SysTick->LOAD;
 	t.s = ticks / 1000;
 	t.us = (ticks - t.s * 1000) * 1000 + sub_ms;
+#else
+	/* RISC-V: Simple counter-based time (microsecond resolution not available) */
+	static uint64_t riscv_ticks = 0;
+	riscv_ticks++;
+	t.s = riscv_ticks / 1000;
+	t.us = (riscv_ticks % 1000) * 1000;
+#endif
 
 	return t;
 }
