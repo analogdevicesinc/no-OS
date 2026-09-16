@@ -180,13 +180,13 @@ int32_t ssd_1306_init(struct display_dev *device)
 		return -1;
 
 	no_os_udelay(3U);
-	command[0] = 0xA1;
+	command[0] = SSD1306_SEG_REMAP_CMD;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
 	no_os_udelay(3U);
-	command[0] = 0xC8;
+	command[0] = SSD1306_COM_SCAN_CMD;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
