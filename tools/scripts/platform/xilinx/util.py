@@ -29,6 +29,19 @@ from hsi import HwManager
 
 
 # ---------------------------------------------------------------------------
+# Logging
+# ---------------------------------------------------------------------------
+
+TYELLOW = "\033[33m"  # Yellow text
+TWHITE = "\033[39m"   # Default text
+
+
+def log_warn(msg):
+    """Log a highlighted WARNING to stderr so it stands out in build/CI logs."""
+    print(f"{TYELLOW}WARNING: {msg}{TWHITE}", file=sys.stderr)
+
+
+# ---------------------------------------------------------------------------
 # Target filter dictionaries (PL bitstream / PS core name patterns)
 # ---------------------------------------------------------------------------
 
@@ -461,6 +474,91 @@ def get_arch(hw_path, hw_file, target):
 
 
 # ---------------------------------------------------------------------------
+# Platform creation (with retry)
+# ---------------------------------------------------------------------------
+
+def _hw0_artifacts(out_dir, vcpu):
+    """Paths to the two artifacts that prove 'hw0' platform creation finished.
+
+    hw0.xpfm is the platform descriptor create_app_component() needs; libxil.a
+    is the standalone BSP archive the CMake build links against. Both present
+    means the platform is usable.
+    """
+    export = os.path.join(out_dir, "hw0", "export", "hw0")
+    xpfm = os.path.join(export, "hw0.xpfm")
+    libxil = os.path.join(export, "sw", f"standalone_{vcpu}", "lib", "libxil.a")
+    return xpfm, libxil
+
+
+def _create_hw0_platform(out_dir, xsa, vcpu, attempts=2):
+    """Create + build the standalone 'hw0' platform, retrying on failure.
+
+    create_platform_component() is intermittently flaky on Vitis 2025.1: while
+    generating the FSBL sub-component, the baremetal 'getsupported_comp' lopper
+    assist can throw an AttributeError which --werror turns fatal, aborting the
+    whole platform ("Failed to create platform: hw0") even though the standalone
+    domain no-OS actually links against generated fine. no-OS does not need the
+    FSBL (the copy step below is best-effort), and a fresh Vitis server on a
+    clean workspace almost always succeeds -- so on failure we dispose the
+    server, wipe the workspace, and try again instead of failing the build.
+
+    Returns the live vitis client on success (the caller reuses it for the app
+    component and disposes it at the end). Exits non-zero if all attempts fail.
+    """
+    import shutil
+    import vitis
+
+    xpfm, libxil = _hw0_artifacts(out_dir, vcpu)
+
+    for attempt in range(attempts):
+        # Always start clean: Vitis refuses to create a platform over stale
+        # workspace metadata, and a failed attempt leaves a half-written one.
+        if os.path.exists(out_dir):
+            shutil.rmtree(out_dir)
+
+        print(f"INFO: Creating platform component (cpu={vcpu}) "
+              f"[attempt {attempt + 1}/{attempts}]...")
+        client = None
+        try:
+            client = vitis.create_client(workspace=out_dir)
+            client.create_platform_component(
+                name="hw0", hw_design=xsa, cpu=vcpu, os="standalone")
+
+            # create_platform_component() sometimes triggers an internal
+            # "Quick Build" that already produces libxil.a; call build() only
+            # when it didn't, since a second build() can crash the gRPC server
+            # ("Application error processing RPC"). Skip build() entirely if the
+            # platform never materialized (no xpfm) -- build() would just error
+            # with "Invalid project location".
+            if os.path.exists(xpfm) and not os.path.exists(libxil):
+                print("INFO: Building platform (BSP + FSBL)...")
+                client.get_component(name="hw0").build()
+        except Exception as exc:  # Vitis API raises bare Exception on failure
+            log_warn(f"Vitis error during platform creation: {exc}")
+
+        if os.path.exists(xpfm) and os.path.exists(libxil):
+            return client  # success -- caller owns the client from here
+
+        # Failed (usually the FSBL assist above). Shut the Vitis server down so
+        # the next attempt starts a fresh one -- a lingering server or corrupt
+        # .Xil repo state is the usual reason a retry then succeeds.
+        try:
+            vitis.dispose()
+        except Exception:
+            pass
+        if attempt < attempts - 1:
+            log_warn(f"platform 'hw0' not produced on attempt "
+                     f"{attempt + 1}/{attempts} (FSBL getsupported_comp assist "
+                     f"is the usual culprit); retrying hw0 creation on a clean "
+                     f"workspace...")
+
+    print(f"ERROR: platform 'hw0' failed after {attempts} attempt(s): "
+          f"hw0.xpfm / libxil.a were not produced. See the Vitis errors above.",
+          file=sys.stderr)
+    sys.exit(1)
+
+
+# ---------------------------------------------------------------------------
 # create_project
 # ---------------------------------------------------------------------------
 
@@ -488,27 +586,13 @@ def create_project(ws, hw_path, hw_file, target):
     xsa = os.path.join(hw_path, hw_file)
     out_dir = os.path.join(ws, "tmp", "output")
 
-    # Clean entire output workspace — Vitis refuses to create a platform
-    # if workspace metadata from a previous run exists.
-    if os.path.exists(out_dir):
-        shutil.rmtree(out_dir)
-
-    # --- Step 1: Platform build (BSP + FSBL) ---
-    print(f"INFO: Creating platform component (cpu={vcpu})...")
-    client = vitis.create_client(workspace=out_dir)
-    client.create_platform_component(
-        name="hw0", hw_design=xsa, cpu=vcpu, os="standalone")
-
-    # Build the platform only if Quick Build didn't already produce the BSP.
-    # create_platform_component() sometimes triggers an internal "Quick Build"
-    # that produces libxil.a — calling platform.build() again can crash the
-    # gRPC server with "Application error processing RPC".
-    platform = client.get_component(name="hw0")
-    libxil_path = os.path.join(out_dir, "hw0", "export", "hw0", "sw",
-                               f"standalone_{vcpu}", "lib", "libxil.a")
-    if not os.path.exists(libxil_path):
-        print("INFO: Building platform (BSP + FSBL)...")
-        platform.build()
+    # --- Step 1: Platform build (BSP + FSBL), with retry ---
+    # The FSBL sub-component of create_platform_component() is flaky on Vitis
+    # 2025.1 and usually succeeds on a fresh retry; _create_hw0_platform()
+    # handles the retry and guarantees hw0.xpfm + libxil.a exist on return
+    # (or exits non-zero). Override the attempt count with NOOS_BSP_MAX_ATTEMPTS.
+    attempts = int(os.environ.get("NOOS_BSP_MAX_ATTEMPTS", "2"))
+    client = _create_hw0_platform(out_dir, xsa, vcpu, attempts=attempts)
 
     # --- Step 2: App component (linker script) ---
     xpfm = os.path.join(out_dir, "hw0", "export", "hw0", "hw0.xpfm")
