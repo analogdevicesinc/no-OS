@@ -28,11 +28,11 @@ if(${NATIVE_BUILD})
     set(NO_OS_TOOLCHAIN_PATH "drivers/platform/${PLATFORM}/toolchain.cmake")
     set(NO_OS_DEFCONFIG_PATH "${CMAKE_SOURCE_DIR}/board_configs/${PLATFORM}/${BOARD_CONFIG_FILE}")
 
-elseif(EXISTS "${CMAKE_SOURCE_DIR}/_deps/no-os-core-src")
+elseif(EXISTS "${CMAKE_BINARY_DIR}/_deps/no-os-core-src")
     # Out-of-tree build with FetchContent
     message(STATUS "Out-of-tree build with FetchContent detected")
-    set(NO_OS_TOOLCHAIN_PATH "_deps/no-os-core-src/drivers/platform/${PLATFORM}/toolchain.cmake")
-    set(NO_OS_DEFCONFIG_PATH "${CMAKE_SOURCE_DIR}/_deps/no-os-core-src/board_configs/${PLATFORM}/${BOARD_CONFIG_FILE}")
+    set(NO_OS_TOOLCHAIN_PATH "${CMAKE_BINARY_DIR}/_deps/no-os-core-src/drivers/platform/${PLATFORM}/toolchain.cmake")
+    set(NO_OS_DEFCONFIG_PATH "${CMAKE_BINARY_DIR}/_deps/no-os-core-src/board_configs/${PLATFORM}/${BOARD_CONFIG_FILE}")
 
 elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/drivers")
     # Out-of-tree build using add_subdirectory (no-OS as subdirectory)
@@ -55,8 +55,13 @@ endif()
 # produces a path that does not exist.  Fail here with the offending path
 # instead of letting CMake report a generic "toolchain file not found".
 if(NOT CMAKE_TOOLCHAIN_FILE)
-    no_os_require_path("${CMAKE_SOURCE_DIR}/${NO_OS_TOOLCHAIN_PATH}"
-        "Toolchain file not found: ${CMAKE_SOURCE_DIR}/${NO_OS_TOOLCHAIN_PATH}. Is PLATFORM=${PLATFORM} a supported platform?")
+    if(${NATIVE_BUILD})
+        set(_toolchain_check_path "${CMAKE_SOURCE_DIR}/${NO_OS_TOOLCHAIN_PATH}")
+    else()
+        set(_toolchain_check_path "${NO_OS_TOOLCHAIN_PATH}")
+    endif()
+    no_os_require_path("${_toolchain_check_path}"
+        "Toolchain file not found: ${_toolchain_check_path}. Is PLATFORM=${PLATFORM} a supported platform?")
 endif()
 
 # Set DEFAULT_DEFCONFIG based on detected paths
@@ -87,8 +92,14 @@ else()
 endif()
 
 # Set toolchain file if not already set
+# NO_OS_TOOLCHAIN_PATH depending if we are doing NATIVE BUILD will be a 
+# completely different absolute path from CMAKE_SOURCE_DIR
 if(DEFINED NO_OS_TOOLCHAIN_PATH AND NOT CMAKE_TOOLCHAIN_FILE)
-    set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/${NO_OS_TOOLCHAIN_PATH}")
+    if (${NATIVE_BUILD})
+        set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/${NO_OS_TOOLCHAIN_PATH}")
+    else()
+        set(CMAKE_TOOLCHAIN_FILE "${NO_OS_TOOLCHAIN_PATH}")
+    endif()
 endif()
 
 # Default to a debuggable build when the user hasn't picked one.  The base
