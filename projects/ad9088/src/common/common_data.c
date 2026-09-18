@@ -118,9 +118,9 @@ struct adf4382_init_param adf4382_ip = {
 
 static struct hmc7044_chan_spec hmc7044_chans[] = {
 	{
-		.num = 1,		// ADF4030_REFIN
-		.divider = 20,		// 125 MHz
-		.driver_mode = 2,	// LVDS
+		.num = 1,			// ADF4030_REFIN
+		.divider = AD9088_HMC_ADF4030_REF_DIV,
+		.driver_mode = 2,		// LVDS
 	},
 	{
 		.num = 3,			// ADF4030_BSYNC0
@@ -185,7 +185,7 @@ struct hmc7044_init_param hmc7044_ip = {
 	.spi_init = &hmc7044_spi_ip,
 	.clkin_freq = {125000000, 125000000, 125000000, 125000000},
 	.vcxo_freq = 125000000,
-	.pll2_freq = 2500000000,
+	.pll2_freq = AD9088_HMC_PLL2_FREQ_HZ,
 	.pll1_loop_bw = 200,
 	.sysref_timer_div = 1024,
 	.in_buf_mode = {0x07, 0x07, 0x00, 0x00, AD9088_HMC7044_OSCIN_BUF_MODE},

@@ -1574,7 +1574,15 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 	if (ret)
 		return ret;
 
-	ret = adf4382_spi_write(dev, 0x38, ADF4382_VCO_CAL_VTUNE);
+	ret = adf4382_spi_update_bits(dev, 0x38, ADF4382_CAL_VTUNE_TO_LSB_MSK,
+				      no_os_field_prep(ADF4382_CAL_VTUNE_TO_LSB_MSK,
+						      ADF4382_VCO_CAL_VTUNE));
+	if (ret)
+		return ret;
+
+	ret = adf4382_spi_update_bits(dev, 0x39, ADF4382_CAL_VTUNE_TO_MSB_MSK,
+				      no_os_field_prep(ADF4382_CAL_VTUNE_TO_MSB_MSK,
+						      ADF4382_VCO_CAL_VTUNE >> 8));
 	if (ret)
 		return ret;
 
