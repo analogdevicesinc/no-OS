@@ -109,6 +109,75 @@ static int adar300x_direct_control_demo(struct adar300x_dev *dev)
 	return 0;
 }
 
+/*
+ * Exercises the amplifier bias and enable registers. The data sheet states the
+ * amplifiers power up enabled with a bias of 3, so the operational state is
+ * checked against that before anything is written.
+ */
+static int adar300x_amplifier_demo(struct adar300x_dev *dev)
+{
+	uint8_t i, bias;
+	bool enable;
+	int ret;
+
+	for (i = 0; i < dev->chip_info->num_beams; i++) {
+		ret = adar300x_get_beam_amp(dev, ADAR300X_BEAM_AMP_OPERATIONAL,
+					    i, &bias, &enable);
+		if (ret)
+			return ret;
+
+		if (bias != 3 || !enable) {
+			pr_err("beam %u operational amp: bias %u en %u, expected bias 3 en 1\n",
+			       i, bias, enable);
+			return -EIO;
+		}
+	}
+
+	pr_info("Amplifier power-up defaults: OK (enabled, bias 3)\n");
+
+	for (i = 0; i < dev->chip_info->num_beams; i++) {
+		ret = adar300x_set_beam_amp(dev, ADAR300X_BEAM_AMP_SLEEP, i,
+					    i & ADAR300X_AMP_BIAS_MAX, false);
+		if (ret)
+			return ret;
+
+		ret = adar300x_get_beam_amp(dev, ADAR300X_BEAM_AMP_SLEEP, i,
+					    &bias, &enable);
+		if (ret)
+			return ret;
+
+		if (bias != (i & ADAR300X_AMP_BIAS_MAX) || enable) {
+			pr_err("beam %u sleep amp: read bias %u en %u\n", i,
+			       bias, enable);
+			return -EIO;
+		}
+	}
+
+	for (i = 0; i < dev->chip_info->num_elements; i++) {
+		ret = adar300x_set_element_amp(dev,
+					       ADAR300X_ELEMENT_AMP_SLEEP, i,
+					       ADAR300X_AMP_BIAS_MAX - i, true);
+		if (ret)
+			return ret;
+
+		ret = adar300x_get_element_amp(dev,
+					       ADAR300X_ELEMENT_AMP_SLEEP, i,
+					       &bias, &enable);
+		if (ret)
+			return ret;
+
+		if (bias != ADAR300X_AMP_BIAS_MAX - i || !enable) {
+			pr_err("element %u sleep amp: read bias %u en %u\n", i,
+			       bias, enable);
+			return -EIO;
+		}
+	}
+
+	pr_info("Amplifier bias/enable write/readback: OK\n");
+
+	return 0;
+}
+
 int basic_example_main(void)
 {
 	struct adar300x_dev *dev;
@@ -130,6 +199,10 @@ int basic_example_main(void)
 	}
 
 	ret = adar300x_direct_control_demo(dev);
+	if (ret)
+		goto error_dev;
+
+	ret = adar300x_amplifier_demo(dev);
 	if (ret)
 		goto error_dev;
 
