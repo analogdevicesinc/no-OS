@@ -289,9 +289,16 @@ The attributes are:
 * reference_divider - is the current value of the input divider.
 * reference_doubler_en - enables the input doubler.
 * reference_frequency - is the current set input frequency.
+* sweep_freq_start - start frequency of the sweep in Hz.
+* sweep_freq_stop - stop frequency of the sweep in Hz.
+* sweep_freq_step - frequency step of the sweep in Hz.
+* sweep_delay_us - per-step dwell delay applied during the manual sweep.
+* sweep_auto_cal - runs an autocalibration sweep to build the VCO cal table.
+* sweep_manual_cal - replays the sweep applying the stored VCO cal per step.
 * sync_setup - enables the synchronization feature to an external signal.
 * temperature - sets temperature setup and reads the die temperature value.
 * toggle_swsync - toggles the swsync bit for EZSYNC synchronization feature.
+* vco_cal_count - number of entries in the built VCO calibration table.
 
 Device Channels
 ---------------
