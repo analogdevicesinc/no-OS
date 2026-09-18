@@ -17,6 +17,12 @@ config ADF4368_IIO_EXAMPLE
 	  IIO framework example. Launches an IIOD server for remote
 	  data acquisition using IIO Oscilloscope or libiio clients.
 
+config ADF4368_SWEEP_EXAMPLE
+	bool "Sweep example"
+	help
+	  Builds the VCO calibration table with an on-device auto-cal sweep,
+	  replays it with the manual calibration sweep.
+
 endchoice
 
 endmenu
