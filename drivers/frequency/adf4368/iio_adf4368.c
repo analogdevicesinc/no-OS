@@ -226,6 +226,23 @@ static int adf4368_iio_read_device_attr(void *dev, char *buf, uint32_t len,
 		ret = snprintf(buf, len, "%"PRIu64, val_64);
 		break;
 
+	case ADF4368_IIO_DEV_ATTR_SWEEP_FREQ_START:
+		ret = snprintf(buf, len, "%"PRIu64, iio_adf4368->sweep_freq_start);
+		break;
+
+	case ADF4368_IIO_DEV_ATTR_SWEEP_FREQ_STOP:
+		ret = snprintf(buf, len, "%"PRIu64, iio_adf4368->sweep_freq_stop);
+		break;
+
+	case ADF4368_IIO_DEV_ATTR_SWEEP_FREQ_STEP:
+		ret = snprintf(buf, len, "%"PRIu64, iio_adf4368->sweep_freq_step);
+		break;
+
+	case ADF4368_IIO_DEV_ATTR_SWEEP_DELAY:
+		val = adf4368->manual_cal.sweep_delay_us;
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+
 	case ADF4368_IIO_DEV_ATTR_SYNC_SETUP:
 		ret = adf4368_get_sync_setup(adf4368, &en);
 		if (ret)
@@ -249,6 +266,11 @@ static int adf4368_iio_read_device_attr(void *dev, char *buf, uint32_t len,
 			return ret;
 
 		val = temperature;
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+
+	case ADF4368_IIO_DEV_ATTR_VCO_CAL_COUNT:
+		val = adf4368->manual_cal.vco_cal_count;
 		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
 		break;
 
@@ -339,6 +361,58 @@ static int adf4368_iio_write_device_attr(void *dev, char *buf, uint32_t len,
 	case ADF4368_IIO_DEV_ATTR_REF_FREQ:
 		sscanf(buf, "%"PRIu64, &val_64);
 		ret = adf4368_set_ref_clk(adf4368, val_64);
+		break;
+
+	case ADF4368_IIO_DEV_ATTR_SWEEP_FREQ_START:
+		sscanf(buf, "%"PRIu64, &iio_adf4368->sweep_freq_start);
+		ret = len;
+		break;
+
+	case ADF4368_IIO_DEV_ATTR_SWEEP_FREQ_STOP:
+		sscanf(buf, "%"PRIu64, &iio_adf4368->sweep_freq_stop);
+		ret = len;
+		break;
+
+	case ADF4368_IIO_DEV_ATTR_SWEEP_FREQ_STEP:
+		sscanf(buf, "%"PRIu64, &iio_adf4368->sweep_freq_step);
+		ret = len;
+		break;
+
+	case ADF4368_IIO_DEV_ATTR_SWEEP_DELAY:
+		ret = iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+		if (ret)
+			return ret;
+
+		adf4368->manual_cal.sweep_delay_us = (val < 0) ? 0 : (uint32_t)val;
+		ret = len;
+		break;
+
+	case ADF4368_IIO_DEV_ATTR_SWEEP_MANUAL_CAL:
+		ret = iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+		if (ret)
+			return ret;
+
+		if (!val)
+			break;
+
+		ret = adf4368_sweep_manual_cal(adf4368,
+					       iio_adf4368->sweep_freq_start,
+					       iio_adf4368->sweep_freq_stop,
+					       iio_adf4368->sweep_freq_step);
+		break;
+
+	case ADF4368_IIO_DEV_ATTR_SWEEP_AUTO_CAL:
+		ret = iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+		if (ret)
+			return ret;
+
+		if (!val)
+			break;
+
+		ret = adf4368_sweep_auto_cal(adf4368,
+					     iio_adf4368->sweep_freq_start,
+					     iio_adf4368->sweep_freq_stop,
+					     iio_adf4368->sweep_freq_step);
 		break;
 
 	case ADF4368_IIO_DEV_ATTR_SYNC_SETUP:
@@ -545,6 +619,42 @@ static struct iio_attribute adf4368_iio_attrs[] = {
 		.store = adf4368_iio_write_device_attr,
 	},
 	{
+		.name = "sweep_freq_start",
+		.priv = ADF4368_IIO_DEV_ATTR_SWEEP_FREQ_START,
+		.show = adf4368_iio_read_device_attr,
+		.store = adf4368_iio_write_device_attr,
+	},
+	{
+		.name = "sweep_freq_stop",
+		.priv = ADF4368_IIO_DEV_ATTR_SWEEP_FREQ_STOP,
+		.show = adf4368_iio_read_device_attr,
+		.store = adf4368_iio_write_device_attr,
+	},
+	{
+		.name = "sweep_freq_step",
+		.priv = ADF4368_IIO_DEV_ATTR_SWEEP_FREQ_STEP,
+		.show = adf4368_iio_read_device_attr,
+		.store = adf4368_iio_write_device_attr,
+	},
+	{
+		.name = "sweep_delay_us",
+		.priv = ADF4368_IIO_DEV_ATTR_SWEEP_DELAY,
+		.show = adf4368_iio_read_device_attr,
+		.store = adf4368_iio_write_device_attr,
+	},
+	{
+		.name = "sweep_manual_cal",
+		.priv = ADF4368_IIO_DEV_ATTR_SWEEP_MANUAL_CAL,
+		.show = adf4368_iio_read_device_attr,
+		.store = adf4368_iio_write_device_attr,
+	},
+	{
+		.name = "sweep_auto_cal",
+		.priv = ADF4368_IIO_DEV_ATTR_SWEEP_AUTO_CAL,
+		.show = adf4368_iio_read_device_attr,
+		.store = adf4368_iio_write_device_attr,
+	},
+	{
 		.name = "sync_setup",
 		.priv = ADF4368_IIO_DEV_ATTR_SYNC_SETUP,
 		.show = adf4368_iio_read_device_attr,
@@ -561,6 +671,11 @@ static struct iio_attribute adf4368_iio_attrs[] = {
 		.priv = ADF4368_IIO_DEV_ATTR_TEMP,
 		.show = adf4368_iio_read_device_attr,
 		.store = adf4368_iio_write_device_attr,
+	},
+	{
+		.name = "vco_cal_count",
+		.priv = ADF4368_IIO_DEV_ATTR_VCO_CAL_COUNT,
+		.show = adf4368_iio_read_device_attr,
 	},
 	END_ATTRIBUTES_ARRAY
 };

@@ -209,6 +209,22 @@ fractional parts of feedback loop for the PLL while trying to obtain the
 configured output frequency. The API will also write the corresponding registers
 with the computed values.
 
+Manual VCO Calibration Sweep
+----------------------------
+
+For fast frequency sweeps the driver can replay a range without running a full
+VCO autocalibration at every step. First call **adf4368_sweep_auto_cal** over
+the target range with a coarse step: it programs each frequency, lets the device
+autocalibrate, and stores the resulting VCO core, band and bias values into a
+calibration table (coalescing adjacent frequencies that share the same values).
+
+Afterwards call **adf4368_sweep_manual_cal** with a fine step to replay the
+range: for each frequency it looks up the stored VCO values and applies them as
+manual overrides via **adf4368_manual_cal_set_freq**, caching divider registers
+so only the values that changed are rewritten. The per-step dwell is set through
+``dev->manual_cal.sweep_delay_us``, and ``dev->manual_cal.mute_nclk_toggle_en``
+enables a MUTE_NCLK reload on fractional->integer mode transitions.
+
 ADF4368 Driver Initialization Example
 -------------------------------------
 
@@ -289,9 +305,16 @@ The attributes are:
 * reference_divider - is the current value of the input divider.
 * reference_doubler_en - enables the input doubler.
 * reference_frequency - is the current set input frequency.
+* sweep_freq_start - start frequency of the sweep in Hz.
+* sweep_freq_stop - stop frequency of the sweep in Hz.
+* sweep_freq_step - frequency step of the sweep in Hz.
+* sweep_delay_us - per-step dwell delay applied during the manual sweep.
+* sweep_auto_cal - runs an autocalibration sweep to build the VCO cal table.
+* sweep_manual_cal - replays the sweep applying the stored VCO cal per step.
 * sync_setup - enables the synchronization feature to an external signal.
 * temperature - sets temperature setup and reads the die temperature value.
 * toggle_swsync - toggles the swsync bit for EZSYNC synchronization feature.
+* vco_cal_count - number of entries in the built VCO calibration table.
 
 Device Channels
 ---------------
