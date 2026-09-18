@@ -29,7 +29,10 @@ config EVAL_PQMON_CONN_T1L
 endchoice
 
 config EVAL_PQMON_UART_EXPORT
-	bool "Export harmonics and metrology as CSV on UART2"
+	bool "CSV data export over UART2"
 	default y
+	help
+	  Stream harmonics and metrology data as CSV frames on UART2 on every
+	  pqlib 10/12-cycle update. Defines UART_EXPORT_ENABLED.
 
 endmenu

@@ -9,7 +9,6 @@ target_sources(eval-pqmon PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/pqlib_convert.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/iio_pqm.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/flash_storage.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/common/uart_export.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}/main.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}/parameters.c
     # LCD driver used unconditionally by the common code (no_os_crc8 is already
@@ -27,6 +26,16 @@ if(CONFIG_EVAL_PQMON_BASIC_EXAMPLE)
     target_compile_definitions(eval-pqmon PRIVATE BASIC_EXAMPLE)
 endif()
 
+# Optional CSV data export over UART2 (see uart_export.c). Enabled by default,
+# matching the legacy Makefile's "UART_EXPORT ?= y". When enabled the module is
+# compiled and UART_EXPORT_ENABLED activates the guarded call sites.
+if(CONFIG_EVAL_PQMON_UART_EXPORT)
+    target_sources(eval-pqmon PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/common/uart_export.c
+    )
+    target_compile_definitions(eval-pqmon PRIVATE UART_EXPORT_ENABLED)
+endif()
+
 target_include_directories(eval-pqmon PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common
     ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}
@@ -37,13 +46,6 @@ target_include_directories(eval-pqmon PUBLIC
 
 # The IIO buffer-overrun error is expected during acquisition; suppress it.
 target_compile_definitions(eval-pqmon PRIVATE IIO_IGNORE_BUFF_OVERRUN_ERR)
-
-# CSV harmonics/metrology export on UART2 (replaces the legacy Makefile
-# UART_EXPORT ?= y flag). The call sites in pqlib_example.c and basic_example.c
-# are guarded by UART_EXPORT_ENABLED.
-if(CONFIG_EVAL_PQMON_UART_EXPORT)
-    target_compile_definitions(eval-pqmon PRIVATE UART_EXPORT_ENABLED)
-endif()
 
 # Transport interface: each variant selects one PQM_CONN_* define plus the
 # networking sources it needs (see the legacy Makefile INTERFACE handling).
