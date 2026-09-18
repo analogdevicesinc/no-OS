@@ -59,6 +59,40 @@
 #define ADAR300X_ADDRESS_PAGE_MSK		NO_OS_GENMASK(3, 0)
 /* Not a real page value, forces the next paged access to write the register */
 #define ADAR300X_PAGE_INVALID			0xFF
+/* Beamstate and control registers below all live on the configuration page */
+#define ADAR300X_PAGE_CONFIG			0x0
+
+/* Beam control registers, configuration page */
+#define ADAR300X_REG_BEAMSTATE_MODE		0x015
+#define ADAR300X_REG_PIN_OR_SPI_CTL		0x030
+#define ADAR300X_REG_BEAMWISE_UPDATE_CODE	0x032
+#define ADAR300X_REG_BEAMWISE_UPDATE		0x033
+
+/*
+ * Three banks hold one delay and one attenuation byte per element, laid out
+ * identically: bank base + beam * 8 + element * 2, attenuation one above its
+ * delay. The reset and mute banks hold the beamstate applied by a RESET or
+ * MUTE command, the direct bank the one applied by an UPDATE in direct mode.
+ */
+#define ADAR300X_REG_RESET_BEAMSTATE(x)		(0x080 + (x))
+#define ADAR300X_REG_MUTE_BEAMSTATE(x)		(0x0A0 + (x))
+#define ADAR300X_REG_DIRECT_CTRL(x)		(0x100 + (x))
+
+#define ADAR300X_ELEMENTS_PER_BEAM		4
+#define ADAR300X_VALUES_PER_BEAM		8
+
+/* Delay and attenuation are 6-bit: 54.5 ps / 0.865 ps and 31.5 dB / 0.5 dB */
+#define ADAR300X_RAW_MSK			NO_OS_GENMASK(5, 0)
+#define ADAR300X_RAW_MAX			0x3F
+
+/* ADAR300X_REG_BEAMSTATE_MODE holds two bits per beam */
+#define ADAR300X_BEAM_MODE_MSK(beam)		(0x03 << ((beam) * 2))
+
+/* ADAR300X_REG_BEAMWISE_UPDATE, one update strobe bit per beam */
+#define ADAR300X_BEAM_UPDATE_MSK(beam)		NO_OS_BIT(beam)
+
+/* ADAR300X_REG_PIN_OR_SPI_CTL, 0 selects the pins, 1 selects SPI */
+#define ADAR300X_UPDATE_SPI_CTL			NO_OS_BIT(0)
 
 /*
  * 16-bit address header: A15 = R/W, A14 = 0 for normal transactions,
@@ -95,6 +129,45 @@ enum adar300x_type {
 	ADAR3001,
 	ADAR3002,
 	ADAR3003,
+};
+
+/**
+ * @enum adar300x_beam_mode
+ * @brief Source a beam takes its next beamstate from on an update.
+ */
+enum adar300x_beam_mode {
+	/** Beamstate held in the direct control registers */
+	ADAR300X_BEAM_MODE_DIRECT = 0,
+	/** Sequencer walks the beamstate RAM */
+	ADAR300X_BEAM_MODE_MEMORY = 1,
+	/** Sequencer pops the FIFO */
+	ADAR300X_BEAM_MODE_FIFO = 2,
+	/** Direct control registers applied as they are written, without UPDATE */
+	ADAR300X_BEAM_MODE_INST_DIRECT = 3,
+};
+
+/**
+ * @enum adar300x_beamstate
+ * @brief Which of the three beamstate register banks to address.
+ */
+enum adar300x_beamstate {
+	/** Applied by an update while the beam is in direct mode */
+	ADAR300X_BEAMSTATE_DIRECT,
+	/** Applied by a reset command */
+	ADAR300X_BEAMSTATE_RESET,
+	/** Applied by a mute command */
+	ADAR300X_BEAMSTATE_MUTE,
+};
+
+/**
+ * @enum adar300x_element_param
+ * @brief The two values held per element.
+ */
+enum adar300x_element_param {
+	/** Time delay unit setting, 0.865 ps per step */
+	ADAR300X_DELAY,
+	/** Digital step attenuator setting, 0.5 dB per step */
+	ADAR300X_ATTENUATION,
 };
 
 /**
@@ -189,6 +262,35 @@ int adar300x_page_reg_write(struct adar300x_dev *dev, uint8_t page,
 /** Read one register from a given address page. */
 int adar300x_page_reg_read(struct adar300x_dev *dev, uint8_t page,
 			   uint16_t reg_addr, uint8_t *data);
+
+/** Write one element value in one of the beamstate banks. */
+int adar300x_set_element(struct adar300x_dev *dev,
+			 enum adar300x_beamstate beamstate, uint8_t beam,
+			 uint8_t element, enum adar300x_element_param param,
+			 uint8_t val);
+
+/** Read one element value back from one of the beamstate banks. */
+int adar300x_get_element(struct adar300x_dev *dev,
+			 enum adar300x_beamstate beamstate, uint8_t beam,
+			 uint8_t element, enum adar300x_element_param param,
+			 uint8_t *val);
+
+/** Select where a beam takes its next beamstate from. */
+int adar300x_set_beam_mode(struct adar300x_dev *dev, uint8_t beam,
+			   enum adar300x_beam_mode mode);
+
+/** Read back the mode of a beam. */
+int adar300x_get_beam_mode(struct adar300x_dev *dev, uint8_t beam,
+			   enum adar300x_beam_mode *mode);
+
+/** Strobe an update on every beam set in the mask. */
+int adar300x_update(struct adar300x_dev *dev, uint8_t beam_mask);
+
+/** Choose whether update, mute and reset come from the pins or from SPI. */
+int adar300x_set_update_source_spi(struct adar300x_dev *dev, bool spi);
+
+/** Read back the update source selection. */
+int adar300x_get_update_source_spi(struct adar300x_dev *dev, bool *spi);
 
 /** Issue the SPI soft reset sequence. */
 int adar300x_soft_reset(struct adar300x_dev *dev);
