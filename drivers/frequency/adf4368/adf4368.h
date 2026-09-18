@@ -407,6 +407,8 @@
 #define ADF4368_POR_DELAY_US			200
 #define ADF4368_LKD_DELAY_MS			9
 
+#define ADF4368_VCO_CAL_TABLE_SIZE		1024
+
 #define ADF4368_MHZ					MEGA
 #define ADF4368_S_TO_NS					NANO
 #define ADF4368_NS_TO_PS				KHZ_PER_MHZ
@@ -436,6 +438,56 @@ struct adf4368_init_param {
 };
 
 /**
+ * @struct adf4368_vco_cal_entry
+ * @brief ADF4368 stored VCO calibration values for a contiguous frequency
+ *  range that shares the same core, band and bias.
+ */
+struct adf4368_vco_cal_entry {
+	uint64_t			freq_start;
+	uint64_t			freq_end;
+	uint8_t				vco_core;
+	uint8_t				vco_band;
+	uint8_t				vco_bias;
+};
+
+/**
+ * @struct adf4368_manual_cal
+ * @brief ADF4368 manual VCO calibration state: the calibration table built by
+ *  the auto-cal sweep and the register/divider cache used to speed up the
+ *  manual-calibration sweep.
+ */
+struct adf4368_manual_cal {
+	/** Calibration table built by the auto-cal sweep. */
+	struct adf4368_vco_cal_entry	vco_cal_table[ADF4368_VCO_CAL_TABLE_SIZE];
+	uint16_t			vco_cal_count;
+	/** Toggle MUTE_NCLK after manual-calibration frequency write. */
+	bool				mute_nclk_toggle_en;
+	/** Dwell delay in microseconds applied after each frequency during a
+	 *  manual-cal sweep. */
+	uint32_t			sweep_delay_us;
+	/** Cached divider values used to skip redundant writes during a
+	 *  manual-calibration sweep. */
+	bool				div_cache_valid;
+	uint16_t			prev_n_int;
+	uint32_t			prev_mod2_word;
+	uint32_t			prev_frac1_word;
+	uint32_t			prev_frac2_word;
+	uint8_t				prev_clkout_div;
+	uint8_t				prev_dclk_div1;
+	uint8_t				prev_adc_clk_div;
+	uint8_t				prev_ldwin_pw;
+	uint8_t				prev_int_mode;
+	uint8_t				prev_en_bleed;
+	uint8_t				prev_var_mod_en;
+	uint8_t				prev_vco_core;
+	uint8_t				prev_vco_band;
+	uint8_t				prev_vco_bias;
+	/** Register shadows so per-step writes avoid read-modify-write. */
+	uint8_t				reg15_shadow;
+	uint8_t				reg30_shadow;
+};
+
+/**
  * @struct adf4368_dev
  * @brief ADF4368 Device Descriptor.
  */
@@ -459,6 +511,8 @@ struct adf4368_dev {
 	uint64_t			freq_min;
 	uint64_t			ref_freq_hz;
 	uint64_t			freq;
+	/** Manual VCO calibration table and sweep cache. */
+	struct adf4368_manual_cal	manual_cal;
 };
 
 /** ADF4368 SPI write */
@@ -566,6 +620,31 @@ int adf4368_get_default_regs(struct adf4368_dev *dev, bool *spi_4wire);
 
 /** ADF4368 Sets frequency */
 int adf4368_set_freq(struct adf4368_dev *dev);
+
+/** ADF4368 Read current frequency's VCO core, band and bias values */
+int adf4368_read_vco_cal(struct adf4368_dev *dev, uint8_t *vco_core,
+			 uint8_t *vco_band, uint8_t *vco_bias);
+
+/** ADF4368 sweep a frequency range and build the VCO calibration table */
+int adf4368_sweep_auto_cal(struct adf4368_dev *dev, uint64_t freq_start,
+			   uint64_t freq_end, uint64_t freq_step);
+
+/** ADF4368 Set the manual-cal sweep per-step dwell delay in microseconds */
+int adf4368_set_sweep_delay_us(struct adf4368_dev *dev, uint32_t delay_us);
+
+/** ADF4368 Get the manual-cal sweep per-step dwell delay in microseconds */
+int adf4368_get_sweep_delay_us(struct adf4368_dev *dev, uint32_t *delay_us);
+
+/** ADF4368 sweep a frequency range using manual VCO calibration from the table */
+int adf4368_sweep_manual_cal(struct adf4368_dev *dev, uint64_t freq_start,
+			     uint64_t freq_end, uint64_t freq_step);
+
+/** ADF4368 Save current frequency's VCO core, band and bias into the table */
+int adf4368_save_vco_cal(struct adf4368_dev *dev);
+
+/** ADF4368 Sets frequency using stored manual VCO calibration values, only
+ *  rewriting divider registers that changed since the previous call */
+int adf4368_manual_cal_set_freq(struct adf4368_dev *dev);
 
 /** ADF4368 Initialization */
 int adf4368_init(struct adf4368_dev **device,

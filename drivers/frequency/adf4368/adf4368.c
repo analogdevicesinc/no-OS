@@ -3,7 +3,7 @@
  *   @brief  Implementation of ADF4368 Driver.
  *   @author Sirac Kucukarabacioglu (sirac.kucukarabacioglu@analog.com)
 ********************************************************************************
- * Copyright 2024(c) Analog Devices, Inc.
+ * Copyright 2024-2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -443,7 +443,7 @@ static int adf4368_frac2_compute(struct adf4368_dev *dev, uint64_t res,
 	if (ret)
 		return ret;
 
-	en_phase_resync = no_os_field_get(tmp, ADF4368_EN_PHASE_RESYNC_MSK);;
+	en_phase_resync = no_os_field_get(tmp, ADF4368_EN_PHASE_RESYNC_MSK);
 
 	if (en_phase_resync)
 		mod2_max = ADF4368_PHASE_RESYNC_MOD2WORD_MAX;
@@ -1363,7 +1363,7 @@ int adf4368_set_phase_sdm(struct adf4368_dev *dev, uint32_t phase_fs)
 	if (ret)
 		return ret;
 
-	return adf4368_spi_update_bits(dev, 0x1F, ADF4368_PHASE_ADJ_MSK, 0x0);;
+	return adf4368_spi_update_bits(dev, 0x1F, ADF4368_PHASE_ADJ_MSK, 0x0);
 }
 
 /**
@@ -1883,7 +1883,668 @@ int adf4368_set_freq(struct adf4368_dev *dev)
 
 	locked = no_os_field_get(val, ADF4368_LOCKED_MSK);
 	if (!locked)
-		return -EIO;
+		return -ETIMEDOUT;
+
+	return 0;
+}
+
+
+/**
+ * @brief Reads the VCO core, band and bias values selected by the last VCO
+ *  calibration for the currently programmed frequency.
+ * @param dev 		- The device structure.
+ * @param vco_core	- The read VCO core value.
+ * @param vco_band	- The read VCO band value.
+ * @param vco_bias	- The read VCO bias value.
+ * @return    		- 0 in case of success or negative error code.
+ */
+int adf4368_read_vco_cal(struct adf4368_dev *dev, uint8_t *vco_core,
+			 uint8_t *vco_band, uint8_t *vco_bias)
+{
+	uint8_t tmp;
+	int ret;
+
+	if (!dev || !vco_core || !vco_band || !vco_bias)
+		return -EINVAL;
+
+	ret = adf4368_spi_read(dev, 0x5A, &tmp);
+	if (ret)
+		return ret;
+	*vco_core = no_os_field_get(ADF4368_VCO_CORE_MSK, tmp);
+
+	ret = adf4368_spi_read(dev, 0x5E, &tmp);
+	if (ret)
+		return ret;
+	*vco_band = no_os_field_get(ADF4368_VCO_BAND_MSK, tmp);
+
+	ret = adf4368_spi_read(dev, 0x60, &tmp);
+	if (ret)
+		return ret;
+	*vco_bias = no_os_field_get(ADF4368_VCO_BIAS_MSK, tmp);
+
+	return 0;
+}
+
+/**
+ * @brief Reads the current frequency's VCO core, band and bias values and
+ *  stores them into the device calibration table. Consecutive frequencies that
+ *  share the same core and band are coalesced into a single range entry (the
+ *  bias of the first frequency in the range is kept) so a wide sweep needs only
+ *  a few entries.
+ * @param dev 		- The device structure.
+ * @return    		- 0 in case of success or negative error code.
+ */
+int adf4368_save_vco_cal(struct adf4368_dev *dev)
+{
+	struct adf4368_manual_cal *mc;
+	struct adf4368_vco_cal_entry *entry;
+	uint8_t vco_core;
+	uint8_t vco_band;
+	uint8_t vco_bias;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	mc = &dev->manual_cal;
+
+	ret = adf4368_read_vco_cal(dev, &vco_core, &vco_band, &vco_bias);
+	if (ret)
+		return ret;
+
+	/* Extend the last range if the calibration values are unchanged. */
+	if (mc->vco_cal_count) {
+		entry = &mc->vco_cal_table[mc->vco_cal_count - 1];
+		if (entry->vco_core == vco_core && entry->vco_band == vco_band &&
+		    entry->vco_bias == vco_bias) {
+			if (dev->freq > entry->freq_end)
+				entry->freq_end = dev->freq;
+			if (dev->freq < entry->freq_start)
+				entry->freq_start = dev->freq;
+			return 0;
+		}
+	}
+
+	if (mc->vco_cal_count >= ADF4368_VCO_CAL_TABLE_SIZE) {
+		/* Table full: extend the last range instead of failing. */
+		return -ENOSPC;
+	}
+
+	entry = &mc->vco_cal_table[mc->vco_cal_count];
+	entry->freq_start = dev->freq;
+	entry->freq_end = dev->freq;
+	entry->vco_core = vco_core;
+	entry->vco_band = vco_band;
+	entry->vco_bias = vco_bias;
+	mc->vco_cal_count++;
+
+	return 0;
+}
+
+/**
+ * @brief Sweeps a frequency range and builds the VCO calibration table. Each
+ *  frequency in [freq_start, freq_end] (stepped by freq_step) is programmed to
+ *  trigger an autocalibration, then its core, band and bias are stored as
+ *  frequency ranges in dev->manual_cal.vco_cal_table. The table is reset on
+ *  entry.
+ * @param dev 		- The device structure.
+ * @param freq_start	- Start of the sweep in Hz.
+ * @param freq_end	- End of the sweep in Hz (inclusive).
+ * @param freq_step	- Frequency resolution in Hz.
+ * @return    		- 0 in case of success or negative error code.
+ */
+int adf4368_sweep_auto_cal(struct adf4368_dev *dev, uint64_t freq_start,
+			   uint64_t freq_end, uint64_t freq_step)
+{
+	uint64_t saved_freq;
+	uint64_t freq;
+	int ret;
+
+	if (!dev || !freq_step || freq_start > freq_end)
+		return -EINVAL;
+
+	if (freq_start < dev->freq_min || freq_end > dev->freq_max)
+		return -EINVAL;
+
+	saved_freq = dev->freq;
+	dev->manual_cal.vco_cal_count = 0;
+
+	for (freq = freq_start; freq <= freq_end; freq += freq_step) {
+		dev->freq = freq;
+		ret = adf4368_set_freq(dev);
+		if (ret)
+			goto restore;
+
+		ret = adf4368_save_vco_cal(dev);
+		if (ret)
+			goto restore;
+	}
+
+	ret = 0;
+restore:
+	dev->freq = saved_freq;
+	adf4368_set_freq(dev);
+
+	return ret;
+}
+
+/**
+ * @brief Looks up the VCO core, band and bias values stored for a frequency in
+ *  the calibration table.
+ * @param dev 		- The device structure.
+ * @param freq		- Target frequency in Hz.
+ * @param vco_core	- The looked up VCO core value.
+ * @param vco_band	- The looked up VCO band value.
+ * @param vco_bias	- The looked up VCO bias value.
+ * @return    		- 0 in case of success or -ENOENT if not found.
+ */
+static int adf4368_lookup_vco_cal(struct adf4368_dev *dev, uint64_t freq,
+				  uint8_t *vco_core, uint8_t *vco_band,
+				  uint8_t *vco_bias)
+{
+	struct adf4368_manual_cal *mc = &dev->manual_cal;
+	struct adf4368_vco_cal_entry *entry;
+	uint16_t i;
+
+	for (i = 0; i < mc->vco_cal_count; i++) {
+		entry = &mc->vco_cal_table[i];
+
+		/* Target is below the first calibrated frequency. */
+		if (freq < entry->freq_start)
+			break;
+
+		/* Assign the coarse-step gaps between sampled bands to the
+		 * lower entry: it owns everything below the next entry's
+		 * start, so a fine sweep never falls into an uncovered gap. */
+		if (i + 1 < mc->vco_cal_count &&
+		    freq >= mc->vco_cal_table[i + 1].freq_start)
+			continue;
+
+		/* The last entry only covers up to its own end. */
+		if (i + 1 == mc->vco_cal_count && freq > entry->freq_end)
+			break;
+
+		*vco_core = entry->vco_core;
+		*vco_band = entry->vco_band;
+		*vco_bias = entry->vco_bias;
+		return 0;
+	}
+
+	return -ENOENT;
+}
+
+/**
+ * @brief Set the per-step dwell delay applied after each frequency during a
+ *  manual-calibration sweep.
+ * @param dev		- The device structure.
+ * @param delay_us	- The dwell delay in microseconds.
+ * @return		- 0 in case of success or negative error code.
+ */
+int adf4368_set_sweep_delay_us(struct adf4368_dev *dev, uint32_t delay_us)
+{
+	if (!dev)
+		return -EINVAL;
+
+	dev->manual_cal.sweep_delay_us = delay_us;
+
+	return 0;
+}
+
+/**
+ * @brief Get the per-step dwell delay applied after each frequency during a
+ *  manual-calibration sweep.
+ * @param dev		- The device structure.
+ * @param delay_us	- The read dwell delay in microseconds.
+ * @return		- 0 in case of success or negative error code.
+ */
+int adf4368_get_sweep_delay_us(struct adf4368_dev *dev, uint32_t *delay_us)
+{
+	if (!dev || !delay_us)
+		return -EINVAL;
+
+	*delay_us = dev->manual_cal.sweep_delay_us;
+
+	return 0;
+}
+
+/**
+ * @brief Sweeps a frequency range applying the stored VCO calibration values
+ *  manually instead of running an autocalibration at each step. The table must
+ *  be populated first with adf4368_sweep_auto_cal(). The original frequency is
+ *  restored on exit.
+ * @param dev 		- The device structure.
+ * @param freq_start	- Start of the sweep in Hz.
+ * @param freq_end	- End of the sweep in Hz (inclusive).
+ * @param freq_step	- Frequency resolution in Hz.
+ * @return    		- 0 in case of success or negative error code.
+ */
+int adf4368_sweep_manual_cal(struct adf4368_dev *dev, uint64_t freq_start,
+			     uint64_t freq_end, uint64_t freq_step)
+{
+	uint64_t freq;
+	int ret;
+
+	if (!dev || !freq_step || freq_start > freq_end)
+		return -EINVAL;
+
+	if (freq_start < dev->freq_min || freq_end > dev->freq_max)
+		return -EINVAL;
+
+	if (!dev->manual_cal.vco_cal_count)
+		return -ENODATA;
+
+	/* Start from a clean cache so the first step writes all registers. */
+	dev->manual_cal.div_cache_valid = false;
+
+	for (freq = freq_start; freq <= freq_end; freq += freq_step) {
+		dev->freq = freq;
+		ret = adf4368_manual_cal_set_freq(dev);
+		if (ret)
+			goto restore;
+
+		no_os_udelay(dev->manual_cal.sweep_delay_us);
+	}
+
+	return 0;
+restore:
+	/* Clear the manual VCO overrides and re-enable autocalibration, then
+	 * re-lock at the last swept frequency (do not restore the original). */
+	adf4368_spi_update_bits(dev, 0x4E,
+				ADF4368_O_VCO_BAND_MSK | ADF4368_O_VCO_CORE_MSK |
+				ADF4368_O_VCO_BIAS_MSK, 0);
+	adf4368_spi_update_bits(dev, 0x20, ADF4368_EN_AUTOCAL_MSK, 0xff);
+	dev->manual_cal.div_cache_valid = false;
+	adf4368_set_freq(dev);
+
+	return ret;
+}
+
+/**
+ * @brief Set the output frequency using the stored VCO calibration values
+ *  (manual calibration) instead of running an autocalibration. The divider
+ *  values computed on the previous call are cached in the device structure and
+ *  their registers are only rewritten when they change; the fractional words
+ *  and N_INT (which change every step) are always written. This keeps a fine
+ *  resolution sweep fast. The calibration table must be populated first with
+ *  adf4368_sweep_auto_cal().
+ * @param dev 	- The device structure.
+ * @return    	- 0 in case of success, negative error code otherwise.
+ */
+int adf4368_manual_cal_set_freq(struct adf4368_dev *dev)
+{
+	uint32_t frac2_word = 0;
+	uint32_t frac1_word = 0;
+	uint32_t mod2_word = 1;
+	uint8_t adc_clk_div;
+	uint8_t ldwin_pw = 0;
+	uint8_t clkout_div;
+	uint8_t dclk_div1;
+	uint64_t pfd_freq;
+	uint8_t var_mod_en;
+	uint8_t vco_core;
+	uint8_t vco_band;
+	uint8_t vco_bias;
+	uint8_t int_mode;
+	uint8_t en_bleed;
+	uint64_t vco = 0;
+	uint64_t rem = 0;
+	uint64_t res = 0;
+	uint16_t n_int;
+	uint8_t div1;
+	uint64_t tmp;
+	uint8_t val;
+	struct adf4368_manual_cal *mc;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	mc = &dev->manual_cal;
+
+	/* Manual calibration needs the stored core/band/bias for this freq. */
+	ret = adf4368_lookup_vco_cal(dev, dev->freq, &vco_core, &vco_band,
+				     &vco_bias);
+	if (ret)
+		return ret;
+
+	for (clkout_div = 0; clkout_div <= dev->clkout_div_reg_val_max;
+	     clkout_div++) {
+		tmp = (1 << clkout_div) * dev->freq;
+		if (tmp < dev->vco_min || tmp > dev->vco_max)
+			continue;
+
+		vco = tmp;
+		break;
+	}
+
+	if (!vco) {
+		pr_err("VCO is 0\n");
+		return -EINVAL;
+	}
+
+	pfd_freq = adf4368_pfd_compute(dev);
+
+	/* Calculate N_int value */
+	n_int = no_os_div64_u64_rem(dev->freq, pfd_freq, &rem);
+	dev->n_int = n_int;
+
+	/* Calculate Frac1 value */
+	if (rem) {
+		res = rem * ADF4368_MOD1WORD;
+		frac1_word = (uint32_t)no_os_div64_u64_rem(res, pfd_freq, &rem);
+
+		/* Calculate Frac2 and Mod2 values */
+		if (rem > 0) {
+			ret = adf4368_frac2_compute(dev, rem, pfd_freq,
+						    &frac2_word, &mod2_word);
+			if (ret)
+				return ret;
+		}
+	}
+
+	if (frac1_word || frac2_word) {
+		if (dev->n_int < ADF4368_FRAC_N_INT_MIN)
+			return -EINVAL;
+		int_mode = 0;
+		en_bleed = 1;
+
+		if (pfd_freq <= 40 * ADF4368_MHZ) {
+			ldwin_pw = 7;
+		} else if (pfd_freq <= 50 * ADF4368_MHZ) {
+			ldwin_pw = 6;
+		} else if (pfd_freq <= 100 * ADF4368_MHZ) {
+			ldwin_pw = 5;
+		} else if (pfd_freq <= 200 * ADF4368_MHZ) {
+			ldwin_pw = 4;
+		} else if (pfd_freq <= 250 * ADF4368_MHZ) {
+			if (dev->freq >= 5000U * ADF4368_MHZ &&
+			    dev->freq < 6400U * ADF4368_MHZ) {
+				ldwin_pw = 3;
+			} else {
+				ldwin_pw = 2;
+			}
+		}
+	} else {
+		if (dev->n_int < ADF4368_INT_N_INT_MIN)
+			return -EINVAL;
+		int_mode = 1;
+		en_bleed = 0;
+		dev->bleed_word = 0;
+		ldwin_pw = 0;
+	}
+
+	var_mod_en = frac2_word ? 1 : 0;
+
+	dclk_div1 = 2;
+	div1 = 8;
+	if (pfd_freq <= ADF4368_DCLK_DIV1_0_MAX) {
+		dclk_div1 = 0;
+		div1 = 1;
+	} else if (pfd_freq <= ADF4368_DCLK_DIV1_1_MAX) {
+		dclk_div1 = 1;
+		div1 = 2;
+	}
+
+	tmp = NO_OS_DIV_ROUND_UP(no_os_div_u64(pfd_freq, div1 * 400000) - 2, 4);
+	tmp = no_os_clamp(tmp, 0U, 255U);
+	adc_clk_div = tmp & ADF4368_ADC_CLK_DIV_MSK;
+
+	/* One-time setup: registers that stay constant across the sweep. */
+	if (!mc->div_cache_valid) {
+		/* R divider, doubler and disable autocalibration. */
+		val = no_os_field_prep(ADF4368_EN_RDBLR_MSK, dev->ref_doubler_en) |
+		      no_os_field_prep(ADF4368_R_DIV_MSK, dev->ref_div) |
+		      no_os_field_prep(ADF4368_EN_AUTOCAL_MSK, 0);
+		ret = adf4368_spi_update_bits(dev, 0x20,
+					      ADF4368_EN_AUTOCAL_MSK |
+					      ADF4368_EN_RDBLR_MSK | ADF4368_R_DIV_MSK,
+					      val);
+		if (ret)
+			return ret;
+
+		ret = adf4368_spi_update_bits(dev, 0x1F, ADF4368_CP_I_MSK,
+					      no_os_field_prep(ADF4368_CP_I_MSK,
+							      dev->cp_i));
+		if (ret)
+			return ret;
+
+		/* Double buffer the manual overrides so N_INT loads them. */
+		ret = adf4368_spi_update_bits(dev, 0x39, ADF4368_O_VCO_DB_MSK,
+					      no_os_field_prep(ADF4368_O_VCO_DB_MSK, 1));
+		if (ret)
+			return ret;
+
+		val = no_os_field_prep(ADF4368_O_VCO_BAND_MSK, 1) |
+		      no_os_field_prep(ADF4368_O_VCO_CORE_MSK, 1) |
+		      no_os_field_prep(ADF4368_O_VCO_BIAS_MSK, 1);
+		ret = adf4368_spi_update_bits(dev, 0x4E,
+					      ADF4368_O_VCO_BAND_MSK |
+					      ADF4368_O_VCO_CORE_MSK |
+					      ADF4368_O_VCO_BIAS_MSK, val);
+		if (ret)
+			return ret;
+
+		ret = adf4368_spi_update_bits(dev, 0x35, ADF4368_DCLK_MODE_MSK,
+					      0xff);
+		if (ret)
+			return ret;
+
+		ret = adf4368_spi_update_bits(dev, 0x35, ADF4368_EN_ADC_CLK_MSK,
+					      0xff);
+		if (ret)
+			return ret;
+
+		ret = adf4368_spi_update_bits(dev, 0x2C, ADF4368_LD_COUNT_MSK,
+					      dev->ld_count);
+		if (ret)
+			return ret;
+
+		/* Snapshot registers written every step so the per-step path
+		 * can write them directly instead of read-modify-write. */
+		ret = adf4368_spi_read(dev, 0x15, &mc->reg15_shadow);
+		if (ret)
+			return ret;
+
+		ret = adf4368_spi_read(dev, 0x30, &mc->reg30_shadow);
+		if (ret)
+			return ret;
+	}
+
+	/* Divider-derived registers: only rewrite the ones that changed. */
+	if (!mc->div_cache_valid || dclk_div1 != mc->prev_dclk_div1) {
+		ret = adf4368_spi_update_bits(dev, 0x4E, ADF4368_DCLK_DIV1_MSK,
+					      no_os_field_prep(ADF4368_DCLK_DIV1_MSK,
+							      dclk_div1));
+		if (ret)
+			return ret;
+	}
+
+	if (!mc->div_cache_valid || adc_clk_div != mc->prev_adc_clk_div) {
+		ret = adf4368_spi_write(dev, 0x3E, adc_clk_div);
+		if (ret)
+			return ret;
+	}
+
+	if (!mc->div_cache_valid || ldwin_pw != mc->prev_ldwin_pw) {
+		ret = adf4368_spi_update_bits(dev, 0x2C, ADF4368_LDWIN_PW_MSK,
+					      no_os_field_prep(ADF4368_LDWIN_PW_MSK,
+							      ldwin_pw));
+		if (ret)
+			return ret;
+	}
+
+	if (!mc->div_cache_valid || int_mode != mc->prev_int_mode) {
+		ret = adf4368_spi_update_bits(dev, 0x11, ADF4368_INT_MODE_MSK,
+					      no_os_field_prep(ADF4368_INT_MODE_MSK,
+							      int_mode));
+		if (ret)
+			return ret;
+	}
+
+	if (!mc->div_cache_valid || en_bleed != mc->prev_en_bleed) {
+		ret = adf4368_spi_update_bits(dev, 0x1F, ADF4368_EN_BLEED_MSK,
+					      no_os_field_prep(ADF4368_EN_BLEED_MSK,
+							      en_bleed));
+		if (ret)
+			return ret;
+	}
+
+	if (!mc->div_cache_valid || var_mod_en != mc->prev_var_mod_en) {
+		ret = adf4368_spi_update_bits(dev, 0x28, ADF4368_VAR_MOD_EN_MSK,
+					      var_mod_en ? 0xff : 0x0);
+		if (ret)
+			return ret;
+	}
+
+	if (!mc->div_cache_valid || mod2_word != mc->prev_mod2_word) {
+		val = mod2_word & ADF4368_MOD2WORD_LSB_MSK;
+		ret = adf4368_spi_write(dev, 0x1A, val);
+		if (ret)
+			return ret;
+		val = (mod2_word >> 8) & ADF4368_MOD2WORD_MID_MSK;
+		ret = adf4368_spi_write(dev, 0x1B, val);
+		if (ret)
+			return ret;
+		val = (mod2_word >> 16) & ADF4368_MOD2WORD_MSB_MSK;
+		ret = adf4368_spi_write(dev, 0x1C, val);
+		if (ret)
+			return ret;
+	}
+
+	/* Bleed depends on the band and N_INT; recompute only when N_INT
+	 * changes to avoid rewriting the bleed registers every step. */
+	if (!int_mode && (!mc->div_cache_valid || n_int != mc->prev_n_int)) {
+		ret = adf4368_optimize_bleed_word(dev);
+		if (ret)
+			return ret;
+	}
+
+	if (!mc->div_cache_valid || clkout_div != mc->prev_clkout_div) {
+		ret = adf4368_spi_update_bits(dev, 0x11, ADF4368_CLKOUT_DIV_MSK,
+					      no_os_field_prep(ADF4368_CLKOUT_DIV_MSK,
+							      clkout_div));
+		if (ret)
+			return ret;
+	}
+
+	/* Fractional words: write only the bytes that actually changed. In a
+	 * fine sweep the low byte changes every step but the higher bytes are
+	 * static for many steps. */
+	if (!mc->div_cache_valid ||
+	    (frac2_word & 0xFF) != (mc->prev_frac2_word & 0xFF)) {
+		ret = adf4368_spi_write(dev, 0x17,
+					frac2_word & ADF4368_FRAC2WORD_LSB_MSK);
+		if (ret)
+			return ret;
+	}
+	if (!mc->div_cache_valid ||
+	    ((frac2_word >> 8) & 0xFF) != ((mc->prev_frac2_word >> 8) & 0xFF)) {
+		ret = adf4368_spi_write(dev, 0x18,
+					(frac2_word >> 8) & ADF4368_FRAC2WORD_MID_MSK);
+		if (ret)
+			return ret;
+	}
+	if (!mc->div_cache_valid ||
+	    ((frac2_word >> 16) & 0xFF) != ((mc->prev_frac2_word >> 16) & 0xFF)) {
+		ret = adf4368_spi_write(dev, 0x19,
+					(frac2_word >> 16) & ADF4368_FRAC2WORD_MSB_MSK);
+		if (ret)
+			return ret;
+	}
+
+	if (!mc->div_cache_valid ||
+	    (frac1_word & 0xFF) != (mc->prev_frac1_word & 0xFF)) {
+		ret = adf4368_spi_write(dev, 0x12,
+					frac1_word & ADF4368_FRAC1WORD_LSB_MSK);
+		if (ret)
+			return ret;
+	}
+	if (!mc->div_cache_valid ||
+	    ((frac1_word >> 8) & 0xFF) != ((mc->prev_frac1_word >> 8) & 0xFF)) {
+		ret = adf4368_spi_write(dev, 0x13,
+					(frac1_word >> 8) & ADF4368_FRAC1WORD_MID_MSK);
+		if (ret)
+			return ret;
+	}
+	if (!mc->div_cache_valid ||
+	    ((frac1_word >> 16) & 0xFF) != ((mc->prev_frac1_word >> 16) & 0xFF)) {
+		ret = adf4368_spi_write(dev, 0x14,
+					(frac1_word >> 16) & ADF4368_FRAC1WORD_MSB_MSK);
+		if (ret)
+			return ret;
+	}
+
+	/* Register 0x15 packs FRAC1WORD[24], M_VCO_CORE and M_VCO_BIAS. Build
+	 * it from the shadow and issue a single write only if the byte moved,
+	 * folding the frac MSB and VCO override updates together. */
+	val = mc->reg15_shadow & ~ADF4368_FRAC1WORD_MSB;
+	val |= no_os_field_prep(ADF4368_FRAC1WORD_MSB, (frac1_word >> 24) & 1);
+	if (!mc->div_cache_valid || vco_core != mc->prev_vco_core ||
+	    vco_bias != mc->prev_vco_bias) {
+		val &= ~(ADF4368_M_VCO_CORE_MSK | ADF4368_M_VCO_BIAS_MSK);
+		val |= no_os_field_prep(ADF4368_M_VCO_CORE_MSK, vco_core) |
+		       no_os_field_prep(ADF4368_M_VCO_BIAS_MSK, vco_bias);
+	}
+	if (val != mc->reg15_shadow) {
+		ret = adf4368_spi_write(dev, 0x15, val);
+		if (ret)
+			return ret;
+		mc->reg15_shadow = val;
+	}
+
+	if (!mc->div_cache_valid || vco_band != mc->prev_vco_band) {
+		ret = adf4368_spi_write(dev, 0x16,
+					no_os_field_prep(ADF4368_M_VCO_BAND_MSK,
+							vco_band));
+		if (ret)
+			return ret;
+	}
+
+	if (!mc->div_cache_valid || (n_int >> 8) != (mc->prev_n_int >> 8)) {
+		val = (n_int >> 8) & ADF4368_N_INT_MSB_MSK;
+		ret = adf4368_spi_update_bits(dev, 0x11, ADF4368_N_INT_MSB_MSK,
+					      val);
+		if (ret)
+			return ret;
+	}
+
+	/* Set N_INT last to load the double-buffered manual values. */
+	val = n_int & ADF4368_N_INT_LSB_MSK;
+	ret = adf4368_spi_write(dev, 0x10, val);
+	if (ret)
+		return ret;
+
+	/* When enabled, toggle MUTE_NCLK only on a fractional<->integer mode
+	 * change versus the previous frequency to reload the manually
+	 * programmed values, using the cached 0x30 value to avoid a
+	 * read-modify-write. */
+	if (mc->mute_nclk_toggle_en && int_mode != mc->prev_int_mode) {
+		ret = adf4368_spi_write(dev, 0x30,
+					mc->reg30_shadow | ADF4368_MUTE_NCLK_MSK);
+		if (ret)
+			return ret;
+		ret = adf4368_spi_write(dev, 0x30,
+					mc->reg30_shadow & ~ADF4368_MUTE_NCLK_MSK);
+		if (ret)
+			return ret;
+	}
+
+	/* Cache the divider values for the next step. */
+	mc->prev_clkout_div = clkout_div;
+	mc->prev_dclk_div1 = dclk_div1;
+	mc->prev_adc_clk_div = adc_clk_div;
+	mc->prev_ldwin_pw = ldwin_pw;
+	mc->prev_int_mode = int_mode;
+	mc->prev_en_bleed = en_bleed;
+	mc->prev_var_mod_en = var_mod_en;
+	mc->prev_mod2_word = mod2_word;
+	mc->prev_frac1_word = frac1_word;
+	mc->prev_frac2_word = frac2_word;
+	mc->prev_n_int = n_int;
+	mc->prev_vco_core = vco_core;
+	mc->prev_vco_band = vco_band;
+	mc->prev_vco_bias = vco_bias;
+	mc->div_cache_valid = true;
 
 	return 0;
 }
@@ -1923,6 +2584,7 @@ int adf4368_init(struct adf4368_dev **dev,
 	device->vco_max = ADF4368_VCO_FREQ_MAX;
 	device->vco_min = ADF4368_VCO_FREQ_MIN;
 	device->clkout_div_reg_val_max = ADF4368_CLKOUT_DIV_REG_VAL_MAX;
+	device->manual_cal.mute_nclk_toggle_en = 0;
 
 	ret = adf4368_set_default_regs(device, device->spi_4wire_en);
 	if (ret)
@@ -1935,14 +2597,17 @@ int adf4368_init(struct adf4368_dev **dev,
 		goto error_spi;
 
 	ret = adf4368_check_scratchpad(device);
-	if (ret)
-		goto error_spi;
+	if (ret) {
+		pr_warning("adf4368_check_scratchpad %d\n", ret);
+	}
 
 	ret = adf4368_set_freq(device);
-	if (ret) {
-		pr_info("adf4368_set_freq %d\n", ret);
+	if (ret == -ETIMEDOUT) {
+		pr_warning("%s:%d ADF4368 VCO frequency setting failed. %d\n",
+			   __FILE__,
+			   __LINE__, (int)ret);
+	} else if (ret)
 		goto error_spi;
-	}
 
 	ret = adf4368_set_en_chan(device, 0, en);
 	if (ret) {
