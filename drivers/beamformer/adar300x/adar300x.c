@@ -317,6 +317,158 @@ int adar300x_get_element(struct adar300x_dev *dev,
 }
 
 /**
+ * @brief Writes an amplifier bias and enable pair.
+ *
+ * Both live in the same byte, so they are written together rather than as two
+ * read modify write cycles.
+ *
+ * @param dev	   - The device structure.
+ * @param reg_addr - Amplifier register address.
+ * @param bias	   - Bias setting, 0 to ADAR300X_AMP_BIAS_MAX.
+ * @param enable   - True to enable the amplifier in this state.
+ * @return	   - 0 in case of success or negative error code otherwise.
+ */
+static int adar300x_write_amp(struct adar300x_dev *dev, uint16_t reg_addr,
+			      uint8_t bias, bool enable)
+{
+	uint8_t val;
+
+	if (bias > ADAR300X_AMP_BIAS_MAX)
+		return -EINVAL;
+
+	val = no_os_field_prep(ADAR300X_AMP_BIAS_MSK, bias);
+	if (enable)
+		val |= ADAR300X_AMP_EN_MSK;
+
+	return adar300x_page_reg_write(dev, ADAR300X_PAGE_CONFIG, reg_addr,
+				       val);
+}
+
+/**
+ * @brief Reads an amplifier bias and enable pair back.
+ * @param dev	   - The device structure.
+ * @param reg_addr - Amplifier register address.
+ * @param bias	   - Bias setting read from the device, may be NULL.
+ * @param enable   - Enable state read from the device, may be NULL.
+ * @return	   - 0 in case of success or negative error code otherwise.
+ */
+static int adar300x_read_amp(struct adar300x_dev *dev, uint16_t reg_addr,
+			     uint8_t *bias, bool *enable)
+{
+	uint8_t val;
+	int ret;
+
+	ret = adar300x_page_reg_read(dev, ADAR300X_PAGE_CONFIG, reg_addr, &val);
+	if (ret)
+		return ret;
+
+	if (bias)
+		*bias = no_os_field_get(ADAR300X_AMP_BIAS_MSK, val);
+	if (enable)
+		*enable = !!(val & ADAR300X_AMP_EN_MSK);
+
+	return 0;
+}
+
+/**
+ * @brief Sets the bias and enable of one beam amplifier in one state.
+ * @param dev	 - The device structure.
+ * @param state	 - Which beam amplifier state to write.
+ * @param beam	 - Beam index.
+ * @param bias	 - Bias setting, 0 to ADAR300X_AMP_BIAS_MAX.
+ * @param enable - True to enable the amplifier in this state.
+ * @return	 - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_set_beam_amp(struct adar300x_dev *dev,
+			  enum adar300x_beam_amp_state state, uint8_t beam,
+			  uint8_t bias, bool enable)
+{
+	if (!dev)
+		return -EINVAL;
+
+	if (beam >= dev->chip_info->num_beams ||
+	    state > ADAR300X_BEAM_AMP_SLEEP)
+		return -EINVAL;
+
+	return adar300x_write_amp(dev, ADAR300X_REG_BEAM_AMP(state, beam),
+				  bias, enable);
+}
+
+/**
+ * @brief Reads back the bias and enable of one beam amplifier.
+ * @param dev	 - The device structure.
+ * @param state	 - Which beam amplifier state to read.
+ * @param beam	 - Beam index.
+ * @param bias	 - Bias setting read from the device, may be NULL.
+ * @param enable - Enable state read from the device, may be NULL.
+ * @return	 - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_get_beam_amp(struct adar300x_dev *dev,
+			  enum adar300x_beam_amp_state state, uint8_t beam,
+			  uint8_t *bias, bool *enable)
+{
+	if (!dev)
+		return -EINVAL;
+
+	if (beam >= dev->chip_info->num_beams ||
+	    state > ADAR300X_BEAM_AMP_SLEEP)
+		return -EINVAL;
+
+	return adar300x_read_amp(dev, ADAR300X_REG_BEAM_AMP(state, beam),
+				 bias, enable);
+}
+
+/**
+ * @brief Sets the bias and enable of one element amplifier in one state.
+ * @param dev	  - The device structure.
+ * @param state	  - Which element amplifier state to write.
+ * @param element - Element index.
+ * @param bias	  - Bias setting, 0 to ADAR300X_AMP_BIAS_MAX.
+ * @param enable  - True to enable the amplifier in this state.
+ * @return	  - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_set_element_amp(struct adar300x_dev *dev,
+			     enum adar300x_element_amp_state state,
+			     uint8_t element, uint8_t bias, bool enable)
+{
+	if (!dev)
+		return -EINVAL;
+
+	if (element >= dev->chip_info->num_elements ||
+	    state > ADAR300X_ELEMENT_AMP_SLEEP)
+		return -EINVAL;
+
+	return adar300x_write_amp(dev,
+				  ADAR300X_REG_ELEMENT_AMP(state, element),
+				  bias, enable);
+}
+
+/**
+ * @brief Reads back the bias and enable of one element amplifier.
+ * @param dev	  - The device structure.
+ * @param state	  - Which element amplifier state to read.
+ * @param element - Element index.
+ * @param bias	  - Bias setting read from the device, may be NULL.
+ * @param enable  - Enable state read from the device, may be NULL.
+ * @return	  - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_get_element_amp(struct adar300x_dev *dev,
+			     enum adar300x_element_amp_state state,
+			     uint8_t element, uint8_t *bias, bool *enable)
+{
+	if (!dev)
+		return -EINVAL;
+
+	if (element >= dev->chip_info->num_elements ||
+	    state > ADAR300X_ELEMENT_AMP_SLEEP)
+		return -EINVAL;
+
+	return adar300x_read_amp(dev,
+				 ADAR300X_REG_ELEMENT_AMP(state, element),
+				 bias, enable);
+}
+
+/**
  * @brief Selects where a beam takes its next beamstate from.
  * @param dev  - The device structure.
  * @param beam - Beam index.

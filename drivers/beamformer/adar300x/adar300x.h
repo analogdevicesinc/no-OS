@@ -95,6 +95,18 @@
 #define ADAR300X_UPDATE_SPI_CTL			NO_OS_BIT(0)
 
 /*
+ * Amplifier bias and enable, one register per amplifier per state. The beam
+ * bank carries four states and the element bank three, in different orders, so
+ * the two take separate state enumerations rather than a shared one.
+ */
+#define ADAR300X_REG_BEAM_AMP(state, beam)	(0x0C0 + (state) * 4 + (beam))
+#define ADAR300X_REG_ELEMENT_AMP(state, el)	(0x0D0 + (state) * 4 + (el))
+
+#define ADAR300X_AMP_BIAS_MSK			NO_OS_GENMASK(2, 0)
+#define ADAR300X_AMP_EN_MSK			NO_OS_BIT(3)
+#define ADAR300X_AMP_BIAS_MAX			0x7
+
+/*
  * 16-bit address header: A15 = R/W, A14 = 0 for normal transactions,
  * A13:A10 = chip ID, A9:A0 = register address.
  */
@@ -157,6 +169,33 @@ enum adar300x_beamstate {
 	ADAR300X_BEAMSTATE_RESET,
 	/** Applied by a mute command */
 	ADAR300X_BEAMSTATE_MUTE,
+};
+
+/**
+ * @enum adar300x_beam_amp_state
+ * @brief Beam amplifier states, in register order from 0x0C0.
+ */
+enum adar300x_beam_amp_state {
+	ADAR300X_BEAM_AMP_RESET = 0,
+	ADAR300X_BEAM_AMP_OPERATIONAL = 1,
+	ADAR300X_BEAM_AMP_MUTE = 2,
+	ADAR300X_BEAM_AMP_SLEEP = 3,
+};
+
+/**
+ * @enum adar300x_element_amp_state
+ * @brief Element amplifier states, in register order from 0x0D0. The element
+ *	  bank has no reset state and orders the rest differently to the beam
+ *	  bank, so the two enumerations are deliberately not interchangeable.
+ *
+ *	  The register map also lists MUTE_EL0 to MUTE_EL3 at 0x0D8 to 0x0DB,
+ *	  but they are not implemented: on an ADAR3000 they power up as 0x00
+ *	  rather than the documented 0x0B and discard writes. Hence no mute
+ *	  state here.
+ */
+enum adar300x_element_amp_state {
+	ADAR300X_ELEMENT_AMP_OPERATIONAL = 0,
+	ADAR300X_ELEMENT_AMP_SLEEP = 1,
 };
 
 /**
@@ -274,6 +313,26 @@ int adar300x_get_element(struct adar300x_dev *dev,
 			 enum adar300x_beamstate beamstate, uint8_t beam,
 			 uint8_t element, enum adar300x_element_param param,
 			 uint8_t *val);
+
+/** Set the bias and enable of one beam amplifier in one state. */
+int adar300x_set_beam_amp(struct adar300x_dev *dev,
+			  enum adar300x_beam_amp_state state, uint8_t beam,
+			  uint8_t bias, bool enable);
+
+/** Read back the bias and enable of one beam amplifier. */
+int adar300x_get_beam_amp(struct adar300x_dev *dev,
+			  enum adar300x_beam_amp_state state, uint8_t beam,
+			  uint8_t *bias, bool *enable);
+
+/** Set the bias and enable of one element amplifier in one state. */
+int adar300x_set_element_amp(struct adar300x_dev *dev,
+			     enum adar300x_element_amp_state state,
+			     uint8_t element, uint8_t bias, bool enable);
+
+/** Read back the bias and enable of one element amplifier. */
+int adar300x_get_element_amp(struct adar300x_dev *dev,
+			     enum adar300x_element_amp_state state,
+			     uint8_t element, uint8_t *bias, bool *enable);
 
 /** Select where a beam takes its next beamstate from. */
 int adar300x_set_beam_mode(struct adar300x_dev *dev, uint8_t beam,
