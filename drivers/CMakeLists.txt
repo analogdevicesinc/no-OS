@@ -27,6 +27,10 @@ if(CONFIG_AXI_CORE)
     add_subdirectory(axi_core)
 endif()
 
+if(CONFIG_BEAMFORMER)
+    add_subdirectory(beamformer)
+endif()
+
 if(CONFIG_CDC)
     add_subdirectory(cdc)
 endif()

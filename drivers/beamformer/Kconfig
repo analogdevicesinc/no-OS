@@ -1,0 +1,14 @@
+menuconfig BEAMFORMER
+	bool "Beamformer Drivers"
+	default n
+	help
+	  Enable support for beamformer drivers.
+
+if BEAMFORMER
+
+config BEAMFORMER_ADAR300X
+	depends on SPI
+	bool "Enable ADAR3000/ADAR3001 beamformer driver"
+	default n
+
+endif # BEAMFORMER
