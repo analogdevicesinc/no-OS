@@ -57,9 +57,9 @@
 /*
  * Profile-dependent link and clock-tree parameters.
  *
- * The AD9084-EBZ (Agilex 5 / Nios V) bitstream runs a JESD204B link (8b10b,
- * lane rate / 40), while the VCU118 (MicroBlaze) bitstream runs JESD204C
- * (64b66b, lane rate / 66). Every value that differs between the two profiles
+ * Both bitstreams run JESD204C (64b66b, lane rate / 66), but at different lane
+ * rates: 10.3125 Gbps on the AD9084-EBZ (Agilex 5 / Nios V), 20.625 Gbps on the
+ * VCU118 (MicroBlaze). Every value that differs between the two profiles
  * lives in this one guarded block so both boards build correctly from the same
  * tree - keep it consistent with the per-board firmware .bin selected in
  * boards/basic_example/<board>.conf. All shared clock-tree topology (ADF4030
@@ -69,15 +69,23 @@
 /* AD9084-EBZ (Agilex 5): JESD204C, L2-per-link, 10.3125 Gbps lanes, 156.25 MHz link. */
 #define AD9088_LANE_RATE_KHZ			10312500
 #define AD9088_DEVICE_CLK_KHZ			(AD9088_LANE_RATE_KHZ / 66)
-#define AD9088_SYSREF_CLK_HZ			1953125		/* 2.5 GHz VCO / 1280 */
+/*
+ * SYSREF is the LEMC itself: 156.25 MHz link clock / 32 blocks = 4.8828125 MHz.
+ * It is not a whole number of Hz, so the value below is the truncation the
+ * integer clock APIs carry; the HMC7044 and ADF4030 both reach it exactly with
+ * an integer divider (2.5 GHz / 512), and the ADF4030 JESD204 FSM retunes ODIVA
+ * to this same rate at CLK_SYNC, so the HMC divider has to match or the TDC
+ * compares two different frequencies and alignment cannot converge.
+ */
+#define AD9088_SYSREF_CLK_HZ			4882812
 #define AD9088_ADF4382_SPI_HZ			5000000
 #define AD9088_ADF4382_FREQ_HZ			10000000000	/* AD9084 converter dev_clk = 10 GHz (N=80 @ 125 MHz PFD); matches profile dev_clk_freq_Hz */
 #define AD9088_ADF4382_ID			ID_ADF4382
-#define AD9088_HMC_SYSREF_DIV			1280		/* HMC7044 ch3  -> 1953125 Hz */
+#define AD9088_HMC_SYSREF_DIV			512		/* HMC7044 ch3 -> 4.8828125 MHz */
 #define AD9088_HMC_CORECLK_DIV			16		/* HMC7044 ch8-12 -> 156.25 MHz */
 #define AD9088_ADXCVR_REF_KHZ			156250
 /*
- * L2-per-link (204B) lane mapping of the AD9084-EBZ design; 11 marks an unused
+ * L2-per-link lane mapping of the AD9084-EBZ design; 11 marks an unused
  * lane. Matches the reference DT (socfpga_agilex5_socdk_ad9084.dts):
  * adi,jtx{0,1}-logical-lane-mapping / adi,jrx{0,1}-physical-lane-mapping.
  */
