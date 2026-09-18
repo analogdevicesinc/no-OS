@@ -36,6 +36,14 @@ ANALOG FRONT-ENDS
 
    projects/afe/*
 
+BEAMFORMERS
+===========
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   projects/beamformer/*
+
 FREQUENCY GENERATORS
 ====================
 .. toctree::
