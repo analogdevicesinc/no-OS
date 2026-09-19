@@ -171,11 +171,8 @@ static int stm32_gpdma_fill_xfer_alignment(struct stm32_dma_channel *sdma_ch,
 	sdma_ch->hdma->Instance = (DMA_Channel_TypeDef *) sdma_ch->ch_num;
 	sdma_ch->hdma->Init.Request = sdma_ch->request;
 
-	/* Burst length MUST be >= 1. If left at 0 the HAL encodes the register
-	 * field SBL_1/DBL_1 = BurstLength - 1 = 0x3F, i.e. a 64-beat burst. A
-	 * peripheral that issues single-data requests (e.g. SPI RX with FTHLV=0)
-	 * can never assemble such a burst, so RXDR is never drained -> OVR and no
-	 * data reaches memory. Single-beat (1) is the correct default here. */
+	/* Burst length MUST be >= 1; 0 encodes SBL_1/DBL_1 = 0x3F (64-beat burst),
+	 * which a single-data peripheral (e.g. SPI RX, FTHLV=0) never fills. */
 	sdma_ch->hdma->Init.SrcBurstLength = 1;
 	sdma_ch->hdma->Init.DestBurstLength = 1;
 
@@ -324,14 +321,6 @@ int stm32_gpdma_config_xfer(struct no_os_dma_ch *channel,
 		if (ret)
 			return -EINVAL;
 
-		/* No post-build register patching: HAL_DMAEx_List_BuildNode() encodes
-		 * CTR1 (data widths, increments, burst) and CTR2 (request, trigger)
-		 * directly from Init + TriggerConfig for every node. As long as those
-		 * are populated correctly (see fill_xfer_alignment / trigger_config),
-		 * the node is correct. An earlier "workaround" hand-patched CTR1 to
-		 * compensate for an Init.*BurstLength=0 bug (which encoded a 64-beat
-		 * burst) and, using wrong bit offsets, clobbered SAP -> mis-routing a
-		 * peripheral read to master port 1. That bug is fixed at the source. */
 		break;
 	default:
 		return -EINVAL;
