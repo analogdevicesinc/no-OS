@@ -251,7 +251,6 @@ struct iio_buffer {
 };
 
 struct iio_block {
-	struct iio_buffer *buffer;
 	uint8_t *data;
 	uint32_t size;
 	uint16_t cl_id;
@@ -260,7 +259,6 @@ struct iio_block {
 };
 
 struct iio_stream {
-	struct iio_buffer *buffer;
 	struct iio_block **blocks;
 	uint32_t nb_blocks;
 	uint8_t curr;

@@ -559,6 +559,8 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 	if (ret)
 		goto abort_transfer;
 
+  /* Enable SPI peripheral */
+   __HAL_SPI_DISABLE(sdesc->hspi);
 	if (sdesc->txdma_ch)
 #if defined (STM32H5)
 		SET_BIT(sdesc->hspi->Instance->CFG1, SPI_CFG1_TXDMAEN);
@@ -572,6 +574,28 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 #else
 		SET_BIT(sdesc->hspi->Instance->CR2, SPI_CR2_RXDMAEN);
 #endif
+
+ #if defined (STM32H5)
+ 	/* On H5 a SPI master transaction only begins once CSTART is set (unlike
+ 	 * F4 which auto-starts on SPE + data). TSIZE = 0 selects endless mode so
+ 	 * the SPI keeps clocking one frame per gated TX-DMA burst (paced by the
+ 	 * timer trigger); the transfer ends when the DMA completes and the DMA
+ 	 * requests are cleared in the abort path. */
+ 	WRITE_REG(SPIx->CR2, 0);
+
+	  /* Enable SPI peripheral */
+ 	  __HAL_SPI_ENABLE(sdesc->hspi);
+
+ 	/* Drain any stale RX data and clear error flags so the first captured
+ 	 * frame stays aligned with the master-generated clock (avoids an
+ 	 * off-by-one / dropped byte at the start of the transfer). */
+ 	while (READ_REG(SPIx->SR) & SPI_SR_RXP)
+ 		(void)READ_REG(SPIx->RXDR);
+ 	SET_BIT(SPIx->IFCR,
+ 		SPI_IFCR_OVRC | SPI_IFCR_EOTC | SPI_IFCR_TXTFC | SPI_IFCR_SUSPC);
+
+ 	SET_BIT(SPIx->CR1, SPI_CR1_CSTART);
+ #endif
 
 #ifdef HAL_TIM_MODULE_ENABLED
 	if (sdesc->pwm_desc) {

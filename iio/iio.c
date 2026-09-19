@@ -1304,7 +1304,7 @@ static struct iio_attribute *get_trig_attributes(enum iio_attr_type type,
 static int iio_read_attr_new(struct iiod_ctx *ctx, const uint16_t *device,
 			 struct iiod_attr *attr, char *buf, uint32_t len)
 {
-	struct iio_desc *desc;
+	struct iio_desc *desc = ctx->instance;
 	struct iio_dev_priv *dev = NULL;
 	struct iio_channel *ch = NULL;
 	struct iio_ch_info ch_info;
@@ -1473,14 +1473,13 @@ static int iio_read_attr(struct iiod_ctx *ctx, const void *device,
 static int iio_write_attr_new(struct iiod_ctx *ctx, const uint16_t *device,
 			  struct iiod_attr *attr, char *buf, uint32_t len)
 {
-	struct iio_desc *desc;
+	struct iio_desc *desc = ctx->instance;
 	struct attr_fun_params	params;
 	struct iio_attribute	*attributes;
 	struct iio_ch_info ch_info;
 	struct iio_trig_priv *trig_dev = NULL;
 	struct iio_dev_priv *dev = NULL;
 	struct iio_channel *ch = NULL;
-	int8_t ch_out;
 
 	dev = get_iio_device(ctx->instance, device, ctx->binary);
 
@@ -1503,7 +1502,7 @@ static int iio_write_attr_new(struct iiod_ctx *ctx, const uint16_t *device,
 			if (!ch)
 				return -ENOENT;
 
-			ch_info.ch_out = ch_out;
+			ch_info.ch_out = ch->ch_out;
 			ch_info.ch_num = ch->channel;
 			ch_info.type = ch->ch_type;
 			ch_info.differential = ch->diferential;

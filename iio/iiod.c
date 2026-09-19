@@ -345,7 +345,7 @@ int32_t iiod_parse_command(char *buf, struct comand_desc *res)
 			data->channel = (uint16_t) cmd->code;
 			return 0;
 		case IIOD_OP_FREE_BLOCK:
-		case IIOD_OP_FREE_BUFFER:
+		case IIOD_OP_CLOSE_BUFFER:
 			data->block_id = (int16_t)(cmd->code >> 16);
 			return 0;
 		case IIOD_OP_GETTRIG:
@@ -379,10 +379,13 @@ int32_t iiod_parse_command(char *buf, struct comand_desc *res)
 			data->channel = (uint16_t) cmd->code;
 			res->bytes_count = *(uint32_t *)payload;
 			return 0;
-		case IIOD_OP_CREATE_BUFFER:
-			res->mask = ((uint32_t *)payload)[2];
+		case IIOD_OP_OPEN_BUFFER:
+			/* Host sends only the raw channel mask (mask->words * 4 bytes).
+			 * For devices with <= 32 channels this is a single 32-bit word. */
+			res->mask = ((uint32_t *)payload)[0];
 			return 0;
 		case IIOD_OP_DISABLE_BUFFER:
+			return 0;
 		case IIOD_OP_CREATE_BLOCK:
 			data->bytes_size = *(uint32_t *)payload; //TODO: Is this correct. We read 8 bytes payload but only use 4?
 			return 0;
@@ -707,6 +710,33 @@ static int32_t rw_iiod_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn,
 	return 0;
 }
 
+/*
+ * Non-blocking send of the binary response header (conn->nb_buf) followed by
+ * the optional payload (conn->res.buf). Each buffer tracks its own idx, so a
+ * short write returns -EAGAIN and the caller resumes on the next iio_step()
+ * without blocking. Returns 0 when both are fully sent, -EAGAIN when more
+ * calls are needed, or a negative error code.
+ */
+static int32_t iiod_send_bin_response(struct iiod_desc *desc,
+				      struct iiod_conn_priv *conn)
+{
+	int32_t ret;
+
+	if (conn->nb_buf.idx < conn->nb_buf.len) {
+		ret = rw_iiod_buff(desc, conn, &conn->nb_buf, IIOD_WR);
+		if (ret)
+			return ret;
+	}
+
+	if (conn->res.buf.buf && conn->res.buf.idx < conn->res.buf.len) {
+		ret = rw_iiod_buff(desc, conn, &conn->res.buf, IIOD_WR);
+		if (ret)
+			return ret;
+	}
+
+	return 0;
+}
+
 static int32_t do_read_buff_delayed(struct iiod_desc *desc,
 				    struct iiod_conn_priv *conn)
 {
@@ -931,14 +961,17 @@ static int32_t iiod_read_generic(struct iiod_desc *desc,
 
 	while (len > 0) {
 		ret = desc->ops.recv(&ctx, ch, 1);
-		if (NO_OS_IS_ERR_VALUE(ret)) {
-			if (ret == -EAGAIN)
-				continue;
+		if (NO_OS_IS_ERR_VALUE(ret) || !ret) {
+			if ((ret == -EAGAIN) || (ret == 0))
+				return -EAGAIN;
 			else
 				return ret;
 		}
 		len -= ret;
 		ch += ret;
+		/* Track progress so a partially-received payload can be resumed
+		 * on the next iio_step() without blocking. */
+		conn->parser_idx += ret;
 	}
 
 	return 0;
@@ -1043,12 +1076,13 @@ static int32_t iiod_read_cmd_payload(struct iiod_desc *desc,
 		case IIOD_OP_GETTRIG:
 		case IIOD_OP_SETTRIG:
 			return 0; // TODO: Check what to do here
-		case IIOD_OP_CREATE_BUFFER:
-			//TODO: This'll only be valid for 32 channels. The format of data is
-			// dma_allocator(4B), mask_count (4B), masks (LSB ... MSB)
-			payload_len = 12;
+		case IIOD_OP_OPEN_BUFFER:
+			/* Host sends the raw channel mask only (mask->words * 4 bytes).
+			 * Valid for devices with <= 32 channels (single 32-bit word). */
+			payload_len = 4;
 			break;
 		case IIOD_OP_DISABLE_BUFFER:
+			return 0;
 		case IIOD_OP_CREATE_BLOCK:
 			payload_len = 8;
 			break;
@@ -1056,7 +1090,7 @@ static int32_t iiod_read_cmd_payload(struct iiod_desc *desc,
 			payload_len = 8;
 			break;
 		case IIOD_OP_FREE_BLOCK:
-		case IIOD_OP_FREE_BUFFER:
+		case IIOD_OP_CLOSE_BUFFER:
 			return 0;
 		case IIOD_OP_ENQUEUE_BLOCK_CYCLIC:
 		case IIOD_OP_RETRY_DEQUEUE_BLOCK:
@@ -1064,9 +1098,9 @@ static int32_t iiod_read_cmd_payload(struct iiod_desc *desc,
 			return -EINVAL;
 	}
 
-	do {
-		ret = iiod_read_generic(desc, conn, ch, payload_len);
-	} while (ret == -EAGAIN);
+	/* Read only the bytes not yet received. */
+	payload_len -= (uint8_t)(conn->parser_idx - sizeof(struct iiod_command));
+	ret = iiod_read_generic(desc, conn, ch, payload_len);
 
 	return ret;
 }
@@ -1175,7 +1209,7 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 		conn->res.buf.len = 0;
 		break;
 
-	case IIOD_OP_CREATE_BUFFER:
+	case IIOD_OP_OPEN_BUFFER:
 		conn->res.buf.len = 0;
 		break;
 
@@ -1249,6 +1283,17 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 
 		break;
 
+	case IIOD_OP_DISABLE_BUFFER:
+		/* Stop streaming and acknowledge. Without this case the command fell
+		 * through to `default: return -EINVAL`, which enqueues no response and
+		 * makes the host time out (-ETIMEDOUT). The hardware teardown
+		 * (post_disable) still runs later via ops.close on FREE_BLOCK. */
+		conn->res.buf.len = 0;
+		if (stream)
+			stream->started = false;
+
+		break;
+
 	case IIOD_OP_FREE_BLOCK:
 
 		conn->res.buf.len = 0;
@@ -1279,7 +1324,7 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 
 		break;
 
-	case IIOD_OP_FREE_BUFFER:
+	case IIOD_OP_CLOSE_BUFFER:
 		conn->res.buf.len = 0;
 		stream->curr =0;
 		//dealloc buffer
@@ -1392,11 +1437,24 @@ static int32_t iiod_run_state_bin(struct iiod_desc *desc,
 	struct command_data_binary *data = (struct command_data_binary *)conn->cmd_data.command_data;
 
 	uint8_t c;
-	static struct iiod_buff buff;
 	switch (conn->state) {
 		case IIOD_WRITING_EVENT_DATA:
 			uint32_t i;
 			struct iiod_event_client *client;
+
+			/* Resume a header+data event transfer that a short write
+			 * interrupted on a previous iio_step(). nb_buf.len != 0
+			 * marks a transfer in progress. */
+			if (conn->nb_buf.len) {
+				ret = iiod_send_bin_response(desc, conn);
+				if (NO_OS_IS_ERR_VALUE(ret))
+					return ret;
+				conn->nb_buf.len = 0;
+				conn->res.buf.buf = NULL;
+				conn->res.buf.len = 0;
+				conn->res.buf.idx = 0;
+			}
+
 			for (i = 0; i < conn->events.num_clients; i++) {
 				ret = no_os_list_read_idx(conn->events.clients, (void **)&client, i);
 				if (NO_OS_IS_ERR_VALUE(ret)) {
@@ -1404,24 +1462,25 @@ static int32_t iiod_run_state_bin(struct iiod_desc *desc,
 				}
 				if (client->event_read_count) {
 					ret = desc->ops.read_event(&ctx, &client->dev_id,
-								client->client_id, conn->event_data);
+							client->client_id, conn->event_data);
 					if (ret > 0) {
-						/* Event Found */
+						/* Event found: header via nb_buf, event via res.buf. */
 						IIOD_SET_RESPONSE(conn->res_header, client->client_id,
 								client->dev_id, sizeof(struct iio_event));
+						conn->nb_buf.buf = (char *)&conn->res_header;
+						conn->nb_buf.len = sizeof(conn->res_header);
+						conn->nb_buf.idx = 0;
+						conn->res.buf.buf = (char *)conn->event_data;
+						conn->res.buf.len = NO_OS_ARRAY_SIZE(conn->event_data);
+						conn->res.buf.idx = 0;
 
-						ret = desc->ops.send(&ctx, (uint8_t *)&conn->res_header,
-								 sizeof(conn->res_header));
-
-						buff.buf = conn->event_data;
-						buff.len = NO_OS_ARRAY_SIZE(conn->event_data);
-						buff.idx = 0;
-
-						do {
-							ret = rw_iiod_buff(desc, conn,
-									&buff,
-									IIOD_WR);
-						} while (ret == -EAGAIN);
+						ret = iiod_send_bin_response(desc, conn);
+						if (NO_OS_IS_ERR_VALUE(ret))
+							return ret;
+						conn->nb_buf.len = 0;
+						conn->res.buf.buf = NULL;
+						conn->res.buf.len = 0;
+						conn->res.buf.idx = 0;
 
 						client->event_read_count--;
 					} else if ((ret == -EAGAIN) || (ret == 0)) {
@@ -1430,6 +1489,8 @@ static int32_t iiod_run_state_bin(struct iiod_desc *desc,
 					} else {
 						IIOD_SET_RESPONSE(conn->res_header, client->client_id, client->dev_id, ret);
 						conn->res.write_val = 0;
+						conn->res.buf.buf = NULL;
+						conn->res.buf.len = 0;
 						conn->state = IIOD_WRITING_BIN_RESPONSE;
 						return 0;
 					}
@@ -1443,23 +1504,31 @@ static int32_t iiod_run_state_bin(struct iiod_desc *desc,
 				if(!lf256fifo_is_empty(conn->fifo_stream)) {
 					lf256fifo_get(conn->fifo_stream, &c);
 					if(conn->stream->blocks[c]->bytes_used == conn->stream->blocks[c]->size) {
-						IIOD_SET_RESPONSE(conn->res_header,
-								conn->stream->blocks[c]->cl_id,
-								0,
-								conn->stream->blocks[c]->size);
-						ret = desc->ops.send(&ctx, (uint8_t *)&conn->res_header,
-								 sizeof(conn->res_header));
+						/* Set up header (nb_buf) + block data (res.buf)
+						 * once; nb_buf.len != 0 marks a transfer in
+						 * progress so it resumes after a short write. */
+						if (conn->nb_buf.len == 0) {
+							IIOD_SET_RESPONSE(conn->res_header,
+									conn->stream->blocks[c]->cl_id,
+									0,
+									conn->stream->blocks[c]->size);
+							conn->nb_buf.buf = (char *)&conn->res_header;
+							conn->nb_buf.len = sizeof(conn->res_header);
+							conn->nb_buf.idx = 0;
+							conn->res.buf.buf = (char *)conn->stream->blocks[c]->data;
+							conn->res.buf.len = conn->stream->blocks[c]->size;
+							conn->res.buf.idx = 0;
+						}
 
-						buff.buf = conn->stream->blocks[c]->data;
-						buff.len = conn->stream->blocks[c]->size;
-						buff.idx = 0;
+						ret = iiod_send_bin_response(desc, conn);
+						if (NO_OS_IS_ERR_VALUE(ret))
+							return ret;
 
-						do {
-							ret = rw_iiod_buff(desc, conn,
-									&buff,
-									IIOD_WR);
-						} while (ret == -EAGAIN);
-
+						/* Block fully sent: clear state for the next one. */
+						conn->nb_buf.len = 0;
+						conn->res.buf.buf = NULL;
+						conn->res.buf.len = 0;
+						conn->res.buf.idx = 0;
 						conn->stream->blocks[c]->bytes_used = 0;
 
 						ret = lf256fifo_read(conn->fifo_stream, &c);
@@ -1475,11 +1544,10 @@ static int32_t iiod_run_state_bin(struct iiod_desc *desc,
 		case IIOD_READING_LINE:
 			ret = iio_read_command(desc, conn);
 			if (NO_OS_IS_ERR_VALUE(ret)) {
-				if ((ret == -EAGAIN) && (conn->parser_idx)) {
+				if (ret == -EAGAIN) {
+					if (!conn->parser_idx)
+						conn->state = IIOD_WRITING_EVENT_DATA;
 					return ret;
-				} else if (ret == -EAGAIN) {
-					conn->state = IIOD_WRITING_EVENT_DATA;
-					return 0;
 				}
 				if (!strncmp(conn->parser_buf, "BINARY\r\n", 8)) {
 					/* If we receive again the "BINARY\r\n" string, send a
@@ -1562,24 +1630,19 @@ static int32_t iiod_run_state_bin(struct iiod_desc *desc,
 		return 0;
 
 	case IIOD_WRITING_BIN_RESPONSE:
-		ret = desc->ops.send(&ctx, (uint8_t *)&conn->res_header,
-					 sizeof(conn->res_header));
+		/* Set up the fixed 8-byte response header, then hand off to the
+		 * resumable send state. This entry runs once. */
+		conn->nb_buf.buf = (char *)&conn->res_header;
+		conn->nb_buf.len = sizeof(conn->res_header);
+		conn->nb_buf.idx = 0;
+		conn->state = IIOD_WRITING_BIN_SEND;
+		return 0;
+	case IIOD_WRITING_BIN_SEND:
+		/* Send the header then the optional payload; -EAGAIN re-enters this
+		 * state until both are fully sent. */
+		ret = iiod_send_bin_response(desc, conn);
 		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
-
-		if (conn->res.buf.len) {
-			/* Send buf from result. Non blocking */
-			if (conn->res.buf.buf &&
-				conn->res.buf.idx < conn->res.buf.len) {
-				do {
-					ret = rw_iiod_buff(desc, conn, &conn->res.buf,
-							   IIOD_WR);
-				} while (ret == -EAGAIN);
-				if (NO_OS_IS_ERR_VALUE(ret))
-					return ret;
-			}
-		}
-
 		conn->state = IIOD_LINE_DONE;
 		return 0;
 	case IIOD_READING_WRITE_DATA:

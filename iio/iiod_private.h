@@ -77,6 +77,7 @@ enum iiod_cmd {
 	IIOD_CMD_SET
 };
 
+/* Opcodes for the binary protocol */
 enum iiod_opcode {
 	IIOD_OP_RESPONSE,
 	IIOD_OP_PRINT,
@@ -85,15 +86,19 @@ enum iiod_opcode {
 	IIOD_OP_READ_DBG_ATTR,
 	IIOD_OP_READ_BUF_ATTR,
 	IIOD_OP_READ_CHN_ATTR,
+	IIOD_OP_READ_DEV_EVT_ATTR,
+	IIOD_OP_READ_CHN_EVT_ATTR,
 	IIOD_OP_WRITE_ATTR,
 	IIOD_OP_WRITE_DBG_ATTR,
 	IIOD_OP_WRITE_BUF_ATTR,
 	IIOD_OP_WRITE_CHN_ATTR,
+	IIOD_OP_WRITE_DEV_EVT_ATTR,
+	IIOD_OP_WRITE_CHN_EVT_ATTR,
 	IIOD_OP_GETTRIG,
 	IIOD_OP_SETTRIG,
 
-	IIOD_OP_CREATE_BUFFER,
-	IIOD_OP_FREE_BUFFER,
+	IIOD_OP_OPEN_BUFFER,
+	IIOD_OP_CLOSE_BUFFER,
 	IIOD_OP_ENABLE_BUFFER,
 	IIOD_OP_DISABLE_BUFFER,
 
@@ -106,6 +111,13 @@ enum iiod_opcode {
 	IIOD_OP_CREATE_EVSTREAM,
 	IIOD_OP_FREE_EVSTREAM,
 	IIOD_OP_READ_EVENT,
+
+	IIOD_OP_REG_READ,
+	IIOD_OP_REG_WRITE,
+
+	IIOD_OP_REFRESH_FORMAT,
+
+	IIOD_OP_NOP,
 
 	IIOD_NB_OPCODES,
 };
@@ -228,6 +240,8 @@ struct iiod_conn_priv {
 		/* Write result of executed cmd */
 		IIOD_WRITING_CMD_RESULT,
 		IIOD_WRITING_BIN_RESPONSE,
+		/* Send the binary response header followed by its payload */
+		IIOD_WRITING_BIN_SEND,
 		/* I/O operations for READBUF and WRITEBUF cmds */
 		IIOD_RW_BUF,
 		/* I/O operations for WRITE cmd */

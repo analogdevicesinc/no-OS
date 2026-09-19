@@ -171,6 +171,14 @@ static int stm32_gpdma_fill_xfer_alignment(struct stm32_dma_channel *sdma_ch,
 	sdma_ch->hdma->Instance = (DMA_Channel_TypeDef *) sdma_ch->ch_num;
 	sdma_ch->hdma->Init.Request = sdma_ch->request;
 
+	/* Burst length MUST be >= 1. If left at 0 the HAL encodes the register
+	 * field SBL_1/DBL_1 = BurstLength - 1 = 0x3F, i.e. a 64-beat burst. A
+	 * peripheral that issues single-data requests (e.g. SPI RX with FTHLV=0)
+	 * can never assemble such a burst, so RXDR is never drained -> OVR and no
+	 * data reaches memory. Single-beat (1) is the correct default here. */
+	sdma_ch->hdma->Init.SrcBurstLength = 1;
+	sdma_ch->hdma->Init.DestBurstLength = 1;
+
 	/* Set the direction to be Memory-to-Peripheral */
 	sdma_ch->hdma->Init.Direction = DMA_MEMORY_TO_PERIPH;
 
@@ -315,6 +323,34 @@ int stm32_gpdma_config_xfer(struct no_os_dma_ch *channel,
 		ret = stm32_gpdma_llist_config(sdma_ch, &xfer_node_config, 1);
 		if (ret)
 			return -EINVAL;
+
+		/* WORKAROUND: HAL doesn't correctly apply some fields in linked-list nodes.
+		 * In linked-list mode, hardware loads CTR1/CTR2 from the node, not from
+		 * the channel register. CTR1 is at offset 0, CTR2 at offset 1. */
+		struct stm32_dma_ch_priv_data *ch_priv = sdma_ch->priv_data;
+		if (ch_priv && ch_priv->llist && ch_priv->llist->Head) {
+			DMA_NodeTypeDef *queue_node = (DMA_NodeTypeDef *)ch_priv->llist->Head;
+			uint32_t *node_ctr1 = &queue_node->LinkRegisters[0];
+			uint32_t *node_ctr2 = &queue_node->LinkRegisters[1];
+
+			/* Fix CTR1 data widths. Correct GPDMA CxTR1 layout:
+			 *   SDW_LOG2 (source data width) = bits [1:0]
+			 *   DDW_LOG2 (dest   data width) = bits [17:16]
+			 * (The previous code used [17:16]/[15:14] and clobbered SAP at bit 14,
+			 *  wrongly routing a peripheral read to GPDMA master port 1.)
+			 * Init.SrcDataWidth / Init.DestDataWidth are already the correctly
+			 * mapped, field-aligned encodings, so copy them straight in. */
+			*node_ctr1 = (*node_ctr1 & ~0x3U) |
+				     (sdma_ch->hdma->Init.SrcDataWidth & 0x3U);
+			*node_ctr1 = (*node_ctr1 & ~(0x3U << 16)) |
+				     (sdma_ch->hdma->Init.DestDataWidth & (0x3U << 16));
+
+			/* Fix CTR2: Apply trigger mode */
+			if (sdma_ch->trig) {
+				/* Clear and set TRIGM bits [15:14] */
+				*node_ctr2 = (*node_ctr2 & ~(0x3U << 14)) | trigger_config.TriggerMode;
+			}
+		}
 		break;
 	default:
 		return -EINVAL;
