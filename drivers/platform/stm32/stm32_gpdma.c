@@ -324,33 +324,14 @@ int stm32_gpdma_config_xfer(struct no_os_dma_ch *channel,
 		if (ret)
 			return -EINVAL;
 
-		/* WORKAROUND: HAL doesn't correctly apply some fields in linked-list nodes.
-		 * In linked-list mode, hardware loads CTR1/CTR2 from the node, not from
-		 * the channel register. CTR1 is at offset 0, CTR2 at offset 1. */
-		struct stm32_dma_ch_priv_data *ch_priv = sdma_ch->priv_data;
-		if (ch_priv && ch_priv->llist && ch_priv->llist->Head) {
-			DMA_NodeTypeDef *queue_node = (DMA_NodeTypeDef *)ch_priv->llist->Head;
-			uint32_t *node_ctr1 = &queue_node->LinkRegisters[0];
-			uint32_t *node_ctr2 = &queue_node->LinkRegisters[1];
-
-			/* Fix CTR1 data widths. Correct GPDMA CxTR1 layout:
-			 *   SDW_LOG2 (source data width) = bits [1:0]
-			 *   DDW_LOG2 (dest   data width) = bits [17:16]
-			 * (The previous code used [17:16]/[15:14] and clobbered SAP at bit 14,
-			 *  wrongly routing a peripheral read to GPDMA master port 1.)
-			 * Init.SrcDataWidth / Init.DestDataWidth are already the correctly
-			 * mapped, field-aligned encodings, so copy them straight in. */
-			*node_ctr1 = (*node_ctr1 & ~0x3U) |
-				     (sdma_ch->hdma->Init.SrcDataWidth & 0x3U);
-			*node_ctr1 = (*node_ctr1 & ~(0x3U << 16)) |
-				     (sdma_ch->hdma->Init.DestDataWidth & (0x3U << 16));
-
-			/* Fix CTR2: Apply trigger mode */
-			if (sdma_ch->trig) {
-				/* Clear and set TRIGM bits [15:14] */
-				*node_ctr2 = (*node_ctr2 & ~(0x3U << 14)) | trigger_config.TriggerMode;
-			}
-		}
+		/* No post-build register patching: HAL_DMAEx_List_BuildNode() encodes
+		 * CTR1 (data widths, increments, burst) and CTR2 (request, trigger)
+		 * directly from Init + TriggerConfig for every node. As long as those
+		 * are populated correctly (see fill_xfer_alignment / trigger_config),
+		 * the node is correct. An earlier "workaround" hand-patched CTR1 to
+		 * compensate for an Init.*BurstLength=0 bug (which encoded a 64-beat
+		 * burst) and, using wrong bit offsets, clobbered SAP -> mis-routing a
+		 * peripheral read to master port 1. That bug is fixed at the source. */
 		break;
 	default:
 		return -EINVAL;
