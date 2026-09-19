@@ -586,14 +586,6 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 	  /* Enable SPI peripheral */
  	  __HAL_SPI_ENABLE(sdesc->hspi);
 
- 	/* Drain any stale RX data and clear error flags so the first captured
- 	 * frame stays aligned with the master-generated clock (avoids an
- 	 * off-by-one / dropped byte at the start of the transfer). */
- 	while (READ_REG(SPIx->SR) & SPI_SR_RXP)
- 		(void)READ_REG(SPIx->RXDR);
- 	SET_BIT(SPIx->IFCR,
- 		SPI_IFCR_OVRC | SPI_IFCR_EOTC | SPI_IFCR_TXTFC | SPI_IFCR_SUSPC);
-
  	SET_BIT(SPIx->CR1, SPI_CR1_CSTART);
  #endif
 
