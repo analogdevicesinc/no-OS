@@ -1227,6 +1227,17 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 			goto command_fail;
 		}
 
+		/* FREE_BLOCK frees the block array and NULLs it on full teardown.
+		 * Re-allocate here so a subsequent capture session doesn't
+		 * dereference a NULL stream->blocks (hardfault). */
+		if (!stream->blocks) {
+			stream->blocks = no_os_calloc(MAX_NUM_BLOCKS, sizeof(*stream->blocks));
+			if (!stream->blocks) {
+				ret = -ENOMEM;
+				goto command_fail;
+			}
+		}
+
 		stream->blocks[stream->nb_blocks] = no_os_calloc(1, sizeof(*stream->blocks[stream->nb_blocks]));
 		if (!stream->blocks[stream->nb_blocks]) {
 			ret = -ENOMEM;
