@@ -198,7 +198,7 @@ build_doxygen() {
 build_sphinx() {
         pushd ${TOP_DIR}/doc/sphinx/source
 
-        make SPHINXOPTS="-W -j${NUM_JOBS}" html
+        make SPHINXOPTS="-W -j${NUM_JOBS}" dirhtml
 
         popd
 }
