@@ -2235,7 +2235,45 @@ int32_t ad9361_do_dcxo_tune_fine(struct ad9361_rf_phy *phy,
 int32_t ad9361_get_temperature(struct ad9361_rf_phy *phy,
 			       int32_t *temp)
 {
-	*temp = ad9361_get_temp(phy);
+	int32_t cfg, val, ret;
+
+	cfg = ad9361_spi_read(phy->spi, REG_AUXADC_CONFIG);
+	if (cfg < 0)
+		return cfg;
+
+	ret = ad9361_spi_write(phy->spi, REG_AUXADC_CONFIG,
+			       cfg | AUXADC_POWER_DOWN);
+	if (ret < 0)
+		return ret;
+
+	val = ad9361_spi_read(phy->spi, REG_TEMPERATURE);
+
+	ret = ad9361_spi_write(phy->spi, REG_AUXADC_CONFIG,
+			       cfg & ~AUXADC_POWER_DOWN);
+	if (ret < 0)
+		return ret;
+
+	if (val < 0)
+		return val;
+
+	/* REG_TEMPERATURE holds a signed 8-bit reading. Widening it as
+	 * unsigned turns every sub-zero measurement into a plausible-looking
+	 * high one: 0xE7 is -25 counts, or -21.9 C, but reads back as 231
+	 * counts and comes out as 202.6 C. The Linux driver has always cast
+	 * this reading to s8; no-OS is the port that dropped it.
+	 *
+	 * The part treats this reading as signed elsewhere in the same block,
+	 * which is what the offset is named after: temp_sense_offset_signed,
+	 * written to REG_TEMP_OFFSET and defaulting to 0xCE.
+	 *
+	 * Observed on a bladeRF 2.0 micro xA4 over 9894 readings taken during
+	 * sweeps: 9762 landed in 49.1-57.0 C and a separate cluster of 132 sat
+	 * at 199.1-207.9 C, with nothing in between. A junction 140 C above
+	 * its neighbours, with no intermediate samples and no thermal event,
+	 * is the sign bit rather than the die: read as signed, that cluster
+	 * is -25.4 to -16.7 C.
+	 */
+	*temp = NO_OS_DIV_ROUND_CLOSEST((int8_t)val * 1000000, 1140);
 
 	return 0;
 }
