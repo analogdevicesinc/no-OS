@@ -73,7 +73,7 @@ int ade7953_init(struct ade7953_dev **device,
 	ret = no_os_spi_init(&dev->spi_desc,
 			     init_param.spi_init);
 	if (ret)
-		goto error_spi;
+		goto error_dev;
 
 	/* select 24 bits or 32 bits regs comm */
 	dev->en_24_bit = init_param.en_24_bit;
