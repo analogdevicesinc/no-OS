@@ -7,7 +7,7 @@ EVAL-ADE9153A no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-- :adi:`EV-ADE9153ASHIELDZ`
+- `EV-ADE9153ASHIELDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ev-ade9153ashieldz.html>`_
 
 Overview
 --------

@@ -7,7 +7,7 @@ DC2903A no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-- :adi:`DC2903A`
+- `DC2903A <https://www.analog.com/DC2903A>`_
 
 Overview
 --------

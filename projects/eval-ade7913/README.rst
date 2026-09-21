@@ -10,7 +10,7 @@ Contents
 Supported Evaluation Boards
 ---------------------------
 
-- `EVAL-ADE7913`
+- `EVAL-ADE7913 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ade7913.html>`_
 
 Overview
 --------

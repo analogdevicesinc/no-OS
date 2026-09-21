@@ -4,7 +4,7 @@ ADXRS290-PMDZ no-OS Project
 Supported Evaluation Boards
 ---------------------------
 
-- :adi:`EVAL-ADXRS290-PMDZ`
+- `EVAL-ADXRS290-PMDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adxrs290-pmdz.html>`_
 
 Overview
 ---------

@@ -7,7 +7,7 @@ EVAL-ADE9000 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-- :adi:`EV-ADE9000SHIELDZ`
+- `EV-ADE9000SHIELDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ev-ade9000shieldz.html>`_
 
 Overview
 --------

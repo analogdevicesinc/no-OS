@@ -10,8 +10,8 @@ Contents
 Supported Evaluation Boards
 ---------------------------
 
-* EVAL-ADMT4000ARD1Z
-* EVAL-ADMT4000ARD2Z
+* `EVAL-ADMT4000ARD1Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-admt4000ard1z.html>`_
+* `EVAL-ADMT4000ARD2Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-admt4000ard2z.html>`_
 
 Overview
 --------
