@@ -173,7 +173,7 @@ int ade9153a_init(struct ade9153a_dev **device,
 
 	ret = no_os_gpio_get_optional(&dev->gpio_rdy, init_param.gpio_rdy);
 	if (ret)
-		goto error_gpio_rdy;
+		goto error_dev;
 
 	if (dev->gpio_rdy) {
 		ret = no_os_gpio_direction_input(dev->gpio_rdy);
