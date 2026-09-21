@@ -403,6 +403,8 @@ int32_t ad7124_read_data(struct ad7124_dev *dev,
 
 	/* Read the value of the Status Register */
 	ret = ad7124_read_register(dev, &regs[AD7124_Data]);
+	if (ret)
+		return ret;
 
 	/* Get the read result */
 	*p_data = regs[AD7124_Data].value;
