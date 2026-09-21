@@ -1299,7 +1299,7 @@ static int32_t ad9361_check_cal_done(struct ad9361_rf_phy *phy, uint32_t reg,
 {
 	uint32_t timeout = 20000; /* RFDC_CAL can take long */
 	int32_t state;
-	uint32_t polls = 0, spi_err = 0;
+	uint32_t polls = 0;
 	int32_t first = -1, last = -1;
 
 	while (timeout > 0) {
@@ -1314,10 +1314,8 @@ static int32_t ad9361_check_cal_done(struct ad9361_rf_phy *phy, uint32_t reg,
 		 * whole loop against a dead bus and then blames the
 		 * calibration engine for what was a SPI failure.
 		 */
-		if (state < 0) {
-			spi_err++;
+		if (state < 0)
 			return state;
-		}
 
 		if ((uint32_t)state == done_state)
 			return 0;
@@ -1331,13 +1329,13 @@ static int32_t ad9361_check_cal_done(struct ad9361_rf_phy *phy, uint32_t reg,
 
 	/* Report what happened, not just that time ran out. On a remotely
 	 * attached part every poll is a bus round trip, so the loop cannot
-	 * finish quickly and the counters tell a genuine timeout apart from
-	 * a transport fault after the fact.
+	 * finish quickly and the poll count and observed states tell a
+	 * genuine timeout apart from a transport fault after the fact.
 	 */
 	dev_err(&phy->spi->dev,
 		"Calibration TIMEOUT (0x%"PRIX32", 0x%"PRIX32") polls=%"PRIu32
-		" spi_err=%"PRIu32" first=0x%"PRIX32" last=0x%"PRIX32,
-		reg, mask, polls, spi_err, (uint32_t)first, (uint32_t)last);
+		" first=0x%"PRIX32" last=0x%"PRIX32,
+		reg, mask, polls, (uint32_t)first, (uint32_t)last);
 
 	return -ETIMEDOUT;
 }
