@@ -6,7 +6,7 @@ from lxml import html
 from docutils import nodes
 from sphinx.util.docutils import Directive
 from sphinx.util import logging
-from sphinx.util.osutil import SEP
+from sphinx.util.osutil import SEP, relative_uri
 from adi_doctools.directive.node import node_a
 
 logger = logging.getLogger(__name__)
@@ -134,6 +134,16 @@ def builder_inited_no_os_doxygen(app) -> None:
         dxy[p]['ctime'] = ctime
 
 
+def doctree_resolved_no_os_doxygen(app, doctree, docname) -> None:
+    """
+    Prefix the Doxygen links with the content root of the builder.
+    """
+    content_root = relative_uri(app.builder.get_target_uri(docname), '')
+    for node in doctree.findall(node_a):
+        if node.get('href', '').startswith(f'doxygen{SEP}'):
+            node['href'] = content_root + node['href']
+
+
 class directive_no_os_doxygen(Directive):
     """
     Adds a link to the Doxygen documentation using the format:
@@ -205,11 +215,10 @@ class directive_no_os_doxygen(Directive):
 
         node = nodes.paragraph()
 
-        content_root = (f'..{SEP}' * env.docname.count(SEP)) or f'.{SEP}'
         if 'ADOC_CUSTOM_DOC' in environ:
             path_ = base_url_doc + dir_
         else:
-            path_ = path.join(content_root, 'doxygen', dir_)
+            path_ = f'doxygen{SEP}{dir_}'
         url = node_a(href=path_,
                      classes=["reference", "external"])
         url += nodes.inline(text='/'.join(lf)+" (doxygen)")
@@ -222,6 +231,7 @@ class directive_no_os_doxygen(Directive):
 
 def setup(app):
     app.connect('builder-inited', builder_inited_no_os_doxygen)
+    app.connect('doctree-resolved', doctree_resolved_no_os_doxygen)
     app.add_directive('no-os-doxygen', directive_no_os_doxygen)
 
     return {
