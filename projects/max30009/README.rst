@@ -1,6 +1,11 @@
 MAX30009 no-OS Example Project
 ===============================
 
+Supported Parts
+---------------
+
+* `MAX30009 <https://www.analog.com/en/products/max30009.html>`_
+
 Supported Evaluation Boards
 ----------------------------
 

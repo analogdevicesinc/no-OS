@@ -6,6 +6,11 @@ MAX22200 no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `MAX22200 <https://www.analog.com/en/products/max22200.html>`_
+
 Supported Evaluation Boards
 ----------------------------
 

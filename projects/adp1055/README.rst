@@ -6,6 +6,11 @@ ADP1055 no-OS Example Project
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `ADP1055 <https://www.analog.com/en/products/adp1055.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

@@ -3,6 +3,11 @@ EVAL-ADE9430 no-OS Example Project
 
 .. no-os-doxygen::
 
+Supported Parts
+---------------
+
+* `ADE9430 <https://www.analog.com/en/products/ade9430.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

@@ -6,10 +6,15 @@ AD7746-EBZ no-OS Example Project
 .. contents::
 	:depth: 3
 
-Supported Evaluation Boards
-----------------------------
+Supported Parts
+---------------
 
-* `EVAL-AD7746EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7746.html>`_
+* `AD7746 <https://www.analog.com/en/products/ad7746.html>`_
+
+Supported Evaluation Boards
+---------------------------
+
+* `EVAL-AD7746EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7746.html>`_
 
 Overview
 --------

@@ -6,6 +6,11 @@ Evaluating the EVAL-ADG1736
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `ADG1736 <https://www.analog.com/en/products/adg1736.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

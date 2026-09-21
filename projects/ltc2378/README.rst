@@ -6,10 +6,15 @@ Evaluating the LTC2378-20
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `LTC2378-20 <https://www.analog.com/en/products/ltc2378-20.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
-`DC2135A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/dc2135a.html>`_
+* `DC2135A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/dc2135a.html>`_
 
 Overview
 --------

@@ -6,10 +6,15 @@ EVAL-ADG2404 no-OS Example Project
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `ADG2404 <https://www.analog.com/en/products/adg2404.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
-* `ADG2404 <https://www.analog.com/en/products/adg2404.html>`_
+* `EVAL-ADG2404 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adg2404.html>`_
 
 Overview
 --------

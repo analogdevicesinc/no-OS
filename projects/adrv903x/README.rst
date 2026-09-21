@@ -6,10 +6,15 @@ adrv903x no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
-Supported Devices
------------------
+Supported Parts
+---------------
 
 * `ADRV9032 <https://www.analog.com/en/products/adrv9032r.html>`_
+
+Supported Evaluation Boards
+---------------------------
+
+* `ADRV9032 Evaluation Board <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adrv9032.html>`_
 
 Supported Carriers
 ------------------

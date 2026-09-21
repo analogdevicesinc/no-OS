@@ -6,9 +6,10 @@ adrv902x no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
-Supported Devices
------------------
+Supported Parts
+---------------
 
+* `ADRV9025 <https://www.analog.com/en/products/adrv9025.html>`_
 * `ADRV9026 <https://www.analog.com/en/products/adrv9026.html>`_
 * `ADRV9029 <https://www.analog.com/en/products/adrv9029.html>`_
 

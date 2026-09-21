@@ -1,6 +1,12 @@
 Evaluating the LTC3220
 ======================
 
+Supported Parts
+---------------
+
+* `LTC3220 <https://www.analog.com/en/products/ltc3220.html>`_
+* `LTC3220-1 <https://www.analog.com/en/products/ltc3220-1.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

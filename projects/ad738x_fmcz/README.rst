@@ -4,10 +4,16 @@ AD738x_FMCZ no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `AD7380 <https://www.analog.com/en/products/ad7380.html>`_
+* `AD7381 <https://www.analog.com/en/products/ad7381.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD7380FMCZ <https://www.analog.com/en/EVAL-AD7380FMCZ.html>`_
+* `EVAL-AD7380FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7380fmcz.html>`_
 * `EVAL-AD7381FMCZ <https://www.analog.com/en/EVAL-AD7381FMCZ.html>`_
 
 Overview

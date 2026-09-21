@@ -9,10 +9,15 @@ Contents
 .. contents:: Table of Contents
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `LT3074 <https://www.analog.com/en/products/lt3074.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-LT3074 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-LT3074.html#eb-documentation>`_
+* `EVAL-LT3074 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-lt3074.html>`_
 
 Overview
 --------

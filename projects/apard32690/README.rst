@@ -3,6 +3,16 @@ AD-APARD32690-SL no-OS Example Project
 
 .. no-os-doxygen::
 
+Supported Parts
+---------------
+
+* `ADIN1110 <https://www.analog.com/en/products/adin1110.html>`_
+
+Supported Evaluation Boards
+---------------------------
+
+* `AD-APARD32690-SL <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-apard32690-sl.html>`_
+
 Prerequisites
 -------------
 

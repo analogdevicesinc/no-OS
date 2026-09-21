@@ -11,6 +11,13 @@ Supported Evaluation Boards
 
 * `AD-FMCDAQ2-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad-fmcdaq2-ebz.html>`_
 
+Supported Parts
+---------------
+
+* `AD9144 <https://www.analog.com/en/products/ad9144.html>`_
+* `AD9680 <https://www.analog.com/en/products/ad9680.html>`_
+* `AD9523-1 <https://www.analog.com/en/products/ad9523-1.html>`_
+
 Overview
 --------
 

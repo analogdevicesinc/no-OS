@@ -14,6 +14,12 @@ Supported Evaluation Boards
 
 * `EVAL-ADF5611 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf5611.html>`_
 
+Supported Parts
+---------------
+
+* `ADF5611 <https://www.analog.com/en/products/adf5611.html>`_
+* `ADF5612 <https://www.analog.com/en/products/adf5612.html>`_
+
 Overview
 --------
 

@@ -11,6 +11,11 @@ Supported Evaluation Boards
 
 * `EVAL-AD5460ARDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad5460ardz.html>`_
 
+Supported Parts
+---------------
+
+* `AD5460 <https://www.analog.com/en/products/ad5460.html>`_
+
 Overview
 --------
 

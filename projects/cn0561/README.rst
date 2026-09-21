@@ -6,6 +6,11 @@ CN0561 no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `AD4134 <https://www.analog.com/en/products/ad4134.html>`_
+
 Supported Evaluation Boards
 ----------------------------
 

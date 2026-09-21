@@ -6,6 +6,13 @@ AD7606x no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `AD7606B <https://www.analog.com/en/products/ad7606b.html>`_
+* `AD7606C-16 <https://www.analog.com/en/products/ad7606c-16.html>`_
+* `AD7606C-18 <https://www.analog.com/en/products/ad7606c-18.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

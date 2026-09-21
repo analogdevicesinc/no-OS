@@ -6,6 +6,11 @@ MAX11205PMB1 no-OS Example Project
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `MAX11205 <https://www.analog.com/en/products/max11205.html>`_
+
 Supported Evaluation Boards
 ----------------------------
 

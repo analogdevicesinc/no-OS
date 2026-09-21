@@ -6,10 +6,17 @@ EVAL-ADXL355-PMDZ no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
-Supported Evaluation Boards
-----------------------------
+Supported Parts
+---------------
 
-* `EVAL-ADXL355-PMDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADXL355-PMDZ.html>`_
+* `ADXL355 <https://www.analog.com/en/products/adxl355.html>`_
+* `ADXL357 <https://www.analog.com/en/products/adxl357.html>`_
+* `ADXL359 <https://www.analog.com/en/products/adxl359.html>`_
+
+Supported Evaluation Boards
+---------------------------
+
+* `EVAL-ADXL355-PMDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adxl355-pmdz.html>`_
 
 Overview
 --------

@@ -11,6 +11,12 @@ Supported Evaluation Boards
 
 * `EVAL-AD74413R <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD74413R.html>`_
 
+Supported Parts
+---------------
+
+* `AD74412R <https://www.analog.com/en/products/ad74412r.html>`_
+* `AD74413R <https://www.analog.com/en/products/ad74413r.html>`_
+
 Overview
 --------
 

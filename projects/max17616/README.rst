@@ -6,6 +6,12 @@ Evaluating the MAX17616
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `MAX17616 <https://www.analog.com/en/products/max17616.html>`_
+* `MAX17616A <https://www.analog.com/en/products/max17616a.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

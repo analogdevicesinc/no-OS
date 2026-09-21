@@ -6,8 +6,8 @@ AD7091R-2/-4/-8 no-OS Example Project
 .. contents::
     :depth: 3
 
-Supported Devices
------------------
+Supported Parts
+---------------
 
 * `AD7091R-2 <https://www.analog.com/en/products/ad7091r-2.html>`_
 * `AD7091R-4 <https://www.analog.com/en/products/ad7091r-4.html>`_
@@ -16,7 +16,7 @@ Supported Devices
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD7091R-xSDZ <https://www.analog.com/en/eval-ad7091r-xsdz.html>`_
+* `EVAL-AD7091R-xSDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7091r-xsdz.html>`_
 
 Overview
 --------

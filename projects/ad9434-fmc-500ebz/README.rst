@@ -4,10 +4,15 @@ AD9434-FMC-500EBZ no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `AD9434 <https://www.analog.com/en/products/ad9434.html>`_
+
 Supported Evaluation Boards
 ----------------------------
 
-* `AD9434-FMC-500EBZ <https://www.analog.com/en/products/ad9434.html>`_
+* `AD9434-FMC-500EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9434-fmc-500ebz.html>`_
 
 Overview
 --------

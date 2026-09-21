@@ -4,6 +4,11 @@ EVAL-ADE9153A no-OS Example Project
 .. contents::
     :depth: 3
 
+Supported Parts
+---------------
+
+* `ADE9153A <https://www.analog.com/en/products/ade9153a.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

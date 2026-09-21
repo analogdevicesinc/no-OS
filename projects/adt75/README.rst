@@ -6,6 +6,11 @@ ADT75 no-OS Example Project
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `ADT75 <https://www.analog.com/en/products/adt75.html>`_
+
 Supported Evaluation Boards
 ----------------------------
 

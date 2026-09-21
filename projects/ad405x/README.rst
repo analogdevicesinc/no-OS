@@ -3,6 +3,16 @@ AD405X no-OS Example Project STM32
 
 .. no-os-doxygen::
 
+Supported Parts
+---------------
+
+* `AD4050 <https://www.analog.com/en/products/ad4050.html>`_
+* `AD4052 <https://www.analog.com/en/products/ad4052.html>`_
+* `AD4056 <https://www.analog.com/en/products/ad4056.html>`_
+* `AD4058 <https://www.analog.com/en/products/ad4058.html>`_
+* `AD4060 <https://www.analog.com/en/products/ad4060.html>`_
+* `AD4062 <https://www.analog.com/en/products/ad4062.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

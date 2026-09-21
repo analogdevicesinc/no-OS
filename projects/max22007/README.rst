@@ -6,6 +6,11 @@ MAX22007EVKIT no-OS Example Project
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `MAX22007 <https://www.analog.com/en/products/max22007.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

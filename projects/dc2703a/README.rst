@@ -6,6 +6,11 @@ Evaluating the LT8491
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `LT8491 <https://www.analog.com/en/products/lt8491.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

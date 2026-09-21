@@ -6,10 +6,15 @@ ADG1712 Family no-OS Example Project
 .. contents::
     :depth: 3
 
+Supported Parts
+---------------
+
+* `ADG1712 <https://www.analog.com/en/products/adg1712.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
-* `ADG1712 <https://www.analog.com/en/products/adg1712.html>`_
+* `EVAL-ADG1712 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adg1712.html>`_
 
 Overview
 --------

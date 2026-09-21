@@ -9,6 +9,16 @@ Contents
 .. contents:: Table of Contents
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `LTC4296-1 <https://www.analog.com/en/products/ltc4296-1.html>`_
+
+Supported Evaluation Boards
+---------------------------
+
+* `EVAL-LTC4296 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ltc4296.html>`_
+
 Overview
 --------
 

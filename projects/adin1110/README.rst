@@ -11,6 +11,12 @@ Supported Evaluation Boards
 
 * `EVAL-ADIN1110 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adin1110.html>`_
 
+Supported Parts
+---------------
+
+* `ADIN1110 <https://www.analog.com/en/products/adin1110.html>`_
+* `ADIN1111 <https://www.analog.com/en/products/adin1111.html>`_
+
 Overview
 --------
 

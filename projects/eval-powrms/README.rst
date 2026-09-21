@@ -4,6 +4,18 @@ EVAL-POWRMS Evaluation Board
 .. contents::
     :depth: 3
 
+Supported Parts
+---------------
+
+* `ADL5920 <https://www.analog.com/en/products/adl5920.html>`_
+* `AD7091R5 <https://www.analog.com/en/products/ad7091r-5.html>`_
+* `MAX77986 <https://www.analog.com/en/products/max77986.html>`_
+
+Supported Evaluation Boards
+---------------------------
+
+* `EVAL-POWRMS <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-powrms.html>`_
+
 Overview
 ========
 

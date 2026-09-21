@@ -7,6 +7,11 @@ Contents
 .. contents:: Table of Contents
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `ADE7913 <https://www.analog.com/en/products/ade7913.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
@@ -145,8 +150,8 @@ Maxim Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-- :adi:`EVAL-ADE7913`
-- :adi:`MAX32690EVKIT`
+- `EVAL-ADE7913 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ade7913.html>`_
+- `MAX32690EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32690evkit.html>`_
 
 Connections
 ^^^^^^^^^^^

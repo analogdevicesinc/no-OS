@@ -11,6 +11,11 @@ Supported Evaluation Boards
 
 * `ADRV9009-W/PCBZ <https://www.analog.com/en/products/adrv9009.html>`_
 
+Supported Parts
+---------------
+
+* `ADRV9009 <https://www.analog.com/en/products/adrv9009.html>`_
+
 Overview
 --------
 

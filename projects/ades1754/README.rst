@@ -6,6 +6,13 @@ Evaluating the EVAL-ADES1754
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `ADES1754 <https://www.analog.com/en/products/ades1754.html>`_
+* `ADES1755 <https://www.analog.com/en/products/ades1755.html>`_
+* `ADES1756 <https://www.analog.com/en/products/ades1756.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

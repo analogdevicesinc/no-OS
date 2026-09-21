@@ -6,6 +6,12 @@ Evaluating the LT7182S
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `LT7182S <https://www.analog.com/en/products/lt7182s.html>`_
+* `LT7184S <https://www.analog.com/en/products/lt7184s.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

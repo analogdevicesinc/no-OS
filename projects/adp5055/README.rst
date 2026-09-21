@@ -6,6 +6,11 @@ ADP5055 no-OS Example Project
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `ADP5055 <https://www.analog.com/en/products/adp5055.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

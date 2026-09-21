@@ -11,6 +11,11 @@ Supported Evaluation Boards
 
 * `EV-ADIN1320FMCZ <https://www.analog.com/en/products/adin1320.html>`_
 
+Supported Parts
+---------------
+
+* `ADIN1320 <https://www.analog.com/en/products/adin1320.html>`_
+
 Overview
 --------
 

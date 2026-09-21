@@ -6,10 +6,15 @@ AD4110 no-OS Example Project
 .. contents:: Table of Contents
    :depth: 3
 
+Supported Parts
+---------------
+
+* `AD4110-1 <https://www.analog.com/en/products/ad4110-1.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD4110-1SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD4110-1.html>`_
+* `EVAL-AD4110-1SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad4110-1.html>`_
 
 Overview
 --------

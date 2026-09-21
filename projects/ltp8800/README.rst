@@ -6,6 +6,11 @@ Evaluating the LTP8800
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `LTP8800 <https://www.analog.com/en/products/ltp8800.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

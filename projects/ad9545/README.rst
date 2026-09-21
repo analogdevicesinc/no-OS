@@ -11,6 +11,11 @@ Supported Evaluation Boards
 
 * `EVAL-AD9545 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9545.html>`_
 
+Supported Parts
+---------------
+
+* `AD9545 <https://www.analog.com/en/products/ad9545.html>`_
+
 Overview
 --------
 

@@ -6,6 +6,16 @@ Demo ESP no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `ADuCM3029 <https://www.analog.com/en/products/aducm3029.html>`_
+
+Supported Evaluation Boards
+---------------------------
+
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
+
 Overview
 --------
 

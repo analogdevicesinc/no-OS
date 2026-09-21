@@ -4,10 +4,15 @@ DC2903A no-OS Example Project
 .. contents::
     :depth: 3
 
-Supported Evaluation Boards
-----------------------------
+Supported Parts
+---------------
 
-- `DC2903A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/dc2903a.html>`_
+* `LTC2672 <https://www.analog.com/en/products/ltc2672.html>`_
+
+Supported Evaluation Boards
+---------------------------
+
+* `DC2903A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/dc2903a.html>`_
 
 Overview
 --------

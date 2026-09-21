@@ -14,6 +14,13 @@ Supported Evaluation Boards
 * `AD-FMCOMMS4-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD-FMCOMMS4-EBZ.html>`_
 * `AD-FMCOMMS5-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad-fmcomms5-ebz.html>`_
 
+Supported Parts
+---------------
+
+* `AD9361 <https://www.analog.com/en/products/ad9361.html>`_
+* `AD9363 <https://www.analog.com/en/products/ad9363.html>`_
+* `AD9364 <https://www.analog.com/en/products/ad9364.html>`_
+
 Overview
 --------
 

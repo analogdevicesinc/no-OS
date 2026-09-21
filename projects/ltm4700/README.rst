@@ -6,6 +6,11 @@ LTM4700 no-OS Example Project
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `LTM4700 <https://www.analog.com/en/products/ltm4700.html>`_
+
 Supported Evaluation Boards
 ----------------------------
 

@@ -6,10 +6,15 @@ ADA4250-ARDZ no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `ADA4250 <https://www.analog.com/en/products/ada4250.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-ADA4250-ARDZ <https://www.analog.com/en/products/ada4250.html>`_
+* `EVAL-ADA4250-ARDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ada4250-ardz.html>`_
 
 Overview
 --------

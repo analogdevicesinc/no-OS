@@ -6,6 +6,11 @@ MAX22196 no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `MAX22196 <https://www.analog.com/en/products/max22196.html>`_
+
 Supported Evaluation Boards
 ----------------------------
 

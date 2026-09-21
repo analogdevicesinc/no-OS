@@ -14,6 +14,11 @@ Supported Evaluation Boards
 
 * `EVAL-ADF4371 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4371.html>`_
 
+Supported Parts
+---------------
+
+* `ADF4371 <https://www.analog.com/en/products/adf4371.html>`_
+
 Overview
 --------
 The EV-ADF4371SD2Z evaluates the performance of the ADF4371 frequency synthesizer

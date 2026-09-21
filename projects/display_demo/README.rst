@@ -6,11 +6,6 @@ Display Demo no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
-Supported Evaluation Boards
-----------------------------
-
-* `SSD1306 OLED Display <https://www.analog.com/en/SSD1306.html>`_
-
 Overview
 --------
 

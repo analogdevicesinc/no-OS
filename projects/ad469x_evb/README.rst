@@ -11,6 +11,14 @@ Supported Evaluation Boards
 
 * `EVAL-AD4696 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad4696.html>`_
 
+Supported Parts
+---------------
+
+* `AD4695 <https://www.analog.com/en/products/ad4695.html>`_
+* `AD4696 <https://www.analog.com/en/products/ad4696.html>`_
+* `AD4697 <https://www.analog.com/en/products/ad4697.html>`_
+* `AD4698 <https://www.analog.com/en/products/ad4698.html>`_
+
 Overview
 --------
 

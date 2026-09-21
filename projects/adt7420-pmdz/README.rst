@@ -6,6 +6,11 @@ ADT7420-PMDZ no-OS Example Project
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `ADT7420 <https://www.analog.com/en/products/adt7420.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

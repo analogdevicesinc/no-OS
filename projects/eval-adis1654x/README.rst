@@ -9,11 +9,17 @@ Contents
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `ADIS16545 <https://www.analog.com/en/products/adis16545.html>`_
+* `ADIS16547 <https://www.analog.com/en/products/adis16547.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
-* `ADIS16545 <https://www.analog.com/en/products/adis16545.html>`__
-* `ADIS16547 <https://www.analog.com/en/products/adis16547.html>`_
+* `EVAL-ADIS16545 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adis16545.html>`_
+* `EVAL-ADIS16547 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adis16547.html>`_
 
 Overview
 --------

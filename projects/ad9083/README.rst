@@ -11,6 +11,11 @@ Supported Evaluation Boards
 
 * `EVAL-AD9083 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9083.html>`_
 
+Supported Parts
+---------------
+
+* `AD9083 <https://www.analog.com/en/products/ad9083.html>`_
+
 Overview
 --------
 

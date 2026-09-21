@@ -6,6 +6,14 @@ Evaluating the LT7170
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `LT7170 <https://www.analog.com/en/products/lt7170.html>`_
+* `LT7170-1 <https://www.analog.com/en/products/lt7170-1.html>`_
+* `LT7171 <https://www.analog.com/en/products/lt7171.html>`_
+* `LT7171-1 <https://www.analog.com/en/products/lt7171-1.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

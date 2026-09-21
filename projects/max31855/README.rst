@@ -6,6 +6,11 @@ MAX31855 no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `MAX31855 <https://www.analog.com/en/products/max31855.html>`_
+
 Supported Evaluation Boards
 ----------------------------
 

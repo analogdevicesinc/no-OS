@@ -1,6 +1,11 @@
 ADXRS290-PMDZ no-OS Project
 ===========================
 
+Supported Parts
+---------------
+
+- `ADXRS290 <https://www.analog.com/en/products/adxrs290.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
@@ -115,8 +120,8 @@ ADuCM Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-- :adi:`EVAL-ADXRS290-PMDZ`
-- :adi:`EVAL-ADICUP3029`
+- `EVAL-ADXRS290-PMDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adxrs290-pmdz.html>`_
+- `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
 
 Connections
 ^^^^^^^^^^^
@@ -202,8 +207,8 @@ Maxim Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-- :adi:`EVAL-ADXRS290-PMDZ`
-- :adi:`MAX32655EVKIT`
+- `EVAL-ADXRS290-PMDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adxrs290-pmdz.html>`_
+- `MAX32655EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32655evkit.html>`_
 
 Connections
 ^^^^^^^^^^^
@@ -280,7 +285,7 @@ PICO Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-- :adi:`EVAL-ADXRS290-PMDZ`
+- `EVAL-ADXRS290-PMDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adxrs290-pmdz.html>`_
 - `Raspberry Pi Pico <https://www.raspberrypi.com/products/raspberry-pi-pico/>`__
 
 Connections
@@ -344,8 +349,8 @@ STM32 Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-- :adi:`EVAL-ADXRS290-PMDZ`
-- :adi:`EVAL-SDP-CK1Z`
+- `EVAL-ADXRS290-PMDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adxrs290-pmdz.html>`_
+- `EVAL-SDP-CK1Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
 
 Connections
 ^^^^^^^^^^^

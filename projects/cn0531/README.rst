@@ -6,10 +6,16 @@ CN0531 no-OS Example Project
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `AD5791 <https://www.analog.com/en/products/ad5791.html>`_
+
 Supported Evaluation Boards
 ----------------------------
 
 * `EVAL-CN0531-PMDZ <https://www.analog.com/en/resources/reference-designs/circuits-from-the-lab/cn0531.html>`_
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
 
 Overview
 --------

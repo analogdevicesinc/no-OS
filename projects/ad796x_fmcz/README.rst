@@ -6,6 +6,11 @@ AD796x no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `AD7960 <https://www.analog.com/en/products/ad7960.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

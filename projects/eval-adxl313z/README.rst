@@ -6,6 +6,13 @@ EVAL-ADXL313Z no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `ADXL312 <https://www.analog.com/en/products/adxl312.html>`_
+* `ADXL313 <https://www.analog.com/en/products/adxl313.html>`_
+* `ADXL314 <https://www.analog.com/en/products/adxl314.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

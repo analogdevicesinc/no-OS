@@ -14,6 +14,11 @@ Supported Evaluation Boards
 
 * `EVAL-ADF4368 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4368.html>`_
 
+Supported Parts
+---------------
+
+* `ADF4368 <https://www.analog.com/en/products/adf4368.html>`_
+
 Overview
 --------
 

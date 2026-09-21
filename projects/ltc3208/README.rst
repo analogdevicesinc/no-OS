@@ -1,6 +1,11 @@
 Evaluating the LTC3208
 ======================
 
+Supported Parts
+---------------
+
+* `LTC3208 <https://www.analog.com/en/products/ltc3208.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

@@ -11,6 +11,12 @@ Supported Evaluation Boards
 
 * `EVAL-AD5766SD2Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD5766.html>`_
 
+Supported Parts
+---------------
+
+* `AD5766 <https://www.analog.com/en/products/ad5766.html>`_
+* `AD5767 <https://www.analog.com/en/products/ad5767.html>`_
+
 Overview
 --------
 

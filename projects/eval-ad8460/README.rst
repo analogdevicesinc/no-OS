@@ -6,6 +6,11 @@ Evaluating the EVAL-AD8460
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `AD8460 <https://www.analog.com/en/products/ad8460.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

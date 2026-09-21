@@ -11,6 +11,11 @@ Supported Evaluation Boards
 
 * `EVAL-AD3552RFMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad3552r.html>`_
 
+Supported Parts
+---------------
+
+* `AD3552R <https://www.analog.com/en/products/ad3552r.html>`_
+
 Overview
 --------
 

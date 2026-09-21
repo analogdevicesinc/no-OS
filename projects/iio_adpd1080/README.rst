@@ -12,6 +12,12 @@ Supported Evaluation Boards
 * `EVAL-CN0569-PMDZ <https://www.analog.com/en/resources/reference-designs/circuits-from-the-lab/CN0569.html>`_
 * `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_ (carrier board)
 
+Supported Parts
+---------------
+
+* `ADPD1080 <https://www.analog.com/en/products/adpd1080.html>`_
+* `ADPD2140 <https://www.analog.com/en/products/adpd2140.html>`_
+
 Overview
 --------
 
