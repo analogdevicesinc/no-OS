@@ -580,6 +580,96 @@ int adar300x_get_update_source_spi(struct adar300x_dev *dev, bool *spi)
 }
 
 /**
+ * @brief Reads the on-chip ADC.
+ *
+ * The ADC requires a manual reset pulse before each conversion, and clocking
+ * is provided by dummy SPI transactions after the start bit is set. The
+ * conversion complete flag is polled before reading the result.
+ *
+ * @param dev   - The device structure.
+ * @param input - Analog input mux selection.
+ * @param value - ADC conversion result.
+ * @return	- 0 in case of success or negative error code otherwise.
+ */
+int adar300x_adc_read(struct adar300x_dev *dev, enum adar300x_adc_input input,
+		      uint8_t *value)
+{
+	uint8_t ctrl2;
+	int ret, i;
+	int timeout_us = 50000;
+	int poll_us = 100;
+
+	if (!dev || !value)
+		return -EINVAL;
+
+	if (input > ADAR300X_ADC_TEMPERATURE)
+		return -EINVAL;
+
+	/* Reset the ADC */
+	ret = adar300x_reg_update(dev, ADAR300X_REG_ADC_CONTROL,
+				  ADAR300X_ADC_RESET_MSK, ADAR300X_ADC_RESET_MSK);
+	if (ret)
+		return ret;
+
+	ret = adar300x_reg_update(dev, ADAR300X_REG_ADC_CONTROL,
+				  ADAR300X_ADC_RESET_MSK, 0);
+	if (ret)
+		return ret;
+
+	/* Enable and select the input */
+	ret = adar300x_reg_update(dev, ADAR300X_REG_ADC_CONTROL,
+				  ADAR300X_ADC_CLK_EN_MSK | ADAR300X_ADC_EN_MSK |
+				  ADAR300X_ADC_MUX_SEL_MSK,
+				  ADAR300X_ADC_CLK_EN_MSK | ADAR300X_ADC_EN_MSK |
+				  input);
+	if (ret)
+		return ret;
+
+	/* Start conversion: clear then set the start bit */
+	ret = adar300x_reg_update(dev, ADAR300X_REG_ADC_CONTROL2,
+				  ADAR300X_ADC_START_MSK, 0);
+	if (ret)
+		return ret;
+	ret = adar300x_reg_update(dev, ADAR300X_REG_ADC_CONTROL2,
+				  ADAR300X_ADC_START_MSK, 0);
+	if (ret)
+		return ret;
+	ret = adar300x_reg_update(dev, ADAR300X_REG_ADC_CONTROL2,
+				  ADAR300X_ADC_START_MSK, ADAR300X_ADC_START_MSK);
+	if (ret)
+		return ret;
+
+	/*
+	 * The SAR runs off SCLK, so the conversion only advances while the bus
+	 * is active. Seven dummy transactions are not enough on their own: at
+	 * 24 clocks each they supply 168 of the 784 the data sheet requires.
+	 * The status reads below make up the rest, which is why the conversion
+	 * must be polled rather than waited out with a delay.
+	 */
+	for (i = 0; i < ADAR300X_ADC_NUM_CLOCKS; i++) {
+		ret = adar300x_reg_write(dev, ADAR300X_REG_SCRATCHPAD,
+					 ADAR300X_SCRATCHPAD_PATTERN_2);
+		if (ret)
+			return ret;
+	}
+
+	/* Poll for conversion complete */
+	for (i = 0; i < timeout_us / poll_us; i++) {
+		ret = adar300x_reg_read(dev, ADAR300X_REG_ADC_CONTROL2, &ctrl2);
+		if (ret)
+			return ret;
+		if (ctrl2 & ADAR300X_ADC_END_CONV_MSK)
+			break;
+		no_os_udelay(poll_us);
+	}
+
+	if (!(ctrl2 & ADAR300X_ADC_END_CONV_MSK))
+		return -ETIMEDOUT;
+
+	return adar300x_reg_read(dev, ADAR300X_REG_ADC_DATA_OUT, value);
+}
+
+/**
  * @brief Pulses the RSTB pin. No-op when no reset GPIO is wired.
  * @param dev - The device structure.
  * @return    - 0 in case of success or negative error code otherwise.

@@ -178,6 +178,59 @@ static int adar300x_amplifier_demo(struct adar300x_dev *dev)
 	return 0;
 }
 
+/*
+ * Reads the temperature sensor twice and converts to millidegrees. A stuck or
+ * unclocked ADC shows up as an out of range value, so the reading is bounds
+ * checked against a plausible ambient rather than just printed.
+ */
+static int adar300x_adc_demo(struct adar300x_dev *dev)
+{
+	uint8_t code, code2, anlg0, anlg1;
+	int mdegc, ret;
+
+	ret = adar300x_adc_read(dev, ADAR300X_ADC_TEMPERATURE, &code);
+	if (ret)
+		return ret;
+
+	ret = adar300x_adc_read(dev, ADAR300X_ADC_TEMPERATURE, &code2);
+	if (ret)
+		return ret;
+
+	if (code > code2 + 2 || code2 > code + 2) {
+		pr_err("temperature unstable: code %u then %u\n", code, code2);
+		return -EIO;
+	}
+
+	mdegc = ADAR300X_TEMP_NOMINAL_MDEGC +
+		((int)code - ADAR300X_TEMP_NOMINAL_CODE) *
+		ADAR300X_TEMP_SLOPE_NUM / ADAR300X_TEMP_SLOPE_DEN;
+
+	if (mdegc < 0 || mdegc > 60000) {
+		pr_err("temperature %d mdegC outside plausible ambient\n",
+		       mdegc);
+		return -EIO;
+	}
+
+	pr_info("ADC temperature: %d.%03d degC (code %u)\n", mdegc / 1000,
+		mdegc % 1000, code);
+
+	/*
+	 * The analog inputs are reported but not checked: they are eval board
+	 * pins that need not be driven, so any code is legitimate.
+	 */
+	ret = adar300x_adc_read(dev, ADAR300X_ADC_ANALOG0, &anlg0);
+	if (ret)
+		return ret;
+
+	ret = adar300x_adc_read(dev, ADAR300X_ADC_ANALOG1, &anlg1);
+	if (ret)
+		return ret;
+
+	pr_info("ADC ANLG0 code %u, ANLG1 code %u\n", anlg0, anlg1);
+
+	return 0;
+}
+
 int basic_example_main(void)
 {
 	struct adar300x_dev *dev;
@@ -203,6 +256,10 @@ int basic_example_main(void)
 		goto error_dev;
 
 	ret = adar300x_amplifier_demo(dev);
+	if (ret)
+		goto error_dev;
+
+	ret = adar300x_adc_demo(dev);
 	if (ret)
 		goto error_dev;
 
