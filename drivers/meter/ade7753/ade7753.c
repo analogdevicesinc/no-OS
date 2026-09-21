@@ -77,7 +77,7 @@ int ade7753_init(struct ade7753_dev **device,
 	ret = no_os_spi_init(&dev->spi_desc,
 			     init_param.spi_init);
 	if (ret)
-		goto error_spi;
+		goto error_dev;
 
 	/* interrupt */
 	dev->irq_ctrl = init_param.irq_ctrl;
