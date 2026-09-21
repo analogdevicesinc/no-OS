@@ -6,12 +6,12 @@ AD7768 no-OS Driver
 Supported Devices
 -----------------
 
-- :adi:`AD7768`
+- `AD7768 <https://www.analog.com/en/products/ad7768.html>`_
 
 Overview
 --------
 
-The :adi:`AD7768` is a high-performance, 8-channel, 24-bit simultaneous
+The `AD7768 <https://www.analog.com/en/products/ad7768.html>`_ is a high-performance, 8-channel, 24-bit simultaneous
 sampling *Σ-Δ* analog-to-digital converter (ADC). It offers a dynamic
 range of 108 dB and a maximum input bandwidth of 110.8 kHz, making it
 suitable for precise data acquisition. The AD7768 supports configurable

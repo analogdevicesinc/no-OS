@@ -4,7 +4,7 @@ LM75 no-OS Driver
 Supported Devices
 ------------------
 
-- :adi:`LM75`
+- `LM75 <https://www.analog.com/en/products/lm75.html>`_
 
 Overview
 --------

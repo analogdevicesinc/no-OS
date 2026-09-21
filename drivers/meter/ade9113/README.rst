@@ -4,9 +4,9 @@ ADE9113 no-OS Driver
 Supported Devices
 -----------------
 
-- :adi:`ADE9103`
-- :adi:`ADE9112`
-- :adi:`ADE9113`
+- `ADE9103 <https://www.analog.com/en/products/ade9103.html>`_
+- `ADE9112 <https://www.analog.com/en/products/ade9112.html>`_
+- `ADE9113 <https://www.analog.com/en/products/ade9113.html>`_
 
 Overview
 --------

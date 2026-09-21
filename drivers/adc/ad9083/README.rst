@@ -4,7 +4,7 @@ AD9083 no-OS Driver
 Supported Devices
 -----------------
 
-- :adi:`AD9083`
+- `AD9083 <https://www.analog.com/en/products/ad9083.html>`_
 
 Overview
 --------

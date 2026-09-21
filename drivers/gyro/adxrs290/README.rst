@@ -4,7 +4,7 @@ ADXRS290 no-OS Driver
 Supported Devices
 -----------------
 
-- :adi:`ADXRS290`
+- `ADXRS290 <https://www.analog.com/en/products/adxrs290.html>`_
 
 Overview
 --------

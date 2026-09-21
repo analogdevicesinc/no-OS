@@ -4,7 +4,7 @@ AD9625 no-OS Driver
 Supported Devices
 -----------------
 
-- :adi:`AD9625`
+- `AD9625 <https://www.analog.com/en/products/ad9625.html>`_
 
 Overview
 --------

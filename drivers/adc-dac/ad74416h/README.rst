@@ -4,8 +4,8 @@ AD74416H no-OS Driver
 Supported Devices
 -----------------
 
-- :adi:`AD74416H`
-- :adi:`AD74414H`
+- `AD74416H <https://www.analog.com/en/products/ad74416h.html>`_
+- `AD74414H <https://www.analog.com/en/products/ad74414h.html>`_
 
 Overview
 ---------

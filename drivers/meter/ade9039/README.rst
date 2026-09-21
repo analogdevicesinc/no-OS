@@ -6,7 +6,7 @@ ADE9039 no-OS Driver
 Supported Devices
 -----------------
 
-* :adi:`ADE9039`
+* `ADE9039 <https://www.analog.com/en/products/ade9039.html>`_
 
 Overview
 --------

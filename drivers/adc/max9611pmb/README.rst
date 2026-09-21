@@ -4,8 +4,8 @@ MAX9611 no-OS driver
 Supported Devices
 -----------------
 
-- :adi:`MAX9611`
-- :adi:`MAX9612`
+- `MAX9611 <https://www.analog.com/en/products/max9611.html>`_
+- `MAX9612 <https://www.analog.com/en/products/max9612.html>`_
 
 Overview
 ---------

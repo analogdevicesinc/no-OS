@@ -6,7 +6,7 @@ ADMT4000 no-OS driver
 Supported Devices
 -----------------
 
-- :adi:`ADMT4000`
+- `ADMT4000 <https://www.analog.com/en/products/admt4000.html>`_
 
 Overview
 --------

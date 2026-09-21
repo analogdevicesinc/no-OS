@@ -6,7 +6,7 @@ ADAQ7980 no-OS Driver
 Supported Devices
 -----------------
 
-- :adi:`ADAQ7980`
+- `ADAQ7980 <https://www.analog.com/en/products/adaq7980.html>`_
 
 Overview
 ---------

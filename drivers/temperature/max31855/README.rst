@@ -4,7 +4,7 @@ MAX31855 no-OS Driver
 Supported Devices
 -----------------
 
-- :adi:`MAX31855`
+- `MAX31855 <https://www.analog.com/en/products/max31855.html>`_
 
 Overview
 --------

@@ -6,12 +6,12 @@ AD7768-1 no-OS Driver
 Supported Devices
 -----------------
 
-- :adi:`AD7768-1`
+- `AD7768-1 <https://www.analog.com/en/products/ad7768-1.html>`_
 
 Overview
 --------
 
-The :adi:`AD7768-1` is a precision 24-bit analog-to-digital converter (ADC)
+The `AD7768-1 <https://www.analog.com/en/products/ad7768-1.html>`_ is a precision 24-bit analog-to-digital converter (ADC)
 optimized for high-performance applications in dynamic signal analysis.
 It offers flexible operational modes, including continuous, one-shot,
 single, periodic, and standby, making it adaptable to various scenarios.

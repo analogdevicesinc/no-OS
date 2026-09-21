@@ -4,7 +4,7 @@ ADT75 no-OS Driver
 Supported Devices
 ------------------
 
-- :adi:`ADT75`
+- `ADT75 <https://www.analog.com/en/products/adt75.html>`_
 
 Overview
 --------

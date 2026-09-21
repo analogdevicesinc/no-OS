@@ -4,7 +4,7 @@ ADRV9009 no-OS Driver
 Supported Devices
 -----------------
 
-- :adi:`ADRV9009`
+- `ADRV9009 <https://www.analog.com/en/products/adrv9009.html>`_
 
 Overview
 --------
