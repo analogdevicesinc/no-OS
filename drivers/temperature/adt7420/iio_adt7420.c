@@ -135,7 +135,7 @@ int adt7420_iio_init(struct adt7420_iio_dev **iio_dev,
 		goto error_init;
 	ret = adt7420_reset(desc->adt7420_dev);
 	if (ret)
-		goto error_init;
+		goto error_reset;
 	desc->iio_dev = &adt7420_iio_dev;
 
 	*iio_dev = desc;
