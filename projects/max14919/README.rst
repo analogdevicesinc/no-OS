@@ -6,10 +6,15 @@ MAX14919 no-OS Example Project
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `MAX14919 <https://www.analog.com/en/products/max14919.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
-* `MAX14919PMB <https://www.analog.com/en/MAX14919PMB.html>`_
+* `MAX14919PMB <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max14919pmb.html>`_
 
 Overview
 --------

@@ -6,6 +6,13 @@ Evaluating the LTM4686
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `LTM4673 <https://www.analog.com/en/products/ltm4673.html>`_
+* `LTM4686 <https://www.analog.com/en/products/ltm4686.html>`_
+* `LTM4686B <https://www.analog.com/en/products/ltm4686b.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

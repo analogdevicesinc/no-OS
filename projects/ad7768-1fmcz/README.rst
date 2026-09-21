@@ -6,6 +6,11 @@ AD7768-1 no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `AD7768-1 <https://www.analog.com/en/products/ad7768-1.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

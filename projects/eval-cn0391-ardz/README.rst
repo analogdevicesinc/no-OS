@@ -6,8 +6,8 @@ EVAL-CN0391-ARDZ no-OS Example Project
 .. contents::
     :depth: 3
 
-Supported Devices
------------------
+Supported Parts
+---------------
 
 * `AD7124-8 <https://www.analog.com/en/products/ad7124-8.html>`_
 

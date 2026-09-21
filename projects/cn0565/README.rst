@@ -6,6 +6,12 @@ CN0565 no-OS Example Project
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `AD5940 <https://www.analog.com/en/products/ad5940.html>`_
+* `ADG2128 <https://www.analog.com/en/products/adg2128.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

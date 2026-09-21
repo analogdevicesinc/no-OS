@@ -1,6 +1,17 @@
 AD-APARDPFWD-SL no-OS Example Project
 ======================================
 
+Supported Parts
+---------------
+
+* `ADIN1110 <https://www.analog.com/en/products/adin1110.html>`_
+
+Supported Evaluation Boards
+---------------------------
+
+* `AD-APARDPFWD-SL <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-apardpfwd-sl.html>`_
+* `AD-APARD32690-SL <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-apard32690-sl.html>`_
+
 Prerequisites
 -------------
 

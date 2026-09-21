@@ -6,6 +6,15 @@ PULSAR-ADC no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `AD4000 <https://www.analog.com/en/products/ad4000.html>`_
+* `AD4001 <https://www.analog.com/en/products/ad4001.html>`_
+* `AD4002 <https://www.analog.com/en/products/ad4002.html>`_
+* `AD4003 <https://www.analog.com/en/products/ad4003.html>`_
+* `AD4020 <https://www.analog.com/en/products/ad4020.html>`_
+
 Supported Evaluation Boards
 ----------------------------
 

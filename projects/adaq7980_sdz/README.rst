@@ -6,6 +6,11 @@ ADAQ7980_SDZ no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `ADAQ7980 <https://www.analog.com/en/products/adaq7980.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

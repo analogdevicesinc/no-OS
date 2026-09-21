@@ -6,6 +6,11 @@ ADAQ8092_FMC no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `ADAQ8092 <https://www.analog.com/en/products/adaq8092.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

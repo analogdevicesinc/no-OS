@@ -6,10 +6,16 @@ CN0552 no-OS Example Project
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `AD7746 <https://www.analog.com/en/products/ad7746.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
 * `EVAL-CN0552-PMDZ <https://www.analog.com/en/resources/reference-designs/circuits-from-the-lab/cn0552.html>`_
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
 
 Overview
 --------

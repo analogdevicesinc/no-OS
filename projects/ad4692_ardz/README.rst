@@ -15,6 +15,14 @@ Supported Evaluation Boards
 * `EVAL-AD4692-ARDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad4692-ardz.html>`_
 * `AD-APARD32690-SL <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-apard32690-sl.html>`_
 
+Supported Parts
+---------------
+
+* `AD4691 <https://www.analog.com/en/products/ad4691.html>`_
+* `AD4692 <https://www.analog.com/en/products/ad4692.html>`_
+* `AD4693 <https://www.analog.com/en/products/ad4693.html>`_
+* `AD4694 <https://www.analog.com/en/products/ad4694.html>`_
+
 Overview
 --------
 

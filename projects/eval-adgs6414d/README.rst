@@ -6,10 +6,15 @@ ADGS6414D Family no-OS Example Project
 .. contents::
     :depth: 3
 
+Supported Parts
+---------------
+
+* `ADGS6414D <https://www.analog.com/en/products/adgs6414d.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
-* `ADGS6414D <https://www.analog.com/en/products/adgs6414d.html>`_
+* `EVAL-ADGS6414D <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adgs6414d.html>`_
 
 Overview
 --------

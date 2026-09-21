@@ -1,10 +1,21 @@
 AD-PQMON-SL Kit no-OS Example Project
 =====================================
 
+Supported Parts
+---------------
+
+* `ADE9430 <https://www.analog.com/en/products/ade9430.html>`_
+* `MAX32650 <https://www.analog.com/en/products/max32650.html>`_
+
+Supported Evaluation Boards
+---------------------------
+
+* `AD-PQMON-SL <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/AD-PQMON-SL.html>`_
+
 Overview
 --------
 
-The :adi:`AD-PQMON-SL` provides a complete software and hardware platform for
+The `AD-PQMON-SL <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/AD-PQMON-SL.html>`_ provides a complete software and hardware platform for
 prototyping and evaluating high performance class S polyphase energy quality
 monitors. The design incorporates the ADE9430 high performance, polyphase
 energy monitoring IC that has an advanced metrology feature set (total and
@@ -80,7 +91,7 @@ Each interface is a separate ``--variant`` selected at build time:
 Build and run
 -------------
 
-The project is based on a :adi:`MAX32650` microcontroller. The proprietary
+The project is based on a `MAX32650 <https://www.analog.com/en/products/max32650.html>`_ microcontroller. The proprietary
 pqlib is not part of the repository; point the ``PQLIB_PATH`` environment
 variable at its directory before building. Select the interface with
 ``--variant`` and build (append ``--probe`` / ``--flash`` to program the board).

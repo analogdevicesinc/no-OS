@@ -6,6 +6,11 @@ AD7124-8-PMDZ no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `AD7124-8 <https://www.analog.com/en/products/ad7124-8.html>`_
+
 Supported Evaluation Boards
 ----------------------------
 

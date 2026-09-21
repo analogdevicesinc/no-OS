@@ -12,6 +12,12 @@ Supported Evaluation Boards
 * `AD9081-FMCA-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9081.html>`_
 * `QUAD-MXFE <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/quad-mxfe.html>`_
 
+Supported Parts
+---------------
+
+* `AD9081 <https://www.analog.com/en/products/ad9081.html>`_
+* `AD9082 <https://www.analog.com/en/products/ad9082.html>`_
+
 Supported Carriers
 ------------------
 

@@ -6,6 +6,11 @@ Evaluating the LTM3360B
 .. contents:: Table of Contents
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `LTM3360B <https://www.analog.com/en/products/ltm3360b.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

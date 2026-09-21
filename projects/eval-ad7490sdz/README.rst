@@ -6,6 +6,11 @@ EVAL-AD7490SDZ no-OS Example Project
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `AD7490 <https://www.analog.com/en/products/ad7490.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

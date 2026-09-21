@@ -6,6 +6,11 @@ ADuCM3029 Blinky no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `ADuCM3029 <https://www.analog.com/en/products/aducm3029.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

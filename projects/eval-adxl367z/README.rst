@@ -6,8 +6,13 @@ EVAL-ADXL367Z no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `ADXL367 <https://www.analog.com/en/products/adxl367.html>`_
+
 Supported Evaluation Boards
-----------------------------
+---------------------------
 
 * `EVAL-ADXL367Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adxl367z.html>`_
 

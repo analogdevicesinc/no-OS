@@ -6,10 +6,15 @@ EVAL-ADL8113 no-OS Example Project
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `ADL8113 <https://www.analog.com/en/products/adl8113.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
-* `ADL8113 <https://www.analog.com/en/products/adl8113.html>`_
+* `EVAL-ADL8113 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adl8113.html>`_
 
 Overview
 --------

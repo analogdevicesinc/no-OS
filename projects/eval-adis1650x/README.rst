@@ -6,13 +6,21 @@ ADIS1650X Family no-OS Example Project
 .. contents::
     :depth: 3
 
-Supported Evaluation Boards
----------------------------
+Supported Parts
+---------------
 
 * `ADIS16500 <https://www.analog.com/en/products/adis16500.html>`_
 * `ADIS16501 <https://www.analog.com/en/products/adis16501.html>`_
 * `ADIS16505 <https://www.analog.com/en/products/adis16505.html>`_
 * `ADIS16507 <https://www.analog.com/en/products/adis16507.html>`_
+
+Supported Evaluation Boards
+---------------------------
+
+* `EVAL-ADIS16500 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adis16500.html>`_
+* `EVAL-ADIS16501 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adis16501.html>`_
+* `EVAL-ADIS16505 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adis16505.html>`_
+* `EVAL-ADIS16507 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adis16507.html>`_
 
 Overview
 --------

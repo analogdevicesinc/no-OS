@@ -6,10 +6,15 @@ AD719X no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `AD7190 <https://www.analog.com/en/products/ad7190.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD7190ASDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7190ASDZ.html>`_
+* `EVAL-AD7190ASDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7190asdz.html>`_
 
 Overview
 --------

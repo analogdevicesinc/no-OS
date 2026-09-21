@@ -6,6 +6,11 @@ Evaluating the MAX31827
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `MAX31827 <https://www.analog.com/en/products/max31827.html>`_
+
 Supported Evaluation Boards
 ----------------------------
 

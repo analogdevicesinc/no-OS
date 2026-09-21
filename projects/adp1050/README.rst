@@ -6,6 +6,12 @@ ADP1050 no-OS Example Project
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `ADP1050 <https://www.analog.com/en/products/adp1050.html>`_
+* `ADP1051 <https://www.analog.com/en/products/adp1051.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

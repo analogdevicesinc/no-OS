@@ -11,6 +11,12 @@ Supported Evaluation Boards
 
 * `AD-ACEVSECRDSET-SL <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-bct2ade9113-sl.html>`_
 
+Supported Parts
+---------------
+
+* `ADE9113 <https://www.analog.com/en/products/ade9113.html>`_
+* `MAX32655 <https://www.analog.com/en/products/max32655.html>`_
+
 Overview
 --------
 

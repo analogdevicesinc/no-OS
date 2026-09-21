@@ -12,6 +12,11 @@ Supported Evaluation Boards
 
 * `EVAL-ADF4030 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4030.html>`_
 
+Supported Parts
+---------------
+
+* `ADF4030 <https://www.analog.com/en/products/adf4030.html>`_
+
 Overview
 --------
 

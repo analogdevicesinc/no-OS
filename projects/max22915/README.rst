@@ -6,6 +6,11 @@ MAX22915 no-OS Example Project
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `MAX22915 <https://www.analog.com/en/products/max22915.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

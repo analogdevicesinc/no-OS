@@ -11,6 +11,11 @@ Supported Evaluation Boards
 
 * `EVAL-AD5758SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD5758.html>`_
 
+Supported Parts
+---------------
+
+* `AD5758 <https://www.analog.com/en/products/ad5758.html>`_
+
 Overview
 --------
 

@@ -11,6 +11,13 @@ Supported Evaluation Boards
 
 * `EVAL-AD917x <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9172.html>`_
 
+Supported Parts
+---------------
+
+* `AD9171 <https://www.analog.com/en/products/ad9171.html>`_
+* `AD9172 <https://www.analog.com/en/products/ad9172.html>`_
+* `AD9173 <https://www.analog.com/en/products/ad9173.html>`_
+
 Overview
 --------
 

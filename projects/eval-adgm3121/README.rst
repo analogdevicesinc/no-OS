@@ -6,10 +6,15 @@ ADGM3121 no-OS Example Project
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `ADGM3121 <https://www.analog.com/en/products/adgm3121.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
-* `ADGM3121 <https://www.analog.com/en/products/adgm3121.html>`_
+* `EVAL-ADGM3121 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adgm3121.html>`_
 
 Overview
 --------

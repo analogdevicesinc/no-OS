@@ -6,6 +6,12 @@ EVAL-ADXL38x no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `ADXL380 <https://www.analog.com/en/products/adxl380.html>`_
+* `ADXL382 <https://www.analog.com/en/products/adxl382.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

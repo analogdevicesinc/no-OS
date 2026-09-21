@@ -6,6 +6,11 @@ MAX42500 no-OS Example Project
 .. contents::
         :depth: 3
 
+Supported Parts
+---------------
+
+* `MAX42500 <https://www.analog.com/en/products/max42500.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

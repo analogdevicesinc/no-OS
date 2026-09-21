@@ -6,6 +6,11 @@ AD7124-4SDZ no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `AD7124-4 <https://www.analog.com/en/products/ad7124-4.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

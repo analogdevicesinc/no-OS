@@ -6,6 +6,14 @@ Evaluating the LTC2983 / ADT7604
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `LTC2983 <https://www.analog.com/en/products/ltc2983.html>`_
+* `LTC2984 <https://www.analog.com/en/products/ltc2984.html>`_
+* `LTC2986 <https://www.analog.com/en/products/ltc2986.html>`_
+* `ADT7604 <https://www.analog.com/en/products/adt7604.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

@@ -6,6 +6,11 @@ LTC3337 no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `LTC3337 <https://www.analog.com/en/products/ltc3337.html>`_
+
 Supported Evaluation Boards
 ----------------------------
 

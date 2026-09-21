@@ -4,10 +4,15 @@ AD4080 no-OS Example Project
 .. contents::
         :depth: 3
 
+Supported Parts
+---------------
+
+* `AD4080 <https://www.analog.com/en/products/ad4080.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD4080ARDZ <https://www.analog.com/en/products/eval-ad4080ardz>`_
+* `EVAL-AD4080ARDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad4080ardz.html>`_
 
 Overview
 --------
@@ -72,7 +77,7 @@ Maxim Platform
 **Used hardware**
 
 * `AD4080 <https://www.analog.com/en/products/ad4080>`_
-* `MAX32666FTHR <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/max32666fthr.html>`_
+* `MAX32666FTHR <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32666fthr.html>`_
 
 +----------------------+----------------------+-----------------------------+
 | EVAL-AD4080ARDZ Pins | Function             | MAX32666FTHR Pins           |

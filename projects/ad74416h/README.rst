@@ -6,6 +6,11 @@ Supported Evaluation Boards
 
 - `EVAL-AD74416H <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad74416h.html>`_
 
+Supported Parts
+---------------
+
+- `AD74416H <https://www.analog.com/en/products/ad74416h.html>`_
+
 Overview
 ---------
 
@@ -210,8 +215,8 @@ STM32 Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-- :adi:`EVAL-AD74416H`
-- :adi:`EVAL-SDP-CK1Z`
+- `EVAL-AD74416H <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad74416h.html>`_
+- `EVAL-SDP-CK1Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
 
 Connections
 ^^^^^^^^^^^

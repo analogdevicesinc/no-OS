@@ -6,6 +6,11 @@ AD713x FMCZ no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `AD7134 <https://www.analog.com/en/products/ad7134.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

@@ -6,6 +6,11 @@ AD6676-EBZ no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `AD6676 <https://www.analog.com/en/products/ad6676.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

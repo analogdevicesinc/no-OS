@@ -6,6 +6,19 @@ AD-SWIOT1L-SL no-OS Example Project
 .. contents::
     :depth: 3
 
+Supported Parts
+---------------
+
+* `AD74413R <https://www.analog.com/en/products/ad74413r.html>`_
+* `ADIN1110 <https://www.analog.com/en/products/adin1110.html>`_
+* `ADT75 <https://www.analog.com/en/products/adt75.html>`_
+* `MAX14906 <https://www.analog.com/en/products/max14906.html>`_
+
+Supported Evaluation Boards
+---------------------------
+
+* `AD-SWIOT1L-SL <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-swiot1l-sl.html>`_
+
 Prerequisites
 -------------
 

@@ -6,6 +6,11 @@ Evaluating the LTC7871
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `LTC7871 <https://www.analog.com/en/products/ltc7871.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

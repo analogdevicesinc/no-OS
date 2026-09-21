@@ -16,6 +16,13 @@ Supported Evaluation Boards
 * `EVAL-ADF4382A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4382a.html>`_
 * `EVAL-ADF4383 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4383.html>`_
 
+Supported Parts
+---------------
+
+* `ADF4382 <https://www.analog.com/en/products/adf4382.html>`_
+* `ADF4382A <https://www.analog.com/en/products/adf4382a.html>`_
+* `ADF4383 <https://www.analog.com/en/products/adf4383.html>`_
+
 Overview
 --------
 The EV-ADF4382SD1Z evaluates the performance of the ADF4382 frequency

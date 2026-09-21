@@ -11,6 +11,11 @@ Supported Evaluation Boards
 
 * `AD9208-DUAL-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad9208-dual-ebz.html>`_
 
+Supported Parts
+---------------
+
+* `AD9208 <https://www.analog.com/en/products/ad9208.html>`_
+
 Supported Carriers
 ------------------
 

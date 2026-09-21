@@ -5,6 +5,17 @@ AD5592R/AD5593R/LM75 no-OS Example Project
    :depth: 3
    :local:
 
+Supported Parts
+---------------
+
+* `AD5592R <https://www.analog.com/en/products/ad5592r.html>`_
+* `AD5593R <https://www.analog.com/en/products/ad5593r.html>`_
+* `LM75 <https://www.analog.com/en/products/lm75.html>`_
+
+Supported Evaluation Boards
+---------------------------
+
+* `ADALM-LSMSPG <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/adalm-lsmspg.html>`_
 
 Overview
 --------

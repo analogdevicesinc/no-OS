@@ -4,6 +4,11 @@ EVAL-ADE9000 no-OS Example Project
 .. contents::
     :depth: 3
 
+Supported Parts
+---------------
+
+* `ADE9000 <https://www.analog.com/en/products/ade9000.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

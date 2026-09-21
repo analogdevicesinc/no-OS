@@ -11,6 +11,11 @@ Supported Evaluation Boards
 
 * `ADRV9371 <https://www.analog.com/en/products/adrv9371.html>`_
 
+Supported Parts
+---------------
+
+* `AD9371 <https://www.analog.com/en/products/ad9371.html>`_
+
 Overview
 --------
 

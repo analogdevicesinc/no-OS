@@ -6,6 +6,11 @@ MAX14906 no-OS Example Project
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `MAX14906 <https://www.analog.com/en/products/max14906.html>`_
+
 Supported Evaluation Boards
 ----------------------------
 

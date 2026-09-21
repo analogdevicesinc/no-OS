@@ -6,6 +6,12 @@ EVAL-LTC4306 no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `LTC4306 <https://www.analog.com/en/products/ltc4306.html>`_
+* `MAX5380 <https://www.analog.com/en/products/max5380.html>`_
+
 Supported Evaluation Boards
 ----------------------------
 

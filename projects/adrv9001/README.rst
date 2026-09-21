@@ -12,10 +12,17 @@ models.
 .. contents:: Table of Contents
     :depth: 3
 
-Supported Devices
------------------
+Supported Evaluation Boards
+---------------------------
 
-* `ADRV9002NP/W2/PCBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adrv9002.html>`__ (Evaluation Board for ADRV9002)
+* `ADRV9002NP/W2/PCBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adrv9002.html>`_
+
+Supported Parts
+---------------
+
+* `ADRV9002 <https://www.analog.com/en/products/adrv9002.html>`_
+* `ADRV9003 <https://www.analog.com/en/products/adrv9003.html>`_
+* `ADRV9004 <https://www.analog.com/en/products/adrv9004.html>`_
 
 Supported Carriers
 ------------------

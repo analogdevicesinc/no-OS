@@ -6,11 +6,17 @@ EVAL-ADHV4710 no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `ADHV4710 <https://www.analog.com/en/products/adhv4710.html>`_
+* `ADHV4711 <https://www.analog.com/en/products/adhv4711.html>`_
+
 Supported Evaluation Boards
 ----------------------------
 
-* `EVAL-ADHV4710 <https://www.analog.com/ADHV4710>`_
-* `EVAL-ADHV4711 <https://www.analog.com/ADHV4711>`_
+* `EVAL-ADHV4710 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adhv4710.html>`_
+* `EVAL-ADHV4711 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adhv4711.html>`_
 
 Overview
 --------
@@ -124,9 +130,9 @@ Maxim Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-ADHV4710 <https://www.analog.com/ADHV4710>`_ or
-  `EVAL-ADHV4711 <https://www.analog.com/ADHV4711>`_
-* `MAX32690EVKIT <https://www.analog.com/MAX32690>`_
+* `EVAL-ADHV4710 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adhv4710.html>`_ or
+  `EVAL-ADHV4711 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adhv4711.html>`_
+* `MAX32690EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/MAX32690EVKIT.html>`_
 
 Connections
 ^^^^^^^^^^^

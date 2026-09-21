@@ -11,6 +11,16 @@ Supported Evaluation Boards
 
 * `ADRV9040 <https://www.analog.com/en/products/adrv9040.html>`_
 
+Supported Parts
+---------------
+
+* `ADRV9040 <https://www.analog.com/en/products/adrv9040.html>`_
+
+Supported Parts
+---------------
+
+* `ADRV9040 <https://www.analog.com/en/products/adrv9040.html>`_
+
 Overview
 --------
 

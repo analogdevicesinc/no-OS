@@ -6,10 +6,16 @@ AD7616-SDZ no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `AD7616 <https://www.analog.com/en/products/ad7616.html>`_
+* `AD7616-P <https://www.analog.com/en/products/ad7616-p.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD7616SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7616.html>`_
+* `EVAL-AD7616SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7616.html>`_
 
 Overview
 --------

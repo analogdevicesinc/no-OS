@@ -6,8 +6,14 @@ Evaluating the LTC4162L
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `LTC4162L <https://www.analog.com/en/products/ltc4162l.html>`_
+
 Supported Evaluation Boards
 ---------------------------
+
 * `DC2038A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/dc2038a.html>`_
 * `DC2654A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/dc2654a.html>`_
 

@@ -6,10 +6,15 @@ MAX22017 no-OS Example Project
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `MAX22017 <https://www.analog.com/en/products/max22017.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
-* `MAX22017_EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max22017evkit.html>`_
+* `MAX22017EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max22017evkit.html>`_
 
 Overview
 --------

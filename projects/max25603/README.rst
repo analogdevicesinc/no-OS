@@ -6,6 +6,11 @@ MAX25603 no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `MAX25603 <https://www.analog.com/en/products/max25603.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

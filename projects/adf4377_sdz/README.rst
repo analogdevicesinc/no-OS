@@ -9,6 +9,12 @@ Contents
 .. contents:: Table of Contents
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `ADF4377 <https://www.analog.com/en/products/adf4377.html>`_
+* `ADF4378 <https://www.analog.com/en/products/adf4378.html>`_
+
 Supported Evaluation Boards
 ----------------------------
 

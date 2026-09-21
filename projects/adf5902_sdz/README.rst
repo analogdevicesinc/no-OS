@@ -11,6 +11,11 @@ Supported Evaluation Boards
 
 * `EV-ADF5902SD1Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADF5902.html>`_
 
+Supported Parts
+---------------
+
+* `ADF5902 <https://www.analog.com/en/products/adf5902.html>`_
+
 Overview
 --------
 

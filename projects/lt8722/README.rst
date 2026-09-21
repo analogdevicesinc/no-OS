@@ -6,6 +6,11 @@ Evaluating the LT8722
 .. contents::
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `LT8722 <https://www.analog.com/en/products/lt8722.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

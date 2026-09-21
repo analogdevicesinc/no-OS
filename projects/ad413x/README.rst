@@ -6,6 +6,11 @@ AD413x no-OS Example Project
 .. contents:: Table of Contents
    :depth: 3
 
+Supported Parts
+---------------
+
+* `AD4130-8 <https://www.analog.com/en/products/ad4130-8.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 

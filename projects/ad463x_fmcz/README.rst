@@ -6,15 +6,24 @@ AD463x-FMCZ no-OS Example Project
 .. contents:: Table of Contents
    :depth: 3
 
+Supported Parts
+---------------
+
+* `AD4030-24 <https://www.analog.com/en/products/ad4030-24.html>`_
+* `AD4630-20 <https://www.analog.com/en/products/ad4630-20.html>`_
+* `AD4630-24 <https://www.analog.com/en/products/ad4630-24.html>`_
+* `ADAQ4216 <https://www.analog.com/en/products/adaq4216.html>`_
+* `ADAQ4224 <https://www.analog.com/en/products/adaq4224.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD4030-24FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD4030-24.html>`_
-* `EVAL-AD4630-16FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD4630-16.html>`_
+* `EVAL-AD4030-24FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad4030-24.html>`_
+* `EVAL-AD4630-16FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad4630-16fmcz.html>`_
 * `EVAL-AD4630-20FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad4630-20fmcz.html>`_
-* `EVAL-AD4630-24FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD4630-24.html>`_
-* `EVAL-ADAQ4224-FMCZ <https://www.analog.com/en/products/adaq4224.html>`_
-* `EV-ISO-4224-FMCZ <https://www.analog.com/en/products/adaq4224.html>`_
+* `EVAL-AD4630-24FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad4630-24fmcz.html>`_
+* `EVAL-ADAQ4224-FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adaq4224.html>`_
+* `EV-ISO-4224-FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ev-iso-4224-fmcz.html>`_
 
 Overview
 --------

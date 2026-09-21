@@ -6,6 +6,11 @@ EVAL-ADE9039 no-OS Example Project
 .. contents:: Table of Contents
     :depth: 3
 
+Supported Parts
+---------------
+
+* `ADE9039 <https://www.analog.com/en/products/ade9039.html>`_
+
 Supported Evaluation Boards
 ---------------------------
 
@@ -95,8 +100,8 @@ Maxim Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* :adi:`EVAL-ADE9039`
-* :adi:`AD-APARD32690-SL`
+* `EVAL-ADE9039 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ade9039.html>`_
+* `AD-APARD32690-SL <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-apard32690-sl.html>`_
 
 Connections
 ^^^^^^^^^^^

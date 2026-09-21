@@ -6,10 +6,15 @@ AD9265-FMC-125EBZ no-OS Example Project
 .. contents:: Table of Contents
 	:depth: 3
 
+Supported Parts
+---------------
+
+* `AD9265 <https://www.analog.com/en/products/ad9265.html>`_
+
 Supported Evaluation Boards
 ----------------------------
 
-* `AD9265-FMC-125EBZ <https://www.analog.com/en/products/ad9265.html>`_
+* `AD9265-FMC-125EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9265-fmc-125ebz.html>`_
 
 Overview
 --------
