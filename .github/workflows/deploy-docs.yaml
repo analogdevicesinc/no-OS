@@ -75,7 +75,7 @@ jobs:
           set -e
           rm -rf _site
           mkdir -p _site/doxygen
-          cp -R doc/sphinx/build/html/. _site/
+          cp -R doc/sphinx/build/dirhtml/. _site/
           rsync -a doc/doxygen/build/doxygen_doc/html/ _site/doxygen/
           touch _site/.nojekyll
 
