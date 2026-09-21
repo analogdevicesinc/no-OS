@@ -211,7 +211,7 @@ int ad7490_read_ch(struct ad7490_desc *desc, enum ad7490_address channel,
 int ad7490_start_seq(struct ad7490_desc *desc, enum ad7490_seq_op seq_op,
 		     uint16_t channels, enum ad7490_address last_chan)
 {
-	uint16_t reg_val, tmp;
+	uint16_t reg_val;
 	uint8_t msb, lsb;
 	int ret, i, k;
 
@@ -239,7 +239,6 @@ int ad7490_start_seq(struct ad7490_desc *desc, enum ad7490_seq_op seq_op,
 			  | no_os_field_prep(AD7490_CFG_MASK, desc->cfg);
 
 		reg_val <<= 4;
-		tmp = reg_val;
 		ret = ad7490_transfer(desc, &reg_val);
 		if (ret)
 			return ret;

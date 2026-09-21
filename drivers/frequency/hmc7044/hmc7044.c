@@ -547,7 +547,7 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 	uint32_t pfd1_freq;
 	uint32_t vco_limit;
 	uint32_t n2[2], r2[2];
-	uint32_t i, c, ref_en = 0;
+	uint32_t i, ref_en = 0;
 	int ret;
 
 	vcxo_freq = dev->vcxo_freq / 1000;
@@ -909,18 +909,6 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 			     HMC7044_HIGH_PERF_DISTRIB_PATH : 0));
 	if (ret)
 		return ret;
-
-	if (!dev->clkin1_vcoin_en) {
-		uint8_t pll1_stat;
-
-		ret = hmc7044_read(dev, HMC7044_REG_PLL1_STATUS, &pll1_stat);
-		if (ret < 0)
-			return ret;
-
-		c = HMC7044_PLL1_ACTIVE_CLKIN(pll1_stat);
-	} else {
-		c = 1; /* CLKIN1 */
-	}
 
 	for (i = 0; i < dev->num_channels; i++) {
 		chan = &dev->channels[i];

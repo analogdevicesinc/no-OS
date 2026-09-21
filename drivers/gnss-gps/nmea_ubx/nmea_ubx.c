@@ -1862,7 +1862,6 @@ int gnss_parse_gprmc_sentence(const char *sentence,
 	int ret = -EINVAL;
 	bool data_valid = false;
 	char *date_field = NULL;
-	int date_field_index = -1;
 
 	if (!sentence || !rmc_time)
 		return -EINVAL;
@@ -1917,13 +1916,11 @@ int gnss_parse_gprmc_sentence(const char *sentence,
 		if (fields[9] && strlen(fields[9]) >= 6
 		    && strspn(fields[9], "0123456789") == strlen(fields[9])) {
 			date_field = fields[9];
-			date_field_index = 9;
 		}
 		/* If field[9] doesn't look like a date, try field[8] (course field missing) */
 		else if (fields[8] && strlen(fields[8]) >= 6
 			 && strspn(fields[8], "0123456789") == strlen(fields[8])) {
 			date_field = fields[8];
-			date_field_index = 8;
 		}
 
 		if (date_field) {
