@@ -91,6 +91,19 @@
 /* ADAR300X_REG_BEAMWISE_UPDATE, one update strobe bit per beam */
 #define ADAR300X_BEAM_UPDATE_MSK(beam)		NO_OS_BIT(beam)
 
+/*
+ * ADAR300X_REG_BEAMWISE_UPDATE_CODE qualifies the update strobe per beam, the
+ * same way the RESET and MUTE pins qualify the UPDATE pin.
+ */
+#define ADAR300X_BEAM_RESET_MSK(beam)		NO_OS_BIT((beam) * 2)
+#define ADAR300X_BEAM_MUTE_MSK(beam)		NO_OS_BIT((beam) * 2 + 1)
+
+/* ADAR300X_REG_ALL_BEAM_UPDATE, unison command for every beam at once */
+#define ADAR300X_REG_ALL_BEAM_UPDATE		0x031
+#define ADAR300X_ALL_BEAM_UPDATE_MSK		NO_OS_BIT(0)
+#define ADAR300X_ALL_BEAM_RESET_MSK		NO_OS_BIT(4)
+#define ADAR300X_ALL_BEAM_MUTE_MSK		NO_OS_BIT(5)
+
 /* ADAR300X_REG_PIN_OR_SPI_CTL, 0 selects the pins, 1 selects SPI */
 #define ADAR300X_UPDATE_SPI_CTL			NO_OS_BIT(0)
 
@@ -256,6 +269,23 @@ enum adar300x_element_amp_state {
 };
 
 /**
+ * @enum adar300x_beam_command
+ * @brief Command applied to a beam when its update is strobed.
+ *
+ *	  A beam in instantaneous direct mode ignores all three: updates have
+ *	  no effect because writes already apply immediately, and the data
+ *	  sheet states such a beam cannot enter its reset or mute beamstate.
+ */
+enum adar300x_beam_command {
+	/** Advance to the next beamstate from the beam's configured source */
+	ADAR300X_BEAM_CMD_UPDATE,
+	/** Apply the beam's reset beamstate */
+	ADAR300X_BEAM_CMD_RESET,
+	/** Apply the beam's mute beamstate */
+	ADAR300X_BEAM_CMD_MUTE,
+};
+
+/**
  * @enum adar300x_adc_input
  * @brief ADC input mux selection.
  */
@@ -409,8 +439,13 @@ int adar300x_set_beam_mode(struct adar300x_dev *dev, uint8_t beam,
 int adar300x_get_beam_mode(struct adar300x_dev *dev, uint8_t beam,
 			   enum adar300x_beam_mode *mode);
 
-/** Strobe an update on every beam set in the mask. */
-int adar300x_update(struct adar300x_dev *dev, uint8_t beam_mask);
+/** Apply a command to every beam set in the mask. */
+int adar300x_beam_command(struct adar300x_dev *dev, uint8_t beam_mask,
+			  enum adar300x_beam_command cmd);
+
+/** Apply a command to all beams at once, in unison. */
+int adar300x_all_beam_command(struct adar300x_dev *dev,
+			      enum adar300x_beam_command cmd);
 
 /** Choose whether update, mute and reset come from the pins or from SPI. */
 int adar300x_set_update_source_spi(struct adar300x_dev *dev, bool spi);

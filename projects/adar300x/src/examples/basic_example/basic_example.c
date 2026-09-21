@@ -99,12 +99,92 @@ static int adar300x_direct_control_demo(struct adar300x_dev *dev)
 
 	pr_info("DIRECT beamstate write/readback: OK\n");
 
-	ret = adar300x_update(dev, NO_OS_GENMASK(dev->chip_info->num_beams - 1,
-			      0));
+	ret = adar300x_beam_command(dev,
+				    NO_OS_GENMASK(dev->chip_info->num_beams - 1,
+					    0),
+				    ADAR300X_BEAM_CMD_UPDATE);
 	if (ret)
 		return ret;
 
 	pr_info("UPDATE strobed on all %u beams\n", dev->chip_info->num_beams);
+
+	return 0;
+}
+
+/*
+ * Exercises the reset and mute beamstate banks and the commands that apply
+ * them. Both banks are written and read back, then reset and mute are issued
+ * beamwise and in unison.
+ */
+static int adar300x_beam_command_demo(struct adar300x_dev *dev)
+{
+	uint8_t beam, element, val, rb;
+	int ret;
+
+	for (beam = 0; beam < dev->chip_info->num_beams; beam++) {
+		for (element = 0; element < dev->chip_info->num_elements;
+		     element++) {
+			val = (beam + element) & ADAR300X_RAW_MAX;
+
+			ret = adar300x_set_element(dev,
+						   ADAR300X_BEAMSTATE_RESET,
+						   beam, element,
+						   ADAR300X_DELAY, val);
+			if (ret)
+				return ret;
+
+			ret = adar300x_set_element(dev,
+						   ADAR300X_BEAMSTATE_MUTE,
+						   beam, element,
+						   ADAR300X_ATTENUATION, val);
+			if (ret)
+				return ret;
+
+			ret = adar300x_get_element(dev,
+						   ADAR300X_BEAMSTATE_RESET,
+						   beam, element,
+						   ADAR300X_DELAY, &rb);
+			if (ret)
+				return ret;
+
+			if (rb != val) {
+				pr_err("beam %u el %u reset delay: wrote %u read %u\n",
+				       beam, element, val, rb);
+				return -EIO;
+			}
+
+			ret = adar300x_get_element(dev,
+						   ADAR300X_BEAMSTATE_MUTE,
+						   beam, element,
+						   ADAR300X_ATTENUATION, &rb);
+			if (ret)
+				return ret;
+
+			if (rb != val) {
+				pr_err("beam %u el %u mute atten: wrote %u read %u\n",
+				       beam, element, val, rb);
+				return -EIO;
+			}
+		}
+	}
+
+	pr_info("RESET and MUTE beamstate write/readback: OK\n");
+
+	ret = adar300x_beam_command(dev, NO_OS_BIT(0),
+				    ADAR300X_BEAM_CMD_MUTE);
+	if (ret)
+		return ret;
+
+	ret = adar300x_beam_command(dev, NO_OS_BIT(1),
+				    ADAR300X_BEAM_CMD_RESET);
+	if (ret)
+		return ret;
+
+	ret = adar300x_all_beam_command(dev, ADAR300X_BEAM_CMD_RESET);
+	if (ret)
+		return ret;
+
+	pr_info("Beamwise MUTE and RESET, and unison RESET: OK\n");
 
 	return 0;
 }
@@ -360,6 +440,10 @@ int basic_example_main(void)
 		goto error_dev;
 
 	ret = adar300x_fifo_demo(dev);
+	if (ret)
+		goto error_dev;
+
+	ret = adar300x_beam_command_demo(dev);
 	if (ret)
 		goto error_dev;
 

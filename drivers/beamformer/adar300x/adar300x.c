@@ -519,25 +519,87 @@ int adar300x_get_beam_mode(struct adar300x_dev *dev, uint8_t beam,
 }
 
 /**
- * @brief Strobes an update on every beam set in the mask.
+ * @brief Applies a command to every beam set in the mask.
+ *
+ * Reset and mute are qualifiers rather than commands of their own: they are
+ * staged per beam and then take effect on the update strobe, mirroring how the
+ * RESET and MUTE pins qualify the UPDATE pin. Beams outside the mask have
+ * their qualifiers cleared so the staged state is always known.
  *
  * Only has an effect when the update source is SPI rather than the pins, see
  * adar300x_set_update_source_spi().
  *
  * @param dev	    - The device structure.
  * @param beam_mask - Bit per beam, bit 0 is beam 0.
+ * @param cmd	    - Command to apply to the masked beams.
  * @return	    - 0 in case of success or negative error code otherwise.
  */
-int adar300x_update(struct adar300x_dev *dev, uint8_t beam_mask)
+int adar300x_beam_command(struct adar300x_dev *dev, uint8_t beam_mask,
+			  enum adar300x_beam_command cmd)
 {
+	uint8_t code = 0;
+	uint8_t beam;
+	int ret;
+
 	if (!dev)
 		return -EINVAL;
 
-	if (beam_mask >= NO_OS_BIT(dev->chip_info->num_beams))
+	if (beam_mask >= NO_OS_BIT(dev->chip_info->num_beams) ||
+	    cmd > ADAR300X_BEAM_CMD_MUTE)
 		return -EINVAL;
+
+	for (beam = 0; beam < dev->chip_info->num_beams; beam++) {
+		if (!(beam_mask & NO_OS_BIT(beam)))
+			continue;
+
+		if (cmd == ADAR300X_BEAM_CMD_RESET)
+			code |= ADAR300X_BEAM_RESET_MSK(beam);
+		else if (cmd == ADAR300X_BEAM_CMD_MUTE)
+			code |= ADAR300X_BEAM_MUTE_MSK(beam);
+	}
+
+	ret = adar300x_reg_write(dev, ADAR300X_REG_BEAMWISE_UPDATE_CODE, code);
+	if (ret)
+		return ret;
 
 	return adar300x_reg_write(dev, ADAR300X_REG_BEAMWISE_UPDATE,
 				  beam_mask);
+}
+
+/**
+ * @brief Applies a command to all beams at once, in unison.
+ *
+ * The qualifier bits and the self deasserting update bit share one register,
+ * and the data sheet requires them to be written separately: the first write
+ * stages reset and mute, the second asserts update without disturbing them.
+ *
+ * @param dev - The device structure.
+ * @param cmd - Command to apply to every beam.
+ * @return    - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_all_beam_command(struct adar300x_dev *dev,
+			      enum adar300x_beam_command cmd)
+{
+	uint8_t code = 0;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	if (cmd > ADAR300X_BEAM_CMD_MUTE)
+		return -EINVAL;
+
+	if (cmd == ADAR300X_BEAM_CMD_RESET)
+		code = ADAR300X_ALL_BEAM_RESET_MSK;
+	else if (cmd == ADAR300X_BEAM_CMD_MUTE)
+		code = ADAR300X_ALL_BEAM_MUTE_MSK;
+
+	ret = adar300x_reg_write(dev, ADAR300X_REG_ALL_BEAM_UPDATE, code);
+	if (ret)
+		return ret;
+
+	return adar300x_reg_write(dev, ADAR300X_REG_ALL_BEAM_UPDATE,
+				  code | ADAR300X_ALL_BEAM_UPDATE_MSK);
 }
 
 /**
