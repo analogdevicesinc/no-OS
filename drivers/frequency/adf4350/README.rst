@@ -4,7 +4,7 @@ ADF4350 no-OS Driver
 Supported Devices
 ------------------
 
-- :adi:`ADF4350`
+- `ADF4350 <https://www.analog.com/en/products/adf4350.html>`_
 
 Overview
 --------

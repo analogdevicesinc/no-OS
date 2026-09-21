@@ -6,11 +6,11 @@ AD719X no-OS driver
 Supported Devices
 -----------------
 
-- :adi:`AD7190`
-- :adi:`AD7192`
-- :adi:`AD7193`
-- :adi:`AD7194`
-- :adi:`AD7195`
+- `AD7190 <https://www.analog.com/en/products/ad7190.html>`_
+- `AD7192 <https://www.analog.com/en/products/ad7192.html>`_
+- `AD7193 <https://www.analog.com/en/products/ad7193.html>`_
+- `AD7194 <https://www.analog.com/en/products/ad7194.html>`_
+- `AD7195 <https://www.analog.com/en/products/ad7195.html>`_
 
 Overview
 --------

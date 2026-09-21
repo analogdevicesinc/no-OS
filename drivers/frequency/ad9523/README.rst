@@ -4,7 +4,7 @@ AD9523 no-OS driver
 Supported Devices
 -----------------
 
-- :adi:`AD9523`
+- `AD9523 <https://www.analog.com/en/products/ad9523.html>`_
 
 Overview
 ---------

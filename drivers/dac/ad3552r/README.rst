@@ -4,7 +4,7 @@ AD3552R no-OS Driver
 Supported Devices
 -----------------
 
-- :adi:`AD3552R`
+- `AD3552R <https://www.analog.com/en/products/ad3552r.html>`_
 
 Overview
 --------

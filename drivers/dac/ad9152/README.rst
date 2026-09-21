@@ -4,7 +4,7 @@ AD9152 no-OS driver
 Supported Devices
 -----------------
 
-- :adi:`AD9152`
+- `AD9152 <https://www.analog.com/en/products/ad9152.html>`_
 
 Overview
 --------

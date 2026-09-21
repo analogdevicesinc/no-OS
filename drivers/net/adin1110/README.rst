@@ -4,8 +4,8 @@ ADIN1110 no-OS Driver
 Supported Devices
 -----------------
 
-- :adi:`ADIN1110`
-- :adi:`ADIN2111`
+- `ADIN1110 <https://www.analog.com/en/products/adin1110.html>`_
+- `ADIN2111 <https://www.analog.com/en/products/adin2111.html>`_
 
 Overview
 --------

@@ -6,9 +6,9 @@ AD9361 no-OS driver
 Supported Devices
 -----------------
 
-- :adi:`AD9361`
-- :adi:`AD9363`
-- :adi:`AD9364`
+- `AD9361 <https://www.analog.com/en/products/ad9361.html>`_
+- `AD9363 <https://www.analog.com/en/products/ad9363.html>`_
+- `AD9364 <https://www.analog.com/en/products/ad9364.html>`_
 
 Overview
 --------

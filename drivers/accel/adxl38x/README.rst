@@ -4,8 +4,8 @@ ADXL38x no-OS Driver
 Supported Devices
 -----------------
 
-- :adi:`ADXL380`
-- :adi:`ADXL382`
+- `ADXL380 <https://www.analog.com/en/products/adxl380.html>`_
+- `ADXL382 <https://www.analog.com/en/products/adxl382.html>`_
 
 Overview
 --------

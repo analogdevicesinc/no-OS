@@ -4,7 +4,7 @@ AD9208 no-OS Driver
 Supported Devices
 -----------------
 
-:adi:`AD9208`
+`AD9208 <https://www.analog.com/en/products/ad9208.html>`_
 
 Overview
 ---------

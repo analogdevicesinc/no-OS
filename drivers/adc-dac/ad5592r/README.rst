@@ -4,8 +4,8 @@ AD5592R no-OS Driver
 Supported Devices
 -----------------
 
-- :adi:`AD5592R`
-- :adi:`AD5593R`
+- `AD5592R <https://www.analog.com/en/products/ad5592r.html>`_
+- `AD5593R <https://www.analog.com/en/products/ad5593r.html>`_
 
 Overview
 ---------

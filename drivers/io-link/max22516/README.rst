@@ -6,7 +6,7 @@ MAX22516 no-OS Driver
 Supported Devices
 -----------------
 
-- :adi:`MAX22516`
+- `MAX22516 <https://www.analog.com/en/products/max22516.html>`_
 
 Overview
 --------

@@ -4,8 +4,8 @@ AD7124 no-OS Driver
 Supported Devices
 -----------------
 
-- :adi:`AD7124-4`
-- :adi:`AD7124-8`
+- `AD7124-4 <https://www.analog.com/en/products/ad7124-4.html>`_
+- `AD7124-8 <https://www.analog.com/en/products/ad7124-8.html>`_
 
 Overview
 --------

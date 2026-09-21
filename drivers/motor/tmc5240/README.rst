@@ -6,7 +6,7 @@ TMC5240 no-OS driver
 Supported Devices
 -----------------
 
-- :adi:`TMC5240`
+- `TMC5240 <https://www.analog.com/en/products/tmc5240.html>`_
 
 Overview
 --------

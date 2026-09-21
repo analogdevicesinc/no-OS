@@ -4,8 +4,8 @@ ADE7913 no-OS Driver
 Supported Devices
 ------------------
 
-- :adi:`ADE7912`
-- :adi:`ADE7913`
+- `ADE7912 <https://www.analog.com/en/products/ade7912.html>`_
+- `ADE7913 <https://www.analog.com/en/products/ade7913.html>`_
 
 Overview
 ---------
