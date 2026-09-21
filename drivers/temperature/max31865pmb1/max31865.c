@@ -180,7 +180,6 @@ int max31865_read(struct max31865_dev *device, uint8_t reg_addr,
 int max31865_write(struct max31865_dev *device, uint8_t reg_addr,
 		   uint8_t reg_data)
 {
-	int ret;
 	uint8_t raw_array[2];
 	struct no_os_spi_msg temp_xfer = {
 		.rx_buff = raw_array,

@@ -101,7 +101,6 @@ int admfm2000_set_dsa_raw(struct admfm2000_dev *dev, uint8_t chan,
 int admfm2000_set_channel_config(struct admfm2000_dev *dev, uint8_t config)
 {
 	int32_t ret;
-	int32_t i;
 
 	if (config > 1)
 		return -EINVAL;

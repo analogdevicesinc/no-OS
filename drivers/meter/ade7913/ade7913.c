@@ -848,8 +848,6 @@ int ade7913_ic_prot_status(struct ade7913_dev *dev, uint8_t *status)
 int ade7913_emi_ctrl(struct ade7913_dev *dev,
 		     uint8_t emi_ctrl)
 {
-	int ret;
-
 	if (!dev)
 		return -ENODEV;
 

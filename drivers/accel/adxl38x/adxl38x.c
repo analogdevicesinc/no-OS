@@ -961,7 +961,6 @@ int adxl38x_accel_set_FIFO(struct adxl38x_dev *dev, uint16_t num_samples,
 int adxl38x_data_raw_to_gees(struct adxl38x_dev *dev, uint8_t *raw_accel_data,
 			     struct adxl38x_fractional_val *data_frac)
 {
-	int ret;
 	uint16_t data = 0;
 
 	data = no_os_get_unaligned_be16(raw_accel_data);

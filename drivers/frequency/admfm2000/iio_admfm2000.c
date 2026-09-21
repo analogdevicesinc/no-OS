@@ -166,7 +166,6 @@ int admfm2000_iio_init(struct admfm2000_iio_dev **iio_dev,
 		       struct admfm2000_iio_dev_init_param *init_param)
 {
 	struct admfm2000_iio_dev *iio_admfm2000;
-	struct admfm2000_dev *admfm2000_dev;
 	int32_t ret;
 
 	iio_admfm2000 = (struct admfm2000_iio_dev *)no_os_calloc(1,

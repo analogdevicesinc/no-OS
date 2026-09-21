@@ -694,7 +694,6 @@ static int ltc7871_iio_read_mfr_fault(void *dev, char *buf, uint32_t len,
 {
 	int ret;
 	bool value;
-	uint8_t reg_data;
 	uint32_t mask = ltc7871_iio_get_mask_mfr_fault(priv);
 	struct ltc7871_iio_dev *iio_ltc7871;
 	struct ltc7871_dev *ltc7871;
@@ -727,7 +726,6 @@ static int ltc7871_iio_read_mfr_oc_fault(void *dev, char *buf, uint32_t len,
 {
 	int ret;
 	bool value;
-	uint8_t reg_data;
 	uint32_t mask = ltc7871_iio_get_mask_mfr_oc_fault(priv);
 	struct ltc7871_iio_dev *iio_ltc7871;
 	struct ltc7871_dev *ltc7871;
@@ -760,7 +758,6 @@ static int ltc7871_iio_read_mfr_noc_fault(void *dev, char *buf, uint32_t len,
 {
 	int ret;
 	bool value;
-	uint8_t reg_data;
 	uint32_t mask = ltc7871_iio_get_mask_mfr_noc_fault(priv);
 	struct ltc7871_iio_dev *iio_ltc7871;
 	struct ltc7871_dev *ltc7871;
@@ -793,7 +790,6 @@ static int ltc7871_iio_read_mfr_status(void *dev, char *buf, uint32_t len,
 {
 	int ret;
 	bool value;
-	uint8_t reg_data;
 	uint32_t mask = ltc7871_iio_get_mask_mfr_status(priv);
 	struct ltc7871_iio_dev *iio_ltc7871;
 	struct ltc7871_dev *ltc7871;
@@ -834,7 +830,6 @@ static int ltc7871_iio_read_mfr_config1(void *dev, char *buf, uint32_t len,
 {
 	int ret;
 	uint8_t value;
-	uint8_t reg_data;
 	uint32_t mask = ltc7871_iio_get_mask_mfr_config1(priv);
 	struct ltc7871_iio_dev *iio_ltc7871;
 	struct ltc7871_dev *ltc7871;
@@ -874,7 +869,6 @@ static int ltc7871_iio_read_mfr_config2(void *dev, char *buf, uint32_t len,
 {
 	int ret;
 	uint8_t value;
-	uint8_t reg_data;
 	uint32_t mask = ltc7871_iio_get_mask_mfr_config2(priv);
 	struct ltc7871_iio_dev *iio_ltc7871;
 	struct ltc7871_dev *ltc7871;
@@ -970,8 +964,6 @@ static int ltc7871_iio_read_pec_fault(void *dev, char *buf, uint32_t len,
 {
 	int ret;
 	bool value;
-	uint8_t reg_data;
-	uint32_t mask = ltc7871_iio_get_mask_mfr_chip_ctrl(priv);
 	struct ltc7871_iio_dev *iio_ltc7871;
 	struct ltc7871_dev *ltc7871;
 
@@ -1003,7 +995,6 @@ static int ltc7871_iio_set_write_protect(void *dev, char *buf, uint32_t len,
 {
 	int ret;
 	int32_t value;
-	uint8_t mask = ltc7871_iio_get_mask_mfr_chip_ctrl(priv);
 	struct ltc7871_iio_dev *iio_ltc7871;
 	struct ltc7871_dev *ltc7871;
 
@@ -1259,7 +1250,6 @@ static int ltc7871_iio_get_freq_spread_range(void *dev, char *buf, uint32_t len,
 {
 	int ret;
 	uint8_t value;
-	uint8_t reg_data;
 	struct ltc7871_iio_dev *iio_ltc7871;
 	struct ltc7871_dev *ltc7871;
 
@@ -1323,7 +1313,6 @@ static int ltc7871_iio_get_mod_freq(void *dev, char *buf, uint32_t len,
 {
 	int ret;
 	uint8_t value;
-	uint8_t reg_data;
 	struct ltc7871_iio_dev *iio_ltc7871;
 	struct ltc7871_dev *ltc7871;
 

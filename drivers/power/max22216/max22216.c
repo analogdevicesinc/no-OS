@@ -36,8 +36,6 @@
 int max22216_write_reg(struct max22216_desc *desc, uint8_t reg_addr,
 		       uint16_t data)
 {
-	int ret = 0;
-
 	if (!desc || !desc->spi_desc)
 		return -EINVAL;
 	uint8_t tx[3] = {
@@ -105,8 +103,6 @@ int erase_fault_reg(struct max22216_desc *desc)
 
 int max22216_set_enable_pin(struct max22216_desc *desc, bool value)
 {
-	int ret;
-
 	if (!desc || !desc->drv_en_gpio)
 		return -EINVAL;
 
@@ -135,7 +131,6 @@ int max22216_current_reg_control(struct max22216_desc *desc, uint8_t channel_nr,
 {
 	int ret;
 	uint16_t test_value;
-	max22216_reg_setting_t reg_setting;
 	// Prepare register settings for current control
 	uint8_t reg_addr = MAX22216_CFG_DC_H_0 + (channel_nr *
 			   MAX22216_CHANNEL_CONFIG_REG_SHIFT);

@@ -123,8 +123,6 @@ static void ade9153a_irq_handler(void *dev)
 	int ret;
 	/* ADE9153A device descriptor */
 	struct ade9153a_dev *desc = dev;
-	/* data read */
-	uint8_t reg_val;
 
 	/* Disable interrupt while reading data. */
 	ret = no_os_irq_disable(desc->irq_ctrl,
@@ -443,11 +441,8 @@ int ade9153a_write(struct ade9153a_dev *dev, uint16_t reg_addr,
 	uint8_t buff[8] = {0};
 	/* register addres */
 	uint16_t addr;
-	/* data to be written */
-	uint32_t data;
 	/* offset of data to be written in the buffer */
 	uint8_t data_byte_offset = 2;
-	int i;
 
 	if (!dev)
 		return -ENODEV;
