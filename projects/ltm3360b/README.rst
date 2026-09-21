@@ -9,7 +9,7 @@ Evaluating the LTM3360B
 Supported Evaluation Boards
 ---------------------------
 
-* EVAL-LTM3360B
+* `EVAL-LTM3360B <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ltm3360b.html>`_
 
 Overview
 --------

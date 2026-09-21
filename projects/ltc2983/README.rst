@@ -12,7 +12,7 @@ Supported Evaluation Boards
 * `DC2296A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/dc2296a.html>`_
 * `DC2420A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/dc2420a.html>`_
 * `DC2531A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/dc2531a.html>`_
-* EVAL-ADT7604-AZ
+* `EVAL-ADT7604-AZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adt7604-az.html>`_
 
 Overview
 --------

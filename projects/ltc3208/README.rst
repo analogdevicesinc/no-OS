@@ -4,7 +4,7 @@ Evaluating the LTC3208
 Supported Evaluation Boards
 ---------------------------
 
-* DC824A (LTC3208)
+* `DC824A <https://www.analog.com/DC824A>`_ (LTC3208)
 
 Overview
 --------

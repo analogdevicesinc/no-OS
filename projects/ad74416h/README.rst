@@ -4,7 +4,7 @@ AD74416H no-OS Project
 Supported Evaluation Boards
 ---------------------------
 
-- :adi:`EVAL-AD74416H`
+- `EVAL-AD74416H <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad74416h.html>`_
 
 Overview
 ---------
