@@ -9,7 +9,7 @@ EVAL-ADE9039 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* :adi:`EVAL-ADE9039`
+* `EVAL-ADE9039 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ade9039.html>`_
 
 Overview
 --------

@@ -6,7 +6,7 @@ EVAL-ADE9430 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-ADE9430 <https://www.analog.com/EVAL-ADE9430>`_
+* `EVAL-ADE9430 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADE9430.html>`_
 
 Overview
 --------
@@ -69,7 +69,7 @@ Maxim Platform
 
 **Used Hardware**
 
-* `EVAL-ADE9430 <https://www.analog.com/EVAL-ADE9430>`_
+* `EVAL-ADE9430 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADE9430.html>`_
 * `MAX32650FTHR <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32650fthr.html>`_
 
 **Build Command**

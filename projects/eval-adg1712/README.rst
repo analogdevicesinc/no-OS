@@ -9,7 +9,7 @@ ADG1712 Family no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `ADG1712 <https://www.analog.com/ADG1712>`_
+* `ADG1712 <https://www.analog.com/en/products/adg1712.html>`_
 
 Overview
 --------

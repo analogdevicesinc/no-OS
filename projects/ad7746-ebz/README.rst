@@ -9,12 +9,12 @@ AD7746-EBZ no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `EVAL-AD7746EBZ <https://www.analog.com/EVAL-AD7746EBZ>`_
+* `EVAL-AD7746EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7746.html>`_
 
 Overview
 --------
 
-The `AD7746 <https://www.analog.com/AD7746>`_ is a high resolution,
+The `AD7746 <https://www.analog.com/en/products/ad7746.html>`_ is a high resolution,
 sigma-delta capacitance-to-digital converter (CDC). The capacitance input
 range is +/-4 pF (measured with respect to on-chip digital-to-capacitance
 DACs), with a common-mode capacitance up to 17 pF. The AD7746 also
@@ -112,8 +112,8 @@ ADuCM3029 Platform
 
 **Used Hardware**
 
-* `EVAL-AD7746EBZ <https://www.analog.com/EVAL-AD7746EBZ>`_
-* `EVAL-ADICUP3029 <https://www.analog.com/EVAL-ADICUP3029>`_
+* `EVAL-AD7746EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7746.html>`_
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
 
 **Connections**
 

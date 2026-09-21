@@ -9,12 +9,12 @@ MAX14906 no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `MAX14906EVKIT <https://www.analog.com/MAX14906EVKIT>`_
+* `MAX14906EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max14906evkit.html>`_
 
 Overview
 --------
 
-The `MAX14906 <https://www.analog.com/MAX14906>`_ is an IEC 61131-2 compliant,
+The `MAX14906 <https://www.analog.com/en/products/max14906.html>`_ is an IEC 61131-2 compliant,
 high-speed, four-channel industrial digital output, digital input device that
 can be configured on a per-channel basis as a high-side switch, push-pull
 driver, or a Type 1 and 3, or Type 2 digital input. The device operates with
@@ -126,8 +126,8 @@ Maxim Platform
 
 **Used Hardware**
 
-* `AD-APARD32690-SL <https://www.analog.com/AD-APARD32690-SL>`_
-* `max32666fthr <https://www.analog.com/max32666fthr>`_
+* `AD-APARD32690-SL <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-apard32690-sl.html>`_
+* `max32666fthr <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32666fthr.html>`_
 
 **Connections**
 
@@ -187,7 +187,7 @@ STM32 Platform
 
 **Used Hardware**
 
-* `MAX14906EVKIT <https://www.analog.com/MAX14906EVKIT>`_
+* `MAX14906EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max14906evkit.html>`_
 * NUCLEO-F401RE
 
 **Connections**

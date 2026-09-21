@@ -9,12 +9,12 @@ AD463x-FMCZ no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD4030-24FMCZ <https://www.analog.com/EVAL-AD4030-24>`_
-* `EVAL-AD4630-16FMCZ <https://www.analog.com/EVAL-AD4630-16>`_
-* `EVAL-AD4630-20FMCZ <https://www.analog.com/EVAL-AD4630-20>`_
-* `EVAL-AD4630-24FMCZ <https://www.analog.com/EVAL-AD4630-24>`_
-* `EVAL-ADAQ4224-FMCZ <https://www.analog.com/ADAQ4224>`_
-* `EV-ISO-4224-FMCZ <https://www.analog.com/ADAQ4224>`_
+* `EVAL-AD4030-24FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD4030-24.html>`_
+* `EVAL-AD4630-16FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD4630-16.html>`_
+* `EVAL-AD4630-20FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad4630-20fmcz.html>`_
+* `EVAL-AD4630-24FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD4630-24.html>`_
+* `EVAL-ADAQ4224-FMCZ <https://www.analog.com/en/products/adaq4224.html>`_
+* `EV-ISO-4224-FMCZ <https://www.analog.com/en/products/adaq4224.html>`_
 
 Overview
 --------
@@ -22,10 +22,10 @@ Overview
 The EVAL-AD4630-24FMCZ, EVAL-AD4030-24FMCZ, and EVAL-AD4630-16FMCZ
 evaluation boards enable quick and easy evaluation of the AD4X3X family
 of 24-bit and 16-bit precision successive approximation register (SAR)
-analog-to-digital converters (ADCs). The `AD4630-24 <https://www.analog.com/AD4630-24>`_
-and `AD4630-16 <https://www.analog.com/AD4630-16>`_ are 2 MSPS per channel,
+analog-to-digital converters (ADCs). The `AD4630-24 <https://www.analog.com/en/products/ad4630-24.html>`_
+and `AD4630-16 <https://www.analog.com/en/products/ad4630-16.html>`_ are 2 MSPS per channel,
 low power, dual channel 24-bit or 16-bit SAR ADCs, while the
-`AD4030-24 <https://www.analog.com/AD4030-24>`_ is a single channel
+`AD4030-24 <https://www.analog.com/en/products/ad4030-24.html>`_ is a single channel
 24-bit precision SAR ADC that supports a sampling rate of up to 2 MSPS.
 The evaluation boards demonstrate the performance of either the
 AD4630-24, AD4030-24, or AD4630-16 and provide a configurable analog
@@ -136,7 +136,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD4630-24FMCZ <https://www.analog.com/EVAL-AD4630-24>`_
+* `EVAL-AD4630-24FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD4630-24.html>`_
 * `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
 Connections
@@ -192,7 +192,7 @@ STM32
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD4630-24FMCZ <https://www.analog.com/EVAL-AD4630-24>`_
+* `EVAL-AD4630-24FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD4630-24.html>`_
 * `EVAL-SDP-CK1Z (SDP-K1) <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
 
 Connections

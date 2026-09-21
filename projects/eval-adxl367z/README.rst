@@ -9,12 +9,12 @@ EVAL-ADXL367Z no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `EVAL-ADXL367Z <https://www.analog.com/EVAL-ADXL367Z>`_
+* `EVAL-ADXL367Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adxl367z.html>`_
 
 Overview
 --------
 
-The `ADXL367 <https://www.analog.com/ADXL367>`_ is an ultralow power, 3-axis
+The `ADXL367 <https://www.analog.com/en/products/adxl367.html>`_ is an ultralow power, 3-axis
 MEMS accelerometer that consumes only 0.89 uA at a 100 Hz output data rate
 and 180 nA in motion-triggered wake-up mode. Unlike accelerometers that use
 power duty cycling to achieve low power consumption, the ADXL367 does not
@@ -103,7 +103,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-ADXL367Z <https://www.analog.com/EVAL-ADXL367Z>`_
+* `EVAL-ADXL367Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adxl367z.html>`_
 * `ZedBoard <https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html>`_
 
 Connections

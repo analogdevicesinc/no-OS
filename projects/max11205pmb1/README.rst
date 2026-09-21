@@ -9,7 +9,7 @@ MAX11205PMB1 no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `MAX11205PMB1 <https://www.analog.com/MAX11205PMB1>`_
+* `MAX11205PMB1 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max11205pmb1.html>`_
 
 Overview
 --------
@@ -114,8 +114,8 @@ Maxim Platform
 
 **Used Hardware**
 
-* `MAX11205PMB1 <https://www.analog.com/MAX11205PMB1>`_
-* `MAX32655FTHR <https://www.analog.com/MAX32655>`_
+* `MAX11205PMB1 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max11205pmb1.html>`_
+* `MAX32655FTHR <https://www.analog.com/en/products/max32655.html>`_
 
 **Connections**
 

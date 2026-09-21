@@ -7,7 +7,7 @@ AD9434-FMC-500EBZ no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `AD9434-FMC-500EBZ <https://www.analog.com/AD9434>`_
+* `AD9434-FMC-500EBZ <https://www.analog.com/en/products/ad9434.html>`_
 
 Overview
 --------
@@ -111,7 +111,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `AD9434-FMC-500EBZ <https://www.analog.com/AD9434>`_
+* `AD9434-FMC-500EBZ <https://www.analog.com/en/products/ad9434.html>`_
 * `ZC706 <https://www.xilinx.com/ZC706>`_ evaluation kit
 
 Connections

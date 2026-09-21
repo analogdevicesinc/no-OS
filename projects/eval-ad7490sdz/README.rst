@@ -9,7 +9,7 @@ EVAL-AD7490SDZ no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD7490SDZ <https://www.analog.com/EVAL-AD7490SDZ>`_
+* `EVAL-AD7490SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7490.html>`_
 
 Overview
 --------
@@ -117,7 +117,7 @@ Maxim Platform
 
 **Used Hardware**
 
-* `EVAL-AD7490SDZ <https://www.analog.com/EVAL-AD7490SDZ>`_
+* `EVAL-AD7490SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7490.html>`_
 * `AD-APARD32690-SL Board <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-apard32690-sl.html>`_
 
 **Connections**:

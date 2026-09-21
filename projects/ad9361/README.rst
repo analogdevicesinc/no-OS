@@ -9,20 +9,20 @@ AD9361/AD9364 no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `AD-FMCOMMS2-EBZ <https://www.analog.com/AD-FMCOMMS2-EBZ>`_
-* `AD-FMCOMMS3-EBZ <https://www.analog.com/AD-FMCOMMS3-EBZ>`_
-* `AD-FMCOMMS4-EBZ <https://www.analog.com/AD-FMCOMMS4-EBZ>`_
-* `AD-FMCOMMS5-EBZ <https://www.analog.com/AD-FMCOMMS5-EBZ>`_
+* `AD-FMCOMMS2-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD-FMCOMMS2.html>`_
+* `AD-FMCOMMS3-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD-FMCOMMS3-EBZ.html>`_
+* `AD-FMCOMMS4-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD-FMCOMMS4-EBZ.html>`_
+* `AD-FMCOMMS5-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad-fmcomms5-ebz.html>`_
 
 Overview
 --------
 
-The `AD-FMCOMMS2-EBZ <https://www.analog.com/AD-FMCOMMS2-EBZ>`_,
-`AD-FMCOMMS3-EBZ <https://www.analog.com/AD-FMCOMMS3-EBZ>`_,
-`AD-FMCOMMS4-EBZ <https://www.analog.com/AD-FMCOMMS4-EBZ>`_ and
-`AD-FMCOMMS5-EBZ <https://www.analog.com/AD-FMCOMMS5-EBZ>`_ are high-speed
+The `AD-FMCOMMS2-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD-FMCOMMS2.html>`_,
+`AD-FMCOMMS3-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD-FMCOMMS3-EBZ.html>`_,
+`AD-FMCOMMS4-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD-FMCOMMS4-EBZ.html>`_ and
+`AD-FMCOMMS5-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad-fmcomms5-ebz.html>`_ are high-speed
 analog FMC modules designed to showcase the
-`AD9361 <https://www.analog.com/AD9361>`_, a high-performance, highly
+`AD9361 <https://www.analog.com/en/products/ad9361.html>`_, a high-performance, highly
 integrated RF Agile Transceiver intended for use in 3G and 4G base
 station, test equipment, and software defined radio (SDR) applications.
 The AD-FMCOMMS2-EBZ is optimized for RF engineers and targets 2.4 GHz
@@ -163,10 +163,10 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `AD-FMCOMMS2-EBZ <https://www.analog.com/AD-FMCOMMS2-EBZ>`_,
-  `AD-FMCOMMS3-EBZ <https://www.analog.com/AD-FMCOMMS3-EBZ>`_,
-  `AD-FMCOMMS4-EBZ <https://www.analog.com/AD-FMCOMMS4-EBZ>`_, or
-  `AD-FMCOMMS5-EBZ <https://www.analog.com/AD-FMCOMMS5-EBZ>`_
+* `AD-FMCOMMS2-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD-FMCOMMS2.html>`_,
+  `AD-FMCOMMS3-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD-FMCOMMS3-EBZ.html>`_,
+  `AD-FMCOMMS4-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD-FMCOMMS4-EBZ.html>`_, or
+  `AD-FMCOMMS5-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad-fmcomms5-ebz.html>`_
 * One of: `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board/>`_,
   `ZC706 <https://www.xilinx.com/ZC706>`_,
   ZC702, `ZCU102 <https://www.xilinx.com/ZCU102>`_, or
@@ -249,9 +249,9 @@ Linux Userspace (ZedBoard)
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `AD-FMCOMMS2-EBZ <https://www.analog.com/AD-FMCOMMS2-EBZ>`_,
-  `AD-FMCOMMS3-EBZ <https://www.analog.com/AD-FMCOMMS3-EBZ>`_, or
-  `AD-FMCOMMS4-EBZ <https://www.analog.com/AD-FMCOMMS4-EBZ>`_
+* `AD-FMCOMMS2-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD-FMCOMMS2.html>`_,
+  `AD-FMCOMMS3-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD-FMCOMMS3-EBZ.html>`_, or
+  `AD-FMCOMMS4-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD-FMCOMMS4-EBZ.html>`_
 * `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board/>`_
   running embedded Linux (PetaLinux or buildroot) with the fmcomms2
   reference HDL design loaded in the PL

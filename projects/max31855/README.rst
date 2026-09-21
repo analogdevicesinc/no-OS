@@ -9,7 +9,7 @@ MAX31855 no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `MAX31855PMB1 <https://www.analog.com/MAX31855PMB1>`_
+* `MAX31855PMB1 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max31855pmb1.html>`_
 
 Overview
 --------

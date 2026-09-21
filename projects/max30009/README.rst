@@ -100,7 +100,7 @@ Used Hardware
 ^^^^^^^^^^^^^
 
 * MAX30009 Evaluation Board
-* `MAX32655FTHR <https://www.analog.com/MAX32655FTHR>`_
+* `MAX32655FTHR <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32655fthr.html>`_
 
 Connections
 ^^^^^^^^^^^

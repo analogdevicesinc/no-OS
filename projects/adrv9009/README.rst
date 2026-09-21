@@ -9,7 +9,7 @@ ADRV9009 no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `ADRV9009-W/PCBZ <https://www.analog.com/ADRV9009>`_
+* `ADRV9009-W/PCBZ <https://www.analog.com/en/products/adrv9009.html>`_
 
 Overview
 --------
@@ -110,7 +110,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `ADRV9009-W/PCBZ <https://www.analog.com/ADRV9009>`_
+* `ADRV9009-W/PCBZ <https://www.analog.com/en/products/adrv9009.html>`_
 * `ZC706 <https://www.xilinx.com/ZC706>`_ (Zynq-7000)
 * `ZCU102 <https://www.xilinx.com/ZCU102>`_ (Zynq UltraScale+ MPSoC)
 

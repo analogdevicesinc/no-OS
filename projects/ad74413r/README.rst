@@ -9,7 +9,7 @@ AD74413R no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD74413R <https://www.analog.com/EVAL-AD74413R>`_
+* `EVAL-AD74413R <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD74413R.html>`_
 
 Overview
 --------
@@ -108,7 +108,7 @@ Maxim
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD74413R <https://www.analog.com/EVAL-AD74413R>`_
+* `EVAL-AD74413R <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD74413R.html>`_
 * MAX32655 or MAX78000
 
 Connections
@@ -151,7 +151,7 @@ STM32
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD74413R <https://www.analog.com/EVAL-AD74413R>`_
+* `EVAL-AD74413R <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD74413R.html>`_
 * `NUCLEO-F756ZG <https://www.st.com/en/evaluation-tools/nucleo-f756zg.html>`_
 
 Connections

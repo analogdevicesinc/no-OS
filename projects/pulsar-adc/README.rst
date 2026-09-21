@@ -93,7 +93,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD400x-FMCZ <https://www.analog.com/eval-ad400x-fmcz.html>`_
+* `EVAL-AD400x-FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad400x-fmcz.html>`_
 * `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
 Connections
@@ -148,8 +148,8 @@ STM32
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD400x-FMCZ <https://www.analog.com/eval-ad400x-fmcz.html>`_
-* `SDP-K1 <https://www.analog.com/SDP-K1>`_
+* `EVAL-AD400x-FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad400x-fmcz.html>`_
+* `SDP-K1 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
 * ST debugger
 
 Connections

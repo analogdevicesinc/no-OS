@@ -9,7 +9,7 @@ EVAL-ADG2404 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `ADG2404 <https://www.analog.com/ADG2404>`_
+* `ADG2404 <https://www.analog.com/en/products/adg2404.html>`_
 
 Overview
 --------
@@ -82,7 +82,7 @@ Maxim Platform
 
 **Used Hardware**
 
-* `EVAL-ADG2404 <https://www.analog.com/ADG2404>`_
+* `EVAL-ADG2404 <https://www.analog.com/en/products/adg2404.html>`_
 * `MAX32655FTHR <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32655fthr.html>`_
 
 **Connections**:

@@ -9,7 +9,7 @@ AD4110 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD4110-1SDZ <https://www.analog.com/EVAL-AD4110-1>`_
+* `EVAL-AD4110-1SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD4110-1.html>`_
 
 Overview
 --------
@@ -92,7 +92,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD4110-1SDZ <https://www.analog.com/EVAL-AD4110-1>`_
+* `EVAL-AD4110-1SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD4110-1.html>`_
 * `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
 Connections

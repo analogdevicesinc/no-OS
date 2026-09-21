@@ -146,7 +146,7 @@ ADuCM Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-ADICUP3029 <https://www.analog.com/EVAL-ADICUP3029>`_
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
 * An ESP8266 Wi-Fi module (only for the ``iio_wifi`` / ``iio_wifi_with_sw_trig``
   variants)
 
@@ -206,11 +206,11 @@ Maxim Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `MAX32650FTHR <https://www.analog.com/MAX32650FTHR>`_
-* `MAX32655FTHR <https://www.analog.com/MAX32655FTHR>`_
-* `MAX32666FTHR <https://www.analog.com/MAX32666FTHR>`_
-* `MAX78000FTHR <https://www.analog.com/MAX78000FTHR>`_
-* `AD-APARD32690-SL <https://www.analog.com/AD-APARD32690-SL>`_
+* `MAX32650FTHR <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32650fthr.html>`_
+* `MAX32655FTHR <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32655fthr.html>`_
+* `MAX32666FTHR <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32666fthr.html>`_
+* `MAX78000FTHR <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max78000fthr.html>`_
+* `AD-APARD32690-SL <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-apard32690-sl.html>`_
 
 Connections
 ^^^^^^^^^^^
@@ -256,7 +256,7 @@ STM32 Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `SDP-K1 <https://www.analog.com/SDP-K1>`_
+* `SDP-K1 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
 * `NUCLEO-F413ZH <https://www.st.com/en/evaluation-tools/nucleo-f413zh.html>`_
 * ST debugger
 

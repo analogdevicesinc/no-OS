@@ -9,8 +9,8 @@ adrv902x no-OS Example Project
 Supported Devices
 -----------------
 
-* `ADRV9026 <https://www.analog.com/ADRV9026>`_
-* `ADRV9029 <https://www.analog.com/ADRV9029>`_
+* `ADRV9026 <https://www.analog.com/en/products/adrv9026.html>`_
+* `ADRV9029 <https://www.analog.com/en/products/adrv9029.html>`_
 
 Supported Carriers
 ------------------

@@ -9,7 +9,7 @@ AD-ACEVSECRDSET-SL no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `AD-ACEVSECRDSET-SL <https://www.analog.com/ad-acevsecrdset-sl>`_
+* `AD-ACEVSECRDSET-SL <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-bct2ade9113-sl.html>`_
 
 Overview
 --------
@@ -115,8 +115,8 @@ Maxim Platform
 
 **Used Hardware**
 
-* `AD-ACEVSECRDSET-SL <https://www.analog.com/ad-acevsecrdset-sl>`_
-* `MAX32625PICO <https://www.analog.com/MAX32625PICO>`_ (debug adapter)
+* `AD-ACEVSECRDSET-SL <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-bct2ade9113-sl.html>`_
+* `MAX32625PICO <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32625pico.html>`_ (debug adapter)
 
 **Connections**
 

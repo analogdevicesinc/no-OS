@@ -9,7 +9,7 @@ AD7616-SDZ no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD7616SDZ <https://www.analog.com/EVAL-AD7616SDZ>`_
+* `EVAL-AD7616SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7616.html>`_
 
 Overview
 --------
@@ -96,7 +96,7 @@ Xilinx Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD7616SDZ <https://www.analog.com/EVAL-AD7616SDZ>`_
+* `EVAL-AD7616SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7616.html>`_
 * `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 * SDP-I-FMC interposer board
 

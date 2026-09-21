@@ -9,7 +9,7 @@ AD9545 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD9545 <https://www.analog.com/EVAL-AD9545>`_
+* `EVAL-AD9545 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9545.html>`_
 
 Overview
 --------
@@ -120,7 +120,7 @@ Linux Userspace
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD9545 <https://www.analog.com/EVAL-AD9545>`_
+* `EVAL-AD9545 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9545.html>`_
 * A Linux host with a SPI or I2C bus exposed via kernel device nodes
   (e.g. a Raspberry Pi, Beaglebone, or any single-board computer running
   Linux with spidev/i2c-dev enabled).

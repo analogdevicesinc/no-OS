@@ -7,7 +7,7 @@ AD9467 no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `AD9467-FMC-250EBZ <https://www.analog.com/AD9467>`_
+* `AD9467-FMC-250EBZ <https://www.analog.com/en/products/ad9467.html>`_
 
 Overview
 --------
@@ -94,7 +94,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `AD9467-FMC-250EBZ <https://www.analog.com/AD9467>`_
+* `AD9467-FMC-250EBZ <https://www.analog.com/en/products/ad9467.html>`_
 * `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board/>`_ (Zynq-7000)
 
 Connections

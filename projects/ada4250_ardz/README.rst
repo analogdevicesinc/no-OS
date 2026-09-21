@@ -9,7 +9,7 @@ ADA4250-ARDZ no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-ADA4250-ARDZ <https://www.analog.com/ADA4250>`_
+* `EVAL-ADA4250-ARDZ <https://www.analog.com/en/products/ada4250.html>`_
 
 Overview
 --------
@@ -80,8 +80,8 @@ ADuCM
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-ADA4250-ARDZ <https://www.analog.com/ADA4250>`_
-* `EVAL-ADICUP3029 <https://www.analog.com/EVAL-ADICUP3029>`_
+* `EVAL-ADA4250-ARDZ <https://www.analog.com/en/products/ada4250.html>`_
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
 
 Connections
 ^^^^^^^^^^^

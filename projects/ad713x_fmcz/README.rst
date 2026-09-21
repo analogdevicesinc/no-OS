@@ -9,7 +9,7 @@ AD713x FMCZ no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD7134FMCZ <https://www.analog.com/EVAL-AD7134FMCZ>`_
+* `EVAL-AD7134FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7134FMCZ.html>`_
 
 Overview
 --------
@@ -107,7 +107,7 @@ Xilinx Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD7134FMCZ <https://www.analog.com/EVAL-AD7134FMCZ>`_
+* `EVAL-AD7134FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7134FMCZ.html>`_
 * `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
 Connections

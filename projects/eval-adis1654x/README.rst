@@ -12,8 +12,8 @@ Contents
 Supported Evaluation Boards
 ---------------------------
 
-* `ADIS16545 <https://www.analog.com/ADIS16545>`__
-* `ADIS16547 <https://www.analog.com/ADIS16547>`_
+* `ADIS16545 <https://www.analog.com/en/products/adis16545.html>`__
+* `ADIS16547 <https://www.analog.com/en/products/adis16547.html>`_
 
 Overview
 --------

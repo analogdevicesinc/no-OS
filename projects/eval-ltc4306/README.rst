@@ -9,7 +9,7 @@ EVAL-LTC4306 no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `EVAL-LTC4306 <https://www.analog.com/EVAL-LTC4306>`_
+* `EVAL-LTC4306 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ltc4306.html>`_
 
 Overview
 --------
@@ -89,7 +89,7 @@ Maxim Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-LTC4306 <https://www.analog.com/EVAL-LTC4306>`_
+* `EVAL-LTC4306 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ltc4306.html>`_
 * MAX32650FTHR or compatible Maxim feather board
 
 Connections
@@ -149,8 +149,8 @@ ADuCM Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-LTC4306 <https://www.analog.com/EVAL-LTC4306>`_
-* `EVAL-ADICUP3029 <https://www.analog.com/EVAL-ADICUP3029>`_
+* `EVAL-LTC4306 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ltc4306.html>`_
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
 
 Connections
 ^^^^^^^^^^^

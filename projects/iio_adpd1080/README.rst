@@ -9,8 +9,8 @@ IIO_ADPD1080 no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `EVAL-CN0569-PMDZ <https://www.analog.com/EVAL-CN0569-PMDZ>`_
-* `EVAL-ADICUP3029 <https://www.analog.com/EVAL-ADICUP3029>`_ (carrier board)
+* `EVAL-CN0569-PMDZ <https://www.analog.com/en/resources/reference-designs/circuits-from-the-lab/CN0569.html>`_
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_ (carrier board)
 
 Overview
 --------
@@ -158,8 +158,8 @@ ADuCM
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-CN0569-PMDZ <https://www.analog.com/EVAL-CN0569-PMDZ>`_
-* `EVAL-ADICUP3029 <https://www.analog.com/EVAL-ADICUP3029>`_
+* `EVAL-CN0569-PMDZ <https://www.analog.com/en/resources/reference-designs/circuits-from-the-lab/CN0569.html>`_
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
 * Micro-USB to USB cable
 * Breadboard wire (for INT/GPIO0 connection)
 * An external ESP8266 Wi-Fi module (``iio_wifi`` variant only)

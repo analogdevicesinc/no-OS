@@ -9,7 +9,7 @@ AD9083 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD9083 <https://www.analog.com/EVAL-AD9083>`_
+* `EVAL-AD9083 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9083.html>`_
 
 Overview
 --------
@@ -106,7 +106,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD9083 <https://www.analog.com/EVAL-AD9083>`_
+* `EVAL-AD9083 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9083.html>`_
 * `ZCU102 <https://www.xilinx.com/ZCU102>`_
 
 Connections

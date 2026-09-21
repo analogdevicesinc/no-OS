@@ -9,12 +9,12 @@ ADE7816 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-ADE7816EBZ <https://www.analog.com/EVAL-ADE7816>`_
+* `EVAL-ADE7816EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ade7816.html>`_
 
 Overview
 --------
 
-The `ADE7816 <https://www.analog.com/ADE7816>`_ is a highly accurate, multichannel
+The `ADE7816 <https://www.analog.com/en/products/ade7816.html>`_ is a highly accurate, multichannel
 energy metering IC capable of measuring one voltage channel and up to six current
 channels. It measures line voltage and current and calculates active and reactive
 energy, as well as instantaneous RMS voltage and current. The device incorporates
@@ -88,7 +88,7 @@ Maxim Platform
 
 **Used Hardware**
 
-* `EVAL-ADE7816EBZ <https://www.analog.com/EVAL-ADE7816>`_
+* `EVAL-ADE7816EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ade7816.html>`_
 * `AD-APARD32690-SL <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-apard32690-sl.html>`_
 
 **Connections**

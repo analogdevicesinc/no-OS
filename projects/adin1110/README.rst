@@ -9,7 +9,7 @@ ADIN1110 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-ADIN1110 <https://www.analog.com/EVAL-ADIN1110>`_
+* `EVAL-ADIN1110 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adin1110.html>`_
 
 Overview
 --------
@@ -89,7 +89,7 @@ Maxim Platform
 Hardware Used
 ^^^^^^^^^^^^^
 
-* `EVAL-ADIN1110 <https://www.analog.com/EVAL-ADIN1110>`_
+* `EVAL-ADIN1110 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adin1110.html>`_
 * MAX32650FTHR
 
 Connections

@@ -9,7 +9,7 @@ ADGM3121 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `ADGM3121 <https://www.analog.com/ADGM3121>`_
+* `ADGM3121 <https://www.analog.com/en/products/adgm3121.html>`_
 
 Overview
 --------

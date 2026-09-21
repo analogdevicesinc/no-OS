@@ -9,7 +9,7 @@ EVAL-AD3552R no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD3552RFMCZ <https://www.analog.com/EVAL-AD3552RFMCZ>`_
+* `EVAL-AD3552RFMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad3552r.html>`_
 
 Overview
 --------
@@ -206,7 +206,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD3552RFMCZ <https://www.analog.com/EVAL-AD3552RFMCZ>`_
+* `EVAL-AD3552RFMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad3552r.html>`_
 * `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
 Connections

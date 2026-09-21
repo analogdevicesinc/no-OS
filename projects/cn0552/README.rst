@@ -9,14 +9,14 @@ CN0552 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-CN0552-PMDZ <https://www.analog.com/CN0552>`_
+* `EVAL-CN0552-PMDZ <https://www.analog.com/en/resources/reference-designs/circuits-from-the-lab/cn0552.html>`_
 
 Overview
 --------
 
-The `EVAL-CN0552-PMDZ <https://www.analog.com/CN0552>`_ is a PMOD form-factor
+The `EVAL-CN0552-PMDZ <https://www.analog.com/en/resources/reference-designs/circuits-from-the-lab/cn0552.html>`_ is a PMOD form-factor
 evaluation board designed for the
-`AD7746 <https://www.analog.com/AD7746>`_ high resolution, sigma-delta
+`AD7746 <https://www.analog.com/en/products/ad7746.html>`_ high resolution, sigma-delta
 capacitance-to-digital converter (CDC). The AD7746 provides 24-bit resolution
 with up to 21-bit effective resolution and is factory calibrated to +-4 fF
 accuracy with +-0.01% linearity. It supports a capacitance measurement range
@@ -110,8 +110,8 @@ ADuCM Platform
 Hardware Used
 ^^^^^^^^^^^^^
 
-* `EVAL-ADICUP3029 <https://www.analog.com/EVAL-ADICUP3029>`_
-* `EVAL-CN0552-PMDZ <https://www.analog.com/CN0552>`_
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
+* `EVAL-CN0552-PMDZ <https://www.analog.com/en/resources/reference-designs/circuits-from-the-lab/cn0552.html>`_
 
 Connections
 ^^^^^^^^^^^

@@ -9,7 +9,7 @@ AD7768-EVB no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD7768FMCZ <https://www.analog.com/ad7768>`_
+* `EVAL-AD7768FMCZ <https://www.analog.com/en/products/ad7768.html>`_
 
 Overview
 --------
@@ -110,7 +110,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD7768FMCZ <https://www.analog.com/ad7768>`_
+* `EVAL-AD7768FMCZ <https://www.analog.com/en/products/ad7768.html>`_
 * `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
 Connections

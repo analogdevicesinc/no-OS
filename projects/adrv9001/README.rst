@@ -15,7 +15,7 @@ models.
 Supported Devices
 -----------------
 
-* `ADRV9002NP/W2/PCBZ <https://www.analog.com/EVAL-ADRV9002>`__ (Evaluation Board for ADRV9002)
+* `ADRV9002NP/W2/PCBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adrv9002.html>`__ (Evaluation Board for ADRV9002)
 
 Supported Carriers
 ------------------
@@ -250,7 +250,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `ADRV9002NP/W2/PCBZ <https://www.analog.com/EVAL-ADRV9002>`__ (Evaluation Board for ADRV9002)
+* `ADRV9002NP/W2/PCBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adrv9002.html>`__ (Evaluation Board for ADRV9002)
 * `ZCU102 Evaluation Kit <https://www.xilinx.com/ZCU102>`__ (Zynq UltraScale+ MPSoC)
 
 Connections

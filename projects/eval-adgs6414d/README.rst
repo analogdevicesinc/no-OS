@@ -9,7 +9,7 @@ ADGS6414D Family no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `ADGS6414D <https://www.analog.com/ADGS6414D>`_
+* `ADGS6414D <https://www.analog.com/en/products/adgs6414d.html>`_
 
 Overview
 --------

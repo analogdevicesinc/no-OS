@@ -6,10 +6,10 @@ AD405X no-OS Example Project STM32
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD4050-ARDZ <https://www.analog.com/EVAL-AD4050-ARDZ>`_
-* `EVAL-AD4052-ARDZ <https://www.analog.com/EVAL-AD4052-ARDZ>`_
-* `EVAL-AD4060-ARDZ <https://www.analog.com/EVAL-AD4060-ARDZ>`_
-* `EVAL-AD4062-ARDZ <https://www.analog.com/EVAL-AD4062-ARDZ>`_
+* `EVAL-AD4050-ARDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad4050-ardz.html>`_
+* `EVAL-AD4052-ARDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD4052-ARDZ.html>`_
+* `EVAL-AD4060-ARDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad4060-eval-ad4062.html>`_
+* `EVAL-AD4062-ARDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad4060-eval-ad4062.html>`_
 
 Overview
 --------

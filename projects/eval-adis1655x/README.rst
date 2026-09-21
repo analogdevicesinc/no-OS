@@ -12,7 +12,7 @@ Contents
 Supported Evaluation Boards
 ---------------------------
 
-* `ADIS16550 <https://www.analog.com/ADIS16550>`_
+* `ADIS16550 <https://www.analog.com/en/products/adis16550.html>`_
 
 Overview
 --------
@@ -182,7 +182,7 @@ STM32 Platform
 
 **Used hardware**:
 
-* `ADIS16550 <https://www.analog.com/ADIS16550>`_ with
+* `ADIS16550 <https://www.analog.com/en/products/adis16550.html>`_ with
 * `SDP-K1 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_ and
 * `ADIS16IMU1/PCBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16IMU1.html>`_ and
 * ST debugger
@@ -244,7 +244,7 @@ Maxim Platform
 
 **Used hardware**:
 
-* `ADIS16550 <https://www.analog.com/ADIS16550>`_ with
+* `ADIS16550 <https://www.analog.com/en/products/adis16550.html>`_ with
 * `ADIS16IMU1/PCBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16IMU1.html>`_ and
 * `MAX78000 <https://www.analog.com/en/products/max78000.html>`_
 
@@ -301,7 +301,7 @@ Pico Platform
 
 **Used hardware**:
 
-* `ADIS16550 <https://www.analog.com/ADIS16550>`_ with
+* `ADIS16550 <https://www.analog.com/en/products/adis16550.html>`_ with
 * `ADIS16IMU1/PCBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADIS16IMU1.html>`_ and
 * Raspberry Pi Pico with
 * `ADALM-UARTJTAG <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/ADALM-UARTJTAG.html>`_ Adapter for Raspberry Pi Pico UART to USB Connection

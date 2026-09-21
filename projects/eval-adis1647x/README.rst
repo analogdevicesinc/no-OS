@@ -9,7 +9,7 @@ ADIS1647X Family no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `ADIS16477 <https://www.analog.com/ADIS16477>`_
+* `ADIS16477 <https://www.analog.com/en/products/adis16477.html>`_
 
 Overview
 --------

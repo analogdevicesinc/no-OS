@@ -9,7 +9,7 @@ ADRV904x no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `ADRV9040 <https://www.analog.com/ADRV9040>`_
+* `ADRV9040 <https://www.analog.com/en/products/adrv9040.html>`_
 
 Overview
 --------
@@ -196,7 +196,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `ADRV9040 evaluation board <https://www.analog.com/ADRV9040>`_
+* `ADRV9040 evaluation board <https://www.analog.com/en/products/adrv9040.html>`_
 * `ZCU102 Zynq UltraScale+ MPSoC Evaluation Kit <https://www.xilinx.com/ZCU102>`_
 
 Connections

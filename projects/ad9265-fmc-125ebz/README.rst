@@ -9,7 +9,7 @@ AD9265-FMC-125EBZ no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `AD9265-FMC-125EBZ <https://www.analog.com/ad9265>`_
+* `AD9265-FMC-125EBZ <https://www.analog.com/en/products/ad9265.html>`_
 
 Overview
 --------
@@ -119,7 +119,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `AD9265-FMC-125EBZ <https://www.analog.com/ad9265>`_
+* `AD9265-FMC-125EBZ <https://www.analog.com/en/products/ad9265.html>`_
 * `ZC706 <https://www.xilinx.com/ZC706>`_ evaluation kit
 
 Connections

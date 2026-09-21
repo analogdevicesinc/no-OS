@@ -9,7 +9,7 @@ ADuCM3029 Flash Demo no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `EVAL-ADICUP3029 <https://www.analog.com/EVAL-ADICUP3029>`_
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
 
 Overview
 --------
@@ -67,7 +67,7 @@ ADuCM
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-ADICUP3029 <https://www.analog.com/EVAL-ADICUP3029>`_
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
 
 Connections
 ^^^^^^^^^^^

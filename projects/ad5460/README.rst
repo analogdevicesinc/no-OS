@@ -9,7 +9,7 @@ AD5460 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD5460ARDZ <https://www.analog.com/EVAL-AD5460ARDZ>`_
+* `EVAL-AD5460ARDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad5460ardz.html>`_
 
 Overview
 --------
@@ -168,8 +168,8 @@ STM32 Platform
 
 **Used Hardware**
 
-* `EVAL-AD5460ARDZ <https://www.analog.com/EVAL-AD5460ARDZ>`_
-* `EVAL-SDP-CK1Z <https://www.analog.com/EVAL-SDP-CK1Z>`_ (SDP-K1)
+* `EVAL-AD5460ARDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad5460ardz.html>`_
+* `EVAL-SDP-CK1Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_ (SDP-K1)
 
 **Connections**:
 

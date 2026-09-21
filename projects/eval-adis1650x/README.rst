@@ -9,10 +9,10 @@ ADIS1650X Family no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `ADIS16500 <https://www.analog.com/ADIS16500>`_
-* `ADIS16501 <https://www.analog.com/ADIS16501>`_
-* `ADIS16505 <https://www.analog.com/ADIS16505>`_
-* `ADIS16507 <https://www.analog.com/ADIS16507>`_
+* `ADIS16500 <https://www.analog.com/en/products/adis16500.html>`_
+* `ADIS16501 <https://www.analog.com/en/products/adis16501.html>`_
+* `ADIS16505 <https://www.analog.com/en/products/adis16505.html>`_
+* `ADIS16507 <https://www.analog.com/en/products/adis16507.html>`_
 
 Overview
 --------

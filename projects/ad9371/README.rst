@@ -9,7 +9,7 @@ AD9371 no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `ADRV9371 <https://www.analog.com/ADRV9371>`_
+* `ADRV9371 <https://www.analog.com/en/products/adrv9371.html>`_
 
 Overview
 --------
@@ -128,7 +128,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `ADRV9371 <https://www.analog.com/ADRV9371>`_ (ADRV9371-N/PCBZ)
+* `ADRV9371 <https://www.analog.com/en/products/adrv9371.html>`_ (ADRV9371-N/PCBZ)
 * One of: `ZC706 <https://www.xilinx.com/ZC706>`_,
   `ZCU102 <https://www.xilinx.com/ZCU102>`_, or
   `KCU105 <https://www.xilinx.com/KCU105>`_ carrier board

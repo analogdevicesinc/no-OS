@@ -9,7 +9,7 @@ AD9656_FMC no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `AD9656-125EBZ <https://www.analog.com/AD9656>`_
+* `AD9656-125EBZ <https://www.analog.com/en/products/ad9656.html>`_
 
 Overview
 --------
@@ -115,7 +115,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `AD9656-125EBZ <https://www.analog.com/AD9656>`_
+* `AD9656-125EBZ <https://www.analog.com/en/products/ad9656.html>`_
 * `ZCU102 <https://www.xilinx.com/ZCU102>`_ evaluation kit
 
 Connections
