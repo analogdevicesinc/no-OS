@@ -111,6 +111,40 @@
 #define ADAR300X_AMP_EN_MSK			NO_OS_BIT(3)
 #define ADAR300X_AMP_BIAS_MAX			0x7
 
+/* ADC registers, configuration page */
+#define ADAR300X_REG_ADC_CONTROL		0x020
+#define ADAR300X_REG_ADC_CONTROL2		0x021
+#define ADAR300X_REG_ADC_DATA_OUT		0x022
+
+/* ADAR300X_REG_ADC_CONTROL */
+#define ADAR300X_ADC_RESET_MSK			NO_OS_BIT(7)
+#define ADAR300X_ADC_CLK_EN_MSK			NO_OS_BIT(5)
+#define ADAR300X_ADC_EN_MSK			NO_OS_BIT(4)
+#define ADAR300X_ADC_MUX_SEL_MSK		NO_OS_GENMASK(2, 0)
+/* Mux inputs 0 and 1 are the ANLG pins, 2 is the temperature sensor */
+#define ADAR300X_ADC_MUX_TEMPERATURE		2
+
+/* ADAR300X_REG_ADC_CONTROL2 */
+#define ADAR300X_ADC_START_MSK			NO_OS_BIT(0)
+#define ADAR300X_ADC_END_CONV_MSK		NO_OS_BIT(4)
+
+/*
+ * The ADC has no dedicated clock. Seven dummy SPI transactions, any register,
+ * provide the clocks required for the conversion after START is set.
+ */
+#define ADAR300X_ADC_NUM_CLOCKS			7
+
+/*
+ * Temperature sensor calibration: the data sheet gives a slope of 1.09 LSB/degC
+ * and a nominal output of 127 at 25 degC, so
+ *	temperature = 25 + (code - 127) / 1.09
+ * Scaled to millidegrees and kept in integer arithmetic.
+ */
+#define ADAR300X_TEMP_NOMINAL_CODE		127
+#define ADAR300X_TEMP_NOMINAL_MDEGC		25000
+#define ADAR300X_TEMP_SLOPE_NUM			100000
+#define ADAR300X_TEMP_SLOPE_DEN			109
+
 /*
  * 16-bit address header: A15 = R/W, A14 = 0 for normal transactions,
  * A13:A10 = chip ID, A9:A0 = register address.
@@ -361,6 +395,9 @@ int adar300x_soft_reset(struct adar300x_dev *dev);
 
 /** Pulse the RSTB pin, no-op when no reset GPIO is wired. */
 int adar300x_hard_reset(struct adar300x_dev *dev);
+
+/** Read the raw temperature sensor code. */
+int adar300x_get_temp(struct adar300x_dev *dev, uint8_t *code);
 
 /** Initialize the device. */
 int adar300x_init(struct adar300x_dev **dev,
