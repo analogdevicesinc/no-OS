@@ -1544,9 +1544,11 @@ static int32_t ad9361_load_gt(struct ad9361_rf_phy *phy, uint64_t freq,
 		 * Upstream spent two dummy register writes on this, which is
 		 * free on a directly attached SPI master but costs a full bus
 		 * round trip each on a remote one. no_os_udelay() states the
-		 * same requirement without turning it into bus traffic.
+		 * same requirement without turning it into bus traffic, and
+		 * matches the delay already used after an internal table write
+		 * in ad9361_gain_step_calib() and ad9361_rssi_gain_step_calib().
 		 */
-		no_os_udelay(2);
+		no_os_udelay(3);
 
 		if ((tab[i][1] & lpf_tia_mask) == 0x20)
 			phy->tx_quad_lpf_tia_match = i;
