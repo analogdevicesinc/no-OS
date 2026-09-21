@@ -50,8 +50,6 @@ int ade7978_read(struct ade7978_dev *dev, uint16_t reg_addr, uint32_t *reg_data)
 	int ret;
 	/* data buffer large enough for 32 bits reg */
 	uint8_t buff[7] = { 0 };
-	/* register addres */
-	uint32_t addr;
 
 	if (!dev)
 		return -ENODEV;
@@ -99,7 +97,6 @@ int ade7978_write(struct ade7978_dev *dev, uint16_t reg_addr, uint32_t reg_data)
 {
 	/* data buffer */
 	uint8_t buff[7] = { 0 };
-	int i;
 
 	if (!dev)
 		return -ENODEV;
@@ -223,8 +220,6 @@ int ade7978_read_data_ph(struct ade7978_dev *dev, enum ade7978_phase phase)
 	uint32_t v2rms_reg;
 	/* temperature value for phase */
 	uint32_t temperature;
-	/* intermediate values used for computation */
-	uint64_t val_int;
 
 	if (!dev)
 		return -ENODEV;

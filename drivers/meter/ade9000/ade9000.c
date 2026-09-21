@@ -48,8 +48,6 @@
 int ade9000_read(struct ade9000_dev *dev, uint16_t reg_addr, uint32_t *reg_data)
 {
 	int ret;
-	/* index */
-	int i;
 	/* data buffer large enough for 32 bits reg */
 	uint8_t buff[6] = { 0 };
 	/* register addres */

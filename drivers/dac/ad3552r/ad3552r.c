@@ -1288,8 +1288,8 @@ static int32_t ad3552r_configure_device(struct ad3552r_desc *desc,
 int32_t ad3552r_axi_init(struct ad3552r_desc *desc,
 			 struct ad3552r_init_param *init_param)
 {
-	int32_t err;
 #ifdef XILINX_PLATFORM
+	int32_t err;
 
 	err = axi_clkgen_init(&desc->clkgen, init_param->clkgen_ip);
 	if (err) {
@@ -1828,9 +1828,9 @@ static int32_t ad3552r_axi_write_all_channels(struct ad3552r_desc *desc,
 		uint16_t *data,
 		enum ad3552r_write_mode mode)
 {
+#ifdef XILINX_PLATFORM
 	uint8_t reg, is_dac, is_fast;
 	int i, err;
-#ifdef XILINX_PLATFORM
 
 	is_fast = desc->ch_data[0].fast_en;
 	is_dac = (mode == AD3552R_WRITE_DAC_REGS);

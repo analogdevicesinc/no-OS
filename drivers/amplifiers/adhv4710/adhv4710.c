@@ -132,8 +132,6 @@ int adhv4710_read(struct adhv4710_dev *dev, uint8_t reg_addr,
 	uint8_t data_byte_offset = 1;
 	/* buffer for data read */
 	uint8_t buff[2] = { 0 };
-	/* register addres */
-	uint32_t addr;
 
 	if (!dev)
 		return -ENODEV;
@@ -162,15 +160,10 @@ int adhv4710_read(struct adhv4710_dev *dev, uint8_t reg_addr,
 int adhv4710_write(struct adhv4710_dev *dev, uint8_t reg_addr,
 		   uint8_t reg_data)
 {
-	int ret;
 	/* number of bytes */
 	uint8_t no_bytes = 2;
 	/* buffer for data write */
 	uint8_t buff[2] = {0};
-	/* register addres */
-	uint16_t addr;
-	/* offset of data to be written in the buffer */
-	uint8_t data_byte_offset = 1;
 
 	if (!dev)
 		return -ENODEV;

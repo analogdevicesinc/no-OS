@@ -403,8 +403,6 @@ int ad4170_spi_reg_write_mask(struct ad4170_dev *dev,
  */
 int ad4170_reset_spi_interface(struct ad4170_dev *dev)
 {
-	int ret;
-
 	/* Data sequence to reset AD4170 SPI interface (71*1 + 1*0) * 3
 	 * Note: CS must be low for entire sequence. */
 	uint8_t buf[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe,

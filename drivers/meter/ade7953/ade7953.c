@@ -135,10 +135,6 @@ int ade7953_read(struct ade7953_dev *dev, uint16_t reg_addr,
 	uint8_t data_byte_offset = 3;
 	/* buffer for data read */
 	uint8_t buff[8] = { 0 };
-	/* index */
-	uint8_t i;
-	/* register addres */
-	uint32_t addr;
 
 	if (!dev)
 		return -ENODEV;
@@ -198,18 +194,12 @@ int ade7953_read(struct ade7953_dev *dev, uint16_t reg_addr,
 int ade7953_write(struct ade7953_dev *dev, uint16_t reg_addr,
 		  uint32_t reg_data)
 {
-	int ret;
 	/* number of bytes - 4 for 8 bits register data */
 	uint8_t no_bytes = 4;
 	/* buffer for data write */
 	uint8_t buff[8] = {0};
-	/* register addres */
-	uint16_t addr;
-	/* data to be written */
-	uint32_t data;
 	/* offset of data to be written in the buffer */
 	uint8_t data_byte_offset = 3;
-	int i;
 
 	if (!dev)
 		return -ENODEV;

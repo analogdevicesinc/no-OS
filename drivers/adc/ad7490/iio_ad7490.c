@@ -70,7 +70,6 @@ static int ad7490_read_samples(struct ad7490_desc *desc, int16_t *data,
 			       uint32_t samples)
 {
 	uint32_t i, sample_size;
-	int16_t channels_val[16];
 	int ret;
 
 	sample_size = desc->nb_channels_seq * sizeof(int16_t);

@@ -201,8 +201,6 @@ int ltc3350_get_esr(struct ltc3350_dev *dev, uint16_t *value)
 *******************************************************************************/
 int ltc3350_get_vcap(struct ltc3350_dev *dev, uint8_t n_cap, uint16_t *value)
 {
-	int ret;
-
 	if (n_cap > 4)
 		return -EINVAL;
 

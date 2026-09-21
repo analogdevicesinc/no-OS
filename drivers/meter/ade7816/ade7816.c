@@ -1420,7 +1420,6 @@ int ade7816_init(struct ade7816_desc **desc,
 	struct no_os_callback_desc irq0_cb;
 	struct no_os_callback_desc irq1_cb;
 	struct ade7816_desc *descriptor;
-	uint32_t reg_val;
 	int ret;
 
 	descriptor = no_os_calloc(1, sizeof(*descriptor));

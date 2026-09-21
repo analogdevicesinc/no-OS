@@ -284,7 +284,6 @@ int32_t ad5293_sdo_setfloat(struct ad5293_dev* dev)
  *******************************************************************************/
 int32_t ad5293_shutdown(struct ad5293_dev* dev, enum shutdown_t sd)
 {
-	int32_t ret ;
 	uint8_t i;
 	uint16_t sz = 2 * dev->chip_num;
 	uint8_t buf[sz];
@@ -349,7 +348,6 @@ int32_t ad5293_update_wiper(struct ad5293_dev* dev, uint16_t val, uint8_t num)
 static int32_t ad5293_write_protect(struct ad5293_dev* dev,
 				    enum protect_mode_t pm)
 {
-	int32_t ret ;
 	uint8_t i;
 	uint16_t sz = 2 * dev->chip_num;
 	uint8_t buf[sz];
@@ -378,7 +376,6 @@ static int32_t ad5293_write_protect(struct ad5293_dev* dev,
  *******************************************************************************/
 int32_t ad5293_write_cali(struct ad5293_dev* dev)
 {
-	int32_t ret ;
 	uint8_t i;
 	uint16_t sz = 2 * dev->chip_num;
 	uint8_t buf[sz];

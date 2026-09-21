@@ -308,8 +308,6 @@ int gnss_ubx_sw_reset(struct gnss_dev *dev)
  */
 int gnss_write(struct gnss_dev *dev, uint8_t *data, uint16_t size)
 {
-	int ret;
-
 	if (!dev || !data || size == 0)
 		return -EINVAL;
 	/* UART is used in this implementation */
@@ -326,8 +324,6 @@ int gnss_write(struct gnss_dev *dev, uint8_t *data, uint16_t size)
 int gnss_read(struct gnss_dev *dev, uint8_t *data,
 	      uint16_t size)
 {
-	int ret;
-
 	if (!dev || !data || size == 0)
 		return -EINVAL;
 	/* UART is used in this implementation */
@@ -403,10 +399,8 @@ int gnss_ubx_receive_packet(struct gnss_dev *dev,
 {
 	uint8_t *byte;
 	uint8_t *header;
-	uint16_t payload_index = 0;
-	int ret, bytes_read;
+	int ret;
 	uint8_t *data;
-	uint8_t payload_a, payload_b;
 
 	if (!dev || !packet)
 		return -EINVAL;
@@ -620,7 +614,6 @@ int gnss_ubx_set_val(struct gnss_dev *dev, uint32_t key_id,
 		     uint64_t value, uint8_t value_size, uint8_t layer)
 {
 	uint8_t *payload;
-	uint8_t payload_len;
 	uint8_t layer_val;
 	int ret;
 
@@ -1944,8 +1937,6 @@ int gnss_parse_gprmc_sentence(const char *sentence,
 
 			/* GPS Week Rollover Correction - only when GPS fix is valid but date is wrong */
 			if (data_valid && rmc_time->date_valid && rmc_time->year < 2020) {
-				uint16_t original_year = rmc_time->year;
-
 				/* GPS week rollover period is 1024 weeks ≈ 19.69 years */
 				/* Second major rollover was April 6, 2019 - many devices report dates ~19 years behind */
 				rmc_time->year += 19;  /* Add one GPS week rollover period */
