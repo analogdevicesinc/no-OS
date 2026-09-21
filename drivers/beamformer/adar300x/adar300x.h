@@ -106,6 +106,19 @@
 #define ADAR300X_AMP_EN_MSK			NO_OS_BIT(3)
 #define ADAR300X_AMP_BIAS_MAX			0x7
 
+/*
+ * Beamstate RAM. Each beam owns an address page holding 64 beamstates from
+ * 0x100 to 0x27F, six bytes each. A beamstate is eight 6-bit values packed
+ * MSB first into 48 bits, ordered delay then attenuation per element, the same
+ * layout the direct control bank uses.
+ */
+#define ADAR300X_PAGE_BEAM(beam)		((beam) + 1)
+#define ADAR300X_PAGE_FIFO			0x5
+#define ADAR300X_REG_RAM_BEAMSTATE(state)	(0x100 + (state) * 6)
+#define ADAR300X_RAM_STATES_PER_BEAM		64
+#define ADAR300X_PACKED_BEAMSTATE_LEN		6
+#define ADAR300X_UNPACKED_BEAMSTATE_LEN		8
+
 /* ADC registers, configuration page */
 #define ADAR300X_REG_ADC_CONTROL		0x020
 #define ADAR300X_REG_ADC_CONTROL2		0x021
@@ -398,6 +411,14 @@ int adar300x_soft_reset(struct adar300x_dev *dev);
 
 /** Pulse the RSTB pin, no-op when no reset GPIO is wired. */
 int adar300x_hard_reset(struct adar300x_dev *dev);
+
+/** Write one beamstate into a beam's RAM page. */
+int adar300x_set_ram_beamstate(struct adar300x_dev *dev, uint8_t beam,
+			       uint8_t state, const uint8_t *values);
+
+/** Read one beamstate back from a beam's RAM page. */
+int adar300x_get_ram_beamstate(struct adar300x_dev *dev, uint8_t beam,
+			       uint8_t state, uint8_t *values);
 
 /** Read the on-chip ADC. */
 int adar300x_adc_read(struct adar300x_dev *dev, enum adar300x_adc_input input,

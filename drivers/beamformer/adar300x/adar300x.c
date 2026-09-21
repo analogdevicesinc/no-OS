@@ -580,6 +580,131 @@ int adar300x_get_update_source_spi(struct adar300x_dev *dev, bool *spi)
 }
 
 /**
+ * @brief Packs eight 6-bit values into six bytes, MSB first.
+ * @param unpacked - Eight values, delay then attenuation per element.
+ * @param packed   - Six byte buffer to fill.
+ */
+static void adar300x_pack_beamstate(const uint8_t *unpacked, uint8_t *packed)
+{
+	packed[0] = unpacked[0] << 2 | unpacked[1] >> 4;
+	packed[1] = unpacked[1] << 4 | unpacked[2] >> 2;
+	packed[2] = unpacked[2] << 6 | unpacked[3];
+	packed[3] = unpacked[4] << 2 | unpacked[5] >> 4;
+	packed[4] = unpacked[5] << 4 | unpacked[6] >> 2;
+	packed[5] = unpacked[6] << 6 | unpacked[7];
+}
+
+/**
+ * @brief Unpacks six bytes into eight 6-bit values.
+ * @param packed   - Six bytes as stored in the RAM.
+ * @param unpacked - Eight value buffer to fill.
+ */
+static void adar300x_unpack_beamstate(const uint8_t *packed, uint8_t *unpacked)
+{
+	unpacked[0] = (packed[0] >> 2) & ADAR300X_RAW_MSK;
+	unpacked[1] = (packed[0] << 4 | packed[1] >> 4) & ADAR300X_RAW_MSK;
+	unpacked[2] = (packed[1] << 2 | packed[2] >> 6) & ADAR300X_RAW_MSK;
+	unpacked[3] = packed[2] & ADAR300X_RAW_MSK;
+	unpacked[4] = (packed[3] >> 2) & ADAR300X_RAW_MSK;
+	unpacked[5] = (packed[3] << 4 | packed[4] >> 4) & ADAR300X_RAW_MSK;
+	unpacked[6] = (packed[4] << 2 | packed[5] >> 6) & ADAR300X_RAW_MSK;
+	unpacked[7] = packed[5] & ADAR300X_RAW_MSK;
+}
+
+/**
+ * @brief Writes one beamstate into a beam's RAM page.
+ * @param dev	 - The device structure.
+ * @param beam	 - Beam index, selects the address page.
+ * @param state	 - Beamstate index within the beam.
+ * @param values - Eight 6-bit values, delay then attenuation per element.
+ * @return	 - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_set_ram_beamstate(struct adar300x_dev *dev, uint8_t beam,
+			       uint8_t state, const uint8_t *values)
+{
+	uint8_t packed[ADAR300X_PACKED_BEAMSTATE_LEN];
+	uint16_t addr;
+	int ret, i;
+
+	if (!dev || !values)
+		return -EINVAL;
+
+	if (beam >= dev->chip_info->num_beams ||
+	    state >= ADAR300X_RAM_STATES_PER_BEAM)
+		return -EINVAL;
+
+	for (i = 0; i < ADAR300X_UNPACKED_BEAMSTATE_LEN; i++)
+		if (values[i] > ADAR300X_RAW_MAX)
+			return -EINVAL;
+
+	adar300x_pack_beamstate(values, packed);
+
+	ret = adar300x_set_page(dev, ADAR300X_PAGE_BEAM(beam));
+	if (ret)
+		return ret;
+
+	addr = ADAR300X_REG_RAM_BEAMSTATE(state);
+
+	for (i = 0; i < ADAR300X_PACKED_BEAMSTATE_LEN; i++) {
+		ret = adar300x_reg_write(dev, addr + i, packed[i]);
+		if (ret)
+			return ret;
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Reads one beamstate back from a beam's RAM page.
+ *
+ * The data sheet gives the RAM its own readback protocol: a first read acts as
+ * a fetch that latches the whole 48-bit beamstate and returns invalid data,
+ * after which the six locations read back singly from that latched copy. One
+ * fetch covers the whole beamstate, so fetching per location is not needed.
+ *
+ * @param dev	 - The device structure.
+ * @param beam	 - Beam index, selects the address page.
+ * @param state	 - Beamstate index within the beam.
+ * @param values - Eight 6-bit values, delay then attenuation per element.
+ * @return	 - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_get_ram_beamstate(struct adar300x_dev *dev, uint8_t beam,
+			       uint8_t state, uint8_t *values)
+{
+	uint8_t packed[ADAR300X_PACKED_BEAMSTATE_LEN];
+	uint16_t addr;
+	int ret, i;
+
+	if (!dev || !values)
+		return -EINVAL;
+
+	if (beam >= dev->chip_info->num_beams ||
+	    state >= ADAR300X_RAM_STATES_PER_BEAM)
+		return -EINVAL;
+
+	ret = adar300x_set_page(dev, ADAR300X_PAGE_BEAM(beam));
+	if (ret)
+		return ret;
+
+	addr = ADAR300X_REG_RAM_BEAMSTATE(state);
+
+	/* Fetch, latching the beamstate. The data returned is invalid. */
+	ret = adar300x_reg_read(dev, addr, &packed[0]);
+	if (ret)
+		return ret;
+
+	for (i = 0; i < ADAR300X_PACKED_BEAMSTATE_LEN; i++) {
+		ret = adar300x_reg_read(dev, addr + i, &packed[i]);
+		if (ret)
+			return ret;
+	}
+
+	adar300x_unpack_beamstate(packed, values);
+
+	return 0;
+}
+
+/**
  * @brief Reads the on-chip ADC.
  *
  * The ADC requires a manual reset pulse before each conversion, and clocking

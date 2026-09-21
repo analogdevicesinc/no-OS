@@ -231,6 +231,59 @@ static int adar300x_adc_demo(struct adar300x_dev *dev)
 	return 0;
 }
 
+static int adar300x_ram_demo(struct adar300x_dev *dev)
+{
+	const uint8_t pattern_a[ADAR300X_UNPACKED_BEAMSTATE_LEN] = {
+		1, 62, 3, 60, 5, 58, 7, 56
+	};
+	const uint8_t pattern_b[ADAR300X_UNPACKED_BEAMSTATE_LEN] = {
+		63, 0, 21, 42, 63, 0, 21, 42
+	};
+	uint8_t readback[ADAR300X_UNPACKED_BEAMSTATE_LEN];
+	int ret, i;
+
+	ret = adar300x_set_ram_beamstate(dev, 0, 0, pattern_a);
+	if (ret)
+		return ret;
+
+	/* A different beam and the last state, so paging and bounds both move */
+	ret = adar300x_set_ram_beamstate(dev, 3,
+					 ADAR300X_RAM_STATES_PER_BEAM - 1,
+					 pattern_b);
+	if (ret)
+		return ret;
+
+	ret = adar300x_get_ram_beamstate(dev, 0, 0, readback);
+	if (ret)
+		return ret;
+
+	for (i = 0; i < ADAR300X_UNPACKED_BEAMSTATE_LEN; i++) {
+		if (readback[i] != pattern_a[i]) {
+			pr_err("beam 0 state 0 value %d: wrote %u read %u\n", i,
+			       pattern_a[i], readback[i]);
+			return -EIO;
+		}
+	}
+
+	ret = adar300x_get_ram_beamstate(dev, 3,
+					 ADAR300X_RAM_STATES_PER_BEAM - 1,
+					 readback);
+	if (ret)
+		return ret;
+
+	for (i = 0; i < ADAR300X_UNPACKED_BEAMSTATE_LEN; i++) {
+		if (readback[i] != pattern_b[i]) {
+			pr_err("beam 3 state 63 value %d: wrote %u read %u\n", i,
+			       pattern_b[i], readback[i]);
+			return -EIO;
+		}
+	}
+
+	pr_info("RAM beamstate write/readback: OK\n");
+
+	return 0;
+}
+
 int basic_example_main(void)
 {
 	struct adar300x_dev *dev;
@@ -260,6 +313,10 @@ int basic_example_main(void)
 		goto error_dev;
 
 	ret = adar300x_adc_demo(dev);
+	if (ret)
+		goto error_dev;
+
+	ret = adar300x_ram_demo(dev);
 	if (ret)
 		goto error_dev;
 
