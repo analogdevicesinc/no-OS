@@ -275,7 +275,7 @@ int max22216_init(struct max22216_desc **desc,
 	struct no_os_gpio_desc *max22216_drv_en_desc = calloc(1,
 			sizeof(*max22216_drv_en_desc));
 	if (!max22216_drv_en_desc)
-		goto error1;
+		goto error3;
 	struct no_os_gpio_desc *max22216_fault_desc = calloc(1,
 			sizeof(*max22216_fault_desc));
 
