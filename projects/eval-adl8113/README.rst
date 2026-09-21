@@ -9,7 +9,7 @@ EVAL-ADL8113 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `ADL8113 <https://www.analog.com/ADL8113>`_
+* `ADL8113 <https://www.analog.com/en/products/adl8113.html>`_
 
 Overview
 --------
@@ -103,7 +103,7 @@ Maxim Platform
 
 **Used Hardware**
 
-* `ADL8113 <https://www.analog.com/ADL8113>`_
+* `ADL8113 <https://www.analog.com/en/products/adl8113.html>`_
 * `MAX32655FTHR <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32655fthr.html>`_
 
 **Connections**:

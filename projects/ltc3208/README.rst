@@ -4,7 +4,7 @@ Evaluating the LTC3208
 Supported Evaluation Boards
 ---------------------------
 
-* `DC824A <https://www.analog.com/DC824A>`_ (LTC3208)
+* `DC824A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/dc824a.html>`_ (LTC3208)
 
 Overview
 --------
@@ -121,7 +121,7 @@ Maxim Platform
 **Used Hardware**
 
 * `DC824A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/dc824a.html>`_
-* `MAX32655FTHR <https://www.analog.com/MAX32655FTHR>`_ or `MAX32690EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/MAX32690EVKIT.html>`_
+* `MAX32655FTHR <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32655fthr.html>`_ or `MAX32690EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/MAX32690EVKIT.html>`_
 
 **Connections**:
 

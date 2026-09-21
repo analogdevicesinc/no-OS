@@ -9,7 +9,7 @@ FMCDAQ2 no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `AD-FMCDAQ2-EBZ <https://www.analog.com/AD-FMCDAQ2-EBZ>`_
+* `AD-FMCDAQ2-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad-fmcdaq2-ebz.html>`_
 
 Overview
 --------
@@ -118,7 +118,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `AD-FMCDAQ2-EBZ <https://www.analog.com/AD-FMCDAQ2-EBZ>`_
+* `AD-FMCDAQ2-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad-fmcdaq2-ebz.html>`_
 * `ZC706 <https://www.xilinx.com/ZC706>`_
 * `ZCU102 <https://www.xilinx.com/ZCU102>`_
 * `KCU105 <https://www.xilinx.com/KCU105>`_

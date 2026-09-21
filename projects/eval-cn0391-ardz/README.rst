@@ -9,12 +9,12 @@ EVAL-CN0391-ARDZ no-OS Example Project
 Supported Devices
 -----------------
 
-* `AD7124-8 <https://www.analog.com/AD7124-8>`_
+* `AD7124-8 <https://www.analog.com/en/products/ad7124-8.html>`_
 
 Supported Evaluation Boards
 ----------------------------
 
-* `EVAL-CN0391-ARDZ <https://www.analog.com/cn0391>`_
+* `EVAL-CN0391-ARDZ <https://www.analog.com/en/resources/reference-designs/circuits-from-the-lab/cn0391.html>`_
 
 Overview
 --------
@@ -30,7 +30,7 @@ and exposes the 4 thermocouple channels over a 10BASE-T1L Ethernet link using
 the ADIN1110 PHY and the lwIP network stack.
 
 See complementary documentation at
-https://www.analog.com/cn0391.
+https://www.analog.com/en/resources/reference-designs/circuits-from-the-lab/cn0391.html.
 
 Hardware Specifications
 ------------------------
@@ -126,8 +126,8 @@ STM32 Platform
 
 **Used hardware**:
 
-* `EVAL-CN0391-ARDZ <https://www.analog.com/cn0391>`_ with
-* `EVAL-ADIN1110 <https://www.analog.com/eval-adin1110>`_
+* `EVAL-CN0391-ARDZ <https://www.analog.com/en/resources/reference-designs/circuits-from-the-lab/cn0391.html>`_ with
+* `EVAL-ADIN1110 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adin1110.html>`_
 
 **Build Command**
 

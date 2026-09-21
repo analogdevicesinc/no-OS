@@ -14,7 +14,7 @@ Supported Evaluation Boards
 Overview
 --------
 
-The `LTC3337 <https://www.analog.com/LTC3337>`_ is a primary battery state of
+The `LTC3337 <https://www.analog.com/en/products/ltc3337.html>`_ is a primary battery state of
 health (SOH) monitor with a built-in precision coulomb counter. It is designed
 to be placed in series with a primary battery with minimal associated series
 voltage drop. The coulomb counter tallies all accumulated battery discharge and

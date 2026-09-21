@@ -9,7 +9,7 @@ FMCDAQ3 no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `AD-FMCDAQ3-EBZ <https://www.analog.com/AD-FMCDAQ3-EBZ>`_
+* `AD-FMCDAQ3-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-FMCDAQ3-EBZ.html>`_
 
 Overview
 --------
@@ -126,7 +126,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `AD-FMCDAQ3-EBZ <https://www.analog.com/AD-FMCDAQ3-EBZ>`_
+* `AD-FMCDAQ3-EBZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-FMCDAQ3-EBZ.html>`_
 * `AMD Zynq UltraScale+ MPSoC ZCU102 Evaluation Kit <https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/ek-u1-zcu102-g.html>`_
 * `ZC706 <https://www.xilinx.com/ZC706>`_
 

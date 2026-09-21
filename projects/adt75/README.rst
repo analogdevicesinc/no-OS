@@ -9,7 +9,7 @@ ADT75 no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `EVAL-ADT75 <https://www.analog.com/EVAL-ADT75>`_
+* `EVAL-ADT75 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adt75.html>`_
 
 Overview
 --------
@@ -123,7 +123,7 @@ Maxim Platform
 
 **Used Hardware**
 
-* `EVAL-ADT75 <https://www.analog.com/EVAL-ADT75>`_
+* `EVAL-ADT75 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adt75.html>`_
 * `MAX32650EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32650evkit.html>`_
 
 **Connections**:

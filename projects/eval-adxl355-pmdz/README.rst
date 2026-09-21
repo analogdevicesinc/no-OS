@@ -9,7 +9,7 @@ EVAL-ADXL355-PMDZ no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `EVAL-ADXL355-PMDZ <https://www.analog.com/EVAL-ADXL355-PMDZ>`_
+* `EVAL-ADXL355-PMDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADXL355-PMDZ.html>`_
 
 Overview
 --------
@@ -168,8 +168,8 @@ ADuCM Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-ADXL355-PMDZ <https://www.analog.com/EVAL-ADXL355-PMDZ>`_
-* `EVAL-ADICUP3029 <https://www.analog.com/EVAL-ADICUP3029>`_
+* `EVAL-ADXL355-PMDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADXL355-PMDZ.html>`_
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
 
 Connections
 ^^^^^^^^^^^
@@ -210,8 +210,8 @@ Maxim Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-ADXL355-PMDZ <https://www.analog.com/EVAL-ADXL355-PMDZ>`_
-* `MAX32655FTHR <https://www.analog.com/MAX32655FTHR>`_
+* `EVAL-ADXL355-PMDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADXL355-PMDZ.html>`_
+* `MAX32655FTHR <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32655fthr.html>`_
 
 Connections
 ^^^^^^^^^^^
@@ -267,8 +267,8 @@ STM32 Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-ADXL355-PMDZ <https://www.analog.com/EVAL-ADXL355-PMDZ>`_
-* `SDP-K1 <https://www.analog.com/SDP-K1>`_
+* `EVAL-ADXL355-PMDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADXL355-PMDZ.html>`_
+* `SDP-K1 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
 * ST debugger
 
 Connections
@@ -332,7 +332,7 @@ Raspberry Pi Pico Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-ADXL355-PMDZ <https://www.analog.com/EVAL-ADXL355-PMDZ>`_
+* `EVAL-ADXL355-PMDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADXL355-PMDZ.html>`_
 * Raspberry Pi Pico
 
 Connections

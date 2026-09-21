@@ -9,12 +9,12 @@ MAX14916 no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `MAX14916EVKIT <https://www.analog.com/MAX14916EVKIT>`_
+* `MAX14916EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max14916evkit.html>`_
 
 Overview
 --------
 
-The `MAX14916 <https://www.analog.com/MAX14916>`_ is a compact industrial octal
+The `MAX14916 <https://www.analog.com/en/products/max14916.html>`_ is a compact industrial octal
 high-side switch with integrated diagnostics. Each of the eight channels
 features an on-resistance of only 120 mOhm (typ) and handles up to 1.1 A of
 continuous current. Two adjacent channels can be combined to form four 2.4 A
@@ -87,9 +87,9 @@ Maxim
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `MAX14916EVKIT <https://www.analog.com/MAX14916EVKIT>`_
-* `AD-APARD32690-SL <https://www.analog.com/AD-APARD32690-SL>`_ or
-  `MAX32666FTHR <https://www.analog.com/MAX32666FTHR>`_
+* `MAX14916EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max14916evkit.html>`_
+* `AD-APARD32690-SL <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-apard32690-sl.html>`_ or
+  `MAX32666FTHR <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32666fthr.html>`_
 
 Connections
 ^^^^^^^^^^^
@@ -141,7 +141,7 @@ Linux Host (USB2PMB2) Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `MAX14916EVKIT <https://www.analog.com/MAX14916EVKIT>`_
+* `MAX14916EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max14916evkit.html>`_
 * `USB2PMB2 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/usb2pmb2.html>`_
   (FTDI FT2232HQ-based USB-to-PMOD adapter)
 

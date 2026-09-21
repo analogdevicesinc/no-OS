@@ -94,7 +94,7 @@ STM32 Platform
 
 **Used hardware**
 
-* `MAX22915EVKIT <https://www.analog.com/MAX22915EVKIT>`_
+* `MAX22915EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max22915evkit.html>`_
 * `SDP-K1 <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
 
 **Build Command**

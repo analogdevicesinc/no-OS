@@ -4,8 +4,8 @@ Evaluating the LTC3220
 Supported Evaluation Boards
 ---------------------------
 
-* `DC1265A-A <https://www.analog.com/DC1265A-A>`_ (LTC3220)
-* `DC1265A-B <https://www.analog.com/DC1265A-B>`_ (LTC3220-1)
+* `DC1265A-A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/dc1265a-a.html>`_ (LTC3220)
+* `DC1265A-B <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/dc1265a-b.html>`_ (LTC3220-1)
 
 Overview
 --------

@@ -9,7 +9,7 @@ ADF5902 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EV-ADF5902SD1Z <https://www.analog.com/EV-ADF5902SD1Z>`_
+* `EV-ADF5902SD1Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADF5902.html>`_
 
 Overview
 --------
@@ -73,9 +73,9 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EV-ADF5902SD1Z <https://www.analog.com/EV-ADF5902SD1Z>`_
+* `EV-ADF5902SD1Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADF5902.html>`_
 * `ZedBoard <https://www.avnet.com/wps/portal/us/products/avnet-boards/avnet-board-families/zedboard/>`_
-* `SDP-I-FMC Interposer <https://www.analog.com/EVAL-SDP-I-FMC>`_
+* `SDP-I-FMC Interposer <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-SDP-I-FMC.html>`_
 
 Connections
 ^^^^^^^^^^^

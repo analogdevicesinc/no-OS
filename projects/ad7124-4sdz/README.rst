@@ -9,14 +9,14 @@ AD7124-4SDZ no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD7124-4SDZ <https://www.analog.com/EVAL-AD7124-4SDZ>`_
+* `EVAL-AD7124-4SDZ <https://www.analog.com/en/EVAL-AD7124-4SDZ.html>`_
 
 Overview
 --------
 
-The `EVAL-AD7124-4SDZ <https://www.analog.com/EVAL-AD7124-4SDZ>`_
+The `EVAL-AD7124-4SDZ <https://www.analog.com/en/EVAL-AD7124-4SDZ.html>`_
 evaluation board is a platform for evaluating the
-`AD7124-4 <https://www.analog.com/AD7124-4>`_, a low power, low noise,
+`AD7124-4 <https://www.analog.com/en/products/ad7124-4.html>`_, a low power, low noise,
 completely integrated analog front end for high precision measurement
 applications. The AD7124-4 provides 4 differential or 7 pseudo
 differential input channels, a 24-bit sigma-delta ADC, an on-chip 2.5 V
@@ -86,7 +86,7 @@ Xilinx Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD7124-4SDZ <https://www.analog.com/EVAL-AD7124-4SDZ>`_
+* `EVAL-AD7124-4SDZ <https://www.analog.com/en/EVAL-AD7124-4SDZ.html>`_
 * `ZedBoard <https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/zedboard-zynq-7000.html>`_
 
 Connections

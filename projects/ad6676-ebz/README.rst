@@ -9,7 +9,7 @@ AD6676-EBZ no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD6676 <https://www.analog.com/EVAL-AD6676>`_
+* `EVAL-AD6676 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad6676.html>`_
 
 Overview
 --------
@@ -106,7 +106,7 @@ Xilinx Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD6676 <https://www.analog.com/EVAL-AD6676>`_
+* `EVAL-AD6676 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad6676.html>`_
 * `ZC706 <https://www.xilinx.com/products/boards-and-kits/ek-z7-zc706-g.html>`_
 
 Connections

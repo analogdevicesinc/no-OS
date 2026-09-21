@@ -9,12 +9,12 @@ MAX22196 no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `MAX22196EVKIT <https://www.analog.com/MAX22196EVKIT>`_
+* `MAX22196EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/MAX22196EVKIT.html>`_
 
 Overview
 --------
 
-The `MAX22196 <https://www.analog.com/MAX22196>`_ is an industrial octal digital
+The `MAX22196 <https://www.analog.com/en/products/max22196.html>`_ is an industrial octal digital
 input that translates eight industrial 24 V or TTL level inputs to logic level
 outputs. The device has a serial interface allowing configuration and reading
 of serialized data through SPI.

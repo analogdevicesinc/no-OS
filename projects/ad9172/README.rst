@@ -9,7 +9,7 @@ AD9172 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD917x <https://www.analog.com/eval-ad9172>`_
+* `EVAL-AD917x <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9172.html>`_
 
 Overview
 --------
@@ -109,7 +109,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD917x <https://www.analog.com/eval-ad9172>`_
+* `EVAL-AD917x <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9172.html>`_
 * `ZC706 <https://www.xilinx.com/ZC706>`_ or `ZCU102 <https://www.xilinx.com/ZCU102>`_
 
 Connections

@@ -9,12 +9,12 @@ MAX22200 no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `MAX22200EVKIT <https://www.analog.com/MAX22200EVKIT>`_
+* `MAX22200EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max22200evkit.html>`_
 
 Overview
 --------
 
-The `MAX22200 <https://www.analog.com/MAX22200>`_ is an octal 36 V
+The `MAX22200 <https://www.analog.com/en/products/max22200.html>`_ is an octal 36 V
 serial-controlled solenoid and motor driver. Each channel features a low
 impedance (200 mOhm typ) push-pull output stage with sink-and-source driving
 capability and up to 1 A RMS driving current. The device is controlled via a

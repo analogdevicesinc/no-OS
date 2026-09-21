@@ -9,13 +9,13 @@ AD5758-SDZ no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD5758SDZ <https://www.analog.com/EVAL-AD5758SDZ>`_
+* `EVAL-AD5758SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD5758.html>`_
 
 Overview
 --------
 
-The `EVAL-AD5758SDZ <https://www.analog.com/EVAL-AD5758SDZ>`_ is an
-evaluation board for the `AD5758 <https://www.analog.com/AD5758>`_,
+The `EVAL-AD5758SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD5758.html>`_ is an
+evaluation board for the `AD5758 <https://www.analog.com/en/products/ad5758.html>`_,
 a single-channel, 16-bit digital-to-analog converter with dynamic power
 control and HART connectivity. The board uses an ADP1031-1 power
 management unit to generate the necessary supply voltages for the AD5758
@@ -106,7 +106,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD5758SDZ <https://www.analog.com/EVAL-AD5758SDZ>`_
+* `EVAL-AD5758SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD5758.html>`_
 * `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
 Connections

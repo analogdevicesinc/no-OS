@@ -9,7 +9,7 @@ AD7616 no-OS Example Project on SDP-K1
 Supported Evaluation Boards
 ---------------------------
 
-* `AD7616 <https://www.analog.com/AD7616>`_
+* `AD7616 <https://www.analog.com/en/products/ad7616.html>`_
 
 Overview
 --------

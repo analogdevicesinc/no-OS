@@ -9,7 +9,7 @@ AD5766-SDZ no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD5766SD2Z <https://www.analog.com/EVAL-AD5766SD2Z>`_
+* `EVAL-AD5766SD2Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD5766.html>`_
 
 Overview
 --------
@@ -100,7 +100,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD5766SD2Z <https://www.analog.com/EVAL-AD5766SD2Z>`_
+* `EVAL-AD5766SD2Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD5766.html>`_
 * `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
 Connections

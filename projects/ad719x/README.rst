@@ -9,7 +9,7 @@ AD719X no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD7190ASDZ <https://www.analog.com/EVAL-AD7190ASDZ>`_
+* `EVAL-AD7190ASDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7190ASDZ.html>`_
 
 Overview
 --------
@@ -93,7 +93,7 @@ Xilinx Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD7190ASDZ <https://www.analog.com/EVAL-AD7190ASDZ>`_
+* `EVAL-AD7190ASDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7190ASDZ.html>`_
 * `ZedBoard <https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html>`_
 
 Connections

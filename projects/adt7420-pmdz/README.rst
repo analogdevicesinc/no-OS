@@ -9,12 +9,12 @@ ADT7420-PMDZ no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-ADT7420-PMDZ <https://www.analog.com/EVAL-ADT7420-PMDZ>`_
+* `EVAL-ADT7420-PMDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADT7420-PMDZ.html>`_
 
 Overview
 --------
 
-The `EVAL-ADT7420-PMDZ <https://www.analog.com/EVAL-ADT7420-PMDZ>`_ is a PMOD
+The `EVAL-ADT7420-PMDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADT7420-PMDZ.html>`_ is a PMOD
 evaluation board for the ADT7420, a high accuracy digital temperature sensor.
 The ADT7420 provides 16-bit resolution (0.0078 degrees C) and communicates via
 an I2C interface. Its factory-set I2C address is 0x48, with options for
@@ -136,7 +136,7 @@ Maxim Platform
 
 **Used hardware**
 
-* `EVAL-ADT7420-PMDZ <https://www.analog.com/EVAL-ADT7420-PMDZ>`_
+* `EVAL-ADT7420-PMDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADT7420-PMDZ.html>`_
 * Maxim platform board (MAX32650, MAX32655, MAX32660, MAX32666, MAX78000, or
   MAX32690)
 
@@ -177,7 +177,7 @@ Linux Userspace Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-ADT7420-PMDZ <https://www.analog.com/EVAL-ADT7420-PMDZ>`_
+* `EVAL-ADT7420-PMDZ <https://www.analog.com/en/EVAL-ADT7420-PMDZ.html>`_
 * Raspberry Pi 5 or Compute Module 5 (CM5) with I2C enabled
 
 Connections

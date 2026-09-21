@@ -9,9 +9,9 @@ EVAL-ADXL313Z no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-ADXL312Z <https://www.analog.com/EVAL-ADXL312Z>`_
-* `EVAL-ADXL313Z <https://www.analog.com/EVAL-ADXL313Z>`_
-* `EVAL-ADXL314Z <https://www.analog.com/EVAL-ADXL314Z>`_
+* `EVAL-ADXL312Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adxl312z.html>`_
+* `EVAL-ADXL313Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adxl313z.html>`_
+* `EVAL-ADXL314Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adxl314z.html>`_
 
 Overview
 --------
@@ -126,9 +126,9 @@ STM32
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-ADXL312Z <https://www.analog.com/EVAL-ADXL312Z>`_ /
-  `EVAL-ADXL313Z <https://www.analog.com/EVAL-ADXL313Z>`_ /
-  `EVAL-ADXL314Z <https://www.analog.com/EVAL-ADXL314Z>`_
+* `EVAL-ADXL312Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adxl312z.html>`_ /
+  `EVAL-ADXL313Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adxl313z.html>`_ /
+  `EVAL-ADXL314Z <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adxl314z.html>`_
 * `NUCLEO-F401RE <https://www.st.com/en/evaluation-tools/nucleo-f401re.html>`_
 
 Connections

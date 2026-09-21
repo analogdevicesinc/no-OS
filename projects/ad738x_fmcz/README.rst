@@ -7,8 +7,8 @@ AD738x_FMCZ no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD7380FMCZ <https://www.analog.com/EVAL-AD7380FMCZ>`_
-* `EVAL-AD7381FMCZ <https://www.analog.com/EVAL-AD7381FMCZ>`_
+* `EVAL-AD7380FMCZ <https://www.analog.com/en/EVAL-AD7380FMCZ.html>`_
+* `EVAL-AD7381FMCZ <https://www.analog.com/en/EVAL-AD7381FMCZ.html>`_
 
 Overview
 --------
@@ -188,7 +188,7 @@ Xilinx Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD7380FMCZ <https://www.analog.com/EVAL-AD7380FMCZ>`_ or `EVAL-AD7381FMCZ <https://www.analog.com/EVAL-AD7381FMCZ>`_
+* `EVAL-AD7380FMCZ <https://www.analog.com/en/EVAL-AD7380FMCZ.html>`_ or `EVAL-AD7381FMCZ <https://www.analog.com/en/EVAL-AD7381FMCZ.html>`_
 * `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
 Connections
@@ -251,8 +251,8 @@ STM32 Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD7380FMCZ <https://www.analog.com/EVAL-AD7380FMCZ>`_ or `EVAL-AD7381FMCZ <https://www.analog.com/EVAL-AD7381FMCZ>`_
-* `EVAL-SDP-CK1Z (SDP-K1) <https://www.analog.com/EVAL-SDP-CK1Z>`_
+* `EVAL-AD7380FMCZ <https://www.analog.com/en/EVAL-AD7380FMCZ.html>`_ or `EVAL-AD7381FMCZ <https://www.analog.com/en/EVAL-AD7381FMCZ.html>`_
+* `EVAL-SDP-CK1Z (SDP-K1) <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
 
 Connections
 ^^^^^^^^^^^

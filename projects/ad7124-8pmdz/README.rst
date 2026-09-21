@@ -9,7 +9,7 @@ AD7124-8-PMDZ no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `EVAL-AD7124-8-PMDZ <https://www.analog.com/EVAL-AD7124-8>`_
+* `EVAL-AD7124-8-PMDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7124-8.html>`_
 
 Overview
 --------
@@ -99,8 +99,8 @@ ADuCM3029
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-ADICUP3029 <https://www.analog.com/EVAL-ADICUP3029>`_
-* `EVAL-AD7124-8-PMDZ <https://www.analog.com/EVAL-AD7124-8>`_
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
+* `EVAL-AD7124-8-PMDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7124-8.html>`_
 
 Connections
 ^^^^^^^^^^^
@@ -143,10 +143,10 @@ Maxim
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `AD-APARD32690-SL <https://www.analog.com/AD-APARD32690-SL>`_ (MAX32690)
-* `MAX32666FTHR <https://www.analog.com/MAX32666FTHR>`_ (MAX32666)
-* `MAX32655FTHR <https://www.analog.com/MAX32655FTHR>`_ (MAX32655)
-* `EVAL-AD7124-8-PMDZ <https://www.analog.com/EVAL-AD7124-8>`_
+* `AD-APARD32690-SL <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-apard32690-sl.html>`_ (MAX32690)
+* `MAX32666FTHR <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32666fthr.html>`_ (MAX32666)
+* `MAX32655FTHR <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max32655fthr.html>`_ (MAX32655)
+* `EVAL-AD7124-8-PMDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD7124-8.html>`_
 
 Connections
 ^^^^^^^^^^^

@@ -9,7 +9,7 @@ MAX14914 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `MAX14914PMB <https://www.analog.com/MAX14914PMB>`_
+* `MAX14914PMB <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max14914pmb.html>`_
 
 Overview
 --------

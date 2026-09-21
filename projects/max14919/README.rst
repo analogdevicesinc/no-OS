@@ -9,7 +9,7 @@ MAX14919 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `MAX14919PMB <https://www.analog.com/MAX14919PMB>`_
+* `MAX14919PMB <https://www.analog.com/en/MAX14919PMB.html>`_
 
 Overview
 --------
@@ -94,7 +94,7 @@ Maxim Platform
 
 **Used hardware**
 
-* `MAX14919PMB <https://www.analog.com/MAX14919PMB>`_
+* `MAX14919PMB <https://www.analog.com/en/MAX14919PMB.html>`_
 * `AD-APARD32690-SL <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/ad-apard32690-sl.html>`_
 
 +------------------------+----------+-------------------------------------------+-----------------------------+

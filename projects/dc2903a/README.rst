@@ -7,7 +7,7 @@ DC2903A no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-- `DC2903A <https://www.analog.com/DC2903A>`_
+- `DC2903A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/dc2903a.html>`_
 
 Overview
 --------

@@ -9,10 +9,10 @@ ADIS1646X Family no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `ADIS16465 <https://www.analog.com/ADIS16465>`_
-* `ADIS16467 <https://www.analog.com/ADIS16467>`_
-* `ADIS16470 <https://www.analog.com/ADIS16470>`_
-* `ADIS16475 <https://www.analog.com/ADIS16475>`_
+* `ADIS16465 <https://www.analog.com/en/products/adis16465.html>`_
+* `ADIS16467 <https://www.analog.com/en/products/adis16467.html>`_
+* `ADIS16470 <https://www.analog.com/en/products/adis16470.html>`_
+* `ADIS16475 <https://www.analog.com/en/products/adis16475.html>`_
 
 Overview
 --------

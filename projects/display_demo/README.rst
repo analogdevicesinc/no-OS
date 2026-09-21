@@ -9,7 +9,7 @@ Display Demo no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `SSD1306 OLED Display <https://www.analog.com/SSD1306>`_
+* `SSD1306 OLED Display <https://www.analog.com/en/SSD1306.html>`_
 
 Overview
 --------

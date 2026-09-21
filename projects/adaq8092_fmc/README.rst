@@ -9,7 +9,7 @@ ADAQ8092_FMC no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-ADAQ8092-FMCZ <https://www.analog.com/EVAL-ADAQ8092>`_
+* `EVAL-ADAQ8092-FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adaq8092.html>`_
 
 Overview
 --------
@@ -105,7 +105,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-ADAQ8092-FMCZ <https://www.analog.com/EVAL-ADAQ8092>`_
+* `EVAL-ADAQ8092-FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adaq8092.html>`_
 * `ZedBoard <https://www.avnet.com/wps/portal/us/products/avnet-boards/avnet-board-families/zedboard/>`_
 
 Connections

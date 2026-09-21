@@ -9,7 +9,7 @@ MAX22017 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `MAX22017_EVKIT <https://www.analog.com/MAX22017EVKIT>`_
+* `MAX22017_EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max22017evkit.html>`_
 
 Overview
 --------
@@ -142,7 +142,7 @@ Maxim Platform
 
 **Used hardware**
 
-* `MAX22017EVKIT <https://www.analog.com/MAX22017EVKIT>`_
+* `MAX22017EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max22017evkit.html>`_
 * `MAX32666FTHR Board <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/max32666fthr.html#eb-documentation>`_
 
 **Connections**:

@@ -9,7 +9,7 @@ CN0565 no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-CN0565-ARDZ <https://www.analog.com/EVAL-CN0565-ARDZ>`_
+* `EVAL-CN0565-ARDZ <https://www.analog.com/en/resources/reference-designs/circuits-from-the-lab/CN0565.html>`_
 
 Overview
 --------

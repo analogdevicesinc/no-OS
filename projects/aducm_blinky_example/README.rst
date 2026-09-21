@@ -9,7 +9,7 @@ ADuCM3029 Blinky no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-ADICUP3029 <https://www.analog.com/EVAL-ADICUP3029>`_
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
 
 Overview
 --------
@@ -52,7 +52,7 @@ ADuCM3029
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-ADICUP3029 <https://www.analog.com/EVAL-ADICUP3029>`_
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
 
 Connections
 ^^^^^^^^^^^

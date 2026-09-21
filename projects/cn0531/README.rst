@@ -9,16 +9,16 @@ CN0531 no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `EVAL-CN0531-PMDZ <https://www.analog.com/EVAL-CN0531-PMDZ>`_
+* `EVAL-CN0531-PMDZ <https://www.analog.com/en/resources/reference-designs/circuits-from-the-lab/cn0531.html>`_
 
 Overview
 --------
 
-The `EVAL-CN0531-PMDZ <https://www.analog.com/EVAL-CN0531-PMDZ>`_
+The `EVAL-CN0531-PMDZ <https://www.analog.com/en/resources/reference-designs/circuits-from-the-lab/cn0531.html>`_
 is a precision DAC module designed for applications
 such as medical instrumentation, test and measurement equipment,
 industrial control, and scientific research. It features the
-`AD5791 <https://www.analog.com/AD5791>`_, a 20-bit DAC
+`AD5791 <https://www.analog.com/en/products/ad5791.html>`_, a 20-bit DAC
 with 1 ppm accuracy and ±1 LSB Integral Non-Linearity (INL). It
 provides flexibility with support for multiple voltage references and
 power options, allowing use of onboard or external power supplies and
@@ -141,8 +141,8 @@ ADuCM Platform
 
 **Used Hardware**
 
-* `EVAL-CN0531-PMDZ <https://www.analog.com/EVAL-CN0531-PMDZ>`_
-* `EVAL-ADICUP3029 <https://www.analog.com/EVAL-ADICUP3029>`_
+* `EVAL-CN0531-PMDZ <https://www.analog.com/en/resources/reference-designs/circuits-from-the-lab/cn0531.html>`_
+* `EVAL-ADICUP3029 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adicup3029.html>`_
 * An external ESP8266 Wi-Fi module (``iio_wifi`` variant only)
 
 **Connections**

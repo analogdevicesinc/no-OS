@@ -9,12 +9,12 @@ ADAQ7980_SDZ no-OS Example Project
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-ADAQ7980SDZ <https://www.analog.com/EVAL-ADAQ7980SDZ>`_
+* `EVAL-ADAQ7980SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADAQ7980.html>`_
 
 Overview
 --------
 
-The `EVAL-ADAQ7980SDZ <https://www.analog.com/EVAL-ADAQ7980SDZ>`_
+The `EVAL-ADAQ7980SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADAQ7980.html>`_
 evaluation board showcases the ADAQ7980, a low-power, 16-bit, 1 MSPS
 micro-module data acquisition system that integrates key signal processing
 and conditioning blocks into a compact system-in-package (SiP) design.
@@ -92,7 +92,7 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-ADAQ7980SDZ <https://www.analog.com/EVAL-ADAQ7980SDZ>`_
+* `EVAL-ADAQ7980SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADAQ7980.html>`_
 * `ZedBoard <https://www.avnet.com/wps/portal/us/products/avnet-boards/avnet-board-families/zedboard/>`_
 
 Connections

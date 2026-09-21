@@ -9,12 +9,12 @@ MAX22190 no-OS Example Project
 Supported Evaluation Boards
 ----------------------------
 
-* `MAX22190EVKIT <https://www.analog.com/MAX22190EVKIT>`_
+* `MAX22190EVKIT <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max22190evkit.html>`_
 
 Overview
 --------
 
-The `MAX22190 <https://www.analog.com/MAX22190>`_ is an octal industrial digital
+The `MAX22190 <https://www.analog.com/en/products/max22190.html>`_ is an octal industrial digital
 input device with serializer and diagnostics. It translates eight 24 V
 industrial inputs into serialized SPI-compatible data and complies with
 IEC 61131-2 Type 1, 2, and 3 input standards. Each input includes a
