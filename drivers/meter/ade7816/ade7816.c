@@ -1344,10 +1344,10 @@ static void ade7816_irq0_handler(void *dev)
 	int ret;
 
 	ret = ade7816_read_reg(desc, ADE7816_STATUS0_REG, &reg_val);
+	if (!ret)
+		desc->status0 = reg_val;
 
-	desc->status0 = reg_val;
-
-	ret = ade7816_write_reg(desc, ADE7816_STATUS0_REG, 0);
+	ade7816_write_reg(desc, ADE7816_STATUS0_REG, 0);
 }
 
 static void ade7816_irq1_handler(void *dev)
@@ -1358,13 +1358,15 @@ static void ade7816_irq1_handler(void *dev)
 
 	ret = no_os_irq_disable(desc->irq_ctrl,
 				desc->gpio_irq1_desc->number);
+	if (ret)
+		return;
 
 	ret = ade7816_read_reg(desc, ADE7816_STATUS1_REG, &reg_val);
+	if (!ret)
+		desc->status1 = reg_val;
 
-	desc->status1 = reg_val;
-
-	ret = ade7816_write_reg(desc, ADE7816_STATUS1_REG, 0);
-	ret = no_os_irq_enable(desc->irq_ctrl, desc->irq_ctrl->irq_ctrl_id);
+	ade7816_write_reg(desc, ADE7816_STATUS1_REG, 0);
+	no_os_irq_enable(desc->irq_ctrl, desc->irq_ctrl->irq_ctrl_id);
 }
 
 static int ade7816_irq_config(struct no_os_gpio_desc *gpio_irq,
