@@ -478,13 +478,12 @@
 #define ADF4030_CHANNEL_PRBS_SEPARATOR		6
 #define ADF4030_CHANNEL_INV_SEPARATOR		4
 #define ADF4030_POR_DELAY_US			200
-#define ADF4030_RCM_CONST1			7000000	/* Resistance numerator [mOhm] */
+#define ADF4030_RCM_CONST1			7000
 #define ADF4030_RCM_CONST2			735
-#define ADF4030_RCM_MV_SCALE			1000	/* mV scaling factor */
-#define ADF4030_RCM_CONST4			26500	/* Resistance offset [mOhm] */
-#define ADF4030_RCM_SLOPE			10	/* RCM code coefficient */
-#define ADF4030_RCM_CURRENT0			14	/* Drive current [mA] */
-#define ADF4030_RCM_CURRENT1			20	/* Boosted drive current [mA] */
+#define ADF4030_RCM_CONST3			10
+#define ADF4030_RCM_CONST4			265
+#define ADF4030_RCM_CURRENT0			14
+#define ADF4030_RCM_CURRENT1			20
 #define ADF4030_RCM_VOLTAGE_MIN0		504
 #define ADF4030_RCM_VOLTAGE_MAX0		1304
 #define ADF4030_RCM_VOLTAGE_MIN1		720
@@ -521,12 +520,6 @@
 #define ADF4030_CHIP_ADDRESS_MAX		15U
 
 /* Reset value of TDC_SOURCE/TDC_TARGET: parked on a non-existent channel. */
-/* Channel TDC offset is a 16-bit signed value */
-#define ADF4030_TDC_OFFSET_CH_MAX		0x7FFF
-#define ADF4030_TDC_OFFSET_CH_MIN		(-0x8000)
-/* Common TDC offset is a 21-bit signed value */
-#define ADF4030_TDC_OFFSET_COM_MAX		0xFFFFF
-#define ADF4030_TDC_OFFSET_COM_MIN		(-0x100000)
 #define ADF4030_TDC_SOURCE_RESET		0x1FU
 
 /* Nominal ALIGN_THOLD step, and the largest threshold the 6-bit field holds. */
@@ -561,6 +554,9 @@ enum adf4030_terminations_e {
 };
 
 struct adf4030_chan_spec {
+	/** Channel number. Only used when the struct describes an init-time
+	 *  channel list; the runtime array in adf4030_dev is indexed by
+	 *  channel number, so this field is unused there. */
 	uint8_t num;
 	int64_t delay_fs;
 	uint32_t rcm_mv;
@@ -573,6 +569,7 @@ struct adf4030_chan_spec {
 	/** Realign this channel against reference_chan on JESD204
 	 *  CLK_SYNC_STAGE4 (device-tree "auto-align-on-sync-en"). */
 	bool align_on_sync_en;
+	/** TDC source channel used as the alignment reference. */
 	uint8_t reference_chan;
 };
 
@@ -597,6 +594,8 @@ struct adf4030_dev {
 	uint8_t 			tdc_source;
 	uint8_t 			tdc_target;
 	uint8_t				alignment_iter;
+	/** TDC averaging exponent programmed into 0x16. Sets how long a single
+	 *  TDC measurement takes: 2^(avgexp + 6) BSYNC periods. */
 	uint8_t				avgexp;
 	bool 				tdc_status;
 	bool				spi_4wire_en;
@@ -618,6 +617,9 @@ struct adf4030_jesd204_priv {
 struct adf4030_init_param {
 	/** SPI Initialization parameters */
 	struct no_os_spi_init_param	*spi_init;
+	/** Optional init-time channel list. Each entry's .num selects the
+	 *  channel. When NULL/0 the driver keeps its legacy default of
+	 *  configuring channel 1 as an output only. */
 	struct adf4030_chan_spec	*channels;
 	uint8_t				num_channels;
 	uint32_t			ref_freq;
@@ -625,8 +627,15 @@ struct adf4030_init_param {
 	uint32_t			bsync_freq;
 	uint8_t				ref_div;
 	uint8_t				chip_addr;
+	/** Auto-align threshold in femtoseconds. 0 selects
+	 *  ADF4030_ALIGN_THOLD_FS_DEFAULT. */
 	uint32_t			alignment_threshold_fs;
+	/** Number of alignment iterations, 1..8. 0 selects
+	 *  ADF4030_ALIGN_ITER_DEFAULT. */
 	uint8_t				alignment_iter;
+	/** Let the alignment FSM iterate against alignment_threshold_fs. Off by
+	 *  default, matching the reference driver, which converges on
+	 *  ALIGN_CYCLES alone. */
 	bool				alignment_threshold_en;
 	bool				spi_4wire_en;
 	bool				cmos_3v3;

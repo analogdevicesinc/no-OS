@@ -1,35 +1,9 @@
-/***************************************************************************//**
- *   @file   ad9088.h
- *   @brief  Header file of the AD9088/AD9084 (Apollo) MxFE driver.
- *   @author CHegbeli (ciprian.hegbeli@analog.com)
-********************************************************************************
- * Copyright 2022-2026(c) Analog Devices, Inc.
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Driver for AD9088 and similar mixed signal front end (MxFE®)
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution.
- *
- * 3. Neither the name of Analog Devices, Inc. nor the names of its
- *    contributors may be used to endorse or promote products derived from this
- *    software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
- * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
- * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*******************************************************************************/
+ * Copyright 2022 Analog Devices Inc.
+ */
 #ifndef __AD9088_H__
 #define __AD9088_H__
 
@@ -44,6 +18,10 @@
 #include "adi_apollo.h"
 #include "adi_apollo_bf_custom.h"
 #include "adi_apollo_adc.h"
+#include "adi_apollo_tmode.h"
+#include "adi_apollo_dformat.h"
+#include "adi_apollo_smon.h"
+#include "adi_apollo_bmem.h"
 #include "adi_apollo_cfg.h"
 #include "adi_apollo_sysclk_cond.h"
 #include "adi_apollo_hal.h"
@@ -217,6 +195,14 @@ struct ad9088_phy {
 	struct no_os_gpio_desc *triq_req_gpio;
 	struct no_os_gpio_desc *reset_gpio;
 
+	/*
+	 * Per-link LID storage. struct jesd204_link carries lane_ids as a bare
+	 * pointer with no backing store, and axi_jesd204_tx_apply_config() reads it
+	 * long after link_init() returns, so it has to live as long as the device.
+	 * One row per link id, so it can be indexed by lnk->link_id directly.
+	 */
+	uint8_t lane_ids[FRAMER_LINK_B1_RX + 1][ADI_APOLLO_JESD_MAX_LANES_PER_SIDE];
+
 	bool is_initialized;
 	bool spi_3wire_en;
 	bool trig_sync_en;
@@ -224,7 +210,7 @@ struct ad9088_phy {
 
 	/* Read by ad9088_set_fnco_freq() as the FNCO main phase offset. */
 	long long fnco_phase[NUM_RXTX][ADI_APOLLO_NUM_SIDES]
-	[MAX_NUM_CHANNELIZER];
+			    [MAX_NUM_CHANNELIZER];
 
 	bool cnco_dual_modulus_mode_en;
 	bool fnco_dual_modulus_mode_en;
@@ -288,6 +274,7 @@ int ad9088_check_apollo_error(int ret, const char *api_name);
 uint8_t ad9088_to_link(uint8_t linkid);
 int ad9088_inspect_jrx_link_all(struct ad9088_phy *phy);
 int ad9088_inspect_jtx_link_all(struct ad9088_phy *phy);
+int ad9088_link_status_dump(struct ad9088_phy *phy);
 void ad9088_print_link_phase(struct ad9088_phy *phy, struct jesd204_link *lnk);
 void ad9088_print_sysref_phase(struct ad9088_phy *phy);
 int ad9088_jesd_tx_link_status_print(struct ad9088_phy *phy,
@@ -309,7 +296,7 @@ int ad9088_mcs_tracking_cal_setup(struct ad9088_phy *phy,
 				  uint32_t mcs_track_decimation,
 				  uint16_t initialize_track_cal);
 
-/* NCO (Numerically Controlled Oscillator) control -- ad9088.c */
+/* NCO (Numerically Controlled Oscillator) control -- Step 6 */
 int adi_ad9088_calc_nco_ftw(struct ad9088_phy *phy, uint64_t freq,
 			    int64_t nco_shift, uint32_t div, uint32_t bits,
 			    uint64_t *ftw, uint64_t *frac_a, uint64_t *frac_b);
@@ -325,7 +312,7 @@ int ad9088_set_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 int ad9088_get_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 			 uint8_t side, uint8_t fddc_num, int64_t *freq_hz);
 
-/* NCO test tones and datapath loopback -- ad9088_runtime.c */
+/* NCO test tones and datapath loopback -- Step 9 (partial) */
 int ad9088_set_cnco_test_tone(struct ad9088_phy *phy,
 			      adi_apollo_terminal_e terminal, uint8_t side,
 			      uint8_t cddc_num, bool enable, uint16_t offset);

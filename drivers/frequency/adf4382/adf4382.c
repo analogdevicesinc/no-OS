@@ -1457,9 +1457,9 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 			ldwin_pw = 1;
 	}
 
-	pr_debug("VCO=%llu PFD=%llu RFout_div=%u N=%u FRAC1=%u FRAC2=%u MOD2=%u\n",
-		 vco, pfd_freq, 1 << clkout_div, n_int,
-		 frac1_word, frac2_word, mod2_word);
+	pr_info("VCO=%llu PFD=%llu RFout_div=%u N=%u FRAC1=%u FRAC2=%u MOD2=%u\n",
+		vco, pfd_freq, 1 << clkout_div, n_int,
+		frac1_word, frac2_word, mod2_word);
 
 	if (frac2_word) {
 		ret = adf4382_spi_update_bits(dev, 0x28, ADF4382_VAR_MOD_EN_MSK,
@@ -1574,7 +1574,15 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 	if (ret)
 		return ret;
 
-	ret = adf4382_spi_write(dev, 0x38, ADF4382_VCO_CAL_VTUNE);
+	ret = adf4382_spi_update_bits(dev, 0x38, ADF4382_CAL_VTUNE_TO_LSB_MSK,
+				      no_os_field_prep(ADF4382_CAL_VTUNE_TO_LSB_MSK,
+						      ADF4382_VCO_CAL_VTUNE));
+	if (ret)
+		return ret;
+
+	ret = adf4382_spi_update_bits(dev, 0x39, ADF4382_CAL_VTUNE_TO_MSB_MSK,
+				      no_os_field_prep(ADF4382_CAL_VTUNE_TO_MSB_MSK,
+						      ADF4382_VCO_CAL_VTUNE >> 8));
 	if (ret)
 		return ret;
 
@@ -1629,9 +1637,9 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 
 	locked = no_os_field_get(val, ADF4382_LOCKED_MSK);
 
-	pr_debug("PLL %s, REF %s\n",
-		 val & NO_OS_BIT(0) ? "Locked" : "Unlocked",
-		 val & NO_OS_BIT(3) ? "OK" : "Error");
+	pr_info("PLL %s, REF %s\n",
+		val & NO_OS_BIT(0) ? "Locked" : "Unlocked",
+		val & NO_OS_BIT(3) ? "OK" : "Error");
 
 	if (!locked)
 		return -EIO;

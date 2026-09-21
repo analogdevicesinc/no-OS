@@ -1,35 +1,9 @@
-/***************************************************************************//**
- *   @file   ad9088_jesd204_fsm.c
- *   @brief  JESD204 FSM support for the AD9088 driver.
- *   @author CHegbeli (ciprian.hegbeli@analog.com)
-********************************************************************************
- * Copyright 2026(c) Analog Devices, Inc.
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * AD9088 JESD204 FSM support
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution.
- *
- * 3. Neither the name of Analog Devices, Inc. nor the names of its
- *    contributors may be used to endorse or promote products derived from this
- *    software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
- * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
- * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*******************************************************************************/
+ * Copyright 2026 Analog Devices Inc.
+ */
 
 #include <string.h>
 
@@ -61,6 +35,7 @@ static int ad9088_jesd204_link_init(struct jesd204_dev *jdev,
 	adi_apollo_jesd_rx_cfg_t *jrx;
 	uint8_t sideIdx, linkIdx;
 	unsigned long lane_rate_kbps;
+	unsigned int i;
 	int ret;
 
 	switch (reason) {
@@ -115,6 +90,18 @@ static int ad9088_jesd204_link_init(struct jesd204_dev *jdev,
 			phy->profile.dac_cfg[sideIdx].dac_sampling_rate_Hz;
 		lnk->sample_rate_div =
 			jrx->rx_link_cfg[linkIdx].link_total_ratio;
+
+		/*
+		 * LIDs, which nothing else fills in: struct jesd204_link carries
+		 * lane_ids as a bare pointer, and axi_jesd204_tx_apply_config() reads
+		 * it when it builds the ILAS. Left NULL it is dereferenced anyway, and
+		 * on a target where address 0 is a live peripheral that silently ships
+		 * whatever that register holds as the lane's LID.
+		 */
+		for (i = 0; i < lnk->num_lanes &&
+		     i < ADI_APOLLO_JESD_MAX_LANES_PER_SIDE; i++)
+			phy->lane_ids[lnk->link_id][i] = i;
+		lnk->lane_ids = phy->lane_ids[lnk->link_id];
 		break;
 	case FRAMER_LINK_A0_RX:
 	case FRAMER_LINK_A1_RX:
@@ -157,6 +144,18 @@ static int ad9088_jesd204_link_init(struct jesd204_dev *jdev,
 			phy->profile.adc_cfg[sideIdx].adc_sampling_rate_Hz;
 		lnk->sample_rate_div =
 			jtx->tx_link_cfg[linkIdx].link_total_ratio;
+
+		/*
+		 * LIDs, which nothing else fills in: struct jesd204_link carries
+		 * lane_ids as a bare pointer, and axi_jesd204_tx_apply_config() reads
+		 * it when it builds the ILAS. Left NULL it is dereferenced anyway, and
+		 * on a target where address 0 is a live peripheral that silently ships
+		 * whatever that register holds as the lane's LID.
+		 */
+		for (i = 0; i < lnk->num_lanes &&
+		     i < ADI_APOLLO_JESD_MAX_LANES_PER_SIDE; i++)
+			phy->lane_ids[lnk->link_id][i] = i;
+		lnk->lane_ids = phy->lane_ids[lnk->link_id];
 		break;
 	default:
 		return -EINVAL;
@@ -287,12 +286,12 @@ static int ad9088_jesd204_link_setup(struct jesd204_dev *jdev,
 
 	ret = adi_apollo_clk_mcs_dyn_sync_sequence_run(device);
 	ret = ad9088_check_apollo_error(ret,
-					"adi_apollo_clk_mcs_dyn_sync_sequence_run");
+			"adi_apollo_clk_mcs_dyn_sync_sequence_run");
 	if (ret)
 		return ret;
 	ret = adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run(device);
 	ret = ad9088_check_apollo_error(ret,
-					"adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run");
+			"adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run");
 	if (ret)
 		return ret;
 
@@ -324,6 +323,7 @@ static int ad9088_jesd204_setup_stage1(struct jesd204_dev *jdev,
 	uint32_t nyquist_zone = phy->rx_nyquist_zone[0][0] + 1;
 	adi_apollo_sysclock_cond_cfg_e cc_cal_cfg;
 	adi_apollo_init_cal_cfg_e init_cal_cfg;
+	uint8_t is_adc_nvm_fused = 0;
 	uint16_t jrx_phase_adjust;
 	int ret;
 
@@ -393,9 +393,28 @@ static int ad9088_jesd204_setup_stage1(struct jesd204_dev *jdev,
 	if (ret)
 		return ret;
 
-	/* ADC calibration - warmboot/NVM paths not supported yet in no-OS */
-	init_cal_cfg = ADI_APOLLO_INIT_CAL_ENABLED;
-	pr_info("Run ADC cal from scratch (can take up to 100 secs)...\n");
+	/*
+	 * ADC calibration. Mirror the Linux ad9088 driver exactly: read the
+	 * ADC NVM cal-data fuse and pick warmboot-from-NVM if the part was
+	 * factory-fused, otherwise run the foreground cal from scratch.
+	 * Warmboot-from-user (Linux's cal_data_loaded_from_fw branch) is not
+	 * supported in no-OS, so we always take the fuse-read path here.
+	 * The fuse value and chosen mode are logged so a hardware run tells us
+	 * which path this board actually takes.
+	 */
+	ret = adi_apollo_hal_bf_get(device, BF_ADC_NVM_CALDATA_FUSED_INFO,
+				    &is_adc_nvm_fused, 1);
+	ret = ad9088_check_apollo_error(ret, "adi_apollo_hal_bf_get(NVM fused)");
+	if (ret)
+		return ret;
+
+	if (is_adc_nvm_fused)
+		init_cal_cfg = ADI_APOLLO_INIT_CAL_ENABLED_WARMBOOT_FROM_NVM;
+	else
+		init_cal_cfg = ADI_APOLLO_INIT_CAL_ENABLED;
+
+	pr_info("ADC NVM fused = %d; run ADC cal from %s (can take up to 100 secs)...\n",
+		is_adc_nvm_fused, is_adc_nvm_fused ? "NVM" : "scratch");
 
 	ret = adi_apollo_adc_init_cal_start(device, adc_cal_chans, init_cal_cfg);
 	ret = ad9088_check_apollo_error(ret, "adi_apollo_adc_init_cal_start");
@@ -447,7 +466,7 @@ static int ad9088_jesd204_setup_stage2(struct jesd204_dev *jdev,
 
 	ret = adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run(device);
 	ret = ad9088_check_apollo_error(ret,
-					"adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run");
+			"adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run");
 	if (ret)
 		return ret;
 
@@ -977,25 +996,25 @@ static int ad9088_jesd204_post_setup_stage2(struct jesd204_dev *jdev,
 		ret = adi_apollo_clk_mcs_sync_trig_map(device, ADI_APOLLO_RX_TX_ALL,
 						       ADI_APOLLO_TRIG_PIN_A0);
 		ret = ad9088_check_apollo_error(ret,
-						"adi_apollo_clk_mcs_sync_trig_map");
+				"adi_apollo_clk_mcs_sync_trig_map");
 		if (ret)
 			return ret;
 
 		/* Resync the Rx and Tx dig only during trig sync */
 		ret = adi_apollo_clk_mcs_trig_sync_enable(device, 0);
 		ret = ad9088_check_apollo_error(ret,
-						"adi_apollo_clk_mcs_trig_sync_enable");
+				"adi_apollo_clk_mcs_trig_sync_enable");
 		if (ret)
 			return ret;
 		ret = adi_apollo_clk_mcs_trig_reset_disable(device);
 		ret = ad9088_check_apollo_error(ret,
-						"adi_apollo_clk_mcs_trig_reset_disable");
+				"adi_apollo_clk_mcs_trig_reset_disable");
 		if (ret)
 			return ret;
 
 		ret = adi_apollo_clk_mcs_trig_reset_dsp_enable(device);
 		ret = ad9088_check_apollo_error(ret,
-						"adi_apollo_clk_mcs_trig_reset_dsp_enable");
+				"adi_apollo_clk_mcs_trig_reset_dsp_enable");
 		if (ret)
 			return ret;
 
@@ -1007,7 +1026,7 @@ static int ad9088_jesd204_post_setup_stage2(struct jesd204_dev *jdev,
 		 */
 		ret = adi_apollo_clk_mcs_trig_sync_enable(device, 1);
 		ret = ad9088_check_apollo_error(ret,
-						"adi_apollo_clk_mcs_trig_sync_enable");
+				"adi_apollo_clk_mcs_trig_sync_enable");
 		if (ret)
 			return ret;
 	}
@@ -1086,14 +1105,14 @@ static int ad9088_jesd204_post_setup_stage4(struct jesd204_dev *jdev,
 						    BF_TRIGGER_SYNC_DONE_A0_INFO(MCS_SYNC_MCSTOP0),
 						    1000000, 100);
 		ret = ad9088_check_apollo_error(ret,
-						"adi_apollo_hal_bf_wait_to_set");
+				"adi_apollo_hal_bf_wait_to_set");
 		if (ret)
 			return ret;
 		ret = adi_apollo_clk_mcs_trig_phase_get(device,
 							ADI_APOLLO_TRIG_PIN_A0,
 							&phase, &phase1);
 		ret = ad9088_check_apollo_error(ret,
-						"adi_apollo_clk_mcs_trig_phase_get");
+				"adi_apollo_clk_mcs_trig_phase_get");
 		if (ret)
 			return ret;
 
@@ -1133,12 +1152,12 @@ static int ad9088_jesd204_post_setup_stage4(struct jesd204_dev *jdev,
 
 		ret = adi_apollo_clk_mcs_trig_sync_enable(device, 0);
 		ret = ad9088_check_apollo_error(ret,
-						"adi_apollo_clk_mcs_trig_sync_enable");
+				"adi_apollo_clk_mcs_trig_sync_enable");
 		if (ret)
 			return ret;
 		ret = adi_apollo_clk_mcs_trig_reset_disable(device);
 		ret = ad9088_check_apollo_error(ret,
-						"adi_apollo_clk_mcs_trig_reset_disable");
+				"adi_apollo_clk_mcs_trig_reset_disable");
 		if (ret)
 			return ret;
 	}

@@ -42,6 +42,9 @@
 #include "no_os_axi_io.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+#include "altera_gts_xcvr.h"
+#endif
 
 #define JESD204_TX_REG_VERSION			0x00
 #define JESD204_TX_REG_MAGIC			0x0c
@@ -65,6 +68,7 @@
 #define JESD204_TX_REG_SYSREF_STATUS	0x108
 
 #define JESD204_TX_REG_CONF0			0x210
+
 
 #define JESD204_TX_REG_LINK_CONF4		0x21C
 
@@ -130,6 +134,7 @@ static int axi_jesd_ext_reset(struct no_os_gpio_desc *reset,
 	pr_err("GT reset-done timeout\n");
 	return -ETIMEDOUT;
 }
+
 
 /**
  * @brief JESD204 TX AXI Data Write.
@@ -472,7 +477,22 @@ int32_t axi_jesd204_tx_apply_config(struct axi_jesd204_tx *jesd,
 			if (i >= config->num_lanes)
 				i = 0;
 
-			lane_id = config->lane_ids[i++];
+			/*
+			 * lane_ids has no backing store in struct jesd204_link, so a
+			 * device driver that forgets it leaves a null pointer here. Fall
+			 * back to the physical index rather than dereferencing it: on a
+			 * target where address 0 is a live peripheral the read succeeds
+			 * and ships a bogus LID, which the far end reports as a bad ILAS
+			 * checksum rather than as a fault.
+			 */
+			if (config->lane_ids) {
+				lane_id = config->lane_ids[i++];
+			} else {
+				lane_id = lane;
+				if (lane == 0)
+					pr_warning("%s: link has no lane_ids, using physical lane index as LID\n",
+						   jesd->name);
+			}
 			axi_jesd204_tx_set_lane_ilas(jesd, config, lane_id, lane);
 		}
 	}
@@ -603,6 +623,19 @@ static int axi_jesd204_tx_jesd204_link_pre_setup(struct jesd204_dev *jdev,
 			 __func__, lnk->link_id, lane_rate);
 	}
 
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+#endif
+
+	/*
+	 * Released here, at LINK_PRE_SETUP, and deliberately earlier than the
+	 * receive side. The converter calibrates its own deframer against this
+	 * transmitter during CLOCKS_ENABLE, so the lanes have to be running by
+	 * then: moving this to LINK_SETUP, behind the reference-clock delay and
+	 * the reset poll, made adi_apollo_serdes_jrx_init_cal fail with -85 and
+	 * left every link in CGS with SYNC asserted.
+	 */
+	altera_gts_xcvr_reset(jesd->name, jesd->xcvr_base);
+
 	return JESD204_STATE_CHANGE_DONE;
 }
 
@@ -626,6 +659,15 @@ static int axi_jesd204_tx_jesd204_link_setup(struct jesd204_dev *jdev,
 
 	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
 		 lnk->link_id, jesd204_state_op_reason_str(reason));
+
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+	ret = altera_gts_refclk_setup(jesd->refclk_ready, jesd->gts_pll_base);
+	if (ret) {
+		pr_err("%s: Link%u GTS refclk setup failed (%d)\n",
+		       __func__, lnk->link_id, ret);
+		return ret;
+	}
+#endif
 
 	if (jesd->gt_reset_pll)
 		axi_jesd_ext_reset(jesd->gt_reset_pll, jesd->gt_reset_done);
@@ -929,6 +971,14 @@ int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
 		no_os_gpio_direction_output(jesd->gt_reset_dp, NO_OS_GPIO_LOW);
 	if (jesd->gt_reset_done)
 		no_os_gpio_direction_input(jesd->gt_reset_done);
+
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+	/* Optional Intel GTS refclk bring-up; driven at JESD204 link setup. */
+	if (init->refclk_ready)
+		no_os_gpio_get_optional(&jesd->refclk_ready, init->refclk_ready);
+	jesd->gts_pll_base = init->gts_pll_base;
+	jesd->xcvr_base = init->xcvr_base;
+#endif
 
 	ret = jesd204_dev_register(&jesd->jdev, &jesd204_axi_jesd204_tx_init);
 	if (ret)

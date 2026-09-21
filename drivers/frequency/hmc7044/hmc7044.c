@@ -1387,7 +1387,16 @@ static int hmc7044_jesd204_link_pre_setup(struct jesd204_dev *jdev,
 
 			hmc7044_clk_round_rate(hmc, hmc->jdev_lmfc_lemc_gcd, &rate);
 
-			if (rate == (long)hmc->jdev_lmfc_lemc_gcd)
+			/*
+			 * A 204C LEMC can be a fractional number of Hz (link
+			 * clock / 32; e.g. 156.25 MHz / 32 = 4882812.5 Hz), so
+			 * the rate arrives here truncated while round_rate()
+			 * rounds the same divider to the nearest Hz. Requiring
+			 * exact equality rejects a divider that is in fact
+			 * exact, hence the 1 Hz allowance.
+			 */
+			if (rate >= hmc->jdev_lmfc_lemc_gcd - 1ULL &&
+			    rate <= hmc->jdev_lmfc_lemc_gcd + 1ULL)
 				ret = hmc7044_clk_set_rate(hmc, hmc->channels[i].num, hmc->jdev_lmfc_lemc_gcd);
 			else
 				ret = -EINVAL;

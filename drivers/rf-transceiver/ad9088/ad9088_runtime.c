@@ -1,35 +1,9 @@
-/***************************************************************************//**
- *   @file   ad9088_runtime.c
- *   @brief  Runtime control (NCO test tones, loopback) for AD9088.
- *   @author CHegbeli (ciprian.hegbeli@analog.com)
-********************************************************************************
- * Copyright 2026(c) Analog Devices, Inc.
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * AD9088 runtime control: NCO test tones and datapath loopback
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution.
- *
- * 3. Neither the name of Analog Devices, Inc. nor the names of its
- *    contributors may be used to endorse or promote products derived from this
- *    software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
- * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
- * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*******************************************************************************/
+ * Copyright 2026 Analog Devices Inc.
+ */
 
 #include "ad9088.h"
 #include "no_os_util.h"
@@ -248,13 +222,13 @@ static int ad9088_device_loopback0(struct ad9088_phy *phy, uint8_t side)
 
 	ret = adi_apollo_loopback_lb0_read_ptr_rst_set(device, select_adc, 2);
 	ret = ad9088_check_apollo_error(ret,
-					"adi_apollo_loopback_lb0_read_ptr_rst_set");
+			"adi_apollo_loopback_lb0_read_ptr_rst_set");
 	if (ret)
 		return ret;
 
 	ret = adi_apollo_loopback_lb0_write_ptr_rst_set(device, sides, 2);
 	ret = ad9088_check_apollo_error(ret,
-					"adi_apollo_loopback_lb0_write_ptr_rst_set");
+			"adi_apollo_loopback_lb0_write_ptr_rst_set");
 	if (ret)
 		return ret;
 
@@ -266,13 +240,13 @@ static int ad9088_device_loopback0(struct ad9088_phy *phy, uint8_t side)
 
 	ret = adi_apollo_loopback_lb0_rx_enable_set(device, sides, 1);
 	ret = ad9088_check_apollo_error(ret,
-					"adi_apollo_loopback_lb0_rx_enable_set");
+			"adi_apollo_loopback_lb0_rx_enable_set");
 	if (ret)
 		return ret;
 
 	ret = adi_apollo_loopback_lb0_tx_enable_set(device, select_adc, 1);
 	ret = ad9088_check_apollo_error(ret,
-					"adi_apollo_loopback_lb0_tx_enable_set");
+			"adi_apollo_loopback_lb0_tx_enable_set");
 	if (ret)
 		return ret;
 
@@ -308,7 +282,7 @@ static int ad9088_device_loopback1(struct ad9088_phy *phy, uint8_t side)
 
 	ret = adi_apollo_loopback_lb1_cduc_enable_set(device, lb1_cducs, 1);
 	ret = ad9088_check_apollo_error(ret,
-					"adi_apollo_loopback_lb1_cduc_enable_set");
+			"adi_apollo_loopback_lb1_cduc_enable_set");
 	if (ret)
 		return ret;
 
@@ -350,13 +324,13 @@ static int ad9088_device_loopback_disable(struct ad9088_phy *phy, uint8_t side)
 		ret = adi_apollo_loopback_lb0_tx_enable_set(device, select_adc,
 				0);
 		ret = ad9088_check_apollo_error(ret,
-						"adi_apollo_loopback_lb0_tx_enable_set");
+				"adi_apollo_loopback_lb0_tx_enable_set");
 		if (ret)
 			return ret;
 
 		ret = adi_apollo_loopback_lb0_rx_enable_set(device, sides, 0);
 		ret = ad9088_check_apollo_error(ret,
-						"adi_apollo_loopback_lb0_rx_enable_set");
+				"adi_apollo_loopback_lb0_rx_enable_set");
 		if (ret)
 			return ret;
 		break;
@@ -364,20 +338,20 @@ static int ad9088_device_loopback_disable(struct ad9088_phy *phy, uint8_t side)
 		ret = adi_apollo_loopback_lb1_cduc_enable_set(device, lb1_cducs,
 				0);
 		ret = ad9088_check_apollo_error(ret,
-						"adi_apollo_loopback_lb1_cduc_enable_set");
+				"adi_apollo_loopback_lb1_cduc_enable_set");
 		if (ret)
 			return ret;
 
 		ret = adi_apollo_loopback_lb1_enable_set(device, sides, 0);
 		ret = ad9088_check_apollo_error(ret,
-						"adi_apollo_loopback_lb1_enable_set");
+				"adi_apollo_loopback_lb1_enable_set");
 		if (ret)
 			return ret;
 
 		ret = adi_apollo_loopback_lb1_blend_set(device, lb1_cducs,
 							ADI_APOLLO_LB1_BLEND_DISABLE);
 		ret = ad9088_check_apollo_error(ret,
-						"adi_apollo_loopback_lb1_blend_set");
+				"adi_apollo_loopback_lb1_blend_set");
 		if (ret)
 			return ret;
 		break;

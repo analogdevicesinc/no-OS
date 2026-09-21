@@ -42,11 +42,6 @@ target_include_directories(ad9088 PUBLIC
 include(${NO_OS_DIR}/drivers/rf-transceiver/ad9088/ad9088_firmware.cmake)
 ad9088_add_firmware(ad9088 PROFILE "${CONFIG_AD9088_PROFILE}")
 
-# ad9088's app and the Apollo/xilinx drivers it uses are SDT-clean, so opt in
-# to the Vitis 2025+ SDT ABI when the BSP is SDT. Other projects keep the
-# classic ABI until individually validated (see config_xilinx_sdk).
-set(NOOS_XILINX_SDT ON)
-
 config_platform_sdk(ad9088)
 add_flash_target(ad9088)
 post_build_config(ad9088)

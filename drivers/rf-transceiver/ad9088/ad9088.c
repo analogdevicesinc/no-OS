@@ -1,35 +1,9 @@
-/***************************************************************************//**
- *   @file   ad9088.c
- *   @brief  Implementation of the AD9088/AD9084 (Apollo) MxFE driver.
- *   @author CHegbeli (ciprian.hegbeli@analog.com)
-********************************************************************************
- * Copyright 2022-2026(c) Analog Devices, Inc.
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Driver for AD9088 and similar mixed signal front end (MxFE®)
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution.
- *
- * 3. Neither the name of Analog Devices, Inc. nor the names of its
- *    contributors may be used to endorse or promote products derived from this
- *    software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
- * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
- * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*******************************************************************************/
+ * Copyright 2022 Analog Devices Inc.
+ */
 
 #include "ad9088.h"
 #include "no_os_delay.h"
@@ -41,6 +15,8 @@
 #include "adi_apollo_startup.h"
 #include "adi_apollo_device.h"
 #include "adi_apollo_mailbox.h"
+#include "adi_apollo_arm.h"
+#include "adi_apollo_bf_custom.h"
 
 #define INDIRECT_REG_TEST_ADDR  (0x60366045)
 #define ARM_REG_TEST_BASE_ADDR  (0x20000000U)
@@ -326,7 +302,7 @@ int ad9088_set_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 	fnco_phase = phy->fnco_phase[terminal][side][fddc_num];
 	config.main_phase_inc = ftw;
 	config.main_phase_offset = no_os_div_s64(fnco_phase * 14073748835533,
-				   18000LL);
+						 18000LL);
 	config.drc_phase_inc_frac_a = frac_a;
 	config.drc_phase_inc_frac_b = frac_b;
 
@@ -375,8 +351,8 @@ int ad9088_get_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 		nco = &phy->profile.tx_path[side].tx_fduc[fddc_pi].nco[0];
 
 		ret = adi_apollo_cduc_interp_bf_to_val(&phy->ad9088,
-						       phy->profile.tx_path[side].tx_cduc[cddc_pi].drc_ratio,
-						       &cddc_dcm);
+			phy->profile.tx_path[side].tx_cduc[cddc_pi].drc_ratio,
+			&cddc_dcm);
 		ret = ad9088_check_apollo_error(ret,
 						"adi_apollo_cduc_interp_bf_to_val");
 		f = phy->profile.dac_cfg[side].dac_sampling_rate_Hz;
@@ -384,8 +360,8 @@ int ad9088_get_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 		nco = &phy->profile.rx_path[side].rx_fddc[fddc_pi].nco[0];
 
 		ret = adi_apollo_cddc_dcm_bf_to_val(&phy->ad9088,
-						    phy->profile.rx_path[side].rx_cddc[cddc_pi].drc_ratio,
-						    &cddc_dcm);
+			phy->profile.rx_path[side].rx_cddc[cddc_pi].drc_ratio,
+			&cddc_dcm);
 		ret = ad9088_check_apollo_error(ret,
 						"adi_apollo_cddc_dcm_bf_to_val");
 		f = phy->profile.adc_cfg[side].adc_sampling_rate_Hz;
@@ -724,6 +700,135 @@ static const char *const ad9088_jrx_204c_states[] = {
 };
 
 /**
+ * @brief Dump every JESD204 link, with per-lane status.
+ * @param phy - The device structure.
+ * @return 0 on success, negative error code otherwise.
+ *
+ * The on-demand counterpart of ad9088_inspect_j{r,t}x_link_all(), which the FSM
+ * calls before the links are up and which therefore reports parameters only.
+ * Port of the Linux driver's debugfs status dump: it walks all four links per
+ * direction, skips the ones the profile leaves unconfigured, and reports every
+ * lane the side has rather than only the ones the active link declares -- a lane
+ * that should be idle but is not is exactly what this is for.
+ *
+ * Lane indices here are physical, not logical: they are not run through the
+ * link's lane_xbar the way ad9088_jesd_rx_link_status_print() does.
+ */
+int ad9088_link_status_dump(struct ad9088_phy *phy)
+{
+	struct adi_apollo_device_t *device = &phy->ad9088;
+	adi_apollo_jesd_rx_inspect_t jrx_status;
+	adi_apollo_jesd_tx_inspect_t jtx_status;
+	adi_apollo_jesd_rx_link_cfg_t *rl;
+	uint16_t links[] = {
+		ADI_APOLLO_LINK_A0, ADI_APOLLO_LINK_A1,
+		ADI_APOLLO_LINK_B0, ADI_APOLLO_LINK_B1
+	};
+	const char *const links_str[] = { "A0", "A1", "B0", "B1" };
+	uint16_t stat, l_stat;
+	uint32_t l;
+	unsigned int i;
+	int ret;
+
+	for (l = 0; l < NO_OS_ARRAY_SIZE(links); l++) {
+		ret = adi_apollo_jrx_link_inspect(device, links[l], &jrx_status);
+		ret = ad9088_check_apollo_error(ret, "adi_apollo_jrx_link_inspect");
+		if (ret)
+			return ret;
+
+		/* np_minus1 == 0 means Np=1, i.e. a link the profile never set up. */
+		if (!jrx_status.np_minus1)
+			continue;
+
+		pr_info("JRX ADI_APOLLO_LINK_%s: JESD204%c Subclass=%c L=%d M=%d "
+			"F=%d S=%d Np=%d CS=%d link_en=%-8s\n",
+			links_str[l],
+			jrx_status.ver == ADI_APOLLO_JESD_204C ? 'C' : 'B',
+			jrx_status.subclass ? '1' : '0',
+			jrx_status.l_minus1 + 1, jrx_status.m_minus1 + 1,
+			jrx_status.f_minus1 + 1, jrx_status.s_minus1 + 1,
+			jrx_status.np_minus1 + 1, jrx_status.cs,
+			jrx_status.link_en ? "Enabled" : "Disabled");
+
+		ret = adi_apollo_jrx_link_status_get(&phy->ad9088, links[l], &stat);
+		if (ret)
+			return -EFAULT;
+
+		/*
+		 * Only the lanes the link actually uses, taken through its crossbar.
+		 * Walking all ADI_APOLLO_JESD_MAX_LANES_PER_SIDE of them the way the
+		 * Linux debugfs dump does buries the two that matter under ten idle
+		 * ones reporting "NOT Ready", which is their correct state.
+		 */
+		rl = &phy->profile.jrx[l / 2].rx_link_cfg[l % 2];
+
+		for (i = 0; i < jrx_status.l_minus1 + 1u &&
+		     i < ADI_APOLLO_JESD_MAX_LANES_PER_SIDE; i++) {
+			uint8_t phys = rl->lane_xbar[i];
+
+			if (jrx_status.ver == ADI_APOLLO_JESD_204C) {
+				ret = adi_apollo_jrx_j204c_lane_status_get(&phy->ad9088,
+						links[l], phys, &l_stat);
+				if (ret)
+					return -EFAULT;
+				pr_info("    Lane%u@%u status: %s\n", i, phys,
+					ad9088_jrx_204c_states[l_stat & 0x7]);
+			} else {
+				ret = adi_apollo_jrx_j204b_lane_status_get(&phy->ad9088,
+						links[l], phys, &l_stat);
+				if (ret)
+					return -EFAULT;
+				pr_info("    Lane%u@%u status: %s 0x%X\n", i, phys,
+					(l_stat & 0x3C) == 0x38 ?
+					"Link Ready" : "Link NOT Ready", l_stat);
+			}
+		}
+
+		pr_info("    User status: %s, SYSREF Phase: %s\n",
+			(stat & 0x20) ? "Ready" : "Fail",
+			(stat & 0x40) ? "Locked" : "Unlocked");
+	}
+
+	for (l = 0; l < NO_OS_ARRAY_SIZE(links); l++) {
+		ret = adi_apollo_jtx_link_inspect(device, links[l], &jtx_status);
+		ret = ad9088_check_apollo_error(ret, "adi_apollo_jtx_link_inspect");
+		if (ret)
+			return ret;
+
+		if (!jtx_status.np_minus1)
+			continue;
+
+		pr_info("JTX ADI_APOLLO_LINK_%s: JESD204%c Subclass=%c L=%d M=%d "
+			"F=%d S=%d Np=%d CS=%d link_en=%-8s\n",
+			links_str[l],
+			jtx_status.ver == ADI_APOLLO_JESD_204C ? 'C' : 'B',
+			jtx_status.subclass ? '1' : '0',
+			jtx_status.l_minus1 + 1, jtx_status.m_minus1 + 1,
+			jtx_status.f_minus1 + 1, jtx_status.s_minus1 + 1,
+			jtx_status.np_minus1 + 1, jtx_status.cs,
+			jtx_status.link_en ? "Enabled" : "Disabled");
+
+		ret = adi_apollo_jtx_link_status_get(&phy->ad9088, links[l], &stat);
+		if (ret)
+			return -EFAULT;
+
+		if (jtx_status.ver == ADI_APOLLO_JESD_204C)
+			pr_info("    PLL %s, PHASE %s, MODE %s\n",
+				stat & NO_OS_BIT(5) ? "locked" : "unlocked",
+				stat & NO_OS_BIT(6) ? "established" : "lost",
+				stat & NO_OS_BIT(7) ? "invalid" : "valid");
+		else
+			pr_info("    SYNC %s, PLL %s, PHASE %s, MODE %s\n",
+				stat & NO_OS_BIT(4) ? "deasserted" : "asserted",
+				stat & NO_OS_BIT(5) ? "locked" : "unlocked",
+				stat & NO_OS_BIT(6) ? "established" : "lost",
+				stat & NO_OS_BIT(7) ? "invalid" : "valid");
+	}
+
+	return 0;
+}
+
+/**
  * @brief Print the deframer phase difference for one link.
  *
  * @param phy - The device structure.
@@ -951,6 +1056,7 @@ struct fw_entry {
 };
 
 static const struct fw_entry fw_table[ADI_APOLLO_FW_ID_MAX] = {
+#ifndef CONFIG_AD9088_FW_SET_PROD	/* engineering set: embedded unless PROD-only */
 	[ADI_APOLLO_FW_ID_SECR_BOOT_HDR_BIN] = AD9088_FW_ENTRY(
 		app_signed_encrypted_B_flash_image_0x01030000_bin),
 	[ADI_APOLLO_FW_ID_CORE_0_TYE_FW_BIN] = AD9088_FW_ENTRY(
@@ -959,6 +1065,8 @@ static const struct fw_entry fw_table[ADI_APOLLO_FW_ID_MAX] = {
 		app_signed_encrypted_B_flash_image_0x02000000_bin),
 	[ADI_APOLLO_FW_ID_TYE_OPER_FW_BIN] = AD9088_FW_ENTRY(
 		app_signed_encrypted_B_flash_image_0x21000000_bin),
+#endif
+#ifndef CONFIG_AD9088_FW_SET_ENG	/* production set: embedded unless ENG-only */
 	[ADI_APOLLO_FW_ID_PROD_SECR_BOOT_HDR_BIN] = AD9088_FW_ENTRY(
 		app_signed_encrypted_prod_B_flash_image_0x01030000_bin),
 	[ADI_APOLLO_FW_ID_PROD_CORE_0_TYE_FW_BIN] = AD9088_FW_ENTRY(
@@ -967,6 +1075,7 @@ static const struct fw_entry fw_table[ADI_APOLLO_FW_ID_MAX] = {
 		app_signed_encrypted_prod_B_flash_image_0x02000000_bin),
 	[ADI_APOLLO_FW_ID_PROD_TYE_OPER_FW_BIN] = AD9088_FW_ENTRY(
 		app_signed_encrypted_prod_B_flash_image_0x21000000_bin),
+#endif
 };
 
 /**
@@ -981,9 +1090,9 @@ static const struct fw_entry fw_table[ADI_APOLLO_FW_ID_MAX] = {
  * @param bytes_read - Set to the length of the image, in bytes.
  * @return           - 0 on success, an API_CMS_ERROR_* code otherwise.
  */
-static int32_t ad9088_fw_provider_get(adi_apollo_fw_provider_t *obj,
-				      adi_apollo_startup_fw_id_e fw_id,
-				      uint8_t **byte_arr, uint32_t *bytes_read)
+static int ad9088_fw_provider_get(adi_apollo_fw_provider_t *obj,
+				  adi_apollo_startup_fw_id_e fw_id,
+				  uint8_t **byte_arr, uint32_t *bytes_read)
 {
 	if (fw_id >= ADI_APOLLO_FW_ID_MAX || !fw_table[fw_id].start) {
 		pr_err("Unknown firmware ID %d\n", fw_id);
@@ -1005,8 +1114,8 @@ static int32_t ad9088_fw_provider_get(adi_apollo_fw_provider_t *obj,
  * @param fw_id - Identifies which image is being released, unused.
  * @return      - 0 on success, an API_CMS_ERROR_* code otherwise.
  */
-static int32_t ad9088_fw_provider_close(adi_apollo_fw_provider_t *obj,
-					adi_apollo_startup_fw_id_e fw_id)
+static int ad9088_fw_provider_close(adi_apollo_fw_provider_t *obj,
+				    adi_apollo_startup_fw_id_e fw_id)
 {
 	return API_CMS_ERROR_OK;
 }
@@ -1024,8 +1133,8 @@ static int32_t ad9088_fw_provider_close(adi_apollo_fw_provider_t *obj,
  * @param len     - Transfer length, in bytes.
  * @return        - 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9088_spi_xfer(void *dev_obj, uint8_t *wbuf, uint8_t *rbuf,
-			       uint32_t len)
+static int ad9088_spi_xfer(void *dev_obj, uint8_t *wbuf, uint8_t *rbuf,
+			   uint32_t len)
 {
 	struct ad9088_phy *phy = dev_obj;
 	int ret;
@@ -1054,9 +1163,9 @@ static int32_t ad9088_spi_xfer(void *dev_obj, uint8_t *wbuf, uint8_t *rbuf,
  * @param txn_config      - Vendor transaction configuration, unused.
  * @return                - 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9088_spi_read(void *dev_obj, const uint8_t tx_data[],
-			       uint8_t rx_data[], uint32_t num_tx_rx_bytes,
-			       adi_apollo_hal_txn_config_t *txn_config)
+static int ad9088_spi_read(void *dev_obj, const uint8_t tx_data[],
+			   uint8_t rx_data[], uint32_t num_tx_rx_bytes,
+			   adi_apollo_hal_txn_config_t *txn_config)
 {
 	struct ad9088_phy *phy = dev_obj;
 	uint8_t buf[16];
@@ -1090,7 +1199,7 @@ static int32_t ad9088_spi_read(void *dev_obj, const uint8_t tx_data[],
  * @return             - 0 in case of success, negative error code otherwise.
  */
 static int32_t ad9088_spi_write(void *dev_obj, const uint8_t tx_data[],
-				uint32_t num_tx_bytes, adi_apollo_hal_txn_config_t *txn_config)
+			    uint32_t num_tx_bytes, adi_apollo_hal_txn_config_t *txn_config)
 {
 	struct ad9088_phy *phy = dev_obj;
 	uint8_t buf[16];
@@ -1110,7 +1219,7 @@ static int32_t ad9088_spi_write(void *dev_obj, const uint8_t tx_data[],
  * @param enable    - Level to drive on the pin.
  * @return          - 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9088_reset_pin_ctrl(void *user_data, uint8_t enable)
+static int ad9088_reset_pin_ctrl(void *user_data, uint8_t enable)
 {
 	struct ad9088_phy *phy = user_data;
 
@@ -1124,8 +1233,9 @@ static int32_t ad9088_reset_pin_ctrl(void *user_data, uint8_t enable)
  * @param us        - Delay, in microseconds.
  * @return          - 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9088_udelay(void *user_data, uint32_t us)
+static int ad9088_udelay(void *user_data, unsigned int us)
 {
+	//us = us * 2;
 	no_os_udelay(us);
 	return 0;
 }
@@ -1143,8 +1253,8 @@ static int32_t ad9088_udelay(void *user_data, uint32_t us)
  * @param argp      - Arguments for the format string.
  * @return          - 0 in case of success, negative error code otherwise.
  */
-int32_t ad9088_log_write(void *user_data, int32_t log_type, const char *message,
-			 va_list argp)
+int ad9088_log_write(void *user_data, int32_t log_type, const char *message,
+		     va_list argp)
 {
 	char logMessage[160];
 
@@ -1169,7 +1279,7 @@ int32_t ad9088_log_write(void *user_data, int32_t log_type, const char *message,
 		pr_debug("%s\n", logMessage);
 		break;
 	case ADI_CMS_LOG_API:
-		pr_debug("%s\n", logMessage);
+		pr_debug("%s\n", logMessage);	/* API function-entry trace (LOG_DEBUG only) */
 		break;
 	case ADI_CMS_LOG_ALL:
 		pr_notice("%s\n", logMessage);
@@ -1329,6 +1439,22 @@ static int ad9088_version_info(struct ad9088_phy *phy)
 	if (ret)
 		return ret;
 
+	{
+		uint8_t core0_status = 0, core1_status = 0;
+		adi_apollo_cpu_errors_t cpu_errors;
+
+		adi_apollo_hal_bf_get(device, BF_RAM_BOOT_CORE0_STATUS,
+				      &core0_status, 1);
+		adi_apollo_hal_bf_get(device, BF_RAM_BOOT_CORE1_STATUS,
+				      &core1_status, 1);
+		adi_apollo_arm_err_codes_get(device, &cpu_errors);
+
+		pr_info("Pre-ping: core0=0x%02x core1=0x%02x err_cmd=%d err_sys=%d err_cal=%d\n",
+			core0_status, core1_status,
+			(int)cpu_errors.last_cmd, (int)cpu_errors.system,
+			(int)cpu_errors.track_cal);
+	}
+
 	ping_cmd.echo_data = 0x00000000;
 	ret = adi_apollo_mailbox_ping(device, &ping_cmd, &ping_resp);
 	ret = ad9088_check_apollo_error(ret, "adi_apollo_mailbox_ping");
@@ -1417,7 +1543,7 @@ int ad9088_init(struct ad9088_phy **device,
 		goto error;
 
 	ret = adi_apollo_hal_active_protocol_set(&phy->ad9088,
-			ADI_APOLLO_HAL_PROTOCOL_SPI0);
+						 ADI_APOLLO_HAL_PROTOCOL_SPI0);
 	ret = ad9088_check_apollo_error(ret, "adi_apollo_hal_active_protocol_set");
 	if (ret)
 		goto error_hw_close;
@@ -1433,6 +1559,20 @@ int ad9088_init(struct ad9088_phy **device,
 		pr_err("Register test failed (%d)\n", ret);
 		ret = -EIO;
 		goto error_hw_close;
+	}
+
+	/*
+	 * For non-8t8r (4t4r) profiles the ADC slice mode-switch must be enabled
+	 * before device startup. This mirrors the Linux ad9088 driver, which
+	 * performs this write for every non-8t8r profile prior to
+	 * adi_apollo_startup_execute().
+	 */
+	if (!phy->profile.profile_cfg.is_8t8r) {
+		ret = adi_apollo_adc_mode_switch_enable_set(&phy->ad9088, 1);
+		ret = ad9088_check_apollo_error(ret,
+						"adi_apollo_adc_mode_switch_enable_set");
+		if (ret)
+			goto error_hw_close;
 	}
 
 	ret = adi_apollo_startup_execute(&phy->ad9088, &phy->profile,

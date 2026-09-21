@@ -67,7 +67,7 @@ uint32_t no_os_crc32_be(uint32_t crc, const uint8_t *pdata, size_t nbytes)
 		return crc;
 
 	while (nbytes--) {
-		crc ^= (uint32_t)(*pdata++) << 24;
+		crc ^= (uint32_t)*pdata++ << 24;
 
 		for (i = 0; i < 8; i++)
 			crc = (crc << 1) ^ ((crc & 0x80000000) ?
