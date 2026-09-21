@@ -705,6 +705,95 @@ int adar300x_get_ram_beamstate(struct adar300x_dev *dev, uint8_t beam,
 }
 
 /**
+ * @brief Queues one beamstate onto a beam's FIFO.
+ *
+ * The six bytes must be written in order: the write to the last address is
+ * what commits the beamstate and advances the write pointer. A load onto a
+ * full FIFO is discarded by the device.
+ *
+ * @param dev	 - The device structure.
+ * @param beam	 - Beam index, selects the load address group.
+ * @param values - Eight 6-bit values, delay then attenuation per element.
+ * @return	 - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_load_fifo_beamstate(struct adar300x_dev *dev, uint8_t beam,
+				 const uint8_t *values)
+{
+	uint8_t packed[ADAR300X_PACKED_BEAMSTATE_LEN];
+	uint16_t addr;
+	int ret, i;
+
+	if (!dev || !values)
+		return -EINVAL;
+
+	if (beam >= dev->chip_info->num_beams)
+		return -EINVAL;
+
+	for (i = 0; i < ADAR300X_UNPACKED_BEAMSTATE_LEN; i++)
+		if (values[i] > ADAR300X_RAW_MAX)
+			return -EINVAL;
+
+	adar300x_pack_beamstate(values, packed);
+
+	ret = adar300x_set_page(dev, ADAR300X_PAGE_FIFO);
+	if (ret)
+		return ret;
+
+	addr = ADAR300X_REG_FIFO_LOAD(beam);
+
+	for (i = 0; i < ADAR300X_PACKED_BEAMSTATE_LEN; i++) {
+		ret = adar300x_reg_write(dev, addr + i, packed[i]);
+		if (ret)
+			return ret;
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Reads a beam's FIFO write and read pointers.
+ * @param dev	    - The device structure.
+ * @param beam	    - Beam index.
+ * @param write_ptr - Write pointer, may be NULL.
+ * @param read_ptr  - Read pointer, may be NULL.
+ * @return	    - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_get_fifo_pointers(struct adar300x_dev *dev, uint8_t beam,
+			       uint8_t *write_ptr, uint8_t *read_ptr)
+{
+	uint8_t val;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	if (beam >= dev->chip_info->num_beams)
+		return -EINVAL;
+
+	if (write_ptr) {
+		ret = adar300x_page_reg_read(dev, ADAR300X_PAGE_CONFIG,
+					     ADAR300X_REG_FIFO_WRITE_PTR(beam),
+					     &val);
+		if (ret)
+			return ret;
+
+		*write_ptr = val & ADAR300X_FIFO_PTR_MSK;
+	}
+
+	if (read_ptr) {
+		ret = adar300x_page_reg_read(dev, ADAR300X_PAGE_CONFIG,
+					     ADAR300X_REG_FIFO_READ_PTR(beam),
+					     &val);
+		if (ret)
+			return ret;
+
+		*read_ptr = val & ADAR300X_FIFO_PTR_MSK;
+	}
+
+	return 0;
+}
+
+/**
  * @brief Reads the on-chip ADC.
  *
  * The ADC requires a manual reset pulse before each conversion, and clocking

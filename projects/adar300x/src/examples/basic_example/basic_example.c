@@ -284,6 +284,45 @@ static int adar300x_ram_demo(struct adar300x_dev *dev)
 	return 0;
 }
 
+/*
+ * The FIFO cannot be read back, so the write pointer stands in for the data:
+ * each committed beamstate must advance it by one.
+ */
+static int adar300x_fifo_demo(struct adar300x_dev *dev)
+{
+	const uint8_t values[ADAR300X_UNPACKED_BEAMSTATE_LEN] = {
+		9, 18, 27, 36, 45, 54, 63, 0
+	};
+	uint8_t before, after, read_ptr;
+	const uint8_t loads = 3;
+	int ret, i;
+
+	ret = adar300x_get_fifo_pointers(dev, 0, &before, &read_ptr);
+	if (ret)
+		return ret;
+
+	for (i = 0; i < loads; i++) {
+		ret = adar300x_load_fifo_beamstate(dev, 0, values);
+		if (ret)
+			return ret;
+	}
+
+	ret = adar300x_get_fifo_pointers(dev, 0, &after, &read_ptr);
+	if (ret)
+		return ret;
+
+	pr_info("FIFO beam 0 write pointer %u to %u after %u loads, read %u\n",
+		before, after, loads, read_ptr);
+
+	if (after != before + loads) {
+		pr_err("write pointer %u after %u loads, expected %u\n", after,
+		       loads, before + loads);
+		return -EIO;
+	}
+
+	return 0;
+}
+
 int basic_example_main(void)
 {
 	struct adar300x_dev *dev;
@@ -317,6 +356,10 @@ int basic_example_main(void)
 		goto error_dev;
 
 	ret = adar300x_ram_demo(dev);
+	if (ret)
+		goto error_dev;
+
+	ret = adar300x_fifo_demo(dev);
 	if (ret)
 		goto error_dev;
 

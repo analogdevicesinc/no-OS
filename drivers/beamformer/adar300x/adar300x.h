@@ -119,6 +119,18 @@
 #define ADAR300X_PACKED_BEAMSTATE_LEN		6
 #define ADAR300X_UNPACKED_BEAMSTATE_LEN		8
 
+/*
+ * FIFO. Each beam queues up to 16 beamstates, loaded through its own group of
+ * six addresses on the FIFO page. Writing the sixth address commits the
+ * beamstate and advances the write pointer. The FIFO cannot be read back; the
+ * pointers in 0x050 to 0x057 are the only visible state.
+ */
+#define ADAR300X_REG_FIFO_LOAD(beam)		(0x100 + (beam) * 0x10)
+#define ADAR300X_REG_FIFO_WRITE_PTR(beam)	(0x050 + (beam) * 2)
+#define ADAR300X_REG_FIFO_READ_PTR(beam)	(0x051 + (beam) * 2)
+#define ADAR300X_FIFO_PTR_MSK			NO_OS_GENMASK(5, 0)
+#define ADAR300X_FIFO_STATES_PER_BEAM		16
+
 /* ADC registers, configuration page */
 #define ADAR300X_REG_ADC_CONTROL		0x020
 #define ADAR300X_REG_ADC_CONTROL2		0x021
@@ -419,6 +431,14 @@ int adar300x_set_ram_beamstate(struct adar300x_dev *dev, uint8_t beam,
 /** Read one beamstate back from a beam's RAM page. */
 int adar300x_get_ram_beamstate(struct adar300x_dev *dev, uint8_t beam,
 			       uint8_t state, uint8_t *values);
+
+/** Queue one beamstate onto a beam's FIFO. */
+int adar300x_load_fifo_beamstate(struct adar300x_dev *dev, uint8_t beam,
+				 const uint8_t *values);
+
+/** Read a beam's FIFO write and read pointers. */
+int adar300x_get_fifo_pointers(struct adar300x_dev *dev, uint8_t beam,
+			       uint8_t *write_ptr, uint8_t *read_ptr);
 
 /** Read the on-chip ADC. */
 int adar300x_adc_read(struct adar300x_dev *dev, enum adar300x_adc_input input,
