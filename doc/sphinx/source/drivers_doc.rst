@@ -209,7 +209,7 @@ ETHERNET
    :maxdepth: 1
    :glob:
 
-   drivers/ethernet/*
+   drivers/net/*
 
 NETWORK
 =======
@@ -225,7 +225,7 @@ GYROSCOPES
    :maxdepth: 1
    :glob:
 
-   drivers/gyroscope/*
+   drivers/gyro/*
 
 COLOR
 =====
