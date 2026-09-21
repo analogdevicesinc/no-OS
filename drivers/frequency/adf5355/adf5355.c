@@ -272,7 +272,7 @@ static int32_t adf5355_set_freq(struct adf5355_dev *dev,
 				    ADF5355_REG6_FEEDBACK_FUND(1) |
 				    ADF4356_REG6_RF_OUTB_SEL((dev->dev_id == ADF4356) ?
 						    dev->outb_sel_fund : 0) |
-				    ADF5355_REG6_NEG_BLEED_EN(dev->cp_neg_bleed_en) |
+				    ADF5355_REG6_NEG_BLEED_EN(cp_neg_bleed_en) |
 				    ADF5355_REG6_GATED_BLEED_EN(dev->cp_gated_bleed_en) |
 				    ADF5356_REG6_BLEED_POLARITY(((dev->dev_id == ADF4356)
 						    || (dev->dev_id == ADF5356)) ?
