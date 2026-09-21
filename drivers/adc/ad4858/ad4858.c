@@ -471,7 +471,7 @@ int ad4858_set_chn_softspan(struct ad4858_dev *dev, uint8_t chn,
 
 	val = no_os_field_prep(AD4858_SOFTSPAN_MSK, chn_softspan);
 	ret = ad4858_reg_mask(dev, AD4858_REG_CH_SOFTSPAN(chn), AD4858_SOFTSPAN_MSK,
-			      chn_softspan);
+			      val);
 	if (ret)
 		return ret;
 
