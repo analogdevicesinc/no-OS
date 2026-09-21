@@ -105,7 +105,7 @@ int32_t mcs_gpio_init(struct mcs_gpio_dev **device,
 
 	ret = jesd204_dev_register(&dev->jdev, &jesd204_mcs_gpio_init);
 	if (ret < 0)
-		goto error;
+		goto err_gpio;
 	priv = jesd204_dev_priv(dev->jdev);
 	priv->mcs_gpio = dev;
 
