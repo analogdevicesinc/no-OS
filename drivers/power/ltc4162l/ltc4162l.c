@@ -647,7 +647,7 @@ int ltc4162l_set_vcharge_setting(struct ltc4162l_desc *dev, uint16_t val)
 	if (ret)
 		return ret;
 
-	if (dev->id == ID_LTC4015)
+	if (dev->id == ID_LTC4015) {
 		switch (chem_type) {
 		case 0 ... 3:
 			base_voltage = LTC4015_BASE_VOLTAGE_TYPE1;
@@ -664,10 +664,12 @@ int ltc4162l_set_vcharge_setting(struct ltc4162l_desc *dev, uint16_t val)
 			scale_factor = LTC4015_SCALE_FACTOR_TYPE3;
 			range = LTC4015_RANGE_TYPE3;
 			break;
-		} else
-		dev->info->base_voltage;
-	dev->info->scale_factor;
-	dev->info->range;
+		}
+	} else {
+		base_voltage = dev->info->base_voltage;
+		scale_factor = dev->info->scale_factor;
+		range = dev->info->range;
+	}
 
 	if (dev->id == ID_LTC4162S)
 		cell_count /= 2;
