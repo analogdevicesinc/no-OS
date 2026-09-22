@@ -60,7 +60,10 @@ extern UART_HandleTypeDef huart3;
 #define UART_EXTRA	&adin1140_uart_extra_ip
 
 #define SPI_DEVICE_ID 	1U
-#define SPI_BAUDRATE    13000000
+/* SPI1 kernel clock is PLL2P = 40 MHz (see nucleo-h563zi.ioc); the stm32_spi
+ * driver divides it by the smallest prescaler that keeps SCLK <= this value.
+ * 20 MHz -> /2 -> 20 MHz SCLK. Previously 13 MHz. */
+#define SPI_BAUDRATE    20000000
 #define SPI_OPS         &stm32_spi_ops
 #define SPI_CS          14
 #define SPI_EXTRA       &adin1140_spi_extra_ip

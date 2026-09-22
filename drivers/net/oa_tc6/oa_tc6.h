@@ -218,6 +218,9 @@ struct oa_tc6_frame_buffer {
 	uint32_t len;
 	uint8_t data[CONFIG_OA_CHUNK_BUFFER_SIZE];
 	enum oa_tc6_user_buffer_state state;
+	uint32_t tx_seq; /**< Submission order ticket, Tx only. Used to drain TX
+					  *   frames in the order they were queued regardless of
+					  *   which pool slot they occupy */
 	uint8_t vs;      /**< Vendor Specific. Tx or Rx */
 	uint8_t tsc;     /**< Timestamp capture. 2-bits. Tx Only */
 	bool frame_drop; /**< Frame should be dropped (is invalid). Rx Only */
@@ -279,6 +282,11 @@ struct oa_tc6_desc {
 
 	uint32_t ctrl_tx_credit;
 	uint32_t ctrl_rx_credit;
+
+	/* Monotonic ticket handed to each TX frame at submission (put_tx_frame),
+	 * so frames are transmitted in submission order even when a deferred frame
+	 * leaves a lower pool slot free for a later submission to reuse. */
+	uint32_t tx_seq_next;
 
 	enum oa_tc6_bufst_polling bufst_polling;
 	struct oa_tc6_flags	xfer_flags;

@@ -60,4 +60,16 @@ config ADIN1140_IPERF_UDP_CLIENT_TIME
 	help
 	  Duration of the UDP client test, in seconds.
 
+config ADIN1140_IPERF_UDP_CLIENT_LEN
+	int "iperf UDP client datagram length (bytes)"
+	default 1470
+	depends on ADIN1140_IPERF_LWIP_FREERTOS_EXAMPLE
+	help
+	  UDP payload size of each datagram sent by the client, in bytes -
+	  same meaning as iperf's -l flag (the ~40-byte iperf header is counted
+	  within this value). This is only the default shown at the boot menu;
+	  the length can be overridden at runtime. Clamped to [40, 1470]: 40 is
+	  the iperf header floor and 1470 is the tx-buffer/MSS ceiling (keeps the
+	  frame under the 1500-byte Ethernet MTU).
+
 endmenu

@@ -256,9 +256,6 @@ int oa_tc6_get_tx_frame(struct oa_tc6_desc *desc,
 		if (desc->user_tx_frame_buffer[i].state == OA_BUFF_FREE) {
 			*buffer = &desc->user_tx_frame_buffer[i];
 			desc->user_tx_frame_buffer[i].state = OA_BUFF_TX_BUSY;
-			memset(desc->user_tx_frame_buffer[i].data, 0,
-			       CONFIG_OA_CHUNK_BUFFER_SIZE);
-
 			return 0;
 		}
 	}
@@ -278,6 +275,10 @@ int oa_tc6_put_tx_frame(struct oa_tc6_desc *desc,
 	if (!desc || !buffer)
 		return -EINVAL;
 
+	/* Stamp a monotonically increasing submission ticket so the pump drains
+	 * frames in the order they were queued, not in pool-slot order,
+	 * which aviods out-of-order datagrams. */
+	buffer->tx_seq = desc->tx_seq_next++;
 	buffer->state = OA_BUFF_TX_READY;
 
 	return 0;
@@ -292,15 +293,27 @@ int oa_tc6_put_tx_frame(struct oa_tc6_desc *desc,
 static int oa_tc6_get_first_tx_frame(struct oa_tc6_desc *desc,
 				     struct oa_tc6_frame_buffer **buffer)
 {
-	for (int i = 0; i < OA_TX_FRAME_BUFF_NUM; i++) {
-		if (desc->user_tx_frame_buffer[i].state == OA_BUFF_TX_READY) {
-			*buffer = &desc->user_tx_frame_buffer[i];
+	struct oa_tc6_frame_buffer *oldest = NULL;
 
-			return 0;
-		}
+	/* Return the READY buffer with the lowest submission ticket (tx_seq), i.e.
+	 * the earliest queued frame, so transmission follows submission order
+	 * rather than pool-slot order */
+	for (int i = 0; i < OA_TX_FRAME_BUFF_NUM; i++) {
+		struct oa_tc6_frame_buffer *b = &desc->user_tx_frame_buffer[i];
+
+		if (b->state != OA_BUFF_TX_READY)
+			continue;
+
+		if (!oldest || (b->tx_seq - oldest->tx_seq) & 0x80000000U)
+			oldest = b;
 	}
 
-	return -ENOENT;
+	if (!oldest)
+		return -ENOENT;
+
+	*buffer = oldest;
+
+	return 0;
 }
 
 /**
@@ -451,8 +464,8 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 		frame_len = frame_buffer->len - frame_buffer->index;
 		tx_frame_num_chunks = NO_OS_DIV_ROUND_UP(frame_len, OA_CHUNK_SIZE);
 
-		/* Check if we can fit more chunks into the MACPHY's FIFO */
-		if (!frame_len || chunks_written >= chunks_limit)
+		/* Check if we can fit more chunks into the MACPHY's FIFO. Only fit full frames */
+		if (!frame_len || chunks_written + tx_frame_num_chunks > chunks_limit)
 			break;
 
 		for (i = 0; i < tx_frame_num_chunks; i++) {

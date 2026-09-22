@@ -487,10 +487,13 @@ int adin1140_submit_fifo(struct adin1140_desc *desc,
 	memcpy(&oa_frame->data[frame_offset], eth_buff->payload,
 	       eth_buff->len - ADIN1140_ETH_HDR_LEN);
 
-	if (eth_buff->len < 64)
-		oa_frame->len = 64;
-	else
+	if (eth_buff->len < 60) {
+		/* Pad short frames to the 60-byte minimum */
+		memset(&oa_frame->data[eth_buff->len], 0, 60 - eth_buff->len);
+		oa_frame->len = 60;
+	} else {
 		oa_frame->len = eth_buff->len;
+	}
 
 	oa_frame->vs = 0;
 
@@ -851,6 +854,7 @@ int adin1140_init(struct adin1140_desc **desc,
 
 	oa_param.comm_desc = d->comm_desc;
 	oa_param.prote_spi = true;
+	oa_param.bufst_polling = OA_TC6_FOOTER_POLL;
 	ret = oa_tc6_init(&d->oa_desc, &oa_param);
 	if (ret)
 		goto free_spi;

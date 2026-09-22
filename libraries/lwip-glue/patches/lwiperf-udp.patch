@@ -1,8 +1,8 @@
 diff --git a/src/apps/lwiperf/lwiperf.c b/src/apps/lwiperf/lwiperf.c
-index 26b1e3b..14db5f7 100644
+index 26b1e3b..bdd155a 100644
 --- a/src/apps/lwiperf/lwiperf.c
 +++ b/src/apps/lwiperf/lwiperf.c
-@@ -52,12 +52,15 @@
+@@ -52,12 +52,20 @@
  #include "lwip/apps/lwiperf.h"
  
  #include "lwip/tcp.h"
@@ -10,6 +10,11 @@ index 26b1e3b..14db5f7 100644
  #include "lwip/sys.h"
 +#include "lwip/timeouts.h"
  #include "lwip/inet.h"
++#include "lwip/netif.h"
++#if LWIP_IPV4 && LWIP_ARP
++#include "lwip/etharp.h"
++#include "lwip/ip4.h"
++#endif
  
  #include <string.h>
  
@@ -19,7 +24,7 @@ index 26b1e3b..14db5f7 100644
  #if LWIP_TCP && LWIP_CALLBACK_API
  
  /** Specify the idle timeout (in seconds) after that the test fails */
-@@ -130,6 +133,170 @@ typedef struct _lwiperf_state_tcp {
+@@ -130,6 +138,173 @@ typedef struct _lwiperf_state_tcp {
    ip_addr_t remote_addr;
  } lwiperf_state_tcp_t;
  
@@ -168,12 +173,15 @@ index 26b1e3b..14db5f7 100644
 +  u8_t fin_tries;           /* remaining FIN retransmit attempts */
 +  u8_t in_fin;              /* 1 once the end-of-test FIN phase has begun */
 +  u8_t done;                /* 1 once report delivered / session finished */
++  u8_t started;             /* 0 until the first pacing tick rebases the clock */
++  u16_t arp_ticks;          /* ARP-warmup ticks elapsed before the stream starts */
 +  /* scratch tx buffer: datagram header + client header + filler up to buffer_len */
 +  u8_t txbuf[LWIPERF_UDP_CLIENT_MSS];
 +} lwiperf_state_udp_client_t;
 +
 +static void lwiperf_udp_client_tick(void *arg);
 +static void lwiperf_udp_client_fin_tick(void *arg);
++static void lwiperf_udp_client_arp_tick(void *arg);
 +
 +/** Microsecond-resolution timestamp for jitter/transit measurement.
 + * sys_now() only offers millisecond resolution, which rounds the sub-millisecond
@@ -190,7 +198,7 @@ index 26b1e3b..14db5f7 100644
  /** List of active iperf sessions */
  static lwiperf_state_base_t *lwiperf_all_connections;
  /** A const buffer to send from: we want to measure sending, not copying! */
-@@ -424,8 +591,32 @@ lwiperf_tx_start_impl(const ip_addr_t *remote_ip, u16_t remote_port, lwiperf_set
+@@ -424,8 +599,32 @@ lwiperf_tx_start_impl(const ip_addr_t *remote_ip, u16_t remote_port, lwiperf_set
    tcp_poll(newpcb, lwiperf_tcp_poll, 2U);
    tcp_err(newpcb, lwiperf_tcp_err);
  
@@ -223,7 +231,7 @@ index 26b1e3b..14db5f7 100644
    err = tcp_connect(newpcb, &remote_addr, remote_port, lwiperf_tcp_client_connected);
    if (err != ERR_OK) {
      lwiperf_tcp_close(client_conn, LWIPERF_TCP_ABORTED_LOCAL);
-@@ -742,7 +933,7 @@ static err_t lwiperf_start_tcp_server_impl(const ip_addr_t *local_addr, u16_t lo
+@@ -742,7 +941,7 @@ static err_t lwiperf_start_tcp_server_impl(const ip_addr_t *local_addr, u16_t lo
  
  /**
   * @ingroup iperf
@@ -232,7 +240,7 @@ index 26b1e3b..14db5f7 100644
   *
   * @returns a connection handle that can be used to abort the client
   *          by calling @ref lwiperf_abort()
-@@ -751,7 +942,7 @@ void* lwiperf_start_tcp_client_default(const ip_addr_t* remote_addr,
+@@ -751,7 +950,7 @@ void* lwiperf_start_tcp_client_default(const ip_addr_t* remote_addr,
                                 lwiperf_report_fn report_fn, void* report_arg)
  {
    return lwiperf_start_tcp_client(remote_addr, LWIPERF_TCP_PORT_DEFAULT, LWIPERF_CLIENT,
@@ -241,7 +249,7 @@ index 26b1e3b..14db5f7 100644
  }
  
  /**
-@@ -762,7 +953,8 @@ void* lwiperf_start_tcp_client_default(const ip_addr_t* remote_addr,
+@@ -762,7 +961,8 @@ void* lwiperf_start_tcp_client_default(const ip_addr_t* remote_addr,
   *          by calling @ref lwiperf_abort()
   */
  void* lwiperf_start_tcp_client(const ip_addr_t* remote_addr, u16_t remote_port,
@@ -251,7 +259,7 @@ index 26b1e3b..14db5f7 100644
  {
    err_t ret;
    lwiperf_settings_t settings;
-@@ -788,8 +980,10 @@ void* lwiperf_start_tcp_client(const ip_addr_t* remote_addr, u16_t remote_port,
+@@ -788,8 +988,10 @@ void* lwiperf_start_tcp_client(const ip_addr_t* remote_addr, u16_t remote_port,
    }
    settings.num_threads = htonl(1);
    settings.remote_port = htonl(LWIPERF_TCP_PORT_DEFAULT);
@@ -264,13 +272,13 @@ index 26b1e3b..14db5f7 100644
  
    ret = lwiperf_tx_start_impl(remote_addr, remote_port, &settings, report_fn, report_arg, NULL, &state);
    if (ret == ERR_OK) {
-@@ -835,7 +1029,29 @@ lwiperf_abort(void *lwiperf_session)
+@@ -835,7 +1037,29 @@ lwiperf_abort(void *lwiperf_session)
        i = i->next;
        if (last != NULL) {
          last->next = i;
 +      } else {
 +        lwiperf_all_connections = i;
-       }
++      }
 +#if LWIP_UDP
 +      if (!dealloc->tcp) {
 +        if (dealloc->server) {
@@ -289,12 +297,12 @@ index 26b1e3b..14db5f7 100644
 +          LWIPERF_FREE(lwiperf_state_udp_client_t, udp_cl);
 +        }
 +        continue;
-+      }
+       }
 +#endif
        LWIPERF_FREE(lwiperf_state_tcp_t, dealloc); /* @todo: type? */
      } else {
        last = i;
-@@ -844,4 +1060,614 @@ lwiperf_abort(void *lwiperf_session)
+@@ -844,4 +1068,718 @@ lwiperf_abort(void *lwiperf_session)
    }
  }
  
@@ -632,6 +640,15 @@ index 26b1e3b..14db5f7 100644
 + * caps per-callback catch-up work; it does not limit the offered rate over
 + * time (the remainder is offered on the next tick). */
 +#define LWIPERF_UDP_CLIENT_MAX_BURST 64U
++/** ARP warmup: before the timed stream starts, resolve the peer's (or gateway's)
++ * MAC so the first data datagrams are not dropped while an ARP request is in
++ * flight - the same effect iperf3 gets for free from its TCP control channel.
++ * The tick runs every _MS and re-requests every few ticks until the address is
++ * in the cache or _TICKS elapse (then we start anyway and let any genuine loss
++ * be reported). */
++#define LWIPERF_UDP_ARP_TICK_MS      20U
++#define LWIPERF_UDP_ARP_MAX_TICKS    50U   /* ~1 s worst case */
++#define LWIPERF_UDP_ARP_REREQ_TICKS  5U    /* re-send ARP request every ~100 ms */
 +
 +/** Deliver the client-side report and tear the session down */
 +static void
@@ -701,15 +718,92 @@ index 26b1e3b..14db5f7 100644
 +  return err;
 +}
 +
++/** Return 1 once the peer's link-layer address (or the gateway's, for an
++ * off-link peer) is resolved in the ARP cache, so the first data datagram will
++ * go straight out instead of being queued/dropped behind an ARP request. On any
++ * build without IPv4 ARP there is nothing to warm up, so it reports ready. */
++static u8_t
++lwiperf_udp_client_arp_ready(lwiperf_state_udp_client_t *c)
++{
++#if LWIP_IPV4 && LWIP_ARP
++  struct netif *netif;
++  const ip4_addr_t *nexthop;
++  struct eth_addr *eth_ret;
++  const ip4_addr_t *ip_ret;
++
++  if (!IP_IS_V4(&c->remote_addr)) {
++    return 1; /* IPv6 uses ND, not handled here; don't block the test */
++  }
++  netif = ip4_route(ip_2_ip4(&c->remote_addr));
++  if (netif == NULL) {
++    return 1; /* no route to warm; let the send path surface the error */
++  }
++  /* On-link peers resolve directly; off-link traffic resolves via the gateway. */
++  if (ip4_addr_netcmp(ip_2_ip4(&c->remote_addr), netif_ip4_addr(netif),
++                      netif_ip4_netmask(netif))) {
++    nexthop = ip_2_ip4(&c->remote_addr);
++  } else {
++    nexthop = netif_ip4_gw(netif);
++  }
++  if (etharp_find_addr(netif, nexthop, &eth_ret, &ip_ret) >= 0) {
++    return 1;
++  }
++  /* Not yet resolved: (re)issue an ARP request periodically while we wait. */
++  if ((c->arp_ticks % LWIPERF_UDP_ARP_REREQ_TICKS) == 0) {
++    etharp_request(netif, nexthop);
++  }
++  return 0;
++#else
++  LWIP_UNUSED_ARG(c);
++  return 1;
++#endif
++}
++
++/** Timer callback: warm up ARP before the timed stream begins, mirroring how
++ * iperf3's TCP control connection resolves the path before its UDP flow. Once
++ * the peer is in the ARP cache (or the warmup budget expires) it hands off to
++ * lwiperf_udp_client_tick(), which rebases the pacing clock on its first run. */
++static void
++lwiperf_udp_client_arp_tick(void *arg)
++{
++  lwiperf_state_udp_client_t *c = (lwiperf_state_udp_client_t *)arg;
++
++  if (lwiperf_udp_client_arp_ready(c) ||
++      ++c->arp_ticks >= LWIPERF_UDP_ARP_MAX_TICKS) {
++    /* Path is warm (or we gave up waiting): start the stream now. The clock is
++     * seeded here and rebased once more on the first pacing tick, so neither the
++     * warmup nor the scheduling gap counts as owed bytes. */
++    c->time_started = sys_now();
++    sys_timeout(c->interval_ms, lwiperf_udp_client_tick, c);
++    return;
++  }
++  sys_timeout(LWIPERF_UDP_ARP_TICK_MS, lwiperf_udp_client_arp_tick, c);
++}
++
 +/** Timer callback: send the scheduled datagrams, then reschedule or finish */
 +static void
 +lwiperf_udp_client_tick(void *arg)
 +{
 +  lwiperf_state_udp_client_t *c = (lwiperf_state_udp_client_t *)arg;
-+  u32_t elapsed_ms = sys_now() - c->time_started;
++  u32_t elapsed_ms;
 +  u8_t test_done = 0;
 +  u32_t burst = 0;
 +  u64_t target_bytes;
++
++  /* Rebase the pacing clock on the first tick, the way iperf3 starts its
++   * throttle at the first real send rather than at socket-setup time. The gap
++   * between lwiperf_start_udp_client() (where time_started was seeded) and this
++   * first callback is task-scheduling + ARP resolution + link/PLCA settling. If
++   * it were counted as elapsed time, target_bytes would already be non-zero and
++   * the loop below would owe a backlog it dumps as one back-to-back burst - more
++   * than the ADIN1140/OA-TC6 MAC TX FIFO can hold, so the head of every run is
++   * reported lost. Starting the clock here makes the first interval ramp at the
++   * requested rate instead of catching up phantom bytes. */
++  if (!c->started) {
++    c->started = 1;
++    c->time_started = sys_now();
++  }
++  elapsed_ms = sys_now() - c->time_started;
 +
 +  if (c->time_mode && (elapsed_ms >= c->amount)) {
 +    test_done = 1;
@@ -805,7 +899,7 @@ index 26b1e3b..14db5f7 100644
 + */
 +void *
 +lwiperf_start_udp_client(const ip_addr_t *remote_addr, u16_t remote_port,
-+                         u32_t rate_bps, s32_t amount,
++                         u32_t rate_bps, s32_t amount, u16_t buffer_len,
 +                         lwiperf_report_fn report_fn, void *report_arg)
 +{
 +  err_t err;
@@ -813,6 +907,11 @@ index 26b1e3b..14db5f7 100644
 +  lwiperf_state_udp_client_t *c;
 +  lwiperf_udp_client_hdr_t *chdr;
 +  u16_t i;
++  /* Smallest datagram that still carries the full iperf client settings header
++   * (16-byte datagram header + 24-byte client header); below this the server
++   * cannot parse the test parameters from the first datagram. */
++  const u16_t buffer_len_min = (u16_t)(sizeof(lwiperf_udp_datagram_t) +
++                                       sizeof(lwiperf_udp_client_hdr_t));
 +
 +  LWIP_ASSERT_CORE_LOCKED();
 +
@@ -821,6 +920,16 @@ index 26b1e3b..14db5f7 100644
 +  }
 +  if (rate_bps == 0) {
 +    rate_bps = LWIPERF_UDP_CLIENT_RATE_DEF;
++  }
++  /* buffer_len is the UDP payload per datagram (iperf's -l), header included.
++   * 0 selects the default; otherwise clamp into [min, MSS] so it never
++   * underflows the header or overflows the fixed txbuf. */
++  if (buffer_len == 0) {
++    buffer_len = LWIPERF_UDP_CLIENT_MSS;
++  } else if (buffer_len < buffer_len_min) {
++    buffer_len = buffer_len_min;
++  } else if (buffer_len > LWIPERF_UDP_CLIENT_MSS) {
++    buffer_len = LWIPERF_UDP_CLIENT_MSS;
 +  }
 +
 +  c = (lwiperf_state_udp_client_t *)LWIPERF_ALLOC(lwiperf_state_udp_client_t);
@@ -834,7 +943,7 @@ index 26b1e3b..14db5f7 100644
 +  c->report_arg = report_arg;
 +  ip_addr_copy(c->remote_addr, *remote_addr);
 +  c->remote_port = remote_port;
-+  c->buffer_len = LWIPERF_UDP_CLIENT_MSS;
++  c->buffer_len = buffer_len;
 +  c->rate_bps = rate_bps;
 +  c->packet_id = 0;
 +
@@ -887,8 +996,10 @@ index 26b1e3b..14db5f7 100644
 +  lwiperf_list_add(&c->base);
 +
 +  c->time_started = sys_now();
-+  /* kick off sending on the next timer service */
-+  sys_timeout(c->interval_ms, lwiperf_udp_client_tick, c);
++  /* Warm up ARP first (like iperf3's control connection), then start streaming.
++   * The warmup issues the initial ARP request immediately so the reply is
++   * usually cached before the first data datagram. */
++  lwiperf_udp_client_arp_tick(c);
 +  return c;
 +}
 +
@@ -903,6 +1014,7 @@ index 26b1e3b..14db5f7 100644
 +  return lwiperf_start_udp_client(remote_addr, LWIPERF_UDP_PORT_DEFAULT,
 +                                  LWIPERF_UDP_CLIENT_RATE_DEF,
 +                                  LWIPERF_UDP_CLIENT_AMOUNT_DEF,
++                                  LWIPERF_UDP_CLIENT_MSS,
 +                                  report_fn, report_arg);
 +}
 +
@@ -910,7 +1022,7 @@ index 26b1e3b..14db5f7 100644
 +
  #endif /* LWIP_TCP && LWIP_CALLBACK_API */
 diff --git a/src/include/lwip/apps/lwiperf.h b/src/include/lwip/apps/lwiperf.h
-index e6f4476..d327dcd 100644
+index e6f4476..e576d93 100644
 --- a/src/include/lwip/apps/lwiperf.h
 +++ b/src/include/lwip/apps/lwiperf.h
 @@ -45,6 +45,7 @@ extern "C" {
@@ -934,7 +1046,7 @@ index e6f4476..d327dcd 100644
  };
  
  /** Control */
-@@ -94,11 +99,28 @@ void* lwiperf_start_tcp_server(const ip_addr_t* local_addr, u16_t local_port,
+@@ -94,11 +99,31 @@ void* lwiperf_start_tcp_server(const ip_addr_t* local_addr, u16_t local_port,
                                 lwiperf_report_fn report_fn, void* report_arg);
  void* lwiperf_start_tcp_server_default(lwiperf_report_fn report_fn, void* report_arg);
  void* lwiperf_start_tcp_client(const ip_addr_t* remote_addr, u16_t remote_port,
@@ -954,9 +1066,12 @@ index e6f4476..d327dcd 100644
 +    @param rate_bps target send rate in bits per second (0 => ~1 Mbit/s default)
 +    @param amount transfer size: positive = bytes to send; negative = duration in
 +                  hundredths of a second (e.g. -1000 => 10 s), matching iperf's -t
++    @param buffer_len UDP payload size per datagram in bytes, like iperf's -l (the
++                  iperf header rides inside it). 0 => default (1470). Clamped to
++                  [40, 1470]: 40 is the iperf header floor, 1470 the tx-buffer/MSS.
 +    @returns a session handle usable with lwiperf_abort(), or NULL on error */
 +void* lwiperf_start_udp_client(const ip_addr_t* remote_addr, u16_t remote_port,
-+                               u32_t rate_bps, s32_t amount,
++                               u32_t rate_bps, s32_t amount, u16_t buffer_len,
 +                               lwiperf_report_fn report_fn, void* report_arg);
 +void* lwiperf_start_udp_client_default(const ip_addr_t* remote_addr,
 +                               lwiperf_report_fn report_fn, void* report_arg);

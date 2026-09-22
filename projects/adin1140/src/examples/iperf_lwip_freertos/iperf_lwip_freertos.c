@@ -154,11 +154,12 @@ static void net_task(void *param)
 	struct iperf_plca_selection plca = {
 		.enabled  = true,
 		.node_id  = 1,
-		.node_cnt = 8,
+		.node_cnt = 5,
 	};
 	const char *def_ip = "";
 	uint32_t def_rate = 5000000;
 	uint32_t def_secs = 10;
+	uint16_t def_len = 1470;
 	uint32_t reg_val;
 	int ret;
 
@@ -209,9 +210,10 @@ static void net_task(void *param)
 	def_ip = CONFIG_ADIN1140_IPERF_UDP_CLIENT_IP;
 	def_rate = CONFIG_ADIN1140_IPERF_UDP_CLIENT_RATE;
 	def_secs = CONFIG_ADIN1140_IPERF_UDP_CLIENT_TIME;
+	def_len = CONFIG_ADIN1140_IPERF_UDP_CLIENT_LEN;
 #endif
 
-	iperf_menu_select(&sel, def_ip, def_rate, def_secs);
+	iperf_menu_select(&sel, def_ip, def_rate, def_secs, def_len);
 
 	if (sel.mode == IPERF_MENU_UDP_CLIENT ||
 	    sel.mode == IPERF_MENU_TCP_CLIENT) {
@@ -222,14 +224,16 @@ static void net_task(void *param)
 				sel.ip);
 			sel.mode = IPERF_MENU_SERVERS;
 		} else if (sel.mode == IPERF_MENU_UDP_CLIENT) {
-			pr_info("Starting lwiperf UDP client to %s (%lu.%03lu Mbit/s, %lu s)\n",
+			pr_info("Starting lwiperf UDP client to %s (%lu.%03lu Mbit/s, %lu s, %u B/datagram)\n",
 				sel.ip,
 				(unsigned long)(sel.rate_bps / 1000000),
 				(unsigned long)((sel.rate_bps % 1000000) / 1000),
-				(unsigned long)sel.duration_s);
+				(unsigned long)sel.duration_s,
+				(unsigned)sel.datagram_len);
 			lwiperf_start_udp_client(&remote, LWIPERF_UDP_PORT_DEFAULT,
 						 sel.rate_bps,
 						 -100 * (s32_t)sel.duration_s,
+						 sel.datagram_len,
 						 lwiperf_report, NULL);
 		} else {
 			pr_info("Starting lwiperf TCP client to %s (%lu s)\n",

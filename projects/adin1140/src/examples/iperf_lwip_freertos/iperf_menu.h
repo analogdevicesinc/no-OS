@@ -50,9 +50,10 @@ enum iperf_menu_mode {
  *  chosen (or defaulted) parameters; unused for server mode. */
 struct iperf_menu_selection {
 	enum iperf_menu_mode mode;
-	char ip[16];        /* dotted-quad target, e.g. "192.168.97.41" */
-	uint32_t rate_bps;  /* client target rate, bits/s */
-	uint32_t duration_s;/* client test duration, seconds */
+	char ip[16];         /* dotted-quad target, e.g. "192.168.97.41" */
+	uint32_t rate_bps;   /* client target rate, bits/s */
+	uint32_t duration_s; /* client test duration, seconds */
+	uint16_t datagram_len;/* UDP payload per datagram (iperf -l), 0 = default */
 };
 
 /** PLCA (PHY-level collision avoidance) settings chosen at boot. */
@@ -87,8 +88,11 @@ void iperf_menu_plca_select(struct iperf_plca_selection *sel);
  * @param def_ip   - default target IP shown for client modes (may be NULL/"").
  * @param def_rate - default client rate in bits/s.
  * @param def_secs - default client duration in seconds.
+ * @param def_len  - default UDP datagram payload length in bytes (iperf -l);
+ *                   only prompted for the UDP client. 0 selects lwiperf's own
+ *                   default (1470).
  */
 void iperf_menu_select(struct iperf_menu_selection *sel, const char *def_ip,
-		       uint32_t def_rate, uint32_t def_secs);
+		       uint32_t def_rate, uint32_t def_secs, uint16_t def_len);
 
 #endif /* __IPERF_MENU_H__ */

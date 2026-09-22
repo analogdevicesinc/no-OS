@@ -177,7 +177,7 @@ void iperf_menu_plca_select(struct iperf_plca_selection *sel)
 }
 
 void iperf_menu_select(struct iperf_menu_selection *sel, const char *def_ip,
-		       uint32_t def_rate, uint32_t def_secs)
+		       uint32_t def_rate, uint32_t def_secs, uint16_t def_len)
 {
 	char line[16];
 	int n;
@@ -190,6 +190,7 @@ void iperf_menu_select(struct iperf_menu_selection *sel, const char *def_ip,
 	sel->ip[sizeof(sel->ip) - 1] = '\0';
 	sel->rate_bps = def_rate;
 	sel->duration_s = def_secs;
+	sel->datagram_len = def_len;
 
 	if (!adin1140_uart_desc) {
 		/* no console available: keep server default */
@@ -226,8 +227,14 @@ void iperf_menu_select(struct iperf_menu_selection *sel, const char *def_ip,
 	/* client parameters. TCP is window/congestion controlled, so it has no
 	 * target rate - only the UDP client prompts for one. */
 	iperf_menu_prompt_str("Target IP", sel->ip, sel->ip, sizeof(sel->ip));
-	if (sel->mode == IPERF_MENU_UDP_CLIENT)
+	if (sel->mode == IPERF_MENU_UDP_CLIENT) {
 		sel->rate_bps = iperf_menu_prompt_mbps("Rate Mbps",
 						       sel->rate_bps);
+		/* UDP payload per datagram, same meaning as iperf's -l. Passed
+		 * through verbatim; lwiperf clamps it to [40, 1470]. */
+		sel->datagram_len = (uint16_t)iperf_menu_prompt_u32(
+					    "UDP payload len bytes (incl. iperf hdr)",
+					    sel->datagram_len);
+	}
 	sel->duration_s = iperf_menu_prompt_u32("Duration s", sel->duration_s);
 }
