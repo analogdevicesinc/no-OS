@@ -77,9 +77,10 @@ static struct iio_channel iio_adc_channels[] = {
 	IIO_AD713X_CHANNEL(8)
 };
 
-static int _iio_ad713x_prepare_transfer(struct iio_ad713x *desc,
-					uint32_t mask)
+static int _iio_ad713x_prepare_transfer(void *dev, uint32_t mask)
 {
+	struct iio_ad713x *desc = dev;
+
 	if (!desc)
 		return -EINVAL;
 
@@ -88,9 +89,10 @@ static int _iio_ad713x_prepare_transfer(struct iio_ad713x *desc,
 	return 0;
 }
 
-static int _iio_ad713x_read_dev(struct iio_ad713x *desc, uint32_t *buff,
-				uint32_t nb_samples)
+static int _iio_ad713x_read_dev(void *dev, void *buff_v, uint32_t nb_samples)
 {
+	struct iio_ad713x *desc = dev;
+	uint32_t *buff = buff_v;
 	struct spi_engine_offload_message *msg;
 	uint32_t bytes;
 	uint32_t data;

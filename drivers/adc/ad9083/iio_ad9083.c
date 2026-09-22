@@ -36,9 +36,28 @@
 #include "ad9083.h"
 #include "iio_ad9083.h"
 
+static int ad9083_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
+{
+	uint8_t val;
+	int ret;
+
+	ret = ad9083_reg_get(dev, reg, &val);
+	if (ret)
+		return ret;
+
+	*readval = val;
+
+	return 0;
+}
+
+static int ad9083_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
+{
+	return ad9083_reg_set(dev, reg, (uint8_t)writeval);
+}
+
 struct iio_device ad9083_iio_descriptor = {
-	.debug_reg_read = (int32_t (*)())ad9083_reg_get,
-	.debug_reg_write = (int32_t (*)())ad9083_reg_set,
+	.debug_reg_read = ad9083_iio_reg_read,
+	.debug_reg_write = ad9083_iio_reg_write,
 };
 
 #endif /* IIO_SUPPORT */

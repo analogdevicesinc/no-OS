@@ -66,9 +66,10 @@ static struct iio_device adxl367_iio_dev;
  *
  * @return ret    - Result of the reading procedure.
 *******************************************************************************/
-static int adxl367_iio_read_reg(struct adxl367_iio_dev *dev, uint32_t reg,
-				uint32_t *readval)
+static int adxl367_iio_read_reg(void *device, uint32_t reg, uint32_t *readval)
 {
+	struct adxl367_iio_dev *dev = device;
+
 	return adxl367_get_register_value(dev->adxl367_dev, (uint8_t *)readval,
 					  (uint8_t)reg, 1);
 }
@@ -82,10 +83,11 @@ static int adxl367_iio_read_reg(struct adxl367_iio_dev *dev, uint32_t reg,
  *
  * @return ret    - Result of the writing procedure.
 *******************************************************************************/
-static int adxl367_iio_write_reg(struct adxl367_iio_dev *dev, uint32_t reg,
-				 uint32_t writeval)
+static int adxl367_iio_write_reg(void *device, uint32_t reg, uint32_t writeval)
 {
+	struct adxl367_iio_dev *dev = device;
 	uint8_t val = writeval;
+
 	return adxl367_set_register_value(dev->adxl367_dev, val, reg);
 }
 
@@ -655,8 +657,9 @@ static int adxl367_iio_update_channels(void* dev, uint32_t mask)
  * @return ret    - Result of the reading procedure.
  * 					In case of success, the size of the read data is returned.
 *******************************************************************************/
-static int adxl367_iio_read_samples(void* dev, int* buff, uint32_t samples)
+static int adxl367_iio_read_samples(void *dev, void *buff_v, uint32_t samples)
 {
+	int *buff = buff_v;
 	int16_t data_x;
 	int16_t data_y;
 	int16_t data_z;

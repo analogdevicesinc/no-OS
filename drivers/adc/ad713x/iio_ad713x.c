@@ -420,9 +420,10 @@ static int ad713x_iio_show_scale(void *device, char *buf, uint32_t len,
 				(int32_t *)vref);
 }
 
-static int ad713x_iio_prepare_transfer(struct ad713x_iio *desc,
-				       uint32_t mask)
+static int ad713x_iio_prepare_transfer(void *dev, uint32_t mask)
 {
+	struct ad713x_iio *desc = dev;
+
 	if (!desc)
 		return -EINVAL;
 
@@ -431,9 +432,10 @@ static int ad713x_iio_prepare_transfer(struct ad713x_iio *desc,
 	return 0;
 }
 
-static int ad713x_iio_read_dev(struct ad713x_iio *desc, uint32_t *buff,
-			       uint32_t nb_samples)
+static int ad713x_iio_read_dev(void *dev, void *buff_v, uint32_t nb_samples)
 {
+	struct ad713x_iio *desc = dev;
+	uint32_t *buff = buff_v;
 	struct spi_engine_offload_message msg;
 	uint32_t bytes;
 	int32_t  ret;
@@ -536,6 +538,25 @@ int iio_ad713x_remove(struct ad713x_iio *desc)
 	return 0;
 }
 
+static int ad713x_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
+{
+	uint8_t val;
+	int ret;
+
+	ret = ad713x_spi_reg_read(dev, (uint8_t)reg, &val);
+	if (ret)
+		return ret;
+
+	*readval = val;
+
+	return 0;
+}
+
+static int ad713x_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
+{
+	return ad713x_spi_reg_write(dev, (uint8_t)reg, (uint8_t)writeval);
+}
+
 struct iio_device ad713x_iio_desc = {
 	.num_ch = NO_OS_ARRAY_SIZE(ad713x_channels),
 	.channels = ad713x_channels,
@@ -547,8 +568,8 @@ struct iio_device ad713x_iio_desc = {
 	.pre_enable = ad713x_iio_prepare_transfer,
 	.post_disable = NULL,
 	.submit = NULL,
-	.debug_reg_read = (int32_t (*)()) ad713x_spi_reg_read,
-	.debug_reg_write = (int32_t (*)()) ad713x_spi_reg_write
+	.debug_reg_read = ad713x_iio_reg_read,
+	.debug_reg_write = ad713x_iio_reg_write
 };
 
 #endif /* IIO_SUPPORT */

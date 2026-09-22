@@ -309,9 +309,10 @@ static int ad413x_iio_read_scale(void *device, char *buf, uint32_t len,
 }
 
 static int ad413x_iio_read_samples(void *device,
-				   int32_t *buff,
+				   void *buff_v,
 				   uint32_t nb_samples)
 {
+	int32_t *buff = buff_v;
 	struct ad413x_iio_dev *iiodev = (struct ad413x_iio_dev *)device;
 	int32_t ret, ch_nb = 0;
 	uint32_t mask;
