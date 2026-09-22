@@ -62,6 +62,18 @@ struct altera_gpio_init_param altera_gpio_param = {
 	.base_address = GPIO_BASEADDR,
 };
 
+#if defined(IIO_EXAMPLE)
+/*
+ * Bidirectional JTAG-UART instance for the IIOD transport (sys_uart @ 0x100).
+ * base/IRQ wiring comes from the generated BSP (system.h via parameters.h).
+ */
+struct altera_uart_init_param altera_uart_ip = {
+	.base_address = UART_JTAG_BASEADDR,
+	.irq_id = UART_IRQ_ID,
+	.irq_ctrl_id = UART_IRQ_CTRL_ID,
+};
+#endif
+
 /*
  * stdout routing for the AD9084-EBZ.
  *
