@@ -119,6 +119,8 @@ int max25603_set_enable(struct max25603_desc *desc, enum max25603_enable enable,
 	default:
 		return -EINVAL;
 	}
+
+	return 0;
 }
 
 /**
