@@ -133,7 +133,7 @@ error:
 	if (dev->gpio_reset)
 		ret = no_os_gpio_remove(dev->gpio_reset);
 	if (dev->spi_desc)
-		ret = no_os_spi_remove(dev->gpio_reset);
+		ret = no_os_spi_remove(dev->spi_desc);
 	no_os_free(chp);
 	no_os_free(dev);
 	return ret;
