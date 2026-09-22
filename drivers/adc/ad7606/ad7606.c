@@ -948,6 +948,8 @@ int32_t ad7606_capture_pre_enable(struct ad7606_dev *dev)
 
 	return ad7606_spi_engine_capture_pre_enable(dev);
 #endif
+
+	return -ENOTSUP;
 }
 
 /***************************************************************************//**
