@@ -682,8 +682,10 @@ int32_t ad413x_reg_write(struct ad413x_dev *dev,
 		return -EINVAL;
 	}
 
-	if (dev->spi_crc_en)
-		buf[data_size] = no_os_crc8(ad413x_crc8, buf, ++data_size, 0);
+	if (dev->spi_crc_en) {
+		data_size++;
+		buf[data_size] = no_os_crc8(ad413x_crc8, buf, data_size, 0);
+	}
 
 	return no_os_spi_write_and_read(dev->spi_dev, buf, data_size + 1);
 }
