@@ -38,7 +38,7 @@
 
 /* Initialize descriptor */
 int generic_trng_init(struct no_os_trng_desc **desc,
-		      struct no_os_trng_init_param *param)
+		      const struct no_os_trng_init_param *param)
 {
 	NO_OS_UNUSED_PARAM(desc);
 	NO_OS_UNUSED_PARAM(param);
