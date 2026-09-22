@@ -14,6 +14,47 @@ resolve_library_source(
     LWIP_BINARY_DIR
 )
 
+# Apply the tracked lwiperf UDP patch to the resolved lwIP source.
+find_package(Git QUIET)
+set(_lwiperf_patch "${NO_OS_DIR}/libraries/lwip-glue/patches/lwiperf-udp.patch")
+if(GIT_FOUND AND EXISTS "${_lwiperf_patch}")
+    execute_process(
+        COMMAND ${GIT_EXECUTABLE} -C "${LWIP_SOURCE_DIR}"
+                apply --reverse --check "${_lwiperf_patch}"
+        RESULT_VARIABLE _lwiperf_already_applied
+        OUTPUT_QUIET ERROR_QUIET)
+    if(NOT _lwiperf_already_applied EQUAL 0)
+        # Not applied yet. Fail loudly if it does not apply cleanly (e.g. the
+        # pinned lwIP version changed and the patch needs regenerating).
+        execute_process(
+            COMMAND ${GIT_EXECUTABLE} -C "${LWIP_SOURCE_DIR}"
+                    apply --check "${_lwiperf_patch}"
+            RESULT_VARIABLE _lwiperf_can_apply
+            OUTPUT_QUIET ERROR_QUIET)
+        if(NOT _lwiperf_can_apply EQUAL 0)
+            message(FATAL_ERROR
+                "[lwip] lwiperf-udp.patch does not apply cleanly to "
+                "${LWIP_SOURCE_DIR}. The pinned lwIP version may have changed; "
+                "regenerate the patch from the updated source.")
+        endif()
+        execute_process(
+            COMMAND ${GIT_EXECUTABLE} -C "${LWIP_SOURCE_DIR}"
+                    apply "${_lwiperf_patch}"
+            RESULT_VARIABLE _lwiperf_apply_res)
+        if(NOT _lwiperf_apply_res EQUAL 0)
+            message(FATAL_ERROR "[lwip] Failed to apply lwiperf-udp.patch")
+        endif()
+        message(STATUS "[lwip] Applied lwiperf-udp.patch")
+    else()
+        message(STATUS "[lwip] lwiperf-udp.patch already applied")
+    endif()
+elseif(NOT GIT_FOUND)
+    message(WARNING
+        "[lwip] Git not found; cannot auto-apply lwiperf-udp.patch. The lwiperf "
+        "UDP server/client support will be missing unless the patch is applied "
+        "to ${LWIP_SOURCE_DIR} manually.")
+endif()
+
 # If a prior include added lwip targets, reuse them
 # Otherwise, we need to add the subdirectory
 if(NOT TARGET lwipcore)
