@@ -111,8 +111,9 @@ The per-board selections live in
 No-OS Supported Examples
 ------------------------
 
-Two example variants are provided, selected by ``CONFIG_AD9088_EXAMPLE``
-(``basic_example`` / ``dma_example``).
+Three example variants are provided, selected by ``CONFIG_AD9088_EXAMPLE``
+(``basic_example`` / ``dma_example`` / ``iio_example``). The ``iio_example``
+variant is Agilex 5 / Nios V only (see below).
 
 Basic Example
 ~~~~~~~~~~~~~
@@ -136,6 +137,25 @@ for background.
 The DMA example builds for both carriers; the per-board profile and firmware
 set are selected in ``boards/dma_example/<board>.conf`` (the same 204C profile
 and engineering firmware set as the basic example on Agilex 5).
+
+IIO Example
+~~~~~~~~~~~
+
+The IIO example (variant ``iio_example``) runs the same clock/JESD204 bring-up
+as the DMA example, then starts an IIOD server that exposes the AXI ADC
+(``axi_adc``) and AXI DAC (``axi_dac``) over the IIO protocol, so a host can
+drive them with ``iio_info`` / ``iio_readdev`` or the IIO oscilloscope instead
+of the fixed capture-and-park flow. The RX data offload is re-armed before each
+capture and the TX data offload is put in bypass so the DAC replays the host's
+buffer.
+
+This variant is **Agilex 5 / Nios V only**: the IIOD transport is the Altera
+JTAG-UART plus the Nios V core-local (CLIC) interrupt controller, provided by
+the ``UART_ALTERA`` / ``IRQ_ALTERA`` drivers. A Xilinx build refuses at compile
+time (``#error``). On top of the DMA example's config it enables ``CONFIG_IIO``,
+``CONFIG_AXI_CORE_IIO_AXI_ADC``, ``CONFIG_AXI_CORE_IIO_AXI_DAC``,
+``CONFIG_UART_ALTERA`` and ``CONFIG_IRQ_ALTERA`` (see
+``projects/ad9088/iio_example.conf`` and ``boards/iio_example/agilex5.conf``).
 
 No-OS Supported Platforms
 -------------------------
@@ -204,6 +224,13 @@ paths never land in the tracked tree:
 board config (``boards/basic_example/agilex5.conf``) selects the 204C profile
 and the engineering firmware set.
 
+To build a different variant, point ``PROJECT_DEFCONFIG`` at its config — e.g.
+``ad9088/iio_example.conf`` for the IIO server (add an ``agilex5-iio`` preset
+that inherits ``agilex5``, or override ``-DPROJECT_DEFCONFIG`` on the command
+line). The IIO variant links the same way; if the BSP archive is not
+auto-detected (it lives in a ``build/`` subdirectory), pass it explicitly with
+``-DALTERA_BSP_LIB=/path/to/.../software/bsp/build/libhal2_bsp.a``.
+
 .. code-block:: bash
 
    cd no-OS
@@ -240,6 +267,22 @@ from flash). Program the FPGA, download the ELF, then open the console.
    uses ``LMA == VMA`` (no boot-copy) because ``niosv-download`` writes each
    segment directly to its run address.
 
+.. note::
+
+   **IIO variant transport.** With the ``iio_example`` ELF the JTAG-UART no
+   longer carries a human console — it carries the IIOD serial protocol, so do
+   not open ``juart-terminal`` against it. A libiio host connects with the
+   serial backend, whose URI is ``serial:<device>,<baud>,8n1`` (libiio 1.0),
+   e.g. ``iio_info -u serial:/dev/pts/N,115200,8n1``.
+
+   The catch: the Nios V JTAG-UART is not exposed as a POSIX serial device — it
+   is reachable only through Intel JTAG Atlantic (the transport behind
+   ``juart-terminal``/``jtagd``), so there is no ``/dev/ttyUSB*`` node for
+   libiio to open. A **byte-transparent** bridge from the JTAG Atlantic endpoint
+   to a pseudo-terminal is required, and ``serial:`` then points at that pty.
+   ``juart-terminal`` itself is not guaranteed byte-transparent for the binary
+   IIOD framing, so validate the bridge on hardware before relying on it.
+
 Xilinx (VCU118, MicroBlaze)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -273,6 +316,9 @@ design. The VCU118 bitstream is the JESD204C (204C) use case.
    python tools/scripts/no_os_build.py build \
        --project ad9088 --variant dma_example --board vcu118 \
        --hardware /path/to/system_topad9084_ebz_vcu118_np16.xsa
+
+The ``iio_example`` variant is not available on VCU118: its IIOD transport is
+Altera/Nios V specific, so a Xilinx build refuses at compile time.
 
 For toolchain setup and prerequisites, see the
 :doc:`Xilinx CMake build guide </build_guides/build_xilinx_cmake>`.
