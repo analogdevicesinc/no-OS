@@ -188,7 +188,7 @@ int adhv4710_update_bits(struct adhv4710_dev *dev, uint8_t reg_addr,
 {
 	int ret;
 	/* data to be written */
-	uint8_t data;
+	int8_t data;
 
 	ret = adhv4710_read(dev, reg_addr, &data);
 	if (ret)
@@ -476,7 +476,7 @@ int adhv4710_version_product(struct adhv4710_dev *dev, uint8_t *data_read)
 {
 	int ret;
 	/* version product */
-	uint8_t version;
+	int8_t version;
 
 	if (!data_read)
 		return -EINVAL;
