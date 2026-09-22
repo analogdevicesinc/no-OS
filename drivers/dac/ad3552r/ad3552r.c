@@ -1818,6 +1818,8 @@ exit_err:
 
 	return ret;
 #endif
+
+	return -ENOTSUP;
 }
 
 #ifdef XILINX_PLATFORM
