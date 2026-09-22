@@ -866,9 +866,10 @@ static int iio_ad7124_close_channels(void *dev)
  * without any extra register reads between DATA reads (which would trigger
  * the SPI_IGNORE_ERR sticky flag).
  */
-static int iio_ad7124_read_samples(void *dev, int32_t *buff,
+static int iio_ad7124_read_samples(void *dev, void *buff_v,
 				   uint32_t nb_samples)
 {
+	int32_t *buff = buff_v;
 	struct ad7124_dev *desc = (struct ad7124_dev *)dev;
 	uint32_t mask = iio_active_mask;
 	int32_t ret, i = 0, k;
@@ -896,6 +897,16 @@ static int iio_ad7124_read_samples(void *dev, int32_t *buff,
  * =========================================================================
  */
 
+static int ad7124_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
+{
+	return ad7124_read_register2(dev, reg, readval);
+}
+
+static int ad7124_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
+{
+	return ad7124_write_register2(dev, reg, writeval);
+}
+
 struct iio_device iio_ad7124_device = {
 	.num_ch           = NO_OS_ARRAY_SIZE(ad7124_channels),
 	.channels         = ad7124_channels,
@@ -905,6 +916,6 @@ struct iio_device iio_ad7124_device = {
 	.pre_enable = iio_ad7124_update_active_channels,
 	.post_disable = iio_ad7124_close_channels,
 	.read_dev = iio_ad7124_read_samples,
-	.debug_reg_read = (int32_t (*)())ad7124_read_register2,
-	.debug_reg_write = (int32_t (*)())ad7124_write_register2
+	.debug_reg_read = ad7124_iio_reg_read,
+	.debug_reg_write = ad7124_iio_reg_write
 };

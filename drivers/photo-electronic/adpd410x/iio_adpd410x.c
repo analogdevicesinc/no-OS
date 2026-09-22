@@ -79,9 +79,10 @@ static int adpd410x_iio_read_raw_chan(void *device, char *buf, uint32_t len,
  * @param nb_samples - Input number of samples.
  * @return Number of samples, or negative code.
  */
-static int adpd410x_read_samples(void *device, uint32_t *buff,
+static int adpd410x_read_samples(void *device, void *buff_v,
 				 uint32_t nb_samples)
 {
+	uint32_t *buff = buff_v;
 	struct adpd410x_dev *dev = (struct adpd410x_dev *)device;
 
 	int32_t ret;
@@ -381,11 +382,30 @@ static struct iio_attribute adpd410x_iio_attributes[] = {
 };
 
 /** IIO Descriptor */
+static int adpd410x_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
+{
+	uint16_t val;
+	int ret;
+
+	ret = adpd410x_reg_read(dev, (uint16_t)reg, &val);
+	if (ret)
+		return ret;
+
+	*readval = val;
+
+	return 0;
+}
+
+static int adpd410x_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
+{
+	return adpd410x_reg_write(dev, (uint16_t)reg, (uint16_t)writeval);
+}
+
 struct iio_device const adpd410x_iio_descriptor = {
 	.num_ch = ADPD410X_IIO_NUM_CH,
 	.channels = adpd410x_iio_channels,
 	.attributes = adpd410x_iio_attributes,
 	.read_dev = adpd410x_read_samples,
-	.debug_reg_read = (int32_t (*)())adpd410x_reg_read,
-	.debug_reg_write = (int32_t (*)())adpd410x_reg_write,
+	.debug_reg_read = adpd410x_iio_reg_read,
+	.debug_reg_write = adpd410x_iio_reg_write,
 };

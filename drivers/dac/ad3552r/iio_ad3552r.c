@@ -165,16 +165,17 @@ static struct iio_attribute iio_ad3552r_ch_attributes[] = {
 	END_ATTRIBUTES_ARRAY,
 };
 
-static int iio_ad3552r_write_reg(struct iio_ad3552r_desc *iio_dac,
-				 uint32_t addr, uint32_t val)
+static int iio_ad3552r_write_reg(void *dev, uint32_t addr, uint32_t val)
 {
+	struct iio_ad3552r_desc *iio_dac = dev;
+
 	return ad3552r_write_reg(iio_dac->dac, addr, val);
 }
 
 
-static int iio_ad3552r_read_reg(struct iio_ad3552r_desc *iio_dac,
-				uint32_t addr, uint32_t *val)
+static int iio_ad3552r_read_reg(void *dev, uint32_t addr, uint32_t *val)
 {
+	struct iio_ad3552r_desc *iio_dac = dev;
 	uint16_t v2;
 	int32_t err;
 
@@ -184,17 +185,19 @@ static int iio_ad3552r_read_reg(struct iio_ad3552r_desc *iio_dac,
 	return err;
 }
 
-static int iio_ad3552r_prep_wr(struct iio_ad3552r_desc *iio_dac,
-			       uint32_t mask)
+static int iio_ad3552r_prep_wr(void *dev, uint32_t mask)
 {
+	struct iio_ad3552r_desc *iio_dac = dev;
+
 	iio_dac->mask = mask;
 
 	return 0;
 }
 
-static int iio_ad3552r_wr_dev(struct iio_ad3552r_desc *iio_dac,
-			      uint16_t *buff, uint32_t nb_samples)
+static int iio_ad3552r_wr_dev(void *dev, void *buff_v, uint32_t nb_samples)
 {
+	struct iio_ad3552r_desc *iio_dac = dev;
+	uint16_t *buff = buff_v;
 	int32_t i;
 
 	static int c = 0;

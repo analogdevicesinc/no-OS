@@ -356,6 +356,16 @@ static struct iio_channel const ad5791_channels[] = {
 	}
 };
 
+static int ad5791_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
+{
+	return ad5791_get_register_value(dev, (uint8_t)reg, readval);
+}
+
+static int ad5791_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
+{
+	return ad5791_set_register_value(dev, (uint8_t)reg, writeval);
+}
+
 struct iio_device const iio_ad5791_device = {
 	.num_ch = AD5791_CH_NO,
 	.channels = (struct iio_channel *)ad5791_channels,
@@ -365,8 +375,8 @@ struct iio_device const iio_ad5791_device = {
 	.pre_enable = NULL,
 	.post_disable = NULL,
 	.read_dev = NULL,
-	.debug_reg_read = (int32_t (*)())ad5791_get_register_value,
-	.debug_reg_write = (int32_t (*)())ad5791_set_register_value
+	.debug_reg_read = ad5791_iio_reg_read,
+	.debug_reg_write = ad5791_iio_reg_write
 };
 
 /**

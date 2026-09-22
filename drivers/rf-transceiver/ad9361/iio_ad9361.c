@@ -3113,6 +3113,16 @@ void iio_ad9361_get_dev_descriptor(struct iio_ad9361_desc *desc,
 	*dev_descriptor = &desc->dev_descriptor;
 }
 
+static int ad9361_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
+{
+	return ad9361_reg_read(dev, reg, readval);
+}
+
+static int ad9361_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
+{
+	return ad9361_reg_write(dev, reg, writeval);
+}
+
 /**
  * @brief Init for reading/writing and parameterization of a
  * ad9361 device.
@@ -3135,9 +3145,8 @@ int32_t iio_ad9361_init(struct iio_ad9361_desc **desc,
 	iio_ad9361_inst->dev_descriptor.attributes = global_attributes;
 	iio_ad9361_inst->dev_descriptor.debug_attributes = debug_attributes;
 	iio_ad9361_inst->dev_descriptor.buffer_attributes = NULL;
-	iio_ad9361_inst->dev_descriptor.debug_reg_read = (int32_t (*)())ad9361_reg_read;
-	iio_ad9361_inst->dev_descriptor.debug_reg_write = (int32_t (
-				*)())ad9361_reg_write;
+	iio_ad9361_inst->dev_descriptor.debug_reg_read = ad9361_iio_reg_read;
+	iio_ad9361_inst->dev_descriptor.debug_reg_write = ad9361_iio_reg_write;
 	*desc = iio_ad9361_inst;
 
 	return 0;

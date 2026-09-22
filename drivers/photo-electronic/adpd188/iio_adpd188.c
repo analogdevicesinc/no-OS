@@ -382,9 +382,10 @@ static bool get_next_ch_idx(uint32_t ch_mask, uint32_t last_idx,
  * @param nb_samples - Number of samples to take.
  * @return 0 in case of success, error code otherwise.
  */
-static int iio_adpd188_read_samples(void *dev, int32_t *buff,
+static int iio_adpd188_read_samples(void *dev, void *buff_v,
 				    uint32_t nb_samples)
 {
+	int32_t *buff = buff_v;
 	struct adpd188_iio_desc *iio_desc = (struct adpd188_iio_desc *)dev;
 	struct adpd188_dev *desc = iio_desc->drv_dev;
 	uint8_t byte_no;
@@ -424,13 +425,21 @@ static int iio_adpd188_read_samples(void *dev, int32_t *buff,
  * @param reg_val - Pointer to the register value.
  * @return 0 in case of success, error code otherwise.
  */
-static int iio_adpd188_reg_read(struct adpd188_iio_desc *dev,
-				uint8_t reg_addr,
-				uint16_t *reg_val)
+static int iio_adpd188_reg_read(void *dev, uint32_t reg_addr,
+				uint32_t *reg_val)
 {
-	struct adpd188_dev *desc = dev->drv_dev;
+	struct adpd188_iio_desc *iio_desc = dev;
+	struct adpd188_dev *desc = iio_desc->drv_dev;
+	uint16_t val;
+	int ret;
 
-	return adpd188_reg_read(desc, reg_addr, reg_val);
+	ret = adpd188_reg_read(desc, (uint8_t)reg_addr, &val);
+	if (ret)
+		return ret;
+
+	*reg_val = val;
+
+	return 0;
 }
 
 /**
@@ -440,13 +449,13 @@ static int iio_adpd188_reg_read(struct adpd188_iio_desc *dev,
  * @param reg_val - New register value.
  * @return 0 in case of success, error code otherwise.
  */
-static int iio_adpd188_reg_write(struct adpd188_iio_desc *dev,
-				 uint8_t reg_addr,
-				 uint16_t reg_val)
+static int iio_adpd188_reg_write(void *dev, uint32_t reg_addr,
+				 uint32_t reg_val)
 {
-	struct adpd188_dev *desc = dev->drv_dev;
+	struct adpd188_iio_desc *iio_desc = dev;
+	struct adpd188_dev *desc = iio_desc->drv_dev;
 
-	return adpd188_reg_write(desc, reg_addr, reg_val);
+	return adpd188_reg_write(desc, (uint8_t)reg_addr, (uint16_t)reg_val);
 }
 
 /**
