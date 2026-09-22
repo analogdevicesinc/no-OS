@@ -624,8 +624,6 @@ static int axi_jesd204_tx_jesd204_link_pre_setup(struct jesd204_dev *jdev,
 	}
 
 #ifdef CONFIG_ALTERA_PLATFORM_NIOSV
-#endif
-
 	/*
 	 * Released here, at LINK_PRE_SETUP, and deliberately earlier than the
 	 * receive side. The converter calibrates its own deframer against this
@@ -635,6 +633,7 @@ static int axi_jesd204_tx_jesd204_link_pre_setup(struct jesd204_dev *jdev,
 	 * left every link in CGS with SYNC asserted.
 	 */
 	altera_gts_xcvr_reset(jesd->name, jesd->xcvr_base);
+#endif
 
 	return JESD204_STATE_CHANGE_DONE;
 }
