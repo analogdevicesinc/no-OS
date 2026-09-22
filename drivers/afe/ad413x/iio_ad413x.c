@@ -199,7 +199,7 @@ static int ad413x_iio_read_raw(void *device, char *buf, uint32_t len,
 	if (reg_data | AD413X_ADC_DATA_STATUS)
 		value >>= 8;
 
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, &value);
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&value);
 }
 
 static int ad413x_iio_scale_available(void *device, char *buf,
@@ -324,7 +324,8 @@ static int ad413x_iio_read_samples(void *device,
 		mask >>= 1;
 	}
 
-	ret = ad413x_continuous_conv(iiodev->ad413x_dev, buff, ch_nb, nb_samples);
+	ret = ad413x_continuous_conv(iiodev->ad413x_dev, (uint32_t *)buff, ch_nb,
+				     nb_samples);
 	if (ret)
 		return ret;
 
