@@ -575,6 +575,7 @@ static int axi_jesd204_rx_apply_config(struct axi_jesd204_rx *jesd,
 
 	axi_jesd204_rx_write(jesd, JESD204_RX_REG_LINK_CONF0, val);
 
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
 	if (jesd->encoder == JESD204_ENCODER_8B10B) {
 		uint32_t synth1, mld;
 
@@ -586,6 +587,7 @@ static int axi_jesd204_rx_apply_config(struct axi_jesd204_rx *jesd,
 			no_os_field_get(JESD204_RX_SYNTH_1_NUM_LINKS, synth1),
 			mld, jesd->num_lanes, config->num_lanes);
 	}
+#endif
 
 	if (jesd->version >= ADI_AXI_PCORE_VER(1, 7, 'a')) {
 		/* beats per multiframe */
@@ -722,9 +724,6 @@ static int axi_jesd204_rx_jesd204_link_pre_setup(struct jesd204_dev *jdev,
 		pr_debug("%s: Link%u set lane rate %lu kHz\n",
 			 __func__, lnk->link_id, lane_rate);
 	}
-
-#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
-#endif
 
 	return JESD204_STATE_CHANGE_DONE;
 }
