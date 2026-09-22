@@ -186,7 +186,7 @@ int32_t ad9083_log_write(void *user_data, int32_t log_type, const char *message,
  * @param us - time to delay/sleep in microseconds.
  * @return 0 in case of success, -1 otherwise.
  */
-static int ad9083_udelay(void *user_data, unsigned int us)
+static int32_t ad9083_udelay(void *user_data, uint32_t us)
 {
 	no_os_udelay(us);
 
