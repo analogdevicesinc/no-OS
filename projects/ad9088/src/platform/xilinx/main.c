@@ -49,6 +49,10 @@
 #include "dma_example.h"
 #endif
 
+#ifdef IIO_EXAMPLE
+#error "iio_example is Agilex 5 / Nios V only (Altera JTAG-UART + CLIC transport)"
+#endif
+
 /**
  * @brief Main function execution for xilinx platform.
  * @return ret - Result of the enabled examples execution.

@@ -17,6 +17,13 @@ config AD9088_DMA_EXAMPLE
 	  DMA, including the NCO test tone and cabled DAC-to-ADC loopback
 	  coherence checks.
 
+config AD9088_IIO_EXAMPLE
+	bool "IIO example"
+	help
+	  Brings up the JESD204 link and serves the AXI ADC and AXI DAC over
+	  IIOD on the JTAG UART, so iio_info / iio_readdev / the IIO
+	  oscilloscope can drive them. Agilex 5 / Nios V only.
+
 endchoice
 
 config AD9088_PROFILE

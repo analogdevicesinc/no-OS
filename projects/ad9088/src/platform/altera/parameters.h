@@ -42,6 +42,9 @@
 #include "system.h"		/* Generated Nios V BSP: *_BASE, *_IRQ, ... */
 #include "altera_spi.h"
 #include "altera_gpio.h"
+#if defined(IIO_EXAMPLE)
+#include "altera_uart.h"	/* altera_uart_ops / altera_uart_init_param */
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -90,10 +93,29 @@
  */
 #define UART_DEVICE_ID		0
 #define UART_BAUDRATE		115200
+#define UART_JTAG_BASEADDR	0x00000100 /* sys_uart (JTAG UART) */
+
+/*
+ * The console shim (_write() in parameters.c) always drives the JTAG UART for
+ * pr_*()/printf(). Only the IIO example instantiates a full bidirectional no-OS
+ * UART device on top of it (the IIOD transport); other examples leave the UART
+ * ops NULL so they neither pull in altera_uart.c nor open an RX path.
+ *
+ * UART_IRQ_ID / UART_IRQ_CTRL_ID come from the generated BSP system.h, so a BSP
+ * regenerated against a new .sof flows the correct wiring through automatically.
+ */
+#if defined(IIO_EXAMPLE)
+extern struct altera_uart_init_param	altera_uart_ip;
+
+#define UART_OPS			&altera_uart_ops
+#define UART_EXTRA			&altera_uart_ip
+#define UART_IRQ_ID			SYS_UART_IRQ
+#define UART_IRQ_CTRL_ID	SYS_UART_IRQ_INTERRUPT_CONTROLLER_ID
+#else
 #define UART_OPS			NULL
 #define UART_EXTRA			NULL
 #define UART_IRQ_ID			0
-#define UART_JTAG_BASEADDR	0x00000100 /* sys_uart (JTAG UART) */
+#endif
 
 /*
  * SPI: the EBZ has two Avalon SPI cores.

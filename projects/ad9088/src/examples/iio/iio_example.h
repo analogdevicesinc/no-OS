@@ -1,10 +1,9 @@
 /***************************************************************************//**
- *   @file   altera/main.c
- *   @brief  Main file for the Altera/Nios V platform of the ad9088 project
- *           (AD9084-EBZ on Agilex 5).
+ *   @file   iio_example.h
+ *   @brief  IIO example header for the ad9088 project (AD9084-EBZ on Agilex 5).
  *   @author Mihaela-Georgeta Petrea (Mihaela-georgeta.Petrea@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,63 +30,20 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include <stdio.h>
-#include "platform_includes.h"
-#include "common_data.h"
-#include "no_os_error.h"
-#include "no_os_print_log.h"
-
-#ifdef BASIC_EXAMPLE
-#include "basic_example.h"
-#endif
-
-#ifdef DMA_EXAMPLE
-#include "dma_example.h"
-#endif
-
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
+#ifndef __IIO_EXAMPLE_H__
+#define __IIO_EXAMPLE_H__
 
 /**
- * @brief Main function execution for the Altera/Nios V platform.
+ * @brief Bring up the AD9084-EBZ JESD204 link and serve the AXI ADC/DAC over
+ *        IIOD on the JTAG UART.
  *
- * stdout is routed to the EBZ JTAG UART (sys_uart @ 0x100) by the project-local
- * _write() override in parameters.c - the generic BSP's _write() targets a
- * nonexistent JTAG UART (0x90158), so pr_*() would otherwise be discarded.
- * Console is up as soon as main() runs.
+ * Agilex 5 / Nios V only: the transport is the Altera JTAG-UART + CLIC IRQ
+ * driver, and the cache maintenance uses the Nios V HAL. The Xilinx main.c
+ * refuses this example at compile time.
  *
- * @return ret - Result of the enabled example's execution.
+ * @return 0 on success, negative error code otherwise. iio_app_run() blocks,
+ *         so a normal run does not return.
  */
-int main(void)
-{
-	int ret = -EINVAL;
+int iio_example_main(void);
 
-	/*
-	 * newlib fully buffers stdout by default -- output would then only appear
-	 * once ~1 KB has accumulated or the program exits, so an early hang looks
-	 * like total silence. Make stdout unbuffered so every pr_*() reaches the
-	 * polled JTAG UART immediately.
-	 */
-	setvbuf(stdout, NULL, _IONBF, 0);
-
-	pr_info("ad9088: Nios V (Agilex 5) bring-up\n");
-
-#ifdef BASIC_EXAMPLE
-	ret = basic_example_main();
-#endif
-
-#ifdef DMA_EXAMPLE
-	ret = dma_example_main();
-#endif
-
-#ifdef IIO_EXAMPLE
-	ret = iio_example_main();
-#endif
-
-	return ret;
-}
+#endif /* __IIO_EXAMPLE_H__ */

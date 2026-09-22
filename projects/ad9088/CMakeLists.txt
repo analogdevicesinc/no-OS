@@ -28,6 +28,16 @@ if(CONFIG_AD9088_DMA_EXAMPLE)
     target_compile_definitions(ad9088 PRIVATE DMA_EXAMPLE)
 endif()
 
+if(CONFIG_AD9088_IIO_EXAMPLE)
+    target_sources(ad9088 PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio/iio_example.c
+    )
+    target_include_directories(ad9088 PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio
+    )
+    target_compile_definitions(ad9088 PRIVATE IIO_EXAMPLE)
+endif()
+
 # src/platform (not just src/platform/${PLATFORM}) is required:
 # platform_includes.h reaches the parameters header as "xilinx/parameters.h".
 target_include_directories(ad9088 PUBLIC
