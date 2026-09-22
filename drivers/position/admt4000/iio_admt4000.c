@@ -539,7 +539,7 @@ static int admt4000_iio_write_gpio_raw(void *dev, char *buf, uint32_t len,
 	struct admt4000_iio_dev *iio_dev = dev;
 	struct admt4000_dev *device = iio_dev->admt4000_desc;
 	int ret;
-	uint32_t value;
+	int32_t value;
 	uint8_t gpio = (uint8_t)priv;
 
 	if (gpio > ADMT4000_MAX_GPIO_INDEX)
@@ -575,7 +575,7 @@ static int admt4000_iio_debug_reset_store(void *dev, char *buf, uint32_t len,
 	struct admt4000_iio_dev *iio_dev = dev;
 	struct admt4000_dev *device = iio_dev->admt4000_desc;
 	int ret;
-	uint32_t value;
+	int32_t value;
 
 	ret = iio_parse_value(buf, IIO_VAL_INT, &value, NULL);
 	if (ret)
@@ -1313,7 +1313,7 @@ static int admt4000_iio_trigger_handler(struct iio_device_data *dev_data)
 		data_samples[i++] = (int16_t) angles[1];
 
 	if (dev_data->buffer->active_mask & NO_OS_BIT(ADMT4000_TEMP)) {
-		ret = admt4000_get_temp(admt4000, &data_samples[i]);
+		ret = admt4000_get_temp(admt4000, (uint16_t *)&data_samples[i]);
 		i++;
 		if (ret)
 			return ret;
@@ -1334,7 +1334,7 @@ static int admt4000_iio_trigger_handler(struct iio_device_data *dev_data)
 	}
 
 	if (dev_data->buffer->active_mask & NO_OS_BIT(ADMT4000_RADIUS)) {
-		ret = admt4000_get_radius(admt4000, &data_samples[i], NULL);
+		ret = admt4000_get_radius(admt4000, (uint16_t *)&data_samples[i], NULL);
 		i++;
 		if (ret)
 			return ret;
