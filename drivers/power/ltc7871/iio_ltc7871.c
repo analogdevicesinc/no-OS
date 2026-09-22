@@ -244,7 +244,7 @@ static int ltc7871_iio_get_pwmen_pin(void *dev, char *buf, uint32_t len,
 static int ltc7871_iio_set_pwmen_pin(void *dev, char *buf, uint32_t len,
 				     const struct iio_ch_info *channel, intptr_t priv);
 
-static struct iio_channel const ltc7871_channels[] = {
+static struct iio_channel ltc7871_channels[] = {
 	//no available channel
 };
 
