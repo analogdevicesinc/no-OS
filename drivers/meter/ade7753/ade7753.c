@@ -247,7 +247,7 @@ int ade7753_update_bits(struct ade7753_dev *dev, uint16_t reg_addr,
 {
 	int ret;
 	/* data to be written */
-	uint32_t data;
+	int32_t data;
 
 	ret = ade7753_read(dev, reg_addr, &data);
 	if (ret)
@@ -347,7 +347,7 @@ int ade7753_version_product(struct ade7753_dev *dev, uint32_t *data_read)
 {
 	int ret;
 	/* version product */
-	uint32_t version;
+	int32_t version;
 
 	if (!data_read)
 		return -EINVAL;
@@ -371,7 +371,7 @@ int ade7753_read_reset_iapk_val(struct ade7753_dev *dev, uint32_t *val)
 {
 	int ret;
 	/* register value read */
-	uint32_t reg_val;
+	int32_t reg_val;
 
 	if (!val)
 		return -EINVAL;
@@ -394,7 +394,7 @@ int ade7753_reset_vpk_val(struct ade7753_dev *dev, uint32_t *val)
 {
 	int ret;
 	/* register value read */
-	uint32_t reg_val;
+	int32_t reg_val;
 
 	if (!val)
 		return -EINVAL;
@@ -419,7 +419,7 @@ int ade7753_get_int_status(struct ade7753_dev *dev, uint32_t msk,
 {
 	int ret;
 	/* register value read */
-	uint32_t reg_val;
+	int32_t reg_val;
 
 	if (!status)
 		return -EINVAL;
@@ -443,7 +443,7 @@ int ade7753_get_int_status(struct ade7753_dev *dev, uint32_t msk,
 int ade7753_clear_irq_status(struct ade7753_dev *dev, int32_t *reg_data)
 {
 	int ret;
-	uint32_t data;
+	int32_t data;
 
 	if (!reg_data)
 		return -EINVAL;
@@ -545,7 +545,7 @@ int ade7753_energy_vals(struct ade7753_dev *dev,
 {
 	int ret;
 	/* temporary value read from register */
-	uint32_t temp_val;
+	int32_t temp_val;
 
 	if (!data)
 		return -EINVAL;
@@ -576,7 +576,7 @@ int ade7753_rms_vals(struct ade7753_dev *dev,
 {
 	int ret;
 	/* temporary value read from register */
-	uint32_t temp_val;
+	int32_t temp_val;
 
 	if (!data)
 		return -EINVAL;
