@@ -99,7 +99,7 @@ int32_t ltc4332_spi_write_and_read(struct no_os_spi_desc *desc, uint8_t *data,
 {
 	int32_t ret;
 	uint8_t *buff;
-	struct no_os_spi_platform_ops *temp_ops;
+	const struct no_os_spi_platform_ops *temp_ops;
 
 	if (!desc || !desc->parent)
 		return -EINVAL;
