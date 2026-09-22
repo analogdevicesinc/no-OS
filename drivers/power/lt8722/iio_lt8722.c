@@ -620,7 +620,7 @@ static struct iio_attribute lt8722_channel_attrs[] = {
 	END_ATTRIBUTES_ARRAY,
 };
 
-static struct iio_channel const lt8722_channels[] = {
+static struct iio_channel lt8722_channels[] = {
 	{
 		.name = "voltage_0",
 		.attributes = lt8722_channel_attrs,
