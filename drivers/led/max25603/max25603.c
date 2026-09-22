@@ -79,11 +79,7 @@ int max25603_set_enable(struct max25603_desc *desc, enum max25603_enable enable,
 		if (ret)
 			return ret;
 
-		ret = no_os_pwm_disable(desc->en2_desc);
-		if (ret)
-			return ret;
-
-		break;
+		return no_os_pwm_disable(desc->en2_desc);
 	case MAX25603_EN1:
 		ret = no_os_pwm_disable(desc->en1_desc);
 		if (ret)
