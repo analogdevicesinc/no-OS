@@ -48,7 +48,8 @@
  * @return Number of bytes printed in the output buffer, or negative error code.
  */
 static int ad7799_iio_channel_read(void *device, char *buf, uint32_t len,
-				   const struct iio_ch_info *channel)
+				   const struct iio_ch_info *channel,
+				   intptr_t priv)
 {
 	struct ad7799_dev *dev = (struct ad7799_dev *)device;
 	int32_t ret;
@@ -157,6 +158,30 @@ static struct iio_attribute ad7799_iio_attributes[] = {
 	END_ATTRIBUTES_ARRAY,
 };
 
+/**
+ * @brief Read a device register (IIO debug interface).
+ * @param device - Device driver descriptor.
+ * @param reg - Register address.
+ * @param readval - Read value.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int ad7799_iio_reg_read(void *device, uint32_t reg, uint32_t *readval)
+{
+	return ad7799_read(device, (uint8_t)reg, readval);
+}
+
+/**
+ * @brief Write a device register (IIO debug interface).
+ * @param device - Device driver descriptor.
+ * @param reg - Register address.
+ * @param writeval - Value to write.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int ad7799_iio_reg_write(void *device, uint32_t reg, uint32_t writeval)
+{
+	return ad7799_write(device, (uint8_t)reg, writeval);
+}
+
 /** IIO Descriptor */
 struct iio_device const ad7799_iio_descriptor = {
 	.num_ch = 3,
@@ -164,7 +189,7 @@ struct iio_device const ad7799_iio_descriptor = {
 	.attributes = ad7799_iio_attributes,
 	.debug_attributes = NULL,
 	.buffer_attributes = NULL,
-	.debug_reg_read = (int32_t (*)())ad7799_read,
-	.debug_reg_write = (int32_t (*)())ad7799_write,
+	.debug_reg_read = ad7799_iio_reg_read,
+	.debug_reg_write = ad7799_iio_reg_write,
 };
 
