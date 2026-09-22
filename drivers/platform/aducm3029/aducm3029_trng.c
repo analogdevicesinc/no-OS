@@ -70,7 +70,7 @@ static void aducm3029_gdesc_remove()
  * @return 0 or -1 if desc is null
  */
 int aducm3029_trng_init(struct no_os_trng_desc **desc,
-			struct no_os_trng_init_param *param)
+			const struct no_os_trng_init_param *param)
 {
 	struct no_os_trng_desc *trng_desc;
 

@@ -46,7 +46,7 @@
  * @return 0 in case of success, negative error code otherwise.
  */
 int max_trng_init(struct no_os_trng_desc **desc,
-		  struct no_os_trng_init_param *param)
+		  const struct no_os_trng_init_param *param)
 {
 	int ret;
 	struct no_os_trng_desc *descriptor;

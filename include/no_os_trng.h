@@ -76,7 +76,7 @@ struct no_os_trng_init_param {
 struct no_os_trng_platform_ops {
 	/** TRNG initialization function pointer */
 	int (*init)(struct no_os_trng_desc **,
-		    struct no_os_trng_init_param *);
+		    const struct no_os_trng_init_param *);
 	/** Fill buffer with random numbers */
 	int (*fill_buffer)(struct no_os_trng_desc *, uint8_t *, uint32_t);
 	/** TRNG remove function pointer */
