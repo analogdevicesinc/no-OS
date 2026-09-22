@@ -20,7 +20,6 @@ BUILD_PATH = sys.argv[2]
 HDL_SERVER_BASE_PATH = sys.argv[3]
 blacklist = ast.literal_eval(sys.argv[4])
 NEW_HW_DIR_NAME = 'new_hardware'
-FOLDERS_NR = 30 #number of folders to check for missing hardware file
 
 list_hardware = []
 for dir in os.listdir(NOOS_PATH + '/projects'):
@@ -70,7 +69,7 @@ unique_hardware_list = set(list_hardware)
 for item in blacklist:
     if item in unique_hardware_list:
         unique_hardware_list.remove(item)
-pattern= '\d{4}_\d{2}_\d{2}-\d{2}_\d{2}_\d{2}'
+pattern = r'\d{4}_\d{2}_\d{2}-\d{2}_\d{2}_\d{2}'
 timestamp_match = re.search(pattern, HDL_SERVER_BASE_PATH)
 
 if timestamp_match:
@@ -87,47 +86,48 @@ if timestamp_match:
         except Exception as e:
             log_warn("Error while downloading " + hardware + " from specific timestamp " + timestamp_match.group() + ": " + repr(e))
 else:
-    timestamp_folders = get_subfolders(package_version='hdl/main/hdl_output/', repo='sdg-hdl')
-    timestamp_folders = (timestamp_folders[len(timestamp_folders) - FOLDERS_NR:])
-    timestamp_folders.reverse()
-    latest = timestamp_folders[0]
-    release_link = HDL_SERVER_BASE_PATH + latest + "/"
+    # Hardware-first resolution: fetch the full "<timestamp>/<hardware>/" map
+    # for HDL_SERVER_BASE_PATH once, then for each hardware pick the NEWEST
+    # timestamp that actually contains a system_top.xsa. Unlike a fixed
+    # timestamp-folder window, this never "ages out" a design that simply has
+    # not been rebuilt recently -- it always resolves the latest published
+    # .xsa, however old (its provenance is logged below).
+    structure = get_folder_and_files_structure(package_version=HDL_SERVER_BASE_PATH, repo='sdg-hdl')
+
+    # hardware -> newest "<timestamp>" whose folder holds a system_top.xsa.
+    # Timestamp names (YYYY_MM_DD-HH_MM_SS) compare chronologically as strings.
+    latest_ts = {}
+    for rel_path, files in structure.items():
+        if 'system_top.xsa' not in files:
+            continue
+        parts = rel_path.strip('/').split('/')
+        if len(parts) != 2:
+            continue
+        ts, hardware_name = parts
+        if hardware_name not in latest_ts or ts > latest_ts[hardware_name]:
+            latest_ts[hardware_name] = ts
 
     for hardware in unique_hardware_list:
-        FOUND = False
+        ts = latest_ts.get(hardware)
+        if ts is None:
+            log_warn("Project " + hardware + " was not found on server")
+            continue
+        d_path = HDL_SERVER_BASE_PATH + ts + "/" + hardware + "/"
         # Skip a failing hardware rather than aborting the whole scan.
         try:
-            file_path = release_link + hardware + "/"
-            if 'system_top.xsa' in get_files(package_version=file_path, repo='sdg-hdl'):
-                os.system("mkdir -p %s" % (str(new_harware_dir) + '/' + hardware))
-                get_artifacts_from_location(package_version=file_path, package_name= 'system_top.xsa', repo='sdg-hdl')
-                os.system("mv ./system_top.xsa %s" % (str(new_harware_dir) + '/' + hardware))
-                FOUND = True
-            else:
-                log_warn("Missing " + hardware + " from latest timestamp " + latest)
-                for timestamp_folder in timestamp_folders[1:]:
-                    d_path = HDL_SERVER_BASE_PATH + timestamp_folder + "/" + hardware + "/"
-                    if 'system_top.xsa' in get_files(package_version=d_path, repo='sdg-hdl'):
-                        os.system("mkdir -p %s" % (str(new_harware_dir) + '/' + hardware))
-                        get_artifacts_from_location(package_version=d_path, package_name= 'system_top.xsa', repo='sdg-hdl')
-                        os.system("mv ./system_top.xsa %s" % (str(new_harware_dir) + '/' + hardware))
-                        # Properties only enrich the log; never let them fail the download.
-                        try:
-                            file_properties = get_item_properties(package_version=d_path, package_name= 'system_top.xsa', repo='sdg-hdl')
-                        except Exception as e:
-                            file_properties = None
-                            log_warn("Could not read properties for " + hardware + " on timestamp " + timestamp_folder + ": " + repr(e))
-                        if file_properties and len(file_properties) >= 2:
-                            commit_date = file_properties[0].split('-', 1)[1]
-                            git_sha = file_properties[1].split('-', 1)[1]
-                            log_warn("Hardware " + hardware + " found on next timestamp " + timestamp_folder + " with next properties git sha: " + \
-                                str(git_sha) + " commit date: " + str(commit_date))
-                        else:
-                            log_warn("Hardware " + hardware + " found on next timestamp " + timestamp_folder)
-                        FOUND = True
-                        break
+            os.system("mkdir -p %s" % (str(new_harware_dir) + '/' + hardware))
+            get_artifacts_from_location(package_version=d_path, package_name='system_top.xsa', repo='sdg-hdl')
+            os.system("mv ./system_top.xsa %s" % (str(new_harware_dir) + '/' + hardware))
         except Exception as e:
-            log_warn("Error while downloading " + hardware + ": " + repr(e))
+            log_warn("Error while downloading " + hardware + " from timestamp " + ts + ": " + repr(e))
             continue
-        if FOUND is False:
-            log_warn("Project " + hardware + " was not found on server")
+        # Provenance of the .xsa we will build against. Best-effort: a missing
+        # tag must never fail the download.
+        git_sha = "unknown"
+        try:
+            props = get_item_properties_as_dict(package_version=d_path, package_name='system_top.xsa', repo='sdg-hdl')
+            if props.get('git_sha'):
+                git_sha = props['git_sha'][0]
+        except Exception as e:
+            log_warn("Could not read properties for " + hardware + " on timestamp " + ts + ": " + repr(e))
+        print("Building " + hardware + ": using system_top.xsa from timestamp " + ts + " (git sha " + git_sha + ")")
