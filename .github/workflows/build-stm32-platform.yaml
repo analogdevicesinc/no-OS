@@ -74,26 +74,16 @@ jobs:
         with:
           submodules: false
           clean: false
-      - name: Building for platform STM32 
+      - name: Building for platform STM32
         shell: sh
         run: |
-          echo "Setup cloudsmith helper ..."
-          wget https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py \
-            -O ./tools/scripts/cloudsmith_temp.py
-          cat tools/scripts/cloudsmith_temp.py | sed 's#/usr/bin/python3#/usr/bin/env python3#' > tools/scripts/cloudsmith_helper.py
-          rm tools/scripts/cloudsmith_temp.py
-
-          echo "Running project build ..."
-          ${{ github.workspace }}/tools/scripts/build_projects.py \
-            ${{ github.workspace }} \
-            -export_dir ${{ env.RELEASES_DIR }} \
-            -log_dir ${{ env.LOGS_DIR }} \
-            -builds_dir ${{ env.BUILDS_DIR }} \
-            -platform stm32 \
-            -hdl_branch ${{ env.HDL_BRANCH }}
+          ${{ github.workspace }}/.github/scripts/build-projects.sh
         env:
+          WORKSPACE: ${{ github.workspace }}
+          PLATFORM: stm32
           CLOUDSMITH_API_KEY: ${{ env.CLOUDSMITH_API_KEY }}
           TOKEN: ${{ secrets.GH_GHDL_TOKEN }}
+          PROJECTS: all
       - name: Upload STM32 artifacts
         if: always()
         uses: actions/upload-artifact@v7
