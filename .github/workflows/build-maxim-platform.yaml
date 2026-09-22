@@ -71,7 +71,7 @@ jobs:
       RELEASES_DIR: ${{ github.workspace }}/latest_build
       LOGS_DIR: ${{ github.workspace }}/logs
     container:
-      image: ${{ vars.DOCKER_REGISTRY }}/maxim-platform:1.0
+      image: ${{ vars.DOCKER_REGISTRY }}/maxim-platform:1.1
       credentials:
         username: ${{ secrets.CLOUDSMITH_USER }}
         password: ${{ secrets.CLOUDSMITH_API_KEY }}
