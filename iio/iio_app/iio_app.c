@@ -55,6 +55,10 @@
 #include "maxim_irq.h"
 #include "maxim_uart.h"
 #endif
+#if defined(CONFIG_ALTERA_PLATFORM_NIOSV)
+#include "altera_uart.h"
+#include "altera_irq.h"
+#endif
 
 #ifdef NO_OS_NETWORKING
 /* Fix: Use static buffers instead of calloc for new connections */
@@ -240,7 +244,7 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 	struct no_os_uart_init_param luart_par = {
 		.device_id = uart_init_par->device_id,
 		/* TODO: remove this ifdef when asynchrounous rx is implemented on every platform. */
-#if defined(STM32_PLATFORM) || defined(MAXIM_PLATFORM) || defined(ADUCM_PLATFORM) || defined(PICO_PLATFORM) || defined(LATTICE_PLATFORM)
+#if defined(STM32_PLATFORM) || defined(MAXIM_PLATFORM) || defined(ADUCM_PLATFORM) || defined(PICO_PLATFORM) || defined(LATTICE_PLATFORM) || defined(CONFIG_ALTERA_PLATFORM_NIOSV)
 		.irq_id = uart_init_par->irq_id,
 #if defined(ADUCM_PLATFORM) && defined(NO_OS_NETWORKING)
 		/*
@@ -268,7 +272,7 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 	return no_os_uart_init(uart_desc, &luart_par);
 }
 
-#if defined(ADUCM_PLATFORM) || (defined(STM32_PLATFORM)) || defined(MAXIM_PLATFORM)
+#if defined(ADUCM_PLATFORM) || (defined(STM32_PLATFORM)) || defined(MAXIM_PLATFORM) || defined(CONFIG_ALTERA_PLATFORM_NIOSV)
 static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 {
 	int32_t status;
@@ -281,6 +285,9 @@ static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 #elif defined(MAXIM_PLATFORM)
 	void *platform_irq_init_par = NULL;
 	const struct no_os_irq_platform_ops *platform_irq_ops = &max_irq_ops;
+#elif defined(CONFIG_ALTERA_PLATFORM_NIOSV)
+	void *platform_irq_init_par = NULL;
+	const struct no_os_irq_platform_ops *platform_irq_ops = &altera_irq_ops;
 #endif
 
 	struct no_os_irq_init_param irq_init_param = {
@@ -320,7 +327,7 @@ int iio_app_init(struct iio_app_desc **app,
 	application->post_step_callback = app_init_param.post_step_callback;
 	application->arg = app_init_param.arg;
 
-#if defined(ADUCM_PLATFORM) || defined(STM32_PLATFORM)
+#if defined(ADUCM_PLATFORM) || defined(STM32_PLATFORM) || defined(CONFIG_ALTERA_PLATFORM_NIOSV)
 	void *irq_desc = app_init_param.irq_desc;
 	/* Only one irq controller can exist and be initialized in
 	 * any of the iio_devices. */
@@ -471,7 +478,7 @@ int iio_app_remove(struct iio_app_desc *app)
 {
 	int ret;
 
-#if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB)) || defined(STM32_PLATFORM)
+#if defined(ADUCM_PLATFORM) || (defined(XILINX_PLATFORM) && !defined(PLATFORM_MB)) || defined(STM32_PLATFORM) || defined(CONFIG_ALTERA_PLATFORM_NIOSV)
 	ret = no_os_irq_ctrl_remove(app->irq_desc);
 	if (ret)
 		return ret;
