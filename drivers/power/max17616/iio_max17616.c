@@ -434,7 +434,7 @@ STATIC int max17616_iio_read_attr(void *device, char *buf, uint32_t len,
 		} else if (priv == 1) {
 			return snprintf(buf, len, "1");
 		}
-		break;
+		return -EINVAL;
 
 	case MAX17616_IIO_VOUT_CHAN:
 		if (priv == 0) {
@@ -448,7 +448,7 @@ STATIC int max17616_iio_read_attr(void *device, char *buf, uint32_t len,
 		} else if (priv == 1) {
 			return snprintf(buf, len, "1");
 		}
-		break;
+		return -EINVAL;
 
 	case MAX17616_IIO_IOUT_CHAN:
 		if (priv == 0) {
@@ -462,7 +462,7 @@ STATIC int max17616_iio_read_attr(void *device, char *buf, uint32_t len,
 		} else if (priv == 1) {
 			return snprintf(buf, len, "1");
 		}
-		break;
+		return -EINVAL;
 
 	case MAX17616_IIO_TEMP_CHAN:
 		if (priv == 0) {
@@ -476,7 +476,7 @@ STATIC int max17616_iio_read_attr(void *device, char *buf, uint32_t len,
 		} else if (priv == 1) {
 			return snprintf(buf, len, "1");
 		}
-		break;
+		return -EINVAL;
 
 	case MAX17616_IIO_POUT_CHAN:
 		if (priv == 0) {
@@ -490,7 +490,7 @@ STATIC int max17616_iio_read_attr(void *device, char *buf, uint32_t len,
 		} else if (priv == 1) {
 			return snprintf(buf, len, "1");
 		}
-		break;
+		return -EINVAL;
 
 	/* Status registers */
 	case MAX17616_IIO_STATUS_WORD_CHAN:
