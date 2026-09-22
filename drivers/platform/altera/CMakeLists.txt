@@ -24,3 +24,10 @@ target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/altera_axi_io.c)
 no_os_sources_ifdef(CONFIG_GPIO_ALTERA ${CMAKE_CURRENT_SOURCE_DIR}/altera_gpio.c)
 no_os_sources_ifdef(CONFIG_I2C_ALTERA  ${CMAKE_CURRENT_SOURCE_DIR}/altera_i2c.c)
 no_os_sources_ifdef(CONFIG_SPI_ALTERA  ${CMAKE_CURRENT_SOURCE_DIR}/altera_spi.c)
+
+# JTAG-UART + core-local interrupt controller drivers. The UART is the IIOD
+# transport; the IRQ driver wraps the BSP HAL alt_ic_*/alt_irq_* API. Both
+# reference generated BSP HAL headers (sys/alt_irq.h) that only exist in a Nios V
+# BSP, so they are opt-in like the other Avalon drivers.
+no_os_sources_ifdef(CONFIG_IRQ_ALTERA  ${CMAKE_CURRENT_SOURCE_DIR}/altera_irq.c)
+no_os_sources_ifdef(CONFIG_UART_ALTERA ${CMAKE_CURRENT_SOURCE_DIR}/altera_uart.c)

@@ -35,4 +35,24 @@ config SPI_ALTERA
 	  Requires CONFIG_SPI=y and a hardware design with the corresponding
 	  Avalon SPI IP core.
 
+config IRQ_ALTERA
+	bool "Enable Altera IRQ driver"
+	depends on IRQ
+	default n
+	help
+	  Enable the Altera / Nios V core-local interrupt controller (CLIC/CLINT)
+	  driver, which wraps the generated BSP HAL alt_ic_* / alt_irq_* API.
+	  Requires CONFIG_IRQ=y.
+
+config UART_ALTERA
+	bool "Enable Altera UART driver"
+	depends on UART
+	select IRQ
+	select IRQ_ALTERA
+	default n
+	help
+	  Enable the Altera / Nios V Avalon JTAG-UART driver (polled TX, hybrid
+	  interrupt + polled RX). Needed for the IIO server transport. Requires
+	  CONFIG_UART=y and pulls in the Altera IRQ driver.
+
 endif # ALTERA_PLATFORM_NIOSV
