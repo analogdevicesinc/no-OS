@@ -710,9 +710,9 @@ int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data)
  *
  * @return 0 on success, or negative error code.
 *******************************************************************************/
+#ifdef XILINX_PLATFORM
 static int32_t ad7606_parallel_capture_pre_enable(struct ad7606_dev *dev)
 {
-#ifdef XILINX_PLATFORM
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 	struct axi_dmac_init dmac_init;
 	int32_t i, ret;
@@ -732,7 +732,6 @@ static int32_t ad7606_parallel_capture_pre_enable(struct ad7606_dev *dev)
 	}
 
 	return no_os_pwm_enable(axi->trigger_pwm_desc);
-#endif
 }
 
 /***************************************************************************//**
@@ -742,7 +741,6 @@ static int32_t ad7606_parallel_capture_pre_enable(struct ad7606_dev *dev)
 *******************************************************************************/
 static void ad7606_parallel_capture_post_disable(struct ad7606_dev *dev)
 {
-#ifdef XILINX_PLATFORM
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 	uint32_t i;
 
@@ -754,7 +752,6 @@ static void ad7606_parallel_capture_post_disable(struct ad7606_dev *dev)
 	axi_dmac_remove(axi->dmac);
 	no_os_pwm_disable(axi->trigger_pwm_desc);
 	axi->dmac = NULL;
-#endif
 }
 
 /***************************************************************************//**
@@ -773,7 +770,6 @@ static void ad7606_parallel_capture_post_disable(struct ad7606_dev *dev)
 static int32_t ad7606_read_raw_data_parallel(struct ad7606_dev *dev,
 		uint32_t *buf, uint32_t samples)
 {
-#ifdef XILINX_PLATFORM
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 	struct axi_dma_transfer transfer = {
 		// Number of bytes to writen/read
@@ -802,7 +798,6 @@ static int32_t ad7606_read_raw_data_parallel(struct ad7606_dev *dev,
 		axi->dcache_invalidate_range(transfer.dest_addr, samples * sizeof(uint32_t));
 
 	return 0;
-#endif
 }
 
 /***************************************************************************//**
@@ -814,7 +809,6 @@ static int32_t ad7606_read_raw_data_parallel(struct ad7606_dev *dev,
 *******************************************************************************/
 static int32_t ad7606_spi_engine_capture_pre_enable(struct ad7606_dev *dev)
 {
-#ifdef XILINX_PLATFORM
 	const uint8_t bits = ad7606_chip_info_tbl[dev->device_id].bits;
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 
@@ -823,7 +817,6 @@ static int32_t ad7606_spi_engine_capture_pre_enable(struct ad7606_dev *dev)
 	spi_engine_set_transfer_width(dev->spi_desc, bits);
 
 	return no_os_pwm_enable(axi->trigger_pwm_desc);
-#endif
 }
 
 /***************************************************************************//**
@@ -833,11 +826,9 @@ static int32_t ad7606_spi_engine_capture_pre_enable(struct ad7606_dev *dev)
 *******************************************************************************/
 static void ad7606_spi_engine_capture_post_disable(struct ad7606_dev *dev)
 {
-#ifdef XILINX_PLATFORM
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 
 	no_os_pwm_disable(axi->trigger_pwm_desc);
-#endif
 }
 
 /***************************************************************************//**
@@ -856,7 +847,6 @@ static void ad7606_spi_engine_capture_post_disable(struct ad7606_dev *dev)
 static int32_t ad7606_read_raw_data_spi_engine(struct ad7606_dev *dev,
 		uint32_t *buf, uint32_t samples)
 {
-#ifdef XILINX_PLATFORM
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 	int32_t ret;
 	uint32_t commands_data[2] = {0x00, 0x00};
@@ -885,8 +875,8 @@ static int32_t ad7606_read_raw_data_spi_engine(struct ad7606_dev *dev,
 
 error:
 	return ret;
-#endif
 }
+#endif
 
 /***************************************************************************//**
  * @brief Blocking conversion start and read data (for a single sample from all
@@ -1705,10 +1695,10 @@ int32_t ad7606_set_digital_diag(struct ad7606_dev *dev,
  *         Example: -ENOMEM - Memory allocation error.
  *                  0 - No errors encountered.
 *******************************************************************************/
+#ifdef XILINX_PLATFORM
 static int32_t ad7606_axi_init(struct ad7606_dev *device,
 			       struct ad7606_init_param *init_param)
 {
-#ifdef XILINX_PLATFORM
 	struct ad7606_axi_init_param *axi_init = init_param->axi_init;
 	struct ad7606_axi_dev *axi = &device->axi_dev;
 	int32_t ret;
@@ -1753,8 +1743,8 @@ static int32_t ad7606_axi_init(struct ad7606_dev *device,
 	/* Note: more validation will be added later */
 error:
 	return ret;
-#endif
 }
+#endif
 
 /***************************************************************************//**
  * @brief Initialize the ad7606 device structure.
