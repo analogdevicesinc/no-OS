@@ -199,7 +199,7 @@ static int32_t pulsar_adc_read_data_offload(struct pulsar_adc_dev *dev,
 
 	msg.commands = spi_eng_msg_cmds;
 	msg.no_commands = NO_OS_ARRAY_SIZE(spi_eng_msg_cmds);
-	msg.rx_addr = buf;
+	msg.rx_addr = (uint32_t)buf;
 	msg.commands_data = commands_data;
 
 	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples);
