@@ -74,7 +74,7 @@ static struct iio_device ltm4700_iio_dev;
 #ifndef TEST
 static
 #endif
-int32_t ltm4700_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
+int ltm4700_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
 {
 	struct ltm4700_iio_desc *iio_ltm4700 = dev;
 	struct ltm4700_dev *ltm4700 = iio_ltm4700->ltm4700_dev;
@@ -168,7 +168,7 @@ int32_t ltm4700_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
 #ifndef TEST
 static
 #endif
-int32_t ltm4700_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
+int ltm4700_iio_reg_write(void *dev, uint32_t reg, uint32_t writeval)
 {
 	struct ltm4700_iio_desc *iio_ltm4700 = dev;
 	struct ltm4700_dev *ltm4700 = iio_ltm4700->ltm4700_dev;
@@ -236,55 +236,55 @@ int ltm4700_iio_read_raw(void *device, char *buf, uint32_t len,
 		ret = ltm4700_read_value(dev, 0, LTM4700_VIN, &val);
 		if (ret)
 			return ret;
-		return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
 
 	case LTM4700_IIO_IIN:
 		ret = ltm4700_read_value(dev, 0, LTM4700_IIN, &val);
 		if (ret)
 			return ret;
-		return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
 
 	case LTM4700_IIO_VOUT:
 		ret = ltm4700_read_value(dev, channel->ch_num, LTM4700_VOUT, &val);
 		if (ret)
 			return ret;
-		return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
 
 	case LTM4700_IIO_IOUT:
 		ret = ltm4700_read_value(dev, channel->ch_num, LTM4700_IOUT, &val);
 		if (ret)
 			return ret;
-		return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
 
 	case LTM4700_IIO_TEMP_EXT:
 		ret = ltm4700_read_value(dev, channel->ch_num, LTM4700_TEMP_EXT, &val);
 		if (ret)
 			return ret;
-		return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
 
 	case LTM4700_IIO_TEMP_IC:
 		ret = ltm4700_read_value(dev, 0, LTM4700_TEMP_IC, &val);
 		if (ret)
 			return ret;
-		return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
 
 	case LTM4700_IIO_FREQ:
 		ret = ltm4700_read_value(dev, channel->ch_num, LTM4700_FREQ, &val);
 		if (ret)
 			return ret;
-		return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
 
 	case LTM4700_IIO_POUT:
 		ret = ltm4700_read_value(dev, channel->ch_num, LTM4700_POUT, &val);
 		if (ret)
 			return ret;
-		return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
 
 	case LTM4700_IIO_PIN:
 		ret = ltm4700_read_value(dev, 0, LTM4700_PIN, &val);
 		if (ret)
 			return ret;
-		return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
 
 	default:
 		return -EINVAL;
@@ -334,7 +334,7 @@ int ltm4700_iio_read_offset(void *device, char *buf, uint32_t len,
 {
 	int val = 0;
 
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
 }
 
 /**
@@ -493,7 +493,7 @@ static int ltm4700_parse_voltage_mv(const char *buf, int *val_mv)
 #ifndef TEST
 static
 #endif
-int ltm4700_iio_write_attr(void *device, const char *buf, uint32_t len,
+int ltm4700_iio_write_attr(void *device, char *buf, uint32_t len,
 			   const struct iio_ch_info *channel,
 			   intptr_t priv)
 {
