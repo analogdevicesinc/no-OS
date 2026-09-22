@@ -354,8 +354,8 @@ int32_t ad9528_init(struct ad9528_init_param *init_param)
  *
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad9528_clk_recalc_rate(struct no_os_clk_desc *desc,
-			       uint64_t *rate)
+int ad9528_clk_recalc_rate(struct no_os_clk_desc *desc,
+			   uint64_t *rate)
 {
 	struct ad9528_dev *ad9528_dev;
 	uint32_t reg_val, val;

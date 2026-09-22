@@ -1683,8 +1683,8 @@ static int hmc7044_round_rate(struct no_os_clk_desc *desc,
  *
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t hmc7044_set_rate(struct no_os_clk_desc *desc,
-			 uint64_t rate)
+int hmc7044_set_rate(struct no_os_clk_desc *desc,
+		     uint64_t rate)
 {
 	return hmc7044_clk_set_rate(desc->dev_desc, desc->hw_ch_num,
 				    rate);
