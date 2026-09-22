@@ -66,24 +66,6 @@ static const char *const ad7490_polarity_avail[2] = {
 	[AD7490_CODING_BINARY] = "UNIPOLAR",
 };
 
-static int ad7490_read_samples(struct ad7490_desc *desc, int16_t *data,
-			       uint32_t samples)
-{
-	uint32_t i, sample_size;
-	int ret;
-
-	sample_size = desc->nb_channels_seq * sizeof(int16_t);
-
-	for (i = 0; i < samples; i++) {
-		ret = ad7490_read_seq(desc, data);
-		if (ret)
-			return ret;
-		data += sample_size;
-	}
-
-	return 0;
-}
-
 static int ad7490_iio_read_raw(void *device, char *buf, uint32_t len,
 			       const struct iio_ch_info *channel,
 			       intptr_t priv)
