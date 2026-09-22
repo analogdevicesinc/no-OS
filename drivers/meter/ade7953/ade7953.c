@@ -245,7 +245,7 @@ static int ade7953_update_bits(struct ade7953_dev *dev, uint16_t reg_addr,
 {
 	int ret;
 	/* data to be written */
-	uint32_t data;
+	int32_t data;
 
 	ret = ade7953_read(dev, reg_addr, &data);
 	if (ret)
@@ -380,7 +380,7 @@ int ade7953_version_product(struct ade7953_dev *dev, uint32_t *data_read)
 {
 	int ret;
 	/* version product */
-	uint32_t version;
+	int32_t version;
 
 	if (!data_read)
 		return -EINVAL;
@@ -404,7 +404,7 @@ int ade7953_reset_iapk_val(struct ade7953_dev *dev, uint32_t *val)
 {
 	int ret;
 	/* register value read */
-	uint32_t reg_val;
+	int32_t reg_val;
 
 	if (!val)
 		return -EINVAL;
@@ -427,7 +427,7 @@ int ade7953_reset_ibpk_val(struct ade7953_dev *dev, uint32_t *val)
 {
 	int ret;
 	/* register value read */
-	uint32_t reg_val;
+	int32_t reg_val;
 
 	if (!val)
 		return -EINVAL;
@@ -450,7 +450,7 @@ int ade7953_reset_vpk_val(struct ade7953_dev *dev, uint32_t *val)
 {
 	int ret;
 	/* register value read */
-	uint32_t reg_val;
+	int32_t reg_val;
 
 	if (!val)
 		return -EINVAL;
@@ -475,7 +475,7 @@ int ade7953_get_int_stata(struct ade7953_dev *dev, uint32_t msk,
 {
 	int ret;
 	/* register value read */
-	uint32_t reg_val;
+	int32_t reg_val;
 
 	if (!status)
 		return -EINVAL;
@@ -501,7 +501,7 @@ int ade7953_get_int_statb(struct ade7953_dev *dev, uint32_t msk,
 {
 	int ret;
 	/* register value read */
-	uint32_t reg_val;
+	int32_t reg_val;
 
 	if (!status)
 		return -EINVAL;
@@ -522,7 +522,7 @@ int ade7953_get_int_statb(struct ade7953_dev *dev, uint32_t msk,
  */
 int ade7953_clear_irq_stata(struct ade7953_dev *dev)
 {
-	uint32_t data;
+	int32_t data;
 
 	return ade7953_read(dev, ADE7953_REG_RSTIRQSTATA, &data);
 
@@ -535,7 +535,7 @@ int ade7953_clear_irq_stata(struct ade7953_dev *dev)
  */
 int ade7953_clear_irq_statb(struct ade7953_dev *dev)
 {
-	uint32_t data;
+	int32_t data;
 
 	return ade7953_read(dev, ADE7953_REG_RSTIRQSTATB, &data);
 
@@ -932,7 +932,7 @@ int ade7953_energy_vals(struct ade7953_dev *dev,
 {
 	int ret;
 	/* temporary value read from register */
-	uint32_t temp_val;
+	int32_t temp_val;
 	/* energy registers addresses */
 	uint16_t active_energy_addr, reactive_energy_addr, apparent_energy_addr;
 	if (!data)
@@ -982,7 +982,7 @@ int ade7953_power_vals(struct ade7953_dev *dev,
 {
 	int ret;
 	/* temporary value read from register */
-	uint32_t temp_val;
+	int32_t temp_val;
 	/* power registers addresses */
 	uint16_t active_power_addr, reactive_power_addr, apparent_power_addr;
 
@@ -1033,7 +1033,7 @@ int ade7953_rms_vals(struct ade7953_dev *dev,
 {
 	int ret;
 	/* temporary value read from register */
-	uint32_t temp_val;
+	int32_t temp_val;
 	/* current channel */
 	uint16_t ch;
 
