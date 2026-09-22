@@ -232,8 +232,8 @@ int max31865_enable_bias(struct max31865_dev *device, bool bias_en)
 		return max31865_reg_update(device, MAX31865_CONFIG_REG, MAX31865_CONFIG_BIAS,
 					   true);
 
-	return max31865_reg_update(device, MAX31865_CONFIG_REG, ~MAX31865_CONFIG_BIAS,
-				   false);
+	return max31865_reg_update(device, MAX31865_CONFIG_REG,
+				   (uint8_t)~MAX31865_CONFIG_BIAS, false);
 }
 
 /**
