@@ -846,6 +846,8 @@ static int ltc7871_iio_read_mfr_config1(void *dev, char *buf, uint32_t len,
 		return sprintf(buf, "%s", ltc7871_drvcc_set_avail[value]);
 	case LTC7871_ILIM_SET:
 		return sprintf(buf, "%s", ltc7871_ilim_set_avail[value]);
+	default:
+		return -EINVAL;
 	}
 }
 
@@ -889,6 +891,8 @@ static int ltc7871_iio_read_mfr_config2(void *dev, char *buf, uint32_t len,
 		return sprintf(buf, "%s", ltc7871_sprd_avail[value]);
 	case LTC7871_BUCK_BOOST:
 		return sprintf(buf, "%s", ltc7871_buck_boost_avail[value]);
+	default:
+		return -EINVAL;
 	}
 }
 
