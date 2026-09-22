@@ -55,13 +55,6 @@ static int m24512_set_write_protection(struct m24512_dev *dev, bool protect);
 static int m24512_enable_write(struct m24512_dev *dev);
 
 /**
- * @brief Perform initialization test with write/read back verification
- * @param dev - Device descriptor
- * @return 0 in case of success, negative error code otherwise
- */
-static int m24512_init_test(struct m24512_dev *dev);
-
-/**
  * @brief Perform acknowledge polling to check if device is ready
  * @param dev - Device descriptor
  * @return true if ready, false if busy
