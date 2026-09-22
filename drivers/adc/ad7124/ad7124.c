@@ -520,14 +520,13 @@ int32_t ad7124_fclk_get(struct ad7124_dev *dev, float *f_clk)
 		return ret;
 
 	switch (dev->power_mode) {
-	case 0:
+	case AD7124_LOW_POWER:
 		*f_clk = f_clk_lp;
 		break;
-	case 1:
+	case AD7124_MID_POWER:
 		*f_clk = f_clk_mp;
 		break;
-	case 2:
-	case 3:
+	case AD7124_HIGH_POWER:
 		*f_clk = f_clk_fp;
 		break;
 	default:
