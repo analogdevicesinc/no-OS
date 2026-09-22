@@ -418,7 +418,7 @@ int ltc7871_get_mfr_idac_vlow(struct ltc7871_dev *dev, int8_t *value)
 	if (!dev || !value)
 		return -EINVAL;
 
-	ret = ltc7871_reg_read(dev, LTC7871_IDAC_VLOW, &data);
+	ret = ltc7871_reg_read(dev, LTC7871_IDAC_VLOW, (uint8_t *)&data);
 	if (ret)
 		return ret;
 
@@ -469,7 +469,7 @@ int ltc7871_get_mfr_idac_vhigh(struct ltc7871_dev *dev, int8_t *value)
 	if (!dev || !value)
 		return -EINVAL;
 
-	ret = ltc7871_reg_read(dev, LTC7871_IDAC_VHIGH, &data);
+	ret = ltc7871_reg_read(dev, LTC7871_IDAC_VHIGH, (uint8_t *)&data);
 	if (ret)
 		return ret;
 
@@ -520,7 +520,7 @@ int ltc7871_get_mfr_idac_setcur(struct ltc7871_dev *dev, int8_t *value)
 	if (!dev || !value)
 		return -EINVAL;
 
-	ret = ltc7871_reg_read(dev, LTC7871_IDAC_SETCUR, &data);
+	ret = ltc7871_reg_read(dev, LTC7871_IDAC_SETCUR, (uint8_t *)&data);
 	if (ret)
 		return ret;
 
