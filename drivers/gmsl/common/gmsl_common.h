@@ -256,99 +256,99 @@ struct gmsl_link_enable_cfg {
  * operations and not all operations are supported by each part.
  */
 struct gmsl_dev_diag_ops {
-	int32_t (*diag_check_device_id)(struct gmsl_dev *dev, void *dev_id,
-					bool *diag_err);                                          /* GMSL_DIAG_PART_DEV_ID */
-	int32_t (*diag_check_device_rev)(struct gmsl_dev *dev, void *dev_rev,
-					 bool *diag_err);                                        /* GMSL_DIAG_PART_DEV_REV */
-	int32_t (*diag_check_part_config)(struct gmsl_dev *dev, void *part_cfg_sts,
-					  bool *diag_err);                                  /* GMSL_DIAG_PART_CFG */
-	int32_t (*diag_check_link_lock_status)(struct gmsl_dev *dev,
-					       void *link_lock_status, bool
-					       *diag_err);                         /* GMSL_DIAG_LINK_LOCK */
-	int32_t (*diag_check_decode_error_status)(struct gmsl_dev *dev,
-			void *decode_err_status,
-			bool *diag_err);                     /* GMSL_DIAG_LINK_DECODE */
-	int32_t (*diag_check_idle_err_status)(struct gmsl_dev *dev, void *idle_err_sts,
-					      bool *diag_err);                              /* GMSL_DIAG_LINK_IDLE */
-	int32_t (*diag_check_max_retrans_status)(struct gmsl_dev *dev,
-			void *max_retrans_sts, bool
-			*diag_err);                        /* GMSL_DIAG_LINK_MAX_RETRANS */
-	int32_t (*diag_check_line_fault_status)(struct gmsl_dev *dev,
-						void *line_fault_status,
-						bool *diag_err);                       /* GMSL_DIAG_LINK_LINE_FAULT */
-	int32_t (*diag_check_fec_status)(struct gmsl_dev *dev, void *fec_status,
-					 bool *diag_err);                                     /* GMSL_DIAG_LINK_FEC */
-	int32_t (*diag_check_eom_status)(struct gmsl_dev *dev, void *eom_status,
-					 bool *diag_err);                                     /* GMSL_DIAG_LINK_EOM */
-	int32_t (*diag_check_overflow_status)(struct gmsl_dev *dev,
-					      void *vid_tx_overflow_sts,
-					      bool *diag_err);                       /* GMSL_DIAG_VIDEO_OVERFLOW */
-	int32_t (*diag_check_pclk_lost_status)(struct gmsl_dev *dev, void *pclk_det_sts,
-					       bool *diag_err);                             /* GMSL_DIAG_VIDEO_PCLK_LOST */
-	int32_t (*diag_check_drift_status)(struct gmsl_dev *dev,
-					   void *vid_tx_pclk_drift_err_sts,
-					   bool *diag_err);                    /* GMSL_DIAG_VIDEO_DRIFT */
-	int32_t (*diag_check_get_is_video_line_crc_enabled)(struct gmsl_dev *dev,
+	int (*diag_check_device_id)(struct gmsl_dev *dev, void *dev_id,
+				    bool *diag_err);                                          /* GMSL_DIAG_PART_DEV_ID */
+	int (*diag_check_device_rev)(struct gmsl_dev *dev, void *dev_rev,
+				     bool *diag_err);                                        /* GMSL_DIAG_PART_DEV_REV */
+	int (*diag_check_part_config)(struct gmsl_dev *dev, void *part_cfg_sts,
+				      bool *diag_err);                                  /* GMSL_DIAG_PART_CFG */
+	int (*diag_check_link_lock_status)(struct gmsl_dev *dev,
+					   void *link_lock_status, bool
+					   *diag_err);                         /* GMSL_DIAG_LINK_LOCK */
+	int (*diag_check_decode_error_status)(struct gmsl_dev *dev,
+					      void *decode_err_status,
+					      bool *diag_err);                     /* GMSL_DIAG_LINK_DECODE */
+	int (*diag_check_idle_err_status)(struct gmsl_dev *dev, void *idle_err_sts,
+					  bool *diag_err);                              /* GMSL_DIAG_LINK_IDLE */
+	int (*diag_check_max_retrans_status)(struct gmsl_dev *dev,
+					     void *max_retrans_sts, bool
+					     *diag_err);                        /* GMSL_DIAG_LINK_MAX_RETRANS */
+	int (*diag_check_line_fault_status)(struct gmsl_dev *dev,
+					    void *line_fault_status,
+					    bool *diag_err);                       /* GMSL_DIAG_LINK_LINE_FAULT */
+	int (*diag_check_fec_status)(struct gmsl_dev *dev, void *fec_status,
+				     bool *diag_err);                                     /* GMSL_DIAG_LINK_FEC */
+	int (*diag_check_eom_status)(struct gmsl_dev *dev, void *eom_status,
+				     bool *diag_err);                                     /* GMSL_DIAG_LINK_EOM */
+	int (*diag_check_overflow_status)(struct gmsl_dev *dev,
+					  void *vid_tx_overflow_sts,
+					  bool *diag_err);                       /* GMSL_DIAG_VIDEO_OVERFLOW */
+	int (*diag_check_pclk_lost_status)(struct gmsl_dev *dev, void *pclk_det_sts,
+					   bool *diag_err);                             /* GMSL_DIAG_VIDEO_PCLK_LOST */
+	int (*diag_check_drift_status)(struct gmsl_dev *dev,
+				       void *vid_tx_pclk_drift_err_sts,
+				       bool *diag_err);                    /* GMSL_DIAG_VIDEO_DRIFT */
+	int (*diag_check_get_is_video_line_crc_enabled)(struct gmsl_dev *dev,
 			void *vid_line_crc_enabled_sts, bool *diag_err);    /* GMSL_DIAG_VIDEO_CRC */
-	int32_t (*diag_check_stream_id_status)(struct gmsl_dev *dev,
-					       void *stream_id_sts, bool
-					       *diag_err);                            /* GMSL_DIAG_VIDEO_STREAM_ID */
-	int32_t (*diag_check_parameter_status)(struct gmsl_dev *dev,
-					       void *vid_param_sts, bool
-					       *diag_err);                            /* GMSL_DIAG_VIDEO_PARAMETER */
-	int32_t (*diag_check_pps_status)(struct gmsl_dev *dev, void *pps_value_sts,
-					 bool *diag_err);                                  /* GMSL_DIAG_VIDEO_PPS */
-	int32_t (*diag_check_video_stream_dsc_compression)(struct gmsl_dev *dev,
+	int (*diag_check_stream_id_status)(struct gmsl_dev *dev,
+					   void *stream_id_sts, bool
+					   *diag_err);                            /* GMSL_DIAG_VIDEO_STREAM_ID */
+	int (*diag_check_parameter_status)(struct gmsl_dev *dev,
+					   void *vid_param_sts, bool
+					   *diag_err);                            /* GMSL_DIAG_VIDEO_PARAMETER */
+	int (*diag_check_pps_status)(struct gmsl_dev *dev, void *pps_value_sts,
+				     bool *diag_err);                                  /* GMSL_DIAG_VIDEO_PPS */
+	int (*diag_check_video_stream_dsc_compression)(struct gmsl_dev *dev,
 			void *vid_stream_dsc_comp_sts,
 			bool *diag_err);      /* GMSL_DIAG_VIDEO_STREAM_DSC_COMPRESSION */
-	int32_t (*diag_check_dp_fec_support)(struct gmsl_dev *dev,
-					     void *pb_is_fec_running,
-					     bool *diag_err);                          /* GMSL_DIAG_DP_FEC_SUPPORT */
-	int32_t (*diag_check_hdcp_status)(struct gmsl_dev *dev, void *hdcp_status,
-					  bool *diag_err);                                   /* GMSL_DIAG_HDCP_STATUS */
-	int32_t (*diag_check_link_training_status)(struct gmsl_dev *dev,
-			void *link_training_sts,
-			bool *diag_err);                    /* GMSL_DIAG_LINK_TRAINING */
-	int32_t (*diag_check_mipi_rx_err_status)(struct gmsl_dev *dev,
-			void *mipi_rx_err_status,
-			bool *diag_err);                     /* GMSL_DIAG_MIPI_RX */
-	int32_t (*diag_check_mem_ecc_2b_err_status)(struct gmsl_dev *dev,
-			void *mem_ecc_2b_err_status,
-			bool *diag_err);               /* GMSL_DIAG_MEM_ECC_2BIT_ERROR */
-	int32_t (*diag_check_get_is_video_line_crc_error_status)(struct gmsl_dev* dev,
+	int (*diag_check_dp_fec_support)(struct gmsl_dev *dev,
+					 void *pb_is_fec_running,
+					 bool *diag_err);                          /* GMSL_DIAG_DP_FEC_SUPPORT */
+	int (*diag_check_hdcp_status)(struct gmsl_dev *dev, void *hdcp_status,
+				      bool *diag_err);                                   /* GMSL_DIAG_HDCP_STATUS */
+	int (*diag_check_link_training_status)(struct gmsl_dev *dev,
+					       void *link_training_sts,
+					       bool *diag_err);                    /* GMSL_DIAG_LINK_TRAINING */
+	int (*diag_check_mipi_rx_err_status)(struct gmsl_dev *dev,
+					     void *mipi_rx_err_status,
+					     bool *diag_err);                     /* GMSL_DIAG_MIPI_RX */
+	int (*diag_check_mem_ecc_2b_err_status)(struct gmsl_dev *dev,
+						void *mem_ecc_2b_err_status,
+						bool *diag_err);               /* GMSL_DIAG_MEM_ECC_2BIT_ERROR */
+	int (*diag_check_get_is_video_line_crc_error_status)(struct gmsl_dev* dev,
 			void* vid_line_crc_error_sts,
 			bool* diag_err); /* GMSL_DIAG_VIDEO_CRC_ERROR_STATUS */
-	int32_t (*diag_check_video_error_status)(struct gmsl_dev* dev,
-			void* vid_error_sts, bool*
-			diag_err);                          /* GMSL_VIDEO_ERROR STATUS*/
-	int32_t (*diag_check_programmable_state_machine_error_status)(
+	int (*diag_check_video_error_status)(struct gmsl_dev* dev,
+					     void* vid_error_sts, bool*
+					     diag_err);                          /* GMSL_VIDEO_ERROR STATUS*/
+	int (*diag_check_programmable_state_machine_error_status)(
 		struct gmsl_dev* dev, void* psm_error_sts,
 		bool* diag_err);     /* GMSL_PSM_ERROR STATUS*/
-	int32_t (*diag_check_video_lock_status)(struct gmsl_dev *dev,
-						void *video_lock_sts, bool
-						*diag_err);                          /* GMSL_DIAG_VIDEO_LOCK */
-	int32_t (*diag_check_mipi_status)(struct gmsl_dev* dev, void* mipi_sts,
-					  bool* diag_err);                                      /* GMSL_DIAG_MIPI_STATUS */
-	int32_t (*diag_check_phy_low_power_err_status)(struct gmsl_dev* dev,
+	int (*diag_check_video_lock_status)(struct gmsl_dev *dev,
+					    void *video_lock_sts, bool
+					    *diag_err);                          /* GMSL_DIAG_VIDEO_LOCK */
+	int (*diag_check_mipi_status)(struct gmsl_dev* dev, void* mipi_sts,
+				      bool* diag_err);                                      /* GMSL_DIAG_MIPI_STATUS */
+	int (*diag_check_phy_low_power_err_status)(struct gmsl_dev* dev,
 			void* lp_err_status, bool*
 			diag_err);                    /* GMSL_DIAG_PHY_LOW_POWER_ERR */
-	int32_t (*diag_check_lmo_status)(struct gmsl_dev* dev, void* lmo_sts,
-					 bool* diag_err);                                        /* GMSL_DIAG_LMO_STATUS */
-	int32_t (*diag_check_video_timing_detect_status)(struct gmsl_dev* dev,
+	int (*diag_check_lmo_status)(struct gmsl_dev* dev, void* lmo_sts,
+				     bool* diag_err);                                        /* GMSL_DIAG_LMO_STATUS */
+	int (*diag_check_video_timing_detect_status)(struct gmsl_dev* dev,
 			void* vid_timing_sts, bool*
 			diag_err);                 /* GMSL_DIAG_VIDEO_TIMING */
-	int32_t(*diag_check_get_dp_link_rate)(struct gmsl_dev* dev, void* dp_link_rate,
-					      bool* diag_err);                              /* GMSL_DIAG_DP_LINK_RATE */
-	int32_t(*diag_check_get_dp_lane_count)(struct gmsl_dev* dev,
-					       void* dp_lane_count, bool*
-					       diag_err);                            /* GMSL_DIAG_DP_LANE_COUNT */
-	int32_t(*diag_check_remote_err)(struct gmsl_dev* dev, void* rom_err_flg,
-					bool* diag_err);                                     /* GMSL_DIAG_REMOTE_ERROR_FLAG */
-	int32_t(*diag_check_video_block_length_err)(struct gmsl_dev* dev,
+	int (*diag_check_get_dp_link_rate)(struct gmsl_dev* dev, void* dp_link_rate,
+					   bool* diag_err);                              /* GMSL_DIAG_DP_LINK_RATE */
+	int (*diag_check_get_dp_lane_count)(struct gmsl_dev* dev,
+					    void* dp_lane_count, bool*
+					    diag_err);                            /* GMSL_DIAG_DP_LANE_COUNT */
+	int (*diag_check_remote_err)(struct gmsl_dev* dev, void* rom_err_flg,
+				     bool* diag_err);                                     /* GMSL_DIAG_REMOTE_ERROR_FLAG */
+	int (*diag_check_video_block_length_err)(struct gmsl_dev* dev,
 			void* video_block_length_err,
 			bool* diag_err);              /* GMSL_DIAG_VID_BLK_LENGTH_ERROR */
-	int32_t(*diag_check_infofr_cc_status)(struct gmsl_dev* dev, void* infofr_cc_sts,
-					      bool* diag_err);                             /* GMSL_DIAG_INFOFR_CC */
+	int (*diag_check_infofr_cc_status)(struct gmsl_dev* dev, void* infofr_cc_sts,
+					   bool* diag_err);                             /* GMSL_DIAG_INFOFR_CC */
 };
 
 #endif /* GMSL_COMMON_H */
