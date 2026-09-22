@@ -20,6 +20,9 @@ on:
       - '.github/workflows/build-maxim-platform.yaml'
       - '.github/workflows/build-xilinx-platform.yaml'
       - '.github/workflows/build-aducm3029-platform.yaml'
+      - '.github/workflows/build-linux-userspace-platform.yaml'
+      - '.github/workflows/build-win-platform.yaml'
+      - '.github/workflows/build-mac-platform.yaml'
       - '.github/workflows/build-common.yaml'
       - '.github/workflows/deploy-docs.yaml'
   push:
@@ -41,6 +44,9 @@ on:
       - '.github/workflows/build-maxim-platform.yaml'
       - '.github/workflows/build-xilinx-platform.yaml'
       - '.github/workflows/build-aducm3029-platform.yaml'
+      - '.github/workflows/build-linux-userspace-platform.yaml'
+      - '.github/workflows/build-win-platform.yaml'
+      - '.github/workflows/build-mac-platform.yaml'
       - '.github/workflows/build-common.yaml'
       - '.github/workflows/deploy-docs.yaml'
 
