@@ -155,8 +155,8 @@ static int ad9545_get_r_div(struct ad9545_dev *dev, int addr, uint32_t *r_div)
 	return 0;
 }
 
-static int32_t ad9545_in_clk_recalc_rate(struct no_os_clk_desc *hw,
-		uint64_t *rate)
+static int ad9545_in_clk_recalc_rate(struct no_os_clk_desc *hw,
+				     uint64_t *rate)
 {
 	struct ad9545_dev *dev = hw->dev_desc;
 	uint32_t div;
@@ -253,8 +253,8 @@ static int ad9545_get_q_div(struct ad9545_dev *dev, int addr, uint32_t *q_div)
 	return 0;
 }
 
-static int32_t ad9545_pll_clk_recalc_rate(struct no_os_clk_desc *hw,
-		uint64_t *rate)
+static int ad9545_pll_clk_recalc_rate(struct no_os_clk_desc *hw,
+				      uint64_t *rate)
 {
 	struct ad9545_dev *dev = hw->dev_desc;
 	struct ad9545_pll_clk *clk = &dev->pll_clks[hw->hw_ch_num];
@@ -822,8 +822,8 @@ static int ad9545_get_nco_freq_hz(struct ad9545_dev *dev, int addr,
 	return 0;
 }
 
-static int32_t ad9545_nco_clk_recalc_rate(struct no_os_clk_desc *hw,
-		uint64_t *rate)
+static int ad9545_nco_clk_recalc_rate(struct no_os_clk_desc *hw,
+				      uint64_t *rate)
 {
 	struct ad9545_dev *dev = hw->dev_desc;
 	struct ad9545_aux_nco_clk *clk = &dev->aux_nco_clks[hw->hw_ch_num];

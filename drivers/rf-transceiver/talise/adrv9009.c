@@ -1276,8 +1276,8 @@ error:
 	return ret;
 }
 
-static int32_t adrv9009_bb_recalc_rate(struct no_os_clk_desc *desc,
-				       uint64_t *rate)
+static int adrv9009_bb_recalc_rate(struct no_os_clk_desc *desc,
+				   uint64_t *rate)
 {
 	struct adrv9009_rf_phy *adrv9009_dev;
 
@@ -1296,16 +1296,16 @@ static int32_t adrv9009_bb_recalc_rate(struct no_os_clk_desc *desc,
 	return 0;
 }
 
-static int32_t adrv9009_bb_set_rate(struct no_os_clk_desc *desc,
-				    uint64_t rate)
+static int adrv9009_bb_set_rate(struct no_os_clk_desc *desc,
+				uint64_t rate)
 {
 	// Do nothing
 	return 0;
 }
 
-static int32_t adrv9009_bb_round_rate(struct no_os_clk_desc *desc,
-				      uint64_t rate,
-				      uint64_t *rounded_rate)
+static int adrv9009_bb_round_rate(struct no_os_clk_desc *desc,
+				  uint64_t rate,
+				  uint64_t *rounded_rate)
 {
 	pr_debug("%s: Rate %lu Hz", __func__, rate);
 
