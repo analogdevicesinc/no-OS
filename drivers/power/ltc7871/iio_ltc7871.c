@@ -47,11 +47,6 @@ static const char *const ltc7871_pin_avail[] = {
 	"High",
 };
 
-static const char *const ltc7871_enable_avail[] = {
-	"Disabled",
-	"Enabled",
-};
-
 static const char *const ltc7871_ssfm_fsr_avail[] = {
 	"+/-12",
 	"+/-15",
