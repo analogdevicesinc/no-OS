@@ -692,8 +692,9 @@ int32_t ad4110_spi_int_reg_read(struct ad4110_dev *dev,
 /***************************************************************************//**
  * IRQ handler for ADC continuous read.
 *******************************************************************************/
-static void irq_adc_read(struct ad4110_callback_ctx *ctx)
+static void irq_adc_read(void *context)
 {
+	struct ad4110_callback_ctx *ctx = context;
 	struct ad4110_dev *dev = ctx->dev;
 	if (ctx->buffer_size > 0) {
 		if (ad4110_spi_int_data_reg_read(ctx->dev, ctx->buffer))
