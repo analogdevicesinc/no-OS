@@ -680,7 +680,7 @@ struct ad713x_dev {
 	/** PDN GPIO handler. */
 	struct no_os_gpio_desc		*gpio_pnd;
 	/** CS Sync */
-	struct no_os_spi_desc *gpio_cs_sync;
+	struct no_os_gpio_desc *gpio_cs_sync;
 	/** ID of supported device. */
 	enum ad713x_supported_dev_ids dev_id;
 	/** Length of data in bits. */
