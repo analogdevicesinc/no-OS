@@ -20,6 +20,9 @@ on:
       - '.github/workflows/build-maxim-platform.yaml'
       - '.github/workflows/build-aducm3029-platform.yaml'
       - '.github/workflows/build-stm32-platform.yaml'
+      - '.github/workflows/build-linux-userspace-platform.yaml'
+      - '.github/workflows/build-win-platform.yaml'
+      - '.github/workflows/build-mac-platform.yaml'
       - '.github/workflows/build-common.yaml'
       - '.github/workflows/deploy-docs.yaml'
   push:
@@ -41,6 +44,9 @@ on:
       - '.github/workflows/build-maxim-platform.yaml'
       - '.github/workflows/build-aducm3029-platform.yaml'
       - '.github/workflows/build-stm32-platform.yaml'
+      - '.github/workflows/build-linux-userspace-platform.yaml'
+      - '.github/workflows/build-win-platform.yaml'
+      - '.github/workflows/build-mac-platform.yaml'
       - '.github/workflows/build-common.yaml'
       - '.github/workflows/deploy-docs.yaml'
 
@@ -66,7 +72,7 @@ jobs:
       LOGS_DIR: ${{ github.workspace }}/logs
       PICO_SDK_PATH: ${{ github.workspace }}/libraries/pico-sdk
     container:
-      image: ${{ vars.DOCKER_REGISTRY }}/pico-platform:latest
+      image: ${{ vars.DOCKER_REGISTRY }}/pico-platform:1.1
       credentials:
         username: ${{ secrets.CLOUDSMITH_USER }}
         password: ${{ secrets.CLOUDSMITH_API_KEY }}

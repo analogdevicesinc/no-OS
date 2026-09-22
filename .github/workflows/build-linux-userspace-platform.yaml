@@ -78,7 +78,7 @@ jobs:
       LOGS_DIR: ${{ github.workspace }}/logs
     runs-on: ubuntu-latest
     container:
-      image: ${{ vars.DOCKER_REGISTRY }}/linux-userspace-platform:latest
+      image: ${{ vars.DOCKER_REGISTRY }}/linux-userspace-platform:1.1
       credentials:
         username: ${{ secrets.CLOUDSMITH_USER }}
         password: ${{ secrets.CLOUDSMITH_API_KEY }}
