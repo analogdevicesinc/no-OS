@@ -72,6 +72,11 @@ for item in blacklist:
 pattern = r'\d{4}_\d{2}_\d{2}-\d{2}_\d{2}_\d{2}'
 timestamp_match = re.search(pattern, HDL_SERVER_BASE_PATH)
 
+# hardware -> HDL timestamp ("YYYY_MM_DD-HH_MM_SS") of the .xsa we staged.
+# Written as a manifest at the end so build_projects.py can flag a
+# found-but-stale HDL output (one whose newest published .xsa is old).
+provenance = {}
+
 if timestamp_match:
     for hardware in unique_hardware_list:
         # Skip a failing hardware rather than aborting the whole scan.
@@ -81,6 +86,7 @@ if timestamp_match:
                 os.system("mkdir -p %s" % (str(new_harware_dir) + '/' + hardware))
                 get_artifacts_from_location(package_version=file_path, package_name= 'system_top.xsa', repo='sdg-hdl')
                 os.system("mv ./system_top.xsa %s" % (str(new_harware_dir) + '/' + hardware))
+                provenance[hardware] = timestamp_match.group()
             else:
                 log_warn("Missing " + hardware + " from specific timestamp " + timestamp_match.group())
         except Exception as e:
@@ -121,6 +127,7 @@ else:
         except Exception as e:
             log_warn("Error while downloading " + hardware + " from timestamp " + ts + ": " + repr(e))
             continue
+        provenance[hardware] = ts
         # Provenance of the .xsa we will build against. Best-effort: a missing
         # tag must never fail the download.
         git_sha = "unknown"
@@ -131,3 +138,13 @@ else:
         except Exception as e:
             log_warn("Could not read properties for " + hardware + " on timestamp " + ts + ": " + repr(e))
         print("Building " + hardware + ": using system_top.xsa from timestamp " + ts + " (git sha " + git_sha + ")")
+
+# Persist the hardware -> HDL-timestamp map next to the staged .xsa files so
+# build_projects.py can flag a found-but-stale HDL output. Best-effort: a write
+# failure must not fail the download.
+manifest_path = os.path.join(new_harware_dir, 'xsa_provenance.json')
+try:
+    with open(manifest_path, 'w') as f:
+        json.dump(provenance, f)
+except OSError as e:
+    log_warn("Could not write xsa provenance manifest: " + repr(e))
