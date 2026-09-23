@@ -100,6 +100,12 @@ jobs:
         env:
           CLOUDSMITH_API_KEY: ${{ env.CLOUDSMITH_API_KEY }}
           TOKEN: ${{ secrets.GH_GHDL_TOKEN }}
+      - name: Report missing or stale XSA on PR
+        if: ${{ always() && github.event_name == 'pull_request' }}
+        uses: analogdevicesinc/shared-actions/pr-comment@main
+        with:
+          marker: noos-missing-xsa
+          body-file: ${{ env.LOGS_DIR }}/xsa_warnings.md
       - name: Upload Xilinx artifacts
         if: always()
         uses: actions/upload-artifact@v7

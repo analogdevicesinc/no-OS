@@ -8,6 +8,7 @@ import multiprocessing
 import sys
 import filecmp
 import re
+from datetime import datetime
 # This file can be downloaded from the wiki-scripts repository
 # https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py
 from cloudsmith_helper import *
@@ -29,9 +30,10 @@ from no_os_build import (
 CMAKE_PLATFORMS = {'maxim', 'stm32', 'pico', 'aducm3029', 'xilinx', 'linux-userspace', 'win', 'mac'}
 
 TGREEN =  '\033[32m' # Green Text	
-TBLUE =  '\033[34m' # Green Text	
-TRED =  '\033[31m' # Red Text	
-TWHITE = '\033[39m' #Withe text
+TBLUE =  '\033[34m' # Blue Text
+TRED =  '\033[31m' # Red Text
+TWHITE = '\033[39m' # White text
+TYELLOW = '\033[33m' # Yellow text
 
 description_help=r'''Build noos projects
 Examples:\n
@@ -70,6 +72,10 @@ def parse_input():
 ERR = 0
 BUILD_TIMEOUT = 120
 XILINX_BUILD_TIMEOUT = 600
+# A found system_top.xsa whose HDL timestamp is older than this many days is
+# flagged as "stale": its design was not rebuilt recently. The build still runs
+# (the .xsa exists) -- we only warn and note it on the PR comment.
+STALE_XSA_DAYS = 75
 LOG_START = " -> "
 TOKEN = os.environ.get('TOKEN')
 BRANCH = os.environ.get('BRANCH')
@@ -84,6 +90,27 @@ def log_err(msg):
 
 def log_success(msg):
 	print(TGREEN + LOG_START + msg + TWHITE)
+
+def log_warn(msg):
+	print(TYELLOW + LOG_START + msg + TWHITE)
+
+def gha_warning(title, message):
+	"""Surface a warning on GitHub Actions.
+
+	Emits a `::warning::` workflow command (an annotation shown on the run and
+	on the PR's checks) and, when running under Actions, appends a line to the
+	job step summary. Locally it just prints the annotation line, which is
+	harmless. Keep `message` to a single line -- the command is line oriented.
+	"""
+	safe = message.replace('\n', ' ').strip()
+	print("::warning title=%s::%s" % (title.replace('\n', ' '), safe))
+	summary = os.environ.get('GITHUB_STEP_SUMMARY')
+	if summary:
+		try:
+			with open(summary, 'a') as f:
+				f.write("- :warning: %s\n" % safe)
+		except OSError:
+			pass
 
 DEFAULT_LOG_FILE = 'log.txt'
 log_file = DEFAULT_LOG_FILE
@@ -163,6 +190,87 @@ else:
 
 HW_DIR_NAME = 'hardware'
 NEW_HW_DIR_NAME = 'new_hardware'
+
+# Xilinx (project, variant, board) combos with a system_top.xsa problem this
+# run. Each entry carries a 'status': 'missing' (the .xsa was not available, so
+# the combo is skipped) or 'stale' (the .xsa exists and was built, but its HDL
+# output is older than STALE_XSA_DAYS). Populated in build_cmake_project and
+# rendered to <log_dir>/xsa_warnings.md in main(), which the shared-actions
+# pr-comment step posts on the PR conversation tab.
+XSA_WARNINGS = []
+
+def render_xsa_warnings_md(entries):
+	"""Render the .xsa warning list (missing + stale) as a Markdown comment body.
+
+	Returns '' when there is nothing to report, so the pr-comment action removes
+	any stale comment. No hidden marker here -- the action adds and tracks its own.
+	"""
+	missing = [e for e in entries if e.get('status') != 'stale']
+	stale = [e for e in entries if e.get('status') == 'stale']
+	if not missing and not stale:
+		return ""
+	lines = []
+	if missing:
+		lines.append("### :warning: Xilinx builds skipped -- missing `system_top.xsa`")
+		lines.append("")
+		lines.append("%d Xilinx target(s) were **skipped** because their "
+			"`system_top.xsa` (HDL output) was not available for this run. "
+			"These are not build failures." % len(missing))
+		lines.append("")
+		lines.append("| Project | Variant | Board | Hardware |")
+		lines.append("| --- | --- | --- | --- |")
+		for m in missing:
+			lines.append("| `%s` | %s | %s | `%s` |" % (
+				m['project'], m['variant'], m['board'], m['hardware']))
+		lines.append("")
+	if stale:
+		lines.append("### :hourglass: Xilinx builds using a stale `system_top.xsa`")
+		lines.append("")
+		lines.append("%d Xilinx target(s) were **built against an HDL output "
+			"older than %d days**. The build still ran, but the design may not "
+			"reflect recent HDL changes." % (len(stale), STALE_XSA_DAYS))
+		lines.append("")
+		lines.append("| Project | Variant | Board | Hardware | HDL build | Age (days) |")
+		lines.append("| --- | --- | --- | --- | --- | --- |")
+		for m in stale:
+			lines.append("| `%s` | %s | %s | `%s` | `%s` | %d |" % (
+				m['project'], m['variant'], m['board'], m['hardware'],
+				m.get('timestamp', 'unknown'), m.get('age_days', 0)))
+		lines.append("")
+	lines.append("_Posted automatically by the Xilinx build workflow._")
+	return "\n".join(lines) + "\n"
+
+# hardware -> HDL timestamp ("YYYY_MM_DD-HH_MM_SS") of the staged .xsa, read
+# from the manifest download_files.py writes. Empty when no download happened
+# (e.g. SKIP_DOWNLOAD) -- the staleness check then simply no-ops.
+XSA_PROVENANCE = {}
+
+def load_xsa_provenance(builds_dir):
+	"""Read the hardware -> HDL-timestamp map written by download_files.py.
+
+	Returns {} if the manifest is absent or unreadable; a missing manifest just
+	means no staleness check for this run, never an error.
+	"""
+	path = os.path.join(builds_dir, NEW_HW_DIR_NAME, 'xsa_provenance.json')
+	try:
+		with open(path) as f:
+			return json.load(f)
+	except (OSError, ValueError):
+		return {}
+
+def xsa_age_days(timestamp):
+	"""Age in whole days of an HDL timestamp 'YYYY_MM_DD-HH_MM_SS', else None.
+
+	None when the timestamp is missing or not in the expected format, so the
+	caller skips the staleness check rather than crashing.
+	"""
+	if not timestamp:
+		return None
+	try:
+		built = datetime.strptime(timestamp, "%Y_%m_%d-%H_%M_%S")
+	except ValueError:
+		return None
+	return (datetime.now() - built).days
 
 def process_blacklist():
 	blacklist = []
@@ -253,12 +361,25 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 		if result.returncode != 0:
 			log_err("Hardware download failed (exit %d)" % result.returncode)
 			sys.exit(1)
+		global XSA_PROVENANCE
+		XSA_PROVENANCE = load_xsa_provenance(builds_dir)
 	return (builds_dir, blacklist)
 
 # Xilinx BSP freshness is validated per-build-dir via xsa_work/.bsp_stamp
 # in config_xilinx_sdk (cmake/xilinx/xilinx_platform_sdk.cmake).
 
 def get_hardware(hardware, platform, builds_dir):
+	"""Resolve the .xsa/.sopcinfo for a hardware target.
+
+	Returns (path, new_hdf, status):
+	  status 'ok'      -- path is usable (new_hdf=1 if it changed this run)
+	  status 'missing' -- the freshly-downloaded hardware is absent (its HDL
+	                      output was not published this run); path is ''
+	  status 'error'   -- the file exists but could not be staged; path is ''
+
+	'missing' is a soft condition: the caller warns and skips it rather than
+	failing the whole run.
+	"""
 	if platform == 'xilinx':
 		ext = 'xsa'
 		base_name = 'system_top'
@@ -271,19 +392,25 @@ def get_hardware(hardware, platform, builds_dir):
 	old_name = "%s.%s" % (hardware, ext)
 	filename = os.path.join(builds_dir, HW_DIR_NAME, old_name)
 
+	# No freshly-downloaded hardware for this target. Bail out before
+	# filecmp.cmp() (which raises FileNotFoundError on a missing operand) so
+	# the caller can treat it as a warning instead of crashing the run.
+	if not os.path.isfile(tmp_filename):
+		return ('', 0, 'missing')
+
 	if os.path.isfile(filename):
 		#If equal
 		if filecmp.cmp(filename, tmp_filename):
 			log("Same hardware from last build, use existing bsp")
-			return (filename, 0, 0)
+			return (filename, 0, 'ok')
 
 	err = run_cmd('cp %s %s' % (tmp_filename, filename))
 	if err != 0:
-		return ('', 1, err)
+		return ('', 0, 'error')
 
 	log("Hardware changed from last build")
 
-	return (filename, 1, err)
+	return (filename, 1, 'ok')
 
 def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 			log_dir, cmake_builds_dir, builds_dir):
@@ -369,8 +496,30 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 				ok = 0
 				os.environ.clear(); os.environ.update(env)
 				continue
-			(hardware_file, new_hdf, hw_err) = get_hardware(hw_name, 'xilinx', builds_dir)
-			if hw_err != 0 or not hardware_file:
+			(hardware_file, new_hdf, hw_status) = get_hardware(hw_name, 'xilinx', builds_dir)
+			if hw_status == 'missing':
+				# Loosened: a missing system_top.xsa is a warning, not a build
+				# failure. The HDL output for this target was not published this
+				# run, so there is nothing to build against -- skip the combo,
+				# flag it on CI, and record it for the PR summary. Deliberately
+				# does NOT touch ERR/ok, so the run stays green.
+				msg = ("%s / %s / %s: system_top.xsa for hardware '%s' "
+					"not available -- skipping xilinx build"
+					% (project, variant, board, hw_name))
+				log_warn("WARNING: " + msg)
+				gha_warning("Missing XSA: %s" % hw_name, msg)
+				XSA_WARNINGS.append(
+					{
+					'status': 'missing',
+					'project': project,
+					'variant': variant,
+					'board': board,
+					'hardware': hw_name
+					})
+				os.environ.clear()
+				os.environ.update(env)
+				continue
+			if hw_status != 'ok' or not hardware_file:
 				log_err("ERROR")
 				log("%s: could not resolve .xsa for hardware '%s' (not downloaded?)" % (
 					project, hw_name))
@@ -379,6 +528,28 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 				os.environ.clear(); os.environ.update(env)
 				continue
 			hardware_arg = " --hardware %s" % hardware_file
+			# Found-but-stale: the .xsa exists so the build proceeds, but if its
+			# HDL timestamp is old the design may lag recent HDL changes. Warn
+			# and record it for the PR comment; deliberately does NOT touch
+			# ERR/ok, so the run stays green.
+			ts = XSA_PROVENANCE.get(hw_name)
+			age = xsa_age_days(ts)
+			if age is not None and age > STALE_XSA_DAYS:
+				msg = ("%s / %s / %s: system_top.xsa for hardware '%s' is "
+					"%d days old (HDL build %s) -- building against a stale "
+					"HDL output" % (project, variant, board, hw_name, age, ts))
+				log_warn("WARNING: " + msg)
+				gha_warning("Stale XSA: %s" % hw_name, msg)
+				XSA_WARNINGS.append(
+					{
+					'status': 'stale',
+					'project': project,
+					'variant': variant,
+					'board': board,
+					'hardware': hw_name,
+					'timestamp': ts,
+					'age_days': age
+					})
 
 		# Delegate the actual build to no_os_build.py. Suppress its
 		# spinner/summary (not useful on CI); the real cmake output lands in
@@ -487,6 +658,22 @@ def main():
 		if cmake_ok is not None:
 			status = 'OK' if cmake_ok == 1 else 'Fail'
 			os.system('echo Project %20s -- %s >> %s' % (project, status, all_status))
+
+	# Render the xilinx .xsa warnings (missing + stale) as a Markdown body for
+	# the shared-actions pr-comment step to post on the PR conversation tab.
+	# Written even when empty (empty file) so the action removes any stale
+	# comment once there is nothing to report.
+	warnings_path = os.path.join(log_dir, 'xsa_warnings.md')
+	try:
+		with open(warnings_path, 'w') as f:
+			f.write(render_xsa_warnings_md(XSA_WARNINGS))
+	except OSError as e:
+		log_err("Could not write %s: %s" % (warnings_path, e))
+	if XSA_WARNINGS:
+		n_missing = sum(1 for e in XSA_WARNINGS if e.get('status') != 'stale')
+		n_stale = sum(1 for e in XSA_WARNINGS if e.get('status') == 'stale')
+		log_warn("%d xilinx .xsa warning(s): %d missing, %d stale; see %s"
+			% (len(XSA_WARNINGS), n_missing, n_stale, warnings_path))
 
 main()
 
