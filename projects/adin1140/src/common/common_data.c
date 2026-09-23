@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for Maxim platform of the ADIN1140 project.
+ *   @file   common_data.c
+ *   @brief  Defines common data to be used by the ADIN1140 examples.
  *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -31,34 +31,24 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "parameters.h"
 #include "common_data.h"
-#include "no_os_error.h"
-#include "no_os_print_log.h"
 
-#define _STR(x) #x
-#define STR(x)  _STR(x)
+struct no_os_uart_init_param adin1140_uart_ip = {
+	.device_id = UART_DEVICE_ID,
+	.baud_rate = UART_BAUDRATE,
+	.size = NO_OS_UART_CS_8,
+	.parity = NO_OS_UART_PAR_NO,
+	.stop = NO_OS_UART_STOP_1_BIT,
+	.platform_ops = UART_OPS,
+	.extra = UART_EXTRA,
+};
 
-extern int example_main();
-
-/***************************************************************************//**
- * @brief Main function execution for Maxim platform.
- *
- * @return ret - Result of the enabled examples execution.
-*******************************************************************************/
-int main()
-{
-	int ret;
-
-	struct no_os_uart_desc *uart_desc;
-
-	ret = no_os_uart_init(&uart_desc, &adin1140_uart_ip);
-	if (ret)
-		return ret;
-
-	no_os_uart_stdio(uart_desc);
-
-	pr_info("Running " STR(EXAMPLE) " on " STR(TARGET) "\n");
-
-	return example_main();
-}
+const struct no_os_spi_init_param adin1140_spi_ip = {
+	.device_id = SPI_DEVICE_ID,
+	.max_speed_hz = SPI_BAUDRATE,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_0,
+	.platform_ops = SPI_OPS,
+	.chip_select = SPI_CS,
+	.extra = SPI_EXTRA,
+};
