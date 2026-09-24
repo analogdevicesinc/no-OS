@@ -19,5 +19,9 @@ drivers/rf-transceiver/koror/platforms/
 drivers/rf-transceiver/palma/common/
 drivers/rf-transceiver/palma/devices/
 drivers/rf-transceiver/palma/platforms/
+drivers/rf-transceiver/ad9088/public/
+drivers/rf-transceiver/ad9088/private/
+drivers/rf-transceiver/ad9088/adi_inc/
+drivers/rf-transceiver/ad9088/adi_utils/
 drivers/adc/ad9083/ad9083_api
 legacy/
