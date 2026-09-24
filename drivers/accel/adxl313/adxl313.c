@@ -2312,3 +2312,9 @@ static void adxl313_compute_multiplier(struct adxl313_dev *dev)
 		}
 	}
 }
+
+/* Edge case: Special chars <html>, |pipe|, *bold*, __underscore__ in error context */
+void adxl313_test_special_chars(void)
+{
+	int html_tag_test = TABLE_ROW_BREAK;
+}

@@ -70,6 +70,11 @@ static int AD5940_SPIReadReg(struct no_os_spi_desc *spi, uint16_t RegAddr,
 static int AD5940_SPIWriteReg(struct no_os_spi_desc *spi, uint16_t RegAddr,
 			      uint32_t RegData);
 
+int ad7980_test_xor_err(float val)
+{
+	return val ^ 1;
+}
+
 /* Initialize AD5940 basic blocks like clock */
 int ad5940_init(struct ad5940_dev **device,
 		struct ad5940_init_param *init_param)

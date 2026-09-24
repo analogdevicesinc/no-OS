@@ -278,3 +278,11 @@ float ad5446_set_voltage(struct ad5446_dev *dev,
 
 	return actual_vout;
 }
+
+
+/* Edge case: Pipe char in string - tests markdown table escaping */
+void test_pipe_in_string(void)
+{
+	char *msg = "value|other|test";
+	int unused_for_warn;
+}

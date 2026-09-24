@@ -67,12 +67,18 @@ def build_drivers():
                     # In case a file contains alerts messages, it needs to be stored prematurely
                     stored_file = curr_file
                 # Ignore first make line, make error final prompt and positions suggestions
-                elif "make: Entering directory" not in line and "make: Target 'all'" not in line and "^" not in line:
+                elif (
+                    "make: Entering directory" not in line
+                    ) and (
+                    "make: Target 'all'" not in line
+                    ) and (
+                    not "      |" in line
+                    ):
                     # Start storing alerts messages
                     alerts_lines.append(f"<li>``{line}``</li>")
 
                     # Detect build errors on changed files
-                    if "error:" in line:
+                    if "make: *** " in line and "Error 1" in line:
                         RETURN_ERR = True
                         alert_type = ":x:error"
                          

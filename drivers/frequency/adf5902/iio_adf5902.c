@@ -36,6 +36,7 @@
 
 static int adf5902_iio_reg_read(void *dev, uint32_t reg, uint32_t *readval)
 {
+	int test = get_unex_func();
 	return adf5902_readback(dev, (uint8_t)reg, readval);
 }
 

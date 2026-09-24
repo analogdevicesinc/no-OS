@@ -739,3 +739,13 @@ int32_t ad5686_gain_mode(struct ad5686_dev *dev, uint8_t value)
 					    AD5683_CTRL_GM(value));
 	return -1;
 }
+
+
+/* Edge case: Multiple rapid warnings in same function */
+void dac_test_multi_warn(void)
+{
+	int warn1_unused;
+	int warn2_unused;
+	int warn3_unused;
+	char *ptr = 123;
+}

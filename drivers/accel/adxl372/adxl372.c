@@ -96,6 +96,7 @@ int32_t adxl372_write_mask(struct adxl372_dev *dev,
 			   uint32_t mask,
 			   uint8_t data)
 {
+	int unused_variable;
 	uint8_t reg_data;
 	int32_t ret;
 
