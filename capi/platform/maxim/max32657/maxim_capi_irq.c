@@ -14,7 +14,6 @@
 #include "max32657.h"
 #include "gpio.h"
 #include "uart.h"
-#include "rtc.h"
 #include "tmr.h"
 #include "dma.h"
 #include "spi.h"
@@ -181,8 +180,6 @@ static int max_capi_irq_disable(uint32_t irq)
 static int max_capi_irq_connect(uint32_t irq, capi_isr_callback_t isr,
 				void *arg)
 {
-	int ret;
-
 	if (!irq_initialized)
 		return -EINVAL;
 
@@ -196,13 +193,6 @@ static int max_capi_irq_connect(uint32_t irq, capi_isr_callback_t isr,
 	irq_table[irq].arg = arg;
 
 	switch (irq) {
-	case RTC_IRQn:
-		ret = MXC_RTC_EnableInt(MXC_RTC_INT_FL_LONG |
-					MXC_RTC_INT_FL_SHORT |
-					MXC_RTC_INT_FL_READY);
-		if (ret)
-			return -EBUSY;
-		break;
 	case TMR0_IRQn:
 		MXC_TMR_EnableInt(MXC_TMR0);
 		break;
@@ -416,16 +406,6 @@ void DMA1_CH3_IRQHandler()
 	_dma_handler(MXC_DMA1_S, 3);
 }
 
-void RTC_IRQHandler()
-{
-	if (irq_table[RTC_IRQn].callback)
-		irq_table[RTC_IRQn].callback(irq_table[RTC_IRQn].arg);
-
-	MXC_RTC_ClearFlags(MXC_RTC_INT_FL_LONG |
-			   MXC_RTC_INT_FL_SHORT |
-			   MXC_RTC_INT_FL_READY);
-}
-
 void _timer_handler(mxc_tmr_regs_t *tmr)
 {
 	uint32_t irq = MXC_TMR_GET_IRQ(MXC_TMR_GET_IDX(tmr));
@@ -504,12 +484,6 @@ void WDT_IRQHandler()
 
 	if (irq_table[WDT_IRQn].callback)
 		irq_table[WDT_IRQn].callback(irq_table[WDT_IRQn].arg);
-}
-
-void TRNG_IRQHandler()
-{
-	if (irq_table[TRNG_IRQn].callback)
-		irq_table[TRNG_IRQn].callback(irq_table[TRNG_IRQn].arg);
 }
 
 void I3C_IRQHandler()
