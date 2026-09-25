@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: BSD-3-Clause */
 #ifndef _ADIN1300_H_
 #define _ADIN1300_H_
 
