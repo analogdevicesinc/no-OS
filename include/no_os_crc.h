@@ -36,5 +36,6 @@
 #include "no_os_crc8.h"
 #include "no_os_crc16.h"
 #include "no_os_crc24.h"
+#include "no_os_crc32.h"
 
 #endif // _NO_OS_CRC_H_

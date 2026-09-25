@@ -31,6 +31,10 @@ set(EXCLUDE_FILES
     ${SOURCES_DIR}/drivers/rf-transceiver/palma \\
     ${SOURCES_DIR}/drivers/adc/ad9081/api \\
     ${SOURCES_DIR}/drivers/adc/ad9083/ad9083_api \\
+    ${SOURCES_DIR}/drivers/rf-transceiver/ad9088/public \\
+    ${SOURCES_DIR}/drivers/rf-transceiver/ad9088/private \\
+    ${SOURCES_DIR}/drivers/rf-transceiver/ad9088/adi_utils \\
+    ${SOURCES_DIR}/drivers/rf-transceiver/ad9088/adi_inc \\
     ${SOURCES_DIR}/drivers/afe/ad5940 \\
 ")
 

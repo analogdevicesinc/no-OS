@@ -38,6 +38,7 @@
 #include "no_os_units.h"
 #include "no_os_util.h"
 #include "no_os_spi.h"
+#include "jesd204.h"
 
 /* ADF4030 REG0000 Map */
 #define ADF4030_SOFT_RESET_R_MSK		NO_OS_BIT(7)
@@ -112,7 +113,7 @@
 
 /* ADF4030 REG0016 Map */
 #define ADF4030_TDC_ARM_M			NO_OS_BIT(7)
-#define ADF4030_AVGRXP				NO_OS_GENMASK(4, 0)
+#define ADF4030_AVGEXP				NO_OS_GENMASK(3, 0)
 
 /* ADF4030 REG0017 Map */
 #define ADF4030_NDEL_ADJ			NO_OS_BIT(7)
@@ -519,12 +520,36 @@
 #define ADF4030_CHIP_ADDRESS_MIN		0U
 #define ADF4030_CHIP_ADDRESS_MAX		15U
 
+/* Reset value of TDC_SOURCE/TDC_TARGET: parked on a non-existent channel. */
 /* Channel TDC offset is a 16-bit signed value */
 #define ADF4030_TDC_OFFSET_CH_MAX		0x7FFF
 #define ADF4030_TDC_OFFSET_CH_MIN		(-0x8000)
 /* Common TDC offset is a 21-bit signed value */
 #define ADF4030_TDC_OFFSET_COM_MAX		0xFFFFF
 #define ADF4030_TDC_OFFSET_COM_MIN		(-0x100000)
+#define ADF4030_TDC_SOURCE_RESET		0x1FU
+
+/* Nominal ALIGN_THOLD step, and the largest threshold the 6-bit field holds. */
+#define ADF4030_ADEL_M_STEP_FS			1400U
+#define ADF4030_MAX_THRESHOLD_FS		(0x3FU * ADF4030_ADEL_M_STEP_FS)
+
+/* Defaults applied when the init parameter is left at 0. */
+#define ADF4030_ALIGN_THOLD_FS_DEFAULT		1400U
+#define ADF4030_ALIGN_ITER_DEFAULT		8U
+
+/*
+ * TDC averaging exponent. A measurement accumulates 2^(AVGEXP + 6) BSYNC
+ * periods, so the faster BSYNC rate gets the longer accumulation.
+ */
+#define ADF4030_AVGEXP_BSYNC_THRESH_HZ		2000000U
+#define ADF4030_AVGEXP_FAST_BSYNC		15U
+#define ADF4030_AVGEXP_SLOW_BSYNC		13U
+
+/* Register-poll granularity and per-operation budgets. */
+#define ADF4030_POLL_STEP_MS			2U
+#define ADF4030_PLL_LOCK_TIMEOUT_MS		2000U
+#define ADF4030_TDC_BUSY_TIMEOUT_MS		3000U
+#define ADF4030_FSM_BUSY_TIMEOUT_MS		3000U
 
 enum adf4030_terminations_e {
 	TX_VOLTAGE_DRIVER = 0,
@@ -536,6 +561,7 @@ enum adf4030_terminations_e {
 };
 
 struct adf4030_chan_spec {
+	uint8_t num;
 	int64_t delay_fs;
 	uint32_t rcm_mv;
 	enum adf4030_terminations_e termination;
@@ -544,6 +570,10 @@ struct adf4030_chan_spec {
 	bool prbs_en;
 	bool boost_en;
 	bool tx_en;
+	/** Realign this channel against reference_chan on JESD204
+	 *  CLK_SYNC_STAGE4 (device-tree "auto-align-on-sync-en"). */
+	bool align_on_sync_en;
+	uint8_t reference_chan;
 };
 
 /**
@@ -553,6 +583,9 @@ struct adf4030_chan_spec {
 struct adf4030_dev {
 	/** SPI Initialization parameters */
 	struct no_os_spi_desc		*spi_desc;
+	/** JESD204 device, registered when the ADF4030 acts as the BSYNC
+	 *  (SYSREF) provider of a JESD204 topology. */
+	struct jesd204_dev		*jdev;
 	struct adf4030_chan_spec	channels[ADF4030_CHANNEL_NUMBER];
 	uint32_t			ref_freq;
 	uint32_t 			vco_freq;
@@ -563,9 +596,19 @@ struct adf4030_dev {
 	uint8_t 			ndiv;
 	uint8_t 			tdc_source;
 	uint8_t 			tdc_target;
+	uint8_t				alignment_iter;
+	uint8_t				avgexp;
 	bool 				tdc_status;
 	bool				spi_4wire_en;
 	bool				cmos_3v3;
+};
+
+/**
+ * @struct adf4030_jesd204_priv
+ * @brief ADF4030 JESD204 device private data.
+ */
+struct adf4030_jesd204_priv {
+	struct adf4030_dev		*dev;
 };
 
 /**
@@ -575,11 +618,16 @@ struct adf4030_dev {
 struct adf4030_init_param {
 	/** SPI Initialization parameters */
 	struct no_os_spi_init_param	*spi_init;
+	struct adf4030_chan_spec	*channels;
+	uint8_t				num_channels;
 	uint32_t			ref_freq;
 	uint32_t			vco_freq;
 	uint32_t			bsync_freq;
 	uint8_t				ref_div;
 	uint8_t				chip_addr;
+	uint32_t			alignment_threshold_fs;
+	uint8_t				alignment_iter;
+	bool				alignment_threshold_en;
 	bool				spi_4wire_en;
 	bool				cmos_3v3;
 };
@@ -643,6 +691,8 @@ int adf4030_get_alignment_iter(struct adf4030_dev *dev, uint8_t *iter_number);
 
 int adf4030_set_alignment_threshold(struct adf4030_dev *dev,
 				    uint32_t threshold_fs);
+
+int adf4030_set_alignment_threshold_en(struct adf4030_dev *dev, bool enable);
 
 int adf4030_get_alignment_threshold(struct adf4030_dev *dev,
 				    uint32_t *threshold_fs);
