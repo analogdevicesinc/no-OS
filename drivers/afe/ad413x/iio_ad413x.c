@@ -395,7 +395,7 @@ enum ad413x_chan {
 		.scan_index = ch_nb, \
 		.channel = ch_nb, \
 		.attributes = ad413x_iio_vin_attrs, \
-		.address = NULL, \
+		.address = 0, \
 		.ch_out = 0, \
 	}
 

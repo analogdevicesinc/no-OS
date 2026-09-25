@@ -849,6 +849,8 @@ static int ltc7871_iio_read_mfr_config1(void *dev, char *buf, uint32_t len,
 	default:
 		return -EINVAL;
 	}
+
+	return -EINVAL;
 }
 
 /**
@@ -894,6 +896,8 @@ static int ltc7871_iio_read_mfr_config2(void *dev, char *buf, uint32_t len,
 	default:
 		return -EINVAL;
 	}
+
+	return -EINVAL;
 }
 
 /**

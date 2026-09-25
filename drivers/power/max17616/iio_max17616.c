@@ -605,6 +605,8 @@ STATIC int max17616_iio_read_attr(void *device, char *buf, uint32_t len,
 	default:
 		return -EINVAL;
 	}
+
+	return -EINVAL;
 }
 
 /**
