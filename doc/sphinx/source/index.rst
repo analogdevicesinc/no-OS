@@ -70,6 +70,7 @@ Contents
    configuration_guide
    contributing
    troubleshooting
+   license_rules
 
 Additional resources
 --------------------
