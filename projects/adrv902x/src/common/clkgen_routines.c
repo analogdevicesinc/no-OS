@@ -49,25 +49,23 @@ int clkgen_setup(struct axi_clkgen **rx_clkgen, struct axi_clkgen **tx_clkgen,
 #endif
 	uint32_t tx_div_rate_hz;
 	uint32_t rx_div_rate_hz;
-	uint32_t divisor = 40;
 	int status;
 
-	if (jesd204c_en)
-		divisor = 66;
+	(void)jesd204c_en;
 
 	struct axi_clkgen_init rx_clkgen_init = {
 		.name = "rx_clkgen",
 		.base = RX_CLKGEN_BASEADDR,
 		.parent_rate = ADRV9025_DEVICE_CLK_KHZ * 1000
 	};
-	rx_div_rate_hz = ADRV9025_LANE_RATE_KHZ / divisor * 1000;
+	rx_div_rate_hz = ADRV9025_DEVICE_CLK_KHZ * 1000;
 
 	struct axi_clkgen_init tx_clkgen_init = {
 		.name = "tx_clkgen",
 		.base = TX_CLKGEN_BASEADDR,
 		.parent_rate = ADRV9025_DEVICE_CLK_KHZ * 1000
 	};
-	tx_div_rate_hz = ADRV9025_LANE_RATE_KHZ / divisor * 1000;
+	tx_div_rate_hz = ADRV9025_DEVICE_CLK_KHZ * 1000;
 
 #ifdef ORX_CLKGEN_BASEADDR
 	struct axi_clkgen_init orx_clkgen_init = {
@@ -75,7 +73,7 @@ int clkgen_setup(struct axi_clkgen **rx_clkgen, struct axi_clkgen **tx_clkgen,
 		.base = ORX_CLKGEN_BASEADDR,
 		.parent_rate = ADRV9025_DEVICE_CLK_KHZ * 1000
 	};
-	orx_div_rate_hz = ADRV9025_LANE_RATE_KHZ / divisor * 1000;
+	orx_div_rate_hz = ADRV9025_DEVICE_CLK_KHZ * 1000;
 #endif
 
 	status = axi_clkgen_init(rx_clkgen, &rx_clkgen_init);

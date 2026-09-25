@@ -43,7 +43,7 @@ const char *json_profile_active_util_init = "{ \n\
       \"streamGpInput15\": 19 \n\
     }, \n\
     \"lo1PllFreq_Hz\": 3500000000, \n\
-    \"lo2PllFreq_Hz\": 3550000000, \n\
+    \"lo2PllFreq_Hz\": 3500000000, \n\
     \"auxPllFreq_Hz\": 0 \n\
   }, \n\
   \"initCals\": { \n\
