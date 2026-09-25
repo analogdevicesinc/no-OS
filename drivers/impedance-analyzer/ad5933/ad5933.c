@@ -41,6 +41,7 @@ int ad5933_init(struct ad5933_dev **device,
 {
 	struct ad5933_dev *dev;
 	int ret;
+	int unused_warning_test;
 
 	if (!device || !init_param)
 		return -EINVAL;
