@@ -1,0 +1,18 @@
+{
+  "version": 7,
+  "configurePresets": [
+    {
+      "name": "altera",
+      "displayName": "Altera default",
+      "description": "Generic Altera/Nios V preset",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "BOARD": "altera",
+        "PLATFORM": "altera",
+        "BOARD_CONFIG_FILE": "altera_defconfig",
+        "CONFIG_ALTERA_PLATFORM_NIOSV": "ON",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/drivers/platform/altera/toolchain.cmake"
+      }
+    }
+  ]
+}
