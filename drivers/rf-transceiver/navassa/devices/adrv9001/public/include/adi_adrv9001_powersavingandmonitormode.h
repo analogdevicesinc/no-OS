@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9001-SLA */
 /**
  * \file
  * \brief Contains ADRV9001 Power saving and Monitor mode related function prototypes for adi_adrv9001_PowerSavingAndMonitorMode.c

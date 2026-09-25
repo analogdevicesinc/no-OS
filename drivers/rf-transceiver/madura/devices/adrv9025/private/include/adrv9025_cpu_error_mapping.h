@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 */
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9025-SLA */
 /**
 * \file adrv9025_arm_error_mapping.h
 * \brief Contains ARM error tables

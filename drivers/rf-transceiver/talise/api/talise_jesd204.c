@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_jesd204.c
  * \brief Contains functions to support Talise JESD204b data interface

@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9001-SLA */
 #ifndef _ADRV9001_CRC32_H_
 #define _ADRV9001_CRC32_H_
 

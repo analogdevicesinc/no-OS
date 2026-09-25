@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file talise_jesd204.h
  * \brief Contains Talise JESD204b data path related function prototypes for

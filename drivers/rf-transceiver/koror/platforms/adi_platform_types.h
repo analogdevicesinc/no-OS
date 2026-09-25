@@ -1,7 +1,6 @@
 /**
- * Copyright 2015 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information.
- * see the "LICENSE.pdf" file in this zip file.
+ * Copyright 2015 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef __ADI_PLATFORM_TYPES_H__
@@ -109,6 +108,7 @@ typedef enum adi_hal_LogConsole
 typedef enum adi_hal_Platforms
 {
     ADI_ADS10_PLATFORM = 0U,        /*!< ADS10 Platform */
+    ADI_LINUX,                      /*!< Linux Platform */
     ADI_UNKNOWN_PLATFORM
 } adi_hal_Platforms_e;
 
@@ -164,7 +164,9 @@ typedef struct adi_hal_LogCfg
 {
     uint8_t                 interfaceEnabled;                       /*!< Interface Enabled Flag */
     uint32_t                logMask;                                /*!< Logging BitMask */
+#ifndef __KERNEL__
     FILE*                   logfd;                                  /*!< File Pointer for Log File */
+#endif
     char                    logFileName[ADI_HAL_STRING_LENGTH];     /*!< Log File Name */
     uint32_t                currentLineNumber;                      /*!< Current Line Number */
     adi_hal_LogConsole_e    logConsole;                             /*!< Logging to Console Flag */
@@ -223,6 +225,7 @@ typedef struct adi_hal_I2cCfg
     char drvName[ADI_HAL_STRING_LENGTH];
 } adi_hal_I2cCfg_t;
 
+#ifndef __KERNEL__
 /**
  * \brief Data structure for EEPROM configuration
  */
@@ -232,6 +235,7 @@ typedef struct adi_hal_EepromCfg
     FILE* fd;
     char drvName[ADI_HAL_STRING_LENGTH];
 } adi_hal_EepromCfg_t;
+#endif
 
 /**
  * \brief Data structure for memory Fpga Driver configuration
@@ -284,7 +288,9 @@ typedef struct adi_hal_Cfg
     adi_hal_HwResetCfg_t    hwResetCfg;                         /*!< HW Reset Configuration */
     adi_hal_I2cCfg_t        i2cCfg;                             /*!< I2C Configuration */
     adi_hal_TimerCfg_t      timerCfg;                           /*!< Timer Configuration */
+#ifndef __KERNEL__
     adi_hal_EepromCfg_t     eepromCfg;                          /*!< Eeprom Configuration */
+#endif
     int32_t                 error;                              /*!< Operating System Error Code */
 } adi_hal_Cfg_t;
 
