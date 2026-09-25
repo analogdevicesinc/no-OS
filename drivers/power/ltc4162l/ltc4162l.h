@@ -139,7 +139,7 @@ enum ltc4162l_command {
 struct ltc4162l_desc {
 	/** I2C Descriptor */
 	struct no_os_i2c_desc *i2c_desc;
-	struct ltc4162l_chip_info *info;
+	const struct ltc4162l_chip_info *info;
 	enum ltc4162l_id id;
 	uint32_t rsnsb;
 	uint32_t rsnsi;
