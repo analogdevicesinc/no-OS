@@ -416,6 +416,40 @@ extern const struct capi_uart_config uart_async_config;
 #ifdef DMA_OPS
 #include "capi_dma.h"
 
+/*
+ * DMA test knobs and capability axes. Defaults assume a fully-featured
+ * mem-to-mem DMA controller; a platform overrides any of them in parameters.h.
+ *
+ *   DMA_CHAN_ID       - channel id the tests open (init_chan). Streams/channels
+ *                       that carry mem-to-mem differ per part; the platform
+ *                       selects a valid one.
+ *   DMA_XFER_SIZE     - nominal transfer length (bytes) for the fixed-size cases.
+ *   DMA_MAX_XFER_SIZE - largest buffer the sizes sweep and the increment cases
+ *                       allocate; must be >= the biggest entry the sweep uses.
+ *   DMA_HAS_IRQ       - the controller can deliver completion through an IRQ and
+ *                       the driver wires a per-channel irq_num + a
+ *                       register_complete_callback op. When 0 the ASYNC case
+ *                       skips and every transfer is verified in polling mode
+ *                       (xfer_start blocks until the copy is done). The STM32
+ *                       CAPI DMA backend runs mem-to-mem in polling mode and
+ *                       implements no callback op, so it sets this to 0.
+ */
+#ifndef DMA_CHAN_ID
+#define DMA_CHAN_ID		0U
+#endif /* DMA_CHAN_ID */
+
+#ifndef DMA_XFER_SIZE
+#define DMA_XFER_SIZE		64U
+#endif /* DMA_XFER_SIZE */
+
+#ifndef DMA_MAX_XFER_SIZE
+#define DMA_MAX_XFER_SIZE	256U
+#endif /* DMA_MAX_XFER_SIZE */
+
+#ifndef DMA_HAS_IRQ
+#define DMA_HAS_IRQ		1
+#endif /* DMA_HAS_IRQ */
+
 /**
  * @brief CAPI DMA configuration for the memory-to-memory tests.
  */
