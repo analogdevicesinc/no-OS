@@ -15,14 +15,6 @@
 #   JTAG_CABLE_ID  - JTAG cable id to disambiguate multiple probes; default empty.
 
 function(add_xilinx_flash_target TARGET_NAME)
-    find_program(VITIS_EXECUTABLE vitis HINTS "$ENV{XILINX_VITIS}/bin")
-    if(NOT VITIS_EXECUTABLE)
-        message(STATUS
-            "vitis not found under $ENV{XILINX_VITIS}/bin; 'flash' target "
-            "will be unavailable. Source settings64.sh from your Vitis install.")
-        return()
-    endif()
-
     set(_util_py "${NO_OS_DIR}/tools/scripts/platform/xilinx/util.py")
     set(_elf "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TARGET_NAME}.elf")
     get_filename_component(_xsa_file "${HARDWARE}" NAME)
@@ -44,6 +36,21 @@ function(add_xilinx_flash_target TARGET_NAME)
     # time). Best-effort per architecture; see extract_xsa_members().
     include(${NO_OS_DIR}/cmake/xilinx/xilinx_hw.cmake)
     extract_xsa_members("${HARDWARE}" "${_hw_path}")
+
+    # Publish what a boot-image packager needs (see xilinx_boot.cmake). Written
+    # before the vitis check below: the .json is a description of the build, and
+    # is just as valid on a host that cannot run the 'flash' target.
+    include(${NO_OS_DIR}/cmake/xilinx/xilinx_boot.cmake)
+    write_xilinx_boot_info("${TARGET_NAME}" "${_run_dir}" "${_hw_path}"
+                           "${_elf}" "${_fsbl}")
+
+    find_program(VITIS_EXECUTABLE vitis HINTS "$ENV{XILINX_VITIS}/bin")
+    if(NOT VITIS_EXECUTABLE)
+        message(STATUS
+            "vitis not found under $ENV{XILINX_VITIS}/bin; 'flash' target "
+            "will be unavailable. Source settings64.sh from your Vitis install.")
+        return()
+    endif()
 
     # Optional JTAG selectors (empty by default, like the legacy defaults).
     if(NOT DEFINED TARGET_CPU)
