@@ -57,7 +57,7 @@ enum max538x_type {
 };
 
 struct max538x_chip_info {
-	uint8_t vfactor;
+	float vfactor;
 	uint8_t addr;
 };
 
@@ -69,7 +69,7 @@ struct max538x_dev {
 	/* Device VDD (for MAX5382 variant) */
 	uint8_t max538x_vdd ;
 	/* Device VREF */
-	uint8_t max538x_vref ;
+	float max538x_vref ;
 };
 
 struct max538x_init_param {
@@ -80,7 +80,7 @@ struct max538x_init_param {
 	/* Device VDD (for MAX5382 variant) */
 	uint8_t max538x_vdd ;
 	/* Device VREF */
-	uint8_t max538x_vref ;
+	float max538x_vref ;
 };
 
 extern const struct max538x_chip_info chip_info[];

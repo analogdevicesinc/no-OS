@@ -196,11 +196,13 @@ int32_t adgs5412_spi_reg_write_mask(adgs5412_dev *dev,
 	}
 
 	ret = adgs5412_spi_reg_read(dev, reg_addr, &reg_data);
+	if (ret)
+		return ret;
+
 	reg_data &= ~mask;
 	reg_data |= data;
-	ret |= adgs5412_spi_reg_write(dev, reg_addr, reg_data);
 
-	return ret;
+	return adgs5412_spi_reg_write(dev, reg_addr, reg_data);
 }
 
 /**
@@ -218,14 +220,13 @@ int32_t adgs5412_do_soft_reset(adgs5412_dev *dev)
 		return -1;
 	}
 
-	ret = adgs5412_spi_reg_write(dev,
-				     ADGS5412_REG_SOFT_RESETB,
+	ret = adgs5412_spi_reg_write(dev, ADGS5412_REG_SOFT_RESETB,
 				     ADGS5412_RESET_1);
-	ret |= adgs5412_spi_reg_write(dev,
-				      ADGS5412_REG_SOFT_RESETB,
-				      ADGS5412_RESET_2);
+	if (ret)
+		return ret;
 
-	return ret;
+	return adgs5412_spi_reg_write(dev, ADGS5412_REG_SOFT_RESETB,
+				      ADGS5412_RESET_2);
 }
 
 /**
@@ -322,29 +323,40 @@ int32_t adgs5412_init(adgs5412_dev **device,
 
 	/* SPI */
 	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
+	if (ret)
+		goto free_adgs5412;
 
 	/* Device Settings */
 	dev->crc_en = ADGS5412_DISABLE;
 	dev->daisy_chain_en = ADGS5412_DISABLE;
-	adgs5412_do_soft_reset(dev);
+	ret = adgs5412_do_soft_reset(dev);
+	if (ret)
+		goto free_spi;
 
 	if (init_param.crc_en == ADGS5412_ENABLE) {
-		adgs5412_spi_reg_write_mask(dev,
-					    ADGS5412_REG_ERR_CONFIG,
-					    ADGS5412_CRC_ERR_EN,
-					    ADGS5412_CRC_ERR_EN);
+		ret = adgs5412_spi_reg_write_mask(dev, ADGS5412_REG_ERR_CONFIG,
+						  ADGS5412_CRC_ERR_EN,
+						  ADGS5412_CRC_ERR_EN);
+		if (ret)
+			goto free_spi;
+
 		dev->crc_en = ADGS5412_ENABLE;
 	}
 
 	dev->burst_mode_en = init_param.burst_mode_en;
-	if (dev->burst_mode_en == ADGS5412_ENABLE)
-		adgs5412_spi_reg_write_mask(dev,
-					    ADGS5412_REG_BURST_EN,
-					    ADGS5412_BURST_MODE_EN,
-					    ADGS5412_BURST_MODE_EN);
+	if (dev->burst_mode_en == ADGS5412_ENABLE) {
+		ret = adgs5412_spi_reg_write_mask(dev, ADGS5412_REG_BURST_EN,
+						  ADGS5412_BURST_MODE_EN,
+						  ADGS5412_BURST_MODE_EN);
+		if (ret)
+			goto free_spi;
+	}
 
 	if (init_param.daisy_chain_en == ADGS5412_ENABLE) {
-		adgs5412_enter_daisy_chain(dev);
+		ret = adgs5412_enter_daisy_chain(dev);
+		if (ret)
+			goto free_spi;
+
 		dev->daisy_chain_en = ADGS5412_ENABLE;
 	}
 
@@ -352,9 +364,13 @@ int32_t adgs5412_init(adgs5412_dev **device,
 
 	if (!ret)
 		printf("ADGS5412 successfully initialized\n");
-	else
-		printf("ADGS5412 initialization error (%d)\n", ret);
 
+	return 0;
+
+free_spi:
+	no_os_spi_remove(dev->spi_desc);
+free_adgs5412:
+	no_os_free(dev);
 	return ret;
 }
 

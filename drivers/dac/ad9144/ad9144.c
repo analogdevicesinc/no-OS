@@ -913,7 +913,7 @@ static int ad9144_link_status_get(struct ad9144_dev *dev)
 	    regs[0] != regs[1] || regs[0] != regs[3])
 		ret = -EFAULT;
 
-	return 0;
+	return ret;
 }
 
 static int ad9144_jesd204_link_running(struct jesd204_dev *jdev,
@@ -981,8 +981,10 @@ int32_t ad9144_setup_legacy(struct ad9144_dev **device,
 
 	/* SPI */
 	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
-	if (ret == -1)
+	if (ret == -1) {
 		printf("%s : Device descriptor failed!\n", __func__);
+		goto free_dev;
+	}
 
 	// reset
 	ad9144_spi_write(dev, REG_SPI_INTFCONFA, SOFTRESET_M | SOFTRESET);
@@ -992,7 +994,7 @@ int32_t ad9144_setup_legacy(struct ad9144_dev **device,
 	ad9144_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
 	if (chip_id != AD9144_CHIP_ID) {
 		printf("%s : Invalid CHIP ID (0x%x).\n", __func__, chip_id);
-		return -1;
+		goto free_spi;
 	}
 
 	ad9144_spi_write(dev, REG_SPI_SCRATCHPAD, 0xAD);
@@ -1000,7 +1002,7 @@ int32_t ad9144_setup_legacy(struct ad9144_dev **device,
 	if (scratchpad != 0xAD) {
 		printf("%s : scratchpad read-write failed (0x%x)!\n", __func__,
 		       scratchpad);
-		return -1;
+		goto free_spi;
 	}
 
 	// power-up and dac initialization
@@ -1116,6 +1118,12 @@ int32_t ad9144_setup_legacy(struct ad9144_dev **device,
 	*device = dev;
 
 	return ret;
+
+free_spi:
+	no_os_spi_remove(dev->spi_desc);
+free_dev:
+	no_os_free(dev);
+	return -1;
 }
 
 /*******************************************************************************
@@ -1148,6 +1156,8 @@ int32_t ad9144_setup_jesd_fsm(struct ad9144_dev **device,
 	ad9144_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
 	if (chip_id != AD9144_CHIP_ID) {
 		printf("%s : Invalid CHIP ID (0x%x).\n", __func__, chip_id);
+		no_os_spi_remove(dev->spi_desc);
+		no_os_free(dev);
 		return -1;
 	}
 
@@ -1156,6 +1166,8 @@ int32_t ad9144_setup_jesd_fsm(struct ad9144_dev **device,
 	if (scratchpad != 0xAD) {
 		printf("%s : scratchpad read-write failed (0x%x)!\n", __func__,
 		       scratchpad);
+		no_os_spi_remove(dev->spi_desc);
+		no_os_free(dev);
 		return -1;
 	}
 

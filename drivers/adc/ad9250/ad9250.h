@@ -553,8 +553,8 @@ int32_t ad9250_output_invert(struct ad9250_dev *dev,
 int32_t ad9250_output_format(struct ad9250_dev *dev,
 			     int32_t format);
 /*! Sets (1) or clears (0) the reset short PN sequence bit(PN9). */
-int32_t ad9250_reset_PN29(struct ad9250_dev *dev,
-			  int32_t rst);
+int32_t ad9250_reset_pn9(struct ad9250_dev *dev,
+			 int32_t rst);
 /*! Sets (1) or clears (0) the reset long PN sequence bit(PN23). */
 int32_t ad9250_reset_pn23(struct ad9250_dev *dev,
 			  int32_t rst);
