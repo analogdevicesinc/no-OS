@@ -38,6 +38,10 @@
 struct adf4368_iio_dev {
 	struct adf4368_dev *adf4368_dev;
 	struct iio_device *iio_dev;
+	/** Manual-calibration sweep bounds in Hz, set via IIO attributes. */
+	uint64_t sweep_freq_start;
+	uint64_t sweep_freq_stop;
+	uint64_t sweep_freq_step;
 };
 
 struct adf4368_iio_dev_init_param {
@@ -59,9 +63,16 @@ enum adf4368_iio_dev_attr_id {
 	ADF4368_IIO_DEV_ATTR_REF_DIV,
 	ADF4368_IIO_DEV_ATTR_REF_DB,
 	ADF4368_IIO_DEV_ATTR_REF_FREQ,
+	ADF4368_IIO_DEV_ATTR_SWEEP_FREQ_START,
+	ADF4368_IIO_DEV_ATTR_SWEEP_FREQ_STOP,
+	ADF4368_IIO_DEV_ATTR_SWEEP_FREQ_STEP,
+	ADF4368_IIO_DEV_ATTR_SWEEP_DELAY,
+	ADF4368_IIO_DEV_ATTR_SWEEP_MANUAL_CAL,
+	ADF4368_IIO_DEV_ATTR_SWEEP_AUTO_CAL,
 	ADF4368_IIO_DEV_ATTR_SYNC_SETUP,
 	ADF4368_IIO_DEV_ATTR_SW_SYNC,
 	ADF4368_IIO_DEV_ATTR_TEMP,
+	ADF4368_IIO_DEV_ATTR_VCO_CAL_COUNT,
 };
 
 int adf4368_iio_init(struct adf4368_iio_dev **iio_dev,
