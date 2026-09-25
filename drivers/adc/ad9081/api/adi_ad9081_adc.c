@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: BSD-3-Clause
 /*!
  * @brief     APIs for ADC configuration and control
  *

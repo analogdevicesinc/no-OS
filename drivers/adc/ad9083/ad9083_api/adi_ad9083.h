@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /*!
  * @brief     API header file
  *            This file contains all the publicly exposed methods and data

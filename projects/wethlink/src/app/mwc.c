@@ -1,3 +1,13 @@
+/***************************************************************************//**
+ *   @file   mwc.c
+ *   @brief  mmWave control for the wethlink project.
+ *   @author Darius Berghe (darius.berghe@analog.com)
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+********************************************************************************
+ * Copyright 2023~2026(c) Analog Devices, Inc.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+*******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

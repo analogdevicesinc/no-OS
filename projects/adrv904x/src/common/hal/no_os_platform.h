@@ -5,6 +5,7 @@
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
  *
+<<<<<<< HEAD
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
@@ -29,6 +30,9 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+=======
+ * SPDX-License-Identifier: BSD-3-Clause
+>>>>>>> 7842989881 (adrv904x: add SPDX license tags to project tree)
 *******************************************************************************/
 #ifndef NO_OS_PLATFORM_H_
 #define NO_OS_PLATFORM_H_

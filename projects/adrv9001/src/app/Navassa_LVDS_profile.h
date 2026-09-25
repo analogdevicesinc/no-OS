@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-ADRV9001-SLA */
 const char *json_profile = "{ \
   \"clocks\": { \
     \"deviceClock_kHz\": 38400, \

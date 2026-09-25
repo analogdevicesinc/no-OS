@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: BSD-3-Clause
 /*!
  * @brief     Common API definitions header file.
  *            This file contains all common API definitions.

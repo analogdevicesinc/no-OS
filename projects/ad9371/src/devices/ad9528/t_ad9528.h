@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-API-License */
 /**
  * \file ad9371/src/devices/ad9528/t_ad9528.h
  * \brief Contains enum and structure data types for all AD9528 function calls
