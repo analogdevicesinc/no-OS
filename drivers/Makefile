@@ -1,5 +1,7 @@
 CC = arm-none-eabi-gcc
 
+SRCS = ${SRCS_MAKE}
+
 SKIPDIR = -path ./platform -prune -o \
 	-path ./axi_core -prune -o \
 	-path ./rf-transceiver/navassa -prune -o \
@@ -40,7 +42,6 @@ IIOD_FLAGS += -DIIO_SUPPORT
 
 CFLAGS = -c -Wall -Wformat=0 -D__int64_t_defined=1 $(IIOD_FLAGS) $(INCLUDES)
 
-SRCS = $(shell find . $(SKIPDIR) -name '*.c')
 OBJS = $(SRCS:.c=.o)
 
 %.o:%.c

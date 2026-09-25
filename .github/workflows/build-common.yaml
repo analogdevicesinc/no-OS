@@ -42,14 +42,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
+      - name: Get changed drivers files
+        id: changed-drivers-files
+        uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 # v47.0.6
         with:
-          submodules: recursive
-      - name: Build drivers
+          files: |
+            "drivers/**.c"
+      - name: Generate drivers report
         shell: sh
         run: |
           sudo apt-get install -y gcc-arm-none-eabi libnewlib-arm-none-eabi
-          make -j${NUM_JOBS} -C ${{ github.workspace }}/drivers -f Makefile
+          pip install tabulate html_to_markdown actions-toolkit
+          ${{ github.workspace }}/.github/scripts/drivers-warnings.py
+        env:
+          CHANGED_FILES: ${{ steps.changed-drivers-files.outputs.all_changed_files }}
+      - name: Report drivers build to PR
+        if: ${{ always() && github.event_name == 'pull_request' }}
+        uses: analogdevicesinc/shared-actions/pr-comment@main
+        with:
+          marker: driver-builds-report
+          body-file: drivers_warnings.md
   unit-tests:
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
