@@ -1,0 +1,25 @@
+if MAXIM
+
+config IPC_MAXIM
+	bool "Enable MAX78000 CAPI mailbox driver"
+	select CAPI
+	select CAPI_ALLOC
+	select CAPI_MAILBOX
+	default n
+	help
+	  Enable the SEMA-backed CAPI mailbox driver: core-to-core doorbell
+	  interrupts (irq0/irq1) and hardware mailbox registers for notifications
+	  between CPU0 (Arm) and CPU1 (RISC-V).
+
+config COPROCESSOR_MAXIM
+	bool "Enable MAX78000 CAPI coprocessor lifecycle driver"
+	depends on IPC_MAXIM
+	select CAPI
+	select CAPI_ALLOC
+	select CAPI_COPROCESSOR
+	default n
+	help
+	  Enable lifecycle and resource control for the MAX78000 RISC-V RV32
+	  coprocessor (CPU1).
+
+endif # MAXIM

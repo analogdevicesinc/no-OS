@@ -1,9 +1,9 @@
-/***************************************************************************//**
- *   @file   maxim_spi.h
- *   @brief  maxim specific header for SPI driver
- *   @author Ciprian Regus (ciprian.regus@analog.com)
+/*******************************************************************************
+ *   @file   maxim_sys.c
+ *   @brief  MAX78000 system-level helpers shared across cores/examples.
+ *   @author Victor Pascu (victor.pascu@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,47 +30,29 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#include "maxim_sys.h"
+#include "gcr_regs.h"
+#include "lpgcr_regs.h"
 
-#ifndef MAXIM_SPI_H_
-#define MAXIM_SPI_H_
-
-#include <stdint.h>
-#include "gpio.h"
-#include "no_os_spi.h"
-#include "no_os_dma.h"
-#include "maxim_dma.h"
-
-struct no_os_gpio_desc;
-struct no_os_gpio_init_param;
-
-/**
- * @brief maxim specific SPI platform ops structure
+/*
+ * See maxim_sys.h for the rationale. The reset selector encodes the target
+ * register by range: 0..31 -> GCR->rst0, 32..63 -> GCR->rst1, 64+ -> LPGCR->rst.
  */
-extern const struct no_os_spi_platform_ops max_spi_ops;
+void __wrap_MXC_SYS_Reset_Periph(mxc_sys_reset_t reset)
+{
+	uint32_t bit;
 
-enum spi_ss_polarity {
-	SPI_SS_POL_LOW,
-	SPI_SS_POL_HIGH
-};
-
-struct max_spi_init_param {
-	uint32_t num_slaves;
-	enum spi_ss_polarity polarity;
-	mxc_gpio_vssel_t vssel;
-	struct no_os_dma_init_param *dma_param;
-	uint32_t dma_rx_priority;
-	uint32_t dma_tx_priority;
-	struct no_os_gpio_init_param *gpio_cs;
-};
-
-struct max_spi_state {
-	struct max_spi_init_param *init_param;
-	struct no_os_gpio_desc *gpio_cs;
-	uint32_t cs_delay_first;
-	uint32_t cs_delay_last;
-	struct no_os_dma_desc *dma;
-	uint32_t dma_req_rx;
-	uint32_t dma_req_tx;
-};
-
-#endif
+	if (reset > 63) {
+		bit = reset - 64;
+		MXC_LPGCR->rst |= (1u << bit);
+		while (MXC_LPGCR->rst & (1u << bit)) {}
+	} else if (reset > 31) {
+		bit = reset - 32;
+		MXC_GCR->rst1 |= (1u << bit);
+		while (MXC_GCR->rst1 & (1u << bit)) {}
+	} else {
+		bit = (uint32_t)reset;
+		MXC_GCR->rst0 |= (1u << bit);
+		while (MXC_GCR->rst0 & (1u << bit)) {}
+	}
+}
