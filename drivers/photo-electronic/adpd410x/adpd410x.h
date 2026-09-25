@@ -1211,7 +1211,7 @@ int32_t adpd410x_get_opmode(struct adpd410x_dev *dev,
 
 /** Set number of active time slots. */
 int32_t adpd410x_set_last_timeslot(struct adpd410x_dev *dev,
-				   uint8_t timeslot_no);
+				   enum adpd410x_timeslots timeslot_no);
 
 /** Get number of active time slots. */
 int32_t adpd410x_get_last_timeslot(struct adpd410x_dev *dev,

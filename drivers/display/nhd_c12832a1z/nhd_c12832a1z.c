@@ -362,7 +362,7 @@ int nhd_c12832a1z_print_string(struct nhd_c12832a1z_dev *dev, char *msg)
 		int x = (cursor & 0xf) << 3; // segment
 
 		for (i = 0; i < 8; i++)
-			framebuffer_memory[y][x + i] = ASC16[msg[cursor]][i];
+			framebuffer_memory[y][x + i] = ASC16[(unsigned char)msg[cursor]][i];
 	}
 
 	ret = nhd_c12832a1z_write_cmd(dev, NHD_C12832A1Z_DISP_OFF);
