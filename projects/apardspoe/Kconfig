@@ -1,0 +1,23 @@
+menu "apardspoe Configuration"
+
+choice APARDSPOE_EXAMPLE
+	prompt "Example variant"
+	default APARDSPOE_APARD_COMMUNICATION_EXAMPLE
+
+config APARDSPOE_APARD_COMMUNICATION_EXAMPLE
+	bool "APARD communication example"
+	depends on LWIP && NET && ADIN1110
+	help
+	  TCP communication example using LWIP and the ADIN1110
+	  MAC/PHY over Ethernet.
+
+config APARDSPOE_COLOR_SENSOR_EXAMPLE
+	bool "Color sensor example"
+	depends on LWIP && NET && ADIN1110 && COLOR_TCS34725 && I2C
+	help
+	  Reads RGBC data from a TCS34725 color sensor and exposes it
+	  over a TCP command server on the ADIN1110 link.
+
+endchoice
+
+endmenu
