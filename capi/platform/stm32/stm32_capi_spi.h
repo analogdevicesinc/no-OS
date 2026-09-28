@@ -11,6 +11,7 @@
 #include "capi_spi.h"
 #include "capi_dma.h"
 #include "capi_gpio.h"
+#include "stm32_capi_dma.h"
 #include "stm32_capi_gpio.h"
 #ifdef HAL_TIM_MODULE_ENABLED
 #include "capi_timer.h"
@@ -34,6 +35,9 @@ struct stm32_spi_extra_config {
 	uint32_t rxdma_ch_id;
 	/** TX DMA Channel ID */
 	uint32_t txdma_ch_id;
+	/** Per-channel DMA configuration for the DMA-based transfer paths. */
+	struct stm32_dma_chan_extra_config *rxdma_extra;
+	struct stm32_dma_chan_extra_config *txdma_extra;
 	/** SPI interrupt number */
 	uint32_t irq_num;
 #ifdef HAL_TIM_MODULE_ENABLED
