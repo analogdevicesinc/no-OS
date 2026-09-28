@@ -288,6 +288,7 @@ static int stm32_capi_dma_config_xfer(struct capi_dma_chan *chan,
 		chan_priv->per_data_alignment = chan_extra->per_data_alignment;
 		chan_priv->dma_mode = chan_extra->dma_mode;
 		chan_priv->trig = chan_extra->trig;
+		chan->irq_num = chan_extra->irq_num;
 
 		if (chan_extra->hdma)
 			memcpy(&chan_priv->hdma, chan_extra->hdma, sizeof(DMA_HandleTypeDef));
@@ -478,7 +479,20 @@ static bool stm32_capi_dma_chan_is_completed(const struct capi_dma_chan *chan)
  */
 static int stm32_capi_dma_isr(struct capi_dma_handle *handle)
 {
-	(void)handle;
+	struct stm32_dma_priv_handle *dma_priv;
+	uint32_t i;
+
+	if (!handle || !handle->priv)
+		return -EINVAL;
+
+	dma_priv = handle->priv;
+
+	for (i = 0; i < dma_priv->num_chans; i++) {
+		if (dma_priv->chan_privs[i] &&
+		    dma_priv->chan_privs[i]->hdma.Instance)
+			HAL_DMA_IRQHandler(&dma_priv->chan_privs[i]->hdma);
+	}
+
 	return 0;
 }
 
@@ -501,6 +515,26 @@ static int stm32_capi_dma_isr_chan(struct capi_dma_chan *chan)
 	return 0;
 }
 
+/**
+ * @brief Register the transfer-completion callback for a DMA channel.
+ * @param chan - Pointer to the DMA channel.
+ * @param callback - Callback invoked on transfer completion.
+ * @param xfer_complete_ctx - User context passed to the callback.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_dma_register_complete_callback(struct capi_dma_chan *chan,
+		capi_dma_xfer_complete_cb callback,
+		void *xfer_complete_ctx)
+{
+	if (!chan)
+		return -EINVAL;
+
+	chan->xfer_complete_cb = callback;
+	chan->xfer_complete_ctx = xfer_complete_ctx;
+
+	return 0;
+}
+
 const struct capi_dma_ops stm32_capi_dma_ops = {
 	.init = stm32_capi_dma_init,
 	.deinit = stm32_capi_dma_deinit,
@@ -512,4 +546,5 @@ const struct capi_dma_ops stm32_capi_dma_ops = {
 	.chan_is_completed = stm32_capi_dma_chan_is_completed,
 	.isr = stm32_capi_dma_isr,
 	.isr_chan = stm32_capi_dma_isr_chan,
+	.register_complete_callback = stm32_capi_dma_register_complete_callback,
 };
