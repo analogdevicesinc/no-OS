@@ -606,6 +606,8 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 				/* Flags valid when EV=1 Only */
 				frame_buffer->frame_drop = !!(footer & OA_DATA_FOOTER_FD_MASK);
 
+				oa_tc6_queue_event(desc, OA_TC6_EVENT_RX);
+
 				/* Now get a new buffer for the second frame */
 				ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, true);
 				if (ret)
@@ -622,6 +624,7 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 			} else {
 				/* A single frame in current chunk. It will be completed */
 				frame_buffer->state = OA_BUFF_RX_COMPLETE;
+				oa_tc6_queue_event(desc, OA_TC6_EVENT_RX);
 			}
 
 			/*
@@ -658,6 +661,8 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 			memcpy(&(frame_buffer->data[frame_buffer->index]), chunks, ebo + 1);
 			frame_buffer->len = frame_buffer->index + ebo + 1;
 			frame_buffer->state = OA_BUFF_RX_COMPLETE;
+
+			oa_tc6_queue_event(desc, OA_TC6_EVENT_RX);
 
 			/* Flags valid when EV=1 Only */
 			frame_buffer->frame_drop = !!(footer & OA_DATA_FOOTER_FD_MASK);
