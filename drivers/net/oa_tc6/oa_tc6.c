@@ -460,12 +460,13 @@ static void oa_tc6_dispatch_events(struct oa_tc6_desc *desc, uint32_t events)
  * @param tx_credit - the number of chunks available for transmission
  * @param rx_nchunks - the number of chunks available for reception
  * @param tx_written - the number of chunks written in the buffer
+ * @param tx_done - set if the last chunk of at least one frame was written
  * @return 0 in case of success, negative error code otherwise
  */
 static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 				     uint8_t *tx_buffer,
 				     uint32_t tx_credit, uint32_t rx_nchunks,
-				     uint32_t *tx_written)
+				     uint32_t *tx_written, bool *tx_done)
 {
 	uint32_t spi_buffer_index = 0;
 	uint32_t spi_buff_max_chunks;
@@ -481,6 +482,7 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 
 	/* The maximum number of chunks we can potentially send, given the size of our SPI buffer. */
 	chunks_limit = no_os_min(spi_buff_max_chunks, tx_credit);
+	*tx_done = false;
 
 	/*
 	 * A frame that doesn't fit in the remaining space is sent partially. Its
@@ -525,6 +527,7 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 			frame_buffer->len = 0;
 			frame_buffer->index = 0;
 			frame_buffer->state = OA_BUFF_FREE;
+			*tx_done = true;
 		}
 	}
 
@@ -783,6 +786,7 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 	uint32_t rx_limit = 0;
 	uint32_t bytes_total;
 	uint32_t events;
+	bool tx_done;
 	int ret = 0;
 	int tx_ret;
 
@@ -811,7 +815,7 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 
 	do {
 		oa_tc6_tx_frame_to_chunks(desc, desc->data_chunks, desc->data_tx_credit,
-					  desc->data_rx_credit, &bytes_total);
+					  desc->data_rx_credit, &bytes_total, &tx_done);
 		if (!bytes_total) {
 			oa_tc6_add_empty_chunk(desc);
 			bytes_total = OA_CHUNK_SIZE + OA_HEADER_LEN;
@@ -828,6 +832,9 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 
 			goto unlock;
 		}
+
+		if (tx_done)
+			oa_tc6_queue_event(desc, OA_TC6_EVENT_TX);
 
 		ret = oa_tc6_rx_chunk_to_frame(desc, desc->data_chunks,
 					       bytes_total / (OA_CHUNK_SIZE + OA_HEADER_LEN));
