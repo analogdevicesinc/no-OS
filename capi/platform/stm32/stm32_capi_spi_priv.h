@@ -38,6 +38,9 @@ struct stm32_spi_priv_handle {
 	struct capi_dma_chan *rxdma_ch;
 	/** TX DMA Channel */
 	struct capi_dma_chan *txdma_ch;
+	/** Per-channel DMA configuration attached to each DMA transfer */
+	struct stm32_dma_chan_extra_config *rxdma_extra;
+	struct stm32_dma_chan_extra_config *txdma_extra;
 	/** CAPI callback */
 	capi_spi_callback_t callback;
 	/** CAPI callback argument */

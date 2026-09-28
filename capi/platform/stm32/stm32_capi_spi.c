@@ -23,6 +23,17 @@
 #define STM32_SPI_DMA_DEFAULT_TIMEOUT_MS	1000
 #define STM32_SPI_GPIO_PINS_PER_PORT		16
 
+#define STM32_SPI_DMA_DRAIN_TIMEOUT		10000U
+#define STM32_SPI_POLL_FAST_MAX_LEN		32U
+#define STM32_SPI_POLL_FAST_GUARD		100000U
+#define STM32_SPI_POLL_FAST_INFLIGHT		2U
+
+#ifdef HAL_TIM_MODULE_ENABLED
+#define STM32_SPI_HAS_CS_TIMER(priv)	((priv)->cs_timer != NULL)
+#else
+#define STM32_SPI_HAS_CS_TIMER(priv)	(false)
+#endif
+
 /* Forward declarations */
 static int stm32_capi_spi_dma_abort(struct capi_spi_device *device);
 
@@ -314,6 +325,8 @@ static int stm32_capi_spi_init(struct capi_spi_controller_handle **handle,
 		/* Set up DMA if provided */
 		if (spi_extra_config->dma_handle) {
 			spi_priv_handle->dma_handle = spi_extra_config->dma_handle;
+			spi_priv_handle->rxdma_extra = spi_extra_config->rxdma_extra;
+			spi_priv_handle->txdma_extra = spi_extra_config->txdma_extra;
 
 			/* Initialize DMA channels if configured */
 			if (spi_extra_config->rxdma_ch_id != 0) {
@@ -492,6 +505,56 @@ static int setup_cs_gpio(struct stm32_spi_priv_handle *priv_handle,
 	return 0;
 }
 
+#if !defined(STM32H5)
+/**
+ * @brief Clock out a short full-duplex transfer without going through the HAL.
+ * @param SPIx - SPI peripheral instance.
+ * @param tx - Transmit buffer.
+ * @param rx - Receive buffer.
+ * @param len - Number of bytes to exchange.
+ * @return 0 on success, -ETIMEDOUT if the guard expires.
+ */
+static int stm32_spi_poll_small_xfer(SPI_TypeDef *SPIx, const uint8_t *tx,
+				     uint8_t *rx, uint32_t len)
+{
+	volatile uint8_t *dr = (volatile uint8_t *)&SPIx->DR;
+	uint32_t guard = STM32_SPI_POLL_FAST_GUARD;
+	uint32_t tx_left = len;
+	uint32_t rx_left = len;
+
+	/*
+	 * The DMA path clears SPE on teardown and the HAL sets it per transfer,
+	 * so it cannot be assumed to be set on entry.
+	 */
+	if (!(SPIx->CR1 & SPI_CR1_SPE))
+		SET_BIT(SPIx->CR1, SPI_CR1_SPE);
+
+	while (rx_left) {
+		if (tx_left &&
+		    (tx_left + STM32_SPI_POLL_FAST_INFLIGHT) > rx_left &&
+		    (SPIx->SR & SPI_SR_TXE)) {
+			*dr = *tx++;
+			tx_left--;
+		}
+
+		if (SPIx->SR & SPI_SR_RXNE) {
+			*rx++ = *dr;
+			rx_left--;
+			continue;
+		}
+
+		if (!--guard)
+			return -ETIMEDOUT;
+	}
+
+	guard = STM32_SPI_POLL_FAST_GUARD;
+	while ((SPIx->SR & SPI_SR_BSY) && --guard)
+		;
+
+	return guard ? 0 : -ETIMEDOUT;
+}
+#endif /* !STM32H5 */
+
 /**
  * @brief Perform SPI transfer with proper CS control and timing.
  * @param priv_handle - Pointer to the STM32 SPI private handle.
@@ -551,6 +614,20 @@ static int perform_spi_transfer_with_cs(struct stm32_spi_priv_handle
 				       transfer->timeout : HAL_MAX_DELAY;
 
 		if (transfer->tx_size == transfer->rx_size) {
+#if !defined(STM32H5)
+			/*
+			 * Short equal-length transfers are almost entirely
+			 * fixed overhead inside the HAL; clock them out
+			 * directly instead.
+			 */
+			if (xfer_len <= STM32_SPI_POLL_FAST_MAX_LEN) {
+				ret = stm32_spi_poll_small_xfer(
+					      priv_handle->hspi->Instance,
+					      transfer->tx_buf,
+					      transfer->rx_buf, xfer_len);
+				goto cs_deassert;
+			}
+#endif
 			hal_ret = HAL_SPI_TransmitReceive(priv_handle->hspi,
 							  (uint8_t *)transfer->tx_buf,
 							  transfer->rx_buf,
@@ -1206,8 +1283,7 @@ static void stm32_capi_spi_dma_callback(uint32_t event, void *ctx)
 					   priv_handle->tx_timer_channel);
 #endif
 
-	/* Perform abort SPI transfers */
-	stm32_capi_spi_abort_async(device);
+	stm32_capi_spi_dma_abort(device);
 
 	priv_handle->dma_done = true;
 
@@ -1243,6 +1319,19 @@ static int stm32_capi_config_dma_and_start(struct capi_spi_device *device,
 	if (!priv_handle->rxdma_ch || !priv_handle->txdma_ch)
 		return -EINVAL;
 
+	/*
+	 * The CS pin is only set up lazily by the blocking/IT transfer paths,
+	 * so a device driven exclusively over DMA would otherwise never get
+	 * one.
+	 */
+	ret = setup_cs_gpio(priv_handle, device);
+	if (ret)
+		return ret;
+
+	ret = stm32_capi_spi_config_peripheral(priv_handle, device);
+	if (ret)
+		return ret;
+
 	rx_ch_xfer = capi_calloc(transfer_count, sizeof(*rx_ch_xfer));
 	if (!rx_ch_xfer)
 		return -ENOMEM;
@@ -1255,6 +1344,7 @@ static int stm32_capi_config_dma_and_start(struct capi_spi_device *device,
 
 	for (i = 0; i < transfer_count; i++) {
 		/* Configure TX DMA transfer */
+		tx_ch_xfer[i].extra = priv_handle->txdma_extra;
 		tx_ch_xfer[i].src = (capi_dma_glbl_addr_t)transfers[i].tx_buf;
 #ifndef SPI_SR_TXE
 		tx_ch_xfer[i].dst = (capi_dma_glbl_addr_t) & (SPIx->TXDR);
@@ -1267,6 +1357,7 @@ static int stm32_capi_config_dma_and_start(struct capi_spi_device *device,
 		tx_ch_xfer[i].length = transfers[i].tx_size;
 
 		/* Configure RX DMA transfer */
+		rx_ch_xfer[i].extra = priv_handle->rxdma_extra;
 		rx_ch_xfer[i].dst = (capi_dma_glbl_addr_t)transfers[i].rx_buf;
 #ifndef SPI_SR_RXNE
 		rx_ch_xfer[i].src = (capi_dma_glbl_addr_t) & (SPIx->RXDR);
@@ -1289,6 +1380,20 @@ static int stm32_capi_config_dma_and_start(struct capi_spi_device *device,
 		ret = capi_dma_register_complete_callback(priv_handle->rxdma_ch,
 				completion_callback,
 				callback_ctx);
+		if (ret)
+			goto cleanup_dma;
+	}
+
+	/*
+	 * Drive CS low for the whole burst. Below, CS is only handled when a
+	 * cs_timer generates it in hardware; with SPI_NSS_SOFT and no such
+	 * timer nothing else asserts it, so the frames would be clocked out
+	 * with CS still deasserted and the peripheral would ignore them.
+	 * stm32_capi_spi_dma_abort() releases it again once the burst ends.
+	 */
+	if (!STM32_SPI_HAS_CS_TIMER(priv_handle) && priv_handle->cs_initialized) {
+		ret = capi_gpio_pin_set_raw_value(&priv_handle->chip_select,
+						  CAPI_GPIO_LOW);
 		if (ret)
 			goto cleanup_dma;
 	}
@@ -1358,6 +1463,9 @@ abort_transfer:
 	capi_dma_xfer_abort(priv_handle->txdma_ch);
 	capi_dma_xfer_abort(priv_handle->rxdma_ch);
 cleanup_dma:
+	if (!STM32_SPI_HAS_CS_TIMER(priv_handle) && priv_handle->cs_initialized)
+		capi_gpio_pin_set_raw_value(&priv_handle->chip_select,
+					    CAPI_GPIO_HIGH);
 	capi_free(tx_ch_xfer);
 	priv_handle->tx_ch_xfer = NULL;
 free_rx_ch_xfer:
@@ -1375,6 +1483,8 @@ static int stm32_capi_spi_dma_abort(struct capi_spi_device *device)
 {
 	struct stm32_spi_priv_handle *priv_handle;
 	SPI_TypeDef *SPIx;
+	uint32_t timeout;
+	int tx_ret;
 	int ret = 0;
 
 	if (!device || !device->controller)
@@ -1388,8 +1498,6 @@ static int stm32_capi_spi_dma_abort(struct capi_spi_device *device)
 
 	if (priv_handle->rxdma_ch) {
 		ret = capi_dma_xfer_abort(priv_handle->rxdma_ch);
-		if (ret)
-			return ret;
 
 #if defined (STM32H5)
 		CLEAR_BIT(SPIx->CFG1, SPI_CFG1_RXDMAEN);
@@ -1399,9 +1507,9 @@ static int stm32_capi_spi_dma_abort(struct capi_spi_device *device)
 	}
 
 	if (priv_handle->txdma_ch) {
-		ret = capi_dma_xfer_abort(priv_handle->txdma_ch);
-		if (ret)
-			return ret;
+		tx_ret = capi_dma_xfer_abort(priv_handle->txdma_ch);
+		if (tx_ret && !ret)
+			ret = tx_ret;
 
 #if defined (STM32H5)
 		CLEAR_BIT(SPIx->CFG1, SPI_CFG1_TXDMAEN);
@@ -1410,11 +1518,25 @@ static int stm32_capi_spi_dma_abort(struct capi_spi_device *device)
 #endif
 	}
 
-	/* Dummy read to clear any pending read on SPI */
-#ifndef SPI_SR_RXNE
-	*(volatile uint8_t *)&SPIx->RXDR;
+	timeout = STM32_SPI_DMA_DRAIN_TIMEOUT;
+	while ((SPIx->SR & SPI_SR_BSY) && timeout)
+		timeout--;
+
+#if defined(SPI_SR_FRLVL)
+	timeout = STM32_SPI_DMA_DRAIN_TIMEOUT;
+	while ((SPIx->SR & SPI_SR_FRLVL) && timeout) {
+		(void)*(volatile uint8_t *)&SPIx->DR;
+		timeout--;
+	}
+#elif !defined(SPI_SR_RXNE)
+	(void)*(volatile uint8_t *)&SPIx->RXDR;
 #else
-	*(volatile uint8_t *)&SPIx->DR;
+	(void)*(volatile uint8_t *)&SPIx->DR;
+#endif
+
+#if defined(SPI_SR_OVR)
+	(void)SPIx->DR;
+	(void)SPIx->SR;
 #endif
 
 	/* Free the allocated memory for tx and rx transfers */
@@ -1423,10 +1545,14 @@ static int stm32_capi_spi_dma_abort(struct capi_spi_device *device)
 	priv_handle->tx_ch_xfer = NULL;
 	priv_handle->rx_ch_xfer = NULL;
 
-	/* put CS pin back into gpio mode */
-	stm32_capi_spi_alternate_cs_enable(device, false);
+	if (STM32_SPI_HAS_CS_TIMER(priv_handle)) {
+		stm32_capi_spi_alternate_cs_enable(device, false);
+	} else if (priv_handle->cs_initialized) {
+		capi_gpio_pin_set_raw_value(&priv_handle->chip_select,
+					    CAPI_GPIO_HIGH);
+	}
 
-	return 0;
+	return ret;
 }
 
 /**
