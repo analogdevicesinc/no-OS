@@ -21,6 +21,8 @@ struct stm32_dma_priv_handle {
 	uint32_t num_chans;
 	/** Array of channel private data pointers */
 	struct stm32_dma_chan_priv **chan_privs;
+	/** Per-channel NVIC line table (see stm32_dma_extra_config), or NULL */
+	const uint32_t *chan_irq_nums;
 };
 
 /**
