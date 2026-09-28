@@ -36,7 +36,7 @@
 #include <stdint.h>
 #include "no_os_error.h"
 
-#if defined (__STDC__) && (__STDC_VERSION__ >= 199901L)
+#if defined (__STDC__) && (__STDC_VERSION__ >= 199901L) || defined(__cplusplus)
 #include <stdbool.h>
 #else
 typedef enum { false, true } bool;
