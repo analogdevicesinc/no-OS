@@ -690,14 +690,11 @@ int32_t ad9361_spi_readm(struct no_os_spi_desc *spi, uint32_t reg,
 {
 	int32_t ret = 0;
 	uint16_t cmd;
-	uint8_t *rbuffer;
+	uint8_t rbuffer[MAX_MBYTE_SPI + 2];
 	if (num > MAX_MBYTE_SPI)
 		return -EINVAL;
 
 	cmd = AD_READ | AD_CNT(num) | AD_ADDR(reg);
-	rbuffer = no_os_malloc(num + 2);
-	if (!rbuffer)
-		return -ENOMEM;
 	rbuffer[0] = cmd >> 8;
 	rbuffer[1] = cmd & 0xFF;
 	ret = no_os_spi_write_and_read(spi, &rbuffer[0], 2 + num);
@@ -707,7 +704,6 @@ int32_t ad9361_spi_readm(struct no_os_spi_desc *spi, uint32_t reg,
 	else
 		memcpy(rbuf, &rbuffer[2], num);
 
-	no_os_free(rbuffer);
 #ifdef _DEBUG
 	{
 		int32_t i;
@@ -2451,6 +2447,9 @@ int32_t ad9361_read_rssi(struct ad9361_rf_phy *phy, struct rf_rssi *rssi)
 
 	rc = ad9361_spi_readm(spi, REG_PREAMBLE_LSB,
 			      reg_val_buf, NO_OS_ARRAY_SIZE(reg_val_buf));
+	if (rc < 0)
+		return rc;
+
 	if (rssi->ant == 1) {
 		rssi->symbol = RSSI_RESOLUTION *
 			       ((reg_val_buf[5] << RSSI_LSB_SHIFT) +
