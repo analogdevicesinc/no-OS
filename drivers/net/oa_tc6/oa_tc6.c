@@ -509,9 +509,10 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 	 * The TX queue may be empty, there is no space in the SPI buffer,
 	 * or we're out of tx credits.
 	 * If rx_chunks > tx_chunks, we need to add dummy chunks (DV = 0) as long
-	 * as there is enough room in the buffer.
+	 * as there is enough room in the buffer. These don't consume TX credits.
 	 */
-	while ((rx_nchunks > chunks_written) && (chunks_written < chunks_limit)) {
+	while ((rx_nchunks > chunks_written) &&
+	       (chunks_written < spi_buff_max_chunks)) {
 		header = no_os_field_prep(OA_DATA_HEADER_DNC_MASK, 1);
 		no_os_put_unaligned_be32(header, &tx_buffer[spi_buffer_index]);
 		spi_buffer_index += OA_CHUNK_SIZE + OA_HEADER_LEN;
