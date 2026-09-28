@@ -3204,7 +3204,7 @@ struct ad9361_phy_platform_data {
 	uint32_t		rssi_lna_err_tbl[4];
 	uint32_t		rssi_mixer_err_tbl[16];
 	uint32_t		rssi_gain_step_calib_reg_val[5];
-	bool			rssi_skip_calib; /* skip live RSSI calib if tables pre-loaded */
+	bool			rssi_skip_calib; /* RSSI tables pre-loaded */
 
 	enum ad9361_clkout	ad9361_clkout_mode;
 

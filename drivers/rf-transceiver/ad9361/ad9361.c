@@ -5651,14 +5651,14 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	if (ret < 0)
 		return ret;
 
-	/* skip live RSSI gain-step calib when pre-loaded tables are present */
-	if (!pd->rssi_skip_calib) {
-		ret = ad9361_rssi_gain_step_calib(phy);
-		if (ret < 0)
-			return ret;
-	} else if (pd->rssi_lna_err_tbl[0] || pd->rssi_mixer_err_tbl[0] ||
-		   pd->rssi_gain_step_calib_reg_val[0]) {
-		/* factory tables present — program them directly */
+	/*
+	 * The live RSSI gain step calibration needs a single tone within the
+	 * channel bandwidth at the RX input: as in the Linux driver, it only
+	 * runs on request (IIO calib_mode or rssi_gain_step_error), never here.
+	 * Program the tables if they were pre-loaded.
+	 */
+	if (pd->rssi_skip_calib || pd->rssi_lna_err_tbl[0] ||
+	    pd->rssi_mixer_err_tbl[0] || pd->rssi_gain_step_calib_reg_val[0]) {
 		ad9361_ensm_force_state(phy, ENSM_STATE_ALERT);
 		ad9361_rssi_program_lna_gain(phy);
 		ad9361_rssi_write_err_tbl(phy);
