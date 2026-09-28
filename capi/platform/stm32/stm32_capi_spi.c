@@ -27,6 +27,7 @@
 #define STM32_SPI_POLL_FAST_MAX_LEN		32U
 #define STM32_SPI_POLL_FAST_GUARD		100000U
 #define STM32_SPI_POLL_FAST_INFLIGHT		2U
+#define STM32_SPI_DMA_DEFAULT_MIN_LEN		64U
 
 #ifdef HAL_TIM_MODULE_ENABLED
 #define STM32_SPI_HAS_CS_TIMER(priv)	((priv)->cs_timer != NULL)
@@ -36,6 +37,28 @@
 
 /* Forward declarations */
 static int stm32_capi_spi_dma_abort(struct capi_spi_device *device);
+static int stm32_capi_spi_transfer_multiple_dma(struct capi_spi_device *device,
+		struct capi_spi_transfer *transfers,
+		uint32_t transfer_count);
+static int stm32_capi_spi_transfer_multiple_dma_async(
+	struct capi_spi_device *device,
+	struct capi_spi_transfer *transfers,
+	uint32_t transfer_count,
+	void (*callback)(void*),
+	void* callback_arg);
+
+/**
+ * @brief Check whether a transfer of the given length should use DMA.
+ * @param priv_handle - Pointer to the STM32 SPI private handle.
+ * @param len - Effective transfer length in bytes.
+ * @return true if DMA should be used, false to fall back to PIO/IT.
+ */
+static bool stm32_capi_spi_use_dma(struct stm32_spi_priv_handle *priv_handle,
+				   uint32_t len)
+{
+	return priv_handle->dma_handle && priv_handle->rxdma_ch &&
+	       priv_handle->txdma_ch && len >= priv_handle->dma_threshold;
+}
 
 /* lookup table for mapping HAL handles to private handles */
 #define MAX_SPI_INSTANCES 8
@@ -327,6 +350,9 @@ static int stm32_capi_spi_init(struct capi_spi_controller_handle **handle,
 			spi_priv_handle->dma_handle = spi_extra_config->dma_handle;
 			spi_priv_handle->rxdma_extra = spi_extra_config->rxdma_extra;
 			spi_priv_handle->txdma_extra = spi_extra_config->txdma_extra;
+			spi_priv_handle->dma_threshold = spi_extra_config->dma_min_len ?
+							 spi_extra_config->dma_min_len :
+							 STM32_SPI_DMA_DEFAULT_MIN_LEN;
 
 			/* Initialize DMA channels if configured */
 			if (spi_extra_config->rxdma_ch_id != 0) {
@@ -723,6 +749,25 @@ static int stm32_capi_spi_transceive(struct capi_spi_device *device,
 }
 
 /**
+ * @brief Trampoline that reports DMA transceive completion through the
+ * registered CAPI callback, matching the completion signalling of the IT
+ * path (see HAL_SPI_TxCpltCallback() etc.).
+ * @param ctx - Pointer to the SPI device descriptor.
+ */
+static void stm32_capi_spi_transceive_dma_done(void *ctx)
+{
+	struct capi_spi_device *device = (struct capi_spi_device *)ctx;
+	struct stm32_spi_priv_handle *priv_handle = device->controller->priv;
+
+	priv_handle->async_in_progress = false;
+	priv_handle->current_transfer = NULL;
+
+	if (priv_handle->callback)
+		priv_handle->callback(CAPI_SPI_EVENT_XFR_DONE,
+				      priv_handle->callback_arg, 0);
+}
+
+/**
  * @brief Perform an asynchronous SPI transceive operation using interrupts.
  * @param device - Pointer to the SPI device descriptor.
  * @param transfer - Pointer to the transfer descriptor.
@@ -751,6 +796,21 @@ static int stm32_capi_spi_transceive_async(struct capi_spi_device *device,
 	ret = setup_cs_gpio(priv_handle, device);
 	if (ret)
 		return ret;
+
+	if (stm32_capi_spi_use_dma(priv_handle,
+				   max(transfer->tx_size, transfer->rx_size))) {
+		priv_handle->current_transfer = transfer;
+		priv_handle->async_in_progress = true;
+
+		ret = stm32_capi_spi_transfer_multiple_dma_async(
+			      device, transfer, 1,
+			      stm32_capi_spi_transceive_dma_done, device);
+		if (ret) {
+			priv_handle->async_in_progress = false;
+			priv_handle->current_transfer = NULL;
+		}
+		return ret;
+	}
 
 	/* Configure SPI for this device */
 	ret = stm32_capi_spi_config_peripheral(priv_handle, device);

@@ -38,6 +38,10 @@ struct stm32_spi_extra_config {
 	/** Per-channel DMA configuration for the DMA-based transfer paths. */
 	struct stm32_dma_chan_extra_config *rxdma_extra;
 	struct stm32_dma_chan_extra_config *txdma_extra;
+	/** Minimum transfer length (bytes) at which transceive()/transceive_async()
+	 *  use DMA instead of PIO/IT. Below this, DMA setup/teardown cost more than
+	 *  the transfer itself. 0 selects a built-in default. */
+	uint32_t dma_min_len;
 	/** SPI interrupt number */
 	uint32_t irq_num;
 #ifdef HAL_TIM_MODULE_ENABLED

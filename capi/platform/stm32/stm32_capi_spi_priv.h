@@ -41,6 +41,9 @@ struct stm32_spi_priv_handle {
 	/** Per-channel DMA configuration attached to each DMA transfer */
 	struct stm32_dma_chan_extra_config *rxdma_extra;
 	struct stm32_dma_chan_extra_config *txdma_extra;
+	/** Minimum transfer length (bytes) at which transceive()/transceive_async()
+	 *  dispatch to DMA instead of PIO/IT. */
+	uint32_t dma_threshold;
 	/** CAPI callback */
 	capi_spi_callback_t callback;
 	/** CAPI callback argument */
