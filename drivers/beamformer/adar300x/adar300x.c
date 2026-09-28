@@ -746,6 +746,82 @@ int adar300x_get_ram_beamstate(struct adar300x_dev *dev, uint8_t beam,
 }
 
 /**
+ * @brief Sets the range of pointers a beam's RAM sequencer steps through.
+ *
+ * A stop pointer below the start pointer is valid: the sequencer then wraps
+ * from pointer 63 to pointer 0, skipping the middle of the range.
+ *
+ * @param dev	- The device structure.
+ * @param beam	- Beam index.
+ * @param start - Pointer the sequencer starts from.
+ * @param stop	- Last pointer before the sequencer wraps to start.
+ * @return	- 0 in case of success or negative error code otherwise.
+ */
+int adar300x_set_seq_range(struct adar300x_dev *dev, uint8_t beam,
+			   uint8_t start, uint8_t stop)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	if (beam >= dev->chip_info->num_beams ||
+	    start >= ADAR300X_RAM_STATES_PER_BEAM ||
+	    stop >= ADAR300X_RAM_STATES_PER_BEAM)
+		return -EINVAL;
+
+	ret = adar300x_page_reg_write(dev, ADAR300X_PAGE_CONFIG,
+				      ADAR300X_REG_SEQ_START(beam), start);
+	if (ret)
+		return ret;
+
+	return adar300x_page_reg_write(dev, ADAR300X_PAGE_CONFIG,
+				       ADAR300X_REG_SEQ_STOP(beam), stop);
+}
+
+/**
+ * @brief Reads the range of pointers a beam's RAM sequencer steps through.
+ * @param dev	- The device structure.
+ * @param beam	- Beam index.
+ * @param start - Start pointer, may be NULL.
+ * @param stop	- Stop pointer, may be NULL.
+ * @return	- 0 in case of success or negative error code otherwise.
+ */
+int adar300x_get_seq_range(struct adar300x_dev *dev, uint8_t beam,
+			   uint8_t *start, uint8_t *stop)
+{
+	uint8_t val;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	if (beam >= dev->chip_info->num_beams)
+		return -EINVAL;
+
+	if (start) {
+		ret = adar300x_page_reg_read(dev, ADAR300X_PAGE_CONFIG,
+					     ADAR300X_REG_SEQ_START(beam),
+					     &val);
+		if (ret)
+			return ret;
+
+		*start = val & ADAR300X_SEQ_PTR_MSK;
+	}
+
+	if (stop) {
+		ret = adar300x_page_reg_read(dev, ADAR300X_PAGE_CONFIG,
+					     ADAR300X_REG_SEQ_STOP(beam), &val);
+		if (ret)
+			return ret;
+
+		*stop = val & ADAR300X_SEQ_PTR_MSK;
+	}
+
+	return 0;
+}
+
+/**
  * @brief Queues one beamstate onto a beam's FIFO.
  *
  * The six bytes must be written in order: the write to the last address is

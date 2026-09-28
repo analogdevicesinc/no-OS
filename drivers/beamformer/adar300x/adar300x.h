@@ -132,6 +132,14 @@
 #define ADAR300X_UNPACKED_BEAMSTATE_LEN		8
 
 /*
+ * RAM sequencer, configuration page. An update in memory mode advances a
+ * beam's active pointer from start to stop, then wraps back to start.
+ */
+#define ADAR300X_REG_SEQ_START(beam)		(0x017 + (beam) * 2)
+#define ADAR300X_REG_SEQ_STOP(beam)		(0x018 + (beam) * 2)
+#define ADAR300X_SEQ_PTR_MSK			NO_OS_GENMASK(5, 0)
+
+/*
  * FIFO. Each beam queues up to 16 beamstates, loaded through its own group of
  * six addresses on the FIFO page. Writing the sixth address commits the
  * beamstate and advances the write pointer. The FIFO cannot be read back; the
@@ -453,6 +461,14 @@ int adar300x_set_ram_beamstate(struct adar300x_dev *dev, uint8_t beam,
 /** Read one beamstate back from a beam's RAM page. */
 int adar300x_get_ram_beamstate(struct adar300x_dev *dev, uint8_t beam,
 			       uint8_t state, uint8_t *values);
+
+/** Set the range of pointers a beam's RAM sequencer steps through. */
+int adar300x_set_seq_range(struct adar300x_dev *dev, uint8_t beam,
+			   uint8_t start, uint8_t stop);
+
+/** Read the range of pointers a beam's RAM sequencer steps through. */
+int adar300x_get_seq_range(struct adar300x_dev *dev, uint8_t beam,
+			   uint8_t *start, uint8_t *stop);
 
 /** Queue one beamstate onto a beam's FIFO. */
 int adar300x_load_fifo_beamstate(struct adar300x_dev *dev, uint8_t beam,

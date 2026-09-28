@@ -444,6 +444,48 @@ static int adar300x_fifo_demo(struct adar300x_dev *dev)
 	return 0;
 }
 
+/*
+ * Checks the RAM sequencer range against its power-on defaults, then sets a
+ * range with the stop pointer below the start pointer, which the device
+ * accepts as a range that wraps from pointer 63 to pointer 0.
+ */
+static int adar300x_seq_demo(struct adar300x_dev *dev)
+{
+	const uint8_t start = 40, stop = 8;
+	uint8_t beam, s, e;
+	int ret;
+
+	for (beam = 0; beam < dev->chip_info->num_beams; beam++) {
+		ret = adar300x_get_seq_range(dev, beam, &s, &e);
+		if (ret)
+			return ret;
+
+		if (s != 0 || e != ADAR300X_RAM_STATES_PER_BEAM - 1) {
+			pr_err("beam %u sequencer range %u..%u, expected 0..%u\n",
+			       beam, s, e, ADAR300X_RAM_STATES_PER_BEAM - 1);
+			return -EIO;
+		}
+
+		ret = adar300x_set_seq_range(dev, beam, start + beam, stop);
+		if (ret)
+			return ret;
+
+		ret = adar300x_get_seq_range(dev, beam, &s, &e);
+		if (ret)
+			return ret;
+
+		if (s != start + beam || e != stop) {
+			pr_err("beam %u sequencer range: wrote %u..%u read %u..%u\n",
+			       beam, start + beam, stop, s, e);
+			return -EIO;
+		}
+	}
+
+	pr_info("RAM sequencer range defaults and write/readback: OK\n");
+
+	return 0;
+}
+
 int basic_example_main(void)
 {
 	struct adar300x_dev *dev;
@@ -485,6 +527,10 @@ int basic_example_main(void)
 		goto error_dev;
 
 	ret = adar300x_beam_command_demo(dev);
+	if (ret)
+		goto error_dev;
+
+	ret = adar300x_seq_demo(dev);
 	if (ret)
 		goto error_dev;
 
