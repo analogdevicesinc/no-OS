@@ -299,11 +299,15 @@ int ade7880_init(struct ade7880_dev **device,
 
 	/* Set power mode */
 	dev->power_mode = init_param.power_mode;
-	if (!init_param.psm0_desc)
+	if (!init_param.psm0_desc) {
+		ret = -EINVAL;
 		goto error_dev;
+	}
 	dev->psm0_desc = init_param.psm0_desc;
-	if (!init_param.psm1_desc)
+	if (!init_param.psm1_desc) {
+		ret = -EINVAL;
 		goto error_dev;
+	}
 	dev->psm1_desc = init_param.psm1_desc;
 
 	ret = ade7880_set_power_mode(dev);
@@ -311,8 +315,10 @@ int ade7880_init(struct ade7880_dev **device,
 		goto error_dev;
 
 	/* Hard reset the device */
-	if (!init_param.reset_desc)
+	if (!init_param.reset_desc) {
+		ret = -EINVAL;
 		goto error_dev;
+	}
 	dev->reset_desc = init_param.reset_desc;
 	ret = no_os_gpio_set_value(dev->reset_desc,
 				   NO_OS_GPIO_LOW);
