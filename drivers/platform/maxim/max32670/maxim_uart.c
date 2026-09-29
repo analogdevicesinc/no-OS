@@ -225,6 +225,8 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 	if (!param || !param->extra)
 		return -EINVAL;
 
+	uart_regs = MXC_UART_GET_UART(param->device_id);
+
 	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
@@ -235,7 +237,6 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 		goto error;
 	}
 	descriptor->extra = max_uart;
-	uart_regs = MXC_UART_GET_UART(param->device_id);
 	eparam = param->extra;
 
 	descriptor->device_id = param->device_id;
