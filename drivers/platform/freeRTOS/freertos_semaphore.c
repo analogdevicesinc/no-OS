@@ -39,7 +39,7 @@
  * @brief Initialize semaphore.
  * semaphore - Pointer toward the semaphore.
  */
-__attribute__((weak)) inline void no_os_semaphore_init(void **semaphore)
+__attribute__((weak)) void no_os_semaphore_init(void **semaphore)
 {
 	if (*semaphore == NULL) {
 		*semaphore = xSemaphoreCreateBinary();
@@ -53,7 +53,7 @@ __attribute__((weak)) inline void no_os_semaphore_init(void **semaphore)
  * @brief Take token from semaphore.
  * semaphore - Pointer toward the semaphore.
  */
-__attribute__((weak)) inline void no_os_semaphore_take(void *semaphore)
+__attribute__((weak)) void no_os_semaphore_take(void *semaphore)
 {
 	if (semaphore != NULL)
 		xSemaphoreTake((SemaphoreHandle_t)semaphore, portMAX_DELAY);
@@ -63,7 +63,7 @@ __attribute__((weak)) inline void no_os_semaphore_take(void *semaphore)
  * @brief Give token to semaphore
  * semaphore - Pointer toward the semaphore.
  */
-__attribute__((weak)) inline void no_os_semaphore_give(void *semaphore)
+__attribute__((weak)) void no_os_semaphore_give(void *semaphore)
 {
 	if (semaphore != NULL)
 		xSemaphoreGive((SemaphoreHandle_t)semaphore);
@@ -73,7 +73,7 @@ __attribute__((weak)) inline void no_os_semaphore_give(void *semaphore)
  * @brief Remove semaphore.
  * semaphore - Pointer toward the semaphore.
  */
-__attribute__((weak)) inline void no_os_semaphore_remove(void *semaphore)
+__attribute__((weak)) void no_os_semaphore_remove(void *semaphore)
 {
 	if (semaphore != NULL) {
 		vSemaphoreDelete((SemaphoreHandle_t)semaphore);
