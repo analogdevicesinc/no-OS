@@ -1,0 +1,35 @@
+menu "ad9088 Configuration"
+
+choice AD9088_EXAMPLE
+	prompt "Example variant"
+	default AD9088_BASIC_EXAMPLE
+
+config AD9088_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Brings the AD9088 up over SPI, loads the device profile and core
+	  firmware, and runs the JESD204 link through to LINK_RUNNING.
+
+config AD9088_DMA_EXAMPLE
+	bool "DMA example"
+	help
+	  Captures from the ADCs and plays back through the DACs over AXI
+	  DMA, including the NCO test tone and cabled DAC-to-ADC loopback
+	  coherence checks.
+
+endchoice
+
+config AD9088_PROFILE
+	string "Use-case profile image"
+	default "204C_M4_L8_NP16_20p0_4x2.bin"
+	help
+	  Device profile image to embed in the ELF. A bare file name is taken
+	  relative to drivers/rf-transceiver/ad9088/firmware/; an absolute path
+	  is used as given, so a profile generated outside the tree works too.
+
+	  The image describes the datapath (JESD204 mode, converter counts,
+	  sample rates) and must match the HDL design on the board. Whichever
+	  one is picked, it is embedded under the name usecase.bin so the
+	  symbols the driver looks for never change.
+
+endmenu

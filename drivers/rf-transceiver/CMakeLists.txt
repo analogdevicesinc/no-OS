@@ -69,3 +69,23 @@ no_os_sources_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV9009
     ${CMAKE_CURRENT_SOURCE_DIR}/talise)
 no_os_include_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV9009
     ${CMAKE_CURRENT_SOURCE_DIR}/talise)
+
+# ad9088 (apollo) — no-OS wrapper + full vendor API tree
+# FLAG (shared driver change): sources use the recurse helper like the other
+# vendor trees above, but the includes are listed by hand and must stay that
+# way.  The vendor API ships one register-bitfield header set per silicon
+# revision under private/inc/bitfields/{a0,b0}.
+no_os_sources_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_AD9088
+    ${CMAKE_CURRENT_SOURCE_DIR}/ad9088)
+
+if(CONFIG_RF_TRANSCEIVER_AD9088)
+    target_include_directories(no-os PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/ad9088
+        ${CMAKE_CURRENT_SOURCE_DIR}/ad9088/adi_inc
+        ${CMAKE_CURRENT_SOURCE_DIR}/ad9088/adi_utils/inc
+        ${CMAKE_CURRENT_SOURCE_DIR}/ad9088/private/inc
+        ${CMAKE_CURRENT_SOURCE_DIR}/ad9088/public/inc)
+
+    target_include_directories(no-os PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/ad9088/private/inc/bitfields/b0)
+endif()
