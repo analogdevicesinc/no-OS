@@ -445,8 +445,10 @@ int32_t hmc630x_iio_init(struct hmc630x_iio_dev **iiodev,
 		return -ENOMEM;
 
 	d2 = (struct iio_device *)no_os_calloc(1, sizeof(*d2));
-	if (!d2)
+	if (!d2) {
+		ret = -ENOMEM;
 		goto end_0;
+	}
 
 	*d2 = hmc630x_iio_device_template;
 
