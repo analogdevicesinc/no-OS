@@ -32,6 +32,7 @@
 *******************************************************************************/
 #ifdef NO_OS_LWIP_NETWORKING
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -314,11 +315,13 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 #ifndef CONFIG_NO_OS_GATEWAY
 #error CONFIG_NO_OS_GATEWAY not defined
 #endif
-	sscanf(CONFIG_NO_OS_IP, "%d.%d.%d.%d", &raw_ip[0], &raw_ip[1], &raw_ip[2],
-	       &raw_ip[3]);
-	sscanf(CONFIG_NO_OS_NETMASK, "%d.%d.%d.%d", &raw_netmask[0], &raw_netmask[1],
+	sscanf(CONFIG_NO_OS_IP, "%"SCNu32".%"SCNu32".%"SCNu32".%"SCNu32,
+	       &raw_ip[0], &raw_ip[1], &raw_ip[2], &raw_ip[3]);
+	sscanf(CONFIG_NO_OS_NETMASK, "%"SCNu32".%"SCNu32".%"SCNu32".%"SCNu32,
+	       &raw_netmask[0], &raw_netmask[1],
 	       &raw_netmask[2], &raw_netmask[3]);
-	sscanf(CONFIG_NO_OS_GATEWAY, "%d.%d.%d.%d", &raw_gateway[0], &raw_gateway[1],
+	sscanf(CONFIG_NO_OS_GATEWAY, "%"SCNu32".%"SCNu32".%"SCNu32".%"SCNu32,
+	       &raw_gateway[0], &raw_gateway[1],
 	       &raw_gateway[2], &raw_gateway[3]);
 
 	IP4_ADDR(&ipaddr, raw_ip[0], raw_ip[1], raw_ip[2], raw_ip[3]);
@@ -860,8 +863,8 @@ static int32_t lwip_socket_connect(void *net, uint32_t sock_id,
 	struct tcp_pcb *pcb;
 	uint8_t ip_addr[4];
 
-	sscanf(addr->addr, "%d.%d.%d.%d", &ip_addr[0], &ip_addr[1],
-	       &ip_addr[2], &ip_addr[3]);
+	sscanf(addr->addr, "%"SCNu8".%"SCNu8".%"SCNu8".%"SCNu8,
+	       &ip_addr[0], &ip_addr[1], &ip_addr[2], &ip_addr[3]);
 
 	ip4_addr_t ip4;
 	IP_ADDR4(&ip4, ip_addr[0], ip_addr[1], ip_addr[2], ip_addr[3]);
