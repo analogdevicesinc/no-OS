@@ -102,10 +102,22 @@ void platform_gpio_irq_disarm(void);
 #include "capi_spi.h"
 #include "capi_irq.h"
 
+#ifndef SPI_HAS_IRQ
+#define SPI_HAS_IRQ     0
+#endif /* SPI_HAS_IRQ */
+
+#ifndef SPI_HAS_DMA
+#define SPI_HAS_DMA     0
+#endif /* SPI_HAS_DMA */
+
 /**
  * @brief CAPI SPI config for external loopback.
  */
 extern const struct capi_spi_config spi_controller_config;
+/**
+ * @brief Platform-specific extra data backing spi_controller_config.
+ */
+extern SPI_EXTRA_TYPE spi_extra;
 /**
  * @brief CAPI SPI device descriptor for the external loopback test.
  */
