@@ -45,6 +45,15 @@
 #define MS_TO_RSSA(x) (0 - ((x * 256) / 1000))
 
 /**
+ * @brief Check whether the RTC is busy synchronizing registers.
+ * @return Non-zero while busy, 0 otherwise.
+ */
+static int max_rtc_busy(void)
+{
+	return MXC_RTC->ctrl & MXC_F_RTC_CTRL_BUSY;
+}
+
+/**
  * @brief Initialize the RTC peripheral.
  * @param device - The RTC descriptor.
  * @param init_param - The structure that contains the RTC initialization.
@@ -105,7 +114,7 @@ int32_t no_os_rtc_remove(struct no_os_rtc_desc *dev)
  */
 int32_t no_os_rtc_start(struct no_os_rtc_desc *dev)
 {
-	while (MXC_RTC_GetBusyFlag());
+	while (max_rtc_busy());
 	MXC_RTC_Start();
 
 	return 0;
@@ -118,7 +127,7 @@ int32_t no_os_rtc_start(struct no_os_rtc_desc *dev)
  */
 int32_t no_os_rtc_stop(struct no_os_rtc_desc *dev)
 {
-	while (MXC_RTC_GetBusyFlag());
+	while (max_rtc_busy());
 	MXC_RTC_Stop();
 
 	return 0;
@@ -156,19 +165,19 @@ int32_t no_os_rtc_set_cnt(struct no_os_rtc_desc *dev, uint32_t tmr_cnt)
 
 	rtc_regs = MXC_RTC;
 
-	while (MXC_RTC_GetBusyFlag());
+	while (max_rtc_busy());
 	rtc_regs->ctrl |= MXC_F_RTC_REVA_CTRL_WR_EN;
 
-	while (MXC_RTC_GetBusyFlag());
+	while (max_rtc_busy());
 	no_os_rtc_stop(dev);
 
-	while (MXC_RTC_GetBusyFlag());
+	while (max_rtc_busy());
 	rtc_regs->sec = tmr_cnt;
 
-	while (MXC_RTC_GetBusyFlag());
+	while (max_rtc_busy());
 	no_os_rtc_start(dev);
 
-	while (MXC_RTC_GetBusyFlag());
+	while (max_rtc_busy());
 	rtc_regs->ctrl &= ~MXC_F_RTC_REVA_CTRL_WR_EN;
 
 	return 0;
