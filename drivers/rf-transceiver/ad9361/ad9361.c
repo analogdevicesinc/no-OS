@@ -7199,12 +7199,16 @@ int32_t ad9361_clk_mux_set_parent(struct refclk_scale *clk_priv, uint8_t index)
 	 */
 	if (ret >= 0 && index == 0) {
 		bool tx = (clk_priv->source == TX_RFPLL);
-		uint64_t restore_hz = tx ? phy->current_tx_lo_freq
-				      : phy->current_rx_lo_freq;
+		/*
+		 * current_[rt]x_lo_freq hold the rate as
+		 * ad9361_rfpll_int_set_rate() got it, already in
+		 * ad9361_to_clk() units: pass it back as is.
+		 */
+		uint32_t restore_rate = tx ? phy->current_tx_lo_freq
+					: phy->current_rx_lo_freq;
 
-		if (restore_hz) {
+		if (restore_rate) {
 			enum ad9361_clocks int_src = tx ? TX_RFPLL_INT : RX_RFPLL_INT;
-			uint32_t restore_rate = ad9361_to_clk(restore_hz);
 
 			ret = ad9361_rfpll_int_set_rate(
 				      phy->ref_clk_scale[int_src],
@@ -7215,7 +7219,7 @@ int32_t ad9361_clk_mux_set_parent(struct refclk_scale *clk_priv, uint8_t index)
 					"%s: %s internal PLL re-lock to %"PRIu64
 					" Hz failed: %"PRId32"\n",
 					__func__, tx ? "TX" : "RX",
-					restore_hz, ret);
+					ad9361_from_clk(restore_rate), ret);
 		}
 	}
 
