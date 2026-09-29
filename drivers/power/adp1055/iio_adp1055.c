@@ -523,12 +523,16 @@ static int adp1055_iio_read_scale(void *dev, char *buf, uint32_t len,
 		break;
 	case ADP1055_IIO_VOUT_CHAN:
 		ret = adp1055_read_vsense(adp1055, &mant);
+		if (ret)
+			return ret;
 
 		vals[0] = mant;
 		vals[1] = 10;
 
 		return iio_format_value(buf, len, IIO_VAL_FRACTIONAL_LOG2, 2,
 					(int32_t *)vals);
+	default:
+		return -EINVAL;
 	}
 	if (ret)
 		return ret;
