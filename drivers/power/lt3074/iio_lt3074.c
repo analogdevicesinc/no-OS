@@ -30,6 +30,7 @@
 * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#include <inttypes.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -151,11 +152,11 @@ static int lt3074_iio_attr_read(void *dev, char *buf, uint32_t len,
 
 		regval = no_os_clamp(regval, 0, 8);
 
-		return sprintf(buf, "%d ", lt3074_margin_avail[regval]);
+		return sprintf(buf, "%"PRId32" ", lt3074_margin_avail[regval]);
 
 	case LT3074_IIO_GLOBAL_ATTR_VOUT_MARGIN_AVAILABLE:
 		for (i = 0; i < NO_OS_ARRAY_SIZE(lt3074_margin_avail); i++)
-			value += sprintf(buf + value, "%d ",
+			value += sprintf(buf + value, "%"PRId32" ",
 					 lt3074_margin_avail[i]);
 
 		return value;
