@@ -30,6 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#include <inttypes.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -424,7 +425,8 @@ static int max22190_iio_read_filter_available(void *dev, char *buf,
 	uint32_t i;
 
 	for (i = 0; i < avail_size; i++)
-		length += sprintf(buf + length, "%d ", max22190_delay_avail[i]);
+		length += sprintf(buf + length, "%"PRIu32" ",
+				  max22190_delay_avail[i]);
 
 	return length;
 }
