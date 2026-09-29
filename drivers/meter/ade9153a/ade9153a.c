@@ -32,6 +32,7 @@
 *******************************************************************************/
 
 #include "ade9153a.h"
+#include <inttypes.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
@@ -256,7 +257,7 @@ int ade9153a_init(struct ade9153a_dev **device,
 		goto error_spi;
 	}
 
-	pr_info("Product Version %x \n", reg_val);
+	pr_info("Product Version %"PRIx32" \n", reg_val);
 
 	*device = dev;
 
