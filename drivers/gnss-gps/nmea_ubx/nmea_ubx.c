@@ -400,7 +400,7 @@ int gnss_ubx_receive_packet(struct gnss_dev *dev,
 	uint8_t *byte;
 	uint8_t *header;
 	int ret;
-	uint8_t *data;
+	uint8_t *data = NULL;
 
 	if (!dev || !packet)
 		return -EINVAL;
