@@ -81,7 +81,7 @@ static const char header[] =
 	"<!ELEMENT scan-element EMPTY>"
 	"<!ELEMENT debug-attribute EMPTY>"
 	"<!ELEMENT buffer-attribute EMPTY>"
-	"<!ELEMENT buffer (attribute)*>"
+	"<!ELEMENT buffer (attribute*, channel*)>"
 	"<!ATTLIST context name CDATA #REQUIRED description CDATA #IMPLIED>"
 	"<!ATTLIST context-attribute name CDATA #REQUIRED value CDATA #REQUIRED>"
 	"<!ATTLIST device id CDATA #REQUIRED name CDATA #IMPLIED>"
@@ -90,7 +90,7 @@ static const char header[] =
 	"<!ATTLIST attribute name CDATA #REQUIRED filename CDATA #IMPLIED>"
 	"<!ATTLIST debug-attribute name CDATA #REQUIRED>"
 	"<!ATTLIST buffer-attribute name CDATA #REQUIRED>"
-	"<!ATTLIST buffer index CDATA #REQUIRED>"
+	"<!ATTLIST buffer index CDATA #REQUIRED direction (in|out) #IMPLIED>"
 	"]>"
 	"<context name=\"xml\" description=\"no-OS/projects/"
 	NO_OS_TOSTRING(NO_OS_PROJECT)" "
@@ -1672,6 +1672,8 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 	int32_t			l;
 	int32_t			n;
 	bool			found;
+	bool			has_in;
+	bool			has_out;
 
 	if ((int32_t)buff_size == -1)
 		n = 0;
@@ -1852,22 +1854,48 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 	 * <buffer index="0">.  Devices that have buffer_attributes but none of
 	 * the DMA callbacks below do not receive a <buffer> element; no such
 	 * device exists in-tree (all set buffer_attributes = NULL).
+	 *
+	 * libiio takes a buffer's scan elements only from the <channel>
+	 * children of an explicit <buffer>, so every scan element is listed.
 	 */
 	if (device->read_dev || device->write_dev || device->submit ||
 	    device->trigger_handler) {
-		if (device->buffer_attributes) {
+		has_in = false;
+		has_out = false;
+		for (j = 0; device->channels && j < device->num_ch; j++) {
+			if (!device->channels[j].scan_type)
+				continue;
+			if (device->channels[j].ch_out)
+				has_out = true;
+			else
+				has_in = true;
+		}
+
+		if (has_in != has_out)
+			i += snprintf(buff + i, no_os_max(n - i, 0),
+				      "<buffer index=\"0\" direction=\"%s\">",
+				      has_out ? "out" : "in");
+		else
 			i += snprintf(buff + i, no_os_max(n - i, 0),
 				      "<buffer index=\"0\">");
-			for (j = 0; device->buffer_attributes[j].name; j++)
-				i += snprintf(buff + i, no_os_max(n - i, 0),
-					      "<attribute name=\"%s\" />",
-					      device->buffer_attributes[j].name);
+
+		for (j = 0; device->buffer_attributes &&
+		     device->buffer_attributes[j].name; j++)
 			i += snprintf(buff + i, no_os_max(n - i, 0),
-				      "</buffer>");
-		} else {
+				      "<attribute name=\"%s\" />",
+				      device->buffer_attributes[j].name);
+
+		for (j = 0; device->channels && j < device->num_ch; j++) {
+			ch = &device->channels[j];
+			if (!ch->scan_type)
+				continue;
+			_print_ch_id(ch_id, ch);
 			i += snprintf(buff + i, no_os_max(n - i, 0),
-				      "<buffer index=\"0\" />");
+				      "<channel id=\"%s\" type=\"%s\" />",
+				      ch_id, ch->ch_out ? "output" : "input");
 		}
+
+		i += snprintf(buff + i, no_os_max(n - i, 0), "</buffer>");
 	}
 
 	i += snprintf(buff + i, no_os_max(n - i, 0), "</device>");
