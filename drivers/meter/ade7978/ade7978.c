@@ -194,9 +194,9 @@ int ade7978_read_data_ph(struct ade7978_dev *dev, enum ade7978_phase phase)
 	/* v rms phase register addr */
 	uint32_t vrms_reg;
 	/* v2 rms phase register addr */
-	uint32_t v2rms_reg;
+	uint32_t v2rms_reg = 0;
 	/* temperature value for phase */
-	uint32_t temperature;
+	uint32_t temperature = 0;
 
 	if (!dev)
 		return -ENODEV;
