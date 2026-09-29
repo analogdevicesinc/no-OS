@@ -53,9 +53,11 @@ int mdio_bitbang_init(struct no_os_mdio_desc **dev,
 	if (!mbe)
 		return -ENOMEM;
 
-	struct no_os_mdio_desc *d = no_os_calloc(1, sizeof(*dev));
-	if (!d)
+	struct no_os_mdio_desc *d = no_os_calloc(1, sizeof(*d));
+	if (!d) {
+		ret = -ENOMEM;
 		goto error;
+	}
 
 	ret = no_os_gpio_get(&mbe->mdc, &mbip->mdc);
 	if (ret)
