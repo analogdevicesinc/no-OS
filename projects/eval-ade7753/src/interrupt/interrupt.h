@@ -35,12 +35,6 @@
 
 #include "no_os_irq.h"
 
-/* IRQ config */
-#define GPIO_IRQ_OPS                &max_gpio_irq_ops
-#define GPIO_CTRL_IRQ_ID            0
-#define GPIO_IRQ_EXTRA              &gpio_extra_ip
-#define NVIC_GPIO_IRQ               GPIO2_IRQn
-
 /*! Get IRQN flag value. */
 int get_irq_flag_state(void);
 
