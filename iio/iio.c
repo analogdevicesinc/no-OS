@@ -93,6 +93,7 @@ static const char * const iio_chan_type_string[] = {
 	[IIO_DELTA_VELOCITY] = "deltavelocity",
 	[IIO_WEIGHT] = "weight",
 	[IIO_POWER] = "power",
+	[IIO_PHASE] = "phase",
 };
 
 static const char * const iio_modifier_names[] = {
