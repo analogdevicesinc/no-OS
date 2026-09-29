@@ -35,6 +35,17 @@ int test_spi(void)
 #define SPI_ASYNC_STEP_US	1000U
 #define SPI_ABORT_SIZE		128U
 
+/*
+ * Platform hook for controllers whose async delivery is DMA-backed. A board
+ * that needs a DMA controller brought up (and its stream vectors enabled)
+ * before the SPI controller is opened defines SPI_DMA_PLATFORM_INIT() in
+ * parameters.h; everyone else gets this no-op. It is invoked from the DMA
+ * case, which is the only case gated on that delivery mode being present.
+ */
+#ifndef SPI_DMA_PLATFORM_INIT
+#define SPI_DMA_PLATFORM_INIT()	0
+#endif
+
 static volatile unsigned int spi_callback_count;
 static volatile enum capi_async_event spi_callback_event;
 static volatile int spi_callback_extra;
@@ -353,6 +364,7 @@ static int spi_async_dma(void)
 	int ret;
 
 	TEST_SECTION("ASYNC_DMA");
+	TEST_ASSERT_EQ(SPI_DMA_PLATFORM_INIT(), 0, "DMA_PLATFORM_INIT");
 	ret = capi_spi_init(&spi_handle, &spi_controller_config);
 	TEST_ASSERT_EQ_OR_CLEANUP(ret, 0, "INIT");
 	dev.controller = spi_handle;
