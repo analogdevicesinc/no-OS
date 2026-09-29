@@ -40,7 +40,7 @@
  * @brief Initialize mutex.
  * mutex - Pointer toward the mutex.
  */
-__attribute__((weak)) inline void no_os_mutex_init(void **mutex)
+__attribute__((weak)) void no_os_mutex_init(void **mutex)
 {
 	*mutex = xSemaphoreCreateBinary();
 	xSemaphoreGive(*mutex);
@@ -50,7 +50,7 @@ __attribute__((weak)) inline void no_os_mutex_init(void **mutex)
  * @brief Lock mutex.
  * mutex - Pointer toward the mutex.
  */
-__attribute__((weak)) inline void no_os_mutex_lock(void *mutex)
+__attribute__((weak)) void no_os_mutex_lock(void *mutex)
 {
 	if (mutex != NULL)
 		xSemaphoreTake((SemaphoreHandle_t)mutex, portMAX_DELAY);
@@ -59,7 +59,7 @@ __attribute__((weak)) inline void no_os_mutex_lock(void *mutex)
  * @brief Unlock mutex.
  * mutex - Pointer toward the mutex.
  */
-__attribute((weak)) inline void no_os_mutex_unlock(void *mutex)
+__attribute((weak)) void no_os_mutex_unlock(void *mutex)
 {
 	if (mutex != NULL)
 		xSemaphoreGive((SemaphoreHandle_t)mutex);
@@ -69,7 +69,7 @@ __attribute((weak)) inline void no_os_mutex_unlock(void *mutex)
  * @brief Remove mutex.
  * mutex - Pointer toward the mutex.
  */
-__attribute__((weak)) inline void no_os_mutex_remove(void *mutex)
+__attribute__((weak)) void no_os_mutex_remove(void *mutex)
 {
 	if (mutex != NULL) {
 		vSemaphoreDelete((SemaphoreHandle_t)mutex);
