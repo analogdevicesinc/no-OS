@@ -48,7 +48,7 @@
 #define RSENSE_VALUE_DC2798A                   2
 
 extern struct max_uart_init_param uart_extra_ip;
-extern const struct max_i2c_init_param ltc7841_i2c_extra;
+extern struct max_i2c_init_param ltc7841_i2c_extra;
 extern const struct max_gpio_init_param ltc7841_gpio_extra;
 
 #endif /* __PARAMETERS_H__ */
