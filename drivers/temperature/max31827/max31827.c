@@ -212,7 +212,7 @@ int max31827_init_client(struct max31827_device *dev,
 			 struct max31827_init_param *init_param)
 {
 	unsigned int res = 0;
-	uint32_t lsb_idx;
+	uint32_t lsb_idx = 0;
 
 	res |= MAX31827_DEVICE_ENABLE(1);
 
