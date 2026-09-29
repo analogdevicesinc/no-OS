@@ -349,7 +349,7 @@ int ade7913_init(struct ade7913_dev **device,
 	// register data
 	uint8_t data;
 	// comms up timeout
-	uint16_t timeout;
+	uint16_t timeout = 0;
 
 	/* If init_param.no_devs uninitialized, then 1 device */
 	if (init_param.no_devs == 0)
@@ -371,18 +371,26 @@ int ade7913_init(struct ade7913_dev **device,
 
 	// allocate memory for the waveforms depending on the number of dev
 	i_wav = (int32_t *)no_os_calloc(dev->no_devs, sizeof(*i_wav));
-	if (!i_wav)
+	if (!i_wav) {
+		ret = -ENOMEM;
 		goto err_alloc_i_wav;
+	}
 	v1_wav = (int32_t *)no_os_calloc(dev->no_devs, sizeof(*v1_wav));
-	if (!v1_wav)
+	if (!v1_wav) {
+		ret = -ENOMEM;
 		goto err_alloc_v1_wav;
+	}
 	v2_wav = (int32_t *)no_os_calloc(dev->no_devs, sizeof(*v2_wav));
-	if (!v2_wav)
+	if (!v2_wav) {
+		ret = -ENOMEM;
 		goto err_alloc_v2_wav;
+	}
 
 	v_product = (uint8_t *)no_os_calloc(dev->no_devs, sizeof(*v_product));
-	if (!v_product)
+	if (!v_product) {
+		ret = -ENOMEM;
 		goto err_alloc_v_product;
+	}
 
 	dev->i_wav_m = i_wav;
 	dev->v1_wav_m = v1_wav;
@@ -940,5 +948,5 @@ int ade7913_get_version_product(struct ade7913_dev *dev, uint8_t *ver_product)
 		break;
 	}
 
-	return 0;
+	return ret;
 }
