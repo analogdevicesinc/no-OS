@@ -35,12 +35,17 @@
 #define STM32_SPI_HAS_CS_TIMER(priv)	(false)
 #endif
 
-/* Forward declarations */
+/*
+ * Forward declarations. The two DMA entry points keep external linkage - they
+ * are declared in stm32_capi_spi.h and reachable both directly and through
+ * stm32_capi_spi_extended_ops - and are re-declared here only because
+ * transceive()/transceive_async() dispatch to them before their definitions.
+ */
 static int stm32_capi_spi_dma_abort(struct capi_spi_device *device);
-static int stm32_capi_spi_transfer_multiple_dma(struct capi_spi_device *device,
+int stm32_capi_spi_transfer_multiple_dma(struct capi_spi_device *device,
 		struct capi_spi_transfer *transfers,
 		uint32_t transfer_count);
-static int stm32_capi_spi_transfer_multiple_dma_async(
+int stm32_capi_spi_transfer_multiple_dma_async(
 	struct capi_spi_device *device,
 	struct capi_spi_transfer *transfers,
 	uint32_t transfer_count,
