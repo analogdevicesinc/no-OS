@@ -8,6 +8,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
+#include <inttypes.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -301,7 +302,7 @@ static int maxm86161_iio_get_attr(void *device, char *buf, uint32_t len,
 		ret = maxm86161_reg_read(dev, MAXM86161_REG_PPG_CFG_3, &val8);
 		if (ret)
 			return ret;
-		return snprintf(buf, len, "%u",
+		return snprintf(buf, len, "%"PRIu32,
 				no_os_field_get(MAXM86161_PPG_CFG3_BURST_RATE_MSK,
 						val8));
 
