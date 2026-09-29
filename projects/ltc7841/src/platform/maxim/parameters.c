@@ -39,7 +39,7 @@ struct max_uart_init_param uart_extra_ip = {
 	.flow = MAX_UART_FLOW_DIS
 };
 
-const struct max_i2c_init_param ltc7841_i2c_extra = {
+struct max_i2c_init_param ltc7841_i2c_extra = {
 	.vssel = MXC_GPIO_VSSEL_VDDIOH
 };
 
