@@ -10,6 +10,12 @@ config ADAR300X_BASIC_EXAMPLE
 	  SPI and power validation: soft reset, scratchpad loopback and
 	  chip ID readback for the ADAR3000/ADAR3001 beamformer.
 
+config ADAR300X_IIO_EXAMPLE
+	bool "IIO example"
+	help
+	  Exposes the beamformer as an IIO device over UART, for use with
+	  libiio clients such as iio_info and IIO Oscilloscope.
+
 endchoice
 
 endmenu
