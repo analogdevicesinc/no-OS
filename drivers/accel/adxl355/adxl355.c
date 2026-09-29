@@ -306,11 +306,15 @@ int adxl355_soft_reset(struct adxl355_dev *dev)
 
 	// After soft reset, the data in the shadow registers will be valid only after NVM is not busy anymore
 	ret = adxl355_get_sts_reg(dev, &flags);
+	if (ret)
+		return -EAGAIN;
 	while (flags.fields.NVM_BUSY && nb_of_retries) {
 		ret = adxl355_get_sts_reg(dev, &flags);
+		if (ret)
+			return -EAGAIN;
 		nb_of_retries--;
 	}
-	if ((!nb_of_retries) || ret)
+	if (!nb_of_retries)
 		return -EAGAIN;
 
 	// Delay is needed between soft reset command and shadow registers reading
