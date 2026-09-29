@@ -444,7 +444,7 @@ static int curve_trace_common(struct no_os_uart_desc *uart_desc,
 		float temperature = ((float)temp_raw + offset) * scale /
 				    1000.0f; /* Convert mC to C */
 		char temp_msg[64];
-		sprintf(temp_msg, "%s Temperature: %.2f\xc2\xb0C (raw=%u)\n\r",
+		sprintf(temp_msg, "%s Temperature: %.2f\xc2\xb0" "C (raw=%u)\n\r",
 			cfg->device_name, temperature, temp_raw);
 		no_os_uart_write(uart_desc, temp_msg, strlen(temp_msg));
 	} else {
