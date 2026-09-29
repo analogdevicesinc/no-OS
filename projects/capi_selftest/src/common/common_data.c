@@ -199,7 +199,7 @@ struct capi_irq_config irq_config = {
 /**
  * @brief Platform-specific extra data for the SPI controller.
  */
-static SPI_EXTRA_TYPE spi_extra = SPI_EXTRA_INIT;
+SPI_EXTRA_TYPE spi_extra = SPI_EXTRA_INIT;
 
 /**
  * @brief CAPI configuration for the SPI controller.
