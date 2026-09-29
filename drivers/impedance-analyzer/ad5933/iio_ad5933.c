@@ -669,7 +669,6 @@ static int ad5933_iio_submit(struct iio_device_data *dev_data)
 	uint32_t i;
 	int16_t scan[3];
 	uint8_t status;
-	int32_t sweep_done;
 	int ret;
 
 	if (!dev_data)
