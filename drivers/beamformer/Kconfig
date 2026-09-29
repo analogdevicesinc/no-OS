@@ -11,4 +11,9 @@ config BEAMFORMER_ADAR300X
 	bool "Enable ADAR3000/ADAR3001 beamformer driver"
 	default n
 
+config BEAMFORMER_IIO_ADAR300X
+	select BEAMFORMER_ADAR300X
+	bool "Enable ADAR3000/ADAR3001 IIO driver"
+	default n
+
 endif # BEAMFORMER
