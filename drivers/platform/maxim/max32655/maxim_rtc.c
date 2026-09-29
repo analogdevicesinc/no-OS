@@ -132,7 +132,11 @@ int32_t no_os_rtc_stop(struct no_os_rtc_desc *dev)
  */
 int32_t no_os_rtc_get_cnt(struct no_os_rtc_desc *dev, uint32_t *tmr_cnt)
 {
-	*tmr_cnt = MXC_RTC_GetSecond();
+	int ret;
+
+	ret = MXC_RTC_GetSeconds(tmr_cnt);
+	if (ret != E_NO_ERROR)
+		return -EINVAL;
 
 	return 0;
 }
