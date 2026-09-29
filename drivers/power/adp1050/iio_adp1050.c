@@ -615,6 +615,8 @@ static int adp1050_iio_read_scale(void *dev, char *buf, uint32_t len,
 		break;
 	case ADP1050_IIO_VOUT_CHAN:
 		ret = adp1050_read_vsense(adp1050, &mant);
+		if (ret)
+			return ret;
 
 		vals[0] = mant;
 		vals[1] = 10;
@@ -624,6 +626,8 @@ static int adp1050_iio_read_scale(void *dev, char *buf, uint32_t len,
 	case ADP1050_IIO_TEMP_CHAN:
 		ret = adp1050_read_value(adp1050, &mant, (uint8_t *)&exp, ADP1050_TEMP);
 		break;
+	default:
+		return -EINVAL;
 	}
 	if (ret)
 		return ret;
