@@ -94,6 +94,8 @@ int create_and_configure_mqtt_client_for_provisioning(void)
 	az_iot_provisioning_client provisioning_client;
 	az_span custom_registration_payload_property
 		= AZ_SPAN_LITERAL_FROM_STR(AZ_IOT_PROVISIONING_CUSTOM_PAYLOAD);
+	az_iot_provisioning_client_payload_options payload_options =
+		az_iot_provisioning_client_payload_options_default();
 
 	iot_sample_create_mqtt_endpoint(SAMPLE_TYPE,
 					mqtt_endpoint_buffer,
@@ -130,10 +132,10 @@ int create_and_configure_mqtt_client_for_provisioning(void)
 	if (ret != AZ_OK)
 		return ret;
 
-	return az_iot_provisioning_client_get_request_payload(
+	return az_iot_provisioning_client_register_get_request_payload(
 		       &provisioning_client,
 		       custom_registration_payload_property,
-		       NULL,
+		       &payload_options,
 		       mqtt_payload,
 		       sizeof(mqtt_payload),
 		       &mqtt_payload_length);
