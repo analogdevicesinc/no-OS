@@ -90,8 +90,10 @@ static int lt7170_data2reg_ieee754(struct lt7170_dev *dev, int data,
 	int mantissa;
 
 	/* simple case */
-	if (data == 0)
+	if (data == 0) {
+		*reg = 0;
 		return 0;
+	}
 
 	if (data < 0) {
 		sign = 1;
