@@ -1830,8 +1830,12 @@ static int lt8722_iio_write_pin(void *dev, char *buf, uint32_t len,
 	switch (priv) {
 	case LT8722_EN_PIN:
 		ret = lt8722_set_en_pin(lt8722, value);
+		break;
 	case LT8722_SWEN_PIN:
 		ret = lt8722_set_swen_pin(lt8722, value);
+		break;
+	default:
+		return -EINVAL;
 	}
 
 	return ret;
