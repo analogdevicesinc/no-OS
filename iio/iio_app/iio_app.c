@@ -268,7 +268,7 @@ static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 	return no_os_uart_init(uart_desc, &luart_par);
 }
 
-#if defined(ADUCM_PLATFORM) || (defined(STM32_PLATFORM)) || defined(MAXIM_PLATFORM)
+#if defined(ADUCM_PLATFORM) || (defined(STM32_PLATFORM))
 static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 {
 	int32_t status;
@@ -278,9 +278,6 @@ static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 #elif defined(STM32_PLATFORM)
 	void *platform_irq_init_par = NULL;
 	const struct no_os_irq_platform_ops *platform_irq_ops = &stm32_irq_ops;
-#elif defined(MAXIM_PLATFORM)
-	void *platform_irq_init_par = NULL;
-	const struct no_os_irq_platform_ops *platform_irq_ops = &max_irq_ops;
 #endif
 
 	struct no_os_irq_init_param irq_init_param = {
