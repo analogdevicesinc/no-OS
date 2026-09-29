@@ -30,6 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#include <inttypes.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -388,7 +389,8 @@ static int max14906_iio_read_climit_avail(void *dev, char *buf, uint32_t len,
 	uint32_t i;
 
 	for (i = 0; i < NO_OS_ARRAY_SIZE(max14906_limit_avail); i++)
-		length += sprintf(buf + length, "%d ", max14906_limit_avail[i]);
+		length += sprintf(buf + length, "%"PRIu32" ",
+				  max14906_limit_avail[i]);
 
 	return length;
 }
