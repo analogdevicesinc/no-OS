@@ -57,4 +57,10 @@ config RF_TRANSCEIVER_ADRV9009
 	bool "Enable ADRV9009 RF transceiver driver"
 	default n
 
+config RF_TRANSCEIVER_AD9088
+	depends on SPI
+	select GPIO
+	bool "Enable AD9088 (Apollo) RF transceiver driver"
+	default n
+
 endif # RF_TRANSCEIVER
