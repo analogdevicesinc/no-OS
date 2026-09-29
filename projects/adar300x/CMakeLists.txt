@@ -15,6 +15,15 @@ if(CONFIG_ADAR300X_BASIC_EXAMPLE)
     )
 endif()
 
+if(CONFIG_ADAR300X_IIO_EXAMPLE)
+    target_sources(adar300x PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_example/iio_example.c
+    )
+    target_include_directories(adar300x PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_example
+    )
+endif()
+
 target_include_directories(adar300x PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common
     ${CMAKE_CURRENT_SOURCE_DIR}/src/platform
