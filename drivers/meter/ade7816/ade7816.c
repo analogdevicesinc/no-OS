@@ -1430,8 +1430,10 @@ int ade7816_init(struct ade7816_desc **desc,
 
 	switch (init_param->active_irq) {
 	case ADE7816_IRQ0:
-		if (!init_param->irq_ctrl)
+		if (!init_param->irq_ctrl) {
+			ret = -EINVAL;
 			goto remove_ade7816;
+		}
 
 		irq0_cb.callback = &ade7816_irq0_handler;
 		irq0_cb.ctx = descriptor;
@@ -1454,8 +1456,10 @@ int ade7816_init(struct ade7816_desc **desc,
 
 		break;
 	case ADE7816_IRQ1:
-		if (!init_param->irq_ctrl)
+		if (!init_param->irq_ctrl) {
+			ret = -EINVAL;
 			goto remove_ade7816;
+		}
 
 		irq1_cb.callback = &ade7816_irq1_handler;
 		irq1_cb.ctx = descriptor;
@@ -1478,8 +1482,10 @@ int ade7816_init(struct ade7816_desc **desc,
 
 		break;
 	case ADE7816_IRQ0_IRQ1:
-		if (!init_param->irq_ctrl)
+		if (!init_param->irq_ctrl) {
+			ret = -EINVAL;
 			goto remove_ade7816;
+		}
 
 		irq0_cb.callback = ade7816_irq0_handler;
 		irq0_cb.ctx = descriptor;
