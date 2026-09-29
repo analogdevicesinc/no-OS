@@ -1200,7 +1200,11 @@ static int iio_open_dev(struct iiod_ctx *ctx, const char *device,
 	if (!dev->buffer.initalized)
 		return -EINVAL;
 
-	ch_mask = 0xFFFFFFFF >> (32 - dev->dev_descriptor->num_ch);
+	/* Only the first 32 channels can be buffered, the mask is 32 bits */
+	if (dev->dev_descriptor->num_ch >= 32)
+		ch_mask = 0xFFFFFFFF;
+	else
+		ch_mask = NO_OS_BIT(dev->dev_descriptor->num_ch) - 1;
 	mask &= ch_mask;
 	if (!mask)
 		return -ENOENT;
