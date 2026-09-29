@@ -77,5 +77,5 @@ struct dac_demo_init_param dac_init_par = {
 	}
 };
 
-uint8_t in_buff[MAX_SIZE_BASE_ADDR] = {0};
-uint8_t out_buff[MAX_SIZE_BASE_ADDR] = {0};
+uint8_t in_buff[MAX_SIZE_BASE_ADDR];
+uint8_t out_buff[MAX_SIZE_BASE_ADDR];
