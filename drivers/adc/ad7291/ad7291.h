@@ -1,7 +1,7 @@
 /***************************************************************************//**
  *   @file   ad7291.h
  *   @brief  Header file of AD7291 Driver.
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @author Melissa Makonga (melissa.makonga@analog.com)
 ********************************************************************************
  * Copyright 2012(c) Analog Devices, Inc.
  *

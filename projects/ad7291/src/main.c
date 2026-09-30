@@ -2,6 +2,7 @@
  *   @file   main.c
  *   @brief  AD7291 voltage monitor example for Raspberry Pi (Linux platform).
  *           Reads and prints all 8 channel voltages in a loop.
+ * 	 @author	 Melissa Makonga (melissa.makonga@analog.com)
 ********************************************************************************
  * Copyright 2012(c) Analog Devices, Inc.
  *

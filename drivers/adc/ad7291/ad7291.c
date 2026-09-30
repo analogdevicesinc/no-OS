@@ -1,7 +1,7 @@
 /***************************************************************************//**
  *   @file   ad7291.c
  *   @brief  Implementation of AD7291 Driver.
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @author Melossa Makonga (melissa.makonga@analog.com)
 ********************************************************************************
  * Copyright 2012(c) Analog Devices, Inc.
  *
@@ -44,7 +44,7 @@
 #include "no_os_util.h"
 
 /**
- * @brief Read a 16-bit register.
+ * @brief Read a 16-bit register via I2C.
  * @param desc - Device descriptor.
  * @param addr - Register address.
  * @param val - Pointer to store the read value.
@@ -70,7 +70,7 @@ int ad7291_reg_read(struct ad7291_desc *desc, uint8_t addr, uint16_t *val)
 }
 
 /**
- * @brief Write a 16-bit register.
+ * @brief Write a 16-bit register via I2C.
  * @param desc - Device descriptor.
  * @param addr - Register address.
  * @param val - Value to write.
@@ -87,7 +87,7 @@ int ad7291_reg_write(struct ad7291_desc *desc, uint8_t addr, uint16_t val)
 }
 
 /**
- * @brief Read a single channel voltage in millivolts.
+ * @brief Read a single ADC channel voltage in millivolts.
  * @param desc - Device descriptor.
  * @param channel - Channel number (0-7).
  * @param millivolts - Pointer to store the result in mV.
@@ -132,7 +132,8 @@ int ad7291_read_channel_voltage(struct ad7291_desc *desc, uint8_t channel,
 }
 
 /**
- * @brief Read the internal temperature sensor in millidegrees Celsius.
+ * @brief Read the internal temperature sensor.
+ *
  * @param desc - Device descriptor.
  * @param millidegrees - Pointer to store the result in m-deg-C.
  * @return 0 on success, negative error code otherwise.
@@ -168,6 +169,7 @@ int ad7291_read_temp(struct ad7291_desc *desc, int32_t *millidegrees)
 
 /**
  * @brief Initialize the AD7291 device.
+ *
  * @param desc - Pointer to the device descriptor pointer.
  * @param init_param - Initialization parameters.
  * @return 0 on success, negative error code otherwise.
@@ -205,7 +207,7 @@ free_desc:
 }
 
 /**
- * @brief Remove the AD7291 device and free resources.
+ * @brief Remove the AD7291 device.
  * @param desc - Device descriptor.
  * @return 0 on success, negative error code otherwise.
  */
