@@ -1,7 +1,7 @@
 /***************************************************************************//**
  *   @file   ad7291.c
  *   @brief  Implementation of AD7291 Driver.
- *   @author Melossa Makonga (melissa.makonga@analog.com)
+ *   @author Melissa Makonga (melissa.makonga@analog.com)
 ********************************************************************************
  * Copyright 2012(c) Analog Devices, Inc.
  *
