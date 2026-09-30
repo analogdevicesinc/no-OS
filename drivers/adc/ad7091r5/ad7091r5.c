@@ -113,9 +113,12 @@ int32_t ad7091r5_i2c_read_mask(struct ad7091r5_dev *dev,
 		return -EINVAL;
 
 	ret = ad7091r5_i2c_reg_read(dev, reg_addr, &reg_data);
+	if (ret)
+		return ret;
+
 	*data = (reg_data & mask);
 
-	return ret;
+	return 0;
 }
 
 /**
