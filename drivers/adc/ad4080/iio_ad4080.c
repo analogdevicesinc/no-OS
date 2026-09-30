@@ -32,6 +32,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include <errno.h>
+#include <inttypes.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
@@ -287,7 +288,7 @@ static int raw_attr_handler(struct iio_ad4080_desc *iio_ad4080,
 		err = iio_ad4080_immediate_trigger(iio_ad4080);
 		if (err)
 			return err;
-		err = sprintf(buf, "%d", fifo->formatted_fifo[0]);
+		err = sprintf(buf, "%"PRId32"", (int32_t)fifo->formatted_fifo[0]);
 	}
 	return err;
 }
