@@ -353,7 +353,7 @@ static int ad7124_iio_read_offset_chan(void *device, char *buf, uint32_t len,
 		return ret;
 
 	if (bipolar)
-		return snprintf(buf, len, "%"PRId32"", -(1 << 23));
+		return snprintf(buf, len, "%"PRId32"", (int32_t)(-(1 << 23)));
 	else
 		return snprintf(buf, len, "0");
 }
