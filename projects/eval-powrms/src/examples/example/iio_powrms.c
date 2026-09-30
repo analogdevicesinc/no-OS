@@ -527,7 +527,7 @@ struct iio_device powrms_iio_descriptor = {
 	.buffer_attributes = NULL,
 	.pre_enable = NULL,
 	.post_disable = NULL,
-	.trigger_handler = (int32_t(*)())NULL,
+	.trigger_handler = NULL,
 	.submit = NULL,
 }; // PowerRMS IIO descriptor
 
