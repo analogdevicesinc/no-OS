@@ -1484,8 +1484,10 @@ int iio_ad4080_fifo_set_watermark(struct iio_ad4080_fifo_struct *fifo,
 
 	formatted_bufsize = watermark * sizeof(uint32_t);
 	formatted_fifo = no_os_malloc(formatted_bufsize);
-	if (!formatted_fifo)
+	if (!formatted_fifo) {
+		err = -ENOMEM;
 		goto err_malloc_formatted_fifo;
+	}
 	fifo->formatted_fifo = formatted_fifo;
 	fifo->formatted_bufsize = formatted_bufsize;
 
