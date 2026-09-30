@@ -530,7 +530,7 @@ int32_t ad7124_fclk_get(struct ad7124_dev *dev, float *f_clk)
 		*f_clk = f_clk_fp;
 		break;
 	default:
-		return ret;
+		return -EINVAL;
 	}
 
 	return 0;
