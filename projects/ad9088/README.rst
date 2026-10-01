@@ -288,6 +288,37 @@ from flash). Program the FPGA, download the ELF, then open the console.
    uses ``LMA == VMA`` (no boot-copy) because ``niosv-download`` writes each
    segment directly to its run address.
 
+Open in the RiscFree IDE (optional)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Every Agilex configure also generates an Eclipse-CDT project under ``.riscfree/``
+that imports into the Ashling RiscFree IDE (the Eclipse-based IDE bundled with
+the Nios V toolchain), the Nios V counterpart to Vitis for Xilinx. It is a
+**build + code-navigation** project: building from the IDE just drives
+``cmake --build`` against the configured build directory, and indexing is fed by
+``compile_commands.json``. Hardware debug is not wired.
+
+Let ``no_os_build.py`` build and open it in one step. ``--open`` builds, imports
+the project into a dedicated workspace headlessly, then launches the GUI already
+populated (the Altera analogue of ``--open`` for Vitis):
+
+.. code-block:: bash
+
+   cd no-OS
+   export CMAKE_C_COMPILER=/path/to/riscfree/toolchain/riscv32-unknown-elf/bin/riscv32-unknown-elf-gcc
+   export CMAKE_CXX_COMPILER=/path/to/riscfree/toolchain/riscv32-unknown-elf/bin/riscv32-unknown-elf-g++
+   export CMAKE_ASM_COMPILER=$CMAKE_C_COMPILER
+   export ALTERA_BSP_DIR=/path/to/hdl/projects/ad9084_ebz/nios_a5e/software/bsp
+   export ALTERA_BSP_LIB=$ALTERA_BSP_DIR/build/libhal2_bsp.a
+
+   python tools/scripts/no_os_build.py build \
+       --project ad9088 --variant basic_example --board agilex5 --open
+
+If you configured with ``cmake --preset`` instead, the ``.riscfree/`` project is
+generated too; import it once with **File → Import → Existing Projects into
+Workspace** and set the root directory to ``no-OS/.riscfree`` (a hidden folder —
+type the path rather than browsing). The workspace stays populated afterwards.
+
 Xilinx (VCU118, MicroBlaze)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
