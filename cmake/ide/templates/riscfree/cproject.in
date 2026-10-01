@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?>
+<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="cdt.managedbuild.config.gnu.exe.debug">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.exe.debug" moduleId="org.eclipse.cdt.core.settings" name="Debug">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GNU_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactExtension="elf" artifactName="@PROJECT_NAME@" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="@CMAKE_COMMAND@ --build @CMAKE_BINARY_DIR@ --target clean" description="no-OS CMake build (Nios V, external builder)" id="cdt.managedbuild.config.gnu.exe.debug" name="Debug" parent="cdt.managedbuild.config.gnu.exe.debug">
+					<folderInfo id="cdt.managedbuild.config.gnu.exe.debug." name="/" resourcePath="">
+						<toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug" name="RISC-V Cross GCC (Nios V)" superClass="cdt.managedbuild.toolchain.gnu.exe.debug">
+							<targetPlatform binaryParser="org.eclipse.cdt.core.ELF;org.eclipse.cdt.core.GNU_ELF" id="cdt.managedbuild.targetPlatform.gnu.exe.debug" isAbstract="false" name="Debug Platform" superClass="cdt.managedbuild.targetPlatform.gnu.exe.debug"/>
+							<builder arguments="--build @CMAKE_BINARY_DIR@ --target @PROJECT_TARGET@" buildPath="@CMAKE_BINARY_DIR@" command="@CMAKE_COMMAND@" enableAutoBuild="false" id="cdt.managedbuild.builder.gnu.exe.debug" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="CMake Builder (no-OS)" superClass="cdt.managedbuild.builder.gnu.exe.debug"/>
+							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug" name="GNU RISC-V Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug">
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug" name="GNU RISC-V C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug">
+								<option id="gnu.c.compiler.option.include.paths" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+@INCLUDE_PATHS@
+								</option>
+								<option id="gnu.c.compiler.option.preprocessor.def.symbols" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
+@COMPILE_DEFINITIONS@
+								</option>
+								<option id="gnu.c.compiler.option.misc.other" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="@CMAKE_ARCH_FLAGS@" valueType="string"/>
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug" name="GNU RISC-V C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug">
+								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug" name="GNU RISC-V C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug">
+								<option id="gnu.c.link.option.ldflags" name="Linker flags (-Xlinker [option])" superClass="gnu.c.link.option.ldflags" value="@CMAKE_ARCH_FLAGS@ -T @LINKER_SCRIPT@" valueType="string"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug" name="GNU RISC-V C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug"/>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="@PROJECT_NAME@.cdt.managedbuild.target.gnu.exe" name="Executable" projectType="cdt.managedbuild.target.gnu.exe"/>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/@PROJECT_NAME@"/>
+		</configuration>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+	</storageModule>
+</cproject>

@@ -1,6 +1,7 @@
 .metadata
 .no_os_venv
 .cubeide
+.riscfree
 no-os.code-workspace
 SDK.log
 bsp

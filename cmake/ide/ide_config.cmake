@@ -15,6 +15,8 @@ function(ide_get_backends OUT_VAR)
         list(APPEND _backends "stm32cubeide")
     elseif(PLATFORM STREQUAL "xilinx")
         list(APPEND _backends "vitis")
+    elseif(PLATFORM STREQUAL "altera")
+        list(APPEND _backends "riscfree")
     endif()
     # User override
     if(DEFINED IDE_BACKENDS)
@@ -67,6 +69,11 @@ function(ide_build_source_groups)
     # ADuCM3029 Device Family Pack (CCES SDK)
     if(PLATFORM STREQUAL "aducm3029" AND DEFINED ADUCM_DFP)
         list(APPEND _groups "aducm_dfp=${ADUCM_DFP}")
+    endif()
+
+    # Altera / Nios V BSP (system.h, HAL, linker.x) generated from the HDL handoff
+    if(PLATFORM STREQUAL "altera" AND DEFINED ALTERA_BSP_DIR)
+        list(APPEND _groups "niosv_bsp=${ALTERA_BSP_DIR}")
     endif()
 
     set(IDE_SOURCE_GROUPS ${_groups} PARENT_SCOPE)
