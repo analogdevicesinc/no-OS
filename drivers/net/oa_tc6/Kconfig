@@ -1,0 +1,26 @@
+if OA_TC6
+
+config OA_TX_FRAME_BUFF_NUM
+    int "Number of RX frame buffers"
+    default 5
+    help
+      Number of transmit frame buffers allocated by the OA-TC6
+      protocol library. Larger values allow more frames to be
+      queued at the cost of more memory usage.
+
+config OA_RX_FRAME_BUFF_NUM
+    int "Number of RX frame buffers"
+    default 5
+    help
+      Number of receive frame buffers allocated by the OA-TC6
+      protocol library. Larger values allow more frames to be
+      queued at the cost of more memory usage.
+
+config OA_THREAD_RX_LIMIT
+    int "Max RX frames processed per thread iteration"
+    default 5
+    help
+      Maximum number of receive frames the OA-TC6 RX thread
+      processes in a single iteration before yielding.
+
+endif
