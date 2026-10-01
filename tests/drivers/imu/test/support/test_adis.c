@@ -132,6 +132,7 @@ void test_adis_init_4(void)
 	no_os_gpio_get_optional_IgnoreAndReturn(-1);
 	no_os_gpio_set_value_IgnoreAndReturn(0);
 	no_os_mdelay_Ignore();
+	no_os_udelay_Ignore();
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_spi_transfer_IgnoreAndReturn(0);
@@ -160,11 +161,12 @@ void test_adis_init_5(void)
 	no_os_gpio_direction_output_IgnoreAndReturn(0);
 	no_os_gpio_set_value_IgnoreAndReturn(0);
 	no_os_mdelay_Ignore();
+	no_os_udelay_Ignore();
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be16_IgnoreAndReturn(0);
-	no_os_spi_transfer_IgnoreAndReturn(-1);
+	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_gpio_remove_IgnoreAndReturn(0);
 	no_os_spi_remove_IgnoreAndReturn(0);
 	no_os_free_Ignore();
@@ -1280,6 +1282,7 @@ void test_adis_read_x_gyro_3(void)
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(0);
 	no_os_sign_extend32_IgnoreAndReturn(0);
 	no_os_find_last_set_bit_IgnoreAndReturn(0);
@@ -1335,6 +1338,7 @@ void test_adis_read_y_gyro_3(void)
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(0);
 	no_os_sign_extend32_IgnoreAndReturn(0);
 	no_os_find_last_set_bit_IgnoreAndReturn(0);
@@ -1390,6 +1394,7 @@ void test_adis_read_z_gyro_3(void)
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(0);
 	no_os_sign_extend32_IgnoreAndReturn(0);
 	no_os_find_last_set_bit_IgnoreAndReturn(0);
@@ -1445,6 +1450,7 @@ void test_adis_read_x_accl_3(void)
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(0);
 	no_os_sign_extend32_IgnoreAndReturn(0);
 	no_os_find_last_set_bit_IgnoreAndReturn(0);
@@ -1500,6 +1506,7 @@ void test_adis_read_y_accl_3(void)
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(0);
 	no_os_sign_extend32_IgnoreAndReturn(0);
 	no_os_find_last_set_bit_IgnoreAndReturn(0);
@@ -1555,6 +1562,7 @@ void test_adis_read_z_accl_3(void)
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(0);
 	no_os_sign_extend32_IgnoreAndReturn(0);
 	no_os_find_last_set_bit_IgnoreAndReturn(0);
@@ -1710,6 +1718,7 @@ void test_adis_read_x_deltang_3(void)
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(0);
 	no_os_sign_extend32_IgnoreAndReturn(0);
 	no_os_find_last_set_bit_IgnoreAndReturn(0);
@@ -1765,6 +1774,7 @@ void test_adis_read_y_deltang_3(void)
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(0);
 	no_os_sign_extend32_IgnoreAndReturn(0);
 	no_os_find_last_set_bit_IgnoreAndReturn(0);
@@ -1820,6 +1830,7 @@ void test_adis_read_z_deltang_3(void)
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(0);
 	no_os_sign_extend32_IgnoreAndReturn(0);
 	no_os_find_last_set_bit_IgnoreAndReturn(0);
@@ -1875,6 +1886,7 @@ void test_adis_read_x_deltvel_3(void)
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(0);
 	no_os_sign_extend32_IgnoreAndReturn(0);
 	no_os_find_last_set_bit_IgnoreAndReturn(0);
@@ -1930,6 +1942,7 @@ void test_adis_read_y_deltvel_3(void)
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(0);
 	no_os_sign_extend32_IgnoreAndReturn(0);
 	no_os_find_last_set_bit_IgnoreAndReturn(0);
@@ -1985,6 +1998,7 @@ void test_adis_read_z_deltvel_3(void)
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(0);
 	no_os_sign_extend32_IgnoreAndReturn(0);
 	no_os_find_last_set_bit_IgnoreAndReturn(0);
@@ -2032,6 +2046,7 @@ void test_adis_read_xg_bias(void)
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(0);
 	no_os_sign_extend32_IgnoreAndReturn(0);
 	no_os_find_last_set_bit_IgnoreAndReturn(0);
@@ -2050,6 +2065,7 @@ void test_adis_write_xg_bias(void)
 	no_os_field_get_IgnoreAndReturn(100);
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_prep_IgnoreAndReturn(0);
 	retval = adis_write_xg_bias(&device_alloc, xg_bias);
 	TEST_ASSERT_EQUAL_INT(0, retval);
@@ -2065,6 +2081,7 @@ void test_adis_read_yg_bias(void)
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(0);
 	no_os_sign_extend32_IgnoreAndReturn(0);
 	no_os_find_last_set_bit_IgnoreAndReturn(0);
@@ -2083,6 +2100,7 @@ void test_adis_write_yg_bias(void)
 	no_os_field_get_IgnoreAndReturn(100);
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_prep_IgnoreAndReturn(0);
 	retval = adis_write_yg_bias(&device_alloc, yg_bias);
 	TEST_ASSERT_EQUAL_INT(0, retval);
@@ -2098,6 +2116,7 @@ void test_adis_read_zg_bias(void)
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(0);
 	no_os_sign_extend32_IgnoreAndReturn(0);
 	no_os_find_last_set_bit_IgnoreAndReturn(0);
@@ -2116,6 +2135,7 @@ void test_adis_write_zg_bias(void)
 	no_os_field_get_IgnoreAndReturn(100);
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_prep_IgnoreAndReturn(0);
 	retval = adis_write_zg_bias(&device_alloc, zg_bias);
 	TEST_ASSERT_EQUAL_INT(0, retval);
@@ -2131,6 +2151,7 @@ void test_adis_read_xa_bias(void)
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(0);
 	no_os_sign_extend32_IgnoreAndReturn(0);
 	no_os_find_last_set_bit_IgnoreAndReturn(0);
@@ -2149,6 +2170,7 @@ void test_adis_write_xa_bias(void)
 	no_os_field_get_IgnoreAndReturn(100);
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_prep_IgnoreAndReturn(0);
 	retval = adis_write_xa_bias(&device_alloc, xa_bias);
 	TEST_ASSERT_EQUAL_INT(0, retval);
@@ -2164,6 +2186,7 @@ void test_adis_read_ya_bias(void)
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(0);
 	no_os_sign_extend32_IgnoreAndReturn(0);
 	no_os_find_last_set_bit_IgnoreAndReturn(0);
@@ -2182,6 +2205,7 @@ void test_adis_write_ya_bias(void)
 	no_os_field_get_IgnoreAndReturn(100);
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_prep_IgnoreAndReturn(0);
 	retval = adis_write_ya_bias(&device_alloc, ya_bias);
 	TEST_ASSERT_EQUAL_INT(0, retval);
@@ -2197,6 +2221,7 @@ void test_adis_read_za_bias(void)
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(0);
 	no_os_sign_extend32_IgnoreAndReturn(0);
 	no_os_find_last_set_bit_IgnoreAndReturn(0);
@@ -2215,6 +2240,7 @@ void test_adis_write_za_bias(void)
 	no_os_field_get_IgnoreAndReturn(100);
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be32_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_prep_IgnoreAndReturn(0);
 	retval = adis_write_za_bias(&device_alloc, za_bias);
 	TEST_ASSERT_EQUAL_INT(0, retval);
@@ -3524,6 +3550,7 @@ void test_adis_cmd_snsr_self_test_1(void)
 {
 	device_alloc.info = adis_chip_info;
 
+	no_os_field_get_IgnoreAndReturn(1);
 	no_os_spi_transfer_IgnoreAndReturn(-1);
 	retval = adis_cmd_snsr_self_test(&device_alloc);
 	TEST_ASSERT_EQUAL_INT(-1, retval);
@@ -3538,6 +3565,9 @@ void test_adis_cmd_snsr_self_test_2(void)
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_mdelay_Ignore();
+	no_os_field_get_IgnoreAndReturn(1);
+	no_os_field_prep_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	retval = adis_cmd_snsr_self_test(&device_alloc);
 	TEST_ASSERT_EQUAL_INT(0, retval);
 }
@@ -4094,12 +4124,13 @@ void test_adis_get_sync_clk_freq_2(void)
 {
 	uint32_t clk_freq;
 	device_alloc.info = adis_chip_info;
+	device_alloc.int_clk = adis_chip_info->int_clk;
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
-	no_os_get_unaligned_be16_IgnoreAndReturn(ADIS_SYNC_DEFAULT);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
 	no_os_field_get_IgnoreAndReturn(ADIS_SYNC_DEFAULT);
 	retval = adis_get_sync_clk_freq(&device_alloc, &clk_freq);
-	TEST_ASSERT_EQUAL_INT(2000, clk_freq);
+	TEST_ASSERT_EQUAL_INT(adis_chip_info->int_clk, clk_freq);
 	TEST_ASSERT_EQUAL_INT(0, retval);
 }
 
@@ -4110,12 +4141,13 @@ void test_adis_get_sync_clk_freq_3(void)
 {
 	uint32_t clk_freq;
 	device_alloc.info = adis_chip_info;
+	device_alloc.int_clk = adis_chip_info->int_clk;
 
 	no_os_spi_transfer_IgnoreAndReturn(0);
 	no_os_get_unaligned_be16_IgnoreAndReturn(ADIS_SYNC_OUTPUT);
 	no_os_field_get_IgnoreAndReturn(ADIS_SYNC_OUTPUT);
 	retval = adis_get_sync_clk_freq(&device_alloc, &clk_freq);
-	TEST_ASSERT_EQUAL_INT(2000, clk_freq);
+	TEST_ASSERT_EQUAL_INT(adis_chip_info->int_clk, clk_freq);
 	TEST_ASSERT_EQUAL_INT(0, retval);
 }
 
@@ -4255,6 +4287,10 @@ void test_adis_get_deltaangl_scale_4(void)
 	struct adis_scale_fractional_log2 scale;
 	device_alloc.info = adis_chip_info;
 	device_alloc.dev_id = adis_dev_id;
+
+	no_os_spi_transfer_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
+	no_os_field_get_IgnoreAndReturn(0);
 	retval = adis_get_deltaangl_scale(&device_alloc, &scale);
 	TEST_ASSERT_EQUAL_INT(0, retval);
 }
@@ -4296,6 +4332,10 @@ void test_adis_get_deltavelocity_scale_4(void)
 	struct adis_scale_fractional_log2 scale;
 	device_alloc.info = adis_chip_info;
 	device_alloc.dev_id = adis_dev_id;
+
+	no_os_spi_transfer_IgnoreAndReturn(0);
+	no_os_get_unaligned_be16_IgnoreAndReturn(0);
+	no_os_field_get_IgnoreAndReturn(0);
 	retval = adis_get_deltavelocity_scale(&device_alloc, &scale);
 	TEST_ASSERT_EQUAL_INT(0, retval);
 }
