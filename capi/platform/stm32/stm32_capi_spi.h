@@ -42,8 +42,6 @@ struct stm32_spi_extra_config {
 	 *  use DMA instead of PIO/IT. Below this, DMA setup/teardown cost more than
 	 *  the transfer itself. 0 selects a built-in default. */
 	uint32_t dma_min_len;
-	/** SPI interrupt number */
-	uint32_t irq_num;
 #ifdef HAL_TIM_MODULE_ENABLED
 	/** CS timer handle for PWM-based CS control */
 	struct capi_timer_handle *cs_timer;
