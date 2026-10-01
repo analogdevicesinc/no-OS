@@ -171,6 +171,34 @@ the paragraphs below assume the BSP already exists.
 Build Command
 ^^^^^^^^^^^^^
 
+Put the toolchain on your ``PATH`` and export the build variables once per
+shell. Save this as e.g. ``~/altera.sh`` (editing ``A=`` and ``ALTERA_BSP_DIR=``)
+and ``source`` it:
+
+.. code-block:: bash
+
+   #!/usr/bin/env bash
+   # Altera / Quartus Prime Pro + Nios V environment for the ad9088 Agilex build.
+   A="$HOME/altera_pro/26.1.1"                                  # install root
+   RF="$A/riscfree/toolchain/riscv32-unknown-elf/bin"
+
+   # Tools on PATH: quartus_pgm, jtagconfig, juart-terminal, niosv-bsp,
+   # niosv-download, and the RISC-V toolchain.
+   export PATH="$A/quartus/bin:$A/niosv/bin:$RF:$PATH"
+   export QUARTUS_ROOTDIR="$A/quartus"
+
+   # no-OS CMake build variables (gcc also drives the assembler, handling .S).
+   export CMAKE_C_COMPILER="$RF/riscv32-unknown-elf-gcc"
+   export CMAKE_CXX_COMPILER="$RF/riscv32-unknown-elf-g++"
+   export CMAKE_ASM_COMPILER="$RF/riscv32-unknown-elf-gcc"
+
+   # Prebuilt Nios V BSP, matched to the AD9084-EBZ .sof.
+   export ALTERA_BSP_DIR="$HOME/hdl/projects/ad9084_ebz/nios_a5e/software/bsp"
+   export ALTERA_BSP_LIB="$ALTERA_BSP_DIR/build/libhal2_bsp.a"
+
+The ``cmake --preset agilex5-ebz`` path below takes the compilers and BSP from
+``CMakeUserPresets.json`` instead, so for it only the ``PATH`` part is required.
+
 The Intel build uses CMake presets. The tracked base preset ``agilex5``
 (in ``board_configs/altera/CMakePresets.json``) sets the platform, board and
 toolchain file. Machine-specific paths — the BSP directory, the BSP archive
