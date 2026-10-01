@@ -176,8 +176,24 @@ static int stm32_capi_spi_config_peripheral(struct stm32_spi_priv_handle
 		prescaler = SPI_BAUDRATEPRESCALER_64;
 	}
 
-	/* Use the SPI instance that was set during init */
-	priv_handle->hspi->Init.Mode = SPI_MODE_MASTER;
+	/*
+	 * Mode/NSS depend on the controller role. Both roles use software NSS
+	 * management (SPI_NSS_SOFT = SSM) so neither needs a physical NSS pin;
+	 * the selection state then comes from the SSI bit, which HAL folds into
+	 * the Mode constant (SPI_MODE_MASTER carries SSI=1, SPI_MODE_SLAVE
+	 * carries SSI=0 -- see HAL_SPI_Init's CR1 write):
+	 *  - Initiator (master): MSTR|SSI -> internal NSS high, so no mode fault;
+	 *    drives the clock at the prescaler computed above; CS handled in
+	 *    software by the CS-GPIO path.
+	 *  - Target (slave): MSTR=0, SSI=0 -> internal NSS low = permanently
+	 *    selected, with no NSS pin or external strap required. The external
+	 *    initiator drives the clock (baud prescaler ignored by hardware).
+	 *    Mode/bit order still come from the device and MUST match the
+	 *    initiator.
+	 */
+	priv_handle->hspi->Init.Mode = priv_handle->is_target ?
+				       SPI_MODE_SLAVE :
+				       SPI_MODE_MASTER;
 	priv_handle->hspi->Init.Direction = SPI_DIRECTION_2LINES;
 	priv_handle->hspi->Init.DataSize = SPI_DATASIZE_8BIT;
 	priv_handle->hspi->Init.CLKPolarity = device->mode & CAPI_SPI_CPOL ?
@@ -294,6 +310,10 @@ static int stm32_capi_spi_init(struct capi_spi_controller_handle **handle,
 	}
 
 	spi_handle->ops = config->ops;
+
+	/* Remember the controller role so config_peripheral() selects slave vs
+	 * master mode. register_target/unregister_target can flip this later. */
+	spi_priv_handle->is_target = config->is_target;
 
 	spi_extra_config = config->extra;
 
@@ -1216,6 +1236,58 @@ static int stm32_capi_spi_set_cs(struct capi_spi_device *device,
 }
 
 /**
+ * @brief Switch the controller into SPI target (slave) mode.
+ * @param handle - Pointer to the SPI controller handle.
+ * @return 0 on success, negative error code otherwise.
+ *
+ * Unlike I2C's register_target(handle, addr) - which can immediately re-init
+ * the peripheral because the target address is part of the API - the SPI target
+ * API carries no address and no device/mode descriptor here, so there is nothing
+ * to program into HAL_SPI_Init() yet. This only flips the role flag and
+ * invalidates the cached peripheral config so the next armed transfer re-runs
+ * HAL_SPI_Init() in slave mode (config_peripheral() reads priv->is_target).
+ * The role may also be set once at init via config->is_target; both entry points
+ * exist for API symmetry.
+ */
+static int stm32_capi_spi_register_target(struct capi_spi_controller_handle
+		*handle)
+{
+	struct stm32_spi_priv_handle *priv_handle;
+
+	if (!handle || !handle->priv)
+		return -EINVAL;
+
+	priv_handle = handle->priv;
+	priv_handle->is_target = true;
+	priv_handle->sync_cfg_cached = false;
+
+	return 0;
+}
+
+/**
+ * @brief Switch the controller out of SPI target mode (back to initiator).
+ * @param handle - Pointer to the SPI controller handle.
+ * @return 0 on success, negative error code otherwise.
+ *
+ * Counterpart to stm32_capi_spi_register_target(): clears the role flag and
+ * invalidates the cached config so the next transfer reconfigures as master.
+ */
+static int stm32_capi_spi_unregister_target(struct capi_spi_controller_handle
+		*handle)
+{
+	struct stm32_spi_priv_handle *priv_handle;
+
+	if (!handle || !handle->priv)
+		return -EINVAL;
+
+	priv_handle = handle->priv;
+	priv_handle->is_target = false;
+	priv_handle->sync_cfg_cached = false;
+
+	return 0;
+}
+
+/**
  * @brief SPI interrupt service routine handler.
  * @param handle - Pointer to the SPI controller handle.
  */
@@ -1734,6 +1806,8 @@ const struct capi_spi_ops stm32_capi_spi_ops = {
 	.abort_async = stm32_capi_spi_abort_async,
 	.register_callback = stm32_capi_spi_register_callback,
 	.set_cs = stm32_capi_spi_set_cs,
+	.register_target = stm32_capi_spi_register_target,
+	.unregister_target = stm32_capi_spi_unregister_target,
 	.isr = stm32_capi_spi_isr,
 };
 
@@ -1748,6 +1822,8 @@ const struct stm32_capi_spi_extended_ops stm32_capi_spi_extended_ops = {
 		.abort_async = stm32_capi_spi_abort_async,
 		.register_callback = stm32_capi_spi_register_callback,
 		.set_cs = stm32_capi_spi_set_cs,
+		.register_target = stm32_capi_spi_register_target,
+		.unregister_target = stm32_capi_spi_unregister_target,
 		.isr = stm32_capi_spi_isr,
 	},
 	.transfer_dma = stm32_capi_spi_transfer_dma,
