@@ -52,6 +52,7 @@ int example_main()
 	enum max14916_wd wd = MAX14916_WD_600MS;
 	enum max14916_ow_off_cs ow_off_cs = MAX14916_OW_OFF_CS_300UA;
 	enum max14916_sht_vdd_thr sht_vdd_thr = MAX14916_SHT_VDD_THR_14V;
+#ifndef CONFIG_FTD2XX
 	struct no_os_uart_desc *uart_desc;
 
 	ret = no_os_uart_init(&uart_desc, &max14916_uart_ip);
@@ -59,6 +60,7 @@ int example_main()
 		goto exit;
 
 	no_os_uart_stdio(uart_desc);
+#endif
 
 	/* Intializing the device MAX14916. */
 	ret = max14916_init(&max14916_desc, &max14916_ip);
@@ -124,7 +126,9 @@ int example_main()
 remove_max14916:
 	max14916_remove(max14916_desc);
 remove_uart:
+#ifndef CONFIG_FTD2XX
 	no_os_uart_remove(uart_desc);
+#endif
 exit:
 	if (ret)
 		pr_info("Error!\n");

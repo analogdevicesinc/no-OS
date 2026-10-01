@@ -522,7 +522,7 @@ int adp1055_normal_mode_df(struct adp1055_desc *desc, uint8_t zero,
 	if (ret)
 		return ret;
 
-	ret =  adp1055_write(desc, ADP1055_NM_DIGFILT_POLE_SETTING, hf, 1);
+	ret =  adp1055_write(desc, ADP1055_NM_DIGFILT_HF_GAIN_SETTING, hf, 1);
 	if (ret)
 		return ret;
 
@@ -557,7 +557,7 @@ int adp1055_lightload_mode_df(struct adp1055_desc *desc, uint8_t zero,
 	if (ret)
 		return ret;
 
-	ret =  adp1055_write(desc, ADP1055_LLM_DIGFILT_POLE_SETTING, hf, 1);
+	ret =  adp1055_write(desc, ADP1055_LLM_DIGFILT_HF_GAIN_SETTING, hf, 1);
 	if (ret)
 		return ret;
 
@@ -591,7 +591,7 @@ int adp1055_singleshot_mode_df(struct adp1055_desc *desc, uint8_t zero,
 	if (ret)
 		return ret;
 
-	ret =  adp1055_write(desc, ADP1055_SS_DIGFILT_POLE_SETTING, hf, 1);
+	ret =  adp1055_write(desc, ADP1055_SS_DIGFILT_HF_GAIN_SETTING, hf, 1);
 	if (ret)
 		return ret;
 
@@ -713,19 +713,19 @@ int adp1055_set_pwm(struct adp1055_desc * desc, enum adp1055_channel chan,
 		reg_val = ADP1055_OUTA_ON;
 		break;
 	case ADP1055_OUTB:
-		reg_val = ADP1055_OUTA_ON;
+		reg_val = ADP1055_OUTB_ON;
 		break;
 	case ADP1055_OUTC:
-		reg_val = ADP1055_OUTA_ON;
+		reg_val = ADP1055_OUTC_ON;
 		break;
 	case ADP1055_OUTD:
-		reg_val = ADP1055_OUTA_ON;
+		reg_val = ADP1055_OUTD_ON;
 		break;
 	case ADP1055_SR1:
-		reg_val = ADP1055_OUTA_ON;
+		reg_val = ADP1055_SR1_ON;
 		break;
 	case ADP1055_SR2:
-		reg_val = ADP1055_OUTA_ON;
+		reg_val = ADP1055_SR2_ON;
 		break;
 	case ADP1055_DISABLE_ALL:
 		reg_val = ADP1055_PWM_OFF;

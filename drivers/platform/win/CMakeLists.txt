@@ -4,9 +4,11 @@
 # Windows Sleep / usleep in MinGW environments).
 # win_uart.c (Windows COM port UART) is compiled only when CONFIG_UART_WIN=y.
 #
-# The ftd2xx library (LibMPSSE) provides SPI, I2C, GPIO and UART over a FTDI
+# The ftd2xx library (LibMPSSE) provides SPI, I2C and GPIO over a FTDI
 # USB-to-MPSSE bridge and is compiled in separately via cmake/libraries/ftd2xx.cmake
-# when CONFIG_FTD2XX=y — nothing extra is needed here.
+# when CONFIG_FTD2XX=y — nothing extra is needed here. LibMPSSE has no UART
+# primitives; CONFIG_FTD2XX builds have no spare UART hardware either, so
+# projects must skip UART entirely rather than using win_uart.c.
 
 target_compile_definitions(no-os PUBLIC -DWIN_PLATFORM)
 

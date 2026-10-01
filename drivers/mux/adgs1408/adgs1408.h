@@ -172,11 +172,6 @@ int32_t adgs1408_spi_reg_read(struct adgs1408_dev *dev,
 int32_t adgs1408_spi_reg_write(struct adgs1408_dev *dev,
 			       uint8_t reg_addr,
 			       uint8_t reg_data);
-/* SPI register read from device using a mask. */
-int32_t adgs1408_spi_reg_read_mask(struct adgs1408_dev *dev,
-				   uint8_t reg_addr,
-				   uint8_t mask,
-				   uint8_t *data);
 /* SPI internal register write to device using a mask. */
 int32_t adgs1408_spi_reg_write_mask(struct adgs1408_dev *dev,
 				    uint8_t reg_addr,
