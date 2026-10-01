@@ -196,15 +196,40 @@ and ``source`` it:
    export ALTERA_BSP_DIR="$HOME/hdl/projects/ad9084_ebz/nios_a5e/software/bsp"
    export ALTERA_BSP_LIB="$ALTERA_BSP_DIR/build/libhal2_bsp.a"
 
-The ``cmake --preset agilex5-ebz`` path below takes the compilers and BSP from
-``CMakeUserPresets.json`` instead, so for it only the ``PATH`` part is required.
+There are two ways to build: directly with the tracked ``agilex5`` preset (no
+user preset needed), or via a one-time ``CMakeUserPresets.json`` convenience.
 
-The Intel build uses CMake presets. The tracked base preset ``agilex5``
-(in ``board_configs/altera/CMakePresets.json``) sets the platform, board and
-toolchain file. Machine-specific paths — the BSP directory, the BSP archive
-and the RISC-V compilers — belong in an **untracked** ``CMakeUserPresets.json``
-that inherits ``agilex5`` (see the ``agilex5-ebz`` example preset), so absolute
-paths never land in the tracked tree:
+Option 1 — tracked preset + environment (works on a fresh clone)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+The tracked base preset ``agilex5`` (in ``board_configs/altera/CMakePresets.json``)
+sets the platform, board and toolchain file. The per-machine paths come from the
+environment sourced above; the build type and example come from ``-D`` flags:
+
+.. code-block:: bash
+
+   source ~/altera.sh     # PATH + CMAKE_* + ALTERA_BSP_* from the block above
+
+   cmake --preset agilex5 -B build_agilex5_ebz \
+         -DCMAKE_BUILD_TYPE=MinSizeRel \
+         -DPROJECT_DEFCONFIG=ad9088/basic_example.conf
+   cmake --build build_agilex5_ebz --target ad9088
+
+   # Output ELF: build_agilex5_ebz/build/ad9088
+   # DMA example: use -DPROJECT_DEFCONFIG=ad9088/dma_example.conf into build_agilex5_dma
+
+``MinSizeRel`` is required so the image fits the Nios V on-chip memory. The
+board config (``boards/basic_example/agilex5.conf``) selects the 204C profile
+and the engineering firmware set.
+
+Option 2 — user preset (one-time setup, then no flags)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Put the machine-specific paths — the BSP directory, the BSP archive and the
+RISC-V compilers — in an **untracked** ``CMakeUserPresets.json`` that inherits
+``agilex5``, so absolute paths never land in the tracked tree. The file must be
+at the **repository root** (next to the tracked ``CMakePresets.json``); CMake
+only reads user presets from there:
 
 .. code-block:: json
 
@@ -228,16 +253,11 @@ paths never land in the tracked tree:
      ]
    }
 
-``MinSizeRel`` is required so the image fits the Nios V on-chip memory. The
-board config (``boards/basic_example/agilex5.conf``) selects the 204C profile
-and the engineering firmware set.
+With that file at the repo root, the build needs no flags (and, since the
+compilers/BSP are in the preset, only ``PATH`` from ``altera.sh``):
 
 .. code-block:: bash
 
-   cd no-OS
-   export ALTERA_PLATFORM_NIOSV=1
-
-   # Configure and build the ad9088 ELF against the EBZ BSP
    cmake --preset agilex5-ebz
    cmake --build build_agilex5_ebz --target ad9088
 
