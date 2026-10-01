@@ -146,8 +146,7 @@ extern SPI_HandleTypeDef hspi1;
  * spi_dma_platform_init(); until then use_dma() returns false and the async
  * cases take the IT path. dma_min_len = 1 defeats the driver's length heuristic
  * so the short transfers the DMA cases use really do go down the DMA path once
- * it is armed. irq_num = SPI1_IRQn keeps the IT path's completion vector wired
- * for the IRQ cases that run first.
+ * it is armed.
  */
 #define SPI_EXTRA_INIT		{ .hspi = &hspi1, \
 				  .get_input_clock = NULL, \
@@ -159,8 +158,7 @@ extern SPI_HandleTypeDef hspi1;
 						 SPI_RXDMA_EXTRA_INIT, \
 				  .txdma_extra = &(struct stm32_dma_chan_extra_config) \
 						 SPI_TXDMA_EXTRA_INIT, \
-				  .dma_min_len = 1U, \
-				  .irq_num = SPI1_IRQn }
+				  .dma_min_len = 1U }
 
 /*
  * SPI DMA platform hook, implemented in spi_dma_platform_init.c. Defining this
@@ -192,8 +190,7 @@ extern SPI_HandleTypeDef hspi5;
 				  .get_input_clock = NULL, \
 				  .alternate = 0U, \
 				  .dma_handle = NULL, \
-				  .dma_min_len = 1U, \
-				  .irq_num = SPI5_IRQn }
+				  .dma_min_len = 1U }
 
 /*
  * TIM2: 32-bit general-purpose timer on APB1. The driver uses identifier=2 to
@@ -348,8 +345,7 @@ extern SPI_HandleTypeDef hspi1;
 						 SPI_RXDMA_EXTRA_INIT, \
 				  .txdma_extra = &(struct stm32_dma_chan_extra_config) \
 						 SPI_TXDMA_EXTRA_INIT, \
-				  .dma_min_len = 1U, \
-				  .irq_num = SPI1_IRQn }
+				  .dma_min_len = 1U }
 
 /*
  * SPI DMA platform hook, implemented in spi_dma_platform_init.c.
