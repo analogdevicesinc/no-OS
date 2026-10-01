@@ -978,3 +978,8 @@ static int64_t adxl355_temp_conv(struct adxl355_dev *dev, uint16_t raw_temp)
 		return 0;
 	}
 }
+
+int adxl355_test_err(void)
+{
+	return ACCEL_UNDECLARED;
+}
