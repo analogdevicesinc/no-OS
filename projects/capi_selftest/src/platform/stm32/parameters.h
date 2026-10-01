@@ -91,17 +91,84 @@ extern SPI_HandleTypeDef hspi1;
  */
 #define SPI_IDENTIFIER		((uint64_t)(uintptr_t)SPI1)
 #define SPI_CLK_FREQ		96000000U
+
+/*
+ * Run BOTH async delivery modes in a single image. SPI_HAS_IRQ and SPI_HAS_DMA
+ * are independent skip flags, so enabling both un-gates the full subtest table,
+ * whose IRQ cases (ASYNC_IRQ/MANUAL_ISR/ABORT_IRQ) are listed before the DMA
+ * cases (ASYNC_DMA/ABORT_DMA). The delivery mode is decided at runtime by
+ * stm32_capi_spi_use_dma(), which only engages DMA once spi_extra.dma_handle is
+ * non-NULL: it boots NULL (below) and is armed by spi_dma_platform_init(), which
+ * fires inside ASYNC_DMA via SPI_DMA_PLATFORM_INIT(). So every IRQ case runs on
+ * the IT path first, then DMA is armed and the DMA cases run - "IRQ first, then
+ * DMA" in one flash. This deliberately deviates from the project's usual
+ * one-mode-per-build convention (arming is one-way, so a single run is assumed).
+ */
+#define SPI_HAS_IRQ		1
+#define SPI_HAS_DMA		1
+
+/*
+ * SPI1 DMA request mapping on this part (RM0410): RX is DMA2 stream 2 channel 3,
+ * TX is DMA2 stream 3 channel 3 - the same streams the SDP-K1 (F469) mapping
+ * uses. Both carry an irq_num because the SPI DMA path reports completion from
+ * the DMA interrupt. The channel IDs index the shared DMA controller configured
+ * further down; id 0 is left to the memory-to-memory suite so they never collide.
+ */
+#define SPI_RXDMA_CH_ID		1U
+#define SPI_TXDMA_CH_ID		2U
+#define SPI_RXDMA_IRQN		DMA2_Stream2_IRQn
+#define SPI_TXDMA_IRQN		DMA2_Stream3_IRQn
+#define SPI_RXDMA_IRQ_HANDLER	DMA2_Stream2_IRQHandler
+#define SPI_TXDMA_IRQ_HANDLER	DMA2_Stream3_IRQHandler
+#define SPI_RXDMA_EXTRA_INIT	{ .hdma = &(DMA_HandleTypeDef){ \
+					.Instance = DMA2_Stream2 }, \
+				  .ch_num = DMA_CHANNEL_3, \
+				  .irq_num = SPI_RXDMA_IRQN, \
+				  .mem_increment = true, \
+				  .per_increment = false, \
+				  .mem_data_alignment = CAPI_DMA_DATA_ALIGN_BYTE, \
+				  .per_data_alignment = CAPI_DMA_DATA_ALIGN_BYTE, \
+				  .dma_mode = CAPI_DMA_NORMAL_MODE, \
+				  .trig = NULL }
+#define SPI_TXDMA_EXTRA_INIT	{ .hdma = &(DMA_HandleTypeDef){ \
+					.Instance = DMA2_Stream3 }, \
+				  .ch_num = DMA_CHANNEL_3, \
+				  .irq_num = SPI_TXDMA_IRQN, \
+				  .mem_increment = true, \
+				  .per_increment = false, \
+				  .mem_data_alignment = CAPI_DMA_DATA_ALIGN_BYTE, \
+				  .per_data_alignment = CAPI_DMA_DATA_ALIGN_BYTE, \
+				  .dma_mode = CAPI_DMA_NORMAL_MODE, \
+				  .trig = NULL }
+
+/*
+ * dma_handle stays NULL at boot and is patched in at runtime by
+ * spi_dma_platform_init(); until then use_dma() returns false and the async
+ * cases take the IT path. dma_min_len = 1 defeats the driver's length heuristic
+ * so the short transfers the DMA cases use really do go down the DMA path once
+ * it is armed. irq_num = SPI1_IRQn keeps the IT path's completion vector wired
+ * for the IRQ cases that run first.
+ */
 #define SPI_EXTRA_INIT		{ .hspi = &hspi1, \
 				  .get_input_clock = NULL, \
 				  .alternate = 0U, \
 				  .dma_handle = NULL, \
-				  .rxdma_ch_id = 0U, \
-				  .txdma_ch_id = 0U, \
+				  .rxdma_ch_id = SPI_RXDMA_CH_ID, \
+				  .txdma_ch_id = SPI_TXDMA_CH_ID, \
+				  .rxdma_extra = &(struct stm32_dma_chan_extra_config) \
+						 SPI_RXDMA_EXTRA_INIT, \
+				  .txdma_extra = &(struct stm32_dma_chan_extra_config) \
+						 SPI_TXDMA_EXTRA_INIT, \
+				  .dma_min_len = 1U, \
 				  .irq_num = SPI1_IRQn }
 
-/* SPI async delivery mode selection (see the note further down). */
-#define SPI_HAS_IRQ		1
-#define SPI_HAS_DMA		0
+/*
+ * SPI DMA platform hook, implemented in spi_dma_platform_init.c. Defining this
+ * pulls that file into the build and is what arms spi_extra.dma_handle; the SPI
+ * suite invokes it from the ASYNC_DMA case.
+ */
+int spi_dma_platform_init(void);
+#define SPI_DMA_PLATFORM_INIT()	spi_dma_platform_init()
 
 /*
  * TIM2: 32-bit general-purpose timer on APB1. The driver uses identifier=2 to
@@ -132,9 +199,11 @@ extern SPI_HandleTypeDef hspi1;
 
 /*
  * DMA2 is the only controller that supports memory-to-memory transfers on this
- * part. Stream 0, channel 0 is used (no peripheral trigger needed).
+ * part, and it is also the one behind SPI1, so a single controller is shared:
+ * stream 0 channel 0 (id 0) serves the memory-to-memory suite, ids 1 and 2
+ * serve SPI (streams 2 and 3). No collision: the three use distinct streams.
  */
-#define DMA_NUM_CHANS		1U
+#define DMA_NUM_CHANS		3U
 #define DMA_MEM2MEM_STREAM	DMA2_Stream0
 #define DMA_MEM2MEM_CHANNEL	DMA_CHANNEL_0
 #define DMA_PLATFORM_INIT()	__HAL_RCC_DMA2_CLK_ENABLE()
