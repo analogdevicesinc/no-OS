@@ -12,6 +12,7 @@ if IMU
 config IMU_ADIS
     depends on SPI
     select GPIO
+    select I2C
     bool "Enable ADIS core driver"
     default n
     help
