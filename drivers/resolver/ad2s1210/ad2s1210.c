@@ -434,7 +434,7 @@ int ad2s1210_spi_single_conversion(struct ad2s1210_dev *dev,
 		return -EINVAL;
 
 	if ((size < 4) && (active_mask & AD2S1210_POS_MASK)
-	    && (active_mask & AD2S1210_POS_MASK))
+	    && (active_mask & AD2S1210_VEL_MASK))
 		return -EINVAL;
 
 	ret = no_os_gpio_set_value(dev->gpio_sample, NO_OS_GPIO_LOW);
