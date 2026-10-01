@@ -18,6 +18,7 @@ import shlex
 import shutil
 import subprocess
 import sys
+import tempfile
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -79,6 +80,130 @@ def open_vscode_workspace(repo_root):
         subprocess.run([editor, str(workspace)], check=True)
     except subprocess.CalledProcessError as e:
         print(f"--open: failed to launch '{editor}': {e}", file=sys.stderr)
+
+
+def find_riscfree_ide(build_dir):
+    """Locate the RiscFree IDE launcher.
+
+    The Nios V toolchain ships RiscFree as <install>/riscfree/RiscFree/RiscFree
+    (an Eclipse launcher), which is normally NOT on PATH. Search, in order:
+    PATH; the compiler recorded in the build cache (the IDE is a sibling of the
+    toolchain under the same riscfree/ root); and common env hints. Returns the
+    launcher path or None.
+    """
+    # 1. On PATH (either spelling).
+    cand = shutil.which("riscfree") or shutil.which("RiscFree")
+    if cand:
+        return cand
+
+    hints = []
+    # 2. Derive from the configured compiler, e.g.
+    #    <root>/riscfree/toolchain/riscv32-unknown-elf/bin/riscv32-unknown-elf-gcc
+    #    -> <root>/riscfree/RiscFree/RiscFree
+    cc = read_cmake_cache_value(build_dir, "CMAKE_C_COMPILER") if build_dir else None
+    if cc:
+        for parent in Path(cc).parents:
+            if parent.name == "riscfree":
+                hints.append(parent / "RiscFree" / "RiscFree")
+                break
+    # 3. Env installs: riscfree/ sits beside niosv/ and quartus/ in the release.
+    for env in ("RISCFREE_HOME", "ALTERA_NIOSV_HOME", "QUARTUS_ROOTDIR"):
+        v = os.environ.get(env)
+        if not v:
+            continue
+        hints.append(Path(v) / "RiscFree" / "RiscFree")          # env points at riscfree/
+        hints.append(Path(v).parent / "riscfree" / "RiscFree" / "RiscFree")  # sibling
+
+    for h in hints:
+        if h.exists():
+            return str(h)
+    return None
+
+
+def riscfree_headless_import(ide, workspace, project_dir):
+    """Import the project into `workspace` headlessly so the GUI opens populated.
+
+    RiscFree does not ship the CDT headless-build application, but it does ship
+    the EASE scripting app with a Jython engine, which can call the Eclipse
+    resources API directly. We run a tiny Jython script that imports the existing
+    project in-place (no copy) and exits the JVM. Returns True on success.
+    """
+    loc = str(project_dir)
+    script = (
+        "from org.eclipse.core.resources import ResourcesPlugin\n"
+        "from org.eclipse.core.runtime import Path\n"
+        "from java.lang import System\n"
+        "loc = " + repr(loc) + "\n"
+        "ws = ResourcesPlugin.getWorkspace()\n"
+        "root = ws.getRoot()\n"
+        "desc = ws.loadProjectDescription(Path(loc + '/.project'))\n"
+        "desc.setLocation(Path(loc))\n"
+        "project = root.getProject(desc.getName())\n"
+        "if not project.exists():\n"
+        "    project.create(desc, None)\n"
+        "project.open(None)\n"
+        "ws.save(True, None)\n"
+        "System.exit(0)\n"
+    )
+    fd, path = tempfile.mkstemp(suffix=".py", prefix="riscfree_import_")
+    with os.fdopen(fd, "w") as f:
+        f.write(script)
+    print("Importing project into the RiscFree workspace (headless)...")
+    try:
+        rc = subprocess.run(
+            [ide, "-nosplash", "-data", str(workspace),
+             "-application", "org.eclipse.ease.runScript",
+             "-script", "file:" + path],
+            check=False, timeout=600,
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode
+        return rc == 0
+    except (OSError, subprocess.TimeoutExpired) as e:
+        print(f"--open: headless import skipped ({e}).", file=sys.stderr)
+        return False
+    finally:
+        try:
+            os.remove(path)
+        except OSError:
+            pass
+
+
+def open_riscfree_workspace(repo_root, build_dir, combo):
+    """Open the generated RiscFree (Nios V) project in the RiscFree IDE.
+
+    The RiscFree backend generates an Eclipse-CDT project under <repo>/.riscfree
+    during configure (build + indexing only; no debug launch). To mirror the
+    Vitis flow, the project is imported headlessly into a dedicated workspace
+    (unless already present) so the IDE opens populated, then the GUI launches.
+    If the launcher cannot be found, print manual guidance rather than failing.
+    """
+    project_dir = repo_root / ".riscfree"
+    if not project_dir.exists():
+        print(f"--open: RiscFree project not found at {project_dir} "
+              "(it is generated during configure).", file=sys.stderr)
+        return
+    ide = find_riscfree_ide(build_dir)
+    if not ide:
+        print("--open: RiscFree launcher not found (looked on PATH, the build's "
+              "compiler path, and $RISCFREE_HOME/$ALTERA_NIOSV_HOME/$QUARTUS_ROOTDIR).\n"
+              "Launch it manually, then import the project:\n"
+              "  RiscFree -> File -> Import -> Existing Projects into Workspace\n"
+              f"  Select root directory: {project_dir}", file=sys.stderr)
+        return
+    workspace = build_dir / "riscfree_ws"
+    # Import once: skip if this workspace already has a project registered.
+    projects_meta = (workspace / ".metadata" / ".plugins"
+                     / "org.eclipse.core.resources" / ".projects")
+    already = projects_meta.is_dir() and any(projects_meta.iterdir())
+    if not already:
+        if not riscfree_headless_import(ide, workspace, project_dir):
+            print("--open: auto-import did not complete; import manually once:\n"
+                  "  File -> Import -> Existing Projects into Workspace\n"
+                  f"  Select root directory: {project_dir}", file=sys.stderr)
+    print(f"Launching RiscFree ({ide}) on {workspace}")
+    try:
+        subprocess.Popen([ide, "-data", str(workspace)])
+    except OSError as e:
+        print(f"--open: failed to launch '{ide}': {e}", file=sys.stderr)
 
 
 def read_cmake_cache_value(build_dir, key):
@@ -877,6 +1002,8 @@ def cmd_build(args, repo_root, presets):
             build_dir = combo_build_dir(build_dir_base, combo)
             if combo["platform"] == "xilinx":
                 open_vitis_workspace(repo_root, build_dir, combo)
+            elif combo["platform"] == "altera":
+                open_riscfree_workspace(repo_root, build_dir, combo)
             else:
                 open_vscode_workspace(repo_root)
         else:
@@ -939,7 +1066,8 @@ def main():
     build_parser.add_argument(
         "--open",
         action="store_true",
-        help="Open the generated VS Code workspace after a successful build",
+        help="Open the generated IDE project after a successful build "
+             "(Vitis for xilinx, RiscFree for altera, VS Code workspace otherwise)",
     )
 
     args = parser.parse_args()
