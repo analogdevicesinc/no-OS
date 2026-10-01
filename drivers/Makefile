@@ -40,7 +40,7 @@ INCLUDES = -I../include/ \
 
 IIOD_FLAGS += -DIIO_SUPPORT
 
-CFLAGS = -c -Wall -Wformat=0 -D__int64_t_defined=1 $(IIOD_FLAGS) $(INCLUDES)
+CFLAGS = -c -Wall -Wformat=0 -D__int64_t_defined=1 $(IIOD_FLAGS) $(INCLUDES) -Werror=implicit-function-declaration
 
 SRCS = $(shell find . $(SKIPDIR) -name '*.c')
 OBJS = $(SRCS:.c=.o)
