@@ -98,8 +98,7 @@ extern SPI_HandleTypeDef hspi1;
 				  .alternate = 0U, \
 				  .dma_handle = NULL, \
 				  .rxdma_ch_id = 0U, \
-				  .txdma_ch_id = 0U, \
-				  .irq_num = SPI1_IRQn }
+				  .txdma_ch_id = 0U }
 #define SPI_CLK_FREQ		96000000U
 
 #define SPI_DEVICE_NATIVE_CS	0x01U
