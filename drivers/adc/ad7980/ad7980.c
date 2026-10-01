@@ -139,3 +139,8 @@ float ad7980_convert_to_volts(uint16_t raw_sample, float v_ref)
 
 	return voltage;
 }
+
+int ad7980_test_xor_err(float val)
+{
+	return val ^ 1;
+}
