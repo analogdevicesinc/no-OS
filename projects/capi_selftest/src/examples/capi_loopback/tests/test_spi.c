@@ -639,22 +639,149 @@ static int spi_data(void)
 	return 0;
 }
 
+#ifdef SPI_TARGET_OPS
+#define CLEANUP \
+	do { \
+		if (tgt_handle != NULL) { \
+			(void)capi_spi_unregister_target(tgt_handle); \
+			(void)capi_spi_deinit(tgt_handle); \
+		} \
+		if (init_handle != NULL) \
+			(void)capi_spi_deinit(init_handle); \
+		SPI_PLATFORM_SET_TARGET(NULL); \
+		SPI_PLATFORM_DEINIT(); \
+	} while (0)
+
+/**
+ * @brief SPI target (slave) mode: on-board SPI-to-SPI loopback.
+ *
+ * Opens the initiator (SPI1) and a second controller as an SPI target (SPI5,
+ * brought up by SPI_PLATFORM_INIT()), switches the target into slave mode via
+ * capi_spi_register_target(), then for a sweep of patterns and sizes arms the
+ * target to receive and clocks the bytes from the initiator. The target's IRQ
+ * completion callback and the received data (rx == tx) are the oracle: they
+ * prove the bytes really crossed SPI1 -> SPI5 and that slave-mode init worked.
+ *
+ * Direction is initiator-TX -> target-RX only, so the target's MISO stays off
+ * the bus and does not conflict with the existing MOSI<->MISO loopback strap
+ * the other SPI tests use. Requires board wiring (see parameters.h) and is
+ * skipped unless SPI_HAS_TARGET.
+ *
+ * @return 0 on pass, negative error code on failure.
+ */
+static int spi_target(void)
+{
+	static const uint8_t patterns[] = { 0xffU, 0x00U, 0xa5U, 0x5aU };
+	static const uint32_t sizes[] = { 1U, 4U, 32U };
+	struct capi_spi_controller_handle *init_handle = NULL;
+	struct capi_spi_controller_handle *tgt_handle = NULL;
+	struct capi_spi_device dev = spi_dev;
+	struct capi_spi_device tgt_dev = spi_target_dev;
+	int ret;
+
+	TEST_SECTION("TARGET");
+
+	/* Bring up the target controller's clock/pins/NVIC (SPI5 on this board). */
+	ret = SPI_PLATFORM_INIT();
+	TEST_ASSERT_EQ_OR_CLEANUP(ret, 0, "PLATFORM_INIT");
+
+	ret = capi_spi_init(&init_handle, &spi_controller_config);
+	TEST_ASSERT_EQ_OR_CLEANUP(ret, 0, "INIT_INITIATOR");
+	dev.controller = init_handle;
+
+	ret = capi_spi_init(&tgt_handle, &spi_target_config);
+	TEST_ASSERT_EQ_OR_CLEANUP(ret, 0, "INIT_TARGET");
+	tgt_dev.controller = tgt_handle;
+
+	/* Route the target's IRQ vector and confirm the role via the target op. */
+	SPI_PLATFORM_SET_TARGET(tgt_handle);
+	TEST_ASSERT_EQ_OR_CLEANUP(capi_spi_register_target(tgt_handle), 0,
+				  "REGISTER_TARGET");
+	TEST_ASSERT_EQ_OR_CLEANUP(capi_spi_register_callback(tgt_handle,
+				  spi_test_callback, NULL), 0, "REGISTER_CALLBACK");
+
+	for (uint32_t pi = 0U; pi < sizeof(patterns); pi++) {
+		for (uint32_t si = 0U; si < sizeof(sizes) / sizeof(sizes[0]); si++) {
+			uint32_t n = sizes[si];
+			uint8_t tx[32];
+			uint8_t tgt_rx[32];
+			uint8_t scratch[32];
+
+			memset(tx, patterns[pi], n);
+			memset(tgt_rx, 0, sizeof(tgt_rx));
+			memset(scratch, 0, sizeof(scratch));
+
+			struct capi_spi_transfer tgt_xfer = {
+				.tx_buf = NULL,
+				.rx_buf = tgt_rx,
+				.tx_size = 0U,
+				.rx_size = n,
+			};
+			struct capi_spi_transfer init_xfer = {
+				.tx_buf = tx,
+				.rx_buf = scratch,
+				.tx_size = n,
+				.rx_size = n,
+			};
+
+			spi_callback_count = 0U;
+			spi_callback_event = 0;
+			spi_callback_extra = 0;
+
+			/* Arm the target to receive, THEN clock bytes from the initiator. */
+			TEST_ASSERT_EQ_OR_CLEANUP(capi_spi_transceive_async(&tgt_dev,
+						  &tgt_xfer), 0, "TARGET_ARM");
+			TEST_ASSERT_EQ_OR_CLEANUP(capi_spi_transceive(&dev, &init_xfer), 0,
+						  "INITIATOR_XFER");
+			TEST_WAIT_UNTIL(spi_callback_count > 0U, SPI_ASYNC_TIMEOUT_US,
+					SPI_ASYNC_STEP_US);
+			TEST_ASSERT_EQ_OR_CLEANUP(spi_callback_count, 1U,
+						  "TARGET_CB_COUNT");
+			TEST_ASSERT_EQ_OR_CLEANUP(spi_callback_event,
+						  CAPI_SPI_EVENT_XFR_DONE, "TARGET_CB_EVENT");
+			TEST_ASSERT_EQ_OR_CLEANUP(memcmp(tgt_rx, tx, n), 0,
+						  "TARGET_MATCH");
+		}
+	}
+
+	TEST_ASSERT_EQ_OR_CLEANUP(capi_spi_unregister_target(tgt_handle), 0,
+				  "UNREGISTER_TARGET");
+	SPI_PLATFORM_SET_TARGET(NULL);
+	TEST_ASSERT_EQ_OR_CLEANUP(capi_spi_deinit(tgt_handle), 0, "DEINIT_TARGET");
+	tgt_handle = NULL;
+	TEST_ASSERT_EQ_OR_CLEANUP(capi_spi_deinit(init_handle), 0,
+				  "DEINIT_INITIATOR");
+	init_handle = NULL;
+	SPI_PLATFORM_DEINIT();
+
+	return 0;
+}
+#undef CLEANUP
+#else /* SPI_TARGET_OPS not defined: keep the table symbol valid (row skips). */
+static int spi_target(void)
+{
+	return 0;
+}
+#endif /* SPI_TARGET_OPS */
+
 /*
  * SPI_HAS_IRQ and SPI_HAS_DMA are mutually exclusive: the controller is
  * configured for exactly one async delivery mode per build (via SPI_EXTRA_INIT
  * and dma_handle in common_data). Async and abort are therefore gated per mode,
  * so only the entries matching the configured delivery run; the rest skip.
+ * TARGET needs a second controller + board wiring and is gated on SPI_HAS_TARGET.
  */
 static const struct test_case spi_subtests[] = {
-	{ "BASIC",      spi_basic,      false        },
-	{ "MODES",      spi_modes,      false        },
-	{ "LSB_FIRST",  spi_lsb_first,  false        },
-	{ "DATA",       spi_data,       false        },
-	{ "ASYNC_IRQ",  spi_async_irq,  !SPI_HAS_IRQ },
-	{ "MANUAL_ISR", spi_manual_isr, !SPI_HAS_IRQ },
-	{ "ABORT_IRQ",  spi_abort,      !SPI_HAS_IRQ },
-	{ "ASYNC_DMA",  spi_async_dma,  !SPI_HAS_DMA },
-	{ "ABORT_DMA",  spi_abort,      !SPI_HAS_DMA },
+	{ "BASIC",      spi_basic,      false           },
+	{ "MODES",      spi_modes,      false           },
+	{ "LSB_FIRST",  spi_lsb_first,  false           },
+	{ "DATA",       spi_data,       false           },
+	{ "ASYNC_IRQ",  spi_async_irq,  !SPI_HAS_IRQ    },
+	{ "MANUAL_ISR", spi_manual_isr, !SPI_HAS_IRQ    },
+	{ "ABORT_IRQ",  spi_abort,      !SPI_HAS_IRQ    },
+	{ "ASYNC_DMA",  spi_async_dma,  !SPI_HAS_DMA    },
+	{ "ABORT_DMA",  spi_abort,      !SPI_HAS_DMA    },
+	{ "TARGET",     spi_target,     !SPI_HAS_TARGET },
 };
 
 /**

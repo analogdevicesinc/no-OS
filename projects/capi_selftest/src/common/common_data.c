@@ -233,6 +233,51 @@ struct capi_spi_device spi_dev = {
 	.lsb_first = false,
 	.extra = NULL,
 };
+
+#ifdef SPI_TARGET_OPS
+/**
+ * @brief Platform-specific extra data for the SPI target controller.
+ */
+SPI_TARGET_EXTRA_TYPE spi_target_extra = SPI_TARGET_EXTRA_INIT;
+
+/**
+ * @brief CAPI configuration for the SPI target (slave) controller.
+ *
+ * is_target selects slave mode in the STM32 backend; clk_freq_hz is 0 because a
+ * slave does not generate the clock.
+ */
+const struct capi_spi_config spi_target_config = {
+	.ops = SPI_TARGET_OPS,
+	.identifier = SPI_TARGET_IDENTIFIER,
+	.dma_handle = NULL,
+	.three_pin_mode = false,
+	.loopback = false,
+	.is_target = true,
+	.clk_freq_hz = 0U,
+	.extra = &spi_target_extra,
+};
+
+/**
+ * @brief CAPI SPI device descriptor for the target controller.
+ *
+ * max_speed_hz is 0 (ignored in slave mode); mode must match the initiator.
+ * The controller field is assigned after capi_spi_init().
+ */
+struct capi_spi_device spi_target_dev = {
+	.controller = NULL,
+	.max_speed_hz = 0U,
+	.mode = SPI_DEVICE_MODE,
+	.native_cs = 0U,
+	.cs_gpio = NULL,
+	.cs_gpio_num = 0U,
+	.flow_ctl_param = {
+		.mode = CAPI_SPI_FLOW_CTL_DISABLE,
+	},
+	.non_continuous_mode = false,
+	.lsb_first = false,
+	.extra = NULL,
+};
+#endif /* SPI_TARGET_OPS */
 #endif /* SPI_OPS */
 
 #ifdef TIMER_OPS

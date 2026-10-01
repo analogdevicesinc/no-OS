@@ -171,6 +171,31 @@ int spi_dma_platform_init(void);
 #define SPI_DMA_PLATFORM_INIT()	spi_dma_platform_init()
 
 /*
+ * SPI initiator/target loopback:
+ *   Initiator = SPI1, target = SPI5. SPI5 is chosen because its SCK/MISO/MOSI
+ *   (PF7/PF8/PF9) are all broken out on the populated Zio connector CN9, so the
+ *   whole test wires up with plain jumpers -- no soldering of the morpho header
+ *   (SPI3's SCK PC10 is morpho-only). The slave uses software NSS and is
+ *   permanently selected, so it needs no NSS pin or wire. CubeMX maps only
+ *   SPI1, so spi_platform_init() brings up SPI5's clock, pins (PF7/8/9) and
+ *   NVIC and installs SPI5_IRQHandler -> capi_spi_isr. The test calls
+ *   SPI_PLATFORM_SET_TARGET() after init so that vector reaches the target.
+ * Wiring (RX direction): PA5(D13)->PF7/CN9.24 (SCK), PA7(D11)->PF9/CN9.26
+ *   (MOSI); PF8/CN9.22 (MISO) left open; keep the PA7<->PA6 (D11<->D12) strap.
+ *   PA7 fans out to both PA6 and PF9 -- join them on a breadboard row or a
+ *   Y-splitter (still solderless).
+ */
+#define SPI_HAS_TARGET		1
+#define SPI_TARGET_IDENTIFIER	((uint64_t)(uintptr_t)SPI5)
+extern SPI_HandleTypeDef hspi5;
+#define SPI_TARGET_EXTRA_INIT	{ .hspi = &hspi5, \
+				  .get_input_clock = NULL, \
+				  .alternate = 0U, \
+				  .dma_handle = NULL, \
+				  .dma_min_len = 1U, \
+				  .irq_num = SPI5_IRQn }
+
+/*
  * TIM2: 32-bit general-purpose timer on APB1. The driver uses identifier=2 to
  * select TIM2 via get_timer_base_from_identifier() and auto-detects the APB1
  * clock.
@@ -405,6 +430,25 @@ int spi_dma_platform_init(void);
 #define SPI_DEVICE_NATIVE_CS	0x01U
 #define SPI_DEVICE_MODE		CAPI_SPI_MODE_0
 #define SPI_DEVICE_SPEED_HZ	1000000U
+
+/*
+ * SPI target (slave) ops and platform glue. Defined only on boards that declare
+ * a target (SPI_TARGET_IDENTIFIER). spi_platform_init() lives in
+ * spi_platform_init.c (gated on SPI_TARGET_OPS) and brings up the second SPI
+ * controller; SPI_PLATFORM_SET_TARGET() routes its IRQ vector to the handle.
+ */
+#ifdef SPI_TARGET_IDENTIFIER
+#define SPI_TARGET_OPS		&stm32_capi_spi_ops
+#define SPI_TARGET_EXTRA_TYPE	struct stm32_spi_extra_config
+
+struct capi_spi_controller_handle;
+int spi_platform_init(void);
+void spi_platform_deinit(void);
+void spi_platform_set_target_handle(struct capi_spi_controller_handle *handle);
+#define SPI_PLATFORM_INIT()		spi_platform_init()
+#define SPI_PLATFORM_DEINIT()		spi_platform_deinit()
+#define SPI_PLATFORM_SET_TARGET(h)	spi_platform_set_target_handle(h)
+#endif /* SPI_TARGET_IDENTIFIER */
 
 #define TIMER_OPS		&stm32_capi_timer_ops
 #define TIMER_INPUT_CLK_HZ	0U		/* auto-detected from APB1 */
