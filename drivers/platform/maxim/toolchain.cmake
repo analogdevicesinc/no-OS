@@ -79,14 +79,16 @@ set(CMAKE_EXECUTABLE_SUFFIX_CXX ".elf")
 
 # CPU flags depending on target. Nearly all Maxim parts are Cortex-M4. MAX32657 is Cortex-M33.
 if(TARGET_NUM STREQUAL "32657")
-    set(COMMON_CPU_FLAGS "-mthumb -mcpu=cortex-m33 -mfloat-abi=softfp -mfpu=fpv5-sp-d16 -mno-unaligned-access")
+    set(COMMON_CPU_FLAGS "-mthumb -mcpu=cortex-m33 -mfloat-abi=softfp -mfpu=fpv5-sp-d16 -mno-unaligned-access -u _printf_float")
+    set(SPECS "-specs=nano.specs -specs=nosys.specs")
 else()
     set(COMMON_CPU_FLAGS "-mthumb -mcpu=cortex-m4 -mfloat-abi=softfp -mfpu=fpv4-sp-d16")
+    set(SPECS "-specs=nosys.specs")
 endif()
 
 # Common flags for all build types
-set(CMAKE_C_FLAGS "${COMMON_CPU_FLAGS} -ffunction-sections -fdata-sections -MD" CACHE STRING "C compiler flags" FORCE)
-set(CMAKE_CXX_FLAGS "${COMMON_CPU_FLAGS} -ffunction-sections -fdata-sections -MD" CACHE STRING "C++ compiler flags" FORCE)
+set(CMAKE_C_FLAGS "${COMMON_CPU_FLAGS} ${SPECS} -ffunction-sections -fdata-sections -MD" CACHE STRING "C compiler flags" FORCE)
+set(CMAKE_CXX_FLAGS "${COMMON_CPU_FLAGS} ${SPECS} -ffunction-sections -fdata-sections -MD" CACHE STRING "C++ compiler flags" FORCE)
 set(CMAKE_ASM_FLAGS "${COMMON_CPU_FLAGS} -x assembler-with-cpp" CACHE STRING "ASM compiler flags" FORCE)
 
 # Debug build flags - Full debug info, no optimization
@@ -110,7 +112,7 @@ set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -DNDEBUG" CACHE STRING "C++ compiler flags f
 set(CMAKE_ASM_FLAGS_MINSIZEREL "" CACHE STRING "ASM compiler flags for MinSizeRel" FORCE)
 
 # Linker flags (common for all build types)
-set(CMAKE_EXE_LINKER_FLAGS "${COMMON_CPU_FLAGS} -specs=nosys.specs -Wl,--gc-sections,--undefined=_sbrk ${MCU_LINKER_FLAGS} \
+set(CMAKE_EXE_LINKER_FLAGS "${COMMON_CPU_FLAGS} -Wl,--gc-sections,--undefined=_sbrk ${MCU_LINKER_FLAGS} \
     -T${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX${TARGET_NUM}/Source/GCC/${TARGET}.ld --entry=Reset_Handler" CACHE STRING "Linker flags for MCU" FORCE)
 
 # Work around a Ninja restat bug with arm-none-eabi-gcc: on link failure the
