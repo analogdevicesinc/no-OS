@@ -30,18 +30,30 @@ endfunction()
 # and known no-OS directory structure.
 function(ide_build_source_groups)
     if(PLATFORM STREQUAL "altera")
-        # Narrow the source view to the subtrees the Nios V build actually
-        # compiles, so the IDE tree does not mount every other device's drivers
-        # (the whole drivers/ tree). Other platforms keep the broad view below.
+        # Pin the source view to the device-level directories the ad9088 Agilex
+        # build actually compiles, so the IDE tree shows only what is built (not
+        # whole class folders such as all of drivers/frequency). Deriving this
+        # automatically from the no-os target is not possible here: the backend
+        # runs from the project's CMakeLists (post_build_config), before the
+        # top-level add_subdirectory(drivers) attaches driver sources, so the
+        # target's SOURCES are still empty at this point. Entries that do not
+        # exist for a given config are dropped by the EXISTS check in the backend.
+        # Other platforms keep the broad view below.
         set(_groups
             "no-os_ad9088=${NO_OS_DIR}/drivers/rf-transceiver/ad9088"
-            "no-os_axi_core=${NO_OS_DIR}/drivers/axi_core"
-            "no-os_frequency=${NO_OS_DIR}/drivers/frequency"
+            "no-os_axi_adc_core=${NO_OS_DIR}/drivers/axi_core/axi_adc_core"
+            "no-os_axi_dac_core=${NO_OS_DIR}/drivers/axi_core/axi_dac_core"
+            "no-os_axi_dmac=${NO_OS_DIR}/drivers/axi_core/axi_dmac"
+            "no-os_clk_axi_clkgen=${NO_OS_DIR}/drivers/axi_core/clk_axi_clkgen"
+            "no-os_axi_jesd204=${NO_OS_DIR}/drivers/axi_core/jesd204"
+            "no-os_adf4030=${NO_OS_DIR}/drivers/frequency/adf4030"
+            "no-os_adf4382=${NO_OS_DIR}/drivers/frequency/adf4382"
+            "no-os_hmc7044=${NO_OS_DIR}/drivers/frequency/hmc7044"
             "no-os_platform_altera=${NO_OS_DIR}/drivers/platform/altera"
             "no-os_api=${NO_OS_DIR}/drivers/api"
             "no-os_jesd204=${NO_OS_DIR}/jesd204"
-            "no-os_include=${NO_OS_DIR}/include"
             "no-os_util=${NO_OS_DIR}/util"
+            "no-os_include=${NO_OS_DIR}/include"
         )
     else()
         set(_groups
