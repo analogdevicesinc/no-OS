@@ -22,25 +22,40 @@ The MaximSDK provides distributions of `arm-none-eabi-` GCC compiler + utilities
 Building the project
 --------------------
 
-The project includes 2 different examples:
+The project includes 4 different examples:
 
 1. apard_communication_example (selected by default) - This example closes the output port of the AD-APARDPFWD-SL and opens a TCP socket to communicate with the AD-APARD32690-SL. It will start a TCP server using the interface ADIN1110 is connected to (the default settings are IP: 192.168.97.50 port: 10000). It will reply back to the connected client with the characters it receives. The actual IP address, netmask, and gateway used at runtime are printed on the serial port connected through the debug adapter.
 
 2. forward_packets_example - may be selected by passing ``--variant forward_packets_example`` to the build command.
 This example opens the output port of the AD-APARDPFWD-SL to be able to ping the downstream device. It initializes the ADIN1110 Ethernet controller and reads its device ID.
 
-The host running the client may require network settings in order to communicate with a device using the 192.168.97.50 IP. These usually include manually adding a static IP for the host's network interface. You may go through the following guide on how to do this: https://wiki.analog.com/resources/no-os/misc_guides/static_ip_setting?rev=1715173602 (choose an IP in the 192.168.97.x/24 range that's different from the board's address).
+3. communication_and_forward_example - may be selected by passing ``--variant communication_and_forward_example`` to the build command.
+This example combines the TCP communication of apard_communication_example with the packet forwarding of forward_packets_example. It opens Port 2 on the AD-APARDPFWD-SL, removes the ADIN1110 broadcast filter and enables promiscuous mode (FWD_UNK2HOST) so unmatched broadcast frames (e.g. ARP) are forwarded between T1L ports by the ADIN2111 switch while still being delivered to the host. It then starts a TCP server (default settings are IP: 192.168.98.50 port: 10000) that echoes back the characters it receives, the same way as apard_communication_example.
 
-The apard_communication_example may be tested by using netcat on the host:
+4. servo_control_example - may be selected by passing ``--variant servo_control_example`` to the build command.
+This example opens Port 2 on the AD-APARDPFWD-SL and drives two hobby servos via PWM (50 Hz, TMR1 and TMR2). It starts a TCP server (default settings are IP: 192.168.98.50 port: 10000) that accepts newline-terminated ``SERVO1_ON``, ``SERVO1_OFF``, ``SERVO2_ON``, ``SERVO2_OFF``, and ``SERVO_STATUS`` commands and replies with ``OK`` / the current servo states.
+
+The host running the client may require network settings in order to communicate with a device using the 192.168.97.50 or 192.168.98.50 IP, depending on the selected example. These usually include manually adding a static IP for the host's network interface. You may go through the following guide on how to do this: https://wiki.analog.com/resources/no-os/misc_guides/static_ip_setting?rev=1715173602 (choose an IP in the same /24 range that's different from the board's address).
+
+The apard_communication_example and communication_and_forward_example may be tested by using netcat on the host:
 
 .. code-block:: bash
 
-	netcat 192.168.97.50 10000
+	netcat 192.168.97.50 10000   # apard_communication_example
+	netcat 192.168.98.50 10000   # communication_and_forward_example
+
+The servo_control_example may be tested the same way, sending commands terminated by a newline:
+
+.. code-block:: bash
+
+	netcat 192.168.98.50 10000   # servo_control_example
+	SERVO1_ON
+	SERVO_STATUS
 
 For toolchain setup and prerequisites, see the
 :doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
 
-Available variants: ``apard_communication_example``, ``forward_packets_example``.
+Available variants: ``apard_communication_example``, ``forward_packets_example``, ``communication_and_forward_example``, ``servo_control_example``.
 Available boards: ``ad-apard32690-sl``.
 Replace ``--variant`` / ``--board`` accordingly.
 
