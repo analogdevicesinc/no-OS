@@ -3519,6 +3519,9 @@ int32_t ad9361_fastlock_store(struct ad9361_rf_phy *phy, bool tx,
 			      uint32_t profile);
 int32_t ad9361_fastlock_recall(struct ad9361_rf_phy *phy, bool tx,
 			       uint32_t profile);
+/* Leave fastlock mode entered by an agent outside this driver, e.g. an
+ * FPGA that recalls profiles on its own. Safe to call unconditionally. */
+int32_t ad9361_fastlock_exit_foreign(struct ad9361_rf_phy *phy, bool tx);
 int32_t ad9361_fastlock_load(struct ad9361_rf_phy *phy, bool tx,
 			     uint32_t profile, uint8_t *values);
 int32_t ad9361_fastlock_save(struct ad9361_rf_phy *phy, bool tx,
@@ -3546,7 +3549,6 @@ int32_t ad9361_set_dcxo_tune(struct ad9361_rf_phy *phy,
 			     uint32_t coarse, uint32_t fine);
 int32_t ad9361_tx_mute(struct ad9361_rf_phy *phy, uint32_t state);
 uint32_t ad9361_validate_rf_bw(struct ad9361_rf_phy *phy, uint32_t bw);
-int32_t ad9361_get_temp(struct ad9361_rf_phy *phy);
 int ad9361_synth_lo_powerdown(struct ad9361_rf_phy *phy,
 			      enum synth_pd_ctrl rx,
 			      enum synth_pd_ctrl tx);
