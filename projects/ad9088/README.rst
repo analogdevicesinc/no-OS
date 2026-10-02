@@ -318,6 +318,14 @@ generated too; import it once with **File → Import → Existing Projects into
 Workspace** and set the root directory to ``no-OS/.riscfree`` (a hidden folder —
 type the path rather than browsing). The workspace stays populated afterwards.
 
+Re-importing after a change: the project's source view is fixed at import time.
+If you regenerate ``.riscfree`` (a different config, or an updated layout), a
+plain re-import *merges* the new linked folders onto the old ones, leaving stale
+entries. To refresh cleanly, either open a **fresh workspace**
+(``RiscFree -data <new-dir>``) and import ``no-OS/.riscfree`` there, or in the
+current workspace **delete the project** (right-click → Delete, with *Delete
+project contents on disk* unchecked) and import it again.
+
 Xilinx (VCU118, MicroBlaze)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
