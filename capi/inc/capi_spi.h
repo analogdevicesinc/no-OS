@@ -33,6 +33,11 @@ struct capi_dma_handle;
 
 /**
  * @brief SPI controller configuration
+ *
+ * Callers must zero-initialize this struct before setting fields (e.g. a
+ * designated initializer `= { ... }` or `= {0}`). Optional pointer fields left
+ * unset must read as NULL; passing an uninitialized (garbage) value is
+ * undefined behavior.
  */
 struct capi_spi_config {
 	/** ops - optional. if NULL, API selects driver from static mapping based on
@@ -46,10 +51,17 @@ struct capi_spi_config {
 	uint64_t identifier;
 	/** optional - user shall pass common hal dma handle to enable dma for async transfers */
 	struct capi_dma_handle *dma_handle;
+	/** optional - separate DMA handle for the RX direction on platforms whose SPI TX and RX
+	 *  DMA request lines are wired to different controllers. Must be NULL (see struct note on
+	 *  zero-init) unless a split controller is used; NULL => dma_handle serves both directions.
+	 */
+	struct capi_dma_handle *rx_dma_handle;
 	/** Enables 3 pin mode of operation */
 	bool three_pin_mode;
 	/** Loopback enable, connects MISO to MOSI during configuration */
 	bool loopback;
+	/** If true, controller acts as SPI Target. Default (false) is SPI Initiator */
+	bool is_target;
 	/** Frequency of peripheral clock in Hz, if zero, driver sets to default of platform */
 	uint32_t clk_freq_hz;
 	/** Optional platform specific extra configuration */
@@ -129,12 +141,12 @@ enum capi_spi_flow_ctl {
  * @brief Flow control configuration for data reads
  */
 struct capi_spi_flow_ctl_params {
-	enum capi_spi_flow_ctl mode; /**< Flow coontrol mode */
-	uint16_t burts_size;         /**< if non-zero, specifies the limit of number of bytes to be
+	enum capi_spi_flow_ctl mode; /**< Flow control mode */
+	uint16_t burst_size;         /**< if non-zero, specifies the limit of number of bytes to be
 				      * transferred at once.
 				      * See flow control mode descriptions for further information. */
 	enum capi_spi_rdy_pol
-	rdy_pol;   /**< Polarity of the Readt Pin, used when ready pin based flow ctrl */
+	rdy_pol;   /**< Polarity of the Ready Pin, used when ready pin based flow ctrl */
 	uint16_t wait_tmr; /**< number of clock cycles to wait, used when timer based flow ctrl.
 			    * See flow control mode descriptions for further information */
 };
@@ -187,6 +199,9 @@ struct capi_spi_transfer {
 				*   for read command operations */
 	int timeout;           /**< if supported, timeout in milliseconds. 0 or -1 means infinite */
 	uint8_t xfer_delay_clk_cycles; /**< Transfer Delay time in clock cycles */
+	bool continuous_frame; /**< Continue generating SPI clocks after transfer count completes.
+				*   When true, frames continue until the controller is disabled.
+				*   Only meaningful in initiator mode. */
 };
 
 /** @brief spi async events */
@@ -330,6 +345,30 @@ int capi_spi_set_cs(struct capi_spi_device *device,
 		    enum capi_spi_cs_control cs_control);
 
 /**
+ * @brief Register SPI controller in target mode.
+ *
+ * Configures the SPI controller to operate in target mode. Disables initiator
+ * mode when registered as a target. The controller will respond to chip-select
+ * assertions from an external initiator.
+ *
+ * @param[in] handle Pointer to the SPI controller handle.
+ *
+ * @return int 0 for success or error code.
+ */
+int capi_spi_register_target(struct capi_spi_controller_handle *handle);
+
+/**
+ * @brief Unregister SPI controller from target mode.
+ *
+ * Disables target mode operation and re-enables initiator mode.
+ *
+ * @param[in] handle Pointer to the SPI controller handle.
+ *
+ * @return int 0 for success or error code.
+ */
+int capi_spi_unregister_target(struct capi_spi_controller_handle *handle);
+
+/**
  * @brief SPI Driver Interrupt handler. If interrupt vectors are managed and implemented by user,
  * then user shall call this function in the relevant interrupt vector function.
  *
@@ -367,6 +406,10 @@ struct capi_spi_ops {
 				 capi_spi_callback_t const callback, void *callback_arg);
 	/** See capi_spi_set_cs() */
 	int (*set_cs)(struct capi_spi_device *device, enum capi_spi_cs_control cs);
+	/** See capi_spi_register_target() */
+	int (*register_target)(struct capi_spi_controller_handle *handle);
+	/** See capi_spi_unregister_target() */
+	int (*unregister_target)(struct capi_spi_controller_handle *handle);
 	/** See capi_spi_isr() */
 	void (*isr)(void *handle);
 };

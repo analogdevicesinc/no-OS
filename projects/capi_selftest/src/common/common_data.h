@@ -102,14 +102,46 @@ void platform_gpio_irq_disarm(void);
 #include "capi_spi.h"
 #include "capi_irq.h"
 
+#ifndef SPI_HAS_IRQ
+#define SPI_HAS_IRQ     0
+#endif /* SPI_HAS_IRQ */
+
+#ifndef SPI_HAS_DMA
+#define SPI_HAS_DMA     0
+#endif /* SPI_HAS_DMA */
+
+#ifndef SPI_HAS_TARGET
+#define SPI_HAS_TARGET  0
+#endif /* SPI_HAS_TARGET */
+
 /**
  * @brief CAPI SPI config for external loopback.
  */
 extern const struct capi_spi_config spi_controller_config;
 /**
+ * @brief Platform-specific extra data backing spi_controller_config.
+ */
+extern SPI_EXTRA_TYPE spi_extra;
+/**
  * @brief CAPI SPI device descriptor for the external loopback test.
  */
 extern struct capi_spi_device spi_dev;
+
+#ifdef SPI_TARGET_OPS
+/**
+ * @brief CAPI SPI config for the target (slave) controller in the SPI-to-SPI
+ *        loopback test.
+ */
+extern const struct capi_spi_config spi_target_config;
+/**
+ * @brief Platform-specific extra data backing spi_target_config.
+ */
+extern SPI_TARGET_EXTRA_TYPE spi_target_extra;
+/**
+ * @brief CAPI SPI device descriptor for the target controller.
+ */
+extern struct capi_spi_device spi_target_dev;
+#endif /* SPI_TARGET_OPS */
 #endif /* SPI_OPS */
 
 #ifdef IRQ_CTRL_IDENTIFIER
