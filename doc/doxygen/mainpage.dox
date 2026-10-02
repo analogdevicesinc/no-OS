@@ -24,7 +24,7 @@ you rights that supersede, the license terms of any particular file.
 
 Where to find the licensing information:
 
-- \b LICENSE &mdash; overview of no-OS licensing: the BSD-3-Clause default,
+- \b COPYING &mdash; overview of no-OS licensing: the BSD-3-Clause default,
   that each file's own SPDX tag or header is authoritative, and that some
   files and trees are under other terms.
 - \b LICENSES/ &mdash; the full text of every license used by Analog Devices'
