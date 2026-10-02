@@ -9,6 +9,7 @@ list(APPEND CMAKE_MODULE_PATH
 include(ColoredOutput)
 include(source_util)
 include(ErrorUtils)
+include(FirmwareBlob)
 
 # A platform must be selected before any toolchain/defconfig path can be
 # resolved.  Catch this early with a clear message rather than failing later
