@@ -31,16 +31,19 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "i2c.h"
+#include "i2c_reva.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "maxim_i2c.h"
 #include "mxc_errors.h"
 #include "no_os_alloc.h"
+#include "no_os_print_log.h"
 
 #define I2C_MASTER_MODE	1
 
@@ -71,7 +74,22 @@ void I2C2_IRQHandler(void)
 #endif
 
 /**
- * @brief Configure the VDDIO level for a I2C interface
+ * @brief Enable the peripheral clock and configure the VDDIO level for
+ * the pin set of an I2C interface that is actually wired on the board.
+ *
+ * Called instead of relying on MXC_I2C_Init()'s own pin/clock setup, for
+ * two reasons:
+ * - MXC_I2C_Init() always configures pins at VDDIO (1.8V) and immediately
+ *   runs bus recovery, which fails on boards like the AD-APARD32690-SL
+ *   where the wired pin set (e.g. I2C1's alternate pins, P2.17/P2.18,
+ *   routed through P5) needs to be at VDDIOH (3.3V) instead.
+ * - MXC_I2C_Init() also muxes BOTH the default and alternate pin sets to
+ *   AF1, even when only one is actually connected. Per the MAX32690 Rev
+ *   A2 errata #16, having both AF1-muxed pin sets live at once confuses
+ *   the I2C peripheral's SCL/SDA status readback, causing bus recovery
+ *   to fail even though the real (connected) bus is electrically fine.
+ *   Only the wired pin set is muxed here to avoid that.
+ *
  * @param device_id - the interface number.
  * @param vssel - the VDDIO level.
  * @return 0 in case of success, -EINVAL otherwise.
@@ -82,12 +100,15 @@ static int32_t _max_i2c_pins_config(uint32_t device_id, mxc_gpio_vssel_t vssel)
 
 	switch (device_id) {
 	case 0:
+		MXC_SYS_ClockEnable(MXC_SYS_PERIPH_CLOCK_I2C0);
 		i2c_pins = gpio_cfg_i2c0;
 		break;
 	case 1:
-		i2c_pins = gpio_cfg_i2c1;
+		MXC_SYS_ClockEnable(MXC_SYS_PERIPH_CLOCK_I2C1);
+		i2c_pins = gpio_cfg_i2c1a;
 		break;
 	case 2:
+		MXC_SYS_ClockEnable(MXC_SYS_PERIPH_CLOCK_I2C2);
 		i2c_pins = gpio_cfg_i2c2;
 		break;
 	default:
@@ -95,6 +116,7 @@ static int32_t _max_i2c_pins_config(uint32_t device_id, mxc_gpio_vssel_t vssel)
 	}
 
 	i2c_pins.vssel = vssel;
+	i2c_pins.pad = MXC_GPIO_PAD_PULL_UP;
 	MXC_GPIO_Config(&i2c_pins);
 
 	return 0;
@@ -156,16 +178,39 @@ static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
 
 	if (nb_created_desc[param->device_id] == 0) {
 		MXC_I2C_Shutdown(max_i2c->handler);
-		/** The last parameter (slave address) is ignored in master mode */
-		if ((MXC_I2C_Init(i2c_regs, I2C_MASTER_MODE, 0)) != E_NO_ERROR) {
+
+		ret = _max_i2c_pins_config((*desc)->device_id, eparam->vssel);
+		if (ret)
+			goto error_extra;
+
+		pr_info("i2c%u: ctrl=0x%x before MXC_I2C_RevA_Init (EN=%d MST=%d BB=%d SCL_OUT=%d SDA_OUT=%d SCL=%d SDA=%d)\n",
+			(unsigned int)(*desc)->device_id, (unsigned int)i2c_regs->ctrl,
+			!!(i2c_regs->ctrl & MXC_F_I2C_CTRL_EN),
+			!!(i2c_regs->ctrl & MXC_F_I2C_CTRL_MST_MODE),
+			!!(i2c_regs->ctrl & MXC_F_I2C_CTRL_BB_MODE),
+			!!(i2c_regs->ctrl & MXC_F_I2C_CTRL_SCL_OUT),
+			!!(i2c_regs->ctrl & MXC_F_I2C_CTRL_SDA_OUT),
+			!!(i2c_regs->ctrl & MXC_F_I2C_CTRL_SCL),
+			!!(i2c_regs->ctrl & MXC_F_I2C_CTRL_SDA));
+
+		/**
+		 * MXC_I2C_RevA_Init() is called directly (bypassing
+		 * MXC_I2C_Init()) since the clock and pins have already been
+		 * configured above, at the correct vssel. MXC_I2C_Init() would
+		 * otherwise reconfigure the pins back to VDDIO before running
+		 * bus recovery.
+		 * The last parameter (slave address) is ignored in master mode.
+		 */
+		if (MXC_I2C_RevA_Init((mxc_i2c_reva_regs_t *)i2c_regs,
+				      I2C_MASTER_MODE, 0) != E_NO_ERROR) {
+			pr_info("i2c%u: ctrl=0x%x after failed MXC_I2C_RevA_Init (SCL=%d SDA=%d)\n",
+				(unsigned int)(*desc)->device_id, (unsigned int)i2c_regs->ctrl,
+				!!(i2c_regs->ctrl & MXC_F_I2C_CTRL_SCL),
+				!!(i2c_regs->ctrl & MXC_F_I2C_CTRL_SDA));
 			ret = -1;
 			goto error_extra;
 		}
 	}
-
-	ret = _max_i2c_pins_config((*desc)->device_id, eparam->vssel);
-	if (ret)
-		return ret;
 
 	freq = MXC_I2C_GetFrequency(i2c_regs);
 	freq = no_os_min(freq, (*desc)->max_speed_hz);
@@ -305,6 +350,16 @@ static int32_t max_i2c_read(struct no_os_i2c_desc *desc,
 	}
 
 	ret = MXC_I2C_MasterTransaction(&req);
+	if (ret)
+		pr_info("i2c%u: read failed ret=%d intfl0=0x%x (ARB=%d TO=%d ADDR_NACK=%d DATA=%d DNR=%d START=%d STOP=%d)\n",
+			(unsigned int)desc->device_id, (int)ret, (unsigned int)i2c_regs->intfl0,
+			!!(i2c_regs->intfl0 & MXC_F_I2C_INTFL0_ARB_ERR),
+			!!(i2c_regs->intfl0 & MXC_F_I2C_INTFL0_TO_ERR),
+			!!(i2c_regs->intfl0 & MXC_F_I2C_INTFL0_ADDR_NACK_ERR),
+			!!(i2c_regs->intfl0 & MXC_F_I2C_INTFL0_DATA_ERR),
+			!!(i2c_regs->intfl0 & MXC_F_I2C_INTFL0_DNR_ERR),
+			!!(i2c_regs->intfl0 & MXC_F_I2C_INTFL0_START_ERR),
+			!!(i2c_regs->intfl0 & MXC_F_I2C_INTFL0_STOP_ERR));
 
 	if (max_i2c_desc->prologue_size != 0) {
 		no_os_free(max_i2c_desc->prologue_data);
