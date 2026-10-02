@@ -18,3 +18,19 @@ collected under LICENSES/, grouped by role:
 
 Bundled third-party libraries under libraries/ each carry their own
 LICENSE / COPYING file in their directory.
+
+For how licenses are declared and the repository-local LicenseRef-
+identifiers used for proprietary vendor device-API code, see:
+
+	doc/sphinx/source/license_rules.rst
+
+The mere aggregation of these files (putting them side by side in one
+source repository) does not create a single master license for all of
+them. When you build a project that combines files, it is up to you to
+ensure the individual licenses are compatible. Some proprietary ADI
+vendor-API trees forbid combination with incompatible code outright, and
+you may not distribute a binary that violates the terms of any file it
+includes.
+
+Nothing in this file restricts, limits, or supersedes the license terms of
+any particular file.

@@ -8,7 +8,7 @@ own header. This page explains how licenses are declared and organized so
 that the license of any file is clear and, where possible, machine
 readable.
 
-The top-level ``LICENSE`` file is a short pointer to this default and to
+The top-level ``COPYING`` file is a short pointer to this default and to
 this page. The license of any individual file is stated by its own SPDX
 tag or header; that tag is authoritative.
 
