@@ -29,11 +29,27 @@ endfunction()
 # "code view" every IDE backend should expose. Driven by Kconfig variables
 # and known no-OS directory structure.
 function(ide_build_source_groups)
-    set(_groups
-        "no-os_drivers=${NO_OS_DIR}/drivers"
-        "no-os_include=${NO_OS_DIR}/include"
-        "no-os_util=${NO_OS_DIR}/util"
-    )
+    if(PLATFORM STREQUAL "altera")
+        # Narrow the source view to the subtrees the Nios V build actually
+        # compiles, so the IDE tree does not mount every other device's drivers
+        # (the whole drivers/ tree). Other platforms keep the broad view below.
+        set(_groups
+            "no-os_ad9088=${NO_OS_DIR}/drivers/rf-transceiver/ad9088"
+            "no-os_axi_core=${NO_OS_DIR}/drivers/axi_core"
+            "no-os_frequency=${NO_OS_DIR}/drivers/frequency"
+            "no-os_platform_altera=${NO_OS_DIR}/drivers/platform/altera"
+            "no-os_api=${NO_OS_DIR}/drivers/api"
+            "no-os_jesd204=${NO_OS_DIR}/jesd204"
+            "no-os_include=${NO_OS_DIR}/include"
+            "no-os_util=${NO_OS_DIR}/util"
+        )
+    else()
+        set(_groups
+            "no-os_drivers=${NO_OS_DIR}/drivers"
+            "no-os_include=${NO_OS_DIR}/include"
+            "no-os_util=${NO_OS_DIR}/util"
+        )
+    endif()
 
     # Project source directory
     if(DEFINED NO_OS_PROJECT_NAME)
