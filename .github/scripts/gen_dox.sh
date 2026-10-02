@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 #List of excluded driver folders for the documentation generation.
-EXCLUDE_DRV="talise navassa ad9083_api ad5940 madura koror palma"
+EXCLUDE_DRV="talise navassa ad9083_api ad5940 madura koror palma ad9088"
 
 #List of folders that are handled differently due to their uncommon structure
 uncommon_drv_list=("sd-card" "imu" "api")
