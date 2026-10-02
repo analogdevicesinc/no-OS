@@ -300,16 +300,15 @@ the Nios V toolchain), the Nios V counterpart to Vitis for Xilinx. It is a
 
 Let ``no_os_build.py`` build and open it in one step. ``--open`` builds, imports
 the project into a dedicated workspace headlessly, then launches the GUI already
-populated (the Altera analogue of ``--open`` for Vitis):
+populated (the Altera analogue of ``--open`` for Vitis). It needs the compilers
+and BSP paths in the environment — ``source`` the ``altera.sh`` setup block shown
+above, or export ``CMAKE_C_COMPILER`` / ``CMAKE_CXX_COMPILER`` /
+``CMAKE_ASM_COMPILER`` and ``ALTERA_BSP_DIR`` / ``ALTERA_BSP_LIB`` by hand:
 
 .. code-block:: bash
 
    cd no-OS
-   export CMAKE_C_COMPILER=/path/to/riscfree/toolchain/riscv32-unknown-elf/bin/riscv32-unknown-elf-gcc
-   export CMAKE_CXX_COMPILER=/path/to/riscfree/toolchain/riscv32-unknown-elf/bin/riscv32-unknown-elf-g++
-   export CMAKE_ASM_COMPILER=$CMAKE_C_COMPILER
-   export ALTERA_BSP_DIR=/path/to/hdl/projects/ad9084_ebz/nios_a5e/software/bsp
-   export ALTERA_BSP_LIB=$ALTERA_BSP_DIR/build/libhal2_bsp.a
+   source ~/altera.sh     # or export the CMAKE_* and ALTERA_BSP_* variables manually
 
    python tools/scripts/no_os_build.py build \
        --project ad9088 --variant basic_example --board agilex5 --open
