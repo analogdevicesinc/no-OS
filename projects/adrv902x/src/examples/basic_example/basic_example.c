@@ -492,10 +492,10 @@ int example_main(void)
 
 	jesd204_fsm_start(topology, JESD204_LINKS_ALL);
 
-	axi_jesd204_tx_status_read(tx_jesd);
-	axi_jesd204_rx_status_read(rx_jesd);
+	axi_jesd204_tx_status_dump(tx_jesd);
+	axi_jesd204_rx_status_dump(rx_jesd);
 #ifdef ORX_JESD_BASEADDR
-	axi_jesd204_rx_status_read(orx_jesd);
+	axi_jesd204_rx_status_dump(orx_jesd);
 #endif
 
 error_15:
