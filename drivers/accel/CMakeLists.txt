@@ -13,3 +13,9 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/adxl367)
 
 no_os_sources_ifdef(CONFIG_ACCEL_ADXL38X ${CMAKE_CURRENT_SOURCE_DIR}/adxl38x/adxl38x.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/adxl38x)
+
+no_os_sources_ifdef(CONFIG_ACCEL_ADXL37X ${CMAKE_CURRENT_SOURCE_DIR}/adxl37x/adxl37x.c)
+no_os_sources_ifdef(CONFIG_ACCEL_ADXL37X ${CMAKE_CURRENT_SOURCE_DIR}/adxl37x/adxl37x_spi.c)
+no_os_sources_ifdef(CONFIG_ACCEL_ADXL37X ${CMAKE_CURRENT_SOURCE_DIR}/adxl37x/adxl37x_i2c.c)
+no_os_sources_ifdef(CONFIG_ACCEL_IIO_ADXL37X ${CMAKE_CURRENT_SOURCE_DIR}/adxl37x/iio_adxl37x.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/adxl37x)
