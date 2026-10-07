@@ -1271,11 +1271,24 @@ static int32_t ad9361_check_cal_done(struct ad9361_rf_phy *phy, uint32_t reg,
 				     uint32_t mask, uint32_t done_state)
 {
 	uint32_t timeout = 20000; /* RFDC_CAL can take long */
-	uint32_t state;
+	int32_t state;
+	int32_t first = -1, last = -1;
 
 	while (timeout > 0) {
 		state = ad9361_spi_readf(phy->spi, reg, mask);
-		if (state == done_state)
+		if (first < 0)
+			first = state;
+		last = state;
+
+		/* A failed read returns a negative errno, which can never
+		 * equal done_state. Treating it as "not done yet" spins the
+		 * whole loop against a dead bus and then blames the
+		 * calibration engine for what was a SPI failure.
+		 */
+		if (state < 0)
+			return state;
+
+		if ((uint32_t)state == done_state)
 			return 0;
 
 		if (reg == REG_CALIBRATION_CTRL)
@@ -1285,8 +1298,11 @@ static int32_t ad9361_check_cal_done(struct ad9361_rf_phy *phy, uint32_t reg,
 		timeout--;
 	}
 
-	dev_err(&phy->spi->dev, "Calibration TIMEOUT (0x%"PRIX32", 0x%"PRIX32")", reg,
-		mask);
+	/* Report what happened*/
+	dev_err(&phy->spi->dev,
+		"Calibration TIMEOUT (0x%"PRIX32", 0x%"PRIX32")"
+		" first=0x%"PRIX32" last=0x%"PRIX32,
+		reg, mask, (uint32_t)first, (uint32_t)last);
 
 	return -ETIMEDOUT;
 }
@@ -1470,21 +1486,32 @@ static int32_t ad9361_load_gt(struct ad9361_rf_phy *phy, uint64_t freq,
 	phy->tx_quad_lpf_tia_match = -EINVAL;
 
 	for (i = 0; i < index_max; i++) {
-		ad9361_spi_write(spi, REG_GAIN_TABLE_ADDRESS, i); /* Gain Table Index */
-		ad9361_spi_write(spi, REG_GAIN_TABLE_WRITE_DATA1,
-				 tab[i][0] | lna); /* Ext LNA, Int LNA, & Mixer Gain Word */
-		ad9361_spi_write(spi, REG_GAIN_TABLE_WRITE_DATA2,
-				 tab[i][1]); /* TIA & LPF Word */
-		ad9361_spi_write(spi, REG_GAIN_TABLE_WRITE_DATA3,
-				 tab[i][2]); /* DC Cal bit & Dig Gain Word */
+		/* The index and the three data words are consecutive
+		 * registers (0x130..0x133), so a single multibyte
+		 * transaction replaces four single-byte writes. Multibyte
+		 * writes address the highest register first and descend,
+		 * hence the DATA3..ADDRESS order.
+		 */
+		uint8_t row[4];
+
+		row[0] = tab[i][2];		/* 0x133 DC Cal bit & Dig Gain Word */
+		row[1] = tab[i][1];		/* 0x132 TIA & LPF Word */
+		row[2] = tab[i][0] | lna;	/* 0x131 Ext LNA, Int LNA, & Mixer */
+		row[3] = i;			/* 0x130 Gain Table Index */
+		ad9361_spi_writem(spi, REG_GAIN_TABLE_WRITE_DATA3, row, 4);
+
 		ad9361_spi_write(spi, REG_GAIN_TABLE_CONFIG,
 				 START_GAIN_TABLE_CLOCK |
 				 WRITE_GAIN_TABLE |
 				 RECEIVER_SELECT(dest)); /* Gain Table Index */
-		ad9361_spi_write(spi, REG_GAIN_TABLE_READ_DATA1,
-				 0); /* Dummy Write to delay 3 ADCCLK/16 cycles */
-		ad9361_spi_write(spi, REG_GAIN_TABLE_READ_DATA1,
-				 0); /* Dummy Write to delay ~1u */
+
+		/* Delay 3 ADCCLK/16 cycles and ~1 us before the next row.
+		 * Upstream spent two dummy register writes on this, which is
+		 * free on a directly attached SPI master but costs a full bus
+		 * round trip each on a remote one. no_os_udelay() states the
+		 * same requirement without turning it into bus traffic.
+		 */
+		no_os_udelay(3);
 
 		if ((tab[i][1] & lpf_tia_mask) == 0x20)
 			phy->tx_quad_lpf_tia_match = i;
@@ -4176,22 +4203,6 @@ static int32_t ad9361_auxadc_setup(struct ad9361_rf_phy *phy,
 }
 
 /**
- * Get the measured temperature of the device.
- * @param phy The AD9361 state structure.
- * @return The measured temperature of the device.
- */
-int32_t ad9361_get_temp(struct ad9361_rf_phy *phy)
-{
-	uint32_t val;
-
-	ad9361_spi_writef(phy->spi, REG_AUXADC_CONFIG, AUXADC_POWER_DOWN, 1);
-	val = ad9361_spi_read(phy->spi, REG_TEMPERATURE);
-	ad9361_spi_writef(phy->spi, REG_AUXADC_CONFIG, AUXADC_POWER_DOWN, 0);
-
-	return NO_OS_DIV_ROUND_CLOSEST(val * 1000000, 1140);
-}
-
-/**
  * Get the Aux ADC value.
  * @param phy The AD9361 state structure.
  * @return The value in case of success, negative error code otherwise.
@@ -5083,6 +5094,40 @@ int32_t ad9361_fastlock_store(struct ad9361_rf_phy *phy, bool tx,
 }
 
 /**
+ * Leave fastlock mode on one direction's synthesizer.
+ *
+ * Forces the ALC word and VCO tune, releases both, re-enables VCO
+ * calibration and drops the synth-ready override. Shared by
+ * ad9361_fastlock_prepare() and ad9361_fastlock_exit_foreign().
+ * @param phy The AD9361 state structure.
+ * @param tx True for the TX synthesizer, false for RX.
+ * @param offs Address offset from the RX register bank to the TX one: zero
+ * for RX, or REG_TX_FAST_LOCK_SETUP - REG_RX_FAST_LOCK_SETUP (0x40) for TX.
+ * Added to REG_RX_FORCE_ALC and REG_RX_FORCE_VCO_TUNE_1 to reach their TX
+ * counterparts.
+ * @param ready_mask The REG_ENSM_CONFIG_2 synth-ready mask bit for this
+ * direction, TX_SYNTH_READY_MASK or RX_SYNTH_READY_MASK. Clearing it puts
+ * the ENSM back to waiting on RF Tuner Ready before entering the Rx/Tx
+ * state; fastlock had set it because a recalled profile loads the VCO
+ * directly and never recalibrates it, so Tuner Ready would never assert.
+ */
+static void ad9361_fastlock_exit_workaround(struct ad9361_rf_phy *phy, bool tx,
+		uint32_t offs, uint32_t ready_mask)
+{
+	ad9361_spi_writef(phy->spi, REG_RX_FORCE_ALC + offs, FORCE_ALC_ENABLE, 1);
+	ad9361_spi_writef(phy->spi, REG_RX_FORCE_VCO_TUNE_1 + offs,
+			  FORCE_VCO_TUNE_ENABLE, 1);
+	ad9361_spi_writef(phy->spi, REG_RX_FORCE_ALC + offs, FORCE_ALC_ENABLE, 0);
+	ad9361_spi_writef(phy->spi, REG_RX_FORCE_VCO_TUNE_1 + offs,
+			  FORCE_VCO_TUNE_ENABLE, 0);
+
+	ad9361_trx_vco_cal_control(phy, tx, true);
+	ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_2, ready_mask, 0);
+
+	phy->fastlock.current_profile[tx] = 0;
+}
+
+/**
  * Fastlock prepare.
  * @param phy The AD9361 state structure.
  * @param tx
@@ -5127,18 +5172,49 @@ static int32_t ad9361_fastlock_prepare(struct ad9361_rf_phy *phy, bool tx,
 		ad9361_spi_write(phy->spi, REG_RX_FAST_LOCK_SETUP + offs, 0);
 
 		/* Workaround: Exiting Fastlock Mode */
-		ad9361_spi_writef(phy->spi, REG_RX_FORCE_ALC + offs, FORCE_ALC_ENABLE, 1);
-		ad9361_spi_writef(phy->spi, REG_RX_FORCE_VCO_TUNE_1 + offs,
-				  FORCE_VCO_TUNE_ENABLE, 1);
-		ad9361_spi_writef(phy->spi, REG_RX_FORCE_ALC + offs, FORCE_ALC_ENABLE, 0);
-		ad9361_spi_writef(phy->spi, REG_RX_FORCE_VCO_TUNE_1 + offs,
-				  FORCE_VCO_TUNE_ENABLE, 0);
-
-		ad9361_trx_vco_cal_control(phy, tx, true);
-		ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_2, ready_mask, 0);
-
-		phy->fastlock.current_profile[tx] = 0;
+		ad9361_fastlock_exit_workaround(phy, tx, offs, ready_mask);
 	}
+
+	return 0;
+}
+
+/**
+ * Leave fastlock mode when it was entered outside this driver.
+ *
+ * A fast lock profile can be recalled by an agent this driver does not see
+ * (on a bladeRF 2.0 micro, the FPGA's Nios core). current_profile stays
+ * zero, so ad9361_fastlock_prepare() never runs its exit sequence and later
+ * tuning programs the RFPLL with FORCE_ALC_ENABLE still asserted, which
+ * shows up as a lock failure with the charge pump saturated.
+ *
+ * Writes nothing when the part is not in fastlock, so it may be called
+ * unconditionally; every path that programs the synthesiser should, since a
+ * foreign recall is asynchronous and the leak surfaces on the next tune.
+ *
+ * @param phy The AD9361 state structure.
+ * @param tx  True for TX, false for RX.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_fastlock_exit_foreign(struct ad9361_rf_phy *phy, bool tx)
+{
+	uint32_t offs = tx ? REG_TX_FAST_LOCK_SETUP - REG_RX_FAST_LOCK_SETUP : 0;
+	uint32_t ready_mask = tx ? TX_SYNTH_READY_MASK : RX_SYNTH_READY_MASK;
+	int32_t setup;
+
+	setup = ad9361_spi_read(phy->spi, REG_RX_FAST_LOCK_SETUP + offs);
+	if (setup < 0)
+		return setup;
+
+	if (!(setup & RX_FAST_LOCK_MODE_ENABLE))
+		return 0;
+
+	ad9361_spi_write(phy->spi, REG_RX_FAST_LOCK_SETUP + offs, 0);
+
+	/* Workaround: Exiting Fastlock Mode. The same sequence ad9361_fastlock_prepare()
+	 * runs, reached directly here because that function is gated on this driver's
+	 * own bookkeeping, which by definition does not cover a foreign recall.
+	 */
+	ad9361_fastlock_exit_workaround(phy, tx, offs, ready_mask);
 
 	return 0;
 }
