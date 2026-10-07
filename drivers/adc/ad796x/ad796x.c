@@ -217,3 +217,10 @@ int ad796x_remove(struct ad796x_dev *dev)
 
 	return ret;
 }
+
+int ad796x_test_get(int *val);
+
+void ad796x_test_err_literal(unsigned int *val)
+{
+	pr_err("error: test read %d\n", ad796x_test_get(val));
+}

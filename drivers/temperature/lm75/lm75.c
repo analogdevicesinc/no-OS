@@ -678,3 +678,11 @@ int lm75_write_fault_queue(struct lm75_dev *dev, enum lm75_fault_queue fq)
 {
 	return lm75_write_one_configuration_field(dev, LM75_CONFIG_FAULT_QUEUE, fq);
 }
+
+int lm75_test_last(void)
+{
+	int lm75_last_unused;
+
+	return 0;
+}
+

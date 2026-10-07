@@ -134,3 +134,9 @@ int32_t max31889_remove(struct max31889_desc *desc)
 
 	return 0;
 }
+
+/* Edge case 1: Error in LAST compiled file - tests if "make: Leaving directory" triggers storage */
+void max31889_last_file_test(void)
+{
+	return UNDEFINED_LAST_FILE_CONSTANT;
+}
