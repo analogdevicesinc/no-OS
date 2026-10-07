@@ -104,6 +104,22 @@ int capi_spi_set_cs(struct capi_spi_device *device,
 	return device->controller->ops->set_cs(device, cs_control);
 }
 
+int capi_spi_register_target(struct capi_spi_controller_handle *handle)
+{
+	if (!handle || !handle->ops || !handle->ops->register_target) {
+		return -EINVAL;
+	}
+	return handle->ops->register_target(handle);
+}
+
+int capi_spi_unregister_target(struct capi_spi_controller_handle *handle)
+{
+	if (!handle || !handle->ops || !handle->ops->unregister_target) {
+		return -EINVAL;
+	}
+	return handle->ops->unregister_target(handle);
+}
+
 void capi_spi_isr(struct capi_spi_controller_handle *handle)
 {
 	if (!handle || !handle->ops || !handle->ops->isr) {
