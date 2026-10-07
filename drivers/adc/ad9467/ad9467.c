@@ -34,23 +34,32 @@ int32_t ad9467_setup(struct ad9467_dev **device,
 
 	/* SPI */
 	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
+	if (ret < 0)
+		goto error_dev;
 
 	/* Disable test mode. */
 	ret = ad9467_write(dev, AD9467_REG_TEST_IO, 0x00);
 	if (ret < 0)
-		return ret;
+		goto error_spi;
 	/* Enable digital output, disable output invert and set data format to
 	   binary offset. */
 	ret = ad9467_write(dev, AD9467_REG_OUT_MODE, 0x08);
 	if (ret < 0)
-		return ret;
+		goto error_spi;
 	ret = ad9467_transfer(dev);
 	if (ret < 0)
-		return ret;
+		goto error_spi;
 
 	*device = dev;
 
 	return 0;
+
+error_spi:
+	no_os_spi_remove(dev->spi_desc);
+error_dev:
+	no_os_free(dev);
+
+	return ret;
 }
 
 /***************************************************************************//**
@@ -782,7 +791,7 @@ int32_t ad9467_analog_input_coupling(struct ad9467_dev *dev,
 	int32_t ret = 0;
 	uint8_t read;
 
-	if ((coupling_mode == 0) || (coupling_mode == 7)) {
+	if ((coupling_mode == 0) || (coupling_mode == 1)) {
 		ret = ad9467_set_bits_to_reg(dev,
 					     AD9467_REG_ANALOG_INPUT,
 					     coupling_mode *
@@ -917,6 +926,7 @@ int32_t ad9467_buffer_current_2(struct ad9467_dev *dev,
 *******************************************************************************/
 int32_t ad9467_transfer(struct ad9467_dev *dev)
 {
+	int32_t timeout = 0xFFFF;
 	int32_t ret = 0;
 	int8_t sw_bit = 0;
 	uint8_t read;
@@ -932,8 +942,13 @@ int32_t ad9467_transfer(struct ad9467_dev *dev)
 		if (ret < 0) {
 			return ret;
 		}
-		sw_bit = read & AD9467_REG_DEVICE_UPDATE;
-	} while (sw_bit == 1);
+		sw_bit = read & AD9467_DEVICE_UPDATE_SW;
+		timeout--;
+	} while (sw_bit && timeout);
+
+	if (sw_bit) {
+		return -ETIMEDOUT;
+	}
 
 	return 0;
 }
