@@ -16,6 +16,8 @@
 #include "no_os_clk.h"
 #include "no_os_gpio.h"
 
+struct axi_clkgen;
+
 struct jesd204_tx_config {
 	uint8_t device_id;
 	uint8_t bank_id;
@@ -60,6 +62,10 @@ struct axi_jesd204_tx {
 	enum jesd204_encoder encoder;
 	/** Lane Clock */
 	struct no_os_clk_desc *lane_clk;
+	/** Optional device-clock generator. When set, the link FSM trims it
+	 *  to the per-path device clock (link_rate * data_path_width /
+	 *  tpl_data_path_width), like Linux; NULL leaves it unchanged. */
+	struct axi_clkgen *device_clkgen;
 	/** JESD204 FSM device */
 	struct jesd204_dev *jdev;
 	/** Optional GT reset GPIOs (Versal) */
