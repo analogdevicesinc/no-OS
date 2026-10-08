@@ -34,6 +34,7 @@
 #define JESD204_RX_REG_LINK_DISABLE		0xc0
 #define JESD204_RX_REG_LINK_STATE		0xc4
 #define JESD204_RX_REG_LINK_CLK_RATIO	0xc8
+#define JESD204_RX_REG_DEVICE_CLK_RATIO	0xcc
 
 #define JESD204_RX_REG_SYSREF_CONF		0x100
 #define JESD204_RX_REG_SYSREF_CONF_SYSREF_DISABLE	NO_OS_BIT(0)
@@ -205,8 +206,13 @@ int32_t axi_jesd204_rx_lane_clk_disable(struct axi_jesd204_rx *jesd)
 	return axi_jesd204_rx_write(jesd, JESD204_RX_REG_LINK_DISABLE, 0x1);
 }
 
+static unsigned long axi_jesd204_rx_calc_device_clk(struct axi_jesd204_rx *jesd,
+		unsigned long link_rate);
+
 /**
- * @brief Read status of the JESD204 Receive Peripherial
+ * @brief Read status of the JESD204 Receive Peripherial. Prints the
+ *        link-level status; when JESD204_DUMP_LANE_STATUS is defined it also
+ *        prints the per-lane info for every lane (Linux "jesd_status" style).
  * @param jesd - The device structure.
  * @return Returns 0 in case of success or negative error code otherwise.
  */
@@ -243,9 +249,49 @@ uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd)
 		       clock_rate / 1000, clock_rate % 1000);
 	}
 
-	clock_rate = jesd->device_clk_khz;
+	if (jesd->encoder == JESD204_ENCODER_64B66B)
+		clock_rate = NO_OS_DIV_ROUND_CLOSEST(jesd->lane_clk_khz, 66);
+	else
+		clock_rate = NO_OS_DIV_ROUND_CLOSEST(jesd->lane_clk_khz, 40);
 	printf("\tReported Link Clock: %"PRIu32".%.3"PRIu32" MHz\n",
 	       clock_rate / 1000, clock_rate % 1000);
+
+	if (jesd->version >= ADI_AXI_PCORE_VER(1, 7, 'a')) {
+		uint32_t device_clk_ratio;
+		uint32_t link_rate_khz;
+
+		if (jesd->encoder == JESD204_ENCODER_64B66B)
+			link_rate_khz = NO_OS_DIV_ROUND_CLOSEST(jesd->lane_clk_khz, 66);
+		else
+			link_rate_khz = NO_OS_DIV_ROUND_CLOSEST(jesd->lane_clk_khz, 40);
+
+		axi_jesd204_rx_read(jesd, JESD204_RX_REG_DEVICE_CLK_RATIO,
+				    &device_clk_ratio);
+		if (device_clk_ratio == 0) {
+			printf("\tMeasured Device Clock: off\n");
+		} else {
+			clock_rate = NO_OS_DIV_ROUND_CLOSEST_ULL(100000ULL *
+					device_clk_ratio, 1ULL << 16);
+			printf("\tMeasured Device Clock: %"PRIu32".%.3"PRIu32" MHz\n",
+			       clock_rate / 1000, clock_rate % 1000);
+		}
+
+		clock_rate = jesd->device_clk_khz;
+		printf("\tReported Device Clock: %"PRIu32".%.3"PRIu32" MHz\n",
+		       clock_rate / 1000, clock_rate % 1000);
+
+		clock_rate = axi_jesd204_rx_calc_device_clk(jesd, link_rate_khz);
+		printf("\tDesired Device Clock: %"PRIu32".%.3"PRIu32" MHz\n",
+		       clock_rate / 1000, clock_rate % 1000);
+		/*
+		 * Only printed when the ratio is not 1:1 so Tx/ORx (and Linux
+		 * parity for the common case) stay unchanged.
+		 */
+		if (jesd->data_path_width != jesd->tpl_data_path_width)
+			printf("\t  (data-path ratio %"PRIu32"/%"PRIu32
+			       "; desired is minimum, fixed clock may run with headroom)\n",
+			       jesd->data_path_width, jesd->tpl_data_path_width);
+	}
 
 	if (!link_disabled) {
 		l_status = (jesd->encoder == JESD204_ENCODER_8B10B) ?
@@ -284,6 +330,17 @@ uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd)
 		printf("\tExternal reset is %s\n",
 		       (link_disabled & 0x2) ? "asserted" : "deasserted");
 	}
+
+	/* Per-lane info is verbose; print it only when explicitly requested
+	 * via JESD204_DUMP_LANE_STATUS (e.g. add_compile_definitions). */
+#ifdef JESD204_DUMP_LANE_STATUS
+	{
+		uint32_t lane;
+
+		for (lane = 0; lane < jesd->num_lanes; lane++)
+			axi_jesd204_rx_laneinfo_read(jesd, lane);
+	}
+#endif
 
 	return 0;
 }
@@ -611,6 +668,10 @@ int32_t axi_jesd204_rx_apply_config_legacy(struct axi_jesd204_rx *jesd,
 	return 0;
 }
 
+/*
+ * Mirrors Linux axi_jesd204_rx_calc_device_clk() so the "Desired Device
+ * Clock" line matches.
+ */
 static unsigned long axi_jesd204_rx_calc_device_clk(struct axi_jesd204_rx *jesd,
 		unsigned long link_rate)
 {
