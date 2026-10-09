@@ -41,7 +41,8 @@ int example_main()
 	if (ret)
 		goto remove_adf4382;
 
-	ret = adf4382_set_phase_adjust(dev, 1);
+	/* 1 ps, expressed in the femtoseconds. */
+	ret = adf4382_set_phase_adjust(dev, 1 * KILO);
 
 remove_adf4382:
 	adf4382_remove(dev);
