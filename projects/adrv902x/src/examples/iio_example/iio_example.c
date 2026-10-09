@@ -68,6 +68,9 @@ int example_main(void)
 	adi_adrv9025_AgcCfg_t agcConfig_init_param = { 0 };
 	struct ad9528_platform_data ad9528_pdata = { 0 };
 	struct ad9528_channel_spec ad9528_channels[14];
+	/* set ADRV chip version: ADRV9025, 9022, 9026 or 9029.
+	 * ADRV_VERSION is defined in src/common/common_data.h */
+	enum adrv9025_device_id adrv_version = ADRV_VERSION;
 	struct ad9528_init_param ad9528_param;
 	struct axi_clkgen *orx_clkgen = NULL;
 	struct axi_clkgen *rx_clkgen = NULL;
@@ -370,6 +373,7 @@ int example_main(void)
 	adrv9025_set_agc_params(&agcConfig_init_param);
 
 	adrv9025_init_par.agcConfig_init_param = &agcConfig_init_param;
+	adrv9025_init_par.adrv_version = adrv_version;
 
 	status = adrv9025_init(&phy, &adrv9025_init_par);
 	if (status) {
