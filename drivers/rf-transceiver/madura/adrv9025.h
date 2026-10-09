@@ -61,6 +61,7 @@ enum adrv9025_tx_ext_info {
 
 enum adrv9025_device_id {
 	ADRV9025_ID_ADRV9025,
+	ADRV9025_ID_ADRV9022,
 	ADRV9025_ID_ADRV9026,
 	ADRV9025_ID_ADRV9029,
 };
@@ -105,6 +106,8 @@ struct adrv9025_rf_phy {
 	struct axi_adc			*rx_adc;
 	struct axi_dac			*tx_dac;
 	struct axi_adc			*orx_adc;
+
+	enum adrv9025_device_id	adrv_version;
 };
 
 struct adrv9025_init_param {
@@ -113,6 +116,7 @@ struct adrv9025_init_param {
 	struct adi_adrv9025_Device	*adrv9025_device;
 	char				*streamImageFile;
 	adi_adrv9025_AgcCfg_t  		*agcConfig_init_param;
+	enum adrv9025_device_id	adrv_version;
 };
 
 /* Initialize the device. */
