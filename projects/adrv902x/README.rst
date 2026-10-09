@@ -157,11 +157,14 @@ driver. The output looks like the one below:
    adrv9025-phy Rev 0, API version: 7.0.0.14 found
    tx_adxcvr: OK (9830400 kHz)
    rx_adxcvr: OK (9830400 kHz)
-   adrv9025-phy Rev 176, Firmware 6.4.0.6 API version: 7.0.0.14 Stream version: 9.4.0.1 successfully initialized via jesd204-fsm
+   adrv9025-phy Rev 176, Firmware 7.0.0.11 API version: 7.0.0.14 Stream version: 9.4.0.1 successfully initialized via jesd204-fsm
    tx_jesd status:
        Link is enabled
-       Measured Link Clock: 245.778 MHz
+       Measured Link Clock: 245.760 MHz
        Reported Link Clock: 245.760 MHz
+       Measured Device Clock: 245.760 MHz
+       Reported Device Clock: 245.760 MHz
+       Desired Device Clock: 245.760 MHz
        Lane rate: 9830.400 MHz
        Lane rate / 40: 245.760 MHz
        LMFC rate: 7.680 MHz
@@ -171,15 +174,34 @@ driver. The output looks like the one below:
        SYSREF alignment error: No
    rx_jesd status:
        Link is enabled
-       Measured Link Clock: 245.778 MHz
+       Measured Link Clock: 245.760 MHz
        Reported Link Clock: 245.760 MHz
+       Measured Device Clock: 122.881 MHz
+       Reported Device Clock: 122.880 MHz
+       Desired Device Clock: 122.880 MHz
+         (data-path ratio 4/8; desired is minimum, fixed clock may run with headroom)
        Lane rate: 9830.400 MHz
        Lane rate / 40: 245.760 MHz
-       LMFC rate: 7.680 MHz
+       LMFC rate: 3.840 MHz
        Link status: DATA
        SYSREF captured: Yes
        SYSREF alignment error: No
    Bye
+
+By default ``axi_jesd204_rx_status_read()`` prints link-level information
+only. To also print the per-lane details (CGS/ILAS state, lane errors and
+the decoded link parameters for every RX/ORx lane), build with the
+``JESD204_DUMP_LANE_STATUS`` define. It must be set on the ``no-os``
+target, because the JESD204 driver is compiled into the library rather
+than the application:
+
+.. code-block:: cmake
+
+   target_compile_definitions(no-os PUBLIC JESD204_DUMP_LANE_STATUS)
+
+This applies to all three example variants (and to any project that calls
+the status read). TX has no per-lane status; ORx uses the RX driver and is
+covered by the same define.
 
 DMA Example
 ~~~~~~~~~~~
