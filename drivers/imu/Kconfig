@@ -12,6 +12,7 @@ if IMU
 config IMU_ADIS
     depends on SPI
     select GPIO
+    select I2C
     bool "Enable ADIS core driver"
     default n
     help
@@ -75,6 +76,17 @@ config IMU_ADIS1657X
 config IMU_IIO_ADIS1657X
     select IMU_ADIS1657X
     bool "Enable ADIS1657X IIO driver"
+    default n
+
+config IMU_ADIS16607
+    select IMU_ADIS
+    select I2C
+    bool "Enable ADIS16607 IMU driver"
+    default n
+
+config IMU_IIO_ADIS16607
+    select IMU_ADIS16607
+    bool "Enable ADIS16607 IIO driver"
     default n
 
 config IMU_IIO_ADIS_COMMON
