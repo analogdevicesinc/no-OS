@@ -118,6 +118,52 @@ reference designs for many boards. Follow the
 `ADI HDL build guide <https://developer.analog.com/docs/hdl/user_guide/build_hdl.html>`__
 to generate a ``system_top.xsa`` for your board.
 
+Altera / Nios V
+~~~~~~~~~~~~~~~
+
+Used Hardware
+^^^^^^^^^^^^^
+
+* An Altera/Intel FPGA board built around a Nios V soft CPU, programmed with
+  a hardware design that includes a JTAG UART (Intel Quartus/Platform
+  Designer reference design with ``hw/`` and ``sw/`` directories).
+
+Connections
+^^^^^^^^^^^
+
+No external hardware connections are required. Console output goes over the
+board's JTAG UART, accessed through the Nios V BSP's own HAL stdio
+implementation rather than a dedicated no-OS UART driver — connect over the
+Quartus/Nios V tools' JTAG terminal (e.g. ``nios2-terminal`` /
+``niosv-terminal``), not a plain serial port.
+
+Build Command
+^^^^^^^^^^^^^
+
+The Altera platform uses the CMake/Ninja build system via the
+``no_os_build.py`` helper script. Available variant/board: ``altera``.
+
+For toolchain setup, BSP resolution and prerequisites, see the
+:doc:`Altera / Nios V CMake build guide </build_guides/build_altera_cmake>`.
+
+.. code-block:: bash
+
+   cd no-OS
+
+   # point at your local Nios V hardware reference design (hw/, sw/)
+   export ALTERA_NIOSV_REPO_DIR=/path/to/nios_v_reference_design
+   # full paths to the Nios V GCC cross compiler (C, C++ and ASM are all required)
+   export CMAKE_C_COMPILER=/path/to/riscv32-unknown-elf-gcc
+   export CMAKE_CXX_COMPILER=/path/to/riscv32-unknown-elf-g++
+   export CMAKE_ASM_COMPILER=/path/to/riscv32-unknown-elf-gcc
+
+   # build
+   python tools/scripts/no_os_build.py build \
+      --project hello_world --variant altera --board altera
+
+   # flash (requires niosv-download from the Nios V tools)
+   cmake --build build/hello_world-altera-altera --target flash
+
 Expected Output
 ---------------
 

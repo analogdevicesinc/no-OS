@@ -14,7 +14,8 @@
 		"board_configs/xilinx/CMakePresets.json",
 		"board_configs/linux-userspace/CMakePresets.json",
 		"board_configs/win/CMakePresets.json",
-		"board_configs/mac/CMakePresets.json"
+		"board_configs/mac/CMakePresets.json",
+		"board_configs/altera/CMakePresets.json"
 	],
 
 	"configurePresets": [

@@ -109,3 +109,10 @@ WSL2
 
     build_guides/build_wsl
 
+ALTERA / NIOS V
+================
+.. toctree::
+    :maxdepth: 1
+
+    build_guides/build_altera_cmake
+

@@ -19,6 +19,7 @@ logs
 log.txt
 mbed-app-json
 .mbed
+_deps
 projects/*/build_*
 dfp_drivers
 aducm_project
@@ -29,7 +30,7 @@ aducm_build
 .github/PULL_REQUEST_TEMPLATE.md
 libraries/ftd2xx
 
-# Dependencies fetched in-tree at configure time (previously git submodules)
+# Dependencies fetched in-tree at configure time
 libraries/lwip/
 libraries/lvgl/
 libraries/mbedtls/
@@ -41,6 +42,7 @@ libraries/TMC-API/
 libraries/precision-converters-library/
 libraries/pico-sdk/
 
+# Compiled objects and binaries
 *.a
 *.o
 *.d
@@ -50,6 +52,14 @@ libraries/pico-sdk/
 *.sof
 *.sopcinfo
 __pycache__/
+
+# CMake build artifacts
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+*.ninja
+.ninja_*
 
 local_variables.mk
 *generated*

@@ -135,6 +135,13 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     message(STATUS "No CMAKE_BUILD_TYPE set, defaulting to RelWithDebInfo")
 endif()
 
+if(PLATFORM STREQUAL "altera")
+    include(altera/altera_toolchain_env)
+    _altera_require_compiler(C)
+    _altera_require_compiler(CXX)
+    _altera_require_compiler(ASM)
+endif()
+
 # Board compatibility checking
 # include(BoardCompatibility)
 
