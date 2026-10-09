@@ -26,7 +26,8 @@ enum capi_pint_trigger {
 	CAPI_PINT_TRIGGER_EDGE_RISING = 0x00U,  /**< Rising edge trigger */
 	CAPI_PINT_TRIGGER_EDGE_FALLING = 0x01U, /**< Falling edge trigger */
 	CAPI_PINT_TRIGGER_LEVEL_LOW = 0x02U,    /**< Level low trigger */
-	CAPI_PINT_TRIGGER_LEVEL_HIGH = 0x03U    /**< Level high trigger */
+	CAPI_PINT_TRIGGER_LEVEL_HIGH = 0x03U,    /**< Level high trigger */
+	CAPI_PINT_TRIGGER_EDGE_BOTH = 0x04U     /**< Both (rising and falling) edge trigger */
 };
 
 /**
