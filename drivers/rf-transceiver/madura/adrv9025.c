@@ -1267,6 +1267,8 @@ int32_t adrv9025_init(struct adrv9025_rf_phy **dev,
 
 	strncpy(phy->platformFiles.streamImageFile, init_param->streamImageFile,
 		sizeof(phy->platformFiles.streamImageFile));
+		
+	phy->adrv_version = init_param->adrv_version;
 
 	ret = adrv9025_setup(phy);
 	if (ret < 0) {
