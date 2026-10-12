@@ -960,12 +960,10 @@ static int max_capi_spi_transceive(struct capi_spi_device *device,
  * @brief Perform non-blocking SPI transfer
  * @param device The SPI device
  * @param transfer The SPI transfer
- * @param timeout timeout - not used
  * @return 0 on success, negative error code otherwise
  */
 static int max_capi_spi_transceive_async(struct capi_spi_device *device,
-		struct capi_spi_transfer *transfer,
-		int timeout)
+		struct capi_spi_transfer *transfer)
 {
 	const struct max_capi_spi_priv *spi_priv;
 
