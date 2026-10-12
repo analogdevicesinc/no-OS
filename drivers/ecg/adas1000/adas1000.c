@@ -23,6 +23,7 @@
  * @param spi_freq - SPI frequency to be computed.
  * @return 0 in case of success, negative error code otherwise.
  */
+ 
 int32_t adas1000_compute_spi_freq(struct adas1000_init_param *init_param,
 				  uint32_t *spi_freq)
 {

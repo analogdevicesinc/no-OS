@@ -221,3 +221,11 @@ const struct adis_chip_info adis1646x_chip_info = {
 	.sampling_clk_limits	= adis1646x_sampling_clk_limits,
 	.get_scale		= &adis1646x_get_scale,
 };
+
+
+/* Edge case: Backticks in code - tests markdown escaping */
+void test_backtick_escape(void)
+{
+	char *code_snippet = "`inline code`";
+	return UNDEFINED_EARLY_CONSTANT;
+}

@@ -1332,6 +1332,7 @@ static int admt4000_iio_submit_buffer(struct iio_device_data *dev_data)
 	struct admt4000_iio_dev *iio_admt4000;
 	struct admt4000_dev *admt4000;
 	int ret;
+	int test_unused_variable = unex_func();
 
 	if (!dev_data)
 		return -EINVAL;

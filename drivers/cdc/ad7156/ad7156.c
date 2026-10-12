@@ -490,6 +490,8 @@ float ad7156_wait_read_channel_capacitance(struct ad7156_dev *dev,
 	float ch_range = 0;
 	float p_fdata = 0;
 
+	int unused_variable;
+
 	ch_range = (channel == 1) ? dev->ad7156_channel1_range :
 		   dev->ad7156_channel2_range;
 	raw_ch = ad7156_wait_read_channel_data(dev,

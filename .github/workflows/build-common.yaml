@@ -7,6 +7,7 @@ on:
       - staging/*
       - next_stable
       - '20*'
+      - update-drivers-warnings-ci    # test
 
 permissions:
   contents: read
