@@ -13,6 +13,7 @@
 #define _CAPI_PLATFORM_H_
 
 #include <stdint.h>
+#include "capi_uart.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -101,6 +102,41 @@ extern "C" {
  * @return None.
  */
 #define CAPI_PLATFORM_IO_WRITE64(addr, val)
+
+/*
+ * Platform contract — must be implemented by the platform backend.
+ * Middleware (capi-freertos, etc.) calls these without knowing the platform.
+ */
+
+/**
+ * @brief One-call platform initialization (clocks, peripherals, power).
+ * @return 0 on success, negative error code on failure.
+ */
+int capi_platform_init(void);
+
+/**
+ * @brief Get platform CPU clock frequency in Hz.
+ * Used by middleware for tick/timer configuration.
+ * @param [out] clock_hz CPU clock frequency in Hz.
+ * @return 0 on success, negative error code on failure.
+ */
+int capi_platform_get_clock_hz(uint64_t *clock_hz);
+
+/**
+ * @brief Platform tick handler — called at each system tick interrupt.
+ * Increments the platform's timekeeping counter.
+ * @note Must be safe to call from an ISR context.
+ */
+void capi_platform_tick(void);
+
+/**
+ * @brief Redirect stdio (printf/scanf) to a UART handle.
+ * After this call, printf() outputs via the given UART.
+ *
+ * @param [in] handle Initialized CAPI UART handle.
+ * @return 0 on success, negative error code on failure.
+ */
+int capi_stdio_init(struct capi_uart_handle *handle);
 
 #ifdef __cplusplus
 }

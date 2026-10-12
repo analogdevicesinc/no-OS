@@ -11,6 +11,15 @@ menuconfig CAPI
 
 if CAPI
 
+config CAPI_PLATFORM
+	bool "CAPI platform contract"
+	default n
+	help
+	  Build the platform contract backend (capi_platform_init,
+	  capi_platform_get_clock_hz, capi_platform_tick, capi_stdio_init).
+	  Middleware (capi-freertos, etc.) calls these without knowing the
+	  platform. stdio redirection additionally requires CAPI_UART.
+
 config CAPI_UART
 	bool "CAPI UART"
 	default n
