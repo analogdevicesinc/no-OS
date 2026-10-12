@@ -796,12 +796,10 @@ static void stm32_capi_spi_transceive_dma_done(void *ctx)
  * @brief Perform an asynchronous SPI transceive operation using interrupts.
  * @param device - Pointer to the SPI device descriptor.
  * @param transfer - Pointer to the transfer descriptor.
- * @param timeout - Timeout value in milliseconds.
  * @return 0 on success, negative error code otherwise.
  */
 static int stm32_capi_spi_transceive_async(struct capi_spi_device *device,
-		struct capi_spi_transfer *transfer,
-		int timeout)
+		struct capi_spi_transfer *transfer)
 {
 	struct stm32_spi_priv_handle *priv_handle;
 	struct stm32_spi_device_extra *dev_extra;
