@@ -38,6 +38,12 @@ struct stm32_spi_priv_handle {
 	struct capi_dma_chan *rxdma_ch;
 	/** TX DMA Channel */
 	struct capi_dma_chan *txdma_ch;
+	/** Per-channel DMA configuration attached to each DMA transfer */
+	struct stm32_dma_chan_extra_config *rxdma_extra;
+	struct stm32_dma_chan_extra_config *txdma_extra;
+	/** Minimum transfer length (bytes) at which transceive()/transceive_async()
+	 *  dispatch to DMA instead of PIO/IT. */
+	uint32_t dma_threshold;
 	/** CAPI callback */
 	capi_spi_callback_t callback;
 	/** CAPI callback argument */
@@ -84,6 +90,12 @@ struct stm32_spi_priv_handle {
 	/** Key of the last device config applied in the sync path. Reconfigure
 	 *  when it changes (CS, clock mode, bit order or speed). */
 	uint64_t sync_cfg_key;
+	/** True when this controller is configured as an SPI target (slave).
+	 *  Set from config->is_target at init and toggled by the
+	 *  register_target/unregister_target ops. Selects SPI_MODE_SLAVE
+	 *  (with software NSS, so the slave is permanently selected and needs
+	 *  no NSS pin) in the peripheral config path. */
+	bool is_target;
 };
 
 #define CAPI_SPI_CONTROLLER_HANDLE_STM32_INIT() \

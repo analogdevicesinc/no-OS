@@ -94,6 +94,17 @@ struct stm32_dma_chan_extra_config {
 	DMA_HandleTypeDef *hdma;
 	/** Channel Number */
 	uint32_t ch_num;
+	/**
+	 * NVIC line for this channel.
+	 *
+	 * Selects how stm32_capi_dma_xfer_start() arms the channel: non-zero
+	 * uses HAL_DMA_Start_IT() and completes through the DMA interrupt,
+	 * zero uses HAL_DMA_Start() followed by a blocking
+	 * HAL_DMA_PollForTransfer(). Peripherals that enable their DMA request
+	 * only after both channels are started -- SPI among them -- cannot make
+	 * progress under the polling path and must set this.
+	 */
+	uint32_t irq_num;
 	/** Memory Increment */
 	bool mem_increment;
 	/** Peripheral Increment */

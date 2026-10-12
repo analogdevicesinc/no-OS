@@ -12,6 +12,18 @@ if(PLATFORM STREQUAL "stm32" AND CONFIG_CAPI_I2C)
 	)
 endif()
 
+if(PLATFORM STREQUAL "stm32" AND CONFIG_CAPI_DMA)
+	target_sources(capi_selftest PRIVATE
+		${CMAKE_CURRENT_SOURCE_DIR}/src/platform/stm32/spi_dma_platform_init.c
+	)
+endif()
+
+if(PLATFORM STREQUAL "stm32" AND CONFIG_CAPI_SPI)
+	target_sources(capi_selftest PRIVATE
+		${CMAKE_CURRENT_SOURCE_DIR}/src/platform/stm32/spi_platform_init.c
+	)
+endif()
+
 if(CONFIG_CAPI_SELFTEST_BASIC_EXAMPLE)
     target_sources(capi_selftest PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/basic/basic_example.c
