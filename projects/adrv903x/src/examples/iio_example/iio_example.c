@@ -358,6 +358,11 @@ int example_main()
 		goto error_phy;
 	}
 
+	/* Let the JESD204 FSM trim each clkgen to its computed per-path
+	 * device clock (Linux-style). */
+	rx_jesd->device_clkgen = rx_clkgen;
+	tx_jesd->device_clkgen = tx_clkgen;
+
 	/*
 	 * ----------------------------------------------------------------
 	 * AXI DAC core initialization — DDS mode.
