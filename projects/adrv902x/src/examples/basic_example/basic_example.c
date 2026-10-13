@@ -392,6 +392,14 @@ int example_main(void)
 	if (status)
 		goto error_11;
 
+	/* Let the JESD204 FSM trim each clkgen to its computed per-path device
+	 * clock (Linux-style) instead of the fixed ADRV9025_DEVICE_CLK_KHZ. */
+	rx_jesd->device_clkgen = rx_clkgen;
+	tx_jesd->device_clkgen = tx_clkgen;
+#ifdef ORX_JESD_BASEADDR
+	orx_jesd->device_clkgen = orx_clkgen;
+#endif
+
 	status = adrv9025_post_setup(phy);
 	if (status) {
 		pr_err("error: adrv9025_post_setup() failed\n");
