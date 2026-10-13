@@ -238,6 +238,38 @@ slots. Serialize peripheral ownership and shared system-register updates with
 a cross-core lock. ``CONFIG_SYS_MAXIM`` adds the reset wrapper and its linker
 option, but the wrapper itself does not provide mutual exclusion.
 
+Embedding a RISC-V image
+------------------------
+
+A MAX78000 ARM project can build a separate CPU1 project and embed its binary:
+
+    .. code-block:: cmake
+
+        include(maxim_coprocessor)
+        maxim_add_riscv_coprocessor(my_application
+            DEFCONFIG "${CMAKE_CURRENT_SOURCE_DIR}/riscv.conf"
+            SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/riscv/main.c"
+            INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/src"
+            SRAM2_RESERVE 0x1000)
+
+Call the helper after configuring the ARM target's sources and link libraries.
+``DEFCONFIG`` is required and enables CPU1's API/device/platform drivers through
+Kconfig. List application sources in ``SOURCES``; the platform supplies startup,
+SDK, and no-OS driver sources. CPU1's configuration is copied into its own build
+project and does not inherit CPU0's feature selections. ``INCLUDES`` and
+``DEFINES`` apply to the CPU1 application and its platform sources. A camera
+application can enable ``CONFIG_CAMERA_OV7692_MAXIM`` and provide a board header
+through ``INCLUDES``. ``TIME_TIMER`` selects the reserved elapsed-time timer.
+
+The helper links an ARM premap to determine CPU1's flash address, configures the
+CPU1 CMake project with that address and remaining flash size, builds CPU1, and
+embeds its binary in the final ARM ELF. Header changes are tracked by the normal
+compiler dependency files. Moving the ARM code or changing the SRAM reservation
+reconfigures CPU1 and relinks it. The final build checks that CPU1's vector table
+is located exactly where ARM embeds it. The CPU1 ELF and map remain available
+under ``coprocessor/build`` for debugging, along with its separate
+``no-os-core/build/no_os_config.h``.
+
 Configuring options (menuconfig)
 --------------------------------
 Kconfig options can be browsed and changed interactively after configuring:
