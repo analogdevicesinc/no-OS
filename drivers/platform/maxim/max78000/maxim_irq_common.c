@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   maxim_irq.c
+ *   @file   maxim_irq_common.c
  *   @brief  Implementation of external irq driver.
  *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
@@ -16,6 +16,7 @@
 #include "uart.h"
 #include "tmr.h"
 #include "maxim_irq.h"
+#include "maxim_irq_priv.h"
 #include "maxim_dma.h"
 #include "max78000.h"
 #include "no_os_uart.h"
@@ -108,50 +109,57 @@ static void _uart_common_handler(mxc_uart_regs_t *uart)
 		MXC_UART_TransactionAsync(req);
 }
 
-void UART0_IRQHandler()
+void MAXIM_IRQ_HANDLER UART0_IRQHandler(void)
 {
 	_uart_common_handler(MXC_UART0);
 }
 
 #ifdef MXC_UART1
-void UART1_IRQHandler()
+void MAXIM_IRQ_HANDLER UART1_IRQHandler(void)
 {
 	_uart_common_handler(MXC_UART1);
 }
 #endif
 
 #ifdef MXC_UART2
-void UART2_IRQHandler()
+void MAXIM_IRQ_HANDLER UART2_IRQHandler(void)
 {
 	_uart_common_handler(MXC_UART2);
 }
 #endif
 
 #ifdef MXC_UART3
-void UART3_IRQHandler()
+void MAXIM_IRQ_HANDLER UART3_IRQHandler(void)
 {
 	_uart_common_handler(MXC_UART3);
 }
 #endif
 
-#ifdef MXC_TMR0
-void TMR0_IRQHandler()
+#if defined(MXC_TMR0) && MAXIM_TIME_TIMER_ID != 0
+void MAXIM_IRQ_HANDLER TMR0_IRQHandler(void)
 {
 	_timer_common_callback(MXC_TMR0);
 }
 #endif
 
-#ifdef MXC_TMR1
-void TMR1_IRQHandler()
+#if defined(MXC_TMR1) && MAXIM_TIME_TIMER_ID != 1
+void MAXIM_IRQ_HANDLER TMR1_IRQHandler(void)
 {
 	_timer_common_callback(MXC_TMR1);
 }
 #endif
 
-#ifdef MXC_TMR2
-void TMR2_IRQHandler()
+#if defined(MXC_TMR2) && MAXIM_TIME_TIMER_ID != 2
+void MAXIM_IRQ_HANDLER TMR2_IRQHandler(void)
 {
 	_timer_common_callback(MXC_TMR2);
+}
+#endif
+
+#if defined(MXC_TMR3) && MAXIM_TIME_TIMER_ID != 3
+void MAXIM_IRQ_HANDLER TMR3_IRQHandler(void)
+{
+	_timer_common_callback(MXC_TMR3);
 }
 #endif
 
@@ -183,87 +191,87 @@ static void max_dma_handler(uint32_t ch_num)
 	}
 }
 
-void DMA0_IRQHandler()
+void MAXIM_IRQ_HANDLER DMA0_IRQHandler(void)
 {
 	max_dma_handler(0);
 }
 
-void DMA1_IRQHandler()
+void MAXIM_IRQ_HANDLER DMA1_IRQHandler(void)
 {
 	max_dma_handler(1);
 }
 
-void DMA2_IRQHandler()
+void MAXIM_IRQ_HANDLER DMA2_IRQHandler(void)
 {
 	max_dma_handler(2);
 }
 
-void DMA3_IRQHandler()
+void MAXIM_IRQ_HANDLER DMA3_IRQHandler(void)
 {
 	max_dma_handler(3);
 }
 
-void DMA4_IRQHandler()
+void MAXIM_IRQ_HANDLER DMA4_IRQHandler(void)
 {
 	max_dma_handler(4);
 }
 
-void DMA5_IRQHandler()
+void MAXIM_IRQ_HANDLER DMA5_IRQHandler(void)
 {
 	max_dma_handler(5);
 }
 
-void DMA6_IRQHandler()
+void MAXIM_IRQ_HANDLER DMA6_IRQHandler(void)
 {
 	max_dma_handler(6);
 }
 
-void DMA7_IRQHandler()
+void MAXIM_IRQ_HANDLER DMA7_IRQHandler(void)
 {
 	max_dma_handler(7);
 }
 
-void DMA8_IRQHandler()
+void MAXIM_IRQ_HANDLER DMA8_IRQHandler(void)
 {
 	max_dma_handler(8);
 }
 
-void DMA9_IRQHandler()
+void MAXIM_IRQ_HANDLER DMA9_IRQHandler(void)
 {
 	max_dma_handler(9);
 }
 
-void DMA10_IRQHandler()
+void MAXIM_IRQ_HANDLER DMA10_IRQHandler(void)
 {
 	max_dma_handler(10);
 }
 
-void DMA11_IRQHandler()
+void MAXIM_IRQ_HANDLER DMA11_IRQHandler(void)
 {
 	max_dma_handler(11);
 }
 
-void DMA12_IRQHandler()
+void MAXIM_IRQ_HANDLER DMA12_IRQHandler(void)
 {
 	max_dma_handler(12);
 }
 
-void DMA13_IRQHandler()
+void MAXIM_IRQ_HANDLER DMA13_IRQHandler(void)
 {
 	max_dma_handler(13);
 }
 
-void DMA14_IRQHandler()
+void MAXIM_IRQ_HANDLER DMA14_IRQHandler(void)
 {
 	max_dma_handler(14);
 }
 
-void DMA15_IRQHandler()
+void MAXIM_IRQ_HANDLER DMA15_IRQHandler(void)
 {
 	max_dma_handler(15);
 }
 
-void RTC_IRQHandler()
+void MAXIM_IRQ_HANDLER RTC_IRQHandler(void)
 {
 	int ret;
 	uint32_t flags = MXC_RTC_GetFlags();
@@ -530,82 +538,6 @@ int max_irq_trigger_level_set(struct no_os_irq_ctrl_desc *desc,
 			      enum no_os_irq_trig_level trig_l)
 {
 	return -ENOSYS;
-}
-
-/**
- * @brief Enable all interrupts
- * @param desc - Interrupt controller descriptor.
- * @return 0
- */
-int max_irq_global_enable(struct no_os_irq_ctrl_desc *desc)
-{
-	__enable_irq();
-
-	return 0;
-}
-
-/**
- * @brief Disable all interrupts
- * @param desc - Interrupt controller descriptor.
- * @return 0
- */
-int max_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
-{
-	__disable_irq();
-
-	return 0;
-}
-
-/**
- * @brief Enable a specific interrupt
- * @param desc - Interrupt controller descriptor.
- * @param irq_id - The interrupt vector entry id of the peripheral.
- * @return 0 in case of success, errno error codes otherwise.
- */
-int max_irq_enable(struct no_os_irq_ctrl_desc *desc, uint32_t irq_id)
-{
-	if (irq_id >= MXC_IRQ_EXT_COUNT)
-		return -EINVAL;
-
-	NVIC_EnableIRQ(irq_id);
-
-	return 0;
-}
-
-/**
- * @brief Disable a specific interrupt
- * @param desc - Interrupt controller descriptor.
- * @param irq_id - The interrupt vector entry id of the peripheral.
- * @return 0 in case of success, -EINVAL otherwise.
- */
-int max_irq_disable(struct no_os_irq_ctrl_desc *desc,
-		    uint32_t irq_id)
-{
-	if (irq_id >= MXC_IRQ_EXT_COUNT)
-		return -EINVAL;
-
-	NVIC_DisableIRQ(irq_id);
-
-	return 0;
-}
-
-/**
- * @brief Set a priority level for an interrupt
- * @param desc - Interrupt controller descriptor.
- * @param irq_id - The interrupt vector entry id of the peripheral.
- * @param priority_level - The interrupt priority level
- * @return 0 in case of success, -EINVAL otherwise.
- */
-int max_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
-			 uint32_t irq_id,
-			 uint32_t priority_level)
-{
-	if (irq_id >= MXC_IRQ_EXT_COUNT)
-		return -EINVAL;
-
-	NVIC_SetPriority(irq_id, priority_level);
-
-	return 0;
 }
 
 /**
