@@ -17,6 +17,7 @@
 #include "no_os_util.h"
 #include "no_os_alloc.h"
 #include "axi_jesd204_rx.h"
+#include "clk_axi_clkgen.h"
 #include "no_os_axi_io.h"
 #include "no_os_print_log.h"
 
@@ -663,6 +664,17 @@ static int axi_jesd204_rx_jesd204_link_pre_setup(struct jesd204_dev *jdev,
 
 	pr_debug("%s: Link%u set lane rate %lu kHz\n",
 		 __func__, lnk->link_id, lane_rate);
+
+	if (jesd->device_clkgen) {
+		ret = axi_clkgen_set_rate(jesd->device_clkgen, device_rate);
+		if (ret) {
+			pr_err("%s: Link%u set device clock rate %lu Hz failed (%d)\n",
+			       __func__, lnk->link_id, device_rate, ret);
+			return ret;
+		}
+		/* Reflect the new rate so "Reported Device Clock" tracks it. */
+		jesd->device_clk_khz = device_rate / 1000;
+	}
 
 	ret = no_os_clk_set_rate(jesd->lane_clk, lane_rate);
 	if (ret) {
