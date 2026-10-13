@@ -153,19 +153,24 @@ if(MAXIM_CORE STREQUAL "riscv")
     file(WRITE "${CMAKE_BINARY_DIR}/buildrv/common_riscv.ld"
         "__FlashStart = ${MAXIM_RISCV_FLASH_ORIGIN};\n__FlashLength = ${MAXIM_RISCV_FLASH_LENGTH};\n")
     math(EXPR _rv_sram_reserve "${MAXIM_RISCV_SRAM2_RESERVE}")
-    if(_rv_sram_reserve LESS 0 OR _rv_sram_reserve GREATER_EQUAL 0xC000)
-        message(FATAL_ERROR "CPU1 SRAM2 reservation must be in [0, 0xC000)")
-    endif()
-    math(EXPR _rv_sram_origin "0x20010000 + ${_rv_sram_reserve}" OUTPUT_FORMAT HEXADECIMAL)
-    math(EXPR _rv_sram_length "0xC000 - ${_rv_sram_reserve}" OUTPUT_FORMAT HEXADECIMAL)
+    math(EXPR _rv_sram_alignment "${_rv_sram_reserve} % 16")
+    # The SDK's SRAM2 length differs between releases (0xC000, or 0xBF80 once a
+    # SHARED region is carved out of its end), so read it instead of assuming it.
+    set(_rv_sram_pattern
+        "(SRAM2[^\n]*ORIGIN[ \t]*=[ \t]*)0x20010000(,[ \t]*LENGTH[ \t]*=[ \t]*)(0x[0-9A-Fa-f]+)")
     file(READ "${_maxim_gcc}/common.ld" _rv_memory)
-    string(REGEX REPLACE
-        "ORIGIN[ \t]*=[ \t]*0x20010000,[ \t]*LENGTH[ \t]*=[ \t]*0x0000[Cc]000"
-        "ORIGIN = ${_rv_sram_origin}, LENGTH = ${_rv_sram_length}"
-        _rv_memory "${_rv_memory}")
-    if(_rv_sram_reserve GREATER 0 AND NOT _rv_memory MATCHES "ORIGIN = ${_rv_sram_origin}, LENGTH = ${_rv_sram_length}")
+    if(NOT _rv_memory MATCHES "${_rv_sram_pattern}")
         message(FATAL_ERROR "SDK common.ld has an unsupported SRAM2 layout")
     endif()
+    math(EXPR _rv_sram_total "${CMAKE_MATCH_3}")
+    if(_rv_sram_reserve LESS 0 OR _rv_sram_reserve GREATER_EQUAL _rv_sram_total OR
+       _rv_sram_alignment)
+        message(FATAL_ERROR "CPU1 SRAM2 reservation must be a multiple of 16 below the SRAM2 size")
+    endif()
+    math(EXPR _rv_sram_origin "0x20010000 + ${_rv_sram_reserve}" OUTPUT_FORMAT HEXADECIMAL)
+    math(EXPR _rv_sram_length "${_rv_sram_total} - ${_rv_sram_reserve}" OUTPUT_FORMAT HEXADECIMAL)
+    string(REGEX REPLACE "${_rv_sram_pattern}"
+        "\\1${_rv_sram_origin}\\2${_rv_sram_length}" _rv_memory "${_rv_memory}")
     file(WRITE "${CMAKE_BINARY_DIR}/common.ld" "${_rv_memory}")
     set(_maxim_link_flags "-nostartfiles -L${CMAKE_BINARY_DIR} -L${_maxim_gcc} -T${_maxim_gcc}/${TARGET}_riscv.ld")
 else()

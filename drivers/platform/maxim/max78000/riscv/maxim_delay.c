@@ -23,6 +23,7 @@
 #define MAXIM_TIME_HANDLER(id) MAXIM_TIME_HANDLER_(id)
 
 static uint64_t elapsed_ticks;
+static bool initialized;
 
 int maxim_time_init(void)
 {
@@ -34,6 +35,9 @@ int maxim_time_init(void)
 		.cmp_cnt = UINT32_MAX,
 	};
 	int ret;
+
+	if (initialized)
+		return 0;
 
 	ret = MXC_TMR_Init(MAXIM_TIME_TIMER, &config, false);
 	if (ret)
@@ -47,6 +51,7 @@ int maxim_time_init(void)
 	NVIC_ClearPendingIRQ(MXC_TMR_GET_IRQ(MAXIM_RISCV_TIME_TIMER));
 	NVIC_EnableIRQ(MXC_TMR_GET_IRQ(MAXIM_RISCV_TIME_TIMER));
 	MXC_TMR_Start(MAXIM_TIME_TIMER);
+	initialized = true;
 
 	return 0;
 }
