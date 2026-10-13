@@ -58,10 +58,7 @@ static struct no_os_uart_desc *uart_desc;
 /* Count of doorbell events received from the RISC-V core */
 static volatile uint32_t wakeup_count = 0;
 
-static inline void barrier(void)
-{
-	__asm__ volatile("dsb sy" ::: "memory");
-}
+
 
 /**
  * @brief Callback function that RISC-V will invoke via the mailbox echo.
@@ -85,22 +82,13 @@ static void publish_callback_to_risc_v(void)
 {
 	/* Invalidate the magic while the table is being updated */
 	g_ipc_table->magic = 0;
-	barrier();
+	maxim_ipc_barrier();
 
 	/* Write the callback address and context */
 	g_ipc_table->fn[0] = (uint32_t)risc_v_event_callback;
 	g_ipc_table->ctx[0] = (uint32_t)NULL;
 
-	/* Release barrier: publish the payload before the ready/magic flags */
-	barrier();
-
-	/* Validate and release the RISC-V core to read */
-	g_ipc_table->magic = MAXIM_IPC_MAGIC;
-	g_ipc_table->ready = 1;
-	barrier();
-
-	printf("[ARM] Callback address published to RISC-V (0x%lx)\r\n",
-	       (unsigned long)risc_v_event_callback);
+	maxim_ipc_table_publish(g_ipc_table);
 }
 
 /*

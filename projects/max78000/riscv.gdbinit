@@ -2,7 +2,7 @@
 # Usage (from repo root):
 #   riscv-none-elf-gdb \
 #     -x projects/max78000/riscv.gdbinit \
-#     build-max78000-imu_dual_core-max78000fthr/projects/max78000/coprocessor/riscv.elf
+#     build-max78000-imu_dual_core-max78000fthr/projects/max78000/coprocessor/build/riscv.elf
 
 set architecture riscv:rv32
 
