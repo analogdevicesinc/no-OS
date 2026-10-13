@@ -9,6 +9,7 @@
 *******************************************************************************/
 
 #include "tmr.h"
+#include "maxim_core.h"
 #include "maxim_timer.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
@@ -74,6 +75,9 @@ int32_t max_timer_init(struct no_os_timer_desc **desc,
 
 	if (!param || param->id >= MXC_CFG_TMR_INSTANCES)
 		return -EINVAL;
+
+	if (!maxim_timer_available(param->id))
+		return -EBUSY;
 
 	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
