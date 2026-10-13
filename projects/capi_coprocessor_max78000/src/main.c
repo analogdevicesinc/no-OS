@@ -351,7 +351,7 @@ static bool snapshot_stats(struct camera_frame_stats *snapshot)
 		before = ipc->stats.sequence;
 		if (before & 1U)
 			continue;
-		camera_ipc_compiler_barrier();
+		camera_ipc_barrier();
 		candidate.frame_number = ipc->stats.frame_number;
 		candidate.capture_fps_x10 = ipc->stats.capture_fps_x10;
 		candidate.processing_us = ipc->stats.processing_us;
@@ -372,7 +372,7 @@ static bool snapshot_stats(struct camera_frame_stats *snapshot)
 		candidate.roi_y = ipc->stats.roi_y;
 		candidate.roi_w = ipc->stats.roi_w;
 		candidate.roi_h = ipc->stats.roi_h;
-		camera_ipc_compiler_barrier();
+		camera_ipc_barrier();
 		after = ipc->stats.sequence;
 		if (before != after || (after & 1U))
 			continue;
@@ -441,7 +441,7 @@ static void display_ready_tiles(void)
 			continue;
 
 		tile->state = CAMERA_TILE_DISPLAYING;
-		camera_ipc_compiler_barrier();
+		camera_ipc_barrier();
 		y = tile->y;
 		rows = tile->rows;
 
@@ -457,7 +457,7 @@ static void display_ready_tiles(void)
 
 		camera_tft_show_rgb565(0, (int)y,
 				       (uint8_t *)ipc->pixels[slot], CAMERA_FRAME_WIDTH, (int)rows);
-		camera_ipc_compiler_barrier();
+		camera_ipc_barrier();
 		tile->state = CAMERA_TILE_FREE;
 
 		if (y + rows == CAMERA_FRAME_HEIGHT) {

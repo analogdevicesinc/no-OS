@@ -15,14 +15,14 @@
 #include "dma_regs.h"
 #include "mxc_device.h"
 #include "mxc_errors.h"
-#include "tmr.h"
+#include "no_os_init.h"
+#include "no_os_delay.h"
 
 #include "camera_ipc.h"
 #include "maxim_coprocessor_riscv.h"
-#include "maxim_ipc.h"
+#include "maxim_ipc_raw.h"
 
 #define CAMERA_CLOCK_HZ       10000000U
-#define RISCV_CLOCK_HZ        60000000U
 #define OV7692_CLKRC_REG       0x11U
 #define OV7692_QVGA_CLKRC       0x00U
 #define OV7692_BGAIN_REG        0x01U
@@ -66,8 +66,6 @@ _Static_assert(!(CAMERA_FRAME_WIDTH % CAMERA_STATS_SCALE) &&
 _Static_assert(!(CAMERA_MOTION_SCALE % CAMERA_STATS_SCALE),
 	       "statistics sampling must include every motion-grid pixel");
 
-extern uint32_t SystemCoreClock;
-
 static volatile struct camera_ipc *const ipc =
 	(volatile struct camera_ipc *)CAMERA_IPC_ADDR;
 static uint8_t motion_history[CAMERA_MOTION_WIDTH * CAMERA_MOTION_HEIGHT];
@@ -88,30 +86,11 @@ static volatile uint32_t ae_relock_requested;
 static enum camera_ae_state ae_state = CAMERA_AE_RESET;
 static uint32_t ae_settle_frames;
 
-static int init_riscv_timer(void)
-{
-	mxc_tmr_cfg_t config = {
-		.pres = MXC_TMR_PRES_128,
-		.mode = MXC_TMR_MODE_CONTINUOUS,
-		.bitMode = MXC_TMR_BIT_MODE_32,
-		.clock = MXC_TMR_IBRO_CLK,
-		.cmp_cnt = UINT32_MAX,
-		.pol = 0,
-	};
-	int ret;
-
-	ret = MXC_TMR_Init(MXC_TMR0, &config, false);
-	if (ret)
-		return ret;
-	MXC_TMR_Start(MXC_TMR0);
-	return 0;
-}
-
 static uint32_t riscv_now_us(void)
 {
-	/* IBRO/128 is 57,600 Hz; 1,000,000 / 57,600 = 625 / 36. */
-	return (uint32_t)(((uint64_t)MXC_TMR_GetCount(MXC_TMR0) * 625U) /
-			  36U);
+	struct no_os_time time = no_os_get_time();
+
+	return (uint32_t)((uint64_t)time.s * 1000000U + time.us);
 }
 
 struct camera_ae_registers {
@@ -371,7 +350,7 @@ static int arm_auto_exposure(void)
 	ae_settle_frames = 0U;
 	ipc->ae_com8 = com8;
 	ipc->ae_settle_frames = 0U;
-	camera_ipc_compiler_barrier();
+	camera_ipc_barrier();
 	ipc->ae_state = CAMERA_AE_SETTLING;
 	return 0;
 }
@@ -413,7 +392,7 @@ static int finish_auto_exposure_frame(void)
 		return ret;
 	publish_ae_registers(&regs);
 	ae_state = CAMERA_AE_LOCKED;
-	camera_ipc_compiler_barrier();
+	camera_ipc_barrier();
 	ipc->ae_state = CAMERA_AE_LOCKED;
 	return 0;
 }
@@ -503,7 +482,7 @@ static void wait_while_paused(void)
 		return;
 
 	ipc->state = CAMERA_STATE_PAUSED;
-	camera_ipc_compiler_barrier();
+	camera_ipc_barrier();
 	notify_host(CAMERA_EVENT_PAUSED, ipc->stats.frame_number);
 
 	while (pause_requested) {
@@ -512,7 +491,7 @@ static void wait_while_paused(void)
 	}
 
 	ipc->state = CAMERA_STATE_RUNNING;
-	camera_ipc_compiler_barrier();
+	camera_ipc_barrier();
 	notify_host(CAMERA_EVENT_RESUMED, ipc->stats.frame_number);
 }
 
@@ -606,9 +585,9 @@ static void publish_tile(volatile struct camera_tile_desc *tile, uint32_t slot,
 			 uint32_t rows)
 {
 	tile->rows = rows;
-	camera_ipc_compiler_barrier();
+	camera_ipc_barrier();
 	tile->state = CAMERA_TILE_READY;
-	camera_ipc_compiler_barrier();
+	camera_ipc_barrier();
 	notify_host(CAMERA_EVENT_TILE, slot);
 }
 
@@ -636,7 +615,7 @@ static void publish_stats(const struct frame_accumulator *acc,
 	uint32_t sequence = stats->sequence;
 
 	stats->sequence = sequence + 1U;
-	camera_ipc_compiler_barrier();
+	camera_ipc_barrier();
 	stats->frame_number = frame_number;
 	stats->capture_fps_x10 = frame_us ? 10000000U / frame_us : 0;
 	stats->processing_us = acc->processing_us;
@@ -673,7 +652,7 @@ static void publish_stats(const struct frame_accumulator *acc,
 		stats->roi_h = 0;
 	}
 
-	camera_ipc_compiler_barrier();
+	camera_ipc_barrier();
 	stats->sequence = sequence + 2U;
 }
 
@@ -685,12 +664,12 @@ static void publish_dropped_frame(uint32_t frame_number, uint32_t frame_us,
 
 	dropped_frames++;
 	stats->sequence = sequence + 1U;
-	camera_ipc_compiler_barrier();
+	camera_ipc_barrier();
 	stats->frame_number = frame_number;
 	stats->capture_fps_x10 = frame_us ? 10000000U / frame_us : 0;
 	stats->dma_overflows = dma_overflows;
 	stats->dropped_frames = dropped_frames;
-	camera_ipc_compiler_barrier();
+	camera_ipc_barrier();
 	stats->sequence = sequence + 2U;
 }
 
@@ -811,7 +790,7 @@ static void stop_with_fault(uint32_t cause, uint32_t epc, uint32_t tval)
 	ipc->fault_tval = tval;
 	ipc->state = CAMERA_STATE_FAULT;
 	ipc->magic = CAMERA_IPC_MAGIC;
-	camera_ipc_compiler_barrier();
+	camera_ipc_barrier();
 	notify_host(CAMERA_EVENT_FAULT, cause);
 	for (;;)
 		__asm__ volatile("wfi");
@@ -847,7 +826,6 @@ int main(void)
 	int ret;
 
 	maxim_riscv_icc_enable();
-	SystemCoreClock = RISCV_CLOCK_HZ;
 
 	ipc->magic = 0;
 	ipc->abi_version = CAMERA_IPC_ABI_VERSION;
@@ -875,12 +853,12 @@ int main(void)
 		ipc->tile[slot].rows = 0;
 	}
 	memset(motion_history, 0, sizeof(motion_history));
-	camera_ipc_compiler_barrier();
+	camera_ipc_barrier();
 	ipc->magic = CAMERA_IPC_MAGIC;
 	notify_host(CAMERA_EVENT_BOOT, 0);
 
 	MXC_DMA_Init();
-	ret = init_riscv_timer();
+	ret = no_os_init();
 	if (ret)
 		stop_with_fault(0x80000003U, 0, (uint32_t)ret);
 	ret = cnn_frame_self_test();

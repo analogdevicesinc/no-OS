@@ -9,6 +9,7 @@
 #define CAPI_COPROCESSOR_MAX78000_CAMERA_IPC_H
 
 #include <stdint.h>
+#include "maxim_core.h"
 
 #define CAMERA_IPC_MAGIC             0x43414D52UL /* "CAMR" */
 #define CAMERA_IPC_ABI_VERSION       6UL
@@ -185,9 +186,9 @@ static inline volatile struct camera_ipc *camera_ipc_get(void)
 }
 
 /* Compiler ordering is sufficient: neither MAX78000 core has a data cache. */
-static inline void camera_ipc_compiler_barrier(void)
+static inline void camera_ipc_barrier(void)
 {
-	__asm__ volatile("" ::: "memory");
+	maxim_ipc_barrier();
 }
 
 #endif /* CAPI_COPROCESSOR_MAX78000_CAMERA_IPC_H */

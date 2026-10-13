@@ -101,16 +101,23 @@ Architecture
 The single-word SEMA mailbox carries commands and notifications; image bytes
 and statistics remain in the fixed shared-memory ABI described by
 ``src/camera_ipc.h``. Tile state is published last. Neither core has a data
-cache, so volatile accesses plus compiler ordering are sufficient.
+cache; the shared helpers enforce memory ordering before publishing or
+acquiring a tile.
 
 Capture and TFT publication are double-buffered. DMA writes only the current
 CNN frame bank while shared tiles are copied from the preceding bank. Analysis
 starts only after the current DMA has completed, but individual sampled rows
 are processed while CPU1 is otherwise waiting for a shared tile slot. This
 keeps statistics associated with complete frames without serializing the
-camera and display. CPU1 timer 0 provides an independent IBRO/128 timebase;
+camera and display. CPU1 uses the platform elapsed-time service on timer 3
+(ISO/64), independently of the SDK delay counter;
 ``C`` measures the completed pipeline period and ``P`` accumulates only active
 analysis time.
+
+CPU1 is built with its own ``src/riscv/project.conf``. Enabling
+``CONFIG_CAMERA_OV7692_MAXIM`` selects the SDK camera, SCCB, and sensor sources;
+the example supplies its board header and capture application. CPU1 private data
+starts at 0x20014000, above the reserved debug and IPC window.
 
 CPU0 timer 2 measures the completed TFT frame rate and the one-second button
 holds from the independent 7.3728 MHz IBRO clock. The MAX78000 Cortex-M4
@@ -217,7 +224,7 @@ Building
 The build produces both the combined image and the symbol-rich CPU1 ELF:
 
 * ``build-max78000-camera/build/capi_coprocessor_max78000.elf``
-* ``build-max78000-camera/projects/capi_coprocessor_max78000/coprocessor/riscv.elf``
+* ``build-max78000-camera/projects/capi_coprocessor_max78000/coprocessor/build/riscv.elf``
 
 The RISC-V firmware is already embedded in the ARM ELF; flash only the combined
 image.
@@ -242,7 +249,7 @@ reflashing or resetting CPU1:
 .. code-block:: bash
 
   riscv-none-elf-gdb \
-      build-max78000-camera/projects/capi_coprocessor_max78000/coprocessor/riscv.elf \
+      build-max78000-camera/projects/capi_coprocessor_max78000/coprocessor/build/riscv.elf \
       -x projects/capi_coprocessor_max78000/debug/riscv_camera.gdb
   (gdb) camera_status
   (gdb) camera_tiles
