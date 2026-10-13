@@ -5,8 +5,12 @@
 #include "no_os_delay.h"
 #include "maxim_time.h"
 #include "tmr.h"
+#include "max78000.h"
+#include "no_os_init.h"
 
 mxc_tmr_regs_t test_timer;
+test_gcr_t test_gcr;
+uint32_t SystemCoreClock;
 static uint32_t flags, irq_state = 8, init_error, delay_calls;
 static uint32_t clock_rate = 60000000;
 static uint64_t delayed_us;
@@ -101,12 +105,24 @@ int main(void)
 {
 	uint64_t before, after;
 
+	test_gcr.clkctrl = (4U << 9) | (2U << 6);
+	SystemCoreClockUpdate();
+	assert(SystemCoreClock == 25000000);
+	test_gcr.clkctrl = 1U << 6;
+	SystemCoreClockUpdate();
+	assert(SystemCoreClock == 30000000);
+	test_gcr.clkctrl = 7U << 9;
+	SystemCoreClockUpdate();
+	assert(SystemCoreClock == 12000000);
+
 	init_error = 1;
 	assert(maxim_time_init() == -EIO);
 	init_error = 0;
 	assert(!maxim_time_init());
 	assert(now_us() == 0);
 	test_timer.count = 1406251;
+	assert(now_us() == 1500000);
+	assert(!maxim_time_init());
 	assert(now_us() == 1500000);
 	assert(irq_state == 8);
 
