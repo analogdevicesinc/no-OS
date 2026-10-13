@@ -16,9 +16,8 @@
  * ARM can integrate and log alongside its own ADXL345.
  *
  * The no-OS + Maxim + ADIS sources are cross-compiled for RV32 and linked into
- * this image by maxim_add_riscv_coprocessor(NOOS_DRIVERS ...). The IMU is wired
- * to the MAX78000FTHR SPI header pins, and CPU1 drives them through a local
- * bit-banged no-OS SPI backend.
+ * this image using riscv/imu_dual_core.conf. The IMU is wired to the
+ * MAX78000FTHR SPI header pins, driven by the GPIO SPI platform driver.
  *
  * Shared pins: the ADXL345 (ARM side) uses the same SPI pins, so every ADIS
  * transaction is bracketed by the SPI hardware-semaphore bus lock
@@ -35,7 +34,7 @@
 #include "adis1657x.h"
 
 /* SEMA doorbell helpers (maxim_ipc_raw_*) shared with the host side. */
-#include "maxim_ipc.h"
+#include "maxim_ipc_raw.h"
 /* RISC-V-side runtime helpers (instruction-cache enable). */
 #include "maxim_coprocessor_riscv.h"
 /* Shared cross-core table + SPI bus-lock helpers. */
@@ -296,6 +295,7 @@ int main(void)
 	 * ARM gates on `state`, not just magic, so this does not race the handshake.
 	 */
 	imu_trace_event(IMU_TRACE_SHARED_INIT);
+	maxim_ipc_barrier();
 	g_shared->magic = IMU_SHARED_MAGIC;
 
 	/*
@@ -333,6 +333,7 @@ int main(void)
 
 	while (!g_shared->host_ready)
 		;
+	maxim_ipc_barrier();
 
 	/* Raw sample loop. */
 	set_stage(IMU_STAGE_LOOP);
