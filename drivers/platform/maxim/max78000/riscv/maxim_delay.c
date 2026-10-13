@@ -23,6 +23,7 @@
 #define MAXIM_TIME_HANDLER(id) MAXIM_TIME_HANDLER_(id)
 
 static uint64_t elapsed_ticks;
+static bool initialized;
 
 /**
  * @brief Start the timer used as the CPU1 time base.
@@ -39,6 +40,9 @@ int maxim_time_init(void)
 	};
 	int ret;
 
+	if (initialized)
+		return 0;
+
 	ret = MXC_TMR_Init(MAXIM_TIME_TIMER, &config, false);
 	if (ret)
 		return -EIO;
@@ -51,6 +55,7 @@ int maxim_time_init(void)
 	NVIC_ClearPendingIRQ(MXC_TMR_GET_IRQ(MAXIM_RISCV_TIME_TIMER));
 	NVIC_EnableIRQ(MXC_TMR_GET_IRQ(MAXIM_RISCV_TIME_TIMER));
 	MXC_TMR_Start(MAXIM_TIME_TIMER);
+	initialized = true;
 
 	return 0;
 }
@@ -70,6 +75,8 @@ static void maxim_time_update(void)
 void MAXIM_IRQ_HANDLER MAXIM_TIME_HANDLER(MAXIM_RISCV_TIME_TIMER)(void)
 {
 	maxim_time_update();
+	/* The RISC-V interrupt controller latches the request; clear it as well. */
+	NVIC_ClearPendingIRQ(MXC_TMR_GET_IRQ(MAXIM_RISCV_TIME_TIMER));
 }
 
 /**

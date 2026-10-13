@@ -224,8 +224,12 @@ nested or used concurrently with other consumers that reset that counter.
 ``MAXIM_RISCV_FLASH_ORIGIN`` and ``MAXIM_RISCV_FLASH_LENGTH`` select CPU1's
 flash region. Defaults cover the whole flash for a standalone image. A combined
 ARM/RISC-V build must supply a disjoint CPU1 flash region and reserve CPU1 SRAM
-in the ARM linker layout. The SDK's CPU1 ``.shared`` clock and mailbox symbols
-must also be initialized by the host, as required by the SDK startup contract.
+in the ARM linker layout. ``MAXIM_RISCV_SRAM2_RESERVE`` excludes a multiple of
+16 bytes from the beginning of SRAM2 for debug or IPC storage. CPU1 refreshes
+its SDK system/peripheral clock variable from hardware registers; it does not
+rely on CPU0 placing that variable at the same address. Repeated CPU1
+initialization preserves the elapsed-time epoch. Bare-metal syscall stubs come
+from ``libnosys``; firmware can provide a UART output implementation if needed.
 
 IRQ entry points use the selected core's calling convention. RISC-V IRQ
 priorities are fixed; attempts to set a programmable priority return
