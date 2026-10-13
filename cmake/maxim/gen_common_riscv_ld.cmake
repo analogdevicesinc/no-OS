@@ -2,17 +2,16 @@
 #
 # Run at build time via `cmake -P`. Reads the ARM premap linker map, finds the
 # flash address of the `_riscv_boot` symbol (the start of the reserved
-# .riscv_flash region), and writes the definitions the stock
-# max<N>_riscv.ld pulls in through its `INCLUDE "buildrv/common_riscv.ld"`:
+# .riscv_flash region), and writes a CMake fragment for CPU1 configuration:
 #
-#   __FlashStart  = <address of _riscv_boot>;
-#   __FlashLength = 0x10080000 - __FlashStart;   /* to the top of flash */
+#   RISCV_FLASH_ORIGIN = <address of _riscv_boot>
+#   RISCV_FLASH_LENGTH = 0x10080000 - RISCV_FLASH_ORIGIN
 #
 # So the RISC-V image is linked to run exactly where the ARM link placed it.
 #
 # Required -D arguments:
 #   MAP_FILE  absolute path to the ARM premap .map
-#   OUT_FILE  absolute path to write common_riscv.ld
+#   OUT_FILE  absolute path to write the flash.cmake fragment
 
 if(NOT DEFINED MAP_FILE OR NOT DEFINED OUT_FILE)
     message(FATAL_ERROR "gen_common_riscv_ld: MAP_FILE and OUT_FILE are required")
@@ -35,9 +34,11 @@ endif()
 
 set(_addr "0x${CMAKE_MATCH_1}")
 
+math(EXPR _length "0x10080000 - ${_addr}" OUTPUT_FORMAT HEXADECIMAL)
+if(_length LESS_EQUAL 0 OR _length GREATER 0x80000)
+    message(FATAL_ERROR "CPU1 flash origin ${_addr} is outside MAX78000 flash")
+endif()
 file(WRITE "${OUT_FILE}"
-    "/* Auto-generated -- do not edit. RISC-V flash origin from the ARM map. */\n"
-    "__FlashStart = ${_addr};\n"
-    "__FlashLength = 0x10080000 - __FlashStart;\n")
+    "set(RISCV_FLASH_ORIGIN ${_addr})\nset(RISCV_FLASH_LENGTH ${_length})\n")
 
 message(STATUS "coprocessor: RISC-V __FlashStart = ${_addr} (from _riscv_boot)")
