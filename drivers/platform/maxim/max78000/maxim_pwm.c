@@ -9,6 +9,7 @@
 *******************************************************************************/
 
 #include "tmr.h"
+#include "maxim_core.h"
 #include "no_os_alloc.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
@@ -228,6 +229,11 @@ int32_t max_pwm_init(struct no_os_pwm_desc **desc,
 	struct no_os_pwm_desc *descriptor;
 	struct max_pwm_extra *pwm_extra;
 	int ret;
+
+	if (!param)
+		return -EINVAL;
+	if (!maxim_timer_available(param->id))
+		return -EBUSY;
 
 	descriptor = (struct no_os_pwm_desc *)no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)

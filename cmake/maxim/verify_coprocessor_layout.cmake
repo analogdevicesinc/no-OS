@@ -1,5 +1,10 @@
 # Verify that CPU0 embeds the CPU1 image at the address used to link CPU1.
 
+if(DEFINED RISCV_BUILD_DIR)
+    file(STRINGS "${RISCV_BUILD_DIR}/CMakeCache.txt" _nm_line REGEX "^CMAKE_NM:FILEPATH=")
+    string(REGEX REPLACE "^CMAKE_NM:FILEPATH=" "" RISCV_NM "${_nm_line}")
+endif()
+
 foreach(_required ARM_NM RISCV_NM ARM_ELF RISCV_ELF)
     if(NOT DEFINED ${_required} OR "${${_required}}" STREQUAL "")
         message(FATAL_ERROR

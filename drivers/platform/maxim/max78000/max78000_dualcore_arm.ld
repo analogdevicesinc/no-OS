@@ -33,7 +33,7 @@ SECTIONS {
         KEEP(*(.init))
         KEEP(*(.fini))
 
-        KEEP(*(.rodata*))  /* read-only data: "const" */
+        *(.rodata*)  /* read-only data: "const" */
 
         /* C++ Exception handling */
         KEEP(*(.eh_frame*))
