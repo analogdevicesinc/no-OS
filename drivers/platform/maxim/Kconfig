@@ -45,10 +45,9 @@ config SPI_GPIO_MAXIM
 	default n
 	help
 	  Enable a software SPI master implemented with direct GPIO register
-	  toggling (no_os_spi platform ops). Pin-parameterized and safe to share a
-	  bus between two cores: it drives SCLK/MOSI only while a transfer is in
-	  flight and leaves them high-Z otherwise, so an idle core does not fight
-	  the active one.
+	  toggling (no_os_spi platform ops). It drives SCLK/MOSI only during a
+	  transfer and leaves them high-Z otherwise. The caller must hold a
+	  cross-core bus lock during initialization, transfers, and teardown.
 
 config SYS_MAXIM
 	bool "Enable Maxim system-level helpers"
@@ -56,8 +55,16 @@ config SYS_MAXIM
 	help
 	  Enable shared MAX78000 system helpers (maxim_sys.c), including the
 	  read-modify-write __wrap_MXC_SYS_Reset_Periph() replacement for the SDK's
-	  destructive peripheral-reset store. Requires the corresponding
-	  "-Wl,--wrap=MXC_SYS_Reset_Periph" link option.
+	  destructive peripheral-reset store. The platform adds the matching
+	  linker wrap option. Callers must serialize shared-register changes
+	  between cores; a read-modify-write is not a cross-core lock.
+
+config CAMERA_OV7692_MAXIM
+	bool "Enable Maxim SDK OV7692 camera support"
+	default n
+	help
+	  Enable the MAX78000 camera interface, pulse train clock, and OV7692
+	  sensor drivers. The application supplies board.h for its camera pins.
 
 config UART_MAXIM
 	bool "Enable Maxim UART driver"

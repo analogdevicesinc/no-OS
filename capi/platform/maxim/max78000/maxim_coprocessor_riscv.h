@@ -6,9 +6,8 @@
  *   @author Victor Pascu (victor.pascu@analog.com)
  *
  * Header-only helpers meant to run ON the RISC-V core. The coprocessor runs as
- * freestanding firmware that cannot link the no-OS runtime or the PeriphDrivers,
- * so these are `static inline` and poke registers directly (same approach as the
- * maxim_ipc_raw_* helpers in maxim_ipc.h).
+ * firmware, with or without no-OS services. These helpers access registers
+ * directly and require no allocation or CAPI dispatcher.
  */
 
 #ifndef MAX78000_CAPI_COPROCESSOR_RISCV_H_
