@@ -190,6 +190,54 @@ Then build the project target (the target name is the project directory name):
    ``-DCMAKE_BUILD_TYPE=Debug`` for an unoptimized build, or ``MinSizeRel`` /
    ``Release`` for size/speed.
 
+MAX78000 core selection
+-----------------------
+
+``MAXIM_CORE`` selects ``arm`` (the default) or ``riscv`` before compiler
+selection. Keep ``PLATFORM=maxim`` and ``TARGET=max78000`` for both cores. Use a
+separate build directory and project defconfig for each image:
+
+    .. code-block:: bash
+
+        $ cmake --preset max78000fthr -B build/cpu1 \
+              -DMAXIM_CORE=riscv -DPROJECT_DEFCONFIG=<project>/<cpu1>.conf
+        $ cmake --build build/cpu1 --target <project>
+
+CPU1 uses ``riscv-none-elf-gcc``, the RV32IMC instruction set with Zicsr and
+Zifencei, and the ILP32 ABI. The toolchain locates the SDK's xPack compiler or a
+compiler on ``PATH``. CPU1 has its own generated Kconfig header; do not reuse
+CPU0's build directory or configuration. RISC-V FreeRTOS support is not yet
+provided by this platform.
+
+The SDK RISC-V startup initializes CPU1's C runtime; the ARM host owns system
+clock and board setup. CPU1's platform initialization starts an independent
+elapsed-time timer. ``MAXIM_RISCV_TIME_TIMER`` selects timer 0 through 3
+(default: 3). Reserve this timer in both applications: CPU1's no-OS timer and
+PWM drivers reject attempts to use it. The timer runs from ISO/64 and extends
+its count through a dedicated interrupt. Keep the timer interrupt enabled for
+long-running firmware; if interrupts are masked, call ``no_os_get_time()`` at
+least once per timer period (approximately 76 minutes). Do not gate or reset
+this timer or its ISO clock while elapsed time is needed. SDK delay calls use
+the CPU1 performance counter independently of elapsed time. Delays must not be
+nested or used concurrently with other consumers that reset that counter.
+
+``MAXIM_RISCV_FLASH_ORIGIN`` and ``MAXIM_RISCV_FLASH_LENGTH`` select CPU1's
+flash region. Defaults cover the whole flash for a standalone image. A combined
+ARM/RISC-V build must supply a disjoint CPU1 flash region and reserve CPU1 SRAM
+in the ARM linker layout. The SDK's CPU1 ``.shared`` clock and mailbox symbols
+must also be initialized by the host, as required by the SDK startup contract.
+
+IRQ entry points use the selected core's calling convention. RISC-V IRQ
+priorities are fixed; attempts to set a programmable priority return
+``-ENOTSUP``. CAPI mailbox transport can run on either core when allocation is
+enabled; coprocessor lifecycle control is available only to the ARM host.
+Firmware needing only SEMA register access can include ``maxim_ipc_raw.h``
+without the CAPI dispatcher. Reserve any IPC table at the same address in both
+linker layouts and use the publication/acquisition helpers before reading its
+slots. Serialize peripheral ownership and shared system-register updates with
+a cross-core lock. ``CONFIG_SYS_MAXIM`` adds the reset wrapper and its linker
+option, but the wrapper itself does not provide mutual exclusion.
+
 Configuring options (menuconfig)
 --------------------------------
 Kconfig options can be browsed and changed interactively after configuring:

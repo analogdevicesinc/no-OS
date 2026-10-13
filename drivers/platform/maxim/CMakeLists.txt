@@ -10,7 +10,9 @@ no_os_sources_ifdef(CONFIG_I2C_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim
 no_os_sources_ifdef(CONFIG_SPI_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_spi.c)
 no_os_sources_ifdef(CONFIG_UART_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_uart.c)
 no_os_sources_ifdef(CONFIG_UART_STDIO_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_uart_stdio.c)
-no_os_sources_ifdef(CONFIG_IRQ_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_irq.c)
+if(NOT "${TARGET}" STREQUAL "max78000")
+    no_os_sources_ifdef(CONFIG_IRQ_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_irq.c)
+endif()
 no_os_sources_ifdef(CONFIG_PWM_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_pwm.c)
 no_os_sources_ifdef(CONFIG_TIMER_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_timer.c)
 no_os_sources_ifdef(CONFIG_RTC_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_rtc.c)
@@ -34,7 +36,7 @@ no_os_sources_ifdef(CONFIG_SPI_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim
 
 no_os_sources_ifdef(CONFIG_DMA_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/common/maxim_dma.c)
 
-if (NOT CONFIG_CAPI)
+if(NOT CONFIG_CAPI AND NOT "${TARGET}" STREQUAL "max78000")
 	target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_init.c)
 
 	# Delay (always included when not using FreeRTOS)

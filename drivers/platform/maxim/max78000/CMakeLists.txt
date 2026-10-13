@@ -1,12 +1,10 @@
 no_os_sources_ifdef(CONFIG_SPI_GPIO_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/maxim_gpio_spi.c)
 no_os_sources_ifdef(CONFIG_SYS_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/maxim_sys.c)
 
-# MAX78000 still uses legacy peripherals alongside its CAPI mailbox and coprocessor.
-if(CONFIG_CAPI)
-    target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/maxim_init.c)
-    if(NOT CONFIG_FREERTOS)
-        target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/maxim_delay.c)
-    endif()
+add_subdirectory(${MAXIM_CORE})
+no_os_sources_ifdef(CONFIG_IRQ_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/maxim_irq_common.c)
+if(CONFIG_SYS_MAXIM)
+    target_link_options(no-os INTERFACE -Wl,--wrap=MXC_SYS_Reset_Periph)
 endif()
 
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SPI/spi_me17.c)
@@ -29,15 +27,16 @@ target_include_directories(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SYS/mxc_delay.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SYS/pins_ai85.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SYS/sys_ai85.c)
-target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SYS/nvic_table.c)
-target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SYS/mxc_lock.c)
+target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SYS/mxc_assert.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/FLC/flc_me17.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/FLC/flc_reva.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/FLC/flc_common.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/LP/lp_ai85.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/ICC/icc_reva.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/ICC/icc_me17.c)
-target_include_directories(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/ICC)
+target_include_directories(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/ICC
+    ${MAXIM_LIBRARIES}/PeriphDrivers/Source/TMR
+    ${MAXIM_LIBRARIES}/PeriphDrivers/Source/RTC)
 
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/RTC/rtc_me17.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/RTC/rtc_reva.c)
@@ -59,9 +58,7 @@ target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/CMSIS/Include)
 target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Include/MAX78000)
 target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX78000/Include)
 
-target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX78000/Source/GCC/startup_max78000.S)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX78000/Source/heap.c)
-target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX78000/Source/system_max78000.c)
 
 no_os_sources_ifdef(CONFIG_CAPI_MAILBOX
     ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SEMA/sema_me17.c

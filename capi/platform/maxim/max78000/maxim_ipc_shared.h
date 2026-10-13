@@ -14,12 +14,12 @@
  *
  * Both cores see an identical, unified address map. The shared table is placed
  * by the application at a fixed address in a region unused by either core (for
- * the dual-core example, SRAM3 @ 0x2001C000, which is free because the RISC-V
- * runs in place from flash). This header only defines the layout, not the
- * address.
+ * instance, an application may reserve part of SRAM3 when CPU1 runs from
+ * flash). Both linker layouts must exclude that region from their heap, stack,
+ * and data sections. This header defines the layout, not the address.
  *
  * This header is included by BOTH ARM and RISC-V translation units.
- * No compiler-specific types — uses only C99 stdint.h types for portability.
+ * Fields have fixed-width types; publication uses the selected core barrier.
  *
  * Cross-Core Function Pointer Table:
  * ARM side publishes function addresses as uint32_t values in the table.
@@ -32,6 +32,8 @@
 #define MAX78000_CAPI_IPC_SHARED_H_
 
 #include <stdint.h>
+#include <stdbool.h>
+#include "maxim_core.h"
 
 /**
  * @def MAXIM_IPC_MAGIC
@@ -52,38 +54,14 @@
  * @struct maxim_ipc_table_t
  * @brief Cross-core function pointer table in shared memory.
  *
- * Placed in the .shared section at 0x2001BF80 (128-byte SHARED SRAM region).
- * Both cores declare this struct identically and access it at the same
- * physical address.
+ * The application reserves at least sizeof(maxim_ipc_table_t) bytes at the
+ * same physical address in both images. Function addresses are opaque to CPU1;
+ * only CPU0 may invoke CPU0 callbacks.
  *
- * Synchronization model:
- * - ARM side populates fn[0..N-1] and ctx[0..N-1], then sets magic, then ready.
- * - RISC-V side spins on (ready && magic == MAXIM_IPC_MAGIC) before reading.
- * - No cache coherency issues: both cores have no data cache.
- * - Read barriers (dsb, fence) are optional but recommended for ARM side.
- *
- * Usage:
- * ARM side (in initialization):
- * ```
- * g_ipc_table.magic = 0;              // invalidate
- * g_ipc_table.fn[0] = (uint32_t)my_cb; // write addresses
- * g_ipc_table.ctx[0] = (uint32_t)NULL;
- * __DSB();                             // ARM data sync barrier (optional)
- * g_ipc_table.ready = 1;              // release
- * maxim_sema_ring_rv32();             // doorbell notify
- * ```
- *
- * RISC-V side (in callback wait loop):
- * ```
- * while (!g_ipc_table.ready || g_ipc_table.magic != MAXIM_IPC_MAGIC)
- *     ;  // spin; no cache, so reads see ARM writes immediately
- * uint32_t addr = g_ipc_table.fn[0];
- * if (addr) {
- *     // Echo address back to ARM via mailbox or doorbell for ARM to dispatch
- *     MXC_SEMA->mail1 = addr;
- *     maxim_sema_ring_cm4();
- * }
- * ```
+ * Halt the peer before modifying an already published table. Fill fn and ctx,
+ * then call maxim_ipc_table_publish(). The receiver waits until
+ * maxim_ipc_table_ready() returns true before reading the slots. Volatile alone
+ * does not order shared-memory writes against the SEMA doorbell.
  */
 typedef struct {
 	/**
@@ -114,5 +92,23 @@ typedef struct {
 	 */
 	volatile uint32_t ready;
 } maxim_ipc_table_t;
+
+/** @brief Publish initialized slots before notifying the peer. */
+static inline void maxim_ipc_table_publish(volatile maxim_ipc_table_t *table)
+{
+	table->magic = MAXIM_IPC_MAGIC;
+	maxim_ipc_barrier();
+	table->ready = 1;
+}
+
+/** @brief Acquire published slots after observing the ready flag. */
+static inline bool maxim_ipc_table_ready(const volatile maxim_ipc_table_t
+		*table)
+{
+	if (!table->ready)
+		return false;
+	maxim_ipc_barrier();
+	return table->magic == MAXIM_IPC_MAGIC;
+}
 
 #endif /* MAX78000_CAPI_IPC_SHARED_H_ */
