@@ -98,14 +98,11 @@ IPC Handshake
    /* ARM side publishes callback (fixed-address pointer to SRAM2 0x20011000) */
    g_ipc_table->magic = 0;                        // invalidate
    g_ipc_table->fn[0] = (uint32_t)callback_fn;    // write address
-   g_ipc_table->magic = MAXIM_IPC_MAGIC;          // validate
-   g_ipc_table->ready = 1;                        // release
-   __DSB();                                       // ARM dsb sy (fine on Cortex-M)
+   maxim_ipc_table_publish(g_ipc_table);
 
-   /* RISC-V side waits and reads (same fixed-address pointer). No fence: see the
-    * "No Data Cache" note -- the RV core's `fence` is avoided here. */
-   while (g_ipc_table->magic != MAXIM_IPC_MAGIC || !g_ipc_table->ready)
-       delay_ms(10);                              // spin until ready
+   /* CPU1 acquires the slots before reading. */
+   while (!maxim_ipc_table_ready(g_ipc_table))
+       no_os_mdelay(10);
    uint32_t addr = g_ipc_table->fn[0];
 
 Event Loop (10-round 1:1 handshake)
@@ -125,17 +122,10 @@ Implementation Notes
 No Data Cache
 ~~~~~~~~~~~~~
 
-Both cores have **no data cache** (ICC0/ICC1 are instruction-only) -> shared
-memory is automatically coherent; synchronization is ``volatile`` + the SEMA
-doorbell.
-
-- ARM's ``__DSB()`` / ``barrier()`` (``dsb sy``) is used for
-  explicit ordering.
-- The RISC-V side issues **no** memory barriers. On this PULP-derived RV32
-  core a ``fence iorw,iorw`` corrupts the immediately-following load, so
-  ``barrier()`` is intentionally not called from the RISC-V side --
-  ``volatile`` accesses plus the doorbell handshake order the exchange
-  correctly.
+Both cores have no data cache. Publication and acquisition still require
+ordering against the SEMA doorbell: the platform provides ARM DMB and RISC-V
+FENCE barriers through the shared IPC helpers. Volatile fields alone do not
+provide this ordering.
 
 Function Pointer Communication
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -161,8 +151,8 @@ Memory Layout & IPC Table Placement
   this is what makes the two cores agree on the table location.
 - It must be in SRAM2, **not** SRAM3: when the RISC-V runs from flash, SRAM3
   (the "RV Code" region) is not accessible to the RV core as data.
-  ``0x20011000`` sits above the RV ``.data``/``.bss`` (~``0x20010004``) and
-  well below the RV stack limit (``0x2001B000``).
+  The first 8 KiB of SRAM2 are reserved, so CPU1 private data starts at
+  ``0x20012000`` and cannot overlap the table.
 
 Build Integration
 -----------------
@@ -176,6 +166,8 @@ source:
 
    include(maxim_coprocessor)
    maxim_add_riscv_coprocessor(max78000
+       DEFCONFIG .../riscv/dual_core.conf
+       SRAM2_RESERVE 0x2000
        SOURCES  .../dual_core_example_riscv.c
        INCLUDES ...)
 
@@ -184,10 +176,10 @@ load address, which is only known after the ARM is linked):
 
 1. **Premap:** link a twin of the ARM target (same sources, no RISC-V blob)
    and read the ``_riscv_boot`` flash address from its map.
-2. Derive ``buildrv/common_riscv.ld`` (``__FlashStart``/``__FlashLength``)
-   from it.
-3. Compile the RISC-V app + the stock RISC-V startup/system, link at
-   ``_riscv_boot`` -> ``riscv.bin``.
+2. Derive CPU1 flash origin and length in ``coprocessor/flash.cmake``.
+3. Configure and build CPU1 with its own toolchain and Kconfig header,
+   using the platform RISC-V startup/services; link at ``_riscv_boot`` and
+   generate ``coprocessor/build/riscv.bin``.
 4. Wrap ``riscv.bin`` (``.incbin``) into ``riscv.o``.
 5. **Final:** link the ARM ELF with ``riscv.o``. The platform's dual-core ARM
    linker script (``drivers/platform/maxim/max78000/max78000_dualcore_arm.ld``)
@@ -287,9 +279,8 @@ Debug Hints
   in flash match ``riscv.bin``. A RISC-V trap with no ``mtvec`` (not an issue
   with the stock startup) wedges the AHB bus -- recover by racing
   ``reset halt`` + ``flash erase_sector 0 0 last`` before the bad image runs.
-- **RISC-V reads garbage from the table**: do not issue
-  ``fence``/``barrier()`` on the RISC-V side -- on this core the
-  fence corrupts the following load.
+- **RISC-V reads garbage from the table**: verify the shared address is
+  reserved in both linker layouts and use the publication/acquisition helpers.
 
 References
 ----------
