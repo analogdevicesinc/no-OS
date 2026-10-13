@@ -105,7 +105,6 @@ static bool report_risc_v_fault(void)
 	return true;
 }
 
-
 /* ADXL345 on the shared SPI pins, chip-select = GPIO P0.19. */
 static struct adxl345_dev *adxl_dev;
 
@@ -386,6 +385,7 @@ int imu_dual_core_example_main(void)
 	ret = init_adxl();
 	if (ret)
 		return ret;
+	maxim_ipc_barrier();
 	g_shared->host_ready = 1;
 
 	if (g_shared->prod_id != IMU_ADIS_PROD_ID) {
