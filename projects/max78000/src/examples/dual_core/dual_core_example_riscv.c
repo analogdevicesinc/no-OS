@@ -35,41 +35,22 @@
 
 /*
  * Inline SEMA doorbell/mailbox helpers (maxim_ipc_raw_*). This core is
- * freestanding and can't link the no-OS runtime, so it drives the doorbell
- * registers directly. The callback payload travels through the shared IPC table
+ * uses the register transport without enabling the CAPI dispatcher. The callback payload travels through the shared IPC table
  * in SRAM2; the doorbell (irq0) signals the ARM.
  */
-#include "maxim_ipc.h"
+#include "maxim_ipc_raw.h"
+#include "no_os_delay.h"
 
 /* Inline RISC-V-side runtime helpers (instruction-cache enable). */
 #include "maxim_coprocessor_riscv.h"
 
-/*
- * Shared IPC table, at a fixed SRAM2 address both cores reach through an
- * identical fixed-address pointer. It sits above this core's .data/.bss and well
- * below its stack (limit 0x2001B000). It must be in SRAM2, not SRAM3: when this
- * core runs in place from flash, SRAM3 is not accessible to it as data.
- */
+/* Shared table in the reserved low SRAM2 window, outside CPU1 private data. */
 #define IPC_TABLE_ADDR 0x20011000
 static volatile maxim_ipc_table_t *const g_ipc_table =
 	(volatile maxim_ipc_table_t *)IPC_TABLE_ADDR;
 
 /* Counter for loop iterations */
 static volatile uint32_t iteration = 0;
-
-/**
- * @brief Simple delay function (approx milliseconds).
- * Uses a busy-wait loop calibrated for the MAX78000 at ~100 MHz.
- * @param ms Milliseconds to delay.
- */
-static void delay_ms(uint32_t ms)
-{
-	/* Approximate: 100 MHz / 4 instructions per loop = 25k loops per ms */
-	uint32_t loops = ms * 25000;
-	while (loops--) {
-		__asm__ volatile("nop");
-	}
-}
 
 /**
  * @brief RISC-V main function (entry point on CPU1).
@@ -84,18 +65,9 @@ int main(void)
 	/* Enable this core's instruction cache before the hot loop. */
 	maxim_riscv_icc_enable();
 
-	/*
-	 * The C runtime is already up (stack, .data/.bss, trap vector set by the
-	 * startup). Wait for the ARM to publish the callback address in the shared
-	 * table, then read it. Shared memory is coherent (no data cache); the ARM's
-	 * stack is confined to SRAM0/1 so it cannot corrupt the table in SRAM2.
-	 *
-	 * No memory barrier here: on this core a `fence` corrupts the following load,
-	 * and with no data cache, `volatile` plus the doorbell handshake already
-	 * order the accesses correctly.
-	 */
-	while (g_ipc_table->magic != MAXIM_IPC_MAGIC || !g_ipc_table->ready)
-		delay_ms(10);
+	/* Acquire the callback slots published by CPU0 before reading them. */
+	while (!maxim_ipc_table_ready(g_ipc_table))
+		no_os_mdelay(10);
 
 	callback_addr = g_ipc_table->fn[0];
 
@@ -120,7 +92,7 @@ int main(void)
 		}
 
 		/* Brief pace between events */
-		delay_ms(10);
+		no_os_mdelay(10);
 	}
 
 	/*

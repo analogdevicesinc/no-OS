@@ -140,11 +140,11 @@ other projects can reuse it:
   bus lock / the SIMO rail). Enable with ``-Wl,--wrap=MXC_SYS_Reset_Periph``;
   used by both this example and the single-core one.
 
-``maxim_add_riscv_coprocessor()`` (in ``cmake/maxim/maxim_coprocessor.cmake``)
-links a ``NOOS_DRIVERS`` list (no-OS + Maxim-platform + MXC + ADIS sources)
-into the coprocessor image. ``maxim_delay.c``'s ``no_os_get_time()`` is
-``#ifndef __riscv``-guarded (the RISC-V has no SysTick) and its
-``no_os_udelay/mdelay`` use a cycle-count path.
+``maxim_add_riscv_coprocessor()`` builds CPU1 through its own CMake project
+and ``riscv/imu_dual_core.conf``. Platform, SDK, and ADIS driver sources are
+selected by Kconfig. CPU1 reserves the first 8 KiB of SRAM2 for the shared
+window; private data starts at 0x20012000. Its delay and elapsed-time services
+come from the RISC-V platform implementation, with timer 3 reserved for time.
 
 Build & flash
 -------------
