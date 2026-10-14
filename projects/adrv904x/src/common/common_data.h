@@ -20,6 +20,9 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+/* ADRV chip version: ADRV9040, ADRV9042, ADRV9044 or ADRV9049. */
+#define ADRV_VERSION ADRV904X_ID_ADRV9042
+
 extern const struct no_os_spi_init_param ad9528_spi_param;
 extern struct no_os_gpio_init_param clkchip_gpio_init_param;
 
