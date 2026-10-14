@@ -1008,6 +1008,7 @@ int32_t adrv904x_init(struct adrv904x_rf_phy **dev,
 	phy->spi_device_id = 0;
 	phy->device_id = 0;
 	phy->dev_clk = init_param->dev_clk;
+	phy->adrv_version = init_param->adrv_version;
 
 	spi_settings = adrv904x_spi_settings_get();
 	spi_options = adrv904x_spi_options_get();
