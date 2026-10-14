@@ -182,7 +182,7 @@ device.
 AD9088 Driver Initialization Example
 ------------------------------------
 
-.. code-block:: bash
+.. code-block:: c
 
 	struct ad9088_phy *ad9088_phy;
 

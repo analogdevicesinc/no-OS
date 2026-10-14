@@ -699,7 +699,7 @@ int dma_example_main(void)
 	}
 
 	rx_size = ADC_BUFFER_SAMPLES * rx_num_conv *
-			sizeof(adc_buffer_dma[0]);
+		  sizeof(adc_buffer_dma[0]);
 
 	pr_info("Capture geometry: M=%u NP=%u samples/conv=%lu bytes=%lu\n",
 		rx_num_conv, np, (unsigned long)ADC_BUFFER_SAMPLES,

@@ -248,13 +248,13 @@ static int ad9088_device_loopback0(struct ad9088_phy *phy, uint8_t side)
 
 	ret = adi_apollo_loopback_lb0_read_ptr_rst_set(device, select_adc, 2);
 	ret = ad9088_check_apollo_error(ret,
-			"adi_apollo_loopback_lb0_read_ptr_rst_set");
+					"adi_apollo_loopback_lb0_read_ptr_rst_set");
 	if (ret)
 		return ret;
 
 	ret = adi_apollo_loopback_lb0_write_ptr_rst_set(device, sides, 2);
 	ret = ad9088_check_apollo_error(ret,
-			"adi_apollo_loopback_lb0_write_ptr_rst_set");
+					"adi_apollo_loopback_lb0_write_ptr_rst_set");
 	if (ret)
 		return ret;
 
@@ -266,13 +266,13 @@ static int ad9088_device_loopback0(struct ad9088_phy *phy, uint8_t side)
 
 	ret = adi_apollo_loopback_lb0_rx_enable_set(device, sides, 1);
 	ret = ad9088_check_apollo_error(ret,
-			"adi_apollo_loopback_lb0_rx_enable_set");
+					"adi_apollo_loopback_lb0_rx_enable_set");
 	if (ret)
 		return ret;
 
 	ret = adi_apollo_loopback_lb0_tx_enable_set(device, select_adc, 1);
 	ret = ad9088_check_apollo_error(ret,
-			"adi_apollo_loopback_lb0_tx_enable_set");
+					"adi_apollo_loopback_lb0_tx_enable_set");
 	if (ret)
 		return ret;
 
@@ -308,7 +308,7 @@ static int ad9088_device_loopback1(struct ad9088_phy *phy, uint8_t side)
 
 	ret = adi_apollo_loopback_lb1_cduc_enable_set(device, lb1_cducs, 1);
 	ret = ad9088_check_apollo_error(ret,
-			"adi_apollo_loopback_lb1_cduc_enable_set");
+					"adi_apollo_loopback_lb1_cduc_enable_set");
 	if (ret)
 		return ret;
 
@@ -350,13 +350,13 @@ static int ad9088_device_loopback_disable(struct ad9088_phy *phy, uint8_t side)
 		ret = adi_apollo_loopback_lb0_tx_enable_set(device, select_adc,
 				0);
 		ret = ad9088_check_apollo_error(ret,
-				"adi_apollo_loopback_lb0_tx_enable_set");
+						"adi_apollo_loopback_lb0_tx_enable_set");
 		if (ret)
 			return ret;
 
 		ret = adi_apollo_loopback_lb0_rx_enable_set(device, sides, 0);
 		ret = ad9088_check_apollo_error(ret,
-				"adi_apollo_loopback_lb0_rx_enable_set");
+						"adi_apollo_loopback_lb0_rx_enable_set");
 		if (ret)
 			return ret;
 		break;
@@ -364,20 +364,20 @@ static int ad9088_device_loopback_disable(struct ad9088_phy *phy, uint8_t side)
 		ret = adi_apollo_loopback_lb1_cduc_enable_set(device, lb1_cducs,
 				0);
 		ret = ad9088_check_apollo_error(ret,
-				"adi_apollo_loopback_lb1_cduc_enable_set");
+						"adi_apollo_loopback_lb1_cduc_enable_set");
 		if (ret)
 			return ret;
 
 		ret = adi_apollo_loopback_lb1_enable_set(device, sides, 0);
 		ret = ad9088_check_apollo_error(ret,
-				"adi_apollo_loopback_lb1_enable_set");
+						"adi_apollo_loopback_lb1_enable_set");
 		if (ret)
 			return ret;
 
 		ret = adi_apollo_loopback_lb1_blend_set(device, lb1_cducs,
 							ADI_APOLLO_LB1_BLEND_DISABLE);
 		ret = ad9088_check_apollo_error(ret,
-				"adi_apollo_loopback_lb1_blend_set");
+						"adi_apollo_loopback_lb1_blend_set");
 		if (ret)
 			return ret;
 		break;

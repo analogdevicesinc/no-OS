@@ -59,8 +59,8 @@ int ad9088_mcs_init_cal_setup(struct ad9088_phy *phy)
 
 	if (!device->dev_info.is_dual_clk) {
 		ret = adi_apollo_mcs_cal_parameter_set(device,
-						      MCS_OFFSET_C_FEMTOSECONDS_INT64,
-						      0);
+						       MCS_OFFSET_C_FEMTOSECONDS_INT64,
+						       0);
 		ret = ad9088_check_apollo_error(ret,
 						"adi_apollo_mcs_cal_parameter_set");
 		if (ret)
@@ -107,10 +107,10 @@ int ad9088_delta_t_measurement_set(struct ad9088_phy *phy, uint32_t mode)
 
 	if (phy->profile.clk_cfg.clocking_mode == ADI_APOLLO_CLOCKING_MODE_SDR_DIV_8)
 		bsync_divider = 8 *
-			phy->profile.mcs_cfg.internal_sysref_prd_digclk_cycles_center;
+				phy->profile.mcs_cfg.internal_sysref_prd_digclk_cycles_center;
 	else
 		bsync_divider = 4 *
-			phy->profile.mcs_cfg.internal_sysref_prd_digclk_cycles_center;
+				phy->profile.mcs_cfg.internal_sysref_prd_digclk_cycles_center;
 
 	switch (mode) {
 	case 0:

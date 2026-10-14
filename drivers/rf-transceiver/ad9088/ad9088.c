@@ -326,7 +326,7 @@ int ad9088_set_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 	fnco_phase = phy->fnco_phase[terminal][side][fddc_num];
 	config.main_phase_inc = ftw;
 	config.main_phase_offset = no_os_div_s64(fnco_phase * 14073748835533,
-						 18000LL);
+				   18000LL);
 	config.drc_phase_inc_frac_a = frac_a;
 	config.drc_phase_inc_frac_b = frac_b;
 
@@ -375,8 +375,8 @@ int ad9088_get_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 		nco = &phy->profile.tx_path[side].tx_fduc[fddc_pi].nco[0];
 
 		ret = adi_apollo_cduc_interp_bf_to_val(&phy->ad9088,
-			phy->profile.tx_path[side].tx_cduc[cddc_pi].drc_ratio,
-			&cddc_dcm);
+						       phy->profile.tx_path[side].tx_cduc[cddc_pi].drc_ratio,
+						       &cddc_dcm);
 		ret = ad9088_check_apollo_error(ret,
 						"adi_apollo_cduc_interp_bf_to_val");
 		f = phy->profile.dac_cfg[side].dac_sampling_rate_Hz;
@@ -384,8 +384,8 @@ int ad9088_get_fnco_freq(struct ad9088_phy *phy, adi_apollo_terminal_e terminal,
 		nco = &phy->profile.rx_path[side].rx_fddc[fddc_pi].nco[0];
 
 		ret = adi_apollo_cddc_dcm_bf_to_val(&phy->ad9088,
-			phy->profile.rx_path[side].rx_cddc[cddc_pi].drc_ratio,
-			&cddc_dcm);
+						    phy->profile.rx_path[side].rx_cddc[cddc_pi].drc_ratio,
+						    &cddc_dcm);
 		ret = ad9088_check_apollo_error(ret,
 						"adi_apollo_cddc_dcm_bf_to_val");
 		f = phy->profile.adc_cfg[side].adc_sampling_rate_Hz;
@@ -1090,7 +1090,7 @@ static int32_t ad9088_spi_read(void *dev_obj, const uint8_t tx_data[],
  * @return             - 0 in case of success, negative error code otherwise.
  */
 static int32_t ad9088_spi_write(void *dev_obj, const uint8_t tx_data[],
-			    uint32_t num_tx_bytes, adi_apollo_hal_txn_config_t *txn_config)
+				uint32_t num_tx_bytes, adi_apollo_hal_txn_config_t *txn_config)
 {
 	struct ad9088_phy *phy = dev_obj;
 	uint8_t buf[16];
@@ -1417,7 +1417,7 @@ int ad9088_init(struct ad9088_phy **device,
 		goto error;
 
 	ret = adi_apollo_hal_active_protocol_set(&phy->ad9088,
-						 ADI_APOLLO_HAL_PROTOCOL_SPI0);
+			ADI_APOLLO_HAL_PROTOCOL_SPI0);
 	ret = ad9088_check_apollo_error(ret, "adi_apollo_hal_active_protocol_set");
 	if (ret)
 		goto error_hw_close;

@@ -287,12 +287,12 @@ static int ad9088_jesd204_link_setup(struct jesd204_dev *jdev,
 
 	ret = adi_apollo_clk_mcs_dyn_sync_sequence_run(device);
 	ret = ad9088_check_apollo_error(ret,
-			"adi_apollo_clk_mcs_dyn_sync_sequence_run");
+					"adi_apollo_clk_mcs_dyn_sync_sequence_run");
 	if (ret)
 		return ret;
 	ret = adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run(device);
 	ret = ad9088_check_apollo_error(ret,
-			"adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run");
+					"adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run");
 	if (ret)
 		return ret;
 
@@ -447,7 +447,7 @@ static int ad9088_jesd204_setup_stage2(struct jesd204_dev *jdev,
 
 	ret = adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run(device);
 	ret = ad9088_check_apollo_error(ret,
-			"adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run");
+					"adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run");
 	if (ret)
 		return ret;
 
@@ -977,25 +977,25 @@ static int ad9088_jesd204_post_setup_stage2(struct jesd204_dev *jdev,
 		ret = adi_apollo_clk_mcs_sync_trig_map(device, ADI_APOLLO_RX_TX_ALL,
 						       ADI_APOLLO_TRIG_PIN_A0);
 		ret = ad9088_check_apollo_error(ret,
-				"adi_apollo_clk_mcs_sync_trig_map");
+						"adi_apollo_clk_mcs_sync_trig_map");
 		if (ret)
 			return ret;
 
 		/* Resync the Rx and Tx dig only during trig sync */
 		ret = adi_apollo_clk_mcs_trig_sync_enable(device, 0);
 		ret = ad9088_check_apollo_error(ret,
-				"adi_apollo_clk_mcs_trig_sync_enable");
+						"adi_apollo_clk_mcs_trig_sync_enable");
 		if (ret)
 			return ret;
 		ret = adi_apollo_clk_mcs_trig_reset_disable(device);
 		ret = ad9088_check_apollo_error(ret,
-				"adi_apollo_clk_mcs_trig_reset_disable");
+						"adi_apollo_clk_mcs_trig_reset_disable");
 		if (ret)
 			return ret;
 
 		ret = adi_apollo_clk_mcs_trig_reset_dsp_enable(device);
 		ret = ad9088_check_apollo_error(ret,
-				"adi_apollo_clk_mcs_trig_reset_dsp_enable");
+						"adi_apollo_clk_mcs_trig_reset_dsp_enable");
 		if (ret)
 			return ret;
 
@@ -1007,7 +1007,7 @@ static int ad9088_jesd204_post_setup_stage2(struct jesd204_dev *jdev,
 		 */
 		ret = adi_apollo_clk_mcs_trig_sync_enable(device, 1);
 		ret = ad9088_check_apollo_error(ret,
-				"adi_apollo_clk_mcs_trig_sync_enable");
+						"adi_apollo_clk_mcs_trig_sync_enable");
 		if (ret)
 			return ret;
 	}
@@ -1086,14 +1086,14 @@ static int ad9088_jesd204_post_setup_stage4(struct jesd204_dev *jdev,
 						    BF_TRIGGER_SYNC_DONE_A0_INFO(MCS_SYNC_MCSTOP0),
 						    1000000, 100);
 		ret = ad9088_check_apollo_error(ret,
-				"adi_apollo_hal_bf_wait_to_set");
+						"adi_apollo_hal_bf_wait_to_set");
 		if (ret)
 			return ret;
 		ret = adi_apollo_clk_mcs_trig_phase_get(device,
 							ADI_APOLLO_TRIG_PIN_A0,
 							&phase, &phase1);
 		ret = ad9088_check_apollo_error(ret,
-				"adi_apollo_clk_mcs_trig_phase_get");
+						"adi_apollo_clk_mcs_trig_phase_get");
 		if (ret)
 			return ret;
 
@@ -1133,12 +1133,12 @@ static int ad9088_jesd204_post_setup_stage4(struct jesd204_dev *jdev,
 
 		ret = adi_apollo_clk_mcs_trig_sync_enable(device, 0);
 		ret = ad9088_check_apollo_error(ret,
-				"adi_apollo_clk_mcs_trig_sync_enable");
+						"adi_apollo_clk_mcs_trig_sync_enable");
 		if (ret)
 			return ret;
 		ret = adi_apollo_clk_mcs_trig_reset_disable(device);
 		ret = ad9088_check_apollo_error(ret,
-				"adi_apollo_clk_mcs_trig_reset_disable");
+						"adi_apollo_clk_mcs_trig_reset_disable");
 		if (ret)
 			return ret;
 	}

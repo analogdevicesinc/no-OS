@@ -224,7 +224,7 @@ struct ad9088_phy {
 
 	/* Read by ad9088_set_fnco_freq() as the FNCO main phase offset. */
 	long long fnco_phase[NUM_RXTX][ADI_APOLLO_NUM_SIDES]
-			    [MAX_NUM_CHANNELIZER];
+	[MAX_NUM_CHANNELIZER];
 
 	bool cnco_dual_modulus_mode_en;
 	bool fnco_dual_modulus_mode_en;

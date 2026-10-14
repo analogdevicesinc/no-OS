@@ -2,7 +2,7 @@
  *   @file   parameters.h
  *   @brief  Definitions specific to xilinx platform used by ad9088
  *           project.
- *   @author RBolboac (ramona.bolboaca@analog.com)
+ *   @author CHegbeli (ciprian.hegbeli@analog.com)
 ********************************************************************************
  * Copyright 2026(c) Analog Devices, Inc.
  *

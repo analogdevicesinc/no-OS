@@ -156,15 +156,19 @@ int basic_example_main()
 	struct jesd204_topology_dev devs[] = {
 		{
 			.jdev = adf4030_dev->jdev,
-			.link_ids = {FRAMER_LINK_A0_RX,
-				     DEFRAMER_LINK_A0_TX},
+			.link_ids = {
+				FRAMER_LINK_A0_RX,
+				DEFRAMER_LINK_A0_TX
+			},
 			.links_number = 2,
 			.is_sysref_provider = true,
 		},
 		{
 			.jdev = hmc7044_dev->jdev,
-			.link_ids = {FRAMER_LINK_A0_RX,
-				     DEFRAMER_LINK_A0_TX},
+			.link_ids = {
+				FRAMER_LINK_A0_RX,
+				DEFRAMER_LINK_A0_TX
+			},
 			.links_number = 2,
 		},
 		{
@@ -179,8 +183,10 @@ int basic_example_main()
 		},
 		{
 			.jdev = ad9088_phy->jdev,
-			.link_ids = {FRAMER_LINK_A0_RX,
-				     DEFRAMER_LINK_A0_TX},
+			.link_ids = {
+				FRAMER_LINK_A0_RX,
+				DEFRAMER_LINK_A0_TX
+			},
 			.links_number = 2,
 			.is_top_device = true,
 		},
