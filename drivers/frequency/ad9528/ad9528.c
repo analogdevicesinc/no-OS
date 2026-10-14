@@ -1079,8 +1079,10 @@ pll2_bypassed:
 
 error:
 
-	for (i = 0; i < AD9528_NUM_CHAN; i++) {
-		no_os_free(clocks[i]);
+	if (clocks) {
+		for (i = 0; i < AD9528_NUM_CHAN; i++) {
+			no_os_free(clocks[i]);
+		}
 	}
 	no_os_free(dev);
 
