@@ -63,6 +63,9 @@ int example_main(void)
 	struct adi_adrv904x_Device adrv904x_device = { 0 };
 	struct ad9528_platform_data ad9528_pdata = { 0 };
 	struct ad9528_channel_spec ad9528_channels[14];
+	/* set ADRV chip version: ADRV9040, 9042, 9044 or 9049.
+	 * ADRV_VERSION is defined in src/common/common_data.h */
+	enum adrv904x_device_id adrv_version = ADRV_VERSION;
 	struct ad9528_init_param ad9528_param;
 	struct axi_clkgen *rx_clkgen = NULL;
 	struct axi_clkgen *tx_clkgen = NULL;
@@ -282,6 +285,7 @@ int example_main(void)
 
 	adrv904x_init_par.adrv904x_device = &adrv904x_device;
 	adrv904x_init_par.dev_clk = ad9528_device->clk_desc[1];
+	adrv904x_init_par.adrv_version = adrv_version;
 
 	status = adrv904x_init(&phy, &adrv904x_init_par);
 	if (status) {
