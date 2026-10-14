@@ -350,7 +350,7 @@ int example_main(void)
 	adrv9025_init_par.dev_clk = ad9528_device->clk_desc[1];
 	adrv9025_init_par.streamImageFile = ADRV9025_STREAM_IMAGE_FILE;
 	adrv9025_init_par.agcConfig_init_param = &agcConfig_init_param;
-	adrv9025_init_par.adrv_version = adrv_version;	
+	adrv9025_init_par.adrv_version = adrv_version;
 
 	status = adrv9025_init(&phy, &adrv9025_init_par);
 	if (status) {
