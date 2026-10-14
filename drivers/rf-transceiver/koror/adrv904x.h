@@ -26,6 +26,12 @@
 #define FRAMER1_LINK_RX		3
 #define FRAMER2_LINK_RX		4
 
+enum adrv904x_device_id {
+	ADRV904X_ID_ADRV9040,
+	ADRV904X_ID_ADRV9042,
+	ADRV904X_ID_ADRV9044
+};
+
 enum adrv904x_clocks {
 	ADRV904X_RX_SAMPL_CLK,
 	ADRV904X_TX_SAMPL_CLK,
@@ -59,11 +65,14 @@ struct adrv904x_rf_phy {
 
 	struct axi_adc				*rx_adc;
 	struct axi_dac				*tx_dac;
+
+	enum adrv904x_device_id			adrv_version;
 };
 
 struct adrv904x_init_param {
 	struct no_os_clk_desc		*dev_clk;
 	struct adi_adrv904x_Device	*adrv904x_device;
+	enum adrv904x_device_id		adrv_version;
 };
 
 // /* Initialize the device. */
