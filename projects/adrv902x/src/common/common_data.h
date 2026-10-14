@@ -10,6 +10,8 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
+#define ADRV_VERSION ADRV9025_ID_ADRV9022
+
 #include "platform_includes.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
