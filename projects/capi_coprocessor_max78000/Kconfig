@@ -1,0 +1,18 @@
+menu "capi_coprocessor_max78000 Configuration"
+
+choice CAPI_COPROCESSOR_MAX78000_EXAMPLE
+	prompt "Example variant"
+	default CAPI_COPROCESSOR_DEMO_EXAMPLE
+
+config CAPI_COPROCESSOR_DEMO_EXAMPLE
+	bool "QVGA camera coprocessor example"
+	help
+	  Runs OVM7692 QVGA capture and streaming statistics on the MAX78000
+	  RV32 core (CPU1), transports RGB565 tiles through shared SRAM and a
+	  CAPI mailbox, and displays the video with a text overlay on the EVKIT
+	  TFT. PB1 provides a debugger-safe pause and PB2 demonstrates CAPI
+	  PARKED/RUN lifecycle control.
+
+endchoice
+
+endmenu
