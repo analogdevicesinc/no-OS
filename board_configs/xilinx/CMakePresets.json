@@ -63,6 +63,17 @@
 			}
 		},
 		{
+			"name": "vck190",
+			"description": "VCK190 (Versal AI Core, cortexa72 / psv_cortexa72_0). Requires -DHARDWARE=<abs path to system_top.xsa>",
+			"inherits": "xilinx-base",
+			"cacheVariables": {
+				"BOARD": "vck190",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "xilinx",
+				"BOARD_CONFIG_FILE": "vck190_defconfig"
+			}
+		},
+		{
 			"name": "zc702",
 			"description": "ZC702 (Zynq-7000, cortexa9). Requires -DHARDWARE=<abs path to system_top.xsa>",
 			"inherits": "xilinx-base",
