@@ -1,0 +1,6 @@
+board:
+  name: ad_pqmon_sl
+  full_name: AD-PQMON-SL
+  vendor: adi
+  socs:
+    - name: max32650

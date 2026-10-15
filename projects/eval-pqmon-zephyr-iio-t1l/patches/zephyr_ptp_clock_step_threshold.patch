@@ -1,0 +1,47 @@
+diff --git a/subsys/net/lib/ptp/clock.c b/subsys/net/lib/ptp/clock.c
+index e4a207572a7..093e9331470 100644
+--- a/subsys/net/lib/ptp/clock.c
++++ b/subsys/net/lib/ptp/clock.c
+@@ -534,12 +534,17 @@ void ptp_clock_synchronize(uint64_t ingress, uint64_t egress)
+ 
+ 	offset = (int64_t)(ptp_clk.timestamp.t2 - ptp_clk.timestamp.t1) - delay;
+ 
+-	/* If diff is too big, ptp_clk needs to be set first. */
+-	if ((offset > (int64_t)NSEC_PER_SEC) || (offset < -(int64_t)NSEC_PER_SEC)) {
++	/* If offset exceeds the step threshold, correct it with a
++	 * single clock_set rather than feeding it to the PI servo.
++	 * The PI servo produces rate_adjust ratios of ~(1 - offset/1e9);
++	 * hardware TS_ADDEND only supports ±10%, so offsets above ~100ms
++	 * would produce out-of-range ratios and never converge. */
++#define PTP_STEP_THRESHOLD_NS (100LL * NSEC_PER_MSEC)
++	if ((offset > PTP_STEP_THRESHOLD_NS) || (offset < -PTP_STEP_THRESHOLD_NS)) {
+ 		struct net_ptp_time current;
+ 		int32_t dest_nsec;
+ 
+-		LOG_WRN("Clock offset exceeds 1 second.");
++		LOG_INF("Stepping clock (offset %lldns exceeds 100ms threshold)", offset);
+ 
+ 		ptp_clock_get(ptp_clk.phc, &current);
+ 
+@@ -557,11 +562,11 @@ void ptp_clock_synchronize(uint64_t ingress, uint64_t egress)
+ 		current.nanosecond = (uint32_t)dest_nsec;
+ 
+ 		ptp_clock_set(ptp_clk.phc, &current);
+-		LOG_WRN("Set clock time: %"PRIu64".%09u", current.second, current.nanosecond);
++		LOG_DBG("Set clock time: %"PRIu64".%09u", current.second, current.nanosecond);
+ 		return;
+ 	}
+ 
+-	LOG_DBG("Offset %lldns", offset);
++	LOG_INF("Offset %lldns (delay=%lldns)", offset, delay);
+ 	ptp_clk.current_ds.offset_from_tt = clock_ns_to_timeinterval(offset);
+ 
+ 	ppb = ptp_servo_pi(-offset);
+@@ -583,7 +588,6 @@ void ptp_clock_delay(uint64_t egress, uint64_t ingress)
+ 		 (int64_t)(ptp_clk.timestamp.t4 - ptp_clk.timestamp.t1)) /
+ 		2LL;
+ 
+-	LOG_DBG("Delay %lldns", delay);
+ 	ptp_clk.current_ds.mean_delay = clock_ns_to_timeinterval(delay);
+ }
+ 

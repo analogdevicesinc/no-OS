@@ -1,0 +1,44 @@
+mainmenu "PQMON IIO Application"
+
+source "Kconfig.zephyr"
+
+choice IIO_TRANSPORT
+	prompt "IIO transport"
+	default IIO_TRANSPORT_USB
+
+config IIO_TRANSPORT_USB
+	bool "USB CDC/ACM"
+	depends on USB_DEVICE_STACK_NEXT && USBD_CDC_ACM_CLASS
+
+config IIO_TRANSPORT_TCP
+	bool "TCP over T1L (port 30431)"
+	depends on NET_TCP && NET_SOCKETS
+
+endchoice
+
+config WAVEFORM_BUFFER
+	bool "Waveform ring buffer"
+	default n
+	help
+	  Enable ring buffer that captures raw ADE9430 waveform blocks
+	  from the AFE thread. Required by WAVEFORM_UART_EXPORT and
+	  future IIO buffer streaming.
+
+config WAVEFORM_UART_EXPORT
+	bool "Stream waveform data over UART2 (binary)"
+	depends on WAVEFORM_BUFFER
+	default n
+	help
+	  Spawn a dedicated thread that reads waveform blocks from the
+	  ring buffer and streams them as binary frames over UART2.
+	  The 1Hz CSV export continues independently.
+
+config WAVEFORM_CHANNEL_MASK
+	hex "Default waveform channel mask"
+	depends on WAVEFORM_BUFFER
+	default 0x7F
+	help
+	  Bitmask selecting which channels to export. Bits follow the
+	  ADE9430 WFB BURST_ALL_CHAN hardware order:
+	  Bit 0=IA, 1=VA, 2=IB, 3=VB, 4=IC, 5=VC, 6=IN.
+	  0x7F = all 7 channels.
