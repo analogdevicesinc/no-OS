@@ -34,6 +34,8 @@ struct max_capi_gpio_port_priv {
 	uint32_t direction_mask;
 	/** Platform-specific extra configuration */
 	struct max_capi_gpio_extra_config extra;
+	/** Bitmask of pins flagged CAPI_GPIO_ACTIVE_LOW */
+	uint32_t active_low_mask;
 };
 
 #define CAPI_GPIO_HANDLE_MAXIM_INIT()				\
