@@ -243,20 +243,69 @@ struct axi_dmac_init tx_dmac_ip = {
  * FSM path the cores are configured from the link the FSM derives from the
  * device profile instead, so setting them here would document nothing.
  */
+#ifndef AD9088_ADXCVR
+static struct no_os_gpio_init_param rx_gt_reset_pll_ip = {
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA,
+	.number = RX_JESD_GT_RESET_PLL,
+};
+
+static struct no_os_gpio_init_param rx_gt_reset_dp_ip = {
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA,
+	.number = RX_JESD_GT_RESET_DP,
+};
+
+static struct no_os_gpio_init_param rx_gt_reset_done_ip = {
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA,
+	.number = RX_JESD_GT_RESET_DONE,
+};
+
+static struct no_os_gpio_init_param tx_gt_reset_pll_ip = {
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA,
+	.number = TX_JESD_GT_RESET_PLL,
+};
+
+static struct no_os_gpio_init_param tx_gt_reset_dp_ip = {
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA,
+	.number = TX_JESD_GT_RESET_DP,
+};
+
+static struct no_os_gpio_init_param tx_gt_reset_done_ip = {
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA,
+	.number = TX_JESD_GT_RESET_DONE,
+};
+#endif
+
 struct jesd204_rx_init rx_jesd204_ip = {
 	.name = "rx_jesd",
 	.base = RX_JESD_BASEADDR,
 	.device_clk_khz = AD9088_DEVICE_CLK_KHZ,
-	.lane_clk_khz = AD9088_LANE_RATE_KHZ
+	.lane_clk_khz = AD9088_LANE_RATE_KHZ,
+#ifndef AD9088_ADXCVR
+	.gt_reset_pll = &rx_gt_reset_pll_ip,
+	.gt_reset_dp = &rx_gt_reset_dp_ip,
+	.gt_reset_done = &rx_gt_reset_done_ip,
+#endif
 };
 
 struct jesd204_tx_init tx_jesd204_ip = {
 	.name = "tx_jesd",
 	.base = TX_JESD_BASEADDR,
 	.device_clk_khz = AD9088_DEVICE_CLK_KHZ,
-	.lane_clk_khz = AD9088_LANE_RATE_KHZ
+	.lane_clk_khz = AD9088_LANE_RATE_KHZ,
+#ifndef AD9088_ADXCVR
+	.gt_reset_pll = &tx_gt_reset_pll_ip,
+	.gt_reset_dp = &tx_gt_reset_dp_ip,
+	.gt_reset_done = &tx_gt_reset_done_ip,
+#endif
 };
 
+#ifdef AD9088_ADXCVR
 struct adxcvr_init tx_adxcvr_ip = {
 	.name = "tx_adxcvr",
 	.base = TX_XCVR_BASEADDR,
@@ -278,6 +327,7 @@ struct adxcvr_init rx_adxcvr_ip = {
 	.ref_rate_khz = 312500,
 	.export_no_os_clk = true,
 };
+#endif
 
 struct axi_adc_init rx_adc_init = {
 	.name = "rx_adc",

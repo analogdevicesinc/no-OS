@@ -80,10 +80,24 @@
 #define ADF4030_CH_FPGA_SYSREF			8	/* SYSREF_IN_F */
 
 #define AD9088_NYQUIST_ZONE			1
+
+#if defined(BOARD_VCK190)
+#define AD9088_TX0_LOGICAL_LANE_MAPPING		\
+	{11, 11, 11, 1, 11, 11, 11, 11, 2, 3, 11, 0}
+#define AD9088_TX1_LOGICAL_LANE_MAPPING		\
+	{11, 5, 1, 0, 11, 2, 11, 3, 4, 7, 11, 6}
+#define AD9088_RX0_PHYSICAL_LANE_MAPPING	\
+	{5, 1, 3, 7, 11, 11, 11, 11, 11, 11, 11, 11}
+#define AD9088_RX1_PHYSICAL_LANE_MAPPING	\
+	{1, 7, 10, 3, 5, 8, 9, 11, 11, 11, 11, 11}
+#elif defined(BOARD_VCU118)
 #define AD9088_TX0_LOGICAL_LANE_MAPPING		{11, 2, 3, 5, 10, 1, 9, 0, 6, 7, 8, 4}
 #define AD9088_TX1_LOGICAL_LANE_MAPPING		{3, 9, 5, 4, 2, 6, 1, 7, 8, 11, 0, 10}
 #define AD9088_RX0_PHYSICAL_LANE_MAPPING	{10, 8, 9, 11, 5, 1, 3, 7, 4, 6, 2, 0}
 #define AD9088_RX1_PHYSICAL_LANE_MAPPING	{4, 6, 2, 0, 1, 7, 10, 3, 5, 8, 9, 11}
+#else
+#error "ad9088: no lane mapping for this board"
+#endif
 
 extern struct adf4382_init_param 		adf4382_ip;
 extern struct adf4030_init_param		adf4030_ip;
@@ -93,8 +107,10 @@ extern struct axi_dmac_init 			rx_dmac_ip;
 extern struct axi_dmac_init 			tx_dmac_ip;
 extern struct jesd204_rx_init			rx_jesd204_ip;
 extern struct jesd204_tx_init			tx_jesd204_ip;
+#ifdef AD9088_ADXCVR
 extern struct adxcvr_init			rx_adxcvr_ip;
 extern struct adxcvr_init			tx_adxcvr_ip;
+#endif
 extern struct ad9088_init_param			ad9088_ip;
 extern struct axi_adc_init 			rx_adc_init;
 extern struct axi_dac_init 			tx_dac_init;
