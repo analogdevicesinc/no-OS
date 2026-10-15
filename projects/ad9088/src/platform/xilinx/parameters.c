@@ -50,7 +50,11 @@ struct xil_uart_init_param platform_uart_extra_ip = {
 #endif
 	.irq_id = UART_IRQ_ID,
 #ifdef SDT
+#ifdef PLATFORM_MB
 	.base_addr = XPAR_XUARTLITE_0_BASEADDR,
+#else
+	.base_addr = XPAR_XUARTPSV_0_BASEADDR,
+#endif
 #endif
 };
 
@@ -73,7 +77,7 @@ struct xil_spi_init_param clk_spi_extra_ip = {
 struct xil_spi_init_param apollo_spi_extra_ip = {
 	.type = SPI_PL,
 #ifdef SDT
-	.base_addr = XPAR_XSPI_1_BASEADDR,
+	.base_addr = APOLLO_SPI_BASEADDR,
 #endif
 };
 

@@ -28,12 +28,6 @@ if(CONFIG_AD9088_DMA_EXAMPLE)
     target_compile_definitions(ad9088 PRIVATE DMA_EXAMPLE)
 endif()
 
-# The carrier board, as a macro the sources can test. The VCU118 and VCK190
-# designs are not interchangeable: the clock chips hang off a PL AXI quad-SPI on
-# one and PS SPI0 on the other (with different chip selects), only the VCU118
-# instantiates an axi_adxcvr, and the Apollo reset sits on a different axi_gpio
-# pin. parameters.h and common_data.h branch on this; see
-# dev_doc/VCK190_ENABLEMENT.md. Mirrors how projects/ad9361 emits PLATFORM_MB.
 if(BOARD)
     string(TOUPPER "${BOARD}" _ad9088_board)
     string(MAKE_C_IDENTIFIER "${_ad9088_board}" _ad9088_board)

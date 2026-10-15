@@ -52,21 +52,54 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#ifdef _XPARAMETERS_PS_H_
+#if defined(BOARD_VCK190) || defined(BOARD_VPK180)
+
 #define UART_DEVICE_ID			XPAR_XUARTPSV_0_DEVICE_ID
+#define UART_IRQ_ID			XPAR_XUARTPSV_0_INTR
 #define CLK_SPI_DEVICE_ID		XPAR_XSPIPS_0_DEVICE_ID
 #define APOLLO_SPI_DEVICE_ID		XPAR_SPI_0_DEVICE_ID
+#define APOLLO_SPI_BASEADDR		XPAR_XSPI_0_BASEADDR
 #define GPIO_DEVICE_ID			XPAR_GPIO_0_DEVICE_ID
-#define UART_IRQ_ID			XPAR_XUARTPS_0_INTR
-#elif defined(PLATFORM_MB)
+
+#define SPI_CS_ADF4382			0
+#define SPI_CS_HMC7044			1
+#define SPI_CS_ADF4030			2
+
+#define GPIO_OFFSET			0
+#define GPIO_RESET_N			30
+
+#define RX_JESD_GT_RESET_DONE		32
+#define TX_JESD_GT_RESET_DONE		33
+#define RX_JESD_GT_RESET_PLL		36
+#define TX_JESD_GT_RESET_PLL		37
+#define RX_JESD_GT_RESET_DP		38
+#define TX_JESD_GT_RESET_DP		39
+
+#elif defined(BOARD_VCU118)
+
 #define UART_DEVICE_ID			XPAR_AXI_UART_DEVICE_ID
+#define UART_IRQ_ID			XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR
 #define CLK_SPI_DEVICE_ID		XPAR_AXI_SPI_DEVICE_ID
 #ifndef XPAR_SPI_1_DEVICE_ID
 #define XPAR_SPI_1_DEVICE_ID		1
 #endif
 #define APOLLO_SPI_DEVICE_ID		XPAR_SPI_1_DEVICE_ID
+#define APOLLO_SPI_BASEADDR		XPAR_XSPI_1_BASEADDR
 #define GPIO_DEVICE_ID			XPAR_AXI_GPIO_DEVICE_ID
-#define UART_IRQ_ID			XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR
+
+#define SPI_CS_ADF4382			0
+#define SPI_CS_HMC7044			1
+#define SPI_CS_ADF4030			4
+
+#define GPIO_OFFSET			32
+#define GPIO_RESET_N			30
+
+#define AD9088_HAS_ADXCVR
+#define RX_XCVR_BASEADDR		XPAR_AXI_APOLLO_RX_XCVR_BASEADDR
+#define TX_XCVR_BASEADDR		XPAR_AXI_APOLLO_TX_XCVR_BASEADDR
+
+#else
+#error "ad9088: unsupported board (VCU118, VCK190 or VPK180 expected)"
 #endif
 
 extern struct xil_uart_init_param	platform_uart_extra_ip;
@@ -76,9 +109,6 @@ extern struct xil_gpio_init_param	xil_gpio_param;
 
 #define SPI_OPS_CLK			&xil_spi_ops
 #define SPI_EXTRA_CLK			&clk_spi_extra_ip
-#define SPI_CS_ADF4382			0
-#define SPI_CS_HMC7044			1
-#define SPI_CS_ADF4030			4
 
 #define SPI_OPS_APOLLO			&xil_spi_ops
 #define SPI_EXTRA_APOLLO		&apollo_spi_extra_ip
@@ -86,8 +116,6 @@ extern struct xil_gpio_init_param	xil_gpio_param;
 
 #define GPIO_OPS			&xil_gpio_ops
 #define GPIO_EXTRA			&xil_gpio_param
-#define GPIO_OFFSET			32
-#define GPIO_RESET_N			30
 
 #define UART_OPS			&xil_uart_ops
 #define UART_BAUDRATE			115200
@@ -116,8 +144,5 @@ extern struct xil_gpio_init_param	xil_gpio_param;
 
 #define RX_JESD_BASEADDR		XPAR_AXI_JESD204_RX_0_BASEADDR
 #define TX_JESD_BASEADDR		XPAR_AXI_JESD204_TX_0_BASEADDR
-
-#define RX_XCVR_BASEADDR		XPAR_AXI_APOLLO_RX_XCVR_BASEADDR
-#define TX_XCVR_BASEADDR		XPAR_AXI_APOLLO_TX_XCVR_BASEADDR
 
 #endif /* __PARAMETERS_H__ */
