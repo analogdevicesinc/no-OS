@@ -116,6 +116,13 @@ elseif(XILINX_ARCH MATCHES "cortexa53")
     set(_xl_prefix aarch64-none-elf)
     file(GLOB _xl_bin "${XILINX_VITIS}/gnu/aarch64/lin/aarch64-none/bin")
     set(_xl_cpu_flags "")
+elseif(XILINX_ARCH MATCHES "cortexa72")
+    # Versal APU.  get_arch reports the full CIPS hierarchy path
+    # (sys_cips_pspmc_0_psv_cortexa72_0), hence the substring match.  Same
+    # aarch64 toolchain as ZynqMP's cortexa53.
+    set(_xl_prefix aarch64-none-elf)
+    file(GLOB _xl_bin "${XILINX_VITIS}/gnu/aarch64/lin/aarch64-none/bin")
+    set(_xl_cpu_flags "")
 elseif(XILINX_ARCH MATCHES "cortexr5")
     set(_xl_prefix armr5-none-eabi)
     file(GLOB _xl_bin "${XILINX_VITIS}/gnu/armr5/lin/gcc-arm-none-eabi/bin")
