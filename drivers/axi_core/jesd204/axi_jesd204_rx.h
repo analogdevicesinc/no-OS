@@ -16,6 +16,8 @@
 #include "no_os_clk.h"
 #include "no_os_gpio.h"
 
+struct axi_clkgen;
+
 struct jesd204_rx_config {
 	uint8_t octets_per_frame;
 	uint16_t frames_per_multiframe;
@@ -49,6 +51,10 @@ struct axi_jesd204_rx {
 	enum jesd204_encoder encoder;
 	/** Lane Clock */
 	struct no_os_clk_desc *lane_clk;
+	/** Optional device-clock generator. When set, the link FSM trims it
+	 *  to the per-path device clock (link_rate * data_path_width /
+	 *  tpl_data_path_width), like Linux; NULL leaves it unchanged. */
+	struct axi_clkgen *device_clkgen;
 	/** JESD204 FSM device */
 	struct jesd204_dev *jdev;
 	/** Optional GT reset GPIOs (Versal) */
@@ -88,11 +94,15 @@ struct jesd204_rx_init {
 int32_t axi_jesd204_rx_lane_clk_enable(struct axi_jesd204_rx *jesd);
 /** JESD204 RX Lane Clock Disable */
 int32_t axi_jesd204_rx_lane_clk_disable(struct axi_jesd204_rx *jesd);
-/** JESD204 RX Status Read */
+/** JESD204 RX Status Read (link-level status; also per-lane info for every
+ *  lane when JESD204_DUMP_LANE_STATUS is defined) */
 uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd);
 /** JESD204 RX Lane Info read */
 int32_t axi_jesd204_rx_laneinfo_read(struct axi_jesd204_rx *jesd,
 				     uint32_t lane);
+/** JESD204 RX Lane Status check (true if the lane is desynced) */
+bool axi_jesd204_rx_check_lane_status(struct axi_jesd204_rx *jesd,
+				      uint32_t lane);
 /** JESD204 RX Watchdog */
 int32_t axi_jesd204_rx_watchdog(struct axi_jesd204_rx *jesd);
 /** Device initialization */
