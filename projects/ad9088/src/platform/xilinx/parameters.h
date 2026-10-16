@@ -54,8 +54,12 @@
 /******************************************************************************/
 #if defined(BOARD_VCK190) || defined(BOARD_VPK180)
 
+#include <xinterrupt_wrap.h>
+
 #define UART_DEVICE_ID			XPAR_XUARTPSV_0_DEVICE_ID
-#define UART_IRQ_ID			XPAR_XUARTPSV_0_INTR
+#define UART_IRQ_ID			\
+	(XGet_IntrId(XPAR_XUARTPSV_0_INTERRUPTS) + \
+	 XGet_IntrOffset(XPAR_XUARTPSV_0_INTERRUPTS))
 #define CLK_SPI_DEVICE_ID		XPAR_XSPIPS_0_DEVICE_ID
 #define APOLLO_SPI_DEVICE_ID		XPAR_SPI_0_DEVICE_ID
 #define APOLLO_SPI_BASEADDR		XPAR_XSPI_0_BASEADDR
