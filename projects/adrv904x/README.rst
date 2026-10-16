@@ -108,18 +108,26 @@ The output from a successful initialization looks like:
     DFE file: ADRV9040_DFE_CALS_FW.bin
 
     adrv904x_setup()
-    adrv904x-phy Rev 0, API version: 2.10.0.4 found
+    adrv904x-phy Rev 0, API version: 2.15.0.4 found
     adrv904x-device revision: 0xa0
 
-        Using the Profile Init and PostMcsInit Structures
-    tx_dac: Successfully initialized (491564941 Hz)
+    Using the Profile Init and PostMcsInit Structures
+    rx_clkgen: MMCM-PLL locked (245760000 Hz)
+    tx_clkgen: MMCM-PLL locked (245760000 Hz)
+    tx_dac: Successfully initialized (491510009 Hz)
+    tx_clkgen: MMCM-PLL locked (245760000 Hz)
+    rx_clkgen: MMCM-PLL locked (245760000 Hz)
     tx_adxcvr: OK (16220160 kHz)
     rx_adxcvr: OK (16220160 kHz)
+    adrv904x-phy Rev 160, API version: 2.15.0.4
 
     tx_jesd status:
         Link is enabled
-        Measured Link Clock: 245.782 MHz
+        Measured Link Clock: 245.755 MHz
         Reported Link Clock: 245.760 MHz
+        Measured Device Clock: 245.755 MHz
+        Reported Device Clock: 245.760 MHz
+        Desired Device Clock: 245.760 MHz
         Lane rate: 16220.160 MHz
         Lane rate / 66: 245.760 MHz
         LEMC rate: 7.680 MHz
@@ -128,7 +136,14 @@ The output from a successful initialization looks like:
         SYSREF alignment error: No
     rx_jesd status:
         Link is enabled
-        ...
+        Measured Link Clock: 245.755 MHz
+        Reported Link Clock: 245.760 MHz
+        Measured Device Clock: 245.755 MHz
+        Reported Device Clock: 245.760 MHz
+        Desired Device Clock: 245.760 MHz
+        Lane rate: 16220.160 MHz
+        Lane rate / 66: 245.760 MHz
+        LEMC rate: 7.680 MHz
         Link status: DATA
         SYSREF captured: Yes
         SYSREF alignment error: No
