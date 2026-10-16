@@ -1150,7 +1150,39 @@ def _write_ps(session, cpu, binary, jtagtarget):
     session.dow(file=os.path.normpath(binary))
     time.sleep(2)
     session.con()
+    # Give the resume reply time to land. disconnect() closes the channel
+    # immediately, and any command still in flight is aborted by the TCF
+    # close path (AbstractChannel, "Exception in command listener"), which
+    # can drop the resume and leave the core sitting at the reset catch.
+    time.sleep(2)
     session.disconnect()
+
+
+# Default hw_server endpoint, matching the xsdb/vivado_lab default. Used
+# when neither XSCT_REMOTE_HOST nor XSCT_REMOTE_PORT is set.
+DEFAULT_HW_SERVER_HOST = "localhost"
+DEFAULT_HW_SERVER_PORT = 3121
+
+
+def _hw_server_endpoint():
+    """Resolve the hw_server endpoint from XSCT_REMOTE_HOST/PORT.
+
+    Returns (host, port), falling back to the local default for whichever
+    variable is unset. Both legs of an upload - the xsdb session and, on
+    Versal, the vivado_lab PDI programming step - resolve the endpoint
+    here, so they cannot end up driving two different boards.
+    """
+    host = os.environ.get("XSCT_REMOTE_HOST")
+    port = os.environ.get("XSCT_REMOTE_PORT")
+    if port:
+        try:
+            port = int(port)
+        except ValueError:
+            print(f"ERROR: XSCT_REMOTE_PORT='{port}' is not a number")
+            sys.exit(1)
+    else:
+        port = DEFAULT_HW_SERVER_PORT
+    return host or DEFAULT_HW_SERVER_HOST, port
 
 
 def _connect_session(session):
@@ -1159,8 +1191,12 @@ def _connect_session(session):
     # on None node during async target enumeration after connect.
     from tcf import protocol as tcf_protocol
     class _LogFilter:
+        # "Exception in command listener" is logged by the TCF channel
+        # close path when it aborts commands still in flight; it is a
+        # teardown artifact, not an upload failure.
         _SUPPRESS = ("Unhandled exception in TCF event dispatch",
-                     "TCF channel terminated")
+                     "TCF channel terminated",
+                     "Exception in command listener")
         def log(self, msg, x=None):
             if any(s in str(msg) for s in self._SUPPRESS):
                 return
@@ -1169,10 +1205,11 @@ def _connect_session(session):
                 sys.stderr.write(f"{type(x).__name__}: {x}\n")
     tcf_protocol.setLogger(_LogFilter())
 
-    remote_host = os.environ.get("XSCT_REMOTE_HOST")
-    remote_port = os.environ.get("XSCT_REMOTE_PORT")
-    if remote_host and remote_port:
-        session.connect(host=remote_host, port=int(remote_port))
+    if os.environ.get("XSCT_REMOTE_HOST") or \
+            os.environ.get("XSCT_REMOTE_PORT"):
+        host, port = _hw_server_endpoint()
+        print(f"INFO: Connecting to hw_server at {host}:{port}")
+        session.connect(host=host, port=port)
     else:
         session.connect()
     time.sleep(1)
@@ -1330,11 +1367,13 @@ def _upload_versal(session, hw_path, hw_file, cpu, binary, jtagtarget):
 
     # Program PDI via vivado_lab (included in Vitis Embedded Kit).
     # xsdb device_program is unreliable for Versal (ROM errors).
-    print("INFO: Programming Versal PDI via vivado_lab...")
+    hw_host, hw_port = _hw_server_endpoint()
+    hw_server_url = f"TCP:{hw_host}:{hw_port}"
+    print(f"INFO: Programming Versal PDI via vivado_lab ({hw_server_url})...")
     pdi_norm = os.path.normpath(pdi_path)
     vivado_script = f'''
 open_hw_manager
-connect_hw_server -url TCP:localhost:3121
+connect_hw_server -url {hw_server_url}
 open_hw_target
 current_hw_device [lindex [get_hw_devices xcv*] 0]
 set_property PROGRAM.FILE {{{pdi_norm}}} [current_hw_device]
