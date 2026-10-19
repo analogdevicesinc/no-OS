@@ -99,7 +99,7 @@ Maxim Platform
 
 **Used hardware**
 
-* `MAX14919PMB <https://www.analog.com/en/MAX14919PMB.html>`_
+* MAX14919PMB
 * `AD-APARD32690-SL <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/ad-apard32690-sl.html>`_
 
 +------------------------+----------+-------------------------------------------+-----------------------------+
