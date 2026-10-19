@@ -199,6 +199,9 @@ static int max_capi_pint_configure_pin(struct capi_pint_port_handle *handle,
 	case CAPI_PINT_TRIGGER_EDGE_FALLING:
 		pol = MXC_GPIO_INT_FALLING;
 		break;
+	case CAPI_PINT_TRIGGER_EDGE_BOTH:
+		pol = MXC_GPIO_INT_BOTH;
+		break;
 	case CAPI_PINT_TRIGGER_LEVEL_LOW:
 		pol = MXC_GPIO_INT_LOW;
 		break;
@@ -206,7 +209,6 @@ static int max_capi_pint_configure_pin(struct capi_pint_port_handle *handle,
 		pol = MXC_GPIO_INT_HIGH;
 		break;
 	default:
-		/* NOTE: capi_pint has no EDGE_BOTH; nothing maps to it. */
 		return -EINVAL;
 	}
 
