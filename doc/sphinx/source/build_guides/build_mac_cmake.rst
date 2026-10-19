@@ -17,7 +17,7 @@ for this platform.
 The macOS platform targets applications that run natively on a Mac. For
 projects that use the USB2PMB2 FTDI adapter (``mac-usb2pmb2`` board),
 the ftd2xx library must be set up separately — see the
-`ftd2xx build guide <build_ftd2xx_cmake.html>`_.
+:doc:`ftd2xx build guide <build_ftd2xx_cmake>`.
 
 Apple Silicon and Intel Macs
 -----------------------------
@@ -169,7 +169,7 @@ Example: building max14916 basic
 
    This example uses the ``mac-usb2pmb2`` board which requires the ftd2xx
    library. Set it up first following the
-   `ftd2xx build guide <build_ftd2xx_cmake.html>`_.
+   :doc:`ftd2xx build guide <build_ftd2xx_cmake>`.
 
 .. code-block:: bash
 
