@@ -53,6 +53,14 @@ target_include_directories(no-os PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common
 )
 
+# The app and the koror driver are SDT-clean, so opt in to the Vitis 2025+
+# SDT ABI when the BSP is SDT.
+set(NOOS_XILINX_SDT ON)
+
+# The embedded device profile is older than the ADRV904X API. Skip the exact
+# version match on the loaded images.
+target_compile_definitions(no-os PUBLIC ADI_ADRV904X_API_VERSION_RANGE_CHECK=0)
+
 config_platform_sdk(adrv904x)
 add_flash_target(adrv904x)
 post_build_config(adrv904x)
@@ -60,3 +68,6 @@ target_link_libraries(adrv904x no-os)
 
 # Wrap fseek/fclose so the custom implementations in no_os_platform.c are used
 target_link_options(adrv904x PRIVATE -Wl,--wrap=fseek -Wl,--wrap=fclose)
+
+# The HAL copies each firmware image to the heap before loading it.
+target_link_options(adrv904x PRIVATE -Xlinker --defsym=_HEAP_SIZE=0x800000)
