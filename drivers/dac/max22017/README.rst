@@ -6,7 +6,7 @@ MAX22017 no-OS Driver
 Supported Devices
 -----------------
 
-`MAX22017 <https://www.analog.com/MAX22017>`_
+MAX22017
 
 Overview
 --------
