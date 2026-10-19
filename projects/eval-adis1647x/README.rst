@@ -368,7 +368,7 @@ Note: the ``iio_trigger`` variant is not supported on linux-userspace
 **Build Command**
 
 For toolchain setup and prerequisites, see the
-`Linux Userspace CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_linux_userspace_cmake.html>`__.
+:doc:`Linux Userspace CMake build guide </build_guides/build_linux_userspace_cmake>`.
 
 Available variants: ``basic``.
 Available boards: ``rpi5``.
