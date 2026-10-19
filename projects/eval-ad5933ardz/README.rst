@@ -162,7 +162,7 @@ helper script. Available variants: ``basic``, ``iio_example``. Available boards:
 ``sdp-ck1z``.
 
 For toolchain setup and prerequisites, see the
-`STM32 CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_stm32_cmake.html>`__.
+:doc:`STM32 CMake build guide </build_guides/build_stm32_cmake>`.
 
 .. code-block:: bash
 
