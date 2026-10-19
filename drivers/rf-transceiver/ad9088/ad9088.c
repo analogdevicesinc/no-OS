@@ -1090,7 +1090,7 @@ static const struct fw_entry fw_table[ADI_APOLLO_FW_ID_MAX] = {
  * @param bytes_read - Set to the length of the image, in bytes.
  * @return           - 0 on success, an API_CMS_ERROR_* code otherwise.
  */
-static int ad9088_fw_provider_get(adi_apollo_fw_provider_t *obj,
+static int32_t ad9088_fw_provider_get(adi_apollo_fw_provider_t *obj,
 				  adi_apollo_startup_fw_id_e fw_id,
 				  uint8_t **byte_arr, uint32_t *bytes_read)
 {
@@ -1114,7 +1114,7 @@ static int ad9088_fw_provider_get(adi_apollo_fw_provider_t *obj,
  * @param fw_id - Identifies which image is being released, unused.
  * @return      - 0 on success, an API_CMS_ERROR_* code otherwise.
  */
-static int ad9088_fw_provider_close(adi_apollo_fw_provider_t *obj,
+static int32_t ad9088_fw_provider_close(adi_apollo_fw_provider_t *obj,
 				    adi_apollo_startup_fw_id_e fw_id)
 {
 	return API_CMS_ERROR_OK;
