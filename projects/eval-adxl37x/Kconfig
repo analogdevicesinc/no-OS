@@ -1,0 +1,22 @@
+menu "eval-adxl37x Configuration"
+
+choice EVAL_ADXL37X_EXAMPLE
+	prompt "Example variant"
+	default EVAL_ADXL37X_BASIC_EXAMPLE
+
+config EVAL_ADXL37X_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Simple example that configures the FIFO in streamed mode, reads
+	  acceleration data from it and prints the samples over UART.
+
+config EVAL_ADXL37X_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO framework example. Launches an IIOD server over UART so the
+	  device can be accessed with IIO Oscilloscope or libiio clients.
+
+endchoice
+
+endmenu
