@@ -408,7 +408,7 @@ No toolchain environment variable is required — the system ``gcc`` is
 used automatically.
 
 For toolchain setup and prerequisites, see the
-`Linux Userspace CMake build guide <https://analogdevicesinc.github.io/no-OS/build_guides/build_linux_userspace_cmake.html>`__.
+:doc:`Linux Userspace CMake build guide </build_guides/build_linux_userspace_cmake>`.
 
 .. code-block:: bash
 
