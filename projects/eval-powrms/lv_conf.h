@@ -819,7 +819,7 @@
 
 /** Setting a default driver letter allows skipping the driver prefix in filepaths.
  *  Documentation about how to use the below driver-identifier letters can be found at
- *  https://docs.lvgl.io/master/details/main-modules/fs.html#lv-fs-identifier-letters . */
+ *  https://lvgl.io/docs/open/main-modules/fs#identifier-letters . */
 #define LV_FS_DEFAULT_DRIVER_LETTER '\0'
 
 /** API for fopen, fread, etc. */
