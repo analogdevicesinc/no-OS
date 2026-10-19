@@ -81,7 +81,7 @@ The No-OS IIO Application together with the No-OS IIO LTC2798 driver take care o
 all the back-end logic needed to setup the IIO server.
 
 This example initializes the IIO device and calls the IIO app as shown in:
-`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltc2798/src/examples/iio_example>`_
+:git-no-OS:`IIO Example </projects/ltc7841/src/examples/iio_example>`
 
 In order to build the IIO project make sure you you are using this command:
 
