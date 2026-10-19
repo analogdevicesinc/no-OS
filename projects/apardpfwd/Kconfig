@@ -17,6 +17,21 @@ config APARDPFWD_FORWARD_PACKETS_EXAMPLE
 	help
 	  Example that forwards packets using the ADIN1110 MAC/PHY driver.
 
+config APARDPFWD_COMMUNICATION_AND_FORWARD_EXAMPLE
+	bool "Communication and forward example"
+	depends on LWIP && NET && ADIN1110
+	help
+	  TCP communication example combined with packet forwarding using
+	  LWIP and the ADIN1110 MAC/PHY over Ethernet.
+
+config APARDPFWD_SERVO_CONTROL_EXAMPLE
+	bool "Servo control example"
+	depends on LWIP && NET && ADIN1110 && PWM
+	help
+	  Drives hobby servos via PWM (50 Hz) and exposes SERVO1_ON /
+	  SERVO1_OFF / SERVO2_ON / SERVO2_OFF / SERVO_STATUS commands over
+	  a TCP socket on the ADIN1110 link.
+
 endchoice
 
 endmenu

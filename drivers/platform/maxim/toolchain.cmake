@@ -99,15 +99,18 @@ set(CMAKE_EXECUTABLE_SUFFIX_CXX ".elf")
 # CPU flags depending on target. Nearly all Maxim parts are Cortex-M4. MAX32657 is Cortex-M33.
 if(MAXIM_CORE STREQUAL "riscv")
     set(COMMON_CPU_FLAGS "-march=rv32imc_zicsr_zifencei -mabi=ilp32")
+    set(SPECS "")
 elseif(TARGET_NUM STREQUAL "32657")
-    set(COMMON_CPU_FLAGS "-mthumb -mcpu=cortex-m33 -mfloat-abi=softfp -mfpu=fpv5-sp-d16 -mno-unaligned-access")
+    set(COMMON_CPU_FLAGS "-mthumb -mcpu=cortex-m33 -mfloat-abi=softfp -mfpu=fpv5-sp-d16 -mno-unaligned-access -u _printf_float")
+    set(SPECS "-specs=nano.specs -specs=nosys.specs")
 else()
     set(COMMON_CPU_FLAGS "-mthumb -mcpu=cortex-m4 -mfloat-abi=softfp -mfpu=fpv4-sp-d16")
+    set(SPECS "-specs=nosys.specs")
 endif()
 
 # Common flags for all build types
-set(CMAKE_C_FLAGS "${COMMON_CPU_FLAGS} -ffunction-sections -fdata-sections -MD" CACHE STRING "C compiler flags" FORCE)
-set(CMAKE_CXX_FLAGS "${COMMON_CPU_FLAGS} -ffunction-sections -fdata-sections -MD" CACHE STRING "C++ compiler flags" FORCE)
+set(CMAKE_C_FLAGS "${COMMON_CPU_FLAGS} ${SPECS} -ffunction-sections -fdata-sections -MD" CACHE STRING "C compiler flags" FORCE)
+set(CMAKE_CXX_FLAGS "${COMMON_CPU_FLAGS} ${SPECS} -ffunction-sections -fdata-sections -MD" CACHE STRING "C++ compiler flags" FORCE)
 set(CMAKE_ASM_FLAGS "${COMMON_CPU_FLAGS} -x assembler-with-cpp" CACHE STRING "ASM compiler flags" FORCE)
 
 # Debug build flags - Full debug info, no optimization
@@ -168,7 +171,7 @@ if(MAXIM_CORE STREQUAL "riscv")
     file(WRITE "${CMAKE_BINARY_DIR}/common.ld" "${_rv_memory}")
     set(_maxim_link_flags "-nostartfiles -L${CMAKE_BINARY_DIR} -L${_maxim_gcc} -T${_maxim_gcc}/${TARGET}_riscv.ld")
 else()
-    set(_maxim_link_flags "-specs=nosys.specs -T${_maxim_gcc}/${TARGET}.ld")
+    set(_maxim_link_flags "-T${_maxim_gcc}/${TARGET}.ld")
 endif()
 set(CMAKE_EXE_LINKER_FLAGS "${COMMON_CPU_FLAGS} ${_maxim_link_flags} -Wl,--gc-sections,--undefined=_sbrk ${MCU_LINKER_FLAGS} --entry=Reset_Handler"
     CACHE STRING "Linker flags for MCU" FORCE)
