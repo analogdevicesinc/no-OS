@@ -1073,21 +1073,25 @@ int adf4030_set_alignment_iter(struct adf4030_dev *dev, uint8_t iter_number)
 	    || iter_number > ADF4030_ALIGN_CYCLES_MAX)
 		return -EINVAL;
 
-	// TODO: PR #3404 review (skucukar): "This is mentioned int he DS
-	// pg.39 section Fixed Iteration Alignment. These 2 bitfields need to
-	// configuration to achieve fixed iter alignment."
-	//DONE: I used the kernel driver as a reference for the changes I did,
-	// in there the alignment threshold is enabled by calling 
-	// adf4030_set_alignment_threshold_en() which is also connected to an
-	// iio attribute. I'm not sure if that is the best approach or if we
-	// should update the EN_ITER bit here instead (the way it's in main now). 
-	// To be honest the only difference whether we give explicit control to
-	// the user or not. Anyway, I think it's better for now to keep the 
-	// adf4030_set_alignment_threshold_en() in case we decide to create an 
-	// iio attribute for it later.
-	// I also removed ADF4030_EN_CYCS_RED because it is an optional bit for 
-	// the threshold alignment and it's set in the initial config and never 
-	// modified afterwards. 
+	/*
+	 * TODO: PR #3404 review (skucukar): "This is mentioned int he DS
+	 * pg.39 section Fixed Iteration Alignment. These 2 bitfields need to
+	 * configuration to achieve fixed iter alignment."
+	 */
+	/*
+	 * DONE: I used the kernel driver as a reference for the changes I did,
+	 * in there the alignment threshold is enabled by calling
+	 * adf4030_set_alignment_threshold_en() which is also connected to an
+	 * iio attribute. I'm not sure if that is the best approach or if we
+	 * should update the EN_ITER bit here instead (the way it's in main now).
+	 * To be honest the only difference whether we give explicit control to
+	 * the user or not. Anyway, I think it's better for now to keep the
+	 * adf4030_set_alignment_threshold_en() in case we decide to create an
+	 * iio attribute for it later.
+	 * I also removed ADF4030_EN_CYCS_RED because it is an optional bit for
+	 * the threshold alignment and it's set in the initial config and never
+	 * modified afterwards.
+	 */
 	ret = adf4030_set_alignment_threshold_en(dev, false);
 	if (ret)
 		return ret;
@@ -1142,30 +1146,38 @@ int adf4030_set_alignment_threshold(struct adf4030_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
-	// TODO: PR #3404 review (skucukar): "This was here to disable
-	// threshold alignment when threshold is 0."
-	// DONE: Added the check to disable threshold alignment when threshold 
-	// is 0 back into the code.
+	/*
+	 * TODO: PR #3404 review (skucukar): "This was here to disable
+	 * threshold alignment when threshold is 0."
+	 */
+	/*
+	 * DONE: Added the check to disable threshold alignment when threshold
+	 * is 0 back into the code.
+	 */
 	if (!threshold_fs)
 		return adf4030_set_alignment_threshold_en(dev, false);
-	// TODO: PR #3404 review (skucukar): "This is mentioned int he DS
-	// pg. 38-39 section Threshold Alignment. These 2 bitfields need to
-	// configuration to achieve fixed iter alignment."
-	// DONE: I used the kernel driver as a reference for the changes I did,
-	// in there the alignment threshold is enabled by calling 
-	// adf4030_set_alignment_threshold_en() which is also connected to an
-	// iio attribute. I'm not sure if that is the best approach or if we
-	// should update the EN_ITER bit here instead (the way it's in main now). 
-	// To be honest the only difference whether we give explicit control to
-	// the user or not. Anyway, I think it's better for now to keep the 
-	// adf4030_set_alignment_threshold_en() instead of the 
-	//
-	//	ret = adf4030_spi_update_bits(dev, 0x37,
-	//			      ADF4030_EN_ITER | ADF4030_EN_CYCS_RED, 0xFF);
-	//
-	// because ADF4030_EN_CYCS_RED is an optional bit for the threshold 
-	// alignment and it's set in the initial config and never modified
-	// afterwards. 
+	/*
+	 * TODO: PR #3404 review (skucukar): "This is mentioned int he DS
+	 * pg. 38-39 section Threshold Alignment. These 2 bitfields need to
+	 * configuration to achieve fixed iter alignment."
+	 */
+	/*
+	 * DONE: I used the kernel driver as a reference for the changes I did,
+	 * in there the alignment threshold is enabled by calling
+	 * adf4030_set_alignment_threshold_en() which is also connected to an
+	 * iio attribute. I'm not sure if that is the best approach or if we
+	 * should update the EN_ITER bit here instead (the way it's in main now).
+	 * To be honest the only difference whether we give explicit control to
+	 * the user or not. Anyway, I think it's better for now to keep the
+	 * adf4030_set_alignment_threshold_en() instead of the
+	 *
+	 *	ret = adf4030_spi_update_bits(dev, 0x37,
+	 *			      ADF4030_EN_ITER | ADF4030_EN_CYCS_RED, 0xFF);
+	 *
+	 * because ADF4030_EN_CYCS_RED is an optional bit for the threshold
+	 * alignment and it's set in the initial config and never modified
+	 * afterwards.
+	 */
 
 	if (threshold_fs > ADF4030_MAX_THRESHOLD_FS)
 		return -EINVAL;
@@ -1255,9 +1267,15 @@ int adf4030_set_single_ch_alignment(struct adf4030_dev *dev,
 	if (ret)
 		return ret;
 
-	// TODO: PR #3404 review (skucukar): "This is also mentioned is the
-	// DS pg.38 section Single-Channel Alignment. Is there a reason why
-	// these are changing?"
+	/*
+	 * TODO: PR #3404 review (skucukar): "This is also mentioned is the
+	 * DS pg.38 section Single-Channel Alignment. Is there a reason why
+	 * these are changing?"
+	 */
+	/*
+	 * DONE: I reverted changes here as well, also kept the TDC source
+	 * because this might change.
+	 */
 	/*
 	 * Single full-byte write: clears MANUAL_MODE, enables alignment and
 	 * selects the TDC source in one go. A read-modify-write of
@@ -1651,11 +1669,15 @@ int adf4030_set_channel_direction(struct adf4030_dev *dev, uint8_t channel,
 	if (!dev)
 		return -EINVAL;
 
-	// TODO: PR #3404 review (skucukar): "By closing the TX path we are
-	// saving power. Is there a reason why we need to keep enabled these
-	// power-downs for the RX operations? Did you face a bug?"
-	// DONE: The JESD FSM was hanging at alignment, this issue has been
-	// addressed, and this change does not influence the behavior.
+	/*
+	 * TODO: PR #3404 review (skucukar): "By closing the TX path we are
+	 * saving power. Is there a reason why we need to keep enabled these
+	 * power-downs for the RX operations? Did you face a bug?"
+	 */
+	/*
+	 * DONE: The JESD FSM was hanging at alignment, this issue has been
+	 * addressed, and this change does not influence the behavior.
+	 */
 	// Write TX_PD
 	if (channel < ADF4030_CHANNEL_TX_PD_SEPARATOR) {
 		msk = (ADF4030_PD_TX_PATH0) << channel;
@@ -2537,11 +2559,15 @@ int adf4030_init(struct adf4030_dev **dev,
 	if (ret)
 		goto error_spi;
 
-	// TODO: PR #3404 review (skucukar): "I would like to keep this as is
-	// to make code more easy to debug. if this is not enforce"
-	// DONE: We can keep the warning, but I think the init should fail in this
-	// case to avoid interacting with a device that may not be properly
-	// connected.
+	/*
+	 * TODO: PR #3404 review (skucukar): "I would like to keep this as is
+	 * to make code more easy to debug. if this is not enforce"
+	 */
+	/*
+	 * DONE: We can keep the warning, but I think the init should fail in this
+	 * case to avoid interacting with a device that may not be properly
+	 * connected.
+	 */
 	ret = adf4030_check_scratchpad(device);
 	if (ret) {
 		pr_warning("%s:%d ADF4030 scratchpad test failed. "
@@ -2566,10 +2592,14 @@ int adf4030_init(struct adf4030_dev **dev,
 	if (ret)
 		goto error_spi;
 
-	// TODO: PR #3404 review (skucukar): "This is actually important for
-	// the practically usage. When the initial ref-in freq does not match
-	// the real-life this gave us a chance to fix it."
-	// DONE: Reverted
+	/*
+	 * TODO: PR #3404 review (skucukar): "This is actually important for
+	 * the practically usage. When the initial ref-in freq does not match
+	 * the real-life this gave us a chance to fix it."
+	 */
+	/*
+	 * DONE: Reverted
+	 */
 	ret = adf4030_set_vco_freq(device, device->vco_freq);
 	if (ret == -ETIMEDOUT)
 		pr_warning("%s:%d ADF4030 PLL did not lock. "
