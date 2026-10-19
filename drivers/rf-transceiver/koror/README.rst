@@ -157,7 +157,7 @@ Configuration
 -------------------
 
 All configurations are handled by the functions in the *adrv904x.c* and *adrv904x_conv.c* files.
-More information regarding the system operation and setup can be found in the `ADRV9040 System Development User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/adrv9040-reference-manual-ug-2192.pdf>`_.
+More information regarding the system operation and setup can be found in the `ADRV9040 System Development User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/eval-adrv904x-ug-2229.pdf>`_.
 
 ADRV904X Driver Initialization Example
 --------------------------------------
