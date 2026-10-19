@@ -13,8 +13,7 @@ Supported Parts
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD7380FMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7380fmcz.html>`_
-* `EVAL-AD7381FMCZ <https://www.analog.com/en/EVAL-AD7381FMCZ.html>`_
+* `EVAL-AD738xFMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad738xfmcz.html>`_
 
 Overview
 --------
@@ -194,7 +193,7 @@ Xilinx Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD7380FMCZ <https://www.analog.com/en/EVAL-AD7380FMCZ.html>`_ or `EVAL-AD7381FMCZ <https://www.analog.com/en/EVAL-AD7381FMCZ.html>`_
+* `EVAL-AD738xFMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad738xfmcz.html>`_
 * `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
 
 Connections
@@ -257,7 +256,7 @@ STM32 Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD7380FMCZ <https://www.analog.com/en/EVAL-AD7380FMCZ.html>`_ or `EVAL-AD7381FMCZ <https://www.analog.com/en/EVAL-AD7381FMCZ.html>`_
+* `EVAL-AD738xFMCZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad738xfmcz.html>`_
 * `EVAL-SDP-CK1Z (SDP-K1) <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
 
 Connections
