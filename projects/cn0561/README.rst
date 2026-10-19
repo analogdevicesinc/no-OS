@@ -89,7 +89,7 @@ calls ``example_main()``, provided by the selected example. Shared
 initialization data is defined in
 `src/common <https://github.com/analogdevicesinc/no-OS/tree/main/projects/cn0561/src>`__,
 and platform-specific macros and extra init parameters are in
-`src/platform <https://github.com/analogdevicesinc/no-OS/tree/main/projects/cn0561/src/platform>`__.
+:git-no-OS:`src/platform </projects/cn0561/src/parameters.h>`.
 
 UART Example
 ~~~~~~~~~~~~
