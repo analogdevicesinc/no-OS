@@ -16,7 +16,7 @@ Supported Parts
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD7091R-xSDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7091r-xsdz.html>`_
+* `EVAL-AD7091R-xSDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7091r.html>`_
 
 Overview
 --------
@@ -74,7 +74,7 @@ Use a soldering iron to change a few soldering links.
   * Unsolder LK13 and LK14 from position A and solder them in position C (tie MUX_OUT with ADC_IN).
   * Unsolder SL09 and SL10 from position A and solder each of them to position B to allow the VIN7 signal to bypass the input buffer.
 
-.. _EVAL-AD7091R-xSDZ: https://www.analog.com/en/eval-ad7091r-xsdz.html
+.. _EVAL-AD7091R-xSDZ: https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7091r.html
 .. _MAX78000FTHR: https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/max78000fthr.html
 .. _EVAL-SDP-CB1Z: https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/SDP-B.html
 
@@ -179,7 +179,7 @@ Maxim Platform
 
 **Used hardware**:
 
-* `EVAL-AD7091R-xSDZ <https://www.analog.com/en/eval-ad7091r-xsdz.html>`_ with
+* `EVAL-AD7091R-xSDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7091r.html>`_ with
 * `MAX78000FTHR <https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/max78000fthr.html>`_
 
 **EVAL Board and Microcontroller Connections**
