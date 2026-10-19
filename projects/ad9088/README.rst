@@ -172,10 +172,83 @@ brings it back before deriving anything from the link. This is controlled by
 ``RX_LINK_RECOVER`` in
 `src/examples/dma/dma_example.c <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9088/src/examples/dma/dma_example.c>`__.
 
+IIO Example
+~~~~~~~~~~~
+
+Build with ``--variant iio_example``.
+
+The IIO example performs the same bring-up as the DMA example, including the
+receive link recovery and the default NCO tuning, then launches an IIOD server
+on the board so that an IIO client can connect over UART. Two devices are
+exposed:
+
+========================== ===================================================
+Device                     Function
+========================== ===================================================
+``cf-ad9088-lpc``          Receive transport core, one channel per converter
+``cf-ad9088-dds-core-lpc`` Transmit transport core, DDS or DMA data per channel
+========================== ===================================================
+
+Both are as wide as the profile's links together, side A's converters first
+and side B's after them. The transmit core starts on its DDS, so a tone plays
+as soon as the link is up; with a coaxial cable between the DAC output and the
+ADC input it shows up in the receive capture at the frequency it was sent at.
+
+Each capture re-arms the receive data offload before the DMA starts, since it
+holds a single fill otherwise. Buffer sizes are limited to the data offload
+memories, so a client cannot request a capture or a transmit buffer the
+hardware cannot hold.
+
+Any combination of channels can be enabled, including counts that are not a
+power of two. IIO places each buffer at a multiple of the sample count times
+the bytes per scan, which for three channels, for example, is not aligned to
+the 1024-bit bus of the DMA. The example therefore runs both DMAs on aligned
+staging buffers of its own and copies the samples to or from the IIO buffer.
+
+The DDS starts at 3 MHz with each of its two tones at a scale of 0.05, which
+is about -20 dBFS. For a clearer loopback, raise the level and move the tone,
+for example on the first transmit channel:
+
+.. code-block:: bash
+
+   iio_attr -u serial:/dev/ttyUSB1,115200,8n1n -c cf-ad9088-dds-core-lpc \
+      altvoltage0 scale 0.25
+   iio_attr -u serial:/dev/ttyUSB1,115200,8n1n -c cf-ad9088-dds-core-lpc \
+      altvoltage0 frequency 30000000
+
+If you are not familiar with ADI IIO Application, please take a look at:
+`IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
+
+If you are not familiar with ADI IIO-Oscilloscope Client, please take a
+look at:
+`IIO Oscilloscope <https://wiki.analog.com/resources/tools-software/linux-software/iio_oscilloscope>`_
+
+After the link bring-up messages, the application prints:
+
+.. code-block:: text
+
+   Running IIOD server...
+   If successful, you may connect an IIO client application by:
+   1. Disconnecting the serial terminal you use to view this message.
+   2. Connecting the IIO client application using the serial backend configured as shown:
+       Baudrate: 115200
+       Data size: 8 bits
+       Parity: none
+       Stop bits: 1
+       Flow control: none
+
+Close the serial terminal, then connect with a serial-backend enabled
+`iio-oscilloscope <https://github.com/analogdevicesinc/iio-oscilloscope>`__ or
+with libiio, for example:
+
+.. code-block:: bash
+
+   iio_info -u serial:/dev/ttyUSB1,115200,8n1n
+
 Selecting the Device Profile
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Both variants embed a device profile image in the ELF. It is selected by the
+Every variant embeds a device profile image in the ELF. It is selected by the
 ``CONFIG_AD9088_PROFILE`` Kconfig string and defaults to
 ``204C_M4_L8_NP16_20p0_4x2.bin``. A bare file name is resolved relative to
 `drivers/rf-transceiver/ad9088/firmware <https://github.com/analogdevicesinc/no-OS/tree/main/drivers/rf-transceiver/ad9088/firmware>`__;
@@ -216,7 +289,8 @@ directory (see `Build Command`_), change it with menuconfig and rebuild:
 
 The selection is kept in the build directory and survives rebuilds. To make it
 part of a variant instead, add the symbol to the variant's defconfig
-(``basic_example.conf`` or ``dma_example.conf``) and rebuild:
+(``basic_example.conf``, ``dma_example.conf`` or ``iio_example.conf``) and
+rebuild:
 
 .. code-block:: text
 
@@ -270,7 +344,8 @@ Build Command
 ^^^^^^^^^^^^^
 
 The Xilinx platform uses the CMake/Ninja build system. Available variants:
-``basic_example``, ``dma_example``. Available boards: ``vcu118``.
+``basic_example``, ``dma_example``, ``iio_example``. Available boards:
+``vcu118``.
 
 For toolchain setup and prerequisites, see the
 :doc:`Xilinx CMake build guide </build_guides/build_xilinx_cmake>`.

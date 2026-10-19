@@ -17,6 +17,15 @@ config AD9088_DMA_EXAMPLE
 	  DMA, including the NCO test tone and cabled DAC-to-ADC loopback
 	  coherence checks.
 
+config AD9088_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  Brings the links up as the DMA example does, then exposes the
+	  receive and transmit transport cores through iio_axi_adc and
+	  iio_axi_dac, so a host can capture and play back data over UART
+	  with libiio or IIO Oscilloscope.
+
 endchoice
 
 config AD9088_PROFILE
