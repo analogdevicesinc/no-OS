@@ -59,7 +59,7 @@ The following devices are supported and share the same project:
      - 500 kSPS
 
 To select the target device, change the ``id`` field in ``ad4692_ip`` inside
-`common_data.c <src/common/common_data.c>`_.
+:git-no-OS:`common_data.c </projects/ad4692_ardz/src/common/common_data.c>`.
 
 Applications
 ------------
@@ -73,14 +73,14 @@ No-OS Supported Examples
 ------------------------
 
 The initialization data used in the examples is taken from:
-`Project Common Data Path <src/common>`_
+:git-no-OS:`Project Common Data Path </projects/ad4692_ardz/src/common>`
 
 Each example below is selected with its own ``--variant`` (``basic``, ``iio``,
 ``iio_trigger``) and built for the ``ad-apard32690-sl`` board. See the
 **Build Command** section for the exact invocations.
 
 The operating mode is selected via the ``mode`` field in ``ad4692_ip`` in
-`common_data.c <src/common/common_data.c>`_. The default is
+:git-no-OS:`common_data.c </projects/ad4692_ardz/src/common/common_data.c>`. The default is
 ``AD4692_MANUAL_MODE``, which works for all three examples. Refer to the
 AD4692 driver documentation for a description of all five operating modes and
 their hardware requirements.
