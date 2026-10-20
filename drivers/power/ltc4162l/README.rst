@@ -6,9 +6,9 @@ LTC4162L no-OS driver
 Supported Devices
 -----------------
 
-`LTC4162L <https://www.analog.com/LTC4162L>`_
-`LTC4162F <https://www.analog.com/LTC4162F>`_
-`LTC4162S <https://www.analog.com/LTC4162S>`_
+`LTC4162L <https://www.analog.com/en/products/ltc4162-l.html>`_
+`LTC4162F <https://www.analog.com/en/products/ltc4162-f.html>`_
+`LTC4162S <https://www.analog.com/en/products/ltc4162-s.html>`_
 `LTC4015 <https://www.analog.com/LTC4015>`_
 
 Overview
