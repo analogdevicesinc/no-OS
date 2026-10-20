@@ -65,7 +65,7 @@ is used by default on the board.
 The reference input can also be driven externally via a pair of SMA connectors,
 REFN (J4) and REFP (J11). When using the external reference, disable the
 on-board oscillator supply. This will require board modifications, please refer
-to the `EVAL-ADF4382 User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/eval-adf4382-ug-2185.pdf>`_ for details.
+to the `EVAL-ADF4382 User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/eval-adf4382-ug-2296.pdf>`_ for details.
 
 Pin Description
 ^^^^^^^^^^^^^^^
@@ -425,55 +425,3 @@ Replace ``--variant`` / ``--board`` accordingly.
 	python tools/scripts/no_os_build.py build \
 		--project adf4382 --variant basic --board sdp-ck1z \
 		--probe openocd --flash
-
-Mbed Platform
-^^^^^^^^^^^^^
-
-**Used hardware**
-
-* `EVAL-ADF4382 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4382.html>`_, `EVAL-ADF4382A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4382a.html>`_, or `EVAL-ADF4383 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4383.html>`_
-* `SDP-K1 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
-
-**Connections**:
-
-The SDP connector of the SDP-K1 needs to be connected to P5 of the EVAL-ADF4382A
-board. Additionally a 6V power supply needs to be connected to either J14 - J15
-or to J18 (the SMA interface).
-
-**Build Command**
-
-For the make-based build flow and prerequisites, see the
-`No-OS Build Guide <https://wiki.analog.com/resources/no-os/build>`_.
-
-In order to build the basic example, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4382/Makefile>`_:
-
-.. code-block:: bash
-
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = y
-	IIO_EXAMPLE = n
-
-In order to build the IIO project, make sure you have the following
-configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4382/Makefile>`_:
-
-.. code-block:: bash
-
-	# Select the example you want to enable by choosing y for enabling and n for disabling
-	BASIC_EXAMPLE = n
-	IIO_EXAMPLE = y
-
-.. code-block:: bash
-
-	# add the arm gcc to the PATH variable
-	export PATH=</path/to/arm/gcc/bin>:$PATH
-	# to delete current build
-	make reset
-	# to build the project
-	make PLATFORM=mbed
-	# to flash the code
-	make
-	# copy the adf4382.bin to the mounted SDP-K1
-	cp build/adf4382.bin </path/to/SDP-K1/mounted/folder>
