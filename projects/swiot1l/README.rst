@@ -340,8 +340,8 @@ For the complete documentation of the AD74413R, MAX14906 and ADT75 IIO drivers
 (for no-OS) you may access the following:
 
 * `AD74413R <https://wiki.analog.com/resources/tools-software/uc-drivers/ad74413r>`_
-* `MAX14906 <https://wiki.analog.com/resources/tools-software/uc-drivers/max14906>`_
-* `ADT75 <https://wiki.analog.com/resources/tools-software/uc-drivers/adt75>`_
+* :doc:`MAX14906 </drivers/digital-io/max149x6>`
+* :doc:`ADT75 </drivers/temperature/adt75>`
 
 Field devices configuration and usage overview
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
