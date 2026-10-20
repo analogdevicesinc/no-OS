@@ -14,12 +14,12 @@ Supported Parts
 Supported Evaluation Boards
 ---------------------------
 
-* `EVAL-AD7124-4SDZ <https://www.analog.com/en/EVAL-AD7124-4SDZ.html>`_
+* `EVAL-AD7124-4SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7124-4.html>`_
 
 Overview
 --------
 
-The `EVAL-AD7124-4SDZ <https://www.analog.com/en/EVAL-AD7124-4SDZ.html>`_
+The `EVAL-AD7124-4SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7124-4.html>`_
 evaluation board is a platform for evaluating the
 `AD7124-4 <https://www.analog.com/en/products/ad7124-4.html>`_, a low power, low noise,
 completely integrated analog front end for high precision measurement
@@ -91,8 +91,8 @@ Xilinx Platform
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `EVAL-AD7124-4SDZ <https://www.analog.com/en/EVAL-AD7124-4SDZ.html>`_
-* `ZedBoard <https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/zedboard-zynq-7000.html>`_
+* `EVAL-AD7124-4SDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7124-4.html>`_
+* `ZedBoard <https://www.avnet.com/wps/portal/us/products/avnet-boards/avnet-board-families/zedboard/>`_
 
 Connections
 ^^^^^^^^^^^
