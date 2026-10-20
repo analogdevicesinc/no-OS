@@ -15,12 +15,12 @@ for this platform.
    Windows executables, and only for **x86_64**. There is no ARM64 Windows
    build support (unlike the macOS platform, which supports both Intel and
    Apple Silicon natively — see the
-   `macOS build guide <build_mac_cmake.html>`_).
+   :doc:`macOS build guide <build_mac_cmake>`).
 
 The Windows platform targets applications that run natively on a Windows
 PC. For projects that use the USB2PMB2 FTDI adapter (``win-usb2pmb2``
 board), the ftd2xx library must be set up separately — see the
-`ftd2xx build guide <build_ftd2xx_cmake.html>`_.
+:doc:`ftd2xx build guide <build_ftd2xx_cmake>`.
 
 All commands below are for **PowerShell**. No MSYS2 shell is required
 for building — MSYS2 is installed only to obtain the GCC toolchain.
@@ -229,7 +229,7 @@ Example: building max31827-evkit basic
 
    This example uses the ``win-usb2pmb2`` board which requires the ftd2xx
    library. Set it up first following the
-   `ftd2xx build guide <build_ftd2xx_cmake.html>`_.
+   :doc:`ftd2xx build guide <build_ftd2xx_cmake>`.
 
 .. code-block:: powershell
 
