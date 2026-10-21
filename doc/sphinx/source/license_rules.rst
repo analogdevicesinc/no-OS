@@ -41,8 +41,8 @@ collected under ``LICENSES/``, one file per license, grouped by role:
 
 ``LICENSES/permissive/``
   Permissive licenses that are allowed but are not the default:
-  ``Apache-2.0`` and ``MIT`` (the latter used by some bundled libraries
-  and vendor SDKs).
+  ``Apache-2.0``, ``MIT`` (used by some bundled libraries and vendor
+  SDKs) and ``OFL-1.1`` (font data generated from OFL-licensed fonts).
 
 ``LICENSES/proprietary/``
   Non-permissive ADI vendor device-API licenses, each confined to its
