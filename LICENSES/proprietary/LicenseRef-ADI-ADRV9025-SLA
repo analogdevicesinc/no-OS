@@ -2,7 +2,8 @@ Valid-License-Identifier: LicenseRef-ADI-ADRV9025-SLA
 Usage-Guide:
   PROPRIETARY. Do NOT use for new files. The Analog Devices "Software
   License Agreement" 20180813-ADI-N3PT-CTSLA governing the ADRV9025
-  (madura) vendor API code under drivers/rf-transceiver/madura.
+  (madura) vendor API code under drivers/rf-transceiver/madura and the
+  generated profiles and platform glue under projects/adrv902x.
   Canonical copy: LICENSE.pdf in the Adi.Adrv9025.Api release package.
   Repository-local LicenseRef; no SPDX-URL.
 License-Text:

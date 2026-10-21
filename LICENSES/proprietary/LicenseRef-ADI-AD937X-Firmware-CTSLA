@@ -4,8 +4,9 @@ Usage-Guide:
   License Agreement" 20180301-AD937X-CTSLA governing the Talise (AD937x)
   ARM and stream firmware binaries shipped as generated C headers under
   drivers/rf-transceiver/talise/firmware (talise_arm_binary.h,
-  talise_stream_binary.h). Canonical copy: the agreement embedded at the
-  top of those firmware/*.h headers. Repository-local LicenseRef; no
+  talise_stream_binary.h) and the AD9371 firmware header under
+  projects/ad9371 (Mykonos_M3.h). Canonical copy: the agreement embedded
+  at the top of the talise firmware/*.h headers. Repository-local LicenseRef; no
   SPDX-URL.
 License-Text:
 

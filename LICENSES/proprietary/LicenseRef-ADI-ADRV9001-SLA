@@ -2,7 +2,8 @@ Valid-License-Identifier: LicenseRef-ADI-ADRV9001-SLA
 Usage-Guide:
   PROPRIETARY. Do NOT use for new files. The Analog Devices "Software
   License Agreement" 20190814-APIGUIHDLFWNAV-CTSLA governing the ADRV9001
-  (navassa) vendor API code under drivers/rf-transceiver/navassa.
+  (navassa) vendor API code under drivers/rf-transceiver/navassa and the
+  generated profiles under projects/adrv9001.
   Canonical copy: LICENSE.md in the ADRV9001 SDK package (adrv9001-sdk
   pkg/LICENSE.md). Repository-local LicenseRef; no SPDX-URL.
 License-Text:

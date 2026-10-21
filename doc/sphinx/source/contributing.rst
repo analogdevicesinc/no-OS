@@ -77,12 +77,19 @@ provided at ``doc/source_header_template.c`` and
 - **Do not** introduce non-permissively licensed code into the
   linkable library core (``util/``, ``include/``, ``iio/``, ``network/``)
   or into general-purpose drivers.
-- The only exception is **vendor-supplied device APIs** that cannot be
-  relicensed (for example the ADI RF-transceiver API code). Such code
-  must be confined to its own ``drivers/<category>/<part>/`` subtree, must
-  carry an accurate ``SPDX-License-Identifier`` (or license header) in
-  every file, and its addition must be raised with a no-OS maintainer
-  before the pull request is opened.
+- There are two exceptions, and adding either must be raised with a
+  no-OS maintainer before the pull request is opened:
+
+  - **Vendor-supplied device APIs** that cannot be relicensed (for
+    example the ADI RF-transceiver API code). Such code must be confined
+    to its own ``drivers/<category>/<part>/`` subtree and the matching
+    example project.
+  - **Third-party code** that keeps its original permissive license
+    (for example MIT or OFL-1.1), such as code derived from a vendor
+    example or a generated configuration or font file.
+
+  In both cases every file must carry an accurate
+  ``SPDX-License-Identifier`` and keep its original copyright notice.
 
 See :doc:`license_rules` for how licenses are declared with SPDX tags, the
 meaning of the ``LICENSES/`` buckets, and the repository-local
