@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-AD9084-SLA */
 /*!
  * \brief     Tx Misc functional block API prototypes
  *

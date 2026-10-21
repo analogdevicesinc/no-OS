@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-AD9084-SLA */
 
 /*!
  * \brief     SPI Register Definition Header File, includes customised bitfield definitions derived from auto-generated headers

@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-AD9084-SLA */
 /*!
  * \brief     Coarse DUC functional block API prototypes
  *

@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-AD9084-SLA */
 /*!
  * \brief     Common API definitions header file.
  *            This file contains all common API definitions.

@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-AD9084-SLA */
 /*!
  * \brief     API SPI and HSCI device header file
  *            This file contains all the publicly exposed methods and data

@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: LicenseRef-ADI-AD9084-SLA */
 /**
  * \file apollo_cpu_device_profile_types.h
  * \brief Device profile for Apollo API

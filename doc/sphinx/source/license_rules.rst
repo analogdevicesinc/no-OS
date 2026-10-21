@@ -47,7 +47,8 @@ collected under ``LICENSES/``, one file per license, grouped by role:
 ``LICENSES/proprietary/``
   Non-permissive ADI vendor device-API licenses, each confined to its
   driver subtree (detailed below): ``LicenseRef-ADI-API-License``,
-  ``LicenseRef-ADI-ADRV9025-SLA``, ``LicenseRef-ADI-ADRV9001-SLA`` and
+  ``LicenseRef-ADI-ADRV9025-SLA``, ``LicenseRef-ADI-ADRV9001-SLA``,
+  ``LicenseRef-ADI-AD9084-SLA`` and
   ``LicenseRef-ADI-AD937X-Firmware-CTSLA``.
 
 Each license file begins with a ``Valid-License-Identifier:`` line (the
@@ -78,6 +79,12 @@ REUSE-style repository-local identifiers:
   SDK (navassa) vendor API files under
   ``drivers/rf-transceiver/navassa``; the same non-permissive ADI
   "API license" family.
+- ``LicenseRef-ADI-AD9084-SLA`` — the ADI "Software License
+  Agreement" ``2026-05-25-AD9084-SDK-2.1.0-GA-SLA`` carried by the
+  AD9084/AD9088 SDK (Apollo) vendor API files and firmware images under
+  ``drivers/rf-transceiver/ad9088``; the same non-permissive ADI
+  "API license" family. It incorporates by reference the terms published
+  at https://www.analog.com/en/support/software-license-agreement.html.
 
 They are **non-permissive** and must not be used for new files.
 

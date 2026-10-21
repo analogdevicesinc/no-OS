@@ -1,0 +1,27 @@
+Valid-License-Identifier: LicenseRef-ADI-AD9084-SLA
+Usage-Guide:
+  PROPRIETARY. Do NOT use for new files. The Analog Devices "Software
+  License Agreement" 2026-05-25-AD9084-SDK-2.1.0-GA-SLA governing the
+  AD9084/AD9088 (Apollo) vendor API code and firmware images under
+  drivers/rf-transceiver/ad9088. The agreement incorporates by reference
+  the terms published at the URL below. Canonical copy:
+  drivers/rf-transceiver/ad9088/license/2026-05-25-ad9084-sdk-2.1.0-ga-
+  click-thru-SLA.pdf. Repository-local LicenseRef; no SPDX-URL.
+License-Text:
+
+2026-05-25-AD9084-SDK-2.1.0-GA-SLA
+
+SOFTWARE LICENSE AGREEMENT
+
+BY DOWNLOADING, INSTALLING, COPYING, USING OR MODIFYING THE LICENSED SOFTWARE,
+YOU AGREE TO BE BOUND BY THE TERMS AND CONDITIONS AVAILABLE HERE:
+https://www.analog.com/en/support/software-license-agreement.html , EXCEPT TO THE EXTENT
+THAT YOU HAVE A SIGNED AGREEMENT WITH ADI GOVERNING THE LICENSED SOFTWARE
+AND DOCUMENTATION. IF YOU DO NOT AGREE, DO NOT DOWNLOAD, INSTALL, COPY, USE, OR
+MODIFY THE SOFTWARE.
+
+Appendix A
+
+This product uses third-party software, the licenses and notices for which can be found at the
+following location.
+https://download.analog.com/ad9084-sdk/versions.html
