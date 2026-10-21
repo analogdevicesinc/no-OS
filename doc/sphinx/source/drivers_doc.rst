@@ -52,6 +52,14 @@ AXI CORES
 
    drivers/axi/*
 
+BEAMFORMERS
+===========
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   drivers/beamformer/*
+
 DIGITAL INPUT/OUTPUT
 ==========================
 .. toctree::
