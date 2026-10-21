@@ -24,8 +24,8 @@ serial lines.
 
 This project runs on a Xilinx ZCU102 carrier connected to the
 ADAR3000/ADAR3001-EVALZ evaluation board through an SDP-I-FMC interposer. Its
-basic example brings the device up, proves the SPI link and identifies the
-part.
+basic example exercises every driver feature and checks each one against the
+hardware.
 
 Applications
 ------------
@@ -116,20 +116,47 @@ and platform-specific macros and extra init parameters are in
 Basic Example
 ~~~~~~~~~~~~~
 
-The basic example initializes the device, which releases the hardware reset,
-issues the soft reset sequence, writes and reads back two scratchpad patterns,
-and checks ``CHIPTYPE`` and ``PRODUCT_ID_L``. It then reads the product ID and
-SPI revision, prints them, and removes the device.
+The basic example exercises every feature of the driver and checks each one
+against the hardware, stopping with an error at the first mismatch. In order,
+it:
+
+* initializes the device: hardware reset, soft reset, scratchpad write and read
+  back, ``CHIPTYPE`` and ``PRODUCT_ID_L`` checks
+* writes a distinct delay and attenuation to all 16 elements of the direct
+  control bank, reads them back and strobes an update
+* checks that the amplifiers power up enabled with a bias of 3, then writes and
+  reads back the beam and element amplifier bias and enable
+* reads the temperature sensor twice, checks that the readings agree and lie
+  in a plausible ambient range, and prints the temperature
+* writes beamstates into the RAM of beam 0 and of beam 3, the last beamstate of
+  the last beam, and reads them back
+* queues three beamstates on the FIFO of beam 0 and checks that the write
+  pointer advances by three
+* writes and reads back the reset and mute beamstate banks, then checks through
+  the FIFO read pointer that an update dequeues exactly one beamstate, that a
+  reset empties the queue, and that the next update is a plain update again
+* checks the power-on RAM sequencer range of every beam, then writes a wrapping
+  range and reads it back
 
 To run it, open a serial terminal on the console port, for example
 ``picocom -b 115200 /dev/ttyUSB0``, then build and flash the ``basic_example``
 variant as shown in `Build Command`_. Expected console output on a working
-setup:
+setup; the temperature follows the board:
 
 .. code-block:: bash
 
    ADAR300X basic example
    ADAR3000 initialized: PRODUCT_ID 0xC001, SPI_REV 0x01
+   DIRECT beamstate write/readback: OK
+   UPDATE strobed on all 4 beams
+   Amplifier power-up defaults: OK (enabled, bias 3)
+   Amplifier bias/enable write/readback: OK
+   ADC temperature: 24.083 degC (code 126)
+   RAM beamstate write/readback: OK
+   FIFO beam 0 write pointer 0 to 3 after 3 loads, read 0
+   RESET and MUTE beamstate write/readback: OK
+   Beam UPDATE and RESET via FIFO read pointer, and MUTE: OK
+   RAM sequencer range defaults and write/readback: OK
 
 Any other final line is an error message naming the check that failed and the
 values it saw.
