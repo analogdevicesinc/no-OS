@@ -50,6 +50,7 @@
 #define AD7124_ID_REG        0x05
 #define AD7124_ERR_REG       0x06
 #define AD7124_ERREN_REG     0x07
+#define AD7124_MCLK_CNT_REG  0x08
 #define AD7124_CH0_MAP_REG   0x09
 #define AD7124_CH1_MAP_REG   0x0A
 #define AD7124_CH2_MAP_REG   0x0B
