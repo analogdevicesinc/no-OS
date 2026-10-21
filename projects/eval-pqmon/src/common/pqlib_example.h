@@ -21,6 +21,19 @@
 #include <stddef.h>
 #include "no_os_circular_buffer.h"
 
+/*
+ * Bench diagnostics on the debug console (off by default): input rates,
+ * ISR load, queue statistics, PQLib call durations and result codes.
+ * Enable by defining PQM_EVENT_DEBUG at build time.
+ */
+#ifdef PQM_EVENT_DEBUG
+extern volatile uint32_t afeIsrBusyUs;
+/* Debug time base (timer ticks) and ticks to microseconds */
+void pqm_debug_timer_init(void);
+uint32_t pqm_debug_cycles(void);
+uint32_t pqm_debug_us(uint32_t cycles);
+#endif
+
 #define POWER_ENERGY_NUM_PHASES 3
 #define PQLIB_MAX_CHANNELS 7
 #define ADI_PQLIB_NUM_WAVEFORM_BLOCKS 4
@@ -266,6 +279,23 @@ int wait_for_zero_crossing(PQLIB_EXAMPLE *pExample,
 void SyncToDip(PQLIB_EXAMPLE *pExample, ADI_PQLIB_RESULT pqlibStatus);
 
 extern PQLIB_EXAMPLE pqlibExample;
+
+/* Persistent event record - keeps the latest valid PQLib events */
+extern ADI_PQLIB_EVENTS accumulated_events;
+
+/* Lifetime per-type event totals */
+extern uint32_t total_dip_count;
+extern uint32_t total_swell_count;
+extern uint32_t total_intrp_count;
+extern uint32_t total_rvc_count;
+
+/* Number of GetOutput results rejected because of invalid event counts */
+extern uint32_t bogus_event_count;
+
+/**
+ * @brief Clear the event record, the lifetime totals and the dedup state.
+ */
+void pqm_clear_events(void);
 
 /**
  * @brief Initializes Power Quality Measurement.

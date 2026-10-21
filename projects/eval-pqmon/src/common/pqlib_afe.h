@@ -36,16 +36,28 @@
 int get_afe_input();
 
 /**
- * @details Initialize waveform IRQ on ADE9430 IRQ0 (P0.30).
- *          Registers falling-edge GPIO interrupt for COH_PAGE_RDY.
+ * @details Initialize the AFE IRQ on ADE9430 IRQ0 (P0.30). The ISR reads
+ *          one-cycle data, waveform pages, 10/12 cycle RMS and energy into
+ *          queues, so no input is lost while PQLib is busy.
  * @return 0 on Success
  */
 int waveform_irq_init(void);
 
 /**
- * @details Service ISR-staged waveform data and deferred reads.
- *          Call from main loop between PQLib processing steps.
+ * @details Stop reading AFE input (AFE IRQ off). Use while the AFE is
+ *          restarted or calibrated.
  */
-void service_waveform_isr(void);
+void afe_input_stop(void);
+
+/**
+ * @details Discard queued input and restart reading AFE input.
+ */
+void afe_input_start(void);
+
+/**
+ * @details Check if AFE input is waiting in the queues.
+ * @return true if get_afe_input() has an item to deliver
+ */
+bool afe_input_pending(void);
 
 #endif /* __PQLIB_AFE_H__ */

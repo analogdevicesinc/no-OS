@@ -53,6 +53,11 @@
         .name = "durationInCycles",                                             \
         .show = read_ch_attr,                                                   \
         .priv = CHAN_EVENT_DURATION_IN_CYCL,                                    \
+},                                                                              \
+{                                                                               \
+        .name = "totalEvent",                                                   \
+        .show = read_ch_attr,                                                   \
+        .priv = CHAN_EVENT_TOTAL,                                               \
 }
 
 volatile bool configChanged = false;
@@ -384,6 +389,11 @@ int read_pqm_attr(void *device, char *buf, uint32_t len,
 		case WAVEFORM_BLOCK_COUNT:
 			return snprintf(buf, len, "%" PRIu32,
 					desc->waveform_block_count);
+		case CLEAR_EVENTS:
+			return snprintf(buf, len, "0");
+		case BOGUS_EVENT_COUNT:
+			return snprintf(buf, len, "%" PRIu32,
+					bogus_event_count);
 
 		case FLASH_CAL_DATA: {
 			FLASH_CALIBRATION_DATA flash_data;
@@ -682,6 +692,12 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
 				}
 			}
 			break;
+		case CLEAR_EVENTS:
+			configChanged = false;
+			if (value != 1)
+				return -EINVAL;
+			pqm_clear_events();
+			break;
 		case WAVEFORM_CAPTURE_MODE_ATTR:
 			configChanged = false;
 			for (int i = 0; i < NO_OS_ARRAY_SIZE(pqm_waveform_capture_mode_available); i++) {
@@ -978,7 +994,9 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 		case 0: // Dips
 			switch (attr_id) {
 			case CHAN_EVENT_COUNT:
-				return snprintf(buf, len, "%" PRIu8 "", pqlibExample.output->events.dipCount);
+				return snprintf(buf, len, "%" PRIu8 "", accumulated_events.dipCount);
+			case CHAN_EVENT_TOTAL:
+				return snprintf(buf, len, "%" PRIu32, total_dip_count);
 			case CHAN_EVENT_START_TIME:
 				return (prepara_string(EVENT_DIPS, CHAN_EVENT_START_TIME, buf));
 			case CHAN_EVENT_END_TIME:
@@ -993,7 +1011,9 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 		case 1: // Swells
 			switch (attr_id) {
 			case CHAN_EVENT_COUNT:
-				return snprintf(buf, len, "%" PRIu8 "", pqlibExample.output->events.swellCount);
+				return snprintf(buf, len, "%" PRIu8 "", accumulated_events.swellCount);
+			case CHAN_EVENT_TOTAL:
+				return snprintf(buf, len, "%" PRIu32, total_swell_count);
 			case CHAN_EVENT_START_TIME:
 				return (prepara_string(EVENT_SWELL, CHAN_EVENT_START_TIME, buf));
 			case CHAN_EVENT_END_TIME:
@@ -1008,7 +1028,9 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 		case 2: // RVC
 			switch (attr_id) {
 			case CHAN_EVENT_COUNT:
-				return snprintf(buf, len, "%" PRIu8 "", pqlibExample.output->events.rvcCount);
+				return snprintf(buf, len, "%" PRIu8 "", accumulated_events.rvcCount);
+			case CHAN_EVENT_TOTAL:
+				return snprintf(buf, len, "%" PRIu32, total_rvc_count);
 			case CHAN_EVENT_START_TIME:
 				return (prepara_string(EVENT_RVC, CHAN_EVENT_START_TIME, buf));
 			case CHAN_EVENT_END_TIME:
@@ -1025,7 +1047,9 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 		case 3: // Intrpt
 			switch (attr_id) {
 			case CHAN_EVENT_COUNT:
-				return snprintf(buf, len, "%" PRIu8 "", pqlibExample.output->events.intrpCount);
+				return snprintf(buf, len, "%" PRIu8 "", accumulated_events.intrpCount);
+			case CHAN_EVENT_TOTAL:
+				return snprintf(buf, len, "%" PRIu32, total_intrp_count);
 			case CHAN_EVENT_START_TIME:
 				return (prepara_string(EVENT_INTRPS, CHAN_EVENT_START_TIME, buf));
 			case CHAN_EVENT_END_TIME:
@@ -1637,6 +1661,17 @@ struct iio_attribute global_pqm_attributes[] = {
 		.name = "waveform_block_count",
 		.show = read_pqm_attr,
 		.priv = WAVEFORM_BLOCK_COUNT,
+	},
+	{
+		.name = "clear_events",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = CLEAR_EVENTS,
+	},
+	{
+		.name = "bogus_event_count",
+		.show = read_pqm_attr,
+		.priv = BOGUS_EVENT_COUNT,
 	},
 	END_ATTRIBUTES_ARRAY,
 }; // global attributes for device

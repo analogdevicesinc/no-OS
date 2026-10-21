@@ -96,6 +96,10 @@
 #define WAVEFORM_ONESHOT_BLOCKS         66
 #define WAVEFORM_BLOCK_COUNT            67
 
+// Event accumulator attributes
+#define CLEAR_EVENTS                    68
+#define BOGUS_EVENT_COUNT               69
+
 // Channel specific attributes
 #define CHAN_RMS                        0
 #define CHAN_ANGLE                      1
@@ -128,6 +132,7 @@
 #define CHAN_FUND_REACTIVE_ENERGY       28
 #define CHAN_FUND_ACTIVE_ENERGY         29
 #define CHAN_DISPLACEMENT_PF            30
+#define CHAN_EVENT_TOTAL                31
 
 #define RESAMPLED_WAVEFORM_FULL_SCALE   18196
 

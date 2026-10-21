@@ -189,6 +189,26 @@ int afe_read_status_1_clear_zx(uint32_t *pSTATUS1, uint8_t phase);
 int afe_read_status0(uint32_t *pSTATUS0);
 
 /**
+ * @brief Clear STATUS0 bits (write-1-to-clear).
+ * @param[in] bits       - mask of the bits to clear.
+ * @return status 	     - SYS_STATUS_SUCCESS on Success,
+ *                       - SYS_STATUS_AFE_STATUS0_FAILED on Failure.
+ */
+int afe_clear_status0(uint32_t bits);
+
+/**
+ * @brief Disable the AFE IRQ (GPIO0) until afe_irq_resume().
+ * Main loop SPI transactions are then not masked any more.
+ */
+void afe_irq_suspend(void);
+
+/**
+ * @brief Enable the AFE IRQ (GPIO0). From then on every thread mode AFE
+ * SPI transaction masks the IRQ for its own duration.
+ */
+void afe_irq_resume(void);
+
+/**
  * @brief Waits for passed number of cycles
  * @param[in] cycles     - Number of cycles to wait
  */

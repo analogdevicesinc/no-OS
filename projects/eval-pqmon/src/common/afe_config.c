@@ -10,9 +10,56 @@
 
 #include "afe_config.h"
 #include "pqlib_example.h"
+#include "max32650.h"
 
 struct no_os_spi_desc *hSPI;
 struct no_os_spi_msg spiMsg;
+
+/* Single SPI buffer shared by all AFE transactions. Thread mode
+ * transactions run with the AFE IRQ masked, so the ISR and the main
+ * loop never use it at the same time. */
+static uint8_t afeSpiBuf[2 * ADI_PQLIB_WAVEFORM_BLOCK_SIZE *
+			 ADI_PQLIB_TOTAL_WAVEFORM_CHANNELS + 2];
+
+/* AFE IRQ enabled by the application (afe_irq_resume) */
+static volatile bool afeIrqEnabled;
+
+void afe_irq_suspend(void)
+{
+	afeIrqEnabled = false;
+	NVIC_DisableIRQ(GPIO0_IRQn);
+	__DSB();
+	__ISB();
+}
+
+void afe_irq_resume(void)
+{
+	afeIrqEnabled = true;
+	NVIC_EnableIRQ(GPIO0_IRQn);
+}
+
+/**
+ * @brief Take the AFE SPI bus. From thread mode the AFE IRQ is masked
+ * for the duration of one transaction, so the ISR cannot preempt it.
+ * @return true if the IRQ was masked and must be restored
+ */
+static bool afe_spi_lock(void)
+{
+	if (__get_IPSR() != 0 || !afeIrqEnabled)
+		return false;
+
+	NVIC_DisableIRQ(GPIO0_IRQn);
+	__DSB();
+	__ISB();
+
+	return true;
+}
+
+static void afe_spi_unlock(bool locked)
+{
+	if (locked && afeIrqEnabled)
+		NVIC_EnableIRQ(GPIO0_IRQn);
+}
 extern struct no_os_gpio_init_param reset_gpio_ip;
 
 int init_lcd(void)
@@ -391,9 +438,8 @@ int afe_read_version(uint32_t *pVersion)
 int afe_write_32bit_reg(uint16_t addr, uint32_t *pData)
 {
 	int status = SYS_STATUS_SUCCESS;
-	uint8_t cmdBuffer[2 * ADI_PQLIB_WAVEFORM_BLOCK_SIZE *
-			    ADI_PQLIB_TOTAL_WAVEFORM_CHANNELS +
-			    2];
+	uint8_t *cmdBuffer = afeSpiBuf;
+	bool locked = afe_spi_lock();
 
 	cmdBuffer[0] = (addr >> 4);
 	cmdBuffer[1] = ((addr & 0x0F) << 4);
@@ -402,6 +448,7 @@ int afe_write_32bit_reg(uint16_t addr, uint32_t *pData)
 	memcpy(&cmdBuffer[2], &pData[0], SPI_32BIT_DATA_SIZE);
 
 	status = no_os_spi_write_and_read(hSPI, cmdBuffer, 6);
+	afe_spi_unlock(locked);
 
 	return status;
 }
@@ -409,9 +456,8 @@ int afe_write_32bit_reg(uint16_t addr, uint32_t *pData)
 int afe_write_16bit_reg(uint16_t addr, uint16_t *pData)
 {
 	int status = SYS_STATUS_SUCCESS;
-	uint8_t cmdBuffer[2 * ADI_PQLIB_WAVEFORM_BLOCK_SIZE *
-			    ADI_PQLIB_TOTAL_WAVEFORM_CHANNELS +
-			    2];
+	uint8_t *cmdBuffer = afeSpiBuf;
+	bool locked = afe_spi_lock();
 
 	cmdBuffer[0] = (addr >> 4);
 	cmdBuffer[1] = ((addr & 0x0F) << 4);
@@ -420,6 +466,7 @@ int afe_write_16bit_reg(uint16_t addr, uint16_t *pData)
 	memcpy(&cmdBuffer[2], &pData[0], SPI_16BIT_DATA_SIZE);
 
 	status = no_os_spi_write_and_read(hSPI, cmdBuffer, 4);
+	afe_spi_unlock(locked);
 
 	return status;
 }
@@ -428,9 +475,8 @@ int afe_read_32bit_buff(uint16_t addr, uint16_t numSamples,
 			uint32_t *pData)
 {
 	int status = SYS_STATUS_SUCCESS;
-	uint8_t cmdBuffer[2 * ADI_PQLIB_WAVEFORM_BLOCK_SIZE *
-			    ADI_PQLIB_TOTAL_WAVEFORM_CHANNELS +
-			    2];
+	uint8_t *cmdBuffer = afeSpiBuf;
+	bool locked = afe_spi_lock();
 
 	cmdBuffer[0] = (addr >> 4);
 	cmdBuffer[1] = ((addr & 0x0F) << 4) + 8;
@@ -439,6 +485,7 @@ int afe_read_32bit_buff(uint16_t addr, uint16_t numSamples,
 		no_os_spi_write_and_read(hSPI, (uint8_t *)cmdBuffer, 2 + numSamples * 4);
 
 	memcpy((uint8_t *)pData, &cmdBuffer[2], numSamples * 4);
+	afe_spi_unlock(locked);
 	no_os_memswap64((void *)pData, numSamples * 4, 4);
 
 	return status;
@@ -448,9 +495,8 @@ int afe_read_16bit_buff(uint16_t addr, uint16_t numSamples,
 			uint16_t *pData)
 {
 	int status = SYS_STATUS_SUCCESS;
-	uint8_t cmdBuffer[2 * ADI_PQLIB_WAVEFORM_BLOCK_SIZE *
-			    ADI_PQLIB_TOTAL_WAVEFORM_CHANNELS +
-			    2];
+	uint8_t *cmdBuffer = afeSpiBuf;
+	bool locked = afe_spi_lock();
 
 	cmdBuffer[0] = (addr >> 4);
 	cmdBuffer[1] = ((addr & 0x0F) << 4) + 8;
@@ -459,6 +505,7 @@ int afe_read_16bit_buff(uint16_t addr, uint16_t numSamples,
 		no_os_spi_write_and_read(hSPI, (uint8_t *)cmdBuffer, 2 + numSamples * 2);
 
 	memcpy((uint8_t *)pData, &cmdBuffer[2], numSamples * 2);
+	afe_spi_unlock(locked);
 	no_os_memswap64((void *)pData, numSamples * 2, 2);
 
 	return status;
@@ -499,21 +546,25 @@ int afe_read_status0(uint32_t *pSTATUS0)
 {
 	int status = SYS_STATUS_SUCCESS;
 
-	uint32_t status0 = 0;
 	*pSTATUS0 = 0;
 
+	/* Pure read: each ready bit is cleared by afe_clear_status0() only
+	 * after its data has been read, otherwise cycles and pages are lost */
 	status = afe_read_32bit_buff(REG_STATUS0, 1, pSTATUS0);
-	status0 = *pSTATUS0;
 	if (status != 0) {
 		status = SYS_STATUS_AFE_STATUS0_FAILED;
 	}
 
-	if (status == 0) {
-		status0 |= BITM_STATUS0_RMSONERDY;
-		status = afe_write_32bit_reg(REG_STATUS0, (uint32_t *)&status0);
-		if (status != 0) {
-			status = SYS_STATUS_AFE_STATUS0_FAILED;
-		}
+	return status;
+}
+
+int afe_clear_status0(uint32_t bits)
+{
+	int status;
+
+	status = afe_write_32bit_reg(REG_STATUS0, &bits);
+	if (status != 0) {
+		status = SYS_STATUS_AFE_STATUS0_FAILED;
 	}
 
 	return status;
@@ -531,6 +582,9 @@ void afe_wait_settling(uint32_t cycles)
 			cycles--;
 		}
 	}
+
+	/* Start measurement without stale ready flags */
+	afe_clear_status0(0xFFFFFFFF);
 }
 
 int afe_set_acc_mode(uint16_t frequency, uint16_t vconsel,

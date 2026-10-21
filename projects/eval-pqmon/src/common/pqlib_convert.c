@@ -136,16 +136,16 @@ int prepara_string(EVENT_TYPE event_type, int event_value, char *buf)
 			case CHAN_EVENT_START_TIME:
 				switch (event_type) {
 				case EVENT_DIPS:
-					val_tmp_d64 = pqlibExample.output->events.dips[j].startTime;
+					val_tmp_d64 = accumulated_events.dips[j].startTime;
 					break;
 				case EVENT_SWELL:
-					val_tmp_d64 = pqlibExample.output->events.swells[j].startTime;
+					val_tmp_d64 = accumulated_events.swells[j].startTime;
 					break;
 				case EVENT_RVC:
-					val_tmp_d64 = pqlibExample.output->events.rvc[j].startTime;
+					val_tmp_d64 = accumulated_events.rvc[j].startTime;
 					break;
 				case EVENT_INTRPS:
-					val_tmp_d64 = pqlibExample.output->events.intrp[j].startTime;
+					val_tmp_d64 = accumulated_events.intrp[j].startTime;
 					break;
 				}
 				sprintf(buffTmp, "%" PRId64 "", val_tmp_d64);
@@ -153,16 +153,16 @@ int prepara_string(EVENT_TYPE event_type, int event_value, char *buf)
 			case CHAN_EVENT_END_TIME:
 				switch (event_type) {
 				case EVENT_DIPS:
-					val_tmp_d64 = pqlibExample.output->events.dips[j].endTime;
+					val_tmp_d64 = accumulated_events.dips[j].endTime;
 					break;
 				case EVENT_SWELL:
-					val_tmp_d64 = pqlibExample.output->events.swells[j].endTime;
+					val_tmp_d64 = accumulated_events.swells[j].endTime;
 					break;
 				case EVENT_RVC:
-					val_tmp_d64 = pqlibExample.output->events.rvc[j].endTime;
+					val_tmp_d64 = accumulated_events.rvc[j].endTime;
 					break;
 				case EVENT_INTRPS:
-					val_tmp_d64 = pqlibExample.output->events.intrp[j].endTime;
+					val_tmp_d64 = accumulated_events.intrp[j].endTime;
 					break;
 				}
 				sprintf(buffTmp, "%" PRId64 "", val_tmp_d64);
@@ -170,23 +170,23 @@ int prepara_string(EVENT_TYPE event_type, int event_value, char *buf)
 			case CHAN_EVENT_DURATION_IN_CYCL:
 				switch (event_type) {
 				case EVENT_DIPS:
-					val_tmp_d32 = pqlibExample.output->events.dips[j].durationInCycles;
+					val_tmp_d32 = accumulated_events.dips[j].durationInCycles;
 					break;
 				case EVENT_SWELL:
-					val_tmp_d32 = pqlibExample.output->events.swells[j].durationInCycles;
+					val_tmp_d32 = accumulated_events.swells[j].durationInCycles;
 					break;
 				case EVENT_RVC:
-					val_tmp_d32 = pqlibExample.output->events.rvc[j].durationInCycles;
+					val_tmp_d32 = accumulated_events.rvc[j].durationInCycles;
 					break;
 				case EVENT_INTRPS:
-					val_tmp_d32 = pqlibExample.output->events.intrp[j].durationInCycles;
+					val_tmp_d32 = accumulated_events.intrp[j].durationInCycles;
 					break;
 				}
 				sprintf(buffTmp, "%" PRId32 "", val_tmp_d32);
 				break;
 			case CHAN_EVENT_MIN_MAG:
 				if (event_type == EVENT_DIPS) {
-					val_tmp_f = pqlibExample.output->events.dips[j].minMag;
+					val_tmp_f = accumulated_events.dips[j].minMag;
 					val_tmp_f = convert_rms_type(val_tmp_f,
 								     pqlibExample.exampleConfig.voltageScale);
 				}
@@ -194,7 +194,7 @@ int prepara_string(EVENT_TYPE event_type, int event_value, char *buf)
 				break;
 			case CHAN_EVENT_MAX_MAG:
 				if (event_type == EVENT_SWELL) {
-					val_tmp_f = pqlibExample.output->events.swells[j].maxMag;
+					val_tmp_f = accumulated_events.swells[j].maxMag;
 					val_tmp_f = convert_rms_type(val_tmp_f,
 								     pqlibExample.exampleConfig.voltageScale);
 				}
@@ -202,7 +202,7 @@ int prepara_string(EVENT_TYPE event_type, int event_value, char *buf)
 				break;
 			case CHAN_EVENT_DELTA_U_MAX:
 				if (event_type == EVENT_RVC) {
-					val_tmp_f = pqlibExample.output->events.rvc[j].deltaUmax;
+					val_tmp_f = accumulated_events.rvc[j].deltaUmax;
 					val_tmp_f = convert_rms_type(val_tmp_f,
 								     pqlibExample.exampleConfig.voltageScale);
 				}
@@ -210,7 +210,7 @@ int prepara_string(EVENT_TYPE event_type, int event_value, char *buf)
 				break;
 			case CHAN_EVENT_DELTA_U_SS:
 				if (event_type == EVENT_RVC) {
-					val_tmp_f = pqlibExample.output->events.rvc[j].deltaUss;
+					val_tmp_f = accumulated_events.rvc[j].deltaUss;
 					val_tmp_f = convert_rms_type(val_tmp_f,
 								     pqlibExample.exampleConfig.voltageScale);
 				}
