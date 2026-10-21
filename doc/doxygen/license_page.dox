@@ -1,6 +1,17 @@
 /**
 
-\page license_page LICENSE_BSD
+\page license_page License
+
+no-OS is, by default, licensed under BSD-3-Clause (below). Individual
+files may be under other terms, stated by the SPDX tag in each file's
+header; COPYING, the LICENSES/ directory and
+doc/sphinx/source/license_rules.rst describe them.
+
+\section license_copying COPYING
+
+\verbinclude COPYING
+
+\section license_bsd LICENSE_BSD
 
 \verbinclude LICENSE_BSD
 
