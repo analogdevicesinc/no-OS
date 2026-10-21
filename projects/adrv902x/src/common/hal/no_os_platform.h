@@ -18,4 +18,6 @@ struct adrv9025_hal_cfg {
 	int32_t logLevel;         /*!< valid 0 - 0xFF */
 };
 
+int32_t no_os_HwResetHold(void);
+
 #endif

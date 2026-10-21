@@ -601,6 +601,40 @@ int32_t no_os_HwReset(void *devHalCfg, uint8_t pinLevel)
 	return ADI_HAL_OK;
 }
 
+/**
+ * \brief Drive the ADRV9025 RESETB pin low and leave it there.
+ *
+ *  A JTAG reload resets the PS and PL but not the FMC devices, so the
+ *  ADRV9025 may still be running from a previous session. Call this before
+ *  configuring the AD9528; no_os_HwOpen() releases the reset later.
+ *
+ * \retval 0 Function completed successfully
+ * \retval negative error code otherwise
+ */
+int32_t no_os_HwResetHold(void)
+{
+	struct no_os_gpio_init_param gip_gpio_reset_n = {
+		.number = ADRV9025_RESET_B,
+		.platform_ops = clkchip_gpio_init_param.platform_ops,
+		.extra = clkchip_gpio_init_param.extra,
+	};
+	struct no_os_gpio_desc *gpio_reset_n;
+	int32_t ret;
+
+	ret = no_os_gpio_get(&gpio_reset_n, &gip_gpio_reset_n);
+	if (ret)
+		return ret;
+
+	ret = no_os_gpio_direction_output(gpio_reset_n, NO_OS_GPIO_LOW);
+	no_os_gpio_remove(gpio_reset_n);
+	if (ret)
+		return ret;
+
+	no_os_mdelay(100);
+
+	return 0;
+}
+
 int32_t no_os_image_page_get(void *devHalCfg, const char *ImagePath,
 			     uint32_t pageIndex, uint32_t pageSize, uint8_t *rdBuff)
 {

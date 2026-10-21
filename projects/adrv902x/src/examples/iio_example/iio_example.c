@@ -214,6 +214,13 @@ int example_main(void)
 	ad9528_param.pdata->stat0_pin_func_sel = 1; /* PLL1 & PLL2 Locked */
 	ad9528_param.pdata->stat1_pin_func_sel = 7; /* REFA Correct */
 
+	/* Keep the ADRV9025 in reset while its clock source is configured */
+	status = no_os_HwResetHold();
+	if (status) {
+		printf("error: no_os_HwResetHold() failed\n");
+		goto error;
+	}
+
 	status = ad9528_setup(&ad9528_device, ad9528_param);
 	if (status != 0) {
 		printf("error: ad9528_setup() failed\n");
