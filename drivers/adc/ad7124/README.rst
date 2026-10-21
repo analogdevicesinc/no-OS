@@ -61,7 +61,7 @@ Operation Modes
 | AD7124_SYS_ZERO_SCALE_OFF     | System zero-scale offset calibration; requires   |
 |                               | the zero-scale signal to be applied externally.  |
 +-------------------------------+--------------------------------------------------+
-| AD7124_SYS_ZERO_SCALE_GAIN    | System full-scale gain calibration; requires     |
+| AD7124_SYS_FULL_SCALE_GAIN    | System full-scale gain calibration; requires     |
 |                               | the full-scale signal to be applied externally.  |
 +-------------------------------+--------------------------------------------------+
 

@@ -1353,7 +1353,7 @@ int32_t ad7124_do_calibration(struct ad7124_dev *dev,
 	if (ret)
 		return ret;
 
-	calib_mode = full_scale ? AD7124_SYS_ZERO_SCALE_GAIN
+	calib_mode = full_scale ? AD7124_SYS_FULL_SCALE_GAIN
 		     : AD7124_SYS_ZERO_SCALE_OFF;
 
 	ret = ad7124_set_adc_mode(dev, calib_mode);
