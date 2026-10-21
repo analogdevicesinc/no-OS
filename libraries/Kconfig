@@ -165,4 +165,41 @@ config AZURE_VERSION
 	  Resolved via the NO_OS_DEP_AZURE_PATH override, else cloned in-tree
 	  (or into a version-keyed NO_OS_CACHE_DIR store when that is set).
 
+menuconfig LIBIIO
+	bool "Serve IIO with libiio (libiio's iiod)"
+	default n
+	help
+	  Builds libiio's IIO daemon into the project and links it: libiio is
+	  then the project's IIO implementation, so leave IIO (no-OS's own
+	  server and iio_app) off. The project lists its devices in a table and
+	  calls noos_iiod_run(); see no-OS/PORTING.md in the libiio tree.
+
+if LIBIIO
+
+config LIBIIO_VERSION
+	string "libiio version tag"
+	default "main"
+	help
+	  Git tag, branch or commit for libiio.
+	  Resolved via the NO_OS_DEP_LIBIIO_PATH override, else cloned in-tree
+	  (or into a version-keyed NO_OS_CACHE_DIR store when that is set).
+
+choice LIBIIO_TRANSPORT
+	prompt "Transport the host connects through"
+	default LIBIIO_TRANSPORT_UART
+
+config LIBIIO_TRANSPORT_UART
+	bool "UART (serial:)"
+
+config LIBIIO_TRANSPORT_USB
+	bool "USB (usb:), needs the platform's USB glue"
+
+config LIBIIO_TRANSPORT_NETWORK
+	bool "TCP on lwIP (ip:)"
+	select LWIP
+
+endchoice
+
+endif # LIBIIO
+
 endmenu
