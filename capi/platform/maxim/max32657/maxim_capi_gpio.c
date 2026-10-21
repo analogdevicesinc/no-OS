@@ -37,6 +37,34 @@ static void _max_capi_gpio_set_enable(mxc_gpio_regs_t *regs, uint32_t mask,
 		regs->en0 &= ~mask;
 }
 
+/**
+ * @brief Apply logical value considering ACTIVE_LOW flag
+ * @param raw_value - Raw hardware value
+ * @param flags - Pin flags
+ * @return Logical value
+ */
+static inline uint8_t _max_capi_gpio_apply_active_low(uint8_t raw_value,
+		uint32_t flags)
+{
+	if (flags & CAPI_GPIO_ACTIVE_LOW)
+		return raw_value ? CAPI_GPIO_LOW : CAPI_GPIO_HIGH;
+	return raw_value;
+}
+
+/**
+ * @brief Convert logical value to raw considering ACTIVE_LOW flag
+ * @param logical_value - Logical value
+ * @param flags - Pin flags
+ * @return Raw hardware value
+ */
+static inline uint8_t _max_capi_gpio_to_raw_value(uint8_t logical_value,
+		uint32_t flags)
+{
+	if (flags & CAPI_GPIO_ACTIVE_LOW)
+		return logical_value ? CAPI_GPIO_LOW : CAPI_GPIO_HIGH;
+	return logical_value;
+}
+
 /** GPIO functions implemenation **********************************************/
 /**
  * @brief Initialize a GPIO port
@@ -433,32 +461,6 @@ static int max_capi_gpio_pin_get_raw_value(struct capi_gpio_pin *pin,
 }
 
 /**
- * @brief Apply logical value considering ACTIVE_LOW flag
- * @param raw_value - Raw hardware value
- * @param flags - Pin flags
- * @return Logical value
- */
-static inline uint8_t apply_active_low(uint8_t raw_value, uint32_t flags)
-{
-	if (flags & CAPI_GPIO_ACTIVE_LOW)
-		return raw_value ? CAPI_GPIO_LOW : CAPI_GPIO_HIGH;
-	return raw_value;
-}
-
-/**
- * @brief Convert logical value to raw considering ACTIVE_LOW flag
- * @param logical_value - Logical value
- * @param flags - Pin flags
- * @return Raw hardware value
- */
-static inline uint8_t to_raw_value(uint8_t logical_value, uint32_t flags)
-{
-	if (flags & CAPI_GPIO_ACTIVE_LOW)
-		return logical_value ? CAPI_GPIO_LOW : CAPI_GPIO_HIGH;
-	return logical_value;
-}
-
-/**
  * @brief Set the value of a single pin (considering the ACTIVE_LOW flag)
  * @param pin - the pin handle
  * @param value - the value (CAPI_GPIO_LOW or CAPI_GPIO_HIGH)
@@ -471,7 +473,7 @@ static int max_capi_gpio_pin_set_value(struct capi_gpio_pin *pin, uint8_t value)
 	if (!pin)
 		return -EINVAL;
 
-	raw_value = to_raw_value(value, pin->flags);
+	raw_value = _max_capi_gpio_to_raw_value(value, pin->flags);
 
 	return max_capi_gpio_pin_set_raw_value(pin, raw_value);
 }
@@ -495,7 +497,7 @@ static int max_capi_gpio_pin_get_value(struct capi_gpio_pin *pin,
 	if (ret)
 		return ret;
 
-	*value = apply_active_low(raw_value, pin->flags);
+	*value = _max_capi_gpio_apply_active_low(raw_value, pin->flags);
 
 	return 0;
 }
