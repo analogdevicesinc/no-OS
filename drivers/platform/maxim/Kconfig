@@ -53,6 +53,14 @@ config UART_STDIO_MAXIM
 	help
 	  Enable Maxim-specific UART STDIO driver implementation.
 
+config IIO_ADC_MAXIM
+	bool "Serve the part's own ADC with libiio"
+	depends on LIBIIO
+	default n
+	help
+	  The MCU's ADC as a libiio device (max32690-adc, ...): raw, scale and
+	  reference per input. MAX32690 and MAX32655 for now.
+
 config USB_UART_MAXIM
 	bool "Enable Maxim USB UART driver"
 	default n

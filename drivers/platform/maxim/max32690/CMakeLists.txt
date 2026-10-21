@@ -42,6 +42,11 @@ target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/TMR/tmr_me1
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/GPIO/gpio_me18.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/GPIO/gpio_reva.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/GPIO/gpio_common.c)
+if(CONFIG_IIO_ADC_MAXIM)
+	target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/ADC/adc_me18.c)
+	target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/ADC/adc_revb.c)
+	target_include_directories(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/ADC)
+endif()
 
 target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Include/RTC)
 target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Include/ICC)

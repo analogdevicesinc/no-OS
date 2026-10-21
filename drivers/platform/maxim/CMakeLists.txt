@@ -49,6 +49,25 @@ no_os_include_dir_ifdef(CONFIG_USB_UART_MAXIM ${MAXIM_LIBRARIES}/MAXUSB/include/
 no_os_include_dir_ifdef(CONFIG_USB_UART_MAXIM ${MAXIM_LIBRARIES}/MAXUSB/include/enumerate)
 no_os_include_dir_ifdef(CONFIG_USB_UART_MAXIM ${MAXIM_LIBRARIES}/MAXUSB/include/devclass)
 
+# libiio (CONFIG_LIBIIO): the part's own ADC as a libiio device, and the
+# MAXUSB glue behind libiio's USB transport.
+if(CONFIG_IIO_ADC_MAXIM)
+	target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/common/maxim_iio_adc.c)
+	target_compile_definitions(no-os PRIVATE IIO_ADC_NAME="${TARGET}-adc")
+	if(TARGET_NUM STREQUAL "32690")
+		target_compile_definitions(no-os PRIVATE IIO_ADC_CLOCK=MXC_ADC_CLK_IBRO)
+	elseif(TARGET_NUM STREQUAL "32655")
+		target_compile_definitions(no-os PRIVATE IIO_ADC_REF_VOLTAGE_MV=1220)
+	else()
+		message(FATAL_ERROR "IIO_ADC_MAXIM: not brought up on ${TARGET} yet")
+	endif()
+endif()
+no_os_sources_ifdef(CONFIG_LIBIIO_TRANSPORT_USB ${CMAKE_CURRENT_SOURCE_DIR}/common/maxim_iio_usb.c)
+# libiio's responder needs far more than the startup file's 4 KiB stack.
+if(CONFIG_LIBIIO)
+	target_compile_definitions(no-os PRIVATE __STACK_SIZE=0x10000)
+endif()
+
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET})
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/common)
 
