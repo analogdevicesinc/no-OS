@@ -323,12 +323,12 @@ static int max_capi_gpio_pin_set_direction(struct capi_gpio_pin *pin,
 	case CAPI_GPIO_OUTPUT:
 		gpio_config.func = MXC_GPIO_FUNC_OUT;
 		MXC_GPIO_Config(&gpio_config);
-		priv->direction_mask &= ~(1 << pin->number);
+		priv->direction_mask &= ~(1U << pin->number);
 		break;
 	case CAPI_GPIO_INPUT:
 		gpio_config.func = MXC_GPIO_FUNC_IN;
 		MXC_GPIO_Config(&gpio_config);
-		priv->direction_mask |= (1 << pin->number);
+		priv->direction_mask |= (1U << pin->number);
 		break;
 	default:
 		return -EINVAL;
@@ -356,7 +356,7 @@ static int max_capi_gpio_pin_get_direction(struct capi_gpio_pin *pin,
 	if (pin->number >= priv->num_pins)
 		return -EINVAL;
 
-	if (priv->direction_mask & ((uint32_t)(1 << pin->number)))
+	if (priv->direction_mask & ((uint32_t)(1U << pin->number)))
 		*direction = CAPI_GPIO_INPUT;
 	else
 		*direction = CAPI_GPIO_OUTPUT;
@@ -365,7 +365,7 @@ static int max_capi_gpio_pin_get_direction(struct capi_gpio_pin *pin,
 }
 
 /**
- * @brief Set the raw value of a single pin (ignoring the ACITVE_LOW flag)
+ * @brief Set the raw value of a single pin (ignoring the ACTIVE_LOW flag)
  * @param pin - the pin handle
  * @param value - the value (CAPI_GPIO_LOW or CAPI_GPIO_HIGH)
  * @return 0 on success, negative error code otherwise
@@ -383,13 +383,13 @@ static int max_capi_gpio_pin_set_raw_value(struct capi_gpio_pin *pin,
 	if (pin->number >= priv->num_pins)
 		return -EINVAL;
 
-	_max_capi_gpio_set_enable(priv->port, (1 << pin->number), true);
+	_max_capi_gpio_set_enable(priv->port, (1U << pin->number), true);
 	switch (value) {
 	case CAPI_GPIO_LOW:
-		MXC_GPIO_OutClr(priv->port, (1 << pin->number));
+		MXC_GPIO_OutClr(priv->port, (1U << pin->number));
 		break;
 	case CAPI_GPIO_HIGH:
-		MXC_GPIO_OutSet(priv->port, (1 << pin->number));
+		MXC_GPIO_OutSet(priv->port, (1U << pin->number));
 		break;
 	/**
 	 * In the maxim_gpio implementation, there is a HIGH_Z option that seems to
@@ -421,7 +421,7 @@ static int max_capi_gpio_pin_get_raw_value(struct capi_gpio_pin *pin,
 	if (pin->number >= priv->num_pins)
 		return -EINVAL;
 
-	_max_capi_gpio_set_enable(priv->port, (1 << pin->number), true);
+	_max_capi_gpio_set_enable(priv->port, (1U << pin->number), true);
 	if (priv->direction_mask & (1U << pin->number)) /* Input */
 		*value = MXC_GPIO_InGet(priv->port,
 					(1U << pin->number)) >> pin->number;
