@@ -19,6 +19,10 @@
 #include "iio_trigger_example.h"
 #endif
 
+#ifdef CONFIG_IIO_DEMO_LIBIIO_EXAMPLE
+#include "libiio_example.h"
+#endif
+
 /***************************************************************************//**
  * @brief Main function execution for Maxim platform.
  *
@@ -44,9 +48,13 @@ int main()
 	ret = iio_timer_trigger_example_main();
 #endif
 
-#if (CONFIG_IIO_DEMO_IIO_EXAMPLE + CONFIG_IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE + CONFIG_IIO_DEMO_IIO_TIMER_TRIGGER_EXAMPLE == 0)
+#ifdef CONFIG_IIO_DEMO_LIBIIO_EXAMPLE
+	ret = libiio_example_main();
+#endif
+
+#if (CONFIG_IIO_DEMO_IIO_EXAMPLE + CONFIG_IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE + CONFIG_IIO_DEMO_IIO_TIMER_TRIGGER_EXAMPLE + CONFIG_IIO_DEMO_LIBIIO_EXAMPLE == 0)
 #error At least one example has to be selected using y value in Makefile.
-#elif (CONFIG_IIO_DEMO_IIO_EXAMPLE + CONFIG_IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE + CONFIG_IIO_DEMO_IIO_TIMER_TRIGGER_EXAMPLE > 1)
+#elif (CONFIG_IIO_DEMO_IIO_EXAMPLE + CONFIG_IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE + CONFIG_IIO_DEMO_IIO_TIMER_TRIGGER_EXAMPLE + CONFIG_IIO_DEMO_LIBIIO_EXAMPLE > 1)
 #error Selected example projects cannot be enabled at the same time. \
 Please enable only one example and rebuild the project.
 #endif

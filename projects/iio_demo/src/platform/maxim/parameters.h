@@ -79,4 +79,38 @@ extern struct max_usb_uart_init_param iio_demo_usb_uart_extra_ip;
 
 #endif
 
+#ifdef CONFIG_IIO_DEMO_LIBIIO_EXAMPLE
+/*
+ * libiio example: the probe's UART (UART0) carries the uart transport, or the
+ * logs on the other transports; TMR1 paces the on-chip ADC (timer0 trigger),
+ * TMR0 is the usb transport's tick. Same priority for both timers: no-OS
+ * walks every timer callback with one shared iterator.
+ */
+extern struct no_os_uart_init_param libiio_uart_ip;
+
+#define LIBIIO_TIMER_FREQ_HZ		1000000
+#define LIBIIO_TIMER_OPS		&max_timer_ops
+#define LIBIIO_IRQ_OPS			&max_irq_ops
+#define LIBIIO_TIMER_IRQ_PRIORITY	3
+
+#define LIBIIO_USB_TICK_TIMER_ID	0
+#define LIBIIO_USB_TICK_TICKS		100	/* 10 kHz */
+#define LIBIIO_USB_TICK_IRQ_ID		TMR0_IRQn
+#define LIBIIO_USB_TICK_IRQ_HANDLE	MXC_TMR0
+
+/* libiio's ids; the host finds the device by its "IIO" interface. */
+#define LIBIIO_USB_VENDOR_ID		0x0456
+#define LIBIIO_USB_PRODUCT_ID		0xB673
+
+#ifdef CONFIG_LIBIIO_TRANSPORT_NETWORK
+/*
+ * lwIP on the ADIN1110 as wired on the AD-APARD32690-SL (parameters.c).
+ * Declared without lwIP's headers: they define ENABLE_LOOPBACK, as
+ * app_config.h does.
+ */
+struct lwip_network_param;
+extern struct lwip_network_param libiio_lwip_ip;
+#endif
+#endif /* CONFIG_IIO_DEMO_LIBIIO_EXAMPLE */
+
 #endif /* __PARAMETERS_H__ */

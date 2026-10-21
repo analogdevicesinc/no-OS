@@ -13,6 +13,14 @@ config IIO_DEMO_IIO_TIMER_TRIGGER_EXAMPLE
 config IIO_DEMO_IIO_SW_TRIGGER_EXAMPLE
 	bool "IIO software trigger example"
 
+config IIO_DEMO_LIBIIO_EXAMPLE
+	bool "Basic example served by libiio"
+	depends on LIBIIO
+	help
+	  adc_demo and dac_demo (and the part's own ADC with IIO_ADC_MAXIM)
+	  served by libiio's iiod instead of iio_app, over the transport
+	  picked in LIBIIO_TRANSPORT.
+
 endchoice
 
 config IIO_DEMO_NETWORKING

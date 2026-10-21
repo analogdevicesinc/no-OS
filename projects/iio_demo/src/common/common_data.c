@@ -130,3 +130,78 @@ struct iio_hw_trig_init_param dac_demo_timer_trig_ip = {
 	.name = DAC_DEMO_TIMER_TRIG_NAME,
 };
 #endif
+
+#ifdef CONFIG_IIO_DEMO_LIBIIO_EXAMPLE
+/*
+ * What the libiio example serves: adc_demo and dac_demo, unmodified, with
+ * the init parameters above; with IIO_ADC_MAXIM also the part's own ADC.
+ * Their transport settings come from the platform's parameters.
+ */
+#include <noos_iiod.h>
+#include <iio_noos_driver.h>
+#include "iio_adc_demo.h"
+#include "iio_dac_demo.h"
+#ifdef CONFIG_IIO_ADC_MAXIM
+#include "maxim_iio_adc.h"
+#endif
+
+NOOS_IIOD_DRIVER_DEFINE(adc_demo, "adc_demo", adc_demo_init,
+			struct adc_demo_desc, &adc_init_par,
+			&adc_demo_iio_descriptor);
+NOOS_IIOD_DRIVER_DEFINE(dac_demo, "dac_demo", dac_demo_init,
+			struct dac_demo_desc, &dac_init_par,
+			&dac_demo_iio_descriptor);
+
+static const struct noos_iiod_device iiod_devices[] = {
+	NOOS_IIOD_DRIVER(adc_demo),
+	NOOS_IIOD_DRIVER(dac_demo),
+#ifdef CONFIG_IIO_ADC_MAXIM
+	NOOS_IIOD_ONCHIP_ADC(),
+#endif
+};
+
+#ifdef CONFIG_LIBIIO_TRANSPORT_USB
+static struct no_os_irq_init_param libiio_irq_ip = {
+	.irq_ctrl_id = 0,
+	.platform_ops = LIBIIO_IRQ_OPS,
+};
+
+static struct no_os_timer_init_param libiio_usb_tick_timer_ip = {
+	.id = LIBIIO_USB_TICK_TIMER_ID,
+	.freq_hz = LIBIIO_TIMER_FREQ_HZ,
+	.ticks_count = LIBIIO_USB_TICK_TICKS,
+	.platform_ops = LIBIIO_TIMER_OPS,
+};
+
+static const struct noos_iiod_usb libiio_usb = {
+	.tick = {
+		.timer = &libiio_usb_tick_timer_ip,
+		.irq = &libiio_irq_ip,
+		.irq_id = LIBIIO_USB_TICK_IRQ_ID,
+		.irq_handle = LIBIIO_USB_TICK_IRQ_HANDLE,
+		.irq_priority = LIBIIO_TIMER_IRQ_PRIORITY,
+	},
+	.vendor_id = LIBIIO_USB_VENDOR_ID,
+	.product_id = LIBIIO_USB_PRODUCT_ID,
+	.manufacturer = "Analog Devices",
+	.product = "iio_demo",
+	.serial = "000000001",
+};
+#endif
+
+const struct noos_iiod_param iiod_param = {
+	.devices = iiod_devices,
+	.nb_devices = NO_OS_ARRAY_SIZE(iiod_devices),
+#ifdef CONFIG_LIBIIO_TRANSPORT_UART
+	.uart = &libiio_uart_ip,
+#else
+	.console = &libiio_uart_ip,
+#endif
+#ifdef CONFIG_LIBIIO_TRANSPORT_USB
+	.usb = &libiio_usb,
+#endif
+#ifdef CONFIG_LIBIIO_TRANSPORT_NETWORK
+	.lwip = &libiio_lwip_ip,
+#endif
+};
+#endif /* CONFIG_IIO_DEMO_LIBIIO_EXAMPLE */

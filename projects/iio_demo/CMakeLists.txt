@@ -17,6 +17,16 @@ if(CONFIG_IIO_DEMO_IIO_EXAMPLE)
     )
 endif()
 
+# Basic example served by libiio (CONFIG_LIBIIO)
+if(CONFIG_IIO_DEMO_LIBIIO_EXAMPLE)
+    target_sources(iio_demo PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/libiio_example/libiio_example.c
+    )
+    target_include_directories(iio_demo PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/libiio_example
+    )
+endif()
+
 # IIO timer trigger example
 if(CONFIG_IIO_DEMO_IIO_TIMER_TRIGGER_EXAMPLE)
     target_sources(iio_demo PRIVATE
