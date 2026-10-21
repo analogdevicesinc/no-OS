@@ -65,6 +65,27 @@ static inline uint8_t _max_capi_gpio_to_raw_value(uint8_t logical_value,
 	return logical_value;
 }
 
+/**
+ * @brief Get the effective flags of a pin (pin flags merged with port flags)
+ * @param pin - the pin handle
+ * @return Effective pin flags
+ */
+static uint32_t _max_capi_gpio_pin_flags(const struct capi_gpio_pin *pin)
+{
+	const struct max_capi_gpio_port_priv *priv;
+	uint32_t flags = pin->flags;
+
+	if (!pin->port_handle || !pin->port_handle->priv)
+		return flags;
+
+	priv = pin->port_handle->priv;
+	if (pin->number < priv->num_pins &&
+	    (priv->active_low_mask & (1U << pin->number)))
+		flags |= CAPI_GPIO_ACTIVE_LOW;
+
+	return flags;
+}
+
 /** GPIO functions implemenation **********************************************/
 /**
  * @brief Initialize a GPIO port
@@ -119,6 +140,14 @@ static int max_capi_gpio_port_init(struct capi_gpio_port_handle **handle,
 	priv->num_pins = config->num_pins;
 	priv->pin_mask = (uint32_t)((1ULL << config->num_pins) - 1);
 	priv->direction_mask = priv->pin_mask; /* All inputs by default */
+	priv->active_low_mask = 0;
+
+	if (config->flags) {
+		for (uint8_t i = 0; i < config->num_pins; i++) {
+			if (config->flags[i] & CAPI_GPIO_ACTIVE_LOW)
+				priv->active_low_mask |= (1U << i);
+		}
+	}
 
 	/* Copy user config or set defaults */
 	if (config->extra) {
@@ -130,7 +159,7 @@ static int max_capi_gpio_port_init(struct capi_gpio_port_handle **handle,
 		priv->extra.drvstr = MAX_CAPI_GPIO_DRVSTR_0;
 	}
 
-	ret = MXC_GPIO_Init(config->identifier);
+	ret = MXC_GPIO_Init(1U << config->identifier);
 	if (ret != E_NO_ERROR)
 		goto free_handle;
 
@@ -290,7 +319,8 @@ static int max_capi_gpio_port_get_raw_value(struct capi_gpio_port_handle
 
 	in_pins = MXC_GPIO_InGet(priv->port, priv->pin_mask);
 	out_pins = MXC_GPIO_OutGet(priv->port, priv->pin_mask);
-	*value_bitmask = in_pins | out_pins;
+	*value_bitmask = (in_pins & priv->direction_mask) |
+			 (out_pins & ~priv->direction_mask);
 
 	return 0;
 }
@@ -304,7 +334,15 @@ static int max_capi_gpio_port_get_raw_value(struct capi_gpio_port_handle
 static int max_capi_gpio_port_set_value(struct capi_gpio_port_handle *handle,
 					uint64_t value_bitmask)
 {
-	return max_capi_gpio_port_set_raw_value(handle, value_bitmask);
+	const struct max_capi_gpio_port_priv *priv;
+
+	if (!handle || !handle->priv)
+		return -EINVAL;
+
+	priv = handle->priv;
+
+	return max_capi_gpio_port_set_raw_value(handle,
+						value_bitmask ^ priv->active_low_mask);
 }
 
 /**
@@ -316,7 +354,21 @@ static int max_capi_gpio_port_set_value(struct capi_gpio_port_handle *handle,
 static int max_capi_gpio_port_get_value(struct capi_gpio_port_handle *handle,
 					uint64_t *value_bitmask)
 {
-	return max_capi_gpio_port_get_raw_value(handle, value_bitmask);
+	int ret;
+	const struct max_capi_gpio_port_priv *priv;
+
+	if (!handle || !handle->priv)
+		return -EINVAL;
+
+	priv = handle->priv;
+
+	ret = max_capi_gpio_port_get_raw_value(handle, value_bitmask);
+	if (ret)
+		return ret;
+
+	*value_bitmask ^= priv->active_low_mask;
+
+	return 0;
 }
 
 /**
@@ -473,7 +525,7 @@ static int max_capi_gpio_pin_set_value(struct capi_gpio_pin *pin, uint8_t value)
 	if (!pin)
 		return -EINVAL;
 
-	raw_value = _max_capi_gpio_to_raw_value(value, pin->flags);
+	raw_value = _max_capi_gpio_to_raw_value(value, _max_capi_gpio_pin_flags(pin));
 
 	return max_capi_gpio_pin_set_raw_value(pin, raw_value);
 }
@@ -497,7 +549,8 @@ static int max_capi_gpio_pin_get_value(struct capi_gpio_pin *pin,
 	if (ret)
 		return ret;
 
-	*value = _max_capi_gpio_apply_active_low(raw_value, pin->flags);
+	*value = _max_capi_gpio_apply_active_low(raw_value,
+			_max_capi_gpio_pin_flags(pin));
 
 	return 0;
 }
