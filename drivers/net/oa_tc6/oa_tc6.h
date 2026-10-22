@@ -236,6 +236,7 @@ struct oa_tc6_stats {
 	uint32_t rx_drop_fd;    /* footer frame-drop (FD) flagged frames */
 	uint32_t rx_drop_nobuf; /* RX frame-buffer pool exhausted (-ENOBUFS) */
 	uint32_t exst_events;   /* EXST latched in a data-chunk footer */
+	uint32_t rx_footer_parity_err; /* data-chunk footer with a parity error */
 };
 
 /**
