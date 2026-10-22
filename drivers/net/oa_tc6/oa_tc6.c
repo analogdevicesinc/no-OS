@@ -262,8 +262,11 @@ int oa_tc6_get_tx_frame(struct oa_tc6_desc *desc,
 int oa_tc6_put_tx_frame(struct oa_tc6_desc *desc,
 			struct oa_tc6_frame_buffer *buffer)
 {
-	if (!desc || !buffer)
+	if (!desc || !buffer || !buffer->len)
 		return -EINVAL;
+
+	if (buffer->len > CONFIG_OA_CHUNK_BUFFER_SIZE)
+		return -EMSGSIZE;
 
 	buffer->state = OA_BUFF_TX_READY;
 
