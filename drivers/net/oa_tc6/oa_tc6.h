@@ -61,8 +61,8 @@ extern "C" {
 #endif
 #define OA_SPI_BUFF_LEN		CONFIG_OA_SPI_BUFF_LEN
 
-/* Most registers one control transaction carries. */
-#define OA_CTRL_MAX_REGS	1
+/* Most registers one control transaction can carry (LEN is 7 bits). */
+#define OA_CTRL_MAX_REGS	128
 
 #define OA_CHUNK_SIZE \
 	64 /* max data-chunk payload; runtime uses desc->chunk_size */
@@ -839,6 +839,18 @@ int oa_tc6_reg_write(struct oa_tc6_desc *, uint32_t, uint32_t);
 
 /* Update a register field */
 int oa_tc6_reg_update(struct oa_tc6_desc *, uint32_t, uint32_t, uint32_t);
+
+/*
+ * Read/write up to OA_CTRL_MAX_REGS consecutive registers in a single control
+ * transaction. addr is the MMS-encoded address of the first register
+ * (OA_MMS_REG(mms, reg)). The address auto-increments by one for each
+ * subsequent register (AID=0). val[] must hold at least count elements.
+ * count must be in [1, OA_CTRL_MAX_REGS].
+ */
+int oa_tc6_reg_read_multiple(struct oa_tc6_desc *, uint32_t addr, uint32_t *val,
+			     uint8_t count);
+int oa_tc6_reg_write_multiple(struct oa_tc6_desc *, uint32_t addr,
+			      const uint32_t *val, uint8_t count);
 
 /* Get a received frame with a matching VS field (in the RX chunks) */
 int oa_tc6_get_rx_frame_match_vs(struct oa_tc6_desc *,
