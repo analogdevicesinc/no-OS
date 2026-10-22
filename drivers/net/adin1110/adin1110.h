@@ -197,6 +197,8 @@ struct adin1110_desc {
 struct adin1110_init_param {
 	enum adin1110_chip_id chip_type;
 	struct no_os_spi_init_param comm_param;
+	/* SPI device for the OPEN Alliance protocol, used if oa_tc6_spi is set */
+	struct capi_spi_device *oa_comm_desc;
 	struct no_os_gpio_init_param reset_param;
 	struct no_os_gpio_init_param int_param;
 	uint8_t mac_address[ADIN1110_ETH_ALEN];

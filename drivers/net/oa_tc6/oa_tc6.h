@@ -10,9 +10,9 @@
 #ifndef _NO_OS_OA_TC6_H
 #define _NO_OS_OA_TC6_H
 
-#include "no_os_spi.h"
+#include "capi_mutex.h"
+#include "capi_spi.h"
 #include "no_os_util.h"
-#include "no_os_mutex.h"
 #include <stdint.h>
 
 #ifndef CONFIG_OA_TX_FRAME_BUFF_NUM
@@ -243,11 +243,15 @@ struct oa_tc6_stats {
  * @brief Holds the frame buffers and the communication descriptor for the OA TC6 driver.
  */
 struct oa_tc6_desc {
-	struct no_os_spi_desc *comm_desc;
+	struct capi_spi_device *comm_desc;
 	uint8_t ctrl_chunks[OA_SPI_CTRL_LEN];
 	uint8_t data_chunks[OA_SPI_BUFF_LEN];
-	void *ctrl_lock;
-	void *data_lock;
+	/*
+	 * ctrl_lock serializes control transactions, data_lock the data path.
+	 * Both are always non-NULL after init.
+	 */
+	struct capi_mutex *ctrl_lock;
+	struct capi_mutex *data_lock;
 
 	struct oa_tc6_frame_buffer user_rx_frame_buffer[OA_RX_FRAME_BUFF_NUM];
 	struct oa_tc6_frame_buffer user_tx_frame_buffer[OA_TX_FRAME_BUFF_NUM];
@@ -273,11 +277,20 @@ struct oa_tc6_desc {
  * @brief Holds the initialization parameters for the OA TC6 driver.
  */
 struct oa_tc6_init_param {
-	struct no_os_spi_desc *comm_desc;
+	/* SPI target device, initialized by the application. */
+	struct capi_spi_device *comm_desc;
 
 	enum oa_tc6_bufst_polling bufst_polling;
 	/* The OASPI device uses Protected SPI for control transactions */
 	bool prote_spi;
+
+	/*
+	 * Optional mutex configurations for the control and data paths. NULL
+	 * selects a built-in no-op lock (bare-metal single-threaded). The two
+	 * MUST be independent mutexes.
+	 */
+	const struct capi_mutex_config *ctrl_mutex_cfg;
+	const struct capi_mutex_config *data_mutex_cfg;
 };
 
 /* Read a register from the MAC device */
