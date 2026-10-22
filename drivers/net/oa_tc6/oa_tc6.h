@@ -361,6 +361,30 @@ enum oa_tc6_event {
 };
 
 /**
+ * @brief TX queue scheduling policy across multiple priority queues.
+ *
+ * Selects how a transaction picks which queue to service first when no frame
+ * is open on the wire. Immaterial for single-queue operation.
+ */
+enum oa_tc6_tx_sched {
+/**
+	 * Strict host priority: always drain the highest-index ready queue
+	 * first (queue index = frame priority). A higher-index queue with
+	 * backlog and credit is sent ahead of any lower-index queue. Default
+	 * (zero value).
+ */
+	OA_TC6_TX_SCHED_STRICT_PRIO = 0,
+/**
+	 * Fair: rotate the starting queue every transaction so no queue is
+	 * preferred. The host keeps every FIFO backlogged and leaves egress
+	 * order to the MAC's on-chip TX arbiter. On a CSMA/CD bus, a frame
+	 * dropped after the maximum collision retries while the other TX FIFO
+	 * is full can stall the AD3316's TX until a reset.
+ */
+	OA_TC6_TX_SCHED_ROUND_ROBIN,
+};
+
+/**
  * @brief A TX priority queue: its own frame-buffer ring and credit.
  *
  * Per-queue credit is only observable from data-chunk footers: a chunk's
@@ -491,6 +515,18 @@ struct oa_tc6_desc {
 	int8_t vs_to_txq[4];
 	struct oa_tc6_queue tx_q_storage;
 
+	/* TX queue scheduling policy (see enum oa_tc6_tx_sched). */
+	enum oa_tc6_tx_sched tx_sched;
+
+/*
+	 * Round-robin cursor: the queue index a transaction starts servicing
+	 * from when no frame is open. Under OA_TC6_TX_SCHED_ROUND_ROBIN it is
+	 * advanced once per transaction so no queue has fixed priority. Unused
+	 * under OA_TC6_TX_SCHED_STRICT_PRIO, where servicing always begins at
+	 * the highest-index queue.
+ */
+	uint8_t tx_rr_cursor;
+
 /*
 	 * TX progress computed by oa_tc6_tx_frame_to_chunks() for the pass being
 	 * packed, applied only for the chunks the MAC-PHY is confirmed to have
@@ -584,6 +620,13 @@ struct oa_tc6_init_param {
 	uint32_t tx_pool_size;
 	struct oa_tc6_queue *tx_q;
 	uint8_t tx_q_count;
+
+/*
+	 * TX queue scheduling policy (see enum oa_tc6_tx_sched). Defaults to
+	 * OA_TC6_TX_SCHED_STRICT_PRIO (zero value). Only meaningful when more
+	 * than one queue is configured.
+ */
+	enum oa_tc6_tx_sched tx_sched;
 
 /*
 	 * Optional mutex configuration for serialising control transactions.
