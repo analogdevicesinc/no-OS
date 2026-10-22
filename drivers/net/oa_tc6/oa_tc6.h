@@ -41,6 +41,14 @@ extern "C" {
 #endif
 
 /*
+ * Watchdog deadline (us) for one async transfer: a lost SPI/DMA completion is
+ * aborted and the state machine reset. Needs capi_uptime; 0 disables it.
+ */
+#ifndef CONFIG_OA_ASYNC_XFER_TIMEOUT_US
+#define CONFIG_OA_ASYNC_XFER_TIMEOUT_US	50000u
+#endif
+
+/*
  * SPI data-chunk buffer size. A frame larger than the buffer or the current
  * TX credit is split across transactions, so this need not hold a whole MTU --
  * it bounds how many chunks one transaction can carry. A full credit window
@@ -361,6 +369,18 @@ enum oa_tc6_event {
 };
 
 /**
+ * @brief State of the oa_tc6_thread_async() non-blocking SPI transfer function.
+ */
+enum oa_tc6_async_state {
+	/* No transfer in flight. The next call starts one (or stays idle). */
+	OA_ASYNC_IDLE = 0,
+
+	/* A DMA SPI transfer is in flight. The next call waits for its
+	 * completion, then processes the received chunks. */
+	OA_ASYNC_DATA_PENDING,
+};
+
+/**
  * @brief TX queue scheduling policy across multiple priority queues.
  *
  * Selects how a transaction picks which queue to service first when no frame
@@ -462,16 +482,18 @@ struct oa_tc6_desc {
 	 * data_lock serializes the TX/RX frame-buffer rings: the pool index
 	 * bookkeeping (each tx_q head/tail/count, rx_head/rx_tail and per-slot
 	 * state) touched by both the producer/consumer API (get/put_tx_frame,
-	 * get/put_rx_frame) and the SPI transfer function (oa_tc6_thread). In a
-	 * bare-metal single-threaded context both locks are no-ops; they become
-	 * meaningful when a FreeRTOS task calls send/recv while another runs the
-	 * poll loop.
+	 * get/put_rx_frame) and the SPI transfer function (oa_tc6_thread /
+	 * oa_tc6_thread_async). In a bare-metal single-threaded context both
+	 * locks are no-ops; they become meaningful when a FreeRTOS task calls
+	 * send/recv while another runs the poll loop.
  *
-	 * ctrl_lock doubles as the SPI bus lock: oa_tc6_thread() holds it across
-	 * its transfers. That is what mutually excludes register (ctrl) access
-	 * from data transfers on the shared bus: a task issuing a register read
-	 * blocks on ctrl_lock until the data transfers complete instead of
-	 * colliding with them. Under
+	 * ctrl_lock doubles as the SPI bus lock. The async transfer function
+	 * (oa_tc6_thread_async) holds it for the whole time a DMA data transfer is
+	 * in flight -- across the poll-loop iterations that transfer spans -- and
+	 * the synchronous oa_tc6_thread() holds it across its transfers too. That
+	 * is what mutually excludes register (ctrl) access from data transfers on
+	 * the shared bus: a task issuing a register read blocks on ctrl_lock until
+	 * an in-flight data transfer completes instead of colliding with it. Under
 	 * an RTOS ctrl_lock must therefore be a recursive, priority-inheriting
 	 * mutex -- recursive because the poll path re-enters it for register
 	 * reads (BUFST bootstrap, STATUS0 service, event_cb), and
@@ -575,8 +597,8 @@ struct oa_tc6_desc {
 
 /*
 	 * A footer in the last processed transaction flagged EXST/HDRB, so a
-	 * STATUS0 read/clear is owed. Serviced once the data pass is over, while
-	 * the bus is free.
+	 * STATUS0 read/clear is owed. Serviced only from the async state
+	 * machine's IDLE branch, where the bus is genuinely free.
  */
 	bool status0_pending;
 
@@ -590,6 +612,39 @@ struct oa_tc6_desc {
 	 * helper.
  */
 	bool irq_pending;
+
+/*
+	 * Async state machine for oa_tc6_thread_async(). The caller starts a DMA
+	 * SPI transfer and returns immediately; on the next call the state machine
+	 * checks completion, processes MISO chunks, and decides whether to start
+	 * another transfer or go idle.
+ *
+	 * async_xfer_done is written from the DMA ISR (via capi_spi callback) and
+	 * read from the main loop -- volatile prevents the compiler from caching it.
+ */
+	bool async_mode; /* true = async DMA transfer function selected at init */
+	enum oa_tc6_async_state async_state;
+	uint32_t async_bytes_total; /* byte count of the in-flight transfer */
+	uint32_t async_rx_limit;    /* loop iteration counter */
+	volatile bool async_xfer_done; /* set from DMA ISR via SPI callback */
+	bool async_xfer_error;	 /* set when callback fires with error event */
+	uint64_t async_start_us; /* launch time for the watchdog */
+	bool async_clock_ok;	 /* async_start_us valid (a clock exists) */
+
+	/* In async mode a control transfer also goes through the DMA path;
+	 * the SPI callback reports its completion here while ctrl_pending is
+	 * set. */
+	volatile bool ctrl_pending;
+	volatile bool ctrl_xfer_done;
+	volatile bool ctrl_xfer_error;
+
+/*
+	 * Optional hook called from the DMA ISR (via SPI callback) immediately
+	 * after async_xfer_done is set. Runs in interrupt context -- keep it
+	 * minimal (e.g. give a semaphore). NULL if unused.
+ */
+	void (*async_xfer_done_cb)(void *);
+	void *async_xfer_done_cb_arg;
 
 /*
 	 * Optional user callback invoked when a data-chunk footer or a
@@ -661,6 +716,21 @@ struct oa_tc6_init_param {
 	 * TX/RX producer task and the poll task can touch the pools concurrently.
  */
 	const struct capi_mutex_config *data_mutex_cfg;
+
+	/* Enable the non-blocking async DMA transfer function (oa_tc6_thread_async).
+	 * When true, control transactions also go over DMA, after waiting for
+	 * any in-flight data transfer, so oa_tc6_reg_read/write() are safe to
+	 * call at any time. Requires a DMA-wired SPI controller. */
+	bool async_mode;
+
+/*
+	 * Optional callback invoked from the DMA ISR immediately after the
+	 * async transfer completes (async_xfer_done is set). Runs in interrupt
+	 * context -- must be ISR-safe. Typical use: give a counting semaphore
+	 * to wake the poll task. NULL if unused.
+ */
+	void (*async_xfer_done_cb)(void *);
+	void *async_xfer_done_cb_arg;
 };
 
 /* Parity bit that makes a 32-bit header/footer word carry odd parity: OR the
@@ -704,6 +774,18 @@ int oa_tc6_get_xfer_flags(struct oa_tc6_desc *, struct oa_tc6_flags *, bool);
  * available chunks.
  */
 int oa_tc6_thread(struct oa_tc6_desc *);
+
+/*
+ * Non-blocking variant of oa_tc6_thread() for use with DMA-capable SPI.
+ * On entry: if a DMA transfer is in flight (OA_ASYNC_DATA_PENDING), returns 0
+ * immediately if DMA is still running, or processes MISO and starts the next
+ * transfer if done. On idle entry: packs TX chunks and fires a new async SPI
+ * transaction, then returns 0 while DMA runs. Returns -ETIMEDOUT when the
+ * transfer watchdog (CONFIG_OA_ASYNC_XFER_TIMEOUT_US) aborts a lost transfer.
+ * NOTE: only one oa_tc6_desc per SPI controller is supported; registering a
+ * second descriptor on the same controller would overwrite the SPI callback.
+ */
+int oa_tc6_thread_async(struct oa_tc6_desc *);
 
 /*
  * Register a callback to be notified of OA-TC6 events (error conditions,
