@@ -13,10 +13,31 @@
 #include <stdbool.h>
 #include <string.h>
 
+#include "capi_mutex.h"
+#include "capi_time.h"
 #include "no_os_alloc.h"
-#include "no_os_delay.h"
-#include "no_os_mutex.h"
 #include "oa_tc6.h"
+
+/*
+ * Built-in no-op mutex, shared by every descriptor that gets no
+ * ctrl_mutex_cfg / data_mutex_cfg (bare-metal single-threaded). Keeps
+ * ctrl_lock/data_lock always non-NULL so lock/unlock never need a NULL
+ * guard; the ops all ignore the handle, so sharing one sentinel across
+ * descriptors is safe.
+ */
+static int noop_mutex_nop(struct capi_mutex *h)
+{
+	(void)h;
+	return 0;
+}
+
+static const struct capi_mutex_ops noop_mutex_ops = {
+	.deinit = noop_mutex_nop,
+	.lock = noop_mutex_nop,
+	.unlock = noop_mutex_nop,
+};
+
+static struct capi_mutex oa_noop_mutex = { .ops = &noop_mutex_ops };
 
 int oa_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 			 uint32_t len);
@@ -89,19 +110,19 @@ static uint32_t oa_tc6_prepare_tx_ctrl(struct oa_tc6_desc *desc, uint32_t addr,
 
 static int oa_tc6_do_ctrl_transfer(struct oa_tc6_desc *desc)
 {
-	struct no_os_spi_msg xfer = {0};
+	struct capi_spi_transfer xfer = {0};
 
 	if (desc->ctrl_rx_credit || desc->ctrl_tx_credit) {
-		xfer.tx_buff = desc->ctrl_chunks;
-		xfer.rx_buff = desc->ctrl_chunks;
-		xfer.cs_change = 1;
+		xfer.tx_buf = desc->ctrl_chunks;
+		xfer.rx_buf = desc->ctrl_chunks;
 
 		if (desc->prote_spi)
-			xfer.bytes_number = 2 * (OA_HEADER_LEN + OA_REG_LEN);
+			xfer.tx_size = 2 * (OA_HEADER_LEN + OA_REG_LEN);
 		else
-			xfer.bytes_number = 2 * OA_HEADER_LEN + OA_REG_LEN;
+			xfer.tx_size = 2 * OA_HEADER_LEN + OA_REG_LEN;
+		xfer.rx_size = xfer.tx_size;
 
-		return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
+		return capi_spi_transceive(desc->comm_desc, &xfer);
 	}
 
 	return 0;
@@ -160,9 +181,9 @@ int oa_tc6_reg_read(struct oa_tc6_desc *desc, uint32_t addr, uint32_t *val)
 	if (!desc)
 		return -ENODEV;
 
-	no_os_mutex_lock(desc->ctrl_lock);
+	capi_mutex_lock(desc->ctrl_lock);
 	ret = __oa_tc6_reg_read(desc, addr, val);
-	no_os_mutex_unlock(desc->ctrl_lock);
+	capi_mutex_unlock(desc->ctrl_lock);
 
 	return ret;
 }
@@ -209,9 +230,9 @@ int oa_tc6_reg_write(struct oa_tc6_desc *desc, uint32_t addr, uint32_t val)
 	if (!desc)
 		return -ENODEV;
 
-	no_os_mutex_lock(desc->ctrl_lock);
+	capi_mutex_lock(desc->ctrl_lock);
 	ret = __oa_tc6_reg_write(desc, addr, val);
-	no_os_mutex_unlock(desc->ctrl_lock);
+	capi_mutex_unlock(desc->ctrl_lock);
 
 	return ret;
 }
@@ -248,9 +269,9 @@ int oa_tc6_reg_update(struct oa_tc6_desc *desc, uint32_t addr,
 	if (!desc)
 		return -ENODEV;
 
-	no_os_mutex_lock(desc->ctrl_lock);
+	capi_mutex_lock(desc->ctrl_lock);
 	ret = __oa_tc6_reg_update(desc, addr, val, mask);
-	no_os_mutex_unlock(desc->ctrl_lock);
+	capi_mutex_unlock(desc->ctrl_lock);
 
 	return ret;
 }
@@ -915,12 +936,12 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 	int tx_ret;
 
 	struct oa_tc6_frame_buffer *frame_buffer;
-	struct no_os_spi_msg xfer = {0};
+	struct capi_spi_transfer xfer = {0};
 
 	if (!desc)
 		return -ENODEV;
 
-	no_os_mutex_lock(desc->data_lock);
+	capi_mutex_lock(desc->data_lock);
 
 	if (desc->bufst_polling == OA_TC6_REG_POLL) {
 		ret = oa_tc6_update_stats(desc);
@@ -945,12 +966,12 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 			bytes_total = OA_CHUNK_SIZE + OA_HEADER_LEN;
 		}
 
-		xfer.tx_buff = desc->data_chunks;
-		xfer.rx_buff = desc->data_chunks;
-		xfer.bytes_number = bytes_total;
-		xfer.cs_change = 1;
+		xfer.tx_buf = desc->data_chunks;
+		xfer.rx_buf = desc->data_chunks;
+		xfer.tx_size = bytes_total;
+		xfer.rx_size = bytes_total;
 
-		ret = no_os_spi_transfer(desc->comm_desc, &xfer, 1);
+		ret = capi_spi_transceive(desc->comm_desc, &xfer);
 		if (ret) {
 			memset(desc->data_chunks, 0, bytes_total);
 
@@ -980,7 +1001,7 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 unlock:
 	events = desc->pending_events;
 	desc->pending_events = 0;
-	no_os_mutex_unlock(desc->data_lock);
+	capi_mutex_unlock(desc->data_lock);
 
 	oa_tc6_dispatch_events(desc, events);
 
@@ -1010,7 +1031,7 @@ int oa_tc6_sw_reset(struct oa_tc6_desc *desc)
 		ret = oa_tc6_reg_read(desc, OA_TC6_STATUS0_REG, &val);
 		if (!ret && (val & OA_TC6_STATUS0_RESETC))
 			break;
-		no_os_mdelay(1);
+		capi_wait_ms(1);
 	}
 	if (i == 1000)
 		return -ENODEV;
@@ -1080,8 +1101,25 @@ int oa_tc6_init(struct oa_tc6_desc **desc, struct oa_tc6_init_param *param)
 	descriptor->comm_desc = param->comm_desc;
 	descriptor->prote_spi = param->prote_spi;
 
-	no_os_mutex_init(&descriptor->ctrl_lock);
-	no_os_mutex_init(&descriptor->data_lock);
+	/*
+	 * Without a mutex config (bare-metal single-threaded), each lock is the
+	 * shared no-op sentinel. ctrl_lock and data_lock MUST be independent.
+	 */
+	if (param->ctrl_mutex_cfg) {
+		ret = capi_mutex_init(&descriptor->ctrl_lock, param->ctrl_mutex_cfg);
+		if (ret)
+			goto free_desc;
+	} else {
+		descriptor->ctrl_lock = &oa_noop_mutex;
+	}
+
+	if (param->data_mutex_cfg) {
+		ret = capi_mutex_init(&descriptor->data_lock, param->data_mutex_cfg);
+		if (ret)
+			goto free_ctrl_lock;
+	} else {
+		descriptor->data_lock = &oa_noop_mutex;
+	}
 
 	ret = oa_tc6_sw_reset(descriptor);
 	if (ret)
@@ -1103,8 +1141,10 @@ int oa_tc6_init(struct oa_tc6_desc **desc, struct oa_tc6_init_param *param)
 	return 0;
 
 free_lock:
-	no_os_mutex_remove(descriptor->ctrl_lock);
-	no_os_mutex_remove(descriptor->data_lock);
+	capi_mutex_deinit(descriptor->data_lock);
+free_ctrl_lock:
+	capi_mutex_deinit(descriptor->ctrl_lock);
+free_desc:
 	no_os_free(descriptor);
 
 	return ret;
@@ -1120,8 +1160,8 @@ int oa_tc6_remove(struct oa_tc6_desc *desc)
 	if (!desc)
 		return -ENODEV;
 
-	no_os_mutex_remove(desc->ctrl_lock);
-	no_os_mutex_remove(desc->data_lock);
+	capi_mutex_deinit(desc->data_lock);
+	capi_mutex_deinit(desc->ctrl_lock);
 	no_os_free(desc);
 
 	return 0;
