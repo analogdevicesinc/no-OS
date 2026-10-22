@@ -23,10 +23,6 @@
 #define CONFIG_OA_THREAD_RX_LIMIT	5
 #endif
 
-#ifndef CONFIG_OA_ZERO_SWO_ONLY
-#define CONFIG_OA_ZERO_SWO_ONLY		1
-#endif
-
 /* Space for one full frame + 24 chunk headers (68 * 24)*/
 #define OA_SPI_BUFF_LEN		1632
 
@@ -124,7 +120,13 @@
 
 #define OA_TC6_STATUS0_RESETC		NO_OS_BIT(6)
 
+#define OA_TC6_CONFIG0_PROTE_MASK	NO_OS_BIT(5)
 #define OA_TC6_CONFIG0_ZARFE_MASK	NO_OS_BIT(12)
+#define OA_TC6_CONFIG0_SYNC_MASK	NO_OS_BIT(15)
+
+/* CONFIG0.CPS chunk-payload-size field; chunk_size = 1 << CPS (OA TC6 std). */
+#define OA_TC6_CONFIG0_CPS_MASK		NO_OS_GENMASK(2, 0)
+#define OA_TC6_CONFIG0_CPS_64		0x6
 
 #define OA_TC6_BUFSTS_TXC_MASK 		NO_OS_GENMASK(15, 8)
 #define OA_TC6_BUFSTS_RCA_MASK 		NO_OS_GENMASK(7, 0)
@@ -270,6 +272,36 @@ struct oa_tc6_desc {
 	uint32_t rx_pool_size;
 	uint32_t rx_head; /* slot the driver is currently writing into */
 	uint32_t rx_tail; /* oldest completed slot to deliver next */
+
+	/*
+	 * Scratch RX buffer used only when rx_pool is exhausted (-ENOBUFS from
+	 * oa_tc6_get_empty_rx_buff()). Lives outside rx_pool[] so anything
+	 * routed into it is never reachable from oa_tc6_get_rx_frame() (which
+	 * only walks [rx_tail, rx_head)) -- a safe sink that lets footer
+	 * parsing (credit, HDRB, sync, EXST) keep going instead of aborting
+	 * the whole transaction when a frame can't be placed. Frames that close
+	 * here are counted in rx_drop_nobuf.
+	 */
+	struct oa_tc6_frame_buffer rx_sink;
+
+	/* Data-chunk payload size in bytes (1 << CONFIG0.CPS). */
+	uint32_t chunk_size;
+
+	bool skip_current_frame;
+
+	/*
+	 * Latched when a footer reports SYNC=0 (MAC-PHY reset/config lost), so
+	 * OA_TC6_EVENT_SYNCE fires once per loss and not on every SYNC=0 footer
+	 * until config is restored (a footer with SYNC=1 re-arms it).
+	 */
+	bool sync_lost;
+
+	/*
+	 * A footer in the last processed transaction flagged EXST/HDRB, so a
+	 * STATUS0 read/clear is owed. Serviced once the data pass is over, while
+	 * the bus is free.
+	 */
+	bool status0_pending;
 
 	/* TX queues. tx_q_storage backs the queue of the tx_pool. */
 	struct oa_tc6_queue *tx_q;
