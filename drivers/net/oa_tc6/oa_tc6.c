@@ -41,8 +41,9 @@ static uint8_t oa_tc6_crc1(uint32_t header)
  * @brief Prepare a register read control chunk.
  * @param desc - the OA TC6 descriptor.
  * @param addr - Register address.
+ * @return the control header.
  */
-static void oa_tc6_prepare_rx_ctrl(struct oa_tc6_desc *desc, uint32_t addr)
+static uint32_t oa_tc6_prepare_rx_ctrl(struct oa_tc6_desc *desc, uint32_t addr)
 {
 	uint32_t header;
 
@@ -52,6 +53,8 @@ static void oa_tc6_prepare_rx_ctrl(struct oa_tc6_desc *desc, uint32_t addr)
 
 	no_os_put_unaligned_be32(header, desc->ctrl_chunks);
 	desc->ctrl_rx_credit++;
+
+	return header;
 }
 
 /**
@@ -59,9 +62,10 @@ static void oa_tc6_prepare_rx_ctrl(struct oa_tc6_desc *desc, uint32_t addr)
  * @param desc - the OA TC6 descriptor.
  * @param addr - Register address.
  * @param val - Register value.
+ * @return the control header.
  */
-static void oa_tc6_prepare_tx_ctrl(struct oa_tc6_desc *desc, uint32_t addr,
-				   uint32_t val)
+static uint32_t oa_tc6_prepare_tx_ctrl(struct oa_tc6_desc *desc, uint32_t addr,
+				       uint32_t val)
 {
 	uint32_t header;
 
@@ -79,6 +83,8 @@ static void oa_tc6_prepare_tx_ctrl(struct oa_tc6_desc *desc, uint32_t addr,
 	}
 
 	desc->ctrl_tx_credit++;
+
+	return header;
 }
 
 static int oa_tc6_do_ctrl_transfer(struct oa_tc6_desc *desc)
@@ -101,22 +107,35 @@ static int oa_tc6_do_ctrl_transfer(struct oa_tc6_desc *desc)
 	return 0;
 }
 
+/*
+ * The MAC-PHY echoes the control header one word later. A mismatch means the
+ * header was rejected (HDRB) or the control transfer is corrupted.
+ */
+static bool oa_tc6_ctrl_echo_ok(struct oa_tc6_desc *desc, uint32_t header)
+{
+	return no_os_get_unaligned_be32(&desc->ctrl_chunks[OA_HEADER_LEN]) == header;
+}
+
 static int __oa_tc6_reg_read(struct oa_tc6_desc *desc, uint32_t addr,
 			     uint32_t *val)
 {
 	uint32_t comp_val;
+	uint32_t header;
 	int ret;
 
 	if (!desc)
 		return -ENODEV;
 
-	oa_tc6_prepare_rx_ctrl(desc, addr);
+	header = oa_tc6_prepare_rx_ctrl(desc, addr);
 	ret = oa_tc6_do_ctrl_transfer(desc);
+	desc->ctrl_rx_credit = 0;
 	if (ret)
 		return ret;
 
+	if (!oa_tc6_ctrl_echo_ok(desc, header))
+		return -EIO;
+
 	*val = no_os_get_unaligned_be32(&desc->ctrl_chunks[2 * OA_HEADER_LEN]);
-	desc->ctrl_rx_credit = 0;
 
 	if (desc->prote_spi) {
 		comp_val = no_os_get_unaligned_be32(&desc->ctrl_chunks[3 * OA_HEADER_LEN]);
@@ -151,17 +170,27 @@ int oa_tc6_reg_read(struct oa_tc6_desc *desc, uint32_t addr, uint32_t *val)
 static int __oa_tc6_reg_write(struct oa_tc6_desc *desc, uint32_t addr,
 			      uint32_t val)
 {
+	uint32_t header;
+	uint8_t *echo;
 	int ret;
 
 	if (!desc)
 		return -ENODEV;
 
-	oa_tc6_prepare_tx_ctrl(desc, addr, val);
+	echo = &desc->ctrl_chunks[2 * OA_HEADER_LEN];
+	header = oa_tc6_prepare_tx_ctrl(desc, addr, val);
 	ret = oa_tc6_do_ctrl_transfer(desc);
+	desc->ctrl_tx_credit = 0;
 	if (ret)
 		return ret;
 
-	desc->ctrl_tx_credit = 0;
+	if (!oa_tc6_ctrl_echo_ok(desc, header) ||
+	    no_os_get_unaligned_be32(echo) != val)
+		return -EIO;
+
+	if (desc->prote_spi &&
+	    no_os_get_unaligned_be32(&echo[OA_REG_LEN]) != (val ^ NO_OS_GENMASK(31, 0)))
+		return -EIO;
 
 	return 0;
 }
@@ -977,10 +1006,9 @@ int oa_tc6_sw_reset(struct oa_tc6_desc *desc)
 		return ret;
 
 	for (i = 0; i < 1000; i++) {
+		/* The control echo is not valid until the MAC-PHY is out of reset */
 		ret = oa_tc6_reg_read(desc, OA_TC6_STATUS0_REG, &val);
-		if (ret)
-			return ret;
-		if (val & OA_TC6_STATUS0_RESETC)
+		if (!ret && (val & OA_TC6_STATUS0_RESETC))
 			break;
 		no_os_mdelay(1);
 	}
