@@ -185,7 +185,7 @@
  * alone; the channel feeding the FPGA is left where it was, so the two SYSREFs
  * separate by the path delay, which is a large fraction of a link clock either
  * way: 2.2 ns against 3.2 ns on the 204C/VCU118 build this was written for,
- * 2.2 ns against 4.0 ns on the 204B AD9084-EBZ. The Apollo re-times off the edge
+ * 2.2 ns against 2.96 ns on the 204B AD9084-EBZ. The Apollo re-times off the edge
  * that moved and the receiver does not, which is what drops it out of DATA --
  * to WAIT_BS on 64b66b, to CGS on 8b10b.
  */

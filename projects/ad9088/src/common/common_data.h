@@ -57,47 +57,47 @@
 /*
  * Profile-dependent link and clock-tree parameters.
  *
- * Both bitstreams run JESD204C (64b66b, lane rate / 66), but at different lane
- * rates: 10.3125 Gbps on the AD9084-EBZ (Agilex 5 / Nios V), 20.625 Gbps on the
- * VCU118 (MicroBlaze). Every value that differs between the two profiles
- * lives in this one guarded block so both boards build correctly from the same
- * tree - keep it consistent with the per-board firmware .bin selected in
- * boards/basic_example/<board>.conf. All shared clock-tree topology (ADF4030
- * VCO/reference, channel assignment) stays common below.
+ * The AD9084-EBZ (Agilex 5 / Nios V) bitstream runs JESD204B (8b10b, lane
+ * rate / 40) at 13.5 Gbps, while the VCU118 (MicroBlaze) bitstream runs
+ * JESD204C (64b66b, lane rate / 66) at 20.625 Gbps. Every value that differs
+ * between the two profiles lives in this one guarded block so both boards
+ * build correctly from the same tree - keep it consistent with the per-board
+ * firmware .bin selected in boards/basic_example/<board>.conf. All shared
+ * clock-tree topology (ADF4030 VCO/reference, channel assignment) stays common
+ * below.
  */
 #ifdef CONFIG_ALTERA_PLATFORM_NIOSV
-/* AD9084-EBZ (Agilex 5): JESD204C, L2-per-link, 11.1375 Gbps lanes, 168.75 MHz link. */
-#define AD9088_LANE_RATE_KHZ			11137500
-#define AD9088_DEVICE_CLK_KHZ			(AD9088_LANE_RATE_KHZ / 66)
+/* AD9084-EBZ (Agilex 5): JESD204B, L2-per-link, 13.5 Gbps lanes, 337.5 MHz link. */
+#define AD9088_LANE_RATE_KHZ			13500000
+#define AD9088_DEVICE_CLK_KHZ			(AD9088_LANE_RATE_KHZ / 40)
 /*
- * SYSREF is the LEMC itself: 168.75 MHz link clock / 32 blocks = 5.2734375 MHz.
- * It is not a whole number of Hz, so the value below is the truncation the
- * integer clock APIs carry; the HMC7044 (2.7 GHz / 512) and the ADF4030
- * (2.53125 GHz / 480) both reach it exactly. The ADF4030 JESD204 FSM retunes
+ * SYSREF is the LMFC itself: 13.5 Gbps / (10 x F=4 x K=32) = 10.546875 MHz, a
+ * whole number of Hz. The HMC7044 (2.7 GHz / 256) and the ADF4030
+ * (2.53125 GHz / 240) both reach it exactly. The ADF4030 JESD204 FSM retunes
  * ODIVA to this rate at CLK_SYNC, so the HMC divider has to match or the TDC
  * compares two different frequencies and alignment cannot converge.
  */
-#define AD9088_SYSREF_CLK_HZ			5273437
+#define AD9088_SYSREF_CLK_HZ			10546875
 #define AD9088_ADF4382_SPI_HZ			5000000
 #define AD9088_ADF4382_FREQ_HZ			10800000000	/* AD9084 converter dev_clk; matches profile dev_clk_freq_Hz */
 #define AD9088_ADF4382_ID			ID_ADF4382
 /*
- * 168.75 MHz is not an integer submultiple of 2.5 GHz, so PLL2 moves to 2.7 GHz
+ * 337.5 MHz is not an integer submultiple of 2.5 GHz, so PLL2 moves to 2.7 GHz
  * (OSCIN doubler, N2 = 54, R2 = 5). It stays in the HMC7044's low VCO band,
  * whose upper limit is 2.88 GHz.
  */
 #define AD9088_HMC_PLL2_FREQ_HZ			2700000000
-#define AD9088_HMC_SYSREF_DIV			512		/* HMC7044 ch3 -> 5.2734375 MHz */
-#define AD9088_HMC_CORECLK_DIV			16		/* HMC7044 ch8-12 -> 168.75 MHz */
+#define AD9088_HMC_SYSREF_DIV			256		/* HMC7044 ch3 -> 10.546875 MHz */
+#define AD9088_HMC_CORECLK_DIV			8		/* HMC7044 ch8-12 -> 337.5 MHz */
 #define AD9088_HMC_ADF4030_REF_DIV		20		/* HMC7044 ch1 -> 135 MHz */
 /*
- * 5.2734375 MHz x 480. The ADF4030 driver searches the reference divider itself
+ * 10.546875 MHz x 240. The ADF4030 driver searches the reference divider itself
  * and needs a VCO that an integer PFD in 10..20 MHz divides exactly: 135 MHz / 8
  * = 16.875 MHz, N = 150.
  */
 #define ADF4030_VCO_FREQ_HZ			2531250000
 #define ADF4030_REF_FREQ_HZ			135000000
-#define AD9088_ADXCVR_REF_KHZ			168750
+#define AD9088_ADXCVR_REF_KHZ			337500
 /*
  * L2-per-link lane mapping of the AD9084-EBZ design; 11 marks an unused
  * lane. Matches the reference DT (socfpga_agilex5_socdk_ad9084.dts):

@@ -19,7 +19,7 @@ Supported Carriers
 ------------------
 
 * **AD9084-EBZ on Intel Agilex 5** (Agilex 5E065B Premium Development Kit,
-  Nios V/g RV32 soft core) — the primary target, a JESD204C design.
+  Nios V/g RV32 soft core) — the primary target, a JESD204B design.
 * `VCU118 <https://www.xilinx.com/VCU118>`_ (MicroBlaze) — a JESD204C design.
 
 Overview
@@ -86,9 +86,9 @@ globally.
   is picked, it is embedded under the fixed name ``usecase.bin`` so the
   symbols the driver looks for never change.
 
-  * AD9084-EBZ (Agilex 5): ``204C_L2_M4_NP16_10p8_8x8_8x4.bin`` (JESD204C,
-    per-link M4/L2, 11.1375 Gbps lanes, 168.75 MHz link clock, 10.8 GHz device
-    clock, 337.5 MSPS).
+  * AD9084-EBZ (Agilex 5): ``204B_M4_L2_NP16_21p6_10p8_8x8_8x4.bin``
+    (JESD204B, per-link M4/L2, 13.5 Gbps lanes, 337.5 MHz link clock, 10.8 GHz
+    device clock, 337.5 MSPS).
   * VCU118: ``204C_M4_L8_NP16_20p0_4x2.bin`` (JESD204C, 20 Gbps lanes).
 
 * ``CONFIG_AD9088_FW_SET`` — which signed core-firmware set(s) to embed. Each
@@ -134,7 +134,7 @@ the application prints, so it can be retrieved and plotted. See the
 for background.
 
 The DMA example builds for both carriers; the per-board profile and firmware
-set are selected in ``boards/dma_example/<board>.conf`` (the same 204C profile
+set are selected in ``boards/dma_example/<board>.conf`` (the same 204B profile
 and engineering firmware set as the basic example on Agilex 5).
 
 No-OS Supported Platforms
@@ -219,7 +219,7 @@ environment sourced above; the build type and example come from ``-D`` flags:
    # DMA example: use -DPROJECT_DEFCONFIG=ad9088/dma_example.conf into build_agilex5_dma
 
 ``MinSizeRel`` is required so the image fits the Nios V on-chip memory. The
-board config (``boards/basic_example/agilex5.conf``) selects the 204C profile
+board config (``boards/basic_example/agilex5.conf``) selects the 204B profile
 and the engineering firmware set.
 
 Option 2 — user preset (one-time setup, then no flags)
