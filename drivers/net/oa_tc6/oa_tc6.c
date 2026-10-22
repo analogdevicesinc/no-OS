@@ -238,6 +238,52 @@ int oa_tc6_reg_write(struct oa_tc6_desc *desc, uint32_t addr, uint32_t val)
 	return ret;
 }
 
+/**
+ * @brief Read multiple consecutive registers in a single control transaction.
+ * @param desc  - the OA TC6 descriptor.
+ * @param addr  - address of the first register (MMS encoded via OA_MMS_REG).
+ * @param val   - output array; must hold at least count elements.
+ * @param count - number of registers to read (1-OA_CTRL_MAX_REGS).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int oa_tc6_reg_read_multiple(struct oa_tc6_desc *desc, uint32_t addr,
+			     uint32_t *val, uint8_t count)
+{
+	int ret;
+
+	if (!desc || !val)
+		return -EINVAL;
+
+	capi_mutex_lock(desc->ctrl_lock);
+	ret = oa_tc6_ctrl_xfer(desc, addr, val, count, false);
+	capi_mutex_unlock(desc->ctrl_lock);
+
+	return ret;
+}
+
+/**
+ * @brief Write multiple consecutive registers in a single control transaction.
+ * @param desc  - the OA TC6 descriptor.
+ * @param addr  - address of the first register (MMS encoded via OA_MMS_REG).
+ * @param val   - values to write; must hold at least count elements.
+ * @param count - number of registers to write (1-OA_CTRL_MAX_REGS).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int oa_tc6_reg_write_multiple(struct oa_tc6_desc *desc, uint32_t addr,
+			      const uint32_t *val, uint8_t count)
+{
+	int ret;
+
+	if (!desc || !val)
+		return -EINVAL;
+
+	capi_mutex_lock(desc->ctrl_lock);
+	ret = oa_tc6_ctrl_xfer(desc, addr, (uint32_t *)val, count, true);
+	capi_mutex_unlock(desc->ctrl_lock);
+
+	return ret;
+}
+
 static int __oa_tc6_reg_update(struct oa_tc6_desc *desc, uint32_t addr,
 			       uint32_t val, uint32_t mask)
 {
