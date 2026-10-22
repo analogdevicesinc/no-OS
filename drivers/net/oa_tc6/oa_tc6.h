@@ -15,28 +15,57 @@
 #include "no_os_util.h"
 #include <stdint.h>
 
+#if defined(__cplusplus)
+extern "C" {
+#endif /* __cplusplus */
+
+/*
+ * Per-frame buffer capacity: a full 1514-byte Ethernet frame, a 4-byte 802.1Q
+ * tag, the 4-byte FCS the MAC-PHY forwards on RX, and the 8-byte worst-case
+ * receive timestamp the MAC-PHY prepends when CONFIG0.FTSE is set (1530).
+ */
 #ifndef CONFIG_OA_CHUNK_BUFFER_SIZE
-#define CONFIG_OA_CHUNK_BUFFER_SIZE	1514
+#define CONFIG_OA_CHUNK_BUFFER_SIZE	1530
 #endif
 
+/*
+ * Safety cap on how many back-to-back data transactions one poll may clock
+ * while draining RX. The drain normally stops as soon as the last footer
+ * reports the RX FIFO empty (RCA == 0); this bounds the worst case so a
+ * stuck-high RCA cannot hold the SPI bus forever. It must be high enough that
+ * a full RX FIFO drains within a single poll at line rate -- a cap that is too
+ * low leaves the FIFO refilling faster than it drains and overflows (LOFE).
+ */
 #ifndef CONFIG_OA_THREAD_RX_LIMIT
 #define CONFIG_OA_THREAD_RX_LIMIT	5
 #endif
 
-/* Space for one full frame + 24 chunk headers (68 * 24)*/
-#define OA_SPI_BUFF_LEN		1632
+/*
+ * SPI data-chunk buffer size. A frame larger than the buffer or the current
+ * TX credit is split across transactions, so this need not hold a whole MTU --
+ * it bounds how many chunks one transaction can carry. A full credit window
+ * (31 chunks, 5-bit TXC) at 64-byte chunks needs 31 * (64+4) = 2108 bytes; a
+ * larger buffer only packs more pending RX per transaction.
+ */
+#ifndef CONFIG_OA_SPI_BUFF_LEN
+#define CONFIG_OA_SPI_BUFF_LEN	1632
+#endif
+#define OA_SPI_BUFF_LEN		CONFIG_OA_SPI_BUFF_LEN
 
 /* Most registers one control transaction carries. */
 #define OA_CTRL_MAX_REGS	1
+
+#define OA_CHUNK_SIZE		64 /* data-chunk payload */
+#define OA_REG_LEN		4
+#define OA_HEADER_LEN		4
+#define OA_FOOTER_LEN		4
 
 /* Header, OA_CTRL_MAX_REGS data words each followed by its PROTE complement,
  * and the trailing word the echo shifts into. */
 #define OA_SPI_CTRL_LEN	(2 * OA_HEADER_LEN + OA_CTRL_MAX_REGS * 2 * OA_REG_LEN)
 
-#define OA_CHUNK_SIZE		64
-#define OA_REG_LEN		4
-#define OA_HEADER_LEN		4
-#define OA_FOOTER_LEN		4
+/* Most chunks in one data transaction. */
+#define OA_SPI_MAX_CHUNKS	(OA_SPI_BUFF_LEN / (OA_CHUNK_SIZE + OA_HEADER_LEN))
 
 #define OA_MMS_REG(m, r)	(((m) << 16) | ((r) & NO_OS_GENMASK(15, 0)))
 #define OA_CTRL_ADDR_MMS_MASK	NO_OS_GENMASK(27, 8)
@@ -64,6 +93,9 @@
 #define OA_DATA_FOOTER_RTSP_MASK    NO_OS_BIT(6)
 #define OA_DATA_FOOTER_TXC_MASK		NO_OS_GENMASK(5, 1)
 #define OA_DATA_FOOTER_P_MASK		NO_OS_BIT(0)
+
+/* Max TX credit the MAC can ever report: the footer TXC field is 5 bits. */
+#define OA_TC6_MAX_TX_CREDIT	31u
 
 #define OA_DATA_HEADER_DNC_MASK		NO_OS_BIT(31)
 #define OA_DATA_HEADER_SEQ_MASK		NO_OS_BIT(30)
@@ -113,23 +145,37 @@
 #define OA_TC6_IMASK0_RXBOEM		NO_OS_BIT(3)
 #define OA_TC6_IMASK0_LOFEM		NO_OS_BIT(4)
 #define OA_TC6_IMASK0_HDREM		NO_OS_BIT(5)
+#define OA_TC6_IMSK1_RX_RDY_MASK	NO_OS_BIT(4)
 
-/* Clause 22 PHY standard register window (MMS 0, offsets 0xFF00..0xFF1F) */
+#define OA_TC6_STATUS0_RESETC	NO_OS_BIT(6) /* reset complete */
+
+/* Direct (memory-mapped) access to the Clause-22 PHY standard register space. */
 #define OA_TC6_PHY_STD_REG_BASE		0xFF00
 #define OA_TC6_PHY_STD_REG_MASK		0x001F
 #define OA_TC6_PHY_STD_REG(reg)		\
-	OA_MMS_REG(0x0, OA_TC6_PHY_STD_REG_BASE | ((reg) & OA_TC6_PHY_STD_REG_MASK))
+	OA_MMS_REG(0x0,         \
+		   OA_TC6_PHY_STD_REG_BASE | ((reg)&OA_TC6_PHY_STD_REG_MASK))
 
 #define OA_TC6_RESET_SWRESET		NO_OS_BIT(0)
 
-#define OA_TC6_STATUS0_RESETC		NO_OS_BIT(6)
-
+#define OA_TC6_CONFIG0_RESET	0x6
 #define OA_TC6_CONFIG0_PROTE_MASK	NO_OS_BIT(5)
+#define OA_TC6_CONFIG0_FTSS_MASK	NO_OS_BIT(6)
+#define OA_TC6_CONFIG0_FTSE_MASK	NO_OS_BIT(7)
+#define OA_TC6_CONFIG0_RXCTE_MASK	NO_OS_BIT(8)
+#define OA_TC6_CONFIG0_TXCTE_MASK	NO_OS_BIT(9)
+#define OA_TC6_CONFIG0_TXCTHRESH_MASK	NO_OS_GENMASK(11, 10)
 #define OA_TC6_CONFIG0_ZARFE_MASK	NO_OS_BIT(12)
+#define OA_TC6_CONFIG0_CSARFE_MASK	NO_OS_BIT(13)
+#define OA_TC6_CONFIG0_TXFCSVE_MASK	NO_OS_BIT(14)
 #define OA_TC6_CONFIG0_SYNC_MASK	NO_OS_BIT(15)
+
 
 /* CONFIG0.CPS chunk-payload-size field; chunk_size = 1 << CPS (OA TC6 std). */
 #define OA_TC6_CONFIG0_CPS_MASK		NO_OS_GENMASK(2, 0)
+#define OA_TC6_CONFIG0_CPS_8	0x3
+#define OA_TC6_CONFIG0_CPS_16	0x4
+#define OA_TC6_CONFIG0_CPS_32	0x5
 #define OA_TC6_CONFIG0_CPS_64		0x6
 
 #define OA_TC6_BUFSTS_TXC_MASK 		NO_OS_GENMASK(15, 8)
@@ -139,23 +185,23 @@
  * @brief State for data buffers containing Ethernet frames
  */
 enum oa_tc6_user_buffer_state {
-	/*
+/*
 	 * Neither the OA nor the user application doesn't currently
 	 * use this buffer. OA can start writing it.
-	 */
+ */
 	OA_BUFF_FREE,
 
-	/*
+/*
 	 * The buffer is currently written by OA, but it doesn't yet
 	 * contain a complete frame. The user application cannot reference
 	 * the data yet.
-	 */
+ */
 	OA_BUFF_RX_IN_PROGRESS,
 
-	/*
+/*
 	 * The buffer has a complete frame, and is no longer accessed by OA.
 	 * The user application could use this.
-	 */
+ */
 	OA_BUFF_RX_COMPLETE,
 
 	/* The buffer is accessed by the user application. OA will not overwrite it */
@@ -166,6 +212,35 @@ enum oa_tc6_user_buffer_state {
 
 	/* The buffer is ready to be transmitted. The user won't access it anymore. */
 	OA_BUFF_TX_READY,
+};
+
+/**
+ * @brief Stores an Ethernet frame along with metadata needed for parsing.
+ * The MAC driver or the user application will receive and submit frames for transmission
+ * in this format.
+ */
+struct oa_tc6_frame_buffer {
+	uint32_t index;
+	uint32_t len;
+	uint8_t data[CONFIG_OA_CHUNK_BUFFER_SIZE];
+	enum oa_tc6_user_buffer_state state;
+	uint8_t vs;	 /**< Vendor Specific. Tx or Rx */
+	uint8_t tsc;	 /**< Timestamp capture. 2-bits. Tx Only */
+	bool frame_drop; /**< Frame should be dropped (is invalid). Rx Only */
+	bool rtsa;	 /**< Timestamp added. Rx Only */
+	bool rtsp;	 /**< Timestamp parity. Rx Only */
+};
+
+/**
+ * @brief Stores the status flags which are provided as part of the footer
+ * during data transfers. These flags will be latched by the driver and can be
+ * cleared by the user when reading.
+ */
+struct oa_tc6_flags {
+	bool flags_valid; /**< Indicates the flags are latched and valid */
+	bool exst;	  /**< Latched high until cleared */
+	bool hdrb;	  /**< Latched high until cleared */
+	bool sync;	  /**< Instantaneous value */
 };
 
 enum oa_tc6_event {
@@ -181,70 +256,39 @@ enum oa_tc6_event {
 };
 
 /**
- * @brief Stores an Ethernet frame along with metadata needed for parsing.
- * The MAC driver or the user application will receive and submit frames for transmission
- * in this format.
+ * @brief A TX priority queue: its own frame-buffer ring and credit.
+ *
+ * Per-queue credit is only observable from data-chunk footers: a chunk's
+ * footer TXC is the credit for the queue named by that chunk's own
+ * request-header VS (see tx_chunk_credit_q); there is no per-queue register.
+ * init_credit seeds tx_credit at reset (TX FIFO capacity in chunks); 0 means
+ * unknown.
+ * Single-queue operation is a one-element array with vs == 0.
  */
-struct oa_tc6_frame_buffer {
-	uint32_t index;
-	uint32_t len;
-	uint8_t data[CONFIG_OA_CHUNK_BUFFER_SIZE];
-	enum oa_tc6_user_buffer_state state;
-	uint8_t vs;      /**< Vendor Specific. Tx or Rx */
-	uint8_t tsc;     /**< Timestamp capture. 2-bits. Tx Only */
-	bool frame_drop; /**< Frame should be dropped (is invalid). Rx Only */
-	bool rtsa;       /**< Timestamp added. Rx Only */
-	bool rtsp;       /**< Timestamp parity. Rx Only */
-};
+struct oa_tc6_queue {
+	struct oa_tc6_frame_buffer *pool;
+	uint32_t pool_size;
+	uint8_t vs;
+	uint32_t init_credit;
 
-/**
- * @brief Stores the status flags which are provided as part of the footer
- * during data transfers. These flags will be latched by the driver and can be
- * cleared by the user when reading.
- */
-struct oa_tc6_flags {
-	bool flags_valid; /**< Indicates the flags are latched and valid */
-	bool exst;        /**< Latched high until cleared */
-	bool hdrb;        /**< Latched high until cleared */
-	bool sync;        /**< Instantaneous value */
-};
-
-/**
- * @brief TX/RX credit updating method before starting a data transaction.
- * 	  OA_TC6_REG_POLL - read the BUFST (0xB) register
- * 	  OA_TC6_FOOTER_POLL - send a data chunk and read the information
- * 			       from the footer.
- */
-enum oa_tc6_bufst_polling {
-	OA_TC6_REG_POLL,
-	OA_TC6_FOOTER_POLL,
+	uint32_t head;
+	uint32_t tail;
+	uint32_t count;
+	uint32_t tx_credit;
 };
 
 /**
  * @brief oa_tc6 software statistics counters.
  */
 struct oa_tc6_stats {
-	uint64_t rx_frames;     /* frames fully de-framed to a buffer */
-	uint64_t rx_bytes;      /* payload bytes received (sum of frame len) */
-	uint64_t tx_frames;     /* frames fully framed out to SPI */
-	uint64_t tx_bytes;      /* payload bytes transmitted */
-	uint32_t rx_drop_fd;    /* footer frame-drop (FD) flagged frames */
-	uint32_t rx_drop_nobuf; /* RX frame-buffer pool exhausted (-ENOBUFS) */
-	uint32_t exst_events;   /* EXST latched in a data-chunk footer */
+	uint64_t rx_frames;	       /* frames delivered to the RX pool */
+	uint64_t rx_bytes;	       /* payload bytes received (sum of frame len) */
+	uint64_t tx_frames;	       /* frames accepted by the MAC-PHY */
+	uint64_t tx_bytes;	       /* payload bytes transmitted */
+	uint32_t rx_drop_fd;	       /* footer frame-drop (FD) flagged frames */
+	uint32_t rx_drop_nobuf;	       /* frames dropped on a full RX pool */
+	uint32_t exst_events;	       /* EXST latched in a data-chunk footer */
 	uint32_t rx_footer_parity_err; /* data-chunk footer with a parity error */
-};
-
-/**
- * @brief A TX queue: its own frame-buffer ring, managed as a FIFO.
- */
-struct oa_tc6_queue {
-	struct oa_tc6_frame_buffer *pool;
-	uint32_t pool_size;
-	uint8_t vs;
-
-	uint32_t head;
-	uint32_t tail;
-	uint32_t count;
 };
 
 /**
@@ -254,103 +298,192 @@ struct oa_tc6_desc {
 	struct capi_spi_device *comm_desc;
 	uint8_t ctrl_chunks[OA_SPI_CTRL_LEN];
 	uint8_t data_chunks[OA_SPI_BUFF_LEN];
-	/*
-	 * ctrl_lock serializes control transactions and doubles as the SPI bus
-	 * lock: oa_tc6_thread() holds it across its transfers. It must be
-	 * recursive, since the register reads of a data pass re-enter it.
-	 * data_lock serializes the frame-buffer ring bookkeeping. It is always
-	 * leaf-level: never held across an SPI transfer or taken before
-	 * ctrl_lock. Both are always non-NULL after init.
-	 */
+
+/*
+	 * Queue whose credit each TX chunk slot's footer TXC reports, or -1.
+	 * That is the queue named by the chunk's request-header VS, not the
+	 * footer's own VS field (the received frame's source, mapped
+	 * differently).
+ */
+	int8_t tx_chunk_credit_q[OA_SPI_MAX_CHUNKS];
+	/* Queue whose frame ends (EV) in each chunk slot, or -1. */
+	int8_t tx_chunk_eof_q[OA_SPI_MAX_CHUNKS];
+	/* Chunks clocked by the transaction being packed/in flight. */
+	uint32_t tx_pass_chunks;
+
+	/* Data-chunk payload size in bytes (1 << CONFIG0.CPS). */
+	uint32_t chunk_size;
+
+/*
+	 * ctrl_lock serializes all control transactions (register read/write).
+	 * data_lock serializes the TX/RX frame-buffer rings: the pool index
+	 * bookkeeping (each tx_q head/tail/count, rx_head/rx_tail and per-slot
+	 * state) touched by both the producer/consumer API (get/put_tx_frame,
+	 * get/put_rx_frame) and the SPI transfer function (oa_tc6_thread). In a
+	 * bare-metal single-threaded context both locks are no-ops; they become
+	 * meaningful when a FreeRTOS task calls send/recv while another runs the
+	 * poll loop.
+ *
+	 * ctrl_lock doubles as the SPI bus lock: oa_tc6_thread() holds it across
+	 * its transfers. That is what mutually excludes register (ctrl) access
+	 * from data transfers on the shared bus: a task issuing a register read
+	 * blocks on ctrl_lock until the data transfers complete instead of
+	 * colliding with them. Under
+	 * an RTOS ctrl_lock must therefore be a recursive, priority-inheriting
+	 * mutex -- recursive because the poll path re-enters it for register
+	 * reads (BUFST bootstrap, STATUS0 service), and
+	 * priority-inheriting so a lower-priority poll task holding the bus
+	 * cannot be starved by a higher-priority register reader waiting on it.
+ *
+	 * Ordering invariant: ctrl_lock is the outer lock, data_lock the inner one.
+	 * A data_lock critical section is always leaf-level -- short ring
+	 * bookkeeping, never held across an SPI transfer and never taken before
+	 * ctrl_lock. The single global order (ctrl_lock -> data_lock) means the two
+	 * cannot deadlock against each other.
+ *
+	 * Both are always non-NULL after init. With no mutex_cfg (bare-metal
+	 * default) each points at a shared file-static no-op sentinel, so
+	 * lock/unlock never need a NULL guard. With a real mutex_cfg,
+	 * capi_mutex_init() points the handle at the backend's own storage.
+ */
 	struct capi_mutex *ctrl_lock;
 	struct capi_mutex *data_lock;
 
-	/*
-	 * The TX and RX pools are managed as FIFO rings so frames are always
-	 * transmitted and delivered in submission/receive order. Producers
-	 * allocate at *_head and advance it; consumers drain from *_tail and
-	 * advance it. A plain first-free scan would recycle freed slots out of
-	 * order and reorder the stream once several frames are in flight.
-	 */
+	/* RX frame-buffer pool: caller-allocated array, set by oa_tc6_init(). */
 	struct oa_tc6_frame_buffer *rx_pool;
 	uint32_t rx_pool_size;
-	uint32_t rx_head; /* slot the driver is currently writing into */
-	uint32_t rx_tail; /* oldest completed slot to deliver next */
 
-	/*
+/*
 	 * Scratch RX buffer used only when rx_pool is exhausted (-ENOBUFS from
 	 * oa_tc6_get_empty_rx_buff()). Lives outside rx_pool[] so anything
 	 * routed into it is never reachable from oa_tc6_get_rx_frame() (which
 	 * only walks [rx_tail, rx_head)) -- a safe sink that lets footer
 	 * parsing (credit, HDRB, sync, EXST) keep going instead of aborting
 	 * the whole transaction when a frame can't be placed. Frames that close
-	 * here are counted in rx_drop_nobuf.
-	 */
+	 * here are counted in rx_ring_full_total.
+ */
 	struct oa_tc6_frame_buffer rx_sink;
 
-	/* Data-chunk payload size in bytes (1 << CONFIG0.CPS). */
-	uint32_t chunk_size;
+/*
+	 * The TX and RX pools are managed as FIFO rings so frames are always
+	 * transmitted and delivered in submission/receive order. Producers
+	 * allocate at *_head and advance it; consumers drain from *_tail and
+	 * advance it. A plain first-free scan would recycle freed slots out of
+	 * order and reorder the stream once several frames are in flight.
+ */
+	uint32_t rx_head; /* slot the driver is currently writing into */
+	uint32_t rx_tail; /* oldest completed slot to deliver next */
 
-	bool skip_current_frame;
-
-	/*
-	 * Latched when a footer reports SYNC=0 (MAC-PHY reset/config lost), so
-	 * OA_TC6_EVENT_SYNCE fires once per loss and not on every SYNC=0 footer
-	 * until config is restored (a footer with SYNC=1 re-arms it).
-	 */
-	bool sync_lost;
-
-	/*
-	 * A footer in the last processed transaction flagged EXST/HDRB, so a
-	 * STATUS0 read/clear is owed. Serviced once the data pass is over, while
-	 * the bus is free.
-	 */
-	bool status0_pending;
-
-	/* TX queues. tx_q_storage backs the queue of the tx_pool. */
+/*
+	 * TX queues. Each has its own ring and footer-tracked credit.
+	 * tx_q_storage backs the queue of the tx_pool.
+ */
 	struct oa_tc6_queue *tx_q;
 	uint8_t tx_q_count;
 	struct oa_tc6_queue tx_q_storage;
 
-	uint32_t data_tx_credit;
+/*
+	 * TX progress computed by oa_tc6_tx_frame_to_chunks() for the pass being
+	 * packed, applied only for the chunks the MAC-PHY is confirmed to have
+	 * accepted (oa_tc6_tx_commit()). tx_pending_done[i] counts whole frames
+	 * of tx_q[i] packed this pass (the packing cursor past the real tail);
+	 * tx_pending_incomplete_frame/_index is the at-most-one frame left open
+	 * (spanning) and its new resume offset. Reset at the top of every
+	 * oa_tc6_tx_frame_to_chunks() call; the real ring state (position,
+	 * ->index) only moves in oa_tc6_tx_commit().
+ */
+	uint32_t tx_pending_done[4];
+	struct oa_tc6_frame_buffer *tx_pending_incomplete_frame;
+	uint32_t tx_pending_incomplete_index;
+
 	uint32_t data_rx_credit;
+	/* data_rx_credit has been seeded (from a BUFST read or a data-chunk
+	 * footer). Until then the thread must read BUFST once to bootstrap. */
+	bool credit_valid;
 
+	struct oa_tc6_flags xfer_flags;
+	bool prote_spi;
 
-	enum oa_tc6_bufst_polling bufst_polling;
-	struct oa_tc6_flags	xfer_flags;
-	bool	 prote_spi;
+	bool skip_current_frame;
 
-	struct oa_tc6_stats stats;
+/*
+	 * Latched when a footer reports SYNC=0 (MAC-PHY reset/config lost), so
+	 * OA_TC6_EVENT_RESET fires once per loss and not on every SYNC=0 footer
+	 * until config is restored (a footer with SYNC=1 re-arms it). The
+	 * MAC-PHY ignores TX data while unconfigured (7.6), so frames stay
+	 * queued meanwhile.
+ */
+	bool sync_lost;
+
+/*
+	 * A footer in the last processed transaction flagged EXST/HDRB, so a
+	 * STATUS0 read/clear is owed. Serviced once the data pass is over, while
+	 * the bus is free.
+ */
+	bool status0_pending;
+
+/*
+	 * Set by the caller before a poll when the MAC-PHY raised its interrupt
+	 * (nINT). Consumed (and cleared) by the transfer function: if there is
+	 * otherwise nothing to clock, one empty data chunk is forced onto the bus
+	 * so its footer is read and any pending error (EXST) is decoded and
+	 * reported.
+	 * Portable equivalent of the Linux driver's int_flag. Set directly, no
+	 * helper.
+ */
+	bool irq_pending;
 
 	void (*callback)(struct oa_tc6_desc *, uint32_t, void *);
 	void *callback_arg;
 	uint32_t pending_events;
+
+/*
+	 * Only ever incremented, except by oa_tc6_reset_stats(); callers that
+	 * want a per-poll count sample it before and after a thread pass.
+ */
+	struct oa_tc6_stats stats;
 };
 
 /**
  * @brief Holds the initialization parameters for the OA TC6 driver.
  */
 struct oa_tc6_init_param {
-	/* SPI target device, initialized by the application. */
+	/* SPI target device, initialized by the application (the SPI controller
+	 * must be brought up via capi_spi_init() before this device is used). */
 	struct capi_spi_device *comm_desc;
 
-	/* Caller-allocated RX and TX frame-buffer pools. They must remain valid
-	 * for the lifetime of the descriptor, and be non-empty. */
-	struct oa_tc6_frame_buffer *rx_pool;
-	uint32_t rx_pool_size;
-	struct oa_tc6_frame_buffer *tx_pool;
-	uint32_t tx_pool_size;
-
-	enum oa_tc6_bufst_polling bufst_polling;
 	/* The OASPI device uses Protected SPI for control transactions */
 	bool prote_spi;
 
-	/*
-	 * Optional mutex configurations for the control and data paths. NULL
-	 * selects a built-in no-op lock (bare-metal single-threaded). The two
-	 * MUST be independent mutexes.
-	 */
+
+	/* Caller-allocated RX frame-buffer pool. Must remain valid for the
+	 * lifetime of the descriptor. rx_pool_size must be non-zero. */
+	struct oa_tc6_frame_buffer *rx_pool;
+	uint32_t rx_pool_size;
+
+	/* Caller-allocated TX frame-buffer pool, like rx_pool. */
+	struct oa_tc6_frame_buffer *tx_pool;
+	uint32_t tx_pool_size;
+
+/*
+	 * Optional mutex configuration for serialising control transactions.
+	 * Pass NULL (or leave zeroed) in bare-metal single-threaded contexts --
+	 * a built-in no-op lock is used.  In an RTOS context provide a
+	 * capi_mutex_config with the appropriate platform ops so that concurrent
+	 * reg_read/write calls from different tasks are safe. The mutex MUST be
+	 * recursive (.recursive = true): the poll path re-enters ctrl_lock.
+ */
 	const struct capi_mutex_config *ctrl_mutex_cfg;
+
+/*
+	 * Optional mutex configuration for serialising the TX/RX frame-buffer
+	 * rings (data path). Must be an INDEPENDENT mutex from ctrl_mutex_cfg
+	 * (its own config and storage) -- the two locks are held separately and
+	 * a shared handle would defeat the ctrl/data concurrency. Pass NULL (or
+	 * leave zeroed) in bare-metal single-threaded contexts; a built-in no-op
+	 * lock is used. In an RTOS context provide a capi_mutex_config so that a
+	 * TX/RX producer task and the poll task can touch the pools concurrently.
+ */
 	const struct capi_mutex_config *data_mutex_cfg;
 };
 
@@ -369,8 +502,8 @@ int oa_tc6_reg_update(struct oa_tc6_desc *, uint32_t, uint32_t, uint32_t);
 
 /* Get a received frame with a matching VS field (in the RX chunks) */
 int oa_tc6_get_rx_frame_match_vs(struct oa_tc6_desc *,
-				 struct oa_tc6_frame_buffer **,
-				 uint8_t, uint8_t);
+				 struct oa_tc6_frame_buffer **, uint8_t,
+				 uint8_t);
 
 /* Get the first frame in the RX queue */
 int oa_tc6_get_rx_frame(struct oa_tc6_desc *, struct oa_tc6_frame_buffer **);
@@ -378,10 +511,11 @@ int oa_tc6_get_rx_frame(struct oa_tc6_desc *, struct oa_tc6_frame_buffer **);
 /* Mark the frame buffer as ready to be reused for a new frame. */
 int oa_tc6_put_rx_frame(struct oa_tc6_desc *, struct oa_tc6_frame_buffer *);
 
-/* Get a frame buffer which can be filled and submitted for transmission */
+/* Get a frame buffer which can be filled and submitted for transmission. */
 int oa_tc6_get_tx_frame(struct oa_tc6_desc *, struct oa_tc6_frame_buffer **);
 
-/* Mark the frame buffer as filled and ready for transmission */
+/* Mark the frame buffer as filled and ready for transmission. On error the
+ * buffer stays owned by the caller, who must fix ->len and put it again. */
 int oa_tc6_put_tx_frame(struct oa_tc6_desc *, struct oa_tc6_frame_buffer *);
 
 /* Gets the latched transfer flags, and optionally clears the latch */
@@ -393,13 +527,13 @@ int oa_tc6_get_xfer_flags(struct oa_tc6_desc *, struct oa_tc6_flags *, bool);
  */
 int oa_tc6_thread(struct oa_tc6_desc *);
 
-/* Trigger a soft reset of the MAC-PHY and wait for completion */
-int oa_tc6_sw_reset(struct oa_tc6_desc *);
-
 /* Register a function that will be called as a result of OA TC6 events */
 int oa_tc6_register_callback(struct oa_tc6_desc *,
 			     void (*)(struct oa_tc6_desc *, uint32_t, void *),
 			     void *);
+
+/* Trigger a soft reset of the MAC-PHY and wait for completion */
+int oa_tc6_sw_reset(struct oa_tc6_desc *);
 
 /* Initialize the OA TC6 SPI driver */
 int oa_tc6_init(struct oa_tc6_desc *, struct oa_tc6_init_param *);
@@ -409,7 +543,12 @@ int oa_tc6_remove(struct oa_tc6_desc *);
 
 /* Get a snapshot of the software statistics counters. */
 int oa_tc6_get_stats(struct oa_tc6_desc *desc, struct oa_tc6_stats *stats);
+
 /* Reset the software statistics counters to zero. */
 int oa_tc6_reset_stats(struct oa_tc6_desc *desc);
+
+#if defined(__cplusplus)
+}
+#endif
 
 #endif /* _NO_OS_OA_TC6_H */
