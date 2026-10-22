@@ -710,17 +710,41 @@ static void oa_tc6_pack_rx_drain(struct oa_tc6_desc *desc,
 		oa_tc6_emit_empty_chunk(desc, pack, norx, force_vs);
 }
 
-/* First queue to service: the highest-index (highest-priority) queue. */
+/* First queue to service: the round-robin cursor, or under strict priority
+ * the highest-index (highest-priority) queue. */
 static uint8_t oa_tc6_tx_lead_queue(struct oa_tc6_desc *desc)
 {
-	return desc->tx_q_count - 1;
+	if (desc->tx_sched == OA_TC6_TX_SCHED_STRICT_PRIO && desc->tx_q_count)
+		return desc->tx_q_count - 1;
+
+	return desc->tx_rr_cursor;
 }
 
-/* The k-th queue to service after start, towards lower priority. */
+/* The k-th queue to service after start: upwards under round-robin,
+ * downwards (towards lower priority) under strict priority. */
 static uint8_t oa_tc6_tx_nth_queue(struct oa_tc6_desc *desc, uint8_t start,
 				   uint8_t k)
 {
-	return (start + desc->tx_q_count - k) % desc->tx_q_count;
+	if (desc->tx_sched == OA_TC6_TX_SCHED_STRICT_PRIO)
+		return (start + desc->tx_q_count - k) % desc->tx_q_count;
+
+	return (start + k) % desc->tx_q_count;
+}
+
+/*
+ * Which queue to service first this pass, advancing the round-robin cursor so
+ * the next transaction leads with a different queue and the MAC's TX arbiter,
+ * not driver order, decides egress.
+ */
+static uint8_t oa_tc6_tx_pick_start_queue(struct oa_tc6_desc *desc)
+{
+	uint8_t start = oa_tc6_tx_lead_queue(desc);
+
+	if (desc->tx_sched == OA_TC6_TX_SCHED_ROUND_ROBIN && desc->tx_q_count)
+		desc->tx_rr_cursor =
+			(desc->tx_rr_cursor + 1) % desc->tx_q_count;
+
+	return start;
 }
 
 /* Data-chunk header for one chunk of an outgoing frame (no CRC). */
@@ -868,9 +892,10 @@ static bool oa_tc6_pack_queue(struct oa_tc6_desc *desc,
  * @brief Convert queued OA_BUFF_TX_READY frames to chunks; append DV=0
  * dummy chunks if more RX is available than TX.
  *
- * Queues are serviced in strict priority, the highest-index queue first, each
- * up to its own footer-tracked credit -- decremented locally per chunk here,
- * reconciled from the footer once the transaction completes.
+ * Queues are serviced from the tx_sched start queue (strict priority by default,
+ * the highest-index queue first under strict priority), each up to its own
+ * footer-tracked credit -- decremented locally per chunk here, reconciled from
+ * the footer once the transaction completes.
  *
  * @param desc - the OA TC6 descriptor
  * @param tx_buffer - the buffer containing the chunks
@@ -932,11 +957,13 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 
 	/*
 	 * Close the frame the last pass left open before any other frame opens,
-	 * then service queues in priority order; stop as soon as one leaves a
-	 * frame open on the wire. No frame data while the MAC-PHY is
-	 * unconfigured: it would ignore it (7.6).
+	 * then service queues from the round-robin cursor; stop as soon as one
+	 * leaves a frame open on the wire. Resuming only that one frame keeps a
+	 * backlogged queue, which ends most passes mid-frame, from holding the
+	 * lead. No frame data while the MAC-PHY is unconfigured: it would
+	 * ignore it (7.6).
 	 */
-	start = oa_tc6_tx_lead_queue(desc);
+	start = oa_tc6_tx_pick_start_queue(desc);
 	if (!desc->sync_lost) {
 		open_qi = oa_tc6_open_frame_qi(desc);
 		if (open_qi >= 0 &&
@@ -1666,7 +1693,9 @@ static bool oa_tc6_credit_solicit_vs(struct oa_tc6_desc *desc, uint8_t *vs)
 
 	/* A queue with a frame open on the wire is the one that has to be
 	 * credited first -- nothing else may be clocked until it closes -- so
-	 * scan from it. Otherwise scan in service order. */
+	 * scan from it. Otherwise scan in service order, so that under
+	 * round-robin several starved queues each get their footer solicited
+	 * in turn. */
 	open_qi = oa_tc6_open_frame_qi(desc);
 	start = open_qi >= 0 ? (uint8_t)open_qi : oa_tc6_tx_lead_queue(desc);
 
@@ -1997,6 +2026,7 @@ int oa_tc6_set_tx_queues(struct oa_tc6_desc *desc, struct oa_tc6_queue *tx_q,
 	memcpy(desc->vs_to_txq, map, sizeof(map));
 	desc->tx_q = tx_q;
 	desc->tx_q_count = count;
+	desc->tx_rr_cursor = 0;
 
 	return 0;
 }
@@ -2010,6 +2040,8 @@ static int oa_tc6_setup_tx_queues(struct oa_tc6_desc *desc,
 				  struct oa_tc6_init_param *param)
 {
 	struct oa_tc6_queue *q;
+
+	desc->tx_sched = param->tx_sched;
 
 	if (param->tx_q_count)
 		return oa_tc6_set_tx_queues(desc, param->tx_q,
