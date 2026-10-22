@@ -21,8 +21,9 @@ extern "C" {
 
 /*
  * Per-frame buffer capacity: a full 1514-byte Ethernet frame, a 4-byte 802.1Q
- * tag, the 4-byte FCS the MAC-PHY forwards on RX, and the 8-byte worst-case
- * receive timestamp the MAC-PHY prepends when CONFIG0.FTSE is set (1530).
+ * tag, the 4-byte FCS the MAC-PHY forwards on RX (and the host appends when
+ * sw_fcs is enabled), and the 8-byte worst-case receive timestamp the MAC-PHY
+ * prepends when CONFIG0.FTSE is set (1530).
  */
 #ifndef CONFIG_OA_CHUNK_BUFFER_SIZE
 #define CONFIG_OA_CHUNK_BUFFER_SIZE	1530
@@ -218,6 +219,9 @@ extern "C" {
 #define OA_TC6_CONFIG0_CPS_16	0x4
 #define OA_TC6_CONFIG0_CPS_32	0x5
 #define OA_TC6_CONFIG0_CPS_64		0x6
+
+/* CONFIG2.HOST_CRC_APPEND: MAC appends the FCS to host frames (reset 1). */
+#define OA_TC6_CONFIG2_HOST_CRC_APPEND_MASK	NO_OS_BIT(5)
 
 #define OA_TC6_BUFSTS_TXC_MASK 		NO_OS_GENMASK(15, 8)
 #define OA_TC6_BUFSTS_RCA_MASK 		NO_OS_GENMASK(7, 0)
@@ -660,6 +664,12 @@ struct oa_tc6_desc {
 	void (*event_cb)(enum oa_tc6_event, void *, void *);
 	void *event_cb_arg;
 
+	/* Host computes/validates the Ethernet FCS (see init_param.sw_fcs). */
+	bool sw_fcs;
+
+	/* Runts are not padded (see init_param.tx_no_pad). */
+	bool tx_no_pad;
+
 	/* TX frames always start at SWO 0 (oa_tc6_config.zarfe). */
 	bool zero_swo;
 
@@ -771,6 +781,24 @@ struct oa_tc6_init_param {
  */
 	void (*async_xfer_done_cb)(void *);
 	void *async_xfer_done_cb_arg;
+
+/*
+	 * Software-computed Ethernet FCS. When true, the host appends the
+	 * 4-byte CRC-32 FCS to each TX frame (after any padding, see
+	 * tx_no_pad) and validates the trailing FCS on every RX
+	 * frame, dropping mismatches. The MAC's automatic FCS append is
+	 * disabled at init (CONFIG2.HOST_CRC_APPEND cleared). The RX FCS is
+	 * stripped in either mode. Init-only.
+ */
+	bool sw_fcs;
+
+/*
+	 * With sw_fcs, append the FCS to TX frames shorter than the 60-byte
+	 * Ethernet minimum without zero-padding them to it first. The MAC does
+	 * not pad, so they egress as runts. Without sw_fcs the transport never
+	 * pads; padding is the caller's. Init-only.
+ */
+	bool tx_no_pad;
 };
 
 /* Parity bit that makes a 32-bit header/footer word carry odd parity: OR the
