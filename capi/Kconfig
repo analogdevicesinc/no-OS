@@ -23,6 +23,10 @@ config CAPI_TIME
 	bool "CAPI time"
 	default n
 
+config CAPI_MUTEX
+	bool "CAPI mutex"
+	default n
+
 config CAPI_GPIO
 	bool "CAPI GPIO"
 	default n
