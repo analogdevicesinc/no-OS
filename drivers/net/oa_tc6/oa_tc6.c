@@ -51,6 +51,13 @@ uint8_t oa_tc6_crc1(uint32_t header)
 
 #define OA_TC6_FCS_LEN 4
 
+/* CONFIG0 fields owned by oa_tc6_set_config() */
+#define OA_TC6_CONFIG0_RUNTIME_MASK                                  \
+	(OA_TC6_CONFIG0_TXFCSVE_MASK | OA_TC6_CONFIG0_CSARFE_MASK |  \
+	 OA_TC6_CONFIG0_ZARFE_MASK | OA_TC6_CONFIG0_TXCTHRESH_MASK | \
+	 OA_TC6_CONFIG0_TXCTE_MASK | OA_TC6_CONFIG0_RXCTE_MASK |     \
+	 OA_TC6_CONFIG0_FTSE_MASK | OA_TC6_CONFIG0_FTSS_MASK)
+
 /*
  * Build an OA-TC6 control header: MMS+ADDR, LEN = count - 1, AID set only
  * for a single register (count == 1), WNR if writing.
@@ -765,7 +772,57 @@ static uint8_t oa_tc6_tx_pick_start_queue(struct oa_tc6_desc *desc)
 	return start;
 }
 
-/* Data-chunk header for one chunk of an outgoing frame (no CRC). */
+/*
+ * Plan for opening the next same-queue frame inside the leftover bytes of the
+ * chunk that closes the current frame (SWO packing), instead of wasting them on
+ * a zero-pad. ->frame is NULL when no packing applies.
+ */
+struct oa_tc6_swo_plan {
+	struct oa_tc6_frame_buffer *frame; /* next frame to open, or NULL */
+	uint32_t off_bytes; /* word-aligned start within the chunk */
+	uint32_t avail;	    /* leading bytes of it copied into the chunk */
+};
+
+static void oa_tc6_plan_swo_pack(struct oa_tc6_desc *desc,
+				 struct oa_tc6_queue *q, uint8_t qi,
+				 uint32_t chunk_bytes, bool first_chunk,
+				 struct oa_tc6_swo_plan *plan)
+{
+	struct oa_tc6_frame_buffer *next;
+	uint32_t off, avail;
+
+	plan->frame = NULL;
+	plan->off_bytes = 0;
+	plan->avail = 0;
+
+	/*
+	 * SV is one bit: a chunk that both opens and closes this frame
+	 * (first_chunk) has already spent it, so it cannot also open the next.
+	 */
+	if (desc->zero_swo || first_chunk)
+		return;
+
+	off = (chunk_bytes + 3u) & ~3u;
+	avail = desc->chunk_size - off;
+	if (avail < 4)
+		return;
+
+	if (oa_tc6_peek_tx_frame(desc, q, desc->tx_pending_done[qi] + 1, &next))
+		return;
+
+	/*
+	 * One header closes at most one frame (a single EV/EBO field), so the
+	 * packed frame must NOT also fit entirely in the leftover room.
+	 */
+	if (next->len <= avail)
+		return;
+
+	plan->frame = next;
+	plan->off_bytes = off;
+	plan->avail = avail;
+}
+
+/* Base data-chunk header for one chunk of an outgoing frame (no SWO/CRC). */
 static uint32_t oa_tc6_frame_chunk_header(struct oa_tc6_frame_buffer *frame,
 					  bool first_chunk, bool last_chunk,
 					  uint32_t chunk_bytes, uint32_t norx)
@@ -800,17 +857,21 @@ enum oa_tc6_pack_result {
  * Clock as many of one frame's chunks as TX credit and SPI-buffer room allow,
  * starting at *frame_offset (the resume point) and advancing it. SV marks the
  * first chunk, EV the last; a frame that runs out of either is left INCOMPLETE
- * and resumed next pass.
+ * and resumed next pass. Unless swo_frame is NULL, a chunk that closes the
+ * frame with spare room may also open the next same-queue frame (SWO packing),
+ * handed back via *swo_frame and *swo_offset for the caller's next iteration.
  */
 static enum oa_tc6_pack_result
 oa_tc6_pack_frame(struct oa_tc6_desc *desc, struct oa_tc6_tx_pack *pack,
 		  struct oa_tc6_queue *q, uint8_t qi,
 		  struct oa_tc6_frame_buffer *frame, uint32_t *frame_offset,
-		  uint32_t norx)
+		  uint32_t norx, struct oa_tc6_frame_buffer **swo_frame,
+		  uint32_t *swo_offset)
 {
 	while (*frame_offset < frame->len &&
 	       pack->chunks_written < pack->max_chunks &&
 	       oa_tc6_tx_credit_ok(desc, qi, *frame_offset == 0)) {
+		struct oa_tc6_swo_plan swo;
 		uint32_t chunk_bytes =
 			no_os_min(desc->chunk_size, frame->len - *frame_offset);
 		bool first_chunk = (*frame_offset == 0);
@@ -820,13 +881,39 @@ oa_tc6_pack_frame(struct oa_tc6_desc *desc, struct oa_tc6_tx_pack *pack,
 
 		header = oa_tc6_frame_chunk_header(
 			frame, first_chunk, last_chunk, chunk_bytes, norx);
+
+		swo.frame = NULL;
+		if (last_chunk && swo_frame) {
+			oa_tc6_plan_swo_pack(desc, q, qi, chunk_bytes,
+					     first_chunk, &swo);
+			if (swo.frame) {
+				header |= no_os_field_prep(
+					OA_DATA_HEADER_SV_MASK, 1);
+				header |= no_os_field_prep(
+					OA_DATA_HEADER_SWO_MASK,
+					swo.off_bytes / 4);
+				header |= no_os_field_prep(
+					OA_DATA_HEADER_TSC_MASK,
+					swo.frame->tsc);
+			}
+		}
+
 		header |= oa_tc6_crc1(header);
 		no_os_put_unaligned_be32(header, &pack->buf[pack->spi_index]);
 		pack->spi_index += OA_HEADER_LEN;
 
 		dst = &pack->buf[pack->spi_index];
 		memcpy(dst, &frame->data[*frame_offset], chunk_bytes);
-		if (chunk_bytes < desc->chunk_size) {
+		if (swo.frame) {
+			/* Zero the word-align gap, then open the next frame in
+			 * the leftover bytes. */
+			if (swo.off_bytes > chunk_bytes)
+				memset(dst + chunk_bytes, 0,
+				       swo.off_bytes - chunk_bytes);
+			memcpy(dst + swo.off_bytes, swo.frame->data, swo.avail);
+			*swo_frame = swo.frame;
+			*swo_offset = swo.avail;
+		} else if (chunk_bytes < desc->chunk_size) {
 			/* A chunk is always chunk_size on the wire; zero-pad a
 			 * short end chunk (EBO marks the valid length) so no
 			 * stale SPI-buffer bytes are clocked out. */
@@ -868,6 +955,8 @@ static bool oa_tc6_pack_queue(struct oa_tc6_desc *desc,
 			      uint32_t norx, bool one_frame)
 {
 	struct oa_tc6_queue *q = &desc->tx_q[qi];
+	struct oa_tc6_frame_buffer *swo_frame = NULL;
+	uint32_t swo_offset = 0;
 
 	for (;;) {
 		struct oa_tc6_frame_buffer *frame;
@@ -878,12 +967,20 @@ static bool oa_tc6_pack_queue(struct oa_tc6_desc *desc,
 					 &frame))
 			return false;
 
-		/* Resume point. ->index is the real ring state, untouched until
-		 * commit. */
+		/*
+		 * Resume point. ->index is the real ring state, untouched until
+		 * commit; a frame this same pass already opened via SWO packing
+		 * has ->index still 0, so its true offset is carried separately.
+		 */
 		frame_offset = frame->index;
+		if (frame == swo_frame) {
+			frame_offset = swo_offset;
+			swo_frame = NULL;
+		}
 
 		res = oa_tc6_pack_frame(desc, pack, q, qi, frame, &frame_offset,
-					norx);
+					norx, one_frame ? NULL : &swo_frame,
+					&swo_offset);
 
 		if (res == OA_PACK_INCOMPLETE) {
 			/*
@@ -1302,6 +1399,7 @@ static int oa_tc6_rx_copy_slice(struct oa_tc6_desc *desc,
 				bool closes)
 {
 	struct oa_tc6_frame_buffer *buf = *fb;
+	uint32_t off;
 	int ret;
 
 	/* A frame start (SV=1) resets the write cursor: bytes already in the slot
@@ -1353,9 +1451,11 @@ static int oa_tc6_rx_copy_slice(struct oa_tc6_desc *desc,
 	 * The MAC-PHY never strips the FCS, so it is dropped from the delivered
 	 * length. The minimum length is the MAC's to enforce; here a frame only
 	 * has to hold its FCS. A runt frees the slot and hands back the same
-	 * buffer so it is never delivered.
+	 * buffer so it is never delivered. A receive timestamp (RTSA) sits ahead
+	 * of the MAC header.
 	 */
-	if (buf->len < OA_TC6_FCS_LEN) {
+	off = buf->rtsa ? desc->rx_ts_len : 0;
+	if (buf->len < off + OA_TC6_FCS_LEN) {
 		buf->state = OA_BUFF_FREE;
 		buf->index = 0;
 		buf->len = 0;
@@ -2355,6 +2455,75 @@ int oa_tc6_sw_reset(struct oa_tc6_desc *desc)
 	} while (--timeout);
 
 	return -ETIMEDOUT;
+}
+
+/**
+ * @brief Program the runtime CONFIG0 options and the host state that follows
+ *        them (TX SWO packing, RX timestamp prepend width).
+ * @param desc - the device descriptor
+ * @param cfg - the options to apply
+ * @return 0 in case of success, negative error code otherwise
+ */
+int oa_tc6_set_config(struct oa_tc6_desc *desc, const struct oa_tc6_config *cfg)
+{
+	uint32_t val;
+	int ret;
+
+	if (!desc || !cfg || cfg->txcthresh > 3)
+		return -EINVAL;
+
+	val = no_os_field_prep(OA_TC6_CONFIG0_TXCTHRESH_MASK, cfg->txcthresh);
+	if (cfg->csarfe)
+		val |= OA_TC6_CONFIG0_CSARFE_MASK;
+	if (cfg->zarfe)
+		val |= OA_TC6_CONFIG0_ZARFE_MASK;
+	if (cfg->txcte)
+		val |= OA_TC6_CONFIG0_TXCTE_MASK;
+	if (cfg->rxcte)
+		val |= OA_TC6_CONFIG0_RXCTE_MASK;
+	if (cfg->ftse)
+		val |= OA_TC6_CONFIG0_FTSE_MASK;
+	if (cfg->ftss)
+		val |= OA_TC6_CONFIG0_FTSS_MASK;
+
+	ret = oa_tc6_reg_update(desc, OA_TC6_CONFIG0_REG, val,
+				OA_TC6_CONFIG0_RUNTIME_MASK);
+	if (ret)
+		return ret;
+
+	desc->zero_swo = cfg->zarfe;
+	desc->rx_ts_len = cfg->ftse ? (cfg->ftss ? 8 : 4) : 0;
+
+	return 0;
+}
+
+/**
+ * @brief Read back the runtime CONFIG0 options.
+ * @param desc - the device descriptor
+ * @param cfg - filled with the current options
+ * @return 0 in case of success, negative error code otherwise
+ */
+int oa_tc6_get_config(struct oa_tc6_desc *desc, struct oa_tc6_config *cfg)
+{
+	uint32_t val;
+	int ret;
+
+	if (!desc || !cfg)
+		return -EINVAL;
+
+	ret = oa_tc6_reg_read(desc, OA_TC6_CONFIG0_REG, &val);
+	if (ret)
+		return ret;
+
+	cfg->txcthresh = no_os_field_get(OA_TC6_CONFIG0_TXCTHRESH_MASK, val);
+	cfg->csarfe = !!(val & OA_TC6_CONFIG0_CSARFE_MASK);
+	cfg->zarfe = !!(val & OA_TC6_CONFIG0_ZARFE_MASK);
+	cfg->txcte = !!(val & OA_TC6_CONFIG0_TXCTE_MASK);
+	cfg->rxcte = !!(val & OA_TC6_CONFIG0_RXCTE_MASK);
+	cfg->ftse = !!(val & OA_TC6_CONFIG0_FTSE_MASK);
+	cfg->ftss = !!(val & OA_TC6_CONFIG0_FTSS_MASK);
+
+	return 0;
 }
 
 /**

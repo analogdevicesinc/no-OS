@@ -660,11 +660,40 @@ struct oa_tc6_desc {
 	void (*event_cb)(enum oa_tc6_event, void *, void *);
 	void *event_cb_arg;
 
+	/* TX frames always start at SWO 0 (oa_tc6_config.zarfe). */
+	bool zero_swo;
+
+/*
+	 * Width in bytes of the receive timestamp the MAC-PHY prepends to a
+	 * frame whose footer has RTSA set (0, 4 or 8, from oa_tc6_config
+	 * ftse/ftss). Used to skip it when validating a software FCS.
+ */
+	uint8_t rx_ts_len;
+
 /*
 	 * Only ever incremented, except by oa_tc6_reset_stats(); callers that
 	 * want a per-poll count sample it before and after a thread pass.
  */
 	struct oa_tc6_stats stats;
+};
+
+/**
+ * @brief Runtime CONFIG0 options, set with oa_tc6_set_config(). CPS, PROTE
+ *        and SYNC are owned by oa_tc6_init(); TXFCSVE is always cleared.
+ */
+struct oa_tc6_config {
+	/* TX credit threshold for the TXC interrupt (CONFIG0.TXCTHRESH). */
+	uint8_t txcthresh;
+	/* Cut-through instead of store-and-forward (CONFIG0.TXCTE/RXCTE). */
+	bool txcte;
+	bool rxcte;
+	/* Align RX frame starts to a chunk start (CSARFE) or to SWO 0 (ZARFE).
+	 * zarfe also keeps the host from packing a TX frame start mid-chunk. */
+	bool csarfe;
+	bool zarfe;
+	/* Frame timestamping (FTSE); FTSS selects 64-bit (8 B) over 32-bit. */
+	bool ftse;
+	bool ftss;
 };
 
 /**
@@ -820,6 +849,12 @@ int oa_tc6_set_tx_queues(struct oa_tc6_desc *, struct oa_tc6_queue *, uint8_t);
 
 /* Keep credit free in each TX FIFO; TXC then tracks the last SV's queue */
 int oa_tc6_set_tx_credit_reserve(struct oa_tc6_desc *, uint8_t);
+
+/* Program the runtime CONFIG0 options */
+int oa_tc6_set_config(struct oa_tc6_desc *, const struct oa_tc6_config *);
+
+/* Read back the runtime CONFIG0 options */
+int oa_tc6_get_config(struct oa_tc6_desc *, struct oa_tc6_config *);
 
 /* Free the resources allocated by the oa_tc6_init() function */
 int oa_tc6_remove(struct oa_tc6_desc *);
