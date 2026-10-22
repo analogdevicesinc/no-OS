@@ -630,26 +630,33 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 
 		if (sv && ev) {
 			if (sbo > ebo) {
-				/* There are 2 frames in the current chunk. Finish the existing. */
-				memcpy(&(frame_buffer->data[frame_buffer->index]), chunks, ebo + 1);
-				frame_buffer->index += ebo + 1;
-				frame_buffer->len = frame_buffer->index;
-				frame_buffer->state = OA_BUFF_RX_COMPLETE;
+				/*
+				 * There are 2 frames in the current chunk. Finish the existing
+				 * one, if it was started.
+				 */
+				if (frame_buffer->state == OA_BUFF_RX_IN_PROGRESS) {
+					memcpy(&frame_buffer->data[frame_buffer->index], chunks,
+					       ebo + 1);
+					frame_buffer->index += ebo + 1;
+					frame_buffer->len = frame_buffer->index;
+					frame_buffer->state = OA_BUFF_RX_COMPLETE;
 
-				desc->stats.rx_frames++;
-				desc->stats.rx_bytes += frame_buffer->len;
+					desc->stats.rx_frames++;
+					desc->stats.rx_bytes += frame_buffer->len;
 
-				/* Flags valid when EV=1 Only */
-				frame_buffer->frame_drop = !!(footer & OA_DATA_FOOTER_FD_MASK);
-				if (frame_buffer->frame_drop)
-					desc->stats.rx_drop_fd++;
+					/* Flags valid when EV=1 Only */
+					frame_buffer->frame_drop = !!(footer &
+								      OA_DATA_FOOTER_FD_MASK);
+					if (frame_buffer->frame_drop)
+						desc->stats.rx_drop_fd++;
 
-				oa_tc6_queue_event(desc, OA_TC6_EVENT_RX);
+					oa_tc6_queue_event(desc, OA_TC6_EVENT_RX);
 
-				/* Now get a new buffer for the second frame */
-				ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, true);
-				if (ret)
-					goto out;
+					/* Now get a new buffer for the second frame */
+					ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, true);
+					if (ret)
+						goto out;
+				}
 
 				/*
 				 * Overwrite the EBO to be the end of the chunk so the next
@@ -695,6 +702,12 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 		}
 
 		if (ev) {
+			/* Drop the end of a frame that was not started */
+			if (frame_buffer->state != OA_BUFF_RX_IN_PROGRESS) {
+				chunks += OA_CHUNK_SIZE + OA_FOOTER_LEN;
+				continue;
+			}
+
 			ebo = no_os_field_get(OA_DATA_FOOTER_EBO_MASK, footer);
 
 			/* The current chunk may be shorter than chunk_size, since it contains the end of a frame */
@@ -716,8 +729,6 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 			ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, true);
 			if (ret)
 				goto out;
-
-			frame_buffer->state = OA_BUFF_RX_IN_PROGRESS;
 
 			chunks += OA_CHUNK_SIZE + OA_FOOTER_LEN;
 			continue;
