@@ -2404,6 +2404,38 @@ int oa_tc6_thread_async(struct oa_tc6_desc *desc)
 }
 
 /*
+ * Detect whether the MAC-PHY requires protected control framing. The CONFIG0
+ * PROTE bit is NOT a reliable indicator of the boot state -- a permanently
+ * protected part (e.g. AD3306) reports PROTE=0 yet still rejects unprotected
+ * writes -- so probe the wire directly: clock a protected-framed read of the
+ * fixed, non-trivial IDVER register and check whether the part drives the
+ * inverted complement word. A protected part echoes ~data there and the read
+ * succeeds; an unprotected part leaves MISO idle (all-ones) in the complement
+ * slot, which fails __oa_tc6_reg_read()'s complement check with -EINVAL. The
+ * probe leaves prote_spi where the caller wants it.
+ */
+static int oa_tc6_detect_prote(struct oa_tc6_desc *desc, bool *prote)
+{
+	uint32_t val;
+	int ret;
+
+	desc->prote_spi = true;
+	ret = __oa_tc6_reg_read(desc, OA_TC6_IDVER_REG, &val);
+	desc->prote_spi = false;
+
+	if (!ret) {
+		*prote = true;
+		return 0;
+	}
+	if (ret == -EINVAL) {
+		*prote = false;
+		return 0;
+	}
+
+	return ret;
+}
+
+/*
  * Reject a chunk payload the part cannot be configured for: CONFIG0.CPS would
  * keep its old value while the host framed every transaction at the requested
  * size, leaving the footer unfindable (7.6). STDCAP.MINCPS uses the same
@@ -2437,7 +2469,12 @@ static int oa_tc6_setup_config0(struct oa_tc6_desc *desc,
 	if (ret)
 		return ret;
 
-	want_prote = param->prote_spi;
+	/*
+	 * A permanently protected part (prote_boot, e.g. AD3306) must stay
+	 * protected no matter what the caller asked for; a part that boots
+	 * unprotected (e.g. AD3316) enables protection only when requested.
+	 */
+	want_prote = param->prote_spi || desc->prote_boot;
 
 	if (want_prote)
 		new_reg_val |= OA_TC6_CONFIG0_PROTE_MASK;
@@ -2447,8 +2484,10 @@ static int oa_tc6_setup_config0(struct oa_tc6_desc *desc,
 	 * sets it, so the CONFIG0 write that turns protection on must itself be
 	 * framed for the chip's CURRENT protection state, not the target one.
 	 * desc->prote_spi already tracks that current state -- false after
-	 * oa_tc6_sw_reset(), as a soft reset clears PROTE -- so leave it untouched
-	 * for the write and adopt the target only once the write has landed.
+	 * oa_tc6_sw_reset() (a soft reset clears PROTE on every variant, AD3306
+	 * included), or the probed boot state when no_reset skipped the reset --
+	 * so leave it untouched for the write and adopt the target only once the
+	 * write has landed.
 	 *
 	 * Getting this wrong is a hard error: framing the enabling write as
 	 * protected (header, val, ~val) against a still-unprotected MAC-PHY makes
@@ -2756,12 +2795,22 @@ int oa_tc6_init(struct oa_tc6_desc *desc, struct oa_tc6_init_param *param)
 		desc->data_lock = &oa_noop_mutex;
 	}
 
-	/* The reset request is framed for the protection the part boots in. */
-	desc->prote_spi = param->prote_spi;
-
-	ret = oa_tc6_sw_reset(desc);
+	ret = oa_tc6_detect_prote(desc, &desc->prote_boot);
 	if (ret)
 		goto err_mutex;
+	desc->prote_spi = desc->prote_boot;
+
+	/*
+	 * no_reset: the caller guarantees the part is fresh out of a power-on
+	 * reset, so skip the soft reset and keep the boot protection state that
+	 * oa_tc6_detect_prote() just probed -- unlike the post-soft-reset case,
+	 * a part that boots protected (AD3306) still IS protected here.
+	 */
+	if (!param->no_reset) {
+		ret = oa_tc6_sw_reset(desc);
+		if (ret)
+			goto err_mutex;
+	}
 
 	ret = oa_tc6_setup_config0(desc, param);
 	if (ret)

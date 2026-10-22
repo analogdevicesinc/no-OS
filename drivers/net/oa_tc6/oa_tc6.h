@@ -593,6 +593,17 @@ struct oa_tc6_desc {
 	struct oa_tc6_flags xfer_flags;
 	bool prote_spi;
 
+/*
+	 * Protection state the MAC-PHY comes up in, probed once at init and
+	 * preserved across the soft reset (a soft reset returns the part to its
+	 * boot state). true for parts that are permanently protected and report
+	 * CONFIG0.PROTE=0 anyway (e.g. AD3306); false for parts that boot
+	 * unprotected (e.g. AD3316). Used to frame the reset + enabling-write
+	 * sequence and to keep a permanently-protected part protected regardless
+	 * of the requested prote_spi.
+ */
+	bool prote_boot;
+
 	bool skip_current_frame;
 
 /*
@@ -716,6 +727,21 @@ struct oa_tc6_init_param {
 
 	/* The OASPI device uses Protected SPI for control transactions */
 	bool prote_spi;
+
+/*
+	 * Skip the soft reset (RESET.SWRESET + STATUS0.RESETC poll) that
+	 * oa_tc6_init() normally issues, on the caller's assurance that the
+	 * MAC-PHY has just come out of a power-on reset and so is already in its
+	 * reset default state. Use when the host cannot afford the reset (a chip
+	 * already configured by another master, a warm attach to a running part)
+	 * or when the board's power-on sequence is known to precede this call.
+ *
+	 * The caller owns the promise: on a part that is NOT freshly reset, init
+	 * inherits whatever state was left behind (CONFIG0.CPS, enabled queues,
+	 * latched status) and the driver's view can silently disagree with the
+	 * hardware.
+ */
+	bool no_reset;
 
 /*
 	 * Data-chunk payload size selector: an OA_TC6_CONFIG0_CPS_* value
