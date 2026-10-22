@@ -63,7 +63,9 @@ extern "C" {
 /* Most registers one control transaction carries. */
 #define OA_CTRL_MAX_REGS	1
 
-#define OA_CHUNK_SIZE		64 /* data-chunk payload */
+#define OA_CHUNK_SIZE \
+	64 /* max data-chunk payload; runtime uses desc->chunk_size */
+#define OA_MIN_CHUNK_SIZE	8 /* smallest CPS payload (1 << CONFIG0.CPS_8) */
 #define OA_REG_LEN		4
 #define OA_HEADER_LEN		4
 #define OA_FOOTER_LEN		4
@@ -72,8 +74,9 @@ extern "C" {
  * and the trailing word the echo shifts into. */
 #define OA_SPI_CTRL_LEN	(2 * OA_HEADER_LEN + OA_CTRL_MAX_REGS * 2 * OA_REG_LEN)
 
-/* Most chunks in one data transaction. */
-#define OA_SPI_MAX_CHUNKS	(OA_SPI_BUFF_LEN / (OA_CHUNK_SIZE + OA_HEADER_LEN))
+/* Worst-case chunks in one data transaction, at the smallest chunk size. */
+#define OA_SPI_MAX_CHUNKS \
+	(OA_SPI_BUFF_LEN / (OA_MIN_CHUNK_SIZE + OA_HEADER_LEN))
 
 #define OA_MMS_REG(m, r)	(((m) << 16) | ((r) & NO_OS_GENMASK(15, 0)))
 #define OA_CTRL_ADDR_MMS_MASK	NO_OS_GENMASK(27, 8)
@@ -206,6 +209,8 @@ extern "C" {
 #define OA_TC6_CONFIG0_TXFCSVE_MASK	NO_OS_BIT(14)
 #define OA_TC6_CONFIG0_SYNC_MASK	NO_OS_BIT(15)
 
+/* STDCAP.MINCPS: smallest CPS the part accepts (same 1 << N encoding). */
+#define OA_TC6_STDCAP_MINCPS_MASK	NO_OS_GENMASK(2, 0)
 
 /* CONFIG0.CPS chunk-payload-size field; chunk_size = 1 << CPS (OA TC6 std). */
 #define OA_TC6_CONFIG0_CPS_MASK		NO_OS_GENMASK(2, 0)
@@ -474,7 +479,7 @@ struct oa_tc6_desc {
 	int8_t tx_sv_q;
 	int8_t tx_pass_sv_q;
 
-	/* Data-chunk payload size in bytes (1 << CONFIG0.CPS). */
+	/* Data-chunk payload size in bytes (1 << CONFIG0.CPS), fixed at init. */
 	uint32_t chunk_size;
 
 /*
@@ -673,6 +678,12 @@ struct oa_tc6_init_param {
 	/* The OASPI device uses Protected SPI for control transactions */
 	bool prote_spi;
 
+/*
+	 * Data-chunk payload size selector: an OA_TC6_CONFIG0_CPS_* value
+	 * (chunk_size = 1 << cps). 0 defaults to OA_TC6_CONFIG0_CPS_64 (64 B).
+	 * Any value outside {8,16,32,64} makes oa_tc6_init() return -EINVAL.
+ */
+	uint8_t cps;
 
 	/* Caller-allocated RX frame-buffer pool. Must remain valid for the
 	 * lifetime of the descriptor. rx_pool_size must be non-zero. */
