@@ -669,6 +669,11 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 			} else {
 				/* A single frame in current chunk. It will be completed */
 				frame_buffer->state = OA_BUFF_RX_COMPLETE;
+
+				frame_buffer->frame_drop = !!(footer & OA_DATA_FOOTER_FD_MASK);
+				if (frame_buffer->frame_drop)
+					desc->stats.rx_drop_fd++;
+
 				oa_tc6_queue_event(desc, OA_TC6_EVENT_RX);
 			}
 
