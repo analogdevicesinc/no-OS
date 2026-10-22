@@ -1,0 +1,16 @@
+menu "MAX34451 Configuration"
+
+choice MAX34451_EXAMPLE
+	prompt "Example variant"
+	default MAX34451_BASIC_EXAMPLE
+
+config MAX34451_BASIC_EXAMPLE
+	bool "Basic example"
+
+config MAX34451_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+
+endchoice
+
+endmenu
