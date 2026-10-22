@@ -592,10 +592,11 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 	int ret;
 
 	struct oa_tc6_frame_buffer *frame_buffer = NULL;
+	uint8_t *start = chunks;
 
 	ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, false);
 	if (ret)
-		return ret;
+		goto out;
 
 	for (uint32_t i = 0; i < len; i++) {
 		footer = no_os_get_unaligned_be32(&chunks[OA_CHUNK_SIZE]);
@@ -773,7 +774,10 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 	}
 
 out:
+	/* The credits reported by the last footer replace the earlier ones */
 	if (len) {
+		footer = no_os_get_unaligned_be32(&start[len * (OA_CHUNK_SIZE +
+						  OA_FOOTER_LEN) - OA_FOOTER_LEN]);
 		desc->data_rx_credit = no_os_field_get(OA_DATA_FOOTER_RCA_MASK, footer);
 		desc->data_tx_credit = no_os_field_get(OA_DATA_FOOTER_TXC_MASK, footer);
 	}
