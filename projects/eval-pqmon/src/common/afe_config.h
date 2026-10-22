@@ -288,6 +288,7 @@ int afe_write_16bit_reg(uint16_t addr, uint16_t *pData);
  * @param[out] pData - pointer to POWER_ENERGY_DATA structure to fill.
  * @return status - SYS_STATUS_SUCCESS on success, non-zero on failure.
  */
+struct power_energy_data;
 int afe_read_power_energy(struct power_energy_data *pData);
 
 #endif /* __AFE_CONFIG_H__ */

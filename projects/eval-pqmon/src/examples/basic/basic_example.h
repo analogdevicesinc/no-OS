@@ -14,6 +14,9 @@
 #include "common_data.h"
 #include "no_os_error.h"
 
+struct pqm_desc;
+struct pqm_init_para;
+
 /**
  * @brief Initialize pqm descriptor
  *

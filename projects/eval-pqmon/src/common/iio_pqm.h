@@ -133,6 +133,13 @@
 #define CHAN_FUND_ACTIVE_ENERGY         29
 #define CHAN_DISPLACEMENT_PF            30
 #define CHAN_EVENT_TOTAL                31
+#define CHAN_EVENT_ACTIVE               32
+#define CHAN_EVENT_ONSET                33
+#define CHAN_EVENT_TRIG                 34
+#define CHAN_EVENT_MIN_PH               35
+#define CHAN_EVENT_MAX_PH               36
+#define CHAN_EVENT_ACK                  37
+#define CHAN_EVENT_AFFECTED             38
 
 #define RESAMPLED_WAVEFORM_FULL_SCALE   18196
 

@@ -280,23 +280,6 @@ void SyncToDip(PQLIB_EXAMPLE *pExample, ADI_PQLIB_RESULT pqlibStatus);
 
 extern PQLIB_EXAMPLE pqlibExample;
 
-/* Persistent event record - keeps the latest valid PQLib events */
-extern ADI_PQLIB_EVENTS accumulated_events;
-
-/* Lifetime per-type event totals */
-extern uint32_t total_dip_count;
-extern uint32_t total_swell_count;
-extern uint32_t total_intrp_count;
-extern uint32_t total_rvc_count;
-
-/* Number of GetOutput results rejected because of invalid event counts */
-extern uint32_t bogus_event_count;
-
-/**
- * @brief Clear the event record, the lifetime totals and the dedup state.
- */
-void pqm_clear_events(void);
-
 /**
  * @brief Initializes Power Quality Measurement.
  * @return   0 on Success

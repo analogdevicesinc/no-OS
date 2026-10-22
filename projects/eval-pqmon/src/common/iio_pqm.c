@@ -9,6 +9,7 @@
  *******************************************************************************/
 
 #include "iio_pqm.h"
+#include "pq_events.h"
 #include "flash_storage.h"
 
 #define PQM_VOLTAGE_CHANNEL(_idx, _scan_idx, _name)                            \
@@ -58,6 +59,42 @@
         .name = "totalEvent",                                                   \
         .show = read_ch_attr,                                                   \
         .priv = CHAN_EVENT_TOTAL,                                               \
+},                                                                              \
+{                                                                               \
+        .name = "active",                                                       \
+        .show = read_ch_attr,                                                   \
+        .priv = CHAN_EVENT_ACTIVE,                                              \
+},                                                                              \
+{                                                                               \
+        .name = "onsetTime",                                                    \
+        .show = read_ch_attr,                                                   \
+        .priv = CHAN_EVENT_ONSET,                                               \
+},                                                                              \
+{                                                                               \
+        .name = "triggerPhase",                                                 \
+        .show = read_ch_attr,                                                   \
+        .priv = CHAN_EVENT_TRIG,                                                \
+},                                                                              \
+{                                                                               \
+        .name = "affectedPhases",                                               \
+        .show = read_ch_attr,                                                   \
+        .priv = CHAN_EVENT_AFFECTED,                                            \
+},                                                                              \
+{                                                                               \
+        .name = "minMagPhase",                                                  \
+        .show = read_ch_attr,                                                   \
+        .priv = CHAN_EVENT_MIN_PH,                                              \
+},                                                                              \
+{                                                                               \
+        .name = "maxMagPhase",                                                  \
+        .show = read_ch_attr,                                                   \
+        .priv = CHAN_EVENT_MAX_PH,                                              \
+},                                                                              \
+{                                                                               \
+        .name = "event_ack",                                                    \
+        .show = read_ch_attr,                                                   \
+        .store = write_ch_attr,                                                 \
+        .priv = CHAN_EVENT_ACK,                                                 \
 }
 
 volatile bool configChanged = false;
@@ -696,7 +733,7 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
 			configChanged = false;
 			if (value != 1)
 				return -EINVAL;
-			pqm_clear_events();
+			pq_events_clear();
 			break;
 		case WAVEFORM_CAPTURE_MODE_ATTR:
 			configChanged = false;
@@ -748,11 +785,135 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
  * @return          - The length of the buffer in case of success, negative
  * value otherwise
  */
+/**
+ * @brief Read the record attributes of the line interruption channel, in
+ * the same format as the other event channels (latest event in slot 0).
+ * @param buf     - output buffer
+ * @param len     - buffer length
+ * @param attr_id - attribute id
+ * @return length written, or -EINVAL
+ */
+static int read_line_attr(char *buf, uint32_t len, intptr_t attr_id)
+{
+	static const char *const unused = " 0 0 0 0 0";
+	float scale = pqlibExample.exampleConfig.voltageScale;
+	ADI_AFE_RMS_TYPE lo, v;
+	ADI_PQLIB_TIME start, end;
+	uint32_t cycles;
+
+	pq_events_latest(PQ_EV_LINE_INTRP, &start, &end, &cycles);
+
+	switch (attr_id) {
+	case CHAN_EVENT_START_TIME:
+		return snprintf(buf, len, "%" PRId64 "%s", start, unused);
+	case CHAN_EVENT_END_TIME:
+		return snprintf(buf, len, "%" PRId64 "%s", end, unused);
+	case CHAN_EVENT_DURATION_IN_CYCL:
+		return snprintf(buf, len, "%" PRIu32 "%s", cycles, unused);
+	case CHAN_EVENT_MIN_MAG:
+		lo = pq_events_mag(PQ_EV_LINE_INTRP, 0, false);
+		for (int p = 1; p < PQ_EV_NUM_PHASES; p++) {
+			v = pq_events_mag(PQ_EV_LINE_INTRP, p, false);
+			if (v < lo)
+				lo = v;
+		}
+		return snprintf(buf, len, "%.5f%s", convert_rms_type(lo, scale),
+				unused);
+	default:
+		return -EINVAL;
+	}
+}
+
+/**
+ * @brief Read the event attributes common to all event channels.
+ * @param type    - event type (event channel number)
+ * @param buf     - output buffer
+ * @param len     - buffer length
+ * @param attr_id - attribute id
+ * @return length written, or -ENOENT if not a common event attribute
+ */
+static int read_event_attr(int type, char *buf, uint32_t len,
+			   intptr_t attr_id)
+{
+	static const char *const names[PQ_EV_NUM_PHASES] = { "A", "B", "C" };
+	float scale = pqlibExample.exampleConfig.voltageScale;
+	uint8_t mask;
+	int n = 0;
+
+	switch (attr_id) {
+	case CHAN_EVENT_COUNT:
+		return snprintf(buf, len, "%" PRIu32, pq_events_unacked(type));
+	case CHAN_EVENT_TOTAL:
+		return snprintf(buf, len, "%" PRIu32, pq_events_total(type));
+	case CHAN_EVENT_ACTIVE:
+		return snprintf(buf, len, "%d", pq_events_active(type) ? 1 : 0);
+	case CHAN_EVENT_ONSET:
+		return snprintf(buf, len, "%" PRId64, pq_events_onset(type));
+	case CHAN_EVENT_TRIG:
+	case CHAN_EVENT_AFFECTED:
+		mask = attr_id == CHAN_EVENT_TRIG ? pq_events_trigger(type) :
+		       pq_events_affected(type);
+		if (!mask)
+			return snprintf(buf, len, "-");
+		buf[0] = '\0';
+		for (int p = 0; p < PQ_EV_NUM_PHASES; p++) {
+			if (!(mask & (1 << p)))
+				continue;
+			n += snprintf(buf + n, len - n, "%s%s", n ? " " : "",
+				      names[p]);
+		}
+		return n;
+	case CHAN_EVENT_MIN_PH:
+	case CHAN_EVENT_MAX_PH:
+		for (int p = 0; p < PQ_EV_NUM_PHASES; p++)
+			n += snprintf(buf + n, len - n, "%s%.2f", p ? " " : "",
+				      convert_rms_type(pq_events_mag(type, p,
+						       attr_id ==
+						       CHAN_EVENT_MAX_PH),
+						       scale));
+		return n;
+	case CHAN_EVENT_ACK:
+		return snprintf(buf, len, "0");
+	default:
+		break;
+	}
+
+	if (type == PQ_EV_LINE_INTRP)
+		return read_line_attr(buf, len, attr_id);
+
+	return -ENOENT;
+}
+
+/**
+ * @brief Write a channel attribute. Only event_ack is writable.
+ * @param device  - device descriptor
+ * @param buf     - value written by the host
+ * @param len     - value length
+ * @param channel - channel info
+ * @param attr_id - attribute id
+ * @return len on success, negative errno otherwise
+ */
+int write_ch_attr(void *device, char *buf, uint32_t len,
+		  const struct iio_ch_info *channel, intptr_t attr_id)
+{
+	if (!device || !channel)
+		return -ENODEV;
+
+	if (channel->type == IIO_COUNT && attr_id == CHAN_EVENT_ACK &&
+	    atoi(buf) == 1) {
+		pq_events_ack(channel->ch_num);
+		return len;
+	}
+
+	return -EINVAL;
+}
+
 int read_ch_attr(void *device, char *buf, uint32_t len,
 		 const struct iio_ch_info *channel, intptr_t attr_id)
 {
 	struct pqm_desc *desc;
 	char buffTmp[10];
+	int ret;
 
 	if (!device)
 		return -ENODEV;
@@ -990,13 +1151,12 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 				       desc->pqm_ch_attr[channel->ch_num + VOLTAGE_CH_NUMBER][attr_id]);
 		}
 	case IIO_COUNT:
+		ret = read_event_attr(channel->ch_num, buf, len, attr_id);
+		if (ret != -ENOENT)
+			return ret;
 		switch (channel->ch_num) {
 		case 0: // Dips
 			switch (attr_id) {
-			case CHAN_EVENT_COUNT:
-				return snprintf(buf, len, "%" PRIu8 "", accumulated_events.dipCount);
-			case CHAN_EVENT_TOTAL:
-				return snprintf(buf, len, "%" PRIu32, total_dip_count);
 			case CHAN_EVENT_START_TIME:
 				return (prepara_string(EVENT_DIPS, CHAN_EVENT_START_TIME, buf));
 			case CHAN_EVENT_END_TIME:
@@ -1010,10 +1170,6 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 			}
 		case 1: // Swells
 			switch (attr_id) {
-			case CHAN_EVENT_COUNT:
-				return snprintf(buf, len, "%" PRIu8 "", accumulated_events.swellCount);
-			case CHAN_EVENT_TOTAL:
-				return snprintf(buf, len, "%" PRIu32, total_swell_count);
 			case CHAN_EVENT_START_TIME:
 				return (prepara_string(EVENT_SWELL, CHAN_EVENT_START_TIME, buf));
 			case CHAN_EVENT_END_TIME:
@@ -1027,10 +1183,6 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 			}
 		case 2: // RVC
 			switch (attr_id) {
-			case CHAN_EVENT_COUNT:
-				return snprintf(buf, len, "%" PRIu8 "", accumulated_events.rvcCount);
-			case CHAN_EVENT_TOTAL:
-				return snprintf(buf, len, "%" PRIu32, total_rvc_count);
 			case CHAN_EVENT_START_TIME:
 				return (prepara_string(EVENT_RVC, CHAN_EVENT_START_TIME, buf));
 			case CHAN_EVENT_END_TIME:
@@ -1046,10 +1198,6 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 			}
 		case 3: // Intrpt
 			switch (attr_id) {
-			case CHAN_EVENT_COUNT:
-				return snprintf(buf, len, "%" PRIu8 "", accumulated_events.intrpCount);
-			case CHAN_EVENT_TOTAL:
-				return snprintf(buf, len, "%" PRIu32, total_intrp_count);
 			case CHAN_EVENT_START_TIME:
 				return (prepara_string(EVENT_INTRPS, CHAN_EVENT_START_TIME, buf));
 			case CHAN_EVENT_END_TIME:
@@ -1716,6 +1864,16 @@ struct iio_attribute event_pqm_intrpr_attribute[] = {
 	END_ATTRIBUTES_ARRAY,
 }; // event channel attribute
 
+struct iio_attribute event_pqm_line_attribute[] = {
+	EVENT_COMMON_ATTR,
+	{
+		.name = "minMag",
+		.show = read_ch_attr,
+		.priv = CHAN_EVENT_MIN_MAG,
+	},
+	END_ATTRIBUTES_ARRAY,
+}; // event channel attribute for line interruptions
+
 struct scan_type pqm_scan_type = {.sign = 's',
 	.realbits = 16,
 	.storagebits = 16,
@@ -1736,6 +1894,7 @@ static struct iio_channel iio_pqm_channels[] = {
 	PQM_EVENT_CHANNEL(1, 9, "swells", event_pqm_swell_attribute),
 	PQM_EVENT_CHANNEL(2, 10, "rvc", event_pqm_rvc_attribute),
 	PQM_EVENT_CHANNEL(3, 11, "intrpt", event_pqm_intrpr_attribute),
+	PQM_EVENT_CHANNEL(4, 12, "intrpt_line", event_pqm_line_attribute),
 }; // channel definitions for device
 
 struct iio_device pqm_iio_descriptor = {

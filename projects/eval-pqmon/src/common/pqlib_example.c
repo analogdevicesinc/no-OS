@@ -11,6 +11,7 @@
 #include "pqlib_example.h"
 #include "pqlib_afe.h"
 #include "afe_queue.h"
+#include "pq_events.h"
 #include "max32650.h"
 #include "iio_pqm.h"
 #include "afe_calibration.h"
@@ -31,60 +32,6 @@ extern volatile bool configChanged;
 
 /* Zero-filled placeholder so IIO reads are safe before the first GetOutput */
 static ADI_PQLIB_OUTPUT emptyOutput;
-
-/* Persistent event record - PQLib clears its events after each GetOutput(),
- * so the latest valid events are kept here until newer ones arrive. */
-ADI_PQLIB_EVENTS accumulated_events;
-
-/* Lifetime per-type event totals (reset by power cycle or pqm_clear_events) */
-uint32_t total_dip_count;
-uint32_t total_swell_count;
-uint32_t total_intrp_count;
-uint32_t total_rvc_count;
-
-/* Number of GetOutput results rejected because of invalid event counts */
-uint32_t bogus_event_count;
-
-/* Start time of the newest accumulated event per type, used for dedup */
-#define NO_EVENT_TIME	((ADI_PQLIB_TIME)-1)
-static ADI_PQLIB_TIME lastDipStart = NO_EVENT_TIME;
-static ADI_PQLIB_TIME lastSwellStart = NO_EVENT_TIME;
-static ADI_PQLIB_TIME lastIntrpStart = NO_EVENT_TIME;
-static ADI_PQLIB_TIME lastRvcStart = NO_EVENT_TIME;
-
-/**
- * @brief Check that PQLib event counts fit the configured event arrays.
- * PQLib occasionally reports garbage counts (e.g. intrpCount=194).
- * @param ev - PQLib events structure
- * @return true if all counts are valid
- */
-static bool events_counts_valid(const ADI_PQLIB_EVENTS *ev)
-{
-	return (ev->dipCount <= ADI_PQLIB_CFG_NUM_DIPS &&
-		ev->swellCount <= ADI_PQLIB_CFG_NUM_SWELLS &&
-		ev->intrpCount <= ADI_PQLIB_CFG_NUM_INTRP &&
-		ev->rvcCount <= ADI_PQLIB_CFG_NUM_RVC);
-}
-
-/* Common leading fields of ADI_PQLIB_DIP/SWELL/INTRP/RVC */
-typedef struct {
-	ADI_PQLIB_TIME startTime;
-	ADI_PQLIB_TIME endTime;
-	uint32_t durationInCycles;
-} EVENT_TIMING;
-
-#define EVENT_TIMING_LAYOUT_OK(type)					\
-	(offsetof(type, endTime) == offsetof(EVENT_TIMING, endTime) &&	\
-	 offsetof(type, durationInCycles) ==				\
-	 offsetof(EVENT_TIMING, durationInCycles))
-
-_Static_assert(EVENT_TIMING_LAYOUT_OK(ADI_PQLIB_DIP), "dip layout");
-_Static_assert(EVENT_TIMING_LAYOUT_OK(ADI_PQLIB_SWELL), "swell layout");
-_Static_assert(EVENT_TIMING_LAYOUT_OK(ADI_PQLIB_INTRP), "intrp layout");
-_Static_assert(EVENT_TIMING_LAYOUT_OK(ADI_PQLIB_RVC), "rvc layout");
-
-/* Max number of rejected event records printed on the debug console */
-#define MAX_BOGUS_EVENT_PRINTS	5
 
 #ifdef PQM_EVENT_DEBUG
 /**
@@ -257,164 +204,6 @@ static void event_debug_output(const ADI_PQLIB_OUTPUT *output)
 		       ev->dips[i].endTime, ev->dips[i].durationInCycles);
 }
 #endif
-
-/**
- * @brief Check that an event record is plausible. PQLib sometimes returns
- * records with a valid count but garbage content (e.g. endTime < startTime).
- * The start-to-end span must match durationInCycles within 10% + 2 cycles.
- * @param t - event timing fields
- * @return true if the record is plausible
- */
-static bool event_timing_valid(const EVENT_TIMING *t)
-{
-	uint32_t freq = pqlibExample.exampleConfig.nominalFrequency;
-	int64_t span, expected, tolerance;
-
-	if (!freq)
-		freq = 50;
-
-	if (t->startTime < 0 || t->endTime <= t->startTime ||
-	    t->durationInCycles == 0)
-		return false;
-
-	span = t->endTime - t->startTime;
-	expected = (int64_t)t->durationInCycles * 1000 / freq;
-	tolerance = expected / 10 + 2 * 1000 / freq;
-
-	return (span >= expected - tolerance) && (span <= expected + tolerance);
-}
-
-/**
- * @brief Validate the records of one event type and count the new ones.
- * Nothing is updated when any record is implausible, so a garbage
- * startTime can never block later events through the dedup check.
- * @param first     - first event structure of the array
- * @param count     - number of reported events
- * @param stride    - size of one event structure
- * @param name      - event type name for the debug console
- * @param lastStart - newest start time already accumulated (updated)
- * @return number of new events, or -1 if the records were rejected
- */
-static int count_new_events(const void *first, uint8_t count, size_t stride,
-			    const char *name, ADI_PQLIB_TIME *lastStart)
-{
-	const uint8_t *event = first;
-	const EVENT_TIMING *t;
-	ADI_PQLIB_TIME newest = *lastStart;
-	int newEvents = 0;
-
-	for (uint8_t i = 0; i < count; i++, event += stride) {
-		t = (const EVENT_TIMING *)event;
-		if (!event_timing_valid(t)) {
-			bogus_event_count++;
-			if (bogus_event_count <= MAX_BOGUS_EVENT_PRINTS)
-				printf("Bogus %s[%u]: start=%" PRId64
-				       " end=%" PRId64 " cycles=%" PRIu32
-				       " (ignored)\n\r", name, i, t->startTime,
-				       t->endTime, t->durationInCycles);
-			return -1;
-		}
-	}
-
-	event = first;
-	for (uint8_t i = 0; i < count; i++, event += stride) {
-		t = (const EVENT_TIMING *)event;
-		if (t->startTime > *lastStart) {
-			newEvents++;
-			if (t->startTime > newest)
-				newest = t->startTime;
-		}
-	}
-	*lastStart = newest;
-
-	return newEvents;
-}
-
-/**
- * @brief Forget the dedup start times. Must be called whenever the PQLib
- * time base is cleared, otherwise new events would look older than the
- * last accumulated ones and be dropped.
- */
-static void reset_event_dedup(void)
-{
-	lastDipStart = NO_EVENT_TIME;
-	lastSwellStart = NO_EVENT_TIME;
-	lastIntrpStart = NO_EVENT_TIME;
-	lastRvcStart = NO_EVENT_TIME;
-}
-
-/**
- * @brief Copy new events from the PQLib output into the persistent record.
- * The previous record is kept when the output holds no new events.
- * @param output - PQLib output structure
- */
-static void accumulate_events_from_output(const ADI_PQLIB_OUTPUT *output)
-{
-	const ADI_PQLIB_EVENTS *ev;
-	int newEvents;
-
-	if (!output)
-		return;
-
-	ev = &output->events;
-	if (!ev->dipCount && !ev->swellCount &&
-	    !ev->intrpCount && !ev->rvcCount)
-		return;
-
-	/* Do not reset or reconfigure PQLib here, it corrupts the handle */
-	if (!events_counts_valid(ev)) {
-		bogus_event_count++;
-		return;
-	}
-
-	newEvents = count_new_events(&ev->dips[0], ev->dipCount,
-				     sizeof(ev->dips[0]), "dip",
-				     &lastDipStart);
-	if (newEvents > 0) {
-		memcpy(accumulated_events.dips, ev->dips, sizeof(ev->dips));
-		accumulated_events.dipCount = ev->dipCount;
-		total_dip_count += newEvents;
-	}
-
-	newEvents = count_new_events(&ev->swells[0], ev->swellCount,
-				     sizeof(ev->swells[0]), "swell",
-				     &lastSwellStart);
-	if (newEvents > 0) {
-		memcpy(accumulated_events.swells, ev->swells,
-		       sizeof(ev->swells));
-		accumulated_events.swellCount = ev->swellCount;
-		total_swell_count += newEvents;
-	}
-
-	newEvents = count_new_events(&ev->intrp[0], ev->intrpCount,
-				     sizeof(ev->intrp[0]), "intrp",
-				     &lastIntrpStart);
-	if (newEvents > 0) {
-		memcpy(accumulated_events.intrp, ev->intrp, sizeof(ev->intrp));
-		accumulated_events.intrpCount = ev->intrpCount;
-		total_intrp_count += newEvents;
-	}
-
-	newEvents = count_new_events(&ev->rvc[0], ev->rvcCount,
-				     sizeof(ev->rvc[0]), "rvc",
-				     &lastRvcStart);
-	if (newEvents > 0) {
-		memcpy(accumulated_events.rvc, ev->rvc, sizeof(ev->rvc));
-		accumulated_events.rvcCount = ev->rvcCount;
-		total_rvc_count += newEvents;
-	}
-}
-
-void pqm_clear_events(void)
-{
-	memset(&accumulated_events, 0, sizeof(accumulated_events));
-	total_dip_count = 0;
-	total_swell_count = 0;
-	total_intrp_count = 0;
-	total_rvc_count = 0;
-	bogus_event_count = 0;
-	reset_event_dedup();
-}
 
 int pqm_measurement_init(void)
 {
@@ -686,6 +475,9 @@ static int process_one_input(void)
 			SyncLibTime(&pqlibExample, true);
 			SyncToDip(&pqlibExample, pqlibStatus);
 			pqlibExample.processedCycles++;
+			if (pqlibExample.state == PQLIB_STATE_RUNNING)
+				pq_events_cycle(hDevice, pqlibStatus,
+						&pqlibExample.inputCycle);
 
 			/* No GetOutput here: calling it every cycle resets
 			 * the PQLib dip state machine, DIP_ENDED never fires */
@@ -753,7 +545,7 @@ static int process_one_input(void)
 			if (status != 0) {
 				break;
 			}
-			accumulate_events_from_output(pqlibExample.output);
+			pq_events_cross_check(pqlibExample.output);
 #ifdef PQM_EVENT_DEBUG
 			event_debug_output(pqlibExample.output);
 #endif
@@ -936,7 +728,7 @@ int wait_for_zero_crossing(PQLIB_EXAMPLE *pExample,
 				bool clearTime = true;
 				pqlibExample.state = PQLIB_STATE_RUNNING;
 				adi_pqlib_Reset(pqlibExample.hDevice, clearTime);
-				reset_event_dedup();
+				pq_events_reset_open();
 				pqlibExample.processedCycles = 0;
 				SyncLibTime(pExample, false);
 			} else {

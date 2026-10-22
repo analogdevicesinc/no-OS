@@ -48,9 +48,9 @@
 #define MAX_SIZE_BASE_ADDR_WITH_SIZE                                           \
   (MAX_SIZE_BASE_ADDR * sizeof(IIO_BUFF_TYPE))
 
-#define TOTAL_PQM_CHANNELS 11
+#define TOTAL_PQM_CHANNELS 12
 #define VOLTAGE_CH_NUMBER 3
-#define MAX_CH_ATTRS 32
+#define MAX_CH_ATTRS 39
 #define PQM_DEVICE_ATTR_NUMBER 70
 #define WAVEFORM_BUFFER_LENGTH (256 * 7)
 #define MAX_EVENT_NUMBER 6

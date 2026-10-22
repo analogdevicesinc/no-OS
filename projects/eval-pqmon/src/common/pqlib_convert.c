@@ -9,6 +9,7 @@
  *******************************************************************************/
 
 #include "pqlib_convert.h"
+#include "pq_events.h"
 #include "common_data.h"
 
 ADI_AFE_ANGLE_TYPE

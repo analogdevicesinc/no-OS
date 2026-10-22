@@ -7,6 +7,7 @@ target_sources(eval-pqmon PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/pqlib_example.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/pqlib_afe.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/afe_queue.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/common/pq_events.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/pqlib_convert.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/iio_pqm.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/flash_storage.c
