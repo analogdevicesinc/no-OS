@@ -575,6 +575,26 @@ static int oa_tc6_handle_exst(struct oa_tc6_desc *desc)
 }
 
 /**
+ * @brief Find the last footer with a valid parity in a transfer.
+ * @param chunks - array containing chunks received from the MAC
+ * @param len - the number of chunks
+ * @param footer - the footer found
+ * @return true if a valid footer was found, false otherwise
+ */
+static bool oa_tc6_last_valid_footer(uint8_t *chunks, uint32_t len,
+				     uint32_t *footer)
+{
+	while (len--) {
+		*footer = no_os_get_unaligned_be32(&chunks[len * (OA_CHUNK_SIZE +
+						   OA_FOOTER_LEN) + OA_CHUNK_SIZE]);
+		if (!oa_tc6_crc1(*footer))
+			return true;
+	}
+
+	return false;
+}
+
+/**
  * @brief Convert the received chunks into frames.
  * @param desc - the OA TC6 descriptor
  * @param chunks - array containing chunks received from the MAC
@@ -600,6 +620,19 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 
 	for (uint32_t i = 0; i < len; i++) {
 		footer = no_os_get_unaligned_be32(&chunks[OA_CHUNK_SIZE]);
+
+		/* None of the footer fields can be trusted on a parity error */
+		if (oa_tc6_crc1(footer)) {
+			desc->stats.rx_footer_parity_err++;
+			if (frame_buffer->state == OA_BUFF_RX_IN_PROGRESS) {
+				frame_buffer->index = 0;
+				frame_buffer->len = 0;
+				frame_buffer->state = OA_BUFF_FREE;
+			}
+
+			chunks += OA_CHUNK_SIZE + OA_FOOTER_LEN;
+			continue;
+		}
 
 		ev = footer & OA_DATA_FOOTER_EV_MASK;
 		sv = footer & OA_DATA_FOOTER_SV_MASK;
@@ -775,9 +808,7 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 
 out:
 	/* The credits reported by the last footer replace the earlier ones */
-	if (len) {
-		footer = no_os_get_unaligned_be32(&start[len * (OA_CHUNK_SIZE +
-						  OA_FOOTER_LEN) - OA_FOOTER_LEN]);
+	if (oa_tc6_last_valid_footer(start, len, &footer)) {
 		desc->data_rx_credit = no_os_field_get(OA_DATA_FOOTER_RCA_MASK, footer);
 		desc->data_tx_credit = no_os_field_get(OA_DATA_FOOTER_TXC_MASK, footer);
 	}
