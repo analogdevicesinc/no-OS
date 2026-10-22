@@ -933,29 +933,6 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 }
 
 /*
- * Events are only recorded while the bus lock is held and delivered by
- * oa_tc6_dispatch_events() after it's released, so that the user callback
- * may call back into the driver.
- */
-static void oa_tc6_queue_event(struct oa_tc6_desc *desc, uint32_t event)
-{
-	desc->pending_events |= NO_OS_BIT(event);
-}
-
-static void oa_tc6_dispatch_events(struct oa_tc6_desc *desc, uint32_t events)
-{
-	uint32_t event;
-
-	if (!desc->callback)
-		return;
-
-	for (event = 0; events; event++, events >>= 1) {
-		if (events & 1)
-			desc->callback(desc, event, desc->callback_arg);
-	}
-}
-
-/*
  * Apply the TX progress of the pass just clocked, up to the first of its
  * `accepted` chunks the MAC-PHY ignored: 0 for a transfer that failed or was
  * aborted, fewer than the pass after a header parity error (7.5.1) or a reset
@@ -1013,47 +990,120 @@ static void oa_tc6_tx_commit(struct oa_tc6_desc *desc, uint32_t accepted)
 	desc->tx_pending_incomplete_frame = NULL;
 	desc->tx_pass_chunks = 0;
 
-	if (sent)
-		oa_tc6_queue_event(desc, OA_TC6_EVENT_TX);
+	if (sent && desc->event_cb)
+		desc->event_cb(OA_TC6_EVENT_TX, NULL, desc->event_cb_arg);
 }
 
-static int oa_tc6_handle_exst(struct oa_tc6_desc *desc)
+/* Map each status-register error bit to the event reported to the user. */
+struct oa_tc6_status_error {
+	uint32_t mask;
+	enum oa_tc6_event event;
+};
+
+static const struct oa_tc6_status_error oa_tc6_status0_errors[] = {
+	{ OA_TC6_STATUS0_TXPE, OA_TC6_EVENT_ERR_TX_PROTOCOL },
+	{ OA_TC6_STATUS0_TXBOE, OA_TC6_EVENT_ERR_TX_OVERFLOW },
+	{ OA_TC6_STATUS0_TXBUE, OA_TC6_EVENT_ERR_TX_UNDERFLOW },
+	{ OA_TC6_STATUS0_RXBOE, OA_TC6_EVENT_ERR_RX_OVERFLOW },
+	{ OA_TC6_STATUS0_LOFE, OA_TC6_EVENT_ERR_LOSS_OF_FRAME },
+	{ OA_TC6_STATUS0_HDRE, OA_TC6_EVENT_ERR_HEADER },
+	{ OA_TC6_STATUS0_TXFCSE, OA_TC6_EVENT_ERR_TX_FCS },
+	{ OA_TC6_STATUS0_CDPE, OA_TC6_EVENT_ERR_CTRL_DATA_PROT },
+	{ OA_TC6_STATUS0_RESETC, OA_TC6_EVENT_RESET },
+};
+
+static const struct oa_tc6_status_error oa_tc6_status1_errors[] = {
+	{ OA_TC6_STATUS1_RX_IFG_ERR, OA_TC6_EVENT_ERR_RX_IFG },
+	{ OA_TC6_STATUS1_MAX_RR_ERR, OA_TC6_EVENT_ERR_TX_MAX_RETRY },
+	{ OA_TC6_STATUS1_SPI_ERR, OA_TC6_EVENT_ERR_SPI },
+	{ OA_TC6_STATUS1_RX_ECC_ERR, OA_TC6_EVENT_ERR_RX_ECC },
+	{ OA_TC6_STATUS1_TX_ECC_ERR, OA_TC6_EVENT_ERR_TX_ECC },
+	{ OA_TC6_STATUS1_RD_ACC_ERR, OA_TC6_EVENT_ERR_READ_ACCESS },
+};
+
+/* Report each set error bit in status against its map; returns true if any
+ * fired. */
+static bool oa_tc6_report_status(struct oa_tc6_desc *desc, uint32_t status,
+				 const struct oa_tc6_status_error *map,
+				 uint32_t count, void *detail)
 {
-	uint32_t status0;
-	uint32_t status1;
+	bool reported = false;
+	uint32_t i;
+
+	for (i = 0; i < count; i++) {
+		if (status & map[i].mask) {
+			desc->event_cb(map[i].event, detail,
+				       desc->event_cb_arg);
+			reported = true;
+		}
+	}
+
+	return reported;
+}
+
+/*
+ * Handle an error signalled in a data-chunk footer (EXST/HDRB). Read STATUS0
+ * and STATUS1, clear only the bits that were set by writing the read value back
+ * (write-1-to-clear), then report each set error bit to the user callback as its
+ * own decoded event. A STATUS0 bit that maps to no known event is reported as
+ * the generic OA_TC6_EVENT_ERROR; STATUS1's non-fault bits (link/RX-ready/VS)
+ * never raise it, and neither do STATUS0's TTSCA{A,B,C} capture flags.
+ * CONFIG0.SYNC is deliberately NOT re-asserted here: on a real config loss the
+ * host must reconfigure the MAC-PHY before setting SYNC (7.6), which is
+ * signalled separately as OA_TC6_EVENT_RESET.
+ */
+static int oa_tc6_handle_flags(struct oa_tc6_desc *desc)
+{
+	uint32_t status0 = 0;
+	uint32_t status1 = 0;
+	bool reported = false;
 	int ret;
 
 	ret = oa_tc6_reg_read(desc, OA_TC6_STATUS0_REG, &status0);
 	if (ret)
-		return ret;
-
+		status0 = 0;
 	ret = oa_tc6_reg_read(desc, OA_TC6_STATUS1_REG, &status1);
 	if (ret)
-		return ret;
+		status1 = 0;
 
-	if (no_os_field_get(OA_TC6_IMASK0_TXPEM, status0))
-		oa_tc6_queue_event(desc, OA_TC6_EVENT_TXPE);
+	/*
+	 * Write-1-to-clear: only the bits that were set are cleared, minus the
+	 * egress-timestamp-capture-available bits. Those are application state,
+	 * not errors: clearing them here would discard a capture the application
+	 * has not read yet and make its poll time
+	 * out. Unknown bits are still cleared, so a latched one cannot wedge EXST.
+	 */
+	status0 &= ~OA_TC6_STATUS0_TTSCA_MASK;
 
-	if (no_os_field_get(OA_TC6_IMASK0_TXBOEM, status0))
-		oa_tc6_queue_event(desc, OA_TC6_EVENT_TXBOE);
+	if (status0)
+		oa_tc6_reg_write(desc, OA_TC6_STATUS0_REG, status0);
+	if (status1)
+		oa_tc6_reg_write(desc, OA_TC6_STATUS1_REG, status1);
 
-	if (no_os_field_get(OA_TC6_IMASK0_TXBUEM, status0))
-		oa_tc6_queue_event(desc, OA_TC6_EVENT_TXBUE);
+	if (desc->event_cb) {
+		struct oa_tc6_error_detail detail = {
+			.status0 = status0,
+			.status1 = status1,
+		};
 
-	if (no_os_field_get(OA_TC6_IMASK0_RXBOEM, status0))
-		oa_tc6_queue_event(desc, OA_TC6_EVENT_RXBOE);
+		reported = oa_tc6_report_status(
+			desc, status0, oa_tc6_status0_errors,
+			NO_OS_ARRAY_SIZE(oa_tc6_status0_errors), &detail);
+		reported |= oa_tc6_report_status(
+			desc, status1, oa_tc6_status1_errors,
+			NO_OS_ARRAY_SIZE(oa_tc6_status1_errors), &detail);
 
-	if (no_os_field_get(OA_TC6_IMASK0_LOFEM, status0))
-		oa_tc6_queue_event(desc, OA_TC6_EVENT_LOFE);
+		/* STATUS0 had a bit set that maps to no known error event --
+		 * report it generically. A clean STATUS0 (status0 == 0) means EXST
+		 * was already cleared or reflected a non-fault STATUS1 bit alone;
+		 * nothing happened on the data path, so stay silent rather than
+		 * misreport an error. */
+		if (!reported && status0)
+			desc->event_cb(OA_TC6_EVENT_ERROR, &detail,
+				       desc->event_cb_arg);
+	}
 
-	if (no_os_field_get(OA_TC6_IMASK0_HDREM, status0))
-		oa_tc6_queue_event(desc, OA_TC6_EVENT_HDRE);
-
-	ret = oa_tc6_reg_write(desc, OA_TC6_STATUS0_REG, status0);
-	if (ret)
-		return ret;
-
-	return oa_tc6_reg_write(desc, OA_TC6_STATUS1_REG, status1);
+	return 0;
 }
 
 /*
@@ -1065,21 +1115,16 @@ static void oa_tc6_service_status0(struct oa_tc6_desc *desc)
 	if (!desc->status0_pending)
 		return;
 
-	oa_tc6_handle_exst(desc);
+	oa_tc6_handle_flags(desc);
 	desc->status0_pending = false;
 }
 
-int oa_tc6_register_callback(struct oa_tc6_desc *desc,
-			     void (*callback)(struct oa_tc6_desc *, uint32_t, void *),
-			     void *arg)
+void oa_tc6_register_callback(struct oa_tc6_desc *desc,
+			      void (*cb)(enum oa_tc6_event, void *, void *),
+			      void *arg)
 {
-	if (!desc)
-		return -EINVAL;
-
-	desc->callback = callback;
-	desc->callback_arg = arg;
-
-	return 0;
+	desc->event_cb = cb;
+	desc->event_cb_arg = arg;
 }
 
 /* True if the queue has a ready frame waiting to be transmitted. */
@@ -1202,11 +1247,15 @@ static int oa_tc6_rx_copy_slice(struct oa_tc6_desc *desc,
 	if (!closes)
 		return 0;
 
-	/* FD flags the closing frame as bad: still forward it, letting the drop
-	 * flag decide. */
+	/* FD flags the closing frame as bad: notify the app but still forward it
+	 * letting the drop flag decide. */
 	buf->frame_drop = !!(footer & OA_DATA_FOOTER_FD_MASK);
-	if (buf->frame_drop)
+	if (buf->frame_drop) {
 		desc->stats.rx_drop_fd++;
+		if (desc->event_cb)
+			desc->event_cb(OA_TC6_EVENT_ERR_RX_FRAME_DROP, NULL,
+				       desc->event_cb_arg);
+	}
 
 	/*
 	 * The MAC-PHY never strips the FCS, so it is dropped from the delivered
@@ -1232,7 +1281,8 @@ static int oa_tc6_rx_copy_slice(struct oa_tc6_desc *desc,
 	if (buf != &desc->rx_sink) {
 		desc->stats.rx_frames++;
 		desc->stats.rx_bytes += buf->len;
-		oa_tc6_queue_event(desc, OA_TC6_EVENT_RX);
+		if (desc->event_cb)
+			desc->event_cb(OA_TC6_EVENT_RX, NULL, desc->event_cb_arg);
 	} else {
 		desc->stats.rx_drop_nobuf++;
 	}
@@ -1255,7 +1305,8 @@ static void oa_tc6_rx_note_sync_loss(struct oa_tc6_desc *desc)
 		return;
 
 	desc->sync_lost = true;
-	oa_tc6_queue_event(desc, OA_TC6_EVENT_SYNCE);
+	if (desc->event_cb)
+		desc->event_cb(OA_TC6_EVENT_RESET, NULL, desc->event_cb_arg);
 }
 
 /* Pass-scoped state threaded through one RX transaction's footers. */
@@ -1290,6 +1341,9 @@ static bool oa_tc6_rx_footer_usable(struct oa_tc6_desc *desc, uint32_t footer,
 	 */
 	if (oa_tc6_crc1(footer)) {
 		desc->stats.rx_footer_parity_err++;
+		if (desc->event_cb)
+			desc->event_cb(OA_TC6_EVENT_ERR_RX_PARITY, NULL,
+				       desc->event_cb_arg);
 		oa_tc6_rx_drop_in_progress(desc, frame_buffer);
 		return false;
 	}
@@ -1442,6 +1496,10 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 	else if (ret)
 		return ret;
 
+	/* Snapshot per-queue credit to detect 0->non-zero recovery below. */
+	for (i = 0; i < desc->tx_q_count; i++)
+		desc->tx_q[i].prev_tx_credit = desc->tx_q[i].tx_credit;
+
 	for (i = 0; i < len; i++) {
 		footer = no_os_get_unaligned_be32(&chunks[desc->chunk_size]);
 
@@ -1473,6 +1531,24 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 	if (pass.have_good_footer)
 		desc->data_rx_credit = no_os_field_get(OA_DATA_FOOTER_RCA_MASK,
 						       pass.last_good_footer);
+
+	if (desc->event_cb) {
+		/* A footer reports RX chunks waiting -- notify the caller. */
+		if (pass.have_good_footer && desc->data_rx_credit)
+			desc->event_cb(OA_TC6_EVENT_RX_READY, NULL,
+				       desc->event_cb_arg);
+
+		/* Any queue's credit recovered from zero -- TX can resume. */
+		for (i = 0; i < desc->tx_q_count; i++) {
+			struct oa_tc6_queue *q = &desc->tx_q[i];
+
+			if (!q->prev_tx_credit && q->tx_credit) {
+				desc->event_cb(OA_TC6_EVENT_TX_CREDITS, NULL,
+					       desc->event_cb_arg);
+				break;
+			}
+		}
+	}
 
 	return 0;
 }
@@ -1718,7 +1794,6 @@ static int oa_tc6_run_data(struct oa_tc6_desc *desc)
 
 int oa_tc6_thread(struct oa_tc6_desc *desc)
 {
-	uint32_t events;
 	int ret;
 
 	/*
@@ -1732,11 +1807,7 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 	/* The bus is free here: service any STATUS0 read owed by the pass. */
 	if (!ret)
 		oa_tc6_service_status0(desc);
-	events = desc->pending_events;
-	desc->pending_events = 0;
 	capi_mutex_unlock(desc->ctrl_lock);
-
-	oa_tc6_dispatch_events(desc, events);
 
 	return ret;
 }

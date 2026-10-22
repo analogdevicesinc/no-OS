@@ -147,7 +147,35 @@ extern "C" {
 #define OA_TC6_IMASK0_HDREM		NO_OS_BIT(5)
 #define OA_TC6_IMSK1_RX_RDY_MASK	NO_OS_BIT(4)
 
-#define OA_TC6_STATUS0_RESETC	NO_OS_BIT(6) /* reset complete */
+/* STATUS0 error bits. Same bit positions as the OA_TC6_IMASK0_* masks: the
+ * interrupt-mask register and the status register share the layout. */
+#define OA_TC6_STATUS0_TXPE	NO_OS_BIT(0)    /* TX protocol error */
+#define OA_TC6_STATUS0_TXBOE	NO_OS_BIT(1)   /* TX buffer overflow */
+#define OA_TC6_STATUS0_TXBUE	NO_OS_BIT(2)   /* TX buffer underflow */
+#define OA_TC6_STATUS0_RXBOE	NO_OS_BIT(3)   /* RX buffer overflow */
+#define OA_TC6_STATUS0_LOFE	NO_OS_BIT(4)    /* loss of framing */
+#define OA_TC6_STATUS0_HDRE	NO_OS_BIT(5)    /* header error */
+#define OA_TC6_STATUS0_RESETC	NO_OS_BIT(6)  /* reset complete */
+#define OA_TC6_STATUS0_TXFCSE	NO_OS_BIT(11) /* TX frame check sequence error */
+#define OA_TC6_STATUS0_CDPE	NO_OS_BIT(12)   /* control data protection error */
+
+/* STATUS0 transmit-egress-timestamp-capture-available bits. Not errors: they
+ * latch a TSC-requested capture for the application to read, so the error path
+ * must leave them alone instead of clearing them out from under it. */
+#define OA_TC6_STATUS0_TTSCAA	NO_OS_BIT(8)
+#define OA_TC6_STATUS0_TTSCAB	NO_OS_BIT(9)
+#define OA_TC6_STATUS0_TTSCAC	NO_OS_BIT(10)
+#define OA_TC6_STATUS0_TTSCA_MASK \
+	(OA_TC6_STATUS0_TTSCAA | OA_TC6_STATUS0_TTSCAB | OA_TC6_STATUS0_TTSCAC)
+
+/* STATUS1 fault bits (single-port host subset; P2_* dual-port and TEST_ADC
+ * bits are intentionally omitted). */
+#define OA_TC6_STATUS1_RX_IFG_ERR NO_OS_BIT(8)	/* RX inter-frame-gap error */
+#define OA_TC6_STATUS1_MAX_RR_ERR NO_OS_BIT(9)	/* TX max collision retry hit */
+#define OA_TC6_STATUS1_SPI_ERR NO_OS_BIT(10)	/* SPI transaction error */
+#define OA_TC6_STATUS1_RX_ECC_ERR	NO_OS_BIT(11) /* RX FIFO size ECC error */
+#define OA_TC6_STATUS1_TX_ECC_ERR	NO_OS_BIT(12) /* TX FIFO size ECC error */
+#define OA_TC6_STATUS1_RD_ACC_ERR	NO_OS_BIT(30) /* read access error */
 
 /* Direct (memory-mapped) access to the Clause-22 PHY standard register space. */
 #define OA_TC6_PHY_STD_REG_BASE		0xFF00
@@ -243,16 +271,93 @@ struct oa_tc6_flags {
 	bool sync;	  /**< Instantaneous value */
 };
 
+/**
+ * @brief Detail payload passed to the event callback for STATUS0/STATUS1 error
+ * events. Points to the raw register values read (and cleared) when the
+ * extended-status footer was serviced. The callback receives a pointer to this
+ * for the OA_TC6_EVENT_ERROR and OA_TC6_EVENT_ERR_* STATUS events and for a
+ * RESET raised from STATUS0.RESETC; it is NULL for the per-chunk footer
+ * errors, RX_READY, TX_CREDITS and a RESET raised from a SYNC=0 footer. The
+ * pointer is valid only for the duration of the call.
+ */
+struct oa_tc6_error_detail {
+	uint32_t status0; /**< Raw STATUS0 latched at the error */
+	uint32_t status1; /**< Raw STATUS1 latched at the error */
+};
+
+/**
+ * @brief Events reported to the user callback registered via
+ * oa_tc6_register_callback().
+ *
+ *   OA_TC6_EVENT_ERROR      - STATUS0 had a set bit that maps to no known
+ *                             event, and no other STATUS0/1 event fired.
+ *                             STATUS0/1 have been cleared; the callback's
+ *                             detail argument points to a struct
+ *                             oa_tc6_error_detail with their raw values.
+ *   OA_TC6_EVENT_RESET      - The MAC-PHY reset and lost its configuration
+ *                             (data footer SYNC=0, or STATUS0.RESETC). Per the
+ *                             OA-TC6 spec the host must terminate transfers,
+ *                             reconfigure the MAC-PHY, and only then set
+ *                             CONFIG0.SYNC. The driver does NOT re-assert SYNC
+ *                             on its own; re-run configuration in response.
+ *   OA_TC6_EVENT_RX_READY  - One or more RX chunks are waiting in the MAC
+ *                             FIFO (RCA > 0 in the footer). The caller should
+ *                             ensure another poll runs soon.
+ *   OA_TC6_EVENT_TX_CREDITS - TX credits became non-zero after being fully
+ *                             exhausted. Transmission can resume.
+ *   OA_TC6_EVENT_RX         - A received frame was completed in the RX pool.
+ *   OA_TC6_EVENT_TX         - The MAC-PHY accepted one or more queued TX
+ *                             frames; their buffers are free again.
+ *
+ *   OA_TC6_EVENT_ERR_* -      A specific error bit was set in STATUS0/STATUS1
+ *                             when a footer flagged EXST or HDRB, or
+ *                             a per-chunk footer error (parity/frame-drop) was
+ *                             detected. For the STATUS0/STATUS1 errors both
+ *                             registers have been read and cleared; the callback
+ *                             fires once per set bit so several may be reported
+ *                             in a row, each with the detail argument pointing
+ *                             at the raw STATUS0/1 snapshot (struct
+ *                             oa_tc6_error_detail). The per-chunk footer errors
+ *                             pass a NULL detail.
+ *
+ * The callback signature is void (*)(enum oa_tc6_event, void *detail, void *arg)
+ * where arg is the value supplied to oa_tc6_register_callback() and detail is as
+ * described above (NULL unless noted).
+ */
 enum oa_tc6_event {
-	OA_TC6_EVENT_RX,
-	OA_TC6_EVENT_TX,
-	OA_TC6_EVENT_TXPE,
-	OA_TC6_EVENT_TXBOE,
-	OA_TC6_EVENT_TXBUE,
-	OA_TC6_EVENT_RXBOE,
-	OA_TC6_EVENT_LOFE,
-	OA_TC6_EVENT_HDRE,
-	OA_TC6_EVENT_SYNCE,
+	OA_TC6_EVENT_ERROR = 0,
+	OA_TC6_EVENT_RX_READY = 1,
+	OA_TC6_EVENT_TX_CREDITS = 2,
+
+	OA_TC6_EVENT_ERR_TX_PROTOCOL,	/* STATUS0.TXPE  */
+	OA_TC6_EVENT_ERR_TX_OVERFLOW,	/* STATUS0.TXBOE */
+	OA_TC6_EVENT_ERR_TX_UNDERFLOW,	/* STATUS0.TXBUE */
+	OA_TC6_EVENT_ERR_RX_OVERFLOW,	/* STATUS0.RXBOE */
+	OA_TC6_EVENT_ERR_LOSS_OF_FRAME, /* STATUS0.LOFE  */
+	OA_TC6_EVENT_ERR_HEADER,	/* STATUS0.HDRE  */
+
+	/* Per-chunk footer errors (detected inline, not via STATUS0/1). */
+	OA_TC6_EVENT_ERR_RX_PARITY,	/* footer parity (P) mismatch */
+	OA_TC6_EVENT_ERR_RX_FRAME_DROP, /* footer FD=1: frame flagged bad */
+
+	/* Further STATUS0 faults. */
+	OA_TC6_EVENT_ERR_TX_FCS,	 /* STATUS0.TXFCSE */
+	OA_TC6_EVENT_ERR_CTRL_DATA_PROT, /* STATUS0.CDPE   */
+
+	/* STATUS1 faults. */
+	OA_TC6_EVENT_ERR_RX_IFG,       /* STATUS1.RX_IFG_ERR */
+	OA_TC6_EVENT_ERR_TX_MAX_RETRY, /* STATUS1.MAX_RR_ERR */
+	OA_TC6_EVENT_ERR_SPI,	       /* STATUS1.SPI_ERR    */
+	OA_TC6_EVENT_ERR_RX_ECC,       /* STATUS1.RX_ECC_ERR */
+	OA_TC6_EVENT_ERR_TX_ECC,       /* STATUS1.TX_ECC_ERR */
+	OA_TC6_EVENT_ERR_READ_ACCESS,  /* STATUS1.RD_ACC_ERR */
+
+	/* Not an error: MAC-PHY reset / config sync lost -- reconfigure. */
+	OA_TC6_EVENT_RESET, /* footer SYNC=0 or STATUS0.RESETC */
+
+	/* Not errors: frame traffic. */
+	OA_TC6_EVENT_RX, /* a received frame is ready in the RX pool */
+	OA_TC6_EVENT_TX, /* the MAC-PHY accepted queued TX frames */
 };
 
 /**
@@ -275,6 +380,7 @@ struct oa_tc6_queue {
 	uint32_t tail;
 	uint32_t count;
 	uint32_t tx_credit;
+	uint32_t prev_tx_credit;
 };
 
 /**
@@ -331,7 +437,7 @@ struct oa_tc6_desc {
 	 * colliding with them. Under
 	 * an RTOS ctrl_lock must therefore be a recursive, priority-inheriting
 	 * mutex -- recursive because the poll path re-enters it for register
-	 * reads (BUFST bootstrap, STATUS0 service), and
+	 * reads (BUFST bootstrap, STATUS0 service, event_cb), and
 	 * priority-inheriting so a lower-priority poll task holding the bus
 	 * cannot be starved by a higher-priority register reader waiting on it.
  *
@@ -433,9 +539,14 @@ struct oa_tc6_desc {
  */
 	bool irq_pending;
 
-	void (*callback)(struct oa_tc6_desc *, uint32_t, void *);
-	void *callback_arg;
-	uint32_t pending_events;
+/*
+	 * Optional user callback invoked when a data-chunk footer or a
+	 * STATUS0/1 read reports a noteworthy event (see oa_tc6_event). Called
+	 * from the main-loop poll context, never from an ISR. NULL if no
+	 * callback has been registered.
+ */
+	void (*event_cb)(enum oa_tc6_event, void *, void *);
+	void *event_cb_arg;
 
 /*
 	 * Only ever incremented, except by oa_tc6_reset_stats(); callers that
@@ -527,10 +638,16 @@ int oa_tc6_get_xfer_flags(struct oa_tc6_desc *, struct oa_tc6_flags *, bool);
  */
 int oa_tc6_thread(struct oa_tc6_desc *);
 
-/* Register a function that will be called as a result of OA TC6 events */
-int oa_tc6_register_callback(struct oa_tc6_desc *,
-			     void (*)(struct oa_tc6_desc *, uint32_t, void *),
-			     void *);
+/*
+ * Register a callback to be notified of OA-TC6 events (error conditions,
+ * RX frames available, TX credits recovered). Pass NULL to unregister.
+ * The callback is invoked from the poll context (not from an ISR). Its detail
+ * argument points to a struct oa_tc6_error_detail for STATUS0/1 error events and
+ * is NULL otherwise (see enum oa_tc6_event); arg is passed through verbatim.
+ */
+void oa_tc6_register_callback(struct oa_tc6_desc *,
+			      void (*cb)(enum oa_tc6_event, void *, void *),
+			      void *arg);
 
 /* Trigger a soft reset of the MAC-PHY and wait for completion */
 int oa_tc6_sw_reset(struct oa_tc6_desc *);
