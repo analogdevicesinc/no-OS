@@ -1198,7 +1198,9 @@ static int oa_tc6_handle_flags(struct oa_tc6_desc *desc)
 
 /*
  * Service a STATUS0 read/clear owed by a prior data pass (EXST/HDRB). Caller
- * must hold the bus with no data transfer in progress.
+ * must hold the bus with no async DMA in flight, so the ctrl read inside cannot
+ * spin in oa_tc6_ctrl_transceive (see the sync thread and the async IDLE
+ * branch).
  */
 static void oa_tc6_service_status0(struct oa_tc6_desc *desc)
 {
@@ -1611,8 +1613,11 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 	*tx_accepted = pass.tx_accepted;
 
 	/*
-	 * A status read is owed (EXST/HDRB). Defer it to a single read once the
-	 * data pass is over, where the bus is free.
+	 * A status read is owed (EXST/HDRB) but MUST NOT be issued here: this
+	 * runs from the async completion path with async_state still
+	 * DATA_PENDING, so a ctrl read would spin in oa_tc6_ctrl_transceive to
+	 * the watchdog and wedge the RX DMA. Defer it to the state machine's IDLE
+	 * branch, where the bus is genuinely free (see oa_tc6_thread_async).
 	 */
 	if (pass.status_pending)
 		desc->status0_pending = true;
@@ -1689,17 +1694,116 @@ int oa_tc6_get_xfer_flags(struct oa_tc6_desc *desc, struct oa_tc6_flags *flags,
 	return 0;
 }
 
-/* Clock len bytes of ctrl_chunks. */
+/*
+ * Watchdog: has a transfer launched at start_us overrun its deadline? Detects a
+ * lost completion, which serialization alone cannot. False when disabled or no
+ * clock is available.
+ */
+static bool oa_tc6_xfer_timed_out(uint64_t start_us, bool clock_ok)
+{
+	uint64_t now = 0;
+
+	if (!CONFIG_OA_ASYNC_XFER_TIMEOUT_US || !clock_ok)
+		return false;
+
+	if (capi_uptime(&now))
+		return false;
+
+	/* A backward clock step would underflow (now - start) and fire the
+	 * watchdog spuriously -- treat it as not-yet-timed-out. */
+	if (now <= start_us)
+		return false;
+
+	return (now - start_us) > CONFIG_OA_ASYNC_XFER_TIMEOUT_US;
+}
+
+static bool oa_tc6_async_xfer_timed_out(struct oa_tc6_desc *desc)
+{
+	return oa_tc6_xfer_timed_out(desc->async_start_us,
+				     desc->async_clock_ok);
+}
+
+/*
+ * Tear down a wedged async data transfer: abort the DMA, reset the state
+ * machine and drop the ctrl_lock hold the transfer took at launch.
+ */
+static void oa_tc6_async_abort(struct oa_tc6_desc *desc)
+{
+	bool held = desc->async_state == OA_ASYNC_DATA_PENDING;
+
+	capi_spi_abort_async(desc->comm_desc);
+	oa_tc6_tx_commit(desc, 0);
+	oa_tc6_rx_xfer_lost(desc);
+	desc->async_xfer_done = false;
+	desc->async_xfer_error = false;
+	desc->async_state = OA_ASYNC_IDLE;
+
+	if (held)
+		capi_mutex_unlock(desc->ctrl_lock);
+}
+
+/*
+ * Block until any in-flight async data transfer completes -- ctrl and data
+ * transactions share the same SPI bus. Under an RTOS another task never gets
+ * here mid-transfer: ctrl_lock is held for the whole in-flight transfer (see
+ * oa_tc6_thread_async), so it blocks on the mutex instead. The poll task itself
+ * (recursive lock) and single-threaded bare-metal (no-op lock) rely on this
+ * bounded spin. The watchdog breaks it if the completion is genuinely lost.
+ */
+static void oa_tc6_async_bus_wait(struct oa_tc6_desc *desc)
+{
+	if (!desc->async_mode)
+		return;
+
+	while (desc->async_state == OA_ASYNC_DATA_PENDING &&
+	       !desc->async_xfer_done) {
+		if (oa_tc6_async_xfer_timed_out(desc)) {
+			oa_tc6_async_abort(desc);
+			break;
+		}
+	}
+}
+
+/*
+ * Clock len bytes of ctrl_chunks. In async mode the transfer goes through the
+ * DMA path like a data transfer, under the same watchdog, and the caller waits
+ * for its completion.
+ */
 static int oa_tc6_ctrl_transceive(struct oa_tc6_desc *desc, uint32_t len)
 {
 	struct capi_spi_transfer xfer = { 0 };
+	uint64_t start_us = 0;
+	bool clock_ok;
+	int ret;
+
+	oa_tc6_async_bus_wait(desc);
 
 	xfer.tx_buf = desc->ctrl_chunks;
 	xfer.rx_buf = desc->ctrl_chunks;
 	xfer.tx_size = len;
 	xfer.rx_size = len;
 
-	return capi_spi_transceive(desc->comm_desc, &xfer);
+	if (!desc->async_mode)
+		return capi_spi_transceive(desc->comm_desc, &xfer);
+
+	desc->ctrl_xfer_done = false;
+	desc->ctrl_xfer_error = false;
+	desc->ctrl_pending = true;
+	clock_ok = !capi_uptime(&start_us);
+
+	ret = capi_spi_transceive_async(desc->comm_desc, &xfer);
+	while (!ret && !desc->ctrl_xfer_done) {
+		if (oa_tc6_xfer_timed_out(start_us, clock_ok)) {
+			capi_spi_abort_async(desc->comm_desc);
+			ret = -ETIMEDOUT;
+		}
+	}
+	desc->ctrl_pending = false;
+
+	if (!ret && desc->ctrl_xfer_error)
+		ret = -EIO;
+
+	return ret;
 }
 
 /*
@@ -1779,7 +1883,8 @@ static bool oa_tc6_tx_should_run(struct oa_tc6_desc *desc, bool *force,
 }
 
 /*
- * Data-pass prologue: consume a pending interrupt into a forced empty chunk, and bootstrap the aggregate RX
+ * Common data-pass prologue for both the sync and async datapaths: consume a
+ * pending interrupt into a forced empty chunk, and bootstrap the aggregate RX
  * credit once from BUFST (later kept current from data-chunk footers).
  */
 static int oa_tc6_data_pass_begin(struct oa_tc6_desc *desc, bool *force)
@@ -1830,7 +1935,9 @@ static int oa_tc6_pack_xfer(struct oa_tc6_desc *desc, bool *force,
 
 /*
  * Turn a completed data transaction's chunks into frame(s) and advance
- * *rx_limit. status0_pending is serviced once the whole data pass is over.
+ * *rx_limit. Deliberately does not service status0_pending -- that stays
+ * deferred to the async IDLE branch, never the completion path (a ctrl read
+ * here would collide with an in-flight transfer on the shared bus).
  */
 static int oa_tc6_process_rx(struct oa_tc6_desc *desc, uint32_t bytes_total,
 			     uint32_t *rx_limit)
@@ -1908,10 +2015,227 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 	 */
 	capi_mutex_lock(desc->ctrl_lock);
 	ret = oa_tc6_run_data(desc);
-	/* The bus is free here: service any STATUS0 read owed by the pass. */
+	/*
+	 * Bus is free here in sync mode (no async DMA in flight), so a ctrl read
+	 * cannot spin in oa_tc6_ctrl_transceive. Service any STATUS0 read owed
+	 * by the data pass -- the async path does this from its IDLE branch
+	 * instead.
+	 */
 	if (!ret)
 		oa_tc6_service_status0(desc);
 	capi_mutex_unlock(desc->ctrl_lock);
+
+	return ret;
+}
+
+/*
+ * SPI completion callback registered with the CAPI SPI controller.
+ * Called from the DMA (or interrupt) ISR when a transfer started by
+ * oa_tc6_thread_async() completes or errors. Sets the done flag so the
+ * next main-loop call to oa_tc6_thread_async() can advance the state machine.
+ */
+static void oa_tc6_spi_callback(enum capi_async_event event, void *arg,
+				int event_extra)
+{
+	struct oa_tc6_desc *desc = arg;
+
+	(void)event_extra;
+
+	if (desc->ctrl_pending) {
+		if (event != CAPI_SPI_EVENT_XFR_DONE)
+			desc->ctrl_xfer_error = true;
+		desc->ctrl_xfer_done = true;
+		return;
+	}
+
+	if (event != CAPI_SPI_EVENT_XFR_DONE)
+		desc->async_xfer_error = true;
+
+	desc->async_xfer_done = true;
+
+	if (desc->async_state == OA_ASYNC_DATA_PENDING &&
+	    desc->async_xfer_done_cb)
+		desc->async_xfer_done_cb(desc->async_xfer_done_cb_arg);
+}
+
+/*
+ * OA_ASYNC_IDLE handler: pack the next batch of chunks and kick off a DMA
+ * transfer, transitioning to OA_ASYNC_DATA_PENDING. If there is nothing to
+ * transfer, stay in OA_ASYNC_IDLE.
+ *
+ * Credit (TXC/RCA) is kept current from data-chunk footers, so a BUFST read is
+ * only needed on the very first call (credit_valid == false). When TX is queued
+ * but the MAC last advertised no credit, an empty chunk is clocked instead so
+ * its footer refreshes the credit counts before the next poll sends.
+ *
+ * Returns 0 on success (transfer started or nothing to do), negative on error.
+ */
+static int oa_tc6_async_start(struct oa_tc6_desc *desc)
+{
+	struct capi_spi_transfer xfer = { 0 };
+	uint32_t bytes_total;
+	bool force;
+	int ret;
+
+	desc->async_state = OA_ASYNC_IDLE;
+
+	ret = oa_tc6_data_pass_begin(desc, &force);
+	if (ret)
+		return ret;
+
+	oa_tc6_pack_xfer(desc, &force, &xfer, &bytes_total);
+	if (!bytes_total)
+		return 0; /* nothing to clock -- stay idle */
+
+	desc->async_bytes_total = bytes_total;
+	desc->async_xfer_done = false;
+	desc->async_xfer_error = false;
+
+	desc->async_state = OA_ASYNC_DATA_PENDING;
+
+	/* Stamp launch time for the watchdog; disable it if no clock. */
+	desc->async_clock_ok = (capi_uptime(&desc->async_start_us) == 0);
+
+	ret = capi_spi_transceive_async(desc->comm_desc, &xfer);
+	if (ret) {
+		desc->async_state = OA_ASYNC_IDLE;
+		desc->irq_pending = true;
+		return ret;
+	}
+
+	return 0;
+}
+
+/*
+ * OA_ASYNC_DATA_PENDING handler: called once the DMA transfer completes.
+ * Turns the received chunks into frames and reports whether the caller should
+ * try to start another transfer this round (true) or stop (false, hit the
+ * per-poll RX limit).
+ *
+ * Returns 0 and sets *again; negative on error (state reset to idle by caller).
+ */
+static int oa_tc6_async_complete(struct oa_tc6_desc *desc, bool *again)
+{
+	int ret;
+
+	*again = false;
+
+	ret = oa_tc6_process_rx(desc, desc->async_bytes_total,
+				&desc->async_rx_limit);
+	if (ret)
+		return ret;
+
+	/*
+	 * Keep draining while the last footer reports RCA > 0, bounded by the
+	 * safety cap: a fixed per-poll count isn't enough, since at line rate
+	 * the RX FIFO can refill faster than a few transactions drain it and
+	 * overflow into LOFE.
+	 */
+	*again = desc->data_rx_credit &&
+		 desc->async_rx_limit <= CONFIG_OA_THREAD_RX_LIMIT;
+
+	return 0;
+}
+
+/**
+ * @brief Non-blocking variant of oa_tc6_thread() for DMA-capable SPI.
+ *
+ * A two-state machine driven once per main-loop poll:
+ *
+ *   OA_ASYNC_IDLE            start a DMA transfer (OA_ASYNC_DATA_PENDING),
+ *                            or stay idle if there is nothing to send/receive.
+ *   OA_ASYNC_DATA_PENDING    wait for the DMA completion flag; once set,
+ *                            process the received chunks and either start the
+ *                            next transfer (staying PENDING) or go back to IDLE
+ *                            after CONFIG_OA_THREAD_RX_LIMIT rounds.
+ *
+ * On any error the state is reset to OA_ASYNC_IDLE so the next poll retries.
+ *
+ * @param desc - the OA TC6 descriptor
+ * @return 0 on success (including "DMA still running, try again later"),
+ *         negative error code on SPI or protocol error.
+ */
+int oa_tc6_thread_async(struct oa_tc6_desc *desc)
+{
+	bool again;
+	int ret;
+
+	/*
+	 * Bus-lock discipline: ctrl_lock is held for exactly as long as a
+	 * transfer is in flight (async_state == OA_ASYNC_DATA_PENDING), across
+	 * every poll iteration that spans -- taken when a transfer starts below
+	 * and released only once state falls back to IDLE. This mutually
+	 * excludes register access on the shared bus without a busy-spin; the
+	 * poll task both takes and releases it, as FreeRTOS ownership requires.
+	 */
+	switch (desc->async_state) {
+	case OA_ASYNC_DATA_PENDING:
+		/* DMA still in flight -- yield to the main loop, bus still held. */
+		if (!desc->async_xfer_done) {
+			/* Watchdog: a lost completion would wedge here with the
+			 * bus lock held -- abort, release it, report the timeout. */
+			if (oa_tc6_async_xfer_timed_out(desc)) {
+				oa_tc6_async_abort(desc);
+				return -ETIMEDOUT;
+			}
+			return 0;
+		}
+
+		/* async_xfer_done stays set until the next launch, so a ctrl
+		 * access from event_cb below does not wait on this transfer. */
+		if (desc->async_xfer_error) {
+			desc->async_xfer_error = false;
+			desc->async_state = OA_ASYNC_IDLE;
+			oa_tc6_tx_commit(desc, 0);
+			oa_tc6_rx_xfer_lost(desc);
+			capi_mutex_unlock(desc->ctrl_lock);
+			return -EIO;
+		}
+
+		ret = oa_tc6_async_complete(desc, &again);
+		if (ret || !again) {
+			desc->async_state = OA_ASYNC_IDLE;
+			capi_mutex_unlock(desc->ctrl_lock);
+			return ret;
+		}
+		/*
+		 * Room for more this round -- start the next transfer below with the
+		 * bus still held (state stays DATA_PENDING on a successful restart).
+		 */
+		break;
+
+	case OA_ASYNC_IDLE:
+	default:
+		desc->async_rx_limit = 0;
+		/* Acquire the bus before starting a transfer. */
+		capi_mutex_lock(desc->ctrl_lock);
+		/*
+		 * Bus is free here (state IDLE, no DMA in flight, lock held), so a
+		 * ctrl read cannot spin in oa_tc6_ctrl_transceive. This is the only
+		 * safe point to service a STATUS0 read/clear owed by a prior
+		 * transaction.
+		 */
+		oa_tc6_service_status0(desc);
+		/*
+		 * Do NOT read BUFST here -- RCA is kept current from every
+		 * data-chunk footer, so BUFST is only for the one-time bootstrap
+		 * (credit_valid == false) inside async_start(). RX arriving while
+		 * idle is handled by the nINT/RX_RDY interrupt (irq_pending),
+		 * which makes async_start() force a DV=0 probe to refresh RCA.
+		 */
+		break;
+	}
+
+	ret = oa_tc6_async_start(desc);
+
+	/*
+	 * async_start() leaves the state at OA_ASYNC_DATA_PENDING only when it
+	 * actually launched a transfer; on "nothing to send" or a start error it
+	 * leaves (or resets) it to OA_ASYNC_IDLE. Release the bus whenever no
+	 * transfer is in flight; keep holding it across the DMA otherwise.
+	 */
+	if (desc->async_state != OA_ASYNC_DATA_PENDING)
+		capi_mutex_unlock(desc->ctrl_lock);
 
 	return ret;
 }
@@ -2131,6 +2455,8 @@ int oa_tc6_init(struct oa_tc6_desc *desc, struct oa_tc6_init_param *param)
 
 	desc->chunk_size = OA_CHUNK_SIZE;
 	desc->comm_desc = param->comm_desc;
+	desc->async_xfer_done_cb = param->async_xfer_done_cb;
+	desc->async_xfer_done_cb_arg = param->async_xfer_done_cb_arg;
 	desc->rx_pool = param->rx_pool;
 	desc->rx_pool_size = param->rx_pool_size;
 	oa_tc6_pool_reset(desc->rx_pool, desc->rx_pool_size);
@@ -2179,6 +2505,16 @@ int oa_tc6_init(struct oa_tc6_desc *desc, struct oa_tc6_init_param *param)
 	if (ret)
 		goto err_mutex;
 
+	/* Last: there is no unregister to unwind a later failure with. Control
+	 * transfers stay synchronous until the callback is in place. */
+	if (param->async_mode) {
+		ret = capi_spi_register_callback(param->comm_desc->controller,
+						 oa_tc6_spi_callback, desc);
+		if (ret)
+			goto err_mutex;
+		desc->async_mode = true;
+	}
+
 	return 0;
 
 err_mutex:
@@ -2197,6 +2533,12 @@ int oa_tc6_remove(struct oa_tc6_desc *desc)
 {
 	if (!desc)
 		return -ENODEV;
+
+	/* A transfer still in flight would complete into a descriptor nobody
+	 * owns, and leave the controller busy for whoever initializes next. */
+	capi_mutex_lock(desc->ctrl_lock);
+	oa_tc6_async_abort(desc);
+	capi_mutex_unlock(desc->ctrl_lock);
 
 	capi_mutex_deinit(desc->data_lock);
 	capi_mutex_deinit(desc->ctrl_lock);

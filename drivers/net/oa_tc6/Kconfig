@@ -7,4 +7,11 @@ config OA_THREAD_RX_LIMIT
       Maximum number of receive frames the OA-TC6 RX thread
       processes in a single iteration before yielding.
 
+config OA_ASYNC_XFER_TIMEOUT_US
+    int "Async transfer watchdog timeout (us)"
+    default 50000
+    help
+      An asynchronous transfer that does not complete within this time
+      is aborted. 0 disables the watchdog. Needs capi_uptime().
+
 endif
