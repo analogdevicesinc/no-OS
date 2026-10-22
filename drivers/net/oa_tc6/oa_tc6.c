@@ -244,6 +244,12 @@ int oa_tc6_reg_update(struct oa_tc6_desc *desc, uint32_t addr, uint32_t val,
 }
 
 
+/* May queue qi clock its next chunk? Any credit will do. */
+static bool oa_tc6_tx_credit_ok(struct oa_tc6_desc *desc, uint8_t qi)
+{
+	return desc->tx_q[qi].tx_credit > 0;
+}
+
 /*
  * Claim a caller-owned frame pool. The pools are typically static storage the
  * caller reuses across init cycles, so a slot can still carry the state a
@@ -391,6 +397,67 @@ static int oa_tc6_get_first_tx_frame(struct oa_tc6_desc *desc,
 				     struct oa_tc6_frame_buffer **buffer)
 {
 	return oa_tc6_peek_tx_frame(desc, q, 0, buffer);
+}
+
+/* How many chunks fit in one SPI transaction (header + payload per chunk). */
+static uint32_t oa_tc6_spi_max_chunks(struct oa_tc6_desc *desc)
+{
+	return OA_SPI_BUFF_LEN / (desc->chunk_size + OA_HEADER_LEN);
+}
+
+/*
+ * Index of the queue whose tail frame is open on the wire -- partially clocked
+ * (->index != 0, SV sent, no EV yet). At most one frame is ever open, since an
+ * incomplete frame ends the transaction and is closed before any other frame
+ * opens. Returns -1 if none is open.
+ */
+static int oa_tc6_open_frame_qi(struct oa_tc6_desc *desc)
+{
+	struct oa_tc6_frame_buffer *frame;
+	uint8_t i;
+
+	for (i = 0; i < desc->tx_q_count; i++) {
+		if (oa_tc6_get_first_tx_frame(desc, &desc->tx_q[i], &frame))
+			continue;
+		if (frame->index)
+			return i;
+	}
+
+	return -1;
+}
+
+/**
+ * @brief Check whether the RX pool has no room left for a fresh frame --
+ * the exact condition under which oa_tc6_get_empty_rx_buff() would return
+ * -ENOBUFS for a new buffer. Used to assert NORX on outgoing TX headers so
+ * the MAC-PHY stops returning RX data (DV=0) before the pool is actually
+ * exhausted.
+ * @param desc - the OA TC6 descriptor.
+ * @return true if the pool is full, false otherwise
+ */
+static bool oa_tc6_rx_pool_full(struct oa_tc6_desc *desc)
+{
+	struct oa_tc6_frame_buffer *slot;
+	uint32_t next;
+	bool full;
+
+	capi_mutex_lock(desc->data_lock);
+
+	slot = &desc->rx_pool[desc->rx_head];
+	if (slot->state == OA_BUFF_FREE) {
+		full = false;
+	} else if (slot->state == OA_BUFF_RX_IN_PROGRESS &&
+		   desc->rx_pool_size == 1) {
+		/* The only slot holds an open frame: NORX would stall its rest. */
+		full = false;
+	} else {
+		next = (desc->rx_head + 1) % desc->rx_pool_size;
+		full = desc->rx_pool[next].state != OA_BUFF_FREE;
+	}
+
+	capi_mutex_unlock(desc->data_lock);
+
+	return full;
 }
 
 /**
@@ -576,6 +643,295 @@ int oa_tc6_put_rx_frame(struct oa_tc6_desc *desc,
 	return 0;
 }
 
+/* Running state of one TX packing pass into the SPI buffer. */
+struct oa_tc6_tx_pack {
+	uint8_t *buf;		 /* SPI TX buffer being filled */
+	uint32_t spi_index;	 /* bytes written so far */
+	uint32_t chunks_written; /* chunks written so far */
+	uint32_t max_chunks;	 /* chunks this pass may clock at most */
+};
+
+/*
+ * Emit one DV=0 chunk: it carries no TX data (consumes no TX credit) and exists
+ * only to clock the bus -- to drain RX, solicit credit, or surface a pending
+ * error. `vs` names the queue whose credit the returned footer should refresh.
+ */
+static void oa_tc6_emit_empty_chunk(struct oa_tc6_desc *desc,
+				    struct oa_tc6_tx_pack *pack, uint32_t norx,
+				    uint8_t vs)
+{
+	uint32_t header;
+
+	header = no_os_field_prep(OA_DATA_HEADER_DNC_MASK, 1);
+	header |= no_os_field_prep(OA_DATA_HEADER_VS_MASK, vs);
+	header |= norx;
+	header |= oa_tc6_crc1(header);
+
+	no_os_put_unaligned_be32(header, &pack->buf[pack->spi_index]);
+	pack->spi_index += desc->chunk_size + OA_HEADER_LEN;
+	desc->tx_chunk_credit_q[pack->chunks_written] = 0;
+	desc->tx_chunk_eof_q[pack->chunks_written] = -1;
+	pack->chunks_written++;
+}
+
+/*
+ * Fill any remaining bus room with DV=0 chunks so more RX chunks than we clocked
+ * out as TX can still be received. Bounded by the physical SPI buffer and the RX
+ * count only -- NOT by TX credit, which dummy chunks do not consume; gating this
+ * on credit would stall RX whenever TX credit is low though the bus is ready.
+ * Legal with a frame open: DV=0 carries no frame data (7.3.8.1, 7.7).
+ */
+static void oa_tc6_pack_rx_drain(struct oa_tc6_desc *desc,
+				 struct oa_tc6_tx_pack *pack,
+				 uint32_t rx_nchunks, uint32_t norx,
+				 uint8_t force_vs)
+{
+	while (rx_nchunks > pack->chunks_written &&
+	       pack->chunks_written < pack->max_chunks)
+		oa_tc6_emit_empty_chunk(desc, pack, norx, force_vs);
+}
+
+/* Data-chunk header for one chunk of an outgoing frame (no CRC). */
+static uint32_t oa_tc6_frame_chunk_header(struct oa_tc6_frame_buffer *frame,
+					  bool first_chunk, bool last_chunk,
+					  uint32_t chunk_bytes, uint32_t norx)
+{
+	uint32_t header;
+
+	header = no_os_field_prep(OA_DATA_HEADER_DNC_MASK, 1);
+	header |= no_os_field_prep(OA_DATA_HEADER_DV_MASK, 1);
+	header |= no_os_field_prep(OA_DATA_HEADER_VS_MASK, frame->vs);
+	header |= norx;
+
+	if (first_chunk) {
+		header |= no_os_field_prep(OA_DATA_HEADER_SV_MASK, 1);
+		header |= no_os_field_prep(OA_DATA_HEADER_TSC_MASK, frame->tsc);
+	}
+
+	if (last_chunk) {
+		header |= no_os_field_prep(OA_DATA_HEADER_EV_MASK, 1);
+		header |= no_os_field_prep(OA_DATA_HEADER_EBO_MASK,
+					   chunk_bytes - 1);
+	}
+
+	return header;
+}
+
+enum oa_tc6_pack_result {
+	OA_PACK_COMPLETE,   /* the whole frame was clocked (SV..EV) */
+	OA_PACK_INCOMPLETE, /* ran out of credit or SPI room before EV */
+};
+
+/*
+ * Clock as many of one frame's chunks as TX credit and SPI-buffer room allow,
+ * starting at *frame_offset (the resume point) and advancing it. SV marks the
+ * first chunk, EV the last; a frame that runs out of either is left INCOMPLETE
+ * and resumed next pass.
+ */
+static enum oa_tc6_pack_result
+oa_tc6_pack_frame(struct oa_tc6_desc *desc, struct oa_tc6_tx_pack *pack,
+		  struct oa_tc6_queue *q, uint8_t qi,
+		  struct oa_tc6_frame_buffer *frame, uint32_t *frame_offset,
+		  uint32_t norx)
+{
+	while (*frame_offset < frame->len &&
+	       pack->chunks_written < pack->max_chunks &&
+	       oa_tc6_tx_credit_ok(desc, qi)) {
+		uint32_t chunk_bytes =
+			no_os_min(desc->chunk_size, frame->len - *frame_offset);
+		bool first_chunk = (*frame_offset == 0);
+		bool last_chunk = (*frame_offset + chunk_bytes == frame->len);
+		uint32_t header;
+		uint8_t *dst;
+
+		header = oa_tc6_frame_chunk_header(
+			frame, first_chunk, last_chunk, chunk_bytes, norx);
+		header |= oa_tc6_crc1(header);
+		no_os_put_unaligned_be32(header, &pack->buf[pack->spi_index]);
+		pack->spi_index += OA_HEADER_LEN;
+
+		dst = &pack->buf[pack->spi_index];
+		memcpy(dst, &frame->data[*frame_offset], chunk_bytes);
+		if (chunk_bytes < desc->chunk_size) {
+			/* A chunk is always chunk_size on the wire; zero-pad a
+			 * short end chunk (EBO marks the valid length) so no
+			 * stale SPI-buffer bytes are clocked out. */
+			memset(dst + chunk_bytes, 0,
+			       desc->chunk_size - chunk_bytes);
+		}
+		pack->spi_index += desc->chunk_size;
+
+		desc->tx_chunk_credit_q[pack->chunks_written] = qi;
+		desc->tx_chunk_eof_q[pack->chunks_written] =
+			last_chunk ? (int8_t)qi : -1;
+		pack->chunks_written++;
+		q->tx_credit--;
+		*frame_offset += chunk_bytes;
+	}
+
+	return (*frame_offset < frame->len) ? OA_PACK_INCOMPLETE
+					    : OA_PACK_COMPLETE;
+}
+
+/*
+ * Pack as many of queue qi's ready frames into the transaction as credit and
+ * SPI-buffer room allow (only its first when one_frame), counting each into
+ * tx_pending_done[qi] (applied to the real ring only once the transceive
+ * succeeds -- see oa_tc6_tx_commit()).
+ *
+ * Returns true if a frame was left OPEN on the wire (SV clocked, no EV): no
+ * other queue may be serviced until it closes, since a second SV before its EV
+ * is a Repeated Frame Start (TXPE) and the MAC would drop both frames. A DV=0
+ * chunk is not affected -- the MAC-PHY ignores its payload and never runs it
+ * through the protocol check -- so RX can still be drained and the open
+ * queue's credit solicited mid-frame.
+ */
+static bool oa_tc6_pack_queue(struct oa_tc6_desc *desc,
+			      struct oa_tc6_tx_pack *pack, uint8_t qi,
+			      uint32_t norx, bool one_frame)
+{
+	struct oa_tc6_queue *q = &desc->tx_q[qi];
+
+	for (;;) {
+		struct oa_tc6_frame_buffer *frame;
+		uint32_t frame_offset;
+		enum oa_tc6_pack_result res;
+
+		if (oa_tc6_peek_tx_frame(desc, q, desc->tx_pending_done[qi],
+					 &frame))
+			return false;
+
+		/* Resume point. ->index is the real ring state, untouched until
+		 * commit. */
+		frame_offset = frame->index;
+
+		res = oa_tc6_pack_frame(desc, pack, q, qi, frame, &frame_offset,
+					norx);
+
+		if (res == OA_PACK_INCOMPLETE) {
+			/*
+			 * Record the resume offset -- applied to the real frame
+			 * only when oa_tc6_tx_commit() confirms this pass
+			 * succeeded, so a failed transfer resends from the true
+			 * state. If any chunk was clocked the frame is now open
+			 * (end the transaction); if none was (fresh frame, zero
+			 * credit) leave it queued so the DV=0 paths can refresh
+			 * credit from the returned footer.
+			 */
+			desc->tx_pending_incomplete_frame = frame;
+			desc->tx_pending_incomplete_index = frame_offset;
+			return frame_offset > 0;
+		}
+
+		/* Fully packed: count it and look past it for more, still from
+		 * the real (unmoved) tail. */
+		desc->tx_pending_done[qi]++;
+		if (one_frame)
+			return false;
+	}
+}
+
+/**
+ * @brief Convert queued OA_BUFF_TX_READY frames to chunks; append DV=0
+ * dummy chunks if more RX is available than TX.
+ *
+ * Queues are serviced in strict priority, the highest-index queue first, each
+ * up to its own footer-tracked credit -- decremented locally per chunk here,
+ * reconciled from the footer once the transaction completes.
+ *
+ * @param desc - the OA TC6 descriptor
+ * @param tx_buffer - the buffer containing the chunks
+ * @param rx_nchunks - the number of chunks available for reception
+ * @param force_empty - if nothing else would be clocked, emit one empty
+ *                      (DV=0) chunk anyway (surfaces a pending error)
+ * @param solicit - lead the transaction with one empty (DV=0) chunk to solicit
+ *                  force_vs's queue credit, whatever else it carries
+ * @param force_vs - VS to stamp on the empty chunks
+ * @param tx_written - the number of chunks written in the buffer
+ * @return 0 in case of success, negative error code otherwise
+ */
+static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
+				     uint8_t *tx_buffer, uint32_t rx_nchunks,
+				     bool force_empty, bool solicit,
+				     uint8_t force_vs, uint32_t *tx_written)
+{
+	struct oa_tc6_tx_pack pack = {
+		.buf = tx_buffer,
+		.max_chunks = oa_tc6_spi_max_chunks(desc),
+	};
+	uint8_t drain_vs = force_vs;
+	int open_qi = -1;
+	uint32_t norx;
+	uint8_t qi;
+
+	/*
+	 * Pool occupancy cannot change between here and this pass's footer
+	 * processing (no allocation happens in between), so one check covers
+	 * every chunk header built below. NORX tells the MAC-PHY not to return
+	 * RX data this pass (footer DV=0); RCA/TXC stay valid regardless, so
+	 * credit bookkeeping is unaffected.
+	 */
+	norx = no_os_field_prep(OA_DATA_HEADER_NORX_MASK,
+				oa_tc6_rx_pool_full(desc));
+
+	/*
+	 * Start this pass with nothing pending -- whatever the previous pass
+	 * left here has already been committed (oa_tc6_tx_commit(), on success)
+	 * or abandoned (on failure, where the real ring state was never
+	 * touched). Either way it must not carry into this pass's count.
+	 */
+	memset(desc->tx_pending_done, 0, sizeof(desc->tx_pending_done));
+	desc->tx_pending_incomplete_frame = NULL;
+
+	/*
+	 * Solicit first, before the queues that do have credit claim the bus
+	 * room: a starved queue's credit is reported only in the footer of a
+	 * chunk stamped with its own VS, so as long as a sending queue fills
+	 * every chunk of every pass with its own VS the starved one never learns
+	 * it may send. This DV=0 chunk consumes no credit, and is legal even
+	 * between an open frame's SV and EV: the MAC-PHY ignores a DV=0 payload
+	 * and never runs the chunk through its transmit protocol check.
+	 */
+	if (solicit)
+		oa_tc6_emit_empty_chunk(desc, &pack, norx, force_vs);
+
+	/*
+	 * Close the frame the last pass left open before any other frame opens,
+	 * then service the queues; stop as soon as one leaves a frame open on
+	 * the wire. No frame data while the MAC-PHY is unconfigured: it would
+	 * ignore it (7.6).
+	 */
+	if (!desc->sync_lost) {
+		open_qi = oa_tc6_open_frame_qi(desc);
+		if (open_qi >= 0 &&
+		    !oa_tc6_pack_queue(desc, &pack, open_qi, norx, true))
+			open_qi = -1;
+	}
+	for (qi = 0; qi < desc->tx_q_count && !desc->sync_lost && open_qi < 0;
+	     qi++) {
+		if (oa_tc6_pack_queue(desc, &pack, qi, norx, false))
+			open_qi = qi;
+	}
+	if (open_qi >= 0)
+		drain_vs = desc->tx_q[open_qi].vs;
+
+	/*
+	 * Backfill DV=0 chunks to drain RX, stamped with the open frame's queue
+	 * (else force_vs) so their footers refresh the credit it is waiting on.
+	 * If nothing at all was clocked but the caller forced a pass, emit a
+	 * single empty chunk so the MAC still returns a footer (surfaces EXST,
+	 * or solicits credit for a starved queue).
+	 */
+	oa_tc6_pack_rx_drain(desc, &pack, rx_nchunks, norx, drain_vs);
+	if (force_empty && pack.chunks_written == 0)
+		oa_tc6_emit_empty_chunk(desc, &pack, norx, force_vs);
+
+	desc->tx_pass_chunks = pack.chunks_written;
+	*tx_written = pack.spi_index;
+
+	return 0;
+}
+
 /*
  * Events are only recorded while the bus lock is held and delivered by
  * oa_tc6_dispatch_events() after it's released, so that the user callback
@@ -599,110 +955,66 @@ static void oa_tc6_dispatch_events(struct oa_tc6_desc *desc, uint32_t events)
 	}
 }
 
-/**
- * @brief Convert frames in the OA_BUFF_TX_READY state to chunks.
- * Configure empty chunks if we need to receive more then transmit.
- * @param desc - the OA TC6 descriptor
- * @param tx_buffer - the buffer containing the chunks
- * @param tx_credit - the number of chunks available for transmission
- * @param rx_nchunks - the number of chunks available for reception
- * @param tx_written - the number of chunks written in the buffer
- * @param tx_done - set if the last chunk of at least one frame was written
- * @return 0 in case of success, negative error code otherwise
+/*
+ * Apply the TX progress of the pass just clocked, up to the first of its
+ * `accepted` chunks the MAC-PHY ignored: 0 for a transfer that failed or was
+ * aborted, fewer than the pass after a header parity error (7.5.1) or a reset
+ * (7.6). A frame whose EV chunk was accepted is released -- the MAC-PHY
+ * processes completed frames even when a later header is bad. The frame being
+ * received at the cut is dropped by the MAC-PHY, which then ignores MOSI until
+ * SV=1, so it restarts at offset 0 rather than resuming mid-frame.
  */
-static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
-				     uint8_t *tx_buffer,
-				     uint32_t tx_credit, uint32_t rx_nchunks,
-				     uint32_t *tx_written, bool *tx_done)
+static void oa_tc6_tx_commit(struct oa_tc6_desc *desc, uint32_t accepted)
 {
-	struct oa_tc6_queue *q = &desc->tx_q[0];
-	uint32_t spi_buffer_index = 0;
-	uint32_t spi_buff_max_chunks;
-	uint32_t chunks_written = 0;
-	uint32_t chunks_limit;
-	uint32_t remaining;
-	uint32_t copy_len;
-	uint32_t header;
-	int ret;
+	uint32_t done[NO_OS_ARRAY_SIZE(desc->tx_pending_done)] = { 0 };
+	struct oa_tc6_frame_buffer *f;
+	struct oa_tc6_queue *q;
+	bool sent = false;
+	uint32_t j;
+	int qi;
 
-	struct oa_tc6_frame_buffer *frame_buffer;
-	spi_buff_max_chunks = OA_SPI_BUFF_LEN / (OA_CHUNK_SIZE + OA_HEADER_LEN);
+	accepted = no_os_min(accepted, desc->tx_pass_chunks);
+	for (j = 0; j < accepted; j++)
+		if (desc->tx_chunk_eof_q[j] >= 0)
+			done[desc->tx_chunk_eof_q[j]]++;
 
-	/* The maximum number of chunks we can potentially send, given the size of our SPI buffer. */
-	chunks_limit = no_os_min(spi_buff_max_chunks, tx_credit);
-	*tx_done = false;
+	for (qi = 0; qi < desc->tx_q_count; qi++) {
+		if (!done[qi])
+			continue;
 
-	/*
-	 * A frame that doesn't fit in the remaining space is sent partially. Its
-	 * index is kept, and the next call resumes it without setting SV.
-	 */
-	while (chunks_written < chunks_limit) {
-		ret = oa_tc6_get_first_tx_frame(desc, q, &frame_buffer);
-		if (ret)
-			break;
-
-		remaining = frame_buffer->len - frame_buffer->index;
-		if (!remaining)
-			break;
-
-		copy_len = no_os_min(remaining, OA_CHUNK_SIZE);
-
-		header = no_os_field_prep(OA_DATA_HEADER_DNC_MASK, 1);
-		header |= no_os_field_prep(OA_DATA_HEADER_DV_MASK, 1);
-		header |= no_os_field_prep(OA_DATA_HEADER_VS_MASK, frame_buffer->vs);
-
-		if (!frame_buffer->index) {
-			header |= no_os_field_prep(OA_DATA_HEADER_SV_MASK, 1);
-			header |= no_os_field_prep(OA_DATA_HEADER_TSC_MASK, frame_buffer->tsc);
-		}
-
-		if (remaining <= OA_CHUNK_SIZE) {
-			header |= no_os_field_prep(OA_DATA_HEADER_EV_MASK, 1);
-			header |= no_os_field_prep(OA_DATA_HEADER_EBO_MASK, remaining - 1);
-		}
-
-		header |= oa_tc6_crc1(header);
-
-		no_os_put_unaligned_be32(header, &tx_buffer[spi_buffer_index]);
-		spi_buffer_index += OA_HEADER_LEN;
-		memcpy(&tx_buffer[spi_buffer_index], &frame_buffer->data[frame_buffer->index],
-		       copy_len);
-		frame_buffer->index += copy_len;
-		spi_buffer_index += OA_CHUNK_SIZE;
-		chunks_written++;
-
-		if (frame_buffer->index == frame_buffer->len) {
+		q = &desc->tx_q[qi];
+		sent = true;
+		capi_mutex_lock(desc->data_lock);
+		for (j = 0; j < done[qi]; j++) {
+			f = &q->pool[(q->tail + j) % q->pool_size];
 			desc->stats.tx_frames++;
-			desc->stats.tx_bytes += frame_buffer->len;
-
-			capi_mutex_lock(desc->data_lock);
-			frame_buffer->len = 0;
-			frame_buffer->index = 0;
-			frame_buffer->state = OA_BUFF_FREE;
-			q->tail = (q->tail + 1) % q->pool_size;
-			q->count--;
-			capi_mutex_unlock(desc->data_lock);
-			*tx_done = true;
+			desc->stats.tx_bytes += f->len;
+			f->len = 0;
+			f->index = 0;
+			f->state = OA_BUFF_FREE;
 		}
+		q->tail = (q->tail + done[qi]) % q->pool_size;
+		q->count -= done[qi];
+		capi_mutex_unlock(desc->data_lock);
 	}
 
-	/*
-	 * The TX queue may be empty, there is no space in the SPI buffer,
-	 * or we're out of tx credits.
-	 * If rx_chunks > tx_chunks, we need to add dummy chunks (DV = 0) as long
-	 * as there is enough room in the buffer. These don't consume TX credits.
-	 */
-	while ((rx_nchunks > chunks_written) &&
-	       (chunks_written < spi_buff_max_chunks)) {
-		header = no_os_field_prep(OA_DATA_HEADER_DNC_MASK, 1);
-		no_os_put_unaligned_be32(header, &tx_buffer[spi_buffer_index]);
-		spi_buffer_index += OA_CHUNK_SIZE + OA_HEADER_LEN;
-		chunks_written++;
+	if (accepted == desc->tx_pass_chunks) {
+		if (desc->tx_pending_incomplete_frame)
+			desc->tx_pending_incomplete_frame->index =
+				desc->tx_pending_incomplete_index;
+	} else {
+		qi = oa_tc6_open_frame_qi(desc);
+		if (qi >= 0 &&
+		    !oa_tc6_get_first_tx_frame(desc, &desc->tx_q[qi], &f))
+			f->index = 0;
 	}
 
-	*tx_written = spi_buffer_index;
+	memset(desc->tx_pending_done, 0, sizeof(desc->tx_pending_done));
+	desc->tx_pending_incomplete_frame = NULL;
+	desc->tx_pass_chunks = 0;
 
-	return 0;
+	if (sent)
+		oa_tc6_queue_event(desc, OA_TC6_EVENT_TX);
 }
 
 static int oa_tc6_handle_exst(struct oa_tc6_desc *desc)
@@ -757,6 +1069,45 @@ static void oa_tc6_service_status0(struct oa_tc6_desc *desc)
 	desc->status0_pending = false;
 }
 
+int oa_tc6_register_callback(struct oa_tc6_desc *desc,
+			     void (*callback)(struct oa_tc6_desc *, uint32_t, void *),
+			     void *arg)
+{
+	if (!desc)
+		return -EINVAL;
+
+	desc->callback = callback;
+	desc->callback_arg = arg;
+
+	return 0;
+}
+
+/* True if the queue has a ready frame waiting to be transmitted. */
+static bool oa_tc6_queue_ready(struct oa_tc6_desc *desc,
+			       struct oa_tc6_queue *queue)
+{
+	struct oa_tc6_frame_buffer *frame;
+
+	return oa_tc6_get_first_tx_frame(desc, queue, &frame) == 0;
+}
+
+/*
+ * True if the queue has a ready frame that can make forward progress now: one
+ * chunk of credit is enough, since a frame is clocked as far as credit allows
+ * and resumed once the footer reports more. A DV=0 chunk mid-frame is harmless
+ * (7.3.8.1 lists no such TXPE cause).
+ */
+static bool oa_tc6_queue_sendable(struct oa_tc6_desc *desc,
+				  struct oa_tc6_queue *queue)
+{
+	struct oa_tc6_frame_buffer *frame;
+
+	if (desc->sync_lost || oa_tc6_get_first_tx_frame(desc, queue, &frame))
+		return false;
+
+	return oa_tc6_tx_credit_ok(desc, queue - desc->tx_q);
+}
+
 /* Abandon the frame in progress and resync on the next SV=1 chunk. The active
  * slot is not user-owned, so resetting its offsets cannot lose a delivered
  * frame. */
@@ -767,6 +1118,26 @@ static void oa_tc6_rx_drop_in_progress(struct oa_tc6_desc *desc,
 	frame_buffer->index = 0;
 	frame_buffer->len = 0;
 	frame_buffer->state = OA_BUFF_FREE;
+}
+
+/*
+ * A transaction whose RX chunks were never parsed (failed, errored or aborted)
+ * may have carried part of the frame in progress: drop it rather than splice
+ * the rest onto the gap. Its footers were lost too, so re-probe: nINT may still
+ * be asserted, with no new edge to come.
+ */
+static void oa_tc6_rx_xfer_lost(struct oa_tc6_desc *desc)
+{
+	struct oa_tc6_frame_buffer *head;
+
+	capi_mutex_lock(desc->data_lock);
+	head = &desc->rx_pool[desc->rx_head];
+	if (head->state == OA_BUFF_RX_IN_PROGRESS)
+		oa_tc6_rx_drop_in_progress(desc, head);
+	capi_mutex_unlock(desc->data_lock);
+
+	oa_tc6_rx_drop_in_progress(desc, &desc->rx_sink);
+	desc->irq_pending = true;
 }
 
 /**
@@ -892,11 +1263,12 @@ struct oa_tc6_rx_pass {
 	uint32_t last_good_footer; /* newest parity-valid footer (for RCA) */
 	bool have_good_footer;
 	bool status_pending;  /* a STATUS0 read is owed (EXST/HDRB) */
+	uint32_t tx_accepted; /* leading chunks whose TX the MAC-PHY took */
 };
 
 /*
  * Inspect one chunk's footer and apply every non-payload side effect: parity,
- * error draining, SYNC loss, EXST/HDRB. All
+ * per-queue credit reconciliation, error draining, SYNC loss, EXST/HDRB. All
  * footer flags are decoded here so the caller sees a clean decision.
  *
  * Returns true if the chunk carries deliverable payload (parity OK, SYNC set,
@@ -904,10 +1276,12 @@ struct oa_tc6_rx_pass {
  * to skip the chunk.
  */
 static bool oa_tc6_rx_footer_usable(struct oa_tc6_desc *desc, uint32_t footer,
+				    uint32_t chunk_idx,
 				    struct oa_tc6_frame_buffer *frame_buffer,
 				    struct oa_tc6_rx_pass *pass)
 {
 	bool sv, dv;
+	int8_t qi;
 
 	/*
 	 * Parity guards every other footer field, so validate it first:
@@ -930,6 +1304,7 @@ static bool oa_tc6_rx_footer_usable(struct oa_tc6_desc *desc, uint32_t footer,
 		desc->xfer_flags.flags_valid = true;
 		desc->xfer_flags.hdrb = true;
 		pass->status_pending = true;
+		pass->tx_accepted = no_os_min(pass->tx_accepted, chunk_idx);
 		oa_tc6_rx_drop_in_progress(desc, frame_buffer);
 		return false;
 	}
@@ -940,12 +1315,23 @@ static bool oa_tc6_rx_footer_usable(struct oa_tc6_desc *desc, uint32_t footer,
 	sv = !!(footer & OA_DATA_FOOTER_SV_MASK);
 	dv = !!(footer & OA_DATA_FOOTER_DV_MASK);
 
+	/*
+	 * TXC is the credit for the queue recorded in tx_chunk_credit_q, valid
+	 * after this transaction -- NOT the footer's VS, which reports the
+	 * received frame's source with a different mapping.
+	 */
+	qi = desc->tx_chunk_credit_q[chunk_idx];
+	if (qi >= 0)
+		desc->tx_q[qi].tx_credit =
+			no_os_field_get(OA_DATA_FOOTER_TXC_MASK, footer);
+
 	/* Latch the transfer flags, even on DV=0. */
 	desc->xfer_flags.flags_valid = true;
 	desc->xfer_flags.sync = !!(footer & OA_DATA_FOOTER_SYNC_MASK);
 
-	/* An unconfigured MAC-PHY returns no RX data (7.6). */
+	/* An unconfigured MAC-PHY ignores TX data chunks (7.6). */
 	if (!desc->xfer_flags.sync) {
+		pass->tx_accepted = no_os_min(pass->tx_accepted, chunk_idx);
 		oa_tc6_rx_note_sync_loss(desc);
 		oa_tc6_rx_drop_in_progress(desc, frame_buffer);
 		return false;
@@ -1037,17 +1423,19 @@ static int oa_tc6_rx_place_data(struct oa_tc6_desc *desc,
  * @param desc - the OA TC6 descriptor
  * @param chunks - array containing chunks received from the MAC
  * @param len - the number of chunks
+ * @param tx_accepted - out: leading chunks whose TX the MAC-PHY accepted
  * @return 0 in case of success, negative error code otherwise
  */
 static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
-				    uint32_t len)
+				    uint32_t len, uint32_t *tx_accepted)
 {
-	struct oa_tc6_rx_pass pass = { 0 };
+	struct oa_tc6_rx_pass pass = { .tx_accepted = len };
 	struct oa_tc6_frame_buffer *frame_buffer;
 	uint32_t footer;
 	uint32_t i;
 	int ret;
 
+	*tx_accepted = len;
 	ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, false);
 	if (ret == -ENOBUFS)
 		frame_buffer = &desc->rx_sink;
@@ -1057,15 +1445,20 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 	for (i = 0; i < len; i++) {
 		footer = no_os_get_unaligned_be32(&chunks[desc->chunk_size]);
 
-		if (oa_tc6_rx_footer_usable(desc, footer, frame_buffer, &pass)) {
+		if (oa_tc6_rx_footer_usable(desc, footer, i, frame_buffer,
+					    &pass)) {
 			ret = oa_tc6_rx_place_data(desc, &frame_buffer, chunks,
 						   footer);
-			if (ret)
+			if (ret) {
+				*tx_accepted = pass.tx_accepted;
 				return ret;
+			}
 		}
 
 		chunks += desc->chunk_size + OA_FOOTER_LEN;
 	}
+
+	*tx_accepted = pass.tx_accepted;
 
 	/*
 	 * A status read is owed (EXST/HDRB). Defer it to a single read once the
@@ -1074,20 +1467,21 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 	if (pass.status_pending)
 		desc->status0_pending = true;
 
-	/* The credits come from the last parity-valid footer of this
-	 * transaction; keep the prior estimate if none was. */
-	if (pass.have_good_footer) {
+	/* RCA is aggregate, from the last footer of this transaction; per-queue
+	 * TXC was already reconciled per-footer above. Harvest only from a
+	 * parity-valid footer; keep the prior estimate if none was. */
+	if (pass.have_good_footer)
 		desc->data_rx_credit = no_os_field_get(OA_DATA_FOOTER_RCA_MASK,
 						       pass.last_good_footer);
-		desc->data_tx_credit = no_os_field_get(OA_DATA_FOOTER_TXC_MASK,
-						       pass.last_good_footer);
-	}
 
 	return 0;
 }
 
 /**
- * @brief Update the number of RX and TX credit available in the MAC FIFOs.
+ * @brief Bootstrap the aggregate RX credit from the BUFST register.
+ *
+ * Per-queue TX credit is not register-readable (footer-only), so it is seeded
+ * from each queue's init_credit at init; only RCA is read here.
  * @param desc - the OA TC6 descriptor
  * @return 0 in case of success, negative error code otherwise
  */
@@ -1100,7 +1494,6 @@ static int oa_tc6_update_stats(struct oa_tc6_desc *desc)
 	if (ret)
 		return ret;
 
-	desc->data_tx_credit = no_os_field_get(OA_TC6_BUFSTS_TXC_MASK, reg_val);
 	desc->data_rx_credit = no_os_field_get(OA_TC6_BUFSTS_RCA_MASK, reg_val);
 
 	return 0;
@@ -1141,103 +1534,201 @@ static int oa_tc6_ctrl_transceive(struct oa_tc6_desc *desc, uint32_t len)
 	return capi_spi_transceive(desc->comm_desc, &xfer);
 }
 
-static void oa_tc6_add_empty_chunk(struct oa_tc6_desc *desc)
+/*
+ * Per-queue TX credit is reported only in the footer of a chunk stamped with
+ * that queue's VS; there is no credit register. Return the VS of the first
+ * queue with a frame waiting but no credit to send it, so the caller
+ * can stamp it on the transaction's DV=0 chunks and refresh that credit.
+ * Without this a queue that clocks no data of its own -- the high-priority queue
+ * behind a backlogged low-priority stream, or during a bidirectional RX stream
+ * -- never learns it has credit and stalls.
+ */
+static bool oa_tc6_credit_solicit_vs(struct oa_tc6_desc *desc, uint8_t *vs)
 {
-	uint32_t header;
+	struct oa_tc6_queue *q;
+	uint8_t qi;
 
-	header = no_os_field_prep(OA_DATA_HEADER_DNC_MASK, 1);
-	header |= no_os_field_prep(OA_DATA_HEADER_DV_MASK, 0);
-	header |= oa_tc6_crc1(header);
+	for (qi = 0; qi < desc->tx_q_count; qi++) {
+		q = &desc->tx_q[qi];
+		if (oa_tc6_queue_ready(desc, q) &&
+		    !oa_tc6_queue_sendable(desc, q)) {
+			*vs = q->vs;
+			return true;
+		}
+	}
 
-	no_os_put_unaligned_be32(header, desc->data_chunks);
+	return false;
 }
 
-/**
- * @brief Transmit all the frames in the OA_BUFF_TX_READY state and receive the
- * frames in the OA_BUFF_RX_COMPLETE state.
- * @param desc - the OA TC6 descriptor
- * @return 0 in case of success, negative error code otherwise
+/*
+ * Decide whether a data transaction should run and how to prime it.
+ *
+ * A transaction is worth clocking when RX is available, when some queue is
+ * sendable (ready frame + credit), when a queue is waiting on credit, or when
+ * the caller forced one (interrupt). Returns true if a transaction should run;
+ * *force primes a forced empty chunk, *solicit a leading one stamped
+ * *solicit_vs (also stamped on any RX-drain chunks).
  */
-int oa_tc6_thread(struct oa_tc6_desc *desc)
+static bool oa_tc6_tx_should_run(struct oa_tc6_desc *desc, bool *force,
+				 bool *solicit, uint8_t *solicit_vs)
 {
-	uint32_t tx_chunks_avail = 0;
-	uint32_t rx_limit = 0;
-	uint32_t bytes_total;
-	uint32_t events;
-	bool tx_done;
-	int ret = 0;
-	int tx_ret;
+	bool sendable = false;
+	uint8_t i;
 
-	struct oa_tc6_frame_buffer *frame_buffer;
-	struct capi_spi_transfer xfer = {0};
+	*solicit = false;
+	*solicit_vs = 0;
 
-	if (!desc)
-		return -ENODEV;
+	/* A queue with any credit can send now. */
+	for (i = 0; i < desc->tx_q_count; i++)
+		if (oa_tc6_queue_sendable(desc, &desc->tx_q[i]))
+			sendable = true;
 
 	/*
-	 * Hold the bus lock across the data transfers, so a register access from
-	 * another task cannot collide with them. The register reads nested inside
-	 * re-enter ctrl_lock, which must therefore be recursive.
+	 * A queue waiting on credit gets a DV=0 chunk stamped with its VS, the
+	 * only way the MAC-PHY reports that credit (there is no per-queue credit
+	 * register). Solicited even when another queue can send: that queue's
+	 * own chunks would otherwise carry every footer of every pass, starving
+	 * the waiting queue for as long as the sending one has frames -- a
+	 * backlogged low-priority stream would keep the high-priority queue at
+	 * zero credit until it ran dry.
 	 */
-	capi_mutex_lock(desc->ctrl_lock);
+	*solicit = oa_tc6_credit_solicit_vs(desc, solicit_vs);
 
-	if (desc->bufst_polling == OA_TC6_REG_POLL) {
+	/* Otherwise run only to drain RX or service a pending IRQ. */
+	return sendable || *solicit || *force || desc->data_rx_credit;
+}
+
+/*
+ * Data-pass prologue: consume a pending interrupt into a forced empty chunk, and bootstrap the aggregate RX
+ * credit once from BUFST (later kept current from data-chunk footers).
+ */
+static int oa_tc6_data_pass_begin(struct oa_tc6_desc *desc, bool *force)
+{
+	int ret;
+
+	if (!desc->credit_valid) {
 		ret = oa_tc6_update_stats(desc);
 		if (ret)
-			goto unlock;
+			return ret;
+		desc->credit_valid = true;
 	}
 
-	tx_ret = oa_tc6_get_first_tx_frame(desc, &desc->tx_q[0], &frame_buffer);
-	if (!tx_ret)
-		tx_chunks_avail = frame_buffer->len;
+	*force = desc->irq_pending;
+	desc->irq_pending = false;
 
-	if (desc->bufst_polling == OA_TC6_REG_POLL) {
-		if (!desc->data_rx_credit && !tx_chunks_avail)
-			goto unlock;
+	return 0;
+}
+
+/*
+ * Decide whether a data transaction should run, and if so pack it into
+ * desc->data_chunks and fill *xfer. *bytes_total == 0 means nothing to clock.
+ * *force is cleared after packing so a forced chunk emits only once per pass.
+ */
+static int oa_tc6_pack_xfer(struct oa_tc6_desc *desc, bool *force,
+			    struct capi_spi_transfer *xfer,
+			    uint32_t *bytes_total)
+{
+	uint8_t force_vs;
+	bool solicit;
+
+	if (!oa_tc6_tx_should_run(desc, force, &solicit, &force_vs)) {
+		*bytes_total = 0;
+		return 0;
 	}
+
+	oa_tc6_tx_frame_to_chunks(desc, desc->data_chunks, desc->data_rx_credit,
+				  *force, solicit, force_vs, bytes_total);
+	*force = false;
+
+	xfer->tx_buf = desc->data_chunks;
+	xfer->rx_buf = desc->data_chunks;
+	xfer->tx_size = *bytes_total;
+	xfer->rx_size = *bytes_total;
+
+	return 0;
+}
+
+/*
+ * Turn a completed data transaction's chunks into frame(s) and advance
+ * *rx_limit. status0_pending is serviced once the whole data pass is over.
+ */
+static int oa_tc6_process_rx(struct oa_tc6_desc *desc, uint32_t bytes_total,
+			     uint32_t *rx_limit)
+{
+	uint32_t accepted = 0;
+	int ret;
+
+	ret = oa_tc6_rx_chunk_to_frame(
+		desc, desc->data_chunks,
+		bytes_total / (desc->chunk_size + OA_HEADER_LEN), &accepted);
+	oa_tc6_tx_commit(desc, accepted);
+	if (ret)
+		return ret;
+
+	(*rx_limit)++;
+
+	return 0;
+}
+
+/*
+ * Issue data-path SPI transactions until credits are exhausted or the RX-limit
+ * trip. Per-queue TX credit is harvested from data-transaction footers; a
+ * synchronous BUFST register read is only done once to bootstrap the aggregate
+ * RX credit (no footer seen yet).
+ */
+static int oa_tc6_run_data(struct oa_tc6_desc *desc)
+{
+	uint32_t rx_limit = 0;
+	uint32_t bytes_total;
+	bool force;
+	int ret;
+
+	struct capi_spi_transfer xfer = { 0 };
+
+	ret = oa_tc6_data_pass_begin(desc, &force);
+	if (ret)
+		return ret;
 
 	do {
-		oa_tc6_tx_frame_to_chunks(desc, desc->data_chunks, desc->data_tx_credit,
-					  desc->data_rx_credit, &bytes_total, &tx_done);
-		if (!bytes_total) {
-			oa_tc6_add_empty_chunk(desc);
-			bytes_total = OA_CHUNK_SIZE + OA_HEADER_LEN;
-		}
+		oa_tc6_pack_xfer(desc, &force, &xfer, &bytes_total);
 
-		xfer.tx_buf = desc->data_chunks;
-		xfer.rx_buf = desc->data_chunks;
-		xfer.tx_size = bytes_total;
-		xfer.rx_size = bytes_total;
+		/*
+		 * Nothing to clock this pass -- no credit and no RX, so no
+		 * transaction can make progress. Stop and let a later poll retry
+		 * once the MAC has advertised fresh credit.
+		 */
+		if (!bytes_total)
+			break;
 
 		ret = capi_spi_transceive(desc->comm_desc, &xfer);
 		if (ret) {
 			memset(desc->data_chunks, 0, bytes_total);
-
-			goto unlock;
+			oa_tc6_tx_commit(desc, 0);
+			oa_tc6_rx_xfer_lost(desc);
+			return ret;
 		}
 
-		if (tx_done)
-			oa_tc6_queue_event(desc, OA_TC6_EVENT_TX);
-
-		ret = oa_tc6_rx_chunk_to_frame(desc, desc->data_chunks,
-					       bytes_total / (desc->chunk_size + OA_HEADER_LEN));
+		ret = oa_tc6_process_rx(desc, bytes_total, &rx_limit);
 		if (ret)
-			goto unlock;
+			return ret;
+	} while (rx_limit <= CONFIG_OA_THREAD_RX_LIMIT);
 
-		tx_ret = oa_tc6_get_first_tx_frame(desc, &desc->tx_q[0],
-						   &frame_buffer);
-		if (!tx_ret)
-			tx_chunks_avail = frame_buffer->len;
-		else
-			tx_chunks_avail = 0;
+	return 0;
+}
 
-		rx_limit++;
+int oa_tc6_thread(struct oa_tc6_desc *desc)
+{
+	uint32_t events;
+	int ret;
 
-		if (rx_limit > CONFIG_OA_THREAD_RX_LIMIT)
-			break;
-	} while (desc->data_rx_credit || tx_chunks_avail);
-
-unlock:
+	/*
+	 * Hold the bus lock across the whole synchronous data pass so register
+	 * access from another task cannot collide with a data transfer on the
+	 * shared SPI bus. update_stats()/reg reads nested inside re-enter ctrl_lock
+	 * recursively; the transfers themselves keep data_lock leaf-level.
+	 */
+	capi_mutex_lock(desc->ctrl_lock);
+	ret = oa_tc6_run_data(desc);
 	/* The bus is free here: service any STATUS0 read owed by the pass. */
 	if (!ret)
 		oa_tc6_service_status0(desc);
@@ -1341,15 +1832,111 @@ int oa_tc6_sw_reset(struct oa_tc6_desc *desc)
 	return -ETIMEDOUT;
 }
 
-int oa_tc6_register_callback(struct oa_tc6_desc *desc,
-			     void (*callback)(struct oa_tc6_desc *, uint32_t, void *),
-			     void *arg)
+/* Wire up the TX queue from the init parameters. */
+static int oa_tc6_setup_tx_queues(struct oa_tc6_desc *desc,
+				  struct oa_tc6_init_param *param)
 {
-	if (!desc)
+	struct oa_tc6_queue *q = &desc->tx_q_storage;
+
+	if (!param->tx_pool || !param->tx_pool_size)
 		return -EINVAL;
 
-	desc->callback = callback;
-	desc->callback_arg = arg;
+	q->pool = param->tx_pool;
+	q->pool_size = param->tx_pool_size;
+	oa_tc6_pool_reset(q->pool, q->pool_size);
+
+	desc->tx_q = q;
+	desc->tx_q_count = 1;
+
+	return 0;
+}
+
+/**
+ * @brief Allocate resources for the OA TC6 driver.
+ * @param desc - the device descriptor to be initialized
+ * @param param - the device's parameter
+ * @return 0 in case of success, negative error code otherwise
+ */
+int oa_tc6_init(struct oa_tc6_desc *desc, struct oa_tc6_init_param *param)
+{
+	int ret;
+
+	if (!desc || !param || !param->rx_pool || !param->rx_pool_size)
+		return -EINVAL;
+
+	memset(desc, 0, sizeof(*desc));
+
+	desc->chunk_size = OA_CHUNK_SIZE;
+	desc->comm_desc = param->comm_desc;
+	desc->rx_pool = param->rx_pool;
+	desc->rx_pool_size = param->rx_pool_size;
+	oa_tc6_pool_reset(desc->rx_pool, desc->rx_pool_size);
+
+	ret = oa_tc6_setup_tx_queues(desc, param);
+	if (ret)
+		return ret;
+
+	/*
+	 * ctrl_lock is always non-NULL: a real mutex config (RTOS context) or
+	 * the shared no-op sentinel, so lock/unlock never need a NULL guard.
+	 */
+	if (param->ctrl_mutex_cfg) {
+		ret = capi_mutex_init(&desc->ctrl_lock, param->ctrl_mutex_cfg);
+		if (ret)
+			return ret;
+	} else {
+		desc->ctrl_lock = &oa_noop_mutex;
+	}
+
+	/*
+	 * data_lock is provisioned exactly like ctrl_lock but MUST be an
+	 * independent mutex (its own config): it guards the frame-buffer rings
+	 * and is held separately from ctrl_lock. NULL cfg => no-op lock.
+	 */
+	if (param->data_mutex_cfg) {
+		ret = capi_mutex_init(&desc->data_lock, param->data_mutex_cfg);
+		if (ret)
+			goto err_ctrl_mutex;
+	} else {
+		desc->data_lock = &oa_noop_mutex;
+	}
+
+	/* The reset request is framed for the protection the part boots in. */
+	desc->prote_spi = param->prote_spi;
+
+	ret = oa_tc6_sw_reset(desc);
+	if (ret)
+		goto err_mutex;
+
+	ret = oa_tc6_setup_config0(desc, param);
+	if (ret)
+		goto err_mutex;
+
+	ret = oa_tc6_reg_write(desc, OA_TC6_STATUS0_REG, 0xFFFF);
+	if (ret)
+		goto err_mutex;
+
+	return 0;
+
+err_mutex:
+	capi_mutex_deinit(desc->data_lock);
+err_ctrl_mutex:
+	capi_mutex_deinit(desc->ctrl_lock);
+	return ret;
+}
+
+/**
+ * @brief Free a device descriptor
+ * @param desc - the device descriptor to be removed.
+ * @return 0
+ */
+int oa_tc6_remove(struct oa_tc6_desc *desc)
+{
+	if (!desc)
+		return -ENODEV;
+
+	capi_mutex_deinit(desc->data_lock);
+	capi_mutex_deinit(desc->ctrl_lock);
 
 	return 0;
 }
@@ -1381,113 +1968,6 @@ int oa_tc6_reset_stats(struct oa_tc6_desc *desc)
 		return -EINVAL;
 
 	memset(&desc->stats, 0, sizeof(desc->stats));
-
-	return 0;
-}
-
-/* Wire up the TX queue from the init parameters. */
-static int oa_tc6_setup_tx_queues(struct oa_tc6_desc *desc,
-				  struct oa_tc6_init_param *param)
-{
-	struct oa_tc6_queue *q = &desc->tx_q_storage;
-
-	if (!param->tx_pool || !param->tx_pool_size)
-		return -EINVAL;
-
-	q->pool = param->tx_pool;
-	q->pool_size = param->tx_pool_size;
-	oa_tc6_pool_reset(q->pool, q->pool_size);
-
-	desc->tx_q = q;
-	desc->tx_q_count = 1;
-
-	return 0;
-}
-
-/**
- * @brief Allocate resources for the OA TC6 driver.
- * @param desc - the device descriptor to be initialized
- * @param param - the device's parameter
- * @return 0 in case of success, negative error code otherwise
- */
-int oa_tc6_init(struct oa_tc6_desc *descriptor, struct oa_tc6_init_param *param)
-{
-	int ret;
-
-	if (!descriptor || !param || !param->rx_pool || !param->rx_pool_size)
-		return -EINVAL;
-
-	memset(descriptor, 0, sizeof(*descriptor));
-
-	descriptor->rx_pool = param->rx_pool;
-	descriptor->rx_pool_size = param->rx_pool_size;
-	oa_tc6_pool_reset(descriptor->rx_pool, descriptor->rx_pool_size);
-
-	ret = oa_tc6_setup_tx_queues(descriptor, param);
-	if (ret)
-		return ret;
-
-	descriptor->chunk_size = OA_CHUNK_SIZE;
-	descriptor->comm_desc = param->comm_desc;
-	/* The reset request is framed for the protection the part boots in. */
-	descriptor->prote_spi = param->prote_spi;
-
-	/*
-	 * Without a mutex config (bare-metal single-threaded), each lock is the
-	 * shared no-op sentinel. ctrl_lock and data_lock MUST be independent.
-	 */
-	if (param->ctrl_mutex_cfg) {
-		ret = capi_mutex_init(&descriptor->ctrl_lock, param->ctrl_mutex_cfg);
-		if (ret)
-			return ret;
-	} else {
-		descriptor->ctrl_lock = &oa_noop_mutex;
-	}
-
-	if (param->data_mutex_cfg) {
-		ret = capi_mutex_init(&descriptor->data_lock, param->data_mutex_cfg);
-		if (ret)
-			goto free_ctrl_lock;
-	} else {
-		descriptor->data_lock = &oa_noop_mutex;
-	}
-
-	ret = oa_tc6_sw_reset(descriptor);
-	if (ret)
-		goto free_lock;
-
-	ret = oa_tc6_setup_config0(descriptor, param);
-	if (ret)
-		goto free_lock;
-
-	ret = oa_tc6_reg_write(descriptor, OA_TC6_STATUS0_REG, 0xFFFF);
-	if (ret)
-		goto free_lock;
-
-	descriptor->bufst_polling = param->bufst_polling;
-
-	return 0;
-
-free_lock:
-	capi_mutex_deinit(descriptor->data_lock);
-free_ctrl_lock:
-	capi_mutex_deinit(descriptor->ctrl_lock);
-
-	return ret;
-}
-
-/**
- * @brief Free a device descriptor
- * @param desc - the device descriptor to be removed.
- * @return 0
- */
-int oa_tc6_remove(struct oa_tc6_desc *desc)
-{
-	if (!desc)
-		return -ENODEV;
-
-	capi_mutex_deinit(desc->data_lock);
-	capi_mutex_deinit(desc->ctrl_lock);
 
 	return 0;
 }
