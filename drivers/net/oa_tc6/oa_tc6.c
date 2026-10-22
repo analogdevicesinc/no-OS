@@ -49,6 +49,8 @@ uint8_t oa_tc6_crc1(uint32_t header)
 	return (~header) & 0x1;
 }
 
+/* Ethernet minimum frame length on the wire, excluding the 4-byte FCS. */
+#define OA_TC6_ETH_MIN_LEN 60
 #define OA_TC6_FCS_LEN 4
 
 /* CONFIG0 fields owned by oa_tc6_set_config() */
@@ -57,6 +59,31 @@ uint8_t oa_tc6_crc1(uint32_t header)
 	 OA_TC6_CONFIG0_ZARFE_MASK | OA_TC6_CONFIG0_TXCTHRESH_MASK | \
 	 OA_TC6_CONFIG0_TXCTE_MASK | OA_TC6_CONFIG0_RXCTE_MASK |     \
 	 OA_TC6_CONFIG0_FTSE_MASK | OA_TC6_CONFIG0_FTSS_MASK)
+
+/**
+ * @brief Compute the Ethernet FCS (CRC-32) over a frame.
+ *
+ * Reflected CRC-32 (poly 0xEDB88320, init 0xFFFFFFFF, final inversion), the
+ * standard IEEE 802.3 FCS. Returned in host byte order; append little-endian.
+ *
+ * @param data - frame bytes.
+ * @param len - number of bytes to checksum.
+ * @return the 32-bit FCS.
+ */
+static uint32_t oa_tc6_fcs_crc32(const uint8_t *data, uint32_t len)
+{
+	uint32_t crc = 0xFFFFFFFFu;
+	uint32_t i;
+	int bit;
+
+	for (i = 0; i < len; i++) {
+		crc ^= data[i];
+		for (bit = 0; bit < 8; bit++)
+			crc = (crc >> 1) ^ (0xEDB88320u & -(crc & 1));
+	}
+
+	return ~crc;
+}
 
 /*
  * Build an OA-TC6 control header: MMS+ADDR, LEN = count - 1, AID set only
@@ -381,6 +408,29 @@ int oa_tc6_put_tx_frame(struct oa_tc6_desc *desc,
 
 	if (buffer->len > CONFIG_OA_CHUNK_BUFFER_SIZE)
 		return -EMSGSIZE;
+
+	/*
+	 * Host-computed FCS: pad to the 60-byte Ethernet minimum unless
+	 * tx_no_pad (the slot was zero-filled by oa_tc6_get_tx_frame, so the pad
+	 * bytes are already 0), then append the CRC-32 little-endian. The MAC's
+	 * own append was disabled at init (CONFIG2.HOST_CRC_APPEND).
+	 */
+	if (desc->sw_fcs) {
+		uint32_t crc;
+
+		/* The 4-byte FCS is appended in place; reject a frame that leaves
+		 * no room for it rather than overrun buffer->data[]. */
+		if (buffer->len > CONFIG_OA_CHUNK_BUFFER_SIZE - OA_TC6_FCS_LEN)
+			return -EMSGSIZE;
+
+		if (!desc->tx_no_pad && buffer->len < OA_TC6_ETH_MIN_LEN)
+			buffer->len = OA_TC6_ETH_MIN_LEN;
+		crc = oa_tc6_fcs_crc32(buffer->data, buffer->len);
+		buffer->data[buffer->len++] = crc & 0xFF;
+		buffer->data[buffer->len++] = (crc >> 8) & 0xFF;
+		buffer->data[buffer->len++] = (crc >> 16) & 0xFF;
+		buffer->data[buffer->len++] = (crc >> 24) & 0xFF;
+	}
 
 	/* ->index is the TX resume offset (bytes already sent); a freshly
 	 * queued frame starts from the beginning. */
@@ -1399,7 +1449,8 @@ static int oa_tc6_rx_copy_slice(struct oa_tc6_desc *desc,
 				bool closes)
 {
 	struct oa_tc6_frame_buffer *buf = *fb;
-	uint32_t off;
+	uint32_t off, crc = 0, rx_fcs = 0;
+	bool runt;
 	int ret;
 
 	/* A frame start (SV=1) resets the write cursor: bytes already in the slot
@@ -1449,13 +1500,25 @@ static int oa_tc6_rx_copy_slice(struct oa_tc6_desc *desc,
 
 	/*
 	 * The MAC-PHY never strips the FCS, so it is dropped from the delivered
-	 * length. The minimum length is the MAC's to enforce; here a frame only
-	 * has to hold its FCS. A runt frees the slot and hands back the same
-	 * buffer so it is never delivered. A receive timestamp (RTSA) sits ahead
-	 * of the MAC header.
+	 * length in both modes. The minimum length is the MAC's to enforce
+	 * (MAC_RX_MIN_LEN); here a frame only has to hold its FCS. A host FCS is
+	 * checked too (little-endian on the wire). A runt or a mismatch frees
+	 * the slot and hands back the same buffer so the bad frame is never
+	 * delivered. A receive timestamp (RTSA) sits ahead of the MAC
+	 * header and is not covered by the FCS.
 	 */
 	off = buf->rtsa ? desc->rx_ts_len : 0;
-	if (buf->len < off + OA_TC6_FCS_LEN) {
+	runt = buf->len < off + OA_TC6_FCS_LEN;
+	if (desc->sw_fcs && !runt) {
+		crc = oa_tc6_fcs_crc32(&buf->data[off],
+				       buf->len - off - OA_TC6_FCS_LEN);
+		rx_fcs = buf->data[buf->len - 4] |
+			 (buf->data[buf->len - 3] << 8) |
+			 (buf->data[buf->len - 2] << 16) |
+			 ((uint32_t)buf->data[buf->len - 1] << 24);
+	}
+
+	if (runt || crc != rx_fcs) {
 		buf->state = OA_BUFF_FREE;
 		buf->index = 0;
 		buf->len = 0;
@@ -2655,6 +2718,8 @@ int oa_tc6_init(struct oa_tc6_desc *desc, struct oa_tc6_init_param *param)
 	memset(desc, 0, sizeof(*desc));
 
 	desc->chunk_size = 1u << param->cps;
+	desc->sw_fcs = param->sw_fcs;
+	desc->tx_no_pad = param->tx_no_pad;
 	desc->comm_desc = param->comm_desc;
 	desc->async_xfer_done_cb = param->async_xfer_done_cb;
 	desc->async_xfer_done_cb_arg = param->async_xfer_done_cb_arg;
@@ -2701,6 +2766,18 @@ int oa_tc6_init(struct oa_tc6_desc *desc, struct oa_tc6_init_param *param)
 	ret = oa_tc6_setup_config0(desc, param);
 	if (ret)
 		goto err_mutex;
+
+	/*
+	 * Host computes the FCS, so disable the MAC's automatic append/check
+	 * (CONFIG2.HOST_CRC_APPEND, reset 1) -- the host now appends on TX and
+	 * validates on RX.
+	 */
+	if (desc->sw_fcs) {
+		ret = oa_tc6_reg_update(desc, OA_TC6_CONFIG2_REG, 0,
+					OA_TC6_CONFIG2_HOST_CRC_APPEND_MASK);
+		if (ret)
+			goto err_mutex;
+	}
 
 	ret = oa_tc6_reg_write(desc, OA_TC6_STATUS0_REG, 0xFFFF);
 	if (ret)
