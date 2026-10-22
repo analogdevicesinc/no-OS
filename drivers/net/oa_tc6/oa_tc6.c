@@ -15,7 +15,6 @@
 
 #include "capi_mutex.h"
 #include "capi_time.h"
-#include "no_os_alloc.h"
 #include "oa_tc6.h"
 
 /*
@@ -276,6 +275,22 @@ int oa_tc6_reg_update(struct oa_tc6_desc *desc, uint32_t addr,
 	return ret;
 }
 
+/*
+ * Claim a caller-owned frame pool. The pools are typically static storage the
+ * caller reuses across init cycles, so a slot can still carry the state a
+ * previous instance left behind -- and only a FREE slot is ever allocated.
+ */
+static void oa_tc6_pool_reset(struct oa_tc6_frame_buffer *pool, uint32_t size)
+{
+	uint32_t i;
+
+	for (i = 0; i < size; i++) {
+		pool[i].state = OA_BUFF_FREE;
+		pool[i].index = 0;
+		pool[i].len = 0;
+	}
+}
+
 /**
  * @brief Get a frame buffer that can be filled by user.
  * @param desc - the OA TC6 descriptor.
@@ -285,26 +300,57 @@ int oa_tc6_reg_update(struct oa_tc6_desc *desc, uint32_t addr,
 int oa_tc6_get_tx_frame(struct oa_tc6_desc *desc,
 			struct oa_tc6_frame_buffer **buffer)
 {
+	struct oa_tc6_frame_buffer *slot;
+	struct oa_tc6_queue *q;
+
 	if (!desc)
 		return -EINVAL;
 
-	for (int i = 0; i < OA_TX_FRAME_BUFF_NUM; i++) {
-		if (desc->user_tx_frame_buffer[i].state == OA_BUFF_FREE) {
-			*buffer = &desc->user_tx_frame_buffer[i];
-			desc->user_tx_frame_buffer[i].state = OA_BUFF_TX_BUSY;
-			desc->user_tx_frame_buffer[i].index = 0;
-			memset(desc->user_tx_frame_buffer[i].data, 0,
-			       CONFIG_OA_CHUNK_BUFFER_SIZE);
+	q = &desc->tx_q[0];
 
-			return 0;
-		}
+	/*
+	 * Serialise concurrent callers so two threads can't both see
+	 * count < pool_size and advance head to the same slot. Leaf-level: no
+	 * SPI, no ctrl_lock. No-op in bare-metal single-threaded builds.
+	 */
+	capi_mutex_lock(desc->data_lock);
+
+	if (q->count >= q->pool_size) {
+		capi_mutex_unlock(desc->data_lock);
+		return -ENOBUFS;
 	}
 
-	return -ENOBUFS;
+	slot = &q->pool[q->head];
+	if (slot->state != OA_BUFF_FREE) {
+		capi_mutex_unlock(desc->data_lock);
+		return -ENOBUFS;
+	}
+
+	slot->state = OA_BUFF_TX_BUSY;
+	slot->index = 0;
+	slot->vs = q->vs;
+	q->head = (q->head + 1) % q->pool_size;
+	q->count++;
+
+	capi_mutex_unlock(desc->data_lock);
+
+	/*
+	 * Zero the payload outside the lock -- the slot is now exclusively
+	 * owned by this thread (state = TX_BUSY; poll only picks TX_READY).
+	 */
+	memset(slot->data, 0, CONFIG_OA_CHUNK_BUFFER_SIZE);
+
+	*buffer = slot;
+
+	return 0;
 }
 
 /**
  * @brief Mark a frame buffer as ready to be transmitted.
+ *
+ * On error the slot stays owned by the caller, who must fix ->len and put it
+ * again: the ring is FIFO, so an abandoned slot blocks its queue.
+ *
  * @param desc - the OA TC6 descriptor.
  * @param buffer - buffer containing the frame to be transmitted.
  * @return 0 in case of success, negative error code otherwise
@@ -318,44 +364,64 @@ int oa_tc6_put_tx_frame(struct oa_tc6_desc *desc,
 	if (buffer->len > CONFIG_OA_CHUNK_BUFFER_SIZE)
 		return -EMSGSIZE;
 
+	/* ->index is the TX resume offset (bytes already sent); a freshly
+	 * queued frame starts from the beginning. */
+	buffer->index = 0;
 	buffer->state = OA_BUFF_TX_READY;
 
 	return 0;
 }
 
 /**
- * @brief Get the first TX frame buffer that is ready to be transmitted. A
- * partially transmitted frame takes precedence, since it has to be completed
- * before another one can be started.
+ * @brief Get the oldest ready TX frame in a queue's ring.
+ *
+ * The pool is a FIFO ring: the oldest frame is always at q->tail and stays
+ * there (non-zero ->index = bytes already sent) until fully transmitted, so
+ * a frame split across several SPI transactions (oa_tc6_tx_frame_to_chunks())
+ * is always resumed first -- OA-TC6's ban on interleaving frames on the bus
+ * is honoured for free.
+ *
+ * Head-of-line blocking: if the tail slot is still TX_BUSY (not yet
+ * TX_READY), nothing is returned rather than skipping ahead and reordering.
+ *
  * @param desc - the OA TC6 descriptor.
+ * @param q - the queue to inspect.
  * @param buffer - buffer to be filled with the frame to be transmitted.
  * @return 0 in case of success, negative error code otherwise
  */
-static int oa_tc6_get_first_tx_frame(struct oa_tc6_desc *desc,
-				     struct oa_tc6_frame_buffer **buffer)
+/*
+ * Peek the frame `offset` slots past the queue's tail, without touching tail
+ * or count -- lets a pass look ahead at not-yet-committed frames (see
+ * oa_tc6_tx_commit()) the same way it would look at the real tail.
+ */
+static int oa_tc6_peek_tx_frame(struct oa_tc6_desc *desc,
+				struct oa_tc6_queue *q, uint32_t offset,
+				struct oa_tc6_frame_buffer **buffer)
 {
-	struct oa_tc6_frame_buffer *first = NULL;
+	struct oa_tc6_frame_buffer *frame;
+	uint32_t count;
 
-	for (int i = 0; i < OA_TX_FRAME_BUFF_NUM; i++) {
-		if (desc->user_tx_frame_buffer[i].state != OA_BUFF_TX_READY)
-			continue;
+	capi_mutex_lock(desc->data_lock);
+	count = q->count;
+	frame = &q->pool[(q->tail + offset) % q->pool_size];
+	capi_mutex_unlock(desc->data_lock);
 
-		if (desc->user_tx_frame_buffer[i].index) {
-			*buffer = &desc->user_tx_frame_buffer[i];
-
-			return 0;
-		}
-
-		if (!first)
-			first = &desc->user_tx_frame_buffer[i];
-	}
-
-	if (!first)
+	if (offset >= count)
 		return -ENOENT;
 
-	*buffer = first;
+	if (frame->state != OA_BUFF_TX_READY)
+		return -ENOENT;
+
+	*buffer = frame;
 
 	return 0;
+}
+
+static int oa_tc6_get_first_tx_frame(struct oa_tc6_desc *desc,
+				     struct oa_tc6_queue *q,
+				     struct oa_tc6_frame_buffer **buffer)
+{
+	return oa_tc6_peek_tx_frame(desc, q, 0, buffer);
 }
 
 /**
@@ -370,29 +436,58 @@ static int oa_tc6_get_empty_rx_buff(struct oa_tc6_desc *desc,
 				    struct oa_tc6_frame_buffer **buffer,
 				    bool new_buffer)
 {
-	if (!new_buffer) {
-		for (int i = 0; i < OA_RX_FRAME_BUFF_NUM; i++) {
-			if (desc->user_rx_frame_buffer[i].state == OA_BUFF_RX_IN_PROGRESS) {
-				*buffer = &desc->user_rx_frame_buffer[i];
+	struct oa_tc6_frame_buffer *slot;
+	uint32_t next;
+	int ret = 0;
 
-				return 0;
-			}
-		}
+	/*
+	 * Guards rx_head against a concurrent put_rx_frame() (which reads
+	 * rx_head while advancing rx_tail). Leaf-level: no SPI, no ctrl_lock.
+	 * The caller fills the returned head slot outside this lock -- safe,
+	 * since put_rx_frame()'s tail advance stops at rx_head.
+	 */
+	capi_mutex_lock(desc->data_lock);
+
+	slot = &desc->rx_pool[desc->rx_head];
+
+	/*
+	 * The head slot is the one currently being written. When a frame spans
+	 * several SPI transactions it stays at the head as OA_BUFF_RX_IN_PROGRESS;
+	 * unless the caller wants a fresh buffer, keep writing into it.
+	 */
+	if (!new_buffer && slot->state == OA_BUFF_RX_IN_PROGRESS) {
+		*buffer = slot;
+		capi_mutex_unlock(desc->data_lock);
+
+		return 0;
 	}
 
-	for (int i = 0; i < OA_RX_FRAME_BUFF_NUM; i++) {
-		if (desc->user_rx_frame_buffer[i].state == OA_BUFF_FREE) {
-			*buffer = &desc->user_rx_frame_buffer[i];
-			desc->user_rx_frame_buffer[i].index = 0;
-			desc->user_rx_frame_buffer[i].len = 0;
-
-			return 0;
+	/*
+	 * Need a fresh buffer. If the head slot is still FREE (nothing written
+	 * yet -- the common start-of-transaction case), reuse it in place. Only
+	 * once it holds a frame do we advance the ring, leaving the finished
+	 * frame in [rx_tail, rx_head) for in-order delivery.
+	 */
+	if (slot->state != OA_BUFF_FREE) {
+		next = (desc->rx_head + 1) % desc->rx_pool_size;
+		slot = &desc->rx_pool[next];
+		if (slot->state != OA_BUFF_FREE) {
+			desc->stats.rx_drop_nobuf++;
+			ret = -ENOBUFS; /* ring full -- oldest frames kept */
+			goto out;
 		}
+
+		desc->rx_head = next;
 	}
 
-	desc->stats.rx_drop_nobuf++;
+	slot->index = 0;
+	slot->len = 0;
+	*buffer = slot;
 
-	return -ENOBUFS;
+out:
+	capi_mutex_unlock(desc->data_lock);
+
+	return ret;
 }
 
 /**
@@ -408,17 +503,33 @@ int oa_tc6_get_rx_frame_match_vs(struct oa_tc6_desc *desc,
 				 struct oa_tc6_frame_buffer **buffer,
 				 uint8_t vs, uint8_t mask)
 {
-	for (int i = 0; i < OA_RX_FRAME_BUFF_NUM; i++) {
-		if (desc->user_rx_frame_buffer[i].state == OA_BUFF_RX_COMPLETE &&
-		    (vs & mask) == (desc->user_rx_frame_buffer[i].vs & mask)) {
-			*buffer = &desc->user_rx_frame_buffer[i];
-			desc->user_rx_frame_buffer[i].state = OA_BUFF_RX_USER_OWNED;
+	uint32_t i;
+	int ret = -ENOENT;
 
-			return 0;
+	/*
+	 * NOTE: matching by VS pulls a frame out of the middle of the ring, so
+	 * it does NOT preserve receive order -- use oa_tc6_get_rx_frame() for
+	 * ordinary in-order delivery. put_rx_frame() reclaims the hole this
+	 * leaves without reordering what's left.
+	 *
+	 * Guards the scan/state-flip against the transfer function; leaf-level,
+	 * no SPI.
+	 */
+	capi_mutex_lock(desc->data_lock);
+
+	for (i = 0; i < desc->rx_pool_size; i++) {
+		if (desc->rx_pool[i].state == OA_BUFF_RX_COMPLETE &&
+		    (vs & mask) == (desc->rx_pool[i].vs & mask)) {
+			*buffer = &desc->rx_pool[i];
+			desc->rx_pool[i].state = OA_BUFF_RX_USER_OWNED;
+			ret = 0;
+			break;
 		}
 	}
 
-	return -ENOENT;
+	capi_mutex_unlock(desc->data_lock);
+
+	return ret;
 }
 
 /**
@@ -430,16 +541,33 @@ int oa_tc6_get_rx_frame_match_vs(struct oa_tc6_desc *desc,
 int oa_tc6_get_rx_frame(struct oa_tc6_desc *desc,
 			struct oa_tc6_frame_buffer **buffer)
 {
-	for (int i = 0; i < OA_RX_FRAME_BUFF_NUM; i++) {
-		if (desc->user_rx_frame_buffer[i].state == OA_BUFF_RX_COMPLETE) {
-			*buffer = &desc->user_rx_frame_buffer[i];
-			desc->user_rx_frame_buffer[i].state = OA_BUFF_RX_USER_OWNED;
+	struct oa_tc6_frame_buffer *tail;
 
-			return 0;
-		}
+	/*
+	 * Deliver strictly from the tail so frames leave in receive order --
+	 * report nothing rather than skip ahead if the tail isn't complete yet
+	 * (even if a younger slot is). A slot picked out of order by
+	 * get_rx_frame_match_vs() (RX_USER_OWNED, not COMPLETE) likewise blocks
+	 * the tail until returned.
+	 *
+	 * Guards rx_tail/state against the transfer function's rx_head advance
+	 * (same lock); leaf-level, no SPI.
+	 */
+	capi_mutex_lock(desc->data_lock);
+
+	tail = &desc->rx_pool[desc->rx_tail];
+	if (tail->state != OA_BUFF_RX_COMPLETE) {
+		capi_mutex_unlock(desc->data_lock);
+		return -ENOENT;
 	}
 
-	return -ENOENT;
+	tail->state = OA_BUFF_RX_USER_OWNED;
+
+	capi_mutex_unlock(desc->data_lock);
+
+	*buffer = tail;
+
+	return 0;
 }
 
 /**
@@ -458,11 +586,30 @@ int oa_tc6_put_rx_frame(struct oa_tc6_desc *desc,
 	buffer->len = 0;
 	buffer->state = OA_BUFF_FREE;
 
+	/*
+	 * Reclaim ring space from the tail. In-order delivery frees the tail
+	 * slot itself; out-of-order VS matching may free a slot ahead of the
+	 * tail, leaving a FREE hole that is only reclaimed once the tail reaches
+	 * it. Advance the tail over any contiguous freed slots, stopping at the
+	 * head (the active write slot), so a hole never blocks reuse but the
+	 * order of the frames still queued is preserved.
+	 *
+	 * Guard the rx_tail advance against the transfer function's rx_head
+	 * reads/writes; leaf-level, no SPI.
+	 */
+	capi_mutex_lock(desc->data_lock);
+
+	while (desc->rx_tail != desc->rx_head &&
+	       desc->rx_pool[desc->rx_tail].state == OA_BUFF_FREE)
+		desc->rx_tail = (desc->rx_tail + 1) % desc->rx_pool_size;
+
+	capi_mutex_unlock(desc->data_lock);
+
 	return 0;
 }
 
 /*
- * Events are only recorded while the data lock is held and delivered by
+ * Events are only recorded while the bus lock is held and delivered by
  * oa_tc6_dispatch_events() after it's released, so that the user callback
  * may call back into the driver.
  */
@@ -500,6 +647,7 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 				     uint32_t tx_credit, uint32_t rx_nchunks,
 				     uint32_t *tx_written, bool *tx_done)
 {
+	struct oa_tc6_queue *q = &desc->tx_q[0];
 	uint32_t spi_buffer_index = 0;
 	uint32_t spi_buff_max_chunks;
 	uint32_t chunks_written = 0;
@@ -521,7 +669,7 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 	 * index is kept, and the next call resumes it without setting SV.
 	 */
 	while (chunks_written < chunks_limit) {
-		ret = oa_tc6_get_first_tx_frame(desc, &frame_buffer);
+		ret = oa_tc6_get_first_tx_frame(desc, q, &frame_buffer);
 		if (ret)
 			break;
 
@@ -559,9 +707,13 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 			desc->stats.tx_frames++;
 			desc->stats.tx_bytes += frame_buffer->len;
 
+			capi_mutex_lock(desc->data_lock);
 			frame_buffer->len = 0;
 			frame_buffer->index = 0;
 			frame_buffer->state = OA_BUFF_FREE;
+			q->tail = (q->tail + 1) % q->pool_size;
+			q->count--;
+			capi_mutex_unlock(desc->data_lock);
 			*tx_done = true;
 		}
 	}
@@ -941,7 +1093,12 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 	if (!desc)
 		return -ENODEV;
 
-	capi_mutex_lock(desc->data_lock);
+	/*
+	 * Hold the bus lock across the data transfers, so a register access from
+	 * another task cannot collide with them. The register reads nested inside
+	 * re-enter ctrl_lock, which must therefore be recursive.
+	 */
+	capi_mutex_lock(desc->ctrl_lock);
 
 	if (desc->bufst_polling == OA_TC6_REG_POLL) {
 		ret = oa_tc6_update_stats(desc);
@@ -949,7 +1106,7 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 			goto unlock;
 	}
 
-	tx_ret = oa_tc6_get_first_tx_frame(desc, &frame_buffer);
+	tx_ret = oa_tc6_get_first_tx_frame(desc, &desc->tx_q[0], &frame_buffer);
 	if (!tx_ret)
 		tx_chunks_avail = frame_buffer->len;
 
@@ -986,7 +1143,8 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 		if (ret)
 			goto unlock;
 
-		tx_ret = oa_tc6_get_first_tx_frame(desc, &frame_buffer);
+		tx_ret = oa_tc6_get_first_tx_frame(desc, &desc->tx_q[0],
+						   &frame_buffer);
 		if (!tx_ret)
 			tx_chunks_avail = frame_buffer->len;
 		else
@@ -1001,7 +1159,7 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 unlock:
 	events = desc->pending_events;
 	desc->pending_events = 0;
-	capi_mutex_unlock(desc->data_lock);
+	capi_mutex_unlock(desc->ctrl_lock);
 
 	oa_tc6_dispatch_events(desc, events);
 
@@ -1083,20 +1241,47 @@ int oa_tc6_reset_stats(struct oa_tc6_desc *desc)
 	return 0;
 }
 
+/* Wire up the TX queue from the init parameters. */
+static int oa_tc6_setup_tx_queues(struct oa_tc6_desc *desc,
+				  struct oa_tc6_init_param *param)
+{
+	struct oa_tc6_queue *q = &desc->tx_q_storage;
+
+	if (!param->tx_pool || !param->tx_pool_size)
+		return -EINVAL;
+
+	q->pool = param->tx_pool;
+	q->pool_size = param->tx_pool_size;
+	oa_tc6_pool_reset(q->pool, q->pool_size);
+
+	desc->tx_q = q;
+	desc->tx_q_count = 1;
+
+	return 0;
+}
+
 /**
  * @brief Allocate resources for the OA TC6 driver.
  * @param desc - the device descriptor to be initialized
  * @param param - the device's parameter
  * @return 0 in case of success, negative error code otherwise
  */
-int oa_tc6_init(struct oa_tc6_desc **desc, struct oa_tc6_init_param *param)
+int oa_tc6_init(struct oa_tc6_desc *descriptor, struct oa_tc6_init_param *param)
 {
-	struct oa_tc6_desc *descriptor;
 	int ret;
 
-	descriptor = no_os_calloc(1, sizeof(*descriptor));
-	if (!descriptor)
-		return -ENOMEM;
+	if (!descriptor || !param || !param->rx_pool || !param->rx_pool_size)
+		return -EINVAL;
+
+	memset(descriptor, 0, sizeof(*descriptor));
+
+	descriptor->rx_pool = param->rx_pool;
+	descriptor->rx_pool_size = param->rx_pool_size;
+	oa_tc6_pool_reset(descriptor->rx_pool, descriptor->rx_pool_size);
+
+	ret = oa_tc6_setup_tx_queues(descriptor, param);
+	if (ret)
+		return ret;
 
 	descriptor->comm_desc = param->comm_desc;
 	descriptor->prote_spi = param->prote_spi;
@@ -1108,7 +1293,7 @@ int oa_tc6_init(struct oa_tc6_desc **desc, struct oa_tc6_init_param *param)
 	if (param->ctrl_mutex_cfg) {
 		ret = capi_mutex_init(&descriptor->ctrl_lock, param->ctrl_mutex_cfg);
 		if (ret)
-			goto free_desc;
+			return ret;
 	} else {
 		descriptor->ctrl_lock = &oa_noop_mutex;
 	}
@@ -1136,16 +1321,12 @@ int oa_tc6_init(struct oa_tc6_desc **desc, struct oa_tc6_init_param *param)
 
 	descriptor->bufst_polling = param->bufst_polling;
 
-	*desc = descriptor;
-
 	return 0;
 
 free_lock:
 	capi_mutex_deinit(descriptor->data_lock);
 free_ctrl_lock:
 	capi_mutex_deinit(descriptor->ctrl_lock);
-free_desc:
-	no_os_free(descriptor);
 
 	return ret;
 }
@@ -1162,7 +1343,6 @@ int oa_tc6_remove(struct oa_tc6_desc *desc)
 
 	capi_mutex_deinit(desc->data_lock);
 	capi_mutex_deinit(desc->ctrl_lock);
-	no_os_free(desc);
 
 	return 0;
 }
