@@ -668,11 +668,10 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 			/*
 			 * At this point it is either a single frame encapsulated in the
 			 * chunk, or the start of the 2nd Frame. EBO should be set
-			 * accordingly above.
+			 * accordingly above. A start of frame drops any frame left open.
 			 */
-			memcpy(&frame_buffer->data[frame_buffer->index], &chunks[sbo],
-			       ebo - sbo + 1);
-			frame_buffer->index += ebo - sbo + 1;
+			memcpy(frame_buffer->data, &chunks[sbo], ebo - sbo + 1);
+			frame_buffer->index = ebo - sbo + 1;
 			frame_buffer->len = frame_buffer->index;
 
 			//Flags valid when SV=1
@@ -725,11 +724,13 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 		}
 
 		if (sv) {
-			/* The current chunk contains the start of a frame at offset SWO */
-			memcpy(&frame_buffer->data[frame_buffer->index], &chunks[sbo],
-			       OA_CHUNK_SIZE - sbo);
+			/*
+			 * The current chunk contains the start of a frame at offset SWO.
+			 * It drops any frame left open.
+			 */
+			memcpy(frame_buffer->data, &chunks[sbo], OA_CHUNK_SIZE - sbo);
 
-			frame_buffer->index += OA_CHUNK_SIZE - sbo;
+			frame_buffer->index = OA_CHUNK_SIZE - sbo;
 			frame_buffer->len = frame_buffer->index;
 			frame_buffer->state = OA_BUFF_RX_IN_PROGRESS;
 
