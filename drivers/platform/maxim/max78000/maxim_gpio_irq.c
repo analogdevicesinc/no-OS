@@ -21,6 +21,7 @@
 
 #include "maxim_gpio_irq.h"
 #include "maxim_irq.h"
+#include "maxim_irq_priv.h"
 
 static struct no_os_list_desc *actions[MXC_CFG_GPIO_INSTANCES];
 
@@ -46,20 +47,20 @@ static void gpio_irq_callback(void *cbdata)
 		action->callback(action->ctx);
 }
 
-void GPIO0_IRQHandler()
+void MAXIM_IRQ_HANDLER GPIO0_IRQHandler(void)
 {
 	MXC_GPIO_Handler(0);
 }
 
 #ifdef MXC_GPIO1
-void GPIO1_IRQHandler()
+void MAXIM_IRQ_HANDLER GPIO1_IRQHandler(void)
 {
 	MXC_GPIO_Handler(1);
 }
 #endif
 
 #ifdef MXC_GPIO2
-void GPIO2_IRQHandler()
+void MAXIM_IRQ_HANDLER GPIO2_IRQHandler(void)
 {
 	MXC_GPIO_Handler(2);
 }
@@ -323,9 +324,8 @@ static int max_gpio_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
 				     uint32_t priority_level)
 {
 	uint32_t id = MXC_GPIO_GET_IRQ(desc->irq_ctrl_id);
-	NVIC_SetPriority(id, priority_level);
 
-	return 0;
+	return max_irq_set_priority(desc, id, priority_level);
 }
 
 /**
