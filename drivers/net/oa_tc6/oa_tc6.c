@@ -38,138 +38,132 @@ static const struct capi_mutex_ops noop_mutex_ops = {
 
 static struct capi_mutex oa_noop_mutex = { .ops = &noop_mutex_ops };
 
-int oa_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
-			 uint32_t len);
-
-/**
- * @brief Compute the CRC value of the header/footer.
- * @param header - value of the header/footer field in a chunk.
- * @return CRC value.
- */
-static uint8_t oa_tc6_crc1(uint32_t header)
+uint8_t oa_tc6_crc1(uint32_t header)
 {
+	/* Branchless odd-parity over 32 bits: fold by halvings then invert. */
 	header ^= header >> 16;
 	header ^= header >> 8;
 	header ^= header >> 4;
 	header ^= header >> 2;
 	header ^= header >> 1;
-
-	return 1 ^ (header & 1);
+	return (~header) & 0x1;
 }
 
 #define OA_TC6_FCS_LEN 4
 
-/**
- * @brief Prepare a register read control chunk.
- * @param desc - the OA TC6 descriptor.
- * @param addr - Register address.
- * @return the control header.
+/*
+ * Build an OA-TC6 control header: MMS+ADDR, LEN = count - 1, AID set only
+ * for a single register (count == 1), WNR if writing.
  */
-static uint32_t oa_tc6_prepare_rx_ctrl(struct oa_tc6_desc *desc, uint32_t addr)
+static uint32_t oa_tc6_ctrl_header(uint32_t addr, uint8_t count, bool write)
 {
-	uint32_t header;
+	uint32_t h = no_os_field_prep(OA_CTRL_ADDR_MMS_MASK, addr);
 
-	header = no_os_field_prep(OA_CTRL_ADDR_MMS_MASK, addr);
-	header |= no_os_field_prep(OA_CTRL_AID_MASK, 1);
-	header |= oa_tc6_crc1(header);
+	h |= no_os_field_prep(OA_CTRL_LEN_MASK, count - 1);
+	h |= no_os_field_prep(OA_CTRL_AID_MASK, count == 1);
+	if (write)
+		h |= no_os_field_prep(OA_CTRL_WNR_MASK, 1);
 
-	no_os_put_unaligned_be32(header, desc->ctrl_chunks);
-	desc->ctrl_rx_credit++;
-
-	return header;
+	return h | oa_tc6_crc1(h);
 }
 
-/**
- * @brief Prepare a register write control chunk.
- * @param desc - the OA TC6 descriptor.
- * @param addr - Register address.
- * @param val - Register value.
- * @return the control header.
- */
-static uint32_t oa_tc6_prepare_tx_ctrl(struct oa_tc6_desc *desc, uint32_t addr,
-				       uint32_t val)
+/* True if data is the PROTE ones'-complement of inv. */
+static bool oa_tc6_prote_ok(uint32_t data, uint32_t inv)
 {
-	uint32_t header;
+	return data == (inv ^ NO_OS_GENMASK(31, 0));
+}
 
-	header = no_os_field_prep(OA_CTRL_ADDR_MMS_MASK, addr);
-	header |= no_os_field_prep(OA_CTRL_AID_MASK, 1);
-	header |= no_os_field_prep(OA_CTRL_WNR_MASK, 1);
-	header |= oa_tc6_crc1(header);
+static int oa_tc6_ctrl_transceive(struct oa_tc6_desc *desc, uint32_t len);
 
-	no_os_put_unaligned_be32(header, desc->ctrl_chunks);
-	no_os_put_unaligned_be32(val, &desc->ctrl_chunks[OA_HEADER_LEN]);
+/*
+ * One control transaction of count registers, built in ctrl_chunks.
+ *
+ * MOSI: the header, then for a write the count data words, each followed by
+ * its ones'-complement under PROTE, then one trailing word. A read sends the
+ * same length with the data slots left zero.
+ *
+ * The MAC-PHY echoes the sent stream on MISO shifted by one header word:
+ * ctrl_chunks[HDR:2*HDR) carries the echoed header, then come the read data
+ * (with complements under PROTE) or, for a write, the echoed data words,
+ * which are checked against what was sent.
+ */
+static int oa_tc6_ctrl_xfer(struct oa_tc6_desc *desc, uint32_t addr,
+			    uint32_t *val, uint8_t count, bool write)
+{
+	uint32_t word_stride = desc->prote_spi ? 2 : 1; /* words per register */
+	uint32_t data_bytes = count * OA_REG_LEN * word_stride;
+	uint8_t *buf = desc->ctrl_chunks;
+	uint32_t header, total, off, comp;
+	uint8_t i;
+	int ret;
 
-	if (desc->prote_spi) {
-		no_os_put_unaligned_be32(val ^ NO_OS_GENMASK(31, 0),
-					 &desc->ctrl_chunks[OA_HEADER_LEN + OA_REG_LEN]);
+	if (!count || count > OA_CTRL_MAX_REGS)
+		return -EINVAL;
+
+	total = 2 * OA_HEADER_LEN + data_bytes;
+	header = oa_tc6_ctrl_header(addr, count, write);
+
+	memset(buf, 0, total);
+	no_os_put_unaligned_be32(header, buf);
+
+	if (write) {
+		off = OA_HEADER_LEN;
+		for (i = 0; i < count; i++) {
+			no_os_put_unaligned_be32(val[i], &buf[off]);
+			if (desc->prote_spi)
+				no_os_put_unaligned_be32(
+					val[i] ^ NO_OS_GENMASK(31, 0),
+					&buf[off + OA_REG_LEN]);
+			off += OA_REG_LEN * word_stride;
+		}
 	}
 
-	desc->ctrl_tx_credit++;
+	ret = oa_tc6_ctrl_transceive(desc, total);
+	if (ret)
+		return ret;
 
-	return header;
-}
+	/* A mismatched echo means the control path is desynced. */
+	if (no_os_get_unaligned_be32(&buf[OA_HEADER_LEN]) != header)
+		return -EIO;
 
-static int oa_tc6_do_ctrl_transfer(struct oa_tc6_desc *desc)
-{
-	struct capi_spi_transfer xfer = {0};
-
-	if (desc->ctrl_rx_credit || desc->ctrl_tx_credit) {
-		xfer.tx_buf = desc->ctrl_chunks;
-		xfer.rx_buf = desc->ctrl_chunks;
-
-		if (desc->prote_spi)
-			xfer.tx_size = 2 * (OA_HEADER_LEN + OA_REG_LEN);
-		else
-			xfer.tx_size = 2 * OA_HEADER_LEN + OA_REG_LEN;
-		xfer.rx_size = xfer.tx_size;
-
-		return capi_spi_transceive(desc->comm_desc, &xfer);
+	off = 2 * OA_HEADER_LEN;
+	for (i = 0; i < count; i++) {
+		if (write) {
+			if (no_os_get_unaligned_be32(&buf[off]) != val[i])
+				return -EIO;
+			if (desc->prote_spi &&
+			    no_os_get_unaligned_be32(&buf[off + OA_REG_LEN]) !=
+				    (val[i] ^ NO_OS_GENMASK(31, 0)))
+				return -EIO;
+		} else {
+			val[i] = no_os_get_unaligned_be32(&buf[off]);
+			if (desc->prote_spi) {
+				comp = no_os_get_unaligned_be32(
+					&buf[off + OA_REG_LEN]);
+				if (!oa_tc6_prote_ok(val[i], comp))
+					return -EINVAL;
+			}
+		}
+		off += OA_REG_LEN * word_stride;
 	}
 
 	return 0;
-}
-
-/*
- * The MAC-PHY echoes the control header one word later. A mismatch means the
- * header was rejected (HDRB) or the control transfer is corrupted.
- */
-static bool oa_tc6_ctrl_echo_ok(struct oa_tc6_desc *desc, uint32_t header)
-{
-	return no_os_get_unaligned_be32(&desc->ctrl_chunks[OA_HEADER_LEN]) == header;
 }
 
 static int __oa_tc6_reg_read(struct oa_tc6_desc *desc, uint32_t addr,
 			     uint32_t *val)
 {
-	uint32_t comp_val;
-	uint32_t header;
-	int ret;
+	return oa_tc6_ctrl_xfer(desc, addr, val, 1, false);
+}
 
-	if (!desc)
-		return -ENODEV;
-
-	header = oa_tc6_prepare_rx_ctrl(desc, addr);
-	ret = oa_tc6_do_ctrl_transfer(desc);
-	desc->ctrl_rx_credit = 0;
-	if (ret)
-		return ret;
-
-	if (!oa_tc6_ctrl_echo_ok(desc, header))
-		return -EIO;
-
-	*val = no_os_get_unaligned_be32(&desc->ctrl_chunks[2 * OA_HEADER_LEN]);
-
-	if (desc->prote_spi) {
-		comp_val = no_os_get_unaligned_be32(&desc->ctrl_chunks[3 * OA_HEADER_LEN]);
-		if (*val != (comp_val ^ NO_OS_GENMASK(31, 0)))
-			return -EINVAL;
-	}
-
-	return 0;
+static int __oa_tc6_reg_write(struct oa_tc6_desc *desc, uint32_t addr,
+			      uint32_t val)
+{
+	return oa_tc6_ctrl_xfer(desc, addr, &val, 1, true);
 }
 
 /**
- * @brief Write a register value.
+ * @brief Read a register value.
  * @param desc - the OA TC6 descriptor.
  * @param addr - Register address.
  * @param val - Register value.
@@ -187,34 +181,6 @@ int oa_tc6_reg_read(struct oa_tc6_desc *desc, uint32_t addr, uint32_t *val)
 	capi_mutex_unlock(desc->ctrl_lock);
 
 	return ret;
-}
-
-static int __oa_tc6_reg_write(struct oa_tc6_desc *desc, uint32_t addr,
-			      uint32_t val)
-{
-	uint32_t header;
-	uint8_t *echo;
-	int ret;
-
-	if (!desc)
-		return -ENODEV;
-
-	echo = &desc->ctrl_chunks[2 * OA_HEADER_LEN];
-	header = oa_tc6_prepare_tx_ctrl(desc, addr, val);
-	ret = oa_tc6_do_ctrl_transfer(desc);
-	desc->ctrl_tx_credit = 0;
-	if (ret)
-		return ret;
-
-	if (!oa_tc6_ctrl_echo_ok(desc, header) ||
-	    no_os_get_unaligned_be32(echo) != val)
-		return -EIO;
-
-	if (desc->prote_spi &&
-	    no_os_get_unaligned_be32(&echo[OA_REG_LEN]) != (val ^ NO_OS_GENMASK(31, 0)))
-		return -EIO;
-
-	return 0;
 }
 
 /**
@@ -238,8 +204,8 @@ int oa_tc6_reg_write(struct oa_tc6_desc *desc, uint32_t addr, uint32_t val)
 	return ret;
 }
 
-int __oa_tc6_reg_update(struct oa_tc6_desc *desc, uint32_t addr,
-			uint32_t val, uint32_t mask)
+static int __oa_tc6_reg_update(struct oa_tc6_desc *desc, uint32_t addr,
+			       uint32_t val, uint32_t mask)
 {
 	uint32_t reg_val;
 	int ret;
@@ -262,8 +228,8 @@ int __oa_tc6_reg_update(struct oa_tc6_desc *desc, uint32_t addr,
  * @param mask - Bit mask corresponding to the register field.
  * @return 0 in case of success, negative error code otherwise
  */
-int oa_tc6_reg_update(struct oa_tc6_desc *desc, uint32_t addr,
-		      uint32_t val, uint32_t mask)
+int oa_tc6_reg_update(struct oa_tc6_desc *desc, uint32_t addr, uint32_t val,
+		      uint32_t mask)
 {
 	int ret;
 
@@ -276,6 +242,7 @@ int oa_tc6_reg_update(struct oa_tc6_desc *desc, uint32_t addr,
 
 	return ret;
 }
+
 
 /*
  * Claim a caller-owned frame pool. The pools are typically static storage the
@@ -1159,6 +1126,19 @@ int oa_tc6_get_xfer_flags(struct oa_tc6_desc *desc, struct oa_tc6_flags *flags,
 		memset(&desc->xfer_flags, 0, sizeof(struct oa_tc6_flags));
 
 	return 0;
+}
+
+/* Clock len bytes of ctrl_chunks. */
+static int oa_tc6_ctrl_transceive(struct oa_tc6_desc *desc, uint32_t len)
+{
+	struct capi_spi_transfer xfer = { 0 };
+
+	xfer.tx_buf = desc->ctrl_chunks;
+	xfer.rx_buf = desc->ctrl_chunks;
+	xfer.tx_size = len;
+	xfer.rx_size = len;
+
+	return capi_spi_transceive(desc->comm_desc, &xfer);
 }
 
 static void oa_tc6_add_empty_chunk(struct oa_tc6_desc *desc)

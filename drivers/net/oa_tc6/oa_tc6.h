@@ -26,8 +26,12 @@
 /* Space for one full frame + 24 chunk headers (68 * 24)*/
 #define OA_SPI_BUFF_LEN		1632
 
-/* Space for 2 Header + Reg Data + Inverse Reg Data (PROTE) */
-#define OA_SPI_CTRL_LEN		16
+/* Most registers one control transaction carries. */
+#define OA_CTRL_MAX_REGS	1
+
+/* Header, OA_CTRL_MAX_REGS data words each followed by its PROTE complement,
+ * and the trailing word the echo shifts into. */
+#define OA_SPI_CTRL_LEN	(2 * OA_HEADER_LEN + OA_CTRL_MAX_REGS * 2 * OA_REG_LEN)
 
 #define OA_CHUNK_SIZE		64
 #define OA_REG_LEN		4
@@ -311,8 +315,6 @@ struct oa_tc6_desc {
 	uint32_t data_tx_credit;
 	uint32_t data_rx_credit;
 
-	uint32_t ctrl_tx_credit;
-	uint32_t ctrl_rx_credit;
 
 	enum oa_tc6_bufst_polling bufst_polling;
 	struct oa_tc6_flags	xfer_flags;
@@ -351,6 +353,10 @@ struct oa_tc6_init_param {
 	const struct capi_mutex_config *ctrl_mutex_cfg;
 	const struct capi_mutex_config *data_mutex_cfg;
 };
+
+/* Parity bit that makes a 32-bit header/footer word carry odd parity: OR the
+ * result into the word to set P, or test == 0 to validate a received word. */
+uint8_t oa_tc6_crc1(uint32_t header);
 
 /* Read a register from the MAC device */
 int oa_tc6_reg_read(struct oa_tc6_desc *, uint32_t, uint32_t *);
