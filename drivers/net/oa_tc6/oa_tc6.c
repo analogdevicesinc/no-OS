@@ -2240,13 +2240,39 @@ int oa_tc6_thread_async(struct oa_tc6_desc *desc)
 	return ret;
 }
 
+/*
+ * Reject a chunk payload the part cannot be configured for: CONFIG0.CPS would
+ * keep its old value while the host framed every transaction at the requested
+ * size, leaving the footer unfindable (7.6). STDCAP.MINCPS uses the same
+ * 1 << N encoding as CPS; 0 is reserved, so treat it as "no constraint" rather
+ * than failing a part that does not populate the field.
+ */
+static int oa_tc6_check_cps(struct oa_tc6_desc *desc, uint8_t cps)
+{
+	uint32_t stdcap;
+	uint8_t mincps;
+	int ret;
+
+	ret = oa_tc6_reg_read(desc, OA_TC6_STDCAP_REG, &stdcap);
+	if (ret)
+		return ret;
+
+	mincps = no_os_field_get(OA_TC6_STDCAP_MINCPS_MASK, stdcap);
+
+	return (mincps && cps < mincps) ? -ENOTSUP : 0;
+}
+
 static int oa_tc6_setup_config0(struct oa_tc6_desc *desc,
 				struct oa_tc6_init_param *param)
 {
 	uint32_t new_reg_val =
-		no_os_field_prep(OA_TC6_CONFIG0_CPS_MASK, OA_TC6_CONFIG0_CPS_64);
+		no_os_field_prep(OA_TC6_CONFIG0_CPS_MASK, param->cps);
 	bool want_prote;
 	int ret;
+
+	ret = oa_tc6_check_cps(desc, param->cps);
+	if (ret)
+		return ret;
 
 	want_prote = param->prote_spi;
 
@@ -2451,9 +2477,15 @@ int oa_tc6_init(struct oa_tc6_desc *desc, struct oa_tc6_init_param *param)
 	if (!desc || !param || !param->rx_pool || !param->rx_pool_size)
 		return -EINVAL;
 
+	if (param->cps == 0)
+		param->cps = OA_TC6_CONFIG0_CPS_64;
+	if (param->cps < OA_TC6_CONFIG0_CPS_8 ||
+	    param->cps > OA_TC6_CONFIG0_CPS_64)
+		return -EINVAL;
+
 	memset(desc, 0, sizeof(*desc));
 
-	desc->chunk_size = OA_CHUNK_SIZE;
+	desc->chunk_size = 1u << param->cps;
 	desc->comm_desc = param->comm_desc;
 	desc->async_xfer_done_cb = param->async_xfer_done_cb;
 	desc->async_xfer_done_cb_arg = param->async_xfer_done_cb_arg;
