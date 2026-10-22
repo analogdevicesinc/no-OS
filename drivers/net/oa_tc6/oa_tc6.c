@@ -57,6 +57,8 @@ static uint8_t oa_tc6_crc1(uint32_t header)
 	return 1 ^ (header & 1);
 }
 
+#define OA_TC6_FCS_LEN 4
+
 /**
  * @brief Prepare a register read control chunk.
  * @param desc - the OA TC6 descriptor.
@@ -472,7 +474,6 @@ static int oa_tc6_get_empty_rx_buff(struct oa_tc6_desc *desc,
 		next = (desc->rx_head + 1) % desc->rx_pool_size;
 		slot = &desc->rx_pool[next];
 		if (slot->state != OA_BUFF_FREE) {
-			desc->stats.rx_drop_nobuf++;
 			ret = -ENOBUFS; /* ring full -- oldest frames kept */
 			goto out;
 		}
@@ -776,24 +777,292 @@ static int oa_tc6_handle_exst(struct oa_tc6_desc *desc)
 	return oa_tc6_reg_write(desc, OA_TC6_STATUS1_REG, status1);
 }
 
-/**
- * @brief Find the last footer with a valid parity in a transfer.
- * @param chunks - array containing chunks received from the MAC
- * @param len - the number of chunks
- * @param footer - the footer found
- * @return true if a valid footer was found, false otherwise
+/*
+ * Service a STATUS0 read/clear owed by a prior data pass (EXST/HDRB). Caller
+ * must hold the bus with no data transfer in progress.
  */
-static bool oa_tc6_last_valid_footer(uint8_t *chunks, uint32_t len,
-				     uint32_t *footer)
+static void oa_tc6_service_status0(struct oa_tc6_desc *desc)
 {
-	while (len--) {
-		*footer = no_os_get_unaligned_be32(&chunks[len * (OA_CHUNK_SIZE +
-						   OA_FOOTER_LEN) + OA_CHUNK_SIZE]);
-		if (!oa_tc6_crc1(*footer))
-			return true;
+	if (!desc->status0_pending)
+		return;
+
+	oa_tc6_handle_exst(desc);
+	desc->status0_pending = false;
+}
+
+/* Abandon the frame in progress and resync on the next SV=1 chunk. The active
+ * slot is not user-owned, so resetting its offsets cannot lose a delivered
+ * frame. */
+static void oa_tc6_rx_drop_in_progress(struct oa_tc6_desc *desc,
+				       struct oa_tc6_frame_buffer *frame_buffer)
+{
+	desc->skip_current_frame = true;
+	frame_buffer->index = 0;
+	frame_buffer->len = 0;
+	frame_buffer->state = OA_BUFF_FREE;
+}
+
+/**
+ * @brief Copy one contiguous slice of a data chunk into the active RX
+ * frame buffer, applying start/end-of-frame side effects as needed.
+ *
+ * @param desc - the OA TC6 descriptor
+ * @param fb - in/out: active RX frame buffer; on closes, updated to the
+ *             fresh buffer fetched for what comes next
+ * @param chunk - the chunk's data (chunk-relative offsets, not the footer)
+ * @param footer - this chunk's footer word
+ * @param start - first byte offset copied from chunk (inclusive)
+ * @param end - last byte offset copied from chunk (inclusive)
+ * @param opens - this slice is the start of a frame (SV): latch
+ *                rtsa/rtsp/vs and mark the buffer IN_PROGRESS
+ * @param closes - this slice is the end of a frame (EV): latch FD from the
+ *                 footer, notify on a drop, mark the buffer COMPLETE and fetch
+ *                 a fresh one for what follows.
+ * @return 0 in case of success, negative error code otherwise
+ */
+static int oa_tc6_rx_copy_slice(struct oa_tc6_desc *desc,
+				struct oa_tc6_frame_buffer **fb,
+				const uint8_t *chunk, uint32_t footer,
+				uint32_t start, uint32_t end, bool opens,
+				bool closes)
+{
+	struct oa_tc6_frame_buffer *buf = *fb;
+	int ret;
+
+	/* A frame start (SV=1) resets the write cursor: bytes already in the slot
+	 * are a prior frame that never closed (EV lost to error/resync) and must
+	 * be discarded, not prepended to this one. */
+	if (opens) {
+		buf->index = 0;
+		buf->len = 0;
 	}
 
-	return false;
+	/* The rest of a frame whose start was dropped or never seen. */
+	if (!opens && buf->state != OA_BUFF_RX_IN_PROGRESS)
+		return 0;
+
+	/* A well-formed frame fits the slot, but a stream that loses its EV (or a
+	 * corrupted SWO/EBO) would keep appending past the end. Drop the whole
+	 * oversized frame rather than overrun buf->data[] -- the next SV
+	 * restarts accumulation. */
+	if (buf->index + (end - start + 1) > CONFIG_OA_CHUNK_BUFFER_SIZE) {
+		oa_tc6_rx_drop_in_progress(desc, buf);
+		return 0;
+	}
+
+	memcpy(&buf->data[buf->index], &chunk[start], end - start + 1);
+	buf->index += end - start + 1;
+	buf->len = buf->index;
+
+	if (opens) {
+		buf->rtsa = !!(footer & OA_DATA_FOOTER_RTSA_MASK);
+		buf->rtsp = !!(footer & OA_DATA_FOOTER_RTSP_MASK);
+		buf->vs = no_os_field_get(OA_DATA_FOOTER_VS_MASK, footer);
+		buf->state = OA_BUFF_RX_IN_PROGRESS;
+	}
+
+	if (!closes)
+		return 0;
+
+	/* FD flags the closing frame as bad: still forward it, letting the drop
+	 * flag decide. */
+	buf->frame_drop = !!(footer & OA_DATA_FOOTER_FD_MASK);
+	if (buf->frame_drop)
+		desc->stats.rx_drop_fd++;
+
+	/*
+	 * The MAC-PHY never strips the FCS, so it is dropped from the delivered
+	 * length. The minimum length is the MAC's to enforce; here a frame only
+	 * has to hold its FCS. A runt frees the slot and hands back the same
+	 * buffer so it is never delivered.
+	 */
+	if (buf->len < OA_TC6_FCS_LEN) {
+		buf->state = OA_BUFF_FREE;
+		buf->index = 0;
+		buf->len = 0;
+		ret = oa_tc6_get_empty_rx_buff(desc, fb, true);
+		if (ret == -ENOBUFS) {
+			*fb = &desc->rx_sink;
+			return 0;
+		}
+		return ret;
+	}
+
+	buf->len -= OA_TC6_FCS_LEN;
+
+	buf->state = OA_BUFF_RX_COMPLETE;
+	if (buf != &desc->rx_sink) {
+		desc->stats.rx_frames++;
+		desc->stats.rx_bytes += buf->len;
+		oa_tc6_queue_event(desc, OA_TC6_EVENT_RX);
+	} else {
+		desc->stats.rx_drop_nobuf++;
+	}
+
+	ret = oa_tc6_get_empty_rx_buff(desc, fb, true);
+	if (ret == -ENOBUFS) {
+		*fb = &desc->rx_sink;
+		return 0;
+	}
+
+	return ret;
+}
+
+/* SYNC=0 in a footer means the MAC-PHY reset and lost its configuration (7.6).
+ * Tell the app to reconfigure, once per loss. CONFIG0.SYNC is deliberately NOT
+ * re-asserted here: the host must reconfigure first, then set it. */
+static void oa_tc6_rx_note_sync_loss(struct oa_tc6_desc *desc)
+{
+	if (desc->sync_lost)
+		return;
+
+	desc->sync_lost = true;
+	oa_tc6_queue_event(desc, OA_TC6_EVENT_SYNCE);
+}
+
+/* Pass-scoped state threaded through one RX transaction's footers. */
+struct oa_tc6_rx_pass {
+	uint32_t last_good_footer; /* newest parity-valid footer (for RCA) */
+	bool have_good_footer;
+	bool status_pending;  /* a STATUS0 read is owed (EXST/HDRB) */
+};
+
+/*
+ * Inspect one chunk's footer and apply every non-payload side effect: parity,
+ * error draining, SYNC loss, EXST/HDRB. All
+ * footer flags are decoded here so the caller sees a clean decision.
+ *
+ * Returns true if the chunk carries deliverable payload (parity OK, SYNC set,
+ * DV=1, not HDRB, not mid-drain) and the caller should place its bytes; false
+ * to skip the chunk.
+ */
+static bool oa_tc6_rx_footer_usable(struct oa_tc6_desc *desc, uint32_t footer,
+				    struct oa_tc6_frame_buffer *frame_buffer,
+				    struct oa_tc6_rx_pass *pass)
+{
+	bool sv, dv;
+
+	/*
+	 * Parity guards every other footer field, so validate it first:
+	 * oa_tc6_crc1() is non-zero on a bad word. Drop the frame in progress
+	 * and resync, without trusting this footer's credit or RCA.
+	 */
+	if (oa_tc6_crc1(footer)) {
+		desc->stats.rx_footer_parity_err++;
+		oa_tc6_rx_drop_in_progress(desc, frame_buffer);
+		return false;
+	}
+
+	/*
+	 * HDRB: from here on MISO carries the 0xC0000001 constant, not a footer
+	 * (7.5.1), so none of its other fields -- SYNC, TXC, RCA -- are real.
+	 * The MAC-PHY ignored this chunk's header and every one after it, and
+	 * terminated the RX frame in progress.
+	 */
+	if (footer & OA_DATA_FOOTER_HDRB_MASK) {
+		desc->xfer_flags.flags_valid = true;
+		desc->xfer_flags.hdrb = true;
+		pass->status_pending = true;
+		oa_tc6_rx_drop_in_progress(desc, frame_buffer);
+		return false;
+	}
+
+	pass->last_good_footer = footer;
+	pass->have_good_footer = true;
+
+	sv = !!(footer & OA_DATA_FOOTER_SV_MASK);
+	dv = !!(footer & OA_DATA_FOOTER_DV_MASK);
+
+	/* Latch the transfer flags, even on DV=0. */
+	desc->xfer_flags.flags_valid = true;
+	desc->xfer_flags.sync = !!(footer & OA_DATA_FOOTER_SYNC_MASK);
+
+	/* An unconfigured MAC-PHY returns no RX data (7.6). */
+	if (!desc->xfer_flags.sync) {
+		oa_tc6_rx_note_sync_loss(desc);
+		oa_tc6_rx_drop_in_progress(desc, frame_buffer);
+		return false;
+	}
+	desc->sync_lost = false;
+
+	/*
+	 * EXST means "a STATUS0 read is owed", NOT "this frame is invalid" --
+	 * deliver it anyway. The read/clear is deferred to a single call after
+	 * all of this transaction's chunks are processed (servicing it inline
+	 * per chunk would starve the data path under sustained LOFE).
+	 */
+	if (footer & OA_DATA_FOOTER_EXST_MASK) {
+		desc->stats.exst_events++;
+		pass->status_pending = true;
+	}
+
+	/* Draining the rest of an already-dropped frame: discard until SV=1. */
+	if (desc->skip_current_frame && dv && !sv)
+		return false;
+	desc->skip_current_frame = false;
+
+	return dv;
+}
+
+/*
+ * Place a deliverable chunk's payload into the RX frame(s), driven by its SV/EV
+ * boundaries (SWO/EBO give the byte offsets). A chunk may start a frame, end
+ * one, do both (optionally spanning two frames when SWO wraps past EBO), or
+ * carry only the middle of a frame already in progress.
+ */
+static int oa_tc6_rx_place_data(struct oa_tc6_desc *desc,
+				struct oa_tc6_frame_buffer **frame_buffer,
+				const uint8_t *chunk, uint32_t footer)
+{
+	uint32_t sbo = no_os_field_get(OA_DATA_FOOTER_SWO_MASK, footer) * 4;
+	uint32_t ebo = no_os_field_get(OA_DATA_FOOTER_EBO_MASK, footer);
+	bool sv = !!(footer & OA_DATA_FOOTER_SV_MASK);
+	bool ev = !!(footer & OA_DATA_FOOTER_EV_MASK);
+	int ret;
+
+	/* SWO is 4 bits and EBO 6, so either can point past a payload smaller
+	 * than 64 bytes. Parity only catches an odd number of flipped bits, so
+	 * treat an out-of-bounds offset as a corrupt footer: dropping the frame
+	 * and resyncing on the next SV beats copying from past the chunk. */
+	if ((sv && sbo >= desc->chunk_size) ||
+	    (ev && ebo >= desc->chunk_size)) {
+		oa_tc6_rx_drop_in_progress(desc, *frame_buffer);
+		return 0;
+	}
+
+	if (sv && ev) {
+		if (sbo > ebo) {
+			/* Two frames in this chunk: finish the one in progress
+			 * at [0, ebo], then start the next at [sbo, end]. */
+			ret = oa_tc6_rx_copy_slice(desc, frame_buffer, chunk,
+						   footer, 0, ebo, false, true);
+			if (ret)
+				return ret;
+
+			return oa_tc6_rx_copy_slice(
+				desc, frame_buffer, chunk, footer, sbo,
+				desc->chunk_size - 1, true, false);
+		}
+
+		/* A single frame, entirely within this chunk. */
+		return oa_tc6_rx_copy_slice(desc, frame_buffer, chunk, footer,
+					    sbo, ebo, true, true);
+	}
+
+	if (ev)
+		/* Chunk holds only the end of the frame in progress. */
+		return oa_tc6_rx_copy_slice(desc, frame_buffer, chunk, footer,
+					    0, ebo, false, true);
+
+	if (sv)
+		/* Chunk holds only the start of a frame, at offset SWO. */
+		return oa_tc6_rx_copy_slice(desc, frame_buffer, chunk, footer,
+					    sbo, desc->chunk_size - 1, true,
+					    false);
+
+	/* Neither boundary: the whole chunk is data for the frame in progress. */
+	return oa_tc6_rx_copy_slice(desc, frame_buffer, chunk, footer, 0,
+				    desc->chunk_size - 1, false, false);
 }
 
 /**
@@ -806,216 +1075,48 @@ static bool oa_tc6_last_valid_footer(uint8_t *chunks, uint32_t len,
 static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 				    uint32_t len)
 {
-	uint32_t footer = 0;
-	uint32_t sbo;
-	uint32_t ebo;
-	uint32_t ev;
-	uint32_t sv;
+	struct oa_tc6_rx_pass pass = { 0 };
+	struct oa_tc6_frame_buffer *frame_buffer;
+	uint32_t footer;
+	uint32_t i;
 	int ret;
 
-	struct oa_tc6_frame_buffer *frame_buffer = NULL;
-	uint8_t *start = chunks;
-
 	ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, false);
-	if (ret)
-		goto out;
+	if (ret == -ENOBUFS)
+		frame_buffer = &desc->rx_sink;
+	else if (ret)
+		return ret;
 
-	for (uint32_t i = 0; i < len; i++) {
-		footer = no_os_get_unaligned_be32(&chunks[OA_CHUNK_SIZE]);
+	for (i = 0; i < len; i++) {
+		footer = no_os_get_unaligned_be32(&chunks[desc->chunk_size]);
 
-		/* None of the footer fields can be trusted on a parity error */
-		if (oa_tc6_crc1(footer)) {
-			desc->stats.rx_footer_parity_err++;
-			if (frame_buffer->state == OA_BUFF_RX_IN_PROGRESS) {
-				frame_buffer->index = 0;
-				frame_buffer->len = 0;
-				frame_buffer->state = OA_BUFF_FREE;
-			}
-
-			chunks += OA_CHUNK_SIZE + OA_FOOTER_LEN;
-			continue;
-		}
-
-		ev = footer & OA_DATA_FOOTER_EV_MASK;
-		sv = footer & OA_DATA_FOOTER_SV_MASK;
-		ebo = no_os_field_get(OA_DATA_FOOTER_EBO_MASK, footer);
-
-		/*
-		 * The footer contains an SWO (Start WORD offset). Convert to a start
-		 * BYTE offset to be used directly in buffer access and math
-		 */
-		sbo = no_os_field_get(OA_DATA_FOOTER_SWO_MASK, footer) * 4;
-
-		/* Always update the transfer flags, even if DV=0 */
-		desc->xfer_flags.flags_valid = true;
-		if (footer & OA_DATA_FOOTER_EXST_MASK) {
-			desc->xfer_flags.exst = 1; /* Latched */
-			desc->stats.exst_events++;
-			ret = oa_tc6_handle_exst(desc);
+		if (oa_tc6_rx_footer_usable(desc, footer, frame_buffer, &pass)) {
+			ret = oa_tc6_rx_place_data(desc, &frame_buffer, chunks,
+						   footer);
 			if (ret)
-				goto out;
-		}
-		desc->xfer_flags.hdrb |= !!(footer & OA_DATA_FOOTER_HDRB_MASK); /* Latched */
-		desc->xfer_flags.sync = !!(footer &
-					   OA_DATA_FOOTER_SYNC_MASK);  /* Instantaneous */
-
-		if (!(footer & OA_DATA_FOOTER_DV_MASK)) {
-			chunks += OA_CHUNK_SIZE + OA_FOOTER_LEN;
-			continue;
+				return ret;
 		}
 
-		if (sv && ev) {
-			if (sbo > ebo) {
-				/*
-				 * There are 2 frames in the current chunk. Finish the existing
-				 * one, if it was started.
-				 */
-				if (frame_buffer->state == OA_BUFF_RX_IN_PROGRESS) {
-					memcpy(&frame_buffer->data[frame_buffer->index], chunks,
-					       ebo + 1);
-					frame_buffer->index += ebo + 1;
-					frame_buffer->len = frame_buffer->index;
-					frame_buffer->state = OA_BUFF_RX_COMPLETE;
-
-					desc->stats.rx_frames++;
-					desc->stats.rx_bytes += frame_buffer->len;
-
-					/* Flags valid when EV=1 Only */
-					frame_buffer->frame_drop = !!(footer &
-								      OA_DATA_FOOTER_FD_MASK);
-					if (frame_buffer->frame_drop)
-						desc->stats.rx_drop_fd++;
-
-					oa_tc6_queue_event(desc, OA_TC6_EVENT_RX);
-
-					/* Now get a new buffer for the second frame */
-					ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, true);
-					if (ret)
-						goto out;
-				}
-
-				/*
-				 * Overwrite the EBO to be the end of the chunk so the next
-				 * block of code is generic
-				 */
-				ebo = OA_CHUNK_SIZE - 1;
-
-				/* Next frame will be in progress */
-				frame_buffer->state = OA_BUFF_RX_IN_PROGRESS;
-			} else {
-				/* A single frame in current chunk. It will be completed */
-				frame_buffer->state = OA_BUFF_RX_COMPLETE;
-
-				frame_buffer->frame_drop = !!(footer & OA_DATA_FOOTER_FD_MASK);
-				if (frame_buffer->frame_drop)
-					desc->stats.rx_drop_fd++;
-
-				oa_tc6_queue_event(desc, OA_TC6_EVENT_RX);
-			}
-
-			/*
-			 * At this point it is either a single frame encapsulated in the
-			 * chunk, or the start of the 2nd Frame. EBO should be set
-			 * accordingly above. A start of frame drops any frame left open.
-			 */
-			memcpy(frame_buffer->data, &chunks[sbo], ebo - sbo + 1);
-			frame_buffer->index = ebo - sbo + 1;
-			frame_buffer->len = frame_buffer->index;
-
-			//Flags valid when SV=1
-			frame_buffer->rtsa = !!(footer & OA_DATA_FOOTER_RTSA_MASK);
-			frame_buffer->rtsp = !!(footer & OA_DATA_FOOTER_RTSP_MASK);
-
-			frame_buffer->vs = no_os_field_get(OA_DATA_FOOTER_VS_MASK, footer);
-
-			if (frame_buffer->state == OA_BUFF_RX_COMPLETE) {
-				desc->stats.rx_frames++;
-				desc->stats.rx_bytes += frame_buffer->len;
-
-				/* Get a new buffer for the next iteration */
-				ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, true);
-				if (ret)
-					goto out;
-			}
-
-			chunks += OA_CHUNK_SIZE + OA_FOOTER_LEN;
-			continue;
-		}
-
-		if (ev) {
-			/* Drop the end of a frame that was not started */
-			if (frame_buffer->state != OA_BUFF_RX_IN_PROGRESS) {
-				chunks += OA_CHUNK_SIZE + OA_FOOTER_LEN;
-				continue;
-			}
-
-			ebo = no_os_field_get(OA_DATA_FOOTER_EBO_MASK, footer);
-
-			/* The current chunk may be shorter than chunk_size, since it contains the end of a frame */
-			memcpy(&(frame_buffer->data[frame_buffer->index]), chunks, ebo + 1);
-			frame_buffer->len = frame_buffer->index + ebo + 1;
-			frame_buffer->state = OA_BUFF_RX_COMPLETE;
-
-			desc->stats.rx_frames++;
-			desc->stats.rx_bytes += frame_buffer->len;
-
-			oa_tc6_queue_event(desc, OA_TC6_EVENT_RX);
-
-			/* Flags valid when EV=1 Only */
-			frame_buffer->frame_drop = !!(footer & OA_DATA_FOOTER_FD_MASK);
-			if (frame_buffer->frame_drop)
-				desc->stats.rx_drop_fd++;
-
-			/* Get a new buffer for the next iteration */
-			ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, true);
-			if (ret)
-				goto out;
-
-			chunks += OA_CHUNK_SIZE + OA_FOOTER_LEN;
-			continue;
-		}
-
-		if (sv) {
-			/*
-			 * The current chunk contains the start of a frame at offset SWO.
-			 * It drops any frame left open.
-			 */
-			memcpy(frame_buffer->data, &chunks[sbo], OA_CHUNK_SIZE - sbo);
-
-			frame_buffer->index = OA_CHUNK_SIZE - sbo;
-			frame_buffer->len = frame_buffer->index;
-			frame_buffer->state = OA_BUFF_RX_IN_PROGRESS;
-
-			//Flags valid when SV=1
-			frame_buffer->rtsa = !!(footer & OA_DATA_FOOTER_RTSA_MASK);
-			frame_buffer->rtsp = !!(footer & OA_DATA_FOOTER_RTSP_MASK);
-
-			frame_buffer->vs = no_os_field_get(OA_DATA_FOOTER_VS_MASK, footer);
-			chunks += OA_CHUNK_SIZE + OA_FOOTER_LEN;
-			continue;
-		}
-
-		if ((!ev && !sv) && (frame_buffer->state == OA_BUFF_RX_IN_PROGRESS)) {
-			/*
-			 * The current chunk does not contain either the start or end of a frame,
-			 * and the contains valid data for each byte
-			 */
-			memcpy(&frame_buffer->data[frame_buffer->index], chunks, OA_CHUNK_SIZE);
-			frame_buffer->index += OA_CHUNK_SIZE;
-			frame_buffer->len = frame_buffer->index;
-		}
-
-		chunks += OA_CHUNK_SIZE + OA_FOOTER_LEN;
+		chunks += desc->chunk_size + OA_FOOTER_LEN;
 	}
 
-out:
-	/* The credits reported by the last footer replace the earlier ones */
-	if (oa_tc6_last_valid_footer(start, len, &footer)) {
-		desc->data_rx_credit = no_os_field_get(OA_DATA_FOOTER_RCA_MASK, footer);
-		desc->data_tx_credit = no_os_field_get(OA_DATA_FOOTER_TXC_MASK, footer);
+	/*
+	 * A status read is owed (EXST/HDRB). Defer it to a single read once the
+	 * data pass is over, where the bus is free.
+	 */
+	if (pass.status_pending)
+		desc->status0_pending = true;
+
+	/* The credits come from the last parity-valid footer of this
+	 * transaction; keep the prior estimate if none was. */
+	if (pass.have_good_footer) {
+		desc->data_rx_credit = no_os_field_get(OA_DATA_FOOTER_RCA_MASK,
+						       pass.last_good_footer);
+		desc->data_tx_credit = no_os_field_get(OA_DATA_FOOTER_TXC_MASK,
+						       pass.last_good_footer);
 	}
 
-	return ret;
+	return 0;
 }
 
 /**
@@ -1139,7 +1240,7 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 			oa_tc6_queue_event(desc, OA_TC6_EVENT_TX);
 
 		ret = oa_tc6_rx_chunk_to_frame(desc, desc->data_chunks,
-					       bytes_total / (OA_CHUNK_SIZE + OA_HEADER_LEN));
+					       bytes_total / (desc->chunk_size + OA_HEADER_LEN));
 		if (ret)
 			goto unlock;
 
@@ -1157,6 +1258,9 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 	} while (desc->data_rx_credit || tx_chunks_avail);
 
 unlock:
+	/* The bus is free here: service any STATUS0 read owed by the pass. */
+	if (!ret)
+		oa_tc6_service_status0(desc);
 	events = desc->pending_events;
 	desc->pending_events = 0;
 	capi_mutex_unlock(desc->ctrl_lock);
@@ -1166,35 +1270,95 @@ unlock:
 	return ret;
 }
 
+static int oa_tc6_setup_config0(struct oa_tc6_desc *desc,
+				struct oa_tc6_init_param *param)
+{
+	uint32_t new_reg_val =
+		no_os_field_prep(OA_TC6_CONFIG0_CPS_MASK, OA_TC6_CONFIG0_CPS_64);
+	bool want_prote;
+	int ret;
+
+	want_prote = param->prote_spi;
+
+	if (want_prote)
+		new_reg_val |= OA_TC6_CONFIG0_PROTE_MASK;
+
+	/*
+	 * PROTE only takes effect on transactions issued AFTER the write that
+	 * sets it, so the CONFIG0 write that turns protection on must itself be
+	 * framed for the chip's CURRENT protection state, not the target one.
+	 * desc->prote_spi already tracks that current state -- false after
+	 * oa_tc6_sw_reset(), as a soft reset clears PROTE -- so leave it untouched
+	 * for the write and adopt the target only once the write has landed.
+	 *
+	 * Getting this wrong is a hard error: framing the enabling write as
+	 * protected (header, val, ~val) against a still-unprotected MAC-PHY makes
+	 * it echo only header+val then idle MISO high, so the complement slot
+	 * reads 0xFFFFFFFF and __oa_tc6_reg_write()'s echo check rejects it with
+	 * -EIO; the converse (unprotected framing to a protected part) trips the
+	 * part's own control-data protection check.
+	 */
+	ret = __oa_tc6_reg_write(desc, OA_TC6_CONFIG0_REG, new_reg_val);
+	if (ret)
+		return ret;
+
+	desc->prote_spi = want_prote;
+
+	/*
+	 * SYNC goes in a SECOND write, once CPS has landed. The chunk payload
+	 * size must be configured before the configuration is synchronised and
+	 * must not change afterwards without a MAC-PHY reset, so setting both in
+	 * one write leaves it to the part whether CPS is latched on the same
+	 * cycle SYNC rises. The hazard is invisible at the 64-byte default --
+	 * CPS already holds its reset value, so that write does not change it --
+	 * and only bites for any other chunk size.
+	 */
+	return __oa_tc6_reg_write(desc, OA_TC6_CONFIG0_REG,
+				  new_reg_val | OA_TC6_CONFIG0_SYNC_MASK);
+}
+
 /**
- * @brief Trigger a soft reset of the MAC-PHY via the OA-TC6 RESET register
- *        and wait for completion. Mirrors the linux oa_tc6_sw_reset_macphy:
- *        write SWRESET, poll STATUS0.RESETC every 1ms up to 1s, then RW1C
- *        clear the reset-complete status.
+ * @brief Soft reset the MAC-PHY and wait for STATUS0.RESETC.
  * @param desc - the OA TC6 descriptor.
- * @return 0 in case of success, -ENODEV on timeout, negative error otherwise.
+ * @return 0 in case of success, -ETIMEDOUT on timeout, negative error
+ *         otherwise.
  */
 int oa_tc6_sw_reset(struct oa_tc6_desc *desc)
 {
-	uint32_t val;
+	uint32_t timeout = 1000;
+	uint32_t reg_val;
 	int ret;
-	int i;
 
 	ret = oa_tc6_reg_write(desc, OA_TC6_RESET_REG, OA_TC6_RESET_SWRESET);
 	if (ret)
 		return ret;
 
-	for (i = 0; i < 1000; i++) {
-		/* The control echo is not valid until the MAC-PHY is out of reset */
-		ret = oa_tc6_reg_read(desc, OA_TC6_STATUS0_REG, &val);
-		if (!ret && (val & OA_TC6_STATUS0_RESETC))
-			break;
-		capi_wait_ms(1);
-	}
-	if (i == 1000)
-		return -ENODEV;
+	/*
+	 * A soft reset clears CONFIG0.PROTE to its reset default (0), so the
+	 * MAC-PHY is UNPROTECTED coming out of reset regardless of how it booted
+	 * -- an AD3306 that powers up protected included (verified on the wire:
+	 * post-reset STATUS0 reads carry RESETC in the data word but do NOT drive
+	 * the PROTE complement). Frame the RESETC poll unprotected and leave
+	 * prote_spi=false so the CONFIG0 write in oa_tc6_setup_config0() -- the
+	 * write that re-enables protection -- is itself framed unprotected, as
+	 * PROTE only takes effect on the transaction AFTER it.
+	 */
+	desc->prote_spi = false;
 
-	return oa_tc6_reg_write(desc, OA_TC6_STATUS0_REG, OA_TC6_STATUS0_RESETC);
+	do {
+		/*
+		 * Tolerate transient read errors while the part is still coming
+		 * out of reset (e.g. a control-data complement that is not yet
+		 * valid); only RESETC or the timeout ends the loop.
+		 */
+		ret = oa_tc6_reg_read(desc, OA_TC6_STATUS0_REG, &reg_val);
+		if (!ret && no_os_field_get(OA_TC6_STATUS0_RESETC, reg_val))
+			return 0;
+
+		capi_wait_ms(1);
+	} while (--timeout);
+
+	return -ETIMEDOUT;
 }
 
 int oa_tc6_register_callback(struct oa_tc6_desc *desc,
@@ -1283,7 +1447,9 @@ int oa_tc6_init(struct oa_tc6_desc *descriptor, struct oa_tc6_init_param *param)
 	if (ret)
 		return ret;
 
+	descriptor->chunk_size = OA_CHUNK_SIZE;
 	descriptor->comm_desc = param->comm_desc;
+	/* The reset request is framed for the protection the part boots in. */
 	descriptor->prote_spi = param->prote_spi;
 
 	/*
@@ -1310,14 +1476,13 @@ int oa_tc6_init(struct oa_tc6_desc *descriptor, struct oa_tc6_init_param *param)
 	if (ret)
 		goto free_lock;
 
-#if CONFIG_OA_ZERO_SWO_ONLY
-	/* For now, we'll only support receiving frames with SWO = 0 */
-	ret = oa_tc6_reg_update(descriptor, OA_TC6_CONFIG0_REG,
-				OA_TC6_CONFIG0_ZARFE_MASK,
-				OA_TC6_CONFIG0_ZARFE_MASK);
+	ret = oa_tc6_setup_config0(descriptor, param);
 	if (ret)
 		goto free_lock;
-#endif
+
+	ret = oa_tc6_reg_write(descriptor, OA_TC6_STATUS0_REG, 0xFFFF);
+	if (ret)
+		goto free_lock;
 
 	descriptor->bufst_polling = param->bufst_polling;
 
