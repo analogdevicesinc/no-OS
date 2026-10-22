@@ -258,13 +258,31 @@ static struct oa_tc6_queue *oa_tc6_txq_for_vs(struct oa_tc6_desc *desc,
 /* Queue whose credit the footer of a chunk stamped vs will report. */
 static int8_t oa_tc6_chunk_credit_q(struct oa_tc6_desc *desc, uint8_t vs)
 {
+	if (desc->tx_credit_reserve)
+		return desc->tx_sv_q;
+
 	return oa_tc6_txq_for_vs(desc, vs) - desc->tx_q;
 }
 
-/* May queue qi clock its next chunk? Any credit will do. */
-static bool oa_tc6_tx_credit_ok(struct oa_tc6_desc *desc, uint8_t qi)
+/*
+ * May queue qi clock its next chunk (sv: one that opens a frame)? Normally
+ * any credit will do. With a reserve, a chunk must leave the reserve free,
+ * except an SV to a queue other than tx_sv_q, which may use it. That SV must
+ * not leave tx_sv_q below the reserve: no footer reports a queue again until
+ * it gets an SV, and that SV needs the reserve.
+ */
+static bool oa_tc6_tx_credit_ok(struct oa_tc6_desc *desc, uint8_t qi, bool sv)
 {
-	return desc->tx_q[qi].tx_credit > 0;
+	uint8_t reserve = desc->tx_credit_reserve;
+	int8_t cur = desc->tx_sv_q;
+
+	if (!reserve || !sv || cur == qi)
+		return desc->tx_q[qi].tx_credit > reserve;
+
+	if (cur >= 0 && desc->tx_q[cur].tx_credit < reserve)
+		return false;
+
+	return desc->tx_q[qi].tx_credit >= reserve;
 }
 
 /*
@@ -792,7 +810,7 @@ oa_tc6_pack_frame(struct oa_tc6_desc *desc, struct oa_tc6_tx_pack *pack,
 {
 	while (*frame_offset < frame->len &&
 	       pack->chunks_written < pack->max_chunks &&
-	       oa_tc6_tx_credit_ok(desc, qi)) {
+	       oa_tc6_tx_credit_ok(desc, qi, *frame_offset == 0)) {
 		uint32_t chunk_bytes =
 			no_os_min(desc->chunk_size, frame->len - *frame_offset);
 		bool first_chunk = (*frame_offset == 0);
@@ -817,6 +835,8 @@ oa_tc6_pack_frame(struct oa_tc6_desc *desc, struct oa_tc6_tx_pack *pack,
 		}
 		pack->spi_index += desc->chunk_size;
 
+		if (first_chunk)
+			desc->tx_sv_q = qi;
 		desc->tx_chunk_credit_q[pack->chunks_written] =
 			oa_tc6_chunk_credit_q(desc, frame->vs);
 		desc->tx_chunk_eof_q[pack->chunks_written] =
@@ -942,6 +962,7 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 	 */
 	memset(desc->tx_pending_done, 0, sizeof(desc->tx_pending_done));
 	desc->tx_pending_incomplete_frame = NULL;
+	desc->tx_pass_sv_q = desc->tx_sv_q;
 
 	/*
 	 * Solicit first, before the queues that do have credit claim the bus
@@ -1048,6 +1069,11 @@ static void oa_tc6_tx_commit(struct oa_tc6_desc *desc, uint32_t accepted)
 		if (qi >= 0 &&
 		    !oa_tc6_get_first_tx_frame(desc, &desc->tx_q[qi], &f))
 			f->index = 0;
+		/* The MAC-PHY saw only the accepted chunks' SVs. */
+		if (desc->tx_credit_reserve)
+			desc->tx_sv_q =
+				accepted ? desc->tx_chunk_credit_q[accepted - 1]
+					 : desc->tx_pass_sv_q;
 	}
 
 	memset(desc->tx_pending_done, 0, sizeof(desc->tx_pending_done));
@@ -1214,7 +1240,7 @@ static bool oa_tc6_queue_sendable(struct oa_tc6_desc *desc,
 	if (desc->sync_lost || oa_tc6_get_first_tx_frame(desc, queue, &frame))
 		return false;
 
-	return oa_tc6_tx_credit_ok(desc, queue - desc->tx_q);
+	return oa_tc6_tx_credit_ok(desc, queue - desc->tx_q, !frame->index);
 }
 
 /* Abandon the frame in progress and resync on the next SV=1 chunk. The active
@@ -1369,6 +1395,7 @@ static void oa_tc6_rx_note_sync_loss(struct oa_tc6_desc *desc)
 		return;
 
 	desc->sync_lost = true;
+	desc->tx_sv_q = -1;
 	if (desc->event_cb)
 		desc->event_cb(OA_TC6_EVENT_RESET, NULL, desc->event_cb_arg);
 }
@@ -1436,7 +1463,8 @@ static bool oa_tc6_rx_footer_usable(struct oa_tc6_desc *desc, uint32_t footer,
 	/*
 	 * TXC is the credit for the queue recorded in tx_chunk_credit_q, valid
 	 * after this transaction -- NOT the footer's VS, which reports the
-	 * received frame's source with a different mapping.
+	 * received frame's source with a different mapping. A chunk whose SV
+	 * switches tx_sv_q already reports the new queue.
 	 */
 	qi = desc->tx_chunk_credit_q[chunk_idx];
 	if (qi >= 0)
@@ -2019,7 +2047,9 @@ int oa_tc6_set_tx_queues(struct oa_tc6_desc *desc, struct oa_tc6_queue *tx_q,
 		q->head = 0;
 		q->tail = 0;
 		q->count = 0;
-		q->tx_credit = q->init_credit;
+		/* An empty FIFO has the reserve free. */
+		q->tx_credit =
+			no_os_max(q->init_credit, desc->tx_credit_reserve);
 		q->prev_tx_credit = 0;
 	}
 
@@ -2027,6 +2057,31 @@ int oa_tc6_set_tx_queues(struct oa_tc6_desc *desc, struct oa_tc6_queue *tx_q,
 	desc->tx_q = tx_q;
 	desc->tx_q_count = count;
 	desc->tx_rr_cursor = 0;
+	desc->tx_sv_q = -1;
+
+	return 0;
+}
+
+/**
+ * @brief Keep reserve chunks of credit free in every TX FIFO, for a MAC-PHY
+ * whose footer TXC reports only the FIFO that last received an SV.
+ * @param desc - the OA TC6 descriptor
+ * @param reserve - chunks to keep free; 0 restores per-chunk VS credit
+ * @return 0 in case of success, negative error code otherwise
+ */
+int oa_tc6_set_tx_credit_reserve(struct oa_tc6_desc *desc, uint8_t reserve)
+{
+	uint8_t i;
+
+	if (!desc)
+		return -EINVAL;
+
+	desc->tx_credit_reserve = reserve;
+	desc->tx_sv_q = -1;
+	/* Called before frames are submitted, so every FIFO is empty. */
+	for (i = 0; i < desc->tx_q_count; i++)
+		desc->tx_q[i].tx_credit =
+			no_os_max(desc->tx_q[i].tx_credit, reserve);
 
 	return 0;
 }

@@ -389,7 +389,8 @@ enum oa_tc6_tx_sched {
  *
  * Per-queue credit is only observable from data-chunk footers: a chunk's
  * footer TXC is the credit for the queue named by that chunk's own
- * request-header VS (see tx_chunk_credit_q); there is no per-queue register.
+ * request-header VS, or with tx_credit_reserve set, for the queue that last
+ * received an SV (see tx_chunk_credit_q); there is no per-queue register.
  * init_credit seeds tx_credit at reset (TX FIFO capacity in chunks); 0 means
  * unknown.
  * Single-queue operation is a one-element array with vs == 0.
@@ -433,13 +434,25 @@ struct oa_tc6_desc {
 	 * Queue whose credit each TX chunk slot's footer TXC reports, or -1.
 	 * That is the queue named by the chunk's request-header VS, not the
 	 * footer's own VS field (the received frame's source, mapped
-	 * differently).
+	 * differently) -- or with tx_credit_reserve set, tx_sv_q after it.
  */
 	int8_t tx_chunk_credit_q[OA_SPI_MAX_CHUNKS];
 	/* Queue whose frame ends (EV) in each chunk slot, or -1. */
 	int8_t tx_chunk_eof_q[OA_SPI_MAX_CHUNKS];
 	/* Chunks clocked by the transaction being packed/in flight. */
 	uint32_t tx_pass_chunks;
+
+/*
+	 * Chunks of credit kept free in every TX FIFO, for a MAC-PHY whose
+	 * footer TXC reports only the FIFO that last received an SV (DV=0
+	 * chunks do not switch it). A queue is refreshed by sending it an SV,
+	 * which the reserve always has room for. 0: TXC follows each chunk's
+	 * VS. Set with oa_tc6_set_tx_credit_reserve().
+ */
+	uint8_t tx_credit_reserve;
+	/* Queue that last received an SV, or -1; and its value at pass start. */
+	int8_t tx_sv_q;
+	int8_t tx_pass_sv_q;
 
 	/* Data-chunk payload size in bytes (1 << CONFIG0.CPS). */
 	uint32_t chunk_size;
@@ -711,6 +724,9 @@ int oa_tc6_init(struct oa_tc6_desc *, struct oa_tc6_init_param *);
 
 /* (Re)configure the TX queues; discards anything still queued */
 int oa_tc6_set_tx_queues(struct oa_tc6_desc *, struct oa_tc6_queue *, uint8_t);
+
+/* Keep credit free in each TX FIFO; TXC then tracks the last SV's queue */
+int oa_tc6_set_tx_credit_reserve(struct oa_tc6_desc *, uint8_t);
 
 /* Free the resources allocated by the oa_tc6_init() function */
 int oa_tc6_remove(struct oa_tc6_desc *);
