@@ -481,11 +481,14 @@ struct oa_tc6_desc {
 	uint32_t rx_tail; /* oldest completed slot to deliver next */
 
 /*
-	 * TX queues. Each has its own ring and footer-tracked credit.
-	 * tx_q_storage backs the queue of the tx_pool.
+	 * TX priority queues. Each has its own ring and footer-tracked credit.
+	 * vs_to_txq maps a wire VS value (2-bit field, 0..3) to its tx_q index,
+	 * -1 if no queue claims it. tx_q_storage backs the synthesized single
+	 * queue when the caller passes a plain tx_pool instead of tx_q.
  */
 	struct oa_tc6_queue *tx_q;
 	uint8_t tx_q_count;
+	int8_t vs_to_txq[4];
 	struct oa_tc6_queue tx_q_storage;
 
 /*
@@ -572,9 +575,15 @@ struct oa_tc6_init_param {
 	struct oa_tc6_frame_buffer *rx_pool;
 	uint32_t rx_pool_size;
 
-	/* Caller-allocated TX frame-buffer pool, like rx_pool. */
+/*
+	 * TX: either pass a single pool (tx_pool/tx_pool_size, single-queue,
+	 * VS 0) or an array of priority queues (tx_q/tx_q_count). Exactly one
+	 * form must be provided; tx_q takes precedence when tx_q_count != 0.
+ */
 	struct oa_tc6_frame_buffer *tx_pool;
 	uint32_t tx_pool_size;
+	struct oa_tc6_queue *tx_q;
+	uint8_t tx_q_count;
 
 /*
 	 * Optional mutex configuration for serialising control transactions.
@@ -622,8 +631,10 @@ int oa_tc6_get_rx_frame(struct oa_tc6_desc *, struct oa_tc6_frame_buffer **);
 /* Mark the frame buffer as ready to be reused for a new frame. */
 int oa_tc6_put_rx_frame(struct oa_tc6_desc *, struct oa_tc6_frame_buffer *);
 
-/* Get a frame buffer which can be filled and submitted for transmission. */
-int oa_tc6_get_tx_frame(struct oa_tc6_desc *, struct oa_tc6_frame_buffer **);
+/* Get a frame buffer which can be filled and submitted for transmission.
+ * prio selects the TX queue (0 for single-queue operation). */
+int oa_tc6_get_tx_frame(struct oa_tc6_desc *, struct oa_tc6_frame_buffer **,
+			uint8_t prio);
 
 /* Mark the frame buffer as filled and ready for transmission. On error the
  * buffer stays owned by the caller, who must fix ->len and put it again. */
@@ -654,6 +665,9 @@ int oa_tc6_sw_reset(struct oa_tc6_desc *);
 
 /* Initialize the OA TC6 SPI driver */
 int oa_tc6_init(struct oa_tc6_desc *, struct oa_tc6_init_param *);
+
+/* (Re)configure the TX queues; discards anything still queued */
+int oa_tc6_set_tx_queues(struct oa_tc6_desc *, struct oa_tc6_queue *, uint8_t);
 
 /* Free the resources allocated by the oa_tc6_init() function */
 int oa_tc6_remove(struct oa_tc6_desc *);

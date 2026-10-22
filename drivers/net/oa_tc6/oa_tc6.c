@@ -243,6 +243,23 @@ int oa_tc6_reg_update(struct oa_tc6_desc *desc, uint32_t addr, uint32_t val,
 	return ret;
 }
 
+/* Resolve a wire VS value to its TX queue, falling back to queue 0. */
+static struct oa_tc6_queue *oa_tc6_txq_for_vs(struct oa_tc6_desc *desc,
+					      uint8_t vs)
+{
+	int8_t idx = -1;
+
+	if (vs < NO_OS_ARRAY_SIZE(desc->vs_to_txq))
+		idx = desc->vs_to_txq[vs];
+
+	return &desc->tx_q[idx < 0 ? 0 : idx];
+}
+
+/* Queue whose credit the footer of a chunk stamped vs will report. */
+static int8_t oa_tc6_chunk_credit_q(struct oa_tc6_desc *desc, uint8_t vs)
+{
+	return oa_tc6_txq_for_vs(desc, vs) - desc->tx_q;
+}
 
 /* May queue qi clock its next chunk? Any credit will do. */
 static bool oa_tc6_tx_credit_ok(struct oa_tc6_desc *desc, uint8_t qi)
@@ -270,10 +287,11 @@ static void oa_tc6_pool_reset(struct oa_tc6_frame_buffer *pool, uint32_t size)
  * @brief Get a frame buffer that can be filled by user.
  * @param desc - the OA TC6 descriptor.
  * @param buffer - buffer containing the frame to be transmitted.
+ * @param prio - TX queue priority to allocate from (0 for single-queue).
  * @return 0 in case of success, negative error code otherwise
  */
 int oa_tc6_get_tx_frame(struct oa_tc6_desc *desc,
-			struct oa_tc6_frame_buffer **buffer)
+			struct oa_tc6_frame_buffer **buffer, uint8_t prio)
 {
 	struct oa_tc6_frame_buffer *slot;
 	struct oa_tc6_queue *q;
@@ -281,7 +299,7 @@ int oa_tc6_get_tx_frame(struct oa_tc6_desc *desc,
 	if (!desc)
 		return -EINVAL;
 
-	q = &desc->tx_q[0];
+	q = oa_tc6_txq_for_vs(desc, prio);
 
 	/*
 	 * Serialise concurrent callers so two threads can't both see
@@ -669,7 +687,8 @@ static void oa_tc6_emit_empty_chunk(struct oa_tc6_desc *desc,
 
 	no_os_put_unaligned_be32(header, &pack->buf[pack->spi_index]);
 	pack->spi_index += desc->chunk_size + OA_HEADER_LEN;
-	desc->tx_chunk_credit_q[pack->chunks_written] = 0;
+	desc->tx_chunk_credit_q[pack->chunks_written] =
+		oa_tc6_chunk_credit_q(desc, vs);
 	desc->tx_chunk_eof_q[pack->chunks_written] = -1;
 	pack->chunks_written++;
 }
@@ -689,6 +708,19 @@ static void oa_tc6_pack_rx_drain(struct oa_tc6_desc *desc,
 	while (rx_nchunks > pack->chunks_written &&
 	       pack->chunks_written < pack->max_chunks)
 		oa_tc6_emit_empty_chunk(desc, pack, norx, force_vs);
+}
+
+/* First queue to service: the highest-index (highest-priority) queue. */
+static uint8_t oa_tc6_tx_lead_queue(struct oa_tc6_desc *desc)
+{
+	return desc->tx_q_count - 1;
+}
+
+/* The k-th queue to service after start, towards lower priority. */
+static uint8_t oa_tc6_tx_nth_queue(struct oa_tc6_desc *desc, uint8_t start,
+				   uint8_t k)
+{
+	return (start + desc->tx_q_count - k) % desc->tx_q_count;
 }
 
 /* Data-chunk header for one chunk of an outgoing frame (no CRC). */
@@ -761,7 +793,8 @@ oa_tc6_pack_frame(struct oa_tc6_desc *desc, struct oa_tc6_tx_pack *pack,
 		}
 		pack->spi_index += desc->chunk_size;
 
-		desc->tx_chunk_credit_q[pack->chunks_written] = qi;
+		desc->tx_chunk_credit_q[pack->chunks_written] =
+			oa_tc6_chunk_credit_q(desc, frame->vs);
 		desc->tx_chunk_eof_q[pack->chunks_written] =
 			last_chunk ? (int8_t)qi : -1;
 		pack->chunks_written++;
@@ -862,7 +895,9 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 	uint8_t drain_vs = force_vs;
 	int open_qi = -1;
 	uint32_t norx;
+	uint8_t start;
 	uint8_t qi;
+	uint8_t k;
 
 	/*
 	 * Pool occupancy cannot change between here and this pass's footer
@@ -897,18 +932,20 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 
 	/*
 	 * Close the frame the last pass left open before any other frame opens,
-	 * then service the queues; stop as soon as one leaves a frame open on
-	 * the wire. No frame data while the MAC-PHY is unconfigured: it would
-	 * ignore it (7.6).
+	 * then service queues in priority order; stop as soon as one leaves a
+	 * frame open on the wire. No frame data while the MAC-PHY is
+	 * unconfigured: it would ignore it (7.6).
 	 */
+	start = oa_tc6_tx_lead_queue(desc);
 	if (!desc->sync_lost) {
 		open_qi = oa_tc6_open_frame_qi(desc);
 		if (open_qi >= 0 &&
 		    !oa_tc6_pack_queue(desc, &pack, open_qi, norx, true))
 			open_qi = -1;
 	}
-	for (qi = 0; qi < desc->tx_q_count && !desc->sync_lost && open_qi < 0;
-	     qi++) {
+	for (k = 0; k < desc->tx_q_count && !desc->sync_lost && open_qi < 0;
+	     k++) {
+		qi = oa_tc6_tx_nth_queue(desc, start, k);
 		if (oa_tc6_pack_queue(desc, &pack, qi, norx, false))
 			open_qi = qi;
 	}
@@ -1622,9 +1659,19 @@ static int oa_tc6_ctrl_transceive(struct oa_tc6_desc *desc, uint32_t len)
 static bool oa_tc6_credit_solicit_vs(struct oa_tc6_desc *desc, uint8_t *vs)
 {
 	struct oa_tc6_queue *q;
+	int open_qi;
+	uint8_t start;
 	uint8_t qi;
+	uint8_t k;
 
-	for (qi = 0; qi < desc->tx_q_count; qi++) {
+	/* A queue with a frame open on the wire is the one that has to be
+	 * credited first -- nothing else may be clocked until it closes -- so
+	 * scan from it. Otherwise scan in service order. */
+	open_qi = oa_tc6_open_frame_qi(desc);
+	start = open_qi >= 0 ? (uint8_t)open_qi : oa_tc6_tx_lead_queue(desc);
+
+	for (k = 0; k < desc->tx_q_count; k++) {
+		qi = oa_tc6_tx_nth_queue(desc, start, k);
 		q = &desc->tx_q[qi];
 		if (oa_tc6_queue_ready(desc, q) &&
 		    !oa_tc6_queue_sendable(desc, q)) {
@@ -1903,23 +1950,81 @@ int oa_tc6_sw_reset(struct oa_tc6_desc *desc)
 	return -ETIMEDOUT;
 }
 
-/* Wire up the TX queue from the init parameters. */
+/**
+ * @brief Wire up the TX queues, replacing any previously configured set.
+ * @param desc - the device descriptor
+ * @param tx_q - array of queues, each with its pool and wire VS assigned
+ * @param count - number of queues in the array
+ * @return 0 in case of success, negative error code otherwise
+ *
+ * Resets each queue's ring to empty, seeds its live credit from init_credit and
+ * rebuilds the VS -> queue lookup. Callers that only learn how many queues the
+ * part has after the transport is up (the queue count is a chip variant
+ * property) can re-run this once the variant is known; it discards anything
+ * still queued, so call it before frames are submitted. Each queue MUST have a
+ * distinct VS; on error the previous queue set is left untouched.
+ */
+int oa_tc6_set_tx_queues(struct oa_tc6_desc *desc, struct oa_tc6_queue *tx_q,
+			 uint8_t count)
+{
+	int8_t map[NO_OS_ARRAY_SIZE(desc->vs_to_txq)];
+	struct oa_tc6_queue *q;
+	uint8_t i;
+
+	if (!desc || !tx_q || !count)
+		return -EINVAL;
+
+	/* Distinct VS values also bound count to the VS space. */
+	memset(map, -1, sizeof(map));
+	for (i = 0; i < count; i++) {
+		q = &tx_q[i];
+		if (!q->pool || !q->pool_size ||
+		    q->vs >= NO_OS_ARRAY_SIZE(map) || map[q->vs] >= 0)
+			return -EINVAL;
+		map[q->vs] = i;
+	}
+
+	for (i = 0; i < count; i++) {
+		q = &tx_q[i];
+		oa_tc6_pool_reset(q->pool, q->pool_size);
+		q->head = 0;
+		q->tail = 0;
+		q->count = 0;
+		q->tx_credit = q->init_credit;
+		q->prev_tx_credit = 0;
+	}
+
+	memcpy(desc->vs_to_txq, map, sizeof(map));
+	desc->tx_q = tx_q;
+	desc->tx_q_count = count;
+
+	return 0;
+}
+
+/*
+ * Wire up the TX queues from the init parameters. The caller passes either an
+ * array of queues (tx_q) or a single plain pool (tx_pool), the latter wrapped
+ * in the built-in single queue (VS 0).
+ */
 static int oa_tc6_setup_tx_queues(struct oa_tc6_desc *desc,
 				  struct oa_tc6_init_param *param)
 {
-	struct oa_tc6_queue *q = &desc->tx_q_storage;
+	struct oa_tc6_queue *q;
+
+	if (param->tx_q_count)
+		return oa_tc6_set_tx_queues(desc, param->tx_q,
+					    param->tx_q_count);
 
 	if (!param->tx_pool || !param->tx_pool_size)
 		return -EINVAL;
 
+	q = &desc->tx_q_storage;
 	q->pool = param->tx_pool;
 	q->pool_size = param->tx_pool_size;
-	oa_tc6_pool_reset(q->pool, q->pool_size);
+	q->vs = 0;
+	q->init_credit = 0;
 
-	desc->tx_q = q;
-	desc->tx_q_count = 1;
-
-	return 0;
+	return oa_tc6_set_tx_queues(desc, q, 1);
 }
 
 /**

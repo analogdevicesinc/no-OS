@@ -535,7 +535,7 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 		struct oa_tc6_frame_buffer *oa_frame_buffer;
 
 		frame_offset = 0;
-		ret = oa_tc6_get_tx_frame(desc->oa_desc, &oa_frame_buffer);
+		ret = oa_tc6_get_tx_frame(desc->oa_desc, &oa_frame_buffer, 0);
 		if (ret)
 			return ret;
 
