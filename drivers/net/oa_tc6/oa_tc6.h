@@ -15,14 +15,6 @@
 #include "no_os_util.h"
 #include <stdint.h>
 
-#ifndef CONFIG_OA_TX_FRAME_BUFF_NUM
-#define CONFIG_OA_TX_FRAME_BUFF_NUM	2
-#endif
-
-#ifndef CONFIG_OA_RX_FRAME_BUFF_NUM
-#define CONFIG_OA_RX_FRAME_BUFF_NUM	5
-#endif
-
 #ifndef CONFIG_OA_CHUNK_BUFFER_SIZE
 #define CONFIG_OA_CHUNK_BUFFER_SIZE	1514
 #endif
@@ -34,9 +26,6 @@
 #ifndef CONFIG_OA_ZERO_SWO_ONLY
 #define CONFIG_OA_ZERO_SWO_ONLY		1
 #endif
-
-#define OA_TX_FRAME_BUFF_NUM		CONFIG_OA_TX_FRAME_BUFF_NUM
-#define OA_RX_FRAME_BUFF_NUM		CONFIG_OA_RX_FRAME_BUFF_NUM
 
 /* Space for one full frame + 24 chunk headers (68 * 24)*/
 #define OA_SPI_BUFF_LEN		1632
@@ -240,6 +229,19 @@ struct oa_tc6_stats {
 };
 
 /**
+ * @brief A TX queue: its own frame-buffer ring, managed as a FIFO.
+ */
+struct oa_tc6_queue {
+	struct oa_tc6_frame_buffer *pool;
+	uint32_t pool_size;
+	uint8_t vs;
+
+	uint32_t head;
+	uint32_t tail;
+	uint32_t count;
+};
+
+/**
  * @brief Holds the frame buffers and the communication descriptor for the OA TC6 driver.
  */
 struct oa_tc6_desc {
@@ -247,14 +249,32 @@ struct oa_tc6_desc {
 	uint8_t ctrl_chunks[OA_SPI_CTRL_LEN];
 	uint8_t data_chunks[OA_SPI_BUFF_LEN];
 	/*
-	 * ctrl_lock serializes control transactions, data_lock the data path.
-	 * Both are always non-NULL after init.
+	 * ctrl_lock serializes control transactions and doubles as the SPI bus
+	 * lock: oa_tc6_thread() holds it across its transfers. It must be
+	 * recursive, since the register reads of a data pass re-enter it.
+	 * data_lock serializes the frame-buffer ring bookkeeping. It is always
+	 * leaf-level: never held across an SPI transfer or taken before
+	 * ctrl_lock. Both are always non-NULL after init.
 	 */
 	struct capi_mutex *ctrl_lock;
 	struct capi_mutex *data_lock;
 
-	struct oa_tc6_frame_buffer user_rx_frame_buffer[OA_RX_FRAME_BUFF_NUM];
-	struct oa_tc6_frame_buffer user_tx_frame_buffer[OA_TX_FRAME_BUFF_NUM];
+	/*
+	 * The TX and RX pools are managed as FIFO rings so frames are always
+	 * transmitted and delivered in submission/receive order. Producers
+	 * allocate at *_head and advance it; consumers drain from *_tail and
+	 * advance it. A plain first-free scan would recycle freed slots out of
+	 * order and reorder the stream once several frames are in flight.
+	 */
+	struct oa_tc6_frame_buffer *rx_pool;
+	uint32_t rx_pool_size;
+	uint32_t rx_head; /* slot the driver is currently writing into */
+	uint32_t rx_tail; /* oldest completed slot to deliver next */
+
+	/* TX queues. tx_q_storage backs the queue of the tx_pool. */
+	struct oa_tc6_queue *tx_q;
+	uint8_t tx_q_count;
+	struct oa_tc6_queue tx_q_storage;
 
 	uint32_t data_tx_credit;
 	uint32_t data_rx_credit;
@@ -279,6 +299,13 @@ struct oa_tc6_desc {
 struct oa_tc6_init_param {
 	/* SPI target device, initialized by the application. */
 	struct capi_spi_device *comm_desc;
+
+	/* Caller-allocated RX and TX frame-buffer pools. They must remain valid
+	 * for the lifetime of the descriptor, and be non-empty. */
+	struct oa_tc6_frame_buffer *rx_pool;
+	uint32_t rx_pool_size;
+	struct oa_tc6_frame_buffer *tx_pool;
+	uint32_t tx_pool_size;
 
 	enum oa_tc6_bufst_polling bufst_polling;
 	/* The OASPI device uses Protected SPI for control transactions */
@@ -337,7 +364,7 @@ int oa_tc6_register_callback(struct oa_tc6_desc *,
 			     void *);
 
 /* Initialize the OA TC6 SPI driver */
-int oa_tc6_init(struct oa_tc6_desc **, struct oa_tc6_init_param *);
+int oa_tc6_init(struct oa_tc6_desc *, struct oa_tc6_init_param *);
 
 /* Free the resources allocated by the oa_tc6_init() function */
 int oa_tc6_remove(struct oa_tc6_desc *);

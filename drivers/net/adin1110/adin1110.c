@@ -986,10 +986,25 @@ int adin1110_init(struct adin1110_desc **desc,
 
 	if (descriptor->oa_tc6_spi) {
 #if defined(CONFIG_OA_TC6)
+		descriptor->oa_desc = no_os_calloc(1, sizeof(*descriptor->oa_desc));
+		descriptor->oa_tx_pool = no_os_calloc(ADIN1110_OA_TX_BUFF_NUM,
+						      sizeof(*descriptor->oa_tx_pool));
+		descriptor->oa_rx_pool = no_os_calloc(ADIN1110_OA_RX_BUFF_NUM,
+						      sizeof(*descriptor->oa_rx_pool));
+		if (!descriptor->oa_desc || !descriptor->oa_tx_pool ||
+		    !descriptor->oa_rx_pool) {
+			ret = -ENOMEM;
+			goto free_oa_mem;
+		}
+
 		oa_param.comm_desc = param->oa_comm_desc;
-		ret = oa_tc6_init(&descriptor->oa_desc, &oa_param);
+		oa_param.tx_pool = descriptor->oa_tx_pool;
+		oa_param.tx_pool_size = ADIN1110_OA_TX_BUFF_NUM;
+		oa_param.rx_pool = descriptor->oa_rx_pool;
+		oa_param.rx_pool_size = ADIN1110_OA_RX_BUFF_NUM;
+		ret = oa_tc6_init(descriptor->oa_desc, &oa_param);
 		if (ret)
-			goto free_spi;
+			goto free_oa_mem;
 #else
 		ret = -ENOTSUP;
 		goto free_spi;
@@ -1022,7 +1037,12 @@ int adin1110_init(struct adin1110_desc **desc,
 free_oa:
 	no_os_free(descriptor->data);
 #if defined(CONFIG_OA_TC6)
-	oa_tc6_remove(descriptor->oa_desc);
+	if (descriptor->oa_tc6_spi)
+		oa_tc6_remove(descriptor->oa_desc);
+free_oa_mem:
+	no_os_free(descriptor->oa_rx_pool);
+	no_os_free(descriptor->oa_tx_pool);
+	no_os_free(descriptor->oa_desc);
 #endif
 free_spi:
 	no_os_spi_remove(descriptor->comm_desc);
@@ -1058,7 +1078,11 @@ int adin1110_remove(struct adin1110_desc *desc)
 
 	no_os_free(desc->data);
 #if defined(CONFIG_OA_TC6)
-	oa_tc6_remove(desc->oa_desc);
+	if (desc->oa_tc6_spi)
+		oa_tc6_remove(desc->oa_desc);
+	no_os_free(desc->oa_rx_pool);
+	no_os_free(desc->oa_tx_pool);
+	no_os_free(desc->oa_desc);
 #endif
 	no_os_free(desc);
 
