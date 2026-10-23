@@ -913,9 +913,23 @@ static int adin1110_setup_mac(struct adin1110_desc *desc)
 	if (ret)
 		return ret;
 
-	reg_val = ADIN1110_TX_RDY_IRQ | ADIN1110_RX_RDY_IRQ | ADIN1110_SPI_ERR_IRQ;
-	if (desc->chip_type == ADIN2111)
-		reg_val |= ADIN2111_RX_RDY_IRQ;
+	/*
+	 * TX_RDY and RX_RDY are level bits: in OA mode credits come from the
+	 * data footers, and leaving them unmasked keeps EXST set on every chunk.
+	 */
+	if (desc->oa_tc6_spi) {
+		reg_val = ADIN1110_SPI_ERR_IRQ;
+
+		ret = adin1110_reg_update(desc, ADIN1110_IMASK0_REG,
+					  ADIN1110_PHYINT_IRQ, ADIN1110_PHYINT_IRQ);
+		if (ret)
+			return ret;
+	} else {
+		reg_val = ADIN1110_TX_RDY_IRQ | ADIN1110_RX_RDY_IRQ |
+			  ADIN1110_SPI_ERR_IRQ;
+		if (desc->chip_type == ADIN2111)
+			reg_val |= ADIN2111_RX_RDY_IRQ;
+	}
 
 	ret = adin1110_reg_write(desc, ADIN1110_IMASK1_REG, ~reg_val);
 	if (ret)
