@@ -17,6 +17,9 @@
 struct ad413x_iio_dev {
 	struct ad413x_dev *ad413x_dev;
 	struct iio_device *iio_dev;
+	struct iio_device iio_dev_desc;
+	struct iio_channel channels[16];
+	struct scan_type scan_type;
 };
 
 struct ad413x_iio_init_param {
