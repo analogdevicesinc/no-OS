@@ -22,6 +22,11 @@
 NO_OS_DECLARE_CRC8_TABLE(ad413x_crc8);
 uint32_t timeout = 0xFFFFFF;
 
+/* Pin mapping for AIN0..AIN7, VBIAS_0..VBIAS_7 */
+static const uint8_t ad413x_4_pin_map[] = {
+	0x00, 0x01, 0x04, 0x05, 0x0A, 0x0B, 0x0E, 0x0F,
+};
+
 /* Pin mapping for AIN0..AIN15, VBIAS_0..VBIAS_15 */
 static const uint8_t ad413x_8_pin_map[] = {
 	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
@@ -29,12 +34,50 @@ static const uint8_t ad413x_8_pin_map[] = {
 };
 
 static const struct ad413x_chip_info ad413x_chip_info_tbl[] = {
+	[AD4129_4] = {
+		.name = "ad4129-4",
+		.id = 0x04,
+		.resolution = 16,
+		.max_analog_pins = 8,
+		.has_fifo = true,
+		.pin_map = ad413x_4_pin_map,
+	},
+	[AD4129_8] = {
+		.name = "ad4129-8",
+		.id = 0x04,
+		.resolution = 16,
+		.max_analog_pins = 16,
+		.has_fifo = true,
+		.pin_map = ad413x_8_pin_map,
+	},
+	[AD4130_4] = {
+		.name = "ad4130-4",
+		.id = 0x04,
+		.resolution = 24,
+		.max_analog_pins = 8,
+		.has_fifo = true,
+		.pin_map = ad413x_4_pin_map,
+	},
 	[AD4130_8] = {
 		.name = "ad4130-8",
 		.id = 0x04,
 		.resolution = 24,
 		.max_analog_pins = 16,
 		.has_fifo = true,
+		.pin_map = ad413x_8_pin_map,
+	},
+	[AD4131_4] = {
+		.name = "ad4131-4",
+		.id = 0x04,
+		.resolution = 16,
+		.max_analog_pins = 8,
+		.pin_map = ad413x_4_pin_map,
+	},
+	[AD4131_8] = {
+		.name = "ad4131-8",
+		.id = 0x04,
+		.resolution = 16,
+		.max_analog_pins = 16,
 		.pin_map = ad413x_8_pin_map,
 	},
 };

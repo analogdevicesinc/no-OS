@@ -17,6 +17,18 @@ static const char *const ad413x_iio_scale_24bit[] = {
 	"0.000149011", "0.000074505", "0.000298023", "0.000149011"
 };
 
+static const char *const ad413x_iio_scale_16bit[] = {
+	"0.038147554", "0.019073777", "0.076293945", "0.038146972"
+};
+
+static const char *const *ad413x_iio_get_scale_tbl(struct ad413x_dev *dev)
+{
+	if (dev->chip_info->resolution == 16)
+		return ad413x_iio_scale_16bit;
+
+	return ad413x_iio_scale_24bit;
+}
+
 static int _ad413x_read_register(void *device, uint32_t reg,
 				 uint32_t *readval)
 {
@@ -204,7 +216,8 @@ static int ad413x_iio_scale_available(void *device, char *buf,
 				      uint32_t len,
 				      const struct iio_ch_info *channel, intptr_t priv)
 {
-	const char *const *tbl = ad413x_iio_scale_24bit;
+	struct ad413x_iio_dev *iiodev = (struct ad413x_iio_dev *)device;
+	const char *const *tbl = ad413x_iio_get_scale_tbl(iiodev->ad413x_dev);
 
 	return snprintf(buf, len, "%sU %sU %sB %sB", tbl[0], tbl[1], tbl[2],
 			tbl[3]);
@@ -216,7 +229,7 @@ static int ad413x_iio_store_scale(void *device, char *buf, uint32_t len,
 {
 	struct ad413x_iio_dev *iiodev = (struct ad413x_iio_dev *)device;
 	struct ad413x_dev *dev = (struct ad413x_dev *)iiodev->ad413x_dev;
-	const char *const *tbl = ad413x_iio_scale_24bit;
+	const char *const *tbl = ad413x_iio_get_scale_tbl(dev);
 	int32_t ret;
 	char polarity;
 
