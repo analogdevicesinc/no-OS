@@ -545,6 +545,117 @@ static int adin1110_oa_poll(struct adin1110_desc *desc)
 #endif
 
 /**
+ * @brief Get a frame buffer to fill in place for transmission (OPEN Alliance
+ *        mode only). Fill ->data and ->len, then pass it to
+ *        adin1110_send_frame().
+ * @param desc - the device descriptor
+ * @param frame - the frame buffer, owned by the caller until it is sent.
+ * @return 0 in case of success, -ENOTSUP outside OPEN Alliance mode,
+ *         negative error code otherwise (no free buffer)
+ */
+int adin1110_get_tx_frame(struct adin1110_desc *desc,
+			  struct oa_tc6_frame_buffer **frame)
+{
+	if (!desc || !frame)
+		return -EINVAL;
+
+#if defined(CONFIG_OA_TC6)
+	if (desc->oa_tc6_spi)
+		return oa_tc6_get_tx_frame(desc->oa_desc, frame, 0);
+#endif
+
+	return -ENOTSUP;
+}
+
+/**
+ * @brief Queue a frame obtained with adin1110_get_tx_frame() for
+ *        transmission and run the datapath.
+ * @param desc - the device descriptor
+ * @param port - the port for the frame to be transmitted on.
+ * @param frame - the filled frame buffer. On error it stays owned by the
+ *                caller.
+ * @return 0 in case of success, negative error code otherwise
+ */
+int adin1110_send_frame(struct adin1110_desc *desc, uint32_t port,
+			struct oa_tc6_frame_buffer *frame)
+{
+	if (!desc || !frame)
+		return -EINVAL;
+
+	if (port >= driver_data[desc->chip_type].num_ports)
+		return -EINVAL;
+
+#if defined(CONFIG_OA_TC6)
+	if (desc->oa_tc6_spi) {
+		int ret;
+
+		if (frame->len < 64)
+			frame->len = 64;
+
+		frame->vs = port;
+
+		ret = oa_tc6_put_tx_frame(desc->oa_desc, frame);
+		if (ret)
+			return ret;
+
+		return adin1110_oa_poll(desc);
+	}
+#endif
+
+	return -ENOTSUP;
+}
+
+/**
+ * @brief Run the datapath and take the next frame received on a port, in
+ *        place (OPEN Alliance mode only). Return it with
+ *        adin1110_put_rx_frame().
+ * @param desc - the device descriptor
+ * @param port - the port from which the frame shall be received.
+ * @param frame - the received frame; ->data holds ->len bytes.
+ * @return 0 in case of success, negative error code otherwise (no frame)
+ */
+int adin1110_get_rx_frame(struct adin1110_desc *desc, uint32_t port,
+			  struct oa_tc6_frame_buffer **frame)
+{
+	if (!desc || !frame)
+		return -EINVAL;
+
+	if (port >= driver_data[desc->chip_type].num_ports)
+		return -EINVAL;
+
+#if defined(CONFIG_OA_TC6)
+	if (desc->oa_tc6_spi) {
+		adin1110_oa_poll(desc);
+
+		return oa_tc6_get_rx_frame_match_vs(desc->oa_desc, frame, port,
+						    0x1);
+	}
+#endif
+
+	return -ENOTSUP;
+}
+
+/**
+ * @brief Return a frame obtained with adin1110_get_rx_frame().
+ * @param desc - the device descriptor
+ * @param frame - the frame buffer.
+ * @return 0 in case of success, negative error code otherwise
+ */
+int adin1110_put_rx_frame(struct adin1110_desc *desc,
+			  struct oa_tc6_frame_buffer *frame)
+{
+	if (!desc || !frame)
+		return -EINVAL;
+
+#if defined(CONFIG_OA_TC6)
+	if (desc->oa_tc6_spi)
+		return oa_tc6_put_rx_frame(desc->oa_desc, frame);
+#endif
+
+	return -ENOTSUP;
+}
+
+/**
  * @brief Write a frame to the TX FIFO.
  * @param desc - the device descriptor
  * @param port - the port for the frame to be transmitted on.
@@ -571,27 +682,22 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	if (desc->oa_tc6_spi) {
 		struct oa_tc6_frame_buffer *oa_frame_buffer;
 
-		frame_offset = 0;
-		ret = oa_tc6_get_tx_frame(desc->oa_desc, &oa_frame_buffer, 0);
+		if (eth_buff->len > sizeof(oa_frame_buffer->data))
+			return -EINVAL;
+
+		ret = adin1110_get_tx_frame(desc, &oa_frame_buffer);
 		if (ret)
 			return ret;
 
+		frame_offset = 0;
 		memcpy(&oa_frame_buffer->data[frame_offset], (void *)&eth_buff->mac_dest[0],
 		       ADIN1110_ETH_HDR_LEN);
 		frame_offset += ADIN1110_ETH_HDR_LEN;
 		memcpy(&oa_frame_buffer->data[frame_offset], eth_buff->payload,
 		       eth_buff->len - ADIN1110_ETH_HDR_LEN);
+		oa_frame_buffer->len = eth_buff->len;
 
-		if (eth_buff->len < 64)
-			oa_frame_buffer->len = 64;
-		else
-			oa_frame_buffer->len = eth_buff->len;
-
-		oa_frame_buffer->vs = port;
-
-		oa_tc6_put_tx_frame(desc->oa_desc, oa_frame_buffer);
-
-		return adin1110_oa_poll(desc);
+		return adin1110_send_frame(desc, port, oa_frame_buffer);
 	}
 #endif
 
@@ -671,8 +777,7 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 	if (desc->oa_tc6_spi) {
 		struct oa_tc6_frame_buffer *frame;
 
-		adin1110_oa_poll(desc);
-		ret = oa_tc6_get_rx_frame_match_vs(desc->oa_desc, &frame, port, 0x1);
+		ret = adin1110_get_rx_frame(desc, port, &frame);
 		if (ret)
 			return ret;
 
@@ -684,9 +789,7 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 		       frame->len - ADIN1110_ETH_HDR_LEN);
 		eth_buff->len = frame->len;
 
-		oa_tc6_put_rx_frame(desc->oa_desc, frame);
-
-		return 0;
+		return adin1110_put_rx_frame(desc, frame);
 	}
 #endif
 

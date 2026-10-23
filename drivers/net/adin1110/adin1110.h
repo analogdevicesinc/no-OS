@@ -250,6 +250,22 @@ int adin1110_write_fifo(struct adin1110_desc *, uint32_t,
 int adin1110_read_fifo(struct adin1110_desc *, uint32_t,
 		       struct adin1110_eth_buff *);
 
+/* Get a TX frame buffer to fill in place (OPEN Alliance mode only) */
+int adin1110_get_tx_frame(struct adin1110_desc *,
+			  struct oa_tc6_frame_buffer **);
+
+/* Queue a frame from adin1110_get_tx_frame() for transmission */
+int adin1110_send_frame(struct adin1110_desc *, uint32_t,
+			struct oa_tc6_frame_buffer *);
+
+/* Take the next received frame in place (OPEN Alliance mode only) */
+int adin1110_get_rx_frame(struct adin1110_desc *, uint32_t,
+			  struct oa_tc6_frame_buffer **);
+
+/* Return a frame from adin1110_get_rx_frame() */
+int adin1110_put_rx_frame(struct adin1110_desc *,
+			  struct oa_tc6_frame_buffer *);
+
 /* Write a PHY register using clause 22 */
 int adin1110_mdio_write(struct adin1110_desc *, uint32_t, uint32_t, uint16_t);
 
