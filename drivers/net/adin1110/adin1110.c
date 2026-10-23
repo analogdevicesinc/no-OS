@@ -752,6 +752,10 @@ static int adin1110_check_reset(struct adin1110_desc *desc)
 	uint32_t reg_val;
 	int ret;
 
+	/* oa_tc6_init() already waited for RESETC and cleared STATUS0 */
+	if (desc->oa_tc6_spi)
+		goto sync;
+
 	ret = adin1110_reg_read(desc, ADIN1110_STATUS0_REG, &reg_val);
 	if (ret)
 		return ret;
@@ -760,6 +764,7 @@ static int adin1110_check_reset(struct adin1110_desc *desc)
 	if (!reg_val)
 		return -EBUSY;
 
+sync:
 	return adin1110_reg_update(desc, ADIN1110_CONFIG1_REG,
 				   ADIN1110_CONFIG1_SYNC, ADIN1110_CONFIG1_SYNC);
 }
