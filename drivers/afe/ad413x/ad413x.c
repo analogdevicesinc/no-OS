@@ -22,6 +22,15 @@
 NO_OS_DECLARE_CRC8_TABLE(ad413x_crc8);
 uint32_t timeout = 0xFFFFFF;
 
+static const struct ad413x_chip_info ad413x_chip_info_tbl[] = {
+	[AD4130_8] = {
+		.name = "ad4130-8",
+		.id = 0x04,
+		.resolution = 24,
+		.max_analog_pins = 16,
+	},
+};
+
 /***************************************************************************//**
  * SPI internal register write to device using a mask.
  *
@@ -897,6 +906,9 @@ int32_t ad413x_init(struct ad413x_dev **device,
 	int32_t ret;
 	int32_t i;
 
+	if (init_param.chip_id >= NO_OS_ARRAY_SIZE(ad413x_chip_info_tbl))
+		return -EINVAL;
+
 	no_os_crc8_populate_msb(ad413x_crc8, AD413X_CRC8_POLY);
 
 	dev = (struct ad413x_dev *)no_os_malloc(sizeof(*dev));
@@ -904,6 +916,7 @@ int32_t ad413x_init(struct ad413x_dev **device,
 		return -1;
 
 	dev->chip_id = init_param.chip_id;
+	dev->chip_info = &ad413x_chip_info_tbl[init_param.chip_id];
 	dev->spi_crc_en = 0;
 
 	/* SPI */
@@ -943,13 +956,8 @@ int32_t ad413x_init(struct ad413x_dev **device,
 	if (ret)
 		goto err_gpio;
 
-	switch (dev->chip_id) {
-	case AD4130_8:
-		if (reg_data != AD4130_8) {
-			goto err_gpio;
-		}
-		break;
-	default:
+	if (reg_data != dev->chip_info->id) {
+		ret = -ENODEV;
 		goto err_gpio;
 	}
 
@@ -1036,7 +1044,7 @@ int32_t ad413x_init(struct ad413x_dev **device,
 
 	*device = dev;
 
-	pr_info("AD413X successfully initialized\n");
+	pr_info("%s successfully initialized\n", dev->chip_info->name);
 	return 0;
 
 err_gpio:

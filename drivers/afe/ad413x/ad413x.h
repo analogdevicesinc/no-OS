@@ -349,10 +349,22 @@ enum ad413x_gain {
 
 /**
  * @enum ad413x_chip_id
- * @brief Chip IDs.
+ * @brief Supported devices.
  */
 enum ad413x_chip_id {
-	AD4130_8 = 0x04
+	AD4130_8,
+};
+
+/**
+ * @struct ad413x_chip_info
+ * @brief Device specific parameters.
+ */
+struct ad413x_chip_info {
+	const char *name;
+	/* Expected ID register value, 0 if not checked */
+	uint8_t id;
+	uint8_t resolution;
+	uint8_t max_analog_pins;
 };
 
 /**
@@ -443,6 +455,7 @@ struct ad413x_dev {
 	struct ad413x_preset preset[8];
 	struct ad413x_channel ch[16];
 	enum ad413x_chip_id chip_id;
+	const struct ad413x_chip_info *chip_info;
 	enum ad413x_mclk_sel mclk;
 	enum ad413x_adc_mode op_mode;
 	uint8_t bipolar;
