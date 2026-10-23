@@ -19,4 +19,22 @@ config AD413X_IIO_EXAMPLE
 
 endchoice
 
+choice AD413X_CARRIER
+	prompt "Carrier board"
+	default AD413X_ZED_CARRIER
+
+config AD413X_ZED_CARRIER
+	bool "ZedBoard carrier"
+	help
+	  Select when targeting the ZedBoard carrier. The IIO console uses
+	  the PS UART1 peripheral routed to the ZedBoard USB-UART.
+
+config AD413X_CORAZ7S_CARRIER
+	bool "Cora Z7-07S carrier"
+	help
+	  Select when targeting the Cora Z7-07S carrier. The IIO console uses
+	  the PS UART0 peripheral routed to the Cora Z7S USB-UART.
+
+endchoice
+
 endmenu

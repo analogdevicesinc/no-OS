@@ -8,6 +8,10 @@ if(CONFIG_AD413X_IIO_EXAMPLE)
     target_compile_definitions(ad413x PRIVATE IIO_SUPPORT)
 endif()
 
+if(CONFIG_AD413X_CORAZ7S_CARRIER)
+    target_compile_definitions(ad413x PRIVATE AD413X_CORAZ7S_CARRIER)
+endif()
+
 target_include_directories(ad413x PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/app
 )
