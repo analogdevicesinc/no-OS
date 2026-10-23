@@ -75,6 +75,35 @@ static int adin1110_read_frames(struct adin1110_desc *desc, struct pbuf **p,
  * @param data - netif to RX data.
  * @return 0 in case of success, negative error otherwise.
  */
+/*
+ * OPEN Alliance mode: copy each received frame straight from the driver's
+ * RX pool into a pbuf, without the intermediate buffer.
+ */
+static int32_t adin1110_oa_step(struct adin1110_desc *mac_desc,
+				struct netif *netif_desc)
+{
+	struct oa_tc6_frame_buffer *frame;
+	struct pbuf *p;
+
+	while (!adin1110_get_rx_frame(mac_desc, 0, &frame)) {
+		p = pbuf_alloc(PBUF_RAW, frame->len, PBUF_POOL);
+		if (p)
+			pbuf_take(p, frame->data, frame->len);
+		adin1110_put_rx_frame(mac_desc, frame);
+
+		if (!p) {
+			LINK_STATS_INC(link.memerr);
+			continue;
+		}
+
+		LINK_STATS_INC(link.recv);
+		if (netif_desc->input(p, netif_desc))
+			pbuf_free(p);
+	}
+
+	return 0;
+}
+
 static int32_t adin1110_step(struct lwip_network_desc *desc, void *data)
 {
 	struct adin1110_desc *mac_desc;
@@ -85,6 +114,9 @@ static int32_t adin1110_step(struct lwip_network_desc *desc, void *data)
 
 	netif_desc = desc->lwip_netif;
 	mac_desc = desc->mac_desc;
+
+	if (mac_desc->oa_tc6_spi)
+		return adin1110_oa_step(mac_desc, netif_desc);
 
 	do {
 		ret = adin1110_read_frames(mac_desc, &p, &len);
@@ -121,6 +153,24 @@ static int32_t adin1110_netif_output(struct netif *net, struct pbuf *p)
 	mac_desc = lwip_desc->mac_desc;
 
 	LINK_STATS_INC(link.xmit);
+
+	/* OPEN Alliance mode: build the frame in place in the driver's TX pool */
+	if (mac_desc->oa_tc6_spi) {
+		struct oa_tc6_frame_buffer *frame;
+
+		if (p->tot_len > sizeof(frame->data))
+			return ERR_VAL;
+
+		if (adin1110_get_tx_frame(mac_desc, &frame)) {
+			LINK_STATS_INC(link.drop);
+			return ERR_MEM;
+		}
+
+		frame->len = pbuf_copy_partial(p, frame->data, p->tot_len, 0);
+
+		return adin1110_send_frame(mac_desc, 0, frame) ? ERR_IF : ERR_OK;
+	}
+
 	frame_len = pbuf_copy_partial(p, lwip_buff, p->tot_len, 0);
 
 	memcpy(&buff.mac_dest, lwip_buff, ADIN1110_ETH_HDR_LEN);
