@@ -507,6 +507,21 @@ int adin1110_broadcast_filter(struct adin1110_desc *desc, bool enabled)
 	return adin1110_clear_mac_addr(desc, broadcast_addr);
 }
 
+#if defined(CONFIG_OA_TC6)
+/**
+ * @brief Run the OPEN Alliance datapath once.
+ * @param desc - the device descriptor.
+ * @return 0 in case of success, negative error code otherwise
+ */
+static int adin1110_oa_poll(struct adin1110_desc *desc)
+{
+	if (desc->oa_tc6_async)
+		return oa_tc6_thread_async(desc->oa_desc);
+
+	return oa_tc6_thread(desc->oa_desc);
+}
+#endif
+
 /**
  * @brief Write a frame to the TX FIFO.
  * @param desc - the device descriptor
@@ -554,7 +569,7 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 
 		oa_tc6_put_tx_frame(desc->oa_desc, oa_frame_buffer);
 
-		return oa_tc6_thread(desc->oa_desc);
+		return adin1110_oa_poll(desc);
 	}
 #endif
 
@@ -634,7 +649,7 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 	if (desc->oa_tc6_spi) {
 		struct oa_tc6_frame_buffer *frame;
 
-		oa_tc6_thread(desc->oa_desc);
+		adin1110_oa_poll(desc);
 		ret = oa_tc6_get_rx_frame_match_vs(desc->oa_desc, &frame, port, 0x1);
 		if (ret)
 			return ret;
@@ -1002,6 +1017,7 @@ int adin1110_init(struct adin1110_desc **desc,
 	}
 
 	descriptor->oa_tc6_spi = param->oa_tc6_spi;
+	descriptor->oa_tc6_async = param->oa_tc6_async;
 
 	if (descriptor->oa_tc6_spi) {
 #if defined(CONFIG_OA_TC6)
@@ -1017,6 +1033,7 @@ int adin1110_init(struct adin1110_desc **desc,
 		}
 
 		oa_param.comm_desc = param->oa_comm_desc;
+		oa_param.async_mode = param->oa_tc6_async;
 		oa_param.tx_pool = descriptor->oa_tx_pool;
 		oa_param.tx_pool_size = ADIN1110_OA_TX_BUFF_NUM;
 		oa_param.rx_pool = descriptor->oa_rx_pool;

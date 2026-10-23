@@ -190,6 +190,8 @@ struct adin1110_desc {
 	struct no_os_gpio_desc *reset_gpio;
 	struct no_os_gpio_desc *int_gpio;
 	bool oa_tc6_spi;
+	/* Use the non-blocking DMA datapath of the OPEN Alliance protocol */
+	bool oa_tc6_async;
 	bool append_crc;
 
 	struct oa_tc6_desc *oa_desc;
@@ -210,6 +212,8 @@ struct adin1110_init_param {
 	uint8_t mac_address[ADIN1110_ETH_ALEN];
 	bool append_crc;
 	bool oa_tc6_spi;
+	/* Use the non-blocking DMA datapath of the OPEN Alliance protocol */
+	bool oa_tc6_async;
 };
 
 /**
