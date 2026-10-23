@@ -26,6 +26,7 @@
 #define AD413X_R2B				(2 << 8)
 #define AD413X_R3B				(3 << 8)
 #define AD413X_TRANSF_LEN(x)			(((x) >> 8) & 0xFF)
+#define AD413X_ADDR(x)				((x) & 0xFF)
 
 /***************************** ADC Register Map *******************************/
 #define AD413X_REG_STATUS 			(AD413X_R1B | 0x0)
@@ -365,6 +366,9 @@ struct ad413x_chip_info {
 	uint8_t id;
 	uint8_t resolution;
 	uint8_t max_analog_pins;
+	bool has_fifo;
+	/* Maps AIN/VBIAS pin number to its register field value */
+	const uint8_t *pin_map;
 };
 
 /**
