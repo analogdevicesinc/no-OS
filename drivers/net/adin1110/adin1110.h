@@ -239,6 +239,9 @@ int adin1110_reg_write(struct adin1110_desc *, uint16_t, uint32_t);
 /* Read a register's value */
 int adin1110_reg_read(struct adin1110_desc *, uint16_t, uint32_t *);
 
+/* Notify the driver of an interrupt from the device, ISR safe */
+int adin1110_irq(struct adin1110_desc *);
+
 /* Write a frame to the TX FIFO */
 int adin1110_write_fifo(struct adin1110_desc *, uint32_t,
 			struct adin1110_eth_buff *);

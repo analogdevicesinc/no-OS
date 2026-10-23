@@ -507,6 +507,28 @@ int adin1110_broadcast_filter(struct adin1110_desc *desc, bool enabled)
 	return adin1110_clear_mac_addr(desc, broadcast_addr);
 }
 
+/**
+ * @brief Notify the driver that the device asserted its interrupt line.
+ *
+ * Safe to call from an ISR. In OPEN Alliance mode the next datapath poll
+ * clocks a chunk, so RX data and credit are fetched even when there is
+ * nothing to transmit.
+ * @param desc - the device descriptor.
+ * @return 0 in case of success, negative error code otherwise
+ */
+int adin1110_irq(struct adin1110_desc *desc)
+{
+	if (!desc)
+		return -EINVAL;
+
+#if defined(CONFIG_OA_TC6)
+	if (desc->oa_tc6_spi)
+		desc->oa_desc->irq_pending = true;
+#endif
+
+	return 0;
+}
+
 #if defined(CONFIG_OA_TC6)
 /**
  * @brief Run the OPEN Alliance datapath once.
