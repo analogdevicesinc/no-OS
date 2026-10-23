@@ -23,9 +23,10 @@ time delay in 0.865 ps steps. All on-chip registers are controlled through a
 serial lines.
 
 This project runs on a Xilinx ZCU102 carrier connected to the
-ADAR3000/ADAR3001-EVALZ evaluation board through an SDP-I-FMC interposer. Its
-basic example exercises every driver feature and checks each one against the
-hardware.
+ADAR3000/ADAR3001-EVALZ evaluation board through an SDP-I-FMC interposer. It
+has two variants: a basic example that exercises every driver feature and
+checks each against the hardware, and an IIO example that serves the device to
+libiio clients over the UART.
 
 Applications
 ------------
@@ -161,6 +162,362 @@ setup; the temperature follows the board:
 Any other final line is an error message naming the check that failed and the
 values it saw.
 
+IIO Example
+~~~~~~~~~~~
+
+The IIO example serves the ADAR300X as an IIO device over the console UART,
+at 115200 baud, for libiio clients such as ``iio_info``, ``iio_attr`` and
+``iio_rwdev``. The device, its channels and its attributes are described in the
+driver documentation, under ``ADAR300X no-OS IIO support``.
+
+If you are not familiar with the no-OS IIO support, please take a look at:
+:doc:`IIO Framework </iio_framework>`
+
+Host Requirements
+^^^^^^^^^^^^^^^^^
+
+The procedure below uses the libiio command line tools. Install **libiio
+1.0.0** or later from the
+`libiio releases <https://github.com/analogdevicesinc/libiio/releases>`__,
+which provide Linux packages, a macOS package and a Windows installer. Check
+the version with:
+
+.. code-block:: bash
+
+   iio_info -V
+
+Older ``iio_writedev`` tools that report ``Using Libiio v0.x -> v1.x
+compatibility layer`` silently discard buffer writes, exiting without an error,
+and should not be used for this procedure.
+
+IIO Test Procedure
+~~~~~~~~~~~~~~~~~~
+
+Build and flash the ``iio_example`` variant as shown in `Build Command`_, and
+close any serial terminal on the console port: libiio needs the port to
+itself. Wait a few seconds for the board to boot, then set the context URI in
+the shell used for all the steps below:
+
+.. code-block:: bash
+
+   U=serial:/dev/ttyUSB0,115200,8n1
+
+The steps are written for a bash shell: Linux, macOS, or Git Bash or WSL on
+Windows. With the Windows libiio tools under Git Bash, use the console COM port
+instead, for example ``U=serial:COM5,115200,8n1``.
+
+The expected outputs below are those of a freshly booted board; run the steps
+in order, since some of them build on the state left by earlier ones. A write
+with ``iio_attr`` prints the value read back after the write.
+
+1. Enumeration
+^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+   iio_info -u $U | grep -E "devices:|adar3000|channels found|buffer found|scan elements found"
+
+Expected output:
+
+.. code-block:: bash
+
+   IIO context has 1 devices:
+   	iio:device0: adar3000 (buffer capable)
+   		33 channels found:
+   		1 buffer found:
+   			32 scan elements found:
+
+``iio_info -u $U`` without the filter lists every channel and attribute.
+
+2. Temperature
+^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+   raw=$(iio_attr -u $U -c adar3000 temp16 raw)
+   offset=$(iio_attr -u $U -c adar3000 temp16 offset)
+   scale=$(iio_attr -u $U -c adar3000 temp16 scale)
+   echo "raw $raw offset $offset scale $scale"
+   awk "BEGIN { printf \"%.1f degC\n\", ($raw + $offset) * $scale / 1000 }"
+
+Expected output; the code and temperature follow the board:
+
+.. code-block:: bash
+
+   raw 125 offset -99.750000000 scale 917.431192660
+   23.2 degC
+
+3. Delay and Attenuation Scales
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+   iio_attr -u $U -c -o adar3000 phase0 scale
+   iio_attr -u $U -c -o adar3000 power0 scale
+
+Expected output, picoseconds and decibels per step:
+
+.. code-block:: bash
+
+   0.865000000
+   0.500000000
+
+4. Direct Control Bank
+^^^^^^^^^^^^^^^^^^^^^^
+
+Write, then read back, the delay and attenuation of beam 1, element 1:
+
+.. code-block:: bash
+
+   iio_attr -u $U -c -o adar3000 phase5 raw 21
+   iio_attr -u $U -c -o adar3000 phase5 raw
+   iio_attr -u $U -c -o adar3000 power5 raw 42
+   iio_attr -u $U -c -o adar3000 power5 raw
+
+Expected output:
+
+.. code-block:: bash
+
+   21
+   21
+   42
+   42
+
+5. Beam Mode
+^^^^^^^^^^^^
+
+.. code-block:: bash
+
+   iio_attr -u $U -d adar3000 beam1_mode
+   iio_attr -u $U -d adar3000 beam1_mode_available
+
+Expected output:
+
+.. code-block:: bash
+
+   direct
+   direct memory fifo instant_direct reset mute
+
+6. RAM Sequencer Range
+^^^^^^^^^^^^^^^^^^^^^^
+
+Read the power-on range of beam 1, set it to 10 to 20 and read it back:
+
+.. code-block:: bash
+
+   iio_attr -u $U -d adar3000 beam1_ram_start
+   iio_attr -u $U -d adar3000 beam1_ram_stop
+   iio_attr -u $U -d adar3000 beam1_ram_start 10
+   iio_attr -u $U -d adar3000 beam1_ram_stop 20
+   iio_attr -u $U -d adar3000 beam1_ram_start
+   iio_attr -u $U -d adar3000 beam1_ram_stop
+
+Expected output:
+
+.. code-block:: bash
+
+   0
+   63
+   10
+   20
+   10
+   20
+
+7. Amplifier Bias and Enable
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Read the power-on operational state of beam amplifier 0, then write and read
+back the sleep state of beam amplifier 2 and of element amplifier 1:
+
+.. code-block:: bash
+
+   iio_attr -u $U -d adar3000 beam0_amp_bias_operational
+   iio_attr -u $U -d adar3000 beam0_amp_en_operational
+   iio_attr -u $U -d adar3000 beam2_amp_bias_sleep 5
+   iio_attr -u $U -d adar3000 beam2_amp_bias_sleep
+   iio_attr -u $U -d adar3000 element1_amp_bias_sleep 2
+   iio_attr -u $U -d adar3000 element1_amp_bias_sleep
+   iio_attr -u $U -d adar3000 element1_amp_en_sleep 0
+   iio_attr -u $U -d adar3000 element1_amp_en_sleep
+
+Expected output:
+
+.. code-block:: bash
+
+   3
+   1
+   5
+   5
+   2
+   2
+   0
+   0
+
+8. Update Source
+^^^^^^^^^^^^^^^^
+
+The update, reset and mute commands of the next steps are driven over SPI:
+
+.. code-block:: bash
+
+   iio_attr -u $U -d adar3000 update_intf_ctrl
+   iio_attr -u $U -d adar3000 update_intf_ctrl_available
+   iio_attr -u $U -d adar3000 update_intf_ctrl SPI
+
+Expected output:
+
+.. code-block:: bash
+
+   pin
+   pin SPI
+   SPI
+
+9. Memory Load Mode
+^^^^^^^^^^^^^^^^^^^
+
+With beam 2 in memory load mode its channels address RAM beamstate
+``beam2_ram_index``. Write a different delay to beamstates 5 and 6 of beam 2,
+element 0, and read each back:
+
+.. code-block:: bash
+
+   iio_attr -u $U -d adar3000 beam2_load_mode memory
+   iio_attr -u $U -d adar3000 beam2_ram_index 5
+   iio_attr -u $U -c -o adar3000 phase8 raw 33
+   iio_attr -u $U -d adar3000 beam2_ram_index 6
+   iio_attr -u $U -c -o adar3000 phase8 raw 44
+   iio_attr -u $U -d adar3000 beam2_ram_index 5
+   iio_attr -u $U -c -o adar3000 phase8 raw
+   iio_attr -u $U -d adar3000 beam2_ram_index 6
+   iio_attr -u $U -c -o adar3000 phase8 raw
+
+Expected output:
+
+.. code-block:: bash
+
+   memory
+   5
+   33
+   6
+   44
+   5
+   33
+   6
+   44
+
+10. FIFO, Update and Reset
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Put beam 3 in FIFO mode and queue two beamstates through its channels; the
+eighth value of each, ``power15``, commits it. Then issue an update, which
+dequeues one beamstate, and a reset, which empties the queue:
+
+.. code-block:: bash
+
+   iio_attr -u $U -d adar3000 beam3_mode fifo
+   iio_attr -u $U -d adar3000 beam3_load_mode fifo
+   for n in 1 2; do
+   	for c in phase12 power12 phase13 power13 phase14 power14 phase15 power15; do
+   		iio_attr -u $U -c -o adar3000 $c raw $n > /dev/null
+   	done
+   done
+   echo "queued:     wr $(iio_attr -u $U -d adar3000 beam3_fifo_wr) rd $(iio_attr -u $U -d adar3000 beam3_fifo_rd)"
+   iio_attr -u $U -d adar3000 beam3_update 1
+   echo "one update: wr $(iio_attr -u $U -d adar3000 beam3_fifo_wr) rd $(iio_attr -u $U -d adar3000 beam3_fifo_rd)"
+   iio_attr -u $U -d adar3000 beam3_mode reset
+   iio_attr -u $U -d adar3000 beam3_update 1
+   echo "reset:      wr $(iio_attr -u $U -d adar3000 beam3_fifo_wr) rd $(iio_attr -u $U -d adar3000 beam3_fifo_rd)"
+
+Expected output; ``beam3_update`` reads 0 because the update strobe clears
+itself:
+
+.. code-block:: bash
+
+   fifo
+   fifo
+   queued:     wr 2 rd 0
+   0
+   one update: wr 2 rd 1
+   reset
+   0
+   reset:      wr 2 rd 2
+
+11. Instantaneous Direct Mode Guard
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A beam in instantaneous direct mode cannot enter its reset or mute beamstate,
+so selecting mute is refused:
+
+.. code-block:: bash
+
+   iio_attr -u $U -d adar3000 beam3_mode instant_direct
+   iio_attr -u $U -d adar3000 beam3_mode mute; echo "exit $?"
+
+Expected output:
+
+.. code-block:: bash
+
+   instant_direct
+   ERROR: iio_attr: Unable to write attribute: Invalid argument (22)
+   exit 1
+
+12. Buffer Load into RAM
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Push four beamstates for beam 0 through the output buffer into RAM beamstates
+0 to 3, then read them back through the channels. Scan ``n`` carries the
+values ``8n`` to ``8n + 7``.
+
+The ``iio_rwdev`` of libiio 1.0.0 never sends the last block of a write, yet
+exits successfully. The data is therefore sent twice, with twice the samples
+requested: the first block, carrying the beamstates, is sent and only the
+duplicate is lost. Each block starts at ``beam0_ram_index``, so a tool that
+sends both blocks writes the same beamstates twice.
+
+.. code-block:: bash
+
+   iio_attr -u $U -d adar3000 beam0_load_mode memory
+   iio_attr -u $U -d adar3000 beam0_ram_index 0
+   python3 -c "import sys; d = bytes(range(32)); sys.stdout.buffer.write(d + d)" > beamstates.bin
+   iio_rwdev -u $U -w -b 4 -s 8 adar3000 \
+   	phase0 power0 phase1 power1 phase2 power2 phase3 power3 < beamstates.bin
+   echo "iio_rwdev exit $?"
+   for s in 0 1 2 3; do
+   	iio_attr -u $U -d adar3000 beam0_ram_index $s > /dev/null
+   	echo "beamstate $s: $(for c in phase0 power0 phase1 power1 phase2 power2 phase3 power3; do
+   		iio_attr -u $U -c -o adar3000 $c raw; done | tr '\n' ' ')"
+   done
+
+Expected output:
+
+.. code-block:: bash
+
+   memory
+   0
+   iio_rwdev exit 0
+   beamstate 0: 0 1 2 3 4 5 6 7
+   beamstate 1: 8 9 10 11 12 13 14 15
+   beamstate 2: 16 17 18 19 20 21 22 23
+   beamstate 3: 24 25 26 27 28 29 30 31
+
+13. Register Access
+^^^^^^^^^^^^^^^^^^^
+
+Read the SPI revision register, then write and read back the scratchpad:
+
+.. code-block:: bash
+
+   iio_reg -u $U adar3000 0x00B
+   iio_reg -u $U adar3000 0x00A 0x5A
+   iio_reg -u $U adar3000 0x00A
+
+Expected output:
+
+.. code-block:: bash
+
+   0x1
+   0x5a
+
 No-OS Supported Platforms
 -------------------------
 
@@ -188,8 +545,8 @@ Build Command
 ^^^^^^^^^^^^^
 
 The Xilinx platform uses the CMake/Ninja build system via the
-``no_os_build.py`` helper script. Available variants: ``basic_example``.
-Available boards: ``zcu102``.
+``no_os_build.py`` helper script. Available variants: ``basic_example``,
+``iio_example``. Available boards: ``zcu102``.
 
 For toolchain setup and prerequisites, see the
 :doc:`Xilinx CMake build guide </build_guides/build_xilinx_cmake>`.
@@ -209,6 +566,11 @@ For toolchain setup and prerequisites, see the
    # Build and flash the basic example
    python tools/scripts/no_os_build.py build --project adar300x \
            --variant basic_example --board zcu102 \
+           --hardware /path/to/system_top.xsa --probe jlink --flash
+
+   # Build and flash the IIO example
+   python tools/scripts/no_os_build.py build --project adar300x \
+           --variant iio_example --board zcu102 \
            --hardware /path/to/system_top.xsa --probe jlink --flash
 
 The ``--hardware`` argument takes the ``.xsa`` exported from the ``adar3000``

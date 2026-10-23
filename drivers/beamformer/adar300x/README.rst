@@ -281,3 +281,176 @@ ADAR300X Driver Initialization Example
 	ret = adar300x_init(&dev, &adar300x_ip);
 	if (ret)
 		goto error;
+
+ADAR300X no-OS IIO support
+--------------------------
+
+The ADAR300X IIO driver comes on top of the ADAR300X driver and offers support
+for interfacing IIO clients through libiio. It exposes the same interface as
+the Linux ``adar300x`` IIO driver, so channel and attribute names carry over,
+with the differences listed in `Differences from the Linux Driver`_.
+
+ADAR300X IIO Device Configuration
+---------------------------------
+
+Channels
+~~~~~~~~
+
+The device has 33 channels. For each of the 16 elements, numbered
+``beam * 4 + element``, there is a ``phase`` channel carrying the delay and a
+``power`` channel carrying the attenuation. The pattern continues through all
+four beams:
+
++--------------------------+------+---------+--------------+
+| Channels                 | Beam | Element | Scan index   |
++==========================+======+=========+==============+
+| ``phase0``, ``power0``   | 0    | 0       | 0, 1         |
++--------------------------+------+---------+--------------+
+| ``phase1``, ``power1``   | 0    | 1       | 2, 3         |
++--------------------------+------+---------+--------------+
+| ``phase4``, ``power4``   | 1    | 0       | 8, 9         |
++--------------------------+------+---------+--------------+
+| ``phase15``, ``power15`` | 3    | 3       | 30, 31       |
++--------------------------+------+---------+--------------+
+| ``temp16``               | none | none    | not buffered |
++--------------------------+------+---------+--------------+
+
+Channel Attributes
+~~~~~~~~~~~~~~~~~~
+
+* ``out_phaseN_raw - delay of the element, 0 to 63, in the bank selected by
+  the beam's load_mode``
+* ``out_phaseN_scale - 0.865, picoseconds of delay per step``
+* ``out_powerN_raw - attenuation of the element, 0 to 63, in the bank selected
+  by the beam's load_mode``
+* ``out_powerN_scale - 0.5, decibels of attenuation per step``
+* ``in_temp16_raw - raw code of the temperature sensor``
+* ``in_temp16_offset - -99.75``
+* ``in_temp16_scale - 917.431192660, millidegrees Celsius per code``
+
+The temperature in millidegrees Celsius is ``(raw + offset) * scale``.
+
+The ``raw`` attributes of a beam address the bank chosen by its ``load_mode``:
+the direct control bank for ``direct`` and ``instant_direct``, the reset or
+mute bank for ``reset`` or ``mute``, RAM beamstate ``ram_index`` for
+``memory``, and a staging beamstate for ``fifo``. In ``fifo`` load mode the
+staged beamstate is queued when its eighth value, ``powerN`` of the beam's
+element 3, is written.
+
+Global Attributes
+~~~~~~~~~~~~~~~~~
+
+In the attributes below, ``N`` is the beam number, 0 to 3.
+
+* ``beamN_mode - beam mode: direct, memory, fifo, instant_direct, or reset or
+  mute to have the next update apply that beamstate``
+* ``beamN_mode_available - the accepted beamN_mode values``
+* ``beamN_update - write any value to issue an update, or the reset or mute
+  selected in beamN_mode; reads 0``
+* ``beamN_load_mode - bank addressed by the beam's channels and buffer, same
+  values as beamN_mode``
+* ``beamN_load_mode_available - the accepted beamN_load_mode values``
+* ``beamN_ram_index - RAM beamstate addressed by the channels in memory load
+  mode, and the first one the buffer writes, 0 to 63``
+* ``beamN_ram_start - sequencer start pointer, 0 to 63``
+* ``beamN_ram_stop - sequencer stop pointer, 0 to 63``
+* ``beamN_fifo_rd - FIFO read pointer, read only``
+* ``beamN_fifo_wr - FIFO write pointer, read only``
+* ``update_intf_ctrl - source of update, reset and mute, pin or SPI``
+* ``update_intf_ctrl_available - the accepted update_intf_ctrl values``
+
+The amplifier attributes take a bias of 0 to 7 or an enable of 0 or 1:
+
+* ``beamN_amp_bias_<state>, beamN_amp_en_<state> - bias and enable of beam
+  amplifier N, for <state> reset, operational, mute and sleep``
+* ``elementN_amp_bias_<state>, elementN_amp_en_<state> - bias and enable of
+  element amplifier N, for <state> operational and sleep``
+
+Debug Attributes
+~~~~~~~~~~~~~~~~
+
+* ``direct_reg_access - raw register read and write. The address is not paged:
+  select the page through register 0x008 first when reaching 0x100 and
+  above``
+
+Output Buffer
+~~~~~~~~~~~~~
+
+The output buffer loads whole beamstates into RAM or the FIFO. Enable all eight
+channels of each beam that takes part, ``phase4B`` to ``power4B+3`` for beam
+``B``; partially enabled beams are rejected. Each scan carries one beamstate
+per enabled beam, whose ``load_mode`` must be ``memory`` or ``fifo``:
+
+* ``memory`` - scan ``n`` is written to RAM beamstate ``ram_index + n``. A
+  buffer that would run past beamstate 63 is rejected.
+* ``fifo`` - each scan is queued in turn. Loads beyond the 16 the FIFO holds
+  are discarded by the device.
+
+Each value takes one byte, of which the low six bits are used. The largest
+buffer, 64 beamstates for each of the four beams, is 2048 bytes.
+
+Differences from the Linux Driver
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The attribute names and behaviour follow the Linux driver except where it
+disagrees with the data sheet:
+
+* The ``phase`` scale is 0.865 ps per step, the time delay the part actually
+  applies. Linux reports 360 / 63 degrees, which is not a property of a true
+  time delay unit.
+* The ``power`` scale is 0.5 dB per step. Linux reports 31 / 63.
+* The temperature offset and scale reproduce 25°C at code 127. The Linux
+  values give 194 m°C there.
+* ``beamN_ram_index`` counts whole beamstates for the buffer. Linux adds it to
+  the RAM address as a byte offset.
+* The amplifier attributes are named after the bank they control. Linux names
+  the beam amplifiers ``ELnV`` and the element amplifiers ``ELnH``.
+
+ADAR300X IIO Driver Initialization Example
+------------------------------------------
+
+.. code-block:: bash
+
+	#define ADAR300X_IIO_BUFFER_SIZE	(ADAR300X_RAM_STATES_PER_BEAM * \
+						 ADAR300X_IIO_BEAMS * \
+						 ADAR300X_UNPACKED_BEAMSTATE_LEN)
+
+	static uint8_t adar300x_iio_buffer[ADAR300X_IIO_BUFFER_SIZE];
+
+	int ret;
+
+	struct adar300x_iio_dev *adar300x_iio_dev;
+	struct adar300x_iio_dev_init_param adar300x_iio_ip = {
+		.adar300x_dev_init = &adar300x_ip,
+	};
+
+	struct iio_data_buffer write_buff = {
+		.buff = adar300x_iio_buffer,
+		.size = sizeof(adar300x_iio_buffer),
+	};
+
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = {0};
+
+	ret = adar300x_iio_init(&adar300x_iio_dev, &adar300x_iio_ip);
+	if (ret)
+		goto exit;
+
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "adar3000",
+			.dev = adar300x_iio_dev,
+			.dev_descriptor = adar300x_iio_dev->iio_dev,
+			.write_buff = &write_buff,
+		},
+	};
+
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = uip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		goto remove_iio_adar300x;
+
+	return iio_app_run(app);
