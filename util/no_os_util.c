@@ -14,11 +14,23 @@
 #include "errno.h"
 extern int no_os_test_bit(int pos, const volatile void * addr);
 
+/* Use the compiler's count-trailing-zeros builtin when it has one */
+#if defined(__has_builtin)
+#if __has_builtin(__builtin_ctz) && __has_builtin(__builtin_ctzll)
+#define NO_OS_HAS_BUILTIN_CTZ
+#endif
+#elif defined(__GNUC__)
+#define NO_OS_HAS_BUILTIN_CTZ
+#endif
+
 /**
  * Find first set bit in word.
  */
 uint32_t no_os_find_first_set_bit(uint32_t word)
 {
+#ifdef NO_OS_HAS_BUILTIN_CTZ
+	return word ? (uint32_t)__builtin_ctz(word) : 32;
+#else
 	uint32_t first_set_bit = 0;
 
 	while (word) {
@@ -29,6 +41,7 @@ uint32_t no_os_find_first_set_bit(uint32_t word)
 	}
 
 	return 32;
+#endif
 }
 
 /**
@@ -36,6 +49,9 @@ uint32_t no_os_find_first_set_bit(uint32_t word)
  */
 uint64_t no_os_find_first_set_bit_u64(uint64_t word)
 {
+#ifdef NO_OS_HAS_BUILTIN_CTZ
+	return word ? (uint64_t)__builtin_ctzll(word) : 64;
+#else
 	uint64_t first_set_bit = 0;
 
 	while (word) {
@@ -46,6 +62,7 @@ uint64_t no_os_find_first_set_bit_u64(uint64_t word)
 	}
 
 	return 64;
+#endif
 }
 
 /**
