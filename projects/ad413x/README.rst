@@ -9,7 +9,12 @@ AD413x no-OS Example Project
 Supported Parts
 ---------------
 
+* `AD4129-4 <https://www.analog.com/en/products/ad4129-4.html>`_
+* `AD4129-8 <https://www.analog.com/en/products/ad4129-8.html>`_
+* `AD4130-4 <https://www.analog.com/en/products/ad4130-4.html>`_
 * `AD4130-8 <https://www.analog.com/en/products/ad4130-8.html>`_
+* `AD4131-4 <https://www.analog.com/en/products/ad4131-4.html>`_
+* `AD4131-8 <https://www.analog.com/en/products/ad4131-8.html>`_
 
 Supported Evaluation Boards
 ---------------------------

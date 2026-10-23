@@ -353,7 +353,12 @@ enum ad413x_gain {
  * @brief Supported devices.
  */
 enum ad413x_chip_id {
+	AD4129_4,
+	AD4129_8,
+	AD4130_4,
 	AD4130_8,
+	AD4131_4,
+	AD4131_8,
 };
 
 /**
