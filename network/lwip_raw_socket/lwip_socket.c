@@ -838,9 +838,9 @@ static int32_t lwip_socket_connect(void *net, uint32_t sock_id,
 	struct lwip_network_desc *desc = net;
 	struct lwip_socket_desc *socket;
 	struct tcp_pcb *pcb;
-	uint8_t ip_addr[4];
+	uint32_t ip_addr[4] = {0};
 
-	sscanf(addr->addr, "%"SCNu8".%"SCNu8".%"SCNu8".%"SCNu8,
+	sscanf(addr->addr, "%"SCNu32".%"SCNu32".%"SCNu32".%"SCNu32,
 	       &ip_addr[0], &ip_addr[1], &ip_addr[2], &ip_addr[3]);
 
 	ip4_addr_t ip4;
