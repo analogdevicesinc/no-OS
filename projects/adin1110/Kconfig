@@ -16,7 +16,26 @@ config ADIN1110_OA_TC6_PERF_EXAMPLE
 	  companion PC script, printing periodic throughput stats over
 	  UART. The SPI protocol/protection combination is selected below.
 
+config ADIN1110_LWIP_UDP_PERF_EXAMPLE
+	bool "ADIN1110 lwIP UDP throughput example"
+	depends on NET && ADIN1110 && OA_TC6 && LWIP
+	help
+	  Benchmarks UDP throughput over lwIP on the ADIN1110 in OPEN
+	  Alliance mode. Streams UDP datagrams to a companion PC script
+	  while counting the datagrams it sends back, and prints the UDP
+	  payload throughput and the CPU load over UART.
+
 endchoice
+
+config ADIN1110_UDP_PERF_HOST_IP
+	string "IP address of the PC running the UDP perf script"
+	depends on ADIN1110_LWIP_UDP_PERF_EXAMPLE
+	default "192.168.80.50"
+
+config ADIN1110_UDP_PERF_PORT
+	int "UDP port used in both directions"
+	depends on ADIN1110_LWIP_UDP_PERF_EXAMPLE
+	default 5001
 
 choice ADIN1110_OA_TC6_PERF_SPI_MODE
 	prompt "SPI protocol mode"

@@ -27,6 +27,16 @@ if(CONFIG_ADIN1110_OA_TC6_PERF_EXAMPLE)
     )
 endif()
 
+# ADIN1110 lwIP UDP throughput example
+if(CONFIG_ADIN1110_LWIP_UDP_PERF_EXAMPLE)
+    target_sources(adin1110 PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/lwip_udp_perf/lwip_udp_perf_example.c
+    )
+    target_include_directories(adin1110 PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/lwip_udp_perf
+    )
+endif()
+
 target_include_directories(adin1110 PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common
     ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}
