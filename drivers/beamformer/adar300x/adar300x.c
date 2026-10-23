@@ -196,6 +196,802 @@ int adar300x_page_reg_read(struct adar300x_dev *dev, uint8_t page,
 }
 
 /**
+ * @brief Resolves a beamstate bank, beam and element to a register address.
+ * @param dev	    - The device structure.
+ * @param beamstate - Which beamstate bank to address.
+ * @param beam	    - Beam index.
+ * @param element   - Element index within the beam.
+ * @param param	    - Delay or attenuation.
+ * @param reg_addr  - Resolved register address.
+ * @return	    - 0 in case of success or negative error code otherwise.
+ */
+static int adar300x_element_addr(struct adar300x_dev *dev,
+				 enum adar300x_beamstate beamstate,
+				 uint8_t beam, uint8_t element,
+				 enum adar300x_element_param param,
+				 uint16_t *reg_addr)
+{
+	uint16_t offset;
+
+	if (!dev || !reg_addr)
+		return -EINVAL;
+
+	if (beam >= dev->chip_info->num_beams ||
+	    element >= dev->chip_info->num_elements)
+		return -EINVAL;
+
+	offset = beam * ADAR300X_VALUES_PER_BEAM + element * 2;
+	if (param == ADAR300X_ATTENUATION)
+		offset++;
+
+	switch (beamstate) {
+	case ADAR300X_BEAMSTATE_DIRECT:
+		*reg_addr = ADAR300X_REG_DIRECT_CTRL(offset);
+		return 0;
+	case ADAR300X_BEAMSTATE_RESET:
+		*reg_addr = ADAR300X_REG_RESET_BEAMSTATE(offset);
+		return 0;
+	case ADAR300X_BEAMSTATE_MUTE:
+		*reg_addr = ADAR300X_REG_MUTE_BEAMSTATE(offset);
+		return 0;
+	default:
+		return -EINVAL;
+	}
+}
+
+/**
+ * @brief Writes one element value in one of the beamstate banks.
+ *
+ * In direct mode the written value is applied on the next update; in instant
+ * direct mode it takes effect immediately.
+ *
+ * @param dev	    - The device structure.
+ * @param beamstate - Which beamstate bank to write.
+ * @param beam	    - Beam index.
+ * @param element   - Element index within the beam.
+ * @param param	    - Delay or attenuation.
+ * @param val	    - Value to write, 0 to ADAR300X_RAW_MAX.
+ * @return	    - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_set_element(struct adar300x_dev *dev,
+			 enum adar300x_beamstate beamstate, uint8_t beam,
+			 uint8_t element, enum adar300x_element_param param,
+			 uint8_t val)
+{
+	uint16_t reg_addr;
+	int ret;
+
+	if (val > ADAR300X_RAW_MAX)
+		return -EINVAL;
+
+	ret = adar300x_element_addr(dev, beamstate, beam, element, param,
+				    &reg_addr);
+	if (ret)
+		return ret;
+
+	return adar300x_page_reg_write(dev, ADAR300X_PAGE_CONFIG, reg_addr,
+				       val);
+}
+
+/**
+ * @brief Reads one element value back from one of the beamstate banks.
+ * @param dev	    - The device structure.
+ * @param beamstate - Which beamstate bank to read.
+ * @param beam	    - Beam index.
+ * @param element   - Element index within the beam.
+ * @param param	    - Delay or attenuation.
+ * @param val	    - Value read from the device.
+ * @return	    - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_get_element(struct adar300x_dev *dev,
+			 enum adar300x_beamstate beamstate, uint8_t beam,
+			 uint8_t element, enum adar300x_element_param param,
+			 uint8_t *val)
+{
+	uint16_t reg_addr;
+	int ret;
+
+	if (!val)
+		return -EINVAL;
+
+	ret = adar300x_element_addr(dev, beamstate, beam, element, param,
+				    &reg_addr);
+	if (ret)
+		return ret;
+
+	ret = adar300x_page_reg_read(dev, ADAR300X_PAGE_CONFIG, reg_addr, val);
+	if (ret)
+		return ret;
+
+	*val &= ADAR300X_RAW_MSK;
+
+	return 0;
+}
+
+/**
+ * @brief Writes an amplifier bias and enable pair.
+ *
+ * Both live in the same byte, so they are written together rather than as two
+ * read modify write cycles.
+ *
+ * @param dev	   - The device structure.
+ * @param reg_addr - Amplifier register address.
+ * @param bias	   - Bias setting, 0 to ADAR300X_AMP_BIAS_MAX.
+ * @param enable   - True to enable the amplifier in this state.
+ * @return	   - 0 in case of success or negative error code otherwise.
+ */
+static int adar300x_write_amp(struct adar300x_dev *dev, uint16_t reg_addr,
+			      uint8_t bias, bool enable)
+{
+	uint8_t val;
+
+	if (bias > ADAR300X_AMP_BIAS_MAX)
+		return -EINVAL;
+
+	val = no_os_field_prep(ADAR300X_AMP_BIAS_MSK, bias);
+	if (enable)
+		val |= ADAR300X_AMP_EN_MSK;
+
+	return adar300x_page_reg_write(dev, ADAR300X_PAGE_CONFIG, reg_addr,
+				       val);
+}
+
+/**
+ * @brief Reads an amplifier bias and enable pair back.
+ * @param dev	   - The device structure.
+ * @param reg_addr - Amplifier register address.
+ * @param bias	   - Bias setting read from the device, may be NULL.
+ * @param enable   - Enable state read from the device, may be NULL.
+ * @return	   - 0 in case of success or negative error code otherwise.
+ */
+static int adar300x_read_amp(struct adar300x_dev *dev, uint16_t reg_addr,
+			     uint8_t *bias, bool *enable)
+{
+	uint8_t val;
+	int ret;
+
+	ret = adar300x_page_reg_read(dev, ADAR300X_PAGE_CONFIG, reg_addr, &val);
+	if (ret)
+		return ret;
+
+	if (bias)
+		*bias = no_os_field_get(ADAR300X_AMP_BIAS_MSK, val);
+	if (enable)
+		*enable = !!(val & ADAR300X_AMP_EN_MSK);
+
+	return 0;
+}
+
+/**
+ * @brief Sets the bias and enable of one beam amplifier in one state.
+ * @param dev	 - The device structure.
+ * @param state	 - Which beam amplifier state to write.
+ * @param beam	 - Beam index.
+ * @param bias	 - Bias setting, 0 to ADAR300X_AMP_BIAS_MAX.
+ * @param enable - True to enable the amplifier in this state.
+ * @return	 - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_set_beam_amp(struct adar300x_dev *dev,
+			  enum adar300x_beam_amp_state state, uint8_t beam,
+			  uint8_t bias, bool enable)
+{
+	if (!dev)
+		return -EINVAL;
+
+	if (beam >= dev->chip_info->num_beams ||
+	    state > ADAR300X_BEAM_AMP_SLEEP)
+		return -EINVAL;
+
+	return adar300x_write_amp(dev, ADAR300X_REG_BEAM_AMP(state, beam),
+				  bias, enable);
+}
+
+/**
+ * @brief Reads back the bias and enable of one beam amplifier.
+ * @param dev	 - The device structure.
+ * @param state	 - Which beam amplifier state to read.
+ * @param beam	 - Beam index.
+ * @param bias	 - Bias setting read from the device, may be NULL.
+ * @param enable - Enable state read from the device, may be NULL.
+ * @return	 - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_get_beam_amp(struct adar300x_dev *dev,
+			  enum adar300x_beam_amp_state state, uint8_t beam,
+			  uint8_t *bias, bool *enable)
+{
+	if (!dev)
+		return -EINVAL;
+
+	if (beam >= dev->chip_info->num_beams ||
+	    state > ADAR300X_BEAM_AMP_SLEEP)
+		return -EINVAL;
+
+	return adar300x_read_amp(dev, ADAR300X_REG_BEAM_AMP(state, beam),
+				 bias, enable);
+}
+
+/**
+ * @brief Sets the bias and enable of one element amplifier in one state.
+ * @param dev	  - The device structure.
+ * @param state	  - Which element amplifier state to write.
+ * @param element - Element index.
+ * @param bias	  - Bias setting, 0 to ADAR300X_AMP_BIAS_MAX.
+ * @param enable  - True to enable the amplifier in this state.
+ * @return	  - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_set_element_amp(struct adar300x_dev *dev,
+			     enum adar300x_element_amp_state state,
+			     uint8_t element, uint8_t bias, bool enable)
+{
+	if (!dev)
+		return -EINVAL;
+
+	if (element >= dev->chip_info->num_elements ||
+	    state > ADAR300X_ELEMENT_AMP_SLEEP)
+		return -EINVAL;
+
+	return adar300x_write_amp(dev,
+				  ADAR300X_REG_ELEMENT_AMP(state, element),
+				  bias, enable);
+}
+
+/**
+ * @brief Reads back the bias and enable of one element amplifier.
+ * @param dev	  - The device structure.
+ * @param state	  - Which element amplifier state to read.
+ * @param element - Element index.
+ * @param bias	  - Bias setting read from the device, may be NULL.
+ * @param enable  - Enable state read from the device, may be NULL.
+ * @return	  - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_get_element_amp(struct adar300x_dev *dev,
+			     enum adar300x_element_amp_state state,
+			     uint8_t element, uint8_t *bias, bool *enable)
+{
+	if (!dev)
+		return -EINVAL;
+
+	if (element >= dev->chip_info->num_elements ||
+	    state > ADAR300X_ELEMENT_AMP_SLEEP)
+		return -EINVAL;
+
+	return adar300x_read_amp(dev,
+				 ADAR300X_REG_ELEMENT_AMP(state, element),
+				 bias, enable);
+}
+
+/**
+ * @brief Selects where a beam takes its next beamstate from.
+ * @param dev  - The device structure.
+ * @param beam - Beam index.
+ * @param mode - Beamstate source.
+ * @return     - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_set_beam_mode(struct adar300x_dev *dev, uint8_t beam,
+			   enum adar300x_beam_mode mode)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	if (beam >= dev->chip_info->num_beams ||
+	    mode > ADAR300X_BEAM_MODE_INST_DIRECT)
+		return -EINVAL;
+
+	ret = adar300x_set_page(dev, ADAR300X_PAGE_CONFIG);
+	if (ret)
+		return ret;
+
+	return adar300x_reg_update(dev, ADAR300X_REG_BEAMSTATE_MODE,
+				   ADAR300X_BEAM_MODE_MSK(beam),
+				   mode << (beam * 2));
+}
+
+/**
+ * @brief Reads back the mode of a beam.
+ * @param dev  - The device structure.
+ * @param beam - Beam index.
+ * @param mode - Beamstate source read from the device.
+ * @return     - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_get_beam_mode(struct adar300x_dev *dev, uint8_t beam,
+			   enum adar300x_beam_mode *mode)
+{
+	uint8_t val;
+	int ret;
+
+	if (!dev || !mode)
+		return -EINVAL;
+
+	if (beam >= dev->chip_info->num_beams)
+		return -EINVAL;
+
+	ret = adar300x_page_reg_read(dev, ADAR300X_PAGE_CONFIG,
+				     ADAR300X_REG_BEAMSTATE_MODE, &val);
+	if (ret)
+		return ret;
+
+	*mode = (val & ADAR300X_BEAM_MODE_MSK(beam)) >> (beam * 2);
+
+	return 0;
+}
+
+/**
+ * @brief Applies a command to every beam set in the mask.
+ *
+ * Reset and mute are qualifiers rather than commands of their own: they are
+ * staged per beam and then take effect on the update strobe, mirroring how the
+ * RESET and MUTE pins qualify the UPDATE pin. Beams outside the mask have
+ * their qualifiers cleared so the staged state is always known.
+ *
+ * Only has an effect when the update source is SPI rather than the pins, see
+ * adar300x_set_update_source_spi().
+ *
+ * @param dev	    - The device structure.
+ * @param beam_mask - Bit per beam, bit 0 is beam 0.
+ * @param cmd	    - Command to apply to the masked beams.
+ * @return	    - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_beam_command(struct adar300x_dev *dev, uint8_t beam_mask,
+			  enum adar300x_beam_command cmd)
+{
+	uint8_t code = 0;
+	uint8_t beam;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	if (beam_mask >= NO_OS_BIT(dev->chip_info->num_beams) ||
+	    cmd > ADAR300X_BEAM_CMD_MUTE)
+		return -EINVAL;
+
+	for (beam = 0; beam < dev->chip_info->num_beams; beam++) {
+		if (!(beam_mask & NO_OS_BIT(beam)))
+			continue;
+
+		if (cmd == ADAR300X_BEAM_CMD_RESET)
+			code |= ADAR300X_BEAM_RESET_MSK(beam);
+		else if (cmd == ADAR300X_BEAM_CMD_MUTE)
+			code |= ADAR300X_BEAM_MUTE_MSK(beam);
+	}
+
+	ret = adar300x_page_reg_write(dev, ADAR300X_PAGE_CONFIG,
+				      ADAR300X_REG_BEAMWISE_UPDATE_CODE, code);
+	if (ret)
+		return ret;
+
+	return adar300x_reg_write(dev, ADAR300X_REG_BEAMWISE_UPDATE,
+				  beam_mask);
+}
+
+/**
+ * @brief Chooses whether update, mute and reset come from the pins or SPI.
+ * @param dev - The device structure.
+ * @param spi - True to drive the commands over SPI, false to use the pins.
+ * @return    - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_set_update_source_spi(struct adar300x_dev *dev, bool spi)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = adar300x_set_page(dev, ADAR300X_PAGE_CONFIG);
+	if (ret)
+		return ret;
+
+	return adar300x_reg_update(dev, ADAR300X_REG_PIN_OR_SPI_CTL,
+				   ADAR300X_UPDATE_SPI_CTL,
+				   spi ? ADAR300X_UPDATE_SPI_CTL : 0);
+}
+
+/**
+ * @brief Reads back the update source selection.
+ * @param dev - The device structure.
+ * @param spi - True when the commands are driven over SPI.
+ * @return    - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_get_update_source_spi(struct adar300x_dev *dev, bool *spi)
+{
+	uint8_t val;
+	int ret;
+
+	if (!dev || !spi)
+		return -EINVAL;
+
+	ret = adar300x_page_reg_read(dev, ADAR300X_PAGE_CONFIG,
+				     ADAR300X_REG_PIN_OR_SPI_CTL, &val);
+	if (ret)
+		return ret;
+
+	*spi = !!(val & ADAR300X_UPDATE_SPI_CTL);
+
+	return 0;
+}
+
+/**
+ * @brief Packs eight 6-bit values into six bytes, MSB first.
+ * @param unpacked - Eight values, delay then attenuation per element.
+ * @param packed   - Six byte buffer to fill.
+ */
+static void adar300x_pack_beamstate(const uint8_t *unpacked, uint8_t *packed)
+{
+	packed[0] = unpacked[0] << 2 | unpacked[1] >> 4;
+	packed[1] = unpacked[1] << 4 | unpacked[2] >> 2;
+	packed[2] = unpacked[2] << 6 | unpacked[3];
+	packed[3] = unpacked[4] << 2 | unpacked[5] >> 4;
+	packed[4] = unpacked[5] << 4 | unpacked[6] >> 2;
+	packed[5] = unpacked[6] << 6 | unpacked[7];
+}
+
+/**
+ * @brief Unpacks six bytes into eight 6-bit values.
+ * @param packed   - Six bytes as stored in the RAM.
+ * @param unpacked - Eight value buffer to fill.
+ */
+static void adar300x_unpack_beamstate(const uint8_t *packed, uint8_t *unpacked)
+{
+	unpacked[0] = (packed[0] >> 2) & ADAR300X_RAW_MSK;
+	unpacked[1] = (packed[0] << 4 | packed[1] >> 4) & ADAR300X_RAW_MSK;
+	unpacked[2] = (packed[1] << 2 | packed[2] >> 6) & ADAR300X_RAW_MSK;
+	unpacked[3] = packed[2] & ADAR300X_RAW_MSK;
+	unpacked[4] = (packed[3] >> 2) & ADAR300X_RAW_MSK;
+	unpacked[5] = (packed[3] << 4 | packed[4] >> 4) & ADAR300X_RAW_MSK;
+	unpacked[6] = (packed[4] << 2 | packed[5] >> 6) & ADAR300X_RAW_MSK;
+	unpacked[7] = packed[5] & ADAR300X_RAW_MSK;
+}
+
+/**
+ * @brief Writes one beamstate into a beam's RAM page.
+ * @param dev	 - The device structure.
+ * @param beam	 - Beam index, selects the address page.
+ * @param state	 - Beamstate index within the beam.
+ * @param values - Eight 6-bit values, delay then attenuation per element.
+ * @return	 - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_set_ram_beamstate(struct adar300x_dev *dev, uint8_t beam,
+			       uint8_t state, const uint8_t *values)
+{
+	uint8_t packed[ADAR300X_PACKED_BEAMSTATE_LEN];
+	uint16_t addr;
+	int ret, i;
+
+	if (!dev || !values)
+		return -EINVAL;
+
+	if (beam >= dev->chip_info->num_beams ||
+	    state >= ADAR300X_RAM_STATES_PER_BEAM)
+		return -EINVAL;
+
+	for (i = 0; i < ADAR300X_UNPACKED_BEAMSTATE_LEN; i++)
+		if (values[i] > ADAR300X_RAW_MAX)
+			return -EINVAL;
+
+	adar300x_pack_beamstate(values, packed);
+
+	ret = adar300x_set_page(dev, ADAR300X_PAGE_BEAM(beam));
+	if (ret)
+		return ret;
+
+	addr = ADAR300X_REG_RAM_BEAMSTATE(state);
+
+	for (i = 0; i < ADAR300X_PACKED_BEAMSTATE_LEN; i++) {
+		ret = adar300x_reg_write(dev, addr + i, packed[i]);
+		if (ret)
+			return ret;
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Reads one beamstate back from a beam's RAM page.
+ *
+ * The data sheet gives the RAM its own readback protocol: a first read acts as
+ * a fetch that latches the whole 48-bit beamstate and returns invalid data,
+ * after which the six locations read back singly from that latched copy. One
+ * fetch covers the whole beamstate, so fetching per location is not needed.
+ *
+ * @param dev	 - The device structure.
+ * @param beam	 - Beam index, selects the address page.
+ * @param state	 - Beamstate index within the beam.
+ * @param values - Eight 6-bit values, delay then attenuation per element.
+ * @return	 - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_get_ram_beamstate(struct adar300x_dev *dev, uint8_t beam,
+			       uint8_t state, uint8_t *values)
+{
+	uint8_t packed[ADAR300X_PACKED_BEAMSTATE_LEN];
+	uint16_t addr;
+	int ret, i;
+
+	if (!dev || !values)
+		return -EINVAL;
+
+	if (beam >= dev->chip_info->num_beams ||
+	    state >= ADAR300X_RAM_STATES_PER_BEAM)
+		return -EINVAL;
+
+	ret = adar300x_set_page(dev, ADAR300X_PAGE_BEAM(beam));
+	if (ret)
+		return ret;
+
+	addr = ADAR300X_REG_RAM_BEAMSTATE(state);
+
+	/* Fetch, latching the beamstate. The data returned is invalid. */
+	ret = adar300x_reg_read(dev, addr, &packed[0]);
+	if (ret)
+		return ret;
+
+	for (i = 0; i < ADAR300X_PACKED_BEAMSTATE_LEN; i++) {
+		ret = adar300x_reg_read(dev, addr + i, &packed[i]);
+		if (ret)
+			return ret;
+	}
+
+	adar300x_unpack_beamstate(packed, values);
+
+	return 0;
+}
+
+/**
+ * @brief Sets the range of pointers a beam's RAM sequencer steps through.
+ *
+ * A stop pointer below the start pointer is valid: the sequencer then wraps
+ * from pointer 63 to pointer 0, skipping the middle of the range.
+ *
+ * @param dev	- The device structure.
+ * @param beam	- Beam index.
+ * @param start - Pointer the sequencer starts from.
+ * @param stop	- Last pointer before the sequencer wraps to start.
+ * @return	- 0 in case of success or negative error code otherwise.
+ */
+int adar300x_set_seq_range(struct adar300x_dev *dev, uint8_t beam,
+			   uint8_t start, uint8_t stop)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	if (beam >= dev->chip_info->num_beams ||
+	    start >= ADAR300X_RAM_STATES_PER_BEAM ||
+	    stop >= ADAR300X_RAM_STATES_PER_BEAM)
+		return -EINVAL;
+
+	ret = adar300x_page_reg_write(dev, ADAR300X_PAGE_CONFIG,
+				      ADAR300X_REG_SEQ_START(beam), start);
+	if (ret)
+		return ret;
+
+	return adar300x_page_reg_write(dev, ADAR300X_PAGE_CONFIG,
+				       ADAR300X_REG_SEQ_STOP(beam), stop);
+}
+
+/**
+ * @brief Reads the range of pointers a beam's RAM sequencer steps through.
+ * @param dev	- The device structure.
+ * @param beam	- Beam index.
+ * @param start - Start pointer, may be NULL.
+ * @param stop	- Stop pointer, may be NULL.
+ * @return	- 0 in case of success or negative error code otherwise.
+ */
+int adar300x_get_seq_range(struct adar300x_dev *dev, uint8_t beam,
+			   uint8_t *start, uint8_t *stop)
+{
+	uint8_t val;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	if (beam >= dev->chip_info->num_beams)
+		return -EINVAL;
+
+	if (start) {
+		ret = adar300x_page_reg_read(dev, ADAR300X_PAGE_CONFIG,
+					     ADAR300X_REG_SEQ_START(beam),
+					     &val);
+		if (ret)
+			return ret;
+
+		*start = val & ADAR300X_SEQ_PTR_MSK;
+	}
+
+	if (stop) {
+		ret = adar300x_page_reg_read(dev, ADAR300X_PAGE_CONFIG,
+					     ADAR300X_REG_SEQ_STOP(beam), &val);
+		if (ret)
+			return ret;
+
+		*stop = val & ADAR300X_SEQ_PTR_MSK;
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Queues one beamstate onto a beam's FIFO.
+ *
+ * The six bytes must be written in order: the write to the last address is
+ * what commits the beamstate and advances the write pointer. A load onto a
+ * full FIFO is discarded by the device.
+ *
+ * @param dev	 - The device structure.
+ * @param beam	 - Beam index, selects the load address group.
+ * @param values - Eight 6-bit values, delay then attenuation per element.
+ * @return	 - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_load_fifo_beamstate(struct adar300x_dev *dev, uint8_t beam,
+				 const uint8_t *values)
+{
+	uint8_t packed[ADAR300X_PACKED_BEAMSTATE_LEN];
+	uint16_t addr;
+	int ret, i;
+
+	if (!dev || !values)
+		return -EINVAL;
+
+	if (beam >= dev->chip_info->num_beams)
+		return -EINVAL;
+
+	for (i = 0; i < ADAR300X_UNPACKED_BEAMSTATE_LEN; i++)
+		if (values[i] > ADAR300X_RAW_MAX)
+			return -EINVAL;
+
+	adar300x_pack_beamstate(values, packed);
+
+	ret = adar300x_set_page(dev, ADAR300X_PAGE_FIFO);
+	if (ret)
+		return ret;
+
+	addr = ADAR300X_REG_FIFO_LOAD(beam);
+
+	for (i = 0; i < ADAR300X_PACKED_BEAMSTATE_LEN; i++) {
+		ret = adar300x_reg_write(dev, addr + i, packed[i]);
+		if (ret)
+			return ret;
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Reads a beam's FIFO write and read pointers.
+ * @param dev	    - The device structure.
+ * @param beam	    - Beam index.
+ * @param write_ptr - Write pointer, may be NULL.
+ * @param read_ptr  - Read pointer, may be NULL.
+ * @return	    - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_get_fifo_pointers(struct adar300x_dev *dev, uint8_t beam,
+			       uint8_t *write_ptr, uint8_t *read_ptr)
+{
+	uint8_t val;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	if (beam >= dev->chip_info->num_beams)
+		return -EINVAL;
+
+	if (write_ptr) {
+		ret = adar300x_page_reg_read(dev, ADAR300X_PAGE_CONFIG,
+					     ADAR300X_REG_FIFO_WRITE_PTR(beam),
+					     &val);
+		if (ret)
+			return ret;
+
+		*write_ptr = val & ADAR300X_FIFO_PTR_MSK;
+	}
+
+	if (read_ptr) {
+		ret = adar300x_page_reg_read(dev, ADAR300X_PAGE_CONFIG,
+					     ADAR300X_REG_FIFO_READ_PTR(beam),
+					     &val);
+		if (ret)
+			return ret;
+
+		*read_ptr = val & ADAR300X_FIFO_PTR_MSK;
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Reads the temperature sensor through the on-chip ADC.
+ *
+ * The ADC requires a manual reset pulse before each conversion, and clocking
+ * is provided by dummy SPI transactions after the start bit is set. The
+ * conversion complete flag is polled before reading the result.
+ *
+ * @param dev  - The device structure.
+ * @param code - Raw conversion result, see ADAR300X_TEMP_* for the scale.
+ * @return     - 0 in case of success or negative error code otherwise.
+ */
+int adar300x_get_temp(struct adar300x_dev *dev, uint8_t *code)
+{
+	uint8_t ctrl2;
+	int ret, i;
+	int timeout_us = 50000;
+	int poll_us = 100;
+
+	if (!dev || !code)
+		return -EINVAL;
+
+	ret = adar300x_set_page(dev, ADAR300X_PAGE_CONFIG);
+	if (ret)
+		return ret;
+
+	/* Reset the ADC */
+	ret = adar300x_reg_update(dev, ADAR300X_REG_ADC_CONTROL,
+				  ADAR300X_ADC_RESET_MSK, ADAR300X_ADC_RESET_MSK);
+	if (ret)
+		return ret;
+
+	ret = adar300x_reg_update(dev, ADAR300X_REG_ADC_CONTROL,
+				  ADAR300X_ADC_RESET_MSK, 0);
+	if (ret)
+		return ret;
+
+	/* Enable and select the temperature sensor */
+	ret = adar300x_reg_update(dev, ADAR300X_REG_ADC_CONTROL,
+				  ADAR300X_ADC_CLK_EN_MSK | ADAR300X_ADC_EN_MSK |
+				  ADAR300X_ADC_MUX_SEL_MSK,
+				  ADAR300X_ADC_CLK_EN_MSK | ADAR300X_ADC_EN_MSK |
+				  ADAR300X_ADC_MUX_TEMPERATURE);
+	if (ret)
+		return ret;
+
+	/* Start conversion: clear then set the start bit */
+	ret = adar300x_reg_update(dev, ADAR300X_REG_ADC_CONTROL2,
+				  ADAR300X_ADC_START_MSK, 0);
+	if (ret)
+		return ret;
+	ret = adar300x_reg_update(dev, ADAR300X_REG_ADC_CONTROL2,
+				  ADAR300X_ADC_START_MSK, 0);
+	if (ret)
+		return ret;
+	ret = adar300x_reg_update(dev, ADAR300X_REG_ADC_CONTROL2,
+				  ADAR300X_ADC_START_MSK, ADAR300X_ADC_START_MSK);
+	if (ret)
+		return ret;
+
+	/*
+	 * The SAR runs off SCLK, so the conversion only advances while the bus
+	 * is active. Seven dummy transactions are not enough on their own: at
+	 * 24 clocks each they supply 168 of the 784 the data sheet requires.
+	 * The status reads below make up the rest, which is why the conversion
+	 * must be polled rather than waited out with a delay.
+	 */
+	for (i = 0; i < ADAR300X_ADC_NUM_CLOCKS; i++) {
+		ret = adar300x_reg_write(dev, ADAR300X_REG_SCRATCHPAD,
+					 ADAR300X_SCRATCHPAD_PATTERN_2);
+		if (ret)
+			return ret;
+	}
+
+	/* Poll for conversion complete */
+	for (i = 0; i < timeout_us / poll_us; i++) {
+		ret = adar300x_reg_read(dev, ADAR300X_REG_ADC_CONTROL2, &ctrl2);
+		if (ret)
+			return ret;
+		if (ctrl2 & ADAR300X_ADC_END_CONV_MSK)
+			break;
+		no_os_udelay(poll_us);
+	}
+
+	if (!(ctrl2 & ADAR300X_ADC_END_CONV_MSK))
+		return -ETIMEDOUT;
+
+	return adar300x_reg_read(dev, ADAR300X_REG_ADC_DATA_OUT, code);
+}
+
+/**
  * @brief Pulses the RSTB pin.
  * @param dev - The device structure.
  * @return    - 0 in case of success, -ENODEV when no reset GPIO is wired, or

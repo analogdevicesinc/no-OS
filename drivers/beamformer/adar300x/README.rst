@@ -40,6 +40,29 @@ Applications
 * Mobile satellite terminals (land, air, and sea)
 * Terrestrial, airborne and satellite phased arrays
 
+Operation Modes
+---------------
+
+Each beam takes its beamstate from one of four sources, selected per beam with
+**adar300x_set_beam_mode**.
+
++------------------------------------+--------------------------------------+-------------------------------+
+| Mode                               | Beamstate source                     | Applied by                    |
++====================================+======================================+===============================+
+| ``ADAR300X_BEAM_MODE_DIRECT``      | Direct control registers             | An update command             |
++------------------------------------+--------------------------------------+-------------------------------+
+| ``ADAR300X_BEAM_MODE_MEMORY``      | RAM, 64 beamstates per beam, stepped | Each update advances the      |
+|                                    | through by the sequencer             | sequencer by one beamstate    |
++------------------------------------+--------------------------------------+-------------------------------+
+| ``ADAR300X_BEAM_MODE_FIFO``        | FIFO, 16 beamstates per beam         | Each update dequeues one      |
+|                                    |                                      | beamstate                     |
++------------------------------------+--------------------------------------+-------------------------------+
+| ``ADAR300X_BEAM_MODE_INST_DIRECT`` | Direct control registers             | Immediately, on the SPI write |
++------------------------------------+--------------------------------------+-------------------------------+
+
+In every mode except instantaneous direct, a reset or mute command sends the
+beam to its reset or mute beamstate instead.
+
 ADAR300X Device Configuration
 -----------------------------
 
@@ -83,8 +106,12 @@ accesses to the same page do not repeat the register write.
 **adar300x_page_reg_write** and **adar300x_page_reg_read** combine a page
 selection with a register access.
 
-The cached page is invalidated by both reset paths, so a reset can never leave
-the driver believing that a stale page is still selected.
+The data sheet describes ``0x000`` to ``0x0FF`` as common to all pages, but
+beam commands written while the FIFO page is selected are ignored. The driver
+therefore accesses every register above the standard SPI block at ``0x000`` to
+``0x00B`` with page 0 selected. The cached page is invalidated by both reset
+paths, so a reset can never leave the driver believing that a stale page is
+still selected.
 
 Reset
 ~~~~~
@@ -110,6 +137,108 @@ Initialize the first device normally and pass its ``spi_desc`` as
 ``dev_addr``. Only the device that owns the bus frees it in
 **adar300x_remove**, so the shared descriptor stays valid until the owner is
 removed last.
+
+Beam Mode and Update Source
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**adar300x_set_beam_mode** and **adar300x_get_beam_mode** select and read back
+the beamstate source of one beam, see `Operation Modes`_.
+
+Update, reset and mute are driven either by the UPDATE, RESET and MUTE pins or
+over SPI. **adar300x_set_update_source_spi** selects SPI when passed true, and
+**adar300x_get_update_source_spi** reads the selection back. The commands in
+`Beam Commands`_ only take effect with SPI selected.
+
+Direct, Reset and Mute Beamstates
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Three register banks hold one beamstate per beam each: the direct control
+bank, applied by an update in direct mode, and the reset and mute banks,
+applied by the reset and mute commands. They share one layout, so a single
+pair of functions covers all three.
+
+**adar300x_set_element** writes, and **adar300x_get_element** reads, the delay
+(``ADAR300X_DELAY``) or attenuation (``ADAR300X_ATTENUATION``) of one element
+of one beam, in the bank selected by ``ADAR300X_BEAMSTATE_DIRECT``,
+``ADAR300X_BEAMSTATE_RESET`` or ``ADAR300X_BEAMSTATE_MUTE``. Both values are
+6-bit, from 0 to 63: delay in 0.865 ps steps and attenuation in 0.5 dB steps.
+
+Beam Commands
+~~~~~~~~~~~~~
+
+**adar300x_beam_command** applies ``ADAR300X_BEAM_CMD_UPDATE``,
+``ADAR300X_BEAM_CMD_RESET`` or ``ADAR300X_BEAM_CMD_MUTE`` to every beam set in
+a mask, bit 0 being beam 0. Reset and mute are qualifiers staged per beam and
+applied by the update strobe, the same way the RESET and MUTE pins qualify the
+UPDATE pin.
+
+A beam in instantaneous direct mode ignores all three commands: updates have no
+effect because writes already apply immediately, and the data sheet states
+that such a beam cannot enter its reset or mute beamstate.
+
+Amplifier Bias and Enable
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Each beam amplifier has a 3-bit bias and an enable bit for each of four
+states, reset, operational, mute and sleep, set with **adar300x_set_beam_amp**
+and read with **adar300x_get_beam_amp**. The element amplifiers have the same
+controls for the operational and sleep states, through
+**adar300x_set_element_amp** and **adar300x_get_element_amp**. The amplifiers
+power up enabled with a bias of 3.
+
+The data sheet also lists element amplifier mute registers at ``0xD8`` to
+``0xDB``. They read back 0 and discard writes on the ADAR3000, so the driver
+does not expose them.
+
+Beamstate RAM
+~~~~~~~~~~~~~
+
+Each beam holds 64 beamstates in RAM, on its own address page. A beamstate is
+eight 6-bit values, the delay then the attenuation of each element in turn,
+packed MSB first into six bytes.
+
+**adar300x_set_ram_beamstate** writes one beamstate from its eight unpacked
+values and **adar300x_get_ram_beamstate** reads one back. The read follows the
+data sheet's fetch protocol: a first read latches the whole beamstate and
+returns invalid data, after which the six bytes read back singly.
+
+RAM Sequencer
+~~~~~~~~~~~~~
+
+In memory mode every update advances a beam's sequencer from the start pointer
+to the stop pointer, then wraps back to the start. **adar300x_set_seq_range**
+sets both pointers and **adar300x_get_seq_range** reads them. A stop pointer
+below the start pointer is valid and wraps from pointer 63 to pointer 0. The
+range powers up as 0 to 63.
+
+FIFO
+~~~~
+
+**adar300x_load_fifo_beamstate** queues one beamstate onto a beam's FIFO,
+which holds 16. The write to the last of the six load registers is what
+commits the beamstate, and a load onto a full FIFO is discarded by the device.
+
+The FIFO cannot be read back. **adar300x_get_fifo_pointers** reads the write
+pointer, which advances on each load, and the read pointer, which advances on
+each update. Both wrap at 16, and a reset empties the queue by moving the read
+pointer onto the write pointer.
+
+Temperature Sensor
+~~~~~~~~~~~~~~~~~~
+
+**adar300x_get_temp** returns the raw 8-bit code of the on-chip temperature
+sensor. The on-chip ADC runs off SCLK, so a conversion only advances while the
+bus is active; the function supplies the dummy transactions and polls for the
+end of conversion.
+
+The data sheet gives a slope of 1.09 LSB/°C and a nominal code of 127 at 25°C.
+In integer millidegrees, using the defines in ``adar300x.h``:
+
+.. code-block:: bash
+
+	mdegc = ADAR300X_TEMP_NOMINAL_MDEGC +
+		((int)code - ADAR300X_TEMP_NOMINAL_CODE) *
+		ADAR300X_TEMP_SLOPE_NUM / ADAR300X_TEMP_SLOPE_DEN;
 
 ADAR300X Driver Initialization Example
 --------------------------------------
