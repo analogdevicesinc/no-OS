@@ -2063,7 +2063,8 @@ static bool oa_tc6_credit_solicit_vs(struct oa_tc6_desc *desc, uint8_t *vs)
  * *solicit_vs (also stamped on any RX-drain chunks).
  */
 static bool oa_tc6_tx_should_run(struct oa_tc6_desc *desc, bool *force,
-				 bool *solicit, uint8_t *solicit_vs)
+				 bool *solicit, uint8_t *solicit_vs,
+				 uint32_t rx_credit)
 {
 	bool sendable = false;
 	uint8_t i;
@@ -2088,7 +2089,7 @@ static bool oa_tc6_tx_should_run(struct oa_tc6_desc *desc, bool *force,
 	*solicit = oa_tc6_credit_solicit_vs(desc, solicit_vs);
 
 	/* Otherwise run only to drain RX or service a pending IRQ. */
-	return sendable || *solicit || *force || desc->data_rx_credit;
+	return sendable || *solicit || *force || rx_credit;
 }
 
 /*
@@ -2122,15 +2123,20 @@ static int oa_tc6_pack_xfer(struct oa_tc6_desc *desc, bool *force,
 			    struct capi_spi_transfer *xfer,
 			    uint32_t *bytes_total)
 {
+	uint32_t rx_credit;
 	uint8_t force_vs;
 	bool solicit;
 
-	if (!oa_tc6_tx_should_run(desc, force, &solicit, &force_vs)) {
+	/* With the RX pool full the pass runs with NORX, so RX credit cannot be
+	 * drained: it must neither trigger a pass nor size one. */
+	rx_credit = oa_tc6_rx_pool_full(desc) ? 0 : desc->data_rx_credit;
+
+	if (!oa_tc6_tx_should_run(desc, force, &solicit, &force_vs, rx_credit)) {
 		*bytes_total = 0;
 		return 0;
 	}
 
-	oa_tc6_tx_frame_to_chunks(desc, desc->data_chunks, desc->data_rx_credit,
+	oa_tc6_tx_frame_to_chunks(desc, desc->data_chunks, rx_credit,
 				  *force, solicit, force_vs, bytes_total);
 	*force = false;
 
