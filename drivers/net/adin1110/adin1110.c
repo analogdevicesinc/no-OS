@@ -568,6 +568,29 @@ int adin1110_get_tx_frame(struct adin1110_desc *desc,
 }
 
 /**
+ * @brief Check whether adin1110_get_tx_frame() would hand out a buffer, so
+ *        a caller can hold off building a frame that could not be queued.
+ * @param desc - the device descriptor
+ * @return true if a TX frame buffer is free (always true outside OPEN
+ *         Alliance mode, where the FIFO functions do their own checks)
+ */
+bool adin1110_tx_ready(struct adin1110_desc *desc)
+{
+#if defined(CONFIG_OA_TC6)
+	struct oa_tc6_queue *q;
+
+	if (desc && desc->oa_tc6_spi) {
+		q = &desc->oa_desc->tx_q[0];
+
+		return q->count < q->pool_size &&
+		       q->pool[q->head].state == OA_BUFF_FREE;
+	}
+#endif
+
+	return true;
+}
+
+/**
  * @brief Queue a frame obtained with adin1110_get_tx_frame() for
  *        transmission and run the datapath.
  * @param desc - the device descriptor

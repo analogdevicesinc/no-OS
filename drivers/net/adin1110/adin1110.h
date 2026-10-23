@@ -254,6 +254,9 @@ int adin1110_read_fifo(struct adin1110_desc *, uint32_t,
 int adin1110_get_tx_frame(struct adin1110_desc *,
 			  struct oa_tc6_frame_buffer **);
 
+/* Check whether a TX frame buffer is free (OPEN Alliance mode) */
+bool adin1110_tx_ready(struct adin1110_desc *);
+
 /* Queue a frame from adin1110_get_tx_frame() for transmission */
 int adin1110_send_frame(struct adin1110_desc *, uint32_t,
 			struct oa_tc6_frame_buffer *);
