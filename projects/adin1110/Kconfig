@@ -7,6 +7,46 @@ choice ADIN1110_EXAMPLE
 config ADIN1110_FRAME_RX_TX_EXAMPLE
 	bool "Frame RX/TX example"
 
+config ADIN1110_OA_TC6_PERF_EXAMPLE
+	bool "ADIN1110 OA TC6 full duplex performance example"
+	depends on NET && ADIN1110
+	help
+	  Benchmarks full duplex throughput of the ADIN1110 MAC/PHY.
+	  Continuously transmits frames while receiving frames from a
+	  companion PC script, printing periodic throughput stats over
+	  UART. The SPI protocol/protection combination is selected below.
+
+endchoice
+
+choice ADIN1110_OA_TC6_PERF_SPI_MODE
+	prompt "SPI protocol mode"
+	depends on ADIN1110_OA_TC6_PERF_EXAMPLE
+	default ADIN1110_OA_TC6_PERF_OA_TC6_UNPROTECTED
+
+config ADIN1110_OA_TC6_PERF_GENERIC_UNPROTECTED
+	bool "Generic SPI, unprotected"
+	help
+	  Classic ADIN1110 register-based SPI transactions, without the
+	  8-bit CRC header protection.
+
+config ADIN1110_OA_TC6_PERF_GENERIC_PROTECTED
+	bool "Generic SPI, protected"
+	help
+	  Classic ADIN1110 register-based SPI transactions, with the 8-bit
+	  CRC header protection enabled.
+
+config ADIN1110_OA_TC6_PERF_OA_TC6_UNPROTECTED
+	bool "OA TC6 native chunk SPI, unprotected control transactions"
+	help
+	  Open Alliance TC6 chunk-based SPI protocol, with control
+	  (register access) transactions left unprotected.
+
+config ADIN1110_OA_TC6_PERF_OA_TC6_PROTECTED
+	bool "OA TC6 native chunk SPI, protected control transactions"
+	help
+	  Open Alliance TC6 chunk-based SPI protocol, with control
+	  (register access) transactions protected (Protected SPI).
+
 endchoice
 
 endmenu
