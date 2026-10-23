@@ -1,3 +1,16 @@
+/* SPDX-License-Identifier: OFL-1.1 */
+/*
+ * Generated with lv_font_conv from Terminus TTF 4.49.3.
+ *
+ * Copyright (c) 2010 Dimitar Toshkov Zhekov,
+ * with Reserved Font Name "Terminus Font".
+ *
+ * Copyright (c) 2011-2023 Tilman Blumenbach,
+ * with Reserved Font Name "Terminus (TTF)".
+ *
+ * Licensed under the SIL Open Font License, Version 1.1; see
+ * LICENSES/permissive/OFL-1.1.
+ */
 /*******************************************************************************
  * Size: 16 px
  * Bpp: 1
