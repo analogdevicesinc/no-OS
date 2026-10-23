@@ -55,4 +55,8 @@ config CAPI_PINT
 	bool "CAPI PINT"
 	default n
 
+config CAPI_CLK
+	bool "CAPI CLK"
+	default n
+
 endif # CAPI
