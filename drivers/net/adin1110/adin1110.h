@@ -16,7 +16,13 @@
 #include "no_os_gpio.h"
 #include "no_os_util.h"
 
+#if defined(CONFIG_OA_TC6)
 #include "oa_tc6.h"
+#else
+struct oa_tc6_desc;
+struct oa_tc6_frame_buffer;
+struct capi_spi_device;
+#endif
 
 #define ADIN1110_BUFF_LEN			1530
 #define ADIN1110_OA_TX_BUFF_NUM			2

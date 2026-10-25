@@ -19,8 +19,6 @@
 #include "no_os_delay.h"
 #include "no_os_util.h"
 
-#include "oa_tc6.h"
-
 #define ADIN1110_CRC_POLYNOMIAL	0x7
 
 NO_OS_DECLARE_CRC8_TABLE(_crc_table);
