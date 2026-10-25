@@ -25,7 +25,6 @@
 
 extern struct no_os_uart_init_param uart_ip;
 extern struct adin1110_init_param adin1110_ip;
-extern const struct no_os_spi_init_param adin1110_spi_ip;
 extern const struct no_os_spi_init_param ad74413r_spi_ip;
 extern struct no_os_spi_init_param max14906_spi_ip;
 extern struct swiot_iio_desc_init_param swiot_ip;
@@ -63,5 +62,7 @@ extern struct iio_hw_trig_init_param ad74413r_gpio_trig_ip;
 extern struct no_os_irq_init_param ad74413r_gpio_irq_ip;
 extern struct iio_trigger ad74413r_iio_trig_desc;
 #endif
+
+int adin1110_spi_init(struct adin1110_init_param *param);
 
 #endif /* __COMMON_DATA_H__ */

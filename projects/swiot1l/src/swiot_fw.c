@@ -138,6 +138,10 @@ int swiot_firmware()
 	memcpy(app_init_param.lwip_param.hwaddr, adin1110_mac_address,
 	       NETIF_MAX_HWADDR_LEN);
 
+	ret = adin1110_spi_init(&adin1110_ip);
+	if (ret)
+		return ret;
+
 	ret = no_os_irq_ctrl_init(&ad74413r_nvic, &ad74413r_nvic_ip);
 	if (ret)
 		return ret;

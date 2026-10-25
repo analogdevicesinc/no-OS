@@ -129,6 +129,12 @@ int swiot1l_mqtt()
 	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 	memcpy(lwip_ip.hwaddr, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 
+	ret = adin1110_spi_init(&adin1110_ip);
+	if (ret) {
+		pr_err("ADIN1110 SPI init error: %d (%s)\n", ret, strerror(-ret));
+		goto free_ad74413r;
+	}
+
 	ret = no_os_lwip_init(&lwip_desc, &lwip_ip);
 	if (ret) {
 		pr_err("LWIP init error: %d (%s)\n", ret, strerror(-ret));
