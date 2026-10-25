@@ -157,6 +157,12 @@ int basic_pqm_firmware()
 	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 	memcpy(app_init_param.lwip_param.hwaddr, adin1110_mac_address,
 	       NETIF_MAX_HWADDR_LEN);
+
+	status = adin1110_spi_init(&adin1110_ip);
+	if (status) {
+		printf("ADIN1110 SPI init failed \n\r");
+		goto exit;
+	}
 #endif
 
 	status = afe_init();

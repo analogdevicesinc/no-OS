@@ -81,6 +81,10 @@ struct no_os_uart_init_param iio_demo_serial_ip = {
 }; // SERIAL initialization parameter for iio connection
 
 #if defined(PQM_CONN_T1L)
+#include "capi_dma.h"
+#include "capi_spi.h"
+#include "maxim_capi_dma.h"
+#include "maxim_capi_spi.h"
 
 const struct no_os_gpio_init_param adin1110_int_ip = {
 	.port = 2,
@@ -137,18 +141,52 @@ const struct no_os_gpio_init_param adin1110_cfg1_ip = {
 	.platform_ops = &max_gpio_ops,
 	.extra = GPIO_EXTRA,
 };
-const struct no_os_spi_init_param adin1110_spi_ip = {
-	.device_id = 2,
-	.max_speed_hz = 15000000,
-	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
-	.mode = NO_OS_SPI_MODE_0,
-	.platform_ops = SPI_OPS,
-	.chip_select = 0,
-	.extra = ADIN_SPI_EXTRA,
+static struct capi_dma_config adin1110_capi_dma_cfg = {
+	.num_chans = 2,
+	.ops = &max_capi_dma_ops,
 };
+
+static struct max_capi_spi_extra adin1110_capi_spi_extra = {
+	.vssel = MAX_CAPI_GPIO_VSSEL_VDDIOH,
+	.chip_select = 1U << 0,
+};
+
+static struct capi_spi_config adin1110_capi_spi_cfg = {
+	.ops = &max_capi_spi_ops,
+	.identifier = 2,
+	.clk_freq_hz = 15000000,
+	.extra = &adin1110_capi_spi_extra,
+};
+
+static struct capi_spi_device adin1110_capi_spi_dev = {
+	.max_speed_hz = 15000000,
+	.mode = CAPI_SPI_MODE_0,
+	.native_cs = 0,
+};
+
+int adin1110_spi_init(struct adin1110_init_param *param)
+{
+	struct capi_spi_controller_handle *spi_ctrl = NULL;
+	struct capi_dma_handle *dma = NULL;
+	int ret;
+
+	ret = capi_dma_init(&dma, &adin1110_capi_dma_cfg);
+	if (ret)
+		return ret;
+
+	adin1110_capi_spi_cfg.dma_handle = dma;
+	ret = capi_spi_init(&spi_ctrl, &adin1110_capi_spi_cfg);
+	if (ret)
+		return ret;
+
+	adin1110_capi_spi_dev.controller = spi_ctrl;
+	param->comm_desc = &adin1110_capi_spi_dev;
+
+	return 0;
+}
+
 struct adin1110_init_param adin1110_ip = {
 	.chip_type = ADIN1110,
-	.comm_param = adin1110_spi_ip,
 	.reset_param = adin1110_rst_gpio_ip,
 	.append_crc = false,
 };

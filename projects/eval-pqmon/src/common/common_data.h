@@ -72,10 +72,11 @@ extern const struct no_os_gpio_init_param adin1110_tx2p4_ip;
 extern const struct no_os_gpio_init_param adin1110_mssel_ip;
 extern const struct no_os_gpio_init_param adin1110_cfg0_ip;
 extern const struct no_os_gpio_init_param adin1110_cfg1_ip;
-extern const struct no_os_spi_init_param adin1110_spi_ip;
 
 extern struct adin1110_init_param adin1110_ip;
 extern struct lwip_network_param lwip_ip;
+
+int adin1110_spi_init(struct adin1110_init_param *param);
 #endif
 
 extern struct pqm_init_para pqm_ip;
