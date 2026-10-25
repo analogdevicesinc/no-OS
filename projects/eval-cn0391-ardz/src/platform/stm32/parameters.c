@@ -24,6 +24,3 @@ struct stm32_gpio_init_param adin1110_reset_gpio_extra_ip = {
 	.speed = GPIO_SPEED_FREQ_VERY_HIGH,
 };
 
-struct stm32_spi_init_param adin1110_spi_extra_ip = {
-	.chip_select_port = ADIN1110_SPI_CS_PORT,
-};

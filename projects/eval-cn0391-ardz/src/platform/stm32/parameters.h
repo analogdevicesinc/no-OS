@@ -38,7 +38,6 @@ extern UART_HandleTypeDef huart1;
 
 #define ADIN1110_GPIO_RESET_PORT	2
 #define ADIN1110_GPIO_RESET_PIN		7
-#define ADIN1110_SPI_DEVICE_ID		2
 #define ADIN1110_SPI_CS			12
 #define ADIN1110_SPI_CS_PORT		1
 #define ADIN1110_SPI_CLK_RATE		25000000
@@ -46,6 +45,5 @@ extern UART_HandleTypeDef huart1;
 extern struct stm32_uart_init_param cn0391_uart_extra_ip;
 extern struct stm32_spi_init_param cn0391_spi_extra_ip;
 extern struct stm32_gpio_init_param adin1110_reset_gpio_extra_ip;
-extern struct stm32_spi_init_param adin1110_spi_extra_ip;
 
 #endif /* __PARAMETERS_H__ */
