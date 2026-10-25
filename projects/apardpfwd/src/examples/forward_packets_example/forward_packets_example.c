@@ -51,6 +51,12 @@ int example_main()
 		goto remove_uart;
 	}
 
+	ret = adin1110_spi_init(&adin1110_ip);
+	if (ret) {
+		pr_err("ADIN2111 SPI initialization failed (%d)\n", ret);
+		goto remove_uart;
+	}
+
 	ret = adin1110_init(&adin1110, &adin1110_ip);
 	if (ret) {
 		pr_err("Error during ADIN1110 config (%d)\n", ret);

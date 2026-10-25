@@ -70,6 +70,12 @@ int example_main()
 
 	memcpy(lwip_ip.hwaddr, adin1110_ip.mac_address, NETIF_MAX_HWADDR_LEN);
 
+	ret = adin1110_spi_init(&adin1110_ip);
+	if (ret) {
+		pr_err("ADIN2111 SPI initialization failed (%d)\n", ret);
+		goto remove_uart;
+	}
+
 	ret = no_os_lwip_init(&lwip_desc, &lwip_ip);
 	if (ret) {
 		pr_err("LWIP initialization failed (%d)\n", ret);

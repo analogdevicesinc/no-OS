@@ -17,7 +17,6 @@
 #include "maxim_uart.h"
 #include "maxim_uart_stdio.h"
 #include "maxim_gpio.h"
-#include "maxim_spi.h"
 
 extern struct no_os_uart_init_param uart_ip;
 extern struct adin1110_init_param adin1110_ip;
@@ -26,5 +25,6 @@ extern struct no_os_gpio_init_param port2_cfg_0;
 
 int spi_cfg_0(const struct no_os_gpio_init_param adin1110_spi_cfg);
 int port2_cfg(const struct no_os_gpio_init_param port2_gpio_cfg, int state);
+int adin1110_spi_init(struct adin1110_init_param *param);
 
 #endif /* __COMMON_DATA_H__ */
