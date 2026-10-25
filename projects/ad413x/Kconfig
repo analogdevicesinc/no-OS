@@ -37,4 +37,32 @@ config AD413X_CORAZ7S_CARRIER
 
 endchoice
 
+choice AD413X_DEV
+	prompt "Device variant"
+	default AD413X_DEV_AD4130_8
+	help
+	  Select the AD413x family part populated on the evaluation board.
+
+config AD413X_DEV_AD4129_4
+	bool "AD4129-4"
+
+config AD413X_DEV_AD4129_8
+	bool "AD4129-8"
+
+config AD413X_DEV_AD4130_4
+	bool "AD4130-4"
+
+config AD413X_DEV_AD4130_8
+	bool "AD4130-8"
+	help
+	  Default AD4130-8 device (no extra compile define needed).
+
+config AD413X_DEV_AD4131_4
+	bool "AD4131-4"
+
+config AD413X_DEV_AD4131_8
+	bool "AD4131-8"
+
+endchoice
+
 endmenu

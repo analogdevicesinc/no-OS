@@ -81,7 +81,19 @@ int main()
 	struct ad413x_dev *ad413x_dev;
 	struct ad413x_init_param ad413x_dev_ip = {
 		.spi_init = &spi_ip,
+#if AD4129_4_DEV
+		.chip_id = AD4129_4,
+#elif AD4129_8_DEV
+		.chip_id = AD4129_8,
+#elif AD4130_4_DEV
+		.chip_id = AD4130_4,
+#elif AD4131_4_DEV
+		.chip_id = AD4131_4,
+#elif AD4131_8_DEV
+		.chip_id = AD4131_8,
+#else
 		.chip_id = AD4130_8,
+#endif
 		.mclk = AD413X_INT_76_8_KHZ_OUT_OFF,
 		.rdy_pin_init = &gpio_init,
 		.preset[0] = { AD413X_INT_REF, AD413X_GAIN_1, AD413X_SYNC4_STANDALONE, AD413X_32_MCLK },
@@ -94,6 +106,8 @@ int main()
 		.ch[5]  = { AD413X_PRESET_0, DISABLE, AD413X_AIN5,  AD413X_DGND },
 		.ch[6]  = { AD413X_PRESET_0, DISABLE, AD413X_AIN6,  AD413X_DGND },
 		.ch[7]  = { AD413X_PRESET_0, DISABLE, AD413X_AIN7,  AD413X_DGND },
+#if !(AD4129_4_DEV || AD4130_4_DEV || AD4131_4_DEV)
+		/* AIN8..AIN15 are only available on the -8 parts */
 		.ch[8]  = { AD413X_PRESET_0, DISABLE, AD413X_AIN8,  AD413X_DGND },
 		.ch[9]  = { AD413X_PRESET_0, DISABLE, AD413X_AIN9,  AD413X_DGND },
 		.ch[10] = { AD413X_PRESET_0, DISABLE, AD413X_AIN10, AD413X_DGND },
@@ -102,6 +116,7 @@ int main()
 		.ch[13] = { AD413X_PRESET_0, DISABLE, AD413X_AIN13, AD413X_DGND },
 		.ch[14] = { AD413X_PRESET_0, DISABLE, AD413X_AIN14, AD413X_DGND },
 		.ch[15] = { AD413X_PRESET_0, DISABLE, AD413X_AIN15, AD413X_DGND },
+#endif
 		.bipolar = DISABLE,
 		.int_ref = AD413X_INTREF_2_5V,
 		.data_stat = ENABLE,
