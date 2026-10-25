@@ -7,9 +7,9 @@ menuconfig NET
 if NET
 
 config ADIN1110
-    depends on SPI
+    depends on CAPI_SPI
     select GPIO
-    select OA_TC6 if CAPI_SPI && CAPI_TIME && CAPI_MUTEX
+    select OA_TC6 if CAPI_TIME && CAPI_MUTEX
     bool "Enable the ADIN1110 driver"
     default n
 

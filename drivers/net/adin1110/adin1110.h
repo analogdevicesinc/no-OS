@@ -12,7 +12,7 @@
 #define _ADIN1110_H
 
 #include <stdbool.h>
-#include "no_os_spi.h"
+#include "capi_spi.h"
 #include "no_os_gpio.h"
 #include "no_os_util.h"
 
@@ -21,7 +21,6 @@
 #else
 struct oa_tc6_desc;
 struct oa_tc6_frame_buffer;
-struct capi_spi_device;
 #endif
 
 #define ADIN1110_BUFF_LEN			1530
@@ -191,8 +190,6 @@ enum adin1110_chip_id {
 struct adin1110_desc {
 	enum adin1110_chip_id chip_type;
 	struct capi_spi_device *comm_desc;
-	/* no-OS SPI, used in the generic SPI mode when comm_desc is not set */
-	struct no_os_spi_desc *no_os_comm_desc;
 	uint8_t mac_address[ADIN1110_ETH_ALEN];
 	uint8_t *data;
 	struct no_os_gpio_desc *reset_gpio;
@@ -214,8 +211,6 @@ struct adin1110_init_param {
 	enum adin1110_chip_id chip_type;
 	/* CAPI SPI device, used by both SPI protocols */
 	struct capi_spi_device *comm_desc;
-	/* no-OS SPI, used in the generic SPI mode when comm_desc is not set */
-	struct no_os_spi_init_param comm_param;
 	struct no_os_gpio_init_param reset_param;
 	struct no_os_gpio_init_param int_param;
 	uint8_t mac_address[ADIN1110_ETH_ALEN];

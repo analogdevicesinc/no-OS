@@ -12,15 +12,12 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-#include "no_os_spi.h"
 #include "adin1110.h"
 #include "no_os_alloc.h"
 #include "no_os_crc8.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
-#if defined(CONFIG_CAPI_SPI)
 #include "capi_spi.h"
-#endif
 
 #define ADIN1110_CRC_POLYNOMIAL	0x7
 
@@ -50,13 +47,6 @@ static struct _adin1110_priv driver_data[2] = {
  */
 static int adin1110_spi_xfer(struct adin1110_desc *desc, uint32_t len)
 {
-	struct no_os_spi_msg msg = {
-		.tx_buff = desc->data,
-		.rx_buff = desc->data,
-		.bytes_number = len,
-		.cs_change = 1,
-	};
-#if defined(CONFIG_CAPI_SPI)
 	struct capi_spi_transfer xfer = {
 		.tx_buf = desc->data,
 		.rx_buf = desc->data,
@@ -64,11 +54,7 @@ static int adin1110_spi_xfer(struct adin1110_desc *desc, uint32_t len)
 		.rx_size = len,
 	};
 
-	if (desc->comm_desc)
-		return capi_spi_transceive(desc->comm_desc, &xfer);
-#endif
-
-	return no_os_spi_transfer(desc->no_os_comm_desc, &msg, 1);
+	return capi_spi_transceive(desc->comm_desc, &xfer);
 }
 
 /**
@@ -1152,17 +1138,7 @@ int adin1110_init(struct adin1110_desc **desc,
 		no_os_mdelay(90);
 	}
 
-	if (param->comm_desc) {
-		descriptor->comm_desc = param->comm_desc;
-	} else if (param->oa_tc6_spi) {
-		ret = -EINVAL;
-		goto free_rst_gpio;
-	} else {
-		ret = no_os_spi_init(&descriptor->no_os_comm_desc,
-				     &param->comm_param);
-		if (ret)
-			goto free_rst_gpio;
-	}
+	descriptor->comm_desc = param->comm_desc;
 
 	no_os_crc8_populate_msb(_crc_table, ADIN1110_CRC_POLYNOMIAL);
 	strncpy((char *)descriptor->mac_address, (char *)param->mac_address,
@@ -1175,7 +1151,7 @@ int adin1110_init(struct adin1110_desc **desc,
 	if (!descriptor->reset_gpio) {
 		ret = adin1110_sw_reset(descriptor);
 		if (ret)
-			goto free_spi;
+			goto free_rst_gpio;
 
 		/* Wait for the MAC and PHY digital interface to intialize */
 		no_os_mdelay(90);
@@ -1208,14 +1184,14 @@ int adin1110_init(struct adin1110_desc **desc,
 			goto free_oa_mem;
 #else
 		ret = -ENOTSUP;
-		goto free_spi;
+		goto free_rst_gpio;
 #endif
 	} else {
 		descriptor->data = no_os_calloc(ADIN1110_BUFF_LEN,
 						sizeof(*descriptor->data));
 		if (!descriptor->data) {
 			ret = -ENOMEM;
-			goto free_spi;
+			goto free_rst_gpio;
 		}
 	}
 
@@ -1245,9 +1221,6 @@ free_oa_mem:
 	no_os_free(descriptor->oa_tx_pool);
 	no_os_free(descriptor->oa_desc);
 #endif
-free_spi:
-	if (descriptor->no_os_comm_desc)
-		no_os_spi_remove(descriptor->no_os_comm_desc);
 free_rst_gpio:
 	no_os_gpio_remove(descriptor->reset_gpio);
 free_desc:
@@ -1267,12 +1240,6 @@ int adin1110_remove(struct adin1110_desc *desc)
 
 	if (!desc)
 		return -EINVAL;
-
-	if (desc->no_os_comm_desc) {
-		ret = no_os_spi_remove(desc->no_os_comm_desc);
-		if (ret)
-			return ret;
-	}
 
 	if (desc->reset_gpio) {
 		ret = no_os_gpio_remove(desc->reset_gpio);

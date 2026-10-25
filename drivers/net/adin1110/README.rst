@@ -48,9 +48,13 @@ Initialization and Resource Management
 
 The initialization-related functions include ``adin1110_init()`` and
 ``adin1110_remove()``. The ``adin1110_init()`` function allocates and
-configures the device descriptor, initializes the SPI (and optionally,
-GPIO) interfaces, and executes all required reset sequences and
-configuration setups. The ``adin1110_remove()`` function deallocates
+configures the device descriptor, initializes the optional GPIO
+interfaces, and executes all required reset sequences and
+configuration setups. The chip is accessed through a CAPI SPI device,
+initialized by the application and passed in ``comm_desc``, for both
+the generic and the OPEN Alliance SPI protocols. The protocol itself is
+selected by the CFG pins of the chip, and ``oa_tc6_spi`` must match
+it. The ``adin1110_remove()`` function deallocates
 resources and cleans up the device descriptor, ensuring a safe removal
 of the device from the system.
 
@@ -124,7 +128,10 @@ Driver Initialization Example
     #include <string.h>
     #include <stdbool.h>
     #include "adin1110.h"
-    #include "no_os_spi.h"
+    #include "capi_dma.h"
+    #include "capi_spi.h"
+    #include "maxim_capi_dma.h"
+    #include "maxim_capi_spi.h"
     #include "no_os_gpio.h"
     #include "no_os_delay.h"
     #include "no_os_print_log.h"
@@ -134,16 +141,28 @@ Driver Initialization Example
 
     int main(void)
     {
+        struct capi_dma_config dma_cfg = {
+            .num_chans = 2,
+            .ops = &max_capi_dma_ops,
+        };
+        struct capi_spi_config spi_cfg = {
+            .ops = &max_capi_spi_ops,
+            .identifier = 1,
+            .clk_freq_hz = 15000000,
+            .extra = &(struct max_capi_spi_extra) {
+                .vssel = MAX_CAPI_GPIO_VSSEL_VDDIOH,
+            },
+        };
+        struct capi_spi_device spi_dev = {
+            .max_speed_hz = 15000000,
+            .mode = CAPI_SPI_MODE_0,
+            .native_cs = 0,
+        };
+        struct capi_spi_controller_handle *spi_ctrl = NULL;
+        struct capi_dma_handle *dma = NULL;
         struct adin1110_init_param init_param = {
             .chip_type = ADIN1110,
-            .comm_param = {
-                .device_id = 1,
-                .max_speed_hz = 15000000,
-                .chip_select = 0,
-                .mode = NO_OS_SPI_MODE_0,
-                .platform_ops = &max_spi_ops,
-                .extra = &adin1110_spi_extra_ip
-            },
+            .comm_desc = &spi_dev,
             .reset_param = {
                 .number = 19,
                 .platform_ops = &max_gpio_ops,
@@ -155,6 +174,17 @@ Driver Initialization Example
 
         struct adin1110_desc *desc;
         int32_t ret;
+
+        ret = capi_dma_init(&dma, &dma_cfg);
+        if (ret)
+            return ret;
+
+        spi_cfg.dma_handle = dma;
+        ret = capi_spi_init(&spi_ctrl, &spi_cfg);
+        if (ret)
+            return ret;
+
+        spi_dev.controller = spi_ctrl;
 
         no_os_print_log("Starting ADIN1110 initialization...\n");
         ret = adin1110_init(&desc, &init_param);
