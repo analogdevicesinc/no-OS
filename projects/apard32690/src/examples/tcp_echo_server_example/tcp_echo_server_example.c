@@ -46,6 +46,10 @@ int tcp_echo_server_example_main()
 	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 	memcpy(lwip_ip.hwaddr, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 
+	ret = adin1110_spi_init(&adin1110_ip);
+	if (ret)
+		return ret;
+
 	ret = no_os_lwip_init(&lwip_desc, &lwip_ip);
 	if (ret)
 		return ret;

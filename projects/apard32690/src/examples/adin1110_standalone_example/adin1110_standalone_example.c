@@ -32,6 +32,12 @@ int adin1110_standalone_example_main()
 
 	no_os_uart_stdio(uart_desc);
 
+	ret = adin1110_spi_init(&adin1110_ip);
+	if (ret) {
+		printf("Error during CAPI SPI init (%d)\n", ret);
+		return ret;
+	}
+
 	ret = adin1110_init(&adin1110, &adin1110_ip);
 	if (ret) {
 		printf("Error during ADIN1110 config (%d)\n", ret);

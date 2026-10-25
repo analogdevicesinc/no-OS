@@ -10,7 +10,10 @@
 
 #include "common_data.h"
 #include "maxim_gpio.h"
-#include "maxim_spi.h"
+#include "capi_dma.h"
+#include "capi_spi.h"
+#include "maxim_capi_dma.h"
+#include "maxim_capi_spi.h"
 
 #if defined(CONFIG_APARD32690_ADIN1110_STANDALONE_EXAMPLE)
 #include "adin1110.h"
@@ -39,12 +42,6 @@ struct no_os_uart_init_param uart_ip = {
 
 #if defined(CONFIG_APARD32690_ECHO_SERVER_EXAMPLE) || defined(CONFIG_APARD32690_ADIN1110_STANDALONE_EXAMPLE)
 
-struct max_spi_init_param adin1110_spi_extra = {
-	.num_slaves = 1,
-	.polarity = SPI_SS_POL_LOW,
-	.vssel = MXC_GPIO_VSSEL_VDDIOH,
-};
-
 const struct no_os_gpio_init_param adin1110_rst_gpio_ip = {
 	.port = 1,
 	.number = 5,
@@ -56,19 +53,52 @@ const struct no_os_gpio_init_param adin1110_rst_gpio_ip = {
 	},
 };
 
-const struct no_os_spi_init_param adin1110_spi_ip = {
-	.device_id = 4,
-	.max_speed_hz = 25000000,
-	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
-	.mode = NO_OS_SPI_MODE_0,
-	.platform_ops = &max_spi_ops,
-	.chip_select = 0,
-	.extra = &adin1110_spi_extra,
+static struct capi_dma_config adin1110_capi_dma_cfg = {
+	.num_chans = 2,
+	.ops = &max_capi_dma_ops,
 };
+
+static struct max_capi_spi_extra adin1110_capi_spi_extra = {
+	.vssel = MAX_CAPI_GPIO_VSSEL_VDDIOH,
+	.chip_select = 1U << 0,
+};
+
+static struct capi_spi_config adin1110_capi_spi_cfg = {
+	.ops = &max_capi_spi_ops,
+	.identifier = 4,
+	.clk_freq_hz = 25000000,
+	.extra = &adin1110_capi_spi_extra,
+};
+
+static struct capi_spi_device adin1110_capi_spi_dev = {
+	.max_speed_hz = 25000000,
+	.mode = CAPI_SPI_MODE_0,
+	.native_cs = 0,
+};
+
+int adin1110_spi_init(struct adin1110_init_param *param)
+{
+	struct capi_spi_controller_handle *spi_ctrl = NULL;
+	struct capi_dma_handle *dma = NULL;
+	int ret;
+
+	ret = capi_dma_init(&dma, &adin1110_capi_dma_cfg);
+	if (ret)
+		return ret;
+
+	adin1110_capi_spi_cfg.dma_handle = dma;
+	ret = capi_spi_init(&spi_ctrl, &adin1110_capi_spi_cfg);
+	if (ret)
+		return ret;
+
+	adin1110_capi_spi_dev.controller = spi_ctrl;
+	param->comm_desc = &adin1110_capi_spi_dev;
+
+	return 0;
+}
 
 struct adin1110_init_param adin1110_ip = {
 	.chip_type = ADIN1110,
-	.comm_param = adin1110_spi_ip,
 	.reset_param = adin1110_rst_gpio_ip,
 	.mac_address = {0x00, 0x18, 0x80, 0x03, 0x25, 0x80},
 	.append_crc = false,
