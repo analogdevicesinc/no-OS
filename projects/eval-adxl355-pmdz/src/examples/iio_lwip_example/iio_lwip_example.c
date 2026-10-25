@@ -14,6 +14,8 @@
 #include "lwip_socket.h"
 #include "lwip_adin1110.h"
 #include "adin1110.h"
+#include "capi_spi.h"
+#include "stm32_capi_spi.h"
 
 #ifndef DATA_BUFFER_SIZE
 #define DATA_BUFFER_SIZE 400
@@ -31,22 +33,50 @@ const struct no_os_gpio_init_param adin1110_reset_ip = {
 	.extra = &adin1110_reset_gpio_extra_ip,
 };
 
-const struct no_os_spi_init_param adin1110_spi_ip = {
-	.device_id = ADIN1110_SPI_DEVICE_ID,
+extern SPI_HandleTypeDef hspi2;
+
+static struct stm32_spi_extra_config adin1110_capi_spi_extra = {
+	.hspi = &hspi2,
+	.get_input_clock = HAL_RCC_GetPCLK1Freq,
+};
+
+static struct stm32_spi_device_extra adin1110_capi_spi_dev_extra = {
+	.chip_select_port = ADIN1110_SPI_CS_PORT,
+	.chip_select_pin = ADIN1110_SPI_CS,
+};
+
+static struct capi_spi_config adin1110_capi_spi_cfg = {
+	.ops = &stm32_capi_spi_ops,
+	.identifier = (uint64_t)(uintptr_t)SPI2,
+	.extra = &adin1110_capi_spi_extra,
+};
+
+static struct capi_spi_device adin1110_capi_spi_dev = {
 	.max_speed_hz = ADIN1110_SPI_CLK_RATE,
-	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
-	.mode = NO_OS_SPI_MODE_0,
-	.platform_ops = SPI_OPS,
-	.chip_select = ADIN1110_SPI_CS,
-	.extra = &adin1110_spi_extra_ip,
+	.mode = CAPI_SPI_MODE_0,
+	.extra = &adin1110_capi_spi_dev_extra,
 };
 
 struct adin1110_init_param adin1110_ip = {
 	.chip_type = ADIN1110,
-	.comm_param = adin1110_spi_ip,
 	.reset_param = adin1110_reset_ip,
 	.append_crc = false,
 };
+
+static int adin1110_spi_init(struct adin1110_init_param *param)
+{
+	struct capi_spi_controller_handle *spi_ctrl = NULL;
+	int ret;
+
+	ret = capi_spi_init(&spi_ctrl, &adin1110_capi_spi_cfg);
+	if (ret)
+		return ret;
+
+	adin1110_capi_spi_dev.controller = spi_ctrl;
+	param->comm_desc = &adin1110_capi_spi_dev;
+
+	return 0;
+}
 
 /***************************************************************************//**
  * @brief IIO example main execution.
@@ -90,6 +120,10 @@ int example_main()
 	app_init_param.lwip_param.extra = NULL;
 	memcpy(app_init_param.lwip_param.hwaddr, adin1110_mac_address,
 	       NETIF_MAX_HWADDR_LEN);
+
+	ret = adin1110_spi_init(&adin1110_ip);
+	if (ret)
+		return ret;
 
 	ret = iio_app_init(&app, app_init_param);
 	if (ret)

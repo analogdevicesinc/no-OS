@@ -60,13 +60,11 @@ extern struct stm32_gpio_irq_init_param adxl355_gpio_irq_extra_ip;
 
 #define ADIN1110_GPIO_RESET_PORT	2
 #define ADIN1110_GPIO_RESET_PIN		7
-#define ADIN1110_SPI_DEVICE_ID		2
 #define ADIN1110_SPI_CS			12
 #define ADIN1110_SPI_CS_PORT		1
 #define ADIN1110_SPI_CLK_RATE		25000000
 #define GPIO_OPS			&stm32_gpio_ops
 
 extern struct stm32_gpio_init_param adin1110_reset_gpio_extra_ip;
-extern struct stm32_spi_init_param adin1110_spi_extra_ip;
 
 #endif /* __PARAMETERS_H__ */
