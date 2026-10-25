@@ -15,21 +15,9 @@ struct max_uart_init_param adin1110_uart_extra_ip = {
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
 
-struct max_spi_init_param adin1110_spi_extra_ip  = {
-	.num_slaves = 1,
-	.polarity = SPI_SS_POL_LOW,
-	.vssel = MXC_GPIO_VSSEL_VDDIOH,
-};
-
 struct max_gpio_init_param adin1110_reset_gpio_extra = {
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
-
-#if defined(CONFIG_OA_TC6)
-#include "mxc_device.h"
-#include "tmr.h"
-#include "no_os_irq.h"
-#include "maxim_gpio_irq.h"
 
 volatile uint32_t adin1110_irq_events;
 volatile uint32_t adin1110_idle_cycles;
@@ -74,10 +62,31 @@ struct capi_spi_device adin1110_capi_spi_dev = {
 
 struct capi_dma_handle *adin1110_capi_dma;
 
-/* The DMA channel vectors are installed by the CAPI DMA driver */
-void adin1110_capi_dma_irq_enable(void)
+int adin1110_spi_init(struct adin1110_init_param *param)
 {
+	struct capi_spi_controller_handle *spi_ctrl = NULL;
+	int ret;
+
+	ret = capi_dma_init(&adin1110_capi_dma, &adin1110_capi_dma_cfg);
+	if (ret)
+		return ret;
+
+	adin1110_capi_spi_cfg.dma_handle = adin1110_capi_dma;
+	ret = capi_spi_init(&spi_ctrl, &adin1110_capi_spi_cfg);
+	if (ret)
+		return ret;
+
+	adin1110_capi_spi_dev.controller = spi_ctrl;
+	param->comm_desc = &adin1110_capi_spi_dev;
+
+	return 0;
 }
+
+#if defined(CONFIG_OA_TC6)
+#include "mxc_device.h"
+#include "tmr.h"
+#include "no_os_irq.h"
+#include "maxim_gpio_irq.h"
 
 #if defined(ADIN1110_INT_PORT)
 static struct no_os_irq_init_param adin1110_int_ip = {

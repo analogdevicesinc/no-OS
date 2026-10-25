@@ -20,19 +20,6 @@ struct stm32_gpio_init_param adin1110_reset_gpio_extra_ip = {
 	.speed = GPIO_SPEED_FREQ_VERY_HIGH,
 };
 
-struct stm32_spi_init_param adin1110_spi_extra_ip = {
-	.chip_select_port = SPI_CS_PORT,
-	/*
-	 * SPI2 is clocked from APB1. Without this the driver sees an input
-	 * clock of 0, the prescaler math collapses to the /2 default and the
-	 * bus runs at PCLK1/2 (60 MHz here) - far above the ADIN1110's 25 MHz
-	 * maximum, corrupting MISO sampling. Providing the real clock lets
-	 * SPI_BAUDRATE select a valid /8 -> 15 MHz prescaler.
-	 */
-	.get_input_clock = HAL_RCC_GetPCLK1Freq,
-};
-
-#if defined(CONFIG_OA_TC6)
 /* SPI2 RX on DMA1 channel 1, TX on DMA1 channel 2, routed through DMAMUX1 */
 static DMA_HandleTypeDef adin1110_spi_rx_hdma = {
 	.Instance = DMA1_Channel1,
@@ -91,6 +78,49 @@ struct capi_dma_handle *adin1110_capi_dma;
 volatile uint32_t adin1110_irq_events;
 volatile uint32_t adin1110_idle_cycles;
 
+static void adin1110_capi_dma_irq_enable(void)
+{
+	HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 1, 0);
+	HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+	HAL_NVIC_SetPriority(DMA1_Channel2_IRQn, 1, 0);
+	HAL_NVIC_EnableIRQ(DMA1_Channel2_IRQn);
+}
+
+int adin1110_spi_init(struct adin1110_init_param *param)
+{
+	struct capi_spi_controller_handle *spi_ctrl = NULL;
+	int ret;
+
+	ret = capi_dma_init(&adin1110_capi_dma, &adin1110_capi_dma_cfg);
+	if (ret)
+		return ret;
+
+	adin1110_capi_dma_irq_enable();
+
+	adin1110_capi_spi_cfg.dma_handle = adin1110_capi_dma;
+	ret = capi_spi_init(&spi_ctrl, &adin1110_capi_spi_cfg);
+	if (ret)
+		return ret;
+
+	adin1110_capi_spi_dev.controller = spi_ctrl;
+	param->comm_desc = &adin1110_capi_spi_dev;
+
+	return 0;
+}
+
+void DMA1_Channel1_IRQHandler(void)
+{
+	capi_dma_isr(adin1110_capi_dma);
+	adin1110_irq_events++;
+}
+
+void DMA1_Channel2_IRQHandler(void)
+{
+	capi_dma_isr(adin1110_capi_dma);
+	adin1110_irq_events++;
+}
+
+#if defined(CONFIG_OA_TC6)
 static struct stm32_gpio_irq_init_param adin1110_int_extra = {
 	.port_nb = ADIN1110_INT_PORT,
 };
@@ -163,25 +193,5 @@ uint32_t adin1110_cpu_cycles(void)
 uint32_t adin1110_cpu_hz(void)
 {
 	return SystemCoreClock;
-}
-
-void adin1110_capi_dma_irq_enable(void)
-{
-	HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 1, 0);
-	HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
-	HAL_NVIC_SetPriority(DMA1_Channel2_IRQn, 1, 0);
-	HAL_NVIC_EnableIRQ(DMA1_Channel2_IRQn);
-}
-
-void DMA1_Channel1_IRQHandler(void)
-{
-	capi_dma_isr(adin1110_capi_dma);
-	adin1110_irq_events++;
-}
-
-void DMA1_Channel2_IRQHandler(void)
-{
-	capi_dma_isr(adin1110_capi_dma);
-	adin1110_irq_events++;
 }
 #endif

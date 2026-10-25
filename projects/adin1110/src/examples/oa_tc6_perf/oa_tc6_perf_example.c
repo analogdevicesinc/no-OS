@@ -95,37 +95,19 @@ int example_main()
 
 	struct adin1110_init_param adin1110_ip = {
 		.chip_type = ADIN1110,
-		.comm_param = adin1110_spi_ip,
 		.reset_param = adin1110_reset_gpio_ip,
 		.mac_address = {0x00, 0x18, 0x80, 0x03, 0x25, 0x80},
 		.append_crc = OA_TC6_PERF_APPEND_CRC,
 		.oa_tc6_spi = OA_TC6_PERF_OA_TC6_SPI,
 		.oa_tc6_async = OA_TC6_PERF_OA_TC6_SPI,
 	};
-#if defined(CONFIG_OA_TC6)
-	struct capi_spi_controller_handle *spi_ctrl = NULL;
-#endif
-
 	printf("OA TC6 perf\n");
 
-#if defined(CONFIG_OA_TC6)
-	ret = capi_dma_init(&adin1110_capi_dma, &adin1110_capi_dma_cfg);
-	if (ret) {
-		printf("Error during CAPI DMA init (%d)\n", ret);
-		return ret;
-	}
-	adin1110_capi_dma_irq_enable();
-
-	adin1110_capi_spi_cfg.dma_handle = adin1110_capi_dma;
-	ret = capi_spi_init(&spi_ctrl, &adin1110_capi_spi_cfg);
+	ret = adin1110_spi_init(&adin1110_ip);
 	if (ret) {
 		printf("Error during CAPI SPI init (%d)\n", ret);
 		return ret;
 	}
-
-	adin1110_capi_spi_dev.controller = spi_ctrl;
-	adin1110_ip.comm_desc = &adin1110_capi_spi_dev;
-#endif
 
 	ret = adin1110_init(&adin1110, &adin1110_ip);
 	if (ret) {

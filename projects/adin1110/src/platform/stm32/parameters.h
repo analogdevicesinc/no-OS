@@ -13,17 +13,16 @@
 
 #include "stm32_hal.h"
 #include "stm32_irq.h"
-#include "stm32_spi.h"
 #include "stm32_gpio.h"
 #include "stm32_uart.h"
 #include "stm32_uart_stdio.h"
-#if defined(CONFIG_OA_TC6)
 #include "capi_dma.h"
 #include "capi_spi.h"
 #include "stm32_capi_dma.h"
 #include "stm32_capi_spi.h"
-#include "stm32_gpio_irq.h"
 #include "adin1110.h"
+#if defined(CONFIG_OA_TC6)
+#include "stm32_gpio_irq.h"
 #endif
 
 extern UART_HandleTypeDef huart1;
@@ -35,7 +34,6 @@ extern UART_HandleTypeDef huart1;
 #define UART_EXTRA	&adin1110_uart_extra_ip
 #define UART_OPS	&stm32_uart_ops
 
-#define SPI_DEVICE_ID	2
 /*
  * SPI2 kernel clock is PCLK1 (96 MHz). The prescaler is a power of two and
  * the driver picks the fastest rate not above this value: /4 -> 24 MHz, under
@@ -44,8 +42,6 @@ extern UART_HandleTypeDef huart1;
 #define SPI_BAUDRATE	25000000
 #define SPI_CS		12
 #define SPI_CS_PORT	1
-#define SPI_OPS		&stm32_spi_ops
-#define SPI_EXTRA	&adin1110_spi_extra_ip
 
 #define GPIO_OPS	&stm32_gpio_ops
 #define RST_GPIO_PORT	2
@@ -53,10 +49,8 @@ extern UART_HandleTypeDef huart1;
 #define RST_GPIO_EXTRA	&adin1110_reset_gpio_extra_ip
 
 extern struct stm32_uart_init_param adin1110_uart_extra_ip;
-extern struct stm32_spi_init_param adin1110_spi_extra_ip;
 extern struct stm32_gpio_init_param adin1110_reset_gpio_extra_ip;
 
-#if defined(CONFIG_OA_TC6)
 extern SPI_HandleTypeDef hspi2;
 
 /* CAPI DMA channel IDs of the SPI2 RX and TX streams */
@@ -69,8 +63,9 @@ extern struct capi_spi_config adin1110_capi_spi_cfg;
 extern struct capi_spi_device adin1110_capi_spi_dev;
 extern struct capi_dma_handle *adin1110_capi_dma;
 
-void adin1110_capi_dma_irq_enable(void);
+int adin1110_spi_init(struct adin1110_init_param *param);
 
+#if defined(CONFIG_OA_TC6)
 /* nINT (T1L_INT_N) is PB11, EXTI line 11 */
 #define ADIN1110_INT_PORT	1
 #define ADIN1110_INT_PIN	11

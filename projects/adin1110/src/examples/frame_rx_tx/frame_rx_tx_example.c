@@ -112,7 +112,6 @@ int example_main()
 	struct adin1110_desc *adin1110;
 	struct adin1110_init_param adin1110_ip = {
 		.chip_type = ADIN2111,
-		.comm_param = adin1110_spi_ip,
 		.reset_param = adin1110_reset_gpio_ip,
 		.append_crc = false,
 	};
@@ -130,6 +129,10 @@ int example_main()
 	memcpy(adin1110_ip.mac_address, mac_source, ADIN1110_ETH_ALEN);
 	memcpy(eth_tx_buff.mac_source, mac_source, ADIN1110_ETH_ALEN);
 	memcpy(eth_tx_buff.mac_dest, mac_dest, ADIN1110_ETH_ALEN);
+
+	ret = adin1110_spi_init(&adin1110_ip);
+	if (ret)
+		return ret;
 
 	ret = adin1110_init(&adin1110, &adin1110_ip);
 	if (ret)
