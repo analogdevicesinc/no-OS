@@ -18,6 +18,9 @@
 #include "no_os_crc8.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
+#if defined(CONFIG_CAPI_SPI)
+#include "capi_spi.h"
+#endif
 
 #define ADIN1110_CRC_POLYNOMIAL	0x7
 
@@ -40,6 +43,35 @@ static struct _adin1110_priv driver_data[2] = {
 };
 
 /**
+ * @brief Full duplex generic SPI transfer of the frame buffer, in place.
+ * @param desc - the device descriptor
+ * @param len - number of bytes
+ * @return 0 in case of success, negative error code otherwise
+ */
+static int adin1110_spi_xfer(struct adin1110_desc *desc, uint32_t len)
+{
+	struct no_os_spi_msg msg = {
+		.tx_buff = desc->data,
+		.rx_buff = desc->data,
+		.bytes_number = len,
+		.cs_change = 1,
+	};
+#if defined(CONFIG_CAPI_SPI)
+	struct capi_spi_transfer xfer = {
+		.tx_buf = desc->data,
+		.rx_buf = desc->data,
+		.tx_size = len,
+		.rx_size = len,
+	};
+
+	if (desc->comm_desc)
+		return capi_spi_transceive(desc->comm_desc, &xfer);
+#endif
+
+	return no_os_spi_transfer(desc->no_os_comm_desc, &msg, 1);
+}
+
+/**
  * @brief Write a register's value
  * @param desc - the device descriptor
  * @param addr - register's address
@@ -50,12 +82,7 @@ static int adin1110_standard_spi_reg_write(struct adin1110_desc *desc,
 		uint16_t addr, uint32_t data)
 {
 	uint32_t header_len = ADIN1110_WR_HDR_SIZE;
-	struct no_os_spi_msg xfer = {
-		.tx_buff = desc->data,
-		.rx_buff = desc->data,
-		.bytes_number = ADIN1110_WR_FRAME_SIZE,
-		.cs_change = 1,
-	};
+	uint32_t len = ADIN1110_WR_FRAME_SIZE;
 
 	addr &= ADIN1110_ADDR_MASK;
 	addr |= ADIN1110_CD_MASK | ADIN1110_RW_MASK;
@@ -64,17 +91,17 @@ static int adin1110_standard_spi_reg_write(struct adin1110_desc *desc,
 	if (desc->append_crc) {
 		desc->data[2] = no_os_crc8(_crc_table, desc->data, 2, 0);
 		header_len++;
-		xfer.bytes_number++;
+		len++;
 	}
 
 	no_os_put_unaligned_be32(data, &desc->data[header_len]);
 	if (desc->append_crc) {
 		desc->data[header_len + ADIN1110_REG_LEN] =
 			no_os_crc8(_crc_table, &desc->data[header_len], ADIN1110_REG_LEN, 0);
-		xfer.bytes_number++;
+		len++;
 	}
 
-	return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
+	return adin1110_spi_xfer(desc, len);
 }
 
 /**
@@ -113,12 +140,7 @@ static int adin1110_standard_spi_reg_read(struct adin1110_desc *desc,
 	uint8_t crc;
 	uint8_t recv_crc;
 	uint32_t header_len = ADIN1110_RD_HEADER_LEN;
-	struct no_os_spi_msg xfer = {
-		.tx_buff = desc->data,
-		.rx_buff = desc->data,
-		.bytes_number = ADIN1110_REG_LEN,
-		.cs_change = 1,
-	};
+	uint32_t len = ADIN1110_REG_LEN;
 	int ret;
 
 	no_os_put_unaligned_be16(addr, &desc->data[0]);
@@ -126,14 +148,14 @@ static int adin1110_standard_spi_reg_read(struct adin1110_desc *desc,
 	desc->data[2] = 0x0;
 
 	if (desc->append_crc) {
-		xfer.bytes_number += ADIN1110_CRC_LEN;
+		len += ADIN1110_CRC_LEN;
 		desc->data[2] = no_os_crc8(_crc_table, desc->data, 2, 0);
 		desc->data[3] = 0x0;
 		header_len++;
 	}
 
-	xfer.bytes_number += header_len;
-	ret = no_os_spi_transfer(desc->comm_desc, &xfer, 1);
+	len += header_len;
+	ret = adin1110_spi_xfer(desc, len);
 	if (ret)
 		return ret;
 
@@ -694,8 +716,6 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	uint32_t tx_space;
 	int ret;
 
-	struct no_os_spi_msg xfer = {0};
-
 	if (port >= driver_data[desc->chip_type].num_ports)
 		return -EINVAL;
 
@@ -725,10 +745,6 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	/* The minimum frame length is 64 bytes */
 	if (eth_buff->len + ADIN1110_FCS_LEN < 64)
 		padding = 64 - (eth_buff->len + ADIN1110_FCS_LEN);
-
-	xfer.tx_buff = desc->data;
-	xfer.rx_buff = desc->data;
-	xfer.cs_change = 1;
 
 	padded_len = eth_buff->len + padding + ADIN1110_FRAME_HEADER_LEN;
 
@@ -760,7 +776,6 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 
 	/* Set the port on which to send the frame */
 	no_os_put_unaligned_be16(port, &desc->data[header_len]);
-	xfer.bytes_number = round_len + header_len;
 	frame_offset = header_len + ADIN1110_FRAME_HEADER_LEN;
 
 	memcpy(&desc->data[frame_offset], (void *)&eth_buff->mac_dest[0],
@@ -769,7 +784,7 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	memcpy(&desc->data[frame_offset], eth_buff->payload,
 	       eth_buff->len - ADIN1110_ETH_HDR_LEN);
 
-	return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
+	return adin1110_spi_xfer(desc, round_len + header_len);
 }
 
 /**
@@ -788,7 +803,7 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 	uint32_t rounded_len;
 	uint32_t frame_size;
 	uint32_t fifo_reg;
-	struct no_os_spi_msg xfer = {0};
+	uint32_t xfer_len;
 	int ret;
 
 	if (port >= driver_data[desc->chip_type].num_ports)
@@ -813,10 +828,6 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 		return adin1110_put_rx_frame(desc, frame);
 	}
 #endif
-
-	xfer.tx_buff = desc->data;
-	xfer.rx_buff = desc->data;
-	xfer.cs_change = 1;
 
 	if (!port) {
 		fifo_reg = ADIN1110_RX_REG;
@@ -849,11 +860,11 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 	rounded_len = no_os_align(frame_size, 4);
 
 	/* Can only read multiples of 4 bytes (the last bytes might be 0) */
-	xfer.bytes_number = rounded_len + field_offset;
+	xfer_len = rounded_len + field_offset;
 	field_offset += ADIN1110_FRAME_HEADER_LEN;
 
 	/** Burst read the whole frame */
-	ret = no_os_spi_transfer(desc->comm_desc, &xfer, 1);
+	ret = adin1110_spi_xfer(desc, xfer_len);
 	if (ret)
 		return ret;
 
@@ -1141,9 +1152,17 @@ int adin1110_init(struct adin1110_desc **desc,
 		no_os_mdelay(90);
 	}
 
-	ret = no_os_spi_init(&descriptor->comm_desc, &param->comm_param);
-	if (ret)
+	if (param->comm_desc) {
+		descriptor->comm_desc = param->comm_desc;
+	} else if (param->oa_tc6_spi) {
+		ret = -EINVAL;
 		goto free_rst_gpio;
+	} else {
+		ret = no_os_spi_init(&descriptor->no_os_comm_desc,
+				     &param->comm_param);
+		if (ret)
+			goto free_rst_gpio;
+	}
 
 	no_os_crc8_populate_msb(_crc_table, ADIN1110_CRC_POLYNOMIAL);
 	strncpy((char *)descriptor->mac_address, (char *)param->mac_address,
@@ -1178,7 +1197,7 @@ int adin1110_init(struct adin1110_desc **desc,
 			goto free_oa_mem;
 		}
 
-		oa_param.comm_desc = param->oa_comm_desc;
+		oa_param.comm_desc = param->comm_desc;
 		oa_param.async_mode = param->oa_tc6_async;
 		oa_param.tx_pool = descriptor->oa_tx_pool;
 		oa_param.tx_pool_size = ADIN1110_OA_TX_BUFF_NUM;
@@ -1227,7 +1246,8 @@ free_oa_mem:
 	no_os_free(descriptor->oa_desc);
 #endif
 free_spi:
-	no_os_spi_remove(descriptor->comm_desc);
+	if (descriptor->no_os_comm_desc)
+		no_os_spi_remove(descriptor->no_os_comm_desc);
 free_rst_gpio:
 	no_os_gpio_remove(descriptor->reset_gpio);
 free_desc:
@@ -1248,9 +1268,11 @@ int adin1110_remove(struct adin1110_desc *desc)
 	if (!desc)
 		return -EINVAL;
 
-	ret = no_os_spi_remove(desc->comm_desc);
-	if (ret)
-		return ret;
+	if (desc->no_os_comm_desc) {
+		ret = no_os_spi_remove(desc->no_os_comm_desc);
+		if (ret)
+			return ret;
+	}
 
 	if (desc->reset_gpio) {
 		ret = no_os_gpio_remove(desc->reset_gpio);

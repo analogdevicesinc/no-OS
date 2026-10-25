@@ -124,7 +124,7 @@ int example_main()
 	}
 
 	adin1110_capi_spi_dev.controller = spi_ctrl;
-	adin1110_ip.oa_comm_desc = &adin1110_capi_spi_dev;
+	adin1110_ip.comm_desc = &adin1110_capi_spi_dev;
 #endif
 
 	ret = adin1110_init(&adin1110, &adin1110_ip);
