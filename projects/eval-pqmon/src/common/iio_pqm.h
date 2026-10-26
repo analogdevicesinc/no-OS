@@ -99,6 +99,8 @@
 // Event accumulator attributes
 #define CLEAR_EVENTS                    68
 #define BOGUS_EVENT_COUNT               69
+#define LAST_ONSET                      70
+#define EVENT_COUNTS                    71
 
 // Channel specific attributes
 #define CHAN_RMS                        0
@@ -140,6 +142,7 @@
 #define CHAN_EVENT_MAX_PH               36
 #define CHAN_EVENT_ACK                  37
 #define CHAN_EVENT_AFFECTED             38
+#define CHAN_EVENT_ONSET_COUNT          39
 
 #define RESAMPLED_WAVEFORM_FULL_SCALE   18196
 

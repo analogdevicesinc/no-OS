@@ -71,6 +71,11 @@
         .priv = CHAN_EVENT_ONSET,                                               \
 },                                                                              \
 {                                                                               \
+        .name = "onsetCount",                                                   \
+        .show = read_ch_attr,                                                   \
+        .priv = CHAN_EVENT_ONSET_COUNT,                                         \
+},                                                                              \
+{                                                                               \
         .name = "triggerPhase",                                                 \
         .show = read_ch_attr,                                                   \
         .priv = CHAN_EVENT_TRIG,                                                \
@@ -124,6 +129,64 @@ static bool get_next_ch_idx(uint32_t ch_mask, uint32_t last_idx,
 	*new_idx = last_idx;
 
 	return 1;
+}
+
+/* Event type names, in pq_ev_type (event channel) order */
+static const char *const pq_event_names[PQ_EV_NUM_TYPES] = {
+	"dips", "swells", "rvc", "intrpt", "intrpt_line"
+};
+
+/**
+ * @brief last_onset: "<seq> <type> <startTime> <triggerPhase> <active>".
+ * seq counts the starts of all types, so one read shows a new start;
+ * trigger phases are comma separated ("A,B") or "-".
+ * @param buf - output buffer
+ * @param len - buffer length
+ * @return length written
+ */
+static int read_last_onset(char *buf, uint32_t len)
+{
+	static const char *const names[PQ_EV_NUM_PHASES] = { "A", "B", "C" };
+	char trig[8] = "-";
+	enum pq_ev_type type;
+	ADI_PQLIB_TIME start;
+	uint8_t mask;
+	uint32_t seq;
+	int n = 0;
+
+	seq = pq_events_last_onset(&type, &start, &mask);
+	if (!seq)
+		return snprintf(buf, len, "0 - 0 - 0");
+
+	for (int p = 0; p < PQ_EV_NUM_PHASES; p++)
+		if (mask & (1 << p))
+			n += snprintf(trig + n, sizeof(trig) - n, "%s%s",
+				      n ? "," : "", names[p]);
+
+	return snprintf(buf, len, "%" PRIu32 " %s %" PRId64 " %s %d", seq,
+			pq_event_names[type], start, trig,
+			pq_events_active(type) ? 1 : 0);
+}
+
+/**
+ * @brief event_counts: onsetCount of every event channel, then totalEvent
+ * of every event channel, in channel order.
+ * @param buf - output buffer
+ * @param len - buffer length
+ * @return length written
+ */
+static int read_event_counts(char *buf, uint32_t len)
+{
+	int n = 0;
+
+	for (int t = 0; t < PQ_EV_NUM_TYPES; t++)
+		n += snprintf(buf + n, len - n, "%s%" PRIu32, t ? " " : "",
+			      pq_events_onsets(t));
+	for (int t = 0; t < PQ_EV_NUM_TYPES; t++)
+		n += snprintf(buf + n, len - n, " %" PRIu32,
+			      pq_events_total(t));
+
+	return n;
 }
 
 /**
@@ -431,6 +494,10 @@ int read_pqm_attr(void *device, char *buf, uint32_t len,
 		case BOGUS_EVENT_COUNT:
 			return snprintf(buf, len, "%" PRIu32,
 					bogus_event_count);
+		case LAST_ONSET:
+			return read_last_onset(buf, len);
+		case EVENT_COUNTS:
+			return read_event_counts(buf, len);
 
 		case FLASH_CAL_DATA: {
 			FLASH_CALIBRATION_DATA flash_data;
@@ -845,6 +912,8 @@ static int read_event_attr(int type, char *buf, uint32_t len,
 		return snprintf(buf, len, "%" PRIu32, pq_events_unacked(type));
 	case CHAN_EVENT_TOTAL:
 		return snprintf(buf, len, "%" PRIu32, pq_events_total(type));
+	case CHAN_EVENT_ONSET_COUNT:
+		return snprintf(buf, len, "%" PRIu32, pq_events_onsets(type));
 	case CHAN_EVENT_ACTIVE:
 		return snprintf(buf, len, "%d", pq_events_active(type) ? 1 : 0);
 	case CHAN_EVENT_ONSET:
@@ -1820,6 +1889,16 @@ struct iio_attribute global_pqm_attributes[] = {
 		.name = "bogus_event_count",
 		.show = read_pqm_attr,
 		.priv = BOGUS_EVENT_COUNT,
+	},
+	{
+		.name = "last_onset",
+		.show = read_pqm_attr,
+		.priv = LAST_ONSET,
+	},
+	{
+		.name = "event_counts",
+		.show = read_pqm_attr,
+		.priv = EVENT_COUNTS,
 	},
 	END_ATTRIBUTES_ARRAY,
 }; // global attributes for device

@@ -80,6 +80,26 @@ uint32_t pq_events_unacked(enum pq_ev_type type);
 uint32_t pq_events_total(enum pq_ev_type type);
 
 /**
+ * @brief Number of event starts since start-up or pq_events_clear().
+ * Incremented in the cycle an event starts, so a host polling it sees
+ * every start, also of events that ended before the next poll. Starts
+ * dropped later (e.g. an RVC that became a dip) are included.
+ * @param type - event type
+ * @return number of starts
+ */
+uint32_t pq_events_onsets(enum pq_ev_type type);
+
+/**
+ * @brief Latest event start of any type.
+ * @param type     - event type of the latest start
+ * @param start    - its start time [ms]
+ * @param trigMask - its trigger phases, bit 0 = phase A
+ * @return number of starts of all types (0 if none yet)
+ */
+uint32_t pq_events_last_onset(enum pq_ev_type *type, ADI_PQLIB_TIME *start,
+			      uint8_t *trigMask);
+
+/**
  * @brief Trigger phases of the open event, or of the latest one.
  * @param type - event type
  * @return bit mask, bit 0 = phase A

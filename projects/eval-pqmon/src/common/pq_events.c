@@ -56,6 +56,8 @@ struct pq_ev_state {
 	struct pq_ev_rec rec;
 	uint32_t total;
 	uint32_t unacked;
+	/* starts seen, incremented in the start cycle */
+	uint32_t onsets;
 };
 
 static struct pq_ev_state evState[PQ_EV_NUM_TYPES];
@@ -82,6 +84,14 @@ static struct {
 	bool valid;
 	struct pq_ev_rec cur;
 } pending[PQ_EV_NUM_TYPES];
+
+/* Latest event start of any type, for the last_onset device attribute */
+static struct {
+	uint32_t seq;
+	enum pq_ev_type type;
+	ADI_PQLIB_TIME start;
+	uint8_t trigMask;
+} lastOnset;
 
 /* Cycles left in which a start masked by an event code is still checked */
 #define PQ_EV_MASK_WINDOW	2
@@ -383,6 +393,20 @@ static void publish_record(enum pq_ev_type type)
 }
 
 /**
+ * @brief Count an event start and make it the latest onset.
+ */
+static void note_onset(enum pq_ev_type type)
+{
+	struct pq_ev_state *s = &evState[type];
+
+	s->onsets++;
+	lastOnset.seq++;
+	lastOnset.type = type;
+	lastOnset.start = s->cur.start;
+	lastOnset.trigMask = s->cur.trigMask;
+}
+
+/**
  * @brief Open the slot of an event.
  */
 static void open_event(enum pq_ev_type type, const ADI_AFE_RMS_TYPE *rms,
@@ -405,6 +429,7 @@ static void open_event(enum pq_ev_type type, const ADI_AFE_RMS_TYPE *rms,
 		s->cur.ref[p] = histCount ? mean_value(p) : rms[p];
 	s->shadow = shadow;
 	s->open = true;
+	note_onset(type);
 	pending[type].valid = false;
 
 	/* IEC 61000-4-30: an RVC that turns into a dip, swell or interruption
@@ -420,6 +445,8 @@ static void close_event(enum pq_ev_type type, const ADI_AFE_RMS_TYPE *rms,
 			ADI_PQLIB_TIME now)
 {
 	struct pq_ev_state *s = &evState[type];
+	/* A start seen only at the end still counts as a start */
+	bool lateStart = !s->open;
 
 	if (!s->open && pending[type].valid) {
 		/* End without a seen start: use the condition's history */
@@ -434,6 +461,8 @@ static void close_event(enum pq_ev_type type, const ADI_AFE_RMS_TYPE *rms,
 		memcpy(s->cur.max, rms, sizeof(s->cur.max));
 	}
 	pending[type].valid = false;
+	if (lateStart)
+		note_onset(type);
 	s->cur.end = now;
 	s->cur.cycles = (uint32_t)(((now - s->cur.start) *
 				    nominal_frequency() + 500) / 1000);
@@ -783,6 +812,7 @@ void pq_events_clear(void)
 {
 	memset(evState, 0, sizeof(evState));
 	memset(&accumulated_events, 0, sizeof(accumulated_events));
+	memset(&lastOnset, 0, sizeof(lastOnset));
 	linesDown = 0;
 	maskWindow = 0;
 	memset(pending, 0, sizeof(pending));
@@ -809,6 +839,21 @@ ADI_PQLIB_TIME pq_events_onset(enum pq_ev_type type)
 uint32_t pq_events_unacked(enum pq_ev_type type)
 {
 	return type < PQ_EV_NUM_TYPES ? evState[type].unacked : 0;
+}
+
+uint32_t pq_events_last_onset(enum pq_ev_type *type, ADI_PQLIB_TIME *start,
+			      uint8_t *trigMask)
+{
+	*type = lastOnset.type;
+	*start = lastOnset.start;
+	*trigMask = lastOnset.trigMask;
+
+	return lastOnset.seq;
+}
+
+uint32_t pq_events_onsets(enum pq_ev_type type)
+{
+	return type < PQ_EV_NUM_TYPES ? evState[type].onsets : 0;
 }
 
 uint32_t pq_events_total(enum pq_ev_type type)
