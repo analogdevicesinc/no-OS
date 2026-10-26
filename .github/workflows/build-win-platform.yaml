@@ -11,6 +11,9 @@ on:
     paths-ignore:
       - '**/*.rst'
       - '**/*.md'
+      - '**/*.dox'
+      - 'COPYING'
+      - 'LICENSES/**'
       - 'drivers/platform/stm32/**'
       - 'drivers/platform/pico/**'
       - 'drivers/platform/aducm3029/**'
@@ -36,6 +39,9 @@ on:
     paths-ignore:
       - '**/*.rst'
       - '**/*.md'
+      - '**/*.dox'
+      - 'COPYING'
+      - 'LICENSES/**'
       - 'drivers/platform/stm32/**'
       - 'drivers/platform/pico/**'
       - 'drivers/platform/aducm3029/**'
