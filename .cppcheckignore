@@ -30,6 +30,9 @@
 *:drivers/rf-transceiver/ad9088/private/*
 *:drivers/rf-transceiver/ad9088/adi_utils/*
 *:drivers/rf-transceiver/ad9088/adi_inc/*
+// usecase_bin_end/_start are linker-provided blob bounds, which cppcheck
+// reports as unrelated objects.
+comparePointers:drivers/rf-transceiver/ad9088/ad9088_dt.c
 *:libraries/fatfs/*
 *:libraries/mbedtls/*
 *:legacy/*
