@@ -74,6 +74,19 @@ static uint32_t histIdx;
 /* Lines currently interrupted (PQ_EV_LINE_INTRP), bit 0 = phase A */
 static uint8_t linesDown;
 
+/*
+ * Hidden history of a dip/swell/interruption condition while no event of
+ * that type is open: used for an end whose start code was never reported.
+ */
+static struct {
+	bool valid;
+	struct pq_ev_rec cur;
+} pending[PQ_EV_NUM_TYPES];
+
+/* Cycles left in which a start masked by an event code is still checked */
+#define PQ_EV_MASK_WINDOW	2
+static uint8_t maskWindow;
+
 static uint32_t mean_window(void)
 {
 	return pqlibExample.exampleConfig.nominalFrequency == 60 ? 120 : 100;
@@ -392,6 +405,7 @@ static void open_event(enum pq_ev_type type, const ADI_AFE_RMS_TYPE *rms,
 		s->cur.ref[p] = histCount ? mean_value(p) : rms[p];
 	s->shadow = shadow;
 	s->open = true;
+	pending[type].valid = false;
 
 	/* IEC 61000-4-30: an RVC that turns into a dip, swell or interruption
 	 * is not an RVC; PQLib drops it without an end code, so do the same */
@@ -407,14 +421,19 @@ static void close_event(enum pq_ev_type type, const ADI_AFE_RMS_TYPE *rms,
 {
 	struct pq_ev_state *s = &evState[type];
 
-	if (!s->open) {
-		/* End without a seen start: keep it, no phase */
+	if (!s->open && pending[type].valid) {
+		/* End without a seen start: use the condition's history */
+		s->cur = pending[type].cur;
+		s->cur.orphan = true;
+	} else if (!s->open) {
+		/* End without a seen start or history: keep it, no phase */
 		memset(&s->cur, 0, sizeof(s->cur));
 		s->cur.start = now;
 		s->cur.orphan = true;
 		memcpy(s->cur.min, rms, sizeof(s->cur.min));
 		memcpy(s->cur.max, rms, sizeof(s->cur.max));
 	}
+	pending[type].valid = false;
 	s->cur.end = now;
 	s->cur.cycles = (uint32_t)(((now - s->cur.start) *
 				    nominal_frequency() + 500) / 1000);
@@ -439,7 +458,10 @@ static void close_event(enum pq_ev_type type, const ADI_AFE_RMS_TYPE *rms,
 /**
  * @brief adi_pqlib_ProcessOneCycle() returns one result code per cycle,
  * so a start in the same cycle as another event change is not reported.
- * Open such events here; PQLib's later end code confirms them.
+ * Open such events here, in the cycle of the other code and in the next
+ * PQ_EV_MASK_WINDOW cycles (the RMS of the cycle with the code may still be
+ * on its way across the threshold). PQLib's later end code confirms them.
+ * @param coded - type reported by PQLib in this cycle, or PQ_EV_NUM_TYPES
  */
 static void masked_starts(enum pq_ev_type coded, const ADI_AFE_RMS_TYPE *rms,
 			  ADI_PQLIB_TIME now)
@@ -469,6 +491,48 @@ static void expire_shadows(const ADI_AFE_RMS_TYPE *rms)
 			continue;
 		if (evState[i].open && evState[i].shadow && recovered(i, rms))
 			evState[i].open = false;
+	}
+}
+
+/**
+ * @brief Follow dip/swell/interruption conditions while no event of that
+ * type is open, without exposing them (see pending[]).
+ */
+static void track_pending(const ADI_AFE_RMS_TYPE *rms, ADI_PQLIB_TIME now)
+{
+	struct pq_ev_rec *c;
+	uint8_t mask;
+	bool cond;
+
+	for (int t = PQ_EV_DIP; t <= PQ_EV_INTRP; t++) {
+		if (t == PQ_EV_RVC)
+			continue;
+		if (evState[t].open) {
+			pending[t].valid = false;
+			continue;
+		}
+		c = &pending[t].cur;
+		mask = beyond_threshold(t, rms, NULL);
+		cond = t == PQ_EV_INTRP ? mask == 0x7 : mask != 0;
+		if (cond && !pending[t].valid) {
+			memset(c, 0, sizeof(*c));
+			c->start = now;
+			c->trigMask = trigger_phases(t, rms, now);
+			c->affMask = mask | c->trigMask;
+			memcpy(c->min, rms, sizeof(c->min));
+			memcpy(c->max, rms, sizeof(c->max));
+			pending[t].valid = true;
+		} else if (pending[t].valid) {
+			c->affMask |= mask;
+			for (int p = 0; p < PQ_EV_NUM_PHASES; p++) {
+				if (rms[p] < c->min[p])
+					c->min[p] = rms[p];
+				if (rms[p] > c->max[p])
+					c->max[p] = rms[p];
+			}
+			if (!cond && recovered(t, rms))
+				pending[t].valid = false;
+		}
 	}
 }
 
@@ -530,6 +594,8 @@ void pq_events_cycle(ADI_PQLIB_HANDLE hDevice, ADI_PQLIB_RESULT res,
 		}
 	}
 
+	track_pending(rms, now);
+
 	type = event_from_result(res, &started);
 	if (type != PQ_EV_NUM_TYPES) {
 		s = &evState[type];
@@ -543,6 +609,10 @@ void pq_events_cycle(ADI_PQLIB_HANDLE hDevice, ADI_PQLIB_RESULT res,
 			close_event(type, rms, now);
 		}
 		masked_starts(type, rms, now);
+		maskWindow = PQ_EV_MASK_WINDOW;
+	} else if (maskWindow) {
+		maskWindow--;
+		masked_starts(PQ_EV_NUM_TYPES, rms, now);
 	}
 	expire_shadows(rms);
 	line_interruptions(rms, now);
@@ -704,6 +774,8 @@ void pq_events_reset_open(void)
 	for (int i = 0; i < PQ_EV_NUM_TYPES; i++)
 		evState[i].open = false;
 	linesDown = 0;
+	maskWindow = 0;
+	memset(pending, 0, sizeof(pending));
 	mean_reset();
 }
 
@@ -712,6 +784,8 @@ void pq_events_clear(void)
 	memset(evState, 0, sizeof(evState));
 	memset(&accumulated_events, 0, sizeof(accumulated_events));
 	linesDown = 0;
+	maskWindow = 0;
+	memset(pending, 0, sizeof(pending));
 	bogus_event_count = 0;
 	mean_reset();
 }
