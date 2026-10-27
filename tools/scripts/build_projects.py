@@ -37,6 +37,37 @@ TRED =  '\033[31m' # Red Text
 TWHITE = '\033[39m' # White text
 TYELLOW = '\033[33m' # Yellow text
 
+HW_DIR_NAME = 'hardware'
+NEW_HW_DIR_NAME = 'new_hardware'
+ERR = 0
+BUILD_TIMEOUT = 120
+XILINX_BUILD_TIMEOUT = 600
+# A found system_top.xsa whose HDL timestamp is older than this many days is
+# flagged as "stale": its design was not rebuilt recently. The build still runs
+# (the .xsa exists) -- we only warn and note it on the PR comment.
+STALE_XSA_DAYS = 75
+LOG_START = " -> "
+TOKEN = os.environ.get('TOKEN')
+BRANCH = os.environ.get('BRANCH')
+BLACKLIST_URL = str(os.environ.get('BLACKLIST_URL')).format(BRANCH)
+DEFAULT_LOG_FILE = 'log.txt'
+LOG_FILE = DEFAULT_LOG_FILE
+SKIP_DOWNLOAD = None
+key = 'SKIP_DOWNLOAD'
+if key in os.environ:	SKIP_DOWNLOAD = int(os.environ[key])
+else:	SKIP_DOWNLOAD = 0
+# Xilinx (project, variant, board) combos with a system_top.xsa problem this
+# run. Each entry carries a 'status': 'missing' (the .xsa was not available, so
+# the combo is skipped) or 'stale' (the .xsa exists and was built, but its HDL
+# output is older than STALE_XSA_DAYS). Populated in build_cmake_project and
+# rendered to <log_dir>/xsa_warnings.md in main(), which the shared-actions
+# pr-comment step posts on the PR conversation tab.
+XSA_WARNINGS = []
+# hardware -> HDL timestamp ("YYYY_MM_DD-HH_MM_SS") of the staged .xsa, read
+# from the manifest download_files.py writes. Empty when no download happened
+# (e.g. SKIP_DOWNLOAD) -- the staleness check then simply no-ops.
+XSA_PROVENANCE = {}
+
 description_help=r'''Build noos projects
 Examples:\n
 	Build all noos projects
@@ -71,30 +102,13 @@ def parse_input():
 	return (args.noos_location, args.export_dir, args.log_dir, args.project,
 		args.platform, args.build_name, args.builds_dir, args.hardware, args.hdl_branch)
 
-ERR = 0
-BUILD_TIMEOUT = 120
-XILINX_BUILD_TIMEOUT = 600
-# A found system_top.xsa whose HDL timestamp is older than this many days is
-# flagged as "stale": its design was not rebuilt recently. The build still runs
-# (the .xsa exists) -- we only warn and note it on the PR comment.
-STALE_XSA_DAYS = 75
-LOG_START = " -> "
-TOKEN = os.environ.get('TOKEN')
-BRANCH = os.environ.get('BRANCH')
-blacklist_url = str(os.environ.get('BLACKLIST_URL')).format(BRANCH)
-environment_path_files = os.environ.get('ENVIRONMENT_PATH_FILES')
+def log(msg):			print(TGREEN + LOG_START + TWHITE + msg)
+def log_err(msg):		print(TRED + LOG_START + msg + TWHITE)
+def log_success(msg):	print(TGREEN + LOG_START + msg + TWHITE)
+def log_warn(msg):		print(TYELLOW + LOG_START + msg + TWHITE)
 
-def log(msg):
-	print(TGREEN + LOG_START + TWHITE + msg)
-
-def log_err(msg):
-	print(TRED + LOG_START + msg + TWHITE)
-
-def log_success(msg):
-	print(TGREEN + LOG_START + msg + TWHITE)
-
-def log_warn(msg):
-	print(TYELLOW + LOG_START + msg + TWHITE)
+def to_blue(str):
+	return TBLUE + str + TWHITE
 
 def gha_warning(title, message):
 	"""Surface a warning on GitHub Actions.
@@ -111,56 +125,31 @@ def gha_warning(title, message):
 		try:
 			with open(summary, 'a') as f:
 				f.write("- :warning: %s\n" % safe)
-		except OSError:
+		except OSError:	
 			pass
-
-DEFAULT_LOG_FILE = 'log.txt'
-log_file = DEFAULT_LOG_FILE
 
 def ensure_dir(path):
 	# Silent mkdir -p; not routed through run_cmd so it neither logs a bogus
 	# build step nor leaks the "test -d ... ||" text to stdout.
 	os.makedirs(path, exist_ok=True)
 
-def shell_source(script):
-	"""
-	Sometime you want to emulate the action of "source" in bash,
-	settings some environment variables. Here is a way to do it.
-	"""
-
-	pipe = subprocess.Popen(". %s && env -0" % script, stdout=subprocess.PIPE, shell=True, executable="/bin/bash")
-	output = pipe.communicate()[0].decode('utf-8')
-	output = output[:-1] # fix for index out for range in 'env[ line[0] ] = line[1]'
-
-	env = {}
-	# split using null char
-	for line in output.split('\x00'):
-		line = line.split( '=', 1)
-		#print(line)
-		env[ line[0] ] = line[1]
-
-	os.environ.update(env)
-
 def run_cmd(cmd):
 	global ERR
 	log(cmd)
 	sys.stdout.flush()
-	err = os.system('echo %s >> %s' % (cmd, log_file))
+	err = os.system('echo %s >> %s' % (cmd, LOG_FILE))
 	if err != 0:
 		ERR = 1
 		return err
-	err = os.system(cmd + ' >> %s 2>&1' % log_file)
+	err = os.system(cmd + ' >> %s 2>&1' % LOG_FILE)
 	if err != 0:
 		log_err("ERROR")
 		log("See log %s " \
 		    "-- Use cat (linux) or type (windows) to see colored output"
-		    % log_file)
+		    % LOG_FILE)
 		ERR = 1
 
 	return err
-
-def to_blue(str):
-	return TBLUE + str + TWHITE
 
 def cmake_cache_source_mismatch(build_dir, noos):
 	"""True if build_dir's CMakeCache.txt was generated from a different source path.
@@ -178,28 +167,10 @@ def cmake_cache_source_mismatch(build_dir, noos):
 				if line.startswith('CMAKE_HOME_DIRECTORY:'):
 					have = line.split('=', 1)[1].strip()
 					return os.path.realpath(have) != want
+	# Unreadable cache: treat as mismatch so --fresh regenerates it cleanly.
 	except OSError:
-		# Unreadable cache: treat as mismatch so --fresh regenerates it cleanly.
 		return True
 	return False
-
-SKIP_DOWNLOAD = None
-key = 'SKIP_DOWNLOAD'
-if key in os.environ:
-	SKIP_DOWNLOAD = int(os.environ[key])
-else:
-	SKIP_DOWNLOAD = 0
-
-HW_DIR_NAME = 'hardware'
-NEW_HW_DIR_NAME = 'new_hardware'
-
-# Xilinx (project, variant, board) combos with a system_top.xsa problem this
-# run. Each entry carries a 'status': 'missing' (the .xsa was not available, so
-# the combo is skipped) or 'stale' (the .xsa exists and was built, but its HDL
-# output is older than STALE_XSA_DAYS). Populated in build_cmake_project and
-# rendered to <log_dir>/xsa_warnings.md in main(), which the shared-actions
-# pr-comment step posts on the PR conversation tab.
-XSA_WARNINGS = []
 
 def render_xsa_warnings_md(entries):
 	"""Render the .xsa warning list (missing + stale) as a Markdown comment body.
@@ -242,11 +213,6 @@ def render_xsa_warnings_md(entries):
 	lines.append("_Posted automatically by the Xilinx build workflow._")
 	return "\n".join(lines) + "\n"
 
-# hardware -> HDL timestamp ("YYYY_MM_DD-HH_MM_SS") of the staged .xsa, read
-# from the manifest download_files.py writes. Empty when no download happened
-# (e.g. SKIP_DOWNLOAD) -- the staleness check then simply no-ops.
-XSA_PROVENANCE = {}
-
 def load_xsa_provenance(builds_dir):
 	"""Read the hardware -> HDL-timestamp map written by download_files.py.
 
@@ -276,16 +242,16 @@ def xsa_age_days(timestamp):
 
 def process_blacklist():
 	blacklist = []
-	log('Fetching blacklist from %s' % blacklist_url)
+	log('Fetching blacklist from %s' % BLACKLIST_URL)
 	result = subprocess.run(
 		['curl', '-f', '-L',
 		 '-H', 'Accept: application/vnd.github.v3.raw',
 		 '-H', 'Authorization: Bearer %s' % TOKEN,
-		 '-o', 'blacklist.txt', blacklist_url],
+		 '-o', 'blacklist.txt', BLACKLIST_URL],
 		capture_output=True)
 	if result.returncode != 0:
 		fallback_url = str(os.environ.get('BLACKLIST_URL')).format('main')
-		if fallback_url != blacklist_url:
+		if fallback_url != BLACKLIST_URL:
 			log('Blacklist for branch %s not found, falling back to main' % BRANCH)
 			result = subprocess.run(
 				['curl', '-f', '-L',
@@ -350,7 +316,7 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 	if (_platform is None or _platform == 'xilinx'):
 		if not TOKEN:
 			log('Skipping blacklist: TOKEN not set')
-		elif not blacklist_url or blacklist_url == 'None':
+		elif not BLACKLIST_URL or BLACKLIST_URL == 'None':
 			log('Skipping blacklist: BLACKLIST_URL not set')
 		else:
 			blacklist = process_blacklist()
@@ -433,7 +399,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 	were no combinations for the requested platform (so the caller can tell a
 	genuine no-op from a real build and avoid emitting a misleading status).
 	"""
-	global ERR, log_file
+	global ERR, LOG_FILE
 
 	presets = load_presets(Path(noos))
 	combos = discover_all_combinations(Path(noos), presets)
@@ -677,7 +643,8 @@ def main():
 		log_warn("%d xilinx .xsa warning(s): %d missing, %d stale; see %s"
 			% (len(XSA_WARNINGS), n_missing, n_stale, warnings_path))
 
-main()
+	if ERR != 0:
+		exit("Error occured: %d" % ERR)
 
-if ERR != 0:
-	exit("Error occured: %d" % ERR)
+if __name__ == "__main__":
+	main()
