@@ -162,7 +162,7 @@ int main()
 
 	struct iio_app_device iio_devices[] = {
 		{
-			.name = "ad4130",
+			.name = adciio->ad413x_dev->chip_info->name,
 			.dev = adciio,
 			.dev_descriptor = adciio->iio_dev,
 			.read_buff =  &iio_ad413x_read_buff,
