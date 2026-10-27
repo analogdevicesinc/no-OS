@@ -55,4 +55,8 @@ config CAPI_PINT
 	bool "CAPI PINT"
 	default n
 
+config CAPI_RTC
+	bool "CAPI RTC"
+	default n
+
 endif # CAPI
