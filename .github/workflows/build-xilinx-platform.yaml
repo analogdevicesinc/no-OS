@@ -31,6 +31,7 @@ on:
       - next_stable
       - 'release/*'
       - '20*'
+      - 'ci/**'
     paths-ignore:
       - '**/*.rst'
       - '**/*.md'
@@ -66,13 +67,13 @@ jobs:
       CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
       TOOLS_REPO: ${{ secrets.TOOLS_REPO }}
       BLACKLIST_URL: ${{ secrets.BLACKLIST_URL }}
-      HDL_BRANCH: 'main'
+      HDL_BRANCH: 'hdl_2026_r1'
       BRANCH: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
       BUILDS_DIR: ${{ github.workspace }}/builds
       RELEASES_DIR: ${{ github.workspace }}/latest_build
       LOGS_DIR: ${{ github.workspace }}/logs
       NO_OS_CACHE_DIR: ${{ github.workspace }}/deps_cache
-    runs-on: noos-runner-xilinx
+    runs-on: noos-runner-xilinx-test
     timeout-minutes: 600
     steps:
       - name: Checkout code
