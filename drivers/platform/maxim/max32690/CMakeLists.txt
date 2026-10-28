@@ -31,6 +31,13 @@ target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/ICC/icc_rev
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/ICC/icc_me18.c)
 target_include_directories(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/ICC)
 
+no_os_sources_ifdef(CONFIG_CAPI_MAILBOX
+	${MAXIM_LIBRARIES}/PeriphDrivers/Source/SEMA/sema_me18.c
+	${MAXIM_LIBRARIES}/PeriphDrivers/Source/SEMA/sema_reva.c)
+if(CONFIG_CAPI_MAILBOX)
+	target_include_directories(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SEMA)
+endif()
+
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/RTC/rtc_me18.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/RTC/rtc_reva.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/CTB/ctb_me18.c)
