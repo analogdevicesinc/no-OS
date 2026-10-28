@@ -1,0 +1,31 @@
+cmake_minimum_required(VERSION 3.28)
+include(${CMAKE_CURRENT_SOURCE_DIR}/spec.cmake)
+set(PLATFORM maxim CACHE STRING "")
+set(TARGET max78000 CACHE STRING "")
+set(TARGET_NUM 78000 CACHE STRING "")
+set(BOARD_CONFIG_FILE max78000fthr_defconfig CACHE STRING "")
+set(CMAKE_TOOLCHAIN_FILE "${NO_OS_PATH}/drivers/platform/maxim/toolchain.cmake")
+project(maxim_coprocessor C CXX ASM)
+add_subdirectory("${NO_OS_PATH}" no-os-core)
+add_executable(riscv ${RV_SOURCES})
+set_target_properties(riscv PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
+set_property(TARGET riscv PROPERTY LINK_DEPENDS
+    "${CMAKE_BINARY_DIR}/buildrv/common_riscv.ld"
+    "${CMAKE_BINARY_DIR}/common.ld"
+    "${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX78000/Source/GCC/max78000_riscv.ld")
+target_link_libraries(riscv no-os)
+target_include_directories(riscv PRIVATE ${RV_INCLUDES})
+target_include_directories(no-os PRIVATE ${RV_INCLUDES})
+target_compile_definitions(no-os PUBLIC ${RV_DEFINES})
+if(RV_FORCE_INCLUDE)
+    target_compile_options(no-os PUBLIC -include "${RV_FORCE_INCLUDE}")
+endif()
+if(RV_OPTIMIZATION)
+    target_compile_options(no-os PUBLIC ${RV_OPTIMIZATION})
+endif()
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${RV_DEPENDS})
+target_link_options(riscv PRIVATE "-Wl,-Map=${CMAKE_BINARY_DIR}/riscv.map")
+add_custom_command(TARGET riscv POST_BUILD
+    COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:riscv> "${CMAKE_BINARY_DIR}/riscv.bin"
+    BYPRODUCTS "${CMAKE_BINARY_DIR}/riscv.bin"
+    VERBATIM)
