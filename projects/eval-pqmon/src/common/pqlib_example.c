@@ -477,9 +477,14 @@ static int process_one_input(void)
 			}
 			SyncToDip(&pqlibExample, pqlibStatus);
 			pqlibExample.processedCycles++;
-			if (pqlibExample.state == PQLIB_STATE_RUNNING)
+			if (pqlibExample.state == PQLIB_STATE_RUNNING) {
+				ADI_PQLIB_TIME now;
+
 				pq_events_cycle(hDevice, pqlibStatus,
 						&pqlibExample.inputCycle);
+				adi_pqlib_GetTime(hDevice, &now);
+				afe_time_cycle_done(now);
+			}
 
 			/* No GetOutput here: calling it every cycle resets
 			 * the PQLib dip state machine, DIP_ENDED never fires */

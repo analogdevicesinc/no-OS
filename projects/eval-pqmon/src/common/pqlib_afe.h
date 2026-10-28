@@ -55,6 +55,22 @@ void afe_input_stop(void);
 void afe_input_start(void);
 
 /**
+ * @details Note the PQLib time of the end of the cycle just processed.
+ *          Waveform block times are derived from it.
+ * @param time - adi_pqlib_GetTime() right after adi_pqlib_ProcessOneCycle()
+ */
+void afe_time_cycle_done(ADI_PQLIB_TIME time);
+
+/**
+ * @details Latest waveform block written to the IIO buffer and the PQLib
+ *          (UTC) time at which the AFE finished it.
+ * @param block - waveform_block_count of that block (1 = first block after
+ *                the buffer was enabled)
+ * @param time - ms, 0 if PQLib time is not known yet
+ */
+void afe_waveform_time_anchor(uint32_t *block, ADI_PQLIB_TIME *time);
+
+/**
  * @details Check if AFE input is waiting in the queues.
  * @return true if get_afe_input() has an item to deliver
  */

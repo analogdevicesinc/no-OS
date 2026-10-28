@@ -495,6 +495,14 @@ int read_pqm_attr(void *device, char *buf, uint32_t len,
 		case WAVEFORM_BLOCK_COUNT:
 			return snprintf(buf, len, "%" PRIu32,
 					desc->waveform_block_count);
+		case WAVEFORM_TIME_ANCHOR: {
+			uint32_t block;
+			ADI_PQLIB_TIME t;
+
+			afe_waveform_time_anchor(&block, &t);
+			return snprintf(buf, len, "%" PRIu32 " %" PRId64,
+					block, t);
+		}
 		case CLEAR_EVENTS:
 			return snprintf(buf, len, "0");
 		case BOGUS_EVENT_COUNT:
@@ -1949,6 +1957,11 @@ struct iio_attribute global_pqm_attributes[] = {
 		.name = "rtc_status",
 		.show = read_pqm_attr,
 		.priv = RTC_STATUS,
+	},
+	{
+		.name = "waveform_time_anchor",
+		.show = read_pqm_attr,
+		.priv = WAVEFORM_TIME_ANCHOR,
 	},
 	END_ATTRIBUTES_ARRAY,
 }; // global attributes for device

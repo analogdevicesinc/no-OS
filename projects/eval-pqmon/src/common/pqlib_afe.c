@@ -33,6 +33,38 @@ static struct no_os_irq_ctrl_desc *afe_irq_desc = NULL;
 static struct no_os_gpio_desc *afe_irq_gpio = NULL;
 static bool afe_irq_ready;
 
+/*
+ * Waveform time: the ISR takes one system tick [us] per STATUS0 pass.
+ * Cycle items carry it in their (otherwise unused) timestamp field, pages
+ * in pageTick[], a FIFO in step with the page pool. After each processed
+ * cycle, PQLib time (end of that cycle) minus its tick gives the offset
+ * that turns a page tick into PQLib (UTC) time.
+ */
+static uint64_t isrTickUs;
+static uint64_t pageTick[AFE_Q_PAGE_DEPTH];
+static volatile uint8_t pageTickWr, pageTickRd;
+static uint64_t cycleTickUs;
+static int64_t tickToTimeUs;
+static bool tickToTimeValid;
+static uint32_t anchorBlock;
+static ADI_PQLIB_TIME anchorMs;
+
+
+static uint64_t tick_us(void)
+{
+	struct no_os_time t = no_os_get_time();
+
+	return (uint64_t)t.s * 1000000 + t.us;
+}
+
+/* Called after each waveform block written to the IIO buffer */
+static void waveform_anchor(uint64_t tick)
+{
+	anchorBlock = pqm_desc_global->waveform_block_count;
+	anchorMs = tickToTimeValid ?
+		   (ADI_PQLIB_TIME)(((int64_t)tick + tickToTimeUs) / 1000) : 0;
+}
+
 #ifdef PQM_EVENT_DEBUG
 /* Time spent in the AFE ISR [us], read and reset by the rate print */
 volatile uint32_t afeIsrBusyUs;
@@ -101,6 +133,7 @@ static int afe_isr_read_cycle(uint32_t status0)
 	}
 
 	c->STATUS0 = status0;
+	c->timestamp = (ADI_PQLIB_TIME)isrTickUs;
 	status = afe_read_rms_one((uint32_t *)&c->AVRMSONE, 3);
 	if (status == 0)
 		status = afe_read_angle((uint16_t *)&c->ANGL_VA_VB, 3,
@@ -129,8 +162,10 @@ static int afe_isr_read_page(uint32_t status0)
 	}
 
 	status = afe_read_waveform((uint16_t *)page, AFE_Q_PAGE_SAMPLES);
-	if (status == 0)
+	if (status == 0) {
+		pageTick[pageTickWr++ % AFE_Q_PAGE_DEPTH] = isrTickUs;
 		afe_q_publish(AFE_Q_PAGE);
+	}
 
 	return status;
 }
@@ -200,6 +235,7 @@ static void afe_isr_service(void)
 		}
 		if (!(status0 & AFE_IRQ_SOURCES))
 			return;
+		isrTickUs = tick_us();
 
 		for (size_t i = 0; i < NO_OS_ARRAY_SIZE(afe_isr_readers); i++) {
 			if (!(status0 & afe_isr_readers[i].bit))
@@ -259,7 +295,22 @@ void afe_input_start(void)
 		return;
 
 	afe_q_flush();
+	pageTickWr = 0;
+	pageTickRd = 0;
+	tickToTimeValid = false;
 	afe_irq_resume();
+}
+
+void afe_time_cycle_done(ADI_PQLIB_TIME time)
+{
+	tickToTimeUs = (int64_t)time * 1000 - (int64_t)cycleTickUs;
+	tickToTimeValid = true;
+}
+
+void afe_waveform_time_anchor(uint32_t *block, ADI_PQLIB_TIME *time)
+{
+	*block = anchorBlock;
+	*time = anchorMs;
 }
 
 int waveform_irq_init(void)
@@ -340,6 +391,7 @@ int get_afe_input()
 	enum afe_q_type type;
 	uint32_t seq;
 	ADI_PQLIB_TIME ts;
+	uint64_t tick;
 
 	if (!afe_q_peek(&type)) {
 		afe_irq_kick();
@@ -349,6 +401,7 @@ int get_afe_input()
 	switch (type) {
 	case AFE_Q_CYCLE:
 		c = afe_q_cycle_front();
+		cycleTickUs = (uint64_t)c->timestamp;
 		seq = pOneCycle->sequenceNumber;
 		ts = pOneCycle->timestamp;
 		*pOneCycle = *c;
@@ -361,12 +414,14 @@ int get_afe_input()
 		       sizeof(pWaveform->waveform));
 		pWaveform->isDataProcessed = 0;
 		pWaveform->sequenceNumber++;
+		tick = pageTick[pageTickRd++ % AFE_Q_PAGE_DEPTH];
 
 		if (pqlibExample.no_os_cb_desc && pqm_desc_global &&
 		    pqm_desc_global->waveform_streaming_active) {
 			waveform_cb_write_and_oneshot(
 				(uint8_t *)pWaveform->waveform,
 				sizeof(pWaveform->waveform));
+			waveform_anchor(tick);
 		} else if (pqlibExample.no_os_cb_desc && !processData &&
 			   pqm_desc_global && pqm_desc_global->active_ch) {
 			/* Only while the host has the buffer enabled: in
@@ -374,6 +429,7 @@ int get_afe_input()
 			waveform_cb_push((uint8_t *)pWaveform->waveform,
 					 sizeof(pWaveform->waveform));
 			pqm_desc_global->waveform_block_count++;
+			waveform_anchor(tick);
 		}
 		break;
 	case AFE_Q_1012:

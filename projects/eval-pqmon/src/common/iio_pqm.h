@@ -107,6 +107,7 @@
 #define TIME_SOURCE                     73
 #define TIME_CORRECTION                 74
 #define RTC_STATUS                      75
+#define WAVEFORM_TIME_ANCHOR            76
 
 // Channel specific attributes
 #define CHAN_RMS                        0

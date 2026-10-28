@@ -40,8 +40,8 @@
 #define IIO_BUFF_TYPE int16_t
 #define SAMPLES_PER_CHANNEL_PLATFORM 256
 /* IIO buffer sized to hold 32 waveform blocks (256 samples x 7 channels each).
- * At 50Hz with 128 resampled pts/cycle, COH_PAGE_RDY fires every 40ms (25/sec).
- * 32 blocks = 1.28s buffer, sufficient for serial IIO readout latency. */
+ * 1024 resampled points per 10/12 cycles: COH_PAGE_RDY fires every 2.5/3
+ * cycles, i.e. every 50 ms (20/sec). 32 blocks = 1.6 s buffer. */
 #define WAVEFORM_IIO_BLOCKS 32
 #define WAVEFORM_BLOCK_SAMPLES (256 * 7)
 #define MAX_SIZE_BASE_ADDR (WAVEFORM_IIO_BLOCKS * WAVEFORM_BLOCK_SAMPLES)
@@ -51,7 +51,7 @@
 #define TOTAL_PQM_CHANNELS 12
 #define VOLTAGE_CH_NUMBER 3
 #define MAX_CH_ATTRS 40
-#define PQM_DEVICE_ATTR_NUMBER 76
+#define PQM_DEVICE_ATTR_NUMBER 77
 #define WAVEFORM_BUFFER_LENGTH (256 * 7)
 #define MAX_EVENT_NUMBER 6
 #define DEFAULT_ONESHOT_BLOCKS 4
