@@ -17,6 +17,7 @@ no_os_sources_ifdef(CONFIG_CAPI_I2C   ${CMAKE_CURRENT_SOURCE_DIR}/src/capi_i2c.c
 no_os_sources_ifdef(CONFIG_CAPI_DMA   ${CMAKE_CURRENT_SOURCE_DIR}/src/capi_dma.c)
 no_os_sources_ifdef(CONFIG_CAPI_WDT   ${CMAKE_CURRENT_SOURCE_DIR}/src/capi_wdt.c)
 no_os_sources_ifdef(CONFIG_CAPI_PINT  ${CMAKE_CURRENT_SOURCE_DIR}/src/capi_pint.c)
+no_os_sources_ifdef(CONFIG_CAPI_RTC   ${CMAKE_CURRENT_SOURCE_DIR}/src/capi_rtc.c)
 
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/inc)
 
