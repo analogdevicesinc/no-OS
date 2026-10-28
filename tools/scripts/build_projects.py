@@ -10,11 +10,13 @@ import multiprocessing
 import sys
 import filecmp
 import re
+import urllib.request
 from datetime import datetime
 # This file can be downloaded from the wiki-scripts repository
 # https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py
 from cloudsmith_helper import *
 from pathlib import Path
+from urllib.parse import urlsplit, urlunsplit
 # Discovery helpers for the CMake build system. no_os_build.py guards its CLI
 # under "if __name__ == '__main__':", so importing it has no side effects.
 from no_os_build import (
@@ -48,8 +50,10 @@ XILINX_BUILD_TIMEOUT = 600
 STALE_XSA_DAYS = 75
 LOG_START = " -> "
 TOKEN = os.environ.get('TOKEN')
-BRANCH = os.environ.get('BRANCH')
-BLACKLIST_URL = str(os.environ.get('BLACKLIST_URL')).format(BRANCH)
+BLACKLIST_URL = os.environ.get('BLACKLIST_URL')
+HDL_BLACKLIST = os.environ.get('HDL_BLACKLIST', '')
+# Used when HDL_BLACKLIST is not defined or its file cannot be downloaded.
+MAIN_BLACKLIST = 'blacklist_main.txt'
 DEFAULT_LOG_FILE = 'log.txt'
 LOG_FILE = DEFAULT_LOG_FILE
 SKIP_DOWNLOAD = None
@@ -240,38 +244,43 @@ def xsa_age_days(timestamp):
 		return None
 	return (datetime.now() - built).days
 
-def process_blacklist():
-	blacklist = []
-	log('Fetching blacklist from %s' % BLACKLIST_URL)
-	result = subprocess.run(
-		['curl', '-f', '-L',
-		 '-H', 'Accept: application/vnd.github.v3.raw',
-		 '-H', 'Authorization: Bearer %s' % TOKEN,
-		 '-o', 'blacklist.txt', BLACKLIST_URL],
-		capture_output=True)
-	if result.returncode != 0:
-		fallback_url = str(os.environ.get('BLACKLIST_URL')).format('main')
-		if fallback_url != BLACKLIST_URL:
-			log('Blacklist for branch %s not found, falling back to main' % BRANCH)
-			result = subprocess.run(
-				['curl', '-f', '-L',
-				 '-H', 'Accept: application/vnd.github.v3.raw',
-				 '-H', 'Authorization: Bearer %s' % TOKEN,
-				 '-o', 'blacklist.txt', fallback_url],
-				capture_output=True)
-		if result.returncode != 0:
-			log_err('Failed to download blacklist (curl exit %d) -- proceeding without filtering'
-				% result.returncode)
-			return blacklist
+def fetch_blacklist(name):
+	"""Return the contents of blacklist file name, or None on failure.
+
+	name is appended to the BLACKLIST_URL path; any query string on
+	BLACKLIST_URL (e.g. "?ref=main") is preserved.
+	"""
+	parts = urlsplit(BLACKLIST_URL)
+	url = urlunsplit(parts._replace(path=parts.path.rstrip('/') + '/' + name))
+	log('Fetching blacklist from %s' % url)
+	req = urllib.request.Request(url, headers={
+		'Accept': 'application/vnd.github.v3.raw',
+		'Authorization': 'Bearer %s' % TOKEN})
 	try:
-		with open('blacklist.txt', 'r') as f:
-			for line in f:
-				project = line.split('#')[0].rstrip().replace('.', '_')
-				if project != '':
-					blacklist.append(project)
-	finally:
-		if os.path.isfile('blacklist.txt'):
-			os.remove('blacklist.txt')
+		with urllib.request.urlopen(req, timeout=30) as resp:
+			return resp.read().decode()
+	except OSError as e:
+		log_warn('Could not fetch %s: %s' % (name, e))
+		return None
+
+def process_blacklist():
+	names = [MAIN_BLACKLIST]
+	if not HDL_BLACKLIST:
+		log_warn('HDL_BLACKLIST not defined, using %s' % MAIN_BLACKLIST)
+	elif HDL_BLACKLIST != MAIN_BLACKLIST:
+		names.insert(0, HDL_BLACKLIST)
+	for name in names:
+		text = fetch_blacklist(name)
+		if text is not None:
+			break
+	else:
+		log_err('No blacklist available -- proceeding without filtering')
+		return []
+	blacklist = []
+	for line in text.splitlines():
+		project = line.split('#')[0].rstrip().replace('.', '_')
+		if project:
+			blacklist.append(project)
 	if blacklist:
 		log('Blacklist loaded: %d project(s) excluded' % len(blacklist))
 	else:
@@ -291,16 +300,16 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 	if hdl_branch == "main":
 		hdl_branch_path = hdl_branch + '/hdl_output/'
 	else:
-		if check_path(package_version=server_base_path + 'releases/' + hdl_branch + '/', repo=hdl_repo):
+		if get_subfolders(package_version=server_base_path + 'releases/' + hdl_branch + '/', repo=hdl_repo):
 			hdl_branch_path = 'releases/' + hdl_branch + '/hdl_output/'
-		elif check_path(package_version=server_base_path + 'dev/' + hdl_branch + '/', repo=hdl_repo):
+		elif get_subfolders(package_version=server_base_path + 'dev/' + hdl_branch + '/', repo=hdl_repo):
 			hdl_branch_path = 'dev/' + hdl_branch + '/hdl_output/'
 		else:
 			log_err("HDL branch '%s' not found in releases/ or dev/" % hdl_branch)
 			sys.exit(1)
 
 	if timestamp_match:
-		if check_path(package_version=server_base_path + hdl_branch_path + timestamp_folder + '/', repo=hdl_repo):
+		if get_subfolders(package_version=server_base_path + hdl_branch_path + timestamp_folder + '/', repo=hdl_repo):
 			hdl_branch_path += timestamp_folder + '/'
 		else:
 			log_err("Timestamp folder '%s' not found in hdl_branch '%s'" % (timestamp_folder, hdl_branch))
@@ -316,7 +325,7 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 	if (_platform is None or _platform == 'xilinx'):
 		if not TOKEN:
 			log('Skipping blacklist: TOKEN not set')
-		elif not BLACKLIST_URL or BLACKLIST_URL == 'None':
+		elif not BLACKLIST_URL:
 			log('Skipping blacklist: BLACKLIST_URL not set')
 		else:
 			blacklist = process_blacklist()
