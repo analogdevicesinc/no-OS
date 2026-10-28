@@ -525,19 +525,25 @@ int adf4382_set_rfout(struct adf4382_dev *dev, uint64_t val)
 }
 
 /**
- * @brief Computes the PFD frequency and returns the value in Hz.
- * @param dev 	     - The device structure.
- * @return 	     - PFD value in Hz.
+ * @brief Computes the PFD frequency in Hz.
+ * @param dev 	       - The device structure.
+ * @param pfd_freq_hz  - The computed PFD frequency in Hz.
+ * @return 	       - 0 in case of success, negative error code otherwise.
  */
-static uint64_t adf4382_pfd_compute(struct adf4382_dev *dev)
+static int adf4382_pfd_compute(struct adf4382_dev *dev, uint64_t *pfd_freq_hz)
 {
-	uint64_t pfd_freq;
+	uint64_t tmp;
 
-	pfd_freq = NO_OS_DIV_ROUND_CLOSEST(dev->ref_freq_hz, dev->ref_div);
+	tmp = NO_OS_DIV_ROUND_CLOSEST(dev->ref_freq_hz, dev->ref_div);
 	if (dev->ref_doubler_en)
-		pfd_freq *=  2;
+		tmp *= 2;
 
-	return pfd_freq;
+	if (tmp < ADF4382_PFD_FREQ_MIN || tmp > ADF4382_PFD_FREQ_MAX)
+		return -EINVAL;
+
+	*pfd_freq_hz = tmp;
+
+	return 0;
 }
 
 /**
@@ -557,7 +563,11 @@ int adf4382_get_rfout(struct adf4382_dev *dev, uint64_t *val)
 	uint16_t n;
 	int ret;
 
-	pfd = adf4382_pfd_compute(dev);
+	ret = adf4382_pfd_compute(dev, &pfd);
+	if (ret) {
+		pr_err("PFD frequency is out of range.\n");
+		return ret;
+	}
 
 	ret = adf4382_spi_read(dev, 0x11, &tmp);
 	if (ret)
@@ -708,7 +718,6 @@ static int adf4382_frac2_compute(struct adf4382_dev *dev, uint64_t res,
 /**
  * @brief Computes the feedback divider values for the PLL.
  * @param dev 	     - The device structure.
- * @param freq 	     - The output frequency.
  * @param pfd_freq   - Phase/frequency detector frequency.
  * @param n_int      - Integer part of the feedback divider, which will be
  * 		       returned.
@@ -720,7 +729,7 @@ static int adf4382_frac2_compute(struct adf4382_dev *dev, uint64_t res,
  * 		       divider, which will be returned.
  * @return 	     - 0 in case of success, negative error code otherwise.
  */
-static int adf4382_pll_fract_n_compute(struct adf4382_dev *dev, uint64_t freq,
+static int adf4382_pll_fract_n_compute(struct adf4382_dev *dev,
 				       uint64_t pfd_freq, uint16_t *n_int,
 				       uint32_t *frac1_word, uint32_t *frac2_word,
 				       uint32_t *mod2_word)
@@ -728,13 +737,13 @@ static int adf4382_pll_fract_n_compute(struct adf4382_dev *dev, uint64_t freq,
 	uint64_t rem;
 	uint64_t res;
 
-	*n_int = no_os_div64_u64_rem(freq, pfd_freq, &rem);
+	*n_int = no_os_div64_u64_rem(dev->freq, pfd_freq, &rem);
 
 	res = rem * ADF4382_MOD1WORD;
 	*frac1_word = (uint32_t)no_os_div64_u64_rem(res, pfd_freq, &rem);
 
 	*frac2_word = 0;
-	*mod2_word = 1;
+	*mod2_word = 0;
 
 	if (rem > 0)
 		return adf4382_frac2_compute(dev, rem, pfd_freq, frac2_word,
@@ -773,7 +782,11 @@ int adf4382_set_en_fast_calibration(struct adf4382_dev *dev, bool en_fast_cal)
 		return 0;
 
 	// Stabilize PFD Frequency for Fast Calibration LUT Generation
-	operating_pfd_freq = adf4382_pfd_compute(dev);
+	ret = adf4382_pfd_compute(dev, &operating_pfd_freq);
+	if (ret) {
+		pr_err("PFD frequency is out of range.\n");
+		return ret;
+	}
 
 	if (operating_pfd_freq > 125 * MHZ) {
 		ref_div_lut = dev->ref_div;
@@ -783,7 +796,11 @@ int adf4382_set_en_fast_calibration(struct adf4382_dev *dev, bool en_fast_cal)
 			dev->ref_div += 1;
 			if (dev->ref_div > ADF4382_REF_DIV_MAX)
 				break;
-			pfd_freq_lut = adf4382_pfd_compute(dev);
+			ret = adf4382_pfd_compute(dev, &pfd_freq_lut);
+			if (ret) {
+				pr_err("PFD frequency is out of range.\n");
+				return ret;
+			}
 		} while (pfd_freq_lut > 125 * MHZ);
 		ret = adf4382_set_ref_div(dev, dev->ref_div);
 		if (ret)
@@ -1156,9 +1173,13 @@ int adf4382_set_change_freq(struct adf4382_dev *dev)
 	}
 
 	//Calculates the PFD freq. the output will be in Hz
-	pfd_freq = adf4382_pfd_compute(dev);
+	ret = adf4382_pfd_compute(dev, &pfd_freq);
+	if (ret) {
+		pr_err("PFD frequency is out of range.\n");
+		return ret;
+	}
 
-	ret = adf4382_pll_fract_n_compute(dev, dev->freq, pfd_freq, &n_int,
+	ret = adf4382_pll_fract_n_compute(dev, pfd_freq, &n_int,
 					  &frac1_word, &frac2_word, &mod2_word);
 	if (ret)
 		return ret;
@@ -1348,6 +1369,12 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 	if (ret)
 		return ret;
 
+	ret = adf4382_pfd_compute(dev, &pfd_freq);
+	if (ret) {
+		pr_err("PFD frequency is out of range.\n");
+		return ret;
+	}
+
 	for (clkout_div = 0; clkout_div <= dev->clkout_div_reg_val_max; clkout_div++) {
 		tmp = (1 << clkout_div) * dev->freq;
 		if (tmp < dev->vco_min || tmp > dev->vco_max)
@@ -1362,16 +1389,7 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 		return -EINVAL;
 	}
 
-	//Calculates the PFD freq. the output will be in Hz
-	pfd_freq = adf4382_pfd_compute(dev);
-
-	ret = adf4382_spi_update_bits(dev, 0x1F, ADF4382_CP_I_MSK,
-				      no_os_field_prep(ADF4382_CP_I_MSK,
-						      dev->cp_i));
-	if (ret)
-		return ret;
-
-	ret = adf4382_pll_fract_n_compute(dev, dev->freq, pfd_freq, &n_int,
+	ret = adf4382_pll_fract_n_compute(dev, pfd_freq, &n_int,
 					  &frac1_word, &frac2_word, &mod2_word);
 	if (ret)
 		return ret;
@@ -1416,6 +1434,10 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 			ldwin_pw = 1;
 	}
 
+	pr_debug("VCO=%llu PFD=%llu RFout_div=%u N=%u FRAC1=%u FRAC2=%u MOD2=%u\n",
+		 vco, pfd_freq, 1 << clkout_div, n_int,
+		 frac1_word, frac2_word, mod2_word);
+
 	if (frac2_word) {
 		ret = adf4382_spi_update_bits(dev, 0x28, ADF4382_VAR_MOD_EN_MSK,
 					      0xff);
@@ -1428,9 +1450,18 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 			return ret;
 	}
 
+	ret = adf4382_spi_update_bits(dev, 0x30, ADF4382_MUTE_NCLK_MSK,
+				      0xff);
+	if (ret)
+		return ret;
+
 	ret = adf4382_spi_update_bits(dev, 0x15, ADF4382_INT_MODE_MSK,
 				      no_os_field_prep(ADF4382_INT_MODE_MSK,
 						      int_mode));
+	if (ret)
+		return ret;
+
+	ret = adf4382_spi_update_bits(dev, 0x30, ADF4382_MUTE_NCLK_MSK, 0);
 	if (ret)
 		return ret;
 
@@ -1511,7 +1542,8 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 	if (ret)
 		return ret;
 
-	ret = adf4382_spi_update_bits(dev, 0x31, ADF4382_DCLK_MODE_MSK, 0xff);
+	ret = adf4382_spi_update_bits(dev, 0x31, ADF4382_DCLK_MODE_MSK,
+				      pfd_freq > (11 * MHZ) ? 0xff : 0);
 	if (ret)
 		return ret;
 
@@ -1519,12 +1551,16 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 	if (ret)
 		return ret;
 
-	ret = adf4382_spi_update_bits(dev, 0x31, ADF4382_EN_ADC_CLK_MSK, 0xff);
+	ret = adf4382_spi_write(dev, 0x38, ADF4382_VCO_CAL_VTUNE);
 	if (ret)
 		return ret;
 
 	//VCO automatic level calibration time
 	ret = adf4382_spi_write(dev, 0x3A, ADF4382_VCO_CAL_ALC);
+	if (ret)
+		return ret;
+
+	ret = adf4382_spi_write(dev, 0x37, ADF4382_VCO_CAL_CNT);
 	if (ret)
 		return ret;
 
@@ -1569,6 +1605,11 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 		return ret;
 
 	locked = no_os_field_get(val, ADF4382_LOCKED_MSK);
+
+	pr_debug("PLL %s, REF %s\n",
+		 val & NO_OS_BIT(0) ? "Locked" : "Unlocked",
+		 val & NO_OS_BIT(3) ? "OK" : "Error");
+
 	if (!locked)
 		return -EIO;
 
@@ -1576,22 +1617,23 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 }
 
 /**
- * @brief Set the phase adjustment in pico-seconds. The phase adjust will
+ * @brief Set the phase adjustment in femto-seconds. The phase adjust will
  * enable the Bleed current option as well as delay mode to 0.
  * @param dev 		- The device structure.
- * @param phase_ps 	- The phase adjustment in pico-seconds.
+ * @param phase_fs 	- The phase adjustment in femto-seconds.
  * @return    		- 0 in case of success, negative error code otherwise.
  */
-int adf4382_set_phase_adjust(struct adf4382_dev *dev, uint32_t phase_ps)
+int adf4382_set_phase_adjust(struct adf4382_dev *dev, uint32_t phase_fs)
 {
-	uint64_t phase_reg_value;
-	uint32_t rfout_deg_ns;
-	uint32_t phase_deg_ns;
-	uint64_t rfout_deg_s;
+	uint8_t phase_reg_value;
+	uint64_t phase_deg_fs;
+	uint64_t phase_deg_ns;
+	uint64_t phase_deg_ms;
 	uint64_t phase_bleed;
-	uint16_t phase_deg;
+	uint64_t phase_value;
+	uint64_t pfd_freq_hz;
 	uint64_t phase_ci;
-	uint64_t pfd_freq;
+	uint64_t rem;
 	int ret;
 
 	ret = adf4382_spi_update_bits(dev, 0x1E, ADF4382_EN_PHASE_RESYNC_MSK, 0xff);
@@ -1606,41 +1648,136 @@ int adf4382_set_phase_adjust(struct adf4382_dev *dev, uint32_t phase_ps)
 	if (ret)
 		return ret;
 
-	dev->phase_adj = phase_ps;
-
-	//Determine the output freq. in degrees/s
-	rfout_deg_s = 360 * dev->freq;
-	//Convert it to degrees/ns
-	rfout_deg_ns = no_os_div_u64(rfout_deg_s, S_TO_NS);
-	//Determine the phase adjustment in degrees relative the output freq.
-	phase_deg_ns = rfout_deg_ns * phase_ps;
-	//Convert it to degrees/ps
-	phase_deg = no_os_div_u64(phase_deg_ns, NS_TO_PS);
-
-	if (phase_deg > 360) {
-		pr_err("Phase Adjustment cannot exceed 360deg per Clock Period\n");
-		return EINVAL;
+	ret = adf4382_pfd_compute(dev, &pfd_freq_hz);
+	if (ret) {
+		pr_err("PFD frequency is out of range.\n");
+		return ret;
 	}
 
-	//Phase adjustment can only be done if bleed is active, and a bleed
-	//constant needs to be added
-	phase_bleed = phase_deg * ADF4382_PHASE_BLEED_CNST;
-	//The charge pump current will also need to be taken in to account
-	phase_ci = phase_bleed * adf4382_ci_ua[dev->cp_i];
-	phase_ci = no_os_div_u64(phase_ci, MICROAMPER_PER_AMPER);
+	dev->phase_adj = phase_fs;
 
-	//Computation of the register value for the phase adjust
-	pfd_freq = adf4382_pfd_compute(dev);
-	phase_reg_value = no_os_div_u64((phase_ci * pfd_freq), (360 * dev->freq));
+	// Determine the phase adjustment in degrees relative the output freq.
+	phase_deg_fs = (uint64_t)phase_fs * dev->freq;
+	phase_deg_ns = no_os_div_u64(phase_deg_fs, FS_PER_NS);
+	phase_deg_ns = PERIOD_IN_DEG * phase_deg_ns;
+	phase_deg_ms = no_os_div_u64(phase_deg_ns, NS_PER_MS);
 
-	if (phase_reg_value > 255)
-		phase_reg_value -= 255;
+	if (phase_deg_ms > PERIOD_IN_DEG_MS) {
+		pr_err("Phase adjustment is out of range.\n");
+		return -EINVAL;
+	}
+
+	/*
+	 * The charge pump current will also need to be taken in to account
+	 * as well as the Bleed constant
+	 */
+	phase_ci = phase_deg_ms * adf4382_ci_ua[dev->cp_i];
+	phase_bleed = phase_ci * ADF4382_PHASE_BLEED_CNST_MUL;
+	phase_bleed = no_os_div_u64(phase_bleed, ADF4382_PHASE_BLEED_CNST_DIV);
+
+	/*
+	 * Computation of the register value for the phase adjust. dev->freq
+	 * reaches well past the 32-bit divisor no_os_div_u64() accepts, so the
+	 * 64-bit-divisor variant is required here.
+	 */
+	phase_value = phase_bleed * pfd_freq_hz;
+	phase_value = no_os_div64_u64_rem(phase_value, dev->freq, &rem);
+	phase_value = no_os_div_u64(phase_value, PERIOD_IN_DEG);
+	phase_value = NO_OS_DIV_ROUND_CLOSEST_ULL(phase_value, MILLI);
+
+	if (phase_value == 0 && phase_fs != 0) {
+		pr_warning("Phase %u fs too small to represent at Icp %u uA.\n",
+			   (unsigned int)phase_fs,
+			   (unsigned int)adf4382_ci_ua[dev->cp_i]);
+		phase_value = 1u;
+	}
+
+	if (phase_value > UINT8_MAX) {
+		pr_warning("Phase adjust register clamped to 255 (computed %llu).\n",
+			   phase_value);
+		phase_value = UINT8_MAX;
+	}
+
+	phase_reg_value = (uint8_t)phase_value;
 
 	ret = adf4382_spi_write(dev, 0x33, phase_reg_value);
 	if (ret)
 		return ret;
 
+	if (dev->auto_align_en)
+		return adf4382_spi_update_bits(dev, 0x32,
+					       ADF4382_EN_AUTO_ALIGN_MSK, 0xff);
+
+	ret = adf4382_spi_update_bits(dev, 0x32, ADF4382_EN_AUTO_ALIGN_MSK, 0x0);
+	if (ret)
+		return ret;
+
 	return adf4382_spi_update_bits(dev, 0x34, ADF4382_PHASE_ADJ_MSK, 0xff);
+}
+
+/**
+ * @brief Get the phase adjustment in femto-seconds. *
+ * @param dev 		- The device structure.
+ * @param phase_fs 	- The read value of the phase adjustment in femto-seconds.
+ * @return    		- 0 in case of success, negative error code otherwise.
+ */
+int adf4382_get_phase_adjust(struct adf4382_dev *dev, uint32_t *phase_fs)
+{
+	uint8_t phase_reg_value;
+	uint64_t phase_value;
+	uint64_t pfd_freq_hz;
+	uint64_t rem;
+	uint8_t tmp;
+	int ret;
+
+	if (!dev || !phase_fs)
+		return -EINVAL;
+
+	ret = adf4382_spi_read(dev, 0x33, &tmp);
+	if (ret)
+		return ret;
+
+	phase_reg_value = tmp;
+
+	ret = adf4382_pfd_compute(dev, &pfd_freq_hz);
+	if (ret) {
+		pr_err("PFD frequency is out of range.\n");
+		return ret;
+	}
+
+	phase_value = (uint64_t)phase_reg_value * PERIOD_IN_DEG;
+	phase_value = phase_value * dev->freq;
+	phase_value = no_os_div64_u64_rem(phase_value, pfd_freq_hz, &rem);
+
+	phase_value = phase_value * ADF4382_PHASE_BLEED_CNST_DIV;
+	phase_value = phase_value * MS_PER_NS;
+	phase_value = no_os_div_u64(phase_value, ADF4382_PHASE_BLEED_CNST_MUL);
+	phase_value = phase_value * MILLI;
+	phase_value = no_os_div_u64(phase_value, adf4382_ci_ua[dev->cp_i]);
+
+	phase_value = phase_value * NS_PER_FS;
+	phase_value = no_os_div_u64(phase_value, PERIOD_IN_DEG);
+	phase_value = no_os_div64_u64_rem(phase_value, dev->freq, &rem);
+
+	*phase_fs = (uint32_t)phase_value;
+
+	return 0;
+}
+
+/**
+ * @brief Enable or disable automatic clock alignment.
+ * @param dev 		- The device structure.
+ * @param en 		- true to enable automatic alignment.
+ * @return    		- 0 in case of success, negative error code otherwise.
+ */
+int adf4382_set_auto_align(struct adf4382_dev *dev, bool en)
+{
+	if (!dev)
+		return -EINVAL;
+
+	dev->auto_align_en = en;
+
+	return adf4382_set_phase_adjust(dev, 0);
 }
 
 /**
@@ -1756,7 +1893,12 @@ int adf4382_set_timed_sync_setup(struct adf4382_dev *dev, bool sync)
 		if (ret)
 			return ret;
 
-		pfd_freq = adf4382_pfd_compute(dev);
+		ret = adf4382_pfd_compute(dev, &pfd_freq);
+		if (ret) {
+			pr_err("PFD frequency is out of range.\n");
+			return ret;
+		}
+
 		if (pfd_freq >= 225 * MHZ) {
 			delay = 3;
 		} else if (pfd_freq >= 200 * MHZ) {
@@ -1869,7 +2011,11 @@ int adf4382_set_vco_cal_timeout(struct adf4382_dev *dev)
 	if (!dev)
 		return -EINVAL;
 
-	pfd_freq = adf4382_pfd_compute(dev);
+	ret = adf4382_pfd_compute(dev, &pfd_freq);
+	if (ret) {
+		pr_err("PFD frequency is out of range.\n");
+		return ret;
+	}
 
 	// Read DCLK_DIV1 once
 	ret = adf4382_spi_read(dev, 0x24, &val);
@@ -1962,6 +2108,56 @@ static int adf4383_update_core_bias_table(struct adf4382_dev *dev)
 }
 
 /**
+ * @brief Set the revision-specific register defaults.
+ * @param dev 	- The device structure.
+ * @return 	- 0 in case of success or negative error code.
+ */
+static int adf4382_set_defaults(struct adf4382_dev *dev)
+{
+	const struct reg_sequence *defaults;
+	uint8_t chip_ver;
+	uint16_t size;
+	uint16_t i;
+	int ret;
+
+	ret = adf4382_spi_read(dev, 0x67, &chip_ver);
+	if (ret)
+		return ret;
+
+	switch (chip_ver) {
+	case ADF4382_CHIP_VER_U2:
+		defaults = adf4382_u2_reg_defaults;
+		size = NO_OS_ARRAY_SIZE(adf4382_u2_reg_defaults);
+		break;
+	case ADF4382_CHIP_VER_U4:
+		defaults = adf4382_u4_reg_defaults;
+		size = NO_OS_ARRAY_SIZE(adf4382_u4_reg_defaults);
+		break;
+	case ADF4382_CHIP_VER_U5_A:
+	case ADF4382_CHIP_VER_U5_B:
+	case ADF4382_CHIP_VER_U5_C:
+	case ADF4382_CHIP_VER_U5_D:
+		defaults = adf4382_u5_reg_defaults;
+		size = NO_OS_ARRAY_SIZE(adf4382_u5_reg_defaults);
+		break;
+	default:
+		pr_err("Unknown chip version: 0x%X\n", chip_ver);
+		return -EINVAL;
+	}
+
+	pr_info("ADF4382 chip version: %u\n", chip_ver);
+
+	for (i = 0; i < size; i++) {
+		ret = adf4382_spi_write(dev, defaults[i].reg,
+					defaults[i].val);
+		if (ret)
+			return ret;
+	}
+
+	return 0;
+}
+
+/**
  * @brief Initializes the ADF4382.
  * @param dev	     - The device structure.
  * @param init_param - The structure containing the device initial parameters.
@@ -1972,7 +2168,7 @@ int adf4382_init(struct adf4382_dev **dev,
 {
 	struct adf4382_dev *device;
 	bool en = true;
-	uint8_t i;
+	uint8_t val;
 	int ret;
 
 	device = (struct adf4382_dev *)no_os_calloc(1, sizeof(*device));
@@ -2045,13 +2241,24 @@ int adf4382_init(struct adf4382_dev **dev,
 	if (ret)
 		goto error_spi;
 
-	for (i = 0; i < NO_OS_ARRAY_SIZE(adf4382_reg_defaults); i++) {
-		ret = adf4382_spi_write(device,
-					adf4382_reg_defaults[i].reg,
-					adf4382_reg_defaults[i].val);
-		if (ret)
-			goto error_spi;
-	}
+	val = no_os_field_prep(ADF4382_EN_RDBLR_MSK, device->ref_doubler_en) |
+	      no_os_field_prep(ADF4382_R_DIV_MSK, device->ref_div);
+	ret = adf4382_spi_write(device, 0x20, val);
+	if (ret)
+		goto error_spi;
+
+	ret = adf4382_spi_write(device, 0x1F, device->cp_i);
+	if (ret)
+		goto error_spi;
+
+	ret = adf4382_set_defaults(device);
+	if (ret)
+		goto error_spi;
+
+	ret = adf4382_spi_update_bits(device, 0x20, ADF4382_EN_AUTOCAL_MSK,
+				      ADF4382_EN_AUTOCAL_MSK);
+	if (ret)
+		goto error_spi;
 
 	if (ID_ADF4383 == init_param->id) {
 		ret = adf4383_update_core_bias_table(device);
