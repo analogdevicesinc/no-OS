@@ -121,7 +121,7 @@ configure time into ``libraries/lvgl`` (no submodule init required).
    Using an RTOS implementation, one must make sure to include the
    ``lv_tick_inc()`` function in the system timer callback, in order to have
    regular updates on the screen. In a baremetal solution, like this project,
-   the file ``drivers/platform/maxim/max78000/maxim_delay.c`` needs the
+   the file ``drivers/platform/maxim/max78000/arm/maxim_delay.c`` needs the
    following change:
 
    .. code-block:: c
