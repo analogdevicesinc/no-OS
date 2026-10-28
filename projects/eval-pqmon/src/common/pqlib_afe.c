@@ -38,9 +38,38 @@ static bool afe_irq_ready;
 volatile uint32_t afeIsrBusyUs;
 #endif
 
+/*
+ * Write one waveform block to the IIO buffer. If the host is not reading
+ * (e.g. Scopy between single captures, buffer still enabled), drop the
+ * oldest block instead of overrunning: with IIO_IGNORE_BUFF_OVERRUN_ERR the
+ * reader does not recover from an overrun, it stays behind the writer and
+ * the host gets about one block per second.
+ */
+static void waveform_cb_push(uint8_t *data, uint32_t len)
+{
+	struct no_os_circular_buffer *cb = pqlibExample.no_os_cb_desc;
+	uint32_t used = 0, skip, n;
+	void *p;
+
+	if (no_os_cb_size(cb, &used)) {
+		/* Overrun already happened: restart empty */
+		cb->read.idx = cb->write.idx;
+		cb->read.spin_count = cb->write.spin_count;
+		used = 0;
+	}
+
+	for (skip = used + len > cb->size ? len : 0; skip; skip -= n) {
+		if (no_os_cb_prepare_async_read(cb, skip, &p, &n) || !n)
+			break;
+		no_os_cb_end_async_read(cb);
+	}
+
+	no_os_cb_write(cb, data, len);
+}
+
 static void waveform_cb_write_and_oneshot(uint8_t *data, uint16_t len)
 {
-	no_os_cb_write(pqlibExample.no_os_cb_desc, data, len);
+	waveform_cb_push(data, len);
 	pqm_desc_global->waveform_block_count++;
 
 	if (pqm_desc_global->waveform_capture_mode ==
@@ -338,12 +367,13 @@ int get_afe_input()
 			waveform_cb_write_and_oneshot(
 				(uint8_t *)pWaveform->waveform,
 				sizeof(pWaveform->waveform));
-		} else if (pqlibExample.no_os_cb_desc && !processData) {
-			no_os_cb_write(pqlibExample.no_os_cb_desc,
-				       (uint8_t *)pWaveform->waveform,
-				       sizeof(pWaveform->waveform));
-			if (pqm_desc_global)
-				pqm_desc_global->waveform_block_count++;
+		} else if (pqlibExample.no_os_cb_desc && !processData &&
+			   pqm_desc_global && pqm_desc_global->active_ch) {
+			/* Only while the host has the buffer enabled: in
+			 * between, the buffer would fill with old pages */
+			waveform_cb_push((uint8_t *)pWaveform->waveform,
+					 sizeof(pWaveform->waveform));
+			pqm_desc_global->waveform_block_count++;
 		}
 		break;
 	case AFE_Q_1012:

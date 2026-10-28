@@ -67,15 +67,16 @@ int32_t update_pqm_channels(void *dev, uint32_t mask)
 	desc = dev;
 	desc->active_ch = mask;
 
+	/* Flush circular buffer so host gets only fresh data */
+	if (mask != 0 && pqlibExample.no_os_cb_desc) {
+		pqlibExample.no_os_cb_desc->read.idx = 0;
+		pqlibExample.no_os_cb_desc->read.spin_count = 0;
+		pqlibExample.no_os_cb_desc->write.idx = 0;
+		pqlibExample.no_os_cb_desc->write.spin_count = 0;
+	}
+
 	/* Activate waveform streaming if capture mode is enabled */
 	if (mask != 0 && desc->waveform_capture_mode != WAVEFORM_CAPTURE_DISABLED) {
-		/* Flush circular buffer so host gets only fresh data */
-		if (pqlibExample.no_os_cb_desc) {
-			pqlibExample.no_os_cb_desc->read.idx = 0;
-			pqlibExample.no_os_cb_desc->read.spin_count = 0;
-			pqlibExample.no_os_cb_desc->write.idx = 0;
-			pqlibExample.no_os_cb_desc->write.spin_count = 0;
-		}
 		desc->waveform_streaming_active = true;
 		if (desc->waveform_capture_mode == WAVEFORM_CAPTURE_ONESHOT) {
 			if (desc->oneshot_blocks_remaining == 0)
