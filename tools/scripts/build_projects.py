@@ -325,16 +325,16 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 	if hdl_branch == "main":
 		hdl_branch_path = hdl_branch + '/hdl_output/'
 	else:
-		if check_path(package_version=server_base_path + 'releases/' + hdl_branch + '/', repo=hdl_repo):
+		if get_subfolders(package_version=server_base_path + 'releases/' + hdl_branch + '/', repo=hdl_repo):
 			hdl_branch_path = 'releases/' + hdl_branch + '/hdl_output/'
-		elif check_path(package_version=server_base_path + 'dev/' + hdl_branch + '/', repo=hdl_repo):
+		elif get_subfolders(package_version=server_base_path + 'dev/' + hdl_branch + '/', repo=hdl_repo):
 			hdl_branch_path = 'dev/' + hdl_branch + '/hdl_output/'
 		else:
 			log_err("HDL branch '%s' not found in releases/ or dev/" % hdl_branch)
 			sys.exit(1)
 
 	if timestamp_match:
-		if check_path(package_version=server_base_path + hdl_branch_path + timestamp_folder + '/', repo=hdl_repo):
+		if get_subfolders(package_version=server_base_path + hdl_branch_path + timestamp_folder + '/', repo=hdl_repo):
 			hdl_branch_path += timestamp_folder + '/'
 		else:
 			log_err("Timestamp folder '%s' not found in hdl_branch '%s'" % (timestamp_folder, hdl_branch))
