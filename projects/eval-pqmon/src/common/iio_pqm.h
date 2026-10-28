@@ -150,6 +150,7 @@
 #define CHAN_EVENT_ACK                  37
 #define CHAN_EVENT_AFFECTED             38
 #define CHAN_EVENT_ONSET_COUNT          39
+#define CHAN_EVENT_PENDING              40
 
 #define RESAMPLED_WAVEFORM_FULL_SCALE   18196
 

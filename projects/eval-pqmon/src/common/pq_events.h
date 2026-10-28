@@ -87,6 +87,14 @@ uint32_t pq_events_unacked(enum pq_ev_type type);
 uint32_t pq_events_total(enum pq_ev_type type);
 
 /**
+ * @brief Number of events of this type that ended since the previous call
+ * (read and clear). A client that only polls the count, as Scopy does with
+ * countEvent, sees each event once.
+ * @param type - event type
+ */
+uint32_t pq_events_take_new(enum pq_ev_type type);
+
+/**
  * @brief Number of event starts since start-up or pq_events_clear().
  * Incremented in the cycle an event starts, so a host polling it sees
  * every start, also of events that ended before the next poll. Starts

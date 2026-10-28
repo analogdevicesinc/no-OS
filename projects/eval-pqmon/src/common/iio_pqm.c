@@ -98,6 +98,11 @@
         .priv = CHAN_EVENT_MAX_PH,                                              \
 },                                                                              \
 {                                                                               \
+        .name = "pendingEvent",                                                 \
+        .show = read_ch_attr,                                                   \
+        .priv = CHAN_EVENT_PENDING,                                             \
+},                                                                              \
+{                                                                               \
         .name = "event_ack",                                                    \
         .show = read_ch_attr,                                                   \
         .store = write_ch_attr,                                                 \
@@ -946,6 +951,8 @@ static int read_event_attr(int type, char *buf, uint32_t len,
 
 	switch (attr_id) {
 	case CHAN_EVENT_COUNT:
+		return snprintf(buf, len, "%" PRIu32, pq_events_take_new(type));
+	case CHAN_EVENT_PENDING:
 		return snprintf(buf, len, "%" PRIu32, pq_events_unacked(type));
 	case CHAN_EVENT_TOTAL:
 		return snprintf(buf, len, "%" PRIu32, pq_events_total(type));

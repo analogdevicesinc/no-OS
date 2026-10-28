@@ -58,6 +58,8 @@ struct pq_ev_state {
 	uint32_t unacked;
 	/* starts seen, incremented in the start cycle */
 	uint32_t onsets;
+	/* total at the last pq_events_take_new() */
+	uint32_t reported;
 };
 
 static struct pq_ev_state evState[PQ_EV_NUM_TYPES];
@@ -851,6 +853,18 @@ ADI_PQLIB_TIME pq_events_onset(enum pq_ev_type type)
 uint32_t pq_events_unacked(enum pq_ev_type type)
 {
 	return type < PQ_EV_NUM_TYPES ? evState[type].unacked : 0;
+}
+
+uint32_t pq_events_take_new(enum pq_ev_type type)
+{
+	uint32_t n;
+
+	if (type >= PQ_EV_NUM_TYPES)
+		return 0;
+	n = evState[type].total - evState[type].reported;
+	evState[type].reported = evState[type].total;
+
+	return n;
 }
 
 uint32_t pq_events_last_onset(enum pq_ev_type *type, ADI_PQLIB_TIME *start,
