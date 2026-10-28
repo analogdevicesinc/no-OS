@@ -8,6 +8,7 @@ target_sources(eval-pqmon PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/pqlib_afe.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/afe_queue.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/pq_events.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/common/time_sync.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/pqlib_convert.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/iio_pqm.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/flash_storage.c
@@ -16,6 +17,7 @@ target_sources(eval-pqmon PRIVATE
     # LCD driver used unconditionally by the common code (no_os_crc8 is already
     # part of the no-os util library).
     ${NO_OS_DIR}/drivers/display/nhd_c12832a1z/nhd_c12832a1z.c
+    ${NO_OS_DIR}/drivers/rtc/max31343/max31343.c
 )
 
 if(CONFIG_EVAL_PQMON_BASIC_EXAMPLE)
@@ -43,6 +45,7 @@ target_include_directories(eval-pqmon PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}
     ${CMAKE_CURRENT_SOURCE_DIR}/src/platform
     ${NO_OS_DIR}/drivers/display/nhd_c12832a1z
+    ${NO_OS_DIR}/drivers/rtc/max31343
     ${NO_OS_DIR}/network
 )
 

@@ -10,6 +10,7 @@
 
 #ifdef BASIC_EXAMPLE
 #include "basic_example.h"
+#include "time_sync.h"
 #endif
 
 #include "pqlib_afe.h"
@@ -201,6 +202,9 @@ int basic_pqm_firmware()
 		printf("Pqm Measurement Init failed \n\r");
 		goto exit;
 	}
+
+	/* UTC time base: the RTC now, the host later (system_time) */
+	time_sync_init();
 
 	status = pqm_init(&pqm_desc, &pqm_ip);
 	if (status) {

@@ -58,6 +58,13 @@ void pq_events_cycle(ADI_PQLIB_HANDLE hDevice, ADI_PQLIB_RESULT res,
 void pq_events_cross_check(const ADI_PQLIB_OUTPUT *output);
 
 /**
+ * @brief Shift the start of events in progress after the PQLib time was
+ * set, so their durations stay correct. Finished records are not changed.
+ * @param delta - new time - old time [ms]
+ */
+void pq_events_time_shift(ADI_PQLIB_TIME delta);
+
+/**
  * @brief Drop open events without recording them. Call after the PQLib
  * time base has been reset.
  */

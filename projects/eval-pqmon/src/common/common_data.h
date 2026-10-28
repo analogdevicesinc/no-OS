@@ -51,7 +51,7 @@
 #define TOTAL_PQM_CHANNELS 12
 #define VOLTAGE_CH_NUMBER 3
 #define MAX_CH_ATTRS 40
-#define PQM_DEVICE_ATTR_NUMBER 72
+#define PQM_DEVICE_ATTR_NUMBER 76
 #define WAVEFORM_BUFFER_LENGTH (256 * 7)
 #define MAX_EVENT_NUMBER 6
 #define DEFAULT_ONESHOT_BLOCKS 4
@@ -86,7 +86,7 @@ extern struct lwip_network_param lwip_ip;
 
 extern struct pqm_init_para pqm_ip;
 extern struct no_os_spi_init_param spi_egy_ip;
-extern struct no_os_i2c_init_param i2c_ip;
+extern struct no_os_i2c_init_param rtc_i2c_ip;
 extern struct no_os_uart_init_param uart_ip_stdio;
 extern struct no_os_timer_init_param timer_ip;
 extern struct no_os_gpio_init_param reset_gpio_ip;

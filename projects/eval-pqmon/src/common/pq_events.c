@@ -798,6 +798,18 @@ void pq_events_cross_check(const ADI_PQLIB_OUTPUT *output)
 	}
 }
 
+void pq_events_time_shift(ADI_PQLIB_TIME delta)
+{
+	for (int i = 0; i < PQ_EV_NUM_TYPES; i++) {
+		if (evState[i].open)
+			evState[i].cur.start += delta;
+		if (pending[i].valid)
+			pending[i].cur.start += delta;
+	}
+	if (lastOnset.seq && evState[lastOnset.type].open)
+		lastOnset.start += delta;
+}
+
 void pq_events_reset_open(void)
 {
 	for (int i = 0; i < PQ_EV_NUM_TYPES; i++)

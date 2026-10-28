@@ -10,6 +10,8 @@
 
 #include "iio_pqm.h"
 #include "pq_events.h"
+#include "time_sync.h"
+#include <stdlib.h>
 #include "flash_storage.h"
 
 #define PQM_VOLTAGE_CHANNEL(_idx, _scan_idx, _name)                            \
@@ -135,6 +137,10 @@ static bool get_next_ch_idx(uint32_t ch_mask, uint32_t last_idx,
 static const char *const pq_event_names[PQ_EV_NUM_TYPES] = {
 	"dips", "swells", "rvc", "intrpt", "intrpt_line"
 };
+
+/* time_source and rtc_status values, in enum order */
+static const char *const time_source_names[] = { "none", "rtc", "host" };
+static const char *const rtc_status_names[] = { "absent", "invalid", "ok" };
 
 /**
  * @brief last_onset: "<seq> <type> <startTime> <triggerPhase> <active>".
@@ -498,6 +504,23 @@ int read_pqm_attr(void *device, char *buf, uint32_t len,
 			return read_last_onset(buf, len);
 		case EVENT_COUNTS:
 			return read_event_counts(buf, len);
+		case SYSTEM_TIME: {
+			ADI_PQLIB_TIME now = 0;
+
+			adi_pqlib_GetTime(pqlibExample.hDevice, &now);
+			return snprintf(buf, len, "%" PRId64, now);
+		}
+		case TIME_SOURCE:
+			return snprintf(buf, len, "%s",
+					time_source_names[time_sync_source()]);
+		case TIME_CORRECTION:
+			return snprintf(buf, len, "%" PRId64,
+					time_sync_last_correction());
+		case RTC_STATUS: {
+			enum time_sync_rtc_status st = time_sync_rtc_status();
+
+			return snprintf(buf, len, "%s", rtc_status_names[st]);
+		}
 
 		case FLASH_CAL_DATA: {
 			FLASH_CALIBRATION_DATA flash_data;
@@ -802,6 +825,12 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
 				return -EINVAL;
 			pq_events_clear();
 			break;
+		case SYSTEM_TIME:
+			/* UTC ms does not fit a float: parse as an integer */
+			configChanged = false;
+			if (time_sync_set_host(strtoll(buf, NULL, 10)))
+				return -EINVAL;
+			return len;
 		case WAVEFORM_CAPTURE_MODE_ATTR:
 			configChanged = false;
 			for (int i = 0; i < NO_OS_ARRAY_SIZE(pqm_waveform_capture_mode_available); i++) {
@@ -1899,6 +1928,27 @@ struct iio_attribute global_pqm_attributes[] = {
 		.name = "event_counts",
 		.show = read_pqm_attr,
 		.priv = EVENT_COUNTS,
+	},
+	{
+		.name = "system_time",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = SYSTEM_TIME,
+	},
+	{
+		.name = "time_source",
+		.show = read_pqm_attr,
+		.priv = TIME_SOURCE,
+	},
+	{
+		.name = "time_correction_ms",
+		.show = read_pqm_attr,
+		.priv = TIME_CORRECTION,
+	},
+	{
+		.name = "rtc_status",
+		.show = read_pqm_attr,
+		.priv = RTC_STATUS,
 	},
 	END_ATTRIBUTES_ARRAY,
 }; // global attributes for device

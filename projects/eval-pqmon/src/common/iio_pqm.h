@@ -102,6 +102,12 @@
 #define LAST_ONSET                      70
 #define EVENT_COUNTS                    71
 
+// Time sync attributes
+#define SYSTEM_TIME                     72
+#define TIME_SOURCE                     73
+#define TIME_CORRECTION                 74
+#define RTC_STATUS                      75
+
 // Channel specific attributes
 #define CHAN_RMS                        0
 #define CHAN_ANGLE                      1

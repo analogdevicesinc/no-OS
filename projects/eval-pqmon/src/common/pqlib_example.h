@@ -196,18 +196,6 @@ int process_pqlib_error(PQLIB_EXAMPLE *pExample,
 int open_pqlib(PQLIB_EXAMPLE *pExample);
 
 /**
- * @brief Sets library internal time using RTC time. Serves as an example
- * how to call the APIs. This also syncs the library time to the
- * user provided time.
- *
- * @param[in] pExample     - Pointer to example structure.
- * @param[in] checkRtcTime - Checks RTC time.
- * @return 0 on success
- *         1 on failure
- */
-int SyncLibTime(PQLIB_EXAMPLE *pExample, bool checkRtcTime);
-
-/**
  * @brief Configures AFE and the library . This serves as an
  * example on how to call APIs adi_pqlib_SetConfig and
  * adi_pqlib_SetCorrectionCoefficients.

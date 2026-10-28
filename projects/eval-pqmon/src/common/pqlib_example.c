@@ -12,6 +12,7 @@
 #include "pqlib_afe.h"
 #include "afe_queue.h"
 #include "pq_events.h"
+#include "time_sync.h"
 #include "max32650.h"
 #include "iio_pqm.h"
 #include "afe_calibration.h"
@@ -240,6 +241,7 @@ int pqm_start_measurement(bool waitingForSync)
 	const uint32_t supportedAfeVersionRC3 = 0x809B461;
 	const uint32_t supportedAfeVersionRC4 = 0x954871C;
 
+	time_sync_save();
 	afe_input_stop();
 	pqlibExample.processedCycles = 0;
 	pqlibExample.zeroCrossingCount = 0;
@@ -291,6 +293,7 @@ int pqm_one_cycle(void)
 	if (pqlibExample.calibrationRequested || calibration_is_active()) {
 		if (pqlibExample.state != PQLIB_STATE_CALIBRATING) {
 			pqlibExample.state = PQLIB_STATE_CALIBRATING;
+			time_sync_save();
 			afe_input_stop();
 		}
 		int cal_status = calibration_process_cycle();
@@ -472,7 +475,6 @@ static int process_one_input(void)
 			if (status != SYS_STATUS_SUCCESS) {
 				break;
 			}
-			SyncLibTime(&pqlibExample, true);
 			SyncToDip(&pqlibExample, pqlibStatus);
 			pqlibExample.processedCycles++;
 			if (pqlibExample.state == PQLIB_STATE_RUNNING)
@@ -730,7 +732,7 @@ int wait_for_zero_crossing(PQLIB_EXAMPLE *pExample,
 				adi_pqlib_Reset(pqlibExample.hDevice, clearTime);
 				pq_events_reset_open();
 				pqlibExample.processedCycles = 0;
-				SyncLibTime(pExample, false);
+				time_sync_apply_after_reset();
 			} else {
 				status = SYS_STATUS_PQLIB_RUNNING;
 			}
@@ -821,33 +823,6 @@ void set_default_config(EXAMPLE_CONFIG *pConfig)
 	pConfig->voltagePgaGain = 1.0f;         /* Default PGA gain */
 }
 
-int SyncLibTime(PQLIB_EXAMPLE *pExample, bool checkRtcTime)
-{
-	ADI_PQLIB_RESULT pqlibStatus = ADI_PQLIB_RESULT_SUCCESS;
-	ADI_PQLIB_HANDLE hDevice = pqlibExample.hDevice;
-	const int16_t uncertainty = 20;
-	bool applyImmediately = true;
-	int status = 0;
-	int64_t systemTime;
-	int64_t rtcTime = 0;
-
-	if (newSyncTimeAvailable) {
-		newSyncTimeAvailable = 0;
-		if (checkRtcTime) {
-			adi_pqlib_GetTime(hDevice, &systemTime);
-			if ((rtcTime - systemTime) >= 1000) {
-				pqlibStatus =
-					adi_pqlib_SetTime(hDevice, rtcTime, uncertainty, applyImmediately);
-			}
-		} else {
-			pqlibStatus =
-				adi_pqlib_SetTime(hDevice, rtcTime, uncertainty, applyImmediately);
-		}
-		status = process_pqlib_error(&pqlibExample, pqlibStatus);
-	}
-
-	return status;
-}
 
 void SyncToDip(PQLIB_EXAMPLE *pExample, ADI_PQLIB_RESULT pqlibStatus)
 {

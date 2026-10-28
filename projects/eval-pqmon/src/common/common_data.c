@@ -227,13 +227,13 @@ struct pqm_init_para pqm_ip = {
 
 struct max_i2c_init_param i2c_extra = {.vssel = MXC_GPIO_VSSEL_VDDIOH}; // I2C
 
-struct no_os_i2c_init_param i2c_ip = {
+struct no_os_i2c_init_param rtc_i2c_ip = {
 	.device_id = 1,
-	.max_speed_hz = 400000,
-	.slave_address = 0x51,
+	.max_speed_hz = 200000,
+	.slave_address = 0x68,	/* MAX31343 RTC */
 	.platform_ops = &max_i2c_ops,
 	.extra = &i2c_extra
-}; // I2C Initialization Parameters
+}; // RTC I2C Initialization Parameters
 
 struct no_os_uart_init_param uart_ip_stdio = {
 	.device_id = 0,
