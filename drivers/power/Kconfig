@@ -54,6 +54,11 @@ config POWER_ADP20086
 	bool "Enable ADP20086 power controller driver"
 	default n
 
+config POWER_IIO_ADP20086
+	select POWER_ADP20086
+	bool "Enable ADP20086 IIO driver"
+	default n
+
 config POWER_LT3074
 	depends on I2C
 	bool "Enable LT3074 power driver"
