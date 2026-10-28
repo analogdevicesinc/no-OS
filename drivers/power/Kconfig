@@ -47,6 +47,18 @@ config POWER_IIO_ADP5055
 	bool "Enable ADP5055 IIO driver"
 	default n
 
+config POWER_ADP20086
+	depends on I2C
+	select GPIO
+	select IRQ
+	bool "Enable ADP20086 power controller driver"
+	default n
+
+config POWER_IIO_ADP20086
+	select POWER_ADP20086
+	bool "Enable ADP20086 IIO driver"
+	default n
+
 config POWER_LT3074
 	depends on I2C
 	bool "Enable LT3074 power driver"

@@ -17,6 +17,11 @@ no_os_sources_ifdef(CONFIG_POWER_ADP5055 ${CMAKE_CURRENT_SOURCE_DIR}/adp5055/adp
 no_os_sources_ifdef(CONFIG_POWER_IIO_ADP5055 ${CMAKE_CURRENT_SOURCE_DIR}/adp5055/iio_adp5055.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/adp5055)
 
+# adp20086
+no_os_sources_ifdef(CONFIG_POWER_ADP20086 ${CMAKE_CURRENT_SOURCE_DIR}/adp20086/adp20086.c)
+no_os_sources_ifdef(CONFIG_POWER_IIO_ADP20086 ${CMAKE_CURRENT_SOURCE_DIR}/adp20086/iio_adp20086.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/adp20086)
+
 # lt3074
 no_os_sources_ifdef(CONFIG_POWER_LT3074 ${CMAKE_CURRENT_SOURCE_DIR}/lt3074/lt3074.c)
 no_os_sources_ifdef(CONFIG_POWER_IIO_LT3074 ${CMAKE_CURRENT_SOURCE_DIR}/lt3074/iio_lt3074.c)
