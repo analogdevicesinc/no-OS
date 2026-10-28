@@ -67,16 +67,29 @@ void delay_us(unsigned int usec)
 }
 
 /**
- * @brief Read data from UART device. Blocking function.
+ * @brief Read the data received from the UART device, up to bytes_number.
+ * Does not wait for data.
  * @param desc - Instance of UART.
  * @param data - Pointer to buffer containing data.
  * @param bytes_number - Number of bytes to read.
- * @return positive number of received bytes in case of success, negative error code otherwise.
+ * @return number of received bytes, -EAGAIN if none was received.
  */
 static int32_t max_uart_read(struct no_os_uart_desc *desc, uint8_t *data,
 			     uint32_t bytes_number)
 {
-	return acm_read(data, bytes_number);
+	int avail;
+
+	/*
+	 * Asynchronous RX (required at init): return what was received.
+	 * acm_read() would block until bytes_number bytes arrive, which
+	 * stalls the caller for as long as the host keeps the port open
+	 * without sending.
+	 */
+	avail = acm_canread();
+	if (avail <= 0)
+		return -EAGAIN;
+
+	return acm_read(data, no_os_min((uint32_t)avail, bytes_number));
 }
 
 /**
@@ -106,7 +119,7 @@ static int32_t max_uart_read_nonblocking(struct no_os_uart_desc *desc,
 		uint8_t *data,
 		uint32_t bytes_number)
 {
-	return -ENOSYS;
+	return max_uart_read(desc, data, bytes_number);
 }
 
 /**
