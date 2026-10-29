@@ -10,6 +10,7 @@
 
 #include <errno.h>
 #include "capi_time.h"
+#include "maxim_capi_time.h"
 #include "mxc_delay.h"
 #include "mxc_sys.h"
 
@@ -70,10 +71,18 @@ int capi_uptime_impl(uint64_t *us)
 
 /** Platform-specific functions ***********************************************/
 
+/**
+ * @brief Advance the 1 ms system tick counter and service MXC_Delay()
+ */
+void max_capi_time_tick(void)
+{
+	MXC_DelayHandler();
+	_system_ticks++;
+}
+
 extern void SysTick_Handler(void);
 
 void SysTick_Handler(void)
 {
-	MXC_DelayHandler();
-	_system_ticks++;
+	max_capi_time_tick();
 }
