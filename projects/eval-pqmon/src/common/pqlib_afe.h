@@ -70,6 +70,36 @@ void afe_time_cycle_done(ADI_PQLIB_TIME time);
  */
 void afe_waveform_time_anchor(uint32_t *block, ADI_PQLIB_TIME *time);
 
+/* Energy totals since start-up or afe_energy_reset() */
+enum energy_total {
+	ENERGY_ACTIVE_IMPORT,	/* Wh, positive active energy */
+	ENERGY_ACTIVE_EXPORT,	/* Wh, negative active energy */
+	ENERGY_REACTIVE_IMPORT,	/* VARh, positive reactive energy */
+	ENERGY_REACTIVE_EXPORT,	/* VARh, negative reactive energy */
+	ENERGY_TOTAL_NUM
+};
+
+/**
+ * @details Energy total of one phase.
+ * @param type - which total
+ * @param phase - 0..2 = A..C
+ * @return Wh or VARh
+ */
+double afe_energy_total(enum energy_total type, int phase);
+
+/**
+ * @details Zero all energy totals and restart afe_energy_time(). The energy
+ *          window in progress is skipped: the totals start at the next one.
+ */
+void afe_energy_reset(void);
+
+/**
+ * @details Time the energy totals cover: the sum of the energy window
+ *          lengths (50 / 60 line cycles each at the measured frequency).
+ * @return seconds since start-up or the last afe_energy_reset()
+ */
+double afe_energy_time(void);
+
 /**
  * @details Check if AFE input is waiting in the queues.
  * @return true if get_afe_input() has an item to deliver

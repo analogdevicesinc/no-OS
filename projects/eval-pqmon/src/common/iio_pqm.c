@@ -508,6 +508,25 @@ int read_pqm_attr(void *device, char *buf, uint32_t len,
 			return snprintf(buf, len, "%" PRIu32 " %" PRId64,
 					block, t);
 		}
+		case LINE_FREQUENCY: {
+			/* IEC 61000-4-30 10 s value, mHz */
+			const ADI_PQLIB_OUTPUT *out = pqlibExample.output;
+
+			return snprintf(buf, len, "%.3f", out ?
+					out->frequency.frequency / 1000.0 :
+					0.0);
+		}
+		case LINE_FREQUENCY_CYCLE: {
+			/* last cycle: T = (PERIOD + 1) / (8 kHz * 2^16) */
+			uint32_t period = pqlibExample.inputCycle.PERIOD;
+
+			return snprintf(buf, len, "%.3f", period ?
+					524288000.0 / (period + 1.0) : 0.0);
+		}
+		case ENERGY_RESET:
+			return snprintf(buf, len, "0");
+		case ENERGY_TIME:
+			return snprintf(buf, len, "%.3f", afe_energy_time());
 		case CLEAR_EVENTS:
 			return snprintf(buf, len, "0");
 		case BOGUS_EVENT_COUNT:
@@ -838,6 +857,12 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
 				return -EINVAL;
 			pq_events_clear();
 			break;
+		case ENERGY_RESET:
+			configChanged = false;
+			if (value != 1)
+				return -EINVAL;
+			afe_energy_reset();
+			break;
 		case SYSTEM_TIME:
 			/* UTC ms does not fit a float: parse as an integer */
 			configChanged = false;
@@ -1021,9 +1046,26 @@ int write_ch_attr(void *device, char *buf, uint32_t len,
 	return -EINVAL;
 }
 
+/* AFE power register to W / VA / VAR, energy window to Wh / VAh / VARh */
+static float pe_power(int32_t raw)
+{
+	return convert_power_type(raw,
+				  pqlibExample.exampleConfig.voltageScale *
+				  pqlibExample.exampleConfig.currentScale);
+}
+
+static float pe_energy(int32_t raw)
+{
+	return convert_energy_type(raw,
+				   pqlibExample.exampleConfig.voltageScale *
+				   pqlibExample.exampleConfig.currentScale);
+}
+
 int read_ch_attr(void *device, char *buf, uint32_t len,
 		 const struct iio_ch_info *channel, intptr_t attr_id)
 {
+	const POWER_ENERGY_DATA *pe = &pqlibExample.powerEnergy;
+	int ch = channel->ch_num;
 	struct pqm_desc *desc;
 	char buffTmp[10];
 	int ret;
@@ -1177,6 +1219,23 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 					compute_power_factor(
 						pqlibExample.powerEnergy.fundActiveEnergyHi[channel->ch_num],
 						pqlibExample.powerEnergy.fundReactiveEnergyHi[channel->ch_num]));
+		case CHAN_REACTIVE_POWER:
+			return snprintf(buf, len, "%.4f", pe_power(
+						pe->reactivePower[ch]));
+		case CHAN_APPARENT_POWER:
+			return snprintf(buf, len, "%.4f", pe_power(
+						pe->apparentPower[ch]));
+		case CHAN_APPARENT_ENERGY:
+			return snprintf(buf, len, "%.6f", pe_energy(
+						pe->apparentEnergyHi[ch]));
+		case CHAN_ACTIVE_ENERGY_IMPORT:
+		case CHAN_ACTIVE_ENERGY_EXPORT:
+		case CHAN_REACTIVE_ENERGY_IMPORT:
+		case CHAN_REACTIVE_ENERGY_EXPORT:
+			/* the totals are in the same order as the IDs */
+			ret = attr_id - CHAN_ACTIVE_ENERGY_IMPORT;
+			return snprintf(buf, len, "%.6f",
+					afe_energy_total(ret, ch));
 
 		default:
 			return snprintf(buf, len, "%" PRIu32 "",
@@ -1497,6 +1556,41 @@ struct iio_attribute voltage_pqm_attributes[] = {
 		.name = "displacement_pf",
 		.show = read_ch_attr,
 		.priv = CHAN_DISPLACEMENT_PF,
+	},
+	{
+		.name = "reactive_power",
+		.show = read_ch_attr,
+		.priv = CHAN_REACTIVE_POWER,
+	},
+	{
+		.name = "apparent_power",
+		.show = read_ch_attr,
+		.priv = CHAN_APPARENT_POWER,
+	},
+	{
+		.name = "apparent_energy",
+		.show = read_ch_attr,
+		.priv = CHAN_APPARENT_ENERGY,
+	},
+	{
+		.name = "active_energy_import",
+		.show = read_ch_attr,
+		.priv = CHAN_ACTIVE_ENERGY_IMPORT,
+	},
+	{
+		.name = "active_energy_export",
+		.show = read_ch_attr,
+		.priv = CHAN_ACTIVE_ENERGY_EXPORT,
+	},
+	{
+		.name = "reactive_energy_import",
+		.show = read_ch_attr,
+		.priv = CHAN_REACTIVE_ENERGY_IMPORT,
+	},
+	{
+		.name = "reactive_energy_export",
+		.show = read_ch_attr,
+		.priv = CHAN_REACTIVE_ENERGY_EXPORT,
 	},
 
 	END_ATTRIBUTES_ARRAY,
@@ -1969,6 +2063,27 @@ struct iio_attribute global_pqm_attributes[] = {
 		.name = "waveform_time_anchor",
 		.show = read_pqm_attr,
 		.priv = WAVEFORM_TIME_ANCHOR,
+	},
+	{
+		.name = "frequency",
+		.show = read_pqm_attr,
+		.priv = LINE_FREQUENCY,
+	},
+	{
+		.name = "frequency_cycle",
+		.show = read_pqm_attr,
+		.priv = LINE_FREQUENCY_CYCLE,
+	},
+	{
+		.name = "energy_reset",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = ENERGY_RESET,
+	},
+	{
+		.name = "energy_time",
+		.show = read_pqm_attr,
+		.priv = ENERGY_TIME,
 	},
 	END_ATTRIBUTES_ARRAY,
 }; // global attributes for device

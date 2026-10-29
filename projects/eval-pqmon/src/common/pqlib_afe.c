@@ -18,6 +18,7 @@
 #include "no_os_delay.h"
 #include "afe_queue.h"
 #include "max32650.h"
+#include "pqlib_convert.h"
 #include <string.h>
 
 /* STATUS0 bits that drive the AFE IRQ (MASK0) */
@@ -48,6 +49,63 @@ static int64_t tickToTimeUs;
 static bool tickToTimeValid;
 static uint32_t anchorBlock;
 static ADI_PQLIB_TIME anchorMs;
+
+/*
+ * Energy import/export: the AFE energy registers hold the energy of the
+ * last ~1 s window only (EGY_LD_ACCUM), signed. Each window is added to
+ * the import (positive) or export (negative) total of its phase, in Wh /
+ * VARh, so a scale change between windows does not mix raw units.
+ */
+static double energyTotal[ENERGY_TOTAL_NUM][POWER_ENERGY_NUM_PHASES];
+/* time the totals cover [s]: the sum of the energy window lengths */
+static double energyTime;
+/* the window in progress at a reset started before it: skip it */
+static bool energySkipWindow;
+
+/*
+ * Length of one energy window: EGY_TIME + 1 = 100 / 120 zero crossings
+ * (EGY_TMR_MODE), i.e. 50 / 60 line cycles
+ */
+static double energy_window_s(void)
+{
+	uint32_t period = pqlibExample.inputCycle.PERIOD;
+	int cycles = pqlibExample.exampleConfig.nominalFrequency == 50 ?
+		     50 : 60;
+
+	if (!period)
+		return cycles /
+		       (double)pqlibExample.exampleConfig.nominalFrequency;
+
+	/* one cycle: (PERIOD + 1) / (8 kHz * 2^16) */
+	return cycles * (period + 1.0) / 524288000.0;
+}
+
+static void energy_totals_add(const POWER_ENERGY_DATA *d)
+{
+	float scale = pqlibExample.exampleConfig.voltageScale *
+		      pqlibExample.exampleConfig.currentScale;
+	double e;
+
+	if (energySkipWindow) {
+		energySkipWindow = false;
+		return;
+	}
+	energyTime += energy_window_s();
+
+	for (int i = 0; i < POWER_ENERGY_NUM_PHASES; i++) {
+		e = convert_energy_type(d->activeEnergyHi[i], scale);
+		if (e >= 0)
+			energyTotal[ENERGY_ACTIVE_IMPORT][i] += e;
+		else
+			energyTotal[ENERGY_ACTIVE_EXPORT][i] -= e;
+
+		e = convert_energy_type(d->reactiveEnergyHi[i], scale);
+		if (e >= 0)
+			energyTotal[ENERGY_REACTIVE_IMPORT][i] += e;
+		else
+			energyTotal[ENERGY_REACTIVE_EXPORT][i] -= e;
+	}
+}
 
 
 static uint64_t tick_us(void)
@@ -313,6 +371,27 @@ void afe_waveform_time_anchor(uint32_t *block, ADI_PQLIB_TIME *time)
 	*time = anchorMs;
 }
 
+double afe_energy_total(enum energy_total type, int phase)
+{
+	if (type >= ENERGY_TOTAL_NUM || phase < 0 ||
+	    phase >= POWER_ENERGY_NUM_PHASES)
+		return 0;
+
+	return energyTotal[type][phase];
+}
+
+void afe_energy_reset(void)
+{
+	memset(energyTotal, 0, sizeof(energyTotal));
+	energyTime = 0;
+	energySkipWindow = true;
+}
+
+double afe_energy_time(void)
+{
+	return energyTime;
+}
+
 int waveform_irq_init(void)
 {
 	int status;
@@ -441,6 +520,7 @@ int get_afe_input()
 		break;
 	case AFE_Q_ENERGY:
 		pqlibExample.powerEnergy = *afe_q_energy_front();
+		energy_totals_add(&pqlibExample.powerEnergy);
 		break;
 	default:
 		break;

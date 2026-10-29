@@ -627,6 +627,11 @@ int afe_read_power_energy(POWER_ENERGY_DATA *pData)
 	static const uint16_t fwatt_regs[] = {REG_AFWATT, REG_BFWATT, REG_CFWATT};
 	static const uint16_t fwatthr_hi_regs[] = {REG_AFWATTHR_HI, REG_BFWATTHR_HI, REG_CFWATTHR_HI};
 	static const uint16_t fvarhr_hi_regs[] = {REG_AFVARHR_HI, REG_BFVARHR_HI, REG_CFVARHR_HI};
+	static const uint16_t var_regs[] = {REG_AVAR, REG_BVAR, REG_CVAR};
+	static const uint16_t va_regs[] = {REG_AVA, REG_BVA, REG_CVA};
+	static const uint16_t vahr_hi_regs[] = {
+		REG_AVAHR_HI, REG_BVAHR_HI, REG_CVAHR_HI
+	};
 
 	for (int i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
 		status = afe_read_32bit_buff(watt_regs[i], 1,
@@ -651,6 +656,17 @@ int afe_read_power_energy(POWER_ENERGY_DATA *pData)
 	for (int i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
 		status = afe_read_32bit_buff(fvarhr_hi_regs[i], 1,
 					     (uint32_t *)&pData->fundReactiveEnergyHi[i]);
+	}
+	for (int i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
+		uint32_t *var = (uint32_t *)&pData->reactivePower[i];
+		uint32_t *va = (uint32_t *)&pData->apparentPower[i];
+		uint32_t *vahr = (uint32_t *)&pData->apparentEnergyHi[i];
+
+		status = afe_read_32bit_buff(var_regs[i], 1, var);
+		if (status == 0)
+			status = afe_read_32bit_buff(va_regs[i], 1, va);
+		if (status == 0)
+			status = afe_read_32bit_buff(vahr_hi_regs[i], 1, vahr);
 	}
 
 	return status;

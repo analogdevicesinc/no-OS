@@ -51,6 +51,9 @@ typedef struct power_energy_data {
 	int32_t fundActivePower[POWER_ENERGY_NUM_PHASES];
 	int32_t fundActiveEnergyHi[POWER_ENERGY_NUM_PHASES];
 	int32_t fundReactiveEnergyHi[POWER_ENERGY_NUM_PHASES];
+	int32_t reactivePower[POWER_ENERGY_NUM_PHASES];
+	int32_t apparentPower[POWER_ENERGY_NUM_PHASES];
+	int32_t apparentEnergyHi[POWER_ENERGY_NUM_PHASES];
 } POWER_ENERGY_DATA;
 
 /**

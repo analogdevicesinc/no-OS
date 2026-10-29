@@ -109,6 +109,12 @@
 #define RTC_STATUS                      75
 #define WAVEFORM_TIME_ANCHOR            76
 
+// Frequency and energy totals attributes
+#define LINE_FREQUENCY                  77
+#define LINE_FREQUENCY_CYCLE            78
+#define ENERGY_RESET                    79
+#define ENERGY_TIME                     80
+
 // Channel specific attributes
 #define CHAN_RMS                        0
 #define CHAN_ANGLE                      1
@@ -151,6 +157,13 @@
 #define CHAN_EVENT_AFFECTED             38
 #define CHAN_EVENT_ONSET_COUNT          39
 #define CHAN_EVENT_PENDING              40
+#define CHAN_REACTIVE_POWER             41
+#define CHAN_APPARENT_POWER             42
+#define CHAN_APPARENT_ENERGY            43
+#define CHAN_ACTIVE_ENERGY_IMPORT       44
+#define CHAN_ACTIVE_ENERGY_EXPORT       45
+#define CHAN_REACTIVE_ENERGY_IMPORT     46
+#define CHAN_REACTIVE_ENERGY_EXPORT     47
 
 #define RESAMPLED_WAVEFORM_FULL_SCALE   18196
 
