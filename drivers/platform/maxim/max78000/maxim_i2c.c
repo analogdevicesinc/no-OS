@@ -9,11 +9,13 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "i2c.h"
+#include "i2c_reva_regs.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
@@ -21,9 +23,17 @@
 #include "mxc_errors.h"
 
 #define I2C_MASTER_MODE	1
+/*
+ * Poll iterations for the bus to go idle: several ms at typical CPU clocks,
+ * while a STOP condition takes about 10 us at 100 kHz.
+ */
+#define I2C_BUS_IDLE_TIMEOUT	100000
 
 /** Used to know how many instances are created */
 static uint32_t nb_created_desc[MXC_I2C_INSTANCES];
+
+/** Set when the last transaction on a bus ended with a repeated START */
+static bool restart_pending[MXC_I2C_INSTANCES];
 
 /**
  * @brief I2C0 interrupt handler.
@@ -74,6 +84,42 @@ static int32_t _max_i2c_pins_config(uint32_t device_id, mxc_gpio_vssel_t vssel)
 
 	i2c_pins.vssel = vssel;
 	MXC_GPIO_Config(&i2c_pins);
+
+	return 0;
+}
+
+/**
+ * @brief Wait for the bus to be released by the previous transaction.
+ *
+ * MXC_I2C_MasterTransaction() can return while the STOP condition is still
+ * being generated (STATUS.BUSY set). A START issued in that window is lost by
+ * MSDK v2024_10, leaving the transaction polling forever, and rejected with
+ * E_BUSY by later MSDK releases (fixed in analogdevicesinc/msdk#1640).
+ *
+ * After a transaction that ended with a repeated START this controller still
+ * holds the bus on purpose, so there is nothing to wait for. Otherwise wait
+ * for both STATUS.BUSY and STATUS.MST_BUSY to clear: MST_BUSY is also still
+ * set while the STOP is being generated, so it cannot tell the two cases
+ * apart on its own.
+ *
+ * @param device_id - I2C controller index.
+ * @param i2c_regs - I2C controller registers.
+ * @return 0 when the bus is available, -ETIMEDOUT otherwise.
+ */
+static int32_t _max_i2c_wait_bus_idle(uint32_t device_id,
+				      mxc_i2c_regs_t *i2c_regs)
+{
+	mxc_i2c_reva_regs_t *i2c = (mxc_i2c_reva_regs_t *)i2c_regs;
+	uint32_t busy = MXC_F_I2C_REVA_STATUS_BUSY | MXC_F_I2C_REVA_STATUS_MST_BUSY;
+	uint32_t timeout = I2C_BUS_IDLE_TIMEOUT;
+
+	if (restart_pending[device_id])
+		return 0;
+
+	while (i2c->status & busy) {
+		if (!--timeout)
+			return -ETIMEDOUT;
+	}
 
 	return 0;
 }
@@ -206,6 +252,7 @@ static int32_t max_i2c_write(struct no_os_i2c_desc *desc,
 {
 	mxc_i2c_regs_t *i2c_regs;
 	mxc_i2c_req_t req;
+	int32_t ret;
 	struct max_i2c_extra *max_i2c_desc;
 	void *ptr;
 
@@ -239,7 +286,14 @@ static int32_t max_i2c_write(struct no_os_i2c_desc *desc,
 	req.rx_buf = data;
 	req.restart = 0;
 
-	return MXC_I2C_MasterTransaction(&req);
+	ret = _max_i2c_wait_bus_idle(desc->device_id, i2c_regs);
+	if (ret)
+		return ret;
+
+	ret = MXC_I2C_MasterTransaction(&req);
+	restart_pending[desc->device_id] = false;
+
+	return ret;
 }
 
 /**
@@ -282,7 +336,10 @@ static int32_t max_i2c_read(struct no_os_i2c_desc *desc,
 		req.tx_buf = max_i2c_desc->prologue_data;
 	}
 
-	ret = MXC_I2C_MasterTransaction(&req);
+	ret = _max_i2c_wait_bus_idle(desc->device_id, i2c_regs);
+	if (!ret)
+		ret = MXC_I2C_MasterTransaction(&req);
+	restart_pending[desc->device_id] = !ret && req.restart;
 
 	if (max_i2c_desc->prologue_size != 0) {
 		no_os_free(max_i2c_desc->prologue_data);
