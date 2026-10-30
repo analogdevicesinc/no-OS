@@ -50,13 +50,26 @@ The multiplexer supports 4 channels (S1-S4) plus an "all off" state using the fo
 * ``ADG2404_S3``: Channel S3 selected (A1=1, A0=0)
 * ``ADG2404_S4``: Channel S4 selected (A1=1, A0=1)
 
+Device Selection
+----------------
+
+The part in use is selected through the ``id`` field of
+``struct adg2404_init_param``:
+
+* ``ID_ADG2404``
+* ``ID_ADG6404``
+
+The device structure exposes the matching entry of the chip information table
+as ``dev->chip_info``, which carries the part name.
+
 API Functions
 -------------
 
 **Initialization**
   ``int adg2404_init(struct adg2404_dev **device, struct adg2404_init_param *init_param)``
-  
-  Initialize the device and configure GPIO pins.
+
+  Initialize the device and configure GPIO pins. The ``id`` field selects the
+  part; passing an out-of-range value returns ``-EINVAL``.
 
 **Channel Selection**
   ``int adg2404_select_channel(struct adg2404_dev *dev, enum adg2404_channel channel)``
@@ -81,6 +94,7 @@ Usage Example
 
    struct adg2404_dev *dev;
    struct adg2404_init_param init_param = {
+       .id = ID_ADG2404,
        .gpio_a0 = { /* A0 GPIO configuration */ },
        .gpio_a1 = { /* A1 GPIO configuration */ },
        .gpio_en = { /* EN GPIO configuration */ },
