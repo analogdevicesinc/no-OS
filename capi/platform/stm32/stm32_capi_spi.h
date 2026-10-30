@@ -34,8 +34,6 @@ struct stm32_spi_extra_config {
 	uint32_t rxdma_ch_id;
 	/** TX DMA Channel ID */
 	uint32_t txdma_ch_id;
-	/** SPI interrupt number */
-	uint32_t irq_num;
 #ifdef HAL_TIM_MODULE_ENABLED
 	/** CS timer handle for PWM-based CS control */
 	struct capi_timer_handle *cs_timer;
