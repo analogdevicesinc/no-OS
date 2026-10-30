@@ -198,8 +198,11 @@ struct capi_irq_config irq_config = {
 #ifdef SPI_OPS
 /**
  * @brief Platform-specific extra data for the SPI controller.
+ *
+ * Not static: platform SPI DMA bring-up (e.g. STM32 spi_dma_platform_init())
+ * patches .dma_handle here at runtime to arm the DMA transfer path.
  */
-static SPI_EXTRA_TYPE spi_extra = SPI_EXTRA_INIT;
+SPI_EXTRA_TYPE spi_extra = SPI_EXTRA_INIT;
 
 /**
  * @brief CAPI configuration for the SPI controller.
