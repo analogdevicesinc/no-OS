@@ -119,6 +119,10 @@ void platform_gpio_irq_disarm(void);
  */
 extern const struct capi_spi_config spi_controller_config;
 /**
+ * @brief Platform-specific extra data backing spi_controller_config.
+ */
+extern SPI_EXTRA_TYPE spi_extra;
+/**
  * @brief CAPI SPI device descriptor for the external loopback test.
  */
 extern struct capi_spi_device spi_dev;

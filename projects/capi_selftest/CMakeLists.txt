@@ -12,11 +12,7 @@ if(PLATFORM STREQUAL "stm32" AND CONFIG_CAPI_I2C)
 	)
 endif()
 
-# SPI DMA bring-up hook. The file is internally guarded by
-# #ifdef SPI_DMA_PLATFORM_INIT, so it compiles to nothing on boards whose
-# parameters.h leaves the SPI DMA path disabled; it provides
-# spi_dma_platform_init() when that macro is defined (see test_spi.c ASYNC_DMA).
-if(PLATFORM STREQUAL "stm32" AND CONFIG_CAPI_SPI)
+if(PLATFORM STREQUAL "stm32" AND CONFIG_CAPI_DMA)
 	target_sources(capi_selftest PRIVATE
 		${CMAKE_CURRENT_SOURCE_DIR}/src/platform/stm32/spi_dma_platform_init.c
 	)
