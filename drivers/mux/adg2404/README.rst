@@ -1,20 +1,22 @@
-ADG2404/ADG6404 Driver
-======================
+ADG2404/ADG6404/ADG2704 Driver
+==============================
 
 Supported Devices
 -----------------
 
 * `ADG2404 <https://www.analog.com/adg2404>`_
 * `ADG6404 <https://www.analog.com/adg6404>`_
+* `ADG2704 <https://www.analog.com/adg2704>`_
 
 Overview
 --------
 
-The ADG2404/ADG6404 are low voltage, CMOS analog multiplexers. This driver provides
-control over the multiplexer channel selection and enable/disable functionality
-for both device variants.
+The ADG2404/ADG6404/ADG2704 are CMOS analog multiplexers. All are 4:1
+single-ended multiplexers sharing an identical control interface (A0, A1, EN).
+This driver provides control over the multiplexer channel selection and
+enable/disable functionality for all device variants.
 
-Both devices feature:
+ADG2404/ADG6404 features:
 
 * 4:1 single-ended multiplexer
 * 0.62Ω on-resistance
@@ -29,6 +31,12 @@ Both devices feature:
 **ADG6404 specifications:**
 * ±20V dual supply or +36V single supply
 * Higher voltage capability for demanding applications
+
+**ADG2704 specifications:**
+* ±1.08V to ±2.75V dual supply or +1.08V to +5.5V single supply
+* 9.1Ω on-resistance
+* Ultra-low leakage, ±0.3pA typical at 25°C
+* 1.8V and 3V JEDEC compliant logic
 
 Hardware Configuration
 ----------------------
@@ -58,6 +66,7 @@ The part in use is selected through the ``id`` field of
 
 * ``ID_ADG2404``
 * ``ID_ADG6404``
+* ``ID_ADG2704``
 
 The device structure exposes the matching entry of the chip information table
 as ``dev->chip_info``, which carries the part name.
