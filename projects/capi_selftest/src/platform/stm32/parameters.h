@@ -14,8 +14,12 @@
 #include "stm32_capi_gpio.h"
 #include "stm32_capi_spi.h"
 #include "stm32_capi_irq.h"
+#ifdef HAL_TIM_MODULE_ENABLED
 #include "stm32_capi_timer.h"
+#endif
+#ifdef HAL_I2C_MODULE_ENABLED
 #include "stm32_capi_i2c.h"
+#endif
 #include "stm32_capi_dma.h"
 #include "capi_uart.h"
 
@@ -77,9 +81,24 @@ extern SPI_HandleTypeDef hspi1;
 #define GPIO_OUTPUT_PIN_NUMBERS	{ 0U }
 #define GPIO_INPUT_PIN_NUMBERS	{ 0U }
 
-/* SPI async delivery mode selection. */
-#define SPI_HAS_IRQ  1
-#define SPI_HAS_DMA  0
+/*
+ * Run BOTH async delivery modes in a single image. SPI_HAS_IRQ and SPI_HAS_DMA
+ * are independent skip flags, so enabling both un-gates the full subtest table,
+ * whose IRQ cases (ASYNC_IRQ/MANUAL_ISR/ABORT_IRQ) are listed before the DMA
+ * cases (ASYNC_DMA/ABORT_DMA). The delivery mode is decided at runtime by
+ * stm32_capi_spi_use_dma(), which only engages DMA once spi_extra.dma_handle is
+ * non-NULL: it boots NULL (below) and is armed by spi_dma_platform_init(), which
+ * fires inside ASYNC_DMA via SPI_DMA_PLATFORM_INIT(). So every IRQ case runs on
+ * the IT path first, then DMA is armed and the DMA cases run - "IRQ first, then
+ * DMA" in one flash. This deliberately deviates from the project's usual
+ * one-mode-per-build convention (arming is one-way, so a single run is assumed).
+ */
+#define SPI_HAS_IRQ		1
+#if defined(STM32F7)
+#define SPI_HAS_DMA		1
+#else
+#define SPI_HAS_DMA		0
+#endif
 
 /* IRQ controller — NVIC, no base address and no extra config needed. */
 #define IRQ_CTRL_IDENTIFIER		0U
@@ -93,17 +112,88 @@ extern SPI_HandleTypeDef hspi1;
 #define SPI_IDENTIFIER		((uint64_t)(uintptr_t)SPI1)
 #define SPI_OPS			&stm32_capi_spi_ops
 #define SPI_EXTRA_TYPE		struct stm32_spi_extra_config
+
+#if defined(STM32F7)
+/*
+ * SPI1 DMA request mapping on this part (RM0410): RX is DMA2 stream 2 channel 3,
+ * TX is DMA2 stream 3 channel 3 - the same streams the SDP-K1 (F469) mapping
+ * uses. Both channels need an NVIC line because the SPI DMA path reports
+ * completion from the DMA interrupt; the lines are listed per channel id in the
+ * DMA controller's chan_irq_nums table further down. The channel IDs index that
+ * shared controller; id 0 is left to the memory-to-memory suite so they never
+ * collide.
+ */
+#define SPI_RXDMA_CH_ID		1U
+#define SPI_TXDMA_CH_ID		2U
+#define SPI_RXDMA_IRQN		DMA2_Stream2_IRQn
+#define SPI_TXDMA_IRQN		DMA2_Stream3_IRQn
+#define SPI_RXDMA_IRQ_HANDLER	DMA2_Stream2_IRQHandler
+#define SPI_TXDMA_IRQ_HANDLER	DMA2_Stream3_IRQHandler
+#define SPI_RXDMA_EXTRA_INIT	{ .hdma = &(DMA_HandleTypeDef){ \
+					.Instance = DMA2_Stream2 }, \
+				  .ch_num = DMA_CHANNEL_3, \
+				  .mem_increment = true, \
+				  .per_increment = false, \
+				  .mem_data_alignment = CAPI_DMA_DATA_ALIGN_BYTE, \
+				  .per_data_alignment = CAPI_DMA_DATA_ALIGN_BYTE, \
+				  .dma_mode = CAPI_DMA_NORMAL_MODE, \
+				  .trig = NULL }
+#define SPI_TXDMA_EXTRA_INIT	{ .hdma = &(DMA_HandleTypeDef){ \
+					.Instance = DMA2_Stream3 }, \
+				  .ch_num = DMA_CHANNEL_3, \
+				  .mem_increment = true, \
+				  .per_increment = false, \
+				  .mem_data_alignment = CAPI_DMA_DATA_ALIGN_BYTE, \
+				  .per_data_alignment = CAPI_DMA_DATA_ALIGN_BYTE, \
+				  .dma_mode = CAPI_DMA_NORMAL_MODE, \
+				  .trig = NULL }
+#endif /* STM32F7 */
+
+#if defined(STM32F7)
+/*
+ * dma_handle stays NULL at boot and is patched in at runtime by
+ * spi_dma_platform_init(); until then use_dma() returns false and the async
+ * cases take the IT path. dma_min_len = 1 defeats the driver's length heuristic
+ * so the short transfers the DMA cases use really do go down the DMA path once
+ * it is armed. irq_num = SPI1_IRQn keeps the IT path's completion vector wired
+ * for the IRQ cases that run first.
+ */
 #define SPI_EXTRA_INIT		{ .hspi = &hspi1, \
 				  .get_input_clock = NULL, \
 				  .alternate = 0U, \
 				  .dma_handle = NULL, \
-				  .rxdma_ch_id = 0U, \
-				  .txdma_ch_id = 0U }
+				  .rxdma_ch_id = SPI_RXDMA_CH_ID, \
+				  .txdma_ch_id = SPI_TXDMA_CH_ID, \
+				  .rxdma_extra = &(struct stm32_dma_chan_extra_config) \
+						 SPI_RXDMA_EXTRA_INIT, \
+				  .txdma_extra = &(struct stm32_dma_chan_extra_config) \
+						 SPI_TXDMA_EXTRA_INIT, \
+				  .dma_min_len = 1U, \
+				  .irq_num = SPI1_IRQn }
+#else
+#define SPI_EXTRA_INIT		{ .hspi = &hspi1, \
+				  .get_input_clock = NULL, \
+				  .alternate = 0U, \
+				  .irq_num = SPI1_IRQn }
+#endif /* STM32F7 */
+
 #define SPI_CLK_FREQ		96000000U
+
+/*
+ * SPI DMA platform hook, implemented in spi_dma_platform_init.c. Defining this
+ * pulls that file into the build and is what arms spi_extra.dma_handle; the SPI
+ * suite invokes it from the ASYNC_DMA case.
+ */
+#if defined(STM32F7)
+int spi_dma_platform_init(void);
+#define SPI_DMA_PLATFORM_INIT()	spi_dma_platform_init()
+#endif
 
 #define SPI_DEVICE_NATIVE_CS	0x01U
 #define SPI_DEVICE_MODE		CAPI_SPI_MODE_0
 #define SPI_DEVICE_SPEED_HZ	1000000U
+
+#if defined(STM32F7)
 
 /*
  * TIM2 on NUCLEO-F767ZI: 32-bit general-purpose timer on APB1.
@@ -170,14 +260,16 @@ void i2c_platform_set_target_handle(struct capi_i2c_controller_handle *handle);
 #define I2C_PLATFORM_SET_TARGET(h)	i2c_platform_set_target_handle(h)
 
 /*
- * DMA2 on NUCLEO-F767ZI: only DMA2 supports memory-to-memory transfers.
- * Stream 0, channel 0 is used (no peripheral trigger needed for mem-to-mem).
- * Polling mode (irq_num=0): the driver blocks in xfer_start until the
- * transfer completes — no interrupt infrastructure required.
+ * DMA2 on NUCLEO-F767ZI: only DMA2 supports memory-to-memory transfers, and it
+ * is also the controller behind SPI1, so a single controller is shared:
+ * stream 0 channel 0 (id 0) serves the memory-to-memory suite, ids 1 and 2
+ * serve SPI (streams 2 and 3). No collision: the three use distinct streams.
+ * Polling mode (irq_num=0) for the mem-to-mem channel: the driver blocks in
+ * xfer_start until the transfer completes — no interrupt infrastructure needed.
  */
 #define DMA_OPS			&stm32_capi_dma_ops
 #define DMA_IDENTIFIER		0U
-#define DMA_NUM_CHANS		1U
+#define DMA_NUM_CHANS		3U
 #define DMA_XFER_EXTRA_TYPE	struct stm32_dma_chan_extra_config
 #define DMA_XFER_EXTRA_INIT	{ .hdma = &(DMA_HandleTypeDef){ \
 					.Instance = DMA2_Stream0 }, \
@@ -189,6 +281,17 @@ void i2c_platform_set_target_handle(struct capi_i2c_controller_handle *handle);
 				  .dma_mode = CAPI_DMA_NORMAL_MODE, \
 				  .trig = NULL }
 #define DMA_PLATFORM_INIT()	__HAL_RCC_DMA2_CLK_ENABLE()
+
+/*
+ * NVIC line per channel id (read by capi_dma_init_chan()): id 0 stays 0 so the
+ * memory-to-memory channel polls; ids 1 and 2 are the SPI RX/TX streams, which
+ * must complete through their interrupt.
+ */
+#define DMA_CONFIG_EXTRA	&(struct stm32_dma_extra_config){ \
+					.chan_irq_nums = (const uint32_t[DMA_NUM_CHANS]){ \
+						[0] = 0U, \
+						[SPI_RXDMA_CH_ID] = SPI_RXDMA_IRQN, \
+						[SPI_TXDMA_CH_ID] = SPI_TXDMA_IRQN } }
 #define DMA_XFER_SIZE		64U
 
 /*
@@ -201,5 +304,7 @@ void i2c_platform_set_target_handle(struct capi_i2c_controller_handle *handle);
 
 /* Largest buffer the DMA sizes sweep / increment cases allocate (bytes). */
 #define DMA_MAX_XFER_SIZE	256U
+
+#endif /* STM32F7 */
 
 #endif /* PARAMETERS_H_ */
