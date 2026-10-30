@@ -1,0 +1,30 @@
+menu "LTC4284 Configuration"
+
+choice LTC4284_EXAMPLE
+	prompt "Example variant"
+	default LTC4284_BASIC_EXAMPLE
+
+config LTC4284_BASIC_EXAMPLE
+	bool "Basic monitoring example"
+	help
+	  Continuously monitors LTC4284 telemetry (VIN, IIN, VOUT, power,
+	  energy, temperature) and decodes fault bits.
+
+config LTC4284_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  Demonstrates IIO integration with LTC4284 telemetry. Requires
+	  CONFIG_IIO=y.
+
+config LTC4284_OVERCURRENT_EXAMPLE
+	bool "Overcurrent protection example"
+	help
+	  Demonstrates overcurrent protection with fault decode, retry
+	  narration, and configurable protection parameters. Shows the
+	  OC retry loop and reports fault register values with
+	  human-readable descriptions.
+
+endchoice
+
+endmenu
