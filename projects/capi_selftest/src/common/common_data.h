@@ -110,6 +110,11 @@ extern const struct capi_spi_config spi_controller_config;
  * @brief CAPI SPI device descriptor for the external loopback test.
  */
 extern struct capi_spi_device spi_dev;
+/**
+ * @brief Platform SPI extra config, exposed so platform SPI DMA bring-up can
+ *	  patch .dma_handle at runtime (see STM32 spi_dma_platform_init()).
+ */
+extern SPI_EXTRA_TYPE spi_extra;
 #endif /* SPI_OPS */
 
 #ifdef IRQ_CTRL_IDENTIFIER
