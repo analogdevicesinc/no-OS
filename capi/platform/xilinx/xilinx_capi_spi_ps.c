@@ -40,7 +40,7 @@ static int capi_spi_ps_deinit(struct capi_spi_controller_handle *handle);
 static int capi_spi_ps_transceive(struct capi_spi_device *device,
 				  struct capi_spi_transfer *transfer);
 static int capi_spi_ps_transceive_async(struct capi_spi_device *device,
-					struct capi_spi_transfer *transfer, int timeout);
+					struct capi_spi_transfer *transfer);
 static int capi_spi_ps_read_command(struct capi_spi_device *device,
 				    struct capi_spi_transfer *transfer);
 static int capi_spi_ps_read_command_async(struct capi_spi_device *device,
@@ -669,7 +669,7 @@ static int capi_spi_ps_transceive(struct capi_spi_device *device,
  * @return 0 on success, negative errno on failure.
  */
 static int capi_spi_ps_transceive_async(struct capi_spi_device *device,
-					struct capi_spi_transfer *transfer, int timeout)
+					struct capi_spi_transfer *transfer)
 {
 	if (device == NULL || device->controller == NULL || transfer == NULL)
 		return -EINVAL;
@@ -677,8 +677,6 @@ static int capi_spi_ps_transceive_async(struct capi_spi_device *device,
 	int ret = ps_validate_transfer(device, transfer, true, false);
 	if (ret != 0)
 		return ret;
-	if (timeout != 0)
-		return -ENOTSUP;
 
 	struct capi_spi_xilinx_handle *xh = device->controller->priv;
 	if (!xh->use_irq)
