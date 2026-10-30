@@ -22,6 +22,120 @@
 NO_OS_DECLARE_CRC8_TABLE(ad413x_crc8);
 uint32_t timeout = 0xFFFFFF;
 
+/* Pin mapping for AIN0..AIN7, VBIAS_0..VBIAS_7 */
+static const uint8_t ad413x_4_pin_map[] = {
+	0x00, 0x01, 0x04, 0x05, 0x0A, 0x0B, 0x0E, 0x0F,
+};
+
+/* Pin mapping for AIN0..AIN15, VBIAS_0..VBIAS_15 */
+static const uint8_t ad413x_8_pin_map[] = {
+	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+	0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+};
+
+static const struct ad413x_chip_info ad413x_chip_info_tbl[] = {
+	[AD4129_4] = {
+		.name = "ad4129-4",
+		.id = 0x04,
+		.resolution = 16,
+		.max_analog_pins = 8,
+		.has_fifo = true,
+		.pin_map = ad413x_4_pin_map,
+	},
+	[AD4129_8] = {
+		.name = "ad4129-8",
+		.id = 0x04,
+		.resolution = 16,
+		.max_analog_pins = 16,
+		.has_fifo = true,
+		.pin_map = ad413x_8_pin_map,
+	},
+	[AD4130_4] = {
+		.name = "ad4130-4",
+		.id = 0x04,
+		.resolution = 24,
+		.max_analog_pins = 8,
+		.has_fifo = true,
+		.pin_map = ad413x_4_pin_map,
+	},
+	[AD4130_8] = {
+		.name = "ad4130-8",
+		.id = 0x04,
+		.resolution = 24,
+		.max_analog_pins = 16,
+		.has_fifo = true,
+		.pin_map = ad413x_8_pin_map,
+	},
+	[AD4131_4] = {
+		.name = "ad4131-4",
+		.id = 0x04,
+		.resolution = 16,
+		.max_analog_pins = 8,
+		.pin_map = ad413x_4_pin_map,
+	},
+	[AD4131_8] = {
+		.name = "ad4131-8",
+		.id = 0x04,
+		.resolution = 16,
+		.max_analog_pins = 16,
+		.pin_map = ad413x_8_pin_map,
+	},
+};
+
+/***************************************************************************//**
+ * Get the transfer size of a register for the current device.
+ *
+ * @param dev      - The device structure.
+ * @param reg_addr - The register address.
+ *
+ * @return Register size in bytes, negative error code otherwise.
+*******************************************************************************/
+static int ad413x_get_reg_size(struct ad413x_dev *dev, uint32_t reg_addr)
+{
+	uint8_t addr = AD413X_ADDR(reg_addr);
+
+	if (!dev->chip_info->has_fifo &&
+	    addr >= AD413X_ADDR(AD413X_REG_FIFO_CTRL))
+		return -EINVAL;
+
+	/* DATA, OFFSET, GAIN and FIFO_DATA are 16-bit wide on 16-bit parts */
+	if (dev->chip_info->resolution == 16 &&
+	    (addr == AD413X_ADDR(AD413X_REG_DATA) ||
+	     (addr >= AD413X_ADDR(AD413X_REG_OFFSET(0)) &&
+	      addr <= AD413X_ADDR(AD413X_REG_GAIN(7))) ||
+	     addr == AD413X_ADDR(AD413X_REG_FIFO_DATA)))
+		return 2;
+
+	return AD413X_TRANSF_LEN(reg_addr);
+}
+
+/***************************************************************************//**
+ * Translate an ADC input to the corresponding register field value.
+ *
+ * @param dev   - The device structure.
+ * @param input - The ADC input.
+ * @param val   - The register field value.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+*******************************************************************************/
+static int ad413x_translate_input(struct ad413x_dev *dev,
+				  enum ad413x_input input, uint8_t *val)
+{
+	if (input < dev->chip_info->max_analog_pins) {
+		*val = dev->chip_info->pin_map[input];
+		return 0;
+	}
+
+	/* Analog input pin not available on this device */
+	if (input < AD413X_TEMP)
+		return -EINVAL;
+
+	/* Internal inputs are passed through unchanged */
+	*val = input;
+
+	return 0;
+}
+
 /***************************************************************************//**
  * SPI internal register write to device using a mask.
  *
@@ -411,10 +525,15 @@ int32_t ad413x_ch_exc_input(struct ad413x_dev *dev, uint8_t ch_nb,
 	if (ch_nb >= NO_OS_ARRAY_SIZE(dev->ch))
 		return -EINVAL;
 
+	/* Excitation currents can only be routed to analog input pins */
+	if (iout0_exc_inp >= dev->chip_info->max_analog_pins ||
+	    iout1_exc_inp >= dev->chip_info->max_analog_pins)
+		return -EINVAL;
+
 	ret = ad413x_reg_write_msk(dev,
 				   AD413X_REG_CHN(ch_nb),
-				   AD413X_I_OUT0_CH_M(iout0_exc_inp) |
-				   AD413X_I_OUT1_CH_M(iout1_exc_inp),
+				   AD413X_I_OUT0_CH_M(dev->chip_info->pin_map[iout0_exc_inp]) |
+				   AD413X_I_OUT1_CH_M(dev->chip_info->pin_map[iout1_exc_inp]),
 				   AD413X_I_OUT_CH_MSK);
 	if (ret)
 		return ret;
@@ -510,17 +629,27 @@ int32_t ad413x_adc_bipolar(struct ad413x_dev *dev, uint8_t enable)
  * Set output VBIAS on analog inputs.
  *
  * @param dev  		- The device structure.
- * @param v_bias_val 	- V_BIAS control register value
+ * @param v_bias_val 	- Bitmask of the VBIAS pins to enable, bit n
+ * 			  corresponding to VBIAS_n of the device.
  *
  * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad413x_set_v_bias(struct ad413x_dev *dev, uint16_t v_bias_val)
 {
 	int32_t ret;
+	uint32_t reg_val = 0;
+	uint8_t i;
+
+	if (v_bias_val & ~NO_OS_GENMASK(dev->chip_info->max_analog_pins - 1, 0))
+		return -EINVAL;
+
+	for (i = 0; i < dev->chip_info->max_analog_pins; i++)
+		if (v_bias_val & NO_OS_BIT(i))
+			reg_val |= NO_OS_BIT(dev->chip_info->pin_map[i]);
 
 	ret = ad413x_reg_write(dev,
 			       AD413X_REG_VBIAS_CTRL,
-			       v_bias_val);
+			       reg_val);
 	if (ret)
 		return ret;
 
@@ -634,8 +763,13 @@ int32_t ad413x_reg_write(struct ad413x_dev *dev,
 			 uint32_t reg_data)
 {
 	uint8_t buf[5];
+	uint8_t data_size;
+	int ret;
 
-	uint8_t data_size = AD413X_TRANSF_LEN(reg_addr);
+	ret = ad413x_get_reg_size(dev, reg_addr);
+	if (ret < 0)
+		return ret;
+	data_size = ret;
 
 	buf[0] = AD413X_CMD_WR_COM_REG(reg_addr);
 
@@ -684,8 +818,13 @@ int32_t ad413x_reg_read(struct ad413x_dev *dev,
 	uint8_t buf[] = {0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA};
 	uint32_t data;
 	uint8_t crc;
+	uint8_t data_size;
+	int size;
 
-	uint8_t data_size = AD413X_TRANSF_LEN(reg_addr);
+	size = ad413x_get_reg_size(dev, reg_addr);
+	if (size < 0)
+		return size;
+	data_size = size;
 
 	buf[0] = AD413X_CMD_RD_COM_REG(reg_addr);
 
@@ -894,8 +1033,12 @@ int32_t ad413x_init(struct ad413x_dev **device,
 {
 	struct ad413x_dev *dev;
 	uint32_t reg_data;
+	uint8_t ain;
 	int32_t ret;
 	int32_t i;
+
+	if (init_param.chip_id >= NO_OS_ARRAY_SIZE(ad413x_chip_info_tbl))
+		return -EINVAL;
 
 	no_os_crc8_populate_msb(ad413x_crc8, AD413X_CRC8_POLY);
 
@@ -904,6 +1047,7 @@ int32_t ad413x_init(struct ad413x_dev **device,
 		return -1;
 
 	dev->chip_id = init_param.chip_id;
+	dev->chip_info = &ad413x_chip_info_tbl[init_param.chip_id];
 	dev->spi_crc_en = 0;
 
 	/* SPI */
@@ -943,13 +1087,8 @@ int32_t ad413x_init(struct ad413x_dev **device,
 	if (ret)
 		goto err_gpio;
 
-	switch (dev->chip_id) {
-	case AD4130_8:
-		if (reg_data != AD4130_8) {
-			goto err_gpio;
-		}
-		break;
-	default:
+	if (reg_data != dev->chip_info->id) {
+		ret = -ENODEV;
 		goto err_gpio;
 	}
 
@@ -980,17 +1119,25 @@ int32_t ad413x_init(struct ad413x_dev **device,
 		if (ret)
 			goto err_gpio;
 
+		ret = ad413x_translate_input(dev, init_param.ch[i].ain_p, &ain);
+		if (ret)
+			goto err_gpio;
+
 		ret = ad413x_reg_write_msk(dev,
 					   AD413X_REG_CHN(i),
-					   AD413X_AINP_M(init_param.ch[i].ain_p),
+					   AD413X_AINP_M(ain),
 					   AD413X_AINP_M(0xFF));
 		if (ret)
 			goto err_gpio;
 		dev->ch[i].ain_p = init_param.ch[i].ain_p;
 
+		ret = ad413x_translate_input(dev, init_param.ch[i].ain_m, &ain);
+		if (ret)
+			goto err_gpio;
+
 		ret = ad413x_reg_write_msk(dev,
 					   AD413X_REG_CHN(i),
-					   AD413X_AINM_M(init_param.ch[i].ain_m),
+					   AD413X_AINM_M(ain),
 					   AD413X_AINM_M(0xFF));
 		if (ret)
 			goto err_gpio;
@@ -1036,7 +1183,7 @@ int32_t ad413x_init(struct ad413x_dev **device,
 
 	*device = dev;
 
-	pr_info("AD413X successfully initialized\n");
+	pr_info("%s successfully initialized\n", dev->chip_info->name);
 	return 0;
 
 err_gpio:

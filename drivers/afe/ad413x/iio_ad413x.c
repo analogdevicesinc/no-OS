@@ -12,13 +12,22 @@
 #include "no_os_alloc.h"
 #include "ad413x.h"
 
-struct scan_type ad413x_iio_scan_type = {
-	.sign = 'u',
-	.realbits = 24,
-	.storagebits = 32,
-	.shift = 0,
-	.is_big_endian = true
+/* 2.5V unipolar, 1.25V unipolar, 2.5V bipolar, 1.25V bipolar */
+static const char *const ad413x_iio_scale_24bit[] = {
+	"0.000149011", "0.000074505", "0.000298023", "0.000149011"
 };
+
+static const char *const ad413x_iio_scale_16bit[] = {
+	"0.038147554", "0.019073777", "0.076293945", "0.038146972"
+};
+
+static const char *const *ad413x_iio_get_scale_tbl(struct ad413x_dev *dev)
+{
+	if (dev->chip_info->resolution == 16)
+		return ad413x_iio_scale_16bit;
+
+	return ad413x_iio_scale_24bit;
+}
 
 static int _ad413x_read_register(void *device, uint32_t reg,
 				 uint32_t *readval)
@@ -171,7 +180,7 @@ static int ad413x_iio_read_offset(void *device, char *buf, uint32_t len,
 		return ret;
 
 	if (readval & AD413X_ADC_BIPOLAR)
-		value = -0x800000;
+		value = -(int32_t)NO_OS_BIT(dev->chip_info->resolution - 1);
 	else
 		value = 0;
 
@@ -207,9 +216,11 @@ static int ad413x_iio_scale_available(void *device, char *buf,
 				      uint32_t len,
 				      const struct iio_ch_info *channel, intptr_t priv)
 {
-	//        2.5V unipolar, 1.25V unipolar, 2.5V bipolar, 1.25V bipolar
-	strcpy(buf, "0.000149011U 0.000074505U 0.000298023B 0.000149011B");
-	return strlen(buf);
+	struct ad413x_iio_dev *iiodev = (struct ad413x_iio_dev *)device;
+	const char *const *tbl = ad413x_iio_get_scale_tbl(iiodev->ad413x_dev);
+
+	return snprintf(buf, len, "%sU %sU %sB %sB", tbl[0], tbl[1], tbl[2],
+			tbl[3]);
 }
 
 static int ad413x_iio_store_scale(void *device, char *buf, uint32_t len,
@@ -218,6 +229,7 @@ static int ad413x_iio_store_scale(void *device, char *buf, uint32_t len,
 {
 	struct ad413x_iio_dev *iiodev = (struct ad413x_iio_dev *)device;
 	struct ad413x_dev *dev = (struct ad413x_dev *)iiodev->ad413x_dev;
+	const char *const *tbl = ad413x_iio_get_scale_tbl(dev);
 	int32_t ret;
 	char polarity;
 
@@ -232,9 +244,9 @@ static int ad413x_iio_store_scale(void *device, char *buf, uint32_t len,
 		ret = ad413x_adc_bipolar(dev, 0U);
 		if (ret)
 			return ret;
-		if (!strcmp(buf, "0.000149011"))
+		if (!strcmp(buf, tbl[0]))
 			ret = ad413x_set_int_ref(dev, AD413X_INTREF_2_5V);
-		else if (!strcmp(buf, "0.000074505"))
+		else if (!strcmp(buf, tbl[1]))
 			ret = ad413x_set_int_ref(dev, AD413X_INTREF_1_25V);
 		else
 			ret = -EINVAL;
@@ -244,9 +256,9 @@ static int ad413x_iio_store_scale(void *device, char *buf, uint32_t len,
 		ret = ad413x_adc_bipolar(dev, 1U);
 		if (ret)
 			return ret;
-		if (!strcmp(buf, "0.000298023"))
+		if (!strcmp(buf, tbl[2]))
 			ret = ad413x_set_int_ref(dev, AD413X_INTREF_2_5V);
-		else if (!strcmp(buf, "0.000149011"))
+		else if (!strcmp(buf, tbl[3]))
 			ret = ad413x_set_int_ref(dev, AD413X_INTREF_1_25V);
 		else
 			ret = -EINVAL;
@@ -263,6 +275,7 @@ static int ad413x_iio_read_scale(void *device, char *buf, uint32_t len,
 				 intptr_t priv)
 {
 	struct ad413x_iio_dev *iiodev = (struct ad413x_iio_dev *)device;
+	uint8_t res = iiodev->ad413x_dev->chip_info->resolution;
 	uint8_t bi = 0, ref_val = 0;
 	int32_t valt, ret;
 	int32_t vals[2];
@@ -279,29 +292,29 @@ static int ad413x_iio_read_scale(void *device, char *buf, uint32_t len,
 		ref_val = 1;
 
 	if (bi) {
-		ad413x_iio_scan_type.sign = 's';
+		iiodev->scan_type.sign = 's';
 		if (ref_val == 0) {
 			/* bipolar, 2.5Vref */
 			vals[0] = 2500;
-			vals[1] = 0x800000;
+			vals[1] = NO_OS_BIT(res - 1);
 			valt = IIO_VAL_FRACTIONAL;
 		} else {
 			/* bipolar, 1.25Vref */
 			vals[0] = 1250;
-			vals[1] = 0x800000;
+			vals[1] = NO_OS_BIT(res - 1);
 			valt = IIO_VAL_FRACTIONAL;
 		}
 	} else {
-		ad413x_iio_scan_type.sign = 'u';
+		iiodev->scan_type.sign = 'u';
 		if (ref_val == 0) {
 			/* unipolar, 2.5Vref */
 			vals[0] = 2500;
-			vals[1] = 0xFFFFFF;
+			vals[1] = NO_OS_GENMASK(res - 1, 0);
 			valt = IIO_VAL_FRACTIONAL;
 		} else {
 			/* unipolar, 1.25Vref */
 			vals[0] = 1250;
-			vals[1] = 0xFFFFFF;
+			vals[1] = NO_OS_GENMASK(res - 1, 0);
 			valt = IIO_VAL_FRACTIONAL;
 		}
 	}
@@ -392,7 +405,6 @@ enum ad413x_chan {
 		.name = nm, \
 		.ch_type = IIO_VOLTAGE, \
 		.indexed = true, \
-		.scan_type = &ad413x_iio_scan_type, \
 		.scan_index = ch_nb, \
 		.channel = ch_nb, \
 		.attributes = ad413x_iio_vin_attrs, \
@@ -400,7 +412,7 @@ enum ad413x_chan {
 		.ch_out = 0, \
 	}
 
-static struct iio_channel ad413x_channels[] = {
+static const struct iio_channel ad413x_channels[] = {
 	AD413X_IIO_CHANN_DEF("ch0",   0),
 	AD413X_IIO_CHANN_DEF("ch1",   1),
 	AD413X_IIO_CHANN_DEF("ch2",   2),
@@ -419,9 +431,8 @@ static struct iio_channel ad413x_channels[] = {
 	AD413X_IIO_CHANN_DEF("ch15", 15),
 };
 
-static struct iio_device ad413x_iio_device = {
+static const struct iio_device ad413x_iio_device = {
 	.num_ch = NO_OS_ARRAY_SIZE(ad413x_channels),
-	.channels = ad413x_channels,
 	.attributes = NULL,
 	.debug_attributes = NULL,
 	.buffer_attributes = NULL,
@@ -437,16 +448,32 @@ int32_t ad413x_iio_init(struct ad413x_iio_dev **iio_dev,
 {
 	int32_t ret;
 	struct ad413x_iio_dev *desc;
+	uint32_t i;
 
 	desc = (struct ad413x_iio_dev *)no_os_calloc(1, sizeof(*desc));
 	if (!desc)
 		return -1;
 
-	desc->iio_dev = &ad413x_iio_device;
-
 	ret = ad413x_init(&desc->ad413x_dev, init_param.ad413x_ip);
 	if (ret != 0)
 		goto error_desc;
+
+	desc->scan_type = (struct scan_type) {
+		.sign = 'u',
+		.realbits = desc->ad413x_dev->chip_info->resolution,
+		.storagebits = 32,
+		.shift = 0,
+		.is_big_endian = true
+	};
+
+	for (i = 0; i < NO_OS_ARRAY_SIZE(desc->channels); i++) {
+		desc->channels[i] = ad413x_channels[i];
+		desc->channels[i].scan_type = &desc->scan_type;
+	}
+
+	desc->iio_dev_desc = ad413x_iio_device;
+	desc->iio_dev_desc.channels = desc->channels;
+	desc->iio_dev = &desc->iio_dev_desc;
 
 	*iio_dev = desc;
 
