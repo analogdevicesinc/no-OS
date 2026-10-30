@@ -22,14 +22,36 @@ enum adg2404_channel {
 	ADG2404_S4,
 };
 
+/** ADG2404 Supported Device IDs */
+enum adg2404_id {
+	ID_ADG2404,
+	ID_ADG6404,
+	NUM_ADG2404_DEVICES,
+};
+
+/**
+ * @struct adg2404_chip_info
+ * @brief ADG2404 part-specific information.
+ */
+struct adg2404_chip_info {
+	/** Device name */
+	const char *name;
+};
+
+extern const struct adg2404_chip_info
+	adg2404_chip_info_tbl[NUM_ADG2404_DEVICES];
 
 struct adg2404_dev {
+	/** Part-specific information */
+	const struct adg2404_chip_info	*chip_info;
 	struct no_os_gpio_desc	*gpio_a0;
 	struct no_os_gpio_desc	*gpio_a1;
 	struct no_os_gpio_desc	*gpio_en;
 };
 
 struct adg2404_init_param {
+	/** Device ID (selects the ADG2404 part) */
+	enum adg2404_id			id;
 	struct no_os_gpio_init_param	gpio_a0;
 	struct no_os_gpio_init_param	gpio_a1;
 	struct no_os_gpio_init_param	gpio_en;
