@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   adg2404.h
- *   @brief  Header file of ADG2404 Driver.
+ *   @brief  Header file of ADG2404/ADG6404/ADG2704 Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -26,6 +26,7 @@ enum adg2404_channel {
 enum adg2404_id {
 	ID_ADG2404,
 	ID_ADG6404,
+	ID_ADG2704,
 	NUM_ADG2404_DEVICES,
 };
 

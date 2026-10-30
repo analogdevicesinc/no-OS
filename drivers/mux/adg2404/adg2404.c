@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   adg2404.c
- *   @brief  Implementation of ADG2404 Driver.
+ *   @brief  Implementation of ADG2404/ADG6404/ADG2704 Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -20,6 +20,9 @@ const struct adg2404_chip_info adg2404_chip_info_tbl[NUM_ADG2404_DEVICES] = {
 	},
 	[ID_ADG6404] = {
 		.name = "adg6404",
+	},
+	[ID_ADG2704] = {
+		.name = "adg2704",
 	},
 };
 
