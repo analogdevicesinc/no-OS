@@ -34,7 +34,9 @@ no_os_sources_ifdef(CONFIG_SPI_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim
 
 no_os_sources_ifdef(CONFIG_DMA_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/common/maxim_dma.c)
 
-if (NOT CONFIG_CAPI)
+# The MAX32657 CAPI backend owns Board_Init() and SysTick; the other CAPI
+# backends run on top of the no-OS ones.
+if (NOT CONFIG_CAPI OR NOT ${TARGET} STREQUAL "max32657")
 	target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_init.c)
 
 	# Delay (always included when not using FreeRTOS)

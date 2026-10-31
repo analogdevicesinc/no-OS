@@ -19,6 +19,8 @@
 #include "oa_tc6.h"
 
 #define ADIN1110_BUFF_LEN			1530
+#define ADIN1110_OA_TX_BUFF_NUM			2
+#define ADIN1110_OA_RX_BUFF_NUM			5
 #define ADIN1110_ETH_ALEN			6
 #define ADIN1110_ETHERTYPE_LEN			2
 #define ADIN1110_ETH_HDR_LEN			14
@@ -189,6 +191,8 @@ struct adin1110_desc {
 	bool append_crc;
 
 	struct oa_tc6_desc *oa_desc;
+	struct oa_tc6_frame_buffer *oa_tx_pool;
+	struct oa_tc6_frame_buffer *oa_rx_pool;
 };
 
 /**
@@ -197,6 +201,8 @@ struct adin1110_desc {
 struct adin1110_init_param {
 	enum adin1110_chip_id chip_type;
 	struct no_os_spi_init_param comm_param;
+	/* SPI device for the OPEN Alliance protocol, used if oa_tc6_spi is set */
+	struct capi_spi_device *oa_comm_desc;
 	struct no_os_gpio_init_param reset_param;
 	struct no_os_gpio_init_param int_param;
 	uint8_t mac_address[ADIN1110_ETH_ALEN];

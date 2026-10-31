@@ -9,6 +9,7 @@
 no_os_sources_ifdef(CONFIG_CAPI_UART  ${CMAKE_CURRENT_SOURCE_DIR}/src/capi_uart.c)
 no_os_sources_ifdef(CONFIG_CAPI_ALLOC ${CMAKE_CURRENT_SOURCE_DIR}/src/capi_alloc.c)
 no_os_sources_ifdef(CONFIG_CAPI_TIME  ${CMAKE_CURRENT_SOURCE_DIR}/src/capi_time.c)
+no_os_sources_ifdef(CONFIG_CAPI_MUTEX ${CMAKE_CURRENT_SOURCE_DIR}/src/capi_mutex.c)
 no_os_sources_ifdef(CONFIG_CAPI_GPIO  ${CMAKE_CURRENT_SOURCE_DIR}/src/capi_gpio.c)
 no_os_sources_ifdef(CONFIG_CAPI_IRQ   ${CMAKE_CURRENT_SOURCE_DIR}/src/capi_irq.c)
 no_os_sources_ifdef(CONFIG_CAPI_SPI   ${CMAKE_CURRENT_SOURCE_DIR}/src/capi_spi.c)
