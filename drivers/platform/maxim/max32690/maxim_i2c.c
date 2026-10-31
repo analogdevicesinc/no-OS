@@ -23,6 +23,7 @@
 #include "no_os_print_log.h"
 
 #define I2C_MASTER_MODE	1
+#define I2C_BUS_IDLE_TIMEOUT	100000
 
 /** Used to know how many instances are created */
 static uint32_t nb_created_desc[MXC_I2C_INSTANCES];
@@ -95,6 +96,29 @@ static int32_t _max_i2c_pins_config(uint32_t device_id, mxc_gpio_vssel_t vssel)
 	i2c_pins.vssel = vssel;
 	i2c_pins.pad = MXC_GPIO_PAD_PULL_UP;
 	MXC_GPIO_Config(&i2c_pins);
+
+	return 0;
+}
+
+/**
+ * @brief Wait for the bus to be released by the previous transaction.
+ *
+ * MXC_I2C_MasterTransaction() can return while the STOP condition is still
+ * being generated (STATUS.BUSY set). A START issued in that window is lost
+ * by MSDK v2024_10, leaving the transaction polling forever, and rejected
+ * with E_BUSY by later MSDK releases.
+ *
+ * @param i2c_regs - I2C controller registers.
+ * @return 0 when the bus is idle, -ETIMEDOUT otherwise.
+ */
+static int32_t _max_i2c_wait_bus_idle(mxc_i2c_regs_t *i2c_regs)
+{
+	uint32_t timeout = I2C_BUS_IDLE_TIMEOUT;
+
+	while (i2c_regs->status & MXC_F_I2C_STATUS_BUSY) {
+		if (!--timeout)
+			return -ETIMEDOUT;
+	}
 
 	return 0;
 }
@@ -250,6 +274,7 @@ static int32_t max_i2c_write(struct no_os_i2c_desc *desc,
 {
 	mxc_i2c_regs_t *i2c_regs;
 	mxc_i2c_req_t req;
+	int32_t ret;
 	struct max_i2c_extra *max_i2c_desc;
 	void *ptr;
 
@@ -282,6 +307,10 @@ static int32_t max_i2c_write(struct no_os_i2c_desc *desc,
 	req.rx_len = 0;
 	req.rx_buf = data;
 	req.restart = 0;
+
+	ret = _max_i2c_wait_bus_idle(i2c_regs);
+	if (ret)
+		return ret;
 
 	return MXC_I2C_MasterTransaction(&req);
 }
@@ -326,7 +355,9 @@ static int32_t max_i2c_read(struct no_os_i2c_desc *desc,
 		req.tx_buf = max_i2c_desc->prologue_data;
 	}
 
-	ret = MXC_I2C_MasterTransaction(&req);
+	ret = _max_i2c_wait_bus_idle(i2c_regs);
+	if (!ret)
+		ret = MXC_I2C_MasterTransaction(&req);
 	if (ret)
 		pr_info("i2c%u: read failed ret=%d intfl0=0x%x (ARB=%d TO=%d ADDR_NACK=%d DATA=%d DNR=%d START=%d STOP=%d)\n",
 			(unsigned int)desc->device_id, (int)ret, (unsigned int)i2c_regs->intfl0,
