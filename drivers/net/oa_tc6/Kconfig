@@ -1,26 +1,31 @@
 if OA_TC6
 
-config OA_TX_FRAME_BUFF_NUM
-    int "Number of RX frame buffers"
-    default 5
+config OA_CHUNK_BUFFER_SIZE
+    int "Frame buffer size"
+    default 1530
     help
-      Number of transmit frame buffers allocated by the OA-TC6
-      protocol library. Larger values allow more frames to be
-      queued at the cost of more memory usage.
+      Capacity in bytes of a TX or RX frame buffer: a full Ethernet
+      frame with an 802.1Q tag, the FCS and a receive timestamp.
 
-config OA_RX_FRAME_BUFF_NUM
-    int "Number of RX frame buffers"
-    default 5
+config OA_SPI_BUFF_LEN
+    int "SPI data transaction buffer size"
+    default 1632
     help
-      Number of receive frame buffers allocated by the OA-TC6
-      protocol library. Larger values allow more frames to be
-      queued at the cost of more memory usage.
+      Size in bytes of the SPI buffer for one data transaction. It
+      bounds the number of chunks in a transaction.
 
 config OA_THREAD_RX_LIMIT
-    int "Max RX frames processed per thread iteration"
+    int "Max data transactions per thread call"
     default 5
     help
-      Maximum number of receive frames the OA-TC6 RX thread
-      processes in a single iteration before yielding.
+      Maximum number of data transactions one oa_tc6_thread() call
+      clocks while the MAC-PHY reports receive chunks waiting.
+
+config OA_ASYNC_XFER_TIMEOUT_US
+    int "Async transfer watchdog timeout (us)"
+    default 50000
+    help
+      An asynchronous transfer that does not complete within this time
+      is aborted. 0 disables the watchdog. Needs capi_uptime().
 
 endif

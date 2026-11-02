@@ -88,14 +88,16 @@ static int adin1110_standard_spi_reg_write(struct adin1110_desc *desc,
  */
 int adin1110_reg_write(struct adin1110_desc *desc, uint16_t addr, uint32_t data)
 {
-	uint8_t mms = 0;
-
+#if defined(CONFIG_OA_TC6)
 	if (desc->oa_tc6_spi) {
+		uint8_t mms = 0;
+
 		if (addr >= 0x30)
 			mms = 1;
 
 		return oa_tc6_reg_write(desc->oa_desc, OA_MMS_REG(mms, addr), data);
 	}
+#endif
 
 	return adin1110_standard_spi_reg_write(desc, addr, data);
 }
@@ -159,14 +161,16 @@ static int adin1110_standard_spi_reg_read(struct adin1110_desc *desc,
  */
 int adin1110_reg_read(struct adin1110_desc *desc, uint16_t addr, uint32_t *data)
 {
-	uint8_t mms = 0;
-
+#if defined(CONFIG_OA_TC6)
 	if (desc->oa_tc6_spi) {
+		uint8_t mms = 0;
+
 		if (addr >= 0x30)
 			mms = 1;
 
 		return oa_tc6_reg_read(desc->oa_desc, OA_MMS_REG(mms, addr), data);
 	}
+#endif
 
 	return adin1110_standard_spi_reg_read(desc, addr, data);
 }
@@ -526,11 +530,12 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 	if (port >= driver_data[desc->chip_type].num_ports)
 		return -EINVAL;
 
+#if defined(CONFIG_OA_TC6)
 	if (desc->oa_tc6_spi) {
 		struct oa_tc6_frame_buffer *oa_frame_buffer;
 
 		frame_offset = 0;
-		ret = oa_tc6_get_tx_frame(desc->oa_desc, &oa_frame_buffer);
+		ret = oa_tc6_get_tx_frame(desc->oa_desc, &oa_frame_buffer, 0);
 		if (ret)
 			return ret;
 
@@ -551,6 +556,7 @@ int adin1110_write_fifo(struct adin1110_desc *desc, uint32_t port,
 
 		return oa_tc6_thread(desc->oa_desc);
 	}
+#endif
 
 	/* The minimum frame length is 64 bytes */
 	if (eth_buff->len + ADIN1110_FCS_LEN < 64)
@@ -624,6 +630,7 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 	if (port >= driver_data[desc->chip_type].num_ports)
 		return -EINVAL;
 
+#if defined(CONFIG_OA_TC6)
 	if (desc->oa_tc6_spi) {
 		struct oa_tc6_frame_buffer *frame;
 
@@ -644,6 +651,7 @@ int adin1110_read_fifo(struct adin1110_desc *desc, uint32_t port,
 
 		return 0;
 	}
+#endif
 
 	xfer.tx_buff = desc->data;
 	xfer.rx_buff = desc->data;
@@ -920,7 +928,9 @@ static int adin1110_setup_mac(struct adin1110_desc *desc)
 int adin1110_init(struct adin1110_desc **desc,
 		  struct adin1110_init_param *param)
 {
-	struct oa_tc6_init_param oa_param;
+#if defined(CONFIG_OA_TC6)
+	struct oa_tc6_init_param oa_param = {0};
+#endif
 	struct adin1110_desc *descriptor;
 	int ret;
 
@@ -975,10 +985,30 @@ int adin1110_init(struct adin1110_desc **desc,
 	descriptor->oa_tc6_spi = param->oa_tc6_spi;
 
 	if (descriptor->oa_tc6_spi) {
-		oa_param.comm_desc = descriptor->comm_desc;
-		ret = oa_tc6_init(&descriptor->oa_desc, &oa_param);
+#if defined(CONFIG_OA_TC6)
+		descriptor->oa_desc = no_os_calloc(1, sizeof(*descriptor->oa_desc));
+		descriptor->oa_tx_pool = no_os_calloc(ADIN1110_OA_TX_BUFF_NUM,
+						      sizeof(*descriptor->oa_tx_pool));
+		descriptor->oa_rx_pool = no_os_calloc(ADIN1110_OA_RX_BUFF_NUM,
+						      sizeof(*descriptor->oa_rx_pool));
+		if (!descriptor->oa_desc || !descriptor->oa_tx_pool ||
+		    !descriptor->oa_rx_pool) {
+			ret = -ENOMEM;
+			goto free_oa_mem;
+		}
+
+		oa_param.comm_desc = param->oa_comm_desc;
+		oa_param.tx_pool = descriptor->oa_tx_pool;
+		oa_param.tx_pool_size = ADIN1110_OA_TX_BUFF_NUM;
+		oa_param.rx_pool = descriptor->oa_rx_pool;
+		oa_param.rx_pool_size = ADIN1110_OA_RX_BUFF_NUM;
+		ret = oa_tc6_init(descriptor->oa_desc, &oa_param);
 		if (ret)
-			goto free_spi;
+			goto free_oa_mem;
+#else
+		ret = -ENOTSUP;
+		goto free_spi;
+#endif
 	} else {
 		descriptor->data = no_os_calloc(ADIN1110_BUFF_LEN,
 						sizeof(*descriptor->data));
@@ -1006,7 +1036,14 @@ int adin1110_init(struct adin1110_desc **desc,
 
 free_oa:
 	no_os_free(descriptor->data);
-	oa_tc6_remove(descriptor->oa_desc);
+#if defined(CONFIG_OA_TC6)
+	if (descriptor->oa_tc6_spi)
+		oa_tc6_remove(descriptor->oa_desc);
+free_oa_mem:
+	no_os_free(descriptor->oa_rx_pool);
+	no_os_free(descriptor->oa_tx_pool);
+	no_os_free(descriptor->oa_desc);
+#endif
 free_spi:
 	no_os_spi_remove(descriptor->comm_desc);
 free_rst_gpio:
@@ -1040,7 +1077,13 @@ int adin1110_remove(struct adin1110_desc *desc)
 	}
 
 	no_os_free(desc->data);
-	oa_tc6_remove(desc->oa_desc);
+#if defined(CONFIG_OA_TC6)
+	if (desc->oa_tc6_spi)
+		oa_tc6_remove(desc->oa_desc);
+	no_os_free(desc->oa_rx_pool);
+	no_os_free(desc->oa_tx_pool);
+	no_os_free(desc->oa_desc);
+#endif
 	no_os_free(desc);
 
 	return 0;

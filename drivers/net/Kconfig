@@ -9,7 +9,7 @@ if NET
 config ADIN1110
     depends on SPI
     select GPIO
-    select OA_TC6
+    select OA_TC6 if CAPI_SPI && CAPI_TIME && CAPI_MUTEX
     bool "Enable the ADIN1110 driver"
     default n
 
@@ -56,7 +56,7 @@ config MDIO_SPI
       no_os_mdio API on top of a SPI bus.
 
 config OA_TC6
-    depends on SPI
+    depends on CAPI_SPI && CAPI_TIME && CAPI_MUTEX
     bool "Enable the Open Alliance TC6 protocol library"
     default n
 
