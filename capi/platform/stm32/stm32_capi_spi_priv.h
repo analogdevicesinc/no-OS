@@ -84,6 +84,28 @@ struct stm32_spi_priv_handle {
 	/** Key of the last device config applied in the sync path. Reconfigure
 	 *  when it changes (CS, clock mode, bit order or speed). */
 	uint64_t sync_cfg_key;
+	/** CS port and pin mask, for BSRR writes in the transfer and ISR paths */
+	GPIO_TypeDef *cs_port;
+	uint32_t cs_pin_mask;
+	/** RX/TX DMA channel templates, NULL when DMA is not configured */
+	struct stm32_dma_chan_extra_config *rxdma_extra;
+	struct stm32_dma_chan_extra_config *txdma_extra;
+	/** Shortest synchronous transfer that uses DMA */
+	uint32_t dma_min_len;
+	/** DMA descriptors of the in-flight transfer, reused for every transfer */
+	struct capi_dma_transfer dma_tx;
+	struct capi_dma_transfer dma_rx;
+	/** Device of the in-flight DMA transfer */
+	struct capi_spi_device *dma_device;
+	/** Remaining transfers of a multi-transfer DMA sequence */
+	struct capi_spi_transfer *dma_seq;
+	uint32_t dma_seq_left;
+	/** The in-flight DMA transfer reports through the CAPI callback */
+	bool dma_async;
+	/** Set by the DMA ISR when the in-flight transfer ends */
+	volatile bool dma_xfer_done;
+	/** Result of the last DMA transfer, written by the DMA ISR */
+	volatile int dma_xfer_status;
 };
 
 #define CAPI_SPI_CONTROLLER_HANDLE_STM32_INIT() \

@@ -22,9 +22,22 @@
 #define STM32_SPI_CRC_POLYNOMIAL		10
 #define STM32_SPI_DMA_DEFAULT_TIMEOUT_MS	1000
 #define STM32_SPI_GPIO_PINS_PER_PORT		16
+#define STM32_SPI_DMA_DEFAULT_MIN_LEN		32
+#define STM32_SPI_PIO_IDLE_SPINS		0x4000U
+
+#ifdef SPI_SR_FRLVL
+/* RX FIFO depth in 8-bit frames: more in flight could overrun it */
+#define STM32_SPI_PIO_INFLIGHT			4U
+#else
+#define STM32_SPI_PIO_INFLIGHT			1U
+#endif
 
 /* Forward declarations */
 static int stm32_capi_spi_dma_abort(struct capi_spi_device *device);
+#ifdef SPI_SR_TXE
+static void stm32_capi_spi_dma_rx_done(uint32_t event, void *ctx);
+static void stm32_capi_spi_dma_error(uint32_t event, void *ctx);
+#endif
 
 /* lookup table for mapping HAL handles to private handles */
 #define MAX_SPI_INSTANCES 8
@@ -212,6 +225,448 @@ static SPI_TypeDef *get_spi_base_from_identifier(uint64_t identifier)
 }
 
 /**
+ * @brief Assert the GPIO chip select (active low).
+ * @param priv_handle - Pointer to the STM32 SPI private handle.
+ */
+static inline void stm32_spi_cs_assert(struct stm32_spi_priv_handle
+				       *priv_handle)
+{
+	if (priv_handle->cs_port)
+		priv_handle->cs_port->BSRR = priv_handle->cs_pin_mask << 16;
+}
+
+/**
+ * @brief Deassert the GPIO chip select (active low).
+ * @param priv_handle - Pointer to the STM32 SPI private handle.
+ */
+static inline void stm32_spi_cs_deassert(struct stm32_spi_priv_handle
+		*priv_handle)
+{
+	if (priv_handle->cs_port)
+		priv_handle->cs_port->BSRR = priv_handle->cs_pin_mask;
+}
+
+#ifdef SPI_SR_TXE
+/* TX source when tx_buf is NULL and RX sink when rx_buf is NULL */
+static const uint8_t stm32_spi_dma_zero;
+static uint8_t stm32_spi_dma_sink;
+
+/**
+ * @brief Number of bytes clocked by a full duplex transfer.
+ * @param transfer - Pointer to the transfer descriptor.
+ * @return The size of the longer of the buffers that are present.
+ */
+static inline uint32_t stm32_spi_xfer_len(const struct capi_spi_transfer
+		*transfer)
+{
+	uint32_t tx_size = transfer->tx_buf ? transfer->tx_size : 0;
+	uint32_t rx_size = transfer->rx_buf ? transfer->rx_size : 0;
+
+	return max(tx_size, rx_size);
+}
+
+/**
+ * @brief Full duplex register-level transfer of max(tx_size, rx_size) bytes.
+ *
+ * TX is fed whenever there is FIFO room and RX is drained as it arrives, so
+ * the bus is not idle between bytes. The number of bytes in flight is bounded
+ * by the RX FIFO depth, so RX cannot overrun. Missing TX bytes are sent as 0,
+ * extra RX bytes are discarded.
+ *
+ * @param spi - SPI peripheral, enabled and configured for 8-bit frames.
+ * @param transfer - Pointer to the transfer descriptor.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_spi_pio(SPI_TypeDef *spi,
+			      const struct capi_spi_transfer *transfer)
+{
+	volatile uint8_t *dr = (volatile uint8_t *)&spi->DR;
+	const uint8_t *tx = transfer->tx_buf;
+	uint8_t *rx = transfer->rx_buf;
+	uint32_t tx_size = tx ? transfer->tx_size : 0;
+	uint32_t rx_size = rx ? transfer->rx_size : 0;
+	uint32_t len = max(tx_size, rx_size);
+	uint32_t tx_cnt = 0;
+	uint32_t rx_cnt = 0;
+	uint32_t idle = 0;
+	uint32_t start = HAL_GetTick();
+	uint32_t sr;
+	uint8_t byte;
+
+	while (rx_cnt < len) {
+		sr = spi->SR;
+
+		if ((sr & SPI_SR_TXE) && tx_cnt < len &&
+		    tx_cnt - rx_cnt < STM32_SPI_PIO_INFLIGHT) {
+			*dr = tx_cnt < tx_size ? tx[tx_cnt] : 0;
+			tx_cnt++;
+		}
+
+		if (sr & SPI_SR_RXNE) {
+			byte = *dr;
+			if (rx_cnt < rx_size)
+				rx[rx_cnt] = byte;
+			rx_cnt++;
+			idle = 0;
+			continue;
+		}
+
+		if (sr & SPI_SR_OVR) {
+			(void)*dr;
+			(void)spi->SR;
+			return -EIO;
+		}
+
+		if (transfer->timeout > 0 && ++idle >= STM32_SPI_PIO_IDLE_SPINS) {
+			idle = 0;
+			if (HAL_GetTick() - start > (uint32_t)transfer->timeout)
+				return -ETIMEDOUT;
+		}
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Check whether both DMA channels and their templates are present.
+ * @param priv_handle - Pointer to the STM32 SPI private handle.
+ * @return true if DMA transfers can be used.
+ */
+static bool stm32_capi_spi_dma_ready(const struct stm32_spi_priv_handle
+				     *priv_handle)
+{
+	return priv_handle->rxdma_ch && priv_handle->txdma_ch &&
+	       priv_handle->rxdma_extra && priv_handle->txdma_extra;
+}
+
+/**
+ * @brief Check whether a transfer can run over DMA.
+ *
+ * Both directions run for max(tx_size, rx_size) bytes, so a transfer with
+ * both buffers must have equal sizes.
+ *
+ * @param priv_handle - Pointer to the STM32 SPI private handle.
+ * @param transfer - Pointer to the transfer descriptor.
+ * @return true if the transfer can use DMA.
+ */
+static bool stm32_capi_spi_dma_fits(const struct stm32_spi_priv_handle
+				    *priv_handle,
+				    const struct capi_spi_transfer *transfer)
+{
+	if (!stm32_capi_spi_dma_ready(priv_handle))
+		return false;
+
+	if (!stm32_spi_xfer_len(transfer))
+		return false;
+
+	if (transfer->tx_buf && transfer->rx_buf &&
+	    transfer->tx_size != transfer->rx_size)
+		return false;
+
+	return true;
+}
+
+/**
+ * @brief One-time DMA setup: fixed descriptor fields and channel callbacks.
+ *
+ * Completion is taken from the RX channel only: once the last byte has been
+ * received the bus is idle. The TX channel only reports errors.
+ *
+ * @param priv_handle - Pointer to the STM32 SPI private handle.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_spi_dma_setup(struct stm32_spi_priv_handle *priv_handle)
+{
+	SPI_TypeDef *spi = priv_handle->hspi->Instance;
+	int ret;
+
+	priv_handle->dma_tx = (struct capi_dma_transfer) {
+		.dst = (capi_dma_glbl_addr_t)&spi->DR,
+		.xfer_type = CAPI_DMA_MEM_TO_DEV,
+		.src_inc = CAPI_DMA_BYTE_INCREMENT,
+		.dst_inc = CAPI_DMA_NO_INCREMENT,
+		.src_size = CAPI_DMA_XFER_SIZE_1_BYTE,
+		.dst_size = CAPI_DMA_XFER_SIZE_1_BYTE,
+		.extra = priv_handle->txdma_extra,
+	};
+	priv_handle->dma_rx = (struct capi_dma_transfer) {
+		.src = (capi_dma_glbl_addr_t)&spi->DR,
+		.xfer_type = CAPI_DMA_DEV_TO_MEM,
+		.src_inc = CAPI_DMA_NO_INCREMENT,
+		.dst_inc = CAPI_DMA_BYTE_INCREMENT,
+		.src_size = CAPI_DMA_XFER_SIZE_1_BYTE,
+		.dst_size = CAPI_DMA_XFER_SIZE_1_BYTE,
+		.extra = priv_handle->rxdma_extra,
+	};
+
+	ret = capi_dma_register_complete_callback(priv_handle->rxdma_ch,
+			stm32_capi_spi_dma_rx_done,
+			priv_handle);
+	if (ret)
+		return ret;
+
+	ret = capi_dma_register_error_callback(priv_handle->rxdma_ch,
+					       stm32_capi_spi_dma_error,
+					       priv_handle);
+	if (ret)
+		return ret;
+
+	return capi_dma_register_error_callback(priv_handle->txdma_ch,
+						stm32_capi_spi_dma_error,
+						priv_handle);
+}
+
+/**
+ * @brief Program both DMA channels and start a transfer.
+ *
+ * Only addresses and length change between transfers; the channel
+ * configuration is reapplied by the DMA backend only when it differs.
+ *
+ * @param priv_handle - Pointer to the STM32 SPI private handle.
+ * @param device - Pointer to the SPI device descriptor.
+ * @param transfer - Pointer to the transfer descriptor.
+ * @param assert_cs - Assert CS before starting (first transfer of a frame).
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_spi_dma_kick(struct stm32_spi_priv_handle *priv_handle,
+				   struct capi_spi_device *device,
+				   struct capi_spi_transfer *transfer,
+				   bool assert_cs)
+{
+	struct stm32_spi_device_extra *dev_extra = device->extra;
+	SPI_TypeDef *spi = priv_handle->hspi->Instance;
+	uint32_t len = stm32_spi_xfer_len(transfer);
+	int ret;
+
+	if (transfer->tx_buf) {
+		priv_handle->dma_tx.src = (capi_dma_glbl_addr_t)transfer->tx_buf;
+		priv_handle->dma_tx.src_inc = CAPI_DMA_BYTE_INCREMENT;
+	} else {
+		priv_handle->dma_tx.src = (capi_dma_glbl_addr_t)&stm32_spi_dma_zero;
+		priv_handle->dma_tx.src_inc = CAPI_DMA_NO_INCREMENT;
+	}
+
+	if (transfer->rx_buf) {
+		priv_handle->dma_rx.dst = (capi_dma_glbl_addr_t)transfer->rx_buf;
+		priv_handle->dma_rx.dst_inc = CAPI_DMA_BYTE_INCREMENT;
+	} else {
+		priv_handle->dma_rx.dst = (capi_dma_glbl_addr_t)&stm32_spi_dma_sink;
+		priv_handle->dma_rx.dst_inc = CAPI_DMA_NO_INCREMENT;
+	}
+
+	priv_handle->dma_tx.length = len;
+	priv_handle->dma_rx.length = len;
+
+	ret = capi_dma_config_xfer(priv_handle->rxdma_ch, &priv_handle->dma_rx);
+	if (ret)
+		return ret;
+
+	ret = capi_dma_config_xfer(priv_handle->txdma_ch, &priv_handle->dma_tx);
+	if (ret)
+		return ret;
+
+	/* Drop stale RX data and a pending overrun */
+	while (spi->SR & SPI_SR_RXNE)
+		(void)*(volatile uint8_t *)&spi->DR;
+	(void)spi->SR;
+
+	priv_handle->dma_device = device;
+	priv_handle->dma_xfer_status = 0;
+	priv_handle->dma_xfer_done = false;
+
+	if (assert_cs) {
+		stm32_spi_cs_assert(priv_handle);
+		if (dev_extra && dev_extra->cs_delay_first)
+			capi_wait_us(dev_extra->cs_delay_first);
+	}
+
+	SET_BIT(spi->CR2, SPI_CR2_RXDMAEN);
+
+	ret = capi_dma_xfer_start(priv_handle->rxdma_ch);
+	if (ret)
+		goto stop;
+
+	ret = capi_dma_xfer_start(priv_handle->txdma_ch);
+	if (ret)
+		goto stop;
+
+	SET_BIT(spi->CR2, SPI_CR2_TXDMAEN);
+
+	return 0;
+
+stop:
+	capi_dma_xfer_abort(priv_handle->rxdma_ch);
+	CLEAR_BIT(spi->CR2, SPI_CR2_RXDMAEN);
+	priv_handle->dma_xfer_done = true;
+	stm32_spi_cs_deassert(priv_handle);
+
+	return ret;
+}
+
+/**
+ * @brief Stop both DMA channels and the SPI DMA requests.
+ * @param priv_handle - Pointer to the STM32 SPI private handle.
+ */
+static void stm32_capi_spi_dma_stop(struct stm32_spi_priv_handle *priv_handle)
+{
+	SPI_TypeDef *spi = priv_handle->hspi->Instance;
+
+	CLEAR_BIT(spi->CR2, SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN);
+	capi_dma_xfer_abort(priv_handle->txdma_ch);
+	capi_dma_xfer_abort(priv_handle->rxdma_ch);
+
+	while (spi->SR & SPI_SR_BSY)
+		;
+	while (spi->SR & SPI_SR_RXNE)
+		(void)*(volatile uint8_t *)&spi->DR;
+	(void)spi->SR;
+}
+
+/**
+ * @brief End of a DMA transfer, called from the DMA ISR.
+ *
+ * Starts the next transfer of a multi-transfer sequence with CS held,
+ * otherwise releases CS and reports the result.
+ *
+ * @param priv_handle - Pointer to the STM32 SPI private handle.
+ * @param status - 0 on success, negative error code otherwise.
+ */
+static void stm32_capi_spi_dma_finish(struct stm32_spi_priv_handle
+				      *priv_handle, int status)
+{
+	struct capi_spi_device *device = priv_handle->dma_device;
+	struct stm32_spi_device_extra *dev_extra = device ? device->extra : NULL;
+	void (*user_cb)(void *ctx);
+	SPI_TypeDef *spi = priv_handle->hspi->Instance;
+
+	if (priv_handle->dma_xfer_done)
+		return;
+
+	CLEAR_BIT(spi->CR2, SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN);
+
+	if (status) {
+		stm32_capi_spi_dma_stop(priv_handle);
+	} else if (priv_handle->dma_seq_left) {
+		priv_handle->dma_seq++;
+		priv_handle->dma_seq_left--;
+		status = stm32_capi_spi_dma_kick(priv_handle, device,
+						 priv_handle->dma_seq, false);
+		if (!status)
+			return;
+	}
+
+	if (dev_extra && dev_extra->cs_delay_last)
+		capi_wait_us(dev_extra->cs_delay_last);
+
+	stm32_spi_cs_deassert(priv_handle);
+
+	if (dev_extra && dev_extra->cs_change_delay)
+		capi_wait_us(dev_extra->cs_change_delay);
+
+	priv_handle->dma_seq_left = 0;
+	priv_handle->dma_xfer_status = status;
+	priv_handle->dma_xfer_done = true;
+
+	user_cb = priv_handle->dma_user_cb;
+	if (priv_handle->dma_async || user_cb) {
+		priv_handle->dma_user_cb = NULL;
+		priv_handle->async_in_progress = false;
+		priv_handle->current_transfer = NULL;
+	}
+
+	if (priv_handle->dma_async && priv_handle->callback)
+		priv_handle->callback(status ? CAPI_SPI_EVENT_ERROR :
+				      CAPI_SPI_EVENT_XFR_DONE,
+				      priv_handle->callback_arg, status);
+
+	if (user_cb)
+		user_cb(priv_handle->dma_user_ctx);
+}
+
+/**
+ * @brief RX DMA channel transfer complete callback.
+ * @param event - DMA event identifier.
+ * @param ctx - Pointer to the STM32 SPI private handle.
+ */
+static void stm32_capi_spi_dma_rx_done(uint32_t event, void *ctx)
+{
+	(void)event;
+
+	stm32_capi_spi_dma_finish(ctx, 0);
+}
+
+/**
+ * @brief RX/TX DMA channel error callback.
+ * @param event - DMA event identifier.
+ * @param ctx - Pointer to the STM32 SPI private handle.
+ */
+static void stm32_capi_spi_dma_error(uint32_t event, void *ctx)
+{
+	(void)event;
+
+	stm32_capi_spi_dma_finish(ctx, -EIO);
+}
+
+/**
+ * @brief Start a DMA sequence of one or more transfers under one CS assertion.
+ * @param priv_handle - Pointer to the STM32 SPI private handle.
+ * @param device - Pointer to the SPI device descriptor.
+ * @param transfers - Array of transfer descriptors.
+ * @param transfer_count - Number of transfers.
+ * @param async - Report the end through the registered CAPI callback.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_spi_dma_start_seq(struct stm32_spi_priv_handle
+					*priv_handle,
+					struct capi_spi_device *device,
+					struct capi_spi_transfer *transfers,
+					uint32_t transfer_count, bool async)
+{
+	uint32_t i;
+
+	for (i = 0; i < transfer_count; i++)
+		if (!stm32_capi_spi_dma_fits(priv_handle, &transfers[i]))
+			return -EINVAL;
+
+	priv_handle->dma_async = async;
+	priv_handle->dma_seq = transfers;
+	priv_handle->dma_seq_left = transfer_count - 1;
+
+	return stm32_capi_spi_dma_kick(priv_handle, device, transfers, true);
+}
+
+/**
+ * @brief Wait for the in-flight DMA transfer, aborting it on timeout.
+ *
+ * A timeout of 0 or -1 still uses STM32_SPI_DMA_DEFAULT_TIMEOUT_MS, so a
+ * missing DMA interrupt cannot hang the caller.
+ *
+ * @param priv_handle - Pointer to the STM32 SPI private handle.
+ * @param timeout - Timeout in milliseconds.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_spi_dma_wait(struct stm32_spi_priv_handle *priv_handle,
+				   int timeout)
+{
+	uint32_t limit = timeout > 0 ? (uint32_t)timeout :
+			 STM32_SPI_DMA_DEFAULT_TIMEOUT_MS;
+	uint32_t start = HAL_GetTick();
+
+	while (!priv_handle->dma_xfer_done) {
+		if (HAL_GetTick() - start > limit) {
+			stm32_capi_spi_dma_stop(priv_handle);
+			stm32_spi_cs_deassert(priv_handle);
+			priv_handle->dma_seq_left = 0;
+			priv_handle->dma_xfer_done = true;
+			return -ETIMEDOUT;
+		}
+	}
+
+	return priv_handle->dma_xfer_status;
+}
+#endif /* SPI_SR_TXE */
+
+/**
  * @brief Initialize the STM32 SPI controller.
  * @param handle - Pointer to store the allocated SPI controller handle.
  * @param config - Pointer to the SPI configuration.
@@ -302,6 +757,16 @@ static int stm32_capi_spi_init(struct capi_spi_controller_handle **handle,
 	spi_priv_handle->dma_done = false;
 	spi_priv_handle->sync_cfg_cached = false;
 	spi_priv_handle->sync_cfg_key = 0;
+	spi_priv_handle->cs_port = NULL;
+	spi_priv_handle->cs_pin_mask = 0;
+	spi_priv_handle->dma_handle = NULL;
+	spi_priv_handle->rxdma_ch = NULL;
+	spi_priv_handle->txdma_ch = NULL;
+	spi_priv_handle->rxdma_extra = NULL;
+	spi_priv_handle->txdma_extra = NULL;
+	spi_priv_handle->dma_user_cb = NULL;
+	spi_priv_handle->dma_seq_left = 0;
+	spi_priv_handle->dma_xfer_done = true;
 
 	if (spi_extra_config) {
 		if (spi_extra_config->get_input_clock)
@@ -312,8 +777,15 @@ static int stm32_capi_spi_init(struct capi_spi_controller_handle **handle,
 		spi_priv_handle->alternate = spi_extra_config->alternate;
 
 		/* Set up DMA if provided */
-		if (spi_extra_config->dma_handle) {
-			spi_priv_handle->dma_handle = spi_extra_config->dma_handle;
+		spi_priv_handle->dma_handle = spi_extra_config->dma_handle ?
+					      spi_extra_config->dma_handle :
+					      config->dma_handle;
+		if (spi_priv_handle->dma_handle) {
+			spi_priv_handle->rxdma_extra = spi_extra_config->rxdma_extra;
+			spi_priv_handle->txdma_extra = spi_extra_config->txdma_extra;
+			spi_priv_handle->dma_min_len = spi_extra_config->dma_min_len ?
+						       spi_extra_config->dma_min_len :
+						       STM32_SPI_DMA_DEFAULT_MIN_LEN;
 
 			/* Initialize DMA channels if configured */
 			if (spi_extra_config->rxdma_ch_id != 0) {
@@ -329,8 +801,16 @@ static int stm32_capi_spi_init(struct capi_spi_controller_handle **handle,
 							 &spi_priv_handle->txdma_ch,
 							 spi_extra_config->txdma_ch_id);
 				if (ret)
-					goto error;
+					goto error_dma;
 			}
+
+#ifdef SPI_SR_TXE
+			if (stm32_capi_spi_dma_ready(spi_priv_handle)) {
+				ret = stm32_capi_spi_dma_setup(spi_priv_handle);
+				if (ret)
+					goto error_dma;
+			}
+#endif
 		}
 
 #ifdef HAL_TIM_MODULE_ENABLED
@@ -342,7 +822,7 @@ static int stm32_capi_spi_init(struct capi_spi_controller_handle **handle,
 			ret = capi_timer_channel_disable(spi_priv_handle->cs_timer,
 							 spi_priv_handle->cs_timer_channel);
 			if (ret)
-				goto error;
+				goto error_dma;
 		}
 		if (spi_extra_config->tx_timer) {
 			spi_priv_handle->tx_timer = spi_extra_config->tx_timer;
@@ -351,7 +831,7 @@ static int stm32_capi_spi_init(struct capi_spi_controller_handle **handle,
 			ret = capi_timer_channel_disable(spi_priv_handle->tx_timer,
 							 spi_priv_handle->tx_timer_channel);
 			if (ret)
-				goto error;
+				goto error_dma;
 		}
 #endif
 	} else {
@@ -361,12 +841,19 @@ static int stm32_capi_spi_init(struct capi_spi_controller_handle **handle,
 	/* Register handle mapping for callbacks */
 	ret = register_handle_mapping(spi_priv_handle->hspi, spi_priv_handle);
 	if (ret != 0) {
-		goto error;
+		goto error_dma;
 	}
 
 	*handle = spi_handle;
 	return 0;
 
+error_dma:
+	if (spi_priv_handle->txdma_ch)
+		capi_dma_deinit_chan(spi_priv_handle->txdma_ch);
+	if (spi_priv_handle->rxdma_ch)
+		capi_dma_deinit_chan(spi_priv_handle->rxdma_ch);
+	spi_priv_handle->txdma_ch = NULL;
+	spi_priv_handle->rxdma_ch = NULL;
 error:
 	if (spi_handle->init_allocated) {
 		capi_free(spi_priv_handle);
@@ -488,12 +975,124 @@ static int setup_cs_gpio(struct stm32_spi_priv_handle *priv_handle,
 		return ret;
 	}
 
+	priv_handle->cs_port = ((struct stm32_capi_gpio_port_priv *)
+				priv_handle->cs_port_handle->priv)->port;
+	priv_handle->cs_pin_mask = 1U << dev_extra->chip_select_pin;
 	priv_handle->cs_initialized = true;
 	return 0;
 }
 
 /**
+ * @brief Set up CS and apply the device configuration if it changed.
+ *
+ * The peripheral is reconfigured only when the effective device settings
+ * change. The key is stored per-controller (not file-static) so it is reset
+ * by init and a fresh/re-initialized controller always configures on its
+ * first transfer; it also folds in every field config_peripheral consumes
+ * (CS, clock mode, bit order, speed) so a change to any of them re-applies
+ * the config.
+ *
+ * @param priv_handle - Pointer to the STM32 SPI private handle.
+ * @param device - Pointer to the SPI device descriptor.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_spi_prepare(struct stm32_spi_priv_handle *priv_handle,
+				  struct capi_spi_device *device)
+{
+	uint64_t cfg_key;
+	int ret;
+
+	ret = setup_cs_gpio(priv_handle, device);
+	if (ret)
+		return ret;
+
+	cfg_key = ((uint64_t)(device->cs_gpio ? device->cs_gpio->number :
+			      device->native_cs)) |
+		  ((uint64_t)device->mode << 8) |
+		  ((uint64_t)(device->lsb_first ? 1U : 0U) << 16) |
+		  ((uint64_t)device->max_speed_hz << 32);
+
+	if (priv_handle->sync_cfg_cached && cfg_key == priv_handle->sync_cfg_key)
+		return 0;
+
+	ret = stm32_capi_spi_config_peripheral(priv_handle, device);
+	if (ret)
+		return ret;
+
+	priv_handle->sync_cfg_key = cfg_key;
+	priv_handle->sync_cfg_cached = true;
+
+	return 0;
+}
+
+#ifndef SPI_SR_TXE
+/**
+ * @brief Full duplex HAL transfer, for SPI IPs without the register-level path.
+ * @param priv_handle - Pointer to the STM32 SPI private handle.
+ * @param transfer - Pointer to the transfer descriptor.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_spi_hal_xfer(struct stm32_spi_priv_handle *priv_handle,
+				   struct capi_spi_transfer *transfer)
+{
+	uint32_t timeout_val = transfer->timeout > 0 ?
+			       transfer->timeout : HAL_MAX_DELAY;
+	uint32_t xfer_len = max(transfer->tx_size, transfer->rx_size);
+	HAL_StatusTypeDef hal_ret;
+	uint8_t *tmp_tx;
+	uint8_t *tmp_rx;
+
+	if (transfer->tx_buf && transfer->rx_buf) {
+		if (transfer->tx_size == transfer->rx_size) {
+			hal_ret = HAL_SPI_TransmitReceive(priv_handle->hspi,
+							  (uint8_t *)transfer->tx_buf,
+							  transfer->rx_buf,
+							  xfer_len, timeout_val);
+		} else {
+			tmp_tx = capi_calloc(1, xfer_len);
+			tmp_rx = capi_calloc(1, xfer_len);
+			if (!tmp_tx || !tmp_rx) {
+				capi_free(tmp_tx);
+				capi_free(tmp_rx);
+				return -ENOMEM;
+			}
+			memcpy(tmp_tx, transfer->tx_buf, transfer->tx_size);
+			hal_ret = HAL_SPI_TransmitReceive(priv_handle->hspi,
+							  tmp_tx, tmp_rx,
+							  xfer_len, timeout_val);
+			if (hal_ret == HAL_OK)
+				memcpy(transfer->rx_buf, tmp_rx, transfer->rx_size);
+			capi_free(tmp_tx);
+			capi_free(tmp_rx);
+		}
+	} else if (transfer->tx_buf) {
+		hal_ret = HAL_SPI_Transmit(priv_handle->hspi,
+					   (uint8_t *)transfer->tx_buf,
+					   transfer->tx_size, timeout_val);
+	} else {
+		tmp_tx = capi_calloc(1, transfer->rx_size);
+		if (!tmp_tx)
+			return -ENOMEM;
+		hal_ret = HAL_SPI_TransmitReceive(priv_handle->hspi,
+						  tmp_tx, transfer->rx_buf,
+						  transfer->rx_size, timeout_val);
+		capi_free(tmp_tx);
+	}
+
+	if (hal_ret == HAL_TIMEOUT)
+		return -ETIMEDOUT;
+	if (hal_ret != HAL_OK)
+		return -EIO;
+
+	return 0;
+}
+#endif
+
+/**
  * @brief Perform SPI transfer with proper CS control and timing.
+ *
+ * The caller must have run stm32_capi_spi_prepare() for this device.
+ *
  * @param priv_handle - Pointer to the STM32 SPI private handle.
  * @param device - Pointer to the SPI device descriptor.
  * @param transfer - Pointer to the transfer descriptor.
@@ -508,119 +1107,38 @@ static int perform_spi_transfer_with_cs(struct stm32_spi_priv_handle
 					bool assert_cs, bool deassert_cs)
 {
 	struct stm32_spi_device_extra *dev_extra = device->extra;
-	uint64_t cfg_key;
-	int ret = 0;
-	HAL_StatusTypeDef hal_ret;
+	int ret;
 
-	/*
-	 * Reconfigure the peripheral only when the effective device settings
-	 * change. The key is stored per-controller (not file-static) so it is
-	 * reset by init and a fresh/re-initialized controller always configures
-	 * on its first transfer; it also folds in every field config_peripheral
-	 * consumes (CS, clock mode, bit order, speed) so a change to any of them
-	 * re-applies the config.
-	 */
-	cfg_key = ((uint64_t)(device->cs_gpio ? device->cs_gpio->number :
-			      device->native_cs)) |
-		  ((uint64_t)device->mode << 8) |
-		  ((uint64_t)(device->lsb_first ? 1U : 0U) << 16) |
-		  ((uint64_t)device->max_speed_hz << 32);
+	if (assert_cs)
+		stm32_spi_cs_assert(priv_handle);
 
-	if (!priv_handle->sync_cfg_cached || cfg_key != priv_handle->sync_cfg_key) {
-		ret = stm32_capi_spi_config_peripheral(priv_handle, device);
-		if (ret)
-			return ret;
-		priv_handle->sync_cfg_key = cfg_key;
-		priv_handle->sync_cfg_cached = true;
-	}
-
-	/* Assert CS if requested (drive low for active-low CS) */
-	if (assert_cs && priv_handle->cs_initialized) {
-		capi_gpio_pin_set_raw_value(&priv_handle->chip_select, CAPI_GPIO_LOW);
-	}
-
-	/* CS delay first */
-	if (dev_extra && dev_extra->cs_delay_first) {
+	if (dev_extra && dev_extra->cs_delay_first)
 		capi_wait_us(dev_extra->cs_delay_first);
-	}
 
-	/* Use HAL functions for reliable operation */
-	if (transfer->tx_buf && transfer->rx_buf) {
-		uint32_t xfer_len = max(transfer->tx_size, transfer->rx_size);
-		uint32_t timeout_val = transfer->timeout > 0 ?
-				       transfer->timeout : HAL_MAX_DELAY;
+#ifdef SPI_SR_TXE
+	ret = stm32_capi_spi_pio(priv_handle->hspi->Instance, transfer);
+#else
+	ret = stm32_capi_spi_hal_xfer(priv_handle, transfer);
+#endif
 
-		if (transfer->tx_size == transfer->rx_size) {
-			hal_ret = HAL_SPI_TransmitReceive(priv_handle->hspi,
-							  (uint8_t *)transfer->tx_buf,
-							  transfer->rx_buf,
-							  xfer_len, timeout_val);
-		} else {
-			uint8_t *tmp_tx = capi_calloc(1, xfer_len);
-			uint8_t *tmp_rx = capi_calloc(1, xfer_len);
-
-			if (!tmp_tx || !tmp_rx) {
-				capi_free(tmp_tx);
-				capi_free(tmp_rx);
-				ret = -ENOMEM;
-				goto cs_deassert;
-			}
-			memcpy(tmp_tx, transfer->tx_buf, transfer->tx_size);
-			hal_ret = HAL_SPI_TransmitReceive(priv_handle->hspi,
-							  tmp_tx, tmp_rx,
-							  xfer_len, timeout_val);
-			if (hal_ret == HAL_OK)
-				memcpy(transfer->rx_buf, tmp_rx, transfer->rx_size);
-			capi_free(tmp_tx);
-			capi_free(tmp_rx);
-		}
-	} else if (transfer->tx_buf) {
-		hal_ret = HAL_SPI_Transmit(priv_handle->hspi,
-					   (uint8_t *)transfer->tx_buf,
-					   transfer->tx_size,
-					   transfer->timeout > 0 ? transfer->timeout : HAL_MAX_DELAY);
-	} else {
-		uint8_t *zero_tx = capi_calloc(1, transfer->rx_size);
-
-		if (!zero_tx) {
-			ret = -ENOMEM;
-			goto cs_deassert;
-		}
-		hal_ret = HAL_SPI_TransmitReceive(priv_handle->hspi,
-						  zero_tx, transfer->rx_buf,
-						  transfer->rx_size,
-						  transfer->timeout > 0 ? transfer->timeout : HAL_MAX_DELAY);
-		capi_free(zero_tx);
-	}
-
-	if (hal_ret != HAL_OK) {
-		if (hal_ret == HAL_TIMEOUT)
-			ret = -ETIMEDOUT;
-		else
-			ret = -EIO;
-	}
-
-cs_deassert:
-	/* CS delay last */
-	if (dev_extra && dev_extra->cs_delay_last) {
+	if (dev_extra && dev_extra->cs_delay_last)
 		capi_wait_us(dev_extra->cs_delay_last);
-	}
 
-	/* Deassert CS if requested (drive high for active-low CS) */
-	if (deassert_cs && priv_handle->cs_initialized) {
-		capi_gpio_pin_set_raw_value(&priv_handle->chip_select, CAPI_GPIO_HIGH);
-	}
+	if (deassert_cs)
+		stm32_spi_cs_deassert(priv_handle);
 
-	/* CS change delay */
-	if (dev_extra && dev_extra->cs_change_delay) {
+	if (dev_extra && dev_extra->cs_change_delay)
 		capi_wait_us(dev_extra->cs_change_delay);
-	}
 
 	return ret;
 }
 
 /**
  * @brief Perform a synchronous SPI transceive operation.
+ *
+ * Transfers of at least dma_min_len bytes run over DMA when it is
+ * configured, shorter ones use the register-level PIO loop.
+ *
  * @param device - Pointer to the SPI device descriptor.
  * @param transfer - Pointer to the transfer descriptor.
  * @return 0 on success, negative error code otherwise.
@@ -636,17 +1154,34 @@ static int stm32_capi_spi_transceive(struct capi_spi_device *device,
 
 	priv_handle = device->controller->priv;
 
-	/* Set up CS GPIO if needed */
-	ret = setup_cs_gpio(priv_handle, device);
+	if (priv_handle->async_in_progress)
+		return -EBUSY;
+
+	ret = stm32_capi_spi_prepare(priv_handle, device);
 	if (ret)
 		return ret;
 
-	/* Perform the transfer with CS control */
+#ifdef SPI_SR_TXE
+	if (stm32_spi_xfer_len(transfer) >= priv_handle->dma_min_len &&
+	    stm32_capi_spi_dma_fits(priv_handle, transfer)) {
+		ret = stm32_capi_spi_dma_start_seq(priv_handle, device, transfer, 1,
+						   false);
+		if (ret)
+			return ret;
+
+		return stm32_capi_spi_dma_wait(priv_handle, transfer->timeout);
+	}
+#endif
+
 	return perform_spi_transfer_with_cs(priv_handle, device, transfer, true, true);
 }
 
 /**
- * @brief Perform an asynchronous SPI transceive operation using interrupts.
+ * @brief Perform an asynchronous SPI transceive operation.
+ *
+ * Runs over DMA when it is configured (completion from the RX DMA channel
+ * interrupt), otherwise falls back to the HAL interrupt driven transfer.
+ *
  * @param device - Pointer to the SPI device descriptor.
  * @param transfer - Pointer to the transfer descriptor.
  * @param timeout - Timeout value in milliseconds.
@@ -670,24 +1205,28 @@ static int stm32_capi_spi_transceive_async(struct capi_spi_device *device,
 	if (priv_handle->async_in_progress)
 		return -EBUSY;
 
-	/* Set up CS GPIO if needed */
-	ret = setup_cs_gpio(priv_handle, device);
-	if (ret)
-		return ret;
-
-	/* Configure SPI for this device */
-	ret = stm32_capi_spi_config_peripheral(priv_handle, device);
+	ret = stm32_capi_spi_prepare(priv_handle, device);
 	if (ret)
 		return ret;
 
 	priv_handle->current_transfer = transfer;
 	priv_handle->async_in_progress = true;
 
-	/* Assert CS (drive low for active-low CS) */
-	if (priv_handle->cs_initialized)
-		capi_gpio_pin_set_raw_value(&priv_handle->chip_select, CAPI_GPIO_LOW);
+#ifdef SPI_SR_TXE
+	if (stm32_capi_spi_dma_fits(priv_handle, transfer)) {
+		ret = stm32_capi_spi_dma_start_seq(priv_handle, device, transfer, 1,
+						   true);
+		if (ret) {
+			priv_handle->async_in_progress = false;
+			priv_handle->current_transfer = NULL;
+		}
 
-	/* CS delay first */
+		return ret;
+	}
+#endif
+
+	stm32_spi_cs_assert(priv_handle);
+
 	if (dev_extra && dev_extra->cs_delay_first)
 		capi_wait_us(dev_extra->cs_delay_first);
 
@@ -706,26 +1245,16 @@ static int stm32_capi_spi_transceive_async(struct capi_spi_device *device,
 					     transfer->rx_size);
 	} else {
 		priv_handle->async_in_progress = false;
-		/* Deassert CS on error */
-		if (priv_handle->cs_initialized)
-			capi_gpio_pin_set_raw_value(&priv_handle->chip_select, CAPI_GPIO_HIGH);
+		priv_handle->current_transfer = NULL;
+		stm32_spi_cs_deassert(priv_handle);
 		return -EINVAL;
 	}
 
 	if (hal_ret != HAL_OK) {
 		priv_handle->async_in_progress = false;
 		priv_handle->current_transfer = NULL;
-		/* Deassert CS on error */
-		if (priv_handle->cs_initialized)
-			capi_gpio_pin_set_raw_value(&priv_handle->chip_select, CAPI_GPIO_HIGH);
-		switch (hal_ret) {
-		case HAL_BUSY:
-			return -EBUSY;
-		case HAL_ERROR:
-			return -EIO;
-		default:
-			return -EIO;
-		}
+		stm32_spi_cs_deassert(priv_handle);
+		return hal_ret == HAL_BUSY ? -EBUSY : -EIO;
 	}
 
 	return 0;
@@ -742,7 +1271,11 @@ static int stm32_capi_spi_read_command(struct capi_spi_device *device,
 {
 	struct stm32_spi_priv_handle *priv_handle;
 	struct stm32_spi_device_extra *dev_extra;
+#ifdef SPI_SR_TXE
+	struct capi_spi_transfer phase;
+#else
 	HAL_StatusTypeDef hal_ret;
+#endif
 	int ret = 0;
 
 	if (!device || !device->controller || !transfer)
@@ -751,24 +1284,36 @@ static int stm32_capi_spi_read_command(struct capi_spi_device *device,
 	priv_handle = device->controller->priv;
 	dev_extra = device->extra;
 
-	/* Set up CS GPIO if needed */
-	ret = setup_cs_gpio(priv_handle, device);
+	if (priv_handle->async_in_progress)
+		return -EBUSY;
+
+	ret = stm32_capi_spi_prepare(priv_handle, device);
 	if (ret)
 		return ret;
 
-	/* Configure SPI for this device */
-	ret = stm32_capi_spi_config_peripheral(priv_handle, device);
-	if (ret)
-		return ret;
-
-	/* Assert CS (drive low for active-low CS) */
-	if (priv_handle->cs_initialized)
-		capi_gpio_pin_set_raw_value(&priv_handle->chip_select, CAPI_GPIO_LOW);
+	stm32_spi_cs_assert(priv_handle);
 
 	/* CS delay first */
 	if (dev_extra && dev_extra->cs_delay_first)
 		capi_wait_us(dev_extra->cs_delay_first);
 
+#ifdef SPI_SR_TXE
+	phase = (struct capi_spi_transfer) {
+		.tx_buf = transfer->tx_buf,
+		.tx_size = transfer->tx_buf ? transfer->tx_size : 0,
+		.timeout = transfer->timeout,
+	};
+	ret = stm32_capi_spi_pio(priv_handle->hspi->Instance, &phase);
+	if (ret)
+		goto deassert_cs;
+
+	phase = (struct capi_spi_transfer) {
+		.rx_buf = transfer->rx_buf,
+		.rx_size = transfer->rx_buf ? transfer->rx_size : 0,
+		.timeout = transfer->timeout,
+	};
+	ret = stm32_capi_spi_pio(priv_handle->hspi->Instance, &phase);
+#else
 	/* First transmit command/address */
 	if (transfer->tx_buf && transfer->tx_size > 0) {
 		hal_ret = HAL_SPI_Transmit(priv_handle->hspi,
@@ -819,15 +1364,14 @@ static int stm32_capi_spi_read_command(struct capi_spi_device *device,
 			break;
 		}
 	}
+#endif
 
 deassert_cs:
 	/* CS delay last */
 	if (dev_extra && dev_extra->cs_delay_last)
 		capi_wait_us(dev_extra->cs_delay_last);
 
-	/* Deassert CS (drive high for active-low CS) */
-	if (priv_handle->cs_initialized)
-		capi_gpio_pin_set_raw_value(&priv_handle->chip_select, CAPI_GPIO_HIGH);
+	stm32_spi_cs_deassert(priv_handle);
 
 	/* CS change delay */
 	if (dev_extra && dev_extra->cs_change_delay)
@@ -859,22 +1403,14 @@ static int stm32_capi_spi_read_command_async(struct capi_spi_device *device,
 	if (priv_handle->async_in_progress)
 		return -EBUSY;
 
-	/* Set up CS GPIO if needed */
-	ret = setup_cs_gpio(priv_handle, device);
-	if (ret)
-		return ret;
-
-	/* Configure SPI for this device */
-	ret = stm32_capi_spi_config_peripheral(priv_handle, device);
+	ret = stm32_capi_spi_prepare(priv_handle, device);
 	if (ret)
 		return ret;
 
 	priv_handle->current_transfer = transfer;
 	priv_handle->async_in_progress = true;
 
-	/* Assert CS (drive low for active-low CS) */
-	if (priv_handle->cs_initialized)
-		capi_gpio_pin_set_raw_value(&priv_handle->chip_select, CAPI_GPIO_LOW);
+	stm32_spi_cs_assert(priv_handle);
 
 	/* CS delay first */
 	if (dev_extra && dev_extra->cs_delay_first)
@@ -990,6 +1526,8 @@ static int stm32_capi_spi_abort_async(struct capi_spi_device *device)
 	 * AbortCpltCallback, so deassert CS and fire the terminal callback here.
 	 */
 	stm32_capi_spi_abort_hw(priv_handle->hspi);
+	/* abort_hw disabled the peripheral, the next transfer reconfigures it */
+	priv_handle->sync_cfg_cached = false;
 
 	if (priv_handle->cs_initialized)
 		capi_gpio_pin_set_raw_value(&priv_handle->chip_select,
@@ -1109,8 +1647,10 @@ int stm32_capi_spi_transfer_multiple(struct capi_spi_device *device,
 
 	priv_handle = device->controller->priv;
 
-	/* Set up CS GPIO if needed */
-	ret = setup_cs_gpio(priv_handle, device);
+	if (priv_handle->async_in_progress)
+		return -EBUSY;
+
+	ret = stm32_capi_spi_prepare(priv_handle, device);
 	if (ret)
 		return ret;
 
@@ -1182,6 +1722,7 @@ int stm32_capi_spi_alternate_cs_enable(struct capi_spi_device *device,
 	return 0;
 }
 
+#ifndef SPI_SR_TXE
 /**
  * @brief DMA completion callback for SPI transfers.
  * @param event - DMA event identifier.
@@ -1532,6 +2073,147 @@ int stm32_capi_spi_transfer_multiple_dma(struct capi_spi_device *device,
 
 	return 0;
 }
+
+#else /* SPI_SR_TXE */
+/**
+ * @brief Abort an in-flight DMA transfer.
+ * @param device - Pointer to the SPI device descriptor.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_spi_dma_abort(struct capi_spi_device *device)
+{
+	struct stm32_spi_priv_handle *priv_handle;
+
+	if (!device || !device->controller || !device->controller->priv)
+		return -EINVAL;
+
+	priv_handle = device->controller->priv;
+
+	if (!stm32_capi_spi_dma_ready(priv_handle) || priv_handle->dma_xfer_done)
+		return 0;
+
+	stm32_capi_spi_dma_stop(priv_handle);
+	priv_handle->dma_seq_left = 0;
+	priv_handle->dma_user_cb = NULL;
+	priv_handle->dma_xfer_status = -ECANCELED;
+	priv_handle->dma_xfer_done = true;
+
+	return 0;
+}
+
+/**
+ * @brief Perform an asynchronous single DMA transfer.
+ * @param device - Pointer to the SPI device descriptor.
+ * @param transfer - Pointer to the transfer descriptor.
+ * @param callback - Completion callback.
+ * @param callback_arg - Callback argument.
+ * @return 0 on success, negative error code otherwise.
+ */
+int stm32_capi_spi_transfer_dma_async(struct capi_spi_device *device,
+				      struct capi_spi_transfer *transfer,
+				      void (*callback)(void*),
+				      void* callback_arg)
+{
+	return stm32_capi_spi_transfer_multiple_dma_async(device, transfer, 1, callback,
+			callback_arg);
+}
+
+/**
+ * @brief Perform a synchronous single DMA transfer.
+ * @param device - Pointer to the SPI device descriptor.
+ * @param transfer - Pointer to the transfer descriptor.
+ * @return 0 on success, negative error code otherwise.
+ */
+int stm32_capi_spi_transfer_dma(struct capi_spi_device *device,
+				struct capi_spi_transfer *transfer)
+{
+	return stm32_capi_spi_transfer_multiple_dma(device, transfer, 1);
+}
+
+/**
+ * @brief Perform an asynchronous multi-transfer DMA operation.
+ *
+ * The transfers run back to back under one CS assertion; each one is started
+ * from the DMA ISR of the previous one.
+ *
+ * @param device - Pointer to the SPI device descriptor.
+ * @param transfers - Array of transfer descriptors.
+ * @param transfer_count - Number of transfers.
+ * @param callback - Completion callback.
+ * @param callback_arg - Callback argument.
+ * @return 0 on success, negative error code otherwise.
+ */
+int stm32_capi_spi_transfer_multiple_dma_async(struct capi_spi_device *device,
+		struct capi_spi_transfer *transfers,
+		uint32_t transfer_count,
+		void (*callback)(void*),
+		void* callback_arg)
+{
+	struct stm32_spi_priv_handle *priv_handle;
+	int ret;
+
+	if (!device || !device->controller || !transfers || !transfer_count)
+		return -EINVAL;
+
+	priv_handle = device->controller->priv;
+
+	if (priv_handle->async_in_progress)
+		return -EBUSY;
+
+	ret = stm32_capi_spi_prepare(priv_handle, device);
+	if (ret)
+		return ret;
+
+	priv_handle->async_in_progress = true;
+	priv_handle->current_transfer = transfers;
+	priv_handle->dma_user_cb = callback;
+	priv_handle->dma_user_ctx = callback_arg;
+
+	ret = stm32_capi_spi_dma_start_seq(priv_handle, device, transfers,
+					   transfer_count, false);
+	if (ret) {
+		priv_handle->dma_user_cb = NULL;
+		priv_handle->async_in_progress = false;
+		priv_handle->current_transfer = NULL;
+	}
+
+	return ret;
+}
+
+/**
+ * @brief Perform a synchronous multi-transfer DMA operation.
+ * @param device - Pointer to the SPI device descriptor.
+ * @param transfers - Array of transfer descriptors.
+ * @param transfer_count - Number of transfers.
+ * @return 0 on success, negative error code otherwise.
+ */
+int stm32_capi_spi_transfer_multiple_dma(struct capi_spi_device *device,
+		struct capi_spi_transfer *transfers,
+		uint32_t transfer_count)
+{
+	struct stm32_spi_priv_handle *priv_handle;
+	int ret;
+
+	if (!device || !device->controller || !transfers || !transfer_count)
+		return -EINVAL;
+
+	priv_handle = device->controller->priv;
+
+	if (priv_handle->async_in_progress)
+		return -EBUSY;
+
+	ret = stm32_capi_spi_prepare(priv_handle, device);
+	if (ret)
+		return ret;
+
+	ret = stm32_capi_spi_dma_start_seq(priv_handle, device, transfers,
+					   transfer_count, false);
+	if (ret)
+		return ret;
+
+	return stm32_capi_spi_dma_wait(priv_handle, transfers[0].timeout);
+}
+#endif /* SPI_SR_TXE */
 
 const struct capi_spi_ops stm32_capi_spi_ops = {
 	.init = stm32_capi_spi_init,

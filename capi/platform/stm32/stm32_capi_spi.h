@@ -10,6 +10,7 @@
 #include "stm32_hal.h"
 #include "capi_spi.h"
 #include "capi_dma.h"
+#include "stm32_capi_dma.h"
 #include "capi_gpio.h"
 #include "stm32_capi_gpio.h"
 #ifdef HAL_TIM_MODULE_ENABLED
@@ -34,6 +35,13 @@ struct stm32_spi_extra_config {
 	uint32_t rxdma_ch_id;
 	/** TX DMA Channel ID */
 	uint32_t txdma_ch_id;
+	/** RX DMA channel template (DMA instance + request), required for DMA */
+	struct stm32_dma_chan_extra_config *rxdma_extra;
+	/** TX DMA channel template (DMA instance + request), required for DMA */
+	struct stm32_dma_chan_extra_config *txdma_extra;
+	/** Shortest synchronous transfer that uses DMA, 0 for the default.
+	 *  Shorter ones use the register-level PIO loop. */
+	uint32_t dma_min_len;
 	/** SPI interrupt number */
 	uint32_t irq_num;
 #ifdef HAL_TIM_MODULE_ENABLED
