@@ -618,6 +618,44 @@ int afe_set_acc_mode(uint16_t frequency, uint16_t vconsel,
 	return status;
 }
 
+int afe_set_overcurrent(uint32_t oilvl, uint16_t ocEn)
+{
+	uint32_t lvl = oilvl & 0x00FFFFFF;
+	uint16_t cfg3 = 0;
+	int status;
+
+	/* the write helpers byte-swap their buffer: pass copies */
+	status = afe_write_32bit_reg(REG_OILVL, &lvl);
+	if (status == 0)
+		status = afe_read_16bit_buff(REG_CONFIG3, 1, &cfg3);
+	if (status == 0) {
+		cfg3 = (cfg3 & ~BITM_CONFIG3_OC_EN) |
+		       (ocEn & BITM_CONFIG3_OC_EN);
+		status = afe_write_16bit_reg(REG_CONFIG3, &cfg3);
+	}
+
+	return status;
+}
+
+int afe_read_oistatus(uint16_t *pPhase)
+{
+	return afe_read_16bit_buff(REG_OISTATUS, 1, pPhase);
+}
+
+int afe_read_oi(uint32_t *pOi)
+{
+	int status = 0;
+
+	/*
+	 * OIA..OIN are outside the burst-read area: a multi-word read
+	 * returns the first register repeatedly, so read them one by one.
+	 */
+	for (int i = 0; i < 4 && status == 0; i++)
+		status = afe_read_32bit_buff(REG_OIA + i, 1, &pOi[i]);
+
+	return status;
+}
+
 int afe_read_power_energy(POWER_ENERGY_DATA *pData)
 {
 	int status = SYS_STATUS_SUCCESS;

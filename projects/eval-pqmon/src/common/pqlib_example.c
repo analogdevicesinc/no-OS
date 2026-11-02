@@ -332,6 +332,30 @@ int open_pqlib(PQLIB_EXAMPLE *pExample)
 	return status;
 }
 
+int pqm_apply_overcurrent(void)
+{
+	EXAMPLE_CONFIG *c = &pqlibExample.exampleConfig;
+	uint32_t m = c->overcurrentPhases;
+	uint32_t lvl = 0x00FFFFFF;
+	uint16_t en = 0;
+	bool clamped = false;
+	int status;
+
+	if (c->overcurrentThreshold > 0) {
+		lvl = convert_amps_to_oilvl(c->overcurrentThreshold,
+					    c->currentScale, &clamped);
+		/* OIPHASE order (A = bit 0) to OC_EN order (A = bit 15) */
+		en = ((m & 1) << 15) | ((m & 2) << 13) | ((m & 4) << 11) |
+		     ((m & 8) << 9);
+	}
+
+	status = afe_set_overcurrent(lvl, en);
+	if (status == 0 && clamped)
+		return -EINVAL;
+
+	return status;
+}
+
 int config_measurement(PQLIB_EXAMPLE *pExample)
 {
 	int status = 0;
@@ -376,6 +400,13 @@ int config_measurement(PQLIB_EXAMPLE *pExample)
 	if (status == 0) {
 		config = 0x0013;
 		status = afe_write_16bit_reg(REG_EP_CFG, (uint16_t *)&config);
+	}
+
+	if (status == 0) {
+		/* an out-of-range threshold is clamped, not an error here */
+		status = pqm_apply_overcurrent();
+		if (status == -EINVAL)
+			status = 0;
 	}
 
 	if (status == 0) {
@@ -799,6 +830,8 @@ void set_default_config(EXAMPLE_CONFIG *pConfig)
 	pConfig->intrpThreshold = 5;
 	pConfig->rvcThreshold = 6;
 	pConfig->rvcHysteresis = 3;
+	pConfig->overcurrentThreshold = 0;
+	pConfig->overcurrentPhases = 0xF;
 	pConfig->correctionData.numCoef = 39;
 	pConfig->correctionData.startOrder = 2;
 	pConfig->correction = 1;

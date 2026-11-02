@@ -50,6 +50,10 @@ static bool tickToTimeValid;
 static uint32_t anchorBlock;
 static ADI_PQLIB_TIME anchorMs;
 
+/* overcurrent status of the last delivered cycle */
+static uint16_t cycleOiPhase;
+static uint32_t cycleOi[4];
+
 /*
  * Energy import/export: the AFE energy registers hold the energy of the
  * last ~1 s window only (EGY_LD_ACCUM), signed. Each window is added to
@@ -190,19 +194,24 @@ static int afe_isr_read_cycle(uint32_t status0)
 		return 0;
 	}
 
-	c->STATUS0 = status0;
-	c->timestamp = (ADI_PQLIB_TIME)isrTickUs;
-	status = afe_read_rms_one((uint32_t *)&c->AVRMSONE, 3);
+	c->in.STATUS0 = status0;
+	c->in.timestamp = (ADI_PQLIB_TIME)isrTickUs;
+	status = afe_read_rms_one((uint32_t *)&c->in.AVRMSONE, 3);
 	if (status == 0)
-		status = afe_read_angle((uint16_t *)&c->ANGL_VA_VB, 3,
+		status = afe_read_angle((uint16_t *)&c->in.ANGL_VA_VB, 3,
 					ANGLE_VOLTAGE);
 	if (status == 0)
-		status = afe_read_angle((uint16_t *)&c->ANGL_IA_IB, 3,
+		status = afe_read_angle((uint16_t *)&c->in.ANGL_IA_IB, 3,
 					ANGLE_CURRENT);
 	if (status == 0)
-		status = afe_read_period((uint32_t *)&c->PERIOD, 1);
+		status = afe_read_period((uint32_t *)&c->in.PERIOD, 1);
+	/* before STATUS1: afe_read_status_1() clears STATUS1 (incl. OI) */
 	if (status == 0)
-		status = afe_read_status_1((uint32_t *)&c->STATUS1);
+		status = afe_read_oistatus(&c->oiPhase);
+	if (status == 0 && (c->oiPhase & AFE_OIPHASE_MASK))
+		status = afe_read_oi(c->oi);
+	if (status == 0)
+		status = afe_read_status_1((uint32_t *)&c->in.STATUS1);
 	if (status == 0)
 		afe_q_publish(AFE_Q_CYCLE);
 
@@ -365,6 +374,12 @@ void afe_time_cycle_done(ADI_PQLIB_TIME time)
 	tickToTimeValid = true;
 }
 
+void afe_cycle_oi(uint16_t *phase, const uint32_t **oi)
+{
+	*phase = cycleOiPhase;
+	*oi = cycleOi;
+}
+
 void afe_waveform_time_anchor(uint32_t *block, ADI_PQLIB_TIME *time)
 {
 	*block = anchorBlock;
@@ -480,10 +495,13 @@ int get_afe_input()
 	switch (type) {
 	case AFE_Q_CYCLE:
 		c = afe_q_cycle_front();
-		cycleTickUs = (uint64_t)c->timestamp;
+		cycleTickUs = (uint64_t)c->in.timestamp;
+		cycleOiPhase = c->oiPhase & AFE_OIPHASE_MASK;
+		if (cycleOiPhase)
+			memcpy(cycleOi, c->oi, sizeof(cycleOi));
 		seq = pOneCycle->sequenceNumber;
 		ts = pOneCycle->timestamp;
-		*pOneCycle = *c;
+		*pOneCycle = c->in;
 		pOneCycle->timestamp = ts;
 		pOneCycle->sequenceNumber = seq + 1;
 		pOneCycle->isDataProcessed = 0;

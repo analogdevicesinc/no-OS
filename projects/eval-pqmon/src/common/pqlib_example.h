@@ -142,6 +142,8 @@ typedef struct {
 	float calOffsetVoltage;         /* Vrms for offset calibration */
 	float currentPgaGain;           /* PGA gain for current (default 1) */
 	float voltagePgaGain;           /* PGA gain for voltage (default 1) */
+	float overcurrentThreshold;     /* A RMS, 0 = overcurrent off */
+	uint32_t overcurrentPhases;     /* bit 0 = A, 1 = B, 2 = C, 3 = N */
 
 } EXAMPLE_CONFIG; // pqlib example config
 
@@ -209,6 +211,13 @@ int open_pqlib(PQLIB_EXAMPLE *pExample);
  *
  */
 int config_measurement(PQLIB_EXAMPLE *pExample);
+
+/**
+ * @brief Write exampleConfig.overcurrentThreshold / overcurrentPhases to
+ * the AFE (OILVL, CONFIG3.OC_EN).
+ * @return 0 on success, -EINVAL if the threshold is out of range
+ */
+int pqm_apply_overcurrent(void);
 
 /**
  * @brief Sets default configuration of the example as floating points

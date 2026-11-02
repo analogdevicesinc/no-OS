@@ -21,6 +21,21 @@ convert_angle_type(ADI_AFE_ANGLE_TYPE angleRaw)
 	return degree;
 }
 
+uint32_t convert_amps_to_oilvl(float amps, float scale, bool *clamped)
+{
+	/* inverse of convert_rms_type(), then OILVL = xIRMSONE * 2^-5 */
+	float lvl = amps * 1.414213f * (float)ADI_PQLIB_MAX_RMS_VALUE /
+		    scale / 32.0f;
+
+	*clamped = lvl < 0.0f || lvl > (float)0x00FFFFFF;
+	if (lvl < 0.0f)
+		return 0;
+	if (lvl > (float)0x00FFFFFF)
+		return 0x00FFFFFF;
+
+	return (uint32_t)lvl;
+}
+
 float convert_rms_type(ADI_AFE_RMS_TYPE mag, float scale)
 {
 	float rms;

@@ -291,4 +291,29 @@ int afe_write_16bit_reg(uint16_t addr, uint16_t *pData);
 struct power_energy_data;
 int afe_read_power_energy(struct power_energy_data *pData);
 
+/* OISTATUS.OIPHASE bits: 0 = A, 1 = B, 2 = C, 3 = N */
+#define AFE_OIPHASE_MASK	0x000F
+
+/**
+ * @brief Set the overcurrent threshold and the monitored phases.
+ * @param oilvl - OILVL = xIRMSONE * 2^-5 (24 bits)
+ * @param ocEn - CONFIG3.OC_EN bits (15 = A, 14 = B, 13 = C, 12 = N)
+ * @return 0 on success
+ */
+int afe_set_overcurrent(uint32_t oilvl, uint16_t ocEn);
+
+/**
+ * @brief Read OISTATUS (OIPHASE: the phases above OILVL).
+ * @param pPhase - OISTATUS value
+ * @return 0 on success
+ */
+int afe_read_oistatus(uint16_t *pPhase);
+
+/**
+ * @brief Read the overcurrent one-cycle RMS values OIA, OIB, OIC, OIN.
+ * @param pOi - 4 values
+ * @return 0 on success
+ */
+int afe_read_oi(uint32_t *pOi);
+
 #endif /* __AFE_CONFIG_H__ */

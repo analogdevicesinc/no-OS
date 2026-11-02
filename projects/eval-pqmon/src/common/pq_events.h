@@ -29,10 +29,19 @@ enum pq_ev_type {
 	 * polyphase interruptions (all lines down).
 	 */
 	PQ_EV_LINE_INTRP,
+	/*
+	 * Overcurrent (application extension, ADE9430 hardware): the one-cycle
+	 * RMS current of an enabled phase (A, B, C or N) is above OILVL
+	 * (overcurrent_threshold). Starts in the first such cycle, ends in the
+	 * first cycle with no phase above. Not an IEC 61000-4-30 event.
+	 */
+	PQ_EV_OVERCURRENT,
 	PQ_EV_NUM_TYPES
 };
 
 #define PQ_EV_NUM_PHASES	3
+/* Overcurrent phases: A, B, C and N */
+#define PQ_EV_OC_PHASES		4
 
 /* Latest event record in PQLib layout, read by the IIO event attributes */
 extern ADI_PQLIB_EVENTS accumulated_events;
@@ -84,6 +93,14 @@ void pq_events_ack(enum pq_ev_type type);
 bool pq_events_active(enum pq_ev_type type);
 ADI_PQLIB_TIME pq_events_onset(enum pq_ev_type type);
 uint32_t pq_events_unacked(enum pq_ev_type type);
+
+/**
+ * @brief Largest one-cycle RMS current of a phase during the overcurrent
+ * event in progress, or else the latest one.
+ * @param phase - 0..3 = A, B, C, N
+ * @return xIRMSONE scale (convert with convert_rms_type, currentScale)
+ */
+ADI_AFE_RMS_TYPE pq_events_oc_mag(int phase);
 uint32_t pq_events_total(enum pq_ev_type type);
 
 /**

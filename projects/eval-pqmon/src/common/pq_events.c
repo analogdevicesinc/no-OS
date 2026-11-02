@@ -23,10 +23,14 @@
 #include <stddef.h>
 #include "pqlib_example.h"
 #include "pq_events.h"
+#include "pqlib_afe.h"
 #include "no_os_util.h"
 
 /* Max number of rejected PQLib records printed on the debug console */
 #define MAX_BOGUS_EVENT_PRINTS	5
+
+/* OIA..OIN = xIRMSONE * 2^-5, the scale of OILVL */
+#define PQ_EV_OI_SHIFT		5
 
 struct pq_ev_rec {
 	ADI_PQLIB_TIME start;
@@ -44,6 +48,8 @@ struct pq_ev_rec {
 	bool pqlibChecked;
 	/* finished without a seen start; start taken from PQLib if it matches */
 	bool orphan;
+	/* overcurrent: largest one-cycle RMS current, A, B, C, N */
+	ADI_AFE_RMS_TYPE ocMax[PQ_EV_OC_PHASES];
 };
 
 struct pq_ev_state {
@@ -594,6 +600,44 @@ static void line_interruptions(const ADI_AFE_RMS_TYPE *rms, ADI_PQLIB_TIME now)
 		close_event(PQ_EV_LINE_INTRP, rms, now);
 }
 
+/*
+ * Overcurrent from the ADE9430: OISTATUS.OIPHASE of each cycle tells which
+ * phases have a one-cycle RMS current above OILVL, OIA..OIN their RMS.
+ */
+static void overcurrents(const ADI_AFE_RMS_TYPE *rms, ADI_PQLIB_TIME now)
+{
+	struct pq_ev_state *s = &evState[PQ_EV_OVERCURRENT];
+	const EXAMPLE_CONFIG *cfg = &pqlibExample.exampleConfig;
+	const uint32_t *oi;
+	ADI_AFE_RMS_TYPE v;
+	uint16_t over;
+
+	afe_cycle_oi(&over, &oi);
+	over &= cfg->overcurrentPhases;
+	if (cfg->overcurrentThreshold <= 0)
+		over = 0;
+
+	if (!s->open) {
+		if (!over)
+			return;
+		memset(&s->cur, 0, sizeof(s->cur));
+		s->cur.start = now;
+		s->cur.trigMask = over;
+		s->open = true;
+		note_onset(PQ_EV_OVERCURRENT);
+	} else if (!over) {
+		close_event(PQ_EV_OVERCURRENT, rms, now);
+		return;
+	}
+
+	s->cur.affMask |= over;
+	for (int p = 0; p < PQ_EV_OC_PHASES; p++) {
+		v = oi[p] << PQ_EV_OI_SHIFT;
+		if ((over & (1 << p)) && v > s->cur.ocMax[p])
+			s->cur.ocMax[p] = v;
+	}
+}
+
 void pq_events_cycle(ADI_PQLIB_HANDLE hDevice, ADI_PQLIB_RESULT res,
 		     const ADI_PQLIB_CYCLE_INPUT *in)
 {
@@ -610,7 +654,8 @@ void pq_events_cycle(ADI_PQLIB_HANDLE hDevice, ADI_PQLIB_RESULT res,
 	/* Per-phase min/max, affected phases and RVC deviation of open events */
 	for (int i = 0; i < PQ_EV_NUM_TYPES; i++) {
 		s = &evState[i];
-		if (!s->open)
+		/* overcurrent is current based: see overcurrents() */
+		if (!s->open || i == PQ_EV_OVERCURRENT)
 			continue;
 		if (i != PQ_EV_LINE_INTRP)
 			s->cur.affMask |= beyond_threshold(i, rms, NULL);
@@ -647,6 +692,7 @@ void pq_events_cycle(ADI_PQLIB_HANDLE hDevice, ADI_PQLIB_RESULT res,
 	}
 	expire_shadows(rms);
 	line_interruptions(rms, now);
+	overcurrents(rms, now);
 
 	mean_add(rms);
 }
@@ -928,6 +974,16 @@ bool pq_events_latest(enum pq_ev_type type, ADI_PQLIB_TIME *start,
 	*cycles = r->cycles;
 
 	return true;
+}
+
+ADI_AFE_RMS_TYPE pq_events_oc_mag(int phase)
+{
+	const struct pq_ev_rec *r = shown_record(PQ_EV_OVERCURRENT);
+
+	if (!r || phase < 0 || phase >= PQ_EV_OC_PHASES)
+		return 0;
+
+	return r->ocMax[phase];
 }
 
 ADI_AFE_RMS_TYPE pq_events_mag(enum pq_ev_type type, int phase, bool max)

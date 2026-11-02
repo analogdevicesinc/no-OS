@@ -70,6 +70,13 @@ void afe_time_cycle_done(ADI_PQLIB_TIME time);
  */
 void afe_waveform_time_anchor(uint32_t *block, ADI_PQLIB_TIME *time);
 
+/**
+ * @details Overcurrent status of the cycle get_afe_input() delivered last.
+ * @param phase - OISTATUS.OIPHASE (bit 0 = A ... 3 = N)
+ * @param oi - OIA..OIN of that cycle (valid when phase != 0)
+ */
+void afe_cycle_oi(uint16_t *phase, const uint32_t **oi);
+
 /* Energy totals since start-up or afe_energy_reset() */
 enum energy_total {
 	ENERGY_ACTIVE_IMPORT,	/* Wh, positive active energy */

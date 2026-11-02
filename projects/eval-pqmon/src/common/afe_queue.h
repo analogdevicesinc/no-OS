@@ -47,7 +47,12 @@ struct afe_q_stats {
 };
 
 /* One-cycle input slot (only the AFE fields are used) */
-typedef ADI_PQLIB_CYCLE_INPUT AFE_Q_CYCLE_ITEM;
+/* One-cycle input for PQLib plus the overcurrent status of that cycle */
+typedef struct {
+	ADI_PQLIB_CYCLE_INPUT in;
+	uint16_t oiPhase;	/* OISTATUS.OIPHASE: bit 0 = A ... 3 = N */
+	uint32_t oi[4];		/* OIA..OIN, read when oiPhase != 0 */
+} AFE_Q_CYCLE_ITEM;
 
 /* 10/12 cycle input slot (only the AFE fields are used) */
 typedef ADI_PQLIB_1012_CYCLE_INPUT AFE_Q_1012_ITEM;

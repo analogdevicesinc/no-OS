@@ -140,8 +140,64 @@ static bool get_next_ch_idx(uint32_t ch_mask, uint32_t last_idx,
 
 /* Event type names, in pq_ev_type (event channel) order */
 static const char *const pq_event_names[PQ_EV_NUM_TYPES] = {
-	"dips", "swells", "rvc", "intrpt", "intrpt_line"
+	"dips", "swells", "rvc", "intrpt", "intrpt_line", "overcurrent"
 };
+
+/* Phase names of the event masks; N only for overcurrent */
+static const char *const pq_phase_names[PQ_EV_OC_PHASES] = {
+	"A", "B", "C", "N"
+};
+
+/* Phases a mask of this event type can hold */
+static int pq_type_phases(int type)
+{
+	return type == PQ_EV_OVERCURRENT ? PQ_EV_OC_PHASES : PQ_EV_NUM_PHASES;
+}
+
+/* Phase mask as names ("A B C N"), "-" if none */
+static int phase_list(char *buf, uint32_t len, uint32_t mask, int phases,
+		      const char *sep)
+{
+	int n = 0;
+
+	buf[0] = '\0';
+	for (int p = 0; p < phases; p++)
+		if (mask & (1 << p))
+			n += snprintf(buf + n, len - n, "%s%s", n ? sep : "",
+				      pq_phase_names[p]);
+
+	return n ? n : snprintf(buf, len, "-");
+}
+
+/* Parse "A B C N" (spaces or commas, any case) into a phase mask */
+static int parse_phases(const char *buf, uint32_t *mask)
+{
+	uint32_t m = 0;
+
+	for (; *buf; buf++) {
+		switch (*buf) {
+		case 'a': case 'A':
+			m |= 1;
+			break;
+		case 'b': case 'B':
+			m |= 2;
+			break;
+		case 'c': case 'C':
+			m |= 4;
+			break;
+		case 'n': case 'N':
+			m |= 8;
+			break;
+		case ' ': case ',': case '\n': case '\r': case '\t':
+			break;
+		default:
+			return -EINVAL;
+		}
+	}
+	*mask = m;
+
+	return 0;
+}
 
 /* time_source and rtc_status values, in enum order */
 static const char *const time_source_names[] = { "none", "rtc", "host" };
@@ -157,22 +213,17 @@ static const char *const rtc_status_names[] = { "absent", "invalid", "ok" };
  */
 static int read_last_onset(char *buf, uint32_t len)
 {
-	static const char *const names[PQ_EV_NUM_PHASES] = { "A", "B", "C" };
 	char trig[8] = "-";
 	enum pq_ev_type type;
 	ADI_PQLIB_TIME start;
 	uint8_t mask;
 	uint32_t seq;
-	int n = 0;
 
 	seq = pq_events_last_onset(&type, &start, &mask);
 	if (!seq)
 		return snprintf(buf, len, "0 - 0 - 0");
 
-	for (int p = 0; p < PQ_EV_NUM_PHASES; p++)
-		if (mask & (1 << p))
-			n += snprintf(trig + n, sizeof(trig) - n, "%s%s",
-				      n ? "," : "", names[p]);
+	phase_list(trig, sizeof(trig), mask, pq_type_phases(type), ",");
 
 	return snprintf(buf, len, "%" PRIu32 " %s %" PRId64 " %s %d", seq,
 			pq_event_names[type], start, trig,
@@ -229,6 +280,15 @@ int read_pqm_attr(void *device, char *buf, uint32_t len,
 		case CURRENT_SCALE:
 			return snprintf(buf, len, "%.2f",
 					pqlibExample.exampleConfig.currentScale);
+		case OVERCURRENT_THRESHOLD:
+			return snprintf(buf, len, "%.3f",
+					pqlibExample.exampleConfig
+					.overcurrentThreshold);
+		case OVERCURRENT_PHASES:
+			return phase_list(buf, len,
+					  pqlibExample.exampleConfig
+					  .overcurrentPhases,
+					  PQ_EV_OC_PHASES, " ");
 		case DIP_THRESHOLD:
 			return snprintf(buf, len, "%.2f",
 					pqlibExample.exampleConfig.dipThreshold);
@@ -658,6 +718,33 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
 		case CURRENT_SCALE:
 			pqlibExample.exampleConfig.currentScale = value;
 			break;
+		case OVERCURRENT_THRESHOLD: {
+			/* written to the AFE at once: no measurement restart */
+			bool clamped = false;
+
+			configChanged = false;
+			if (value < 0)
+				return -EINVAL;
+			convert_amps_to_oilvl(value, pqlibExample.exampleConfig
+					      .currentScale, &clamped);
+			if (clamped)
+				return -EINVAL;
+			pqlibExample.exampleConfig.overcurrentThreshold = value;
+			if (pqm_apply_overcurrent())
+				return -EIO;
+			break;
+		}
+		case OVERCURRENT_PHASES: {
+			uint32_t mask;
+
+			configChanged = false;
+			if (parse_phases(buf, &mask))
+				return -EINVAL;
+			pqlibExample.exampleConfig.overcurrentPhases = mask;
+			if (pqm_apply_overcurrent())
+				return -EIO;
+			break;
+		}
 		case DIP_THRESHOLD:
 			pqlibExample.exampleConfig.dipThreshold = value;
 			break;
@@ -966,11 +1053,39 @@ static int read_line_attr(char *buf, uint32_t len, intptr_t attr_id)
  * @param attr_id - attribute id
  * @return length written, or -ENOENT if not a common event attribute
  */
+static int read_overcurrent_attr(char *buf, uint32_t len, intptr_t attr_id)
+{
+	static const char *const unused = " 0 0 0 0 0";
+	float scale = pqlibExample.exampleConfig.currentScale;
+	ADI_AFE_RMS_TYPE hi = 0;
+	ADI_PQLIB_TIME start, end;
+	uint32_t cycles;
+
+	pq_events_latest(PQ_EV_OVERCURRENT, &start, &end, &cycles);
+
+	switch (attr_id) {
+	case CHAN_EVENT_START_TIME:
+		return snprintf(buf, len, "%" PRId64 "%s", start, unused);
+	case CHAN_EVENT_END_TIME:
+		return snprintf(buf, len, "%" PRId64 "%s", end, unused);
+	case CHAN_EVENT_DURATION_IN_CYCL:
+		return snprintf(buf, len, "%" PRIu32 "%s", cycles, unused);
+	case CHAN_EVENT_MAX_MAG:
+		for (int p = 0; p < PQ_EV_OC_PHASES; p++)
+			if (pq_events_oc_mag(p) > hi)
+				hi = pq_events_oc_mag(p);
+		return snprintf(buf, len, "%.5f%s", convert_rms_type(hi, scale),
+				unused);
+	default:
+		return -EINVAL;
+	}
+}
+
 static int read_event_attr(int type, char *buf, uint32_t len,
 			   intptr_t attr_id)
 {
-	static const char *const names[PQ_EV_NUM_PHASES] = { "A", "B", "C" };
 	float scale = pqlibExample.exampleConfig.voltageScale;
+	float iscale = pqlibExample.exampleConfig.currentScale;
 	uint8_t mask;
 	int n = 0;
 
@@ -991,18 +1106,21 @@ static int read_event_attr(int type, char *buf, uint32_t len,
 	case CHAN_EVENT_AFFECTED:
 		mask = attr_id == CHAN_EVENT_TRIG ? pq_events_trigger(type) :
 		       pq_events_affected(type);
-		if (!mask)
-			return snprintf(buf, len, "-");
-		buf[0] = '\0';
-		for (int p = 0; p < PQ_EV_NUM_PHASES; p++) {
-			if (!(mask & (1 << p)))
-				continue;
-			n += snprintf(buf + n, len - n, "%s%s", n ? " " : "",
-				      names[p]);
-		}
-		return n;
+		return phase_list(buf, len, mask, pq_type_phases(type), " ");
 	case CHAN_EVENT_MIN_PH:
 	case CHAN_EVENT_MAX_PH:
+		if (type == PQ_EV_OVERCURRENT) {
+			/* largest current per phase A B C N; no minimum */
+			if (attr_id == CHAN_EVENT_MIN_PH)
+				return snprintf(buf, len, "-");
+			for (int p = 0; p < PQ_EV_OC_PHASES; p++)
+				n += snprintf(buf + n, len - n, "%s%.3f",
+					      p ? " " : "",
+					      convert_rms_type(
+						      pq_events_oc_mag(p),
+						      iscale));
+			return n;
+		}
 		for (int p = 0; p < PQ_EV_NUM_PHASES; p++)
 			n += snprintf(buf + n, len - n, "%s%.2f", p ? " " : "",
 				      convert_rms_type(pq_events_mag(type, p,
@@ -1018,6 +1136,8 @@ static int read_event_attr(int type, char *buf, uint32_t len,
 
 	if (type == PQ_EV_LINE_INTRP)
 		return read_line_attr(buf, len, attr_id);
+	if (type == PQ_EV_OVERCURRENT)
+		return read_overcurrent_attr(buf, len, attr_id);
 
 	return -ENOENT;
 }
@@ -2085,6 +2205,18 @@ struct iio_attribute global_pqm_attributes[] = {
 		.show = read_pqm_attr,
 		.priv = ENERGY_TIME,
 	},
+	{
+		.name = "overcurrent_threshold",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = OVERCURRENT_THRESHOLD,
+	},
+	{
+		.name = "overcurrent_phases",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = OVERCURRENT_PHASES,
+	},
 	END_ATTRIBUTES_ARRAY,
 }; // global attributes for device
 
@@ -2138,6 +2270,16 @@ struct iio_attribute event_pqm_line_attribute[] = {
 	END_ATTRIBUTES_ARRAY,
 }; // event channel attribute for line interruptions
 
+struct iio_attribute event_pqm_overcurrent_attribute[] = {
+	EVENT_COMMON_ATTR,
+	{
+		.name = "maxMag",
+		.show = read_ch_attr,
+		.priv = CHAN_EVENT_MAX_MAG,
+	},
+	END_ATTRIBUTES_ARRAY,
+}; // event channel attribute for overcurrent
+
 struct scan_type pqm_scan_type = {.sign = 's',
 	.realbits = 16,
 	.storagebits = 16,
@@ -2159,6 +2301,8 @@ static struct iio_channel iio_pqm_channels[] = {
 	PQM_EVENT_CHANNEL(2, 10, "rvc", event_pqm_rvc_attribute),
 	PQM_EVENT_CHANNEL(3, 11, "intrpt", event_pqm_intrpr_attribute),
 	PQM_EVENT_CHANNEL(4, 12, "intrpt_line", event_pqm_line_attribute),
+	PQM_EVENT_CHANNEL(5, 13, "overcurrent",
+			  event_pqm_overcurrent_attribute),
 }; // channel definitions for device
 
 struct iio_device pqm_iio_descriptor = {

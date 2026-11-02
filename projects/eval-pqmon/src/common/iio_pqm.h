@@ -115,6 +115,10 @@
 #define ENERGY_RESET                    79
 #define ENERGY_TIME                     80
 
+// Overcurrent attributes
+#define OVERCURRENT_THRESHOLD           81
+#define OVERCURRENT_PHASES              82
+
 // Channel specific attributes
 #define CHAN_RMS                        0
 #define CHAN_ANGLE                      1

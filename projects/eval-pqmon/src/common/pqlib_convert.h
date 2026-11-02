@@ -14,6 +14,7 @@
 #include "adi_pqlib.h"
 #include <math.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include <stdio.h>
 
 #define ADI_PQLIB_POWER_MAX_VALUE 20694066
@@ -105,6 +106,16 @@ uint32_t convert_to_time_ms(float timesec);
 int prepara_string(EVENT_TYPE event_type, int event_value, char *buf);
 
 float convert_power_type(int32_t power, float scale);
+
+/**
+ * @brief Overcurrent threshold in A RMS to the OILVL register value
+ * (OILVL = xIRMSONE * 2^-5).
+ * @param amps - threshold, A RMS
+ * @param scale - current scale (exampleConfig.currentScale)
+ * @param clamped - set when the value is out of the 24-bit range
+ * @return OILVL value
+ */
+uint32_t convert_amps_to_oilvl(float amps, float scale, bool *clamped);
 float convert_energy_type(int32_t energy_hi, float scale);
 float compute_power_factor(int32_t watthr, int32_t varhr);
 
