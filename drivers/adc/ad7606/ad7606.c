@@ -708,7 +708,7 @@ static int32_t ad7606_parallel_capture_pre_enable(struct ad7606_dev *dev)
 				   AD7606_CHAN_CTRL_ENABLE);
 	}
 
-	return no_os_pwm_enable(axi->trigger_pwm_desc);
+	return 0;
 }
 
 /***************************************************************************//**
@@ -763,6 +763,10 @@ static int32_t ad7606_read_raw_data_parallel(struct ad7606_dev *dev,
 	int32_t ret;
 
 	ret = axi_dmac_transfer_start(axi->dmac, &transfer);
+	if (ret)
+		return ret;
+
+	ret = no_os_pwm_enable(axi->trigger_pwm_desc);
 	if (ret)
 		return ret;
 
