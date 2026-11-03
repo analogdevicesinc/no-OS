@@ -1,20 +1,66 @@
-## Pull Request Description
+<!--
+First contribution? Before this PR can be merged:
+- sign the CLA when the CLA assistant asks for it in this PR;
+- select the analogdevicesinc/noos team as reviewer;
+- make sure the commits follow the Submission Checklist:
+  https://analogdevicesinc.github.io/no-OS/contributing/#submission-checklist
 
-Please replace this with a detailed description and motivation of the changes. 
-You can tick the checkboxes below with an 'x' between square brackets or just check them after publishing the PR. 
-If this PR contains a breaking change, list dependent PRs and try to push all related PRs at the same time.
+Text inside these comment markers is not shown in the published PR.
+Delete any section that does not apply.
+-->
 
-## PR Type
-- [ ] Bug fix (change that fixes an issue)
-- [ ] New feature (change that adds new functionality)
-- [ ] Breaking change (has dependencies in other repos or will cause CI to fail)
+## 📝 Description
 
-## PR Checklist
-- [ ] I have followed the [Coding style guidelines](https://analogdevicesinc.github.io/no-OS/drivers_guide/#coding-style)
-- [ ] I have complied with the [Submission Checklist](https://analogdevicesinc.github.io/no-OS/contributing/#submission-checklist)
-- [ ] I have performed a self-review of the changes
-- [ ] I have commented my code, at least hard-to-understand parts
-- [ ] I have build all projects affected by the changes in this PR
-- [ ] I have tested in hardware affected projects, at the relevant boards
-- [ ] I have signed off all commits from this PR
-- [ ] I have updated the documentation (wiki pages, ReadMe etc), if applies
+<!--
+What does this PR change, and why? For bug fixes, describe the symptom and
+the root cause. For new drivers or projects, name the part(s) and the
+supported platform(s).
+-->
+
+## 🏷️ Type
+
+- [ ] 🐛 Bug fix
+- [ ] ✨ New feature (driver, project, platform support)
+- [ ] 💥 Breaking change (API change, or has dependencies in other repos)
+- [ ] 📚 Documentation
+- [ ] ⚙️ CI
+
+## 🔗 Related
+
+<!--
+Datasheet (with revision and section/table), issue, and PRs this one
+depends on or must be merged together with (for example in the HDL,
+Linux or pyadi-iio repositories), with the merge order.
+-->
+
+- 📄 **Datasheet:**
+- 🎫 **Issue:**
+- 🧩 **Depends on:**
+
+## 🧪 Testing
+
+<!--
+Fill in one block per tested setup. If the change was only built and not
+run on hardware, say so under "Tests performed".
+-->
+
+- **Hardware:** <!-- eval board and carrier board -->
+- **Platform:**
+- **Project / configuration:** <!-- project and example -->
+- **Tests performed:**
+  - [ ] Built only, not run on hardware
+  - [ ] Example ran on hardware
+  - [ ] Validated data through serial output or an IIO client
+  - [ ] Other:
+- ✅ **Result:** <!-- what was observed, and how it compares with the expected behavior -->
+- ⚠️ **Not tested:** <!-- platforms, modes or features the change touches but were not tested -->
+
+<details>
+<summary>📋 Logs</summary>
+
+<!-- Console output, IIO reads, register dumps. Attach scope captures as images. -->
+
+```
+```
+
+</details>
