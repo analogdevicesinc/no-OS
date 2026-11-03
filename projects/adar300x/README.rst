@@ -45,12 +45,13 @@ Power Supply Requirements
 The ADAR3000/ADAR3001-EVALZ is supplied from two bench supplies, applied to the
 test loops on the evaluation board:
 
-============= ======================== ============= ==================
-Rail          Test Points              Current Limit Expected Draw
-============= ======================== ============= ==================
-1.2 V analog  Red ``1P2V`` to ``AGND`` 300 mA        ~128 mA (ADAR3000)
-1.8 V digital Red ``1P8V`` to ``DGND`` 100 mA        ~7 mA
-============= ======================== ============= ==================
+============= ======================== ================= =========================
+Rail          Test Points              Supply Capability Expected Draw
+============= ======================== ================= =========================
+1.2 V analog  Red ``1P2V`` to ``AGND`` 250 mA            128 mA ± 12 mA (ADAR3000)
+                                                         110 mA ± 10 mA (ADAR3001)
+1.8 V digital Red ``1P8V`` to ``DGND`` 20 mA             7 mA ± 3 mA
+============= ======================== ================= =========================
 
 The data sheet gives absolute maximum ratings of 1.32 V on V1P2 and 1.98 V on
 V1P8, so set the supply over-voltage protection below those values.
@@ -58,6 +59,12 @@ V1P8, so set the supply over-voltage protection below those values.
 Headers ``P8`` and ``P9`` must have jumpers shorting pin 1 to pin 2. These
 connect the chip's internal 1.0 V LDO outputs, and the device will not operate
 without them.
+
+Leave header ``P4`` as shipped, with its jumper tying ``RESET_N`` (RSTB) to
+1.8 V. The project does not drive RSTB, and resets the device with the soft
+reset sequence instead. Headers ``P2``, ``P12`` and ``P13`` must be open:
+fitted, they switch the board's SPI mux to bit-banged GPIO SPI and disable the
+SPI and control pin level translators respectively.
 
 FMC VADJ Prerequisite
 ~~~~~~~~~~~~~~~~~~~~~
@@ -93,7 +100,7 @@ GPIO 3          EMIO 35            Evaluation board SPI mux select, driven low
 GPIO 4          EMIO 36            ``UPDATE``, beamstate latch strobe
 GPIO 5          EMIO 37            ``RESET``, beam qualifier
 GPIO 6          EMIO 38            ``MUTE``, beam qualifier
-GPIO 7          EMIO 39            ``RSTB``, active low hardware reset
+GPIO 7          EMIO 39            ``RSTB``, not driven, see `Power Supply Requirements`_
 =============== ================== ===============================================
 
 The evaluation board's SPI mux select must be low for the FMC SPI bus to reach
@@ -121,8 +128,8 @@ The basic example exercises every feature of the driver and checks each one
 against the hardware, stopping with an error at the first mismatch. In order,
 it:
 
-* initializes the device: hardware reset, soft reset, scratchpad write and read
-  back, ``CHIPTYPE`` and ``PRODUCT_ID_L`` checks
+* initializes the device: soft reset, scratchpad write and read back,
+  ``CHIPTYPE`` and ``PRODUCT_ID_L`` checks
 * writes a distinct delay and attenuation to all 16 elements of the direct
   control bank, reads them back and strobes an update
 * checks that the amplifiers power up enabled with a bias of 3, then writes and

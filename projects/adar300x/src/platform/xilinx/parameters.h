@@ -63,7 +63,6 @@
 #define GPIO_UPDATE			(GPIO_OFFSET + 32 + 4)
 #define GPIO_BEAM_RESET			(GPIO_OFFSET + 32 + 5)
 #define GPIO_MUTE			(GPIO_OFFSET + 32 + 6)
-#define GPIO_RSTB			(GPIO_OFFSET + 32 + 7)
 
 extern struct xil_uart_init_param adar300x_uart_extra;
 extern struct xil_spi_init_param adar300x_spi_extra;

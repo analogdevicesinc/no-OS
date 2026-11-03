@@ -20,12 +20,6 @@ struct no_os_uart_init_param adar300x_uart_ip = {
 	.extra = UART_EXTRA,
 };
 
-static struct no_os_gpio_init_param adar300x_gpio_rstb_ip = {
-	.number = GPIO_RSTB,
-	.platform_ops = GPIO_OPS,
-	.extra = GPIO_EXTRA,
-};
-
 static struct no_os_gpio_init_param adar300x_gpio_mux_sel_ip = {
 	.number = GPIO_MUX_SEL,
 	.platform_ops = GPIO_OPS,
@@ -61,7 +55,11 @@ struct adar300x_init_param adar300x_ip = {
 		.extra = SPI_EXTRA,
 	},
 	.spi_desc_shared = NULL,
-	.gpio_rstb = &adar300x_gpio_rstb_ip,
+	/*
+	 * RSTB is left undriven: the evaluation board ships with P4 tying RESET_N
+	 * to 1.8 V, and the soft reset sequence issued at init resets the device.
+	 */
+	.gpio_rstb = NULL,
 	.gpio_mux_sel = &adar300x_gpio_mux_sel_ip,
 	.gpio_update = &adar300x_gpio_update_ip,
 	.gpio_reset = &adar300x_gpio_reset_ip,
