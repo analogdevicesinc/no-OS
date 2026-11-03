@@ -9,6 +9,11 @@
 *******************************************************************************/
 
 #include "no_os_delay.h"
+#if defined(CONFIG_ALTERA_PLATFORM_NIOSV)
+#include <sys/alt_alarm.h>
+#else
+#include <unistd.h>
+#endif
 
 /**
  * @brief Generate microseconds delay.
@@ -16,7 +21,11 @@
  */
 void no_os_udelay(uint32_t usecs)
 {
+#if defined(CONFIG_ALTERA_PLATFORM_NIOSV)
+	alt_busy_sleep(usecs);
+#else
 	usleep(usecs);
+#endif
 }
 
 /**
@@ -25,5 +34,9 @@ void no_os_udelay(uint32_t usecs)
  */
 void no_os_mdelay(uint32_t msecs)
 {
-	usleep(msecs * 1000);
+#if defined(CONFIG_ALTERA_PLATFORM_NIOSV)
+	alt_busy_sleep(msecs * 1000U);
+#else
+	usleep(msecs * 1000U);
+#endif
 }
