@@ -495,6 +495,7 @@ int dma_example_main(void)
 		goto error_rx_dmac;
 	}
 
+#ifdef AD9088_ADXCVR
 	ret = adxcvr_init(&tx_adxcvr, &tx_adxcvr_ip);
 	if (ret) {
 		pr_info("TX ADXCVR initialization failed\n");
@@ -508,6 +509,7 @@ int dma_example_main(void)
 		goto error_tx_adxcvr;
 	}
 	rx_jesd_clk.xcvr = rx_adxcvr;
+#endif
 
 	rx_lane_clk.platform_ops = &jesd204_clk_ops;
 	rx_lane_clk.dev_desc = &rx_jesd_clk;
@@ -520,7 +522,11 @@ int dma_example_main(void)
 	ret = axi_jesd204_rx_init(&rx_jesd, &rx_jesd204_ip);
 	if (ret) {
 		pr_info("JESD RX initialization failed\n");
+#ifdef AD9088_ADXCVR
 		goto error_rx_adxcvr;
+#else
+		goto error_tx_dmac;
+#endif
 	}
 	rx_jesd_clk.jesd_rx = rx_jesd;
 
@@ -903,10 +909,12 @@ error_tx_jesd:
 	axi_jesd204_tx_remove(tx_jesd);
 error_rx_jesd:
 	axi_jesd204_rx_remove(rx_jesd);
+#ifdef AD9088_ADXCVR
 error_rx_adxcvr:
 	adxcvr_remove(rx_adxcvr);
 error_tx_adxcvr:
 	adxcvr_remove(tx_adxcvr);
+#endif
 error_tx_dmac:
 	axi_dmac_remove(tx_dmac);
 error_rx_dmac:
