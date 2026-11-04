@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADXL355_H__
-#define __ADXL355_H__
+#ifndef ADXL355_H_
+#define ADXL355_H_
 
 #include <stdint.h>
 #include <string.h>
@@ -364,4 +364,4 @@ int adxl355_config_int_pins(struct adxl355_dev *dev,
 /*! Configures the interrupt polarity. */
 int adxl355_set_int_pol(struct adxl355_dev *dev, enum adxl355_int_pol int_pol);
 
-#endif /* __ADXL355_H__ */
+#endif /* ADXL355_H_ */

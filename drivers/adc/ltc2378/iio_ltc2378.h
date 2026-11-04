@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef IIO_LTC2378_H
-#define IIO_LTC2378_H
+#ifndef IIO_LTC2378_H_
+#define IIO_LTC2378_H_
 
 #include "iio.h"
 #include "ltc2378.h"
@@ -30,4 +30,4 @@ int ltc2378_iio_init(struct ltc2378_iio_desc **,
 /* Free resources allocated by the IIO initialization function */
 int ltc2378_iio_remove(struct ltc2378_iio_desc *);
 
-#endif /* IIO_LTC2378_H */
+#endif /* IIO_LTC2378_H_ */

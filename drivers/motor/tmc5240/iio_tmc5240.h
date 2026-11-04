@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
 
-#ifndef IIO_TMC5240_H
-#define IIO_TMC5240_H
+#ifndef IIO_TMC5240_H_
+#define IIO_TMC5240_H_
 
 /**
  * @enum tmc5240_iio_attr

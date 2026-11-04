@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef MAX22216_H
-#define MAX22216_H
+#ifndef MAX22216_H_
+#define MAX22216_H_
 
 #include <stdbool.h>
 #include "no_os_gpio.h"
@@ -79,4 +79,4 @@ int max22216_set_current_ma(struct max22216_desc *desc, uint8_t channel_nr,
 int max22216_turn_on(struct max22216_desc *desc, uint8_t channel_nr);
 int max22216_turn_off(struct max22216_desc *desc, uint8_t channel_nr);
 
-#endif // MAX22216_H
+#endif // MAX22216_H_

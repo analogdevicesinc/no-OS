@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef SRC_LTC4332_SPI_H_
-#define SRC_LTC4332_SPI_H_
+#ifndef LTC4332_H_
+#define LTC4332_H_
 
 #include "no_os_spi.h"
 
@@ -30,4 +30,4 @@ int32_t ltc4332_spi_remove(struct no_os_spi_desc *desc);
 int32_t ltc4332_spi_write_and_read(struct no_os_spi_desc *desc, uint8_t *data,
 				   uint16_t bytes_number);
 
-#endif /* SRC_LTC4332_SPI_H_ */
+#endif /* LTC4332_H_ */

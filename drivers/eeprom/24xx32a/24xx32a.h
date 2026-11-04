@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _24XX32A_H_
-#define _24XX32A_H_
+#ifndef EEPROM_24XX32A_H_
+#define EEPROM_24XX32A_H_
 
 #include <stdint.h>
 #include "no_os_i2c.h"
@@ -37,4 +37,4 @@ struct eeprom_24xx32a_dev {
  */
 extern const struct no_os_eeprom_platform_ops eeprom_24xx32a_ops;
 
-#endif	/* end of _24XX32A_H_ */
+#endif	/* end of EEPROM_24XX32A_H_ */

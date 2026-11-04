@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef __LTC4162L_H__
-#define __LTC4162L_H__
+#ifndef LTC4162L_H_
+#define LTC4162L_H_
 
 #include <stdint.h>
 #include <string.h>
@@ -237,4 +237,4 @@ int ltc4162l_get_telemetry(struct ltc4162l_desc *dev, uint16_t *val);
 /* Set telemetry*/
 int ltc4162l_set_telemetry(struct ltc4162l_desc *dev, uint16_t val);
 
-#endif //__LTC4162L_H__
+#endif //LTC4162L_H_

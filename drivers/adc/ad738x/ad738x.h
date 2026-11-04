@@ -10,8 +10,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef SRC_AD738X_H_
-#define SRC_AD738X_H_
+#ifndef AD738X_H_
+#define AD738X_H_
 
 #include "no_os_util.h"
 #include "no_os_spi.h"
@@ -218,4 +218,4 @@ int32_t ad738x_ch_seq_sel(struct ad738x_dev *dev,
 int32_t ad738x_read_data(struct ad738x_dev *dev,
 			 uint32_t *buf,
 			 uint16_t samples);
-#endif /* SRC_AD738X_H_ */
+#endif /* AD738X_H_ */

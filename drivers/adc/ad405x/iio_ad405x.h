@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef IIO_AD405X_H
-#define IIO_AD405X_H
+#ifndef IIO_AD405X_H_
+#define IIO_AD405X_H_
 
 #include "iio.h"
 
@@ -66,4 +66,4 @@ int ad405x_iio_init(struct ad405x_iio_dev **iio_dev,
 /** Free memory allocated by ad405x_iio_init(). */
 int ad405x_iio_remove(struct ad405x_iio_dev *desc);
 
-#endif /** IIO_AD405X_H */
+#endif /** IIO_AD405X_H_ */

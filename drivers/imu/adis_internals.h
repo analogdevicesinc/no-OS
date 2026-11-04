@@ -9,8 +9,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
 
-#ifndef __ADIS_INTERNALS_H__
-#define __ADIS_INTERNALS_H__
+#ifndef ADIS_INTERNALS_H_
+#define ADIS_INTERNALS_H_
 
 #define ADIS_HAS_BURST32		NO_OS_BIT(0)
 #define ADIS_HAS_BURST_DELTA_DATA	NO_OS_BIT(1)

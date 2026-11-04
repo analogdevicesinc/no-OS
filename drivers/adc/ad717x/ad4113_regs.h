@@ -8,8 +8,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 ******************************************************************************/
 
-#ifndef __AD4113_REGS_H__
-#define __AD4113_REGS_H__
+#ifndef AD4113_REGS_H_
+#define AD4113_REGS_H_
 
 #include "ad717x.h"
 
@@ -95,4 +95,4 @@ ad717x_st_reg ad4113_regs[] = {
 	{AD717X_GAIN7_REG, 0, 2 },
 };
 
-#endif /* __AD4113_REGS_H__ */
+#endif /* AD4113_REGS_H_ */

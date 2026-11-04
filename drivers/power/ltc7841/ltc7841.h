@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __LTC7841_H__
-#define __LTC7841_H__
+#ifndef LTC7841_H_
+#define LTC7841_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -156,4 +156,4 @@ int ltc7841_change_margin_high_command(struct ltc7841_desc *desc,
 int ltc7841_mfr_clear_peaks(struct ltc7841_desc *desc);
 /** Clears the STATUS_WORD BITS that are clearable of LTC7841 */
 int ltc7841_clear_status_word_bits(struct ltc7841_desc *desc);
-#endif /* LTC7841_H */
+#endif /* LTC7841_H_ */

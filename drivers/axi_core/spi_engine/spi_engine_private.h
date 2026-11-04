@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef SPI_ENGINE_PRIVATE_H
-#define SPI_ENGINE_PRIVATE_H
+#ifndef SPI_ENGINE_PRIVATE_H_
+#define SPI_ENGINE_PRIVATE_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -110,4 +110,4 @@ typedef struct spi_engine_msg {
 	struct spi_engine_cmd_queue	*cmds;
 } spi_engine_msg;
 
-#endif // SPI_ENGINE_PRIVATE_H
+#endif // SPI_ENGINE_PRIVATE_H_

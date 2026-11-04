@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef IIO_LTP8800_H
-#define IIO_LTP8800_H
+#ifndef IIO_LTP8800_H_
+#define IIO_LTP8800_H_
 
 #include <stdbool.h>
 #include "iio.h"
@@ -36,4 +36,4 @@ int ltp8800_iio_init(struct ltp8800_iio_desc **,
 /** Free resources allocated by the initialization function. */
 int ltp8800_iio_remove(struct ltp8800_iio_desc *);
 
-#endif /* IIO_LTP8800_H */
+#endif /* IIO_LTP8800_H_ */

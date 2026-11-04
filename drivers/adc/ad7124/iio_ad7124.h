@@ -8,11 +8,11 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef IIO_AD7124_H
-#define IIO_AD7124_H
+#ifndef IIO_AD7124_H_
+#define IIO_AD7124_H_
 
 #include "iio.h"
 
 extern struct iio_device iio_ad7124_device;
 
-#endif /** IIO_AD7124_H */
+#endif /** IIO_AD7124_H_ */

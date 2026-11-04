@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __LTP8800_H__
-#define __LTP8800_H__
+#ifndef LTP8800_H_
+#define LTP8800_H_
 
 #include <stdint.h>
 #include <string.h>
@@ -278,4 +278,4 @@ int ltp8800_store_user_settings(struct ltp8800_dev *dev);
 /* Restore user settings from EEPROM */
 int ltp8800_restore_user_settings(struct ltp8800_dev *dev);
 
-#endif /* __LTP8800_H__ */
+#endif /* LTP8800_H_ */

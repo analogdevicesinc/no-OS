@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *
 *******************************************************************************/
-#ifndef __AD5754R_H__
-#define __AD5754R_H__
+#ifndef AD5754R_H_
+#define AD5754R_H_
 
 #include <stdint.h>
 #include "no_os_gpio.h"
@@ -360,4 +360,4 @@ int ad5754r_remove_gpios(struct ad5754r_dev *dev);
 /** Free the resources allocated by ad5754r_init(). */
 int ad5754r_remove(struct ad5754r_dev *dev);
 
-#endif /* __AD5754R_H__ */
+#endif /* AD5754R_H_ */

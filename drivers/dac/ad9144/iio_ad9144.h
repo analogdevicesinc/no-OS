@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef IIO_AD9144_H
-#define IIO_AD9144_H
+#ifndef IIO_AD9144_H_
+#define IIO_AD9144_H_
 
 #include "iio_types.h"
 #include "ad9144.h"
@@ -17,4 +17,4 @@
 /** IIO Descriptor */
 extern const struct iio_device ad9144_iio_descriptor;
 
-#endif //IIO_AD9144_H
+#endif //IIO_AD9144_H_

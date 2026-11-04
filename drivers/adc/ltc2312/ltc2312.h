@@ -9,8 +9,8 @@
     Header for LTC2315: 12/14-bit 1Msps ADC
 */
 
-#ifndef LTC231X_H
-#define LTC231X_H
+#ifndef LTC2312_H_
+#define LTC2312_H_
 
 /*! Define the SPI CS pin */
 #ifndef LTC2315_CS
@@ -63,4 +63,4 @@ int32_t ltc2312_read(struct ltc2312_dev *dev, uint16_t *ptr_adc_code);
 void ltc2312_code_to_voltage(struct ltc2312_dev *dev, uint16_t adc_code,
 			     float vref, float *voltage);
 
-#endif  //  LTC2315_H
+#endif  //  LTC2312_H_

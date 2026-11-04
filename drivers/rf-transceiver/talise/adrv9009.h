@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADRV9009_H__
-#define __ADRV9009_H__
+#ifndef ADRV9009_H_
+#define ADRV9009_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -175,4 +175,4 @@ static inline bool has_rx_and_en(struct adrv9009_rf_phy *phy)
 	return has_rx(phy) && (phy->talInit.rx.rxChannels != TAL_RXOFF);
 }
 
-#endif /* __ADRV9009_H__ */
+#endif /* ADRV9009_H_ */

@@ -8,8 +8,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __ADIN1320_H__
-#define __ADIN1320_H__
+#ifndef ADIN1320_H_
+#define ADIN1320_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -822,4 +822,4 @@ int adin1320_wol_en_cfg(struct adin1320_desc *dev,
 int adin1320_get_active_media(struct adin1320_desc *dev,
 			      enum adin1320_active_media *media);
 
-#endif /* __ADIN1320_H__ */
+#endif /* ADIN1320_H_ */

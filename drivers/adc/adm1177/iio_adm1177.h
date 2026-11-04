@@ -8,8 +8,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 ******************************************************************************/
 
-#ifndef IIO_ADM1177_H
-#define IIO_ADM1177_H
+#ifndef IIO_ADM1177_H_
+#define IIO_ADM1177_H_
 
 #include "iio.h"
 #include "iio_types.h"
@@ -31,4 +31,4 @@ int adm1177_iio_init(struct adm1177_iio_dev **iio_dev,
 
 int adm1177_iio_remove(struct adm1177_iio_dev *desc);
 
-#endif /** IIO_ADM1177_H */
+#endif /** IIO_ADM1177_H_ */

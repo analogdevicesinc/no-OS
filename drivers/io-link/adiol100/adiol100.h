@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __ADIOL100_H_
-#define __ADIOL100_H_
+#ifndef ADIOL100_H_
+#define ADIOL100_H_
 
 #include "no_os_spi.h"
 #include "no_os_gpio.h"

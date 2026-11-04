@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __AD9517_H__
-#define __AD9517_H__
+#ifndef AD9517_H_
+#define AD9517_H_
 
 #include <stdint.h>
 #include "no_os_spi.h"
@@ -399,4 +399,4 @@ int32_t ad9517_power_mode(struct ad9517_dev *dev,
 			  int32_t channel,
 			  int32_t mode);
 
-#endif // __AD9517_H__
+#endif // AD9517_H_

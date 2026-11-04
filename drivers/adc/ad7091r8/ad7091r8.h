@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __AD7091R8_H__
-#define __AD7091R8_H__
+#ifndef AD7091R8_H_
+#define AD7091R8_H_
 
 #include <stdbool.h>
 
@@ -233,4 +233,4 @@ int ad7091r8_spi_write_mask(struct ad7091r8_dev* dev,
 
 int ad7091r8_pulse_convst(struct ad7091r8_dev *dev);
 
-#endif // __AD7091R8_H__
+#endif // AD7091R8_H_

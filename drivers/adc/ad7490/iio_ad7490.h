@@ -8,8 +8,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 ******************************************************************************/
 
-#ifndef IIO_AD7490_H
-#define IIO_AD7490_H
+#ifndef IIO_AD7490_H_
+#define IIO_AD7490_H_
 
 #include "iio.h"
 #include "iio_types.h"
@@ -36,4 +36,4 @@ int ad7490_iio_init(struct ad7490_iio_desc **iio_desc,
 
 int ad7490_iio_remove(struct ad7490_iio_desc *iio_desc);
 
-#endif /** IIO_AD7490_H */
+#endif /** IIO_AD7490_H_ */

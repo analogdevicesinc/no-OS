@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef IIO_ADXL355_H
-#define IIO_ADXL355_H
+#ifndef IIO_ADXL355_H_
+#define IIO_ADXL355_H_
 
 #include "iio.h"
 #include "no_os_irq.h"
@@ -32,4 +32,4 @@ int adxl355_iio_init(struct adxl355_iio_dev **iio_dev,
 
 int adxl355_iio_remove(struct adxl355_iio_dev *desc);
 
-#endif /** IIO_ADXL355_H */
+#endif /** IIO_ADXL355_H_ */

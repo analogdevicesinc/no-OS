@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef IIO_AD7091R8_H
-#define IIO_AD7091R8_H
+#ifndef IIO_AD7091R8_H_
+#define IIO_AD7091R8_H_
 
 #include "iio.h"
 
@@ -45,4 +45,4 @@ int ad7091r8_iio_init(struct ad7091r8_iio_dev **iio_dev,
 /*! Function to be called to remove a AD7091R-2/-4/-8 device. */
 int ad7091r8_iio_remove(struct ad7091r8_iio_dev *desc);
 
-#endif /** IIO_AD7091R8_H */
+#endif /** IIO_AD7091R8_H_ */

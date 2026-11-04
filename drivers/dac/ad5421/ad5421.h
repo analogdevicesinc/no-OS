@@ -8,8 +8,8 @@
 *
 * SPDX-License-Identifier: BSD-3-Clause
 ******************************************************************************/
-#ifndef _AD5421_H_
-#define _AD5421_H_
+#ifndef AD5421_H_
+#define AD5421_H_
 
 #include <stdint.h>
 #include "no_os_gpio.h"
@@ -97,4 +97,4 @@ int32_t ad5421_get(struct ad5421_dev *dev);
 /* Resets the AD5421 device. */
 void ad5421_reset(struct ad5421_dev *dev);
 
-#endif /* _AD5421_H_ */
+#endif /* AD5421_H_ */

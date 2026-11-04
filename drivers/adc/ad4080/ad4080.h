@@ -9,8 +9,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __AD4080_H__
-#define __AD4080_H__
+#ifndef AD4080_H_
+#define AD4080_H_
 
 #include <stdint.h>
 #include <string.h>
@@ -597,4 +597,4 @@ int ad4080_init(struct ad4080_dev **device,
 /** Remove the device and release resources. */
 int ad4080_remove(struct ad4080_dev *dev);
 
-#endif /* __AD4080_H__ */
+#endif /* AD4080_H_ */

@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef MAX31889_H
-#define MAX31889_H
+#ifndef MAX31889_H_
+#define MAX31889_H_
 
 #include <errno.h>
 #include "no_os_i2c.h"

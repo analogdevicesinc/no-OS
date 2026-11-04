@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __TCS34725_H__
-#define __TCS34725_H__
+#ifndef TCS34725_H_
+#define TCS34725_H_
 
 #include <stdint.h>
 #include "no_os_i2c.h"
@@ -71,4 +71,4 @@ int tcs34725_init(struct tcs34725_desc **desc,
 /** Free the device descriptor */
 int tcs34725_remove(struct tcs34725_desc *desc);
 
-#endif /* __TCS34725_H__ */
+#endif /* TCS34725_H_ */

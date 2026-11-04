@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 ******************************************************************************/
 
-#ifndef GMSL_CAM_SER_H
-#define GMSL_CAM_SER_H
+#ifndef GMSL_CAM_SER_H_
+#define GMSL_CAM_SER_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -105,4 +105,4 @@ struct gmsl_dev_csi_ser_init_param {
 	void *dev_state_mem;										 /*!< GMSL Camera Serializer device state memory */
 };
 
-#endif /* GMSL_CAM_SER_H */
+#endif /* GMSL_CAM_SER_H_ */

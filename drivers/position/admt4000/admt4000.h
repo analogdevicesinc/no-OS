@@ -10,8 +10,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
 
-#ifndef __ADMT4000_H__
-#define __ADMT4000_H__
+#ifndef ADMT4000_H_
+#define ADMT4000_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -508,4 +508,4 @@ int admt4000_set_harmonics_calib(struct admt4000_dev *device,
 }
 #endif
 
-#endif  /* __ADMT4000_H__ */
+#endif  /* ADMT4000_H_ */

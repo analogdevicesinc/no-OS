@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
 
-#ifndef IIO_ADIS1650X_H
-#define IIO_ADIS1650X_H
+#ifndef IIO_ADIS1650X_H_
+#define IIO_ADIS1650X_H_
 
 #include "iio_adis_internals.h"
 #include "adis1650x.h"

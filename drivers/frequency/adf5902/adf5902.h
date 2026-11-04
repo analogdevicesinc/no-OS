@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef SRC_ADF5902_H_
-#define SRC_ADF5902_H_
+#ifndef ADF5902_H_
+#define ADF5902_H_
 
 #include <stdint.h>
 #include "no_os_spi.h"
@@ -535,4 +535,4 @@ int32_t adf5902f_compute_frequency(struct adf5902_dev *dev, uint64_t *freq);
 /** ADF5902 Resources Deallocation */
 int32_t adf5902_remove(struct adf5902_dev *dev);
 
-#endif /* SRC_ADF5902_H_ */
+#endif /* ADF5902_H_ */

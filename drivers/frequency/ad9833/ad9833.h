@@ -8,8 +8,8 @@
 *
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _AD9833_H_
-#define _AD9833_H_
+#ifndef AD9833_H_
+#define AD9833_H_
 
 #include <stdint.h>
 #include "no_os_delay.h"
@@ -141,4 +141,4 @@ void ad9834_logic_output(struct ad9833_dev *dev,
 			 uint8_t signpib,
 			 uint8_t div2);
 
-#endif  /* _AD9833_H_ */
+#endif  /* AD9833_H_ */

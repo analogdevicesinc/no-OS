@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
-#ifndef _NO_OS_OA_TC6_H
-#define _NO_OS_OA_TC6_H
+#ifndef OA_TC6_H_
+#define OA_TC6_H_
 
 #include "no_os_spi.h"
 #include "no_os_util.h"
@@ -333,4 +333,4 @@ int oa_tc6_get_stats(struct oa_tc6_desc *desc, struct oa_tc6_stats *stats);
 /* Reset the software statistics counters to zero. */
 int oa_tc6_reset_stats(struct oa_tc6_desc *desc);
 
-#endif /* _NO_OS_OA_TC6_H */
+#endif /* OA_TC6_H_ */

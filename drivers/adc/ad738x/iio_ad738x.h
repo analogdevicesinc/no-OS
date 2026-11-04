@@ -10,8 +10,8 @@
 * By using this software you agree to the terms of the associated
 * Analog Devices Software License Agreement.
 *******************************************************************************/
-#ifndef _AD738X_IIO_H_
-#define _AD738X_IIO_H_
+#ifndef IIO_AD738X_H_
+#define IIO_AD738X_H_
 
 #include <stdint.h>
 
@@ -28,4 +28,4 @@ struct ad738x_iio_dev {
 int ad738x_iio_init(struct ad738x_iio_dev **dev,
 		    struct ad738x_init_param *init_param);
 int ad738x_iio_remove(struct ad738x_iio_dev *dev);
-#endif /* __AD738X_IIO_H__ */
+#endif /* IIO_AD738X_H_ */

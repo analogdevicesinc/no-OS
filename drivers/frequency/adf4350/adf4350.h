@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *
 *******************************************************************************/
-#ifndef __ADF4350_H__
-#define __ADF4350_H__
+#ifndef ADF4350_H_
+#define ADF4350_H_
 
 #include <stdint.h>
 #include "no_os_spi.h"
@@ -176,4 +176,4 @@ int64_t adf4350_out_altvoltage0_refin_frequency(adf4350_dev *dev,
 int32_t adf4350_out_altvoltage0_powerdown(adf4350_dev *dev,
 		int32_t pwd);
 
-#endif // __ADF4350_H__
+#endif // ADF4350_H_

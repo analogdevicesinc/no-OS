@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADE7753_H__
-#define __ADE7753_H__
+#ifndef ADE7753_H_
+#define ADE7753_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -326,4 +326,4 @@ int ade7753_rms_vals(struct ade7753_dev *dev,
 int ade7753_period_val(struct ade7753_dev *dev,
 		       struct ade7753_period_value *data);
 
-#endif /* __ADE7753_H__ */
+#endif /* ADE7753_H_ */

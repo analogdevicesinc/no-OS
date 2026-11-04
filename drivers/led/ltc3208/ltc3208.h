@@ -12,8 +12,8 @@
 extern "C" {
 #endif
 
-#ifndef __LTC3208_H__
-#define __LTC3208_H__
+#ifndef LTC3208_H_
+#define LTC3208_H_
 
 #include "no_os_i2c.h"
 #include "no_os_gpio.h"
@@ -220,7 +220,7 @@ int ltc3208_set_cam_high(struct ltc3208_dev *device, bool is_cam_high_enable);
 int ltc3208_set_sub_enable(struct ltc3208_dev *device, bool is_sub_enable);
 
 
-#endif  /*__LTC3208_H__*/
+#endif  /*LTC3208_H_*/
 
 #ifdef __cplusplus
 }

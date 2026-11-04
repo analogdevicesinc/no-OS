@@ -9,8 +9,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 ******************************************************************************/
 
-#ifndef _AD5710R_H_
-#define _AD5710R_H_
+#ifndef AD5710R_H_
+#define AD5710R_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -379,4 +379,4 @@ int ad5710r_init(struct ad5710r_desc **desc,
 		 struct ad5710r_init_param *init_param);
 int ad5710r_remove(struct ad5710r_desc *desc);
 
-#endif /* _AD5710R_H_ */
+#endif /* AD5710R_H_ */

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __MAX31875_H__
-#define __MAX31875_H__
+#ifndef MAX31875_H_
+#define MAX31875_H_
 
 #include <stdint.h>
 #include "no_os_i2c.h"
@@ -88,4 +88,4 @@ int32_t max31875_init(struct max31875_dev **device,
 /** Free memory allocated by max31875_init(). */
 int32_t max31875_remove(struct max31875_dev *dev);
 
-#endif	/* __MAX31875_H__ */
+#endif	/* MAX31875_H_ */

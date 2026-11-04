@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
-#ifndef __MAX11205_H__
-#define __MAX11205_H__
+#ifndef MAX11205_H_
+#define MAX11205_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -58,4 +58,4 @@ int max11205_get_data_mv(struct max11205_dev *dev, int16_t raw_data,
 
 int max11205_remove(struct max11205_dev *dev);
 
-#endif /* __MAX11205_H__ */
+#endif /* MAX11205_H_ */

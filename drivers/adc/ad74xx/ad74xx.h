@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __AD74XX_H__
-#define __AD74XX_H__
+#ifndef AD74XX_H_
+#define AD74XX_H_
 
 #include <stdint.h>
 #include "no_os_spi.h"
@@ -77,4 +77,4 @@ float ad74xx_convert_to_volts(struct ad74xx_dev *dev,
 			      uint16_t raw_value,
 			      float v_ref);
 
-#endif /* __AD74XX_H__ */
+#endif /* AD74XX_H_ */

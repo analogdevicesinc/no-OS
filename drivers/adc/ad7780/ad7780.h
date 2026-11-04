@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __AD7780_H__
-#define __AD7780_H__
+#ifndef AD7780_H_
+#define AD7780_H_
 
 #include <stdint.h>
 #include "no_os_gpio.h"
@@ -94,4 +94,4 @@ float ad7780_convert_to_voltage(uint32_t raw_sample,
 				float v_ref,
 				uint8_t gain);
 
-#endif /* __AD7780_H__ */
+#endif /* AD7780_H_ */

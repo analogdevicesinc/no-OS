@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
 
-#ifndef __NHD_C12832A1Z_H__
-#define __NHD_C12832A1Z_H__
+#ifndef NHD_C12832A1Z_H_
+#define NHD_C12832A1Z_H_
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -89,4 +89,4 @@ int nhd_c12832a1z_init(struct nhd_c12832a1z_dev **device,
 /** Removes resources allocated by device. */
 int nhd_c12832a1z_remove(struct nhd_c12832a1z_dev *dev);
 
-#endif //__NHD_C12832A1Z_H__
+#endif //NHD_C12832A1Z_H_

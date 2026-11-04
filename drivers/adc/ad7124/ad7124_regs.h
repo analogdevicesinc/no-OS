@@ -10,8 +10,8 @@
 *******************************************************************************/
 
 
-#ifndef __AD7124_REGS_H__
-#define __AD7124_REGS_H__
+#ifndef AD7124_REGS_H_
+#define AD7124_REGS_H_
 
 #include "ad7124.h"
 
@@ -19,4 +19,4 @@
     size and access type. */
 extern struct ad7124_st_reg ad7124_regs[AD7124_REG_NO];
 
-#endif /* __AD7124_REGS_H__ */
+#endif /* AD7124_REGS_H_ */

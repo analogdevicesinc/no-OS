@@ -8,8 +8,8 @@
 *
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __AD7124_H__
-#define __AD7124_H__
+#ifndef AD7124_H_
+#define AD7124_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -738,5 +738,5 @@ int32_t ad7124_do_calibration(struct ad7124_dev *dev,
 /* Read one raw sample from the internal temperature sensor (hw ch 15). */
 int32_t ad7124_read_temp_raw(struct ad7124_dev *dev, int32_t *val);
 
-#endif /* __AD7124_H__ */
+#endif /* AD7124_H_ */
 

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __AD5933_H__
-#define __AD5933_H__
+#ifndef AD5933_H_
+#define AD5933_H_
 
 #include <stdint.h>
 #include "no_os_i2c.h"
@@ -257,4 +257,4 @@ int ad5933_get_current_data(struct ad5933_dev *dev, int16_t *real,
 
 int ad5933_sweep_done(struct ad5933_dev *dev, int32_t *done);
 
-#endif /* __AD5933_H__ */
+#endif /* AD5933_H_ */

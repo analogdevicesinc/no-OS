@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADP_1050_H__
-#define __ADP_1050_H__
+#ifndef ADP1050_H_
+#define ADP1050_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -826,4 +826,4 @@ int adp1051_set_iout_oc_fault_limit(struct adp1050_desc *desc, int16_t mantissa,
 int adp1050_lfilter(struct adp1050_desc *desc, uint8_t zero, uint8_t pole,
 		    uint8_t lf, uint8_t hf);
 
-#endif /** __ADP_1050_H__ */
+#endif /** ADP1050_H_ */

@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef IIO_DEMO_ADC
-#define IIO_DEMO_ADC
+#ifndef IIO_ADC_DEMO_H_
+#define IIO_ADC_DEMO_H_
 
 #include <stdlib.h>
 #include "iio_types.h"
@@ -19,4 +19,4 @@ extern struct iio_device adc_demo_iio_descriptor;
 extern struct iio_trigger adc_iio_sw_trig_desc;
 extern struct iio_trigger adc_iio_timer_trig_desc;
 
-#endif /* IIO_DEMO_ADC */
+#endif /* IIO_ADC_DEMO_H_ */

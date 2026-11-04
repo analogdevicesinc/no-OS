@@ -54,4 +54,4 @@ int ad5259_dpot_copy_rdac_to_nvm(struct dpot_dev *desc,
 				 enum dpot_chn_type chn);
 int ad5259_dpot_copy_nvm_to_rdac(struct dpot_dev *desc,
 				 enum dpot_chn_type chn);
-#endif	// ad5259_H_
+#endif	// AD5259_H_

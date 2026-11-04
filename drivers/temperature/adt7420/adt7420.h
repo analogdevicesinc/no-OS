@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADT7420_H__
-#define __ADT7420_H__
+#ifndef ADT7420_H_
+#define ADT7420_H_
 
 #include "no_os_spi.h"
 #include "no_os_i2c.h"
@@ -181,4 +181,4 @@ int adt7420_spi_reg_read(struct adt7420_dev *dev,
 /*! Check if the interface of the selected device is SPI */
 bool adt7420_is_spi(struct adt7420_dev *dev);
 
-#endif	/* __ADT7420_H__ */
+#endif	/* ADT7420_H_ */

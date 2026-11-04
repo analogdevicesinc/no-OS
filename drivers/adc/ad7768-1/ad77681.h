@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef SRC_AD77681_H_
-#define SRC_AD77681_H_
+#ifndef AD77681_H_
+#define AD77681_H_
 
 #include "no_os_spi.h"
 
@@ -639,4 +639,4 @@ int32_t ad77681_SINC3_ODR(struct ad77681_dev *dev,
 			  float sinc3_odr);
 int32_t ad77681_status(struct ad77681_dev *dev,
 		       struct ad77681_status_registers *status);
-#endif /* SRC_AD77681_H_ */
+#endif /* AD77681_H_ */

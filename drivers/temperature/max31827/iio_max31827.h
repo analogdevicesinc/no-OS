@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __IIO_MAX31827_H__
-#define __IIO_MAX31827_H__
+#ifndef IIO_MAX31827_H_
+#define IIO_MAX31827_H_
 
 #include "iio.h"
 
@@ -29,4 +29,4 @@ int max31827_iio_init(struct max31827_iio_device **iio_device,
 
 int max31827_iio_remove(struct max31827_iio_device *iio_device);
 
-#endif	/* __IIO_MAX31827_H__ */
+#endif	/* IIO_MAX31827_H_ */

@@ -9,8 +9,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef IIO_ADF4377_H
-#define IIO_ADF4377_H
+#ifndef IIO_ADF4377_H_
+#define IIO_ADF4377_H_
 
 #include "iio_types.h"
 #include "iio.h"

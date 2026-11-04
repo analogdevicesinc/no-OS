@@ -11,8 +11,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __AD717X_H__
-#define __AD717X_H__
+#ifndef AD717X_H_
+#define AD717X_H_
 
 #include <stdint.h>
 #include "no_os_spi.h"
@@ -603,4 +603,4 @@ int ad717x_single_read(ad717x_dev* device, uint8_t id,
 int32_t ad717x_configure_device_odr(ad717x_dev *dev, uint8_t filtcon_id,
 				    uint8_t odr_sel);
 
-#endif /* __AD717X_H__ */
+#endif /* AD717X_H_ */

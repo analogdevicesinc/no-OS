@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADAQ8092_H__
-#define __ADAQ8092_H__
+#ifndef ADAQ8092_H_
+#define ADAQ8092_H_
 
 #include <stdint.h>
 #include <string.h>
@@ -291,4 +291,4 @@ int adaq8092_set_twos_comp(struct adaq8092_dev *dev,
 /* Get the Tows Complement mode. */
 enum adaq8092_twoscomp adaq8092_get_twos_comp(struct adaq8092_dev *dev);
 
-#endif /* __ADAQ8092_H__ */
+#endif /* ADAQ8092_H_ */

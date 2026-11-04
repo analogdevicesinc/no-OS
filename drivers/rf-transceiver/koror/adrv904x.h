@@ -5,8 +5,8 @@
  * Copyright 2020-2023 Analog Devices Inc.
  */
 
-#ifndef IIO_TRX_ADRV904X_H_
-#define IIO_TRX_ADRV904X_H_
+#ifndef ADRV904X_H_
+#define ADRV904X_H_
 
 #include "adi_adrv904x_types.h"
 #include "adi_adrv904x_core.h"

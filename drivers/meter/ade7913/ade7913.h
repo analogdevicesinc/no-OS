@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADE7913_H__
-#define __ADE7913_H__
+#ifndef ADE7913_H_
+#define ADE7913_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -243,4 +243,4 @@ int ade7913_cnt_snapshot_val(struct ade7913_dev *dev, uint16_t *val);
 int ade7913_get_version_product(struct ade7913_dev *dev,
 				uint8_t *ver_product);
 
-#endif // __ADE7913_H__
+#endif // ADE7913_H_

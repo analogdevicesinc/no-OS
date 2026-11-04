@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __LTC2672_H__
-#define __LTC2672_H__
+#ifndef LTC2672_H_
+#define LTC2672_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -262,4 +262,4 @@ int ltc2672_hw_ldac_update(struct ltc2672_dev *);
 /** Device and communication init function */
 int ltc2672_init(struct ltc2672_dev **, struct ltc2672_init_param *);
 
-#endif // __LTC2672_H__
+#endif // LTC2672_H_

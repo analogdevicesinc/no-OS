@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __AD9083_H__
-#define __AD9083_H__
+#ifndef AD9083_H_
+#define AD9083_H_
 
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
@@ -63,4 +63,4 @@ int32_t ad9083_reg_get(struct ad9083_phy *device, uint32_t reg,
 int32_t ad9083_reg_set(struct ad9083_phy *device, uint32_t reg,
 		       uint8_t writeval);
 
-#endif // __AD9083_H__
+#endif // AD9083_H_

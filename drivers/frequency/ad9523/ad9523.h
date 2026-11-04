@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *
  *******************************************************************************/
-#ifndef _AD9523_H_
-#define _AD9523_H_
+#ifndef AD9523_H_
+#define AD9523_H_
 
 #include <stdint.h>
 #include "no_os_delay.h"
@@ -483,4 +483,4 @@ int32_t ad9523_setup(struct ad9523_dev **device,
 int32_t ad9523_remove(struct ad9523_dev *dev);
 
 int32_t ad9523_status(struct ad9523_dev *dev);
-#endif // __AD9523_H__
+#endif // AD9523_H_

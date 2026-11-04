@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef IIO_AD5940_H
-#define IIO_AD5940_H
+#ifndef IIO_AD5940_H_
+#define IIO_AD5940_H_
 
 #include "iio.h"
 #include "ad5940.h"
@@ -37,5 +37,5 @@ int32_t ad5940_iio_init(struct ad5940_iio_dev **iio_dev,
 			struct ad5940_iio_init_param *init_param);
 int32_t ad5940_iio_remove(struct ad5940_iio_dev *desc);
 
-#endif /** IIO_AD5940_H */
+#endif /** IIO_AD5940_H_ */
 

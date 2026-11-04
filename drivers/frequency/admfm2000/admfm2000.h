@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef SRC_ADMFM2000_H_
-#define SRC_ADMFM2000_H_
+#ifndef ADMFM2000_H_
+#define ADMFM2000_H_
 
 #include <stdint.h>
 #include "no_os_gpio.h"
@@ -56,4 +56,4 @@ int admfm2000_get_dsa_raw(struct admfm2000_dev *dev, uint8_t chan,
 
 int admfm2000_set_channel_config(struct admfm2000_dev *dev, uint8_t config);
 
-#endif /* SRC_ADMFM2000_H_ */
+#endif /* ADMFM2000_H_ */

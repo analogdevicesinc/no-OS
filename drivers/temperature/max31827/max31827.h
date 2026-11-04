@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __MAX31827_H__
-#define __MAX31827_H__
+#ifndef MAX31827_H_
+#define MAX31827_H_
 
 #include "no_os_i2c.h"
 #include "no_os_util.h"
@@ -152,4 +152,4 @@ int max31827_shutdown_write(struct max31827_device *dev, uint8_t reg,
 int max31827_write_alarm_val(struct max31827_device *dev, unsigned int reg,
 			     int32_t val);
 
-#endif	/* __MAX31827_H__ */
+#endif	/* MAX31827_H_ */

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADE9113_H__
-#define __ADE9113_H__
+#ifndef ADE9113_H_
+#define ADE9113_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -747,4 +747,4 @@ int ade9113_drdy_int_enable(struct ade9113_dev *dev);
 /* DRDY inerrupt disable. */
 int ade9113_drdy_int_disable(struct ade9113_dev *dev);
 
-#endif // __ADE9113_H__
+#endif // ADE9113_H_

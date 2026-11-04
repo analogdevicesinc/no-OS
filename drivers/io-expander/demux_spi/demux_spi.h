@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef SRC_DEMUX_SPI_H_
-#define SRC_DEMUX_SPI_H_
+#ifndef DEMUX_SPI_H_
+#define DEMUX_SPI_H_
 
 #include "no_os_spi.h"
 
@@ -32,4 +32,4 @@ int32_t demux_spi_remove(struct no_os_spi_desc *desc);
 int32_t demux_spi_write_and_read(struct no_os_spi_desc *desc, uint8_t *data,
 				 uint16_t bytes_number);
 
-#endif /* SRC_DEMUX_SPI_H_ */
+#endif /* DEMUX_SPI_H_ */

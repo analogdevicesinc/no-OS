@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
-#ifndef __LT8722_H__
-#define __LT8722_H__
+#ifndef LT8722_H_
+#define LT8722_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -507,4 +507,4 @@ int lt8722_init(struct lt8722_dev **device,
 /** Remove resources allocated by the init function. */
 int lt8722_remove(struct lt8722_dev *dev);
 
-#endif /** __LT8722_H__ */
+#endif /** LT8722_H_ */

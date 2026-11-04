@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _AD5940_H_
-#define _AD5940_H_
+#ifndef AD5940_H_
+#define AD5940_H_
 #include <stdint.h>
 #include "no_os_spi.h"
 #include "no_os_gpio.h"

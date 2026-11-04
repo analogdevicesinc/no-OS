@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __PCF85263_H__
-#define __PCF85263_H__
+#ifndef PCF85263_H_
+#define PCF85263_H_
 
 #include <stdint.h>
 #include <string.h>
@@ -126,4 +126,4 @@ int pcf85263_init(struct pcf85263_dev **device,
 /* Remove the device and release resources. */
 int pcf85263_remove(struct pcf85263_dev *dev);
 
-#endif //__PCF85263_H__
+#endif //PCF85263_H_

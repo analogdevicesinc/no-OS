@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADE7978_H__
-#define __ADE7978_H__
+#ifndef ADE7978_H_
+#define ADE7978_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -712,4 +712,4 @@ int ade7978_get_int_status0(struct ade7978_dev *dev, uint32_t msk,
 int ade7978_get_int_status1(struct ade7978_dev *dev, uint32_t msk,
 			    uint8_t *status);
 
-#endif /* __ADE7978_H__ */
+#endif /* ADE7978_H_ */

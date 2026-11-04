@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _TMC7300_H_
-#define _TMC7300_H_
+#ifndef TMC7300_H_
+#define TMC7300_H_
 
 #include <stdint.h>
 #include "no_os_uart.h"

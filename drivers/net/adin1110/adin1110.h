@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _ADIN1110_H
-#define _ADIN1110_H
+#ifndef ADIN1110_H_
+#define ADIN1110_H_
 
 #include <stdbool.h>
 #include "no_os_spi.h"

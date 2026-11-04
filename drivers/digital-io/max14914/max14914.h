@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _MAX14914_H
-#define _MAX14914_H
+#ifndef MAX14914_H_
+#define MAX14914_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -56,4 +56,4 @@ int max14914_init(struct max14914_desc **desc,
 /* Free resources allocate by the init function. */
 int max14914_remove(struct max14914_desc *desc);
 
-#endif /* _MAX14914_H */
+#endif /* MAX14914_H_ */

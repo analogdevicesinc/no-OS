@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADE7953_H__
-#define __ADE7953_H__
+#ifndef ADE7953_H_
+#define ADE7953_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -662,4 +662,4 @@ int ade7953_rms_vals(struct ade7953_dev *dev,
 int ade7953_power_quality_vals(struct ade7953_dev *dev,
 			       struct ade7953_pq_values *data);
 
-#endif /* __ADE7953_H__ */
+#endif /* ADE7953_H_ */

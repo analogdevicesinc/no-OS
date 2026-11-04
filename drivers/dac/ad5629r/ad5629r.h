@@ -9,8 +9,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 ******************************************************************************/
 
-#ifndef _AD5629R_H_
-#define _AD5629R_H_
+#ifndef AD5629R_H_
+#define AD5629R_H_
 
 #include <stdint.h>
 #include "no_os_gpio.h"
@@ -168,4 +168,4 @@ void ad5629r_set_ref(struct ad5629r_dev *dev,
 		     uint8_t status);
 
 
-#endif /* AD5629_H_ */
+#endif /* AD5629R_H_ */

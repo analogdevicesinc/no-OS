@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef IIO_ADT75_H
-#define IIO_ADT75_H
+#ifndef IIO_ADT75_H_
+#define IIO_ADT75_H_
 
 #include "iio.h"
 #include "adt75.h"
@@ -35,4 +35,4 @@ int adt75_iio_init(struct adt75_iio_desc **, struct adt75_iio_init_param *);
 /** Free the iio descriptor */
 int adt75_iio_remove(struct adt75_iio_desc *);
 
-#endif /** IIO_ADT75_H */
+#endif /** IIO_ADT75_H_ */

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADXRS453_H__
-#define __ADXRS453_H__
+#ifndef ADXRS453_H_
+#define ADXRS453_H_
 
 #include <stdint.h>
 #include "no_os_spi.h"
@@ -62,4 +62,4 @@ float adxrs453_get_rate(struct adxrs453_dev *dev);
 /*! Reads the temperature sensor data and converts it to degrees Celsius. */
 float adxrs453_get_temperature(struct adxrs453_dev *dev);
 
-#endif // __ADXRS453_H__
+#endif // ADXRS453_H_

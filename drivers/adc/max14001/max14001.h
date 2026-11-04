@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
-#ifndef __MAX14001_H__
-#define __MAX14001_H__
+#ifndef MAX14001_H_
+#define MAX14001_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -321,4 +321,4 @@ int max14001_get_data_filtered(struct max14001_dev *dev, uint16_t *data);
 /** Free the resources allocated by max14001_init(). */
 int max14001_remove(struct max14001_dev *dev);
 
-#endif /* __MAX14001_H__ */
+#endif /* MAX14001_H_ */

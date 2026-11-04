@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _PULSAR_ADC_IIO_H_
-#define _PULSAR_ADC_IIO_H_
+#ifndef IIO_PULSAR_ADC_H_
+#define IIO_PULSAR_ADC_H_
 
 #include <stdint.h>
 
@@ -47,4 +47,4 @@ int pulsar_adc_iio_init(struct pulsar_adc_iio_dev **dev,
 			struct pulsar_adc_iio_init_param *iio_init_param);
 /** Free memory allocated by iio_pulsar_adc_init(). */
 int pulsar_adc_iio_remove(struct pulsar_adc_iio_dev *dev);
-#endif /* __PULSAR_ADC_IIO_H__ */
+#endif /* IIO_PULSAR_ADC_H_ */

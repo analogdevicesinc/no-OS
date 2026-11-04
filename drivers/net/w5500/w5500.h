@@ -8,8 +8,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __W5500_H__
-#define __W5500_H__
+#ifndef W5500_H_
+#define W5500_H_
 
 #include "no_os_spi.h"
 #include "no_os_gpio.h"

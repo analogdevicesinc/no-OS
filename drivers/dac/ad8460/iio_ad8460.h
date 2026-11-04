@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __IIO_AD8460_H__
-#define __IIO_AD8460_H__
+#ifndef IIO_AD8460_H_
+#define IIO_AD8460_H_
 
 #include "iio.h"
 
@@ -29,4 +29,4 @@ int ad8460_iio_init(struct ad8460_iio_device **iio_device,
 
 int ad8460_iio_remove(struct ad8460_iio_device *iio_device);
 
-#endif	/* __IIO_AD8460_H__ */
+#endif	/* IIO_AD8460_H_ */

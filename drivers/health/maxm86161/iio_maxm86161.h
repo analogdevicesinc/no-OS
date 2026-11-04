@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __IIO_MAXM86161_H__
-#define __IIO_MAXM86161_H__
+#ifndef IIO_MAXM86161_H_
+#define IIO_MAXM86161_H_
 
 #include "iio.h"
 #include "maxm86161.h"
@@ -72,4 +72,4 @@ int maxm86161_iio_get_dev_descriptor(struct maxm86161_iio_desc *iio_desc,
 
 void maxm86161_iio_fifo_irq_handler(void *ctx);
 
-#endif /* __IIO_MAXM86161_H__ */
+#endif /* IIO_MAXM86161_H_ */

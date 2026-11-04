@@ -8,8 +8,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef IIO_ADG2128_H
-#define IIO_ADG2128_H
+#ifndef IIO_ADG2128_H_
+#define IIO_ADG2128_H_
 
 #include "iio.h"
 
@@ -22,4 +22,4 @@ int32_t adg2128_iio_init(struct adg2128_iio_dev **iio_dev,
 			 struct no_os_i2c_desc *i2c_desc);
 int32_t adg2128_iio_remove(struct adg2128_iio_dev *desc);
 
-#endif /** IIO_ADG2128_H */
+#endif /** IIO_ADG2128_H_ */

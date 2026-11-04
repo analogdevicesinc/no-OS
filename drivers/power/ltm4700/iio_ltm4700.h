@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __IIO_LTM4700_H__
-#define __IIO_LTM4700_H__
+#ifndef IIO_LTM4700_H_
+#define IIO_LTM4700_H_
 
 #include <stdbool.h>
 #include "iio.h"
@@ -65,4 +65,4 @@ int ltm4700_iio_init(struct ltm4700_iio_desc **iio_desc,
  */
 int ltm4700_iio_remove(struct ltm4700_iio_desc *desc);
 
-#endif /* __IIO_LTM4700_H__ */
+#endif /* IIO_LTM4700_H_ */

@@ -43,4 +43,4 @@ int ad5246_dpot_chn_read(struct dpot_dev *desc,
 			 enum dpot_chn_type chn, uint8_t *data);
 int ad5246_dpot_chn_write(struct dpot_dev *desc,
 			  enum dpot_chn_type chn, uint8_t data);
-#endif	// ad5246_H_
+#endif	// AD5246_H_

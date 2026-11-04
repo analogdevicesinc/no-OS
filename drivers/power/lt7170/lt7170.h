@@ -8,8 +8,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __LT7170_H__
-#define __LT7170_H__
+#ifndef LT7170_H_
+#define LT7170_H_
 
 #include <stdint.h>
 #include <string.h>
@@ -405,4 +405,4 @@ int lt7170_clear_faults(struct lt7170_dev *dev);
 /* Software reset */
 int lt7170_software_reset(struct lt7170_dev *dev);
 
-#endif /* __LT7170_H__ */
+#endif /* LT7170_H_ */

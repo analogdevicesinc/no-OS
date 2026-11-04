@@ -8,8 +8,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __LT7182S_H__
-#define __LT7182S_H__
+#ifndef LT7182S_H_
+#define LT7182S_H_
 
 #include <stdint.h>
 #include <string.h>
@@ -450,4 +450,4 @@ int lt7182s_clear_faults(struct lt7182s_dev *dev);
 /* Software reset */
 int lt7182s_software_reset(struct lt7182s_dev *dev);
 
-#endif /* __LT7182S_H__ */
+#endif /* LT7182S_H_ */

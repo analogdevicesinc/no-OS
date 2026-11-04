@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _MAX22915_H
-#define _MAX22915_H
+#ifndef MAX22915_H_
+#define MAX22915_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -153,4 +153,4 @@ int max22915_set_sw_state(struct max22915_desc *dev,
 /** Free the resources allocated during init */
 int max22915_remove(struct max22915_desc *desc);
 
-#endif /* _MAX22915_H */
+#endif /* MAX22915_H_ */

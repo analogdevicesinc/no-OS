@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __AD9208_H__
-#define __AD9208_H__
+#ifndef AD9208_H_
+#define AD9208_H_
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -131,4 +131,4 @@ int32_t ad9208_initialize(ad9208_dev **device, ad9208_init_param *init_param);
 /* Remove the device. */
 int32_t ad9208_remove(ad9208_dev *device);
 
-#endif // __AD9208_H__
+#endif // AD9208_H_

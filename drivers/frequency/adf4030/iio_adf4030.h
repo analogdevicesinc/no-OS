@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef IIO_ADF4030_H
-#define IIO_ADF4030_H
+#ifndef IIO_ADF4030_H_
+#define IIO_ADF4030_H_
 
 #include "iio.h"
 
@@ -57,4 +57,4 @@ int adf4030_iio_init(struct adf4030_iio_dev **iio_dev,
 
 int adf4030_iio_remove(struct adf4030_iio_dev *desc);
 
-#endif /* IIO_ADF4030_H */
+#endif /* IIO_ADF4030_H_ */

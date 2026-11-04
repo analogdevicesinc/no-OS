@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef SRC_IIO_ADMFM2000_H_
-#define SRC_IIO_ADMFM2000_H_
+#ifndef IIO_ADMFM2000_H_
+#define IIO_ADMFM2000_H_
 
 #include <stdint.h>
 #include "admfm2000.h"
@@ -29,4 +29,4 @@ int admfm2000_iio_init(struct admfm2000_iio_dev **iio_dev,
 
 int admfm2000_iio_remove(struct admfm2000_iio_dev *desc);
 
-#endif /* SRC_IIO_ADMFM2000_H_ */
+#endif /* IIO_ADMFM2000_H_ */

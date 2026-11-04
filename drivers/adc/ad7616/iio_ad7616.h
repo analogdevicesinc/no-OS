@@ -10,8 +10,8 @@
 * By using this software you agree to the terms of the associated
 * Analog Devices Software License Agreement.
 *******************************************************************************/
-#ifndef _AD7616_IIO_H_
-#define _AD7616_IIO_H_
+#ifndef IIO_AD7616_H_
+#define IIO_AD7616_H_
 
 #include <stdint.h>
 
@@ -31,4 +31,4 @@ int ad7616_iio_remove(struct ad7616_iio_dev *dev);
 
 void iio_ad7616_event_handler(struct iio_desc *desc);
 
-#endif /* __AD7616_IIO_H__ */
+#endif /* IIO_AD7616_H_ */

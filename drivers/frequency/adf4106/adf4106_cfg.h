@@ -10,8 +10,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
-#ifndef __ADF4106_CFG_H__
-#define __ADF4106_CFG_H__
+#ifndef ADF4106_CFG_H_
+#define ADF4106_CFG_H_
 
 struct adf4106_settings_t adf4106_st = {
 	10000000,                       // RFIN is 10Mhz
@@ -36,4 +36,4 @@ struct adf4106_settings_t adf4106_st = {
 	ADF4106_PS_8_9                  // Prescaler value
 };
 
-#endif // __ADF4106_CFG_H__
+#endif // ADF4106_CFG_H_
