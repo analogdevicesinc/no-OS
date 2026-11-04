@@ -587,7 +587,7 @@ static int _max_capi_i2c_transmit_dma(struct max_capi_i2c_priv *i2c_priv,
 	int ret;
 	struct capi_dma_handle *dma_handle = i2c_priv->dma_handle;
 	uint8_t *tx_buffer;
-	uint16_t tx_len;
+	uint32_t tx_len;
 	struct max_capi_dma_xfer_extra dma_tx_extra;
 	struct capi_dma_transfer dma_tx_xfer;
 
@@ -962,7 +962,8 @@ int _max_capi_i2c_setup_async(struct capi_i2c_device *device,
 	if (!device || !device->controller || !device->controller->priv || !transfer)
 		return -EINVAL;
 
-	if (!transfer->buf || transfer->len == 0)
+	/* The async state tracks the data length in a uint16_t. */
+	if (!transfer->buf || transfer->len == 0 || transfer->len > UINT16_MAX)
 		return -EINVAL;
 
 	i2c_priv = device->controller->priv;
@@ -1253,6 +1254,10 @@ static int max_capi_i2c_transmit(struct capi_i2c_device *device,
 		if (transfer->sub_address_len > 0 && !transfer->sub_address)
 			return -EINVAL;
 
+		/* The MSDK request tracks the TX length in a uint16_t. */
+		if (transfer->len > (uint32_t)UINT16_MAX - transfer->sub_address_len)
+			return -EINVAL;
+
 		mxc_i3c_req_t i2c_req = (mxc_i3c_req_t) {
 			.is_i2c = true,
 			.rx_buf = NULL,
@@ -1326,6 +1331,10 @@ static int max_capi_i2c_receive(struct capi_i2c_device *device,
 		return 0;
 	} else {
 		if (transfer->sub_address_len > 0 && !transfer->sub_address)
+			return -EINVAL;
+
+		/* The MSDK request tracks the RX length in a uint16_t. */
+		if (transfer->len > UINT16_MAX)
 			return -EINVAL;
 
 		i2c_req = (mxc_i3c_req_t) {
@@ -1503,7 +1512,16 @@ static int max_capi_i2c_receive_async(struct capi_i2c_device *device,
 		return 0;
 	} else {
 		/* Controller mode - do the receive async */
-		int ret = _max_capi_i2c_setup_async(device, transfer);
+		int ret;
+
+		/*
+		 * The read length is programmed into the 8-bit TERM_RD field of
+		 * CONT_CTRL1 in a single EmitStart, so longer reads would wrap.
+		 */
+		if (transfer->len > UINT8_MAX)
+			return -EINVAL;
+
+		ret = _max_capi_i2c_setup_async(device, transfer);
 		if (ret)
 			return ret;
 
