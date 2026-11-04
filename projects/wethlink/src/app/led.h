@@ -7,6 +7,9 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
+#ifndef LED_H_
+#define LED_H_
+
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -25,3 +28,5 @@ void led_rx_det_green(bool on);
 void led_rx_det_red(bool on);
 void led_rj45(enum rj45_led state);
 void led_blink_all(unsigned int times, unsigned int duration);
+
+#endif /* LED_H_ */

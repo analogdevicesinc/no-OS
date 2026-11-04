@@ -11,6 +11,9 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
+#ifndef AD5446_H_
+#define AD5446_H_
+
 #include <stdint.h>
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
@@ -113,3 +116,5 @@ float ad5446_set_voltage(struct ad5446_dev *dev,
 			 float voltage,
 			 float vref,
 			 enum vout_type_t vout_type);
+
+#endif /* AD5446_H_ */

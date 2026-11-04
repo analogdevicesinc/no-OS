@@ -11,6 +11,9 @@
 *
 *******************************************************************************/
 
+#ifndef AD5686_H_
+#define AD5686_H_
+
 #include <stdint.h>
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
@@ -233,3 +236,5 @@ void ad5686_read_back_en(struct ad5686_dev *dev,
 
 /* Set Gain mode */
 int32_t ad5686_gain_mode(struct ad5686_dev *dev, uint8_t value);
+
+#endif /* AD5686_H_ */
