@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __CN0391_H__
-#define __CN0391_H__
+#ifndef CN0391_H_
+#define CN0391_H_
 
 #include "ad7124.h"
 #include "no_os_thermocouple.h"
@@ -158,4 +158,4 @@ int cn0391_read_temperature(struct cn0391_dev *dev, uint8_t ch_idx,
 			    double *thermocouple_voltage,
 			    double *rtd_resistance);
 
-#endif /* __CN0391_H__ */
+#endif /* CN0391_H_ */

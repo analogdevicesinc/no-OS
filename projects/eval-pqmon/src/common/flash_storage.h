@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef __FLASH_STORAGE_H__
-#define __FLASH_STORAGE_H__
+#ifndef FLASH_STORAGE_H_
+#define FLASH_STORAGE_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -178,4 +178,4 @@ const char *flash_status_to_string(FLASH_STATUS status);
  */
 uint32_t flash_calculate_crc32(const void *data, uint32_t len);
 
-#endif /* __FLASH_STORAGE_H__ */
+#endif /* FLASH_STORAGE_H_ */

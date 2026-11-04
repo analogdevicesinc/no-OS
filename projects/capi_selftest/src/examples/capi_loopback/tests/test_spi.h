@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef TEST_SPI_H
-#define TEST_SPI_H
+#ifndef TEST_SPI_H_
+#define TEST_SPI_H_
 
 /**
  * @brief Run all SPI test cases available on the mapped platform.
@@ -15,4 +15,4 @@
  */
 int test_spi(void);
 
-#endif /* TEST_SPI_H */
+#endif /* TEST_SPI_H_ */

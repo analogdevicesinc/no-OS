@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #ifndef DISABLE_SECURE_SOCKET
 #include "iot_sample_common.h"
@@ -151,4 +151,4 @@
     "-----END PRIVATE KEY-----\r\n";
 #endif
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

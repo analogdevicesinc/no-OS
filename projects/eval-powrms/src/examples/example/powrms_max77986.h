@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __POWRMS_MAX77986_H__
-#define __POWRMS_MAX77986_H__
+#ifndef POWRMS_MAX77986_H_
+#define POWRMS_MAX77986_H_
 
 #include "no_os_i2c.h"
 
@@ -71,4 +71,4 @@ int max77986_init(struct no_os_i2c_desc **desc,
  */
 int max77986_remove(struct no_os_i2c_desc *desc);
 
-#endif /* __POWRMS_MAX77986_H__ */
+#endif /* POWRMS_MAX77986_H_ */

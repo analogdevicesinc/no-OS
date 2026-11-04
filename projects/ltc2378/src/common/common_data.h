@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "parameters.h"
 #include "ltc2378.h"
@@ -23,4 +23,4 @@ extern const struct no_os_gpio_init_param ltc2378_gpio_cnv;
 extern const struct no_os_gpio_init_param ltc2378_gpio_busy;
 extern const struct ltc2378_init_param ltc2378_ip;
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

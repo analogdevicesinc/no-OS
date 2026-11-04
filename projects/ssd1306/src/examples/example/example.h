@@ -7,9 +7,9 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __SSD1306_EXAMPLE__
-#define __SSD1306_EXAMPLE__
+#ifndef EXAMPLE_H_
+#define EXAMPLE_H_
 
 int example_main();
 
-#endif /* __SSD1306_EXAMPLE__ */
+#endif /* EXAMPLE_H_ */

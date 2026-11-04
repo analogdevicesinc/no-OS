@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _WRAPPER_H_
-#define _WRAPPER_H_
+#ifndef WRAPPER_H_
+#define WRAPPER_H_
 
 #include <stdlib.h>
 #include <stdint.h>

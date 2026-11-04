@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "adhv4710.h"
 #include "no_os_uart.h"
@@ -64,4 +64,4 @@ extern struct no_os_gpio_init_param gpio_reset_ip;
 #define TEMPERATURE_LIMIT               88
 #define TEMP_OFFSET                     266.64
 /*  */
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

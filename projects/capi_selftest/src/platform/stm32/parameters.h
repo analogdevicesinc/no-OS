@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "stm32_hal.h"
 #include "stm32_capi_uart.h"
@@ -202,4 +202,4 @@ void i2c_platform_set_target_handle(struct capi_i2c_controller_handle *handle);
 /* Largest buffer the DMA sizes sweep / increment cases allocate (bytes). */
 #define DMA_MAX_XFER_SIZE	256U
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

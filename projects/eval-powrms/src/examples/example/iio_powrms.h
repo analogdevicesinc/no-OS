@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __IIO_PWRMS_H__
-#define __IIO_PWRMS_H__
+#ifndef IIO_POWRMS_H_
+#define IIO_POWRMS_H_
 
 #include "iio_app.h"
 #include "no_os_uart.h"

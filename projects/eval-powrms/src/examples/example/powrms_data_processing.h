@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __POWRMS_DATA_PROCESSING_H__
-#define __POWRMS_DATA_PROCESSING_H__
+#ifndef POWRMS_DATA_PROCESSING_H_
+#define POWRMS_DATA_PROCESSING_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -154,4 +154,4 @@ void sync_all_digits_from_values(void);
 
 int calculate_power();
 
-#endif /* __POWRMS_DATA_PROCESSING_H__ */
+#endif /* POWRMS_DATA_PROCESSING_H_ */

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADI_PLATFORM_H__
-#define __ADI_PLATFORM_H__
+#ifndef ADI_PLATFORM_H_
+#define ADI_PLATFORM_H_
 
 #include <stdio.h>
 #include <stdint.h>
@@ -35,6 +35,6 @@ extern int32_t(*adi_hal_Wait_us)(void *devHalCfg, uint32_t time_us);
 #ifdef __cplusplus
 }
 #endif
-#endif /* __ADI_PLATFORM_H__ */
+#endif /* ADI_PLATFORM_H_ */
 
 

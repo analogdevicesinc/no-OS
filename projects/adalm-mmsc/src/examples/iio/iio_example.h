@@ -7,11 +7,11 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __IIO_EXAMPLE_H__
-#define __IIO_EXAMPLE_H__
+#ifndef IIO_EXAMPLE_H_
+#define IIO_EXAMPLE_H_
 
 extern struct no_os_callback_desc heartbeat_callback;
 
 int iio_example_main(void);
 
-#endif /* __IIO_EXAMPLE_H__ */
+#endif /* IIO_EXAMPLE_H_ */

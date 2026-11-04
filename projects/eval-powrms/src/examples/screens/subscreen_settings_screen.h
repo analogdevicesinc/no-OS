@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __SETTINGS_SCREEN_H__
-#define __SETTINGS_SCREEN_H__
+#ifndef SUBSCREEN_SETTINGS_SCREEN_H_
+#define SUBSCREEN_SETTINGS_SCREEN_H_
 
 #include "example.h"
 
@@ -30,4 +30,4 @@
  */
 void subscreen_settings_screen();
 
-#endif // __SETTINGS_SCREEN_H__
+#endif // SUBSCREEN_SETTINGS_SCREEN_H_

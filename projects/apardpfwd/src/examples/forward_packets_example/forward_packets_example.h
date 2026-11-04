@@ -7,9 +7,9 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __FORWARD_PACKETS_EXAMPLE_H__
-#define __FORWARD_PACKETS_EXAMPLE_H__
+#ifndef FORWARD_PACKETS_EXAMPLE_H_
+#define FORWARD_PACKETS_EXAMPLE_H_
 
 int example_main();
 
-#endif /* __FORWARD_PACKETS_EXAMPLE_H__ */
+#endif /* FORWARD_PACKETS_EXAMPLE_H_ */

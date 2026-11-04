@@ -15,4 +15,4 @@
 
 //#define IIO_SUPPORT
 
-#endif /* SRC_APP_CONFIG_H_ */
+#endif /* APP_CONFIG_H_ */

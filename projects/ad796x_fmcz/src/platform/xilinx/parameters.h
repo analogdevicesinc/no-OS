@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include <xparameters.h>
 #include <xil_cache.h>
@@ -70,5 +70,5 @@ extern struct axi_pwm_init_param axi_pwm_0_extra;
 
 #define DCACHE_INVALIDATE	Xil_DCacheInvalidateRange
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */
 

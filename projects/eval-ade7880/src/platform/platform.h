@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PLATFORM_H__
-#define __PLATFORM_H__
+#ifndef PLATFORM_H_
+#define PLATFORM_H_
 
 #include "ade7880.h"
 #include "no_os_uart.h"
@@ -69,4 +69,4 @@ extern struct no_os_spi_init_param ade7880_spi_ip ;
 // Read data interval in ms
 #define READ_INTERVAL               3000
 
-#endif // __PLATFORM_H__
+#endif // PLATFORM_H_

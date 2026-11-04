@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef IIO_DEMO_FREE_RTOS_CONFIG
-#define IIO_DEMO_FREE_RTOS_CONFIG
+#ifndef FREERTOSCONFIG_H_
+#define FREERTOSCONFIG_H_
 
 #include <stdint.h>
 #define configCPU_CLOCK_HZ ((uint32_t)100000000)
@@ -56,4 +56,4 @@ to exclude the API function. */
 #define INCLUDE_xTaskGetIdleTaskHandle 1
 #define INCLUDE_pxTaskGetStackStart  1
 
-#endif // IIO_DEMO_FREE_RTOS_CONFIG
+#endif // FREERTOSCONFIG_H_

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __INTER_H__
-#define __INTER_H__
+#ifndef INTERRUPT_H_
+#define INTERRUPT_H_
 
 #include "no_os_irq.h"
 
@@ -30,4 +30,4 @@ void reset_zx_flag_state(void);
 /*! Initialize ZX interrupt */
 int inter_init_zx(struct ade7753_dev *dev);
 
-#endif /* __INTER__H__ */
+#endif /* INTERRUPT_H_ */

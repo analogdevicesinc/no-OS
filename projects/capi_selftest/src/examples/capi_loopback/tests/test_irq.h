@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef TEST_IRQ_H
-#define TEST_IRQ_H
+#ifndef TEST_IRQ_H_
+#define TEST_IRQ_H_
 
 /**
  * @brief Run all IRQ controller test cases available on the mapped platform.
@@ -15,4 +15,4 @@
  */
 int test_irq(void);
 
-#endif /* TEST_IRQ_H */
+#endif /* TEST_IRQ_H_ */

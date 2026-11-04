@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef ADRV9025_TX_ATTEN_TABLE_H
-#define ADRV9025_TX_ATTEN_TABLE_H
+#ifndef ADRV9025_TXATTENTABLE_H_
+#define ADRV9025_TXATTENTABLE_H_
 
 const char *ADRV9025_TxAttenTable_text =
 	"Tx Atten Index,Tx Atten Hp,Tx Atten Mult\n\

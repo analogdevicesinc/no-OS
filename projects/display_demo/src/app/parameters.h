@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef PARAMETERS_H
-#define PARAMETERS_H
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #define SPI_DEVICE_ID 0U
 #define GPIO_OFFSET   54U

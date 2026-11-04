@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __LTC3220_BASIC_EXAMPLE_TESTS__
-#define __LTC3220_BASIC_EXAMPLE_TESTS__
+#ifndef BASIC_EXAMPLE_H_
+#define BASIC_EXAMPLE_H_
 
 #include "ltc3220.h"
 
@@ -48,4 +48,4 @@ int ltc3220_test_led_singles_alt_modes(struct ltc3220_dev *ltc3220);
 int ltc3220_test_led_quick_write_with_indiv(struct ltc3220_dev *ltc3220,
 		enum ltc3220_uled_mode mode);
 
-#endif /* __LTC3220_BASIC_EXAMPLE_TESTS__ */
+#endif /* BASIC_EXAMPLE_H_ */

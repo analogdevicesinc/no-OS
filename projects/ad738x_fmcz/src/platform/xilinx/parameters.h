@@ -10,8 +10,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include <stdio.h>
 #include <xparameters.h>
@@ -76,4 +76,4 @@ extern struct axi_pwm_init_param axi_pwm_init_param;
 #define OFFLOAD_INIT			&spi_engine_offload_init_param
 
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

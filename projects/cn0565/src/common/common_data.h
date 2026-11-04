@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include <stdint.h>
 #include "parameters.h"
@@ -29,4 +29,4 @@ void ad5940_int_callback(void *ctx);
 uint32_t GetMCUIntFlag(void);
 uint32_t ClrMCUIntFlag(void);
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

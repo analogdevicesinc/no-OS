@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "common_data.h"
 #include "no_os_util.h"
@@ -73,4 +73,4 @@ extern uint8_t adxrs290_timer_extra_ip;
 #define ADXRS290_TIMER_CB_HANDLE    &adxrs290_timer_extra_ip /* for alarm0 */
 #define ADXRS290_TIMER_TRIG_IRQ_ID  0 /* for TIMER_IRQ_0 */
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __EVAL_POWRMS_EXAMPLE__
-#define __EVAL_POWRMS_EXAMPLE__
+#ifndef EXAMPLE_H_
+#define EXAMPLE_H_
 
 #include "common_data.h"
 #include "no_os_util.h"
@@ -37,4 +37,4 @@
 
 int example_main();
 
-#endif /* __EVAL_POWRMS_EXAMPLE__ */
+#endif /* EXAMPLE_H_ */

@@ -7,9 +7,9 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __DUMMY_EXAMPLE_H__
-#define __DUMMY_EXAMPLE_H__
+#ifndef DUMMY_EXAMPLE_H_
+#define DUMMY_EXAMPLE_H_
 
 int dummy_example_main();
 
-#endif /* __DUMMY_EXAMPLE_H__ */
+#endif /* DUMMY_EXAMPLE_H_ */

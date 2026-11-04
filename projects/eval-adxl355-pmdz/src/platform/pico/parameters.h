@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "common_data.h"
 #include "no_os_util.h"
@@ -50,4 +50,4 @@ extern struct pico_uart_init_param adxl355_uart_extra_ip;
 #define GPIO_IRQ_OPS            &pico_gpio_irq_ops
 #define GPIO_IRQ_EXTRA          NULL /* Not used for pico platform */
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

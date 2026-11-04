@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "platform.h"
 
@@ -41,4 +41,4 @@ extern struct no_os_irq_init_param gnss_nvic_ip;
 
 #define GNSS_PPS_1HZ         1
 #define GNSS_PPS_LENGTH_100MS 100
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

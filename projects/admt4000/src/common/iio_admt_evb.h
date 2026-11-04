@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
 #ifdef IIO_SUPPORT
-#ifndef IIO_ADMT_EVB_H
-#define IIO_ADMT_EVB_H
+#ifndef IIO_ADMT_EVB_H_
+#define IIO_ADMT_EVB_H_
 
 #include "iio.h"
 #include <errno.h>

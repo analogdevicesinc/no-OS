@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
 
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "maxim_capi_uart.h"
 #include "maxim_capi_gpio.h"
@@ -128,4 +128,4 @@
 /** IRQ */
 #define IRQ_CTRL_EXTRA		&(struct max_capi_irq_extra_config) {}
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

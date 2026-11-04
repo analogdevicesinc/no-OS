@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __MAIN_MENU_SCREEN_H__
-#define __MAIN_MENU_SCREEN_H__
+#ifndef SUBSCREEN_MAIN_MENU_SCREEN_H_
+#define SUBSCREEN_MAIN_MENU_SCREEN_H_
 
 #include "example.h"
 
@@ -39,4 +39,4 @@ void subscreen_main_menu_screen();
 void underline_in_main_screen(lv_obj_t *label1, lv_obj_t *label2,
 			      bool show_menu);
 
-#endif // __MAIN_MENU_SCREEN_H__
+#endif // SUBSCREEN_MAIN_MENU_SCREEN_H_

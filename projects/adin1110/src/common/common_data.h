@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "parameters.h"
 #include "no_os_spi.h"
@@ -19,4 +19,4 @@ extern struct no_os_uart_init_param adin1110_uart_ip;
 extern struct no_os_spi_init_param adin1110_spi_ip;
 extern struct no_os_gpio_init_param adin1110_reset_gpio_ip;
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

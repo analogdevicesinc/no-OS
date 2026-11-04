@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __BUTTONS_H__
-#define __BUTTONS_H__
+#ifndef POWRMS_GPIOS_H_
+#define POWRMS_GPIOS_H_
 
 #include "no_os_gpio.h"
 
@@ -64,4 +64,4 @@ void configure_gpios_upon_startup(void);
 int configure_gpios_upon_shutdown();
 
 
-#endif /* __BUTTONS_H__ */
+#endif /* POWRMS_GPIOS_H_ */

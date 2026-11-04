@@ -7,9 +7,9 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ESH_EXAMPLE_H__
-#define __ESH_EXAMPLE_H__
+#ifndef ESH_EXAMPLE_H_
+#define ESH_EXAMPLE_H_
 
 int esh_example_main();
 
-#endif /* __ESH_EXAMPLE_H__ */
+#endif /* ESH_EXAMPLE_H_ */

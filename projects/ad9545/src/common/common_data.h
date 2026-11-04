@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "parameters.h"
 #include "ad9545.h"
@@ -23,4 +23,4 @@ extern const struct no_os_clk_platform_ops refm1_clk_ops;
 #define REFBB_CLK_FREQUENCY 1
 #define REFM1_CLK_FREQUENCY 50000000
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

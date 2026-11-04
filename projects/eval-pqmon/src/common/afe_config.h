@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef __AFE_CONFIG_H__
-#define __AFE_CONFIG_H__
+#ifndef AFE_CONFIG_H_
+#define AFE_CONFIG_H_
 
 #include "ade9430.h"
 #include "adi_pqlib.h"
@@ -264,4 +264,4 @@ int afe_write_32bit_reg(uint16_t addr, uint32_t *pData);
  */
 int afe_write_16bit_reg(uint16_t addr, uint16_t *pData);
 
-#endif /* __AFE_CONFIG_H__ */
+#endif /* AFE_CONFIG_H_ */

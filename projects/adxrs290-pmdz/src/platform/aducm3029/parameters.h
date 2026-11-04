@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "stdio.h"
 #include "platform_init.h"
@@ -64,4 +64,4 @@ extern struct aducm_timer_init_param adxrs290_timer_extra_ip;
 
 extern struct aducm_spi_init_param adxrs290_spi_extra_ip;
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

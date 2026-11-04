@@ -9,8 +9,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "maxim_gpio.h"
 #include "maxim_uart.h"
@@ -34,4 +34,4 @@ extern struct max_gpio_init_param adg1712_gpio_extra_ip;
 #define GPIO_SW3_PIN_NUM    24
 #define GPIO_SW4_PIN_NUM    30
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

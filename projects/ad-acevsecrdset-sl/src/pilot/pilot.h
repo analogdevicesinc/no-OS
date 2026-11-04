@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PILOT_H__
-#define __PILOT_H__
+#ifndef PILOT_H_
+#define PILOT_H_
 
 #include "state_machine.h"
 #include "parameters.h"
@@ -65,4 +65,4 @@ uint32_t get_count_ms(void);
 /*! Reset milliseconds count */
 void reset_count_ms(void);
 
-#endif /* __PILOT_H__ */
+#endif /* PILOT_H_ */

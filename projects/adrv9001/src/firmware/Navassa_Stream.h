@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef NAVASSA_STREAM_H
-#define NAVASSA_STREAM_H
+#ifndef NAVASSA_STREAM_H_
+#define NAVASSA_STREAM_H_
 
 unsigned char Navassa_Stream_bin[] = {
 	0x29, 0x23, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x07, 0x0f, 0x00,

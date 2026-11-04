@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #ifdef CONFIG_FTD2XX
 #include "no_os_uart.h"
@@ -38,4 +38,4 @@ extern struct ftd2xx_spi_init max14916_spi_extra;
 #define SPI_CS		0
 #define SPI_BAUDRATE	100000
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

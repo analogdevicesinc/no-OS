@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __SHOW_SCREEN_H__
-#define __SHOW_SCREEN_H__
+#ifndef SUBSCREEN_SHOW_SCREEN_H_
+#define SUBSCREEN_SHOW_SCREEN_H_
 
 #include "example.h"
 
@@ -47,4 +47,4 @@
  */
 void subscreen_show_screen();
 
-#endif // __SHOW_SCREEN_H__
+#endif // SUBSCREEN_SHOW_SCREEN_H_

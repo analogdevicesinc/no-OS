@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef ORX_GAIN_TABLE_H
-#define ORX_GAIN_TABLE_H
+#ifndef ORXGAINTABLE_H_
+#define ORXGAINTABLE_H_
 
 #include <stdint.h>
 

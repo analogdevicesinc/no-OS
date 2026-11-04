@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "xilinx_spi.h"
 #include "xilinx_gpio.h"
@@ -28,4 +28,4 @@
 extern struct xil_spi_init_param spi_extra;
 extern struct xil_gpio_init_param gpio_extra;
 
-#endif //__PARAMETERS_H__
+#endif //PARAMETERS_H_

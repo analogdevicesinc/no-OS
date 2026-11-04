@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "parameters.h"
 #include "ade7816.h"
@@ -21,4 +21,4 @@ extern struct no_os_gpio_init_param ade7816_gpio_irq1_ip;
 
 extern struct ade7816_init_param ade7816_ip;
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

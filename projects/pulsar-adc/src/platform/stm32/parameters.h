@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "stm32_hal.h"
 #include "stm32_irq.h"
@@ -55,4 +55,4 @@ extern uint8_t in_buff[];
 extern struct stm32_uart_init_param pulsar_adc_uart_extra_ip;
 extern struct stm32_spi_init_param pulsar_adc_spi_extra_ip;
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

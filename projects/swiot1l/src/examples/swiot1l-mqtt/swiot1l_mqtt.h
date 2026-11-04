@@ -8,9 +8,9 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __SWIOT1L_MQTT_H__
-#define __SWIOT1L_MQTT_H__
+#ifndef SWIOT1L_MQTT_H_
+#define SWIOT1L_MQTT_H_
 
 int swiot1l_mqtt();
 
-#endif // __SWIOT1L_MQTT_H__
+#endif // SWIOT1L_MQTT_H_

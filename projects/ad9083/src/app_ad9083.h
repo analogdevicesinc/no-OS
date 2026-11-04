@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __APP_AD9083_H
-#define __APP_AD9083_H
+#ifndef APP_AD9083_H_
+#define APP_AD9083_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -51,4 +51,4 @@ int32_t app_ad9083_subclass1_status(struct app_ad9083 *app);
 /* Check AD9083 status. */
 int32_t app_ad9083_status(struct app_ad9083 *app);
 
-#endif /* __APP_AD9083_H */
+#endif /* APP_AD9083_H_ */

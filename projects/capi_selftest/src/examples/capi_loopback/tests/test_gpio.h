@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef TEST_GPIO_H
-#define TEST_GPIO_H
+#ifndef TEST_GPIO_H_
+#define TEST_GPIO_H_
 
 /**
  * @brief Run all GPIO test cases available on the mapped platform.
@@ -15,4 +15,4 @@
  */
 int test_gpio(void);
 
-#endif /* TEST_GPIO_H */
+#endif /* TEST_GPIO_H_ */

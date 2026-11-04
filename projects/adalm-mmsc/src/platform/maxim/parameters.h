@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 #include <stdbool.h>
 
 #include "no_os_spi.h"
@@ -143,4 +143,4 @@ extern struct max_usb_uart_init_param iio_uart_extra;
 #define TIMER_IRQ_OPS 		&max_irq_ops
 #define TIMER_IRQ_EXTRA 	NULL
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

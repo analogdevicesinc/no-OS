@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _PARAMETERS_H_
-#define _PARAMETERS_H_
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "app_config.h"
 #ifdef ALTERA_PLATFORM
@@ -113,4 +113,4 @@ enum ad9523_channels {
 	ADC_FPGA_SYSREF,
 };
 
-#endif /* _PARAMETERS_H_ */
+#endif /* PARAMETERS_H_ */

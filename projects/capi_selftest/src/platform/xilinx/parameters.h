@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include <xparameters.h>
 #include "capi_uart.h"
@@ -819,4 +819,4 @@
 #define I2C_PLATFORM_DEINIT()		((void)0)
 #define I2C_PLATFORM_SET_TARGET(h)	((void)(h))
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

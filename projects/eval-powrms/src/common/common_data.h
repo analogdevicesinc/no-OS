@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "platform_includes.h"
 #include "no_os_util.h"
@@ -78,4 +78,4 @@ extern struct no_os_i2c_init_param max77986_i2c_init_param;
 
 void _update_adc_data();
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

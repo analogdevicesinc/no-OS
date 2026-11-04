@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "parameters.h"
 #include "ad7124.h"
@@ -20,4 +20,4 @@ extern struct no_os_spi_init_param cn0391_spi_ip;
 extern struct ad7124_init_param cn0391_ad7124_ip;
 extern struct cn0391_init_param cn0391_ip;
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "ade7754.h"
 #include "no_os_uart.h"
@@ -73,4 +73,4 @@ int print_measurements(struct ade7754_dev *dev);
 /* Toggle user LED */
 int interface_toggle_led(struct no_os_gpio_desc *gpio_led_desc);
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

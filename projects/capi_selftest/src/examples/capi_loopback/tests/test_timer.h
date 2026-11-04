@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef TEST_TIMER_H
-#define TEST_TIMER_H
+#ifndef TEST_TIMER_H_
+#define TEST_TIMER_H_
 
 /**
  * @brief Run all timer test cases available on the mapped platform.
@@ -15,4 +15,4 @@
  */
 int test_timer(void);
 
-#endif /* TEST_TIMER_H */
+#endif /* TEST_TIMER_H_ */

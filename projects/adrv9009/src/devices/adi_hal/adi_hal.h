@@ -7,8 +7,8 @@
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
  */
 
-#ifndef _ADI_HAL_H_
-#define _ADI_HAL_H_
+#ifndef ADI_HAL_H_
+#define ADI_HAL_H_
 
 /* include standard types and definitions */
 #include <stdint.h>

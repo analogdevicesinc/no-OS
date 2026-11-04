@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PLATFORM_H__
-#define __PLATFORM_H__
+#ifndef PLATFORM_H_
+#define PLATFORM_H_
 
 #include "ade7913.h"
 #include "no_os_uart.h"
@@ -55,4 +55,4 @@
 // Init NVIC
 int init_nvic(struct no_os_irq_ctrl_desc **ade7913_nvic_desc);
 
-#endif /* __PLATFORM_H__ */
+#endif /* PLATFORM_H_ */

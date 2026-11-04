@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __UC_SETTINGS_H
-#define __UC_SETTINGS_H
+#ifndef UC_SETTINGS_H_
+#define UC_SETTINGS_H_
 
 #include <stdint.h>
 #include "adi_cms_api_common.h"
@@ -45,4 +45,4 @@ struct uc_settings {
 /* Get uc settings */
 struct uc_settings* get_uc_settings();
 
-#endif /* __UC_SETTINGS_H */
+#endif /* UC_SETTINGS_H_ */

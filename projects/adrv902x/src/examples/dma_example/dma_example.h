@@ -7,9 +7,9 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __DMA_EXAMPLE_H__
-#define __DMA_EXAMPLE_H__
+#ifndef DMA_EXAMPLE_H_
+#define DMA_EXAMPLE_H_
 
 int example_main();
 
-#endif /* __DMA_EXAMPLE_H__ */
+#endif /* DMA_EXAMPLE_H_ */

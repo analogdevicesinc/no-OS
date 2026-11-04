@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "stm32_hal.h"
 #include "stm32_irq.h"
@@ -69,4 +69,4 @@ extern struct stm32_gpio_irq_init_param adxl355_gpio_irq_extra_ip;
 extern struct stm32_gpio_init_param adin1110_reset_gpio_extra_ip;
 extern struct stm32_spi_init_param adin1110_spi_extra_ip;
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

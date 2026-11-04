@@ -9,8 +9,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef CONFIG_H_
-#define CONFIG_H_
+#ifndef APP_CONFIG_H_
+#define APP_CONFIG_H_
 
 // #define HAVE_VERBOSE_MESSAGES /* Recommended during development prints errors and warnings */
 // #define DEBUG		 /* For Debug purposes only */

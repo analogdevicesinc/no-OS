@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "maxim_irq.h"
 #include "maxim_spi.h"
@@ -62,4 +62,4 @@ extern struct max_gpio_init_param max14906_gpio_extra_ip;
 #define NVIC_GPIO_IRQ		GPIO2_IRQn
 #endif
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

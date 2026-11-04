@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #ifdef XILINX_PLATFORM
 #include <xparameters.h>
@@ -165,4 +165,4 @@
 #define AD9361_ADC_DMA_IRQ_INTR		XPAR_FABRIC_AXI_AD9361_ADC_DMA_IRQ_INTR
 #endif
 
-#endif // __PARAMETERS_H__
+#endif // PARAMETERS_H_

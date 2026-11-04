@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "parameters.h"
 #include "ad463x.h"
@@ -23,4 +23,4 @@ extern struct no_os_uart_init_param ad463x_uart_ip;
 #ifndef USE_STANDARD_SPI
 extern struct spi_engine_offload_init_param spi_engine_offload_init_param;
 #endif
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */
