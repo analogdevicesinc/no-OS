@@ -7,9 +7,10 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
-#ifdef IIO_SUPPORT
 #ifndef IIO_ADMT_EVB_H_
 #define IIO_ADMT_EVB_H_
+
+#ifdef IIO_SUPPORT
 
 #include "iio.h"
 #include <errno.h>
@@ -38,5 +39,6 @@ int admt_evb_iio_init(struct admt_evb_iio_desc **,
 
 int admt_evb_iio_remove(struct admt_evb_iio_desc *);
 
-#endif
-#endif
+#endif /* IIO_SUPPORT */
+
+#endif /* IIO_ADMT_EVB_H_ */
