@@ -4,8 +4,8 @@
  *
  * Copyright (c) 2022 Analog Devices Inc.
  */
-#ifndef _JESD204_H_
-#define _JESD204_H_
+#ifndef JESD204_H_
+#define JESD204_H_
 
 #include <stdbool.h>
 #include <stddef.h>

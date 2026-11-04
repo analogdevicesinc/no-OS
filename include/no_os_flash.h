@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _NO_OS_FLASH_H_
-#define _NO_OS_FLASH_H_
+#ifndef NO_OS_FLASH_H_
+#define NO_OS_FLASH_H_
 
 #include <stdint.h>
 
@@ -70,4 +70,4 @@ int32_t no_os_flash_read(struct no_os_flash_dev *dev, uint32_t flash_addr,
 			 uint32_t *array,
 			 uint32_t size);
 
-#endif // _NO_OS_FLASH_H_
+#endif // NO_OS_FLASH_H_

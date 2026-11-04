@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _NO_OS_IRQ_H_
-#define _NO_OS_IRQ_H_
+#ifndef NO_OS_IRQ_H_
+#define NO_OS_IRQ_H_
 
 #include <stdint.h>
 
@@ -215,4 +215,4 @@ int no_os_irq_clear_pending(struct no_os_irq_ctrl_desc* desc,
 /* Set pending interrupt */
 int no_os_irq_set_pending(struct no_os_irq_ctrl_desc* desc,
 			  uint32_t irq_id);
-#endif // _NO_OS_IRQ_H_
+#endif // NO_OS_IRQ_H_

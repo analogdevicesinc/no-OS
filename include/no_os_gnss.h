@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _NO_OS_GNSS_H_
-#define _NO_OS_GNSS_H_
+#ifndef NO_OS_GNSS_H_
+#define NO_OS_GNSS_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -208,4 +208,4 @@ int32_t no_os_gnss_get_position_data(struct no_os_gnss_desc *desc,
 /* Platform-specific implementations */
 extern const struct no_os_gnss_platform_ops nmea_ubx_gnss_ops;
 
-#endif /* _NO_OS_GNSS_H_ */
+#endif /* NO_OS_GNSS_H_ */

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _NO_OS_UART_H_
-#define _NO_OS_UART_H_
+#ifndef NO_OS_UART_H_
+#define NO_OS_UART_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -166,4 +166,4 @@ uint32_t no_os_uart_get_errors(struct no_os_uart_desc *desc);
 /* Make stdio to use this UART. */
 void no_os_uart_stdio(struct no_os_uart_desc *desc);
 
-#endif // _NO_OS_UART_H_
+#endif // NO_OS_UART_H_

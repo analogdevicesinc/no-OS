@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _NO_OS_SEMAPHORE_H_
-#define _NO_OS_SEMAPHORE_H_
+#ifndef NO_OS_SEMAPHORE_H_
+#define NO_OS_SEMAPHORE_H_
 
 /* Initialize semaphore */
 void no_os_semaphore_init(void **semaphore);
@@ -22,4 +22,4 @@ void no_os_semaphore_give(void *semaphore);
 /* Remove semaphore */
 void no_os_semaphore_remove(void *semaphore);
 
-#endif // _NO_OS_SEMAPHORE_H_
+#endif // NO_OS_SEMAPHORE_H_

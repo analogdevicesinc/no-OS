@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _NO_OS_I2C_H_
-#define _NO_OS_I2C_H_
+#ifndef NO_OS_I2C_H_
+#define NO_OS_I2C_H_
 
 #include <stdint.h>
 
@@ -120,4 +120,4 @@ int32_t no_os_i2cbus_init(const struct no_os_i2c_init_param *param);
 /* Free the resources allocated for I2C  bus desc*/
 void no_os_i2cbus_remove(uint32_t bus_number);
 
-#endif // _NO_OS_I2C_H_
+#endif // NO_OS_I2C_H_

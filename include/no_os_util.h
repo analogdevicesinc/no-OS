@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _NO_OS_UTIL_H_
-#define _NO_OS_UTIL_H_
+#ifndef NO_OS_UTIL_H_
+#define NO_OS_UTIL_H_
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -201,4 +201,4 @@ uint64_t no_os_mul_u64_u32_div(uint64_t a, uint32_t mul, uint32_t divisor);
 bool no_os_is_big_endian(void);
 void no_os_memswap64(void *buf, uint32_t bytes, uint32_t step);
 
-#endif // _NO_OS_UTIL_H_
+#endif // NO_OS_UTIL_H_

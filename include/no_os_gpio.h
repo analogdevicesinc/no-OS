@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _NO_OS_GPIO_H_
-#define _NO_OS_GPIO_H_
+#ifndef NO_OS_GPIO_H_
+#define NO_OS_GPIO_H_
 
 #include <stdint.h>
 
@@ -140,4 +140,4 @@ int32_t no_os_gpio_set_value(struct no_os_gpio_desc *desc,
 int32_t no_os_gpio_get_value(struct no_os_gpio_desc *desc,
 			     uint8_t *value);
 
-#endif // _NO_OS_GPIO_H_
+#endif // NO_OS_GPIO_H_

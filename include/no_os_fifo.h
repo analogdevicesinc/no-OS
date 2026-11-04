@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _NO_OS_FIFO_H_
-#define _NO_OS_FIFO_H_
+#ifndef NO_OS_FIFO_H_
+#define NO_OS_FIFO_H_
 
 #include <stdint.h>
 
@@ -32,4 +32,4 @@ int32_t no_os_fifo_insert(struct no_os_fifo_element **p_fifo, char *buff,
 /* Remove fifo head. */
 struct no_os_fifo_element *no_os_fifo_remove(struct no_os_fifo_element *p_fifo);
 
-#endif // _NO_OS_FIFO_H_
+#endif // NO_OS_FIFO_H_

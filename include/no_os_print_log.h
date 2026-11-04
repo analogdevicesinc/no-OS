@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _NO_OS_PRINT_LOG_H_
-#define _NO_OS_PRINT_LOG_H_
+#ifndef NO_OS_PRINT_LOG_H_
+#define NO_OS_PRINT_LOG_H_
 
 #include <stdio.h>
 
@@ -106,4 +106,4 @@
 #define pr_debug(fmt, args...)
 #endif
 
-#endif // _NO_OS_PRINT_LOG_H_
+#endif // NO_OS_PRINT_LOG_H_

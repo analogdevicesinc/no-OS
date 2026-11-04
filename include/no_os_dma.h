@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _NO_OS_DMA_H_
-#define _NO_OS_DMA_H_
+#ifndef NO_OS_DMA_H_
+#define NO_OS_DMA_H_
 
 #include <stdio.h>
 #include <stdlib.h>

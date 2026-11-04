@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _NO_OS_MUTEX_H_
-#define _NO_OS_MUTEX_H_
+#ifndef NO_OS_MUTEX_H_
+#define NO_OS_MUTEX_H_
 
 /**
 * @brief Function for no-os mutex initialization and thread safety.
@@ -52,4 +52,4 @@ void no_os_mutex_unlock(void *mutex);
 */
 void no_os_mutex_remove(void *mutex);
 
-#endif // _NO_OS_MUTEX_H_
+#endif // NO_OS_MUTEX_H_
