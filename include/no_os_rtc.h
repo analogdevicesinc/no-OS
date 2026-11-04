@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _NO_OS_RTC_H_
-#define _NO_OS_RTC_H_
+#ifndef NO_OS_RTC_H_
+#define NO_OS_RTC_H_
 
 #include <stdint.h>
 
@@ -65,4 +65,4 @@ int32_t no_os_rtc_set_cnt(struct no_os_rtc_desc *dev, uint32_t tmr_cnt);
 /** Set the time at which an interrupt will occur */
 int32_t no_os_rtc_set_irq_time(struct no_os_rtc_desc *dev, uint32_t irq_time);
 
-#endif // _NO_OS_RTC_H_
+#endif // NO_OS_RTC_H_

@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _NO_OS_I3C_H_
-#define _NO_OS_I3C_H_
+#ifndef NO_OS_I3C_H_
+#define NO_OS_I3C_H_
 
 #include <stdint.h>
 #include "no_os_util.h"
@@ -401,4 +401,4 @@ int32_t no_os_i3c_transfer_dma_async(struct no_os_i3c_desc *desc,
 /* Abort the ongoing DMA transaction */
 int32_t no_os_i3c_transfer_abort(struct no_os_i3c_desc *desc);
 
-#endif // _NO_OS_I3C_H_
+#endif // NO_OS_I3C_H_

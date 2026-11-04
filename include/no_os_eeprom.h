@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _NO_OS_EEPROM_H_
-#define _NO_OS_EEPROM_H_
+#ifndef NO_OS_EEPROM_H_
+#define NO_OS_EEPROM_H_
 
 #include <stdint.h>
 
@@ -73,4 +73,4 @@ int32_t no_os_eeprom_read(struct no_os_eeprom_desc *desc, uint32_t address,
 /* Free the resources allocated by no_os_eeprom_init() */
 int32_t no_os_eeprom_remove(struct no_os_eeprom_desc *desc);
 
-#endif // _NO_OS_EEPROM_H_
+#endif // NO_OS_EEPROM_H_

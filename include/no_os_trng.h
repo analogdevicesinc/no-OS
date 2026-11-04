@@ -9,8 +9,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _NO_OS_TRNG_H_
-#define _NO_OS_TRNG_H_
+#ifndef NO_OS_TRNG_H_
+#define NO_OS_TRNG_H_
 
 #include <stdint.h>
 
@@ -71,4 +71,4 @@ int no_os_trng_remove(struct no_os_trng_desc *desc);
 int no_os_trng_fill_buffer(struct no_os_trng_desc *desc, uint8_t *buff,
 			   uint32_t len);
 
-#endif // _NO_OS_TRNG_H_
+#endif // NO_OS_TRNG_H_

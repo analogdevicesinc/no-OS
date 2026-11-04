@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _NO_OS_PID_H
-#define _NO_OS_PID_H
+#ifndef NO_OS_PID_H_
+#define NO_OS_PID_H_
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>

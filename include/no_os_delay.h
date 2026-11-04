@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _NO_OS_DELAY_H_
-#define _NO_OS_DELAY_H_
+#ifndef NO_OS_DELAY_H_
+#define NO_OS_DELAY_H_
 
 #include <stdint.h>
 
@@ -30,4 +30,4 @@ void no_os_mdelay(uint32_t msecs);
 /* Get current time */
 struct no_os_time no_os_get_time(void);
 
-#endif // _NO_OS_DELAY_H_
+#endif // NO_OS_DELAY_H_

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _NO_OS_TDM_H_
-#define _NO_OS_TDM_H_
+#ifndef NO_OS_TDM_H_
+#define NO_OS_TDM_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -128,4 +128,4 @@ int32_t  no_os_tdm_resume(struct no_os_tdm_desc *desc);
 /* Stop TDM DMA Transfer */
 int32_t  no_os_tdm_stop(struct no_os_tdm_desc *desc);
 
-#endif // _NO_OS_TDM_H_
+#endif // NO_OS_TDM_H_

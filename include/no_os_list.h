@@ -58,8 +58,8 @@
  *    @endcode
 *******************************************************************************/
 
-#ifndef _NO_OS_LIST_H_
-#define _NO_OS_LIST_H_
+#ifndef NO_OS_LIST_H_
+#define NO_OS_LIST_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -281,4 +281,4 @@ int32_t no_os_list_get_find(struct no_os_list_desc *list_desc, void **data,
 			    void *cmp_data);
 /** @}*/
 
-#endif // _NO_OS_LIST_H_
+#endif // NO_OS_LIST_H_

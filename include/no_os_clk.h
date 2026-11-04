@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _NO_OS_CLK_H_
-#define _NO_OS_CLK_H_
+#ifndef NO_OS_CLK_H_
+#define NO_OS_CLK_H_
 
 #include <stdint.h>
 
@@ -102,4 +102,4 @@ int32_t no_os_clk_round_rate(struct no_os_clk_desc *desc,
 int32_t no_os_clk_set_rate(struct no_os_clk_desc *desc,
 			   uint64_t rate);
 
-#endif // _NO_OS_CLK_H_
+#endif // NO_OS_CLK_H_
