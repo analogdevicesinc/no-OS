@@ -15,25 +15,10 @@
 #include <stdbool.h>
 #include "mxc_device.h"
 #include "sema_regs.h"
+#include "maxim_core.h"
 
 #define MAX_IPC_HOST_ID    0u
 #define MAX_IPC_COPROC_ID  1u
-
-/**
- * @brief Order shared-memory accesses against the SEMA doorbell/mailbox.
- *
- * On the Arm host a DMB makes prior SRAM writes visible to CPU1 before the
- * doorbell fires. The RV32 core has no data cache, so a compiler barrier is
- * enough to stop the access from being reordered around the register write.
- */
-static inline void maxim_ipc_barrier(void)
-{
-#if defined(__riscv)
-	__asm__ volatile("" ::: "memory");
-#else
-	__DMB();
-#endif
-}
 
 /*
  * ----------------------------------------------------------------------------
