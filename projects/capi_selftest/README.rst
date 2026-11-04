@@ -92,55 +92,90 @@ otherwise it reports as a SKIP.
 Build
 -----
 
-Configure with a board preset and, on Xilinx, point ``HARDWARE`` at the matching
-``.xsa``. The preset sets ``PLATFORM``, ``BOARD`` and ``BOARD_CONFIG_FILE``; the
-defconfig picks the example; the ``.xsa`` decides which peripherals and
-interrupts the BSP exposes.
+Builds go through ``tools/scripts/no_os_build.py``, which discovers every valid
+project/variant/board combination from the CMake presets and the project's
+``boards/<variant>/*.conf`` files, then runs configure and build for each. Each
+combination gets its own directory under ``build/`` named
+``capi_selftest-<variant>-<board>``, so nothing clobbers anything else.
+
+To see what this project can be built for:
+
+.. code-block:: bash
+
+	python tools/scripts/no_os_build.py list --project capi_selftest
+
+.. code-block:: text
+
+	PROJECT        VARIANT   BOARD          PLATFORM
+	─────────────  ────────  ─────────────  ────────
+	capi_selftest  basic     coraz7s        xilinx
+	capi_selftest  basic     max32657evkit  maxim
+	capi_selftest  basic     nucleo-f767zi  stm32
+	capi_selftest  basic     sdp-ck1z       stm32
+	capi_selftest  loopback  coraz7s        xilinx
+	capi_selftest  loopback  max32657evkit  maxim
+	capi_selftest  loopback  nucleo-f767zi  stm32
+	capi_selftest  loopback  sdp-ck1z       stm32
+
+The two variants are:
+
+* ``loopback`` - the full seven-group suite; needs the straps in the wiring
+  section for the board.
+* ``basic`` - a UART-only smoke test. Build this first on a new board to prove
+  the console and the toolchain before wiring anything.
+
+Omitting ``--variant`` or ``--board`` builds every match, which is the quickest
+way to check a change did not break another board:
+
+.. code-block:: bash
+
+	# one board, both variants
+	python tools/scripts/no_os_build.py build --project capi_selftest --board sdp-ck1z
+
+	# one combination
+	python tools/scripts/no_os_build.py build --project capi_selftest \
+	    --variant loopback --board nucleo-f767zi
+
+	# build and program the attached board
+	python tools/scripts/no_os_build.py build --project capi_selftest \
+	    --variant loopback --board nucleo-f767zi --probe openocd --flash
+
+Useful flags: ``-j N`` for parallel compilation, ``--parallel`` to build
+different boards concurrently (flashing stays serialized - boards share a
+probe), ``--clean`` / ``--fresh`` to discard a stale build directory, and
+``--dry-run`` to print the cmake commands without running them.
 
 The suite is designed to compile and link against **any** BSP. A peripheral the
 hardware design does not expose simply drops out of the build (see
-`How a test is skipped`_), so **the same sources cover all three Cora Z7-07S
-builds with no source edits** - a GIC build, a cascaded AXI-INTC build and a
-polled ("noirq") build.
+`How a test is skipped`_), so the same sources cover every board above with no
+source edits.
 
-Every build is the same three commands - configure, build, flash - changing
-only the ``.xsa`` and the build directory. Pick a mode and run:
+Xilinx builds additionally need a hardware definition, since the ``.xsa``
+decides which peripherals and interrupts the BSP exposes. Pass it with
+``--hardware``:
 
 .. code-block:: bash
 
 	MODE=gic        # gic | intc | noirq
 
-	cmake -B build-coraz7s-$MODE --preset coraz7s \
-	    -DPROJECT_DEFCONFIG=capi_selftest/loopback.conf \
-	    -DHARDWARE=$(pwd)/projects/capi_selftest/coraz7s_$MODE.xsa
-	cmake --build build-coraz7s-$MODE --target capi_selftest -j$(nproc)
-	cmake --build build-coraz7s-$MODE --target flash       # program the board
+	python tools/scripts/no_os_build.py build --project capi_selftest \
+	    --variant loopback --board coraz7s \
+	    --hardware projects/capi_selftest/coraz7s_$MODE.xsa
 
-The three modes differ only in the ``.xsa`` (see `Which IP per build`_):
+Three ``.xsa`` files ship with the project, and **the same sources cover all
+three with no source edits** (see `Which IP per build`_):
 
 * ``gic`` - interrupts through the GIC.
 * ``intc`` - fabric interrupts cascaded through an AXI INTC into the GIC.
 * ``noirq`` - no fabric interrupt wired; async paths skip, sync still runs.
 
-For a first-boot smoke test, build the UART-only ``basic`` example instead of
-the full suite (any ``.xsa`` works):
+Because the build directory name does not include the ``.xsa``, pass
+``--fresh`` when switching modes, or give each mode its own base directory with
+``--build-dir build-$MODE``.
 
-.. code-block:: bash
-
-	cmake -B build-basic --preset coraz7s \
-	    -DPROJECT_DEFCONFIG=capi_selftest/basic.conf \
-	    -DHARDWARE=$(pwd)/projects/capi_selftest/coraz7s_gic.xsa
-	cmake --build build-basic --target capi_selftest -j$(nproc)
-
-Notes:
-
-* One build directory per ``.xsa`` so they do not clobber each other.
-* ``--target flash`` programs the attached board; only one board attaches at a
-  time, so flash the build that matches it.
-* Console is PS UART0 on the USB-UART - set jumper **JP3 to USB**.
-* Other presets exist (``zed``, ``zc702``, ``zc706``, ``zcu102``, ``kcu105``
-  ...); ``zed_{gic,intc,noirq}.xsa`` mirror this three-build split on a
-  ZedBoard.
+Other Xilinx presets exist (``zed``, ``zc702``, ``zc706``, ``zcu102``,
+``kcu105`` ...); ``zed_{gic,intc,noirq}.xsa`` mirror the three-build split on a
+ZedBoard.
 
 Wiring - Cora Z7-07S
 --------------------
@@ -242,11 +277,30 @@ Three groups need no jumper - their loopback is internal to the SoC or the BSP:
 * **DMA** - memory-to-memory, no peripheral and no pins. (Not mapped on Cora
   today; present on STM32.)
 
-Wiring - STM32 (NUCLEO-F767ZI)
-------------------------------
+Wiring - STM32
+--------------
 
-Same groups, on-chip peripherals.
-brings up clocks/pins/NVIC by hand, so the platform hooks are real, not no-ops.
+Two STM32 boards are mapped, and between them they cover both SPI async
+delivery modes: NUCLEO-F767ZI delivers async completion by SPI interrupt,
+SDP-K1 delivers it by DMA. ``src/platform/stm32/parameters.h`` selects the
+mapping from the CMSIS device macro the CubeMX BSP defines, so the board
+follows from ``--board`` and its ``.ioc`` with nothing else to pass down.
+
+.. code-block:: bash
+
+	python tools/scripts/no_os_build.py build --project capi_selftest \
+	    --variant loopback --board nucleo-f767zi
+
+	python tools/scripts/no_os_build.py build --project capi_selftest \
+	    --variant loopback --board sdp-ck1z
+
+NUCLEO-F767ZI
+~~~~~~~~~~~~~
+
+USART3 is the console (ST-LINK virtual COM port) and is never used by a test.
+CubeMX only generates MSP code for I2C1, so ``i2c_platform_init.c`` brings up
+I2C2's clock, pins and NVIC by hand - the platform hooks here are real, not
+no-ops.
 
 .. list-table::
 	:header-rows: 1
@@ -257,20 +311,61 @@ brings up clocks/pins/NVIC by hand, so the platform hooks are real, not no-ops.
 	  - Strap / notes
 	* - GPIO
 	  - PE0 -> PC0
-	  - Jumper PE0 (CN10/D34) to PC0 (CN9, Arduino A1). No toggle op. Input line 0
-	    routes to EXTI0 for IRQ.
+	  - Jumper PE0 (CN10/D34) to PC0 (CN9, Arduino A1). No toggle op. Both
+	    endpoints are bit 0 of their port, so the port-wide cases run too.
+	    PC0 routes to EXTI0 for the IRQ group.
 	* - SPI
 	  - SPI1
-	  - Jumper PA7 (MOSI) to PA6 (MISO); PA5 is SCK. IRQ, no DMA.
+	  - Jumper PA7 (MOSI) to PA6 (MISO); PA5 is SCK. Async delivered by the
+	    SPI interrupt (``SPI_HAS_IRQ``), not DMA.
 	* - I2C
 	  - I2C1 <-> I2C2
 	  - Jumper PB6/PB9 (I2C1) to PB10/PB11 (I2C2). Polled (``I2C_HAS_IRQ`` 0).
 	* - IRQ / Timer / DMA
 	  - NVIC / TIM2 / DMA2
-	  - No strap. IRQ reuses the GPIO edge; TIM2 is a 32-bit on-chip counter (1 us
-	    resolution); DMA2 Stream0 is memory-to-memory, polled.
+	  - No strap. IRQ reuses the GPIO edge; TIM2 is a 32-bit on-chip counter
+	    (1 us resolution); DMA2 Stream0 is memory-to-memory, polled.
 
-USART3 is the console only
+SDP-K1 (EVAL-SDP-CK1Z)
+~~~~~~~~~~~~~~~~~~~~~~
+
+UART5 is the console (on-board USB virtual COM port) and is never used by a
+test. Every strap lands on the **Arduino Uno header**, so no SDP-120 breakout is
+needed; the pin names below are the silkscreened Arduino labels with the
+STM32F469 port/pin in parentheses.
+
+.. list-table::
+	:header-rows: 1
+	:widths: 16 26 58
+
+	* - Group
+	  - Peripheral
+	  - Strap / notes
+	* - GPIO
+	  - D5 (PA11) -> D2 (PG7)
+	  - Jumper D5 to D2. Pin-loopback only (``GPIO_HAS_PORT_LOOPBACK`` 0):
+	    neither endpoint is bit 0 of its port, so a port-wide write would
+	    reach pins that are not strapped. PG7 routes to EXTI7 (shared
+	    EXTI9_5 vector) for the IRQ group.
+	* - SPI
+	  - SPI1
+	  - All three signals are on **DIGI1 (P6)**: jumper pin 4 (D11 / PA7,
+	    MOSI) to pin 5 (D12 / PB4, MISO) - they are adjacent, so a single
+	    2-pin shunt does it. Pin 6 (D13 / PB3) is SCK and stays open. Async
+	    delivered by **DMA** (``SPI_HAS_DMA``) - this is the board that
+	    exercises the SPI DMA path.
+	* - I2C
+	  - not mapped
+	  - I2C1 is on DIGI1 (P6) pins 9/10 (SDA/SCL, pulled up 2.2k to
+	    MAIN_PWR_SUPPLY), but I2C2's pins are taken by the USB-HS ULPI PHY
+	    and I2C3 is reachable only through the SDP-120 connector, so no
+	    initiator/target pair can be strapped from the Arduino header. The
+	    whole I2C group reports NOT_CONFIGURED.
+	* - IRQ / Timer / DMA
+	  - NVIC / TIM2 / DMA2
+	  - No strap. IRQ reuses the GPIO edge; TIM2 is a 32-bit on-chip counter
+	    (1 us resolution). DMA2 is shared: stream 0 serves the
+	    memory-to-memory group, streams 2 and 3 carry SPI1 RX/TX.
 
 Wiring - MAX32657 (MAX32657EVKIT)
 ---------------------------------

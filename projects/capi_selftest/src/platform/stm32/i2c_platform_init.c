@@ -19,6 +19,10 @@
  *******************************************************************************/
 
 #include <stddef.h>
+#include "parameters.h"
+
+#ifdef I2C_TARGET_OPS
+
 #include "stm32_hal.h"
 #include "capi_i2c.h"
 
@@ -85,3 +89,5 @@ void I2C2_ER_IRQHandler(void)
 	if (i2c2_handle)
 		capi_i2c_isr(i2c2_handle);
 }
+
+#endif /* I2C_TARGET_OPS */
