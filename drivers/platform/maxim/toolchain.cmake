@@ -37,8 +37,8 @@ set(MAXIM_CONFIGURED_CORE ${MAXIM_CORE} CACHE INTERNAL "Configured Maxim core")
 if(NOT MAXIM_CORE MATCHES "^(arm|riscv)$")
     message(FATAL_ERROR "Unsupported MAXIM_CORE=${MAXIM_CORE}; select arm or riscv")
 endif()
-if(MAXIM_CORE STREQUAL "riscv" AND NOT TARGET_NUM STREQUAL "78000")
-    message(FATAL_ERROR "RISC-V platform support is currently available for MAX78000 only")
+if(MAXIM_CORE STREQUAL "riscv" AND NOT TARGET_NUM MATCHES "^(78000|32690)$")
+    message(FATAL_ERROR "RISC-V platform support is currently available for MAX78000 and MAX32690 only")
 endif()
 set(CMAKE_SYSTEM_PROCESSOR ${MAXIM_CORE})
 list(APPEND CMAKE_TRY_COMPILE_PLATFORM_VARIABLES
@@ -133,7 +133,28 @@ set(CMAKE_ASM_FLAGS_MINSIZEREL "" CACHE STRING "ASM compiler flags for MinSizeRe
 
 # Linker flags and memory layout are selected before compiler detection.
 set(_maxim_gcc "${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX${TARGET_NUM}/Source/GCC")
-if(MAXIM_CORE STREQUAL "riscv")
+if(MAXIM_CORE STREQUAL "riscv" AND TARGET_NUM STREQUAL "32690")
+    # CPU1 owns a dedicated flash bank and SRAM bank, described by
+    # max32690/memory_layout.cmake and consumed by the SDK max32690_riscv.ld.
+    set(MAXIM_RISCV_FLASH_ORIGIN "${_RISCV_FLASH_ORIGIN}" CACHE STRING "CPU1 flash link address")
+    set(MAXIM_RISCV_FLASH_LENGTH "${_RISCV_FLASH_SIZE}" CACHE STRING "CPU1 flash region length")
+    set(MAXIM_RISCV_TIME_TIMER "3" CACHE STRING "CPU1 elapsed-time timer (0..3)")
+    if(NOT MAXIM_RISCV_TIME_TIMER MATCHES "^[0-3]$")
+        message(FATAL_ERROR "MAXIM_RISCV_TIME_TIMER must be between 0 and 3")
+    endif()
+    math(EXPR _rv_flash_start "${MAXIM_RISCV_FLASH_ORIGIN}")
+    math(EXPR _rv_flash_end "${MAXIM_RISCV_FLASH_ORIGIN} + ${MAXIM_RISCV_FLASH_LENGTH}")
+    math(EXPR _rv_bank_end "${_RISCV_FLASH_ORIGIN} + ${_RISCV_FLASH_SIZE}")
+    if(_rv_flash_start LESS ${_RISCV_FLASH_ORIGIN} OR _rv_flash_end GREATER _rv_bank_end OR
+       NOT _rv_flash_end GREATER _rv_flash_start)
+        message(FATAL_ERROR "CPU1 flash region is outside the MAX32690 RISC-V flash bank")
+    endif()
+    string(REPLACE "_RISCV_FLASH_ORIGIN=${_RISCV_FLASH_ORIGIN}"
+        "_RISCV_FLASH_ORIGIN=${MAXIM_RISCV_FLASH_ORIGIN}" MCU_LINKER_FLAGS "${MCU_LINKER_FLAGS}")
+    string(REPLACE "_RISCV_FLASH_SIZE=${_RISCV_FLASH_SIZE}"
+        "_RISCV_FLASH_SIZE=${MAXIM_RISCV_FLASH_LENGTH}" MCU_LINKER_FLAGS "${MCU_LINKER_FLAGS}")
+    set(_maxim_link_flags "-nostartfiles -L${_maxim_gcc} -T${_maxim_gcc}/${TARGET}_riscv.ld")
+elseif(MAXIM_CORE STREQUAL "riscv")
     set(MAXIM_RISCV_FLASH_ORIGIN "0x10000000" CACHE STRING "CPU1 flash link address")
     set(MAXIM_RISCV_FLASH_LENGTH "0x80000" CACHE STRING "CPU1 flash region length")
     set(MAXIM_RISCV_TIME_TIMER "3" CACHE STRING "CPU1 elapsed-time timer (0..3)")
