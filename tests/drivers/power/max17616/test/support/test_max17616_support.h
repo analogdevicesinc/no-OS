@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
 
-#ifndef __TEST_MAX17616_SUPPORT_H__
-#define __TEST_MAX17616_SUPPORT_H__
+#ifndef TEST_MAX17616_SUPPORT_H_
+#define TEST_MAX17616_SUPPORT_H_
 
 #include "max17616.h"
 
@@ -89,4 +89,4 @@ int max17616_identify_chip_variant(struct max17616_dev *dev);
  */
 int max17616_verify_pmbus_revision(struct max17616_dev *dev);
 
-#endif /* __TEST_MAX17616_SUPPORT_H__ */
+#endif /* TEST_MAX17616_SUPPORT_H_ */
