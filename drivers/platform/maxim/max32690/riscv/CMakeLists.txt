@@ -4,12 +4,16 @@ endif()
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_definitions(no-os PUBLIC RV32 RISCV
     MAXIM_RISCV_TIME_TIMER=${MAXIM_RISCV_TIME_TIMER})
-# Memory symbols exported by startup_riscv_max32690.S
+# Memory symbols exported by startup_riscv_max32690.S. max32690_riscv.ld
+# starts the CPU1 SRAM after two mailboxes of MAILBOX_SIZE bytes each, which
+# form the reserved window.
+math(EXPR _rv_mailbox_size "${MAXIM_RISCV_SRAM2_RESERVE} / 2")
 target_compile_definitions(no-os PRIVATE
     RISCV_FLASH_ORIGIN=${MAXIM_RISCV_FLASH_ORIGIN}
     RISCV_FLASH_SIZE=${MAXIM_RISCV_FLASH_LENGTH}
     RISCV_SRAM_ORIGIN=${_RISCV_SRAM_ORIGIN}
-    RISCV_SRAM_SIZE=${_RISCV_SRAM_SIZE})
+    RISCV_SRAM_SIZE=${_RISCV_SRAM_SIZE}
+    MAILBOX_SIZE=${_rv_mailbox_size})
 target_sources(no-os PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/maxim_init.c
     ${CMAKE_CURRENT_SOURCE_DIR}/maxim_delay.c
