@@ -5,8 +5,8 @@
  * Copyright (c) 2022 Analog Devices Inc.
  */
 
-#ifndef _JESD204_PRIV_H_
-#define _JESD204_PRIV_H_
+#ifndef JESD204_PRIV_H_
+#define JESD204_PRIV_H_
 
 #include "jesd204.h"
 
@@ -69,4 +69,4 @@ struct jesd204_dev_top {
 struct jesd204_dev_top *jesd204_dev_get_topology_top_dev(
 	struct jesd204_dev *jdev);
 
-#endif /* _JESD204_PRIV_H_ */
+#endif /* JESD204_PRIV_H_ */
