@@ -7,6 +7,9 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
+#ifndef ADF5611_H_
+#define ADF5611_H_
+
 #include <stdint.h>
 #include <string.h>
 #include "no_os_util.h"
@@ -575,3 +578,5 @@ int adf5611_init(struct adf5611_dev **device,
 
 /** ADF5611 Remove */
 int adf5611_remove(struct adf5611_dev *dev);
+
+#endif /* ADF5611_H_ */

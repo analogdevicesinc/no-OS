@@ -9,6 +9,9 @@
 *******************************************************************************/
 
 /* Register Definition */
+#ifndef ADF5355_H_
+#define ADF5355_H_
+
 #define ADF5355_REG(x)                          (x)
 
 /* REG0 Bit Definitions */
@@ -260,3 +263,5 @@ int32_t adf5355_init(struct adf5355_dev **device,
 
 /* Remove the device. */
 int32_t adf5355_remove(struct adf5355_dev *device);
+
+#endif /* ADF5355_H_ */

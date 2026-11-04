@@ -10,6 +10,9 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
+#ifndef AD5449_H_
+#define AD5449_H_
+
 #include <stdint.h>
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
@@ -165,3 +168,5 @@ void ad5449_sdocontrol(struct ad5449_dev *dev,
 /* Set up the active clock edge of the SPI interface */
 void ad5449_sclksetup(struct ad5449_dev *dev,
 		      int8_t value);
+
+#endif /* AD5449_H_ */
