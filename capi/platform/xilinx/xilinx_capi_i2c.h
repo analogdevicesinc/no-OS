@@ -22,8 +22,8 @@
  * IRQ ID 0 is valid for INTC input 0.
  */
 
-#ifndef _XILINX_CAPI_I2C_H_
-#define _XILINX_CAPI_I2C_H_
+#ifndef XILINX_CAPI_I2C_H_
+#define XILINX_CAPI_I2C_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -69,4 +69,4 @@ extern const struct capi_i2c_ops capi_i2c_xilinx_pl_ops;
 }
 #endif
 
-#endif /* _XILINX_CAPI_I2C_H_ */
+#endif /* XILINX_CAPI_I2C_H_ */

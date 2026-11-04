@@ -12,8 +12,8 @@
  * read/write macros, mapping them onto the BSP Xil_In / Xil_Out primitives.
  */
 
-#ifndef _XILINX_CAPI_PLATFORM_H_
-#define _XILINX_CAPI_PLATFORM_H_
+#ifndef XILINX_CAPI_PLATFORM_H_
+#define XILINX_CAPI_PLATFORM_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,4 +37,4 @@ extern "C" {
 }
 #endif
 
-#endif /* _XILINX_CAPI_PLATFORM_H_ */
+#endif /* XILINX_CAPI_PLATFORM_H_ */

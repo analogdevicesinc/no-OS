@@ -15,8 +15,8 @@
  * Both backends operate in master mode only.
  */
 
-#ifndef _XILINX_CAPI_SPI_H_
-#define _XILINX_CAPI_SPI_H_
+#ifndef XILINX_CAPI_SPI_H_
+#define XILINX_CAPI_SPI_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -58,4 +58,4 @@ extern const struct capi_spi_ops capi_spi_xilinx_pl_ops;
 }
 #endif
 
-#endif /* _XILINX_CAPI_SPI_H_ */
+#endif /* XILINX_CAPI_SPI_H_ */

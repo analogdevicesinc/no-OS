@@ -9,8 +9,8 @@
  * @brief Xilinx platform GPIO private driver contract.
  */
 
-#ifndef _XILINX_CAPI_GPIO_PRIV_H_
-#define _XILINX_CAPI_GPIO_PRIV_H_
+#ifndef XILINX_CAPI_GPIO_PRIV_H_
+#define XILINX_CAPI_GPIO_PRIV_H_
 
 #include <xilinx_capi_gpio.h>
 
@@ -64,4 +64,4 @@ struct capi_gpio_xilinx_port_handle {
 }
 #endif
 
-#endif /* _XILINX_CAPI_GPIO_PRIV_H_ */
+#endif /* XILINX_CAPI_GPIO_PRIV_H_ */

@@ -9,8 +9,8 @@
  * @brief Xilinx platform I2C private driver contract.
  */
 
-#ifndef _XILINX_CAPI_I2C_PRIV_H_
-#define _XILINX_CAPI_I2C_PRIV_H_
+#ifndef XILINX_CAPI_I2C_PRIV_H_
+#define XILINX_CAPI_I2C_PRIV_H_
 
 #include <xilinx_capi_i2c.h>
 
@@ -132,4 +132,4 @@ struct capi_i2c_xilinx_handle {
 }
 #endif
 
-#endif /* _XILINX_CAPI_I2C_PRIV_H_ */
+#endif /* XILINX_CAPI_I2C_PRIV_H_ */

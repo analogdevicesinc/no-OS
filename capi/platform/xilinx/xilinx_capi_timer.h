@@ -18,8 +18,8 @@
  * IRQ ID 0 is valid for INTC input 0.
  */
 
-#ifndef _XILINX_CAPI_TIMER_H_
-#define _XILINX_CAPI_TIMER_H_
+#ifndef XILINX_CAPI_TIMER_H_
+#define XILINX_CAPI_TIMER_H_
 
 #include <xparameters.h>
 #include <stdbool.h>
@@ -56,4 +56,4 @@ extern const struct capi_timer_ops capi_timer_xilinx_pl_ops;
 }
 #endif
 
-#endif /* _XILINX_CAPI_TIMER_H_ */
+#endif /* XILINX_CAPI_TIMER_H_ */
