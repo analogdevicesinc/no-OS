@@ -12,8 +12,9 @@ function(maxim_add_riscv_coprocessor ARM_TARGET)
     if(NOT RV_SOURCES OR NOT RV_DEFCONFIG)
         message(FATAL_ERROR "maxim_add_riscv_coprocessor requires SOURCES and DEFCONFIG")
     endif()
-    if(NOT MAXIM_CORE STREQUAL "arm" OR NOT TARGET_NUM STREQUAL "78000")
-        message(FATAL_ERROR "The embedded coprocessor requires a MAX78000 ARM host")
+    if(NOT MAXIM_CORE STREQUAL "arm" OR NOT TARGET_NUM MATCHES "^(78000|32690)$")
+        message(FATAL_ERROR
+            "The embedded coprocessor requires a MAX78000 or MAX32690 ARM host")
     endif()
     get_filename_component(RV_DEFCONFIG "${RV_DEFCONFIG}" ABSOLUTE
         BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -41,6 +42,9 @@ function(maxim_add_riscv_coprocessor ARM_TARGET)
     if(_reserve LESS 0 OR _reserve GREATER_EQUAL 0xC000 OR _reserve_alignment)
         message(FATAL_ERROR "SRAM2_RESERVE must be a multiple of 16 in [0, 0xC000)")
     endif()
+    if(_reserve AND NOT TARGET_NUM STREQUAL "78000")
+        message(FATAL_ERROR "SRAM2_RESERVE is only supported on MAX78000")
+    endif()
     if(NOT DEFINED RV_TIME_TIMER OR RV_TIME_TIMER STREQUAL "")
         set(RV_TIME_TIMER 3)
     endif()
@@ -55,7 +59,26 @@ function(maxim_add_riscv_coprocessor ARM_TARGET)
 
     set(_bin "${CMAKE_CURRENT_BINARY_DIR}/coprocessor")
     set(_gcc "${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX${TARGET_NUM}/Source/GCC")
-    set(_arm_ld "${NO_OS_DIR}/drivers/platform/maxim/max78000/max78000_dualcore_arm.ld")
+    set(_arm_ld "${NO_OS_DIR}/drivers/platform/maxim/${TARGET}/${TARGET}_dualcore_arm.ld")
+    # CPU1 flash bounds and the linker scripts the CPU1 image depends on.
+    if(TARGET_NUM STREQUAL "32690")
+        math(EXPR RV_FLASH_END "${_RISCV_FLASH_ORIGIN} + ${_RISCV_FLASH_SIZE}"
+            OUTPUT_FORMAT HEXADECIMAL)
+        set(RV_FLASH_SIZE ${_RISCV_FLASH_SIZE})
+        set(RV_LINK_DEPENDS "${_gcc}/max32690_riscv.ld")
+        # The SDK CPU0 startup exports the CPU1 regions to max32690.ld and
+        # defaults them to 0 (no CPU1 image) unless they are defined.
+        target_compile_definitions(no-os PRIVATE
+            RISCV_FLASH_ORIGIN=${_RISCV_FLASH_ORIGIN}
+            RISCV_FLASH_SIZE=${_RISCV_FLASH_SIZE}
+            RISCV_SRAM_ORIGIN=${_RISCV_SRAM_ORIGIN}
+            RISCV_SRAM_SIZE=${_RISCV_SRAM_SIZE})
+    else()
+        set(RV_FLASH_END 0x10080000)
+        set(RV_FLASH_SIZE 0x80000)
+        set(RV_LINK_DEPENDS "\${CMAKE_BINARY_DIR}/buildrv/common_riscv.ld"
+            "\${CMAKE_BINARY_DIR}/common.ld" "${_gcc}/max78000_riscv.ld")
+    endif()
     file(MAKE_DIRECTORY "${_bin}/source")
     configure_file("${RV_DEFCONFIG}" "${_bin}/source/project.conf" COPYONLY)
     configure_file("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/templates/coprocessor_spec.cmake.in"
@@ -88,6 +111,7 @@ function(maxim_add_riscv_coprocessor ARM_TARGET)
     set(_layout "${_bin}/flash.cmake")
     add_custom_command(OUTPUT "${_layout}"
         COMMAND ${CMAKE_COMMAND} "-DMAP_FILE=${_premap_map}" "-DOUT_FILE=${_layout}"
+            "-DFLASH_END=${RV_FLASH_END}" "-DFLASH_SIZE=${RV_FLASH_SIZE}"
             -P "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/gen_common_riscv_ld.cmake"
         DEPENDS ${_premap} "${_premap_map}"
             "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/gen_common_riscv_ld.cmake"
