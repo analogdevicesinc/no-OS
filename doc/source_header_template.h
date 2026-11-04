@@ -7,9 +7,9 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __<PART>_H__
-#define __<PART>_H__
+#ifndef <PART>_H_
+#define <PART>_H_
 
 #include <stdint.h>
 
-#endif /* __<PART>_H__ */
+#endif /* <PART>_H_ */
