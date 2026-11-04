@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _PICO_UART_H_
-#define _PICO_UART_H_
+#ifndef PICO_UART_H_
+#define PICO_UART_H_
 
 #include "no_os_uart.h"
 #include "no_os_irq.h"

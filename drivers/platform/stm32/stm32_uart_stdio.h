@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _STM32_UART_STDIO_H_
-#define _STM32_UART_STDIO_H_
+#ifndef STM32_UART_STDIO_H_
+#define STM32_UART_STDIO_H_
 
 #include <sys/stat.h>
 #include "no_os_uart.h"

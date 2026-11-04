@@ -9,7 +9,7 @@
 *******************************************************************************/
 
 #ifndef MAXIM_GPIO_IRQ_H_
-#define MAXIM_GPIO_IRQ_H
+#define MAXIM_GPIO_IRQ_H_
 
 #include "no_os_irq.h"
 

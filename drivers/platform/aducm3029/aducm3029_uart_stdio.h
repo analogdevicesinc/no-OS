@@ -7,11 +7,11 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _ADUCM3029_UART_STDIO_H_
-#define _ADUCM3029_UART_STDIO_H_
+#ifndef ADUCM3029_UART_STDIO_H_
+#define ADUCM3029_UART_STDIO_H_
 
 #include "no_os_uart.h"
 
 void no_os_uart_stdio(struct no_os_uart_desc *desc);
 
-#endif //_ADUCM3029_UART_STDIO_H_
+#endif //ADUCM3029_UART_STDIO_H_

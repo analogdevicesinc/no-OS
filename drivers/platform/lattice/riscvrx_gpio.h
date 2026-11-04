@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef LATTICE_GPIO_H_
-#define LATTICE_GPIO_H_
+#ifndef RISCVRX_GPIO_H_
+#define RISCVRX_GPIO_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -55,4 +55,4 @@ struct lattice_gpio_desc {
  */
 extern const struct no_os_gpio_platform_ops lattice_gpio_ops;
 
-#endif /* LATTICE_GPIO_H_ */
+#endif /* RISCVRX_GPIO_H_ */

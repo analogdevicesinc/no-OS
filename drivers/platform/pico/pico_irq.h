@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _PICO_IRQ_H_
-#define _PICO_IRQ_H_
+#ifndef PICO_IRQ_H_
+#define PICO_IRQ_H_
 
 #include "no_os_irq.h"
 

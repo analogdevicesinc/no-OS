@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _CHIBIOS_UART_H_
-#define _CHIBIOS_UART_H_
+#ifndef CHIBIOS_UART_H_
+#define CHIBIOS_UART_H_
 
 #include "no_os_uart.h"
 #include "hal.h"
@@ -44,4 +44,4 @@ extern const struct no_os_uart_platform_ops chibios_uart_ops;
 
 #endif //HAL_USE_UART==TRUE
 
-#endif //_CHIBIOS_UART_H_
+#endif //CHIBIOS_UART_H_

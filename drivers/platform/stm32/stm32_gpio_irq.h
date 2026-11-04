@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef STM32_GPIO_IRQ_H
-#define STM32_GPIO_IRQ_H
+#ifndef STM32_GPIO_IRQ_H_
+#define STM32_GPIO_IRQ_H_
 
 #include "no_os_irq.h"
 #include "stm32_hal.h"
