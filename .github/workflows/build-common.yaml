@@ -86,11 +86,13 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1   # v7
       - name: Get changed files
         uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c # v46
         id: changed-header-files
         with:
-          files_separator: ','
+          separator: ','
           files: |
             **.h
       - name: Include guards check
@@ -99,3 +101,4 @@ jobs:
           workspace: ${{ github.workspace }}
           files: ${{ steps.changed-header-files.outputs.all_changed_files }}
           generate-pr-report: true
+          fail-on-findings: true

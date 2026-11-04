@@ -9,6 +9,11 @@
 *******************************************************************************/
 #ifndef APP_CLOCK_H_
 #define APP_CLOCK_H_
+#endif
+
+#ifndef _TEST1_
+#define _TEST1_
+#endif
 
 #include <stdint.h>
 #include "no_os_clk.h"
@@ -20,4 +25,6 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT]);
 /* Application clocks remove. */
 int32_t app_clock_remove(void);
 
+#ifndef _TEST2_
+#define _TEST2_
 #endif
