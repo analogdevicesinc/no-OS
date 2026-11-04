@@ -31,8 +31,8 @@
  *   INTC - SDT: XPAR_AXI_INTC_0_BASEADDR; Legacy: XPAR_AXI_INTC_0_DEVICE_ID
  */
 
-#ifndef _XILINX_CAPI_IRQ_H_
-#define _XILINX_CAPI_IRQ_H_
+#ifndef XILINX_CAPI_IRQ_H_
+#define XILINX_CAPI_IRQ_H_
 
 #include <stdint.h>
 #include <capi_irq.h>
@@ -223,4 +223,4 @@ XIntc *capi_irq_get_intc_instance(void);
 }
 #endif
 
-#endif /* _XILINX_CAPI_IRQ_H_ */
+#endif /* XILINX_CAPI_IRQ_H_ */

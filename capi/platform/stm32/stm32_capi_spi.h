@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _STM32_CAPI_SPI_H_
-#define _STM32_CAPI_SPI_H_
+#ifndef STM32_CAPI_SPI_H_
+#define STM32_CAPI_SPI_H_
 
 #include "stm32_hal.h"
 #include "capi_spi.h"
@@ -156,4 +156,4 @@ int stm32_capi_spi_transfer_multiple_dma(struct capi_spi_device *device,
 int stm32_capi_spi_alternate_cs_enable(struct capi_spi_device *device,
 				       bool enable);
 
-#endif /* _STM32_CAPI_SPI_H_ */
+#endif /* STM32_CAPI_SPI_H_ */

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _STM32_CAPI_TIMER_PRIV_H_
-#define _STM32_CAPI_TIMER_PRIV_H_
+#ifndef STM32_CAPI_TIMER_PRIV_H_
+#define STM32_CAPI_TIMER_PRIV_H_
 
 #if defined(__cplusplus)
 extern "C" {
@@ -69,4 +69,4 @@ struct stm32_capi_timer_priv {
 }
 #endif /* __cplusplus */
 
-#endif /* _STM32_CAPI_TIMER_PRIV_H_ */
+#endif /* STM32_CAPI_TIMER_PRIV_H_ */
