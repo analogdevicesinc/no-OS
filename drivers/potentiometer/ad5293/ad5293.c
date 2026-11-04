@@ -26,7 +26,7 @@
  *******************************************************************************/
 static void ad5293_reset_chip_info(struct ad5293_dev* dev)
 {
-	uint8_t i;
+	uint16_t i;
 
 	for (i = 0; i < dev->chip_num; i++) {
 		(dev->chip + i)->Wiper_value = 512;
@@ -198,7 +198,7 @@ int32_t ad5293_hard_reset(struct ad5293_dev* dev)
 int32_t ad5293_soft_reset(struct ad5293_dev* dev)
 {
 	int32_t ret ;
-	uint8_t i;
+	uint16_t i;
 	uint16_t sz = 2 * dev->chip_num;
 	uint8_t buf[sz];
 
@@ -233,7 +233,7 @@ int32_t ad5293_soft_reset(struct ad5293_dev* dev)
 int32_t ad5293_sdo_setfloat(struct ad5293_dev* dev)
 {
 	int32_t ret ;
-	uint8_t i;
+	uint16_t i;
 	uint16_t sz = 2 * dev->chip_num;
 	uint8_t buf[sz];
 
@@ -266,7 +266,7 @@ int32_t ad5293_sdo_setfloat(struct ad5293_dev* dev)
  *******************************************************************************/
 int32_t ad5293_shutdown(struct ad5293_dev* dev, enum shutdown_t sd)
 {
-	uint8_t i;
+	uint16_t i;
 	uint16_t sz = 2 * dev->chip_num;
 	uint8_t buf[sz];
 
@@ -330,7 +330,7 @@ int32_t ad5293_update_wiper(struct ad5293_dev* dev, uint16_t val, uint8_t num)
 static int32_t ad5293_write_protect(struct ad5293_dev* dev,
 				    enum protect_mode_t pm)
 {
-	uint8_t i;
+	uint16_t i;
 	uint16_t sz = 2 * dev->chip_num;
 	uint8_t buf[sz];
 	enum protect_mode_t cali;
@@ -358,7 +358,7 @@ static int32_t ad5293_write_protect(struct ad5293_dev* dev,
  *******************************************************************************/
 int32_t ad5293_write_cali(struct ad5293_dev* dev)
 {
-	uint8_t i;
+	uint16_t i;
 	uint16_t sz = 2 * dev->chip_num;
 	uint8_t buf[sz];
 	enum calibration_mode_t cali;
@@ -387,7 +387,7 @@ int32_t ad5293_write_cali(struct ad5293_dev* dev)
 int32_t ad5293_write_wiper(struct ad5293_dev* dev)
 {
 	int32_t ret ;
-	uint8_t i;
+	uint16_t i;
 	uint16_t sz = 2 * dev->chip_num;
 	uint8_t buf[sz];
 
@@ -426,7 +426,7 @@ int32_t ad5293_write_wiper(struct ad5293_dev* dev)
 int32_t ad5293_read_reg_cali(struct ad5293_dev* dev)
 {
 	int32_t ret ;
-	uint8_t i;
+	uint16_t i;
 	uint16_t sz = 2 * dev->chip_num;
 	uint8_t buf[sz];
 
@@ -466,7 +466,7 @@ int32_t ad5293_read_reg_cali(struct ad5293_dev* dev)
 int32_t ad5293_read_reg_wiper(struct ad5293_dev* dev)
 {
 	int32_t ret ;
-	uint8_t i;
+	uint16_t i;
 	uint16_t sz = 2 * dev->chip_num;
 	uint8_t buf[sz];
 
