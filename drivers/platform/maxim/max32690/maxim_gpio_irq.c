@@ -19,6 +19,7 @@
 #include "no_os_gpio.h"
 #include "maxim_gpio_irq.h"
 #include "maxim_irq.h"
+#include "maxim_irq_priv.h"
 #include "no_os_alloc.h"
 
 static struct no_os_list_desc *actions[MXC_CFG_GPIO_INSTANCES];
@@ -45,34 +46,34 @@ static void gpio_irq_callback(void *cbdata)
 		action->callback(action->ctx);
 }
 
-void GPIO0_IRQHandler()
+void MAXIM_IRQ_HANDLER GPIO0_IRQHandler(void)
 {
 	MXC_GPIO_Handler(0);
 }
 
 #ifdef MXC_GPIO1
-void GPIO1_IRQHandler()
+void MAXIM_IRQ_HANDLER GPIO1_IRQHandler(void)
 {
 	MXC_GPIO_Handler(1);
 }
 #endif
 
 #ifdef MXC_GPIO2
-void GPIO2_IRQHandler()
+void MAXIM_IRQ_HANDLER GPIO2_IRQHandler(void)
 {
 	MXC_GPIO_Handler(2);
 }
 #endif
 
 #ifdef MXC_GPIO3
-void GPIO3_IRQHandler()
+void MAXIM_IRQ_HANDLER GPIO3_IRQHandler(void)
 {
 	MXC_GPIO_Handler(3);
 }
 #endif
 
 #ifdef MXC_GPIO4
-void GPIO4_IRQHandler()
+void MAXIM_IRQ_HANDLER GPIO4_IRQHandler(void)
 {
 	MXC_GPIO_Handler(4);
 }
@@ -329,16 +330,15 @@ static int max_gpio_irq_global_disable(struct no_os_irq_ctrl_desc *desc)
  * @param desc - GPIO interrupt controller descriptor.
  * @param irq_id - Unused
  * @param priority_level - The interrupt priority level.
- * @return 0
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int max_gpio_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
 				     uint32_t irq_id,
 				     uint32_t priority_level)
 {
 	uint32_t id = MXC_GPIO_GET_IRQ(desc->irq_ctrl_id);
-	NVIC_SetPriority(id, priority_level);
 
-	return 0;
+	return max_irq_set_priority(desc, id, priority_level);
 }
 
 /**
