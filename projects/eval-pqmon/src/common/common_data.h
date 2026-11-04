@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #if defined(PQM_CONN_ETH)
 #include "w5500_network.h"
@@ -135,4 +135,4 @@ struct pqm_init_para {
 	int16_t *ext_buff;
 };
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

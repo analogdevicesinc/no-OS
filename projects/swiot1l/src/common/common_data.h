@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "platform_includes.h"
 #include "ad74413r.h"
@@ -64,4 +64,4 @@ extern struct no_os_irq_init_param ad74413r_gpio_irq_ip;
 extern struct iio_trigger ad74413r_iio_trig_desc;
 #endif
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

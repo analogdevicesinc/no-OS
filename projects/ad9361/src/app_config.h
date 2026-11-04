@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef CONFIG_H_
-#define CONFIG_H_
+#ifndef APP_CONFIG_H_
+#define APP_CONFIG_H_
 
 #define HAVE_SPLIT_GAIN_TABLE	1 /* only set to 0 in case split_gain_table_mode_enable = 0*/
 

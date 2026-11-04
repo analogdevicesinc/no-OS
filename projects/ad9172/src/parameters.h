@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include <xparameters.h>
 
@@ -36,4 +36,4 @@
 #define DDR_MEM_BASEADDR 			(XPAR_PS7_DDR_0_S_AXI_BASEADDR + 0xA000000)
 #endif
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

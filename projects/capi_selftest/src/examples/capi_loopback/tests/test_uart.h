@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef TEST_UART_H
-#define TEST_UART_H
+#ifndef TEST_UART_H_
+#define TEST_UART_H_
 
 /**
  * @brief Run all UART test cases available on the mapped platform.
@@ -15,4 +15,4 @@
  */
 int test_uart(void);
 
-#endif /* TEST_UART_H */
+#endif /* TEST_UART_H_ */

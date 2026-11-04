@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _PARAMETERS_H_
-#define _PARAMETERS_H_
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include <xparameters.h>
 
@@ -21,4 +21,4 @@
 #define UART_IRQ_ID				XPAR_XUARTPS_1_INTR
 #define UART_BAUDRATE                           115200
 
-#endif /* _PARAMETERS_H_ */
+#endif /* PARAMETERS_H_ */

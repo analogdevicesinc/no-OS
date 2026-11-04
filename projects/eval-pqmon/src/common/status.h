@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef __STATUS_H__
-#define __STATUS_H__
+#ifndef STATUS_H_
+#define STATUS_H_
 
 #define SYS_STATUS_SUCCESS 0
 #define SYS_STATUS_PQLIB_ERROR 1
@@ -37,4 +37,4 @@
 #define SYS_STATUS_CALIBRATION_SUCCESS 23
 #define SYS_STATUS_CALIBRATION_ERROR 24
 
-#endif /* __AFE_CONFIG_H__ */
+#endif /* STATUS_H_ */

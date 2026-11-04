@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "parameters.h"
 #include "max25603.h"
@@ -22,4 +22,4 @@ extern struct no_os_pwm_init_param max25603_hb_ip;
 extern struct no_os_pwm_init_param max25603_lb_ip;
 extern struct max25603_init_param max25603_ip;
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

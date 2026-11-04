@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef __PQLIB_AFE_H__
-#define __PQLIB_AFE_H__
+#ifndef PQLIB_AFE_H_
+#define PQLIB_AFE_H_
 
 #include "ade9430.h"
 #include "adi_pqlib.h"
@@ -35,4 +35,4 @@
  */
 int get_afe_input();
 
-#endif /* __PQLIB_AFE_H__ */
+#endif /* PQLIB_AFE_H_ */

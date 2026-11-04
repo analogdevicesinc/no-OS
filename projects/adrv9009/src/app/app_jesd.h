@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __APP_JESD_H
-#define __APP_JESD_H
+#ifndef APP_JESD_H_
+#define APP_JESD_H_
 
 #include <stdint.h>
 #include "adi_hal.h"
@@ -25,4 +25,4 @@ void jesd_deinit(void);
 void jesd_status(void);
 void jesd_rx_watchdog(void);
 
-#endif /* __APP_JESD_H */
+#endif /* APP_JESD_H_ */

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 extern struct no_os_timer_init_param timer_init_param;
 extern struct no_os_irq_init_param timer_irq_ip;
@@ -30,4 +30,4 @@ extern struct no_os_spi_init_param cfg_spi_init_param;
 
 extern struct no_os_uart_init_param uart_init_param;
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

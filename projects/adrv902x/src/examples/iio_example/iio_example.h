@@ -7,9 +7,9 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __IIO_EXAMPLE_H__
-#define __IIO_EXAMPLE_H__
+#ifndef IIO_EXAMPLE_H_
+#define IIO_EXAMPLE_H_
 
 int example_main();
 
-#endif /* __IIO_EXAMPLE_H__ */
+#endif /* IIO_EXAMPLE_H_ */

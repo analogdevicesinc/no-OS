@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "platform_includes.h"
 #include "app_config.h"
@@ -62,4 +62,4 @@ extern struct no_os_irq_init_param dac_demo_timer_irq_ip;
 extern struct iio_hw_trig_init_param dac_demo_timer_trig_ip;
 #endif
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

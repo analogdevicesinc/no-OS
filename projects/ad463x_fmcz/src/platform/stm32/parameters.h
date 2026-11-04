@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "stm32_hal.h"
 #include "stm32_irq.h"
@@ -83,4 +83,4 @@ extern struct stm32_gpio_init_param cnv_pwm_gpio_extra_init_params;
 #define PWM_EXTRA		&cnv_pwm_extra_init_params
 #define PWM_GPIO_EXTRA		&cnv_pwm_gpio_extra_init_params
 #define NO_OS_PWM_ID		1
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

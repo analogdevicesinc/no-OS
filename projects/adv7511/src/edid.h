@@ -8,8 +8,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _EDID_H_
-#define _EDID_H_
+#ifndef EDID_H_
+#define EDID_H_
 
 #include <stdbool.h>
 #include <stdint.h>

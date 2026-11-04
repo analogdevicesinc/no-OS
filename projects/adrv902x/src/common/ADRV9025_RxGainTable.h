@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef ADRV9025_RX_GAIN_TABLE_H
-#define ADRV9025_RX_GAIN_TABLE_H
+#ifndef ADRV9025_RXGAINTABLE_H_
+#define ADRV9025_RXGAINTABLE_H_
 
 const char *ADRV9025_RxGainTable_text =
 	"Gain Index,FE Control Word,TIA Control,ADC Control,Ext Control,Phase Offset,Digital Gain\n\

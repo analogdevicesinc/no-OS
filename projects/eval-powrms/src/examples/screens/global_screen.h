@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __GLOBAL_SCREEN_H__
-#define __GLOBAL_SCREEN_H__
+#ifndef GLOBAL_SCREEN_H_
+#define GLOBAL_SCREEN_H_
 
 #include "example.h"
 #include "common_data.h"
@@ -46,4 +46,4 @@ enum display_entry_t {
 lv_obj_t * get_global_screen(void);
 int delete_global_screen(void);
 
-#endif /* __GLOBAL_SCREEN_H__ */
+#endif /* GLOBAL_SCREEN_H_ */

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "parameters.h"
 #include "ad469x.h"
@@ -16,4 +16,4 @@
 extern struct no_os_uart_init_param iio_uart_ip;
 extern struct ad469x_init_param ad469x_init_param;
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

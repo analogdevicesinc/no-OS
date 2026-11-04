@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef TEST_DMA_H
-#define TEST_DMA_H
+#ifndef TEST_DMA_H_
+#define TEST_DMA_H_
 
 /**
  * @brief Run all DMA test cases available on the mapped platform.
@@ -15,4 +15,4 @@
  */
 int test_dma(void);
 
-#endif /* TEST_DMA_H */
+#endif /* TEST_DMA_H_ */

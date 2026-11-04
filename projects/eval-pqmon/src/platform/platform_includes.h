@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
+#ifndef PLATFORM_INCLUDES_H_
+#define PLATFORM_INCLUDES_H_
 
 #ifdef MAXIM_PLATFORM
 #include "maxim/parameters.h"
@@ -19,4 +19,4 @@
 #include "iio_app.h"
 #endif
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+#endif /* PLATFORM_INCLUDES_H_ */

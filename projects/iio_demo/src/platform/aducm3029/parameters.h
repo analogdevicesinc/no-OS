@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 /******************************************************************************/
 #include <sys/platform.h>
@@ -38,4 +38,4 @@ and based on the available RAM memory of the platform.
  * 256; 512 leaves headroom for larger -b values while still fitting DSRAM_A. */
 #define SAMPLES_PER_CHANNEL_PLATFORM 512
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

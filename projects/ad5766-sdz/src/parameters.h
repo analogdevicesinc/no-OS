@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include <xparameters.h>
 
@@ -22,4 +22,4 @@
 #define GPIO_OFFSET			54 + 32
 #define GPIO_RESET			GPIO_OFFSET + 0
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

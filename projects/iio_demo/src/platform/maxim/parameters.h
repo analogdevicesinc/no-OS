@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "maxim_irq.h"
 #include "maxim_uart.h"
@@ -79,4 +79,4 @@ extern struct max_usb_uart_init_param iio_demo_usb_uart_extra_ip;
 
 #endif
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

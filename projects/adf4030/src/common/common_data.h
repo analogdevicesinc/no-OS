@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "parameters.h"
 #include "adf4030.h"
@@ -20,4 +20,4 @@ extern struct no_os_uart_init_param	adf4030_uart_ip;
 extern struct no_os_spi_init_param	adf4030_spi_ip;
 extern struct adf4030_init_param 	adf4030_ip;
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __APP_CLOCKING_H
-#define __APP_CLOCKING_H
+#ifndef APP_CLOCKING_H_
+#define APP_CLOCKING_H_
 
 #include <stdint.h>
 #include "ad9528.h"
@@ -40,4 +40,4 @@ int32_t app_clocking_init(struct app_clocking **app,
 /* @brief Application clocking remove. */
 int32_t app_clocking_remove(struct app_clocking *app);
 
-#endif /* __APP_CLOCKING_H */
+#endif /* APP_CLOCKING_H_ */

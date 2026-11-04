@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef __PQLIB_EXAMPLE_H__
-#define __PQLIB_EXAMPLE_H__
+#ifndef PQLIB_EXAMPLE_H_
+#define PQLIB_EXAMPLE_H_
 
 #include "ade9430.h"
 #include "adi_pqlib.h"
@@ -277,4 +277,4 @@ int pqm_start_measurement(bool waitingForSync);
  */
 int process_and_prepare_output();
 
-#endif /* __PQLIB_EXAMPLE_H__ */
+#endif /* PQLIB_EXAMPLE_H_ */

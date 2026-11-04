@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "max30009.h"
 #include "no_os_i2c.h"
@@ -21,4 +21,4 @@ extern struct no_os_uart_init_param max30009_uart_ip;
 extern struct no_os_irq_init_param max30009_gpio_irq_ip;
 extern struct no_os_gpio_init_param max30009_gpio_ip;
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

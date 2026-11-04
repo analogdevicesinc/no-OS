@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "maxim_pwm.h"
 #include "maxim_gpio.h"
@@ -61,4 +61,4 @@ extern struct max_uart_init_param max25603_uart_extra;
 extern struct max_pwm_init_param max25603_pwm_extra;
 extern struct max_gpio_init_param max25603_gpio_extra;
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

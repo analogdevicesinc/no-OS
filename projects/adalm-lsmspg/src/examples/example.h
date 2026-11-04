@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
-#ifndef __EXAMPLE_H__
-#define __EXAMPLE_H__
+#ifndef EXAMPLE_H_
+#define EXAMPLE_H_
 
 #define example_main(fn) \
 	int start_example(void) __attribute__ ((alias(fn)))
@@ -18,4 +18,4 @@ int start_example(void);
 int heartbeat_init(void (*cb)(void *context));
 void heartbeat_exit(void);
 
-#endif /* __EXAMPLE_H__*/
+#endif /* EXAMPLE_H_*/

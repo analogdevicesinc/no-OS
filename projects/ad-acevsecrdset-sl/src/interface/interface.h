@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __INTERFACE_H__
-#define __INTERFACE_H__
+#ifndef INTERFACE_H_
+#define INTERFACE_H_
 
 #include "state_machine.h"
 #include "parameters.h"
@@ -32,4 +32,4 @@ int interface_disp(struct stout *stout);
 /*! Get interface blink time (multimple of 20ms) */
 int interface_blink_time(struct stout *stout);
 
-#endif /* __INTERFACE_H__ */
+#endif /* INTERFACE_H_ */

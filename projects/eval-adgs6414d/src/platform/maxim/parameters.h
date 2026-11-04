@@ -9,8 +9,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "maxim_spi.h"
 #include "maxim_uart.h"
@@ -30,4 +30,4 @@
 extern struct max_uart_init_param adgs6414d_uart_extra_ip;
 extern struct max_spi_init_param adgs6414d_spi_extra_ip;
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

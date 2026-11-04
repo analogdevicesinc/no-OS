@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __BASIC_EXAMPLE_H__
-#define __BASIC_EXAMPLE_H__
+#ifndef BASIC_EXAMPLE_H_
+#define BASIC_EXAMPLE_H_
 
 #include <stdint.h>
 
@@ -129,4 +129,4 @@ static inline int iol_decode_operate_od(uint8_t mseq_cap)
 
 int basic_example_main(void);
 
-#endif /* __BASIC_EXAMPLE_H__ */
+#endif /* BASIC_EXAMPLE_H_ */

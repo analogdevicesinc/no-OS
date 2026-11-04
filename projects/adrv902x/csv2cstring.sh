@@ -26,10 +26,10 @@ sed -i -e '$a#endif' $CFILE
 echo >> $CFILE
 if [ "$1" = "ADRV9025_RxGainTable.csv" ]; then
 sed -i '1i\
-#ifndef ADRV9025_RX_GAIN_TABLE_H\n#define ADRV9025_RX_GAIN_TABLE_H\n' $CFILE
+#ifndef ADRV9025_RXGAINTABLE_H_\n#define ADRV9025_RXGAINTABLE_H_\n' $CFILE
 fi
 if [ "$1" = "ADRV9025_TxAttenTable.csv" ]; then
 sed -i '1i\
-#ifndef ADRV9025_TX_ATTEN_TABLE_H\n#define ADRV9025_TX_ATTEN_TABLE_H\n' $CFILE
+#ifndef ADRV9025_TXATTENTABLE_H_\n#define ADRV9025_TXATTENTABLE_H_\n' $CFILE
 fi
 echo $CFILE

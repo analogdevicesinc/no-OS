@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #ifdef CONFIG_FTD2XX
 #include "no_os_uart.h"
@@ -36,4 +36,4 @@ extern struct ftd2xx_i2c_init max31827_i2c_extra;
 #define UART_OPS	&linux_uart_ops
 #endif
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

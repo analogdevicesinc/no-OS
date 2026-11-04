@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "maxim_irq.h"
 #include "maxim_spi.h"
@@ -60,4 +60,4 @@ extern struct max_spi_init_param adxrs290_spi_extra_ip;
 #define ADXRS290_GPIO_TRIG_IRQ_ID    GPIO_SYNC_PIN_NUM
 #define ADXRS290_GPIO_CB_HANDLE      MXC_GPIO_GET_GPIO(GPIO_SYNC_PORT_NUM)
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

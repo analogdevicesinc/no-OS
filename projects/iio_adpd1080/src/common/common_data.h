@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "parameters.h"
 #include "adpd188.h"
@@ -28,4 +28,4 @@ extern struct no_os_timer_init_param adpd1080_cal_timer_ip;
 extern struct no_os_gpio_init_param adpd1080_sync_gpio_ip;
 extern struct no_os_irq_init_param adpd1080_cal_irq_ip;
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

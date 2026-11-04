@@ -9,8 +9,8 @@
  *   SVN Revision: $WCREV$
 *******************************************************************************/
 
-#ifndef _TRANSMITTER_H_
-#define _TRANSMITTER_H_
+#ifndef TRANSMITTER_H_
+#define TRANSMITTER_H_
 
 #include "transmitter_defs.h"
 #include "clk_axi_clkgen.h"

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __RCD_H__
-#define __RCD_H__
+#ifndef RCD_H_
+#define RCD_H_
 
 #include "no_os_gpio.h"
 #include "no_os_irq.h"
@@ -24,4 +24,4 @@ int rcd_init(struct no_os_irq_ctrl_desc *desc,
 	     struct no_os_gpio_desc **rcm_test, struct no_os_gpio_desc **rcddc,
 	     struct no_os_gpio_desc **rcdac);
 
-#endif /* __RCD_H__ */
+#endif /* RCD_H_ */

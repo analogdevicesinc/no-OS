@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __INTER_H__
-#define __INTER_H__
+#ifndef INTER_H_
+#define INTER_H_
 
 #include "state_machine.h"
 #include "parameters.h"
@@ -35,4 +35,4 @@ void reset_gpio_opto2_flag_state(void);
 /*! Initialize interrupt phase */
 int inter_init(struct stout *stout);
 
-#endif /* __INTER__H__ */
+#endif /* INTER_H_ */

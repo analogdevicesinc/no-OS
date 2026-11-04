@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __BLANK_SCREEN_H__
-#define __BLANK_SCREEN_H__
+#ifndef SUBSCREEN_BLANK_SCREEN_H_
+#define SUBSCREEN_BLANK_SCREEN_H_
 
 #include "example.h"
 
@@ -27,4 +27,4 @@
  */
 void subscreen_blank_screen(void);
 
-#endif // __BLANK_SCREEN_H__
+#endif // SUBSCREEN_BLANK_SCREEN_H_

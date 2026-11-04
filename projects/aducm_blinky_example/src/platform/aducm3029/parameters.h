@@ -3,8 +3,8 @@
  * parameters.h
  * Definitions specific to ADuCM3029 platform used by aducm_blinky_example.
  *****************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include <stdint.h>
 #include <stddef.h>
@@ -16,4 +16,4 @@
 #define GPIO_OPS	&aducm_gpio_ops
 #define GPIO_EXTRA	NULL
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

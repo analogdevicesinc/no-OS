@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef PARAMETERS_H
-#define PARAMETERS_H
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "iio_aducm3029.h"
 #include "aducm3029_irq.h"

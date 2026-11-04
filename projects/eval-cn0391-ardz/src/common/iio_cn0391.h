@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __IIO_CN0391_H__
-#define __IIO_CN0391_H__
+#ifndef IIO_CN0391_H_
+#define IIO_CN0391_H_
 
 #include "iio.h"
 
@@ -22,4 +22,4 @@ extern struct iio_device iio_cn0391_device;
  * with SCOPY application. */
 extern struct iio_device iio_ad7124_cn0391_device;
 
-#endif /* __IIO_CN0391_H__ */
+#endif /* IIO_CN0391_H_ */

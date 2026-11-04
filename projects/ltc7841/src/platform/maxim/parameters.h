@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "maxim_gpio.h"
 #include "maxim_i2c.h"
@@ -28,4 +28,4 @@ extern struct max_uart_init_param uart_extra_ip;
 extern struct max_i2c_init_param ltc7841_i2c_extra;
 extern const struct max_gpio_init_param ltc7841_gpio_extra;
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

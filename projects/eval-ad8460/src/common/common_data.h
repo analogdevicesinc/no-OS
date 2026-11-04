@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "parameters.h"
 #include "ad8460.h"
@@ -22,4 +22,4 @@ extern const struct no_os_spi_init_param ad8460_spi_ip;
 extern const struct no_os_gpio_init_param ad8460_gpio_rstn;
 extern struct ad8460_init_param ad8460_ip;
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

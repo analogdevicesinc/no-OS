@@ -7,9 +7,9 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADIN1110_STANDALONE_EXAMPLE_H__
-#define __ADIN1110_STANDALONE_EXAMPLE_H__
+#ifndef ADIN1110_STANDALONE_EXAMPLE_H_
+#define ADIN1110_STANDALONE_EXAMPLE_H_
 
 int adin1110_standalone_example_main();
 
-#endif /* __ADIN1110_STANDALONE_EXAMPLE_H__ */
+#endif /* ADIN1110_STANDALONE_EXAMPLE_H_ */

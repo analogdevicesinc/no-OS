@@ -10,8 +10,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "stm32_hal.h"
 #include "stm32_irq.h"
@@ -83,4 +83,4 @@ extern struct stm32_pwm_init_param trigger_pwm_extra_init_params;
 #define DCACHE_INVALIDATE		NULL
 
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

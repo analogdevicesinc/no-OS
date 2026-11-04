@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef PARAMETERS_H
-#define PARAMETERS_H
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #define SPI_DEVICE_ID           	XPAR_PS7_SPI_0_DEVICE_ID
 #define AD5758_SPI_CS           	0

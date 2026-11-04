@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "linux_i2c.h"
 
@@ -19,4 +19,4 @@
 
 extern struct linux_i2c_init_param adt7420_i2c_extra;
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

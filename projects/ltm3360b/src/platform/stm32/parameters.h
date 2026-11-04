@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "stm32_hal.h"
 #include "stm32_irq.h"
@@ -42,4 +42,4 @@ extern struct stm32_uart_init_param ltm3360b_uart_extra_ip;
 extern UART_HandleTypeDef huart5;
 
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

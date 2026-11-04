@@ -9,8 +9,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef NOOS_MBEDTLS_CONFIG_H
-#define NOOS_MBEDTLS_CONFIG_H
+#ifndef NOOS_MBEDTLS_CONFIG_H_
+#define NOOS_MBEDTLS_CONFIG_H_
 
 /*
  * For an easy configuration of mbedtls library only this macros from user
@@ -196,4 +196,4 @@
 /* Check if the configuration is ok */
 #include "mbedtls/check_config.h"
 
-#endif /* NOOS_MBEDTLS_CONFIG_H */
+#endif /* NOOS_MBEDTLS_CONFIG_H_ */

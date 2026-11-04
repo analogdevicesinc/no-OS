@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef TX_ATTEN_TABLE_H
-#define TX_ATTEN_TABLE_H
+#ifndef TXATTENTABLE_H_
+#define TXATTENTABLE_H_
 
 #include <stdint.h>
 

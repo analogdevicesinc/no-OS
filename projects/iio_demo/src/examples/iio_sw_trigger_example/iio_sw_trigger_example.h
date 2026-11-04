@@ -7,9 +7,9 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __IIO_SW_TRIGGER_EXAMPLE_H__
-#define __IIO_SW_TRIGGER_EXAMPLE_H__
+#ifndef IIO_SW_TRIGGER_EXAMPLE_H_
+#define IIO_SW_TRIGGER_EXAMPLE_H_
 
 int iio_sw_trigger_example_main();
 
-#endif /* __IIO_SW_TRIGGER_EXAMPLE_H__ */
+#endif /* IIO_SW_TRIGGER_EXAMPLE_H_ */

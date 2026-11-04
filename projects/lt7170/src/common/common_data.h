@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "no_os_i2c.h"
 #include "parameters.h"
@@ -20,4 +20,4 @@ extern struct no_os_uart_init_param lt7170_uart_ip;
 extern struct no_os_i2c_init_param lt7170_i2c_ip;
 extern struct lt7170_init_param lt7170_ip;
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

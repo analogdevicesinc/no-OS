@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef MWC_H
-#define MWC_H
+#ifndef MWC_H_
+#define MWC_H_
 
 #include <assert.h>
 #include "no_os_gpio.h"

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __STATE_MACHINE_H__
-#define __STATE_MACHINE_H__
+#ifndef STATE_MACHINE_H_
+#define STATE_MACHINE_H_
 
 #include <stdint.h>
 
@@ -238,4 +238,4 @@ void stop_charging(void);
 /*! Get charging state */
 uint8_t car_is_charging(void);
 
-#endif /* __STATE_MACHINE_H__ */
+#endif /* STATE_MACHINE_H_ */

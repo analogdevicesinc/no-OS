@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -468,4 +468,4 @@ extern DMA_XFER_EXTRA_TYPE dma_xfer_extra;
 void get_test_framework_config(struct test_framework_config *config,
 			       struct capi_uart_handle *uart);
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

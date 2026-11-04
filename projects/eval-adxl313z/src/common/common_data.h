@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "parameters.h"
 #include "adxl313.h"
@@ -23,4 +23,4 @@ extern struct adxl313_init_param adxl313_user_init;
 
 #define SPI_MAX_HZ			4000000
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

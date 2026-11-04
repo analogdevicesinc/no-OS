@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "parameters.h"
 #include "no_os_i2c.h"
@@ -31,4 +31,4 @@ extern struct adp5055_init_param adp5055_ip;
 #define EXAMPLE_VOUT2 1.3
 #define EXAMPLE_VOUT3 1.8
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

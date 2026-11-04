@@ -7,9 +7,9 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COLOR_SENSOR_EXAMPLE_H__
-#define __COLOR_SENSOR_EXAMPLE_H__
+#ifndef COLOR_SENSOR_EXAMPLE_H_
+#define COLOR_SENSOR_EXAMPLE_H_
 
 int example_main();
 
-#endif /* __COLOR_SENSOR_EXAMPLE_H__ */
+#endif /* COLOR_SENSOR_EXAMPLE_H_ */

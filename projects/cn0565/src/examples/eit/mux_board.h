@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef MUXBOARD_H_
-#define MUXBOARD_H_
+#ifndef MUX_BOARD_H_
+#define MUX_BOARD_H_
 #include <stdint.h>
 #include "no_os_i2c.h"
 #include "ad5940.h"
@@ -34,4 +34,4 @@ struct electrode_combo {
 void setMuxSwitch(struct no_os_i2c_desc *i2c, struct ad5940_dev *dev,
 		  struct electrode_combo sw, uint16_t nElCount);
 
-#endif /* MUXBOARD_H_ */
+#endif /* MUX_BOARD_H_ */

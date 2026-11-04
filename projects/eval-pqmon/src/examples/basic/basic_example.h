@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef __PQM_FW_H__
-#define __PQM_FW_H__
+#ifndef BASIC_EXAMPLE_H_
+#define BASIC_EXAMPLE_H_
 
 #include "common_data.h"
 #include "no_os_error.h"
@@ -54,4 +54,4 @@ int32_t close_pqm_channels(void *dev);
  */
 int basic_pqm_firmware();
 
-#endif /* __PQM_FW_H__ */
+#endif /* BASIC_EXAMPLE_H_ */

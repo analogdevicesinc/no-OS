@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef POWRMS_UTILS_H
-#define POWRMS_UTILS_H
+#ifndef POWRMS_UTILS_H_
+#define POWRMS_UTILS_H_
 
 #include <stdint.h>
 #include "common_data.h"
@@ -457,4 +457,4 @@ int powrms_eeprom_read_def_poly_5000MHz_reverse_coeffs(double *coeffs);
 
 int powrms_init_memory_upon_boot();
 
-#endif /* POWRMS_UTILS_H */
+#endif /* POWRMS_UTILS_H_ */

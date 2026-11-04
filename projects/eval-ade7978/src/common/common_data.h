@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "ade7978.h"
 #include "no_os_uart.h"
@@ -65,4 +65,4 @@ struct measurements {
 int rms_adc_values_read(struct ade7978_dev *dev, struct measurements *value,
 			enum ade7978_phase phase);
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

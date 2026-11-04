@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PLATFORM_H__
-#define __PLATFORM_H__
+#ifndef PLATFORM_H_
+#define PLATFORM_H_
 
 #include "ade9000.h"
 #include "no_os_uart.h"
@@ -55,4 +55,4 @@ int interface_toggle_led(struct no_os_gpio_desc *gpio_led_desc);
 // Read data interval in ms
 #define READ_INTERVAL               3000
 
-#endif // __PLATFORM_H__
+#endif // PLATFORM_H_

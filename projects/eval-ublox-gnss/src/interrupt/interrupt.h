@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __INTERRUPT_H__
-#define __INTERRUPT_H__
+#ifndef INTERRUPT_H_
+#define INTERRUPT_H_
 
 #include "nmea_ubx.h"
 
@@ -24,4 +24,4 @@ int get_irq_flag_state(void);
 /* Interrupt flag state */
 void reset_irq_flag_state(void);
 
-#endif /* __INTERRUPT_H__ */
+#endif /* INTERRUPT_H_ */

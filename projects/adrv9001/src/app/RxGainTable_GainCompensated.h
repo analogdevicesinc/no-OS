@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef RX_GAIN_TABLE_GAIN_COMPENSATED_H
-#define RX_GAIN_TABLE_GAIN_COMPENSATED_H
+#ifndef RXGAINTABLE_GAINCOMPENSATED_H_
+#define RXGAINTABLE_GAINCOMPENSATED_H_
 
 #include <stdint.h>
 

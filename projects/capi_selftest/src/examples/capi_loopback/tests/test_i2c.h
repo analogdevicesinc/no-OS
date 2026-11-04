@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef TEST_I2C_H
-#define TEST_I2C_H
+#ifndef TEST_I2C_H_
+#define TEST_I2C_H_
 
 /**
  * @brief Run all I2C test cases available on the mapped platform.
@@ -15,4 +15,4 @@
  */
 int test_i2c(void);
 
-#endif /* TEST_I2C_H */
+#endif /* TEST_I2C_H_ */

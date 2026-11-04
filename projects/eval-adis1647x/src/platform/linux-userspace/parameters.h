@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "linux_gpio.h"
 #include "linux_spi.h"
@@ -32,4 +32,4 @@
 #define GPIO_OPS             &linux_gpio_ops
 #define GPIO_EXTRA           NULL
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */
