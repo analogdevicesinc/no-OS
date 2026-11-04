@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __AD796X_H__
-#define __AD796X_H__
+#ifndef AD796X_H_
+#define AD796X_H_
 
 #include "no_os_gpio.h"
 #include "no_os_pwm.h"
@@ -70,4 +70,4 @@ int ad796x_remove(struct ad796x_dev *dev);
 int32_t ad796x_read_data(struct ad796x_dev *dev, uint32_t *buf,
 			 uint16_t samples);
 
-#endif /* __AD796X_H__ */
+#endif /* AD796X_H_ */

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __LTC4306_H__
-#define __LTC4306_H__
+#ifndef LTC4306_H_
+#define LTC4306_H_
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -195,4 +195,4 @@ int ltc4306_set_downstream_channel(struct ltc4306_dev *dev,
 int ltc4306_get_downstream_channel(struct ltc4306_dev *dev,
 				   uint8_t bus_num, bool *connect);
 
-#endif	/* __LTC4306_H__ */
+#endif	/* LTC4306_H_ */

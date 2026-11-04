@@ -8,8 +8,8 @@
 *
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _ADF4156_H_
-#define _ADF4156_H_
+#ifndef ADF4156_H_
+#define ADF4156_H_
 
 #include <stdint.h>
 #include "no_os_gpio.h"
@@ -210,4 +210,4 @@ uint32_t gcd(uint32_t x, uint32_t y);
 double adf4156_set_freq(struct adf4156_dev *dev,
 			double freq);
 
-#endif /* _ADF4156_H_ */
+#endif /* ADF4156_H_ */

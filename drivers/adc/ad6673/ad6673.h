@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __AD6673_H__
-#define __AD6673_H__
+#ifndef AD6673_H_
+#define AD6673_H_
 
 #include <stdint.h>
 #include "no_os_spi.h"
@@ -583,4 +583,4 @@ int32_t ad6673_nsr_tuning_freq(int64_t tune_freq,
 			       int64_t f_adc,
 			       struct ad6673_type_band *p_band);
 
-#endif /* __AD6673_H__ */
+#endif /* AD6673_H_ */

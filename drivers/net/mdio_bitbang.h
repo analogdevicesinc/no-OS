@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _MDIO_BITBANG_H_
-#define _MDIO_BITBANG_H_
+#ifndef MDIO_BITBANG_H_
+#define MDIO_BITBANG_H_
 
 #include "no_os_gpio.h"
 

@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __LTC2378_H__
-#define __LTC2378_H__
+#ifndef LTC2378_H_
+#define LTC2378_H_
 
 #include <stdint.h>
 #include "no_os_spi.h"
@@ -96,4 +96,4 @@ int ltc2378_raw_to_uv(struct ltc2378_dev *dev, uint32_t raw,
 /* Put the LTC2378-20 into power-down mode */
 int ltc2378_power_down(struct ltc2378_dev *dev);
 
-#endif /* __LTC2378_H__ */
+#endif /* LTC2378_H_ */

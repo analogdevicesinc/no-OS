@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 ******************************************************************************/
-#ifndef MAX96792_H
-#define MAX96792_H
+#ifndef MAX96792_H_
+#define MAX96792_H_
 
 #include <stdint.h>
 #include "gmsl_common.h"
@@ -96,4 +96,4 @@ int32_t max96792_init(struct gmsl_dev **device, struct no_os_i2c_desc *i2c_desc,
 		      void *init_param);
 int32_t max96792_remove(struct gmsl_dev *dev);
 
-#endif /* MAX96792_H */
+#endif /* MAX96792_H_ */

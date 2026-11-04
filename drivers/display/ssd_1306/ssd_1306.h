@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef SSD_1306_H
-#define SSD_1306_H
+#ifndef SSD_1306_H_
+#define SSD_1306_H_
 
 #include <stdint.h>
 #include <stdlib.h>

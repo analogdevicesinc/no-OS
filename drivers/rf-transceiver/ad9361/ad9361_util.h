@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __AD9361_UTIL_H__
-#define __AD9361_UTIL_H__
+#ifndef AD9361_UTIL_H_
+#define AD9361_UTIL_H_
 
 #include <limits.h>
 #include <stdint.h>

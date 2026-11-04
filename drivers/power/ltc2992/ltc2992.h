@@ -8,8 +8,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __LTC2992_H__
-#define __LTC2992_H__
+#ifndef LTC2992_H_
+#define LTC2992_H_
 
 #include <stdint.h>
 #include <string.h>
@@ -394,4 +394,4 @@ int ltc2992_get_gpio_state(struct ltc2992_dev *dev,
 int ltc2992_set_gpio_output(struct ltc2992_dev *dev,
 			    enum ltc2992_gpio gpio,
 			    enum ltc2992_gpio_output output);
-#endif /* __LTC2992_H__ */
+#endif /* LTC2992_H_ */

@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __ADXL367_H__
-#define __ADXL367_H__
+#ifndef ADXL367_H_
+#define ADXL367_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -601,4 +601,4 @@ int adxl367_pedometer_get_steps(struct adxl367_dev *dev, uint16_t *steps);
 /* Reset the step counter. */
 int adxl367_pedometer_reset(struct adxl367_dev *dev);
 
-#endif /* __ADXL367_H__ */
+#endif /* ADXL367_H_ */

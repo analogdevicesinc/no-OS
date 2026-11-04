@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef SRC_AD7091R5_H_
-#define SRC_AD7091R5_H_
+#ifndef AD7091R5_H_
+#define AD7091R5_H_
 
 #include <stdbool.h>
 #include "no_os_i2c.h"
@@ -234,4 +234,4 @@ int32_t ad7091r5_read_one(struct ad7091r5_dev *dev,
 			  uint8_t channel,
 			  uint16_t *read_val);
 
-#endif /* SRC_AD7091R5_H_ */
+#endif /* AD7091R5_H_ */

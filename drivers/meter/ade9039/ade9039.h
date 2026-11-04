@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADE9039_H__
-#define __ADE9039_H__
+#ifndef ADE9039_H_
+#define ADE9039_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -1480,4 +1480,4 @@ int ade9039_get_int_status0(struct ade9039_dev *dev, uint32_t msk,
 int ade9039_check_bit_status(struct ade9039_dev *dev, uint16_t reg_addr,
 			     uint32_t bit_mask, uint8_t *status);
 
-#endif // __ADE9039_H__
+#endif // ADE9039_H_

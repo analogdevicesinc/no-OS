@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 ******************************************************************************/
 
-#ifndef MAX96792_DIAG_H
-#define MAX96792_DIAG_H
+#ifndef MAX96792_DIAG_H_
+#define MAX96792_DIAG_H_
 
 #include "gmsl_common.h"
 #include "max96792.h"

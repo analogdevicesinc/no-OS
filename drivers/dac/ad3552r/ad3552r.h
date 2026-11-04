@@ -9,8 +9,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 ******************************************************************************/
 
-#ifndef _AD3552R_H_
-#define _AD3552R_H_
+#ifndef AD3552R_H_
+#define AD3552R_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -501,4 +501,4 @@ int32_t ad3552r_simulatneous_update_enable(struct ad3552r_desc *desc);
 int32_t ad3552r_axi_write_data(struct ad3552r_desc *desc, uint32_t *buf,
 			       uint16_t samples, bool cyclic, int cyclic_secs);
 
-#endif /* _AD3552R_H_ */
+#endif /* AD3552R_H_ */

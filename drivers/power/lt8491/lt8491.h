@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __LT8491_H__
-#define __LT8491_H__
+#ifndef LT8491_H_
+#define LT8491_H_
 
 #include "no_os_i2c.h"
 #include "no_os_util.h"
@@ -166,4 +166,4 @@ int lt8491_write_scratch(struct lt8491_desc *dev, uint32_t val);
 /** Read the serial ID */
 int lt8491_read_serial_id(struct lt8491_desc *dev, uint32_t *val);
 
-#endif	/* __LT8491_H__ */
+#endif	/* LT8491_H_ */

@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
 
-#ifndef TMC5240_H
-#define TMC5240_H
+#ifndef TMC5240_H_
+#define TMC5240_H_
 
 #include "no_os_spi.h"
 #include "no_os_util.h"

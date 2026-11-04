@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __LTM3360B_H__
-#define __LTM3360B_H__
+#ifndef LTM3360B_H_
+#define LTM3360B_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -107,4 +107,4 @@ int ltm3360b_adc_enable(struct ltm3360b_dev *dev, bool enable);
 int ltm3360b_adc_read_raw(struct ltm3360b_dev *dev,
 			  enum ltm3360b_adc_channel channel, uint8_t *result);
 
-#endif /* __LTM3360B_H__ */
+#endif /* LTM3360B_H_ */

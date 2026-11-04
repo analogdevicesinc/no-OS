@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __M24512_H__
-#define __M24512_H__
+#ifndef M24512_H_
+#define M24512_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -177,4 +177,4 @@ static inline bool m24512_is_valid_page(uint16_t page)
  */
 extern const struct no_os_eeprom_platform_ops eeprom_m24512_ops;
 
-#endif /* __M24512_H__ */
+#endif /* M24512_H_ */

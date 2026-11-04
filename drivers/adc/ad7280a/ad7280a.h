@@ -9,8 +9,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 ******************************************************************************/
 
-#ifndef _AD7280A_H_
-#define _AD7280A_H_
+#ifndef AD7280A_H_
+#define AD7280A_H_
 
 
 #include <stdint.h>
@@ -204,4 +204,4 @@ void ad7280a_selftest_all(struct ad7280a_dev *dev,
 /* Reads the value of Alert Pin from the device. */
 uint8_t ad7280a_alert_pin(struct ad7280a_dev *dev);
 
-#endif /*_AD7280A_H_*/
+#endif /*AD7280A_H_*/

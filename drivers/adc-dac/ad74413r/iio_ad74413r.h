@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef IIO_AD74413R_H
-#define IIO_AD74413R_H
+#ifndef IIO_AD74413R_H_
+#define IIO_AD74413R_H_
 
 #include "iio.h"
 #include "ad74413r.h"
@@ -77,4 +77,4 @@ int ad74413r_iio_init(struct ad74413r_iio_desc **,
 		      struct ad74413r_iio_desc_init_param *);
 int ad74413r_iio_remove(struct ad74413r_iio_desc *);
 
-#endif /** IIO_AD74413R_H */
+#endif /** IIO_AD74413R_H_ */

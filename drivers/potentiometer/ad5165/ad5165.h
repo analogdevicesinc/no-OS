@@ -50,4 +50,4 @@ int ad5165_dpot_send_cmd(struct dpot_dev *desc,
 int ad5165_dpot_shutdown(struct dpot_dev *desc,	enum dpot_chn_type chn,
 			 bool shutdown_enable);
 
-#endif	// ad525x_H_
+#endif	// AD5165_H_

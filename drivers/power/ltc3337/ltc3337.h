@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __LTC3337_H__
-#define __LTC3337_H__
+#ifndef LTC3337_H_
+#define LTC3337_H_
 
 #include <stdint.h>
 #include "no_os_util.h"

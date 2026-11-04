@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _MAX17851_H_
-#define _MAX17851_H_
+#ifndef MAX17851_H_
+#define MAX17851_H_
 
 #include <stdint.h>
 #include <string.h>
@@ -368,4 +368,4 @@ int max17851_remove(struct max17851_desc *desc);
 
 extern const struct no_os_uart_platform_ops max17851_uart_ops;
 
-#endif /* _MAX17851_H_ */
+#endif /* MAX17851_H_ */

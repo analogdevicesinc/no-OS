@@ -10,8 +10,8 @@
 *
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __AD525X_H__
-#define __AD525X_H__
+#ifndef AD525X_H_
+#define AD525X_H_
 
 #include <stdint.h>
 #include "no_os_delay.h"
@@ -189,4 +189,4 @@ void ad525x_write_command(struct ad525x_dev *dev,
 			  uint8_t command,
 			  uint8_t address);
 
-#endif // __AD525X_H__
+#endif // AD525X_H_

@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef __IIO_ADL8113_H__
-#define __IIO_ADL8113_H__
+#ifndef IIO_ADL8113_H_
+#define IIO_ADL8113_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -73,4 +73,4 @@ int adl8113_iio_init(struct adl8113_iio_dev **iio_dev,
  */
 int adl8113_iio_remove(struct adl8113_iio_dev *iio_dev);
 
-#endif /* __IIO_ADL8113_H__ */
+#endif /* IIO_ADL8113_H_ */

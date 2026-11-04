@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADXL38X_H__
-#define __ADXL38X_H__
+#ifndef ADXL38X_H_
+#define ADXL38X_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -427,5 +427,5 @@ int adxl38x_accel_set_FIFO(struct adxl38x_dev *dev, uint16_t numSamples,
 int adxl38x_data_raw_to_gees(struct adxl38x_dev *dev, uint8_t *raw_accel_data,
 			     struct adxl38x_fractional_val *data_frac);
 
-#endif /* __ADXL38X_H__ */
+#endif /* ADXL38X_H_ */
 

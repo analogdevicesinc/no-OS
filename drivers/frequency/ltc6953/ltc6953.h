@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __LTC6953_H__
-#define __LTC6953_H__
+#ifndef LTC6953_H_
+#define LTC6953_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -233,4 +233,4 @@ int ltc6953_read_rev(struct ltc6953_dev *dev, uint8_t *rev);
 /** LTC6953 Get Part Number **/
 int ltc6953_read_part(struct ltc6953_dev *dev, uint8_t *part);
 
-#endif // __LTC6953_H__
+#endif // LTC6953_H_

@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 ******************************************************************************/
 
-#ifndef GMSL_COMMON_H
-#define GMSL_COMMON_H
+#ifndef GMSL_COMMON_H_
+#define GMSL_COMMON_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -328,4 +328,4 @@ struct gmsl_dev_diag_ops {
 					   bool* diag_err);                             /* GMSL_DIAG_INFOFR_CC */
 };
 
-#endif /* GMSL_COMMON_H */
+#endif /* GMSL_COMMON_H_ */

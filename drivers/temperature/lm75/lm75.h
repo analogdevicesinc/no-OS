@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __LM75_H__
-#define __LM75_H__
+#ifndef LM75_H_
+#define LM75_H_
 #include "no_os_util.h"
 #include "no_os_i2c.h"
 
@@ -110,4 +110,4 @@ int lm75_write_os_polarity(struct lm75_dev *dev, enum lm75_os_polarity pol);
 int lm75_read_fault_queue(struct lm75_dev *dev, enum lm75_fault_queue *fq);
 int lm75_write_fault_queue(struct lm75_dev *dev, enum lm75_fault_queue fq);
 
-#endif /* __LM75_H__ */
+#endif /* LM75_H_ */

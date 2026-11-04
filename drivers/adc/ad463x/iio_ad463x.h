@@ -7,8 +7,8 @@
 *
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef IIO_AD463x
-#define IIO_AD463x
+#ifndef IIO_AD463X_H_
+#define IIO_AD463X_H_
 
 #ifdef IIO_SUPPORT
 
@@ -34,4 +34,4 @@ int32_t iio_ad463x_remove(struct iio_ad463x *desc);
 
 #endif /* IIO_SUPPORT */
 
-#endif /* IIO_AD463x */
+#endif /* IIO_AD463X_H_ */

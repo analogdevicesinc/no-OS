@@ -54,4 +54,4 @@ struct ad5161_dpot_dev {
 	/* Digital interface select GPIO descriptor */
 	struct no_os_gpio_desc *dis_gpio_desc;
 };
-#endif	// ad5161_H_
+#endif	// AD5161_H_

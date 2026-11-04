@@ -6,8 +6,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef IIO_FREQUENCY_AD9361_H_
-#define IIO_FREQUENCY_AD9361_H_
+#ifndef AD9361_H_
+#define AD9361_H_
 
 #include <stdint.h>
 #include "no_os_gpio.h"

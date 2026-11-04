@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
 
-#ifndef __LTC7871_H__
-#define __LTC7871_H__
+#ifndef LTC7871_H_
+#define LTC7871_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -288,4 +288,4 @@ int ltc7871_init(struct ltc7871_dev **device,
 /** Remove resources allocated by the init function. */
 int ltc7871_remove(struct ltc7871_dev *dev);
 
-#endif /** __LTC7871_H__ */
+#endif /** LTC7871_H_ */

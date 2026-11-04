@@ -9,8 +9,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __MAX31865_H__
-#define __MAX31865_H__
+#ifndef MAX31865_H_
+#define MAX31865_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -105,4 +105,4 @@ int max31865_set_wires(struct max31865_dev *, bool);
 /** Read RTD **/
 int max31865_read_rtd(struct max31865_dev *, uint16_t *);
 
-#endif // __MAX31865_H__
+#endif // MAX31865_H_

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADXL313_H__
-#define __ADXL313_H__
+#ifndef ADXL313_H_
+#define ADXL313_H_
 
 #include <stdint.h>
 #include <string.h>
@@ -702,4 +702,4 @@ int adxl313_get_range(struct adxl313_dev *dev, enum adxl313_range *range);
 /* Perform device self-test. */
 int adxl313_self_test(struct adxl313_dev *dev);
 
-#endif /* __ADXL313_H__ */
+#endif /* ADXL313_H_ */

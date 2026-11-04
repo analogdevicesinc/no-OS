@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 ******************************************************************************/
-#ifndef GMSL_REG_ACCESS_H
-#define GMSL_REG_ACCESS_H
+#ifndef GMSL_REG_ACCESS_H_
+#define GMSL_REG_ACCESS_H_
 
 #include <stdint.h>
 #include "no_os_i2c.h"
@@ -72,4 +72,4 @@ int32_t gmsl_reg_update(struct no_os_i2c_desc *i2c_desc,
 			uint8_t val,
 			uint8_t mask);
 
-#endif	/* GMSL_REG_ACCESS_H */
+#endif	/* GMSL_REG_ACCESS_H_ */

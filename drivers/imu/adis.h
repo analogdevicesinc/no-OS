@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
 
-#ifndef __ADIS_H__
-#define __ADIS_H__
+#ifndef ADIS_H_
+#define ADIS_H_
 
 #ifdef TEST
 #define STATIC

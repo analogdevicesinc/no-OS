@@ -12,8 +12,8 @@
 extern "C" {
 #endif
 
-#ifndef __LTC3220_H__
-#define __LTC3220_H__
+#ifndef LTC3220_H_
+#define LTC3220_H_
 
 #include "no_os_i2c.h"
 #include "no_os_gpio.h"
@@ -274,7 +274,7 @@ int ltc3220_update_reg_command(struct ltc3220_dev *device, bool is_shutdown,
 			       bool is_force_cpo_2x, bool is_force_cpo_1p5x,
 			       bool is_quick_write);
 
-#endif  /*__LTC3220_H__*/
+#endif  /*LTC3220_H_*/
 
 #ifdef __cplusplus
 }

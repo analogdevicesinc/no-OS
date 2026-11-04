@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADP5589_H__
-#define __ADP5589_H__
+#ifndef ADP5589_H_
+#define ADP5589_H_
 
 #include <stdint.h>
 #include "no_os_i2c.h"
@@ -356,4 +356,4 @@ void adp5589_key_lock(struct adp5589_dev *dev,
 		      uint8_t second_event,
 		      uint8_t pmod_port);
 
-#endif	/* __ADP5589_H__ */
+#endif	/* ADP5589_H_ */

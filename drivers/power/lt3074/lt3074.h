@@ -7,8 +7,8 @@
 *
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __LT3074_H__
-#define __LT3074_H__
+#ifndef LT3074_H_
+#define LT3074_H_
 
 #include <stdint.h>
 #include <string.h>
@@ -238,4 +238,4 @@ int lt3074_set_enable_pin(struct lt3074_dev *dev, bool state);
 /* Software reset */
 int lt3074_software_reset(struct lt3074_dev *dev);
 
-#endif /* __LT3074_H__ */
+#endif /* LT3074_H_ */

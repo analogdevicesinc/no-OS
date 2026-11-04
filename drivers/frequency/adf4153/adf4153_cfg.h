@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *
  ******************************************************************************/
-#ifndef __ADF4153_CFG_H__
-#define __ADF4153_CFG_H__
+#ifndef ADF4153_CFG_H_
+#define ADF4153_CFG_H_
 
 struct adf4153_settings_t adf4153_st = {
 	25000000,                           // RFIN is 25Mhz
@@ -36,4 +36,4 @@ struct adf4153_settings_t adf4153_st = {
 	ADF4153_LOW_SPUR_MODE               // Noise and Spur mode
 };
 
-#endif // __ADF4153_CFG_H__
+#endif // ADF4153_CFG_H_

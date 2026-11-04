@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef IIO_ADF5902_H
-#define IIO_ADF5902_H
+#ifndef IIO_ADF5902_H_
+#define IIO_ADF5902_H_
 
 #include "iio_types.h"
 #include "adf5902.h"
@@ -17,4 +17,4 @@
 /** IIO Descriptor */
 extern struct iio_device const adf5902_iio_descriptor;
 
-#endif //IIO_ADF5902_H
+#endif //IIO_ADF5902_H_

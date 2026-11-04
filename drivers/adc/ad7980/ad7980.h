@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __AD7980_H__
-#define __AD7980_H__
+#ifndef AD7980_H_
+#define AD7980_H_
 
 #include <stdint.h>
 #include "no_os_gpio.h"
@@ -47,4 +47,4 @@ uint16_t ad7980_conversion(struct ad7980_dev *dev);
 /*! Converts a 16-bit raw sample to volts. */
 float ad7980_convert_to_volts(uint16_t raw_sample, float v_ref);
 
-#endif /* __AD7980_H__ */
+#endif /* AD7980_H_ */

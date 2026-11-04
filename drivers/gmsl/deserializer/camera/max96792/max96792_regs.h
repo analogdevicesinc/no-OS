@@ -9,8 +9,8 @@
 ******************************************************************************/
 /*================================= INCLUDES ================================*/
 /*================================= DEFINES =================================*/
-#ifndef MAX96792_REGS_H
-#define MAX96792_REGS_H
+#ifndef MAX96792_REGS_H_
+#define MAX96792_REGS_H_
 
 #define DEV_CTRL3_LINK_A_LOCK_ADDR 	 (0x13U)
 #define DEV_CTRL3_LINK_A_LOCK_MASK 	 (0x08U)

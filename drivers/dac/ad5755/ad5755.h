@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __AD5755_H__
-#define __AD5755_H__
+#ifndef AD5755_H_
+#define AD5755_H_
 
 #include <stdint.h>
 #include "no_os_delay.h"
@@ -390,4 +390,4 @@ float ad5755_set_current(struct ad5755_dev *dev,
 			 uint8_t channel,
 			 float m_acurrent);
 
-#endif // __AD5755_H__
+#endif // AD5755_H_

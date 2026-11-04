@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
 
-#ifndef __ADIS1647X_H__
-#define __ADIS1647X_H__
+#ifndef ADIS1647X_H_
+#define ADIS1647X_H_
 
 #include "adis.h"
 

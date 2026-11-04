@@ -9,8 +9,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 ******************************************************************************/
 
-#ifndef IIO_AD3552R_H
-#define IIO_AD3552R_H
+#ifndef IIO_AD3552R_H_
+#define IIO_AD3552R_H_
 
 #include "ad3552r.h"
 #include "iio_types.h"
@@ -25,4 +25,4 @@ int32_t iio_ad3552r_remove(struct iio_ad3552r_desc *iio_dac);
 void iio_ad3552r_get_descriptor(struct iio_ad3552r_desc *iio_dac,
 				struct iio_device **desc);
 
-#endif /* IIO_AD3552R_H */
+#endif /* IIO_AD3552R_H_ */

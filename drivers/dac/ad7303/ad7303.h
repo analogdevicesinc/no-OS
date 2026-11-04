@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __AD7303_H__
-#define __AD7303_H__
+#ifndef AD7303_H_
+#define AD7303_H_
 
 #include <stdint.h>
 #include "no_os_spi.h"
@@ -46,4 +46,4 @@ void ad7303_write(struct ad7303_dev *dev,
 		  uint8_t control_reg,
 		  uint8_t data_reg);
 
-#endif /* __AD7303_H__ */
+#endif /* AD7303_H_ */

@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef IIO_ADF4382_H
-#define IIO_ADF4382_H
+#ifndef IIO_ADF4382_H_
+#define IIO_ADF4382_H_
 
 #include "iio.h"
 

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADXL345_H__
-#define __ADXL345_H__
+#ifndef ADXL345_H_
+#define ADXL345_H_
 
 #include <stdint.h>
 #include "no_os_i2c.h"
@@ -314,4 +314,4 @@ void adxl345_set_range_resolution(struct adxl345_dev *dev,
 				  uint8_t g_range,
 				  uint8_t full_res);
 
-#endif	/* __ADXL345_H__ */
+#endif	/* ADXL345_H_ */

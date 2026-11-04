@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
-#ifndef __IIO_MAX11205_H__
-#define __IIO_MAX11205_H__
+#ifndef IIO_MAX11205_H_
+#define IIO_MAX11205_H_
 
 #include "iio.h"
 
@@ -37,4 +37,4 @@ int max11205_iio_init(struct max11205_iio_dev **iio_dev,
 		      struct max11205_iio_dev_init_param *init_param);
 int max11205_iio_remove(struct max11205_iio_dev *desc);
 
-#endif /* __IIO_MAX11205_H__ */
+#endif /* IIO_MAX11205_H_ */

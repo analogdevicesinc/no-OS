@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADF7023_H__
-#define __ADF7023_H__
+#ifndef ADF7023_H_
+#define ADF7023_H_
 
 #include <stdint.h>
 #include "no_os_spi.h"
@@ -408,4 +408,4 @@ void adf7023_set_data_rate(struct adf7023_dev *dev,
 void adf7023_set_frequency_deviation(struct adf7023_dev *dev,
 				     uint32_t freq_dev);
 
-#endif // __ADF7023_H__
+#endif // ADF7023_H_

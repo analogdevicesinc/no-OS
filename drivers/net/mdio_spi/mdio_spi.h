@@ -8,8 +8,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __MDIO_SPI_H__
-#define __MDIO_SPI_H__
+#ifndef MDIO_SPI_H_
+#define MDIO_SPI_H_
 
 #include <stdint.h>
 #include "no_os_spi.h"
@@ -35,4 +35,4 @@ struct mdio_spi_init_param {
 
 extern struct no_os_mdio_ops mdio_spi_ops;
 
-#endif /* __MDIO_SPI_H__ */
+#endif /* MDIO_SPI_H_ */

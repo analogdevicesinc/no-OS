@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADE9000_H__
-#define __ADE9000_H__
+#ifndef ADE9000_H_
+#define ADE9000_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -1397,4 +1397,4 @@ int ade9000_remove(struct ade9000_dev *dev);
 int ade9000_get_int_status0(struct ade9000_dev *dev, uint32_t msk,
 			    uint8_t *status);
 
-#endif // __ADE9000_H__
+#endif // ADE9000_H_

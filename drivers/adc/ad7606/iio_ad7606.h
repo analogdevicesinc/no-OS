@@ -10,8 +10,8 @@
 * By using this software you agree to the terms of the associated
 * Analog Devices Software License Agreement.
 *******************************************************************************/
-#ifndef _AD7606_IIO_H_
-#define _AD7606_IIO_H_
+#ifndef IIO_AD7606_H_
+#define IIO_AD7606_H_
 
 #include <stdint.h>
 
@@ -30,4 +30,4 @@ int ad7606_iio_init(struct ad7606_iio_dev **dev,
 		    struct ad7606_init_param *init_param);
 int ad7606_iio_remove(struct ad7606_iio_dev *dev);
 
-#endif /* __AD7606_IIO_H__ */
+#endif /* IIO_AD7606_H_ */

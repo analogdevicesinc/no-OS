@@ -9,8 +9,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __MAX20362_H__
-#define __MAX20362_H__
+#ifndef MAX20362_H_
+#define MAX20362_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -387,4 +387,4 @@ int max20362_unlock_registers(struct max20362_dev *dev);
 /* Lock write protection for registers */
 int max20362_lock_registers(struct max20362_dev *dev);
 
-#endif // __MAX20362_H__
+#endif // MAX20362_H_

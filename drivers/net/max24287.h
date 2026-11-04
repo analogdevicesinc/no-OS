@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: BSD-3-Clause */
-#ifndef _MAX24287_H_
-#define _MAX24287_H_
+#ifndef MAX24287_H_
+#define MAX24287_H_
 
 #include <stdint.h>
 #include "no_os_util.h"

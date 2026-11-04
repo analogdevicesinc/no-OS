@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef SRC_PULSAR_ADC_H_
-#define SRC_PULSAR_ADC_H_
+#ifndef PULSAR_ADC_H_
+#define PULSAR_ADC_H_
 
 #include <stdbool.h>
 
@@ -130,4 +130,4 @@ int32_t pulsar_adc_remove(struct pulsar_adc_dev *dev);
 /* read data samples */
 int32_t pulsar_adc_read_data(struct pulsar_adc_dev *dev, uint32_t *buf,
 			     uint16_t samples);
-#endif /* SRC_PULSAR_ADC_H_ */
+#endif /* PULSAR_ADC_H_ */

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __AD9467_H__
-#define __AD9467_H__
+#ifndef AD9467_H_
+#define AD9467_H_
 
 #include <stdint.h>
 #include "no_os_spi.h"
@@ -195,4 +195,4 @@ int32_t ad9467_buffer_current_2(struct ad9467_dev *dev,
 /*! Initiates a transfer and waits for the operation to end. */
 int32_t ad9467_transfer(struct ad9467_dev *dev);
 
-#endif /* __AD9467_H__ */
+#endif /* AD9467_H_ */

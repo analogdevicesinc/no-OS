@@ -8,8 +8,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef IIO_ADPD188_H
-#define IIO_ADPD188_H
+#ifndef IIO_ADPD188_H_
+#define IIO_ADPD188_H_
 
 #include "adpd188.h"
 #include "iio.h"
@@ -35,5 +35,5 @@ int32_t adpd188_iio_init(struct adpd188_iio_desc **device,
 			 struct adpd188_iio_init_param *init_param);
 int32_t adpd188_iio_remove(struct adpd188_iio_desc *dev);
 
-#endif /* IIO_ADPD188_H */
+#endif /* IIO_ADPD188_H_ */
 

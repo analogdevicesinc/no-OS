@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
-#ifndef __AD9250_H__
-#define __AD9250_H__
+#ifndef AD9250_H_
+#define AD9250_H_
 
 #include <stdint.h>
 #include "no_os_spi.h"
@@ -572,4 +572,4 @@ int32_t ad9250_dcc_bandwidth(struct ad9250_dev *dev,
 int32_t ad9250_dcc_freeze(struct ad9250_dev *dev,
 			  int32_t freeze);
 
-#endif /* __AD9250_H__ */
+#endif /* AD9250_H_ */

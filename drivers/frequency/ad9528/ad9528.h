@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _AD9528_H_
-#define _AD9528_H_
+#ifndef AD9528_H_
+#define AD9528_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -503,4 +503,4 @@ int32_t ad9528_clk_set_rate(struct ad9528_dev *dev, uint32_t chan,
 int32_t ad9528_reset(struct ad9528_dev *dev);
 int32_t ad9528_remove(struct ad9528_dev *dev);
 
-#endif // __AD9528_H__
+#endif // AD9528_H_

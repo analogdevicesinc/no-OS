@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __AD5628_H__
-#define __AD5628_H__
+#ifndef AD5628_H_
+#define AD5628_H_
 
 #include <stdint.h>
 #include "no_os_spi.h"
@@ -88,4 +88,4 @@ void ad5628_reset(struct ad5628_dev *dev);
 void ad5628_set_input_register(struct ad5628_dev *dev,
 			       uint32_t register_value);
 
-#endif /* __AD5628_H__ */
+#endif /* AD5628_H_ */

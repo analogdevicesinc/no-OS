@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __MAXM86161_H__
-#define __MAXM86161_H__
+#ifndef MAXM86161_H_
+#define MAXM86161_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -613,4 +613,4 @@ int maxm86161_memory_read(struct maxm86161_dev *dev, uint16_t addr,
 int maxm86161_memory_write(struct maxm86161_dev *dev, uint16_t addr,
 			   uint8_t data);
 
-#endif /* __MAXM86161_H__ */
+#endif /* MAXM86161_H_ */

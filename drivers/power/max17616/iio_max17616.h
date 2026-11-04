@@ -7,8 +7,8 @@
 *
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __IIO_MAX17616_H__
-#define __IIO_MAX17616_H__
+#ifndef IIO_MAX17616_H_
+#define IIO_MAX17616_H_
 
 #include <stdbool.h>
 #include "iio.h"
@@ -36,4 +36,4 @@ int max17616_iio_init(struct max17616_iio_desc **iio_desc,
 /** Free resources allocated by the initialization function. */
 int max17616_iio_remove(struct max17616_iio_desc *desc);
 
-#endif /* __IIO_MAX17616_H__ */
+#endif /* IIO_MAX17616_H_ */

@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __MAX9611_H__
-#define __MAX9611_H__
+#ifndef MAX9611_H_
+#define MAX9611_H_
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -153,4 +153,4 @@ int max9611_get_retry(struct max9611_dev *dev, enum max9611_retry_time *rtime);
 /* Get MAX9611 raw data */
 int max9611_get_raw(struct max9611_dev *dev, uint16_t *raw);
 
-#endif	/* __MAX9611_H__ */
+#endif	/* MAX9611_H_ */

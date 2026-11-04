@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __AD7156_H__
-#define __AD7156_H__
+#ifndef AD7156_H_
+#define AD7156_H_
 
 #include <stdint.h>
 #include "no_os_i2c.h"
@@ -205,4 +205,4 @@ float ad7156_read_channel_capacitance(struct ad7156_dev *dev,
 float ad7156_wait_read_channel_capacitance(struct ad7156_dev *dev,
 		uint8_t channel);
 
-#endif	/* __AD7156_H__ */
+#endif	/* AD7156_H_ */

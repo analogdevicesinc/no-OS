@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _AD7746_H_
-#define _AD7746_H_
+#ifndef AD7746_H_
+#define AD7746_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -185,4 +185,4 @@ int32_t ad7746_get_vt_data(struct ad7746_dev *dev, uint32_t *vt_data);
 int32_t ad7746_get_cap_data(struct ad7746_dev *dev, uint32_t *cap_data);
 int32_t ad7746_calibrate(struct ad7746_dev *dev, enum ad7746_md md);
 
-#endif // _AD7746_H
+#endif // AD7746_H_

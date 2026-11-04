@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADE9153A_H__
-#define __ADE9153A_H__
+#ifndef ADE9153A_H_
+#define ADE9153A_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -1423,4 +1423,4 @@ int ade9153a_start_autocal_av(struct ade9153a_dev *dev,
 int ade9153a_read_autocal_vals(struct ade9153a_dev *dev,
 			       struct ade9153a_autocal_vals *data);
 
-#endif // __ADE9153A_H__
+#endif // ADE9153A_H_

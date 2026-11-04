@@ -8,8 +8,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef IIO_AD413X_H
-#define IIO_AD413X_H
+#ifndef IIO_AD413X_H_
+#define IIO_AD413X_H_
 
 #include "iio.h"
 #include "ad413x.h"
@@ -27,4 +27,4 @@ int32_t ad413x_iio_init(struct ad413x_iio_dev **iio_dev,
 			struct ad413x_iio_init_param init_param);
 int32_t ad413x_iio_remove(struct ad413x_iio_dev *desc);
 
-#endif /** IIO_AD413X_H */
+#endif /** IIO_AD413X_H_ */

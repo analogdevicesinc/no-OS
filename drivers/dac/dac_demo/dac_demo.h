@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef IIO_DEMO_DAC_
-#define IIO_DEMO_DAC_
+#ifndef DAC_DEMO_H_
+#define DAC_DEMO_H_
 
 #include <stdint.h>
 #include "iio_types.h"
@@ -84,4 +84,4 @@ int32_t dac_demo_reg_write(struct dac_demo_desc *desc, uint8_t reg_index,
 
 int dac_demo_trigger_handler(struct iio_device_data *dev_data);
 
-#endif /*IIO_DEMO_DAC_*/
+#endif /*DAC_DEMO_H_*/

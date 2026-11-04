@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADES1754_H__
-#define __ADES1754_H__
+#ifndef ADES1754_H_
+#define ADES1754_H_
 
 #include "no_os_spi.h"
 #include "no_os_uart.h"
@@ -362,4 +362,4 @@ int ades1754_init(struct ades1754_desc **desc,
 
 int ades1754_remove(struct ades1754_desc *desc);
 
-#endif /* __ADES1754_H__ */
+#endif /* ADES1754_H_ */

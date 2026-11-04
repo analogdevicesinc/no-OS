@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _MAX22200_H
-#define _MAX22200_H
+#ifndef MAX22200_H_
+#define MAX22200_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -236,4 +236,4 @@ int max22200_init(struct max22200_desc **, struct max22200_init_param *);
 /** Deallocates all the resources used at initialization. */
 int max22200_remove(struct max22200_desc *);
 
-#endif /* _MAX22200_H */
+#endif /* MAX22200_H_ */

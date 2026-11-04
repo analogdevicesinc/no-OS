@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *
 *******************************************************************************/
-#ifndef __AD5791_H__
-#define __AD5791_H__
+#ifndef AD5791_H_
+#define AD5791_H_
 
 #include <stdint.h>
 #include "no_os_delay.h"
@@ -173,4 +173,4 @@ int ad5791_ldac_trigger(struct ad5791_dev *dev);
 /*! Clear DAC channel output with the clearcode. */
 int ad5791_clear_async(struct ad5791_dev *dev);
 
-#endif /* __AD5791_H__ */
+#endif /* AD5791_H_ */

@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __AD8460_H__
-#define __AD8460_H__
+#ifndef AD8460_H_
+#define AD8460_H_
 
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
@@ -121,4 +121,4 @@ int ad8460_hv_reset(struct ad8460_device *dev);
 /** Set the sample value */
 int ad8460_set_sample(struct ad8460_device *dev, uint16_t val);
 
-#endif	/* __AD8460_H__ */
+#endif	/* AD8460_H_ */

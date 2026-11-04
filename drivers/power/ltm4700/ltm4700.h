@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __LTM4700_H__
-#define __LTM4700_H__
+#ifndef LTM4700_H_
+#define LTM4700_H_
 
 #include <stdint.h>
 #include <string.h>
@@ -454,4 +454,4 @@ int ltm4700_verify_manufacturer_id(struct ltm4700_dev *dev);
  */
 int ltm4700_verify_manufacturer_model(struct ltm4700_dev *dev);
 
-#endif /* __LTM4700_H__ */
+#endif /* LTM4700_H_ */

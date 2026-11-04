@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _MAX22017_H
-#define _MAX22017_H
+#ifndef MAX22017_H_
+#define MAX22017_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -256,4 +256,4 @@ int max22017_init(struct max22017_desc **, struct max22017_init_param *);
 /** Free resources allocated by the init() function. */
 int max22017_remove(struct max22017_desc *);
 
-#endif /* _MAX22017_H */
+#endif /* MAX22017_H_ */

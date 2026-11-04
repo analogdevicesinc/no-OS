@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __AD7091R_H__
-#define __AD7091R_H__
+#ifndef AD7091R_H_
+#define AD7091R_H_
 
 #include <stdint.h>
 #include "no_os_spi.h"
@@ -46,4 +46,4 @@ void ad7091r_power_up(struct ad7091r_dev *dev);
 /*! Converts a 12-bit raw sample to volts. */
 float ad7091r_convert_to_volts(int16_t raw_sample, float v_ref);
 
-#endif /* __AD7091R_H__ */
+#endif /* AD7091R_H_ */

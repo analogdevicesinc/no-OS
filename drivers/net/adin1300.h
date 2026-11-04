@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: BSD-3-Clause */
-#ifndef _ADIN1300_H_
-#define _ADIN1300_H_
+#ifndef ADIN1300_H_
+#define ADIN1300_H_
 
 #include <stdint.h>
 #include "no_os_util.h"
