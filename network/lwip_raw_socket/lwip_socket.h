@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _LWIP_SOCKET_H_
-#define _LWIP_SOCKET_H_
+#ifndef LWIP_SOCKET_H_
+#define LWIP_SOCKET_H_
 
 #ifdef NO_OS_LWIP_NETWORKING
 

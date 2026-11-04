@@ -9,8 +9,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef WIFI_DRIVER_H
-#define WIFI_DRIVER_H
+#ifndef WIFI_H_
+#define WIFI_H_
 
 #include <stdint.h>
 #include "network_interface.h"
