@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef IIOD_PRIVATE_H
-#define IIOD_PRIVATE_H
+#ifndef IIOD_PRIVATE_H_
+#define IIOD_PRIVATE_H_
 
 #include "iio.h"
 
@@ -152,4 +152,4 @@ struct iiod_desc {
 	enum physical_link_type phy_type;
 };
 
-#endif //IIOD_PRIVATE_H
+#endif //IIOD_PRIVATE_H_

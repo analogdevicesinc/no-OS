@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef IIOD_H
-#define IIOD_H
+#ifndef IIOD_H_
+#define IIOD_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -166,4 +166,4 @@ int32_t iiod_conn_remove(struct iiod_desc *desc, uint32_t conn_id,
 /* Advance in the state machine of a connection. Will not block */
 int32_t iiod_conn_step(struct iiod_desc *desc, uint32_t conn_id);
 
-#endif //IIOD_H
+#endif //IIOD_H_
