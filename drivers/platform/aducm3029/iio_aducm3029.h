@@ -10,8 +10,8 @@
 
 #ifdef IIO_SUPPORT
 
-#ifndef IIO_ADCUM3029
-#define IIO_ADCUM3029
+#ifndef IIO_ADUCM3029_H_
+#define IIO_ADUCM3029_H_
 
 #include "iio_types.h"
 #include "aducm3029_adc.h"

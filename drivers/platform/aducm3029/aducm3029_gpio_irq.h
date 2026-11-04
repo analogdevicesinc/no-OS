@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef GPIO_IRQ_EXTRA_H_
-#define GPIO_IRQ_EXTRA_H
+#ifndef ADUCM3029_GPIO_IRQ_H_
+#define ADUCM3029_GPIO_IRQ_H_
 
 #include <drivers/xint/adi_xint.h>
 

@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef LATTICE_CACHE_H_
-#define LATTICE_CACHE_H_
+#ifndef RISCVRX_CACHE_H_
+#define RISCVRX_CACHE_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/

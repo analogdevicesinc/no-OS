@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef MAXIM_TRNG_H
-#define MAXIM_TRNG_H
+#ifndef MAXIM_TRNG_H_
+#define MAXIM_TRNG_H_
 
 #include "no_os_trng.h"
 
@@ -18,4 +18,4 @@
  */
 extern const struct no_os_trng_platform_ops max_trng_ops;
 
-#endif // MAXIM_TRNG_H
+#endif // MAXIM_TRNG_H_

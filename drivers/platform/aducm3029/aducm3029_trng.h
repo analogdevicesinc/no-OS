@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef ADUCM3029_TRNG_H
-#define ADUCM3029_TRNG_H
+#ifndef ADUCM3029_TRNG_H_
+#define ADUCM3029_TRNG_H_
 
 #include <drivers/rng/adi_rng.h>
 #include "no_os_trng.h"
@@ -38,4 +38,4 @@ struct aducm3029_trng_desc {
  */
 extern const struct no_os_trng_platform_ops aducm_trng_ops;
 
-#endif // ADUCM3029_TRNG_H
+#endif // ADUCM3029_TRNG_H_

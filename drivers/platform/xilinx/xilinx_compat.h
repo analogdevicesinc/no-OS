@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _XILINX_COMPAT_H_
-#define _XILINX_COMPAT_H_
+#ifndef XILINX_COMPAT_H_
+#define XILINX_COMPAT_H_
 
 /*
  * Vitis 2025+ removed XPAR_*_DEVICE_ID defines from xparameters.h and renamed
@@ -179,4 +179,4 @@
 #endif
 #endif
 
-#endif /* _XILINX_COMPAT_H_ */
+#endif /* XILINX_COMPAT_H_ */

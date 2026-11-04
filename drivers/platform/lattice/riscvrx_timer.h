@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef LATTICE_TIMER_H_
-#define LATTICE_TIMER_H_
+#ifndef RISCVRX_TIMER_H_
+#define RISCVRX_TIMER_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -72,4 +72,4 @@ int32_t lattice_timer_set_callback(struct no_os_timer_desc *desc,
  */
 extern const struct no_os_timer_platform_ops latt_timer_ops;
 
-#endif /* LATTICE_TIMER_H_ */
+#endif /* RISCVRX_TIMER_H_ */

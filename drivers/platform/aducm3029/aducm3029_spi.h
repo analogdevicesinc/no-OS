@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef ADUCM3029_SPI_H
-# define ADUCM3029_SPI_H
+#ifndef ADUCM3029_SPI_H_
+# define ADUCM3029_SPI_H_
 
 #include "no_os_spi.h"
 #include <drivers/spi/adi_spi.h>
@@ -84,4 +84,4 @@ struct aducm_spi_desc {
 	struct aducm_device_desc	*dev;
 };
 
-#endif // ADUCM3029_SPI_H
+#endif // ADUCM3029_SPI_H_

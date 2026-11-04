@@ -9,8 +9,8 @@
 *******************************************************************************/
 
 /* Define to prevent redundant inclusion */
-#ifndef MAXIM_USB_CDCACM_DESCRIPTORS_H_
-#define MAXIM_USB_CDCACM_DESCRIPTORS_H_
+#ifndef MAXIM_USB_UART_DESCRIPTORS_H_
+#define MAXIM_USB_UART_DESCRIPTORS_H_
 
 /* **** Includes **** */
 #include <stdint.h>
@@ -314,4 +314,4 @@ __attribute__((aligned(4))) uint8_t cdcacm_func_desc[] = {
 }
 #endif
 
-#endif // MAXIM_USB_CDCACM_DESCRIPTORS_H_
+#endif // MAXIM_USB_UART_DESCRIPTORS_H_
