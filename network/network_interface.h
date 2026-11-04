@@ -9,8 +9,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef NETWORK_INTERFACE_H
-#define NETWORK_INTERFACE_H
+#ifndef NETWORK_INTERFACE_H_
+#define NETWORK_INTERFACE_H_
 
 #include <stdint.h>
 

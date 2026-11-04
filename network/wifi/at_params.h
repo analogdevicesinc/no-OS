@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef AT_PARAMS_H
-#define AT_PARAMS_H
+#ifndef AT_PARAMS_H_
+#define AT_PARAMS_H_
 
 /**
  * @struct at_buff
@@ -229,4 +229,4 @@ struct cwlap_querry_param {
 };
 #endif
 
-#endif /* AT_PARAMS_H */
+#endif /* AT_PARAMS_H_ */
