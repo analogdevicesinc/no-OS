@@ -110,6 +110,42 @@ the top of ``src/examples/overcurrent/overcurrent_example.c``:
 alligator clips will burn. Connect the load between DC2470A RTN and
 -48VOUT (not -48VIN, which bypasses the FET).
 
+Dual-Core Example
+~~~~~~~~~~~~~~~~~
+
+Runs the overcurrent monitoring on the MAX32690's RISC-V core (CPU1)
+while the Arm core (CPU0) handles the console. Build it with
+``--variant dual_core``.
+
+* **CPU1 (RISC-V)** owns the LTC4284: it initializes the driver on I2C0,
+  programs the OC profile (macros at the top of
+  ``src/examples/dual_core/dual_core_example_riscv.c``, same values as
+  the overcurrent example), enables the FET, serves telemetry and
+  configuration requests, and reports edges on the LTC4284 ALERT pin.
+* **CPU0 (Arm)** boots CPU1 with the CAPI coprocessor API
+  (``capi_coprocessor_init`` / ``capi_coprocessor_set_vector_base`` /
+  ``capi_coprocessor_boot``), sends commands through the CAPI mailbox
+  doorbell, prints the OC banner and telemetry once per second, and
+  narrates faults and FET transitions.
+
+The cores exchange commands and telemetry through a 256-byte table at
+``0x20100000``, the start of the CPU1 SRAM bank. The project reserves
+that window with ``SRAM2_RESERVE`` in ``CMakeLists.txt``, so CPU1's own
+data, heap and stack never overlap it.
+
+CPU1 is a separate no-OS image configured by ``riscv/dual_core.conf``.
+The build embeds it in the Arm firmware at the RISC-V flash bank
+(``0x10300000``), so a single flash programs both cores. The build
+prints ``coprocessor: verified ARM embed == RISC-V link == 0x10300000``
+when the layout is consistent.
+
+The OC wiring notes of the overcurrent example apply. Telemetry over
+I²C works without any extra wiring. The ALERT path (DC2470A ALERT pin to
+P0.19, see Connections; CPU1 counts each rising edge and CPU0 prints
+``[RV32->ARM] OVERCURRENT ALERT``) is implemented but **not
+hardware-verified** yet; faults are still reported through the FAULT
+register in the telemetry without it.
+
 IIO Example
 ~~~~~~~~~~~
 
@@ -151,6 +187,8 @@ I²C:
 +----------------------+--------------------------------+---------------------------+
 | SCL                  | P2.8  (via PCA9603 SCB → SCL)  | I²C serial clock          |
 +----------------------+--------------------------------+---------------------------+
+| ALERT#               | P0.19 (dual_core, optional)    | Overcurrent alert         |
++----------------------+--------------------------------+---------------------------+
 | GND                  | GND                            | Common ground             |
 +----------------------+--------------------------------+---------------------------+
 
@@ -170,7 +208,8 @@ Build Command
 
 The Maxim platform uses the CMake / Ninja build system via the
 ``no_os_build.py`` helper script. Available variants: ``basic``,
-``iio_example``, ``overcurrent``. Available boards: ``max32690evkit``.
+``dual_core``, ``iio_example``, ``overcurrent``. Available boards:
+``max32690evkit``.
 
 For toolchain setup and prerequisites, see the
 :doc:`Maxim CMake build guide </build_guides/build_maxim_cmake>`.
@@ -191,8 +230,8 @@ For toolchain setup and prerequisites, see the
       --project ltc4284 --variant basic --board max32690evkit \
       --probe openocd --flash
 
-Replace ``--variant`` with ``overcurrent`` or ``iio_example`` to build
-the other examples on the same board.
+Replace ``--variant`` with ``overcurrent``, ``dual_core`` or
+``iio_example`` to build the other examples on the same board.
 
 Troubleshooting
 ---------------
