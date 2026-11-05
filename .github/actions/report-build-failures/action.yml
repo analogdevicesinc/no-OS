@@ -1,0 +1,90 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# Copyright (c) 2026 Analog Devices, Inc. All rights reserved.
+name: Report build failures
+description: >-
+  Collect the failed project builds of a build-*-platform job, upload them as
+  an artifact, and post a PR comment that lists them. Run it after the full
+  build logs have been uploaded, as the comment links to that artifact.
+
+inputs:
+  platform:
+    description: Platform label shown in the report (passed to --platform).
+    required: true
+  name:
+    description: >-
+      Slug used for the failed-builds file name and the PR comment marker
+      (build-failures-<name>). Must be unique per job of a workflow run.
+    required: true
+  log-dir:
+    description: Directory the build logs were written to.
+    required: true
+  logs-url:
+    description: URL of the uploaded full build logs artifact, linked from the PR comment.
+    required: false
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - name: Collect failed build logs
+      if: always()
+      shell: bash
+      env:
+        LOG_DIR: ${{ inputs.log-dir }}
+        PLATFORM: ${{ inputs.platform }}
+        HTML_FILE: ${{ inputs.log-dir }}/${{ inputs.name }}_failed_builds.html
+      run: |
+        python3 .github/scripts/report-build-failures.py \
+          --log-dir "$LOG_DIR" --platform "$PLATFORM" \
+          --html "$HTML_FILE"
+
+    - name: Upload failed build logs
+      id: upload-failed-logs
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: ${{ inputs.name }}-failed-builds
+        path: ${{ inputs.log-dir }}/${{ inputs.name }}_failed_builds.html
+        archive: false
+        if-no-files-found: ignore
+
+    - name: Render build failures report
+      id: render
+      if: ${{ always() && github.event_name == 'pull_request' }}
+      shell: bash
+      env:
+        LOG_DIR: ${{ inputs.log-dir }}
+        PLATFORM: ${{ inputs.platform }}
+        MARKDOWN_FILE: ${{ inputs.log-dir }}/build_failures.md
+        FAILED_LOGS_URL: ${{ steps.upload-failed-logs.outputs.artifact-url }}
+        LOGS_URL: ${{ inputs.logs-url }}
+        # The PR head, not github.sha: on pull_request that is a merge commit.
+        COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
+        COMMIT_URL: ${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.pull_request.number }}/commits/${{ github.event.pull_request.head.sha }}
+      run: |
+        python3 .github/scripts/report-build-failures.py \
+          --log-dir "$LOG_DIR" --platform "$PLATFORM" \
+          --markdown "$MARKDOWN_FILE" \
+          --failed-logs-url "$FAILED_LOGS_URL" \
+          --logs-url "$LOGS_URL" \
+          --commit "$COMMIT_SHA" --commit-url "$COMMIT_URL"
+        # No body means the build did not complete (e.g. cancelled by a newer
+        # push): skip the comment so the existing one is left as it is.
+        if [ -f "$MARKDOWN_FILE" ]; then
+          echo "post=true" >> "$GITHUB_OUTPUT"
+        fi
+
+    # pr-comment edits a marked comment in place. Delete it first so each
+    # report is posted as a new comment at the bottom of the conversation.
+    - name: Remove previous build failures comment
+      if: ${{ always() && github.event_name == 'pull_request' && steps.render.outputs.post == 'true' }}
+      uses: analogdevicesinc/shared-actions/pr-comment@main
+      with:
+        marker: build-failures-${{ inputs.name }}
+
+    - name: Report build failures on PR
+      if: ${{ always() && github.event_name == 'pull_request' && steps.render.outputs.post == 'true' }}
+      uses: analogdevicesinc/shared-actions/pr-comment@main
+      with:
+        marker: build-failures-${{ inputs.name }}
+        body-file: ${{ inputs.log-dir }}/build_failures.md

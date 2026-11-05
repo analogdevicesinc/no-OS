@@ -108,11 +108,20 @@ jobs:
           path: ${{ env.RELEASES_DIR }}
           name: ${{ github.job }}-binaries
       - name: Upload Xilinx build logs
+        id: upload-logs
         if: always()
         uses: actions/upload-artifact@v7
         with:
           path: ${{ env.LOGS_DIR }}
           name: ${{ github.job }}-logs
+      - name: Report build failures
+        if: always()
+        uses: ./.github/actions/report-build-failures
+        with:
+          platform: "xilinx"
+          name: "xilinx"
+          log-dir: ${{ env.LOGS_DIR }}
+          logs-url: ${{ steps.upload-logs.outputs.artifact-url }}
       - name: Remove logs, new_hardware and release output
         if: always()
         shell: sh
