@@ -94,6 +94,17 @@
 				"PLATFORM": "xilinx",
 				"BOARD_CONFIG_FILE": "kcu105_defconfig"
 			}
+		},
+		{
+			"name": "vpk180",
+			"description": "VPK180 (Versal Premium ACAP, cortexa72). Requires -DHARDWARE=<abs path to system_top.xsa>",
+			"inherits": "xilinx-base",
+			"cacheVariables": {
+				"BOARD": "vpk180",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "xilinx",
+				"BOARD_CONFIG_FILE": "vpk180_defconfig"
+			}
 		}
 	]
 }
