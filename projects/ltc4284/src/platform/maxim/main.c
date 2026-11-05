@@ -25,6 +25,10 @@
 #include "overcurrent_example.h"
 #endif
 
+#if defined(CONFIG_LTC4284_DUAL_CORE_EXAMPLE)
+#include "dual_core_example.h"
+#endif
+
 /***************************************************************************//**
  * @brief Main function execution.
  *
@@ -50,6 +54,8 @@ int main()
 	ret = basic_example_main();
 #elif defined(CONFIG_LTC4284_OVERCURRENT_EXAMPLE)
 	ret = overcurrent_example_main();
+#elif defined(CONFIG_LTC4284_DUAL_CORE_EXAMPLE)
+	ret = dual_core_example_main();
 #endif
 
 	no_os_uart_remove(uart_desc);

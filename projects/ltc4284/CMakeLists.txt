@@ -37,6 +37,16 @@ if(CONFIG_LTC4284_OVERCURRENT_EXAMPLE)
 	)
 endif()
 
+# Dual-core example (ARM + RISC-V)
+if(CONFIG_LTC4284_DUAL_CORE_EXAMPLE)
+	target_sources(ltc4284 PRIVATE
+		${CMAKE_CURRENT_SOURCE_DIR}/src/examples/dual_core/dual_core_example.c
+	)
+	target_include_directories(ltc4284 PRIVATE
+		${CMAKE_CURRENT_SOURCE_DIR}/src/examples/dual_core
+	)
+endif()
+
 # Include directories
 target_include_directories(ltc4284 PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/src/common
@@ -46,6 +56,17 @@ target_include_directories(ltc4284 PUBLIC
 
 # Link to no-os library
 target_link_libraries(ltc4284 no-os)
+
+# RISC-V (CPU1) image, embedded in the ARM firmware. SRAM2_RESERVE keeps the
+# shared IPC table (LTC4284_IPC_TABLE_ADDR/SIZE) out of CPU1's own RAM.
+if(CONFIG_LTC4284_DUAL_CORE_EXAMPLE)
+	include(maxim_coprocessor)
+	maxim_add_riscv_coprocessor(ltc4284
+		DEFCONFIG ${CMAKE_CURRENT_SOURCE_DIR}/riscv/dual_core.conf
+		SRAM2_RESERVE 0x100
+		SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/dual_core/dual_core_example_riscv.c
+		INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/dual_core)
+endif()
 
 # Platform SDK configuration
 config_platform_sdk(ltc4284)
