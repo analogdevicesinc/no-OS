@@ -25,6 +25,17 @@ config LTC4284_OVERCURRENT_EXAMPLE
 	  OC retry loop and reports fault register values with
 	  human-readable descriptions.
 
+config LTC4284_DUAL_CORE_EXAMPLE
+	bool "Dual-core overcurrent example (ARM + RISC-V)"
+	depends on CAPI_COPROCESSOR && CAPI_MAILBOX
+	help
+	  The RISC-V core (CPU1) owns the LTC4284: it programs the overcurrent
+	  profile, monitors the ALERT pin and serves telemetry requests. The
+	  ARM core (CPU0) boots it with the CAPI coprocessor API, talks to it
+	  through a shared table and the CAPI mailbox doorbell, and prints the
+	  telemetry. Requires CONFIG_CAPI_COPROCESSOR=y and
+	  CONFIG_CAPI_MAILBOX=y.
+
 endchoice
 
 endmenu
