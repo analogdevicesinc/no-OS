@@ -8,6 +8,9 @@ set -e
 
 ASTYLE_EXT_LIST="${ASTYLE_EXT_LIST} .c .h"
 COMMIT_RANGE="$1"
+# PR comment body. Left empty when the style check passes, so pr-comment
+# deletes a stale comment.
+ASTYLE_REPORT="${ASTYLE_REPORT:-${WORKSPACE}/astyle_report.md}"
 
 get_script_path() {
 	local script="$1"
@@ -84,6 +87,34 @@ build_astyle() {
 	fi
 }
 
+write_report() {
+	local diff
+
+	diff="$(git diff)"
+	{
+		echo "### :x: Astyle check failed"
+		echo
+		echo "These files are not formatted with \`.github/config/astyle_config\`:"
+		echo
+		git diff --name-only | sed 's/^/- `/; s/$/`/'
+		echo
+		echo "<details><summary>Suggested changes</summary>"
+		echo
+		echo '```diff'
+		# Keep the comment under the GitHub comment size limit.
+		echo "${diff:0:50000}"
+		echo '```'
+		echo "</details>"
+		if [ -n "$COMMIT_SHA" ]; then
+			local sha="\`${COMMIT_SHA:0:7}\`"
+
+			[ -n "$COMMIT_URL" ] && sha="[$sha]($COMMIT_URL)"
+			echo
+			echo "_Posted automatically by the astyle check for commit $sha._"
+		fi
+	} > "$ASTYLE_REPORT"
+}
+
 run_astyle() {
 	git diff --name-only --diff-filter=d $COMMIT_RANGE | while read -r file; do
 		if is_source_file "$file" && is_valid_file "$file"
@@ -94,6 +125,7 @@ run_astyle() {
 
 	git diff --exit-code || {
 		echo "Code style issues found."
+		write_report
 		exit 1
 	}
 }
@@ -102,4 +134,5 @@ parse_commit_range
 
 build_astyle
 
+: > "$ASTYLE_REPORT"
 run_astyle
