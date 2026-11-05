@@ -31,6 +31,14 @@ endif()
 set(HARDWARE "${HARDWARE}" CACHE FILEPATH "Path to the board .xsa")
 list(APPEND CMAKE_TRY_COMPILE_PLATFORM_VARIABLES HARDWARE XILINX_ARCH)
 
+# Optional: which processor to target in a multi-core XSA (e.g. the Versal RPU
+# Cortex-R5 vs the APU Cortex-A72). Empty = first processor in the XSA (the APU
+# on Versal), preserving existing behaviour. Passed to get_arch as a cell-name
+# substring filter (see tools/scripts/platform/xilinx/util.py _get_processor).
+set(XILINX_CPU "" CACHE STRING
+    "Processor cell to target in the XSA, e.g. cortexr5 (empty = first/APU)")
+list(APPEND CMAKE_TRY_COMPILE_PLATFORM_VARIABLES XILINX_CPU)
+
 if(NOT DEFINED HARDWARE OR "${HARDWARE}" STREQUAL "")
     message(FATAL_ERROR
         "HARDWARE is not set. Point it at the board .xsa file "
@@ -63,7 +71,7 @@ if(NOT DEFINED XILINX_ARCH)
     execute_process(
         COMMAND ${VITIS_EXECUTABLE} -s
                 "${CMAKE_CURRENT_LIST_DIR}/../../../tools/scripts/platform/xilinx/util.py"
-                get_arch "${_arch_work}" "${_arch_work}" "${_xsa_file}"
+                get_arch "${_arch_work}" "${_arch_work}" "${_xsa_file}" "" "${XILINX_CPU}"
         RESULT_VARIABLE _arch_rc
         OUTPUT_QUIET)
     if(NOT _arch_rc EQUAL 0)

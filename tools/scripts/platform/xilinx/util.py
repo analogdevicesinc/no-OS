@@ -49,6 +49,7 @@ PL_DICT = {
     "ps7_cortexa9_0": "xc7z*",
     "psu_cortexa53_0": "PSU",
     "sys_cips_pspmc_0_psv_cortexa72_0": "Versal*",
+    "sys_cips_pspmc_0_psv_cortexr5_0": "Versal*",
     "sys_mb": "xc*",
 }
 
@@ -56,6 +57,7 @@ PS_DICT = {
     "ps7_cortexa9_0": "*Cortex-A9 MPCore #0*",
     "psu_cortexa53_0": "*Cortex-A53 #0*",
     "sys_cips_pspmc_0_psv_cortexa72_0": "*Cortex-A72 #0*",
+    "sys_cips_pspmc_0_psv_cortexr5_0": "*Cortex-R5 #0*",
     "sys_mb": "*MicroBlaze #*",
 }
 
