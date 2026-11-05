@@ -71,6 +71,10 @@ XSA_WARNINGS = []
 # from the manifest download_files.py writes. Empty when no download happened
 # (e.g. SKIP_DOWNLOAD) -- the staleness check then simply no-ops.
 XSA_PROVENANCE = {}
+# (project, variant, board) combos that failed to build this run. Written to
+# <log_dir>/build_failures.json in main(); .github/scripts/report-build-failures.py
+# turns it into the PR comment and the browsable failed-logs page.
+BUILD_FAILURES = []
 
 description_help=r'''Build noos projects
 Examples:\n
@@ -131,6 +135,16 @@ def gha_warning(title, message):
 				f.write("- :warning: %s\n" % safe)
 		except OSError:	
 			pass
+
+def record_failure(project, variant, board, platform, reason, log_file=None):
+	BUILD_FAILURES.append({
+		'project': project,
+		'variant': variant,
+		'board': board,
+		'platform': platform,
+		'reason': reason,
+		'log': os.path.basename(log_file) if log_file else None,
+		})
 
 def ensure_dir(path):
 	# Silent mkdir -p; not routed through run_cmd so it neither logs a bogus
@@ -469,6 +483,8 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 				log_err("ERROR")
 				log("%s/%s/%s: no CONFIG_XILINX_HDL_DESIGN in %s.conf" % (
 					project, variant, board, variant))
+				record_failure(project, variant, board, platform,
+					"no CONFIG_XILINX_HDL_DESIGN in %s.conf" % variant)
 				ERR = 1
 				ok = 0
 				os.environ.clear(); os.environ.update(env)
@@ -500,6 +516,8 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 				log_err("ERROR")
 				log("%s: could not resolve .xsa for hardware '%s' (not downloaded?)" % (
 					project, hw_name))
+				record_failure(project, variant, board, platform,
+					"could not resolve .xsa for hardware '%s'" % hw_name)
 				ERR = 1
 				ok = 0
 				os.environ.clear(); os.environ.update(env)
@@ -554,6 +572,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 		log(build_cmd)
 		sys.stdout.flush()
 		timeout = XILINX_BUILD_TIMEOUT if platform == 'xilinx' else BUILD_TIMEOUT
+		reason = "build failed"
 		try:
 			result = subprocess.run(
 				build_cmd, shell=True,
@@ -564,6 +583,7 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 			success = result.returncode == 0
 		except subprocess.TimeoutExpired:
 			success = False
+			reason = "timed out after %d s" % timeout
 			log_err("TIMEOUT")
 			log("Project configuration and compilation took more than %d s, "
 			    "please check the logs: %s" % (timeout, dst_log))
@@ -592,8 +612,10 @@ def build_cmake_project(noos, project, _platform, _build_name, export_dir,
 			log("See log %s -- no %s produced (link likely failed)" % (dst_log, elf.name))
 			ERR = 1
 			success = False
+			reason = "no %s produced (link likely failed)" % elf.name
 
 		if not success:
+			record_failure(project, variant, board, platform, reason, dst_log)
 			ERR = 1
 			ok = 0
 			continue
@@ -613,6 +635,11 @@ def main():
 	projets = os.path.join(noos,'projects')
 	ensure_dir(export_dir)
 	ensure_dir(log_dir)
+	# Self-hosted runners keep the workspace: drop a previous run's results so
+	# an early exit below cannot pass them off as this run's.
+	failures_path = os.path.join(log_dir, 'build_failures.json')
+	if os.path.exists(failures_path):
+		os.remove(failures_path)
 	(builds_dir, blacklist) = configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch)
 	for project in os.listdir(projets):
 		if _project is not None:
@@ -651,6 +678,14 @@ def main():
 		n_stale = sum(1 for e in XSA_WARNINGS if e.get('status') == 'stale')
 		log_warn("%d xilinx .xsa warning(s): %d missing, %d stale; see %s"
 			% (len(XSA_WARNINGS), n_missing, n_stale, warnings_path))
+
+	# Written even when empty so the report step can tell "no failures" from
+	# "the build never got this far".
+	try:
+		with open(failures_path, 'w') as f:
+			json.dump(BUILD_FAILURES, f, indent=1)
+	except OSError as e:
+		log_err("Could not write %s: %s" % (failures_path, e))
 
 	if ERR != 0:
 		exit("Error occured: %d" % ERR)

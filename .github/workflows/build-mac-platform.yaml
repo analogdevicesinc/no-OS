@@ -125,8 +125,17 @@ jobs:
           path: ${{ env.RELEASES_DIR }}
           name: ${{ github.job }}-binaries
       - name: Upload logs artifact
+        id: upload-logs
         if: always()
         uses: actions/upload-artifact@v7
         with:
           path: ${{ env.LOGS_DIR }}
           name: ${{ github.job }}-logs
+      - name: Report build failures
+        if: always()
+        uses: ./.github/actions/report-build-failures
+        with:
+          platform: "mac (${{ matrix.runs-on }})"
+          name: "mac-${{ matrix.runs-on }}"
+          log-dir: ${{ env.LOGS_DIR }}
+          logs-url: ${{ steps.upload-logs.outputs.artifact-url }}
