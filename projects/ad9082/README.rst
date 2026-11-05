@@ -172,10 +172,11 @@ Build Command
 ^^^^^^^^^^^^^
 
 The Xilinx platform uses the CMake/Ninja build system via the ``no_os_build.py``
-helper script. Available variant: ``basic_example``. Available board:
-``vpk180``.
+helper script. Available variant: ``basic_example``. Available boards:
+``vpk180`` (Cortex-A72 APU) and ``vpk180-r5`` (Cortex-R5F RPU).
 
-The VPK180 runs no-OS on the Versal **Cortex-A72** application processor (APU).
+The VPK180 runs no-OS on the Versal **Cortex-A72** application processor (APU),
+or on the **Cortex-R5F** real-time processor (RPU) via the ``vpk180-r5`` board.
 A Xilinx XSA hardware handoff is required and is passed with ``--hardware``; the
 HDL design is ``ad9082_fmca_ebz`` (VPK180 variant). The Vitis 2025.1 Versal BSP
 is System-Device-Tree (SDT) flavored, which the project's ``CMakeLists.txt``
@@ -195,13 +196,22 @@ For toolchain setup and prerequisites, see the
 
    cd no-OS
 
-   # Build the basic example for the VPK180
+   # Build the basic example for the VPK180 APU (Cortex-A72)
    python tools/scripts/no_os_build.py build \
       --project ad9082 --variant basic_example --board vpk180 \
       --hardware /path/to/ad9082_fmca_ebz_vpk180/system_top.xsa
 
-The built ELF is at
-``build/ad9082-<variant>-vpk180/build/ad9082.elf``.
+   # Build for the VPK180 RPU (Cortex-R5) -- same XSA; the vpk180-r5 board
+   # selects the R5 via XILINX_CPU=cortexr5
+   python tools/scripts/no_os_build.py build \
+      --project ad9082 --variant basic_example --board vpk180-r5 \
+      --hardware /path/to/ad9082_fmca_ebz_vpk180/system_top.xsa
+
+The built ELF is at ``build/ad9082-<variant>-<board>/build/ad9082.elf``. The
+same XSA serves both cores: the Cortex-R5F (RPU) is already present in the
+Versal PS, so no separate bitstream is needed, and the R5 BSP links the app
+into DDR. The basic example prints which core it is running on
+(``Running on Cortex-A72 (APU, ...)`` / ``Running on Cortex-R5F (RPU, ...)``).
 
 .. note::
 
@@ -223,5 +233,7 @@ The built ELF is at
         dow build/ad9082-basic_example-vpk180/build/ad9082.elf
         con'
 
-   The ``after 2000`` avoids a race where the A72 target is not yet enumerated
-   (it appears only once the PLM has booted the APU).
+   The ``after 2000`` avoids a race where the APU target is not yet enumerated
+   (it appears only once the PLM has booted it). For the RPU build, select the
+   R5 instead (``targets -set -filter {name =~ "*Cortex-R5*#0*"}``) and download
+   ``build/ad9082-basic_example-vpk180-r5/build/ad9082.elf``.
