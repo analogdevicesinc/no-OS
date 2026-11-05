@@ -34,6 +34,21 @@ jobs:
           NUM_JOBS: ${{ env.NUM_JOBS }}
           TARGET_BRANCH: ${{ github.base_ref }}
           WORKSPACE: ${{ github.workspace }}
+          COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
+          COMMIT_URL: ${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.pull_request.number }}/commits/${{ github.event.pull_request.head.sha }}
+      # pr-comment edits a marked comment in place. Delete it first so each
+      # report is posted as a new comment at the bottom of the conversation.
+      - name: Remove previous astyle comment
+        if: ${{ always() && github.event_name == 'pull_request' }}
+        uses: analogdevicesinc/shared-actions/pr-comment@main
+        with:
+          marker: astyle-report
+      - name: Report astyle findings to PR
+        if: ${{ always() && github.event_name == 'pull_request' }}
+        uses: analogdevicesinc/shared-actions/pr-comment@main
+        with:
+          marker: astyle-report
+          body-file: ${{ github.workspace }}/astyle_report.md
       - name: Check-cpp format
         shell: sh
         run: |
