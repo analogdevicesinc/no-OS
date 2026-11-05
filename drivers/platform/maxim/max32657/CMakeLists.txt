@@ -72,6 +72,11 @@ target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX32657/Sour
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX32657/Source/heap.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX32657/Source/system_max32657.c)
 
+# Replaces newlib's memcpy(), which faults under SCB->CCR.UNALIGN_TRP. -u keeps
+# this definition in use when no-os is built as a STATIC library.
+target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/maxim_memcpy.c)
+target_link_options(no-os INTERFACE LINKER:--undefined=memcpy)
+
 target_compile_definitions(no-os PUBLIC -DTARGET_NUM=32657)
 target_compile_definitions(no-os PUBLIC -DTARGET=32657)
 target_compile_definitions(no-os PUBLIC -DCONFIG_TRUSTED_EXECUTION_SECURE=1)
