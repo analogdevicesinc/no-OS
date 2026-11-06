@@ -35,6 +35,17 @@ int test_spi(void)
 #define SPI_ASYNC_STEP_US	1000U
 #define SPI_ABORT_SIZE		128U
 
+/*
+ * Platform hook for controllers whose async delivery is DMA-backed. A board
+ * that needs a DMA controller brought up (and its stream vectors enabled)
+ * before the SPI controller is opened defines SPI_DMA_PLATFORM_INIT() in
+ * parameters.h; everyone else gets this no-op. It is invoked from the DMA
+ * case, which is the only case gated on that delivery mode being present.
+ */
+#ifndef SPI_DMA_PLATFORM_INIT
+#define SPI_DMA_PLATFORM_INIT()	0
+#endif
+
 static volatile unsigned int spi_callback_count;
 static volatile enum capi_async_event spi_callback_event;
 static volatile int spi_callback_extra;
@@ -188,6 +199,9 @@ static int spi_basic(void)
 			(void)capi_spi_deinit(spi_handle); \
 	} while (0)
 
+static int spi_dma_async_shape(struct capi_spi_device *dev,
+			       struct capi_spi_transfer *xfer);
+
 /**
  * @brief IRQ-backed async transfers: register callback, IRQ-driven completion.
  *
@@ -264,6 +278,64 @@ static int spi_async_irq(void)
 	TEST_ASSERT_EQ_OR_CLEANUP(memcmp(read_rx, zero3, sizeof(read_rx)), 0,
 				  "ASYNC_READ_MATCH");
 
+	uint8_t it_short_tx[] = { 0x12, 0x34 };
+	uint8_t it_long_rx[5];
+	memset(it_long_rx, 0xee, sizeof(it_long_rx));
+	struct capi_spi_transfer it_tx_short = {
+		.tx_buf = it_short_tx,
+		.rx_buf = it_long_rx,
+		.tx_size = sizeof(it_short_tx),
+		.rx_size = sizeof(it_long_rx),
+	};
+	TEST_ASSERT_EQ_OR_CLEANUP(spi_dma_async_shape(&dev, &it_tx_short), 0,
+				  "IT_TX_SHORT");
+	TEST_ASSERT_EQ_OR_CLEANUP(memcmp(it_long_rx, it_short_tx,
+					 sizeof(it_short_tx)), 0,
+				  "IT_TX_SHORT_MATCH");
+	TEST_ASSERT_EQ_OR_CLEANUP(it_long_rx[2] | it_long_rx[3] | it_long_rx[4], 0,
+				  "IT_TX_SHORT_PAD");
+
+	uint8_t it_long_tx[] = { 0x9a, 0xbc, 0xde, 0xf0 };
+	uint8_t it_guard[] = { 0xcc, 0x00, 0x00, 0xdd };
+	struct capi_spi_transfer it_rx_short = {
+		.tx_buf = it_long_tx,
+		.rx_buf = &it_guard[1],
+		.tx_size = sizeof(it_long_tx),
+		.rx_size = 2U,
+	};
+	TEST_ASSERT_EQ_OR_CLEANUP(spi_dma_async_shape(&dev, &it_rx_short), 0,
+				  "IT_RX_SHORT");
+	TEST_ASSERT_EQ_OR_CLEANUP(it_guard[0], 0xcc, "IT_RX_SHORT_GUARD_PRE");
+	TEST_ASSERT_EQ_OR_CLEANUP(it_guard[1], it_long_tx[0], "IT_RX_SHORT_RX0");
+	TEST_ASSERT_EQ_OR_CLEANUP(it_guard[2], it_long_tx[1], "IT_RX_SHORT_RX1");
+	TEST_ASSERT_EQ_OR_CLEANUP(it_guard[3], 0xdd, "IT_RX_SHORT_GUARD_POST");
+
+	uint8_t it_tx_only_buf[] = { 0xca, 0xfe, 0xba, 0xbe };
+	struct capi_spi_transfer it_tx_only = {
+		.tx_buf = it_tx_only_buf,
+		.rx_buf = NULL,
+		.tx_size = sizeof(it_tx_only_buf),
+		.rx_size = 0U,
+	};
+	TEST_ASSERT_EQ_OR_CLEANUP(spi_dma_async_shape(&dev, &it_tx_only), 0,
+				  "IT_TX_ONLY");
+
+	/* Pre-fill non-zero: RX-only must clock 0x00, not the stale buffer. */
+	uint8_t it_rx_only_buf[4];
+	uint8_t it_zero4[4] = { 0 };
+	memset(it_rx_only_buf, 0xa5, sizeof(it_rx_only_buf));
+	struct capi_spi_transfer it_rx_only = {
+		.tx_buf = NULL,
+		.rx_buf = it_rx_only_buf,
+		.tx_size = 0U,
+		.rx_size = sizeof(it_rx_only_buf),
+	};
+	TEST_ASSERT_EQ_OR_CLEANUP(spi_dma_async_shape(&dev, &it_rx_only), 0,
+				  "IT_RX_ONLY");
+	TEST_ASSERT_EQ_OR_CLEANUP(memcmp(it_rx_only_buf, it_zero4,
+					 sizeof(it_zero4)), 0,
+				  "IT_RX_ONLY_MATCH");
+
 	TEST_ASSERT_EQ_OR_CLEANUP(capi_spi_deinit(spi_handle), 0, "DEINIT");
 
 	return 0;
@@ -337,12 +409,63 @@ static int spi_manual_isr(void)
 }
 
 /**
+ * @brief Run one DMA-backed async transfer and wait for its terminal callback.
+ *
+ * Returns 0 only when exactly one XFR_DONE arrived. Every other outcome
+ * returns negative *and* leaves the controller idle: a transfer that never
+ * completes is aborted here, because an in-flight transfer would otherwise
+ * linger in the driver and fail every following case with -EBUSY, hiding the
+ * shape that actually broke behind a cascade of unrelated failures.
+ *
+ * @param dev - SPI device to transfer on.
+ * @param xfer - Transfer descriptor describing the shape under test.
+ * @return 0 on a clean single XFR_DONE, negative error code otherwise.
+ */
+static int spi_dma_async_shape(struct capi_spi_device *dev,
+			       struct capi_spi_transfer *xfer)
+{
+	int ret;
+
+	spi_callback_count = 0U;
+	spi_callback_event = 0;
+	spi_callback_extra = 0;
+
+	ret = capi_spi_transceive_async(dev, xfer);
+	if (ret != 0)
+		return ret;
+
+	TEST_WAIT_UNTIL(spi_callback_count > 0U, SPI_ASYNC_TIMEOUT_US,
+			SPI_ASYNC_STEP_US);
+
+	if (spi_callback_count == 0U) {
+		/* Never completed: tear it down so the next case starts clean. */
+		(void)capi_spi_abort_async(dev);
+		return -ETIMEDOUT;
+	}
+
+	if (spi_callback_count != 1U)
+		return -EIO;
+
+	if (spi_callback_event != CAPI_SPI_EVENT_XFR_DONE)
+		return -EIO;
+
+	return 0;
+}
+
+/**
  * @brief DMA-backed async transfers: async completion via DMA delivery.
  *
  * Exercises capi_spi_transceive_async() when async is delivered by DMA instead
  * of IRQ. Callback registration and completion semantics are identical to IRQ;
  * only the underlying delivery mechanism differs. On platforms without DMA,
  * this test is skipped.
+ *
+ * Beyond the symmetric full-duplex case, this sweeps the transfer shapes the
+ * blocking path already accepts (see spi_basic): TX-only, RX-only, and both
+ * unequal-length directions. SPI clocks max(tx_size, rx_size) frames whatever
+ * the caller asked for, so each of these needs the short direction padded; the
+ * DMA path has to produce the same observable result as the blocking path or
+ * the two are not interchangeable.
  *
  * @return 0 on pass, negative error code on failure.
  */
@@ -353,6 +476,7 @@ static int spi_async_dma(void)
 	int ret;
 
 	TEST_SECTION("ASYNC_DMA");
+	TEST_ASSERT_EQ(SPI_DMA_PLATFORM_INIT(), 0, "DMA_PLATFORM_INIT");
 	ret = capi_spi_init(&spi_handle, &spi_controller_config);
 	TEST_ASSERT_EQ_OR_CLEANUP(ret, 0, "INIT");
 	dev.controller = spi_handle;
@@ -382,6 +506,59 @@ static int spi_async_dma(void)
 	TEST_ASSERT_EQ_OR_CLEANUP(spi_callback_extra, 0, "DMA_ASYNC_CB_EXTRA");
 	TEST_ASSERT_EQ_OR_CLEANUP(memcmp(dma_rx, dma_tx, sizeof(dma_tx)), 0,
 				  "DMA_ASYNC_MATCH");
+
+	uint8_t tx_only_buf[] = { 0xca, 0xfe, 0xba, 0xbe };
+	struct capi_spi_transfer tx_only = {
+		.tx_buf = tx_only_buf,
+		.rx_buf = NULL,
+		.tx_size = sizeof(tx_only_buf),
+		.rx_size = 0U,
+	};
+	TEST_ASSERT_EQ_OR_CLEANUP(spi_dma_async_shape(&dev, &tx_only), 0,
+				  "DMA_TX_ONLY");
+
+	uint8_t rx_only_buf[4];
+	uint8_t zero4[4] = { 0 };
+	memset(rx_only_buf, 0xa5, sizeof(rx_only_buf));
+	struct capi_spi_transfer rx_only = {
+		.tx_buf = NULL,
+		.rx_buf = rx_only_buf,
+		.tx_size = 0U,
+		.rx_size = sizeof(rx_only_buf),
+	};
+	TEST_ASSERT_EQ_OR_CLEANUP(spi_dma_async_shape(&dev, &rx_only), 0,
+				  "DMA_RX_ONLY");
+	TEST_ASSERT_EQ_OR_CLEANUP(memcmp(rx_only_buf, zero4, sizeof(zero4)), 0,
+				  "DMA_RX_ONLY_MATCH");
+
+	uint8_t short_tx[] = { 0x12, 0x34 };
+	uint8_t long_rx[5];
+	memset(long_rx, 0xee, sizeof(long_rx));
+	struct capi_spi_transfer tx_short = {
+		.tx_buf = short_tx,
+		.rx_buf = long_rx,
+		.tx_size = sizeof(short_tx),
+		.rx_size = sizeof(long_rx),
+	};
+	TEST_ASSERT_EQ_OR_CLEANUP(spi_dma_async_shape(&dev, &tx_short), 0,
+				  "DMA_TX_SHORT");
+	TEST_ASSERT_EQ_OR_CLEANUP(memcmp(long_rx, short_tx, sizeof(short_tx)), 0,
+				  "DMA_TX_SHORT_MATCH");
+
+	uint8_t long_tx[] = { 0x9a, 0xbc, 0xde, 0xf0 };
+	uint8_t rx_guard[] = { 0xcc, 0x00, 0x00, 0xdd };
+	struct capi_spi_transfer rx_short = {
+		.tx_buf = long_tx,
+		.rx_buf = &rx_guard[1],
+		.tx_size = sizeof(long_tx),
+		.rx_size = 2U,
+	};
+	TEST_ASSERT_EQ_OR_CLEANUP(spi_dma_async_shape(&dev, &rx_short), 0,
+				  "DMA_RX_SHORT");
+	TEST_ASSERT_EQ_OR_CLEANUP(rx_guard[0], 0xcc, "DMA_RX_SHORT_GUARD_PRE");
+	TEST_ASSERT_EQ_OR_CLEANUP(rx_guard[1], long_tx[0], "DMA_RX_SHORT_RX0");
+	TEST_ASSERT_EQ_OR_CLEANUP(rx_guard[2], long_tx[1], "DMA_RX_SHORT_RX1");
+	TEST_ASSERT_EQ_OR_CLEANUP(rx_guard[3], 0xdd, "DMA_RX_SHORT_GUARD_POST");
 
 	TEST_ASSERT_EQ_OR_CLEANUP(capi_spi_deinit(spi_handle), 0, "DEINIT");
 
