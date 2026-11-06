@@ -16,6 +16,9 @@
  */
 int Board_Init(void)
 {
+	/* Clear unaligned trap bit */
+	SCB->CCR &= ~SCB_CCR_UNALIGN_TRP_Msk;
+
 	SysTick_Config(SystemCoreClock / 1000);
 	/* Forces the SysTick enable state to be saved. */
 	return MXC_Delay(1);
