@@ -1,20 +1,22 @@
-ADG2404/ADG6404 Driver
-======================
+ADG2404/ADG6404/ADG2704 Driver
+==============================
 
 Supported Devices
 -----------------
 
 * `ADG2404 <https://www.analog.com/adg2404>`_
 * `ADG6404 <https://www.analog.com/adg6404>`_
+* `ADG2704 <https://www.analog.com/adg2704>`_
 
 Overview
 --------
 
-The ADG2404/ADG6404 are low voltage, CMOS analog multiplexers. This driver provides
-control over the multiplexer channel selection and enable/disable functionality
-for both device variants.
+The ADG2404/ADG6404/ADG2704 are CMOS analog multiplexers. All are 4:1
+single-ended multiplexers sharing an identical control interface (A0, A1, EN).
+This driver provides control over the multiplexer channel selection and
+enable/disable functionality for all device variants.
 
-Both devices feature:
+ADG2404/ADG6404 features:
 
 * 4:1 single-ended multiplexer
 * 0.62Ω on-resistance
@@ -29,6 +31,13 @@ Both devices feature:
 **ADG6404 specifications:**
 * ±20V dual supply or +36V single supply
 * Higher voltage capability for demanding applications
+
+**ADG2704 specifications:**
+
+* ±1.08V to ±2.75V dual supply or +1.08V to +5.5V single supply
+* 9.1Ω on-resistance
+* Ultra-low leakage, ±0.3pA typical at 25°C
+* 1.8V and 3V JEDEC compliant logic
 
 Hardware Configuration
 ----------------------
@@ -50,13 +59,27 @@ The multiplexer supports 4 channels (S1-S4) plus an "all off" state using the fo
 * ``ADG2404_S3``: Channel S3 selected (A1=1, A0=0)
 * ``ADG2404_S4``: Channel S4 selected (A1=1, A0=1)
 
+Device Selection
+----------------
+
+The part in use is selected through the ``id`` field of
+``struct adg2404_init_param``:
+
+* ``ID_ADG2404``
+* ``ID_ADG6404``
+* ``ID_ADG2704``
+
+The device structure exposes the matching entry of the chip information table
+as ``dev->chip_info``, which carries the part name.
+
 API Functions
 -------------
 
 **Initialization**
   ``int adg2404_init(struct adg2404_dev **device, struct adg2404_init_param *init_param)``
-  
-  Initialize the device and configure GPIO pins.
+
+  Initialize the device and configure GPIO pins. The ``id`` field selects the
+  part; passing an out-of-range value returns ``-EINVAL``.
 
 **Channel Selection**
   ``int adg2404_select_channel(struct adg2404_dev *dev, enum adg2404_channel channel)``
@@ -81,6 +104,7 @@ Usage Example
 
    struct adg2404_dev *dev;
    struct adg2404_init_param init_param = {
+       .id = ID_ADG2404,
        .gpio_a0 = { /* A0 GPIO configuration */ },
        .gpio_a1 = { /* A1 GPIO configuration */ },
        .gpio_en = { /* EN GPIO configuration */ },

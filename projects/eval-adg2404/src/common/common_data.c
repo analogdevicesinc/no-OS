@@ -23,6 +23,7 @@ struct no_os_uart_init_param adg2404_uart_ip = {
 };
 
 struct adg2404_init_param adg2404_ip = {
+	.id = ID_ADG2404,
 	.gpio_a0 = {
 		.port = GPIO_A0_PORT,
 		.number = GPIO_A0_PIN,

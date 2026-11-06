@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   adg2404.c
- *   @brief  Implementation of ADG2404 Driver.
+ *   @brief  Implementation of ADG2404/ADG6404/ADG2704 Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -13,6 +13,18 @@
 #include "adg2404.h"
 #include "no_os_error.h"
 #include "no_os_alloc.h"
+
+const struct adg2404_chip_info adg2404_chip_info_tbl[NUM_ADG2404_DEVICES] = {
+	[ID_ADG2404] = {
+		.name = "adg2404",
+	},
+	[ID_ADG6404] = {
+		.name = "adg6404",
+	},
+	[ID_ADG2704] = {
+		.name = "adg2704",
+	},
+};
 
 /**
  * Select the multiplexer channel.
@@ -75,9 +87,14 @@ int adg2404_init(struct adg2404_dev **device,
 	if (!device || !init_param)
 		return -EINVAL;
 
+	if (init_param->id >= NUM_ADG2404_DEVICES)
+		return -EINVAL;
+
 	dev = (struct adg2404_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
+
+	dev->chip_info = &adg2404_chip_info_tbl[init_param->id];
 
 	ret = no_os_gpio_get(&dev->gpio_a0, &init_param->gpio_a0);
 	if (ret)
