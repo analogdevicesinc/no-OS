@@ -7,7 +7,7 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef AD5766_CORE_H_
+#ifndef AD5766_CORE_H_ /* TEST */
 #define AD5766_CORE_H_
 
 typedef struct {
