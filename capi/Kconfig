@@ -64,4 +64,18 @@ config CAPI_PINT
 	bool "CAPI PINT"
 	default n
 
+config CAPI_CLK
+	bool "CAPI CLK"
+	default n
+
+config CAPI_FPGA
+	bool "CAPI fabric-neutral ADI AXI-core backends"
+	default n
+	help
+	  Build the capi/platform/fpga backends (AXI DMAC, SPI Engine,
+	  AXI CLKGEN, AXI PWMGEN) alongside the active platform. Each one
+	  is compiled only when its CAPI_<MODULE> dispatcher is enabled.
+	  The active platform must provide <platform>_capi_platform.h with
+	  the capi_platform.h CAPI_PLATFORM_IO_* register accessors.
+
 endif # CAPI

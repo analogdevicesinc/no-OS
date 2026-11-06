@@ -17,9 +17,18 @@ no_os_sources_ifdef(CONFIG_CAPI_I2C   ${CMAKE_CURRENT_SOURCE_DIR}/src/capi_i2c.c
 no_os_sources_ifdef(CONFIG_CAPI_DMA   ${CMAKE_CURRENT_SOURCE_DIR}/src/capi_dma.c)
 no_os_sources_ifdef(CONFIG_CAPI_WDT   ${CMAKE_CURRENT_SOURCE_DIR}/src/capi_wdt.c)
 no_os_sources_ifdef(CONFIG_CAPI_PINT  ${CMAKE_CURRENT_SOURCE_DIR}/src/capi_pint.c)
+no_os_sources_ifdef(CONFIG_CAPI_CLK   ${CMAKE_CURRENT_SOURCE_DIR}/src/capi_clk.c)
 
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/inc)
 
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/platform/${PLATFORM}/CMakeLists.txt)
 	add_subdirectory(platform/${PLATFORM})
+endif()
+
+# Fabric-neutral backends (ADI AXI soft-IP, register access through CAPI_PLATFORM_IO_*)
+# are not a build PLATFORM; they build alongside the active platform when
+# CONFIG_CAPI_FPGA is set.
+if(CONFIG_CAPI_FPGA AND
+   EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/platform/fpga/CMakeLists.txt)
+	add_subdirectory(platform/fpga)
 endif()
