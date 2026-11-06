@@ -87,6 +87,14 @@
 #define UART_DEVICE_ID		XPAR_XUARTPS_0_DEVICE_ID
 #define UART_IRQ_ID		XPAR_XUARTPS_1_INTR
 #define CLK_CS			0
+#elif defined(VERSAL) || defined(versal)
+#define GPIO_DEVICE_ID		XPAR_AXI_GPIO_DEVICE_ID
+#define PHY_SPI_DEVICE_ID	0
+#define CLK_SPI_DEVICE_ID	1
+#define UART_DEVICE_ID		XPAR_XUARTPSV_0_DEVICE_ID
+#define UART_IRQ_ID		0
+#define DDR_CNTRL_BASEADDR	XPAR_AXI_NOC_DDR_LOW_0_BASEADDR
+#define CLK_CS			0
 #else
 #error Unsupported platform.
 #endif
