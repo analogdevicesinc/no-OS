@@ -27,6 +27,16 @@ if(CONFIG_ADF4368_IIO_EXAMPLE)
     )
 endif()
 
+# Sweep example
+if(CONFIG_ADF4368_SWEEP_EXAMPLE)
+    target_sources(adf4368 PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/sweep_example/sweep_example.c
+    )
+    target_include_directories(adf4368 PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/sweep_example
+    )
+endif()
+
 target_include_directories(adf4368 PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common
     ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}
