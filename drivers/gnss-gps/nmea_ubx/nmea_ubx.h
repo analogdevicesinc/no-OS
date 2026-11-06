@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __NMEA_UBX_H__
-#define __NMEA_UBX_H__
+#ifndef NMEA_UBX_H_
+#define NMEA_UBX_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -1536,4 +1536,4 @@ int gnss_parse_gpgga_sentence(const char *sentence,
 int gnss_get_nmea_position_data(struct gnss_dev *dev,
 				struct gnss_nmea_position *position_data);
 
-#endif /* __NMEA_UBX_H__ */
+#endif /* NMEA_UBX_H_ */

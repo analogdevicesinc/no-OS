@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _ADT75_H
-#define _ADT75_H
+#ifndef ADT75_H_
+#define ADT75_H_
 
 #include <stdint.h>
 #include "no_os_i2c.h"
@@ -72,4 +72,4 @@ int adt75_init(struct adt75_desc **, struct adt75_init_param *);
 /** Free the device descriptor */
 int adt75_remove(struct adt75_desc *);
 
-#endif // _ADT75_H
+#endif // ADT75_H_

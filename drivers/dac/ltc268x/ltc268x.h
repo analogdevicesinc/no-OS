@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
-#ifndef __LTC268X_H__
-#define __LTC268X_H__
+#ifndef LTC268X_H_
+#define LTC268X_H_
 
 #include "no_os_spi.h"
 #include "no_os_util.h"
@@ -153,4 +153,4 @@ int32_t ltc268x_init(struct ltc268x_dev **device,
 		     struct ltc268x_init_param init_param);
 int32_t ltc268x_remove(struct ltc268x_dev *dev);
 
-#endif // __LTC268X_H__
+#endif // LTC268X_H_

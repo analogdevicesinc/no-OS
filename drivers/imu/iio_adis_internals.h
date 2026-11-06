@@ -9,8 +9,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
 
-#ifndef IIO_ADIS_INTERNALS_H
-#define IIO_ADIS_INTERNALS_H
+#ifndef IIO_ADIS_INTERNALS_H_
+#define IIO_ADIS_INTERNALS_H_
 
 #include "iio.h"
 #include <errno.h>

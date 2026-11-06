@@ -10,8 +10,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __AD405X_H__
-#define __AD405X_H__
+#ifndef AD405X_H_
+#define AD405X_H_
 
 #include <stdint.h>
 #include "no_os_util.h"
@@ -516,4 +516,4 @@ int ad405x_set_ibi_enable(struct ad405x_dev *dev,
 int ad405x_set_ibi_mask(struct ad405x_dev *dev,
 			uint16_t en_mask);
 
-#endif /* __AD405X_H__ */
+#endif /* AD405X_H_ */

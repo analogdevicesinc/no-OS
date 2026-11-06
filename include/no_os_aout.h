@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef NO_OS_AOUT_H
-#define NO_OS_AOUT_H
+#ifndef NO_OS_AOUT_H_
+#define NO_OS_AOUT_H_
 
 #include <stdint.h>
 
@@ -52,4 +52,4 @@ int32_t no_os_aout_init(struct no_os_aout_desc **desc,
 /* Free the resources allocated by no_os_aout_init() */
 int32_t no_os_aout_remove(struct no_os_aout_desc *desc);
 
-#endif	// end of NO_OS_AOUT_H
+#endif	// end of NO_OS_AOUT_H_

@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
 
-#ifndef IIO_ADMT4000_H
-#define IIO_ADMT4000_H
+#ifndef IIO_ADMT4000_H_
+#define IIO_ADMT4000_H_
 
 #include "iio.h"
 #include "no_os_gpio.h"

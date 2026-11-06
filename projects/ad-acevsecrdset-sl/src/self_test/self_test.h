@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __SELF_TEST_H__
-#define __SELF_TEST_H__
+#ifndef SELF_TEST_H_
+#define SELF_TEST_H_
 
 #include "state_machine.h"
 
@@ -36,4 +36,4 @@ int self_test_relay_closed(struct stout *stout, int32_t v2);
 /*! Startup test for upstream PE detection */
 int self_test_pe_upstream(struct stout *stout);
 
-#endif /* __SELF_TEST_H__ */
+#endif /* SELF_TEST_H_ */

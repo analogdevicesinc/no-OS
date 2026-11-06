@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __LTC2983_H__
-#define __LTC2983_H__
+#ifndef LTC2983_H_
+#define LTC2983_H_
 
 #include <stdbool.h>
 #include "no_os_gpio.h"

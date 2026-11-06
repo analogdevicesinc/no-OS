@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __IIO_LM75_H__
-#define __IIO_LM75_H__
+#ifndef IIO_LM75_H_
+#define IIO_LM75_H_
 #include "lm75.h"
 #include "iio_types.h"
 
@@ -27,4 +27,4 @@ int iio_lm75_init(struct iio_lm75 **iio_lm75pp,
 		  struct lm75_dev *dev);
 int iio_lm75_remove(struct iio_lm75 *iio_lm75);
 
-#endif /* __IIO_LM75_H__ */
+#endif /* IIO_LM75_H_ */

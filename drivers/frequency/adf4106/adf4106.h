@@ -9,8 +9,8 @@
 *
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADF4106_H__
-#define __ADF4106_H__
+#ifndef ADF4106_H_
+#define ADF4106_H_
 
 #include <stdint.h>
 #include "no_os_delay.h"
@@ -364,4 +364,4 @@ void adf4106_init_counte_reset_method(struct adf4106_dev *dev);
 uint64_t adf4106_set_frequency(struct adf4106_dev *dev,
 			       uint64_t frequency);
 
-#endif // __ADF4106_H__
+#endif // ADF4106_H_

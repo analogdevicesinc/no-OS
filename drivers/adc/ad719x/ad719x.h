@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __AD719X_H__
-#define __AD719X_H__
+#ifndef AD719X_H_
+#define AD719X_H_
 
 #include <stdint.h>
 #include "no_os_gpio.h"
@@ -261,4 +261,4 @@ int ad719x_temperature_read(struct ad719x_dev *dev, float *temp);
 float ad719x_convert_to_millivolts(struct ad719x_dev *dev,
 				   uint32_t raw_data, float v_ref);
 
-#endif /* __AD719X_H__ */
+#endif /* AD719X_H_ */

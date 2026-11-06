@@ -7,8 +7,8 @@
 *
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef IIO_DUAL_AD713X
-#define IIO_DUAL_AD713X
+#ifndef IIO_DUAL_AD713X_H_
+#define IIO_DUAL_AD713X_H_
 
 #ifdef IIO_SUPPORT
 
@@ -58,4 +58,4 @@ int32_t iio_dual_ad713x_remove(struct iio_ad713x *desc);
 
 #endif /* IIO_SUPPORT */
 
-#endif /* IIO_AD713X */
+#endif /* IIO_DUAL_AD713X_H_ */

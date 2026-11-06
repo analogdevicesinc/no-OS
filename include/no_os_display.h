@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _NO_OS_DISPLAY_H_
-#define _NO_OS_DISPLAY_H_
+#ifndef NO_OS_DISPLAY_H_
+#define NO_OS_DISPLAY_H_
 
 #include <stdint.h>
 
@@ -18,4 +18,4 @@
  */
 int32_t no_os_row_major_to_column_major_8bits(uint8_t *, uint8_t *, int, int);
 
-#endif // _NO_OS_DISPLAY_H_
+#endif // NO_OS_DISPLAY_H_

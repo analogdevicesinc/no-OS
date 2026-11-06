@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __ADXL362_H__
-#define __ADXL362_H__
+#ifndef ADXL362_H_
+#define ADXL362_H_
 
 #include <stdint.h>
 #include "no_os_spi.h"
@@ -248,4 +248,4 @@ void adxl362_setup_inactivity_detection(struct adxl362_dev *dev,
 					uint16_t threshold,
 					uint16_t time);
 
-#endif /* __ADXL362_H__ */
+#endif /* ADXL362_H_ */

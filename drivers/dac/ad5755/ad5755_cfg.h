@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *
  ******************************************************************************/
-#ifndef __AD5755_CFG_H__
-#define __AD5755_CFG_H__
+#ifndef AD5755_CFG_H_
+#define AD5755_CFG_H_
 
 struct ad5755_setup AD5755_st = {
 	0,                          //DUT_AD0
@@ -26,4 +26,4 @@ struct ad5755_setup AD5755_st = {
 	AD5755_MAX_23V              //dcDcMaxVBit
 };
 
-#endif // __AD5755_CFG_H__
+#endif // AD5755_CFG_H_

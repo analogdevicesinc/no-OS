@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include <xparameters.h>
 #include <xil_cache.h>
@@ -58,4 +58,4 @@ extern struct spi_engine_init_param spi_eng_extra_ip;
 #define SPI_EXTRA			&spi_eng_extra_ip
 #define SPI_CS				0
 #define SPI_BAUDRATE			80000000
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

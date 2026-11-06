@@ -15,8 +15,8 @@
  *  - AD4134.
  */
 
-#ifndef SRC_AD713X_H_
-#define SRC_AD713X_H_
+#ifndef AD713X_H_
+#define AD713X_H_
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -765,4 +765,4 @@ int32_t ad713x_spi_reg_dump(struct ad713x_dev *dev);
 /** Multidevice synchronization */
 int32_t ad713x_channel_sync(struct ad713x_dev *dev);
 
-#endif /* SRC_AD713X_H_ */
+#endif /* AD713X_H_ */

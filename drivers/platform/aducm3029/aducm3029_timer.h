@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef ADUCM3029_TIMER_H
-#define ADUCM3029_TIMER_H
+#ifndef ADUCM3029_TIMER_H_
+#define ADUCM3029_TIMER_H_
 
 #include <stdint.h>
 #include "no_os_util.h"
@@ -66,4 +66,4 @@ struct aducm_timer_init_param {
  */
 extern const struct no_os_timer_platform_ops aducm_timer_ops;
 
-#endif /* ADUCM3029_TIMER_H */
+#endif /* ADUCM3029_TIMER_H_ */

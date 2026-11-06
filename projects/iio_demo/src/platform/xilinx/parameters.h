@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include <xparameters.h>
 #include <xil_cache.h>
@@ -40,4 +40,4 @@ and based on the available RAM memory of the platform */
 #define SAMPLES_PER_CHANNEL_PLATFORM    2000
 #define UART_BAUDRATE	                115200
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

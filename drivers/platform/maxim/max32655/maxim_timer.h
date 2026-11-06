@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef MAXIM_TIMER_H
-#define MAXIM_TIMER_H
+#ifndef MAXIM_TIMER_H_
+#define MAXIM_TIMER_H_
 
 #include "tmr.h"
 #include "stdint.h"
@@ -22,4 +22,4 @@
  */
 extern const struct no_os_timer_platform_ops max_timer_ops;
 
-#endif //MAXIM_TIMER_H
+#endif //MAXIM_TIMER_H_

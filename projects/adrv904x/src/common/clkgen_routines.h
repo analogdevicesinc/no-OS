@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __CLKGEN_ROUTINES_H__
-#define __CLKGEN_ROUTINES_H__
+#ifndef CLKGEN_ROUTINES_H_
+#define CLKGEN_ROUTINES_H_
 
 #include "platform_includes.h"
 #include "no_os_print_log.h"
@@ -22,4 +22,4 @@ int clkgen_setup(struct axi_clkgen **rx_clkgen, struct axi_clkgen **tx_clkgen,
 int clkgen_remove(struct axi_clkgen *rx_clkgen, struct axi_clkgen *tx_clkgen,
 		  struct axi_clkgen *orx_clkgen);
 
-#endif /* __CLKGEN_ROUTINES_H__ */
+#endif /* CLKGEN_ROUTINES_H_ */

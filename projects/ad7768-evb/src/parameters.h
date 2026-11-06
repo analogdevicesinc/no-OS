@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _PARAMETERS_H_
-#define _PARAMETERS_H_
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include <xparameters.h>
 
@@ -28,4 +28,4 @@
 #define BITS_IN_BYTE				8
 #define AD7768_EVB_REFERENCE_VOLT		4.096f
 
-#endif /* _PARAMETERS_H_ */
+#endif /* PARAMETERS_H_ */

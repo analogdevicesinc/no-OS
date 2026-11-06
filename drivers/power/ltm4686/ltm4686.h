@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __LTM4686_H__
-#define __LTM4686_H__
+#ifndef LTM4686_H_
+#define LTM4686_H_
 
 #include <stdint.h>
 #include <string.h>
@@ -414,4 +414,4 @@ int ltm4686_nvm_cmd(struct ltm4686_dev *dev, enum ltm4686_nvm_cmd_type cmd);
 /* Software reset */
 int ltm4686_software_reset(struct ltm4686_dev *dev);
 
-#endif /* __LTM4686_H__ */
+#endif /* LTM4686_H_ */

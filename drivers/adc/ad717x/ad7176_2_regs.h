@@ -10,8 +10,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __AD7176_2_REGS_H__
-#define __AD7176_2_REGS_H__
+#ifndef AD7176_2_REGS_H_
+#define AD7176_2_REGS_H_
 
 #include "ad717x.h"
 
@@ -74,4 +74,4 @@ ad717x_st_reg ad7176_2_regs[] = {
 
 #define AD7176_2_SLAVE_ID    1
 
-#endif /*__AD7176_2_REGS_H__ */
+#endif /*AD7176_2_REGS_H_ */

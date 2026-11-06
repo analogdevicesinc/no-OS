@@ -13,8 +13,8 @@
  *   - XGpio: AXI GPIO (Programmable Logic)
  */
 
-#ifndef _XILINX_CAPI_GPIO_H_
-#define _XILINX_CAPI_GPIO_H_
+#ifndef XILINX_CAPI_GPIO_H_
+#define XILINX_CAPI_GPIO_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -59,4 +59,4 @@ extern const struct capi_gpio_ops capi_gpio_xilinx_pl_ops;
 }
 #endif
 
-#endif /* _XILINX_CAPI_GPIO_H_ */
+#endif /* XILINX_CAPI_GPIO_H_ */

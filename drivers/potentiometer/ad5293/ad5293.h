@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: MIT
 *******************************************************************************/
 
-#ifndef _AD5293_H_
-#define _AD5293_H_
+#ifndef AD5293_H_
+#define AD5293_H_
 
 /****************************** Include Files ********************************/
 #include <stdint.h>
@@ -127,4 +127,4 @@ int8_t ad5293_get_cali(struct ad5293_dev* dev, uint8_t num);
 /* Get wiper of a certain chip. */
 int16_t ad5293_get_wiper(struct ad5293_dev* dev, uint8_t num);
 
-#endif  // _AD5293_H_
+#endif  // AD5293_H_

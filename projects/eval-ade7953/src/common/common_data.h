@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "ade7953.h"
 #include "no_os_uart.h"
@@ -75,4 +75,4 @@ and sense circuit */
 int read_measurements(struct ade7953_dev *dev,
 		      enum ade7953_i_ch_e channel);
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

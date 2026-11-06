@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _PARAMETERS_H_
-#define _PARAMETERS_H_
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "app_config.h"
 #include "xparameters.h"
@@ -53,4 +53,4 @@
 
 #define GPIO_JESD204_SYSREF		(GPIO_OFFSET + 48)
 
-#endif /* _PARAMETERS_H_ */
+#endif /* PARAMETERS_H_ */

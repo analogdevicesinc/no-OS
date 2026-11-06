@@ -9,8 +9,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __LTC3350_H__
-#define __LTC3350_H__
+#ifndef LTC3350_H_
+#define LTC3350_H_
 
 #include <stdint.h>
 #include <string.h>
@@ -183,4 +183,4 @@ int ltc3350_clear_alarm_status_mask(struct ltc3350_dev *dev);
 
 #endif
 
-#endif /* __LTC3350_H__ */
+#endif /* LTC3350_H_ */

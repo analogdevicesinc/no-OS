@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef IIO_MAX31855_H
-#define IIO_MAX31855_H
+#ifndef IIO_MAX31855_H_
+#define IIO_MAX31855_H_
 
 #include "iio.h"
 

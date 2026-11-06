@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "parameters.h"
 #include "adis1657x.h"
@@ -19,4 +19,4 @@ extern struct no_os_spi_init_param adis1657x_spi_ip;
 extern struct no_os_gpio_init_param adis1657x_gpio_reset_ip;
 extern struct adis_init_param adis1657x_ip;
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

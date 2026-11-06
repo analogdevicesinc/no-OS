@@ -9,7 +9,7 @@
 *******************************************************************************/
 
 #ifndef MAXIM_CAPI_WDT_PRIV_H_
-#define MAIXM_CAPI_WDT_PRIV_H_
+#define MAXIM_CAPI_WDT_PRIV_H_
 
 #include "maxim_capi_wdt.h"
 

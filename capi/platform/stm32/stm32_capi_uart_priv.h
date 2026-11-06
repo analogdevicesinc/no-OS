@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _STM32_CAPI_UART_PRIV_H_
-#define _STM32_CAPI_UART_PRIV_H_
+#ifndef STM32_CAPI_UART_PRIV_H_
+#define STM32_CAPI_UART_PRIV_H_
 
 #if defined(__cplusplus)
 extern "C" {
@@ -39,4 +39,4 @@ struct stm32_uart_priv_handle {
 }
 #endif /* __cplusplus */
 
-#endif /* _STM32_CAPI_UART_PRIV_H_ */
+#endif /* STM32_CAPI_UART_PRIV_H_ */

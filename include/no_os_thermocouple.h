@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __NO_OS_THERMOCOUPLE_H__
-#define __NO_OS_THERMOCOUPLE_H__
+#ifndef NO_OS_THERMOCOUPLE_H_
+#define NO_OS_THERMOCOUPLE_H_
 
 /**
  * @brief ITS-90 Type K thermocouple forward polynomial.
@@ -29,4 +29,4 @@ double no_os_typek_temp_to_voltage(double temp_celsius);
  */
 double no_os_typek_voltage_to_temp(double voltage_mv);
 
-#endif /* __NO_OS_THERMOCOUPLE_H__ */
+#endif /* NO_OS_THERMOCOUPLE_H_ */

@@ -9,8 +9,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __LFFIFO_H
-#define __LFFIFO_H
+#ifndef NO_OS_LF256FIFO_H_
+#define NO_OS_LF256FIFO_H_
 
 #include <stdlib.h>
 #include <stdint.h>

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef IIO_ADP5055_H
-#define IIO_ADP5055_H
+#ifndef IIO_ADP5055_H_
+#define IIO_ADP5055_H_
 
 #include <stdbool.h>
 #include "iio.h"
@@ -36,4 +36,4 @@ int adp5055_iio_init(struct adp5055_iio_desc **,
 /** Free resources allocated by the initialization function. */
 int adp5055_iio_remove(struct adp5055_iio_desc *);
 
-#endif /* IIO_ADP5055_H */
+#endif /* IIO_ADP5055_H_ */

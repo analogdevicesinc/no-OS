@@ -8,10 +8,10 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifdef IIO_SUPPORT
+#ifndef IIO_ADUCM3029_H_
+#define IIO_ADUCM3029_H_
 
-#ifndef IIO_ADCUM3029
-#define IIO_ADCUM3029
+#ifdef IIO_SUPPORT
 
 #include "iio_types.h"
 #include "aducm3029_adc.h"
@@ -71,6 +71,6 @@ enum global_attributes {
 	ADC_ENABLE
 };
 
-#endif
+#endif /* IIO_SUPPORT */
 
-#endif //IIO_SUPPORT
+#endif /* IIO_ADUCM3029_H_ */

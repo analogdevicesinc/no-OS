@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "adl8113.h"
 #include "no_os_gpio.h"
@@ -24,4 +24,4 @@ extern struct no_os_gpio_init_param button2_ip;
 extern struct adl8113_init_param adl8113_param;
 extern struct no_os_uart_init_param adl8113_uart_ip;
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

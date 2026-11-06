@@ -49,7 +49,7 @@ Determine from the repo where possible; ask only for what you cannot infer:
 2. Replace every `<...>` placeholder:
    - `<part>` — lowercase file base name (e.g. `ad405x`).
    - `<PART>` — uppercase part/module name (e.g. `AD405X`); also forms the
-     include-guard macro `__<PART>_H__`.
+     include-guard macro `<PART>_H_`.
    - `<Your Name>` / `<your.name>` — author and ADI email.
    - Copyright year — current year for new files.
 3. Keep the banner byte-exact: the opening `/**...//**` doxygen marker, the
@@ -58,8 +58,8 @@ Determine from the repo where possible; ask only for what you cannot infer:
 4. **Exactly one** `SPDX-License-Identifier: BSD-3-Clause` line, on its own
    comment line after the copyright line(s). Never emit the full-text BSD
    boilerplate — the SPDX tag replaces it.
-5. For headers, wrap the body in `#ifndef __<PART>_H__ / #define __<PART>_H__`
-   ... `#endif /* __<PART>_H__ */` include guards.
+5. For headers, wrap the body in `#ifndef <PART>_H_ / #define <PART>_H_`
+   ... `#endif /* <PART>_H_ */` include guards.
 6. Adjust the `#include` lines in the `.c` template to what the file actually
    needs; they are only a starting point.
 
@@ -67,7 +67,7 @@ Determine from the repo where possible; ask only for what you cannot infer:
 
 - Verify exactly one SPDX tag and zero `Redistribution and use` /
   `POSSIBILITY OF SUCH DAMAGE` lines remain.
-- Verify the include-guard macro matches the file (`__<PART>_H__`) and is
+- Verify the include-guard macro matches the file (`<PART>_H_`) and is
   closed.
 - Run astyle if the file has real code:
   `astyle --style=linux --indent=force-tab=8 --max-code-length=80 --suffix=none --pad-oper --pad-header --unpad-paren --pad-comma <file>`

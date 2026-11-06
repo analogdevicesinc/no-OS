@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __MAX42500_H__
-#define __MAX42500_H__
+#ifndef MAX42500_H_
+#define MAX42500_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -274,4 +274,4 @@ int max42500_init(struct max42500_dev **, struct max42500_init_param *);
 /** Free the device descriptor */
 int max42500_remove(struct max42500_dev *);
 
-#endif // __MAX42500_H__
+#endif // MAX42500_H_

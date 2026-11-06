@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "parameters.h"
 #include "no_os_util.h"
@@ -26,4 +26,4 @@ extern struct no_os_i2c_init_param oled_display_i2c_init_param;
 extern ssd_1306_extra oled_display_extra;
 extern struct display_init_param oled_display_ini_param;
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

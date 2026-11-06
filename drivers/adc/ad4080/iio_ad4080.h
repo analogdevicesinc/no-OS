@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __IIO_AD4080_H__
-#define __IIO_AD4080_H__
+#ifndef IIO_AD4080_H_
+#define IIO_AD4080_H_
 #include <stddef.h>
 #include <errno.h>
 #include "no_os_irq.h"
@@ -92,4 +92,4 @@ int ad4080_device(struct iio_ad4080_desc *iio_ad4080,
 int ad4080_iio_device(struct iio_ad4080_desc *iio_ad4080,
 		      struct iio_device *iio_device);
 
-#endif /* _IIO_AD4080_H__ */
+#endif /* IIO_AD4080_H_ */

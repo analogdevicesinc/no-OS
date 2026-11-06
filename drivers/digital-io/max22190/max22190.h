@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _MAX22190_H
-#define _MAX22190_H
+#ifndef MAX22190_H_
+#define MAX22190_H_
 
 #include <stdint.h>
 #include <stdbool.h>

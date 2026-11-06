@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADP_5055_H__
-#define __ADP_5055_H__
+#ifndef ADP5055_H_
+#define ADP5055_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -262,4 +262,4 @@ int adp5055_init(struct adp5055_desc **desc,
 /** Remove resources allocated by the init function. */
 int adp5055_remove(struct adp5055_desc *desc);
 
-#endif /** __ADP_5055_H__ */
+#endif /** ADP5055_H_ */

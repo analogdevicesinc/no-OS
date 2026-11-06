@@ -9,8 +9,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef SPI_ENGINE_H
-#define SPI_ENGINE_H
+#ifndef SPI_ENGINE_H_
+#define SPI_ENGINE_H_
 
 #include <stdint.h>
 
@@ -175,4 +175,4 @@ int32_t spi_engine_set_transfer_width(struct no_os_spi_desc *desc,
 void spi_engine_set_speed(struct no_os_spi_desc *desc,
 			  uint32_t speed_hz);
 
-#endif // SPI_ENGINE_H
+#endif // SPI_ENGINE_H_

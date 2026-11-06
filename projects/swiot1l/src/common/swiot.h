@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef IIO_SWIOT_H
-#define IIO_SWIOT_H
+#ifndef SWIOT_H_
+#define SWIOT_H_
 
 #include <stdbool.h>
 #include "no_os_gpio.h"

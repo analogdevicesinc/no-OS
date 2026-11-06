@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADP_1055_H__
-#define __ADP_1055_H__
+#ifndef ADP1055_H_
+#define ADP1055_H_
 
 
 /******************************************************************************/
@@ -583,4 +583,4 @@ int adp1055_set_pwm(struct adp1055_desc * desc, enum adp1055_channel chan,
 /** Set Frequency Synchronization */
 int adp1055_freq_sync(struct adp1055_desc * desc, bool pll, bool reso);
 
-#endif /** __ADP_1050_H__ */
+#endif /** ADP1055_H_ */

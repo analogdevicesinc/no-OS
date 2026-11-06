@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 #ifndef AD463X_H_
-#define AD463x_H_
+#define AD463X_H_
 
 #include <stdint.h>
 #include "no_os_util.h"

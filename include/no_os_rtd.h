@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __NO_OS_RTD_H__
-#define __NO_OS_RTD_H__
+#ifndef NO_OS_RTD_H_
+#define NO_OS_RTD_H_
 
 /**
  * @brief Callendar-Van Dusen equation for Pt1000 RTD (IEC 60751).
@@ -20,4 +20,4 @@
  */
 double no_os_pt1000_resistance_to_temp(double resistance);
 
-#endif /* __NO_OS_RTD_H__ */
+#endif /* NO_OS_RTD_H_ */

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __AD9172_H__
-#define __AD9172_H__
+#ifndef AD9172_H_
+#define AD9172_H_
 
 #include "AD917x.h"
 #include "no_os_delay.h"
@@ -90,4 +90,4 @@ typedef struct ad9172_init_param {
 int32_t ad9172_init(ad9172_dev **device,
 		    ad9172_init_param *init_param);
 int32_t ad9172_remove(ad9172_dev *device);
-#endif // __AD9172_H__
+#endif // AD9172_H_

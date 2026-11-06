@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __SUPPLY_H__
-#define __SUPPLY_H__
+#ifndef SUPPLY_H_
+#define SUPPLY_H_
 
 #include "state_machine.h"
 #include "parameters.h"
@@ -49,4 +49,4 @@ int64_t rms_filter_i(int32_t sample);
 /*! Update the rms and adc values */
 int rms_adc_values_read(struct stout *stout, struct rms_adc_values *rms);
 
-#endif /* __SUPPLY_H__ */
+#endif /* SUPPLY_H_ */

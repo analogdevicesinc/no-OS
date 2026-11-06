@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "parameters.h"
 #include "ltc2983.h"
@@ -59,4 +59,4 @@ extern struct ltc2983_custom_sensor ltc2983_thermocouple_20_custom;
 
 #endif /* ADT7604_BASIC_EXAMPLE || ADT7604_IIO_EXAMPLE */
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

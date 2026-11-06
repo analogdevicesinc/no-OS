@@ -9,8 +9,8 @@
 *
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADF4153_H__
-#define __ADF4153_H__
+#ifndef ADF4153_H_
+#define ADF4153_H_
 
 #include <stdint.h>
 #include "no_os_gpio.h"
@@ -354,4 +354,4 @@ uint64_t adf4153_set_frequency(struct adf4153_dev *dev,
 /* Return the value of the channel spacing */
 uint32_t adf4153_get_channel_spacing(struct adf4153_dev *dev);
 
-#endif // __ADF4153_H__
+#endif // ADF4153_H_

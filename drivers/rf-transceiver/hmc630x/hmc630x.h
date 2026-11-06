@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _HMC630X_H_
-#define _HMC630X_H_
+#ifndef HMC630X_H_
+#define HMC630X_H_
 
 #include <stdbool.h>
 #include <stdint.h>

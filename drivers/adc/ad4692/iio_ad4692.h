@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef IIO_AD4692_H
-#define IIO_AD4692_H
+#ifndef IIO_AD4692_H_
+#define IIO_AD4692_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -40,4 +40,4 @@ int ad4692_iio_init(struct ad4692_iio_desc **,
 
 int ad4692_iio_remove(struct ad4692_iio_desc *);
 
-#endif /* IIO_AD4692_H */
+#endif /* IIO_AD4692_H_ */

@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __MAX31855_H__
-#define __MAX31855_H__
+#ifndef MAX31855_H_
+#define MAX31855_H_
 
 #include <stdint.h>
 #include "no_os_spi.h"

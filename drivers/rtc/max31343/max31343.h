@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef __MAX31343__
-#define __MAX31343__
+#ifndef MAX31343_H_
+#define MAX31343_H_
 
 #include <stdint.h>
 #include <string.h>
@@ -159,4 +159,4 @@ int max31343_init(struct max31343_dev **device,
 /* Remove the device and release resources. */
 int max31343_remove(struct max31343_dev *dev);
 
-#endif /* __MAX31343__ */
+#endif /* MAX31343_H_ */

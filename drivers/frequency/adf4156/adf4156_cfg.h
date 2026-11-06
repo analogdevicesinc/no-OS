@@ -9,8 +9,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __AD4156_CFG_H__
-#define __AD4156_CFG_H__
+#ifndef ADF4156_CFG_H_
+#define ADF4156_CFG_H_
 
 #include "adf4156.h"
 
@@ -25,4 +25,4 @@ static struct adf4156_platform_data adf4156_pdata_lpc = {
 	0,                          //r4_user_settings
 };
 
-#endif // __AD4156_CFG_H__
+#endif // ADF4156_CFG_H_

@@ -10,8 +10,8 @@
 ********************************************************************************
  *   SVN Revision: $WCREV$
 *******************************************************************************/
-#ifndef __AD9739A_H__
-#define __AD9739A_H__
+#ifndef AD9739A_H_
+#define AD9739A_H_
 
 #include <stdint.h>
 #include "no_os_spi.h"
@@ -223,4 +223,4 @@ int32_t ad9739a_setup(struct ad9739a_dev **device,
 /*! Free the resources allocated by ad9739a_setup(). */
 int32_t ad9739a_remove(struct ad9739a_dev *dev);
 
-#endif /* __AD9739A_H__ */
+#endif /* AD9739A_H_ */

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __INTER_H__
-#define __INTER_H__
+#ifndef INTERRUPT_H_
+#define INTERRUPT_H_
 
 #include "no_os_irq.h"
 
@@ -21,4 +21,4 @@ void reset_gpio_low_flag_state(void);
 /*! Initialize interrupt phase */
 int inter_init(struct ade7913_dev *dev);
 
-#endif /* __INTER__H__ */
+#endif /* INTERRUPT_H_ */

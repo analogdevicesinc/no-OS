@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _NO_OS_ERROR_H_
-#define _NO_OS_ERROR_H_
+#ifndef NO_OS_ERROR_H_
+#define NO_OS_ERROR_H_
 
 #include <errno.h>
 
@@ -25,4 +25,4 @@
 #define NO_OS_PTR_ERR(x)	((long)x)
 #define NO_OS_ERR_CAST(x)	((void *) x)
 
-#endif // _NO_OS_ERROR_H_
+#endif // NO_OS_ERROR_H_

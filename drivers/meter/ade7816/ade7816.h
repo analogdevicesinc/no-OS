@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
-#ifndef __ADE7816_H__
-#define __ADE7816_H__
+#ifndef ADE7816_H_
+#define ADE7816_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -465,4 +465,4 @@ int ade7816_init(struct ade7816_desc **desc,
 /** Free the resources allocated during init. */
 int ade7816_remove(struct ade7816_desc *desc);
 
-#endif /* __ADE7816_H__ */
+#endif /* ADE7816_H_ */

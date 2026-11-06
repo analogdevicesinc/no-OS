@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _AD74413R_H
-#define _AD74413R_H
+#ifndef AD74413R_H_
+#define AD74413R_H_
 
 #include "stdint.h"
 #include "stdbool.h"
@@ -498,4 +498,4 @@ int ad74413r_init(struct ad74413r_desc **, struct ad74413r_init_param *);
 /** Free the device descriptor */
 int ad74413r_remove(struct ad74413r_desc *desc);
 
-#endif // _AD74413R_H
+#endif // AD74413R_H_

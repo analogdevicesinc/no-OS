@@ -7,8 +7,8 @@
 *
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef IIO_HMC630X_H
-#define IIO_HMC630X_H
+#ifndef IIO_HMC630X_H_
+#define IIO_HMC630X_H_
 
 #include "iio.h"
 #include "hmc630x.h"
@@ -44,4 +44,4 @@ int32_t hmc630x_iio_init(struct hmc630x_iio_dev **iio_dev,
 			 struct hmc630x_iio_init_param *init_param);
 int32_t hmc630x_iio_remove(struct hmc630x_iio_dev *desc);
 
-#endif /** IIO_HMC630X_H */
+#endif /** IIO_HMC630X_H_ */

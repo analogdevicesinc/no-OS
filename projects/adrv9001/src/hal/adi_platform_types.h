@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __ADI_PLATFORM_TYPES_H__
-#define __ADI_PLATFORM_TYPES_H__
+#ifndef ADI_PLATFORM_TYPES_H_
+#define ADI_PLATFORM_TYPES_H_
 
 #ifndef ADI_COMPILED_LOGLEVEL
 /**
@@ -55,6 +55,6 @@
  */
 #define ADI_LOGLEVEL_NONE (255)
 
-#endif /* __ADI_PLATFORM_TYPES_H__*/
+#endif /* ADI_PLATFORM_TYPES_H_*/
 
 

@@ -8,12 +8,12 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
+#ifndef AD5761R_H_
+#define AD5761R_H_
+
 #include <stdint.h>
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
-
-#ifndef AD5761R_H_
-#define AD5761R_H_
 
 /* Input Shift Register Format */
 #define AD5761R_INPUT_ZERO_BIT		(1 << 20)

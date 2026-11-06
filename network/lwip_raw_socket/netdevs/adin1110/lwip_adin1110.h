@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _LWIP_ADIN1110_H_
-#define _LWIP_ADIN1110_H_
+#ifndef LWIP_ADIN1110_H_
+#define LWIP_ADIN1110_H_
 
 #ifdef NO_OS_LWIP_NETWORKING
 
@@ -18,4 +18,4 @@
 extern const struct no_os_lwip_ops adin1110_lwip_ops;
 
 #endif /* NO_OS_LWIP_NETWORKING */
-#endif /* _LWIP_ADIN1110_H_ */
+#endif /* LWIP_ADIN1110_H_ */

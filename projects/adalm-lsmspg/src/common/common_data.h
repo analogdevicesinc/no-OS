@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 extern struct no_os_spi_init_param ad5592r_spi_ip;
 extern struct no_os_uart_init_param uart_ip;
@@ -18,4 +18,4 @@ extern struct no_os_gpio_init_param led_gpio_ip;
 extern struct no_os_i2c_init_param ad5593r_i2c_ip;
 extern struct no_os_i2c_init_param lm75_i2c_ip;
 
-#endif /* __COMMON_DATA_H__*/
+#endif /* COMMON_DATA_H_*/

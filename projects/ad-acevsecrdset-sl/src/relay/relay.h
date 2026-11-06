@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __RELAY_H__
-#define __RELAY_H__
+#ifndef RELAY_H_
+#define RELAY_H_
 
 /*! Initialize relay */
 int relay_init(struct no_os_gpio_desc **relay);
@@ -31,4 +31,4 @@ void set_relay_status(void);
 /*! Set relay status to OPENED - 0 */
 void reset_relay_status(void);
 
-#endif /* __RELAY_H__ */
+#endif /* RELAY_H_ */

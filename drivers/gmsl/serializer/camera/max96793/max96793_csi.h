@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef MAX96793_CSI_H
-#define MAX96793_CSI_H
+#ifndef MAX96793_CSI_H_
+#define MAX96793_CSI_H_
 
 #include "gmsl_common.h"
 #include "gmsl_cam_ser.h"

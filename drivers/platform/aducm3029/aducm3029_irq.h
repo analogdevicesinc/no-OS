@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef ADUCM3029_IRQ_H
-# define ADUCM3029_IRQ_H
+#ifndef ADUCM3029_IRQ_H_
+# define ADUCM3029_IRQ_H_
 
 #include <drivers/xint/adi_xint.h>
 #include <stdbool.h>
@@ -96,4 +96,4 @@ struct irq_action {
 /** Action comparator function */
 int32_t irq_action_cmp(void *data1, void *data2);
 
-#endif // ADUCM3029_IRQ_H
+#endif // ADUCM3029_IRQ_H_

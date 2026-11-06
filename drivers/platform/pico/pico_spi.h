@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _PICO_SPI_H_
-#define _PICO_SPI_H_
+#ifndef PICO_SPI_H_
+#define PICO_SPI_H_
 
 #include "no_os_spi.h"
 #include "hardware/spi.h"
@@ -101,4 +101,4 @@ struct pico_spi_init_param {
  */
 extern const struct no_os_spi_platform_ops pico_spi_ops;
 
-#endif // _PICO_SPI_H_
+#endif // PICO_SPI_H_

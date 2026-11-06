@@ -8,16 +8,16 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#ifndef __LTC3220_H__
-#define __LTC3220_H__
+#ifndef LTC3220_H_
+#define LTC3220_H_
 
 #include "no_os_i2c.h"
 #include "no_os_gpio.h"
 #include "no_os_util.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*ltc3220 register addresses*/
 #define LTC3220_REG_COMMAND					0x00
@@ -274,8 +274,8 @@ int ltc3220_update_reg_command(struct ltc3220_dev *device, bool is_shutdown,
 			       bool is_force_cpo_2x, bool is_force_cpo_1p5x,
 			       bool is_quick_write);
 
-#endif  /*__LTC3220_H__*/
-
 #ifdef __cplusplus
 }
 #endif
+
+#endif  /*LTC3220_H_*/

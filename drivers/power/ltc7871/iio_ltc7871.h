@@ -8,8 +8,8 @@
 //  * SPDX-License-Identifier: BSD-3-Clause
 //  ******************************************************************************/
 
-#ifndef __IIO_LTC7871_H__
-#define __IIO_LTC7871_H__
+#ifndef IIO_LTC7871_H_
+#define IIO_LTC7871_H_
 
 #include <stdbool.h>
 // #include "iio/iio.h"
@@ -50,4 +50,4 @@ int ltc7871_iio_init(struct ltc7871_iio_dev **iio_dev,
  */
 int ltc7871_iio_remove(struct ltc7871_iio_dev *desc);
 
-#endif /* __IIO_LTC7871_H__ */
+#endif /* IIO_LTC7871_H_ */

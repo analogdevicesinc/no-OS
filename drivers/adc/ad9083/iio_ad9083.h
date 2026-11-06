@@ -8,15 +8,16 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifdef IIO_SUPPORT
-
 #ifndef IIO_AD9083_H_
 #define IIO_AD9083_H_
+
+#ifdef IIO_SUPPORT
 
 #include "iio_types.h"
 
 /** IIO Descriptor */
 extern struct iio_device ad9083_iio_descriptor;
 
-#endif /* IIO_AD9083_H_ */
 #endif /* IIO_SUPPORT */
+
+#endif /* IIO_AD9083_H_ */

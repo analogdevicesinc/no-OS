@@ -9,8 +9,8 @@
  *   SVN Revision: $WCREV$
 *******************************************************************************/
 
-#ifndef _TRANSMITTER_DEFS_H_
-#define _TRANSMITTER_DEFS_H_
+#ifndef TRANSMITTER_DEFS_H_
+#define TRANSMITTER_DEFS_H_
 
 #include "tx_lib.h"
 

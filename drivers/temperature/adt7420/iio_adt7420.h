@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef IIO_ADT7420_H
-#define IIO_ADT7420_H
+#ifndef IIO_ADT7420_H_
+#define IIO_ADT7420_H_
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -38,4 +38,4 @@ int adt7420_iio_init(struct adt7420_iio_dev **iio_dev,
 
 int adt7420_iio_remove(struct adt7420_iio_dev *desc);
 
-#endif /** IIO_ADT7420_H **/
+#endif /** IIO_ADT7420_H_ **/

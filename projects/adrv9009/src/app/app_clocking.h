@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __APP_CLOCKING_H
-#define __APP_CLOCKING_H
+#ifndef APP_CLOCKING_H_
+#define APP_CLOCKING_H_
 
 #include <stdint.h>
 #include "adi_hal.h"
@@ -48,4 +48,4 @@ void clocking_deinit(void);
 
 extern struct ad9528_dev* ad9528_device;
 
-#endif /* __APP_CLOCKING_H */
+#endif /* APP_CLOCKING_H_ */

@@ -8,8 +8,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef W5500_NETWORK_H
-#define W5500_NETWORK_H
+#ifndef W5500_NETWORK_H_
+#define W5500_NETWORK_H_
 
 #ifdef NO_OS_W5500_NETWORKING
 
@@ -56,4 +56,4 @@ int w5500_network_init(struct w5500_network_dev **net_dev,
 int w5500_network_remove(struct w5500_network_dev *dev);
 
 #endif /* NO_OS_W5500_NETWORKING */
-#endif /* W5500_NETWORK_H */
+#endif /* W5500_NETWORK_H_ */

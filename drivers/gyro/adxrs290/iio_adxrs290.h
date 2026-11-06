@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef IIO_ADXRS290_H
-#define IIO_ADXRS290_H
+#ifndef IIO_ADXRS290_H_
+#define IIO_ADXRS290_H_
 
 #include "iio_types.h"
 #include "iio_trigger.h"

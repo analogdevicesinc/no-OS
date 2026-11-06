@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _NO_OS_UNITS_H_
-#define _NO_OS_UNITS_H_
+#ifndef NO_OS_UNITS_H_
+#define NO_OS_UNITS_H_
 
 #define PETA	1000000000000000ULL
 #define TERA	1000000000000ULL
@@ -61,4 +61,4 @@
 /* Returns the given value converted from meter / second**2 to g */
 #define M_S_2_TO_G(ms2) (((ms2) * 100000ULL + 980665ULL / 2) / 980665ULL)
 
-#endif // _NO_OS_UNITS_H_
+#endif // NO_OS_UNITS_H_

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
-#ifndef __IIO_PQM_H__
-#define __IIO_PQM_H__
+#ifndef IIO_PQM_H_
+#define IIO_PQM_H_
 
 #include "common_data.h"
 #include "pqlib_afe.h"

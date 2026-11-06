@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
 
-#ifndef __TEST_IIO_MAX17616_INTERNAL_H__
-#define __TEST_IIO_MAX17616_INTERNAL_H__
+#ifndef TEST_IIO_MAX17616_INTERNAL_H_
+#define TEST_IIO_MAX17616_INTERNAL_H_
 
 #include "iio_types.h"
 
@@ -66,4 +66,4 @@ enum max17616_iio_channels {
 	MAX17616_IIO_PGOOD_THRESHOLD_CHAN,
 };
 
-#endif /* __TEST_IIO_MAX17616_INTERNAL_H__ */
+#endif /* TEST_IIO_MAX17616_INTERNAL_H_ */

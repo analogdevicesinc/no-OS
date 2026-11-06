@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "parameters.h"
 #include "ad7091r8.h"
@@ -30,4 +30,4 @@ extern struct no_os_irq_init_param ad7091r8_timer_irq_ip;
 extern struct iio_hw_trig_init_param ad7091r8_timer_trig_ip;
 #endif
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

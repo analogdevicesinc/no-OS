@@ -53,12 +53,12 @@ To prevent the inclusion of the header file content more than once, include guar
 
 .. code-block:: C
 
-	#ifndef __AD1234_H__
-	#define __AD1234_H__
+	#ifndef AD1234_H_
+	#define AD1234_H_
 
 	// ...
 
-	#endif // __AD1234_H__
+	#endif // AD1234_H_
 
 Indentation
 -----------

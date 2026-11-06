@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __IIO_LTC4162L_H__
-#define __IIO_LTC4162L_H__
+#ifndef IIO_LTC4162L_H_
+#define IIO_LTC4162L_H_
 
 #include "iio.h"
 
@@ -37,4 +37,4 @@ int ltc4162l_iio_init(struct ltc4162l_iio_device **iio_device,
 /* Free resources allocated by the initialization function. */
 int ltc4162l_iio_remove(struct ltc4162l_iio_device *iio_device);
 
-#endif	/* __IIO_LTC4162L_H__ */
+#endif	/* IIO_LTC4162L_H_ */

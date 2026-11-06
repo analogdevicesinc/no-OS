@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _LATTICE_IP_UART_H_
-#define _LATTICE_IP_UART_H_
+#ifndef RISCVRX_IP_UART_H_
+#define RISCVRX_IP_UART_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/

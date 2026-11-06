@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _ADF4382_H_
-#define _ADF4382_H_
+#ifndef ADF4382_H_
+#define ADF4382_H_
 
 #include <stdint.h>
 #include <string.h>

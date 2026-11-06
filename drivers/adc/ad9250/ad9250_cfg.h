@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
-#ifndef __AD9250_CFG_H__
-#define __AD9250_CFG_H__
+#ifndef AD9250_CFG_H_
+#define AD9250_CFG_H_
 
 #include "ad9250.h"
 
@@ -59,4 +59,4 @@ struct ad9250_fast_detect_cfg ad9250_fast_detect = {
 	0,	// dfDwellTime
 };
 
-#endif // __AD9250_CFG_H__
+#endif // AD9250_CFG_H_

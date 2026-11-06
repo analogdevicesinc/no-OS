@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "stm32_hal.h"
 #include "stm32_spi.h"
@@ -34,4 +34,4 @@ extern UART_HandleTypeDef huart5;
 extern struct stm32_uart_init_param max22915_uart_extra_ip;
 extern struct stm32_spi_init_param max22915_spi_extra_ip;
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

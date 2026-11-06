@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __PLATFORM_H__
-#define __PLATFORM_H__
+#ifndef PLATFORM_H_
+#define PLATFORM_H_
 
 #include "ade7754.h"
 #include "no_os_uart.h"
@@ -49,4 +49,4 @@
 #define GPIO_IRQ_EXTRA              &ade7754_gpio_extra_ip
 #define NVIC_GPIO_IRQ               GPIO2_IRQn
 
-#endif /* __PLATFORM_H__ */
+#endif /* PLATFORM_H_ */

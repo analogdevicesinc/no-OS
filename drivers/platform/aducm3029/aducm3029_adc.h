@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef ADUCM3029_ADC_H
-#define ADUCM3029_ADC_H
+#ifndef ADUCM3029_ADC_H_
+#define ADUCM3029_ADC_H_
 
 #include <stdint.h>
 

@@ -5,8 +5,8 @@
  * Copyright 2020-2023 Analog Devices Inc.
  */
 
-#ifndef IIO_TRX_ADRV9025_H_
-#define IIO_TRX_ADRV9025_H_
+#ifndef ADRV9025_H_
+#define ADRV9025_H_
 
 #include "adi_adrv9025_agc.h"
 #include "adi_adrv9025_arm.h"

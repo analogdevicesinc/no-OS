@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADE9430_H__
-#define __ADE9430_H__
+#ifndef ADE9430_H_
+#define ADE9430_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -892,4 +892,4 @@ int ade9430_init(struct ade9430_dev **device,
 /* Remove the device and release resources. */
 int ade9430_remove(struct ade9430_dev *dev);
 
-#endif // __ADE9430_H__
+#endif // ADE9430_H_

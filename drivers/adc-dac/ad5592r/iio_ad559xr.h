@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
-#ifndef __IIO_AD559XR_H__
-#define __IIO_AD559XR_H__
+#ifndef IIO_AD559XR_H_
+#define IIO_AD559XR_H_
 #include "iio_types.h"
 #include "ad5592r.h"
 #include "ad5593r.h"
@@ -94,4 +94,4 @@ int iio_ad559xr_gpio_init(struct iio_ad559xr_desc **desc,
 			  const size_t count);
 int iio_ad559xr_remove(struct iio_ad559xr_desc *desc);
 
-#endif /* __IIO_AD559XR_H__ */
+#endif /* IIO_AD559XR_H_ */

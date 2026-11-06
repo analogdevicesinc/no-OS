@@ -46,4 +46,4 @@ struct ftd2xx_gpio_desc {
 	FT_HANDLE ftHandle;
 };
 
-#endif /* FTD2XX_GPIO_H*/
+#endif /* FTD2XX_GPIO_H_*/

@@ -19,8 +19,8 @@
 *
 *******************************************************************************/
 
-#ifndef __SD_H__
-#define __SD_H__
+#ifndef SD_H_
+#define SD_H_
 
 #include <string.h>
 #include <stdbool.h>
@@ -88,5 +88,5 @@ int32_t sd_write(struct sd_desc *desc,
 		 uint64_t address,
 		 uint64_t len);
 
-#endif /* __SD_H__ */
+#endif /* SD_H_ */
 

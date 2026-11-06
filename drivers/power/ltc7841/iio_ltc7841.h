@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef IIO_LTC7841_H
-#define IIO_LTC7841_H
+#ifndef IIO_LTC7841_H_
+#define IIO_LTC7841_H_
 
 #include <stdbool.h>
 #include "iio.h"
@@ -43,4 +43,4 @@ int ltc7841_iio_init(struct ltc7841_iio_desc ** iio_desc,
 /** Free resources allocated by the initialization function. */
 int ltc7841_iio_remove(struct ltc7841_iio_desc * desc);
 
-#endif /* IIO_LTC7841_H */
+#endif /* IIO_LTC7841_H_ */

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADE7758_H__
-#define __ADE7758_H__
+#ifndef ADE7758_H_
+#define ADE7758_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -484,4 +484,4 @@ int ade7758_frequency_period_val(struct ade7758_dev *dev,
 int ade7758_temperature_val(struct ade7758_dev *dev,
 			    struct ade7758_temp_value *data);
 
-#endif /* __ADE7758_H__ */
+#endif /* ADE7758_H_ */

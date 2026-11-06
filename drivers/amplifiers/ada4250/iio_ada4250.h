@@ -8,12 +8,12 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef IIO_ADA4250_H
-#define IIO_ADA4250_H
+#ifndef IIO_ADA4250_H_
+#define IIO_ADA4250_H_
 
 #include "iio_types.h"
 
 /** IIO Descriptor */
 extern const struct iio_device ada4250_iio_descriptor;
 
-#endif //IIO_ADA4250_H
+#endif //IIO_ADA4250_H_

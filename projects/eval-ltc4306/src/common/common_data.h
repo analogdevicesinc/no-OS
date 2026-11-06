@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "parameters.h"
 #include "ltc4306.h"
@@ -20,4 +20,4 @@ extern const struct no_os_i2c_init_param iip;
 extern struct ltc4306_init_param ltc4306_user_init;
 extern struct max538x_init_param max538x_user_init;
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

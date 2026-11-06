@@ -7,9 +7,9 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 ****************************************/
-#ifndef __APARD_SERVO_CONTROL_H__
-#define __APARD_SERVO_CONTROL_H__
+#ifndef APARD_SERVO_CONTROL_H_
+#define APARD_SERVO_CONTROL_H_
 
 int example_main();
 
-#endif /* __APARD_SERVO_CONTROL_H__ */
+#endif /* APARD_SERVO_CONTROL_H_ */

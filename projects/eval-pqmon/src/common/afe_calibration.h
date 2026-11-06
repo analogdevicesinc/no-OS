@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef __AFE_CALIBRATION_H__
-#define __AFE_CALIBRATION_H__
+#ifndef AFE_CALIBRATION_H_
+#define AFE_CALIBRATION_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -241,4 +241,4 @@ int32_t calculate_rms_without_rmsos(int32_t measured, int32_t xrmsos);
  */
 float calculate_error(int32_t measured, int32_t expected);
 
-#endif /* __AFE_CALIBRATION_H__ */
+#endif /* AFE_CALIBRATION_H_ */

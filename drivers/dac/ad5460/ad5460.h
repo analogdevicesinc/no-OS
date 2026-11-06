@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _AD5460_H
-#define _AD5460_H
+#ifndef AD5460_H_
+#define AD5460_H_
 
 #include "stdint.h"
 #include "stdbool.h"
@@ -394,4 +394,4 @@ int ad5460_init(struct ad5460_desc **, struct ad5460_init_param *);
 /** Free the device descriptor */
 int ad5460_remove(struct ad5460_desc *desc);
 
-#endif // _AD5460_H
+#endif // AD5460_H_

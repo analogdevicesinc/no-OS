@@ -12,8 +12,8 @@
  * inspect Xilinx-private state or preallocate Xilinx UART storage.
  */
 
-#ifndef _XILINX_CAPI_UART_PRIV_H_
-#define _XILINX_CAPI_UART_PRIV_H_
+#ifndef XILINX_CAPI_UART_PRIV_H_
+#define XILINX_CAPI_UART_PRIV_H_
 
 #include <xilinx_capi_uart.h>
 
@@ -73,4 +73,4 @@ struct capi_uart_xilinx_handle {
 }
 #endif
 
-#endif /* _XILINX_CAPI_UART_PRIV_H_ */
+#endif /* XILINX_CAPI_UART_PRIV_H_ */

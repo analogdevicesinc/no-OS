@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 ******************************************************************************/
-#ifndef __ADM1177_H__
-#define __ADM1177_H__
+#ifndef ADM1177_H_
+#define ADM1177_H_
 
 #include <stdint.h>
 #include <stdio.h>
@@ -112,4 +112,4 @@ int adm1177_to_microvolts(struct adm1177_dev *device,
 /* Converts the raw sample of the current from the ADC in uA */
 int adm1177_to_microampers(uint16_t raw_sample, uint64_t *current_ua);
 
-#endif /*__ADM1177_H__*/
+#endif /*ADM1177_H_*/

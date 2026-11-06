@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *
 *******************************************************************************/
-#ifndef __ADF7023_CONFIG_H__
-#define __ADF7023_CONFIG_H__
+#ifndef ADF7023_CONFIG_H_
+#define ADF7023_CONFIG_H_
 
 #include "adf7023.h"
 
@@ -150,4 +150,4 @@ struct adf7023_bbram adf7023_bbram_default = {
 	0x00,
 };
 
-#endif // __ADF7023_CONFIG_H__
+#endif // ADF7023_CONFIG_H_

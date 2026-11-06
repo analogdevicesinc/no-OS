@@ -13,8 +13,8 @@
  * xilinx_capi_uart_priv.h.
  */
 
-#ifndef _XILINX_CAPI_UART_H_
-#define _XILINX_CAPI_UART_H_
+#ifndef XILINX_CAPI_UART_H_
+#define XILINX_CAPI_UART_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -50,4 +50,4 @@ extern const struct capi_uart_ops capi_uart_xilinx_pl_ns550_ops;
 }
 #endif
 
-#endif /* _XILINX_CAPI_UART_H_ */
+#endif /* XILINX_CAPI_UART_H_ */

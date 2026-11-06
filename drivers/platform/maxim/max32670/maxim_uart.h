@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _MAXIM_UART_H_
-#define _MAXIM_UART_H_
+#ifndef MAXIM_UART_H_
+#define MAXIM_UART_H_
 
 #include "uart.h"
 #include "no_os_irq.h"

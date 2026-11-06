@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // SPDX-License-Identifier: MIT
 
-#ifndef IOT_SAMPLE_COMMON_H
-#define IOT_SAMPLE_COMMON_H
+#ifndef IOT_SAMPLE_COMMON_H_
+#define IOT_SAMPLE_COMMON_H_
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -59,4 +59,4 @@ void iot_sample_create_mqtt_endpoint(
 	char* endpoint,
 	size_t endpoint_size);
 
-#endif // IOT_SAMPLE_COMMON_H
+#endif // IOT_SAMPLE_COMMON_H_

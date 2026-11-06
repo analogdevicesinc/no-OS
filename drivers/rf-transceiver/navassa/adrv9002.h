@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 ******************************************************************************/
-#ifndef IIO_TRX_ADRV9002_H_
-#define IIO_TRX_ADRV9002_H_
+#ifndef ADRV9002_H_
+#define ADRV9002_H_
 
 #include "no_os_gpio.h"
 #include "no_os_delay.h"

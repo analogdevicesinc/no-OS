@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PLATFORM_H__
-#define __PLATFORM_H__
+#ifndef PLATFORM_H_
+#define PLATFORM_H_
 
 #include "ade7978.h"
 #include "no_os_uart.h"
@@ -75,4 +75,4 @@ extern struct no_os_irq_init_param ade7978_gpio_irq_ip;
 /* Led toggle */
 int interface_toggle_led(struct no_os_gpio_desc *gpio_led_desc);
 
-#endif /* __PLATFORM_H__ */
+#endif /* PLATFORM_H_ */

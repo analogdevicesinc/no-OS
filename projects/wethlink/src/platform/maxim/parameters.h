@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "no_os_uart.h"
 #include "no_os_gpio.h"
@@ -135,4 +135,4 @@ extern struct no_os_gpio_init_param led_rj45s11_ip;
 extern struct no_os_gpio_init_param led_rj45s12_ip;
 extern struct no_os_eeprom_init_param eeprom_ip;
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

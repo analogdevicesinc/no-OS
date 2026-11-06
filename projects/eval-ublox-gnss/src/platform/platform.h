@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PLATFORM_H__
-#define __PLATFORM_H__
+#ifndef PLATFORM_H_
+#define PLATFORM_H_
 
 #include "no_os_gpio.h"
 #include "no_os_uart.h"
@@ -43,4 +43,4 @@ extern struct no_os_irq_init_param gnss_gpio_int_ip;
 /* GPIO toggle function for LED */
 int platform_toggle_led(struct no_os_gpio_desc *gpio_desc);
 
-#endif /* __PLATFORM_H__ */
+#endif /* PLATFORM_H_ */

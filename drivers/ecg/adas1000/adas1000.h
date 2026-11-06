@@ -10,8 +10,8 @@
  *
 *******************************************************************************/
 
-#ifndef _ADAS1000_H_
-#define _ADAS1000_H_
+#ifndef ADAS1000_H_
+#define ADAS1000_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -1109,4 +1109,4 @@ int32_t adas1000_read_data(struct adas1000_dev *device, uint8_t *data_buff,
 uint32_t adas1000_compute_frame_crc(struct adas1000_dev * device,
 				    uint8_t *buff);
 
-#endif /* _ADAS1000_H_ */
+#endif /* ADAS1000_H_ */

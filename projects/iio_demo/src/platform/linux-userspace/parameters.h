@@ -8,8 +8,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 #include "common_data.h"
 #include "no_os_util.h"
@@ -25,4 +25,4 @@ and based on the available RAM memory of the platform */
 #define UART_EXTRA      NULL
 #define UART_OPS        NULL
 
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */

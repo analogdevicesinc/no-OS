@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _PICO_TIMER_H_
-#define _PICO_TIMER_H_
+#ifndef PICO_TIMER_H_
+#define PICO_TIMER_H_
 
 #include "no_os_timer.h"
 
@@ -28,4 +28,4 @@ struct pico_timer_desc {
  */
 extern const struct no_os_timer_platform_ops pico_timer_ops;
 
-#endif // _PICO_TIMER_H_
+#endif // PICO_TIMER_H_

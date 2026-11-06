@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef DBG_H
-#define DBG_H
+#ifndef GMSL_DBG_H_
+#define GMSL_DBG_H_
 
 #include <stdbool.h> /*!< Boolean definitions */
 #include <stdint.h>  /*!< Integer types */

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef COMMON_DATA_H_
+#define COMMON_DATA_H_
 
 #include "parameters.h"
 #include "adt7420.h"
@@ -18,4 +18,4 @@ extern struct no_os_uart_init_param uip;
 extern const struct no_os_i2c_init_param iip;
 extern struct adt7420_init_param adt7420_user_init;
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* COMMON_DATA_H_ */

@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __MAX538x_H__
-#define __MAX538x_H__
+#ifndef MAX538X_H_
+#define MAX538X_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -72,4 +72,4 @@ int max538x_remove(struct max538x_dev *dev);
 /* Sets the DAC output using VOUT */
 int max538x_set_voutput(struct max538x_dev *dev, float vout);
 
-#endif	/* __MAX538x_H__ */
+#endif	/* MAX538X_H_ */

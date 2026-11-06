@@ -6,8 +6,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef __TEST_FRAMEWORK_H__
-#define __TEST_FRAMEWORK_H__
+#ifndef TEST_FRAMEWORK_H_
+#define TEST_FRAMEWORK_H_
 
 #include <errno.h>
 #include <stdbool.h>
@@ -629,4 +629,4 @@ int test_framework_run_cases(const char *module, const struct test_case *cases,
 #define TEST_ASSERT_COUNTER_DIR_OR_CLEANUP(first, second, direction, name) \
 	TEST_ASSERT_COUNTER_DIR_ACT(first, second, direction, name, CLEANUP)
 
-#endif /* __TEST_FRAMEWORK_H__ */
+#endif /* TEST_FRAMEWORK_H_ */

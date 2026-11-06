@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __APP_TALISE_H
-#define __APP_TALISE_H
+#ifndef APP_TALISE_H_
+#define APP_TALISE_H_
 
 #include <stdint.h>
 #include "talise_types.h"
@@ -33,4 +33,4 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step);
 void talise_shutdown(taliseDevice_t * const pd);
 bool adrv9009_check_sysref_rate(uint32_t lmfc, uint32_t sysref);
 
-#endif /* __APP_TALISE_H */
+#endif /* APP_TALISE_H_ */

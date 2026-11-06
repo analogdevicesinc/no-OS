@@ -7,9 +7,9 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __SWIOT_FW_H__
-#define __SWIOT_FW_H__
+#ifndef SWIOT_FW_H_
+#define SWIOT_FW_H_
 
 int swiot_firmware();
 
-#endif /* __SWIOT_FW_H__ */
+#endif /* SWIOT_FW_H_ */

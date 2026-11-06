@@ -9,8 +9,8 @@
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _NO_OS_SRC_TIMER_H_
-#define _NO_OS_SRC_TIMER_H_
+#ifndef NO_OS_TIMER_H_
+#define NO_OS_TIMER_H_
 
 #include <stdint.h>
 
@@ -129,4 +129,4 @@ int32_t no_os_timer_set_callback(struct no_os_timer_desc *desc,
 				 void (*handler)(void *),
 				 void *ctx);
 
-#endif // _NO_OS_SRC_TIMER_H_
+#endif // NO_OS_TIMER_H_

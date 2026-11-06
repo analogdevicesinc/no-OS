@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef NAVASSA_EVALUATIONFW_H
-#define NAVASSA_EVALUATIONFW_H
+#ifndef NAVASSA_EVALUATIONFW_H_
+#define NAVASSA_EVALUATIONFW_H_
 
 unsigned char Navassa_EvaluationFw_bin[] = {
 	0x80, 0x55, 0x02, 0x20, 0x91, 0x41, 0x04, 0x01, 0x4d, 0xac, 0x00, 0x01,

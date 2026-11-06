@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _NO_OS_CRC16_H_
-#define _NO_OS_CRC16_H_
+#ifndef NO_OS_CRC16_H_
+#define NO_OS_CRC16_H_
 
 #include <stdint.h>
 #include <stddef.h>
@@ -23,4 +23,4 @@ uint16_t no_os_crc16(const uint16_t * table, const uint8_t *pdata,
 		     size_t nbytes,
 		     uint16_t crc);
 
-#endif // _NO_OS_CRC16_H_
+#endif // NO_OS_CRC16_H_

@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef __AD799X_H__
-#define __AD799X_H__
+#ifndef AD799X_H_
+#define AD799X_H_
 
 #include <stdint.h>
 #include "no_os_i2c.h"
@@ -63,4 +63,4 @@ float ad799x_convert_to_volts(struct ad799x_dev *dev,
 			      int16_t raw_sample,
 			      float v_ref);
 
-#endif /* __AD799X_H__ */
+#endif /* AD799X_H_ */

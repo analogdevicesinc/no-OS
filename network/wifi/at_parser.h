@@ -52,8 +52,8 @@
  *    @endcode
 *******************************************************************************/
 
-#ifndef AT_DRIVER_H
-# define AT_DRIVER_H
+#ifndef AT_PARSER_H_
+# define AT_PARSER_H_
 
 #include <stdint.h>
 #include <stdbool.h>

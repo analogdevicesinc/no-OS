@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: BSD-3-Clause */
-#ifndef IIO_ADIN1300_H
-#define IIO_ADIN1300_H
+#ifndef IIO_ADIN1300_H_
+#define IIO_ADIN1300_H_
 
 #include "iio.h"
 #include "adin1300.h"
@@ -24,4 +24,4 @@ int32_t adin1300_iio_init(struct adin1300_iio_desc **iio_dev,
 			  struct adin1300_iio_init_param *init_param);
 int32_t adin1300_iio_remove(struct adin1300_iio_desc *desc);
 
-#endif /** IIO_ADIN1300_H */
+#endif /** IIO_ADIN1300_H_ */

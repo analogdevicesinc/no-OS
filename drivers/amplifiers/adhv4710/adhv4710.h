@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __ADHV4710_H__
-#define __ADHV4710_H__
+#ifndef ADHV4710_H_
+#define ADHV4710_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -225,4 +225,4 @@ int adhv4710_set_overtemperature_level(struct adhv4710_dev *dev, uint8_t level);
 /* Version product */
 int adhv4710_version_product(struct adhv4710_dev *dev, uint8_t *data_read);
 
-#endif /* __ADHV4710_H__ */
+#endif /* ADHV4710_H_ */

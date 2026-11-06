@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef LTC2358_H
-#define LTC2358_H
+#ifndef LTC2358_H_
+#define LTC2358_H_
 
 #include <stdint.h>
 #include "no_os_spi.h"
@@ -51,4 +51,4 @@ int32_t ltc2358_init(struct ltc2358_dev **device,
 /* Free the resources allocated by ltc2358_init(). */
 int32_t ltc2358_remove(struct ltc2358_dev *dev);
 
-#endif /* LTC2358_H */
+#endif /* LTC2358_H_ */

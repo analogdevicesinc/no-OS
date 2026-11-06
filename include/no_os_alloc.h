@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _NO_OS_ALLOC_H_
-#define _NO_OS_ALLOC_H_
+#ifndef NO_OS_ALLOC_H_
+#define NO_OS_ALLOC_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,4 +23,4 @@ void *no_os_calloc(size_t nitems, size_t size);
  * no_os_malloc */
 void no_os_free(void *ptr);
 
-#endif // _NO_OS_ALLOC_H_
+#endif // NO_OS_ALLOC_H_

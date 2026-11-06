@@ -9,8 +9,8 @@
  * @brief Xilinx platform SPI private driver contract.
  */
 
-#ifndef _XILINX_CAPI_SPI_PRIV_H_
-#define _XILINX_CAPI_SPI_PRIV_H_
+#ifndef XILINX_CAPI_SPI_PRIV_H_
+#define XILINX_CAPI_SPI_PRIV_H_
 
 #include <xilinx_capi_spi.h>
 
@@ -88,4 +88,4 @@ struct capi_spi_xilinx_handle {
 }
 #endif
 
-#endif /* _XILINX_CAPI_SPI_PRIV_H_ */
+#endif /* XILINX_CAPI_SPI_PRIV_H_ */

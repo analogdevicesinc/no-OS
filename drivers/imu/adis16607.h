@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************/
-#ifndef __ADIS16607_H__
-#define __ADIS16607_H__
+#ifndef ADIS16607_H_
+#define ADIS16607_H_
 
 #include "adis.h"
 
@@ -38,4 +38,4 @@ int adis16607_fifo_enable(struct adis_dev *adis, bool enable, uint16_t thr,
 			  bool burst32);
 int adis16607_fifo_pop(struct adis_dev *adis, struct adis_burst_data *data);
 
-#endif /* __ADIS16607_H__*/
+#endif /* ADIS16607_H_*/

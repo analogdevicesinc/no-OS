@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef SRC_AD469X_H_
-#define SRC_AD469X_H_
+#ifndef AD469X_H_
+#define AD469X_H_
 
 // **** Note for User: SPI Standard/Engine selection **** //
 /* By default the SPI Engine Framework is used for communicating with eval board.
@@ -435,4 +435,4 @@ int32_t ad469x_init(struct ad469x_dev **device,
 /* Remove the device and release resources. */
 int32_t ad469x_remove(struct ad469x_dev *dev);
 
-#endif /* SRC_AD469X_H_ */
+#endif /* AD469X_H_ */

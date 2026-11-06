@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  *******************************************************************************/
 
-#ifndef __PQLIB_CONVERT_H__
-#define __PQLIB_CONVERT_H__
+#ifndef PQLIB_CONVERT_H_
+#define PQLIB_CONVERT_H_
 
 #include "adi_pqlib.h"
 #include <math.h>
@@ -93,4 +93,4 @@ uint32_t convert_to_time_ms(float timesec);
  */
 int prepara_string(EVENT_TYPE event_type, int event_value, char *buf);
 
-#endif /* __PQLIB_CONVERT_H__ */
+#endif /* PQLIB_CONVERT_H_ */

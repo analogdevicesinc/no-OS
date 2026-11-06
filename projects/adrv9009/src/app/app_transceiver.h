@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __APP_TRANSCEIVER_H
-#define __APP_TRANSCEIVER_H
+#ifndef APP_TRANSCEIVER_H_
+#define APP_TRANSCEIVER_H_
 
 #include <stdint.h>
 #include "adi_hal.h"
@@ -19,4 +19,4 @@ adiHalErr_t fpga_xcvr_init(uint32_t rx_lane_rate_khz,
 			   uint32_t device_clock);
 void fpga_xcvr_deinit(void);
 
-#endif /* __APP_TRANSCEIVER_H */
+#endif /* APP_TRANSCEIVER_H_ */

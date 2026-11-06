@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _MAX22007_H
-#define _MAX22007_H
+#ifndef MAX22007_H_
+#define MAX22007_H_
 
 #include "no_os_spi.h"
 #include "no_os_util.h"
@@ -180,4 +180,4 @@ int max22007_init(struct max22007_dev **device,
 		  struct max22007_init_param init_param);
 int max22007_remove(struct max22007_dev *dev);
 
-#endif // _MAX22007_H
+#endif // MAX22007_H_

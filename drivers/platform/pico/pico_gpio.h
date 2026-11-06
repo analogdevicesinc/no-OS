@@ -7,8 +7,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _PICO_GPIO_H_
-#define _PICO_GPIO_H_
+#ifndef PICO_GPIO_H_
+#define PICO_GPIO_H_
 
 #include "no_os_gpio.h"
 

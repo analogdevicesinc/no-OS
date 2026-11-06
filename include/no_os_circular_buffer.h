@@ -9,8 +9,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _NO_OS_CIRCULAR_BUFFER_H_
-#define _NO_OS_CIRCULAR_BUFFER_H_
+#ifndef NO_OS_CIRCULAR_BUFFER_H_
+#define NO_OS_CIRCULAR_BUFFER_H_
 
 #include <stdint.h>
 
@@ -68,4 +68,4 @@ int32_t no_os_cb_prepare_async_read(struct no_os_circular_buffer *desc,
 				    uint32_t *raw_size_avilable);
 int32_t no_os_cb_end_async_read(struct no_os_circular_buffer *desc);
 
-#endif //_NO_OS_CIRCULAR_BUFFER_H_
+#endif //NO_OS_CIRCULAR_BUFFER_H_

@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef _MAX30009_H_
-#define _MAX30009_H_
+#ifndef MAX30009_H_
+#define MAX30009_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -873,4 +873,4 @@ int max30009_enable_interrupt(struct max30009_dev *device,
 /** Clear interrupt status registers */
 int max30009_clear_status(struct max30009_dev *device);
 
-#endif /* _MAX30009_H_ */
+#endif /* MAX30009_H_ */

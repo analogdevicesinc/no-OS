@@ -8,8 +8,8 @@
 *
 * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef _ad5110_H_
-#define _ad5110_H_
+#ifndef AD5110_H_
+#define AD5110_H_
 
 #include <stdint.h>
 #include "no_os_i2c.h"
@@ -75,4 +75,4 @@ void ad5110_reset(struct ad5110_dev *dev);
 void ad5110_shut_down(struct ad5110_dev *dev,
 		      uint8_t value);
 
-#endif  // _ad5110_H_
+#endif  // AD5110_H_

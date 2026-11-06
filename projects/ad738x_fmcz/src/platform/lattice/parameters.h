@@ -10,8 +10,8 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -69,4 +69,4 @@ extern struct latt_ip_uart_init_param uart_extra_ip;
 extern struct spi_engine_init_param spi_eng_init_param;
 extern struct axi_pwm_init_param axi_pwm_init_param;
 extern struct spi_engine_offload_init_param spi_engine_offload_init_param;
-#endif /* __PARAMETERS_H__ */
+#endif /* PARAMETERS_H_ */
