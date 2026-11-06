@@ -1,0 +1,16 @@
+menu "ADP20086 Configuration"
+
+choice ADP20086_EXAMPLE
+    prompt "Example variant"
+    default ADP20086_BASIC_EXAMPLE
+
+config ADP20086_BASIC_EXAMPLE
+    bool "Basic example"
+
+config ADP20086_IIO_EXAMPLE
+    bool "IIO example"
+	depends on IIO
+
+endchoice
+
+endmenu

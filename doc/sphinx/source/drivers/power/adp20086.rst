@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/power/adp20086/README.rst
