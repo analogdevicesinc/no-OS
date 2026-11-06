@@ -1,0 +1,16 @@
+menu "ad9082 Configuration"
+
+choice AD9082_EXAMPLE
+	prompt "Example variant"
+	default AD9082_BASIC_EXAMPLE
+
+config AD9082_BASIC_EXAMPLE
+	bool "Basic example"
+	help
+	  Basic bring-up example: initializes the HMC7044 clocks, the
+	  AXI-JESD204 RX/TX cores and the AD9082 (ad9081 driver), runs the
+	  JESD204 FSM and prints the link status. No data is moved.
+
+endchoice
+
+endmenu
