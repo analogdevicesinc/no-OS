@@ -248,7 +248,7 @@ static int32_t max_i2c_remove(struct no_os_i2c_desc *desc)
  */
 static int32_t max_i2c_write(struct no_os_i2c_desc *desc,
 			     uint8_t *data,
-			     uint8_t bytes_number,
+			     uint32_t bytes_number,
 			     uint8_t stop_bit)
 {
 	mxc_i2c_regs_t *i2c_regs;
@@ -309,7 +309,7 @@ static int32_t max_i2c_write(struct no_os_i2c_desc *desc,
  */
 static int32_t max_i2c_read(struct no_os_i2c_desc *desc,
 			    uint8_t *data,
-			    uint8_t bytes_number,
+			    uint32_t bytes_number,
 			    uint8_t stop_bit)
 {
 	mxc_i2c_regs_t *i2c_regs;

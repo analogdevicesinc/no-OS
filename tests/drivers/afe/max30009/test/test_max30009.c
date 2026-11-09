@@ -76,7 +76,7 @@ static int32_t stub_spi_always_zero(struct no_os_spi_desc *desc,
 
 /* Smart I2C write stub: captures register address for the subsequent read */
 static int32_t stub_i2c_write_capture(struct no_os_i2c_desc *desc,
-				      uint8_t *data, uint8_t bytes_number,
+				      uint8_t *data, uint32_t bytes_number,
 				      uint8_t stop_bit)
 {
 	(void)desc;
@@ -89,7 +89,7 @@ static int32_t stub_i2c_write_capture(struct no_os_i2c_desc *desc,
 
 /* Smart I2C read stub: returns PART_ID for 0xFF, lock bits for 0x00 */
 static int32_t stub_i2c_read(struct no_os_i2c_desc *desc,
-			     uint8_t *data, uint8_t bytes,
+			     uint8_t *data, uint32_t bytes,
 			     uint8_t stop)
 {
 	(void)desc;
@@ -2487,7 +2487,7 @@ void test_max30009_spi_reg_access_calloc_fail(void)
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 static int32_t stub_i2c_write_fail(struct no_os_i2c_desc *desc,
-				   uint8_t *data, uint8_t bytes_number,
+				   uint8_t *data, uint32_t bytes_number,
 				   uint8_t stop_bit)
 {
 	(void)desc;

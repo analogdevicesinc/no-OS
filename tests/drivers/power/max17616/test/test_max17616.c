@@ -49,7 +49,7 @@ char os_malloc[512] = {0};
 */
 static int32_t test_i2c_read_callback(struct no_os_i2c_desc* desc,
 				      uint8_t* data,
-				      uint8_t bytes_number, uint8_t stop_bit,
+				      uint32_t bytes_number, uint8_t stop_bit,
 				      int cmock_num_calls)
 {
 	if (data && bytes_number > 0) {
@@ -70,7 +70,7 @@ static int32_t test_i2c_read_callback(struct no_os_i2c_desc* desc,
  *        sequential calls
  */
 static int32_t test_i2c_read_init_callback(struct no_os_i2c_desc* desc,
-		uint8_t* data, uint8_t bytes_number,
+		uint8_t* data, uint32_t bytes_number,
 		uint8_t stop_bit,
 		int cmock_num_calls)
 {
@@ -126,7 +126,7 @@ static int32_t test_i2c_read_init_callback(struct no_os_i2c_desc* desc,
  */
 static int32_t test_i2c_read_unknown_device_callback(struct no_os_i2c_desc*
 		desc,
-		uint8_t* data, uint8_t bytes_number,
+		uint8_t* data, uint32_t bytes_number,
 		uint8_t stop_bit,
 		int cmock_num_calls)
 {
@@ -170,7 +170,7 @@ static int32_t test_i2c_read_unknown_device_callback(struct no_os_i2c_desc*
  * @brief Mock callback for I2C read that returns wrong manufacturer
  */
 static int32_t test_i2c_read_wrong_mfr_callback(struct no_os_i2c_desc* desc,
-		uint8_t* data, uint8_t bytes_number,
+		uint8_t* data, uint32_t bytes_number,
 		uint8_t stop_bit,
 		int cmock_num_calls)
 {
@@ -199,7 +199,7 @@ static int32_t test_i2c_read_wrong_mfr_callback(struct no_os_i2c_desc* desc,
  * @brief Mock callback for I2C read that returns wrong PMBus revision
  */
 static int32_t test_i2c_read_wrong_pmbus_callback(struct no_os_i2c_desc* desc,
-		uint8_t* data, uint8_t bytes_number,
+		uint8_t* data, uint32_t bytes_number,
 		uint8_t stop_bit,
 		int cmock_num_calls)
 {
