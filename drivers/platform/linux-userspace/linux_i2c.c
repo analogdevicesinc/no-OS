@@ -52,6 +52,10 @@ int linux_i2c_add_msg(struct no_os_i2c_desc *desc,
 	struct i2c_msg msg;
 	void *ptr;
 
+	/* struct i2c_msg holds the length in a __u16 */
+	if (bytes_number > UINT16_MAX)
+		return -EINVAL;
+
 	linux_desc = desc->extra;
 
 	msg.addr = desc->slave_address;
