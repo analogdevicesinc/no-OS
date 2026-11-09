@@ -26,7 +26,8 @@ dependencies on other repositories) explicitly.
 <!--
 Datasheet (with revision and section/table), issue, and PRs this one
 depends on or must be merged together with (for example in the HDL,
-Linux or pyadi-iio repositories), with the merge order.
+Linux or pyadi-iio repositories), with the merge order. A JIRA link is
+added automatically when the branch name contains the ticket key.
 -->
 
 - 📄 **Datasheet:**
