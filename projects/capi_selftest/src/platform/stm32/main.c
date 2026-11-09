@@ -48,7 +48,11 @@ int platform_gpio_irq_arm(uint32_t *irq_line)
 		return -EINVAL;
 
 	/* EXTI line routing lives in SYSCFG; the pin lives on GPIOC. */
+#if defined(STM32H5)
+	__HAL_RCC_SBS_CLK_ENABLE();
+#else
 	__HAL_RCC_SYSCFG_CLK_ENABLE();
+#endif
 	__HAL_RCC_GPIOC_CLK_ENABLE();
 
 	/*
@@ -97,7 +101,11 @@ bool platform_gpio_irq_ack(void)
  */
 void platform_gpio_irq_disarm(void)
 {
+#if defined(STM32H5)
+	EXTI->IMR1 &= ~GPIO_IRQ_PIN;
+#else
 	EXTI->IMR &= ~GPIO_IRQ_PIN;
+#endif
 	__HAL_GPIO_EXTI_CLEAR_IT(GPIO_IRQ_PIN);
 	HAL_NVIC_ClearPendingIRQ(GPIO_IRQ_IRQN);
 }
