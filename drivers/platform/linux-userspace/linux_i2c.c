@@ -45,7 +45,7 @@ struct linux_i2c_desc {
  */
 int linux_i2c_add_msg(struct no_os_i2c_desc *desc,
 		      uint8_t *data,
-		      uint8_t bytes_number,
+		      uint32_t bytes_number,
 		      uint8_t read)
 {
 	struct linux_i2c_desc *linux_desc;
@@ -194,7 +194,7 @@ int linux_i2c_remove(struct no_os_i2c_desc *desc)
  */
 int linux_i2c_write(struct no_os_i2c_desc *desc,
 		    uint8_t *data,
-		    uint8_t bytes_number,
+		    uint32_t bytes_number,
 		    uint8_t stop_bit)
 {
 	int32_t ret;
@@ -228,7 +228,7 @@ int linux_i2c_write(struct no_os_i2c_desc *desc,
  */
 int linux_i2c_read(struct no_os_i2c_desc *desc,
 		   uint8_t *data,
-		   uint8_t bytes_number,
+		   uint32_t bytes_number,
 		   uint8_t stop_bit)
 {
 	int32_t ret;

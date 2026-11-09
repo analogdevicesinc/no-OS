@@ -30,7 +30,7 @@
  */
 static int fill_ltm4700_special_id(struct no_os_i2c_desc* desc,
 				   unsigned char* data,
-				   unsigned char bytes_number, unsigned char stop_bit, int cmock_num_calls)
+				   uint32_t bytes_number, unsigned char stop_bit, int cmock_num_calls)
 {
 	(void)desc;
 	(void)stop_bit;
@@ -47,7 +47,7 @@ static int fill_ltm4700_special_id(struct no_os_i2c_desc* desc,
  */
 static int fill_unknown_device_id(struct no_os_i2c_desc* desc,
 				  unsigned char* data,
-				  unsigned char bytes_number, unsigned char stop_bit, int cmock_num_calls)
+				  uint32_t bytes_number, unsigned char stop_bit, int cmock_num_calls)
 {
 	(void)desc;
 	(void)stop_bit;
@@ -65,7 +65,7 @@ static int fill_unknown_device_id(struct no_os_i2c_desc* desc,
  */
 static int fill_mfr_id_correct(struct no_os_i2c_desc* desc,
 			       unsigned char* data,
-			       unsigned char bytes_number, unsigned char stop_bit, int cmock_num_calls)
+			       uint32_t bytes_number, unsigned char stop_bit, int cmock_num_calls)
 {
 	(void)desc;
 	(void)stop_bit;
@@ -85,7 +85,7 @@ static int fill_mfr_id_correct(struct no_os_i2c_desc* desc,
  */
 static int fill_mfr_id_incorrect(struct no_os_i2c_desc* desc,
 				 unsigned char* data,
-				 unsigned char bytes_number, unsigned char stop_bit, int cmock_num_calls)
+				 uint32_t bytes_number, unsigned char stop_bit, int cmock_num_calls)
 {
 	(void)desc;
 	(void)stop_bit;
@@ -105,7 +105,7 @@ static int fill_mfr_id_incorrect(struct no_os_i2c_desc* desc,
  */
 static int fill_mfr_model_correct(struct no_os_i2c_desc* desc,
 				  unsigned char* data,
-				  unsigned char bytes_number, unsigned char stop_bit, int cmock_num_calls)
+				  uint32_t bytes_number, unsigned char stop_bit, int cmock_num_calls)
 {
 	(void)desc;
 	(void)stop_bit;
@@ -129,7 +129,7 @@ static int fill_mfr_model_correct(struct no_os_i2c_desc* desc,
  */
 static int fill_mfr_model_incorrect(struct no_os_i2c_desc* desc,
 				    unsigned char* data,
-				    unsigned char bytes_number, unsigned char stop_bit, int cmock_num_calls)
+				    uint32_t bytes_number, unsigned char stop_bit, int cmock_num_calls)
 {
 	(void)desc;
 	(void)stop_bit;
@@ -153,7 +153,7 @@ static int fill_mfr_model_incorrect(struct no_os_i2c_desc* desc,
  */
 static int fill_complete_device_id_success(struct no_os_i2c_desc* desc,
 		unsigned char* data,
-		unsigned char bytes_number, unsigned char stop_bit, int cmock_num_calls)
+		uint32_t bytes_number, unsigned char stop_bit, int cmock_num_calls)
 {
 	(void)desc;
 	(void)stop_bit;
@@ -190,7 +190,7 @@ static int fill_complete_device_id_success(struct no_os_i2c_desc* desc,
  */
 static int fill_device_id_mfr_id_fail(struct no_os_i2c_desc* desc,
 				      unsigned char* data,
-				      unsigned char bytes_number, unsigned char stop_bit, int cmock_num_calls)
+				      uint32_t bytes_number, unsigned char stop_bit, int cmock_num_calls)
 {
 	(void)desc;
 	(void)stop_bit;
@@ -216,7 +216,7 @@ static int fill_device_id_mfr_id_fail(struct no_os_i2c_desc* desc,
  */
 static int fill_device_id_mfr_model_fail(struct no_os_i2c_desc* desc,
 		unsigned char* data,
-		unsigned char bytes_number, unsigned char stop_bit, int cmock_num_calls)
+		uint32_t bytes_number, unsigned char stop_bit, int cmock_num_calls)
 {
 	(void)desc;
 	(void)stop_bit;
@@ -272,7 +272,7 @@ void tearDown(void)
  * @brief Mock callback to fill word data for read operations
  */
 static int fill_word_data(struct no_os_i2c_desc *desc, uint8_t *data,
-			  uint8_t bytes_number, uint8_t stop_bit, int cmock_num_calls)
+			  uint32_t bytes_number, uint8_t stop_bit, int cmock_num_calls)
 {
 	(void)desc;
 	(void)stop_bit;
@@ -289,7 +289,7 @@ static int fill_word_data(struct no_os_i2c_desc *desc, uint8_t *data,
  * @brief Mock callback to fill block data for read operations
  */
 static int fill_block_data(struct no_os_i2c_desc *desc, uint8_t *data,
-			   uint8_t bytes_number, uint8_t stop_bit, int cmock_num_calls)
+			   uint32_t bytes_number, uint8_t stop_bit, int cmock_num_calls)
 {
 	(void)desc;
 	(void)stop_bit;
@@ -308,7 +308,7 @@ static int fill_block_data(struct no_os_i2c_desc *desc, uint8_t *data,
  */
 static int fill_word_data_negative_exp(struct no_os_i2c_desc *desc,
 				       uint8_t *data,
-				       uint8_t bytes_number, uint8_t stop_bit, int cmock_num_calls)
+				       uint32_t bytes_number, uint8_t stop_bit, int cmock_num_calls)
 {
 	(void)desc;
 	(void)stop_bit;

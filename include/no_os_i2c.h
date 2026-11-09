@@ -88,9 +88,9 @@ struct no_os_i2c_platform_ops {
 	int32_t (*i2c_ops_init)(struct no_os_i2c_desc **,
 				const struct no_os_i2c_init_param *);
 	/** i2c write function pointer */
-	int32_t (*i2c_ops_write)(struct no_os_i2c_desc *, uint8_t *, uint8_t, uint8_t);
+	int32_t (*i2c_ops_write)(struct no_os_i2c_desc *, uint8_t *, uint32_t, uint8_t);
 	/** i2c write function pointer */
-	int32_t (*i2c_ops_read)(struct no_os_i2c_desc *, uint8_t *, uint8_t, uint8_t);
+	int32_t (*i2c_ops_read)(struct no_os_i2c_desc *, uint8_t *, uint32_t, uint8_t);
 	/** i2c remove function pointer */
 	int32_t (*i2c_ops_remove)(struct no_os_i2c_desc *);
 };
@@ -105,13 +105,13 @@ int32_t no_os_i2c_remove(struct no_os_i2c_desc *desc);
 /* Write data to a slave device. */
 int32_t no_os_i2c_write(struct no_os_i2c_desc *desc,
 			uint8_t *data,
-			uint8_t bytes_number,
+			uint32_t bytes_number,
 			uint8_t stop_bit);
 
 /* Read data from a slave device. */
 int32_t no_os_i2c_read(struct no_os_i2c_desc *desc,
 		       uint8_t *data,
-		       uint8_t bytes_number,
+		       uint32_t bytes_number,
 		       uint8_t stop_bit);
 
 /* Initialize I2C bus descriptor*/

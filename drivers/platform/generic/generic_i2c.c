@@ -50,7 +50,7 @@ int32_t generic_i2c_remove(struct no_os_i2c_desc *desc)
  */
 int32_t generic_i2c_write(struct no_os_i2c_desc *desc,
 			  uint8_t *data,
-			  uint8_t bytes_number,
+			  uint32_t bytes_number,
 			  uint8_t stop_bit)
 {
 	NO_OS_UNUSED_PARAM(desc);
@@ -73,7 +73,7 @@ int32_t generic_i2c_write(struct no_os_i2c_desc *desc,
  */
 int32_t generic_i2c_read(struct no_os_i2c_desc *desc,
 			 uint8_t *data,
-			 uint8_t bytes_number,
+			 uint32_t bytes_number,
 			 uint8_t stop_bit)
 {
 	NO_OS_UNUSED_PARAM(desc);

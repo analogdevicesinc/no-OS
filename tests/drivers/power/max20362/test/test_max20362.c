@@ -41,7 +41,7 @@ char os_malloc[512] = {0};
  * @brief Mock callback for no_os_i2c_read - returns single byte
  */
 static int32_t i2c_read_cb(struct no_os_i2c_desc *desc,
-			   uint8_t *data, uint8_t bytes_number,
+			   uint8_t *data, uint32_t bytes_number,
 			   uint8_t stop_bit, int cmock_num_calls)
 {
 	if (data && bytes_number > 0)
@@ -53,7 +53,7 @@ static int32_t i2c_read_cb(struct no_os_i2c_desc *desc,
  * @brief Mock callback for no_os_i2c_read during init - chip ID verification
  */
 static int32_t i2c_read_init_cb(struct no_os_i2c_desc *desc,
-				uint8_t *data, uint8_t bytes_number,
+				uint8_t *data, uint32_t bytes_number,
 				uint8_t stop_bit, int cmock_num_calls)
 {
 	if (data && bytes_number > 0)
@@ -65,7 +65,7 @@ static int32_t i2c_read_init_cb(struct no_os_i2c_desc *desc,
  * @brief Mock callback for no_os_i2c_read - returns wrong chip ID
  */
 static int32_t i2c_read_wrong_id_cb(struct no_os_i2c_desc *desc,
-				    uint8_t *data, uint8_t bytes_number,
+				    uint8_t *data, uint32_t bytes_number,
 				    uint8_t stop_bit, int cmock_num_calls)
 {
 	if (data && bytes_number > 0)
@@ -77,7 +77,7 @@ static int32_t i2c_read_wrong_id_cb(struct no_os_i2c_desc *desc,
  * @brief Mock callback for no_os_i2c_write - fails on a specific call number
  */
 static int32_t i2c_write_fail_at_cb(struct no_os_i2c_desc *desc,
-				    uint8_t *data, uint8_t bytes_number,
+				    uint8_t *data, uint32_t bytes_number,
 				    uint8_t stop_bit, int cmock_num_calls)
 {
 	if (cmock_num_calls == i2c_write_fail_on_call)

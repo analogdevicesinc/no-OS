@@ -69,7 +69,7 @@ int32_t altera_i2c_remove(struct no_os_i2c_desc *desc)
  */
 int32_t altera_i2c_write(struct no_os_i2c_desc *desc,
 			 uint8_t *data,
-			 uint8_t bytes_number,
+			 uint32_t bytes_number,
 			 uint8_t stop_bit)
 {
 	if (desc) {
@@ -103,7 +103,7 @@ int32_t altera_i2c_write(struct no_os_i2c_desc *desc,
  */
 int32_t altera_i2c_read(struct no_os_i2c_desc *desc,
 			uint8_t *data,
-			uint8_t bytes_number,
+			uint32_t bytes_number,
 			uint8_t stop_bit)
 {
 	if (desc) {
