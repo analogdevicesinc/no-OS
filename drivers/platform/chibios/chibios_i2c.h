@@ -31,7 +31,7 @@ struct chibios_i2c_desc {
 	 *  following no-stop-bit read */
 	uint8_t *buffer;
 	/** Number of bytes staged in buffer */
-	uint16_t buffer_size;
+	uint32_t buffer_size;
 };
 
 /**
