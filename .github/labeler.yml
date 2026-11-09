@@ -21,14 +21,14 @@ projects:
           - 'projects/**/*.json'
           - 'projects/**/*.ioc'
 
-documentation:
+'📚 Documentation':
   - changed-files:
       - any-glob-to-any-file:
           - 'doc/**'
           - '**/*.md'
           - '**/*.rst'
 
-CI:
+'⚙️ CI':
   - changed-files:
       - any-glob-to-any-file:
           - 'tools/scripts/**'
