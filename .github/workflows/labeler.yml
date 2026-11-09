@@ -39,3 +39,49 @@ jobs:
                 labels: ['fix']
               });
             }
+
+      - name: Link JIRA ticket from branch name or title
+        if: ${{ github.event_name == 'pull_request_target' && vars.JIRA_BASE_URL != '' }}
+        uses: actions/github-script@v7
+        env:
+          JIRA_BASE_URL: ${{ vars.JIRA_BASE_URL }}
+        with:
+          script: |
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number
+            });
+
+            // Ticket anywhere in the branch name, or as "[KEY-123]" or
+            // "KEY-123:" in the title, to avoid matching e.g. "UTF-8".
+            const match = pr.head.ref.match(/\b([A-Z][A-Z0-9]+-\d+)\b/) ||
+                          pr.title.match(/\[([A-Z][A-Z0-9]+-\d+)\]/) ||
+                          pr.title.match(/^([A-Z][A-Z0-9]+-\d+):/);
+            if (!match)
+              return;
+
+            const key = match[1];
+            const base = process.env.JIRA_BASE_URL.replace(/\/+$/, '');
+            const start = '<!-- jira-link -->';
+            const end = '<!-- /jira-link -->';
+            const block = `${start}\n- 🎫 **JIRA:** [${key}](${base}/browse/${key})\n${end}`;
+
+            let body = pr.body || '';
+            const existing = new RegExp(`${start}[\\s\\S]*?${end}`);
+            if (existing.test(body))
+              body = body.replace(existing, block);
+            else if (/^## 🔗 Related.*$/m.test(body))
+              body = body.replace(/^## 🔗 Related.*$/m, `$&\n\n${block}`);
+            else
+              body = `${body}\n\n${block}`;
+
+            if (body === (pr.body || ''))
+              return;
+
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              body
+            });
