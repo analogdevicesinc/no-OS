@@ -230,6 +230,9 @@ static int32_t max_i2c_remove(struct no_os_i2c_desc *desc)
 		NVIC_DisableIRQ(MXC_I2C_GET_IRQ(desc->device_id));
 	}
 
+	/* A write without a stop bit not followed by a read */
+	if (max_i2c->prologue_data)
+		no_os_free(max_i2c->prologue_data);
 	no_os_free(max_i2c);
 	no_os_free(desc);
 
@@ -264,16 +267,20 @@ static int32_t max_i2c_write(struct no_os_i2c_desc *desc,
 	max_i2c_desc = desc->extra;
 
 	if (stop_bit == 0) {
-		max_i2c_desc->prologue_size = bytes_number;
-		if (max_i2c_desc->prologue_data) {
-			ptr = realloc(max_i2c_desc->prologue_data, bytes_number);
-			max_i2c_desc->prologue_data = ptr;
-		} else {
-			max_i2c_desc->prologue_data = no_os_malloc(bytes_number);
-			if (!max_i2c_desc->prologue_data)
+		/* Drop any previous prologue, even if this one fails */
+		if (max_i2c_desc->prologue_data)
+			no_os_free(max_i2c_desc->prologue_data);
+		max_i2c_desc->prologue_data = NULL;
+		max_i2c_desc->prologue_size = 0;
+
+		if (bytes_number) {
+			ptr = no_os_malloc(bytes_number);
+			if (!ptr)
 				return -ENOMEM;
+			memcpy(ptr, data, bytes_number);
+			max_i2c_desc->prologue_data = ptr;
+			max_i2c_desc->prologue_size = bytes_number;
 		}
-		memcpy(max_i2c_desc->prologue_data, data, bytes_number);
 
 		return 0;
 	}
