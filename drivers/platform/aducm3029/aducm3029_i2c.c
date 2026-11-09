@@ -47,7 +47,7 @@ struct aducm_i2c_extra {
 	/** Pointer to the prologue data. */
 	uint8_t *prologue_data;
 	/** Prologue size. */
-	uint8_t prologue_size;
+	uint32_t prologue_size;
 };
 
 /**
@@ -179,11 +179,19 @@ static int32_t aducm3029_i2c_write(struct no_os_i2c_desc *desc,
 	int32_t ret;
 	uint8_t *temp_ptr = NULL;
 
+	/* The DFP holds transfer sizes in a uint16_t */
+	if (bytes_number > UINT16_MAX)
+		return -EINVAL;
+
 	ret = set_transmission_configuration(desc);
 	if (ret < 0)
 		return ret;
 
 	if (desc->slave_address == 0) { //General call
+		/* The DFP takes the general call size as a uint8_t */
+		if (bytes_number > UINT8_MAX)
+			return -EINVAL;
+
 		if (ADI_I2C_SUCCESS != adi_i2c_IssueGeneralCall(i2c_handler,
 				data, bytes_number, &errors))
 			return -EIO;
@@ -244,6 +252,10 @@ static int32_t aducm3029_i2c_read(struct no_os_i2c_desc *desc,
 	ADI_I2C_TRANSACTION trans[1];
 	uint32_t errors;
 	int32_t ret;
+
+	/* The DFP holds transfer sizes in a uint16_t */
+	if (bytes_number > UINT16_MAX)
+		return -EINVAL;
 
 	ret = set_transmission_configuration(desc);
 	if (ret < 0)
