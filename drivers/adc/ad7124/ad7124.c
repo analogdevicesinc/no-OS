@@ -1623,3 +1623,5 @@ int32_t ad7124_remove(struct ad7124_dev *dev)
 
 	return 0;
 }
+
+/* PR template/labeler test, do not merge */
