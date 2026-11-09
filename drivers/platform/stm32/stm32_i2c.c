@@ -139,6 +139,10 @@ int32_t stm32_i2c_write(struct no_os_i2c_desc *desc,
 	if (!desc || !desc->extra || !data)
 		return -EINVAL;
 
+	/* The HAL takes the transfer size as a uint16_t */
+	if (bytes_number > UINT16_MAX)
+		return -EINVAL;
+
 	xdesc = desc->extra;
 
 	if (!stop_bit) {
@@ -174,6 +178,10 @@ int32_t stm32_i2c_read(struct no_os_i2c_desc *desc,
 	struct stm32_i2c_desc *xdesc;
 
 	if (!desc || !desc->extra || !data)
+		return -EINVAL;
+
+	/* The HAL takes the transfer size as a uint16_t */
+	if (bytes_number > UINT16_MAX)
 		return -EINVAL;
 
 	xdesc = desc->extra;
