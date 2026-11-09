@@ -27,7 +27,8 @@ explain the impact here and add the 💥 Breaking change label.
 <!--
 Datasheet (with revision and section/table) and PRs this one depends on
 or must be merged together with (for example in the HDL, Linux or
-pyadi-iio repositories), with the merge order.
+pyadi-iio repositories), with the merge order. A JIRA link is added
+automatically when the branch name contains the ticket key.
 -->
 
 - 📄 **Datasheet:**
