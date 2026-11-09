@@ -306,3 +306,5 @@ Where to go next
 * :doc:`build_guide` — per-platform toolchain setup and build mechanics.
 * `No-OS Doxygen Documentation <https://developer.analog.com/docs/no-os/doxygen>`_
   — the exact signature and fields of every ``no_os_*`` function and structure.
+
+.. PR template/labeler test, do not merge
