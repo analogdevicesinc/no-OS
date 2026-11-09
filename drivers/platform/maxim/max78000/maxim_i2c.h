@@ -36,7 +36,7 @@ struct max_i2c_extra {
 	uint8_t *prologue_data;
 	/** Size of the write data in case of
 	 *  write-repeated start-read operation */
-	uint8_t prologue_size;
+	uint32_t prologue_size;
 };
 
 struct max_i2c_init_param {
