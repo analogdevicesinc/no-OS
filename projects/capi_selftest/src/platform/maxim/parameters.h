@@ -51,13 +51,15 @@
 #define GPIO_INPUT_PIN_NUMBERS	{ 8 }
 
 /*
- * SPI async delivery mode. SPI_HAS_IRQ and SPI_HAS_DMA are mutually exclusive:
- * the loopback test configures exactly one delivery path per build. MAX32657
- * uses IRQ/FIFO delivery here; DMA delivery would need IRQ-driven DMA
- * completion, which the shared dma_config (extra = NULL) does not wire.
+ * Run BOTH async delivery modes in a single image, as on STM32. The MAX32657
+ * SPI backend picks DMA whenever spi_controller_config.dma_handle is non-NULL:
+ * it boots NULL, so the IRQ cases (ASYNC_IRQ/MANUAL_ISR/ABORT_IRQ) run on the
+ * FIFO/IRQ path first. ASYNC_DMA then calls SPI_DMA_PLATFORM_INIT(), which
+ * brings up DMA1 (IRQ-driven, see DMA_CONFIG_EXTRA) and patches dma_handle, so
+ * ASYNC_DMA/ABORT_DMA run on the DMA path. Arming is one-way per boot.
  */
 #define SPI_HAS_IRQ	1
-#define SPI_HAS_DMA	0
+#define SPI_HAS_DMA	1
 
 /* IRQ controller - NVIC, no base address needed. */
 #define IRQ_CTRL_IDENTIFIER	0U
@@ -79,6 +81,9 @@
 				  .clock_polarity = MAX_CAPI_SPI_CLOCK_POLARITY_0, \
 				  .use_irq = true }
 #define SPI_CLK_FREQ		25000000
+
+int spi_dma_platform_init(void);
+#define SPI_DMA_PLATFORM_INIT()	spi_dma_platform_init()
 
 #define SPI_DEVICE_NATIVE_CS	MAX_CAPI_SPI_CS0
 #define SPI_DEVICE_MODE		CAPI_SPI_MODE_0
