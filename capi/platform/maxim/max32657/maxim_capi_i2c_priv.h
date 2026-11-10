@@ -18,10 +18,20 @@ extern "C" {
 #endif /* __cplusplus */
 
 #define MAX_CAPI_I2C_TARGET_RX_BUFFER_SIZE	256
-#define MAX_CAPI_I2C_FIFO_DEPTH			32
+/** TX and RX FIFO depth (TARG_CAP1.fifotx = fiforx = 0b10) */
+#define MAX_CAPI_I2C_FIFO_DEPTH			8U
 
-#define MAX_CAPI_I2C_DMA_TIMEOUT			1000
 #define MAX_CAPI_I2C_DMA_CALLBACK_CLEANUP_TIMEOUT	10000
+
+/** Longest read that the 8-bit CONT_CTRL1.term_rd count can end */
+#define MAX_CAPI_I2C_TERM_RD_MAX		255U
+/**
+ * Bytes the controller still clocks in after term_rd = 1 is written while it
+ * holds SCL on a full receive FIFO: the byte it then NACKs.
+ */
+#define MAX_CAPI_I2C_TERM_TAIL			1U
+/** Bus bit times a blocking transfer may go without progress */
+#define MAX_CAPI_I2C_IDLE_BITS			256U
 
 /**
  * @enum max_capi_i2c_target_state_enum
@@ -70,6 +80,8 @@ enum max_capi_i2c_async_state_enum {
 	MAX_CAPI_I2C_ASYNC_STATE_IDLE,
 	/** Transmitting sub-address */
 	MAX_CAPI_I2C_ASYNC_STATE_TX_SUBADDR,
+	/** Sub-address queued; waiting for it to go out before the read */
+	MAX_CAPI_I2C_ASYNC_STATE_WAIT_SUBADDR_DONE,
 	/** Transmitting data */
 	MAX_CAPI_I2C_ASYNC_STATE_TX_DATA,
 	/** Receiving data */
