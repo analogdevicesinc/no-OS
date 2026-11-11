@@ -193,6 +193,54 @@ script in the no-OS repository. The following command plots all 4 channels:
 
    python tools/scripts/platform/xilinx/plot.py 4
 
+IIO Example
+~~~~~~~~~~~
+
+The IIO example (variant ``iio_example``) brings the links up via the shared
+code, then runs an IIOD server (via ``iio_axi_adc`` / ``iio_axi_dac``) so a host
+can capture ADC samples and inject DAC samples over the console UART. The board
+can be used with any ADI IIO client:
+
+* `libiio <https://wiki.analog.com/resources/tools-software/linux-software/libiio>`_ command-line tools
+* `IIO-Oscilloscope <https://github.com/analogdevicesinc/iio-oscilloscope/releases>`_
+* `Scopy v2 <https://github.com/analogdevicesinc/scopy/releases/tag/v2.0.0>`_
+
+If you are not familiar with ADI IIO Application, please take a look at:
+:dokuwiki:`IIO No-OS </resources/tools-software/no-os-software/iio>`
+
+If you are not familiar with ADI IIO-Oscilloscope Client, please take a look at:
+:dokuwiki:`IIO Oscilloscope </resources/tools-software/linux-software/iio_oscilloscope>`
+
+To run the IIOD demo, connect to the board via UART with the following
+settings:
+
+.. code-block:: bash
+
+   Baud Rate: 115200bps
+   Data: 8 bit
+   Parity: None
+   Stop bits: 1 bit
+   Flow Control: none
+
+After the link bring-up messages, the application prints ``Running IIOD
+server...``. Close the serial terminal, then start IIO-Oscilloscope and connect
+it through the serial backend with the same settings, for example:
+
+.. code-block:: bash
+
+   osc -u serial:/dev/ttyUSB0,115200,8n1n
+
+The ADC buffer holds up to 16384 samples per converter
+(``MAX_ADC_BUF_SAMPLES`` in ``parameters.h``). The DAC buffer is sized to the
+TX data offload, 512 KB on this HDL build; both are clamped at runtime to the
+depth the RX and TX data offloads report.
+
+At 115200 baud a capture moves at about 11 KB/s, so keep IIO-Oscilloscope at
+1024 to 4096 samples, fewer with all four channels enabled; a request that
+takes longer than the client's timeout leaves the session out of step, and the
+board must be reloaded. IIO-Oscilloscope restores the last capture settings
+when it starts, so lower the sample count before reconnecting after a timeout.
+
 No-OS Supported Platforms
 -------------------------
 
@@ -220,9 +268,9 @@ Build Command
 ^^^^^^^^^^^^^
 
 The Xilinx platform uses the CMake/Ninja build system via the ``no_os_build.py``
-helper script. Available variants: ``basic_example``, ``dma_example``.
-Available boards: ``vpk180`` (Cortex-A72 APU) and ``vpk180-r5`` (Cortex-R5F
-RPU).
+helper script. Available variants: ``basic_example``, ``dma_example``,
+``iio_example``. Available boards: ``vpk180`` (Cortex-A72 APU) and
+``vpk180-r5`` (Cortex-R5F RPU).
 
 The VPK180 runs no-OS on the Versal **Cortex-A72** application processor (APU),
 or on the **Cortex-R5F** real-time processor (RPU) via the ``vpk180-r5`` board.
@@ -253,6 +301,11 @@ For toolchain setup and prerequisites, see the
    # Build the DMA example
    python tools/scripts/no_os_build.py build \
       --project ad9082 --variant dma_example --board vpk180 \
+      --hardware /path/to/ad9082_fmca_ebz_vpk180/system_top.xsa
+
+   # Build the IIO example
+   python tools/scripts/no_os_build.py build \
+      --project ad9082 --variant iio_example --board vpk180 \
       --hardware /path/to/ad9082_fmca_ebz_vpk180/system_top.xsa
 
    # Build for the VPK180 RPU (Cortex-R5) -- same XSA; the vpk180-r5 board
