@@ -951,6 +951,12 @@ static int set_sampling_frequency(void *device, char *buf, uint32_t len,
 	if (ret < 0)
 		return ret;
 
+#ifndef AXI_ADC_NOT_PRESENT
+	ret = ad9361_update_dds_clock(ad9361_phy);
+	if (ret < 0)
+		return ret;
+#endif
+
 	return len;
 }
 
@@ -2709,6 +2715,11 @@ static int set_out_voltage_sampling_frequency(void *dev, char *buf,
 	int ret = ad9361_set_tx_sampling_freq(phy, rate);
 	if (ret < 0)
 		return ret;
+#ifndef AXI_ADC_NOT_PRESENT
+	ret = ad9361_update_dds_clock(phy);
+	if (ret < 0)
+		return ret;
+#endif
 	return (int)len;
 }
 

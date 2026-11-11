@@ -1493,6 +1493,58 @@ int32_t ad9361_get_tx_sampling_freq(struct ad9361_rf_phy *phy,
 	return 0;
 }
 
+#ifndef AXI_ADC_NOT_PRESENT
+/**
+ * Re-reference the DDS to the current TX sample rate.
+ *
+ * The axi_ad9361 DDS steps once every RATE + 1 interface clocks, so its
+ * reference is the TX sample rate and not the measured interface clock
+ * axi_dac_core starts from. Read every tone back with the old reference and
+ * reprogram the increment words with the new one, so the tones keep their
+ * frequency across a sample rate change.
+ * @param phy The AD9361 current state structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_update_dds_clock(struct ad9361_rf_phy *phy)
+{
+	uint32_t freq[16];
+	uint32_t tx_fs;
+	uint32_t i, n;
+	int32_t ret;
+
+	if (!phy)
+		return -EINVAL;
+
+	/* No TX DAC core, nothing to re-reference */
+	if (!phy->tx_dac)
+		return 0;
+
+	ret = ad9361_get_tx_sampling_freq(phy, &tx_fs);
+	if (ret < 0)
+		return ret;
+
+	/* Two tones per channel, indexed like axi_dac_data_setup() */
+	n = no_os_min(phy->tx_dac->num_channels * 2,
+		      (uint32_t)NO_OS_ARRAY_SIZE(freq));
+
+	for (i = 0; i < n; i++) {
+		ret = axi_dac_dds_get_frequency(phy->tx_dac, i, &freq[i]);
+		if (ret < 0)
+			return ret;
+	}
+
+	phy->tx_dac->clock_hz = tx_fs;
+
+	for (i = 0; i < n; i++) {
+		ret = axi_dac_dds_set_frequency(phy->tx_dac, i, freq[i]);
+		if (ret < 0)
+			return ret;
+	}
+
+	return 0;
+}
+#endif
+
 /**
  * Set the TX LO frequency.
  * @param phy The AD9361 current state structure.
