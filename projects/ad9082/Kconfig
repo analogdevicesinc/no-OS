@@ -17,6 +17,13 @@ config AD9082_DMA_EXAMPLE
 	  DMA-based data capture and playback example for the AD9082 over the
 	  AXI ADC/DAC cores and DMACs.
 
+config AD9082_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the AD9082 through the IIO framework via
+	  iio_axi_adc and iio_axi_dac, for host-side capture/playback over UART.
+
 endchoice
 
 endmenu

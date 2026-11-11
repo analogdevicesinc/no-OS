@@ -193,6 +193,46 @@ script in the no-OS repository. The following command plots all 4 channels:
 
    python tools/scripts/platform/xilinx/plot.py 4
 
+IIO Example
+~~~~~~~~~~~
+
+The IIO example (variant ``iio_example``) brings the links up via the shared
+code, then runs an IIOD server (via ``iio_axi_adc`` / ``iio_axi_dac``) so a host
+can capture ADC samples and inject DAC samples over the console UART. The board
+can be used with any ADI IIO client:
+
+* `libiio <https://wiki.analog.com/resources/tools-software/linux-software/libiio>`_ command-line tools
+* `IIO-Oscilloscope <https://github.com/analogdevicesinc/iio-oscilloscope/releases>`_
+* `Scopy v2 <https://github.com/analogdevicesinc/scopy/releases/tag/v2.0.0>`_
+
+If you are not familiar with ADI IIO Application, please take a look at:
+:dokuwiki:`IIO No-OS </resources/tools-software/no-os-software/iio>`
+
+If you are not familiar with ADI IIO-Oscilloscope Client, please take a look at:
+:dokuwiki:`IIO Oscilloscope </resources/tools-software/linux-software/iio_oscilloscope>`
+
+To run the IIOD demo, connect to the board via UART with the following
+settings:
+
+.. code-block:: bash
+
+   Baud Rate: 115200bps
+   Data: 8 bit
+   Parity: None
+   Stop bits: 1 bit
+   Flow Control: none
+
+After the link bring-up messages, the application prints ``Running IIOD
+server...``. Close the serial terminal, then start IIO-Oscilloscope and connect
+it through the serial backend with the same settings, for example:
+
+.. code-block:: bash
+
+   osc -u serial:/dev/ttyUSB0,115200,8n1n
+
+The IIO buffers hold up to 8192 DAC and 16384 ADC samples
+(``MAX_DAC_BUF_SAMPLES`` / ``MAX_ADC_BUF_SAMPLES`` in ``parameters.h``).
+
 No-OS Supported Platforms
 -------------------------
 
@@ -220,8 +260,8 @@ Build Command
 ^^^^^^^^^^^^^
 
 The Xilinx platform uses the CMake/Ninja build system via the ``no_os_build.py``
-helper script. Available variants: ``basic_example``, ``dma_example``.
-Available board: ``vpk180``.
+helper script. Available variants: ``basic_example``, ``dma_example``,
+``iio_example``. Available board: ``vpk180``.
 
 The VPK180 runs no-OS on the Versal **Cortex-A72** application processor (APU).
 A Xilinx XSA hardware handoff is required and is passed with ``--hardware``; the
@@ -251,6 +291,11 @@ For toolchain setup and prerequisites, see the
    # Build the DMA example
    python tools/scripts/no_os_build.py build \
       --project ad9082 --variant dma_example --board vpk180 \
+      --hardware /path/to/ad9082_fmca_ebz_vpk180/system_top.xsa
+
+   # Build the IIO example
+   python tools/scripts/no_os_build.py build \
+      --project ad9082 --variant iio_example --board vpk180 \
       --hardware /path/to/ad9082_fmca_ebz_vpk180/system_top.xsa
 
 The built ELF is at

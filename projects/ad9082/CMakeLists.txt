@@ -23,6 +23,15 @@ if(CONFIG_AD9082_DMA_EXAMPLE)
     )
 endif()
 
+if(CONFIG_AD9082_IIO_EXAMPLE)
+    target_sources(ad9082 PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_example/iio_example.c
+    )
+    target_include_directories(ad9082 PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_example
+    )
+endif()
+
 # Hardware profile (JESD mode + datapath). Versal/VPK180 only for now; a single
 # profile, selected unconditionally. Add more under profiles/<board>_ad9082/ and
 # switch here (e.g. per BOARD) when another Versal board/profile is introduced.
