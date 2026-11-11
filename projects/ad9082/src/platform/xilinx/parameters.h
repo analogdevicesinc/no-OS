@@ -90,6 +90,21 @@
 #define RX_DMA_BASEADDR		XPAR_AXI_MXFE_RX_DMA_BASEADDR
 #define TX_DMA_BASEADDR		XPAR_AXI_MXFE_TX_DMA_BASEADDR
 
+/*
+ * Dedicated DDR region for the PL DMA buffers.  The RX/TX DMACs master DDR over
+ * the Versal NoC (C0_DDR_LOW0 aperture, 0x0-0x7FFFFFFF, already routed to the
+ * DDR controller by the ADI vpk180 HDL).  Placing the buffers 256 MB into DDR
+ * keeps them well clear of the CPU image, stack and heap in low DDR -- and of
+ * the R5 TCM (<= 0x3FFFF in lockstep).  The address is the same for the A72 and
+ * the R5, so no per-core split is needed; there is no XPAR symbol for the
+ * DDR-low region on Versal, hence the absolute literal.  Both bases are 64 MB
+ * aligned (>> the 64 B / 32 B cache line), so flush/invalidate never spill into
+ * neighbouring data.
+ */
+#define DMA_DDR_BASEADDR	0x10000000UL
+#define DAC_DDR_BASEADDR	DMA_DDR_BASEADDR
+#define ADC_DDR_BASEADDR	(DMA_DDR_BASEADDR + 0x04000000UL)	/* +64 MB */
+
 #ifdef IIO_SUPPORT
 #define MAX_DAC_BUF_SAMPLES	10000000
 #define MAX_ADC_BUF_SAMPLES	10000000

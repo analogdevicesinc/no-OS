@@ -11,6 +11,12 @@ config AD9082_BASIC_EXAMPLE
 	  AXI-JESD204 RX/TX cores and the AD9082 (ad9081 driver), runs the
 	  JESD204 FSM and prints the link status. No data is moved.
 
+config AD9082_DMA_EXAMPLE
+	bool "DMA example"
+	help
+	  DMA-based data capture and playback example for the AD9082 over the
+	  AXI ADC/DAC cores and DMACs.
+
 endchoice
 
 endmenu
