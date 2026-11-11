@@ -696,12 +696,14 @@ int main(void)
 #else
 #ifdef FMCOMMS5
 	axi_dac_init(&ad9361_phy_b->tx_dac, &tx_dac_init);
+	ad9361_update_dds_clock(ad9361_phy_b);
 	axi_dac_set_datasel(ad9361_phy_b->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
 	rx_adc_init.base = AD9361_RX_0_BASEADDR;
 	rx_adc_init.num_slave_channels = 4;
 	tx_dac_init.base = AD9361_TX_0_BASEADDR;
 #endif
 	axi_dac_init(&ad9361_phy->tx_dac, &tx_dac_init);
+	ad9361_update_dds_clock(ad9361_phy);
 	axi_dac_set_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
 #endif
 #endif
