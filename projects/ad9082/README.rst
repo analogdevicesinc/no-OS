@@ -149,6 +149,50 @@ leaves the GT PLL unlocked and the JESD ``reset-done`` never asserts. A second
 profile for a different link rate will be added under ``profiles/`` when its
 matching bitstream is available.
 
+DMA Example
+~~~~~~~~~~~
+
+The DMA example (variant ``dma_example``) plays a sine wave out of the DACs and
+captures ADC samples back, both over the PL AXI DMACs into the Cortex-A72 DDR.
+
+A sine look-up table is written to a DDR buffer and loaded, with a single
+non-cyclic transfer, into the TX data-offload in the HDL; the offload then
+replays it continuously, so the DAC output is gap-free. The ADC samples are
+captured into a second DDR buffer through the RX DMAC. Both buffers live in a
+dedicated DDR region (``DAC_DDR_BASEADDR`` / ``ADC_DDR_BASEADDR`` in
+``parameters.h``), clear of the CPU image, and the CPU flushes / invalidates
+them by hand because the PL DMACs are not cache-coherent with the APU and master
+DDR over the Versal NoC.
+
+The DMA and IIO examples play the DAC data at baseband: the TX main NCO shift
+is forced to 0 Hz instead of the profile's 1 GHz, which would alias in the
+full-bandwidth RX path and make the loopback capture unreadable. This matches
+the Linux reference design.
+
+On success the console reports the buffers in the shared ``DMA_EXAMPLE`` format::
+
+    DMA_EXAMPLE Tx: address=0x10000000 samples=32768 channels=4 bits=32
+    DMA_EXAMPLE Rx: address=0x14000000 samples=65536 channels=4 bits=16
+
+The RX line means the captured data is at ``0x14000000``: 65536 16-bit samples
+across 4 converters, i.e. 16384 samples per converter. The profile carries two
+complex (I/Q) channels, so the four converters are rx1 I, rx1 Q, rx2 I, rx2 Q.
+
+Retrieve the captured data into ``.csv`` files with the standard Tcl script,
+passing ``VERSAL`` as the processor type:
+
+.. code-block:: bash
+
+   xsct tools/scripts/platform/xilinx/capture.tcl VERSAL 0x14000000 65536 4 16
+
+The ``.csv`` files can then be visualised using the
+`plot.py <https://github.com/analogdevicesinc/no-OS/blob/master/tools/scripts/platform/xilinx/plot.py>`_
+script in the no-OS repository. The following command plots all 4 channels:
+
+.. code-block:: bash
+
+   python tools/scripts/platform/xilinx/plot.py 4
+
 No-OS Supported Platforms
 -------------------------
 
@@ -176,8 +220,8 @@ Build Command
 ^^^^^^^^^^^^^
 
 The Xilinx platform uses the CMake/Ninja build system via the ``no_os_build.py``
-helper script. Available variant: ``basic_example``. Available board:
-``vpk180``.
+helper script. Available variants: ``basic_example``, ``dma_example``.
+Available board: ``vpk180``.
 
 The VPK180 runs no-OS on the Versal **Cortex-A72** application processor (APU).
 A Xilinx XSA hardware handoff is required and is passed with ``--hardware``; the
@@ -202,6 +246,11 @@ For toolchain setup and prerequisites, see the
    # Build the basic example for the VPK180
    python tools/scripts/no_os_build.py build \
       --project ad9082 --variant basic_example --board vpk180 \
+      --hardware /path/to/ad9082_fmca_ebz_vpk180/system_top.xsa
+
+   # Build the DMA example
+   python tools/scripts/no_os_build.py build \
+      --project ad9082 --variant dma_example --board vpk180 \
       --hardware /path/to/ad9082_fmca_ebz_vpk180/system_top.xsa
 
 The built ELF is at
