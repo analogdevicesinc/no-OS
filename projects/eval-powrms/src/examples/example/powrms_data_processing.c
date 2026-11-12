@@ -39,7 +39,7 @@ int32_t use_eeprom_calibration_data = 0;
 // Storage for frequency ranges for callibration
 uint32_t frequency_MHz_ranges[FREQUENCY_RANGE_NR] = {
 	10,
-	100,
+	300,
 	1000,
 	2000,
 	3000,
@@ -97,7 +97,7 @@ struct powrms_variables input_variables[VARIABLE_NUMBER] = {
 };
 
 // Storage for the 112 precision values as 32-bit integers
-// Order 10MHz: X1, Y1, X2, Y2, X3, Y3 , X4, Y4, X5, Y5, X6, Y6, X7, Y7, 100MHz:...
+// Order 10MHz: X1, Y1, X2, Y2, X3, Y3 , X4, Y4, X5, Y5, X6, Y6, X7, Y7, 300MHz:...
 int32_t precision_values[PRECISION_ARRAY_SIZE];
 int32_t precision_values_reverse[PRECISION_ARRAY_SIZE];
 
@@ -129,12 +129,12 @@ double poly_5000MHz_c_f3_reverse = 0;
 // Order A1, A2, A3 for each frequency range
 double temperature_precision_values[TEMPERATURE_CORRECTION_COEFFS *
 								  FREQUENCY_RANGE_NR] = {
-	0.09907037, -0.006107942, -0.0176689,
-	0.5951664, -0.409783, 0.08516236,
-	-0.9938435, 0.6969325, -0.168762,
-	0.08790697, -0.09423475, 0.01784584,
-	1.005991, -0.5792234, 0.08180364,
-	-6.526894, 4.923146, -1.258186,
+	0.09907037, -0.006107942, -0.0176689,	// 10MHz
+	0.5951664, -0.409783, 0.08516236,	// 300MHz
+	-0.9938435, 0.6969325, -0.168762,	// 1000MHz
+	0.08790697, -0.09423475, 0.01784584,	// 2000MHz
+	1.005991, -0.5792234, 0.08180364,	// 3000MHz
+	-6.526894, 4.923146, -1.258186,		// 4000MHz
 	6.637077, -4.713627, 1.078375,		// 5000MHz
 	6.637077, -4.713627, 1.078375,		// 5250MHz (placeholder: copy of 5000MHz)
 	6.637077, -4.713627, 1.078375,		// 5500MHz (placeholder: copy of 5000MHz)

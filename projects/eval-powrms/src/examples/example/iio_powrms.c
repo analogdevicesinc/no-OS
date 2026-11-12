@@ -198,7 +198,7 @@ struct iio_attribute powrms_precision_attributes[] = {
 		.priv = MIN_FREQ_RANGE_INDEX,  // frequency index 0
 	},
 	{
-		.name = "calib_100MHz",
+		.name = "calib_300MHz",
 		.show = read_calib_freq_range,
 		.store = write_calib_freq_range,
 		.priv = MIN_FREQ_RANGE_INDEX + 1,  // frequency index 1
@@ -265,7 +265,7 @@ struct iio_attribute powrms_precision_attributes[] = {
 		.priv = MIN_FREQ_RANGE_INDEX,  // frequency index 0
 	},
 	{
-		.name = "calib_100MHz_reverse",
+		.name = "calib_300MHz_reverse",
 		.show = read_calib_freq_range_reverse,
 		.store = write_calib_freq_range_reverse,
 		.priv = MIN_FREQ_RANGE_INDEX + 1,  // frequency index 1
