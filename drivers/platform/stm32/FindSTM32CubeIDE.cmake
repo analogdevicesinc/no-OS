@@ -44,5 +44,6 @@ get_filename_component(
 
 mark_as_advanced(STM32CUBEIDE_EXECUTABLE)
 
-# Export the CubeIDE directory so the toolchain can locate bundled tools (e.g. OpenOCD)
-set(CUBEIDE_DIR "${CUBEIDE_DIR}" PARENT_SCOPE)
+# Export the CubeIDE directory so the toolchain can locate bundled tools (e.g. OpenOCD).
+# CACHE instead of PARENT_SCOPE: find_package() has no enclosing function, so PARENT_SCOPE is a no-op.
+set(CUBEIDE_DIR "${CUBEIDE_DIR}" CACHE PATH "STM32CubeIDE install directory" FORCE)
