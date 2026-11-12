@@ -1,0 +1,1 @@
+.. include:: ../../../../../projects/eval-adxl37x/README.rst
