@@ -26,6 +26,7 @@
 #define AD413X_R2B				(2 << 8)
 #define AD413X_R3B				(3 << 8)
 #define AD413X_TRANSF_LEN(x)			(((x) >> 8) & 0xFF)
+#define AD413X_ADDR(x)				((x) & 0xFF)
 
 /***************************** ADC Register Map *******************************/
 #define AD413X_REG_STATUS 			(AD413X_R1B | 0x0)
@@ -349,10 +350,30 @@ enum ad413x_gain {
 
 /**
  * @enum ad413x_chip_id
- * @brief Chip IDs.
+ * @brief Supported devices.
  */
 enum ad413x_chip_id {
-	AD4130_8 = 0x04
+	AD4129_4,
+	AD4129_8,
+	AD4130_4,
+	AD4130_8,
+	AD4131_4,
+	AD4131_8,
+};
+
+/**
+ * @struct ad413x_chip_info
+ * @brief Device specific parameters.
+ */
+struct ad413x_chip_info {
+	const char *name;
+	/* Expected ID register value, 0 if not checked */
+	uint8_t id;
+	uint8_t resolution;
+	uint8_t max_analog_pins;
+	bool has_fifo;
+	/* Maps AIN/VBIAS pin number to its register field value */
+	const uint8_t *pin_map;
 };
 
 /**
@@ -443,6 +464,7 @@ struct ad413x_dev {
 	struct ad413x_preset preset[8];
 	struct ad413x_channel ch[16];
 	enum ad413x_chip_id chip_id;
+	const struct ad413x_chip_info *chip_info;
 	enum ad413x_mclk_sel mclk;
 	enum ad413x_adc_mode op_mode;
 	uint8_t bipolar;
