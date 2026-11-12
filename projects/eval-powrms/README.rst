@@ -51,7 +51,7 @@ Frequency Range Support
 The system supports calibration across 11 frequency ranges:
 
 * 10 MHz
-* 100 MHz
+* 300 MHz
 * 1000 MHz (1 GHz)
 * 2000 MHz (2 GHz)
 * 3000 MHz (3 GHz)
@@ -117,14 +117,25 @@ The board implements a comprehensive IIO interface for remote control and automa
 
 .. code-block:: bash
 
-   # Available IIO channels
-   iio_attr -c powrms voltage0    # v_in_corrected
-   iio_attr -c powrms voltage1    # v_out_corrected  
-   iio_attr -c powrms voltage2    # temperature
-   iio_attr -c powrms voltage3    # v_in_raw
-   iio_attr -c powrms voltage4    # v_out_raw
-   iio_attr -c powrms power0      # p_forward
-   iio_attr -c powrms power1      # p_reverse
+   # Available IIO channels (id -- name)
+   iio_attr -c powrms voltage0     # v_in_cor   : corrected input voltage
+   iio_attr -c powrms voltage1     # v_out_cor  : corrected output voltage
+   iio_attr -c powrms voltage2     # tmp        : temperature
+   iio_attr -c powrms voltage3     # v_in       : raw input voltage
+   iio_attr -c powrms voltage4     # v_out      : raw output voltage
+   iio_attr -c powrms power5       # p_fwd      : forward power
+   iio_attr -c powrms power6       # p_rev      : reverse power
+   iio_attr -c powrms voltage7     # precision_array : calibration attributes
+   iio_attr -c powrms voltage8     # poly_calib_5000MHz
+   iio_attr -c powrms voltage9     # poly_calib_5000MHz_reverse
+   iio_attr -c powrms voltage10    # v_diff     : raw differential voltage
+
+.. note::
+
+   Channel indices come from a single shared enum in ``iio_powrms.h``, not from a
+   per-type counter, so the power channels are ``power5``/``power6`` -- not
+   ``power0``/``power1``. The examples below address channels by name
+   (e.g. ``precision_array``), which is stable regardless of index.
 
 **Global Configuration Attributes:**
 
@@ -150,8 +161,8 @@ The board implements a comprehensive IIO interface for remote control and automa
    iio_attr -c powrms voltage0 offset  # Offset value
 
    # Read power measurements
-   iio_attr -c powrms power0 raw       # Forward power raw
-   iio_attr -c powrms power1 raw       # Reverse power raw
+   iio_attr -c powrms power5 raw       # Forward power raw (p_fwd)
+   iio_attr -c powrms power6 raw       # Reverse power raw (p_rev)
 
 Calibration System
 ==================
@@ -169,18 +180,17 @@ The EVAL-POWRMS implements a sophisticated temperature compensation system to ma
 * **Temperature Sensing**: On-board temperature monitoring for real-time compensation
 * **Multi-Coefficient Correction**: Three temperature coefficients per frequency range for precise modeling
 * **Automatic Correction**: Real-time application of temperature compensation to all voltage measurements
-* **EEPROM Storage**: Persistent storage of temperature calibration data
+* **EEPROM Storage**: Persistent storage of the temperature compensation value
 
 **Temperature Coefficient Configuration:**
 
-Each frequency range supports three temperature compensation coefficients stored as calibration data:
+Each frequency range has three temperature compensation coefficients (A1, A2, A3).
+These are build-time constants held in ``temperature_precision_values[]`` in
+``src/examples/example/powrms_data_processing.c``. They are **not** exposed as IIO
+attributes and are not read back from EEPROM, so changing them requires rebuilding
+and reflashing the firmware.
 
-.. code-block:: bash
-
-   # Temperature calibration for each frequency range
-   iio_attr -c powrms precision_array calib_temp_10MHz_values "coeff1,coeff2,coeff3"
-   iio_attr -c powrms precision_array calib_temp_100MHz_values "coeff1,coeff2,coeff3"
-   # ... for all 11 frequency ranges
+The only temperature setting adjustable at runtime is the global compensation value:
 
 **Temperature Compensation Value:**
 
@@ -199,22 +209,33 @@ The system provides frequency-specific calibration to account for component vari
 
 **Precision Value Configuration:**
 
-Each frequency range requires six precision values for comprehensive calibration:
+Each frequency range requires 28 precision values -- 14 (X, Y) interpolation points
+written as ``X1,Y1,X2,Y2,...,X14,Y14``. A write with any other number of values is
+rejected with ``-EINVAL``.
 
 .. code-block:: bash
 
-   # Frequency-specific precision calibration values
-   iio_attr -c powrms precision_array calib_10MHz_values "val1,val2,val3,val4,val5,val6"
-   iio_attr -c powrms precision_array calib_100MHz_values "val1,val2,val3,val4,val5,val6"
-   iio_attr -c powrms precision_array calib_1000MHz_values "val1,val2,val3,val4,val5,val6"
-   iio_attr -c powrms precision_array calib_2000MHz_values "val1,val2,val3,val4,val5,val6"
-   iio_attr -c powrms precision_array calib_3000MHz_values "val1,val2,val3,val4,val5,val6"
-   iio_attr -c powrms precision_array calib_4000MHz_values "val1,val2,val3,val4,val5,val6"
-   iio_attr -c powrms precision_array calib_5000MHz_values "val1,val2,val3,val4,val5,val6"
-   iio_attr -c powrms precision_array calib_5250MHz_values "val1,val2,val3,val4,val5,val6"
-   iio_attr -c powrms precision_array calib_5500MHz_values "val1,val2,val3,val4,val5,val6"
-   iio_attr -c powrms precision_array calib_5750MHz_values "val1,val2,val3,val4,val5,val6"
-   iio_attr -c powrms precision_array calib_6000MHz_values "val1,val2,val3,val4,val5,val6"
+   # Frequency-specific precision calibration values (forward power)
+   iio_attr -c powrms precision_array calib_10MHz "X1,Y1,...,X14,Y14"
+   iio_attr -c powrms precision_array calib_300MHz "X1,Y1,...,X14,Y14"
+   iio_attr -c powrms precision_array calib_1000MHz "X1,Y1,...,X14,Y14"
+   iio_attr -c powrms precision_array calib_2000MHz "X1,Y1,...,X14,Y14"
+   iio_attr -c powrms precision_array calib_3000MHz "X1,Y1,...,X14,Y14"
+   iio_attr -c powrms precision_array calib_4000MHz "X1,Y1,...,X14,Y14"
+   iio_attr -c powrms precision_array calib_5000MHz "X1,Y1,...,X14,Y14"
+   iio_attr -c powrms precision_array calib_5250MHz "X1,Y1,...,X14,Y14"
+   iio_attr -c powrms precision_array calib_5500MHz "X1,Y1,...,X14,Y14"
+   iio_attr -c powrms precision_array calib_5750MHz "X1,Y1,...,X14,Y14"
+   iio_attr -c powrms precision_array calib_6000MHz "X1,Y1,...,X14,Y14"
+
+Each frequency range has a matching reverse-power attribute taking the same 28 values:
+
+.. code-block:: bash
+
+   # Frequency-specific precision calibration values (reverse power)
+   iio_attr -c powrms precision_array calib_10MHz_reverse "X1,Y1,...,X14,Y14"
+   iio_attr -c powrms precision_array calib_300MHz_reverse "X1,Y1,...,X14,Y14"
+   # ... for all 11 frequency ranges
 
 **Calibration Data Organization:**
 
@@ -258,12 +279,13 @@ The EVAL-POWRMS supports sophisticated calibration data management with separate
 
 .. code-block:: bash
 
-   # Example: Upload custom precision values for 10MHz range
-   iio_attr -c powrms precision_array calib_10MHz_values "1.0000,0.9995,1.0005,0.9998,1.0002,0.9997"
-   
-   # Upload custom temperature coefficients for 10MHz range  
-   iio_attr -c powrms precision_array calib_temp_10MHz_values "0.001,-0.0005,0.0008"
-   
+   # Example: Upload custom precision values for the 10MHz range.
+   # All 28 values (14 X,Y pairs) must be supplied in a single write.
+   iio_attr -c powrms precision_array calib_10MHz "X1,Y1,X2,Y2,...,X14,Y14"
+
+   # Same for the matching reverse-power range
+   iio_attr -c powrms precision_array calib_10MHz_reverse "X1,Y1,X2,Y2,...,X14,Y14"
+
    # Set custom temperature compensation value
    iio_attr -c powrms precision_array temperature_compensation_value 1.0234
 
@@ -306,15 +328,15 @@ The EVAL-POWRMS includes a special development mode attribute for **factory cali
 .. code-block:: bash
 
    # Step 1: Load factory-grade calibration values (example)
-   iio_attr -c powrms precision_array calib_10MHz_values "1.0000,1.0000,1.0000,1.0000,1.0000,1.0000"
-   iio_attr -c powrms precision_array calib_temp_10MHz_values "0.0,0.0,0.0"
-   # ... repeat for all frequency ranges
+   iio_attr -c powrms precision_array calib_10MHz "X1,Y1,X2,Y2,...,X14,Y14"
+   iio_attr -c powrms precision_array calib_10MHz_reverse "X1,Y1,X2,Y2,...,X14,Y14"
+   # ... repeat for all 11 frequency ranges
    
    # Step 2: Set factory temperature compensation
    iio_attr -c powrms precision_array temperature_compensation_value 1.0
    
    # Step 3: **FACTORY OVERRIDE** - Save current values as factory defaults
-   iio_attr -c powrms precision_array dev_mode_overwrite_def_calib_values 1
+   iio_attr -c powrms precision_array dev_mode_overwrite_def_calib 1
 
 **Post-Factory Setup Workflow:**
 
@@ -328,7 +350,7 @@ After factory calibration is complete, end users should focus on the ``use_defau
 
 **Best Practices:**
 
-* **Factory Use Only**: The ``dev_mode_overwrite_def_calib_values`` should only be used during initial factory setup
+* **Factory Use Only**: The ``dev_mode_overwrite_def_calib`` should only be used during initial factory setup
 * **Documentation**: Always document factory calibration procedures and reference standards used
 * **User Focus**: End users should only modify ``use_default_calibration`` and update user calibration values via standard IIO attributes
 * **Backup**: Maintain backup copies of factory calibration data before any override operations
