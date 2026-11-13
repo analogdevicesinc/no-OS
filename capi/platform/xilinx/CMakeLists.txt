@@ -33,6 +33,10 @@ no_os_sources_ifdef(CONFIG_CAPI_TIMER ${CMAKE_CURRENT_SOURCE_DIR}/xilinx_capi_ti
 no_os_sources_ifdef(CONFIG_CAPI_I2C   ${CMAKE_CURRENT_SOURCE_DIR}/xilinx_capi_i2c_ps.c)
 no_os_sources_ifdef(CONFIG_CAPI_I2C   ${CMAKE_CURRENT_SOURCE_DIR}/xilinx_capi_i2c_pl.c)
 
+# DMA — the ADI AXI DMAC backend is fabric-neutral, so it lives in
+# capi/platform/fpga and is wired in by capi/CMakeLists.txt (gated on
+# CONFIG_CAPI_FPGA), not here.
+
 # alloc / time (no XPAR guard — always valid on the PS)
 no_os_sources_ifdef(CONFIG_CAPI_ALLOC ${CMAKE_CURRENT_SOURCE_DIR}/xilinx_capi_alloc.c)
 no_os_sources_ifdef(CONFIG_CAPI_TIME  ${CMAKE_CURRENT_SOURCE_DIR}/xilinx_capi_time.c)
