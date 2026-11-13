@@ -64,7 +64,8 @@ static uint8_t out_buff[MAX_SIZE_BASE_ADDR];
 #endif
 
 #if defined(DMA_EXAMPLE) || defined(IIO_SUPPORT)
-uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__((aligned(1024)));
+/* axi_dac_load_custom_data() writes one I/Q word per TX channel pair */
+uint32_t dac_buffer[DAC_BUFFER_SAMPLES * 2] __attribute__((aligned(1024)));
 #endif
 uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__((
 			aligned(1024)));
