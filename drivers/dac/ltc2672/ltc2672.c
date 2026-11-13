@@ -228,8 +228,8 @@ int ltc2672_set_current_channel(struct ltc2672_dev *device,
 {
 	uint32_t current_code;
 
-	if (current > device->max_currents[out_ch]
-	    || out_ch > LTC2672_DAC4)
+	if (out_ch > LTC2672_DAC4
+	    || current > device->max_currents[out_ch])
 		return -EINVAL;
 
 	current_code = ltc2672_current_to_code(device, current, out_ch);
