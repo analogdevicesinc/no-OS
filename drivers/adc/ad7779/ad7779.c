@@ -113,6 +113,9 @@ int32_t ad7779_spi_int_reg_write(ad7779_dev *dev,
 	uint8_t buf_size = 2;
 	int32_t ret;
 
+	if (reg_addr > AD7779_REG_SRC_UPDATE)
+		return -EINVAL;
+
 	buf[0] = 0x00 | (reg_addr & 0x7F);
 	buf[1] = reg_data;
 	if (dev->spi_crc_en == AD7779_ENABLE) {
@@ -162,6 +165,9 @@ int32_t ad7779_spi_int_reg_write_mask(ad7779_dev *dev,
 {
 	uint8_t reg_data;
 	int32_t ret;
+
+	if (reg_addr > AD7779_REG_SRC_UPDATE)
+		return -EINVAL;
 
 	reg_data = dev->cached_reg_val[reg_addr];
 	reg_data &= ~mask;
@@ -414,6 +420,9 @@ int32_t ad7779_set_state(ad7779_dev *dev,
 {
 	int32_t ret;
 
+	if (ch > AD7779_CH7)
+		return -EINVAL;
+
 	ret = ad7779_spi_int_reg_write_mask(dev,
 					    AD7779_REG_CH_DISABLE,
 					    AD7779_CH_DISABLE(ch),
@@ -444,6 +453,9 @@ int32_t ad7779_get_state(ad7779_dev *dev,
 {
 	int32_t ret;
 	uint8_t reg_data;
+
+	if (ch > AD7779_CH7)
+		return -EINVAL;
 
 	if (!dev->read_from_cache) {
 		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_CH_DISABLE, &reg_data);
@@ -482,6 +494,9 @@ int32_t ad7779_set_gain(ad7779_dev *dev,
 			ad7779_gain gain)
 {
 	int32_t ret;
+
+	if (ch > AD7779_CH7)
+		return -EINVAL;
 
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		if (ch <= AD7779_CH3) {
@@ -528,6 +543,9 @@ int32_t ad7779_get_gain(ad7779_dev *dev,
 {
 	int32_t ret;
 	uint8_t reg_data;
+
+	if (ch > AD7779_CH7)
+		return -EINVAL;
 
 	if (!dev->read_from_cache) {
 		ret = ad7779_spi_int_reg_read(dev, AD7779_REG_CH_CONFIG(ch), &reg_data);
@@ -833,6 +851,9 @@ int32_t ad7779_set_sync_offset(ad7779_dev *dev,
 {
 	int32_t ret;
 
+	if (ch > AD7779_CH7)
+		return -EINVAL;
+
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
 		       __func__);
@@ -868,6 +889,9 @@ int32_t ad7779_get_sync_offset(ad7779_dev *dev,
 {
 	int32_t ret;
 	uint8_t reg_data;
+
+	if (ch > AD7779_CH7)
+		return -EINVAL;
 
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
@@ -910,6 +934,9 @@ int32_t ad7779_set_offset_corr(ad7779_dev *dev,
 	uint8_t upper_byte;
 	uint8_t mid_byte;
 	uint8_t lower_byte;
+
+	if (ch > AD7779_CH7)
+		return -EINVAL;
 
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
@@ -955,6 +982,9 @@ int32_t ad7779_get_offset_corr(ad7779_dev *dev,
 {
 	int32_t ret;
 	uint8_t reg_data;
+
+	if (ch > AD7779_CH7)
+		return -EINVAL;
 
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
@@ -1011,6 +1041,9 @@ int32_t ad7779_set_gain_corr(ad7779_dev *dev,
 	uint8_t mid_byte;
 	uint8_t lower_byte;
 
+	if (ch > AD7779_CH7)
+		return -EINVAL;
+
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
 		       __func__);
@@ -1056,6 +1089,9 @@ int32_t ad7779_get_gain_corr(ad7779_dev *dev,
 {
 	int32_t ret;
 	uint8_t reg_data;
+
+	if (ch > AD7779_CH7)
+		return -EINVAL;
 
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
