@@ -64,6 +64,10 @@ static void stm32_capi_dma_xfer_error_callback(DMA_HandleTypeDef *hdma)
 		return;
 
 	chan_priv->completed = true;
+
+	if (chan_priv->capi_chan && chan_priv->capi_chan->error_cb)
+		chan_priv->capi_chan->error_cb(hdma->ErrorCode,
+					       chan_priv->capi_chan->error_ctx);
 }
 
 /**
@@ -110,6 +114,9 @@ static int stm32_capi_dma_init(struct capi_dma_handle **handle,
 	}
 
 	dma_priv->num_chans = config->num_chans;
+	if (config->extra)
+		dma_priv->chan_irq_nums =
+			((struct stm32_dma_extra_config *)config->extra)->chan_irq_nums;
 	dma_priv->chan_privs = (struct stm32_dma_chan_priv **)capi_calloc(
 				       config->num_chans, sizeof(struct stm32_dma_chan_priv *));
 	if (!dma_priv->chan_privs) {
@@ -210,6 +217,7 @@ static int stm32_capi_dma_init_chan(struct capi_dma_handle *handle,
 	chan->owned_by_app = false;
 	chan->handle = handle;
 	chan->id = id;
+	chan->irq_num = dma_priv->chan_irq_nums ? dma_priv->chan_irq_nums[id] : 0;
 	chan->extra = chan_priv;
 
 	chan_priv->capi_chan = chan;
@@ -261,6 +269,103 @@ static int stm32_capi_dma_deinit_chan(struct capi_dma_chan *chan)
 	return 0;
 }
 
+#if defined(STM32H5)
+/**
+ * @brief Fill the GPDMA HAL init structure from a CAPI transfer descriptor.
+ *
+ * STM32H5 uses GPDMA, whose DMA_InitTypeDef describes source/destination
+ * increment and data width directly instead of memory/peripheral roles.
+ * Circular mode needs a linked-list setup, which is not supported yet.
+ *
+ * @param chan_priv - Pointer to the channel private data.
+ * @param xfer - Pointer to the DMA transfer descriptor.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_dma_fill_init(struct stm32_dma_chan_priv *chan_priv,
+				    const struct capi_dma_transfer *xfer)
+{
+	DMA_InitTypeDef *init = &chan_priv->hdma.Init;
+	uint32_t mem_width;
+	uint32_t per_width;
+
+	if (chan_priv->dma_mode != CAPI_DMA_NORMAL_MODE)
+		return -ENOTSUP;
+
+	switch (chan_priv->mem_data_alignment) {
+	case CAPI_DMA_DATA_ALIGN_HALF_WORD:
+		mem_width = DMA_SRC_DATAWIDTH_HALFWORD;
+		break;
+	case CAPI_DMA_DATA_ALIGN_WORD:
+		mem_width = DMA_SRC_DATAWIDTH_WORD;
+		break;
+	default:
+		mem_width = DMA_SRC_DATAWIDTH_BYTE;
+		break;
+	}
+
+	switch (chan_priv->per_data_alignment) {
+	case CAPI_DMA_DATA_ALIGN_HALF_WORD:
+		per_width = DMA_SRC_DATAWIDTH_HALFWORD;
+		break;
+	case CAPI_DMA_DATA_ALIGN_WORD:
+		per_width = DMA_SRC_DATAWIDTH_WORD;
+		break;
+	default:
+		per_width = DMA_SRC_DATAWIDTH_BYTE;
+		break;
+	}
+
+	switch (xfer->xfer_type) {
+	case CAPI_DMA_MEM_TO_MEM:
+		init->Request = DMA_REQUEST_SW;
+		init->Direction = DMA_MEMORY_TO_MEMORY;
+		break;
+	case CAPI_DMA_MEM_TO_DEV:
+		init->Request = chan_priv->ch_num;
+		init->Direction = DMA_MEMORY_TO_PERIPH;
+		break;
+	case CAPI_DMA_DEV_TO_MEM:
+		init->Request = chan_priv->ch_num;
+		init->Direction = DMA_PERIPH_TO_MEMORY;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	/*
+	 * The source side is the peripheral for DEV_TO_MEM and (keeping the
+	 * legacy backend's convention) for MEM_TO_MEM; the destination side is
+	 * the peripheral for MEM_TO_DEV. Width constants for source and
+	 * destination share the same encoding.
+	 */
+	if (xfer->xfer_type == CAPI_DMA_MEM_TO_DEV) {
+		init->SrcDataWidth = mem_width;
+		init->DestDataWidth = per_width << (DMA_CTR1_DDW_LOG2_Pos -
+						    DMA_CTR1_SDW_LOG2_Pos);
+	} else {
+		init->SrcDataWidth = per_width;
+		init->DestDataWidth = mem_width << (DMA_CTR1_DDW_LOG2_Pos -
+						    DMA_CTR1_SDW_LOG2_Pos);
+	}
+
+	init->SrcInc = (xfer->src_inc == CAPI_DMA_BYTE_INCREMENT) ?
+		       DMA_SINC_INCREMENTED : DMA_SINC_FIXED;
+	init->DestInc = (xfer->dst_inc == CAPI_DMA_BYTE_INCREMENT) ?
+			DMA_DINC_INCREMENTED : DMA_DINC_FIXED;
+
+	init->BlkHWRequest = DMA_BREQ_SINGLE_BURST;
+	init->Priority = DMA_LOW_PRIORITY_LOW_WEIGHT;
+	init->SrcBurstLength = 1;
+	init->DestBurstLength = 1;
+	init->TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0 |
+				      DMA_DEST_ALLOCATED_PORT0;
+	init->TransferEventMode = DMA_TCEM_BLOCK_TRANSFER;
+	init->Mode = DMA_NORMAL;
+
+	return 0;
+}
+#endif /* STM32H5 */
+
 /**
  * @brief Configure a DMA transfer.
  * @param chan - Pointer to the DMA channel.
@@ -302,6 +407,11 @@ static int stm32_capi_dma_config_xfer(struct capi_dma_chan *chan,
 	if (!chan_priv->hdma.Instance)
 		return -EINVAL;
 
+#if defined(STM32H5)
+	ret = stm32_capi_dma_fill_init(chan_priv, xfer);
+	if (ret)
+		return ret;
+#else
 	switch (chan_priv->dma_mode) {
 	case CAPI_DMA_NORMAL_MODE:
 		chan_priv->hdma.Init.Mode = DMA_NORMAL;
@@ -369,6 +479,7 @@ static int stm32_capi_dma_config_xfer(struct capi_dma_chan *chan,
 		chan_priv->hdma.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
 		break;
 	}
+#endif /* STM32H5 */
 
 	chan_priv->src = xfer->src;
 	chan_priv->dst = xfer->dst;
@@ -478,7 +589,20 @@ static bool stm32_capi_dma_chan_is_completed(const struct capi_dma_chan *chan)
  */
 static int stm32_capi_dma_isr(struct capi_dma_handle *handle)
 {
-	(void)handle;
+	struct stm32_dma_priv_handle *dma_priv;
+	uint32_t i;
+
+	if (!handle || !handle->priv)
+		return -EINVAL;
+
+	dma_priv = handle->priv;
+
+	for (i = 0; i < dma_priv->num_chans; i++) {
+		if (dma_priv->chan_privs[i] &&
+		    dma_priv->chan_privs[i]->hdma.Instance)
+			HAL_DMA_IRQHandler(&dma_priv->chan_privs[i]->hdma);
+	}
+
 	return 0;
 }
 
@@ -501,6 +625,47 @@ static int stm32_capi_dma_isr_chan(struct capi_dma_chan *chan)
 	return 0;
 }
 
+/**
+ * @brief Register the transfer-completion callback for a DMA channel.
+ * @param chan - Pointer to the DMA channel.
+ * @param callback - Callback invoked on transfer completion.
+ * @param xfer_complete_ctx - User context passed to the callback.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_dma_register_complete_callback(struct capi_dma_chan *chan,
+		capi_dma_xfer_complete_cb callback,
+		void *xfer_complete_ctx)
+{
+	if (!chan)
+		return -EINVAL;
+
+	chan->xfer_complete_cb = callback;
+	chan->xfer_complete_ctx = xfer_complete_ctx;
+
+	return 0;
+}
+
+/**
+ * @brief Register the error callback for a DMA channel.
+ * @param chan - Pointer to the DMA channel.
+ * @param callback - Callback invoked on a DMA transfer error; receives the
+ *                   HAL DMA error code as the event.
+ * @param error_ctx - User context passed to the callback.
+ * @return 0 on success, negative error code otherwise.
+ */
+static int stm32_capi_dma_register_error_callback(struct capi_dma_chan *chan,
+		capi_dma_error_cb callback,
+		void *error_ctx)
+{
+	if (!chan)
+		return -EINVAL;
+
+	chan->error_cb = callback;
+	chan->error_ctx = error_ctx;
+
+	return 0;
+}
+
 const struct capi_dma_ops stm32_capi_dma_ops = {
 	.init = stm32_capi_dma_init,
 	.deinit = stm32_capi_dma_deinit,
@@ -512,4 +677,6 @@ const struct capi_dma_ops stm32_capi_dma_ops = {
 	.chan_is_completed = stm32_capi_dma_chan_is_completed,
 	.isr = stm32_capi_dma_isr,
 	.isr_chan = stm32_capi_dma_isr_chan,
+	.register_complete_callback = stm32_capi_dma_register_complete_callback,
+	.register_error_callback = stm32_capi_dma_register_error_callback,
 };

@@ -63,7 +63,7 @@ static IRQn_Type get_exti_irqn(uint16_t pin)
       defined(STM32F4) || defined(STM32F7) || defined(STM32L1) || \
       defined(STM32L4) || defined(STM32L5) || defined(STM32H7) || \
       defined(STM32G4) || defined(STM32WB) || defined(STM32WL) || \
-      defined(STM32U5) || defined(STM32H5)
+      defined(STM32U5)
 	/* Most STM32 families have individual handlers for EXTI0-4 */
 	switch (pin) {
 	case 0:
@@ -85,6 +85,9 @@ static IRQn_Type get_exti_irqn(uint16_t pin)
 	default:
 		return EXTI15_10_IRQn;
 	}
+#elif defined(STM32H5)
+	/* One consecutive vector per EXTI line (EXTI0_IRQn .. EXTI15_IRQn) */
+	return (IRQn_Type)(EXTI0_IRQn + pin);
 #else
 	/* Fallback for unknown families */
 	return EXTI0_IRQn;
