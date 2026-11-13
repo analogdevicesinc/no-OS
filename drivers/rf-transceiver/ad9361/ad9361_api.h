@@ -438,6 +438,10 @@ int32_t ad9361_set_tx_sampling_freq(struct ad9361_rf_phy *phy,
 /* Get current TX sampling frequency. */
 int32_t ad9361_get_tx_sampling_freq(struct ad9361_rf_phy *phy,
 				    uint32_t *sampling_freq_hz);
+#ifndef AXI_ADC_NOT_PRESENT
+/* Re-reference the DDS to the current TX sampling frequency. */
+int32_t ad9361_update_dds_clock(struct ad9361_rf_phy *phy);
+#endif
 /* Set the TX LO frequency. */
 int32_t ad9361_set_tx_lo_freq(struct ad9361_rf_phy *phy, uint64_t lo_freq_hz);
 /* Get current TX LO frequency. */
