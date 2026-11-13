@@ -19,6 +19,7 @@
 #include "spi.h"
 #include "wdt.h"
 #include "i3c.h"
+#include "rtc.h"
 
 /** Static variables **********************************************************/
 
@@ -490,6 +491,14 @@ void I3C_IRQHandler()
 {
 	if (irq_table[I3C_IRQn].callback)
 		irq_table[I3C_IRQn].callback(irq_table[I3C_IRQn].arg);
+}
+
+void RTC_IRQHandler()
+{
+	if (irq_table[RTC_IRQn].callback)
+		irq_table[RTC_IRQn].callback(irq_table[RTC_IRQn].arg);
+	else
+		MXC_RTC_ClearFlags(MXC_RTC_GetFlags());
 }
 
 /** CAPI functions implementation **********************************************/
