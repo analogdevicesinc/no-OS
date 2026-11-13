@@ -17,25 +17,100 @@ jobs:
         with:
           sync-labels: true
 
-      - name: Add fix label for commits with Fixes tag
+      - name: Add type labels from commits and new directories
         uses: actions/github-script@v7
         with:
           script: |
-            const { data: commits } = await github.rest.pulls.listCommits({
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pr = context.payload.pull_request;
+            const labels = [];
+
+            const commits = await github.paginate(github.rest.pulls.listCommits, {
+              owner,
+              repo,
+              pull_number: pr.number
+            });
+
+            if (commits.some(commit => commit.commit.message.match(/^Fixes:/m)))
+              labels.push('🐛 Bug fix');
+
+            // A new driver, platform or project directory is a new feature.
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner,
+              repo,
+              pull_number: pr.number
+            });
+
+            const dirs = new Set();
+            for (const file of files) {
+              const match = file.status === 'added' &&
+                            file.filename.match(/^(drivers\/platform\/[^/]+\/[^/]+|drivers\/[^/]+\/[^/]+|projects\/[^/]+)\//);
+              if (match)
+                dirs.add(match[1]);
+            }
+
+            for (const path of dirs) {
+              try {
+                await github.rest.repos.getContent({ owner, repo, path, ref: pr.base.sha });
+              } catch (error) {
+                if (error.status !== 404)
+                  throw error;
+                labels.push('✨ New feature');
+                break;
+              }
+            }
+
+            if (labels.length)
+              await github.rest.issues.addLabels({
+                owner,
+                repo,
+                issue_number: pr.number,
+                labels
+              });
+
+      - name: Link JIRA ticket from branch name or title
+        if: ${{ github.event_name == 'pull_request_target' && vars.JIRA_BASE_URL != '' }}
+        uses: actions/github-script@v7
+        env:
+          JIRA_BASE_URL: ${{ vars.JIRA_BASE_URL }}
+        with:
+          script: |
+            const { data: pr } = await github.rest.pulls.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.payload.pull_request.number
             });
 
-            const hasFixesTag = commits.some(commit =>
-              commit.commit.message.match(/^Fixes:/m)
-            );
+            // Ticket anywhere in the branch name, or as "[KEY-123]" or
+            // "KEY-123:" in the title, to avoid matching e.g. "UTF-8".
+            const match = pr.head.ref.match(/\b([A-Z][A-Z0-9]+-\d+)\b/) ||
+                          pr.title.match(/\[([A-Z][A-Z0-9]+-\d+)\]/) ||
+                          pr.title.match(/^([A-Z][A-Z0-9]+-\d+):/);
+            if (!match)
+              return;
 
-            if (hasFixesTag) {
-              await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.payload.pull_request.number,
-                labels: ['fix']
-              });
-            }
+            const key = match[1];
+            const base = process.env.JIRA_BASE_URL.replace(/\/+$/, '');
+            const start = '<!-- jira-link -->';
+            const end = '<!-- /jira-link -->';
+            const block = `${start}\n- 🎫 **JIRA:** [${key}](${base}/browse/${key})\n${end}`;
+
+            let body = pr.body || '';
+            const existing = new RegExp(`${start}[\\s\\S]*?${end}`);
+            if (existing.test(body))
+              body = body.replace(existing, block);
+            else if (/^## 🔗 Related.*$/m.test(body))
+              body = body.replace(/^## 🔗 Related.*$/m, `$&\n\n${block}`);
+            else
+              body = `${body}\n\n${block}`;
+
+            if (body === (pr.body || ''))
+              return;
+
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              body
+            });
