@@ -21,7 +21,6 @@
 #include "maxim_i2c.h"
 #include "mxc_errors.h"
 #include "no_os_alloc.h"
-#include "no_os_print_log.h"
 
 #define I2C_MASTER_MODE	1
 /*
@@ -205,16 +204,6 @@ static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
 		if (ret)
 			goto error_extra;
 
-		pr_info("i2c%u: ctrl=0x%x before MXC_I2C_RevA_Init (EN=%d MST=%d BB=%d SCL_OUT=%d SDA_OUT=%d SCL=%d SDA=%d)\n",
-			(unsigned int)(*desc)->device_id, (unsigned int)i2c_regs->ctrl,
-			!!(i2c_regs->ctrl & MXC_F_I2C_CTRL_EN),
-			!!(i2c_regs->ctrl & MXC_F_I2C_CTRL_MST_MODE),
-			!!(i2c_regs->ctrl & MXC_F_I2C_CTRL_BB_MODE),
-			!!(i2c_regs->ctrl & MXC_F_I2C_CTRL_SCL_OUT),
-			!!(i2c_regs->ctrl & MXC_F_I2C_CTRL_SDA_OUT),
-			!!(i2c_regs->ctrl & MXC_F_I2C_CTRL_SCL),
-			!!(i2c_regs->ctrl & MXC_F_I2C_CTRL_SDA));
-
 		/**
 		 * MXC_I2C_RevA_Init() is called directly (bypassing
 		 * MXC_I2C_Init()) since the clock and pins have already been
@@ -225,10 +214,6 @@ static int32_t max_i2c_init(struct no_os_i2c_desc **desc,
 		 */
 		if (MXC_I2C_RevA_Init((mxc_i2c_reva_regs_t *)i2c_regs,
 				      I2C_MASTER_MODE, 0) != E_NO_ERROR) {
-			pr_info("i2c%u: ctrl=0x%x after failed MXC_I2C_RevA_Init (SCL=%d SDA=%d)\n",
-				(unsigned int)(*desc)->device_id, (unsigned int)i2c_regs->ctrl,
-				!!(i2c_regs->ctrl & MXC_F_I2C_CTRL_SCL),
-				!!(i2c_regs->ctrl & MXC_F_I2C_CTRL_SDA));
 			ret = -1;
 			goto error_extra;
 		}
@@ -383,16 +368,6 @@ static int32_t max_i2c_read(struct no_os_i2c_desc *desc,
 	if (!ret)
 		ret = MXC_I2C_MasterTransaction(&req);
 	restart_pending[desc->device_id] = !ret && req.restart;
-	if (ret)
-		pr_info("i2c%u: read failed ret=%d intfl0=0x%x (ARB=%d TO=%d ADDR_NACK=%d DATA=%d DNR=%d START=%d STOP=%d)\n",
-			(unsigned int)desc->device_id, (int)ret, (unsigned int)i2c_regs->intfl0,
-			!!(i2c_regs->intfl0 & MXC_F_I2C_INTFL0_ARB_ERR),
-			!!(i2c_regs->intfl0 & MXC_F_I2C_INTFL0_TO_ERR),
-			!!(i2c_regs->intfl0 & MXC_F_I2C_INTFL0_ADDR_NACK_ERR),
-			!!(i2c_regs->intfl0 & MXC_F_I2C_INTFL0_DATA_ERR),
-			!!(i2c_regs->intfl0 & MXC_F_I2C_INTFL0_DNR_ERR),
-			!!(i2c_regs->intfl0 & MXC_F_I2C_INTFL0_START_ERR),
-			!!(i2c_regs->intfl0 & MXC_F_I2C_INTFL0_STOP_ERR));
 
 	if (max_i2c_desc->prologue_size != 0) {
 		no_os_free(max_i2c_desc->prologue_data);
