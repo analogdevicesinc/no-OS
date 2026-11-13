@@ -392,6 +392,77 @@ static uint16_t _max_capi_i2c_read_rx_fifo(mxc_i3c_regs_t *i3c,
 }
 
 /**
+ * @brief Check a blocking transfer for a controller error
+ *
+ * CONT_ERRWARN.timeout is marked reserved in the user guide, and the MSDK
+ * reports it as a timeout error. It is cleared here without failing the
+ * transfer: a transfer that stops making progress is caught by the bus-speed
+ * timeout in _max_capi_i2c_poll() instead. Holding SCL is not an error on
+ * its own, as the controller holds it whenever its receive FIFO is full, and
+ * a 1.5 ms hold on a full receive FIFO leaves this bit clear.
+ *
+ * @param i3c I3C peripheral registers
+ * @return 0 if no error is pending, -EIO otherwise
+ */
+static int _max_capi_i2c_bus_error(mxc_i3c_regs_t *i3c)
+{
+	uint32_t errwarn;
+
+	if (!(i3c->cont_status & MXC_F_I3C_CONT_STATUS_ERRWARN))
+		return 0;
+
+	errwarn = i3c->cont_errwarn;
+	if (errwarn & MXC_F_I3C_CONT_ERRWARN_TO)
+		i3c->cont_errwarn = MXC_F_I3C_CONT_ERRWARN_TO;
+
+	return (errwarn & ~MXC_F_I3C_CONT_ERRWARN_TO) ? -EIO : 0;
+}
+
+/**
+ * @brief Check a blocking transfer for a controller error or a stall
+ * @param i3c I3C peripheral registers
+ * @param timeout Poll iterations left, decremented on each call
+ * @return 0 to keep polling, -EIO on a controller error, -ETIMEDOUT when
+ *	   @p timeout runs out
+ */
+static int _max_capi_i2c_poll(mxc_i3c_regs_t *i3c, uint32_t *timeout)
+{
+	int ret;
+
+	ret = _max_capi_i2c_bus_error(i3c);
+	if (ret)
+		return ret;
+
+	if (!--(*timeout))
+		return -ETIMEDOUT;
+
+	return 0;
+}
+
+/**
+ * @brief Move received bytes from the RX FIFO into a buffer
+ * @param i3c I3C peripheral registers
+ * @param buf Destination buffer
+ * @param idx Index of the next byte in @p buf, advanced by the bytes moved
+ * @param limit Index to stop at; later bytes stay in the FIFO
+ * @return Number of bytes moved
+ */
+static uint32_t _max_capi_i2c_drain_rx(mxc_i3c_regs_t *i3c, uint8_t *buf,
+				       uint32_t *idx, uint32_t limit)
+{
+	uint32_t count = MXC_I3C_Controller_GetRXCount(i3c);
+	uint32_t i;
+
+	if (count > limit - *idx)
+		count = limit - *idx;
+
+	for (i = 0; i < count; i++)
+		buf[(*idx)++] = (uint8_t)i3c->cont_rxfifo8;
+
+	return count;
+}
+
+/**
  * @brief Perform I2C transmit using FIFO (interrupt-driven)
  * @param i3c I3C peripheral registers
  * @param async Async state
@@ -411,8 +482,13 @@ static int _max_capi_i2c_transmit_fifo(mxc_i3c_regs_t *i3c,
 
 	ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_WRITE,
 				async->target_addr, 0);
-	if (ret != E_SUCCESS)
-		return (ret == E_BUSY) ? -EBUSY : -EIO;
+	if (ret == E_BUSY)
+		return -EBUSY;
+	if (ret != E_SUCCESS) {
+		/* A NACKed address leaves the message open: end it */
+		MXC_I3C_EmitI2CStop(i3c);
+		return -EIO;
+	}
 
 	if (async->state == MAX_CAPI_I2C_ASYNC_STATE_TX_SUBADDR) {
 		_max_capi_i2c_write_tx_fifo(i3c, async->subaddr_buf,
@@ -430,7 +506,10 @@ static int _max_capi_i2c_transmit_fifo(mxc_i3c_regs_t *i3c,
 					    true);
 	}
 
-	MXC_I3C_Controller_ClearFlags(i3c, 0xFFFFFFFF);
+	/*
+	 * EmitStart cleared the flags before the message started. Clearing them
+	 * again here could drop the DONE of a message that already ended.
+	 */
 	MXC_I3C_Controller_EnableInt(i3c, MXC_F_I3C_CONT_INTEN_TX_NFULL |
 				     MXC_F_I3C_CONT_INTEN_DONE |
 				     MXC_F_I3C_CONT_INTEN_ERRWARN);
@@ -457,8 +536,13 @@ static int _max_capi_i2c_receive_fifo(mxc_i3c_regs_t *i3c,
 
 		ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_WRITE,
 					async->target_addr, 0);
-		if (ret != E_SUCCESS)
-			return (ret == E_BUSY) ? -EBUSY : -EIO;
+		if (ret == E_BUSY)
+			return -EBUSY;
+		if (ret != E_SUCCESS) {
+			/* A NACKed address leaves the message open: end it */
+			MXC_I3C_EmitI2CStop(i3c);
+			return -EIO;
+		}
 
 		_max_capi_i2c_write_tx_fifo(i3c, async->subaddr_buf,
 					    async->subaddr_len,
@@ -473,15 +557,23 @@ static int _max_capi_i2c_receive_fifo(mxc_i3c_regs_t *i3c,
 
 		ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_READ,
 					async->target_addr, async->data_len);
-		if (ret != E_SUCCESS)
-			return (ret == E_BUSY) ? -EBUSY : -EIO;
+		if (ret == E_BUSY)
+			return -EBUSY;
+		if (ret != E_SUCCESS) {
+			/* A NACKed address leaves the message open: end it */
+			MXC_I3C_EmitI2CStop(i3c);
+			return -EIO;
+		}
 
 		int_mask = MXC_F_I3C_CONT_INTEN_RX_RDY |
 			   MXC_F_I3C_CONT_INTEN_DONE |
 			   MXC_F_I3C_CONT_INTEN_ERRWARN;
 	}
 
-	MXC_I3C_Controller_ClearFlags(i3c, 0xFFFFFFFF);
+	/*
+	 * EmitStart cleared the flags before the message started. Clearing them
+	 * again here could drop the DONE of a message that already ended.
+	 */
 	MXC_I3C_Controller_EnableInt(i3c, int_mask);
 
 	return 0;
@@ -518,31 +610,44 @@ static void _max_capi_i2c_dma_complete_callback(uint32_t event, void *ctx)
 	mxc_i3c_regs_t *i3c = MXC_I3C_GET_I3C(i2c_id);
 	capi_i2c_callback callback;
 	void *callback_arg;
+	uint32_t budget, timeout;
+	int result = 0;
 
 	callback = i2c_priv->callback;
 	callback_arg = i2c_priv->callback_arg;
 
 	i2c_priv->dma_completed = true;
 
-	/* Finalize transmit */
-	if (i2c_priv->async->is_transmit) {
-		uint32_t timeout = MAX_CAPI_I2C_DMA_TIMEOUT;
+	/*
+	 * The DMA is done with memory, not with the bus: a write still has up to
+	 * MAX_CAPI_I2C_FIFO_DEPTH bytes queued, and a read ends with the NACK of
+	 * its last byte. A STOP requested before DONE, in the middle of the
+	 * message, is dropped, so wait for DONE with timeouts that follow the bus
+	 * speed. Each poll iteration takes at least one core clock.
+	 */
+	budget = (SystemCoreClock / i2c_priv->freq) * MAX_CAPI_I2C_IDLE_BITS;
 
-		if (i2c_priv->async->dma_tx_end_pending) {
-			while (!(i3c->cont_status & MXC_F_I3C_CONT_STATUS_TX_NFULL)
-			       && --timeout);
-			/* Write the last byte to the txfifo8e register */
+	if (i2c_priv->async->is_transmit && i2c_priv->async->dma_tx_end_pending) {
+		timeout = budget;
+		while (!(i3c->cont_status & MXC_F_I3C_CONT_STATUS_TX_NFULL) &&
+		       !result)
+			result = _max_capi_i2c_poll(i3c, &timeout);
+
+		/* The last byte goes to the END register to close the message */
+		if (!result)
 			i3c->cont_txfifo8e = i2c_priv->async->dma_tx_end_byte;
-			i2c_priv->async->dma_tx_end_pending = false;
-		}
-
-		/* Same DONE poll the MSDK's Controller_Transaction uses. */
-		timeout = MAX_CAPI_I2C_DMA_TIMEOUT;
-		while (!(i3c->cont_status & MXC_F_I3C_CONT_STATUS_DONE)
-		       && --timeout);
+		i2c_priv->async->dma_tx_end_pending = false;
 	}
 
-	if (i2c_priv->async->send_stop)
+	timeout = budget * (MAX_CAPI_I2C_FIFO_DEPTH + 1);
+	while (!(i3c->cont_status & MXC_F_I3C_CONT_STATUS_DONE) && !result)
+		result = _max_capi_i2c_poll(i3c, &timeout);
+
+	if (!result)
+		result = _max_capi_i2c_bus_error(i3c);
+
+	/* Bus errors clear at the STOP, so they are read before it */
+	if (i2c_priv->async->send_stop || result)
 		MXC_I3C_EmitI2CStop(i3c);
 
 	/*
@@ -568,7 +673,7 @@ static void _max_capi_i2c_dma_complete_callback(uint32_t event, void *ctx)
 	_max_capi_i2c_reset_async_state(i2c_priv);
 
 	if (callback)
-		callback(CAPI_I2C_XFR_DONE, callback_arg, 0);
+		callback(CAPI_I2C_XFR_DONE, callback_arg, result);
 
 	i2c_priv->callback_active = false;
 }
@@ -630,6 +735,8 @@ static int _max_capi_i2c_transmit_dma(struct max_capi_i2c_priv *i2c_priv,
 	ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_WRITE,
 				async->target_addr, 0);
 	if (ret != E_SUCCESS) {
+		/* A NACKed address leaves the message open: end it */
+		MXC_I3C_EmitI2CStop(i3c);
 		if (tx_buffer != async->data_buf) {
 			capi_free(tx_buffer);
 			i2c_priv->async->dma_allocated_buffer = NULL;
@@ -710,7 +817,7 @@ static int _max_capi_i2c_receive_dma(struct max_capi_i2c_priv *i2c_priv,
 	struct capi_dma_transfer dma_rx_xfer;
 	uint16_t i;
 	bool is_last;
-	uint32_t timeout = MAX_CAPI_I2C_DMA_TIMEOUT;
+	uint32_t timeout;
 
 	if (i2c_priv->async_transfer_in_progress)
 		return -EBUSY;
@@ -723,6 +830,8 @@ static int _max_capi_i2c_receive_dma(struct max_capi_i2c_priv *i2c_priv,
 		ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_WRITE,
 					async->target_addr, 0);
 		if (ret != E_SUCCESS) {
+			/* A NACKed address leaves the message open: end it */
+			MXC_I3C_EmitI2CStop(i3c);
 			i2c_priv->async_transfer_in_progress = false;
 			return -EIO;
 		}
@@ -732,6 +841,7 @@ static int _max_capi_i2c_receive_dma(struct max_capi_i2c_priv *i2c_priv,
 			ret = MXC_I3C_WriteTXFIFO(i3c, &async->subaddr_buf[i],
 						  1, is_last, 0);
 			if (ret <= 0) {
+				MXC_I3C_EmitI2CStop(i3c);
 				i2c_priv->async_transfer_in_progress = false;
 				return -EIO;
 			}
@@ -741,12 +851,17 @@ static int _max_capi_i2c_receive_dma(struct max_capi_i2c_priv *i2c_priv,
 		 * which is what the MSDK's own Controller_Transaction polls. The
 		 * cont_intfl DONE flag (MXC_I3C_Controller_GetFlags) is not set on
 		 * this path since the DONE interrupt is never armed here, so polling
-		 * it hangs until timeout.
+		 * it hangs until timeout. Each poll iteration takes at least one
+		 * core clock.
 		 */
+		timeout = (SystemCoreClock / i2c_priv->freq) * MAX_CAPI_I2C_IDLE_BITS *
+			  (async->subaddr_len + 1);
 		while (!(i3c->cont_status & MXC_F_I3C_CONT_STATUS_DONE)) {
-			if (--timeout == 0) {
+			ret = _max_capi_i2c_poll(i3c, &timeout);
+			if (ret) {
+				MXC_I3C_EmitI2CStop(i3c);
 				i2c_priv->async_transfer_in_progress = false;
-				return -ETIMEDOUT;
+				return ret;
 			}
 		}
 		MXC_I3C_Controller_ClearFlags(i3c, MXC_F_I3C_CONT_STATUS_DONE);
@@ -797,6 +912,8 @@ static int _max_capi_i2c_receive_dma(struct max_capi_i2c_priv *i2c_priv,
 	ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_READ,
 				async->target_addr, async->data_len);
 	if (ret != E_SUCCESS) {
+		/* A NACKed address leaves the message open: end it */
+		MXC_I3C_EmitI2CStop(i3c);
 		capi_dma_xfer_abort(i2c_priv->dma_channel_rx);
 		ret = -EIO;
 		goto error_deinit_rx;
@@ -845,8 +962,8 @@ static void _max_capi_i2c_controller_isr(struct max_capi_i2c_priv *i2c_priv,
 		i2c_priv->async->result = -EIO;
 		i2c_priv->async->state = MAX_CAPI_I2C_ASYNC_STATE_ERROR;
 
-		if (i2c_priv->async->send_stop)
-			MXC_I3C_EmitI2CStop(i3c);
+		/* Release the bus even if the caller asked to keep it */
+		MXC_I3C_EmitI2CStop(i3c);
 
 		operation_complete = true;
 		goto invoke_callback;
@@ -855,33 +972,45 @@ static void _max_capi_i2c_controller_isr(struct max_capi_i2c_priv *i2c_priv,
 	switch (i2c_priv->async->state) {
 	case MAX_CAPI_I2C_ASYNC_STATE_TX_SUBADDR:
 		if (flags & MXC_F_I3C_CONT_INTFL_TX_NFULL) {
+			/* Before a read, the last sub-address byte ends the write */
 			_max_capi_i2c_write_tx_fifo(i3c,
 						    i2c_priv->async->subaddr_buf,
 						    i2c_priv->async->subaddr_len,
 						    &i2c_priv->async->subaddr_idx,
-						    false);
+						    !i2c_priv->async->is_transmit);
 
 			if (i2c_priv->async->subaddr_idx >= i2c_priv->async->subaddr_len) {
 				if (i2c_priv->async->is_transmit) {
 					i2c_priv->async->state = MAX_CAPI_I2C_ASYNC_STATE_TX_DATA;
 				} else {
-					ret = MXC_I3C_EmitStart(i3c, true,
-								MXC_I3C_TRANSFER_TYPE_READ,
-								i2c_priv->async->target_addr,
-								i2c_priv->async->data_len);
-					if (ret != E_SUCCESS) {
-						i2c_priv->async->result = -EIO;
-						i2c_priv->async->state = MAX_CAPI_I2C_ASYNC_STATE_ERROR;
-						operation_complete = true;
-						break;
-					}
-
+					/*
+					 * TX_NFULL only means the sub-address is queued.
+					 * A repeated START requested now, while it is
+					 * still on the bus, breaks the read, so wait for
+					 * the write to finish (DONE).
+					 */
 					MXC_I3C_Controller_DisableInt(i3c, MXC_F_I3C_CONT_INTEN_TX_NFULL);
-					MXC_I3C_Controller_EnableInt(i3c, MXC_F_I3C_CONT_INTEN_RX_RDY);
-
-					i2c_priv->async->state = MAX_CAPI_I2C_ASYNC_STATE_RX_DATA;
+					i2c_priv->async->state = MAX_CAPI_I2C_ASYNC_STATE_WAIT_SUBADDR_DONE;
 				}
 			}
+		}
+		break;
+
+	case MAX_CAPI_I2C_ASYNC_STATE_WAIT_SUBADDR_DONE:
+		if (flags & MXC_F_I3C_CONT_INTFL_DONE) {
+			ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_READ,
+						i2c_priv->async->target_addr,
+						i2c_priv->async->data_len);
+			if (ret != E_SUCCESS) {
+				i2c_priv->async->result = -EIO;
+				i2c_priv->async->state = MAX_CAPI_I2C_ASYNC_STATE_ERROR;
+				MXC_I3C_EmitI2CStop(i3c);
+				operation_complete = true;
+				break;
+			}
+
+			MXC_I3C_Controller_EnableInt(i3c, MXC_F_I3C_CONT_INTEN_RX_RDY);
+			i2c_priv->async->state = MAX_CAPI_I2C_ASYNC_STATE_RX_DATA;
 		}
 		break;
 
@@ -1225,95 +1354,140 @@ static int max_capi_i2c_deinit(struct capi_i2c_controller_handle *handle)
 
 /**
  * @brief Transmit function
+ *
+ * In controller mode the bytes are written as one message. The MSDK write is
+ * not used: it polls a fixed 1000 times for the message to finish before it
+ * requests the STOP, which at 100 kHz can end while bytes are still queued in
+ * the transmit FIFO, and a STOP requested in the middle of a message is
+ * dropped, leaving the message open. This waits for the message to end, with
+ * a timeout that follows the bus speed, before the STOP.
+ *
  * @param device The I2C device
  * @param transfer The I2C transfer
- * @return 0 on success, negative error code otherwise
+ * @return 0 on success, -ETIMEDOUT if the bus stops making progress, -EIO on
+ *	   a NACK or another bus error, other negative error codes otherwise
  */
 static int max_capi_i2c_transmit(struct capi_i2c_device *device,
 				 struct capi_i2c_transfer *transfer)
 {
 	struct max_capi_i2c_priv *i2c_priv;
-	uint8_t i2c_id;
+	uint32_t total, budget, timeout, i;
+	mxc_i3c_regs_t *i3c;
+	uint16_t addr;
+	uint8_t byte;
+	int ret;
 
 	if (!device || !device->controller || !device->controller->priv || !transfer
 	    || !transfer->buf)
 		return -EINVAL;
 
 	i2c_priv = device->controller->priv;
-	i2c_id = i2c_priv->identifier;
 
 	if (i2c_priv->target != NULL && i2c_priv->target->enabled) {
 		/* Target mode - set TX data*/
 		_max_capi_i2c_target_set_tx_data(i2c_priv, transfer->buf, transfer->len);
 
 		return 0;
-	} else {
-		/* Controller mode - do the transmit */
-		uint8_t *combined_buf = NULL;
+	}
 
-		if (transfer->sub_address_len > 0 && !transfer->sub_address)
-			return -EINVAL;
+	if (transfer->sub_address_len > 0 && !transfer->sub_address)
+		return -EINVAL;
 
-		/* The MSDK request tracks the TX length in a uint16_t. */
-		if (transfer->len > (uint32_t)UINT16_MAX - transfer->sub_address_len)
-			return -EINVAL;
+	if (!transfer->len && !transfer->sub_address_len)
+		return -EINVAL;
 
-		mxc_i3c_req_t i2c_req = (mxc_i3c_req_t) {
-			.is_i2c = true,
-			.rx_buf = NULL,
-			.rx_len = 0,
-			.stop = !transfer->no_stop,
-			.target_addr = transfer->target_addr ? transfer->target_addr : device->address,
-		};
+	if (transfer->len > UINT32_MAX - transfer->sub_address_len)
+		return -EINVAL;
 
-		/* If sub_address is filled, concatenate with data buffer */
-		if (transfer->sub_address && transfer->sub_address_len > 0) {
-			combined_buf = capi_malloc(transfer->sub_address_len + transfer->len);
-			if (!combined_buf)
-				return -ENOMEM;
+	i3c = MXC_I3C_GET_I3C(i2c_priv->identifier);
+	addr = transfer->target_addr ? transfer->target_addr : device->address;
+	total = transfer->sub_address_len + transfer->len;
+	/* Each poll iteration takes at least one core clock */
+	budget = (SystemCoreClock / i2c_priv->freq) * MAX_CAPI_I2C_IDLE_BITS;
 
-			memcpy(combined_buf, transfer->sub_address, transfer->sub_address_len);
-			memcpy(combined_buf + transfer->sub_address_len, transfer->buf, transfer->len);
+	MXC_I3C_ClearTXFIFO(i3c);
 
-			i2c_req.tx_buf = combined_buf;
-			i2c_req.tx_len = transfer->sub_address_len + transfer->len;
-		} else {
-			i2c_req.tx_buf = transfer->buf;
-			i2c_req.tx_len = transfer->len;
+	ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_WRITE, addr, 0);
+	if (ret) {
+		ret = (ret == E_TIME_OUT) ? -ETIMEDOUT : -EIO;
+		goto stop;
+	}
+
+	for (i = 0; i < total; i++) {
+		byte = (i < transfer->sub_address_len) ? transfer->sub_address[i] :
+		       transfer->buf[i - transfer->sub_address_len];
+
+		timeout = budget;
+		while (!(i3c->cont_status & MXC_F_I3C_CONT_STATUS_TX_NFULL)) {
+			ret = _max_capi_i2c_poll(i3c, &timeout);
+			if (ret)
+				goto stop;
 		}
 
-		int ret = MXC_I3C_Controller_Transaction(MXC_I3C_GET_I3C(i2c_id), &i2c_req);
-
-		if (combined_buf)
-			capi_free(combined_buf);
-
-		if (ret)
-			return (ret == E_TIME_OUT ? -ETIMEDOUT : -EIO);
-
-		return 0;
+		/* The last byte goes to the END register to close the message */
+		if (i == total - 1)
+			i3c->cont_txfifo8e = byte;
+		else
+			i3c->cont_txfifo8o = byte;
 	}
-}
 
+	/* Let the queued bytes go out before the STOP */
+	timeout = budget * (MAX_CAPI_I2C_FIFO_DEPTH + 1);
+	while (!(i3c->cont_status & MXC_F_I3C_CONT_STATUS_DONE)) {
+		ret = _max_capi_i2c_poll(i3c, &timeout);
+		if (ret)
+			goto stop;
+	}
+
+	ret = _max_capi_i2c_bus_error(i3c);
+
+stop:
+	/* Bus errors clear at the STOP, so they are read before it */
+	if (!transfer->no_stop || ret)
+		MXC_I3C_EmitI2CStop(i3c);
+
+	return ret;
+}
 
 /**
  * @brief Receive function
+ *
+ * In controller mode, reads of up to MAX_CAPI_I2C_TERM_RD_MAX bytes go through
+ * the MSDK. Longer reads cannot: CONT_CTRL1.term_rd, which sets the byte the
+ * controller NACKs, is 8 bits wide and can only be loaded with the START, and
+ * the MSDK splits such reads into messages joined by repeated STARTs, which a
+ * target streaming one block (an SMBus block read) does not accept.
+ *
+ * A longer read starts with term_rd = 0, which lets it run, and is ended by
+ * writing term_rd = 1, which makes the controller NACK the next byte it
+ * receives. The last bytes are left in the receive FIFO so that "the next
+ * byte" is known: with the FIFO full the controller holds SCL, so once the
+ * FIFO holds MAX_CAPI_I2C_FIFO_DEPTH bytes and the buffer holds the rest,
+ * exactly len - MAX_CAPI_I2C_TERM_TAIL bytes have been received.
+ *
  * @param device The I2C device
  * @param transfer The I2C transfer
- * @return 0 on success, negative error code otherwise
+ * @return 0 on success, -ETIMEDOUT if the bus stops making progress,
+ *	   -EOVERFLOW if the target sent more bytes than requested, -EIO on a
+ *	   NACK, a short read or another bus error, other negative error codes
+ *	   otherwise
  */
 static int max_capi_i2c_receive(struct capi_i2c_device *device,
 				struct capi_i2c_transfer *transfer)
 {
 	struct max_capi_i2c_priv *i2c_priv;
+	uint32_t hold, budget, timeout;
 	mxc_i3c_req_t i2c_req;
-	uint8_t i2c_id;
+	mxc_i3c_regs_t *i3c;
+	uint32_t idx = 0;
+	uint16_t addr;
+	int ret;
 
 	if (!device || !device->controller || !device->controller->priv || !transfer
 	    || !transfer->buf)
 		return -EINVAL;
 
 	i2c_priv = device->controller->priv;
-	i2c_id = i2c_priv->identifier;
 
 	if (i2c_priv->target != NULL && i2c_priv->target->enabled) {
 		/* Target mode - get RX data */
@@ -1329,20 +1503,21 @@ static int max_capi_i2c_receive(struct capi_i2c_device *device,
 		transfer->len = rx_len;
 
 		return 0;
-	} else {
-		if (transfer->sub_address_len > 0 && !transfer->sub_address)
-			return -EINVAL;
+	}
 
-		/* The MSDK request tracks the RX length in a uint16_t. */
-		if (transfer->len > UINT16_MAX)
-			return -EINVAL;
+	if (transfer->sub_address_len > 0 && !transfer->sub_address)
+		return -EINVAL;
 
+	i3c = MXC_I3C_GET_I3C(i2c_priv->identifier);
+	addr = transfer->target_addr ? transfer->target_addr : device->address;
+
+	if (transfer->len <= MAX_CAPI_I2C_TERM_RD_MAX) {
 		i2c_req = (mxc_i3c_req_t) {
 			.is_i2c = true,
 			.rx_buf = transfer->buf,
 			.rx_len = transfer->len,
 			.stop = !transfer->no_stop,
-			.target_addr = transfer->target_addr ? transfer->target_addr : device->address,
+			.target_addr = addr,
 		};
 
 		if (transfer->sub_address && transfer->sub_address_len > 0) {
@@ -1350,12 +1525,118 @@ static int max_capi_i2c_receive(struct capi_i2c_device *device,
 			i2c_req.tx_len = transfer->sub_address_len;
 		}
 
-		int ret =  MXC_I3C_Controller_Transaction(MXC_I3C_GET_I3C(i2c_id), &i2c_req);
+		ret = MXC_I3C_Controller_Transaction(i3c, &i2c_req);
 		if (ret != E_NO_ERROR)
 			return (ret == E_TIME_OUT ? -ETIMEDOUT : -EIO);
 
 		return 0;
 	}
+
+	hold = transfer->len - MAX_CAPI_I2C_FIFO_DEPTH - MAX_CAPI_I2C_TERM_TAIL;
+	/* Each poll iteration takes at least one core clock */
+	budget = (SystemCoreClock / i2c_priv->freq) * MAX_CAPI_I2C_IDLE_BITS;
+
+	MXC_I3C_ClearTXFIFO(i3c);
+	MXC_I3C_ClearRXFIFO(i3c);
+
+	if (transfer->sub_address_len) {
+		ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_WRITE,
+					addr, 0);
+		if (ret) {
+			ret = (ret == E_TIME_OUT) ? -ETIMEDOUT : -EIO;
+			goto stop;
+		}
+
+		timeout = budget * transfer->sub_address_len;
+		if (MXC_I3C_WriteTXFIFO(i3c, transfer->sub_address,
+					transfer->sub_address_len, true,
+					timeout) != transfer->sub_address_len) {
+			ret = -ETIMEDOUT;
+			goto stop;
+		}
+
+		while (!(i3c->cont_status & MXC_F_I3C_CONT_STATUS_DONE)) {
+			ret = _max_capi_i2c_poll(i3c, &timeout);
+			if (ret)
+				goto stop;
+		}
+	}
+
+	/* term_rd = 0: the controller ACKs every byte until told to stop */
+	ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_READ, addr, 0);
+	if (ret) {
+		ret = (ret == E_TIME_OUT) ? -ETIMEDOUT : -EIO;
+		goto stop;
+	}
+
+	timeout = budget;
+	while (idx < hold) {
+		if (_max_capi_i2c_drain_rx(i3c, transfer->buf, &idx, hold)) {
+			timeout = budget;
+			continue;
+		}
+
+		ret = _max_capi_i2c_poll(i3c, &timeout);
+		if (ret)
+			goto stop;
+	}
+
+	/* Wait until the FIFO is full and the controller holds SCL */
+	timeout = budget * MAX_CAPI_I2C_FIFO_DEPTH;
+	while (MXC_I3C_Controller_GetRXCount(i3c) < MAX_CAPI_I2C_FIFO_DEPTH) {
+		ret = _max_capi_i2c_poll(i3c, &timeout);
+		if (ret)
+			goto stop;
+	}
+
+	/* NACK the next byte. term_rd can only be changed with req = 0. */
+	i3c->cont_ctrl1 = (i3c->cont_ctrl1 & ~(MXC_F_I3C_CONT_CTRL1_REQ |
+					       MXC_F_I3C_CONT_CTRL1_TERM_RD)) |
+			  MXC_S_I3C_CONT_CTRL1_REQ_NONE |
+			  (1U << MXC_F_I3C_CONT_CTRL1_TERM_RD_POS);
+
+	timeout = budget;
+	while (idx < transfer->len) {
+		uint32_t status = i3c->cont_status;
+
+		if (_max_capi_i2c_drain_rx(i3c, transfer->buf, &idx, transfer->len)) {
+			timeout = budget;
+			continue;
+		}
+
+		/* The read ended early */
+		if (status & MXC_F_I3C_CONT_STATUS_DONE) {
+			ret = -EIO;
+			goto stop;
+		}
+
+		ret = _max_capi_i2c_poll(i3c, &timeout);
+		if (ret)
+			goto stop;
+	}
+
+	timeout = budget;
+	while (!(i3c->cont_status & MXC_F_I3C_CONT_STATUS_DONE)) {
+		ret = _max_capi_i2c_poll(i3c, &timeout);
+		if (ret)
+			goto stop;
+	}
+
+	/* A byte past the requested length means the NACK came late */
+	if (MXC_I3C_Controller_GetRXCount(i3c)) {
+		MXC_I3C_ClearRXFIFO(i3c);
+		ret = -EOVERFLOW;
+		goto stop;
+	}
+
+	ret = _max_capi_i2c_bus_error(i3c);
+
+stop:
+	/* Bus errors clear at the STOP, so they are read before it */
+	if (!transfer->no_stop || ret)
+		MXC_I3C_EmitI2CStop(i3c);
+
+	return ret;
 }
 
 /**
