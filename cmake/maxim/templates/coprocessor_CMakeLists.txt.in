@@ -9,10 +9,7 @@ project(maxim_coprocessor C CXX ASM)
 add_subdirectory("${NO_OS_PATH}" no-os-core)
 add_executable(riscv ${RV_SOURCES})
 set_target_properties(riscv PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
-set_property(TARGET riscv PROPERTY LINK_DEPENDS
-    "${CMAKE_BINARY_DIR}/buildrv/common_riscv.ld"
-    "${CMAKE_BINARY_DIR}/common.ld"
-    "${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX@TARGET_NUM@/Source/GCC/max@TARGET_NUM@_riscv.ld")
+set_property(TARGET riscv PROPERTY LINK_DEPENDS "@RV_LINK_DEPENDS@")
 target_link_libraries(riscv no-os)
 target_include_directories(riscv PRIVATE ${RV_INCLUDES})
 target_include_directories(no-os PRIVATE ${RV_INCLUDES})
