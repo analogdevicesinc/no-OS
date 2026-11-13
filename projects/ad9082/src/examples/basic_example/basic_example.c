@@ -265,10 +265,18 @@ int example_main(void)
 		},
 	};
 
-	jesd204_topology_init(&topology, devs,
-			      sizeof(devs) / sizeof(*devs));
+	status = jesd204_topology_init(&topology, devs,
+				       sizeof(devs) / sizeof(*devs));
+	if (status) {
+		printf("jesd204_topology_init() error: %" PRId32 "\n", status);
+		goto error_phy;
+	}
 
-	jesd204_fsm_start(topology, JESD204_LINKS_ALL);
+	status = jesd204_fsm_start(topology, JESD204_LINKS_ALL);
+	if (status) {
+		printf("jesd204_fsm_start() error: %" PRId32 "\n", status);
+		goto error_phy;
+	}
 
 	axi_jesd204_rx_watchdog(rx_jesd);
 
