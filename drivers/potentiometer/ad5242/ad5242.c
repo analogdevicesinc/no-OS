@@ -177,6 +177,9 @@ int ad5242_dpot_chn_write(struct dpot_dev *desc,
 	if (!desc->extra)
 		return -EINVAL;
 
+	if (chn > DPOT_CHN_RDAC2)
+		return -EINVAL;
+
 	/* Write contents of serial register data to RDAC (command #1) */
 	cmd.control =  ad5242_dpot_cmd_addr[chn];
 	cmd.data = data;
