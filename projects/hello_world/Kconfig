@@ -7,7 +7,8 @@ choice HELLO_WORLD_EXAMPLE
 config HELLO_WORLD_BASIC_EXAMPLE
 	bool "Basic example"
 	help
-	  Minimal UART hello-world example.
+	  Minimal hello-world example: UART console, LED blink
+	  and key echo.
 
 endchoice
 

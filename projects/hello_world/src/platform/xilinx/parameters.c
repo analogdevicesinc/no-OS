@@ -31,3 +31,17 @@ struct xil_uart_init_param hello_world_uart_extra_ip = {
 	.irq_id = UART_IRQ_ID,
 #endif
 };
+
+#ifdef LED_GPIO_PIN
+/*
+ * Extra initialisation parameters for the Xilinx GPIO driver. The LED is
+ * driven by the GPIO controller of the Processing System.
+ */
+struct xil_gpio_init_param hello_world_gpio_extra_ip = {
+	.type = GPIO_PS,
+#ifdef SDT
+	.base_addr = XPAR_XGPIOPS_0_BASEADDR,
+#endif
+	.device_id = GPIO_DEVICE_ID,
+};
+#endif

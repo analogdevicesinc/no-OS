@@ -11,7 +11,9 @@ Overview
 
 This is the simplest possible no-OS project: it initializes the board's UART
 peripheral and prints a "Hello World" counter message over the serial port once
-per second. It is intended as a **quick-start template** for engineers who are
+per second. It also echoes back the characters typed in the serial terminal
+and, on the boards that have a user LED wired to the Processing System, blinks
+that LED. It is intended as a **quick-start template** for engineers who are
 new to no-OS and want to understand how to build, flash, and run a bare-metal
 embedded application on a Xilinx board.
 
@@ -19,6 +21,10 @@ What it demonstrates:
 
 - The no-OS peripheral descriptor pattern (``no_os_uart_init`` / ``no_os_uart_remove``)
 - The no-OS logging macros (``pr_info``, ``pr_err``, ...)
+- Reading from the UART without blocking the main loop
+  (``no_os_uart_read_nonblocking``)
+- Driving an output pin (``no_os_gpio_get``, ``no_os_gpio_direction_output``,
+  ``no_os_gpio_set_value``)
 - The no-OS delay API (``no_os_mdelay``)
 - Proper error handling (checking return values, cleanup on failure)
 
@@ -36,8 +42,10 @@ Basic Example
 ~~~~~~~~~~~~~
 
 Initializes the board's UART peripheral and prints a "Hello World" counter
-message over the serial port once per second. No external hardware is required
-beyond the board itself.
+message over the serial port once per second. Every character received on the
+serial port is echoed back, which confirms that both directions of the UART
+work. On the ZCU102 the PS_LED1 LED (DS50) is toggled with every message. No
+external hardware is required beyond the board itself.
 
 This example is built by selecting the ``basic`` variant (see the Build Command
 section below).
@@ -58,8 +66,9 @@ Connections
 ^^^^^^^^^^^
 
 No external hardware connections are required beyond the carrier board's USB
-cable. The application uses only the ARM Processing System (PS) and its
-built-in UART — no custom PL logic is needed. Any XSA that targets your
+cable. The application uses only the ARM Processing System (PS), its
+built-in UART and, for the LED, its GPIO controller — no custom PL logic is
+needed. Any XSA that targets your
 board will work, even one borrowed from a different no-OS or HDL project.
 
 The UART console appears on the board's USB-UART adapter at **115200 baud,
@@ -139,10 +148,16 @@ should see:
 
    *** no-OS Hello World ***
 
+   Blinking the LED on GPIO 23
+   Press any key to have it echoed back
+
    Hello World #1
    Hello World #2
+   You pressed: 'a' (0x61)
    Hello World #3
    ...
 
-A new line is printed every second. If nothing appears, check that you are
+A new line is printed every second. The ``Blinking the LED`` line is only
+printed on the boards that have a user LED (the ZCU102), and a ``You pressed``
+line is printed for every key typed in the terminal. If nothing appears, check that you are
 connected to the correct serial device and that the baud rate is exactly 115200.
