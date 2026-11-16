@@ -47,7 +47,7 @@
  * blocks and this define removes the feature completely; nothing else in the
  * project depends on it.
  */
-#define POWRMS_CHARGER_DEBUG_ATTRS	1
+#define POWRMS_CHARGER_DEBUG_ATTRS	0
 
 #if POWRMS_CHARGER_DEBUG_ATTRS
 /**
