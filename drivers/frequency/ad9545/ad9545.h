@@ -616,6 +616,7 @@ struct ad9545_pll_clk {
 	bool				internal_zero_delay;
 	uint8_t				internal_zero_delay_source;
 	uint64_t			internal_zero_delay_source_rate_hz;
+	/* 0 = keep device default */
 	uint32_t			slew_rate_limit_ps;
 };
 
