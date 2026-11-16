@@ -2128,7 +2128,7 @@ static int ad9545_plls_setup(struct ad9545_dev *dev)
 		if (!pll->parents)
 			return -ENOMEM;
 
-		if (!pll->slew_rate_limit_ps) {
+		if (pll->slew_rate_limit_ps) {
 			regval = pll->slew_rate_limit_ps;
 			ret = ad9545_write_reg_multiple(dev, AD9545_DPLLX_SLEW_RATE(i),
 							(uint8_t *)&regval, 4);
