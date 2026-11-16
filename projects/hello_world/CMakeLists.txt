@@ -21,6 +21,10 @@ target_include_directories(hello_world PUBLIC
 
 target_link_libraries(hello_world no-os)
 
+# Vitis 2025+ generates SDT BSPs, whose drivers look up their configuration by
+# base address instead of by device id. Build no-os with -DSDT to match.
+set(NOOS_XILINX_SDT ON)
+
 config_platform_sdk(hello_world)
 add_flash_target(hello_world)
 post_build_config(hello_world)

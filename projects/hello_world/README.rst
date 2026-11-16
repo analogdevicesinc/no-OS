@@ -65,16 +65,22 @@ board will work, even one borrowed from a different no-OS or HDL project.
 The UART console appears on the board's USB-UART adapter at **115200 baud,
 8N1, no flow control**:
 
-- **Linux**: ``/dev/ttyUSB0`` (ZedBoard/Cora Z7) or ``/dev/ttyUSB1`` (ZCU102)
+- **Linux**: ``/dev/ttyUSB0`` (ZedBoard/Cora Z7) or the first of the four
+  ``/dev/ttyUSB*`` ports of the ZCU102 USB-UART bridge
 - **Windows**: a COM port listed in Device Manager under *Ports (COM & LPT)*
 - **macOS**: ``/dev/tty.usbserial-*``
+
+On the ZCU102 the serial console and the JTAG interface use two separate
+micro-USB connectors: J83 (USB-UART) and J2 (USB-JTAG). Connect both. To load
+the application over JTAG, set the boot mode switch SW6 to JTAG (all four
+positions ON).
 
 Build Command
 ^^^^^^^^^^^^^
 
 The Xilinx platform uses the CMake/Ninja build system via the
 ``no_os_build.py`` helper script. Available variants: ``basic``.
-Available boards: ``zed``.
+Available boards: ``zed``, ``zcu102``.
 
 For toolchain setup and prerequisites, see the
 :doc:`Xilinx CMake build guide </build_guides/build_xilinx_cmake>`.
@@ -91,6 +97,11 @@ For toolchain setup and prerequisites, see the
    # build the basic example on the ZedBoard (requires a .xsa hardware file)
    python tools/scripts/no_os_build.py build \
       --project hello_world --variant basic --board zed \
+      --hardware /path/to/system_top.xsa
+
+   # build the basic example on the ZCU102
+   python tools/scripts/no_os_build.py build \
+      --project hello_world --variant basic --board zcu102 \
       --hardware /path/to/system_top.xsa
 
    # build and flash (requires a connected debug probe)
