@@ -544,11 +544,59 @@ static uint32_t xil_uart_get_errors(struct no_os_uart_desc *desc)
 	return total_error_count;
 }
 
+/**
+ * @brief Read the data already received from the UART, without waiting.
+ * @param desc - Instance of UART.
+ * @param data - Pointer to buffer containing data.
+ * @param bytes_number - Maximum number of bytes to read.
+ * @return Number of bytes read (0 if none are available), negative error code
+ *         otherwise.
+ */
 static int32_t xil_uart_read_nonblocking(struct no_os_uart_desc *desc,
 		uint8_t *data,
 		uint32_t bytes_number)
 {
-	return -EINVAL;
+	struct xil_uart_desc *xil_uart_desc = desc->extra;
+	uint32_t i = 0;
+#ifdef XUARTLITE_H
+	XUartLite *instance = xil_uart_desc->instance;
+#endif
+#ifdef XUARTPS_H
+	int32_t ret;
+#endif
+
+	switch (xil_uart_desc->type) {
+	case UART_PS:
+#ifdef XUARTPS_H
+		/* Move the bytes received by the interrupt handler to the fifo */
+		ret = uart_fifo_insert(desc);
+		if (ret < 0)
+			return ret;
+
+		while (i < bytes_number && xil_uart_desc->fifo) {
+			data[i++] = xil_uart_desc->fifo->data[xil_uart_desc->fifo_read_offset];
+			xil_uart_desc->fifo_read_offset++;
+
+			if (xil_uart_desc->fifo->len - xil_uart_desc->fifo_read_offset <= 0) {
+				xil_uart_desc->fifo_read_offset = 0;
+				xil_uart_desc->fifo = no_os_fifo_remove(xil_uart_desc->fifo);
+			}
+		}
+#endif // XUARTPS_H
+		break;
+	case UART_PL:
+#ifdef XUARTLITE_H
+		while (i < bytes_number &&
+		       (Xil_In32(instance->RegBaseAddress + XUL_STATUS_REG_OFFSET) &
+			XUL_SR_RX_FIFO_VALID_DATA))
+			data[i++] = Xil_In32(instance->RegBaseAddress + XUL_RX_FIFO_OFFSET);
+#endif // XUARTLITE_H
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	return i;
 }
 
 /**
