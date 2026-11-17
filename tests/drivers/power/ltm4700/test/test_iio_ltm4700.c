@@ -108,7 +108,7 @@ static int mock_ltm4700_init_callback(struct ltm4700_dev **device,
 
 /* Mock callback for read_block_data - fills buffer with test data */
 static int mock_read_block_data_callback(struct ltm4700_dev *dev,
-		uint8_t page,
+		int page,
 		uint8_t reg,
 		uint8_t *data,
 		size_t nbytes,
@@ -133,7 +133,7 @@ static int mock_read_block_data_callback(struct ltm4700_dev *dev,
 }
 
 /* Mock callback for read_word - returns test value */
-static int mock_read_word_callback(struct ltm4700_dev *dev, uint8_t page,
+static int mock_read_word_callback(struct ltm4700_dev *dev, int page,
 				   uint8_t reg, uint16_t *word,
 				   int num_calls)
 {
@@ -144,7 +144,7 @@ static int mock_read_word_callback(struct ltm4700_dev *dev, uint8_t page,
 }
 
 /* Mock callback for read_byte - returns test value */
-static int mock_read_byte_callback(struct ltm4700_dev *dev, uint8_t page,
+static int mock_read_byte_callback(struct ltm4700_dev *dev, int page,
 				   uint8_t reg, uint8_t *data,
 				   int num_calls)
 {
@@ -167,7 +167,7 @@ static int mock_read_value_callback(struct ltm4700_dev *dev, uint8_t channel,
 
 /* Mock callback for read_word_data - returns test value */
 static int mock_read_word_data_callback(struct ltm4700_dev *dev,
-					uint8_t channel, uint8_t reg,
+					int channel, uint8_t reg,
 					int *data, int num_calls)
 {
 	if (data) {
