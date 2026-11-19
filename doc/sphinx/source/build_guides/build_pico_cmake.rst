@@ -18,10 +18,6 @@ uses the Pico SDK's own CMake (``pico_sdk_init()``) to provide the SDK sources,
 headers, the second-stage bootloader, the linker script and the libc/soft-float
 wrapping, linking them into the no-OS executable automatically.
 
-.. note::
-   Pico platform builds are supported on Linux only. The build targets the
-   Raspberry Pi Pico (RP2040).
-
 Supported boards
 ================
 
@@ -38,22 +34,40 @@ The following Pico board (preset) is available out of the box:
 Prerequisites
 =============
 
-- **CMake** 3.28 or newer (presets v7 are used).
-- **Ninja** (the presets use the Ninja generator).
+- **CMake 3.28 or newer** and **Ninja** — see `Common Prerequisites
+  <../build_guide.html#common-prerequisites>`_ in the top-level build guide
+  for Linux and Windows install commands.
+
 - **Python 3**. The build creates a private virtual environment under
   ``.no_os_venv`` on first configure and installs the dependencies listed in
   ``tools/scripts/requirements.txt`` (``kconfiglib``, ``pylink-square`` and,
   on Windows, ``windows-curses``).
-- An **ARM cross toolchain** (``arm-none-eabi-gcc``) available on ``PATH``.
-  Unlike the Maxim and STM32 platforms, no vendor toolchain is used: the Pico
-  SDK is vendored in-tree and the build uses the ``arm-none-eabi`` GCC found on
-  ``PATH``.
-- **OpenOCD** 0.12.0 or newer for flashing and debugging (RP2040 support is
-  included from 0.12.0):
+
+- **ARM cross toolchain** (``arm-none-eabi-gcc``) on ``PATH``. The Pico SDK is
+  vendored in-tree; no vendor toolchain installer is used.
 
     .. code-block:: bash
 
+        # Linux (Debian/Ubuntu)
+        $ sudo apt install gcc-arm-none-eabi
+
+    .. code-block:: bat
+
+        :: Windows
+        > winget install Arm.GnuArmEmbeddedToolchain
+
+- **OpenOCD** 0.12.0 or newer for flashing and debugging (RP2040 support
+  is included from 0.12.0):
+
+    .. code-block:: bash
+
+        # Linux (Debian/Ubuntu)
         $ sudo apt install openocd
+
+    .. code-block:: bat
+
+        :: Windows (xPack build — meets the 0.12.0 requirement)
+        > winget install xpack-dev-tools.openocd-xpack
 
 Pico SDK resolution
 -------------------
@@ -127,7 +141,13 @@ Pico board:
 
     .. code-block:: bash
 
+        # Linux / macOS
         $ python tools/scripts/no_os_build.py list --board rpi-pico
+
+    .. code-block:: bat
+
+        :: Windows
+        > .\tools\scripts\no_os_build list --board rpi-pico
 
 Each row is a ``PROJECT  VARIANT  BOARD  PLATFORM`` tuple that can be fed back
 to the ``build`` subcommand.
@@ -142,7 +162,14 @@ the right preset, defconfig and board config for you:
 
     .. code-block:: bash
 
+        # Linux / macOS
         $ python tools/scripts/no_os_build.py build \
+              --project iio_demo --variant iio --board rpi-pico
+
+    .. code-block:: bat
+
+        :: Windows
+        > .\tools\scripts\no_os_build build ^
               --project iio_demo --variant iio --board rpi-pico
 
 Useful options:
