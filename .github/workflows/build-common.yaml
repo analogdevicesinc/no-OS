@@ -118,3 +118,15 @@ jobs:
           generate-pr-report: true
           fail-on-findings: false
           ignored-files: ${{ github.workspace }}/.github/config/include_guards_ignore.txt
+  pr-commits-checker:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check commits for current PR
+        uses: analogdevicesinc/shared-actions/pr-commits-checker@pr-commits-checker-v1.0.0
+        with:
+          repository: ${{ github.repository }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pr-id: ${{ github.event.number }}
+          fail-on-findings: false
+          generate-pr-report: true
