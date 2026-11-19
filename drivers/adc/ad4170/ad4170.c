@@ -1250,6 +1250,12 @@ int ad4170_set_adc_ctrl(struct ad4170_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
+	/* The AD4171-8 has no FIR/IIR filter */
+	if (dev->id == ID_AD4171_8
+	    && (adc_ctrl.mode == AD4170_MODE_CONT_FIR
+		|| adc_ctrl.mode == AD4170_MODE_CONT_IIR))
+		return -ENOTSUP;
+
 	reg = no_os_field_prep(AD4170_ADC_CTRL_PARALLEL_FILT_EN_MSK,
 			       adc_ctrl.parallel_filt_en);
 	reg |= no_os_field_prep(AD4170_ADC_CTRL_MULTI_DATA_REG_SEL_MSK,
@@ -1539,6 +1545,10 @@ int ad4170_set_fir_control(struct ad4170_dev *dev,
 	if (!dev)
 		return -EINVAL;
 
+	/* The AD4171-8 has no FIR filter */
+	if (dev->id == ID_AD4171_8)
+		return -ENOTSUP;
+
 	reg = no_os_field_prep(AD4170_FIR_CONTROL_FIR_MODE_MSK, fir_control.fir_mode);
 	reg |= no_os_field_prep(AD4170_FIR_CONTROL_COEFF_SET_MSK,
 				fir_control.coeff_set);
@@ -1778,6 +1788,11 @@ int ad4170_init(struct ad4170_dev **device,
 		prod_id_h_expected = AD4170_PRODUCT_ID_H_VALUE;
 		break;
 
+	case ID_AD4171_8:
+		prod_id_l_expected = AD4171_8_PRODUCT_ID_L_VALUE;
+		prod_id_h_expected = AD4171_8_PRODUCT_ID_H_VALUE;
+		break;
+
 	case ID_AD4190:
 	case ID_AD4195:
 		prod_id_l_expected = AD4190_PRODUCT_ID_L_VALUE;
@@ -1906,7 +1921,7 @@ int ad4170_init(struct ad4170_dev **device,
 	}
 
 	ret = ad4170_set_fir_control(dev, init_param->config.fir_control);
-	if (ret)
+	if (ret && ret != -ENOTSUP)
 		goto error;
 
 	ret = ad4170_set_dac_config(dev, init_param->config.dac);

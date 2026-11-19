@@ -1,0 +1,7 @@
+{
+	"stm32": {
+		"iio_example": {
+			"flags" : "EXAMPLE=iio_example HARDWARE=sdp-k1.ioc"
+		}
+	}
+}
