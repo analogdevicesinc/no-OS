@@ -76,6 +76,9 @@ static inline uint32_t max_dma_get_irq(uint32_t id, uint32_t ch)
 		return MXC_DMA0_CH_GET_IRQ(ch);
 
 	return MXC_DMA1_CH_GET_IRQ(ch);
+#elif TARGET_NUM == 32690 && defined(__riscv)
+	/* On CPU1 only channels 0-3 have their own vector; 4-15 share one. */
+	return ch < 4 ? DMA0_IRQn + ch : DMA4_15_IRQn;
 #else
 	return MXC_DMA_CH_GET_IRQ(ch);
 #endif

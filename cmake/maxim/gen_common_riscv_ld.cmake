@@ -5,16 +5,20 @@
 # .riscv_flash region), and writes a CMake fragment for CPU1 configuration:
 #
 #   RISCV_FLASH_ORIGIN = <address of _riscv_boot>
-#   RISCV_FLASH_LENGTH = 0x10080000 - RISCV_FLASH_ORIGIN
+#   RISCV_FLASH_LENGTH = FLASH_END - RISCV_FLASH_ORIGIN
 #
 # So the RISC-V image is linked to run exactly where the ARM link placed it.
 #
 # Required -D arguments:
 #   MAP_FILE  absolute path to the ARM premap .map
 #   OUT_FILE  absolute path to write the flash.cmake fragment
+#   FLASH_END  end address of the flash available to CPU1
+#   FLASH_SIZE size of the flash available to CPU1
 
-if(NOT DEFINED MAP_FILE OR NOT DEFINED OUT_FILE)
-    message(FATAL_ERROR "gen_common_riscv_ld: MAP_FILE and OUT_FILE are required")
+if(NOT DEFINED MAP_FILE OR NOT DEFINED OUT_FILE OR NOT DEFINED FLASH_END OR
+   NOT DEFINED FLASH_SIZE)
+    message(FATAL_ERROR
+        "gen_common_riscv_ld: MAP_FILE, OUT_FILE, FLASH_END and FLASH_SIZE are required")
 endif()
 
 if(NOT EXISTS "${MAP_FILE}")
@@ -34,9 +38,9 @@ endif()
 
 set(_addr "0x${CMAKE_MATCH_1}")
 
-math(EXPR _length "0x10080000 - ${_addr}" OUTPUT_FORMAT HEXADECIMAL)
-if(_length LESS_EQUAL 0 OR _length GREATER 0x80000)
-    message(FATAL_ERROR "CPU1 flash origin ${_addr} is outside MAX78000 flash")
+math(EXPR _length "${FLASH_END} - ${_addr}" OUTPUT_FORMAT HEXADECIMAL)
+if(_length LESS_EQUAL 0 OR _length GREATER ${FLASH_SIZE})
+    message(FATAL_ERROR "CPU1 flash origin ${_addr} is outside the CPU1 flash region")
 endif()
 file(WRITE "${OUT_FILE}"
     "set(RISCV_FLASH_ORIGIN ${_addr})\nset(RISCV_FLASH_LENGTH ${_length})\n")
