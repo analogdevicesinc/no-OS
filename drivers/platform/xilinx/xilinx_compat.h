@@ -35,6 +35,13 @@
  * alone; bspconfig.h also brings xparameters_ps.h on PS designs. */
 #include "bspconfig.h"
 
+/* The Cortex-R5 BSP guards xparameters_ps.h as XPARAMETERS_PS_H_, while the
+ * platform code tests the A53/A72 name. Alias it, or PS-only paths such as
+ * the UART interrupt setup are compiled out on the R5. */
+#if defined(XPARAMETERS_PS_H_) && !defined(_XPARAMETERS_PS_H_)
+#define _XPARAMETERS_PS_H_
+#endif
+
 /* Zynq PS7 */
 #ifndef XPAR_PS7_SPI_0_DEVICE_ID
 #define XPAR_PS7_SPI_0_DEVICE_ID	0
