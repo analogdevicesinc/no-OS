@@ -9,7 +9,7 @@
 *******************************************************************************/
 
 #ifndef ADUCM3029_IRQ_H_
-# define ADUCM3029_IRQ_H_
+#define ADUCM3029_IRQ_H_
 
 #include <drivers/xint/adi_xint.h>
 #include <stdbool.h>

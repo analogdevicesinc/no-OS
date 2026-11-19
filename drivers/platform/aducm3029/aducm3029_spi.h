@@ -9,7 +9,7 @@
 *******************************************************************************/
 
 #ifndef ADUCM3029_SPI_H_
-# define ADUCM3029_SPI_H_
+#define ADUCM3029_SPI_H_
 
 #include "no_os_spi.h"
 #include <drivers/spi/adi_spi.h>

@@ -53,7 +53,7 @@
 *******************************************************************************/
 
 #ifndef AT_PARSER_H_
-# define AT_PARSER_H_
+#define AT_PARSER_H_
 
 #include <stdint.h>
 #include <stdbool.h>

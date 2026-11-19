@@ -10,7 +10,7 @@
 *******************************************************************************/
 
 #ifndef TCP_SOCKET_H_
-# define TCP_SOCKET_H_
+#define TCP_SOCKET_H_
 
 #include "network_interface.h"
 #ifndef DISABLE_SECURE_SOCKET

@@ -68,7 +68,7 @@
 #define ADP1055_VFF_GO                  	0x20
 #define ADP1055_SYNC_GO                 	0x40
 
-# define ADP1055_ON_OFF_MASK			NO_OS_GENMASK(7, 6)
+#define ADP1055_ON_OFF_MASK			NO_OS_GENMASK(7, 6)
 
 #define ADP1055_FREQ_PLL_MASK			NO_OS_BIT(6)
 #define ADP1055_FREQ_JITT_MASK			NO_OS_BIT(1)

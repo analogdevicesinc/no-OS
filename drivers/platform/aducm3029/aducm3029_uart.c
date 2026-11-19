@@ -20,10 +20,10 @@
 #define NO_OS_BAUDS_NB	10u
 #if defined (__ADUCM4x50__)
 /** In ADuCM302x UART0 and UART1 are available */
-# define NO_OS_NUM_UART_DEVICES 2
+#define NO_OS_NUM_UART_DEVICES 2
 #else
 /** In ADuCM302x UART0 is available */
-# define NO_OS_NUM_UART_DEVICES 1
+#define NO_OS_NUM_UART_DEVICES 1
 #endif
 
 /** Stores calculated baud rates and parameters */
