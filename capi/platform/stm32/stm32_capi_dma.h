@@ -83,6 +83,12 @@ struct stm32_dma_extra_config {
 	enum stm32_capi_dma_mode dma_mode;
 	/** Trigger configuration (optional) */
 	struct stm32_capi_dma_trigger *trig;
+	/**
+	 * NVIC line of each channel, indexed by channel id (num_chans
+	 * entries; the array must outlive the controller). NULL, or a 0
+	 * entry, leaves that channel in polling mode.
+	 */
+	const uint32_t *chan_irq_nums;
 };
 
 /**

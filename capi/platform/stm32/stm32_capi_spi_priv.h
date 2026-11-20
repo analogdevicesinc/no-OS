@@ -14,6 +14,28 @@ extern "C" {
 #include "stm32_capi_spi.h"
 
 /**
+ * @brief Padding bookkeeping for one DMA transfer.
+ *
+ * SPI clocks max(tx_size, rx_size) frames, so whichever direction is short
+ * (or absent) has to be padded before the DMA channels can be armed. Only the
+ * cases that need a bounce buffer allocate one; a direction that is entirely
+ * dummy is pointed at a single static byte with increment disabled instead.
+ */
+struct stm32_spi_dma_pad {
+	/** Padded TX bounce buffer (tx_buf copied in, remainder zeroed), or
+	 *  NULL when the caller's tx_buf is used directly. */
+	uint8_t *tx_tmp;
+	/** Oversized RX bounce buffer, or NULL when the caller's rx_buf is
+	 *  used directly. */
+	uint8_t *rx_tmp;
+	/** Caller RX buffer that rx_tmp must be copied back into on
+	 *  completion, or NULL when no copy-back is needed. */
+	uint8_t *rx_dst;
+	/** Number of bytes to copy from rx_tmp back into rx_dst. */
+	uint32_t rx_copy_len;
+};
+
+/**
  * @brief STM32 SPI private handle with full feature support
  */
 struct stm32_spi_priv_handle {
@@ -38,6 +60,12 @@ struct stm32_spi_priv_handle {
 	struct capi_dma_chan *rxdma_ch;
 	/** TX DMA Channel */
 	struct capi_dma_chan *txdma_ch;
+	/** Per-channel DMA configuration attached to each DMA transfer */
+	struct stm32_dma_chan_extra_config *rxdma_extra;
+	struct stm32_dma_chan_extra_config *txdma_extra;
+	/** Minimum transfer length (bytes) at which transceive()/transceive_async()
+	 *  dispatch to DMA instead of PIO/IT. */
+	uint32_t dma_threshold;
 	/** CAPI callback */
 	capi_spi_callback_t callback;
 	/** CAPI callback argument */
@@ -54,6 +82,10 @@ struct stm32_spi_priv_handle {
 	bool async_in_progress;
 	/** DMA completion flag */
 	bool dma_done;
+	/** Set when a DMA channel reported an error during the burst */
+	bool dma_error;
+	/** SPI NVIC line connected to the CAPI IRQ layer, 0 if none */
+	uint32_t irq_num;
 	/** DMA user callback */
 	void (*dma_user_cb)(void *ctx);
 	/** DMA user callback context */
@@ -62,6 +94,8 @@ struct stm32_spi_priv_handle {
 	struct capi_dma_transfer *tx_ch_xfer;
 	/** RX DMA transfer descriptors */
 	struct capi_dma_transfer *rx_ch_xfer;
+	/** Per-transfer padding bookkeeping, transfer_count entries. */
+	struct stm32_spi_dma_pad *dma_pad;
 #ifdef HAL_TIM_MODULE_ENABLED
 	/** Timer handle for PWM-based CS control */
 	struct capi_timer_handle *cs_timer;

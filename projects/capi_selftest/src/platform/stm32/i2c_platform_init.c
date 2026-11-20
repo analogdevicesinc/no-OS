@@ -20,6 +20,9 @@
 
 #include <stddef.h>
 #include "stm32_hal.h"
+
+#if defined(STM32F7)
+
 #include "capi_i2c.h"
 
 static struct capi_i2c_controller_handle *i2c2_handle;
@@ -85,3 +88,5 @@ void I2C2_ER_IRQHandler(void)
 	if (i2c2_handle)
 		capi_i2c_isr(i2c2_handle);
 }
+
+#endif /* STM32F7 */
