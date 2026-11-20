@@ -70,3 +70,19 @@ endif()
 
 target_compile_definitions(no-os PUBLIC -DTARGET_NUM=78000)
 target_compile_definitions(no-os PUBLIC -DTARGET=78000)
+
+no_os_sources_ifdef(CONFIG_CAMERA_OV7692_MAXIM
+    ${MAXIM_LIBRARIES}/PeriphDrivers/Source/CAMERAIF/cameraif_ai85.c
+    ${MAXIM_LIBRARIES}/PeriphDrivers/Source/CAMERAIF/cameraif_reva.c
+    ${MAXIM_LIBRARIES}/PeriphDrivers/Source/PT/pt_ai85.c
+    ${MAXIM_LIBRARIES}/PeriphDrivers/Source/PT/pt_reva.c
+    ${MAXIM_LIBRARIES}/MiscDrivers/Camera/camera.c
+    ${MAXIM_LIBRARIES}/MiscDrivers/Camera/ov7692.c
+    ${MAXIM_LIBRARIES}/MiscDrivers/Camera/sccb.c)
+if(CONFIG_CAMERA_OV7692_MAXIM)
+    target_include_directories(no-os PRIVATE
+        ${MAXIM_LIBRARIES}/PeriphDrivers/Source/CAMERAIF
+        ${MAXIM_LIBRARIES}/PeriphDrivers/Source/PT)
+    target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/MiscDrivers/Camera)
+    target_compile_definitions(no-os PUBLIC CAMERA_OV7692)
+endif()
