@@ -74,8 +74,8 @@
  *    @endcode
 *******************************************************************************/
 
-#ifndef MQTT_NOOS_CLIENT
-#define MQTT_NOOS_CLIENT
+#ifndef MQTT_CLIENT_H_
+#define MQTT_CLIENT_H_
 
 #include <stdbool.h>
 #include "tcp_socket.h"
@@ -225,4 +225,4 @@ int32_t mqtt_unsubscribe(struct mqtt_desc *desc, const char *topic);
 /* Allow messages to be received */
 int32_t mqtt_yield(struct mqtt_desc *desc, uint32_t timeout_ms);
 
-#endif
+#endif /* MQTT_CLIENT_H_ */

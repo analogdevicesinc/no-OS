@@ -7,10 +7,10 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
-#ifndef __NO_OS_ESH_H__
-#define __NO_OS_ESH_H__
+#ifndef NO_OS_ESH_H_
+#define NO_OS_ESH_H_
 
 void prompt();
 void initial_setup();
 
-#endif // __NO_OS_ESH_H__
+#endif /* NO_OS_ESH_H_ */
