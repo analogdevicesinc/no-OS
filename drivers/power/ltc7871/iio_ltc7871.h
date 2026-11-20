@@ -1,12 +1,12 @@
-// /***************************************************************************//**
-//  *   @file   iio_ltc7871.h
-//  *   @brief  Header file for the LTC7871 IIO Driver
-//  *   @author Aldrin Abacan (aldrin.abacan@analog.com)
-//  *******************************************************************************
-//  * Copyright 2024(c) Analog Devices, Inc.
-//  *
-//  * SPDX-License-Identifier: BSD-3-Clause
-//  ******************************************************************************/
+/***************************************************************************//**
+ *   @file   iio_ltc7871.h
+ *   @brief  Header file for the LTC7871 IIO Driver
+ *   @author Aldrin Abacan (aldrin.abacan@analog.com)
+ *******************************************************************************
+ * Copyright 2024(c) Analog Devices, Inc.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ ******************************************************************************/
 
 #ifndef IIO_LTC7871_H_
 #define IIO_LTC7871_H_
