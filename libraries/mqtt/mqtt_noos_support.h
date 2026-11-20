@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
 *******************************************************************************/
 
-#ifndef MQTT_NOOS
-#define MQTT_NOOS
+#ifndef MQTT_NOOS_SUPPORT_H_
+#define MQTT_NOOS_SUPPORT_H_
 
 #include <stdint.h>
 #include "tcp_socket.h"
@@ -56,4 +56,4 @@ int mqtt_noos_read(Network*, unsigned char*, int, int);
 /* Function to be linked to Network.mqttwrite */
 int mqtt_noos_write(Network*, unsigned char*, int, int);
 
-#endif
+#endif /* MQTT_NOOS_SUPPORT_H_ */
