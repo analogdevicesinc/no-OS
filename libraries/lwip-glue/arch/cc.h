@@ -21,8 +21,8 @@
  *
  ******************************************************************************
  */
-// #ifndef _MXC_CC_H_
-// #define _MXC_CC_H_
+#ifndef CC_H_
+#define CC_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -66,4 +66,4 @@ typedef uintptr_t   mem_ptr_t;
         while (1);                        					\
     } while (0)
 
-// #endif /* _MXC_CC_H_ */
+#endif /* CC_H_ */
