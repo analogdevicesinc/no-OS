@@ -42,4 +42,5 @@ struct adf4368_init_param adf4368_ip = {
 	.ref_div = 1,
 	.cp_i = 14,
 	.ld_count = 12,
+	.mute_nclk_toggle_en = false,
 };

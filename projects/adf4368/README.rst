@@ -397,6 +397,24 @@ In order to build the IIO project make sure you are using this command:
 	python tools/scripts/no_os_build.py build \
 		--project adf4368 --variant iio --board sdp-ck1z
 
+Sweep example
+^^^^^^^^^^^^^
+
+This example demonstrates the ADF4368 manual VCO calibration sweep. It first
+runs an auto-calibration sweep over the configured range with a coarse step to
+build the VCO calibration table (``adf4368_sweep_auto_cal``), then replays the
+range with a fine step, applying the stored VCO core/band/bias values manually
+at each step instead of triggering a new autocalibration
+(``adf4368_sweep_manual_cal``). The sweep range, steps and per-step dwell are
+set at the top of ``sweep_example.c``.
+
+In order to build the sweep example make sure you are using this command:
+
+.. code-block:: bash
+
+	python tools/scripts/no_os_build.py build \
+		--project adf4368 --variant sweep --board sdp-ck1z
+
 
 No-OS Supported Platforms
 -------------------------
@@ -418,8 +436,8 @@ or to J12 (the SMA interface).
 **Build Command**
 
 The STM32 platform uses the CMake/Ninja build system via the
-``no_os_build.py`` helper script. Available variants: ``basic``, ``iio``.
-Available boards: ``sdp-ck1z``.
+``no_os_build.py`` helper script. Available variants: ``basic``, ``iio``,
+``sweep``. Available boards: ``sdp-ck1z``.
 
 For toolchain setup and prerequisites, see the
 :doc:`STM32 CMake build guide </build_guides/build_stm32_cmake>`.
