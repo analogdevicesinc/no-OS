@@ -11,6 +11,8 @@
 #ifndef PLATFORM_INIT_H_
 #define PLATFORM_INIT_H_
 
+#include <stdint.h>
+
 /* Initialize the power controller and set the core and peripherals clock
  * divider. */
 int32_t platform_init();
