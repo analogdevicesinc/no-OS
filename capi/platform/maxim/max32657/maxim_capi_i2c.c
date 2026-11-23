@@ -93,8 +93,13 @@ static int _max_capi_i2c_get_frequencies(uint32_t i2c_freq, uint32_t *pp_freq,
 		*od_freq =  1390000;
 		break;
 	case MAX_CAPI_I2C_SPEED_FAST_PLUS:
-		*pp_freq = 2500000;
-		*od_freq = 2500000;
+		/*
+		 * The I2C clock is divided down from the push-pull clock. With a
+		 * 2.5 MHz push-pull clock, SDA does not follow the address bits at
+		 * 1 MHz and every address goes out as all ones.
+		 */
+		*pp_freq = 12500000;
+		*od_freq =  2500000;
 		break;
 	default:
 		return -EINVAL;
@@ -411,8 +416,13 @@ static int _max_capi_i2c_transmit_fifo(mxc_i3c_regs_t *i3c,
 
 	ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_WRITE,
 				async->target_addr, 0);
-	if (ret != E_SUCCESS)
-		return (ret == E_BUSY) ? -EBUSY : -EIO;
+	if (ret == E_BUSY)
+		return -EBUSY;
+	if (ret != E_SUCCESS) {
+		/* A NACKed address leaves the message open: end it */
+		MXC_I3C_EmitI2CStop(i3c);
+		return -EIO;
+	}
 
 	if (async->state == MAX_CAPI_I2C_ASYNC_STATE_TX_SUBADDR) {
 		_max_capi_i2c_write_tx_fifo(i3c, async->subaddr_buf,
@@ -430,7 +440,10 @@ static int _max_capi_i2c_transmit_fifo(mxc_i3c_regs_t *i3c,
 					    true);
 	}
 
-	MXC_I3C_Controller_ClearFlags(i3c, 0xFFFFFFFF);
+	/*
+	 * EmitStart cleared the flags before the message started. Clearing them
+	 * again here could drop the DONE of a message that already ended.
+	 */
 	MXC_I3C_Controller_EnableInt(i3c, MXC_F_I3C_CONT_INTEN_TX_NFULL |
 				     MXC_F_I3C_CONT_INTEN_DONE |
 				     MXC_F_I3C_CONT_INTEN_ERRWARN);
@@ -457,8 +470,13 @@ static int _max_capi_i2c_receive_fifo(mxc_i3c_regs_t *i3c,
 
 		ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_WRITE,
 					async->target_addr, 0);
-		if (ret != E_SUCCESS)
-			return (ret == E_BUSY) ? -EBUSY : -EIO;
+		if (ret == E_BUSY)
+			return -EBUSY;
+		if (ret != E_SUCCESS) {
+			/* A NACKed address leaves the message open: end it */
+			MXC_I3C_EmitI2CStop(i3c);
+			return -EIO;
+		}
 
 		_max_capi_i2c_write_tx_fifo(i3c, async->subaddr_buf,
 					    async->subaddr_len,
@@ -473,15 +491,23 @@ static int _max_capi_i2c_receive_fifo(mxc_i3c_regs_t *i3c,
 
 		ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_READ,
 					async->target_addr, async->data_len);
-		if (ret != E_SUCCESS)
-			return (ret == E_BUSY) ? -EBUSY : -EIO;
+		if (ret == E_BUSY)
+			return -EBUSY;
+		if (ret != E_SUCCESS) {
+			/* A NACKed address leaves the message open: end it */
+			MXC_I3C_EmitI2CStop(i3c);
+			return -EIO;
+		}
 
 		int_mask = MXC_F_I3C_CONT_INTEN_RX_RDY |
 			   MXC_F_I3C_CONT_INTEN_DONE |
 			   MXC_F_I3C_CONT_INTEN_ERRWARN;
 	}
 
-	MXC_I3C_Controller_ClearFlags(i3c, 0xFFFFFFFF);
+	/*
+	 * EmitStart cleared the flags before the message started. Clearing them
+	 * again here could drop the DONE of a message that already ended.
+	 */
 	MXC_I3C_Controller_EnableInt(i3c, int_mask);
 
 	return 0;
@@ -617,19 +643,20 @@ static int _max_capi_i2c_transmit_dma(struct max_capi_i2c_priv *i2c_priv,
 
 	/*
 	 * An I3C write terminates only when its last byte carries the END
-	 * marker, which the hardware sets when a byte is written to the END FIFO
-	 * register (cont_txfifo8e) rather than the ordinary one (cont_txfifo8o).
+	 * marker, which the hardware sets when the CPU writes a byte to the END
+	 * FIFO register (cont_txfifo8e) rather than the ordinary one
+	 * (cont_txfifo8o). A DMA write to cont_txfifo8e does not set it: the byte
+	 * goes out, but DONE never follows. The last byte is therefore always
+	 * written by _max_capi_i2c_dma_complete_callback().
 	 */
-	if (tx_len > 1U) {
-		async->dma_tx_end_byte = tx_buffer[tx_len - 1U];
-		async->dma_tx_end_pending = true;
-	} else {
-		async->dma_tx_end_pending = false;
-	}
+	async->dma_tx_end_byte = tx_buffer[tx_len - 1U];
+	async->dma_tx_end_pending = true;
 
 	ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_WRITE,
 				async->target_addr, 0);
 	if (ret != E_SUCCESS) {
+		/* A NACKed address leaves the message open: end it */
+		MXC_I3C_EmitI2CStop(i3c);
 		if (tx_buffer != async->data_buf) {
 			capi_free(tx_buffer);
 			i2c_priv->async->dma_allocated_buffer = NULL;
@@ -637,8 +664,6 @@ static int _max_capi_i2c_transmit_dma(struct max_capi_i2c_priv *i2c_priv,
 		i2c_priv->async_transfer_in_progress = false;
 		return -EIO;
 	}
-
-	i3c->cont_dmactrl = MXC_S_I3C_CONT_DMACTRL_TX_EN_EN;
 
 	ret = capi_dma_init_chan(dma_handle, &i2c_priv->dma_channel_tx, 0);
 	if (ret)
@@ -648,20 +673,40 @@ static int _max_capi_i2c_transmit_dma(struct max_capi_i2c_priv *i2c_priv,
 		.reqsel = MAX_CAPI_DMA_REQUEST_I3C_TX_CONTROLLER,
 	};
 
-	dma_tx_xfer = (struct capi_dma_transfer) {
-		.src = (capi_dma_glbl_addr_t)tx_buffer,
-		.dst = async->dma_tx_end_pending ?
-		       (capi_dma_glbl_addr_t)&i3c->cont_txfifo8o :
-		       (capi_dma_glbl_addr_t)&i3c->cont_txfifo8e,
-		       .src_inc = CAPI_DMA_BYTE_INCREMENT,
-		       .dst_inc = CAPI_DMA_NO_INCREMENT,
-		       .src_size = CAPI_DMA_XFER_SIZE_1_BYTE,
-		       .dst_size = CAPI_DMA_XFER_SIZE_1_BYTE,
-		       .length = async->dma_tx_end_pending ? (tx_len - 1U) : tx_len,
-		       .extra = &dma_tx_extra,
-		       .xfer_type = CAPI_DMA_MEM_TO_DEV,
-		       .user_data = i2c_priv,
-	};
+	if (tx_len > 1U) {
+		i3c->cont_dmactrl = MXC_S_I3C_CONT_DMACTRL_TX_EN_EN;
+
+		dma_tx_xfer = (struct capi_dma_transfer) {
+			.src = (capi_dma_glbl_addr_t)tx_buffer,
+			.dst = (capi_dma_glbl_addr_t)&i3c->cont_txfifo8o,
+			.src_inc = CAPI_DMA_BYTE_INCREMENT,
+			.dst_inc = CAPI_DMA_NO_INCREMENT,
+			.src_size = CAPI_DMA_XFER_SIZE_1_BYTE,
+			.dst_size = CAPI_DMA_XFER_SIZE_1_BYTE,
+			.length = tx_len - 1U,
+			.extra = &dma_tx_extra,
+			.xfer_type = CAPI_DMA_MEM_TO_DEV,
+			.user_data = i2c_priv,
+		};
+	} else {
+		/*
+		 * A one-byte write leaves the DMA nothing to move to the FIFO.
+		 * It copies the byte onto dma_tx_end_byte instead, only to raise
+		 * the completion callback, which writes the byte.
+		 */
+		dma_tx_xfer = (struct capi_dma_transfer) {
+			.src = (capi_dma_glbl_addr_t)tx_buffer,
+			.dst = (capi_dma_glbl_addr_t)&async->dma_tx_end_byte,
+			.src_inc = CAPI_DMA_BYTE_INCREMENT,
+			.dst_inc = CAPI_DMA_BYTE_INCREMENT,
+			.src_size = CAPI_DMA_XFER_SIZE_1_BYTE,
+			.dst_size = CAPI_DMA_XFER_SIZE_1_BYTE,
+			.length = 1U,
+			.extra = &dma_tx_extra,
+			.xfer_type = CAPI_DMA_MEM_TO_MEM,
+			.user_data = i2c_priv,
+		};
+	}
 
 	ret = capi_dma_config_xfer(i2c_priv->dma_channel_tx, &dma_tx_xfer);
 	if (ret)
@@ -682,8 +727,12 @@ static int _max_capi_i2c_transmit_dma(struct max_capi_i2c_priv *i2c_priv,
 	return 0;
 
 error_deinit_tx:
-	capi_dma_deinit_chan(i2c_priv->dma_channel_tx);
+	/* Clears the pointer too: the next init must not reuse the freed channel */
+	_max_capi_i2c_dma_cleanup_channel(&i2c_priv->dma_channel_tx);
 error_cleanup:
+	/* The message is already open: end it, as the receive path does */
+	i3c->cont_dmactrl = 0;
+	MXC_I3C_EmitI2CStop(i3c);
 	if (tx_buffer != async->data_buf) {
 		capi_free(tx_buffer);
 		i2c_priv->async->dma_allocated_buffer = NULL;
@@ -723,6 +772,8 @@ static int _max_capi_i2c_receive_dma(struct max_capi_i2c_priv *i2c_priv,
 		ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_WRITE,
 					async->target_addr, 0);
 		if (ret != E_SUCCESS) {
+			/* A NACKed address leaves the message open: end it */
+			MXC_I3C_EmitI2CStop(i3c);
 			i2c_priv->async_transfer_in_progress = false;
 			return -EIO;
 		}
@@ -797,7 +848,8 @@ static int _max_capi_i2c_receive_dma(struct max_capi_i2c_priv *i2c_priv,
 	ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_READ,
 				async->target_addr, async->data_len);
 	if (ret != E_SUCCESS) {
-		capi_dma_xfer_abort(i2c_priv->dma_channel_rx);
+		/* A NACKed address leaves the message open: end it */
+		MXC_I3C_EmitI2CStop(i3c);
 		ret = -EIO;
 		goto error_deinit_rx;
 	}
@@ -805,7 +857,8 @@ static int _max_capi_i2c_receive_dma(struct max_capi_i2c_priv *i2c_priv,
 	return 0;
 
 error_deinit_rx:
-	capi_dma_deinit_chan(i2c_priv->dma_channel_rx);
+	/* Clears the pointer too: the next init must not reuse the freed channel */
+	_max_capi_i2c_dma_cleanup_channel(&i2c_priv->dma_channel_rx);
 error_cleanup:
 	i3c->cont_dmactrl = 0;
 	i2c_priv->async_transfer_in_progress = false;
@@ -845,8 +898,8 @@ static void _max_capi_i2c_controller_isr(struct max_capi_i2c_priv *i2c_priv,
 		i2c_priv->async->result = -EIO;
 		i2c_priv->async->state = MAX_CAPI_I2C_ASYNC_STATE_ERROR;
 
-		if (i2c_priv->async->send_stop)
-			MXC_I3C_EmitI2CStop(i3c);
+		/* Release the bus even if the caller asked to keep it */
+		MXC_I3C_EmitI2CStop(i3c);
 
 		operation_complete = true;
 		goto invoke_callback;
@@ -872,6 +925,7 @@ static void _max_capi_i2c_controller_isr(struct max_capi_i2c_priv *i2c_priv,
 					if (ret != E_SUCCESS) {
 						i2c_priv->async->result = -EIO;
 						i2c_priv->async->state = MAX_CAPI_I2C_ASYNC_STATE_ERROR;
+						MXC_I3C_EmitI2CStop(i3c);
 						operation_complete = true;
 						break;
 					}
