@@ -10,6 +10,7 @@
 #ifndef NO_OS_UTIL_H_
 #define NO_OS_UTIL_H_
 
+#include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdbool.h>
