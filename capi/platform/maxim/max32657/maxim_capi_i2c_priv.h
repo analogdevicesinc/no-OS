@@ -35,6 +35,14 @@ extern "C" {
 /** Bus bit times a transfer may go without progress in interrupt context */
 #define MAX_CAPI_I2C_IRQ_IDLE_BITS		32U
 
+/** I3C pins, in gpio_cfg_i3c: P0.0 is SCL, P0.1 is SDA */
+#define MAX_CAPI_I2C_SCL_PIN			MXC_GPIO_PIN_0
+#define MAX_CAPI_I2C_SDA_PIN			MXC_GPIO_PIN_1
+/** Clock pulses a bus clear may take: a byte and its acknowledge */
+#define MAX_CAPI_I2C_CLEAR_PULSES		9U
+/** Half period of a bus clear clock, in microseconds (standard mode) */
+#define MAX_CAPI_I2C_CLEAR_HALF_US		5U
+
 /**
  * @enum max_capi_i2c_target_state_enum
  * @brief State of I2C target mode
@@ -171,6 +179,11 @@ struct max_capi_i2c_priv {
 	struct capi_dma_chan *dma_channel_rx;
 	/** Async transfer flag */
 	volatile bool async_transfer_in_progress;
+	/**
+	 * A transfer timed out partway through a message: a target can still be
+	 * in the middle of a byte while the bus looks idle
+	 */
+	volatile bool recover_pending;
 	/** Whether to enable IRQ connection during init */
 	bool use_irq;
 

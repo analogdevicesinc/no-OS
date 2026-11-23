@@ -596,6 +596,175 @@ static int _max_capi_i2c_finish_read(mxc_i3c_regs_t *i3c, uint8_t *buf,
 }
 
 /**
+ * @brief Busy-wait for a bus clear half period
+ *
+ * Counts core cycles rather than calling MXC_Delay(), which needs the SysTick
+ * interrupt and so cannot run from the DMA completion callback.
+ */
+static void _max_capi_i2c_clear_wait(void)
+{
+	/* Each iteration takes at least one core clock */
+	volatile uint32_t n = SystemCoreClock / 1000000U *
+			      MAX_CAPI_I2C_CLEAR_HALF_US;
+
+	while (n)
+		n--;
+}
+
+/**
+ * @brief Free a bus that a target holds by driving SDA low
+ *
+ * A target cut off in the middle of a byte, for example by a read that timed
+ * out while SCL was held low, goes on driving SDA once it gets SCL back. The
+ * controller cannot clock it out: it reports the bus idle, and the next
+ * message reads what the target is still sending. As in the I2C-bus
+ * specification (UM10204, bus clear), SCL is clocked with SDA released until
+ * the target lets go, for at most a byte and its acknowledge, each pulse
+ * ending with a STOP, as in the Linux generic I2C bus recovery. The pins are
+ * GPIOs meanwhile, driven low or released to the pull-ups.
+ *
+ * @param i2c_priv I2C private data
+ * @return 0 if the bus is free, -EBUSY if SDA or SCL stays low
+ */
+static int _max_capi_i2c_clear_bus(struct max_capi_i2c_priv *i2c_priv)
+{
+	const uint32_t scl = MAX_CAPI_I2C_SCL_PIN, sda = MAX_CAPI_I2C_SDA_PIN;
+	mxc_gpio_regs_t *port = gpio_cfg_i3c.port;
+	mxc_gpio_cfg_t pins = gpio_cfg_i3c;
+	uint32_t i;
+	int ret;
+
+	pins.vssel = (mxc_gpio_vssel_t)i2c_priv->vssel;
+	pins.func = MXC_GPIO_FUNC_IN;
+	MXC_GPIO_Config(&pins);
+	/* Driving a pin low is enabling its output */
+	MXC_GPIO_OutClr(port, gpio_cfg_i3c.mask);
+
+	/*
+	 * SDA follows SCL half a period later, so that every pulse ends with a
+	 * STOP once the target lets SDA go. SDA high with SCL high at the end of
+	 * a pulse means the STOP went out. Stopping at the first SDA high before
+	 * a pulse instead would miss a target in the middle of sending a 1.
+	 */
+	for (i = 0; i < MAX_CAPI_I2C_CLEAR_PULSES; i++) {
+		port->outen_set = scl;
+		_max_capi_i2c_clear_wait();
+		port->outen_set = sda;
+		_max_capi_i2c_clear_wait();
+		port->outen_clr = scl;
+		_max_capi_i2c_clear_wait();
+		port->outen_clr = sda;
+		_max_capi_i2c_clear_wait();
+
+		if ((port->in & gpio_cfg_i3c.mask) == gpio_cfg_i3c.mask)
+			break;
+	}
+
+	ret = ((port->in & gpio_cfg_i3c.mask) == gpio_cfg_i3c.mask) ? 0 : -EBUSY;
+
+	pins.func = gpio_cfg_i3c.func;
+	MXC_GPIO_Config(&pins);
+
+	return ret;
+}
+
+/**
+ * @brief Bring the controller and the bus back to the stopped state
+ *
+ * An open message is ended with a STOP, and a bus clear frees a target still
+ * driving SDA. The controller takes such a target for one making an In-Band
+ * Interrupt request, which no I2C target makes: it flags a target START and
+ * leaves the stopped state, and can hold SDA itself. MXC_I3C_Recover() is not
+ * used, as it has the controller process the request, which clocks the bus
+ * while the target is still sending. Only a reset of the peripheral brings
+ * the controller back instead, and it comes before the bus clear.
+ *
+ * @param i2c_priv I2C private data
+ * @return 0 if the bus is free, negative error code otherwise
+ */
+static int _max_capi_i2c_recover(struct max_capi_i2c_priv *i2c_priv)
+{
+	mxc_i3c_regs_t *i3c = MXC_I3C_GET_I3C(i2c_priv->identifier);
+	int ret;
+
+	i2c_priv->recover_pending = false;
+
+	if ((i3c->cont_status & MXC_F_I3C_CONT_STATUS_STATE) ==
+	    MXC_S_I3C_CONT_STATUS_STATE_SDR_NORM)
+		MXC_I3C_EmitI2CStop(i3c);
+
+	/* Reset first: the reset sets up the pins again, which can clock SCL */
+	if ((i3c->cont_status & MXC_F_I3C_CONT_STATUS_STATE) !=
+	    MXC_S_I3C_CONT_STATUS_STATE_IDLE ||
+	    (i3c->cont_status & MXC_F_I3C_CONT_STATUS_TARG_START)) {
+		ret = _max_capi_i2c_configure_hardware(i2c_priv, false,
+						       i2c_priv->freq);
+		if (ret)
+			return ret;
+	}
+
+	return _max_capi_i2c_clear_bus(i2c_priv);
+}
+
+/**
+ * @brief Recover the bus before a new message if a target is still sending
+ *
+ * The signs are an earlier transfer that timed out partway through a message,
+ * a target START flagged, the states the controller enters for an In-Band
+ * Interrupt request, which no I2C target makes, or SDA low with SCL high in the
+ * stopped state. The timeout is the only sign of a target cut off while it
+ * sends a 1. While a message is open, the target holds SDA low after it
+ * acknowledges a byte, so the pins alone do not count then.
+ *
+ * @param i2c_priv I2C private data
+ * @param i3c I3C peripheral registers
+ */
+static void _max_capi_i2c_check_bus(struct max_capi_i2c_priv *i2c_priv,
+				    mxc_i3c_regs_t *i3c)
+{
+	uint32_t status = i3c->cont_status;
+	uint32_t state = status & MXC_F_I3C_CONT_STATUS_STATE;
+	mxc_gpio_regs_t *port = gpio_cfg_i3c.port;
+
+	if (i2c_priv->recover_pending ||
+	    (status & MXC_F_I3C_CONT_STATUS_TARG_START) ||
+	    state == MXC_S_I3C_CONT_STATUS_STATE_TARG_REQ ||
+	    state == MXC_S_I3C_CONT_STATUS_STATE_IBI_ACKNACK ||
+	    (state == MXC_S_I3C_CONT_STATUS_STATE_IDLE &&
+	     (port->in & gpio_cfg_i3c.mask) == MAX_CAPI_I2C_SCL_PIN))
+		_max_capi_i2c_recover(i2c_priv);
+}
+
+/**
+ * @brief End a failed transfer with a STOP
+ *
+ * A STOP requested while a byte is on the bus is dropped, and after a write
+ * times out the controller can still be sending. This discards the rest of
+ * the write and requests the STOP again until the controller is idle, for at
+ * most the bytes the transmit FIFO and the shift register can hold. A read
+ * must be ended with _max_capi_i2c_abort_read() first.
+ *
+ * @param i3c I3C peripheral registers
+ * @param budget Poll iterations allowed per byte
+ */
+static void _max_capi_i2c_stop_failed(mxc_i3c_regs_t *i3c, uint32_t budget)
+{
+	uint32_t tries, timeout;
+
+	MXC_I3C_ClearTXFIFO(i3c);
+
+	for (tries = 0; tries <= MAX_CAPI_I2C_FIFO_DEPTH; tries++) {
+		i3c->cont_ctrl1 = MXC_S_I3C_CONT_CTRL1_REQ_EMIT_STOP |
+				  (1U << MXC_F_I3C_CONT_CTRL1_TYPE_POS);
+
+		for (timeout = budget; timeout; timeout--)
+			if ((i3c->cont_status & MXC_F_I3C_CONT_STATUS_STATE) ==
+			    MXC_S_I3C_CONT_STATUS_STATE_IDLE)
+				return;
+	}
+}
+
+/**
  * @brief Perform I2C transmit using FIFO (interrupt-driven)
  * @param i3c I3C peripheral registers
  * @param async Async state
@@ -804,8 +973,12 @@ static void _max_capi_i2c_dma_complete_callback(uint32_t event, void *ctx)
 		_max_capi_i2c_abort_read(i3c, budget);
 
 	/* Bus errors clear at the STOP, so they are read before it */
-	if (result || i2c_priv->async->send_stop)
+	if (result)
+		_max_capi_i2c_stop_failed(i3c, budget);
+	else if (i2c_priv->async->send_stop)
 		MXC_I3C_EmitI2CStop(i3c);
+	if (result == -ETIMEDOUT)
+		i2c_priv->recover_pending = true;
 
 	/*
 	 * Disable the controller RX/TX DMA request. Leaving it enabled lets a
@@ -1024,8 +1197,9 @@ static int _max_capi_i2c_receive_dma(struct max_capi_i2c_priv *i2c_priv,
 		if (MXC_I3C_WriteTXFIFO(i3c, async->subaddr_buf,
 					async->subaddr_len, true,
 					timeout) != async->subaddr_len) {
-			MXC_I3C_EmitI2CStop(i3c);
+			_max_capi_i2c_stop_failed(i3c, budget);
 			i2c_priv->async_transfer_in_progress = false;
+			i2c_priv->recover_pending = true;
 			return -ETIMEDOUT;
 		}
 
@@ -1039,8 +1213,9 @@ static int _max_capi_i2c_receive_dma(struct max_capi_i2c_priv *i2c_priv,
 		while (!(i3c->cont_status & MXC_F_I3C_CONT_STATUS_DONE)) {
 			ret = _max_capi_i2c_poll(i3c, &timeout);
 			if (ret) {
-				MXC_I3C_EmitI2CStop(i3c);
+				_max_capi_i2c_stop_failed(i3c, budget);
 				i2c_priv->async_transfer_in_progress = false;
+				i2c_priv->recover_pending = ret == -ETIMEDOUT;
 				return ret;
 			}
 		}
@@ -1271,6 +1446,8 @@ static void _max_capi_i2c_controller_isr(struct max_capi_i2c_priv *i2c_priv,
 			i2c_priv->async->state = MAX_CAPI_I2C_ASYNC_STATE_ERROR;
 			_max_capi_i2c_abort_read(i3c, budget);
 			MXC_I3C_EmitI2CStop(i3c);
+			if (ret == -ETIMEDOUT)
+				i2c_priv->recover_pending = true;
 			operation_complete = true;
 			break;
 		}
@@ -1378,6 +1555,8 @@ int _max_capi_i2c_setup_async(struct capi_i2c_device *device,
 	i2c_priv->async->data_idx = 0;
 	i2c_priv->async->rx_limit = _max_capi_i2c_rx_limit(transfer->len);
 
+	/* Before the FIFOs are cleared: a recovery can leave bytes in them */
+	_max_capi_i2c_check_bus(i2c_priv, i3c);
 	MXC_I3C_ClearRXFIFO(i3c);
 	MXC_I3C_ClearTXFIFO(i3c);
 
@@ -1653,6 +1832,8 @@ static int max_capi_i2c_transmit(struct capi_i2c_device *device,
 	/* Each poll iteration takes at least one core clock */
 	budget = (SystemCoreClock / i2c_priv->freq) * MAX_CAPI_I2C_IDLE_BITS;
 
+	/* Before the FIFOs are cleared: a recovery can leave bytes in them */
+	_max_capi_i2c_check_bus(i2c_priv, i3c);
 	MXC_I3C_ClearTXFIFO(i3c);
 
 	ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_WRITE, addr, 0);
@@ -1691,8 +1872,13 @@ static int max_capi_i2c_transmit(struct capi_i2c_device *device,
 
 stop:
 	/* Bus errors clear at the STOP, so they are read before it */
-	if (ret || !transfer->no_stop)
+	if (ret)
+		_max_capi_i2c_stop_failed(i3c, budget);
+	else if (!transfer->no_stop)
 		MXC_I3C_EmitI2CStop(i3c);
+
+	if (ret == -ETIMEDOUT)
+		i2c_priv->recover_pending = true;
 
 	return ret;
 }
@@ -1769,6 +1955,8 @@ static int max_capi_i2c_receive(struct capi_i2c_device *device,
 	/* Each poll iteration takes at least one core clock */
 	budget = (SystemCoreClock / i2c_priv->freq) * MAX_CAPI_I2C_IDLE_BITS;
 
+	/* Before the FIFOs are cleared: a recovery can leave bytes in them */
+	_max_capi_i2c_check_bus(i2c_priv, i3c);
 	MXC_I3C_ClearTXFIFO(i3c);
 	MXC_I3C_ClearRXFIFO(i3c);
 
@@ -1839,8 +2027,13 @@ stop:
 		_max_capi_i2c_abort_read(i3c, budget);
 
 	/* Bus errors clear at the STOP, so they are read before it */
-	if (ret || !transfer->no_stop)
+	if (ret)
+		_max_capi_i2c_stop_failed(i3c, budget);
+	else if (!transfer->no_stop)
 		MXC_I3C_EmitI2CStop(i3c);
+
+	if (ret == -ETIMEDOUT)
+		i2c_priv->recover_pending = true;
 
 	return ret;
 }
@@ -2036,21 +2229,10 @@ static int max_capi_i2c_receive_async(struct capi_i2c_device *device,
  */
 static int max_capi_i2c_recover_bus(struct capi_i2c_controller_handle *handle)
 {
-	const struct max_capi_i2c_priv *i2c_priv;
-	uint8_t i2c_id;
-	int ret;
-
 	if (!handle || !handle->priv)
 		return -EINVAL;
 
-	i2c_priv = handle->priv;
-	i2c_id = i2c_priv->identifier;
-
-	ret = MXC_I3C_Recover(MXC_I3C_GET_I3C(i2c_id));
-	if (ret != E_NO_ERROR)
-		return -EIO;
-
-	return 0;
+	return _max_capi_i2c_recover(handle->priv);
 }
 
 /**
