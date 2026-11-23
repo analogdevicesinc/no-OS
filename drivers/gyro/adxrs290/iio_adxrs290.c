@@ -81,7 +81,8 @@ static int get_adxrs290_iio_ch_hpf(void *device, char *buf, uint32_t len,
 				   const struct iio_ch_info *channel,
 				   intptr_t priv)
 {
-	uint8_t index;
+	enum adxrs290_hpf index;
+
 	adxrs290_get_hpf((struct adxrs290_dev *)device, &index);
 	if (index > 0x0A)
 		index = 0x0A;
@@ -116,7 +117,7 @@ static int get_adxrs290_iio_ch_lpf(void *device, char *buf, uint32_t len,
 				   const struct iio_ch_info *channel,
 				   intptr_t priv)
 {
-	uint8_t index;
+	enum adxrs290_lpf index;
 
 	adxrs290_get_lpf((struct adxrs290_dev *)device, &index);
 	if (index > 0x07)
