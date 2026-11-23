@@ -14,6 +14,7 @@
 #ifndef AD5446_H_
 #define AD5446_H_
 
+#include <stdbool.h>
 #include <stdint.h>
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
@@ -24,17 +25,11 @@ enum active_clk_t {
 	posedge
 };
 
-/* Custom boolean type */
-enum bool_t {
-	false,
-	true
-};
-
 /* Data structure for chip's attributes */
 struct ad5446_chip_info {
 	uint8_t resolution;
 	enum active_clk_t  data_clock_in;
-	enum bool_t        has_ctrl;
+	bool has_ctrl;
 };
 
 /* Supported output types */
