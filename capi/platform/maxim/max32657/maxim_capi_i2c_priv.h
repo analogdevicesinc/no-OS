@@ -23,6 +23,13 @@ extern "C" {
 
 #define MAX_CAPI_I2C_DMA_CALLBACK_CLEANUP_TIMEOUT	10000
 
+/** Longest read that the 8-bit CONT_CTRL1.term_rd count can end */
+#define MAX_CAPI_I2C_TERM_RD_MAX		255U
+/**
+ * Bytes the controller still clocks in after term_rd = 1 is written while it
+ * holds SCL on a full receive FIFO: the byte it then NACKs.
+ */
+#define MAX_CAPI_I2C_TERM_TAIL			1U
 /** Bus bit times a blocking transfer may go without progress */
 #define MAX_CAPI_I2C_IDLE_BITS			256U
 /** Bus bit times a transfer may go without progress in interrupt context */
