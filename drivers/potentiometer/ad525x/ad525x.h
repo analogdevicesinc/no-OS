@@ -13,6 +13,7 @@
 #ifndef AD525X_H_
 #define AD525X_H_
 
+#include <stdbool.h>
 #include <stdint.h>
 #include "no_os_delay.h"
 #include "no_os_gpio.h"
@@ -101,12 +102,6 @@
 #define AD525X_RDAC2_DECIMAL_TOL            0x1D
 #define AD525X_RDAC3_SIGN_TOL               0x1E
 #define AD525X_RDAC4_DECIMAL_TOL            0x1F
-
-/* Custom boolean type */
-enum bool_t {
-	false,
-	true
-};
 
 /* Supported devices */
 enum ad525_x_type_t {

@@ -13,14 +13,10 @@
 #ifndef AD5449_H_
 #define AD5449_H_
 
+#include <stdbool.h>
 #include <stdint.h>
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
-
-enum bool_t {
-	false,
-	true
-};
 
 /* Supported devices */
 enum ad5449_type_t {
@@ -36,7 +32,7 @@ enum ad5449_type_t {
 struct ad5449_chip_info {
 	uint8_t num_channels;
 	uint8_t resolution;
-	enum bool_t has_ctrl;
+	bool has_ctrl;
 };
 
 struct ad5449_dev {
