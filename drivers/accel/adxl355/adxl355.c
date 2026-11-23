@@ -227,10 +227,11 @@ int adxl355_remove(struct adxl355_dev *dev)
 *******************************************************************************/
 int adxl355_set_op_mode(struct adxl355_dev *dev, enum adxl355_op_mode op_mode)
 {
+	uint8_t val = op_mode;
 	int ret;
 
 	ret = adxl355_write_device_data(dev, ADXL355_ADDR(ADXL355_POWER_CTL),
-					GET_ADXL355_TRANSF_LEN(ADXL355_POWER_CTL), &op_mode);
+					GET_ADXL355_TRANSF_LEN(ADXL355_POWER_CTL), &val);
 
 	if (!ret)
 		dev->op_mode = op_mode;
@@ -249,13 +250,16 @@ int adxl355_set_op_mode(struct adxl355_dev *dev, enum adxl355_op_mode op_mode)
 int adxl355_get_op_mode(struct adxl355_dev *dev,
 			enum adxl355_op_mode *op_mode)
 {
+	uint8_t val;
 	int ret;
 
 	ret = adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_POWER_CTL),
-				       GET_ADXL355_TRANSF_LEN(ADXL355_POWER_CTL), op_mode);
+				       GET_ADXL355_TRANSF_LEN(ADXL355_POWER_CTL), &val);
 
-	if (!ret)
+	if (!ret) {
+		*op_mode = val;
 		dev->op_mode = *op_mode;
+	}
 
 	return ret;
 }

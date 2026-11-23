@@ -1559,7 +1559,7 @@ static int lt8722_iio_read_amux_available(void *dev, char *buf, uint32_t len,
 	struct lt8722_iio_attr_avail avail =
 		lt8722_iio_get_amux_available(priv);
 	const char *values;
-	uint8_t amux;
+	enum lt8722_amux amux;
 	uint8_t amux_test;
 	struct lt8722_iio_dev *iio_lt8722;
 	struct lt8722_dev *lt8722;
@@ -1622,7 +1622,7 @@ static int lt8722_iio_read_amux(void *dev, char *buf, uint32_t len,
 	lt8722 = iio_lt8722->lt8722_dev;
 
 	if (priv == LT8722_AMUX) {
-		uint8_t amux;
+		enum lt8722_amux amux;
 		uint8_t amux_test;
 
 		ret = lt8722_get_amux(lt8722, &amux, &amux_test);
@@ -1664,7 +1664,7 @@ static int lt8722_iio_write_amux(void *dev, char *buf, uint32_t len,
 	struct lt8722_iio_attr_avail avail =
 		lt8722_iio_get_amux_available(priv);
 	const char *values;
-	uint8_t amux;
+	enum lt8722_amux amux;
 	uint8_t amux_test;
 	struct lt8722_iio_dev *iio_lt8722;
 	struct lt8722_dev *lt8722;

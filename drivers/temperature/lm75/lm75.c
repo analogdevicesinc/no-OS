@@ -613,7 +613,19 @@ int lm75_shutdown(struct lm75_dev *dev, bool flag)
  */
 int lm75_read_mode(struct lm75_dev *dev, enum lm75_mode *mode)
 {
-	return lm75_read_one_configuration_field(dev, LM75_CONFIG_INT_EN, mode);
+	uint8_t val;
+	int err;
+
+	if (!mode)
+		return -EINVAL;
+
+	err = lm75_read_one_configuration_field(dev, LM75_CONFIG_INT_EN, &val);
+	if (err)
+		return err;
+
+	*mode = val;
+
+	return 0;
 }
 
 /**
@@ -637,7 +649,19 @@ int lm75_write_mode(struct lm75_dev *dev, enum lm75_mode mode)
  */
 int lm75_read_os_polarity(struct lm75_dev *dev, enum lm75_os_polarity *pol)
 {
-	return lm75_read_one_configuration_field(dev, LM75_CONFIG_OS_POLARITY, pol);
+	uint8_t val;
+	int err;
+
+	if (!pol)
+		return -EINVAL;
+
+	err = lm75_read_one_configuration_field(dev, LM75_CONFIG_OS_POLARITY, &val);
+	if (err)
+		return err;
+
+	*pol = val;
+
+	return 0;
 }
 
 /**
@@ -663,7 +687,19 @@ int lm75_write_os_polarity(struct lm75_dev *dev, enum lm75_os_polarity pol)
  */
 int lm75_read_fault_queue(struct lm75_dev *dev, enum lm75_fault_queue *fq)
 {
-	return lm75_read_one_configuration_field(dev, LM75_CONFIG_FAULT_QUEUE, fq);
+	uint8_t val;
+	int err;
+
+	if (!fq)
+		return -EINVAL;
+
+	err = lm75_read_one_configuration_field(dev, LM75_CONFIG_FAULT_QUEUE, &val);
+	if (err)
+		return err;
+
+	*fq = val;
+
+	return 0;
 }
 
 /**

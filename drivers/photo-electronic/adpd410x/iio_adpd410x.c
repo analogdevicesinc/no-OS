@@ -177,7 +177,7 @@ static int adpd410x_iio_get_last_timeslot(void *device, char *buf,
 {
 	struct adpd410x_dev *dev = (struct adpd410x_dev *)device;
 	int32_t ret;
-	uint8_t timeslot_no;
+	enum adpd410x_timeslots timeslot_no;
 
 	ret = adpd410x_get_last_timeslot(dev, &timeslot_no);
 	if (ret != 0)

@@ -111,6 +111,9 @@ static int maxm86161_iio_get_attr(void *device, char *buf, uint32_t len,
 	enum maxm86161_ppg_tint tint;
 	enum maxm86161_adc_range adc_range;
 	enum maxm86161_smp_ave avg;
+	enum maxm86161_pf_iir_tc iir_tc;
+	enum maxm86161_pf_iir_init iir_init;
+	enum maxm86161_pf_threshold_sigma_mult sigma;
 	int32_t temperature;
 	int ret;
 	uint16_t int_status;
@@ -260,22 +263,22 @@ static int maxm86161_iio_get_attr(void *device, char *buf, uint32_t len,
 		return snprintf(buf, len, "%d", val_bool);
 
 	case MAXM86161_IIO_PF_IIR_TC:
-		ret = maxm86161_get_pf_iir_tc(dev, &val8);
+		ret = maxm86161_get_pf_iir_tc(dev, &iir_tc);
 		if (ret)
 			return ret;
-		return snprintf(buf, len, "%u", val8);
+		return snprintf(buf, len, "%u", iir_tc);
 
 	case MAXM86161_IIO_PF_IIR_INIT:
-		ret = maxm86161_get_pf_iir_init(dev, &val8);
+		ret = maxm86161_get_pf_iir_init(dev, &iir_init);
 		if (ret)
 			return ret;
-		return snprintf(buf, len, "%u", val8);
+		return snprintf(buf, len, "%u", iir_init);
 
 	case MAXM86161_IIO_PF_THRESHOLD_SIGMA:
-		ret = maxm86161_get_pf_threshold_sigma(dev, &val8);
+		ret = maxm86161_get_pf_threshold_sigma(dev, &sigma);
 		if (ret)
 			return ret;
-		return snprintf(buf, len, "%u", val8);
+		return snprintf(buf, len, "%u", sigma);
 
 	case MAXM86161_IIO_SHUTDOWN:
 		ret = maxm86161_reg_read(dev, MAXM86161_REG_SYS_CTRL, &val8);

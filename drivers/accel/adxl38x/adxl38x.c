@@ -473,7 +473,7 @@ int adxl38x_get_raw_xyz(struct adxl38x_dev *dev, uint16_t *raw_x,
 {
 	int ret;
 	uint8_t array_raw_data[6] = {0};
-	uint8_t op_mode;
+	enum adxl38x_op_mode op_mode;
 
 	// Enable XYZ channels
 	ret = adxl38x_register_update_bits(dev, ADXL38X_DIG_EN,
@@ -513,7 +513,7 @@ int adxl38x_get_temp(struct adxl38x_dev *dev,
 		     struct adxl38x_fractional_val *temp_degC)
 {
 	int ret;
-	uint8_t op_mode;
+	enum adxl38x_op_mode op_mode;
 	uint8_t array_raw_data[2] = {0};
 
 	// Enable T channel only
@@ -568,7 +568,7 @@ int adxl38x_get_raw_data(struct adxl38x_dev *dev,
 	uint8_t array_rearranged_data[8] = {0};
 	int ret;
 	int j = 0;
-	uint8_t op_mode;
+	enum adxl38x_op_mode op_mode;
 	uint8_t tzyx, start_addr;
 	uint16_t num_bytes = 0;
 

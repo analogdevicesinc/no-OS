@@ -939,6 +939,7 @@ int hmc6301_get_bb_attn_fine(struct hmc630x_dev *dev,
 			     enum hmc6301_bb_attn_fine *attn_i,
 			     enum hmc6301_bb_attn_fine *attn_q)
 {
+	uint8_t val;
 	int ret;
 
 	if (!dev)
@@ -948,11 +949,19 @@ int hmc6301_get_bb_attn_fine(struct hmc630x_dev *dev,
 	if (dev->type != HMC6301)
 		return -ENOSYS;
 
-	ret = hmc630x_read(dev, HMC6301_BBAMP_ATTENFI, attn_i);
+	ret = hmc630x_read(dev, HMC6301_BBAMP_ATTENFI, &val);
 	if (ret)
 		return ret;
 
-	return hmc630x_read(dev, HMC6301_BBAMP_ATTENFQ, attn_q);
+	*attn_i = val;
+
+	ret = hmc630x_read(dev, HMC6301_BBAMP_ATTENFQ, &val);
+	if (ret)
+		return ret;
+
+	*attn_q = val;
+
+	return 0;
 }
 
 /* Set the low-pass corner and high-pass corner of the baseband amplifiers. */
