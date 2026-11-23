@@ -23,6 +23,16 @@ extern "C" {
 #include "xil_types.h"
 #include <stdint.h>
 
+/* Replace the inactive defaults from capi_platform.h. */
+#undef CAPI_PLATFORM_IO_READ8
+#undef CAPI_PLATFORM_IO_READ16
+#undef CAPI_PLATFORM_IO_READ32
+#undef CAPI_PLATFORM_IO_READ64
+#undef CAPI_PLATFORM_IO_WRITE8
+#undef CAPI_PLATFORM_IO_WRITE16
+#undef CAPI_PLATFORM_IO_WRITE32
+#undef CAPI_PLATFORM_IO_WRITE64
+
 #define CAPI_PLATFORM_IO_READ8(addr)  Xil_In8((UINTPTR)(addr))
 #define CAPI_PLATFORM_IO_READ16(addr) Xil_In16((UINTPTR)(addr))
 #define CAPI_PLATFORM_IO_READ32(addr) Xil_In32((UINTPTR)(addr))
