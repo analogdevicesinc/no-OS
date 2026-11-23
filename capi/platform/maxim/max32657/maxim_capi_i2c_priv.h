@@ -18,7 +18,8 @@ extern "C" {
 #endif /* __cplusplus */
 
 #define MAX_CAPI_I2C_TARGET_RX_BUFFER_SIZE	256
-#define MAX_CAPI_I2C_FIFO_DEPTH			32
+/** TX and RX FIFO depth (TARG_CAP1.fifotx = fiforx = 0b10) */
+#define MAX_CAPI_I2C_FIFO_DEPTH			8U
 
 #define MAX_CAPI_I2C_DMA_TIMEOUT			1000
 #define MAX_CAPI_I2C_DMA_CALLBACK_CLEANUP_TIMEOUT	10000
