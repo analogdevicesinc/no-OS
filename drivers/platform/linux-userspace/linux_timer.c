@@ -222,15 +222,14 @@ int linux_timer_get_elapsed_time_nsec(struct no_os_timer_desc *desc,
  * @brief linux platform specific timer platform ops structure
  */
 const struct no_os_timer_platform_ops linux_timer_ops = {
-	.init = (int32_t (*)())linux_timer_init,
-	.start = (int32_t (*)())linux_timer_start,
-	.stop = (int32_t (*)())linux_timer_stop,
-	.counter_get = (int32_t (*)())linux_timer_counter_get,
-	.counter_set = (int32_t (*)())linux_timer_counter_set,
-	.count_clk_get = (int32_t (*)())linux_timer_count_clk_get,
-	.count_clk_set = (int32_t (*)())linux_timer_count_clk_set,
-	.get_elapsed_time_nsec =
-	(int32_t (*)())linux_timer_get_elapsed_time_nsec,
-	.remove = (int32_t (*)())linux_timer_remove
+	.init = linux_timer_init,
+	.start = linux_timer_start,
+	.stop = linux_timer_stop,
+	.counter_get = linux_timer_counter_get,
+	.counter_set = linux_timer_counter_set,
+	.count_clk_get = linux_timer_count_clk_get,
+	.count_clk_set = linux_timer_count_clk_set,
+	.get_elapsed_time_nsec = linux_timer_get_elapsed_time_nsec,
+	.remove = linux_timer_remove
 };
 

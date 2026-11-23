@@ -938,7 +938,7 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
  * @param dev_data  - The iio device data structure.
  * @return the number of read samples.
  */
-int32_t read_samples(struct iio_device_data *dev_data)
+int read_samples(struct iio_device_data *dev_data)
 {
 	if (!dev_data)
 		return -ENODEV;
@@ -957,7 +957,7 @@ int32_t read_samples(struct iio_device_data *dev_data)
  * @return ret - Result of the handling procedure. In case of success, the size
  * 				 of the written data is returned.
  */
-int32_t pqm_trigger_handler(struct iio_device_data *dev_data)
+int pqm_trigger_handler(struct iio_device_data *dev_data)
 {
 	struct pqm_desc *desc;
 	uint32_t k = 0;
@@ -1535,6 +1535,6 @@ struct iio_device pqm_iio_descriptor = {
 	.buffer_attributes = NULL,
 	.pre_enable = update_pqm_channels,
 	.post_disable = close_pqm_channels,
-	.trigger_handler = (int32_t(*)())pqm_trigger_handler,
-	.submit = (int32_t(*)())read_samples,
+	.trigger_handler = pqm_trigger_handler,
+	.submit = read_samples,
 }; // pqm iio descriptor
