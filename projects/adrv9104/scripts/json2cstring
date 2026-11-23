@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# Usage example:
+#     json2cstring path/to/file.json
+#
+CFILE="${1%.json}.h"
+\cp -f $1 $CFILE
+sed -i 's/$/ \\/' $CFILE
+sed -i 's/\r//' $CFILE
+sed -i 's/\"/\\\"/g' $CFILE
+sed -i '1s/^/const char *json_profile = "/' $CFILE
+sed -i '$s/ \\/";/' $CFILE
+echo $CFILE

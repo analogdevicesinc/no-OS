@@ -26,6 +26,7 @@ set(DOCUMENTED_FILES
 set(EXCLUDE_FILES
     "${SOURCES_DIR}/drivers/rf-transceiver/talise \\
     ${SOURCES_DIR}/drivers/rf-transceiver/navassa \\
+    ${SOURCES_DIR}/drivers/rf-transceiver/nevis \\
     ${SOURCES_DIR}/drivers/rf-transceiver/madura \\
     ${SOURCES_DIR}/drivers/rf-transceiver/koror \\
     ${SOURCES_DIR}/drivers/rf-transceiver/palma \\

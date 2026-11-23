@@ -52,6 +52,11 @@ config RF_TRANSCEIVER_ADRV9002
 	bool "Enable ADRV9002 RF transceiver driver"
 	default n
 
+config RF_TRANSCEIVER_ADRV910X
+	select GPIO
+	bool "Enable ADRV910X (Nevis) RF transceiver driver"
+	default n
+
 config RF_TRANSCEIVER_ADRV9009
 	select GPIO
 	bool "Enable ADRV9009 RF transceiver driver"

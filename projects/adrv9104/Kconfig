@@ -1,0 +1,42 @@
+menu "adrv9104 Configuration"
+
+choice ADRV9104_EXAMPLE
+	prompt "Example variant"
+	default ADRV9104_DEMO_EXAMPLE
+
+config ADRV9104_DEMO_EXAMPLE
+	bool "Demo example"
+	help
+	  Basic initialization and bring-up example for the ADRV910x (Nevis)
+	  transceiver via AXI ADC/DAC cores and DMA.
+
+config ADRV9104_DEMO_ADRV9002_EXAMPLE
+	bool "Demo RX2TX2 example"
+	help
+	  Basic initialization and bring-up example built with ADRV9002_RX2TX2
+	  defined (single 2-channel interface instead of two 1-channel ones).
+
+config ADRV9104_DMA_EXAMPLE
+	bool "DMA example"
+	help
+	  DMA-based data capture and playback example for the ADRV910x (Nevis)
+	  transceiver.
+
+config ADRV9104_IIO_EXAMPLE
+	bool "IIO example"
+	depends on IIO
+	help
+	  IIO example that exposes the ADRV910x (Nevis) transceiver through
+	  the IIO framework via iio_axi_adc and iio_axi_dac, enabling host-side
+	  data capture and playback over UART.
+
+config ADRV9104_IIO_ADRV9002_EXAMPLE
+	bool "IIO RX2TX2 example"
+	depends on IIO
+	help
+	  IIO example built with ADRV9002_RX2TX2 defined (single 2-channel
+	  interface instead of two 1-channel ones).
+
+endchoice
+
+endmenu
