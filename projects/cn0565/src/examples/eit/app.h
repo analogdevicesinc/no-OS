@@ -34,7 +34,7 @@ struct measurement_config {
 
 extern volatile uint32_t
 ucInterrupted; /* Flag to indicate interrupt occurred */
-int app_main();
+int app_main(struct no_os_i2c_desc *i2c, struct ad5940_init_param *ad5940_ip);
 int ADG2128_SwRst(struct ad5940_dev *dev);
 uint32_t  GetMCUIntFlag(void);
 uint32_t  ClrMCUIntFlag(void);
