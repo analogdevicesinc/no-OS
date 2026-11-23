@@ -506,17 +506,17 @@ static int aducm_gpio_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
 }
 
 /**
- * @brief maxim specific GPIO IRQ platform ops structure
+ * @brief aducm3029 specific GPIO IRQ platform ops structure
  */
 const struct no_os_irq_platform_ops aducm_gpio_irq_ops = {
-	.init = (int32_t (*)())aducm_gpio_irq_ctrl_init,
-	.register_callback = (int32_t (*)())aducm_gpio_irq_register_callback,
-	.unregister_callback = (int32_t (*)())aducm_gpio_irq_unregister_callback,
-	.enable = (int32_t (*)())aducm_gpio_irq_enable,
-	.disable = (int32_t (*)())aducm_gpio_irq_disable,
-	.trigger_level_set = (int32_t (*)())aducm_gpio_irq_trigger_level_set,
-	.global_enable = (int32_t (*)())aducm_gpio_irq_global_enable,
-	.global_disable = (int32_t (*)())aducm_gpio_irq_global_disable,
-	.set_priority = (int32_t (*)())(aducm_gpio_irq_set_priority),
-	.remove = (int32_t (*)())aducm_gpio_irq_ctrl_remove
+	.init = aducm_gpio_irq_ctrl_init,
+	.register_callback = aducm_gpio_irq_register_callback,
+	.unregister_callback = aducm_gpio_irq_unregister_callback,
+	.enable = aducm_gpio_irq_enable,
+	.disable = aducm_gpio_irq_disable,
+	.trigger_level_set = aducm_gpio_irq_trigger_level_set,
+	.global_enable = aducm_gpio_irq_global_enable,
+	.global_disable = aducm_gpio_irq_global_disable,
+	.set_priority = aducm_gpio_irq_set_priority,
+	.remove = aducm_gpio_irq_ctrl_remove
 };

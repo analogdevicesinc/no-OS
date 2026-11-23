@@ -19,15 +19,19 @@
 #include "iio_ad5940.h"
 #include "bia_measurement.h"
 
-static int _ad5940_read_register2(struct ad5940_iio_dev *dev, uint32_t reg,
+static int _ad5940_read_register2(void *device, uint32_t reg,
 				  uint32_t *readval)
 {
+	struct ad5940_iio_dev *dev = device;
+
 	return ad5940_ReadReg(dev->ad5940, reg, readval);
 }
 
-static int _ad5940_write_register2(struct ad5940_iio_dev *dev, uint32_t reg,
+static int _ad5940_write_register2(void *device, uint32_t reg,
 				   uint32_t writeval)
 {
+	struct ad5940_iio_dev *dev = device;
+
 	return ad5940_WriteReg(dev->ad5940, reg, writeval);
 }
 
@@ -249,8 +253,8 @@ static struct iio_device ad5940_iio_device = {
 	.pre_enable = NULL,
 	.post_disable = NULL,
 	.read_dev = NULL,
-	.debug_reg_read = (int (*)())_ad5940_read_register2,
-	.debug_reg_write = (int (*)())_ad5940_write_register2
+	.debug_reg_read = _ad5940_read_register2,
+	.debug_reg_write = _ad5940_write_register2
 };
 
 static struct iio_attribute ad5940_channel_attributes[] = {
