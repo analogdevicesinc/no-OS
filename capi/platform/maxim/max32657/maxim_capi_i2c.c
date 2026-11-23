@@ -338,6 +338,7 @@ static void _max_capi_i2c_reset_async_state(struct max_capi_i2c_priv *i2c_priv)
 	i2c_priv->async->data_buf = NULL;
 	i2c_priv->async->data_len = 0;
 	i2c_priv->async->data_idx = 0;
+	i2c_priv->async->rx_limit = 0;
 	i2c_priv->async->send_stop = false;
 	i2c_priv->async->result = 0;
 	i2c_priv->async->is_transmit = false;
@@ -595,31 +596,6 @@ static int _max_capi_i2c_finish_read(mxc_i3c_regs_t *i3c, uint8_t *buf,
 }
 
 /**
- * @brief Read available bytes from RX FIFO to buffer
- * @param i3c I3C peripheral registers
- * @param buf Destination buffer
- * @param len Total buffer length
- * @param idx Pointer to current index
- * @return Number of bytes read
- */
-static uint16_t _max_capi_i2c_read_rx_fifo(mxc_i3c_regs_t *i3c,
-		uint8_t *buf, uint16_t len,
-		uint16_t *idx)
-{
-	uint16_t available = MXC_I3C_Controller_GetRXCount(i3c);
-	uint16_t to_read = (available < len - (*idx)) ? available : (len - (*idx));
-
-	if (to_read > 0) {
-		int ret = MXC_I3C_ReadRXFIFO(i3c, &buf[*idx], to_read, 0);
-		if (ret > 0)
-			*idx += ret;
-		return ret > 0 ? ret : 0;
-	}
-
-	return 0;
-}
-
-/**
  * @brief Perform I2C transmit using FIFO (interrupt-driven)
  * @param i3c I3C peripheral registers
  * @param async Async state
@@ -713,7 +689,8 @@ static int _max_capi_i2c_receive_fifo(mxc_i3c_regs_t *i3c,
 		async->state = MAX_CAPI_I2C_ASYNC_STATE_RX_DATA;
 
 		ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_READ,
-					async->target_addr, async->data_len);
+					async->target_addr,
+					_max_capi_i2c_read_count(async->data_len));
 		if (ret == E_BUSY)
 			return -EBUSY;
 		if (ret != E_SUCCESS) {
@@ -796,12 +773,35 @@ static void _max_capi_i2c_dma_complete_callback(uint32_t event, void *ctx)
 		i2c_priv->async->dma_tx_end_pending = false;
 	}
 
+	if (!i2c_priv->async->is_transmit &&
+	    i2c_priv->async->rx_limit < i2c_priv->async->data_len) {
+		uint32_t idx = i2c_priv->async->rx_limit;
+
+		/*
+		 * The DMA moved the first rx_limit bytes of a read too long for
+		 * term_rd. The last bytes have to stay in the FIFO until term_rd
+		 * is written, so take the DMA off the FIFO and end the read here.
+		 */
+		i3c->cont_dmactrl = 0;
+
+		result = _max_capi_i2c_term_read(i3c, budget);
+		if (!result)
+			result = _max_capi_i2c_finish_read(i3c,
+							   i2c_priv->async->data_buf,
+							   &idx,
+							   i2c_priv->async->data_len,
+							   budget);
+	}
+
 	timeout = budget * (MAX_CAPI_I2C_FIFO_DEPTH + 1);
 	while (!(i3c->cont_status & MXC_F_I3C_CONT_STATUS_DONE) && !result)
 		result = _max_capi_i2c_poll(i3c, &timeout);
 
 	if (!result)
 		result = _max_capi_i2c_bus_error(i3c);
+
+	if (result && !i2c_priv->async->is_transmit)
+		_max_capi_i2c_abort_read(i3c, budget);
 
 	/* Bus errors clear at the STOP, so they are read before it */
 	if (result || i2c_priv->async->send_stop)
@@ -1001,6 +1001,7 @@ static int _max_capi_i2c_receive_dma(struct max_capi_i2c_priv *i2c_priv,
 	i2c_priv->async_transfer_in_progress = true;
 
 	async->state = MAX_CAPI_I2C_ASYNC_STATE_RX_DATA;
+	async->is_transmit = false;
 
 	if (async->subaddr_buf) {
 		ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_WRITE,
@@ -1065,7 +1066,8 @@ static int _max_capi_i2c_receive_dma(struct max_capi_i2c_priv *i2c_priv,
 		.dst_inc = CAPI_DMA_BYTE_INCREMENT,
 		.src_size = CAPI_DMA_XFER_SIZE_1_BYTE,
 		.dst_size = CAPI_DMA_XFER_SIZE_1_BYTE,
-		.length = async->data_len,
+		/* A long read is finished in _max_capi_i2c_dma_complete_callback() */
+		.length = async->rx_limit,
 		.extra = &dma_rx_extra,
 		.xfer_type = CAPI_DMA_DEV_TO_MEM,
 		.user_data = i2c_priv,
@@ -1089,7 +1091,8 @@ static int _max_capi_i2c_receive_dma(struct max_capi_i2c_priv *i2c_priv,
 
 	/* DMA is armed and waiting; now trigger the read. */
 	ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_READ,
-				async->target_addr, async->data_len);
+				async->target_addr,
+				_max_capi_i2c_read_count(async->data_len));
 	if (ret != E_SUCCESS) {
 		/* A NACKed address leaves the message open: end it */
 		MXC_I3C_EmitI2CStop(i3c);
@@ -1117,7 +1120,7 @@ error_cleanup:
 static void _max_capi_i2c_controller_isr(struct max_capi_i2c_priv *i2c_priv,
 		mxc_i3c_regs_t *i3c)
 {
-	uint32_t flags;
+	uint32_t flags, budget, idx;
 	int ret, result;
 	bool operation_complete;
 	capi_i2c_callback callback;
@@ -1133,6 +1136,8 @@ static void _max_capi_i2c_controller_isr(struct max_capi_i2c_priv *i2c_priv,
 
 	operation_complete = false;
 	flags = MXC_I3C_Controller_GetFlags(i3c);
+	/* Each poll iteration takes at least one core clock */
+	budget = (SystemCoreClock / i2c_priv->freq) * MAX_CAPI_I2C_IRQ_IDLE_BITS;
 
 	if (flags & MXC_F_I3C_CONT_INTFL_ERRWARN) {
 		uint32_t errwarn = i3c->cont_errwarn;
@@ -1140,6 +1145,10 @@ static void _max_capi_i2c_controller_isr(struct max_capi_i2c_priv *i2c_priv,
 
 		/* As in _max_capi_i2c_bus_error(), a timeout is not an error */
 		if (errwarn & ~MXC_F_I3C_CONT_ERRWARN_TO) {
+			if (i2c_priv->async->state == MAX_CAPI_I2C_ASYNC_STATE_RX_DATA ||
+			    i2c_priv->async->state == MAX_CAPI_I2C_ASYNC_STATE_RX_TERM)
+				_max_capi_i2c_abort_read(i3c, budget);
+
 			i2c_priv->async->result = -EIO;
 			i2c_priv->async->state = MAX_CAPI_I2C_ASYNC_STATE_ERROR;
 
@@ -1182,7 +1191,7 @@ static void _max_capi_i2c_controller_isr(struct max_capi_i2c_priv *i2c_priv,
 		if (flags & MXC_F_I3C_CONT_INTFL_DONE) {
 			ret = MXC_I3C_EmitStart(i3c, true, MXC_I3C_TRANSFER_TYPE_READ,
 						i2c_priv->async->target_addr,
-						i2c_priv->async->data_len);
+						_max_capi_i2c_read_count(i2c_priv->async->data_len));
 			if (ret != E_SUCCESS) {
 				i2c_priv->async->result = -EIO;
 				i2c_priv->async->state = MAX_CAPI_I2C_ASYNC_STATE_ERROR;
@@ -1212,23 +1221,79 @@ static void _max_capi_i2c_controller_isr(struct max_capi_i2c_priv *i2c_priv,
 		break;
 
 	case MAX_CAPI_I2C_ASYNC_STATE_RX_DATA:
-		if (flags & MXC_F_I3C_CONT_INTFL_RX_RDY) {
-			_max_capi_i2c_read_rx_fifo(i3c,
-						   i2c_priv->async->data_buf,
-						   i2c_priv->async->data_len,
-						   &i2c_priv->async->data_idx);
+		if (flags & (MXC_F_I3C_CONT_INTFL_RX_RDY | MXC_F_I3C_CONT_INTFL_DONE)) {
+			/*
+			 * Take all that is there: if DONE is set, the last bytes
+			 * are already in the FIFO.
+			 */
+			idx = i2c_priv->async->data_idx;
+			_max_capi_i2c_drain_rx(i3c, i2c_priv->async->data_buf,
+					       &idx, i2c_priv->async->rx_limit);
+			i2c_priv->async->data_idx = idx;
 
 			if (i2c_priv->async->data_idx >= i2c_priv->async->data_len) {
 				i2c_priv->async->state = MAX_CAPI_I2C_ASYNC_STATE_WAIT_DONE;
 				MXC_I3C_Controller_DisableInt(i3c, MXC_F_I3C_CONT_INTEN_RX_RDY);
+			} else if (i2c_priv->async->data_idx >= i2c_priv->async->rx_limit) {
+				/*
+				 * A read too long for term_rd: the last bytes stay in
+				 * the FIFO until it is full. With the threshold at 3/4,
+				 * RX_RDY fires again with at most two bytes to go.
+				 */
+				MXC_I3C_SetRXTXThreshold(i3c, MXC_I3C_RX_TH_3_4_FULL,
+							 MXC_I3C_TX_TH_HALF_FULL);
+				i2c_priv->async->state = MAX_CAPI_I2C_ASYNC_STATE_RX_TERM;
+			} else if (flags & MXC_F_I3C_CONT_INTFL_DONE) {
+				/* The read ended early */
+				i2c_priv->async->result = -EIO;
+				i2c_priv->async->state = MAX_CAPI_I2C_ASYNC_STATE_ERROR;
+				MXC_I3C_EmitI2CStop(i3c);
+				operation_complete = true;
 			}
 		}
 		break;
 
+	case MAX_CAPI_I2C_ASYNC_STATE_RX_TERM:
+		if (flags & MXC_F_I3C_CONT_INTFL_DONE) {
+			/* The read ended early */
+			ret = -EIO;
+		} else if (flags & MXC_F_I3C_CONT_INTFL_RX_RDY) {
+			ret = _max_capi_i2c_term_read(i3c, budget);
+		} else {
+			break;
+		}
+
+		MXC_I3C_SetRXTXThreshold(i3c, MXC_I3C_RX_TH_NOT_EMPTY,
+					 MXC_I3C_TX_TH_HALF_FULL);
+
+		if (ret) {
+			i2c_priv->async->result = ret;
+			i2c_priv->async->state = MAX_CAPI_I2C_ASYNC_STATE_ERROR;
+			_max_capi_i2c_abort_read(i3c, budget);
+			MXC_I3C_EmitI2CStop(i3c);
+			operation_complete = true;
+			break;
+		}
+
+		/* RX_RDY stays set on the full FIFO, so the ISR runs again */
+		i2c_priv->async->rx_limit = i2c_priv->async->data_len;
+		i2c_priv->async->state = MAX_CAPI_I2C_ASYNC_STATE_RX_DATA;
+		break;
+
 	case MAX_CAPI_I2C_ASYNC_STATE_WAIT_DONE:
 		if (flags & MXC_F_I3C_CONT_INTFL_DONE) {
-			i2c_priv->async->result = 0;
 			operation_complete = true;
+
+			/* A byte past the requested length means the NACK came late */
+			if (!i2c_priv->async->is_transmit &&
+			    MXC_I3C_Controller_GetRXCount(i3c)) {
+				MXC_I3C_ClearRXFIFO(i3c);
+				i2c_priv->async->result = -EOVERFLOW;
+				MXC_I3C_EmitI2CStop(i3c);
+				break;
+			}
+
+			i2c_priv->async->result = 0;
 
 			if (i2c_priv->async->send_stop)
 				MXC_I3C_EmitI2CStop(i3c);
@@ -1311,6 +1376,7 @@ int _max_capi_i2c_setup_async(struct capi_i2c_device *device,
 	i2c_priv->async->data_buf = transfer->buf;
 	i2c_priv->async->data_len = transfer->len;
 	i2c_priv->async->data_idx = 0;
+	i2c_priv->async->rx_limit = _max_capi_i2c_rx_limit(transfer->len);
 
 	MXC_I3C_ClearRXFIFO(i3c);
 	MXC_I3C_ClearTXFIFO(i3c);
@@ -1903,6 +1969,14 @@ static int max_capi_i2c_transmit_async(struct capi_i2c_device *device,
 
 /**
  * @brief Async receive function
+ *
+ * In controller mode, a read longer than MAX_CAPI_I2C_TERM_RD_MAX bytes is
+ * ended with term_rd = 1 as in max_capi_i2c_receive(). With FIFO interrupts,
+ * the controller interrupt does this, polling for at most two byte times. With
+ * DMA, the DMA moves all but the last MAX_CAPI_I2C_FIFO_DEPTH +
+ * MAX_CAPI_I2C_TERM_TAIL bytes, and the DMA completion callback polls for
+ * those, which takes about as many byte times.
+ *
  * @param device The I2C device
  * @param transfer The I2C transfer
  * @return 0 on success, negative error code otherwise
@@ -1934,13 +2008,6 @@ static int max_capi_i2c_receive_async(struct capi_i2c_device *device,
 	} else {
 		/* Controller mode - do the receive async */
 		int ret;
-
-		/*
-		 * The read length is programmed into the 8-bit TERM_RD field of
-		 * CONT_CTRL1 in a single EmitStart, so longer reads would wrap.
-		 */
-		if (transfer->len > UINT8_MAX)
-			return -EINVAL;
 
 		ret = _max_capi_i2c_setup_async(device, transfer);
 		if (ret)

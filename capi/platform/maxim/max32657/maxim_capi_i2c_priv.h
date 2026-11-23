@@ -88,6 +88,8 @@ enum max_capi_i2c_async_state_enum {
 	MAX_CAPI_I2C_ASYNC_STATE_TX_DATA,
 	/** Receiving data */
 	MAX_CAPI_I2C_ASYNC_STATE_RX_DATA,
+	/** Long read: waiting for a full receive FIFO to write term_rd = 1 */
+	MAX_CAPI_I2C_ASYNC_STATE_RX_TERM,
 	/** Waiting for transaction completion */
 	MAX_CAPI_I2C_ASYNC_STATE_WAIT_DONE,
 	/** Error occurred */
@@ -115,6 +117,12 @@ struct max_capi_i2c_async_state {
 	uint16_t data_len;
 	/** Data read/write index */
 	uint16_t data_idx;
+	/**
+	 * Bytes to receive before the read is ended: data_len for a read
+	 * that term_rd ends, fewer for a longer read whose last bytes stay
+	 * in the receive FIFO until term_rd = 1 is written
+	 */
+	uint16_t rx_limit;
 	/** Send STOP condition */
 	bool send_stop;
 	/** Operation result (0 on success, negative error code otherwise) */
