@@ -21,8 +21,12 @@ extern "C" {
 /** TX and RX FIFO depth (TARG_CAP1.fifotx = fiforx = 0b10) */
 #define MAX_CAPI_I2C_FIFO_DEPTH			8U
 
-#define MAX_CAPI_I2C_DMA_TIMEOUT			1000
 #define MAX_CAPI_I2C_DMA_CALLBACK_CLEANUP_TIMEOUT	10000
+
+/** Bus bit times a blocking transfer may go without progress */
+#define MAX_CAPI_I2C_IDLE_BITS			256U
+/** Bus bit times a transfer may go without progress in interrupt context */
+#define MAX_CAPI_I2C_IRQ_IDLE_BITS		32U
 
 /**
  * @enum max_capi_i2c_target_state_enum
@@ -71,6 +75,8 @@ enum max_capi_i2c_async_state_enum {
 	MAX_CAPI_I2C_ASYNC_STATE_IDLE,
 	/** Transmitting sub-address */
 	MAX_CAPI_I2C_ASYNC_STATE_TX_SUBADDR,
+	/** Sub-address queued; waiting for it to go out before the read */
+	MAX_CAPI_I2C_ASYNC_STATE_WAIT_SUBADDR_DONE,
 	/** Transmitting data */
 	MAX_CAPI_I2C_ASYNC_STATE_TX_DATA,
 	/** Receiving data */
