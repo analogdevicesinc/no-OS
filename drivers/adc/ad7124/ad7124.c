@@ -1625,3 +1625,4 @@ int32_t ad7124_remove(struct ad7124_dev *dev)
 }
 
 /* PR template/labeler test, do not merge */
+/* PR template/labeler test, do not merge, fix tag */
