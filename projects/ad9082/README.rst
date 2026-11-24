@@ -51,9 +51,19 @@ does not drive an ADXCVR or AXI-CLKGEN IP on this platform — it only brings up
 the HMC7044 clock tree, releases the GT reset over an AXI GPIO, and runs the
 JESD204 FSM.
 
-The bundled profile (``profiles/vpk180_ad9082``) matches the stock
-``ad9082_fmca_ebz`` VPK180 bitstream: JESD204C, M=4, L=8, S=4, N=NP=12, 24.75 Gbps
-lane rate, with the MxFE configured for a 4.0 GSPS DAC / 4.0 GSPS ADC datapath.
+The bundled profile (``profiles/vpk180_ad9082/app_config.h``) uses the link of
+the Linux ``versal-vpk180-reva-ad9082.dts``: JESD204C, M=8, L=8, S=2,
+N=NP=12, 24.75 Gbps lane rate. The DAC runs at 12 GHz with an interpolation of
+6, and the ADC at 6 GHz with a decimation of 3, so the RX data is complex I/Q
+at 2 GSPS. The TX and RX NCOs are both set to 1 GHz, so a DAC-to-ADC loopback
+tone comes back at baseband.
+
+The profile needs an M=8 bitstream. The HDL ``ad9082_fmca_ebz/vpk180``
+project builds M=4 by default; build the M=8 variant with:
+
+.. code-block:: bash
+
+   make RX_JESD_M=8 RX_JESD_S=2 TX_JESD_M=8 TX_JESD_S=2
 
 Applications
 ------------
@@ -127,6 +137,7 @@ prints the link status. No data is moved. The output looks like the one below:
    AD9082 Rev. 3 Grade 2 (API 1.7.0) probed
    JESD TX (JRX) Link0 204C status: Link is good (6)
    tx_jesd status:
+           Link is enabled
            Measured Link Clock: 375.002 MHz
            Reported Link Clock: 375.000 MHz
            Measured Device Clock: 250.002 MHz
@@ -138,9 +149,13 @@ prints the link status. No data is moved. The output looks like the one below:
            Link status: DATA
            SYSREF captured: Yes
            SYSREF alignment error: No
-   tx_dac: Successfully initialized (4000048828 Hz)
-   rx_adc: Successfully initialized (4000048828 Hz)
+   tx_dac: Successfully initialized (2000000000 Hz)
+   rx_adc: Successfully initialized (2000000000 Hz)
    Bye
+
+The ``tx_dac`` / ``rx_adc`` rates are the sample rates at the FPGA: the 12 GHz
+DAC divided by the interpolation of 6, and the 6 GHz ADC divided by the
+decimation of 3.
 
 The JESD profile is selected unconditionally from ``profiles/vpk180_ad9082`` and
 **must match the link mode the loaded bitstream (PDI) was synthesized for**. The
@@ -148,6 +163,97 @@ VPK180 hardens the GT line rate in the PDI, so a profile/bitstream mismatch
 leaves the GT PLL unlocked and the JESD ``reset-done`` never asserts. A second
 profile for a different link rate will be added under ``profiles/`` when its
 matching bitstream is available.
+
+DMA Example
+~~~~~~~~~~~
+
+The DMA example (variant ``dma_example``) plays a sine wave out of the DACs and
+captures ADC samples back, both over the PL AXI DMACs into the Cortex-A72 DDR.
+
+A sine look-up table is written to a DDR buffer and loaded, with a single
+non-cyclic transfer, into the TX data-offload in the HDL; the offload then
+replays it continuously, so the DAC output is gap-free. The ADC samples are
+captured into a second DDR buffer through the RX DMAC. Both buffers live in a
+dedicated DDR region (``DAC_DDR_BASEADDR`` / ``ADC_DDR_BASEADDR`` in
+``parameters.h``), clear of the CPU image, and the CPU flushes / invalidates
+them by hand because the PL DMACs are not cache-coherent with the APU and master
+DDR over the Versal NoC.
+
+The DMA and IIO examples shift the DAC output by the profile's 1 GHz TX main
+NCO, and the 1 GHz RX NCO brings the tone back to baseband.
+
+On success the console reports the buffers in the shared ``DMA_EXAMPLE`` format::
+
+    DMA_EXAMPLE Tx: address=0x10000000 samples=65536 channels=8 bits=32
+    DMA_EXAMPLE Rx: address=0x14000000 samples=131072 channels=8 bits=16
+
+The RX line means the captured data is at ``0x14000000``: 131072 16-bit samples
+across 8 converters, i.e. 16384 samples per converter. The profile carries four
+complex (I/Q) channels, so the eight converters are rx1 I, rx1 Q, rx2 I, rx2 Q,
+rx3 I, rx3 Q, rx4 I, rx4 Q.
+
+Retrieve the captured data into ``.csv`` files with the standard Tcl script,
+passing ``VERSAL`` as the processor type:
+
+.. code-block:: bash
+
+   xsct tools/scripts/platform/xilinx/capture.tcl VERSAL 0x14000000 131072 8 16
+
+The ``.csv`` files can then be visualised using the
+`plot.py <https://github.com/analogdevicesinc/no-OS/blob/master/tools/scripts/platform/xilinx/plot.py>`_
+script in the no-OS repository. The following command plots all 8 channels:
+
+.. code-block:: bash
+
+   python tools/scripts/platform/xilinx/plot.py 8
+
+IIO Example
+~~~~~~~~~~~
+
+The IIO example (variant ``iio_example``) brings the links up via the shared
+code, then runs an IIOD server (via ``iio_axi_adc`` / ``iio_axi_dac``) so a host
+can capture ADC samples and inject DAC samples over the console UART. The board
+can be used with any ADI IIO client:
+
+* `libiio <https://wiki.analog.com/resources/tools-software/linux-software/libiio>`_ command-line tools
+* `IIO-Oscilloscope <https://github.com/analogdevicesinc/iio-oscilloscope/releases>`_
+* `Scopy v2 <https://github.com/analogdevicesinc/scopy/releases/tag/v2.0.0>`_
+
+If you are not familiar with ADI IIO Application, please take a look at:
+:dokuwiki:`IIO No-OS </resources/tools-software/no-os-software/iio>`
+
+If you are not familiar with ADI IIO-Oscilloscope Client, please take a look at:
+:dokuwiki:`IIO Oscilloscope </resources/tools-software/linux-software/iio_oscilloscope>`
+
+To run the IIOD demo, connect to the board via UART with the following
+settings:
+
+.. code-block:: bash
+
+   Baud Rate: 115200bps
+   Data: 8 bit
+   Parity: None
+   Stop bits: 1 bit
+   Flow Control: none
+
+After the link bring-up messages, the application prints ``Running IIOD
+server...``. Close the serial terminal, then start IIO-Oscilloscope and connect
+it through the serial backend with the same settings, for example:
+
+.. code-block:: bash
+
+   osc -u serial:/dev/ttyUSB0,115200,8n1n
+
+The ADC buffer holds up to 16384 samples per converter
+(``MAX_ADC_BUF_SAMPLES`` in ``parameters.h``). The DAC buffer is sized to the
+TX data offload, 512 KB on this HDL build; both are clamped at runtime to the
+depth the RX and TX data offloads report.
+
+At 115200 baud a capture moves at about 11 KB/s, so keep IIO-Oscilloscope at
+1024 to 4096 samples, fewer with all four channels enabled; a request that
+takes longer than the client's timeout leaves the session out of step, and the
+board must be reloaded. IIO-Oscilloscope restores the last capture settings
+when it starts, so lower the sample count before reconnecting after a timeout.
 
 No-OS Supported Platforms
 -------------------------
@@ -176,8 +282,8 @@ Build Command
 ^^^^^^^^^^^^^
 
 The Xilinx platform uses the CMake/Ninja build system via the ``no_os_build.py``
-helper script. Available variant: ``basic_example``. Available board:
-``vpk180``.
+helper script. Available variants: ``basic_example``, ``dma_example``,
+``iio_example``. Available board: ``vpk180``.
 
 The VPK180 runs no-OS on the Versal **Cortex-A72** application processor (APU).
 A Xilinx XSA hardware handoff is required and is passed with ``--hardware``; the
@@ -202,6 +308,16 @@ For toolchain setup and prerequisites, see the
    # Build the basic example for the VPK180
    python tools/scripts/no_os_build.py build \
       --project ad9082 --variant basic_example --board vpk180 \
+      --hardware /path/to/ad9082_fmca_ebz_vpk180/system_top.xsa
+
+   # Build the DMA example
+   python tools/scripts/no_os_build.py build \
+      --project ad9082 --variant dma_example --board vpk180 \
+      --hardware /path/to/ad9082_fmca_ebz_vpk180/system_top.xsa
+
+   # Build the IIO example
+   python tools/scripts/no_os_build.py build \
+      --project ad9082 --variant iio_example --board vpk180 \
       --hardware /path/to/ad9082_fmca_ebz_vpk180/system_top.xsa
 
 The built ELF is at
