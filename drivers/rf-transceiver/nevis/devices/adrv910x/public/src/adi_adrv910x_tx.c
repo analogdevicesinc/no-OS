@@ -39,7 +39,7 @@
 #include <math.h>
 #endif
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Tx_AttenuationTable_Write_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Tx_AttenuationTable_Write_Validate(adi_adrv910x_Device_t *device,
                                                                               uint32_t channelMask,
                                                                               uint32_t indexOffset,
                                                                               adi_adrv910x_TxAttenTableRow_t attenTableRows[],
@@ -114,7 +114,7 @@ int32_t adi_adrv910x_Tx_AttenuationTable_Write(adi_adrv910x_Device_t *device,
 
     ADI_PERFORM_VALIDATION(adi_adrv910x_Tx_AttenuationTable_Write_Validate, device, channelMask, indexOffset, attenTableRows, arraySize);
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
     /* Enable ARM clock to access attenuation table memory */
 	ADI_EXPECT(adrv910x_NvsRegmapTxb_TxAlgArmOrGroup11ClkSel_Set, device, true);
@@ -159,7 +159,7 @@ int32_t adi_adrv910x_Tx_AttenuationTable_Write(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Tx_AttenuationTable_Read_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Tx_AttenuationTable_Read_Validate(adi_adrv910x_Device_t *device,
                                                                              uint32_t indexOffset,
                                                                              adi_adrv910x_TxAttenTableRow_t attenTableRows[],
                                                                              uint32_t arraySize)
@@ -218,7 +218,7 @@ int32_t adi_adrv910x_Tx_AttenuationTable_Read(adi_adrv910x_Device_t *device,
         numTxAttenEntriesRead = ADI_ADRV910X_TX_ATTEN_TABLE_CACHE_MAX;
     }
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
     /* Enable ARM clock to access attenuation table memory */
     ADI_EXPECT(adrv910x_NvsRegmapTxb_TxAlgArmOrGroup11ClkSel_Set, device, true);
@@ -264,7 +264,7 @@ int32_t adi_adrv910x_Tx_AttenuationTable_Read(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Tx_AttenuationMode_Set_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Tx_AttenuationMode_Set_Validate(adi_adrv910x_Device_t *device,
                                                                            adi_adrv910x_TxAttenuationControlMode_e mode)
 {
     static const uint32_t TX_CHANNELS[] = {ADI_ADRV910X_TX1, ADI_ADRV910X_TXNB};
@@ -308,7 +308,7 @@ static __maybe_unused int32_t __maybe_unused adi_adrv910x_Tx_AttenuationMode_Set
                                 ADI_COMMON_ERRSRC_API,
                                 ADI_COMMON_ERR_API_FAIL,
                                 ADI_COMMON_ACT_ERR_CHECK_PARAM,
-                                currentState.channelStates[port_index][chan_index],
+                                state,
                                 "Error while attempting to set attenuation mode. Channel must be in STANDBY or CALIBRATED.");
             }
         }
@@ -334,7 +334,7 @@ int32_t adi_adrv910x_Tx_AttenuationMode_Set(adi_adrv910x_Device_t *device,
 {
     ADI_PERFORM_VALIDATION(adi_adrv910x_Tx_AttenuationMode_Set_Validate, device, mode);
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
 	device->devStateInfo.txAttenMode = mode;
 
@@ -355,7 +355,7 @@ int32_t adi_adrv910x_Tx_AttenuationMode_Get(adi_adrv910x_Device_t *device,
     uint8_t regData = 0;
 	adi_adrv910x_RadioState_t radioState = {0};
     ADI_NULL_PTR_RETURN(&device->common, mode);
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 	
 	ADI_EXPECT(adi_adrv910x_Radio_State_Get, device, &radioState);
 	if (radioState.channelStates[ADI_TX][0] == ADI_ADRV910X_CHANNEL_PRIMED ||
@@ -376,7 +376,7 @@ int32_t adi_adrv910x_Tx_AttenuationMode_Get(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Tx_Attenuation_Configure_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Tx_Attenuation_Configure_Validate(adi_adrv910x_Device_t *device,
                                                                                             adi_adrv910x_TxAttenuationConfig_t *config)
 {
     ADI_NULL_PTR_RETURN(&device->common, config);
@@ -390,7 +390,7 @@ int32_t adi_adrv910x_Tx_Attenuation_Configure(adi_adrv910x_Device_t *device,
                                             adi_adrv910x_TxAttenuationConfig_t *config)
 {
     ADI_PERFORM_VALIDATION(adi_adrv910x_Tx_Attenuation_Configure_Validate, device, config);
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
     ADI_EXPECT(adrv910x_NvsRegmapTx_TxAttenConfig_Set, device, config->txAttenStepSize);
     ADI_EXPECT(adi_adrv910x_Tx_AttenuationMode_Set, device, config->attenMode);
 
@@ -406,7 +406,7 @@ int32_t adi_adrv910x_Tx_Attenuation_Inspect(adi_adrv910x_Device_t *device,
     adi_adrv910x_TxAttenuationControlMode_e txModeRead = ADI_ADRV910X_TX_ATTENUATION_CONTROL_MODE_SPI;
     
     ADI_NULL_PTR_RETURN(&device->common, config);
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
     /* RFPLL unlock setting for Tx attenuation ramp */
     ADI_EXPECT(adrv910x_NvsRegmapTx_TxDataRampDownOnPllUnlock_Get, device, &disableTxOnPllUnlock);
 
@@ -424,7 +424,7 @@ int32_t adi_adrv910x_Tx_Attenuation_Inspect(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);    
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Tx_Attenuation_Set_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Tx_Attenuation_Set_Validate(adi_adrv910x_Device_t *device,
                                                                                         uint16_t attenuation_mdB)
 {
     adi_adrv910x_TxAttenuationControlMode_e txModeRead = ADI_ADRV910X_TX_ATTENUATION_CONTROL_MODE_BYPASS;
@@ -468,7 +468,7 @@ int32_t adi_adrv910x_Tx_Attenuation_Set(adi_adrv910x_Device_t *device,
     uint8_t bfVal = 0;
 
     ADI_PERFORM_VALIDATION(adi_adrv910x_Tx_Attenuation_Set_Validate, device, attenuation_mdB);
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
     /* Save the current attenuation mode and set to the required mode */
     ADI_EXPECT(adi_adrv910x_Tx_AttenuationMode_Get, device, &attenMode);
 	if (attenMode != ADI_ADRV910X_TX_ATTENUATION_CONTROL_MODE_SPI &&
@@ -525,7 +525,7 @@ int32_t adi_adrv910x_Tx_Attenuation_Get(adi_adrv910x_Device_t *device,
 
     ADI_NULL_PTR_RETURN(&device->common, attenuation_mdB);
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
     /* Strobe read register to update value, delay for update */
     ADI_EXPECT(adrv910x_NvsRegmapTx_TxAttenuationRead_Set, device, regData);
 
@@ -568,7 +568,7 @@ int32_t adi_adrv910x_Tx_Attenuation_Get(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Tx_OutputPowerBoost_Set_Validate(adi_adrv910x_Device_t *device)
+static __maybe_unused int32_t adi_adrv910x_Tx_OutputPowerBoost_Set_Validate(adi_adrv910x_Device_t *device)
 {
     static const uint32_t TX_CHANNELS[] = {ADI_ADRV910X_TX1, ADI_ADRV910X_TXNB};
     adi_adrv910x_ChannelState_e state = ADI_ADRV910X_CHANNEL_STANDBY;
@@ -614,7 +614,7 @@ int32_t adi_adrv910x_Tx_OutputPowerBoost_Set(adi_adrv910x_Device_t *device,
 {
     ADI_PERFORM_VALIDATION(adi_adrv910x_Tx_OutputPowerBoost_Set_Validate, device);
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
     /* DAC full scale setting */
     ADI_EXPECT(adrv910x_TxdacMemMap_TxdacFscBoostI_Set, device, boostEnable);
     ADI_EXPECT(adrv910x_TxdacMemMap_TxdacFscBoostQ_Set, device, boostEnable);
@@ -629,7 +629,7 @@ int32_t adi_adrv910x_Tx_OutputPowerBoost_Get(adi_adrv910x_Device_t *device,
     uint8_t bfValue = 0;
     ADI_NULL_PTR_RETURN(&device->common, boostEnable);
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
     ADI_EXPECT(adrv910x_TxdacMemMap_TxdacFscBoostI_Get, device, &bfValue);
     *boostEnable = (bool)bfValue;
 

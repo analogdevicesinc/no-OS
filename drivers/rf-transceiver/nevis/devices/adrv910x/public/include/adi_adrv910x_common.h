@@ -1,17 +1,22 @@
 /**
  * \file
  * \brief ADRV910X common interfaces
- * 
- * Copyright (c) 2022 Analog Devices, Inc. All Rights Reserved.
+ *
+ * Copyright (c) 2022 - 2026 Analog Devices, Inc. All Rights Reserved.
  * This software is proprietary to Analog Devices, Inc. and its licensors.
+ * Released under the ADRV910X API license.
+ * For more information, see the "LICENSE.txt" file.
  */
 
 #ifndef _ADI_ADRV910X_COMMON_H_
 #define _ADI_ADRV910X_COMMON_H_
 
 #include "adi_adrv910x_common_types.h"
+
+
 #ifndef __KERNEL__
 #include <stdint.h>
+#include <stddef.h>
 #else
 #include <linux/types.h>
 #endif
@@ -76,4 +81,4 @@ int32_t adi_common_index_to_channel(uint8_t index, adi_common_ChannelNumber_e *c
 }
 #endif
 
-#endif  /* _ADI_ADRV910X_COMMON_H_ */
+#endif /* _ADI_ADRV910X_COMMON_H_ */

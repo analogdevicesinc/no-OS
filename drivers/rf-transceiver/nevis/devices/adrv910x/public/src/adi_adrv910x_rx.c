@@ -25,12 +25,17 @@
 #include "adi_adrv910x_rx.h"
 #include "adi_adrv910x_user.h"
 #include "object_ids.h"
+#ifdef NEVIS_PS2
+#include <adi_adrv910x_cmsis_cfg.h>
+volatile uint32_t g_cyclestart = 0;
+volatile uint32_t g_cycleend = 0;
+#endif
 
 #ifdef __ICCARM__
 #pragma diag_suppress=Pe186
 #endif
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_GainTable_Write_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Rx_GainTable_Write_Validate(adi_adrv910x_Device_t *device,
                                        adi_common_Port_e port,
                                        adi_common_ChannelNumber_e channel,
                                        uint8_t  gainIndexOffset,
@@ -138,7 +143,7 @@ int32_t adi_adrv910x_Rx_GainTable_Write(adi_adrv910x_Device_t *device,
     baseIndex = (gainIndexOffset - (numGainIndicesToWrite - 1));
     minGainIndex = (uint8_t)baseIndex;
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
     ADI_EXPECT(adrv910x_RxGainTableFormat, device, gainTablePtr, &armDmaData[0], numGainIndicesToWrite);
 
@@ -219,7 +224,7 @@ int32_t adi_adrv910x_Rx_GainTable_Write(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_GainTable_Read_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Rx_GainTable_Read_Validate(adi_adrv910x_Device_t *device,
                                                                     adi_common_ChannelNumber_e channel,
                                                                     uint8_t  gainIndexOffset,
                                                                     adi_adrv910x_RxGainTableRow_t gainTableRows[],
@@ -302,7 +307,7 @@ int32_t adi_adrv910x_Rx_GainTable_Read(adi_adrv910x_Device_t *device,
     ADI_PERFORM_VALIDATION(adi_adrv910x_Rx_GainTable_Read_Validate, device,
                            channel, gainIndexOffset, gainTableRows, arraySize, numGainIndicesRead);
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
     adi_common_channel_to_index(channel, &instanceIdx);
     instance = instances[instanceIdx];
@@ -391,7 +396,7 @@ int32_t adi_adrv910x_Rx_GainTable_Read(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_GainControl_Mode_Set_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Rx_GainControl_Mode_Set_Validate(adi_adrv910x_Device_t *device,
                                                                                             adi_common_ChannelNumber_e channel,
                                                                                             adi_adrv910x_RxGainControlMode_e gainCtrlMode)
 {
@@ -426,7 +431,7 @@ int32_t adi_adrv910x_Rx_GainControl_Mode_Set(adi_adrv910x_Device_t *device,
         bfVal = 2;
     }
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
 
 	ADI_EXPECT(adrv910x_NvsRegmapRxbCommon_AgcSetup_Set, device, instance, bfVal);
@@ -462,7 +467,7 @@ int32_t adi_adrv910x_Rx_GainControl_Mode_Set(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_GainControl_Mode_Get_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Rx_GainControl_Mode_Get_Validate(adi_adrv910x_Device_t *device,
                                                                                             adi_common_ChannelNumber_e channel,
                                                                                             adi_adrv910x_RxGainControlMode_e *gainCtrlMode)
 {
@@ -490,7 +495,7 @@ int32_t adi_adrv910x_Rx_GainControl_Mode_Get(adi_adrv910x_Device_t *device,
     adi_common_channel_to_index(channel, &instanceIdx);
     instance = instances[instanceIdx];
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
 
 	ADI_EXPECT(adrv910x_NvsRegmapRxbCommon_AgcSetup_Get, device, instance, &agcSetup);
@@ -553,7 +558,7 @@ int32_t adi_adrv910x_Rx_GainControl_MinMaxGainIndex_Set(adi_adrv910x_Device_t *d
     adi_common_channel_to_index(channel, &instanceIdx);
     instance = instances[instanceIdx];
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
 
 	ADI_EXPECT(adrv910x_NvsRegmapRxbCommon_AgcMinimumGainIndex_Set, device, instance, minGainIndex);
@@ -562,7 +567,7 @@ int32_t adi_adrv910x_Rx_GainControl_MinMaxGainIndex_Set(adi_adrv910x_Device_t *d
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_GainControl_MinMaxGainIndex_Get_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Rx_GainControl_MinMaxGainIndex_Get_Validate(adi_adrv910x_Device_t *device,
                                                adi_common_ChannelNumber_e channel,
                                                uint8_t *minGainIndex,
                                                uint8_t *maxGainIndex)
@@ -588,7 +593,7 @@ int32_t adi_adrv910x_Rx_GainControl_MinMaxGainIndex_Get(adi_adrv910x_Device_t *d
     adi_common_channel_to_index(channel, &instanceIdx);
     instance = instances[instanceIdx];
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
 	ADI_EXPECT(adrv910x_NvsRegmapRxbCommon_AgcMaximumGainIndex_Get, device, instance, maxGainIndex);
 	ADI_EXPECT(adrv910x_NvsRegmapRxbCommon_AgcMinimumGainIndex_Get, device, instance, minGainIndex);
@@ -597,7 +602,7 @@ int32_t adi_adrv910x_Rx_GainControl_MinMaxGainIndex_Get(adi_adrv910x_Device_t *d
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_GainControl_Configure_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Rx_GainControl_Configure_Validate(adi_adrv910x_Device_t *device,
                                          adi_common_ChannelNumber_e channel,
                                          adi_adrv910x_GainControlCfg_t *agcCfg)
 {
@@ -631,9 +636,22 @@ static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_GainControl_Configu
     static const uint8_t ENABLE_MAX = 0x01;
     static const uint16_t HB_THRESH_MAX = 0x3FFF;
 
+    adi_adrv910x_ChannelState_e state = ADI_ADRV910X_CHANNEL_STANDBY;
     ADI_NULL_PTR_RETURN(&device->common, agcCfg);
 
     ADI_RANGE_CHECK(device, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
+
+    ADI_EXPECT(adi_adrv910x_Radio_Channel_State_Get, device, ADI_RX, channel, &state);
+    if ((ADI_ADRV910X_CHANNEL_STANDBY != state) && (ADI_ADRV910X_CHANNEL_CALIBRATED != state)
+     && (ADI_ADRV910X_CHANNEL_PRIMED != state))
+    {
+        ADI_ERROR_REPORT(device,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_API_FAIL,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         state,
+                         "Error attempting to configure Rx automatic gain. Specified channel must be in STANDBY, CALIBRATED, or PRIMED state");
+    }
 
     ADI_EXPECT(adi_adrv910x_Rx_GainControl_MinMaxGainIndex_Set_Validate, device, channel, agcCfg->minGainIndex, agcCfg->maxGainIndex);
     ADI_RANGE_CHECK(device, agcCfg->peakWaitTime,           0, PEAK_WAIT_TIME_MAX);
@@ -781,7 +799,7 @@ int32_t adi_adrv910x_Rx_GainControl_Configure(adi_adrv910x_Device_t *device,
 	rxbCommonAddr = nvsRegmapRxbCommonInstances[instanceIdx];
 	anaAddr = nevisAnalogRxMemMapInstances[instanceIdx];
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
 #ifndef __KERNEL__
     /* APD Low Frequency MITIGATION Mode Setup */
@@ -803,9 +821,7 @@ int32_t adi_adrv910x_Rx_GainControl_Configure(adi_adrv910x_Device_t *device,
 
     if (APD_LOW_FREQ_ERROR_MITIGATION_MODE == 1) {
         agcCfg->peak.apdHighThresh = device->devStateInfo.agcHighThresholdSettings.ApdPeakOverloadThresh;
-        agcCfg->peak.apdLowThresh = device->devStateInfo.agcHighThresholdSettings.ApdPeakUnderloadThresh;
         agcCfg->peak.hbHighThresh = device->devStateInfo.agcHighThresholdSettings.Hb2PeakOverloadThresh;
-	    agcCfg->peak.hbUnderRangeHighThresh = device->devStateInfo.agcHighThresholdSettings.Hb2PeakUnderloadThresh;
         threshCalc = device->devStateInfo.agcHighThresholdSettings.Hb2SecondaryUpperThresh;
     }
 
@@ -1148,7 +1164,7 @@ int32_t adi_adrv910x_Rx_GainControl_Configure(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_GainControl_Inspect_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Rx_GainControl_Inspect_Validate(adi_adrv910x_Device_t *device,
                                        adi_common_ChannelNumber_e channel,
                                        adi_adrv910x_GainControlCfg_t *agcCfg)
 {
@@ -1183,7 +1199,7 @@ int32_t adi_adrv910x_Rx_GainControl_Inspect(adi_adrv910x_Device_t *device,
     adi_common_channel_to_index(channel, &instanceIdx);
 	rxbCommonAddr = nvsRegmapRxbCommonInstances[instanceIdx];
     anaAddr = nevisAnalogRxMemMapInstances[instanceIdx];
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
     ADI_EXPECT(adrv910x_NvsRegmapRxbCommon_AgcPeakWaitTime_Get,      device, rxbCommonAddr, &agcCfg->peakWaitTime);
 	ADI_EXPECT(adrv910x_NvsRegmapRxbCommon_AgcMaximumGainIndex_Get, device, rxbCommonAddr, &agcCfg->maxGainIndex);
@@ -1306,7 +1322,7 @@ int32_t adi_adrv910x_Rx_GainControl_Inspect(adi_adrv910x_Device_t *device,
 	    ADI_EXPECT(adrv910x_NvsRegmapRxnb2_AgcEnableSyncPulseForGainCounter_Get, device, &bfValue);
 	    agcCfg->enableSyncPulseForGainCounter = (bool)bfValue;
 
-	    ADI_EXPECT(adrv910x_NvsRegmapRxb_AgcSlowLoopSettlingDelay_Get, device, &agcCfg->slowLoopSettlingDelay);
+	    ADI_EXPECT(adrv910x_NvsRegmapRxnb2_AgcSlowLoopSettlingDelay_Get, device, &agcCfg->slowLoopSettlingDelay);
 
 	    /* Agc Peak */
 	    ADI_EXPECT(adrv910x_NvsRegmapRxnb2_AgcUrangeInterval0_Get, device, &agcCfg->peak.agcUnderRangeLowInterval);
@@ -1455,12 +1471,12 @@ int32_t adi_adrv910x_Rx_GainControl_Inspect(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_Gain_Set_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Rx_Gain_Set_Validate(adi_adrv910x_Device_t *device,
                                                                                 adi_common_ChannelNumber_e channel,
-                                                                                uint8_t gainIndex,
-                                                                                adi_adrv910x_RxGainControlMode_e *gainCtrlMode)
+                                                                                uint8_t gainIndex)
 {
     static const uint32_t RX_CHANNELS[] = {ADI_ADRV910X_RX1, ADI_ADRV910X_RXNB};
+    adi_adrv910x_RxGainControlMode_e gainCtrlMode = ADI_ADRV910X_RX_GAIN_CONTROL_MODE_SPI;
     uint8_t chan_idx = 0;
 
     /* Check for valid channel */
@@ -1482,8 +1498,8 @@ static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_Gain_Set_Validate(a
     ADI_RANGE_CHECK(device, gainIndex, ADI_ADRV910X_RX_GAIN_INDEX_MIN, ADI_ADRV910X_RX_GAIN_INDEX_MAX);
 
     /* Confirm mode is set to Manual SPI Gain control */
-    ADI_EXPECT(adi_adrv910x_Rx_GainControl_Mode_Get, device, channel, gainCtrlMode);
-    if (ADI_ADRV910X_RX_GAIN_CONTROL_MODE_SPI != *gainCtrlMode)
+    ADI_EXPECT(adi_adrv910x_Rx_GainControl_Mode_Get, device, channel, &gainCtrlMode);
+    if (ADI_ADRV910X_RX_GAIN_CONTROL_MODE_SPI != gainCtrlMode)
     {
        ADI_ERROR_REPORT(&device->common,
             ADI_COMMON_ERRSRC_API,
@@ -1502,8 +1518,7 @@ int32_t adi_adrv910x_Rx_Gain_Set(adi_adrv910x_Device_t *device,
 {
 
 	adrv910x_BfNvsRegmapRxbCommon_e baseAddr = ADRV910X_BF_RXB1_CORE;
-    adi_adrv910x_RxGainControlMode_e gainCtrlMode = ADI_ADRV910X_RX_GAIN_CONTROL_MODE_SPI;
-    ADI_PERFORM_VALIDATION(adi_adrv910x_Rx_Gain_Set_Validate, device, channel, gainIndex, &gainCtrlMode);
+    ADI_PERFORM_VALIDATION(adi_adrv910x_Rx_Gain_Set_Validate, device, channel, gainIndex);
 
     if (ADI_CHANNEL_2 == channel)
     {
@@ -1511,7 +1526,7 @@ int32_t adi_adrv910x_Rx_Gain_Set(adi_adrv910x_Device_t *device,
 
     }
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
     ADI_EXPECT(adrv910x_NvsRegmapRxbCommon_AgcManualGainIndex_Set, device, baseAddr, gainIndex);
 
@@ -1519,7 +1534,7 @@ int32_t adi_adrv910x_Rx_Gain_Set(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_Gain_Get_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Rx_Gain_Get_Validate(adi_adrv910x_Device_t *device,
                                                                                 adi_common_ChannelNumber_e channel,
                                                                                 uint8_t *gainIndex)
 {
@@ -1554,7 +1569,7 @@ int32_t adi_adrv910x_Rx_Gain_Get(adi_adrv910x_Device_t *device,
     {
         baseAddr = ADRV910X_BF_RXB_NB_CORE;
     }
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
     ADI_EXPECT(adrv910x_NvsRegmapRxbCommon_AgcGainIndex_Get, device, baseAddr, gainIndex);
 
@@ -1608,7 +1623,7 @@ static __maybe_unused int32_t adi_adrv910x_Rx_InterfaceGain_Validate(adi_adrv910
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_InterfaceGain_Configure_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Rx_InterfaceGain_Configure_Validate(adi_adrv910x_Device_t *device,
                                                                                adi_common_ChannelNumber_e channel,
                                                                                adi_adrv910x_RxInterfaceGainCtrl_t *rxInterfaceGainCtrl)
 {
@@ -1686,7 +1701,7 @@ int32_t adi_adrv910x_Rx_InterfaceGain_Configure(adi_adrv910x_Device_t *device,
 	armData[7] = (uint8_t)(rxInterfaceGainCtrl->signalPAR);
 	armData[8] = (uint8_t)(rxInterfaceGainCtrl->enableFastAttack);
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
     /* Write RX interface gain control parameters to ARM mailbox */
     ADI_EXPECT(adi_adrv910x_arm_Memory_Write, device, ADRV910X_ADDR_ARM_MAILBOX_SET, &armData[0], sizeof(armData), ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4, ADI_PS1);
@@ -1709,7 +1724,7 @@ int32_t adi_adrv910x_Rx_InterfaceGain_Configure(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_InterfaceGain_Set_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Rx_InterfaceGain_Set_Validate(adi_adrv910x_Device_t *device,
                                                                          adi_common_ChannelNumber_e channel,
                                                                          adi_adrv910x_RxInterfaceGain_e gain)
 {
@@ -1765,7 +1780,7 @@ int32_t adi_adrv910x_Rx_InterfaceGain_Set(adi_adrv910x_Device_t *device,
     ADI_PERFORM_VALIDATION(adi_adrv910x_Rx_InterfaceGain_Set_Validate, device, channel, gain);
 
     armData[0] = (uint8_t)gain;
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
     /* Write RX interface gain control parameters to ARM mailbox */
     ADI_EXPECT(adi_adrv910x_arm_Memory_Write, device, (uint32_t)ADRV910X_ADDR_ARM_MAILBOX_SET, &armData[0], sizeof(armData), ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4, ADI_PS1);
 
@@ -1787,7 +1802,7 @@ int32_t adi_adrv910x_Rx_InterfaceGain_Set(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_InterfaceGain_Inspect_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Rx_InterfaceGain_Inspect_Validate(adi_adrv910x_Device_t *device,
                                                                              adi_common_ChannelNumber_e channel,
                                                                              adi_adrv910x_RxInterfaceGainCtrl_t *rxInterfaceGainCtrl,
                                                                              adi_adrv910x_RxGainTableType_e *gainTableType)
@@ -1836,7 +1851,7 @@ int32_t adi_adrv910x_Rx_InterfaceGain_Inspect(adi_adrv910x_Device_t *device,
     /* Executing the SET RX interface gain control command */
 	extData[1] = OBJID_GS_SLICER_CONTROL;
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
     ADI_EXPECT(adi_adrv910x_arm_Cmd_Write, device, (uint8_t)ADRV910X_ARM_GET_OPCODE, &extData[0], sizeof(extData));
 
@@ -1870,7 +1885,7 @@ int32_t adi_adrv910x_Rx_InterfaceGain_Inspect(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_InterfaceGain_Get_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Rx_InterfaceGain_Get_Validate(adi_adrv910x_Device_t *device,
                                                                          adi_common_ChannelNumber_e channel,
                                                                          adi_adrv910x_RxInterfaceGain_e *gain)
 {
@@ -1917,7 +1932,7 @@ int32_t adi_adrv910x_Rx_InterfaceGain_Get(adi_adrv910x_Device_t *device,
     /* Executing the SET RX interface gain control command */
 	extData[1] = OBJID_GS_SLICER_GAIN;
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
     ADI_EXPECT(adi_adrv910x_arm_Cmd_Write, device, (uint8_t)ADRV910X_ARM_GET_OPCODE, &extData[0], sizeof(extData));
 
@@ -1943,9 +1958,9 @@ int32_t adi_adrv910x_Rx_InterfaceGain_Get(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_Rssi_Read_Validate(adi_adrv910x_Device_t *device,
-                                                                 uint32_t *rxRssiPower_mdB,
-                                                                 adi_common_ChannelNumber_e rxChannel)
+static __maybe_unused int32_t adi_adrv910x_Rx_Rssi_Read_Validate(adi_adrv910x_Device_t *device,
+                                                                 adi_common_ChannelNumber_e channel,
+                                                                 uint32_t *rxRssiPower_mdB)
 {
 
     adi_adrv910x_RadioState_t state = { 0 };
@@ -1956,12 +1971,12 @@ static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_Rssi_Read_Validate(
     ADI_NULL_PTR_RETURN(&device->common, rxRssiPower_mdB);
 
     /* Check that the requested channel mask is valid */
-    ADI_RANGE_CHECK(device, rxChannel, ADI_CHANNEL_1, ADI_CHANNEL_2);
+    ADI_RANGE_CHECK(device, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
 
     /* Validate state is RF ENABLED*/
     ADI_EXPECT(adi_adrv910x_Radio_State_Get, device, &state);
     adi_common_port_to_index(ADI_RX, &port_index);
-    adi_common_channel_to_index(rxChannel, &chan_index);
+    adi_common_channel_to_index(channel, &chan_index);
     if ((ADI_ADRV910X_CHANNEL_RF_ENABLED != state.channelStates[port_index][chan_index]))
     {
         ADI_ERROR_REPORT(&device->common,
@@ -1983,7 +1998,7 @@ int32_t adi_adrv910x_Rx_Rssi_Read(adi_adrv910x_Device_t *device,
     uint8_t armReadBack[6] = { 0 };
     uint32_t offset = 0;
 
-    ADI_PERFORM_VALIDATION(adi_adrv910x_Rx_Rssi_Read_Validate, device, rxRssiPower_mdB, channel);
+    ADI_PERFORM_VALIDATION(adi_adrv910x_Rx_Rssi_Read_Validate, device, channel, rxRssiPower_mdB);
 
     armExtData[0] = adi_adrv910x_Radio_MailboxChannel_Get(ADI_RX, channel);
     armExtData[1] = OBJID_GO_RSSI;
@@ -2056,7 +2071,7 @@ int32_t adi_adrv910x_Rx_Loid_Configure(adi_adrv910x_Device_t *device,
 	armData[2] = loidConfig->loidReenableTrackingLowThreshold_negdBFS;
     armData[3] = loidConfig->loidDisableTrackingHighThreshold_negdBFS;
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
     /* Write LOID config to ARM mailbox */
     ADI_EXPECT(adi_adrv910x_arm_Memory_Write, device, ADRV910X_ADDR_ARM_MAILBOX_SET, &armData[0], sizeof(armData), ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4, ADI_PS1);
@@ -2077,7 +2092,7 @@ int32_t adi_adrv910x_Rx_Loid_Configure(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_Loid_Inspect_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Rx_Loid_Inspect_Validate(adi_adrv910x_Device_t *device,
                               adi_common_ChannelNumber_e channel,
                               adi_adrv910x_RxrfdcLoidCfg_t *loidConfig)
 {
@@ -2100,7 +2115,7 @@ int32_t adi_adrv910x_Rx_Loid_Inspect(adi_adrv910x_Device_t *device,
     extData[0] = adi_adrv910x_Radio_MailboxChannel_Get(ADI_RX, channel);
     extData[1] = OBJID_GS_LOID;
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
     ADI_EXPECT(adi_adrv910x_arm_Cmd_Write, device, (uint8_t)ADRV910X_ARM_GET_OPCODE, &extData[0], sizeof(extData));
 
@@ -2126,7 +2141,7 @@ int32_t adi_adrv910x_Rx_Loid_Inspect(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_Loid_Status_Get_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Rx_Loid_Status_Get_Validate(adi_adrv910x_Device_t *device,
                                                                                 adi_common_ChannelNumber_e channel,
                                                                                 uint8_t *rfdcResidual)
 {
@@ -2166,7 +2181,7 @@ int32_t adi_adrv910x_Rx_Loid_Status_Get(adi_adrv910x_Device_t *device,
     extData[0] = adi_adrv910x_Radio_MailboxChannel_Get(ADI_RX, channel);
     extData[1] = OBJID_GO_RX_RFDC_READ;
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
     ADI_EXPECT(adi_adrv910x_arm_Cmd_Write, device, (uint8_t)ADRV910X_ARM_GET_OPCODE, &extData[0], sizeof(extData));
 
@@ -2190,8 +2205,8 @@ int32_t adi_adrv910x_Rx_Loid_Status_Get(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_HighBlockerMode_Configure_Validate(adi_adrv910x_Device_t *device, adi_common_ChannelNumber_e channel,
-adi_adrv910x_HighBlockerModeCfg_t *highBlockerConfig)
+static __maybe_unused int32_t adi_adrv910x_Rx_ImageID_Configure_Validate(adi_adrv910x_Device_t *device, adi_common_ChannelNumber_e channel,
+adi_adrv910x_ImageIDCfg_t *imageIDConfig)
 {
    adi_adrv910x_RadioState_t state = { 0 };
    uint8_t port_index = 0;
@@ -2200,19 +2215,20 @@ adi_adrv910x_HighBlockerModeCfg_t *highBlockerConfig)
 	if (channel != ADI_CHANNEL_2)
 	{
 
-		ADI_ERROR_REPORT(&device->common,
+	    ADI_ERROR_REPORT(&device->common,
 			ADI_COMMON_ERRSRC_API,
 			ADI_COMMON_ERR_INV_PARAM,
 			ADI_COMMON_ACT_ERR_CHECK_PARAM,
 			channel,
 			"Invalid channel. Channel must RxNB to perform High Blocker Mode Configuration.");
+        ADI_ERROR_RETURN(device->common.error.newAction);
 	}
 
-   ADI_NULL_PTR_RETURN(&device->common, highBlockerConfig);
+   ADI_NULL_PTR_RETURN(&device->common, imageIDConfig);
 
-   ADI_RANGE_CHECK(device, highBlockerConfig->enableHighBlockerMode, false, true);
-   ADI_RANGE_CHECK(device, highBlockerConfig->highBlockerModeThresholdOne_negQuartdBFS, 0, 64);
-   ADI_RANGE_CHECK(device, highBlockerConfig->highBlockerModeThresholdTwo_QuartdB, 0, 640);
+   ADI_RANGE_CHECK(device, imageIDConfig->enableHighBlockerMode, false, true);
+   ADI_RANGE_CHECK(device, imageIDConfig->highBlockerModeThresholdOne_negQuartdBFS, 0, 112);
+   ADI_RANGE_CHECK(device, imageIDConfig->highBlockerModeThresholdTwo_QuartdB, 0, 640);
 
 
    /* Validate state is STANDBY or CALIBRATED */
@@ -2221,31 +2237,32 @@ adi_adrv910x_HighBlockerModeCfg_t *highBlockerConfig)
    adi_common_channel_to_index(channel, &chan_index);
 	if ((ADI_ADRV910X_CHANNEL_STANDBY != state.channelStates[port_index][chan_index]) && (ADI_ADRV910X_CHANNEL_CALIBRATED != state.channelStates[port_index][chan_index]))
 	{
-       ADI_ERROR_REPORT(&device->common,
+        ADI_ERROR_REPORT(&device->common,
            ADI_COMMON_ERRSRC_API,
            ADI_COMMON_ERR_INV_PARAM,
            ADI_COMMON_ACT_ERR_CHECK_PARAM,
            channel,
 			"Invalid channel state. Channel must be in STANDBY or CALIBRATED state");
+		ADI_ERROR_RETURN(device->common.error.newAction);
 	}
 
    ADI_API_RETURN(device);
 }
 
-int32_t adi_adrv910x_Rx_HighBlockerMode_Configure(adi_adrv910x_Device_t *device, adi_common_ChannelNumber_e channel,
-adi_adrv910x_HighBlockerModeCfg_t *highBlockerConfig)
+int32_t adi_adrv910x_Rx_ImageID_Configure(adi_adrv910x_Device_t *device, adi_common_ChannelNumber_e channel,
+adi_adrv910x_ImageIDCfg_t *imageIDConfig)
 {
     uint8_t armData[9] = { 0 };
     uint8_t extData[3] = { 0 };
 	uint32_t offset = 4;
 
-    ADI_PERFORM_VALIDATION(adi_adrv910x_Rx_HighBlockerMode_Configure_Validate, device, channel, highBlockerConfig);
+    ADI_PERFORM_VALIDATION(adi_adrv910x_Rx_ImageID_Configure_Validate, device, channel, imageIDConfig);
 
-	armData[offset++] = highBlockerConfig->enableHighBlockerMode;
-	adrv910x_LoadTwoBytes(&offset, armData, highBlockerConfig->highBlockerModeThresholdOne_negQuartdBFS);
-	adrv910x_LoadTwoBytes(&offset, armData, highBlockerConfig->highBlockerModeThresholdTwo_QuartdB);
+	armData[offset++] = imageIDConfig->enableHighBlockerMode;
+	adrv910x_LoadTwoBytes(&offset, armData, imageIDConfig->highBlockerModeThresholdOne_negQuartdBFS);
+	adrv910x_LoadTwoBytes(&offset, armData, imageIDConfig->highBlockerModeThresholdTwo_QuartdB);
 	
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
     /* Write High blocker config to ARM mailbox */
     ADI_EXPECT(adi_adrv910x_arm_Memory_Write, device, ADRV910X_ADDR_ARM_MAILBOX_SET, &armData[0], sizeof(armData), ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4, ADI_PS1);
@@ -2268,15 +2285,15 @@ adi_adrv910x_HighBlockerModeCfg_t *highBlockerConfig)
 
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Rx_HighBlockerMode_Inspect_Validate(adi_adrv910x_Device_t *device, adi_common_ChannelNumber_e channel,
-adi_adrv910x_HighBlockerModeCfg_t *highBlockerConfig)
+static __maybe_unused int32_t adi_adrv910x_Rx_ImageID_Inspect_Validate(adi_adrv910x_Device_t *device, adi_common_ChannelNumber_e channel,
+adi_adrv910x_ImageIDCfg_t *imageIDConfig)
 {
    adi_adrv910x_RadioState_t state = { 0 };
    uint8_t port_index = 0;
    uint8_t chan_index = 0;
 
-	if (channel != ADI_CHANNEL_2)
-	{
+   if (channel != ADI_CHANNEL_2)
+   {
 
 		ADI_ERROR_REPORT(&device->common,
 			ADI_COMMON_ERRSRC_API,
@@ -2284,9 +2301,10 @@ adi_adrv910x_HighBlockerModeCfg_t *highBlockerConfig)
 			ADI_COMMON_ACT_ERR_CHECK_PARAM,
 			channel,
 			"Invalid channel. Channel must RxNB to inspect High Blocker Mode Configuration.");
+		ADI_ERROR_RETURN(device->common.error.newAction);
 	}
 
-   ADI_NULL_PTR_RETURN(&device->common, highBlockerConfig);
+   ADI_NULL_PTR_RETURN(&device->common, imageIDConfig);
 
    /* Validate state is STANDBY or CALIBRATED */
    ADI_EXPECT(adi_adrv910x_Radio_State_Get, device, &state);
@@ -2300,25 +2318,26 @@ adi_adrv910x_HighBlockerModeCfg_t *highBlockerConfig)
            ADI_COMMON_ACT_ERR_CHECK_PARAM,
            channel,
            "Invalid channel state. Channel must be in STANDBY or CALIBRATED state");
+       ADI_ERROR_RETURN(device->common.error.newAction);
    }
 
    ADI_API_RETURN(device);
 }
 
-int32_t adi_adrv910x_Rx_HighBlockerMode_Inspect(adi_adrv910x_Device_t *device, adi_common_ChannelNumber_e channel,
-adi_adrv910x_HighBlockerModeCfg_t *highBlockerConfig)
+int32_t adi_adrv910x_Rx_ImageID_Inspect(adi_adrv910x_Device_t *device, adi_common_ChannelNumber_e channel,
+adi_adrv910x_ImageIDCfg_t *imageIDConfig)
 {
     uint8_t armReadBack[8] = { 0 };
     uint8_t extData[3] = { 0 };
 	uint32_t offset = 0;
 
-    ADI_PERFORM_VALIDATION(adi_adrv910x_Rx_HighBlockerMode_Inspect_Validate, device, channel, highBlockerConfig);
+    ADI_PERFORM_VALIDATION(adi_adrv910x_Rx_ImageID_Inspect_Validate, device, channel, imageIDConfig);
 
     extData[0] = adi_adrv910x_Radio_MailboxChannel_Get(ADI_RX, channel);
 	extData[1] = OBJID_GS_CONFIG;
     extData[2] = OBJID_CFG_HIGH_BLOCKER_CONFIG;
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 
     ADI_EXPECT(adi_adrv910x_arm_Cmd_Write, device, (uint8_t)ADRV910X_ARM_GET_OPCODE, &extData[0], sizeof(extData));
 
@@ -2336,11 +2355,462 @@ adi_adrv910x_HighBlockerModeCfg_t *highBlockerConfig)
 		sizeof(armReadBack),
 		ADRV910X_ARM_MEM_READ_AUTOINCR, ADI_PS1);
 
-	highBlockerConfig->enableHighBlockerMode = (bool)armReadBack[offset++];
-	adrv910x_ParseTwoBytes(&offset, armReadBack, &highBlockerConfig->highBlockerModeThresholdOne_negQuartdBFS);
-	adrv910x_ParseTwoBytes(&offset, armReadBack, &highBlockerConfig->highBlockerModeThresholdTwo_QuartdB);
+	imageIDConfig->enableHighBlockerMode = (bool)armReadBack[offset++];
+	adrv910x_ParseTwoBytes(&offset, armReadBack, &imageIDConfig->highBlockerModeThresholdOne_negQuartdBFS);
+	adrv910x_ParseTwoBytes(&offset, armReadBack, &imageIDConfig->highBlockerModeThresholdTwo_QuartdB);
 
     ADI_MUTEX_RELEASE(device);
 
     ADI_API_RETURN(device);
+}
+
+int32_t adi_adrv910x_Rx_Nco2Ftw_Set(adi_adrv910x_Device_t *adrv910x,
+                                   adi_common_ChannelNumber_e channel,
+                                   uint32_t ncoControlWord)
+{
+    uint8_t nco70 = (ncoControlWord & 0xFF);
+    uint8_t nco158 = ((ncoControlWord >> 8) & 0xFF);
+    uint8_t nco2316 = ((ncoControlWord >> 16) & 0xFF);
+    uint8_t nco3124 = ((ncoControlWord >> 24) & 0xFF);
+
+    ADI_NULL_DEVICE_PTR_RETURN(adrv910x);
+    ADI_MUTEX_ACQUIRE(adrv910x);
+
+    if (channel == ADI_ADRV910X_RX1)
+    {
+        ADI_EXPECT(adrv910x_NvsRegmapRx_RxNbdemNco50Enable_Set, adrv910x, 0x1);
+        ADI_EXPECT(adrv910x_NvsRegmapRx_RxNco2Ftw70_Set, adrv910x, nco70);
+        ADI_EXPECT(adrv910x_NvsRegmapRx_RxNco2Ftw158_Set, adrv910x, nco158);
+        ADI_EXPECT(adrv910x_NvsRegmapRx_RxNco2Ftw2316_Set, adrv910x, nco2316);
+        ADI_EXPECT(adrv910x_NvsRegmapRx_RxNco2Ftw3124_Set, adrv910x, nco3124);
+        ADI_EXPECT(adrv910x_NvsRegmapRx_RxNco2FtwUpdate_Set, adrv910x, 0x1);
+    }
+    else /* ADI_ADRV910X_RXNB */
+    {
+        ADI_EXPECT(adrv910x_NvsRegmapRxnb_RxNbdemNco50Enable_Set, adrv910x, 0x1);
+        ADI_EXPECT(adrv910x_NvsRegmapRxnb_RxNco2Ftw70_Set, adrv910x, nco70);
+        ADI_EXPECT(adrv910x_NvsRegmapRxnb_RxNco2Ftw158_Set, adrv910x, nco158);
+        ADI_EXPECT(adrv910x_NvsRegmapRxnb_RxNco2Ftw2316_Set, adrv910x, nco2316);
+        ADI_EXPECT(adrv910x_NvsRegmapRxnb_RxNco2Ftw3124_Set, adrv910x, nco3124);
+        ADI_EXPECT(adrv910x_NvsRegmapRxnb_RxNco2FtwUpdate_Set, adrv910x, 0x1);
+    }
+
+    ADI_MUTEX_RELEASE(adrv910x);
+    ADI_API_RETURN(adrv910x);
+}
+
+static __maybe_unused int32_t adi_adrv910x_Rx_ResampPhase_Set_Validate(
+    adi_adrv910x_Device_t *adrv910x,
+    adi_common_ChannelNumber_e channel)
+{
+    adi_adrv910x_RadioState_t state = { 0 };
+    uint8_t port_index = 0;
+    uint8_t chan_index = 0;
+
+    ADI_NULL_DEVICE_PTR_RETURN(adrv910x);
+
+    if ((channel != ADI_ADRV910X_RX1) && (channel != ADI_ADRV910X_RXNB))
+    {
+        ADI_ERROR_REPORT(&adrv910x->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         channel,
+                         "Invalid channel. Must be ADI_ADRV910X_RX1 or ADI_ADRV910X_RXNB");
+	    ADI_API_RETURN(adrv910x);
+    }
+
+    /* Validate state is CALIBRATED, PRIMED, or RF_ENABLED */
+    ADI_EXPECT(adi_adrv910x_Radio_State_Get, adrv910x, &state);
+    adi_common_port_to_index(ADI_RX, &port_index);
+    adi_common_channel_to_index((adi_common_ChannelNumber_e)channel, &chan_index);
+    if ((ADI_ADRV910X_CHANNEL_CALIBRATED  != state.channelStates[port_index][chan_index]) &&
+        (ADI_ADRV910X_CHANNEL_PRIMED      != state.channelStates[port_index][chan_index]) &&
+        (ADI_ADRV910X_CHANNEL_RF_ENABLED  != state.channelStates[port_index][chan_index]))
+    {
+        ADI_ERROR_REPORT(&adrv910x->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         channel,
+                         "Invalid channel state. Channel must be in CALIBRATED, PRIMED, or RF_ENABLED state");
+    }
+
+    ADI_API_RETURN(adrv910x);
+}
+
+int32_t adi_adrv910x_Rx_ResampPhase_Set(adi_adrv910x_Device_t *adrv910x,
+                                       adi_common_ChannelNumber_e channel,
+                                       int16_t resampleInputI,
+                                       int16_t resampleInputQ)
+{
+    ADI_PERFORM_VALIDATION(adi_adrv910x_Rx_ResampPhase_Set_Validate, adrv910x, channel);
+
+    ADI_MUTEX_ACQUIRE(adrv910x);
+
+    ADI_EXPECT(adrv910x_Rx_ResampPhase_Set, adrv910x, channel, resampleInputI, resampleInputQ);
+
+    ADI_MUTEX_RELEASE(adrv910x);
+    ADI_API_RETURN(adrv910x);
+}
+
+static __maybe_unused int32_t adi_adrv910x_Rx_ResampPhase_Get_Validate(
+    adi_adrv910x_Device_t *adrv910x,
+    adi_common_ChannelNumber_e channel,
+    int16_t *resampleInputI,
+    int16_t *resampleInputQ)
+{
+    ADI_NULL_DEVICE_PTR_RETURN(adrv910x);
+    ADI_NULL_PTR_RETURN(&adrv910x->common, resampleInputI);
+    ADI_NULL_PTR_RETURN(&adrv910x->common, resampleInputQ);
+
+    if ((channel != ADI_ADRV910X_RX1) && (channel != ADI_ADRV910X_RXNB))
+    {
+        ADI_ERROR_REPORT(&adrv910x->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         channel,
+                         "Invalid channel. Must be ADI_ADRV910X_RX1 or ADI_ADRV910X_RXNB");
+	    ADI_API_RETURN(adrv910x);
+    }
+
+    ADI_API_RETURN(adrv910x);
+}
+
+int32_t adi_adrv910x_Rx_ResampPhase_Get(adi_adrv910x_Device_t *adrv910x,
+                                       adi_common_ChannelNumber_e channel,
+                                       int16_t *resampleInputI,
+                                       int16_t *resampleInputQ)
+{
+    ADI_PERFORM_VALIDATION(adi_adrv910x_Rx_ResampPhase_Get_Validate, adrv910x, channel, resampleInputI, resampleInputQ);
+
+    ADI_MUTEX_ACQUIRE(adrv910x);
+
+    ADI_EXPECT(adrv910x_Rx_ResampPhase_Get, adrv910x, channel, resampleInputI, resampleInputQ);
+
+    ADI_MUTEX_RELEASE(adrv910x);
+    ADI_API_RETURN(adrv910x);
+}
+
+static __maybe_unused int32_t adi_adrv910x_Rx_NcoFrequency_Set_Validate(
+    adi_adrv910x_Device_t *adrv910x,
+    adi_common_ChannelNumber_e channel,
+    int32_t frequencyOffset_Hz)
+{
+    uint8_t chanIndex = 0;
+    int32_t maxFreq_Hz = 0;
+
+    ADI_NULL_DEVICE_PTR_RETURN(adrv910x);
+
+    if (channel == ADI_ADRV910X_RX1)
+    {
+        chanIndex = 0;
+    }
+    else if (channel == ADI_ADRV910X_RXNB)
+    {
+        chanIndex = 1;
+    }
+    else
+    {
+        ADI_ERROR_REPORT(&adrv910x->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         channel,
+                         "Invalid channel. Must be ADI_ADRV910X_RX1 or ADI_ADRV910X_RXNB");
+	    ADI_API_RETURN(adrv910x);
+    }
+
+    /* Validate frequency range: |offset| <= rxOutputRate / 2 */
+    if (adrv910x->devStateInfo.rxOutputRate_kHz[chanIndex] == 0u)
+    {
+        ADI_ERROR_REPORT(&adrv910x->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         chanIndex,
+                         "Rx output rate not initialized. Load a profile before setting NCO frequency");
+	    ADI_API_RETURN(adrv910x);
+    }
+
+    maxFreq_Hz = (int32_t)((adrv910x->devStateInfo.rxOutputRate_kHz[chanIndex] * 1000u) / 2u);
+    if ((frequencyOffset_Hz > maxFreq_Hz) || (frequencyOffset_Hz < -maxFreq_Hz))
+    {
+        ADI_ERROR_REPORT(&adrv910x->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         frequencyOffset_Hz,
+                         "Frequency offset exceeds half the RX interface rate");
+	    ADI_API_RETURN(adrv910x);
+    }
+
+    ADI_API_RETURN(adrv910x);
+}
+
+int32_t adi_adrv910x_Rx_NcoFrequency_Set(adi_adrv910x_Device_t *adrv910x,
+                                                adi_common_ChannelNumber_e channel,
+                                                int32_t frequencyOffset_Hz)
+{
+    uint8_t chanIndex = 0;
+    uint32_t sampleRate_Hz = 0;
+    uint32_t ftw = 0;
+
+    ADI_PERFORM_VALIDATION(adi_adrv910x_Rx_NcoFrequency_Set_Validate, adrv910x, channel, frequencyOffset_Hz);
+
+    /* Determine sample rate based on channel */
+    chanIndex = (channel == ADI_ADRV910X_RX1) ? 0u : 1u;
+    sampleRate_Hz = adrv910x->devStateInfo.rxOutputRate_kHz[chanIndex] * 1000u;
+
+    /* Checked unconditionally, not only in _Validate(): the shipped libraries are built
+     * without ADI_VALIDATE_PARAMS, so the validation call above compiles to nothing and
+     * an uninitialised rate would otherwise reach the division below. */
+    if (sampleRate_Hz == 0u)
+    {
+        ADI_ERROR_REPORT(&adrv910x->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         chanIndex,
+                         "Rx output rate not initialized. Load a profile before setting NCO frequency");
+        ADI_API_RETURN(adrv910x);
+    }
+
+    /* Convert frequency offset (Hz) to NCO Frequency Tuning Word
+     * FTW = frequencyOffset_Hz * 2^32 / sampleRate_Hz
+     * Bias of sampleRate/2 is added before division to achieve
+     * rounding to nearest integer instead of truncation toward zero. */
+	int64_t num = (int64_t)frequencyOffset_Hz * (int64_t)(1LL << 32);
+	int64_t bias = (frequencyOffset_Hz > 0) ? (int64_t)(sampleRate_Hz / 2)
+	             : (frequencyOffset_Hz < 0) ? -(int64_t)(sampleRate_Hz / 2)
+	             : 0;
+	ftw = (uint32_t)((num + bias) / (int64_t)sampleRate_Hz);
+
+    ADI_EXPECT(adi_adrv910x_Rx_Nco2Ftw_Set, adrv910x, channel, ftw);
+
+    ADI_API_RETURN(adrv910x);
+}
+
+static __maybe_unused int32_t adi_adrv910x_Rx_NcoFrequency_Get_Validate(
+    adi_adrv910x_Device_t *adrv910x,
+    adi_common_ChannelNumber_e channel,
+    int32_t *frequencyOffset_Hz)
+{
+    ADI_NULL_DEVICE_PTR_RETURN(adrv910x);
+    ADI_NULL_PTR_RETURN(&adrv910x->common, frequencyOffset_Hz);
+
+    if ((channel != ADI_ADRV910X_RX1) && (channel != ADI_ADRV910X_RXNB))
+    {
+        ADI_ERROR_REPORT(&adrv910x->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         channel,
+                         "Invalid channel. Must be ADI_ADRV910X_RX1 or ADI_ADRV910X_RXNB");
+	    ADI_API_RETURN(adrv910x);
+    }
+
+    ADI_API_RETURN(adrv910x);
+}
+
+int32_t adi_adrv910x_Rx_NcoFrequency_Get(adi_adrv910x_Device_t *adrv910x,
+                                                adi_common_ChannelNumber_e channel,
+                                                int32_t *frequencyOffset_Hz)
+{
+    uint8_t chanIndex = 0;
+    uint8_t nco70 = 0;
+    uint8_t nco158 = 0;
+    uint8_t nco2316 = 0;
+    uint8_t nco3124 = 0;
+    uint32_t ftw = 0;
+    uint32_t sampleRate_Hz = 0;
+
+    ADI_PERFORM_VALIDATION(adi_adrv910x_Rx_NcoFrequency_Get_Validate, adrv910x, channel, frequencyOffset_Hz);
+
+    chanIndex = (channel == ADI_ADRV910X_RX1) ? 0u : 1u;
+    sampleRate_Hz = adrv910x->devStateInfo.rxOutputRate_kHz[chanIndex] * 1000u;
+
+    /* Without a rate the conversion below collapses to 0 Hz for every FTW, which reads
+     * as a plausible answer rather than a failure. Reported here rather than only in
+     * _Validate() because the shipped libraries are built without ADI_VALIDATE_PARAMS.
+     * Checked before the registers are read so no mutex is taken on this path. */
+    if (sampleRate_Hz == 0u)
+    {
+        ADI_ERROR_REPORT(&adrv910x->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         chanIndex,
+                         "Rx output rate not initialized. Load a profile before reading NCO frequency");
+        ADI_API_RETURN(adrv910x);
+    }
+
+    ADI_MUTEX_ACQUIRE(adrv910x);
+
+    /* Read FTW bytes from appropriate register set */
+    if (channel == ADI_ADRV910X_RX1)
+    {
+        ADI_EXPECT(adrv910x_NvsRegmapRx_RxNco2Ftw70_Get, adrv910x, &nco70);
+        ADI_EXPECT(adrv910x_NvsRegmapRx_RxNco2Ftw158_Get, adrv910x, &nco158);
+        ADI_EXPECT(adrv910x_NvsRegmapRx_RxNco2Ftw2316_Get, adrv910x, &nco2316);
+        ADI_EXPECT(adrv910x_NvsRegmapRx_RxNco2Ftw3124_Get, adrv910x, &nco3124);
+    }
+    else /* ADI_ADRV910X_RXNB */
+    {
+        ADI_EXPECT(adrv910x_NvsRegmapRxnb_RxNco2Ftw70_Get, adrv910x, &nco70);
+        ADI_EXPECT(adrv910x_NvsRegmapRxnb_RxNco2Ftw158_Get, adrv910x, &nco158);
+        ADI_EXPECT(adrv910x_NvsRegmapRxnb_RxNco2Ftw2316_Get, adrv910x, &nco2316);
+        ADI_EXPECT(adrv910x_NvsRegmapRxnb_RxNco2Ftw3124_Get, adrv910x, &nco3124);
+    }
+
+    ADI_MUTEX_RELEASE(adrv910x);
+
+    /* Reconstruct 32-bit FTW */
+    ftw = ((uint32_t)nco70) |
+          ((uint32_t)nco158 << 8) |
+          ((uint32_t)nco2316 << 16) |
+          ((uint32_t)nco3124 << 24);
+
+    /* Convert FTW back to frequency offset (Hz)
+     * freq_Hz = (int32_t)ftw * sampleRate_Hz / 2^32 */
+    int64_t num = (int64_t)(int32_t)ftw * (int64_t)sampleRate_Hz;
+    int64_t bias = ((int32_t)ftw > 0) ? (int64_t)(1LL << 31)
+                 : ((int32_t)ftw < 0) ? -(int64_t)(1LL << 31)
+                 : 0;
+    *frequencyOffset_Hz = (int32_t)((num + bias) / (int64_t)(1LL << 32));
+
+    ADI_API_RETURN(adrv910x);
+}
+
+static __maybe_unused int32_t adi_adrv910x_Rx_PfirBankSelect_Set_Validate(
+    adi_adrv910x_Device_t *adrv910x,
+	adi_adrv910x_MailboxChannel_e channel,
+	adi_adrv910x_Rx_PfirBank_e bankSel)
+{
+    adi_adrv910x_RadioState_t state = { 0 };
+    uint8_t port_index = 0;
+    uint8_t chan_index = 0;
+
+    ADI_NULL_DEVICE_PTR_RETURN(adrv910x);
+
+    if ((channel != ADI_ADRV910X_RX1) && (channel != ADI_ADRV910X_RXNB))
+    {
+        ADI_ERROR_REPORT(&adrv910x->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         channel,
+                         "Invalid channel. Must be ADI_ADRV910X_RX1 or ADI_ADRV910X_RXNB");
+        ADI_API_RETURN(adrv910x);
+    }
+
+    if ((bankSel < ADI_ADRV910X_RX_PFIR_BANK_A) || (bankSel > ADI_ADRV910X_RX_PFIR_BANK_F))
+    {
+        ADI_ERROR_REPORT(&adrv910x->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         bankSel,
+                         "Invalid PFIR bank. Must be ADI_ADRV910X_RX_PFIR_BANK_A(0) through ADI_ADRV910X_RX_PFIR_BANK_F(5)");
+        ADI_API_RETURN(adrv910x);
+    }
+
+    /* Validate state is CALIBRATED, PRIMED, or RF_ENABLED */
+    ADI_EXPECT(adi_adrv910x_Radio_State_Get, adrv910x, &state);
+    adi_common_port_to_index(ADI_RX, &port_index);
+    adi_common_channel_to_index((adi_common_ChannelNumber_e)channel, &chan_index);
+    if ((ADI_ADRV910X_CHANNEL_CALIBRATED != state.channelStates[port_index][chan_index]) &&
+        (ADI_ADRV910X_CHANNEL_PRIMED     != state.channelStates[port_index][chan_index]) &&
+        (ADI_ADRV910X_CHANNEL_RF_ENABLED != state.channelStates[port_index][chan_index]))
+    {
+        ADI_ERROR_REPORT(&adrv910x->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         channel,
+                         "Invalid channel state. Channel must be in CALIBRATED, PRIMED, or RF_ENABLED state");
+    }
+
+    ADI_API_RETURN(adrv910x);
+}
+
+int32_t adi_adrv910x_Rx_PfirBankSelect_Set(adi_adrv910x_Device_t *adrv910x,
+                                           adi_adrv910x_MailboxChannel_e channel,
+                                           adi_adrv910x_Rx_PfirBank_e bankSel)
+{
+    #ifdef NEVIS_PS2
+    CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk; /* enable trace/DWT */
+    DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;            /* enable cycle counter */
+    DWT->CYCCNT = 0;
+    g_cyclestart = DWT->CYCCNT;
+    #endif
+    ADI_PERFORM_VALIDATION(adi_adrv910x_Rx_PfirBankSelect_Set_Validate, adrv910x, channel, bankSel);
+
+    ADI_MUTEX_ACQUIRE(adrv910x);
+
+    ADI_EXPECT(adrv910x_Rx_PfirBankSelect_Set, adrv910x, channel, bankSel);
+
+    ADI_MUTEX_RELEASE(adrv910x);
+    #ifdef NEVIS_PS2
+    g_cycleend = DWT->CYCCNT;
+    #endif
+
+    ADI_API_RETURN(adrv910x);
+}
+
+static __maybe_unused int32_t adi_adrv910x_Rx_PfirBankSelect_Get_Validate(
+    adi_adrv910x_Device_t *adrv910x,
+    adi_adrv910x_MailboxChannel_e channel,
+    adi_adrv910x_Rx_PfirBank_e *bankSel)
+{
+    adi_adrv910x_RadioState_t state = { 0 };
+    uint8_t port_index = 0;
+    uint8_t chan_index = 0;
+
+    ADI_NULL_DEVICE_PTR_RETURN(adrv910x);
+    ADI_NULL_PTR_RETURN(&adrv910x->common, bankSel);
+
+    if ((channel != ADI_ADRV910X_RX1) && (channel != ADI_ADRV910X_RXNB))
+    {
+        ADI_ERROR_REPORT(&adrv910x->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         channel,
+                         "Invalid channel. Must be ADI_ADRV910X_RX1 or ADI_ADRV910X_RXNB");
+        ADI_API_RETURN(adrv910x);
+    }
+
+    /* Validate state is CALIBRATED, PRIMED, or RF_ENABLED */
+    ADI_EXPECT(adi_adrv910x_Radio_State_Get, adrv910x, &state);
+    adi_common_port_to_index(ADI_RX, &port_index);
+    adi_common_channel_to_index((adi_common_ChannelNumber_e)channel, &chan_index);
+    if ((ADI_ADRV910X_CHANNEL_CALIBRATED != state.channelStates[port_index][chan_index]) &&
+        (ADI_ADRV910X_CHANNEL_PRIMED     != state.channelStates[port_index][chan_index]) &&
+        (ADI_ADRV910X_CHANNEL_RF_ENABLED != state.channelStates[port_index][chan_index]))
+    {
+        ADI_ERROR_REPORT(&adrv910x->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         channel,
+                         "Invalid channel state. Channel must be in CALIBRATED, PRIMED, or RF_ENABLED state");
+    }
+
+    ADI_API_RETURN(adrv910x);
+}
+
+int32_t adi_adrv910x_Rx_PfirBankSelect_Get(adi_adrv910x_Device_t *adrv910x,
+                                           adi_adrv910x_MailboxChannel_e channel,
+                                           adi_adrv910x_Rx_PfirBank_e *bankSel)
+{
+    ADI_PERFORM_VALIDATION(adi_adrv910x_Rx_PfirBankSelect_Get_Validate, adrv910x, channel, bankSel);
+
+    ADI_MUTEX_ACQUIRE(adrv910x);
+
+    ADI_EXPECT(adrv910x_Rx_PfirBankSelect_Get, adrv910x, channel, bankSel);
+
+    ADI_MUTEX_RELEASE(adrv910x);
+    ADI_API_RETURN(adrv910x);
 }

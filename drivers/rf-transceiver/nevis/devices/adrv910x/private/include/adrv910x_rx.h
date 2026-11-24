@@ -64,6 +64,62 @@ int32_t adrv910x_RxGainTableParse(adi_adrv910x_Device_t *device,
                                   uint8_t *armDmaDataGainTablePtr,
                                   uint16_t numGainIndicesInTable);
 
+/**
+* \brief Writes resampler phase registers directly via SPI (bypasses bitfield layer)
+*
+* \param device Structure pointer to the ADRV910X device data structure
+* \param channel RX channel (ADI_ADRV910X_RX1 or ADI_ADRV910X_RXNB)
+* \param resampleInputI I-channel resampler phase value
+* \param resampleInputQ Q-channel resampler phase value
+*
+* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+*/
+int32_t adrv910x_Rx_ResampPhase_Set(adi_adrv910x_Device_t *device,
+                                           adi_common_ChannelNumber_e channel,
+                                           int16_t resampleInputI,
+                                           int16_t resampleInputQ);
+
+/**
+* \brief Reads resampler phase registers directly via SPI (bypasses bitfield layer)
+*
+* \param device Structure pointer to the ADRV910X device data structure
+* \param channel RX channel (ADI_ADRV910X_RX1 or ADI_ADRV910X_RXNB)
+* \param resampleInputI Pointer to store I-channel resampler phase value
+* \param resampleInputQ Pointer to store Q-channel resampler phase value
+*
+* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+*/
+int32_t adrv910x_Rx_ResampPhase_Get(adi_adrv910x_Device_t *device,
+                                          adi_common_ChannelNumber_e channel,
+                                          int16_t *resampleInputI,
+                                          int16_t *resampleInputQ);
+
+/**
+* \brief Directly writes the PFIR bank select register via SPI (no wrapper overhead)
+*
+* \param device Pointer to the device structure
+* \param channel ADI_ADRV910X_RX1 or ADI_ADRV910X_RXNB
+* \param bankSel PFIR bank to activate (ADI_ADRV910X_RX_PFIR_BANK_A through ADI_ADRV910X_RX_PFIR_BANK_F)
+*
+* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+*/
+int32_t adrv910x_Rx_PfirBankSelect_Set(adi_adrv910x_Device_t *device,
+                                      adi_adrv910x_MailboxChannel_e channel,
+                                      adi_adrv910x_Rx_PfirBank_e bankSel);
+
+/**
+* \brief Directly reads the PFIR bank select register via SPI (no wrapper overhead)
+*
+* \param device Pointer to the device structure
+* \param channel ADI_ADRV910X_RX1 or ADI_ADRV910X_RXNB
+* \param bankSel Pointer to store the currently active PFIR bank
+*
+* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+*/
+int32_t adrv910x_Rx_PfirBankSelect_Get(adi_adrv910x_Device_t *device,
+                                      adi_adrv910x_MailboxChannel_e channel,
+                                      adi_adrv910x_Rx_PfirBank_e *bankSel);
+
 #ifdef __cplusplus
 }
 #endif

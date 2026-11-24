@@ -39,11 +39,182 @@
 #include "object_ids.h"
 
 
-static __maybe_unused int32_t __maybe_unused SystemPowerSavingAndMonitorMode_Configure_Validate(adi_adrv910x_Device_t *device,
-                                                                                 adi_adrv910x_PowerSavingAndMonitorMode_SystemPowerSavingAndMonitorModeCfg_t *monitorModeCfg)
+static __maybe_unused int32_t adi_adrv910x_powerSavingAndMonitorMode_ChannelPowerSaving_Configure_Validate(adi_adrv910x_Device_t *device,
+	adi_common_ChannelNumber_e channel,
+	adi_adrv910x_PowerSavingAndMonitorMode_ChannelPowerSavingCfg_t *powerSavingCfg)
+{
+	static const uint32_t TX_CHANNELS[] = { ADI_ADRV910X_TX1, ADI_ADRV910X_TXNB };
+	static const uint32_t RX_CHANNELS[] = { ADI_ADRV910X_RX1, ADI_ADRV910X_RXNB };
+	uint8_t chan_index = 0;
+	adi_adrv910x_ChannelState_e state = ADI_ADRV910X_CHANNEL_STANDBY;
+
+	ADI_NULL_PTR_RETURN(&device->common, powerSavingCfg);
+
+	/* Check for valid channel */
+	ADI_PERFORM_VALIDATION(adi_adrv910x_Channel_Validate, device, channel);
+
+	/* 'channelDisabledPowerDownMode' is restricted between ADI_ADRV910X_POWERSAVINGANDMONITORMODE_CHANNEL_MODE_DEFAULT and ADI_ADRV910X_POWERSAVINGANDMONITORMODE_CHANNEL_MODE_RFPLL_AND_LDO */
+	ADI_RANGE_CHECK(device,
+		powerSavingCfg->channelDisabledPowerDownMode,
+		ADI_ADRV910X_POWERSAVINGANDMONITORMODE_CHANNEL_MODE_DEFAULT,
+		ADI_ADRV910X_POWERSAVINGANDMONITORMODE_CHANNEL_MODE_RFPLL_AND_LDO);
+
+	adi_common_channel_to_index(channel, &chan_index);
+	if (ADRV910X_BF_EQUAL(device->devStateInfo.initializedChannels, RX_CHANNELS[chan_index]))
+	{
+		ADI_EXPECT(adi_adrv910x_Radio_Channel_State_Get, device, ADI_RX, channel, &state);
+
+		if (ADI_ADRV910X_CHANNEL_STANDBY == state)
+		{
+			ADI_ERROR_REPORT(&device->common,
+				ADI_COMMON_ERRSRC_API,
+				ADI_COMMON_ERR_API_FAIL,
+				ADI_COMMON_ACT_ERR_CHECK_PARAM,
+				currentState.channelStates[port_index][chan_index],
+				"Error while attempting to configure power saving. Rx channel is in wrong state.");
+			ADI_API_RETURN(device);
+		}
+	}
+
+
+	if (ADRV910X_BF_EQUAL(device->devStateInfo.initializedChannels, TX_CHANNELS[chan_index]))
+	{
+		ADI_EXPECT(adi_adrv910x_Radio_Channel_State_Get, device, ADI_TX, channel, &state);
+
+		if (ADI_ADRV910X_CHANNEL_STANDBY == state)
+		{
+			ADI_ERROR_REPORT(&device->common,
+				ADI_COMMON_ERRSRC_API,
+				ADI_COMMON_ERR_API_FAIL,
+				ADI_COMMON_ACT_ERR_CHECK_PARAM,
+				currentState.channelStates[port_index][chan_index],
+				"Error while attempting to configure power saving. Tx channel is in wrong state.");
+			ADI_API_RETURN(device);
+		}
+	}
+
+	ADI_API_RETURN(device);
+}
+
+int32_t adi_adrv910x_powerSavingAndMonitorMode_ChannelPowerSaving_Configure(adi_adrv910x_Device_t *device,
+	adi_common_ChannelNumber_e channel,
+	adi_adrv910x_PowerSavingAndMonitorMode_ChannelPowerSavingCfg_t *powerSavingCfg)
+{
+	uint8_t armData[5] = { 0 };
+
+	ADI_PERFORM_VALIDATION(adi_adrv910x_powerSavingAndMonitorMode_ChannelPowerSaving_Configure_Validate, device, channel, powerSavingCfg);
+
+	armData[0] = (uint8_t)channel;
+	armData[1] = ADRV910X_ARM_HIGHPRIORITY_SET_POWER_SAVING_CONFIG;
+	armData[2] = (uint8_t)powerSavingCfg->channelDisabledPowerDownMode;
+
+	ADI_EXPECT(adi_adrv910x_arm_Cmd_Write, device, ADRV910X_ARM_HIGHPRIORITY_OPCODE, armData, sizeof(armData));
+
+	/* Wait for command to finish executing */
+	ADRV910X_ARM_CMD_STATUS_WAIT_EXPECT(device,
+		ADRV910X_ARM_HIGHPRIORITY_OPCODE,
+		armData[1],
+		(uint32_t)ADI_ADRV910X_DEFAULT_TIMEOUT_US,
+		(uint32_t)ADI_ADRV910X_DEFAULT_INTERVAL_US);
+
+	ADI_API_RETURN(device);
+}
+
+static __maybe_unused int32_t adi_adrv910x_powerSavingAndMonitorMode_ChannelPowerSaving_Inspect_Validate(adi_adrv910x_Device_t *device,
+	adi_common_ChannelNumber_e channel,
+	adi_adrv910x_PowerSavingAndMonitorMode_ChannelPowerSavingCfg_t *powerSavingCfg)
+{
+	static const uint32_t TX_CHANNELS[] = { ADI_ADRV910X_TX1, ADI_ADRV910X_TXNB };
+	static const uint32_t RX_CHANNELS[] = { ADI_ADRV910X_RX1, ADI_ADRV910X_RXNB };
+	uint8_t chan_index = 0;
+
+	adi_adrv910x_ChannelState_e state = ADI_ADRV910X_CHANNEL_STANDBY;
+
+	/* Check device pointer and rxInterfaceGainCtrl are not null */
+	ADI_ENTRY_PTR_EXPECT(device, powerSavingCfg);
+
+	ADI_RANGE_CHECK(device, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
+
+	adi_common_channel_to_index(channel, &chan_index);
+
+	if (ADRV910X_BF_EQUAL(device->devStateInfo.initializedChannels, RX_CHANNELS[chan_index]))
+	{
+		ADI_EXPECT(adi_adrv910x_Radio_Channel_State_Get, device, ADI_RX, channel, &state);
+
+		if (ADI_ADRV910X_CHANNEL_STANDBY == state)
+		{
+			ADI_ERROR_REPORT(&device->common,
+				ADI_COMMON_ERRSRC_API,
+				ADI_COMMON_ERR_API_FAIL,
+				ADI_COMMON_ACT_ERR_CHECK_PARAM,
+				currentState.channelStates[port_index][chan_index],
+				"Error while attempting to inspect power saving configuration. Rx channel is in wrong state.");
+			ADI_API_RETURN(device);
+		}
+	}
+
+	if (ADRV910X_BF_EQUAL(device->devStateInfo.initializedChannels, TX_CHANNELS[chan_index]))
+	{
+		ADI_EXPECT(adi_adrv910x_Radio_Channel_State_Get, device, ADI_TX, channel, &state);
+
+		if (ADI_ADRV910X_CHANNEL_STANDBY == state)
+		{
+			ADI_ERROR_REPORT(&device->common,
+				ADI_COMMON_ERRSRC_API,
+				ADI_COMMON_ERR_API_FAIL,
+				ADI_COMMON_ACT_ERR_CHECK_PARAM,
+				currentState.channelStates[port_index][chan_index],
+				"Error while attempting to inspect power saving configuration. Specified channel is in wrong state.");
+			ADI_API_RETURN(device);
+		}
+	}
+
+	ADI_API_RETURN(device);
+}
+
+int32_t adi_adrv910x_powerSavingAndMonitorMode_ChannelPowerSaving_Inspect(adi_adrv910x_Device_t *device,
+	adi_common_ChannelNumber_e channel,
+	adi_adrv910x_PowerSavingAndMonitorMode_ChannelPowerSavingCfg_t *powerSavingCfg)
+{
+	uint8_t armReadBack[2] = { 0 };
+	uint8_t extData[5] = { 0 };
+
+	ADI_PERFORM_VALIDATION(adi_adrv910x_powerSavingAndMonitorMode_ChannelPowerSaving_Inspect_Validate, device, channel, powerSavingCfg);
+
+	extData[0] = (uint8_t)channel;
+	extData[1] = OBJID_GO_GET_POWER_SAVING_CONFIG;
+
+	ADI_EXPECT(adi_adrv910x_arm_Cmd_Write, device, (uint8_t)ADRV910X_ARM_GET_OPCODE, &extData[0], sizeof(extData));
+
+	/* Wait for command to finish executing */
+	ADRV910X_ARM_CMD_STATUS_WAIT_EXPECT(device,
+		(uint8_t)ADRV910X_ARM_GET_OPCODE,
+		extData[1],
+		(uint32_t)ADI_ADRV910X_DEFAULT_TIMEOUT_US,
+		(uint32_t)ADI_ADRV910X_DEFAULT_INTERVAL_US);
+
+	/* read the ARM memory to get RSSI status */
+	ADI_EXPECT(adi_adrv910x_arm_Memory_Read,
+		device,
+		ADRV910X_ADDR_ARM_MAILBOX_GET,
+		&armReadBack[0],
+		sizeof(armReadBack),
+		false,
+        ADI_PS1)
+
+    powerSavingCfg->channelDisabledPowerDownMode = (adi_adrv910x_PowerSavingAndMonitorMode_ChannelPowerDownMode_e)armReadBack[0];
+
+	ADI_API_RETURN(device);
+}
+
+
+static __maybe_unused int32_t SystemPowerSaving_Configure_Validate(adi_adrv910x_Device_t *device,
+                                                                                 adi_adrv910x_PowerSavingAndMonitorMode_SystemPowerSavingCfg_t *monitorModeCfg)
 {
     adi_adrv910x_GpioCfg_t gpio = { 0 };
-
+    
+    ADI_ENTRY_PTR_EXPECT(device, monitorModeCfg);
+    
     /* RxNb must be enabled to support Monitor Mode feature */
     if ((monitorModeCfg->detectionTime_us!= 0) &&
         (0 == ADRV910X_BF_EQUAL(device->devStateInfo.initializedChannels, ADI_ADRV910X_RXNB)))
@@ -57,12 +228,10 @@ static __maybe_unused int32_t __maybe_unused SystemPowerSavingAndMonitorMode_Con
         ADI_ERROR_RETURN(device->common.error.newAction);
     }
 
-    ADI_NULL_PTR_RETURN(&device->common, monitorModeCfg);
-
     ADI_RANGE_CHECK(device,
                     monitorModeCfg->powerDownMode,
                     ADI_ADRV910X_POWERSAVINGANDMONITORMODE_SYSTEM_MODE_CLKPLL,
-                    ADI_ADRV910X_POWERSAVINGANDMONITORMODE_SYSTEM_MODE_ARM);
+                    ADI_ADRV910X_POWERSAVINGANDMONITORMODE_SYSTEM_MODE_ARM_PS2);
 
     ADI_RANGE_CHECK(device,
                     monitorModeCfg->detectionMode,
@@ -118,14 +287,14 @@ static __maybe_unused int32_t __maybe_unused SystemPowerSavingAndMonitorMode_Con
     ADI_API_RETURN(device);
 }
 
-int32_t adi_adrv910x_powerSavingAndMonitorMode_SystemPowerSavingAndMonitorMode_Configure(adi_adrv910x_Device_t *device,
-                                                                                         adi_adrv910x_PowerSavingAndMonitorMode_SystemPowerSavingAndMonitorModeCfg_t *monitorModeCfg)
+int32_t adi_adrv910x_powerSavingAndMonitorMode_SystemPowerSaving_Configure(adi_adrv910x_Device_t *device,
+                                                                                         adi_adrv910x_PowerSavingAndMonitorMode_SystemPowerSavingCfg_t *monitorModeCfg)
 {
-    uint8_t armData[16] = { 0 };
+    uint8_t armData[17] = { 0 };
     uint8_t extData[5] = { 0 };
     uint32_t offset = 0;
 
-    ADI_PERFORM_VALIDATION(SystemPowerSavingAndMonitorMode_Configure_Validate, device, monitorModeCfg);
+    ADI_PERFORM_VALIDATION(SystemPowerSaving_Configure_Validate, device, monitorModeCfg);
 
 #ifndef NEVIS_PS2
     /* NOTE: this probably doesn't need to be here.  When API is executing on
@@ -135,13 +304,14 @@ int32_t adi_adrv910x_powerSavingAndMonitorMode_SystemPowerSavingAndMonitorMode_C
     ADI_EXPECT(adi_adrv910x_arm_AhbSpiBridge_Enable, device);
 #endif
 	
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 
     adrv910x_LoadFourBytes(&offset, armData, monitorModeCfg->initialBatterySaverDelay_us);
     adrv910x_LoadFourBytes(&offset, armData, monitorModeCfg->detectionTime_us);
     adrv910x_LoadFourBytes(&offset, armData, monitorModeCfg->sleepTime_us);
     armData[offset++] = (uint8_t)monitorModeCfg->bbicWakeupLevelEnable;
     armData[offset++] = (uint8_t)monitorModeCfg->externalPllEnable;
+    armData[offset++] = (uint8_t)1; /* reserved for debug use, set to 1 for now to avoid any unintended behavior */
 
     /* Write monitor mode configuration parameters to ARM data memory */
     ADI_EXPECT(adi_adrv910x_arm_Memory_Write, device, ADRV910X_ADDR_ARM_HIGHPRIORITY_MAILBOX_SET, &armData[0], sizeof(armData), ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4, ADI_PS1);
@@ -165,10 +335,10 @@ int32_t adi_adrv910x_powerSavingAndMonitorMode_SystemPowerSavingAndMonitorMode_C
     ADI_API_RETURN(device);
 }
 
-int32_t adi_adrv910x_powerSavingAndMonitorMode_SystemPowerSavingAndMonitorMode_Inspect(adi_adrv910x_Device_t *device,
-                                                                                       adi_adrv910x_PowerSavingAndMonitorMode_SystemPowerSavingAndMonitorModeCfg_t *monitorModeCfg)
+int32_t adi_adrv910x_powerSavingAndMonitorMode_SystemPowerSaving_Inspect(adi_adrv910x_Device_t *device,
+                                                                                       adi_adrv910x_PowerSavingAndMonitorMode_SystemPowerSavingCfg_t *monitorModeCfg)
 {
-    uint8_t armReadBack[17] = { 0 };
+    uint8_t armReadBack[18] = { 0 };
     uint8_t extData[5] = { 0 };
     uint32_t offset = 0;
 
@@ -178,7 +348,7 @@ int32_t adi_adrv910x_powerSavingAndMonitorMode_SystemPowerSavingAndMonitorMode_I
     extData[0] = 0;
     extData[1] = OBJID_GO_GET_MONITOR_CONFIG;
 
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 	
     ADI_EXPECT(adi_adrv910x_arm_Cmd_Write, device, (uint8_t)ADRV910X_ARM_GET_OPCODE, &extData[0], sizeof(extData));
 
@@ -213,26 +383,27 @@ int32_t adi_adrv910x_powerSavingAndMonitorMode_SystemPowerSavingAndMonitorMode_I
 int32_t adi_adrv910x_powerSavingAndMonitorMode_SystemPowerSavingMode_Set(adi_adrv910x_Device_t *device,
                                                                          adi_adrv910x_PowerSavingAndMonitorMode_SystemPowerDownMode_e mode)
 {
-    adi_adrv910x_PowerSavingAndMonitorMode_SystemPowerSavingAndMonitorModeCfg_t config = {
+    adi_adrv910x_PowerSavingAndMonitorMode_SystemPowerSavingCfg_t config = {
         .initialBatterySaverDelay_us = 0,
         .detectionTime_us = 0,
         .sleepTime_us = 0xFFFFFFFF,
         .detectionFirst = 0,
         .detectionMode = ADI_ADRV910X_POWERSAVINGANDMONITORMODE_MONITOR_DETECTION_MODE_RSSI,
         .bbicWakeupLevelEnable = false,
+        .externalPllEnable = false,
     };
 
     config.powerDownMode = mode;
 	
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 	
-    ADI_EXPECT(adi_adrv910x_powerSavingAndMonitorMode_SystemPowerSavingAndMonitorMode_Configure, device, &config);
+    ADI_EXPECT(adi_adrv910x_powerSavingAndMonitorMode_SystemPowerSaving_Configure, device, &config);
 
 	ADI_MUTEX_RELEASE(device);
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_powerSavingAndMonitorMode_SystemPowerSavingMode_Get_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_powerSavingAndMonitorMode_SystemPowerSavingMode_Get_Validate(adi_adrv910x_Device_t *device,
                                                                                                         adi_adrv910x_PowerSavingAndMonitorMode_SystemPowerDownMode_e *mode)
 {
     ADI_NULL_PTR_RETURN(&device->common, mode);
@@ -243,20 +414,20 @@ static __maybe_unused int32_t __maybe_unused adi_adrv910x_powerSavingAndMonitorM
 int32_t adi_adrv910x_powerSavingAndMonitorMode_SystemPowerSavingMode_Get(adi_adrv910x_Device_t *device,
                                                                          adi_adrv910x_PowerSavingAndMonitorMode_SystemPowerDownMode_e *mode)
 {
-    adi_adrv910x_PowerSavingAndMonitorMode_SystemPowerSavingAndMonitorModeCfg_t config = { 0 };
+    adi_adrv910x_PowerSavingAndMonitorMode_SystemPowerSavingCfg_t config = { 0 };
 
     ADI_PERFORM_VALIDATION(adi_adrv910x_powerSavingAndMonitorMode_SystemPowerSavingMode_Get_Validate, device, mode);
 
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 	
-    ADI_EXPECT(adi_adrv910x_powerSavingAndMonitorMode_SystemPowerSavingAndMonitorMode_Inspect, device, &config);
+    ADI_EXPECT(adi_adrv910x_powerSavingAndMonitorMode_SystemPowerSaving_Inspect, device, &config);
     *mode = config.powerDownMode;
 
 	ADI_MUTEX_RELEASE(device);
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Pattern_Configure_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Pattern_Configure_Validate(adi_adrv910x_Device_t *device,
                                                                                                             adi_adrv910x_PowerSavingAndMonitorMode_MonitorModePatternCfg_t *monitorModePattern)
 {
     uint8_t readAddrOffset = 0;
@@ -293,7 +464,7 @@ int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Pattern_Configure(adi
 
     ADI_PERFORM_VALIDATION(adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Pattern_Configure_Validate, device, monitorModePattern);
 	
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 	
     /* Select DpinFIFO test pattern; 1: select test pattern. 0: select datapath data */
 	ADI_EXPECT(adrv910x_NvsRegmapRxnb_DpinfifoTestdataSel_Set, device, 0x1);
@@ -370,106 +541,7 @@ int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Pattern_Configure(adi
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Vector_Configure_Validate(adi_adrv910x_Device_t *device,
-                                                                                                           adi_adrv910x_PowerSavingAndMonitorMode_MonitorModeVectorCfg_t *monitorModeVector)
-{
-    static uint16_t VECTOR_MASK_MAX = 0x3FFF;
-    ADI_NULL_PTR_RETURN(&device->common, monitorModeVector);
-    ADI_RANGE_CHECK(device, monitorModeVector->vectorMask, 0x1, VECTOR_MASK_MAX);
-    ADI_API_RETURN(device);
-}
-
-int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Vector_Configure(adi_adrv910x_Device_t *device,
-                                                                            adi_adrv910x_PowerSavingAndMonitorMode_MonitorModeVectorCfg_t *monitorModeVector)
-{
-    uint8_t mask = 0;
-    uint8_t nibSel = 0;
-    uint8_t vectorCrumb = 0;
-    uint8_t vectorNibble = 0;
-    uint16_t bfValue = 0;
-    uint32_t vectorConverted = 0;
-    static const uint8_t MONITOR_MODE_VECTOR_MAX = 14;
-    static const uint8_t MAX_NIBBLE_PER_VECTOR = 12;
-
-    ADI_PERFORM_VALIDATION(adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Vector_Configure_Validate, device, monitorModeVector);
-
-	ADI_MUTEX_AQUIRE(device);
-	
-    /* Hard code D14 and D15 = 0x1 */
-    bfValue = monitorModeVector->vectorMask | 0xC000;
-	ADI_EXPECT(adrv910x_NvsRegmapRxnb_CorrCtrl_Set, device, bfValue);
-
-    for (mask = 0; mask < MONITOR_MODE_VECTOR_MAX; mask++)
-    {
-        if (bfValue & (1 << mask))
-        {
-            for (nibSel = 0; nibSel < MAX_NIBBLE_PER_VECTOR; nibSel++)
-            {
-                vectorNibble = (monitorModeVector->vector[mask] >> (nibSel * 4)) & 0xF;
-                /* bit3 and bit1 are extracted in each nibble and combined for conversion */
-                /* 0x5: 0x00, 0x7:0x1, 0xD:0x2, 0xF:0x3 */
-                vectorCrumb = ((vectorNibble & 0x8) >> 2) | ((vectorNibble & 0x2) >> 1);
-                vectorConverted |= (vectorCrumb << (nibSel * 2));
-            }
-	        ADI_EXPECT(adrv910x_NvsRegmapRxnb_Vcorrsig_Set, device, mask, vectorConverted);
-            vectorConverted = 0;
-        }
-    }
-
-	ADI_MUTEX_RELEASE(device);
-    ADI_API_RETURN(device);
-}
-
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Vector_Inspect_Validate(adi_adrv910x_Device_t *device,
-                                                                                                         adi_adrv910x_PowerSavingAndMonitorMode_MonitorModeVectorCfg_t *monitorModeVector)
-{
-    ADI_NULL_PTR_RETURN(&device->common, monitorModeVector);
-    ADI_API_RETURN(device);
-}
-
-int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Vector_Inspect(adi_adrv910x_Device_t *device,
-                                                                          adi_adrv910x_PowerSavingAndMonitorMode_MonitorModeVectorCfg_t *monitorModeVector)
-{
-    uint8_t mask = 0;
-    uint8_t crumbSel = 0;
-    uint8_t vectorCrumb = 0;
-    uint8_t vectorLut[4] = { 0x5, 0x7, 0xD, 0xF };
-    uint16_t bfValue = 0;
-    uint32_t readvector = 0;
-    uint64_t vectorConverted = 0;
-    uint64_t tempVector = 0;
-    static const uint8_t MONITOR_MODE_VECTOR_MAX = 14;
-    static const uint8_t MAX_CRUMB_PER_READVECTOR = 12;
-
-    ADI_PERFORM_VALIDATION(adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Vector_Inspect_Validate, device, monitorModeVector);
-
-	ADI_MUTEX_AQUIRE(device);
-	
-	ADI_EXPECT(adrv910x_NvsRegmapRxnb_CorrCtrl_Get, device, &bfValue);
-    monitorModeVector->vectorMask = bfValue & 0x3FFF;
-
-    for (mask = 0; mask < MONITOR_MODE_VECTOR_MAX; mask++)
-    {
-        if (bfValue & (1 << mask))
-        {
-	        ADI_EXPECT(adrv910x_NvsRegmapRxnb_Vcorrsig_Get, device, mask, &readvector);
-
-            for (crumbSel = 0; crumbSel < MAX_CRUMB_PER_READVECTOR; crumbSel++)
-            {
-                vectorCrumb = (readvector >> (crumbSel * 2)) & 0x3;
-                tempVector = (uint64_t)vectorLut[vectorCrumb] << (crumbSel * 4);
-                vectorConverted |= tempVector;
-            }
-            monitorModeVector->vector[mask] = vectorConverted;
-            vectorConverted = 0;
-        }
-    }
-
-	ADI_MUTEX_RELEASE(device);
-    ADI_API_RETURN(device);
-}
-
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Rssi_Configure_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Rssi_Configure_Validate(adi_adrv910x_Device_t *device,
                                                                                                          adi_adrv910x_PowerSavingAndMonitorMode_MonitorModeRssiCfg_t *monitorModeRssiCfg)
 {
     adi_adrv910x_RadioState_t state = { 0 };
@@ -544,7 +616,7 @@ int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Rssi_Configure(adi_ad
 
     ADI_PERFORM_VALIDATION(adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Rssi_Configure_Validate, device, monitorModeRssiCfg);
 
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 	
     offset += 4;
     armData[offset++] = monitorModeRssiCfg->numberOfMeasurementsToAverage;
@@ -564,7 +636,7 @@ int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Rssi_Configure(adi_ad
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Rssi_Inspect_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Rssi_Inspect_Validate(adi_adrv910x_Device_t *device,
                                                                                                        adi_adrv910x_PowerSavingAndMonitorMode_MonitorModeRssiCfg_t *monitorModeRssiCfg)
 {
     ADI_NULL_PTR_RETURN(&device->common, monitorModeRssiCfg);
@@ -581,7 +653,7 @@ int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Rssi_Inspect(adi_adrv
 
     ADI_PERFORM_VALIDATION(adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Rssi_Inspect_Validate, device, monitorModeRssiCfg);
 
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 	
     ADI_EXPECT(adi_adrv910x_arm_MailBox_Get, device, OBJID_GS_CONFIG, OBJID_CFG_MONITOR_MODE_RSSI, channelMask, offset, armReadBack, sizeof(armReadBack));
     monitorModeRssiCfg->numberOfMeasurementsToAverage = armReadBack[offset++];
@@ -603,7 +675,7 @@ int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_RxDmrPd_Prepare(adi_a
     extData[1] = OBJID_GS_CONFIG;
     extData[2] = OBJID_IC_RX_DMR_PD;
 	
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 
     ADI_EXPECT(adi_adrv910x_arm_Memory_Write, device, (uint32_t)ADRV910X_ADDR_ARM_MAILBOX_SET, armData, sizeof(armData), ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4, ADI_PS1);
     ADI_EXPECT(adi_adrv910x_arm_Cmd_Write, device, ADRV910X_ARM_SET_OPCODE, extData, sizeof(extData));
@@ -613,6 +685,7 @@ int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_RxDmrPd_Prepare(adi_a
 }
 
 static __maybe_unused int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_RxDmrPd_Run_Validate(adi_adrv910x_Device_t *device,
+                                                                                       uint32_t timeout_ms,
                                                                                        uint8_t *initCalsError)
 {
     adi_adrv910x_RadioState_t currentState = { 0 };
@@ -631,7 +704,7 @@ static __maybe_unused int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode
                          ADI_COMMON_ACT_ERR_CHECK_PARAM,
                          currentState.channelStates[ADI_RX][chanId],
                          "Channel Rx2 must be in CALIBRATED");
-        ADI_API_RETURN(device)
+        ADI_API_RETURN(device);
     }
 
     ADI_API_RETURN(device);
@@ -643,9 +716,9 @@ int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_RxDmrPd_Run(adi_adrv9
 {
     initCals_t initCals = { 0 };
 
-    ADI_PERFORM_VALIDATION(adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_RxDmrPd_Run_Validate, device, initCalsError);
+    ADI_PERFORM_VALIDATION(adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_RxDmrPd_Run_Validate, device, timeout_ms, initCalsError);
 	
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 
     initCals.sysInitCalMask = 0;
     initCals.chanInitCalMask[0] = 0;
@@ -660,17 +733,17 @@ int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_RxDmrPd_Run(adi_adrv9
 
 int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_RxDmrPd_Calibrate(adi_adrv910x_Device_t *device,
                                                                              adi_adrv910x_PowerSavingAndMonitorMode_MonitorModePatternCfg_t *monitorModePattern,
-                                                                             adi_adrv910x_PowerSavingAndMonitorMode_MonitorModeVectorCfg_t *monitorModeVector,
+                                                                             adi_adrv910x_SyncDetect_SyncDetectVectorCfg_t *syncDetectVector,
                                                                              uint32_t timeout_ms,
                                                                              uint8_t *initCalsError,
                                                                              uint16_t *pathDelay,
                                                                              uint8_t *syncIndex)
 {
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 	
     ADI_EXPECT(adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_RxDmrPd_Prepare, device);
     ADI_EXPECT(adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Pattern_Configure, device, monitorModePattern);
-    ADI_EXPECT(adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_Vector_Configure, device, monitorModeVector);
+    ADI_EXPECT(adi_adrv910x_syncDetect_Vector_Configure, device, syncDetectVector);
     ADI_EXPECT(adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_RxDmrPd_Run, device, timeout_ms, initCalsError);
     ADI_EXPECT(adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_RxDmrPd_Get, device, pathDelay, syncIndex);
     
@@ -681,293 +754,64 @@ int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_RxDmrPd_Calibrate(adi
 int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_RxDmrPd_Get(adi_adrv910x_Device_t *device,
                                                                        uint16_t *pathDelay, uint8_t *syncIndex)
 {
-    uint8_t armReadBack[4] = { 0 };
+    /* ARM-padded size of adi_MonitorMode_DmrPdStatus_t: pathDelay(2) + syncIndex(1) + reserved(1) */
+    static const uint32_t DMR_PD_STATUS_SIZE = 4u;
+    uint8_t descriptorBuf[8] = { 0 };
+    uint8_t rawBuf[4] = { 0 };
     uint8_t channelMask = adi_adrv910x_Radio_MailboxChannel_Get(ADI_RX, ADI_CHANNEL_2);
+    uint32_t statusLen = 0u;
+    uint32_t statusAddr = 0u;
     uint32_t offset = 0;
 
     ADI_ENTRY_PTR_EXPECT(device, pathDelay);
 	ADI_ENTRY_PTR_EXPECT(device, syncIndex);
 	
-	ADI_MUTEX_AQUIRE(device);
-	
-    ADI_EXPECT(adi_adrv910x_arm_MailBox_Get, device, OBJID_GO_CAL_STATUS, OBJID_IC_RX_DMR_PD, channelMask, offset, armReadBack, sizeof(armReadBack))
+	ADI_MUTEX_ACQUIRE(device);
 
-    adrv910x_ParseTwoBytes(&offset, armReadBack, pathDelay);
-    *syncIndex = armReadBack[offset];
+    /* Firmware writes a calStatusGet_t descriptor { uint32_t len, void *pCalStatus } for
+     * OBJID_GO_CAL_STATUS requests; the actual status struct must be read separately from
+     * ARM memory at pCalStatus. */
+    ADI_EXPECT(adi_adrv910x_arm_MailBox_Get, device, OBJID_GO_CAL_STATUS, OBJID_IC_RX_DMR_PD, channelMask, 0u, &descriptorBuf[0], sizeof(descriptorBuf))
 
-	ADI_MUTEX_RELEASE(device);
-    ADI_API_RETURN(device);
-}
+    statusLen  = (uint32_t)descriptorBuf[0] |
+                 ((uint32_t)descriptorBuf[1] << 8) |
+                 ((uint32_t)descriptorBuf[2] << 16) |
+                 ((uint32_t)descriptorBuf[3] << 24);
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_DmrSearch_Configure_Validate(adi_adrv910x_Device_t *device,
-                                                                                                              adi_adrv910x_PowerSavingAndMonitorMode_MonitorModeDmrSearchCfg_t *dmrSearchCfg)
-{
-	static const int32_t MIN_POWER_THRESHOLD = (int32_t)(-256*(1<<23)); // -256 in S9.23
-	static const uint32_t MAX_DETECT_MULTIPLIER = 0x7FFFFFFF;
-	
-	ADI_NULL_PTR_RETURN(&device->common, dmrSearchCfg);
-    ADI_RANGE_CHECK(device, dmrSearchCfg->pathDelay, 0, 2047);
-	ADI_RANGE_CHECK(device, dmrSearchCfg->powerThreshold_dBm, MIN_POWER_THRESHOLD, 0);
-	ADI_RANGE_CHECK(device, dmrSearchCfg->detectMultiplier, 0, MAX_DETECT_MULTIPLIER);
-	ADI_RANGE_CHECK(device, dmrSearchCfg->preCount, 0, 65535);
-	ADI_RANGE_CHECK(device, dmrSearchCfg->postCount, 0, 65535);
-    ADI_RANGE_CHECK(device, dmrSearchCfg->algoMode, ADI_ADRV910X_POWERSAVINGANDMONITORMODE_DMRSEARCH_DETECTION_MODE_CORR, ADI_ADRV910X_POWERSAVINGANDMONITORMODE_DMRSEARCH_DETECTION_MODE_ERR);
-    ADI_API_RETURN(device);
-}
+    statusAddr = (uint32_t)descriptorBuf[4] |
+                 ((uint32_t)descriptorBuf[5] << 8) |
+                 ((uint32_t)descriptorBuf[6] << 16) |
+                 ((uint32_t)descriptorBuf[7] << 24);
 
-int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_DmrSearch_Configure(adi_adrv910x_Device_t *device,
-                                                                               adi_adrv910x_PowerSavingAndMonitorMode_MonitorModeDmrSearchCfg_t *dmrSearchCfg)
-{
-    uint8_t armData[22] = { 0 };
-    uint8_t extData[5] = { 0 };
-    uint32_t offset = 4;
-
-    ADI_PERFORM_VALIDATION(adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_DmrSearch_Configure_Validate, device, dmrSearchCfg);
-
-    extData[0] = adi_adrv910x_Radio_MailboxChannel_Get(ADI_RX, ADI_CHANNEL_2); /* channelMask = RxNB */
-    extData[1] = OBJID_GS_CONFIG;
-    extData[2] = OBJID_CFG_MONITOR_DMR_SEARCH;
-
-    adrv910x_LoadFourBytes(&offset, armData, dmrSearchCfg->pathDelay);
-	adrv910x_LoadFourBytes(&offset, armData, dmrSearchCfg->powerThreshold_dBm);
-	adrv910x_LoadFourBytes(&offset, armData, dmrSearchCfg->detectMultiplier);
-    adrv910x_LoadTwoBytes(&offset, armData, dmrSearchCfg->preCount);
-    adrv910x_LoadTwoBytes(&offset, armData, dmrSearchCfg->postCount);
-    armData[offset++] = (uint8_t)dmrSearchCfg->algoMode;
-
-	ADI_MUTEX_AQUIRE(device);
-	
-    ADI_EXPECT(adi_adrv910x_arm_Memory_Write, device, (uint32_t)ADRV910X_ADDR_ARM_MAILBOX_SET, armData, sizeof(armData), ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4, ADI_PS1);
-    ADI_EXPECT(adi_adrv910x_arm_Cmd_Write, device, ADRV910X_ARM_SET_OPCODE, extData, sizeof(extData));
-
-	ADI_MUTEX_RELEASE(device);
-    ADI_API_RETURN(device);
-}
-
-int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_DmrSearch_Inspect(adi_adrv910x_Device_t *device,
-	adi_adrv910x_PowerSavingAndMonitorMode_MonitorModeDmrSearchCfg_t *dmrSearchCfg)
-{
-	uint8_t armReadBack[22] = { 0 };
-	uint8_t extData[5] = { 0 };
-	uint32_t offset = 0;
-	
-	ADI_ENTRY_PTR_EXPECT(device, dmrSearchCfg);	
-
-	extData[0] = adi_adrv910x_Radio_MailboxChannel_Get(ADI_RX, ADI_CHANNEL_2); /* channelMask = RxNB */
-	extData[1] = OBJID_GS_CONFIG;
-	extData[2] = OBJID_CFG_MONITOR_DMR_SEARCH;
-    
-	ADI_MUTEX_AQUIRE(device);
-
-	ADI_EXPECT(adi_adrv910x_arm_Cmd_Write, device, (uint8_t)ADRV910X_ARM_GET_OPCODE, &extData[0], sizeof(extData));
-
-	/* Wait for command to finish executing */
-	ADRV910X_ARM_CMD_STATUS_WAIT_EXPECT(device,
-		(uint8_t)ADRV910X_ARM_GET_OPCODE,
-		extData[1],
-		(uint32_t)ADI_ADRV910X_DEFAULT_TIMEOUT_US,
-		(uint32_t)ADI_ADRV910X_DEFAULT_INTERVAL_US);
-
-	/* read the ARM memory to get DmrSearch status */
-	ADI_EXPECT(adi_adrv910x_arm_Memory_Read,
-		device,
-		ADRV910X_ADDR_ARM_MAILBOX_GET,
-		armReadBack,
-		sizeof(armReadBack),
-		false,
-		ADI_PS1)
-
-	adrv910x_ParseFourBytes(&offset, armReadBack, &dmrSearchCfg->pathDelay);
-	adrv910x_ParseFourBytes(&offset, armReadBack, &dmrSearchCfg->powerThreshold_dBm);
-	adrv910x_ParseFourBytes(&offset, armReadBack, &dmrSearchCfg->detectMultiplier);
-	adrv910x_ParseTwoBytes(&offset, armReadBack, &dmrSearchCfg->preCount);
-	adrv910x_ParseTwoBytes(&offset, armReadBack, &dmrSearchCfg->postCount);
-	dmrSearchCfg->algoMode = (adi_adrv910x_PowerSavingAndMonitorMode_MonitorDetectionMode_e)armReadBack[offset++];
-
-	ADI_MUTEX_RELEASE(device);
-	ADI_API_RETURN(device);
-}
-
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_ContinuousSyncDetect_Set_Validate(adi_adrv910x_Device_t *device,
-																																  bool syncDetectionEnable, adi_adrv910x_GpioPin_e detectedPin){
-    adi_adrv910x_RadioState_t state = { 0 };
-    uint8_t port_index = 0;
-    uint8_t chan_index = 0;
-
-    ADI_NULL_DEVICE_PTR_RETURN(device);
-
-    ADI_RANGE_CHECK(device, syncDetectionEnable, false, true);
-	ADI_RANGE_CHECK(device, detectedPin, ADI_ADRV910X_GPIO_UNASSIGNED, ADI_ADRV910X_GPIO_DIGITAL_15);
-
-    /* Validate state is CALIBRATED, PRIMED, or RF_ENABLED */
-    ADI_EXPECT(adi_adrv910x_Radio_State_Get, device, &state);
-    adi_common_port_to_index(ADI_RX, &port_index);
-    adi_common_channel_to_index(ADI_CHANNEL_2, &chan_index);
-    if ((ADI_ADRV910X_CHANNEL_CALIBRATED != state.channelStates[port_index][chan_index]) &&
-        (ADI_ADRV910X_CHANNEL_PRIMED != state.channelStates[port_index][chan_index]) &&
-        (ADI_ADRV910X_CHANNEL_RF_ENABLED != state.channelStates[port_index][chan_index]))
+    if ((statusLen == 0u) || (statusAddr == 0u))
     {
         ADI_ERROR_REPORT(&device->common,
-            ADI_COMMON_ERRSRC_API,
-            ADI_COMMON_ERR_INV_PARAM,
-            ADI_COMMON_ACT_ERR_CHECK_PARAM,
-		    ADI_CHANNEL_2,
-            "RxNB must be in CALIBRATED, PRIMED, or RF_ENABLED state");
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_API_FAIL,
+                         ADI_COMMON_ACT_ERR_RESET_FEATURE,
+                         statusLen,
+                         "Firmware returned an empty DMR PD status descriptor");
+        ADI_MUTEX_RELEASE(device);
+        ADI_API_RETURN(device);
     }
-    ADI_API_RETURN(device);
-}
 
-int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_ContinuousSyncDetect_Set(adi_adrv910x_Device_t *device,
-																					bool syncDetectionEnable, adi_adrv910x_GpioPin_e detectedPin)
-{
-    uint8_t armData[4] = { 0 };
-    uint8_t extData[2] = { 0 };
-
-	ADI_PERFORM_VALIDATION(adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_ContinuousSyncDetect_Set_Validate, device, syncDetectionEnable, detectedPin);
-    
-    armData[0] = (uint8_t)syncDetectionEnable;  // 1: Enabled; 0: Disabled  
-	armData[1] = (uint8_t)detectedPin - 1; //PintoMailbox Conversion due to enum
-
-	if (detectedPin != ADI_ADRV910X_GPIO_UNASSIGNED)
-	{
-		adi_adrv910x_GpioCfg_t gpioCfg = {
-			.pin = detectedPin,
-			.polarity = ADI_ADRV910X_GPIO_POLARITY_NORMAL,
-			.master = ADI_ADRV910X_GPIO_MASTER_ADRV910X
-		};
-		ADI_EXPECT(adi_adrv910x_gpio_Ps1_Configure, device, ADI_ADRV910X_GPIO_SIGNAL_CONTINUOUS_SYNC_DETECTION, &gpioCfg);
-	}
-
-	ADI_MUTEX_AQUIRE(device);
-
-    /* Write Continuous Sync Detection Enable to ARM mailbox*/
-	ADI_EXPECT(adi_adrv910x_arm_Memory_Write, device, (uint32_t)ADRV910X_ADDR_ARM_MAILBOX_SET, &armData[0], sizeof(armData), ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4, ADI_PS1);
-    
-    extData[1] = OBJID_GS_CONTINUOUS_SYNC_DETECTION;
-    
-	ADI_EXPECT(adi_adrv910x_arm_Cmd_Write, device, (uint8_t)ADRV910X_ARM_SET_OPCODE, &extData[0], sizeof(extData));
-    
-    /* Wait for command to finish executing */
-	ADRV910X_ARM_CMD_STATUS_WAIT_EXPECT(device,
-    (uint8_t)ADRV910X_ARM_SET_OPCODE,
-    extData[1],
-		(uint32_t)ADI_ADRV910X_READARMCFG_TIMEOUT_US,
-		(uint32_t)ADI_ADRV910X_READARMCFG_INTERVAL_US);
-    
-    ADI_MUTEX_RELEASE(device);
-
-	ADI_API_RETURN(device);
-}
-
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_ContinuousSyncDetect_Get_Validate(adi_adrv910x_Device_t *device,
-																																  bool *syncDetectionEnable, adi_adrv910x_GpioPin_e *detectedPin)
-{
-    adi_adrv910x_RadioState_t state = { 0 };
-    uint8_t port_index = 0;
-    uint8_t chan_index = 0;
-
-    ADI_NULL_DEVICE_PTR_RETURN(device);
-
-    /* Validate state is CALIBRATED, PRIMED, or RF_ENABLED */
-    ADI_EXPECT(adi_adrv910x_Radio_State_Get, device, &state);
-    adi_common_port_to_index(ADI_RX, &port_index);
-    adi_common_channel_to_index(ADI_CHANNEL_2, &chan_index);
-    if ((ADI_ADRV910X_CHANNEL_CALIBRATED != state.channelStates[port_index][chan_index]) &&
-        (ADI_ADRV910X_CHANNEL_PRIMED != state.channelStates[port_index][chan_index]) &&
-        (ADI_ADRV910X_CHANNEL_RF_ENABLED != state.channelStates[port_index][chan_index]))
+    if (statusLen < DMR_PD_STATUS_SIZE)
     {
         ADI_ERROR_REPORT(&device->common,
-            ADI_COMMON_ERRSRC_API,
-            ADI_COMMON_ERR_INV_PARAM,
-            ADI_COMMON_ACT_ERR_CHECK_PARAM,
-		    ADI_CHANNEL_2,
-		    "RxNB must be in CALIBRATED, PRIMED, or RF_ENABLED state");
-		}
-    ADI_API_RETURN(device);
-}
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_API_FAIL,
+                         ADI_COMMON_ACT_ERR_RESET_FEATURE,
+                         statusLen,
+                         "Firmware DMR PD status is smaller than the layout this API version expects");
+        ADI_MUTEX_RELEASE(device);
+        ADI_API_RETURN(device);
+    }
 
-int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_ContinuousSyncDetect_Get(adi_adrv910x_Device_t *device,
-																					bool *syncDetectionEnable, adi_adrv910x_GpioPin_e *detectedPin)
-{
-    uint8_t armReadBack[4] = { 0 };	
-    uint8_t extData[2] = { 0 };
+    ADI_EXPECT(adi_adrv910x_arm_Memory_Read, device, statusAddr, &rawBuf[0], DMR_PD_STATUS_SIZE, ADRV910X_ARM_MEM_READ_AUTOINCR, ADI_PS1);
 
-	ADI_PERFORM_VALIDATION(adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_ContinuousSyncDetect_Get_Validate, device, syncDetectionEnable, detectedPin);
-
-    extData[1] = OBJID_GS_CONTINUOUS_SYNC_DETECTION;
-
-    ADI_MUTEX_AQUIRE(device);
-
-    ADI_EXPECT(adi_adrv910x_arm_Cmd_Write, device, (uint8_t)ADRV910X_ARM_GET_OPCODE, &extData[0], sizeof(extData));
-
-    ADRV910X_ARM_CMD_STATUS_WAIT_EXPECT(device,
-        (uint8_t)ADRV910X_ARM_GET_OPCODE,
-        extData[1],
-        (uint32_t)ADI_ADRV910X_RX_INTERFACE_CONTROL_TIMEOUT_US,
-        (uint32_t)ADI_ADRV910X_RX_INTERFACE_CONTROL_INTERVAL_US);
-
-	/* read the ARM memory to get continuous sync detect enable */
-	ADI_EXPECT(adi_adrv910x_arm_Memory_Read,
-		device,
-		ADRV910X_ADDR_ARM_MAILBOX_GET,
-		&armReadBack[0],
-		sizeof(armReadBack),
-		false, ADI_PS1);
-		
-	*syncDetectionEnable = (bool)(armReadBack[0] & 0x1);
-	if (detectedPin != NULL)
-	{
-		adi_adrv910x_GpioCfg_t gpioCfg = {0};
-
-		ADI_EXPECT(adi_adrv910x_gpio_Ps1_Inspect, device, ADI_ADRV910X_GPIO_SIGNAL_CONTINUOUS_SYNC_DETECTION, &gpioCfg);
-		*detectedPin = gpioCfg.pin;
-	}
+    adrv910x_ParseTwoBytes(&offset, rawBuf, pathDelay);
+    *syncIndex = rawBuf[offset];
 
 	ADI_MUTEX_RELEASE(device);
     ADI_API_RETURN(device);
 }
-
-int32_t adi_adrv910x_powerSavingAndMonitorMode_MonitorMode_ContinuousSyncDetect_Status_Get(adi_adrv910x_Device_t *adrv910x,
-																						   adi_adrv910x_PowerSavingAndMonitorMode_SyncDetectionResult_t *syncDetectionResult)
-{
-	uint8_t extData[2] = {0};
-
-	ADI_NULL_PTR_RETURN(&adrv910x->common, syncDetectionResult);
-
-	extData[1] = OBJID_GO_SYNCDETECT_DATA_GET;
-
-	ADI_MUTEX_AQUIRE(adrv910x);
-
-	ADI_EXPECT(adi_adrv910x_arm_Cmd_Write, adrv910x, (uint8_t)ADRV910X_ARM_GET_OPCODE, &extData[0], sizeof(extData));
-
-	ADRV910X_ARM_CMD_STATUS_WAIT_EXPECT(adrv910x,
-										(uint8_t)ADRV910X_ARM_GET_OPCODE,
-										extData[1],
-										(uint32_t)ADI_ADRV910X_RX_INTERFACE_CONTROL_TIMEOUT_US,
-										(uint32_t)ADI_ADRV910X_RX_INTERFACE_CONTROL_INTERVAL_US);
-
-	/* read the ARM memory to get continuous sync detect enable */
-	ADI_EXPECT(adi_adrv910x_arm_Memory_Read,
-			   adrv910x,
-			   ADRV910X_ADDR_ARM_MAILBOX_GET,
-			   (uint8_t*)syncDetectionResult,
-			   sizeof(adi_adrv910x_PowerSavingAndMonitorMode_SyncDetectionResult_t),
-			   false, ADI_PS1);
-	
-	/* send Ack if in sync */
-	if (syncDetectionResult->syncDetected)
-	{
-		extData[1] = OBJID_GO_SYNCDETECT_DATA_READ_DONE;
-		ADI_EXPECT(adi_adrv910x_arm_Cmd_Write, adrv910x, (uint8_t)ADRV910X_ARM_GET_OPCODE, &extData[0], sizeof(extData));
-		
-		ADRV910X_ARM_CMD_STATUS_WAIT_EXPECT(adrv910x,
-			(uint8_t)ADRV910X_ARM_GET_OPCODE,
-			extData[1],
-			(uint32_t)ADI_ADRV910X_RX_INTERFACE_CONTROL_TIMEOUT_US,
-			(uint32_t)ADI_ADRV910X_RX_INTERFACE_CONTROL_INTERVAL_US);
-	}
-
-	ADI_MUTEX_RELEASE(adrv910x);
-	ADI_API_RETURN(adrv910x);
-}
-

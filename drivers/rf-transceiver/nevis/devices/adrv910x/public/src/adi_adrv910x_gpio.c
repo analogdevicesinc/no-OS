@@ -8,6 +8,7 @@
 * see the "LICENSE.txt" file in this zip file.
 */
 
+#include "adrv910x_arm.h"
 #include "adi_adrv910x_user.h"
 #include "adi_adrv910x_error.h"
 #include "adi_adrv910x_gpio.h"
@@ -16,30 +17,30 @@
 #include "adrv910x_bf.h"
 #include "object_ids.h"
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_gpio_ManualInput_Configure_Validate(adi_adrv910x_Device_t *device,
-                                           adi_adrv910x_GpioPin_e pin)
+static __maybe_unused int32_t adi_adrv910x_gpio_ManualInput_Configure_Validate(adi_adrv910x_Device_t *device,
+	adi_adrv910x_GpioPin_e pin)
 {
-    ADI_RANGE_CHECK(device, pin, ADI_ADRV910X_GPIO_DIGITAL_00, ADI_ADRV910X_GPIO_DIGITAL_15);
-    ADI_API_RETURN(device);
+	ADI_RANGE_CHECK(device, pin, ADI_ADRV910X_GPIO_DIGITAL_00, ADI_ADRV910X_GPIO_DIGITAL_15);
+	ADI_API_RETURN(device);
 }
 
 int32_t adi_adrv910x_gpio_ManualInput_Configure(adi_adrv910x_Device_t *device, adi_adrv910x_GpioPin_e pin)
 {
-    uint32_t gpioOutEn = 0;
+	uint32_t gpioOutEn = 0;
 
-    ADI_PERFORM_VALIDATION(adi_adrv910x_gpio_ManualInput_Configure_Validate, device, pin);
+	ADI_PERFORM_VALIDATION(adi_adrv910x_gpio_ManualInput_Configure_Validate, device, pin);
 
-    ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 
-    ADI_EXPECT(adrv910x_NvsRegmapCore_NvsGpioDirectionControlOe_Get, device, &gpioOutEn);
-    gpioOutEn &= ~(1 << (pin - 1));
-    ADI_EXPECT(adrv910x_NvsRegmapCore_NvsGpioDirectionControlOe_Set, device, gpioOutEn);
+	ADI_EXPECT(adrv910x_NvsRegmapCore_NvsGpioDirectionControlOe_Get, device, &gpioOutEn);
+	gpioOutEn &= ~(1 << (pin - 1));
+	ADI_EXPECT(adrv910x_NvsRegmapCore_NvsGpioDirectionControlOe_Set, device, gpioOutEn);
 	
-    ADI_MUTEX_RELEASE(device);
-    ADI_API_RETURN(device);
+	ADI_MUTEX_RELEASE(device);
+	ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_gpio_Ps1_Configure_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_gpio_Ps1_Configure_Validate(adi_adrv910x_Device_t *device,
 	adi_adrv910x_GpioSignal_e signal,
 	adi_adrv910x_GpioCfg_t *gpioConfig)
 {
@@ -63,8 +64,8 @@ static __maybe_unused int32_t __maybe_unused adi_adrv910x_gpio_Ps1_Configure_Val
 			ADI_COMMON_ERRSRC_API,
 			ADI_COMMON_ERR_INV_PARAM,
 			ADI_COMMON_ACT_ERR_CHECK_PARAM,
-			armgpioConfig->control,
-			"Invalid parameter value. armgpioConfig->control must be either ADI_ADRV910X_GPIO_MASTER_BBIC"
+			gpioConfig->master,
+			"Invalid parameter value. gpioConfig->master must be either ADI_ADRV910X_GPIO_MASTER_BBIC"
 			" or ADI_ADRV910X_GPIO_MASTER_ADRV910X");
 	}
 
@@ -116,7 +117,7 @@ int32_t adi_adrv910x_gpio_Ps1_Configure(adi_adrv910x_Device_t *device,
 	extData[3] = adrv910x_gpio_PinToMailbox_Convert(gpioConfig->pin);
 	extData[4] = GPIO_ENABLE | gpioConfig->master | gpioConfig->polarity;
 
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 
 	recoveryAction = adi_adrv910x_arm_Cmd_Write(device, ADRV910X_ARM_SET_OPCODE, &extData[0], sizeof(extData));
 	ADI_ERROR_RETURN(device->common.error.newAction);
@@ -155,11 +156,11 @@ int32_t adi_adrv910x_gpio_Ps1_Configure(adi_adrv910x_Device_t *device,
 	ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_gpio_Ps1_Inspect_Validate(adi_adrv910x_Device_t *device,
-	adi_adrv910x_GpioSignal_e gpioSignalSel,
+static __maybe_unused int32_t adi_adrv910x_gpio_Ps1_Inspect_Validate(adi_adrv910x_Device_t *device,
+	adi_adrv910x_GpioSignal_e signal,
 	adi_adrv910x_GpioCfg_t *gpioConfig)
 {
-	ADI_RANGE_CHECK(device, gpioSignalSel, 0x00, ADI_ADRV910X_GPIO_NUM_SIGNALS - 1);
+	ADI_RANGE_CHECK(device, signal, 0x00, ADI_ADRV910X_GPIO_NUM_SIGNALS - 1);
 	ADI_NULL_PTR_RETURN(&device->common, gpioConfig);
 
 	ADI_API_RETURN(device);
@@ -185,7 +186,7 @@ int32_t adi_adrv910x_gpio_Ps1_Inspect(adi_adrv910x_Device_t *device,
 	extData[1] = OBJID_GS_GPIO_CTRL;
 	extData[2] = signal;
 
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 
 	ADI_EXPECT(adi_adrv910x_arm_Cmd_Write, device, ADRV910X_ARM_GET_OPCODE, &extData[0], sizeof(extData));
 
@@ -202,7 +203,8 @@ int32_t adi_adrv910x_gpio_Ps1_Inspect(adi_adrv910x_Device_t *device,
 		(uint32_t)ADRV910X_ADDR_ARM_MAILBOX_GET,
 		&armData[0],
 		sizeof(armData),
-		false, ADI_PS1);
+		false,
+		ADI_PS1);
 
 	/* Return the GPIO data read back from ARM mailbox */
 	gpioConfig->pin = adrv910x_gpio_MailboxToPin_Convert(armData[0]);
@@ -211,4 +213,36 @@ int32_t adi_adrv910x_gpio_Ps1_Inspect(adi_adrv910x_Device_t *device,
 
 	ADI_MUTEX_RELEASE(device);
 	ADI_API_RETURN(device);
+}
+
+int32_t adi_adrv910x_gpio_OutputPinLevel_Get(adi_adrv910x_Device_t *device,
+                                             adi_adrv910x_GpioPin_e pin,
+                                             adi_adrv910x_GpioPinLevel_e *gpioOutPinLevel)
+{
+    uint16_t pinLevels = 0;
+    uint16_t pinLevelBitfield = 0;
+	uint32_t pinLevelsDig = 0;
+	uint32_t pinLevelBitfieldDig = 0;
+
+    /* Check device pointer is not null */
+    ADI_ENTRY_PTR_EXPECT(device, gpioOutPinLevel);
+
+    if (ADI_ADRV910X_GPIO_DIGITAL_00 <= pin && pin <= ADI_ADRV910X_GPIO_DIGITAL_19)
+    {
+	    ADI_EXPECT(adrv910x_NvsRegmapCore_NvsGpioSpiSource_Get, device, &pinLevelsDig);
+	    pinLevelBitfieldDig = pinLevelsDig & (1 << (pin - 1));
+        *gpioOutPinLevel = pinLevelBitfield >> (pin - 1);
+    }
+    else if (ADI_ADRV910X_GPIO_ANALOG_00 <= pin && pin <= ADI_ADRV910X_GPIO_ANALOG_11)
+    {
+        ADI_EXPECT(adrv910x_NvsRegmapCore1_NvsGpioAnalogSpiSource_Get, device, &pinLevels);
+        pinLevelBitfield = pinLevels & (1 << (pin - ADI_ADRV910X_GPIO_ANALOG_00));
+        *gpioOutPinLevel = pinLevelBitfield >> (pin - ADI_ADRV910X_GPIO_ANALOG_00);
+    }
+    else
+    {
+        ADI_SHOULD_NOT_EXECUTE(device);
+    }
+
+    ADI_API_RETURN(device);
 }

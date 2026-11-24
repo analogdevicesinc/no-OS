@@ -26,7 +26,7 @@
 #include "adrv910x_reg_addr_macros.h"
 #include "object_ids.h"
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Ssi_Rx_TestMode_Configure_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Ssi_Rx_TestMode_Configure_Validate(adi_adrv910x_Device_t *device,
 	adi_common_ChannelNumber_e channel,
 	ssiType_e ssiType,
 	ssiDataFormat_e dataFormat,
@@ -74,7 +74,7 @@ int32_t adi_adrv910x_ssi_Rx_TestMode_Configure(adi_adrv910x_Device_t *device,
 	adi_common_channel_to_index(channel, &channelIdx);
 	instance = nvsRegmapRxCommonInstances[channelIdx];
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 	if (SSI_TYPE_CMOS == ssiType)
 	{
 		if (ADI_ADRV910X_SSI_TESTMODE_DATA_NORMAL == ssiTestModeConfig->testData)
@@ -150,7 +150,7 @@ int32_t adi_adrv910x_ssi_Rx_TestMode_Configure(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Ssi_Tx_TestMode_Configure_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Ssi_Tx_TestMode_Configure_Validate(adi_adrv910x_Device_t *device,
 	adi_common_ChannelNumber_e channel,
 	ssiType_e ssiType,
 	ssiDataFormat_e dataFormat,
@@ -185,7 +185,7 @@ static __maybe_unused int32_t __maybe_unused adi_adrv910x_Ssi_Tx_TestMode_Config
 
 static __maybe_unused int32_t adi_adrv910x_Ssi_Tx_CssiClearErrorFlags(adi_adrv910x_Device_t *device)
 {
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 	ADI_EXPECT(adrv910x_NvsRegmapTx_CssiTxDebugStartRamp_Set, device, 0x0);
 	ADI_EXPECT(adrv910x_NvsRegmapTx_CssiTxClearRampShiftError_Set, device, 0x0);
 	ADI_EXPECT(adrv910x_NvsRegmapTx_CssiTxClearRampShiftError_Set, device, 0x1);
@@ -214,7 +214,7 @@ int32_t adi_adrv910x_Ssi_Tx_TestMode_Configure(adi_adrv910x_Device_t *device,
 
 	ADI_PERFORM_VALIDATION(adi_adrv910x_Ssi_Tx_TestMode_Configure_Validate, device, channel, ssiType, dataFormat, ssiTestModeConfig);
 
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 	if (SSI_TYPE_CMOS == ssiType)
 	{
 		if (ADI_ADRV910X_SSI_TESTMODE_DATA_NORMAL == ssiTestModeConfig->testData)
@@ -342,7 +342,7 @@ int32_t adi_adrv910x_Ssi_Tx_TestMode_Configure(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Ssi_Tx_TestMode_Status_Inspect_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Ssi_Tx_TestMode_Status_Inspect_Validate(adi_adrv910x_Device_t *device,
 	adi_common_ChannelNumber_e channel,
 	ssiType_e ssiType,
 	ssiDataFormat_e dataFormat,
@@ -429,7 +429,7 @@ int32_t adi_adrv910x_Ssi_Tx_TestMode_Status_Inspect(adi_adrv910x_Device_t *devic
 	numEventChecks = (waitInterval_us == 0) ? 1 : (timeout_us / waitInterval_us);
 
 	ADI_PERFORM_VALIDATION(adi_adrv910x_Ssi_Tx_TestMode_Status_Inspect_Validate, device, channel, ssiType, dataFormat, ssiTestModeConfig, ssiTestModeStatus);
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 	if (SSI_TYPE_CMOS == ssiType)
 	{
 		if (ADI_ADRV910X_SSI_TESTMODE_DATA_FIXED_PATTERN == ssiTestModeConfig->testData)
@@ -471,17 +471,17 @@ int32_t adi_adrv910x_Ssi_Tx_TestMode_Status_Inspect(adi_adrv910x_Device_t *devic
 					}
 				}
 				/* if capture did not complete within the timeout period */
-				if (captureComplete == 1)
-				{
-					ADI_ERROR_REPORT(&device->common,
-						ADI_ADRV910X_SRC_ARMCMD,
-						ADI_COMMON_ERR_API_FAIL,
-						ADI_ADRV910X_ACT_ERR_RESET_ARM,
-						device,
-						"CssiTxDebugCapture failed due to time out ");
-					ADI_MUTEX_ERROR_RELEASE(device);
-					ADI_ERROR_RETURN(device->common.error.newAction);
-				}
+				 if (captureComplete == 1)
+				 {
+				 	ADI_ERROR_REPORT(&device->common,
+				 		ADI_ADRV910X_SRC_ARMCMD,
+				 		ADI_COMMON_ERR_API_FAIL,
+				 		ADI_ADRV910X_ACT_ERR_RESET_ARM,
+				 		device,
+				 		"CssiTxDebugCapture failed due to time out ");
+				 	ADI_MUTEX_ERROR_RELEASE(device);
+				 	ADI_ERROR_RETURN(device->common.error.newAction);
+				 }
 				ADI_EXPECT(adrv910x_NvsRegmapTx_CssiTxDebugCapturedData_Get, device, (uint8_t *)(&dataRead));
 				iqValue[0] |= ((dataRead & 0xF) << 4 * nibSel);
 				dataRead = 0;
@@ -702,7 +702,7 @@ int32_t adi_adrv910x_Ssi_Tx_TestMode_Status_Inspect(adi_adrv910x_Device_t *devic
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Ssi_Loopback_Set_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Ssi_Loopback_Set_Validate(adi_adrv910x_Device_t *device,
 	adi_common_ChannelNumber_e channel,
 	const deviceProfile_t * profile)
 {
@@ -722,7 +722,7 @@ int32_t adi_adrv910x_Ssi_Loopback_Set(adi_adrv910x_Device_t *device,
 
 	adi_common_channel_to_index(channel, &channelIdx);
 	instance = nvsRegmapRxCommonInstances[channelIdx];
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 	if (loopbackEnable)
 	{
 		ADI_EXPECT(adrv910x_NvsRegmapRxCommon_SsiDataSourceSel_Set, device, instance, SSI_TX_LPBK);
@@ -739,7 +739,7 @@ int32_t adi_adrv910x_Ssi_Loopback_Set(adi_adrv910x_Device_t *device,
 static __maybe_unused int32_t adi_adrv910x_Ssi_LvdsDelayConfigSet(adi_adrv910x_Device_t *device,
 	adi_adrv910x_SsiCalibrationCfg_t *ssiCalibrationCfg)
 {
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 	ADI_EXPECT(adrv910x_NvsRegmapCore_Rx1ClkLvdsDelay_Set, device, ssiCalibrationCfg->rxClkDelay[0]);
 	ADI_EXPECT(adrv910x_NvsRegmapCore_Rx1StrobeLvdsDelay_Set, device, ssiCalibrationCfg->rxStrobeDelay[0]);
 	ADI_EXPECT(adrv910x_NvsRegmapCore_Rx1IdataLvdsDelay_Set, device, ssiCalibrationCfg->rxIDataDelay[0]);
@@ -763,7 +763,7 @@ static __maybe_unused int32_t adi_adrv910x_Ssi_LvdsDelayConfigSet(adi_adrv910x_D
 static __maybe_unused int32_t adi_adrv910x_Ssi_CmosDelayConfigSet(adi_adrv910x_Device_t *device,
 	adi_adrv910x_SsiCalibrationCfg_t *ssiCalibrationCfg)
 {
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 	/* Rx1 */
 	ADI_EXPECT(adrv910x_NvsRegmapCore3_Rx1ClkCmosNDelay_Set, device, ssiCalibrationCfg->rxClkDelay[0]);
 	ADI_EXPECT(adrv910x_NvsRegmapCore3_Rx1ClkCmosPDelay_Set, device, ssiCalibrationCfg->rxClkDelay[0]);
@@ -810,7 +810,7 @@ static __maybe_unused int32_t adi_adrv910x_Ssi_CmosDelayConfigSet(adi_adrv910x_D
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Ssi_Delay_Configure_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Ssi_Delay_Configure_Validate(adi_adrv910x_Device_t *device,
 	ssiType_e ssiType,
 	adi_adrv910x_SsiCalibrationCfg_t *ssiCalibration)
 {
@@ -843,7 +843,7 @@ int32_t adi_adrv910x_Ssi_Delay_Configure(adi_adrv910x_Device_t *device,
 {
 	ADI_PERFORM_VALIDATION(adi_adrv910x_Ssi_Delay_Configure_Validate, device, ssiType, ssiCalibration);
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 	if (SSI_TYPE_LVDS == ssiType)
 	{
 		ADI_EXPECT(adi_adrv910x_Ssi_LvdsDelayConfigSet, device, ssiCalibration);
@@ -860,7 +860,7 @@ int32_t adi_adrv910x_Ssi_Delay_Configure(adi_adrv910x_Device_t *device,
 static __maybe_unused int32_t adi_adrv910x_Ssi_LvdsDelayConfigGet(adi_adrv910x_Device_t *device,
 	adi_adrv910x_SsiCalibrationCfg_t *ssiCalibrationCfg)
 {
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 	ADI_EXPECT(adrv910x_NvsRegmapCore_Rx1ClkLvdsDelay_Get, device, &ssiCalibrationCfg->rxClkDelay[0]);
 	ADI_EXPECT(adrv910x_NvsRegmapCore_Rx1StrobeLvdsDelay_Get, device, &ssiCalibrationCfg->rxStrobeDelay[0]);
 	ADI_EXPECT(adrv910x_NvsRegmapCore_Rx1IdataLvdsDelay_Get, device, &ssiCalibrationCfg->rxIDataDelay[0]);
@@ -884,7 +884,7 @@ static __maybe_unused int32_t adi_adrv910x_Ssi_LvdsDelayConfigGet(adi_adrv910x_D
 static __maybe_unused int32_t adi_adrv910x_Ssi_CmosDelayConfigGet(adi_adrv910x_Device_t *device,
 	adi_adrv910x_SsiCalibrationCfg_t *ssiCalibrationCfg)
 {
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 	/* Rx1 */
 	ADI_EXPECT(adrv910x_NvsRegmapCore3_Rx1ClkCmosNDelay_Get, device, &ssiCalibrationCfg->rxClkDelay[0]);
 	ADI_EXPECT(adrv910x_NvsRegmapCore3_Rx1ClkCmosPDelay_Get, device, &ssiCalibrationCfg->rxClkDelay[0]);
@@ -931,7 +931,7 @@ static __maybe_unused int32_t adi_adrv910x_Ssi_CmosDelayConfigGet(adi_adrv910x_D
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Ssi_Delay_Inspect_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Ssi_Delay_Inspect_Validate(adi_adrv910x_Device_t *device,
 	ssiType_e ssiType,
 	adi_adrv910x_SsiCalibrationCfg_t *ssiCalibration)
 {
@@ -945,7 +945,7 @@ int32_t adi_adrv910x_Ssi_Delay_Inspect(adi_adrv910x_Device_t *device,
 	adi_adrv910x_SsiCalibrationCfg_t *ssiCalibration)
 {
 	ADI_PERFORM_VALIDATION(adi_adrv910x_Ssi_Delay_Inspect_Validate, device, ssiType, ssiCalibration);
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 	if (SSI_TYPE_LVDS == ssiType)
 	{
 		ADI_EXPECT(adi_adrv910x_Ssi_LvdsDelayConfigGet, device, ssiCalibration);
@@ -959,7 +959,7 @@ int32_t adi_adrv910x_Ssi_Delay_Inspect(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Ssi_Tx_Disable_LSSI_Pads_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Ssi_Tx_Disable_LSSI_Pads_Validate(adi_adrv910x_Device_t *device,
 	adi_common_ChannelNumber_e channel,
 	ssiType_e ssiType)
 {
@@ -974,7 +974,7 @@ int32_t adi_adrv910x_Ssi_Tx_Disable_LSSI_Pads(adi_adrv910x_Device_t *device,
 	ssiType_e ssiType)
 {
 	ADI_PERFORM_VALIDATION(adi_adrv910x_Ssi_Tx_Disable_LSSI_Pads_Validate, device, channel, ssiType);
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 	if (SSI_TYPE_LVDS == ssiType)
 	{
 		if (channel == ADI_CHANNEL_1)
@@ -990,7 +990,7 @@ int32_t adi_adrv910x_Ssi_Tx_Disable_LSSI_Pads(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_Ssi_Tx_Enable_LSSI_Pads_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_Ssi_Tx_Enable_LSSI_Pads_Validate(adi_adrv910x_Device_t *device,
 	adi_common_ChannelNumber_e channel,
 	ssiType_e ssiType)
 {
@@ -1005,7 +1005,7 @@ int32_t adi_adrv910x_Ssi_Tx_Enable_LSSI_Pads(adi_adrv910x_Device_t *device,
 	ssiType_e ssiType)
 {
 	ADI_PERFORM_VALIDATION(adi_adrv910x_Ssi_Tx_Enable_LSSI_Pads_Validate, device, channel, ssiType);
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 	if (SSI_TYPE_LVDS == ssiType)
 	{
 		if (channel == ADI_CHANNEL_1)

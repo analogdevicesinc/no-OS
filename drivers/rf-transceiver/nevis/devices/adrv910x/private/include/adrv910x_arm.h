@@ -67,6 +67,52 @@ extern "C" {
 	int32_t adrv910x_DmaMemWrite(adi_adrv910x_Device_t *device, uint32_t address, const uint8_t data[], uint32_t byteCount, adi_adrv910x_ArmSingleSpiWriteMode_e spiWriteMode, adi_common_Processor_Subsystem_e PS);
 	
 /**
+* \brief Write to the ADRV910X Flex Stream Processor(0 - 3) memory 
+*
+* The user must make sure the memory addresses are valid.
+*
+* \pre This function is private and is not called directly by the user.
+*
+* \param device             Structure pointer to the ADRV9001 data structure containing settings
+* \param address            The 32-bit ARM address to write
+* \param data               Byte Array (uint8_t) containing data to be written to the selected flex SP memory
+* \param byteCount          Number of bytes in the data array to be written
+* \param flexSpNumber       Flex Stream Procesor(SP) to select and write the data
+* \param[in] spiWriteMode   Preferred SPI write mode
+*
+* \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+*/
+int32_t adrv910x_FlexStreamProcessorMemWrite(adi_adrv910x_Device_t *device,
+                                             uint32_t address,
+                                             const uint8_t data[],
+                                             uint32_t byteCount,
+                                             uint8_t flexSpNumber,
+                                             adi_adrv910x_ArmSingleSpiWriteMode_e spiWriteMode);
+
+
+/**
+* \brief Read from the ADRV9001 Flex Stream Processor(0 - 3) memory
+*
+* The user must make sure the memory addresses are valid.
+*
+* \pre This function is private and is not called directly by the user.
+*
+* \param device        Structure pointer to the ADRV9001 data structure containing settings
+* \param address       The 32bit ARM address to read from.
+* \param returnData    Byte(uint8_t) array containing the data read from the selected flex SP memory.
+* \param byteCount     Number of bytes in the returnData array.
+* \param autoIncrement Boolean flag to enable or disable auto-increment of ARM register address
+* \param flexSpNumber  Flex Stream Procesor(SP) to select and read the data
+*
+* \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+*/
+int32_t adrv910x_FlexStreamProcessorMemRead(adi_adrv910x_Device_t *device,
+                                            uint32_t address,
+                                            uint8_t returnData[],
+                                            uint32_t byteCount,
+                                            uint8_t autoIncrement,
+                                            uint8_t flexSpNumber);
+                                             /**
 * \brief Private Helper function to process detected errors reported from the
 *        arm to determine recovery action.
 *

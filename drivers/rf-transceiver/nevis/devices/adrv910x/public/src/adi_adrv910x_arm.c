@@ -18,6 +18,12 @@
 #include "adrv910x_arm_error_mapping.h"
 #include "object_ids.h"
 
+#ifdef NEVIS_PS2
+#include <adi_flash_api.h>
+#include <adi_qspi_api.h>
+#include <adi_boot_api.h>
+#endif /* NEVIS_PS2 */
+
 static uint32_t Crc32(const uint8_t buf[], uint32_t bufLen);
 
 #ifndef NEVIS_PS2
@@ -27,7 +33,7 @@ int32_t adi_adrv910x_arm_AhbSpiBridge_Enable(adi_adrv910x_Device_t *device)
 	uint8_t ahbSpiReg = 0;
 
 	ADI_ENTRY_EXPECT(device);
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 	ADRV910X_SPIREADBYTE(device, "AHB_SPI_BRIDGE", ADRV910X_ADDR_AHB_SPI_BRIDGE, &ahbSpiReg);
 
 	ahbSpiReg = ahbSpiReg | ADRV910X_AHB_SPI_BRIDGE_ENABLE;
@@ -47,7 +53,7 @@ int32_t adi_adrv910x_arm_AhbSpiBridge_Disable(adi_adrv910x_Device_t *device)
 	uint8_t ahbSpiReg = 0;
 
 	ADI_ENTRY_EXPECT(device);
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 	ADRV910X_SPIREADBYTE(device, "AHB_SPI_BRIDGE", ADRV910X_ADDR_AHB_SPI_BRIDGE, &ahbSpiReg);
 
 	ahbSpiReg = (ahbSpiReg & (~ADRV910X_AC1_ARM_M3_RUN));
@@ -57,6 +63,8 @@ int32_t adi_adrv910x_arm_AhbSpiBridge_Disable(adi_adrv910x_Device_t *device)
     ADI_API_RETURN(device);
 }
 
+#endif /* NEVIS_PS2 */
+#ifndef NEVIS_PS2
 int32_t adi_adrv910x_arm_Image_Write(adi_adrv910x_Device_t *device, uint32_t byteOffset, const uint8_t binary[], uint32_t byteCount, adi_adrv910x_ArmSingleSpiWriteMode_e spiWriteMode, adi_common_Processor_Subsystem_e PS)
 {
 	uint8_t stackPtr[4] = { 0 };
@@ -72,7 +80,7 @@ int32_t adi_adrv910x_arm_Image_Write(adi_adrv910x_Device_t *device, uint32_t byt
 		if (PS == ADI_PS2)
 		{
 			/* add extra bytes for PS2 */
-			/* large security issue here, the extra bytes will be random sutff past the end of the binary array :-( */
+			/* large security issue here, the extra bytes will be random stuff past the end of the binary array :-( */
 			byteCount += (4 - (byteCount % 4));
 		}
 		else
@@ -98,7 +106,7 @@ int32_t adi_adrv910x_arm_Image_Write(adi_adrv910x_Device_t *device, uint32_t byt
 		ADI_ERROR_RETURN(device->common.error.newAction);
 	}
 	
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 	if (byteOffset == 0)
 	{
 		if (byteCount < 8)
@@ -173,9 +181,272 @@ int32_t adi_adrv910x_arm_Image_Write(adi_adrv910x_Device_t *device, uint32_t byt
     ADI_API_RETURN(device);
 }
 
+#else  //PS1 image from Flash
+
+#define FLASH_CHUNK_SIZE 1040
+uint8_t chunkBuffer[FLASH_CHUNK_SIZE] = {0};
+
+int32_t adi_adrv910x_arm_Image_Write(adi_adrv910x_Device_t *device, uint32_t byteOffset, const uint8_t binary[], uint32_t byteCount, adi_adrv910x_ArmSingleSpiWriteMode_e spiWriteMode, adi_common_Processor_Subsystem_e PS)
+{
+	ADI_ENTRY_EXPECT(device);
+	ADI_RANGE_CHECK(device, spiWriteMode, ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4,
+		ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STREAMING_BYTES_1);
+
+    adi_boot_SystemCfg_t bootConfig = {0};
+    adi_driver_Result_e result = adi_boot_ConfigGet(&bootConfig);
+    if (result != ADI_DRV_SUCCESS)
+    {
+        ADI_ERROR_REPORT(&device->common,
+            ADI_COMMON_ERRSRC_API,
+            ADI_COMMON_ERR_API_FAIL,
+            ADI_COMMON_ACT_ERR_CHECK_PARAM,
+            result,
+            "Failed to get bootloader configuration.");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+    
+    adi_flash_Handle_t flashHdl = bootConfig.flash_handle;
+    ADI_NULL_DEVICE_PTR_RETURN(flashHdl);
+
+	// Validate alignment
+	if ((byteOffset % 4) > 0)
+	{
+		ADI_ERROR_REPORT(&device->common,
+			ADI_COMMON_ERRSRC_API,
+			ADI_COMMON_ERR_INV_PARAM,
+			ADI_COMMON_ACT_ERR_CHECK_PARAM,
+			byteOffset,
+			"Invalid byteOffset. Must be multiple of 4.");
+		ADI_ERROR_RETURN(device->common.error.newAction);
+	}
+
+    adi_boot_ImageDesc_t armImage = {0};
+    adi_boot_ImageType_t imageType = (PS == ADI_PS1) ? IMAGE_TYPE_PS1 : IMAGE_TYPE_PS2;
+
+    result = adi_boot_ActiveImageGet(imageType, &armImage);
+    if (result != ADI_DRV_SUCCESS)
+    {
+        ADI_ERROR_REPORT(&device->common,
+            ADI_COMMON_ERRSRC_API,
+            ADI_COMMON_ERR_API_FAIL,
+            ADI_COMMON_ACT_ERR_CHECK_PARAM,
+            result,
+            "Failed to get active image from bootloader catalog.");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+    
+	uint32_t flashReadAddress = armImage.code_flash_start_addr;
+    byteCount = armImage.code_flash_size;
+
+	if (byteCount < 8 && byteOffset == 0)
+	{
+		ADI_ERROR_REPORT(&device->common,
+			ADI_COMMON_ERRSRC_API,
+			ADI_COMMON_ERR_INV_PARAM,
+			ADI_COMMON_ACT_ERR_CHECK_PARAM,
+			byteCount,
+			"Invalid byteCount. Must be larger than 8 for initial boot.");
+		ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+		    
+	(void)binary; // Binary data is not used in PS2 boot flow since we're reading directly from flash
+	uint8_t stackPtr[4] = {0};
+	uint8_t bootAddr[4] = {0};
+        
+	uint32_t bytesRemaining = byteCount;
+	uint32_t currentArmOffset = byteOffset;
+	uint32_t bytesToProcess = 0;
+	uint16_t stBase, entry;
+	adi_driver_Result_e retVal;
+
+	// Align byteCount to 4 bytes
+	if ((byteCount % 4) > 0)
+	{
+		byteCount += (4 - (byteCount % 4));
+		bytesRemaining = byteCount;
+	}
+
+	ADI_MUTEX_ACQUIRE(device);
+        
+	if (PS == ADI_PS2)
+	{
+        retVal = adi_boot_ActiveImageCopy(IMAGE_TYPE_PS2, true);
+		if (retVal != ADI_DRV_SUCCESS)
+		{
+			ADI_ERROR_REPORT(&device->common,
+				ADI_COMMON_ERRSRC_API,
+				ADI_COMMON_ERR_API_FAIL,
+				ADI_COMMON_ACT_ERR_RESET_INTERFACE,
+				retVal,
+				"PS2 Flash read failed (metadata processing)");
+			ADI_MUTEX_RELEASE(device);
+			ADI_ERROR_RETURN(device->common.error.newAction);
+		}
+
+		ADI_MUTEX_RELEASE(device);
+		ADI_API_RETURN(device);
+	}
+	// ========== Read Firmware from Flash in Chunks and Write to ARM Memory ==========
+
+	// ========== Phase 1: Process Initial 1040 Bytes with Metadata Extraction ==========
+	// This covers stack pointer (0-3), boot address (4-7),
+	// profile address (0x404/1028), and PFIR profile address (0x408/1032)
+	// Using a single 1040-byte buffer for efficient processing
+
+	if (byteOffset == 0 && byteCount >= FLASH_CHUNK_SIZE)
+	{
+		bytesToProcess = FLASH_CHUNK_SIZE;  // 1040 bytes
+
+		// Clear metadata buffer
+		memset(chunkBuffer, 0, FLASH_CHUNK_SIZE);
+
+		// Read 1040 bytes from flash in one operation
+		retVal = adi_flash_Read(flashHdl, flashReadAddress, chunkBuffer, bytesToProcess);
+		if (retVal != ADI_DRV_SUCCESS)
+		{
+			ADI_ERROR_REPORT(&device->common,
+				ADI_COMMON_ERRSRC_API,
+				ADI_COMMON_ERR_API_FAIL,
+				ADI_COMMON_ACT_ERR_RESET_INTERFACE,
+				retVal,
+				"PS2 Flash read failed (metadata processing)");
+			ADI_MUTEX_RELEASE(device);
+			ADI_ERROR_RETURN(device->common.error.newAction);
+		}
+
+		// Wait for read command completion
+		while(true == adi_flash_CommandBusy(flashHdl));
+
+		// ===== Extract Metadata from the 1040-byte buffer =====
+
+		// Extract stack pointer (first 4 bytes of ARM Cortex-M vector table)
+		stackPtr[0] = chunkBuffer[0];
+		stackPtr[1] = chunkBuffer[1];
+		stackPtr[2] = chunkBuffer[2];
+		stackPtr[3] = chunkBuffer[3];
+
+		// Extract boot address/reset vector (next 4 bytes)
+		bootAddr[0] = chunkBuffer[4];
+		bootAddr[1] = chunkBuffer[5];
+		bootAddr[2] = chunkBuffer[6];
+		bootAddr[3] = chunkBuffer[7];
+
+		if (PS != ADI_PS2)
+		{
+			// Extract Profile Address from firmware image at offset 0x404 (1028 bytes)
+			if (ADRV910X_ADDR_DEVICE_PROFILE_OFFSET < bytesToProcess)
+			{
+				uint32_t i = ADRV910X_ADDR_DEVICE_PROFILE_OFFSET;  // 1028
+				// Check bounds: we need 4 bytes starting at position i
+				if ((i + 4) <= bytesToProcess)
+				{
+					device->devStateInfo.profileAddr = (((uint32_t)(chunkBuffer[i + 3]) << 24) |
+						(((uint32_t)chunkBuffer[i + 2]) << 16) |
+						(((uint32_t)chunkBuffer[i + 1]) << 8) |
+						((uint32_t)chunkBuffer[i]));
+				}
+			}
+
+			// Extract PFIR Profile Address from firmware image at offset 0x408 (1032 bytes)
+			uint32_t i = ADRV910X_ADDR_PFIR_PROFILE_BUFFER_OFFSET;  // 1032
+			if ((i + 4) <= bytesToProcess)
+			{
+				device->devStateInfo.pfirProfileAddr = ((((uint32_t)chunkBuffer[i + 3]) << 24) |
+					(((uint32_t)chunkBuffer[i + 2]) << 16) |
+					(((uint32_t)chunkBuffer[i + 1]) << 8) |
+					((uint32_t)chunkBuffer[i]));
+			}
+		}
+
+		// ===== Write Boot Address and Stack Pointer to PS1 ARM Registers =====
+
+		// Use PS1 specific register addresses
+		entry = ADRV910X_ADDR_ARM_BOOT_ADDR_BYTE0;
+		stBase = ADRV910X_ADDR_ARM_STACK_PTR_BYTE0;
+
+		/* core.arm_boot_addr_byte0/1/2/3 */
+		ADRV910X_SPIWRITEBYTE(device, "ARM_BOOT_ADDR_BYTE_0", entry, bootAddr[0]);
+		ADRV910X_SPIWRITEBYTE(device, "ARM_BOOT_ADDR_BYTE_1", entry+1, bootAddr[1]);
+		ADRV910X_SPIWRITEBYTE(device, "ARM_BOOT_ADDR_BYTE_2", entry+2, bootAddr[2]);
+		ADRV910X_SPIWRITEBYTE(device, "ARM_BOOT_ADDR_BYTE_3", entry+3, bootAddr[3]);
+
+		/* core.arm_stack_ptr_byte_0/1/2/3 */
+		ADRV910X_SPIWRITEBYTE(device, "ARM_STACK_PTR_BYTE_0", stBase, stackPtr[0]);
+		ADRV910X_SPIWRITEBYTE(device, "ARM_STACK_PTR_BYTE_1", stBase+1, stackPtr[1]);
+		ADRV910X_SPIWRITEBYTE(device, "ARM_STACK_PTR_BYTE_2", stBase+2, stackPtr[2]);
+		ADRV910X_SPIWRITEBYTE(device, "ARM_STACK_PTR_BYTE_3", stBase+3, stackPtr[3]);
+
+		// ===== Write the entire 1040-byte chunk to ARM memory =====
+		ADI_EXPECT(adi_adrv910x_arm_Memory_Write, device,
+			ADRV910X_ADDR_ARM_START_PROG,
+			chunkBuffer,
+			bytesToProcess,
+			spiWriteMode,
+			ADI_PS1);
+
+
+		// Update pointers after Phase 1
+		flashReadAddress += bytesToProcess;
+		currentArmOffset += bytesToProcess;
+		bytesRemaining -= bytesToProcess;
+	}
+
+	// ========== Phase 2: Stream Remaining Bytes Directly ==========
+	// No metadata extraction needed, just read from flash and write to ARM memory
+
+	while (bytesRemaining > 0)
+	{
+		// Determine chunk size for this iteration
+		bytesToProcess = (bytesRemaining > FLASH_CHUNK_SIZE) ? FLASH_CHUNK_SIZE : bytesRemaining;
+
+		// Clear only the bytes we'll use
+		memset(chunkBuffer, 0, bytesToProcess);
+
+		// Read chunk from flash using normal read command
+		retVal = adi_flash_Read(flashHdl, flashReadAddress, chunkBuffer, bytesToProcess);
+		if (retVal != ADI_DRV_SUCCESS)
+		{
+			ADI_ERROR_REPORT(&device->common,
+				ADI_COMMON_ERRSRC_API,
+				ADI_COMMON_ERR_API_FAIL,
+				ADI_COMMON_ACT_ERR_RESET_INTERFACE,
+				retVal,
+				"PS2 Flash read failed");
+			ADI_MUTEX_RELEASE(device);
+			ADI_ERROR_RETURN(device->common.error.newAction);
+		}
+
+		// Wait for read command completion
+		while (true == adi_flash_CommandBusy(flashHdl));
+
+		// Align to 4-byte boundary ONLY for ARM memory write (not flash read)
+		uint32_t bytesToWrite = bytesToProcess;
+		if ((bytesToWrite % 4) != 0)
+		{
+			bytesToWrite += (4 - (bytesToWrite % 4));
+			// Padding bytes are already 0 from memset above
+		}
+
+		// Write chunk directly to ARM memory via AHB-SPI bridge
+		ADI_EXPECT(adi_adrv910x_arm_Memory_Write, device,
+			ADRV910X_ADDR_ARM_START_PROG + currentArmOffset,
+			chunkBuffer,
+			bytesToWrite,  // Use aligned size for write
+			spiWriteMode,
+			ADI_PS1);
+
+		// Update pointers based on ACTUAL bytes read from flash
+		flashReadAddress += bytesToProcess;
+		currentArmOffset += bytesToWrite;      // ARM offset uses aligned size
+		bytesRemaining -= bytesToProcess;      // Remaining uses actual size
+	}
+
+	ADI_MUTEX_RELEASE(device);
+	ADI_API_RETURN(device);
+}
 #endif /* NEVIS_PS2 */
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_arm_Memory_ReadWrite_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adi_adrv910x_arm_Memory_ReadWrite_Validate(adi_adrv910x_Device_t *device,
                                                                          uint32_t address,
                                                                          uint8_t returnData[],
                                                                          uint32_t byteCount,
@@ -231,7 +502,7 @@ int32_t adi_adrv910x_arm_Memory_Read(adi_adrv910x_Device_t *device,
 	                                 adi_common_Processor_Subsystem_e PS)
 {
     ADI_PERFORM_VALIDATION(adi_adrv910x_arm_Memory_ReadWrite_Validate, device, address, returnData, byteCount, 0, autoIncrement);
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
     ADI_EXPECT(adrv910x_DmaMemRead, device, address, returnData, byteCount, autoIncrement, PS);
 
     ADI_MUTEX_RELEASE(device);
@@ -252,14 +523,13 @@ int32_t adi_adrv910x_arm_Memory_Write(adi_adrv910x_Device_t *device, uint32_t ad
       }
 #endif
 	ADI_PERFORM_VALIDATION(adi_adrv910x_arm_Memory_ReadWrite_Validate, device, address, (uint8_t *)data, byteCount, spiWriteMode, false);
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 	ADI_EXPECT(adrv910x_DmaMemWrite, device, address, data, byteCount, spiWriteMode, PS);
 
 	ADI_MUTEX_RELEASE(device);
     ADI_API_RETURN(device);
 }
 
-#ifndef NEVIS_PS2
 
 int32_t adi_adrv910x_arm_StartStatus_Check(adi_adrv910x_Device_t *device, uint32_t timeout_us)
 {
@@ -278,7 +548,7 @@ int32_t adi_adrv910x_arm_StartStatus_Check(adi_adrv910x_Device_t *device, uint32
         timeout_us : ADI_ADRV910X_GETARMBOOTUP_INTERVAL_US;
     numEventChecks = (waitInterval_us == 0) ? 1 : (timeout_us / waitInterval_us);
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
     for (eventCheck = 0; eventCheck <= numEventChecks; eventCheck++)
     {
         ADI_EXPECT(adi_adrv910x_Radio_State_Get, device, &state);
@@ -368,7 +638,7 @@ int32_t adi_adrv910x_arm_Start(adi_adrv910x_Device_t *device, adi_common_Process
     uint8_t mailBox[4] = { 0xFF, 0xFF, 0xFF, 0xFF };
     
     ADI_ENTRY_EXPECT(device);
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 	armCtl1 = ADRV910X_AC1_ARM_DEBUG_ENABLE | ADRV910X_AC1_ARM_MEM_HRESP_MASK | ADRV910X_AC1_ARM_M3_RUN;
 	if (PS == ADI_PS1)
 	{
@@ -394,13 +664,12 @@ int32_t adi_adrv910x_arm_Start(adi_adrv910x_Device_t *device, adi_common_Process
     ADI_API_RETURN(device);
 }
 
-#endif /* NEVIS_PS2 */
 
 int32_t adi_adrv910x_arm_SystemError_Get(adi_adrv910x_Device_t *device, uint8_t *objectId, uint8_t *errorCode)
 {
 	ADI_ENTRY_PTR_EXPECT(device, errorCode);
 	ADI_NULL_PTR_RETURN(&device->common, objectId);
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 	ADRV910X_SPIREADBYTE(device, "arm_cmd_status_12", ADRV910X_ADDR_ARM_CMD_STATUS_12, errorCode);
 	ADRV910X_SPIREADBYTE(device, "arm_cmd_status_13", ADRV910X_ADDR_ARM_CMD_STATUS_13, objectId);
 
@@ -410,9 +679,10 @@ int32_t adi_adrv910x_arm_SystemError_Get(adi_adrv910x_Device_t *device, uint8_t 
 
 int32_t adi_adrv910x_arm_Profile_Write(adi_adrv910x_Device_t *device, const adi_adrv910x_Profiles_t *profile, adi_common_Processor_Subsystem_e PS)
 {
+  
 	ADI_ENTRY_PTR_EXPECT(device, profile);
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 	if (PS == ADI_PS1)
 	{
 		/* recompute CRC on data that is going to be written to device */
@@ -422,12 +692,37 @@ int32_t adi_adrv910x_arm_Profile_Write(adi_adrv910x_Device_t *device, const adi_
 	}
 	else
 	{
+        #ifdef NEVIS_PS2
+        memcpy((void*)0x20000000, (void*)&profile->profilePS2, sizeof(profile->profilePS2));
+        #else 
 		ADI_EXPECT(adrv910x_ArmProfileWrite, device, (const deviceProfile_t*)&profile->profilePS2, PS);
+        #endif
 	}
 	
 
 	ADI_MUTEX_RELEASE(device);
     ADI_API_RETURN(device);
+}
+
+int32_t adi_adrv910x_arm_DevState_Ps2_Write(adi_adrv910x_Device_t *device)
+{
+	ADI_ENTRY_EXPECT(device);
+	ADI_MUTEX_ACQUIRE(device);
+
+	/* Raw whole-struct snapshot: common.error captures live mutex state (locked/lock/unlock).
+	 * Fine for a diagnostic dump; a future restore path must re-init these before reuse. */
+	#ifdef NEVIS_PS2
+	/* Skip when the context already resides at the reserved address (InitDevPS2 handle) to avoid a self-copy. */
+	if ((void*)device != (void*)ADRV910X_SYS2_ADDR_DEV_CONTEXT)
+	{
+		memcpy((void*)ADRV910X_SYS2_ADDR_DEV_CONTEXT, device, sizeof(adi_adrv910x_Device_t));
+	}
+	#else
+	ADI_EXPECT(adi_adrv910x_arm_Memory_Write, device, ADRV910X_SYS2_ADDR_DEV_CONTEXT, (const uint8_t*)device, sizeof(adi_adrv910x_Device_t), ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4, ADI_PS2);
+	#endif
+
+	ADI_MUTEX_RELEASE(device);
+	ADI_API_RETURN(device);
 }
 
 int32_t adi_adrv910x_arm_PfirProfiles_Write(adi_adrv910x_Device_t *device, const pfirBuffer_t *init)
@@ -437,7 +732,7 @@ int32_t adi_adrv910x_arm_PfirProfiles_Write(adi_adrv910x_Device_t *device, const
 	/* update CRC on pfir buffer before sending */
 	pfirBuffer_t *p = (pfirBuffer_t *)init;
 	p->checksum = Crc32((const uint8_t*)p, sizeof(pfirBuffer_t) - 4);
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 	ADI_EXPECT(adrv910x_PfirProfilesWrite, device, init);
 
 	ADI_MUTEX_RELEASE(device);
@@ -450,7 +745,7 @@ int32_t adi_adrv910x_arm_MailboxBusy_Get(adi_adrv910x_Device_t *device, bool *ma
 
 	/* Check device pointer is not null */
 	ADI_ENTRY_PTR_EXPECT(device, mailboxBusy);
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 	/* Read arm_command_busy bit in arm_command register*/
 	ADI_EXPECT(adrv910x_NvsRegmapCore_ArmCommandBusy_Get, device, &bfVal);
 	*mailboxBusy = (bool)bfVal;
@@ -481,7 +776,7 @@ int32_t adi_adrv910x_arm_CmdStatus_Get(adi_adrv910x_Device_t *device, uint16_t *
     /* ensuring the errorWord and statusWord are cleared */
     *errorWord = 0;
     *statusWord = 0;
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
     /* read in the entire 64-bit status register into a byte array and parse one byte at a time */
     for (i = 0; i < CMD_STATUS_MAX; i++)
     {
@@ -539,7 +834,7 @@ int32_t adi_adrv910x_arm_CmdStatusOpcode_Get(adi_adrv910x_Device_t *device, uint
 
     /* calculating command status register offset based on opcode status packing */
     cmdByteIndex = opCode >> 2;
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
     /* reading the command status register for given opcode */
     ADRV910X_SPIREADBYTE(device, "", ((uint16_t)ADRV910X_ADDR_ARM_CMD_STATUS_0 + cmdByteIndex), &cmdByte);
 
@@ -586,7 +881,7 @@ int32_t adi_adrv910x_arm_CmdStatus_Wait(adi_adrv910x_Device_t *device,
 
     waitInterval_us = (waitInterval_us > timeout_us) ? timeout_us : waitInterval_us;
     numEventChecks = (waitInterval_us == 0) ? 1 : (timeout_us / waitInterval_us);
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
     /* timeout event check loop */
     for (eventCheck = 0; eventCheck <= numEventChecks; eventCheck++)
     {
@@ -702,7 +997,7 @@ int32_t adi_adrv910x_arm_Cmd_Write(adi_adrv910x_Device_t *device, uint8_t opCode
     waitInterval_us = (waitInterval_us > timeout_us) ? timeout_us : waitInterval_us;
     numEventChecks = (waitInterval_us == 0) ? 1 : (timeout_us / waitInterval_us);
 
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
     /* timeout event loop to permit non-blocking of thread */
     for (eventCheck = 0; eventCheck <= numEventChecks; eventCheck++)
     {
@@ -777,7 +1072,7 @@ int32_t adi_adrv910x_arm_System_Program(adi_adrv910x_Device_t *device, uint8_t c
     /* Executing the SET System Config command */
     extData[0] = channelMask;
 	extData[1] = OBJID_GS_SYSTEM_CONFIG;
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
     ADI_EXPECT(adi_adrv910x_arm_Cmd_Write, device, (uint8_t)ADRV910X_ARM_SET_OPCODE, &extData[0], sizeof(extData));
 
     /* Wait for command to finish executing */
@@ -857,6 +1152,179 @@ int32_t adi_adrv910x_arm_ConfigJtag_ps2(adi_adrv910x_Device_t *device)
 	/* Config test mode */
 	adrv910x_NevisMonitorRegmapCore_JtagTestmodeEn_Set(device, SetJtagTestModeEn);
 	
+	ADI_API_RETURN(device);
+}
+
+int32_t adi_adrv910x_arm_MailboxBusy_Ps2_Get(adi_adrv910x_Device_t *device, bool *mailboxBusy)
+{
+	uint8_t armCmdReg = 0;
+
+	ADI_ENTRY_PTR_EXPECT(device, mailboxBusy);
+	ADI_MUTEX_ACQUIRE(device);
+
+	ADRV910X_SPIREADBYTE(device, "PS2_ARM_COMMAND", ADRV910X_ADDR_PS2_ARM_COMMAND, &armCmdReg);
+	*mailboxBusy = (bool)((armCmdReg >> 7) & 0x01);
+
+	ADI_MUTEX_RELEASE(device);
+	ADI_API_RETURN(device);
+}
+
+int32_t adi_adrv910x_arm_Cmd_Ps2_Write(adi_adrv910x_Device_t *device, uint8_t opCode, const uint8_t extendedData[], uint32_t byteCount)
+{
+	int32_t halError = 0;
+	bool armCommandBusy = false;
+	uint32_t i = 0;
+	uint32_t timeout_us = ADI_ADRV910X_SENDARMCMD_TIMEOUT_US;
+	uint32_t waitInterval_us = ADI_ADRV910X_SENDARMCMD_INTERVAL_US;
+	uint32_t eventCheck = 0;
+	uint32_t numEventChecks = 0;
+	int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
+
+	ADI_ENTRY_EXPECT(device);
+
+	if (byteCount > 0)
+	{
+		ADI_NULL_PTR_RETURN(&device->common, extendedData);
+	}
+
+	if (byteCount > ADRV910X_ARM_PS2_EXT_CMD_BYTE_MAX)
+	{
+		ADI_ERROR_REPORT(&device->common,
+			ADI_COMMON_ERRSRC_API,
+			ADI_COMMON_ERR_INV_PARAM,
+			ADI_COMMON_ACT_ERR_CHECK_PARAM,
+			device,
+			"Invalid number of extended data in Cmd_Ps2_Write()");
+		ADI_ERROR_RETURN(device->common.error.newAction);
+	}
+
+	waitInterval_us = (waitInterval_us > timeout_us) ? timeout_us : waitInterval_us;
+	numEventChecks = (waitInterval_us == 0) ? 1 : (timeout_us / waitInterval_us);
+
+	ADI_MUTEX_ACQUIRE(device);
+
+	for (eventCheck = 0; eventCheck <= numEventChecks; eventCheck++)
+	{
+		recoveryAction = adi_adrv910x_arm_MailboxBusy_Ps2_Get(device, &armCommandBusy);
+		ADI_ERROR_REPORT(&device->common, ADI_COMMON_ERRSRC_API, ADI_COMMON_ERR_API_FAIL, recoveryAction, NULL, "Invalid Get for PS2 armCommandBusy");
+		ADI_MUTEX_ERROR_RELEASE(device);
+		ADI_ERROR_RETURN(device->common.error.newAction);
+
+		if (armCommandBusy == true)
+		{
+			halError = adi_common_hal_Wait_us(&device->common, waitInterval_us);
+			ADI_ERROR_REPORT(&device->common,
+				ADI_COMMON_ERRSRC_ADI_HAL,
+				halError,
+				ADI_COMMON_ACT_ERR_CHECK_TIMER,
+				device,
+				"Timer not working in Cmd_Ps2_Write()");
+			ADI_MUTEX_ERROR_RELEASE(device);
+			ADI_ERROR_RETURN(device->common.error.newAction);
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	if (armCommandBusy == true)
+	{
+		ADI_ERROR_REPORT(&device->common,
+			ADI_ADRV910X_SRC_ARMCMD,
+			ADI_COMMON_ERR_API_FAIL,
+			ADI_ADRV910X_ACT_ERR_RESET_ARM,
+			device,
+			"PS2 ARM Mailbox Busy. Command not executed in Cmd_Ps2_Write()");
+		ADI_MUTEX_ERROR_RELEASE(device);
+		ADI_ERROR_RETURN(device->common.error.newAction);
+	}
+	else
+	{
+		ADRV910X_SPIWRITEBYTE(device, "PS2_ARM_EXT_CMD_BYTE_1", (uint16_t)ADRV910X_ADDR_PS2_ARM_EXT_CMD_BYTE_1, opCode);
+
+		if (byteCount > 0)
+		{
+			for (i = 0; i < byteCount; i++)
+			{
+				ADRV910X_SPIWRITEBYTE(device, "PS2_ARM_EXT_CMD_BYTE_1+", ((uint16_t)ADRV910X_ADDR_PS2_ARM_EXT_CMD_BYTE_1 + 1 + i), extendedData[i]);
+			}
+		}
+
+		ADRV910X_SPIWRITEBYTE(device, "PS2_ARM_COMMAND", ADRV910X_ADDR_PS2_ARM_COMMAND, 0x01);
+	}
+
+	ADI_MUTEX_RELEASE(device);
+	ADI_API_RETURN(device);
+}
+
+int32_t adi_adrv910x_arm_PhysapBuffAddr_Ps2_Get(adi_adrv910x_Device_t *device, uint32_t *bufferAddr)
+{
+	int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
+	int32_t halError = 0;
+	uint8_t extData[ADRV910X_ARM_PS2_EXT_CMD_BYTE_MAX] = { 0 };
+	bool armCommandBusy = false;
+	uint8_t b0 = 0, b1 = 0, b2 = 0, b3 = 0;
+	uint32_t timeout_us = ADI_ADRV910X_SENDARMCMD_TIMEOUT_US;
+	uint32_t waitInterval_us = ADI_ADRV910X_SENDARMCMD_INTERVAL_US;
+	uint32_t eventCheck = 0;
+	uint32_t numEventChecks = 0;
+
+	ADI_ENTRY_PTR_EXPECT(device, bufferAddr);
+
+	recoveryAction = adi_adrv910x_arm_Cmd_Ps2_Write(device, ADRV910X_ARM_PS2_PHYSAP_BUFF_ADDR_GET_REQ, extData, ADRV910X_ARM_PS2_EXT_CMD_BYTE_MAX);
+	ADI_ERROR_REPORT(&device->common, ADI_COMMON_ERRSRC_API, ADI_COMMON_ERR_API_FAIL, recoveryAction, NULL,
+		"Failed to send PhysapBuffAddrGet command");
+	ADI_ERROR_RETURN(device->common.error.newAction);
+
+	waitInterval_us = (waitInterval_us > timeout_us) ? timeout_us : waitInterval_us;
+	numEventChecks = (waitInterval_us == 0) ? 1 : (timeout_us / waitInterval_us);
+
+	for (eventCheck = 0; eventCheck <= numEventChecks; eventCheck++)
+	{
+		recoveryAction = adi_adrv910x_arm_MailboxBusy_Ps2_Get(device, &armCommandBusy);
+		ADI_ERROR_REPORT(&device->common, ADI_COMMON_ERRSRC_API, ADI_COMMON_ERR_API_FAIL, recoveryAction, NULL,
+			"Failed to get PS2 mailbox busy status");
+		ADI_ERROR_RETURN(device->common.error.newAction);
+
+		if (armCommandBusy == true)
+		{
+			halError = adi_common_hal_Wait_us(&device->common, waitInterval_us);
+			ADI_ERROR_REPORT(&device->common,
+				ADI_COMMON_ERRSRC_ADI_HAL,
+				halError,
+				ADI_COMMON_ACT_ERR_CHECK_TIMER,
+				device,
+				"Timer not working in PhysapBuffAddr_Ps2_Get()");
+			ADI_ERROR_RETURN(device->common.error.newAction);
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	if (armCommandBusy == true)
+	{
+		ADI_ERROR_REPORT(&device->common,
+			ADI_ADRV910X_SRC_ARMCMD,
+			ADI_COMMON_ERR_API_FAIL,
+			ADI_ADRV910X_ACT_ERR_RESET_ARM,
+			device,
+			"PS2 ARM Mailbox Busy. PhysapBuffAddrGet timed out.");
+		ADI_ERROR_RETURN(device->common.error.newAction);
+	}
+
+	ADI_MUTEX_ACQUIRE(device);
+
+	ADRV910X_SPIREADBYTE(device, "PS2_EXT_CMD_BYTE_1", ((uint16_t)ADRV910X_ADDR_PS2_ARM_EXT_CMD_BYTE_1 + 0), &b0);
+	ADRV910X_SPIREADBYTE(device, "PS2_EXT_CMD_BYTE_2", ((uint16_t)ADRV910X_ADDR_PS2_ARM_EXT_CMD_BYTE_1 + 1), &b1);
+	ADRV910X_SPIREADBYTE(device, "PS2_EXT_CMD_BYTE_3", ((uint16_t)ADRV910X_ADDR_PS2_ARM_EXT_CMD_BYTE_1 + 2), &b2);
+	ADRV910X_SPIREADBYTE(device, "PS2_EXT_CMD_BYTE_4", ((uint16_t)ADRV910X_ADDR_PS2_ARM_EXT_CMD_BYTE_1 + 3), &b3);
+
+	*bufferAddr = (uint32_t)b0 | ((uint32_t)b1 << 8) | ((uint32_t)b2 << 16) | ((uint32_t)b3 << 24);
+
+	ADI_MUTEX_RELEASE(device);
 	ADI_API_RETURN(device);
 }
 

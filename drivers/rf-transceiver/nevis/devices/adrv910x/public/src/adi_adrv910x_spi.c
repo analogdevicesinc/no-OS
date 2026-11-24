@@ -147,7 +147,7 @@ int32_t adi_adrv910x_spi_Byte_Write(adi_adrv910x_Device_t *device, uint16_t addr
 
     ADI_EXPECT(adi_adrv910x_spi_DataPack, device, &txData[0], &numTxBytes, addr, 0xFF, data, ADRV910X_SPI_WRITE_POLARITY);
 
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 
     for (i = 0; i < ADI_ADRV910X_NUMBER_SPI_RETRY; i++)
     {
@@ -183,7 +183,7 @@ int32_t adi_adrv910x_spi_Bytes_Stream_Write(adi_adrv910x_Device_t *device, uint1
 
     ADI_EXPECT(adi_adrv910x_spi_Stream_DataPack,device, &txData[0], &numTxBytes, addr, data, count, ADRV910X_SPI_WRITE_POLARITY);
 
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 
     for (i = 0; i < ADI_ADRV910X_NUMBER_SPI_RETRY; i++)
     {
@@ -226,7 +226,7 @@ int32_t adi_adrv910x_spi_Bytes_Write(adi_adrv910x_Device_t *device, const uint16
         ADI_EXPECT(adi_adrv910x_spi_DataPack, device, &wrData[0], &numWrBytes, addr[i], 0xFF, data[i], ADRV910X_SPI_WRITE_POLARITY);
     }
  
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 
     for (i = 0; i < ADI_ADRV910X_NUMBER_SPI_RETRY; i++)
     {
@@ -259,7 +259,7 @@ int32_t adi_adrv910x_spi_Byte_Read(adi_adrv910x_Device_t *device, uint16_t addr,
 
     ADI_EXPECT(adi_adrv910x_spi_DataPack, device, &wrData[0], &numWrBytes, addr, 0xFF, regVal, ~ADRV910X_SPI_WRITE_POLARITY);
 
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 
     for (i = 0; i < ADI_ADRV910X_NUMBER_SPI_RETRY; i++)
     {
@@ -312,7 +312,7 @@ int32_t adi_adrv910x_spi_Bytes_Read(adi_adrv910x_Device_t *device,
         ADI_ERROR_RETURN(device->common.error.newAction);  
     }
 
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
     for (j = 0; j < ADI_ADRV910X_NUMBER_SPI_RETRY; j++)
     {
         halError = adi_adrv910x_hal_spi_read(device->common.devHalInfo, &wrData[0], &rdData[0], numWrBytes);
@@ -360,10 +360,10 @@ int32_t adi_adrv910x_spi_Field_Write(adi_adrv910x_Device_t *device,
 
     ADI_NULL_DEVICE_PTR_RETURN(device);
 
-    ADI_FUNCTION_ENTRY_VARIABLE_LOG(&device->common, "%s(0x%04X, 0x%02X)", addr, regVal);
+    ADI_FUNCTION_ENTRY_VARIABLE_LOG(&device->common, "%s(addr = 0x%04X, fieldVal = 0x%02X, mask = 0x%02X, startBit = 0x%02X, regVal = 0x%02X)", addr, fieldVal, mask, startBit, regVal);
             
     ADI_EXPECT(adi_adrv910x_spi_DataPack, device, &wrData[0], &numWrBytes, addr, 0xFF, regVal, ~ADRV910X_SPI_WRITE_POLARITY);
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
     for (i = 0; i < ADI_ADRV910X_NUMBER_SPI_RETRY; i++)
     {
         halError = adi_adrv910x_hal_spi_read(device->common.devHalInfo, &wrData[0], &registerVal[0], numWrBytes);
@@ -425,7 +425,7 @@ int32_t adi_adrv910x_spi_Field_Read(adi_adrv910x_Device_t *device,
 
     ADI_EXPECT(adi_adrv910x_spi_DataPack, device, &wrData[0], &numWrBytes, addr, 0xFF, regVal, ~ADRV910X_SPI_WRITE_POLARITY);
 
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
     for (i = 0; i < ADI_ADRV910X_NUMBER_SPI_RETRY; i++)
     {
         halError = adi_adrv910x_hal_spi_read(device->common.devHalInfo, &wrData[0], &rdData[0], numWrBytes);
@@ -478,7 +478,7 @@ int32_t adi_adrv910x_spi_Cache_Write(adi_adrv910x_Device_t *device,
        
     }
     
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
     
     for (i = 0; i < ADI_ADRV910X_NUMBER_SPI_RETRY; i++)
     {
@@ -530,7 +530,7 @@ int32_t adi_adrv910x_spi_Cache_Read(adi_adrv910x_Device_t *device,
                        ~ADRV910X_SPI_WRITE_POLARITY);
     }
 
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
 
     for (j = 0; j < ADI_ADRV910X_NUMBER_SPI_RETRY; j++)
     {

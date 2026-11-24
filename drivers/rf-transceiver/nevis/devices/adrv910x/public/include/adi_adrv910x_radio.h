@@ -2,48 +2,43 @@
  * \file
  * \brief Contains ADRV910X related function prototypes for adi_adrv910x_radio.c
  *
- *  ADRV910X API Version: $ADI_ADRV910X_API_VERSION$
- */
-
- /**
- * Copyright 2022 Analog Devices Inc.
- * Released under the ADRV910X API license, for more information
- * see the "LICENSE.txt" file in this zip file.
+ * Copyright (c) 2022 - 2026 Analog Devices, Inc. All Rights Reserved.
+ * This software is proprietary to Analog Devices, Inc. and its licensors.
+ * Released under the ADRV910X API license.
+ * For more information, see the "LICENSE.txt" file.
  */
 
 #ifndef _ADI_ADRV910X_RADIO_H_
 #define _ADI_ADRV910X_RADIO_H_
 
-#include "adi_adrv910x_types.h"
-#include "adi_adrv910x_common_types.h"
 #include "adi_adrv910x_radio_types.h"
+#include "adi_adrv910x_common_types.h"
+#include "adi_adrv910x_types.h"
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/**
- * \brief Minimum supported carrier frequency 
- */
-#define ADI_ADRV910X_CARRIER_FREQUENCY_MIN_HZ 25000000llu    /* 25 MHz */
-/**
- * \brief Maximum supported carrier frequency
- */
-#define ADI_ADRV910X_CARRIER_FREQUENCY_MAX_HZ 6000000000llu  /* 6 GHz */
-/**
- * \brief Maximum supported intermediate frequency
- */
-#define ADI_ADRV910X_INTERMEDIATE_FREQUENCY_MAX_HZ 20000000  /* 20MHz */
-
-/**
- * \brief Minimum supported external VCO PLL reference clock divider
- */
+/** \brief Minimum supported carrier frequency (25 MHz) */
+#define ADI_ADRV910X_CARRIER_FREQUENCY_MIN_HZ 25000000llu
+/** \brief Maximum supported carrier frequency (6 GHz) */
+#define ADI_ADRV910X_CARRIER_FREQUENCY_MAX_HZ 6000000000llu
+/** \brief Maximum supported intermediate frequency (20MHz) */
+#define ADI_ADRV910X_INTERMEDIATE_FREQUENCY_MAX_HZ 20000000
+/** \brief Minimum supported external VCO PLL reference clock divider */
 #define ADI_ADRV910X_CARRIER_EXTVCO_PLL_REF_DIV_MIN 0
-/**
- * \brief Maximum supported external VCO PLL reference clock divider
- */
+/** \brief Maximum supported external VCO PLL reference clock divider */
 #define ADI_ADRV910X_CARRIER_EXTVCO_PLL_REF_DIV_MAX 4
-		
+/** \brief Minimum supported external VCO PLL charge pump current (0.1mA) */
+#define ADI_ADRV910X_CARRIER_EXTVCO_PLL_CHARGE_PUMP_MIN 0
+/** \brief Maximum supported external VCO PLL charge pump current (6.4mA) */
+#define ADI_ADRV910X_CARRIER_EXTVCO_PLL_CHARGE_PUMP_MAX 63
+/** \brief Minimum supported external VCO PLL settle time(cycles) (256 cycles) */
+#define ADI_ADRV910X_CARRIER_EXTVCO_PLL_SETTLE_TIME_MIN 0
+/** \brief Maximum supported external VCO PLL settle time(cycles) (1024 cycles) */
+#define ADI_ADRV910X_CARRIER_EXTVCO_PLL_SETTLE_TIME_MAX 10
+
 /**
  * \brief Minimum supported external VCO PLL charge pump current
  */
@@ -52,11 +47,15 @@ extern "C" {
  * \brief Maximum supported external VCO PLL charge pump current
  */
 #define ADI_ADRV910X_CARRIER_EXTVCO_PLL_CHARGE_PUMP_MAX 63   /* 6.4mA */
-
 /**
  * \brief Minimum supported external VCO PLL settle time(cycles)
  */
 #define ADI_ADRV910X_CARRIER_EXTVCO_PLL_SETTLE_TIME_MIN 0    /* 256 cycles */
+/**
+ * \brief FDD/TDD Frequency Constraints
+ * Minimum LO separation prevents coupling degradation between LO1/LO2
+ */
+#define ADI_ADRV910X_MIN_LO_SEPARATION_HZ 10000000llu  /* 10 MHz */
 /**
  * \brief Maximum supported external VCO PLL settle time(cycles)
  */
@@ -65,55 +64,50 @@ extern "C" {
  * \brief Reads the current ARM radio state
  *
  * \note Message type: \ref timing_direct "Direct register access"
+ * \pre This function can be used after the device has been initialized, ARM binary loaded and the PLLs configured.
  *
- * \pre This function can be used after the device has been initialized, ARM binary loaded and the
- *      PLLs configured.
- *
- * \param[in]  adrv910x  Context variable - Pointer to the ADRV910X device settings data structure
- * \param[out] radioState   The current radio state
+ * \param[in]  adrv910x    Context variable - Pointer to the ADRV910X device data structure
+ * \param[out] radioState  The current radio state
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv910x_Radio_State_Get(adi_adrv910x_Device_t *adrv910x, adi_adrv910x_RadioState_t *radioState);
 
 /**
- * \brief Reads the current channel state 
- * 
+ * \brief Reads the current channel state
+ *
  * \note Message type: \ref timing_direct "Direct register access"
- * 
- * \pre This function can be used after the device has been initialized, ARM binary loaded and the
- *      PLLs configured.
- * 
- * \param[in]  adrv910x      Context variable - Pointer to the ADRV910X device settings data structure
+ * \pre This function can be used after the device has been initialized, ARM binary loaded and the PLLs configured.
+ *
+ * \param[in]  adrv910x      Context variable - Pointer to the ADRV910X device data structure
  * \param[in]  port          The port that the channel refers to
  * \param[in]  channel       The channel number of the channel
  * \param[out] channelState  The current state of the channel
- * 
+ *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv910x_Radio_Channel_State_Get(adi_adrv910x_Device_t *adrv910x,
-                                            adi_common_Port_e port,
-                                            adi_common_ChannelNumber_e channel,
-                                            adi_adrv910x_ChannelState_e *channelState);
-	
+                                             adi_common_Port_e port,
+                                             adi_common_ChannelNumber_e channel,
+                                             adi_adrv910x_ChannelState_e *channelState);
+
 /**
  * \brief Convert a channel and port combination to the appropriate mailbox channel value
  *
- * \param[in] channel   The channel of the specified port
- * \param[in] port      The port that the channel refers to
+ * \param[in] port     The port that the channel refers to
+ * \param[in] channel  The channel of the specified port
  *
  * \returns The mailbox channel value corresponding to the channel/port combination
  */
 uint8_t adi_adrv910x_Radio_MailboxChannel_Get(adi_common_Port_e port, adi_common_ChannelNumber_e channel);
-	
+
 /**
  * \brief Sets the Carrier frequency for the given channel.
  *
  * \note Message type: \ref timing_mailbox "Mailbox command"
+ * \pre Channel state is #ADI_ADRV910X_CHANNEL_STANDBY or #ADI_ADRV910X_CHANNEL_CALIBRATED
  *
- * \pre Channel state is STANDBY or CALIBRATED
- *
- * \param[in] adrv910x	Context variable - Pointer to the ADRV910X device settings data structure
+ * \param[in] adrv910x  Context variable - Pointer to the ADRV910X device data structure
  * \param[in] port      The port of interest
  * \param[in] channel   The channel of interest
  * \param[in] carrier   Desired carrier configuration
@@ -129,21 +123,20 @@ int32_t adi_adrv910x_Radio_Carrier_Configure(adi_adrv910x_Device_t *adrv910x,
  * \brief Gets the Carrier frequency for the specified channel.
  *
  * \note Message type: \ref timing_mailbox "Mailbox command"
+ * \pre Channel state any of #ADI_ADRV910X_CHANNEL_STANDBY, #ADI_ADRV910X_CHANNEL_CALIBRATED, #ADI_ADRV910X_CHANNEL_PRIMED, #ADI_ADRV910X_CHANNEL_RF_ENABLED
  *
- * \pre Channel state any of STANDBY, CALIBRATED, PRIMED, RF_ENABLED
- *
- * \param[in]  adrv910x	 Context variable - Pointer to the ADRV910X device settings data structure
+ * \param[in]  adrv910x  Context variable - Pointer to the ADRV910X device data structure
  * \param[in]  port      The port of interest
  * \param[in]  channel   The channel of interest
  * \param[out] carrier   Current carrier configuration
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
-*/
+ */
 int32_t adi_adrv910x_Radio_Carrier_Inspect(adi_adrv910x_Device_t *adrv910x,
                                            adi_common_Port_e port,
                                            adi_common_ChannelNumber_e channel,
                                            adi_adrv910x_Carrier_t *carrier);
-	
+
 /**
  * \brief Configure how the specified channel is enabled
  *
@@ -153,11 +146,9 @@ int32_t adi_adrv910x_Radio_Carrier_Inspect(adi_adrv910x_Device_t *adrv910x,
  * dedicated input pins to the ADRV910X device.
  *
  * \note Message type: \ref timing_direct "Direct register access"
+ * \pre This function should be called after initialization and loading the stream processor.
  *
- * \pre This function should be called after initialization and loading the stream
- * processor.
- *
- * \param[in] adrv910x  Context variable - Pointer to the ADRV910X device settings data structure
+ * \param[in] adrv910x  Context variable - Pointer to the ADRV910X device data structure
  * \param[in] port      The port that the channel refers to
  * \param[in] channel   The channel of the specified port to prime
  * \param[in] mode      The desired enable mode
@@ -173,13 +164,11 @@ int32_t adi_adrv910x_Radio_ChannelEnableMode_Set(adi_adrv910x_Device_t *adrv910x
  * \brief Read the current enable mode for the specified channel
  *
  * \note Message type: \ref timing_direct "Direct register access"
+ * \pre This function should be called after initialization and loading the stream processor.
  *
- * \pre This function should be called after initialization and loading the stream
- * processor.
- *
- * \param[in] adrv910x  Context variable - Pointer to the ADRV910X device settings data structure
- * \param[in] port      The port that the channel refers to
- * \param[in] channel   The channel of the specified port to prime
+ * \param[in]  adrv910x  Context variable - Pointer to the ADRV910X device data structure
+ * \param[in]  port      The port that the channel refers to
+ * \param[in]  channel   The channel of the specified port to prime
  * \param[out] mode      The current enable mode
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
@@ -188,7 +177,7 @@ int32_t adi_adrv910x_Radio_ChannelEnableMode_Get(adi_adrv910x_Device_t *adrv910x
                                                  adi_common_Port_e port,
                                                  adi_common_ChannelNumber_e channel,
                                                  adi_adrv910x_ChannelEnableMode_e *mode);
-	
+
 /**
  * \brief Prime the specified channel
  *
@@ -196,7 +185,7 @@ int32_t adi_adrv910x_Radio_ChannelEnableMode_Get(adi_adrv910x_Device_t *adrv910x
  *
  * \note Message type: \ref timing_mailbox "Mailbox command"
  *
- * \param[in] adrv910x  Context variable - Pointer to the ADRV910X device data structure containing settings
+ * \param[in] adrv910x  Context variable - Pointer to the ADRV910X device data structure
  * \param[in] port      The port that the channel refers to
  * \param[in] channel   The channel of the specified port to prime
  * \param[in] prime     Whether to prime (true) or unprime (false) the channel
@@ -207,7 +196,7 @@ int32_t adi_adrv910x_Radio_Channel_Prime(adi_adrv910x_Device_t *adrv910x,
                                          adi_common_Port_e port,
                                          adi_common_ChannelNumber_e channel,
                                          bool prime);
-	
+
 /**
  * \brief Prime the specified channels
  *
@@ -215,12 +204,11 @@ int32_t adi_adrv910x_Radio_Channel_Prime(adi_adrv910x_Device_t *adrv910x,
  *
  * \note Message type: \ref timing_mailbox "Mailbox command"
  *
- * \param[in] adrv910x      Context variable - Pointer to the ADRV910X device data structure containing settings
- * \param[in] ports         Set of port/channel combinations to prime
- * \param[in] channels      Set of port/channel combinations to prime
- * \param[in] length        Length of ports and channels arrays - the number of port/channel combinations to prime;
- *                          Each index i of ports and channels correspond to a single port/channel combination
- * \param[in] prime         Whether to prime (true) or unprime (false) the channels
+ * \param[in] adrv910x  Context variable - Pointer to the ADRV910X device data structure
+ * \param[in] ports     Set of port/channel combinations to prime
+ * \param[in] channels  Set of port/channel combinations to prime
+ * \param[in] length    Length of ports and channels arrays - the number of port/channel combinations to prime; Each index i of ports and channels correspond to a single port/channel combination
+ * \param[in] prime     Whether to prime (true) or unprime (false) the channels
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
@@ -236,11 +224,9 @@ int32_t adi_adrv910x_Radio_Channels_Prime(adi_adrv910x_Device_t *adrv910x,
  * This function transitions the specified channel from the PRIMED state to the RF ENABLED state.
  *
  * \note Message type: \ref timing_direct "Direct register access"
+ * \pre For this function to have any effect, the channel must be in SPI enable mode. See adi_adrv910x_ChannelEnableModeSet()
  *
- * \pre For this function to have any effect, the channel must be in SPI enable mode.
- *      See adi_adrv910x_ChannelEnableModeSet()
- *
- * \param[in] adrv910x  Context variable - Pointer to the ADRV910X device data structure containing settings
+ * \param[in] adrv910x  Context variable - Pointer to the ADRV910X device data structure
  * \param[in] port      The port that the channel refers to
  * \param[in] channel   The channel of the specified port for which to enable RF operation
  * \param[in] enable    Whether to enable (true) or disable (false) RF for the channel
@@ -251,22 +237,19 @@ int32_t adi_adrv910x_Radio_Channel_EnableRf(adi_adrv910x_Device_t *adrv910x,
                                             adi_common_Port_e port,
                                             adi_common_ChannelNumber_e channel,
                                             bool enable);
-	
+
 /**
  * \brief Enable RF operation for the specified channels if in SPI enable mode
  *
  * This function transitions the specified channels from the PRIMED state to the RF ENABLED state.
  *
  * \note Message type: \ref timing_direct "Direct register access"
+ * \pre For this function to have any effect, the channel must be in SPI enable mode. See adi_adrv910x_ChannelEnableModeSet()
  *
- * \pre For this function to have any effect, the channel must be in SPI enable mode.
- *      See adi_adrv910x_ChannelEnableModeSet()
- *
- * \param[in] adrv910x  Context variable - Pointer to the ADRV910X device data structure containing settings
+ * \param[in] adrv910x  Context variable - Pointer to the ADRV910X device data structure
  * \param[in] ports     Set of port/channel combinations
  * \param[in] channels  Set of port/channel combinations for which to enable RF operation
- * \param[in] length    Length of ports and channels arrays - the number of port/channel combinations to enable;
- *                      Each index i of ports and channels correspond to a single port/channel combination
+ * \param[in] length    Length of ports and channels arrays - the number of port/channel combinations to enable; Each index i of ports and channels correspond to a single port/channel combination
  * \param[in] enable    Whether to enable (true) or disable (false) RF for the channels
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
@@ -276,42 +259,155 @@ int32_t adi_adrv910x_Radio_Channels_EnableRf(adi_adrv910x_Device_t *adrv910x,
                                              adi_common_ChannelNumber_e channels[],
                                              uint32_t length,
                                              bool enable);
-		
-/**
-* \brief Configures the loop filter for the specified PLL
-*
-* \note Message type: \ref timing_mailbox "Mailbox command"
-*
-* \pre Channel state is STANDBY
-*
-* \param[in] adrv910x              Context variable - Pointer to the adrv910x device data structure containing settings
-* \param[in] pll                   The PLL for which to configure the loop filter
-* \param[in] pllLoopFilterConfig   The desired loop filter configuration
-*
-* \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
-*/
-int32_t adi_adrv910x_Radio_PllLoopFilter_Set(adi_adrv910x_Device_t *adrv910x,
-	adi_adrv910x_Pll_e pll,
-	adi_adrv910x_PllLoopFilterCfg_t *pllLoopFilterConfig);
 
 /**
-* \brief Gets the loop filter configuration for the specified PLL
-*
-* \note Message type: \ref timing_mailbox "Mailbox command"
-*
-* \pre Channel state any of STANDBY, CALIBRATED, PRIMED, RF_ENABLED
-*
-* \param[in] adrv910x              Context variable - Pointer to the adrv910x device data structure containing settings
-* \param[in] pll                   The PLL for which to configure the loop filter
-* \param[out] pllLoopFilterConfig   The current loop filter configuration
-*
-* \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
-*/
+ * \brief Configures the loop filter for the specified PLL
+ *
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ * \pre Channel state is #ADI_ADRV910X_CHANNEL_STANDBY
+ *
+ * \param[in] adrv910x             Context variable - Pointer to the ADRV910X device data structure
+ * \param[in] pll                  The PLL for which to configure the loop filter
+ * \param[in] pllLoopFilterConfig  The desired loop filter configuration
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv910x_Radio_PllLoopFilter_Set(adi_adrv910x_Device_t *adrv910x,
+                                             adi_adrv910x_Pll_e pll,
+                                             adi_adrv910x_PllLoopFilterCfg_t *pllLoopFilterConfig);
+
+/**
+ * \brief Gets the loop filter configuration for the specified PLL
+ *
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ * \pre Channel state any of #ADI_ADRV910X_CHANNEL_STANDBY, #ADI_ADRV910X_CHANNEL_CALIBRATED, #ADI_ADRV910X_CHANNEL_PRIMED, #ADI_ADRV910X_CHANNEL_RF_ENABLED
+ *
+ * \param[in]  adrv910x             Context variable - Pointer to the ADRV910X device data structure
+ * \param[in]  pll                  The PLL for which to configure the loop filter
+ * \param[out] pllLoopFilterConfig  The current loop filter configuration
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
 int32_t adi_adrv910x_Radio_PllLoopFilter_Get(adi_adrv910x_Device_t *adrv910x,
-	adi_adrv910x_Pll_e pll,
-	adi_adrv910x_PllLoopFilterCfg_t *pllLoopFilterConfig);
-	
-	
+                                             adi_adrv910x_Pll_e pll,
+                                             adi_adrv910x_PllLoopFilterCfg_t *pllLoopFilterConfig);
+
+/**
+ * \brief Gets the lock status and coarse cap word for the specified PLL
+ *
+ * \note Message type: \ref timing_direct "Direct register access"
+ * \pre Channel state any of #ADI_ADRV910X_CHANNEL_STANDBY, #ADI_ADRV910X_CHANNEL_CALIBRATED, #ADI_ADRV910X_CHANNEL_PRIMED, #ADI_ADRV910X_CHANNEL_RF_ENABLED
+ *
+ * \param[in]  adrv910x      Context variable - Pointer to the ADRV910X device data structure
+ * \param[in]  pll           The PLL for which to check the status
+ * \param[out] extPllStatus  The current external PLL status
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv910x_Radio_ExtPll_Status_Get(adi_adrv910x_Device_t *adrv910x,
+                                             adi_adrv910x_Pll_e pll,
+                                             adi_adrv910x_ExtPll_t *extPllStatus);
+
+/**
+ * \brief Configure channel enable delays for the specified channel
+ *
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ * \pre Channel state any of #ADI_ADRV910X_CHANNEL_STANDBY, #ADI_ADRV910X_CHANNEL_CALIBRATED
+ *
+ * \param[in] adrv910x  Context variable - Pointer to the ADRV910X device data structure
+ * \param[in] port      The port of the channel
+ * \param[in] channel   The channel number
+ * \param[in] delays    The desired delay settings
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv910x_Radio_ChannelEnablementDelays_Configure(adi_adrv910x_Device_t *adrv910x,
+                                                             adi_common_Port_e port,
+                                                             adi_common_ChannelNumber_e channel,
+                                                             adi_adrv910x_ChannelEnablementDelays_t *delays);
+
+/**
+ * \brief Inspect channel enable delays for the specified channel
+ *
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ * \pre Channel state any of #ADI_ADRV910X_CHANNEL_PRIMED, #ADI_ADRV910X_CHANNEL_RF_ENABLED
+ *
+ * \param[in]  adrv910x  Context variable - Pointer to the ADRV910X device data structure
+ * \param[in]  port      The port of the channel
+ * \param[in]  channel   The channel number
+ * \param[out] delays    The desired delay settings
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv910x_Radio_ChannelEnablementDelays_Inspect(adi_adrv910x_Device_t *adrv910x,
+                                                           adi_common_Port_e port,
+                                                           adi_common_ChannelNumber_e channel,
+                                                           adi_adrv910x_ChannelEnablementDelays_t *delays);
+
+/**
+ * \brief Configure the external PLL open loop test mode
+ *
+ * \note Message type: \ref timing_direct "Direct register access"
+ * \pre Channel state only #ADI_ADRV910X_CHANNEL_CALIBRATED
+ *
+ * \param[in] adrv910x                  Context variable - Pointer to the ADRV910X device data structure
+ * \param[in] extPll                    The external PLL to configure
+ * \param[in] testModeEn                Enable or disable the open loop test mode
+ * \param[in] extPllOpenLoopTestConfig  The desired open loop test mode configuration
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv910x_Radio_ExtPllOpenLoopTestMode_Configure(adi_adrv910x_Device_t *adrv910x,
+                                                      adi_adrv910x_ExtPllSel_e extPll,
+                                                      bool testModeEn,
+                                                      adi_adrv910x_ExtPllOpenLoopTestConfig_t *extPllOpenLoopTestConfig);
+
+/**
+ * \brief Inspect the external PLL open loop test mode configuration
+ *
+ * \note Message type: \ref timing_direct "Direct register access"
+ * \pre Channel state any of #ADI_ADRV910X_CHANNEL_CALIBRATED, #ADI_ADRV910X_CHANNEL_PRIMED, #ADI_ADRV910X_CHANNEL_RF_ENABLED
+ *
+ * \param[in]  adrv910x                  Context variable - Pointer to the ADRV910X device data structure
+ * \param[in]  extPll                    The external PLL to inspect
+ * \param[out] extPllOpenLoopTestConfig  The current open loop test mode configuration
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv910x_Radio_ExtPllOpenLoopTestMode_Inspect(adi_adrv910x_Device_t *adrv910x,
+                                                    adi_adrv910x_ExtPllSel_e extPll,
+                                                    adi_adrv910x_ExtPllOpenLoopTestConfig_t *extPllOpenLoopTestConfig);
+
+/**
+ * \brief Selects the VCO band and PLL to be used
+ *
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ * \pre Channel state any of #ADI_ADRV910X_CHANNEL_STANDBY, #ADI_ADRV910X_CHANNEL_CALIBRATED, #ADI_ADRV910X_CHANNEL_PRIMED
+ *
+ * \param[in] adrv910x      Context variable - Pointer to the ADRV910X device data structure
+ * \param[in] powerControl  The current VCO and band selection
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv910x_Radio_ExtVco_PowerControl_Set(adi_adrv910x_Device_t *adrv910x,
+                                                   adi_adrv910x_Radio_ExtVco_PowerControl_t *powerControl);
+
+/**
+ * \brief Gets the VCO and band selection for the specified PLL
+ *
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ * \pre Channel state any of #ADI_ADRV910X_CHANNEL_STANDBY, #ADI_ADRV910X_CHANNEL_CALIBRATED, #ADI_ADRV910X_CHANNEL_PRIMED, #ADI_ADRV910X_CHANNEL_RF_ENABLED
+ *
+ * \param[in]  adrv910x      Context variable - Pointer to the ADRV910X device data structure
+ * \param[in]  pll           The external PLL to query
+ * \param[out] powerControl  The desired VCO and band selection
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv910x_Radio_ExtVco_PowerControl_Get(adi_adrv910x_Device_t *adrv910x,
+                                                   adi_adrv910x_ExtPllSel_e pll,
+                                                   adi_adrv910x_Radio_ExtVco_PowerControl_t *powerControl);
+
 #ifdef __cplusplus
 }
 #endif

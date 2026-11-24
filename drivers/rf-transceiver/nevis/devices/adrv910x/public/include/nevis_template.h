@@ -9,13 +9,15 @@
 deviceProfileBundle_t config_uc_id_0 = {
 		.profile = {
 		.ver = {
-		.major = 12, 
+		.major = 13, 
 		.minor = 0}
 , 
 		.vcoFreq_daHz = 0, 
 		.hsDigFreq_Hz = 0, 
+		.hsDigFreq_PLL_Hz = 0, 
 		.devClock_Hz = 0, 
 		.ps1ArmClkDiv = 0, 
+		.ps1ArmClkDiv_PLL = 0, 
 		.armPowerSavingClkDiv = 0, 
 		.refClockOutEn = 0, 
 		.clkPllPowerLevel = COMPONENT_POWER_LEVEL_LOW, 
@@ -78,13 +80,6 @@ deviceProfileBundle_t config_uc_id_0 = {
 		.rxMaskStrobeEn = 0, 
 		.padding = { 0, 0, 0  }}
 , 
-		.txEnableDelay = {
-		.enableRiseToOnDelay = 0, 
-		.enableRiseToAnalogOnDelay = 0, 
-		.enableFallToOffDelay = 0, 
-		.enableGuardDelay = 0, 
-		.enableHoldDelay = 0}
-, 
 		.LoSelect = LO_ID_START, 
 		.padding = { 0, 0  }}, {
 		.primaryBw_Hz = 0, 
@@ -130,13 +125,6 @@ deviceProfileBundle_t config_uc_id_0 = {
 		.rxMaskStrobeEn = 0, 
 		.padding = { 0, 0, 0  }}
 , 
-		.txEnableDelay = {
-		.enableRiseToOnDelay = 0, 
-		.enableRiseToAnalogOnDelay = 0, 
-		.enableFallToOffDelay = 0, 
-		.enableGuardDelay = 0, 
-		.enableHoldDelay = 0}
-, 
 		.LoSelect = LO_ID_START, 
 		.padding = { 0, 0  }}  }, 
 		.rxConfig = { {
@@ -170,13 +158,6 @@ deviceProfileBundle_t config_uc_id_0 = {
 		.rxMaskStrobeEn = 0, 
 		.padding = { 0, 0, 0  }}
 , 
-		.rxEnableDelay = {
-		.enableRiseToOnDelay = 0, 
-		.enableRiseToAnalogOnDelay = 0, 
-		.enableFallToOffDelay = 0, 
-		.enableGuardDelay = 0, 
-		.enableHoldDelay = 0}
-, 
 		.gainTableType = RX_GAIN_CORRECTION_TABLE, 
 		.LoSelect = LO_ID_START}, {
 		.primaryBw_Hz = 0, 
@@ -209,15 +190,12 @@ deviceProfileBundle_t config_uc_id_0 = {
 		.rxMaskStrobeEn = 0, 
 		.padding = { 0, 0, 0  }}
 , 
-		.rxEnableDelay = {
-		.enableRiseToOnDelay = 0, 
-		.enableRiseToAnalogOnDelay = 0, 
-		.enableFallToOffDelay = 0, 
-		.enableGuardDelay = 0, 
-		.enableHoldDelay = 0}
-, 
 		.gainTableType = RX_GAIN_CORRECTION_TABLE, 
 		.LoSelect = LO_ID_START}  }, 
+		.txAllowedInitCalMask = { 0, 0  }, 
+		.txAllowedTrackingCalMask = { 0, 0  }, 
+		.rxAllowedInitCalMask = { 0, 0  }, 
+		.rxAllowedTrackingCalMask = { 0, 0  }, 
 		.orxConfig = { {
 		.primaryBw_Hz = 0, 
 		.rxOutputRate = 0, 
@@ -249,13 +227,6 @@ deviceProfileBundle_t config_uc_id_0 = {
 		.rxMaskStrobeEn = 0, 
 		.padding = { 0, 0, 0  }}
 , 
-		.rxEnableDelay = {
-		.enableRiseToOnDelay = 0, 
-		.enableRiseToAnalogOnDelay = 0, 
-		.enableFallToOffDelay = 0, 
-		.enableGuardDelay = 0, 
-		.enableHoldDelay = 0}
-, 
 		.gainTableType = RX_GAIN_CORRECTION_TABLE, 
 		.LoSelect = LO_ID_START}, {
 		.primaryBw_Hz = 0, 
@@ -287,13 +258,6 @@ deviceProfileBundle_t config_uc_id_0 = {
 		.ddrEn = 0, 
 		.rxMaskStrobeEn = 0, 
 		.padding = { 0, 0, 0  }}
-, 
-		.rxEnableDelay = {
-		.enableRiseToOnDelay = 0, 
-		.enableRiseToAnalogOnDelay = 0, 
-		.enableFallToOffDelay = 0, 
-		.enableGuardDelay = 0, 
-		.enableHoldDelay = 0}
 , 
 		.gainTableType = RX_GAIN_CORRECTION_TABLE, 
 		.LoSelect = LO_ID_START}  }, 
@@ -328,13 +292,6 @@ deviceProfileBundle_t config_uc_id_0 = {
 		.rxMaskStrobeEn = 0, 
 		.padding = { 0, 0, 0  }}
 , 
-		.rxEnableDelay = {
-		.enableRiseToOnDelay = 0, 
-		.enableRiseToAnalogOnDelay = 0, 
-		.enableFallToOffDelay = 0, 
-		.enableGuardDelay = 0, 
-		.enableHoldDelay = 0}
-, 
 		.gainTableType = RX_GAIN_CORRECTION_TABLE, 
 		.LoSelect = LO_ID_START}, {
 		.primaryBw_Hz = 0, 
@@ -366,13 +323,6 @@ deviceProfileBundle_t config_uc_id_0 = {
 		.ddrEn = 0, 
 		.rxMaskStrobeEn = 0, 
 		.padding = { 0, 0, 0  }}
-, 
-		.rxEnableDelay = {
-		.enableRiseToOnDelay = 0, 
-		.enableRiseToAnalogOnDelay = 0, 
-		.enableFallToOffDelay = 0, 
-		.enableGuardDelay = 0, 
-		.enableHoldDelay = 0}
 , 
 		.gainTableType = RX_GAIN_CORRECTION_TABLE, 
 		.LoSelect = LO_ID_START}  }, 
@@ -407,13 +357,6 @@ deviceProfileBundle_t config_uc_id_0 = {
 		.rxMaskStrobeEn = 0, 
 		.padding = { 0, 0, 0  }}
 , 
-		.rxEnableDelay = {
-		.enableRiseToOnDelay = 0, 
-		.enableRiseToAnalogOnDelay = 0, 
-		.enableFallToOffDelay = 0, 
-		.enableGuardDelay = 0, 
-		.enableHoldDelay = 0}
-, 
 		.gainTableType = RX_GAIN_CORRECTION_TABLE, 
 		.LoSelect = LO_ID_START}, {
 		.primaryBw_Hz = 0, 
@@ -445,13 +388,6 @@ deviceProfileBundle_t config_uc_id_0 = {
 		.ddrEn = 0, 
 		.rxMaskStrobeEn = 0, 
 		.padding = { 0, 0, 0  }}
-, 
-		.rxEnableDelay = {
-		.enableRiseToOnDelay = 0, 
-		.enableRiseToAnalogOnDelay = 0, 
-		.enableFallToOffDelay = 0, 
-		.enableGuardDelay = 0, 
-		.enableHoldDelay = 0}
 , 
 		.gainTableType = RX_GAIN_CORRECTION_TABLE, 
 		.LoSelect = LO_ID_START}  }, 
@@ -970,7 +906,8 @@ deviceProfileBundle_t config_uc_id_0 = {
 		.adcOption = Default, 
 		.gainControl = {
 		.rxNbAgcHighThresholdModeEnable = false, 
-		.padding = { 0, 0, 0  }, 
+		.rxNbApdLegacyMode = false, 
+		.padding = { 0, 0  }, 
 		.agcHighThresholdSettings = {
 		.ApdPeakOverloadThresh = 0, 
 		.ApdPeakUnderloadThresh = 0, 
@@ -1061,7 +998,8 @@ deviceProfileBundle_t config_uc_id_0 = {
 		.adcOption = Default, 
 		.gainControl = {
 		.rxNbAgcHighThresholdModeEnable = false, 
-		.padding = { 0, 0, 0  }, 
+		.rxNbApdLegacyMode = false, 
+		.padding = { 0, 0  }, 
 		.agcHighThresholdSettings = {
 		.ApdPeakOverloadThresh = 0, 
 		.ApdPeakUnderloadThresh = 0, 
@@ -1152,7 +1090,8 @@ deviceProfileBundle_t config_uc_id_0 = {
 		.adcOption = Default, 
 		.gainControl = {
 		.rxNbAgcHighThresholdModeEnable = false, 
-		.padding = { 0, 0, 0  }, 
+		.rxNbApdLegacyMode = false, 
+		.padding = { 0, 0  }, 
 		.agcHighThresholdSettings = {
 		.ApdPeakOverloadThresh = 0, 
 		.ApdPeakUnderloadThresh = 0, 
@@ -1243,7 +1182,8 @@ deviceProfileBundle_t config_uc_id_0 = {
 		.adcOption = Default, 
 		.gainControl = {
 		.rxNbAgcHighThresholdModeEnable = false, 
-		.padding = { 0, 0, 0  }, 
+		.rxNbApdLegacyMode = false, 
+		.padding = { 0, 0  }, 
 		.agcHighThresholdSettings = {
 		.ApdPeakOverloadThresh = 0, 
 		.ApdPeakUnderloadThresh = 0, 
@@ -1259,7 +1199,9 @@ deviceProfileBundle_t config_uc_id_0 = {
 		.fhModeOn = 0, 
 		.numDynamicProfile = 0, 
 		.mcsMode = MCS_DISABLE, 
-		.pllLockTime_us = 0, 
+		.intLOPllLockTime_us = 0, 
+		.extVCO1PllLockTime_us = 0, 
+		.extVCO2PllLockTime_us = 0, 
 		.pllModuli = {
 		.modulus = { 0, 0, 0, 0, 0  }, 
 		.dmModulus = { 0, 0, 0, 0  }}

@@ -90,16 +90,14 @@ typedef enum
 //    LPADC_CONTINUOUS,
 //} ADI_NEVIS_PACK_ENUM lpAdcCalMode_e; //REMOVED
 
-ADI_NEVIS_PACK_START
-typedef struct
+typedef enum
 {
-    uint32_t        enableRiseToOnDelay;        /*!< Delay from T/RX_enable rising  edge until LNA is powered up, 0 to 2^24-1 ARM clock cycles */
-    uint32_t        enableRiseToAnalogOnDelay;  /*!< Delay from T/RX_enable rising  edge until T/RX analog power up procedure commences (this may or may not include PLL retuning), 0 to 2^24-1 ARM clock cycles */
-    uint32_t        enableFallToOffDelay;       /*!< Delay from T/RX_enable falling edge until LNA is powered down, 0 to 2^24-1 ARM clock cycles */
-    uint32_t        enableGuardDelay;           /*!< Delay from T/RX_enable rising  edge until first valid data is received over the air, 0 to 2^24-1 ARM clock cycles */
-    uint32_t        enableHoldDelay;            /*!< Delay from T/RX_enable falling edge until the T/Rx interface is disabled, 0 to 2^24-1 ARM clock cycles */
-} enableDelay_t;
-ADI_NEVIS_PACK_FINISH
+    GPIO_ANALOG_PIN_NIBBLE_UNASSIGNED,
+    GPIO_ANALOG_PIN_NIBBLE_03_00,
+    GPIO_ANALOG_PIN_NIBBLE_07_04,
+    GPIO_ANALOG_PIN_NIBBLE_11_08,
+    GPIO_ANALOG_PIN_NIBBLE_13_12 /* 14 Analog GPIO Pins in Nevis */
+} ADI_NEVIS_PACK_ENUM gpioAnalogPinNibbleSel_e;
 
 ADI_NEVIS_PACK_START
 typedef struct
@@ -108,12 +106,14 @@ typedef struct
     uint8_t         fhModeOn;
     uint8_t         numDynamicProfile;          /*!< Number of Profile. =1 means only one profile and no switching */
     mcsMode_e       mcsMode;                    /*!< MCS mode selection: 0 - Disable, 1 - MCS Only, 2 - MCS + RFPLL phase sync*/
-    uint16_t        pllLockTime_us;             /*!< Required lock time in microseconds for PLLs, based on ref_clk and loop bandwidth */
+    uint16_t        intLOPllLockTime_us;        /*!< Required lock time in microseconds for internal LO PLLs, based on ref_clk and loop bandwidth */
+    uint16_t        extVCO1PllLockTime_us;      /*!< Required lock time in microseconds for external VCO1 PLL*/ 
+    uint16_t        extVCO2PllLockTime_us;      /*!< Required lock time in microseconds for external VCO2 PLL*/
     pllModulus_t    pllModuli;                  /*!< PLL moduli */
     uint16_t        pllPhaseSyncWait_us;        /*!< Worst case phase sync wait time in FH */
     mcsInf_e        mcsInterfaceType;           /*!< NEW  0-Disabled, 1-CMOS, 2-LVDS */
     uint8_t         warmBootOn;                 /*!< Flag to enable Init Cal warmboot: 0 -Disable */    
-    uint8_t         padding[2u];               /*!< Reserved for future feature */
+    uint8_t         padding[2u];                /*!< padding for 32 bit alignment */
 } deviceSysConfig_t;
 ADI_NEVIS_PACK_FINISH
 
@@ -143,7 +143,6 @@ typedef struct
     uint32_t            corner3dB;              /*!< TIA bandwidth */
     componentPowerLevel_e  tiaPower;               /*!< RX TIA Power setting */
     ssiConfig_t         rxSsiConfig;            /*!< RX Serial data interface config */
-    enableDelay_t       rxEnableDelay;          /*!< RX enable delay timing */
     rxGainTableType_e   gainTableType;          /*!< type of gain table loaded during ADRV910X initialization */
     LoId_e              LoSelect;               /*!< The selected LO for this channel */
 } rxConfig_t;
@@ -212,7 +211,6 @@ typedef struct
     txElbConfig_t       txElbConfig;            /*!< External Loopback configuration*/
     uint32_t            freqDev;                /*!< freq dev value in Hz for both FM_IQ and FM_DM.*/
     ssiConfig_t         txSsiConfig;            /*!< TX Serial data interface config */
-    enableDelay_t       txEnableDelay;          /*!< TX enable delay timing */
     LoId_e              LoSelect;               /*!< The selected LO for this channel */
     uint8_t             padding[2u];            /*!< padding for 32 bit alignment */
 } txConfig_t;
@@ -246,11 +244,13 @@ ADI_NEVIS_PACK_FINISH
 ADI_NEVIS_PACK_START
 typedef struct
 {
-    profileVersion_t ver;                  /*!< Version information */
+    profileVersion_t ver;                      /*!< Version information */
     uint32_t         vcoFreq_daHz;             /*!< BBPLL VCO frequency of the system as set by API, in dekaHz */
     uint32_t         hsDigFreq_Hz;             /*!< HS Dig as calc by API */
+    uint32_t         hsDigFreq_PLL_Hz;         /*!< HS Dig as calc by API when CLK PLL is used */
     uint32_t         devClock_Hz;              /*!< reference clock */
-	uint32_t         ps1ArmClkDiv;             /*!< PS1 ARM clock divider */
+	uint32_t         ps1ArmClkDiv;             /*!< PS1 ARM clock divider when REF_CLK is used */
+    uint32_t         ps1ArmClkDiv_PLL;         /*!< PS1 ARM clock divider when CLK PLL is used*/
     uint8_t          armPowerSavingClkDiv;     /*!< ARM power saving clock divider 1/N. (0: Div1 (184MHz); 1: Div2 ... 255: Div256) */
     uint8_t          refClockOutEn;            /*!< reference clock output disable/enable */
     componentPowerLevel_e   clkPllPowerLevel;  /*!< Clock Pll power level */
@@ -277,6 +277,12 @@ typedef struct
     uint8_t          padding[2u];        
     txConfig_t       txConfig[NUM_TX_CHANNELS];  /*!< TX configuration */
     rxConfig_t       rxConfig[NUM_RX_CHANNELS];  /*!< RX configuration */
+
+    uint32_t         txAllowedInitCalMask[NUM_TX_CHANNELS];       /*!< Allowed Init Cal mask for tx channels */
+    uint32_t         txAllowedTrackingCalMask[NUM_TX_CHANNELS];   /*!< Allowed Tracking Cal mask for tx channels */
+    uint32_t         rxAllowedInitCalMask[NUM_RX_CHANNELS];       /*!< Allowed Init Cal mask for rx channels */
+    uint32_t         rxAllowedTrackingCalMask[NUM_RX_CHANNELS];   /*!< Allowed Tracking Cal mask for rx channels */
+    
     rxConfig_t       orxConfig[NUM_RX_CHANNELS]; /*!< ORX configuration */
     rxConfig_t       ilbConfig[NUM_RX_CHANNELS]; /*!< Internal Loopback configuration */
     rxConfig_t       elbConfig[NUM_RX_CHANNELS]; /*!< External Loopback configuration */

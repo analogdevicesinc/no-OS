@@ -2,13 +2,10 @@
  * \file
  * \brief Contains ADRV910X ARM data types
  *
- * ADRV910X API Version: $ADI_ADRV910X_API_VERSION$
- */
-
- /**
- * Copyright 2015 - 2018 Analog Devices Inc.
- * Released under the ADRV910X API license, for more information
- * see the "LICENSE.txt" file in this zip file.
+ * Copyright (c) 2015 - 2026 Analog Devices, Inc. All Rights Reserved.
+ * This software is proprietary to Analog Devices, Inc. and its licensors.
+ * Released under the ADRV910X API license.
+ * For more information, see the "LICENSE.txt" file.
  */
 
 #ifndef _ADI_ADRV910X_ARM_TYPES_H_
@@ -18,11 +15,17 @@
 #include <linux/types.h>
 #else
 #include <stdint.h>
+#include <stdbool.h>
 #endif
 
+#include "adi_adrv910x_types.h"
+#include "adi_common_types.h"
+#include "device_profile_pfir_buffer_t.h"
+#include "device_profile_top_t.h"
+
 /**
-* \brief Enumerated list of ARM System States.
-*/
+ * \brief Enumerated list of ARM System States.
+ */
 typedef enum adi_adrv910x_ArmSystemStates
 {
     ADI_ADRV910X_ARM_SYSTEM_POWERUP,         /*!< Powerup State */
@@ -43,31 +46,31 @@ typedef enum adi_adrv910x_ArmMcsStates
 } adi_adrv910x_ArmMcsStates_e;
 
 /**
-* \brief Enumerated list of ARM bootup states.
-*/
+ * \brief Enumerated list of ARM bootup states.
+ */
 typedef enum adi_adrv910x_ArmBootStates
 {
-    ADI_ADRV910X_ARM_BOOT_POWERUP                           = 0,    /*!< Used to put API in wait for ARM state */
-    ADI_ADRV910X_ARM_BOOT_READY                             = 1,    /*!< ARM booted with no failure */
-    ADI_ADRV910X_ARM_BOOT_FW_CHECKSUM_ERR                   = 2,    /*!< ARM firmware checksum error */
-    ADI_ADRV910X_ARM_BOOT_EFUSE_DATA_ERR                    = 3,    /*!< Efuse data error */
-    ADI_ADRV910X_ARM_BOOT_STATE_DATAMEM_ERR                 = 4,    /*!< ARM data memory error */
-    ADI_ADRV910X_ARM_BOOT_DEVICE_PROFILE_CHECKSUM_ERR       = 5,    /*!< Device profile checksum error */
-    ADI_ADRV910X_ARM_BOOT_CLKGEN_ERR                        = 6,    /*!< Bootup clkgen setup error */
-    ADI_ADRV910X_ARM_BOOT_CLKSSI_ERR                        = 7,    /*!< Bootup SSI setup error */
-    ADI_ADRV910X_ARM_BOOT_DEVICE_PROFILE_INIT_ERR           = 8,    /*!< Device profile init setup error */
-    ADI_ADRV910X_ARM_BOOT_JTAG_BUILD_STATUS_READY           = 9,    /*!< JTAG build status ready indication */
-    ADI_ADRV910X_ARM_BOOT_CLKLOGEN_ERR                      = 10,   /*!< Bootup clock LOGEN error */
-    ADI_ADRV910X_ARM_BOOT_RXQECHW_ERR                       = 11,   /*!< Error initializing RxQEC hardware */
-    ADI_ADRV910X_ARM_BOOT_HM_TIMER_ERR                      = 12,   /*!< Failed to create health monitor timers */
-    ADI_ADRV910X_ARM_BOOT_ADC_RCAL_ERR                      = 13,   /*!< ADC RCAL error */
-    ADI_ADRV910X_ARM_BOOT_STATE_ADC_CCAL_ERR                = 14,   /*!< ADC CCAL error */
-    ADI_ADRV910X_ARM_BOOT_STATE_STREAM_RUNTIME_ERR          = 15,   /*!< Stream Run error */
+    ADI_ADRV910X_ARM_BOOT_POWERUP = 0,                     /*!< Used to put API in wait for ARM state */
+    ADI_ADRV910X_ARM_BOOT_READY = 1,                       /*!< ARM booted with no failure */
+    ADI_ADRV910X_ARM_BOOT_FW_CHECKSUM_ERR = 2,             /*!< ARM firmware checksum error */
+    ADI_ADRV910X_ARM_BOOT_EFUSE_DATA_ERR = 3,              /*!< Efuse data error */
+    ADI_ADRV910X_ARM_BOOT_STATE_DATAMEM_ERR = 4,           /*!< ARM data memory error */
+    ADI_ADRV910X_ARM_BOOT_DEVICE_PROFILE_CHECKSUM_ERR = 5, /*!< Device profile checksum error */
+    ADI_ADRV910X_ARM_BOOT_CLKGEN_ERR = 6,                  /*!< Bootup clkgen setup error */
+    ADI_ADRV910X_ARM_BOOT_CLKSSI_ERR = 7,                  /*!< Bootup SSI setup error */
+    ADI_ADRV910X_ARM_BOOT_DEVICE_PROFILE_INIT_ERR = 8,     /*!< Device profile init setup error */
+    ADI_ADRV910X_ARM_BOOT_JTAG_BUILD_STATUS_READY = 9,     /*!< JTAG build status ready indication */
+    ADI_ADRV910X_ARM_BOOT_CLKLOGEN_ERR = 10,               /*!< Bootup clock LOGEN error */
+    ADI_ADRV910X_ARM_BOOT_RXQECHW_ERR = 11,                /*!< Error initializing RxQEC hardware */
+    ADI_ADRV910X_ARM_BOOT_HM_TIMER_ERR = 12,               /*!< Failed to create health monitor timers */
+    ADI_ADRV910X_ARM_BOOT_ADC_RCAL_ERR = 13,               /*!< ADC RCAL error */
+    ADI_ADRV910X_ARM_BOOT_STATE_ADC_CCAL_ERR = 14,         /*!< ADC CCAL error */
+    ADI_ADRV910X_ARM_BOOT_STATE_STREAM_RUNTIME_ERR = 15    /*!< Stream Run error */
 } adi_adrv910x_ArmBootStates_e;
 
 /**
-* \brief Enumerated list of ARM image build options.
-*/
+ * \brief Enumerated list of ARM image build options.
+ */
 typedef enum adi_adrv910x_ArmBuildType
 {
     ADI_ADRV910X_ARMBUILD_RELEASE = 0,
@@ -88,17 +91,16 @@ typedef enum adi_adrv910x_ArmClockType
  * \brief ARM memory SPI write mode
  */
 typedef enum adi_adrv910x_ArmSingleSpiWriteMode
-{	
-    ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4, /*!< Write 4 Bytes to ARM Memory. A SPI Operation (CSB-Low-to-High, 1R/W, 15 ADDR and 8 DATA bits) for each byte */
-    ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_CACHED_BYTES_N, /*!< Cache SPI bytes before sending to SPI buffer. Each SPI Operation (CSB-Low-to-High) writes up to N bytes (1R/W, 15 ADDR and 8 DATA bits). N is dictated by platform SPI Buffer size */
-    ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STREAMING_BYTES_4,   /*!< Each SPI Operation (CSB-Low-to-High) writes 4 data bytes, Streaming 4 bytes at a time (1R/W, 15 ADDR and 32 DATA bits) */
-	ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STREAMING_BYTES_1,   /*!< Each SPI Operation (CSB-Low-to-High) writes N data bytes, Streaming 1 byte at a time (1R/W, 15 ADDR and N*8 DATA bits) N is dictated by platform SPI Buffer size */ 
-	
-}adi_adrv910x_ArmSingleSpiWriteMode_e;
+{
+    ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4,  /*!< Write 4 Bytes to ARM Memory. A SPI Operation (CSB-Low-to-High, 1R/W, 15 ADDR and 8 DATA bits) for each byte */
+    ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_CACHED_BYTES_N,    /*!< Cache SPI bytes before sending to SPI buffer. Each SPI Operation (CSB-Low-to-High) writes up to N bytes (1R/W, 15 ADDR and 8 DATA bits). N is dictated by platform SPI Buffer size */
+    ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STREAMING_BYTES_4, /*!< Each SPI Operation (CSB-Low-to-High) writes 4 data bytes, Streaming 4 bytes at a time (1R/W, 15 ADDR and 32 DATA bits) */
+    ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STREAMING_BYTES_1  /*!< Each SPI Operation (CSB-Low-to-High) writes N data bytes, Streaming 1 byte at a time (1R/W, 15 ADDR and N*8 DATA bits) N is dictated by platform SPI Buffer size */
+} adi_adrv910x_ArmSingleSpiWriteMode_e;
 
 /**
-* \brief Data structure to hold ARM version information
-*/
+ * \brief Data structure to hold ARM version information
+ */
 typedef struct adi_adrv910x_ArmVersion
 {
     uint8_t majorVer;
@@ -109,8 +111,8 @@ typedef struct adi_adrv910x_ArmVersion
 } adi_adrv910x_ArmVersion_t;
 
 /**
-* \brief Data structure to hold ARM image build and runtime calculated checksums.
-*/
+ * \brief Data structure to hold ARM image build and runtime calculated checksums.
+ */
 typedef struct adi_adrv910x_Checksum
 {
     uint32_t buildChecksum;
@@ -118,8 +120,8 @@ typedef struct adi_adrv910x_Checksum
 } adi_adrv910x_Checksum_t;
 
 /**
-* \brief Data structure to hold a table of additional ARM checksums
-*/
+ * \brief Data structure to hold a table of additional ARM checksums
+ */
 typedef struct adi_adrv910x_ChecksumTable
 {
     adi_adrv910x_Checksum_t fwCheckSums;
@@ -134,8 +136,8 @@ typedef struct adi_adrv910x_ChecksumTable
  */
 typedef struct adi_adrv910x_Profiles
 {
-	deviceProfile_t profilePS1;
-	deviceProfilePS2_t profilePS2;
+    deviceProfile_t profilePS1;
+    deviceProfilePS2_t profilePS2;
 } adi_adrv910x_Profiles_t;
 
 #endif /* _ADI_ADRV910X_ARM_TYPES_H_ */

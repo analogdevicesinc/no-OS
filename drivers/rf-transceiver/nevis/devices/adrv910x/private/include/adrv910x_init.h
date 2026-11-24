@@ -46,6 +46,18 @@ extern "C" {
 #else
 #define ADRV910X_SPIDMAINFO(s,a,b,c)
 #endif
+	
+//#define ADRV910X_INIT_WARNING 1
+#ifdef ADRV910X_INIT_WARNING
+#include <stdio.h>
+#define ADRV910X_WARNING_INFO(x) printf("WARNING: %s ******************************* \n", (x));
+#else
+#define ADRV910X_WARNING_INFO(x)
+#endif
+
+#ifdef NEVIS_PS2
+#define ADI_PS1_REG_UNLOCK_KEY 0xABABFEFEU
+#endif
 
 #define ADRV910X_SPIWRITEBYTESDMA(devicePtr, text, addr, addrArray, dataArray, count) \
 {\
@@ -90,8 +102,8 @@ extern "C" {
 #define ADRV910X_SPIINFO(s,a,b,c) printf((s),(a),(b),(c));
 #define ADRV910X_SPI_FIELD_INFO(s,a,b,c,d) printf((s),(a),(b),(c), (d));
 #else
-#define ADRV910X_SPIINFO(s,a,b,c) printf(s, a, b, c)
-#define ADRV910X_SPI_FIELD_INFO(s,a,b,c,d) printf(s,a,b,c,d)
+#define ADRV910X_SPIINFO(s,a,b,c)
+#define ADRV910X_SPI_FIELD_INFO(s,a,b,c,d)
 #endif
 
 #define ADRV910X_SPIINFO_NO(s,a,b,c)
@@ -134,6 +146,8 @@ recoveryAction = adi_adrv910x_spi_Field_Read(devicePtr, addr, (fieldVal), mask, 
 ADI_ERROR_RETURN(devicePtr->common.error.newAction); \
 ADRV910X_SPI_FIELD_INFO("MESSAGE: READ: %30s: addr=0x%04x, data=0x%02x \n", (text), (addr), (fieldVal), (startBit)); \
 }
+
+int32_t adrv910x_ProfilesVerify(adi_adrv910x_Device_t *device, deviceProfile_t *profile);
 	
 /**
 * \brief Set various Analog registers in the device

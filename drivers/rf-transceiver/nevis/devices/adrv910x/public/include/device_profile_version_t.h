@@ -22,10 +22,10 @@
  *  @{
  */
 
-#define NEVIS_PROFILE_VERSION_MAJOR         12             /*!< Major */
+#define NEVIS_PROFILE_VERSION_MAJOR         13             /*!< Major */
 #define NEVIS_PROFILE_VERSION_MINOR         0             /*!< Minor */
 
-#define  PROFILETYPES_VERSION "12.0.4"
+#define  PROFILETYPES_VERSION "13.0.5"
 
 /* Profile version structure */
 ADI_NEVIS_PACK_START

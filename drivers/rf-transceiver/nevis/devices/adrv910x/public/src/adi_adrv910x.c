@@ -6,14 +6,17 @@
  * This software is proprietary to Analog Devices, Inc. and its licensors.
  */
 
+#include "adrv910x_arm.h"
 #include "adrv910x_init.h"
 #include "adrv910x_reg_addr_macros.h"
 #include "adi_adrv910x.h"
 #include "adi_adrv910x_hal.h"
 #include "adi_adrv910x_user.h"
 #include "adi_adrv910x_version.h"
+#include "adrv910x_arm_macros.h"
+#include "adi_adrv910x_arm.h"
+#include "adi_adrv910x_arm_types.h"
 
-#ifndef NEVIS_PS2
 
 int32_t adi_adrv910x_HwOpen(adi_adrv910x_Device_t *device, adi_adrv910x_SpiSettings_t *spiSettings)
 {
@@ -21,8 +24,10 @@ int32_t adi_adrv910x_HwOpen(adi_adrv910x_Device_t *device, adi_adrv910x_SpiSetti
 
     ADI_EXPECT(adi_adrv910x_HwOpenNoReset, device, spiSettings);
 
+    #ifndef NEVIS_PS2
     /* Toggle RESETB pin, Configure and Verify SPI */
     ADI_MSG_EXPECT("Failed to reset device and set SPI Config", adi_adrv910x_HwReset, device);
+    #endif /* NEVIS_PS2 */
 
     ADI_API_RETURN(device);
 }
@@ -67,6 +72,7 @@ int32_t adi_adrv910x_HwClose(adi_adrv910x_Device_t *device)
     ADI_API_RETURN(device);
 }
 
+#ifndef NEVIS_PS2
 int32_t adi_adrv910x_HwReset(adi_adrv910x_Device_t *device)
 {
     int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
@@ -142,7 +148,7 @@ int32_t adi_adrv910x_HwReset(adi_adrv910x_Device_t *device)
 int32_t adi_adrv910x_Shutdown(adi_adrv910x_Device_t *device)
 {
     ADI_NULL_DEVICE_PTR_RETURN(device);
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
     ADI_MSG_EXPECT("Failed to reset device", adi_adrv910x_HwReset, device);
 
     ADI_MUTEX_RELEASE(device);
@@ -178,7 +184,7 @@ int32_t adi_adrv910x_spi_Configure(adi_adrv910x_Device_t *device, adi_adrv910x_S
     {
         spiConfigB |= ADRV910X_CONFIG_B_SINGLE_INSTRUCTION;
     }
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
     /* Force single instruction mode */
     ADRV910X_SPIWRITEBYTE(device, "SPI_INTERFACE_CONFIG_B", ADRV910X_ADDR_SPI_INTERFACE_CONFIG_B, spiConfigB);
 
@@ -225,7 +231,7 @@ int32_t adi_adrv910x_spi_Inspect(adi_adrv910x_Device_t *device, adi_adrv910x_Spi
 
     ADI_ENTRY_PTR_EXPECT(device, spi);
 
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
     ADRV910X_SPIREADBYTE(device, "SPI_INTERFACE_CONFIG_A", ADRV910X_ADDR_SPI_INTERFACE_CONFIG_A, &spiConfigA);
 
     /* core.spi_interface_config_A */
@@ -285,7 +291,7 @@ int32_t adi_adrv910x_spi_Verify(adi_adrv910x_Device_t *device)
 
     ADI_ENTRY_EXPECT(device);
 
-	ADI_MUTEX_AQUIRE(device);
+	ADI_MUTEX_ACQUIRE(device);
     /* Check SPI read - VENDOR_ID_0 */
     ADRV910X_SPIREADBYTE(device, "VENDOR_ID_0", ADRV910X_ADDR_VENDOR_ID_0, &spiReg);
 #if ADI_ADRV910X_SW_TEST > 0
@@ -398,6 +404,53 @@ static uint32_t number_extract(const char *src, uint8_t *location)
 
 static void cacheInitInfo(adi_adrv910x_Device_t *adrv910x, deviceProfile_t *profile)
 {
+	uint32_t hsDigFreq_Hz;
+	uint32_t armClkDiv;
+
+	/* Cache clock values for API functions that need timing calculations.
+	 * This function is reached from both init entry points: adi_adrv910x_InitDevPS2()
+	 * (PS2 as slave core, which never runs adrv910x_InitAnalog()) and
+	 * adi_adrv910x_InitAnalog() (host, or PS2 acting as master core and running the
+	 * full PS1 bring-up sequence). The clkGenDis selection is therefore made here
+	 * rather than left to adrv910x_InitAnalog() alone. */
+	if (profile->clkGenDis == 0) /* clkGenDisable = false: hsDigClk comes from the clock PLL */
+	{
+		hsDigFreq_Hz = profile->hsDigFreq_PLL_Hz;
+		armClkDiv = profile->ps1ArmClkDiv_PLL;
+	}
+	else /* clkGenDisable = true: hsDigClk is derived from the device clock */
+	{
+		hsDigFreq_Hz = profile->hsDigFreq_Hz;
+		armClkDiv = profile->ps1ArmClkDiv;
+	}
+
+	/* A bring-up profile need not describe the clock tree - when PS2 is master it
+	 * calls adi_adrv910x_InitAnalog() with a bypass profile and supplies the
+	 * operational clocks later. Keep any value already cached rather than replacing
+	 * it with an unusable zero: consumers such as adi_adrv910x_AuxAdc_Voltage_Get()
+	 * divide by these. */
+	if (profile->devClock_Hz != 0)
+	{
+		adrv910x->devStateInfo.devClock_Hz = profile->devClock_Hz;
+	}
+	if (hsDigFreq_Hz != 0)
+	{
+		adrv910x->devStateInfo.hsDigFreq_Hz = hsDigFreq_Hz;
+	}
+	if (armClkDiv != 0)
+	{
+		adrv910x->devStateInfo.ps1ArmClkDiv = armClkDiv;
+	}
+
+	/* Cache duplex mode for runtime validation */
+
+
+
+	adrv910x->devStateInfo.duplexMode = (uint32_t)profile->sysConfig.duplexMode;
+
+
+
+
 
 	adrv910x->devStateInfo.rxOutputSignaling[0] = profile->rxConfig[0].outputSignalingSel;
 	adrv910x->devStateInfo.rxOutputSignaling[1] = profile->rxConfig[1].outputSignalingSel;
@@ -472,7 +525,6 @@ int32_t adi_adrv910x_PartNumber_Get(adi_adrv910x_Device_t *device, adi_adrv910x_
     ADI_API_RETURN(device);
 }
 
-#ifndef NEVIS_PS2
 
 int32_t adi_adrv910x_InitAnalog(adi_adrv910x_Device_t *device,
                                 deviceProfile_t *profile,
@@ -483,11 +535,19 @@ int32_t adi_adrv910x_InitAnalog(adi_adrv910x_Device_t *device,
 	ADI_ENTRY_PTR_EXPECT(device, profile);
 
 #ifdef API_MUTEX
+#ifndef NEVIS_PS2
 	extern int adi_bbic_sem_lock(void *device);
 	extern int adi_bbic_sem_unlock(void *device);
 	device->common.error.locked = 0;
 	device->common.error.lock = adi_bbic_sem_lock;
 	device->common.error.unlock = adi_bbic_sem_unlock;
+#else
+    extern int adi_ps2_sem_lock(void* device);
+    extern int adi_ps2_sem_unlock(void* device);
+    device->common.error.locked = 0;
+    device->common.error.lock = adi_ps2_sem_lock;
+    device->common.error.unlock = adi_ps2_sem_unlock;
+#endif /* NEVIS_PS2 */
 #endif /* API_MUTEX */
 	
 	device->devStateInfo = devStateInfoClear;
@@ -504,35 +564,26 @@ int32_t adi_adrv910x_InitAnalog(adi_adrv910x_Device_t *device,
     ADI_API_RETURN(device);
 }
 
-#else /* NEVIS_PS2 */
 
-int32_t adi_adrv910x_InitDevPS2(adi_adrv910x_Device_t *device,
-                                deviceProfile_t *profile, halTimer timerCallback)
+#ifdef NEVIS_PS2 
+/*Reserved regions in PS2 data memory, provided by the firmware (adi_system_init.c). */
+extern deviceProfilePS2_t deviceProfile;
+extern adi_adrv910x_Device_t devContext;
+
+int32_t adi_adrv910x_InitDevPS2(adi_adrv910x_Device_t **device,
+                                deviceProfilePS2_t **profile)
 {
   int32_t ret = 0;
+
+
+  if (device != NULL)
+  {
+    *device = &devContext;
+  }
   if (profile != NULL)
   {
-    ret = adrv910x_ProfilesVerify(device, profile);
-    if (ret == 0)
-    {
-        cacheInitInfo(device, profile);
-    }
+    *profile = (deviceProfilePS2_t *) &deviceProfile;
   }
-  
-  device->devStateInfo.devState = (adi_adrv910x_ApiStates_e)(device->devStateInfo.devState | ADI_ADRV910X_STATE_ANA_INITIALIZED);
-
-  if (timerCallback != NULL)
-  {
-    adi_common_hal_Wait_us = timerCallback;
-  }
-
-#ifdef API_MUTEX
-  extern int adi_ps2_sem_lock(void* device);
-  extern int adi_ps2_sem_unlock(void* device);
-  device->common.error.locked = 0;
-  device->common.error.lock = adi_ps2_sem_lock;
-  device->common.error.unlock = adi_ps2_sem_unlock;
-#endif /* API_MUTEX */
   return ret;
 }
 
@@ -541,9 +592,47 @@ int32_t adi_adrv910x_InitDevPS2(adi_adrv910x_Device_t *device,
 int32_t adi_adrv910x_SetDeviceClockOutDivider(adi_adrv910x_Device_t *device,
 	adi_adrv910x_DeviceClockDivisor_e adrv910xDeviceClockOutDivisor)
 {
-    ADI_MUTEX_AQUIRE(device);
+    ADI_MUTEX_ACQUIRE(device);
 	ADI_EXPECT(adrv910x_SetDeviceClockOutDivider, device, adrv910xDeviceClockOutDivisor);
 
 	ADI_MUTEX_RELEASE(device);
     ADI_API_RETURN(device);
+}
+
+int32_t adi_adrv910x_TempSensor_Get(adi_adrv910x_Device_t *device, int16_t *temperature)
+{
+	uint8_t armReadBack[4] = { 0 };
+	uint8_t extData[5] = { 0 };
+	uint32_t offset = 0;
+
+	/* Check device pointer and temperature pointer are not null */
+	ADI_ENTRY_PTR_EXPECT(device, temperature);
+
+	extData[0] = 0;
+	extData[1] = ADRV910X_ARM_HIGHPRIORITY_GET_TEMP_SENSOR;
+
+	ADI_MUTEX_ACQUIRE(device);
+	
+	ADI_EXPECT(adi_adrv910x_arm_Cmd_Write, device, (uint8_t)ADRV910X_ARM_HIGHPRIORITY_OPCODE, &extData[0], sizeof(extData));
+
+	/* Wait for command to finish executing */
+	ADRV910X_ARM_CMD_STATUS_WAIT_EXPECT(device,
+		(uint8_t)ADRV910X_ARM_HIGHPRIORITY_OPCODE,
+		extData[1],
+		(uint32_t)ADI_ADRV910X_DEFAULT_TIMEOUT_US,
+		(uint32_t)ADI_ADRV910X_DEFAULT_INTERVAL_US);
+
+	/* read ARM memory to get Temperature sensor data */
+	ADI_EXPECT(adi_adrv910x_arm_Memory_Read,
+		device,
+		ADRV910X_ADDR_ARM_HIGHPRIORITY_MAILBOX_SET,
+		&armReadBack[0],
+		sizeof(armReadBack),
+		false,
+		ADI_PS1);
+
+	adrv910x_ParseTwoBytes(&offset, armReadBack, temperature);
+
+	ADI_MUTEX_RELEASE(device);
+	ADI_API_RETURN(device);
 }

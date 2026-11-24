@@ -20,6 +20,10 @@
 #include "adrv910x_arm_macros.h"
 #include "adrv910x_bf.h"
 
+#ifdef NEVIS_PS2
+#include "adi_ps1bridge.h"
+#endif /* NEVIS_PS2 */
+
 static __maybe_unused int32_t adrv910x_RefClockEnable(adi_adrv910x_Device_t *device)
 {
 	// Write Bitfield: (ref_clk_adcdac_pd) to 0
@@ -218,7 +222,7 @@ int32_t adrv910x_ProfilesVerify(adi_adrv910x_Device_t *device, deviceProfile_t *
 	ADI_API_RETURN(device);
 }
 
-static __maybe_unused int32_t __maybe_unused adrv910x_InitAnalog_Validate(adi_adrv910x_Device_t *device,
+static __maybe_unused int32_t adrv910x_InitAnalog_Validate(adi_adrv910x_Device_t *device,
                                                            deviceProfile_t *profile,
                                                            adi_adrv910x_DeviceClockDivisor_e adrv910xDeviceClockOutDivisor)
 {
@@ -276,9 +280,19 @@ int32_t adrv910x_InitAnalog(adi_adrv910x_Device_t *device,
 		ADRV910X_ADDR_PGCHANNEL1_POWER_CTRL,
 		(0xdd));
 
-	if (profile->ps2En != 0) 
+#ifdef NEVIS_PS2
+	int32_t retVal = (int32_t)adi_adrv910x_ps2SPI_Reset();
+	if (retVal != 0)
 	{
-		// PS2 Power Up
+		ADI_ERROR_REPORT(&device->common, ADI_COMMON_ERRSRC_API, ADI_COMMON_ERR_API_FAIL, 0, NULL, "Error while resetting ps2SPI!");
+		ADI_API_RETURN(device);
+	}
+	uint32_t temp = ADI_PS1_REG_UNLOCK_KEY;
+	adi_ps1bridge_WordsWrite(&temp, (void*)ADDR_SYS2_INT_CTRL1_INT_CONTROLLER1_INT1_KEY_ADDR, 1, 1);
+#else
+	if (profile->ps2En != 0)
+	{
+		/* PS2 Power Up */
 		ADRV910X_SPIWRITEBYTE(device,
 			"PGSYS2_POWER_CTRL",
 			ADRV910X_ADDR_PGSYS2_POWER_CTRL,
@@ -298,12 +312,13 @@ int32_t adrv910x_InitAnalog(adi_adrv910x_Device_t *device,
 	}
 	
 	
+#endif /* NEVIS_PS2 */ 
 	// TODO: This step needs to be remvoed when STREAM PROCESSORS are in use
 	// Disable clocks to STREAM PROCESSORS
 	ADRV910X_SPIWRITEBYTE(device,
 		"STREAM_PROC_CLK_EN",
 		ADRV910X_ADDR_STREAM_PROC_CLK_EN,
-		(0x00)); // all off
+		(0x1F)); // all on
 	
 	sramAssignmentReg = 0; /* all six banks to PS1 */
 	ADRV910X_SPIWRITEBYTE(device, "SYS2_MEM_SEL_BYTE0", ADRV910X_ADDR_SYS2_MEM_SEL_BYTE0, sramAssignmentReg);
@@ -323,12 +338,41 @@ int32_t adrv910x_InitAnalog(adi_adrv910x_Device_t *device,
 		ADI_EXPECT(adrv910x_NevisMonitorRegmapCore_RefClkIntDevclkDivideRatio_Set, device, divider);
 	}
 	
+	/* Update the device clock value and hsDigClk in the device structure */
+	device->devStateInfo.devClock_Hz = profile->devClock_Hz;
+	if (profile->clkGenDis == 0) /* clkGenDisable = false */
+	{
+		device->devStateInfo.hsDigFreq_Hz = profile->hsDigFreq_PLL_Hz;
+		device->devStateInfo.ps1ArmClkDiv = profile->ps1ArmClkDiv_PLL;
+	}
+	else /* clkGenDisable = true */
+	{
+		device->devStateInfo.hsDigFreq_Hz = profile->hsDigFreq_Hz;	
+		device->devStateInfo.ps1ArmClkDiv = profile->ps1ArmClkDiv;
+	}
+	
 	ADI_EXPECT(adrv910x_SetDeviceClockOutDivider, device, adrv910xDeviceClockOutDivisor);
 	
 	/* TODO: re-enable when MCS required */
 	//ADI_EXPECT(adrv910x_MCSInternalRestartRefClk, device);
 	
 	ADI_EXPECT(adrv910x_ProfilesVerify, device, profile);
+	
+	/*copy init cal and tracking cal mask to dev info*/
+	device->devStateInfo.txAllowedInitCalMask[0] = profile->txAllowedInitCalMask[0];
+	device->devStateInfo.txAllowedInitCalMask[1] = profile->txAllowedInitCalMask[1];
+	device->devStateInfo.rxAllowedInitCalMask[0] = profile->rxAllowedInitCalMask[0];
+	device->devStateInfo.rxAllowedInitCalMask[1] = profile->rxAllowedInitCalMask[1];
+	device->devStateInfo.txAllowedTrackingCalMask[0] = profile->txAllowedTrackingCalMask[0];
+	device->devStateInfo.txAllowedTrackingCalMask[1] = profile->txAllowedTrackingCalMask[1];
+	device->devStateInfo.rxAllowedTrackingCalMask[0] = profile->rxAllowedTrackingCalMask[0];
+	device->devStateInfo.rxAllowedTrackingCalMask[1] = profile->rxAllowedTrackingCalMask[1];
+
+	/* A new profile invalidates whatever the user had previously enabled */
+	device->devStateInfo.chanEnabledInitCalMask[0] = 0u;
+	device->devStateInfo.chanEnabledInitCalMask[1] = 0u;
+	device->devStateInfo.chanEnabledTrackingCalMask[0] = 0u;
+	device->devStateInfo.chanEnabledTrackingCalMask[1] = 0u;
 	
 	/* set ahb bridge resters to HSD/Ref Clock */
 	ADI_EXPECT(adrv910x_NevisMonitorRegmapCore_AhbSpiBridgeEn_Set, device, 0x1);

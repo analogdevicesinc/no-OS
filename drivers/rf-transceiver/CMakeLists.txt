@@ -58,13 +58,22 @@ no_os_sources_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV9002
 no_os_include_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV9002
     ${CMAKE_CURRENT_SOURCE_DIR}/navassa)
 
-# nevis (adrv910x) — top-level wrapper + full vendor API tree (common/,
-# devices/adrv910x/private/src/ and public/src/). The legacy Make used
-# SRC_DIRS+=nevis which compiled all .c files recursively.
+# nevis (adrv910x) — top-level wrapper + vendor API tree (common/,
+# devices/adrv910x/private/src/ and public/src/).
+# devices/fpga910x and devices/adm1293 (ADI evaluation FPGA design and its
+# power monitor) are not part of the build for now.
+no_os_sources_ifdef(CONFIG_RF_TRANSCEIVER_ADRV910X
+    ${CMAKE_CURRENT_SOURCE_DIR}/nevis/adrv910x.c)
+no_os_include_dir_ifdef(CONFIG_RF_TRANSCEIVER_ADRV910X
+    ${CMAKE_CURRENT_SOURCE_DIR}/nevis)
 no_os_sources_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV910X
-    ${CMAKE_CURRENT_SOURCE_DIR}/nevis)
+    ${CMAKE_CURRENT_SOURCE_DIR}/nevis/common)
 no_os_include_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV910X
-    ${CMAKE_CURRENT_SOURCE_DIR}/nevis)
+    ${CMAKE_CURRENT_SOURCE_DIR}/nevis/common)
+no_os_sources_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV910X
+    ${CMAKE_CURRENT_SOURCE_DIR}/nevis/devices/adrv910x)
+no_os_include_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV910X
+    ${CMAKE_CURRENT_SOURCE_DIR}/nevis/devices/adrv910x)
 
 # talise (adrv9009) — top-level wrapper + full vendor API tree
 # FLAG (shared driver change): Switched from two explicit sources to recurse

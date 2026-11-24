@@ -2,17 +2,19 @@
  * \file
  * \brief Functions for configuring receiver (Rx) features
  *
- * Copyright 2022 Analog Devices Inc.
- * Released under the ADRV910X API license, for more information
- * see the "LICENSE.txt" file in this zip file.
+ * Copyright (c) 2022 - 2026 Analog Devices, Inc. All Rights Reserved.
+ * This software is proprietary to Analog Devices, Inc. and its licensors.
+ * Released under the ADRV910X API license.
+ * For more information, see the "LICENSE.txt" file.
  */
 
 #ifndef _ADI_ADRV910X_RX_H_
 #define _ADI_ADRV910X_RX_H_
 
+#include "adi_adrv910x_rx_types.h"
 #include "adi_adrv910x_common_types.h"
 #include "adi_adrv910x_types.h"
-#include "adi_adrv910x_rx_types.h"
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -49,28 +51,22 @@ extern "C" {
  * After this multiple partial gain table load, call the function adi_adrv910x_RxMinMaxGainIndexSet(minIndex = 0, maxIndex = 255).
  *
  * \note Message type: \ref timing_direct "Direct register access"
+ * \pre This function called automatically during initialization to load the default gain table. If the BBIC desires to change or update the gain table, it may call this function after initialization but before running init cals.
  *
- * \pre This function called automatically during initialization to load
- *      the default gain table. If the BBIC desires to change or update the
- *      gain table, it may call this function after initialization but before
- *      running init cals.
- *
- * \param[in] adrv910x           Context variable - Pointer to the ADRV910X device data structure
- * \param[in] port               The desired Rx or ORx port
- * \param[in] channel            The Rx Channel from which to write the gain table
- *                               specifying the Rx Channels for which to write the gain table
- * \param[in] gainIndexOffset    The starting gain index from which the gain table is written
- * \param[in] gainTableRows      Array of gain table row entries to write
- * \param[in] arraySize          The number of gain table rows to write
- * \param[in] lnaConfig          The desired LNA configuration
- * \param[in] gainTableType      Gain table loaded during ADRV910X initialization
+ * \param[in] adrv910x         Context variable - Pointer to the ADRV910X device data structure
+ * \param[in] port             The desired Rx or ORx port
+ * \param[in] channel          The Rx Channel from which to write the gain table specifying the Rx Channels for which to write the gain table
+ * \param[in] gainIndexOffset  The starting gain index from which the gain table is written
+ * \param[in] gainTableRows    Array of gain table row entries to write
+ * \param[in] arraySize        The number of gain table rows to write
+ * \param[in] gainTableType    Gain table loaded during ADRV910X initialization
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv910x_Rx_GainTable_Write(adi_adrv910x_Device_t *adrv910x,
                                         adi_common_Port_e port,
                                         adi_common_ChannelNumber_e channel,
-                                        uint8_t  gainIndexOffset,
+                                        uint8_t gainIndexOffset,
                                         adi_adrv910x_RxGainTableRow_t gainTableRows[],
                                         uint32_t arraySize,
                                         adi_adrv910x_RxGainTableType_e gainTableType);
@@ -83,65 +79,64 @@ int32_t adi_adrv910x_Rx_GainTable_Write(adi_adrv910x_Device_t *adrv910x,
  * for the requested channel and stores it in the provided memory reference of type adi_adrv910x_RxGainTableCfg_t
  *
  * \note Message type: \ref timing_direct "Direct register access"
- *
- * \param[in] adrv910x               Context variable - Pointer to the ADRV910X device data structure
- * \param[in]  channel               The Rx Channel from which to read the gain table
- * \param[in]  gainIndexOffset       The gain index from which gain table read back should start
- * \param[out] gainTableRows         Read back array for gain table row entries which will be updated with the read back values
- * \param[in]  arraySize             The size of the gainTableRows array; the max number of gain table rows to read
- * \param[out] numGainIndicesRead    The actual no. of gain indices read. Pass NULL if this info is not needed
- *
  * \pre This function can be called by the user anytime after initialization.
+ *
+ * \param[in]  adrv910x            Context variable - Pointer to the ADRV910X device data structure
+ * \param[in]  channel             The Rx Channel from which to read the gain table
+ * \param[in]  gainIndexOffset     The gain index from which gain table read back should start
+ * \param[out] gainTableRows       Read back array for gain table row entries which will be updated with the read back values
+ * \param[in]  arraySize           The size of the gainTableRows array; the max number of gain table rows to read
+ * \param[out] numGainIndicesRead  The actual no. of gain indices read. Pass NULL if this info is not needed
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv910x_Rx_GainTable_Read(adi_adrv910x_Device_t *adrv910x,
                                        adi_common_ChannelNumber_e channel,
-                                       uint8_t  gainIndexOffset,
+                                       uint8_t gainIndexOffset,
                                        adi_adrv910x_RxGainTableRow_t gainTableRows[],
                                        uint32_t arraySize,
                                        uint16_t *numGainIndicesRead);
 
 /**
  * \brief Configures Rx gain control mode for the specified channel.
- * 
+ *
  * \note Message type: \ref timing_direct "Direct register access"
- * 
  * \pre This function should be called before Rx operation is initiated.
- * 
- * \param[in] adrv910x          Context variable - Pointer to the ADRV910X device data structure 
- * \param[in] channel           The Rx channel for which to set the gain control mode
- * \param[in] gainCtrlMode      The desired gain control mode
- * 
- * \return A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ *
+ * \param[in] adrv910x      Context variable - Pointer to the ADRV910X device data structure
+ * \param[in] channel       The Rx channel for which to set the gain control mode
+ * \param[in] gainCtrlMode  The desired gain control mode
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv910x_Rx_GainControl_Mode_Set(adi_adrv910x_Device_t *adrv910x,
-                                            adi_common_ChannelNumber_e channel,
-                                            adi_adrv910x_RxGainControlMode_e gainCtrlMode);
+                                             adi_common_ChannelNumber_e channel,
+                                             adi_adrv910x_RxGainControlMode_e gainCtrlMode);
+
 /**
  * \brief Reads current Rx gain control mode configuration
- * 
+ *
  * \note Message type: \ref timing direct "Direct register access"
- * 
- * \param[in] adrv910x          Context variable, Pointer to the ADRV910X device data structure
- * \param[in] channel           The Rx channel from which the gain control mode read back is requested
- * \param[out] gainCtrlMode     The current gain control mode
- * 
+ *
+ * \param[in]  adrv910x      Context variable - Pointer to the ADRV910X device data structure
+ * \param[in]  channel       The Rx channel from which the gain control mode read back is requested
+ * \param[out] gainCtrlMode  The current gain control mode
+ *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv910x_Rx_GainControl_Mode_Get(adi_adrv910x_Device_t *adrv910x,
-                                            adi_common_ChannelNumber_e channel,
-                                            adi_adrv910x_RxGainControlMode_e *gainCtrlMode);
+                                             adi_common_ChannelNumber_e channel,
+                                             adi_adrv910x_RxGainControlMode_e *gainCtrlMode);
 
 /**
  * \brief Set the min and max gain indexes for AGC for the specified channel.
  *
- * \note Message type: \ref timing_direct "Direct register acccess"
+ * \note Message type: \ref timing_direct "Direct register access"
  *
- * \param[in] adrv910x           Context variable - Pointer to the ADRV910x device data structure
- * \param[in] channel            The Rx Channel for which to set min and max gain indices
- * \param[in] minGainIndex       The lower limit of the gain index. Valid range is from 0 to 255.
- * \param[in] maxGainIndex       The upper limit of the gain index. Valid range is from 0 to 255.
+ * \param[in] adrv910x      Context variable - Pointer to the ADRV910X device data structure
+ * \param[in] channel       The Rx Channel for which to set min and max gain indices
+ * \param[in] minGainIndex  The lower limit of the gain index. Valid range is from 0 to 255.
+ * \param[in] maxGainIndex  The upper limit of the gain index. Valid range is from 0 to 255.
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
@@ -149,16 +144,16 @@ int32_t adi_adrv910x_Rx_GainControl_MinMaxGainIndex_Set(adi_adrv910x_Device_t *a
                                                         adi_common_ChannelNumber_e channel,
                                                         uint8_t minGainIndex,
                                                         uint8_t maxGainIndex);
-    
+
 /**
  * \brief Get the min and max gain indexes for AGC for the specified Rx channel
  *
- * \note Message type: \ref timing_direct "Direct register acccess"
+ * \note Message type: \ref timing_direct "Direct register access"
  *
- * \param[in]  adrv910x          Context variable - Pointer to the ADRV910x device data structure
- * \param[in]  channel           The Rx Channel from which to get min and max gain indices
- * \param[out] minGainIndex      The lower limit of the gain index
- * \param[out] maxGainIndex      The upper limit of the gain index
+ * \param[in]  adrv910x      Context variable - Pointer to the ADRV910X device data structure
+ * \param[in]  channel       The Rx Channel from which to get min and max gain indices
+ * \param[out] minGainIndex  The lower limit of the gain index
+ * \param[out] maxGainIndex  The upper limit of the gain index
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
@@ -170,14 +165,13 @@ int32_t adi_adrv910x_Rx_GainControl_MinMaxGainIndex_Get(adi_adrv910x_Device_t *a
 /**
  * \brief Configure Automatic Gain Control (AGC) for the specified Rx channel
  *
- * \pre Channel state is any of CALIBRATED, PRIMED, or RF_ENABLED
- *
  * \note This function does NOT enable AGC mode. Call adi_adrv910x_Rx_GainCtrlMode_Set() afterwards
- * \note Message type: \ref timing_direct "Direct register acccess"
- * 
- * \param[in] adrv910x       Context variable - Pointer to the ADRV910X device data structure
- * \param[in] channel        The Rx Channel for which to configure AGC
- * \param[in] agcCfg         The AGC configuration to apply
+ * \note Message type: \ref timing_direct "Direct register access"
+ * \pre Channel state is any of #ADI_ADRV910X_CHANNEL_STANDBY, #ADI_ADRV910X_CHANNEL_CALIBRATED, #ADI_ADRV910X_CHANNEL_PRIMED
+ *
+ * \param[in] adrv910x  Context variable - Pointer to the ADRV910X device data structure
+ * \param[in] channel   The Rx Channel for which to configure AGC
+ * \param[in] agcCfg    The AGC configuration to apply
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
@@ -188,13 +182,12 @@ int32_t adi_adrv910x_Rx_GainControl_Configure(adi_adrv910x_Device_t *adrv910x,
 /**
  * \brief Inspect the Automatic Gain Control (AGC) configuration for the specified Rx channel
  *
- * \note Message type: \ref timing_direct "Direct register acccess"
+ * \note Message type: \ref timing_direct "Direct register access"
+ * \pre Channel state is any of #ADI_ADRV910X_CHANNEL_CALIBRATED, #ADI_ADRV910X_CHANNEL_PRIMED, or #ADI_ADRV910X_CHANNEL_RF_ENABLED
  *
- * \pre Channel state is any of CALIBRATED, PRIMED, or RF_ENABLED
- *
- * \param[in]  adrv910x      Context variable - Pointer to the ADRV910X device data structure
- * \param[in]  channel       The Rx Channel for which to configure AGC
- * \param[out] agcCfg        The current AGC configuration
+ * \param[in]  adrv910x  Context variable - Pointer to the ADRV910X device data structure
+ * \param[in]  channel   The Rx Channel for which to configure AGC
+ * \param[out] agcCfg    The current AGC configuration
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
@@ -204,48 +197,48 @@ int32_t adi_adrv910x_Rx_GainControl_Inspect(adi_adrv910x_Device_t *adrv910x,
 
 /**
  * \brief Sets the manual gain index for the specified Rx channel
- * 
+ *
  * This function can be called by the user to set the gain index for the channel given. The maximum value is 255
  * and the minimum is application specific. The default value is 187.
- * 
+ *
  * If the value passed in the gainIndex parameter is within the range of the gain table minimum and maximum indices,
- * the Rx channel will be written to the transceiver. 
- * 
+ * the Rx channel will be written to the transceiver.
+ *
  * \note Message type: \ref timing direct "Direct register access"
  * \note The new gain only takes effect in states where clocks are enabled
- * 
- * \param[in] adrv910x      Context variable, Pointer to the ADRV910X device data structure
- * \param[in] channel       The Rx channel from which to set the gain index value
- * \param[in] gainIndex     The actual gain index value to set
- * 
+ *
+ * \param[in] adrv910x   Context variable - Pointer to the ADRV910X device data structure
+ * \param[in] channel    The Rx channel from which to set the gain index value
+ * \param[in] gainIndex  The actual gain index value to set
+ *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
-int32_t adi_adrv910x_Rx_Gain_Set(adi_adrv910x_Device_t *adrv910x, 
-                                adi_common_ChannelNumber_e channel, 
-                                uint8_t gainIndex);
+int32_t adi_adrv910x_Rx_Gain_Set(adi_adrv910x_Device_t *adrv910x,
+                                 adi_common_ChannelNumber_e channel,
+                                 uint8_t gainIndex);
+
 /**
  * \brief Reads the current gain index for a selected Rx channel
- * 
+ *
  * This function reads the gain index of the channel from the last time the clocks were enabled
- * 
+ *
  * \note Message type: \ref timing direct "Direct register access"
- * 
- * \param[in]  adrv910x      Context variable, Pointer to the ADRV910X device data structure
- * \param[in]  channel       The Rx channel from which to read the gain index
- * \param[out] gainIndex     The current gain table index that the channel is set to
- * 
+ *
+ * \param[in]  adrv910x   Context variable - Pointer to the ADRV910X device data structure
+ * \param[in]  channel    The Rx channel from which to read the gain index
+ * \param[out] gainIndex  The current gain table index that the channel is set to
+ *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv910x_Rx_Gain_Get(adi_adrv910x_Device_t *adrv910x,
-                                adi_common_ChannelNumber_e channel,
-                                uint8_t *gainIndex);
-	
+                                 adi_common_ChannelNumber_e channel,
+                                 uint8_t *gainIndex);
+
 /**
  * \brief Configure the Rx interface gain control
  *
  * \note Message type: \ref timing_mailbox "Mailbox command"
- *
- * \pre Channel state is CALIBRATED
+ * \pre Channel state is #ADI_ADRV910X_CHANNEL_CALIBRATED
  *
  * \param[in] adrv910x               Context variable - Pointer to the ADRV910X device data structure
  * \param[in] channel                The Rx channel for which to configure the interface gain control
@@ -261,16 +254,12 @@ int32_t adi_adrv910x_Rx_InterfaceGain_Configure(adi_adrv910x_Device_t *adrv910x,
  * \brief Set the Rx interface gain
  *
  * \note Message type: \ref timing_mailbox "Mailbox command"
+ * \pre Channel state is any of #ADI_ADRV910X_CHANNEL_RF_ENABLED
+ * \pre This function may be called only when the specified channel is in #ADI_ADRV910X_CHANNEL_RF_ENABLED state. 'gainControlMode' in adi_adrv910x_RxInterfaceGainCtrl_t struct must be ADI_ADRV910X_RX_INTERFACE_GAIN_CONTROL_MANUAL to set the Rx interface gain
  *
- * \pre Channel state is any of RF_ENABLED
- *
- * \pre This function may be called only when the specified channel is in RF_ENABLED state.
- * 'gainControlMode' in adi_adrv910x_RxInterfaceGainCtrl_t struct must be ADI_ADRV910X_RX_INTERFACE_GAIN_CONTROL_MANUAL
- *  to set the Rx interface gain
- *
- * \param[in] adrv910x   Context variable - Pointer to the ADRV910X device data structure
- * \param[in] channel    The Rx channel for which the interface gain has to be configured
- * \param[in] gain       The gain value to be set for the given Rx channel
+ * \param[in] adrv910x  Context variable - Pointer to the ADRV910X device data structure
+ * \param[in] channel   The Rx channel for which the interface gain has to be configured
+ * \param[in] gain      The gain value to be set for the given Rx channel
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
@@ -282,13 +271,12 @@ int32_t adi_adrv910x_Rx_InterfaceGain_Set(adi_adrv910x_Device_t *adrv910x,
  * \brief Inspect the Rx interface gain control configuration
  *
  * \note Message type: \ref timing_mailbox "Mailbox command"
+ * \pre Channel state any of #ADI_ADRV910X_CHANNEL_CALIBRATED, #ADI_ADRV910X_CHANNEL_PRIMED, #ADI_ADRV910X_CHANNEL_RF_ENABLED
  *
- * \pre Channel state any of CALIBRATED, PRIMED, RF_ENABLED
- *
- * \param[in]  adrv910x                  Context variable - Pointer to the ADRV910X device data structure
- * \param[in]  channel                   The Rx channel for which to inspect the interface gain control configuration
- * \param[out] rxInterfaceGainConfig     The current Rx interface gain control configuration
- * \param[out] gainTableType             The current gain table type loaded
+ * \param[in]  adrv910x               Context variable - Pointer to the ADRV910X device data structure
+ * \param[in]  channel                The Rx channel for which to inspect the interface gain control configuration
+ * \param[out] rxInterfaceGainConfig  The current Rx interface gain control configuration
+ * \param[out] gainTableType          The current gain table type loaded
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
@@ -301,8 +289,7 @@ int32_t adi_adrv910x_Rx_InterfaceGain_Inspect(adi_adrv910x_Device_t *adrv910x,
  * \brief Get the Rx interface gain for the given Rx channel
  *
  * \note Message type: \ref timing_mailbox "Mailbox command"
- *
- * \pre Channel state any of CALIBRATED, PRIMED, RF_ENABLED
+ * \pre Channel state any of #ADI_ADRV910X_CHANNEL_CALIBRATED, #ADI_ADRV910X_CHANNEL_PRIMED, #ADI_ADRV910X_CHANNEL_RF_ENABLED
  *
  * \param[in]  adrv910x  Context variable - Pointer to the ADRV910X device data structure
  * \param[in]  channel   The Rx channel from which to read the interface gain
@@ -318,8 +305,7 @@ int32_t adi_adrv910x_Rx_InterfaceGain_Get(adi_adrv910x_Device_t *adrv910x,
  * \brief Reads back the RSSI (Received Signal Strength Indicator) status for the given Rx channel
  *
  * \note Message type: \ref timing_mailbox "Mailbox command"
- *
- * \pre Channel state is RF_ENABLED
+ * \pre Channel state is #ADI_ADRV910X_CHANNEL_RF_ENABLED
  *
  * \param[in]  adrv910x         Context variable - Pointer to the ADRV910X device data structure
  * \param[in]  channel          RX Channel for which RSSI status to be read back
@@ -333,87 +319,242 @@ int32_t adi_adrv910x_Rx_Rssi_Read(adi_adrv910x_Device_t *adrv910x,
 
 /**
  * \brief Configure LOID settings
- * 
+ *
  * \note Message type: \ref timing_mailbox "Mailbox command"
+ * \pre channel state is any of #ADI_ADRV910X_CHANNEL_STANDBY, #ADI_ADRV910X_CHANNEL_CALIBRATED
  *
- * \pre channel state is any of STANDBY, CALIBRATED
+ * \param[in] adrv910x    Context variable - Pointer to the ADRV910X device data structure
+ * \param[in] channel     The channel to configure
+ * \param[in] loidConfig  The desired LOID configuration
  *
- * \param[in] adrv910x		Context variable - Pointer to the ADRV910X device settings data structure
- * \param[in] channel       The channel to configure
- * \param[in] loidConfig    The desired LOID configuration
- * 
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv910x_Rx_Loid_Configure(adi_adrv910x_Device_t *adrv910x,
-                                   adi_common_ChannelNumber_e channel,
-		                           adi_adrv910x_RxrfdcLoidCfg_t *loidConfig);
+                                       adi_common_ChannelNumber_e channel,
+                                       adi_adrv910x_RxrfdcLoidCfg_t *loidConfig);
 
 /**
  * \brief Inspect LOID settings
- * 
+ *
  * \note Message type: \ref timing_mailbox "Mailbox command"
+ * \pre channel state is any of #ADI_ADRV910X_CHANNEL_STANDBY, #ADI_ADRV910X_CHANNEL_CALIBRATED, #ADI_ADRV910X_CHANNEL_PRIMED, #ADI_ADRV910X_CHANNEL_RF_ENABLED
  *
- * \pre channel state is any of STANDBY, CALIBRATED, PRIMED, RF_ENABLED
+ * \param[in]  adrv910x    Context variable - Pointer to the ADRV910X device data structure
+ * \param[in]  channel     The channel to configure
+ * \param[out] loidConfig  The current LOID configuration
  *
- * \param[in] adrv910x		Context variable - Pointer to the ADRV910X device settings data structure
- * \param[in] channel       The channel to configure
- * \param[out] loidConfig   The current LOID configuration
- * 
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv910x_Rx_Loid_Inspect(adi_adrv910x_Device_t *adrv910x,
-                                   adi_common_ChannelNumber_e channel,
-		                           adi_adrv910x_RxrfdcLoidCfg_t *loidConfig);
+                                     adi_common_ChannelNumber_e channel,
+                                     adi_adrv910x_RxrfdcLoidCfg_t *loidConfig);
 
 /**
  * \brief Reads current measured residual DC value
- * 
+ *
  * \note Message type: \ref timing_mailbox "Mailbox command"
+ * \pre channel state is of #ADI_ADRV910X_CHANNEL_CALIBRATED, #ADI_ADRV910X_CHANNEL_PRIMED, #ADI_ADRV910X_CHANNEL_RF_ENABLED
  *
- * \pre channel state is of CALIBRATED, PRIMED, RF_ENABLED
+ * \param[in]  adrv910x      Context variable - Pointer to the ADRV910X device data structure
+ * \param[in]  channel       The channel to configure
+ * \param[out] rfdcResidual  The current measured residual DC (in -dBFS)
  *
- * \param[in] adrv910x		  Context variable - Pointer to the ADRV910X device settings data structure
- * \param[in] channel         The channel to configure
- * \param[out] rfdcResidual   The current measured residual DC (in -dBFS)
- * 
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv910x_Rx_Loid_Status_Get(adi_adrv910x_Device_t *adrv910x,
-                                    adi_common_ChannelNumber_e channel,
-                                    uint8_t *rfdcResidual);
+                                        adi_common_ChannelNumber_e channel,
+                                        uint8_t *rfdcResidual);
 
 /**
- * \brief Configures the High Blocker Mode settings for LO frequency reconfiguration
- * 
+ * \brief Configures the Image Interferer Detection(High Blocker Mode) settings for LO frequency reconfiguration
+ *
  * \note Message type: \ref timing_mailbox "Mailbox command"
- * 
- * \pre channel state is of RF_ENABLED
+ * \pre channel state is of #ADI_ADRV910X_CHANNEL_STANDBY or #ADI_ADRV910X_CHANNEL_CALIBRATED
  * \pre only supports RxNB
- * 
- * \param[in] adrv910x		       Context variable - Pointer to the ADRV910X device settings data structure
- * \param[in] channel              The channel to configure
- * \param[in] highBlockerConfig    The desired rx High Blocker Mode settings
+ *
+ * \param[in] adrv910x       Context variable - Pointer to the ADRV910X device data structure
+ * \param[in] channel        The channel to configure
+ * \param[in] imageIDConfig  The desired rx Image Interferer Detection(High Blocker Mode) settings
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
-int32_t adi_adrv910x_Rx_HighBlockerMode_Configure(adi_adrv910x_Device_t *adrv910x, adi_common_ChannelNumber_e channel, 
-adi_adrv910x_HighBlockerModeCfg_t *highBlockerConfig);
+int32_t adi_adrv910x_Rx_ImageID_Configure(adi_adrv910x_Device_t *adrv910x,
+                                          adi_common_ChannelNumber_e channel,
+                                          adi_adrv910x_ImageIDCfg_t *imageIDConfig);
 
 /**
- * \brief Inspects the High Blocker Mode settings for LO frequency reconfiguration
- * 
+ * \brief Inspects the Image Interferer Detection(High Blocker Mode) settings for LO frequency reconfiguration
+ *
  * \note Message type: \ref timing_mailbox "Mailbox command"
- * 
- * \pre channel state is of RF_ENABLED
+ * \pre channel state is of #ADI_ADRV910X_CHANNEL_STANDBY or #ADI_ADRV910X_CHANNEL_CALIBRATED
  * \pre only supports RxNB
- * 
- * \param[in] adrv910x		        Context variable - Pointer to the ADRV910X device settings data structure
- * \param[in] channel               The channel to configure
- * \param[out] highBlockerConfig    The current rx High Blocker Mode settings
+ *
+ * \param[in]  adrv910x       Context variable - Pointer to the ADRV910X device data structure
+ * \param[in]  channel        The channel to configure
+ * \param[out] imageIDConfig  The current rx Image Interferer Detection(High Blocker Mode) settings
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
-int32_t adi_adrv910x_Rx_HighBlockerMode_Inspect(adi_adrv910x_Device_t *adrv910x, adi_common_ChannelNumber_e channel, 
-adi_adrv910x_HighBlockerModeCfg_t *highBlockerConfig);
+int32_t adi_adrv910x_Rx_ImageID_Inspect(adi_adrv910x_Device_t *adrv910x,
+                                        adi_common_ChannelNumber_e channel,
+                                        adi_adrv910x_ImageIDCfg_t *imageIDConfig);
+
+/**
+ * \brief Sets the NCO2 Frequency Tuning Word for the specified Rx channel
+ *
+ * This function writes the 32-bit NCO2 frequency tuning word (FTW) to the
+ * specified Rx channel (RX1 or RXNB) registers. The FTW is split into 4 bytes
+ * and latched atomically via the FtwUpdate strobe.
+ *
+ * \note Message type: \ref timing_direct "Direct register access"
+ *
+ * \param[in] adrv910x        Context variable - Pointer to the ADRV910X device settings data structure
+ * \param[in] channel        The channel to configure
+ * \param[in] ncoControlWord  32-bit NCO2 frequency tuning word to program
+ *
+ * \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+ * \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
+ * \retval ADI_COMMON_ACT_ERR_RESET_FULL Recovery action for SPI error
+ */
+int32_t adi_adrv910x_Rx_Nco2Ftw_Set(adi_adrv910x_Device_t        *adrv910x,
+                                    adi_common_ChannelNumber_e  channel,
+                                    uint32_t                       ncoControlWord);
+
+/**
+ * \brief Sets the resampler phase for the specified Rx channel
+ *
+ * This function enables the resampler and programs the I and Q phase
+ * values for the specified Rx channel (RX1 or RXNB).
+ *
+ * \note Message type: \ref timing_direct "Direct register access"
+ * \pre Channel state is any of #ADI_ADRV910X_CHANNEL_CALIBRATED, #ADI_ADRV910X_CHANNEL_PRIMED, or #ADI_ADRV910X_CHANNEL_RF_ENABLED
+ *
+ * \param[in] adrv910x        Context variable - Pointer to the ADRV910X device settings data structure
+ * \param[in] channel         The channel to configure
+ * \param[in] resampleInputI  Resampler phase value for I path
+ * \param[in] resampleInputQ  Resampler phase value for Q path
+ *
+ * \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+ * \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
+ * \retval ADI_COMMON_ACT_ERR_RESET_FULL Recovery action for SPI error
+ */
+int32_t adi_adrv910x_Rx_ResampPhase_Set(adi_adrv910x_Device_t        *adrv910x,
+                                       adi_common_ChannelNumber_e  channel,
+                                       int16_t                        resampleInputI,
+                                       int16_t                        resampleInputQ);
+
+/**
+ * \brief Gets the resampler phase for the specified Rx channel
+ *
+ * This function reads back the I and Q phase values from the resampler
+ * for the specified Rx channel (RX1 or RXNB).
+ *
+ * \note Message type: \ref timing_direct "Direct register access"
+ *
+ * \param[in]  adrv910x        Context variable - Pointer to the ADRV910X device settings data structure
+ * \param[in]  channel         The channel to read back the resampler phase for
+ * \param[out] resampleInputI  Pointer to store resampler phase value for I path
+ * \param[out] resampleInputQ  Pointer to store resampler phase value for Q path
+ *
+ * \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+ * \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
+ * \retval ADI_COMMON_ACT_ERR_RESET_FULL Recovery action for SPI error
+ */
+int32_t adi_adrv910x_Rx_ResampPhase_Get(adi_adrv910x_Device_t        *adrv910x,
+                                       adi_common_ChannelNumber_e  channel,
+                                       int16_t                       *resampleInputI,
+                                       int16_t                       *resampleInputQ);
+
+/**
+ * \brief Sets the NCO frequency offset for the specified Rx channel
+ *
+ * This function converts the desired frequency offset in Hz to a 32-bit NCO
+ * frequency tuning word (FTW) and programs it to the specified Rx channel.
+ * The frequency offset is validated against the RX interface rate: the maximum
+ * allowed offset is half the channel's output sample rate.
+ *
+ * \note Message type: \ref timing_direct "Direct register access"
+ *
+ * \pre Channel state is #ADI_ADRV910X_CHANNEL_RF_ENABLED
+ * \param[in] adrv910x           Context variable - Pointer to the ADRV910X device settings data structure
+ * \param[in] channel            The channel to configure
+ * \param[in] frequencyOffset_Hz Signed frequency offset in Hz. Range: +/-(rxOutputRate_Hz / 2)
+ *
+ * \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+ * \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
+ * \retval ADI_COMMON_ACT_ERR_RESET_FULL Recovery action for SPI error
+ */
+int32_t adi_adrv910x_Rx_NcoFrequency_Set(adi_adrv910x_Device_t        *adrv910x,
+                                                adi_common_ChannelNumber_e  channel,
+                                                int32_t                        frequencyOffset_Hz);
+
+/**
+ * \brief Gets the current NCO frequency offset for the specified Rx channel
+ *
+ * This function reads the current 32-bit NCO frequency tuning word (FTW)
+ * from the specified Rx channel registers and converts it back to a
+ * frequency offset in Hz.
+ *
+ * \note Message type: \ref timing_direct "Direct register access"
+ *
+ * \param[in]  adrv910x           Context variable - Pointer to the ADRV910X device settings data structure
+ * \param[in]  channel            The channel to read back the NCO frequency offset for
+ * \param[out] frequencyOffset_Hz Pointer to store the current frequency offset in Hz
+ *
+ * \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+ * \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
+ * \retval ADI_COMMON_ACT_ERR_RESET_FULL Recovery action for SPI error
+ */
+int32_t adi_adrv910x_Rx_NcoFrequency_Get(adi_adrv910x_Device_t        *adrv910x,
+                                                adi_common_ChannelNumber_e  channel,
+                                                int32_t                       *frequencyOffset_Hz);
+
+/**
+ * \brief Switches the active RX PFIR coefficient bank for the specified channel
+ *
+ * Selects which pre-loaded PFIR coefficient bank (A through F) is active on the
+ * specified RX channel. The desired banks must be loaded at initialization time.
+ * The bank selection is written to both the PFIR bank select register and the
+ * stream processor software spare register so it persists across RF_ON transitions.
+ *
+ * \note Message type: \ref timing_direct "Direct register access"
+ * \pre Channel state any of #ADI_ADRV910X_CHANNEL_CALIBRATED, #ADI_ADRV910X_CHANNEL_PRIMED, #ADI_ADRV910X_CHANNEL_RF_ENABLED
+ *
+ * \param[in] adrv910x  Context variable - Pointer to the ADRV910X device data structure
+ * \param[in] channel   Rx channel (ADI_ADRV910X_RX1 or ADI_ADRV910X_RXNB)
+ * \param[in] bankSel   PFIR bank to activate (ADI_ADRV910X_RX_PFIR_BANK_A through ADI_ADRV910X_RX_PFIR_BANK_F)
+ *
+ * \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully
+ * \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Invalid channel or bank parameter
+ * \retval ADI_COMMON_ACT_ERR_RESET_FULL Recovery action for SPI error
+ */
+int32_t adi_adrv910x_Rx_PfirBankSelect_Set(adi_adrv910x_Device_t        *adrv910x,
+                                           adi_adrv910x_MailboxChannel_e  channel,
+                                           adi_adrv910x_Rx_PfirBank_e     bankSel);
+
+/**
+ * \brief Get the currently active RX PFIR coefficient bank
+ *
+ * Reads the bank select register to determine which PFIR coefficient bank
+ * is currently active for the specified RX channel.
+ *
+ * \note Message type: \ref timing_direct "Direct register access"
+ * \pre Channel state any of CALIBRATED, PRIMED, RF_ENABLED
+ *
+ * \param[in]  adrv910x  Context variable - Pointer to the ADRV910X device data structure
+ * \param[in]  channel   Rx channel (ADI_ADRV910X_RX1 or ADI_ADRV910X_RXNB)
+ * \param[out] bankSel   Pointer to store the currently active PFIR bank
+ *
+ * \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully
+ * \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Invalid channel or null pointer
+ * \retval ADI_COMMON_ACT_ERR_RESET_FULL Recovery action for SPI error
+ */
+int32_t adi_adrv910x_Rx_PfirBankSelect_Get(adi_adrv910x_Device_t        *adrv910x,
+                                           adi_adrv910x_MailboxChannel_e  channel,
+                                           adi_adrv910x_Rx_PfirBank_e    *bankSel);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _ADI_ADRV910x_RX_H_ */
+#endif /* _ADI_ADRV910X_RX_H_ */

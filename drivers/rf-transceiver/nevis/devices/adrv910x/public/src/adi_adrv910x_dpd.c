@@ -12,6 +12,7 @@
 #include "adi_adrv910x_radio.h"
 #include "adi_adrv910x_tx.h"
 
+#include "adrv910x_arm.h"
 #include "adi_adrv910x_arm.h"
 #include "adrv910x_arm_macros.h"
 #include "adrv910x_nvs_regmap_tx.h"
@@ -19,7 +20,7 @@
 
 #define MAX_PRELUTSCALE 15
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_dpd_Initial_Configure_Validate(adi_adrv910x_Device_t *adrv910x,
+static __maybe_unused int32_t adi_adrv910x_dpd_Initial_Configure_Validate(adi_adrv910x_Device_t *adrv910x,
                                                                           adi_common_ChannelNumber_e channel,
                                                                           adi_adrv910x_DpdInitCfg_t *dpdConfig)
 {
@@ -105,7 +106,7 @@ int32_t adi_adrv910x_dpd_Initial_Configure(adi_adrv910x_Device_t *adrv910x,
     ADI_API_RETURN(adrv910x);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_dpd_Initial_Inspect_Validate(adi_adrv910x_Device_t *adrv910x,
+static __maybe_unused int32_t adi_adrv910x_dpd_Initial_Inspect_Validate(adi_adrv910x_Device_t *adrv910x,
                                     adi_common_ChannelNumber_e channel,
                                     adi_adrv910x_DpdInitCfg_t *dpdConfig)
 {
@@ -143,7 +144,7 @@ int32_t adi_adrv910x_dpd_Initial_Inspect(adi_adrv910x_Device_t *adrv910x,
     ADI_API_RETURN(adrv910x);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_dpd_Configure_Validate(adi_adrv910x_Device_t *adrv910x,
+static __maybe_unused int32_t adi_adrv910x_dpd_Configure_Validate(adi_adrv910x_Device_t *adrv910x,
                                                                   adi_common_ChannelNumber_e channel,
                                                                   adi_adrv910x_DpdCfg_t *dpdConfig)
 {
@@ -214,7 +215,7 @@ int32_t adi_adrv910x_dpd_Configure(adi_adrv910x_Device_t *adrv910x,
     ADI_API_RETURN(adrv910x);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_dpd_Inspect_Validate(adi_adrv910x_Device_t *adrv910x,
+static __maybe_unused int32_t adi_adrv910x_dpd_Inspect_Validate(adi_adrv910x_Device_t *adrv910x,
                                 adi_common_ChannelNumber_e channel,
                                 adi_adrv910x_DpdCfg_t *dpdConfig)
 {
@@ -269,7 +270,7 @@ int32_t adi_adrv910x_dpd_Inspect(adi_adrv910x_Device_t *adrv910x,
     ADI_API_RETURN(adrv910x);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_dpd_coefficients_Set_Validate(adi_adrv910x_Device_t *adrv910x,
+static __maybe_unused int32_t adi_adrv910x_dpd_coefficients_Set_Validate(adi_adrv910x_Device_t *adrv910x,
                                                                          adi_common_ChannelNumber_e channel,
                                                                          adi_adrv910x_DpdCoefficients_t *coefficients)
 {
@@ -325,7 +326,7 @@ int32_t adi_adrv910x_dpd_coefficients_Set(adi_adrv910x_Device_t *adrv910x,
     ADI_API_RETURN(adrv910x);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_dpd_coefficients_Get_Validate(adi_adrv910x_Device_t *adrv910x,
+static __maybe_unused int32_t adi_adrv910x_dpd_coefficients_Get_Validate(adi_adrv910x_Device_t *adrv910x,
                                                                          adi_common_ChannelNumber_e channel,
                                                                          adi_adrv910x_DpdCoefficients_t *coefficients)
 {
@@ -465,7 +466,7 @@ int32_t adi_adrv910x_dpd_CaptureData_Read(adi_adrv910x_Device_t *adrv910x,
     ADI_API_RETURN(adrv910x);
 }
 
-static __maybe_unused int32_t __maybe_unused adi_adrv910x_dpd_channel_Status_Get_Validate(adi_adrv910x_Device_t* adrv910x,
+static __maybe_unused int32_t adi_adrv910x_dpd_channel_Status_Get_Validate(adi_adrv910x_Device_t* adrv910x,
                                                                                          adi_common_ChannelNumber_e channel,
                                                                                          adi_adrv910x_DpdChannelStatus_t* dpdChannelStatus)
 {
@@ -498,13 +499,68 @@ static __maybe_unused int32_t __maybe_unused adi_adrv910x_dpd_channel_Status_Get
 
 int32_t adi_adrv910x_dpd_channel_Status_Get(adi_adrv910x_Device_t* adrv910x, adi_common_ChannelNumber_e channel, adi_adrv910x_DpdChannelStatus_t* dpdChannelStatus)
 {
+    /* Per-channel ARM-padded size of dpdChannelStatus_t (13 bytes packed, padded to 16). */
+    static const uint32_t DPD_CH_STATUS_SIZE = 16u;
     uint8_t channelMask = 0;
-    uint32_t offset = 0;
+    uint8_t descriptorBuf[8] = { 0 };
+    uint8_t rawBuf[32] = { 0 };
+    uint32_t statusLen = 0u;
+    uint32_t statusAddr = 0u;
+    uint32_t readLen = 0u;
+    uint32_t requiredLen = 0u;
+    uint8_t channelIndex = 0u;
+    uint32_t base = 0u;
 
     ADI_PERFORM_VALIDATION(adi_adrv910x_dpd_channel_Status_Get_Validate, adrv910x, channel, dpdChannelStatus);
     channelMask = adi_adrv910x_Radio_MailboxChannel_Get(ADI_TX, channel);
-	ADI_EXPECT(adi_adrv910x_arm_MailBox_Get, adrv910x, OBJID_GO_CAL_STATUS, OBJID_TC_TX_DPD, channelMask, offset, (uint8_t*)dpdChannelStatus, sizeof(adi_adrv910x_DpdChannelStatus_t))
 
+    /* Firmware writes a calStatusGet_t descriptor { uint32_t len, void *pCalStatus } for
+     * OBJID_GO_CAL_STATUS requests; the actual status struct must be read separately from
+     * ARM memory at pCalStatus, then filtered down to the requested channel. */
+    ADI_EXPECT(adi_adrv910x_arm_MailBox_Get, adrv910x, OBJID_GO_CAL_STATUS, OBJID_TC_TX_DPD, channelMask, 0u, &descriptorBuf[0], sizeof(descriptorBuf))
+
+    statusLen  = (uint32_t)descriptorBuf[0] |
+                 ((uint32_t)descriptorBuf[1] << 8) |
+                 ((uint32_t)descriptorBuf[2] << 16) |
+                 ((uint32_t)descriptorBuf[3] << 24);
+
+    statusAddr = (uint32_t)descriptorBuf[4] |
+                 ((uint32_t)descriptorBuf[5] << 8) |
+                 ((uint32_t)descriptorBuf[6] << 16) |
+                 ((uint32_t)descriptorBuf[7] << 24);
+
+    if ((statusLen == 0u) || (statusAddr == 0u))
+    {
+        ADI_ERROR_REPORT(&adrv910x->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_API_FAIL,
+                         ADI_COMMON_ACT_ERR_RESET_FEATURE,
+                         statusLen,
+                         "Firmware returned an empty DPD channel status descriptor");
+        ADI_API_RETURN(adrv910x);
+    }
+
+    adi_common_channel_to_index(channel, &channelIndex);
+    requiredLen = ((uint32_t)channelIndex + 1u) * DPD_CH_STATUS_SIZE;
+
+    if (statusLen < requiredLen)
+    {
+        ADI_ERROR_REPORT(&adrv910x->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_API_FAIL,
+                         ADI_COMMON_ACT_ERR_RESET_FEATURE,
+                         statusLen,
+                         "Firmware DPD status buffer is too small to contain the requested channel");
+        ADI_API_RETURN(adrv910x);
+    }
+
+    /* Only the requested channel is needed; ARM memory reads must be word aligned */
+    readLen = (requiredLen + 3u) & ~3u;
+
+    ADI_EXPECT(adi_adrv910x_arm_Memory_Read, adrv910x, statusAddr, &rawBuf[0], readLen, ADRV910X_ARM_MEM_READ_AUTOINCR, ADI_PS1);
+
+    base = (uint32_t)channelIndex * DPD_CH_STATUS_SIZE;
+    adrv910x_ParseFourBytes(&base, rawBuf, &dpdChannelStatus->numberOfSuccessfulIterations);
 
     ADI_API_RETURN(adrv910x);
 }

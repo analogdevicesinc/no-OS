@@ -51,9 +51,6 @@ void from_json(const ordered_json& j, txElbConfig_t& p);
 void to_json(ordered_json& j, const ssiConfig_t& p);
 void from_json(const ordered_json& j, ssiConfig_t& p);
 
-void to_json(ordered_json& j, const enableDelay_t& p);
-void from_json(const ordered_json& j, enableDelay_t& p);
-
 void to_json(ordered_json& j, const rxConfig_t& p);
 void from_json(const ordered_json& j, rxConfig_t& p);
 
@@ -176,4 +173,25 @@ void from_json(const ordered_json& j, initCals_t& p);
 
 void to_json(ordered_json& j, const deviceProfilePS2_t& p);
 void from_json(const ordered_json& j, deviceProfilePS2_t& p);
+
+void to_json(ordered_json& j, const sysConfigPS2_t& p);
+void from_json(const ordered_json& j, sysConfigPS2_t& p);
+
+void to_json(ordered_json& j, const rxConfigPS2_t& p);
+void from_json(const ordered_json& j, rxConfigPS2_t& p);
+
+void to_json(ordered_json& j, const obsRxConfigPS2_t& p);
+void from_json(const ordered_json& j, obsRxConfigPS2_t& p);
+
+void to_json(ordered_json& j, const rxNbConfigPS2_t& p);
+void from_json(const ordered_json& j, rxNbConfigPS2_t& p);
+
+void to_json(ordered_json& j, const rxGainControlPS2_t& p);
+void from_json(const ordered_json& j, rxGainControlPS2_t& p);
+
+void to_json(ordered_json& j, const rxNbAgcHighThresholdSettingsPS2_t& p);
+void from_json(const ordered_json& j, rxNbAgcHighThresholdSettingsPS2_t& p);
+
+void to_json(ordered_json& j, const txConfigPS2_t& p);
+void from_json(const ordered_json& j, txConfigPS2_t& p);
 

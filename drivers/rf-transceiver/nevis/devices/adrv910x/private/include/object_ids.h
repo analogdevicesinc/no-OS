@@ -137,7 +137,9 @@ typedef enum
     OBJID_TC_HW_RX_RSSI          = GENERATE_OBJID(OBJ_GROUP_ID_TC, 0x17u),  /*!< 0x57: Object ID for RSSI HW tracing algorithm */
     
     /* get only objects in OBJ_GROUP_ID_GO group */
+#if 0   // Temperature sensor get has been moved to high speed mailbox command
     OBJID_GO_TEMP_SENSOR               = GENERATE_OBJID(OBJ_GROUP_ID_GO, 0x0u),    /*!< 0x60: Object ID for temp sensor   */
+#endif
     OBJID_GO_RSSI                      = GENERATE_OBJID(OBJ_GROUP_ID_GO, 0x1u),    /*!< 0x61: Object ID for RSSI          */
     OBJID_GO_RSSI_XCORR                = GENERATE_OBJID(OBJ_GROUP_ID_GO, 0x2u),    /*!< 0x62: Object ID for RSSI/cross-correlator  */
     OBJID_GO_CAL_STATUS                = GENERATE_OBJID(OBJ_GROUP_ID_GO, 0x3u),    /*!< 0x63: Object ID for Cal Status    */
@@ -159,12 +161,17 @@ typedef enum
 
     /* get and set objects in OBJ_GROUP_ID_GS group */
     OBJID_GS_GPIO_CTRL                 = GENERATE_OBJID(OBJ_GROUP_ID_GS, 0x0u),     /*!< 0x80: Object ID for GPIO control  */
-	// TODO: Temporarily disabled as it is unused to accommodate new GS mailbox command
+    // TODO: Temporarily disabled as it is unused to accommodate new GS mailbox command
     //OBJID_GS_ORX_TX_CTRL               = GENERATE_OBJID(OBJ_GROUP_ID_GS, 0x1u),     /*!< 0x81: Object ID for ORX TX select */
-	OBJID_GS_CONTINUOUS_SYNC_DETECTION = GENERATE_OBJID(OBJ_GROUP_ID_GS, 0x1u),     /*!< 0x81: Object ID for continuous sync detection enablement */
+    OBJID_GS_CONTINUOUS_SYNC_DETECTION = GENERATE_OBJID(OBJ_GROUP_ID_GS, 0x1u),     /*!< 0x81: Object ID for continuous sync detection enablement */
     OBJID_GS_TX_ATTEN                  = GENERATE_OBJID(OBJ_GROUP_ID_GS, 0x2u),     /*!< 0x82: Object ID for Tx atten      */
     OBJID_GS_CHANNEL_CARRIER_FREQUENCY = GENERATE_OBJID(OBJ_GROUP_ID_GS, 0x3u),     /*!< 0x83: Object ID for Channel carrier frequency */
+#if 0
+    // TODO: Temporarily disabled as it is unused to accommodate new GS mailbox command
     OBJID_GS_PERFORM_ADC_SWITCH        = GENERATE_OBJID(OBJ_GROUP_ID_GS, 0x4u),     /*!< 0x84: Object ID for requesting ADC switching  */
+#else
+    OBJID_GS_EXTVCO_POWERCONTROL_CONFIG = GENERATE_OBJID(OBJ_GROUP_ID_GS, 0x4u),     /*!< 0x84: Object ID for requesting Ext VCO power control configuration */
+#endif
     OBJID_GS_EXT_PATH_DELAY            = GENERATE_OBJID(OBJ_GROUP_ID_GS, 0x5u),     /*!< 0x85: Object ID for external path delay */
     OBJID_GS_TRACKCALS_CTRL            = GENERATE_OBJID(OBJ_GROUP_ID_GS, 0x6u),     /*!< 0x86: Tracking cals control commands */
     OBJID_GS_TRACKCALS_PENDING         = GENERATE_OBJID(OBJ_GROUP_ID_GS, 0x7u),     /*!< 0x87: Tracking cals pending       */
@@ -209,11 +216,11 @@ typedef enum
     OBJID_CFG_TELEM                   = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0xBu),    /*!< 0xAB: Configure the telemetry logging for short or long term */
     OBJID_CFG_DPD_PRE_INIT_CAL        = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0xCu),    /*!< 0xAC: Configure DPD before initial calibrations */
     OBJID_CFG_MONITOR_RSSI            = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0xDu),    /*!< 0xAD: Configure RSSI settings used in monitor mode */
-    OBJID_CFG_MONITOR_DMR_SEARCH      = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0xEu),    /*!< 0xAE: Configure DMR search settings used in monitor mode */
+    OBJID_CFG_SYNC_DETECT             = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0xEu),    /*!< 0xAE: Configure Sync Detect, use to Configure DMR search settings used in monitor mode (OBJID_CFG_MONITOR_DMR_SEARCH) */
     OBJID_CFG_LSSI_PADS_WHEN_NOT_USED = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0xFu),    /*!< 0xAF: Configure LSSI pads option when LSSI is not in use */
     OBJID_CFG_TX_INTERNAL_TONE_GENERATION = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0x10u),   /*!< 0xB0: Configure TX internal tone generation */
     OBJID_CFG_PLL_CONFIG              = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0x11u),   /*!< 0xB1: Configure PLL */
-    OBJID_CFG_RX_PORT_SWITCHING       = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0x12u),   /*!< 0xB2: Configure RX port switching */
+                                                                                   /*!< 0xB2: FREE TO USE */
     OBJID_CFG_GPIO_DEBUG_IN_STREAM    = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0x13u),   /*!< 0xB3: Configure GPIO debug in stream */
     OBJID_CFG_CLK_PLL_TYPE            = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0x14u),   /*!< 0xB4: Configure clock PLL type */
     OBJID_CFG_RX_GAIN_OVER_SSI        = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0x15u),   /*!< 0xB5: Configure RX slicer gain or agc gain, and gain index delay for 32-bit SSI */
@@ -221,6 +228,7 @@ typedef enum
     OBJID_CFG_REFERENCE_TIMER_CONFIG  = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0x17u),   /*!< 0xB7: Configure Reference Timer */
     OBJID_CFG_REFERENCE_TIMER_START   = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0x18u),   /*!< 0xB8: Start Reference Timer */
     OBJID_CFG_HIGH_BLOCKER_CONFIG     = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0x19u),   /*!< 0xB9: Start Reference Timer */
+    OBJID_CFG_SYNC_DETECT_VECTOR      = GENERATE_OBJID(OBJ_GROUP_ID_CFG, 0x1Au),    /*!<0xBA: Configure DMR search settings. NOTE: should be moved to AF once complete */
 
     /* Driver objects in OBJ_GROUP_ID_DRV group */
     OBJID_DRV_NCO                     = GENERATE_OBJID(OBJ_GROUP_ID_DRV, 0x0u),    /*!< 0xC0: NCO driver      */

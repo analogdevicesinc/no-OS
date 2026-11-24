@@ -46,7 +46,8 @@ ADI_NEVIS_PACK_START
 typedef struct
 {
     bool rxNbAgcHighThresholdModeEnable; /*!< Enable PFIR on AGC Path*/
-    uint8_t padding[3];
+    bool rxNbApdLegacyMode;              /*!< Use new highpass prefilter when set to 'false' and use legacy mode (old LUT) if 'true'. */
+    uint8_t padding[2];
     rxNbAgcHighThresholdSettings_t agcHighThresholdSettings; /*!< rxNbAgc settings for the profile */
 } rx_gainControl_t; 
 ADI_NEVIS_PACK_FINISH

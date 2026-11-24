@@ -99,7 +99,8 @@ const char* const adrv910x_error_table_CmdError[] =
     "Error occurred during a Firmware Mailbox CONFIG transaction.Check the connection between ADRV910X Evaluation card"
         " and FPGA Platform",
     "Error occurred in Firmware Driver code",
-    "Error occurred in Firmware System code"
+    "Error occurred in Firmware System code",
+    "Unknown error"
 };
 
 
@@ -797,6 +798,474 @@ int32_t adrv910x_DmaMemRead(adi_adrv910x_Device_t *device, uint32_t address, uin
 }
 
 #endif /* NEVIS_PS2 */
+
+static __maybe_unused int32_t adrv910x_FlexStreamProcessorMemWriteByte(adi_adrv910x_Device_t *device,
+                                                        uint32_t address,
+                                                        const uint8_t data[],
+                                                        uint32_t byteCount,
+                                                        uint8_t flexSpNumber)
+{
+    uint32_t i = 0;
+    uint8_t regWrite = 0;
+    uint8_t autoInc = ADI_ADRV910X_ARM_MEM_AUTO_INCR;
+
+    ADI_ENTRY_PTR_ARRAY_EXPECT(device, data, byteCount);
+
+    ADRV910X_DMAINFO("FLEX_SP_ARM_MEM_WRITE", address, byteCount);
+
+    /*
+    Use SPI DMA for Write
+    */
+    /* Write */
+    /* 1 = read, 0 = write */
+    /* core_bf.rd_wrb.write(bf_status, 1'b1); */
+    regWrite &= ~ADRV910X_DMA_CTL_RD_WRB;
+
+    /* bus size, 2'b00=byte; 2'b01=half-word; 2'b10=full-word; 2'b11=invalid */
+    /* core_bf.bus_size.write(bf_status, 2'b10); */
+    regWrite |= ADRV910X_BF_ENCODE(0, ADRV910X_DMA_CTL_BUS_SIZE_MASK, ADRV910X_DMA_CTL_BUS_SIZE_SHIFT);
+
+    /* address auto incremental, 1'b0=no; 1'b1=yes */
+    /* core_bf.auto_incr.write(bf_status, 1'b0); */
+    if (autoInc != 0)
+    {
+        regWrite |= ADRV910X_DMA_CTL_AUTO_INCR;
+    }
+
+    /* setting up the flex SP DMA control register for a write */
+    ADRV910X_SPIWRITEBYTEDMA(device, "FLEX_SP_ARM_DMA_CTL", ADRV910X_ADDR_FLEX_SP_ARM_DMA_CTL, regWrite);
+
+    /* Access the flex SP needed; 0x1 - flex SP0, 0x2 - flex SP1, 0x4 - flex SP2, 0x8 - flex SP3 */
+    ADRV910X_SPIWRITEBYTEDMA(device, "FLEX_SP_ARM_DMA_CTL", ADRV910X_ADDR_FLEX_SP_SELECT, (0x1 << (flexSpNumber - 1)));
+
+    /* flex SP AHB address for write */
+    /* core_bf.bus_addr.write(bf_status, 32'hxxxxxxxx); */
+    /* Refer nvs_spi.yda for more info about the byte shifting logic below on DMA address input */
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_3", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR3, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR3_BYTE_SHIFT));
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_2", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR2, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR2_BYTE_SHIFT));
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_1", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR1, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR1_BYTE_SHIFT));
+
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_BYTE_SEL", ADRV910X_ADDR_FLEX_SP_ARM_DMA_BYTE_SEL, (uint8_t)((address & ADRV910X_ADDR_ARM_DMA_BYTE_SEL_BIT_MASK) >> 0));
+
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_0", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR0, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR0_BYTE_SHIFT));
+
+    for (i = 0; i < byteCount; i++)
+    {
+        ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA_0+", ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA0 + ((address & 0x00000003)), data[i]);
+        if (address & 0x00000003)
+        {
+            ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA_0", ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA0, data[i]); /* inc address */
+        }
+
+        address++;
+        if (autoInc == 0)
+        {
+            /* Refer nvs_spi.yda for more info about the byte shifting logic below on DMA address input */
+            ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_3", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR3, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR3_BYTE_SHIFT));
+            ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_2", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR2, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR2_BYTE_SHIFT));
+            ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_1", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR1, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR1_BYTE_SHIFT));
+
+            ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_BYTE_SEL", ADRV910X_ADDR_FLEX_SP_ARM_DMA_BYTE_SEL, (uint8_t)((address & ADRV910X_ADDR_ARM_DMA_BYTE_SEL_BIT_MASK) >> 0));
+
+            ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_0", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR0, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR0_BYTE_SHIFT));
+        }
+    }
+
+    /* setting up the DMA control register for a read to avoid accidental writing */
+    regWrite |= ADRV910X_DMA_CTL_RD_WRB;
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_CTL", ADRV910X_ADDR_FLEX_SP_ARM_DMA_CTL, regWrite);
+
+    ADI_API_RETURN(device);
+}
+
+static __maybe_unused int32_t adrv910x_FlexStreamProcessorMemReadByte(adi_adrv910x_Device_t *device,
+                                                       uint32_t address,
+                                                       uint8_t returnData[],
+                                                       uint32_t byteCount,
+                                                       uint8_t autoIncrement,
+                                                       uint8_t flexSpNumber)
+{
+    int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
+    uint32_t i = 0;
+    uint8_t regRead = 0;
+    uint8_t dataRead0 = 0;
+
+    ADI_ENTRY_PTR_ARRAY_EXPECT(device, returnData, byteCount);
+
+    ADRV910X_DMAINFO("ADRV910X_ADDR_FLEX_SP_ARM_MEM_READ", address, byteCount);
+
+    /*
+    Use SPI DMA for Read
+    */
+    /* Read */
+    /* 1 = read, 0 = write */
+    /* core_bf.rd_wrb.write(bf_status, 1'b1); */
+    regRead |= ADRV910X_DMA_CTL_RD_WRB;
+
+    /* bus size, 2'b00=byte; 2'b01=half-word; 2'b10=full-word; 2'b11=invalid */
+    /* core_bf.bus_size.write(bf_status, 2'b10); */
+    regRead |= ADRV910X_BF_ENCODE(0, ADRV910X_DMA_CTL_BUS_SIZE_MASK, ADRV910X_DMA_CTL_BUS_SIZE_SHIFT);
+
+    /* address auto incremental, 1'b0=no; 1'b1=yes */
+    /* core_bf.auto_incr.write(bf_status, 1'b0); */
+    if (autoIncrement != 0)
+    {
+        regRead |= ADRV910X_DMA_CTL_AUTO_INCR;
+    }
+
+    /* setting up the DMA control register for a write */
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_CTL", ADRV910X_ADDR_FLEX_SP_ARM_DMA_CTL, regRead);
+
+    /* Access the flex SP needed; 0x1 - flex SP0, 0x2 - flex SP1, 0x4 - flex SP2, 0x8 - flex SP3 */
+    ADRV910X_SPIWRITEBYTEDMA(device, "FLEX_SP_ARM_DMA_CTL", ADRV910X_ADDR_FLEX_SP_SELECT, (0x1 << (flexSpNumber - 1)));
+
+    /* flex SP AHB address for read */
+    /* core_bf.bus_addr.write(bf_status, 32'hxxxxxxxx); */
+    /* Refer nvs_spi.yda for more info about the byte shifting logic below on DMA address input */
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_3", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR3, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR3_BYTE_SHIFT));
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_2", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR2, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR2_BYTE_SHIFT));
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_1", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR1, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR1_BYTE_SHIFT));
+
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_BYTE_SEL", ADRV910X_ADDR_FLEX_SP_ARM_DMA_BYTE_SEL, (uint8_t)((address & ADRV910X_ADDR_ARM_DMA_BYTE_SEL_BIT_MASK) >> 0));
+
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_0", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR0, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR0_BYTE_SHIFT));
+
+    /* starting write at zero address offset */
+    for (i = 0; i < byteCount; i++)
+    {
+        ADRV910X_SPIREADBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA_0+", ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA0 + (address % 4), &dataRead0);
+        returnData[i] = dataRead0;
+
+        if (address & 0x00000003)
+        {
+            ADRV910X_SPIREADBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA_0", ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA0, &dataRead0); /* inc address */
+        }
+
+        address++;
+        if (autoIncrement == 0)
+        {
+            /* Refer nvs_spi.yda for more info about the byte shifting logic below on DMA address input */
+            ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_3", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR3, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR3_BYTE_SHIFT));
+            ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_2", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR2, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR2_BYTE_SHIFT));
+            ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_1", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR1, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR1_BYTE_SHIFT));
+
+            ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_BYTE_SEL", ADRV910X_ADDR_FLEX_SP_ARM_DMA_BYTE_SEL, (uint8_t)((address & ADRV910X_ADDR_ARM_DMA_BYTE_SEL_BIT_MASK) >> 0));
+
+            ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_0", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR0, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR0_BYTE_SHIFT));
+        }
+    }
+
+    ADI_API_RETURN(device);
+}
+
+int32_t adrv910x_FlexStreamProcessorMemWrite(adi_adrv910x_Device_t *device,
+                                             uint32_t address,
+                                             const uint8_t data[],
+                                             uint32_t byteCount,
+                                             uint8_t flexSpNumber,
+                                             adi_adrv910x_ArmSingleSpiWriteMode_e spiWriteMode)
+{
+    uint32_t i = 0;
+    uint8_t regWrite = 0;
+    uint8_t autoInc = ADI_ADRV910X_ARM_MEM_AUTO_INCR;
+    uint32_t addrIndex = 0;
+    uint32_t dataIndex = 0;
+    uint32_t spiBufferSize = ((HAL_SPIWRITEARRAY_BUFFERSIZE / 3) - 1);
+    uint16_t addrArray[(HAL_SPIWRITEARRAY_BUFFERSIZE / 3)] = { 0 };
+    uint8_t  dataArray[(HAL_SPIWRITEARRAY_BUFFERSIZE / 3)] = { 0 };
+    uint32_t ADDR_FLEX_SP_ARM_DMA_DATA[4] = { ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA3, ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA2, ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA1, ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA0 };
+    uint32_t index = 0;
+    uint32_t flexSpAddress = address;
+#if ADI_ADRV910X_PRE_MCS_BROADCAST_DISABLE > 0
+    uint8_t regVal = 0;
+	uint8_t spiConfig_A = 0;
+#endif
+    int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
+    uint8_t singleInstruction = 0;
+    uint8_t spiMode = 0;
+
+    ADI_ENTRY_PTR_ARRAY_EXPECT(device, data, byteCount);
+
+    ADRV910X_DMAINFO("FLEX_SP_ARM_MEM_WRITE", flexSpAddress, byteCount);
+#ifndef NEVIS_PS2
+    spiMode = device->spiSettings.enSpiStreaming;
+#endif
+    ADI_EXPECT(adrv910x_NevisMonitorRegmapCore_SingleInstruction_Get, device, &singleInstruction);
+
+#if ADI_ADRV910X_PRE_MCS_BROADCAST_DISABLE > 0
+    ADRV910X_SPIREADBYTEDMA(device, "SPI_INTERFACE_CONFIG_A", ADRV910X_ADDR_SPI_INTERFACE_CONFIG_A, &spiConfig_A);
+
+    ADRV910X_SPIREADBYTEDMA(device, "FLEX_SP_ARM_DMA_CTL", ADRV910X_ADDR_FLEX_SP_ARM_DMA_CTL, &regVal);
+
+    if (ADRV910X_BF_EQUAL(regVal, ADRV910X_DMA_CTL_BUS_WAITING))
+    {
+        ADRV910X_DEBUG_INFO_NUM("FLEX_SP_ARM_MEM_WRITE BUS ERROR ADRV910X_ADDR_FLEX_SP_ARM_DMA_CTL", regVal);
+    }
+#endif
+
+    /* If Address is not on word boundary, Or ByteCount is not on Word boundary */
+    if (((flexSpAddress & 0x00000003) > 0) || ((byteCount & 0x00000003) > 0))
+    {
+        if (ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STREAMING_BYTES_4 == spiWriteMode)
+        {
+            ADI_ERROR_REPORT(&device->common,
+                ADI_ADRV910X_SRC_ARMCMD,
+                spiWriteMode,
+                recoveryAction,
+                ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                "SPI_WRITE_MODE_STANDARD_BYTES_252 and ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STREAMING_BYTES_4 are not supported if byteCount is not a multiple of 4");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+        return adrv910x_FlexStreamProcessorMemWriteByte(device, flexSpAddress, data, byteCount, flexSpNumber);
+    }
+
+    /*
+    Use SPI DMA for Write
+    */
+    /* Write */
+    /* 1 = read, 0 = write */
+    /* core_bf.rd_wrb.write(bf_status, 1'b1); */
+    regWrite &= ~ADRV910X_DMA_CTL_RD_WRB;
+
+    /* bus size, 2'b00=byte; 2'b01=half-word; 2'b10=full-word; 2'b11=invalid */
+    /* core_bf.bus_size.write(bf_status, 2'b10); */
+    regWrite |= ADRV910X_BF_ENCODE(2, ADRV910X_DMA_CTL_BUS_SIZE_MASK, ADRV910X_DMA_CTL_BUS_SIZE_SHIFT);
+
+    /* address auto incremental, 1'b0=no; 1'b1=yes */
+    /* core_bf.auto_incr.write(bf_status, 1'b0); */
+    if (autoInc != 0)
+    {
+        regWrite |= ADRV910X_DMA_CTL_AUTO_INCR;
+    }
+
+    /* setting up the flex SP DMA control register for a write */
+    ADRV910X_SPIWRITEBYTEDMA(device, "FLEX_SP_ARM_DMA_CTL", ADRV910X_ADDR_FLEX_SP_ARM_DMA_CTL, regWrite);
+
+    /* Enable single instruction and disable SPI streaming mode by default.
+     * If ADRV910X SPI streming mode is selected, then single instruction and single instruction are disbled */
+    ADI_EXPECT(adrv910x_NevisMonitorRegmapCore_SingleInstruction_Set, device, 0x1);
+#ifndef NEVIS_PS2
+    device->spiSettings.enSpiStreaming = 0;
+#endif /* NEVIS_PS2 */
+
+    if (ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STREAMING_BYTES_4 == spiWriteMode)
+    {
+        ADRV910X_SPIWRITEBYTEDMA(device, "SPI_INTERFACE_CONFIG_A", ADRV910X_ADDR_SPI_INTERFACE_CONFIG_A, 0x18);
+        ADI_EXPECT(adrv910x_NevisMonitorRegmapCore_AddrAscension2_Set, device, 0x0);
+        ADI_EXPECT(adrv910x_NevisMonitorRegmapCore_SingleInstruction_Set, device, 0x0);
+#ifndef NEVIS_PS2
+        device->spiSettings.enSpiStreaming = 1;
+#endif /* NEVIS_PS2 */
+
+    }
+
+    /* Access the flex SP needed; 0x1 - flex SP0, 0x2 - flex SP1, 0x4 - flex SP2, 0x8 - flex SP3 */
+    ADRV910X_SPIWRITEBYTEDMA(device, "FLEX_SP_ARM_DMA_CTL", ADRV910X_ADDR_FLEX_SP_SELECT, (0x1 << (flexSpNumber - 1)));
+
+    /* flex SP AHB address for write */
+    /* core_bf.bus_addr.write(bf_status, 32'hxxxxxxxx); */
+    /* Refer nvs_spi.yda for more info about the byte shifting logic below on DMA address input */
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_3", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR3, (uint8_t)((flexSpAddress) >> ADRV910X_ADDR_ARM_DMA_ADDR3_BYTE_SHIFT));
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_2", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR2, (uint8_t)((flexSpAddress) >> ADRV910X_ADDR_ARM_DMA_ADDR2_BYTE_SHIFT));
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_1", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR1, (uint8_t)((flexSpAddress) >> ADRV910X_ADDR_ARM_DMA_ADDR1_BYTE_SHIFT));
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_0", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR0, (uint8_t)((flexSpAddress) >> ADRV910X_ADDR_ARM_DMA_ADDR0_BYTE_SHIFT));
+
+#if ADI_ADRV910X_SW_TEST > 0
+    /* No Cache Enable for SW test */
+    if (device->devStateInfo.swTest > 1)
+    {
+        cacheEnable = 0;
+    }
+#endif
+
+	if (ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_CACHED_BYTES_N == spiWriteMode)
+    {
+        /* Cache Enable and Auto Inc */
+         for(i = 0 ; i < byteCount ; i++)
+        {
+            /* Write mem_write_data bitfield (mem_write_data[7:0] has to be the last register written) */
+            /* core_bf.mem_write_data.write(bf_status, 32'hxxxxxxxx); */
+            index = flexSpAddress % 4;
+
+            /* Writing byte order: 3,2,1,0 */
+            if (index == 0)
+            {
+                dataIndex = i + 3;
+            }
+            else
+            {
+                dataIndex--;
+            }
+
+            dataArray[addrIndex] = data[dataIndex];
+            addrArray[addrIndex] = ADDR_FLEX_SP_ARM_DMA_DATA[index];
+
+            addrIndex++;
+            flexSpAddress++;
+
+            if (addrIndex >= spiBufferSize)
+            {
+                ADRV910X_SPIWRITEBYTESDMA(device,
+                                          "DMA_MEM_WRITE_CACHE",
+                                          flexSpAddress - addrIndex,
+                                          &addrArray[0],
+                                          &dataArray[0],
+                                          addrIndex);
+                addrIndex = 0;
+            }
+        }
+
+        if (addrIndex > 0)
+        {
+            ADRV910X_SPIWRITEBYTESDMA(device,
+                                      "DMA_MEM_WRITE_CACHE_LAST",
+                                      flexSpAddress - addrIndex,
+                                      &addrArray[0],
+                                      &dataArray[0],
+                                      addrIndex);
+        }
+    }
+    else
+    {
+        /* starting write at zero address offset */
+        for (i = 0; i < byteCount; i += 4)
+        {
+            if (ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STREAMING_BYTES_4 == spiWriteMode)
+            {
+                ADRV910X_SPIWRITEBYTESTREAMDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA_3", ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA3, (data + i), 4);
+            }
+            else
+            {
+                /* Write mem_write_data bitfield (mem_write_data[7:0] has to be the last register written) */
+                /* core_bf.mem_write_data.write(bf_status, 32'hxxxxxxxx); */
+                ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA_3", ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA3, data[i + 3]);
+                ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA_2", ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA2, data[i + 2]);
+                ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA_1", ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA1, data[i + 1]);
+                ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA_0", ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA0, data[i]);
+            }
+
+            if (autoInc == 0)
+            {
+                /* flex SP AHB address for write */
+                /* core_bf.bus_addr.write(bf_status, 32'hxxxxxxxx); */
+                flexSpAddress += 4;
+                /* Refer nvs_spi.yda for more info about the byte shifting logic below on DMA address input */
+                ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_3", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR3, (uint8_t)((flexSpAddress) >> ADRV910X_ADDR_ARM_DMA_ADDR3_BYTE_SHIFT));
+                ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_2", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR2, (uint8_t)((flexSpAddress) >> ADRV910X_ADDR_ARM_DMA_ADDR2_BYTE_SHIFT));
+                ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_1", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR1, (uint8_t)((flexSpAddress) >> ADRV910X_ADDR_ARM_DMA_ADDR1_BYTE_SHIFT));
+                ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_0", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR0, (uint8_t)((flexSpAddress) >> ADRV910X_ADDR_ARM_DMA_ADDR0_BYTE_SHIFT));
+            }
+        }
+    }
+
+    /* setting up the DMA control register for a read to avoid accidental writing */
+    regWrite |= ADRV910X_DMA_CTL_RD_WRB;
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_CTL", ADRV910X_ADDR_FLEX_SP_ARM_DMA_CTL, regWrite);
+
+#if ADI_ADRV910X_PRE_MCS_BROADCAST_DISABLE > 0
+    ADRV910X_SPIWRITEBYTEDMA(device, "SPI_INTERFACE_CONFIG_A", ADRV910X_ADDR_SPI_INTERFACE_CONFIG_A, spiConfig_A);
+#endif
+
+    ADI_EXPECT(adrv910x_NevisMonitorRegmapCore_SingleInstruction_Set, device, singleInstruction);
+#ifndef NEVIS_PS2
+    device->spiSettings.enSpiStreaming = spiMode;
+#endif /* NEVIS_PS2 */
+
+    ADI_API_RETURN(device);
+}
+
+int32_t adrv910x_FlexStreamProcessorMemRead(adi_adrv910x_Device_t *device,
+                                            uint32_t address,
+                                            uint8_t returnData[],
+                                            uint32_t byteCount,
+                                            uint8_t autoIncrement,
+                                            uint8_t flexSpNumber)
+{
+    int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
+    uint32_t i = 0;
+    uint8_t regRead = 0;
+    uint8_t dataRead = 0;
+    uint8_t regVal = 0;
+
+    ADI_ENTRY_PTR_ARRAY_EXPECT(device, returnData, byteCount);
+
+    ADRV910X_DMAINFO("ADRV910X_ADDR_FLEX_SP_ARM_MEM_READ", address, byteCount);
+
+    ADRV910X_SPIREADBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_CTL", ADRV910X_ADDR_FLEX_SP_ARM_DMA_CTL, &regVal);
+
+    if (ADRV910X_BF_EQUAL(regVal, ADRV910X_DMA_CTL_BUS_WAITING))
+    {
+        ADRV910X_DEBUG_INFO_NUM("ARM_MEM_READ BUS ERROR ADRV910X_ADDR_FLEX_SP_ARM_DMA_CTL", regVal);
+    }
+
+    ADRV910X_DMA_SKIP();
+
+    /* If Address is not on word boundary, Or ByteCount is not on Word boundary */
+    if (((address & 0x00000003) > 0) || ((byteCount & 0x00000003) > 0))
+    {
+        return adrv910x_FlexStreamProcessorMemReadByte(device, address, returnData, byteCount, autoIncrement, flexSpNumber);
+    }
+
+    /*
+    Use SPI DMA for Read
+    */
+    /* Read */
+    /* 1 = read, 0 = write */
+    /* core_bf.rd_wrb.write(bf_status, 1'b1); */
+    regRead |= ADRV910X_DMA_CTL_RD_WRB;
+
+    /* bus size, 2'b00=byte; 2'b01=half-word; 2'b10=full-word; 2'b11=invalid */
+    /* core_bf.bus_size.write(bf_status, 2'b10); */
+    regRead |= ADRV910X_BF_ENCODE(2, ADRV910X_DMA_CTL_BUS_SIZE_MASK, ADRV910X_DMA_CTL_BUS_SIZE_SHIFT);
+
+    /* address auto incremental, 1'b0=no; 1'b1=yes */
+    /* core_bf.auto_incr.write(bf_status, 1'b0); */
+    if (autoIncrement != 0)
+    {
+        regRead |= ADRV910X_DMA_CTL_AUTO_INCR;
+    }
+
+    /* setting up the flex SP DMA control register for a write */
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_CTL", ADRV910X_ADDR_FLEX_SP_ARM_DMA_CTL, regRead);
+
+    /* flex SP AHB address for read */
+    /* core_bf.bus_addr.write(bf_status, 32'hxxxxxxxx); */
+    /* Refer nvs_spi.yda for more info about the byte shifting logic below on DMA address input */
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_3", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR3, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR3_BYTE_SHIFT));
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_2", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR2, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR2_BYTE_SHIFT));
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_1", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR1, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR1_BYTE_SHIFT));
+    ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_0", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR0, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR0_BYTE_SHIFT));
+
+    /* starting write at zero address offset */
+    for (i = 0; i < byteCount; i += 4)
+    {
+        /* Write mem_write_data bitfield (mem_write_data[7:0] has to be the last register written) */
+        /* core_bf.mem_write_data.write(bf_status, 32'hxxxxxxxx); */
+        ADRV910X_SPIREADBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA_3", ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA3, &dataRead);
+        returnData[i + 3] = dataRead;
+        ADRV910X_SPIREADBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA_2", ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA2, &dataRead);
+        returnData[i + 2] = dataRead;
+        ADRV910X_SPIREADBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA_1", ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA1, &dataRead);
+        returnData[i + 1] = dataRead;
+        ADRV910X_SPIREADBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA_0", ADRV910X_ADDR_FLEX_SP_ARM_DMA_DATA0, &dataRead);
+        returnData[i] = dataRead;
+
+        if (autoIncrement == 0)
+        {
+            /* flex SP AHB address for read */
+            /* core_bf.bus_addr.write(bf_status, 32'hxxxxxxxx); */
+            address += 4;
+            /* Refer nvs_spi.yda for more info about the byte shifting logic below on DMA address input */
+            ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_3", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR3, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR3_BYTE_SHIFT));
+            ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_2", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR2, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR2_BYTE_SHIFT));
+            ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_1", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR1, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR1_BYTE_SHIFT));
+            ADRV910X_SPIWRITEBYTEDMA(device, "ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR_0", ADRV910X_ADDR_FLEX_SP_ARM_DMA_ADDR0, (uint8_t)((address) >> ADRV910X_ADDR_ARM_DMA_ADDR0_BYTE_SHIFT));
+        }
+    }
+
+    ADI_API_RETURN(device);
+}
+
 static int32_t adrv910x_ArmMailBoxErrCodeGet(adi_adrv910x_Device_t *device, uint16_t *mailboxErrCode)
 {
 	/* reading the command status register for given opcode */
@@ -843,6 +1312,10 @@ static const char* adrv910x_CmdErrMsgGet(uint32_t errCode)
     else if (0xE000 <= errCode && errCode <= 0xFFFF)
     {
         return adrv910x_error_table_CmdError[6];
+    }
+    else
+    {
+	    return adrv910x_error_table_CmdError[7];
     }
     
     return NULL;
@@ -944,6 +1417,7 @@ int32_t adrv910x_ArmProfileWrite(adi_adrv910x_Device_t *device, const deviceProf
 	uint8_t *profPtr = (uint8_t*)profile;
 	uint32_t profileAddr = 0;
 	uint32_t byteCount = 0;
+	
 	
 	if (PS == ADI_PS1)
 	{
@@ -1195,6 +1669,7 @@ static __maybe_unused int32_t adrv910x_lockDmaMemWriteByte(adi_adrv910x_Device_t
 #define LOCK_LOG(...)
 #endif /* LOCK_DEBUG */
 
+#ifndef NEVIS_PS2
 int adi_bbic_sem_unlock(void * device)
 {
 	uint32_t lock = 0, lock2 = 0;
@@ -1233,7 +1708,7 @@ int adi_bbic_sem_lock(void *device)
             LOCK_LOG("first tap: %02X\r\n", lock);
 			if (lock == 0)
 			{
-				/* lock aquired, apply rule #2... */
+				/* lock acquired, apply rule #2... */
 				adrv910x_lockDmaMemReadByte(dev, 0x4600018A, (uint8_t*)&lock/*, 1, 0, ADI_PS1*/);
 			}
 			else
@@ -1246,5 +1721,6 @@ int adi_bbic_sem_lock(void *device)
 	return 1;
 }
 
+#endif /* NEVIS_PS2 */
 #endif /* API_MUTEX */
 

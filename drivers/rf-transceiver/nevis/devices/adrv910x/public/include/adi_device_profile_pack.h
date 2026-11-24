@@ -28,7 +28,8 @@ if (((uintptr_t)(const void *)(ptr) & alignMask) == 0)          \
 else                                                            \
   (ptr) = NULL;                                                 \
 } while (0)
-#define ADI_NEVIS_PACK_ENUM __attribute__((packed))
+//#define ADI_NEVIS_PACK_ENUM __attribute__((packed))
+#define ADI_NEVIS_PACK_ENUM
 #define ADI_NEVIS_PACK_START     _Pragma("pack(push, 4)")
 #define ADI_NEVIS_PACK_FINISH    _Pragma("pack(pop)")
 #elif defined  __ICCARM__

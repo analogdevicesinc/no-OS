@@ -108,11 +108,12 @@ typedef enum
     THREE_SAMPLE_DIFFERENCE  = 3u,
     FOUR_SAMPLE_DIFFERENCE  = 4u,
     FIVE_SAMPLE_DIFFERENCE   = 5u,
-    SIX_SAMPLE_DIFFERENCE   = 8u,  /*!<  3LSBs: 0 = 6 sample difference... 4 = 10 sample difference */
-    SEVEN_SAMPLE_DIFFERENCE = 9u,
-    EIGHT_SAMPLE_DIFFERENCE  = 10u,    
-    NINE_SAMPLE_DIFFERENCE  = 11u,
-    TEN_SAMPLE_DIFFERENCE   = 12u,    
+    /*!< Needs subtraction by SIX_SAMPLE_DIFFERENCE for 3LSBs: 0 = 6 sample difference... 4 = 10 sample difference */
+    SIX_SAMPLE_DIFFERENCE   = 6u, 
+    SEVEN_SAMPLE_DIFFERENCE = 7u,
+    EIGHT_SAMPLE_DIFFERENCE  = 8u,    
+    NINE_SAMPLE_DIFFERENCE  = 9u,
+    TEN_SAMPLE_DIFFERENCE   = 10u,    
 } ADI_NEVIS_PACK_ENUM freqDiscriminatorInSel_e;
 
 /*! Enumeration for formatting selection*/

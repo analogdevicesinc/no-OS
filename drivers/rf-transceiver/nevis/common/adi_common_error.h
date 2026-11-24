@@ -73,7 +73,7 @@
 * \param commonDev Pointer to the common device structure
 * 
 */
-#define ADI_MUTEX_AQUIRE(commonDev) \
+#define ADI_MUTEX_ACQUIRE(commonDev) \
 {\
     if(((adi_common_Device_t *)(commonDev))->error.lock)\
     {\
@@ -88,7 +88,7 @@
 #else /* API_MUTEX */
 #define ADI_MUTEX_RELEASE(commonDev) 
 #define ADI_MUTEX_ERROR_RELEASE(commonDev) 
-#define ADI_MUTEX_AQUIRE(commonDev) 
+#define ADI_MUTEX_ACQUIRE(commonDev) 
 #endif /* API_MUTEX */
 
 /**
