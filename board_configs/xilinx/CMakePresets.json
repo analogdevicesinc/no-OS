@@ -105,6 +105,18 @@
 				"PLATFORM": "xilinx",
 				"BOARD_CONFIG_FILE": "vpk180_defconfig"
 			}
+		},
+		{
+			"name": "vpk180-r5",
+			"description": "VPK180 (Versal Premium ACAP, cortexr5 RPU). Requires -DHARDWARE=<abs path to system_top.xsa>",
+			"inherits": "xilinx-base",
+			"cacheVariables": {
+				"BOARD": "vpk180-r5",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "xilinx",
+				"BOARD_CONFIG_FILE": "vpk180_defconfig",
+				"XILINX_CPU": "cortexr5"
+			}
 		}
 	]
 }
