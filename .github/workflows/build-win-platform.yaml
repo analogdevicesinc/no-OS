@@ -20,6 +20,7 @@ on:
       - 'drivers/platform/maxim/**'
       - 'drivers/platform/xilinx/**'
       - 'drivers/platform/mac/**'
+      - 'drivers/platform/altera/**'
       - '.github/config/**'
       - '.github/scripts/**'
       - '.github/workflows/build-pico-platform.yaml'
@@ -29,6 +30,7 @@ on:
       - '.github/workflows/build-aducm3029-platform.yaml'
       - '.github/workflows/build-stm32-platform.yaml'
       - '.github/workflows/build-common.yaml'
+      - '.github/workflows/build-altera-platform.yaml'
       - '.github/workflows/deploy-docs.yaml'
   push:
     branches:
@@ -48,6 +50,7 @@ on:
       - 'drivers/platform/maxim/**'
       - 'drivers/platform/xilinx/**'
       - 'drivers/platform/mac/**'
+      - 'drivers/platform/altera/**'
       - '.github/config/**'
       - '.github/scripts/**'
       - '.github/workflows/build-pico-platform.yaml'
@@ -57,6 +60,7 @@ on:
       - '.github/workflows/build-aducm3029-platform.yaml'
       - '.github/workflows/build-stm32-platform.yaml'
       - '.github/workflows/build-common.yaml'
+      - '.github/workflows/build-altera-platform.yaml'
       - '.github/workflows/deploy-docs.yaml'
 
 permissions:

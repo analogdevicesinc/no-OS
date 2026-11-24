@@ -1,0 +1,141 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# Copyright (c) 2026 Analog Devices, Inc. All rights reserved.
+name: Build projects for Altera platform
+
+on:
+  pull_request:
+    branches:
+      - main
+      - next_stable
+      - 'release/*'
+      - '20*'
+    paths-ignore:
+      - '**/*.rst'
+      - '**/*.md'
+      - '**/*.dox'
+      - 'COPYING'
+      - 'LICENSES/**'
+      - 'drivers/platform/stm32/**'
+      - 'drivers/platform/xilinx/**'
+      - 'drivers/platform/aducm3029/**'
+      - 'drivers/platform/pico/**'
+      - 'drivers/platform/maxim/**'
+      - '.github/config/**'
+      - '.github/workflows/build-xilinx-platform.yaml'
+      - '.github/workflows/build-pico-platform.yaml'
+      - '.github/workflows/build-maxim-platform.yaml'
+      - '.github/workflows/build-aducm3029-platform.yaml'
+      - '.github/workflows/build-stm32-platform.yaml'
+      - '.github/workflows/build-linux-userspace-platform.yaml'
+      - '.github/workflows/build-win-platform.yaml'
+      - '.github/workflows/build-mac-platform.yaml'
+      - '.github/workflows/build-common.yaml'
+      - '.github/workflows/deploy-docs.yaml'
+  push:
+    branches:
+      - main
+      - next_stable
+      - 'release/*'
+      - '20*'
+      - 'feat/setup-nios-pipeline'
+    paths-ignore:
+      - '**/*.rst'
+      - '**/*.md'
+      - '**/*.dox'
+      - 'COPYING'
+      - 'LICENSES/**'
+      - 'drivers/platform/stm32/**'
+      - 'drivers/platform/xilinx/**'
+      - 'drivers/platform/aducm3029/**'
+      - 'drivers/platform/pico/**'
+      - 'drivers/platform/maxim/**'
+      - '.github/config/**'
+      - '.github/workflows/build-xilinx-platform.yaml'
+      - '.github/workflows/build-pico-platform.yaml'
+      - '.github/workflows/build-maxim-platform.yaml'
+      - '.github/workflows/build-aducm3029-platform.yaml'
+      - '.github/workflows/build-stm32-platform.yaml'
+      - '.github/workflows/build-linux-userspace-platform.yaml'
+      - '.github/workflows/build-win-platform.yaml'
+      - '.github/workflows/build-mac-platform.yaml'
+      - '.github/workflows/build-common.yaml'
+      - '.github/workflows/deploy-docs.yaml'
+
+permissions:
+  contents: read
+  id-token: write
+  checks: write
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build-altera-projects:
+    env:
+      # build_projects.py imports cloudsmith_helper, which requires the key to
+      # be exported even though no Altera step downloads from Cloudsmith.
+      CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
+      # 'main' keeps build_projects.py from looking up HDL folders.
+      HDL_BRANCH: 'main'
+      BUILDS_DIR: ${{ github.workspace }}/builds
+      RELEASES_DIR: ${{ github.workspace }}/latest_build
+      LOGS_DIR: ${{ github.workspace }}/logs
+      # Quartus Pro install providing niosv-bsp and niosv-app (BSP generation).
+      ALTERA_QUARTUS_ROOT: ${{ vars.ALTERA_QUARTUS_ROOT }}
+      # RISC-V toolchain used for both the BSP library and the no-OS build.
+      ALTERA_TOOLCHAIN_BIN: ${{ vars.ALTERA_TOOLCHAIN_BIN }}
+      # Nios V reference design the BSP is generated from.
+      ALTERA_DESIGN_URL: https://github.com/altera-fpga/agilex5e-nios-ed/releases/download/26.1.1/agilex5_niosv_g_soft_soc_system_example_design.zip
+      ALTERA_DESIGN_NAME: agilex5-niosv_g-soft_soc-26.1.1
+      # Outside the checkout directory, so 'clean: false' and the repo cleanup
+      # never touch the cached bundle.
+      ALTERA_BSP_CACHE: /no-OS-oss-altera-gh-agent/_work/altera-bsp
+    runs-on: noos-runner-altera
+    timeout-minutes: 60
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          submodules: false
+          # Keep .no_os_venv between runs instead of reinstalling it.
+          clean: false
+      - name: Prepare Nios V BSP
+        shell: bash
+        run: |
+          .github/scripts/altera-prepare-bsp.sh
+      - name: Building for platform Altera
+        shell: sh
+        run: |
+          .github/scripts/build-projects.sh
+        env:
+          CLOUDSMITH_API_KEY: ${{ env.CLOUDSMITH_API_KEY }}
+          WORKSPACE: ${{ github.workspace }}
+          PLATFORM: altera
+      - name: Upload Altera artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          path: ${{ env.RELEASES_DIR }}
+          name: ${{ github.job }}-binaries
+      - name: Upload Altera build logs
+        id: upload-logs
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          path: ${{ env.LOGS_DIR }}
+          name: ${{ github.job }}-logs
+      - name: Report build failures
+        if: always()
+        uses: ./.github/actions/report-build-failures
+        with:
+          platform: "altera"
+          name: "altera"
+          log-dir: ${{ env.LOGS_DIR }}
+          logs-url: ${{ steps.upload-logs.outputs.artifact-url }}
+      - name: Remove logs and release output
+        if: always()
+        shell: sh
+        run: |
+          rm -rf ${{ env.RELEASES_DIR }} ${{ env.LOGS_DIR }}
