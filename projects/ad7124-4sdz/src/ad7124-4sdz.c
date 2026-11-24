@@ -72,3 +72,5 @@ int main(void)
 
 	return 0;
 }
+
+/* PR template/labeler test, do not merge */
