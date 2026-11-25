@@ -1141,6 +1141,7 @@ int32_t stm32_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
 	param.duty_cycle_ns = duty_cycle_ns;
 	param.period_ns = desc->period_ns;
 	param.phase_ns = desc->phase_ns;
+	param.polarity = desc->polarity;
 	sparam.htimer = ((struct stm32_pwm_desc *)desc->extra)->htimer;
 	sparam.pwm_timer = ((struct stm32_pwm_desc *)desc->extra)->pwm_timer;
 	sparam.mode = ((struct stm32_pwm_desc *)desc->extra)->mode;
