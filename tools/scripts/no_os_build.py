@@ -505,6 +505,30 @@ def echo_cmd(cmd):
     print(f"  $ {quote_cmd(cmd)}", flush=True)
 
 
+def first_cmake_error(stderr):
+    """Return the first error CMake reported, or the tail of stderr if none.
+
+    A failed configure usually prints one meaningful error followed by
+    consequences of it (e.g. a toolchain file that aborts leaves every
+    CMAKE_<LANG>_COMPILER unset), so the tail of stderr is the wrong part to
+    show. The block ends at the next CMake message or at the call stack.
+    """
+    lines = stderr.splitlines()
+    for i, line in enumerate(lines):
+        if not line.startswith("CMake Error"):
+            continue
+        block = [line]
+        for follow in lines[i + 1:]:
+            if follow.startswith(("CMake Error", "CMake Warning",
+                                  "Call Stack", "-- ")):
+                break
+            block.append(follow)
+        while block and not block[-1].strip():
+            block.pop()
+        return "\n".join(block)
+    return stderr[-500:]
+
+
 def append_log(log_path, section, result):
     """Append a labelled section of captured output to the build log."""
     with open(log_path, "a") as f:
@@ -592,7 +616,8 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
         except subprocess.CalledProcessError as e:
             append_log(log_path, "Configure", e)
             spinner.finish("FAILED")
-            return combo, False, f"Configure failed:\n{e.stderr[-500:]}"
+            return combo, False, (f"Configure failed:\n"
+                                  f"{first_cmake_error(e.stderr)}")
 
     with Spinner(f"Building {label}") as spinner:
         echo_cmd(build_cmd)
@@ -866,7 +891,12 @@ def cmd_build(args, repo_root, presets):
         for combo, msg in failures:
             print(f"  - {combo['project']}/{combo['variant']} for {combo['board']}")
             if msg:
-                for line in msg.strip().split("\n")[-3:]:
+                lines = msg.strip().split("\n")
+                # A configure failure is already reduced to its first error;
+                # everything else is a raw stderr tail.
+                if not msg.startswith("Configure failed:"):
+                    lines = lines[-3:]
+                for line in lines:
                     print(f"    {line}")
         sys.exit(1)
 
