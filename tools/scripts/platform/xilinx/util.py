@@ -886,11 +886,22 @@ def create_ide_workspace(ws, hw_path, hw_file, manifest_path):
             content, count=1)
 
         # Add force-include flags
-        if force_includes:
-            flags = " ".join(f"-include {h}" for h in force_includes)
+        flags = [f"-include {h}" for h in force_includes]
+        # The app is compiled from the symlink tree, so its debug info would
+        # name the sources by their symlink paths. The debugger reports and
+        # opens the real files, and a breakpoint set there is then rejected
+        # ("No debug information for this source line"). Record the real
+        # repository paths instead.
+        if repo_root:
+            flags.append(f"-fdebug-prefix-map="
+                         f"{os.path.abspath(symlink_root)}={repo_root}")
+        # One quoted string: the template concatenates the elements of this
+        # variable without a separator, so a CMake list would glue the flags
+        # together.
+        if flags:
             content = content.replace(
                 "set(USER_COMPILE_OTHER_FLAGS )",
-                f"set(USER_COMPILE_OTHER_FLAGS {flags})")
+                f'set(USER_COMPILE_OTHER_FLAGS "{" ".join(flags)}")')
 
         with open(user_config, "w") as f:
             f.write(content)
