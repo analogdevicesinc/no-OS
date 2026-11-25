@@ -153,6 +153,60 @@ def harvest_compile_manifest(build_dir):
             "force_includes": force_includes}
 
 
+def vitis_ide_env(xsa_work):
+    """Return the environment for launching the Vitis IDE.
+
+    The IDE needs a clangd language server for code navigation. Full Vitis
+    installs bundle one; the embedded-only install does not, and the IDE then
+    starts whatever `clangd` is on PATH. That is the host's clangd, which
+    cannot run inside the IDE's environment: Vitis puts its own older
+    libstdc++ on LD_LIBRARY_PATH, so the server exits at startup and the IDE
+    reports that it crashed. In that case, make the IDE find a wrapper first
+    that drops LD_LIBRARY_PATH before running the host clangd.
+    """
+    env = os.environ.copy()
+    if os.name == "nt":
+        return env
+    vitis_root = Path(env.get("XILINX_VITIS", ""))
+    if list(vitis_root.glob("lnx64/tools/clang*/bin/clangd")):
+        return env
+    host_clangd = shutil.which("clangd")
+    if not host_clangd:
+        print("--open: this Vitis install has no clangd and none was found on "
+              "PATH; code navigation (Go to Definition) will not work in the "
+              "IDE. Install clangd from your distribution to enable it.",
+              file=sys.stderr)
+        return env
+    wrapper_dir = xsa_work / "ide" / "tools"
+    wrapper_dir.mkdir(parents=True, exist_ok=True)
+    wrapper = wrapper_dir / "clangd"
+    # The IDE always passes --directory-map-file <file>, an option that only
+    # the clangd bundled with Vitis understands; the host clangd exits on it.
+    wrapper.write_text(
+        "#!/bin/sh\n"
+        "unset LD_LIBRARY_PATH\n"
+        "skip=0\n"
+        "for arg in \"$@\"; do\n"
+        "\tshift\n"
+        "\tif [ \"$skip\" = 1 ]; then skip=0; continue; fi\n"
+        "\tcase \"$arg\" in\n"
+        "\t--directory-map-file) skip=1; continue ;;\n"
+        "\t--directory-map-file=*) continue ;;\n"
+        "\tesac\n"
+        "\tset -- \"$@\" \"$arg\"\n"
+        "done\n"
+        f"exec {shlex.quote(host_clangd)} \"$@\"\n")
+    wrapper.chmod(0o755)
+    # The Vitis launcher rebuilds PATH and ends up with /bin ahead of whatever
+    # the caller had put first, so prepending to PATH is not enough. It
+    # prepends VITIS_IDE_USER_TOOLCHAIN last, which keeps the wrapper in front.
+    user_toolchain = env.get("VITIS_IDE_USER_TOOLCHAIN")
+    env["VITIS_IDE_USER_TOOLCHAIN"] = (
+        f"{wrapper_dir}{os.pathsep}{user_toolchain}" if user_toolchain
+        else str(wrapper_dir))
+    return env
+
+
 def open_vitis_workspace(repo_root, build_dir, combo):
     """Populate and open a Vitis Unified IDE workspace for a Xilinx project.
 
@@ -223,7 +277,8 @@ def open_vitis_workspace(repo_root, build_dir, combo):
 
     print(f"Opening Vitis IDE workspace: {workspace}")
     try:
-        subprocess.run([vitis, "-w", str(workspace)], check=True)
+        subprocess.run([vitis, "-w", str(workspace)], check=True,
+                       env=vitis_ide_env(xsa_work))
     except subprocess.CalledProcessError as e:
         print(f"--open: failed to launch 'vitis': {e}", file=sys.stderr)
 

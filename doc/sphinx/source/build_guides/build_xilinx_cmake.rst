@@ -163,6 +163,14 @@ For interactive debugging, use the Vitis IDE.
    For detailed Vitis IDE debugging instructions, see
    :doc:`build_xilinx_vitis2025`.
 
+.. note::
+   Code navigation in the IDE (Go to Definition, error markers) relies on the
+   clangd language server. A full Vitis install bundles it; the embedded-only
+   install does not. In that case install ``clangd`` from your distribution:
+   ``no_os_build.py --open`` then starts the IDE with it. Without it the IDE
+   reports that the Clang Language Server crashed, and building and debugging
+   still work.
+
 Remote Host
 ^^^^^^^^^^^
 
