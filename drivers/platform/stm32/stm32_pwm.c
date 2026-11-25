@@ -861,7 +861,16 @@ int32_t stm32_pwm_enable(struct no_os_pwm_desc *desc)
 		if (sparam->dma_enable) {
 			/*sw trigger to reload repetition counter from repetition register */
 			htimer->Instance->RCR = sparam->repetitions;
-			htimer->Instance->EGR |= (1 << 0);
+		}
+
+		/* Generate an update event before starting counters so all the preload
+		 * registers will be transferred to shadow registers.
+		 * Clear the update flag raised by it so that no spurious update
+		 * interrupt is pending. */
+		htimer->Instance->EGR |= TIM_EGR_UG;
+		__HAL_TIM_CLEAR_FLAG(htimer, TIM_FLAG_UPDATE);
+
+		if (sparam->dma_enable) {
 			__HAL_TIM_ENABLE_DMA(htimer, timer_map[sparam->timer_chn]);
 		}
 
