@@ -396,12 +396,19 @@ def xilinx_hardware_name(repo_root, project, variant, board):
     """Compose the HDL hardware name for a Xilinx (project, variant, board).
 
     The name is <CONFIG_XILINX_HDL_DESIGN>_<board> (e.g. adv7511_zed), matching
-    the artifact-server folder that holds system_top.xsa. The design prefix
-    lives in the variant .conf; the board suffix is the CMake board. Returns
-    None when the variant declares no design (i.e. not a Xilinx build).
+    the artifact-server folder that holds system_top.xsa. The board suffix is
+    the CMake board. The design prefix is read from the board .conf
+    (boards/<variant>/<board>.conf) when it is set there, for projects whose
+    boards do not all share one HDL design, and from the variant .conf
+    otherwise. Returns None when neither declares a design (i.e. not a Xilinx
+    build).
     """
-    conf = repo_root / "projects" / project / f"{variant}.conf"
-    design = _read_conf_string(conf, "XILINX_HDL_DESIGN")
+    proj_dir = repo_root / "projects" / project
+    design = (
+        _read_conf_string(proj_dir / "boards" / variant / f"{board}.conf",
+                          "XILINX_HDL_DESIGN")
+        or _read_conf_string(proj_dir / f"{variant}.conf", "XILINX_HDL_DESIGN")
+    )
     if not design:
         return None
     return f"{design}_{board}"
