@@ -124,6 +124,16 @@ config POWER_IIO_LTC4162L
 	bool "Enable LTC4162L IIO driver"
 	default n
 
+config POWER_LTC4284
+	depends on I2C
+	bool "Enable LTC4284 negative voltage hot swap controller driver"
+	default n
+
+config POWER_IIO_LTC4284
+	select POWER_LTC4284
+	bool "Enable LTC4284 IIO driver"
+	default n
+
 config POWER_LTC4296
 	depends on SPI
 	select GPIO
