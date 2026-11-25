@@ -54,25 +54,26 @@ endif()
 
 # Find OpenOCD — prefer CubeIDE-bundled version, then system.
 # Only search when CUBEIDE_DIR is set; an empty value would expand the glob to
-# "/plugins/*/openocd" (filesystem root) and match unrelated host paths.
-# The recursive glob can also match *directories* named "openocd" (CubeIDE ships
-# several), so pick the first entry that is an actual executable file.
+# "/plugins/*" (filesystem root) and match unrelated host paths.
 if(CUBEIDE_DIR)
-    file(GLOB_RECURSE _cubeide_openocd ${CUBEIDE_DIR}/plugins/*/openocd)
-    foreach(_candidate ${_cubeide_openocd})
-        if(NOT IS_DIRECTORY "${_candidate}")
-            set(OPENOCD_PATH "${_candidate}")
-            break()
+    file(GLOB _cubeide_plugins "${CUBEIDE_DIR}/plugins/*")
+    find_program(OPENOCD_CUBEIDE_PATH
+        NAMES openocd
+        HINTS ${_cubeide_plugins}
+        PATH_SUFFIXES tools/bin bin ""
+        NO_DEFAULT_PATH
+        DOC "Path to the STM32CubeIDE-bundled OpenOCD executable"
+    )
+    mark_as_advanced(OPENOCD_CUBEIDE_PATH)
+    if(OPENOCD_CUBEIDE_PATH)
+        set(OPENOCD_PATH "${OPENOCD_CUBEIDE_PATH}")
+        file(GLOB_RECURSE _cubeide_scripts ${CUBEIDE_DIR}/plugins/*/mem_helper.tcl)
+        if(_cubeide_scripts)
+            list(GET _cubeide_scripts 0 _scripts_file)
+            cmake_path(GET _scripts_file PARENT_PATH OPENOCD_SCRIPTS)
         endif()
-    endforeach()
-endif()
-if(OPENOCD_PATH)
-    file(GLOB_RECURSE _cubeide_scripts ${CUBEIDE_DIR}/plugins/*/mem_helper.tcl)
-    if(_cubeide_scripts)
-        list(GET _cubeide_scripts 0 _scripts_file)
-        cmake_path(GET _scripts_file PARENT_PATH OPENOCD_SCRIPTS)
+        message(STATUS "Found CubeIDE-bundled OpenOCD: ${OPENOCD_PATH}")
     endif()
-    message(STATUS "Found CubeIDE-bundled OpenOCD: ${OPENOCD_PATH}")
 endif()
 
 if(NOT OPENOCD_PATH)
