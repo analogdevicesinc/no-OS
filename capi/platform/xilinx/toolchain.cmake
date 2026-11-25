@@ -85,6 +85,7 @@ if(NOT DEFINED XILINX_ARCH)
             COMMAND ${VITIS_EXECUTABLE} -s "${_util_dir}/util.py"
                     get_arch "${_arch_work}" "${_arch_work}" "${_xsa_file}"
             RESULT_VARIABLE _arch_rc
+            ERROR_VARIABLE _arch_err
             OUTPUT_QUIET)
     else()
         find_program(XSCT_EXECUTABLE xsct HINTS "${XILINX_VITIS}/bin")
@@ -96,10 +97,13 @@ if(NOT DEFINED XILINX_ARCH)
                     "${_util_dir}/util.tcl"
                     get_arch "${_arch_work}" "${_arch_work}" "${_xsa_file}"
             RESULT_VARIABLE _arch_rc
+            ERROR_VARIABLE _arch_err
             OUTPUT_QUIET)
     endif()
     if(NOT _arch_rc EQUAL 0)
-        message(FATAL_ERROR "get_arch failed on ${HARDWARE} (rc=${_arch_rc})")
+        include("${CMAKE_CURRENT_LIST_DIR}/../../../cmake/xilinx/xilinx_vitis_error.cmake")
+        xilinx_vitis_fatal("Reading the CPU architecture from ${HARDWARE}"
+                           "${_arch_rc}" "${_arch_err}")
     endif()
     file(READ "${_arch_work}/arch.txt" _arch_raw)
     string(STRIP "${_arch_raw}" XILINX_ARCH)

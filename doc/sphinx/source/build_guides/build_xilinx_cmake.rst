@@ -27,6 +27,68 @@ Run:
 
     $ source /path/to/xilinx/Vitis/2022.2/settings64.sh
 
+Host libraries
+^^^^^^^^^^^^^^
+
+The Vitis tools depend on a few host libraries that the Vitis installer does
+not ship. The installer ends with a reminder to install them, and the build
+cannot read the ``.xsa`` hardware file without them. Starting with Vitis
+2026.1 this includes ``libncurses.so.5``, which current distributions no
+longer install by default.
+
+Run the script provided by Vitis once after installing it:
+
+.. code-block:: bash
+
+    $ sudo /path/to/xilinx/2026.1/Vitis/scripts/installLibs.sh
+
+Then check that the library is available:
+
+.. code-block:: bash
+
+    $ ldconfig -p | grep libncurses.so.5
+
+The script only supports the distributions on the Vitis support list, so the
+check above can still come back empty:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 65
+
+   * - Distribution
+     - What ``installLibs.sh`` does
+   * - Ubuntu
+     - Installs the ``libncurses5`` and ``libtinfo5`` packages. On releases
+       that no longer provide these packages, ``apt-get`` reports an error
+       and the script continues without installing them.
+   * - RHEL, AlmaLinux, CentOS, Rocky Linux
+     - Installs ``ncurses-compat-libs``.
+   * - Kali, Debian and other distributions
+     - Nothing. The distribution is not recognized and no package is
+       installed.
+
+If the library is still missing, provide it from the ncurses 6 library that
+the distribution already installs. On Debian-based distributions (Kali,
+Debian, recent Ubuntu):
+
+.. code-block:: bash
+
+    $ sudo ln -s /usr/lib/x86_64-linux-gnu/libncurses.so.6 \
+          /usr/lib/x86_64-linux-gnu/libncurses.so.5
+    $ sudo ln -s /usr/lib/x86_64-linux-gnu/libtinfo.so.6 \
+          /usr/lib/x86_64-linux-gnu/libtinfo.so.5
+
+Skip a line if that file already exists. The links only add the old library
+names; nothing that is already installed changes, and removing the two links
+undoes the step.
+
+When a host library is missing, configuring a project stops with an error
+that names it, for example:
+
+.. code-block:: text
+
+    Vitis needs the host library libncurses.so.5, which is not installed.
+
 Building a project
 ------------------
 
