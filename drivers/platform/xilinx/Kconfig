@@ -19,9 +19,11 @@ config XILINX_HDL_DESIGN
 	  tooling composes the artifact server folder name as
 	  <this>_<board> (e.g. adv7511_zed) and downloads system_top.xsa from
 	  the sdg-hdl Cloudsmith repo for CI builds. The board suffix comes from
-	  the CMake board/preset, so only the design prefix belongs here. This
-	  symbol is read by the build scripts only; it does not affect compiled
-	  sources.
+	  the CMake board/preset, so only the design prefix belongs here. Set
+	  it in the variant .conf, or in each boards/<variant>/<board>.conf
+	  when the boards of a variant do not share one HDL design; do not set
+	  it in both. This symbol is read by the build scripts only; it does
+	  not affect compiled sources.
 
 config UART_XILINX
 	bool "Enable Xilinx UART driver"
