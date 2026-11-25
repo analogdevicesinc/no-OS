@@ -21,6 +21,7 @@ Arguments (positional):
 """
 
 import os
+import re
 import sys
 import time
 import subprocess
@@ -39,6 +40,27 @@ TWHITE = "\033[39m"   # Default text
 def log_warn(msg):
     """Log a highlighted WARNING to stderr so it stands out in build/CI logs."""
     print(f"{TYELLOW}WARNING: {msg}{TWHITE}", file=sys.stderr)
+
+
+# ---------------------------------------------------------------------------
+# Environment
+# ---------------------------------------------------------------------------
+
+def _drop_wsl_windows_path():
+    """Remove the Windows drive mounts (/mnt/<letter>/...) from PATH on WSL.
+
+    The BSP CMake scripts call find_package() for drivers the design may not
+    have (e.g. INTC on a PS-only interrupt topology). On a miss, CMake falls
+    back to searching every prefix derived from PATH. WSL appends the Windows
+    PATH, and each lookup there crosses the slow Windows filesystem bridge,
+    which adds minutes to BSP generation with the CMake bundled in Vitis
+    2026.1. Nothing the Vitis server spawns lives on the Windows side.
+    """
+    if "microsoft" not in os.uname().release.lower():
+        return
+    kept = [p for p in os.environ.get("PATH", "").split(os.pathsep)
+            if not re.match(r"/mnt/[a-z]/", p)]
+    os.environ["PATH"] = os.pathsep.join(kept)
 
 
 # ---------------------------------------------------------------------------
@@ -1426,6 +1448,7 @@ def main():
         print(f"Available: {', '.join(dispatch.keys())}")
         sys.exit(1)
 
+    _drop_wsl_windows_path()
     dispatch[function]()
 
 
