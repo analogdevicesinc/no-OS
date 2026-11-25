@@ -254,7 +254,7 @@ def _generate_mb_irq_macros(hw_design):
     # Find the AXI interrupt controller by VLNV (more reliable than name)
     intc_cell = None
     for cell in cells:
-        vlnv = cell.get('VLNV') or ''
+        vlnv = cell.VLNV or ''
         if 'axi_intc' in vlnv:
             intc_cell = cell
             break
@@ -279,7 +279,7 @@ def _generate_mb_irq_macros(hw_design):
     # Find the concat block whose dout drives the intc's intr pin
     concat_cell = None
     for cell in cells:
-        vlnv = cell.get('VLNV') or ''
+        vlnv = cell.VLNV or ''
         if 'xlconcat' in vlnv:
             pins = hw_design.get_pins(of_objects=cell)
             for pin in pins:
@@ -433,7 +433,7 @@ def _generate_ddr_macros(xsa_path, cpu):
     mb_cell = None
     cells = hw_design.get_cells()
     for cell in cells:
-        vlnv = cell.get('VLNV') or ''
+        vlnv = cell.VLNV or ''
         if 'microblaze' in vlnv.lower():
             mb_cell = cell
             break
