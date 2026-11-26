@@ -363,6 +363,99 @@ design. The VCU118 bitstream is the JESD204C (204C) use case.
 For toolchain setup and prerequisites, see the
 :doc:`Xilinx CMake build guide </build_guides/build_xilinx_cmake>`.
 
+Host simulation (Linux PC, no board)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Agilex 5 build of both examples can also run as an ordinary Linux program,
+with the board replaced by software models in ``src/sim/``. It runs the real
+drivers, vendor API, profile and firmware images, and is useful to check
+software changes before hardware, or without it. It is enabled with
+``-DAD9088_SIM=ON`` (OFF by default; the Nios V and Xilinx builds are
+unchanged).
+
+What the models do:
+
+* **AD9084:** the SPI slave with its direct, paged and SPIDMA access paths over
+  a sparse memory, so the four firmware images and the profile really load.
+  Secure boot, the Core1 boot steps, the mailbox (ping echoes, calibrations
+  succeed), multi-chip sync and the JESD204 link status respond the way a
+  healthy device does.
+* **Clock chips** (ADF4382, HMC7044, ADF4030): register memories that report
+  their ID and report locked.
+* **FPGA cores:** JESD204 link layer in DATA with SYSREF aligned, TPL cores
+  ready, and the two DMACs as a digital loopback: the RX capture is exactly
+  the transmit buffer.
+
+The status values are fixed, not derived from the configuration, so the
+simulation does not catch a misconfigured link, and there is no converter,
+NCO or analog model.
+
+Used Hardware
+^^^^^^^^^^^^^
+
+* An x86-64 Linux PC (native or WSL2) with GCC and 32-bit (i386) multilib
+  support. The build is 32-bit so the FPGA register windows can be mapped at
+  their real addresses.
+
+Build Command
+^^^^^^^^^^^^^
+
+``no_os_build.py`` has no way to pass ``-DAD9088_SIM=ON``, so configure with
+CMake directly, using the ``native-i386`` preset:
+
+.. code-block:: bash
+
+   sudo apt install gcc-multilib g++-multilib
+
+   cd no-OS
+
+   # Configure and build the basic example
+   cmake -B build-sim/ad9088-basic_example-native-i386 --preset native-i386 \
+         -DPROJECT_DEFCONFIG=ad9088/basic_example.conf -DAD9088_SIM=ON
+   cmake --build build-sim/ad9088-basic_example-native-i386 --target ad9088
+
+   # Configure and build the DMA example
+   cmake -B build-sim/ad9088-dma_example-native-i386 --preset native-i386 \
+         -DPROJECT_DEFCONFIG=ad9088/dma_example.conf -DAD9088_SIM=ON
+   cmake --build build-sim/ad9088-dma_example-native-i386 --target ad9088
+
+The preset also checks the C++ compiler, which fails without the 32-bit C++
+runtime (``g++-multilib``). The project compiles no C++, so if you cannot
+install it, add ``-DCMAKE_CXX_COMPILER_WORKS=TRUE`` to the configure command.
+
+Run
+^^^
+
+.. code-block:: bash
+
+   ./build-sim/ad9088-basic_example-native-i386/build/ad9088.elf
+
+The console output matches the board's, plus lines starting with ``SIM:`` that
+log the models' SPI, mailbox and DMA activity; filter them with
+``| grep -v '^SIM:'``. The basic example ends after its NCO test and exits 0.
+
+The DMA example, as on the board, parks in its ``while (1)`` after the
+capture; stop it with Ctrl-C once ``DMA_EXAMPLE Rx side 0`` is printed. With
+``AD9088_SIM_CAPTURE`` set, it writes the RX buffer to that file and the TX
+buffer to the same path plus ``.tx``. Plot them with the same script as a board
+capture (``tools/scripts/platform/altera/plot_loopback.py``), after
+splitting each into the per-channel CSVs that script reads with
+``scripts/sim_capture_to_csv.py`` from this project:
+
+.. code-block:: bash
+
+   AD9088_SIM_CAPTURE=/tmp/sim_cap.bin \
+       ./build-sim/ad9088-dma_example-native-i386/build/ad9088.elf
+
+   CONV=projects/ad9088/scripts/sim_capture_to_csv.py
+   python3 $CONV /tmp/sim_cap.bin    /tmp/sim_plot/rx
+   python3 $CONV /tmp/sim_cap.bin.tx /tmp/sim_plot/tx
+   python3 tools/scripts/platform/altera/plot_loopback.py \
+           --tx /tmp/sim_plot/tx --rx /tmp/sim_plot/rx \
+           --out /tmp/sim_plot/loopback.png
+
+Expect RX identical to TX: 0 deg phase and 0 dB gain on all 8 converters.
+
 HDL / Quartus to no-OS Build Flow (Agilex 5)
 --------------------------------------------------
 
