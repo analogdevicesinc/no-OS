@@ -887,6 +887,12 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 
 		/* Read data from the client to verify whether a close command has been sent */
 		ret = iiod_read_line(desc, conn);
+		/*
+		 * Nothing from the client yet: yield, so the other
+		 * connections are served, and come back to this state.
+		 */
+		if (ret == -EAGAIN)
+			return -EAGAIN;
 		if (NO_OS_IS_ERR_VALUE(ret))
 			return 0;
 
