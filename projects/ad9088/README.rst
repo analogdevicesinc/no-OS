@@ -525,8 +525,9 @@ either from osc's DAC Data Manager or with ``iio_writedev``, then capture:
 
 .. code-block:: bash
 
-   # tx.bin: 8 interleaved little-endian int16 channels; -c keeps it cyclic
-   iio_writedev -u ip:127.0.0.1 -c -s 4096 axi_dac < tx.bin &
+   # tx.bin: 8 interleaved little-endian int16 channels, 4096 samples;
+   # -c keeps it cyclic, -b is the waveform length in samples
+   iio_writedev -u ip:127.0.0.1 -c -b 4096 axi_dac < tx.bin &
    iio_readdev  -u ip:127.0.0.1 -s 4096 axi_adc > rx.bin
 
 ``iio_readdev`` from libiio 1.0 writes a one-line "compatibility layer" notice
@@ -535,15 +536,9 @@ comparing files. With nothing transmitted the capture is all zeros. The
 DAC's DDS tone generator is not modelled, so DDS settings do not appear in the
 capture.
 
-Two limits seen when driving the simulation over IIO:
-
-* Only the first 4096-byte block of a transmit buffer reaches the loopback:
-  on the next submit, with no new data buffered, ``iio_call_submit()`` in
-  ``iio/iio.c`` calls ``write_dev`` with an uninitialised buffer pointer. The
-  simulation logs this as ``SIM: tx dma from invalid address ... ignored``.
-* After the server stops, restarting it within about a minute fails with
-  ``IIOD server failed with code -98`` (address in use), as the socket is
-  bound without ``SO_REUSEADDR``; wait and start it again.
+``iio_writedev`` sends its ``-b`` buffer size (default 256 samples) as the
+cyclic waveform, so pass ``-b`` with the number of samples in the file to
+play all of it; the capture then repeats the whole file.
 
 HDL / Quartus to no-OS Build Flow (Agilex 5)
 --------------------------------------------------

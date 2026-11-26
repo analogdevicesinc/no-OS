@@ -464,6 +464,8 @@ int32_t __wrap_no_os_axi_io_read(uint32_t base, uint32_t offset,
 
 static uint8_t sim_loopback[SIM_LOOPBACK_MAX];
 static uint32_t sim_loopback_len;
+/* RX position in the store, carried across transfers (burst by burst). */
+static uint32_t sim_loopback_rd;
 
 static uint32_t sim_axi_get(uint32_t addr)
 {
@@ -521,6 +523,7 @@ static void sim_dmac_submit(uint32_t base)
 		n = no_os_min(len, SIM_LOOPBACK_MAX - sim_loopback_len);
 		memcpy(&sim_loopback[sim_loopback_len], buf, n);
 		sim_loopback_len += n;
+		sim_loopback_rd = 0;
 		sim_dump_capture(buf, len, true);
 		printf("SIM: tx dma %u bytes -> loopback (%u total)\n",
 		       (unsigned)len, (unsigned)sim_loopback_len);
@@ -531,9 +534,15 @@ static void sim_dmac_submit(uint32_t base)
 			       (void *)buf);
 			goto done;
 		}
-		for (i = 0; i < len; i++)
-			buf[i] = sim_loopback_len ?
-				 sim_loopback[i % sim_loopback_len] : 0;
+		for (i = 0; i < len; i++) {
+			if (!sim_loopback_len) {
+				buf[i] = 0;
+				continue;
+			}
+			buf[i] = sim_loopback[sim_loopback_rd];
+			sim_loopback_rd = (sim_loopback_rd + 1) %
+					  sim_loopback_len;
+		}
 		printf("SIM: rx dma %u bytes <- loopback\n", (unsigned)len);
 		sim_dump_capture(buf, len, false);
 	}
@@ -566,8 +575,10 @@ int32_t __wrap_no_os_axi_io_write(uint32_t base, uint32_t offset,
 	sim_axi_set(addr, data);
 
 	if (base == TX_DATA_OFFLOAD_BASEADDR && offset == DO_RESETN_OFFLOAD &&
-	    !data)
+	    !data) {
 		sim_loopback_len = 0;
+		sim_loopback_rd = 0;
+	}
 
 	if (dmac && offset == DMAC_TRANSFER_SUBMIT && (data & 0x1))
 		sim_dmac_submit(base);
