@@ -45,7 +45,24 @@
 #define MBOX_BUF		0x21000000u	/* command in, response out */
 #define MBOX_RESP_LEN		1024u	/* largest response struct */
 #define MBOX_OP_PING		0u
+#define MBOX_OP_INIT_COMPLETION	2u
+#define MBOX_OP_GET_CAL_STATUS	8u
 #define MBOX_OP_GET_FW_VERSION	0x29u
+
+/*
+ * get_cal_status: request object id at +1, reply data at +4, length at
+ * +1020.  The MCS init cal reply is adi_apollo_mcs_cal_init_status_t, the
+ * MCS tracking cal reply adi_apollo_mcs_cal_status_t.
+ */
+#define MBOX_DATA		4u
+#define MBOX_DATA_LEN		1020u
+#define CAL_OBJID_IC_MCS	4u
+#define MCS_INIT_LEN		128u
+#define MCS_INIT_LOCKED_C	24u	/* is_C/A/B_Locked follow */
+#define CAL_OBJID_TC_MCS	50u
+#define MCS_TRACK_LEN		72u
+#define MCS_TRACK_FG_DONE	24u
+#define MCS_TRACK_HALT_ACTIVE	29u
 
 /* TinyE secure-boot stage results: 0xFF = encrypted images verified. */
 #define TE_STAGE0		0x4C006342u
@@ -101,9 +118,51 @@ static uint8_t *apollo_byte(uint32_t addr, bool create)
 	return &p->data[addr & (APOLLO_PAGE_SIZE - 1)];
 }
 
+/*
+ * Status the JESD204 blocks drive for a healthy link: always read back
+ * this value.  Per side (A at 0x606../0x616.., B at 0x60E../0x61E..).
+ */
+struct apollo_ro {
+	uint32_t addr;
+	uint8_t count;	/* consecutive bytes with the same value */
+	uint8_t val;
+};
+
+static const struct apollo_ro apollo_ro_regs[] = {
+	/* JRx core: user data ready, SYSREF received, config valid */
+	{ 0x6160415Cu, 2, 0x06 }, { 0x61E0415Cu, 2, 0x06 },
+	/* JRx 204B lanes: frame sync, CGS, data ready, checksum good */
+	{ 0x6160C500u, 8, 0x38 }, { 0x61E0C500u, 8, 0x38 },
+	/* JTx: SYNC~ deasserted, PLL locked, phase established */
+	{ 0x606100C3u, 1, 0x20 }, { 0x60E100C3u, 1, 0x20 },
+	{ 0x60618001u, 1, 0x80 }, { 0x60E18001u, 1, 0x80 },
+	{ 0x60618013u, 1, 0x01 }, { 0x60E18013u, 1, 0x01 },
+};
+
+static bool apollo_ro_get(uint32_t addr, uint8_t *val)
+{
+	uint32_t i;
+
+	for (i = 0; i < sizeof(apollo_ro_regs) / sizeof(apollo_ro_regs[0]);
+	     i++) {
+		if (addr - apollo_ro_regs[i].addr < apollo_ro_regs[i].count) {
+			*val = apollo_ro_regs[i].val;
+			return true;
+		}
+	}
+
+	return false;
+}
+
 uint8_t apollo_mem_read8(uint32_t addr)
 {
-	uint8_t *b = apollo_byte(addr, false);
+	uint8_t *b;
+	uint8_t val;
+
+	if (apollo_ro_get(addr, &val))
+		return val;
+
+	b = apollo_byte(addr, false);
 
 	return b ? *b : 0;
 }
@@ -263,14 +322,41 @@ static void boot_on_write(uint32_t off, uint8_t val)
 /* Mailbox                                                                    */
 /******************************************************************************/
 
+static void mailbox_cal_status(uint32_t objid)
+{
+	uint32_t i;
+
+	switch (objid) {
+	case CAL_OBJID_IC_MCS:
+		/* SYSREF locked on every side, zero alignment error */
+		for (i = 0; i < 3; i++)
+			apollo_mem_write8(MBOX_BUF + MBOX_DATA +
+					  MCS_INIT_LOCKED_C + i, 1);
+		apollo_mem_write32(MBOX_BUF + MBOX_DATA_LEN, MCS_INIT_LEN);
+		break;
+	case CAL_OBJID_TC_MCS:
+		/* foreground run done; halt acknowledged when asked */
+		apollo_mem_write8(MBOX_BUF + MBOX_DATA + MCS_TRACK_FG_DONE, 1);
+		apollo_mem_write8(MBOX_BUF + MBOX_DATA + MCS_TRACK_HALT_ACTIVE,
+				  1);
+		apollo_mem_write32(MBOX_BUF + MBOX_DATA_LEN, MCS_TRACK_LEN);
+		break;
+	default:
+		break;
+	}
+}
+
 /*
  * Stand-in for the Core1 command handler.  Every command succeeds at once:
  * the response buffer is cleared (status 0 = OK) and busy stays clear.
- * Ping echoes its word; get_fw_version reports a fixed version.
+ * Ping echoes its word, init cals report done and successful, the MCS
+ * cal status reports SYSREF locked with no alignment error, and
+ * get_fw_version reports a fixed version.
  */
 static void mailbox_on_command(uint8_t opcode)
 {
 	uint32_t echo = apollo_mem_read32(MBOX_BUF);
+	uint32_t objid = apollo_mem_read32(MBOX_BUF + 1);
 	uint32_t i;
 
 	for (i = 0; i < MBOX_RESP_LEN; i++)
@@ -279,6 +365,12 @@ static void mailbox_on_command(uint8_t opcode)
 	switch (opcode) {
 	case MBOX_OP_PING:
 		apollo_mem_write32(MBOX_BUF + 4, echo);
+		break;
+	case MBOX_OP_INIT_COMPLETION:
+		apollo_mem_write8(MBOX_BUF + 5, 1);	/* done, success */
+		break;
+	case MBOX_OP_GET_CAL_STATUS:
+		mailbox_cal_status(objid);
 		break;
 	case MBOX_OP_GET_FW_VERSION:
 		apollo_mem_write8(MBOX_BUF + 4, 1);	/* major 1, rest 0 */

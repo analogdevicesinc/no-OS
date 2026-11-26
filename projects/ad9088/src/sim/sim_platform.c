@@ -167,6 +167,10 @@ struct sim_spi_ro {
 static const struct sim_spi_ro sim_spi_ro_regs[] = {
 	{ SIM_SPI_ADF4382, 0x67, 11 },	/* chip version U5_A */
 	{ SIM_SPI_ADF4382, 0x58, 0x09 },	/* LOCKED, REF OK, FSM idle */
+	{ SIM_SPI_HMC7044, 0x82, 0x02 },	/* PLL1 locked, CLKIN0 */
+	{ SIM_SPI_HMC7044, 0x7D, 0x09 },	/* PLL2 + PLL1&2 locked */
+	{ SIM_SPI_ADF4030, 0x8F, 0x40 },	/* REF OK, not busy */
+	{ SIM_SPI_ADF4030, 0x90, 0x01 },	/* PLL locked, no TDC error */
 };
 
 static bool sim_spi_ro_get(enum sim_spi_dev dev, uint16_t addr, uint8_t *val)
@@ -378,10 +382,32 @@ static struct sim_axi_reg *sim_axi_slot(uint32_t addr, bool create)
 	return NULL;
 }
 
+/* Status registers the cores drive: always read back this value. */
+static const struct {
+	uint32_t addr;
+	uint32_t val;
+} sim_axi_ro_regs[] = {
+	/* JESD204 link layer: link state DATA, SYSREF captured, aligned */
+	{ RX_JESD_BASEADDR + 0x280, 0x3 },
+	{ RX_JESD_BASEADDR + 0x108, 0x1 },
+	{ TX_JESD_BASEADDR + 0x280, 0x3 },
+	{ TX_JESD_BASEADDR + 0x108, 0x1 },
+};
+
 int32_t __wrap_no_os_axi_io_read(uint32_t base, uint32_t offset,
 				 uint32_t *data)
 {
-	struct sim_axi_reg *r = sim_axi_slot(base + offset, false);
+	struct sim_axi_reg *r;
+	uint32_t i;
+
+	for (i = 0; i < NO_OS_ARRAY_SIZE(sim_axi_ro_regs); i++) {
+		if (sim_axi_ro_regs[i].addr == base + offset) {
+			*data = sim_axi_ro_regs[i].val;
+			return 0;
+		}
+	}
+
+	r = sim_axi_slot(base + offset, false);
 
 	if (r) {
 		*data = r->val;
