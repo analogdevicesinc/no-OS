@@ -89,7 +89,8 @@ Build Command
 
 The Xilinx platform uses the CMake/Ninja build system via the
 ``no_os_build.py`` helper script. Available variants: ``basic``.
-Available boards: ``zed``, ``zcu102``.
+Available boards: ``zed``, ``zc706``, ``zcu102``, ``vcu118``, ``kcu105``,
+``vpk180``.
 
 For toolchain setup and prerequisites, see the
 :doc:`Xilinx CMake build guide </build_guides/build_xilinx_cmake>`.
