@@ -52,6 +52,24 @@ target_compile_definitions(ad9082 PRIVATE PLATFORM_VERSAL)
 # the *_Config structs use the SDT layout. Build no-os with -DSDT to match.
 set(NOOS_XILINX_SDT ON)
 
+# Software-in-the-loop build (QEMU / no board): -DAD9082_SIM=ON swaps the SPI,
+# GPIO and UART ops and the AXI register access for the models in src/sim/.  The
+# project sources are unchanged; the swap is done here.  OFF by default.
+option(AD9082_SIM "Build against the src/sim hardware models (QEMU, no board)" OFF)
+if(AD9082_SIM)
+    target_sources(ad9082 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/sim/sim_platform.c)
+    target_compile_definitions(ad9082 PRIVATE
+        AD9082_SIM
+        xil_spi_ops=sim_spi_ops
+        xil_gpio_ops=sim_gpio_ops
+        xil_uart_ops=sim_uart_ops
+    )
+    target_link_options(ad9082 PRIVATE
+        -Wl,--wrap=no_os_axi_io_read
+        -Wl,--wrap=no_os_axi_io_write
+    )
+endif()
+
 config_platform_sdk(ad9082)
 add_flash_target(ad9082)
 post_build_config(ad9082)
