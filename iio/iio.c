@@ -1347,12 +1347,19 @@ static int iio_call_submit(struct iiod_ctx *ctx, const char *device,
 		     dev->dev_descriptor->write_dev && dev->trig_idx == NO_TRIGGER)) {
 		/* Code used to don't break devices using read_dev */
 		int32_t ret;
-		void *buff;
+		void *buff = NULL;
 		struct iio_buffer *buffer = &dev->buffer.public;
 
 		ret = iio_buffer_get_block(buffer, &buff);
 		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
+
+		/*
+		 * An output buffer with nothing new in it returns no block
+		 * (and starts no transaction): there is nothing to submit.
+		 */
+		if (!buff)
+			return 0;
 
 		if (dir == IIO_DIRECTION_INPUT)
 			ret = dev->dev_descriptor->read_dev(dev->dev_instance,
