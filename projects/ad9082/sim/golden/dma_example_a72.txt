@@ -1,0 +1,47 @@
+Hello, this is the dma example for ad9082
+Running on Cortex-A72 (APU, aarch64)
+PLL1: Locked, CLKIN0 @ 100000000 Hz, PFD: 10000 kHz - PLL2: Locked @ 3000.000000 MHz
+AD9082 Rev. 3 Grade 2 (API 1.7.0) probed
+WARNING: hmc7044_jesd204_link_pre_setup: Link2 forcing continuous SYSREF mode
+running jesd_rx_calibrate_204c, LR 24750000 kbps
+JESD RX (JTX) Link2 PLL locked, PHASE established, MODE valid
+JESD TX (JRX) Link0 204C status: Link is good (6)
+rx_adc: Successfully initialized (2000012207 Hz)
+tx_dac: Successfully initialized (2000024414 Hz)
+tx_jesd status:
+        Link is enabled
+        Measured Link Clock: 375.003 MHz
+        Reported Link Clock: 375.000 MHz
+        Measured Device Clock: 250.002 MHz
+        Reported Device Clock: 250.000 MHz
+        Desired Device Clock: 250.000 MHz
+        Lane rate: 24750.000 MHz
+        Lane rate / 66: 375.000 MHz
+        LEMC rate: 11.718 MHz
+        Link status: DATA
+        SYSREF captured: Yes
+        SYSREF alignment error: No
+rx_jesd status:
+        Link is enabled
+        Measured Link Clock: 375.002 MHz
+        Reported Link Clock: 375.000 MHz
+        Measured Device Clock: 250.002 MHz
+        Reported Device Clock: 250.000 MHz
+        Desired Device Clock: 250.000 MHz
+        Lane rate: 24750.000 MHz
+        Lane rate / 66: 375.000 MHz
+        LEMC rate: 11.718 MHz
+        Link status: DATA
+        SYSREF captured: Yes
+        SYSREF alignment error: No
+[dma] TX: set DAC data source to DMA
+[dma] TX: load sine LUT into DDR buffer @0x10000000
+[dma] TX: load offload (262144 bytes, non-cyclic)
+[dma] TX: transfer_start returned 0
+DMA_EXAMPLE Tx: address=0x10000000 samples=65536 channels=8 bits=32
+[dma] RX: start capture -> DDR @0x14000000 (262144 bytes)
+[dma] RX: transfer_start returned 0
+[dma] RX: waiting for completion (<=1000 ms)...
+[dma] RX: wait_completion returned 0
+DMA_EXAMPLE Rx: address=0x14000000 samples=131072 channels=8 bits=16
+Bye

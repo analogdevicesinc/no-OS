@@ -1,0 +1,37 @@
+Hello, this is the basic example for ad9082
+Running on Cortex-R5F (RPU, armv7-r)
+PLL1: Locked, CLKIN0 @ 100000000 Hz, PFD: 10000 kHz - PLL2: Locked @ 3000.000000 MHz
+AD9082 Rev. 3 Grade 2 (API 1.7.0) probed
+WARNING: hmc7044_jesd204_link_pre_setup: Link2 forcing continuous SYSREF mode
+running jesd_rx_calibrate_204c, LR 24750000 kbps
+JESD RX (JTX) Link2 PLL locked, PHASE established, MODE valid
+JESD TX (JRX) Link0 204C status: Link is good (6)
+tx_jesd status:
+        Link is enabled
+        Measured Link Clock: 375.003 MHz
+        Reported Link Clock: 375.000 MHz
+        Measured Device Clock: 250.002 MHz
+        Reported Device Clock: 250.000 MHz
+        Desired Device Clock: 250.000 MHz
+        Lane rate: 24750.000 MHz
+        Lane rate / 66: 375.000 MHz
+        LEMC rate: 11.718 MHz
+        Link status: DATA
+        SYSREF captured: Yes
+        SYSREF alignment error: No
+rx_jesd status:
+        Link is enabled
+        Measured Link Clock: 375.003 MHz
+        Reported Link Clock: 375.000 MHz
+        Measured Device Clock: 250.003 MHz
+        Reported Device Clock: 250.000 MHz
+        Desired Device Clock: 250.000 MHz
+        Lane rate: 24750.000 MHz
+        Lane rate / 66: 375.000 MHz
+        LEMC rate: 11.718 MHz
+        Link status: DATA
+        SYSREF captured: Yes
+        SYSREF alignment error: No
+tx_dac: Successfully initialized (2000024414 Hz)
+rx_adc: Successfully initialized (2000024414 Hz)
+Bye

@@ -358,3 +358,71 @@ into DDR. The basic example prints which core it is running on
    (it appears only once the PLM has booted it). For the RPU build, select the
    R5 instead (``targets -set -filter {name =~ "*Cortex-R5*#0*"}``) and download
    ``build/ad9082-basic_example-vpk180-r5/build/ad9082.elf``.
+
+Run Without a Board (QEMU)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+All three examples can also run **in simulation**, in AMD's QEMU (shipped with
+Vitis), without a VPK180 or an AD9082. The firmware is the same no-OS code; only
+the hardware is replaced by software models. With ``-DAD9082_SIM=ON`` the
+project's SPI, GPIO and UART operations and the FPGA register accesses go to
+``src/sim/sim_platform.c``. It models the AD9082 and HMC7044 status registers,
+the JESD204, TPL and DMA cores, and a DAC-to-ADC loopback: RX channel *n* returns
+what TX channel *n* sends, as DDS tones or the TX DMA buffer. No other source
+file changes, and the option is off by default.
+
+This checks the software: init order, error paths, the JESD204 state machine,
+the A72 and R5 builds, DMA buffer handling, IIOD and osc. It does not model RF,
+link quality or calibration, and it cannot detect a configuration that the chip
+itself would reject. Use the board for those.
+
+.. code-block:: bash
+
+   source "$XILINX_VITIS/settings64.sh"
+   cd no-OS
+
+   # Build a simulation ELF (separate build directory)
+   cmake -B build-sim/ad9082-basic_example-vpk180 --preset vpk180 \
+      -DPROJECT_DEFCONFIG=ad9082/basic_example.conf \
+      -DHARDWARE=/path/to/ad9082_fmca_ebz_vpk180/system_top.xsa \
+      -DAD9082_SIM=ON
+   cmake --build build-sim/ad9082-basic_example-vpk180 --target ad9082
+
+   # Run it on the Cortex-A72 (use "r5" and a vpk180-r5 build for the R5).
+   # The UART appears in this terminal; quit with Ctrl-A, then X.
+   tools/scripts/platform/xilinx/qemu/run_qemu.sh a72 \
+      build-sim/ad9082-basic_example-vpk180/build/ad9082.elf 300 | tee run.log
+
+   # Compare the console with a board log
+   projects/ad9082/sim/compare_golden.sh \
+      projects/ad9082/sim/golden/basic_example_a72.txt run.log
+
+A full bring-up takes about 2 minutes, because QEMU waits out the driver delays.
+Lines starting with ``SIM:`` come from the models and name registers they don't
+model. ``compare_golden.sh`` masks the values that also vary between board runs
+(measured clocks) and must report ``MATCH``.
+
+**DMA capture.** While ``dma_example`` runs, dump the RX buffer from emulated
+DDR and plot it with the same script used on hardware:
+
+.. code-block:: bash
+
+   python3 tools/scripts/platform/xilinx/qemu/qemu_capture.py 0x14000000 131072 8
+   python3 tools/scripts/platform/xilinx/plot.py 8 512
+
+**IIO and osc.** Put the UART on a TCP socket and start the IIOD multiplexer.
+libiio opens several connections, and the emulated UART is a single stream.
+Then connect osc or the libiio tools to port 30432:
+
+.. code-block:: bash
+
+   UART=tcp:127.0.0.1:30431,server=on,wait=off \
+      tools/scripts/platform/xilinx/qemu/run_qemu.sh a72 \
+      build-sim/ad9082-iio_example-vpk180/build/ad9082.elf 3600
+   # after about 3 minutes, in another terminal:
+   python3 tools/scripts/iiod_mux.py
+   iio_info -u ip:127.0.0.1:30432     # or osc, URI ip:localhost:30432
+
+Changing a DDS tone in osc changes the next capture through the loopback model.
+``tools/scripts/iio_capture.py`` reads an IIO buffer without libiio. libiio's
+serial backend can't be used here: it refuses pseudo-terminals.
