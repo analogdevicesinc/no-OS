@@ -392,6 +392,13 @@ static const struct {
 	{ RX_JESD_BASEADDR + 0x108, 0x1 },
 	{ TX_JESD_BASEADDR + 0x280, 0x3 },
 	{ TX_JESD_BASEADDR + 0x108, 0x1 },
+	/* TPL cores: interface status OK, clock 337.5 MHz (x 256 / 390625) */
+	{ RX_CORE_BASEADDR + 0x5C, 0x1 },
+	{ RX_CORE_BASEADDR + 0x54, 221184 },
+	{ RX_CORE_BASEADDR + 0x58, 1 },
+	{ TX_CORE_BASEADDR + 0x5C, 0x1 },
+	{ TX_CORE_BASEADDR + 0x54, 221184 },
+	{ TX_CORE_BASEADDR + 0x58, 1 },
 };
 
 int32_t __wrap_no_os_axi_io_read(uint32_t base, uint32_t offset,
@@ -425,14 +432,124 @@ int32_t __wrap_no_os_axi_io_read(uint32_t base, uint32_t offset,
 	return 0;
 }
 
+/******************************************************************************/
+/* DMA                                                                        */
+/******************************************************************************/
+
+/*
+ * The two DMACs as a digital loopback: a TX transfer (memory to device)
+ * appends its bytes to the loopback store, an RX transfer (device to
+ * memory) fills its buffer from the store, repeated the way the TX data
+ * offload replays its memory.  Buffers are host pointers, so the copies
+ * are direct.  Every transfer completes at once (SOT | EOT pending).
+ */
+#define DMAC_IRQ_PENDING	0x084
+#define DMAC_TRANSFER_SUBMIT	0x408
+#define DMAC_DEST_ADDRESS	0x410
+#define DMAC_SRC_ADDRESS	0x414
+#define DMAC_X_LENGTH		0x418
+#define DMAC_IRQ_SOT_EOT	0x3
+
+#define SIM_LOOPBACK_MAX	(1024 * 1024)
+
+static uint8_t sim_loopback[SIM_LOOPBACK_MAX];
+static uint32_t sim_loopback_len;
+
+static uint32_t sim_axi_get(uint32_t addr)
+{
+	struct sim_axi_reg *r = sim_axi_slot(addr, false);
+
+	return r ? r->val : 0;
+}
+
+static void sim_axi_set(uint32_t addr, uint32_t val)
+{
+	struct sim_axi_reg *r = sim_axi_slot(addr, true);
+
+	if (r)
+		r->val = val;
+}
+
+/*
+ * Write a raw DMA buffer to $AD9088_SIM_CAPTURE (RX) or to the same path
+ * plus ".tx" (TX), if the variable is set.
+ */
+static void sim_dump_capture(const uint8_t *buf, uint32_t len, bool tx)
+{
+	const char *env = getenv("AD9088_SIM_CAPTURE");
+	char path[512];
+	FILE *f;
+
+	if (!env)
+		return;
+
+	snprintf(path, sizeof(path), "%s%s", env, tx ? ".tx" : "");
+
+	f = fopen(path, "wb");
+	if (!f || fwrite(buf, 1, len, f) != len)
+		fprintf(stderr, "SIM: cannot write capture to %s\n", path);
+	else
+		printf("SIM: %s capture written to %s\n", tx ? "tx" : "rx",
+		       path);
+	if (f)
+		fclose(f);
+}
+
+static void sim_dmac_submit(uint32_t base)
+{
+	uint32_t len = sim_axi_get(base + DMAC_X_LENGTH) + 1;
+	uint8_t *buf;
+	uint32_t i, n;
+
+	if (base == TX_DMA_BASEADDR) {
+		buf = (uint8_t *)(uintptr_t)sim_axi_get(base + DMAC_SRC_ADDRESS);
+		n = no_os_min(len, SIM_LOOPBACK_MAX - sim_loopback_len);
+		memcpy(&sim_loopback[sim_loopback_len], buf, n);
+		sim_loopback_len += n;
+		sim_dump_capture(buf, len, true);
+		printf("SIM: tx dma %u bytes -> loopback (%u total)\n",
+		       (unsigned)len, (unsigned)sim_loopback_len);
+	} else {
+		buf = (uint8_t *)(uintptr_t)sim_axi_get(base + DMAC_DEST_ADDRESS);
+		for (i = 0; i < len; i++)
+			buf[i] = sim_loopback_len ?
+				 sim_loopback[i % sim_loopback_len] : 0;
+		printf("SIM: rx dma %u bytes <- loopback\n", (unsigned)len);
+		sim_dump_capture(buf, len, false);
+	}
+
+	sim_axi_set(base + DMAC_TRANSFER_SUBMIT, 0);
+	sim_axi_set(base + DMAC_IRQ_PENDING, DMAC_IRQ_SOT_EOT);
+}
+
+/* Data offload: STATUS is write 1 to clear; a TX offload reset drops
+ * what was loaded, as a refill follows. */
+#define DO_STATUS		0x080
+#define DO_RESETN_OFFLOAD	0x084
+
 int32_t __wrap_no_os_axi_io_write(uint32_t base, uint32_t offset,
 				  uint32_t data)
 {
-	struct sim_axi_reg *r = sim_axi_slot(base + offset, true);
+	uint32_t addr = base + offset;
+	bool dmac = base == RX_DMA_BASEADDR || base == TX_DMA_BASEADDR;
+	bool offload = base == RX_DATA_OFFLOAD_BASEADDR ||
+		       base == TX_DATA_OFFLOAD_BASEADDR;
 
-	if (!r)
-		return -ENOMEM;
-	r->val = data;
+	if ((dmac && offset == DMAC_IRQ_PENDING) ||
+	    (offload && offset == DO_STATUS)) {
+		/* write 1 to clear */
+		sim_axi_set(addr, sim_axi_get(addr) & ~data);
+		return 0;
+	}
+
+	sim_axi_set(addr, data);
+
+	if (base == TX_DATA_OFFLOAD_BASEADDR && offset == DO_RESETN_OFFLOAD &&
+	    !data)
+		sim_loopback_len = 0;
+
+	if (dmac && offset == DMAC_TRANSFER_SUBMIT && (data & 0x1))
+		sim_dmac_submit(base);
 
 	return 0;
 }
