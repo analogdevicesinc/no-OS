@@ -399,6 +399,10 @@ static const struct {
 	{ TX_CORE_BASEADDR + 0x5C, 0x1 },
 	{ TX_CORE_BASEADDR + 0x54, 221184 },
 	{ TX_CORE_BASEADDR + 0x58, 1 },
+	/* DMACs: the streaming side is not memory-mapped (reads 0), which is
+	 * how the driver tells TX (mem to dev) from RX (dev to mem) */
+	{ TX_DMA_BASEADDR + 0x410, 0 },
+	{ RX_DMA_BASEADDR + 0x414, 0 },
 };
 
 int32_t __wrap_no_os_axi_io_read(uint32_t base, uint32_t offset,
@@ -452,6 +456,12 @@ int32_t __wrap_no_os_axi_io_read(uint32_t base, uint32_t offset,
 
 #define SIM_LOOPBACK_MAX	(1024 * 1024)
 
+/*
+ * On the board a DMA from a bad address reads garbage; on the host it
+ * would crash, so addresses in the never-mapped first page are refused.
+ */
+#define SIM_DMA_ADDR_MIN	0x1000u
+
 static uint8_t sim_loopback[SIM_LOOPBACK_MAX];
 static uint32_t sim_loopback_len;
 
@@ -503,6 +513,11 @@ static void sim_dmac_submit(uint32_t base)
 
 	if (base == TX_DMA_BASEADDR) {
 		buf = (uint8_t *)(uintptr_t)sim_axi_get(base + DMAC_SRC_ADDRESS);
+		if ((uintptr_t)buf < SIM_DMA_ADDR_MIN) {
+			printf("SIM: tx dma from invalid address %p ignored\n",
+			       (void *)buf);
+			goto done;
+		}
 		n = no_os_min(len, SIM_LOOPBACK_MAX - sim_loopback_len);
 		memcpy(&sim_loopback[sim_loopback_len], buf, n);
 		sim_loopback_len += n;
@@ -511,6 +526,11 @@ static void sim_dmac_submit(uint32_t base)
 		       (unsigned)len, (unsigned)sim_loopback_len);
 	} else {
 		buf = (uint8_t *)(uintptr_t)sim_axi_get(base + DMAC_DEST_ADDRESS);
+		if ((uintptr_t)buf < SIM_DMA_ADDR_MIN) {
+			printf("SIM: rx dma to invalid address %p ignored\n",
+			       (void *)buf);
+			goto done;
+		}
 		for (i = 0; i < len; i++)
 			buf[i] = sim_loopback_len ?
 				 sim_loopback[i % sim_loopback_len] : 0;
@@ -518,6 +538,7 @@ static void sim_dmac_submit(uint32_t base)
 		sim_dump_capture(buf, len, false);
 	}
 
+done:
 	sim_axi_set(base + DMAC_TRANSFER_SUBMIT, 0);
 	sim_axi_set(base + DMAC_IRQ_PENDING, DMAC_IRQ_SOT_EOT);
 }

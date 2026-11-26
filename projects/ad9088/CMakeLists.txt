@@ -60,6 +60,7 @@ if(AD9088_SIM)
     target_sources(ad9088 PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/sim/sim_platform.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/sim/apollo_model.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/sim/sim_uart.c
     )
     # Nios V HAL header stand-ins first, then the Altera init-param headers.
     target_include_directories(ad9088 BEFORE PUBLIC
@@ -70,7 +71,16 @@ if(AD9088_SIM)
         AD9088_SIM
         altera_spi_ops=sim_spi_ops
         altera_gpio_ops=sim_gpio_ops
+        altera_uart_ops=sim_uart_ops
+        altera_irq_ops=sim_irq_ops
     )
+    # iio_app.c (IIO example) is in the no-OS library and includes the
+    # Altera UART/IRQ headers and names the Altera IRQ ops directly.
+    target_include_directories(no-os PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/sim/hal
+        ${NO_OS_DIR}/drivers/platform/altera
+    )
+    target_compile_definitions(no-os PRIVATE altera_irq_ops=sim_irq_ops)
     target_link_options(ad9088 PRIVATE
         -Wl,--wrap=no_os_axi_io_read
         -Wl,--wrap=no_os_axi_io_write

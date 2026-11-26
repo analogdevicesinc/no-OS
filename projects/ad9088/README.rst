@@ -412,7 +412,7 @@ For toolchain setup and prerequisites, see the
 Host simulation (Linux PC, no board)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Agilex 5 build of both examples can also run as an ordinary Linux program,
+The Agilex 5 build of all three examples can also run as an ordinary Linux program,
 with the board replaced by software models in ``src/sim/``. It runs the real
 drivers, vendor API, profile and firmware images, and is useful to check
 software changes before hardware, or without it. It is enabled with
@@ -431,6 +431,9 @@ What the models do:
 * **FPGA cores:** JESD204 link layer in DATA with SYSREF aligned, TPL cores
   ready, and the two DMACs as a digital loopback: the RX capture is exactly
   the transmit buffer.
+* **IIO transport:** on the host the IIO example serves IIOD over TCP (port
+  30431) instead of the JTAG-UART, so IIO clients connect to
+  ``ip:127.0.0.1``.
 
 The status values are fixed, not derived from the configuration, so the
 simulation does not catch a misconfigured link, and there is no converter,
@@ -464,6 +467,11 @@ CMake directly, using the ``native-i386`` preset:
    cmake -B build-sim/ad9088-dma_example-native-i386 --preset native-i386 \
          -DPROJECT_DEFCONFIG=ad9088/dma_example.conf -DAD9088_SIM=ON
    cmake --build build-sim/ad9088-dma_example-native-i386 --target ad9088
+
+   # Configure and build the IIO example
+   cmake -B build-sim/ad9088-iio_example-native-i386 --preset native-i386 \
+         -DPROJECT_DEFCONFIG=ad9088/iio_example.conf -DAD9088_SIM=ON
+   cmake --build build-sim/ad9088-iio_example-native-i386 --target ad9088
 
 The preset also checks the C++ compiler, which fails without the 32-bit C++
 runtime (``g++-multilib``). The project compiles no C++, so if you cannot
@@ -501,6 +509,41 @@ splitting each into the per-channel CSVs that script reads with
            --out /tmp/sim_plot/loopback.png
 
 Expect RX identical to TX: 0 deg phase and 0 dB gain on all 8 converters.
+
+The IIO example brings the links up, then serves IIOD; it is ready once
+``Project configured, starting IIOD`` is printed. From a second terminal:
+
+.. code-block:: bash
+
+   ./build-sim/ad9088-iio_example-native-i386/build/ad9088.elf   # terminal 1
+
+   iio_info -u ip:127.0.0.1          # lists axi_adc and axi_dac
+   osc -u ip:127.0.0.1               # or IIO Oscilloscope, connect to 127.0.0.1
+
+The ADC captures what the DAC was last given, so push a transmit buffer first,
+either from osc's DAC Data Manager or with ``iio_writedev``, then capture:
+
+.. code-block:: bash
+
+   # tx.bin: 8 interleaved little-endian int16 channels; -c keeps it cyclic
+   iio_writedev -u ip:127.0.0.1 -c -s 4096 axi_dac < tx.bin &
+   iio_readdev  -u ip:127.0.0.1 -s 4096 axi_adc > rx.bin
+
+``iio_readdev`` from libiio 1.0 writes a one-line "compatibility layer" notice
+to standard output before the data; drop it (``tail -c <bytes>``) when
+comparing files. With nothing transmitted the capture is all zeros. The
+DAC's DDS tone generator is not modelled, so DDS settings do not appear in the
+capture.
+
+Two limits seen when driving the simulation over IIO:
+
+* Only the first 4096-byte block of a transmit buffer reaches the loopback:
+  on the next submit, with no new data buffered, ``iio_call_submit()`` in
+  ``iio/iio.c`` calls ``write_dev`` with an uninitialised buffer pointer. The
+  simulation logs this as ``SIM: tx dma from invalid address ... ignored``.
+* After the server stops, restarting it within about a minute fails with
+  ``IIOD server failed with code -98`` (address in use), as the socket is
+  bound without ``SO_REUSEADDR``; wait and start it again.
 
 HDL / Quartus to no-OS Build Flow (Agilex 5)
 --------------------------------------------------
