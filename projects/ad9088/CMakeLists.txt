@@ -1,9 +1,19 @@
 add_executable(ad9088)
 
+# Software-in-the-loop build (host, no board): -DAD9088_SIM=ON with the
+# native-i386 preset builds the Agilex 5 variant of the project for the PC and
+# replaces the hardware with the models in src/sim/. The Altera platform
+# sources are reused; OFF by default.
+option(AD9088_SIM "Build against the src/sim hardware models (host, no board)" OFF)
+set(AD9088_PLATFORM_DIR ${PLATFORM})
+if(AD9088_SIM)
+    set(AD9088_PLATFORM_DIR altera)
+endif()
+
 target_sources(ad9088 PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/common_data.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}/main.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}/parameters.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${AD9088_PLATFORM_DIR}/main.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${AD9088_PLATFORM_DIR}/parameters.c
 )
 
 # main.c selects the example with a bare #ifdef, so the Kconfig choice is
@@ -33,8 +43,36 @@ endif()
 target_include_directories(ad9088 PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common
     ${CMAKE_CURRENT_SOURCE_DIR}/src/platform
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${AD9088_PLATFORM_DIR}
 )
+
+if(AD9088_SIM)
+    target_sources(ad9088 PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/sim/sim_platform.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/sim/apollo_model.c
+    )
+    # Nios V HAL header stand-ins first, then the Altera init-param headers.
+    target_include_directories(ad9088 BEFORE PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/sim/hal
+        ${NO_OS_DIR}/drivers/platform/altera
+    )
+    target_compile_definitions(ad9088 PRIVATE
+        AD9088_SIM
+        altera_spi_ops=sim_spi_ops
+        altera_gpio_ops=sim_gpio_ops
+    )
+    target_link_options(ad9088 PRIVATE
+        -Wl,--wrap=no_os_axi_io_read
+        -Wl,--wrap=no_os_axi_io_write
+    )
+    # GCC 15 defaults to C23, where the linux-userspace platform's
+    # "int32_t (*)()" casts no longer compile; build as C17.
+    target_compile_options(no-os PRIVATE -std=gnu17)
+    target_compile_options(ad9088 PRIVATE -std=gnu17)
+    # Firmware / profile blobs are linked as host objects.
+    set(NO_OS_OBJCOPY_BIN_FORMAT "elf32-i386")
+    set(NO_OS_OBJCOPY_BIN_ARCH "i386")
+endif()
 
 # Device profile and signed core firmware, linked in as binary blobs. The
 # driver owns the image list and the symbol names; PROFILE overrides the
