@@ -153,6 +153,60 @@ def harvest_compile_manifest(build_dir):
             "force_includes": force_includes}
 
 
+def vitis_ide_env(xsa_work):
+    """Return the environment for launching the Vitis IDE.
+
+    The IDE needs a clangd language server for code navigation. Full Vitis
+    installs bundle one; the embedded-only install does not, and the IDE then
+    starts whatever `clangd` is on PATH. That is the host's clangd, which
+    cannot run inside the IDE's environment: Vitis puts its own older
+    libstdc++ on LD_LIBRARY_PATH, so the server exits at startup and the IDE
+    reports that it crashed. In that case, make the IDE find a wrapper first
+    that drops LD_LIBRARY_PATH before running the host clangd.
+    """
+    env = os.environ.copy()
+    if os.name == "nt":
+        return env
+    vitis_root = Path(env.get("XILINX_VITIS", ""))
+    if list(vitis_root.glob("lnx64/tools/clang*/bin/clangd")):
+        return env
+    host_clangd = shutil.which("clangd")
+    if not host_clangd:
+        print("--open: this Vitis install has no clangd and none was found on "
+              "PATH; code navigation (Go to Definition) will not work in the "
+              "IDE. Install clangd from your distribution to enable it.",
+              file=sys.stderr)
+        return env
+    wrapper_dir = xsa_work / "ide" / "tools"
+    wrapper_dir.mkdir(parents=True, exist_ok=True)
+    wrapper = wrapper_dir / "clangd"
+    # The IDE always passes --directory-map-file <file>, an option that only
+    # the clangd bundled with Vitis understands; the host clangd exits on it.
+    wrapper.write_text(
+        "#!/bin/sh\n"
+        "unset LD_LIBRARY_PATH\n"
+        "skip=0\n"
+        "for arg in \"$@\"; do\n"
+        "\tshift\n"
+        "\tif [ \"$skip\" = 1 ]; then skip=0; continue; fi\n"
+        "\tcase \"$arg\" in\n"
+        "\t--directory-map-file) skip=1; continue ;;\n"
+        "\t--directory-map-file=*) continue ;;\n"
+        "\tesac\n"
+        "\tset -- \"$@\" \"$arg\"\n"
+        "done\n"
+        f"exec {shlex.quote(host_clangd)} \"$@\"\n")
+    wrapper.chmod(0o755)
+    # The Vitis launcher rebuilds PATH and ends up with /bin ahead of whatever
+    # the caller had put first, so prepending to PATH is not enough. It
+    # prepends VITIS_IDE_USER_TOOLCHAIN last, which keeps the wrapper in front.
+    user_toolchain = env.get("VITIS_IDE_USER_TOOLCHAIN")
+    env["VITIS_IDE_USER_TOOLCHAIN"] = (
+        f"{wrapper_dir}{os.pathsep}{user_toolchain}" if user_toolchain
+        else str(wrapper_dir))
+    return env
+
+
 def open_vitis_workspace(repo_root, build_dir, combo):
     """Populate and open a Vitis Unified IDE workspace for a Xilinx project.
 
@@ -223,7 +277,8 @@ def open_vitis_workspace(repo_root, build_dir, combo):
 
     print(f"Opening Vitis IDE workspace: {workspace}")
     try:
-        subprocess.run([vitis, "-w", str(workspace)], check=True)
+        subprocess.run([vitis, "-w", str(workspace)], check=True,
+                       env=vitis_ide_env(xsa_work))
     except subprocess.CalledProcessError as e:
         print(f"--open: failed to launch 'vitis': {e}", file=sys.stderr)
 
@@ -512,6 +567,30 @@ def echo_cmd(cmd):
     print(f"  $ {quote_cmd(cmd)}", flush=True)
 
 
+def first_cmake_error(stderr):
+    """Return the first error CMake reported, or the tail of stderr if none.
+
+    A failed configure usually prints one meaningful error followed by
+    consequences of it (e.g. a toolchain file that aborts leaves every
+    CMAKE_<LANG>_COMPILER unset), so the tail of stderr is the wrong part to
+    show. The block ends at the next CMake message or at the call stack.
+    """
+    lines = stderr.splitlines()
+    for i, line in enumerate(lines):
+        if not line.startswith("CMake Error"):
+            continue
+        block = [line]
+        for follow in lines[i + 1:]:
+            if follow.startswith(("CMake Error", "CMake Warning",
+                                  "Call Stack", "-- ")):
+                break
+            block.append(follow)
+        while block and not block[-1].strip():
+            block.pop()
+        return "\n".join(block)
+    return stderr[-500:]
+
+
 def append_log(log_path, section, result):
     """Append a labelled section of captured output to the build log."""
     with open(log_path, "a") as f:
@@ -599,7 +678,8 @@ def run_build(repo_root, combo, build_dir_base, jobs, clean, dry_run, probe=None
         except subprocess.CalledProcessError as e:
             append_log(log_path, "Configure", e)
             spinner.finish("FAILED")
-            return combo, False, f"Configure failed:\n{e.stderr[-500:]}"
+            return combo, False, (f"Configure failed:\n"
+                                  f"{first_cmake_error(e.stderr)}")
 
     with Spinner(f"Building {label}") as spinner:
         echo_cmd(build_cmd)
@@ -873,7 +953,12 @@ def cmd_build(args, repo_root, presets):
         for combo, msg in failures:
             print(f"  - {combo['project']}/{combo['variant']} for {combo['board']}")
             if msg:
-                for line in msg.strip().split("\n")[-3:]:
+                lines = msg.strip().split("\n")
+                # A configure failure is already reduced to its first error;
+                # everything else is a raw stderr tail.
+                if not msg.startswith("Configure failed:"):
+                    lines = lines[-3:]
+                for line in lines:
                     print(f"    {line}")
         sys.exit(1)
 

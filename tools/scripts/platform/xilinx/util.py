@@ -21,6 +21,7 @@ Arguments (positional):
 """
 
 import os
+import re
 import sys
 import time
 import subprocess
@@ -39,6 +40,27 @@ TWHITE = "\033[39m"   # Default text
 def log_warn(msg):
     """Log a highlighted WARNING to stderr so it stands out in build/CI logs."""
     print(f"{TYELLOW}WARNING: {msg}{TWHITE}", file=sys.stderr)
+
+
+# ---------------------------------------------------------------------------
+# Environment
+# ---------------------------------------------------------------------------
+
+def _drop_wsl_windows_path():
+    """Remove the Windows drive mounts (/mnt/<letter>/...) from PATH on WSL.
+
+    The BSP CMake scripts call find_package() for drivers the design may not
+    have (e.g. INTC on a PS-only interrupt topology). On a miss, CMake falls
+    back to searching every prefix derived from PATH. WSL appends the Windows
+    PATH, and each lookup there crosses the slow Windows filesystem bridge,
+    which adds minutes to BSP generation with the CMake bundled in Vitis
+    2026.1. Nothing the Vitis server spawns lives on the Windows side.
+    """
+    if "microsoft" not in os.uname().release.lower():
+        return
+    kept = [p for p in os.environ.get("PATH", "").split(os.pathsep)
+            if not re.match(r"/mnt/[a-z]/", p)]
+    os.environ["PATH"] = os.pathsep.join(kept)
 
 
 # ---------------------------------------------------------------------------
@@ -232,7 +254,7 @@ def _generate_mb_irq_macros(hw_design):
     # Find the AXI interrupt controller by VLNV (more reliable than name)
     intc_cell = None
     for cell in cells:
-        vlnv = cell.get('VLNV') or ''
+        vlnv = cell.VLNV or ''
         if 'axi_intc' in vlnv:
             intc_cell = cell
             break
@@ -257,7 +279,7 @@ def _generate_mb_irq_macros(hw_design):
     # Find the concat block whose dout drives the intc's intr pin
     concat_cell = None
     for cell in cells:
-        vlnv = cell.get('VLNV') or ''
+        vlnv = cell.VLNV or ''
         if 'xlconcat' in vlnv:
             pins = hw_design.get_pins(of_objects=cell)
             for pin in pins:
@@ -411,7 +433,7 @@ def _generate_ddr_macros(xsa_path, cpu):
     mb_cell = None
     cells = hw_design.get_cells()
     for cell in cells:
-        vlnv = cell.get('VLNV') or ''
+        vlnv = cell.VLNV or ''
         if 'microblaze' in vlnv.lower():
             mb_cell = cell
             break
@@ -864,11 +886,22 @@ def create_ide_workspace(ws, hw_path, hw_file, manifest_path):
             content, count=1)
 
         # Add force-include flags
-        if force_includes:
-            flags = " ".join(f"-include {h}" for h in force_includes)
+        flags = [f"-include {h}" for h in force_includes]
+        # The app is compiled from the symlink tree, so its debug info would
+        # name the sources by their symlink paths. The debugger reports and
+        # opens the real files, and a breakpoint set there is then rejected
+        # ("No debug information for this source line"). Record the real
+        # repository paths instead.
+        if repo_root:
+            flags.append(f"-fdebug-prefix-map="
+                         f"{os.path.abspath(symlink_root)}={repo_root}")
+        # One quoted string: the template concatenates the elements of this
+        # variable without a separator, so a CMake list would glue the flags
+        # together.
+        if flags:
             content = content.replace(
                 "set(USER_COMPILE_OTHER_FLAGS )",
-                f"set(USER_COMPILE_OTHER_FLAGS {flags})")
+                f'set(USER_COMPILE_OTHER_FLAGS "{" ".join(flags)}")')
 
         with open(user_config, "w") as f:
             f.write(content)
@@ -1426,6 +1459,7 @@ def main():
         print(f"Available: {', '.join(dispatch.keys())}")
         sys.exit(1)
 
+    _drop_wsl_windows_path()
     dispatch[function]()
 
 

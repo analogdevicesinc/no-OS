@@ -65,9 +65,12 @@ if(NOT DEFINED XILINX_ARCH)
                 "${CMAKE_CURRENT_LIST_DIR}/../../../tools/scripts/platform/xilinx/util.py"
                 get_arch "${_arch_work}" "${_arch_work}" "${_xsa_file}"
         RESULT_VARIABLE _arch_rc
+        ERROR_VARIABLE _arch_err
         OUTPUT_QUIET)
     if(NOT _arch_rc EQUAL 0)
-        message(FATAL_ERROR "vitis get_arch failed on ${HARDWARE} (rc=${_arch_rc})")
+        include("${CMAKE_CURRENT_LIST_DIR}/../../../cmake/xilinx/xilinx_vitis_error.cmake")
+        xilinx_vitis_fatal("Reading the CPU architecture from ${HARDWARE}"
+                           "${_arch_rc}" "${_arch_err}")
     endif()
     file(READ "${_arch_work}/arch.txt" _arch_raw)
     string(STRIP "${_arch_raw}" XILINX_ARCH)
