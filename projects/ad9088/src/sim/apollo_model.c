@@ -69,6 +69,18 @@
 #define TE_STAGE1		0x4C006343u
 #define TE_STAGE_ENCR_OK	0xFFu
 
+/*
+ * Pointers Core1's firmware publishes once it runs. Both locations sit
+ * inside the TinyE image loaded at 0x21000000, so until then they read as
+ * image bytes. The firmware's own target addresses are not visible from
+ * the host; the model uses free regions clear of the loaded images
+ * (TinyE ends below 0x21006000) and of the mailbox buffer.
+ */
+#define FW_PROFILE_PTR		0x21000414u	/* -> device profile */
+#define FW_BOOT_ERROR_PTR	0x21000424u	/* -> last_cmd, system, track_cal */
+#define FW_BOOT_ERROR_BLOCK	0x21008000u
+#define FW_PROFILE_AREA		0x21010000u
+
 /* RAM boot steps reported by the Core1 firmware. */
 #define BOOT_WAIT_FOR_CONFIG	0x1Du
 #define BOOT_APP_RUNNING	0x34u
@@ -302,12 +314,17 @@ static void spidma_after_read(void)
 static void boot_on_write(uint32_t off, uint8_t val)
 {
 	uint32_t status = APOLLO_DIRECT_BASE + APOLLO_CORE1_STATUS;
+	uint32_t i;
 
 	if (off == APOLLO_TE_BOOT_READY && val) {
 		apollo_mem_write8(TE_STAGE0, TE_STAGE_ENCR_OK);
 		apollo_mem_write8(TE_STAGE1, TE_STAGE_ENCR_OK);
 		printf("SIM: apollo TinyE boot ready -> stages verified\n");
 	} else if (off == APOLLO_ARM1_RUN && (val & 0x1)) {
+		for (i = 0; i < 12; i += 4)	/* no boot error */
+			apollo_mem_write32(FW_BOOT_ERROR_BLOCK + i, 0);
+		apollo_mem_write32(FW_BOOT_ERROR_PTR, FW_BOOT_ERROR_BLOCK);
+		apollo_mem_write32(FW_PROFILE_PTR, FW_PROFILE_AREA);
 		apollo_mem_write8(status, BOOT_WAIT_FOR_CONFIG);
 		printf("SIM: apollo Core1 released -> boot 0x%02X\n",
 		       BOOT_WAIT_FOR_CONFIG);

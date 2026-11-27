@@ -40,7 +40,7 @@ ADI_APOLLO_STARTUP_SEQ_PROFILE_LOAD
 Core 1 Ram Boot Status: 0x1D
 adi_apollo_startup_execute: Loading device profile (ver=10.1.2, 4T4R)...
 adi_apollo_startup_execute: Profile checksum: 3060797939
-Device Profile address: 0xa5a5a5a5
+Device Profile address: 0x21010000
 
 Loading 23720 bytes
 Core 1 Ram Boot Status: 0x34
@@ -56,9 +56,9 @@ adi_apollo_startup_execute: seq_txrx_activate: OK
 adi_apollo_startup_execute: ADI_APOLLO_STARTUP_SEQ_SYNC
 adi_apollo_startup_execute: seq_sync: OK
 API ver: 2.0.10
-REG_RAM_BOOT_ERROR 0x1000000
+REG_RAM_BOOT_ERROR 0x0
 Core 1 Ram Boot Status: 0x34
-Pre-ping: core0=0x00 core1=0x34 err_cmd=33554698 err_sys=16777216 err_cal=256
+Pre-ping: core0=0x00 core1=0x34 err_cmd=0 err_sys=0 err_cal=0
 Ping (core 1) cmd/res: 0x00000000/0x00000000
 Ping (core 0) cmd/res: 0x12345678/0x12345678
 FW ver: 1.0.0
