@@ -1,6 +1,9 @@
 # Platform definitions
 target_compile_definitions(no-os PUBLIC -DMAXIM_PLATFORM)
 
+# Targets whose arm/ and riscv/ subdirectories provide init, delay and IRQ
+set(MAXIM_CORE_SPLIT_TARGETS max78000 max32690)
+
 # Add target-specific subdirectory
 add_subdirectory(${TARGET})
 
@@ -10,7 +13,7 @@ no_os_sources_ifdef(CONFIG_I2C_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim
 no_os_sources_ifdef(CONFIG_SPI_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_spi.c)
 no_os_sources_ifdef(CONFIG_UART_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_uart.c)
 no_os_sources_ifdef(CONFIG_UART_STDIO_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_uart_stdio.c)
-if(NOT "${TARGET}" STREQUAL "max78000")
+if(NOT "${TARGET}" IN_LIST MAXIM_CORE_SPLIT_TARGETS)
     no_os_sources_ifdef(CONFIG_IRQ_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_irq.c)
 endif()
 no_os_sources_ifdef(CONFIG_PWM_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_pwm.c)
@@ -36,7 +39,7 @@ no_os_sources_ifdef(CONFIG_SPI_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim
 
 no_os_sources_ifdef(CONFIG_DMA_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/common/maxim_dma.c)
 
-if(NOT CONFIG_CAPI AND NOT "${TARGET}" STREQUAL "max78000")
+if(NOT CONFIG_CAPI AND NOT "${TARGET}" IN_LIST MAXIM_CORE_SPLIT_TARGETS)
 	target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_init.c)
 
 	# Delay (always included when not using FreeRTOS)
