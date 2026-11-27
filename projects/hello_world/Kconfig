@@ -1,15 +1,10 @@
 menu "hello_world Configuration"
 
-choice HELLO_WORLD_EXAMPLE
-	prompt "Example variant"
-	default HELLO_WORLD_BASIC_EXAMPLE
-
 config HELLO_WORLD_BASIC_EXAMPLE
 	bool "Basic example"
+	default y
 	help
 	  Minimal hello-world example: UART console, LED blink
 	  and key echo.
-
-endchoice
 
 endmenu
