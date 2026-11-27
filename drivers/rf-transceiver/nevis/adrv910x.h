@@ -136,9 +136,9 @@ struct adrv910x_rf_phy {
 	adi_adrv910x_DeviceClockDivisor_e clk_out_divisor;
 
 	/*
-	 * AXI cores of the data ports. Optional: the application allocates them
-	 * and assigns them here before adrv910x_init(), which then configures
-	 * them as the profile says. Left NULL, the driver does not touch them.
+	 * AXI cores of the data ports. The application allocates the ADC and
+	 * DAC cores and assigns them here before adrv910x_init(), which then
+	 * configures them as the profile says.
 	 */
 	struct axi_adc *rx1_adc;
 	struct axi_adc *rx2_adc;

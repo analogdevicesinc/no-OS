@@ -152,7 +152,6 @@ int __adrv910x_dev_err(const struct adrv910x_rf_phy *phy, const char *function,
 	return ret;
 }
 
-/* Linux adrv9104_channel_to_state_cache(), without the enable GPIO handling */
 int adrv910x_channel_to_state_cache(struct adrv910x_rf_phy *phy,
 				    const struct adrv910x_chan *chan,
 				    adi_adrv910x_ChannelState_e state,
@@ -246,7 +245,6 @@ int adrv910x_channel_to_state(struct adrv910x_rf_phy *phy,
 	return adrv910x_channel_to_state_cache(phy, chan, state, NULL);
 }
 
-/* Linux adrv9104_validate_rx_profile()/adrv9104_validate_tx_profile() */
 static int adrv910x_validate_ssi(const ssiConfig_t *ssi, const char *name)
 {
 	if (ssi->ssiType == SSI_TYPE_LVDS && !ssi->ddrEn) {
@@ -262,7 +260,6 @@ static int adrv910x_validate_ssi(const ssiConfig_t *ssi, const char *name)
 	return 0;
 }
 
-/* Linux adrv9104_validate_profile(): find out which ports the profile enables */
 static int adrv910x_validate_profile(struct adrv910x_rf_phy *phy)
 {
 	const deviceProfile_t *profile = &phy->device_profile->profilePS1;
@@ -309,7 +306,6 @@ static int adrv910x_validate_profile(struct adrv910x_rf_phy *phy)
 	return 0;
 }
 
-/* Linux adrv9104_carrier_set(): only change the frequency of the carrier */
 static int adrv910x_carrier_set(struct adrv910x_rf_phy *phy,
 				const struct adrv910x_chan *chan,
 				uint64_t freq_hz, uint64_t *old_freq_hz)
@@ -331,7 +327,6 @@ static int adrv910x_carrier_set(struct adrv910x_rf_phy *phy,
 			chan->number, &carrier);
 }
 
-/* Linux adrv9104_radio_init(), first half: carriers of the enabled ports */
 static int adrv910x_radio_carriers_init(struct adrv910x_rf_phy *phy)
 {
 	uint64_t carrier_hz;
@@ -357,7 +352,6 @@ static int adrv910x_radio_carriers_init(struct adrv910x_rf_phy *phy)
 	return 0;
 }
 
-/* Linux adrv9104_radio_init(), second half: PLL loop filters and programming */
 static int adrv910x_radio_pll_init(struct adrv910x_rf_phy *phy)
 {
 	adi_adrv910x_PllLoopFilterCfg_t pll_loop_filter = {
@@ -382,7 +376,6 @@ static int adrv910x_radio_pll_init(struct adrv910x_rf_phy *phy)
 			phy->device_profile->profilePS1.chanConfig);
 }
 
-/* Linux adrv9104_tx_set_dac_full_scale() */
 static int adrv910x_tx_set_dac_full_scale(struct adrv910x_rf_phy *phy)
 {
 	const struct adrv910x_tx *tx = &phy->tx_channel;
@@ -429,7 +422,6 @@ static const uint32_t adrv910x_init_cals_mask[16][2] = {
 	[15] = { 0x1bc5f7, 0x1ac5f7 },
 };
 
-/* Linux adrv9104_run_init_cals() */
 static int adrv910x_run_init_cals(struct adrv910x_rf_phy *phy)
 {
 	initCals_t init_cals = { 0 };
@@ -456,7 +448,6 @@ static int adrv910x_run_init_cals(struct adrv910x_rf_phy *phy)
 	return ret;
 }
 
-/* Linux adrv9104_rx_path_config() */
 static int adrv910x_rx_path_config(struct adrv910x_rf_phy *phy,
 				   adi_adrv910x_ChannelState_e state)
 {
@@ -597,7 +588,6 @@ static int adrv910x_rx_gain_init(struct adrv910x_rf_phy *phy)
 	return 0;
 }
 
-/* Linux adrv9104_cleanup() */
 static void adrv910x_cleanup(struct adrv910x_rf_phy *phy)
 {
 	int c;
@@ -611,7 +601,6 @@ static void adrv910x_cleanup(struct adrv910x_rf_phy *phy)
 	       sizeof(phy->adrv910x->devStateInfo));
 }
 
-/* Linux adrv9104_rf_init() */
 static int adrv910x_rf_init(struct adrv910x_rf_phy *phy)
 {
 	adi_adrv910x_ChannelState_e init_state;
@@ -824,10 +813,26 @@ static int adrv910x_rf_init(struct adrv910x_rf_phy *phy)
 	return ret;
 }
 
-/* Linux __adrv9104_init() */
-static int __adrv910x_init(struct adrv910x_rf_phy *phy)
+/*
+ * Put the AXI cores in reset or take the ones of the enabled ports out of
+ * reset.
+ */
+static void adrv910x_axi_cores_enable(const struct adrv910x_rf_phy *phy,
+				      bool enable)
 {
 	uint32_t c;
+
+	for (c = 0; c < ADRV910X_CHAN_MAX; c++) {
+		/* Always disable, but only enable what the profile enables */
+		if (enable && !phy->channels[c]->enabled)
+			continue;
+
+		adrv910x_axi_interface_enable(phy, c, enable);
+	}
+}
+
+static int __adrv910x_init(struct adrv910x_rf_phy *phy)
+{
 	int ret;
 
 	if (!phy->device_profile) {
@@ -838,24 +843,18 @@ static int __adrv910x_init(struct adrv910x_rf_phy *phy)
 	adrv910x_cleanup(phy);
 
 	/*
-	 * The AXI cores, if the application assigned them, stay in reset while
-	 * the transceiver is initialized so they do not interfere with the
-	 * init calibrations.
+	 * The AXI cores stay in reset while the transceiver is initialized so
+	 * they do not interfere with the init calibrations.
 	 */
-	if (phy->rx1_adc) {
-		for (c = 0; c < ADRV910X_CHAN_MAX; c++)
-			adrv910x_axi_interface_enable(phy, c, false);
-	}
+	adrv910x_axi_cores_enable(phy, false);
 
 	ret = adrv910x_rf_init(phy);
 	if (ret)
 		goto error;
 
-	if (phy->rx1_adc) {
-		ret = adrv910x_axi_ssi_configure(phy);
-		if (ret)
-			goto error;
-	}
+	ret = adrv910x_axi_ssi_configure(phy);
+	if (ret)
+		goto error;
 
 	return 0;
 
@@ -868,8 +867,7 @@ error:
 }
 
 /*
- * Linux adrv9104_probe(). The init parameters take the place of the devicetree
- * and of the profile file, and are all copied to the phy before the cleanup.
+ * The init parameters are all copied to the phy before the cleanup.
  */
 int adrv910x_init(struct adrv910x_rf_phy *phy,
 		  const struct adrv910x_init_param *init_param)
@@ -908,7 +906,6 @@ int adrv910x_init(struct adrv910x_rf_phy *phy,
 	phy->dev_clk_frequency_hz = init_param->dev_clk_frequency_hz;
 	phy->clk_out_divisor = init_param->clk_out_divisor;
 
-	/* Linux adrv9104_profile_load() and the firmware files */
 	phy->device_profile = init_param->device_profile;
 	phy->pfbuf = init_param->pfbuf;
 	phy->arm_binary = init_param->arm_binary_ptr;
@@ -918,7 +915,6 @@ int adrv910x_init(struct adrv910x_rf_phy *phy,
 	phy->rx_gain_table = init_param->rx_gain_table;
 	phy->tx_atten_table = init_param->tx_atten_table;
 
-	/* Linux adrv9104_fw_parse() */
 	for (c = 0; c < ADRV910X_RX_MAX; c++) {
 		phy->rx_channels[c].channel.carrier_hz = init_param->rx_carrier_hz[c];
 		phy->rx_channels[c].agc = init_param->rx_agc[c] ?
@@ -938,10 +934,6 @@ int adrv910x_init(struct adrv910x_rf_phy *phy,
 	return __adrv910x_init(phy);
 }
 
-/*
- * Linux adrv9104_init_with_profile(): re-initialize with a new profile. The
- * rest of the configuration is the one adrv910x_init() left in the phy.
- */
 int adrv910x_init_with_profile(struct adrv910x_rf_phy *phy,
 			       adi_adrv910x_Profiles_t *profile,
 			       const pfirBuffer_t *pfbuf)
@@ -957,7 +949,6 @@ int adrv910x_init_with_profile(struct adrv910x_rf_phy *phy,
 	return __adrv910x_init(phy);
 }
 
-/* Linux adrv9104_get_rf_chan_from_iio() */
 static int adrv910x_chan_get(struct adrv910x_rf_phy *phy, uint32_t port,
 			     struct adrv910x_chan **chan)
 {
@@ -983,8 +974,8 @@ static int adrv910x_rx_chan_get(struct adrv910x_rf_phy *phy, uint32_t port,
 }
 
 /*
- * Linux adrv9104_hardware_gain_set(). RX: gain in mdB above the minimum gain
- * index. TX: attenuation as a negative gain in mdB.
+ * RX: gain in mdB above the minimum gain index. TX: attenuation as a negative
+ * gain in mdB.
  */
 int adrv910x_hardware_gain_set(struct adrv910x_rf_phy *phy, uint32_t port,
 			       int32_t gain_mdb)
@@ -1011,7 +1002,6 @@ int adrv910x_hardware_gain_set(struct adrv910x_rf_phy *phy, uint32_t port,
 	return api_call(phy, adi_adrv910x_Rx_Gain_Set, chan->number, idx);
 }
 
-/* Linux adrv9104_hardware_gain_get() */
 int adrv910x_hardware_gain_get(struct adrv910x_rf_phy *phy, uint32_t port,
 			       int32_t *gain_mdb)
 {
@@ -1049,7 +1039,6 @@ int adrv910x_hardware_gain_get(struct adrv910x_rf_phy *phy, uint32_t port,
 	return 0;
 }
 
-/* Linux adrv9104_phy_read_sample_rate() */
 int adrv910x_sampling_frequency_get(struct adrv910x_rf_phy *phy, uint32_t port,
 				    uint32_t *rate_hz)
 {
@@ -1068,29 +1057,6 @@ int adrv910x_sampling_frequency_get(struct adrv910x_rf_phy *phy, uint32_t port,
 	return 0;
 }
 
-/*
- * Same as adrv9002_port_enable(): put the AXI cores, if the application
- * assigned them to the phy, in reset or take the ones of the enabled ports
- * out of reset.
- */
-static void adrv910x_axi_cores_enable(const struct adrv910x_rf_phy *phy,
-				      bool enable)
-{
-	uint32_t c;
-
-	if (!phy->rx1_adc)
-		return;
-
-	for (c = 0; c < ADRV910X_CHAN_MAX; c++) {
-		/* Always disable, but only enable what the profile enables */
-		if (enable && !phy->channels[c]->enabled)
-			continue;
-
-		adrv910x_axi_interface_enable(phy, c, enable);
-	}
-}
-
-/* Linux adrv9104_rerun_init_cals() */
 static int adrv910x_rerun_init_cals(struct adrv910x_rf_phy *phy,
 				    const struct adrv910x_chan *chan,
 				    initCals_t *init_cals)
@@ -1139,8 +1105,7 @@ static int adrv910x_rerun_init_cals(struct adrv910x_rf_phy *phy,
 }
 
 /*
- * Linux adrv9104_carrier_freq_set(). The device has two LOs, mapped to the
- * ports by the profile:
+ * The device has two LOs, mapped to the ports by the profile:
  *  - all the ports sharing the LO must be in the calibrated state for the
  *    PLL to re-tune;
  *  - RX ports sharing an LO are moved together, as they cannot run at
@@ -1220,7 +1185,6 @@ int adrv910x_carrier_freq_set(struct adrv910x_rf_phy *phy, uint32_t port,
 					 state[ADRV910X_PORT_POS(chan)]);
 }
 
-/* Linux adrv9104_carrier_freq_get() */
 int adrv910x_carrier_freq_get(struct adrv910x_rf_phy *phy, uint32_t port,
 			      uint64_t *freq_hz)
 {
@@ -1245,7 +1209,6 @@ int adrv910x_carrier_freq_get(struct adrv910x_rf_phy *phy, uint32_t port,
 	return 0;
 }
 
-/* Linux adrv9104_rf_bandwidth_get() */
 int adrv910x_rf_bandwidth_get(struct adrv910x_rf_phy *phy, uint32_t port,
 			      uint32_t *bw_hz)
 {
@@ -1269,7 +1232,6 @@ int adrv910x_rf_bandwidth_get(struct adrv910x_rf_phy *phy, uint32_t port,
 	return 0;
 }
 
-/* Linux adrv9104_rssi_get() */
 int adrv910x_rssi_get(struct adrv910x_rf_phy *phy, uint32_t port,
 		      uint32_t *rssi_mdb)
 {
@@ -1286,7 +1248,6 @@ int adrv910x_rssi_get(struct adrv910x_rf_phy *phy, uint32_t port,
 	return api_call(phy, adi_adrv910x_Rx_Rssi_Read, chan->number, rssi_mdb);
 }
 
-/* Linux adrv9104_track_cals_get(). 'mask' is one or more TRACKING_CAL_RX_* */
 int adrv910x_track_cal_get(struct adrv910x_rf_phy *phy, uint32_t port,
 			   uint32_t mask, bool *enable)
 {
@@ -1311,8 +1272,8 @@ int adrv910x_track_cal_get(struct adrv910x_rf_phy *phy, uint32_t port,
 }
 
 /*
- * Linux adrv9104_track_cals_set(): all the enabled ports must be in the
- * calibrated state to change the tracking calibrations.
+ * All the enabled ports must be in the calibrated state to change the tracking
+ * calibrations.
  */
 int adrv910x_track_cal_set(struct adrv910x_rf_phy *phy, uint32_t port,
 			   uint32_t mask, bool enable)
@@ -1367,7 +1328,6 @@ int adrv910x_track_cal_set(struct adrv910x_rf_phy *phy, uint32_t port,
 	return 0;
 }
 
-/* Linux adrv9104_get_port_en_mode() */
 int adrv910x_port_en_mode_get(struct adrv910x_rf_phy *phy, uint32_t port,
 			      adi_adrv910x_ChannelEnableMode_e *mode)
 {
@@ -1385,7 +1345,6 @@ int adrv910x_port_en_mode_get(struct adrv910x_rf_phy *phy, uint32_t port,
 			chan->port, chan->number, mode);
 }
 
-/* Linux adrv9104_set_port_en_mode() */
 int adrv910x_port_en_mode_set(struct adrv910x_rf_phy *phy, uint32_t port,
 			      adi_adrv910x_ChannelEnableMode_e mode)
 {
@@ -1400,7 +1359,6 @@ int adrv910x_port_en_mode_set(struct adrv910x_rf_phy *phy, uint32_t port,
 			chan->port, chan->number, mode);
 }
 
-/* Linux adrv9104_get_ensm_mode() */
 int adrv910x_ensm_mode_get(struct adrv910x_rf_phy *phy, uint32_t port,
 			   adi_adrv910x_ChannelState_e *state)
 {
@@ -1418,7 +1376,6 @@ int adrv910x_ensm_mode_get(struct adrv910x_rf_phy *phy, uint32_t port,
 			chan->number, state);
 }
 
-/* Linux adrv9104_set_ensm_mode(): calibrated, primed or rf_enabled */
 int adrv910x_ensm_mode_set(struct adrv910x_rf_phy *phy, uint32_t port,
 			   adi_adrv910x_ChannelState_e state)
 {
@@ -1432,7 +1389,6 @@ int adrv910x_ensm_mode_set(struct adrv910x_rf_phy *phy, uint32_t port,
 	return adrv910x_channel_to_state(phy, chan, state);
 }
 
-/* Linux adrv9104_get_agc_mode() */
 int adrv910x_gain_control_mode_get(struct adrv910x_rf_phy *phy, uint32_t port,
 				   adi_adrv910x_RxGainControlMode_e *mode)
 {
@@ -1450,7 +1406,6 @@ int adrv910x_gain_control_mode_get(struct adrv910x_rf_phy *phy, uint32_t port,
 			mode);
 }
 
-/* Linux adrv9104_set_agc_mode() */
 int adrv910x_gain_control_mode_set(struct adrv910x_rf_phy *phy, uint32_t port,
 				   adi_adrv910x_RxGainControlMode_e mode)
 {
@@ -1465,7 +1420,6 @@ int adrv910x_gain_control_mode_set(struct adrv910x_rf_phy *phy, uint32_t port,
 			mode);
 }
 
-/* Linux adrv9104_get_digital_gain_ctl_mode() */
 int adrv910x_digital_gain_control_mode_get(struct adrv910x_rf_phy *phy,
 		uint32_t port, adi_adrv910x_RxInterfaceGainCtrlMode_e *mode)
 {
@@ -1492,8 +1446,8 @@ int adrv910x_digital_gain_control_mode_get(struct adrv910x_rf_phy *phy,
 }
 
 /*
- * Linux adrv9104_set_digital_gain_ctl_mode(): the port must be in the
- * calibrated state to configure the interface gain, so move it there and back.
+ * The port must be in the calibrated state to configure the interface gain, so
+ * move it there and back.
  */
 int adrv910x_digital_gain_control_mode_set(struct adrv910x_rf_phy *phy,
 		uint32_t port, adi_adrv910x_RxInterfaceGainCtrlMode_e mode)
@@ -1529,7 +1483,6 @@ int adrv910x_digital_gain_control_mode_set(struct adrv910x_rf_phy *phy,
 	return adrv910x_channel_to_state(phy, chan, state);
 }
 
-/* Linux adrv9104_get_atten_control_mode() */
 int adrv910x_atten_control_mode_get(struct adrv910x_rf_phy *phy, uint32_t port,
 				    adi_adrv910x_TxAttenuationControlMode_e *mode)
 {
@@ -1547,8 +1500,8 @@ int adrv910x_atten_control_mode_get(struct adrv910x_rf_phy *phy, uint32_t port,
 }
 
 /*
- * Linux adrv9104_set_atten_control_mode(): the port must be in the calibrated
- * state to change the attenuation mode, so move it there and back.
+ * The port must be in the calibrated state to change the attenuation mode, so
+ * move it there and back.
  */
 int adrv910x_atten_control_mode_set(struct adrv910x_rf_phy *phy, uint32_t port,
 				    adi_adrv910x_TxAttenuationControlMode_e mode)
@@ -1577,7 +1530,6 @@ int adrv910x_atten_control_mode_set(struct adrv910x_rf_phy *phy, uint32_t port,
 	return adrv910x_channel_to_state(phy, chan, state);
 }
 
-/* Linux adrv9104_phy_reg_access() */
 int adrv910x_reg_read(struct adrv910x_rf_phy *phy, uint16_t reg, uint8_t *val)
 {
 	if (!phy || !val)
@@ -1594,7 +1546,6 @@ int adrv910x_reg_write(struct adrv910x_rf_phy *phy, uint16_t reg, uint8_t val)
 	return api_call(phy, adi_adrv910x_spi_Byte_Write, reg, val);
 }
 
-/* Linux debugfs "api_version" */
 int adrv910x_api_version_get(struct adrv910x_rf_phy *phy,
 			     adi_common_ApiVersion_t *version)
 {
@@ -1604,7 +1555,6 @@ int adrv910x_api_version_get(struct adrv910x_rf_phy *phy,
 	return api_call(phy, adi_adrv910x_apiVersion_get, version);
 }
 
-/* Linux debugfs "rx[1|2]_agc_config": AGC settings as read from the device */
 int adrv910x_rx_agc_get(struct adrv910x_rf_phy *phy, uint32_t port,
 			adi_adrv910x_GainControlCfg_t *agc)
 {
@@ -1622,7 +1572,6 @@ int adrv910x_rx_agc_get(struct adrv910x_rf_phy *phy, uint32_t port,
 			agc);
 }
 
-/* Linux debugfs "ssi_delays" */
 int adrv910x_ssi_delays_set(struct adrv910x_rf_phy *phy,
 			    adi_adrv910x_SsiCalibrationCfg_t *delays)
 {

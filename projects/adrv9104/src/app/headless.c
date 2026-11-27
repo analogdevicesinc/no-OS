@@ -290,7 +290,7 @@ static const adi_adrv910x_GainControlCfg_t agc_uc5 = {
 	.rxQecFreezeEnable = false,
 	.gpioFreezePin = ADI_ADRV910X_GPIO_UNASSIGNED
 };
-/* The AXI cores of an RX port, kept in the phy as in the adrv9002 driver */
+/* The AXI cores of an RX port, kept in the phy */
 static struct axi_adc **adrv910x_rx_adc(struct adrv910x_rf_phy *phy,
 					uint32_t port)
 {
@@ -304,10 +304,7 @@ static struct axi_dmac **adrv910x_rx_dmac(struct adrv910x_rf_phy *phy,
 }
 
 #ifdef DMA_EXAMPLE
-/*
- * Transmit the sine of sine_lut_iq on the TX port, cyclically, as the adrv9001
- * project does.
- */
+/* Transmit the sine of sine_lut_iq on the TX port, cyclically */
 static int adrv910x_transmit_sine(struct adrv910x_rf_phy *phy)
 {
 	struct axi_dma_transfer transfer = {

@@ -43,8 +43,6 @@
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "adi_common_error.h"
-//#include "Navassa_EvaluationFw.h"
-//#include "Navassa_Stream.h"
 #include "ORxGainTable.h"
 #include "RxGainTable.h"
 #include "TxAttenTable.h"
@@ -441,21 +439,6 @@ int32_t no_os_ssi_reset(void* devHalCfg)
 int32_t no_os_image_page_get(void *devHalCfg, const char *ImagePath,
 			     uint32_t pageIndex, uint32_t pageSize, uint8_t *rdBuff)
 {
-//	unsigned char *bin;
-//	if (!strcmp(ImagePath, "Navassa_EvaluationFw.bin")) {
-//		if ((pageIndex * pageSize) > sizeof(Navassa_EvaluationFw_bin))
-//			return -EINVAL;
-//
-//		bin = Navassa_EvaluationFw_bin;
-//	} else if (!strcmp(ImagePath, "Navassa_Stream.bin")) {
-//		if ((pageIndex * pageSize) > sizeof(Navassa_Stream_bin))
-//			return -EINVAL;
-//		bin = Navassa_Stream_bin;
-//	} else
-//		return ADI_COMMON_ERR_INV_PARAM;
-//
-//	memcpy(rdBuff, &bin[pageIndex * pageSize], pageSize);
-
 	return ADI_COMMON_ERR_OK;
 }
 

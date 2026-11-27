@@ -10,11 +10,6 @@ if(CONFIG_ADRV9104_DEMO_EXAMPLE)
     # No additional sources beyond headless.c
 endif()
 
-# demo_adrv9002 variant (RX2TX2 mode)
-if(CONFIG_ADRV9104_DEMO_ADRV9002_EXAMPLE)
-    target_compile_definitions(adrv9104 PRIVATE ADRV9002_RX2TX2)
-endif()
-
 # dma_example variant
 if(CONFIG_ADRV9104_DMA_EXAMPLE)
     target_compile_definitions(adrv9104 PRIVATE DMA_EXAMPLE)
@@ -23,11 +18,6 @@ endif()
 # iio variant (IIO support)
 if(CONFIG_ADRV9104_IIO_EXAMPLE)
     target_compile_definitions(adrv9104 PRIVATE IIO_SUPPORT)
-endif()
-
-# iio_adrv9002 variant (IIO support + RX2TX2 mode)
-if(CONFIG_ADRV9104_IIO_ADRV9002_EXAMPLE)
-    target_compile_definitions(adrv9104 PRIVATE IIO_SUPPORT ADRV9002_RX2TX2)
 endif()
 
 # Compiler flags carried over from the legacy src.mk CFLAGS. These go on the

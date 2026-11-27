@@ -40,7 +40,7 @@
 
 /*
  * The RX1, RX2 and TX cores are register windows of the same axi_adrv9001 IP,
- * so, as in adrv9002_conv.c, all of them are reached through phy->rx1_adc.
+ * so all of them are reached through phy->rx1_adc.
  */
 #define ADI_RX2_REG_OFF			0x1000
 #define ADI_TX1_REG_OFF			0x2000
@@ -66,9 +66,8 @@ static const char * const adrv910x_tx_clk[] = {
 };
 
 /*
- * Same check as in adrv9002_post_setup()/adrv9002_validate_profile(): find out
- * which clock drives the TX SSI in the HDL. When it is the SSI clock of an RX
- * port, TX only works if both interfaces run at the same rate.
+ * Find out which clock drives the TX SSI in the HDL. When it is the SSI clock
+ * of an RX port, TX only works if both interfaces run at the same rate.
  */
 static int adrv910x_axi_tx_ref_clk_check(const struct adrv910x_rf_phy *phy)
 {
@@ -141,7 +140,7 @@ int adrv910x_axi_interface_set(const struct adrv910x_rf_phy *phy,
 	uint32_t reg_ctrl, reg_value = 0, off, divider = 0, lanes, div;
 	const bool tx = port == ADRV910X_TX;
 
-	if (!phy || !phy->rx1_adc || port >= ADRV910X_CHAN_MAX)
+	if (!phy || port >= ADRV910X_CHAN_MAX)
 		return -EINVAL;
 
 	off = adrv910x_axi_port_off(port);
@@ -210,9 +209,6 @@ void adrv910x_axi_interface_enable(const struct adrv910x_rf_phy *phy,
 {
 	uint32_t off = adrv910x_axi_port_off(port);
 
-	if (!phy || !phy->rx1_adc)
-		return;
-
 	if (en)
 		/* bring axi core out of reset */
 		axi_adc_write(phy->rx1_adc, AIM_AXI_REG(off, AXI_ADC_REG_RSTN),
@@ -237,7 +233,7 @@ int adrv910x_axi_ssi_configure(struct adrv910x_rf_phy *phy)
 	uint32_t i;
 	int ret;
 
-	if (!phy || !phy->rx1_adc || !phy->device_profile)
+	if (!phy || !phy->device_profile)
 		return -EINVAL;
 
 	profile = &phy->device_profile->profilePS1;
