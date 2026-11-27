@@ -743,7 +743,7 @@ static int adf4382_pll_fract_n_compute(struct adf4382_dev *dev,
 	*frac1_word = (uint32_t)no_os_div64_u64_rem(res, pfd_freq, &rem);
 
 	*frac2_word = 0;
-	*mod2_word = 1;
+	*mod2_word = 0;
 
 	if (rem > 0)
 		return adf4382_frac2_compute(dev, rem, pfd_freq, frac2_word,
@@ -1434,6 +1434,10 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 			ldwin_pw = 1;
 	}
 
+	pr_info("VCO=%llu PFD=%llu RFout_div=%u N=%u FRAC1=%u FRAC2=%u MOD2=%u\n",
+		vco, pfd_freq, 1 << clkout_div, n_int,
+		frac1_word, frac2_word, mod2_word);
+
 	if (frac2_word) {
 		ret = adf4382_spi_update_bits(dev, 0x28, ADF4382_VAR_MOD_EN_MSK,
 					      0xff);
@@ -1446,9 +1450,18 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 			return ret;
 	}
 
+	ret = adf4382_spi_update_bits(dev, 0x30, ADF4382_MUTE_NCLK_MSK,
+				      0xff);
+	if (ret)
+		return ret;
+
 	ret = adf4382_spi_update_bits(dev, 0x15, ADF4382_INT_MODE_MSK,
 				      no_os_field_prep(ADF4382_INT_MODE_MSK,
 						      int_mode));
+	if (ret)
+		return ret;
+
+	ret = adf4382_spi_update_bits(dev, 0x30, ADF4382_MUTE_NCLK_MSK, 0);
 	if (ret)
 		return ret;
 
@@ -1538,12 +1551,24 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 	if (ret)
 		return ret;
 
-	ret = adf4382_spi_update_bits(dev, 0x31, ADF4382_EN_ADC_CLK_MSK, 0xff);
+	ret = adf4382_spi_update_bits(dev, 0x38, ADF4382_CAL_VTUNE_TO_LSB_MSK,
+				      no_os_field_prep(ADF4382_CAL_VTUNE_TO_LSB_MSK,
+						      ADF4382_VCO_CAL_VTUNE));
+	if (ret)
+		return ret;
+
+	ret = adf4382_spi_update_bits(dev, 0x39, ADF4382_CAL_VTUNE_TO_MSB_MSK,
+				      no_os_field_prep(ADF4382_CAL_VTUNE_TO_MSB_MSK,
+						      ADF4382_VCO_CAL_VTUNE >> 8));
 	if (ret)
 		return ret;
 
 	//VCO automatic level calibration time
 	ret = adf4382_spi_write(dev, 0x3A, ADF4382_VCO_CAL_ALC);
+	if (ret)
+		return ret;
+
+	ret = adf4382_spi_write(dev, 0x37, ADF4382_VCO_CAL_CNT);
 	if (ret)
 		return ret;
 
@@ -1588,6 +1613,11 @@ int adf4382_set_freq(struct adf4382_dev *dev)
 		return ret;
 
 	locked = no_os_field_get(val, ADF4382_LOCKED_MSK);
+
+	pr_info("PLL %s, REF %s\n",
+		val & NO_OS_BIT(0) ? "Locked" : "Unlocked",
+		val & NO_OS_BIT(3) ? "OK" : "Error");
+
 	if (!locked)
 		return -EIO;
 
