@@ -185,11 +185,22 @@ static int32_t linux_socket_bind(void *desc, uint32_t sock_id,
 	int32_t ret;
 	struct sockaddr_in saddr = {0};
 	socklen_t len;
+	int reuse = 1;
 
 	saddr.sin_family = AF_INET;
 	saddr.sin_port = htons(port);
 	saddr.sin_addr.s_addr = htonl(INADDR_ANY);
 	len = sizeof(saddr);
+
+	/*
+	 * Let a restarted server bind while connections from the previous
+	 * run are still closing (TIME_WAIT / FIN_WAIT); without it bind()
+	 * fails with EADDRINUSE for up to a minute.
+	 */
+	ret = setsockopt(sock_id, SOL_SOCKET, SO_REUSEADDR, &reuse,
+			 sizeof(reuse));
+	if (ret < 0)
+		return -errno;
 
 	ret = bind(sock_id, (struct sockaddr*) &saddr, len);
 
