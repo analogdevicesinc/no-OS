@@ -49,6 +49,10 @@
 #include "dma_example.h"
 #endif
 
+#ifdef IIO_EXAMPLE
+#include "iio_example.h"
+#endif
+
 /**
  * @brief Main function execution for the Altera/Nios V platform.
  *
@@ -79,6 +83,10 @@ int main(void)
 
 #ifdef DMA_EXAMPLE
 	ret = dma_example_main();
+#endif
+
+#ifdef IIO_EXAMPLE
+	ret = iio_example_main();
 #endif
 
 	return ret;

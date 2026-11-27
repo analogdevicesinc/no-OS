@@ -51,9 +51,12 @@
 /*
  * Ceiling for the transmit buffer. The TX data offload holds at most this much
  * on this HDL build; the depth it actually has is read back at runtime and the
- * buffer handed to IIO clamped to it.
+ * buffer handed to IIO clamped to it. A platform with less memory (the Nios V
+ * on-chip RAM on Agilex 5) sets its own value in parameters.h.
  */
+#ifndef TX_OFFLOAD_MAX_BYTES
 #define TX_OFFLOAD_MAX_BYTES	(512 * 1024)
+#endif
 
 /*
  * axi_data_offload registers, from data_offload_regmap.v. MEMORY_SIZE_LSB is
@@ -62,6 +65,15 @@
  */
 #define AXI_DO_REG_MEMORY_SIZE_LSB	0x0014
 #define AXI_DO_REG_RESETN_OFFLOAD	0x0084
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+#define AXI_DO_REG_CONFIG		0x0010
+#define AXI_DO_CONFIG_HAS_BYPASS	NO_OS_BIT(2)
+#define AXI_DO_REG_STATUS		0x0080
+#define AXI_DO_STATUS_SRC_OVERFLOW	NO_OS_BIT(4)
+#define AXI_DO_STATUS_DST_UNDERFLOW	NO_OS_BIT(5)
+#define AXI_DO_REG_CONTROL		0x0088
+#define AXI_DO_CONTROL_BYPASS		NO_OS_BIT(0)
+#endif
 
 #define DMA_BUFFER_ALIGN	1024
 
@@ -74,7 +86,18 @@
 #define JESD204_RX_LINK_STATUS_MASK	0x3
 #define JESD204_RX_LINK_STATUS_DATA	3
 
-static uint16_t adc_buffer[ADC_BUFFER_SAMPLES * CAPTURE_CONVERTERS]
+/*
+ * Receive depth per converter. The Nios V build halves it: with the aligned
+ * staging copies below, the full depth does not fit the 2 MB on-chip RAM next
+ * to the application and the firmware images.
+ */
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+#define IIO_ADC_BUFFER_SAMPLES	(ADC_BUFFER_SAMPLES / 2)
+#else
+#define IIO_ADC_BUFFER_SAMPLES	ADC_BUFFER_SAMPLES
+#endif
+
+static uint16_t adc_buffer[IIO_ADC_BUFFER_SAMPLES * CAPTURE_CONVERTERS]
 __attribute__((aligned(DMA_BUFFER_ALIGN)));
 
 static uint16_t dac_buffer[TX_OFFLOAD_MAX_BYTES / sizeof(uint16_t)]
@@ -367,17 +390,55 @@ static int iio_example_dac_write_dev(void *dev, void *buff,
 /*
  * Cache maintenance for the IIO buffers. Wrapped rather than passed directly
  * because the MicroBlaze BSP implements both as function-like macros, which
- * have no address to take.
+ * have no address to take, and the Nios V HAL takes a pointer rather than an
+ * address.
  */
 static void iio_example_dcache_invalidate(uint32_t addr, uint32_t len)
 {
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+	alt_dcache_flush_no_writeback((void *)addr, len);
+#else
 	Xil_DCacheInvalidateRange(addr, len);
+#endif
 }
 
 static void iio_example_dcache_flush(uint32_t addr, uint32_t len)
 {
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+	alt_dcache_flush((void *)addr, len);
+#else
 	Xil_DCacheFlushRange(addr, len);
+#endif
 }
+
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+/**
+ * @brief Put the transmit data offload in bypass so a DMA buffer streams.
+ *
+ * iio_axi_dac plays a buffer with a cyclic DMA straight into the transport
+ * layer, so the offload has to pass the stream through rather than store one
+ * fill and replay it: a cyclic source into a storing offload races its write
+ * FSM (see dma_example.c). On a bitstream built without a bypass path this can
+ * only warn; DDS tones still work, as they never touch the offload.
+ */
+static void iio_example_tx_offload_bypass(void)
+{
+	uint32_t cfg = 0;
+
+	no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, AXI_DO_REG_CONFIG, &cfg);
+	if (!(cfg & AXI_DO_CONFIG_HAS_BYPASS)) {
+		pr_warning("TX data offload: HDL built without bypass; DMA buffer "
+			   "playback may not stream (DDS tones unaffected)\n");
+		return;
+	}
+
+	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, AXI_DO_REG_CONTROL,
+			   AXI_DO_CONTROL_BYPASS);
+	/* Write-1-to-clear latches, cleared so a later read means something. */
+	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, AXI_DO_REG_STATUS,
+			   AXI_DO_STATUS_SRC_OVERFLOW | AXI_DO_STATUS_DST_UNDERFLOW);
+}
+#endif
 
 /**
  * @brief Clamp an IIO buffer to the depth of the data offload behind it.
@@ -421,8 +482,12 @@ int iio_example_main(void)
 	struct hmc7044_dev *hmc7044_dev;
 	struct adf4030_dev *adf4030_dev;
 	struct ad9088_phy *ad9088_phy;
+#ifndef CONFIG_ALTERA_PLATFORM_NIOSV
+	/* Agilex 5 has no ADXCVR: the GTS transceivers are reset through the
+	 * JESD204 link-management registers instead. */
 	struct adxcvr *rx_adxcvr;
 	struct adxcvr *tx_adxcvr;
+#endif
 	struct axi_dmac *rx_dmac;
 	struct axi_dmac *tx_dmac;
 	struct iio_app_desc *app;
@@ -487,6 +552,7 @@ int iio_example_main(void)
 		goto error_rx_dmac;
 	}
 
+#ifndef CONFIG_ALTERA_PLATFORM_NIOSV
 	ret = adxcvr_init(&tx_adxcvr, &tx_adxcvr_ip);
 	if (ret) {
 		pr_info("TX ADXCVR initialization failed\n");
@@ -500,6 +566,7 @@ int iio_example_main(void)
 		goto error_tx_adxcvr;
 	}
 	rx_jesd_clk.xcvr = rx_adxcvr;
+#endif
 
 	rx_lane_clk.platform_ops = &jesd204_clk_ops;
 	rx_lane_clk.dev_desc = &rx_jesd_clk;
@@ -669,6 +736,9 @@ int iio_example_main(void)
 
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_jesd);
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+	iio_example_tx_offload_bypass();
+#endif
 	pr_info("Project configured\n\n");
 
 	for (side = 0; side < IIO_SIDES; side++) {
@@ -682,7 +752,7 @@ int iio_example_main(void)
 	}
 
 	read_buff.size = iio_example_offload_clamp(RX_DATA_OFFLOAD_BASEADDR,
-			 sizeof(adc_buffer[0]) * ADC_BUFFER_SAMPLES *
+			 sizeof(adc_buffer[0]) * IIO_ADC_BUFFER_SAMPLES *
 			 rx_num_conv);
 	write_buff.size = iio_example_offload_clamp(TX_DATA_OFFLOAD_BASEADDR,
 			  sizeof(dac_buffer));
@@ -755,10 +825,12 @@ error_tx_jesd:
 error_rx_jesd:
 	axi_jesd204_rx_remove(rx_jesd);
 error_rx_adxcvr:
+#ifndef CONFIG_ALTERA_PLATFORM_NIOSV
 	adxcvr_remove(rx_adxcvr);
 error_tx_adxcvr:
 	adxcvr_remove(tx_adxcvr);
 error_tx_dmac:
+#endif
 	axi_dmac_remove(tx_dmac);
 error_rx_dmac:
 	axi_dmac_remove(rx_dmac);
