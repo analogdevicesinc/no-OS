@@ -646,6 +646,156 @@ entries. To refresh cleanly, either open a **fresh workspace**
 current workspace **delete the project** (right-click → Delete, with *Delete
 project contents on disk* unchecked) and import it again.
 
+Host simulation (Linux PC, no board)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Agilex 5 build of all three examples can also run as an ordinary Linux program,
+with the board replaced by software models in ``src/sim/``. It runs the real
+drivers, vendor API, profile and firmware images, and is useful to check
+software changes before hardware, or without it. It is enabled with
+``-DAD9088_SIM=ON`` (OFF by default; the Nios V and Xilinx builds are
+unchanged).
+
+What the models do:
+
+* **AD9084:** the SPI slave with its direct, paged and SPIDMA access paths over
+  a sparse memory, so the four firmware images and the profile really load.
+  Secure boot, the Core1 boot steps, the mailbox (ping echoes, calibrations
+  succeed), multi-chip sync and the JESD204 link status respond the way a
+  healthy device does.
+* **Clock chips** (ADF4382, HMC7044, ADF4030): register memories that report
+  their ID and report locked.
+* **FPGA cores:** JESD204 link layer in DATA with SYSREF aligned, TPL cores
+  ready, and the two DMACs as a digital loopback: the RX capture is exactly
+  the transmit buffer.
+* **IIO transport:** on the host the IIO example serves IIOD over TCP (port
+  30431) instead of the JTAG-UART, so IIO clients connect to
+  ``ip:127.0.0.1``.
+
+The status values are fixed, not derived from the configuration, so the
+simulation does not catch a misconfigured link, and there is no converter,
+NCO or analog model.
+
+Used Hardware
+^^^^^^^^^^^^^
+
+* An x86-64 Linux PC (native or WSL2) with GCC and 32-bit (i386) multilib
+  support. The build is 32-bit so the FPGA register windows can be mapped at
+  their real addresses.
+
+Build Command
+^^^^^^^^^^^^^
+
+``no_os_build.py`` has no way to pass ``-DAD9088_SIM=ON``, so configure with
+CMake directly, using the ``native-i386`` preset:
+
+.. code-block:: bash
+
+   sudo apt install gcc-multilib g++-multilib
+
+   cd no-OS
+
+   # Configure and build the basic example
+   cmake -B build-sim/ad9088-basic_example-native-i386 --preset native-i386 \
+         -DPROJECT_DEFCONFIG=ad9088/basic_example.conf -DAD9088_SIM=ON
+   cmake --build build-sim/ad9088-basic_example-native-i386 --target ad9088
+
+   # Configure and build the DMA example
+   cmake -B build-sim/ad9088-dma_example-native-i386 --preset native-i386 \
+         -DPROJECT_DEFCONFIG=ad9088/dma_example.conf -DAD9088_SIM=ON
+   cmake --build build-sim/ad9088-dma_example-native-i386 --target ad9088
+
+   # Configure and build the IIO example
+   cmake -B build-sim/ad9088-iio_example-native-i386 --preset native-i386 \
+         -DPROJECT_DEFCONFIG=ad9088/iio_example.conf -DAD9088_SIM=ON
+   cmake --build build-sim/ad9088-iio_example-native-i386 --target ad9088
+
+The preset also checks the C++ compiler, which fails without the 32-bit C++
+runtime (``g++-multilib``). The project compiles no C++, so if you cannot
+install it, add ``-DCMAKE_CXX_COMPILER_WORKS=TRUE`` to the configure command.
+
+Run
+^^^
+
+.. code-block:: bash
+
+   ./build-sim/ad9088-basic_example-native-i386/build/ad9088.elf
+
+The console output matches the board's, plus lines starting with ``SIM:`` that
+log the models' SPI, mailbox and DMA activity; filter them with
+``| grep -v '^SIM:'``. The basic example ends after its NCO test and exits 0.
+
+The DMA example, as on the board, parks in its ``while (1)`` after the
+capture; stop it with Ctrl-C once ``DMA_EXAMPLE Rx side 0`` is printed. With
+``AD9088_SIM_CAPTURE`` set, it writes the RX buffer to that file and the TX
+buffer to the same path plus ``.tx``. Plot them with the same script as a board
+capture (``tools/scripts/platform/altera/plot_loopback.py``), after
+splitting each into the per-channel CSVs that script reads with
+``scripts/sim_capture_to_csv.py`` from this project:
+
+.. code-block:: bash
+
+   AD9088_SIM_CAPTURE=/tmp/sim_cap.bin \
+       ./build-sim/ad9088-dma_example-native-i386/build/ad9088.elf
+
+   CONV=projects/ad9088/scripts/sim_capture_to_csv.py
+   python3 $CONV /tmp/sim_cap.bin    /tmp/sim_plot/rx
+   python3 $CONV /tmp/sim_cap.bin.tx /tmp/sim_plot/tx
+   python3 tools/scripts/platform/altera/plot_loopback.py \
+           --tx /tmp/sim_plot/tx --rx /tmp/sim_plot/rx \
+           --out /tmp/sim_plot/loopback.png
+
+Expect RX identical to TX: 0 deg phase and 0 dB gain on all 8 converters.
+
+The IIO example brings the links up, then serves IIOD; it is ready once the
+``IIO: rx ... buffer`` line after ``Project configured`` is printed. From a
+second terminal:
+
+.. code-block:: bash
+
+   ./build-sim/ad9088-iio_example-native-i386/build/ad9088.elf   # terminal 1
+
+   iio_info -u ip:127.0.0.1          # lists cf-ad9088-lpc, cf-ad9088-dds-core-lpc
+   osc -u ip:127.0.0.1               # or IIO Oscilloscope, connect to 127.0.0.1
+
+The ADC captures what the DAC was last given, so push a transmit buffer first,
+either from osc's DAC Data Manager or with ``iio_writedev``, then capture:
+
+.. code-block:: bash
+
+   # tx.bin: 8 interleaved little-endian int16 channels, 4096 samples;
+   # -c keeps it cyclic, -b is the waveform length in samples
+   iio_writedev -u ip:127.0.0.1 -c -b 4096 cf-ad9088-dds-core-lpc < tx.bin &
+   iio_readdev  -u ip:127.0.0.1 -s 4096 cf-ad9088-lpc > rx.bin
+
+``iio_readdev`` from libiio 1.0 writes a one-line "compatibility layer" notice
+to standard output before the data; drop it (``tail -c <bytes>``) when
+comparing files. With nothing transmitted the capture is all zeros. The
+DAC's DDS tone generator is not modelled, so DDS settings do not appear in the
+capture.
+
+``iio_writedev`` sends its ``-b`` buffer size (default 256 samples) as the
+cyclic waveform, so pass ``-b`` with the number of samples in the file to
+play all of it; the capture then repeats the whole file.
+
+Regression Check
+^^^^^^^^^^^^^^^^
+
+``scripts/sim_check.sh`` runs every example that is built under
+``build-sim/`` and compares its console output with the baselines in
+``scripts/golden/``. The models' ``SIM:`` lines, the DMA buffer addresses and
+the checkout path are masked; any other change is reported as a diff, and the
+script exits non-zero.
+
+.. code-block:: bash
+
+   projects/ad9088/scripts/sim_check.sh            # MATCH / DIFF per example
+   projects/ad9088/scripts/sim_check.sh --update   # re-record after an intended change
+
+The baselines were recorded from the simulation itself, not from a board, so a
+MATCH means the software behaves as it did when they were recorded. Replace
+them with board logs, masked the same way, to compare against hardware.
+
 HDL / Quartus to no-OS Build Flow (Agilex 5)
 --------------------------------------------------
 
