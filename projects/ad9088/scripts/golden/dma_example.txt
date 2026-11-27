@@ -1,0 +1,138 @@
+ad9088: Nios V (Agilex 5) bring-up
+Enter DMA example
+VCO=21600000000 PFD=125000000 RFout_div=2 N=86 FRAC1=13421772 FRAC2=12500000 MOD2=15625000
+PLL Locked, REF OK
+PLL1: Locked, CLKIN0 @ 125000000 Hz, PFD: 6250 kHz - PLL2: Locked @ 2700.000000 MHz
+ADF4030: ref 135000000 Hz, VCO 2531250000 Hz, BSYNC 10546875 Hz, avgexp 15, PLL locked, REF OK
+profile: subclass jtx0=0 jtx1=0 jrx0=0 jrx1=0
+profile: center_sysref present=0 term=0 cm900=0 ref_to_int_ratio=1 int_prd_digclk=256
+profile: side_a_sysref present=0 term=0 cm900=0 ref_to_int_ratio=1 int_prd_digclk=256
+profile: side_b_sysref present=0 term=0 cm900=0 ref_to_int_ratio=1 int_prd_digclk=256
+profile: gapped_sysref=0 leave_sysref_rx_on=0 num_avg=31 lock_window=0
+api v2.0.10 
+host is using little endian mode.
+Test direct register Passed
+Test indirect register Passed
+Test ARM memory Passed
+adi_apollo_startup_execute: startup_type 0x0000007f
+adi_apollo_startup_execute: profile checksum 3060797939
+adi_apollo_startup_execute: fw_provider desc 'no-OS Embedded FW Provider'
+adi_apollo_startup_execute: ADI_APOLLO_STARTUP_SEQ_FW_LOAD
+adi_apollo_startup_execute: TyE bypassed: 0
+adi_apollo_startup_execute: Running scenario = 4
+adi_apollo_startup_execute: Apollo Silicon Grade = 00
+adi_apollo_startup_execute: Loading TyE SecureBoot Header image...
+Loading 4096 bytes
+adi_apollo_startup_execute: Loading Core0 firmware image...
+Loading 196604 bytes
+adi_apollo_startup_execute: Loading Core1 firmware image...
+Loading 360444 bytes
+adi_apollo_startup_execute: Loading TinyE Operation firmware image...
+Loading 23424 bytes
+adi_apollo_startup_execute: Boot Ready bit has been set
+BF_RAM_BOOT_CORE1_STATUS: 29.
+SECURE_BOOT_STAGE_0 CHECK: Passed.
+SECURE_BOOT_STAGE_1 CHECK: Passed.
+adi_apollo_startup_execute: seq_fw_load: OK
+ADI_APOLLO_STARTUP_SEQ_PROFILE_LOAD
+Core 1 Ram Boot Status: 0x1D
+adi_apollo_startup_execute: Loading device profile (ver=10.1.2, 4T4R)...
+adi_apollo_startup_execute: Profile checksum: 3060797939
+Device Profile address: 0x21010000
+
+Loading 23720 bytes
+Core 1 Ram Boot Status: 0x34
+adi_apollo_startup_execute: seq_profile_load: OK
+adi_apollo_startup_execute: ADI_APOLLO_STARTUP_SEQ_TMU_EN
+adi_apollo_startup_execute: seq_tmu_enable: OK
+adi_apollo_startup_execute: ADI_APOLLO_STARTUP_SEQ_DP_CONFIG
+adi_apollo_startup_execute: seq_dp_config: OK
+adi_apollo_startup_execute: ADI_APOLLO_STARTUP_SEQ_LINK_EN
+adi_apollo_startup_execute: seq_link_en: OK
+adi_apollo_startup_execute: ADI_APOLLO_STARTUP_SEQ_TXRX_ACTIVATE
+adi_apollo_startup_execute: seq_txrx_activate: OK
+adi_apollo_startup_execute: ADI_APOLLO_STARTUP_SEQ_SYNC
+adi_apollo_startup_execute: seq_sync: OK
+API ver: 2.0.10
+REG_RAM_BOOT_ERROR 0x0
+Core 1 Ram Boot Status: 0x34
+Pre-ping: core0=0x00 core1=0x34 err_cmd=0 err_sys=0 err_cal=0
+Ping (core 1) cmd/res: 0x00000000/0x00000000
+Ping (core 0) cmd/res: 0x12345678/0x12345678
+FW ver: 1.0.0
+AD0 Rev. 0 Grade 0 (API 2.0.10) probed
+adf4030_jesd204_clks_sync4: aligned ch5 against ch0 (tdc_err=0 align_err=0)
+adf4030_jesd204_clks_sync4: aligned ch9 against ch0 (tdc_err=0 align_err=0)
+rx_jesd: core supports 0 link(s), MULTI_LINK_DISABLE 0x00000000, 2 core lanes for a 2-lane link
+Run clock conditioning cal (can take up to 10 secs)...
+JRX ADI_APOLLO_LINK_A0: L= 1 M= 1 F= 1 S= 1 Np= 1 CS= 0 Subclass=0 link_en= Enabled 
+JRX ADI_APOLLO_LINK_A1: L= 1 M= 1 F= 1 S= 1 Np= 1 CS= 0 Subclass=0 link_en= Disabled
+JRX ADI_APOLLO_LINK_B0: L= 1 M= 1 F= 1 S= 1 Np= 1 CS= 0 Subclass=0 link_en= Enabled 
+JRX ADI_APOLLO_LINK_B1: L= 1 M= 1 F= 1 S= 1 Np= 1 CS= 0 Subclass=0 link_en= Disabled
+JTX ADI_APOLLO_LINK_A0: L= 1 M= 1 F= 1 S= 1 Np= 1 CS= 0 Subclass=0 link_en= Enabled 
+JTX ADI_APOLLO_LINK_A1: L= 1 M= 1 F= 1 S= 1 Np= 1 CS= 0 Subclass=0 link_en= Disabled
+JTX ADI_APOLLO_LINK_B0: L= 1 M= 1 F= 1 S= 1 Np= 1 CS= 0 Subclass=0 link_en= Enabled 
+JTX ADI_APOLLO_LINK_B1: L= 1 M= 1 F= 1 S= 1 Np= 1 CS= 0 Subclass=0 link_en= Disabled
+ADC NVM fused = 0; run ADC cal from scratch (can take up to 100 secs)...
+Link0: SERDES JRx cal Rate 13500000 kBps via INIT_CAL ...
+Link2: SERDES JRx cal Rate 13500000 kBps via INIT_CAL ...
+JESD RX (JTX Framer Link A0) Link4 204B SYNC deasserted, PLL locked, PHASE established, MODE valid, STAT 0x70
+JESD TX (JRX Deframer Link A0) Phase Difference 0
+JESD TX (JRX Deframer Link A0) Link0 204B Lane-0@5 status: Link is good (0x38)
+JESD TX (JRX Deframer Link A0) Link0 204B Lane-1@1 status: Link is good (0x38)
+JESD TX (JRX Deframer Link A0) Link0 204B User status: Ready, SYSREF Phase: Locked
+JESD RX (JTX Framer Link B0) Link6 204B SYNC deasserted, PLL locked, PHASE established, MODE valid, STAT 0x70
+JESD TX (JRX Deframer Link B0) Phase Difference 0
+JESD TX (JRX Deframer Link B0) Link2 204B Lane-0@1 status: Link is good (0x38)
+JESD TX (JRX Deframer Link B0) Link2 204B Lane-1@7 status: Link is good (0x38)
+JESD TX (JRX Deframer Link B0) Link2 204B User status: Ready, SYSREF Phase: Locked
+Total BSYNC path delay 0 fs
+MCS Init Cal Validation: Passed
+MCS Initcal Status: Passed
+WARNING: Phase 125 fs too small to represent at Icp 11100 uA.
+SYSREF_PHASE = 1 (TRY0)
+SYSREF_PHASE = 1 (TRY1)
+SYSREF_PHASE = 1 (TRY2)
+SYSREF_PHASE = 1 (TRY3)
+SYSREF_PHASE = 1 (TRY4)
+rx_jesd before re-CGS: irq_source 0x00000000
+rx_jesd before re-CGS: lane 0 frame_align_err 0 errors 0x00000000
+rx_jesd before re-CGS: lane 1 frame_align_err 0 errors 0x00000000
+rx_jesd: re-CGS reached DATA after 0 ms
+rx_jesd after re-CGS: irq_source 0x00000000
+rx_jesd after re-CGS: lane 0 frame_align_err 0 errors 0x00000000
+rx_jesd after re-CGS: lane 1 frame_align_err 0 errors 0x00000000
+Capture geometry: M=8 NP=16 samples/conv=16384 bytes=262144
+  Side 0: converters 0..3  <- reported window
+  Side 1: converters 4..7
+rx_adc: Successfully initialized (337500000 Hz)
+tx_dac: Successfully initialized (337500000 Hz)
+tx_jesd status:
+	Link is enabled
+	Measured Link Clock: off
+	Reported Link Clock: 337.500 MHz
+	Lane rate: 13500.000 MHz
+	Lane rate / 40: 337.500 MHz
+	LMFC rate: 10.546 MHz
+	SYNC~: asserted
+	Link status: DATA
+	SYSREF captured: Yes
+	SYSREF alignment error: No
+rx_jesd status:
+	Link is enabled
+	Measured Link Clock: off
+	Reported Link Clock: 337.500 MHz
+	Lane rate: 13500.000 MHz
+	Lane rate / 40: 337.500 MHz
+	LMFC rate: 10.546 MHz
+	Link status: DATA
+	SYSREF captured: Yes
+	SYSREF alignment error: No
+Project configured
+
+  Side 0 NCOs: 2 coarse at 2700000 kHz, 4 fine at 0 Hz, tx and rx matched
+  Side 1 NCOs: 2 coarse at 2700000 kHz, 4 fine at 0 Hz, tx and rx matched
+WARNING: TX data offload: HDL built without bypass
+DMA_EXAMPLE Tx: address=<addr> samples=16384 channels=8 bits=16
+DMA_EXAMPLE Rx: address=<addr> samples=16384 channels=8 bits=16
+DMA_EXAMPLE Rx side 0: first sample at byte 0, stride 16 bytes, 4 converters
