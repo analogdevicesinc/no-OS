@@ -973,16 +973,45 @@ int adf4030_set_tdc_measurement(struct adf4030_dev *dev, uint8_t tdc_target)
 	if (!dev)
 		return -EINVAL;
 
+	/*
+	 * Re-assert the TDC source on every measurement. TDC_SOURCE resets to
+	 * 0x1F, a channel that does not exist, so relying on an earlier caller
+	 * leaves the TDC comparing against nothing: it arms and never
+	 * completes, with no error reported.
+	 */
+	ret = adf4030_spi_update_bits(dev, 0x11, ADF4030_TDC_SOURCE,
+				      no_os_field_prep(ADF4030_TDC_SOURCE,
+						      dev->tdc_source));
+	if (ret)
+		return ret;
+
+	/* Measure rising edges on both source and target. */
+	ret = adf4030_spi_update_bits(dev, 0x15, ADF4030_FALL_EDGE_SRC |
+				      ADF4030_FALL_EDGE_TGT, 0x0);
+	if (ret)
+		return ret;
+
 	ret = adf4030_spi_update_bits(dev, 0x11, ADF4030_MANUAL_MODE, 0xFF);
 	if (ret)
 		return ret;
 
 	dev->tdc_target = tdc_target;
-	ret = adf4030_spi_write(dev, 0x10, dev->tdc_target);
+	ret = adf4030_spi_update_bits(dev, 0x10, ADF4030_TDC_TARGET,
+				      no_os_field_prep(ADF4030_TDC_TARGET,
+						      dev->tdc_target));
 	if (ret)
 		return ret;
 
+	/*
+	 * Pulse the TDC error monitor reset. Left asserted, it holds the
+	 * monitor in reset, so TDC_ERR can never latch and a failed
+	 * measurement looks like a clean one.
+	 */
 	ret = adf4030_spi_update_bits(dev, 0x61, ADF4030_RST_TDC_ERR, 0xFF);
+	if (ret)
+		return ret;
+
+	ret = adf4030_spi_update_bits(dev, 0x61, ADF4030_RST_TDC_ERR, 0x0);
 	if (ret)
 		return ret;
 
@@ -993,6 +1022,43 @@ int adf4030_set_tdc_measurement(struct adf4030_dev *dev, uint8_t tdc_target)
 	dev->tdc_status = true;
 
 	return 0;
+}
+
+/**
+ * @brief BSYNC frequency seen by the current TDC source channel.
+ *
+ * tdc_source can hold the 0x1F reset value, which is outside the channel
+ * array, so it is bounds-checked before indexing.
+ * @param dev - The device structure.
+ * @return    - The BSYNC frequency in Hz, or 0 if no source is selected.
+ */
+static uint32_t adf4030_tdc_source_bsync(struct adf4030_dev *dev)
+{
+	if (dev->tdc_source >= ADF4030_CHANNEL_NUMBER)
+		return 0;
+
+	return dev->channels[dev->tdc_source].odivb_en ?
+	       dev->bsync_freq_odiv_b : dev->bsync_freq_odiv_a;
+}
+
+/**
+ * @brief Duration of a single TDC measurement, in microseconds.
+ *
+ * The TDC accumulates 2^(AVGEXP + 6) BSYNC periods per measurement.
+ * @param dev - The device structure.
+ * @return    - The measurement time in microseconds, 0 if unknown.
+ */
+static uint64_t adf4030_tdc_meas_time_us(struct adf4030_dev *dev)
+{
+	uint32_t bsync_freq = adf4030_tdc_source_bsync(dev);
+	uint64_t samples;
+
+	if (!bsync_freq)
+		return 0;
+
+	samples = 1ULL << (dev->avgexp + 6);
+
+	return NO_OS_DIV_ROUND_UP(samples * 1000000ULL, bsync_freq);
 }
 
 /**
@@ -1008,6 +1074,7 @@ int adf4030_get_tdc_measurement(struct adf4030_dev *dev, int64_t *tdc_result_fs)
 	uint8_t tmp;
 	int64_t tdc_tmp = 0;
 	uint32_t bsync_freq = 0;
+	uint64_t meas_time_us;
 
 	if (!dev)
 		return -EINVAL;
@@ -1019,8 +1086,17 @@ int adf4030_get_tdc_measurement(struct adf4030_dev *dev, int64_t *tdc_result_fs)
 			return ret;
 	}
 
-	ret = adf4030_poll(dev, 0x8F, ADF4030_TDC_BUSY, false,
-			   ADF4030_TDC_BUSY_TIMEOUT_MS);
+	/*
+	 * Wait out the measurement before polling: at AVGEXP 15 and a 9.765625
+	 * MHz BSYNC it takes about 215 ms. The result is only stable once the
+	 * math block has finished as well.
+	 */
+	meas_time_us = adf4030_tdc_meas_time_us(dev);
+	if (meas_time_us)
+		no_os_mdelay((uint32_t)(meas_time_us / 1000) + 1);
+
+	ret = adf4030_poll(dev, 0x8F, ADF4030_TDC_BUSY | ADF4030_MATH_BUSY,
+			   false, ADF4030_TDC_BUSY_TIMEOUT_MS);
 	if (ret)
 		return ret;
 
@@ -1043,8 +1119,9 @@ int adf4030_get_tdc_measurement(struct adf4030_dev *dev, int64_t *tdc_result_fs)
 	tdc_tmp = ((tdc_tmp * 1000000000L) / ((1 << 24)));
 	tdc_tmp = tdc_tmp * 1000000L;
 
-	bsync_freq = dev->channels[dev->tdc_source].odivb_en ?
-		     dev->bsync_freq_odiv_b : dev->bsync_freq_odiv_a;
+	bsync_freq = adf4030_tdc_source_bsync(dev);
+	if (!bsync_freq)
+		return -EINVAL;
 
 	*tdc_result_fs = (tdc_tmp / ((int64_t)bsync_freq));
 
@@ -1612,15 +1689,18 @@ int adf4030_set_channel_direction(struct adf4030_dev *dev, uint8_t channel,
 	if (!dev)
 		return -EINVAL;
 
-	// Write TX_PD
+	/*
+	 * Power the TX path up unconditionally and let EN_DRIVE alone set the
+	 * direction, as the Linux driver does: the default register table
+	 * powers every TX path down, and an input channel still needs its path
+	 * alive for the TDC to observe it.
+	 */
 	if (channel < ADF4030_CHANNEL_TX_PD_SEPARATOR) {
 		msk = (ADF4030_PD_TX_PATH0) << channel;
-		ret = adf4030_spi_update_bits(dev, 0x3B,
-					      msk, no_os_field_prep(msk, !tx_en));
+		ret = adf4030_spi_update_bits(dev, 0x3B, msk, 0x0);
 	} else {
 		msk = (ADF4030_PD_TX_PATH6) << (channel - ADF4030_CHANNEL_TX_PD_SEPARATOR);
-		ret = adf4030_spi_update_bits(dev, 0x3C,
-					      msk, no_os_field_prep(msk, !tx_en));
+		ret = adf4030_spi_update_bits(dev, 0x3C, msk, 0x0);
 	}
 	if (ret)
 		return ret;

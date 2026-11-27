@@ -574,6 +574,8 @@ struct adf4030_dev {
 	uint8_t 			tdc_source;
 	uint8_t 			tdc_target;
 	uint8_t				alignment_iter;
+	/** TDC averaging exponent programmed into 0x16. A measurement takes
+	 *  2^(avgexp + 6) BSYNC periods. */
 	uint8_t				avgexp;
 	bool 				tdc_status;
 	bool				spi_4wire_en;
@@ -595,6 +597,8 @@ struct adf4030_jesd204_priv {
 struct adf4030_init_param {
 	/** SPI Initialization parameters */
 	struct no_os_spi_init_param	*spi_init;
+	/** Optional init-time channel list; each entry's .num selects the
+	 *  channel. When NULL / 0, only channel 1 is set up as an output. */
 	struct adf4030_chan_spec	*channels;
 	uint8_t				num_channels;
 	uint32_t			ref_freq;
