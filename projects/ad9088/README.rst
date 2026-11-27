@@ -540,6 +540,24 @@ capture.
 cyclic waveform, so pass ``-b`` with the number of samples in the file to
 play all of it; the capture then repeats the whole file.
 
+Regression Check
+^^^^^^^^^^^^^^^^
+
+``scripts/sim_check.sh`` runs every example that is built under
+``build-sim/`` and compares its console output with the baselines in
+``scripts/golden/``. The models' ``SIM:`` lines, the DMA buffer addresses and
+the checkout path are masked; any other change is reported as a diff, and the
+script exits non-zero.
+
+.. code-block:: bash
+
+   projects/ad9088/scripts/sim_check.sh            # MATCH / DIFF per example
+   projects/ad9088/scripts/sim_check.sh --update   # re-record after an intended change
+
+The baselines were recorded from the simulation itself, not from a board, so a
+MATCH means the software behaves as it did when they were recorded. Replace
+them with board logs, masked the same way, to compare against hardware.
+
 HDL / Quartus to no-OS Build Flow (Agilex 5)
 --------------------------------------------------
 
