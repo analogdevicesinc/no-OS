@@ -31,8 +31,21 @@ int basic_example_main()
 	struct adf4030_dev *adf4030_dev;
 	struct axi_jesd204_rx *rx_jesd;
 	struct axi_jesd204_tx *tx_jesd;
+#ifndef CONFIG_ALTERA_PLATFORM_NIOSV
+	/*
+	 * The Agilex 5 bitstream does have an ADI adxcvr control core per
+	 * direction (hdl library/intel/adi_jesd204 instantiates axi_adxcvr as
+	 * "axi_xcvr", exported as the link_management window), but neither
+	 * adxcvr driver in the tree fits it: axi_adxcvr.c is Xilinx-only and
+	 * altera_adxcvr.c reprograms Arria10/Stratix10 ATX and CDR PLLs through
+	 * per-lane PMA windows that GTS does not expose. The GTS PHY is fully
+	 * configured by the bitstream, so all that is left is releasing the
+	 * transceiver from reset, which axi_jesd204_{rx,tx}.c does directly from
+	 * xcvr_base. These handles therefore exist only on the Xilinx path.
+	 */
 	struct adxcvr *rx_adxcvr;
 	struct adxcvr *tx_adxcvr;
+#endif
 	struct jesd204_clk rx_jesd_clk = {0};
 	struct jesd204_clk tx_jesd_clk = {0};
 	struct no_os_clk_desc rx_lane_clk = {0};
@@ -60,7 +73,7 @@ int basic_example_main()
 	/* After the HMC7044: the ADF4030's reference comes from HMC7044 ch1. */
 	ret = adf4030_init(&adf4030_dev, &adf4030_ip);
 	if (ret) {
-		pr_info("ADF4030 initialization failed\n");
+		pr_info("ADF4030 initialization failed (ret=%d)\n", ret);
 		goto error_hmc7044;
 	}
 
@@ -86,6 +99,13 @@ int basic_example_main()
 		goto error_rx_dmac;
 	}
 
+#ifndef CONFIG_ALTERA_PLATFORM_NIOSV
+	/*
+	 * Xilinx path only: configure the ADI adxcvr transceivers. On Agilex the
+	 * lane clocks keep xcvr == NULL - jesd204_clk.c speaks the Xilinx adxcvr
+	 * API - and the transceiver is instead released from reset inside the
+	 * link cores' CLOCKS_ENABLE handler.
+	 */
 	ret = adxcvr_init(&tx_adxcvr, &tx_adxcvr_ip);
 	if (ret) {
 		pr_info("TX ADXCVR initialization failed\n");
@@ -99,6 +119,7 @@ int basic_example_main()
 		goto error_tx_adxcvr;
 	}
 	rx_jesd_clk.xcvr = rx_adxcvr;
+#endif
 
 	rx_lane_clk.platform_ops = &jesd204_clk_ops;
 	rx_lane_clk.dev_desc = &rx_jesd_clk;
@@ -160,11 +181,22 @@ int basic_example_main()
 		},
 		{
 			.jdev = ad9088_phy->jdev,
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+			/* Agilex 5: bring up the links on both sides. */
+			.link_ids = {
+				DEFRAMER_LINK_A0_TX,
+				DEFRAMER_LINK_B0_TX,
+				FRAMER_LINK_A0_RX,
+				FRAMER_LINK_B0_RX
+			},
+			.links_number = 4,
+#else
 			.link_ids = {
 				FRAMER_LINK_A0_RX,
 				DEFRAMER_LINK_A0_TX
 			},
 			.links_number = 2,
+#endif
 			.is_top_device = true,
 		},
 	};
@@ -184,6 +216,13 @@ int basic_example_main()
 
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_jesd);
+
+	/*
+	 * Converter-side view of the same links, per lane. The FPGA status above
+	 * only says what the link cores see; this says what the AD9088 sees, which
+	 * is the half that identifies a dead or mismapped lane.
+	 */
+	ad9088_link_status_dump(ad9088_phy);
 
 	pr_info("Project configured\n");
 
@@ -282,10 +321,12 @@ error_tx_jesd:
 error_rx_jesd:
 	axi_jesd204_rx_remove(rx_jesd);
 error_rx_adxcvr:
+#ifndef CONFIG_ALTERA_PLATFORM_NIOSV
 	adxcvr_remove(rx_adxcvr);
 error_tx_adxcvr:
 	adxcvr_remove(tx_adxcvr);
 error_tx_dmac:
+#endif
 	axi_dmac_remove(tx_dmac);
 error_rx_dmac:
 	axi_dmac_remove(rx_dmac);

@@ -17,6 +17,10 @@
 #include "xilinx/parameters.h"
 #endif
 
+#ifdef CONFIG_ALTERA_PLATFORM_NIOSV
+#include "altera/parameters.h"
+#endif
+
 #ifdef IIO_SUPPORT
 #include "iio_app.h"
 #endif
