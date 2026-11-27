@@ -9,7 +9,12 @@ AD413x no-OS Example Project
 Supported Parts
 ---------------
 
+* `AD4129-4 <https://www.analog.com/en/products/ad4129-4.html>`_
+* `AD4129-8 <https://www.analog.com/en/products/ad4129-8.html>`_
+* `AD4130-4 <https://www.analog.com/en/products/ad4130-4.html>`_
 * `AD4130-8 <https://www.analog.com/en/products/ad4130-8.html>`_
+* `AD4131-4 <https://www.analog.com/en/products/ad4131-4.html>`_
+* `AD4131-8 <https://www.analog.com/en/products/ad4131-8.html>`_
 
 Supported Evaluation Boards
 ---------------------------
@@ -140,10 +145,13 @@ Used Hardware
 ^^^^^^^^^^^^^
 
 * `EVAL-AD4130-8WARDZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad4130-8.html>`_
-* `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_
+* `ZedBoard <https://www.analog.com/en/resources/reference-designs/powering-zynq-evaluation-development-board-zedboard.html>`_ 
+  **or** `Cora Z7-07S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development/>`_
 
 Connections
 ^^^^^^^^^^^
+
+**ZedBoard**
 
 * Power the EVAL-AD4130-8 board with a 5V USB supply.
 
@@ -179,12 +187,47 @@ Connections
 * Connect the ZedBoard's USB-UART to your PC via MicroUSB. The UART
   console appears at 115200 baud, 8N1.
 
+**Cora Z7-07S**
+
+* Power the EVAL-AD4130-8 board with a 5V USB supply and set up AVDD and
+  IOVDD with the on-board regulators, as for the ZedBoard.
+
+* Plug the EVAL-AD4130-8 onto the Cora Z7S Arduino header. No additional
+  wiring is required: all signals are routed through this header, with the
+  pin mapping provided by the ADI HDL design for the Cora Z7-07S.
+
+* Do not power the EVAL-AD4130-8 board through the shield; use the Cora Z7S
+  main power input only.
+
+* Power the Cora Z7S from its USB port or the external power jack (J15,
+  7V to 15V), then connect its USB-UART to your PC via MicroUSB. If using
+  external source, move the jumpers (JP3) to the EXT position. The UART
+  console (PS UART0) appears at 115200 baud, 8N1.
+
 Build Command
 ^^^^^^^^^^^^^
 
 The Xilinx platform uses the CMake/Ninja build system via the
 ``no_os_build.py`` helper script. Available variants: ``demo``, ``iio``.
-Available boards: ``zed``.
+Available boards: ``zed`` (ZedBoard), ``coraz7s`` (Cora Z7-07S). The
+carrier is selected by ``--board``; the ``coraz7s`` board overlay enables
+``CONFIG_AD413X_CORAZ7S_CARRIER``.
+
+The device variant defaults to AD4130-8 and is selected through the
+``AD413X_DEV`` Kconfig choice. The -4 parts (AD4129-4, AD4130-4, AD4131-4)
+only have analog inputs AIN0 to AIN7, so for them the example leaves channels
+8 to 15 at their defaults instead of routing them to AIN8 to AIN15. To target
+another part, either set it in ``menuconfig`` after the first configure and
+rebuild:
+
+.. code-block:: bash
+
+   cmake --build build/ad413x-<variant>-<board> --target menuconfig
+
+or add the matching symbol (``CONFIG_AD413X_DEV_AD4129_4``,
+``CONFIG_AD413X_DEV_AD4129_8``, ``CONFIG_AD413X_DEV_AD4130_4``,
+``CONFIG_AD413X_DEV_AD4130_8``, ``CONFIG_AD413X_DEV_AD4131_4`` or
+``CONFIG_AD413X_DEV_AD4131_8``) to ``boards/<variant>/<board>.conf``.
 
 For toolchain setup and prerequisites, see the
 :doc:`Xilinx CMake build guide </build_guides/build_xilinx_cmake>`.
@@ -208,3 +251,8 @@ For toolchain setup and prerequisites, see the
       --project ad413x --variant demo --board zed \
       --hardware /path/to/system_top.xsa \
       --probe openocd --flash
+
+   # build the IIO example on the Cora Z7-07S
+   python tools/scripts/no_os_build.py build \
+      --project ad413x --variant iio --board coraz7s \
+      --hardware /path/to/coraz7s/system_top.xsa
