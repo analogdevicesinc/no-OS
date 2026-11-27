@@ -109,6 +109,11 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/max20362)
 no_os_sources_ifdef(CONFIG_POWER_MAX22216 ${CMAKE_CURRENT_SOURCE_DIR}/max22216/max22216.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/max22216)
 
+# max34451
+no_os_sources_ifdef(CONFIG_POWER_MAX34451 ${CMAKE_CURRENT_SOURCE_DIR}/max34451/max34451.c)
+no_os_sources_ifdef(CONFIG_POWER_IIO_MAX34451 ${CMAKE_CURRENT_SOURCE_DIR}/max34451/iio_max34451.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/max34451)
+
 # max42500
 no_os_sources_ifdef(CONFIG_POWER_MAX42500 ${CMAKE_CURRENT_SOURCE_DIR}/max42500/max42500.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/max42500)
