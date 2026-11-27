@@ -53,6 +53,11 @@ target_include_directories(no-os PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/hal
 )
 
+# Vitis 2025+ generates an SDT BSP whose driver config tables are keyed by base
+# address. Opt in so no-os is compiled with -DSDT when the BSP is SDT; without
+# it the PS SPI/GPIO config structures are read with the wrong layout.
+set(NOOS_XILINX_SDT ON)
+
 config_platform_sdk(adrv9104)
 add_flash_target(adrv9104)
 post_build_config(adrv9104)

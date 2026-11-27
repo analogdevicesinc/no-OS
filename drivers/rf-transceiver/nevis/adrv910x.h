@@ -52,6 +52,10 @@
 #include "no_os_spi.h"
 #include "no_os_clk.h"
 
+#include "axi_adc_core.h"
+#include "axi_dac_core.h"
+#include "axi_dmac.h"
+
 #define api_call(phy, func, args...)	({				\
 	int __ret = func((phy)->adrv910x, ##args);			\
 									\
@@ -104,6 +108,8 @@ struct adrv910x_rf_phy {
 	adi_adrv910x_Profiles_t *device_profile;
 	uint8_t *arm_binary;
 	uint32_t arm_binary_size;
+	uint8_t *stream_binary;
+	uint32_t stream_binary_size;
 	initCals_t init_cals;
 	trackingCals_t tracking_cals;
 	pfirBuffer_t pfbuf;
@@ -128,6 +134,18 @@ struct adrv910x_rf_phy {
 	/* Clock configuration */
 	uint32_t dev_clk_frequency_hz;
 	adi_adrv910x_DeviceClockDivisor_e clk_out_divisor;
+
+	/*
+	 * AXI cores of the data ports. Optional: the application allocates them
+	 * and assigns them here before adrv910x_init(), which then configures
+	 * them as the profile says. Left NULL, the driver does not touch them.
+	 */
+	struct axi_adc *rx1_adc;
+	struct axi_adc *rx2_adc;
+	struct axi_dac *tx1_dac;
+	struct axi_dmac *rx1_dmac;
+	struct axi_dmac *rx2_dmac;
+	struct axi_dmac *tx1_dmac;
 };
 
 struct adrv910x_init_param {
@@ -137,6 +155,8 @@ struct adrv910x_init_param {
 	adi_adrv910x_Profiles_t *device_profile;
 	uint8_t *arm_binary_ptr;
 	uint32_t arm_binary_size;
+	uint8_t *stream_binary_ptr;
+	uint32_t stream_binary_size;
 	uint32_t dev_clk_frequency_hz;
 	adi_adrv910x_DeviceClockDivisor_e clk_out_divisor;
 	adi_adrv910x_RxGainTableRow_t *rx_gain_table;
@@ -232,6 +252,14 @@ int adrv910x_configure_channels(struct adrv910x_rf_phy *phy);
 int adrv910x_run_init_calibrations(struct adrv910x_rf_phy *phy);
 int adrv910x_setup_tracking_calibrations(struct adrv910x_rf_phy *phy);
 int adrv910x_setup(struct adrv910x_rf_phy *phy);
+
+/* AXI cores interface, adrv910x_conv.c */
+int adrv910x_axi_ssi_configure(struct adrv910x_rf_phy *phy);
+int adrv910x_axi_interface_set(const struct adrv910x_rf_phy *phy,
+			       const uint8_t n_lanes, const bool cmos_ddr,
+			       const uint32_t port);
+void adrv910x_axi_interface_enable(const struct adrv910x_rf_phy *phy,
+				   const uint32_t port, const bool en);
 
 struct adi_adrv910x_SpiSettings *adrv910x_spi_settings_get(void);
 

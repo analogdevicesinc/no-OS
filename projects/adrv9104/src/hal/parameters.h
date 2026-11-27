@@ -71,7 +71,15 @@
 /* UART */
 #define UART_DEVICE_ID			XPAR_XUARTPS_0_DEVICE_ID
 #define UART_BAUDRATE			921600
-#ifdef XPS_BOARD_ZCU102
+#ifdef SDT
+/*
+ * SDT BSPs (Vitis 2025+) export the raw devicetree interrupt cell (e.g. 0x4015)
+ * instead of the GIC interrupt ID. Convert it: ID field plus the SPI/PPI offset.
+ */
+#include "xinterrupt_wrap.h"
+#define UART_IRQ_ID			(XGet_IntrId(XPAR_XUARTPS_0_INTERRUPTS) + \
+					 XGet_IntrOffset(XPAR_XUARTPS_0_INTERRUPTS))
+#elif defined(XPS_BOARD_ZCU102)
 #define UART_IRQ_ID			XPAR_XUARTPS_0_INTR
 #else
 #define UART_IRQ_ID			XPAR_XUARTPS_1_INTR

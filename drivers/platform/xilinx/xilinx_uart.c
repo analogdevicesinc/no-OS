@@ -276,12 +276,6 @@ static void uart_irq_handler(void *call_back_ref, uint32_t event,
 		 */
 		case XUARTPS_EVENT_RECV_ERROR:
 		/*
-		 * Data was received with an parity or frame or break error, keep the data
-		 * but determine what kind of errors occurred. Specific to Zynq Ultrascale+
-		 * MP.
-		 */
-		case XUARTPS_EVENT_PARE_FRAME_BRKE:
-		/*
 		 * Data was received with an overrun error, keep the data but determine
 		 * what kind of errors occurred. Specific to Zynq Ultrascale+ MP.
 		 */
@@ -292,6 +286,19 @@ static void uart_irq_handler(void *call_back_ref, uint32_t event,
 			XUartPs_Recv(xil_uart_desc->instance,
 				     (u8 *)(xil_uart_desc->buff),
 				     UART_BUFF_LENGTH);
+			break;
+		/*
+		 * A byte was received with a parity, framing or break error.
+		 * Specific to Zynq Ultrascale+ MP. The BSP raises this event
+		 * from inside its receive loop, once per bad byte, and
+		 * data_len holds the byte status, not a byte count. The
+		 * receive buffer must not be touched here: re-arming it with
+		 * XUartPs_Recv() re-enters that loop and corrupts its
+		 * bookkeeping. Only count the error; the BSP reports the
+		 * received bytes afterwards through another event.
+		 */
+		case XUARTPS_EVENT_PARE_FRAME_BRKE:
+			xil_uart_desc->total_error_count++;
 			break;
 		default:
 			break;

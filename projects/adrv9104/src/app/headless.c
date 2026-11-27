@@ -46,6 +46,7 @@
 #include "no_os_delay.h"
 
 #include "axi_adc_core.h"
+#include "axi_dac_core.h"
 #include "axi_dmac.h"
 
 #include "parameters.h"
@@ -62,29 +63,21 @@
 #include "adi_adrv910x.h"
 #include "adrv910x.h"
 #include "nevis_template_profile.h"
-#include "Nevis_uc5_profile.h"
-// #include "Nevis_uc1_profile.h"
-#include "Nevis_pfirBuffer.h"
-#include "Nevis_gain_tables.h"
+#include "Nevis_profile.h"
 #include "ADRV9104_FW.h"
-
-/* axi_adrv9001 RX core registers, see Linux adrv9104-backend.c */
-#define ADRV910X_AXI_REG_CONFIG		0x0c
-#define ADRV910X_AXI_IS_CMOS		NO_OS_BIT(7)
-#define ADRV910X_AXI_RX_R1_MODE		NO_OS_BIT(2)
-#define ADRV910X_AXI_SSI_N_LANES_MSK	NO_OS_GENMASK(12, 8)
-#define ADRV910X_AXI_SSI_DDR		NO_OS_BIT(16)
+#include "ADRV9104_Stream.h"
 
 /* Bytes of one capture: ADC_BUFFER_SAMPLES 16 bit I/Q pairs */
 #define ADC_BUFFER_SIZE	(ADC_BUFFER_SAMPLES * ADRV9001_I_Q_CHANNELS * \
 			 sizeof(uint16_t))
 
-/* The AXI cores of one RX port. They are owned by the application. */
+/*
+ * Init parameters of the AXI cores of one RX port. The cores themselves are
+ * part of struct adrv910x_rf_phy.
+ */
 struct adrv910x_axi_rx {
 	struct axi_adc_init adc_init;
 	struct axi_dmac_init dmac_init;
-	struct axi_adc *adc;
-	struct axi_dmac *dmac;
 	uint32_t rate;
 };
 
@@ -107,10 +100,70 @@ static struct adrv910x_axi_rx axi_rx[ADRV910X_RX_MAX] = {
 	},
 };
 
+/* Init parameters of the AXI cores of the TX port */
+struct adrv910x_axi_tx {
+	struct axi_dac_init dac_init;
+	struct axi_dmac_init dmac_init;
+	uint32_t rate;
+};
+
+/*
+ * By default the TX core sends a single DDS tone, I and Q in quadrature. It is
+ * switched to the DMA when a buffer is pushed over IIO or by the DMA example.
+ */
+#define ADRV910X_DDS_TONE_HZ	100000
+#define ADRV910X_DDS_SCALE	250000	/* 0.25 per tone, two tones summed */
+
+static struct axi_dac_channel tx_dac_channels[ADRV9001_I_Q_CHANNELS] = {
+	/* I */
+	[0] = {
+		.sel = AXI_DAC_DATA_SEL_DDS,
+		.dds_frequency_0 = ADRV910X_DDS_TONE_HZ,
+		.dds_phase_0 = 90000,
+		.dds_scale_0 = ADRV910X_DDS_SCALE,
+	},
+	/* Q */
+	[1] = {
+		.sel = AXI_DAC_DATA_SEL_DDS,
+		.dds_frequency_0 = ADRV910X_DDS_TONE_HZ,
+		.dds_phase_0 = 0,
+		.dds_scale_0 = ADRV910X_DDS_SCALE,
+	},
+};
+
+static struct adrv910x_axi_tx axi_tx = {
+	.dac_init = {
+		.name = "axi-adrv910x-tx-lpc",
+		.base = TX1_DAC_BASEADDR,
+		.num_channels = ADRV9001_I_Q_CHANNELS,
+		.channels = tx_dac_channels,
+	},
+	.dmac_init = { "tx_dmac", TX1_DMA_BASEADDR, IRQ_DISABLED },
+};
+
 #if defined(DMA_EXAMPLE) || defined(IIO_SUPPORT)
 static uint16_t adc_buffers[ADRV910X_RX_MAX][ADC_BUFFER_SAMPLES *
 		ADRV9001_I_Q_CHANNELS]
 __attribute__((aligned(1024)));
+#endif
+
+#if defined(DMA_EXAMPLE) || defined(IIO_SUPPORT)
+static uint32_t dac_buffer[DAC_BUFFER_SAMPLES * ADRV9001_I_Q_CHANNELS]
+__attribute__((aligned(1024)));
+#endif
+
+#ifdef IIO_SUPPORT
+
+static int get_dac_sampling_frequency(struct axi_dac *dev, uint32_t chan,
+				      uint64_t *sampling_freq_hz)
+{
+	if (!dev || dev->base != axi_tx.dac_init.base || !sampling_freq_hz)
+		return -EINVAL;
+
+	*sampling_freq_hz = axi_tx.rate;
+
+	return 0;
+}
 #endif
 
 int get_sampling_frequency(struct axi_adc *dev, uint32_t chan,
@@ -122,7 +175,7 @@ int get_sampling_frequency(struct axi_adc *dev, uint32_t chan,
 		return -EINVAL;
 
 	for (c = 0; c < ADRV910X_RX_MAX; c++) {
-		if (dev != axi_rx[c].adc)
+		if (dev->base != axi_rx[c].adc_init.base)
 			continue;
 
 		*sampling_freq_hz = axi_rx[c].rate;
@@ -132,14 +185,7 @@ int get_sampling_frequency(struct axi_adc *dev, uint32_t chan,
 	return -ENODEV;
 }
 
-static struct adi_adrv910x_SpiSettings spiSettings = {
-	.msbFirst = 1,
-	.enSpiStreaming = 0,
-	.autoIncAddrUp = 1,
-	.fourWireMode = 1,
-	.cmosPadDrvStrength = ADI_ADRV910X_CMOSPAD_DRV_STRONG,
-};
-
+/* spiSettings comes from Nevis_profile.h */
 struct adi_adrv910x_SpiSettings *adrv910x_spi_settings_get(void)
 {
 	return &spiSettings;
@@ -244,172 +290,66 @@ static const adi_adrv910x_GainControlCfg_t agc_uc5 = {
 	.rxQecFreezeEnable = false,
 	.gpioFreezePin = ADI_ADRV910X_GPIO_UNASSIGNED
 };
-
-//static struct adi_adrv9001_GainControlCfg agc_defaults = {
-//	.peakWaitTime = 4,
-//	.maxGainIndex = ADI_ADRV9001_RX_GAIN_INDEX_MAX,
-//	.minGainIndex = ADI_ADRV9001_RX_GAIN_INDEX_MIN,
-//	.gainUpdateCounter = 11520,
-//	.attackDelay_us = 10,
-//	.lowThreshPreventGainInc = false,
-//	.slowLoopSettlingDelay = 16,
-//	.changeGainIfThreshHigh = 3,
-//	.agcMode = 1,
-//	.resetOnRxon = false,
-//	.resetOnRxonGainIndex = ADI_ADRV9001_RX_GAIN_INDEX_MAX,
-//	.enableSyncPulseForGainCounter = false,
-//	.enableFastRecoveryLoop = false,
-//	.power = {
-//		.powerEnableMeasurement = true,
-//		.underRangeHighPowerThresh = 10,
-//		.underRangeLowPowerThresh = 4,
-//		.underRangeHighPowerGainStepRecovery = 2,
-//		.underRangeLowPowerGainStepRecovery = 4,
-//		.powerMeasurementDuration = 10,
-//		.powerMeasurementDelay = 2,
-//		.rxTddPowerMeasDuration = 0,
-//		.rxTddPowerMeasDelay = 0,
-//		.overRangeHighPowerThresh = 0,
-//		.overRangeLowPowerThresh = 7,
-//		.overRangeHighPowerGainStepAttack = 4,
-//		.overRangeLowPowerGainStepAttack = 4,
-//		.feedback_inner_high_inner_low = ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED,
-//		.feedback_apd_high_apd_low = ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED,
-//	},
-//	.peak = {
-//		.agcUnderRangeLowInterval = 50,
-//		.agcUnderRangeMidInterval = 2,
-//		.agcUnderRangeHighInterval = 4,
-//		.apdHighThresh = 21,
-//		.apdLowThresh = 12,
-//		.apdUpperThreshPeakExceededCount = 6,
-//		.apdLowerThreshPeakExceededCount = 3,
-//		.apdGainStepAttack = 2,
-//		.apdGainStepRecovery = 0,
-//		.enableHbOverload = true,
-//		.hbOverloadDurationCount = 1,
-//		.hbOverloadThreshCount = 1,
-//		.hbHighThresh = 13044,
-//		.hbUnderRangeLowThresh = 5826,
-//		.hbUnderRangeMidThresh = 8230,
-//		.hbUnderRangeHighThresh = 7335,
-//		.hbUpperThreshPeakExceededCount = 6,
-//		.hbUnderRangeHighThreshExceededCount = 3,
-//		.hbGainStepHighRecovery = 2,
-//		.hbGainStepLowRecovery = 6,
-//		.hbGainStepMidRecovery = 4,
-//		.hbGainStepAttack = 2,
-//		.hbOverloadPowerMode = 0,
-//		.hbUnderRangeMidThreshExceededCount = 3,
-//		.hbUnderRangeLowThreshExceededCount = 3,
-//		.feedback_apd_low_hb_low = ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED,
-//		.feedback_apd_high_hb_high = ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED,
-//	},
-//};
-
-/*
- * Linux adrv9104_backend_disable(): allocate the core and hold it in reset, so
- * it does not interfere with the init calibrations.
- */
-static int adrv910x_axi_rx_begin(struct adrv910x_axi_rx *rx)
+/* The AXI cores of an RX port, kept in the phy as in the adrv9002 driver */
+static struct axi_adc **adrv910x_rx_adc(struct adrv910x_rf_phy *phy,
+					uint32_t port)
 {
-	int ret;
-
-	ret = axi_adc_init_begin(&rx->adc, &rx->adc_init);
-	if (ret)
-		return ret;
-
-	return axi_adc_write(rx->adc, AXI_ADC_REG_RSTN, 0);
+	return port == ADRV910X_RX1 ? &phy->rx1_adc : &phy->rx2_adc;
 }
 
-/*
- * Linux adrv9104_backend_setup() and iio_backend_enable(): configure the SSI
- * of the core as the profile says, then take the core out of reset. The port
- * must already be enabled, the core has no clock otherwise.
- */
-static int adrv910x_axi_rx_setup(struct adrv910x_rf_phy *phy, uint32_t port)
+static struct axi_dmac **adrv910x_rx_dmac(struct adrv910x_rf_phy *phy,
+		uint32_t port)
 {
-	const struct adrv910x_chan *chan = phy->channels[port];
-	const ssiConfig_t *ssi =
-			&phy->device_profile->profilePS1.rxConfig[chan->idx].rxSsiConfig;
-	struct adrv910x_axi_rx *rx = &axi_rx[port];
-	uint32_t val, lanes, ch;
-	bool cmos;
-	int ret;
-
-	ret = axi_adc_read(rx->adc, ADRV910X_AXI_REG_CONFIG, &val);
-	if (ret)
-		return ret;
-
-	cmos = !!(val & ADRV910X_AXI_IS_CMOS);
-	if (cmos != (phy->ssi_type == SSI_TYPE_CMOS)) {
-		pr_err("%s: HDL is built for %s, the profile is not\n",
-		       rx->adc_init.name, cmos ? "CMOS" : "LVDS");
-		return -EINVAL;
-	}
-
-	switch (ssi->numLaneSel) {
-	case SSI_1_LANE:
-		lanes = 1;
-		break;
-	case SSI_2_LANE:
-		if (cmos)
-			return -EINVAL;
-		lanes = 2;
-		break;
-	case SSI_4_LANE:
-		if (!cmos)
-			return -EINVAL;
-		lanes = 4;
-		break;
-	default:
-		return -EINVAL;
-	}
-
-	ret = axi_adc_read(rx->adc, AXI_ADC_REG_CNTRL, &val);
-	if (ret)
-		return ret;
-
-	val &= ~(ADRV910X_AXI_SSI_N_LANES_MSK | ADRV910X_AXI_SSI_DDR);
-	/* Split mode: each RX core carries its own I/Q pair */
-	val |= ADRV910X_AXI_RX_R1_MODE;
-	val |= no_os_field_prep(ADRV910X_AXI_SSI_N_LANES_MSK, lanes);
-	if (cmos && ssi->ddrEn)
-		val |= ADRV910X_AXI_SSI_DDR;
-
-	ret = axi_adc_write(rx->adc, AXI_ADC_REG_CNTRL, val);
-	if (ret)
-		return ret;
-
-	ret = axi_adc_write(rx->adc, AXI_ADC_REG_RSTN,
-			    AXI_ADC_MMCM_RSTN | AXI_ADC_RSTN);
-	if (ret)
-		return ret;
-
-	for (ch = 0; ch < rx->adc_init.num_channels; ch++) {
-		ret = axi_adc_write(rx->adc, AXI_ADC_REG_CHAN_CNTRL(ch),
-				    AXI_ADC_FORMAT_SIGNEXT |
-				    AXI_ADC_FORMAT_ENABLE | AXI_ADC_ENABLE);
-		if (ret)
-			return ret;
-	}
-
-	no_os_mdelay(100);
-
-	ret = axi_adc_init_finish(rx->adc);
-	if (ret)
-		return ret;
-
-	rx->rate = chan->rate;
-
-	return axi_dmac_init(&rx->dmac, &rx->dmac_init);
+	return port == ADRV910X_RX1 ? &phy->rx1_dmac : &phy->rx2_dmac;
 }
 
 #ifdef DMA_EXAMPLE
+/*
+ * Transmit the sine of sine_lut_iq on the TX port, cyclically, as the adrv9001
+ * project does.
+ */
+static int adrv910x_transmit_sine(struct adrv910x_rf_phy *phy)
+{
+	struct axi_dma_transfer transfer = {
+		.size = sizeof(sine_lut_iq),
+		.transfer_done = 0,
+		.cyclic = CYCLIC,
+		.src_addr = (uintptr_t)dac_buffer,
+		.dest_addr = 0,
+	};
+	int ret;
+
+	/* Copies the samples to the buffer and selects the DMA as source */
+	ret = axi_dac_load_custom_data(phy->tx1_dac, sine_lut_iq,
+				       NO_OS_ARRAY_SIZE(sine_lut_iq),
+				       (uintptr_t)dac_buffer);
+	if (ret)
+		return ret;
+
+#ifdef XILINX_PLATFORM
+	Xil_DCacheFlushRange((uintptr_t)dac_buffer, sizeof(sine_lut_iq));
+#endif /* XILINX_PLATFORM */
+
+	ret = axi_dmac_transfer_start(phy->tx1_dmac, &transfer);
+	if (ret)
+		return ret;
+
+	printf("DMA_EXAMPLE %s: transmitting %lu samples cyclically\n",
+	       axi_tx.dac_init.name,
+	       (unsigned long)NO_OS_ARRAY_SIZE(sine_lut_iq));
+
+	/* Let the signal settle before any capture */
+	no_os_mdelay(1000);
+
+	return 0;
+}
+
 /* Capture ADC_BUFFER_SAMPLES I/Q pairs of one RX port into its buffer */
-static int adrv910x_capture(uint32_t port)
+static int adrv910x_capture(struct adrv910x_rf_phy *phy, uint32_t port)
 {
 	struct adrv910x_axi_rx *rx = &axi_rx[port];
+	struct axi_adc *adc = *adrv910x_rx_adc(phy, port);
+	struct axi_dmac *dmac = *adrv910x_rx_dmac(phy, port);
 	struct axi_dma_transfer transfer = {
 		.size = ADC_BUFFER_SIZE,
 		.transfer_done = 0,
@@ -423,16 +363,16 @@ static int adrv910x_capture(uint32_t port)
 	/* The narrowband rates are low: wait for the capture time plus margin */
 	timeout_ms = (uint64_t)ADC_BUFFER_SAMPLES * 1000 / rx->rate + 500;
 
-	ret = axi_adc_update_active_channels(rx->adc,
+	ret = axi_adc_update_active_channels(adc,
 					     NO_OS_GENMASK(ADRV9001_I_Q_CHANNELS - 1, 0));
 	if (ret)
 		return ret;
 
-	ret = axi_dmac_transfer_start(rx->dmac, &transfer);
+	ret = axi_dmac_transfer_start(dmac, &transfer);
 	if (ret)
 		return ret;
 
-	ret = axi_dmac_transfer_wait_completion(rx->dmac, timeout_ms);
+	ret = axi_dmac_transfer_wait_completion(dmac, timeout_ms);
 	if (ret)
 		return ret;
 
@@ -450,16 +390,25 @@ static int adrv910x_capture(uint32_t port)
 #endif
 
 #ifdef IIO_SUPPORT
-/* Expose every enabled RX port as an IIO device with a capture buffer */
-static int32_t iio_run(const struct adrv910x_rf_phy *phy)
+/*
+ * Expose every enabled RX port as an IIO device with a capture buffer and the
+ * TX port, if enabled, as an IIO device with a transmit buffer.
+ */
+static int32_t iio_run(struct adrv910x_rf_phy *phy)
 {
 	struct iio_axi_adc_init_param adc_pars[ADRV910X_RX_MAX] = { 0 };
 	struct iio_data_buffer iio_adc_buffers[ADRV910X_RX_MAX];
-	struct iio_app_device app_devices[ADRV910X_RX_MAX] = { 0 };
+	struct iio_app_device app_devices[ADRV910X_CHAN_MAX] = { 0 };
 	struct iio_axi_adc_desc *adcs[ADRV910X_RX_MAX];
-	struct iio_device *iio_descs[ADRV910X_RX_MAX];
+	struct iio_device *iio_descs[ADRV910X_CHAN_MAX];
+	struct iio_axi_dac_init_param dac_par = { 0 };
+	struct iio_data_buffer iio_dac_buffer;
+	struct iio_axi_dac_desc *dac;
 	struct xil_uart_init_param platform_uart_init_par = {
 		.type = UART_PS,
+#ifdef SDT
+		.base_addr = XPAR_XUARTPS_0_BASEADDR,
+#endif
 		.irq_id = UART_IRQ_ID
 	};
 
@@ -483,8 +432,8 @@ static int32_t iio_run(const struct adrv910x_rf_phy *phy)
 		if (!phy->channels[c]->enabled)
 			continue;
 
-		adc_pars[n].rx_adc = axi_rx[c].adc;
-		adc_pars[n].rx_dmac = axi_rx[c].dmac;
+		adc_pars[n].rx_adc = *adrv910x_rx_adc(phy, c);
+		adc_pars[n].rx_dmac = *adrv910x_rx_dmac(phy, c);
 #ifdef XILINX_PLATFORM
 		adc_pars[n].dcache_invalidate_range =
 			(void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange;
@@ -502,6 +451,29 @@ static int32_t iio_run(const struct adrv910x_rf_phy *phy)
 		app_devices[n].dev = adcs[n];
 		app_devices[n].dev_descriptor = iio_descs[n];
 		app_devices[n].read_buff = &iio_adc_buffers[n];
+		n++;
+	}
+
+	if (phy->channels[ADRV910X_TX]->enabled) {
+		dac_par.tx_dac = phy->tx1_dac;
+		dac_par.tx_dmac = phy->tx1_dmac;
+#ifdef XILINX_PLATFORM
+		dac_par.dcache_flush_range =
+			(void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange;
+#endif /* XILINX_PLATFORM */
+		dac_par.get_sampling_frequency = get_dac_sampling_frequency;
+
+		ret = iio_axi_dac_init(&dac, &dac_par);
+		if (ret < 0)
+			return ret;
+
+		iio_dac_buffer.buff = dac_buffer;
+		iio_dac_buffer.size = sizeof(dac_buffer);
+		iio_axi_dac_get_dev_descriptor(dac, &iio_descs[n]);
+		app_devices[n].name = (char *)axi_tx.dac_init.name;
+		app_devices[n].dev = dac;
+		app_devices[n].dev_descriptor = iio_descs[n];
+		app_devices[n].write_buff = &iio_dac_buffer;
 		n++;
 	}
 
@@ -532,6 +504,7 @@ int main(void)
 #endif /* XILINX_PLATFORM */
 
 	printf("Hello\nStarting ADRV9104 initialization...\n");
+	printf("Built on %s %s\n", __DATE__, __TIME__);
 	phy.adrv910x = &adrv910x_device;
 	phy.adrv910x->common.devHalInfo = &phy.hal;
 
@@ -552,37 +525,41 @@ int main(void)
 	adrv910x_init_par.clk_out_divisor = ADI_ADRV910X_DEVICECLOCKDIVISOR_BYPASS;
 	adrv910x_init_par.reset_gpio_init = NULL; /* GPIO initialized by platform */
 	adrv910x_init_par.spi = NULL; /* SPI will be initialized by HAL */
-	adrv910x_init_par.pfbuf = pfirBuffer_9;
-	adrv910x_init_par.rx_gain_table = gainTableRows_12;
-	adrv910x_init_par.tx_atten_table = attenTableRows_14;
-	/* Use case settings: RX2 (narrowband) and TXNB at 450 MHz */
-	adrv910x_init_par.rx_carrier_hz[ADRV910X_RX2] = 450000000;
-	adrv910x_init_par.tx_carrier_hz = 450000000;
+	adrv910x_init_par.pfbuf = pfirBuffer;
+	adrv910x_init_par.rx_gain_table = gainTableRows_RX_1_CORRECTION_TABLE;
+	adrv910x_init_par.tx_atten_table = attenTableRows;
+	/*
+	 * Use case settings: the profile enables RX1 and TX1. They share LO1,
+	 * so both get the carrier of the profile.
+	 */
+	adrv910x_init_par.rx_carrier_hz[ADRV910X_RX1] =
+		carrier_RX_1.carrierFrequency_Hz;
+	adrv910x_init_par.tx_carrier_hz = carrier_RX_1.carrierFrequency_Hz;
 	adrv910x_init_par.rx_agc[ADRV910X_RX2] = &agc_uc5;
-	deviceProfilePS2_t profilePS2 = {
-		.ver = {
-			.major = 12,
-			.minor = 0
-		},
-		.ps2ArmClk = 0,
-		.checksum = 0
-	};
-	adi_adrv910x_Profiles_t dev_profile = {
-		.profilePS1 = profile_5,
-		.profilePS2 = profilePS2
-	};
-	adrv910x_init_par.device_profile = &dev_profile;
-	adrv910x_init_par.arm_binary_ptr = Adrv910xFirmware_C0_0_1_365_bin;
-	adrv910x_init_par.arm_binary_size = Adrv910xFirmware_C0_0_1_365_bin_len;
+	adrv910x_init_par.device_profile = &profile_PS1;
+	adrv910x_init_par.arm_binary_ptr = ADRV9104_FW_PS1_bin;
+	adrv910x_init_par.arm_binary_size = sizeof(ADRV9104_FW_PS1_bin);
+	adrv910x_init_par.stream_binary_ptr = ADRV9104_Stream_bin;
+	adrv910x_init_par.stream_binary_size = sizeof(ADRV9104_Stream_bin);
 
-	/* The RX cores stay in reset while the transceiver is initialized */
+	/*
+	 * Allocate the ADC/DAC cores and assign them to the phy. The driver
+	 * configures them in adrv910x_init().
+	 */
 	for (c = 0; c < ADRV910X_RX_MAX; c++) {
-		ret = adrv910x_axi_rx_begin(&axi_rx[c]);
+		ret = axi_adc_init_begin(adrv910x_rx_adc(&phy, c),
+					 &axi_rx[c].adc_init);
 		if (ret) {
-			pr_err("%s: core reset failed: %d\n",
-			       axi_rx[c].adc_init.name, ret);
-			return ret;
+			printf("axi_adc_init_begin() failed with status %d\n",
+			       ret);
+			goto error;
 		}
+	}
+
+	ret = axi_dac_init_begin(&phy.tx1_dac, &axi_tx.dac_init);
+	if (ret) {
+		printf("axi_dac_init_begin() failed with status %d\n", ret);
+		goto error;
 	}
 
 	/* Initialize the device from the init parameters */
@@ -594,41 +571,135 @@ int main(void)
 
 	printf("ADRV9104 initialization completed successfully!\n");
 
-	/* Prepare every RX port the profile enables for a data capture */
+	/*
+	 * The enable pins are not driven by this application, so every port
+	 * the profile enables, RX and TX, is controlled over SPI and moved to
+	 * RF enabled. The AXI cores have no clock otherwise.
+	 */
+	for (c = 0; c < ADRV910X_CHAN_MAX; c++) {
+		if (!phy.channels[c]->enabled)
+			continue;
+
+		ret = adrv910x_port_en_mode_set(&phy, c, ADI_ADRV910X_SPI_MODE);
+		if (ret) {
+			printf("port %lu: SPI enable mode failed: %d\n",
+			       (unsigned long)c, ret);
+			goto error;
+		}
+
+		ret = adrv910x_ensm_mode_set(&phy, c,
+					     ADI_ADRV910X_CHANNEL_RF_ENABLED);
+		if (ret) {
+			printf("port %lu: move to rf_enabled failed: %d\n",
+			       (unsigned long)c, ret);
+			goto error;
+		}
+	}
+
+	/*
+	 * Report the state and the carrier every port ended up with: in TDD
+	 * the device might not keep RX and TX RF enabled at the same time, and
+	 * ports sharing an LO must have the same carrier.
+	 */
+	for (c = 0; c < ADRV910X_CHAN_MAX; c++) {
+		adi_adrv910x_ChannelState_e state;
+		uint64_t carrier_hz;
+
+		if (!phy.channels[c]->enabled)
+			continue;
+
+		ret = adrv910x_ensm_mode_get(&phy, c, &state);
+		if (ret) {
+			printf("port %lu: state read failed: %d\n",
+			       (unsigned long)c, ret);
+			goto error;
+		}
+
+		ret = adrv910x_carrier_freq_get(&phy, c, &carrier_hz);
+		if (ret) {
+			printf("port %lu: carrier read failed: %d\n",
+			       (unsigned long)c, ret);
+			goto error;
+		}
+
+		printf("%s: state %d (%s), carrier %lu Hz, LO %d\n",
+		       c == ADRV910X_TX ? "TX" : (c ? "RX2" : "RX1"), state,
+		       state == ADI_ADRV910X_CHANNEL_RF_ENABLED ?
+		       "rf_enabled" : "not rf_enabled",
+		       (unsigned long)carrier_hz, phy.channels[c]->lo);
+	}
+
+	/* Finalize the ADC/DAC cores initialization and init their DMAs */
 	for (c = 0; c < ADRV910X_RX_MAX; c++) {
 		if (!phy.channels[c]->enabled)
 			continue;
 
-		/*
-		 * The enable pins are not driven by this application, so the
-		 * port is controlled over SPI and left receiving.
-		 */
-		ret = adrv910x_port_en_mode_set(&phy, c, ADI_ADRV910X_SPI_MODE);
-		if (ret)
-			goto error;
-
-		ret = adrv910x_ensm_mode_set(&phy, c,
-					     ADI_ADRV910X_CHANNEL_RF_ENABLED);
-		if (ret)
-			goto error;
-
-		ret = adrv910x_axi_rx_setup(&phy, c);
+		ret = axi_adc_init_finish(*adrv910x_rx_adc(&phy, c));
 		if (ret) {
-			pr_err("%s: setup failed: %d\n",
-			       axi_rx[c].adc_init.name, ret);
+			printf("axi_adc_init_finish() failed with status %d\n",
+			       ret);
 			goto error;
 		}
 
+		ret = axi_dmac_init(adrv910x_rx_dmac(&phy, c),
+				    &axi_rx[c].dmac_init);
+		if (ret) {
+			printf("axi_dmac_init() failed with status %d\n", ret);
+			goto error;
+		}
+
+		axi_rx[c].rate = phy.channels[c]->rate;
 		printf("%s: ready for capture at %lu Hz\n",
 		       axi_rx[c].adc_init.name, (unsigned long)axi_rx[c].rate);
 	}
 
+	printf("TX: %s by the profile\n",
+	       phy.channels[ADRV910X_TX]->enabled ? "enabled" : "not enabled");
+
+	if (phy.channels[ADRV910X_TX]->enabled) {
+		ret = axi_dac_init_finish(phy.tx1_dac);
+		if (ret) {
+			printf("axi_dac_init_finish() failed with status %d\n",
+			       ret);
+			goto error;
+		}
+
+		/*
+		 * The DDS runs at the sample rate of the port, not at the
+		 * interface clock axi_dac_init_finish() measured, so that is
+		 * what its frequencies must be computed against.
+		 */
+		phy.tx1_dac->clock_hz = phy.channels[ADRV910X_TX]->rate;
+
+		/* Apply the data source of tx_dac_channels: the DDS tone */
+		axi_dac_data_setup(phy.tx1_dac);
+
+		ret = axi_dmac_init(&phy.tx1_dmac, &axi_tx.dmac_init);
+		if (ret) {
+			printf("axi_dmac_init() failed with status %d\n", ret);
+			goto error;
+		}
+
+		axi_tx.rate = phy.channels[ADRV910X_TX]->rate;
+		printf("%s: ready for transmit at %lu Hz\n",
+		       axi_tx.dac_init.name, (unsigned long)axi_tx.rate);
+	}
+
 #ifdef DMA_EXAMPLE
+	if (phy.channels[ADRV910X_TX]->enabled) {
+		ret = adrv910x_transmit_sine(&phy);
+		if (ret) {
+			pr_err("%s: transmit failed: %d\n",
+			       axi_tx.dac_init.name, ret);
+			goto error;
+		}
+	}
+
 	for (c = 0; c < ADRV910X_RX_MAX; c++) {
 		if (!phy.channels[c]->enabled)
 			continue;
 
-		ret = adrv910x_capture(c);
+		ret = adrv910x_capture(&phy, c);
 		if (ret) {
 			pr_err("%s: capture failed: %d\n",
 			       axi_rx[c].adc_init.name, ret);
@@ -649,12 +720,18 @@ int main(void)
 	return 0;
 
 error:
+	printf("Stopped with status %d\n", ret);
+
 	for (c = 0; c < ADRV910X_RX_MAX; c++) {
-		if (axi_rx[c].dmac)
-			axi_dmac_remove(axi_rx[c].dmac);
-		if (axi_rx[c].adc)
-			axi_adc_remove(axi_rx[c].adc);
+		if (*adrv910x_rx_dmac(&phy, c))
+			axi_dmac_remove(*adrv910x_rx_dmac(&phy, c));
+		if (*adrv910x_rx_adc(&phy, c))
+			axi_adc_remove(*adrv910x_rx_adc(&phy, c));
 	}
+	if (phy.tx1_dmac)
+		axi_dmac_remove(phy.tx1_dmac);
+	if (phy.tx1_dac)
+		axi_dac_remove(phy.tx1_dac);
 
 	return ret;
 }

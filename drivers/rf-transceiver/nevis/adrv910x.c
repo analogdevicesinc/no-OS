@@ -46,6 +46,7 @@
 #include "adi_adrv910x_tx.h"
 #include "adi_adrv910x_spi.h"
 #include "adi_adrv910x_ssi.h"
+#include "adi_adrv910x_stream.h"
 #include "adrv910x.h"
 
 #define ADRV910X_RX_BIT_START		0	/* ADI_ADRV910X_RX1 */
@@ -480,6 +481,122 @@ static int adrv910x_rx_path_config(struct adrv910x_rf_phy *phy,
 	return 0;
 }
 
+/* LO generation calibration settings of the ports the profile enables */
+static int adrv910x_logen_cal_init(struct adrv910x_rf_phy *phy)
+{
+	int ret, c;
+
+	for (c = 0; c < ADRV910X_CHAN_MAX; c++) {
+		const struct adrv910x_chan *chan = phy->channels[c];
+		adi_adrv910x_LoGenCalSettings_t logen = {
+			.termRes = 1,
+			.vcmBiasEnable = true,
+			.s2dMode = ADI_ADRV910X_CAL_LOGEN_SINGLE_ENDED_POSITIVE_INPUT
+		};
+
+		if (!chan->enabled)
+			continue;
+
+		/* The narrowband TX uses a differential LO */
+		if (chan->port == ADI_TX && phy->tx_channel.txnb)
+			logen.s2dMode = ADI_ADRV910X_CAL_LOGEN_DIFFERENTIAL;
+
+		ret = api_call(phy, adi_adrv910x_cals_InitCalsLoGenParams_Configure,
+			       chan->port, chan->number, &logen);
+		if (ret)
+			return ret;
+	}
+
+	return 0;
+}
+
+/* Tracking calibrations of the ports the profile enables */
+static int adrv910x_tracking_cals_init(struct adrv910x_rf_phy *phy)
+{
+	trackingCals_t tracking_cals = { 0 };
+
+	if (phy->rx_channels[ADRV910X_RX1].channel.enabled)
+		tracking_cals.chanTrackingCalMask[0] |= TRACKING_CAL_RX_QEC_FIC |
+			TRACKING_CAL_RX_GAIN_CONTROL_DETECTORS |
+			TRACKING_CAL_RX_RSSI;
+
+	if (phy->tx_channel.channel.enabled && !phy->tx_channel.txnb)
+		tracking_cals.chanTrackingCalMask[0] |= TRACKING_CAL_TX_QEC |
+			TRACKING_CAL_TX_LO_LEAKAGE | TRACKING_CAL_TX_DPD_CLGC;
+
+	if (phy->rx_channels[ADRV910X_RX2].channel.enabled)
+		tracking_cals.chanTrackingCalMask[1] |= TRACKING_CAL_RX_HD2 |
+			TRACKING_CAL_RX_BBDC | TRACKING_CAL_RX_RFDC |
+			TRACKING_CAL_RX_QEC_FIC |
+			TRACKING_CAL_RX_GAIN_CONTROL_DETECTORS |
+			TRACKING_CAL_RX_RSSI;
+
+	return api_call(phy, adi_adrv910x_cals_Tracking_Set, &tracking_cals);
+}
+
+/* Manual gain setup of the RX ports the profile enables */
+static int adrv910x_rx_gain_init(struct adrv910x_rf_phy *phy)
+{
+	adi_adrv910x_RxInterfaceGainCtrl_t interface_gain = {
+		.updateInstance = ADI_ADRV910X_RX_INTERFACE_GAIN_UPDATE_TIMING_NOW,
+		.controlMode = ADI_ADRV910X_RX_INTERFACE_GAIN_CONTROL_MANUAL,
+		.gain = ADI_ADRV910X_RX_INTERFACE_GAIN_0_DB,
+		.rssiDuration = 255,
+		.rssiMovingAverageDuration = 10,
+		.gainControlAutomaticThreshold_dBFS = -2,
+		.signalPAR = 15,
+		.enableFastAttack = false
+	};
+	adi_adrv910x_ImageIDCfg_t high_blocker = {
+		.enableHighBlockerMode = false,
+		.highBlockerModeThresholdOne_negQuartdBFS = 0,
+		.highBlockerModeThresholdTwo_QuartdB = 0
+	};
+	adi_adrv910x_RxrfdcLoidCfg_t loid = {
+		.loidEnable = true,
+		.loidDisableTrackingHighThreshold_negdBFS = 40,
+		.loidReenableTrackingLowThreshold_negdBFS = 60
+	};
+	int ret, c;
+
+	for (c = 0; c < ADRV910X_RX_MAX; c++) {
+		const struct adrv910x_chan *chan = &phy->rx_channels[c].channel;
+
+		if (!chan->enabled)
+			continue;
+
+		/* High blocker mode and LOID are narrowband (RX2) settings */
+		if (c == ADRV910X_RX2) {
+			ret = api_call(phy, adi_adrv910x_Rx_ImageID_Configure,
+				       chan->number, &high_blocker);
+			if (ret)
+				return ret;
+
+			ret = api_call(phy, adi_adrv910x_Rx_Loid_Configure,
+				       chan->number, &loid);
+			if (ret)
+				return ret;
+		}
+
+		ret = api_call(phy, adi_adrv910x_Rx_Gain_Set, chan->number, 255);
+		if (ret)
+			return ret;
+
+		ret = api_call(phy, adi_adrv910x_Rx_GainControl_Mode_Set,
+			       chan->number,
+			       ADI_ADRV910X_RX_GAIN_CONTROL_MODE_SPI);
+		if (ret)
+			return ret;
+
+		ret = api_call(phy, adi_adrv910x_Rx_InterfaceGain_Configure,
+			       chan->number, &interface_gain);
+		if (ret)
+			return ret;
+	}
+
+	return 0;
+}
+
 /* Linux adrv9104_cleanup() */
 static void adrv910x_cleanup(struct adrv910x_rf_phy *phy)
 {
@@ -499,6 +616,7 @@ static int adrv910x_rf_init(struct adrv910x_rf_phy *phy)
 {
 	adi_adrv910x_ChannelState_e init_state;
 	int ret = 0;
+	int c;
 
 
 	if (!phy) {
@@ -526,7 +644,7 @@ static int adrv910x_rf_init(struct adrv910x_rf_phy *phy)
 	phy->adrv910x->common.error.logEnable = true;
 #endif
 
-	ret = adi_adrv910x_InitAnalog(phy->adrv910x, &phy->device_profile->profilePS1, ADI_ADRV910X_DEVICECLOCKDIVISOR_BYPASS);
+	ret = adi_adrv910x_InitAnalog(phy->adrv910x, &phy->device_profile->profilePS1, ADI_ADRV910X_DEVICECLOCKDIVISOR_2);
 	if (ret) {
 			pr_err("init analogfailed: %d\n", ret);
 			return ret;
@@ -536,6 +654,21 @@ static int adrv910x_rf_init(struct adrv910x_rf_phy *phy)
 	if (ret) {
 			pr_err("arm_AhbSpiBridge_Enable failed: %d\n", ret);
 			return ret;
+	}
+
+	/* The stream image goes in before the ARM image */
+	if (!phy->stream_binary || !phy->stream_binary_size) {
+		pr_err("No stream image provided\n");
+		return -EINVAL;
+	}
+
+	ret = adi_adrv910x_Stream_Image_Write(phy->adrv910x, 0,
+					      phy->stream_binary,
+					      phy->stream_binary_size,
+					      ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);
+	if (ret) {
+		pr_err("failed to write stream image: %d\n", ret);
+		return adrv910x_dev_err(phy);
 	}
 
 	ret = adi_adrv910x_arm_Image_Write(phy->adrv910x, 0, (const uint8_t *)phy->arm_binary, phy->arm_binary_size, ADI_ADRV910X_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4, ADI_PS1);
@@ -575,7 +708,9 @@ static int adrv910x_rf_init(struct adrv910x_rf_phy *phy)
 	}
 
 	/* Write TX attenuation table */
-	ret = adi_adrv910x_Tx_AttenuationTable_Write(phy->adrv910x, 138, 0, phy->tx_atten_table, 960);
+	ret = adi_adrv910x_Tx_AttenuationTable_Write(phy->adrv910x,
+			phy->device_profile->profilePS1.chanConfig, 0,
+			phy->tx_atten_table, 960);
 	if (ret != ADI_COMMON_ERR_OK) {
 		pr_err("TX attenuation table write failed: %d\n", ret);
 		return adrv910x_dev_err(phy);
@@ -603,7 +738,8 @@ static int adrv910x_rf_init(struct adrv910x_rf_phy *phy)
 	}
 
 	/* Program ARM system */
-	ret = adi_adrv910x_arm_System_Program(phy->adrv910x, 138);
+	ret = adi_adrv910x_arm_System_Program(phy->adrv910x,
+			phy->device_profile->profilePS1.chanConfig);
 	if (ret != ADI_COMMON_ERR_OK) {
 		pr_err("ARM system program failed: %d\n", ret);
 		return adrv910x_dev_err(phy);
@@ -613,19 +749,9 @@ static int adrv910x_rf_init(struct adrv910x_rf_phy *phy)
 	if (ret)
 		return ret;
 
-	adi_adrv910x_LoGenCalSettings_t loGenCalSettings_19 = { 
-		.termRes = 1, 
-		.vcmBiasEnable = true, 
-		.s2dMode = ADI_ADRV910X_CAL_LOGEN_SINGLE_ENDED_POSITIVE_INPUT };
-
-	ret = adi_adrv910x_cals_InitCalsLoGenParams_Configure(phy->adrv910x, ADI_RX, ADI_CHANNEL_2, &loGenCalSettings_19);
-
-	adi_adrv910x_LoGenCalSettings_t loGenCalSettings_21 = { 
-		.termRes = 1, 
-		.vcmBiasEnable = true, 
-		.s2dMode = ADI_ADRV910X_CAL_LOGEN_DIFFERENTIAL };
-
-	ret = adi_adrv910x_cals_InitCalsLoGenParams_Configure(phy->adrv910x, ADI_TX, ADI_CHANNEL_2, &loGenCalSettings_21);
+	ret = adrv910x_logen_cal_init(phy);
+	if (ret)
+		return ret;
 
 	ret = adrv910x_radio_pll_init(phy);
 	if (ret)
@@ -640,63 +766,30 @@ static int adrv910x_rf_init(struct adrv910x_rf_phy *phy)
 	if (ret)
 		return ret;
 
-trackingCals_t trackingCals_7 = { 
-		.chanTrackingCalMask = { (trackingCalibrations_e) 0, TRACKING_CAL_RX_HD2 | TRACKING_CAL_RX_BBDC | TRACKING_CAL_RX_RFDC | TRACKING_CAL_RX_QEC_FIC | TRACKING_CAL_RX_GAIN_CONTROL_DETECTORS | TRACKING_CAL_RX_RSSI  } };
+	ret = adrv910x_tracking_cals_init(phy);
+	if (ret)
+		return ret;
 
-	ret = adi_adrv910x_cals_Tracking_Set(phy->adrv910x, &trackingCals_7);
+	ret = adrv910x_rx_gain_init(phy);
+	if (ret)
+		return ret;
 
+	if (phy->tx_channel.channel.enabled) {
+		adi_adrv910x_TxAttenuationConfig_t tx_atten_cfg = {
+			.disableTxOnPllUnlock = false,
+			.txAttenStepSize = ADI_ADRV910X_TXATTEN_0P05_DB,
+			.attenMode = ADI_ADRV910X_TX_ATTENUATION_CONTROL_MODE_SPI
+		};
 
+		ret = api_call(phy, adi_adrv910x_Tx_Attenuation_Configure,
+			       &tx_atten_cfg);
+		if (ret)
+			return ret;
 
-	adi_adrv910x_ImageIDCfg_t highBlockerConfig_8 = { 
-		.enableHighBlockerMode = false, 
-		.highBlockerModeThresholdOne_negQuartdBFS = 0, 
-		.highBlockerModeThresholdTwo_QuartdB = 0 };
-
-	ret = adi_adrv910x_Rx_ImageID_Configure(phy->adrv910x, ADI_CHANNEL_2, &highBlockerConfig_8);
-
-
-
-	adi_adrv910x_RxrfdcLoidCfg_t loidConfig_9 = { 
-		.loidEnable = true, 
-		.loidDisableTrackingHighThreshold_negdBFS = 40, 
-		.loidReenableTrackingLowThreshold_negdBFS = 60 };
-
-	ret = adi_adrv910x_Rx_Loid_Configure(phy->adrv910x, ADI_CHANNEL_2, &loidConfig_9);
-
-
-
-	ret = adi_adrv910x_Rx_Gain_Set(phy->adrv910x, ADI_CHANNEL_2, 255);
-
-
-
-	ret = adi_adrv910x_Rx_GainControl_Mode_Set(phy->adrv910x, ADI_CHANNEL_2, ADI_ADRV910X_RX_GAIN_CONTROL_MODE_SPI);
-
-
-
-	adi_adrv910x_TxAttenuationConfig_t config_12 = { 
-		.disableTxOnPllUnlock = false, 
-		.txAttenStepSize = ADI_ADRV910X_TXATTEN_0P05_DB, 
-		.attenMode = ADI_ADRV910X_TX_ATTENUATION_CONTROL_MODE_SPI };
-
-	ret = adi_adrv910x_Tx_Attenuation_Configure(phy->adrv910x, &config_12);
-
-
-
-	ret = adi_adrv910x_Tx_Attenuation_Set(phy->adrv910x, 10000);
-
-
-	adi_adrv910x_RxInterfaceGainCtrl_t rxInterfaceGainConfig_15 = { 
-		.updateInstance = ADI_ADRV910X_RX_INTERFACE_GAIN_UPDATE_TIMING_NOW, 
-		.controlMode = ADI_ADRV910X_RX_INTERFACE_GAIN_CONTROL_MANUAL, 
-		.gain = ADI_ADRV910X_RX_INTERFACE_GAIN_0_DB, 
-		.rssiDuration = 255, 
-		.rssiMovingAverageDuration = 10, 
-		.gainControlAutomaticThreshold_dBFS = -2, 
-		.signalPAR = 15, 
-		.enableFastAttack = false };
-
-	ret = adi_adrv910x_Rx_InterfaceGain_Configure(phy->adrv910x, ADI_CHANNEL_2, &rxInterfaceGainConfig_15);
-
+		ret = api_call(phy, adi_adrv910x_Tx_Attenuation_Set, 10000);
+		if (ret)
+			return ret;
+	}
 
 	/* In TDD we cannot start with all ports enabled as RX/TX cannot be on at the same time */
 	if (phy->device_profile->profilePS1.sysConfig.duplexMode == TDD)
@@ -715,10 +808,17 @@ trackingCals_t trackingCals_7 = {
 			return ret;
 	}
 
+	for (c = 0; c < ADRV910X_RX_MAX; c++) {
+		const struct adrv910x_chan *chan = &phy->rx_channels[c].channel;
 
-	ret = adi_adrv910x_Radio_ChannelEnableMode_Set(phy->adrv910x, ADI_RX, ADI_CHANNEL_2, ADI_ADRV910X_PIN_MODE);
+		if (!chan->enabled)
+			continue;
 
-
+		ret = api_call(phy, adi_adrv910x_Radio_ChannelEnableMode_Set,
+			       ADI_RX, chan->number, ADI_ADRV910X_PIN_MODE);
+		if (ret)
+			return ret;
+	}
 
 	pr_info("ADRV910x hardware initialization completed\n");
 	return ret;
@@ -727,6 +827,7 @@ trackingCals_t trackingCals_7 = {
 /* Linux __adrv9104_init() */
 static int __adrv910x_init(struct adrv910x_rf_phy *phy)
 {
+	uint32_t c;
 	int ret;
 
 	if (!phy->device_profile) {
@@ -736,12 +837,32 @@ static int __adrv910x_init(struct adrv910x_rf_phy *phy)
 
 	adrv910x_cleanup(phy);
 
-	ret = adrv910x_rf_init(phy);
-	if (ret) {
-		/* Leave the device in a reset state in case of error */
-		api_call(phy, adi_adrv910x_HwReset);
-		adrv910x_cleanup(phy);
+	/*
+	 * The AXI cores, if the application assigned them, stay in reset while
+	 * the transceiver is initialized so they do not interfere with the
+	 * init calibrations.
+	 */
+	if (phy->rx1_adc) {
+		for (c = 0; c < ADRV910X_CHAN_MAX; c++)
+			adrv910x_axi_interface_enable(phy, c, false);
 	}
+
+	ret = adrv910x_rf_init(phy);
+	if (ret)
+		goto error;
+
+	if (phy->rx1_adc) {
+		ret = adrv910x_axi_ssi_configure(phy);
+		if (ret)
+			goto error;
+	}
+
+	return 0;
+
+error:
+	/* Leave the device in a reset state in case of error */
+	api_call(phy, adi_adrv910x_HwReset);
+	adrv910x_cleanup(phy);
 
 	return ret;
 }
@@ -792,6 +913,8 @@ int adrv910x_init(struct adrv910x_rf_phy *phy,
 	phy->pfbuf = init_param->pfbuf;
 	phy->arm_binary = init_param->arm_binary_ptr;
 	phy->arm_binary_size = init_param->arm_binary_size;
+	phy->stream_binary = init_param->stream_binary_ptr;
+	phy->stream_binary_size = init_param->stream_binary_size;
 	phy->rx_gain_table = init_param->rx_gain_table;
 	phy->tx_atten_table = init_param->tx_atten_table;
 
@@ -945,7 +1068,29 @@ int adrv910x_sampling_frequency_get(struct adrv910x_rf_phy *phy, uint32_t port,
 	return 0;
 }
 
-/* Linux adrv9104_rerun_init_cals(), without the backend disable/enable */
+/*
+ * Same as adrv9002_port_enable(): put the AXI cores, if the application
+ * assigned them to the phy, in reset or take the ones of the enabled ports
+ * out of reset.
+ */
+static void adrv910x_axi_cores_enable(const struct adrv910x_rf_phy *phy,
+				      bool enable)
+{
+	uint32_t c;
+
+	if (!phy->rx1_adc)
+		return;
+
+	for (c = 0; c < ADRV910X_CHAN_MAX; c++) {
+		/* Always disable, but only enable what the profile enables */
+		if (enable && !phy->channels[c]->enabled)
+			continue;
+
+		adrv910x_axi_interface_enable(phy, c, enable);
+	}
+}
+
+/* Linux adrv9104_rerun_init_cals() */
 static int adrv910x_rerun_init_cals(struct adrv910x_rf_phy *phy,
 				    const struct adrv910x_chan *chan,
 				    initCals_t *init_cals)
@@ -968,8 +1113,13 @@ static int adrv910x_rerun_init_cals(struct adrv910x_rf_phy *phy,
 			return ret;
 	}
 
+	/* The AXI cores might interfere with the init calibrations */
+	adrv910x_axi_cores_enable(phy, false);
+
 	ret = api_call(phy, adi_adrv910x_cals_InitCals_Run, init_cals, 6000,
 		       &error);
+
+	adrv910x_axi_cores_enable(phy, true);
 	if (ret)
 		return ret;
 
@@ -1702,4 +1852,3 @@ int adrv910x_setup(struct adrv910x_rf_phy *phy)
 
 	return ret;
 }
-

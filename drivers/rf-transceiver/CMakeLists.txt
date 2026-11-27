@@ -63,7 +63,8 @@ no_os_include_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV9002
 # devices/fpga910x and devices/adm1293 (ADI evaluation FPGA design and its
 # power monitor) are not part of the build for now.
 no_os_sources_ifdef(CONFIG_RF_TRANSCEIVER_ADRV910X
-    ${CMAKE_CURRENT_SOURCE_DIR}/nevis/adrv910x.c)
+    ${CMAKE_CURRENT_SOURCE_DIR}/nevis/adrv910x.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/nevis/adrv910x_conv.c)
 no_os_include_dir_ifdef(CONFIG_RF_TRANSCEIVER_ADRV910X
     ${CMAKE_CURRENT_SOURCE_DIR}/nevis)
 no_os_sources_dir_recurse_ifdef(CONFIG_RF_TRANSCEIVER_ADRV910X
